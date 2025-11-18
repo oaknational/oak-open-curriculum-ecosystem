@@ -4,8 +4,7 @@
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolResult, ToolName } from '@oaknational/oak-curriculum-sdk';
-
-import type { Logger } from './wiring.js';
+import { type Logger, enrichError, type ErrorContext } from '@oaknational/mcp-logger/node';
 import type { ToolExecutionSuccessEnvelope } from './validation.js';
 
 type ToolResponse = CallToolResult;
@@ -20,11 +19,12 @@ export interface ToolHandlerContext {
 }
 
 export interface ToolResponseHandlers {
-  handleExecutionError(params: unknown, error: unknown): ToolResponse;
+  handleExecutionError(params: unknown, error: unknown, errorContext?: ErrorContext): ToolResponse;
   handleValidationError(
     params: unknown,
     output: ToolExecutionSuccessEnvelope,
     message: string,
+    errorContext?: ErrorContext,
   ): ToolResponse;
   handleSuccess<TName extends ToolName>(result: ToolResult<TName>): ToolResponse;
 }
@@ -63,9 +63,25 @@ function createErrorResponse(
   logger: LoggerForToolHandlers,
   prefix: string,
   payload: ToolExecutionErrorPayload | ToolValidationErrorPayload,
+  errorContext?: ErrorContext,
 ): ToolResponse {
   const serialised = serialisePayload(payload);
-  logger.error(`${prefix}: ${serialised}`);
+
+  // If we have error context, enrich the error before logging
+  if (errorContext) {
+    const error = new Error(`${prefix}: ${serialised}`);
+    enrichError(error, errorContext);
+    logger.error(prefix, {
+      payload: serialised,
+      correlationId: errorContext.correlationId,
+      duration: errorContext.duration?.formatted,
+      durationMs: errorContext.duration?.ms,
+      toolName: errorContext.toolName,
+    });
+  } else {
+    logger.error(`${prefix}: ${serialised}`);
+  }
+
   return { content: [{ type: 'text', text: serialised }], isError: true };
 }
 
@@ -78,6 +94,7 @@ function createSuccessResponse(
   return { content: [{ type: 'text', text: serialised }] };
 }
 
+// eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
 export function createToolResponseHandlers(
   logger: LoggerForToolHandlers,
   context: ToolHandlerContext,
@@ -90,27 +107,42 @@ export function createToolResponseHandlers(
   };
 
   return {
-    handleExecutionError(params: unknown, error: unknown): ToolResponse {
+    handleExecutionError(
+      params: unknown,
+      error: unknown,
+      errorContext?: ErrorContext,
+    ): ToolResponse {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      return createErrorResponse(logger, 'Tool execution failed', {
-        ...sharedMetadata,
-        toolInput: params,
-        toolExecutionError: { message },
-      });
+      return createErrorResponse(
+        logger,
+        'Tool execution failed',
+        {
+          ...sharedMetadata,
+          toolInput: params,
+          toolExecutionError: { message },
+        },
+        errorContext,
+      );
     },
     handleValidationError(
       params: unknown,
       output: ToolExecutionSuccessEnvelope,
       message: string,
+      errorContext?: ErrorContext,
     ): ToolResponse {
-      return createErrorResponse(logger, 'Tool output validation failed', {
-        ...sharedMetadata,
-        toolInput: params,
-        toolOutputSchemaRaw: context.outputSchemaRaw,
-        toolOutputSchemaZod: context.outputSchemaZod,
-        toolOutput: output,
-        outputValidationFailed: { message },
-      });
+      return createErrorResponse(
+        logger,
+        'Tool output validation failed',
+        {
+          ...sharedMetadata,
+          toolInput: params,
+          toolOutputSchemaRaw: context.outputSchemaRaw,
+          toolOutputSchemaZod: context.outputSchemaZod,
+          toolOutput: output,
+          outputValidationFailed: { message },
+        },
+        errorContext,
+      );
     },
     handleSuccess(result: ToolExecutionSuccessEnvelope): ToolResponse {
       return createSuccessResponse(logger, result);

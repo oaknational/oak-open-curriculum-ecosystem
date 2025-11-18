@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { createApp } from './index.js';
+import { createApp } from './application.js';
 
 describe('CORS and OAuth metadata', () => {
   it('serves /.well-known/oauth-protected-resource', async () => {

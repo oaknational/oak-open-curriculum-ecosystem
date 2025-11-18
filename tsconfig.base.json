@@ -18,18 +18,6 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@oaknational/mcp-env": ["./packages/libs/env/src"],
-      "@oaknational/mcp-env/*": ["./packages/libs/env/src/*"],
-      "@oaknational/mcp-logger": ["./packages/libs/logger/src"],
-      "@oaknational/mcp-logger/*": ["./packages/libs/logger/src/*"],
-      "@oaknational/mcp-storage": ["./packages/libs/storage/src"],
-      "@oaknational/mcp-storage/*": ["./packages/libs/storage/src/*"],
-      "@oaknational/mcp-transport": ["./packages/libs/transport/src"],
-      "@oaknational/mcp-transport/*": ["./packages/libs/transport/src/*"],
-      "@oaknational/mcp-providers-node": ["./packages/providers/mcp-providers-node/src"],
-      "@oaknational/mcp-providers-node/*": ["./packages/providers/mcp-providers-node/src/*"]
-    }
+    "skipLibCheck": true
   }
 }

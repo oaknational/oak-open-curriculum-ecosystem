@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 import type { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 
-type OakSdkModule = {
+interface OakSdkModule {
   readonly [key: PropertyKey]: unknown;
   readonly createOakPathBasedClient: typeof createOakPathBasedClient;
-};
+}
 type CreateOakPathBasedClient = OakSdkModule['createOakPathBasedClient'];
 
 interface MockReferences {

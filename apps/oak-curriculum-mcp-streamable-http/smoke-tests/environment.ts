@@ -8,12 +8,14 @@ import type {
 } from './types.js';
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
 import { closeSmokeServer } from './local-server.js';
-import { prepareLocalStubEnvironment, STUB_API_KEY, STUB_DEV_TOKEN } from './modes/local-stub.js';
+import { prepareLocalStubEnvironment, STUB_API_KEY } from './modes/local-stub.js';
 import { prepareLocalLiveEnvironment } from './modes/local-live.js';
+import { prepareLocalLiveAuthEnvironment } from './modes/local-live-auth.js';
+import { prepareLocalStubAuthEnvironment } from './modes/local-stub-auth.js';
 import { prepareRemoteEnvironment as prepareRemoteModeEnvironment } from './modes/remote.js';
 
 export const DEFAULT_PORT = 3333;
-export { STUB_DEV_TOKEN, STUB_API_KEY };
+export { STUB_API_KEY };
 
 export async function prepareEnvironment(
   options: PrepareEnvironmentOptions,
@@ -23,10 +25,21 @@ export async function prepareEnvironment(
     return prepareLocalStubEnvironment(options, envLoad);
   }
 
-  const requiredKeys = options.mode === 'local-live' ? ['OAK_API_KEY'] : [];
+  if (options.mode === 'local-stub-auth') {
+    const envLoad = loadEnvironment({ envFileOrder: [] });
+    return prepareLocalStubAuthEnvironment(options, envLoad);
+  }
+
+  const requiredKeys =
+    options.mode === 'local-live' || options.mode === 'local-live-auth' ? ['OAK_API_KEY'] : [];
   const envLoad = loadEnvironment({ requiredKeys });
+
   if (options.mode === 'local-live') {
     return prepareLocalLiveEnvironment(options, envLoad);
+  }
+
+  if (options.mode === 'local-live-auth') {
+    return prepareLocalLiveAuthEnvironment(options, envLoad);
   }
 
   return prepareRemoteModeEnvironment(options, envLoad);
@@ -48,15 +61,12 @@ export function captureEnvSnapshot(): EnvSnapshot {
   return {
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
     OAK_API_KEY: process.env.OAK_API_KEY,
-    REMOTE_MCP_DEV_TOKEN: process.env.REMOTE_MCP_DEV_TOKEN,
     PORT: process.env.PORT,
   };
 }
 
 export function restoreEnv(snapshot: EnvSnapshot): void {
-  (
-    ['OAK_CURRICULUM_MCP_USE_STUB_TOOLS', 'OAK_API_KEY', 'REMOTE_MCP_DEV_TOKEN', 'PORT'] as const
-  ).forEach((key) => {
+  (['OAK_CURRICULUM_MCP_USE_STUB_TOOLS', 'OAK_API_KEY', 'PORT'] as const).forEach((key) => {
     restoreKey(key, snapshot[key]);
   });
 }

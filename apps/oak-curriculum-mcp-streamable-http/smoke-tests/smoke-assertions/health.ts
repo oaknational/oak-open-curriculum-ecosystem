@@ -76,7 +76,8 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
     headers,
     body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-1', method: 'tools/list' }),
   });
-  const expectedAcceptStatus = headers.Authorization ? 406 : 401;
+  // Accept header validation happens before auth, so missing Accept always gets 406
+  const expectedAcceptStatus = 406;
   evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, logger);
   logAssertionSuccess(
     logger,

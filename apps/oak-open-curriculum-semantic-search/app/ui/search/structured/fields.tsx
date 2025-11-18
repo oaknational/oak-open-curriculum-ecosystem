@@ -14,7 +14,7 @@ interface LabeledSelectProps {
   id: string;
   value: string;
   onChange: ChangeEventHandler<HTMLSelectElement>;
-  options: ReadonlyArray<string | { value: string; label: string }>;
+  options: readonly (string | { value: string; label: string })[];
   includeAny?: boolean;
 }
 

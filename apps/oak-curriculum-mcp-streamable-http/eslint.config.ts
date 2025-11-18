@@ -42,7 +42,8 @@ const config = defineConfig(
         '.logs/**',
         'vitest.config.ts',
         '**/*.js',
-        '**/*.mjs',
+        'temp-secrets/**',
+        'smoke-tests/auth/**',
       ],
     },
     // no special ignores for vitest.e2e.config.ts; treat as config file below

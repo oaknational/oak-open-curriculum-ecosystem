@@ -1,10 +1,15 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import type { MinimalNotionClient } from '../types/notion-types/notion-client.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
-import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
-/** @todo why are there logger types in the core package instead of the logger package? */
-import type { Logger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
 interface CoreLogger {
   debug: (message: string, context?: unknown) => void;
@@ -55,15 +60,23 @@ async function loadEnvironment(log: ServerSetupDependencies['log']) {
  * Creates all server dependencies
  */
 function createLoggerFromConfig() {
-  return createAdaptiveLogger({
-    level: parseLogLevel(
-      typeof runtimeConfig.logLevel === 'string' ? runtimeConfig.logLevel : undefined,
-    ),
-    name: runtimeConfig.serverName,
-    consolaOptions: {
-      stdout: process.stderr,
-      stderr: process.stderr,
-    },
+  const levelInput =
+    typeof runtimeConfig.logLevel === 'string' ? runtimeConfig.logLevel : undefined;
+  const level = parseLogLevel(levelInput, 'INFO');
+  const minSeverity = logLevelToSeverityNumber(level);
+
+  const resourceAttributes = buildResourceAttributes(
+    process.env,
+    runtimeConfig.serverName,
+    process.env.npm_package_version ?? '0.0.0',
+  );
+
+  return new UnifiedLogger({
+    minSeverity,
+    resourceAttributes,
+    context: {},
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
   });
 }
 
@@ -98,9 +111,27 @@ function validateRuntimeConfig(): void {
   }
 }
 
+/**
+ * Creates Notion client - either real or mock depending on environment
+ */
+async function createNotionClient(
+  notionConfig: { apiKey: string },
+  log: ServerSetupDependencies['log'],
+): Promise<MinimalNotionClient> {
+  if (process.env.NOTION_USE_MOCK_CLIENT === 'true') {
+    log('[STARTUP] Using MOCK Notion client for E2E testing (no real API calls)');
+    const { createMockNotionClientForE2E } = await import('../test/mocks/mock-notion-client.js');
+    return createMockNotionClientForE2E();
+  }
+
+  log('[STARTUP] Using REAL Notion client');
+  const { Client } = await import('@notionhq/client');
+  return new Client({ auth: notionConfig.apiKey });
+}
+
 async function createServerDependencies(log: ServerSetupDependencies['log']): Promise<{
   logger: Logger;
-  notionClient: Client;
+  notionClient: MinimalNotionClient;
   server: Server;
   runtime: ReturnType<typeof createRuntime>;
 }> {
@@ -108,22 +139,18 @@ async function createServerDependencies(log: ServerSetupDependencies['log']): Pr
 
   const { getNotionConfig } = await import('../config/notion-config/notion-config');
   const { env: notionEnv } = await import('../config/notion-config/environment');
-  const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server');
   const { createNotionOperations } = await import('../integrations/notion');
 
-  // Minimal runtime config validation (mechanical, no external deps)
   validateRuntimeConfig();
 
   log('[STARTUP] Creating logger...');
   const logger = createLoggerFromConfig();
-
-  // Bridge application logger to core logger for runtime composition
   const runtime = createCoreRuntime(logger);
 
   log('[STARTUP] Creating Notion client...');
   const notionConfig = getNotionConfig(notionEnv);
-  const notionClient = new Client({ auth: notionConfig.apiKey });
+  const notionClient = await createNotionClient(notionConfig, log);
 
   const serverConfig = { name: runtimeConfig.serverName, version: runtimeConfig.serverVersion };
 

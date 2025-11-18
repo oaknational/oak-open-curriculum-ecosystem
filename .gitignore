@@ -36,6 +36,9 @@ yarn-error.log*
 lerna-debug.log*
 tmp/smoke-logs/
 apps/oak-curriculum-mcp-streamable-http/tmp/
+.tmp/
+# Vercel logs
+logs_result.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

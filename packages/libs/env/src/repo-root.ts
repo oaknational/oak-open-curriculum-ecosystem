@@ -41,14 +41,14 @@ export function loadRootEnv(options: LoadRootEnvOptions): {
   loaded: boolean;
   path?: string;
 } {
-  const repoRoot = findRepoRoot(options.startDir);
-
   const envObj = options.env ?? {};
   const required = options.requiredKeys ?? [];
   const missing = required.filter((k) => !envObj[k]);
   if (missing.length === 0 && required.length > 0) {
-    return { repoRoot, loaded: false };
+    return { repoRoot: 'Required keys present, skipping dotenv load', loaded: false };
   }
+
+  const repoRoot = findRepoRoot(options.startDir);
 
   const files = options.envFileOrder ?? ['.env.local', '.env'];
   for (const file of files) {

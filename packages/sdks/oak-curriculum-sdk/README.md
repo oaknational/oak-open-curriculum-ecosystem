@@ -4,7 +4,11 @@ TypeScript SDK for accessing Oak National Academy's Curriculum API.
 
 ## Overview
 
-This SDK provides a type-safe, runtime-agnostic client for the Oak Curriculum API. It is designed to be reusable across different environments and applications.
+This SDK implements the **OpenAPI-First Pipeline** pattern: a type-safe, compile-time approach where everything is generated from the OpenAPI schema. It provides a fully-typed, runtime-agnostic client for the Oak Curriculum API.
+
+**Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm type-gen` regenerates all types, validators, and MCP tools automatically.
+
+For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md)
 
 ## Architecture
 
@@ -39,6 +43,8 @@ This is achieved through:
 - **ADR-029**: No manual API data structures - everything flows from OpenAPI
 - **ADR-030**: SDK as the single source of truth - consumers import SDK types directly
 - **ADR-031**: Generation at build time - all transformations happen during SDK build
+
+> **This SDK demonstrates the compile-time generation pattern that works for any OpenAPI-compliant API.** The same pattern can be applied to other APIs, different versions, or custom implementations. See [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md) for how to extend this to new APIs.
 
 #### Key Components:
 
@@ -203,6 +209,49 @@ const units = await client.listUnits('programme-id');
 - Response caching
 - Error handling with detailed messages
 - Runtime-agnostic design
+
+## Logging
+
+The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
+
+```typescript
+import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import {
+  UnifiedLogger,
+  startTimer,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
+
+// Create logger with explicit dependency injection
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'my-app', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
+
+const client = new OakCurriculumClient({ apiKey: process.env.OAK_API_KEY });
+
+const timer = startTimer();
+try {
+  const lessons = await client.searchLessons({ subject: 'maths' });
+  const duration = timer.end();
+
+  logger.info('Search completed', {
+    resultCount: lessons.length,
+    duration: duration.formatted,
+  });
+} catch (error) {
+  logger.error('Search failed', error as Error);
+}
+```
+
+For comprehensive logging patterns, integration examples, and best practices, see the [Logging Guide](docs/logging-guide.md).
 
 ## Documentation
 

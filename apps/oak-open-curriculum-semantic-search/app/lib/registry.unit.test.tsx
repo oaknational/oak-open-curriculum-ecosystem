@@ -4,7 +4,7 @@ import StyledComponentsRegistry from './registry';
 
 vi.mock('next/navigation', () => ({
   useServerInsertedHTML: (callback: () => React.ReactNode) => {
-    callback();
+    void callback();
   },
 }));
 

@@ -44,6 +44,64 @@ By participating in this project, you agree to maintain a respectful and inclusi
    pnpm test
    ```
 
+## Contribution Levels
+
+We support different contribution paths depending on your setup time and access to services:
+
+### Level 1: Code-Only Contributions (0 minutes setup)
+
+**No environment variables required!**
+
+You can contribute immediately by:
+
+- Fixing TypeScript errors
+- Adding/improving unit tests
+- Refactoring pure functions
+- Updating documentation
+- Reviewing pull requests
+- Improving generation scripts in `type-gen/`
+
+```bash
+pnpm install
+pnpm test          # All unit tests run without API keys
+pnpm type-check    # Type checking works without env vars
+pnpm lint          # Linting works without env vars
+pnpm build         # SDK and libraries build without env vars
+```
+
+### Level 2: Integration Development (10-15 minutes setup)
+
+**Requires: `OAK_API_KEY` only**
+
+With a single API key, you can:
+
+- Run MCP servers locally
+- Test SDK integrations
+- Run most integration tests
+- Work on application features
+
+```bash
+cp .env.example .env
+# Add: OAK_API_KEY=your_key_here
+pnpm -C apps/oak-curriculum-mcp-stdio dev
+```
+
+Get your Oak API key from: Contact Oak engineering team or see [Environment Variables Guide](docs/development/environment-variables.md).
+
+### Level 3: Full Stack Development (1-2 hours setup)
+
+**Requires: Multiple service credentials**
+
+For complete E2E testing and search functionality:
+
+- `OAK_API_KEY` – Curriculum API
+- `ELASTICSEARCH_URL` + `ELASTICSEARCH_API_KEY` – Search indices
+- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY` – OAuth testing
+- `OPENAI_API_KEY` – Natural language search (optional)
+- `SEARCH_API_KEY` – Admin endpoints
+
+See workspace READMEs for detailed setup instructions.
+
 ## Development Process
 
 ### 1. Create a Feature Branch
@@ -184,20 +242,89 @@ describe('scrubEmail', () => {
 
 ## Architecture Guidelines
 
+### The Generation-First Principle
+
+This repository is fundamentally about **code generation from OpenAPI schemas**.
+
+**DO**:
+
+- ✅ Add new features by extending the OpenAPI schema (upstream)
+- ✅ Improve generation scripts in `packages/sdks/oak-curriculum-sdk/type-gen/`
+- ✅ Import types and validators from the generated SDK
+- ✅ Test that `pnpm type-gen` updates everything correctly
+- ✅ Use shared validation helpers (`parseSchema`, `parseWithCurriculumSchema`, etc.)
+
+**DON'T**:
+
+- ❌ Manually define API types or response shapes
+- ❌ Create custom validators for API data
+- ❌ Hand-write MCP tool definitions
+- ❌ Use type assertions (`as`) or `any` types
+- ❌ Duplicate schema knowledge across workspaces
+- ❌ Edit files in `src/types/generated/` directories
+- ❌ Re-validate or re-parse in runtime code (use generated helpers)
+- ❌ Widen types or add fallbacks for "missing" descriptors
+
+> **Critical**: Read [Schema-First Execution Directive](../.agent/directives-and-memory/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behavior must flow from generated artifacts.
+
 ### Layer Boundaries
 
-1. **SDK generation** – All curriculum data flows from the OpenAPI contract. Never hand-write schemas or types.
-2. **Validation layer** – Use the shared helpers exported from `packages/sdks/oak-curriculum-sdk/src/validation` (`parseSchema`, `parseWithCurriculumSchema`, `parseEndpointParameters`, `parseSearchResponse`).
-3. **Application layer** – MCP servers, Semantic Search routes, and admin tools import the SDK helpers and keep business logic pure.
-4. **Infrastructure** – Logging, configuration, storage, and transport live in `packages/libs/`.
+The architecture flows in one direction: **OpenAPI → Generation → Runtime**
+
+1. **OpenAPI Schema** (single source of truth, external)
+   - Hosted by API provider (e.g., Oak Curriculum API)
+   - Defines all endpoints, parameters, responses
+   - Changed by API maintainers, not us
+
+2. **SDK Generation** (`type-gen/` scripts)
+   - Fetches OpenAPI schema at build time
+   - Generates TypeScript types, Zod schemas, MCP tools
+   - Outputs to `src/types/generated/` (DO NOT EDIT)
+   - Transforms schema → code
+
+3. **Generated Artifacts** (`src/types/generated/`, `src/tool-generation/`)
+   - TypeScript types, Zod validators, MCP tool metadata
+   - Committed to repository for review and CI
+   - **DO NOT EDIT MANUALLY** - changes will be overwritten
+   - Import from these, never duplicate
+
+4. **Runtime Applications** (MCP servers, search app, admin tools)
+   - Import types and tools from SDK
+   - Use shared validation helpers
+   - Implement business logic
+   - No manual API definitions
+
+5. **Infrastructure Libraries** (`packages/libs/`)
+   - Logging, configuration, storage, transport
+   - Independent of API schema
+   - Reusable across different SDKs
 
 ### Adding New Features
 
-1. Update or add plan items in the relevant `.agent/plans/` document (remember ACTION/REVIEW/QUALITY-GATE cadence).
-2. Regenerate SDK artefacts with `pnpm type-gen` if the API schema changes.
-3. Extend the shared validation helpers instead of duplicating `safeParse` calls.
-4. Update the workspace README + onboarding docs so contributors know how to run or test the new behaviour.
-5. Add or amend ADRs when introducing new architectural rules (e.g. shared parsing, ingestion flow changes).
+1. **Plan the work**: Update or add plan items in `.agent/plans/` (follow ACTION/REVIEW/QUALITY-GATE cadence)
+
+2. **If API needs to change**:
+   - Work with API maintainers to update the OpenAPI schema
+   - After schema changes, run `pnpm type-gen`
+   - Fix any TypeScript errors that appear
+   - Update consuming code to use new/changed types
+
+3. **If generation needs to improve**:
+   - Modify scripts in `packages/sdks/oak-curriculum-sdk/type-gen/`
+   - Run `pnpm type-gen` to regenerate
+   - Verify generated output is correct
+   - Update tests for generation scripts
+
+4. **If application logic changes**:
+   - Import types from SDK
+   - Use shared validation helpers
+   - Keep business logic pure
+   - Write tests for your changes
+
+5. **Update documentation**:
+   - Update workspace READMEs
+   - Add or amend ADRs for architectural changes
+   - Update onboarding docs for new patterns
 
 ## Testing Your Changes
 

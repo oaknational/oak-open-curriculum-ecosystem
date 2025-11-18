@@ -1,35 +1,58 @@
 # Plan Summary and Status
 
-**Last Updated**: 2025-10-28
+**Last Updated**: 2025-11-11
 
 This document provides a quick reference for all active plans and their current status.
+
+## Plan Organization (NEW - 2025-11-11)
+
+Plans have been reorganized into topical subdirectories:
+
+- **Root**: High-priority active plans (OAuth, backlog)
+- **`sdk-and-mcp-enhancements/`**: SDK/MCP tool/resource content improvements (what we generate)
+  - Comprehensive MCP enhancement roadmap (3 plans combined)
+  - Curriculum tools/guidance and ontology resource plans
+- **`pipeline-enhancements/`**: Type-gen pipeline improvements (how we generate)
+  - OpenAPI-to-MCP framework extraction
+  - SDK workspace separation
+  - Pipeline integration plans
+- **`semantic-search/`**: Search service and UI (well-organized with index, overview, service, UI plans)
+- **`dev-tooling-and-dev-ai-support/`**: Testing, tooling, and developer infrastructure
+- **`openai-app/`**: OpenAI Apps SDK integration
+- **`observability/`**: Logging, error tracking, monitoring
+- **`external/`**: External stakeholder documents
+- **`archive/`**: Completed and superseded plans
+- **`icebox/`**: Deferred/won't implement
 
 ## Current Priorities
 
 1. **Semantic Search Phase 1** - ✅ NEAR COMPLETE
 2. **Ontology Resource** - 🔄 ACTIVE (planned)
-3. **OAuth/Clerk Integration** - 🔄 ACTIVE (planned)
-4. **Advanced MCP Tools** - ⏸ DEFERRED (until 1-3 complete)
+3. **OAuth/Clerk Integration** - 🔄 ACTIVE (finishing up)
+4. **MCP Enhancements** - ⏸ DEFERRED (until 1-3 complete)
 
 ## Active Plans
 
 ### Priority 1: Semantic Search
 
-| Plan                  | Status   | Path                                                                    |
-| --------------------- | -------- | ----------------------------------------------------------------------- |
-| High-Level Plan       | Complete | `.agent/plans/semantic-search/semantic-search-high-level-plan.md`       |
-| Context Log           | Current  | `.agent/plans/semantic-search/context.md`                               |
-| Snagging Resolution   | ✅ DONE  | `.agent/plans/semantic-search/snagging-resolution-plan.md`              |
-| Phase 1 Functionality | Complete | `.agent/plans/semantic-search/semantic-search-phase-1-functionality.md` |
+| Plan           | Status   | Path                                                   |
+| -------------- | -------- | ------------------------------------------------------ |
+| Overview       | Current  | `semantic-search/semantic-search-overview.md`          |
+| Search Service | Current  | `semantic-search/search-service/schema-first-...md`    |
+| Search UI      | Current  | `semantic-search/search-ui/frontend-implementation.md` |
+| Index          | Current  | `semantic-search/index.md`                             |
+| Archive        | Complete | `semantic-search/archive/` (completed Phase 1 work)    |
 
-**Current State**: Status-aware response handling complete; quality gates green; remote verification passing. Only documentation refresh and commit packaging remain.
+**Current State**: Planning complete; all 3 phases defined with clear sessions; ready for implementation.
+
+**Scope**: Migrate all search schemas to type-gen (SDK generation); add ontology fields (threads, programme factors, unit types, content guidance, lesson components).
 
 ### Priority 2: Ontology Resource
 
-| Plan                                 | Status      | Path                                                          |
-| ------------------------------------ | ----------- | ------------------------------------------------------------- |
-| Ontology Resource                    | NOT STARTED | `.agent/plans/curriculum-ontology-resource-plan.md`           |
-| Aggregated Tools Refactor (Sprint 0) | NOT STARTED | `.agent/plans/mcp-aggregated-tools-type-gen-refactor-plan.md` |
+| Plan                                 | Status      | Path                                                         |
+| ------------------------------------ | ----------- | ------------------------------------------------------------ |
+| Ontology Resource                    | NOT STARTED | `sdk-and-mcp-enhancements/curriculum-ontology-resource...md` |
+| Aggregated Tools Refactor (Sprint 0) | NOT STARTED | `sdk-and-mcp-enhancements/comprehensive-...md` Phase 0       |
 
 **Current State**: Sprint 0 prerequisite (aggregated tools refactor) must happen first. Aggregated tools still hand-written runtime code in `packages/sdks/oak-curriculum-sdk/src/mcp/`.
 
@@ -37,22 +60,22 @@ This document provides a quick reference for all active plans and their current 
 
 ### Priority 3: OAuth/Clerk Integration
 
-| Plan                 | Status      | Path                                            |
-| -------------------- | ----------- | ----------------------------------------------- |
-| OAuth Implementation | NOT STARTED | `.agent/plans/mcp-oauth-implementation-plan.md` |
+| Plan                 | Status       | Path                               |
+| -------------------- | ------------ | ---------------------------------- |
+| OAuth Implementation | FINISHING UP | `mcp-oauth-implementation-plan.md` |
 
-**Current State**: OAuth 2.1 Resource Server already implemented. Need to replace local demo Authorization Server with Clerk production AS.
+**Current State**: Clerk AS is live with metadata endpoints, auth middleware, and smoke/e2e coverage; remote and local smoke passes with auth bypass, while authenticated smoke awaits M2M bearer support.
 
 ### Priority 4+: Future Work
 
-| Plan                            | Status       | Priority | Path                                                       |
-| ------------------------------- | ------------ | -------- | ---------------------------------------------------------- |
-| OpenAI Apps SDK                 | Planned      | 4        | `.agent/plans/oak-openai-app-plan.md`                      |
-| Semantic Search MCP Integration | Planned      | 5        | (covered in semantic search plans)                         |
-| **Advanced MCP Tools**          | **DEFERRED** | **6**    | **`.agent/plans/advanced-mcp-tools-plan.md`**              |
-| Contract Testing                | Planned      | 7        | `.agent/plans/contract-testing-schema-evolution-plan.md`   |
-| SDK Workspace Separation        | Planned      | 8        | `.agent/plans/sdk-workspace-separation-plan.md`            |
-| OpenAPI Framework Extraction    | Blocked      | 10       | `.agent/plans/openapi-to-mcp-framework-extraction-plan.md` |
+| Plan                            | Status       | Priority | Path                                                                  |
+| ------------------------------- | ------------ | -------- | --------------------------------------------------------------------- |
+| OpenAI Apps SDK                 | Planned      | 4        | `openai-app/oak-openai-app-plan.md`                                   |
+| Semantic Search MCP Integration | Planned      | 5        | (covered in semantic search plans)                                    |
+| **MCP Enhancements**            | **DEFERRED** | **6**    | **`sdk-and-mcp-enhancements/comprehensive-...md`** (3 plans combined) |
+| Contract Testing                | Planned      | 7        | `dev-tooling-and-dev-ai-support/contract-testing-...md`               |
+| SDK Workspace Separation        | Planned      | 8        | `pipeline-enhancements/sdk-workspace-separation-plan.md`              |
+| OpenAPI Framework Extraction    | Blocked      | 10       | `pipeline-enhancements/openapi-to-mcp-framework-extraction-plan.md`   |
 
 ## Plan Relationships
 
@@ -71,23 +94,58 @@ graph TD
 
 ## Recently Updated Plans
 
-- **2025-10-28**: Created `advanced-mcp-tools-plan.md` (comprehensive plan for future tooling)
-- **2025-10-28**: Updated `high-level-plan.md` to reflect current priorities
-- **2025-10-28**: Deleted `mcp-enhancements-plan.md` (low quality, superseded)
+- **2025-11-11**: Created `mcp-enhancements/comprehensive-mcp-enhancement-plan.md` (combines 3 MCP plans)
+- **2025-11-11**: Reorganized plans into topical subdirectories
+- **2025-11-11**: Moved archived plans: `advanced-mcp-tools-plan.md`, `mcp-enhancements-plan.md`, `mcp-aggregated-tools-type-gen-refactor-plan.md`
+- **2025-11-11**: Moved context document to `.agent/context/curriculum-tools-guidance-playbooks-context.md`
+- **2025-11-11**: Updated `high-level-plan.md` with new plan structure
+- **2025-11-11**: Updated `PLAN_SUMMARY.md` to reflect reorganization
+- **2025-10-28**: Created original advanced MCP tools plans
 - **2025-10-24**: Completed status-aware response handling (semantic search)
-- **2025-10-23**: Completed OpenAI connector alias retirement
 
-## Deprecated/Superseded Plans
+## Consolidated/Archived Plans
 
-- ❌ `mcp-enhancements-plan.md` - DELETED (low quality, superseded by advanced-mcp-tools-plan.md)
-- ⏸ `curriculum-tools-guidance-playbooks-plan.md` - Phase 1 complete, Phase 2+ deferred (overlaps with advanced tools)
+- ✅ **MCP Enhancements Consolidated** (2025-11-11): Three separate plans combined into one comprehensive plan:
+  - `archive/mcp-aggregated-tools-type-gen-refactor-plan.md` → Phase 0
+  - `archive/mcp-enhancements-plan.md` → Phase 1
+  - `archive/advanced-mcp-tools-plan.md` → Phase 2
+  - **New location**: `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md`
+- ✅ **Plans Organized by Category** (2025-11-11):
+  - `curriculum-tools-guidance-playbooks-plan.md` → `sdk-and-mcp-enhancements/`
+  - `curriculum-ontology-resource-plan.md` → `sdk-and-mcp-enhancements/`
+  - Phase 1 of playbooks plan complete, Phase 2+ deferred (overlaps with MCP Enhancements Phase 2)
+- ✅ **Backlog Items Expanded** (2025-11-11):
+  - Created `dev-tooling-and-dev-ai-support/sdk-publishing-and-versioning-plan.md` (from backlog line 60)
+  - Created `dev-tooling-and-dev-ai-support/agent-lifecycle-automation-plan.md` (from backlog line 61)
+  - Created `icebox/advanced-mcp-server-ideas.md` (from backlog lines 73-74)
+  - Archived `backlog.md` and `backlog-analysis.md` (content preserved in new plans)
+
+## Future Plans (Not Yet Active)
+
+These plans are documented but not yet prioritized for implementation:
+
+| Plan                         | Priority | Category             | Path                                                       |
+| ---------------------------- | -------- | -------------------- | ---------------------------------------------------------- |
+| SDK Publishing & Versioning  | Medium   | Production hardening | `dev-tooling-and-dev-ai-support/sdk-publishing-...md`      |
+| Pair Programming Coach Agent | Medium   | DX / AI-assisted dev | `dev-tooling-and-dev-ai-support/pair-programming-coach...` |
+| Agent Lifecycle Automation   | Low      | DX improvement       | `dev-tooling-and-dev-ai-support/agent-lifecycle-...md`     |
+| Advanced MCP Server Ideas    | Low      | Research/PoC         | `icebox/advanced-mcp-server-ideas.md`                      |
+
+**SDK Publishing**: Make packages npm-installable; add CLI entry points; implement versioning workflow
+
+**Pair Programming Coach**: Event-driven VSCode/Cursor extension that monitors code changes in real-time, detects patterns (type safety, missing tests, architecture violations), and provides AI-powered suggestions like a senior engineer pair programming partner
+
+**Agent Lifecycle**: Automated commit trigger when file changes exceed threshold; runs quality gates; generates conventional commits
+
+**Advanced MCP**: Fan-out-fan-in parallel execution; review agents; cross-server pipelines (speculative)
 
 ## Quick Reference: What to Work On Next
 
-1. **If finishing semantic search**: Documentation refresh, commit packaging
-2. **If starting ontology**: Begin with Sprint 0 (aggregated tools refactor)
-3. **If starting OAuth**: Review existing OAuth 2.1 Resource Server, plan Clerk AS replacement
-4. **If considering advanced tools**: DON'T START YET - prerequisites not met
+1. **If finishing semantic search**: Begin Phase 1 implementation (schema-first migration)
+2. **If starting ontology**: Begin with Sprint 0 (see `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` Phase 0)
+3. **If finishing OAuth**: Complete M2M bearer support for authenticated smoke tests
+4. **If considering MCP enhancements**: DON'T START YET - prerequisites (semantic search, ontology, OAuth) not met
+5. **If considering npm publish**: See `sdk-publishing-and-versioning-plan.md` when production-ready
 
 ## Key Documents
 
@@ -101,15 +159,19 @@ graph TD
 
 ### Aggregated Tools Refactor (Sprint 0 - Critical Blocker)
 
+**Plan**: `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` Phase 0
+
 **Current Hand-Written Files** (need to be moved to type-gen):
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search.ts` (225 lines)
+- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search.ts` (220 lines)
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.ts` (~100 lines)
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (118 lines)
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (116 lines)
 
 **Target State**: All tool definitions generated at type-gen time from declarative configuration.
 
 **Why Critical**: Establishes the pattern for all composite tools (ontology, advanced tools, semantic search integration).
+
+**Implementation**: 6 sessions over ~2 weeks (config schema → descriptors → validators → executors → runtime integration → documentation).
 
 ### Type-Gen Infrastructure
 

@@ -4,6 +4,8 @@
 
 Accepted
 
+**Note**: Code examples in this ADR reference `ConsolaLogger`, which has been superseded by `UnifiedLogger` (see ADR-051). The dependency injection patterns described remain valid and current.
+
 ## Context
 
 During Phase 5 development, we needed to create truly transplantable tissues that could adapt to different runtime environments (Node.js, Edge, Browser) without code changes. The challenge was managing runtime-specific dependencies (filesystem, console, process) while maintaining clean architecture.

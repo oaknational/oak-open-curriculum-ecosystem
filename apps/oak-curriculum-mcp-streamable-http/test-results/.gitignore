@@ -1,0 +1,5 @@
+# Ignore all Playwright test results
+*
+# But keep this .gitignore file
+!.gitignore
+

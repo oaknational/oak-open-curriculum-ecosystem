@@ -1,6 +1,7 @@
-# Search Schema Generator Specification (Draft)
+# Search Schema Generator Specification
 
-_Last updated: 2025-09-30_
+_Last updated: 2025-11-11_  
+_Status: REFERENCE DOCUMENT_
 
 ## Purpose
 
@@ -137,10 +138,20 @@ Each module should export both `zod` schemas and TypeScript types, plus helper g
 
 ## Work Breakdown
 
-1. `requests`/`natural-requests` modules – emit Zod schema + type + guard for structured and natural search payloads; derive enums from OpenAPI and include helper constants (default includeFacets, allowed scopes). **Implemented.**
-2. `responses` modules – generate per-scope result schemas/types plus a multi-scope composer that references the suggestion schema and ensures the shared `suggestionCache` default. **Implemented.**
-3. `suggestions` module – produce request/response schemas, item schema, cache defaults, and guard helpers for use in fixtures/controllers. **Implemented.**
-4. `scopes` module – surface `SearchScope`, `SearchScopeWithAll`, and helper arrays/guards extracted from enums. **Implemented.**
-5. `fixtures` module – expose builder helpers (`createSearchLessonsResponse`, etc.) that wrap generated schemas and validate overrides. **Implemented.**
-6. Index wiring – update generated `search/index.ts` to re-export new modules and ensure zod counterparts land under `src/types/generated/zod/search`. **Implemented.**
-7. Tests – add unit coverage in `type-gen` verifying the file map contains each module and that guard helpers compile. _(Pending – to be added alongside broader generator tests.)_
+This is the reference specification for the type-gen search schema generator. See [Search Service Implementation Plan](search-service/schema-first-ontology-implementation.md#phase-1-schema-first-migration) for the actual implementation sessions.
+
+**Key Modules to Generate:**
+
+1. **requests** – Structured and natural language request schemas (Zod + TypeScript)
+2. **responses** – Per-scope result schemas (lessons, units, sequences, threads) plus multi-scope composition
+3. **suggestions** – Suggestion request/response schemas and cache metadata
+4. **scopes** – Search scope enumerations and guards
+5. **fixtures** – Builder helpers for test fixtures
+6. **index** – Aggregate exports and re-exports
+
+**Implementation Notes:**
+
+- All schemas derive from the Open Curriculum OpenAPI specification
+- Generated files include `// GENERATED FILE - DO NOT EDIT` headers
+- Type guards (e.g., `isSearchSuggestionResponse`) generated for runtime validation
+- Fixture builders use generated types for type-safe test data construction

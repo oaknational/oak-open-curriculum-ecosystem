@@ -1,11 +1,10 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 interface CapturedCall {
@@ -37,27 +36,15 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
 }
 
 function configureDevEnvironment(): () => void {
-  const previousDevToken = process.env.REMOTE_MCP_DEV_TOKEN;
-  const previousBaseUrl = process.env.BASE_URL;
-  const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
-  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-  process.env.BASE_URL = 'http://localhost:3333';
-  process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
+  const previousAuth = process.env.DANGEROUSLY_DISABLE_AUTH;
+  // Disable auth – this suite validates success envelope formatting.
+  // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   return () => {
-    if (typeof previousDevToken === 'string') {
-      process.env.REMOTE_MCP_DEV_TOKEN = previousDevToken;
+    if (typeof previousAuth === 'string') {
+      process.env.DANGEROUSLY_DISABLE_AUTH = previousAuth;
     } else {
-      Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
-    }
-    if (typeof previousBaseUrl === 'string') {
-      process.env.BASE_URL = previousBaseUrl;
-    } else {
-      Reflect.deleteProperty(process.env, 'BASE_URL');
-    }
-    if (typeof previousCanonicalUri === 'string') {
-      process.env.MCP_CANONICAL_URI = previousCanonicalUri;
-    } else {
-      Reflect.deleteProperty(process.env, 'MCP_CANONICAL_URI');
+      Reflect.deleteProperty(process.env, 'DANGEROUSLY_DISABLE_AUTH');
     }
   };
 }
@@ -72,7 +59,6 @@ async function executeToolCall(): Promise<{
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
-    .set('Authorization', `Bearer ${DEV_TOKEN}`)
     .set('Accept', ACCEPT)
     .send({
       jsonrpc: '2.0',

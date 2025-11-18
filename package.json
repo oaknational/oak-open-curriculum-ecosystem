@@ -15,21 +15,26 @@
     "test": "turbo run --continue test",
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",
+    "test:e2e:built": "turbo run --continue test:e2e:built",
     "test:ui": "turbo run --continue test:ui",
-    "smoke:dev:stub": "turbo run smoke:dev:stub",
-    "smoke:dev:live": "turbo run smoke:dev:live",
-    "smoke:remote": "turbo run smoke:remote",
+    "smoke:dev:stub": "LOG_LEVEL=debug turbo run smoke:dev:stub",
+    "smoke:dev:live": "LOG_LEVEL=debug turbo run smoke:dev:live",
+    "smoke:dev:live:auth": "LOG_LEVEL=debug turbo run smoke:dev:live:auth",
+    "test:all": "pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub",
+    "smoke:remote": "LOG_LEVEL=debug turbo run smoke:remote",
     "type-check": "turbo run --continue type-check",
     "format:root": "prettier --write --cache .",
     "format-check:root": "prettier --check .",
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
+    "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
     "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
-    "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub",
+    "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm test:e2e:built && pnpm smoke:dev:stub && pnpm smoke:dev:live",
     "re-build": "pnpm clean && pnpm install && pnpm type-gen && pnpm build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint -- --fix ",
     "check": "pnpm clean && pnpm lint:clean && pnpm make && pnpm qg",
     "app:search": "pnpm run dev --filter=@oaknational/open-curriculum-semantic-search",
+    "app:mcp": "pnpm run dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
     "identity-check": "node scripts/identity-check.mjs --mode=enforce",
     "identity-report": "node scripts/identity-check.mjs --mode=report",
     "prepare": "husky",
@@ -56,7 +61,14 @@
   "pnpm": {
     "overrides": {
       "axios": "^1.12.2"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@clerk/shared",
+      "core-js",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

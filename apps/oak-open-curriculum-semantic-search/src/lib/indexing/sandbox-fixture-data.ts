@@ -37,7 +37,7 @@ interface FixtureLessonTranscript {
   readonly vtt: string;
 }
 
-type UnknownFixtureRecord = { readonly [key: string]: unknown };
+type UnknownFixtureRecord = Readonly<Record<string, unknown>>;
 
 /**
  * Aggregated snapshot of all parsed fixture records.

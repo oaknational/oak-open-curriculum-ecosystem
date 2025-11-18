@@ -15,7 +15,6 @@ import {
 import { McpToolError, type ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 
 const ACCEPT = 'application/json, text/event-stream';
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'live-mode-dev-token';
 
 interface CapturedCall {
   readonly tool: unknown;
@@ -69,7 +68,6 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
       const res = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
-        .set('Authorization', `Bearer ${DEV_TOKEN}`)
         .set('Accept', ACCEPT)
         .send({
           jsonrpc: '2.0',
@@ -104,7 +102,6 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
       const res = await request(app)
         .post('/mcp')
         .set('Host', 'localhost')
-        .set('Authorization', `Bearer ${DEV_TOKEN}`)
         .set('Accept', ACCEPT)
         .send({
           jsonrpc: '2.0',

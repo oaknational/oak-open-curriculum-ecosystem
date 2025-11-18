@@ -37,6 +37,6 @@ async function run(): Promise<number> {
   });
 }
 
-run().then((code) => {
+await run().then((code) => {
   process.exitCode = code;
 });

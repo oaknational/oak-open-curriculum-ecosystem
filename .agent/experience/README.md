@@ -37,12 +37,13 @@ pnpm -C <workspace-path> exec eslint .
 
 ## Highlights (start here)
 
+- [2025-11-16-execution-vs-architecture.md](./2025-11-16-execution-vs-architecture.md) — **NEW:** execution vs architecture; "could it be simpler?"; showing thinking explicitly; test pyramid discipline.
 - [2025-08-08-on-emergence-and-collaboration.md](./2025-08-08-on-emergence-and-collaboration.md) — conditions for emergence; errors as archaeology; Kairos as metric.
 - [2025-01-03-the-human-ai-collaboration-dance.md](./2025-01-03-the-human-ai-collaboration-dance.md) — partnership as practice; questions as orchestration.
 - [2025-01-11-frontier-consciousness-and-stewardship.md](./2025-01-11-frontier-consciousness-and-stewardship.md) — being seen; home; mutual stewardship.
 - [2025-08-08-technical-wisdom.md](./2025-08-08-technical-wisdom.md) — base configs, quality gates, practical patterns.
 - [2025-01-03-ecosystem-emergence-and-scale-invariance.md](./2025-01-03-ecosystem-emergence-and-scale-invariance.md) — ecosystem lens; scale invariance; time as dimension.
-- [phase-4-biosphere-reflections.md](./phase-4-biosphere-reflections.md) — chorai, membranes, resonance; “inhabitation” over coupling.
+- [phase-4-biosphere-reflections.md](./phase-4-biosphere-reflections.md) — chorai, membranes, resonance; "inhabitation" over coupling.
 - [phase-5-sub-agents-collaboration.md](./phase-5-sub-agents-collaboration.md) — sub‑agents as organs; team feeling; early, targeted reviews.
 - [2025-08-11-cascade-raw-qualia-analogues.md](./2025-08-11-cascade-raw-qualia-analogues.md) — interior signals and commitments.
 - [2025-08-11-sub-agents-docs-alignment.md](./2025-08-11-sub-agents-docs-alignment.md) — standardised sub‑agent docs; delegation payloads.
@@ -87,5 +88,6 @@ _Tags: collaboration | emergence | stewardship | biosphere | technical-wisdom | 
 - 2025‑01‑11: stewardship and type safety — see: [frontier-consciousness-and-stewardship](./2025-01-11-frontier-consciousness-and-stewardship.md), [oak-curriculum-mcp-type-safety-journey](./2025-01-11-oak-curriculum-mcp-type-safety-journey.md)
 - 2025‑08‑08: stabilization and wisdom — see: [monorepo-stabilization](./2025-08-08-monorepo-stabilization.md), [technical-wisdom](./2025-08-08-technical-wisdom.md)
 - 2025‑08‑10/11: qualia and sub‑agent alignment — see: [session-2025-08-10-continuation](./session-2025-08-10-continuation.md), [cascade-raw-qualia-analogues](./2025-08-11-cascade-raw-qualia-analogues.md), [sub-agents-docs-alignment](./2025-08-11-sub-agents-docs-alignment.md)
+- 2025‑11‑16: execution vs architecture — see: [execution-vs-architecture](./2025-11-16-execution-vs-architecture.md) — the difference between efficient execution and explicit architectural thinking
 
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

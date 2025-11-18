@@ -18,20 +18,32 @@ import {
 import { EXPECTED_TOOLS, type SmokeContext } from './types.js';
 import { createAssertionLogger, logAssertionSuccess, recordSsePayload } from './logging.js';
 
-export async function assertToolCatalogue(context: SmokeContext): Promise<void> {
+export async function assertToolCatalogue(
+  context: SmokeContext,
+  options?: { readonly expectedMinimum?: number },
+): Promise<void> {
   const logger = createAssertionLogger(context, 'tools');
-  logger.info('Validating tools/list response');
+  const expectedMin = options?.expectedMinimum ?? EXPECTED_TOOLS.length;
+  logger.info('Validating tools/list response', { expectedMinimum: expectedMin });
   const names = await fetchToolNames(context);
   logger.debug('Canonical tools/list response captured', { tools: names });
   if (context.mode === 'remote' && names.length === 0) {
     logger.warn('Skipping tool catalogue assertions; remote /mcp tools/list failed');
     return;
   }
+
+  // Verify minimum tool count
+  assert.ok(
+    names.length >= expectedMin,
+    `tools/list should include at least ${String(expectedMin)} tools (got ${String(names.length)})`,
+  );
+
+  // Verify critical tools are present
   for (const tool of EXPECTED_TOOLS) {
     assert.ok(names.includes(tool), `tools/list should include ${tool}`);
   }
   logAssertionSuccess(logger, 'tools/list includes expected entries', {
-    expectedCount: EXPECTED_TOOLS.length,
+    expectedMinimum: expectedMin,
     receivedCount: names.length,
   });
 }
@@ -90,7 +102,7 @@ async function fetchToolNames(context: SmokeContext): Promise<readonly string[]>
   return extractToolNames(text);
 }
 
-async function fetchToolResponse(
+export async function fetchToolResponse(
   context: SmokeContext,
   headers: Record<string, string>,
   logger: Logger,
@@ -127,7 +139,7 @@ async function fetchToolResponse(
   return response;
 }
 
-function parseToolResult(
+export function parseToolResult(
   response: JsonResponse,
   logger: Logger,
 ): { readonly envelope: JsonRpcEnvelope; readonly resultRecord: JsonObject } {
@@ -138,7 +150,7 @@ function parseToolResult(
   return { envelope, resultRecord };
 }
 
-function extractToolPayload(resultRecord: JsonObject, logger: Logger): readonly unknown[] {
+export function extractToolPayload(resultRecord: JsonObject, logger: Logger): readonly unknown[] {
   const isError =
     resultRecord.isError === undefined
       ? false

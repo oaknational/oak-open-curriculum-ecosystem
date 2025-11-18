@@ -1,3 +1,19 @@
+/**
+ * This file takes custom Zod schemas and registers them for generation into an OpenAPI document.
+ *
+ * Most of the end points are pass-throughs to the SDK and therefore the Open Curriculum API
+ * OpenAPI document. So we are doing two conversions:
+ * 1. OpenAPI document to Zod schemas in the SDK type-gen
+ * 2. Zod schemas to OpenAPI document in this workspace
+ *
+ * The more we push the type definitions into the SDK type-gen, the more we can reduce
+ * the complexity of this file.
+ *
+ * Semantic search is a fundamental application of the Oak Open Curriculum API, just like
+ * MCP, and so it belongs in the SDK type-gen.
+ *
+ */
+
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from '@asteasolutions/zod-to-openapi';
 import { registerOpenApiPaths } from './openapi.register';
 import {

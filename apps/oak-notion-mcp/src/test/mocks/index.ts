@@ -17,5 +17,8 @@ export {
 // Export API response mocks - simulated external responses
 export { createMockListUsersResponse, createMockSearchResponse } from './notion-api-mocks';
 
+// Export mock Notion client for E2E testing
+export { createMockNotionClientForE2E } from './mock-notion-client';
+
 // Export runtime mocks
 export { createMockRuntime } from './runtime-mocks';

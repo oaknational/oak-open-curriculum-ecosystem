@@ -185,10 +185,10 @@ function StreamOutputBody({ text, source }: { text: string; source: string }): J
     >
       <OakTypography as="p" $font="body-4" $color="text-subdued">
         {lines.length > 0
-          ? lines.map((line, index) => (
-              <Fragment key={`${source}-line-${index}`}>
+          ? lines.map((line, index, arr) => (
+              <Fragment key={`${source}-line-${line || 'empty'}`}>
                 {line.length > 0 ? line : null}
-                {index < lines.length - 1 ? <br /> : null}
+                {index < arr.length - 1 ? <br /> : null}
               </Fragment>
             ))
           : '—'}

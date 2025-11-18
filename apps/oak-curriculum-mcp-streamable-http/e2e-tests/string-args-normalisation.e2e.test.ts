@@ -1,19 +1,17 @@
 import request from 'supertest';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 describe('HTTP boundary argument validation', () => {
   beforeEach(() => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    // Disable auth – this suite inspects HTTP argument validation only.
+    // Auth enforcement has dedicated coverage in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    process.env.BASE_URL = 'http://localhost';
-    process.env.MCP_CANONICAL_URI = 'http://localhost/mcp';
   });
 
   function extractErrorText(body: string): string {
@@ -34,7 +32,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -52,7 +49,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -70,7 +66,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -111,7 +106,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp({ toolHandlerOverrides: overrides });
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .set('Host', 'localhost')
       .send({

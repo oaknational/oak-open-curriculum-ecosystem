@@ -2,8 +2,9 @@
 
 ## Start Here
 
-1. **→ Current Architecture Overview (this page)**
-2. **→ Historical Context: Greek Ecosystem Deprecation** ([deprecation doc](./greek-ecosystem-deprecation.md))
+1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) - **Read this first** to understand the core pattern
+2. **→ Current Architecture Overview (this page)** - Standard structure and boundaries
+3. **→ Historical Context: Greek Ecosystem Deprecation** ([deprecation doc](./greek-ecosystem-deprecation.md))
 
 ## Reference Documentation
 
@@ -19,8 +20,9 @@
 - Provider injection replaces runtime auto‑detection
 - Apps compose a `CoreRuntime` and inject dependencies (DI) into servers and tools
 - A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
+- **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
 - Provider system overview: see [Provider System](./provider-system.md)
-- Onboarding guide: see [Onboarding](../onboarding.md)
+- Onboarding guide: see [Onboarding](../development/onboarding.md)
 
 #### Rules & Relationships
 

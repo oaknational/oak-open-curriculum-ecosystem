@@ -14,10 +14,21 @@ import {
   createOakPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
-import type { ServerConfig, Logger } from './wiring.js';
+import type { ServerConfig } from './wiring.js';
+import { startTimer, type Logger, type ErrorContext } from '@oaknational/mcp-logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
+import { generateCorrelationId } from '../correlation/index.js';
+import { createChildLogger } from '../logging/index.js';
+
+/**
+ * Threshold in milliseconds for slow operation warnings.
+ * Tool executions exceeding this duration will be logged at WARN level.
+ *
+ * @internal
+ */
+const SLOW_OPERATION_THRESHOLD_MS = 5000;
 
 /**
  * Setup shutdown handler
@@ -113,6 +124,96 @@ function ensureDescriptorDescription(
   return descriptor.description;
 }
 
+function createHandlersForTool(
+  correlatedLogger: Logger,
+  name: string,
+  description: string,
+  descriptor: ReturnType<typeof getToolFromToolName>,
+  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+): ReturnType<typeof createToolResponseHandlers> {
+  return createToolResponseHandlers(correlatedLogger, {
+    name,
+    description,
+    inputSchemaRaw: descriptor.inputSchema,
+    inputSchemaZod: input,
+    outputSchemaRaw: descriptor.toolOutputJsonSchema,
+    outputSchemaZod: descriptor.zodOutputSchema,
+  });
+}
+
+function handleToolResult(
+  execResult: Awaited<ReturnType<typeof executeToolCall>>,
+  params: unknown,
+  descriptor: ReturnType<typeof getToolFromToolName>,
+  handlers: ReturnType<typeof createToolResponseHandlers>,
+  errorContext?: ErrorContext,
+): ReturnType<ReturnType<typeof createToolResponseHandlers>['handleSuccess']> {
+  if (execResult.error) {
+    return handlers.handleExecutionError(params, execResult.error, errorContext);
+  }
+  const validation = validateOutput(descriptor, execResult);
+  if (!validation.ok) {
+    return handlers.handleValidationError(params, execResult, validation.message, errorContext);
+  }
+  return handlers.handleSuccess(execResult);
+}
+
+// eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
+function createToolHandler<TName extends (typeof toolNames)[number]>(
+  name: TName,
+  description: string,
+  descriptor: ToolDescriptorForName<TName>,
+  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+  client: ReturnType<typeof createOakPathBasedClient>,
+  logger: Logger,
+  toolExecutors?: UniversalToolExecutors,
+) {
+  return async (params: unknown) => {
+    const timer = startTimer();
+    const correlationId = generateCorrelationId();
+    const correlatedLogger = createChildLogger(logger, correlationId);
+
+    correlatedLogger.debug('Tool execution started', { toolName: name, correlationId });
+
+    const handlers = createHandlersForTool(correlatedLogger, name, description, descriptor, input);
+
+    const execResult = toolExecutors?.executeMcpTool
+      ? await toolExecutors.executeMcpTool(name, params ?? {})
+      : await executeToolCall(name, params, client);
+
+    const duration = timer.end();
+
+    // Build error context for enrichment
+    const errorContext: ErrorContext = {
+      correlationId,
+      duration,
+      toolName: name,
+    };
+
+    const result = handleToolResult(execResult, params, descriptor, handlers, errorContext);
+    const isSlowOperation = duration.ms > SLOW_OPERATION_THRESHOLD_MS;
+
+    const status = execResult.error
+      ? 'with error'
+      : validateOutput(descriptor, execResult).ok
+        ? 'success'
+        : 'with validation error';
+
+    const logMethod = isSlowOperation ? 'warn' : 'debug';
+    const logData = {
+      toolName: name,
+      correlationId,
+      duration: duration.formatted,
+      durationMs: duration.ms,
+      ...(isSlowOperation && { slowOperation: true }),
+    };
+
+    correlatedLogger[logMethod](`Tool execution completed ${status}`, logData);
+
+    return result;
+  };
+}
+
 function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
@@ -123,31 +224,18 @@ function registerMcpTools(
     const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
     const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
     const description = ensureDescriptorDescription(descriptor, name);
-    const handlers = createToolResponseHandlers(logger, {
+
+    const handler = createToolHandler(
       name,
       description,
-      inputSchemaRaw: descriptor.inputSchema,
-      inputSchemaZod: input,
-      outputSchemaRaw: descriptor.toolOutputJsonSchema,
-      outputSchemaZod: descriptor.zodOutputSchema,
-    });
-    server.registerTool(
-      name,
-      { title: name, description, inputSchema: input },
-      async (params: unknown) => {
-        const execResult = toolExecutors?.executeMcpTool
-          ? await toolExecutors.executeMcpTool(name, params ?? {})
-          : await executeToolCall(name, params, client);
-        if (execResult.error) {
-          return handlers.handleExecutionError(params, execResult.error);
-        }
-        const validation = validateOutput(descriptor, execResult);
-        if (!validation.ok) {
-          return handlers.handleValidationError(params, execResult, validation.message);
-        }
-        return handlers.handleSuccess(execResult);
-      },
+      descriptor,
+      input,
+      client,
+      logger,
+      toolExecutors,
     );
+
+    server.registerTool(name, { title: name, description, inputSchema: input }, handler);
   }
 }
 

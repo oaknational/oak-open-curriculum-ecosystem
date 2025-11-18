@@ -106,23 +106,28 @@ export interface StubbedStdioServer {
   close(): Promise<void>;
 }
 
-function createNoopLogger(): {
+interface NoopLogger {
   trace: () => void;
   debug: () => void;
   info: () => void;
   warn: () => void;
   error: () => void;
   fatal: () => void;
-} {
+  child: () => NoopLogger;
+}
+
+function createNoopLogger(): NoopLogger {
   const noop = (): void => undefined;
-  return {
+  const logger: NoopLogger = {
     trace: noop,
     debug: noop,
     info: noop,
     warn: noop,
     error: noop,
     fatal: noop,
+    child: () => logger, // Return self for noop logger
   };
+  return logger;
 }
 
 function buildToolExecutors(missingTools: ReadonlySet<ToolName>): UniversalToolExecutors {

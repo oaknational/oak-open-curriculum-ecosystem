@@ -6,17 +6,17 @@ import { AccentTypography, HeroCard, HeroHeadingCluster } from './SearchPageClie
 const HERO_LEAD_PARAGRAPH =
   'Blend structured filters with natural-language prompts to surface Oak lessons, units, and programmes in seconds.';
 
-const HERO_BODY_PARAGRAPHS: ReadonlyArray<string> = [
+const HERO_BODY_PARAGRAPHS: readonly string[] = [
   'Results stay visible alongside the controls, so you can compare options without scrolling back.',
   'Switch between structured and natural language journeys whenever you need a different approach.',
 ];
 
-const STRUCTURED_HERO_PARAGRAPHS: ReadonlyArray<string> = [
+const STRUCTURED_HERO_PARAGRAPHS: readonly string[] = [
   'Choose subject, phase, and scope to target the Oak catalogue with precision.',
   'Results update alongside the form so you can spot the right lesson immediately.',
 ];
 
-const NATURAL_HERO_PARAGRAPHS: ReadonlyArray<string> = [
+const NATURAL_HERO_PARAGRAPHS: readonly string[] = [
   'Describe what you need in plain language and we will translate it into a structured query for you.',
   'Matching results appear next to the prompt so refinements stay effortless.',
 ];
@@ -32,9 +32,7 @@ export function SearchHero({ variant }: { variant: SearchLayoutVariant }): JSX.E
   return <DefaultHero />;
 }
 
-export function buildSkipLinks(
-  variant: SearchLayoutVariant,
-): Array<{ href: string; label: string }> {
+export function buildSkipLinks(variant: SearchLayoutVariant): { href: string; label: string }[] {
   switch (variant) {
     case 'structured':
       return buildStructuredSkipLinks();
@@ -145,7 +143,7 @@ function NaturalHero(): JSX.Element {
   );
 }
 
-function buildStructuredSkipLinks(): Array<{ href: string; label: string }> {
+function buildStructuredSkipLinks(): { href: string; label: string }[] {
   return [
     { href: '#structured-search-panel', label: 'Skip to structured search form' },
     { href: '#structured-search-results', label: 'Skip to structured results' },
