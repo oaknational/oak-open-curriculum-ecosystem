@@ -46,7 +46,7 @@ export interface MultiScopeBucketView {
   facets: SearchFacets | null;
 }
 
-export type SearchController = {
+export interface SearchController {
   mode: 'idle' | 'single' | 'multi';
   results: SearchResultItem[];
   facets: SearchFacets | null;
@@ -58,13 +58,13 @@ export type SearchController = {
   onStart: () => void;
   onSuccess: (payload: unknown | null) => void;
   onError: (message: string | null) => void;
-};
+}
 
 type ParsedHybridPayload =
   | { kind: 'single'; response: HybridResponse }
   | { kind: 'multi'; response: SearchMultiScopeResponse };
 
-type SearchState = {
+interface SearchState {
   mode: 'idle' | 'single' | 'multi';
   results: SearchResultItem[];
   facets: SearchFacets | null;
@@ -73,7 +73,7 @@ type SearchState = {
   suggestions: SearchSuggestionItem[];
   error: string | null;
   loading: boolean;
-};
+}
 
 type SearchAction =
   | { type: 'start' }

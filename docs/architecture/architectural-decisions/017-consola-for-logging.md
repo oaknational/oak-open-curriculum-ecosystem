@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+~~Accepted~~ → **Superseded by ADR-051** (2025-11-08)
 
 ## Context
 

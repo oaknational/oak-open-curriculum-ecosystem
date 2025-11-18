@@ -1,4 +1,4 @@
-export type UnknownObject = { readonly [key: string]: unknown };
+export type UnknownObject = Readonly<Record<string, unknown>>;
 
 export function isUnknownObject(value: unknown): value is UnknownObject {
   return typeof value === 'object' && value !== null;

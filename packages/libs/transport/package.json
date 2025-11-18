@@ -33,9 +33,7 @@
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
-  "dependencies": {
-    "@oaknational/mcp-logger": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.9.2"
   },

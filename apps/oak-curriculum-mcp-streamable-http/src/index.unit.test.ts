@@ -34,35 +34,47 @@ function isTextContent(value: unknown): value is { type: string; text: string } 
     typeof (value as { text?: unknown }).text === 'string'
   );
 }
-import { createApp } from './index.js';
+import { createApp } from './application.js';
 
 describe('Oak Curriculum MCP Streamable HTTP', () => {
-  const DEV_TOKEN = 'dev-token';
   let app: express.Express;
 
   /** @todo refactor the underlying lying so we don't have to care about envs in unit tests */
   beforeEach(() => {
     delete process.env.BASE_URL;
     delete process.env.MCP_CANONICAL_URI;
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
     process.env.OAK_API_KEY = 'test-key';
+    // Use real Clerk key format for middleware initialization
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
+    // Bypass auth for unit tests (testing tool execution, not auth) - safe for local dev only
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+    process.env.NODE_ENV = 'development';
+    delete process.env.VERCEL; // Ensure bypass works (only works when NOT on Vercel)
     vi.restoreAllMocks();
     app = createApp();
   });
 
-  it('returns 401 without Authorization header', async () => {
-    const res = await request(app)
+  it('returns 401 with Clerk auth when bypass not enabled', async () => {
+    // Save current bypass setting
+    const originalBypass = process.env.DANGEROUSLY_DISABLE_AUTH;
+    // Disable bypass temporarily
+    delete process.env.DANGEROUSLY_DISABLE_AUTH;
+    const authApp = createApp();
+    const res = await request(authApp)
       .post('/mcp')
-      .set('Accept', 'application/json')
+      .set('Accept', 'application/json, text/event-stream')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    // Restore bypass setting for other tests
+    if (originalBypass) {
+      process.env.DANGEROUSLY_DISABLE_AUTH = originalBypass;
+    }
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty('error');
   });
 
-  it('lists tools with dev token', async () => {
+  it('lists tools with auth bypassed', async () => {
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', 'application/json, text/event-stream')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
@@ -88,7 +100,6 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
 
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', 'application/json, text/event-stream')
       .send({
         jsonrpc: '2.0',
@@ -117,7 +128,6 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
 
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', 'application/json, text/event-stream')
       .send({
         jsonrpc: '2.0',

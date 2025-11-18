@@ -173,37 +173,24 @@ function buildStructuredBody(model: SearchStructuredRequest): SearchStructuredRe
     scope: model.scope,
     text: model.text,
     includeFacets: model.includeFacets ?? true,
+    // Conditionally include optional string fields using spread (only non-empty strings)
+    ...(isNonEmptyString(model.subject) && { subject: model.subject }),
+    ...(isNonEmptyString(model.keyStage) && { keyStage: model.keyStage }),
+    ...(isNonEmptyString(model.phaseSlug) && { phaseSlug: model.phaseSlug }),
+    // Conditionally include optional positive numbers
+    ...(isPositiveNumber(model.minLessons) && { minLessons: model.minLessons }),
+    ...(isPositiveNumber(model.size) && { size: model.size }),
   };
-
-  assignOptionalString(body, 'subject', model.subject);
-  assignOptionalString(body, 'keyStage', model.keyStage);
-  assignOptionalPositive(body, 'minLessons', model.minLessons);
-  assignOptionalPositive(body, 'size', model.size);
-  assignOptionalString(body, 'phaseSlug', model.phaseSlug);
 
   return body;
 }
 
-function assignOptionalString<K extends 'subject' | 'keyStage' | 'phaseSlug'>(
-  target: SearchStructuredRequest,
-  key: K,
-  value: SearchStructuredRequest[K],
-): void {
-  if (typeof value === 'string' && value.length > 0) {
-    target[key] = value;
-  } else {
-    delete target[key];
-  }
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0;
 }
 
-function assignOptionalPositive<K extends 'minLessons' | 'size'>(
-  target: SearchStructuredRequest,
-  key: K,
-  value?: number,
-): void {
-  if (typeof value === 'number' && value > 0) {
-    target[key] = value;
-  }
+function isPositiveNumber(value: unknown): value is number {
+  return typeof value === 'number' && value > 0;
 }
 
 function makeServerReducer(

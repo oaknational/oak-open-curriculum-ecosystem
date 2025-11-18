@@ -16,13 +16,13 @@ export async function parseQuery(query: string): Promise<QueryParserResponse> {
   const openai = createOpenAI({ apiKey: e.OPENAI_API_KEY });
   const request = QueryParserRequestSchema.parse({ query });
 
-  type Generation = {
+  interface Generation {
     intent: QueryParserIntent;
     text: QueryParserResponse['text'];
     subject?: string;
     keyStage?: string;
     minLessons?: QueryParserResponse['minLessons'];
-  };
+  }
 
   const GenerationSchema = z
     .object({

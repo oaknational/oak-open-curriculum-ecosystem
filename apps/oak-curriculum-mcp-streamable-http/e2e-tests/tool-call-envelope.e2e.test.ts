@@ -1,49 +1,27 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
 const ACCEPT = 'application/json, text/event-stream';
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 
 function configureRealApiEnvironment(): () => void {
   const previous = {
-    BASE_URL: process.env.BASE_URL,
-    MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
-    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
-    REMOTE_MCP_DEV_TOKEN: process.env.REMOTE_MCP_DEV_TOKEN,
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
     OAK_API_KEY: process.env.OAK_API_KEY,
   };
-  delete process.env.BASE_URL;
-  delete process.env.MCP_CANONICAL_URI;
-  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  // Disable auth – this test focuses on response formatting.
+  // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'stub-test-key';
 
   return () => {
-    if (typeof previous.BASE_URL === 'string') {
-      process.env.BASE_URL = previous.BASE_URL;
+    if (typeof previous.DANGEROUSLY_DISABLE_AUTH === 'string') {
+      process.env.DANGEROUSLY_DISABLE_AUTH = previous.DANGEROUSLY_DISABLE_AUTH;
     } else {
-      delete process.env.BASE_URL;
-    }
-
-    if (typeof previous.MCP_CANONICAL_URI === 'string') {
-      process.env.MCP_CANONICAL_URI = previous.MCP_CANONICAL_URI;
-    } else {
-      delete process.env.MCP_CANONICAL_URI;
-    }
-
-    if (typeof previous.REMOTE_MCP_ALLOW_NO_AUTH === 'string') {
-      process.env.REMOTE_MCP_ALLOW_NO_AUTH = previous.REMOTE_MCP_ALLOW_NO_AUTH;
-    } else {
-      delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
-    }
-    if (typeof previous.REMOTE_MCP_DEV_TOKEN === 'string') {
-      process.env.REMOTE_MCP_DEV_TOKEN = previous.REMOTE_MCP_DEV_TOKEN;
-    } else {
-      delete process.env.REMOTE_MCP_DEV_TOKEN;
+      delete process.env.DANGEROUSLY_DISABLE_AUTH;
     }
     if (typeof previous.OAK_API_KEY === 'string') {
       process.env.OAK_API_KEY = previous.OAK_API_KEY;
@@ -97,7 +75,6 @@ describe('Tool response envelope formatting', () => {
         .post('/mcp')
         .set('Accept', ACCEPT)
         .set('Host', 'localhost')
-        .set('Authorization', `Bearer ${DEV_TOKEN}`)
         .send({
           jsonrpc: '2.0',
           id: '1',

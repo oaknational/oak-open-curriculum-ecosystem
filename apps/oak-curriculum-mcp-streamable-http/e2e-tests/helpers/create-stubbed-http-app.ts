@@ -1,8 +1,9 @@
 import type express from 'express';
-import { createApp } from '../../src/index.js';
+import { createApp } from '../../src/application.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
-export const STUB_DEV_BEARER_TOKEN = 'stub-dev-token';
+// No longer using bearer tokens - using auth bypass instead
+export const STUB_DEV_BEARER_TOKEN = ''; // Deprecated, kept for backward compatibility
 const STUB_API_KEY = 'stub-api-key';
 
 export interface StubbedHttpApp {
@@ -22,24 +23,25 @@ export function createStubbedHttpApp(): StubbedHttpApp {
   const previous = {
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
     OAK_API_KEY: process.env.OAK_API_KEY,
-    REMOTE_MCP_DEV_TOKEN: process.env.REMOTE_MCP_DEV_TOKEN,
-    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
     DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
-    BASE_URL: process.env.BASE_URL,
-    MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
-    NODE_ENV: process.env.NODE_ENV,
+    CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   } as const;
 
+  // Configure for stub mode with auth bypass
   process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
   process.env.OAK_API_KEY = STUB_API_KEY;
-  process.env.REMOTE_MCP_DEV_TOKEN = STUB_DEV_BEARER_TOKEN;
-  setEnv('REMOTE_MCP_ALLOW_NO_AUTH', undefined);
-  setEnv('DANGEROUSLY_DISABLE_AUTH', undefined);
-  setEnv('BASE_URL', undefined);
-  setEnv('MCP_CANONICAL_URI', undefined);
-  process.env.NODE_ENV = 'test';
+
+  // Disable auth – stub-mode E2E tests focus on protocol responses.
+  // Auth enforcement is proven by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+
+  // Clerk keys not needed when auth disabled, but set for completeness
+  process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
+
   process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
   setEnv('ALLOWED_ORIGINS', undefined);
 
@@ -48,12 +50,9 @@ export function createStubbedHttpApp(): StubbedHttpApp {
   const restoreEnvironment = (): void => {
     setEnv('OAK_CURRICULUM_MCP_USE_STUB_TOOLS', previous.OAK_CURRICULUM_MCP_USE_STUB_TOOLS);
     setEnv('OAK_API_KEY', previous.OAK_API_KEY);
-    setEnv('REMOTE_MCP_DEV_TOKEN', previous.REMOTE_MCP_DEV_TOKEN);
-    setEnv('REMOTE_MCP_ALLOW_NO_AUTH', previous.REMOTE_MCP_ALLOW_NO_AUTH);
     setEnv('DANGEROUSLY_DISABLE_AUTH', previous.DANGEROUSLY_DISABLE_AUTH);
-    setEnv('BASE_URL', previous.BASE_URL);
-    setEnv('MCP_CANONICAL_URI', previous.MCP_CANONICAL_URI);
-    setEnv('NODE_ENV', previous.NODE_ENV);
+    setEnv('CLERK_PUBLISHABLE_KEY', previous.CLERK_PUBLISHABLE_KEY);
+    setEnv('CLERK_SECRET_KEY', previous.CLERK_SECRET_KEY);
     setEnv('ALLOWED_HOSTS', previous.ALLOWED_HOSTS);
     setEnv('ALLOWED_ORIGINS', previous.ALLOWED_ORIGINS);
   };

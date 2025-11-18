@@ -55,9 +55,7 @@ describe('fixture mode resolution', () => {
       live: 'off',
     };
 
-    for (const [mode, cookieValue] of Object.entries(expectations) as Array<
-      [FixtureMode, string]
-    >) {
+    for (const [mode, cookieValue] of Object.entries(expectations) as [FixtureMode, string][]) {
       expect(modeToCookieValue(mode)).toBe(cookieValue);
     }
   });

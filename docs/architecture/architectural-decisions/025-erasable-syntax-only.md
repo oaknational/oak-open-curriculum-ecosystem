@@ -4,6 +4,8 @@
 
 Accepted (Revised)
 
+**Note**: Code examples in this ADR reference `ConsolaLogger`, which has been superseded by `UnifiedLogger` (see ADR-051). The erasable syntax patterns described remain valid and current.
+
 ## Context
 
 As part of Phase 5's completion and our commitment to pure ESM modules, we need to ensure that all TypeScript-specific syntax can be completely removed during compilation without leaving any runtime artifacts. This is especially important for:

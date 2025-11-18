@@ -15,6 +15,9 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "e2e-tests/**/*",
-    "vitest.e2e.config.ts"
+    "vitest.e2e.config.ts",
+    "smoke-tests/**/*",
+    "docs/**/*",
+    "temp-secrets/**/*"
   ]
 }

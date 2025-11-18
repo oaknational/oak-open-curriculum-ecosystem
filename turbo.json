@@ -132,6 +132,19 @@
       "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
+    "test:e2e:built": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "e2e-tests/built-server.e2e.test.ts",
+        "dist/**/*.js",
+        "dist/**/*.d.ts"
+      ],
+      "env": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"],
+      "passThroughEnv": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"]
+    },
     "test:ui": {
       "outputs": [],
       "cache": true,
@@ -174,17 +187,31 @@
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
+      ],
+      "env": ["LOG_LEVEL"],
+      "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
       "dependsOn": ["^smoke:dev:live"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"],
+      "env": ["OAK_API_KEY", "LOG_LEVEL"],
+      "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:dev:live:auth": {
+      "dependsOn": ["^smoke:dev:live:auth"],
+      "cache": false,
+      "outputs": [],
+      "env": ["OAK_API_KEY", "LOG_LEVEL"],
+      "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live-auth.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     },
@@ -196,7 +223,9 @@
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
+      ],
+      "env": ["LOG_LEVEL"],
+      "passThroughEnv": ["LOG_LEVEL"]
     }
   }
 }

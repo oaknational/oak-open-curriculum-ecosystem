@@ -103,15 +103,15 @@ export function rewriteBulkOperations(
   });
 }
 
-interface UnknownObject {
-  [key: string]: unknown;
-}
+type UnknownObject = Record<string, unknown>;
 
 interface IndexMetadata extends UnknownObject {
   _index: string;
 }
 
-type IndexAction = { index: IndexMetadata };
+interface IndexAction {
+  index: IndexMetadata;
+}
 
 function isIndexAction(value: unknown): value is IndexAction {
   if (!isUnknownObject(value)) {

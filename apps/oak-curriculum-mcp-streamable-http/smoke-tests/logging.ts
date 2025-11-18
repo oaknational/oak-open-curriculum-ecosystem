@@ -1,6 +1,13 @@
 import path from 'node:path';
 
-import { createAdaptiveLogger, parseLogLevel, LOG_LEVEL_KEY } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  LOG_LEVEL_KEY,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import type { Logger, LogLevel } from '@oaknational/mcp-logger';
 
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
@@ -25,10 +32,20 @@ export function resolveLogConfig(): LogConfig {
 }
 
 export function createRootLogger(mode: SmokeSuiteMode): Logger {
-  return createAdaptiveLogger({
-    name: 'streamable-http-smoke',
-    level: resolveLogLevel(),
+  const level = resolveLogLevel();
+  const minSeverity = logLevelToSeverityNumber(level);
+  const resourceAttributes = buildResourceAttributes(
+    process.env,
+    'streamable-http-smoke',
+    process.env.npm_package_version ?? '0.0.0',
+  );
+
+  return new UnifiedLogger({
+    minSeverity,
+    resourceAttributes,
     context: { requestedMode: mode },
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
   });
 }
 

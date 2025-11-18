@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback } from 'react';
 import type { ChangeEvent, JSX } from 'react';
 import { OakRadioButton, OakRadioGroup, oakColorTokens } from '@oaknational/oak-components';
 import styledComponents from 'styled-components';
@@ -18,7 +19,7 @@ function resolveColor(token: string | null | undefined, fallback: string): strin
   return typeof resolved === 'string' ? resolved : fallback;
 }
 
-const OPTIONS: ReadonlyArray<{ value: ThemeMode; label: string }> = [
+const OPTIONS: readonly { value: ThemeMode; label: string }[] = [
   { value: THEME_MODES.system, label: 'System' },
   { value: THEME_MODES.light, label: 'Light' },
   { value: THEME_MODES.dark, label: 'Dark' },
@@ -50,12 +51,15 @@ const ThemeModeRadioGroup = styledComponents(OakRadioGroup)`
 export default function ThemeSelect(): JSX.Element {
   const { mode, setMode } = useThemeContext();
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>): void {
-    const next = OPTIONS.find((option) => option.value === event.target.value);
-    if (next) {
-      setMode(next.value);
-    }
-  }
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      const next = OPTIONS.find((option) => option.value === event.target.value);
+      if (next) {
+        setMode(next.value);
+      }
+    },
+    [setMode],
+  );
 
   return (
     <ThemeModeRadioGroup

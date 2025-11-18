@@ -15,10 +15,10 @@ interface SearchFixtureModeToggleProps {
   readonly label?: string;
 }
 
-const FIXTURE_MODE_OPTIONS: ReadonlyArray<{
+const FIXTURE_MODE_OPTIONS: readonly {
   readonly value: FixtureMode;
   readonly label: string;
-}> = [
+}[] = [
   { value: 'live', label: 'Live data' },
   { value: 'fixtures', label: 'Fixtures (success)' },
   { value: 'fixtures-empty', label: 'Fixtures (empty)' },

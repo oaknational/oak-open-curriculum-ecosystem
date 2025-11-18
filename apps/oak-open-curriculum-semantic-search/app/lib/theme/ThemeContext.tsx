@@ -11,7 +11,11 @@ import React, {
 } from 'react';
 import { OakGlobalStyle, OakThemeProvider } from '@oaknational/oak-components';
 
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+} from '@oaknational/mcp-logger';
 import { createLightTheme } from '../../ui/themes/light';
 import { createDarkTheme } from '../../ui/themes/dark';
 import type { AppTheme } from '../../ui/themes/types';
@@ -33,13 +37,19 @@ export { THEME_MODES };
 export type { ResolvedThemeMode, ThemeMode };
 
 /** @todo centralise logger creation */
-const logger = createAdaptiveLogger({ name: 'ThemeContext' });
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber('INFO'),
+  resourceAttributes: buildResourceAttributes({}, 'ThemeContext', '1.0.0'),
+  context: {},
+  stdoutSink: { write: (line: string) => console.log(line) }, // Browser console
+  fileSink: null,
+});
 
-type ThemeContextValue = {
+interface ThemeContextValue {
   mode: ThemeMode;
   setMode: (next: ThemeMode) => void;
   resolved: ResolvedThemeMode;
-};
+}
 
 const Ctx = createContext<ThemeContextValue | null>(null);
 
@@ -106,7 +116,7 @@ export function ThemeProvider({
       // Log contrast preference requests for telemetry/diagnostics (no-op if unchanged)
       void getContrastPreference();
     } catch (error: unknown) {
-      logger.error('Error setting theme mode:', { error });
+      logger.error('Error setting theme mode:', error instanceof Error ? error : undefined);
       // ignore
     }
   }, []);

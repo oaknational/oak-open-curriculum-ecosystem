@@ -28,13 +28,27 @@ export type JsonValue =
 /**
  * Logger interface for consistent logging across the application
  */
+
+/**
+ * Message for the logger. ALL messages must be strings.
+ */
+type Message = string;
+/**
+ * Context for the logger. This is for configuring the logger, not for logging.
+ */
+type Context = unknown;
+/**
+ * Error for the logger. This is for logging errors.
+ */
+type Error = unknown;
+
 export interface Logger {
-  trace(message: string, context?: unknown): void;
-  debug(message: string, context?: unknown): void;
-  info(message: string, context?: unknown): void;
-  warn(message: string, context?: unknown): void;
-  error(message: string, error?: unknown, context?: unknown): void;
-  fatal(message: string, error?: unknown, context?: unknown): void;
+  trace(message: Message, context?: Context): void;
+  debug(message: Message, context?: Context): void;
+  info(message: Message, context?: Context): void;
+  warn(message: Message, context?: Context): void;
+  error(message: Message, error?: Error, context?: Context): void;
+  fatal(message: Message, error?: Error, context?: Context): void;
   isLevelEnabled?(level: number): boolean;
   child?(context: JsonObject): Logger;
 }

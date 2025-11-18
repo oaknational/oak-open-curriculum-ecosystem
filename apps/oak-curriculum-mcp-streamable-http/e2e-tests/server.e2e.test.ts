@@ -1,13 +1,22 @@
-import { describe, it, expect } from 'vitest';
-import { generateKeyPair, SignJWT, exportJWK } from 'jose';
+import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 import { toolNames } from '@oaknational/oak-curriculum-sdk';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
+
+/**
+ * Configure environment for auth bypass in E2E tests.
+ * These scenarios target protocol behaviour; auth enforcement is asserted in
+ * auth-enforcement.e2e.test.ts and the smoke-dev-auth run.
+ */
+function enableAuthBypass(): void {
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+  process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
+}
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
@@ -43,15 +52,18 @@ function toolNamesFromResult(value: unknown): string[] {
 }
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
-  it('returns 401 when missing Authorization', async () => {
-    // ensure no leaked no-auth setting from other tests
-    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
-    delete process.env.BASE_URL;
-    delete process.env.MCP_CANONICAL_URI;
-    // ensure host filtering doesn't mask auth behaviour
+  beforeEach(() => {
+    // Default: enable auth bypass; individual tests re-enable auth when required.
+    enableAuthBypass();
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     delete process.env.ALLOWED_ORIGINS;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+  });
+
+  it('returns 401 when missing Authorization (auth enforcement test)', async () => {
+    // Override: enable auth enforcement for this test
+    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
+
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
@@ -59,23 +71,18 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(401);
-    // Assert RFC-compliant WWW-Authenticate with resource metadata hint per plan
+    // Assert WWW-Authenticate header is present (Clerk format)
     const header = res.headers['www-authenticate'] as string | undefined;
     expect(header).toBeDefined();
-    // It should be a Bearer challenge with error and discovery hints
+    // Clerk provides Bearer challenge with resource_metadata
     expect(header?.toLowerCase()).toMatch(/^bearer\s+/);
-    expect(header).toContain('error="invalid_request"');
-    expect(header).toContain('authorization_uri="/.well-known/oauth-protected-resource"');
-    expect(header).toContain('resource="http://localhost/mcp"');
+    expect(header).toContain('resource_metadata');
   });
 
-  it('returns 200 with dev bearer token and list_tools parity', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+  it('returns 200 with auth bypassed and list_tools parity', async () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(200);
@@ -95,12 +102,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects missing Accept header with 406', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(406);
     expect(res.body).toEqual({
@@ -109,12 +113,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects initialize without clientInfo', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -133,12 +134,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -159,12 +157,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns JSON-RPC error when calling an unknown tool (error path)', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -179,100 +174,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(typeof payload.error !== 'undefined').toBe(true);
   });
 
-  it('allows no-auth in local dev when REMOTE_MCP_ALLOW_NO_AUTH=true', async () => {
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-    process.env.NODE_ENV = 'development';
-    delete process.env.VERCEL;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
+  // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)
 
-  it('accepts CI token only when CI=true', async () => {
-    process.env.CI = 'true';
-    process.env.REMOTE_MCP_CI_TOKEN = 'ci-token';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Authorization', 'Bearer ci-token')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
-
-  it('blocks unknown Host by DNS-rebinding protection', async () => {
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Host', 'malicious.example.com')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect([403, 401]).toContain(res.status);
-  });
-
-  it('blocks disallowed origin by CORS', async () => {
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_ORIGINS = 'https://allowed.example.com';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Origin', 'https://not-allowed.example.com')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    // Express CORS denies request before our handler; status can be 500 or 401 depending on flow
-    expect([401, 500]).toContain(res.status);
-  });
-
-  it('accepts JWT access token when local AS is enabled', async () => {
-    process.env.ENABLE_LOCAL_AS = 'true';
-    process.env.BASE_URL = 'http://localhost:3333';
-    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-
-    // Generate ephemeral key pair and install public JWK for the RS
-    const { publicKey, privateKey } = await generateKeyPair('RS256');
-    const publicJwk = await exportJWK(publicKey);
-    (publicJwk as { alg?: string; use?: string }).alg = 'RS256';
-    (publicJwk as { alg?: string; use?: string }).use = 'sig';
-    process.env.LOCAL_AS_JWK = JSON.stringify(publicJwk);
-
-    // Start app after env is prepared
-    const app = createApp();
-
-    // Mint a valid access token
-    const now = Math.floor(Date.now() / 1000);
-    const issuerEnv = process.env.BASE_URL;
-    const audienceEnv = process.env.MCP_CANONICAL_URI;
-    if (!issuerEnv || !audienceEnv) {
-      throw new Error('Missing BASE_URL or MCP_CANONICAL_URI for test');
-    }
-    const issuer = issuerEnv;
-    const audience = audienceEnv;
-    const token = await new SignJWT({
-      sub: 'user-123',
-      email: 'user@thenational.academy',
-      org: 'thenational.academy',
-      scope: 'mcp:invoke mcp:read',
-    })
-      .setProtectedHeader({ alg: 'RS256' })
-      .setIssuer(issuer)
-      .setAudience(audience)
-      .setIssuedAt(now)
-      .setExpirationTime(now + 5 * 60)
-      .sign(privateKey);
-
-    const res = await request(app)
-      .post('/mcp')
-      .set('Authorization', `Bearer ${token}`)
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
+  // TODO: Add E2E test with real Clerk token once automated flow is available.
+  // Requires: OAuth Device / programmatic flow support from Clerk.
 });

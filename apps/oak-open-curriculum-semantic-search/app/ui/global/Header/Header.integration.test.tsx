@@ -42,7 +42,7 @@ describe('Header', () => {
     renderHeader();
     const nav = screen.getByRole('navigation', { name: 'Primary' });
 
-    const expectations: Array<{ name: string; href: string }> = [
+    const expectations: { name: string; href: string }[] = [
       { name: 'Home', href: '/' },
       { name: 'Structured search', href: '/structured_search' },
       { name: 'Natural language search', href: '/natural_language_search' },

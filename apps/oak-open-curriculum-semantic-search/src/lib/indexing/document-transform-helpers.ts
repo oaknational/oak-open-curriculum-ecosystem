@@ -3,7 +3,7 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
-type UnknownObject = { readonly [key: string]: unknown };
+type UnknownObject = Readonly<Record<string, unknown>>;
 
 function isUnknownObject(value: unknown): value is UnknownObject {
   return typeof value === 'object' && value !== null;

@@ -3,15 +3,23 @@ import { spawn, type ChildProcess } from 'child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { dirname } from 'path';
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import { fileURLToPath } from 'url';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
 // Create logger for E2E tests
-const logger = createAdaptiveLogger({
-  name: 'e2e-tests',
-  level: 20, // Info level
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber('INFO'),
+  resourceAttributes: buildResourceAttributes({}, 'e2e-tests', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
 });
 
 // Load env from repo root using shared helper
@@ -40,17 +48,18 @@ function isTextContent(c: unknown): c is { type: string; text?: string } {
   return c.type === 'text';
 }
 
-// Skip E2E tests if no API key is provided
+// Validate NOTION_API_KEY is present - FAIL if missing (don't skip)
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
-
-// Log test environment status
-if (!NOTION_API_KEY) {
-  logger.warn('E2E tests will be skipped: NOTION_API_KEY not found', {});
-} else {
-  logger.info('Running E2E tests with Notion API');
+if (!NOTION_API_KEY || NOTION_API_KEY.trim().length === 0) {
+  throw new Error(
+    'NOTION_API_KEY is required for E2E tests. Set it in .env file in repository root. ' +
+      'Tests must FAIL when configuration is wrong, not skip.',
+  );
 }
 
-describe.skipIf(!NOTION_API_KEY)('E2E: MCP Server with Real Notion API', () => {
+logger.info('Running E2E tests with Notion API', { keyPresent: !!NOTION_API_KEY });
+
+describe('E2E: MCP Server with Real Notion API', () => {
   let serverProcess: ChildProcess;
   let client: Client;
 
@@ -59,7 +68,7 @@ describe.skipIf(!NOTION_API_KEY)('E2E: MCP Server with Real Notion API', () => {
     serverProcess = spawn('node', ['dist/index.js'], {
       env: {
         ...process.env,
-        NOTION_API_KEY: NOTION_API_KEY ?? '',
+        NOTION_API_KEY, // Already validated to be non-empty
         LOG_LEVEL: 'error', // Reduce noise in tests
       },
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -71,7 +80,7 @@ describe.skipIf(!NOTION_API_KEY)('E2E: MCP Server with Real Notion API', () => {
       args: ['dist/index.js'],
       env: {
         ...process.env,
-        NOTION_API_KEY: NOTION_API_KEY ?? '',
+        NOTION_API_KEY, // Already validated to be non-empty
         LOG_LEVEL: 'error',
       },
     });

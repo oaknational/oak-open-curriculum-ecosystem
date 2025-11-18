@@ -14,22 +14,22 @@ import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
 
 export type ChangeStructured = (update: Partial<SearchStructuredRequest>) => void;
 
-const STRUCTURED_SCOPE_ORDER: ReadonlyArray<SearchStructuredRequest['scope']> = [
+const STRUCTURED_SCOPE_ORDER: readonly SearchStructuredRequest['scope'][] = [
   MULTI_SCOPE,
   UNITS_SCOPE,
   LESSONS_SCOPE,
   SEQUENCES_SCOPE,
 ];
 
-const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{
+const STRUCTURED_SCOPE_OPTIONS: readonly {
   value: SearchStructuredRequest['scope'];
   label: string;
-}> = STRUCTURED_SCOPE_ORDER.map((scope) => ({
+}[] = STRUCTURED_SCOPE_ORDER.map((scope) => ({
   value: scope,
   label: formatStructuredScopeLabel(scope),
 }));
 
-const PHASE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
+const PHASE_OPTIONS: readonly { value: string; label: string }[] = [
   { value: 'primary', label: 'Primary' },
   { value: 'secondary', label: 'Secondary' },
 ];

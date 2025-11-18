@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const REQUIRED_ENV = {
   ELASTICSEARCH_URL: 'https://example.com',
@@ -9,29 +9,48 @@ const REQUIRED_ENV = {
 };
 
 type RequiredEnvKey = keyof typeof REQUIRED_ENV;
+type TestEnvKey = RequiredEnvKey | 'AI_PROVIDER' | 'SEARCH_INDEX_TARGET';
 
-function setEnv(
-  overrides: Partial<Record<RequiredEnvKey | 'AI_PROVIDER' | 'SEARCH_INDEX_TARGET', string>> = {},
-): void {
+let originalEnv: Map<TestEnvKey, string | undefined>;
+
+beforeEach(() => {
+  // Save original environment
+  const keys: TestEnvKey[] = [
+    ...(Object.keys(REQUIRED_ENV) as RequiredEnvKey[]),
+    'AI_PROVIDER',
+    'SEARCH_INDEX_TARGET',
+  ];
+  originalEnv = new Map(keys.map((key) => [key, process.env[key]]));
+});
+
+afterEach(() => {
+  vi.resetModules();
+  // Restore original environment without mutation
+  for (const [key, value] of originalEnv.entries()) {
+    if (value === undefined) {
+      // Using type assertion to work around readonly constraint in test
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Cleanup only
+      delete process.env[key];
+    } else {
+      process.env[key] = value;
+    }
+  }
+});
+
+function setEnv(overrides: Partial<Record<TestEnvKey, string>> = {}): void {
+  // Set all required env vars
   for (const [key, value] of Object.entries(REQUIRED_ENV)) {
     process.env[key] = value;
   }
   process.env.AI_PROVIDER = 'none';
+
+  // Apply overrides (immutable approach - only set defined values)
   for (const [key, value] of Object.entries(overrides)) {
-    if (value === undefined) {
-      delete process.env[key];
-      continue;
+    if (value !== undefined) {
+      process.env[key] = value;
     }
-    process.env[key] = value;
   }
 }
-
-afterEach(() => {
-  vi.resetModules();
-  for (const key of [...Object.keys(REQUIRED_ENV), 'AI_PROVIDER', 'SEARCH_INDEX_TARGET']) {
-    delete process.env[key];
-  }
-});
 
 describe('search index target helpers', () => {
   it('resolves primary and sandbox index names', async () => {
