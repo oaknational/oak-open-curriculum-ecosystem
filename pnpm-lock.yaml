@@ -401,6 +401,9 @@ importers:
         specifier: ^3
         version: 3.25.76
     devDependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.20.1
+        version: 1.20.1
       '@next/eslint-plugin-next':
         specifier: ^15.5.3
         version: 15.5.6
