@@ -2,7 +2,7 @@
 
 **Date**: November 18, 2024  
 **Priority**: P0 - Critical (Blocks P1 parameter descriptions from being visible)  
-**Status**: Planning  
+**Status**: Won't Fix - This is a generator bug, and we will fix it in the generator.
 **Implements**: Type-safe unwrapping of nested params structure for MCP registration
 
 ---
@@ -11,7 +11,7 @@
 
 ### The Issue
 
-Our generated MCP tool schemas use a nested structure that hides parameters from MCP clients:
+Our generated MCP tool schemas use a nested structure that does not match the expected flat structure from MCP clients:
 
 ```typescript
 // What we generate and pass to registerTool
