@@ -8,7 +8,7 @@
 
 ## EXECUTIVE SUMMARY
 
-This report provides a deep analysis of how MCP tool descriptions, input schemas, and output schemas flow through our system, from OpenAPI schema definition through SDK code generation to MCP server registration. The analysis identifies both strengths and areas for improvement in our schema-first architecture.
+This report provides a deep analysis of how MCP tool descriptions, input schemas, and output schemas flow through our system, from OpenAPI schema definition through SDK code generation to MCP server registration. This analysis identifies both strengths and areas for improvement in our schema-first architecture.
 
 **Key Finding**: Our system generally follows schema-first principles correctly, with tool metadata flowing from OpenAPI through generation, but there are critical gaps in how we're using the MCP TypeScript SDK's `registerTool` API and opportunities to leverage upstream SDK types.
 

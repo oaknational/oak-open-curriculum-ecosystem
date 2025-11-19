@@ -26,7 +26,7 @@ export interface OutputValidationSuccess<TName extends ToolName = ToolName> {
 
 export type OutputValidationFailure<TName extends ToolName = ToolName> =
   | { readonly ok: false; readonly message: string }
-  | (DescriptorValidationFailure<TName> & { readonly ok: false });
+  | DescriptorValidationFailure<TName>;
 
 export type OutputValidationResult<TName extends ToolName = ToolName> =
   | OutputValidationSuccess<TName>

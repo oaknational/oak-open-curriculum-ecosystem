@@ -103,6 +103,8 @@ function buildExports({
   lines.push('  },');
   lines.push('  toolZodSchema,');
   lines.push('  toolInputJsonSchema,');
+  lines.push('  toolMcpFlatInputSchema,');
+  lines.push('  transformFlatToNestedArgs,');
   lines.push('  toolOutputJsonSchema: primaryResponseDescriptor.json,');
   lines.push('  zodOutputSchema: primaryResponseDescriptor.zod,');
   lines.push('  describeToolArgs,');
@@ -145,7 +147,7 @@ function buildExports({
   lines.push('    };');
   lines.push('  },');
   lines.push(
-    '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;',
+    '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof toolMcpFlatInputSchema>, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;',
   );
   lines.push('');
   return lines.join('\n');

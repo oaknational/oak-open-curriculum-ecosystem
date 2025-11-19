@@ -76,6 +76,22 @@ const config = defineConfig(
       },
     },
     {
+      files: ['**/*.ts'],
+      /** @todo remove once we start .agent/plans/quality-and-maintainability/di-architecture-consistency.md */
+      ignores: ['**/*.test.ts', '**/*.spec.ts', 'smoke-tests/**', 'e2e-tests/**'],
+      rules: {
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector:
+              'MemberExpression[object.property.name="process"][property.name="env"], MemberExpression[object.name="process"][property.name="env"]',
+            message:
+              'Avoid using process.env directly. In product code use the runtime config provided by the env library instead. In test code pass simple values directly via DI.',
+          },
+        ],
+      },
+    },
+    {
       files: ['**/*.test.ts', '**/*.spec.ts'],
       rules: {
         'import-x/no-relative-parent-imports': 'off',

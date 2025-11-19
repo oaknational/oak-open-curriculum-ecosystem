@@ -45,7 +45,7 @@ export function registerPublicOAuthMetadataEndpoints(
 
   // Custom handler that sets resource field to canonical MCP server URI per MCP spec
   app.get('/.well-known/oauth-protected-resource', (req, res) => {
-    const publishableKey = process.env.CLERK_PUBLISHABLE_KEY;
+    const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
     if (!publishableKey) {
       throw new Error('CLERK_PUBLISHABLE_KEY environment variable is required');
     }
@@ -57,7 +57,9 @@ export function registerPublicOAuthMetadataEndpoints(
 
     // Per MCP Authorization Spec: resource field must be the canonical URI of the MCP server
     // Examples: https://mcp.example.com/mcp, http://localhost:3333/mcp
-    const resourceUrl = `https://${host}/mcp`;
+    // Use http for localhost development, https for all other hosts
+    const protocol = host.startsWith('localhost:') || host === 'localhost' ? 'http' : 'https';
+    const resourceUrl = `${protocol}://${host}/mcp`;
 
     const metadata = generateClerkProtectedResourceMetadata({
       publishableKey,

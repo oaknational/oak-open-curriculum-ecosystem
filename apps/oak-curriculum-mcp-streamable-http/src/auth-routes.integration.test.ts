@@ -47,7 +47,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       const resource = (body as { resource: unknown }).resource;
 
       // Local development should use http and include /mcp
-      expect(resource).toBe('https://localhost:3333/mcp');
+      expect(resource).toBe('http://localhost:3333/mcp');
     });
 
     it('resource URL matches request host header and includes /mcp path', async () => {
@@ -56,7 +56,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       const testCases = [
         { host: 'example.com', expected: 'https://example.com/mcp' },
         { host: 'api.example.com', expected: 'https://api.example.com/mcp' },
-        { host: 'localhost:3333', expected: 'https://localhost:3333/mcp' },
+        { host: 'localhost:3333', expected: 'http://localhost:3333/mcp' },
         { host: 'example.com:8080', expected: 'https://example.com:8080/mcp' },
       ];
 

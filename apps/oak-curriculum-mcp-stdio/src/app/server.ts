@@ -9,7 +9,6 @@ import {
   toolNames,
   getToolFromToolName,
   type ToolDescriptorForName,
-  zodRawShapeFromToolInputJsonSchema,
   executeToolCall,
   createOakPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
@@ -129,7 +128,7 @@ function createHandlersForTool(
   name: string,
   description: string,
   descriptor: ReturnType<typeof getToolFromToolName>,
-  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+  input: ReturnType<typeof getToolFromToolName>['toolMcpFlatInputSchema'],
 ): ReturnType<typeof createToolResponseHandlers> {
   return createToolResponseHandlers(correlatedLogger, {
     name,
@@ -163,7 +162,7 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
   name: TName,
   description: string,
   descriptor: ToolDescriptorForName<TName>,
-  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+  input: ToolDescriptorForName<TName>['toolMcpFlatInputSchema'],
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
   toolExecutors?: UniversalToolExecutors,
@@ -222,20 +221,20 @@ function registerMcpTools(
 ): void {
   for (const name of toolNames) {
     const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
-    const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
+    const flatSchema = descriptor.toolMcpFlatInputSchema;
     const description = ensureDescriptorDescription(descriptor, name);
 
     const handler = createToolHandler(
       name,
       description,
       descriptor,
-      input,
+      flatSchema,
       client,
       logger,
       toolExecutors,
     );
 
-    server.registerTool(name, { title: name, description, inputSchema: input }, handler);
+    server.registerTool(name, { title: name, description, inputSchema: flatSchema.shape }, handler);
   }
 }
 

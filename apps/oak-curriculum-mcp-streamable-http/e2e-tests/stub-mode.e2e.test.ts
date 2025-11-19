@@ -81,7 +81,7 @@ async function assertFetchLessonResponse(
 
   const executor = createStubToolExecutionAdapter();
   const stubResult = await executor('get-lessons-summary', {
-    params: { path: { lesson: lessonSlug } },
+    lesson: lessonSlug,
   });
   if (!('data' in stubResult)) {
     throw new Error('Stub executor did not return data');
@@ -92,89 +92,73 @@ async function assertFetchLessonResponse(
 
 describe('Streamable HTTP server (stub mode)', () => {
   it('returns the full roster from listUniversalTools()', async () => {
-    const { app, restoreEnvironment } = createStubbedHttpApp();
-    try {
-      const response = await request(app)
-        .post('/mcp')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
+    const { app } = createStubbedHttpApp();
+    const response = await request(app)
+      .post('/mcp')
+      .set('Accept', STUB_ACCEPT_HEADER)
+      .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
 
-      expect(response.status).toBe(200);
-      assertToolRoster(response.text, listUniversalTools());
-    } finally {
-      restoreEnvironment();
-    }
+    expect(response.status).toBe(200);
+    assertToolRoster(response.text, listUniversalTools());
   });
 
   it('serialises stubbed fetch results with canonicalUrl', async () => {
-    const { app, restoreEnvironment } = createStubbedHttpApp();
+    const { app } = createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';
     const lessonSlug = 'four-types-of-simple-sentence';
-    try {
-      const response = await request(app)
-        .post('/mcp')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: 'fetch-success',
-          method: 'tools/call',
-          params: {
-            name: 'fetch',
-            arguments: { id: lessonId },
-          },
-        });
+    const response = await request(app)
+      .post('/mcp')
+      .set('Accept', STUB_ACCEPT_HEADER)
+      .send({
+        jsonrpc: '2.0',
+        id: 'fetch-success',
+        method: 'tools/call',
+        params: {
+          name: 'fetch',
+          arguments: { id: lessonId },
+        },
+      });
 
-      expect(response.status).toBe(200);
-      await assertFetchLessonResponse(response.text, lessonId, lessonSlug);
-    } finally {
-      restoreEnvironment();
-    }
+    expect(response.status).toBe(200);
+    await assertFetchLessonResponse(response.text, lessonId, lessonSlug);
   });
 
   it('reports parameter validation failures from stub executor', async () => {
-    const { app, restoreEnvironment } = createStubbedHttpApp();
-    try {
-      const response = await request(app)
-        .post('/mcp')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: 'call-invalid',
-          method: 'tools/call',
-          params: {
-            name: 'fetch',
-            arguments: { id: 'unknown:sample' },
-          },
-        });
+    const { app } = createStubbedHttpApp();
+    const response = await request(app)
+      .post('/mcp')
+      .set('Accept', STUB_ACCEPT_HEADER)
+      .send({
+        jsonrpc: '2.0',
+        id: 'call-invalid',
+        method: 'tools/call',
+        params: {
+          name: 'fetch',
+          arguments: { id: 'unknown:sample' },
+        },
+      });
 
-      expect(response.status).toBe(200);
-      const { result, content } = extractResultAndContent(response.text);
-      expect(result.isError).toBe(true);
+    expect(response.status).toBe(200);
+    const { result, content } = extractResultAndContent(response.text);
+    expect(result.isError).toBe(true);
 
-      const text = readFirstTextContent(content);
-      expect(text).toContain('Unsupported id prefix');
-    } finally {
-      restoreEnvironment();
-    }
+    const text = readFirstTextContent(content);
+    expect(text).toContain('Unsupported id prefix');
   });
 
   // Auth enforcement tests moved to auth-enforcement.e2e.test.ts
   // Stub mode uses auth bypass for convenience
 
   it('rejects requests missing text/event-stream in Accept header', async () => {
-    const { app, restoreEnvironment } = createStubbedHttpApp();
-    try {
-      const response = await request(app)
-        .post('/mcp')
-        .set('Accept', 'application/json')
-        .send({ jsonrpc: '2.0', id: 'missing-accept', method: 'tools/list' });
+    const { app } = createStubbedHttpApp();
+    const response = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json')
+      .send({ jsonrpc: '2.0', id: 'missing-accept', method: 'tools/list' });
 
-      expect(response.status).toBe(406);
-      expect(response.body).toEqual({
-        error: 'Accept header must include text/event-stream',
-      });
-    } finally {
-      restoreEnvironment();
-    }
+    expect(response.status).toBe(406);
+    expect(response.body).toEqual({
+      error: 'Accept header must include text/event-stream',
+    });
   });
 });

@@ -82,7 +82,7 @@ describe('Stdio transport with stub executors', () => {
       method: 'tools/call',
       params: {
         name: 'get-key-stages',
-        arguments: { params: {} },
+        arguments: {},
       },
     });
 
@@ -117,9 +117,8 @@ describe('Stdio transport with stub executors', () => {
       params: {
         name: 'get-key-stages-subject-lessons',
         arguments: {
-          params: {
-            path: { keyStage: 'invalid-stage', subject: 'english' },
-          },
+          keyStage: 'invalid-stage',
+          subject: 'english',
         },
       },
     });
@@ -151,7 +150,7 @@ describe('Stdio transport with stub executors', () => {
       method: 'tools/call',
       params: {
         name: 'get-key-stages',
-        arguments: { params: {} },
+        arguments: {},
       },
     });
 

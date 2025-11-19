@@ -13,6 +13,8 @@ export interface RuntimeConfig {
   readonly dangerouslyDisableAuth: boolean;
   /** Whether to use stub tools instead of real API calls */
   readonly useStubTools: boolean;
+  /** Application version from package.json */
+  readonly version: string;
   /**
    * Collection of all Vercel deployment URLs.
    *
@@ -44,10 +46,11 @@ function toBooleanFlag(value: string | undefined): boolean {
  * All URLs are lowercased for consistent hostname matching. Empty/undefined URLs
  * are filtered out. When not running on Vercel, vercelHostnames will be empty.
  *
- * @param source - Environment variables object (defaults to process.env)
+ * @param source - Environment variables object, defaults to process.env.
  * @returns Runtime configuration with validated env and derived settings
  * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
+/* eslint-disable-next-line no-restricted-syntax -- process.env is needed here to enable building the runtime config */
 export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   const env = readEnv(source);
 
@@ -64,6 +67,7 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
     env,
     dangerouslyDisableAuth: toBooleanFlag(source.DANGEROUSLY_DISABLE_AUTH),
     useStubTools: toBooleanFlag(source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
+    version: source.npm_package_version ?? '0.0.0',
     vercelHostnames,
   };
 }

@@ -114,7 +114,7 @@ describe('HTTP boundary argument validation', () => {
         method: 'tools/call',
         params: {
           name: 'get-search-lessons',
-          arguments: { params: { query: { q: 'trees' } } },
+          arguments: { q: 'trees' },
         },
       });
 

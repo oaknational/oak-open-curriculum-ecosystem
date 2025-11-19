@@ -1,148 +1,140 @@
 import { describe, it, expect } from 'vitest';
+import { buildFlatMcpZodObject } from './emit-input-schema.js';
+import type { ParamMetadataMap } from './param-metadata.js';
 
-// The pure function we will implement next in TDD:
-// It builds a JSON Schema object for a tool from path/query param metadata.
-// The emitter will then stringify/embed this at generation time.
-import type { PrimitiveType } from './param-utils.js';
-// This module will be created as part of implementing the plan.
-import {
-  buildInputSchemaObject,
-  type JsonSchemaObject,
-  type JsonSchemaProperty,
-} from './emit-input-schema.js';
-
-interface ParamMetadataLike {
-  readonly typePrimitive: PrimitiveType;
-  readonly valueConstraint: boolean;
-  readonly required: boolean;
-  readonly allowedValues?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
-
-type MetaRecord = Record<string, ParamMetadataLike>;
-
-function expectObjectSchema(
-  property: JsonSchemaProperty | undefined,
-  label: string,
-): JsonSchemaObject {
-  if (property?.type !== 'object') {
-    throw new Error(`Expected ${label} to be an object schema`);
-  }
-  return property;
-}
-
-describe('buildInputSchemaObject (compile-time schema generator helper)', () => {
-  it('emits required string property with additionalProperties: false', () => {
-    const pathMeta: MetaRecord = {};
-    const queryMeta: MetaRecord = {
-      q: { typePrimitive: 'string', valueConstraint: false, required: true },
-    };
-
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
-
-    expect(schema.type).toBe('object');
-    expect(schema.additionalProperties).toBe(false);
-    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
-    expect(paramsSchema).toEqual({
-      type: 'object',
-      properties: {
-        query: {
-          type: 'object',
-          properties: { q: { type: 'string' } },
-          additionalProperties: false,
-          required: ['q'],
+describe('buildFlatMcpZodObject', () => {
+  describe('flattening path and query parameters', () => {
+    it('should flatten query parameters to top level', () => {
+      // Arrange
+      const pathParams: ParamMetadataMap = {};
+      const queryParams: ParamMetadataMap = {
+        q: {
+          typePrimitive: 'string',
+          required: true,
+          valueConstraint: false,
+          description: 'Search query',
         },
-      },
-      additionalProperties: false,
-      required: ['query'],
+        limit: {
+          typePrimitive: 'number',
+          required: false,
+          valueConstraint: false,
+        },
+      };
+
+      // Act
+      const result = buildFlatMcpZodObject(pathParams, queryParams);
+
+      // Assert: Should generate flat Zod object string
+      expect(result).toContain('z.object({');
+      expect(result).toContain('q: z.string()');
+      expect(result).toContain('limit: z.number().optional()');
+      expect(result).not.toContain('params');
+      expect(result).not.toContain('query');
     });
-    expect(schema.required).toEqual(['params']);
+
+    it('should flatten path parameters to top level', () => {
+      const pathParams: ParamMetadataMap = {
+        keyStage: {
+          typePrimitive: 'string',
+          required: true,
+          allowedValues: ['ks1', 'ks2', 'ks3', 'ks4'],
+          valueConstraint: true,
+        },
+      };
+      const queryParams: ParamMetadataMap = {};
+
+      const result = buildFlatMcpZodObject(pathParams, queryParams);
+
+      expect(result).toContain('keyStage: z.union([');
+      expect(result).toContain('z.literal("ks1")');
+      expect(result).not.toContain('params');
+      expect(result).not.toContain('path');
+    });
+
+    it('should merge path and query parameters in flat structure', () => {
+      const pathParams: ParamMetadataMap = {
+        keyStage: {
+          typePrimitive: 'string',
+          required: true,
+          allowedValues: ['ks1', 'ks2'],
+          valueConstraint: true,
+        },
+      };
+      const queryParams: ParamMetadataMap = {
+        subject: {
+          typePrimitive: 'string',
+          required: false,
+          valueConstraint: false,
+        },
+      };
+
+      const result = buildFlatMcpZodObject(pathParams, queryParams);
+
+      // Both parameters at top level
+      expect(result).toContain('keyStage: z.union([');
+      expect(result).toContain('subject: z.string().optional()');
+      expect(result).not.toContain('params');
+    });
+
+    it('should handle zero parameters (empty object)', () => {
+      const pathParams: ParamMetadataMap = {};
+      const queryParams: ParamMetadataMap = {};
+
+      const result = buildFlatMcpZodObject(pathParams, queryParams);
+
+      expect(result).toBe('z.object({})');
+    });
   });
 
-  it('maps primitive types and array variants correctly', () => {
-    const pathMeta: MetaRecord = {
-      a: { typePrimitive: 'number', valueConstraint: false, required: true },
-      b: { typePrimitive: 'boolean', valueConstraint: false, required: false },
-    };
-    const queryMeta: MetaRecord = {
-      s: { typePrimitive: 'string[]', valueConstraint: false, required: false },
-      n: { typePrimitive: 'number[]', valueConstraint: false, required: false },
-      z: { typePrimitive: 'boolean[]', valueConstraint: false, required: false },
-    };
+  describe('preserving parameter metadata', () => {
+    it('should preserve enum values', () => {
+      const queryParams: ParamMetadataMap = {
+        status: {
+          typePrimitive: 'string',
+          required: true,
+          allowedValues: ['active', 'inactive'],
+          valueConstraint: true,
+        },
+      };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+      const result = buildFlatMcpZodObject({}, queryParams);
 
-    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
-    const pathSchema = expectObjectSchema(paramsSchema.properties.path, 'params.path');
-    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
-
-    expect(pathSchema.properties.a).toEqual({ type: 'number' });
-    expect(pathSchema.properties.b).toEqual({ type: 'boolean' });
-    expect(querySchema.properties.s).toEqual({ type: 'array', items: { type: 'string' } });
-    expect(querySchema.properties.n).toEqual({ type: 'array', items: { type: 'number' } });
-    expect(querySchema.properties.z).toEqual({ type: 'array', items: { type: 'boolean' } });
-    expect(pathSchema.required).toContain('a');
-    expect(pathSchema.required).not.toContain('b');
-  });
-
-  it('emits enum arrays when allowedValues are present', () => {
-    const pathMeta: MetaRecord = {};
-    const queryMeta: MetaRecord = {
-      subject: {
-        typePrimitive: 'string',
-        valueConstraint: true,
-        required: false,
-        allowedValues: ['maths', 'english'] as const,
-      },
-    };
-
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
-
-    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
-    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
-    expect(querySchema.properties.subject).toEqual({
-      type: 'string',
-      enum: ['maths', 'english'],
+      expect(result).toContain('z.literal("active")');
+      expect(result).toContain('z.literal("inactive")');
     });
-  });
 
-  it('propagates description and default when provided in metadata', () => {
-    const pathMeta: MetaRecord = {
-      sequence: {
-        typePrimitive: 'string',
-        valueConstraint: false,
-        required: true,
-        description: 'Sequence slug',
-      },
-    };
-    const queryMeta: MetaRecord = {
-      year: {
-        typePrimitive: 'string',
-        valueConstraint: true,
-        required: false,
-        allowedValues: ['1', '2', 'all-years'] as const,
-        description: 'Optional year filter',
-        default: 'all-years',
-      },
-    };
+    it('should preserve optional/required distinction', () => {
+      const queryParams: ParamMetadataMap = {
+        required: {
+          typePrimitive: 'string',
+          required: true,
+          valueConstraint: false,
+        },
+        optional: {
+          typePrimitive: 'string',
+          required: false,
+          valueConstraint: false,
+        },
+      };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+      const result = buildFlatMcpZodObject({}, queryParams);
 
-    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
-    const pathSchema = expectObjectSchema(paramsSchema.properties.path, 'params.path');
-    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
-
-    expect(pathSchema.properties.sequence).toEqual({
-      type: 'string',
-      description: 'Sequence slug',
+      expect(result).toContain('required: z.string()');
+      expect(result).toContain('optional: z.string().optional()');
     });
-    expect(querySchema.properties.year).toEqual({
-      type: 'string',
-      enum: ['1', '2', 'all-years'],
-      description: 'Optional year filter',
-      default: 'all-years',
+
+    it('should handle array types', () => {
+      const queryParams: ParamMetadataMap = {
+        tags: {
+          typePrimitive: 'string[]',
+          required: false,
+          valueConstraint: false,
+        },
+      };
+
+      const result = buildFlatMcpZodObject({}, queryParams);
+
+      expect(result).toContain('tags: z.array(z.string()).optional()');
     });
-    expect(pathSchema.required).toContain('sequence');
   });
 });

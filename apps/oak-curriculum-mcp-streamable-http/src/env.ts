@@ -66,6 +66,7 @@ const EnvSchema = z.object({
   // MCP Server Configuration
   BASE_URL: z.url().optional(),
   MCP_CANONICAL_URI: z.url().optional(),
+  PORT: z.string().optional(),
   // Transport Mode
   REMOTE_MCP_MODE: ModeSchema.optional(),
   // Security & Development
@@ -86,6 +87,7 @@ const EnvSchema = z.object({
 
 export type Env = z.infer<typeof EnvSchema>;
 
+/* eslint-disable-next-line no-restricted-syntax -- This is the ONLY function that reads process.env to build validated config */
 export function readEnv(env: NodeJS.ProcessEnv = process.env): Env {
   // Derive BASE_URL and MCP_CANONICAL_URI from Vercel system variables if needed
   const derivedBaseUrl = deriveBaseUrl(env);
