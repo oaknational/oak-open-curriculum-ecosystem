@@ -125,11 +125,7 @@ describe('Multi-status transcript handling (E2E)', () => {
     const toolResult = await client.callTool({
       name: 'get-lessons-transcript',
       arguments: {
-        params: {
-          path: {
-            lesson: 'making-apple-flapjack-bites',
-          },
-        },
+        lesson: 'making-apple-flapjack-bites',
       },
     });
     const response = expectSuccess(toolResult);

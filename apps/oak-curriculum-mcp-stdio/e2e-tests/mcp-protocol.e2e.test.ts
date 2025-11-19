@@ -107,7 +107,7 @@ describe('MCP Protocol E2E', () => {
       const payload = expectSuccessfulResult(
         await client.callTool({
           name: 'get-key-stages',
-          arguments: { params: {} },
+          arguments: {},
         }),
       );
       const dataArray = extractDataArray(payload);
@@ -120,11 +120,7 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-search-lessons',
           arguments: {
-            params: {
-              query: {
-                q: 'fractions',
-              },
-            },
+            q: 'fractions',
           },
         }),
       );
@@ -137,11 +133,7 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            params: {
-              path: {
-                sequence: 'english-primary',
-              },
-            },
+            sequence: 'english-primary',
           },
         }),
       );
@@ -152,14 +144,8 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            params: {
-              path: {
-                sequence: 'english-primary',
-              },
-              query: {
-                year: '1',
-              },
-            },
+            sequence: 'english-primary',
+            year: '1',
           },
         }),
       );
@@ -169,15 +155,15 @@ describe('MCP Protocol E2E', () => {
 
   describe('Error Handling', () => {
     it('should handle unknown tool error', async () => {
-      await expect(
-        client.callTool({ name: 'non-existent-tool', arguments: { params: {} } }),
-      ).rejects.toThrow(/Tool non-existent-tool not found/);
+      await expect(client.callTool({ name: 'non-existent-tool', arguments: {} })).rejects.toThrow(
+        /Tool non-existent-tool not found/,
+      );
     });
 
     it('should handle missing required parameters', async () => {
-      await expect(
-        client.callTool({ name: 'get-search-lessons', arguments: { params: {} } }),
-      ).rejects.toThrow(/Invalid arguments.*get-search-lessons/);
+      await expect(client.callTool({ name: 'get-search-lessons', arguments: {} })).rejects.toThrow(
+        /Invalid arguments.*get-search-lessons/,
+      );
     });
 
     it('should handle invalid parameter values', async () => {
@@ -185,9 +171,8 @@ describe('MCP Protocol E2E', () => {
         client.callTool({
           name: 'get-key-stages-subject-lessons',
           arguments: {
-            params: {
-              path: { keyStage: 'invalid-stage', subject: 'maths' },
-            },
+            keyStage: 'invalid-stage',
+            subject: 'maths',
           },
         }),
       ).rejects.toThrow(/Invalid arguments.*get-key-stages-subject-lessons/);

@@ -72,11 +72,11 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
         jsonrpc: '2.0',
         id: 'live-success',
         method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: { params: {} } },
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
     expect(res.status).toBe(200);
-    expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
+    expect(captured).toEqual([{ tool: 'get-key-stages', args: {} }]);
 
     const envelope = parseSseEnvelope(res.text);
     const result = parseJsonRpcResult(envelope);

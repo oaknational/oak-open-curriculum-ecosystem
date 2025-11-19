@@ -1,10 +1,10 @@
 # Fix E2E Test Isolation
 
-**Status**: 🚧 IN PROGRESS (Phases 1-3 ✅ Mostly Complete, Phase 4 Pending)  
+**Status**: 🚧 IN PROGRESS (Phases 1-3 ✅ Complete, Phase 3B Ready, Phase 4 Pending)  
 **Priority**: P0 - Blocking (tests failing)  
-**Estimated Effort**: 2 hours  
+**Estimated Effort**: 2.5 hours (revised: +30 min for generator fix)  
 **Created**: 2025-11-19  
-**Last Updated**: 2025-11-19 (Post-Phase 3 Execution)
+**Last Updated**: 2025-11-19 (Root Cause Analysis Complete - Generator Issue Identified)
 
 ---
 
@@ -219,9 +219,13 @@ pnpm test
 
 ---
 
-### Phase 3: Fix E2E Tests (45 minutes)
+### Phase 3: Fix E2E Tests ✅ COMPLETE (45 minutes)
+
+### Phase 3B: Fix Generator JSON Schema (30 minutes) 🎯 NEXT
 
 **Discovery**: Initial plan identified 2 files, but quality gate analysis revealed **5 total E2E test files** use the refactored helpers and need updating.
+
+**Post-Phase 3 Discovery**: 6 failing tests in `sdk-client-stub.e2e.test.ts` are caused by generator emitting nested JSON schemas instead of flat ones. This is NOT a test issue - tests are correct. Root cause: `buildInputSchemaObject()` in generator wraps parameters in `{ params: {...} }` structure, but MCP clients send flat arguments.
 
 #### Task 3.1: Fix auth-enforcement.e2e.test.ts ✅ COMPLETE
 
@@ -349,9 +353,91 @@ done
 # Expected: 10/10 passes (no race conditions)
 ```
 
+#### Task 3B.1: Replace buildInputSchemaObject with Flat Version
+
+**Current** (lines 20-84 in `emit-input-schema.ts`):
+
+```typescript
+export function buildInputSchemaObject(
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
+): JsonSchemaObject {
+  // ... builds nested structure ...
+  return {
+    type: 'object',
+    properties: { params: paramsSchema }, // ← NESTED
+    required: ['params'],
+    additionalProperties: false,
+  };
+}
+```
+
+**Fixed** (flat version):
+
+```typescript
+export function buildInputSchemaObject(
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
+): JsonSchemaObject {
+  // Merge path and query parameters - path first for consistency
+  const allEntries = [...Object.entries(pathParams), ...Object.entries(queryParams)];
+
+  const properties: Record<string, JsonSchemaProperty> = {};
+  const required: string[] = [];
+
+  for (const [name, meta] of allEntries) {
+    properties[name] = jsonSchemaFromPrimitive(meta);
+    if (meta.required) {
+      required.push(name);
+    }
+  }
+
+  return {
+    type: 'object',
+    properties, // ← FLAT
+    additionalProperties: false,
+    ...(required.length > 0 ? { required } : {}),
+  };
+}
+```
+
+**Rationale**:
+
+- Mirrors existing `buildFlatMcpZodObject()` logic (lines 147-167)
+- Nested structure was never needed - architectural mistake
+- MCP clients expect flat arguments
+- Simplifies system - removes duplicate schema representations
+
+**Validation**:
+
+```bash
+cd packages/sdks/oak-curriculum-sdk
+
+# Regenerate all tool descriptors
+pnpm type-gen
+
+# Verify generated tools now have flat schemas
+grep -A 2 "toolInputJsonSchema" src/types/generated/api-schema/mcp-tools/generated/data/tools/get-subject-detail.ts
+# Expected: Should show { subject: { type: 'string' } } NOT { params: { ... } }
+
+# Rebuild SDK
+pnpm build
+
+# Run SDK tests
+pnpm test
+# Expected: All pass (may need to update any tests that expected nested format)
+
+# Run streamable-http E2E tests
+cd ../../../apps/oak-curriculum-mcp-streamable-http
+pnpm test:e2e
+# Expected: 75/75 passing (6 previously failing tests should now pass)
+```
+
 ---
 
 ### Phase 4: Fix stdio Flat Arguments (30 minutes)
+
+**Note**: This phase may no longer be needed if stdio tools already use flat schemas after generator fix. Verify before implementing.
 
 #### Task 4.1: Fix multi-status-handling.e2e.test.ts
 
@@ -472,12 +558,18 @@ pnpm test:e2e    # Expected: exit 0
 
 ## Files Changed
 
-**Product Code** (4 files):
+**Product Code** (4 files): ✅ ALL COMPLETE
 
 1. `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`
 2. `apps/oak-curriculum-mcp-streamable-http/src/index.ts`
 3. `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts`
-4. `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts` (add ESLint exception if needed)
+4. `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`
+
+**Generator** (1 file): 🎯 NEXT
+
+1. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+   - Replace `buildInputSchemaObject()` function to emit flat schemas
+   - Affects 27 generated tool files (regenerated automatically)
 
 **Test Helpers** (2 files):
 
@@ -497,7 +589,8 @@ pnpm test:e2e    # Expected: exit 0
 1. `apps/oak-curriculum-mcp-stdio/e2e-tests/multi-status-handling.e2e.test.ts`
 2. `apps/oak-curriculum-mcp-stdio/e2e-tests/mcp-protocol.e2e.test.ts`
 
-**Total**: 13 files modified (6 product + 2 helpers + 5 E2E tests)
+**Total**: 14 files modified (6 product + 1 generator + 2 helpers + 5 E2E tests)
+**Generated Files**: 27 tool descriptors (auto-regenerated by `pnpm type-gen`)
 
 ---
 
@@ -728,28 +821,48 @@ pnpm test:e2e    # Expected: exit 0
 
 ### Outstanding Issues
 
-**Issue 1: sdk-client-stub.e2e.test.ts - 6 Failing Tests**
+**Issue 1: sdk-client-stub.e2e.test.ts - 6 Failing Tests** ✅ ROOT CAUSE IDENTIFIED
 
 **Observed Behavior**:
 
-- Tests call `callTool(app, toolName, args)` which posts to `/mcp` endpoint
+- Tests call `callTool(app, toolName, args)` which posts to `/mcp` endpoint with FLAT arguments
 - Response status is 200
 - SSE envelope parsing succeeds
 - `parseJsonRpcResult(envelope)` throws exception (caught on line 92)
 - `result` variable is undefined
 - `expectSuccessfulPayload(result)` fails with "expected undefined to be defined"
+- Underlying error: `"path: ["params"], message: "Required"` - validation expects nested `{ params: {...} }` structure
 
-**What Was Changed**:
+**Root Cause Analysis** (Deep Dive Completed 2025-11-19):
 
-- No changes made to this file's test code
-- Helper `withStubbedHttpApp` correctly uses `createStubbedHttpApp()`
-- Arguments passed to `callTool()` are flat (correct format)
+**Multiple Source of Truth Problem - Generator Issue, NOT Test Issue**
 
-**What Was Not Changed**:
+The generator creates THREE schemas for tool arguments:
 
-- Test logic and assertions
-- SSE parsing utilities
-- Tool invocation mechanics
+1. `toolInputJsonSchema` (NESTED): `{ params: { path: {...}, query: {...} } }` - for SDK `invoke()`
+2. `toolMcpFlatInputSchema` (FLAT ZOD): `{ subject: string, ... }` - for MCP clients
+3. `tool.inputSchema` (Currently points to #1, should point to flat JSON equivalent of #2)
+
+**The Problem Flow**:
+
+1. Generator emits `toolInputJsonSchema` with nested structure (line 80 in `emit-input-schema.ts`)
+2. Tool descriptor sets `inputSchema: toolInputJsonSchema` (line 111 in `emit-index.ts`)
+3. `listUniversalTools()` returns tools with this nested schema
+4. `handlers.ts:48` extracts top-level properties: `zodRawShapeFromToolInputJsonSchema(tool.inputSchema)`
+5. This creates `{ params: z.object({...}) }` expecting arguments with `params` wrapper
+6. MCP clients send FLAT arguments: `{ subject: 'maths' }`
+7. Validation fails: "Required: params"
+
+**The Simple Fix**:
+
+Replace `buildInputSchemaObject()` function (lines 20-84 in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`) with flat version that merges path and query parameters at the top level, matching `buildFlatMcpZodObject()` logic.
+
+**Why Simple**:
+
+- Nested JSON schema (`toolInputJsonSchema`) is NOT used anywhere else
+- Only appears in: tool export, tool descriptor, passed through to registration
+- Just generate it flat from the start - no need for two parallel schemas
+- Mirrors existing `buildFlatMcpZodObject()` logic (lines 147-167)
 
 **Failing Tests** (lines in sdk-client-stub.e2e.test.ts):
 
@@ -762,7 +875,11 @@ pnpm test:e2e    # Expected: exit 0
 
 **Passing Test**:
 
-- Line 295-306: "returns lesson coverage and quiz downloads info"
+- Line 295-306: "returns lesson coverage and quiz downloads info" (mystery why this one works)
+
+**Fix Location**: Generator, not tests
+**Files to Change**: 1 file, 1 function (~65 lines)
+**Estimated Time**: 10 minutes + rebuild + retest
 
 ### Architectural Success Validation
 
@@ -776,15 +893,17 @@ pnpm test:e2e    # Expected: exit 0
 
 **Immediate**:
 
-1. Investigate why 6 specific tests in `sdk-client-stub.e2e.test.ts` fail while others pass
-2. Phase 4: Fix stdio nested argument structures (2 files)
-3. Phase 5: Full validation and stability testing
+1. ✅ **COMPLETE** - Root cause identified for `sdk-client-stub.e2e.test.ts` failures
+2. **NEW Phase 3B**: Fix generator to emit flat JSON schemas (10 min)
+   - File: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-input-schema.ts`
+   - Replace `buildInputSchemaObject()` function (lines 20-84) with flat version
+   - Run `pnpm type-gen` to regenerate all tool descriptors
+   - Run `pnpm build` to compile
+   - Rerun streamable-http E2E tests - expect 75/75 passing
+3. Phase 4: Fix stdio nested argument structures (2 files) - may also be fixed by generator change
+4. Phase 5: Full validation and stability testing
 
-**Deferred**:
-
-- Stdio E2E tests (Phase 4 - nested arguments issue)
-- Stability testing (run auth-enforcement 10x)
-- Full E2E suite validation
+**Note**: This is a **generator fix**, not a test fix. The tests are correct - they send flat arguments as MCP clients should. The generator was producing the wrong schema format.
 
 ---
 

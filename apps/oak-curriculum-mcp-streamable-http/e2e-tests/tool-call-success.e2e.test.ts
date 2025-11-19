@@ -64,7 +64,7 @@ async function executeToolCall(): Promise<{
       jsonrpc: '2.0',
       id: '1',
       method: 'tools/call',
-      params: { name: 'get-key-stages', arguments: { params: {} } },
+      params: { name: 'get-key-stages', arguments: {} },
     });
   return { response, captured };
 }
@@ -72,7 +72,7 @@ async function executeToolCall(): Promise<{
 function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[]): void {
   expect(res.status).toBe(200);
   expect(res.text).toContain('event: message');
-  expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
+  expect(captured).toEqual([{ tool: 'get-key-stages', args: {} }]);
 
   const envelope = parseSseEnvelope(res.text);
   const result = parseJsonRpcResult(envelope);

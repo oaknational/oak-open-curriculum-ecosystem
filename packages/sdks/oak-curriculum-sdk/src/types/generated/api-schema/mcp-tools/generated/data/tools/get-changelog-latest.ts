@@ -21,11 +21,11 @@ export interface ToolParams { readonly __noParams?: never; }
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{},"additionalProperties":false}} as const, additionalProperties: false as const, required: ["params"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {} as const, additionalProperties: false as const };
 export const toolZodSchema = z.object({ params: z.object({}) });
 export const toolMcpFlatInputSchema = z.object({});
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{},"additionalProperties":false}},"required":["params"],"additionalProperties":false}\nRequired: params';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.

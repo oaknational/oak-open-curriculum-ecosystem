@@ -21,12 +21,13 @@ describe('emitErrorDescription (compile-time literal emitter)', () => {
 
     expect(code.trim().endsWith(';')).toBe(true);
 
-    expect(code).toContain('"params"');
-    expect(code).toContain('"path"');
-    expect(code).toContain('"query"');
+    // Test expects flat schema structure (no nested params/path/query)
+    expect(code).toContain('"lesson"');
+    expect(code).toContain('"q"');
 
     const requiredMatch = /Required: ([^\n]*)/.exec(code);
     expect(requiredMatch).not.toBeNull();
-    expect(requiredMatch?.[1]).toContain('params');
+    expect(requiredMatch?.[1]).toContain('lesson');
+    expect(requiredMatch?.[1]).toContain('q');
   });
 });
