@@ -1,5 +1,6 @@
 import type express from 'express';
 import { createApp } from '../../src/application.js';
+import { loadRuntimeConfig } from '../../src/runtime-config.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
 // No longer using bearer tokens - using auth bypass instead
@@ -8,54 +9,30 @@ const STUB_API_KEY = 'stub-api-key';
 
 export interface StubbedHttpApp {
   readonly app: express.Express;
-  readonly restoreEnvironment: () => void;
 }
 
-function setEnv(key: string, value: string | undefined): void {
-  if (value === undefined) {
-    Reflect.deleteProperty(process.env, key);
-    return;
-  }
-  process.env[key] = value;
-}
-
-export function createStubbedHttpApp(): StubbedHttpApp {
-  const previous = {
-    OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
-    OAK_API_KEY: process.env.OAK_API_KEY,
-    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
-    CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
-    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
-  } as const;
-
-  // Configure for stub mode with auth bypass
-  process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
-  process.env.OAK_API_KEY = STUB_API_KEY;
-
-  // Disable auth – stub-mode E2E tests focus on protocol responses.
-  // Auth enforcement is proven by auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-
-  // Clerk keys not needed when auth disabled, but set for completeness
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-
-  process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-  setEnv('ALLOWED_ORIGINS', undefined);
-
-  const app = createApp();
-
-  const restoreEnvironment = (): void => {
-    setEnv('OAK_CURRICULUM_MCP_USE_STUB_TOOLS', previous.OAK_CURRICULUM_MCP_USE_STUB_TOOLS);
-    setEnv('OAK_API_KEY', previous.OAK_API_KEY);
-    setEnv('DANGEROUSLY_DISABLE_AUTH', previous.DANGEROUSLY_DISABLE_AUTH);
-    setEnv('CLERK_PUBLISHABLE_KEY', previous.CLERK_PUBLISHABLE_KEY);
-    setEnv('CLERK_SECRET_KEY', previous.CLERK_SECRET_KEY);
-    setEnv('ALLOWED_HOSTS', previous.ALLOWED_HOSTS);
-    setEnv('ALLOWED_ORIGINS', previous.ALLOWED_ORIGINS);
+export function createStubbedHttpApp(
+  envOverrides: Partial<NodeJS.ProcessEnv> = {},
+): StubbedHttpApp {
+  // Create isolated env - NO global mutation
+  const testEnv: NodeJS.ProcessEnv = {
+    NODE_ENV: 'test',
+    // Configure for stub mode with auth bypass
+    OAK_CURRICULUM_MCP_USE_STUB_TOOLS: 'true',
+    OAK_API_KEY: STUB_API_KEY,
+    // Disable auth – stub-mode E2E tests focus on protocol responses.
+    // Auth enforcement is proven by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    DANGEROUSLY_DISABLE_AUTH: 'true',
+    // Clerk keys not needed when auth disabled, but set for completeness
+    CLERK_PUBLISHABLE_KEY: 'REDACTED',
+    CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+    ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+    ...envOverrides,
   };
 
-  return { app, restoreEnvironment };
+  // Use DI - pass isolated env
+  const runtimeConfig = loadRuntimeConfig(testEnv);
+  const app = createApp({ runtimeConfig });
+
+  return { app };
 }

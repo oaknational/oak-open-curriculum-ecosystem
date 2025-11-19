@@ -55,7 +55,7 @@ export function createStubToolExecutionAdapter(): (
 
   return async (name: ToolName, args: unknown): Promise<ToolExecutionResult> => {
     const descriptor = getToolFromToolName(name);
-    const validation = descriptor.toolZodSchema.safeParse(args ?? {});
+    const validation = descriptor.toolMcpFlatInputSchema.safeParse(args ?? {});
     if (!validation.success) {
       return {
         error: new McpParameterError(descriptor.describeToolArgs(), name, undefined, undefined, {

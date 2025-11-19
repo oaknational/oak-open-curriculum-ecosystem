@@ -8,7 +8,7 @@
 
 ## EXECUTIVE SUMMARY
 
-This investigation examines whether `@oaknational/oak-curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly where possible" from `rules.md`.
+This investigation examines whether `@oaknational/oak-curriculum-sdk` should leverage types from `@modelcontextprotocol/sdk` to better align with our architectural principle of "use library types directly wherever possible" from `rules.md`.
 
 **Key Finding**: We ARE already using some MCP SDK types (`Tool`, `CallToolResult`, `TextContent`, etc.), but there are opportunities to use more upstream types, particularly around input schemas and tool list responses. However, some duplication is justified by our schema-first architecture and the MCP SDK's limited type exports.
 

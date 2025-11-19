@@ -19,6 +19,7 @@ export interface ToolDescriptor<
   TName extends string,
   TClient,
   TArgs,
+  TFlatArgs,
   TResult,
   TDocumentedStatus extends string,
   TStatus extends number | string = StatusDiscriminant<TDocumentedStatus>,
@@ -31,7 +32,6 @@ export interface ToolDescriptor<
   readonly toolZodSchema: ZodType<TArgs, ZodTypeDef, unknown>;
   readonly toolInputJsonSchema: {
     readonly type: 'object';
-     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
@@ -41,11 +41,12 @@ export interface ToolDescriptor<
   readonly describeToolArgs: () => string;
   readonly inputSchema: {
     readonly type: 'object';
-     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
+  readonly toolMcpFlatInputSchema: ZodType<TFlatArgs, ZodTypeDef, unknown>;
+  readonly transformFlatToNestedArgs: (flatArgs: TFlatArgs) => TArgs;
   readonly documentedStatuses: readonly TDocumentedStatus[];
   readonly validateOutput: (value: unknown) =>
     | { readonly ok: true; readonly data: TResult; readonly status: TStatus }

@@ -30,11 +30,29 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{"path":{"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}},"additionalProperties":false,"required":["path"]}} as const, additionalProperties: false as const, required: ["params"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug"}} as const, additionalProperties: false as const, required: ["unit"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string() }) }) });
+export const toolMcpFlatInputSchema = z.object({ unit: z.string() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{"path":{"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}},"additionalProperties":false,"required":["path"]}},"required":["params"],"additionalProperties":false}\nRequired: params';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
 export const describeToolArgs = () => toolArgsDescription;
+/**
+ * Transform flat MCP arguments to nested SDK format.
+ *
+ * Converts flat parameter structure from MCP client to nested params.path/params.query
+ * structure expected by SDK invoke function.
+ *
+ * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)
+ * @returns Nested arguments for SDK invoke function (ToolArgs format)
+ */
+export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
+  const params: ToolParams = {
+    path: {
+      unit: flatArgs.unit,
+    },
+  };
+  return { params };
+}
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
@@ -88,6 +106,8 @@ export const getUnitsSummary = {
   },
   toolZodSchema,
   toolInputJsonSchema,
+  toolMcpFlatInputSchema,
+  transformFlatToNestedArgs,
   toolOutputJsonSchema: primaryResponseDescriptor.json,
   zodOutputSchema: primaryResponseDescriptor.zod,
   describeToolArgs,
@@ -117,4 +137,4 @@ export const getUnitsSummary = {
       attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof toolMcpFlatInputSchema>, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;

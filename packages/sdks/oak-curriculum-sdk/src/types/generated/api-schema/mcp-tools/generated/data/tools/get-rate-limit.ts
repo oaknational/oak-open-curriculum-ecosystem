@@ -21,11 +21,25 @@ export interface ToolParams { readonly __noParams?: never; }
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{},"additionalProperties":false}} as const, additionalProperties: false as const, required: ["params"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {} as const, additionalProperties: false as const };
 export const toolZodSchema = z.object({ params: z.object({}) });
+export const toolMcpFlatInputSchema = z.object({});
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{},"additionalProperties":false}},"required":["params"],"additionalProperties":false}\nRequired: params';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
 export const describeToolArgs = () => toolArgsDescription;
+/**
+ * Transform flat MCP arguments to nested SDK format.
+ *
+ * Converts flat parameter structure from MCP client to nested params.path/params.query
+ * structure expected by SDK invoke function.
+ *
+ * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)
+ * @returns Nested arguments for SDK invoke function (ToolArgs format)
+ */
+export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
+  void flatArgs;
+  return { params: {} };
+}
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
@@ -79,6 +93,8 @@ export const getRateLimit = {
   },
   toolZodSchema,
   toolInputJsonSchema,
+  toolMcpFlatInputSchema,
+  transformFlatToNestedArgs,
   toolOutputJsonSchema: primaryResponseDescriptor.json,
   zodOutputSchema: primaryResponseDescriptor.zod,
   describeToolArgs,
@@ -108,4 +124,4 @@ export const getRateLimit = {
       attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof toolMcpFlatInputSchema>, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;

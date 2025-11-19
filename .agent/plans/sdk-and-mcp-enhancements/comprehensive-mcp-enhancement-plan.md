@@ -44,7 +44,8 @@ This comprehensive plan unifies all MCP enhancement work into a single roadmap, 
 
 **Status**: PREREQUISITE for Phases 1-2  
 **Duration**: ~2 weeks  
-**Priority**: Must complete before any other MCP enhancement work
+**Priority**: Must complete before any other MCP enhancement work  
+**Last Updated**: 2025-11-18 (post P0 flat schema fix)
 
 ### Purpose
 
@@ -52,18 +53,25 @@ Refactor aggregated MCP tools (`search`, `fetch`) from hand-written runtime code
 
 ### Problem Statement
 
-**Current state**: Aggregated tools (`search`, `fetch`) are defined in hand-written runtime code:
+**Current state** (post P0 flat schema fix): Aggregated tools (`search`, `fetch`) are defined in hand-written runtime code:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search.ts` (220 lines)
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.ts` (~100 lines)
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (116 lines)
 
+**Good News**: Aggregated tools already use flat schemas (consistent with P0 flat schema fix):
+
+- ✅ `SEARCH_INPUT_SCHEMA`: Flat properties (`q`, `keyStage`, `subject`, `unit`)
+- ✅ `FETCH_INPUT_SCHEMA`: Flat properties (`id`)
+- ✅ No nested `params` structure
+
 **Issues**:
 
 1. **Duplication**: Tool names, descriptions, schemas defined in separate code from generated tools
-2. **Inconsistency**: Generated tools vs aggregated tools follow different patterns
+2. **Inconsistency**: Generated tools vs aggregated tools follow different patterns (descriptor vs hand-written)
 3. **Inflexibility**: Adding semantic search would require more hand-written runtime code
 4. **Schema-first violation**: Aggregated tool definitions don't flow from OpenAPI schema or declarative config
+5. **Manual enum maintenance**: `KEY_STAGES` and `SUBJECT_SLUGS` are hardcoded arrays, not derived from source
 
 **Target state**: All MCP tool definitions (basic + aggregated) generated at type-gen time:
 
@@ -118,16 +126,16 @@ Create declarative JSON/TypeScript configuration defining aggregated tool compos
           {
             "tool": "get-search-lessons",
             "mapInput": {
-              "params.query.q": "q",
-              "params.query.keyStage": "keyStage",
-              "params.query.subject": "subject",
-              "params.query.unit": "unit"
+              "q": "q",
+              "keyStage": "keyStage",
+              "subject": "subject",
+              "unit": "unit"
             }
           },
           {
             "tool": "get-search-transcripts",
             "mapInput": {
-              "params.query.q": "q"
+              "q": "q"
             }
           }
         ],
@@ -173,17 +181,17 @@ Create declarative JSON/TypeScript configuration defining aggregated tool compos
             {
               "pattern": "^lesson:(.+)",
               "tool": "get-lessons-summary",
-              "mapInput": { "params.path.lesson": "$1" }
+              "mapInput": { "lesson": "$1" }
             },
             {
               "pattern": "^unit:(.+)",
               "tool": "get-units-summary",
-              "mapInput": { "params.path.unit": "$1" }
+              "mapInput": { "unit": "$1" }
             },
             {
               "pattern": "^subject:(.+)",
               "tool": "get-subject-detail",
-              "mapInput": { "params.path.subject": "$1" }
+              "mapInput": { "subject": "$1" }
             }
           ]
         },
