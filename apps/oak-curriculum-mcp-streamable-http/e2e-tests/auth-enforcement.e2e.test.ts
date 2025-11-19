@@ -8,9 +8,10 @@
  * configuration. No auth bypass is used here.
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 
 /**
@@ -50,32 +51,20 @@ async function validateOAuthMetadataStep(app: Express): Promise<string> {
 
 describe('Auth Enforcement (E2E - Production Equivalent)', () => {
   let app: Express;
-  let restoreEnv: () => void;
 
   beforeAll(() => {
-    // Save current environment
-    const previous = { ...process.env };
-
-    // Configure for production-equivalent auth
-    process.env.NODE_ENV = 'test'; // NOT development (bypass disabled)
-    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ'; // Valid public key format
-    process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing'; // Dummy secret for initialization
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
-    delete process.env.VERCEL; // Local but with auth enforced
-
-    app = createApp();
-    restoreEnv = () => {
-      // Clear current env
-      for (const key of Object.keys(process.env)) {
-        Reflect.deleteProperty(process.env, key);
-      }
-      // Restore previous env
-      Object.assign(process.env, previous);
+    // Create isolated env with auth ENABLED (production equivalent)
+    const testEnv: NodeJS.ProcessEnv = {
+      NODE_ENV: 'test', // NOT development (bypass disabled)
+      CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ', // Valid public key format
+      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing', // Dummy secret for initialization
+      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+      // Explicitly do NOT set DANGEROUSLY_DISABLE_AUTH - auth ENABLED by default
+      // Explicitly do NOT set VERCEL - local but with auth enforced
     };
-  });
 
-  afterAll(() => {
-    restoreEnv();
+    const runtimeConfig = loadRuntimeConfig(testEnv);
+    app = createApp({ runtimeConfig });
   });
 
   it('rejects /mcp POST without Authorization header with 401', async () => {

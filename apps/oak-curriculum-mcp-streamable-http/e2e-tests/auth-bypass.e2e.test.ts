@@ -8,40 +8,30 @@
  * This is a developer convenience feature that should ONLY work in development.
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
-  let restoreEnv: () => void;
 
   beforeAll(() => {
-    // Save current environment
-    const previous = { ...process.env };
-
-    // Configure for auth bypass – this suite proves the DX helper works.
-    // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
-    process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1'; // Allow localhost for DNS rebinding protection
-
-    app = createApp();
-    restoreEnv = () => {
-      // Clear current env
-      for (const key of Object.keys(process.env)) {
-        Reflect.deleteProperty(process.env, key);
-      }
-      // Restore previous env
-      Object.assign(process.env, previous);
+    // Create isolated env with auth DISABLED (DX helper validation)
+    const testEnv: NodeJS.ProcessEnv = {
+      NODE_ENV: 'test',
+      // Configure for auth bypass – this suite proves the DX helper works.
+      // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+      DANGEROUSLY_DISABLE_AUTH: 'true',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1', // Allow localhost for DNS rebinding protection
     };
-  });
 
-  afterAll(() => {
-    restoreEnv();
+    const runtimeConfig = loadRuntimeConfig(testEnv);
+    app = createApp({ runtimeConfig });
   });
 
   it('allows /mcp POST without Authorization when bypass enabled', async () => {

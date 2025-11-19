@@ -25,12 +25,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-changelog': {
       const entry = getToolEntryFromToolName('get-changelog');
       const descriptor: ToolDescriptorForName<'get-changelog'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -42,12 +43,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-changelog-latest': {
       const entry = getToolEntryFromToolName('get-changelog-latest');
       const descriptor: ToolDescriptorForName<'get-changelog-latest'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -59,12 +61,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-key-stages': {
       const entry = getToolEntryFromToolName('get-key-stages');
       const descriptor: ToolDescriptorForName<'get-key-stages'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -76,12 +79,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-key-stages-subject-assets': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-assets');
       const descriptor: ToolDescriptorForName<'get-key-stages-subject-assets'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -93,12 +97,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-key-stages-subject-lessons': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-lessons');
       const descriptor: ToolDescriptorForName<'get-key-stages-subject-lessons'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -110,12 +115,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-key-stages-subject-questions': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-questions');
       const descriptor: ToolDescriptorForName<'get-key-stages-subject-questions'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -127,12 +133,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-key-stages-subject-units': {
       const entry = getToolEntryFromToolName('get-key-stages-subject-units');
       const descriptor: ToolDescriptorForName<'get-key-stages-subject-units'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -144,12 +151,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-lessons-assets': {
       const entry = getToolEntryFromToolName('get-lessons-assets');
       const descriptor: ToolDescriptorForName<'get-lessons-assets'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -161,12 +169,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-lessons-assets-by-type': {
       const entry = getToolEntryFromToolName('get-lessons-assets-by-type');
       const descriptor: ToolDescriptorForName<'get-lessons-assets-by-type'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -178,12 +187,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-lessons-quiz': {
       const entry = getToolEntryFromToolName('get-lessons-quiz');
       const descriptor: ToolDescriptorForName<'get-lessons-quiz'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -195,12 +205,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-lessons-summary': {
       const entry = getToolEntryFromToolName('get-lessons-summary');
       const descriptor: ToolDescriptorForName<'get-lessons-summary'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -212,12 +223,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-lessons-transcript': {
       const entry = getToolEntryFromToolName('get-lessons-transcript');
       const descriptor: ToolDescriptorForName<'get-lessons-transcript'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -229,12 +241,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-rate-limit': {
       const entry = getToolEntryFromToolName('get-rate-limit');
       const descriptor: ToolDescriptorForName<'get-rate-limit'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -246,12 +259,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-search-lessons': {
       const entry = getToolEntryFromToolName('get-search-lessons');
       const descriptor: ToolDescriptorForName<'get-search-lessons'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -263,12 +277,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-search-transcripts': {
       const entry = getToolEntryFromToolName('get-search-transcripts');
       const descriptor: ToolDescriptorForName<'get-search-transcripts'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -280,12 +295,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-sequences-assets': {
       const entry = getToolEntryFromToolName('get-sequences-assets');
       const descriptor: ToolDescriptorForName<'get-sequences-assets'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -297,12 +313,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-sequences-questions': {
       const entry = getToolEntryFromToolName('get-sequences-questions');
       const descriptor: ToolDescriptorForName<'get-sequences-questions'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -314,12 +331,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-sequences-units': {
       const entry = getToolEntryFromToolName('get-sequences-units');
       const descriptor: ToolDescriptorForName<'get-sequences-units'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -331,12 +349,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-subject-detail': {
       const entry = getToolEntryFromToolName('get-subject-detail');
       const descriptor: ToolDescriptorForName<'get-subject-detail'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -348,12 +367,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-subjects': {
       const entry = getToolEntryFromToolName('get-subjects');
       const descriptor: ToolDescriptorForName<'get-subjects'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -365,12 +385,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-subjects-key-stages': {
       const entry = getToolEntryFromToolName('get-subjects-key-stages');
       const descriptor: ToolDescriptorForName<'get-subjects-key-stages'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -382,12 +403,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-subjects-sequences': {
       const entry = getToolEntryFromToolName('get-subjects-sequences');
       const descriptor: ToolDescriptorForName<'get-subjects-sequences'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -399,12 +421,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-subjects-years': {
       const entry = getToolEntryFromToolName('get-subjects-years');
       const descriptor: ToolDescriptorForName<'get-subjects-years'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -416,12 +439,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-threads': {
       const entry = getToolEntryFromToolName('get-threads');
       const descriptor: ToolDescriptorForName<'get-threads'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -433,12 +457,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-threads-units': {
       const entry = getToolEntryFromToolName('get-threads-units');
       const descriptor: ToolDescriptorForName<'get-threads-units'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {
@@ -450,12 +475,13 @@ async function invokeToolByName<TName extends ToolName>(
     case 'get-units-summary': {
       const entry = getToolEntryFromToolName('get-units-summary');
       const descriptor: ToolDescriptorForName<'get-units-summary'> = entry.descriptor;
-      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);
+      const parsed = descriptor.toolMcpFlatInputSchema.safeParse(rawArgs);
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args = parsed.data;
-      const output = await descriptor.invoke(client, args);
+      const flatArgs = parsed.data;
+      const nestedArgs = descriptor.transformFlatToNestedArgs(flatArgs);
+      const output = await descriptor.invoke(client, nestedArgs);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message, {

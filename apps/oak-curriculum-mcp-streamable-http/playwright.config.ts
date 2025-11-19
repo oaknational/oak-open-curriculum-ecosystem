@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/* eslint-disable-next-line no-restricted-syntax -- Playwright config file needs env for test configuration */
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3333';
 
 export default defineConfig({

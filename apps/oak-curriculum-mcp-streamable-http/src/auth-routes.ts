@@ -45,7 +45,7 @@ export function registerPublicOAuthMetadataEndpoints(
 
   // Custom handler that sets resource field to canonical MCP server URI per MCP spec
   app.get('/.well-known/oauth-protected-resource', (req, res) => {
-    const publishableKey = process.env.CLERK_PUBLISHABLE_KEY;
+    const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
     if (!publishableKey) {
       throw new Error('CLERK_PUBLISHABLE_KEY environment variable is required');
     }

@@ -1,5 +1,9 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
-import { buildInputSchemaObject, buildZodObject } from './emit-input-schema.js';
+import {
+  buildInputSchemaObject,
+  buildZodObject,
+  buildFlatMcpZodObject,
+} from './emit-input-schema.js';
 import { emitErrorDescription } from './emit-error-description.js';
 import type { ParamMetadata, ParamMetadataMap } from './param-metadata.js';
 
@@ -136,14 +140,74 @@ function buildHeaderBlock(
 function inputSchemaBlock(
   pathParamMetadata: ParamMetadataMap,
   queryParamMetadata: ParamMetadataMap,
-): { jsonLiteral: string; zodLiteral: string } {
+): { jsonLiteral: string; zodLiteral: string; flatMcpZodLiteral: string } {
   const schemaObject = buildInputSchemaObject(pathParamMetadata, queryParamMetadata);
   const propertiesLiteral = JSON.stringify(schemaObject.properties);
   const requiredKeys = schemaObject.required ?? [];
   const requiredPart = requiredKeys.length > 0 ? `, required: ${JSON.stringify(requiredKeys)}` : '';
   const jsonLiteral = `export const toolInputJsonSchema = { type: 'object' as const, properties: ${propertiesLiteral} as const, additionalProperties: false as const${requiredPart} };`;
   const zodLiteral = `export const toolZodSchema = ${buildZodObject(pathParamMetadata, queryParamMetadata)};`;
-  return { jsonLiteral, zodLiteral };
+  const flatMcpZodLiteral = `export const toolMcpFlatInputSchema = ${buildFlatMcpZodObject(pathParamMetadata, queryParamMetadata)};`;
+  return { jsonLiteral, zodLiteral, flatMcpZodLiteral };
+}
+
+function buildFlatToNestedTransform(
+  pathParamMetadata: ParamMetadataMap,
+  queryParamMetadata: ParamMetadataMap,
+): string {
+  const pathParamNames = Object.keys(pathParamMetadata);
+  const queryParamNames = Object.keys(queryParamMetadata);
+  const hasPathParams = pathParamNames.length > 0;
+  const hasQueryParams = queryParamNames.length > 0;
+
+  const lines: string[] = [];
+  lines.push('/**');
+  lines.push(' * Transform flat MCP arguments to nested SDK format.');
+  lines.push(' *');
+  lines.push(
+    ' * Converts flat parameter structure from MCP client to nested params.path/params.query',
+  );
+  lines.push(' * structure expected by SDK invoke function.');
+  lines.push(' *');
+  lines.push(
+    ' * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)',
+  );
+  lines.push(' * @returns Nested arguments for SDK invoke function (ToolArgs format)');
+  lines.push(' */');
+  lines.push(
+    'export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {',
+  );
+
+  if (!hasPathParams && !hasQueryParams) {
+    // No parameters - return empty params object
+    lines.push('  void flatArgs;');
+    lines.push('  return { params: {} };');
+  } else {
+    lines.push('  const params: ToolParams = {');
+
+    if (hasPathParams) {
+      lines.push('    path: {');
+      for (const paramName of pathParamNames) {
+        lines.push(`      ${paramName}: flatArgs.${paramName},`);
+      }
+      lines.push('    },');
+    }
+
+    if (hasQueryParams) {
+      // Build query object conditionally - only include if any query params are present
+      lines.push('    query: {');
+      for (const paramName of queryParamNames) {
+        lines.push(`      ${paramName}: flatArgs.${paramName},`);
+      }
+      lines.push('    },');
+    }
+
+    lines.push('  };');
+    lines.push('  return { params };');
+  }
+
+  lines.push('}');
+  return lines.join('\n');
 }
 
 export function emitSchema(
@@ -154,10 +218,15 @@ export function emitSchema(
   void operation;
   const lines: string[] = [];
   lines.push(buildHeaderBlock(pathParamMetadata, queryParamMetadata));
-  const { jsonLiteral, zodLiteral } = inputSchemaBlock(pathParamMetadata, queryParamMetadata);
+  const { jsonLiteral, zodLiteral, flatMcpZodLiteral } = inputSchemaBlock(
+    pathParamMetadata,
+    queryParamMetadata,
+  );
   lines.push(jsonLiteral);
   lines.push(zodLiteral);
+  lines.push(flatMcpZodLiteral);
   lines.push('export type ToolInputSchema = z.infer<typeof toolZodSchema>;');
   lines.push(emitErrorDescription(pathParamMetadata, queryParamMetadata));
+  lines.push(buildFlatToNestedTransform(pathParamMetadata, queryParamMetadata));
   return lines.join('\n');
 }

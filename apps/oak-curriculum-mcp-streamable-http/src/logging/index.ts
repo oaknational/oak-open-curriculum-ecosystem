@@ -36,11 +36,13 @@ export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOpti
   const minSeverity = logLevelToSeverityNumber(level);
 
   const serviceName = options?.name ?? 'streamable-http';
+  /* eslint-disable no-restricted-syntax -- buildResourceAttributes needs full env for OTEL resource attributes */
   const resourceAttributes = buildResourceAttributes(
     process.env, // App wiring owns env access
     serviceName,
-    process.env.npm_package_version ?? '0.0.0',
+    config.version,
   );
+  /* eslint-enable no-restricted-syntax */
 
   return new UnifiedLogger({
     minSeverity,

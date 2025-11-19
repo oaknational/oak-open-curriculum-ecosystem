@@ -63,61 +63,51 @@ function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
 describe('Streamable HTTP server (live mode with overrides)', () => {
   it('formats successful tool responses identically to stub mode', async () => {
     const captured: CapturedCall[] = [];
-    const { app, restoreEnvironment } = createLiveHttpApp(createOverrides(captured));
-    try {
-      const res = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', ACCEPT)
-        .send({
-          jsonrpc: '2.0',
-          id: 'live-success',
-          method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: { params: {} } },
-        });
+    const { app } = createLiveHttpApp(createOverrides(captured));
+    const res = await request(app)
+      .post('/mcp')
+      .set('Host', 'localhost')
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'live-success',
+        method: 'tools/call',
+        params: { name: 'get-key-stages', arguments: { params: {} } },
+      });
 
-      expect(res.status).toBe(200);
-      expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
+    expect(res.status).toBe(200);
+    expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
 
-      const envelope = parseSseEnvelope(res.text);
-      const result = parseJsonRpcResult(envelope);
-      expect(result.isError).not.toBe(true);
-      const payload = parseToolSuccessPayload(result);
-      expect(payload.status).toBe(200);
-      if (!Array.isArray(payload.data)) {
-        throw new Error('Expected array response from tool');
-      }
-      const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
-      expect(first?.canonicalUrl).toContain('thenational.academy');
-    } finally {
-      restoreEnvironment();
+    const envelope = parseSseEnvelope(res.text);
+    const result = parseJsonRpcResult(envelope);
+    expect(result.isError).not.toBe(true);
+    const payload = parseToolSuccessPayload(result);
+    expect(payload.status).toBe(200);
+    if (!Array.isArray(payload.data)) {
+      throw new Error('Expected array response from tool');
     }
+    const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
+    expect(first?.canonicalUrl).toContain('thenational.academy');
   });
 
   it('propagates tool execution errors with the same SSE envelope structure', async () => {
-    const { app, restoreEnvironment } = createLiveHttpApp(
-      createErrorOverrides('Simulated execution failure'),
-    );
-    try {
-      const res = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', ACCEPT)
-        .send({
-          jsonrpc: '2.0',
-          id: 'live-error',
-          method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: { params: {} } },
-        });
+    const { app } = createLiveHttpApp(createErrorOverrides('Simulated execution failure'));
+    const res = await request(app)
+      .post('/mcp')
+      .set('Host', 'localhost')
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'live-error',
+        method: 'tools/call',
+        params: { name: 'get-key-stages', arguments: { params: {} } },
+      });
 
-      expect(res.status).toBe(200);
-      const envelope = parseSseEnvelope(res.text);
-      const result = parseJsonRpcResult(envelope);
-      expect(result.isError).toBe(true);
-      const text = readFirstTextContent(getContentArray(result));
-      expect(text).toContain('Simulated execution failure');
-    } finally {
-      restoreEnvironment();
-    }
+    expect(res.status).toBe(200);
+    const envelope = parseSseEnvelope(res.text);
+    const result = parseJsonRpcResult(envelope);
+    expect(result.isError).toBe(true);
+    const text = readFirstTextContent(getContentArray(result));
+    expect(text).toContain('Simulated execution failure');
   });
 });

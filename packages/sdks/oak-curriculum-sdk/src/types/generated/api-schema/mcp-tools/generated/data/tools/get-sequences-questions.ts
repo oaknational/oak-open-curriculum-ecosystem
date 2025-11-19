@@ -44,9 +44,32 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{"path":{"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."}},"additionalProperties":false,"required":["sequence"]},"query":{"type":"object","properties":{"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false}},"additionalProperties":false,"required":["path"]}} as const, additionalProperties: false as const, required: ["params"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ sequence: z.string() }), query: z.object({ year: z.number().optional(), offset: z.number().optional(), limit: z.number().optional() }).optional() }) });
+export const toolMcpFlatInputSchema = z.object({ sequence: z.string(), year: z.number().optional(), offset: z.number().optional(), limit: z.number().optional() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{"path":{"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."}},"additionalProperties":false,"required":["sequence"]},"query":{"type":"object","properties":{"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false}},"additionalProperties":false,"required":["path"]}},"required":["params"],"additionalProperties":false}\nRequired: params';
 export const describeToolArgs = () => toolArgsDescription;
+/**
+ * Transform flat MCP arguments to nested SDK format.
+ *
+ * Converts flat parameter structure from MCP client to nested params.path/params.query
+ * structure expected by SDK invoke function.
+ *
+ * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)
+ * @returns Nested arguments for SDK invoke function (ToolArgs format)
+ */
+export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
+  const params: ToolParams = {
+    path: {
+      sequence: flatArgs.sequence,
+    },
+    query: {
+      year: flatArgs.year,
+      offset: flatArgs.offset,
+      limit: flatArgs.limit,
+    },
+  };
+  return { params };
+}
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
@@ -100,6 +123,8 @@ export const getSequencesQuestions = {
   },
   toolZodSchema,
   toolInputJsonSchema,
+  toolMcpFlatInputSchema,
+  transformFlatToNestedArgs,
   toolOutputJsonSchema: primaryResponseDescriptor.json,
   zodOutputSchema: primaryResponseDescriptor.zod,
   describeToolArgs,
@@ -129,4 +154,4 @@ export const getSequencesQuestions = {
       attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof toolMcpFlatInputSchema>, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;

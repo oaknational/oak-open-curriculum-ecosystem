@@ -128,10 +128,10 @@ describe('createUniversalToolExecutor', () => {
     const result = await callUniversalTool('search', { query: 'photosynthesis' });
 
     expect(executeMcpTool).toHaveBeenCalledWith('get-search-lessons', {
-      params: { query: { q: 'photosynthesis' } },
+      q: 'photosynthesis',
     });
     expect(executeMcpTool).toHaveBeenCalledWith('get-search-transcripts', {
-      params: { query: { q: 'photosynthesis' } },
+      q: 'photosynthesis',
     });
     expect(result.isError).toBeUndefined();
     const payload = parseTextContent(result);
@@ -162,7 +162,7 @@ describe('createUniversalToolExecutor', () => {
     const result = await callUniversalTool('fetch', { id: 'lesson:maths-lesson' });
 
     expect(executeMcpTool).toHaveBeenCalledWith('get-lessons-summary', {
-      params: { path: { lesson: 'maths-lesson' } },
+      lesson: 'maths-lesson',
     });
     const payload = parseTextContent(result);
     const expectedCanonicalUrl = generateCanonicalUrlWithContext('lesson', 'lesson:maths-lesson');

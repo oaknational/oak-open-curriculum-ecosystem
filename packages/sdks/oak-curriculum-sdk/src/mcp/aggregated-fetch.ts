@@ -115,35 +115,35 @@ async function executeFetchByType(
     case 'lesson': {
       return extractExecutionData(
         await deps.executeMcpTool('get-lessons-summary', {
-          params: { path: { lesson: slug } },
+          lesson: slug,
         }),
       );
     }
     case 'unit': {
       return extractExecutionData(
         await deps.executeMcpTool('get-units-summary', {
-          params: { path: { unit: slug } },
+          unit: slug,
         }),
       );
     }
     case 'subject': {
       return extractExecutionData(
         await deps.executeMcpTool('get-subject-detail', {
-          params: { path: { subject: slug } },
+          subject: slug,
         }),
       );
     }
     case 'sequence': {
       return extractExecutionData(
         await deps.executeMcpTool('get-sequences-units', {
-          params: { path: { sequence: slug } },
+          sequence: slug,
         }),
       );
     }
     case 'thread': {
       return extractExecutionData(
         await deps.executeMcpTool('get-threads-units', {
-          params: { path: { threadSlug: slug } },
+          threadSlug: slug,
         }),
       );
     }

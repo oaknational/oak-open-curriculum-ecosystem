@@ -32,9 +32,27 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{"query":{"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}},"additionalProperties":false,"required":["q"]}},"additionalProperties":false,"required":["query"]}} as const, additionalProperties: false as const, required: ["params"] };
 export const toolZodSchema = z.object({ params: z.object({ query: z.object({ q: z.string() }) }) });
+export const toolMcpFlatInputSchema = z.object({ q: z.string() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{"query":{"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}},"additionalProperties":false,"required":["q"]}},"additionalProperties":false,"required":["query"]}},"required":["params"],"additionalProperties":false}\nRequired: params';
 export const describeToolArgs = () => toolArgsDescription;
+/**
+ * Transform flat MCP arguments to nested SDK format.
+ *
+ * Converts flat parameter structure from MCP client to nested params.path/params.query
+ * structure expected by SDK invoke function.
+ *
+ * @param flatArgs - Flat arguments from MCP client (validated against toolMcpFlatInputSchema)
+ * @returns Nested arguments for SDK invoke function (ToolArgs format)
+ */
+export function transformFlatToNestedArgs(flatArgs: z.infer<typeof toolMcpFlatInputSchema>): ToolArgs {
+  const params: ToolParams = {
+    query: {
+      q: flatArgs.q,
+    },
+  };
+  return { params };
+}
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
 type DocumentedStatus = typeof documentedStatuses[number];
@@ -88,6 +106,8 @@ export const getSearchTranscripts = {
   },
   toolZodSchema,
   toolInputJsonSchema,
+  toolMcpFlatInputSchema,
+  transformFlatToNestedArgs,
   toolOutputJsonSchema: primaryResponseDescriptor.json,
   zodOutputSchema: primaryResponseDescriptor.zod,
   describeToolArgs,
@@ -117,4 +137,4 @@ export const getSearchTranscripts = {
       attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof toolMcpFlatInputSchema>, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;

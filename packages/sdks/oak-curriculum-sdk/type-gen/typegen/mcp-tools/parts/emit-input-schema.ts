@@ -1,115 +1,17 @@
 import type { ParamMetadata, ParamMetadataMap } from './param-metadata.js';
+import { buildZodFields } from './build-zod-type.js';
+import { jsonSchemaFromPrimitive } from './build-json-schema-property.js';
 
-export interface JsonSchemaPropertyString {
-  readonly type: 'string';
-  readonly enum?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
+export type {
+  JsonSchemaProperty,
+  JsonSchemaPropertyString,
+  JsonSchemaPropertyNumber,
+  JsonSchemaPropertyBoolean,
+  JsonSchemaPropertyArray,
+  JsonSchemaObject,
+} from './json-schema-types.js';
 
-export interface JsonSchemaPropertyNumber {
-  readonly type: 'number';
-  readonly enum?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
-
-export interface JsonSchemaPropertyBoolean {
-  readonly type: 'boolean';
-  readonly enum?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
-
-export interface JsonSchemaPropertyArray<TItem extends 'string' | 'number' | 'boolean'> {
-  readonly type: 'array';
-  readonly items: { readonly type: TItem };
-  readonly description?: string;
-  readonly default?: unknown;
-}
-
-export type JsonSchemaProperty =
-  | JsonSchemaPropertyString
-  | JsonSchemaPropertyNumber
-  | JsonSchemaPropertyBoolean
-  | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>
-  | JsonSchemaObject;
-
-export interface JsonSchemaObject {
-  readonly type: 'object';
-  readonly properties: Readonly<Record<string, JsonSchemaProperty>>;
-  readonly required?: readonly string[];
-  readonly additionalProperties: false;
-}
-
-function buildCommon(meta: ParamMetadata): {
-  readonly description?: string;
-  readonly default?: unknown;
-} {
-  const out: { description?: string; default?: unknown } = {};
-  if (meta.description !== undefined) {
-    out.description = meta.description;
-  }
-  if (meta.default !== undefined) {
-    out.default = meta.default;
-  }
-  return out;
-}
-
-function buildStringProperty(meta: ParamMetadata): JsonSchemaPropertyString {
-  const common = buildCommon(meta);
-  const base: JsonSchemaPropertyString = { type: 'string', ...common };
-  if (meta.valueConstraint && Array.isArray(meta.allowedValues)) {
-    return { ...base, enum: meta.allowedValues };
-  }
-  return base;
-}
-
-function buildNumberProperty(meta: ParamMetadata): JsonSchemaPropertyNumber {
-  const common = buildCommon(meta);
-  const base: JsonSchemaPropertyNumber = { type: 'number', ...common };
-  if (meta.valueConstraint && Array.isArray(meta.allowedValues)) {
-    return { ...base, enum: meta.allowedValues };
-  }
-  return base;
-}
-
-function buildBooleanProperty(meta: ParamMetadata): JsonSchemaPropertyBoolean {
-  const common = buildCommon(meta);
-  const base: JsonSchemaPropertyBoolean = { type: 'boolean', ...common };
-  if (meta.valueConstraint && Array.isArray(meta.allowedValues)) {
-    return { ...base, enum: meta.allowedValues };
-  }
-  return base;
-}
-
-function buildArrayProperty(
-  item: 'string' | 'number' | 'boolean',
-  meta: ParamMetadata,
-): JsonSchemaPropertyArray<'string' | 'number' | 'boolean'> {
-  const common = buildCommon(meta);
-  return { type: 'array', items: { type: item }, ...common };
-}
-
-function jsonSchemaFromPrimitive(meta: ParamMetadata): JsonSchemaProperty {
-  const t = meta.typePrimitive;
-  if (t === 'string') {
-    return buildStringProperty(meta);
-  }
-  if (t === 'number') {
-    return buildNumberProperty(meta);
-  }
-  if (t === 'boolean') {
-    return buildBooleanProperty(meta);
-  }
-  if (t === 'string[]') {
-    return buildArrayProperty('string', meta);
-  }
-  if (t === 'number[]') {
-    return buildArrayProperty('number', meta);
-  }
-  return buildArrayProperty('boolean', meta);
-}
+import type { JsonSchemaObject, JsonSchemaProperty } from './json-schema-types.js';
 
 /**
  * Build a JSON Schema object for a tool's parameters from path/query metadata.
@@ -181,13 +83,6 @@ export function buildInputSchemaObject(
   };
 }
 
-function buildZodFields(entries: [string, ParamMetadata][]): string[] {
-  return entries.map(([name, meta]) => {
-    const base = buildZodType(meta);
-    return `${name}: ${base}${meta.required ? '' : '.optional()'}`;
-  });
-}
-
 export function buildZodObject(
   pathParams: ParamMetadataMap,
   queryParams: ParamMetadataMap,
@@ -220,25 +115,53 @@ export function buildZodObject(
   return `z.object({ params: ${paramsSchema} })`;
 }
 
-function buildZodType(meta: ParamMetadata): string {
-  if (meta.allowedValues && meta.allowedValues.length > 0) {
-    const literals = meta.allowedValues.map((value) => `z.literal(${JSON.stringify(value)})`);
-    return `z.union([${literals.join(', ')}])`;
+/**
+ * Build a flat Zod object for MCP tool registration.
+ *
+ * Merges path and query parameters into a single flat object structure
+ * that MCP clients can navigate to discover individual parameters.
+ *
+ * This differs from buildZodObject which creates nested structure
+ * (params → path/query) for internal SDK type safety.
+ *
+ * @param pathParams - Path parameter metadata from OpenAPI
+ * @param queryParams - Query parameter metadata from OpenAPI
+ * @returns Zod schema string with flat parameter structure
+ *
+ * @example
+ * ```typescript
+ * // Input: path: { id: 'ks1' }, query: { q: 'search' }
+ * // Output: "z.object({ id: z.string(), q: z.string() })"
+ * ```
+ *
+ * @remarks
+ * - Reuses existing buildZodFields() for type generation
+ * - Parameters appear at top level (no params/path/query nesting)
+ * - Path parameters listed before query parameters
+ * - MCP clients can discover and document each parameter individually
+ *
+ * @see buildZodObject - Generates nested structure for SDK internal use
+ * @see .agent/plans/p0-mcp-flat-schema-generator-fix.md
+ * @see .agent/research/deep-reflection-schema-first-and-findings.md (Priority 0)
+ */
+export function buildFlatMcpZodObject(
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
+): string {
+  // Merge path and query parameters - path first for consistency
+  const allEntries = [...Object.entries(pathParams), ...Object.entries(queryParams)];
+
+  // Handle zero-parameter tools
+  if (allEntries.length === 0) {
+    return 'z.object({})';
   }
-  switch (meta.typePrimitive) {
-    case 'string':
-      return 'z.string()';
-    case 'number':
-      return 'z.number()';
-    case 'boolean':
-      return 'z.boolean()';
-    case 'string[]':
-      return 'z.array(z.string())';
-    case 'number[]':
-      return 'z.array(z.number())';
-    case 'boolean[]':
-      return 'z.array(z.boolean())';
-    default:
-      return 'z.unknown()';
-  }
+
+  // Reuse existing buildZodFields which handles all type generation logic:
+  // - Enum unions (z.literal values)
+  // - Optional parameters (.optional())
+  // - Array types
+  // - Primitive types
+  const fields = buildZodFields(allEntries).join(', ');
+
+  return `z.object({ ${fields} })`;
 }

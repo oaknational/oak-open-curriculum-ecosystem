@@ -108,11 +108,7 @@ describe('Multi-status transcript handling (E2E)', () => {
     const toolResult = await client.callTool({
       name: 'get-lessons-transcript',
       arguments: {
-        params: {
-          path: {
-            lesson: 'add-and-subtract-two-numbers-that-bridge-through-10',
-          },
-        },
+        lesson: 'add-and-subtract-two-numbers-that-bridge-through-10',
       },
     });
     const response = expectSuccess(toolResult);

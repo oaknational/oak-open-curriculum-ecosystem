@@ -148,12 +148,8 @@ function asOptionalRecord(value: unknown): Record<string, unknown> | undefined {
 }
 
 async function withStubbedHttpApp<T>(callback: (app: Express) => Promise<T>): Promise<T> {
-  const { app, restoreEnvironment } = createStubbedHttpApp();
-  try {
-    return await callback(app);
-  } finally {
-    restoreEnvironment();
-  }
+  const { app } = createStubbedHttpApp();
+  return await callback(app);
 }
 
 interface NormalisedJsonRpcError {
@@ -197,7 +193,8 @@ async function getSampleLessonReference(): Promise<{
 }> {
   const { subjectSlug, keyStageSlug } = await getSampleSubject();
   const lessonsRaw = await executeStubTool('get-key-stages-subject-lessons', {
-    params: { path: { keyStage: keyStageSlug, subject: subjectSlug } },
+    keyStage: keyStageSlug,
+    subject: subjectSlug,
   });
   const lessons = ensureArray(lessonsRaw, 'subject lessons');
   const firstGroup = ensureRecord(lessons[0], 'first lesson group');
@@ -210,10 +207,8 @@ async function getSampleLessonReference(): Promise<{
 describe('Streamable HTTP stubbed SDK behaviours', () => {
   it('returns key stages via get-key-stages', async () => {
     await withStubbedHttpApp(async (app) => {
-      const expected = (await executeStubTool('get-key-stages', {
-        params: {},
-      })) as KeyStagesResponse;
-      const { result } = await callTool(app, 'get-key-stages', { params: {} });
+      const expected = (await executeStubTool('get-key-stages', {})) as KeyStagesResponse;
+      const { result } = await callTool(app, 'get-key-stages', {});
       const payload = expectSuccessfulPayload(result) as KeyStagesResponse;
       expect(payload).toEqual(expected);
     });
@@ -224,11 +219,11 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
       const { subjectSlug } = await getSampleSubject();
 
       const expected = (await executeStubTool('get-subject-detail', {
-        params: { path: { subject: subjectSlug } },
+        subject: subjectSlug,
       })) as SubjectSummary;
 
       const { result } = await callTool(app, 'get-subject-detail', {
-        params: { path: { subject: subjectSlug } },
+        subject: subjectSlug,
       });
 
       const payload = expectSuccessfulPayload(result) as SubjectSummary;
@@ -251,11 +246,11 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
       const { lessonSlug } = await getSampleLessonReference();
 
       const expected = (await executeStubTool('get-lessons-summary', {
-        params: { path: { lesson: lessonSlug } },
+        lesson: lessonSlug,
       })) as LessonSummaryResponse;
 
       const { result } = await callTool(app, 'get-lessons-summary', {
-        params: { path: { lesson: lessonSlug } },
+        lesson: lessonSlug,
       });
 
       const payload = expectSuccessfulPayload(result) as LessonSummaryResponse;
@@ -271,11 +266,11 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
   it('returns search results for lessons', async () => {
     await withStubbedHttpApp(async (app) => {
       const expectedLessons = (await executeStubTool('get-search-lessons', {
-        params: { query: { q: 'algebra' } },
+        q: 'algebra',
       })) as SearchResult;
 
       const { result } = await callTool(app, 'get-search-lessons', {
-        params: { query: { q: 'algebra' } },
+        q: 'algebra',
       });
       const lessonPayload = expectSuccessfulPayload(result) as SearchResult;
       expect(lessonPayload).toEqual(expectedLessons);
@@ -285,11 +280,11 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
   it('returns search transcript results', async () => {
     await withStubbedHttpApp(async (app) => {
       const expectedTranscripts = (await executeStubTool('get-search-transcripts', {
-        params: { query: { q: 'algebra' } },
+        q: 'algebra',
       })) as SearchResult;
 
       const { result } = await callTool(app, 'get-search-transcripts', {
-        params: { query: { q: 'algebra' } },
+        q: 'algebra',
       });
       const transcriptPayload = expectSuccessfulPayload(result) as SearchResult;
       expect(transcriptPayload).toEqual(expectedTranscripts);
@@ -311,10 +306,8 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
 
   it('returns rate limit status from stub tool', async () => {
     await withStubbedHttpApp(async (app) => {
-      const expected = (await executeStubTool('get-rate-limit', {
-        params: {},
-      })) as RateLimitResponse;
-      const { result } = await callTool(app, 'get-rate-limit', { params: {} });
+      const expected = (await executeStubTool('get-rate-limit', {})) as RateLimitResponse;
+      const { result } = await callTool(app, 'get-rate-limit', {});
       const payload = expectSuccessfulPayload(result) as RateLimitResponse;
       expect(payload.limit).toBeDefined();
       expect(payload.remaining).toBeDefined();

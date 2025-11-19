@@ -179,21 +179,13 @@ export async function runSearchTool(
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
   const lessonsArgs = {
-    params: {
-      query: {
-        q: args.q,
-        ...(args.keyStage !== undefined ? { keyStage: args.keyStage } : {}),
-        ...(args.subject !== undefined ? { subject: args.subject } : {}),
-        ...(args.unit !== undefined ? { unit: args.unit } : {}),
-      },
-    },
+    q: args.q,
+    ...(args.keyStage !== undefined ? { keyStage: args.keyStage } : {}),
+    ...(args.subject !== undefined ? { subject: args.subject } : {}),
+    ...(args.unit !== undefined ? { unit: args.unit } : {}),
   };
   const transcriptsArgs = {
-    params: {
-      query: {
-        q: args.q,
-      },
-    },
+    q: args.q,
   };
 
   const lessonsResult = await deps.executeMcpTool('get-search-lessons', lessonsArgs);
