@@ -1,4 +1,5 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
+import { getSecuritySchemeForTool } from '../apply-security-policy.js';
 
 function literalName(toolName: string): string {
   const parts = toolName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
@@ -17,6 +18,7 @@ function literalName(toolName: string): string {
 }
 
 function buildExports({
+  toolName,
   descriptorName,
   description,
   path,
@@ -24,6 +26,7 @@ function buildExports({
   operationId,
   operation,
 }: {
+  readonly toolName: string;
   readonly descriptorName: string;
   readonly description: string | undefined;
   readonly path: string;
@@ -31,6 +34,20 @@ function buildExports({
   readonly operationId: string;
   readonly operation: OperationObject;
 }): string {
+  // Apply security policy to determine tool's authentication requirements
+  const securitySchemes = getSecuritySchemeForTool(toolName);
+  const securitySchemesLiteral = `[${securitySchemes
+    .map((scheme) => {
+      if (scheme.type === 'noauth') {
+        return "{ type: 'noauth' }";
+      }
+      const scopesArray = scheme.scopes
+        ? `[${scheme.scopes.map((s) => `'${s}'`).join(', ')}]`
+        : '[]';
+      return `{ type: 'oauth2', scopes: ${scopesArray} }`;
+    })
+    .join(', ')}]`;
+
   const documentedStatuses = collectDocumentedStatuses(operation);
   const documentedStatusLiterals = `[${documentedStatuses
     .map((status) => `'${status}'`)
@@ -117,6 +134,7 @@ function buildExports({
   lines.push('  path,');
   lines.push('  method,');
   lines.push('  documentedStatuses,');
+  lines.push(`  securitySchemes: ${securitySchemesLiteral},`);
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',
@@ -200,6 +218,7 @@ export function emitIndex(
   operation: OperationObject,
 ): string {
   return buildExports({
+    toolName,
     descriptorName: literalName(toolName),
     description: toToolDescription(operation),
     path,

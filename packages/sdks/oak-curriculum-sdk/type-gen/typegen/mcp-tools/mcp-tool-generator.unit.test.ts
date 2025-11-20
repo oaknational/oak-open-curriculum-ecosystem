@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { generateCompleteMcpTools } from './mcp-tool-generator.js';
-import { schemaWithPathParams, buildSchemaWithEnumParam } from '../../test-fixtures.js';
+import {
+  schemaWithPathParams,
+  buildSchemaWithEnumParam,
+  schemaWithGetEndpoint,
+} from '../../test-fixtures.js';
 import { generateMcpToolName } from './name-generator.js';
 
 describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
@@ -67,5 +72,53 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(contractFile).toContain('MCP security scheme types');
     expect(contractFile).toContain('No authentication required');
     expect(contractFile).toContain('OAuth 2.1 authentication required');
+  });
+
+  it('emits security metadata in generated tool files', () => {
+    const output = generateCompleteMcpTools(schemaWithGetEndpoint);
+
+    // Test PUBLIC tool (get-users should NOT be in PUBLIC_TOOLS)
+    const getUsersToolFile = output.data.tools['get-users.ts'];
+    expect(getUsersToolFile).toBeDefined();
+
+    // Verify securitySchemes field is emitted
+    expect(getUsersToolFile).toContain('securitySchemes:');
+
+    // Verify OAuth2 scheme for protected tools (default)
+    expect(getUsersToolFile).toContain("type: 'oauth2'");
+    expect(getUsersToolFile).toContain("scopes: ['openid', 'email']");
+
+    // Verify field position (after documentedStatuses, before validateOutput)
+    const documentedStatusesIndex = getUsersToolFile.indexOf('documentedStatuses,');
+    const securitySchemesIndex = getUsersToolFile.indexOf('securitySchemes:');
+    const validateOutputIndex = getUsersToolFile.indexOf('validateOutput:');
+
+    expect(documentedStatusesIndex).toBeGreaterThan(-1);
+    expect(securitySchemesIndex).toBeGreaterThan(documentedStatusesIndex);
+    expect(validateOutputIndex).toBeGreaterThan(securitySchemesIndex);
+  });
+
+  it('emits noauth scheme for tools in PUBLIC_TOOLS', () => {
+    // Create schema with a tool that will generate 'get-changelog' name
+    const schemaWithPublicTool: OpenAPIObject = {
+      openapi: '3.0.0',
+      info: { title: 'Test', version: '1.0.0' },
+      paths: {
+        '/changelog': {
+          get: {
+            operationId: 'getChangelog',
+            responses: { '200': { description: 'Success' } },
+          },
+        },
+      },
+    };
+
+    const output = generateCompleteMcpTools(schemaWithPublicTool);
+    const changelogToolFile = output.data.tools['get-changelog.ts'];
+
+    expect(changelogToolFile).toBeDefined();
+    expect(changelogToolFile).toContain('securitySchemes:');
+    expect(changelogToolFile).toContain("type: 'noauth'");
+    expect(changelogToolFile).not.toContain("type: 'oauth2'");
   });
 });

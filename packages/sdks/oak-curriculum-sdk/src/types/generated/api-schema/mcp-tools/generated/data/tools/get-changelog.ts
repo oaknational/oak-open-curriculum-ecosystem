@@ -105,6 +105,7 @@ export const getChangelog = {
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'noauth' }],
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {
