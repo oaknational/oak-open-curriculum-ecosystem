@@ -1,0 +1,81 @@
+/**
+ * Unit tests for MCP Security Policy Configuration
+ * Following TDD approach - tests written FIRST before implementation
+ */
+
+import { describe, it, expect } from 'vitest';
+import { PUBLIC_TOOLS, DEFAULT_AUTH_SCHEME, toolRequiresAuth } from './mcp-security-policy.js';
+
+describe('MCP Security Policy Configuration', () => {
+  describe('PUBLIC_TOOLS', () => {
+    it('is a readonly array', () => {
+      // TypeScript will enforce readonly at compile time
+      // At runtime, prove it's an array
+      expect(Array.isArray(PUBLIC_TOOLS)).toBe(true);
+    });
+
+    it('has no duplicate entries', () => {
+      const uniqueTools = new Set(PUBLIC_TOOLS);
+      expect(uniqueTools.size).toBe(PUBLIC_TOOLS.length);
+    });
+  });
+
+  describe('DEFAULT_AUTH_SCHEME', () => {
+    it('has oauth2 type', () => {
+      expect(DEFAULT_AUTH_SCHEME.type).toBe('oauth2');
+    });
+
+    it('has scopes array', () => {
+      expect(Array.isArray(DEFAULT_AUTH_SCHEME.scopes)).toBe(true);
+    });
+
+    it('includes required openid scope', () => {
+      expect(DEFAULT_AUTH_SCHEME.scopes).toContain('openid');
+    });
+
+    it('includes required email scope', () => {
+      expect(DEFAULT_AUTH_SCHEME.scopes).toContain('email');
+    });
+  });
+
+  describe('toolRequiresAuth', () => {
+    it('returns true for tools NOT in PUBLIC_TOOLS', () => {
+      const result = toolRequiresAuth('any-protected-tool');
+      expect(result).toBe(true);
+    });
+
+    it('returns true for another tool NOT in PUBLIC_TOOLS', () => {
+      const result = toolRequiresAuth('get-lessons');
+      expect(result).toBe(true);
+    });
+
+    it('is pure - returns same result for same input', () => {
+      const toolName = 'test-tool';
+      const result1 = toolRequiresAuth(toolName);
+      const result2 = toolRequiresAuth(toolName);
+      expect(result1).toBe(result2);
+    });
+
+    it('is pure - multiple calls with different inputs maintain consistency', () => {
+      const tool1 = 'protected-tool-1';
+      const tool2 = 'protected-tool-2';
+
+      const result1a = toolRequiresAuth(tool1);
+      const result2a = toolRequiresAuth(tool2);
+      const result1b = toolRequiresAuth(tool1);
+      const result2b = toolRequiresAuth(tool2);
+
+      expect(result1a).toBe(result1b);
+      expect(result2a).toBe(result2b);
+    });
+
+    it('returns false if tool is in PUBLIC_TOOLS (when PUBLIC_TOOLS is not empty)', () => {
+      // This test will pass when PUBLIC_TOOLS is empty (vacuously true)
+      // If PUBLIC_TOOLS has entries, they should return false
+      for (const toolName of PUBLIC_TOOLS) {
+        const result = toolRequiresAuth(toolName);
+        expect(result).toBe(false);
+      }
+    });
+  });
+});
