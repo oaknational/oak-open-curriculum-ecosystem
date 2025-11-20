@@ -4,7 +4,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { PUBLIC_TOOLS, DEFAULT_AUTH_SCHEME, toolRequiresAuth } from './mcp-security-policy.js';
+import {
+  PUBLIC_TOOLS,
+  DEFAULT_AUTH_SCHEME,
+  toolRequiresAuth,
+  getScopesSupported,
+} from './mcp-security-policy.js';
 
 describe('MCP Security Policy Configuration', () => {
   describe('PUBLIC_TOOLS', () => {
@@ -75,6 +80,39 @@ describe('MCP Security Policy Configuration', () => {
       for (const toolName of PUBLIC_TOOLS) {
         const result = toolRequiresAuth(toolName);
         expect(result).toBe(false);
+      }
+    });
+  });
+
+  describe('getScopesSupported', () => {
+    it('returns scopes from DEFAULT_AUTH_SCHEME', () => {
+      const scopes = getScopesSupported();
+      expect(scopes).toEqual(['email', 'openid']); // sorted
+    });
+
+    it('returns sorted array', () => {
+      const scopes = getScopesSupported();
+      const sorted = [...scopes].sort();
+      expect(scopes).toEqual(sorted);
+    });
+
+    it('is pure - returns same result on multiple calls', () => {
+      const result1 = getScopesSupported();
+      const result2 = getScopesSupported();
+      expect(result1).toEqual(result2);
+    });
+
+    it('returns array with no duplicates', () => {
+      const scopes = getScopesSupported();
+      const uniqueScopes = Array.from(new Set(scopes));
+      expect(scopes).toEqual(uniqueScopes);
+    });
+
+    it('all returned scopes are non-empty strings', () => {
+      const scopes = getScopesSupported();
+      for (const scope of scopes) {
+        expect(typeof scope).toBe('string');
+        expect(scope.length).toBeGreaterThan(0);
       }
     });
   });
