@@ -48,4 +48,24 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(toolFile).toContain("'CourseA' | 'CourseB'");
     expect(toolFile).toContain('Allowed values: CourseA, CourseB');
   });
+
+  it('emits security types in generated contract', () => {
+    const output = generateCompleteMcpTools(schemaWithPathParams);
+    const contractFile = output.contract['tool-descriptor.contract.ts'];
+
+    // Verify security types are present
+    expect(contractFile).toContain('export type SecuritySchemeType');
+    expect(contractFile).toContain('export interface NoAuthScheme');
+    expect(contractFile).toContain('export interface OAuth2Scheme');
+    expect(contractFile).toContain('export type SecurityScheme');
+
+    // Verify field in ToolDescriptor
+    expect(contractFile).toContain('readonly securitySchemes?:');
+    expect(contractFile).toContain('readonly SecurityScheme[]');
+
+    // Verify TSDoc is present
+    expect(contractFile).toContain('MCP security scheme types');
+    expect(contractFile).toContain('No authentication required');
+    expect(contractFile).toContain('OAuth 2.1 authentication required');
+  });
 });
