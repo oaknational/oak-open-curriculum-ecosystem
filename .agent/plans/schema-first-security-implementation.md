@@ -1,6 +1,6 @@
 # MCP OAuth Security Implementation Plan
 
-**Status**: Phase 1 Complete - Ready for Phase 2  
+**Status**: Phase 2 Sub-Phase 2.1 Complete - Ready for Sub-Phase 2.2  
 **Date**: 2024-11-20  
 **Last Updated**: 2025-11-21  
 **Phase 0 Decision**: ✅ PROCEED (Clerk verified compatible)
@@ -11,8 +11,11 @@
 
 **Date**: 2025-11-21  
 **Phase 1**: ✅ **COMPLETE** (Generator - Policy-Driven Security Metadata)  
-**Phase 2**: 🔄 **IN PROGRESS** (Runtime - Method-Aware MCP Routing)  
-**Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
+**Phase 2**: 🔄 **IN PROGRESS** (Runtime - Method-Aware MCP Routing)
+
+- Sub-Phase 2.1: ✅ **COMPLETE** (Security Metadata Integration - Both Parts)
+- Sub-Phase 2.2: ⏳ **READY TO START** (MCP Method Classification)  
+  **Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
 
 ### Resume Point
 
@@ -20,11 +23,14 @@
 
 ### What Just Completed
 
-**Sub-Phase 2.1: Update Tool Registration to Include Security Metadata** ✅ COMPLETE (2025-11-21)
+**Sub-Phase 2.1: Security Metadata Integration** ✅ COMPLETE (2025-11-21)
 
-**Strict TDD Approach Used**: Red-Green-Refactor cycle followed exactly
+This sub-phase had two parts, both using strict TDD (Red-Green-Refactor):
 
-#### Implementation Details
+**Part 1: Tool Registration with Security Metadata**
+**Part 2: OAuth Discovery Endpoint with Generated Scopes**
+
+#### Part 1 Implementation Details
 
 1. **Integration Tests Created** (Red Phase) ✅
    - File: `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts`
@@ -54,7 +60,7 @@
    - Exported `SecurityScheme`, `SecuritySchemeType`, `NoAuthScheme`, `OAuth2Scheme` types
    - Available for runtime use
 
-#### Quality Results
+#### Part 1 Quality Results
 
 - ✅ All quality gates passed: format → type-check → lint → test → build
 - ✅ **169/169 tests passing** (streamable-http, up from 164)
@@ -62,7 +68,7 @@
 - ✅ Zero regressions
 - ✅ 5 new integration tests verify security metadata flow end-to-end
 
-#### Ready to Commit
+#### Part 1 Commit
 
 ```bash
 feat(runtime): include security metadata in tool registration
@@ -73,24 +79,90 @@ feat(runtime): include security metadata in tool registration
 - Export SecurityScheme types from SDK public API
 - Add integration tests for security metadata flow
 
-Phase 2, Sub-Phase 2.1 complete. All 169 streamable-http tests passing.
+Phase 2, Sub-Phase 2.1 Part 1 complete. All 169 streamable-http tests passing.
 Zero regressions.
 ```
 
-#### Files Changed
+#### Part 2 Implementation Details
+
+**Goal**: Complete the schema-first flow by using generated `SCOPES_SUPPORTED` in the OAuth discovery metadata endpoint instead of hardcoded scopes.
+
+1. **Integration Tests Created** (Red Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts`
+   - 2 new tests added to existing test suite:
+     - Test: OAuth metadata endpoint returns scopes from generated constant
+     - Test: OAuth metadata includes `openid` and `email` from security policy
+   - Tests initially failed as expected (Red phase confirmed)
+
+2. **SDK Exports Updated** (Green Phase) ✅
+   - File: `packages/sdks/oak-curriculum-sdk/src/index.ts`
+   - Exported `SCOPES_SUPPORTED` constant and `ScopesSupported` type
+   - Makes generated scopes available to runtime
+
+3. **OAuth Metadata Endpoint Updated** (Green Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`
+   - Replaced hardcoded `['openid', 'email']` with `[...SCOPES_SUPPORTED]`
+   - Added inline comment documenting schema-first flow
+   - Tests now pass (Green phase confirmed)
+
+#### Part 2 Quality Results
+
+- ✅ All quality gates passed: format → type-check → lint → test → build
+- ✅ **171/171 tests passing** (streamable-http, up from 169)
+- ✅ **265/265 tests passing** (SDK)
+- ✅ Zero regressions
+- ✅ 2 new integration tests verify OAuth metadata uses generated scopes
+
+#### Part 2 Commit
+
+```bash
+feat(oauth): use generated SCOPES_SUPPORTED in metadata endpoint
+
+- Import SCOPES_SUPPORTED from SDK
+- Replace hardcoded ['openid', 'email'] with generated constant
+- Add integration test verifying scopes in OAuth metadata
+- Complete schema-first flow: policy → type-gen → runtime
+
+Phase 2, Sub-Phase 2.1 Part 2 complete. All quality gates passing.
+```
+
+**Schema-First Flow Now Complete**:
+
+```
+mcp-security-policy.ts (source)
+  ↓
+pnpm type-gen (generator)
+  ↓
+SCOPES_SUPPORTED constant (generated)
+  ↓
+auth-routes.ts (runtime)
+  ↓
+/.well-known/oauth-protected-resource (public API)
+```
+
+**Key Architectural Decision**: All authenticated tools use the same scopes from the security policy. Tool-specific scopes are not currently needed. The generated `SCOPES_SUPPORTED` constant is the single source of truth for OAuth scopes across all tools.
+
+#### All Files Changed (Both Parts)
+
+**Part 1**:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (interface + data)
-- `packages/sdks/oak-curriculum-sdk/src/index.ts` (exports)
-- `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (exports)
+- `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (type exports)
 - `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` (registration)
 - `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts` (new tests)
+
+**Part 2**:
+
+- `packages/sdks/oak-curriculum-sdk/src/index.ts` (export SCOPES_SUPPORTED)
+- `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts` (use generated scopes)
+- `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts` (new tests)
 
 ### Quality Baseline
 
 | Metric           | Status         | Details                          |
 | ---------------- | -------------- | -------------------------------- |
 | SDK Unit Tests   | ✅ 265/265     | All passing                      |
-| Streamable Tests | ✅ 169/169     | All passing (+5 new tests)       |
+| Streamable Tests | ✅ 171/171     | All passing (+7 new tests)       |
 | E2E Tests        | ✅ All passing | Source and built code            |
 | Type Check       | ✅ Passing     | All workspaces                   |
 | Lint             | ✅ Passing     | No errors                        |
@@ -1474,9 +1546,17 @@ export const aggregatedSearchTool = {
 - [x] All acceptance criteria met
 - [x] Ready to commit with message: "feat(runtime): include security metadata in tool registration"
 
-**Status**: ✅ **COMPLETE** (2025-11-21)
+**Status**: ✅ **COMPLETE** (2025-11-21) - Both Parts
 
-**Implementation Summary**: Successfully implemented security metadata flow from generated tool descriptors through SDK universal tools to MCP server registration. Used strict TDD (Red-Green-Refactor). All 169 tests passing, zero regressions. See "What Just Completed" section above for full details.
+**Implementation Summary**:
+
+**Part 1**: Successfully implemented security metadata flow from generated tool descriptors through SDK universal tools to MCP server registration. Used strict TDD (Red-Green-Refactor). All 169 tests passing, zero regressions.
+
+**Part 2**: Completed schema-first flow by updating OAuth discovery metadata endpoint to use generated `SCOPES_SUPPORTED` constant instead of hardcoded scopes. All 171 tests passing (added 2 integration tests). All quality gates pass.
+
+**Architectural Decision Documented**: All authenticated tools use the same scopes from the security policy. Tool-specific scopes are not currently needed. The generated `SCOPES_SUPPORTED` constant is the single source of truth.
+
+See "What Just Completed" section above for complete implementation details of both parts.
 
 ---
 
