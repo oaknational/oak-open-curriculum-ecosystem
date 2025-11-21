@@ -14,14 +14,113 @@
 **Phase 2**: 🔄 **IN PROGRESS** (Runtime - Method-Aware MCP Routing)
 
 - Sub-Phase 2.1: ✅ **COMPLETE** (Security Metadata Integration - Both Parts)
-- Sub-Phase 2.2: ⏳ **READY TO START** (MCP Method Classification)  
+- Sub-Phase 2.2: ✅ **COMPLETE** (MCP Method Classification - Pure Functions)
+- Sub-Phase 2.3: ⏳ **READY TO START** (Auth Decision Logic)  
   **Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
 
 ### Resume Point
 
-**➡️ BEGIN AT: Phase 2, Sub-Phase 2.2** - MCP Method Classification (Pure Functions)
+**➡️ BEGIN AT: Phase 2, Sub-Phase 2.3** - Auth Decision Logic (Pure Function Reading Tool Metadata)
 
-### What Just Completed
+### What Just Completed (Most Recent)
+
+**Sub-Phase 2.2: MCP Method Classification** ✅ COMPLETE (2025-11-21)
+
+This sub-phase created pure functions to classify MCP protocol methods as "discovery" (no auth required) or "execution" (auth checks needed). Followed strict TDD (Red-Green-Refactor).
+
+#### Implementation Details
+
+1. **Unit Tests Created** (Red Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/mcp-method-classifier.unit.test.ts`
+   - 6 comprehensive tests covering:
+     - Discovery methods: `initialize`, `tools/list` return true
+     - Execution methods: `tools/call` returns false
+     - Unknown methods return false (safe default)
+     - Empty string returns false
+     - Future methods like `resources/list` return false
+   - Tests initially failed as expected (Red phase confirmed)
+
+2. **Implementation File Created** (Green Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/mcp-method-classifier.ts`
+   - Function: `isDiscoveryMethod(method: string): boolean`
+   - Pure function with simple switch statement
+   - No side effects, no I/O, deterministic output
+   - Comprehensive TSDoc documentation with examples
+   - All tests pass (Green phase confirmed)
+
+3. **Refactor Phase** ✅
+   - Used explicit block scoping for switch cases
+   - Added comprehensive documentation
+   - No code smells or complexity issues
+   - All quality gates passing
+
+#### Quality Results
+
+- ✅ All quality gates passed: format → type-check → lint → test → build
+- ✅ **177/177 tests passing** (all apps/libs, zero regressions)
+- ✅ **75/75 E2E tests passing**
+- ✅ **23/23 UI tests passing**
+- ✅ Zero regressions across entire monorepo
+- ✅ 6 new unit tests prove classification logic
+
+#### Commits
+
+**Red Phase**:
+
+```bash
+test: add unit tests for MCP method classification
+
+Create comprehensive tests for isDiscoveryMethod function covering:
+- Discovery methods (initialize, tools/list)
+- Execution methods (tools/call)
+- Unknown methods (safe default)
+- Edge cases (empty string, future methods)
+
+Tests fail as expected - RED phase of TDD complete.
+```
+
+**Green Phase**:
+
+```bash
+feat(auth): implement MCP method classification
+
+Implement isDiscoveryMethod() pure function using switch statement:
+- Discovery: initialize, tools/list (no auth)
+- Execution: tools/call (requires auth checks)
+- Default: false (safe - require auth for unknown methods)
+
+All 6 tests passing - GREEN phase complete.
+Zero regressions across 177 tests.
+```
+
+#### Key Architectural Clarification
+
+**IMPORTANT**: MCP protocol methods (`initialize`, `tools/list`, `tools/call`) are defined by the **MCP specification itself**, NOT our OpenAPI schema. Therefore:
+
+- ✅ **Correct**: Classification logic implemented as runtime constant/function
+- ❌ **Incorrect**: Would be to generate this at type-gen time from schema
+
+**This is the opposite of tool security metadata**, which IS schema-derived and flows from generated descriptors. The distinction:
+
+| Data Type                     | Source                           | Implementation             |
+| ----------------------------- | -------------------------------- | -------------------------- |
+| **Tool security metadata**    | OpenAPI schema → security policy | Generated at type-gen time |
+| **MCP method classification** | MCP protocol specification       | Runtime constant/function  |
+
+This clarification was documented in the implementation with inline comments linking to the plan.
+
+#### Files Changed
+
+**New Files**:
+
+- `apps/oak-curriculum-mcp-streamable-http/src/mcp-method-classifier.ts` (implementation)
+- `apps/oak-curriculum-mcp-streamable-http/src/mcp-method-classifier.unit.test.ts` (tests)
+
+**No existing files modified** - this was pure additive functionality.
+
+---
+
+### Previously Completed
 
 **Sub-Phase 2.1: Security Metadata Integration** ✅ COMPLETE (2025-11-21)
 
@@ -159,15 +258,16 @@ auth-routes.ts (runtime)
 
 ### Quality Baseline
 
-| Metric           | Status         | Details                          |
-| ---------------- | -------------- | -------------------------------- |
-| SDK Unit Tests   | ✅ 265/265     | All passing                      |
-| Streamable Tests | ✅ 171/171     | All passing (+7 new tests)       |
-| E2E Tests        | ✅ All passing | Source and built code            |
-| Type Check       | ✅ Passing     | All workspaces                   |
-| Lint             | ✅ Passing     | No errors                        |
-| Build            | ✅ Passing     | All packages                     |
-| Regressions      | ✅ Zero        | Existing functionality unchanged |
+| Metric           | Status     | Details                           |
+| ---------------- | ---------- | --------------------------------- |
+| SDK Unit Tests   | ✅ 265/265 | All passing                       |
+| Streamable Tests | ✅ 177/177 | All passing (+6 new tests in 2.2) |
+| E2E Tests        | ✅ 75/75   | All passing                       |
+| UI Tests         | ✅ 23/23   | All passing                       |
+| Type Check       | ✅ Passing | All workspaces                    |
+| Lint             | ✅ Passing | No errors                         |
+| Build            | ✅ Passing | All packages                      |
+| Regressions      | ✅ Zero    | Existing functionality unchanged  |
 
 ### Key Artifacts Generated
 
@@ -179,7 +279,10 @@ auth-routes.ts (runtime)
 
 - 📄 **Phase 2.1 Implementation Summary**: `.agent/plans/phase-2-1-implementation-summary.md`
   - Complete Sub-Phase 2.1 context (implementation details, test strategy, data flow)
-  - **READ THIS** before starting Sub-Phase 2.2
+
+- 📄 **Phase 2.2 Summary**: See "What Just Completed (Most Recent)" section above
+  - MCP method classification implementation
+  - Architectural clarification: MCP protocol constants vs schema-derived data
 
 **Generated Files**:
 
@@ -1419,7 +1522,7 @@ app.get('/.well-known/oauth-protected-resource', (req, res) => {
 
 ## Phase 2: Runtime - Method-Aware MCP Routing
 
-**Status**: ⏳ **NOT STARTED** (Ready to begin at Sub-Phase 2.1)
+**Status**: 🔄 **IN PROGRESS** (Sub-Phases 2.1 and 2.2 complete, proceeding to 2.3)
 
 **Objective**: Implement method-aware routing that allows discovery without authentication whilst enforcing per-tool authorization for execution methods. Runtime reads security metadata directly from generated tool descriptors.
 
@@ -1562,9 +1665,11 @@ See "What Just Completed" section above for complete implementation details of b
 
 ### Sub-Phase 2.2: MCP Method Classification (Pure Functions)
 
-**Status**: ⏳ NOT STARTED  
+**Status**: ✅ **COMPLETE** (2025-11-21)  
+**Commit**: `feat(auth): implement MCP method classification`
+
 **Goal**: Create pure functions that classify MCP methods as "discovery" vs "execution".  
-**TDD**: Tests first, then implementation.
+**TDD**: Tests first, then implementation. ✅ Followed strictly.
 
 **Prerequisites**: ✅ Met
 
@@ -1572,7 +1677,7 @@ See "What Just Completed" section above for complete implementation details of b
 - Tool descriptors include `securitySchemes` field
 - Types exported from SDK (`SecurityScheme` available for import)
 
-**Context for New Session**: This sub-phase creates the logic to differentiate between MCP methods that need authentication (like `tools/call`) and those that don't (like `initialize`, `tools/list`). This is pure classification logic - no middleware changes yet, just the decision-making functions.
+**Architectural Clarification**: MCP protocol methods are defined by the MCP specification, NOT our OpenAPI schema. Therefore, classification logic is implemented as a runtime constant/function, not generated at type-gen time. This is the opposite of tool security metadata, which IS schema-derived and generated.
 
 #### Tasks
 
@@ -1610,18 +1715,19 @@ export function isDiscoveryMethod(method: string): boolean {
 
 #### Acceptance Criteria
 
-- [ ] Tests written FIRST (Red)
-- [ ] Functions implemented to pass tests (Green)
-- [ ] Functions are pure (no side effects)
-- [ ] All tests pass
-- [ ] TSDoc comments explain behaviour
-- [ ] Quality gates pass
+- [x] Tests written FIRST (Red) - 6 comprehensive tests in `mcp-method-classifier.unit.test.ts`
+- [x] Functions implemented to pass tests (Green) - Simple, pure `isDiscoveryMethod` function
+- [x] Functions are pure (no side effects) - Deterministic switch statement, no I/O
+- [x] All tests pass - 6/6 tests passing, 177/177 total tests passing
+- [x] TSDoc comments explain behaviour - Comprehensive documentation with examples and links
+- [x] Quality gates pass - format, type-check, lint, test, build all passing
 
 #### Definition of Done
 
-- All tasks completed
-- All acceptance criteria met
-- Committed with message: "test: add tests for MCP method classification" then "feat: implement MCP method classification"
+- [x] All tasks completed
+- [x] All acceptance criteria met
+- [x] Committed with message: "test: add tests for MCP method classification" then "feat: implement MCP method classification"
+- [x] Architectural clarification documented (MCP protocol constants vs schema-derived data)
 
 ---
 
