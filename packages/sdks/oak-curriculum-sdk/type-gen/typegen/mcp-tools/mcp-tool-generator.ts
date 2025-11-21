@@ -12,6 +12,7 @@ import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateExecuteFile } from './parts/generate-execute-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
+import { generateScopesSupportedFile } from './parts/generate-scopes-supported-file.js';
 import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
@@ -149,6 +150,7 @@ export interface GeneratedMcpToolFiles {
   data: {
     'definitions.ts': string;
     'index.ts': string;
+    'scopes-supported.ts': string;
     tools: Record<string, string>;
   };
   aliases: Record<string, string>;
@@ -171,6 +173,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     data: {
       'definitions.ts': '',
       'index.ts': '',
+      'scopes-supported.ts': '',
       tools: {},
     },
     aliases: {},
@@ -218,6 +221,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result.runtime['execute.ts'] = generateExecuteFile(toolNames);
   result.runtime['lib.ts'] = generateLibFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
+  result.data['scopes-supported.ts'] = generateScopesSupportedFile();
   result.data['index.ts'] = generateDataIndexFile();
   result.index = generateRootIndexFile();
   result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();

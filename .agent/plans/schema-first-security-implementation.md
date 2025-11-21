@@ -108,15 +108,16 @@ Protected Resource Metadata (generated from policy)
 1. ✅ MCP security policy defined in configuration file (Sub-Phase 1.1 COMPLETE)
 2. ✅ Generator reads policy and applies to all tools (Sub-Phase 1.3 COMPLETE)
 3. ✅ `ToolDescriptor` interface includes `securitySchemes` field (Sub-Phase 1.4 COMPLETE)
-4. ⏳ Generated tool descriptors emit security metadata per policy (Sub-Phase 1.5 - NEXT)
-5. ⏳ Runtime allows MCP `initialize` and `tools/list` without Bearer token (Phase 2)
-6. ⏳ Runtime enforces security per tool based on generated metadata (Phase 2)
-7. ⏳ Protected resource metadata generated from tool security metadata (Phase 2)
-8. ⏳ ChatGPT can connect, discover tools, and authenticate (Phase 3)
-9. ✅ All quality gates pass (format, type-check, lint, test, build) - Passing after every sub-phase
-10. ✅ Zero regressions in existing functionality - Verified
-11. ✅ All changes proven by tests written FIRST (TDD) - Strictly followed
-12. ⏳ Documentation updated to reflect policy-driven security flow (Phase 3)
+4. ✅ Generated tool descriptors emit security metadata per policy (Sub-Phase 1.5 COMPLETE)
+5. ✅ OAuth scopes metadata available for runtime (Sub-Phase 1.6 COMPLETE - generator file pending)
+6. ⏳ Runtime allows MCP `initialize` and `tools/list` without Bearer token (Phase 2)
+7. ⏳ Runtime enforces security per tool based on generated metadata (Phase 2)
+8. ⏳ Protected resource metadata served at runtime using generated scopes (Phase 2)
+9. ⏳ ChatGPT can connect, discover tools, and authenticate (Phase 3)
+10. ✅ All quality gates pass (format, type-check, lint, test, build) - Passing after every sub-phase
+11. ✅ Zero regressions in existing functionality - Verified
+12. ✅ All changes proven by tests written FIRST (TDD) - Strictly followed
+13. ⏳ Documentation updated to reflect policy-driven security flow (Phase 3)
 
 ## Quality Gates
 
@@ -459,7 +460,7 @@ Findings documented in:
 **Layer**: Compile time (type-gen)  
 **Approach**: TDD with pure functions
 
-**Status**: IN PROGRESS - Sub-Phases 1.1-1.4 Complete ✅
+**Status**: IN PROGRESS - Sub-Phases 1.1-1.5 Complete ✅, Sub-Phase 1.6 In Progress ⏳
 
 ### Progress Summary
 
@@ -490,7 +491,20 @@ Findings documented in:
   - 4 unit tests + integration test
   - All quality gates passing
 
-**Next Sub-Phase**: 1.5 - Emit Security Metadata in Generated Tools
+- ✅ **Sub-Phase 1.5**: Emit Security Metadata in Generated Tools
+  - Modified `emit-index.ts` to call `getSecuritySchemeForTool()`
+  - All 26 tool files now have `securitySchemes` field populated
+  - Integration tests verify correct metadata emission
+  - Comprehensive documentation comment added
+  - All quality gates passing
+
+- ⏳ **Sub-Phase 1.6**: Generate Protected Resource Metadata (IN PROGRESS)
+  - Policy function `getScopesSupported()` completed with 5 unit tests ✅
+  - Generator function to emit `scopes-supported.ts` file - NEXT
+  - Export from SDK public API - NEXT
+  - Run `pnpm type-gen` to generate file - NEXT
+
+**Current Sub-Phase**: 1.6 - Complete Protected Resource Metadata Generation
 
 **Key Files**:
 
@@ -964,85 +978,133 @@ export const getSequenceUnits = {
 
 ---
 
-### Sub-Phase 1.6: Generate Protected Resource Metadata
+### Sub-Phase 1.6: Generate Protected Resource Metadata ⏳
 
-**Goal**: Create function that generates OAuth protected resource metadata by scanning tool descriptors.
+**Status**: IN PROGRESS (2025-11-20)  
+**Commits So Far**: `feat(generator): implement simple scope metadata generation (Sub-Phase 1.6)` - policy function complete
 
-**TDD**: Tests first, then implementation.
+**Goal**: Generate OAuth scopes metadata as a data artifact that runtime can import.
 
-#### Tasks
+**Approach**: Schema-first execution - emit generated data file, not runtime functions.
 
-1. **Write tests FIRST** (Red)
-   - File: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/generate-protected-resource-metadata.test.ts`
-   - Test: Scan tools with oauth2 → includes in `scopes_supported`
-   - Test: All tools have oauth2 → all scopes collected
-   - Test: Some tools public → only oauth2 tool scopes included
-   - Test: Deduplicates scopes
-   - Run tests, watch them FAIL
+**Implementation Decision**: Since all OAuth tools currently share the same scopes (`['openid', 'email']`), we generate `SCOPES_SUPPORTED` constant directly from the security policy rather than scanning tool descriptors. This is simpler, avoids circular dependencies, and follows schema-first principles. If per-tool scopes are needed in the future, the generated file can be updated to scan descriptors.
 
-2. **Implement function** (Green)
-   - File: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/generate-protected-resource-metadata.ts`
-   - Function: `generateScopesSupported(tools: ToolDescriptor[]): string[]`
-   - Scan all tool `securitySchemes`
-   - Collect unique scopes from oauth2 schemes
-   - Return deduplicated array
-   - Run tests, watch them PASS
+#### Tasks Completed
 
-3. **Wire into generator output**
-   - Generate metadata file alongside tool definitions
-   - Export function that runtime can use
+1. **Add getScopesSupported() to security policy** ✅
+   - File: `packages/sdks/oak-curriculum-sdk/type-gen/mcp-security-policy.ts`
+   - Function: `getScopesSupported(): readonly string[]`
+   - Returns scopes directly from `DEFAULT_AUTH_SCHEME` (no scanning needed)
+   - Pure function with comprehensive documentation
+   - Includes upgrade path if per-tool scopes needed
 
-#### Expected Function
+2. **Write unit tests FIRST** (Red → Green) ✅
+   - File: `packages/sdks/oak-curriculum-sdk/type-gen/mcp-security-policy.unit.test.ts`
+   - 5 comprehensive tests for `getScopesSupported()`
+   - Tests: returns correct scopes, sorted array, pure function, no duplicates, all strings
+   - All tests pass
+
+3. **Create generator for scopes metadata file** ⏳ TODO NOW
+   - File: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-scopes-supported-file.ts`
+   - Generator function that reads `getScopesSupported()` and emits constant
+   - Generates: `src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts`
+   - Write unit tests for generator function (TDD)
+
+4. **Wire into main generator orchestration** ⏳ TODO NOW
+   - File: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts`
+   - Call `generateScopesSupportedFile()` during generation
+   - Add generated file to output structure
+
+5. **Export from SDK public API** ⏳ TODO NOW
+   - File: `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts`
+   - Add: `export { SCOPES_SUPPORTED } from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';`
+   - Runtime imports generated constant, not function
+
+6. **Run type-gen and verify** ⏳ TODO NOW
+   - Run: `pnpm type-gen` from repo root
+   - Verify: `scopes-supported.ts` generated with correct content
+   - Run quality gates: format, type-check, lint, test, build
+
+#### Expected Generated File
 
 ```typescript
-import type { ToolDescriptor, SecurityScheme } from './contract/tool-descriptor.contract.js';
+// src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts
+/**
+ * OAuth scopes supported by this MCP server.
+ *
+ * Generated from mcp-security-policy.ts at type-gen time.
+ * DO NOT EDIT - this file is auto-generated by running `pnpm type-gen`.
+ *
+ * All OAuth-protected tools currently require these scopes.
+ * To modify supported scopes, update DEFAULT_AUTH_SCHEME in:
+ * type-gen/mcp-security-policy.ts
+ *
+ * @see {@link file://./../../../../../type-gen/mcp-security-policy.ts}
+ * @see {@link file://./../../../../../type-gen/typegen/mcp-tools/parts/generate-scopes-supported-file.ts} for generator
+ *
+ * @remarks
+ * Runtime uses this constant to construct RFC 9728 protected resource metadata.
+ * Generator reads security policy and emits this constant during type-gen.
+ */
+export const SCOPES_SUPPORTED = ['email', 'openid'] as const;
 
 /**
- * Generates list of OAuth scopes supported by the MCP server.
- *
- * Scans all tool descriptors and collects scopes from oauth2 security schemes.
- * Used to generate OAuth protected resource metadata.
- *
- * @param tools - Array of tool descriptors
- * @returns Deduplicated array of supported scopes
+ * Type representing the supported OAuth scopes.
  */
-export function generateScopesSupported(
-  tools: readonly ToolDescriptor<any, any, any, any, any, any>[],
-): readonly string[] {
-  const scopesSet = new Set<string>();
+export type ScopesSupported = typeof SCOPES_SUPPORTED;
+```
 
-  for (const tool of tools) {
-    if (!tool.securitySchemes) continue;
+#### Runtime Usage (Phase 2)
 
-    for (const scheme of tool.securitySchemes) {
-      if (scheme.type === 'oauth2' && scheme.scopes) {
-        for (const scope of scheme.scopes) {
-          scopesSet.add(scope);
-        }
-      }
-    }
-  }
+```typescript
+import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk/mcp-tools';
 
-  return Array.from(scopesSet).sort();
-}
+app.get('/.well-known/oauth-protected-resource', (req, res) => {
+  const metadata = {
+    resource: 'https://curriculum-mcp.thenational.academy',
+    authorization_servers: [clerkIssuer],
+    scopes_supported: SCOPES_SUPPORTED, // ← Import generated constant
+  };
+  res.json(metadata);
+});
 ```
 
 #### Acceptance Criteria
 
-- [ ] Tests written FIRST (Red)
-- [ ] Function implemented to pass tests (Green)
-- [ ] Function scans all tools and collects scopes
-- [ ] Scopes are deduplicated
-- [ ] All tests pass
-- [ ] TSDoc explains purpose
-- [ ] Quality gates pass
+- [x] `getScopesSupported()` function added to security policy
+- [x] 5 unit tests written and passing
+- [x] Function is pure (no side effects)
+- [x] Comprehensive documentation with upgrade path
+- [x] Quality gates pass (format, type-check, lint, test, build)
+- [ ] Generator function creates `scopes-supported.ts` file (TODO NOW)
+- [ ] Generator wired into main orchestration (TODO NOW)
+- [ ] Generated file exported from SDK public API (TODO NOW)
+- [ ] `pnpm type-gen` emits the file (TODO NOW)
+- [ ] Quality gates pass after generation (TODO NOW)
 
-#### Definition of Done
+#### Definition of Done (Sub-Phase 1.6 Complete When)
 
-- All tasks completed
-- All acceptance criteria met
-- Function can be used by runtime to generate metadata
-- Committed with messages: "test: add tests for protected resource metadata generation" then "feat: implement protected resource metadata generation"
+- [x] Policy function completed and tested
+- [ ] Generator function to emit data file implemented with tests
+- [ ] Generator wired into main tool generation
+- [ ] Generated file `scopes-supported.ts` exists and contains correct data
+- [ ] Generated file exported from SDK public API
+- [ ] Runtime can import `SCOPES_SUPPORTED` constant
+- [ ] All quality gates pass
+- [ ] Committed with message: "feat(generator): generate scopes-supported metadata file (Sub-Phase 1.6)"
+
+#### Notes
+
+**Why this approach is better than the original plan:**
+
+1. **Schema-first execution**: Runtime imports generated data, not functions
+2. **Simpler**: Current policy has uniform scopes - no need to scan descriptors
+3. **Type-safe**: No `any` or `unknown` types needed
+4. **No circular dependency**: Generator doesn't import generated code
+5. **Documented upgrade path**: Comments explain how to extend for per-tool scopes
+6. **Follows domain boundaries**: Generator domain → Generated data → Runtime domain
+
+**Future-proofing**: If per-tool scopes are needed, the generator function can be updated to scan tool descriptors and emit a dynamic array. The runtime import stays the same: `import { SCOPES_SUPPORTED }`. This preserves the schema-first architecture.
 
 ---
 

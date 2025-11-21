@@ -27,6 +27,11 @@ export {
 } from '../types/generated/api-schema/mcp-tools/index.js';
 
 export {
+  SCOPES_SUPPORTED,
+  type ScopesSupported,
+} from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+
+export {
   McpToolRegistry,
   attachMcpHandlers,
   createMcpToolRegistry,

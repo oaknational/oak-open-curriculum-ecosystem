@@ -20,6 +20,7 @@ export default defineConfig({
     'src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts',
     'src/types/generated/api-schema/mcp-tools/index.ts',
     'src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts',
+    'src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts',
     'src/types/generated/api-schema/mcp-tools/generated/data/index.ts',
     'src/types/generated/api-schema/mcp-tools/generated/data/tools/*.ts',
     'src/types/generated/api-schema/mcp-tools/generated/aliases/types.ts',

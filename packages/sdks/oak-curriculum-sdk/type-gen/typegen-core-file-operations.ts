@@ -44,6 +44,10 @@ export function writeMcpToolsDirectory(
   }
 
   fs.writeFileSync(path.resolve(dataDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
+  fs.writeFileSync(
+    path.resolve(dataDir, 'scopes-supported.ts'),
+    mcpTools.data['scopes-supported.ts'],
+  );
   fs.writeFileSync(path.resolve(dataDir, 'index.ts'), mcpTools.data['index.ts']);
   for (const [filename, content] of Object.entries(mcpTools.data.tools)) {
     fs.writeFileSync(path.resolve(dataToolsDir, filename), content);
