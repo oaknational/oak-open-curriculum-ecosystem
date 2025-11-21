@@ -7,11 +7,12 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { validateCurriculumResponse } from './validation/curriculum-response-validators.js';
 // Note: precise response types are inferred via validateResponse overloads
 
 describe('SDK response pipeline integration', () => {
-  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+  let consoleWarnSpy: Mock<typeof console.warn>;
 
   beforeEach(() => {
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {

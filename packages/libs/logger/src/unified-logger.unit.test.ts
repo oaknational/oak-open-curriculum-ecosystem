@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { UnifiedLogger } from './unified-logger';
 import type { ResourceAttributes } from './resource-attributes';
 import type { StdoutSink } from './stdout-sink';
@@ -20,8 +21,8 @@ function parseLogRecord(line: string): OtelLogRecord {
 describe('UnifiedLogger', () => {
   let stdoutSink: StdoutSink;
   let fileSink: FileSinkInterface;
-  let stdoutWriteSpy: ReturnType<typeof vi.fn>;
-  let fileSinkWriteSpy: ReturnType<typeof vi.fn>;
+  let stdoutWriteSpy: Mock<StdoutSink['write']>;
+  let fileSinkWriteSpy: Mock<FileSinkInterface['write']>;
 
   const resourceAttributes: ResourceAttributes = {
     'service.name': 'test-service',
@@ -33,8 +34,8 @@ describe('UnifiedLogger', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2025-11-08T12:00:00.000Z'));
 
-    stdoutWriteSpy = vi.fn();
-    fileSinkWriteSpy = vi.fn();
+    stdoutWriteSpy = vi.fn<StdoutSink['write']>();
+    fileSinkWriteSpy = vi.fn<FileSinkInterface['write']>();
 
     stdoutSink = {
       write: stdoutWriteSpy,
@@ -106,7 +107,7 @@ describe('UnifiedLogger', () => {
       logger.trace('trace message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('TRACE');
       expect(record.SeverityNumber).toBe(1);
@@ -125,7 +126,7 @@ describe('UnifiedLogger', () => {
       logger.debug('debug message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('DEBUG');
       expect(record.SeverityNumber).toBe(5);
@@ -143,7 +144,7 @@ describe('UnifiedLogger', () => {
       logger.info('info message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('INFO');
       expect(record.SeverityNumber).toBe(9);
@@ -161,7 +162,7 @@ describe('UnifiedLogger', () => {
       logger.warn('warn message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('WARN');
       expect(record.SeverityNumber).toBe(13);
@@ -179,7 +180,7 @@ describe('UnifiedLogger', () => {
       logger.error('error message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('ERROR');
       expect(record.SeverityNumber).toBe(17);
@@ -197,7 +198,7 @@ describe('UnifiedLogger', () => {
       logger.fatal('fatal message');
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.SeverityText).toBe('FATAL');
       expect(record.SeverityNumber).toBe(21);
@@ -231,7 +232,7 @@ describe('UnifiedLogger', () => {
       logger.error('error occurred', error);
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.Attributes['exception.type']).toBe('Error');
       expect(record.Attributes['exception.message']).toBe('test error');
@@ -249,7 +250,7 @@ describe('UnifiedLogger', () => {
       logger.info('message with context', { userId: '123', action: 'login' });
 
       expect(stdoutWriteSpy).toHaveBeenCalled();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.Attributes.userId).toBe('123');
       expect(record.Attributes.action).toBe('login');
@@ -300,8 +301,8 @@ describe('UnifiedLogger', () => {
       expect(fileSinkWriteSpy).toHaveBeenCalledOnce();
 
       // Verify both sinks get identical content
-      const stdoutContent = stdoutWriteSpy.mock.calls[0]?.[0] as string;
-      const fileSinkContent = fileSinkWriteSpy.mock.calls[0]?.[0] as string;
+      const stdoutContent = stdoutWriteSpy.mock.calls[0]?.[0];
+      const fileSinkContent = fileSinkWriteSpy.mock.calls[0]?.[0];
       expect(stdoutContent).toBe(fileSinkContent);
     });
 
@@ -316,7 +317,7 @@ describe('UnifiedLogger', () => {
 
       logger.info('test message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       expect(written).toMatch(/^\{.*\}\n$/); // Single line JSON with newline
       expect(written.split('\n').length).toBe(2); // JSON + newline = 2 elements
     });
@@ -332,7 +333,7 @@ describe('UnifiedLogger', () => {
 
       logger.info('test message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
@@ -351,7 +352,7 @@ describe('UnifiedLogger', () => {
       const child = logger.child({ childKey: 'childValue' });
       child.info('child message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.Attributes.parentKey).toBe('parentValue');
       expect(record.Attributes.childKey).toBe('childValue');
@@ -385,7 +386,7 @@ describe('UnifiedLogger', () => {
       const child = logger.child({ childKey: 'value' });
       child.info('child message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
       expect(record.Resource).toEqual(resourceAttributes);
     });
