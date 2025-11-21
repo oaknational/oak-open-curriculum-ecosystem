@@ -6,6 +6,7 @@ import {
   type ToolDescriptorForName,
   getToolFromToolName,
 } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { SecurityScheme } from '../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import {
@@ -19,16 +20,22 @@ import {
 import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggregated-search.js';
 import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
 
+/**
+ * TODO: Remove manual security metadata when Phase 0 (comprehensive-mcp-enhancement-plan.md)
+ * moves aggregated tools to generated code. Security should flow from OpenAPI schema.
+ */
 const AGGREGATED_TOOL_DEFS = {
   search: {
     description:
       'Search across lessons and transcripts. Executes get-search-lessons and get-search-transcripts.',
     inputSchema: SEARCH_INPUT_SCHEMA,
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
   },
   fetch: {
     description:
       'Fetch lesson, unit, subject, sequence, or thread metadata by canonical identifier.',
     inputSchema: FETCH_INPUT_SCHEMA,
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
   },
 } as const;
 
@@ -43,6 +50,7 @@ export interface UniversalToolListEntry {
   readonly name: UniversalToolName;
   readonly description?: string;
   readonly inputSchema: UniversalToolInputSchema;
+  readonly securitySchemes?: readonly SecurityScheme[];
 }
 function isAggregatedToolName(value: unknown): value is AggregatedToolName {
   return value === 'search' || value === 'fetch';
@@ -62,6 +70,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       name,
       description: AGGREGATED_TOOL_DEFS[name].description,
       inputSchema: AGGREGATED_TOOL_DEFS[name].inputSchema,
+      securitySchemes: AGGREGATED_TOOL_DEFS[name].securitySchemes,
     }),
   );
 
@@ -71,6 +80,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       name,
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
+      securitySchemes: descriptor.securitySchemes,
     };
   });
 

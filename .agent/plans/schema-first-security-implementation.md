@@ -11,47 +11,103 @@
 
 **Date**: 2025-11-21  
 **Phase 1**: ✅ **COMPLETE** (Generator - Policy-Driven Security Metadata)  
-**Phase 2**: ⏳ **NOT STARTED** (Runtime - Method-Aware MCP Routing)  
+**Phase 2**: 🔄 **IN PROGRESS** (Runtime - Method-Aware MCP Routing)  
 **Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
 
 ### Resume Point
 
-**➡️ BEGIN AT: Phase 2, Sub-Phase 2.1** - Update Tool Registration to Include Security Metadata
+**➡️ BEGIN AT: Phase 2, Sub-Phase 2.2** - MCP Method Classification (Pure Functions)
 
 ### What Just Completed
 
-**Sub-Phase 1.7: Phase 1 Validation and Quality Gates** ✅ COMPLETE (2025-11-21)
+**Sub-Phase 2.1: Update Tool Registration to Include Security Metadata** ✅ COMPLETE (2025-11-21)
 
-- ✅ All quality gates passed (clean → type-gen → format → type-check → lint → test → build)
-- ✅ All E2E tests passed (test:e2e and test:e2e:built)
-- ✅ Manual inspection of 7 tool files verified correct security metadata:
-  - PUBLIC_TOOLS (3): get-changelog, get-changelog-latest, get-rate-limit → `noauth`
-  - OAuth tools (4): get-key-stages, get-lessons-summary, get-sequences-units, get-search-lessons → `oauth2`
-- ✅ Verified scopes-supported.ts file structure and content
-- ✅ Documentation updated:
-  - MCP README with security policy guide
-  - Phase 1 implementation summary created
-- ✅ Committed: `docs(phase1): add security policy guide to MCP docs and Phase 1 implementation summary`
+**Strict TDD Approach Used**: Red-Green-Refactor cycle followed exactly
+
+#### Implementation Details
+
+1. **Integration Tests Created** (Red Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts`
+   - 5 comprehensive tests verify security metadata flow:
+     - OAuth2 security for protected generated tools (`get-key-stages`)
+     - NoAuth security for public generated tools (`get-changelog`)
+     - OAuth2 security for aggregated tool `search`
+     - OAuth2 security for aggregated tool `fetch`
+     - All tools receive proper security metadata
+   - Tests initially failed as expected (Red phase confirmed)
+
+2. **SDK Universal Tools Updated** (Green Phase) ✅
+   - File: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts`
+   - Extended `UniversalToolListEntry` interface with `securitySchemes?: readonly SecurityScheme[]`
+   - Updated `AGGREGATED_TOOL_DEFS` with manual OAuth2 security for `search` and `fetch`
+   - Added TODO comment referencing Phase 0 migration plan
+   - Updated `listUniversalTools()` to flow `securitySchemes` from both generated and aggregated tools
+
+3. **Runtime Registration Updated** (Green Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+   - Modified `registerHandlers` to pass `tool.securitySchemes` to `server.registerTool()`
+   - Added comment explaining MCP SDK type lag (supported at runtime, not in types yet)
+   - Preserved type safety through object spreading
+
+4. **Type Exports Added** ✅
+   - Files: `packages/sdks/oak-curriculum-sdk/src/index.ts` and `src/public/mcp-tools.ts`
+   - Exported `SecurityScheme`, `SecuritySchemeType`, `NoAuthScheme`, `OAuth2Scheme` types
+   - Available for runtime use
+
+#### Quality Results
+
+- ✅ All quality gates passed: format → type-check → lint → test → build
+- ✅ **169/169 tests passing** (streamable-http, up from 164)
+- ✅ **265/265 tests passing** (SDK)
+- ✅ Zero regressions
+- ✅ 5 new integration tests verify security metadata flow end-to-end
+
+#### Ready to Commit
+
+```bash
+feat(runtime): include security metadata in tool registration
+
+- Add securitySchemes field to UniversalToolListEntry interface
+- Update AGGREGATED_TOOL_DEFS with OAuth2 security for search/fetch
+- Pass securitySchemes from tool descriptors to MCP SDK registration
+- Export SecurityScheme types from SDK public API
+- Add integration tests for security metadata flow
+
+Phase 2, Sub-Phase 2.1 complete. All 169 streamable-http tests passing.
+Zero regressions.
+```
+
+#### Files Changed
+
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (interface + data)
+- `packages/sdks/oak-curriculum-sdk/src/index.ts` (exports)
+- `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (exports)
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` (registration)
+- `apps/oak-curriculum-mcp-streamable-http/src/handlers.integration.test.ts` (new tests)
 
 ### Quality Baseline
 
 | Metric           | Status         | Details                          |
 | ---------------- | -------------- | -------------------------------- |
 | SDK Unit Tests   | ✅ 265/265     | All passing                      |
-| Streamable Tests | ✅ 164/164     | All passing                      |
+| Streamable Tests | ✅ 169/169     | All passing (+5 new tests)       |
 | E2E Tests        | ✅ All passing | Source and built code            |
 | Type Check       | ✅ Passing     | All workspaces                   |
 | Lint             | ✅ Passing     | No errors                        |
 | Build            | ✅ Passing     | All packages                     |
 | Regressions      | ✅ Zero        | Existing functionality unchanged |
 
-### Key Artifacts Generated in Phase 1
+### Key Artifacts Generated
 
 **Essential Reading**:
 
 - 📄 **Phase 1 Implementation Summary**: `.agent/plans/phase-1-implementation-summary.md`
   - Complete Phase 1 context (deliverables, decisions, deviations, files changed)
-  - **READ THIS FIRST** before starting Phase 2
+  - **READ THIS** for Phase 1 background
+
+- 📄 **Phase 2.1 Implementation Summary**: `.agent/plans/phase-2-1-implementation-summary.md`
+  - Complete Sub-Phase 2.1 context (implementation details, test strategy, data flow)
+  - **READ THIS** before starting Sub-Phase 2.2
 
 **Generated Files**:
 
@@ -71,7 +127,9 @@
 
 ### Critical Notes for Phase 2
 
-⚠️ **Runtime-Defined Tools**: The aggregated tools (`search`, `fetch`) are currently defined in hand-written runtime code, not generated. Sub-Phase 2.1 MUST add default OAuth security metadata to these tools manually before proceeding with routing logic. There's a comprehensive plan (Phase 0 of `.agent/plans/sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md`) to move them to generated code, but until that work is complete, they need manual security metadata at registration time.
+⚠️ **Runtime-Defined Tools** (RESOLVED in Sub-Phase 2.1): The aggregated tools (`search`, `fetch`) were defined in hand-written runtime code, not generated. Sub-Phase 2.1 added default OAuth security metadata to these tools manually via `AGGREGATED_TOOL_DEFS` in `universal-tools.ts`. A comprehensive plan exists (Phase 0 of `.agent/plans/sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md`) to move them to generated code, but for now they have the security metadata they need via manual definitions with TODOs marking them for future migration.
+
+**Key Implementation Pattern from 2.1**: Security metadata flows from generated tool descriptors → SDK's `listUniversalTools()` → runtime's `registerHandlers()` → MCP SDK's `registerTool()`. Both generated tools and runtime-defined tools now include `securitySchemes` in their descriptors.
 
 ### Phase 2 Prerequisites Met
 
@@ -1404,25 +1462,37 @@ export const aggregatedSearchTool = {
 
 #### Acceptance Criteria
 
-- [ ] Integration test written FIRST (Red)
-- [ ] Registration updated to pass `securitySchemes` (Green)
-- [ ] Test proves security metadata flows to MCP SDK
-- [ ] All tests pass
-- [ ] Quality gates pass
+- [x] Integration test written FIRST (Red)
+- [x] Registration updated to pass `securitySchemes` (Green)
+- [x] Test proves security metadata flows to MCP SDK
+- [x] All tests pass
+- [x] Quality gates pass
 
 #### Definition of Done
 
-- All tasks completed
-- All acceptance criteria met
-- Committed with message: "test: add integration test for tool registration with security" then "feat: register tools with security metadata from descriptors"
+- [x] All tasks completed
+- [x] All acceptance criteria met
+- [x] Ready to commit with message: "feat(runtime): include security metadata in tool registration"
+
+**Status**: ✅ **COMPLETE** (2025-11-21)
+
+**Implementation Summary**: Successfully implemented security metadata flow from generated tool descriptors through SDK universal tools to MCP server registration. Used strict TDD (Red-Green-Refactor). All 169 tests passing, zero regressions. See "What Just Completed" section above for full details.
 
 ---
 
 ### Sub-Phase 2.2: MCP Method Classification (Pure Functions)
 
-**Goal**: Create pure functions that classify MCP methods as "discovery" vs "execution".
-
+**Status**: ⏳ NOT STARTED  
+**Goal**: Create pure functions that classify MCP methods as "discovery" vs "execution".  
 **TDD**: Tests first, then implementation.
+
+**Prerequisites**: ✅ Met
+
+- Sub-Phase 2.1 complete (security metadata now flows to MCP SDK registration)
+- Tool descriptors include `securitySchemes` field
+- Types exported from SDK (`SecurityScheme` available for import)
+
+**Context for New Session**: This sub-phase creates the logic to differentiate between MCP methods that need authentication (like `tools/call`) and those that don't (like `initialize`, `tools/list`). This is pure classification logic - no middleware changes yet, just the decision-making functions.
 
 #### Tasks
 
@@ -1477,11 +1547,19 @@ export function isDiscoveryMethod(method: string): boolean {
 
 ### Sub-Phase 2.3: Auth Decision Logic (Pure Function Reading Tool Metadata)
 
-**Goal**: Create pure function that decides whether authentication is required by reading security metadata directly from generated tool descriptors.
-
+**Status**: ⏳ NOT STARTED  
+**Goal**: Create pure function that decides whether authentication is required by reading security metadata directly from generated tool descriptors.  
 **TDD**: Tests first, then implementation.
 
-**Key Insight**: We don't need a separate "resolver" function. Just read `descriptor.securitySchemes` directly.
+**Prerequisites**:
+
+- Sub-Phase 2.2 complete (method classification functions available)
+- Tool descriptors include `securitySchemes` field (from Sub-Phase 2.1)
+- `getToolFromToolName` available from SDK to lookup tool metadata
+
+**Context for New Session**: This sub-phase builds on 2.2's classification logic. Now we add the logic to check a specific tool's security requirements. For `tools/call` requests, we lookup the tool descriptor and check its `securitySchemes` field to determine if OAuth is required.
+
+**Key Insight**: We don't need a separate "resolver" function. Just read `descriptor.securitySchemes` directly from the generated tool descriptor.
 
 #### Tasks
 
@@ -1571,9 +1649,17 @@ export function requiresAuth(method: string, toolName?: string): boolean {
 
 ### Sub-Phase 2.4: MCP Router Middleware (Integration Point)
 
-**Goal**: Create middleware that routes MCP requests based on method and applies auth selectively.
-
+**Status**: ⏳ NOT STARTED  
+**Goal**: Create middleware that routes MCP requests based on method and applies auth selectively.  
 **Approach**: Integration test first (tests multiple units working together).
+
+**Prerequisites**:
+
+- Sub-Phase 2.3 complete (auth decision function available)
+- Sub-Phase 2.2 complete (method classification available)
+- Existing Clerk auth middleware functional
+
+**Context for New Session**: This is where we bring it all together. We create Express middleware that intercepts `/mcp` requests, reads the MCP method and tool name from the request body, uses the classification and decision logic from 2.2/2.3, and conditionally applies authentication. This includes RFC 8707 resource parameter validation (checking the JWT's `aud` claim).
 
 #### Tasks
 

@@ -46,23 +46,29 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
   const tools = listUniversalTools();
   for (const tool of tools) {
     const input = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    server.registerTool(
-      tool.name,
-      { title: tool.name, description: tool.description ?? tool.name, inputSchema: input },
-      async (params: unknown) => {
-        const client = deps.createClient(options.runtimeConfig.env.OAK_API_KEY);
-        const executor = deps.createExecutor({
-          executeMcpTool: async (name, args) => {
-            const execution = await (stubExecutor
-              ? stubExecutor(name, args ?? {})
-              : deps.executeMcpTool(name, args, client));
-            logValidationFailureIfPresent(name, execution, options.logger);
-            return execution;
-          },
-        });
-        return executor(tool.name, params ?? {});
-      },
-    );
+    // Note: securitySchemes is supported by MCP runtime per OpenAI Apps SDK documentation
+    // but not yet in MCP TypeScript SDK types (as of v1.20.1).
+    // We pass it through and it will be accepted at runtime via JavaScript's dynamic nature.
+    // See: https://platform.openai.com/docs/guides/apps-authentication
+    const config = {
+      title: tool.name,
+      description: tool.description ?? tool.name,
+      inputSchema: input,
+      securitySchemes: tool.securitySchemes,
+    };
+    server.registerTool(tool.name, config, async (params: unknown) => {
+      const client = deps.createClient(options.runtimeConfig.env.OAK_API_KEY);
+      const executor = deps.createExecutor({
+        executeMcpTool: async (name, args) => {
+          const execution = await (stubExecutor
+            ? stubExecutor(name, args ?? {})
+            : deps.executeMcpTool(name, args, client));
+          logValidationFailureIfPresent(name, execution, options.logger);
+          return execution;
+        },
+      });
+      return executor(tool.name, params ?? {});
+    });
   }
 }
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
+import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
 import { createApp } from './application.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
@@ -93,6 +94,46 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       // The resource specifically identifies the MCP endpoint
       expect(resource).toMatch(/\/mcp$/);
+    });
+  });
+
+  describe('scopes_supported field', () => {
+    it('returns scopes_supported from generated SCOPES_SUPPORTED constant', async () => {
+      const app = createApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'example.com');
+
+      expect(res.status).toBe(200);
+
+      const body: unknown = res.body;
+      expect(body).toHaveProperty('scopes_supported');
+
+      const scopesSupported = (body as { scopes_supported: unknown }).scopes_supported;
+      expect(Array.isArray(scopesSupported)).toBe(true);
+
+      // Verify scopes match generated constant (order may vary)
+      const expectedScopes = Array.from(SCOPES_SUPPORTED);
+      expect(scopesSupported).toEqual(expect.arrayContaining(expectedScopes));
+      expect(scopesSupported).toHaveLength(expectedScopes.length);
+    });
+
+    it('scopes_supported includes openid and email from security policy', async () => {
+      const app = createApp();
+
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'example.com');
+
+      expect(res.status).toBe(200);
+
+      const body: unknown = res.body;
+      const scopesSupported = (body as { scopes_supported: unknown }).scopes_supported;
+
+      // Verify expected scopes are present (derived from DEFAULT_AUTH_SCHEME in mcp-security-policy.ts)
+      expect(scopesSupported).toContain('openid');
+      expect(scopesSupported).toContain('email');
     });
   });
 });

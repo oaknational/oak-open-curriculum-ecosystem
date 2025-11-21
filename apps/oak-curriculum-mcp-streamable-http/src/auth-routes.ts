@@ -2,6 +2,7 @@ import type { Express, RequestHandler } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
+import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
 import { mcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
@@ -61,11 +62,12 @@ export function registerPublicOAuthMetadataEndpoints(
     const protocol = host.startsWith('localhost:') || host === 'localhost' ? 'http' : 'https';
     const resourceUrl = `${protocol}://${host}/mcp`;
 
+    // Scopes flow from mcp-security-policy.ts → type-gen → SCOPES_SUPPORTED constant
     const metadata = generateClerkProtectedResourceMetadata({
       publishableKey,
       resourceUrl,
       properties: {
-        scopes_supported: ['openid', 'email'],
+        scopes_supported: [...SCOPES_SUPPORTED],
       },
     });
 
