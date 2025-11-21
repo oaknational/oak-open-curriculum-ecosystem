@@ -91,7 +91,7 @@
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.20.1",
-    "@next/eslint-plugin-next": "^15.5.3",
+    "@next/eslint-plugin-next": "^16.0.3",
     "@types/node": "^22.10.5",
     "dotenv": "^17.2.1",
     "openapi-typescript": "^7.10.1",

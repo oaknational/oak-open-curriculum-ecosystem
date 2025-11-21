@@ -12,7 +12,7 @@ import eslint from '@eslint/js';
 import { importX } from 'eslint-plugin-import-x';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
+// const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config = defineConfig(
   // JavaScript files configuration - separate from TypeScript config
@@ -52,10 +52,10 @@ const config = defineConfig(
       languageOptions: {
         parserOptions: {
           projectService: true,
-          project: wsTsProject,
+          // project: wsTsProject,
           tsconfigRootDir: thisDir,
           // Allow files not explicitly included in the project to still be linted
-          allowDefaultProject: true,
+          // allowDefaultProject: true,
         },
       },
       settings: {
@@ -64,7 +64,8 @@ const config = defineConfig(
           ...commonSettings['import-x/resolver'],
           typescript: {
             ...commonSettings['import-x/resolver'].typescript,
-            project: wsTsProject,
+            // project: wsTsProject,
+            projectService: true,
           },
         },
       },
@@ -111,7 +112,7 @@ const config = defineConfig(
       languageOptions: {
         parserOptions: {
           projectService: true,
-          project: './tsconfig.json',
+          // project: './tsconfig.json',
           tsconfigRootDir: thisDir,
         },
       },

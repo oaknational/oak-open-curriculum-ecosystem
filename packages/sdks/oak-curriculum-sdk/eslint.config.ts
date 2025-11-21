@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
+// const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config = defineConfig(
   ...baseConfig,
@@ -37,7 +37,7 @@ const config = defineConfig(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        project: wsTsProject,
+        // project: wsTsProject,
         tsconfigRootDir: thisDir,
       },
     },
@@ -47,7 +47,8 @@ const config = defineConfig(
         ...commonSettings['import-x/resolver'],
         typescript: {
           ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
+          // project: wsTsProject,
+          projectService: true,
         },
       },
     },
@@ -167,7 +168,8 @@ const config = defineConfig(
     files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
+        // project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
     },
