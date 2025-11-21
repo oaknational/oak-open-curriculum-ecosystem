@@ -147,7 +147,9 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     );
     expect(body).toHaveProperty('scopes_supported');
     const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
-    expect(scopes).toEqual(['openid', 'email']);
+    // Test BEHAVIOR (presence of required scopes) not IMPLEMENTATION (order)
+    expect(scopes).toEqual(expect.arrayContaining(['openid', 'email']));
+    expect(scopes).toHaveLength(2);
   });
 
   it('rejects invalid Bearer token with 401', async () => {
