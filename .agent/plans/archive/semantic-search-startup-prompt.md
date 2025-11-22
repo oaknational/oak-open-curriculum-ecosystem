@@ -11,7 +11,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 
 1. **Repository Rules & Standards**
    - `.agent/directives-and-memory/rules.md`
-   - `docs/agent-guidance/testing-strategy.md`
+   - `.agent/directives-and-memory/testing-strategy.md`
 2. **Plans & Context**
    - `.agent/plans/semantic-search/semantic-search-api-plan.md`
    - `.agent/plans/semantic-search/semantic-search-api-context.md`
@@ -47,7 +47,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 2. Open `.agent/plans/semantic-search/semantic-search-alignment-refresh-plan.md` and continue from the next ACTION item.
 3. For each task:
    - Write the todo entry in GO format (ACTION, REVIEW, with grounding every third step).
-   - Use TDD (`docs/agent-guidance/testing-strategy.md`), starting with failing tests.
+   - Use TDD (`.agent/directives-and-memory/testing-strategy.md`), starting with failing tests.
    - Capture reviews/quality-gate outcomes in the refresh plan’s Review Log.
 4. Keep documentation in sync (docs, README, MCP notes) per the documentation plan.
 

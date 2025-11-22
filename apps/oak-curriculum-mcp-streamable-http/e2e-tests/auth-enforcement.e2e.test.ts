@@ -67,29 +67,51 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     app = createApp({ runtimeConfig });
   });
 
-  it('rejects /mcp POST without Authorization header with 401', async () => {
+  it('allows discovery methods (initialize) without Authorization header', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2024-11-05',
+          capabilities: {},
+          clientInfo: { name: 'test', version: '1.0.0' },
+        },
+      });
 
-    expect(res.status).toBe(401);
+    // Discovery methods should work without authentication
+    expect(res.status).toBe(200);
+    // MCP uses SSE, response will be in text format
+    expect(res.text).toBeDefined();
+    expect(res.text.length).toBeGreaterThan(0);
   });
 
-  it('rejects /mcp GET without Authorization header with 401', async () => {
-    const res = await request(app)
-      .get('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .query({ method: 'tools/list' });
-
-    expect(res.status).toBe(401);
-  });
-
-  it('includes WWW-Authenticate header in 401 response with Clerk AS URL', async () => {
+  it('allows discovery methods (tools/list) via POST without Authorization header', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+
+    // Discovery methods should work without authentication
+    expect(res.status).toBe(200);
+    // MCP uses SSE, response will be in text format
+    expect(res.text).toBeDefined();
+    expect(res.text.length).toBeGreaterThan(0);
+  });
+
+  it('includes WWW-Authenticate header in 401 response for protected tools', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
 
     expect(res.status).toBe(401);
     expect(res.headers['www-authenticate']).toBeDefined();
@@ -152,33 +174,48 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(scopes).toHaveLength(2);
   });
 
-  it('rejects invalid Bearer token with 401', async () => {
+  it('rejects invalid Bearer token for protected tools with 401', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
       .set('Authorization', 'Bearer invalid-token-12345')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
 
     expect(res.status).toBe(401);
   });
 
-  it('rejects malformed Authorization header with 401', async () => {
+  it('rejects malformed Authorization header for protected tools with 401', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
       .set('Authorization', 'NotBearer xyz')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
 
     expect(res.status).toBe(401);
   });
 
   // Test #3: OAuth Discovery Flow (Protected Resource Metadata)
   it('supports OAuth discovery via protected resource metadata', async () => {
-    // Step 1: Client calls /mcp without auth → 401 with WWW-Authenticate
+    // Step 1: Client calls protected tool without auth → 401 with WWW-Authenticate
     const step1 = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
 
     expect(step1.status).toBe(401);
     const wwwAuth = step1.headers['www-authenticate'];
@@ -262,7 +299,12 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
-        .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages' },
+        });
 
       expect(res.status).toBe(401);
       const wwwAuth = res.headers['www-authenticate'];

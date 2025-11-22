@@ -66,7 +66,7 @@ Post Phase 1, semantic search will integrate with MCP via:
 
 - Curriculum ontology: `docs/architecture/curriculum-ontology.md` (✅ COMPLETE)
 - Schema-first execution: `.agent/directives-and-memory/schema-first-execution.md`
-- Testing strategy: `docs/agent-guidance/testing-strategy.md`
+- Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
 - Cardinal rule: `.agent/directives-and-memory/rules.md`
 
 ## Navigation

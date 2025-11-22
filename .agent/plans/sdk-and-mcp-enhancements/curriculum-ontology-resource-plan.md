@@ -774,7 +774,7 @@ This approach provides immediate value while aligning with long-term upstream AP
 
 - `.agent/directives-and-memory/rules.md` - Cardinal rule: type-gen sufficiency; TDD approach
 - `.agent/directives-and-memory/schema-first-execution.md` - Schema-first execution directive
-- `docs/agent-guidance/testing-strategy.md` - Testing strategy for unit/integration/E2E tests
+- `.agent/directives-and-memory/testing-strategy.md` - Testing strategy for unit/integration/E2E tests
 
 ### Related Plans
 

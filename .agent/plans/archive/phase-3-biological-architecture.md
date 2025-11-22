@@ -148,7 +148,7 @@ Update all docs/agent-guidance/ files for consistency:
    - Current guidelines work with new structure
    - No path-specific changes needed
 
-7. **docs/agent-guidance/testing-strategy.md** ✅ COMPLETED
+7. **.agent/directives-and-memory/testing-strategy.md** ✅ COMPLETED
    - Updated with guidelines for testing chorai vs organa
    - Added specific examples for each architectural layer
 

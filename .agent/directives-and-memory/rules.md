@@ -72,7 +72,7 @@ Use the right tool for the job:
 
 ### Testing
 
-For further information, see the [Testing Strategy](../../docs/agent-guidance/testing-strategy.md).
+For further information, see the [Testing Strategy](testing-strategy.md).
 
 #### Test Types
 

@@ -74,6 +74,7 @@ This sub-phase created a pure function `toolRequiresAuth()` that reads security 
 #### Key Architectural Points
 
 **Schema-First Compliance**: ✅ PERFECT
+
 - Function only READS metadata, never computes policy
 - Policy defined at type-gen time in `type-gen/mcp-security-policy.ts`
 - Security metadata flows from generated descriptors
@@ -81,12 +82,14 @@ This sub-phase created a pure function `toolRequiresAuth()` that reads security 
 - If OpenAPI schema changes → `pnpm type-gen` → function continues working
 
 **Type-Driven Development**: ✅ EXEMPLARY
+
 - TypeScript's type narrowing guided implementation
 - Lint errors about "unnecessary conditionals" were valuable feedback
 - Type system proved all tools have security metadata
 - Final code is simpler because we listened to the compiler
 
 **Pure Function Design**: ✅ TEXTBOOK
+
 - Zero side effects
 - No I/O operations
 - Deterministic output
@@ -96,10 +99,12 @@ This sub-phase created a pure function `toolRequiresAuth()` that reads security 
 #### Files Changed
 
 **New Files**:
+
 - `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts` (implementation)
 - `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.unit.test.ts` (9 tests)
 
 **Modified Files**:
+
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (exported constants/functions)
 - `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (re-export)
 - `packages/sdks/oak-curriculum-sdk/src/index.ts` (public API)
@@ -409,7 +414,7 @@ This plan MUST be executed in strict compliance with:
 
 - [`.agent/directives-and-memory/rules.md`](../directives-and-memory/rules.md) - Core rules, ALWAYS followed
 - [`.agent/directives-and-memory/schema-first-execution.md`](../directives-and-memory/schema-first-execution.md) - Non-negotiable generator/runtime contract
-- [`docs/agent-guidance/testing-strategy.md`](../../docs/agent-guidance/testing-strategy.md) - TDD approach
+- [`.agent/directives-and-memory/testing-strategy.md`](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach
 
 **Mandatory re-reading**: At the start of each phase and after any significant blocker, re-read these documents to ensure continued alignment.
 
@@ -1822,6 +1827,7 @@ export function isDiscoveryMethod(method: string): boolean {
 **Implementation Summary**:
 
 Created `toolRequiresAuth(toolName: UniversalToolName): boolean` pure function that:
+
 - Reads security metadata from generated tool descriptors
 - Handles both generated tools and aggregated tools (`search`, `fetch`)
 - Returns `true` if any `securityScheme` is `oauth2`, `false` otherwise

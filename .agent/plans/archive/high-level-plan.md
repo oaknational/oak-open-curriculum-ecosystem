@@ -378,7 +378,7 @@ Multiple specialized MCP organisms coexisting:
 ## 📚 References
 
 - [Architecture Guide](../../docs/agent-guidance/architecture.md) - Authoritative biological architecture reference
-- [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) - TDD/BDD approach
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - TDD/BDD approach
 - [Rules](../directives-and-memory/rules.md) - Core development principles
 - [Phase 6 Plan](phase-6-oak-curriculum-api.md) - Detailed implementation plan
 

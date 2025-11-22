@@ -79,7 +79,7 @@ The search indices will be enhanced with ontology metadata to enable:
 
 ## Testing Strategy
 
-Following `docs/agent-guidance/testing-strategy.md`:
+Following `.agent/directives-and-memory/testing-strategy.md`:
 
 - **Unit tests** (`.unit.test.ts`): Pure functions, schema generators, query builders
 - **Integration tests** (`.integration.test.ts`): API routes with mocked Elasticsearch, ingestion with mocked SDK

@@ -15,7 +15,7 @@ Observe, analyse and report, do not modify.
 You will audit test files by:
 
 1. **First and foremost**, verify compliance with `.agent/directives-and-memory/rules.md` - these rules override any general best practices
-2. **Second**, ensure alignment with the testing strategy defined in `docs/agent-guidance/testing-strategy.md`
+2. **Second**, ensure alignment with the testing strategy defined in `.agent/directives-and-memory/testing-strategy.md`
 3. **Third**, apply general software testing best practices where not contradicted by project rules
 
 ## Core References
@@ -25,7 +25,7 @@ Read and adhere to these documents:
 - `GO.md` — Grounding, orchestration, and decision framework for planning and reviews
 - `.agent/directives-and-memory/rules.md` — Core development rules
 - `.agent/directives-and-memory/AGENT.md` — General practice guidance and documentation index
-- `docs/agent-guidance/testing-strategy.md` — Testing strategy, definitions, and file naming
+- `.agent/directives-and-memory/testing-strategy.md` — Testing strategy, definitions, and file naming
 - `docs/agent-guidance/typescript-practice.md` — Type safety guardrails impacting tests and boundaries
 - `docs/agent-guidance/architecture.md` — Architectural principles that inform test placement
 - `docs/architecture-overview.md` — High-level architecture context
@@ -53,7 +53,7 @@ Read and adhere to these documents:
 For each test file you review:
 
 1. **Check project rule compliance**: Compare against `.agent/directives-and-memory/rules.md` line by line
-2. **Verify testing strategy alignment**: Ensure tests follow patterns in `docs/agent-guidance/testing-strategy.md`
+2. **Verify testing strategy alignment**: Ensure tests follow patterns in `.agent/directives-and-memory/testing-strategy.md`
 3. **Assess test value**: For each test, explicitly identify what product code behaviour it validates
 4. **Evaluate complexity**: Rate setup complexity, mock complexity, and assertion complexity
 5. **Identify refactoring opportunities**: When complexity is found, suggest specific product code changes
@@ -63,7 +63,7 @@ For each test file you review:
 When encountering conflicts:
 
 1. Project rules in `.agent/directives-and-memory/rules.md` always win
-2. Testing strategy in `docs/agent-guidance/testing-strategy.md` is second priority
+2. Testing strategy in `.agent/directives-and-memory/testing-strategy.md` is second priority
 3. General best practices apply only when not contradicted by above
 
 When encountering complexity:
@@ -99,7 +99,7 @@ When invoked, quickly gather:
 - [ ] Tests are simple (setups, mocks, assertions) and prove product behaviours
 - [ ] No IO in unit/integration tests; mocks are minimal where applicable
 - [ ] Correct test type placement and naming (`*.unit.test.ts`, `*.integration.test.ts`, `*.e2e.test.ts`)
-- [ ] Test suite aligns with `docs/agent-guidance/testing-strategy.md`
+- [ ] Test suite aligns with `.agent/directives-and-memory/testing-strategy.md`
 - [ ] Quality gates pass in the documented order
 
 ## Output Format

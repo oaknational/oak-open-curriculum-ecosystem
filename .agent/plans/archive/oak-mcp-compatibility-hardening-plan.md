@@ -85,7 +85,7 @@ Flow per spec ([MCP Server Spec 2025-06-18](https://modelcontextprotocol.io/spec
 - Generate a shared translation module during `pnpm type-gen` that:
   - Imports the compile-time OpenAPI types and emits Zod schemas/guards for canonical MCP request/response shapes.
   - Provides bidirectional conversion helpers (raw OpenAPI ↔ canonical MCP) that validate and normalise without type assertions, failing fast with useful error messages.
-  - Is implemented through TDD with pure functions and unit tests that exercise every conversion path; follow the testing workflow in `docs/agent-guidance/testing-strategy.md`.
+  - Is implemented through TDD with pure functions and unit tests that exercise every conversion path; follow the testing workflow in `.agent/directives-and-memory/testing-strategy.md`.
 - Refactor the existing `/openai_connector` code to delegate to this module so that `/mcp`, stdio, ElevenLabs, and future agents all consume the same translation path.
 - Ensure the translation module exposes only schema-derived types and guards, making it impossible to bypass validation or introduce compatibility layers.
 

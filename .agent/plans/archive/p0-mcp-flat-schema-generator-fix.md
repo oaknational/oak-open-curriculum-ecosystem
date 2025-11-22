@@ -1038,7 +1038,7 @@ These improvements build on the flat schema foundation but are separate tasks:
 
 - `.agent/directives-and-memory/schema-first-execution.md`
 - `.agent/directives-and-memory/rules.md`
-- `docs/agent-guidance/testing-strategy.md`
+- `.agent/directives-and-memory/testing-strategy.md`
 
 **Research Documents**:
 

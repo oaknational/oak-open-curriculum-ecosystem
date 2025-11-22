@@ -34,14 +34,15 @@ describe('Clerk Auth Middleware Integration', () => {
     process.env = { ...originalEnv };
   });
 
-  it('rejects unauthenticated requests to /mcp with 401', async () => {
+  it('rejects unauthenticated requests to protected tools with 401', async () => {
     const app = createApp({
       runtimeConfig: createRuntimeConfig({ DANGEROUSLY_DISABLE_AUTH: 'false' }),
     });
+    // Test with tools/call for an OAuth-protected tool (not discovery method)
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/call', params: { name: 'get-key-stages' } });
 
     if (res.status !== 401) {
       console.log('Unexpected status:', res.status);
@@ -52,6 +53,18 @@ describe('Clerk Auth Middleware Integration', () => {
     expect(res.status).toBe(401);
     expect(res.headers['www-authenticate']).toBeDefined();
     expect(res.headers['www-authenticate']).toContain('Bearer');
+  });
+
+  it('allows discovery methods without auth (tools/list)', async () => {
+    const app = createApp({
+      runtimeConfig: createRuntimeConfig({ DANGEROUSLY_DISABLE_AUTH: 'false' }),
+    });
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+
+    expect(res.status).toBe(200);
   });
 
   it('allows GET /healthz without auth', async () => {

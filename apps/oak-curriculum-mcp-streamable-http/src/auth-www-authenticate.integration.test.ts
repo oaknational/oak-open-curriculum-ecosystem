@@ -22,20 +22,22 @@ describe('WWW-Authenticate header integration test', () => {
     app = createApp();
   });
 
-  it('should return 401 for unauthenticated POST /mcp request', async () => {
+  it('should return 401 for unauthenticated POST /mcp request to protected tool', async () => {
+    // Use protected tool (not discovery method) to trigger auth requirement
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', method: 'tools/list' });
+      .send({ jsonrpc: '2.0', method: 'tools/call', params: { name: 'get-key-stages' } });
 
     expect(response.status).toBe(401);
   });
 
-  it('should include WWW-Authenticate header in 401 response', async () => {
+  it('should include WWW-Authenticate header in 401 response for protected tool', async () => {
+    // Use protected tool (not discovery method) to trigger auth requirement
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', method: 'tools/list' });
+      .send({ jsonrpc: '2.0', method: 'tools/call', params: { name: 'get-key-stages' } });
 
     expect(response.status).toBe(401);
     expect(response.headers['www-authenticate']).toBeDefined();
@@ -44,10 +46,11 @@ describe('WWW-Authenticate header integration test', () => {
   it('should point to a valid resource_metadata URL in WWW-Authenticate header', async () => {
     // This test verifies our in-house mcpAuthClerk middleware generates correct
     // resource_metadata URLs in WWW-Authenticate headers (without the /mcp suffix bug)
+    // Use protected tool (not discovery method) to trigger auth requirement
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', method: 'tools/list' });
+      .send({ jsonrpc: '2.0', method: 'tools/call', params: { name: 'get-key-stages' } });
 
     expect(response.status).toBe(401);
     const wwwAuth = response.headers['www-authenticate'];
@@ -73,10 +76,11 @@ describe('WWW-Authenticate header integration test', () => {
   });
 
   it('should NOT include /mcp suffix in resource_metadata URL', async () => {
+    // Use a protected tool (not discovery method) to trigger auth requirement
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', method: 'tools/list' });
+      .send({ jsonrpc: '2.0', method: 'tools/call', params: { name: 'get-key-stages' } });
 
     expect(response.status).toBe(401);
     const wwwAuth = response.headers['www-authenticate'];

@@ -745,7 +745,7 @@ readonly toolMcpFlatZodSchema: z.ZodRawShape & FlatMcpInputSchema
 
 - `.agent/directives-and-memory/schema-first-execution.md`
 - `.agent/directives-and-memory/rules.md`
-- `docs/agent-guidance/testing-strategy.md`
+- `.agent/directives-and-memory/testing-strategy.md`
 
 **Research Documents**:
 

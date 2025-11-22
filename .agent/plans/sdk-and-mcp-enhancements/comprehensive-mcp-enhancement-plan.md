@@ -27,7 +27,7 @@ This comprehensive plan unifies all MCP enhancement work into a single roadmap, 
 
 - `.agent/directives-and-memory/rules.md` – Cardinal Rule, TDD, type safety, no shortcuts
 - `.agent/directives-and-memory/schema-first-execution.md` – All runtime behaviour driven by generated artefacts
-- `docs/agent-guidance/testing-strategy.md` – TDD-first, unit → integration → E2E
+- `.agent/directives-and-memory/testing-strategy.md` – TDD-first, unit → integration → E2E
 - `.agent/plans/high-level-plan.md` – Strategic roadmap
 
 ### Related Plans
@@ -962,7 +962,7 @@ packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-advanced-too
 
 ### Testing Strategy
 
-Following `docs/agent-guidance/testing-strategy.md`:
+Following `.agent/directives-and-memory/testing-strategy.md`:
 
 1. **Unit Tests**: Pure functions, no I/O, no mocks
    - Configuration validation
@@ -1083,7 +1083,7 @@ This comprehensive plan combines three previous documents:
 
 - `.agent/directives-and-memory/rules.md` - Cardinal rule, TDD, type safety
 - `.agent/directives-and-memory/schema-first-execution.md` - Generator-first mindset
-- `docs/agent-guidance/testing-strategy.md` - Unit → integration → E2E
+- `.agent/directives-and-memory/testing-strategy.md` - Unit → integration → E2E
 
 ### Related Plans
 

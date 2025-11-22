@@ -158,9 +158,14 @@ describe('Header Redaction E2E', () => {
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', ACCEPT)
-        .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages' },
+        });
 
-      // Should return 401 without auth
+      // Should return 401 without auth for protected tools
       expect(response.status).toBe(401);
 
       // Verify WWW-Authenticate header is present

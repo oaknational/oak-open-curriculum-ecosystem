@@ -599,7 +599,7 @@ Measure and validate optimizations
 
 - [ADR-023: Moria/Histoi/Psycha Architecture](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md)
 - [Architecture Guide](../../docs/agent-guidance/architecture.md)
-- [Testing Strategy](../../docs/agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md)
 - [Rules](../.agent/directives-and-memory/rules.md)
 - [AGENT.md](../.agent/directives-and-memory/AGENT.md)
 

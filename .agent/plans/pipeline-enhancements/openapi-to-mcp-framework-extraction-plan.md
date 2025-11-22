@@ -5,7 +5,7 @@
 - [GO.md](../../GO.md)
 - [AGENT.md](../directives-and-memory/AGENT.md)
 - [.agent/directives-and-memory/rules.md](../directives-and-memory/rules.md)
-- [docs/agent-guidance/testing-strategy.md](../../docs/agent-guidance/testing-strategy.md)
+- [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
 
 ## Prerequisites
 

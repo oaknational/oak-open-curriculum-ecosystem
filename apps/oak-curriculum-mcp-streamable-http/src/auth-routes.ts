@@ -4,6 +4,7 @@ import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
 import { mcpAuthClerk } from './auth/mcp-auth/index.js';
+import { createMcpRouter } from './mcp-router.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';
@@ -83,7 +84,14 @@ export function registerPublicOAuthMetadataEndpoints(
 }
 
 /**
- * Registers authenticated MCP routes with Clerk OAuth protection
+ * Registers authenticated MCP routes with method-aware auth routing.
+ *
+ * Uses createMcpRouter to conditionally apply authentication based on:
+ * - Discovery methods (initialize, tools/list): No auth required
+ * - Execution methods (tools/call): Per-tool security metadata
+ *
+ * This enables OpenAI ChatGPT integration which requires discovery methods
+ * to work without authentication.
  */
 function registerAuthenticatedRoutes(
   app: Express,
@@ -91,10 +99,14 @@ function registerAuthenticatedRoutes(
   log: Logger,
   authMiddleware: RequestHandler,
 ): void {
-  log.debug('Registering POST /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.post('/mcp', authMiddleware, createMcpHandler(coreTransport, log));
-  log.debug('Registering GET /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.get('/mcp', authMiddleware, createMcpHandler(coreTransport, log));
+  // Create method-aware router that wraps auth middleware
+  const mcpRouter = createMcpRouter({ auth: authMiddleware });
+
+  log.debug('Registering POST /mcp route (method-aware auth with resource validation)');
+  app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+
+  log.debug('Registering GET /mcp route (method-aware auth with resource validation)');
+  app.get('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
 }
 
 /**

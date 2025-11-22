@@ -8,20 +8,27 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response } from 'express';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import jwt from 'jsonwebtoken';
 import { mcpAuth } from './mcp-auth.js';
 import { getPRMUrl } from './get-prm-url.js';
+import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 
-// Mock getPRMUrl module
+// Mock modules
 vi.mock('./get-prm-url.js', () => ({
   getPRMUrl: vi.fn(),
 }));
 
+vi.mock('./get-mcp-resource-url.js', () => ({
+  getMcpResourceUrl: vi.fn(),
+}));
+
 describe('mcpAuth', () => {
-  // Setup mock before each test
+  // Setup mocks before each test
   beforeEach(() => {
     vi.mocked(getPRMUrl).mockReturnValue(
       'https://example.com/.well-known/oauth-protected-resource',
     );
+    vi.mocked(getMcpResourceUrl).mockReturnValue('https://example.com/mcp');
   });
 
   // Type guard for headers object
@@ -168,10 +175,13 @@ describe('mcpAuth', () => {
 
     it('attaches AuthInfo to req.auth and calls next() when token is valid', async () => {
       const { req, res, next } = createMocks();
-      req.headers.authorization = 'Bearer valid-token-123';
+
+      // Create a valid JWT with correct aud claim (matching getMcpResourceUrl mock)
+      const validToken = jwt.sign({ aud: 'https://example.com/mcp' }, 'test-secret');
+      req.headers.authorization = `Bearer ${validToken}`;
 
       const mockAuthInfo: AuthInfo = {
-        token: 'valid-token-123',
+        token: validToken,
         clientId: 'client-456',
         scopes: ['mcp:invoke', 'mcp:read'],
         extra: { userId: 'user-789' },
@@ -182,7 +192,7 @@ describe('mcpAuth', () => {
       const middleware = mcpAuth(verifyToken);
       await middleware(req, res, next);
 
-      expect(verifyToken).toHaveBeenCalledWith('valid-token-123', req);
+      expect(verifyToken).toHaveBeenCalledWith(validToken, req);
       expect(req.auth).toEqual(mockAuthInfo);
       expect(next).toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
@@ -191,7 +201,10 @@ describe('mcpAuth', () => {
 
     it('passes both token and request to the verifier function', async () => {
       const { req, res, next } = createMocks();
-      req.headers.authorization = 'Bearer test-token';
+
+      // Create a valid JWT with correct aud claim (but verifier will reject it)
+      const testToken = jwt.sign({ aud: 'https://example.com/mcp' }, 'test-secret');
+      req.headers.authorization = `Bearer ${testToken}`;
 
       const verifyToken = vi.fn().mockResolvedValue(undefined);
 
@@ -199,7 +212,7 @@ describe('mcpAuth', () => {
       await middleware(req, res, next);
 
       expect(verifyToken).toHaveBeenCalledTimes(1);
-      expect(verifyToken).toHaveBeenCalledWith('test-token', req);
+      expect(verifyToken).toHaveBeenCalledWith(testToken, req);
     });
   });
 });

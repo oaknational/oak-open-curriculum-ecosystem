@@ -15,7 +15,7 @@ Read and follow:
 
 - `./.agent/directives-and-memory/AGENT.md` and linked references
 - `./.agent/directives-and-memory/rules.md`
-- `./docs/agent-guidance/testing-strategy.md`
+- `./.agent/directives-and-memory/testing-strategy.md`
 
 Adjust the todo list if anything changes.
 

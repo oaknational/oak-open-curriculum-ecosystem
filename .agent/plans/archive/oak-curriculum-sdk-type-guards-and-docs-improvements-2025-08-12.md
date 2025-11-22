@@ -4,7 +4,7 @@
 
 - GO.md → `./GO.md`
 - Rules → `.agent/directives-and-memory/rules.md`
-- Testing strategy → `docs/agent-guidance/testing-strategy.md`
+- Testing strategy → `.agent/directives-and-memory/testing-strategy.md`
 - Current SDK doc → `packages/oak-curriculum-sdk/docs/oak-open-curriculum-api-sdk-reference.md`
 
 ## Intent

@@ -95,6 +95,6 @@ Keep CI green locally; no `--no-verify` or disabled lint rules.
 - [docs/README.md](../README.md)
 - [docs/architecture/architectural-decisions/](../architecture/architectural-decisions/)
 - [docs/agent-guidance/development-practice.md](../agent-guidance/development-practice.md)
-- [docs/agent-guidance/testing-strategy.md](../agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
 
 Welcome aboard! Keep the documentation close to the code and prefer the shared helpers over bespoke validation.

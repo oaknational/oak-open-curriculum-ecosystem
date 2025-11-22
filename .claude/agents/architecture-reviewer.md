@@ -19,7 +19,7 @@ Read and internalize these documents:
 3. `.agent/directives-and-memory/AGENT.md` - General practice guidance and documentation index
 4. `docs/agent-guidance/architecture.md` - THE AUTHORITATIVE ARCHITECTURAL REFERENCE
 5. `docs/agent-guidance/typescript-practice.md` - Type safety guidance relevant to boundary typing and type-only imports
-6. `docs/agent-guidance/testing-strategy.md` - Testing types, naming conventions, and CI placement
+6. `.agent/directives-and-memory/testing-strategy.md` - Testing types, naming conventions, and CI placement
 7. `docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md` - Formal ADR for the current architecture
 8. `docs/architecture-overview.md` - High-level overview of the architecture
 9. `docs/architecture/workspace-eslint-rules.md` - ESLint rules for ensuring architecture boundaries both in the ecosystem and within each psychon organism are respected

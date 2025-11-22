@@ -75,4 +75,4 @@ Status: MVP scope expanded — REQUIRED items now include migration to the `McpS
 - ADR: `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md`
 - Standards: `.agent/reference-docs/openai-connector-standards.md`
 - Rules: `.agent/directives-and-memory/rules.md`
-- Testing: `docs/agent-guidance/testing-strategy.md`
+- Testing: `.agent/directives-and-memory/testing-strategy.md`

@@ -18,7 +18,7 @@ All other work is tracked in `shared-mcp-core-and-mcp-server-migration-plan.md` 
 ## References
 
 - `.agent/reference-docs/mcp-typescript-sdk-readme.md` (Tool schema, Streamable HTTP, stdio)
-- GO.md; docs/agent-guidance/testing-strategy.md; typescript-practice.md; development-practice.md
+- GO.md; .agent/directives-and-memory/testing-strategy.md; typescript-practice.md; development-practice.md
 
 ## Next steps (only remaining tasks)
 

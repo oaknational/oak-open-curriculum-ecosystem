@@ -482,7 +482,7 @@ After each phase:
 
 - `.agent/directives-and-memory/rules.md` - Cardinal rule: type-gen sufficiency
 - `.agent/directives-and-memory/schema-first-execution.md` - Schema-first execution directive
-- `docs/agent-guidance/testing-strategy.md` - TDD approach
+- `.agent/directives-and-memory/testing-strategy.md` - TDD approach
 
 ### Related Plans
 

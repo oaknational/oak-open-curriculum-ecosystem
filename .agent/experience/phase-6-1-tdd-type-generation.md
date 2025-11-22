@@ -131,6 +131,6 @@ packages/oak-curriculum-sdk/
 
 ## References
 
-- [Testing Strategy](../../docs/agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md)
 - [High Level Plan](../plans/high-level-plan.md)
 - Generated files: `src/types/generated.ts`, `src/validators/generated.ts`

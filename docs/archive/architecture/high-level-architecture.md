@@ -429,7 +429,7 @@ Sub-phases:
 
 ### Supporting Documents
 
-4. **[Testing Strategy](../agent-guidance/testing-strategy.md)** - TDD approach
+4. **[Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)** - TDD approach at all levels
 5. **[Workspace ESLint Rules](workspace-eslint-rules.md)** - Import enforcement
 6. **[AGENT.md](../../.agent/directives-and-memory/AGENT.md)** - AI agent guidance
 

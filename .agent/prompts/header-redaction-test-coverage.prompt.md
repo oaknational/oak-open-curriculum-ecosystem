@@ -29,7 +29,7 @@ This is a **security-critical** feature that MUST be thoroughly tested before de
 2. `@.agent/context/continuation.prompt.md` - Complete technical context and historical decisions
 3. `@.agent/context/context.md` - Recent changes and immediate next steps
 4. `@.agent/directives-and-memory/rules.md` - Cardinal rules (MUST follow)
-5. `@docs/agent-guidance/testing-strategy.md` - TDD workflow (Red → Green → Refactor)
+5. `@.agent/directives-and-memory/testing-strategy.md` - TDD workflow (Red → Green → Refactor)
 6. `@apps/oak-curriculum-mcp-streamable-http/src/logging/header-redaction.ts` - Module under test
 7. `@apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.ts` - Integration point
 
@@ -516,7 +516,7 @@ Please read these files to understand the context:
 @.agent/context/continuation.prompt.md
 @.agent/context/context.md
 @.agent/directives-and-memory/rules.md
-@docs/agent-guidance/testing-strategy.md
+@.agent/directives-and-memory/testing-strategy.md
 @.agent/prompts/header-redaction-test-coverage.prompt.md (this file)
 
 Once ready:
