@@ -24,7 +24,7 @@ import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregate
  * TODO: Remove manual security metadata when Phase 0 (comprehensive-mcp-enhancement-plan.md)
  * moves aggregated tools to generated code. Security should flow from OpenAPI schema.
  */
-const AGGREGATED_TOOL_DEFS = {
+export const AGGREGATED_TOOL_DEFS = {
   search: {
     description:
       'Search across lessons and transcripts. Executes get-search-lessons and get-search-transcripts.',
@@ -52,7 +52,7 @@ export interface UniversalToolListEntry {
   readonly inputSchema: UniversalToolInputSchema;
   readonly securitySchemes?: readonly SecurityScheme[];
 }
-function isAggregatedToolName(value: unknown): value is AggregatedToolName {
+export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
   return value === 'search' || value === 'fetch';
 }
 

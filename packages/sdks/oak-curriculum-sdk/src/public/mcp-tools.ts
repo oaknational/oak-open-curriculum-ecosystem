@@ -62,7 +62,9 @@ export {
 export {
   listUniversalTools,
   isUniversalToolName,
+  isAggregatedToolName,
   createUniversalToolExecutor,
+  AGGREGATED_TOOL_DEFS,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,

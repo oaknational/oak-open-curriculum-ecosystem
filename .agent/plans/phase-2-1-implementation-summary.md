@@ -330,3 +330,4 @@ Zero regressions.
 - **OpenAI Auth Docs**: Referenced in code comments
 - **Testing Strategy**: `docs/agent-guidance/testing-strategy.md`
 - **Schema-First Execution**: `.agent/directives-and-memory/schema-first-execution.md`
+

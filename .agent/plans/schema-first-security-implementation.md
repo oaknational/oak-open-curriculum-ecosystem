@@ -1,32 +1,114 @@
 # MCP OAuth Security Implementation Plan
 
-**Status**: Phase 2 Sub-Phase 2.1 Complete - Ready for Sub-Phase 2.2  
+**Status**: Phase 2 Sub-Phase 2.3 Complete - Ready for Sub-Phase 2.4  
 **Date**: 2024-11-20  
-**Last Updated**: 2025-11-21  
+**Last Updated**: 2025-11-22  
 **Phase 0 Decision**: ✅ PROCEED (Clerk verified compatible)
 
 ---
 
 ## 🎯 CURRENT STATUS - START HERE
 
-**Date**: 2025-11-21  
+**Date**: 2025-11-22  
 **Phase 1**: ✅ **COMPLETE** (Generator - Policy-Driven Security Metadata)  
 **Phase 2**: 🔄 **IN PROGRESS** (Runtime - Method-Aware MCP Routing)
 
 - Sub-Phase 2.1: ✅ **COMPLETE** (Security Metadata Integration - Both Parts)
 - Sub-Phase 2.2: ✅ **COMPLETE** (MCP Method Classification - Pure Functions)
-- Sub-Phase 2.3: ⏳ **READY TO START** (Auth Decision Logic)  
+- Sub-Phase 2.3: ✅ **COMPLETE** (Auth Decision Logic - Pure Function Reading Tool Metadata)
+- Sub-Phase 2.4: ⏳ **READY TO START** (Middleware Integration)  
   **Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
 
 ### Resume Point
 
-**➡️ BEGIN AT: Phase 2, Sub-Phase 2.3** - Auth Decision Logic (Pure Function Reading Tool Metadata)
+**➡️ BEGIN AT: Phase 2, Sub-Phase 2.4** - Middleware Integration (Wire Auth Logic into Request Flow)
 
 ### What Just Completed (Most Recent)
 
-**Sub-Phase 2.2: MCP Method Classification** ✅ COMPLETE (2025-11-21)
+**Sub-Phase 2.3: Auth Decision Logic** ✅ COMPLETE (2025-11-22)
 
-This sub-phase created pure functions to classify MCP protocol methods as "discovery" (no auth required) or "execution" (auth checks needed). Followed strict TDD (Red-Green-Refactor).
+This sub-phase created a pure function `toolRequiresAuth()` that reads security metadata from generated tool descriptors to determine if a specific tool requires OAuth authentication. Followed strict TDD (Red-Green-Refactor).
+
+#### Implementation Details
+
+1. **Unit Tests Created** (Red Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.unit.test.ts`
+   - 9 comprehensive tests covering:
+     - Generated OAuth-protected tools (`get-lessons-summary`, `get-units-summary`, `get-key-stages`)
+     - Generated public tools (`get-changelog`, `get-changelog-latest`, `get-rate-limit`)
+     - Aggregated OAuth-protected tools (`search`, `fetch`)
+     - Type safety with `UniversalToolName`
+   - Tests initially failed as expected (Red phase confirmed)
+
+2. **Implementation File Created** (Green Phase) ✅
+   - File: `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts`
+   - Function: `toolRequiresAuth(toolName: UniversalToolName): boolean`
+   - Pure function with simple ternary dispatch
+   - Reads from `AGGREGATED_TOOL_DEFS` for aggregated tools
+   - Reads from `getToolFromToolName()` for generated tools
+   - Returns `true` if any `securityScheme` is `oauth2`
+   - No side effects, no I/O, deterministic output
+   - Comprehensive TSDoc documentation with examples
+   - All tests pass (Green phase confirmed)
+
+3. **SDK Exports Updated** ✅
+   - File: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts`
+   - Exported `AGGREGATED_TOOL_DEFS` (was internal constant)
+   - Exported `isAggregatedToolName()` type guard (was internal function)
+   - Changes flow through `src/public/mcp-tools.ts` and `src/index.ts`
+
+4. **Refactor Phase** ✅
+   - Simplified logic based on TypeScript type analysis
+   - Removed unnecessary conditionals (lint feedback)
+   - Type system proved `schemes` is always defined and non-empty
+   - Final implementation is 4 lines of pure logic
+   - No code smells or complexity issues
+
+#### Quality Results
+
+- ✅ All quality gates passed: format → type-check → lint → test → build
+- ✅ **186/186 tests passing** (9 new + 177 existing, zero regressions)
+- ✅ Zero regressions across entire monorepo
+- ✅ All 9 packages build successfully
+
+#### Key Architectural Points
+
+**Schema-First Compliance**: ✅ PERFECT
+- Function only READS metadata, never computes policy
+- Policy defined at type-gen time in `type-gen/mcp-security-policy.ts`
+- Security metadata flows from generated descriptors
+- Aggregated tools have explicit metadata in `universal-tools.ts`
+- If OpenAPI schema changes → `pnpm type-gen` → function continues working
+
+**Type-Driven Development**: ✅ EXEMPLARY
+- TypeScript's type narrowing guided implementation
+- Lint errors about "unnecessary conditionals" were valuable feedback
+- Type system proved all tools have security metadata
+- Final code is simpler because we listened to the compiler
+
+**Pure Function Design**: ✅ TEXTBOOK
+- Zero side effects
+- No I/O operations
+- Deterministic output
+- Single responsibility
+- 4 lines of implementation logic
+
+#### Files Changed
+
+**New Files**:
+- `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts` (implementation)
+- `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.unit.test.ts` (9 tests)
+
+**Modified Files**:
+- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` (exported constants/functions)
+- `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` (re-export)
+- `packages/sdks/oak-curriculum-sdk/src/index.ts` (public API)
+
+---
+
+### Previously Completed
+
+**Sub-Phase 2.2: MCP Method Classification** ✅ COMPLETE (2025-11-21)
 
 #### Implementation Details
 
@@ -1733,19 +1815,21 @@ export function isDiscoveryMethod(method: string): boolean {
 
 ### Sub-Phase 2.3: Auth Decision Logic (Pure Function Reading Tool Metadata)
 
-**Status**: ⏳ NOT STARTED  
+**Status**: ✅ COMPLETE (2025-11-22)  
 **Goal**: Create pure function that decides whether authentication is required by reading security metadata directly from generated tool descriptors.  
-**TDD**: Tests first, then implementation.
+**TDD**: Tests first, then implementation. ✅
 
-**Prerequisites**:
+**Implementation Summary**:
 
-- Sub-Phase 2.2 complete (method classification functions available)
-- Tool descriptors include `securitySchemes` field (from Sub-Phase 2.1)
-- `getToolFromToolName` available from SDK to lookup tool metadata
+Created `toolRequiresAuth(toolName: UniversalToolName): boolean` pure function that:
+- Reads security metadata from generated tool descriptors
+- Handles both generated tools and aggregated tools (`search`, `fetch`)
+- Returns `true` if any `securityScheme` is `oauth2`, `false` otherwise
+- 9 comprehensive tests, all passing
+- Zero regressions (186/186 tests passing)
+- Strict TDD: Red → Green → Refactor
 
-**Context for New Session**: This sub-phase builds on 2.2's classification logic. Now we add the logic to check a specific tool's security requirements. For `tools/call` requests, we lookup the tool descriptor and check its `securitySchemes` field to determine if OAuth is required.
-
-**Key Insight**: We don't need a separate "resolver" function. Just read `descriptor.securitySchemes` directly from the generated tool descriptor.
+See "What Just Completed" section above for full details.
 
 #### Tasks
 
