@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { SecurityScheme } from '@oaknational/oak-curriculum-sdk';
-import { registerHandlers } from './handlers.js';
+import { registerHandlers, type ToolRegistrationServer } from './handlers.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 import { createHttpLogger } from './logging/index.js';
 
@@ -35,9 +34,9 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for protected generated tool', () => {
-    const mockServer = {
+    const mockServer: ToolRegistrationServer = {
       registerTool: vi.fn(),
-    } as unknown as McpServer;
+    };
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -56,9 +55,9 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes noauth securitySchemes for public generated tool', () => {
-    const mockServer = {
+    const mockServer: ToolRegistrationServer = {
       registerTool: vi.fn(),
-    } as unknown as McpServer;
+    };
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -77,9 +76,9 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for aggregated search tool', () => {
-    const mockServer = {
+    const mockServer: ToolRegistrationServer = {
       registerTool: vi.fn(),
-    } as unknown as McpServer;
+    };
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -98,9 +97,9 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for aggregated fetch tool', () => {
-    const mockServer = {
+    const mockServer: ToolRegistrationServer = {
       registerTool: vi.fn(),
-    } as unknown as McpServer;
+    };
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -119,9 +118,9 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('registers all tools with security metadata', () => {
-    const mockServer = {
+    const mockServer: ToolRegistrationServer = {
       registerTool: vi.fn(),
-    } as unknown as McpServer;
+    };
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });

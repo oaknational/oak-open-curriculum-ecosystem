@@ -7,6 +7,8 @@
  * Part of Phase 2, Sub-Phase 2.7
  */
 
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
 /**
  * Types of authentication errors per RFC 6750 (OAuth 2.0 Bearer Token Usage)
  */
@@ -21,12 +23,15 @@ export type AuthErrorType =
  *
  * Per OpenAI documentation, includes `_meta["mcp/www_authenticate"]` array
  * to signal that OAuth is available and trigger ChatGPT's "Connect" UI.
+ *
+ * Extends CallToolResult to preserve type information and ensure compatibility
+ * with MCP SDK expectations.
  */
-export interface AuthErrorResponse {
-  readonly content: readonly { readonly type: 'text'; readonly text: string }[];
-  readonly isError: true;
-  readonly _meta: {
-    readonly 'mcp/www_authenticate': readonly string[];
+export interface AuthErrorResponse extends CallToolResult {
+  content: { type: 'text'; text: string }[];
+  isError: true;
+  _meta: {
+    'mcp/www_authenticate': string[];
   };
 }
 

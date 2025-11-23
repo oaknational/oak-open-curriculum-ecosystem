@@ -30,6 +30,7 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly runtimeConfig?: RuntimeConfig;
   readonly logger?: Logger;
+  readonly resourceUrl?: string;
 }
 
 let appCounter = 0;
@@ -140,6 +141,7 @@ function initializeCoreEndpoints(
     overrides: options?.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
+    resourceUrl: options?.resourceUrl,
   });
   log.debug('bootstrap.mcp.transport.connect.start');
   const connectionTimer = startTimer();

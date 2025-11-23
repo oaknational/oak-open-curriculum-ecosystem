@@ -58,6 +58,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging](051-opentelemetry-compliant-logging.md) ← **Supersedes ADR-017**
 - [ADR-052: OAuth 2.1 for MCP HTTP Server Authentication](052-oauth-2.1-for-mcp-http-authentication.md)
 - [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md)
+- [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 
 ## Key Architectural Decisions
 

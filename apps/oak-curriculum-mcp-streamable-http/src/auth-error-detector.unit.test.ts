@@ -29,8 +29,12 @@ describe('hasStatus401', () => {
 
   it('returns false for other status codes', () => {
     expect(hasStatus401({ status: 500 })).toBe(false);
-    expect(hasStatus401({ status: 403 })).toBe(false);
     expect(hasStatus401({ statusCode: 500 })).toBe(false);
+  });
+
+  it('returns true for 403 status code (Forbidden)', () => {
+    expect(hasStatus401({ status: 403 })).toBe(true);
+    expect(hasStatus401({ statusCode: 403 })).toBe(true);
   });
 
   it('returns false for non-objects', () => {
@@ -99,9 +103,9 @@ describe('isAuthError', () => {
     expect(isAuthError(error)).toBe(false);
   });
 
-  it('returns false for errors with 403 status code', () => {
+  it('returns true for errors with 403 status code', () => {
     const error = { status: 403, message: 'Forbidden' };
-    expect(isAuthError(error)).toBe(false);
+    expect(isAuthError(error)).toBe(true);
   });
 
   it('returns false for non-error values', () => {

@@ -9,12 +9,13 @@
 import type { AuthErrorType } from './auth-error-response.js';
 
 /**
- * Checks if error has HTTP 401 status code.
+ * Checks if error has HTTP 401 or 403 status code.
  *
- * Pure function that detects 401 status in various property formats.
+ * Pure function that detects auth-related HTTP status codes.
+ * 401 = Unauthorized, 403 = Forbidden
  *
  * @param error - Unknown error value
- * @returns true if error has 401 status, false otherwise
+ * @returns true if error has 401 or 403 status, false otherwise
  *
  * @public
  */
@@ -23,15 +24,10 @@ export function hasStatus401(error: unknown): boolean {
     return false;
   }
 
-  if ('status' in error && error.status === 401) {
-    return true;
-  }
+  const statusValue =
+    ('status' in error ? error.status : null) ?? ('statusCode' in error ? error.statusCode : null);
 
-  if ('statusCode' in error && error.statusCode === 401) {
-    return true;
-  }
-
-  return false;
+  return statusValue === 401 || statusValue === 403;
 }
 
 /**
@@ -101,37 +97,63 @@ export function isAuthError(error: unknown): boolean {
  *
  * @public
  */
-export function getAuthErrorType(error: unknown): AuthErrorType {
-  // Extract message for pattern matching
-  const message = getErrorMessage(error);
-  const lowerMessage = message.toLowerCase();
+/**
+ * Checks if error has HTTP 403 status (Forbidden).
+ *
+ * Pure function helper for error type classification.
+ *
+ * @param error - Unknown error value
+ * @returns true if error has 403 status, false otherwise
+ */
+function hasStatus403(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) {
+    return false;
+  }
+  const status =
+    ('status' in error ? error.status : null) ?? ('statusCode' in error ? error.statusCode : null);
+  return status === 403;
+}
 
-  // Check for expired token
-  if (lowerMessage.includes('expired')) {
+/**
+ * Classifies auth error by message content.
+ *
+ * Pure function helper for error type classification based on message patterns.
+ *
+ * @param message - Error message (lowercase)
+ * @returns Auth error type or undefined if no pattern matches
+ */
+function classifyByMessage(message: string): AuthErrorType | undefined {
+  if (message.includes('expired')) {
     return 'token_expired';
   }
-
-  // Check for scope errors
-  if (lowerMessage.includes('scope')) {
+  if (message.includes('scope')) {
     return 'insufficient_scope';
   }
-
-  // Check for missing token/authorization
   if (
-    lowerMessage.includes('no authorization') ||
-    lowerMessage.includes('missing authorization') ||
-    lowerMessage.includes('authorization header')
+    message.includes('no authorization') ||
+    message.includes('missing authorization') ||
+    message.includes('authorization header')
   ) {
     return 'missing_token';
   }
-
-  // Check for invalid/malformed token
-  if (lowerMessage.includes('invalid') || lowerMessage.includes('malformed')) {
+  if (message.includes('invalid') || message.includes('malformed')) {
     return 'invalid_token';
   }
+  return undefined;
+}
 
-  // Safe default: invalid_token
-  return 'invalid_token';
+export function getAuthErrorType(error: unknown): AuthErrorType {
+  // Per RFC 6750: 403 indicates insufficient_scope
+  if (hasStatus403(error)) {
+    return 'insufficient_scope';
+  }
+
+  // Extract message for pattern matching
+  const message = getErrorMessage(error);
+  const messageType = classifyByMessage(message.toLowerCase());
+
+  // Return message-based classification or safe default
+  return messageType ?? 'invalid_token';
 }
 
 /**
