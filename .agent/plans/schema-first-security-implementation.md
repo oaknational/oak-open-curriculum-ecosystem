@@ -16,12 +16,15 @@
 - Sub-Phase 2.1: ✅ **COMPLETE** (Security Metadata Integration - Both Parts)
 - Sub-Phase 2.2: ✅ **COMPLETE** (MCP Method Classification - Pure Functions)
 - Sub-Phase 2.3: ✅ **COMPLETE** (Auth Decision Logic - Pure Function Reading Tool Metadata)
-- Sub-Phase 2.4: ⏳ **READY TO START** (Middleware Integration)  
+- Sub-Phase 2.4: ✅ **COMPLETE** (Middleware Integration and Wiring)
+- Sub-Phase 2.5: ✅ **COMPLETE** (Application-Level E2E Tests)
+- Sub-Phase 2.6: ✅ **COMPLETE** (Protected Resource Metadata Uses Generated Scopes)
+- Sub-Phase 2.7: ⏳ **IN PROGRESS** (Tool-Level Auth Error Handling)  
   **Phase 3**: ⏳ **NOT STARTED** (Validation - Real-World Client Testing)
 
 ### Resume Point
 
-**➡️ BEGIN AT: Phase 2, Sub-Phase 2.4** - Middleware Integration (Wire Auth Logic into Request Flow)
+**➡️ BEGIN AT: Phase 2, Sub-Phase 2.7** - Tool-Level Auth Error Handling and `_meta` Emission
 
 ### What Just Completed (Most Recent)
 
@@ -2174,7 +2177,10 @@ function setupMcpRoutes(app: Express, config: RuntimeConfig, ...) {
 
 ### Sub-Phase 2.6: Update Protected Resource Metadata Endpoint
 
+**Status**: ✅ **COMPLETE** (2025-11-22)  
 **Goal**: Modify protected resource metadata endpoint to use generated scopes from tool descriptors.
+
+**Note**: This sub-phase was already complete. The OAuth metadata endpoint in `auth-routes.ts:71` already uses the generated `SCOPES_SUPPORTED` constant from the SDK, which is derived from the security policy at type-gen time. Integration tests in `auth-routes.integration.test.ts` verify this behavior.
 
 #### Tasks
 
@@ -2217,17 +2223,24 @@ app.get('/.well-known/oauth-protected-resource', (req, res) => {
 
 #### Acceptance Criteria
 
-- [ ] Protected resource metadata uses generated scopes
-- [ ] Scopes reflect actual tool requirements
-- [ ] Tests prove metadata generation works
-- [ ] Quality gates pass
+- [x] Protected resource metadata uses generated scopes ✅
+- [x] Scopes reflect actual tool requirements ✅
+- [x] Tests prove metadata generation works ✅ (`auth-routes.integration.test.ts`)
+- [x] Quality gates pass ✅
 
 #### Definition of Done
 
-- All tasks completed
-- All acceptance criteria met
-- Protected resource metadata is generated, not hard-coded
-- Committed with message: "feat: generate protected resource metadata from tool descriptors"
+- [x] All tasks completed ✅
+- [x] All acceptance criteria met ✅
+- [x] Protected resource metadata is generated, not hard-coded ✅ (uses `SCOPES_SUPPORTED`)
+- [x] Already committed in earlier work ✅
+
+**Evidence**:
+
+- File: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts:71`
+- Imports: `SCOPES_SUPPORTED` from `@oaknational/oak-curriculum-sdk`
+- Usage: `scopes_supported: [...SCOPES_SUPPORTED]`
+- Tests: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts` (6 tests passing)
 
 ---
 

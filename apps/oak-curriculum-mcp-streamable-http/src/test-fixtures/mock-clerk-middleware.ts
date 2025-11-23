@@ -49,10 +49,7 @@ export function createMockClerkMiddleware(
     const token = authHeader.replace(/^Bearer\s+/i, '');
     if (validTokens.includes(token)) {
       // Simulate authenticated state with AuthInfo structure that mcpAuthClerk expects
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
-      const reqWithAuth = req as {
-        auth?: { token: string; clientId: string; scopes: string[]; extra?: unknown };
-      };
+      const reqWithAuth = req;
       reqWithAuth.auth = {
         token,
         clientId: `client-${token}`,
@@ -74,11 +71,11 @@ export function createMockClerkMiddleware(
 export function createMockMcpAuthClerk(): RequestHandler {
   return (req, res, next) => {
     // Check if req.auth is present (AuthInfo from MCP SDK)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
-    const reqWithAuth = req as { auth?: { token?: string; clientId?: string; scopes?: string[] } };
+    const reqWithAuth = req;
     const auth = reqWithAuth.auth;
 
     // AuthInfo requires token, clientId, and scopes - if any are missing, reject
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- JC: Allowing runtime safety check
     if (!(auth?.token && auth.clientId && auth.scopes)) {
       res.setHeader(
         'WWW-Authenticate',

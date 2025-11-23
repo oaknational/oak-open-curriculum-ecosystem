@@ -10,7 +10,7 @@
 import type { RequestHandler } from 'express';
 import { isDiscoveryMethod } from './mcp-method-classifier.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
-import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk';
+import { isUniversalToolName, type UniversalToolName } from '@oaknational/oak-curriculum-sdk';
 
 /**
  * Configuration options for MCP router.
@@ -71,10 +71,10 @@ function getMethodFromRequest(req: { body?: unknown; query?: unknown }): string 
  */
 function getToolNameFromBody(body: unknown): UniversalToolName | undefined {
   if (hasParams(body) && hasName(body.params) && typeof body.params.name === 'string') {
-    // Type assertion justified: UniversalToolName is a generated type without runtime validator
-    // Invalid names will be caught by toolRequiresAuth()
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return body.params.name as UniversalToolName;
+    const maybeToolName = body.params.name;
+    if (isUniversalToolName(maybeToolName)) {
+      return maybeToolName;
+    }
   }
   return undefined;
 }
