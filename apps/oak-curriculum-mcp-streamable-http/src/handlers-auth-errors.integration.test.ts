@@ -93,11 +93,12 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       assertAuthErrorResponse(result, /Bearer.*error="invalid_token"/);
-      assertAuthErrorLogged(mockLogger, 'get-key-stages', 'invalid_token', 'Unauthorized');
+      assertAuthErrorLogged(mockLogger, 'get-changelog', 'invalid_token', 'Unauthorized');
     });
 
     it('should emit _meta on Oak API 403 error', async () => {
@@ -107,7 +108,8 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).toHaveProperty('isError', true);
@@ -120,7 +122,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
         /Bearer.*error="insufficient_scope"/,
       );
 
-      assertAuthErrorLogged(mockLogger, 'get-key-stages', 'insufficient_scope');
+      assertAuthErrorLogged(mockLogger, 'get-changelog', 'insufficient_scope');
     });
 
     it('should emit _meta on Clerk token verification failure', async () => {
@@ -130,7 +132,8 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      // Use public tool (get-changelog) to bypass MCP client auth and test upstream API auth
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).toHaveProperty('isError', true);
@@ -149,10 +152,10 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
 
-      assertAuthErrorLogged(mockLogger, 'get-key-stages', 'token_expired');
+      assertAuthErrorLogged(mockLogger, 'get-changelog', 'token_expired');
     });
   });
 
@@ -164,7 +167,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).toHaveProperty('content');
@@ -182,7 +185,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).toHaveProperty('isError', true);
@@ -195,7 +198,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       const metaResult = result as { _meta?: { 'mcp/www_authenticate'?: string[] } };
@@ -220,7 +223,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
 
       expect(mockLogger.warn).toHaveBeenCalled();
@@ -229,7 +232,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const [message, context] = warnCalls[0];
       expect(message).toBe('Tool execution auth error');
       const logContext = context as { toolName: string; errorType: string };
-      expect(logContext.toolName).toBe('get-key-stages');
+      expect(logContext.toolName).toBe('get-changelog');
       expect(typeof logContext.errorType).toBe('string');
     });
 
@@ -240,10 +243,10 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
 
-      assertAuthErrorLogged(mockLogger, 'get-key-stages', 'invalid_token');
+      assertAuthErrorLogged(mockLogger, 'get-changelog', 'invalid_token');
     });
 
     it('should log with description context', async () => {
@@ -253,7 +256,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       await handler({});
 
       expect(mockLogger.warn).toHaveBeenCalled();
@@ -262,7 +265,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const [message, context] = warnCalls[0];
       expect(message).toBe('Tool execution auth error');
       const logContext = context as { toolName: string; errorType: string; description: string };
-      expect(logContext.toolName).toBe('get-key-stages');
+      expect(logContext.toolName).toBe('get-changelog');
       expect(typeof logContext.errorType).toBe('string');
       expect(logContext.description).toContain('Custom auth error');
     });
@@ -276,7 +279,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).not.toHaveProperty('_meta');
@@ -293,7 +296,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
 
       registerHandlers(mockServer, { runtimeConfig, logger: mockLogger, overrides });
 
-      const handler = getHandler(capturedHandlers, 'get-key-stages');
+      const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
       expect(result).not.toHaveProperty('_meta');

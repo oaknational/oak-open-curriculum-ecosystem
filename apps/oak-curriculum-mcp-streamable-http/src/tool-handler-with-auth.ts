@@ -17,6 +17,7 @@ import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-e
 import { createAuthErrorResponse } from './auth-error-response.js';
 import type { ToolHandlerDependencies } from './handlers.js';
 import { logValidationFailureIfPresent } from './validation-logger.js';
+import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 /**
  * Handles tool execution with authentication error interception.
@@ -43,6 +44,15 @@ export async function handleToolWithAuthInterception(
   logger: Logger,
   apiKey: string,
 ): Promise<CallToolResult> {
+  // Preventive MCP client auth checking (BEFORE SDK execution)
+  // This is MCP OAuth (ChatGPT → us), NOT upstream API auth (us → Oak API)
+  const authError = checkMcpClientAuth(tool.name, deps.getResourceUrl(), logger);
+  if (authError) {
+    return authError;
+  }
+
+  // EXISTING: Upstream API auth error interception (AFTER SDK execution)
+  // This is ADR-054 - we do NOT modify this
   const client = deps.createClient(apiKey);
 
   // Closure variable to capture auth errors from ToolExecutionResult callback

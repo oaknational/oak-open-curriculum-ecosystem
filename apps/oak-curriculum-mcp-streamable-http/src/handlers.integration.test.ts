@@ -16,6 +16,20 @@ interface TestToolConfig {
 }
 
 /**
+ * Creates a test double for McpServer that only implements registerTool.
+ * This is a minimal fake for testing - we only test tool registration behavior,
+ * not the full McpServer implementation.
+ *
+ * @returns Test double that can be passed to registerHandlers
+ */
+function createTestServerDouble(): ToolRegistrationServer {
+  // Test double: minimal implementation for testing purposes only
+  return {
+    registerTool: vi.fn(),
+  } as unknown as ToolRegistrationServer;
+}
+
+/**
  * Integration tests for tool registration with security metadata.
  *
  * These tests prove that security metadata flows from generated tool descriptors
@@ -34,9 +48,7 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for protected generated tool', () => {
-    const mockServer: ToolRegistrationServer = {
-      registerTool: vi.fn(),
-    };
+    const mockServer = createTestServerDouble();
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -45,7 +57,7 @@ describe('registerHandlers - security metadata integration', () => {
 
     // Find call for a protected tool (get-key-stages is in generated tools, NOT in PUBLIC_TOOLS)
     const calls = vi.mocked(mockServer.registerTool).mock.calls;
-    const keyStagesCall = calls.find((call) => call[0] === 'get-key-stages');
+    const keyStagesCall = calls.find((call: readonly unknown[]) => call[0] === 'get-key-stages');
 
     expect(keyStagesCall).toBeDefined();
     const config = keyStagesCall?.[1] as TestToolConfig;
@@ -55,9 +67,7 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes noauth securitySchemes for public generated tool', () => {
-    const mockServer: ToolRegistrationServer = {
-      registerTool: vi.fn(),
-    };
+    const mockServer = createTestServerDouble();
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -66,7 +76,7 @@ describe('registerHandlers - security metadata integration', () => {
 
     // Find call for a public tool (get-changelog is in PUBLIC_TOOLS)
     const calls = vi.mocked(mockServer.registerTool).mock.calls;
-    const changelogCall = calls.find((call) => call[0] === 'get-changelog');
+    const changelogCall = calls.find((call: readonly unknown[]) => call[0] === 'get-changelog');
 
     expect(changelogCall).toBeDefined();
     const config = changelogCall?.[1] as TestToolConfig;
@@ -76,9 +86,7 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for aggregated search tool', () => {
-    const mockServer: ToolRegistrationServer = {
-      registerTool: vi.fn(),
-    };
+    const mockServer = createTestServerDouble();
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -87,7 +95,7 @@ describe('registerHandlers - security metadata integration', () => {
 
     // Find call for aggregated search tool
     const calls = vi.mocked(mockServer.registerTool).mock.calls;
-    const searchCall = calls.find((call) => call[0] === 'search');
+    const searchCall = calls.find((call: readonly unknown[]) => call[0] === 'search');
 
     expect(searchCall).toBeDefined();
     const config = searchCall?.[1] as TestToolConfig;
@@ -97,9 +105,7 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('passes oauth2 securitySchemes for aggregated fetch tool', () => {
-    const mockServer: ToolRegistrationServer = {
-      registerTool: vi.fn(),
-    };
+    const mockServer = createTestServerDouble();
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -108,7 +114,7 @@ describe('registerHandlers - security metadata integration', () => {
 
     // Find call for aggregated fetch tool
     const calls = vi.mocked(mockServer.registerTool).mock.calls;
-    const fetchCall = calls.find((call) => call[0] === 'fetch');
+    const fetchCall = calls.find((call: readonly unknown[]) => call[0] === 'fetch');
 
     expect(fetchCall).toBeDefined();
     const config = fetchCall?.[1] as TestToolConfig;
@@ -118,9 +124,7 @@ describe('registerHandlers - security metadata integration', () => {
   });
 
   it('registers all tools with security metadata', () => {
-    const mockServer: ToolRegistrationServer = {
-      registerTool: vi.fn(),
-    };
+    const mockServer = createTestServerDouble();
 
     const runtimeConfig = loadRuntimeConfig();
     const logger = createHttpLogger(runtimeConfig, { name: 'test' });
@@ -132,7 +136,7 @@ describe('registerHandlers - security metadata integration', () => {
     // Verify all registered tools have securitySchemes
     expect(calls.length).toBeGreaterThan(0);
 
-    calls.forEach((call) => {
+    calls.forEach((call: readonly unknown[]) => {
       const config = call[1] as TestToolConfig;
 
       expect(config).toHaveProperty('securitySchemes');

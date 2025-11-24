@@ -14,5 +14,7 @@
  * @module auth/mcp-auth
  */
 
-export { mcpAuthClerk } from './mcp-auth-clerk.js';
-export type { AuthInfo } from './types.js';
+export { createAuthLogContext } from './auth-response-helpers.js';
+export { verifyClerkToken } from './verify-clerk-token.js';
+export type { AuthInfo, MachineAuthObject } from './types.js';
+export type { AuthLogContext } from './auth-response-helpers.js';

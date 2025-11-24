@@ -76,11 +76,12 @@ export function createMockServer(
   // Create mock using vi.fn() for call tracking
   const mockRegisterTool = vi.fn(mockRegisterToolImpl);
 
-  // Return a properly typed mock server
-  const mockServer: ToolRegistrationServer = {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridge between vi.fn() mock and MCP SDK library type
+  // Return a properly typed mock server (test double)
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Test double with minimal implementation for testing
+  const mockServer = {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
     registerTool: mockRegisterTool as ToolRegistrationServer['registerTool'],
-  };
+  } as unknown as ToolRegistrationServer;
   return mockServer;
 }
 

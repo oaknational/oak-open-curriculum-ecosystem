@@ -6,7 +6,8 @@ export type AuthSetupStep =
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'
   | 'registerPublicOAuthMetadata'
-  | 'mcp.auth.register';
+  | 'mcp.auth.register'
+  | 'mcp.routes.register';
 
 /**
  * Measures an authentication setup step and emits start/finish/error logs with duration metrics.

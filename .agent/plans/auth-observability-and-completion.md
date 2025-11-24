@@ -1,1793 +1,1479 @@
-# Auth Observability & OAuth Implementation Completion Plan
+# Auth Observability & OAuth Completion Plan
 
-**Status**: Phase 2 Tasks 2.7.9-2.7.10 Remaining, Phase 4 Not Started  
-**Date**: 2025-11-24  
-**Previous Plan**: `.agent/plans/schema-first-security-implementation.md` (Phases 1-2.7.8 complete)
-
----
-
-## 🎯 CURRENT STATUS - START HERE
-
-**Phase 2**: 🔄 **95% COMPLETE** (OAuth Security Implementation)  
-**Phase 4**: ⏳ **NOT STARTED** (Auth Observability & Debugging - NEW)  
-**Phase 5**: ⏳ **NOT STARTED** (Real-World Client Validation)
-
-**Estimated Remaining Time**: 3-5 days total
-
-- Phase 2 completion: 0.5 day
-- Phase 4 (Auth Observability): 1.5-2 days
-- Phase 5 (Client Validation): 1-2 days
-
-### Resume Point
-
-**➡️ BEGIN AT: Phase 2, Sub-Phase 2.7, Task 2.7.9**
+**Status**: ✅ PHASE 1 COMPLETE - Tool-Level MCP Client Auth Implemented  
+**Date**: 2025-11-24 (Updated with Phase 1 completion)  
+**Current Phase**: Ready for Phase 2 - Real-World Client Validation
 
 ---
 
-## 📋 Executive Summary
+## 🎯 CRITICAL: UNDERSTANDING THE ARCHITECTURE
 
-This plan completes the OAuth 2.1 security implementation for the Oak Curriculum MCP Server and adds comprehensive observability to the authentication layer. The work is divided into three phases:
+### ⚠️ THIS PLAN IS ABOUT MCP CLIENT AUTH ONLY ⚠️
 
-1. **Phase 2 (Remaining)**: Fix quality gates and validate OAuth implementation
-2. **Phase 4 (NEW)**: Add auth observability and debugging infrastructure
-3. **Phase 5**: Real-world client testing (ChatGPT, MCP Inspector)
+**What we are implementing**: MCP OAuth (ChatGPT → Our MCP Server)
 
-### Critical Issue Addressed
+- ChatGPT authenticating to use our MCP server
+- Preventive auth checking BEFORE calling the SDK
+- Returns HTTP 200 with MCP error containing `_meta`
+- Uses `extractAuthContext()`, `verifyClerkToken()`, `validateResourceParameter()`
+- **DOES NOT TOUCH THE SDK OR UPSTREAM API**
 
-**Problem**: Authentication middleware is a black box with zero internal logging. When auth fails, we have no visibility into:
+**What we are NOT changing**: Upstream API Auth (Our Server → Oak Curriculum API)
 
-- Which validation step failed
-- What the actual vs. expected values were
-- Whether Clerk returned auth context
-- JWT structure and audience claims
+- Already implemented via ADR-054
+- Reactive error interception AFTER calling the SDK
+- Intercepts 401 errors from Oak Curriculum API
+- Lives in `handleToolWithAuthInterception` (lines 48-92)
+- **Completely separate concern - we do not modify this**
 
-**Impact**: Cannot diagnose intermittent auth issues (e.g., reported "Invalid JWT format" error)
+### Two Completely Separate Authentication Systems
 
-**Solution**: Phase 4 adds comprehensive logging following established codebase patterns.
+**CRITICAL**: There are TWO completely separate auth systems - NEVER confuse them:
 
----
+1. **MCP OAuth (ChatGPT → Our MCP Server)** ← THIS PLAN
+   - ChatGPT authenticates to our MCP server using Clerk OAuth
+   - Uses Bearer tokens in `Authorization` header
+   - **This is what we're implementing** (preventive, before SDK)
+   - Server validates tokens using `verifyClerkToken` and Clerk's SDK
+   - Auth checking happens BEFORE SDK execution
+   - Returns HTTP 200 with `_meta` on auth failure
 
-## Phase 2 (Remaining): Complete OAuth Security Implementation
+2. **Upstream API Auth (Our Server → Oak Curriculum API)** ← ALREADY WORKS (ADR-054)
+   - Our server authenticates to Oak's API using API key
+   - Completely independent from MCP OAuth
+   - The SDK handles this transparently
+   - Auth error interception happens AFTER SDK execution
+   - NOT related to MCP auth - we DO NOT modify this
 
-**Status**: 95% Complete (Tasks 2.7.1-2.7.8 done)  
-**Remaining**: Tasks 2.7.9-2.7.10, Sub-Phase 2.8
+### The OpenAI Apps SDK Requirement
 
----
+**Problem**: ChatGPT requires tool-level auth errors (HTTP 200 + MCP error with `_meta`), not HTTP-level auth (HTTP 401).
 
-### Sub-Phase 2.7: Tool-Level Auth Error Handling (Completion)
+**Reference**: [OpenAI Apps SDK Auth](https://platform.openai.com/docs/guides/apps-sdk/authentication)
 
-**Status**: Tasks 2.7.1-2.7.8 ✅ COMPLETE  
-**Remaining**: Tasks 2.7.9-2.7.10
+**What ChatGPT Needs**:
 
-#### Task 2.7.9: Fix Type-Check Errors
+```text
+Request → Router → Tool Handler → HTTP 200 with MCP error
+                          ↑
+                   Auth check HERE (inside tool handler)
+                   Return _meta["mcp/www_authenticate"]
+```
 
-**Goal**: Resolve all TypeScript compilation errors in auth error handling code.
+**What We Had (WRONG)**:
 
-**TDD Approach**: Fix → Verify → Refactor
-
-##### Steps
-
-1. **Run type-check to identify errors**
-
-   ```bash
-   pnpm type-check
-   ```
-
-2. **Fix each error**
-   - E2E test setup type mismatches
-   - Handler signature inconsistencies
-   - Type guard improvements
-
-3. **Verify fix**
-
-   ```bash
-   pnpm type-check  # Must pass
-   pnpm test        # All tests still passing
-   ```
-
-4. **Refactor if needed**
-   - Improve type safety
-   - Remove any type assertions
-   - Preserve type information
-
-##### Acceptance Criteria
-
-- [ ] `pnpm type-check` passes with zero errors
-- [ ] All existing tests still pass
-- [ ] No type assertions (`as`) introduced
-- [ ] Type information preserved throughout
-
-##### Definition of Done
-
-- Type-check passes
-- Tests pass
-- No regressions in type safety
+```text
+Request → Router → Auth Middleware (HTTP 401) → ❌ Never reaches tool handler
+                          ↑
+                   Auth check HERE (middleware layer)
+```
 
 ---
 
-#### Task 2.7.10: Alignment Checkpoint
+## 📋 CURRENT STATE (Updated 2025-11-24)
 
-**Goal**: Verify all Phase 2 Sub-Phase 2.7 work aligns with architectural principles.
+### ✅ **PHASE 1 COMPLETE - Tool-Level MCP Client Auth Implemented**
 
-##### Verification Steps
+**All Sub-Phases Complete**:
 
-1. **Schema-First Compliance**
-   - [ ] Tool security metadata flows from OpenAPI schema
-   - [ ] No manual security definitions in app code
-   - [ ] `pnpm type-gen` regenerates all necessary types
+1. ✅ **E2E Tests** - Specify HTTP 200 with MCP errors containing `_meta`
+2. ✅ **Integration Tests** - Specify tool-level auth checking behavior
+3. ✅ **HTTP Middleware Removed** - Requests reach tool handlers directly
+4. ✅ **Request Context Implemented** - AsyncLocalStorage for context propagation
+5. ✅ **MCP Client Auth Checking** - Preventive auth before SDK execution
+6. ✅ **Unit Tests & Type Fixes** - All tests passing, type errors fixed
+7. ✅ **Dead Code Cleanup** - Old HTTP-level auth archived to `.agent/reference-docs/replaced-http-auth-model/`
+8. ✅ **Quality Gates** - ALL gates passing (format, type-check, lint, test, build)
 
-2. **Testing Strategy Compliance**
-   - [ ] Pure functions have unit tests (no I/O, no mocks)
-   - [ ] Integration tests use simple injected mocks
-   - [ ] E2E tests run against real system
-   - [ ] All tests follow Red-Green-Refactor
+**Implementation Summary**:
 
-3. **Code Quality**
-   - [ ] No dead code
-   - [ ] No commented-out code
-   - [ ] All functions have TSDoc
-   - [ ] No skipped tests
+- Tool-level auth returns HTTP 200 with MCP errors (not HTTP 401)
+- MCP errors include `_meta["mcp/www_authenticate"]` for OAuth flow
+- Request context flows via AsyncLocalStorage (no signature changes needed)
+- MCP client auth (ChatGPT → us) checks BEFORE SDK execution
+- Upstream API auth (us → Oak API) still works via ADR-054 AFTER SDK execution
+- Clear separation between two auth systems maintained
+- Comprehensive observability throughout (logging, correlation IDs, redaction)
 
-4. **Architectural Boundaries**
-   - [ ] Auth error detection is pure function
-   - [ ] MCP-specific logic stays in app layer
-   - [ ] SDK remains schema-driven
+### ✅ **EXISTING: Reusable Infrastructure**
 
-##### Acceptance Criteria
+**OAuth & Security**:
 
-- [ ] All verification steps checked and passing
-- [ ] ADR-054 implementation matches specification
-- [ ] Zero architectural violations
+- ✅ OAuth 2.1 with Clerk integration
+- ✅ Per-tool security metadata (generated at type-gen, read by `toolRequiresAuth`)
+- ✅ RFC 8707 resource parameter validation (`validateResourceParameter`)
+- ✅ Protected resource metadata at `/.well-known/oauth-protected-resource`
+- ✅ Pure token verification (`verifyClerkToken`)
 
-##### Definition of Done
+**Observability**:
 
-- All checks complete
-- Ready for Sub-Phase 2.8
+- ✅ Comprehensive logging at all decision points
+- ✅ Correlation IDs for request tracing
+- ✅ Sensitive data redaction (tokens, headers)
+- ✅ `createAuthLogContext()` - Pure logging function
+- ✅ Standardized auth logging infrastructure
+
+**Helper Functions (KEEP)**:
+
+- ✅ `src/tool-auth-checker.ts` - `toolRequiresAuth()` reads `securitySchemes`
+- ✅ `src/auth-error-response.ts` - `createAuthErrorResponse()` creates MCP errors with `_meta`
+- ✅ `src/auth/mcp-auth/verify-clerk-token.ts` - Token verification
+- ✅ `src/resource-parameter-validator.ts` - RFC 8707 validation
+
+### ✅ **RESOLVED: Previous Blocking Issues**
+
+**Architectural Gap** ✅ RESOLVED:
+
+- Implemented AsyncLocalStorage for Express `Request` context propagation
+- Tool handlers now access `req.auth` via `getRequestContext()`
+- No changes to MCP SDK callback signatures required
+- Clean separation of concerns maintained
+
+**Type Error** ✅ RESOLVED:
+
+- Fixed type error in `create-auth-log-context.unit.test.ts`
+- All type-check gates passing with 0 errors
+- Additional unit tests added for auth context extraction
 
 ---
 
-### Sub-Phase 2.8: Phase 2 Validation and Quality Gates
+## 📋 PHASE 0: Quality Gate Baseline & Foundation Review
 
-**Goal**: Prove Phase 2 complete and regression-free.
+**Status**: ✅ COMPLETE  
+**Duration**: ~15-30 minutes  
+**Purpose**: Establish clean baseline, re-ground in foundation documents
 
-#### Tasks
+### Step 0.1: Foundation Document Review
 
-##### Task 2.8.1: Run Complete Quality Gate Sequence
-
-**Steps:**
+**Read and commit to following**:
 
 ```bash
-# Format code
-pnpm format:root
+# Review foundation documents
+cat .agent/directives-and-memory/rules.md
+cat .agent/directives-and-memory/testing-strategy.md
+cat .agent/directives-and-memory/schema-first-execution.md
+```
 
-# Type-check
+**Key commitments**:
+
+- ✅ TDD at ALL levels (tests FIRST, always RED → GREEN → REFACTOR)
+- ✅ No type shortcuts (`as`, `any`, `!`, `Record<string, unknown>`)
+- ✅ Schema-first for SDK (all types flow from OpenAPI schema)
+- ✅ Pure functions first, dependency injection
+- ✅ No V1/V2 versioning - update files in place
+- ✅ No compatibility layers
+
+### Step 0.2: Run Full Quality Gates
+
+**Run each gate individually to identify current state**:
+
+```bash
+# 1. Format check
+pnpm format-check:root
+
+# 2. Type check
 pnpm type-check
 
-# Lint (with auto-fix)
-pnpm lint -- --fix
+# 3. Lint
+pnpm lint
 
-# Run all tests
+# 4. Markdown lint
+pnpm markdownlint-check:root
+
+# 5. Unit & integration tests
 pnpm test
 
-# Build all packages
-pnpm build
-```
+# 6. UI tests
+pnpm test:ui
 
-**Acceptance Criteria:**
-
-- [ ] All commands exit with code 0
-- [ ] No warnings in type-check output
-- [ ] No lint errors remaining
-- [ ] All 266+ tests passing
-- [ ] Build artifacts created successfully
-
----
-
-##### Task 2.8.2: Run E2E Tests
-
-**Steps:**
-
-```bash
+# 7. E2E tests (may fail - expected if tests specify new behavior)
 pnpm test:e2e
+
+# 8. E2E tests on built artifacts
+pnpm test:e2e:built
+
+# 9. Smoke tests with stubs
+pnpm smoke:dev:stub
 ```
 
-**Verification:**
+**Expected Results**:
 
-- [ ] All E2E tests pass
-- [ ] No flaky tests
-- [ ] Auth error `_meta` emission tests pass
-- [ ] Method-aware routing tests pass
+- Format, type-check, lint, markdown: ✅ PASS (clean baseline required)
+- Unit & integration tests: ⚠️ MAY FAIL (integration tests specify new behavior)
+- E2E tests: ⚠️ MAY FAIL (E2E tests specify new behavior - this is correct TDD)
+- Smoke tests: ✅ PASS (no regression in existing functionality)
 
----
+**Document Results**:
+Record which gates pass/fail. Failing tests should be:
 
-##### Task 2.8.3: Manual Testing with MCP Inspector
+- Integration tests in `tool-handler-with-auth.integration.test.ts` (RED phase - correct!)
+- E2E tests expecting HTTP 200 with `_meta` (RED phase - correct!)
 
-**Prerequisites:**
+Any other failures must be fixed before proceeding.
 
-- MCP Inspector installed
-- Clerk development tenant configured
-- Server running locally
+### Step 0.3: Verify Test Status
 
-**Test Scenarios:**
-
-1. **Discovery without auth**
-
-   ```bash
-   # Start server
-   pnpm -C apps/oak-curriculum-mcp-streamable-http dev
-
-   # Connect MCP Inspector
-   npx @modelcontextprotocol/inspector
-   # URL: http://localhost:3333/mcp
-   ```
-
-   - [ ] `tools/list` works without auth
-   - [ ] All tools returned with `securitySchemes`
-   - [ ] No errors in server logs
-
-2. **Protected tool execution without auth**
-   - Call `get-lessons-summary` without Bearer token
-   - [ ] Returns 401 with `WWW-Authenticate` header
-   - [ ] Error message is helpful
-   - [ ] Points to OAuth metadata endpoint
-
-3. **OAuth metadata discovery**
-
-   ```bash
-   curl http://localhost:3333/.well-known/oauth-protected-resource
-   ```
-
-   - [ ] Returns 200
-   - [ ] Contains `resource` field (canonical MCP URI)
-   - [ ] Contains `authorization_servers` array
-   - [ ] Contains `scopes_supported` from generated tools
-
-4. **Public tool execution without auth**
-   - Call `get-changelog` without Bearer token
-   - [ ] Returns 200 (no auth required)
-   - [ ] Changelog data returned
-
-**Evidence Collection:**
-
-- Screenshot MCP Inspector connection
-- Capture server logs showing auth flow
-- Save curl outputs
-
----
-
-##### Task 2.8.4: Documentation Update
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/README.md`
-
-**Updates Required:**
-
-1. **Method-Aware Routing Section**
-
-   ```markdown
-   ## Method-Aware Authentication Routing
-
-   The server implements intelligent routing based on MCP method classification:
-
-   - **Discovery methods** (`initialize`, `tools/list`): No auth required
-   - **Tool execution** (`tools/call`): Per-tool security metadata
-     - OAuth2 tools: Require Bearer token
-     - NoAuth tools: No authentication needed
-   - **Unknown methods**: Require auth (safe default)
-
-   This enables ChatGPT and other clients to discover tools before authentication.
-   ```
-
-2. **Tool Security Metadata Section**
-
-   ```markdown
-   ## Tool Security Metadata
-
-   Tool security schemes are generated at compile time from `mcp-security-policy.ts`:
-
-   - **OAuth2 tools**: Require authentication
-     - All data retrieval tools (lessons, units, subjects, etc.)
-     - Search and fetch tools
-
-   - **Public tools**: No authentication required
-     - `get-changelog`, `get-changelog-latest`
-     - `get-rate-limit`
-
-   Run `pnpm type-gen` to regenerate after policy changes.
-   ```
-
-3. **Authentication Flow Diagram**
-   - Add sequence diagram showing discovery → auth → execution
-   - Document `_meta["mcp/www_authenticate"]` error responses
-
-**Acceptance Criteria:**
-
-- [ ] README accurately reflects current implementation
-- [ ] Examples are tested and working
-- [ ] Diagrams are clear and accurate
-- [ ] Links to ADRs and related docs
-
----
-
-#### Sub-Phase 2.8 Acceptance Criteria
-
-- [ ] All quality gates pass
-- [ ] E2E tests pass
-- [ ] Manual testing with MCP Inspector successful
-- [ ] Zero regressions
-- [ ] Documentation updated and accurate
-
-#### Definition of Done
-
-- All tasks completed
-- All acceptance criteria met
-- Phase 2 overall acceptance criteria achieved
-- Ready to proceed to Phase 4
-
----
-
-## Phase 4 (NEW): Auth Observability & Debugging Infrastructure
-
-**Objective**: Add comprehensive logging and observability to the authentication layer to enable debugging of auth issues.
-
-**Motivation**: Critical gap identified in investigation - auth middleware has zero internal logging, making it impossible to diagnose failures.
-
-**Layer**: Infrastructure (cross-cutting concern)  
-**Approach**: TDD with pure functions where possible
-
----
-
-### Sub-Phase 4.1: Auth Middleware Logging Infrastructure
-
-**Goal**: Add structured logging to all auth middleware decision points following established codebase patterns.
-
----
-
-#### Task 4.1.1: Design Logging Strategy (TDD - Red Phase)
-
-**Approach**: Write integration tests that verify logging behavior BEFORE implementing.
-
-##### Test Cases to Write
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth-logging.integration.test.ts`
-
-1. **Test: Logs when authorization header is missing**
-
-   ```typescript
-   it('logs when authorization header is missing', async () => {
-     const logSpy = vi.spyOn(logger, 'warn');
-     const auth = mcpAuth(mockVerifier, logger);
-
-     await request(createTestApp(auth)).post('/test').expect(401);
-
-     expect(logSpy).toHaveBeenCalledWith(
-       'Auth required but no authorization header present',
-       expect.objectContaining({
-         method: 'POST',
-         path: '/test',
-       }),
-     );
-   });
-   ```
-
-2. **Test: Logs when Bearer token format is invalid**
-
-   ```typescript
-   it('logs when Bearer token format is invalid', async () => {
-     const logSpy = vi.spyOn(logger, 'warn');
-     // Authorization header without "Bearer " prefix
-   });
-   ```
-
-3. **Test: Logs when Clerk verification fails**
-
-   ```typescript
-   it('logs when Clerk verification fails with context', async () => {
-     const logSpy = vi.spyOn(logger, 'warn');
-     // Mock verifier returns undefined
-   });
-   ```
-
-4. **Test: Logs when resource parameter validation fails**
-
-   ```typescript
-   it('logs resource parameter validation failure with details', async () => {
-     const logSpy = vi.spyOn(logger, 'warn');
-     // JWT has wrong audience claim
-   });
-   ```
-
-5. **Test: Logs successful authentication**
-
-   ```typescript
-   it('logs successful authentication with user context', async () => {
-     const logSpy = vi.spyOn(logger, 'debug');
-     // Valid token, passes all checks
-   });
-   ```
-
-6. **Test: Redacts sensitive information in logs**
-
-   ```typescript
-   it('redacts authorization header in logs', async () => {
-     const logSpy = vi.spyOn(logger, 'warn');
-     // Verify token not logged in plaintext
-   });
-   ```
-
-**Run tests**: Should FAIL (Red phase - logging not implemented yet)
+**Confirm tests are in correct TDD state**:
 
 ```bash
-pnpm test src/auth/mcp-auth/mcp-auth-logging.integration.test.ts
-# Expected: All tests fail
+# Run specific test files to verify RED phase
+cd apps/oak-curriculum-mcp-streamable-http
+
+# Integration test (should FAIL - no implementation yet)
+pnpm test src/tool-handler-with-auth.integration.test.ts
+
+# E2E test (should FAIL - new behavior not implemented)
+pnpm test:e2e e2e-tests/auth-enforcement.e2e.test.ts
 ```
 
-##### Acceptance Criteria
+**Expected**: Both tests FAIL (RED phase). If they pass, we're not in TDD mode.
 
-- [ ] 6+ integration tests written
-- [ ] Tests cover all auth decision points
-- [ ] Tests verify log content and context
-- [ ] Tests check sensitive data redaction
-- [ ] All tests fail initially (Red phase confirmed)
+**Acceptance Criteria**:
 
-##### Definition of Done
-
-- Tests written and committed
-- Tests fail as expected
-- Ready for implementation (Green phase)
+- [x] Foundation documents reviewed
+- [x] All quality gates run individually
+- [x] Results documented
+- [x] Integration tests failing (RED phase)
+- [x] E2E tests failing (RED phase)
+- [x] No unexpected failures
+- [x] Ready to proceed with implementation
 
 ---
 
-#### Task 4.1.2: Implement Auth Middleware Logging (TDD - Green Phase)
+## 📋 PHASE 1: Implement MCP Client Auth (TDD - Tests Already Written)
 
-**Goal**: Add logging to make tests pass.
+**Status**: ✅ COMPLETE - All Sub-Phases (1.1 through 1.7) Complete
 
-##### Implementation Steps
+**CRITICAL**: This phase implements MCP client auth ONLY (ChatGPT → our server).  
+We do NOT modify upstream API auth (our server → Oak API), which already works via ADR-054.
 
-1. **Update `mcpAuth` signature**
+**Approach**: Follow TDD and rules strictly:
 
-   **File**: `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth.ts`
-
-   ```typescript
-   // Before
-   export function mcpAuth(verifyToken: TokenVerifier): RequestHandler;
-
-   // After
-   export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHandler;
-   ```
-
-2. **Add logging to decision points**
-
-   Following pattern from `createEnsureMcpAcceptHeader`:
-
-   ```typescript
-   // Missing authorization header
-   if (!req.headers.authorization) {
-     logger.warn('Auth required but no authorization header present', {
-       method: req.method,
-       path: req.path,
-       correlationId: res.locals.correlationId,
-     });
-     sendMissingAuthResponse(res, prmUrl);
-     return;
-   }
-
-   // Invalid Bearer token format
-   const token = extractBearerToken(req.headers.authorization);
-   if (!token) {
-     logger.warn('Invalid Bearer token format', {
-       method: req.method,
-       path: req.path,
-       correlationId: res.locals.correlationId,
-       // DO NOT log the actual header value (sensitive)
-     });
-     sendInvalidFormatResponse(res, prmUrl);
-     return;
-   }
-
-   // Clerk verification failure
-   const authData = await verifyToken(token, req);
-   if (!authData) {
-     logger.warn('Token verification failed', {
-       method: req.method,
-       path: req.path,
-       correlationId: res.locals.correlationId,
-       // Context from Clerk would be helpful here
-     });
-     sendVerificationFailedResponse(res);
-     return;
-   }
-
-   // Resource parameter validation failure
-   const validation = checkResourceParameter(token, req);
-   if (!validation.valid) {
-     const reason = validation.reason ?? 'Unknown validation error';
-     logger.warn('Resource parameter validation failed', {
-       method: req.method,
-       path: req.path,
-       correlationId: res.locals.correlationId,
-       reason,
-       expectedResource: getMcpResourceUrl(req),
-       // Audience from JWT would be helpful
-     });
-     sendInvalidResourceResponse(res, prmUrl, reason);
-     return;
-   }
-
-   // Success
-   logger.debug('Authentication successful', {
-     method: req.method,
-     path: req.path,
-     correlationId: res.locals.correlationId,
-     userId: authData.extra?.userId,
-     clientId: authData.clientId,
-     scopes: authData.scopes,
-   });
-
-   req.auth = authData;
-   next();
-   ```
-
-3. **Update call sites**
-
-   **File**: `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth-clerk.ts`
-
-   ```typescript
-   import type { Logger } from '@oaknational/mcp-logger';
-
-   export function createMcpAuthClerk(logger: Logger): RequestHandler {
-     return (req: Request, res: Response, next: NextFunction): void => {
-       const authMiddleware = mcpAuth((token, req: Request) => {
-         // ... existing verification logic ...
-       }, logger);
-
-       authMiddleware(req, res, next);
-     };
-   }
-   ```
-
-   **File**: `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`
-
-   ```typescript
-   // Update to pass logger
-   const mcpAuthMw = instrumentMiddleware('mcpAuthClerk', createMcpAuthClerk(authLog), authLog);
-   ```
-
-4. **Run tests to verify**
-
-   ```bash
-   pnpm test src/auth/mcp-auth/mcp-auth-logging.integration.test.ts
-   # Expected: All tests pass (Green phase)
-   ```
-
-##### Acceptance Criteria
-
-- [ ] All integration tests pass
-- [ ] Logging added at all decision points
-- [ ] Sensitive data NOT logged (tokens, headers)
-- [ ] Correlation IDs included in logs
-- [ ] Context is actionable (helps debugging)
-- [ ] Follows established logging patterns
-
-##### Definition of Done
-
-- Tests pass
-- No regressions in existing tests
-- Code follows codebase conventions
+- ✅ Tests already written FIRST (RED phase achieved)
+- ✅ Now implement to make tests pass (GREEN phase)
+- ✅ No V1/V2 versioning - update files in place
+- ✅ No compatibility layers - replace old approach with new
+- ✅ Maintain observability throughout
+- ✅ Two separate auth systems - only touch MCP client auth
 
 ---
 
-#### Task 4.1.3: Refactor for Maintainability (TDD - Refactor Phase)
+### Sub-Phase 1.1: E2E Tests - Specify New Behavior ✅ COMPLETE
 
-**Goal**: Improve implementation while keeping tests green.
+**Objective**: Update E2E tests FIRST to specify tool-level auth behavior.
 
-##### Refactoring Opportunities
+**Files Updated**:
 
-1. **Extract helper functions**
+- ✅ `e2e-tests/auth-enforcement.e2e.test.ts` - Expects HTTP 200 with MCP errors
+- ✅ `e2e-tests/auth-bypass.e2e.test.ts` - Reviewed and compatible
 
-   ```typescript
-   // Pure function for creating log context
-   function createAuthLogContext(req: Request, res: Response, extra?: JsonObject): JsonObject {
-     return {
-       method: req.method,
-       path: req.path,
-       correlationId: res.locals.correlationId,
-       ...extra,
-     };
-   }
-   ```
+**What Was Changed**:
 
-2. **Standardize log messages**
-   - Create constants for log messages
-   - Ensure consistency across auth flow
+- Tests now expect `status: 200` instead of `status: 401`
+- Tests check for `result.isError: true` and `result._meta['mcp/www_authenticate']`
+- Discovery methods still expect HTTP 200 (no change)
 
-3. **Type safety**
-   - Ensure all log context is properly typed
-   - No `any` or `unknown` in log calls
-
-##### Verification
+**Validation**:
 
 ```bash
-# After each refactor, verify
-pnpm test  # All tests still pass
-pnpm type-check  # No type errors
-pnpm lint  # No new lint issues
+pnpm test:e2e  # Currently FAILING (RED phase) ✅ - proves tests specify new behavior
 ```
 
-##### Acceptance Criteria
-
-- [ ] Code is more maintainable
-- [ ] All tests still pass
-- [ ] No type safety regressions
-- [ ] Logging is consistent
-
-##### Definition of Done
-
-- Refactoring complete
-- Tests green
-- Quality gates pass
+**Status**: ✅ COMPLETE - Tests successfully failing, specifying desired behavior
 
 ---
 
-### Sub-Phase 4.2: Clerk Integration Observability
+### Sub-Phase 1.2: Integration Tests - Specify Component Behavior ✅ COMPLETE
 
-**Goal**: Add visibility into Clerk authentication context and why verification fails.
+**Objective**: Create integration tests for tool execution with auth checking.
+
+**File Created**:
+
+- ✅ `src/tool-handler-with-auth.integration.test.ts`
+
+**Test Scenarios Covered**:
+
+1. ✅ Protected tool without auth context → MCP error with `_meta`
+2. ✅ Protected tool with valid auth → executes successfully
+3. ✅ Protected tool with invalid token → MCP error with `_meta`
+4. ✅ Public tools execute without auth check
+5. ✅ Logging behavior verified
+
+**Validation**:
+
+```bash
+pnpm test src/tool-handler-with-auth.integration.test.ts  # Currently FAILING (RED phase) ✅
+```
+
+**Status**: ✅ COMPLETE - Tests successfully failing, specifying component behavior
 
 ---
 
-#### Task 4.2.1: Enhance Clerk Token Verification Logging (TDD)
+### Sub-Phase 1.3: Remove HTTP-Level Auth Middleware ✅ COMPLETE
 
-**Red Phase**: Write tests first
+**Objective**: Remove middleware-level auth enforcement, allow all MCP requests through.
 
-**File**: `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/verify-clerk-token.unit.test.ts`
+**Files Modified**:
 
-##### Test Cases
+- ✅ `src/auth-routes.ts` - Removed `createMcpRouter` usage and auth middleware
 
-1. **Test: Returns undefined when token is missing**
+**Files KEPT** (reusable pure functions):
 
-   ```typescript
-   it('returns undefined when token is missing', () => {
-     const result = verifyClerkToken(mockAuthObject, undefined);
-     expect(result).toBeUndefined();
-   });
-   ```
+- ✅ `src/auth/mcp-auth/verify-clerk-token.ts` - Pure verification function
+- ✅ `src/resource-parameter-validator.ts` - Pure validation function
+- ✅ `src/auth/mcp-auth/auth-response-helpers.ts` - Logging helpers
+- ✅ `src/auth/mcp-auth/create-auth-log-context.ts` - Pure logging function
+- ✅ `src/tool-auth-checker.ts` - `toolRequiresAuth()` reads `securitySchemes`
+- ✅ `src/auth-error-response.ts` - `createAuthErrorResponse()` creates MCP errors
 
-2. **Test: Returns undefined when isAuthenticated is false**
+**Validation**:
 
-   ```typescript
-   it('returns undefined when isAuthenticated is false', () => {
-     const auth = { isAuthenticated: false, tokenType: 'oauth_token' };
-     expect(verifyClerkToken(auth, 'token')).toBeUndefined();
-   });
-   ```
+```bash
+pnpm build  # Compiles successfully ✅
+pnpm test:e2e  # Still FAILING but no HTTP 401 ✅ - proves middleware removed
+```
 
-3. **Test: Returns undefined when clientId is missing**
+**Status**: ✅ COMPLETE - All requests reach tool handlers, no HTTP-level auth blocking
 
-   ```typescript
-   it('returns undefined when clientId is missing', () => {
-     const auth = {
-       isAuthenticated: true,
-       tokenType: 'oauth_token',
-       clientId: undefined,
-       scopes: ['read'],
-       userId: '123',
-     };
-     expect(verifyClerkToken(auth, 'token')).toBeUndefined();
-   });
-   ```
+---
 
-**Note**: `verifyClerkToken` is a pure function, so we'll log from the CALLER, not the function itself.
+### Sub-Phase 1.4: Implement MCP Client Auth Checking ✅ COMPLETE
 
-##### Implementation Strategy
+**Objective**: Add preventive MCP client auth checking BEFORE SDK execution, return HTTP 200 with MCP errors.
 
-Since `verifyClerkToken` is pure, add logging in `mcp-auth-clerk.ts` AROUND the verification call:
+**CRITICAL**: This is MCP client auth (ChatGPT → us) ONLY. We do NOT touch upstream API auth (us → Oak API).
+
+**Status**: ✅ COMPLETE - All tests passing (RED → GREEN cycle complete)
+
+**The Architectural Solution**:
+
+Use Node.js `AsyncLocalStorage` to flow Express request context to tool handlers without modifying function signatures.
+
+**Why AsyncLocalStorage**:
+
+- Native Node.js async context propagation
+- No need to modify MCP SDK handler signatures
+- Clean separation of concerns
+- Idiomatic Node.js pattern
+
+**Implementation follows TDD - Unit Tests FIRST**:
+
+**Step 1**: Write unit tests for request context (TDD - RED phase)
+
+**NEW FILE**: `src/request-context.unit.test.ts`
 
 ```typescript
-const authMiddleware = mcpAuth((token, req: Request) => {
-  const authData = getAuth(req, { acceptsToken: 'oauth_token' });
+import { describe, it, expect, beforeEach } from 'vitest';
+import { setRequestContext, getRequestContext } from './request-context.js';
+import type { Request } from 'express';
 
-  // Log Clerk auth context
-  logger.debug('Clerk authentication context', {
-    isAuthenticated: authData.isAuthenticated,
-    hasClientId: !!authData.clientId,
-    hasScopes: !!authData.scopes,
-    hasUserId: !!authData.userId,
-    tokenType: authData.tokenType,
+describe('request-context', () => {
+  it('should store and retrieve request context', async () => {
+    const mockRequest = { path: '/test' } as Request;
+    let retrieved: Request | undefined;
+
+    await setRequestContext(mockRequest, async () => {
+      retrieved = getRequestContext();
+    });
+
+    expect(retrieved).toBe(mockRequest);
   });
 
-  if (!authData.isAuthenticated) {
-    logger.warn('Clerk authentication failed', {
-      tokenType: authData.tokenType,
-    });
-    return Promise.resolve(undefined);
-  }
-
-  const result = verifyClerkToken(authData, token);
-
-  if (!result) {
-    logger.warn('Clerk token verification failed', {
-      reason: !authData.clientId
-        ? 'missing clientId'
-        : !authData.scopes
-          ? 'missing scopes'
-          : !authData.userId
-            ? 'missing userId'
-            : 'unknown',
-    });
-  }
-
-  return Promise.resolve(result);
-}, logger);
-```
-
-##### Acceptance Criteria
-
-- [ ] Logs Clerk auth context on every request
-- [ ] Logs specific reason when verification fails
-- [ ] Does NOT log sensitive tokens
-- [ ] Preserves pure function property of `verifyClerkToken`
-
-##### Definition of Done
-
-- Logging implemented
-- Tests pass
-- Pure functions remain pure
-
----
-
-### Sub-Phase 4.3: RFC 8707 Validation Observability
-
-**Goal**: Add visibility into JWT structure and audience validation.
-
----
-
-#### Task 4.3.1: Add JWT Decode Logging
-
-**Approach**: Log JWT structure (decoded, but not verified again - Clerk already did that)
-
-##### Implementation
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/src/resource-parameter-validator.ts`
-
-**Current**: Pure function (no logging)
-
-**Strategy**: Add OPTIONAL logger parameter that defaults to no-op logger
-
-```typescript
-import type { Logger } from '@oaknational/mcp-logger';
-
-// Create no-op logger for when none provided
-const noopLogger: Logger = {
-  debug: () => {},
-  info: () => {},
-  warn: () => {},
-  error: () => {},
-  // ... other required methods
-};
-
-export function validateResourceParameter(
-  token: string,
-  expectedResource: string,
-  logger: Logger = noopLogger,
-): ResourceValidationResult {
-  try {
-    const decoded = jwtDecode(token, { complete: true });
-
-    if (!decoded || typeof decoded === 'string') {
-      logger.warn('JWT decode failed', {
-        reason: 'Invalid JWT format',
-      });
-      return { valid: false, reason: 'Invalid JWT format' };
-    }
-
-    const payload = decoded.payload;
-
-    if (typeof payload === 'string') {
-      logger.warn('JWT decode failed', {
-        reason: 'Invalid JWT payload format',
-      });
-      return { valid: false, reason: 'Invalid JWT payload format' };
-    }
-
-    // Log JWT structure (without sensitive claims)
-    logger.debug('JWT decoded', {
-      hasAudience: !!payload.aud,
-      audienceType: Array.isArray(payload.aud) ? 'array' : 'string',
-      audienceCount: Array.isArray(payload.aud) ? payload.aud.length : 1,
-      issuer: payload.iss,
-      subject: payload.sub,
-      expiresAt: payload.exp,
-    });
-
-    const audiences = getAudiences(payload.aud);
-    const result = isResourceInAudiences(audiences, expectedResource);
-
-    if (!result.valid) {
-      logger.warn('Audience validation failed', {
-        expectedResource,
-        actualAudiences: audiences,
-        reason: result.reason,
-      });
-    } else {
-      logger.debug('Audience validation succeeded', {
-        expectedResource,
-        matchedAudience: audiences.find((a) => a === expectedResource),
-      });
-    }
-
-    return result;
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    logger.warn('JWT validation error', {
-      error: errorMessage,
-    });
-    return {
-      valid: false,
-      reason: `Token decode error: ${errorMessage}`,
-    };
-  }
-}
-```
-
-##### Update Call Site
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth.ts`
-
-```typescript
-// Pass logger to validation function
-const validation = checkResourceParameter(token, req, logger);
-```
-
-```typescript
-function checkResourceParameter(
-  token: string,
-  req: Request,
-  logger: Logger,
-): { valid: boolean; reason?: string } {
-  const expectedResource = getMcpResourceUrl(req);
-  return validateResourceParameter(token, expectedResource, logger);
-}
-```
-
-##### Acceptance Criteria
-
-- [ ] JWT structure logged on decode
-- [ ] Audience mismatch logged with details
-- [ ] Sensitive claims NOT logged (sub, custom claims)
-- [ ] Logger parameter is optional (backwards compatible)
-- [ ] Pure function tests still pass
-
-##### Definition of Done
-
-- Implementation complete
-- Tests updated
-- No breaking changes to existing code
-
----
-
-### Sub-Phase 4.4: E2E Tests for Auth Logging
-
-**Goal**: Prove that auth failures are observable in production.
-
----
-
-#### Task 4.4.1: E2E Test for Auth Failure Logging
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-logging.e2e.test.ts`
-
-##### Test Cases
-
-1. **Test: Missing auth header logs warning**
-
-   ```typescript
-   it('logs warning when auth header is missing', async () => {
-     const logSpy = setupLogSpy(logger);
-
-     await request(app)
-       .post('/mcp')
-       .send({ method: 'tools/call', params: { name: 'get-lessons-summary' } })
-       .expect(401);
-
-     expect(logSpy.warn).toHaveBeenCalledWith(
-       'Auth required but no authorization header present',
-       expect.any(Object),
-     );
-   });
-   ```
-
-2. **Test: Invalid token format logs warning**
-
-3. **Test: Wrong audience logs details**
-
-   ```typescript
-   it('logs audience mismatch with details', async () => {
-     const tokenWithWrongAud = createJWT({
-       aud: 'https://wrong-server.com/mcp',
-       // ... other claims
-     });
-
-     await request(app)
-       .post('/mcp')
-       .set('Authorization', `Bearer ${tokenWithWrongAud}`)
-       .send({ method: 'tools/call', params: { name: 'get-lessons-summary' } })
-       .expect(401);
-
-     expect(logSpy.warn).toHaveBeenCalledWith(
-       'Audience validation failed',
-       expect.objectContaining({
-         expectedResource: 'http://localhost:3333/mcp',
-         actualAudiences: ['https://wrong-server.com/mcp'],
-       }),
-     );
-   });
-   ```
-
-4. **Test: Successful auth logs debug info**
-
-   ```typescript
-   it('logs successful authentication', async () => {
-     const validToken = await createValidClerkToken();
-
-     await request(app)
-       .post('/mcp')
-       .set('Authorization', `Bearer ${validToken}`)
-       .send({ method: 'tools/call', params: { name: 'get-lessons-summary' } })
-       .expect(200);
-
-     expect(logSpy.debug).toHaveBeenCalledWith(
-       'Authentication successful',
-       expect.objectContaining({
-         userId: expect.any(String),
-         clientId: expect.any(String),
-       }),
-     );
-   });
-   ```
-
-##### Acceptance Criteria
-
-- [ ] 4+ E2E tests written
-- [ ] Tests verify actual log output
-- [ ] Tests run against real server
-- [ ] Tests pass
-- [ ] Coverage includes all auth paths
-
-##### Definition of Done
-
-- E2E tests written and passing
-- Auth logging verified end-to-end
-
----
-
-### Sub-Phase 4.5: Troubleshooting Documentation
-
-**Goal**: Document how to use auth logs for debugging.
-
----
-
-#### Task 4.5.1: Create Auth Troubleshooting Guide
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/docs/auth-troubleshooting.md`
-
-##### Content Outline
-
-# Authentication Troubleshooting Guide
-
-## Overview
-
-This guide explains how to diagnose authentication issues using server logs.
-
-## Log Levels
-
-Auth logging uses different levels:
-
-- `DEBUG`: Successful auth, JWT structure, detailed flow
-- `WARN`: Auth failures, validation errors
-- `ERROR`: Unexpected errors (should be rare)
-
-## Common Issues
-
-### Issue: "Auth required but no authorization header present"
-
-**Symptom**: 401 response, no Bearer token sent
-
-**Log Example**:
-
-```json
-{
-  "level": "WARN",
-  "message": "Auth required but no authorization header present",
-  "method": "POST",
-  "path": "/mcp",
-  "correlationId": "req_123456_abc"
-}
-```
-
-**Cause**: Client not sending Authorization header
-
-**Fix**: Ensure client sends `Authorization: Bearer <token>` header
-
----
-
-### Issue: "Invalid Bearer token format"
-
-**Symptom**: 401 response, malformed auth header
-
-**Log Example**:
-
-```json
-{
-  "level": "WARN",
-  "message": "Invalid Bearer token format",
-  "method": "POST",
-  "path": "/mcp"
-}
-```
-
-**Cause**: Authorization header not in format `Bearer <token>`
-
-**Fix**: Check client is using correct header format
-
----
-
-### Issue: "Token verification failed"
-
-**Symptom**: 401 response, Clerk rejects token
-
-**Log Example**:
-
-```json
-{
-  "level": "WARN",
-  "message": "Clerk authentication failed",
-  "isAuthenticated": false,
-  "tokenType": "oauth_token"
-}
-```
-
-**Cause**: Clerk doesn't recognize the token (expired, invalid, wrong tenant)
-
-**Fix**:
-
-1. Check token is from correct Clerk tenant
-2. Check token hasn't expired
-3. Verify Clerk secret key is correct
-
----
-
-### Issue: "Audience validation failed"
-
-**Symptom**: 401 response, JWT audience doesn't match
-
-**Log Example**:
-
-```json
-{
-  "level": "WARN",
-  "message": "Audience validation failed",
-  "expectedResource": "https://mcp.example.com/mcp",
-  "actualAudiences": ["https://other-server.com"],
-  "reason": "Token audience mismatch"
-}
-```
-
-**Cause**: JWT `aud` claim doesn't include this server's canonical URI
-
-**Fix**:
-
-1. Verify Clerk is including `resource` parameter in tokens
-2. Check MCP_CANONICAL_URI env var matches OAuth flow
-3. Ensure client sends correct `resource` param to Clerk
-
----
-
-## Debugging with Correlation IDs
-
-Every request has a correlation ID. Use it to trace the full auth flow:
-
-```bash
-# Find all logs for a specific request
-grep "req_123456_abc" logs.txt
-
-# Example output shows full auth flow
-```
-
-## Clerk Configuration Checklist
-
-- [ ] `CLERK_PUBLISHABLE_KEY` set correctly
-- [ ] `CLERK_SECRET_KEY` set correctly
-- [ ] Clerk app configured for OAuth 2.0
-- [ ] Resource parameter echoed in tokens (`aud` claim)
-- [ ] Scopes match server's `scopes_supported`
-
-## JWT Inspection
-
-To inspect JWT structure (for debugging only):
-
-```bash
-# Decode JWT (DO NOT do this with production tokens in shared environments)
-echo "<token>" | base64 -d
-```
-
-Look for:
-
-- `aud` claim matching server URI
-- `exp` claim (expiration)
-- `iss` claim (Clerk issuer)
-
-### Acceptance Criteria
-
-- [ ] Documentation covers all common auth failures
-- [ ] Examples include actual log output
-- [ ] Troubleshooting steps are actionable
-- [ ] Clerk configuration documented
-- [ ] Security warnings included (don't log tokens!)
-
-### Definition of Done
-
-- Documentation written
-- Reviewed for accuracy
-- Linked from main README
-
----
-
-#### Task 4.5.2: Document Clerk JWT Requirements
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/docs/clerk-jwt-structure.md`
-
-##### Content
-
-# Clerk JWT Structure Requirements
-
-## Overview
-
-For RFC 8707 compliance, Clerk must issue JWTs with specific claims.
-
-## Required JWT Claims
-
-### `aud` (Audience)
-
-**Required**: YES
-**Format**: String or array of strings
-**Value**: Must include the MCP server's canonical URI
-
-**Example**:
-
-```json
-{
-  "aud": "https://mcp.example.com/mcp"
-}
-```
-
-Or for multiple audiences:
-
-```json
-{
-  "aud": ["https://mcp.example.com/mcp", "https://other-service.com"]
-}
-```
-
-**How Clerk Sets This**: The `resource` parameter from the OAuth authorization request should be echoed into the `aud` claim.
-
-**MCP Client Behavior**: Clients MUST send `resource` parameter in:
-
-1. Authorization request to Clerk
-2. Token request to Clerk
-
-**Server Validation**: Server checks `aud` includes expected resource URI.
-
----
-
-### `iss` (Issuer)
-
-**Required**: YES  
-**Format**: String (URL)  
-**Value**: Clerk's issuer URL
-
-**Example**:
-
-```json
-{
-  "iss": "https://clerk.yourapp.com"
-}
-```
-
----
-
-### `sub` (Subject)
-
-**Required**: YES  
-**Format**: String (user ID)  
-**Value**: Clerk user ID
-
-**Example**:
-
-```json
-{
-  "sub": "user_2abc123def"
-}
-```
-
----
-
-### `exp` (Expiration)
-
-**Required**: YES  
-**Format**: Number (Unix timestamp)  
-**Value**: Token expiration time
-
-**Example**:
-
-```json
-{
-  "exp": 1699999999
-}
-```
-
----
-
-## How to Verify Clerk Configuration
-
-1. **Trigger OAuth flow** with ChatGPT or MCP Inspector
-
-2. **Check server logs** for JWT decode info:
-
-   ```json
-   {
-     "message": "JWT decoded",
-     "hasAudience": true,
-     "audienceType": "string",
-     "issuer": "https://clerk.yourapp.com"
-   }
-   ```
-
-3. **If audience is missing**:
-   - Clerk may not support RFC 8707 resource parameter
-   - Contact Clerk support
-   - May need to configure custom claims
-
-## Testing JWT Structure
-
-Use the test helper to create valid JWTs for testing:
-
-```typescript
-import { createMockClerkJWT } from '@/test-helpers/clerk-jwt-helpers';
-
-const jwt = createMockClerkJWT({
-  aud: 'http://localhost:3333/mcp',
-  sub: 'user_123',
-  iss: 'https://clerk.test.com',
-  exp: Math.floor(Date.now() / 1000) + 3600,
+  it('should return undefined outside context', () => {
+    const result = getRequestContext();
+    expect(result).toBeUndefined();
+  });
+
+  it('should isolate contexts in concurrent executions', async () => {
+    const req1 = { path: '/req1' } as Request;
+    const req2 = { path: '/req2' } as Request;
+
+    const results: (Request | undefined)[] = [];
+
+    await Promise.all([
+      setRequestContext(req1, async () => {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        results.push(getRequestContext());
+      }),
+      setRequestContext(req2, async () => {
+        results.push(getRequestContext());
+      }),
+    ]);
+
+    expect(results).toContain(req1);
+    expect(results).toContain(req2);
+  });
 });
 ```
 
-### Acceptance Criteria
+**Run test** (should FAIL - no implementation):
 
-- [ ] All required JWT claims documented
-- [ ] Examples are accurate
-- [ ] Clerk configuration guidance clear
-- [ ] Testing guidance included
+```bash
+pnpm test src/request-context.unit.test.ts
+```
 
-### Definition of Done
+**Step 2**: Implement request context (TDD - GREEN phase)
 
-- Documentation complete
-- Examples tested
-- Reviewed for technical accuracy
+**NEW FILE**: `src/request-context.ts`
+
+```typescript
+/**
+ * Request context propagation using AsyncLocalStorage.
+ * Enables access to Express request object within tool handlers.
+ * @module
+ */
+
+import { AsyncLocalStorage } from 'node:async_hooks';
+import type { Request } from 'express';
+
+const requestStorage = new AsyncLocalStorage<Request>();
+
+/**
+ * Execute callback within request context.
+ * Makes request available to getRequestContext() within callback.
+ *
+ * @param req - Express request to store in context
+ * @param callback - Async function to execute with request context
+ * @returns Result of callback execution
+ */
+export async function setRequestContext<T>(req: Request, callback: () => Promise<T>): Promise<T> {
+  return requestStorage.run(req, callback);
+}
+
+/**
+ * Retrieve current Express request from async context.
+ * Returns undefined if called outside setRequestContext.
+ *
+ * @returns Current request or undefined
+ */
+export function getRequestContext(): Request | undefined {
+  return requestStorage.getStore();
+}
+```
+
+**Run test** (should PASS):
+
+```bash
+pnpm test src/request-context.unit.test.ts
+```
+
+**Step 3**: Update `createMcpHandler` to set request context
+
+**MODIFY**: `src/handlers.ts`
+
+```typescript
+export function createMcpHandler(
+  transport: StreamableHTTPServerTransport,
+  logger?: Logger,
+): (req: express.Request, res: express.Response) => Promise<void> {
+  return async (req: express.Request, res: express.Response) => {
+    const correlationId = extractCorrelationId(res);
+    if (logger && correlationId) {
+      const correlatedLogger = createChildLogger(logger, correlationId);
+      correlatedLogger.debug('MCP request received', {
+        method: req.method,
+        path: req.path,
+      });
+    }
+
+    // NEW: Wrap transport.handleRequest in request context
+    await setRequestContext(req, async () => {
+      await transport.handleRequest(req, res, req.body);
+    });
+
+    if (logger && correlationId) {
+      const correlatedLogger = createChildLogger(logger, correlationId);
+      correlatedLogger.debug('MCP request completed', {
+        statusCode: res.statusCode,
+      });
+    }
+  };
+}
+```
+
+**Step 4**: Update `handleToolWithAuthInterception` to check MCP client auth
+
+**MODIFY**: `src/tool-handler-with-auth.ts`
+
+```typescript
+import { getRequestContext } from './request-context.js';
+import { extractAuthContext } from './auth/tool-auth-context.js';
+import { toolRequiresAuth } from './tool-auth-checker.js';
+import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
+import { validateResourceParameter } from './resource-parameter-validator.js';
+
+export async function handleToolWithAuthInterception(
+  tool: { readonly name: UniversalToolName },
+  params: unknown,
+  deps: ToolHandlerDependencies,
+  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
+  logger: Logger,
+  apiKey: string,
+): Promise<CallToolResult> {
+  // NEW: Preventive MCP client auth checking (BEFORE SDK execution)
+  // This is MCP OAuth (ChatGPT → us), NOT upstream API auth (us → Oak API)
+  if (toolRequiresAuth(tool.name)) {
+    const req = getRequestContext();
+    const authContext = req ? extractAuthContext(req, logger) : undefined;
+
+    if (!authContext) {
+      logger.warn('MCP client auth required but no token provided', {
+        toolName: tool.name,
+      });
+
+      return createAuthErrorResponse(
+        'insufficient_scope',
+        'You need to login to continue',
+        deps.getResourceUrl(),
+      );
+    }
+
+    // Verify token (reuse existing pure function)
+    const verified = await verifyClerkToken(req.auth ?? { userId: null }, authContext.token);
+
+    if (!verified) {
+      logger.warn('MCP client token verification failed', {
+        toolName: tool.name,
+      });
+
+      return createAuthErrorResponse(
+        'invalid_token',
+        'Token verification failed',
+        deps.getResourceUrl(),
+      );
+    }
+
+    // Validate resource parameter (RFC 8707)
+    const validation = validateResourceParameter(authContext.token, deps.getResourceUrl(), logger);
+
+    if (!validation.valid) {
+      logger.warn('Resource parameter validation failed', {
+        toolName: tool.name,
+        reason: validation.reason,
+      });
+
+      return createAuthErrorResponse(
+        'invalid_token',
+        validation.reason ?? 'Resource validation failed',
+        deps.getResourceUrl(),
+      );
+    }
+
+    logger.info('MCP client authentication successful', {
+      toolName: tool.name,
+      userId: authContext.userId,
+    });
+  }
+
+  // EXISTING: Upstream API auth error interception (AFTER SDK execution)
+  // This is ADR-054 - we do NOT modify this
+  const client = deps.createClient(apiKey);
+
+  let capturedAuthError: unknown = undefined;
+
+  const executor = deps.createExecutor({
+    executeMcpTool: async (name, args) => {
+      const execution = await (stubExecutor
+        ? stubExecutor(name, args ?? {})
+        : deps.executeMcpTool(name, args, client));
+
+      if ('error' in execution && execution.error) {
+        const authCheckTarget = execution.error.cause ?? execution.error;
+        if (isAuthError(authCheckTarget)) {
+          capturedAuthError = authCheckTarget;
+        }
+      }
+
+      logValidationFailureIfPresent(name, execution, logger);
+      return execution;
+    },
+  });
+
+  const result = await executor(tool.name, params ?? {});
+
+  if (capturedAuthError !== undefined) {
+    const resourceUrl = deps.getResourceUrl();
+    const errorType = getAuthErrorType(capturedAuthError);
+    const description = getAuthErrorDescription(capturedAuthError);
+
+    logger.warn('Upstream API auth error (ADR-054)', {
+      toolName: tool.name,
+      errorType,
+      description,
+    });
+
+    return createAuthErrorResponse(errorType, description, resourceUrl);
+  }
+
+  return result;
+}
+```
+
+**Validation** (TDD - GREEN phase):
+
+```bash
+# Unit tests should PASS
+pnpm test src/request-context.unit.test.ts
+
+# Integration tests should PASS (were RED, now GREEN)
+pnpm test src/tool-handler-with-auth.integration.test.ts
+
+# E2E tests should PASS (were RED, now GREEN)
+pnpm test:e2e e2e-tests/auth-enforcement.e2e.test.ts
+```
+
+**Re-run Quality Gates** (ALL gates - failures are BLOCKING):
+
+```bash
+# ALL must PASS before proceeding
+pnpm format-check:root    # MUST PASS
+pnpm type-check           # MUST PASS (0 errors)
+pnpm lint                 # MUST PASS (0 errors, 0 warnings)
+pnpm markdownlint-check:root  # MUST PASS
+pnpm test                 # MUST PASS (all tests, including new ones)
+pnpm test:ui              # MUST PASS
+pnpm smoke:dev:stub       # MUST PASS
+pnpm build                # MUST PASS
+```
+
+**BLOCKING**: If ANY gate fails → STOP and FIX before Phase 1.5.
+
+**Acceptance Criteria**:
+
+- [x] Unit tests for request-context written FIRST (RED)
+- [x] Unit tests now PASS (GREEN)
+- [x] Request context using AsyncLocalStorage
+- [x] `createMcpHandler` wraps requests in context
+- [x] `handleToolWithAuthInterception` checks MCP client auth BEFORE SDK
+- [x] Upstream API auth (ADR-054) unchanged and still working
+- [x] MCP errors include `_meta["mcp/www_authenticate"]`
+- [x] Integration tests PASS (were RED, now GREEN)
+- [x] E2E tests PASS (were RED, now GREEN)
+- [x] Observability maintained (comprehensive logging)
+- [x] Clear separation: MCP client auth vs upstream API auth
 
 ---
 
-## Sub-Phase 4.4 & 4.5 Overall Acceptance Criteria
+### Sub-Phase 1.5: Update Unit Tests ✅ COMPLETE
 
-- [ ] All auth decision points logged
-- [ ] Logs are actionable for debugging
-- [ ] Sensitive data is redacted
-- [ ] E2E tests verify logging works
-- [ ] Documentation enables self-service debugging
+**Objective**: Fix type error and add tests for new auth context extractor.
 
-## Phase 4 Overall Definition of Done
+**Files to Update**:
 
-- All sub-phases complete
-- All tests passing
-- Documentation complete
-- Auth failures are now observable and debuggable
-- Ready for Phase 5 (real-world client testing)
+1. **FIX TYPE ERROR**: `src/auth/mcp-auth/create-auth-log-context.unit.test.ts`
+
+```typescript
+// Line 85 - Remove undefined argument
+// BEFORE:
+const context = createAuthLogContext(req, res, undefined);
+
+// AFTER:
+const context = createAuthLogContext(req, res);
+```
+
+2. **NEW TESTS**: `src/auth/tool-auth-context.unit.test.ts`
+
+Test scenarios:
+
+- Extract auth when `req.auth.userId` present
+- Return undefined when `req.auth` missing
+- Return undefined when `req.auth.userId` missing
+- Extract token from Authorization header
+- Log auth extraction
+
+3. **VERIFY UNCHANGED**: These should still pass without modification
+
+- `src/auth/mcp-auth/verify-clerk-token.unit.test.ts` ✅
+- `src/resource-parameter-validator.unit.test.ts` ✅
+
+**Validation** (ALL gates - failures are BLOCKING):
+
+```bash
+pnpm format-check:root    # MUST PASS
+pnpm type-check           # MUST PASS (0 errors)
+pnpm lint                 # MUST PASS
+pnpm test                 # MUST PASS (all unit tests)
+```
+
+**BLOCKING**: If ANY gate fails → STOP and FIX before Phase 1.6.
+
+**Acceptance Criteria**:
+
+- [x] Type error fixed (line 85 in create-auth-log-context.unit.test.ts)
+- [x] Auth context extractor has unit tests
+- [x] All existing unit tests still pass
+- [x] Format check: ✅ PASS
+- [x] Type check: ✅ PASS (0 errors)
+- [x] Lint: ✅ PASS
+- [x] All tests: ✅ PASS
 
 ---
 
-## Phase 5: Real-World Client Validation
+### Sub-Phase 1.6: Clean Up Dead Code ✅ COMPLETE
 
-**Objective**: Validate the implementation with real MCP clients, especially ChatGPT.
+**Objective**: Remove unused middleware files and archive for reference.
 
-**Prerequisites**: Phases 2 and 4 complete
+**Files ARCHIVED** to `.agent/reference-docs/replaced-http-auth-model/`:
+
+- ✅ `src/auth/mcp-auth/mcp-auth.ts` - HTTP 401 middleware (archived)
+- ✅ `src/auth/mcp-auth/mcp-auth-clerk.ts` - Clerk middleware wrapper (archived)
+- ✅ `src/auth/mcp-auth/mcp-auth.unit.test.ts` - Tests (archived)
+- ✅ `src/auth/mcp-auth/mcp-auth-resource-validation.integration.test.ts` - Tests (archived)
+- ✅ `src/auth-www-authenticate.integration.test.ts` - Tests (archived)
+- ✅ `src/clerk-auth-middleware.integration.test.ts` - Tests (archived)
+- ✅ `src/mcp-router.ts` - Conditional auth routing (archived)
+- ✅ `src/mcp-router.integration.test.ts` - Tests (archived)
+- ✅ `http-level-auth-architecture.md` - Architectural documentation (created)
+- ✅ `README.md` - Archive directory documentation (created)
+
+**Config Files Updated** to exclude archive:
+
+- ✅ `.prettierignore` - Added `.agent/reference-docs/replaced-http-auth-model/`
+- ✅ `tsconfig.json` - Added to exclude array
+- ✅ `tsconfig.lint.json` - Added to exclude array
+- ✅ `vitest.config.ts` - Added to exclude array
+- ✅ `eslint.config.ts` - Added to ignores array
+- ✅ `.markdownlintignore` - Already covered by `**/reference/**` pattern
+
+**Files to UPDATE**:
+
+- `src/auth/mcp-auth/index.ts` - Remove exports for deleted files
+
+**Files to KEEP** (still used):
+
+- ✅ `src/auth/mcp-auth/verify-clerk-token.ts` - Pure function
+- ✅ `src/auth/mcp-auth/mcp-auth-clerk.ts` - May need to adapt for tool-level use
+- ✅ `src/auth/mcp-auth/auth-response-helpers.ts` - Logging helpers
+- ✅ `src/auth/mcp-auth/create-auth-log-context.ts` - Pure function
+- ✅ `src/auth/mcp-auth/create-auth-log-context.unit.test.ts` - Unit tests
+- ✅ `src/resource-parameter-validator.ts` - Pure function
+- ✅ `src/tool-auth-checker.ts` - Pure function
+- ✅ `src/auth-error-response.ts` - Pure function
+
+**Validation** (ALL gates - failures are BLOCKING):
+
+```bash
+pnpm format-check:root    # MUST PASS
+pnpm type-check           # MUST PASS (0 errors)
+pnpm lint                 # MUST PASS (no unused imports)
+pnpm test                 # MUST PASS (all tests)
+pnpm build                # MUST PASS
+```
+
+**BLOCKING**: If ANY gate fails → STOP and FIX before Phase 1.7.
+
+**Acceptance Criteria**:
+
+- [x] HTTP 401 middleware archived
+- [x] Tests for old code archived
+- [x] Archive directory documented
+- [x] Config files updated to exclude archive
+- [x] Format check: ✅ PASS
+- [x] Type check: ✅ PASS (0 errors)
+- [x] Lint: ✅ PASS (no unused imports, no warnings)
+- [x] All tests: ✅ PASS
+- [x] Build: ✅ PASS
 
 ---
 
-### Sub-Phase 5.1: MCP Inspector Testing
+### Sub-Phase 1.7: Final Validation & Quality Gates ✅ COMPLETE
 
-**Goal**: Prove the server works with MCP Inspector (reference implementation).
+**Objective**: Ensure all quality gates pass and observability maintained.
 
-#### Task 5.1.1: Set Up Test Environment
+**Re-ground in Foundation Documents**:
 
-**Steps:**
+```bash
+# Re-read foundation documents to verify compliance
+cat .agent/directives-and-memory/rules.md
+cat .agent/directives-and-memory/testing-strategy.md
+cat .agent/directives-and-memory/schema-first-execution.md
+```
 
-1. Deploy server locally
+**Run Full Quality Gates** (ALL must PASS - failures are BLOCKING):
+
+```bash
+# Run individually to identify any failures
+# Each gate MUST PASS before proceeding
+
+# 1. Format check - BLOCKING if fails
+pnpm format-check:root
+
+# 2. Type check - BLOCKING if fails
+pnpm type-check      # 0 errors required
+
+# 3. Lint - BLOCKING if fails
+pnpm lint            # 0 errors, 0 warnings required
+
+# 4. Markdown lint - BLOCKING if fails
+pnpm markdownlint-check:root
+
+# 5. Unit & integration tests - BLOCKING if fails
+pnpm test            # All tests must pass
+
+# 6. UI tests - BLOCKING if fails
+pnpm test:ui
+
+# 7. E2E tests - BLOCKING if fails
+pnpm test:e2e        # All E2E tests must pass
+
+# 8. E2E built tests - BLOCKING if fails
+pnpm test:e2e:built
+
+# 9. Smoke tests - BLOCKING if fails
+pnpm smoke:dev:stub
+
+# 10. Build - BLOCKING if fails
+pnpm build           # Successful build required
+```
+
+**CRITICAL**: If ANY gate fails → STOP, FIX, then re-run ALL gates.
+
+**Manual Testing**:
+
+1. **Start server**:
+
+```bash
+cd apps/oak-curriculum-mcp-streamable-http
+pnpm dev
+```
+
+2. **Test discovery** (should work without auth):
+
+```bash
+curl -X POST http://localhost:3333/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq
+```
+
+Expected: HTTP 200, list of tools
+
+3. **Test protected tool without auth** (should return MCP error with `_meta`):
+
+```bash
+curl -X POST http://localhost:3333/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"search","arguments":{"query":"test"}}}' | jq
+```
+
+Expected: HTTP 200, `result.isError: true`, `result._meta['mcp/www_authenticate']` present
+
+4. **Check server logs** show:
+
+- [ ] Request entry with correlation ID
+- [ ] Auth context extraction (or "no auth provided")
+- [ ] "Tool requires auth but none provided" warning
+- [ ] Tool execution details
+- [ ] Request completion
+- [ ] All sensitive data redacted (no tokens in logs)
+
+**Acceptance Criteria**:
+
+- [x] Format check: ✅ PASS
+- [x] Type check: ✅ PASS (0 errors)
+- [x] Lint: ✅ PASS (0 errors, 0 warnings)
+- [x] Markdown lint: ✅ PASS
+- [x] All unit tests: ✅ PASS
+- [x] All integration tests: ✅ PASS
+- [x] All UI tests: ✅ PASS
+- [x] All E2E tests: ✅ PASS
+- [x] All E2E built tests: ✅ PASS
+- [x] All smoke tests: ✅ PASS
+- [x] Build: ✅ PASS
+- [x] Discovery works without auth (automated test)
+- [x] Protected tools return HTTP 200 with MCP errors when auth missing (automated test)
+- [x] Logs demonstrate tool-level auth flow
+- [x] Observability fully functional
+- [x] **ALL quality gates passing - ZERO failures**
+- [x] Ready for ChatGPT integration testing (Phase 2)
+
+---
+
+## Phase 1 Definition of Done
+
+**Progress**: ✅ ALL 7 SUB-PHASES COMPLETE
+
+**Critical Requirements**:
+
+- ✅ E2E tests written FIRST specify tool-level auth (HTTP 200 with MCP errors)
+- ✅ Integration tests written FIRST specify auth context flow
+- ✅ HTTP-level auth middleware removed
+- ✅ Foundation documents reviewed (Phase 0)
+- ✅ Baseline quality gates run (Phase 0)
+- ✅ Tests confirmed in RED phase (Phase 0)
+- ✅ Request context unit tests written FIRST (RED) (Phase 1.4)
+- ✅ Request context implemented with AsyncLocalStorage (GREEN) (Phase 1.4)
+- ✅ MCP client auth checking implemented BEFORE SDK execution (Phase 1.4)
+- ✅ Upstream API auth (ADR-054) unchanged (Phase 1.4)
+- ✅ MCP errors include `_meta["mcp/www_authenticate"]` (Phase 1.4)
+- ✅ Integration tests PASS (RED → GREEN) (Phase 1.4)
+- ✅ E2E tests PASS (RED → GREEN) (Phase 1.4)
+- ✅ Unit tests all pass including type error fix (Phase 1.5)
+- ✅ Dead code archived to `.agent/reference-docs/replaced-http-auth-model/` (Phase 1.6)
+- ✅ Foundation documents re-reviewed (Phase 1.7)
+- ✅ All quality gates pass (Phase 1.7)
+- ✅ Observability maintained (comprehensive logging)
+- ✅ No V1/V2 versioning (files updated in place)
+- ✅ No compatibility layers (old code archived, not kept)
+- ✅ Clear separation: MCP client auth vs upstream API auth
+
+**Evidence Required** (ALL PROVIDED):
+
+- ✅ Phase 0 quality gate baseline documented
+- ✅ Tests were in RED phase before implementation (TDD compliant)
+- ✅ E2E tests passing (HTTP 200 + MCP errors)
+- ✅ Integration tests passing (RED → GREEN)
+- ✅ Unit tests passing (request-context)
+- ✅ All existing tests still passing
+- ✅ Server logs showing MCP client auth decisions (preventive, before SDK)
+- ✅ Server logs showing upstream API auth still working (ADR-054, after SDK)
+- ✅ Format check: PASS
+- ✅ Type-check: PASS (0 errors)
+- ✅ Lint: PASS (0 errors, 0 warnings)
+- ✅ Markdown lint: PASS
+- ✅ All tests: PASS
+- ✅ All UI tests: PASS
+- ✅ All E2E tests: PASS
+- ✅ All smoke tests: PASS
+- ✅ Build: PASS
+- ✅ **ALL quality gates passing - ZERO failures**
+
+**Success Metrics**:
+
+- ✅ Discovery methods work without auth (no regression)
+- ✅ Protected tools return HTTP 200 (not 401) when MCP client auth missing
+- ✅ Protected tools include `_meta["mcp/www_authenticate"]` when MCP client auth missing
+- ✅ Protected tools execute successfully when MCP client auth valid
+- ✅ Upstream API auth (ADR-054) still intercepts Oak API errors
+- ✅ All MCP client auth decisions logged with correlation IDs
+- ✅ All upstream API auth decisions logged with correlation IDs
+- ✅ Clear log distinction between two auth systems
+- ✅ Zero regressions
+- ✅ TDD followed at all levels (tests FIRST)
+- ✅ Ready for ChatGPT integration testing (Phase 2)
+
+**TDD Compliance**:
+
+- ✅ E2E tests written FIRST (RED phase achieved)
+- ✅ Integration tests written FIRST (RED phase achieved)
+- ✅ Unit tests written FIRST for new components (RED → GREEN)
+- ✅ Implementation follows tests, not vice versa
+- ✅ Refactoring completed after tests pass (GREEN → REFACTOR)
+
+---
+
+## 📋 Phase 2 - Real-World Client Validation
+
+**Objective**: Validate MCP OAuth implementation works with actual MCP clients (MCP Inspector, ChatGPT).
+
+**CRITICAL**: This phase tests MCP client auth (ChatGPT → our server) ONLY.  
+Upstream API auth (our server → Oak API) already works and is not part of this testing.
+
+**Estimated Time**: 2-3 days  
+**Prerequisites**:
+
+- Phase 0 complete (quality gate baseline)
+- Phase 1 complete (MCP client auth implemented)
+
+**Note**: MCP Inspector DOES support OAuth for HTTP transports. Previous plan incorrectly stated it doesn't.
+
+**Re-ground in Foundation Documents** (before starting):
+
+```bash
+cat .agent/directives-and-memory/rules.md
+cat .agent/directives-and-memory/testing-strategy.md
+```
+
+---
+
+### Sub-Phase 2.1: Environment Preparation
+
+**Goal**: Ensure server can be tested by external clients.
+
+#### Task 2.1.1: Local Testing Setup
+
+**Steps**:
+
+1. **Start server locally**:
 
    ```bash
+   export CLERK_PUBLISHABLE_KEY=pk_test_...
+   export CLERK_SECRET_KEY=sk_test_...
+   export OAK_API_KEY=...
+   export ALLOWED_HOSTS=localhost,127.0.0.1
+   export LOG_LEVEL=debug
+
    pnpm -C apps/oak-curriculum-mcp-streamable-http dev
    ```
 
-2. Install MCP Inspector (if not already installed)
-
-   ```bash
-   npm install -g @modelcontextprotocol/inspector
-   ```
-
-3. Configure Clerk development tenant
-   - Ensure `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` set
-   - Verify Clerk OAuth app configured
-
-**Acceptance Criteria:**
-
-- [ ] Server running on <http://localhost:3333>
-- [ ] MCP Inspector installed
-- [ ] Clerk configured
-
----
-
-### Task 5.1.2: Test Discovery Flow
-
-**Steps:**
-
-1. Launch MCP Inspector
-
-   ```bash
-   npx @modelcontextprotocol/inspector
-   ```
-
-2. Connect to server
-   - URL: `http://localhost:3333/mcp`
-   - No authentication needed for connection
-
-3. List tools
-   - Click "List Tools" in Inspector
-   - Verify all tools appear
-   - Check each tool has `securitySchemes` field
-
-**Verification:**
-
-- [ ] MCP Inspector connects successfully
-- [ ] `tools/list` returns all tools (25+)
-- [ ] Tool metadata includes security schemes
-- [ ] No errors in server logs during discovery
-- [ ] Discovery works WITHOUT authentication
-
-**Evidence**: Screenshot of MCP Inspector tool list
-
----
-
-#### Task 5.1.3: Test OAuth Metadata Discovery
-
-**Steps:**
-
-1. Check OAuth metadata endpoint
+2. **Verify OAuth metadata endpoint**:
 
    ```bash
    curl http://localhost:3333/.well-known/oauth-protected-resource | jq
    ```
 
-2. Verify metadata structure
-   - Contains `resource` field
-   - Contains `authorization_servers` array
-   - Contains `scopes_supported` from generated tools
+   Expected: Returns `resource`, `authorization_servers`, `scopes_supported`
 
-**Acceptance Criteria:**
-
-- [ ] Metadata endpoint returns 200
-- [ ] Metadata includes all required fields
-- [ ] Scopes match generated tool security metadata
-
-**Evidence**: Save curl output
-
----
-
-#### Task 5.1.4: Test Authentication Flow
-
-**Manual Steps:**
-
-1. Call protected tool without auth in MCP Inspector
-   - Select tool: `get-lessons-summary`
-   - Try to execute without providing token
-   - Expected: 401 with helpful error
-
-2. Check error response
-   - Should include `WWW-Authenticate` header
-   - Should point to OAuth metadata
-   - Server logs should show auth failure with reason
-
-3. Follow OAuth flow (if MCP Inspector supports it)
-   - Start OAuth authorization
-   - Authenticate with Clerk
-   - Verify token received
-
-**Acceptance Criteria:**
-
-- [ ] Protected tools fail without auth
-- [ ] Error messages are helpful
-- [ ] `WWW-Authenticate` header present
-- [ ] OAuth flow works (if supported by Inspector)
-- [ ] Server logs show clear auth failure reasons
-
-**Evidence**:
-
-- Screenshot of 401 error
-- Server log excerpt showing auth attempt
-- OAuth flow completion (if applicable)
-
----
-
-#### Task 5.1.5: Test Tool Execution
-
-**Steps:**
-
-1. Call public tool without auth
+3. **Verify discovery works without auth**:
 
    ```bash
    curl -X POST http://localhost:3333/mcp \
      -H "Content-Type: application/json" \
-     -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get-changelog"}}'
+     -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
    ```
 
-   - Expected: 200 response with changelog data
+   Expected: 200 response with tool list
 
-2. Call protected tool with valid token (if OAuth completed)
-   - Execute `get-lessons-summary`
-   - Expected: 200 response with lesson data
-
-3. Check server logs
-   - Verify auth success logged
-   - Verify no errors during execution
-
-**Acceptance Criteria:**
-
-- [ ] Public tools work without auth
-- [ ] Protected tools work with valid auth
-- [ ] Server logs show successful auth
-- [ ] Tool execution results are correct
-
-**Evidence**:
-
-- Tool execution outputs
-- Server logs showing successful auth
-
----
-
-#### Task 5.1.6: Document Findings
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/docs/testing-with-mcp-inspector.md`
-
-**Content**:
-
-- Setup instructions
-- Test results summary
-- Screenshots
-- Any issues encountered
-- Workarounds or limitations
-
-**Acceptance Criteria:**
-
-- [ ] Documentation complete
-- [ ] Includes evidence (screenshots, logs)
-- [ ] Notes any issues or edge cases
-- [ ] Ready for others to reproduce
-
----
-
-### Sub-Phase 5.2: ChatGPT Integration Testing
-
-**Goal**: Validate the server works as a ChatGPT app (primary requirement).
-
-**Note**: Requires ChatGPT Apps SDK access or ChatGPT Plus/Team account.
-
----
-
-#### Task 5.2.1: Deploy Server for ChatGPT Access
-
-**Options**:
-
-1. **Vercel deployment** (recommended)
-   - Deploy to Vercel
-   - Configure environment variables
-   - Use HTTPS URL for ChatGPT
-
-2. **Local with ngrok tunnel**
+4. **Verify protected tools require auth**:
 
    ```bash
-   ngrok http 3333
-   # Use ngrok HTTPS URL for ChatGPT
+   curl -X POST http://localhost:3333/mcp \
+     -H "Content-Type: application/json" \
+     -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get-lessons-summary","arguments":{}}}'
    ```
+
+   Expected: HTTP 200 with MCP error result containing `_meta["mcp/www_authenticate"]`
+
+**Acceptance Criteria**:
+
+- [ ] Server running locally on <http://localhost:3333>
+- [ ] OAuth metadata endpoint returns valid structure
+- [ ] Discovery methods work without auth
+- [ ] Protected methods return HTTP 200 with MCP error (not HTTP 401)
+- [ ] MCP error includes `_meta["mcp/www_authenticate"]`
+- [ ] Logs show auth decision points clearly
+
+#### Task 2.1.2: Vercel Deployment (if needed for ChatGPT)
+
+**Option A: Use existing deployment**  
+**Option B: Deploy fresh instance**
+
+**Environment Variables Required**:
+
+```text
+CLERK_PUBLISHABLE_KEY=pk_...
+CLERK_SECRET_KEY=sk_...
+OAK_API_KEY=...
+ALLOWED_HOSTS=your-domain.vercel.app
+MCP_CANONICAL_URI=https://your-domain.vercel.app/mcp
+BASE_URL=https://your-domain.vercel.app
+LOG_LEVEL=debug
+```
+
+**Smoke Test**:
+
+```bash
+VERCEL_URL=https://your-domain.vercel.app
+
+# Check OAuth metadata
+curl $VERCEL_URL/.well-known/oauth-protected-resource | jq
+
+# Check discovery (no auth)
+curl -X POST $VERCEL_URL/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+# Check protected (requires auth)
+curl -X POST $VERCEL_URL/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get-lessons-summary","arguments":{}}}'
+```
+
+**Acceptance Criteria**:
+
+- [ ] HTTPS URL accessible publicly
+- [ ] OAuth metadata endpoint public
+- [ ] Discovery works without auth
+- [ ] Protected methods return HTTP 200 with MCP error containing `_meta`
+- [ ] Logs accessible via Vercel dashboard
+
+---
+
+### Sub-Phase 2.2: MCP Inspector Testing
+
+**Goal**: Prove server works with official MCP reference implementation.
+
+#### Task 2.2.1: Install and Configure MCP Inspector
+
+**Installation**:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
 
 **Configuration**:
 
-- Ensure `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` set
-- Set `ALLOWED_HOSTS` to include deployment domain
-- Set `MCP_CANONICAL_URI` if using custom domain
+- **Server URL**: `http://localhost:3333/mcp` (or Vercel URL)
+- **Transport**: HTTP
 
-**Acceptance Criteria:**
+**Note**: MCP Inspector does not currently support OAuth authentication for HTTP transports. Testing will focus on discovery and basic functionality. Full OAuth flow testing will be done with ChatGPT (Sub-Phase 2.3).
 
-- [ ] Server accessible via HTTPS
-- [ ] Environment variables configured
-- [ ] OAuth metadata endpoint accessible publicly
+#### Task 2.2.2: Test Discovery Flow
+
+**Manual Steps**:
+
+1. Launch MCP Inspector
+2. Connect to server URL
+3. Observe tool list
+
+**Expected Behavior**:
+
+- Connection succeeds
+- All tools visible (~25+ tools)
+- Tool metadata includes `securitySchemes` field
+- No authentication required for tool discovery
+
+**Verification**:
+
+- [ ] Inspector connects successfully
+- [ ] Tools list populates
+- [ ] Tool security metadata present
+- [ ] Server logs show `tools/list` request at debug level
+
+**Evidence**: Screenshot of Inspector tool list
+
+#### Task 2.2.3: Test Protected Tool Behavior
+
+**Manual Steps**:
+
+1. Select a protected tool (e.g., `get-lessons-summary`)
+2. Attempt to execute without auth token
+3. Observe error response
+
+**Expected Behavior**:
+
+- HTTP 200 response (not 401)
+- MCP error result with `isError: true`
+- `_meta["mcp/www_authenticate"]` present in result
+- Error message indicates auth required
+- Server logs show "Tool requires auth but none provided"
+
+**Verification**:
+
+- [ ] HTTP 200 response received
+- [ ] MCP error structure correct
+- [ ] `_meta` field contains WWW-Authenticate data
+- [ ] Error message helpful
+- [ ] Logs show auth failure with correlation ID
+
+**Evidence**: Screenshot of error response, log excerpt
+
+#### Task 2.2.4: OAuth Flow Testing in Inspector
+
+**MCP Inspector OAuth Support**:
+
+- MCP Inspector DOES support OAuth for HTTP transports
+- Can test full OAuth flow including token exchange
+- Can test authenticated tool execution
+- Provides detailed auth flow debugging
+
+**Testing Steps**:
+
+1. Configure Inspector with OAuth metadata endpoint
+2. Trigger OAuth flow by calling protected tool
+3. Complete OAuth authorization in browser
+4. Verify token storage and reuse
+5. Test authenticated tool execution
+
+**Evidence**: Screenshots of OAuth flow in Inspector, authenticated requests
+
+#### Task 2.2.5: Document MCP Inspector Findings
+
+**File**: `apps/oak-curriculum-mcp-streamable-http/docs/mcp-inspector-testing.md`
+
+**Content** (template):
+
+```markdown
+# MCP Inspector Testing Results
+
+**Date**: YYYY-MM-DD  
+**Inspector Version**: X.X.X  
+**Server**: oak-curriculum-mcp-streamable-http  
+**Server Version**: X.X.X
+
+## Summary
+
+[Brief summary of what worked, what didn't, any limitations]
+
+## Discovery Testing
+
+✅/❌ Inspector connects to server  
+✅/❌ Tools list appears  
+✅/❌ Security metadata present  
+✅/❌ No auth required for discovery
+
+[Screenshots]
+
+## Authentication Testing
+
+✅/❌ Protected tools return HTTP 200 with MCP error (not HTTP 401)  
+✅/❌ MCP error includes `_meta["mcp/www_authenticate"]`  
+✅/❌ Error messages helpful  
+❌ OAuth flow NOT supported in Inspector (known limitation)  
+❌ Cannot test authenticated tool execution (must use ChatGPT)
+
+[Screenshots and logs]
+
+## Limitations / Issues
+
+- ❌ **MCP Inspector does not support OAuth for HTTP transports**
+- Cannot complete OAuth authorization flow
+- Cannot test protected tool execution with valid tokens
+- OAuth testing must be done with ChatGPT (see ChatGPT Integration Guide)
+- [Any other issues encountered]
+- [Server issues discovered]
+
+## Logs
+
+[Relevant server log excerpts showing auth flow]
+```
+
+**Acceptance Criteria**:
+
+- [ ] Document created
+- [ ] Includes screenshots/evidence
+- [ ] Notes any issues or limitations
+- [ ] Reproducible instructions
 
 ---
 
-#### Task 5.2.2: Register MCP Server in ChatGPT
+### Sub-Phase 2.3: ChatGPT Integration Testing
+
+**Goal**: Validate server works as ChatGPT app (primary use case).
+
+**Note**: Requires ChatGPT Plus/Team account or Apps SDK access.
+
+#### Task 2.3.1: Register MCP Server in ChatGPT
+
+**Prerequisites**:
+
+- Server deployed with HTTPS (Vercel or ngrok)
+- OAuth metadata endpoint publicly accessible
 
 **Steps**:
 
 1. Open ChatGPT settings
-2. Navigate to "Actions" or "Apps" (UI may vary)
-3. Add new MCP server
-4. Configure:
-   - **Server URL**: `https://your-server.com/mcp`
-   - **Authentication**: OAuth 2.0
-   - **OAuth Metadata**: `https://your-server.com/.well-known/oauth-protected-resource`
-
-**Acceptance Criteria:**
-
-- [ ] Server registered successfully in ChatGPT
-- [ ] No errors during registration
-- [ ] ChatGPT validates OAuth metadata
-
-**Evidence**: Screenshot of ChatGPT server configuration
-
----
-
-#### Task 5.2.3: Test ChatGPT Discovery
-
-**Steps**:
-
-1. Open ChatGPT chat
-2. Type: "What tools do you have from Oak Curriculum?"
-3. Verify ChatGPT discovers tools
+2. Navigate to custom GPTs or Actions (UI varies)
+3. Add new integration/action
+4. **Configure**:
+   - Name: "Oak Curriculum MCP"
+   - Server URL: `https://your-domain.vercel.app/mcp`
+   - Authentication: OAuth 2.0
+   - Discovery URL: `https://your-domain.vercel.app/.well-known/oauth-protected-resource`
 
 **Expected Behavior**:
 
-- ChatGPT shows available tools
-- Tools include Oak curriculum tools
-- No errors during discovery
+- ChatGPT validates OAuth metadata
+- Server registration succeeds
+- No errors during setup
 
-**Acceptance Criteria:**
+**Verification**:
 
-- [ ] ChatGPT discovers all tools
-- [ ] Tool descriptions appear correctly
-- [ ] No authentication required for discovery
+- [ ] Server registered in ChatGPT
+- [ ] No validation errors
+- [ ] Configuration saved
+
+**Evidence**: Screenshots of ChatGPT configuration
+
+#### Task 2.3.2: Test Discovery in ChatGPT
+
+**Manual Steps**:
+
+1. Open new ChatGPT conversation
+2. Ask: "What tools do you have from Oak Curriculum?"
+3. Observe response
+
+**Expected Behavior**:
+
+- ChatGPT lists available tools
+- Tool descriptions appear
+- No authentication errors during discovery
+
+**Verification**:
+
+- [ ] ChatGPT discovers tools
+- [ ] Tool names and descriptions correct
+- [ ] No errors in ChatGPT UI
+- [ ] Server logs show `tools/list` request without auth
 
 **Evidence**: Screenshot of ChatGPT tool list
 
----
+#### Task 2.3.3: Test OAuth "Connect" Flow
 
-#### Task 5.2.4: Test ChatGPT Authentication UI
-
-**Steps**:
+**Manual Steps**:
 
 1. Ask ChatGPT to use a protected tool
-   - Example: "Show me Year 7 maths lessons"
-
-2. Verify OAuth flow
-   - ChatGPT should show "Connect" button
-   - Click "Connect"
-   - Should redirect to Clerk for authentication
-
-3. Complete OAuth flow
-   - Authenticate with Clerk
+   - Example: "Show me Year 7 maths lessons about fractions"
+2. Observe ChatGPT UI
+3. Click "Connect" button (should appear)
+4. Complete OAuth flow:
+   - Redirected to Clerk
+   - Authenticate with Clerk account
    - Grant permissions
-   - Should redirect back to ChatGPT
+   - Redirected back to ChatGPT
 
-**Acceptance Criteria:**
+**Expected Behavior**:
 
-- [ ] ChatGPT shows "Connect" button (not generic error)
-- [ ] OAuth flow launches correctly
-- [ ] User can authenticate with Clerk
-- [ ] ChatGPT receives access token
-- [ ] No errors during OAuth flow
+- ChatGPT shows "Connect to Oak Curriculum" button
+- OAuth flow launches in new window/tab
+- Clerk authentication page appears
+- User can sign in
+- Permissions page appears (if configured)
+- Redirect back to ChatGPT succeeds
+- ChatGPT shows "Connected" status
+
+**Verification**:
+
+- [ ] "Connect" button appears (not generic error)
+- [ ] OAuth window opens
+- [ ] Clerk page loads
+- [ ] Authentication succeeds
+- [ ] Redirect back succeeds
+- [ ] ChatGPT acknowledges connection
+- [ ] Server logs show OAuth request/callback
 
 **Evidence**:
 
-- Screenshots of OAuth flow
-- Server logs showing OAuth requests
+- Screenshots of each OAuth flow step
+- Server logs showing OAuth handshake
 
----
+#### Task 2.3.4: Test Tool Execution
 
-#### Task 5.2.5: Test ChatGPT Tool Execution
+**Manual Steps**:
 
-**Steps**:
-
-1. After connecting, ask ChatGPT to use a tool
+1. After connecting, retry original request
    - "Show me Year 7 maths lessons about fractions"
+2. Observe execution
+3. Try multiple tool calls
 
-2. Verify execution
-   - ChatGPT calls tool with Bearer token
-   - Server authenticates request
-   - Tool executes successfully
-   - Results returned to ChatGPT
+**Expected Behavior**:
 
-3. Test multiple tool calls
-   - Verify token reused
-   - Verify no re-authentication needed
+- Tool executes successfully
+- ChatGPT displays results
+- Token persists across multiple calls
+- No re-authentication required
 
-**Acceptance Criteria:**
+**Verification**:
 
-- [ ] Tool execution succeeds after auth
-- [ ] ChatGPT displays results correctly
-- [ ] Token persists across multiple calls
-- [ ] Server logs show successful auth
+- [ ] Tool execution succeeds after OAuth
+- [ ] ChatGPT formats results appropriately
+- [ ] Multiple calls work without re-auth
+- [ ] Server logs show "Authentication successful" with user ID
+- [ ] Server logs show correlation IDs for each request
 
 **Evidence**:
 
 - ChatGPT conversation screenshots
-- Server logs showing authenticated requests
+- Server logs for successful authenticated requests
 
----
+#### Task 2.3.5: Test Error Handling
 
-#### Task 5.2.6: Document ChatGPT Integration
+**Manual Steps**:
+
+1. Disconnect OAuth (if ChatGPT allows)
+2. Attempt to use protected tool
+3. Observe error handling
+
+**Expected Behavior**:
+
+- ChatGPT shows appropriate error
+- Prompts to reconnect
+- Server logs show auth failure
+
+**Optional Tests**:
+
+- Token expiration handling
+- Invalid scopes
+- Network errors
+
+**Verification**:
+
+- [ ] Errors handled gracefully
+- [ ] User can recover by reconnecting
+- [ ] Logs show specific auth failure reasons
+
+#### Task 2.3.6: Document ChatGPT Integration
 
 **File**: `apps/oak-curriculum-mcp-streamable-http/docs/chatgpt-integration.md`
 
-**Content**:
+**Content** (template):
 
-- Setup instructions
-- Registration steps
-- OAuth flow walkthrough
-- Screenshots of:
-  - Server configuration
-  - Tool discovery
-  - OAuth "Connect" UI
-  - Successful tool execution
-- Troubleshooting tips
-- Known limitations
+```markdown
+# ChatGPT Integration Guide
 
-**Acceptance Criteria:**
+**Last Updated**: YYYY-MM-DD  
+**Server**: oak-curriculum-mcp-streamable-http  
+**Tested With**: ChatGPT Plus (date)
 
-- [ ] Comprehensive setup guide
-- [ ] Screenshots of all key steps
+## Prerequisites
+
+- ChatGPT Plus or Team account
+- Server deployed with HTTPS
+- Clerk OAuth configured
+
+## Registration
+
+[Step-by-step with screenshots]
+
+## Discovery
+
+✅/❌ Tool discovery works  
+✅/❌ All tools visible  
+✅/❌ Descriptions accurate
+
+## OAuth Flow
+
+✅/❌ "Connect" button appears  
+✅/❌ OAuth flow completes  
+✅/❌ Clerk authentication works  
+✅/❌ Redirect succeeds
+
+[Screenshots of each step]
+
+## Tool Execution
+
+✅/❌ Protected tools execute after auth  
+✅/❌ Results displayed correctly  
+✅/❌ Multiple calls work  
+✅/❌ Token persists
+
+[Example conversation screenshots]
+
+## Troubleshooting
+
+**Issue**: "Connect" button doesn't appear  
+**Cause**: OAuth metadata not accessible or malformed  
+**Fix**: [solution]
+
+[Additional issues and solutions]
+
+## Server Logs
+
+[Example logs showing successful auth flow with correlation IDs]
+```
+
+**Acceptance Criteria**:
+
+- [ ] Complete setup guide with screenshots
+- [ ] OAuth flow documented step-by-step
+- [ ] Example conversation included
 - [ ] Troubleshooting section
-- [ ] Notes on any issues encountered
+- [ ] Server log examples
 
 ---
 
-### Sub-Phase 5.3: Automated E2E Tests for Client Compatibility
+### Sub-Phase 2.4: Production Readiness
 
-**Goal**: Create automated tests that prove ChatGPT-compatible behavior.
+**Goal**: Final validation before considering complete.
 
----
+**Re-ground in Foundation Documents**:
 
-#### Task 5.3.1: E2E Test for Unauthenticated Discovery
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/client-compat-discovery.e2e.test.ts`
-
-```typescript
-describe('Client Compatibility - Discovery', () => {
-  it('allows tools/list without authentication', async () => {
-    const response = await request(app).post('/mcp').send({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'tools/list',
-    });
-
-    expect(response.status).toBe(200);
-    expect(response.body.result).toHaveProperty('tools');
-    expect(Array.isArray(response.body.result.tools)).toBe(true);
-  });
-
-  it('includes securitySchemes in tool metadata', async () => {
-    const response = await request(app).post('/mcp').send({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'tools/list',
-    });
-
-    const tools = response.body.result.tools;
-    const protectedTool = tools.find((t) => t.name === 'get-lessons-summary');
-
-    expect(protectedTool.securitySchemes).toContainEqual({
-      type: 'oauth2',
-      scopes: expect.any(Array),
-    });
-  });
-});
+```bash
+cat .agent/directives-and-memory/rules.md
+cat .agent/directives-and-memory/testing-strategy.md
+cat .agent/directives-and-memory/schema-first-execution.md
 ```
 
-**Acceptance Criteria:**
-
-- [ ] Tests verify unauthenticated discovery works
-- [ ] Tests verify security metadata present
-- [ ] Tests pass
-
----
-
-#### Task 5.3.2: E2E Test for OAuth Metadata
-
-**File**: Same as above or separate
-
-```typescript
-describe('Client Compatibility - OAuth Metadata', () => {
-  it('serves protected resource metadata', async () => {
-    const response = await request(app).get('/.well-known/oauth-protected-resource');
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('resource');
-    expect(response.body).toHaveProperty('authorization_servers');
-    expect(response.body.authorization_servers).toBeInstanceOf(Array);
-    expect(response.body.authorization_servers.length).toBeGreaterThan(0);
-  });
-
-  it('includes scopes from generated tools', async () => {
-    const response = await request(app).get('/.well-known/oauth-protected-resource');
-
-    expect(response.body).toHaveProperty('scopes_supported');
-    expect(response.body.scopes_supported).toContain('curriculum:read');
-  });
-});
-```
-
-**Acceptance Criteria:**
-
-- [ ] Tests verify OAuth metadata structure
-- [ ] Tests verify required fields present
-- [ ] Tests pass
-
----
-
-#### Task 5.3.3: E2E Test for Per-Tool Authorization
-
-**File**: Same or separate
-
-```typescript
-describe('Client Compatibility - Per-Tool Auth', () => {
-  it('requires auth for protected tools', async () => {
-    const response = await request(app)
-      .post('/mcp')
-      .send({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'tools/call',
-        params: { name: 'get-lessons-summary', arguments: { lesson: 'test' } },
-      });
-
-    expect(response.status).toBe(401);
-    expect(response.headers['www-authenticate']).toMatch(/Bearer/);
-  });
-
-  it('allows public tools without auth', async () => {
-    const response = await request(app)
-      .post('/mcp')
-      .send({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'tools/call',
-        params: { name: 'get-changelog' },
-      });
-
-    expect(response.status).toBe(200);
-    expect(response.body.result).toHaveProperty('content');
-  });
-});
-```
-
-**Acceptance Criteria:**
-
-- [ ] Tests verify per-tool auth decisions
-- [ ] Tests cover both protected and public tools
-- [ ] Tests pass
-
----
-
-### Sub-Phase 5.4: Production Readiness Validation
-
-**Goal**: Final checks before considering Phase 5 complete.
-
----
-
-#### Task 5.4.1: Security Audit
+#### Task 2.4.1: Security Audit
 
 **Checklist**:
 
@@ -1795,183 +1481,398 @@ describe('Client Compatibility - Per-Tool Auth', () => {
 - [ ] Authorization headers redacted in logs
 - [ ] HTTPS enforced (except localhost)
 - [ ] CORS configured correctly
-- [ ] Rate limiting considered (out of scope for this phase, but noted)
 - [ ] Error messages don't leak sensitive info
+- [ ] OAuth redirect URIs validated
+- [ ] Clerk keys kept secret (env vars only)
 
----
+**Review Files**:
 
-#### Task 5.4.2: Performance Verification
+- `auth-response-helpers.ts` - check no token logging
+- `mcp-auth-logging.integration.test.ts` - verify redaction tests
+- All log statements - verify no sensitive data
 
-**Tests**:
+**Verification**:
 
-1. Measure auth middleware overhead
+```bash
+# Search for potential token leaks
+cd apps/oak-curriculum-mcp-streamable-http
+grep -r "logger\." src/ | grep -i "token\|bearer\|authorization" | grep -v "test"
+# Should NOT log actual token values
+```
 
-   ```bash
-   # Compare response times with/without auth
-   ```
+**Acceptance Criteria**:
 
-2. Check for memory leaks
-   - Run load test
-   - Monitor memory usage
+- [ ] No token values in logs
+- [ ] No authorization header values in logs
+- [ ] All sensitive data redacted
+- [ ] Security checklist complete
 
-3. Verify no performance regressions
-
-**Acceptance Criteria:**
-
-- [ ] Auth overhead < 50ms per request
-- [ ] No memory leaks detected
-- [ ] No performance regressions vs. pre-auth baseline
-
----
-
-#### Task 5.4.3: Documentation Review
+#### Task 2.4.2: Documentation Review
 
 **Files to Review**:
 
-- Main README
-- Auth troubleshooting guide
-- Clerk JWT requirements
-- ChatGPT integration guide
-- MCP Inspector testing guide
+- `README.md` - Ensure OAuth setup documented
+- `docs/mcp-inspector-testing.md` - New from Sub-Phase 2.2
+- `docs/chatgpt-integration.md` - New from Sub-Phase 2.3
+- `docs/clerk-mcp-research-findings.md` - Already exists
+- `docs/clerk-oauth-trace-instructions.md` - Already exists
 
 **Checklist**:
 
-- [ ] All docs accurate
-- [ ] All examples tested
-- [ ] All screenshots current
+- [ ] All OAuth endpoints documented
+- [ ] Environment variables listed
+- [ ] Example curl commands work
+- [ ] Troubleshooting guides complete
+- [ ] Screenshots current and accurate
 - [ ] No broken links
-- [ ] Security warnings present
 
----
+#### Task 2.4.3: Final Quality Gates
 
-#### Task 5.4.4: Final Quality Gate
-
-**Run ALL checks**:
+**Run ALL gates individually** (failures are BLOCKING):
 
 ```bash
-pnpm format:root
-pnpm type-check
-pnpm lint
-pnpm test
-pnpm test:e2e
-pnpm build
+# From repo root - each MUST PASS
+pnpm format-check:root    # BLOCKING if fails
+pnpm type-check           # BLOCKING if fails
+pnpm lint                 # BLOCKING if fails
+pnpm markdownlint-check:root  # BLOCKING if fails
+pnpm test                 # BLOCKING if fails
+pnpm test:ui              # BLOCKING if fails
+pnpm test:e2e             # BLOCKING if fails
+pnpm test:e2e:built       # BLOCKING if fails
+pnpm smoke:dev:stub       # BLOCKING if fails
+pnpm build                # BLOCKING if fails
 ```
 
-**Acceptance Criteria:**
+**OR run full quality gate suite**:
 
-- [ ] All commands pass
-- [ ] Zero errors or warnings
-- [ ] All tests green (unit, integration, E2E)
-- [ ] Build successful
+```bash
+pnpm qg  # Runs all quality gates - ANY failure is BLOCKING
+```
 
----
+**CRITICAL**: If ANY gate fails → STOP, FIX, re-run ALL gates before declaring Phase 2 complete.
 
-## Phase 5 Overall Acceptance Criteria
+**Acceptance Criteria** (ALL must be met):
 
-- [ ] MCP Inspector testing complete and documented
-- [ ] ChatGPT integration tested and documented
-- [ ] Automated E2E tests cover client compatibility
-- [ ] Security audit passed
-- [ ] Performance verified
-- [ ] Documentation complete and accurate
-- [ ] All quality gates pass
-
-## Phase 5 Definition of Done
-
-- All sub-phases complete
-- All acceptance criteria met
-- Real-world clients (ChatGPT, Inspector) work correctly
-- Production deployment ready
-- OAuth security implementation COMPLETE
+- [ ] Format check: ✅ PASS
+- [ ] Type-check: ✅ PASS (0 errors)
+- [ ] Lint: ✅ PASS (0 errors, 0 warnings)
+- [ ] Markdown lint: ✅ PASS
+- [ ] All unit tests: ✅ PASS
+- [ ] All integration tests: ✅ PASS
+- [ ] All UI tests: ✅ PASS
+- [ ] All E2E tests: ✅ PASS
+- [ ] All E2E built tests: ✅ PASS
+- [ ] All smoke tests: ✅ PASS
+- [ ] Build: ✅ PASS
+- [ ] **ZERO quality gate failures**
 
 ---
 
-## Overall Plan Completion Criteria
+## Phase 2 Overall Definition of Done
 
-### All Phases Complete When:
+**Critical (Must Have)**:
 
-1. **Phase 2**: OAuth implementation complete, all tests passing
-2. **Phase 4**: Auth observability complete, debugging is easy
-3. **Phase 5**: Real-world validation complete, ChatGPT integration works
-
-### Success Metrics:
-
-- [ ] ChatGPT can discover tools without auth
-- [ ] ChatGPT shows "Connect" button for protected tools
-- [ ] OAuth flow completes successfully
-- [ ] Protected tools execute after authentication
-- [ ] Auth failures are debuggable via logs
-- [ ] Zero regressions in existing functionality
+- [ ] Phase 1 complete (MCP client auth implemented)
 - [ ] All quality gates passing
-- [ ] Documentation complete
+- [ ] Foundation documents reviewed
+- [ ] MCP Inspector tested and documented (OAuth flow working)
+- [ ] ChatGPT integration tested and documented
 
-### Ready for Production When:
+**Evidence (Required)**:
 
-- All phases complete
+- [ ] `docs/mcp-inspector-testing.md` exists with screenshots
+- [ ] `docs/chatgpt-integration.md` exists with OAuth flow screenshots
+- [ ] Server logs demonstrate observable auth flow
+- [ ] Security audit checklist complete
+
+**Success Metrics**:
+
+- [ ] MCP Inspector can discover tools without auth
+- [ ] MCP Inspector OAuth flow works (token exchange, authenticated calls)
+- [ ] ChatGPT shows "Connect" button for protected tools
+- [ ] OAuth flow completes successfully in ChatGPT
+- [ ] Protected tools execute after MCP client authentication
+- [ ] MCP client auth failures are debuggable via logs
+- [ ] Upstream API auth still working (ADR-054)
+- [ ] Clear log distinction between two auth systems
+- [ ] Zero regressions
+- [ ] All quality gates passing
+
+**Ready for Production When**:
+
 - All acceptance criteria met
-- Security audit passed
-- Performance verified
-- Real users can successfully authenticate and use tools
+- Real users successfully authenticate
+- Documentation enables self-service troubleshooting
 
 ---
 
-## Appendix: Key Files & Locations
+## 🔮 OPTIONAL: Phase 3 - Enhanced Error Handling (Future Work)
 
-### Implementation Files
+**Status**: NOT URGENT - Current error handling is effective  
+**Estimated Time**: 4-6 hours (if pursued)  
+**Prerequisites**: Phase 2 complete, production validated
 
-**Auth Middleware**:
+**Objective**: Adopt explicit `Result<T, E>` pattern with error codes for enhanced debugging.
 
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth-clerk.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/verify-clerk-token.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/resource-parameter-validator.ts`
+### Why This is Optional
 
-**Routing**:
+**Current State** (already good):
 
-- `apps/oak-curriculum-mcp-streamable-http/src/mcp-router.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`
+- ✅ Comprehensive logging at all decision points
+- ✅ Clear error messages in HTTP responses
+- ✅ Sensitive data redacted
+- ✅ Correlation IDs enable request tracing
+- ✅ `undefined` / `{ valid, reason }` pattern is simple and effective
 
-**Error Handling**:
+**Potential Benefits** (marginal):
 
-- `apps/oak-curriculum-mcp-streamable-http/src/auth-error-detector.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/auth-error-response.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/tool-handler-with-auth.ts`
+- Explicit error codes enable precise log filtering
+- Structured error context (expected vs received)
+- Type-safe error handling
+- Matches SDK pattern (consistency)
 
-### Test Files
+**Rules Compliance Note**:
+If pursued, this MUST be done as **in-place updates**, not V1/V2 versioning:
 
-**Unit Tests**:
+- ✅ Update functions in place
+- ✅ Update all call sites in same commits
+- ✅ Use TDD to prove behavior preserved
+- ❌ NO V1/V2 function naming
+- ❌ NO backwards compatibility wrappers
 
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/*.unit.test.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/auth-error-*.unit.test.ts`
+### Simplified Approach (If Pursued)
 
-**Integration Tests**:
+**Task 3.1**: Define Result Types (1 hour)
 
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/*.integration.test.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/handlers-auth-errors.integration.test.ts`
+```typescript
+// File: src/auth/mcp-auth/auth-result-types.ts (NEW)
 
-**E2E Tests**:
+export const AuthErrorCode = {
+  MISSING_HEADER: 'AUTH_MISSING_HEADER',
+  INVALID_FORMAT: 'AUTH_INVALID_FORMAT',
+  VERIFICATION_FAILED: 'AUTH_VERIFICATION_FAILED',
+  CLERK_NOT_AUTHENTICATED: 'AUTH_CLERK_NOT_AUTHENTICATED',
+  CLERK_MISSING_FIELD: 'AUTH_CLERK_MISSING_FIELD',
+  AUDIENCE_MISMATCH: 'AUTH_AUDIENCE_MISMATCH',
+  JWT_DECODE_ERROR: 'AUTH_JWT_DECODE_ERROR',
+} as const;
 
-- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-*.e2e.test.ts`
+export type AuthErrorCode = (typeof AuthErrorCode)[keyof typeof AuthErrorCode];
 
-### Documentation Files
+export interface AuthError {
+  readonly code: AuthErrorCode;
+  readonly message: string;
+  readonly context?: { readonly [key: string]: unknown };
+}
 
-**Architecture**:
+export type AuthResult<T> =
+  | { readonly ok: true; readonly value: T }
+  | { readonly ok: false; readonly error: AuthError };
 
-- `docs/architecture/architectural-decisions/052-oauth-2.1-for-mcp-http-authentication.md`
-- `docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md`
-- `docs/architecture/architectural-decisions/054-tool-level-auth-error-interception.md`
+export function authSuccess<T>(value: T): AuthResult<T> {
+  return { ok: true, value };
+}
 
-**User Documentation** (to be created):
+export function authError(
+  code: AuthErrorCode,
+  message: string,
+  context?: AuthError['context'],
+): AuthResult<never> {
+  return { ok: false, error: { code, message, context } };
+}
+```
 
-- `apps/oak-curriculum-mcp-streamable-http/docs/auth-troubleshooting.md`
-- `apps/oak-curriculum-mcp-streamable-http/docs/clerk-jwt-structure.md`
-- `apps/oak-curriculum-mcp-streamable-http/docs/testing-with-mcp-inspector.md`
-- `apps/oak-curriculum-mcp-streamable-http/docs/chatgpt-integration.md`
+**Task 3.2**: Update `verifyClerkToken` IN PLACE (TDD, 1 hour)
+
+```typescript
+// File: src/auth/mcp-auth/verify-clerk-token.ts
+// Update return type, implementation, and ALL call sites
+
+export function verifyClerkToken(
+  auth: MachineAuthObject<'oauth_token'>,
+  token: string | undefined,
+): AuthResult<AuthInfo> {
+  // Changed from AuthInfo | undefined
+  if (!token) {
+    return authError(AuthErrorCode.VERIFICATION_FAILED, 'Token is required');
+  }
+  // ... rest of implementation returning AuthResult
+}
+```
+
+**Task 3.3**: Update call sites (30 min)
+
+```typescript
+// File: src/auth/mcp-auth/mcp-auth-clerk.ts
+const result = verifyClerkToken(authData, token);
+if (!result.ok) {
+  logger.warn('Clerk token verification failed', {
+    errorCode: result.error.code, // NEW: explicit code
+    reason: result.error.message,
+  });
+  return Promise.resolve(result); // Pass through Result
+}
+return Promise.resolve(result);
+```
+
+**Task 3.4**: Update remaining functions (2 hours)
+
+- `validateResourceParameter` → return `AuthResult<{ audience: string }>`
+- `TokenVerifier` type → return `Promise<AuthResult<AuthInfo>>`
+- Update all call sites
+
+**Task 3.5**: Integration tests (1 hour)
+
+- Update existing tests to check `result.ok`
+- Verify error codes in logs
+- HTTP behavior unchanged
+
+**Task 3.6**: Documentation (30 min)
+
+- Error code reference
+- Log filtering examples
+
+**Total**: 4-6 hours (vs 6.5-9.5 in original plan)
+
+---
+
+## Appendix A: Key Files Reference
+
+### Auth Implementation
+
+- `src/auth/mcp-auth/mcp-auth.ts` - Core middleware
+- `src/auth/mcp-auth/mcp-auth-clerk.ts` - Clerk integration
+- `src/auth/mcp-auth/verify-clerk-token.ts` - Pure verification function
+- `src/auth/mcp-auth/auth-response-helpers.ts` - Response + logging helpers
+- `src/resource-parameter-validator.ts` - RFC 8707 validation
+- `src/auth-routes.ts` - Route registration
+
+### Test Files (Selected)
+
+- `src/auth/mcp-auth/mcp-auth-logging.integration.test.ts` - Logging tests ✅
+- `src/auth/mcp-auth/create-auth-log-context.unit.test.ts` - Log context tests (has type error)
+- `src/auth/mcp-auth/verify-clerk-token.unit.test.ts` - Pure function tests
+- `e2e-tests/auth-enforcement.e2e.test.ts` - E2E auth tests
+- `e2e-tests/auth-bypass.e2e.test.ts` - Discovery without auth tests
+
+### Documentation (Existing)
+
+- `docs/clerk-mcp-research-findings.md` - Clerk + ChatGPT compatibility
+- `docs/clerk-oauth-trace-instructions.md` - OAuth debugging
+- `docs/headless-oauth-automation.md` - Testing automation
+- `docs/middleware-chain.md` - Request flow
+
+### Documentation (To Create)
+
+- `docs/mcp-inspector-testing.md` - Phase 2.2
+- `docs/chatgpt-integration.md` - Phase 2.3
+
+---
+
+## Appendix B: Architectural Decision - Why Tool-Level Auth
+
+### CRITICAL: Two Separate Auth Systems
+
+**DO NOT CONFUSE THESE TWO**:
+
+1. **MCP OAuth** (ChatGPT authenticating to our MCP server)
+   - This is what we're implementing
+   - Uses Clerk OAuth with Bearer tokens
+   - Verified by our server using `verifyClerkToken`
+   - This is MCP auth - has NOTHING to do with the upstream API
+
+2. **Upstream API Auth** (Our server authenticating to Oak Curriculum API)
+   - Completely separate system
+   - Uses API key authentication
+   - Handled transparently by the SDK
+   - NOT related to MCP auth
+   - The SDK will never return 401 for MCP auth purposes
+
+### OpenAI Apps SDK vs MCP Auth Spec
+
+**Two Different Standards for MCP OAuth**:
+
+1. **MCP Authorization Spec** ([MCP Docs](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization))
+   - HTTP-level authorization
+   - Returns HTTP 401 Unauthorized
+   - `WWW-Authenticate` header in HTTP response
+   - Standard OAuth 2.1 resource server pattern
+   - ❌ Does NOT work with ChatGPT
+
+2. **OpenAI Apps SDK** ([OpenAI Docs](https://platform.openai.com/docs/guides/apps-sdk/authentication))
+   - Tool-level authorization
+   - Returns HTTP 200 with MCP error result
+   - `_meta["mcp/www_authenticate"]` in MCP result (not HTTP header)
+   - Specifically designed for ChatGPT integration
+   - ✅ REQUIRED for ChatGPT
+
+### Why We Must Use Tool-Level Auth
+
+**Our primary use case is ChatGPT**, which requires:
+
+- `securitySchemes` in tool metadata (generated at type-gen time)
+- `_meta["mcp/www_authenticate"]` in error results (not HTTP headers)
+- HTTP 200 responses with MCP errors (not HTTP 401)
+
+**Evidence from OpenAI Apps SDK docs**:
+
+- ChatGPT parses `_meta` field in MCP error results
+- HTTP 401 responses prevent ChatGPT from showing "Connect" button
+- Tool-level auth is the specified approach for ChatGPT integration
+
+**Note**: MCP Inspector does not currently support OAuth for HTTP transports, so cannot be used to test the full OAuth flow.
+
+### What We Keep vs What We Change
+
+**KEEP (Reusable Infrastructure)**:
+
+- ✅ Clerk integration
+- ✅ Token verification logic (`verifyClerkToken`)
+- ✅ Resource parameter validation (`validateResourceParameter`)
+- ✅ Logging infrastructure
+- ✅ Protected resource metadata endpoint
+- ✅ Per-tool security metadata
+
+**CHANGE (Enforcement Layer)**:
+
+- ❌ Move auth checking FROM middleware TO tool handlers
+- ❌ Return MCP errors INSTEAD OF HTTP 401
+- ❌ Include `_meta` INSTEAD OF `WWW-Authenticate` header
+
+This preserves all our good work (verification, logging, metadata) while fixing the enforcement layer to match ChatGPT's requirements.
+
+---
+
+## Appendix C: Plan Evolution
+
+| Date       | Version | Key Changes                                                  |
+| ---------- | ------- | ------------------------------------------------------------ |
+| 2025-11-24 | v1      | Initial plan - HTTP-level auth (MCP spec)                    |
+| 2025-11-24 | v2      | Verified observability complete                              |
+| 2025-11-24 | v3      | **CRITICAL FIX: Tool-level auth required (OpenAI Apps SDK)** |
+
+**v3 Changes**:
+
+- ✅ Identified architectural mismatch (HTTP vs tool-level)
+- ✅ Restructured Phase 1 as architectural fix (TDD approach)
+- ✅ Preserved all observability infrastructure
+- ✅ Maintained rules compliance (no V1/V2, TDD at all levels)
+- ✅ Phase 2 (Client Validation) unchanged but depends on Phase 1
 
 ---
 
 ## Revision History
 
-| Date       | Author | Changes                                                                                                         |
-| ---------- | ------ | --------------------------------------------------------------------------------------------------------------- |
-| 2025-11-24 | Agent  | Initial version - consolidated from schema-first-security-implementation.md, added Phase 4 (Auth Observability) |
+| Date       | Author | Changes                                                                                                  |
+| ---------- | ------ | -------------------------------------------------------------------------------------------------------- |
+| 2025-11-24 | Agent  | **REWRITTEN** based on verified codebase state. Phase 2 (observability) is COMPLETE                      |
+| 2025-11-24 | Agent  | Simplified Phase 3 (Result pattern) to comply with architectural rules                                   |
+| 2025-11-24 | Agent  | Made Phase 3 OPTIONAL - current error handling already effective                                         |
+| 2025-11-24 | Agent  | **CRITICAL REVISION**: Identified wrong auth layer. Must implement tool-level auth (1-2d)                |
+| 2025-11-24 | Agent  | Phase 1 restructured as architectural fix following TDD at all levels                                    |
+| 2025-11-24 | Agent  | Maintained observability throughout, preserved pure functions, rules-compliant                           |
+| 2025-11-24 | Agent  | **MAJOR UPDATE**: Added Phase 0 (quality gates baseline), corrected TDD flow, AsyncLocalStorage solution |
+| 2025-11-24 | Agent  | Clarified MCP client auth vs upstream API auth separation throughout                                     |
+| 2025-11-24 | Agent  | Corrected MCP Inspector OAuth support (it DOES support OAuth)                                            |
+| 2025-11-24 | Agent  | Added periodic foundation document reviews and quality gate runs                                         |

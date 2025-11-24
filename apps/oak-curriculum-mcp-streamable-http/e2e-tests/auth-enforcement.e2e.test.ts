@@ -102,7 +102,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(res.text.length).toBeGreaterThan(0);
   });
 
-  it('includes WWW-Authenticate header in 401 response for protected tools', async () => {
+  it('returns MCP error with _meta for protected tools without auth', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
@@ -110,12 +110,33 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages' },
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
-    expect(res.status).toBe(401);
-    expect(res.headers['www-authenticate']).toBeDefined();
-    expect(res.headers['www-authenticate']).toContain('Bearer');
+    // Tool-level auth: return HTTP 200 with MCP error result
+    expect(res.status).toBe(200);
+
+    // Parse SSE response to get JSON-RPC result
+    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
+    expect(sseData).toBeDefined();
+    if (!sseData) {
+      throw new Error('Expected SSE data not found');
+    }
+    const jsonData = JSON.parse(sseData.substring(6)) as {
+      result: {
+        isError: boolean;
+        _meta: Record<string, unknown>;
+      };
+    };
+
+    // Expect MCP error result with _meta
+    expect(jsonData.result.isError).toBe(true);
+    expect(jsonData.result._meta).toBeDefined();
+    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+    expect(Array.isArray(jsonData.result._meta['mcp/www_authenticate'])).toBe(true);
+    const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
+    expect(wwwAuth[0]).toContain('Bearer');
+    expect(wwwAuth[0]).toContain('error=');
   });
 
   it('does not proxy authorization server metadata', async () => {
@@ -174,7 +195,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(scopes).toHaveLength(2);
   });
 
-  it('rejects invalid Bearer token for protected tools with 401', async () => {
+  it('returns MCP error with _meta for invalid Bearer token', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
@@ -183,13 +204,33 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages' },
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
-    expect(res.status).toBe(401);
+    // Tool-level auth: return HTTP 200 with MCP error result
+    expect(res.status).toBe(200);
+
+    // Parse SSE response to get JSON-RPC result
+    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
+    expect(sseData).toBeDefined();
+    if (!sseData) {
+      throw new Error('Expected SSE data not found');
+    }
+    const jsonData = JSON.parse(sseData.substring(6)) as {
+      result: {
+        isError: boolean;
+        _meta: Record<string, unknown>;
+      };
+    };
+
+    // Expect MCP error result with _meta indicating invalid token
+    expect(jsonData.result.isError).toBe(true);
+    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+    const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
+    expect(wwwAuth[0]).toContain('error=');
   });
 
-  it('rejects malformed Authorization header for protected tools with 401', async () => {
+  it('returns MCP error with _meta for malformed Authorization header', async () => {
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
@@ -198,15 +239,33 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages' },
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
-    expect(res.status).toBe(401);
+    // Tool-level auth: return HTTP 200 with MCP error result
+    expect(res.status).toBe(200);
+
+    // Parse SSE response to get JSON-RPC result
+    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
+    expect(sseData).toBeDefined();
+    if (!sseData) {
+      throw new Error('Expected SSE data not found');
+    }
+    const jsonData = JSON.parse(sseData.substring(6)) as {
+      result: {
+        isError: boolean;
+        _meta: Record<string, unknown>;
+      };
+    };
+
+    // Expect MCP error result with _meta
+    expect(jsonData.result.isError).toBe(true);
+    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
   });
 
   // Test #3: OAuth Discovery Flow (Protected Resource Metadata)
   it('supports OAuth discovery via protected resource metadata', async () => {
-    // Step 1: Client calls protected tool without auth → 401 with WWW-Authenticate
+    // Step 1: Client calls protected tool without auth → HTTP 200 with MCP error + _meta
     const step1 = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
@@ -214,12 +273,31 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages' },
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
-    expect(step1.status).toBe(401);
-    const wwwAuth = step1.headers['www-authenticate'];
-    expect(wwwAuth).toBeDefined();
+    // Tool-level auth: HTTP 200 with MCP error
+    expect(step1.status).toBe(200);
+
+    // Parse SSE response to get JSON-RPC result
+    const sseData = step1.text.split('\n').find((line) => line.startsWith('data: '));
+    expect(sseData).toBeDefined();
+    if (!sseData) {
+      throw new Error('Expected SSE data not found');
+    }
+    const jsonData = JSON.parse(sseData.substring(6)) as {
+      result: {
+        isError: boolean;
+        _meta: Record<string, unknown>;
+      };
+    };
+
+    // Verify MCP error with _meta containing www_authenticate
+    expect(jsonData.result.isError).toBe(true);
+    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+
+    const wwwAuthArray = jsonData.result._meta['mcp/www_authenticate'] as string[];
+    const wwwAuth = wwwAuthArray[0];
     expect(wwwAuth).toContain('Bearer');
     expect(wwwAuth).toContain('resource_metadata');
 
@@ -233,8 +311,24 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(asUrl).toContain('clerk');
     expect(asUrl).toMatch(/^https:\/\//);
   });
+});
 
-  // Test #5: RFC Compliance Validation
+// Test #5: RFC Compliance Validation
+describe('Auth Enforcement - RFC Compliance', () => {
+  let app: Express;
+
+  beforeAll(() => {
+    const testEnv: NodeJS.ProcessEnv = {
+      NODE_ENV: 'test',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+    };
+
+    const runtimeConfig = loadRuntimeConfig(testEnv);
+    app = createApp({ runtimeConfig });
+  });
+
   describe('RFC Compliance', () => {
     it('oauth-protected-resource conforms to RFC 9728', async () => {
       const res = await request(app).get('/.well-known/oauth-protected-resource');
@@ -295,7 +389,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       // Only the /mcp endpoint requires OAuth authentication
     });
 
-    it('WWW-Authenticate header conforms to RFC 6750 Bearer scheme', async () => {
+    it('_meta www_authenticate conforms to RFC 6750 Bearer scheme', async () => {
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -303,11 +397,25 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'tools/call',
-          params: { name: 'get-key-stages' },
+          params: { name: 'get-key-stages', arguments: {} },
         });
 
-      expect(res.status).toBe(401);
-      const wwwAuth = res.headers['www-authenticate'];
+      // Tool-level auth: HTTP 200 with MCP error
+      expect(res.status).toBe(200);
+
+      // Parse SSE response to get JSON-RPC result
+      const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: {
+          _meta: Record<string, unknown>;
+        };
+      };
+
+      const wwwAuth = (jsonData.result._meta['mcp/www_authenticate'] as string[])[0];
       expect(wwwAuth).toBeDefined();
 
       // RFC 6750 format: Bearer realm="...", error="...", error_description="..."

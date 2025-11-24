@@ -7,7 +7,8 @@
  * Part of Phase 2, Sub-Phase 2.4
  */
 
-import { decode as jwtDecode } from 'jsonwebtoken';
+import { decode as jwtDecode, type JwtPayload } from 'jsonwebtoken';
+import type { Logger } from '@oaknational/mcp-logger';
 
 /**
  * Result of resource parameter validation.
@@ -23,6 +24,33 @@ export interface ResourceValidationResult {
    */
   readonly reason?: string;
 }
+
+/**
+ * No-op logger for backwards compatibility when logger not provided.
+ * All methods are intentionally empty as this is a no-op implementation.
+ */
+const noopLogger: Logger = {
+  debug: () => {
+    /* no-op */
+  },
+  info: () => {
+    /* no-op */
+  },
+  warn: () => {
+    /* no-op */
+  },
+  error: () => {
+    /* no-op */
+  },
+  fatal: () => {
+    /* no-op */
+  },
+  trace: () => {
+    /* no-op */
+  },
+  isLevelEnabled: () => false,
+  child: () => noopLogger,
+};
 
 /**
  * Extract audiences from JWT payload.
@@ -49,6 +77,42 @@ function isResourceInAudiences(
 }
 
 /**
+ * Log JWT structure information (without sensitive data).
+ */
+function logJWTStructure(logger: Logger, payload: JwtPayload): void {
+  logger.debug('JWT decoded', {
+    hasAudience: !!payload.aud,
+    audienceType: Array.isArray(payload.aud) ? 'array' : 'string',
+    audienceCount: Array.isArray(payload.aud) ? payload.aud.length : payload.aud ? 1 : 0,
+    issuer: payload.iss,
+    expiresAt: payload.exp,
+  });
+}
+
+/**
+ * Log audience validation result.
+ */
+function logAudienceValidation(
+  logger: Logger,
+  result: ResourceValidationResult,
+  audiences: string[],
+  expectedResource: string,
+): void {
+  if (!result.valid) {
+    logger.warn('Audience validation failed', {
+      expectedResource,
+      actualAudiences: audiences,
+      reason: result.reason,
+    });
+  } else {
+    logger.debug('Audience validation succeeded', {
+      expectedResource,
+      matchedAudience: audiences.find((a) => a === expectedResource),
+    });
+  }
+}
+
+/**
  * Validates that a JWT token's audience claim matches the expected resource.
  *
  * Per RFC 8707 (Resource Indicators for OAuth 2.0), the authorization server
@@ -60,13 +124,14 @@ function isResourceInAudiences(
  *
  * @param token - JWT access token (Bearer token, without 'Bearer ' prefix)
  * @param expectedResource - Expected resource URL (e.g., "https://mcp.example.com/mcp")
+ * @param logger - Optional logger for JWT validation details (defaults to no-op logger)
  * @returns Validation result with details
  *
  * @see https://www.rfc-editor.org/rfc/rfc8707.html
  *
  * @example
  * ```typescript
- * const result = validateResourceParameter(token, 'https://mcp.example.com/mcp');
+ * const result = validateResourceParameter(token, 'https://mcp.example.com/mcp', logger);
  * if (!result.valid) {
  *   console.error('Token validation failed:', result.reason);
  *   return res.status(401).json({ error: result.reason });
@@ -78,12 +143,16 @@ function isResourceInAudiences(
 export function validateResourceParameter(
   token: string,
   expectedResource: string,
+  logger: Logger = noopLogger,
 ): ResourceValidationResult {
   try {
     // Decode JWT without verification (already verified by Clerk)
     const decoded = jwtDecode(token, { complete: true });
 
     if (!decoded || typeof decoded === 'string') {
+      logger.warn('JWT decode failed', {
+        reason: 'Invalid JWT format',
+      });
       return { valid: false, reason: 'Invalid JWT format' };
     }
 
@@ -91,16 +160,31 @@ export function validateResourceParameter(
 
     // Type guard: payload should be JwtPayload, not string
     if (typeof payload === 'string') {
+      logger.warn('JWT decode failed', {
+        reason: 'Invalid JWT payload format',
+      });
       return { valid: false, reason: 'Invalid JWT payload format' };
     }
 
+    // Log JWT structure
+    logJWTStructure(logger, payload);
+
     // Extract and validate audiences
     const audiences = getAudiences(payload.aud);
-    return isResourceInAudiences(audiences, expectedResource);
+    const result = isResourceInAudiences(audiences, expectedResource);
+
+    // Log validation result
+    logAudienceValidation(logger, result, audiences, expectedResource);
+
+    return result;
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.warn('JWT validation error', {
+      error: errorMessage,
+    });
     return {
       valid: false,
-      reason: `Token decode error: ${error instanceof Error ? error.message : String(error)}`,
+      reason: `Token decode error: ${errorMessage}`,
     };
   }
 }

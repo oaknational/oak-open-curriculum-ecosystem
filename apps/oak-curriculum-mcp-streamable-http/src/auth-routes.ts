@@ -1,10 +1,8 @@
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
-import { mcpAuthClerk } from './auth/mcp-auth/index.js';
-import { createMcpRouter } from './mcp-router.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';
@@ -84,29 +82,28 @@ export function registerPublicOAuthMetadataEndpoints(
 }
 
 /**
- * Registers authenticated MCP routes with method-aware auth routing.
+ * Registers MCP routes without HTTP-level auth middleware.
  *
- * Uses createMcpRouter to conditionally apply authentication based on:
- * - Discovery methods (initialize, tools/list): No auth required
- * - Execution methods (tools/call): Per-tool security metadata
+ * Authentication is now handled at the tool execution level,
+ * not at the HTTP middleware level. This enables:
+ * - Discovery methods work without authentication
+ * - Protected tools return HTTP 200 with MCP error containing _meta
+ * - ChatGPT OAuth flow triggered by _meta["mcp/www_authenticate"]
  *
- * This enables OpenAI ChatGPT integration which requires discovery methods
- * to work without authentication.
+ * This is the correct pattern for OpenAI Apps SDK integration.
  */
 function registerAuthenticatedRoutes(
   app: Express,
   coreTransport: StreamableHTTPServerTransport,
   log: Logger,
-  authMiddleware: RequestHandler,
 ): void {
-  // Create method-aware router that wraps auth middleware
-  const mcpRouter = createMcpRouter({ auth: authMiddleware });
+  // No HTTP-level auth middleware - all requests reach tool handlers
+  // Auth is checked inside tool execution (tool-level, not HTTP-level)
+  log.debug('Registering POST /mcp route (tool-level auth)');
+  app.post('/mcp', createMcpHandler(coreTransport, log));
 
-  log.debug('Registering POST /mcp route (method-aware auth with resource validation)');
-  app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
-
-  log.debug('Registering GET /mcp route (method-aware auth with resource validation)');
-  app.get('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+  log.debug('Registering GET /mcp route (tool-level auth)');
+  app.get('/mcp', createMcpHandler(coreTransport, log));
 }
 
 /**
@@ -195,10 +192,10 @@ export function setupAuthRoutes(
   }
 
   // OAuth metadata endpoints are now registered BEFORE clerkMiddleware (in Phase 2.5)
-  // This function ONLY registers the protected /mcp routes
-  authLog.debug('Registering protected MCP routes (with auth enforcement)');
-  const mcpAuthMw = instrumentMiddleware('mcpAuthClerk', mcpAuthClerk, authLog);
-  measureAuthSetupStep(authLog, 'mcp.auth.register', () => {
-    registerAuthenticatedRoutes(app, coreTransport, authLog, mcpAuthMw);
+  // This function ONLY registers the /mcp routes
+  // Auth enforcement happens at tool-level, not HTTP-level
+  authLog.debug('Registering MCP routes (tool-level auth enforcement)');
+  measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
+    registerAuthenticatedRoutes(app, coreTransport, authLog);
   });
 }
