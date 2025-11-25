@@ -148,7 +148,7 @@ describe('Header Redaction E2E', () => {
       // This E2E test verifies the complete request/response cycle works
     });
 
-    it('should handle auth failure responses with WWW-Authenticate header', async () => {
+    it('should handle auth failure with HTTP 200 and MCP error containing _meta', async () => {
       // Override: enable auth enforcement for this test
       delete process.env.DANGEROUSLY_DISABLE_AUTH;
 
@@ -162,21 +162,36 @@ describe('Header Redaction E2E', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'tools/call',
-          params: { name: 'get-key-stages' },
+          params: { name: 'get-key-stages', arguments: {} }, // Add arguments field
         });
 
-      // Should return 401 without auth for protected tools
-      expect(response.status).toBe(401);
-
-      // Verify WWW-Authenticate header is present
-      const wwwAuth = response.headers['www-authenticate'] as string | undefined;
-      expect(wwwAuth).toBeDefined();
-      expect(wwwAuth?.toLowerCase()).toMatch(/^bearer\s+/);
+      // Tool-level auth: return HTTP 200 with MCP error result
+      expect(response.status).toBe(200);
 
       // Verify correlation ID is still set
       expect(response.headers['x-correlation-id']).toBeDefined();
 
-      // Note: WWW-Authenticate header is preserved in logs (not sensitive)
+      // Parse SSE response to get JSON-RPC result
+      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: {
+          isError: boolean;
+          _meta: Record<string, unknown>;
+        };
+      };
+
+      // Verify _meta contains WWW-Authenticate (not HTTP header)
+      expect(jsonData.result).toBeDefined();
+      expect(jsonData.result.isError).toBe(true);
+      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+      const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
+      expect(wwwAuth[0].toLowerCase()).toMatch(/bearer\s+/);
+
+      // Note: _meta['mcp/www_authenticate'] is preserved in logs (not sensitive)
       // Integration tests verify this preservation behavior
     });
   });

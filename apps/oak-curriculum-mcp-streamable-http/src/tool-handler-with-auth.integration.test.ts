@@ -10,6 +10,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk';
+import type { RuntimeConfig } from './runtime-config.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import type { ToolHandlerDependencies } from './handlers.js';
 
@@ -57,6 +58,20 @@ function createMockDependencies(
   };
 }
 
+/**
+ * Creates a mock RuntimeConfig for testing
+ */
+function createMockRuntimeConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
+  return {
+    env: {} as RuntimeConfig['env'],
+    dangerouslyDisableAuth: false,
+    useStubTools: false,
+    version: '1.0.0-test',
+    vercelHostnames: [],
+    ...overrides,
+  };
+}
+
 describe('Tool Handler with Auth Integration', () => {
   let logger: Logger;
   let deps: ToolHandlerDependencies;
@@ -70,6 +85,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should return MCP error with _meta when auth context missing', async () => {
       const tool = { name: 'search' as UniversalToolName };
       const params = { query: 'test' };
+      const config = createMockRuntimeConfig();
 
       // For this test, we expect the handler to check auth BEFORE executing
       // Since auth context is missing (not implemented yet), expect error
@@ -80,6 +96,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       // Expected behavior (not yet implemented):
@@ -104,6 +121,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should return MCP error with _meta for invalid auth token', async () => {
       const tool = { name: 'get-key-stages' as UniversalToolName };
       const params = {};
+      const config = createMockRuntimeConfig();
 
       // For this test, assume we have invalid auth context
       // (Not yet implemented - will need to pass auth context to handler)
@@ -114,6 +132,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       // Expected behavior (when auth validation is implemented):
@@ -131,6 +150,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should execute public tool without auth check', async () => {
       const tool = { name: 'get-changelog' as UniversalToolName };
       const params = {};
+      const config = createMockRuntimeConfig();
 
       const result = await handleToolWithAuthInterception(
         tool,
@@ -139,6 +159,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       // Expected behavior:
@@ -153,8 +174,17 @@ describe('Tool Handler with Auth Integration', () => {
     it('should log auth required but missing with correlation ID', async () => {
       const tool = { name: 'search' as UniversalToolName };
       const params = { query: 'test' };
+      const config = createMockRuntimeConfig();
 
-      await handleToolWithAuthInterception(tool, params, deps, undefined, logger, 'test-api-key');
+      await handleToolWithAuthInterception(
+        tool,
+        params,
+        deps,
+        undefined,
+        logger,
+        'test-api-key',
+        config,
+      );
 
       // Expected: logger.warn called with auth required message
       expect(logger.warn).toHaveBeenCalled();
@@ -174,6 +204,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should include resource_metadata in www_authenticate header', async () => {
       const tool = { name: 'search' as UniversalToolName };
       const params = { query: 'test' };
+      const config = createMockRuntimeConfig();
 
       const result = await handleToolWithAuthInterception(
         tool,
@@ -182,6 +213,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       const meta = result._meta as Record<string, unknown>;
@@ -195,6 +227,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should include error description in www_authenticate header', async () => {
       const tool = { name: 'search' as UniversalToolName };
       const params = { query: 'test' };
+      const config = createMockRuntimeConfig();
 
       const result = await handleToolWithAuthInterception(
         tool,
@@ -203,6 +236,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       const meta = result._meta as Record<string, unknown>;
@@ -212,6 +246,7 @@ describe('Tool Handler with Auth Integration', () => {
     it('should include user-friendly error message in content', async () => {
       const tool = { name: 'search' as UniversalToolName };
       const params = { query: 'test' };
+      const config = createMockRuntimeConfig();
 
       const result = await handleToolWithAuthInterception(
         tool,
@@ -220,6 +255,7 @@ describe('Tool Handler with Auth Integration', () => {
         undefined,
         logger,
         'test-api-key',
+        config,
       );
 
       expect(result.content).toBeDefined();

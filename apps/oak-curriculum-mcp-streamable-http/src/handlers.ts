@@ -1,8 +1,3 @@
-/* eslint-disable max-lines */
-// File is 254 lines (4 over limit of 250). The architectural adapter function
-// for bridging Clerk and MCP SDK types requires extensive documentation.
-// Splitting would reduce clarity without architectural benefit.
-
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -80,6 +75,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
         stubExecutor,
         options.logger,
         options.runtimeConfig.env.OAK_API_KEY,
+        options.runtimeConfig,
       );
     });
   }

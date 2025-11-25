@@ -11,6 +11,7 @@ import type { Logger } from '@oaknational/mcp-logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk';
 import type { MachineAuthObject } from '@clerk/backend';
+import type { RuntimeConfig } from './runtime-config.js';
 import { getRequestContext } from './request-context.js';
 import { extractAuthContext } from './auth/tool-auth-context.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
@@ -104,42 +105,23 @@ function checkResourceValidation(
 }
 
 /**
- * Checks MCP client authentication for a tool.
+ * Performs all auth validations (token + resource) and logs success.
  *
- * This function performs preventive auth checking BEFORE SDK execution.
- * Returns an auth error response if auth is required but missing/invalid.
- * Returns undefined if auth check passes or tool doesn't require auth.
- *
- * @param toolName - Name of the tool being executed
- * @param resourceUrl - MCP resource URL for auth metadata
- * @param logger - Logger for auth events
- * @returns Auth error response if auth fails, undefined if auth passes
- *
- * @public
+ * @param clerkAuth - Clerk authentication object
+ * @param authContext - Auth context with token
+ * @param toolName - Tool name for logging
+ * @param resourceUrl - Resource URL for validation
+ * @param logger - Logger instance
+ * @returns Auth error if validation fails, undefined if all checks pass
+ * @private
  */
-export function checkMcpClientAuth(
-  toolName: UniversalToolName,
+function performAuthValidations(
+  clerkAuth: MachineAuthObject<'oauth_token'>,
+  authContext: { readonly userId: string | null; readonly token: string },
+  toolName: string,
   resourceUrl: string,
   logger: Logger,
 ): CallToolResult | undefined {
-  if (!toolRequiresAuth(toolName)) {
-    return undefined;
-  }
-
-  const req = getRequestContext();
-  const authContext = req ? extractAuthContext(req, logger) : undefined;
-
-  if (!authContext) {
-    logger.warn('MCP client auth required but no token provided', { toolName });
-    return createAuthErrorResponse(
-      'insufficient_scope',
-      'You need to login to continue',
-      resourceUrl,
-    );
-  }
-
-  const clerkAuth = req?.auth ?? createUnauthenticatedClerkAuth();
-
   const tokenError = checkTokenVerification(
     clerkAuth,
     authContext.token,
@@ -162,4 +144,56 @@ export function checkMcpClientAuth(
   });
 
   return undefined;
+}
+
+/**
+ * Checks MCP client authentication for a tool.
+ *
+ * This function performs preventive auth checking BEFORE SDK execution.
+ * Returns an auth error response if auth is required but missing/invalid.
+ * Returns undefined if auth check passes or tool doesn't require auth.
+ *
+ * When DANGEROUSLY_DISABLE_AUTH is true, all auth checks are bypassed.
+ * This is for local development only and should NEVER be used in production.
+ *
+ * @param toolName - Name of the tool being executed
+ * @param resourceUrl - MCP resource URL for auth metadata
+ * @param logger - Logger for auth events
+ * @param runtimeConfig - Runtime configuration including auth bypass flag
+ * @returns Auth error response if auth fails, undefined if auth passes
+ *
+ * @public
+ */
+export function checkMcpClientAuth(
+  toolName: UniversalToolName,
+  resourceUrl: string,
+  logger: Logger,
+  runtimeConfig: RuntimeConfig,
+): CallToolResult | undefined {
+  // CRITICAL: Auth bypass for local development only
+  // When DANGEROUSLY_DISABLE_AUTH=true, skip all auth checks
+  if (runtimeConfig.dangerouslyDisableAuth) {
+    logger.info('Auth disabled via DANGEROUSLY_DISABLE_AUTH', { toolName });
+    return undefined;
+  }
+
+  if (!toolRequiresAuth(toolName)) {
+    return undefined;
+  }
+
+  const req = getRequestContext();
+  const authContext = req ? extractAuthContext(req, logger) : undefined;
+
+  if (!authContext) {
+    logger.warn('MCP client auth required but no token provided', { toolName });
+    return createAuthErrorResponse(
+      'insufficient_scope',
+      'You need to login to continue',
+      resourceUrl,
+    );
+  }
+
+  const clerkAuth = req?.auth ?? createUnauthenticatedClerkAuth();
+
+  return performAuthValidations(clerkAuth, authContext, toolName, resourceUrl, logger);
 }

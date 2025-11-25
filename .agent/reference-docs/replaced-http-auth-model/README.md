@@ -81,3 +81,4 @@ git show HEAD:apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/mcp-auth
 ```
 
 All files represent the state at the time of deletion.
+

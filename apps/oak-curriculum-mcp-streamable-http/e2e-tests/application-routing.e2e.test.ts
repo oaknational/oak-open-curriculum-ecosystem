@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /**
  * Application-Level E2E Tests for Method-Aware Auth Routing
  *
@@ -144,7 +145,7 @@ describe('Application-Level Method-Aware Auth', () => {
   });
 
   describe('Auth-required generated tools', () => {
-    it('requires auth for tools/call get-key-stages without token', async () => {
+    it('returns HTTP 200 with MCP error for get-key-stages without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -154,14 +155,29 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'get-key-stages',
+            arguments: {}, // Add arguments field
           },
         });
 
-      expect(response.status).toBe(401);
-      expect(response.headers['www-authenticate']).toBeDefined();
+      // Tool-level auth: HTTP 200 with MCP error
+      expect(response.status).toBe(200);
+
+      // Parse SSE response
+      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: { isError: boolean; _meta: Record<string, unknown> };
+      };
+
+      expect(jsonData.result).toBeDefined();
+      expect(jsonData.result.isError).toBe(true);
+      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
     });
 
-    it('requires auth for tools/call get-programmes without token', async () => {
+    it('returns HTTP 200 with MCP error for get-subjects without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -170,17 +186,32 @@ describe('Application-Level Method-Aware Auth', () => {
           id: '1',
           method: 'tools/call',
           params: {
-            name: 'get-programmes',
+            name: 'get-subjects',
+            arguments: {}, // No required arguments for get-subjects
           },
         });
 
-      expect(response.status).toBe(401);
-      expect(response.headers['www-authenticate']).toBeDefined();
+      // Tool-level auth: HTTP 200 with MCP error
+      expect(response.status).toBe(200);
+
+      // Parse SSE response
+      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: { isError: boolean; _meta: Record<string, unknown> };
+      };
+
+      expect(jsonData.result).toBeDefined();
+      expect(jsonData.result.isError).toBe(true);
+      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
     });
   });
 
   describe('Aggregated tools (require auth)', () => {
-    it('requires auth for tools/call search without token', async () => {
+    it('returns HTTP 200 with MCP error for search without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -190,15 +221,29 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'search',
+            arguments: { query: 'test' }, // Provide required query parameter
           },
         });
 
-      // Aggregated tool requires auth - must return 401
-      expect(response.status).toBe(401);
-      expect(response.headers['www-authenticate']).toBeDefined();
+      // Tool-level auth: HTTP 200 with MCP error
+      expect(response.status).toBe(200);
+
+      // Parse SSE response
+      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: { isError: boolean; _meta: Record<string, unknown> };
+      };
+
+      expect(jsonData.result).toBeDefined();
+      expect(jsonData.result.isError).toBe(true);
+      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
     });
 
-    it('requires auth for tools/call fetch without token', async () => {
+    it('returns HTTP 200 with MCP error for fetch without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -208,12 +253,26 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'fetch',
+            arguments: { id: 'test-id' }, // Provide required id parameter
           },
         });
 
-      // Aggregated tool requires auth - must return 401
-      expect(response.status).toBe(401);
-      expect(response.headers['www-authenticate']).toBeDefined();
+      // Tool-level auth: HTTP 200 with MCP error
+      expect(response.status).toBe(200);
+
+      // Parse SSE response
+      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
+      expect(sseData).toBeDefined();
+      if (!sseData) {
+        throw new Error('Expected SSE data not found');
+      }
+      const jsonData = JSON.parse(sseData.substring(6)) as {
+        result: { isError: boolean; _meta: Record<string, unknown> };
+      };
+
+      expect(jsonData.result).toBeDefined();
+      expect(jsonData.result.isError).toBe(true);
+      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
     });
   });
 

@@ -13,6 +13,7 @@ import type {
   UniversalToolName,
   createStubToolExecutionAdapter,
 } from '@oaknational/oak-curriculum-sdk';
+import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
 import type { ToolHandlerDependencies } from './handlers.js';
@@ -32,6 +33,7 @@ import { checkMcpClientAuth } from './check-mcp-client-auth.js';
  * @param stubExecutor - Optional stub executor for testing
  * @param logger - Logger for observability
  * @param apiKey - API key for upstream client
+ * @param runtimeConfig - Runtime configuration including auth bypass flag
  * @returns Tool execution result or auth error response with _meta
  *
  * @public
@@ -43,10 +45,11 @@ export async function handleToolWithAuthInterception(
   stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
   logger: Logger,
   apiKey: string,
+  runtimeConfig: RuntimeConfig,
 ): Promise<CallToolResult> {
   // Preventive MCP client auth checking (BEFORE SDK execution)
   // This is MCP OAuth (ChatGPT → us), NOT upstream API auth (us → Oak API)
-  const authError = checkMcpClientAuth(tool.name, deps.getResourceUrl(), logger);
+  const authError = checkMcpClientAuth(tool.name, deps.getResourceUrl(), logger, runtimeConfig);
   if (authError) {
     return authError;
   }
