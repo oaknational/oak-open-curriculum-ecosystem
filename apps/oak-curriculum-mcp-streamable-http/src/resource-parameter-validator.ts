@@ -26,31 +26,21 @@ export interface ResourceValidationResult {
 }
 
 /**
- * No-op logger for backwards compatibility when logger not provided.
- * All methods are intentionally empty as this is a no-op implementation.
+ * Check if a token appears to be a JWT (3 base64url-encoded parts separated by dots).
+ * Returns false for opaque tokens like Clerk's OAuth tokens (oat_...).
+ *
+ * Note: This is a format check, not cryptographic verification.
  */
-const noopLogger: Logger = {
-  debug: () => {
-    /* no-op */
-  },
-  info: () => {
-    /* no-op */
-  },
-  warn: () => {
-    /* no-op */
-  },
-  error: () => {
-    /* no-op */
-  },
-  fatal: () => {
-    /* no-op */
-  },
-  trace: () => {
-    /* no-op */
-  },
-  isLevelEnabled: () => false,
-  child: () => noopLogger,
-};
+function isJwtFormat(token: string): boolean {
+  const parts = token.split('.');
+  if (parts.length !== 3) {
+    return false;
+  }
+
+  // Each part must be a non-empty base64url string
+  const base64urlRegex = /^[A-Za-z0-9_-]+$/;
+  return parts.every((part) => part.length > 0 && base64urlRegex.test(part));
+}
 
 /**
  * Extract audiences from JWT payload.
@@ -113,18 +103,23 @@ function logAudienceValidation(
 }
 
 /**
- * Validates that a JWT token's audience claim matches the expected resource.
+ * Validates that a token's audience claim matches the expected resource.
  *
  * Per RFC 8707 (Resource Indicators for OAuth 2.0), the authorization server
  * should echo the `resource` parameter into the token's `aud` (audience) claim.
  * This function verifies that binding to prevent token misuse across services.
  *
- * **Security Note**: This function only validates the audience claim. The token
- * itself must be cryptographically verified by Clerk before calling this function.
+ * **Opaque Token Handling**: Clerk OAuth tokens (`oat_...`) are opaque and cannot
+ * be decoded locally. For these tokens, Clerk has already verified the token via
+ * their API before this function is called. Since we cannot extract audience claims
+ * from opaque tokens, we skip RFC 8707 validation and return valid.
  *
- * @param token - JWT access token (Bearer token, without 'Bearer ' prefix)
+ * **Security Note**: This function only validates the audience claim for JWT tokens.
+ * The token itself must be cryptographically verified by Clerk before calling this.
+ *
+ * @param token - Access token (Bearer token, without 'Bearer ' prefix)
  * @param expectedResource - Expected resource URL (e.g., "https://mcp.example.com/mcp")
- * @param logger - Optional logger for JWT validation details (defaults to no-op logger)
+ * @param logger - Logger for validation details
  * @returns Validation result with details
  *
  * @see https://www.rfc-editor.org/rfc/rfc8707.html
@@ -143,8 +138,21 @@ function logAudienceValidation(
 export function validateResourceParameter(
   token: string,
   expectedResource: string,
-  logger: Logger = noopLogger,
+  logger: Logger,
 ): ResourceValidationResult {
+  // Check if token is a JWT (3 dot-separated base64url parts)
+  // Opaque tokens (e.g., Clerk's oat_...) cannot be decoded locally
+  if (!isJwtFormat(token)) {
+    logger.debug('Token is opaque (not JWT), skipping RFC 8707 audience validation', {
+      tokenPrefix: token.slice(0, 10) + '...',
+      expectedResource,
+    });
+    // Opaque tokens have already been verified by Clerk's API.
+    // RFC 8707 audience validation requires JWT format with aud claim.
+    // Since we cannot extract claims from opaque tokens, we trust Clerk's verification.
+    return { valid: true };
+  }
+
   try {
     // Decode JWT without verification (already verified by Clerk)
     const decoded = jwtDecode(token, { complete: true });

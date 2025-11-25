@@ -6,6 +6,7 @@ import type { Logger } from '@oaknational/mcp-logger';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
+import { setRequestContext } from './request-context.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -170,7 +171,13 @@ export function createMcpHandler(
     // to avoid type conflict with MCP SDK's AuthInfo type. We use AsyncLocalStorage
     // for our auth flow, so the auth property is not needed by the MCP SDK.
     const mcpRequest = createMcpRequest(req);
-    await transport.handleRequest(mcpRequest, res, req.body);
+
+    // Wrap transport.handleRequest with setRequestContext to propagate Express request
+    // to tool handlers via AsyncLocalStorage. This enables getRequestContext() to work
+    // in checkMcpClientAuth for tool-level authentication.
+    await setRequestContext(req, async () => {
+      await transport.handleRequest(mcpRequest, res, req.body);
+    });
 
     if (logger && correlationId) {
       const correlatedLogger = createChildLogger(logger, correlationId);

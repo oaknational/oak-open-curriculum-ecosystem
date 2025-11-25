@@ -92,7 +92,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.
   // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
-  // Actual enforcement happens later via mcpAuthClerk on specific routes.
+  // Actual enforcement happens later via createMcpAuthClerk on specific routes.
   runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appId, () => {
     setupGlobalAuthContext(app, runtimeConfig, log);
   });

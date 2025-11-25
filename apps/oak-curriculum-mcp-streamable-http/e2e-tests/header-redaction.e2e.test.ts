@@ -148,7 +148,7 @@ describe('Header Redaction E2E', () => {
       // This E2E test verifies the complete request/response cycle works
     });
 
-    it('should handle auth failure with HTTP 200 and MCP error containing _meta', async () => {
+    it('should handle auth failure with HTTP 401 and WWW-Authenticate header', async () => {
       // Override: enable auth enforcement for this test
       delete process.env.DANGEROUSLY_DISABLE_AUTH;
 
@@ -162,37 +162,20 @@ describe('Header Redaction E2E', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: {} }, // Add arguments field
+          params: { name: 'get-key-stages', arguments: {} },
         });
 
-      // Tool-level auth: return HTTP 200 with MCP error result
-      expect(response.status).toBe(200);
+      // HTTP 401 per MCP spec for protected tools without auth
+      expect(response.status).toBe(401);
 
       // Verify correlation ID is still set
       expect(response.headers['x-correlation-id']).toBeDefined();
 
-      // Parse SSE response to get JSON-RPC result
-      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: {
-          isError: boolean;
-          _meta: Record<string, unknown>;
-        };
-      };
-
-      // Verify _meta contains WWW-Authenticate (not HTTP header)
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result.isError).toBe(true);
-      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-      const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
-      expect(wwwAuth[0].toLowerCase()).toMatch(/bearer\s+/);
-
-      // Note: _meta['mcp/www_authenticate'] is preserved in logs (not sensitive)
-      // Integration tests verify this preservation behavior
+      // WWW-Authenticate header per RFC 6750
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth.toLowerCase()).toMatch(/bearer\s+/);
+      expect(wwwAuth).toContain('resource_metadata');
     });
   });
 });

@@ -60,7 +60,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     delete process.env.ALLOWED_ORIGINS;
   });
 
-  it('returns HTTP 200 with MCP error when missing Authorization for protected tools', async () => {
+  it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
     // Override: enable auth enforcement for this test
     delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
 
@@ -73,32 +73,17 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} }, // Add arguments field
+        params: { name: 'get-key-stages', arguments: {} },
       });
 
-    // Tool-level auth: return HTTP 200 with MCP error result
-    expect(res.status).toBe(200);
+    // HTTP 401 per MCP spec for protected tools without auth
+    expect(res.status).toBe(401);
 
-    // Parse SSE response to get JSON-RPC result
-    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result: {
-        isError: boolean;
-        _meta: Record<string, unknown>;
-      };
-    };
-
-    // Expect MCP error result with _meta
-    expect(jsonData.result).toBeDefined();
-    expect(jsonData.result.isError).toBe(true);
-    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-    const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
-    expect(wwwAuth[0]).toContain('Bearer');
-    expect(wwwAuth[0]).toContain('resource_metadata');
+    // WWW-Authenticate header per RFC 6750
+    const wwwAuth = res.headers['www-authenticate'];
+    expect(wwwAuth).toBeDefined();
+    expect(wwwAuth).toContain('Bearer');
+    expect(wwwAuth).toContain('resource_metadata');
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {

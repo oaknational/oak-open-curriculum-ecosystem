@@ -6,6 +6,25 @@
  *
  * This suite tests the system with auth ENABLED, which mirrors production
  * configuration. No auth bypass is used here.
+ *
+ * ## Auth Model (Per MCP Spec + OpenAI Apps Docs)
+ *
+ * The specs define TWO complementary auth mechanisms:
+ *
+ * 1. **HTTP 401 + WWW-Authenticate** (Transport-level)
+ *    - For unauthenticated requests (no token, invalid token)
+ *    - Triggers OAuth discovery flow
+ *    - Returned BEFORE request reaches MCP SDK
+ *
+ * 2. **HTTP 200 + _meta["mcp/www_authenticate"]** (Tool-level)
+ *    - For authenticated requests missing required scope
+ *    - Used for per-tool scope refinements
+ *    - Returned FROM tool handlers after auth passes
+ *
+ * Both are needed. HTTP 401 initiates OAuth, _meta handles scope issues.
+ *
+ * @see https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
+ * @see https://platform.openai.com/docs/guides/apps-authentication
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
@@ -67,249 +86,201 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     app = createApp({ runtimeConfig });
   });
 
-  it('allows discovery methods (initialize) without Authorization header', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'initialize',
-        params: {
-          protocolVersion: '2024-11-05',
-          capabilities: {},
-          clientInfo: { name: 'test', version: '1.0.0' },
-        },
-      });
+  describe('Discovery Methods (No Auth Required)', () => {
+    it('allows initialize without Authorization header', async () => {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0.0' },
+          },
+        });
 
-    // Discovery methods should work without authentication
-    expect(res.status).toBe(200);
-    // MCP uses SSE, response will be in text format
-    expect(res.text).toBeDefined();
-    expect(res.text.length).toBeGreaterThan(0);
+      // Discovery methods should work without authentication
+      expect(res.status).toBe(200);
+      // MCP uses SSE, response will be in text format
+      expect(res.text).toBeDefined();
+      expect(res.text.length).toBeGreaterThan(0);
+    });
+
+    it('allows tools/list via POST without Authorization header', async () => {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+
+      // Discovery methods should work without authentication
+      expect(res.status).toBe(200);
+      // MCP uses SSE, response will be in text format
+      expect(res.text).toBeDefined();
+      expect(res.text.length).toBeGreaterThan(0);
+    });
   });
 
-  it('allows discovery methods (tools/list) via POST without Authorization header', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+  describe('Protected Tools Without Token (HTTP 401 Required)', () => {
+    /**
+     * Per MCP Spec: "Invalid or expired tokens MUST receive a HTTP 401 response"
+     * Per OpenAI Apps: "If verification fails, respond with 401 Unauthorized"
+     *
+     * HTTP 401 triggers OAuth discovery flow in the client.
+     */
+    it('returns HTTP 401 with WWW-Authenticate for protected tools without auth', async () => {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: {} },
+        });
 
-    // Discovery methods should work without authentication
-    expect(res.status).toBe(200);
-    // MCP uses SSE, response will be in text format
-    expect(res.text).toBeDefined();
-    expect(res.text.length).toBeGreaterThan(0);
+      // HTTP 401 per MCP spec and OpenAI Apps docs
+      expect(res.status).toBe(401);
+
+      // WWW-Authenticate header per RFC 6750
+      const wwwAuth = res.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('resource_metadata=');
+    });
+
+    it('returns HTTP 401 for invalid Bearer token', async () => {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Authorization', 'Bearer invalid-token-12345')
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: {} },
+        });
+
+      // HTTP 401 for invalid token per MCP spec
+      expect(res.status).toBe(401);
+
+      // WWW-Authenticate header with error
+      const wwwAuth = res.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('error=');
+    });
+
+    it('returns HTTP 401 for malformed Authorization header', async () => {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Authorization', 'NotBearer xyz')
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: {} },
+        });
+
+      // HTTP 401 for malformed header per MCP spec
+      expect(res.status).toBe(401);
+
+      // WWW-Authenticate header with error
+      const wwwAuth = res.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+    });
   });
 
-  it('returns MCP error with _meta for protected tools without auth', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
-      });
+  describe('OAuth Discovery Flow', () => {
+    it('supports OAuth discovery via protected resource metadata', async () => {
+      // Step 1: Client calls protected tool without auth → HTTP 401 + WWW-Authenticate
+      const step1 = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: {} },
+        });
 
-    // Tool-level auth: return HTTP 200 with MCP error result
-    expect(res.status).toBe(200);
+      // HTTP 401 triggers OAuth discovery
+      expect(step1.status).toBe(401);
 
-    // Parse SSE response to get JSON-RPC result
-    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result: {
-        isError: boolean;
-        _meta: Record<string, unknown>;
-      };
-    };
+      // Extract resource_metadata URL from WWW-Authenticate header
+      const wwwAuth = step1.headers['www-authenticate'];
+      expect(wwwAuth).toContain('resource_metadata=');
 
-    // Expect MCP error result with _meta
-    expect(jsonData.result.isError).toBe(true);
-    expect(jsonData.result._meta).toBeDefined();
-    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-    expect(Array.isArray(jsonData.result._meta['mcp/www_authenticate'])).toBe(true);
-    const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
-    expect(wwwAuth[0]).toContain('Bearer');
-    expect(wwwAuth[0]).toContain('error=');
+      // Step 2: Client fetches OAuth metadata and extracts AS URL
+      const asUrl = await validateOAuthMetadataStep(app);
+
+      // Step 3: MCP clients fetch AS metadata directly from Clerk (not tested here)
+      // Per test boundaries: we do NOT make external network calls to Clerk
+      expect(asUrl).toContain('clerk');
+      expect(asUrl).toMatch(/^https:\/\//);
+    });
+
+    it('does not proxy authorization server metadata', async () => {
+      // Per MCP spec 2025-06-18: clients fetch AS metadata directly from
+      // authorization server, not from resource server proxy
+      const res = await request(app).get('/.well-known/oauth-authorization-server');
+
+      // Expect 404 - we should NOT have this endpoint
+      expect(res.status).toBe(404);
+    });
   });
 
-  it('does not proxy authorization server metadata', async () => {
-    // Per MCP spec 2025-06-18: clients fetch AS metadata directly from
-    // authorization server, not from resource server proxy
-    const res = await request(app).get('/.well-known/oauth-authorization-server');
+  describe('OAuth Metadata Endpoints', () => {
+    it('protected resource metadata contains valid authorization_servers array', async () => {
+      const prRes = await request(app).get('/.well-known/oauth-protected-resource');
+      expect(prRes.status).toBe(200);
 
-    // Expect 404 - we should NOT have this endpoint
-    expect(res.status).toBe(404);
-  });
+      const metadata: unknown = prRes.body;
 
-  it('protected resource metadata contains valid authorization_servers array', async () => {
-    const prRes = await request(app).get('/.well-known/oauth-protected-resource');
-    expect(prRes.status).toBe(200);
+      // Verify RFC 9728 structure
+      expect(metadata).toHaveProperty('resource');
+      expect(metadata).toHaveProperty('authorization_servers');
 
-    const metadata: unknown = prRes.body;
+      // Use type guard for safe access
+      if (!isOAuthMetadata(metadata)) {
+        throw new Error('Invalid OAuth metadata response');
+      }
 
-    // Verify RFC 9728 structure
-    expect(metadata).toHaveProperty('resource');
-    expect(metadata).toHaveProperty('authorization_servers');
+      expect(Array.isArray(metadata.authorization_servers)).toBe(true);
+      expect(metadata.authorization_servers.length).toBeGreaterThan(0);
 
-    // Use type guard for safe access
-    if (!isOAuthMetadata(metadata)) {
-      throw new Error('Invalid OAuth metadata response');
-    }
+      // Verify Clerk URL format (structure validation only)
+      const clerkAsUrl = metadata.authorization_servers[0];
+      expect(clerkAsUrl).toContain('clerk');
+      expect(clerkAsUrl).toMatch(/^https:\/\//);
 
-    expect(Array.isArray(metadata.authorization_servers)).toBe(true);
-    expect(metadata.authorization_servers.length).toBeGreaterThan(0);
+      // CRITICAL: Do NOT fetch from this URL in automated tests
+      // Clerk accessibility is validated manually with Inspector CLI
+    });
 
-    // Verify Clerk URL format (structure validation only)
-    const clerkAsUrl = metadata.authorization_servers[0];
-    expect(clerkAsUrl).toContain('clerk');
-    expect(clerkAsUrl).toMatch(/^https:\/\//);
+    it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
+      const res = await request(app).get('/.well-known/oauth-protected-resource');
 
-    // CRITICAL: Do NOT fetch from this URL in automated tests
-    // Clerk accessibility is validated manually with Inspector CLI
-  });
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('resource');
+      expect(res.body).toHaveProperty('authorization_servers');
 
-  it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
-    const res = await request(app).get('/.well-known/oauth-protected-resource');
-
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('resource');
-    expect(res.body).toHaveProperty('authorization_servers');
-
-    // Type-safe access to response body
-    const body = res.body as unknown;
-    expect(body).toHaveProperty('authorization_servers');
-    expect(Array.isArray((body as { authorization_servers?: unknown }).authorization_servers)).toBe(
-      true,
-    );
-    expect(body).toHaveProperty('scopes_supported');
-    const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
-    // Test BEHAVIOR (presence of required scopes) not IMPLEMENTATION (order)
-    expect(scopes).toEqual(expect.arrayContaining(['openid', 'email']));
-    expect(scopes).toHaveLength(2);
-  });
-
-  it('returns MCP error with _meta for invalid Bearer token', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .set('Authorization', 'Bearer invalid-token-12345')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
-      });
-
-    // Tool-level auth: return HTTP 200 with MCP error result
-    expect(res.status).toBe(200);
-
-    // Parse SSE response to get JSON-RPC result
-    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result: {
-        isError: boolean;
-        _meta: Record<string, unknown>;
-      };
-    };
-
-    // Expect MCP error result with _meta indicating invalid token
-    expect(jsonData.result.isError).toBe(true);
-    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-    const wwwAuth = jsonData.result._meta['mcp/www_authenticate'] as string[];
-    expect(wwwAuth[0]).toContain('error=');
-  });
-
-  it('returns MCP error with _meta for malformed Authorization header', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .set('Authorization', 'NotBearer xyz')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
-      });
-
-    // Tool-level auth: return HTTP 200 with MCP error result
-    expect(res.status).toBe(200);
-
-    // Parse SSE response to get JSON-RPC result
-    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result: {
-        isError: boolean;
-        _meta: Record<string, unknown>;
-      };
-    };
-
-    // Expect MCP error result with _meta
-    expect(jsonData.result.isError).toBe(true);
-    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-  });
-
-  // Test #3: OAuth Discovery Flow (Protected Resource Metadata)
-  it('supports OAuth discovery via protected resource metadata', async () => {
-    // Step 1: Client calls protected tool without auth → HTTP 200 with MCP error + _meta
-    const step1 = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
-      });
-
-    // Tool-level auth: HTTP 200 with MCP error
-    expect(step1.status).toBe(200);
-
-    // Parse SSE response to get JSON-RPC result
-    const sseData = step1.text.split('\n').find((line) => line.startsWith('data: '));
-    expect(sseData).toBeDefined();
-    if (!sseData) {
-      throw new Error('Expected SSE data not found');
-    }
-    const jsonData = JSON.parse(sseData.substring(6)) as {
-      result: {
-        isError: boolean;
-        _meta: Record<string, unknown>;
-      };
-    };
-
-    // Verify MCP error with _meta containing www_authenticate
-    expect(jsonData.result.isError).toBe(true);
-    expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
-
-    const wwwAuthArray = jsonData.result._meta['mcp/www_authenticate'] as string[];
-    const wwwAuth = wwwAuthArray[0];
-    expect(wwwAuth).toContain('Bearer');
-    expect(wwwAuth).toContain('resource_metadata');
-
-    // Step 2: Client fetches OAuth metadata and extracts AS URL
-    const asUrl = await validateOAuthMetadataStep(app);
-
-    // Step 3: MCP clients fetch AS metadata directly from Clerk (not tested here)
-    // Per test boundaries: we do NOT make external network calls to Clerk
-    // The AS URL structure is validated above; actual accessibility is
-    // validated manually with Inspector CLI per Phase 2 and Phase 6
-    expect(asUrl).toContain('clerk');
-    expect(asUrl).toMatch(/^https:\/\//);
+      // Type-safe access to response body
+      const body = res.body as unknown;
+      expect(body).toHaveProperty('authorization_servers');
+      expect(
+        Array.isArray((body as { authorization_servers?: unknown }).authorization_servers),
+      ).toBe(true);
+      expect(body).toHaveProperty('scopes_supported');
+      const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
+      // Test BEHAVIOR (presence of required scopes) not IMPLEMENTATION (order)
+      expect(scopes).toEqual(expect.arrayContaining(['openid', 'email']));
+      expect(scopes).toHaveLength(2);
+    });
   });
 });
 
@@ -389,7 +360,7 @@ describe('Auth Enforcement - RFC Compliance', () => {
       // Only the /mcp endpoint requires OAuth authentication
     });
 
-    it('_meta www_authenticate conforms to RFC 6750 Bearer scheme', async () => {
+    it('WWW-Authenticate header conforms to RFC 6750 Bearer scheme', async () => {
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -400,32 +371,18 @@ describe('Auth Enforcement - RFC Compliance', () => {
           params: { name: 'get-key-stages', arguments: {} },
         });
 
-      // Tool-level auth: HTTP 200 with MCP error
-      expect(res.status).toBe(200);
+      // HTTP 401 per MCP spec
+      expect(res.status).toBe(401);
 
-      // Parse SSE response to get JSON-RPC result
-      const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: {
-          _meta: Record<string, unknown>;
-        };
-      };
-
-      const wwwAuth = (jsonData.result._meta['mcp/www_authenticate'] as string[])[0];
+      const wwwAuth = res.headers['www-authenticate'];
       expect(wwwAuth).toBeDefined();
 
       // RFC 6750 format: Bearer realm="...", error="...", error_description="..."
       // Must start with "Bearer" (case-insensitive per RFC)
-      if (typeof wwwAuth === 'string') {
-        expect(wwwAuth.toLowerCase()).toMatch(/^bearer\s+/);
-        // Clerk-specific: includes resource_metadata parameter
-        // This is valid per RFC 6750 (allows additional auth-params)
-        expect(wwwAuth).toMatch(/resource_metadata/);
-      }
+      expect(wwwAuth.toLowerCase()).toMatch(/^bearer\s+/);
+
+      // Includes resource_metadata parameter (per MCP spec)
+      expect(wwwAuth).toMatch(/resource_metadata/);
     });
   });
 
@@ -439,4 +396,68 @@ describe('Auth Enforcement - RFC Compliance', () => {
   // (rejecting unauthenticated requests). Authenticated happy-path testing
   // is covered by mock-based integration tests which provide deterministic,
   // fast validation without external service dependencies.
+});
+
+describe('Public Tools (noauth)', () => {
+  let app: Express;
+
+  beforeAll(() => {
+    const testEnv: NodeJS.ProcessEnv = {
+      NODE_ENV: 'test',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+    };
+
+    const runtimeConfig = loadRuntimeConfig(testEnv);
+    app = createApp({ runtimeConfig });
+  });
+
+  it('allows get-changelog without auth (noauth tool)', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-changelog', arguments: {} },
+      });
+
+    // Public tools should work without auth - HTTP 200
+    expect(res.status).toBe(200);
+
+    // Should contain tool result, not auth error
+    const sseData = res.text.split('\n').find((line) => line.startsWith('data: '));
+    expect(sseData).toBeDefined();
+    if (!sseData) {
+      throw new Error('Expected SSE data not found');
+    }
+
+    const jsonData = JSON.parse(sseData.substring(6)) as {
+      result?: {
+        isError?: boolean;
+        content?: unknown[];
+      };
+    };
+
+    // Should be successful tool result
+    expect(jsonData.result).toBeDefined();
+    expect(jsonData.result?.isError).toBeFalsy();
+  });
+
+  it('allows get-rate-limit without auth (noauth tool)', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-rate-limit', arguments: {} },
+      });
+
+    // Public tools should work without auth - HTTP 200
+    expect(res.status).toBe(200);
+  });
 });

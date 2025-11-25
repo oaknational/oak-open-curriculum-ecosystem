@@ -145,7 +145,11 @@ describe('Application-Level Method-Aware Auth', () => {
   });
 
   describe('Auth-required generated tools', () => {
-    it('returns HTTP 200 with MCP error for get-key-stages without token', async () => {
+    /**
+     * Per MCP spec and OpenAI Apps docs, protected tools without token
+     * return HTTP 401 with WWW-Authenticate header to trigger OAuth discovery.
+     */
+    it('returns HTTP 401 with WWW-Authenticate for get-key-stages without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -155,29 +159,21 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'get-key-stages',
-            arguments: {}, // Add arguments field
+            arguments: {},
           },
         });
 
-      // Tool-level auth: HTTP 200 with MCP error
-      expect(response.status).toBe(200);
+      // HTTP 401 per MCP spec and OpenAI Apps docs
+      expect(response.status).toBe(401);
 
-      // Parse SSE response
-      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: { isError: boolean; _meta: Record<string, unknown> };
-      };
-
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result.isError).toBe(true);
-      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+      // WWW-Authenticate header per RFC 6750
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
+      expect(wwwAuth).toContain('resource_metadata=');
     });
 
-    it('returns HTTP 200 with MCP error for get-subjects without token', async () => {
+    it('returns HTTP 401 with WWW-Authenticate for get-subjects without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -187,31 +183,21 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'get-subjects',
-            arguments: {}, // No required arguments for get-subjects
+            arguments: {},
           },
         });
 
-      // Tool-level auth: HTTP 200 with MCP error
-      expect(response.status).toBe(200);
+      // HTTP 401 per MCP spec
+      expect(response.status).toBe(401);
 
-      // Parse SSE response
-      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: { isError: boolean; _meta: Record<string, unknown> };
-      };
-
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result.isError).toBe(true);
-      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
     });
   });
 
   describe('Aggregated tools (require auth)', () => {
-    it('returns HTTP 200 with MCP error for search without token', async () => {
+    it('returns HTTP 401 with WWW-Authenticate for search without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -221,29 +207,19 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'search',
-            arguments: { query: 'test' }, // Provide required query parameter
+            arguments: { query: 'test' },
           },
         });
 
-      // Tool-level auth: HTTP 200 with MCP error
-      expect(response.status).toBe(200);
+      // HTTP 401 per MCP spec
+      expect(response.status).toBe(401);
 
-      // Parse SSE response
-      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: { isError: boolean; _meta: Record<string, unknown> };
-      };
-
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result.isError).toBe(true);
-      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
     });
 
-    it('returns HTTP 200 with MCP error for fetch without token', async () => {
+    it('returns HTTP 401 with WWW-Authenticate for fetch without token', async () => {
       const response = await request(app)
         .post('/mcp')
         .set('Accept', ACCEPT_HEADER)
@@ -253,26 +229,16 @@ describe('Application-Level Method-Aware Auth', () => {
           method: 'tools/call',
           params: {
             name: 'fetch',
-            arguments: { id: 'test-id' }, // Provide required id parameter
+            arguments: { id: 'test-id' },
           },
         });
 
-      // Tool-level auth: HTTP 200 with MCP error
-      expect(response.status).toBe(200);
+      // HTTP 401 per MCP spec
+      expect(response.status).toBe(401);
 
-      // Parse SSE response
-      const sseData = response.text.split('\n').find((line) => line.startsWith('data: '));
-      expect(sseData).toBeDefined();
-      if (!sseData) {
-        throw new Error('Expected SSE data not found');
-      }
-      const jsonData = JSON.parse(sseData.substring(6)) as {
-        result: { isError: boolean; _meta: Record<string, unknown> };
-      };
-
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result.isError).toBe(true);
-      expect(jsonData.result._meta['mcp/www_authenticate']).toBeDefined();
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth).toContain('Bearer');
     });
   });
 

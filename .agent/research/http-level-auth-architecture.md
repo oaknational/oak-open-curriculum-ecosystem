@@ -12,7 +12,7 @@ This was a clean, well-architected HTTP-level authentication middleware system u
 
 ### Request Flow
 
-```
+```text
 Client Request
     ↓
 clerkMiddleware (sets req.auth)
