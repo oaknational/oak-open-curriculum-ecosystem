@@ -7,6 +7,8 @@
  * @module
  */
 
+/* eslint-disable max-lines-per-function -- comprehensive test coverage requires many test cases */
+
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk';
@@ -15,16 +17,50 @@ import { checkMcpClientAuth } from './check-mcp-client-auth.js';
 
 // Mock dependencies
 vi.mock('./request-context.js');
-vi.mock('./auth/tool-auth-context.js');
 vi.mock('./tool-auth-checker.js');
 vi.mock('./auth/mcp-auth/verify-clerk-token.js');
 vi.mock('./resource-parameter-validator.js');
+vi.mock('@clerk/express');
 
+import type { MachineAuthObject } from '@clerk/backend';
 import { getRequestContext } from './request-context.js';
-import { extractAuthContext } from './auth/tool-auth-context.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
 import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
 import { validateResourceParameter } from './resource-parameter-validator.js';
+import { getAuth } from '@clerk/express';
+
+/**
+ * Creates a mock MachineAuthObject for testing.
+ * Uses explicit typing to avoid Vitest/Clerk type inference conflicts.
+ */
+function createMockAuthObject(
+  overrides: Partial<{
+    isAuthenticated: boolean;
+    userId: string | null;
+    clientId: string | null;
+    scopes: readonly string[] | null;
+  }>,
+): MachineAuthObject<'oauth_token'> {
+  const base = {
+    tokenType: 'oauth_token' as const,
+    id: overrides.isAuthenticated ? 'auth_123' : null,
+    subject: overrides.userId ?? null,
+    getToken: () => Promise.resolve(overrides.isAuthenticated ? 'token' : null),
+    has: () => overrides.isAuthenticated ?? false,
+    debug: () => (overrides.isAuthenticated ? { userId: overrides.userId } : {}),
+    ...overrides,
+  };
+  return base as MachineAuthObject<'oauth_token'>;
+}
+
+/**
+ * Type-safe mock setter for getAuth.
+ * Works around Vitest/Clerk overload inference issues by using unknown intermediate.
+ */
+function mockGetAuthReturnValue(authObject: MachineAuthObject<'oauth_token'>): void {
+  // Use unknown as intermediate to avoid SessionAuthObject inference
+  vi.mocked(getAuth).mockReturnValue(authObject as unknown as ReturnType<typeof getAuth>);
+}
 
 describe('checkMcpClientAuth', () => {
   const mockLogger: Logger = {
@@ -64,7 +100,6 @@ describe('checkMcpClientAuth', () => {
       });
       // Should NOT call any auth checking functions
       expect(getRequestContext).not.toHaveBeenCalled();
-      expect(extractAuthContext).not.toHaveBeenCalled();
       expect(verifyClerkToken).not.toHaveBeenCalled();
       expect(validateResourceParameter).not.toHaveBeenCalled();
     });
@@ -113,7 +148,7 @@ describe('checkMcpClientAuth', () => {
   });
 
   describe('protected tools with auth checks enabled', () => {
-    it('should return auth error when no auth context', () => {
+    it('should return auth error when no request context', () => {
       const config = createMockConfig(false);
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
       vi.mocked(getRequestContext).mockReturnValue(undefined);
@@ -122,35 +157,25 @@ describe('checkMcpClientAuth', () => {
 
       expect(result).toBeDefined();
       expect(result?.isError).toBe(true);
-      expect(mockLogger.warn).toHaveBeenCalledWith(
-        'MCP client auth required but no token provided',
-        { toolName },
-      );
+      expect(mockLogger.warn).toHaveBeenCalledWith('No request context available', { toolName });
     });
 
     it('should return auth error when token verification fails', () => {
       const config = createMockConfig(false);
       const mockReq = {
-        auth: {
-          userId: null,
-          clientId: null,
-          isAuthenticated: false,
-          tokenType: 'oauth_token' as const,
-          id: null,
-          subject: null,
-          scopes: null,
-          getToken: () => Promise.resolve(null),
-          has: () => false,
-          debug: () => ({}),
-        },
+        headers: { authorization: 'Bearer invalid-token' },
       };
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
       vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
-      vi.mocked(extractAuthContext).mockReturnValue({
-        userId: '123',
-        token: 'invalid-token',
-      });
+      mockGetAuthReturnValue(
+        createMockAuthObject({
+          isAuthenticated: false,
+          userId: null,
+          clientId: null,
+          scopes: null,
+        }),
+      );
       vi.mocked(verifyClerkToken).mockReturnValue(undefined);
 
       const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
@@ -165,30 +190,24 @@ describe('checkMcpClientAuth', () => {
     it('should return auth error when resource validation fails', () => {
       const config = createMockConfig(false);
       const mockReq = {
-        auth: {
-          userId: 'user_123',
-          clientId: 'client_123',
-          isAuthenticated: true,
-          tokenType: 'oauth_token' as const,
-          id: 'auth_123',
-          subject: 'user_123',
-          scopes: null,
-          getToken: () => Promise.resolve('valid-token'),
-          has: () => true,
-          debug: () => ({ userId: 'user_123' }),
-        },
+        headers: { authorization: 'Bearer valid-token' },
       };
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
       vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
-      vi.mocked(extractAuthContext).mockReturnValue({
-        userId: 'user_123',
-        token: 'valid-token',
-      });
+      mockGetAuthReturnValue(
+        createMockAuthObject({
+          isAuthenticated: true,
+          userId: 'user_123',
+          clientId: 'client_123',
+          scopes: ['openid', 'email'],
+        }),
+      );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
         scopes: ['openid', 'email'],
+        extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({
         valid: false,
@@ -208,30 +227,24 @@ describe('checkMcpClientAuth', () => {
     it('should return undefined when all auth checks pass', () => {
       const config = createMockConfig(false);
       const mockReq = {
-        auth: {
-          userId: 'user_123',
-          clientId: 'client_123',
-          isAuthenticated: true,
-          tokenType: 'oauth_token' as const,
-          id: 'auth_123',
-          subject: 'user_123',
-          scopes: null,
-          getToken: () => Promise.resolve('valid-token'),
-          has: () => true,
-          debug: () => ({ userId: 'user_123' }),
-        },
+        headers: { authorization: 'Bearer valid-token' },
       };
 
       vi.mocked(toolRequiresAuth).mockReturnValue(true);
       vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
-      vi.mocked(extractAuthContext).mockReturnValue({
-        userId: 'user_123',
-        token: 'valid-token',
-      });
+      mockGetAuthReturnValue(
+        createMockAuthObject({
+          isAuthenticated: true,
+          userId: 'user_123',
+          clientId: 'client_123',
+          scopes: ['openid', 'email'],
+        }),
+      );
       vi.mocked(verifyClerkToken).mockReturnValue({
         token: 'valid-token',
         clientId: 'client_123',
         scopes: ['openid', 'email'],
+        extra: { userId: 'user_123' },
       });
       vi.mocked(validateResourceParameter).mockReturnValue({
         valid: true,
@@ -243,6 +256,112 @@ describe('checkMcpClientAuth', () => {
       expect(mockLogger.info).toHaveBeenCalledWith('MCP client authentication successful', {
         toolName,
         userId: 'user_123',
+      });
+    });
+  });
+
+  describe('OAuth bearer token without req.auth', () => {
+    it('should verify bearer token and extract userId from verified claims', () => {
+      const config = createMockConfig(false);
+      const mockReq = {
+        headers: { authorization: 'Bearer valid-jwt-token' },
+      };
+
+      vi.mocked(toolRequiresAuth).mockReturnValue(true);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      mockGetAuthReturnValue(
+        createMockAuthObject({
+          isAuthenticated: true,
+          userId: 'user_from_jwt',
+          clientId: 'client_123',
+          scopes: ['mcp:invoke'],
+        }),
+      );
+      vi.mocked(verifyClerkToken).mockReturnValue({
+        token: 'valid-jwt-token',
+        clientId: 'client_123',
+        scopes: ['mcp:invoke'],
+        extra: { userId: 'user_from_jwt' },
+      });
+      vi.mocked(validateResourceParameter).mockReturnValue({
+        valid: true,
+      });
+
+      const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
+
+      expect(result).toBeUndefined(); // Auth passes
+      expect(getAuth).toHaveBeenCalledWith(mockReq, { acceptsToken: 'oauth_token' });
+      expect(mockLogger.info).toHaveBeenCalledWith('MCP client authentication successful', {
+        toolName,
+        userId: 'user_from_jwt',
+      });
+    });
+
+    it('should return auth error when no Authorization header', () => {
+      const config = createMockConfig(false);
+      const mockReq = {
+        headers: {}, // No Authorization header
+      };
+
+      vi.mocked(toolRequiresAuth).mockReturnValue(true);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+
+      const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
+
+      expect(result).toBeDefined();
+      expect(result?.isError).toBe(true);
+      expect(mockLogger.warn).toHaveBeenCalledWith(
+        'MCP client auth required but no token provided',
+        { toolName },
+      );
+      expect(getAuth).not.toHaveBeenCalled();
+    });
+
+    it('should return auth error when Authorization header is not Bearer', () => {
+      const config = createMockConfig(false);
+      const mockReq = {
+        headers: { authorization: 'Basic credentials' },
+      };
+
+      vi.mocked(toolRequiresAuth).mockReturnValue(true);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+
+      const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
+
+      expect(result).toBeDefined();
+      expect(result?.isError).toBe(true);
+      expect(mockLogger.warn).toHaveBeenCalledWith(
+        'MCP client auth required but no token provided',
+        { toolName },
+      );
+      expect(getAuth).not.toHaveBeenCalled();
+    });
+
+    it('should return auth error when bearer token verification fails', () => {
+      const config = createMockConfig(false);
+      const mockReq = {
+        headers: { authorization: 'Bearer invalid-jwt-token' },
+      };
+
+      vi.mocked(toolRequiresAuth).mockReturnValue(true);
+      vi.mocked(getRequestContext).mockReturnValue(mockReq as never);
+      mockGetAuthReturnValue(
+        createMockAuthObject({
+          isAuthenticated: false,
+          userId: null,
+          clientId: null,
+          scopes: null,
+        }),
+      );
+      vi.mocked(verifyClerkToken).mockReturnValue(undefined);
+
+      const result = checkMcpClientAuth(toolName, resourceUrl, mockLogger, config);
+
+      expect(result).toBeDefined();
+      expect(result?.isError).toBe(true);
+      expect(getAuth).toHaveBeenCalledWith(mockReq, { acceptsToken: 'oauth_token' });
+      expect(mockLogger.warn).toHaveBeenCalledWith('MCP client token verification failed', {
+        toolName,
       });
     });
   });

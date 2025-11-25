@@ -6,6 +6,7 @@
 - React Testing Library
 - Supertest
 - Playwright
+- Stryker
 
 ## Philosophy
 
@@ -20,7 +21,7 @@
 - NEVER test external functionality, that is not under our control
 - NEVER add complex logic to tests - it risks testing the test code rather than the code under test
 - Always ask what a test is proving - it should prove something useful about the code under test
-- Each proof should happen ONCE - repeated proofs are fragile and waste time
+- Each proof should happen ONCE - repeated proofs are fragile and waste resources
 
 ## Rules
 
@@ -54,7 +55,9 @@ In-process tests are tests that validate **code imported into the test process**
 
 Out-of-process tests are tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
-- **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
+- **E2E test**: A test that verifies the behaviour of a running system. E2E tests CAN trigger File System and STDIO IO but NOT network IO, DO have side effects, and contain minimal mocks, largely around network IO. These constrains are to allow the E2E tests to be safely run in CI/CD.
+
+- **Smoke test**: A test that verifies the behaviour of a running system, locally or deployed. Smoke tests CAN trigger all IO types, DO have side effects, and DO NOT contain mocks.
 
 #### Common Misconception: Integration Tests
 
@@ -101,7 +104,7 @@ The key distinction: Integration tests import and test code directly. They never
 
 ### TDD is Not Just for Unit Tests
 
-**Critical Rule**: TDD applies to ALL test types - unit, integration, AND E2E tests. The test must be written FIRST to specify the desired behaviour, BEFORE the implementation exists.
+**Critical Rule**: TDD applies to unit, integration, AND E2E tests. Each level of tests MUST be written to specify the desired behaviour, BEFORE the implementation is created or changed.
 
 ### Unit Test TDD (Micro-level)
 

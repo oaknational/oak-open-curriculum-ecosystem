@@ -10,141 +10,13 @@
 import type { Logger } from '@oaknational/mcp-logger';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { UniversalToolName } from '@oaknational/oak-curriculum-sdk';
-import type { MachineAuthObject } from '@clerk/backend';
 import type { RuntimeConfig } from './runtime-config.js';
+import { getAuth } from '@clerk/express';
 import { getRequestContext } from './request-context.js';
-import { extractAuthContext } from './auth/tool-auth-context.js';
 import { toolRequiresAuth } from './tool-auth-checker.js';
 import { verifyClerkToken } from './auth/mcp-auth/verify-clerk-token.js';
 import { validateResourceParameter } from './resource-parameter-validator.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
-
-/**
- * Creates a default unauthenticated Clerk auth object.
- * When unauthenticated, Clerk returns a specific structure where isAuthenticated is false
- * and certain fields are null. We include clientId as null for the unauthenticated case.
- *
- * @returns Default unauthenticated MachineAuthObject
- * @private
- */
-function createUnauthenticatedClerkAuth(): MachineAuthObject<'oauth_token'> {
-  // Unauthenticated variant requires all auth fields to be null
-  const unauthenticated: MachineAuthObject<'oauth_token'> = {
-    userId: null,
-    clientId: null,
-    isAuthenticated: false,
-    tokenType: 'oauth_token',
-    id: null,
-    subject: null,
-    scopes: null,
-    getToken: () => Promise.resolve(null),
-    has: () => false,
-    debug: () => ({}),
-  };
-  return unauthenticated;
-}
-
-/**
- * Checks token verification and logs result.
- *
- * @param clerkAuth - Clerk authentication object
- * @param token - OAuth token to verify
- * @param toolName - Tool name for logging
- * @param logger - Logger instance
- * @returns Auth error if verification fails, undefined if passes
- * @private
- */
-function checkTokenVerification(
-  clerkAuth: MachineAuthObject<'oauth_token'>,
-  token: string,
-  toolName: string,
-  resourceUrl: string,
-  logger: Logger,
-): CallToolResult | undefined {
-  const verified = verifyClerkToken(clerkAuth, token);
-
-  if (!verified) {
-    logger.warn('MCP client token verification failed', { toolName });
-    return createAuthErrorResponse('invalid_token', 'Token verification failed', resourceUrl);
-  }
-
-  return undefined;
-}
-
-/**
- * Validates resource parameter and logs result.
- *
- * @param token - OAuth token containing resource parameter
- * @param resourceUrl - Expected resource URL
- * @param toolName - Tool name for logging
- * @param logger - Logger instance
- * @returns Auth error if validation fails, undefined if passes
- * @private
- */
-function checkResourceValidation(
-  token: string,
-  resourceUrl: string,
-  toolName: string,
-  logger: Logger,
-): CallToolResult | undefined {
-  const validation = validateResourceParameter(token, resourceUrl, logger);
-
-  if (!validation.valid) {
-    logger.warn('Resource parameter validation failed', {
-      toolName,
-      reason: validation.reason,
-    });
-    return createAuthErrorResponse(
-      'invalid_token',
-      validation.reason ?? 'Resource validation failed',
-      resourceUrl,
-    );
-  }
-
-  return undefined;
-}
-
-/**
- * Performs all auth validations (token + resource) and logs success.
- *
- * @param clerkAuth - Clerk authentication object
- * @param authContext - Auth context with token
- * @param toolName - Tool name for logging
- * @param resourceUrl - Resource URL for validation
- * @param logger - Logger instance
- * @returns Auth error if validation fails, undefined if all checks pass
- * @private
- */
-function performAuthValidations(
-  clerkAuth: MachineAuthObject<'oauth_token'>,
-  authContext: { readonly userId: string | null; readonly token: string },
-  toolName: string,
-  resourceUrl: string,
-  logger: Logger,
-): CallToolResult | undefined {
-  const tokenError = checkTokenVerification(
-    clerkAuth,
-    authContext.token,
-    toolName,
-    resourceUrl,
-    logger,
-  );
-  if (tokenError) {
-    return tokenError;
-  }
-
-  const resourceError = checkResourceValidation(authContext.token, resourceUrl, toolName, logger);
-  if (resourceError) {
-    return resourceError;
-  }
-
-  logger.info('MCP client authentication successful', {
-    toolName,
-    userId: authContext.userId,
-  });
-
-  return undefined;
-}
 
 /**
  * Checks MCP client authentication for a tool.
@@ -164,6 +36,7 @@ function performAuthValidations(
  *
  * @public
  */
+// eslint-disable-next-line max-lines-per-function, max-statements, complexity -- OAuth bearer token verification requires sequential validation steps
 export function checkMcpClientAuth(
   toolName: UniversalToolName,
   resourceUrl: string,
@@ -182,9 +55,18 @@ export function checkMcpClientAuth(
   }
 
   const req = getRequestContext();
-  const authContext = req ? extractAuthContext(req, logger) : undefined;
+  if (!req) {
+    logger.warn('No request context available', { toolName });
+    return createAuthErrorResponse(
+      'insufficient_scope',
+      'You need to login to continue',
+      resourceUrl,
+    );
+  }
 
-  if (!authContext) {
+  // Extract bearer token from Authorization header
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) {
     logger.warn('MCP client auth required but no token provided', { toolName });
     return createAuthErrorResponse(
       'insufficient_scope',
@@ -193,7 +75,35 @@ export function checkMcpClientAuth(
     );
   }
 
-  const clerkAuth = req?.auth ?? createUnauthenticatedClerkAuth();
+  const token = authHeader.substring('Bearer '.length);
 
-  return performAuthValidations(clerkAuth, authContext, toolName, resourceUrl, logger);
+  // Explicitly verify bearer token with Clerk
+  const clerkAuth = getAuth(req, { acceptsToken: 'oauth_token' });
+
+  const verified = verifyClerkToken(clerkAuth, token);
+  if (!verified) {
+    logger.warn('MCP client token verification failed', { toolName });
+    return createAuthErrorResponse('invalid_token', 'Token verification failed', resourceUrl);
+  }
+
+  // Validate resource parameter (RFC 8707)
+  const validation = validateResourceParameter(token, resourceUrl, logger);
+  if (!validation.valid) {
+    logger.warn('Resource parameter validation failed', {
+      toolName,
+      reason: validation.reason,
+    });
+    return createAuthErrorResponse(
+      'invalid_token',
+      validation.reason ?? 'Resource validation failed',
+      resourceUrl,
+    );
+  }
+
+  logger.info('MCP client authentication successful', {
+    toolName,
+    userId: verified.extra?.userId,
+  });
+
+  return undefined;
 }

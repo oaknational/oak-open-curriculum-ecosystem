@@ -170,6 +170,92 @@ describe('Tool Handler with Auth Integration', () => {
     });
   });
 
+  describe('DANGEROUSLY_DISABLE_AUTH bypass', () => {
+    it('should bypass auth and execute protected tool when flag is true', async () => {
+      const tool = { name: 'search' as UniversalToolName };
+      const params = { query: 'test' };
+      const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
+
+      const result = await handleToolWithAuthInterception(
+        tool,
+        params,
+        deps,
+        undefined,
+        logger,
+        'test-api-key',
+        config,
+      );
+
+      // Expected behavior:
+      // - Auth bypass should prevent auth error
+      // - Tool should execute successfully
+      expect(result.isError).toBeUndefined();
+      expect(result.content).toBeDefined();
+      expect(deps.executeMcpTool).toHaveBeenCalledWith(
+        'search',
+        { query: 'test' },
+        expect.anything(),
+      );
+
+      // Should log the bypass
+      expect(logger.info).toHaveBeenCalledWith('Auth disabled via DANGEROUSLY_DISABLE_AUTH', {
+        toolName: 'search',
+      });
+    });
+
+    it('should bypass auth for all protected tools when flag is true', async () => {
+      const tool = { name: 'get-key-stages' as UniversalToolName };
+      const params = {};
+      const config = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
+
+      const result = await handleToolWithAuthInterception(
+        tool,
+        params,
+        deps,
+        undefined,
+        logger,
+        'test-api-key',
+        config,
+      );
+
+      // Should execute without auth error
+      expect(result.isError).toBeUndefined();
+      expect(result.content).toBeDefined();
+      expect(deps.executeMcpTool).toHaveBeenCalledWith('get-key-stages', {}, expect.anything());
+
+      // Should log the bypass
+      expect(logger.info).toHaveBeenCalledWith('Auth disabled via DANGEROUSLY_DISABLE_AUTH', {
+        toolName: 'get-key-stages',
+      });
+    });
+
+    it('should enforce auth when flag is false', async () => {
+      const tool = { name: 'search' as UniversalToolName };
+      const params = { query: 'test' };
+      const config = createMockRuntimeConfig({ dangerouslyDisableAuth: false });
+
+      const result = await handleToolWithAuthInterception(
+        tool,
+        params,
+        deps,
+        undefined,
+        logger,
+        'test-api-key',
+        config,
+      );
+
+      // Should return auth error (no auth context available in test)
+      expect(result.isError).toBe(true);
+      expect(result._meta).toBeDefined();
+
+      // Should NOT log bypass
+      expect(logger.info).not.toHaveBeenCalledWith(
+        'Auth disabled via DANGEROUSLY_DISABLE_AUTH',
+        expect.anything(),
+      );
+    });
+  });
+
   describe('Error logging', () => {
     it('should log auth required but missing with correlation ID', async () => {
       const tool = { name: 'search' as UniversalToolName };
@@ -186,14 +272,17 @@ describe('Tool Handler with Auth Integration', () => {
         config,
       );
 
-      // Expected: logger.warn called with auth required message
+      // Expected: logger.warn called with auth/context missing message
       expect(logger.warn).toHaveBeenCalled();
       const warnCalls = (logger.warn as ReturnType<typeof vi.fn>).mock.calls;
-      const hasAuthWarning = warnCalls.some((call: unknown[]) => {
+      const hasAuthOrContextWarning = warnCalls.some((call: unknown[]) => {
         const firstArg = call[0];
-        return typeof firstArg === 'string' && firstArg.includes('auth');
+        return (
+          typeof firstArg === 'string' &&
+          (firstArg.includes('auth') || firstArg.includes('context') || firstArg.includes('token'))
+        );
       });
-      expect(hasAuthWarning).toBe(true);
+      expect(hasAuthOrContextWarning).toBe(true);
     });
 
     // Note: Testing successful auth logging requires a real JWT token
