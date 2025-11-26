@@ -39,9 +39,17 @@ export interface RegisterHandlersOptions {
  */
 export type ToolRegistrationServer = McpServer;
 
-export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
-  const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
-
+/**
+ * Build dependencies for tool handlers, merging defaults with overrides.
+ *
+ * @param resourceUrl - Base URL for resources
+ * @param overrides - Optional dependency overrides
+ * @returns Complete dependencies for tool handlers
+ */
+function buildToolHandlerDependencies(
+  resourceUrl: string,
+  overrides: ToolHandlerOverrides | undefined,
+): ToolHandlerDependencies {
   const defaultDependencies: ToolHandlerDependencies = {
     createClient: createOakPathBasedClient,
     executeMcpTool: executeToolCall,
@@ -49,15 +57,33 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     getResourceUrl: () => resourceUrl,
   };
 
-  const deps: ToolHandlerDependencies = {
+  return {
     ...defaultDependencies,
-    ...(options.overrides ?? {}),
+    ...(overrides ?? {}),
   };
-  const useStubTools = options.runtimeConfig.useStubTools;
-  const stubExecutor = useStubTools ? createStubToolExecutionAdapter() : undefined;
+}
+
+/**
+ * Registers all MCP tools with the server.
+ *
+ * Iterates over universal tools (generated + aggregated) and registers each
+ * with proper configuration including Zod schemas with parameter descriptions.
+ *
+ * @param server - MCP server instance
+ * @param options - Registration options including runtime config and logger
+ */
+export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
+  const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
+  const deps = buildToolHandlerDependencies(resourceUrl, options.overrides);
+  const stubExecutor = options.runtimeConfig.useStubTools
+    ? createStubToolExecutionAdapter()
+    : undefined;
+
   const tools = listUniversalTools();
   for (const tool of tools) {
-    const input = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
+    // Use generated Zod schema directly when available (includes .describe() for MCP clients).
+    // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
+    const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
     // Note: securitySchemes and annotations are supported by MCP runtime per OpenAI Apps SDK
     // documentation but not yet fully typed in MCP TypeScript SDK (as of v1.20.1).
     // We pass them through and they will be accepted at runtime via JavaScript's dynamic nature.

@@ -3,30 +3,53 @@ import type { ParamMetadata } from './param-metadata.js';
 /**
  * Build a Zod type string from parameter metadata.
  *
- * @param meta - Parameter metadata
- * @returns Zod type string (e.g., "z.string()", "z.union([...])")
+ * Generates Zod schema strings that include:
+ * - Type-appropriate schemas (z.string(), z.number(), etc.)
+ * - z.enum() for allowed values (proper JSON Schema conversion)
+ * - .describe() when description is provided (preserves metadata for MCP clients)
+ *
+ * @param meta - Parameter metadata from OpenAPI schema
+ * @returns Zod type string (e.g., 'z.string().describe("User name")')
  */
 export function buildZodType(meta: ParamMetadata): string {
+  let base: string;
+
   if (meta.allowedValues && meta.allowedValues.length > 0) {
-    const literals = meta.allowedValues.map((value) => `z.literal(${JSON.stringify(value)})`);
-    return `z.union([${literals.join(', ')}])`;
+    // Use z.enum() for proper JSON Schema conversion via zodToJsonSchema
+    const values = meta.allowedValues.map((v) => JSON.stringify(v)).join(', ');
+    base = `z.enum([${values}] as const)`;
+  } else {
+    switch (meta.typePrimitive) {
+      case 'string':
+        base = 'z.string()';
+        break;
+      case 'number':
+        base = 'z.number()';
+        break;
+      case 'boolean':
+        base = 'z.boolean()';
+        break;
+      case 'string[]':
+        base = 'z.array(z.string())';
+        break;
+      case 'number[]':
+        base = 'z.array(z.number())';
+        break;
+      case 'boolean[]':
+        base = 'z.array(z.boolean())';
+        break;
+      default:
+        base = 'z.unknown()';
+    }
   }
-  switch (meta.typePrimitive) {
-    case 'string':
-      return 'z.string()';
-    case 'number':
-      return 'z.number()';
-    case 'boolean':
-      return 'z.boolean()';
-    case 'string[]':
-      return 'z.array(z.string())';
-    case 'number[]':
-      return 'z.array(z.number())';
-    case 'boolean[]':
-      return 'z.array(z.boolean())';
-    default:
-      return 'z.unknown()';
+
+  // Add .describe() if description exists - enables MCP SDK to preserve
+  // parameter descriptions when converting Zod to JSON Schema
+  if (meta.description) {
+    return `${base}.describe(${JSON.stringify(meta.description)})`;
   }
+
+  return base;
 }
 
 /**

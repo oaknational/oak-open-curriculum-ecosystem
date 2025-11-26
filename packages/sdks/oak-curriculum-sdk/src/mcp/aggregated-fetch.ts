@@ -14,11 +14,20 @@ import {
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
 
+/**
+ * JSON Schema for the fetch aggregated tool.
+ *
+ * Includes parameter descriptions that will be visible to MCP clients.
+ */
 export const FETCH_INPUT_SCHEMA = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    id: { type: 'string' },
+    id: {
+      type: 'string',
+      description:
+        'Canonical identifier in format "type:slug" (e.g., "lesson:maths-lesson", "unit:fractions", "subject:science", "sequence:ks2-science", "thread:algebra")',
+    },
   },
   required: ['id'],
 } as const satisfies GenericToolInputJsonSchema;

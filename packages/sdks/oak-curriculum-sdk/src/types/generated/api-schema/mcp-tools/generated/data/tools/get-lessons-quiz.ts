@@ -31,8 +31,8 @@ export interface ToolParams {
 export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The lesson slug identifier"}} as const, additionalProperties: false as const, required: ["lesson"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ lesson: z.string() });
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string().describe("The lesson slug identifier") }) }) });
+export const toolMcpFlatInputSchema = z.object({ lesson: z.string().describe("The lesson slug identifier") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier"}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
 export const describeToolArgs = () => toolArgsDescription;

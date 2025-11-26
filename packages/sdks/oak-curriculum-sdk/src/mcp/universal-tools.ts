@@ -1,4 +1,5 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { z } from 'zod';
 import {
   toolNames,
   isToolName,
@@ -19,6 +20,37 @@ import {
 } from './universal-tool-shared.js';
 import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggregated-search.js';
 import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
+
+/**
+ * Type guard for ZodObject.
+ *
+ * Uses instanceof check to safely determine if a Zod schema is a ZodObject,
+ * which has a `.shape` property. This enables safe access to the shape for
+ * MCP SDK registration.
+ *
+ * @param schema - Zod schema to check
+ * @returns True if schema is a ZodObject with accessible shape
+ */
+function isZodObject(schema: z.ZodTypeAny): schema is z.ZodObject<z.ZodRawShape> {
+  return schema instanceof z.ZodObject;
+}
+
+/**
+ * Safely extract the shape from a Zod schema if it's a ZodObject.
+ *
+ * All generated toolMcpFlatInputSchema values are ZodObjects, so this will
+ * always return the shape. Returns undefined for non-object schemas or
+ * if the schema is undefined (e.g., in test mocks).
+ *
+ * @param schema - Generated flat Zod schema, may be undefined in tests
+ * @returns The ZodRawShape if schema is a ZodObject, undefined otherwise
+ */
+function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | undefined {
+  if (schema && isZodObject(schema)) {
+    return schema.shape;
+  }
+  return undefined;
+}
 
 /**
  * Aggregated tool definitions with MCP metadata.
@@ -84,11 +116,25 @@ export interface ToolAnnotations {
 
 /**
  * Entry in the universal tools list for MCP registration.
+ *
+ * Contains both JSON Schema (for backwards compatibility) and Zod schema
+ * (for MCP SDK registration with proper parameter descriptions).
  */
 export interface UniversalToolListEntry {
   readonly name: UniversalToolName;
   readonly description?: string;
+  /** JSON Schema for tool inputs (kept for backwards compatibility) */
   readonly inputSchema: UniversalToolInputSchema;
+  /**
+   * Zod raw shape for MCP SDK registerTool().
+   *
+   * Generated Zod schemas include .describe() calls that preserve
+   * parameter descriptions through the SDK's zodToJsonSchema conversion.
+   * Undefined for aggregated tools (which use JSON Schema only).
+   *
+   * @remarks Use this instead of converting inputSchema to avoid information loss.
+   */
+  readonly flatZodSchema?: z.ZodRawShape;
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
 }
@@ -110,6 +156,10 @@ function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
  * Returns both aggregated tools (search, fetch) and generated tools
  * from the OpenAPI schema, all with proper MCP annotations.
  *
+ * Generated tools include `flatZodSchema` which contains .describe() calls
+ * that preserve parameter descriptions through the MCP SDK's zodToJsonSchema
+ * conversion. Aggregated tools don't have this (they use JSON Schema directly).
+ *
  * @returns Array of tool entries with name, description, schema, security, and annotations
  */
 export function listUniversalTools(): UniversalToolListEntry[] {
@@ -118,6 +168,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       name,
       description: AGGREGATED_TOOL_DEFS[name].description,
       inputSchema: AGGREGATED_TOOL_DEFS[name].inputSchema,
+      // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
       securitySchemes: AGGREGATED_TOOL_DEFS[name].securitySchemes,
       annotations: AGGREGATED_TOOL_DEFS[name].annotations,
     }),
@@ -129,6 +180,8 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       name,
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
+      // Use generated Zod schema which includes .describe() for parameter descriptions
+      flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
     };
