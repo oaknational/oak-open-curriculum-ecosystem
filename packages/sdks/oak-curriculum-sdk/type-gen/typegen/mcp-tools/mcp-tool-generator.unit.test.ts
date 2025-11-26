@@ -5,6 +5,10 @@ import {
   schemaWithPathParams,
   buildSchemaWithEnumParam,
   schemaWithGetEndpoint,
+  buildSchemaWithParamLevelDescription,
+  buildSchemaWithSchemaLevelDescription,
+  buildSchemaWithBothDescriptionLevels,
+  buildSchemaWithNoDescription,
 } from '../../test-fixtures.js';
 import { generateMcpToolName } from './name-generator.js';
 
@@ -120,5 +124,67 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(changelogToolFile).toContain('securitySchemes:');
     expect(changelogToolFile).toContain("type: 'noauth'");
     expect(changelogToolFile).not.toContain("type: 'oauth2'");
+  });
+});
+
+/**
+ * Tests specifying parameter description extraction behaviour.
+ *
+ * OpenAPI spec allows descriptions at two levels:
+ * 1. param.description (parameter-level)
+ * 2. param.schema.description (schema-level)
+ *
+ * These tests ensure:
+ * - Both levels are supported
+ * - Parameter-level takes precedence
+ * - No description results in no .describe() call
+ */
+describe('parameter description extraction behaviour', () => {
+  it('extracts description from parameter level (param.description)', () => {
+    const schema = buildSchemaWithParamLevelDescription();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/assets', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Verify .describe() is present with the parameter-level description
+    expect(toolFile).toContain('.describe("Asset type filter from parameter level")');
+  });
+
+  it('extracts description from schema level (param.schema.description)', () => {
+    const schema = buildSchemaWithSchemaLevelDescription();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/units', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Verify .describe() is present with the schema-level description
+    expect(toolFile).toContain('.describe("Key stage filter from schema level")');
+  });
+
+  it('prefers parameter-level description when both levels exist', () => {
+    const schema = buildSchemaWithBothDescriptionLevels();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/search', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Parameter-level takes precedence
+    expect(toolFile).toContain('.describe("Parameter-level description takes precedence")');
+    // Schema-level should NOT appear
+    expect(toolFile).not.toContain('Schema-level description is fallback');
+  });
+
+  it('omits .describe() when no description at any level', () => {
+    const schema = buildSchemaWithNoDescription();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/items', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // The 'limit' parameter should NOT have a .describe() call
+    // It should just be z.number().optional() without describe
+    expect(toolFile).toContain('limit: z.number()');
+    expect(toolFile).not.toContain('limit: z.number().describe');
   });
 });

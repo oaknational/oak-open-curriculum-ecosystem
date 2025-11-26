@@ -315,3 +315,149 @@ export function buildSchemaWithEnumParam(): OpenAPIObject {
     },
   };
 }
+
+/**
+ * Schema with parameter description at the parameter level only.
+ * OpenAPI allows descriptions at param.description (parameter-level).
+ */
+export function buildSchemaWithParamLevelDescription(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Param-level description schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/assets': {
+        get: {
+          operationId: 'getAssets',
+          parameters: [
+            {
+              name: 'type',
+              in: 'query',
+              description: 'Asset type filter from parameter level',
+              schema: {
+                type: 'string',
+                enum: ['slideDeck', 'worksheet', 'video'],
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter description at the schema level only.
+ * OpenAPI also allows descriptions at param.schema.description (schema-level).
+ */
+export function buildSchemaWithSchemaLevelDescription(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Schema-level description schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/units': {
+        get: {
+          operationId: 'getUnits',
+          parameters: [
+            {
+              name: 'keyStage',
+              in: 'query',
+              schema: {
+                type: 'string',
+                description: 'Key stage filter from schema level',
+                enum: ['ks1', 'ks2', 'ks3', 'ks4'],
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter descriptions at BOTH levels.
+ * Parameter-level should take precedence.
+ */
+export function buildSchemaWithBothDescriptionLevels(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Both description levels schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/search': {
+        get: {
+          operationId: 'search',
+          parameters: [
+            {
+              name: 'subject',
+              in: 'query',
+              description: 'Parameter-level description takes precedence',
+              schema: {
+                type: 'string',
+                description: 'Schema-level description is fallback',
+                enum: ['maths', 'english'],
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter that has no description at any level.
+ */
+export function buildSchemaWithNoDescription(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'No description schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/items': {
+        get: {
+          operationId: 'getItems',
+          parameters: [
+            {
+              name: 'limit',
+              in: 'query',
+              schema: {
+                type: 'number',
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
