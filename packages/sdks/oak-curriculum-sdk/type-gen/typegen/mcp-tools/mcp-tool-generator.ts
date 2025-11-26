@@ -108,12 +108,18 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
     .filter((value): value is string | number | boolean => value !== undefined);
   const hasAllowedValues = Array.isArray(primitiveEnumValues) && primitiveEnumValues.length > 0;
 
+  // Check both parameter-level and schema-level descriptions
+  // Parameter-level (param.description) is preferred as it's more common in OpenAPI specs
+  const paramDescription = typeof param.description === 'string' ? param.description : undefined;
+  const schemaDescription =
+    typeof schema?.description === 'string' ? schema.description : undefined;
+
   return {
     typePrimitive: primitiveType,
     valueConstraint: hasAllowedValues,
     required: isRequired,
     allowedValues: hasAllowedValues ? [...primitiveEnumValues] : undefined,
-    description: typeof schema?.description === 'string' ? schema.description : undefined,
+    description: paramDescription ?? schemaDescription,
     default: schema && 'default' in schema ? schema.default : undefined,
   };
 }
