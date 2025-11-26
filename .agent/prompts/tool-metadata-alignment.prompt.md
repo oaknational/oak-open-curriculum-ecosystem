@@ -14,6 +14,7 @@ Read and follow these directives:
 
 ## Reference Documents
 
+- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - OpenAPI schema that we are working from to generate the MCP tools.
 - `.agent/reference-docs/mcp-docs-for-agents.md` - MCP specification (search for "ToolAnnotations")
 - `.agent/reference-docs/mcp-typescript-sdk-readme.md` - SDK usage patterns
 - `.agent/reference-docs/openai-apps-sdk-guidance.md` - OpenAI Apps requirements
@@ -52,6 +53,7 @@ export const AGGREGATED_TOOL_DEFS = {
 1. Do generated tools have `title` field? If so, aggregated tools need it.
 2. Do generated tools have `annotations` field? If so, aggregated tools need it.
 3. Are there any other metadata fields on generated tools that aggregated tools are missing?
+4. Are there any metadata fields that generated tools are missing? For instance, the upstream API has a rate limit of about 1000 requests per hour, which is not currently reflected in the generated tools, the current limit and reset time can always be fetched from the `/rate-limit` endpoint.
 
 ### Task 2: Add `readOnlyHint` to All Tools
 
@@ -67,6 +69,16 @@ ToolAnnotations {
   openWorldHint?: boolean;   // If true, may interact with open world. Default: true
   title?: string;            // Human-readable title
 }
+```
+
+For all of our tools:
+
+```typescript
+readOnlyHint: true;
+destructiveHint: false;
+idempotentHint: true;
+openWorldHint: false; // They only access fixed data provided by the upstream API.
+title: string;
 ```
 
 **OpenAI Apps Guidance** (from `.agent/reference-docs/openai-apps-sdk-guidance.md`):
@@ -232,4 +244,4 @@ Per `.agent/directives-and-memory/testing-strategy.md`:
 
 > "Write tests **FIRST**. Red → Green → Refactor"
 
-Consider writing a test that verifies all tools have `readOnlyHint: true` before implementing.
+Remember: tests are written to prove the behaviour of the code, not the implementation details.

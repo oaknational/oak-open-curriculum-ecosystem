@@ -1,1 +1,1 @@
-please read @rules.md @testing-strategy.md and @schema-first-execution.md and commit to them. The schema first is an absolute for parts of the sdk related directly to calling the upstream api, but it is okay to e.g. add additional metadata to mcp tools and type-gen time.
+please read @rules.md @testing-strategy.md and @schema-first-execution.md and commit to them. The schema first is an absolute for parts of the sdk related directly to calling the upstream api, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.
