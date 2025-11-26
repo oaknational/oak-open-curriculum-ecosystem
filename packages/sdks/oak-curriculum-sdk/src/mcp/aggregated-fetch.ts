@@ -17,7 +17,8 @@ import {
 /**
  * JSON Schema for the fetch aggregated tool.
  *
- * Includes parameter descriptions that will be visible to MCP clients.
+ * Includes parameter descriptions and examples that will be visible to MCP clients.
+ * These help AI agents understand expected formats for canonical identifiers.
  */
 export const FETCH_INPUT_SCHEMA = {
   type: 'object',
@@ -27,6 +28,13 @@ export const FETCH_INPUT_SCHEMA = {
       type: 'string',
       description:
         'Canonical identifier in format "type:slug" (e.g., "lesson:maths-lesson", "unit:fractions", "subject:science", "sequence:ks2-science", "thread:algebra")',
+      examples: [
+        'lesson:adding-fractions-with-the-same-denominator',
+        'unit:fractions',
+        'subject:maths',
+        'sequence:english-primary',
+        'thread:algebra',
+      ],
     },
   },
   required: ['id'],

@@ -461,3 +461,154 @@ export function buildSchemaWithNoDescription(): OpenAPIObject {
     },
   };
 }
+
+/**
+ * Schema with parameter example at the parameter level (param.example).
+ * OpenAPI allows examples at both parameter and schema levels.
+ */
+export function buildSchemaWithParamLevelExample(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Param-level example schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/sequences/{sequence}/units': {
+        get: {
+          operationId: 'getSequenceUnits',
+          parameters: [
+            {
+              name: 'sequence',
+              in: 'path',
+              required: true,
+              description: 'The sequence slug identifier',
+              example: 'english-primary',
+              schema: {
+                type: 'string',
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter example at the schema level (param.schema.example).
+ * Fallback location when param.example is not present.
+ */
+export function buildSchemaWithSchemaLevelExample(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Schema-level example schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/lessons/{lesson}/transcript': {
+        get: {
+          operationId: 'getLessonTranscript',
+          parameters: [
+            {
+              name: 'lesson',
+              in: 'path',
+              required: true,
+              description: 'The lesson slug',
+              schema: {
+                type: 'string',
+                example: 'checking-understanding-of-basic-transformations',
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter examples at BOTH levels.
+ * Parameter-level should take precedence.
+ */
+export function buildSchemaWithBothExampleLevels(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Both example levels schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/units/{unit}': {
+        get: {
+          operationId: 'getUnit',
+          parameters: [
+            {
+              name: 'unit',
+              in: 'path',
+              required: true,
+              description: 'The unit slug',
+              example: 'param-level-example',
+              schema: {
+                type: 'string',
+                example: 'schema-level-example',
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
+/**
+ * Schema with parameter that has no example at any level.
+ * The examples field should be omitted from output.
+ */
+export function buildSchemaWithNoExample(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'No example schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/subjects': {
+        get: {
+          operationId: 'getSubjects',
+          parameters: [
+            {
+              name: 'limit',
+              in: 'query',
+              description: 'Maximum number of results',
+              schema: {
+                type: 'number',
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
+}

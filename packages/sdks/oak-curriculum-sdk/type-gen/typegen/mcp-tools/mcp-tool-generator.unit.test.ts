@@ -9,6 +9,10 @@ import {
   buildSchemaWithSchemaLevelDescription,
   buildSchemaWithBothDescriptionLevels,
   buildSchemaWithNoDescription,
+  buildSchemaWithParamLevelExample,
+  buildSchemaWithSchemaLevelExample,
+  buildSchemaWithBothExampleLevels,
+  buildSchemaWithNoExample,
 } from '../../test-fixtures.js';
 import { generateMcpToolName } from './name-generator.js';
 
@@ -186,5 +190,68 @@ describe('parameter description extraction behaviour', () => {
     // It should just be z.number().optional() without describe
     expect(toolFile).toContain('limit: z.number()');
     expect(toolFile).not.toContain('limit: z.number().describe');
+  });
+});
+
+/**
+ * Tests specifying parameter example extraction behaviour.
+ *
+ * OpenAPI spec allows examples at two levels:
+ * 1. param.example (parameter-level)
+ * 2. param.schema.example (schema-level)
+ *
+ * JSON Schema uses `examples` (array) not `example` (singular).
+ *
+ * These tests ensure:
+ * - Both levels are supported
+ * - Parameter-level takes precedence
+ * - No example results in no examples field in JSON Schema
+ * - Examples are emitted as arrays per JSON Schema spec
+ */
+describe('parameter example extraction behaviour', () => {
+  it('extracts example from parameter level and emits in JSON Schema', () => {
+    const schema = buildSchemaWithParamLevelExample();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/sequences/{sequence}/units', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Verify examples array is present in toolInputJsonSchema
+    expect(toolFile).toContain('"examples":["english-primary"]');
+  });
+
+  it('extracts example from schema level when param-level absent', () => {
+    const schema = buildSchemaWithSchemaLevelExample();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/lessons/{lesson}/transcript', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Verify examples array is present from schema-level example
+    expect(toolFile).toContain('"examples":["checking-understanding-of-basic-transformations"]');
+  });
+
+  it('prefers parameter-level example when both levels exist', () => {
+    const schema = buildSchemaWithBothExampleLevels();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/units/{unit}', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // Parameter-level takes precedence
+    expect(toolFile).toContain('"examples":["param-level-example"]');
+    // Schema-level should NOT appear
+    expect(toolFile).not.toContain('schema-level-example');
+  });
+
+  it('omits examples field when no example at any level', () => {
+    const schema = buildSchemaWithNoExample();
+    const files = generateCompleteMcpTools(schema);
+    const toolName = generateMcpToolName('/subjects', 'get');
+    const toolFile = files.data.tools[`${toolName}.ts`];
+
+    expect(toolFile).toBeDefined();
+    // The toolInputJsonSchema should NOT contain examples field
+    expect(toolFile).not.toContain('"examples":');
   });
 });

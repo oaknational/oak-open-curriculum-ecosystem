@@ -33,8 +33,8 @@ export const SUBJECT_SLUGS = [
 /**
  * JSON Schema for the search aggregated tool.
  *
- * Includes parameter descriptions that will be visible to MCP clients.
- * These descriptions help users understand what each parameter does.
+ * Includes parameter descriptions and examples that will be visible to MCP clients.
+ * These help AI agents understand what each parameter does and expected formats.
  */
 export const SEARCH_INPUT_SCHEMA = {
   type: 'object',
@@ -43,24 +43,29 @@ export const SEARCH_INPUT_SCHEMA = {
     query: {
       type: 'string',
       description: 'Search query string (alias for "q")',
+      examples: ['Who were the Romans?', 'photosynthesis', 'adding fractions'],
     },
     q: {
       type: 'string',
       description: 'Search query string to find lessons and transcripts',
+      examples: ['Who were the Romans?', 'photosynthesis', 'adding fractions'],
     },
     keyStage: {
       type: 'string',
       description: 'Filter by key stage (ks1, ks2, ks3, or ks4)',
       enum: [...KEY_STAGES],
+      examples: ['ks2'],
     },
     subject: {
       type: 'string',
       description: 'Filter by subject slug (e.g., "maths", "english", "science")',
       enum: [...SUBJECT_SLUGS],
+      examples: ['maths', 'english', 'science'],
     },
     unit: {
       type: 'string',
       description: 'Filter by unit slug to narrow results to a specific unit',
+      examples: ['fractions', 'the-romans'],
     },
   },
 } as const satisfies GenericToolInputJsonSchema;

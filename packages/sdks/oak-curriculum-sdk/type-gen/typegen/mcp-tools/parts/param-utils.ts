@@ -69,3 +69,19 @@ export function toCamelCase(value: string): string {
       .join('')
   );
 }
+
+/**
+ * Extract example value from an OpenAPI object (parameter or schema).
+ * Returns undefined if no example present, or the example value as a primitive.
+ * Only supports primitive examples (string, number, boolean).
+ */
+export function extractExampleValue(obj: object): string | number | boolean | undefined {
+  if (!('example' in obj)) {
+    return undefined;
+  }
+  const example: unknown = obj.example;
+  if (typeof example === 'string' || typeof example === 'number' || typeof example === 'boolean') {
+    return example;
+  }
+  return undefined;
+}

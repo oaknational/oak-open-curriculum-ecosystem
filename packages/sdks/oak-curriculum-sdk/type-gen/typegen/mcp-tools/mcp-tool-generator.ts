@@ -14,7 +14,7 @@ import { generateExecuteFile } from './parts/generate-execute-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
 import { generateScopesSupportedFile } from './parts/generate-scopes-supported-file.js';
 import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
-import { getParameterPrimitiveType } from './parts/param-utils.js';
+import { getParameterPrimitiveType, extractExampleValue } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
@@ -114,6 +114,12 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
   const schemaDescription =
     typeof schema?.description === 'string' ? schema.description : undefined;
 
+  // Extract example from parameter level or schema level
+  // Parameter-level (param.example) takes precedence over schema-level (param.schema.example)
+  // OpenAPI example field can be string, number, boolean, or more complex objects
+  const paramExample = extractExampleValue(param);
+  const schemaExample = schema ? extractExampleValue(schema) : undefined;
+
   return {
     typePrimitive: primitiveType,
     valueConstraint: hasAllowedValues,
@@ -121,6 +127,7 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
     allowedValues: hasAllowedValues ? [...primitiveEnumValues] : undefined,
     description: paramDescription ?? schemaDescription,
     default: schema && 'default' in schema ? schema.default : undefined,
+    example: paramExample ?? schemaExample,
   };
 }
 

@@ -3,6 +3,8 @@ export interface JsonSchemaPropertyString {
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  /** Example values for AI agent guidance (JSON Schema draft-07) */
+  readonly examples?: readonly unknown[];
 }
 
 export interface JsonSchemaPropertyNumber {
@@ -10,6 +12,8 @@ export interface JsonSchemaPropertyNumber {
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  /** Example values for AI agent guidance (JSON Schema draft-07) */
+  readonly examples?: readonly unknown[];
 }
 
 export interface JsonSchemaPropertyBoolean {
@@ -17,6 +21,8 @@ export interface JsonSchemaPropertyBoolean {
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  /** Example values for AI agent guidance (JSON Schema draft-07) */
+  readonly examples?: readonly unknown[];
 }
 
 export interface JsonSchemaPropertyArray<TItem extends 'string' | 'number' | 'boolean'> {
@@ -24,6 +30,8 @@ export interface JsonSchemaPropertyArray<TItem extends 'string' | 'number' | 'bo
   readonly items: { readonly type: TItem };
   readonly description?: string;
   readonly default?: unknown;
+  /** Example values for AI agent guidance (JSON Schema draft-07) */
+  readonly examples?: readonly unknown[];
 }
 
 export interface JsonSchemaObject {
