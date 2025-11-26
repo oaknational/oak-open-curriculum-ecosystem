@@ -1,7 +1,8 @@
 # Tool Metadata Alignment - Implementation Plan
 
-**Status**: 🔴 NOT STARTED  
+**Status**: ✅ COMPLETE  
 **Date**: 2025-11-26  
+**Completed**: 2025-11-26  
 **Priority**: Pre-merge cleanup for OAuth implementation
 
 ---
@@ -39,6 +40,7 @@ Read and follow:
 **Location**: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/tools/`
 
 **Current fields**:
+
 - `name`, `description`, `path`, `method`, `operationId`
 - `inputSchema`, `toolInputJsonSchema`, `toolZodSchema`, `toolMcpFlatInputSchema`
 - `securitySchemes`, `documentedStatuses`
@@ -51,6 +53,7 @@ Read and follow:
 **Location**: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts`
 
 **Current fields**:
+
 - `description`, `inputSchema`, `securitySchemes`
 
 **Missing**: `annotations` field, potentially `title`
@@ -60,6 +63,7 @@ Read and follow:
 **Location**: `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
 
 **Currently passes**:
+
 - `title: tool.name` (uses kebab-case name, not human-readable)
 - `description`, `inputSchema`, `securitySchemes`
 
@@ -79,11 +83,11 @@ From `@modelcontextprotocol/sdk/types.js`:
 
 ```typescript
 interface ToolAnnotations {
-  readOnlyHint?: boolean;    // If true, tool does not modify environment. Default: false
+  readOnlyHint?: boolean; // If true, tool does not modify environment. Default: false
   destructiveHint?: boolean; // If true, may perform destructive updates. Default: true
-  idempotentHint?: boolean;  // If true, repeated calls have no additional effect. Default: false
-  openWorldHint?: boolean;   // If true, may interact with open world. Default: true
-  title?: string;            // Human-readable title
+  idempotentHint?: boolean; // If true, repeated calls have no additional effect. Default: false
+  openWorldHint?: boolean; // If true, may interact with open world. Default: true
+  title?: string; // Human-readable title
 }
 ```
 
@@ -233,50 +237,50 @@ annotations: {
 
 ### Generated Tools
 
-| Criterion | Test Method | Pass/Fail |
-|-----------|-------------|-----------|
-| All 26 generated tools have `annotations` property | Grep generated files for `annotations:` | ⬜ |
-| All tools have `readOnlyHint: true` | Grep generated files | ⬜ |
-| All tools have `destructiveHint: false` | Grep generated files | ⬜ |
-| All tools have `idempotentHint: true` | Grep generated files | ⬜ |
-| All tools have `openWorldHint: false` | Grep generated files | ⬜ |
-| All tools have human-readable `title` | Grep generated files for `title:` | ⬜ |
-| `pnpm type-gen` regenerates with annotations | Run type-gen, check output | ⬜ |
+| Criterion                                          | Test Method                             | Pass/Fail |
+| -------------------------------------------------- | --------------------------------------- | --------- |
+| All 26 generated tools have `annotations` property | Grep generated files for `annotations:` | ✅        |
+| All tools have `readOnlyHint: true`                | Grep generated files                    | ✅        |
+| All tools have `destructiveHint: false`            | Grep generated files                    | ✅        |
+| All tools have `idempotentHint: true`              | Grep generated files                    | ✅        |
+| All tools have `openWorldHint: false`              | Grep generated files                    | ✅        |
+| All tools have human-readable `title`              | Grep generated files for `title:`       | ✅        |
+| `pnpm type-gen` regenerates with annotations       | Run type-gen, check output              | ✅        |
 
 ### Aggregated Tools
 
-| Criterion | Test Method | Pass/Fail |
-|-----------|-------------|-----------|
-| `search` tool has `annotations` with all fields | Unit test or code inspection | ⬜ |
-| `fetch` tool has `annotations` with all fields | Unit test or code inspection | ⬜ |
-| `UniversalToolListEntry` includes `annotations` type | TypeScript compilation | ⬜ |
-| `listUniversalTools()` returns annotations | Integration test | ⬜ |
+| Criterion                                            | Test Method                  | Pass/Fail |
+| ---------------------------------------------------- | ---------------------------- | --------- |
+| `search` tool has `annotations` with all fields      | Unit test or code inspection | ✅        |
+| `fetch` tool has `annotations` with all fields       | Unit test or code inspection | ✅        |
+| `UniversalToolListEntry` includes `annotations` type | TypeScript compilation       | ✅        |
+| `listUniversalTools()` returns annotations           | Integration test             | ✅        |
 
 ### Handler Registration
 
-| Criterion | Test Method | Pass/Fail |
-|-----------|-------------|-----------|
-| `server.registerTool()` receives `annotations` | Code inspection or integration test | ⬜ |
-| `title` uses `annotations.title` when available | Code inspection | ⬜ |
+| Criterion                                       | Test Method                         | Pass/Fail |
+| ----------------------------------------------- | ----------------------------------- | --------- |
+| `server.registerTool()` receives `annotations`  | Code inspection or integration test | ✅        |
+| `title` uses `annotations.title` when available | Code inspection                     | ✅        |
 
 ### Contract & Types
 
-| Criterion | Test Method | Pass/Fail |
-|-----------|-------------|-----------|
-| `ToolDescriptor` interface includes `annotations` | TypeScript compilation | ⬜ |
-| No type errors after changes | `pnpm type-check` | ⬜ |
+| Criterion                                         | Test Method            | Pass/Fail |
+| ------------------------------------------------- | ---------------------- | --------- |
+| `ToolDescriptor` interface includes `annotations` | TypeScript compilation | ✅        |
+| No type errors after changes                      | `pnpm type-check`      | ✅        |
 
 ### Quality Gates
 
-| Gate | Status |
-|------|--------|
-| `pnpm type-gen` | ⬜ |
-| `pnpm build` | ⬜ |
-| `pnpm type-check` | ⬜ |
-| `pnpm lint -- --fix` | ⬜ |
-| `pnpm format` | ⬜ |
-| `pnpm test` | ⬜ |
-| `pnpm test:e2e` | ⬜ |
+| Gate                 | Status |
+| -------------------- | ------ |
+| `pnpm type-gen`      | ✅     |
+| `pnpm build`         | ✅     |
+| `pnpm type-check`    | ✅     |
+| `pnpm lint -- --fix` | ✅     |
+| `pnpm format`        | ✅     |
+| `pnpm test`          | ✅     |
+| `pnpm test:e2e`      | ✅     |
 
 ---
 
@@ -284,39 +288,39 @@ annotations: {
 
 ### Type Generation (Schema-First)
 
-| File | Purpose | Change Required |
-|------|---------|-----------------|
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts` | Emits tool descriptor | Add `annotations` block |
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` | Main generator | May need title derivation |
+| File                                                                                | Purpose               | Change Required           |
+| ----------------------------------------------------------------------------------- | --------------------- | ------------------------- |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`   | Emits tool descriptor | Add `annotations` block   |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` | Main generator        | May need title derivation |
 
 ### Contract
 
-| File | Purpose | Change Required |
-|------|---------|-----------------|
+| File                                                                                                             | Purpose                   | Change Required            |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------- | -------------------------- |
 | `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts` | Tool descriptor interface | Add `annotations` property |
 
 ### SDK (Aggregated Tools)
 
-| File | Purpose | Change Required |
-|------|---------|-----------------|
+| File                                                          | Purpose                     | Change Required                           |
+| ------------------------------------------------------------- | --------------------------- | ----------------------------------------- |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools.ts` | Aggregated tool definitions | Add annotations to defs, update interface |
 
 ### App (Handler)
 
-| File | Purpose | Change Required |
-|------|---------|-----------------|
+| File                                                      | Purpose           | Change Required                        |
+| --------------------------------------------------------- | ----------------- | -------------------------------------- |
 | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` | Tool registration | Pass `annotations` to `registerTool()` |
 
 ---
 
 ## Risks and Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Type generation breaks | Run full quality gates after each phase; commit frequently |
-| Annotations not passed to MCP SDK | Integration test to verify `server.registerTool()` config |
-| Human-readable title generation edge cases | Unit test edge cases (single word, special chars) |
-| Breaking existing tests | TDD approach ensures tests drive implementation |
+| Risk                                       | Mitigation                                                 |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| Type generation breaks                     | Run full quality gates after each phase; commit frequently |
+| Annotations not passed to MCP SDK          | Integration test to verify `server.registerTool()` config  |
+| Human-readable title generation edge cases | Unit test edge cases (single word, special chars)          |
+| Breaking existing tests                    | TDD approach ensures tests drive implementation            |
 
 ---
 
@@ -327,6 +331,7 @@ Per testing-strategy.md:
 > "Write tests **FIRST**. Red → Green → Refactor"
 
 All changes should follow:
+
 1. **RED**: Write test that fails (feature doesn't exist yet)
 2. **GREEN**: Implement minimal code to pass test
 3. **REFACTOR**: Improve implementation while keeping tests green
@@ -354,4 +359,3 @@ The `annotations` for generated tools MUST be added in the type-gen templates (`
 - Rate limiting metadata could be added as custom extension (not in MCP spec)
 - Per-tool caching hints could be added similarly
 - These would require OpenAI Apps guidance review first
-

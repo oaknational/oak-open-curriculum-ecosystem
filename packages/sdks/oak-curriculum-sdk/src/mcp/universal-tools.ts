@@ -21,8 +21,13 @@ import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggreg
 import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
 
 /**
- * TODO: Remove manual security metadata when Phase 0 (comprehensive-mcp-enhancement-plan.md)
- * moves aggregated tools to generated code. Security should flow from OpenAPI schema.
+ * Aggregated tool definitions with MCP metadata.
+ *
+ * These tools combine multiple API calls into a single operation.
+ * Annotations match generated tools: read-only, non-destructive, idempotent.
+ *
+ * @remarks Security metadata is manual until Phase 0 (comprehensive-mcp-enhancement-plan.md)
+ * moves aggregated tools to generated code.
  */
 export const AGGREGATED_TOOL_DEFS = {
   search: {
@@ -30,12 +35,26 @@ export const AGGREGATED_TOOL_DEFS = {
       'Search across lessons and transcripts. Executes get-search-lessons and get-search-transcripts.',
     inputSchema: SEARCH_INPUT_SCHEMA,
     securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+      title: 'Search Lessons and Transcripts',
+    },
   },
   fetch: {
     description:
       'Fetch lesson, unit, subject, sequence, or thread metadata by canonical identifier.',
     inputSchema: FETCH_INPUT_SCHEMA,
     securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+      title: 'Fetch Curriculum Resource',
+    },
   },
 } as const;
 
@@ -46,11 +65,32 @@ type GeneratedToolInputSchema = ToolDescriptorForName<ToolName>['inputSchema'];
 type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolName]['inputSchema'];
 export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
 
+/**
+ * MCP tool annotations providing hints about tool behavior.
+ *
+ * All Oak curriculum tools are read-only GET operations.
+ *
+ * @remarks The index signature is required for compatibility with MCP SDK's
+ * ToolAnnotations type which allows arbitrary extension properties.
+ */
+export interface ToolAnnotations {
+  readonly [x: string]: unknown;
+  readonly readOnlyHint?: boolean;
+  readonly destructiveHint?: boolean;
+  readonly idempotentHint?: boolean;
+  readonly openWorldHint?: boolean;
+  readonly title?: string;
+}
+
+/**
+ * Entry in the universal tools list for MCP registration.
+ */
 export interface UniversalToolListEntry {
   readonly name: UniversalToolName;
   readonly description?: string;
   readonly inputSchema: UniversalToolInputSchema;
   readonly securitySchemes?: readonly SecurityScheme[];
+  readonly annotations?: ToolAnnotations;
 }
 export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
   return value === 'search' || value === 'fetch';
@@ -64,6 +104,14 @@ function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
   return formatData({ status: outcome.status, data: outcome.data });
 }
 
+/**
+ * Lists all available MCP tools with their metadata.
+ *
+ * Returns both aggregated tools (search, fetch) and generated tools
+ * from the OpenAPI schema, all with proper MCP annotations.
+ *
+ * @returns Array of tool entries with name, description, schema, security, and annotations
+ */
 export function listUniversalTools(): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
     (name) => ({
@@ -71,6 +119,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       description: AGGREGATED_TOOL_DEFS[name].description,
       inputSchema: AGGREGATED_TOOL_DEFS[name].inputSchema,
       securitySchemes: AGGREGATED_TOOL_DEFS[name].securitySchemes,
+      annotations: AGGREGATED_TOOL_DEFS[name].annotations,
     }),
   );
 
@@ -81,6 +130,7 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
       securitySchemes: descriptor.securitySchemes,
+      annotations: descriptor.annotations,
     };
   });
 

@@ -58,15 +58,16 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
   const tools = listUniversalTools();
   for (const tool of tools) {
     const input = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    // Note: securitySchemes is supported by MCP runtime per OpenAI Apps SDK documentation
-    // but not yet in MCP TypeScript SDK types (as of v1.20.1).
-    // We pass it through and it will be accepted at runtime via JavaScript's dynamic nature.
+    // Note: securitySchemes and annotations are supported by MCP runtime per OpenAI Apps SDK
+    // documentation but not yet fully typed in MCP TypeScript SDK (as of v1.20.1).
+    // We pass them through and they will be accepted at runtime via JavaScript's dynamic nature.
     // See: https://platform.openai.com/docs/guides/apps-authentication
     const config = {
-      title: tool.name,
+      title: tool.annotations?.title ?? tool.name,
       description: tool.description ?? tool.name,
       inputSchema: input,
       securitySchemes: tool.securitySchemes,
+      annotations: tool.annotations,
     };
     server.registerTool(tool.name, config, async (params: unknown) => {
       return handleToolWithAuthInterception(

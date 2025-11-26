@@ -96,6 +96,23 @@ export interface ToolDescriptor<
   readonly transformFlatToNestedArgs: (flatArgs: TFlatArgs) => TArgs;
   readonly documentedStatuses: readonly TDocumentedStatus[];
   readonly securitySchemes?: readonly SecurityScheme[];
+  /**
+   * MCP tool annotations providing hints about tool behavior.
+   *
+   * All Oak curriculum tools are read-only GET operations, so:
+   * - readOnlyHint: true (no state modification)
+   * - destructiveHint: false (no destructive operations)
+   * - idempotentHint: true (GET is idempotent)
+   * - openWorldHint: false (fixed curriculum data only)
+   * - title: human-readable tool name
+   */
+  readonly annotations?: {
+    readonly readOnlyHint?: boolean;
+    readonly destructiveHint?: boolean;
+    readonly idempotentHint?: boolean;
+    readonly openWorldHint?: boolean;
+    readonly title?: string;
+  };
   readonly validateOutput: (value: unknown) =>
     | { readonly ok: true; readonly data: TResult; readonly status: TStatus }
     | {

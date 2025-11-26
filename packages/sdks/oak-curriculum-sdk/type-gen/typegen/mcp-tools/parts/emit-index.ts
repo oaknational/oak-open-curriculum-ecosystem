@@ -1,5 +1,6 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
 import { getSecuritySchemeForTool } from '../apply-security-policy.js';
+import { kebabToTitleCase } from './kebab-to-title-case.js';
 
 function literalName(toolName: string): string {
   const parts = toolName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
@@ -34,28 +35,7 @@ function buildExports({
   readonly operationId: string;
   readonly operation: OperationObject;
 }): string {
-  // Apply security policy to determine tool's authentication requirements
-  //
-  // SECURITY METADATA GENERATION:
-  // This embeds security requirements directly into each tool descriptor.
-  // The security policy is defined in: type-gen/mcp-security-policy.ts
-  //
-  // CURRENT APPROACH (Simple):
-  // All OAuth-protected tools share the same scopes: ['openid', 'email']
-  // Tools in PUBLIC_TOOLS get { type: 'noauth' }
-  // All other tools get { type: 'oauth2', scopes: ['openid', 'email'] }
-  //
-  // WHY THIS IS SIMPLE:
-  // We don't need per-tool scope variation yet. If you're looking at this
-  // because you need different scopes for different tools (e.g., read vs write),
-  // you'll need to:
-  // 1. Update mcp-security-policy.ts to support per-tool scopes
-  // 2. Update apply-security-policy.ts to use tool-specific logic
-  // 3. The generation here will automatically pick up the changes
-  //
-  // PROTECTED RESOURCE METADATA:
-  // To get the list of all supported scopes for RFC 9728 metadata,
-  // use getScopesSupported() from mcp-security-policy.ts
+  // Security metadata from mcp-security-policy.ts (see apply-security-policy.ts for details)
   const securitySchemes = getSecuritySchemeForTool(toolName);
   const securitySchemesLiteral = `[${securitySchemes
     .map((scheme) => {
@@ -156,6 +136,15 @@ function buildExports({
   lines.push('  method,');
   lines.push('  documentedStatuses,');
   lines.push(`  securitySchemes: ${securitySchemesLiteral},`);
+  // MCP annotations: all Oak tools are read-only, non-destructive, idempotent GET operations
+  const humanReadableTitle = kebabToTitleCase(toolName);
+  lines.push('  annotations: {');
+  lines.push('    readOnlyHint: true,');
+  lines.push('    destructiveHint: false,');
+  lines.push('    idempotentHint: true,');
+  lines.push('    openWorldHint: false,');
+  lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
+  lines.push('  },');
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',
