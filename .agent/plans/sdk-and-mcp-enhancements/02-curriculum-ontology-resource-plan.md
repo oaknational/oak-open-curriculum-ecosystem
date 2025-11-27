@@ -8,6 +8,28 @@
 
 ---
 
+## POC Available
+
+**Before implementing this full plan**, consider running the POC first:
+
+→ **00-ontology-poc-static-tool.md** - A ~1 hour spike (content pre-authored) that validates whether ChatGPT uses ontology information effectively. Serves a hand-authored static JSON file as a `get-ontology` tool with full metadata treatment (annotations, `_meta`, descriptions).
+
+**The POC validates:**
+
+- Does ChatGPT request ontology when composing tool calls?
+- Does ontology context improve tool selection accuracy?
+- Is the content structure (key stages, threads, workflows) sufficient?
+
+**Proceed with this full plan when:**
+
+- POC proves value (ChatGPT uses ontology effectively)
+- Static content becomes a maintenance burden
+- Schema changes require manual ontology updates
+- Multiple tools need structured ontology access
+- You want resource-based pre-injection for some clients
+
+---
+
 ## Executive Summary
 
 Implement a schema-derived curriculum ontology exposed as an MCP resource, enabling AI agents to understand the Oak Curriculum domain model, entity relationships, and tool composition patterns. The ontology will be split into:
@@ -70,15 +92,50 @@ Read and follow:
    - Format as JSON/summary/mermaid
    - Location: `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-resource.ts`
 
-### MCP Resource vs Tool
+### MCP Resource vs Tool: Dual Exposure
 
-**Resources** are static/semi-static data that can be read; **Tools** are executable functions. The ontology fits the resource model:
+Per MCP specification, the key distinction is **control model**:
 
-- Static schema facts (change only on schema updates)
-- Stable guidance (changes rarely)
-- No side effects, no external API calls
-- Read-only access pattern
-- MCP specification supports resources via `resources/list` and `resources/read`
+| Primitive     | Control            | Use Case                          |
+| ------------- | ------------------ | --------------------------------- |
+| **Resources** | Application-driven | Context the client pre-injects    |
+| **Tools**     | Model-driven       | Actions the LLM decides to invoke |
+
+For ontology, we need **both patterns**:
+
+#### Tool Exposure (`get-ontology`)
+
+- **Model-controlled**: ChatGPT decides when to request domain context
+- **Full metadata**: Annotations, `_meta`, invocation status
+- **On-demand**: AI asks for ontology when composing tool calls
+- **POC validates**: 00-ontology-poc-static-tool.md tests this pattern
+
+#### Resource Exposure (`curriculum://ontology`)
+
+- **Application-controlled**: Client decides when to inject context
+- **Pre-fetchable**: Agents can load ontology before conversation starts
+- **Subscription-ready**: Clients can monitor for schema changes
+- **Flexible filtering**: URI parameters for format/entity filtering
+
+The full implementation will provide **both** interfaces to the same underlying ontology:
+
+```
+                       ┌──────────────────────┐
+                       │  Ontology Data       │
+                       │  (schema + guidance) │
+                       └──────────┬───────────┘
+                                  │
+              ┌───────────────────┴───────────────────┐
+              │                                       │
+     ┌────────▼────────┐                   ┌──────────▼──────────┐
+     │  get-ontology   │                   │ curriculum://ontol  │
+     │     (Tool)      │                   │     (Resource)      │
+     ├─────────────────┤                   ├─────────────────────┤
+     │ Model requests  │                   │ App pre-injects     │
+     │ Full metadata   │                   │ Subscribable        │
+     │ Invocation UX   │                   │ URI filtering       │
+     └─────────────────┘                   └─────────────────────┘
+```
 
 ---
 
@@ -783,8 +840,10 @@ All changes follow:
 
 ## Related Plans
 
+- **00-ontology-poc-static-tool.md** - Quick POC to validate value proposition (~2 hours)
 - **01-mcp-tool-metadata-enhancement-plan.md** - Tool metadata enhancement (parallel work)
 - **03-mcp-infrastructure-advanced-tools-plan.md** - Infrastructure and advanced tools (Phase 0 is prerequisite)
+- **upstream-api-metadata-wishlist.md (Item 3)** - Ideal future: native `/ontology` endpoint in upstream API
 
 ---
 
