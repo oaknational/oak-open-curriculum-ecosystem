@@ -73,7 +73,7 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Search');
+    expect(annotations?.title).toBe('Search Curriculum');
   });
 
   it('fetch tool has correct annotations', () => {
@@ -86,7 +86,7 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Fetch');
+    expect(annotations?.title).toBe('Fetch Curriculum Resource');
   });
 
   it('get-ontology tool has correct annotations', () => {

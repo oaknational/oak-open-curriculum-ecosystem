@@ -52,6 +52,7 @@ Call this FIRST before using other curriculum tools to understand the domain mod
     title: 'Get Curriculum Ontology',
   },
   _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Loading curriculum model…',
     'openai/toolInvocation/invoked': 'Curriculum model loaded',
   },

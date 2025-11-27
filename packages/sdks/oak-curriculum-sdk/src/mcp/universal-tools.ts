@@ -18,8 +18,18 @@ import {
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from './universal-tool-shared.js';
-import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggregated-search.js';
-import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
+import {
+  SEARCH_TOOL_DEF,
+  SEARCH_INPUT_SCHEMA,
+  validateSearchArgs,
+  runSearchTool,
+} from './aggregated-search/index.js';
+import {
+  FETCH_TOOL_DEF,
+  FETCH_INPUT_SCHEMA,
+  validateFetchArgs,
+  runFetchTool,
+} from './aggregated-fetch.js';
 import { GET_ONTOLOGY_TOOL_DEF, runOntologyTool } from './aggregated-ontology.js';
 
 /**
@@ -58,34 +68,12 @@ function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | unde
  *
  * These tools combine multiple API calls into a single operation.
  * Annotations match generated tools: read-only, non-destructive, idempotent.
+ * Tool definitions (description, annotations, _meta) are imported from
+ * their respective modules to keep this file under 250 lines.
  */
 export const AGGREGATED_TOOL_DEFS = {
-  search: {
-    description:
-      'Search across lessons and transcripts\n\nExecutes get-search-lessons and get-search-transcripts in parallel, combining results. Use filters (keyStage, subject, unit) to narrow results.',
-    inputSchema: SEARCH_INPUT_SCHEMA,
-    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
-    annotations: {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: false,
-      title: 'Search',
-    },
-  },
-  fetch: {
-    description:
-      'Fetch curriculum resource by canonical identifier\n\nRetrieves lesson, unit, subject, sequence, or thread metadata. Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").',
-    inputSchema: FETCH_INPUT_SCHEMA,
-    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
-    annotations: {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: false,
-      title: 'Fetch',
-    },
-  },
+  search: { ...SEARCH_TOOL_DEF, inputSchema: SEARCH_INPUT_SCHEMA },
+  fetch: { ...FETCH_TOOL_DEF, inputSchema: FETCH_INPUT_SCHEMA },
   'get-ontology': GET_ONTOLOGY_TOOL_DEF,
 } as const;
 
@@ -109,11 +97,14 @@ export interface ToolAnnotations {
 /**
  * OpenAI Apps SDK metadata for tool descriptors.
  *
- * These fields are used by ChatGPT to display status during tool invocation.
+ * These fields are used by ChatGPT to display status during tool invocation
+ * and to render output using a widget.
  * See: https://developers.openai.com/apps-sdk/reference
  */
 export interface ToolMeta {
   readonly [x: string]: unknown;
+  /** URI of widget resource to render tool output (text/html+skybridge MIME type) */
+  readonly 'openai/outputTemplate'?: string;
   /** Status text shown while tool is running (≤64 chars) */
   readonly 'openai/toolInvocation/invoking'?: string;
   /** Status text shown after tool completes (≤64 chars) */

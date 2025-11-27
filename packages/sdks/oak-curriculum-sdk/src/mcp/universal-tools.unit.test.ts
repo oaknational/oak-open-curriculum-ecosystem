@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
-import { SEARCH_INPUT_SCHEMA } from './aggregated-search.js';
+import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import type { UniversalToolName } from './universal-tools.js';
 import { generateCanonicalUrlWithContext } from '../types/generated/api-schema/routing/url-helpers.js';
 
@@ -270,5 +270,61 @@ describe('get-ontology tool descriptor', () => {
       properties: {},
       additionalProperties: false,
     });
+  });
+});
+
+/**
+ * Tests for OpenAI Apps SDK _meta fields on all aggregated tools.
+ *
+ * These tests verify that all aggregated tools (search, fetch, get-ontology) have
+ * the required _meta fields for ChatGPT widget integration:
+ * - openai/outputTemplate: URI of widget to render output
+ * - openai/toolInvocation/invoking: Status text during execution
+ * - openai/toolInvocation/invoked: Status text after completion
+ */
+describe('aggregated tool _meta fields', () => {
+  const aggregatedToolNames = ['search', 'fetch', 'get-ontology'] as const;
+
+  it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+  });
+
+  it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoking', (toolName) => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
+    expect(typeof tool?._meta?.['openai/toolInvocation/invoking']).toBe('string');
+  });
+
+  it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoked', (toolName) => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
+    expect(typeof tool?._meta?.['openai/toolInvocation/invoked']).toBe('string');
+  });
+});
+
+/**
+ * Tests for description quality on search and fetch tools.
+ *
+ * Per OpenAI Apps SDK metadata optimization guidance, tool descriptions should
+ * include "Use this when" and "Do NOT use" patterns to help ChatGPT select
+ * the correct tool for user requests.
+ */
+describe('search and fetch descriptions', () => {
+  it('search description includes "Use this when" guidance', () => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === 'search');
+    expect(tool?.description).toContain('Use this when');
+    expect(tool?.description).toContain('Do NOT use');
+  });
+
+  it('fetch description includes "Use this when" guidance', () => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === 'fetch');
+    expect(tool?.description).toContain('Use this when');
+    expect(tool?.description).toContain('Do NOT use');
   });
 });

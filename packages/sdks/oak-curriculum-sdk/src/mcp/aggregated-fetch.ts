@@ -15,6 +15,41 @@ import {
 } from '../types/generated/api-schema/routing/url-helpers.js';
 
 /**
+ * Fetch tool definition with full MCP metadata.
+ *
+ * Includes MCP annotations for behavior hints and OpenAI Apps SDK
+ * _meta fields for invocation status display.
+ */
+export const FETCH_TOOL_DEF = {
+  description: `Fetch curriculum resource by canonical identifier.
+
+Use this when you need to:
+- Get lesson details (learning objectives, keywords, misconceptions)
+- Get unit information (lessons list, subject context)
+- Get subject or sequence overview
+- Retrieve thread progression data
+
+Do NOT use for:
+- Finding content when you don't have the ID (use 'search')
+- Understanding ID formats (use 'get-ontology' first)
+
+Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: 'Fetch Curriculum Resource',
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': 'Fetching resource…',
+    'openai/toolInvocation/invoked': 'Resource loaded',
+  },
+} as const;
+
+/**
  * JSON Schema for the fetch aggregated tool.
  *
  * Includes parameter descriptions and examples that will be visible to MCP clients.
