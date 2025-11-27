@@ -48,16 +48,19 @@ export function createMockClerkMiddleware(
 
     const token = authHeader.replace(/^Bearer\s+/i, '');
     if (validTokens.includes(token)) {
-      // Simulate authenticated state with AuthInfo structure that mcpAuthClerk expects
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
-      const reqWithAuth = req as {
-        auth?: { token: string; clientId: string; scopes: string[]; extra?: unknown };
-      };
+      // Simulate authenticated state with Clerk's auth object structure
+      const reqWithAuth = req;
       reqWithAuth.auth = {
-        token,
-        clientId: `client-${token}`,
-        scopes: ['mcp:invoke', 'mcp:read'],
-        extra: { userId: 'test-user-123', sessionId: 'test-session-456' },
+        userId: 'test-user-123',
+        clientId: 'test-client-456',
+        getToken: () => Promise.resolve(token),
+        id: 'test-user-123',
+        subject: 'test-user-123',
+        scopes: [],
+        has: () => false,
+        debug: () => ({}),
+        tokenType: 'oauth_token' as const,
+        isAuthenticated: true,
       };
     }
 
@@ -73,13 +76,13 @@ export function createMockClerkMiddleware(
  */
 export function createMockMcpAuthClerk(): RequestHandler {
   return (req, res, next) => {
-    // Check if req.auth is present (AuthInfo from MCP SDK)
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
-    const reqWithAuth = req as { auth?: { token?: string; clientId?: string; scopes?: string[] } };
+    // Check if req.auth is present (Clerk's auth object)
+    const reqWithAuth = req;
     const auth = reqWithAuth.auth;
 
-    // AuthInfo requires token, clientId, and scopes - if any are missing, reject
-    if (!(auth?.token && auth.clientId && auth.scopes)) {
+    // Check if auth is present with userId (Clerk's auth object)
+
+    if (!auth?.userId) {
       res.setHeader(
         'WWW-Authenticate',
         'Bearer resource_metadata="/.well-known/oauth-protected-resource"',

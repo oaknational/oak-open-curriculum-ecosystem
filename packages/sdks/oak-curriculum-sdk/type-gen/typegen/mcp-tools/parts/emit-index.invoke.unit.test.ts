@@ -29,4 +29,39 @@ describe('emitIndex (invoke wrapper emission)', () => {
       'attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues })',
     );
   });
+
+  it('emits securitySchemes field for protected tools', () => {
+    const toolName = 'get-lessons'; // Not in PUBLIC_TOOLS
+    const path = '/lessons';
+    const method = 'GET';
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+
+    const code = emitIndex(toolName, path, method, 'getLessons', operation);
+
+    // Verify securitySchemes field is present
+    expect(code).toContain('securitySchemes:');
+
+    // Verify OAuth2 scheme
+    expect(code).toContain("{ type: 'oauth2', scopes: ['openid', 'email'] }");
+
+    // Verify field ordering (after documentedStatuses)
+    expect(code).toMatch(/documentedStatuses,[\s\S]*securitySchemes:/);
+  });
+
+  it('emits noauth scheme for PUBLIC_TOOLS', () => {
+    const toolName = 'get-changelog'; // In PUBLIC_TOOLS
+    const path = '/changelog';
+    const method = 'GET';
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+
+    const code = emitIndex(toolName, path, method, 'getChangelog', operation);
+
+    expect(code).toContain('securitySchemes:');
+    expect(code).toContain("{ type: 'noauth' }");
+    expect(code).not.toContain("type: 'oauth2'");
+  });
 });

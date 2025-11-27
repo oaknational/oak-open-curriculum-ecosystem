@@ -148,7 +148,7 @@ describe('Header Redaction E2E', () => {
       // This E2E test verifies the complete request/response cycle works
     });
 
-    it('should handle auth failure responses with WWW-Authenticate header', async () => {
+    it('should handle auth failure with HTTP 401 and WWW-Authenticate header', async () => {
       // Override: enable auth enforcement for this test
       delete process.env.DANGEROUSLY_DISABLE_AUTH;
 
@@ -158,21 +158,24 @@ describe('Header Redaction E2E', () => {
         .post('/mcp')
         .set('Host', 'localhost')
         .set('Accept', ACCEPT)
-        .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: {} },
+        });
 
-      // Should return 401 without auth
+      // HTTP 401 per MCP spec for protected tools without auth
       expect(response.status).toBe(401);
-
-      // Verify WWW-Authenticate header is present
-      const wwwAuth = response.headers['www-authenticate'] as string | undefined;
-      expect(wwwAuth).toBeDefined();
-      expect(wwwAuth?.toLowerCase()).toMatch(/^bearer\s+/);
 
       // Verify correlation ID is still set
       expect(response.headers['x-correlation-id']).toBeDefined();
 
-      // Note: WWW-Authenticate header is preserved in logs (not sensitive)
-      // Integration tests verify this preservation behavior
+      // WWW-Authenticate header per RFC 6750
+      const wwwAuth = response.headers['www-authenticate'];
+      expect(wwwAuth).toBeDefined();
+      expect(wwwAuth.toLowerCase()).toMatch(/bearer\s+/);
+      expect(wwwAuth).toContain('resource_metadata');
     });
   });
 });

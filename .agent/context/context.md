@@ -350,7 +350,7 @@ Re-run the full suite before every hand-off and after significant changes.
 - `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap (includes Session 3.B plan)
 - `.agent/context/continuation.prompt.md` – quick-start hand-off prompt (kept in sync with this file)
 - `.agent/directives-and-memory/rules.md` – cardinal rules (must follow)
-- `docs/agent-guidance/testing-strategy.md` – mandated TDD approach
+- `.agent/directives-and-memory/testing-strategy.md` – mandated TDD approach
 - `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` – ADR for OpenTelemetry format
 - `packages/libs/logger/README.md` – logger usage, entry points, sink configuration
 - `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance

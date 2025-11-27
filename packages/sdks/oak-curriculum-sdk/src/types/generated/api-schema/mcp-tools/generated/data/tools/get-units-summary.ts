@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug"}} as const, additionalProperties: false as const, required: ["unit"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ unit: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}} as const, additionalProperties: false as const, required: ["unit"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string().describe("The unit slug") }) }) });
+export const toolMcpFlatInputSchema = z.object({ unit: z.string().describe("The unit slug") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getUnitsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Units Summary",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

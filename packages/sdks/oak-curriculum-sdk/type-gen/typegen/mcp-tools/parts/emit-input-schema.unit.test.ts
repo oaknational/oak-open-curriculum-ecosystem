@@ -24,12 +24,13 @@ describe('buildFlatMcpZodObject', () => {
       // Act
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
-      // Assert: Should generate flat Zod object string
+      // Assert: Should generate flat Zod object string with .describe() for documented params
       expect(result).toContain('z.object({');
-      expect(result).toContain('q: z.string()');
+      expect(result).toContain('q: z.string().describe("Search query")');
       expect(result).toContain('limit: z.number().optional()');
       expect(result).not.toContain('params');
-      expect(result).not.toContain('query');
+      // Note: 'query' appears in the description, so we check for nested structure indicator instead
+      expect(result).not.toContain('query:');
     });
 
     it('should flatten path parameters to top level', () => {
@@ -45,8 +46,8 @@ describe('buildFlatMcpZodObject', () => {
 
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
-      expect(result).toContain('keyStage: z.union([');
-      expect(result).toContain('z.literal("ks1")');
+      // Uses z.enum() for proper JSON Schema conversion via zodToJsonSchema
+      expect(result).toContain('keyStage: z.enum(["ks1", "ks2", "ks3", "ks4"] as const)');
       expect(result).not.toContain('params');
       expect(result).not.toContain('path');
     });
@@ -70,8 +71,8 @@ describe('buildFlatMcpZodObject', () => {
 
       const result = buildFlatMcpZodObject(pathParams, queryParams);
 
-      // Both parameters at top level
-      expect(result).toContain('keyStage: z.union([');
+      // Both parameters at top level with z.enum() for allowed values
+      expect(result).toContain('keyStage: z.enum(["ks1", "ks2"] as const)');
       expect(result).toContain('subject: z.string().optional()');
       expect(result).not.toContain('params');
     });
@@ -87,7 +88,7 @@ describe('buildFlatMcpZodObject', () => {
   });
 
   describe('preserving parameter metadata', () => {
-    it('should preserve enum values', () => {
+    it('should preserve enum values using z.enum()', () => {
       const queryParams: ParamMetadataMap = {
         status: {
           typePrimitive: 'string',
@@ -99,8 +100,8 @@ describe('buildFlatMcpZodObject', () => {
 
       const result = buildFlatMcpZodObject({}, queryParams);
 
-      expect(result).toContain('z.literal("active")');
-      expect(result).toContain('z.literal("inactive")');
+      // Uses z.enum() for proper JSON Schema conversion
+      expect(result).toContain('z.enum(["active", "inactive"] as const)');
     });
 
     it('should preserve optional/required distinction', () => {

@@ -843,7 +843,7 @@ logger.fatal('Database connection lost', error); // FATAL: critical failures
 ## Further Reading
 
 - [Logger Package README](../../packages/libs/logger/README.md) - Complete API documentation
-- [Testing Strategy](./testing-strategy.md) - How to test logging code
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - How to test logging code
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP logging patterns
 - [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Stdio logging patterns
 - [Production Debugging Runbook](../development/production-debugging-runbook.md) - Using logs for debugging

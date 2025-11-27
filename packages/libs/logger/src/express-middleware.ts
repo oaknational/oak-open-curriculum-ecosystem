@@ -4,8 +4,15 @@
 
 import type { Request, Response, NextFunction, RequestHandler, ErrorRequestHandler } from 'express';
 import type { IncomingHttpHeaders } from 'node:http';
-import type { Logger, JsonObject } from './types.js';
+import type { Logger, JsonObject, JsonValue } from './types.js';
 import { sanitiseForJson } from './json-sanitisation.js';
+
+/**
+ * Type guard to check if a JsonValue is a JsonObject
+ */
+function isJsonObject(value: JsonValue): value is JsonObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 /**
  * Options for request logger middleware
@@ -39,8 +46,7 @@ export function extractRequestMetadata(
 ): JsonObject {
   const headers = options?.redactHeaders ? options.redactHeaders(req.headers) : req.headers;
 
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return sanitiseForJson({
+  const metadata = {
     method: req.method,
     url: req.url,
     path: req.path,
@@ -48,7 +54,17 @@ export function extractRequestMetadata(
     query: req.query,
     params: req.params,
     ip: req.ip,
-  }) as JsonObject;
+  };
+
+  const result = sanitiseForJson(metadata);
+
+  // sanitiseForJson returns JsonValue, but we know the input is a plain object
+  // so the result will be a JsonObject (not null/string/number/boolean/array)
+  if (!isJsonObject(result)) {
+    throw new Error('Unexpected sanitisation result: expected object');
+  }
+
+  return result;
 }
 
 /**
@@ -72,13 +88,16 @@ export function createRequestLogger(
   const level = options.level ?? 'debug';
 
   return (req: Request, _res: Response, next: NextFunction): void => {
-    const metadata = extractRequestMetadata(req, {
+    let metadata = extractRequestMetadata(req, {
       redactHeaders: options.redactHeaders,
     });
 
     if (options.includeBody && req.body) {
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      (metadata as { body?: unknown }).body = sanitiseForJson(req.body);
+      // JsonObject has readonly index signature, so create new object
+      metadata = {
+        ...metadata,
+        body: sanitiseForJson(req.body),
+      };
     }
 
     logger[level]('Incoming HTTP request', metadata);

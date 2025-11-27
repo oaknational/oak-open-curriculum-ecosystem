@@ -123,7 +123,7 @@
   +- 🔜 Full repo `pnpm qg` post-migration (Tranche 1.5).
 - +## References
 - +- `.agent/directives-and-memory/rules.md` – repository rules.
-  +- `docs/agent-guidance/testing-strategy.md` – TDD guidance.
+  +- `.agent/directives-and-memory/testing-strategy.md` – TDD guidance.
   +- `packages/libs/logger/README.md` – authoritative logger documentation.
   +- `apps/oak-curriculum-mcp-streamable-http/README.md` – HTTP logging configuration.
   +- `apps/oak-curriculum-mcp-stdio/README.md` – stdio logging configuration.
@@ -201,7 +201,7 @@
 - +- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap.
   +- `.agent/context/continuation.prompt.md` – hand-off prompt (kept in sync with this file).
   +- `.agent/directives-and-memory/rules.md` – cardinal rules.
-  +- `docs/agent-guidance/testing-strategy.md` – required TDD approach.
+  +- `.agent/directives-and-memory/testing-strategy.md` – required TDD approach.
   +- `packages/libs/logger/README.md` – logger usage & entry points.
   +- `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance.
   +```
@@ -217,7 +217,7 @@
 - 1.  `@.agent/context/context.md`
 - 2.  `.agent/plans/mcp-oauth-implementation-plan.md`
 - 3.  `.agent/directives-and-memory/rules.md`
-- 4.  `docs/agent-guidance/testing-strategy.md`
+- 4.  `.agent/directives-and-memory/testing-strategy.md`
       +- Confirm understanding of the logger entry-point split (main vs `/node`).
       +- Keep all quality gates green; never disable or skip checks.
 - +## Current State Snapshot
@@ -258,7 +258,7 @@
 - +- Plan: `.agent/plans/mcp-oauth-implementation-plan.md`
   +- Context snapshot: `.agent/context/context.md`
   +- Rules: `.agent/directives-and-memory/rules.md`
-  +- Testing strategy: `docs/agent-guidance/testing-strategy.md`
+  +- Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
   +- Logger docs: `packages/libs/logger/README.md`
 - +## Hand-off Notes
 - +- Repo currently green post-restructure.

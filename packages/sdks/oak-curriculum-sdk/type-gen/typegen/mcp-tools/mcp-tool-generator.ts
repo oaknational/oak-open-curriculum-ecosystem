@@ -12,8 +12,9 @@ import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateExecuteFile } from './parts/generate-execute-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
+import { generateScopesSupportedFile } from './parts/generate-scopes-supported-file.js';
 import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
-import { getParameterPrimitiveType } from './parts/param-utils.js';
+import { getParameterPrimitiveType, extractExampleValue } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
@@ -107,13 +108,26 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
     .filter((value): value is string | number | boolean => value !== undefined);
   const hasAllowedValues = Array.isArray(primitiveEnumValues) && primitiveEnumValues.length > 0;
 
+  // Check both parameter-level and schema-level descriptions
+  // Parameter-level (param.description) is preferred as it's more common in OpenAPI specs
+  const paramDescription = typeof param.description === 'string' ? param.description : undefined;
+  const schemaDescription =
+    typeof schema?.description === 'string' ? schema.description : undefined;
+
+  // Extract example from parameter level or schema level
+  // Parameter-level (param.example) takes precedence over schema-level (param.schema.example)
+  // OpenAPI example field can be string, number, boolean, or more complex objects
+  const paramExample = extractExampleValue(param);
+  const schemaExample = schema ? extractExampleValue(schema) : undefined;
+
   return {
     typePrimitive: primitiveType,
     valueConstraint: hasAllowedValues,
     required: isRequired,
     allowedValues: hasAllowedValues ? [...primitiveEnumValues] : undefined,
-    description: typeof schema?.description === 'string' ? schema.description : undefined,
+    description: paramDescription ?? schemaDescription,
     default: schema && 'default' in schema ? schema.default : undefined,
+    example: paramExample ?? schemaExample,
   };
 }
 
@@ -149,6 +163,7 @@ export interface GeneratedMcpToolFiles {
   data: {
     'definitions.ts': string;
     'index.ts': string;
+    'scopes-supported.ts': string;
     tools: Record<string, string>;
   };
   aliases: Record<string, string>;
@@ -171,6 +186,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     data: {
       'definitions.ts': '',
       'index.ts': '',
+      'scopes-supported.ts': '',
       tools: {},
     },
     aliases: {},
@@ -218,6 +234,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result.runtime['execute.ts'] = generateExecuteFile(toolNames);
   result.runtime['lib.ts'] = generateLibFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
+  result.data['scopes-supported.ts'] = generateScopesSupportedFile();
   result.data['index.ts'] = generateDataIndexFile();
   result.index = generateRootIndexFile();
   result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();

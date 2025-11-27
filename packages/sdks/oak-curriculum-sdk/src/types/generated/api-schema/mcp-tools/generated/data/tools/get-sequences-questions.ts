@@ -30,9 +30,9 @@ export interface ToolPathParams {
 export interface ToolQueryParams {
   /** The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used. */
   readonly year?: number;
-  /** Default: 0 */
+  /** If limiting results returned, this allows you to return the next set of results, starting at the given offset point Default: 0 */
   readonly offset?: number;
-  /** Default: 10 */
+  /** Limit the number of lessons, e.g. return a maximum of 100 lessons Default: 10 */
   readonly limit?: number;
 }
 export interface ToolParams {
@@ -42,11 +42,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}} as const, additionalProperties: false as const, required: ["sequence"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ sequence: z.string() }), query: z.object({ year: z.number().optional(), offset: z.number().optional(), limit: z.number().optional() }).optional() }) });
-export const toolMcpFlatInputSchema = z.object({ sequence: z.string(), year: z.number().optional(), offset: z.number().optional(), limit: z.number().optional() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant.","examples":["english-primary"]},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.","examples":[3]},"offset":{"type":"number","description":"If limiting results returned, this allows you to return the next set of results, starting at the given offset point","default":0,"examples":[50]},"limit":{"type":"number","description":"Limit the number of lessons, e.g. return a maximum of 100 lessons","default":10,"examples":[10]}} as const, additionalProperties: false as const, required: ["sequence"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ sequence: z.string().describe("The sequence slug identifier, including the key stage 4 option where relevant.") }), query: z.object({ year: z.number().describe("The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.").optional(), offset: z.number().describe("If limiting results returned, this allows you to return the next set of results, starting at the given offset point").optional(), limit: z.number().describe("Limit the number of lessons, e.g. return a maximum of 100 lessons").optional() }).optional() }) });
+export const toolMcpFlatInputSchema = z.object({ sequence: z.string().describe("The sequence slug identifier, including the key stage 4 option where relevant."), year: z.number().describe("The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.").optional(), offset: z.number().describe("If limiting results returned, this allows you to return the next set of results, starting at the given offset point").optional(), limit: z.number().describe("Limit the number of lessons, e.g. return a maximum of 100 lessons").optional() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant.","examples":["english-primary"]},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.","examples":[3]},"offset":{"type":"number","description":"If limiting results returned, this allows you to return the next set of results, starting at the given offset point","default":0,"examples":[50]},"limit":{"type":"number","description":"Limit the number of lessons, e.g. return a maximum of 100 lessons","default":10,"examples":[10]}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -131,10 +131,18 @@ export const getSequencesQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
+  description: "Questions within a sequence\n\nThis tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Sequences Questions",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

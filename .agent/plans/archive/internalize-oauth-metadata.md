@@ -616,7 +616,7 @@ Every exported function needs JSDoc:
 ### Project Standards
 
 - `.agent/directives-and-memory/rules.md` - Code quality rules
-- `docs/agent-guidance/testing-strategy.md` - Testing approach
+- `.agent/directives-and-memory/testing-strategy.md` - Testing approach
 - `.agent/experience/2025-11-16-execution-vs-architecture.md` - "Could it be simpler?" principle
 
 ### Clerk Documentation

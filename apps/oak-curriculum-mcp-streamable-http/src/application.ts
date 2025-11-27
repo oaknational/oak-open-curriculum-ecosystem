@@ -10,6 +10,7 @@ import listRoutes from 'express-list-routes';
 import { renderLandingPageHtml } from './landing-page.js';
 import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
+import { overrideToolsListHandler } from './tools-list-override.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
@@ -30,6 +31,7 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly runtimeConfig?: RuntimeConfig;
   readonly logger?: Logger;
+  readonly resourceUrl?: string;
 }
 
 let appCounter = 0;
@@ -91,7 +93,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.
   // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
-  // Actual enforcement happens later via mcpAuthClerk on specific routes.
+  // Actual enforcement happens later via createMcpAuthClerk on specific routes.
   runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appId, () => {
     setupGlobalAuthContext(app, runtimeConfig, log);
   });
@@ -140,7 +142,11 @@ function initializeCoreEndpoints(
     overrides: options?.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
+    resourceUrl: options?.resourceUrl,
   });
+  overrideToolsListHandler(server);
+  log.debug('bootstrap.mcp.tools-list-override.registered');
+
   log.debug('bootstrap.mcp.transport.connect.start');
   const connectionTimer = startTimer();
   let connectionDuration: Duration | undefined;

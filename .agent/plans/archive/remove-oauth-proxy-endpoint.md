@@ -631,7 +631,7 @@ npx @modelcontextprotocol/inspector --cli http://localhost:3333 \
 ### Project Standards
 
 - `.agent/directives-and-memory/rules.md` - Code quality, TDD, testing
-- `docs/agent-guidance/testing-strategy.md` - Test types and boundaries
+- `.agent/directives-and-memory/testing-strategy.md` - Test types and boundaries
 
 ### Tools
 

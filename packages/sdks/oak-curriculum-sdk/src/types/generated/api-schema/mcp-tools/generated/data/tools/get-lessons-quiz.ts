@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The lesson slug identifier"}} as const, additionalProperties: false as const, required: ["lesson"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ lesson: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]}} as const, additionalProperties: false as const, required: ["lesson"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string().describe("The lesson slug identifier") }) }) });
+export const toolMcpFlatInputSchema = z.object({ lesson: z.string().describe("The lesson slug identifier") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier"}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier","examples":["imagining-you-are-the-characters-the-three-billy-goats-gruff"]}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getLessonsQuiz = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
+  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Lessons Quiz",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

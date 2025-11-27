@@ -29,11 +29,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"threadSlug":{"type":"string"}} as const, additionalProperties: false as const, required: ["threadSlug"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"threadSlug":{"type":"string","examples":["number-multiplication-and-division"]}} as const, additionalProperties: false as const, required: ["threadSlug"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ threadSlug: z.string() }) }) });
 export const toolMcpFlatInputSchema = z.object({ threadSlug: z.string() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"threadSlug":{"type":"string"}},"additionalProperties":false,"required":["threadSlug"]}\nRequired: threadSlug';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"threadSlug":{"type":"string","examples":["number-multiplication-and-division"]}},"additionalProperties":false,"required":["threadSlug"]}\nRequired: threadSlug';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -113,10 +113,18 @@ export const getThreadsUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns all of the units that belong to a given thread.",
+  description: "Units belonging to a given thread\n\nThis tool returns all of the units that belong to a given thread.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Threads Units",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

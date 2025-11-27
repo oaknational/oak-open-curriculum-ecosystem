@@ -4,6 +4,10 @@ CHANGELOG.md
 **/research/**
 **/temp-secrets/**
 
+# Third-party dependencies
+node_modules/**
+**/node_modules/**
+
 # Generated
 packages/sdks/oak-curriculum-sdk/docs/api-md/**
 

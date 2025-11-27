@@ -183,7 +183,7 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - Curriculum ontology documentation (`docs/architecture/curriculum-ontology.md`)
 - Cardinal rule architecture defined (`.agent/directives-and-memory/rules.md`)
 - Schema-first execution patterns (`.agent/directives-and-memory/schema-first-execution.md`)
-- Testing strategy documented (`docs/agent-guidance/testing-strategy.md`)
+- Testing strategy documented (`.agent/directives-and-memory/testing-strategy.md`)
 
 ### Active Dependencies
 
@@ -260,7 +260,7 @@ pnpm test:e2e                                            # E2E tests (manual)
 
 ### Guidance
 
-- [Testing Strategy](../../docs/agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md)
 - [Schema-First Execution](../../directives-and-memory/schema-first-execution.md)
 - [Cardinal Rule](../../directives-and-memory/rules.md)
 

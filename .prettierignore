@@ -61,3 +61,4 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 # Agent artifacts
 .agent/cache/
 .agent/artifacts/
+.agent/reference-docs/replaced-http-auth-model/

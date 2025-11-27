@@ -60,7 +60,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     delete process.env.ALLOWED_ORIGINS;
   });
 
-  it('returns 401 when missing Authorization (auth enforcement test)', async () => {
+  it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
     // Override: enable auth enforcement for this test
     delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
 
@@ -69,14 +69,21 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       .post('/mcp')
       .set('Host', 'localhost')
       .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages', arguments: {} },
+      });
+
+    // HTTP 401 per MCP spec for protected tools without auth
     expect(res.status).toBe(401);
-    // Assert WWW-Authenticate header is present (Clerk format)
-    const header = res.headers['www-authenticate'] as string | undefined;
-    expect(header).toBeDefined();
-    // Clerk provides Bearer challenge with resource_metadata
-    expect(header?.toLowerCase()).toMatch(/^bearer\s+/);
-    expect(header).toContain('resource_metadata');
+
+    // WWW-Authenticate header per RFC 6750
+    const wwwAuth = res.headers['www-authenticate'];
+    expect(wwwAuth).toBeDefined();
+    expect(wwwAuth).toContain('Bearer');
+    expect(wwwAuth).toContain('resource_metadata');
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {

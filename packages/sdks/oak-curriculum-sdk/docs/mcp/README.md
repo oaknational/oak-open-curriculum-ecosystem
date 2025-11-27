@@ -36,3 +36,69 @@ Keeping MCP internals out of the main API docs preserves a clear, stable public 
 
 - If you find gaps in the curated SDK types, improve TSDoc in the SDK first.
 - Cross‑link back to the specific SDK types and functions rather than duplicating content here.
+
+## Security and Authentication
+
+MCP tools in this SDK include OAuth 2.1 security metadata to enable ChatGPT compatibility. Security policy is centrally defined and applied at type-generation time.
+
+### Security Policy Configuration
+
+Security policy is defined in:
+
+- `type-gen/mcp-security-policy.ts`
+
+The policy specifies:
+
+- **PUBLIC_TOOLS**: Tools that do not require authentication (e.g., `get-changelog`, `get-rate-limit`)
+- **DEFAULT_AUTH_SCHEME**: OAuth 2.1 configuration for protected tools
+
+Current configuration:
+
+- Public tools: `get-changelog`, `get-changelog-latest`, `get-rate-limit`
+- Protected tools: All others
+- Required scopes: `openid`, `email`
+
+### Making a Tool Public
+
+To make a tool publicly accessible without authentication:
+
+1. Edit `type-gen/mcp-security-policy.ts`
+2. Add the tool name to the `PUBLIC_TOOLS` array:
+
+```typescript
+export const PUBLIC_TOOLS = [
+  'get-changelog',
+  'get-changelog-latest',
+  'get-rate-limit',
+  'your-tool-name', // Add here
+] as const;
+```
+
+3. Run `pnpm type-gen` to regenerate tool descriptors
+4. Verify the tool now has `securitySchemes: [{ type: 'noauth' }]`
+
+### Security Metadata in Tool Descriptors
+
+Each generated tool includes a `securitySchemes` field:
+
+**Public tools**:
+
+```typescript
+securitySchemes: [{ type: 'noauth' }];
+```
+
+**Protected tools**:
+
+```typescript
+securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }];
+```
+
+Runtime uses this metadata to enforce per-tool authorization.
+
+### Protected Resource Metadata
+
+The generator also emits OAuth scopes metadata for RFC 9728 protected resource discovery:
+
+- Generated file: `src/types/generated/api-schema/mcp-tools/generated/data/scopes-supported.ts`
+- Exported constant: `SCOPES_SUPPORTED`
+- Runtime imports this to advertise supported scopes to authorization servers

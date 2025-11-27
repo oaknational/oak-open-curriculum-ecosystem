@@ -1,13 +1,15 @@
-import type { Express, RequestHandler } from 'express';
+import type { Express } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
-import { mcpAuthClerk } from './auth/mcp-auth/index.js';
+import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';
 
 import { createMcpHandler } from './handlers.js';
+import { createMcpRouter } from './mcp-router.js';
+import { createMcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
 
 /**
@@ -61,11 +63,12 @@ export function registerPublicOAuthMetadataEndpoints(
     const protocol = host.startsWith('localhost:') || host === 'localhost' ? 'http' : 'https';
     const resourceUrl = `${protocol}://${host}/mcp`;
 
+    // Scopes flow from mcp-security-policy.ts → type-gen → SCOPES_SUPPORTED constant
     const metadata = generateClerkProtectedResourceMetadata({
       publishableKey,
       resourceUrl,
       properties: {
-        scopes_supported: ['openid', 'email'],
+        scopes_supported: [...SCOPES_SUPPORTED],
       },
     });
 
@@ -81,18 +84,38 @@ export function registerPublicOAuthMetadataEndpoints(
 }
 
 /**
- * Registers authenticated MCP routes with Clerk OAuth protection
+ * Registers MCP routes with HTTP-level auth middleware.
+ *
+ * Per MCP spec and OpenAI Apps docs, authentication is enforced at HTTP level:
+ * - Discovery methods (initialize, tools/list): Skip auth, return HTTP 200
+ * - Protected tools without token: Return HTTP 401 + WWW-Authenticate
+ * - Protected tools with valid token: Proceed to tool handler
+ * - Public tools (noauth): Skip auth, proceed to tool handler
+ *
+ * The method-aware router routes based on MCP method and tool security metadata.
+ * Auth middleware returns HTTP 401 BEFORE the request reaches the MCP SDK.
+ *
+ * @see https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
+ * @see https://platform.openai.com/docs/guides/apps-authentication
  */
 function registerAuthenticatedRoutes(
   app: Express,
   coreTransport: StreamableHTTPServerTransport,
   log: Logger,
-  authMiddleware: RequestHandler,
 ): void {
-  log.debug('Registering POST /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.post('/mcp', authMiddleware, createMcpHandler(coreTransport, log));
-  log.debug('Registering GET /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.get('/mcp', authMiddleware, createMcpHandler(coreTransport, log));
+  // Create method-aware router with HTTP-level auth
+  // This router checks method/tool and conditionally applies auth middleware
+  const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
+  const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog) });
+
+  // POST /mcp - main MCP endpoint
+  // Router runs BEFORE SDK handler to enable HTTP 401 responses
+  log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
+  app.post('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
+
+  // GET /mcp - for SSE connections and initial requests
+  log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
+  app.get('/mcp', mcpRouter, createMcpHandler(coreTransport, log));
 }
 
 /**
@@ -104,7 +127,7 @@ function registerAuthenticatedRoutes(
  * Per Clerk best practices:
  * - clerkMiddleware() is applied globally to all routes
  * - It provides auth context without blocking any requests
- * - Actual enforcement happens later via mcpAuthClerk on specific routes
+ * - Actual enforcement happens later via createMcpAuthClerk on specific routes
  *
  * @param app - Express application instance
  * @param runtimeConfig - Runtime configuration including auth settings
@@ -137,7 +160,7 @@ export function setupGlobalAuthContext(
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
     // Apply clerkMiddleware() globally to all routes per Clerk best practices.
     // This provides authentication context without blocking access.
-    // Selective protection is then applied via mcpAuthClerk on /mcp routes.
+    // Selective protection is then applied via createMcpAuthClerk on /mcp routes.
     // OAuth metadata endpoints (/.well-known/*) remain publicly accessible.
     authLog.info('Installing Clerk middleware globally (all routes)');
     app.use(clerkMw);
@@ -151,7 +174,7 @@ export function setupGlobalAuthContext(
  * and AFTER clerkMiddleware is installed (in Phase 3).
  *
  * Registers:
- * - Protected /mcp routes with mcpAuthClerk enforcement (if auth enabled)
+ * - Protected /mcp routes with createMcpAuthClerk enforcement (if auth enabled)
  * - Unprotected /mcp routes (if DANGEROUSLY_DISABLE_AUTH is true)
  *
  * NOTE: OAuth metadata endpoints are registered separately in Phase 2.5 by
@@ -180,11 +203,11 @@ export function setupAuthRoutes(
     return;
   }
 
-  // OAuth metadata endpoints are now registered BEFORE clerkMiddleware (in Phase 2.5)
-  // This function ONLY registers the protected /mcp routes
-  authLog.debug('Registering protected MCP routes (with auth enforcement)');
-  const mcpAuthMw = instrumentMiddleware('mcpAuthClerk', mcpAuthClerk, authLog);
-  measureAuthSetupStep(authLog, 'mcp.auth.register', () => {
-    registerAuthenticatedRoutes(app, coreTransport, authLog, mcpAuthMw);
+  // OAuth metadata endpoints are registered BEFORE clerkMiddleware (in Phase 2.5)
+  // This function registers /mcp routes with HTTP-level auth enforcement
+  // Auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs
+  authLog.debug('Registering MCP routes (HTTP-level auth enforcement)');
+  measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
+    registerAuthenticatedRoutes(app, coreTransport, authLog);
   });
 }

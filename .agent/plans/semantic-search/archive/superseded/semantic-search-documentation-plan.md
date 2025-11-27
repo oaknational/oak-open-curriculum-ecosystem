@@ -93,7 +93,7 @@ _(Insert additional ACTION/REVIEW/GROUNDING pairs if documentation scope grows.)
 ## References
 
 - `.agent/directives-and-memory/rules.md`
-- `docs/agent-guidance/testing-strategy.md`
+- `.agent/directives-and-memory/testing-strategy.md`
 - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
 - `.agent/plans/semantic-search/semantic-search-api-plan.md`
 - `.agent/plans/semantic-search/semantic-search-alignment-refresh-plan.md`

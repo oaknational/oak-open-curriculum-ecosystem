@@ -1235,7 +1235,7 @@ pnpm test -- search-with-facets
 
 ## Testing and Validation Strategy
 
-Following `docs/agent-guidance/testing-strategy.md`, the search service uses a three-tier testing approach.
+Following `.agent/directives-and-memory/testing-strategy.md`, the search service uses a three-tier testing approach.
 
 ### Unit Tests (Pure Functions, `.unit.test.ts`)
 
@@ -1459,7 +1459,7 @@ pnpm e2e:thread-search
    - Defines: Compile-time generation, no runtime types
 
 4. **Testing strategy**
-   - Location: `docs/agent-guidance/testing-strategy.md`
+   - Location: `.agent/directives-and-memory/testing-strategy.md`
    - Status: ✅ COMPLETE
    - Defines: Unit/integration/E2E patterns
 
@@ -2000,7 +2000,7 @@ describe('API error tracking', () => {
 
 ### Guidance
 
-- [Testing Strategy](../../../docs/agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)
 - [Schema-First Execution](../../../directives-and-memory/schema-first-execution.md)
 - [Cardinal Rule](../../../directives-and-memory/rules.md)
 

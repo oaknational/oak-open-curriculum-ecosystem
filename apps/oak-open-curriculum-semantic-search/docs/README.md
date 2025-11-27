@@ -19,7 +19,7 @@ This directory contains authored documentation for the semantic search workspace
 
 ## Editing workflow
 
-1. Read `.agent/directives-and-memory/rules.md`, `docs/agent-guidance/testing-strategy.md`, and GO.md.
+1. Read `.agent/directives-and-memory/rules.md`, `.agent/directives-and-memory/testing-strategy.md`, and GO.md.
 2. Update authored Markdown alongside code changes; ensure British spelling.
 3. Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` to regenerate TypeDoc and verify zero warnings.
 4. Add notes to the alignment refresh plan’s Review Log summarising documentation changes and quality gate outcomes.

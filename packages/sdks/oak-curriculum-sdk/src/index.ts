@@ -108,10 +108,18 @@ export {
   zodRawShapeFromToolInputJsonSchema,
   listUniversalTools,
   isUniversalToolName,
+  isAggregatedToolName,
   createUniversalToolExecutor,
+  AGGREGATED_TOOL_DEFS,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
+  type SecurityScheme,
+  type SecuritySchemeType,
+  type NoAuthScheme,
+  type OAuth2Scheme,
+  SCOPES_SUPPORTED,
+  type ScopesSupported,
 } from './public/mcp-tools.js';
 
 // Hybrid search, query parser, observability, and admin exports

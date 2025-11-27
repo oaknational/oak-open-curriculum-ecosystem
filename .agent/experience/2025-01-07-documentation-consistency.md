@@ -104,7 +104,7 @@ Key documentation files updated:
 - `.agent/directives-and-memory/rules.md`
 - `docs/ARCHITECTURE_MAP.md`
 - `docs/agent-guidance/architecture.md`
-- `docs/agent-guidance/testing-strategy.md`
+- `.agent/directives-and-memory/testing-strategy.md`
 - `docs/architecture/high-level-architecture.md`
 - `docs/architecture/biological-philosophy.md`
 - All Phase 5 planning documents

@@ -1,5 +1,18 @@
 # Upstream Open Curriculum API Metadata Enhancement Wish List
 
+- Upstream API docs: <https://open-api.thenational.academy/docs/about-oaks-api/api-overview>
+- OpenAPI schema: <https://open-api.thenational.academy/api/v0/swagger.json>
+- API front page: <https://open-api.thenational.academy/>
+
+## Open Questions
+
+- Does OpenAPI 3.0 support `examples` at the path level, rather than just at the parameter level?
+- Can we update the OpenAPI spec to OpenAPI 3.1? Does GCP support this?
+- Can we make sure that the API uses Zod 4?
+- Can we make sure that the API ships the Zod schemas as code snippets, in addition to JSON Schema?
+- Can we enhance the metadata of the API to make it more useful for AI agents?
+- Can we improve data integrity at the API level?
+
 ## Executive Summary
 
 Oak National Academy has built something unique: a comprehensive, open curriculum API containing 30,000+ lessons, 1,000+ units, and rich educational metadata. This isn't just another education dataset—it's one of the most complete, openly accessible curriculum resources in the world.

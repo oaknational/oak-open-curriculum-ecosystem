@@ -12,7 +12,7 @@ import { dirname } from 'node:path';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 // Next.js 16 canonical imports
-import eslintNextPlugin from '@next/eslint-plugin-next';
+import { configs as eslintNextConfigs } from '@next/eslint-plugin-next';
 
 // React plugins for strict hooks enforcement
 import reactPlugin from 'eslint-plugin-react';
@@ -31,9 +31,12 @@ const eslintConfig = defineConfig([
   tseslintConfigs.strict,
   tseslintConfigs.stylistic,
 
+  // Next.js 16 config
+  eslintNextConfigs.recommended,
+  eslintNextConfigs['core-web-vitals'],
+
   {
     plugins: {
-      next: eslintNextPlugin,
       react: reactPlugin,
       // @ts-expect-error - temp type incompatibility
       'react-hooks': reactHooksPlugin,
@@ -67,7 +70,7 @@ const eslintConfig = defineConfig([
       parser: tseslintParser,
       parserOptions: {
         projectService: true,
-        project: './tsconfig.lint.json',
+        // project: './tsconfig.lint.json',
         tsconfigRootDir: thisDir,
       },
     },

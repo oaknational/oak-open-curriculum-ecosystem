@@ -18,7 +18,7 @@ A **hybrid lexical + semantic search platform** for Oak Curriculum content that:
 - Serves **structured** (`POST /api/search`) and **natural language** (`POST /api/search/nl`) queries with server-side **Reciprocal Rank Fusion (RRF)** across lexical and `semantic_text` clauses.
 - Provides **suggestion/type-ahead** endpoints backed by Elasticsearch completion contexts and `search_as_you_type` fields.
 - Exposes **admin surfaces** (indexing, rollup rebuild, status, observability hooks) guarded by `SEARCH_API_KEY`.
-- Publishes an up-to-date **OpenAPI contract**, feeds MCP tools/resources/prompts, and insists on TDD + quality gates per `docs/agent-guidance/testing-strategy.md`.
+- Publishes an up-to-date **OpenAPI contract**, feeds MCP tools/resources/prompts, and insists on TDD + quality gates per `.agent/directives-and-memory/testing-strategy.md`.
 
 ### Architecture (definitive target)
 
@@ -187,7 +187,7 @@ Environment validation in `src/lib/env.ts` must enforce mutual exclusivity betwe
 
 ## Development Workflow Expectations
 
-- **Planning & reviews**: Follow `GO.md` — every `ACTION:` is immediately followed by a self-review entry. Reference `.agent/directives-and-memory/rules.md` and `docs/agent-guidance/testing-strategy.md` when defining tasks.
+- **Planning & reviews**: Follow `GO.md` — every `ACTION:` is immediately followed by a self-review entry. Reference `.agent/directives-and-memory/rules.md` and `.agent/directives-and-memory/testing-strategy.md` when defining tasks.
 - **TDD**: Write failing tests first (Vitest for queries/transforms, integration harnesses for ES interactions). Avoid `any`, unsafe casts, or bypassing quality gates.
 - **Quality gates**: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`. Capture outcomes in the Review Log.
 - **Documentation**: Keep `apps/oak-open-curriculum-semantic-search/docs/*.md` and README in sync with code changes; regenerate OpenAPI + TypeDoc after schema updates.

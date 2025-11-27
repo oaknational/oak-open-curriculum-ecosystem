@@ -43,7 +43,7 @@
 ## Related Agent Guidance
 
 - [Development Practice](../agent-guidance/development-practice.md)
-- [Testing Strategy](../agent-guidance/testing-strategy.md)
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md)
 - [TypeScript Practice](../agent-guidance/typescript-practice.md)
 
 ## Implementation Plans

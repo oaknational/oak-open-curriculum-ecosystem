@@ -99,7 +99,7 @@ Start here, then dive deeper as needed:
    - Type safety requirements
    - TDD workflow
 
-7. **`docs/agent-guidance/testing-strategy.md`**
+7. **`.agent/directives-and-memory/testing-strategy.md`**
    - Red → Green → Refactor loop
    - Test organization patterns
 
@@ -425,7 +425,7 @@ export function doX() {
 1. **Logger API**: `packages/libs/logger/README.md`
 2. **HTTP Server**: `apps/oak-curriculum-mcp-streamable-http/README.md`
 3. **Stdio Server**: `apps/oak-curriculum-mcp-stdio/README.md`
-4. **Testing Strategy**: `docs/agent-guidance/testing-strategy.md`
+4. **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md`
 
 ### For Understanding MCP Protocol
 
