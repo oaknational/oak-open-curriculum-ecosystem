@@ -1,44 +1,48 @@
-# Curriculum Ontology MCP Resource Implementation Plan
+# Curriculum Ontology MCP Resource Plan
 
-## Purpose
+**Status**: PLANNED  
+**Created**: 2025-11-27  
+**Priority**: Post-OAuth, parallel with metadata enhancement  
+**Estimated Duration**: ~4 weeks  
+**Depends On**: Aggregated tools type-gen refactor (Phase 0 of Plan 03)
 
-Implement a schema-derived curriculum ontology exposed as an MCP resource, enabling AI agents to understand the Oak Curriculum domain model, entity relationships, and tool composition patterns. The ontology will be split into schema-derived facts (auto-generated) and educational guidance (manual), merged at runtime and exposed via MCP resources.
+---
+
+## Executive Summary
+
+Implement a schema-derived curriculum ontology exposed as an MCP resource, enabling AI agents to understand the Oak Curriculum domain model, entity relationships, and tool composition patterns. The ontology will be split into:
+
+1. **Schema-Derived Layer** (auto-generated at type-gen time)
+2. **Guidance Layer** (hand-authored, version-controlled)
+3. **Runtime Merge** (thin plumbing to expose as MCP resource)
+
+---
+
+## Directive References
+
+Read and follow:
+
+- `.agent/directives-and-memory/rules.md` - Cardinal rule: type-gen sufficiency; TDD approach
+- `.agent/directives-and-memory/schema-first-execution.md` - All complexity at type-gen time
+- `.agent/directives-and-memory/testing-strategy.md` - TDD-first, unit → integration → E2E
+
+---
 
 ## Context and References
 
-- Aligns with `.agent/directives-and-memory/rules.md` (Cardinal rule: type-gen sufficiency)
-- Follows `.agent/directives-and-memory/schema-first-execution.md` (all complexity at type-gen time)
 - Builds on existing aggregated tools pattern (`search`, `fetch` in `packages/sdks/oak-curriculum-sdk/src/mcp/`)
 - References existing ontology documentation: `docs/architecture/curriculum-ontology.md`
 - Implements Phase 0 Item 8 from `.agent/plans/oak-openai-app-plan.md` (OpenAI App SDK integration)
-- Provides interim solution for `.agent/plans/upstream-api-metadata-wishlist.md` Item 3 (upstream `/ontology` endpoint)
-- Supports metadata optimization described in `.agent/plans/upstream-api-metadata-wishlist.md` (tool guidance patterns)
+- Provides interim solution for `.agent/plans/external/upstream-api-metadata-wishlist.md` Item 3 (upstream `/ontology` endpoint)
+- Supports metadata optimization described in `.agent/plans/external/upstream-api-metadata-wishlist.md` (tool guidance patterns)
+
+---
 
 ## Cardinal Rule Compliance
 
 **Type-gen must be sufficient**: Running `pnpm type-gen` must generate the complete schema-derived ontology JSON **and the resource registration code**. Runtime code is thin plumbing that imports and exposes the generated resources.
 
-## Critical Architectural Note: Move All MCP Definitions to Type-Gen
-
-**Current state**: Aggregated tools (`search`, `fetch`) and resources (ontology) are defined at runtime with hand-written code in `packages/sdks/oak-curriculum-sdk/src/mcp/`.
-
-**Target state**: All MCP tool and resource definitions must be generated at type-gen time to:
-
-1. **Eliminate duplication**: Single source of truth for tool/resource names, descriptions, schemas
-2. **Maintain consistency**: Generated tools and aggregated tools follow same patterns
-3. **Enable evolution**: When semantic search integrates, it's part of generated `search` tool definition
-4. **Enforce schema-first**: All MCP primitives derive from OpenAPI schema + guidance configs
-
-**Implementation approach**:
-
-- Move `aggregated-search.ts`, `aggregated-fetch.ts`, and `ontology-resource.ts` logic into type-gen generators
-- Create `type-gen/typegen/mcp-aggregated-tools/` and `type-gen/typegen/mcp-resources/` directories
-- Generate tool/resource descriptors, validators, and execution logic at type-gen time
-- Runtime code becomes pure plumbing: import generated definitions, wire to MCP SDK
-
-**Priority**: Must happen before semantic search integration (Item #6 in high-level plan) to avoid compounding technical debt.
-
-**Tracking**: This refactor should be added as a prerequisite step in the implementation phases below.
+---
 
 ## Architecture Overview
 
@@ -76,10 +80,14 @@ Implement a schema-derived curriculum ontology exposed as an MCP resource, enabl
 - Read-only access pattern
 - MCP specification supports resources via `resources/list` and `resources/read`
 
+---
+
 ## Implementation Phases
 
 ### Phase 1: Type-Gen Schema Extractor (TDD)
 
+**Status**: PLANNED  
+**Duration**: ~1 week  
 **Objective**: Generate `curriculum-ontology.schema.json` during `pnpm type-gen` by parsing the OpenAPI schema.
 
 #### 1.1 Create Extractor Module
@@ -250,8 +258,22 @@ writeFileSync(ontologyOutputPath, JSON.stringify(extractedOntology, null, 2));
 - `get-key-stages-subject-lessons` → returns `Lesson[]`, exercises `Unit-has-Lesson`
 - `get-search-lessons` → returns `Lesson[]`, uses search similarity
 
+### Acceptance Criteria (Phase 1)
+
+| Criterion                               | Test Method   |
+| --------------------------------------- | ------------- |
+| Schema extractor produces valid JSON    | Unit test     |
+| All core entities extracted             | Snapshot test |
+| Relationships derived from nesting      | Unit test     |
+| Enumerations extracted from params      | Unit test     |
+| `pnpm type-gen` generates ontology file | Run type-gen  |
+
+---
+
 ### Phase 2: Manual Guidance JSON (Hand-Authored)
 
+**Status**: PLANNED  
+**Duration**: ~1 week  
 **Objective**: Create version-controlled educational and tooling guidance.
 
 #### 2.1 Create Guidance Schema
@@ -343,8 +365,21 @@ Define JSON schema for guidance validation:
 - Schema changes reviewed by engineering team
 - Both tracked in separate commits for clarity
 
+### Acceptance Criteria (Phase 2)
+
+| Criterion                                      | Test Method            |
+| ---------------------------------------------- | ---------------------- |
+| Guidance JSON validates against schema         | JSON Schema validation |
+| All entity IDs reference valid schema entities | Cross-reference test   |
+| Tool names match generated tools               | Cross-reference test   |
+| Version is semantic                            | Pattern match          |
+
+---
+
 ### Phase 3: MCP Resource Exposure (Thin Runtime)
 
+**Status**: PLANNED  
+**Duration**: ~1 week  
 **Objective**: Merge schema + guidance at runtime; expose as MCP resources.
 
 #### 3.1 Create Ontology Resource Module
@@ -397,13 +432,6 @@ export function listOntologyResources(): ResourceListEntry[];
 4. Write test: Filter by entity returns subset
 5. Write test: Format='summary' returns condensed version
 6. Implement merge and filtering logic
-
-**Validation**:
-
-- Unit tests for merge logic
-- Unit tests for filtering
-- Unit tests for format variants
-- Integration test with real schema + guidance JSONs
 
 #### 3.2 Resource URI Design
 
@@ -489,7 +517,21 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 - No examples, no field details
 - ~1-2KB JSON (token-efficient for context-limited agents)
 
+### Acceptance Criteria (Phase 3)
+
+| Criterion                                | Test Method      |
+| ---------------------------------------- | ---------------- |
+| Resources accessible via MCP protocol    | Integration test |
+| Filter by entity returns subset          | Unit test        |
+| Format variants return correct structure | Unit test        |
+| Resource URIs are valid                  | Unit test        |
+
+---
+
 ### Phase 4: Testing Strategy (TDD Throughout)
+
+**Status**: PLANNED  
+**Duration**: ~3 days
 
 #### 4.1 Unit Tests
 
@@ -552,7 +594,12 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 - Tool names in workflows match generated tool names
 - Relationship sources/targets reference valid entities
 
+---
+
 ### Phase 5: Documentation and Maintenance
+
+**Status**: PLANNED  
+**Duration**: ~2 days
 
 #### 5.1 Update Existing Docs
 
@@ -616,91 +663,37 @@ export function extractOntologyFromSchema(schema: OpenAPIObject): ExtractedOntol
 - **Guidance content**: Curriculum/product team
 - **Integration**: Engineering team
 
-## Implementation Order
+---
 
-### Sprint 0: Refactor Aggregated Tools to Type-Gen (3-5 days) ⚠️ **PREREQUISITE**
+## Implementation Schedule
 
-**Objective**: Move `search` and `fetch` tools from runtime to type-gen generation.
+| Phase                     | Duration | Dependencies                                |
+| ------------------------- | -------- | ------------------------------------------- |
+| Phase 1: Schema Extractor | 1 week   | Aggregated tools refactor (Plan 03 Phase 0) |
+| Phase 2: Guidance JSON    | 1 week   | Phase 1                                     |
+| Phase 3: MCP Resource     | 1 week   | Phases 1-2                                  |
+| Phase 4: Testing          | 3 days   | Phases 1-3                                  |
+| Phase 5: Documentation    | 2 days   | Phases 1-4                                  |
 
-**Tasks**:
+**Total**: ~4 weeks
 
-1. Create `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-aggregated-tools/` directory
-2. Create aggregated tool configuration format (JSON/TypeScript config defining composition rules)
-3. Implement generator for `search` tool (calls `get-search-lessons` + `get-search-transcripts`)
-4. Implement generator for `fetch` tool (routes by canonical ID prefix)
-5. Generate tool descriptors, input schemas, validators, execution logic
-6. Update `universal-tools.ts` to import generated aggregated tools instead of hand-written
-7. Remove `aggregated-search.ts` and `aggregated-fetch.ts` runtime files
-8. Update tests to use generated tools
-9. Validate `pnpm type-gen && pnpm build && pnpm test`
-
-**Acceptance**: Aggregated tools are generated at type-gen time; runtime code imports generated definitions; all tests pass; no change to MCP server behaviour.
-
-**Rationale**: Establishes pattern for type-gen-generated composite MCP primitives before adding ontology resources and semantic search.
-
-### Sprint 1: Foundation (1 week)
-
-1. Create schema extractor module skeleton
-2. Implement entity extraction (TDD)
-3. Write unit tests for entity extraction
-4. Implement relationship extraction (TDD)
-5. Write unit tests for relationship extraction
-6. Integrate into type-gen pipeline
-7. Validate generated schema JSON
-
-**Acceptance**: `pnpm type-gen` generates valid `curriculum-ontology.schema.json`
-
-### Sprint 2: Guidance and Merge (1 week)
-
-1. Create guidance schema definition
-2. Populate guidance JSON with initial content
-3. Create ontology resource module
-4. Implement merge logic (TDD)
-5. Write unit tests for merge
-6. Implement filtering and formatting
-7. Write unit tests for variants
-
-**Acceptance**: Ontology resource merges schema + guidance correctly
-
-### Sprint 3: MCP Resource Generation (1 week)
-
-**Objective**: Generate ontology resource definitions at type-gen time; expose via thin runtime plumbing.
-
-**Tasks**:
-
-1. Create `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-resources/` directory
-2. Create resource generator that emits resource descriptors, URIs, and access logic
-3. Generate ontology resource definitions from schema JSON + guidance JSON at type-gen time
-4. Update `universal-tools.ts` (or create `universal-resources.ts`) to import generated resources
-5. Register resources in MCP servers (stdio + http) using generated definitions
-6. Write integration tests for resource generation
-7. Write E2E tests for resource access (stubbed)
-8. Update documentation
-
-**Acceptance**: Resources generated at type-gen time; accessible via MCP protocol in both servers; runtime code is thin plumbing
-
-### Sprint 4: Polish and Validation (3 days)
-
-1. Add format variants (summary, mermaid)
-2. Implement resource filtering
-3. Add validation tests
-4. Update all documentation
-5. Run full quality gate
-6. Capture walkthrough for OpenAI App SDK plan
-
-**Acceptance**: All tests pass; documentation complete; ready for OpenAI App SDK integration
+---
 
 ## Quality Gates
 
-After each sprint:
+After each phase:
 
-1. `pnpm type-gen` - Schema extraction succeeds
-2. `pnpm build` - No type errors
-3. `pnpm type-check` - All workspaces type-safe
-4. `pnpm lint -- --fix` - No linting errors
-5. `pnpm test` - All unit/integration tests pass
-6. `pnpm test:e2e` - E2E tests pass
-7. `pnpm markdownlint` - Documentation valid
+```bash
+pnpm type-gen      # Schema extraction succeeds
+pnpm build         # No type errors
+pnpm type-check    # All workspaces type-safe
+pnpm lint -- --fix # No linting errors
+pnpm test          # All unit/integration tests pass
+pnpm test:e2e      # E2E tests pass
+pnpm markdownlint  # Documentation valid
+```
+
+---
 
 ## Success Criteria
 
@@ -712,6 +705,8 @@ After each sprint:
 6. ✅ All tests pass
 7. ✅ Documentation complete
 8. ✅ Zero manual schema maintenance (all flows from OpenAPI)
+
+---
 
 ## Risks and Mitigation
 
@@ -731,18 +726,22 @@ After each sprint:
 
 - **Mitigation**: Profile extractor; cache intermediate results; optimize hot paths; extraction is one-time at build
 
-## Future Enhancements (Out of Scope for Initial Implementation)
+---
+
+## Future Enhancements (Out of Scope)
 
 - Mermaid diagram generation from ontology JSON
 - JSON-LD format with `@context` for semantic web compatibility
 - Ontology versioning and diff detection
 - Interactive ontology explorer UI
 - Ontology-driven code generation (e.g., graph traversal helpers)
-- **Integration with upstream API `/ontology` endpoint when available** (see `.agent/plans/upstream-api-metadata-wishlist.md` Item 3 for upstream requirements)
+- **Integration with upstream API `/ontology` endpoint when available** (see `.agent/plans/external/upstream-api-metadata-wishlist.md` Item 3)
+
+---
 
 ## Relationship to Upstream API Work
 
-This implementation provides an **interim solution** while the upstream API team develops the official `/ontology` endpoint (`.agent/plans/upstream-api-metadata-wishlist.md` Item 3).
+This implementation provides an **interim solution** while the upstream API team develops the official `/ontology` endpoint.
 
 ### Current Approach (Shimmed at MCP Layer)
 
@@ -762,27 +761,34 @@ When upstream delivers `/ontology`:
 
 ### Migration Strategy
 
-Phase 1 (Current): Shimmed implementation per this plan
-Phase 2 (Future): Hybrid – consume upstream schema facts, merge with local guidance
-Phase 3 (Ideal): Full upstream integration with MCP-layer guidance overlay
+- Phase 1 (Current): Shimmed implementation per this plan
+- Phase 2 (Future): Hybrid – consume upstream schema facts, merge with local guidance
+- Phase 3 (Ideal): Full upstream integration with MCP-layer guidance overlay
 
-This approach provides immediate value while aligning with long-term upstream API architecture.
+---
 
-## Related Documents
+## TDD Reminder
 
-### Implementation Directives
+Per testing-strategy.md:
 
-- `.agent/directives-and-memory/rules.md` - Cardinal rule: type-gen sufficiency; TDD approach
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first execution directive
-- `.agent/directives-and-memory/testing-strategy.md` - Testing strategy for unit/integration/E2E tests
+> "Write tests **FIRST**. Red → Green → Refactor"
 
-### Related Plans
+All changes follow:
 
-- `.agent/plans/oak-openai-app-plan.md` - OpenAI App SDK integration plan (Phase 0 Item 8)
-- `.agent/plans/upstream-api-metadata-wishlist.md` - Upstream API enhancement wishlist (Item 3: `/ontology` endpoint)
-- `.agent/plans/semantic-search/snagging-resolution-plan.md` - Current SDK quality gate process
+1. **RED**: Write test that fails (feature doesn't exist yet)
+2. **GREEN**: Implement minimal code to pass test
+3. **REFACTOR**: Improve implementation while keeping tests green
 
-### Domain Documentation
+---
+
+## Related Plans
+
+- **01-mcp-tool-metadata-enhancement-plan.md** - Tool metadata enhancement (parallel work)
+- **03-mcp-infrastructure-advanced-tools-plan.md** - Infrastructure and advanced tools (Phase 0 is prerequisite)
+
+---
+
+## Domain Documentation
 
 - `docs/architecture/curriculum-ontology.md` - Existing ontology documentation (basis for guidance JSON)
 - `packages/sdks/oak-curriculum-sdk/README.md` - SDK documentation (to be updated with resource usage)

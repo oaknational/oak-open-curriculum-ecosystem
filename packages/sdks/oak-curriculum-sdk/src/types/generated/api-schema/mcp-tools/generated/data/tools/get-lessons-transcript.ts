@@ -114,7 +114,7 @@ export const getLessonsTranscript = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns the video transcript and video captions file for a given lesson.",
+  description: "Lesson transcript\n\nThis tool returns the video transcript and video captions file for a given lesson.",
   path,
   method,
   documentedStatuses,

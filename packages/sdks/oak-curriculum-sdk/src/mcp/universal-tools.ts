@@ -61,10 +61,18 @@ function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | unde
  * @remarks Security metadata is manual until Phase 0 (comprehensive-mcp-enhancement-plan.md)
  * moves aggregated tools to generated code.
  */
+/**
+ * Aggregated tool definitions.
+ *
+ * Descriptions follow git commit message format:
+ * - First line: short summary
+ * - Blank line
+ * - Remaining: detailed description
+ */
 export const AGGREGATED_TOOL_DEFS = {
   search: {
     description:
-      'Search across lessons and transcripts. Executes get-search-lessons and get-search-transcripts.',
+      'Search across lessons and transcripts\n\nExecutes get-search-lessons and get-search-transcripts in parallel, combining results. Use filters (keyStage, subject, unit) to narrow results.',
     inputSchema: SEARCH_INPUT_SCHEMA,
     securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
     annotations: {
@@ -72,12 +80,12 @@ export const AGGREGATED_TOOL_DEFS = {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Search Lessons and Transcripts',
+      title: 'Search',
     },
   },
   fetch: {
     description:
-      'Fetch lesson, unit, subject, sequence, or thread metadata by canonical identifier.',
+      'Fetch curriculum resource by canonical identifier\n\nRetrieves lesson, unit, subject, sequence, or thread metadata. Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").',
     inputSchema: FETCH_INPUT_SCHEMA,
     securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
     annotations: {
@@ -85,7 +93,7 @@ export const AGGREGATED_TOOL_DEFS = {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Fetch Curriculum Resource',
+      title: 'Fetch',
     },
   },
 } as const;

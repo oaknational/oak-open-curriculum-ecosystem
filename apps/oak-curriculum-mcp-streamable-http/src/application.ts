@@ -10,6 +10,7 @@ import listRoutes from 'express-list-routes';
 import { renderLandingPageHtml } from './landing-page.js';
 import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
+import { overrideToolsListHandler } from './tools-list-override.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
@@ -143,6 +144,9 @@ function initializeCoreEndpoints(
     logger: log,
     resourceUrl: options?.resourceUrl,
   });
+  overrideToolsListHandler(server);
+  log.debug('bootstrap.mcp.tools-list-override.registered');
+
   log.debug('bootstrap.mcp.transport.connect.start');
   const connectionTimer = startTimer();
   let connectionDuration: Duration | undefined;

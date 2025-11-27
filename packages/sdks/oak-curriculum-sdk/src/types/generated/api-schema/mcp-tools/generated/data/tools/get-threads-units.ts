@@ -113,7 +113,7 @@ export const getThreadsUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns all of the units that belong to a given thread.",
+  description: "Units belonging to a given thread\n\nThis tool returns all of the units that belong to a given thread.",
   path,
   method,
   documentedStatuses,

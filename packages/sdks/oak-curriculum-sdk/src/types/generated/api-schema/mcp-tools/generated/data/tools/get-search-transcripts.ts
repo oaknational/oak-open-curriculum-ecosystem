@@ -114,7 +114,7 @@ export const getSearchTranscripts = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
+  description: "Lesson search using lesson video transcripts\n\nSearch for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
   path,
   method,
   documentedStatuses,

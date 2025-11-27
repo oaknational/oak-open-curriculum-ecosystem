@@ -131,7 +131,7 @@ export const getKeyStagesSubjectAssets = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.",
+  description: "Assets\n\nThis tool returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.",
   path,
   method,
   documentedStatuses,

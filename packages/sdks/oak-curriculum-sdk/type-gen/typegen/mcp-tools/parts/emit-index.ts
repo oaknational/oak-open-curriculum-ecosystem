@@ -1,6 +1,7 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
 import { getSecuritySchemeForTool } from '../apply-security-policy.js';
 import { kebabToTitleCase } from './kebab-to-title-case.js';
+import { toToolDescription } from './tool-description.js';
 
 function literalName(toolName: string): string {
   const parts = toolName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
@@ -205,19 +206,6 @@ function compareStatuses(left: string, right: string): number {
     return 1;
   }
   return left.localeCompare(right);
-}
-
-function toToolDescription(operation: OperationObject): string | undefined {
-  const raw = typeof operation.description === 'string' ? operation.description : '';
-  if (!raw.trim()) {
-    return undefined;
-  }
-  const updated = raw
-    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
-    .replace(/\bThis endpoint\b/gi, (match) => (match[0] === 'T' ? 'This tool' : 'this tool'))
-    .replace(/\s+/g, ' ')
-    .trim();
-  return updated.length > 0 ? updated : undefined;
 }
 
 export function emitIndex(

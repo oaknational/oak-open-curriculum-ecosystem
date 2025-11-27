@@ -114,7 +114,7 @@ export const getSubjectDetail = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns the sequences, key stages and years that are currently available for a given subject.",
+  description: "Subject\n\nThis tool returns the sequences, key stages and years that are currently available for a given subject.",
   path,
   method,
   documentedStatuses,

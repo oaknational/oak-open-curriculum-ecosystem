@@ -134,7 +134,7 @@ export const getKeyStagesSubjectLessons = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns an array of available published lessons for a given subject and key stage, grouped by unit.",
+  description: "Lessons\n\nThis tool returns an array of available published lessons for a given subject and key stage, grouped by unit.",
   path,
   method,
   documentedStatuses,

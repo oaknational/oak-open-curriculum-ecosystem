@@ -125,7 +125,7 @@ export const getLessonsAssets = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.",
+  description: "Downloadable lesson assets\n\nThis tool returns the types of available assets for a given lesson, and the download endpoints for each. This tool contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.",
   path,
   method,
   documentedStatuses,

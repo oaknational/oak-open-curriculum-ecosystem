@@ -117,7 +117,7 @@ export const getLessonsAssetsByType = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.",
+  description: "Lesson asset by type\n\nThis tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.",
   path,
   method,
   documentedStatuses,

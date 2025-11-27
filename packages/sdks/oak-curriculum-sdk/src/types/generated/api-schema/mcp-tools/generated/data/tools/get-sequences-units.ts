@@ -125,7 +125,7 @@ export const getSequencesUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.",
+  description: "Units within a sequence\n\nThis tool returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.",
   path,
   method,
   documentedStatuses,

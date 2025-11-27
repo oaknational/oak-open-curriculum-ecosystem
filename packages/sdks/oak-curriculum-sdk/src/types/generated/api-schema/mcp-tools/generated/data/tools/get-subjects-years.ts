@@ -114,7 +114,7 @@ export const getSubjectsYears = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns an array of years that are currently available for a given subject.",
+  description: "Year groups for a given subject\n\nThis tool returns an array of years that are currently available for a given subject.",
   path,
   method,
   documentedStatuses,

@@ -114,7 +114,7 @@ export const getSubjectsKeyStages = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns a list of key stages that are currently available for a given subject.",
+  description: "Key stages within a subject\n\nThis tool returns a list of key stages that are currently available for a given subject.",
   path,
   method,
   documentedStatuses,

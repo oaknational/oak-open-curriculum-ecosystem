@@ -131,7 +131,7 @@ export const getSequencesQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
+  description: "Questions within a sequence\n\nThis tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
   path,
   method,
   documentedStatuses,

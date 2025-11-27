@@ -9,6 +9,18 @@ import { createApp } from '../src/application.js';
  * for tool input parameters that have examples defined in the OpenAPI schema.
  *
  * Examples help AI agents understand expected input formats through concrete values.
+ *
+ * ## Implementation: B3 Hybrid Approach
+ *
+ * The MCP SDK's registerTool() accepts Zod schemas, but Zod doesn't support `examples`.
+ * When the SDK responds to tools/list, it converts Zod back to JSON Schema, losing examples.
+ *
+ * We solve this by overriding the tools/list handler (via server.server.setRequestHandler)
+ * to return our pre-generated JSON Schema directly. This preserves examples while still
+ * using Zod for input validation on tools/call.
+ *
+ * @see application.ts for the override implementation
+ * @see .agent/plans/sdk-and-mcp-enhancements/b3-tools-list-override-test-plan.md
  */
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -79,6 +91,11 @@ function findToolByName(tools: McpTool[], name: string): McpTool | undefined {
   return tools.find((t) => t.name === name);
 }
 
+function getPropertyExamples(tool: McpTool, propName: string): readonly unknown[] {
+  const prop = tool.inputSchema?.properties?.[propName];
+  return prop?.examples ?? [];
+}
+
 async function callToolsList(
   app: ReturnType<typeof createApp>,
 ): Promise<{ tools: McpTool[]; status: number }> {
@@ -90,29 +107,6 @@ async function callToolsList(
   return { tools: getToolsFromResult(payload), status: res.status };
 }
 
-/**
- * Test suite for parameter examples metadata in MCP tools.
- *
- * ## Known Limitation: MCP SDK Examples Support
- *
- * The MCP SDK (v1.20.1) uses Zod for `inputSchema` in registerTool() and
- * converts Zod to JSON Schema for `tools/list` responses. Since Zod doesn't
- * support an `examples` property, examples are lost during this conversion.
- *
- * **What DOES work:**
- * - Examples are correctly extracted from OpenAPI schema at type-gen time
- * - Examples are emitted to `toolInputJsonSchema` in generated tool files
- * - Examples are defined in aggregated tool schemas (SEARCH_INPUT_SCHEMA, FETCH_INPUT_SCHEMA)
- *
- * **What DOESN'T work (SDK limitation):**
- * - Examples don't appear in MCP `tools/list` responses
- * - The SDK's Zod-to-JSON-Schema conversion doesn't preserve examples
- *
- * These tests verify the expected behavior and document the SDK limitation.
- * When the MCP SDK adds examples support, these tests should pass.
- *
- * @see https://github.com/modelcontextprotocol/typescript-sdk/issues/XXX
- */
 describe('Tool Examples Metadata E2E', () => {
   beforeEach(() => {
     enableAuthBypass();
@@ -138,5 +132,54 @@ describe('Tool Examples Metadata E2E', () => {
     const fetchTool = findToolByName(tools, 'fetch');
     expect(fetchTool).toBeDefined();
     expect(fetchTool?.description).toContain('Fetch');
+  });
+
+  it('tools/list includes examples for generated tools with OpenAPI examples', async () => {
+    const app = createApp();
+    const { tools, status } = await callToolsList(app);
+    expect(status).toBe(200);
+
+    // get-sequences-units has examples in OpenAPI schema (sequence: "english-primary")
+    const sequencesTool = findToolByName(tools, 'get-sequences-units');
+    expect(sequencesTool).toBeDefined();
+    if (!sequencesTool) {
+      throw new Error('Tool not found');
+    }
+
+    const examples = getPropertyExamples(sequencesTool, 'sequence');
+    expect(examples.length).toBeGreaterThan(0);
+    expect(examples).toContain('english-primary');
+  });
+
+  it('tools/list includes examples for aggregated search tool', async () => {
+    const app = createApp();
+    const { tools, status } = await callToolsList(app);
+    expect(status).toBe(200);
+
+    const searchTool = findToolByName(tools, 'search');
+    expect(searchTool).toBeDefined();
+    if (!searchTool) {
+      throw new Error('Tool not found');
+    }
+
+    const qExamples = getPropertyExamples(searchTool, 'q');
+    expect(qExamples.length).toBeGreaterThan(0);
+  });
+
+  it('tools/list includes examples for aggregated fetch tool', async () => {
+    const app = createApp();
+    const { tools, status } = await callToolsList(app);
+    expect(status).toBe(200);
+
+    const fetchTool = findToolByName(tools, 'fetch');
+    expect(fetchTool).toBeDefined();
+    if (!fetchTool) {
+      throw new Error('Tool not found');
+    }
+
+    const idExamples = getPropertyExamples(fetchTool, 'id');
+    expect(idExamples.length).toBeGreaterThan(0);
+    // Examples should follow the "type:slug" format
+    expect(idExamples.some((ex) => typeof ex === 'string' && ex.includes(':'))).toBe(true);
   });
 });

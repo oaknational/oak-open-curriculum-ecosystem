@@ -114,7 +114,7 @@ export const getUnitsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
   path,
   method,
   documentedStatuses,

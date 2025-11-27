@@ -114,7 +114,7 @@ export const getLessonsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns a summary for a given lesson",
+  description: "Lesson summary\n\nThis tool returns a summary for a given lesson",
   path,
   method,
   documentedStatuses,

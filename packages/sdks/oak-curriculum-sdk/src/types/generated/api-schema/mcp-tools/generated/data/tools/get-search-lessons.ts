@@ -123,7 +123,7 @@ export const getSearchLessons = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Search for a term and find the 20 most similar lessons with titles that contain similar text.",
+  description: "Lesson search using lesson title\n\nSearch for a term and find the 20 most similar lessons with titles that contain similar text.",
   path,
   method,
   documentedStatuses,

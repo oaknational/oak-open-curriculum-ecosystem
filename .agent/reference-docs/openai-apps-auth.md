@@ -1,3 +1,5 @@
+original doc: <https://developers.openai.com/apps-sdk/build/auth>
+
 # Authentication
 
 ## Authenticate your users
@@ -80,6 +82,10 @@ That single header lets ChatGPT discover the metadata URL even if it has not see
   - `code_challenge_methods_supported`: must include `S256`, otherwise ChatGPT will refuse to proceed because PKCE appears unsupported.
   - Optional fields follow [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414) / [OpenID Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html); include whatever helps your administrators configure policies.
 
+#### Redirect URL
+
+ChatGPT completes the OAuth flow by redirecting to `https://chatgpt.com/connector_platform_oauth_redirect`. Add that production redirect URL to your authorization server's allowlist so the authorization code can be returned successfully.
+
 #### Echo the `resource` parameter throughout the OAuth flow
 
 - Expect ChatGPT to append `resource=https%3A%2F%2Fyour-mcp.example.com` to both the authorization and token requests. This ties the token back to the protected resource metadata shown above.
@@ -121,7 +127,7 @@ To address this issue, the MCP council is currently advancing [Client Metadata D
 
 ### Client identification
 
-A frequent question is how your MCP server can confirm that a request actually comes from ChatGPT. Today the only reliable control is network-level filtering, such as allowlisting ChatGPT’s published egress IP ranges. ChatGPT does **not** support machine-to-machine OAuth grants such as client credentials, service accounts, or JWT bearer assertions, nor can it present custom API keys or mTLS certificates.
+A frequent question is how your MCP server can confirm that a request actually comes from ChatGPT. Today the only reliable control is network-level filtering, such as allowlisting ChatGPT’s [published egress IP ranges](https://openai.com/chatgpt-connectors.json). ChatGPT does **not** support machine-to-machine OAuth grants such as client credentials, service accounts, or JWT bearer assertions, nor can it present custom API keys or mTLS certificates.
 
 Once rolled out, CMID directly addresses the client identification problem by giving you a signed, HTTPS-hosted declaration of ChatGPT’s identity.
 

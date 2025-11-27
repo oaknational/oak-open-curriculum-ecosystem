@@ -101,7 +101,7 @@ export const getSubjects = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns an array of all available subjects and their associated sequences, key stages and years.",
+  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.",
   path,
   method,
   documentedStatuses,

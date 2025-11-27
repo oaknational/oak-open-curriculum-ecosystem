@@ -114,7 +114,7 @@ export const getLessonsQuiz = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
+  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
   path,
   method,
   documentedStatuses,

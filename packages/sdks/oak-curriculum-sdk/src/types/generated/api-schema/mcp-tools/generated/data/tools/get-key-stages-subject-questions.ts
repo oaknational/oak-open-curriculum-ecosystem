@@ -131,7 +131,7 @@ export const getKeyStagesSubjectQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
+  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
   path,
   method,
   documentedStatuses,
