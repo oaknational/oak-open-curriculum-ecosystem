@@ -1,9 +1,10 @@
 # Aggregated Tools Widget and Metadata Enhancement
 
-**Status**: IN_PROGRESS  
+**Status**: COMPLETED  
 **Created**: 2025-11-27  
+**Completed**: 2025-11-27  
 **Priority**: Enhancement (Post-POC)  
-**Estimated Duration**: ~2 hours
+**Actual Duration**: ~3 hours (including TDD, refactoring, and E2E tests)
 
 ---
 
@@ -620,15 +621,17 @@ pnpm test          # All tests pass
 
 ## Todos
 
-- [ ] Create aggregated-tool-widget.ts with Oak-branded HTML and Lexend font
-- [ ] Register oak-json-viewer resource in handlers.ts
-- [ ] Update search tool with full metadata (description, `_meta` with outputTemplate)
-- [ ] Update fetch tool with full metadata (description, `_meta` with outputTemplate)
-- [ ] Add `openai/outputTemplate` to get-ontology `_meta`
-- [ ] Add unit tests for `_meta` fields on all aggregated tools
-- [ ] Add E2E tests for widget resource registration and content
-- [ ] Run build, type-check, lint, test to verify all changes
-- [ ] Manual test in ChatGPT to verify widget rendering
+- [x] Create aggregated-tool-widget.ts with Oak-branded HTML and Lexend font
+- [x] Register oak-json-viewer resource in handlers.ts
+- [x] Update search tool with full metadata (description, `_meta` with outputTemplate)
+- [x] Update fetch tool with full metadata (description, `_meta` with outputTemplate)
+- [x] Add `openai/outputTemplate` to get-ontology `_meta`
+- [x] Add unit tests for `_meta` fields on all aggregated tools
+- [x] Add E2E tests for widget resource registration and content
+- [x] Add E2E tests for `_meta` fields in tools/list response
+- [x] Add Oak National Academy logo to widget header
+- [x] Run build, type-check, lint, test to verify all changes
+- [ ] Manual test in ChatGPT to verify widget rendering (deferred - requires deployment)
 
 ---
 
