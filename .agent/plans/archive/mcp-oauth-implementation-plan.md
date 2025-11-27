@@ -1769,7 +1769,7 @@ pnpm markdownlint-check:root
 ## References
 
 - `.agent/directives-and-memory/rules.md` – repository rules (must follow at all times)
-- `docs/agent-guidance/testing-strategy.md` – TDD guidance
+- `.agent/directives-and-memory/testing-strategy.md` – TDD guidance
 - `packages/libs/logger/README.md` – authoritative logger documentation
 - `apps/oak-curriculum-mcp-streamable-http/README.md` – HTTP logging configuration
 - `apps/oak-curriculum-mcp-stdio/README.md` – stdio logging configuration (pending updates)

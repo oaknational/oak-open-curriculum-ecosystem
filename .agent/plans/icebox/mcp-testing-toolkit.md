@@ -367,7 +367,7 @@ describe('executeInspectorCommand', () => {
 ### Project Standards
 
 - `.agent/directives-and-memory/rules.md` - TDD, pure functions, YAGNI
-- `docs/agent-guidance/testing-strategy.md` - Test types and boundaries
+- `.agent/directives-and-memory/testing-strategy.md` - Test types and boundaries
 
 ### Tools
 

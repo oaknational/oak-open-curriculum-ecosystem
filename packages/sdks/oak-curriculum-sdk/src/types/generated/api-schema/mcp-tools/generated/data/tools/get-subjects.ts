@@ -101,10 +101,18 @@ export const getSubjects = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns an array of all available subjects and their associated sequences, key stages and years.",
+  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Subjects",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

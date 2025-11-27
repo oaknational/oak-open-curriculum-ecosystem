@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The slug of the lesson"}} as const, additionalProperties: false as const, required: ["lesson"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ lesson: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"lesson":{"type":"string","description":"The slug of the lesson","examples":["joining-using-and"]}} as const, additionalProperties: false as const, required: ["lesson"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ lesson: z.string().describe("The slug of the lesson") }) }) });
+export const toolMcpFlatInputSchema = z.object({ lesson: z.string().describe("The slug of the lesson") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The slug of the lesson"}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The slug of the lesson","examples":["joining-using-and"]}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getLessonsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns a summary for a given lesson",
+  description: "Lesson summary\n\nThis tool returns a summary for a given lesson",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Lessons Summary",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

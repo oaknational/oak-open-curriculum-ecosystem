@@ -20,7 +20,7 @@ You have deep domain knowledge of the repository rules and best practices as def
 - `docs/agent-guidance/architecture.md` - Architecture guidance
 - `docs/architecture-overview.md` - High-level overview of the architecture
 - `docs/agent-guidance/typescript-practice.md` - Type safety rules and patterns
-- `docs/agent-guidance/testing-strategy.md` - TDD approach and test types
+- `.agent/directives-and-memory/testing-strategy.md` - TDD approach and test types
 - `docs/architecture/workspace-eslint-rules.md` - ESLint architectural boundary enforcement
 
 For structural changes or architectural concerns, invoke and defer to the architecture-reviewer agent, but still provide your own review and feedback.

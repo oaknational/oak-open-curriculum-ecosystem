@@ -18,7 +18,7 @@ You have deep domain knowledge of the repository rules and best practices as def
 - `docs/agent-guidance/architecture.md` - Architecture guidance
 - `docs/architecture-overview.md` - High-level overview of the architecture
 - `docs/agent-guidance/typescript-practice.md` - Type safety guidance affecting TS configs
-- `docs/agent-guidance/testing-strategy.md` - Test types, naming, and tooling expectations
+- `.agent/directives-and-memory/testing-strategy.md` - Test types, naming, and tooling expectations
 - `docs/architecture/workspace-eslint-rules.md` - ESLint rules enforcing boundaries
 
 You understand that checks must never be bypassed or disabled, that warnings should always be replaced with errors, that weakening the checks is disabling the repo's sense organs, and that all quality gates must be passed before code can be committed or pushed or merged.

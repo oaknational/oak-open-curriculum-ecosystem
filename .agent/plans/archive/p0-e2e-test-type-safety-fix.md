@@ -22,7 +22,7 @@ During implementation of P0 (flat schema generator fix), we discovered that E2E 
 
 - `.agent/directives-and-memory/rules.md` - Type safety requirements, workspace boundaries
 - `.agent/directives-and-memory/schema-first-execution.md` - Schema-first architecture
-- `docs/agent-guidance/testing-strategy.md` - Test type definitions and boundaries
+- `.agent/directives-and-memory/testing-strategy.md` - Test type definitions and boundaries
 - `.agent/plans/p0-mcp-flat-schema-generator-fix.md` - Completed P0 work
 
 ## Problem Statement
@@ -488,7 +488,7 @@ pnpm test:e2e
 
 ### Documentation Updates
 
-- ✅ Update `docs/agent-guidance/testing-strategy.md` with examples of correct E2E test patterns
+- ✅ Update `.agent/directives-and-memory/testing-strategy.md` with examples of correct E2E test patterns
 - ✅ Add section on workspace boundaries in testing
 - ✅ Document fixture pattern for E2E tests
 

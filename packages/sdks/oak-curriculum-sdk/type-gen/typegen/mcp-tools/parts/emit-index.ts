@@ -1,4 +1,7 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
+import { getSecuritySchemeForTool } from '../apply-security-policy.js';
+import { kebabToTitleCase } from './kebab-to-title-case.js';
+import { toToolDescription } from './tool-description.js';
 
 function literalName(toolName: string): string {
   const parts = toolName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
@@ -17,6 +20,7 @@ function literalName(toolName: string): string {
 }
 
 function buildExports({
+  toolName,
   descriptorName,
   description,
   path,
@@ -24,6 +28,7 @@ function buildExports({
   operationId,
   operation,
 }: {
+  readonly toolName: string;
   readonly descriptorName: string;
   readonly description: string | undefined;
   readonly path: string;
@@ -31,6 +36,20 @@ function buildExports({
   readonly operationId: string;
   readonly operation: OperationObject;
 }): string {
+  // Security metadata from mcp-security-policy.ts (see apply-security-policy.ts for details)
+  const securitySchemes = getSecuritySchemeForTool(toolName);
+  const securitySchemesLiteral = `[${securitySchemes
+    .map((scheme) => {
+      if (scheme.type === 'noauth') {
+        return "{ type: 'noauth' }";
+      }
+      const scopesArray = scheme.scopes
+        ? `[${scheme.scopes.map((s) => `'${s}'`).join(', ')}]`
+        : '[]';
+      return `{ type: 'oauth2', scopes: ${scopesArray} }`;
+    })
+    .join(', ')}]`;
+
   const documentedStatuses = collectDocumentedStatuses(operation);
   const documentedStatusLiterals = `[${documentedStatuses
     .map((status) => `'${status}'`)
@@ -117,6 +136,16 @@ function buildExports({
   lines.push('  path,');
   lines.push('  method,');
   lines.push('  documentedStatuses,');
+  lines.push(`  securitySchemes: ${securitySchemesLiteral},`);
+  // MCP annotations: all Oak tools are read-only, non-destructive, idempotent GET operations
+  const humanReadableTitle = kebabToTitleCase(toolName);
+  lines.push('  annotations: {');
+  lines.push('    readOnlyHint: true,');
+  lines.push('    destructiveHint: false,');
+  lines.push('    idempotentHint: true,');
+  lines.push('    openWorldHint: false,');
+  lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
+  lines.push('  },');
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',
@@ -179,19 +208,6 @@ function compareStatuses(left: string, right: string): number {
   return left.localeCompare(right);
 }
 
-function toToolDescription(operation: OperationObject): string | undefined {
-  const raw = typeof operation.description === 'string' ? operation.description : '';
-  if (!raw.trim()) {
-    return undefined;
-  }
-  const updated = raw
-    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
-    .replace(/\bThis endpoint\b/gi, (match) => (match[0] === 'T' ? 'This tool' : 'this tool'))
-    .replace(/\s+/g, ' ')
-    .trim();
-  return updated.length > 0 ? updated : undefined;
-}
-
 export function emitIndex(
   toolName: string,
   path: string,
@@ -200,6 +216,7 @@ export function emitIndex(
   operation: OperationObject,
 ): string {
   return buildExports({
+    toolName,
     descriptorName: literalName(toolName),
     description: toToolDescription(operation),
     path,

@@ -10,13 +10,17 @@ import type {
 function buildCommon(meta: ParamMetadata): {
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 } {
-  const out: { description?: string; default?: unknown } = {};
+  const out: { description?: string; default?: unknown; examples?: unknown[] } = {};
   if (meta.description !== undefined) {
     out.description = meta.description;
   }
   if (meta.default !== undefined) {
     out.default = meta.default;
+  }
+  if (meta.example !== undefined) {
+    out.examples = [meta.example];
   }
   return out;
 }

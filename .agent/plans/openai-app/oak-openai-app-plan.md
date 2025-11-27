@@ -3,7 +3,7 @@
 ## Context and References
 
 - Aligns with the [OpenAI App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines) requirements across purpose, safety, privacy, and verification.
-- Must comply with `.agent/directives-and-memory/rules.md` (Cardinal type rule, no type shortcuts, British spelling) and `docs/agent-guidance/testing-strategy.md` (TDD-first, behaviour-focused proofs).
+- Must comply with `.agent/directives-and-memory/rules.md` (Cardinal type rule, no type shortcuts, British spelling) and `.agent/directives-and-memory/testing-strategy.md` (TDD-first, behaviour-focused proofs).
 - Builds on existing MCP infrastructure (`apps/oak-curriculum-mcp-stdio`, `apps/oak-curriculum-mcp-streamable-http`, `apps/oak-notion-mcp`) and the compile-time generated SDK at `packages/sdks/oak-curriculum-sdk`.
 - The OpenAI Apps SDK is currently in preview (Developer Mode required; publishing not yet open to the public). See the [OpenAI Apps SDK developer docs](https://developers.openai.com/docs/apps) for current guidance.
 

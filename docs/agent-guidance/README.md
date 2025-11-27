@@ -8,7 +8,7 @@ This directory contains documentation specifically designed for AI agents workin
 - [Experimental Architecture Quick Reference](./experimental-architecture-quick-reference.md) - Concrete examples of the experimental approach
 - [Development Practice](./development-practice.md) - Best practices for development in this project
 - [Safety and Security](./safety-and-security.md) - Critical safety guidelines and security considerations
-- [Testing Strategy](./testing-strategy.md) - Comprehensive testing approach and requirements
+- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - **MOVED**: Comprehensive TDD approach at all levels (now in directives)
 - [TypeScript Practice](./typescript-practice.md) - TypeScript-specific guidelines and patterns
 - [Understanding Agent References](./understanding-agent-references.md) - How to interpret and use agent-specific references
 

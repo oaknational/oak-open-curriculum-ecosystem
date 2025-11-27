@@ -7,6 +7,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { UnifiedLogger } from './unified-logger';
 import type { ResourceAttributes } from './resource-attributes';
 import type { FileSinkInterface } from './file-sink';
@@ -30,8 +31,8 @@ function parseLogRecord(line: string): OtelLogRecord {
 describe('Logger DI Integration', () => {
   let stdoutMock: StdoutSink;
   let fileMock: FileSinkInterface;
-  let stdoutWriteSpy: ReturnType<typeof vi.fn>;
-  let fileWriteSpy: ReturnType<typeof vi.fn>;
+  let stdoutWriteSpy: Mock<StdoutSink['write']>;
+  let fileWriteSpy: Mock<FileSinkInterface['write']>;
 
   const httpResourceAttributes: ResourceAttributes = {
     'service.name': 'http-test',
@@ -49,8 +50,8 @@ describe('Logger DI Integration', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2025-11-09T10:00:00.000Z'));
 
-    stdoutWriteSpy = vi.fn();
-    fileWriteSpy = vi.fn();
+    stdoutWriteSpy = vi.fn<StdoutSink['write']>();
+    fileWriteSpy = vi.fn<FileSinkInterface['write']>();
 
     stdoutMock = {
       write: stdoutWriteSpy,
@@ -79,7 +80,7 @@ describe('Logger DI Integration', () => {
       logger.info('test message');
 
       expect(stdoutWriteSpy).toHaveBeenCalledOnce();
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       expect(written).toContain('"Body":"test message"');
       expect(written).toContain('"service.name":"http-test"');
       expect(written).toMatch(/\n$/); // ends with newline
@@ -96,7 +97,7 @@ describe('Logger DI Integration', () => {
 
       logger.info('test message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
 
       expect(record).toHaveProperty('Timestamp');
@@ -152,7 +153,7 @@ describe('Logger DI Integration', () => {
 
       logger.info('test message');
 
-      const written = fileWriteSpy.mock.calls[0]?.[0] as string;
+      const written = fileWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
 
       expect(record).toHaveProperty('Timestamp');
@@ -199,8 +200,8 @@ describe('Logger DI Integration', () => {
       expect(stdoutWriteSpy).toHaveBeenCalledOnce();
       expect(fileWriteSpy).toHaveBeenCalledOnce();
 
-      const stdoutWritten = stdoutWriteSpy.mock.calls[0]?.[0] as string;
-      const fileWritten = fileWriteSpy.mock.calls[0]?.[0] as string;
+      const stdoutWritten = stdoutWriteSpy.mock.calls[0]?.[0];
+      const fileWritten = fileWriteSpy.mock.calls[0]?.[0];
 
       expect(stdoutWritten).toBe(fileWritten);
     });
@@ -255,7 +256,7 @@ describe('Logger DI Integration', () => {
       const child = parent.child({ childKey: 'childValue' });
       child.info('child message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
 
       expect(record.Attributes).toHaveProperty('parentKey', 'parentValue');
@@ -274,7 +275,7 @@ describe('Logger DI Integration', () => {
       const child = parent.child({ childContext: 'value' });
       child.info('child message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
 
       expect(record.Resource).toHaveProperty('service.name', 'http-test');
@@ -320,7 +321,7 @@ describe('Logger DI Integration', () => {
       expect(stdoutWriteSpy).toHaveBeenCalledTimes(3);
 
       const records = stdoutWriteSpy.mock.calls.map((call) => {
-        const line = call[0] as string;
+        const line = call[0];
         return parseLogRecord(line);
       });
 
@@ -341,7 +342,7 @@ describe('Logger DI Integration', () => {
       const child = parent.child({ correlationId: 'corr-456-def' });
       child.info('test message');
 
-      const written = stdoutWriteSpy.mock.calls[0]?.[0] as string;
+      const written = stdoutWriteSpy.mock.calls[0]?.[0];
       const record = parseLogRecord(written);
 
       expect(record).toHaveProperty('TraceId');
@@ -409,7 +410,7 @@ describe('Logger DI Integration', () => {
       logger.error('message 3');
 
       const records = stdoutWriteSpy.mock.calls.map((call) => {
-        const line = call[0] as string;
+        const line = call[0];
         return parseLogRecord(line);
       });
 
@@ -431,8 +432,8 @@ describe('Logger DI Integration', () => {
 
       logger.info('test message');
 
-      const stdoutLine = stdoutWriteSpy.mock.calls[0]?.[0] as string;
-      const fileLine = fileWriteSpy.mock.calls[0]?.[0] as string;
+      const stdoutLine = stdoutWriteSpy.mock.calls[0]?.[0];
+      const fileLine = fileWriteSpy.mock.calls[0]?.[0];
 
       const stdoutRecord = parseLogRecord(stdoutLine);
       const fileRecord = parseLogRecord(fileLine);

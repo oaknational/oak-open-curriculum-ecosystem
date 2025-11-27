@@ -9,6 +9,7 @@
  */
 
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { MachineAuthObject } from '@clerk/backend';
 import type { Request } from 'express';
 
 /**
@@ -30,18 +31,19 @@ export type { MachineAuthObject } from '@clerk/backend';
 export type TokenVerifier = (token: string, req: Request) => Promise<AuthInfo | undefined>;
 
 /**
- * Augment Express Request interface to include auth property.
+ * Augment Express Request interface to include auth property from Clerk.
  * This declaration merging allows TypeScript to recognize req.auth throughout the application.
+ * Clerk's clerkMiddleware() sets this to the authentication object.
  */
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace -- Required for Express Request augmentation
   namespace Express {
     interface Request {
       /**
-       * Authentication information attached to the request after successful OAuth token verification.
-       * Contains token, scopes, clientId, and optional extra data like userId.
+       * Authentication context set by Clerk's clerkMiddleware().
+       * Contains userId, sessionId, and other Clerk auth properties.
        */
-      auth?: AuthInfo;
+      auth?: MachineAuthObject<'oauth_token'>;
     }
   }
 }

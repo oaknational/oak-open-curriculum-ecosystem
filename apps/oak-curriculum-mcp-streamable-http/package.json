@@ -9,7 +9,8 @@
     "build": "tsup",
     "clean": "rm -rf dist .turbo",
     "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
-    "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
+    "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
+    "dev:observe:noauth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-noauth-$(date +%Y%m%d-%H%M%S).log",
     "start": "node dist/src/index.js",
     "prod:harness": "node scripts/server-harness.js",
     "prod:requests": "node scripts/run-requests.js",
@@ -40,6 +41,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-list-routes": "^1.3.1",
+    "jsonwebtoken": "^9.0.2",
     "zod": "^4"
   },
   "devDependencies": {
@@ -47,13 +49,14 @@
     "@playwright/test": "^1.48.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22",
-    "eslint": "^9.35.0",
+    "eslint": "^9.39.1",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.12"
   },
   "engines": {
     "node": ">=22.0.0"

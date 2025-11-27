@@ -105,6 +105,14 @@ export const getRateLimit = {
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'noauth' }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Rate Limit",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

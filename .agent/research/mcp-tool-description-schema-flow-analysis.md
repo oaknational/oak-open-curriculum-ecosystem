@@ -1047,7 +1047,7 @@ if (!parsed.success) {
 
 ### 7.3 Testing Strategy
 
-**Reference**: `docs/agent-guidance/testing-strategy.md`
+**Reference**: `.agent/directives-and-memory/testing-strategy.md`
 
 | Principle                               | Status                | Evidence                        |
 | --------------------------------------- | --------------------- | ------------------------------- |

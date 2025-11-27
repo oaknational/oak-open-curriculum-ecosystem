@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import type { JSX } from 'react';
 import { vi } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from './structured/StructuredSearch';
@@ -11,7 +12,7 @@ import { createLightTheme } from '../themes/light';
 import { mockMatchMedia as createMockMatchMedia } from './mock-match-media';
 import SearchPageClient from './SearchPageClient';
 
-export const refreshMock = vi.fn();
+export const refreshMock = vi.fn<AppRouterInstance['refresh']>();
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ refresh: refreshMock }),

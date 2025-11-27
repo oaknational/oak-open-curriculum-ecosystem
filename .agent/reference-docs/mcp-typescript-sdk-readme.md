@@ -38,6 +38,7 @@
     - [Improving Network Efficiency with Notification Debouncing](#improving-network-efficiency-with-notification-debouncing)
     - [Low-Level Server](#low-level-server)
     - [Eliciting User Input](#eliciting-user-input)
+    - [Eliciting URL Actions](#eliciting-url-actions)
     - [Writing MCP Clients](#writing-mcp-clients)
     - [Proxy Authorization Requests Upstream](#proxy-authorization-requests-upstream)
     - [Backwards Compatibility](#backwards-compatibility)
@@ -52,7 +53,7 @@
 ## Overview
 
 The Model Context Protocol allows applications to provide context for LLMs in a standardized way, separating the concerns of providing context from the actual LLM interaction. This TypeScript SDK implements
-[the full MCP specification](https://modelcontextprotocol.io/specification/latest), making it easy to:
+[the full MCP specification](https://modelcontextprotocol.io/specification/draft), making it easy to:
 
 - Create MCP servers that expose resources, prompts and tools
 - Build MCP clients that can connect to any MCP server
@@ -61,8 +62,10 @@ The Model Context Protocol allows applications to provide context for LLMs in a 
 ## Installation
 
 ```bash
-npm install @modelcontextprotocol/sdk
+npm install @modelcontextprotocol/sdk zod
 ```
+
+This SDK has a **required peer dependency** on `zod` for schema validation. The SDK internally imports from `zod/v4`, but maintains backwards compatibility with projects using Zod v3.25 or later. You can use either API in your code by importing from `zod/v3` or `zod/v4`:
 
 ## Quick Start
 
@@ -72,7 +75,7 @@ Let's create a simple MCP server that exposes a calculator tool and some data. S
 import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 // Create an MCP server
 const server = new McpServer({
@@ -146,7 +149,7 @@ app
   });
 ```
 
-Install the deps with `npm install @modelcontextprotocol/sdk express zod@3`, and run with `npx -y tsx server.ts`.
+Install the deps with `npm install @modelcontextprotocol/sdk express zod`, and run with `npx -y tsx server.ts`.
 
 You can connect to it using any MCP client that supports streamable http, such as:
 
@@ -172,7 +175,7 @@ const server = new McpServer({
 
 ### Tools
 
-[Tools](https://modelcontextprotocol.io/specification/latest/server/tools) let LLMs take actions through your server. Tools can perform computation, fetch data and have side effects. Tools should be designed to be model-controlled - i.e. AI models will decide which tools to call,
+[Tools](https://modelcontextprotocol.io/specification/draft/server/tools) let LLMs take actions through your server. Tools can perform computation, fetch data and have side effects. Tools should be designed to be model-controlled - i.e. AI models will decide which tools to call,
 and the arguments.
 
 ```typescript
@@ -273,7 +276,7 @@ Tools can return `ResourceLink` objects to reference resources without embedding
 
 ### Resources
 
-[Resources](https://modelcontextprotocol.io/specification/latest/server/resources) can also expose data to LLMs, but unlike tools shouldn't perform significant computation or have side effects.
+[Resources](https://modelcontextprotocol.io/specification/draft/server/resources) can also expose data to LLMs, but unlike tools shouldn't perform significant computation or have side effects.
 
 Resources are designed to be used in an application-driven way, meaning MCP client applications can decide how to expose them. For example, a client could expose a resource picker to the human, or could expose them to the model directly.
 
@@ -347,7 +350,7 @@ server.registerResource(
 
 ### Prompts
 
-[Prompts](https://modelcontextprotocol.io/specification/latest/server/prompts) are reusable templates that help humans prompt models to interact with your server. They're designed to be user-driven, and might appear as slash commands in a chat interface.
+[Prompts](https://modelcontextprotocol.io/specification/draft/server/prompts) are reusable templates that help humans prompt models to interact with your server. They're designed to be user-driven, and might appear as slash commands in a chat interface.
 
 ```typescript
 import { completable } from '@modelcontextprotocol/sdk/server/completable.js';
@@ -493,7 +496,7 @@ MCP servers can request LLM completions from connected clients that support samp
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 const mcpServer = new McpServer({
   name: 'tools-with-sample-server',
@@ -580,7 +583,7 @@ For most use cases where session management isn't needed:
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 const app = express();
 app.use(express.json());
@@ -817,7 +820,7 @@ A simple server demonstrating resources, tools, and prompts:
 
 ```typescript
 import { McpServer, ResourceTemplate } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 const server = new McpServer({
   name: 'echo-server',
@@ -887,7 +890,7 @@ A more complex example showing database integration:
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import sqlite3 from 'sqlite3';
 import { promisify } from 'util';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 const server = new McpServer({
   name: 'sqlite-explorer',
@@ -982,7 +985,7 @@ If you want to offer an initial set of tools/prompts/resources, but later add ad
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express from 'express';
-import { z } from 'zod';
+import * as z from 'zod/v4';
 
 const server = new McpServer({
   name: 'Dynamic Example',
@@ -1199,7 +1202,7 @@ await server.connect(transport);
 
 ### Eliciting User Input
 
-MCP servers can request additional information from users through the elicitation feature. This is useful for interactive workflows where the server needs user input or confirmation:
+MCP servers can request non-sensitive information from users through the form elicitation capability. This is useful for interactive workflows where the server needs user input or confirmation:
 
 ```typescript
 // Server-side: Restaurant booking tool that asks for alternatives
@@ -1232,6 +1235,7 @@ server.registerTool(
     if (!available) {
       // Ask user if they want to try alternative dates
       const result = await server.server.elicitInput({
+        mode: 'form',
         message: `No tables available at ${restaurant} on ${date}. Would you like to check alternative dates?`,
         requestedSchema: {
           type: 'object',
@@ -1303,7 +1307,7 @@ server.registerTool(
 );
 ```
 
-Client-side: Handle elicitation requests
+On the client side, handle form elicitation requests:
 
 ```typescript
 // This is a placeholder - implement based on your UI framework
@@ -1331,7 +1335,88 @@ client.setRequestHandler(ElicitRequestSchema, async (request) => {
 });
 ```
 
-**Note**: Elicitation requires client support. Clients must declare the `elicitation` capability during initialization.
+When calling `server.elicitInput`, prefer to explicitly set `mode: 'form'` for new code. Omitting the mode continues to work for backwards compatibility and defaults to form elicitation.
+
+Elicitation is a client capability. Clients must declare the `elicitation` capability during initialization:
+
+```typescript
+const client = new Client(
+  {
+    name: 'example-client',
+    version: '1.0.0',
+  },
+  {
+    capabilities: {
+      elicitation: {
+        form: {},
+      },
+    },
+  },
+);
+```
+
+**Note**: Form elicitation **must** only be used to gather non-sensitive information. For sensitive information such as API keys or secrets, use URL elicitation instead.
+
+### Eliciting URL Actions
+
+MCP servers can prompt the user to perform a URL-based action through URL elicitation. This is useful for securely gathering sensitive information such as API keys or secrets, or for redirecting users to secure web-based flows.
+
+```typescript
+// Server-side: Prompt the user to navigate to a URL
+const result = await server.server.elicitInput({
+  mode: 'url',
+  message: 'Please enter your API key',
+  elicitationId: '550e8400-e29b-41d4-a716-446655440000',
+  url: 'http://localhost:3000/api-key',
+});
+
+// Alternative, return an error from within a tool:
+throw new UrlElicitationRequiredError([
+  {
+    mode: 'url',
+    message: 'This tool requires a payment confirmation. Open the link to confirm payment!',
+    url: `http://localhost:${MCP_PORT}/confirm-payment?session=${sessionId}&elicitation=${elicitationId}&cartId=${encodeURIComponent(cartId)}`,
+    elicitationId: '550e8400-e29b-41d4-a716-446655440000',
+  },
+]);
+```
+
+On the client side, handle URL elicitation requests:
+
+```typescript
+client.setRequestHandler(ElicitRequestSchema, async (request) => {
+  if (request.params.mode !== 'url') {
+    throw new McpError(
+      ErrorCode.InvalidParams,
+      `Unsupported elicitation mode: ${request.params.mode}`,
+    );
+  }
+
+  // At a minimum, implement a UI that:
+  // - Display the full URL and server reason to prevent phishing
+  // - Explicitly ask the user for consent, with clear decline/cancel options
+  // - Open the URL in the system (not embedded) browser
+  // Optionally, listen for a `nofifications/elicitation/complete` message from the server
+});
+```
+
+Elicitation is a client capability. Clients must declare the `elicitation` capability during initialization:
+
+```typescript
+const client = new Client(
+  {
+    name: 'example-client',
+    version: '1.0.0',
+  },
+  {
+    capabilities: {
+      elicitation: {
+        url: {},
+      },
+    },
+  },
+);
+```
 
 ### Writing MCP Clients
 

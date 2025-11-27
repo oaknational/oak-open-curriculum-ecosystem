@@ -22,7 +22,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
   const openApiDocWithPaths: Parameters<typeof generateZodClientFromOpenAPI>[0]['openApiDoc'] =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition, so we have to pretend that paths are no optional
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: openapi-zod-client uses an outdated PathsObject definition, so we have to pretend that paths are no optional
     openApiDoc as OpenAPIObject & { paths: PathsObject };
 
   const methodAndPathToOperationId = new Map<string, string>();

@@ -101,10 +101,18 @@ export const getKeyStages = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns all the key stages (titles and slugs) that are currently available on Oak",
+  description: "Key stages\n\nThis tool returns all the key stages (titles and slugs) that are currently available on Oak",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Key Stages",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

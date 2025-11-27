@@ -13,5 +13,11 @@
     "*.config.ts",
     "vitest.e2e.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "temp-secrets", "smoke-tests"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "temp-secrets",
+    "smoke-tests",
+    "../../.agent/reference-docs/**"
+  ]
 }

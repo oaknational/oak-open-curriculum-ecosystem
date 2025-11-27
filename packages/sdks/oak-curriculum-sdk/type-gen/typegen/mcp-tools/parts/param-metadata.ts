@@ -9,6 +9,8 @@ export interface ParamMetadata {
   readonly allowedValues?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  /** Example value from OpenAPI schema for AI agent guidance */
+  readonly example?: unknown;
 }
 
 export type ParamMetadataMap = Record<string, ParamMetadata>;
@@ -21,5 +23,6 @@ export function createMutableParamMetadata(metadata: ParamMetadata): ParamMetada
     allowedValues: metadata.allowedValues,
     description: metadata.description,
     default: metadata.default,
+    example: metadata.example,
   };
 }

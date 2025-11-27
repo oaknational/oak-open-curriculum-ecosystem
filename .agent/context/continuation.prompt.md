@@ -36,7 +36,7 @@ When resuming work, read these documents in order:
 3. **`.agent/context/context.md`** – Recent changes and current status
 4. **`.agent/plans/mcp-oauth-implementation-plan.md`** – Detailed Phase 2 sessions with acceptance criteria
 5. **`.agent/directives-and-memory/rules.md`** – Cardinal rules (MUST follow)
-6. **`docs/agent-guidance/testing-strategy.md`** – TDD workflow (Red → Green → Refactor)
+6. **`.agent/directives-and-memory/testing-strategy.md`** – TDD workflow (Red → Green → Refactor)
 
 **Before starting work**:
 
@@ -2004,7 +2004,7 @@ pnpm qg                       ✅ (Runs all above)
 | **Context**      | `.agent/context/context.md`                         | Recent changes and current status         |
 | **Handoff**      | `.agent/context/HANDOFF.md`                         | Big picture orientation                   |
 | **Rules**        | `.agent/directives-and-memory/rules.md`             | Cardinal rules (MUST follow)              |
-| **Testing**      | `docs/agent-guidance/testing-strategy.md`           | TDD workflow                              |
+| **Testing**      | `.agent/directives-and-memory/testing-strategy.md`  | TDD workflow                              |
 | **Logger**       | `packages/libs/logger/README.md`                    | Logger API and usage                      |
 | **HTTP Server**  | `apps/oak-curriculum-mcp-streamable-http/README.md` | HTTP server docs                          |
 | **Stdio Server** | `apps/oak-curriculum-mcp-stdio/README.md`           | Stdio server docs                         |

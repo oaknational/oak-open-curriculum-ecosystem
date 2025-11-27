@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { Mock } from 'vitest';
 import express, { type Express, type NextFunction, type Request, type Response } from 'express';
 import request from 'supertest';
 import {
@@ -14,7 +15,7 @@ import { createCorrelationMiddleware } from './correlation/middleware';
 describe('HTTP Error Handling Integration', () => {
   let app: Express;
   let logger: Logger;
-  let logSpy: ReturnType<typeof vi.spyOn>;
+  let logSpy: Mock<Logger['error']>;
 
   beforeEach(() => {
     // Create logger with spy

@@ -1,4 +1,5 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { z } from 'zod';
 import {
   toolNames,
   isToolName,
@@ -6,6 +7,7 @@ import {
   type ToolDescriptorForName,
   getToolFromToolName,
 } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { SecurityScheme } from '../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import {
@@ -19,16 +21,80 @@ import {
 import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggregated-search.js';
 import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
 
-const AGGREGATED_TOOL_DEFS = {
+/**
+ * Type guard for ZodObject.
+ *
+ * Uses instanceof check to safely determine if a Zod schema is a ZodObject,
+ * which has a `.shape` property. This enables safe access to the shape for
+ * MCP SDK registration.
+ *
+ * @param schema - Zod schema to check
+ * @returns True if schema is a ZodObject with accessible shape
+ */
+function isZodObject(schema: z.ZodTypeAny): schema is z.ZodObject<z.ZodRawShape> {
+  return schema instanceof z.ZodObject;
+}
+
+/**
+ * Safely extract the shape from a Zod schema if it's a ZodObject.
+ *
+ * All generated toolMcpFlatInputSchema values are ZodObjects, so this will
+ * always return the shape. Returns undefined for non-object schemas or
+ * if the schema is undefined (e.g., in test mocks).
+ *
+ * @param schema - Generated flat Zod schema, may be undefined in tests
+ * @returns The ZodRawShape if schema is a ZodObject, undefined otherwise
+ */
+function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | undefined {
+  if (schema && isZodObject(schema)) {
+    return schema.shape;
+  }
+  return undefined;
+}
+
+/**
+ * Aggregated tool definitions with MCP metadata.
+ *
+ * These tools combine multiple API calls into a single operation.
+ * Annotations match generated tools: read-only, non-destructive, idempotent.
+ *
+ * @remarks Security metadata is manual until Phase 0 (comprehensive-mcp-enhancement-plan.md)
+ * moves aggregated tools to generated code.
+ */
+/**
+ * Aggregated tool definitions.
+ *
+ * Descriptions follow git commit message format:
+ * - First line: short summary
+ * - Blank line
+ * - Remaining: detailed description
+ */
+export const AGGREGATED_TOOL_DEFS = {
   search: {
     description:
-      'Search across lessons and transcripts. Executes get-search-lessons and get-search-transcripts.',
+      'Search across lessons and transcripts\n\nExecutes get-search-lessons and get-search-transcripts in parallel, combining results. Use filters (keyStage, subject, unit) to narrow results.',
     inputSchema: SEARCH_INPUT_SCHEMA,
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+      title: 'Search',
+    },
   },
   fetch: {
     description:
-      'Fetch lesson, unit, subject, sequence, or thread metadata by canonical identifier.',
+      'Fetch curriculum resource by canonical identifier\n\nRetrieves lesson, unit, subject, sequence, or thread metadata. Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").',
     inputSchema: FETCH_INPUT_SCHEMA,
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+      title: 'Fetch',
+    },
   },
 } as const;
 
@@ -39,12 +105,48 @@ type GeneratedToolInputSchema = ToolDescriptorForName<ToolName>['inputSchema'];
 type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolName]['inputSchema'];
 export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
 
+/**
+ * MCP tool annotations providing hints about tool behavior.
+ *
+ * All Oak curriculum tools are read-only GET operations.
+ *
+ * @remarks The index signature is required for compatibility with MCP SDK's
+ * ToolAnnotations type which allows arbitrary extension properties.
+ */
+export interface ToolAnnotations {
+  readonly [x: string]: unknown;
+  readonly readOnlyHint?: boolean;
+  readonly destructiveHint?: boolean;
+  readonly idempotentHint?: boolean;
+  readonly openWorldHint?: boolean;
+  readonly title?: string;
+}
+
+/**
+ * Entry in the universal tools list for MCP registration.
+ *
+ * Contains both JSON Schema (for backwards compatibility) and Zod schema
+ * (for MCP SDK registration with proper parameter descriptions).
+ */
 export interface UniversalToolListEntry {
   readonly name: UniversalToolName;
   readonly description?: string;
+  /** JSON Schema for tool inputs (kept for backwards compatibility) */
   readonly inputSchema: UniversalToolInputSchema;
+  /**
+   * Zod raw shape for MCP SDK registerTool().
+   *
+   * Generated Zod schemas include .describe() calls that preserve
+   * parameter descriptions through the SDK's zodToJsonSchema conversion.
+   * Undefined for aggregated tools (which use JSON Schema only).
+   *
+   * @remarks Use this instead of converting inputSchema to avoid information loss.
+   */
+  readonly flatZodSchema?: z.ZodRawShape;
+  readonly securitySchemes?: readonly SecurityScheme[];
+  readonly annotations?: ToolAnnotations;
 }
-function isAggregatedToolName(value: unknown): value is AggregatedToolName {
+export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
   return value === 'search' || value === 'fetch';
 }
 
@@ -56,12 +158,27 @@ function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
   return formatData({ status: outcome.status, data: outcome.data });
 }
 
+/**
+ * Lists all available MCP tools with their metadata.
+ *
+ * Returns both aggregated tools (search, fetch) and generated tools
+ * from the OpenAPI schema, all with proper MCP annotations.
+ *
+ * Generated tools include `flatZodSchema` which contains .describe() calls
+ * that preserve parameter descriptions through the MCP SDK's zodToJsonSchema
+ * conversion. Aggregated tools don't have this (they use JSON Schema directly).
+ *
+ * @returns Array of tool entries with name, description, schema, security, and annotations
+ */
 export function listUniversalTools(): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
     (name) => ({
       name,
       description: AGGREGATED_TOOL_DEFS[name].description,
       inputSchema: AGGREGATED_TOOL_DEFS[name].inputSchema,
+      // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
+      securitySchemes: AGGREGATED_TOOL_DEFS[name].securitySchemes,
+      annotations: AGGREGATED_TOOL_DEFS[name].annotations,
     }),
   );
 
@@ -71,6 +188,10 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       name,
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
+      // Use generated Zod schema which includes .describe() for parameter descriptions
+      flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
+      securitySchemes: descriptor.securitySchemes,
+      annotations: descriptor.annotations,
     };
   });
 

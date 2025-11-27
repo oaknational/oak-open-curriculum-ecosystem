@@ -30,9 +30,9 @@ export interface ToolPathParams {
  * Query parameters derived from the OpenAPI schema.
  */
 export interface ToolQueryParams {
-  /** Default: 0 */
+  /** If limiting results returned, this allows you to return the next set of results, starting at the given offset point Default: 0 */
   readonly offset?: number;
-  /** Default: 10 */
+  /** Limit the number of lessons, e.g. return a maximum of 100 lessons Default: 10 */
   readonly limit?: number;
 }
 export interface ToolParams {
@@ -42,11 +42,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}} as const, additionalProperties: false as const, required: ["keyStage","subject"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ keyStage: z.union([z.literal("ks1"), z.literal("ks2"), z.literal("ks3"), z.literal("ks4")]), subject: z.union([z.literal("art"), z.literal("citizenship"), z.literal("computing"), z.literal("cooking-nutrition"), z.literal("design-technology"), z.literal("english"), z.literal("french"), z.literal("geography"), z.literal("german"), z.literal("history"), z.literal("maths"), z.literal("music"), z.literal("physical-education"), z.literal("religious-education"), z.literal("rshe-pshe"), z.literal("science"), z.literal("spanish")]) }), query: z.object({ offset: z.number().optional(), limit: z.number().optional() }).optional() }) });
-export const toolMcpFlatInputSchema = z.object({ keyStage: z.union([z.literal("ks1"), z.literal("ks2"), z.literal("ks3"), z.literal("ks4")]), subject: z.union([z.literal("art"), z.literal("citizenship"), z.literal("computing"), z.literal("cooking-nutrition"), z.literal("design-technology"), z.literal("english"), z.literal("french"), z.literal("geography"), z.literal("german"), z.literal("history"), z.literal("maths"), z.literal("music"), z.literal("physical-education"), z.literal("religious-education"), z.literal("rshe-pshe"), z.literal("science"), z.literal("spanish")]), offset: z.number().optional(), limit: z.number().optional() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","examples":["ks1"],"enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here","examples":["art"],"enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","description":"If limiting results returned, this allows you to return the next set of results, starting at the given offset point","default":0,"examples":[50]},"limit":{"type":"number","description":"Limit the number of lessons, e.g. return a maximum of 100 lessons","default":10,"examples":[10]}} as const, additionalProperties: false as const, required: ["keyStage","subject"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ keyStage: z.enum(["ks1", "ks2", "ks3", "ks4"] as const).describe("Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase"), subject: z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"] as const).describe("Subject slug to search by, e.g. 'science' - note that casing is important here") }), query: z.object({ offset: z.number().describe("If limiting results returned, this allows you to return the next set of results, starting at the given offset point").optional(), limit: z.number().describe("Limit the number of lessons, e.g. return a maximum of 100 lessons").optional() }).optional() }) });
+export const toolMcpFlatInputSchema = z.object({ keyStage: z.enum(["ks1", "ks2", "ks3", "ks4"] as const).describe("Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase"), subject: z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"] as const).describe("Subject slug to search by, e.g. 'science' - note that casing is important here"), offset: z.number().describe("If limiting results returned, this allows you to return the next set of results, starting at the given offset point").optional(), limit: z.number().describe("Limit the number of lessons, e.g. return a maximum of 100 lessons").optional() });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","examples":["ks1"],"enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here","examples":["art"],"enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","description":"If limiting results returned, this allows you to return the next set of results, starting at the given offset point","default":0,"examples":[50]},"limit":{"type":"number","description":"Limit the number of lessons, e.g. return a maximum of 100 lessons","default":10,"examples":[10]}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -131,10 +131,18 @@ export const getKeyStagesSubjectQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
+  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Key Stages Subject Questions",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

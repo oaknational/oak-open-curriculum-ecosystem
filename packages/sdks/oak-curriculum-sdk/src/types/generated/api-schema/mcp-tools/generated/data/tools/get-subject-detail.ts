@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The slug identifier for the subject"}} as const, additionalProperties: false as const, required: ["subject"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ subject: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The slug identifier for the subject","examples":["art"]}} as const, additionalProperties: false as const, required: ["subject"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string().describe("The slug identifier for the subject") }) }) });
+export const toolMcpFlatInputSchema = z.object({ subject: z.string().describe("The slug identifier for the subject") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The slug identifier for the subject"}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The slug identifier for the subject","examples":["art"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getSubjectDetail = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns the sequences, key stages and years that are currently available for a given subject.",
+  description: "Subject\n\nThis tool returns the sequences, key stages and years that are currently available for a given subject.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Subject Detail",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

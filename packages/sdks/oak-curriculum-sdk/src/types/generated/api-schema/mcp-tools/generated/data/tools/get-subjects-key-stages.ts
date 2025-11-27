@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The subject slug identifier"}} as const, additionalProperties: false as const, required: ["subject"] };
-export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ subject: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The subject slug identifier","examples":["art"]}} as const, additionalProperties: false as const, required: ["subject"] };
+export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string().describe("The subject slug identifier") }) }) });
+export const toolMcpFlatInputSchema = z.object({ subject: z.string().describe("The subject slug identifier") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The subject slug identifier"}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The subject slug identifier","examples":["art"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getSubjectsKeyStages = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "This tool returns a list of key stages that are currently available for a given subject.",
+  description: "Key stages within a subject\n\nThis tool returns a list of key stages that are currently available for a given subject.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Subjects Key Stages",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

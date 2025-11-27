@@ -6,24 +6,28 @@ interface JsonSchemaPropertyString {
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 }
 interface JsonSchemaPropertyNumber {
   readonly type: 'number';
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 }
 interface JsonSchemaPropertyBoolean {
   readonly type: 'boolean';
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 }
 interface JsonSchemaPropertyArray {
   readonly type: 'array';
   readonly items: JsonSchemaProperty;
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 }
 interface JsonSchemaPropertyObject {
   readonly type: 'object';
@@ -32,6 +36,7 @@ interface JsonSchemaPropertyObject {
   readonly additionalProperties?: boolean;
   readonly description?: string;
   readonly default?: unknown;
+  readonly examples?: readonly unknown[];
 }
 type JsonSchemaProperty =
   | JsonSchemaPropertyString
@@ -50,8 +55,16 @@ export interface GenericToolInputJsonSchema {
 // Backwards-compatible alias used by generated files
 export type ToolInputJsonSchema = GenericToolInputJsonSchema;
 
+function isNonEmptyStringArray(arr: readonly string[]): arr is [string, ...string[]] {
+  return arr.length > 0;
+}
+
 function buildEnumStringSchema(values: readonly unknown[]): z.ZodTypeAny {
   const allowed = values.map((v) => String(v));
+  // Use z.enum() for proper JSON Schema conversion (produces "enum" array instead of just "type": "string")
+  if (isNonEmptyStringArray(allowed)) {
+    return z.enum(allowed);
+  }
   return z.string().refine((v) => allowed.includes(v), { message: 'Invalid enum value' });
 }
 
@@ -76,14 +89,16 @@ function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodTypeAny {
   return prop.additionalProperties === false ? objectSchema.strict() : objectSchema;
 }
 
-function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
+function withDescription(schema: z.ZodTypeAny, description: string | undefined): z.ZodTypeAny {
+  return description ? schema.describe(description) : schema;
+}
+
+function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
   switch (prop.type) {
-    case 'string': {
+    case 'string':
       return Array.isArray(prop.enum) ? buildEnumStringSchema(prop.enum) : z.string();
-    }
-    case 'number': {
+    case 'number':
       return Array.isArray(prop.enum) ? buildEnumNumberSchema(prop.enum) : z.number();
-    }
     case 'boolean':
       return z.boolean();
     case 'array':
@@ -93,6 +108,10 @@ function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
     default:
       return z.any();
   }
+}
+
+function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
+  return withDescription(zodBaseForProperty(prop), prop.description);
 }
 
 /**

@@ -126,6 +126,7 @@ describe('typegen-core', () => {
         data: {
           'definitions.ts': 'definitions content',
           'index.ts': 'data index content',
+          'scopes-supported.ts': 'scopes supported content',
           tools: {
             'alpha.ts': 'alpha tool content',
           },

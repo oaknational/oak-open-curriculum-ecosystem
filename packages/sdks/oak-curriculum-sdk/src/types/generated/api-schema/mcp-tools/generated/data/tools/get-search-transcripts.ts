@@ -30,11 +30,11 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}} as const, additionalProperties: false as const, required: ["q"] };
-export const toolZodSchema = z.object({ params: z.object({ query: z.object({ q: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ q: z.string() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts","examples":["Who were the romans?"]}} as const, additionalProperties: false as const, required: ["q"] };
+export const toolZodSchema = z.object({ params: z.object({ query: z.object({ q: z.string().describe("A snippet of text to search for in the lesson video transcripts") }) }) });
+export const toolMcpFlatInputSchema = z.object({ q: z.string().describe("A snippet of text to search for in the lesson video transcripts") });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}},"additionalProperties":false,"required":["q"]}\nRequired: q';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts","examples":["Who were the romans?"]}},"additionalProperties":false,"required":["q"]}\nRequired: q';
 export const describeToolArgs = () => toolArgsDescription;
 /**
  * Transform flat MCP arguments to nested SDK format.
@@ -114,10 +114,18 @@ export const getSearchTranscripts = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
+  description: "Lesson search using lesson video transcripts\n\nSearch for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
   path,
   method,
   documentedStatuses,
+  securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+    title: "Get Search Transcripts",
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

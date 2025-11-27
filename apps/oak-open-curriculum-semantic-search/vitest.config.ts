@@ -32,5 +32,4 @@ export default defineConfig({
       ],
     },
   },
-  // No TS path aliases; use relative imports to match workspace policy
 });

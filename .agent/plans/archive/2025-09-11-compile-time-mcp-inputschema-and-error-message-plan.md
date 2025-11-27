@@ -8,7 +8,7 @@ Owner: Engineering (MCP/Oak SDK)
 - GO.md (root)
 - .agent/directives-and-memory/rules.md
 - docs/agent-guidance/typescript-practice.md
-- docs/agent-guidance/testing-strategy.md
+- .agent/directives-and-memory/testing-strategy.md
 - docs/agent-guidance/development-practice.md
 
 ## Context and Problem Statement

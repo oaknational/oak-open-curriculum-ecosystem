@@ -27,6 +27,11 @@ export {
 } from '../types/generated/api-schema/mcp-tools/index.js';
 
 export {
+  SCOPES_SUPPORTED,
+  type ScopesSupported,
+} from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
+
+export {
   McpToolRegistry,
   attachMcpHandlers,
   createMcpToolRegistry,
@@ -39,6 +44,12 @@ export {
   assertStubAvailable,
 } from '../mcp/stub-tool-executor.js';
 export type { StubbedToolName } from '../types/generated/api-schema/mcp-tools/generated/stubs/index.js';
+export type {
+  SecurityScheme,
+  SecuritySchemeType,
+  NoAuthScheme,
+  OAuth2Scheme,
+} from '../types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
 
 export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
@@ -51,7 +62,9 @@ export {
 export {
   listUniversalTools,
   isUniversalToolName,
+  isAggregatedToolName,
   createUniversalToolExecutor,
+  AGGREGATED_TOOL_DEFS,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,

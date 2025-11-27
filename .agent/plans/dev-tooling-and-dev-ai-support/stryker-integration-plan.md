@@ -5,7 +5,7 @@
 - [GO.md](../../GO.md)
 - [.agent/directives-and-memory/AGENT.md](../../.agent/directives-and-memory/AGENT.md)
 - [.agent/directives-and-memory/rules.md](../../.agent/directives-and-memory/rules.md)
-- [docs/agent-guidance/testing-strategy.md](../../docs/agent-guidance/testing-strategy.md)
+- [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
 
 ## Intent
 
@@ -86,7 +86,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ### 5. Workspace Readiness Checklist
 
-- **Pure function emphasis**: Reaffirm TDD and pure-function-first expectations per `docs/agent-guidance/testing-strategy.md` so mutants fail meaningfully.
+- **Pure function emphasis**: Reaffirm TDD and pure-function-first expectations per `.agent/directives-and-memory/testing-strategy.md` so mutants fail meaningfully.
 - **Test determinism**: Verify suites avoid flaky timing, uncontrolled IO, or reliance on global state that could mask mutants.
 - **Resource constraints**: Profile long-running suites to gauge mutation-testing feasibility and identify candidates for selective mutant scopes.
 - **Command wiring**: Ensure each workspace adds a `mutate` script that runs `stryker run` with its local config before enabling the Turbo pipeline.

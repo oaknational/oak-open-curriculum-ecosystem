@@ -119,7 +119,7 @@ Following Oak's accessibility standards:
 
 - [High-level overview](../semantic-search-overview.md)
 - [Search service plans](../search-service/index.md)
-- [Testing strategy](../../../docs/agent-guidance/testing-strategy.md)
+- [Testing strategy](../../../.agent/directives-and-memory/testing-strategy.md)
 
 ## Historical Context
 

@@ -38,7 +38,7 @@ Comprehensive documentation for AI agents working with this codebase:
 - [Experimental Architecture Quick Reference](agent-guidance/experimental-architecture-quick-reference.md) - Concrete examples of our approach
 - [Development Practice](agent-guidance/development-practice.md) - Code standards and workflow
 - [TypeScript Practice](agent-guidance/typescript-practice.md) - Type safety guidelines
-- [Testing Strategy](agent-guidance/testing-strategy.md) - TDD/BDD approach
+- [Testing Strategy](../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
 - [Safety and Security](agent-guidance/safety-and-security.md) - Security measures and privacy protection
 - [Understanding Agent References](agent-guidance/understanding-agent-references.md) - How to use curated docs
 
