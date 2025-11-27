@@ -88,6 +88,31 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.openWorldHint).toBe(false);
     expect(annotations?.title).toBe('Fetch');
   });
+
+  it('get-ontology tool has correct annotations', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find(findToolByName('get-ontology'));
+
+    expect(ontologyTool).toBeDefined();
+    const annotations = ontologyTool?.annotations;
+    expect(annotations?.readOnlyHint).toBe(true);
+    expect(annotations?.destructiveHint).toBe(false);
+    expect(annotations?.idempotentHint).toBe(true);
+    expect(annotations?.openWorldHint).toBe(false);
+    expect(annotations?.title).toBe('Get Curriculum Ontology');
+  });
+
+  it('get-ontology tool has OpenAI _meta fields', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find(findToolByName('get-ontology'));
+
+    expect(ontologyTool).toBeDefined();
+    expect(ontologyTool?._meta).toBeDefined();
+    expect(ontologyTool?._meta?.['openai/toolInvocation/invoking']).toBe(
+      'Loading curriculum model…',
+    );
+    expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
+  });
 });
 
 /** Helper to find a tool by name, reducing complexity in test functions */

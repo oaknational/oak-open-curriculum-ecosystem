@@ -46,6 +46,8 @@ export function overrideToolsListHandler(server: McpServer): void {
         description: tool.description,
         inputSchema: tool.inputSchema,
         annotations: tool.annotations,
+        // Include _meta for OpenAI Apps SDK invocation status (when present)
+        ...(tool._meta ? { _meta: tool._meta } : {}),
       })),
     });
   });

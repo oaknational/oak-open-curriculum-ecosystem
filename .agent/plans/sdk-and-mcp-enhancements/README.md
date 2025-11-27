@@ -88,7 +88,7 @@ Covers architecture evolution and advanced MCP capabilities:
 Plan 00 (POC)  →  Plan 02 (Full Ontology)  →  Upstream API /ontology
     ↓                    ↓
   Validates          Replaces POC
-  
+
 Plan 01 (Metadata)     Plan 02 (Ontology)
        ↘                 ↙
     Plan 03 Phase 0

@@ -63,6 +63,8 @@ export default defineConfig({
     'src/mcp/universal-tool-shared.ts',
     'src/mcp/aggregated-search.ts',
     'src/mcp/aggregated-fetch.ts',
+    'src/mcp/aggregated-ontology.ts',
+    'src/mcp/ontology-data.ts',
     'src/mcp/universal-tools.ts',
     'src/mcp/stub-tool-executor.ts',
   ],

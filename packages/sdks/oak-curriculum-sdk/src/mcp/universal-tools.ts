@@ -20,6 +20,7 @@ import {
 } from './universal-tool-shared.js';
 import { SEARCH_INPUT_SCHEMA, validateSearchArgs, runSearchTool } from './aggregated-search.js';
 import { FETCH_INPUT_SCHEMA, validateFetchArgs, runFetchTool } from './aggregated-fetch.js';
+import { GET_ONTOLOGY_TOOL_DEF, runOntologyTool } from './aggregated-ontology.js';
 
 /**
  * Type guard for ZodObject.
@@ -57,17 +58,6 @@ function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | unde
  *
  * These tools combine multiple API calls into a single operation.
  * Annotations match generated tools: read-only, non-destructive, idempotent.
- *
- * @remarks Security metadata is manual until Phase 0 (comprehensive-mcp-enhancement-plan.md)
- * moves aggregated tools to generated code.
- */
-/**
- * Aggregated tool definitions.
- *
- * Descriptions follow git commit message format:
- * - First line: short summary
- * - Blank line
- * - Remaining: detailed description
  */
 export const AGGREGATED_TOOL_DEFS = {
   search: {
@@ -96,6 +86,7 @@ export const AGGREGATED_TOOL_DEFS = {
       title: 'Fetch',
     },
   },
+  'get-ontology': GET_ONTOLOGY_TOOL_DEF,
 } as const;
 
 type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
@@ -105,14 +96,7 @@ type GeneratedToolInputSchema = ToolDescriptorForName<ToolName>['inputSchema'];
 type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolName]['inputSchema'];
 export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
 
-/**
- * MCP tool annotations providing hints about tool behavior.
- *
- * All Oak curriculum tools are read-only GET operations.
- *
- * @remarks The index signature is required for compatibility with MCP SDK's
- * ToolAnnotations type which allows arbitrary extension properties.
- */
+/** MCP tool annotations providing hints about tool behavior. */
 export interface ToolAnnotations {
   readonly [x: string]: unknown;
   readonly readOnlyHint?: boolean;
@@ -120,6 +104,20 @@ export interface ToolAnnotations {
   readonly idempotentHint?: boolean;
   readonly openWorldHint?: boolean;
   readonly title?: string;
+}
+
+/**
+ * OpenAI Apps SDK metadata for tool descriptors.
+ *
+ * These fields are used by ChatGPT to display status during tool invocation.
+ * See: https://developers.openai.com/apps-sdk/reference
+ */
+export interface ToolMeta {
+  readonly [x: string]: unknown;
+  /** Status text shown while tool is running (≤64 chars) */
+  readonly 'openai/toolInvocation/invoking'?: string;
+  /** Status text shown after tool completes (≤64 chars) */
+  readonly 'openai/toolInvocation/invoked'?: string;
 }
 
 /**
@@ -145,9 +143,11 @@ export interface UniversalToolListEntry {
   readonly flatZodSchema?: z.ZodRawShape;
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
+  /** OpenAI Apps SDK metadata for invocation status */
+  readonly _meta?: ToolMeta;
 }
 export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
-  return value === 'search' || value === 'fetch';
+  return value === 'search' || value === 'fetch' || value === 'get-ontology';
 }
 
 function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
@@ -172,14 +172,19 @@ function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
  */
 export function listUniversalTools(): UniversalToolListEntry[] {
   const aggregatedEntries: UniversalToolListEntry[] = typeSafeKeys(AGGREGATED_TOOL_DEFS).map(
-    (name) => ({
-      name,
-      description: AGGREGATED_TOOL_DEFS[name].description,
-      inputSchema: AGGREGATED_TOOL_DEFS[name].inputSchema,
-      // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
-      securitySchemes: AGGREGATED_TOOL_DEFS[name].securitySchemes,
-      annotations: AGGREGATED_TOOL_DEFS[name].annotations,
-    }),
+    (name) => {
+      const def = AGGREGATED_TOOL_DEFS[name];
+      return {
+        name,
+        description: def.description,
+        inputSchema: def.inputSchema,
+        // Aggregated tools don't have generated Zod, so flatZodSchema is undefined
+        securitySchemes: def.securitySchemes,
+        annotations: def.annotations,
+        // Include _meta if present (for OpenAI Apps SDK invocation status)
+        _meta: '_meta' in def ? def._meta : undefined,
+      };
+    },
   );
 
   const generatedEntries: UniversalToolListEntry[] = toolNames.map((name) => {
@@ -222,6 +227,9 @@ export function createUniversalToolExecutor(
           return formatError(validation.message);
         }
         return runSearchTool(validation.value, deps);
+      }
+      if (name === 'get-ontology') {
+        return runOntologyTool();
       }
       const validation = validateFetchArgs(input);
       if (!validation.ok) {

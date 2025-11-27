@@ -101,6 +101,7 @@ describe('isUniversalToolName', () => {
   it('matches aggregated tool names', () => {
     expect(isUniversalToolName('search')).toBe(true);
     expect(isUniversalToolName('fetch')).toBe(true);
+    expect(isUniversalToolName('get-ontology')).toBe(true);
   });
 
   it('matches curriculum tool names', () => {
@@ -203,5 +204,71 @@ describe('createUniversalToolExecutor', () => {
 
     expect(result.isError).toBe(true);
     expect(result.content[0]).toEqual({ type: 'text', text: 'Execution failed' });
+  });
+
+  it('returns curriculum ontology with domain model structure', async () => {
+    const executeMcpTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
+
+    const result = await callUniversalTool('get-ontology', {});
+
+    expect(result.isError).toBeUndefined();
+    const payload = parseTextContent(result);
+    expect(payload).toHaveProperty('version');
+    expect(payload).toHaveProperty('curriculumStructure');
+    expect(payload).toHaveProperty('toolUsageGuidance');
+  });
+});
+
+describe('get-ontology tool descriptor', () => {
+  it('appears in listUniversalTools', () => {
+    const tools = listUniversalTools();
+    const names = tools.map((tool) => tool.name as string);
+    expect(names).toContain('get-ontology');
+  });
+
+  it('has readOnlyHint annotation set to true', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?.annotations?.readOnlyHint).toBe(true);
+  });
+
+  it('has idempotentHint annotation set to true', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?.annotations?.idempotentHint).toBe(true);
+  });
+
+  it('has title annotation', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?.annotations?.title).toBe('Get Curriculum Ontology');
+  });
+
+  it('has _meta with openai/toolInvocation fields', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?._meta).toBeDefined();
+    expect(ontologyTool?._meta?.['openai/toolInvocation/invoking']).toBe(
+      'Loading curriculum model…',
+    );
+    expect(ontologyTool?._meta?.['openai/toolInvocation/invoked']).toBe('Curriculum model loaded');
+  });
+
+  it('has description with "Use when" guidance', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?.description).toContain('Use this when');
+    expect(ontologyTool?.description).toContain('Do NOT use for');
+  });
+
+  it('has empty input schema (no parameters)', () => {
+    const tools = listUniversalTools();
+    const ontologyTool = tools.find((tool) => tool.name === 'get-ontology');
+    expect(ontologyTool?.inputSchema).toEqual({
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    });
   });
 });

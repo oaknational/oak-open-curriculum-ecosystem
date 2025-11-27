@@ -40,20 +40,43 @@
       }
     ],
     "phases": [
-      { "slug": "primary", "name": "Primary", "keyStages": ["ks1", "ks2"], "years": [1, 2, 3, 4, 5, 6] },
-      { "slug": "secondary", "name": "Secondary", "keyStages": ["ks3", "ks4"], "years": [7, 8, 9, 10, 11] }
+      {
+        "slug": "primary",
+        "name": "Primary",
+        "keyStages": ["ks1", "ks2"],
+        "years": [1, 2, 3, 4, 5, 6]
+      },
+      {
+        "slug": "secondary",
+        "name": "Secondary",
+        "keyStages": ["ks3", "ks4"],
+        "years": [7, 8, 9, 10, 11]
+      }
     ],
     "subjects": [
       { "slug": "maths", "name": "Mathematics", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
       { "slug": "english", "name": "English", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
-      { "slug": "science", "name": "Science", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasExamSubjects": true },
+      {
+        "slug": "science",
+        "name": "Science",
+        "keyStages": ["ks1", "ks2", "ks3", "ks4"],
+        "hasExamSubjects": true
+      },
       { "slug": "history", "name": "History", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
       { "slug": "geography", "name": "Geography", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
       { "slug": "art", "name": "Art", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
       { "slug": "music", "name": "Music", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
-      { "slug": "physical-education", "name": "Physical Education", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
+      {
+        "slug": "physical-education",
+        "name": "Physical Education",
+        "keyStages": ["ks1", "ks2", "ks3", "ks4"]
+      },
       { "slug": "computing", "name": "Computing", "keyStages": ["ks1", "ks2", "ks3", "ks4"] },
-      { "slug": "religious-education", "name": "Religious Education", "keyStages": ["ks1", "ks2", "ks3"] },
+      {
+        "slug": "religious-education",
+        "name": "Religious Education",
+        "keyStages": ["ks1", "ks2", "ks3"]
+      },
       { "slug": "french", "name": "French", "keyStages": ["ks2", "ks3", "ks4"] },
       { "slug": "spanish", "name": "Spanish", "keyStages": ["ks2", "ks3", "ks4"] },
       { "slug": "german", "name": "German", "keyStages": ["ks3", "ks4"] }
@@ -213,14 +236,38 @@
   "lessonComponents": {
     "definition": "Each lesson contains 8 standard components",
     "components": [
-      { "name": "Curriculum information", "description": "Lesson summary with metadata", "tool": "get-lessons-summary" },
+      {
+        "name": "Curriculum information",
+        "description": "Lesson summary with metadata",
+        "tool": "get-lessons-summary"
+      },
       { "name": "Slide deck", "description": "Presentation slides", "tool": "get-lessons-assets" },
-      { "name": "Video", "description": "Teacher-delivered lesson video", "tool": "get-lessons-assets" },
-      { "name": "Video transcript", "description": "Full text of video content", "tool": "get-lessons-transcript" },
-      { "name": "Starter quiz", "description": "Prior knowledge assessment", "tool": "get-lessons-quiz" },
+      {
+        "name": "Video",
+        "description": "Teacher-delivered lesson video",
+        "tool": "get-lessons-assets"
+      },
+      {
+        "name": "Video transcript",
+        "description": "Full text of video content",
+        "tool": "get-lessons-transcript"
+      },
+      {
+        "name": "Starter quiz",
+        "description": "Prior knowledge assessment",
+        "tool": "get-lessons-quiz"
+      },
       { "name": "Exit quiz", "description": "Learning assessment", "tool": "get-lessons-quiz" },
-      { "name": "Worksheet", "description": "Practice tasks with answers", "tool": "get-lessons-assets" },
-      { "name": "Additional materials", "description": "Supplementary resources", "tool": "get-lessons-assets" }
+      {
+        "name": "Worksheet",
+        "description": "Practice tasks with answers",
+        "tool": "get-lessons-assets"
+      },
+      {
+        "name": "Additional materials",
+        "description": "Supplementary resources",
+        "tool": "get-lessons-assets"
+      }
     ]
   },
 
@@ -316,9 +363,21 @@
   "idFormats": {
     "description": "The 'fetch' tool uses prefixed IDs to route to the correct endpoint",
     "formats": [
-      { "prefix": "lesson:", "example": "lesson:adding-fractions", "fetchesFrom": "Lesson summary endpoint" },
-      { "prefix": "unit:", "example": "unit:fractions-year-4", "fetchesFrom": "Unit summary endpoint" },
-      { "prefix": "subject:", "example": "subject:maths", "fetchesFrom": "Subject details endpoint" },
+      {
+        "prefix": "lesson:",
+        "example": "lesson:adding-fractions",
+        "fetchesFrom": "Lesson summary endpoint"
+      },
+      {
+        "prefix": "unit:",
+        "example": "unit:fractions-year-4",
+        "fetchesFrom": "Unit summary endpoint"
+      },
+      {
+        "prefix": "subject:",
+        "example": "subject:maths",
+        "fetchesFrom": "Subject details endpoint"
+      },
       { "prefix": "thread:", "example": "thread:number", "fetchesFrom": "Thread units endpoint" }
     ]
   },
@@ -337,9 +396,17 @@
       "GCSE = General Certificate of Secondary Education (KS4 qualification)"
     ],
     "yearToAge": {
-      "year1": "5-6", "year2": "6-7", "year3": "7-8", "year4": "8-9",
-      "year5": "9-10", "year6": "10-11", "year7": "11-12", "year8": "12-13",
-      "year9": "13-14", "year10": "14-15", "year11": "15-16"
+      "year1": "5-6",
+      "year2": "6-7",
+      "year3": "7-8",
+      "year4": "8-9",
+      "year5": "9-10",
+      "year6": "10-11",
+      "year7": "11-12",
+      "year8": "12-13",
+      "year9": "13-14",
+      "year10": "14-15",
+      "year11": "15-16"
     }
   },
 
@@ -358,4 +425,3 @@
     ]
   }
 }
-
