@@ -8,7 +8,7 @@ This document outlines a canonical, production-quality approach for exposing “
 
 MCP defines primitives—**tools**, **resources**, and **prompts**—but does not dictate a single “start here” mechanism. Modern clients (ChatGPT, Claude Desktop, Cursor, IDE integrations) rely on multiple complementary layers of metadata and documentation to understand and surface your capabilities.
 
-This guide describes how to design those layers coherently so the model, the user, and the client UI can all understand _what your server does_ and _how to use it_.
+This guide describes how to design those layers coherently so the model, the user, and the client UI can all understand _what the mcp server can do_ and _how and when to use it_.
 
 ---
 
@@ -235,7 +235,7 @@ Workflow-level templates for clients and the assistant.
 
 ## 8. Example Layout
 
-```
+```text
 mcp-server/
   tools/
     search_repos.ts

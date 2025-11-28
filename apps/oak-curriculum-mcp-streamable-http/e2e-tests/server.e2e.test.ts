@@ -103,7 +103,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     );
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
-    const aggregatedTools = ['fetch', 'get-ontology', 'search'];
+    const aggregatedTools = ['fetch', 'get-help', 'get-ontology', 'search'];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());
   });
@@ -163,7 +163,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(result?.capabilities?.tools?.listChanged).toBe(true);
   });
 
-  it('returns JSON-RPC error when calling an unknown tool (error path)', async () => {
+  it('returns error when calling an unknown tool (error path)', async () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
@@ -176,9 +176,14 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       });
     expect(res.status).toBe(200);
     const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText) as { error?: unknown };
-    // With McpServer unknown tool returns a JSON-RPC error envelope
-    expect(typeof payload.error !== 'undefined').toBe(true);
+    const payload = parseFirstSseData(payloadText) as {
+      error?: { message?: string };
+      result?: { isError?: boolean; content?: { text?: string }[] };
+    };
+    // MCP SDK returns either a JSON-RPC error or a result with isError: true
+    const hasJsonRpcError = typeof payload.error !== 'undefined';
+    const hasResultError = payload.result?.isError === true;
+    expect(hasJsonRpcError || hasResultError).toBe(true);
   });
 
   // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)

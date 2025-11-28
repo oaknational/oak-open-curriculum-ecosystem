@@ -328,3 +328,20 @@ describe('search and fetch descriptions', () => {
     expect(tool?.description).toContain('Do NOT use');
   });
 });
+
+/**
+ * Tests for ontologyData structure.
+ *
+ * The ontology data includes static curriculum domain information that
+ * helps LLMs understand the Oak curriculum structure.
+ */
+describe('ontologyData', () => {
+  it('includes synonyms section with subjects and keyStages', async () => {
+    const { ontologyData } = await import('./ontology-data.js');
+    expect(ontologyData.synonyms).toBeDefined();
+    expect(ontologyData.synonyms.subjects).toBeDefined();
+    expect(ontologyData.synonyms.keyStages).toBeDefined();
+    expect(ontologyData.synonyms.subjects.maths).toContain('mathematics');
+    expect(ontologyData.synonyms.keyStages.ks4).toContain('gcse');
+  });
+});

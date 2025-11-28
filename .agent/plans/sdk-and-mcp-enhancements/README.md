@@ -6,12 +6,14 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 
 ## Plan Index
 
-| Plan                                                                                  | Status     | Duration     | Focus                                            |
-| ------------------------------------------------------------------------------------- | ---------- | ------------ | ------------------------------------------------ |
-| [00: Ontology POC](./00-ontology-poc-static-tool.md)                                  | PLANNED    | ~1 hour      | Quick static tool to validate ontology value     |
-| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅ | ~4-5 days    | Enriching tool metadata for AI agents            |
-| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED    | ~4 weeks     | Exposing domain model as MCP resource            |
-| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED    | ~12-14 weeks | Architecture evolution and advanced capabilities |
+| Plan                                                                                  | Status         | Duration     | Focus                                            |
+| ------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------------------------------------ |
+| [00: Ontology POC](./00-ontology-poc-static-tool.md)                                  | PLANNED        | ~1 hour      | Quick static tool to validate ontology value     |
+| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅     | ~4-5 days    | Enriching tool metadata for AI agents            |
+| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED        | ~4 weeks     | Exposing domain model as MCP resource            |
+| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED        | ~12-14 weeks | Architecture evolution and advanced capabilities |
+| [04: MCP Prompts & Agent Guidance](./04-mcp-prompts-and-agent-guidance-plan.md)       | 🔴 NOT STARTED | ~1.5 hours   | Fix prompt arg passing, establish agent guidance |
+| [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589       |
 
 ---
 
@@ -82,9 +84,47 @@ Covers architecture evolution and advanced MCP capabilities:
 
 ---
 
+### 04: MCP Prompts & Agent Guidance
+
+Fixes broken prompt argument passing and establishes proper agent guidance architecture:
+
+- **Phase 0**: Validate MCP SDK `registerPrompt` with Zod v4 works correctly
+- **Phase 1**: Fix prompt registration using TDD (remove workaround, use SDK correctly)
+- **Phase 2**: Fix remaining lint errors and add documentation
+- **Phase 3**: Full validation and compliance check
+
+**Key Insight**: The MCP SDK already has Zod v3/v4 compatibility built in. The workaround was unnecessary.
+
+**Key benefit**: Prompts correctly receive arguments; agents can use workflow templates effectively.
+
+**Related ADR**: [ADR-055: Zod Version Boundaries](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
+
+---
+
+### 05: Zod v4 Export Implementation
+
+Fixes the Zod version boundary issue and resolves the TS2589 type complexity error:
+
+- **Phase 1**: Update SDK type-gen to export Zod v4 schemas (using `zod/v4` from Zod 3.25+)
+- **Phase 2**: Resolve TS2589 "Type instantiation excessively deep" error
+
+**Key Insight**: Zod 3.25+ includes `zod/v4` which provides the Zod v4 API. The SDK can generate Zod v3 schemas via `openapi-zod-client` internally, then export Zod v4 equivalents to consumers.
+
+**Key benefit**: Apps receive Zod v4 schemas directly from SDK (schema-first), compatible with MCP SDK, no type assertions needed.
+
+**Related ADR**: [ADR-055: Zod Version Boundaries (Revised)](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
+
+---
+
 ## Dependencies
 
 ```
+Plan 05 Phase 1 (Zod v4 Exports)
+         ↓
+Plan 05 Phase 2 (TS2589 Fix)
+         ↓
+Plan 04 (MCP Prompts)  ←  unblocked by Plan 05
+
 Plan 00 (POC)  →  Plan 02 (Full Ontology)  →  Upstream API /ontology
     ↓                    ↓
   Validates          Replaces POC
@@ -98,6 +138,8 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
     (Infrastructure + Advanced)
 ```
 
+- **Plan 05** is the **immediate priority** - fixes Zod versioning foundation for all SDK consumers
+- **Plan 04** is unblocked by Plan 05 (prompts use Zod schemas for MCP registration)
 - **Plan 00** is a quick POC that validates ontology value (~1 hour, content pre-authored)
 - **Plan 02** replaces Plan 00 when POC proves value
 - Plans 01 and 02 can run **in parallel** after Plan 03 Phase 0 completes

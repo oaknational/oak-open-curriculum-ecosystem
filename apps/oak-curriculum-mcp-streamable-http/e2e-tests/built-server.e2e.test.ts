@@ -20,10 +20,32 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const serverPath = resolve(__dirname, '../dist/src/index.js');
 
+/**
+ * Waits for the server to respond to healthcheck, with retries.
+ */
+async function waitForServerReady(
+  port: number,
+  maxRetries: number,
+  retryDelayMs: number,
+): Promise<void> {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(`http://localhost:${String(port)}/healthz`);
+      if (response.ok) {
+        return;
+      }
+    } catch {
+      // Server not ready yet, retry
+    }
+    await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+  }
+  throw new Error(`Server failed to respond after ${String(maxRetries)} attempts`);
+}
+
 describe('Built Server (dist/src/index.js)', () => {
   let server: ChildProcess | undefined;
   const testPort = 9999;
-  const startupTimeMs = 3000;
+  const startupTimeoutMs = 10000;
 
   beforeAll(async () => {
     // Start the built server
@@ -52,20 +74,31 @@ describe('Built Server (dist/src/index.js)', () => {
       stderr += data.toString();
     });
 
-    // Wait for server to be ready
-    await new Promise((resolve) => setTimeout(resolve, startupTimeMs));
-
-    // Verify process is still running
-    if (server.exitCode !== null) {
-      console.error('Server stdout:', stdout);
-      console.error('Server stderr:', stderr);
-      throw new Error(`Server exited immediately with code ${String(server.exitCode)}`);
+    // Wait for server to respond to healthcheck (more reliable than fixed timeout)
+    try {
+      await waitForServerReady(testPort, 20, 250);
+    } catch {
+      // If healthcheck fails, check if server exited
+      if (server.exitCode !== null) {
+        console.error('Server stdout:', stdout);
+        console.error('Server stderr:', stderr);
+        throw new Error(
+          `Server exited with code ${String(server.exitCode)}. Check if port ${String(testPort)} is already in use.`,
+        );
+      }
+      throw new Error(`Server failed to respond. stdout: ${stdout}, stderr: ${stderr}`);
     }
-  }, startupTimeMs + 2000);
+  }, startupTimeoutMs);
 
   afterAll(() => {
     if (server) {
       server.kill('SIGTERM');
+      // Force kill after a short delay if still running
+      setTimeout(() => {
+        if (server && !server.killed) {
+          server.kill('SIGKILL');
+        }
+      }, 1000);
     }
   });
 

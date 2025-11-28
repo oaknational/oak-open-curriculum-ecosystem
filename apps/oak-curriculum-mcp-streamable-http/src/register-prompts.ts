@@ -4,92 +4,93 @@
  * Registers workflow prompts with the MCP server. Prompts are user-initiated
  * templates that guide common interactions with the curriculum tools.
  *
- * ## ⚠️ ZOD VERSION COMPATIBILITY WORKAROUND ⚠️
+ * Prompts appear as slash commands or suggested actions in MCP clients,
+ * helping users initiate structured workflows for common curriculum tasks.
  *
- * This module uses a **simplified prompt registration approach** due to
- * Zod version incompatibility between:
+ * ## Zod Version Compatibility
  *
- * - **This app**: Zod v4
- * - **MCP SDK** (`@modelcontextprotocol/sdk`): Zod v3 internally
+ * This module uses Zod schemas for prompt argument validation via the
+ * MCP SDK's `registerPrompt()` method. The MCP SDK v1.23.0+ supports
+ * both Zod v3.25+ and Zod v4 through its peer dependency configuration.
  *
- * The MCP SDK's `registerPrompt()` method expects `argsSchema` to be a
- * Zod v3 schema object. Mixing Zod v3 and v4 types causes TypeScript
- * errors like "Type instantiation is excessively deep and possibly infinite."
- *
- * ### Current Workaround
- *
- * We use the simpler `server.prompt(name, description, callback)` overload
- * which doesn't require an argsSchema. Prompt arguments are defined in
- * `MCP_PROMPTS` metadata for `prompts/list` responses, but aren't validated
- * at registration time.
- *
- * ### Future Fix (When Zod 3 Dependencies Are Removed)
- *
- * When the SDK migrates from `openapi-zod-client` (which requires Zod 3)
- * to a Zod 4-compatible solution, this module should be updated to:
- *
- * 1. Import `{ z } from 'zod'` (not `zod/v3`)
- * 2. Use `server.registerPrompt()` with proper `argsSchema`
- * 3. Build Zod schemas from `MCP_PROMPTS[].arguments` definitions
- *
- * @example Future implementation with Zod 4:
- * ```typescript
- * import { z } from 'zod';
- *
- * server.registerPrompt(prompt.name, {
- *   description: prompt.description,
- *   argsSchema: {
- *     topic: z.string().describe('The topic to search for'),
- *     keyStage: z.string().optional().describe('Filter by key stage'),
- *   },
- * }, (args) => { ... });
- * ```
- *
- * @see https://github.com/oaknational/oak-mcp-ecosystem - Track Zod migration
- * @see {@link MCP_PROMPTS} - Prompt definitions in SDK
+ * @see {@link MCP_PROMPTS} - Prompt definitions from SDK
+ * @see https://modelcontextprotocol.io/specification/draft/server/prompts
  *
  * @module register-prompts
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { getPromptMessages } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import {
-  MCP_PROMPTS,
-  getPromptMessages,
-} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+  findLessonsArgsSchema,
+  lessonPlanningArgsSchema,
+  progressionMapArgsSchema,
+} from './prompt-schemas.js';
+
+/**
+ * Formats SDK prompt messages for MCP response structure.
+ *
+ * @param promptName - Name of the prompt to get messages for
+ * @param args - Arguments object with string values (optional fields may be undefined)
+ * @returns MCP-compatible messages structure
+ */
+function formatPromptResponse(
+  promptName: string,
+  args: Readonly<Record<string, string | undefined>>,
+) {
+  const messages = getPromptMessages(promptName, args);
+  return {
+    messages: messages.map((m) => ({
+      role: m.role,
+      content: { type: 'text' as const, text: m.content.text },
+    })),
+  };
+}
 
 /**
  * Registers MCP prompts for common curriculum workflows.
  *
- * Prompts appear as slash commands or suggested actions in MCP clients.
- * Each prompt guides users through a multi-step workflow using the
- * available tools.
- *
- * ## ⚠️ ZOD 3 COMPATIBILITY LIMITATION ⚠️
- *
- * Uses the simpler `prompt()` overload to avoid Zod v3/v4 type conflicts.
- * See module-level documentation for details and future fix instructions.
+ * Each prompt is registered with:
+ * - An `argsSchema` for type-safe argument validation
+ * - A callback that receives validated arguments directly
+ * - Message generation delegated to the SDK's `getPromptMessages()`
  *
  * @param server - MCP server instance
+ *
+ * @example
+ * ```typescript
+ * const server = new McpServer({ name: 'curriculum', version: '1.0.0' });
+ * registerPrompts(server);
+ * ```
  */
 export function registerPrompts(server: McpServer): void {
-  for (const prompt of MCP_PROMPTS) {
-    // ⚠️ ZOD 3 WORKAROUND: Using 3-arg overload (name, description, callback)
-    // instead of registerPrompt() with argsSchema to avoid Zod version conflicts.
-    // TODO: When MCP SDK or our deps support Zod 4, use registerPrompt() with proper argsSchema.
-    server.prompt(prompt.name, prompt.description, () => {
-      // For now, use empty args - users provide context in conversation.
-      // Future: Parse args from callback parameter when using registerPrompt().
-      const messages = getPromptMessages(prompt.name, {});
+  server.registerPrompt(
+    'find-lessons',
+    {
+      description:
+        'Find curriculum lessons on a specific topic. Searches across all subjects and key stages.',
+      argsSchema: findLessonsArgsSchema,
+    },
+    (args) => formatPromptResponse('find-lessons', args),
+  );
 
-      return {
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: {
-            type: 'text' as const,
-            text: m.content.text,
-          },
-        })),
-      };
-    });
-  }
+  server.registerPrompt(
+    'lesson-planning',
+    {
+      description:
+        'Gather materials for planning a lesson on a topic, including objectives and resources.',
+      argsSchema: lessonPlanningArgsSchema,
+    },
+    (args) => formatPromptResponse('lesson-planning', args),
+  );
+
+  server.registerPrompt(
+    'progression-map',
+    {
+      description:
+        'Map how a concept develops across years in a subject, from early learning to GCSE.',
+      argsSchema: progressionMapArgsSchema,
+    },
+    (args) => formatPromptResponse('progression-map', args),
+  );
 }

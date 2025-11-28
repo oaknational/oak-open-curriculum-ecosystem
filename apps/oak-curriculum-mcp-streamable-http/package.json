@@ -26,13 +26,13 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:e2e:built": "vitest run --config vitest.e2e.config.ts e2e-tests/built-server.e2e.test.ts",
+    "test:e2e:built": "vitest run --config vitest.e2e.built.config.ts",
     "test:ui": "playwright test"
   },
   "dependencies": {
     "@clerk/express": "^1.7.43",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.20.1",
+    "@modelcontextprotocol/sdk": "^1.23.0",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",

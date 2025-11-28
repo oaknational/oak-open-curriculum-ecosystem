@@ -39,12 +39,15 @@ async function post(body: Record<string, unknown>) {
 }
 
 describe('HTTP /mcp enum validation failure', () => {
-  it('returns JSON-RPC error when enum value is invalid', async () => {
+  it('returns error when enum value is invalid', async () => {
     const res = await post(makeInvalidEnumBody());
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(
       typeof res.text === 'string' ? res.text : JSON.stringify({}),
-    ) as { error?: unknown };
-    expect(typeof payload.error !== 'undefined').toBe(true);
+    ) as { error?: unknown; result?: { isError?: boolean } };
+    // MCP SDK returns either a JSON-RPC error or a result with isError: true
+    const hasJsonRpcError = typeof payload.error !== 'undefined';
+    const hasResultError = payload.result?.isError === true;
+    expect(hasJsonRpcError || hasResultError).toBe(true);
   });
 });

@@ -155,23 +155,36 @@ async function withStubbedHttpApp<T>(callback: (app: Express) => Promise<T>): Pr
   return await callback(app);
 }
 
-interface NormalisedJsonRpcError {
+interface NormalisedError {
   readonly content: readonly unknown[];
   readonly message?: string;
 }
 
-function expectJsonRpcError(envelope: JsonRpcEnvelope): NormalisedJsonRpcError {
-  const error = envelope.error;
-  expect(error).toBeDefined();
-  if (error === undefined) {
-    throw new Error('Expected JSON-RPC error payload');
+/**
+ * Extracts error information from MCP response.
+ *
+ * MCP SDK returns errors in two formats:
+ * 1. JSON-RPC error envelope: { error: { message, data: { content } } }
+ * 2. Result with isError: { result: { isError: true, content } }
+ */
+function expectError(envelope: JsonRpcEnvelope): NormalisedError {
+  // Check for JSON-RPC error first
+  if (envelope.error !== undefined) {
+    const errorRecord = ensureRecord(envelope.error, 'JSON-RPC error');
+    const message = ensureOptionalString(errorRecord.message, 'JSON-RPC error message');
+    const dataRecord = asOptionalRecord(errorRecord.data);
+    const contentCandidate = dataRecord?.content;
+    const content = Array.isArray(contentCandidate) ? contentCandidate : [];
+    return { content, message };
   }
-  const errorRecord = ensureRecord(error, 'JSON-RPC error');
-  const message = ensureOptionalString(errorRecord.message, 'JSON-RPC error message');
-  const dataRecord = asOptionalRecord(errorRecord.data);
-  const contentCandidate = dataRecord?.content;
-  const content = Array.isArray(contentCandidate) ? contentCandidate : [];
-  return { content, message };
+  // Check for result with isError
+  const result = asOptionalRecord(envelope.result);
+  if (result?.isError === true) {
+    const contentCandidate = result.content;
+    const content = Array.isArray(contentCandidate) ? contentCandidate : [];
+    return { content, message: undefined };
+  }
+  throw new Error('Expected error response but got success');
 }
 
 async function getSampleSubject(): Promise<{ subjectSlug: string; keyStageSlug: string }> {
@@ -320,13 +333,11 @@ describe('Streamable HTTP stubbed SDK behaviours', () => {
 
   it('reports parameter validation errors for missing arguments', async () => {
     await withStubbedHttpApp(async (app) => {
-      const { result, envelope, text } = await callTool(app, 'get-subject-detail', {});
-      expect(result).toBeUndefined();
-      const error = expectJsonRpcError(envelope);
+      const { envelope } = await callTool(app, 'get-subject-detail', {});
+      const error = expectError(envelope);
       const message =
         error.content.length > 0 ? readFirstTextContent(error.content) : (error.message ?? '');
       expect(message).toContain('Invalid arguments');
-      expect(text).toContain('"error"');
     });
   });
 });

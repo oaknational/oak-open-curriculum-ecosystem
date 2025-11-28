@@ -24,8 +24,20 @@ describe('HTTP boundary argument validation', () => {
     }
     const envelope = JSON.parse(line.slice('data: '.length)) as {
       readonly error?: { readonly message?: string };
+      readonly result?: {
+        readonly isError?: boolean;
+        readonly content?: readonly { readonly type?: string; readonly text?: string }[];
+      };
     };
-    return envelope.error?.message ?? '';
+    // MCP SDK returns either a JSON-RPC error or a result with isError: true
+    if (envelope.error?.message) {
+      return envelope.error.message;
+    }
+    if (envelope.result?.isError) {
+      const textContent = envelope.result.content?.find((c) => c.type === 'text');
+      return textContent?.text ?? '';
+    }
+    return '';
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
@@ -42,7 +54,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
@@ -59,7 +72,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
@@ -76,7 +90,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('accepts structured arguments that match the tool schema', async () => {

@@ -82,8 +82,8 @@ export function createMockServer(
   // Mock registerResource as no-op - tests focus on tool handler behaviour, not widget registration
   const mockRegisterResource = vi.fn();
 
-  // Mock prompt as no-op - tests focus on tool handler behaviour, not prompt registration
-  const mockPrompt = vi.fn();
+  // Mock registerPrompt as no-op - tests focus on tool handler behaviour, not prompt registration
+  const mockRegisterPrompt = vi.fn();
 
   // Return a properly typed mock server (test double)
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Test double with minimal implementation for testing
@@ -93,7 +93,7 @@ export function createMockServer(
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
     registerResource: mockRegisterResource as ToolRegistrationServer['registerResource'],
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    prompt: mockPrompt as ToolRegistrationServer['prompt'],
+    registerPrompt: mockRegisterPrompt as ToolRegistrationServer['registerPrompt'],
   } as unknown as ToolRegistrationServer;
   return mockServer;
 }
