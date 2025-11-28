@@ -1,4 +1,20 @@
-// Aggregated MCP tooling exports to keep the public index concise.
+/**
+ * Oak Curriculum SDK - MCP Tools Entry Point
+ *
+ * This module provides all MCP (Model Context Protocol) tooling including:
+ * - Tool definitions and registries
+ * - Tool execution and validation
+ * - Universal tools (search, fetch, help, ontology)
+ * - Documentation resources and prompts
+ *
+ * Also re-exports core client types needed by MCP applications.
+ *
+ * @module @oaknational/oak-curriculum-sdk/public/mcp-tools
+ */
+
+// Re-export core client types needed by MCP apps
+export { createOakClient, createOakPathBasedClient } from '../client/index.js';
+export type { OakApiClient, OakApiPathBasedClient } from '../client/index.js';
 
 export {
   toolNames,
@@ -68,4 +84,15 @@ export {
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
-} from '../mcp/universal-tools.js';
+} from '../mcp/universal-tools/index.js';
+
+export {
+  DOCUMENTATION_RESOURCES,
+  getGettingStartedMarkdown,
+  getToolsReferenceMarkdown,
+  getWorkflowsMarkdown,
+  getDocumentationContent,
+  type DocumentationResource,
+} from '../mcp/documentation-resources.js';
+
+export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';

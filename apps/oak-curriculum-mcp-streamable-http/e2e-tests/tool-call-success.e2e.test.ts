@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
-import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 

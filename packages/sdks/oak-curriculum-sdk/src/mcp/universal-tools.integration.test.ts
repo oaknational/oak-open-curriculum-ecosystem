@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listUniversalTools } from './universal-tools.js';
+import { listUniversalTools } from './universal-tools/index.js';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations.

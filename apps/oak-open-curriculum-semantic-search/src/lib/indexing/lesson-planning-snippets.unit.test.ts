@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk';
+import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 
 interface LessonSummaryFixture {

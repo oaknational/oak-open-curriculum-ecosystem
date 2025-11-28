@@ -7,7 +7,7 @@ import {
   isSearchScope,
   type SearchStructuredRequest,
   type SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { runHybridSearch, runHybridSearchAllScopes } from '../../../src/lib/run-hybrid-search';
 import { logZeroHit } from '../../../src/lib/observability/zero-hit';

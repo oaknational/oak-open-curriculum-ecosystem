@@ -29,7 +29,7 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { listUniversalTools } from '@oaknational/oak-curriculum-sdk';
+import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Overrides the tools/list handler on an McpServer to return our pre-generated

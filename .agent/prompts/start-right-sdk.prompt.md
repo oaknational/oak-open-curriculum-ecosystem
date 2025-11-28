@@ -1,3 +1,3 @@
 read @rules.md , @testing-strategy.md , and @schema-first-execution.md , and take to heart that it is encouraged to take a step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you. Identify and question assumptions. Even before the First Question, ask, are we solving the right problem, at the right layer? Any generated plans must include regularly re-reading and re-committing to those foundation documents.
 
-The schema first is an absolute for parts of the sdk related directly to calling the upstream api, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.
+The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.

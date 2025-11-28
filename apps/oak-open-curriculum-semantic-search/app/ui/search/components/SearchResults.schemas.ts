@@ -6,7 +6,7 @@ import {
   type SearchScope,
   type SearchSequenceResult,
   type SearchUnitResult,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export const LessonResultsSchema = SearchLessonsResponseSchema.shape.results;
 export const UnitResultsSchema = SearchUnitsResponseSchema.shape.results;

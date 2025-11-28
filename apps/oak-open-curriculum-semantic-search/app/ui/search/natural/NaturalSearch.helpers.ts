@@ -2,11 +2,11 @@ import { z } from 'zod';
 import type {
   SearchNaturalLanguageRequest,
   SearchStructuredRequest,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   SearchStructuredRequestSchema,
   SearchNaturalLanguageRequestSchema,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 const NaturalSearchSummarySchema = z
   .object({

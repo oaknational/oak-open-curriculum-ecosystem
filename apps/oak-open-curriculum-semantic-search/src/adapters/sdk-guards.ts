@@ -1,17 +1,18 @@
 /**
  * SDK guard integration.
- * We import input guards/allowed-values from the SDK root,
- * and provide structural fallbacks for response shapes.
+ * Core path parameter guards from main SDK, search guards from search entry point.
  */
 import {
   isKeyStage as sdkIsKeyStage,
   isSubject as sdkIsSubject,
   KEY_STAGES as SDK_KEY_STAGES,
   SUBJECTS as SDK_SUBJECTS,
+} from '@oaknational/oak-curriculum-sdk';
+import {
   isUnitsGrouped as sdkIsUnitsGrouped,
   isLessonGroups as sdkIsLessonGroups,
   isTranscriptResponse as sdkIsTranscriptResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export const isKeyStage = sdkIsKeyStage;
 export const isSubject = sdkIsSubject;

@@ -4,7 +4,7 @@ import {
   lessonSummarySchema,
   subjectSequencesSchema,
   unitSummarySchema,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { isKeyStage, isSubject } from '../../adapters/sdk-guards';
 

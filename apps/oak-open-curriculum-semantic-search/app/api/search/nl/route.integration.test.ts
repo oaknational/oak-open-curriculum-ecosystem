@@ -6,7 +6,7 @@ import {
   SearchStructuredRequestSchema,
   type SearchLessonsResponse,
   type SearchStructuredRequest,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 const LESSONS_SCOPE = 'lessons';
 
 type ParsedIntent = typeof LESSONS_SCOPE;

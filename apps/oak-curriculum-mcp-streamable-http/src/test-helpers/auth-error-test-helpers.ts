@@ -10,7 +10,10 @@ import { vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { RuntimeConfig } from '../runtime-config.js';
 import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
-import { McpToolError, type ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import {
+  McpToolError,
+  type ToolExecutionResult,
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { Notification, ServerRequest } from '@modelcontextprotocol/sdk/types.js';
 
 /**
@@ -79,6 +82,9 @@ export function createMockServer(
   // Mock registerResource as no-op - tests focus on tool handler behaviour, not widget registration
   const mockRegisterResource = vi.fn();
 
+  // Mock prompt as no-op - tests focus on tool handler behaviour, not prompt registration
+  const mockPrompt = vi.fn();
+
   // Return a properly typed mock server (test double)
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Test double with minimal implementation for testing
   const mockServer = {
@@ -86,6 +92,8 @@ export function createMockServer(
     registerTool: mockRegisterTool as ToolRegistrationServer['registerTool'],
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
     registerResource: mockRegisterResource as ToolRegistrationServer['registerResource'],
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
+    prompt: mockPrompt as ToolRegistrationServer['prompt'],
   } as unknown as ToolRegistrationServer;
   return mockServer;
 }

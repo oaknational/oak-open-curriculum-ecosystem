@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from './structured/StructuredSearch';
 import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';

@@ -15,7 +15,7 @@ import {
   type SearchScope,
   type SearchStructuredRequest,
   type SearchSuggestionResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { buildFixtureForScope } from '../../../lib/search-fixtures/builders';
 import { resolveFixtureModeFromCookies } from '../../../lib/fixture-mode';
 import { buildApiUrl, resolveFixtureQueryParam } from './structured-search.actions.helpers';

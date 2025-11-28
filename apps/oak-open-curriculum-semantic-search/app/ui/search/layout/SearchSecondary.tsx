@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ComponentProps, type JSX } from 'react';
 import { useTheme } from 'styled-components';
-import { SearchFacetsSchema } from '@oaknational/oak-curriculum-sdk';
+import { SearchFacetsSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { SearchSuggestions } from '../components/SearchSuggestions';
 import { SearchFacets } from '../components/SearchFacets';
 import {

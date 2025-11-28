@@ -1,3 +1,4 @@
+import { isSubject } from '@oaknational/oak-curriculum-sdk';
 import {
   DEFAULT_SUGGESTION_CACHE,
   createSearchLessonsResponse,
@@ -7,8 +8,7 @@ import {
   type SearchLessonsSuggestionCache,
   type SearchSuggestionItem,
   SearchSuggestionResponseSchema,
-} from '@oaknational/oak-curriculum-sdk';
-import { isSubject } from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   ks2MathsLessons,
   ks2MathsMeta,

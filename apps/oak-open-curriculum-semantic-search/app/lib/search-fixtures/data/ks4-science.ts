@@ -1,4 +1,7 @@
-import type { SearchSuggestionItem, SearchFacets } from '@oaknational/oak-curriculum-sdk';
+import type {
+  SearchSuggestionItem,
+  SearchFacets,
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 interface SequenceRecord {
   readonly sequenceSlug: string;

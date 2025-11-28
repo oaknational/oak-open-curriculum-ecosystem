@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { SequenceFacet } from '../../../../src/lib/hybrid-search/types';
 import { buildFacetFollowUpInput } from './facet-search';
 

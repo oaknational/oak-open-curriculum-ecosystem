@@ -4,7 +4,7 @@ import type { SuggestQuery } from '../../../../src/lib/suggestions/types';
 import {
   SearchSuggestionResponseSchema,
   type SearchSuggestionResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
 
 const runSuggestions = vi.hoisted(() =>

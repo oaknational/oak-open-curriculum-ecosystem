@@ -1,7 +1,10 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { type ZeroHitTelemetry, ZeroHitTelemetrySchema } from '@oaknational/oak-curriculum-sdk';
+import {
+  type ZeroHitTelemetry,
+  ZeroHitTelemetrySchema,
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 const handleZeroHitSummary = vi.hoisted(() =>
   vi.fn(async () =>

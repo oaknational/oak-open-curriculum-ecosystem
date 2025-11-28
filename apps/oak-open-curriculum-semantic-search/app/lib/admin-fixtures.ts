@@ -9,7 +9,7 @@ import {
   createAdminStreamErrorFixture,
   createAdminStreamFixtureMap,
   createZeroHitTelemetry,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 type ZeroHitTelemetry = ReturnType<typeof createZeroHitTelemetry>;
 

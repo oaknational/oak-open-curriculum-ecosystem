@@ -56,6 +56,22 @@
     "./validation/*": {
       "types": "./dist/validation/*.d.ts",
       "default": "./dist/validation/*.js"
+    },
+    "./public/search": {
+      "types": "./dist/public/search.d.ts",
+      "default": "./dist/public/search.js"
+    },
+    "./public/search.js": {
+      "types": "./dist/public/search.d.ts",
+      "default": "./dist/public/search.js"
+    },
+    "./public/mcp-tools": {
+      "types": "./dist/public/mcp-tools.d.ts",
+      "default": "./dist/public/mcp-tools.js"
+    },
+    "./public/mcp-tools.js": {
+      "types": "./dist/public/mcp-tools.d.ts",
+      "default": "./dist/public/mcp-tools.js"
     }
   },
   "scripts": {

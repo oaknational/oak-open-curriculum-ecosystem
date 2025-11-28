@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
-import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk';
+import { SCOPES_SUPPORTED } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { createApp } from './application.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {

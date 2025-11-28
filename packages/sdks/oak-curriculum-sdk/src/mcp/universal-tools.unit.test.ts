@@ -3,7 +3,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
-import type { UniversalToolName } from './universal-tools.js';
+import type { UniversalToolName } from './universal-tools/index.js';
 import { generateCanonicalUrlWithContext } from '../types/generated/api-schema/routing/url-helpers.js';
 
 interface McpToolDefinition {
@@ -70,7 +70,7 @@ function parseTextContent(result: CallToolResult): Record<string, unknown> {
 }
 
 const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } = await import(
-  './universal-tools.js'
+  './universal-tools/index.js'
 );
 
 const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;

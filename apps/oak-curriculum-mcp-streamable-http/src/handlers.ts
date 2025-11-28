@@ -14,13 +14,9 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
-import {
-  AGGREGATED_TOOL_WIDGET_URI,
-  AGGREGATED_TOOL_WIDGET_MIME_TYPE,
-  AGGREGATED_TOOL_WIDGET_HTML,
-} from './aggregated-tool-widget.js';
+import { registerAllResources, registerPrompts } from './register-resources.js';
 
 export interface ToolHandlerDependencies {
   readonly createClient: typeof createOakPathBasedClient;
@@ -69,32 +65,6 @@ function buildToolHandlerDependencies(
 }
 
 /**
- * Registers the Oak JSON viewer widget as an MCP resource.
- *
- * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
- * and used by ChatGPT to render tool output with Oak branding.
- */
-function registerWidgetResource(server: McpServer): void {
-  server.registerResource(
-    'oak-json-viewer',
-    AGGREGATED_TOOL_WIDGET_URI,
-    {
-      description: 'Oak-branded JSON viewer widget for tool output',
-      mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
-    },
-    () => ({
-      contents: [
-        {
-          uri: AGGREGATED_TOOL_WIDGET_URI,
-          mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
-          text: AGGREGATED_TOOL_WIDGET_HTML,
-        },
-      ],
-    }),
-  );
-}
-
-/**
  * Registers all MCP tools with the server.
  *
  * Iterates over universal tools (generated + aggregated) and registers each
@@ -134,7 +104,8 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     });
   }
 
-  registerWidgetResource(server);
+  registerAllResources(server);
+  registerPrompts(server);
 }
 
 /**

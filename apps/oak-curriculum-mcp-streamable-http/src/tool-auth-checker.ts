@@ -39,7 +39,7 @@ import {
   isAggregatedToolName,
   AGGREGATED_TOOL_DEFS,
   getToolFromToolName,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 export function toolRequiresAuth(toolName: UniversalToolName): boolean {
   const schemes = isAggregatedToolName(toolName)

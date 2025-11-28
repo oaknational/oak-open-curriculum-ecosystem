@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildTimedOutMultiScopeFixture, buildTimedOutSingleScopeFixture } from './timed-out';
-import { SearchMultiScopeResponseSchema } from '@oaknational/oak-curriculum-sdk';
+import { SearchMultiScopeResponseSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 describe('timed-out builders', () => {
   it('marks single scope fixtures as timed out while keeping results', () => {

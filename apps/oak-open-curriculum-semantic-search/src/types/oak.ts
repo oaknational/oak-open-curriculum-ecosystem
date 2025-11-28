@@ -1,21 +1,19 @@
 /**
- * All search-related types MUST come from the SDK.
+ * All search-related types MUST come from the SDK search entry point.
+ * Core types (KeyStage, Subject) come from the main SDK entry point.
  */
+
+// Core types from main SDK entry point
 export type { KeyStage, Subject as SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk';
 
+// Search functionality from dedicated search entry point
 export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
-} from '@oaknational/oak-curriculum-sdk';
-
-export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
   SearchFacetsSchema,
-} from '@oaknational/oak-curriculum-sdk';
-
-export {
   SearchCompletionSuggestPayloadSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
@@ -26,9 +24,6 @@ export {
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
-} from '@oaknational/oak-curriculum-sdk';
-
-export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
   isSearchStructuredRequest,
@@ -55,14 +50,11 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from '@oaknational/oak-curriculum-sdk';
-
-export {
   QueryParserRequestSchema,
   QueryParserResponseSchema,
   isQueryParserResponse,
-} from '@oaknational/oak-curriculum-sdk';
-export { QUERY_PARSER_INTENT_ENUM } from '@oaknational/oak-curriculum-sdk';
+  QUERY_PARSER_INTENT_ENUM,
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type {
   SearchStructuredRequest,
@@ -96,9 +88,7 @@ export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
-} from '@oaknational/oak-curriculum-sdk';
-export type {
   QueryParserRequest,
   QueryParserResponse,
   QueryParserIntent,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';

@@ -11,7 +11,7 @@ import {
   type ToolDescriptorForName,
   executeToolCall,
   createOakPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
 import { startTimer, type Logger, type ErrorContext } from '@oaknational/mcp-logger/node';
