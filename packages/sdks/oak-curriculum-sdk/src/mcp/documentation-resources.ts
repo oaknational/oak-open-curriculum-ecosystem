@@ -90,7 +90,7 @@ ${tips.map((tip) => `- ${tip}`).join('\n')}
 
 ## Documentation
 
-For detailed API documentation, visit: ${serverOverview.documentation}
+For detailed API documentation, visit: <${serverOverview.documentation}>
 `;
 }
 
@@ -114,8 +114,7 @@ ${category.description}
 
 **When to use**: ${category.whenToUse}
 
-**Tools**: ${category.tools.map((t) => `\`${t}\``).join(', ')}
-`;
+**Tools**: ${category.tools.map((t) => `\`${t}\``).join(', ')}`;
   };
 
   return `# Tool Reference
@@ -125,8 +124,11 @@ This document describes all available tools organised by category.
 ## Tool Categories
 
 ${categorySection('Discovery', toolCategories.discovery)}
+
 ${categorySection('Browsing', toolCategories.browsing)}
+
 ${categorySection('Fetching', toolCategories.fetching)}
+
 ${categorySection('Progression', toolCategories.progression)}
 
 ## ID Formats for the Fetch Tool
@@ -166,7 +168,7 @@ export function getWorkflowsMarkdown(): string {
       })
       .join('\n');
 
-    return `### ${workflow.title}
+    return `## ${workflow.title}
 
 ${workflow.description}
 
@@ -178,19 +180,11 @@ ${steps}
 
 Step-by-step guides for common tasks with the Oak Curriculum MCP server.
 
-## Find lessons on a topic
-
 ${workflowSection(workflows.findLessons)}
-
-## Plan a lesson
 
 ${workflowSection(workflows.lessonPlanning)}
 
-## Browse a subject curriculum
-
 ${workflowSection(workflows.browseSubject)}
-
-## Track concept progression across years
 
 ${workflowSection(workflows.trackProgression)}
 `;

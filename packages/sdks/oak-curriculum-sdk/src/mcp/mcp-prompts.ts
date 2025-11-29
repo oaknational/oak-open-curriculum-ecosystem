@@ -170,6 +170,7 @@ Please:
  */
 function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
+  // This should be key stage, not year group.
   const year = args.year ?? 'the year group';
 
   return [
