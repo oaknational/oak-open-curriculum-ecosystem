@@ -249,16 +249,16 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
   return curriculumSchemaValues.includes(value);
 }`;
 
-  // The adapter may have already removed Zodios exports, so check both cases
+  // The adapter may have already removed client exports, so check both cases
   let withCurriculumSchemas: string;
   if (withUpdatedBuilder.includes('export const api = new Zodios(endpoints);')) {
-    // Zodios export still exists - replace it with schema metadata
+    // Client export still exists - replace it with schema metadata
     withCurriculumSchemas = withUpdatedBuilder.replace(
       'export const api = new Zodios(endpoints);',
       `${schemaMetadata}\n`,
     );
   } else {
-    // Zodios export already removed by adapter - append schema metadata at end
+    // Client export already removed by adapter - append schema metadata at end
     withCurriculumSchemas = withUpdatedBuilder.trimEnd() + '\n\n' + schemaMetadata + '\n';
   }
 
