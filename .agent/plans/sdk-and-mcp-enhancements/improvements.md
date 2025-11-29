@@ -10,3 +10,7 @@
 ## General Notes
 
 In our reference repositories collection, we have a copy of the main Oak AI repository reference/oak-ai-lesson-assistant . This is an excellent place to look for examples of how to improve the prompt and tool and resource UX. Please refer to this repository for examples of how to improve the prompt and tool and resource UX.
+
+## User Experience
+
+The HTTP Streamable MCP server is the main user of the prompts and tools and resources. It is the main entry point for the user to interact with the Oak Curriculum MCP server. It includes a static page on the `/` route that provides a landing page for the server. This landing page should be improved to provide a more user-friendly experience. Preserve the existing content and structure of the landing page, but add a "getting started" section that provides a more user-friendly experience, lists the tools (in a collapsible details section) and resources and prompts.
