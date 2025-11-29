@@ -41,7 +41,8 @@ describe('validateCurriculumResponse', () => {
       if (!result.ok) {
         expect(result.issues).toHaveLength(1);
         expect(result.issues[0].path).toContain('vtt');
-        expect(result.issues[0].message).toContain('Required');
+        // Zod v4 reports missing required fields as "expected string, received undefined"
+        expect(result.issues[0].message).toMatch(/string|undefined/);
       }
     });
 

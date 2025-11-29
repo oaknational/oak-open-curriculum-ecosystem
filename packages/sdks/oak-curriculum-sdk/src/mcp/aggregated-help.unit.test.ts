@@ -119,6 +119,10 @@ describe('runHelpTool', () => {
       expect(result.isError).toBe(true);
       const content = result.content[0];
       expect(content.type).toBe('text');
+      // Narrow to text response type
+      if (!('text' in content)) {
+        throw new TypeError('Test: Expected text content, got blob');
+      }
       expect(content.text).toContain('Unknown tool');
     });
   });

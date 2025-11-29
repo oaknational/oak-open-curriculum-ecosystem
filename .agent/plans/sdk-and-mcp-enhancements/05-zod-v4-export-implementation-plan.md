@@ -1,402 +1,263 @@
-# Zod v4 Export Implementation Plan
+# Zod v3 Isolation to Adapter Workspace
 
-**Status**: Active  
+**Status**: 🔴 BLOCKED (build failing)  
 **Created**: 2025-11-28  
-**Related ADR**: [ADR-055: Zod Version Boundaries](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
-
-## Foundation Documents
-
-Before any work, re-read and commit to:
-
-- [rules.md](../../directives-and-memory/rules.md)
-- [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)
-- [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
-
-**Pre-Work Question**: Are we solving the right problem, at the right layer?
+**Updated**: 2025-11-29
 
 ---
 
-## Architectural Insight
+## Goal
 
-### The Single Source of Zod v3
+**Strictly isolate Zod v3 AND all Zodios references to the `openapi-zod-client-adapter` workspace.**
 
-**`openapi-zod-client` is the ONLY source of Zod v3 artefacts in the entire project.**
-
-This library reads the OpenAPI schema and produces Zod v3 schemas. Everything else in the SDK and all apps should use Zod v4.
-
-### The Adapter Pattern
-
-We encapsulate `openapi-zod-client` in an **adapter** with a clear boundary:
+- **Adapter workspace** (`packages/libs/openapi-zod-client-adapter`):
+  - Has `"zod": "^3"` - only place Zod v3 is allowed
+  - Only place Zodios references are allowed (internal implementation detail)
+- **All other workspaces**:
+  - Have `"zod": "^4"` - import directly from `'zod'`
+  - No Zodios references whatsoever
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    openapi-zod-client Adapter                    │
+│  openapi-zod-client-adapter (zod@^3)                            │
 │  ┌─────────────────────────────────────────────────────────┐    │
-│  │  openapi-zod-client (Zod v3)                            │    │
-│  │  - Reads OpenAPI spec                                   │    │
-│  │  - Produces Zod v3 schemas                              │    │
-│  └─────────────────────────────────────────────────────────┘    │
-│                              ↓                                   │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │  Adapter Layer                                          │    │
-│  │  - Converts Zod v3 → Zod v4                             │    │
-│  │  - Zod v3 NEVER escapes this boundary                   │    │
+│  │  Internal: openapi-zod-client, Zodios types             │    │
+│  │  zod-v3-to-v4-transform.ts → Zod v4 code strings        │    │
 │  └─────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
-              ┌───────────────────────────────┐
-              │  SDK Public API (Zod v4 ONLY) │
-              └───────────────────────────────┘
-                              ↓
-              ┌───────────────────────────────┐
-              │  Apps (Zod v4)                │
-              └───────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  SDK + Apps (zod@^4)                                            │
+│  • All imports: `import { z } from 'zod'`                       │
+│  • No `zod/v4` subpath (doesn't exist in pure Zod v4)           │
+│  • No Zodios references                                          │
+└─────────────────────────────────────────────────────────────────┘
 ```
-
-### Benefits
-
-1. **Clean boundary**: Zod v3 is contained; consumers only see Zod v4
-2. **Replacement-ready**: The adapter defines what we need from `openapi-zod-client`
-3. **Single responsibility**: One place handles the version translation
-4. **Testable**: We can test the adapter boundary in isolation
-
-### Adapter Interface (What We Need)
-
-The adapter's public interface defines what our project requires from any OpenAPI → Zod library:
-
-```typescript
-interface OpenApiZodAdapter {
-  /**
-   * Generate Zod v4 schemas from an OpenAPI operation.
-   * 
-   * The implementation uses openapi-zod-client (Zod v3) internally
-   * but MUST convert all output to Zod v4 before returning.
-   */
-  generateToolSchemas(operation: OpenApiOperation): {
-    /** Flat input schema for MCP registration (Zod v4) */
-    flatInputSchema: z4.ZodObject<z4.ZodRawShape>;
-    /** Nested input schema for SDK invoke (Zod v4) */
-    nestedInputSchema: z4.ZodObject<z4.ZodRawShape>;
-    /** Output schema for response validation (Zod v4) */
-    outputSchema: z4.ZodType;
-  };
-}
-```
-
-If we ever replace `openapi-zod-client`, the replacement must satisfy this interface.
 
 ---
 
-## Overview
+## Critical Understanding
 
-The SDK currently generates Zod v3 schemas via `openapi-zod-client` and allows them to leak into the public API. This causes:
+### Import Paths
 
-1. Apps use Zod v4, creating type mismatches
-2. MCP SDK expects Zod v4 for optimal compatibility
-3. No clear boundary around the Zod v3 dependency
+| Package                      | `package.json` | Correct Import            |
+| ---------------------------- | -------------- | ------------------------- |
+| `openapi-zod-client-adapter` | `"zod": "^3"`  | Internal Zod v3 allowed   |
+| `oak-curriculum-sdk`         | `"zod": "^4"`  | `import { z } from 'zod'` |
+| All apps                     | `"zod": "^4"`  | `import { z } from 'zod'` |
 
-**Solution**: Create an adapter that encapsulates `openapi-zod-client` and converts all output to Zod v4 at type-gen time. Zod v3 artefacts never escape the adapter.
+**Key insight**: The `zod/v4` subpath only exists in the dual package (`zod@^3.25.x`). If you have `"zod": "^4"`, there is NO `zod/v4` subpath.
 
 ---
 
-## Phase 1: Create the openapi-zod-client Adapter
+## Current Build Error
 
-### Goal
+```
+@oaknational/open-curriculum-semantic-search:build: Type error: Type 'unknown' has no matching index signature for type 'number'.
+@oaknational/open-curriculum-semantic-search:build: > 41 | export type SubjectSequenceEntry = SearchSubjectSequences[number];
+```
 
-Encapsulate all `openapi-zod-client` usage in an adapter that:
-1. Consumes Zod v3 output from `openapi-zod-client`
-2. Converts to Zod v4 before returning
-3. Exports ONLY Zod v4 schemas
+This happens because `SearchSubjectSequences` resolves to `unknown`.
 
-### Prerequisites
+---
 
-- SDK uses Zod 3.25+ (currently 3.25.76 ✓)
-- `zod/v4` export path is available ✓
+## Blocking Issues
 
-### Tasks
+### Issue 1: `curriculumSchemas` Loses Type Information
 
-#### 1.1 Verify Zod v4 API Access
-
-**TDD Approach**: Write a test first that imports from `zod/v4` and validates basic functionality.
+**File**: `packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts`
 
 ```typescript
-// packages/sdks/oak-curriculum-sdk/type-gen/adapter/zod-v4.unit.test.ts
-import { describe, it, expect } from 'vitest';
-import { z } from 'zod/v4';
+import type { z } from 'zod';
+import { curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
 
-describe('zod/v4 import', () => {
-  it('provides Zod v4 API from the zod package', () => {
-    const schema = z.object({ name: z.string().describe('A name') });
-    const result = schema.safeParse({ name: 'test' });
-    expect(result.success).toBe(true);
-  });
-});
+export const subjectSequencesSchema = curriculumSchemas.SubjectSequenceResponseSchema;
+export type SearchSubjectSequences = z.infer<SubjectSequenceResponseSchema>;
 ```
 
-#### 1.2 Create the Adapter Module
+**Problem chain**:
 
-**Location**: `packages/sdks/oak-curriculum-sdk/type-gen/adapter/`
+1. `curriculumSchemas` is typed as `CurriculumSchemaCollection` = `Record<string, z.ZodType>`
+2. Accessing `curriculumSchemas.SubjectSequenceResponseSchema` gives `z.ZodType` (generic)
+3. `z.infer<z.ZodType>` = `unknown`
+4. `unknown[number]` fails
 
-```
-type-gen/
-├── adapter/
-│   ├── index.ts              # Public API (Zod v4 only)
-│   ├── openapi-zod-client-adapter.ts  # Encapsulates the library
-│   ├── zod-v3-to-v4.ts       # Conversion utilities
-│   └── types.ts              # Adapter interface
-├── typegen/
-│   └── ...                   # Consumes adapter, never touches Zod v3
-```
-
-**TDD Approach**:
-
-1. **RED**: Write a test that expects Zod v4 schemas from the adapter
-2. **GREEN**: Implement the adapter with conversion
-3. **REFACTOR**: Clean up
-
-#### 1.3 Implement Zod v3 → v4 Conversion
-
-The conversion is straightforward because both APIs are structurally similar:
+**Fix**: The generator creates `rawCurriculumSchemas` with `as const` which preserves specific types. Change generator to export it, then use it in `search-response-guards.ts`:
 
 ```typescript
-// type-gen/adapter/zod-v3-to-v4.ts
-import { z as z3 } from 'zod';
-import { z as z4 } from 'zod/v4';
+import { z } from 'zod'; // Value import, not type-only
+import { rawCurriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
 
-/**
- * Convert a Zod v3 object schema to Zod v4.
- * 
- * This function is the ONLY place where Zod v3 types are handled.
- * All consumers receive Zod v4 schemas.
- */
-export function convertObjectSchemaToV4(
-  v3Schema: z3.ZodObject<z3.ZodRawShape>,
-): z4.ZodObject<z4.ZodRawShape> {
-  // Rebuild the schema using Zod v4 primitives
-  // Preserve .describe() calls for MCP parameter descriptions
-  // ...
-}
+export const subjectSequencesSchema = rawCurriculumSchemas.SubjectSequenceResponseSchema;
 ```
 
-#### 1.4 Update Type-Gen to Use Adapter
+### Issue 2: `ZodIssue` Not Exported in Zod v4
 
-Modify the type-gen templates to consume the adapter instead of using `openapi-zod-client` directly:
+**File**: `packages/sdks/oak-curriculum-sdk/src/validation/types.ts` line 7
 
-**Before** (Zod v3 leaks out):
 ```typescript
-// type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts
-import { z } from 'zod';  // v3
-// ... generates v3 schemas that leak into public API
+import type { z, ZodIssue } from 'zod'; // ❌ ZodIssue doesn't exist in Zod v4
 ```
 
-**After** (adapter boundary):
-```typescript
-// type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts
-import { generateToolSchemas } from '../../adapter/index.js';
-// ... generates v4 schemas from adapter
-```
-
-#### 1.5 Verify No Zod v3 Escapes
-
-Add a lint rule or type-check that ensures:
-- No `import { z } from 'zod'` (v3) outside the adapter
-- Only `import { z } from 'zod/v4'` in generated files
-- Adapter is the only module that imports from plain `'zod'`
-
-#### 1.6 Update SDK Exports
-
-Ensure public API surfaces export Zod v4 schemas:
-
-- `listUniversalTools()` returns `flatZodSchema` as Zod v4
-- Tool descriptors expose `toolMcpFlatInputSchema` as Zod v4
-- Tool descriptors expose `zodOutputSchema` as Zod v4
-
-### Quality Gates
-
-After Phase 1:
+**Verification** (run in SDK directory):
 
 ```bash
-pnpm type-gen    # Regenerate with adapter
-pnpm build       # Build all packages
-pnpm type-check  # Verify no type errors
-pnpm lint        # Verify code style
-pnpm test        # Run all tests
+node -e "const z = require('zod'); console.log('ZodIssue:', typeof z.ZodIssue)"
+# Output: ZodIssue: undefined
 ```
 
-### Success Criteria
+**Fix**: Use `ZodError['issues'][number]` pattern:
 
-- [ ] Adapter encapsulates all `openapi-zod-client` usage
-- [ ] Zod v3 types/objects NEVER escape the adapter boundary
-- [ ] SDK exports Zod v4 schemas only
-- [ ] Apps can import and use schemas with MCP SDK
-- [ ] No type assertions needed for Zod schema usage
-- [ ] All quality gates pass
-- [ ] `.describe()` calls preserved for MCP parameter descriptions
+```typescript
+import type { z, ZodError } from 'zod';
+type ZodIssue = ZodError['issues'][number];
+```
+
+### Issue 3: Zodios References Outside Adapter
+
+Files with "Zodios" that need fixing:
+
+| File                                                                               | Issue                                         |
+| ---------------------------------------------------------------------------------- | --------------------------------------------- |
+| `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.ts`                         | Defines `ZodiosEndpoint`, has Zodios comments |
+| `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.unit.test.ts`               | Test fixture has `new Zodios(endpoints)`      |
+| `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.integration.test.ts`        | Test fixture has `new Zodios(endpoints)`      |
+| `packages/sdks/oak-curriculum-sdk/src/types/generated/zod/curriculumZodSchemas.ts` | Generated with `ZodiosEndpoint`               |
+
+**Fix**: In `zodgen-core.ts`:
+
+- Rename `ZodiosEndpoint` → `Endpoint`
+- Remove all comments mentioning Zodios/`@zodios/core`
+- The interface stays in the generated file (it's for runtime use with `z.ZodType`)
 
 ---
 
-## Phase 2: Resolve TS2589 Type Complexity
+## Remediation Tasks
 
-### Context
+### Task 1: Rename ZodiosEndpoint → Endpoint in Generator
 
-After Phase 1, we may still have the TS2589 "Type instantiation is excessively deep" error. This is a separate issue caused by TypeScript's type inference struggling with the union of all tool schemas.
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.ts`
 
-**Root Cause**: When `listUniversalTools()` returns an array with `flatZodSchema` being a union of 26+ different Zod shapes, and this is passed to `registerTool<InputArgs>()`, TypeScript must infer the generic from a complex union. Zod's deeply recursive types combined with this union exceed TypeScript's depth limit.
-
-### Pre-Phase-2 Question
-
-Before solving, ask: **Is this solving the right problem at the right layer?**
-
-Options to consider:
-
-1. **Simplify the union**: Export a simpler type that doesn't require inferring all 26 tool shapes simultaneously
-2. **Break registration into typed calls**: Register each tool with its specific type, not a union
-3. **Use a type-erased intermediate**: Pass schemas through a function that returns `ZodRawShape` (the base type)
-4. **Generator-level fix**: Generate something that avoids the union entirely
-
-### Tasks
-
-#### 2.1 Diagnose the Exact Recursion Path
-
-**Investigation**:
-
-1. Create a minimal reproduction with 2-3 tools
-2. Identify which Zod type features cause the deepest recursion
-3. Check if the issue is in `flatZodSchema` typing or in `registerTool`'s generics
-
-#### 2.2 Evaluate Solutions
-
-**Option A: Simplify `UniversalToolListEntry.flatZodSchema` Type**
-
-Currently typed as `z.ZodRawShape | undefined`. Consider:
+Find all occurrences of `ZodiosEndpoint` and rename to `Endpoint`. Remove comments mentioning Zodios or `@zodios/core`. The interface should become:
 
 ```typescript
-// Instead of preserving exact shapes for each tool
-flatZodSchema?: z.ZodRawShape;
-
-// The value at runtime is still the specific shape, but the TYPE is the base
+'/** Endpoint interface for OpenAPI-derived endpoints */',
+'interface Endpoint {',
 ```
 
-This loses compile-time precision but avoids the union explosion.
+### Task 2: Export rawCurriculumSchemas
 
-**Option B: Separate Registration by Tool Type**
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.ts` (~line 204)
+
+Change:
 
 ```typescript
-// Instead of one loop with a union
-for (const tool of listUniversalTools()) { ... }
-
-// Two loops with narrower types
-for (const tool of listGeneratedTools()) { ... }  // narrower type
-for (const tool of listAggregatedTools()) { ... } // no flatZodSchema
+'const rawCurriculumSchemas = ' + body + ' as const satisfies CurriculumSchemaCollection;',
 ```
 
-**Option C: Type-Erasing Wrapper Function**
+To:
 
 ```typescript
-function toMcpInputSchema(schema: z.ZodRawShape | undefined): z.ZodRawShape | undefined {
-  return schema; // Type is now base ZodRawShape, not the union
-}
-
-const input = toMcpInputSchema(tool.flatZodSchema);
+'export const rawCurriculumSchemas = ' + body + ' as const satisfies CurriculumSchemaCollection;',
 ```
 
-**Option D: Generator-Level Type Simplification**
+### Task 3: Fix search-response-guards.ts
 
-At type-gen time, export a branded or simplified type that doesn't trigger deep inference.
+**File**: `packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts`
 
-#### 2.3 Implement Chosen Solution
+Change:
 
-Follow TDD:
+```typescript
+import type { z } from 'zod';
+import { curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
+```
 
-1. **RED**: Write a test that type-checks the registration loop
-2. **GREEN**: Implement the solution
-3. **REFACTOR**: Clean up
+To:
 
-#### 2.4 Verify No Functionality Lost
+```typescript
+import { z } from 'zod';
+import { rawCurriculumSchemas, curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
+```
 
-Ensure:
+Then use `rawCurriculumSchemas` for schema assignments that need type preservation:
 
-- Parameter descriptions still flow through
-- Type safety for tool args maintained where needed
-- No runtime behaviour changes
+```typescript
+export const lessonSummarySchema = rawCurriculumSchemas.LessonSummaryResponseSchema;
+export const unitSummarySchema = rawCurriculumSchemas.UnitSummaryResponseSchema;
+export const subjectSequencesSchema = rawCurriculumSchemas.SubjectSequenceResponseSchema;
+```
 
-### Quality Gates
+### Task 4: Fix ZodIssue Import
 
-After Phase 2:
+**File**: `packages/sdks/oak-curriculum-sdk/src/validation/types.ts`
+
+Change line 7:
+
+```typescript
+import type { z, ZodIssue } from 'zod';
+```
+
+To:
+
+```typescript
+import type { z, ZodError } from 'zod';
+/** ZodIssue type derived from ZodError (not directly exported in Zod v4) */
+type ZodIssue = ZodError['issues'][number];
+```
+
+### Task 5: Update Test Fixtures
+
+**Files**:
+
+- `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.unit.test.ts`
+- `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.integration.test.ts`
+
+Remove `export const api = new Zodios(endpoints);` from test fixtures. The adapter transformer removes this line, so fixtures should reflect post-transformation state.
+
+### Task 6: Regenerate and Verify
 
 ```bash
-pnpm type-check  # NO TS2589 error
-pnpm lint
-pnpm test
+pnpm type-gen
 pnpm build
+pnpm check
+
+# Verify no Zodios references in SDK
+grep -ri zodios packages/sdks  # Must return empty
 ```
 
-### Success Criteria
+---
 
-- [ ] No TS2589 error during type-check
-- [ ] No type shortcuts (`as`, `any`, etc.) introduced
-- [ ] MCP tool registration still works correctly
-- [ ] Parameter descriptions preserved
+## Zod v3 → v4 API Differences
+
+| Zod v3           | Zod v4                       | Notes               |
+| ---------------- | ---------------------------- | ------------------- |
+| `ZodSchema`      | `ZodType`                    | Type renamed        |
+| `ZodTypeAny`     | `ZodType`                    | Eliminated          |
+| `.passthrough()` | `.loose()`                   | Method renamed      |
+| `ZodIssue`       | `ZodError['issues'][number]` | Not a direct export |
 
 ---
 
-## Future: Address JSON Schema / Zod Redundancy
+## Key Files
 
-### Context
-
-The SDK currently exports both:
-
-- **JSON Schema**: `tool.inputSchema`, `tool.toolOutputJsonSchema`
-- **Zod Schema**: `tool.flatZodSchema`, `tool.zodOutputSchema`
-
-These contain overlapping information.
-
-### Options
-
-1. **Document when to use each**: JSON Schema for serialization, Zod for runtime validation
-2. **Consolidate**: Export only Zod, derive JSON Schema on demand
-3. **Keep both**: Accept redundancy for different use cases
-
-### Decision
-
-Defer until after Phase 1 and 2. Current priority is Zod version alignment and type safety.
+| File                                                                               | Role                                 |
+| ---------------------------------------------------------------------------------- | ------------------------------------ |
+| `packages/libs/openapi-zod-client-adapter/src/zod-v3-to-v4-transform.ts`           | Adapter: v3 → v4 code transform      |
+| `packages/sdks/oak-curriculum-sdk/type-gen/zodgen-core.ts`                         | Generator (has Zodios naming to fix) |
+| `packages/sdks/oak-curriculum-sdk/src/types/generated/zod/curriculumZodSchemas.ts` | Generated (never edit directly)      |
+| `packages/sdks/oak-curriculum-sdk/src/validation/types.ts`                         | Uses ZodIssue (needs fix)            |
+| `packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts`             | Type derivation (needs fix)          |
 
 ---
 
-## Implementation Order
+## Success Criteria
 
-1. **Phase 1.1-1.3**: Create adapter with Zod v3 → v4 conversion
-2. **Phase 1.4-1.5**: Update type-gen to use adapter, verify boundary
-3. **Phase 1.6**: Update SDK exports
-4. **Phase 2**: Address TS2589 (only if it persists after Phase 1)
-
----
-
-## Rollback Plan
-
-If Phase 1 causes issues:
-
-1. Revert adapter and type-gen template changes
-2. Re-run `pnpm type-gen` to restore previous output
-3. Apps continue using JSON Schema fallback
-
----
-
-## Future Replacement
-
-If we ever need to replace `openapi-zod-client` (e.g., for better Zod v4 support), the adapter defines exactly what we need:
-
-1. Parse OpenAPI operations
-2. Generate input schemas (flat and nested)
-3. Generate output schemas
-4. Preserve descriptions for MCP
-
-Any replacement library must satisfy the adapter interface.
-
----
-
-## References
-
-- [ADR-055: Zod Version Boundaries](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
-- [TS2589 Investigation Prompt](../../prompts/investigate-ts2589-type-recursion.prompt.md)
-- [Zod v3/v4 Compatibility](https://zod.dev/v4)
+- [ ] `ZodiosEndpoint` renamed to `Endpoint` in generator
+- [ ] No "Zodios" string anywhere outside adapter workspace
+- [ ] `rawCurriculumSchemas` exported from generated file
+- [ ] `search-response-guards.ts` uses `rawCurriculumSchemas`
+- [ ] `ZodIssue` import fixed in `validation/types.ts`
+- [ ] `pnpm type-gen` succeeds
+- [ ] `pnpm build` succeeds (including semantic-search app)
+- [ ] `pnpm check` passes
+- [ ] `grep -ri zodios packages/sdks` returns no results

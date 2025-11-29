@@ -132,7 +132,7 @@ Before each phase:
 2. **Re-read** `testing-strategy.md` - TDD proves behavior, not types
 3. **Re-read** `schema-first-execution.md` - Generator is single source of truth
 4. **Ask**: "Is this generated, not hand-written?"
-5. **Verify**: No `zod/v3` references outside SDK, no type assertions
+5. **Verify**: No Zod v3 references outside the openapi-zod-client-adapter workspace, no type assertions
 
 ---
 
@@ -404,7 +404,7 @@ function toPascalCase(str: string): string {
 **Acceptance Criteria**:
 
 1. ✅ Generator created at `type-gen/mcp-prompts/generate-mcp-prompts.ts`
-2. ✅ Generates `import { z } from 'zod/v4'` (NOT 'zod' or 'zod/v3')
+2. ✅ Generates `import { z } from 'zod'` where the consuming app must have Zod 4 installed.
 3. ✅ Generates Zod schemas for each prompt's arguments
 4. ✅ Generates MCP_PROMPTS array
 5. ✅ Generates getPromptMessages() function
@@ -568,11 +568,10 @@ export function registerPrompts(server: McpServer): void {
 
 1. ✅ Imports schemas from SDK, not local file
 2. ✅ No `as unknown as` or type assertions
-3. ✅ No `zod` or `zod/v3` imports in app's register-prompts.ts
-4. ✅ Uses `server.registerPrompt()` with `argsSchema`
-5. ✅ `extractArgsFromExtra` workaround removed
-6. ✅ `pnpm type-check` passes
-7. ✅ `pnpm lint` passes (no type assertion errors)
+3. ✅ Uses `server.registerPrompt()` with `argsSchema`
+4. ✅ `extractArgsFromExtra` workaround removed
+5. ✅ `pnpm type-check` passes
+6. ✅ `pnpm lint` passes (no type assertion errors)
 
 ---
 
@@ -620,7 +619,7 @@ Verify compliance with foundation documents:
 
 - [ ] **rules.md - Cardinal Rule**: Prompts generated at type-gen time, flow from SDK
 - [ ] **rules.md - No Type Shortcuts**: No `as`, `any`, `Record<string, unknown>`
-- [ ] **rules.md - No Zod v3 outside SDK**: App has no `zod/v3` imports
+- [ ] **rules.md - No Zod v3 outside openapi-zod-client-adapter workspace**: All other workspaces must use Zod v4 only
 - [ ] **testing-strategy.md - TDD**: E2E tests specified behavior; implementation made them pass
 - [ ] **testing-strategy.md - Tests prove behavior**: Tests don't validate Zod schema structure
 - [ ] **schema-first-execution.md**: Generator is source of truth

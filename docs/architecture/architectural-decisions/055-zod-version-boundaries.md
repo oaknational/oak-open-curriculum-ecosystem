@@ -15,7 +15,7 @@ The Oak MCP ecosystem involves three layers that use Zod for runtime validation:
 Each layer has different Zod version requirements:
 
 - The Oak Curriculum SDK uses **Zod v3** internally because `openapi-zod-client` (used for schema generation) requires Zod v3
-- The MCP SDK internally uses **Zod v4** (via `zod/v4` imports) but maintains compatibility with projects using Zod v3.25+
+- The MCP SDK internally uses **Zod v4**
 - Apps use **Zod v4** for modern features and MCP SDK compatibility
 
 ## Problem Statement
@@ -42,7 +42,7 @@ This upstream library reads the OpenAPI schema and produces Zod v3 schemas. We e
 2. Converts everything to Zod v4 using `zod/v4` (available in Zod 3.25+)
 3. Ensures Zod v3 artefacts **NEVER escape the adapter boundary**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                    openapi-zod-client Adapter                    │
 │  ┌─────────────────────────────────────────────────────────┐    │
@@ -74,9 +74,9 @@ The adapter's public interface defines what our project requires from `openapi-z
 ```typescript
 interface OpenApiZodAdapter {
   generateToolSchemas(operation: OpenApiOperation): {
-    flatInputSchema: z4.ZodObject<z4.ZodRawShape>;   // MCP registration
+    flatInputSchema: z4.ZodObject<z4.ZodRawShape>; // MCP registration
     nestedInputSchema: z4.ZodObject<z4.ZodRawShape>; // SDK invoke
-    outputSchema: z4.ZodType;                         // Response validation
+    outputSchema: z4.ZodType; // Response validation
   };
 }
 ```

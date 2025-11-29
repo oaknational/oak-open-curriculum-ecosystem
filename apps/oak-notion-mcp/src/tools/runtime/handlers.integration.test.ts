@@ -180,13 +180,14 @@ describe('Tool Handlers', () => {
       expect(result.content).toHaveLength(1);
       expect(result.content[0]).toHaveProperty('type', 'text');
       expect(result.content[0]).toHaveProperty('text');
-      if (result.content[0] && 'text' in result.content[0]) {
-        expect(result.content[0].text).toContain('Found 2 results');
+      const firstContent = result.content[0];
+      // Narrow to text response type
+      if (!('text' in firstContent)) {
+        throw new TypeError('Test: Expected text content, got blob');
       }
-
-      const resultText = result.content[0]?.text ?? '';
-      expect(resultText).toContain('Test Page');
-      expect(resultText).toContain('Test Database');
+      expect(firstContent.text).toContain('Found 2 results');
+      expect(firstContent.text).toContain('Test Page');
+      expect(firstContent.text).toContain('Test Database');
     });
 
     it('should apply type filter when provided', async () => {

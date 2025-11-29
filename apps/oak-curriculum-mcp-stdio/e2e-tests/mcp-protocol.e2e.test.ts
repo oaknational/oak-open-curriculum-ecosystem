@@ -155,27 +155,45 @@ describe('MCP Protocol E2E', () => {
 
   describe('Error Handling', () => {
     it('should handle unknown tool error', async () => {
-      await expect(client.callTool({ name: 'non-existent-tool', arguments: {} })).rejects.toThrow(
-        /Tool non-existent-tool not found/,
-      );
+      // MCP SDK returns isError: true instead of rejecting
+      const result = await client.callTool({ name: 'non-existent-tool', arguments: {} });
+      expect(result.isError).toBe(true);
+      const contentList = result.content as McpContent | undefined;
+      const content = contentList?.[0];
+      if (!content || !('text' in content)) {
+        throw new TypeError('Test: Expected text content');
+      }
+      expect(content.text).toMatch(/Tool non-existent-tool not found/);
     });
 
     it('should handle missing required parameters', async () => {
-      await expect(client.callTool({ name: 'get-search-lessons', arguments: {} })).rejects.toThrow(
-        /Invalid arguments.*get-search-lessons/,
-      );
+      // MCP SDK returns isError: true instead of rejecting
+      const result = await client.callTool({ name: 'get-search-lessons', arguments: {} });
+      expect(result.isError).toBe(true);
+      const contentList = result.content as McpContent | undefined;
+      const content = contentList?.[0];
+      if (!content || !('text' in content)) {
+        throw new TypeError('Test: Expected text content');
+      }
+      expect(content.text).toMatch(/Invalid arguments.*get-search-lessons/);
     });
 
     it('should handle invalid parameter values', async () => {
-      await expect(
-        client.callTool({
-          name: 'get-key-stages-subject-lessons',
-          arguments: {
-            keyStage: 'invalid-stage',
-            subject: 'maths',
-          },
-        }),
-      ).rejects.toThrow(/Invalid arguments.*get-key-stages-subject-lessons/);
+      // MCP SDK returns isError: true instead of rejecting
+      const result = await client.callTool({
+        name: 'get-key-stages-subject-lessons',
+        arguments: {
+          keyStage: 'invalid-stage',
+          subject: 'maths',
+        },
+      });
+      expect(result.isError).toBe(true);
+      const contentList = result.content as McpContent | undefined;
+      const content = contentList?.[0];
+      if (!content || !('text' in content)) {
+        throw new TypeError('Test: Expected text content');
+      }
+      expect(content.text).toMatch(/Invalid arguments.*get-key-stages-subject-lessons/);
     });
   });
 });

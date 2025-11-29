@@ -35,20 +35,18 @@ const SearchStringSchema = z.string().trim().min(1, { message: SEARCH_QUERY_ERRO
 const SearchObjectShape = z
   .object({
     query: z
-      .string({ invalid_type_error: SEARCH_QUERY_ERROR_MESSAGE })
+      .string({ error: SEARCH_QUERY_ERROR_MESSAGE })
       .trim()
       .min(1, { message: SEARCH_QUERY_ERROR_MESSAGE })
       .optional(),
     q: z
-      .string({ invalid_type_error: SEARCH_QUERY_ERROR_MESSAGE })
+      .string({ error: SEARCH_QUERY_ERROR_MESSAGE })
       .trim()
       .min(1, { message: SEARCH_QUERY_ERROR_MESSAGE })
       .optional(),
-    keyStage: z
-      .string({ invalid_type_error: 'keyStage must be one of ks1, ks2, ks3, ks4' })
-      .optional(),
-    subject: z.string({ invalid_type_error: 'subject must be a string' }).optional(),
-    unit: z.string({ invalid_type_error: 'unit must be a string' }).optional(),
+    keyStage: z.string({ error: 'keyStage must be one of ks1, ks2, ks3, ks4' }).optional(),
+    subject: z.string({ error: 'subject must be a string' }).optional(),
+    unit: z.string({ error: 'unit must be a string' }).optional(),
   })
   .strict();
 

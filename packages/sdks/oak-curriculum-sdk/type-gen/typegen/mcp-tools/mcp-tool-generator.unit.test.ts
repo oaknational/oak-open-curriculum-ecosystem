@@ -38,13 +38,10 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     );
     expect(output.runtime['execute.ts']).toContain('switch (name) {');
     expect(output.runtime['execute.ts']).not.toContain('callToolEntry(');
-    expect(output.runtime['lib.ts']).toContain(
-      "import { getToolFromOperationId, isToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolName, type ToolOperationId } from '../data/definitions.js';",
+    // Runtime index exports listAllToolDescriptors for public API
+    expect(output.runtime['index.ts']).toContain(
+      "export { callTool, listAllToolDescriptors } from './execute.js';",
     );
-    expect(output.runtime['lib.ts']).toContain(
-      "import { callTool, listAllToolDescriptors } from './execute.js';",
-    );
-    expect(output.runtime['lib.ts']).not.toContain('override');
     expect(output.index).toContain('generated/data/index.js');
 
     expect(output.stubs['index.ts']).toContain('createStubToolExecutor');

@@ -108,13 +108,15 @@ async function createTestServerWithPrompt(): Promise<express.Express> {
     },
     (args) => {
       // Args should be directly available, typed by the schema
+      const topic: string = args.topic;
+      const category: string = args.category ?? 'none';
       return {
         messages: [
           {
             role: 'user',
             content: {
               type: 'text',
-              text: `Topic received: ${String(args.topic)}, Category: ${args.category ?? 'none'}`,
+              text: `Topic received: ${topic}, Category: ${category}`,
             },
           },
         ],

@@ -18,7 +18,7 @@ import {
   applyFixtureModeCookie,
   type FixtureMode,
 } from '../../lib/fixture-mode';
-import type { SafeParseReturnType } from 'zod/v3';
+import type { ZodSafeParseResult } from 'zod';
 import {
   buildFixtureResponse,
   isMultiScopePayload,
@@ -26,9 +26,7 @@ import {
   type SearchResponsePayload,
 } from './fixture-responses';
 
-export function parseSearchRequest(
-  payload: unknown,
-): SafeParseReturnType<unknown, SearchStructuredRequest> {
+export function parseSearchRequest(payload: unknown): ZodSafeParseResult<SearchStructuredRequest> {
   return SearchStructuredRequestSchema.safeParse(payload);
 }
 

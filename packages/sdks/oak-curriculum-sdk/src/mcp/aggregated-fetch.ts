@@ -88,7 +88,7 @@ const FetchStringSchema = z
 const FetchObjectSchema = z
   .object({
     id: z
-      .string({ invalid_type_error: 'fetch requires an "id" string' })
+      .string({ error: 'fetch requires an "id" string' })
       .trim()
       .min(1, { message: 'fetch requires an "id" string' }),
   })

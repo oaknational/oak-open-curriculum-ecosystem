@@ -10,3 +10,5 @@ export { MCP_TOOL_DESCRIPTORS, toolNames, getToolEntryFromToolName, getToolFromT
 export { type ToolDescriptor } from "./contract/tool-descriptor.contract.js";
 
 export { type ToolArgs, type ToolArgsForOperationId, type ToolDescriptors, type ToolInvoke, type ToolNameFromOperationId, type ToolResult, type ToolResultForOperationId, type RegisteredToolEntries, type ToolClient, type ToolClientForName, type ToolArgsForName, type ToolResultForName } from "./generated/aliases/types.js";
+
+export { listAllToolDescriptors } from "./generated/runtime/index.js";

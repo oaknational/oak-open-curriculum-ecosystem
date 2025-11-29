@@ -188,7 +188,12 @@ describe('createResourceHandlers', () => {
         uri: 'notion://discovery',
         mimeType: 'application/json',
       });
-      expect(result.contents[0]?.text).toContain('# Notion Workspace Discovery');
+      const content = result.contents[0];
+      // Narrow to text response type
+      if (!('text' in content)) {
+        throw new TypeError('Test: Expected text content, got blob');
+      }
+      expect(content.text).toContain('# Notion Workspace Discovery');
 
       expect(mockDebug).toHaveBeenCalledWith('Reading resource', {
         uri: 'notion://discovery',

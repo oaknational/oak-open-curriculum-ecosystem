@@ -4,6 +4,7 @@ import {
   lessonSummarySchema,
   subjectSequencesSchema,
   unitSummarySchema,
+  type SearchSubjectSequences,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { isKeyStage, isSubject } from '../../adapters/sdk-guards';
@@ -50,7 +51,7 @@ export interface FixtureData {
   readonly unitSummaries: ReadonlyMap<string, unknown>;
   readonly lessonSummaries: ReadonlyMap<string, unknown>;
   readonly lessonTranscripts: ReadonlyMap<string, FixtureLessonTranscript>;
-  readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, readonly unknown[]>;
+  readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences>;
   readonly sequenceUnits: ReadonlyMap<string, unknown>;
 }
 
@@ -182,9 +183,9 @@ function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTr
 
 function parseSubjectSequenceMap(
   value: unknown,
-): ReadonlyMap<SearchSubjectSlug, readonly unknown[]> {
+): ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences> {
   const record = assertRecord(value, 'subject sequences must be an object keyed by subject');
-  const entries = new Map<SearchSubjectSlug, readonly unknown[]>();
+  const entries = new Map<SearchSubjectSlug, SearchSubjectSequences>();
   for (const [slug, sequences] of Object.entries(record)) {
     const subject = ensureSubject(
       slug,

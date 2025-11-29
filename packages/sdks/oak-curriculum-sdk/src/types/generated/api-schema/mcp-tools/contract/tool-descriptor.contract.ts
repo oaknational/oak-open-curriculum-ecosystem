@@ -11,7 +11,7 @@
  * for the schema-first execution directive that governs this file.
  */
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import type { ZodSchema, ZodType, ZodTypeDef } from 'zod';
+import type { ZodType } from 'zod';
 
 /**
  * MCP security scheme types.
@@ -75,23 +75,23 @@ export interface ToolDescriptor<
   readonly operationId: string;
   readonly path: string;
   readonly method: string;
-  readonly toolZodSchema: ZodType<TArgs, ZodTypeDef, unknown>;
+  readonly toolZodSchema: ZodType<TArgs>;
   readonly toolInputJsonSchema: {
     readonly type: 'object';
-    readonly properties?: Record<string, unknown>;
+    readonly properties?: { readonly [key: string]: object };
     readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
   readonly toolOutputJsonSchema: unknown;
-  readonly zodOutputSchema: ZodSchema<TResult>;
+  readonly zodOutputSchema: ZodType<TResult>;
   readonly describeToolArgs: () => string;
   readonly inputSchema: {
     readonly type: 'object';
-    readonly properties?: Record<string, unknown>;
+    readonly properties?: { readonly [key: string]: object };
     readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
-  readonly toolMcpFlatInputSchema: ZodType<TFlatArgs, ZodTypeDef, unknown>;
+  readonly toolMcpFlatInputSchema: ZodType<TFlatArgs>;
   readonly transformFlatToNestedArgs: (flatArgs: TFlatArgs) => TArgs;
   readonly documentedStatuses: readonly TDocumentedStatus[];
   readonly securitySchemes?: readonly SecurityScheme[];

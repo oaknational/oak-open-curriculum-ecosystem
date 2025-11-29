@@ -1,9 +1,5 @@
-import { defineConfig } from 'vitest/config';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
-
-const rootDir = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(rootDir, '../..');
+import { mergeConfig } from 'vitest/config';
+import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
 /**
  * Vitest config specifically for built server E2E tests.
@@ -15,11 +11,8 @@ const repoRoot = resolve(rootDir, '../..');
  *
  * Run with: pnpm test:e2e:built
  */
-export default defineConfig({
+export default mergeConfig(baseE2EConfig, {
   test: {
-    globals: true,
-    environment: 'node',
-    setupFiles: [resolve(repoRoot, 'test.setup.env.ts')],
     include: ['e2e-tests/built-server.e2e.test.ts'],
     exclude: ['node_modules', 'dist', 'coverage'],
     isolate: true,
@@ -29,7 +22,5 @@ export default defineConfig({
         singleFork: true,
       },
     },
-    testTimeout: 30000,
-    hookTimeout: 30000,
   },
 });

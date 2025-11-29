@@ -3,7 +3,7 @@
  * Maps API operations to their validators from generated data
  */
 
-import type { ZodSchema } from 'zod';
+import type { ZodType } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
 import { parseEndpointParameters } from './types.js';
 import { toColon } from '../types/generated/api-schema/path-utils.js';
@@ -15,7 +15,7 @@ import type {
 import { REQUEST_PARAMETER_SCHEMAS } from '../types/generated/api-schema/validation/request-parameter-map.js';
 
 const parameterSchemaEntries = typeSafeEntries(REQUEST_PARAMETER_SCHEMAS);
-const parameterSchemaMap = new Map<string, ZodSchema>(parameterSchemaEntries);
+const parameterSchemaMap = new Map<string, ZodType>(parameterSchemaEntries);
 
 const knownPaths = (() => {
   const paths = new Set<string>();

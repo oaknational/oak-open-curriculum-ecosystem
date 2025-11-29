@@ -24,6 +24,7 @@ export {
   getToolFromOperationId,
   getToolNameFromOperationId,
   getOperationIdFromToolName,
+  listAllToolDescriptors,
   type ToolOperationId,
   type ToolOperationIdForName,
   type ToolDescriptorForName,
@@ -46,12 +47,6 @@ export {
   SCOPES_SUPPORTED,
   type ScopesSupported,
 } from '../types/generated/api-schema/mcp-tools/generated/data/scopes-supported.js';
-
-export {
-  McpToolRegistry,
-  attachMcpHandlers,
-  createMcpToolRegistry,
-} from '../types/generated/api-schema/mcp-tools/generated/runtime/lib.js';
 
 export {
   createStubToolExecutionAdapter,

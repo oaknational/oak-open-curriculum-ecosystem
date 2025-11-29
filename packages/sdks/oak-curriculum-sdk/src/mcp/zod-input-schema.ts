@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { typeSafeEntries } from '../types/helpers/type-helpers.js';
+import { typeSafeEntries, typeSafeFromEntries } from '../types/helpers/type-helpers.js';
 
 interface JsonSchemaPropertyString {
   readonly type: 'string';
@@ -59,7 +59,7 @@ function isNonEmptyStringArray(arr: readonly string[]): arr is [string, ...strin
   return arr.length > 0;
 }
 
-function buildEnumStringSchema(values: readonly unknown[]): z.ZodTypeAny {
+function buildEnumStringSchema(values: readonly unknown[]): z.ZodType {
   const allowed = values.map((v) => String(v));
   // Use z.enum() for proper JSON Schema conversion (produces "enum" array instead of just "type": "string")
   if (isNonEmptyStringArray(allowed)) {
@@ -68,32 +68,32 @@ function buildEnumStringSchema(values: readonly unknown[]): z.ZodTypeAny {
   return z.string().refine((v) => allowed.includes(v), { message: 'Invalid enum value' });
 }
 
-function buildEnumNumberSchema(values: readonly unknown[]): z.ZodTypeAny {
+function buildEnumNumberSchema(values: readonly unknown[]): z.ZodType {
   const allowed = values.filter((v) => typeof v === 'number');
   return z.number().refine((v) => allowed.includes(v), { message: 'Invalid enum value' });
 }
 
-function buildArraySchema(prop: JsonSchemaPropertyArray): z.ZodTypeAny {
+function buildArraySchema(prop: JsonSchemaPropertyArray): z.ZodType {
   return z.array(zodForProperty(prop.items));
 }
 
-function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodTypeAny {
+function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodType {
   const required = new Set(prop.required ?? []);
   const properties = prop.properties ?? {};
-  const shape: z.ZodRawShape = {};
-  for (const [key, property] of typeSafeEntries(properties)) {
+  const entries = typeSafeEntries(properties).map(([key, property]) => {
     const base = zodForProperty(property);
-    shape[key] = required.has(key) ? base : base.optional();
-  }
+    return [key, required.has(key) ? base : base.optional()] as const;
+  });
+  const shape = typeSafeFromEntries(entries);
   const objectSchema = z.object(shape);
   return prop.additionalProperties === false ? objectSchema.strict() : objectSchema;
 }
 
-function withDescription(schema: z.ZodTypeAny, description: string | undefined): z.ZodTypeAny {
+function withDescription(schema: z.ZodType, description: string | undefined): z.ZodType {
   return description ? schema.describe(description) : schema;
 }
 
-function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
+function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodType {
   switch (prop.type) {
     case 'string':
       return Array.isArray(prop.enum) ? buildEnumStringSchema(prop.enum) : z.string();
@@ -110,7 +110,7 @@ function zodBaseForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
   }
 }
 
-function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
+function zodForProperty(prop: JsonSchemaProperty): z.ZodType {
   return withDescription(zodBaseForProperty(prop), prop.description);
 }
 
@@ -121,20 +121,19 @@ function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
 export function zodRawShapeFromToolInputJsonSchema(
   schema: GenericToolInputJsonSchema,
 ): z.ZodRawShape {
-  const shape: z.ZodRawShape = {};
   const required = new Set(schema.required ?? []);
   const props = schema.properties ?? {};
-  for (const [key, prop] of typeSafeEntries(props)) {
+  const entries = typeSafeEntries(props).map(([key, prop]) => {
     const base = zodForProperty(prop);
-    shape[key] = required.has(key) ? base : base.optional();
-  }
-  return shape;
+    return [key, required.has(key) ? base : base.optional()] as const;
+  });
+  return typeSafeFromEntries(entries);
 }
 
 /**
  * Build a strict Zod object from the generated JSON schema for tool inputs.
  */
-export function zodFromToolInputJsonSchema(schema: GenericToolInputJsonSchema): z.ZodTypeAny {
+export function zodFromToolInputJsonSchema(schema: GenericToolInputJsonSchema): z.ZodType {
   const shape = zodRawShapeFromToolInputJsonSchema(schema);
   return z.object(shape).strict();
 }

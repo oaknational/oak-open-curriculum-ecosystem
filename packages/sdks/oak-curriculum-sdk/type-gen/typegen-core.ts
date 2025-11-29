@@ -40,7 +40,7 @@ import { generateSearchIndexDocumentModules } from './typegen/search/generate-se
 import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
-import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
+import { getEndpointDefinitions } from './adapter/index.js';
 import { ensurePathsOnSchema } from './typegen-core-helpers.js';
 import {
   calculateSdkSchemaPath,
@@ -162,7 +162,7 @@ export async function generateSchemaArtifacts(
   runAllCrossValidations(sdkSchema, responseMapEntries);
   const responseValidatorsContent = emitResponseValidators(responseMapEntries);
   const sdkSchemaWithPaths = ensurePathsOnSchema(sdkSchema);
-  const endpointContext = getZodiosEndpointDefinitionList(sdkSchemaWithPaths, {
+  const endpointContext = getEndpointDefinitions(sdkSchemaWithPaths, {
     shouldExportAllSchemas: true,
     shouldExportAllTypes: true,
     groupStrategy: 'none',

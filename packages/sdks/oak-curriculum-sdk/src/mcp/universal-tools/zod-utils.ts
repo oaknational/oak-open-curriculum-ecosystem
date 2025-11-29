@@ -26,7 +26,7 @@ import { z } from 'zod';
  * }
  * ```
  */
-export function isZodObject(schema: z.ZodTypeAny): schema is z.ZodObject<z.ZodRawShape> {
+export function isZodObject(schema: z.ZodType): schema is z.ZodObject<z.ZodRawShape> {
   return schema instanceof z.ZodObject;
 }
 
@@ -52,7 +52,7 @@ export function isZodObject(schema: z.ZodTypeAny): schema is z.ZodObject<z.ZodRa
  * }
  * ```
  */
-export function extractZodShape(schema: z.ZodTypeAny | undefined): z.ZodRawShape | undefined {
+export function extractZodShape(schema: z.ZodType | undefined): z.ZodRawShape | undefined {
   if (schema && isZodObject(schema)) {
     return schema.shape;
   }

@@ -110,8 +110,8 @@ importers:
   apps/oak-curriculum-mcp-stdio:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.20.1
-        version: 1.20.1
+        specifier: ^1.23.0
+        version: 1.23.0(zod@4.1.12)
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -229,8 +229,8 @@ importers:
   apps/oak-notion-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.20.1
-        version: 1.20.1
+        specifier: ^1.23.0
+        version: 1.23.0(zod@4.1.12)
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.2
@@ -383,6 +383,22 @@ importers:
         specifier: ^5.9.2
         version: 5.9.3
 
+  packages/libs/openapi-zod-client-adapter:
+    dependencies:
+      openapi-zod-client:
+        specifier: ^1.18.3
+        version: 1.18.3(react@19.2.0)
+      zod:
+        specifier: ^3
+        version: 3.25.76
+    devDependencies:
+      openapi3-ts:
+        specifier: ^4.5.0
+        version: 4.5.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+
   packages/libs/storage:
     devDependencies:
       typescript:
@@ -402,16 +418,22 @@ importers:
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../libs/logger
+      '@oaknational/openapi-zod-client-adapter':
+        specifier: workspace:*
+        version: link:../../libs/openapi-zod-client-adapter
+      '@zod/core':
+        specifier: ^0.11.6
+        version: 0.11.6
       openapi-fetch:
         specifier: ^0.15.0
         version: 0.15.0
       zod:
-        specifier: ^3
-        version: 3.25.76
+        specifier: ^4
+        version: 4.1.12
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.20.1
-        version: 1.20.1
+        specifier: ^1.23.0
+        version: 1.23.0(zod@4.1.12)
       '@next/eslint-plugin-next':
         specifier: ^16.0.3
         version: 16.0.3
@@ -424,9 +446,6 @@ importers:
       openapi-typescript:
         specifier: ^7.10.1
         version: 7.10.1(typescript@5.9.3)
-      openapi-zod-client:
-        specifier: ^1.18.3
-        version: 1.18.3(react@19.2.0)
       openapi3-ts:
         specifier: ^4.5.0
         version: 4.5.0
@@ -1543,10 +1562,6 @@ packages:
   '@liuli-util/fs-extra@0.1.0':
     resolution: {integrity: sha512-eaAyDyMGT23QuRGbITVY3SOJff3G9ekAAyGqB9joAnTBmqvFN+9a1FazOdO70G6IUqgpKV451eBHYSRcOJ/FNQ==}
 
-  '@modelcontextprotocol/sdk@1.20.1':
-    resolution: {integrity: sha512-j/P+yuxXfgxb+mW7OEoRCM3G47zCTDqUPivJo/VzpjbG8I9csTXtOprCf5FfOfHK4whOJny0aHuBEON+kS7CCA==}
-    engines: {node: '>=18'}
-
   '@modelcontextprotocol/sdk@1.23.0':
     resolution: {integrity: sha512-MCGd4K9aZKvuSqdoBkdMvZNcYXCkZRYVs/Gh92mdV5IHbctX9H9uIvd4X93+9g8tBbXv08sxc/QHXTzf8y65bA==}
     engines: {node: '>=18'}
@@ -2347,6 +2362,9 @@ packages:
 
   '@vitest/utils@4.0.12':
     resolution: {integrity: sha512-DVS/TLkLdvGvj1avRy0LSmKfrcI9MNFvNGN6ECjTUHWJdlcgPDOXhjMis5Dh7rBH62nAmSXnkPbE+DZ5YD75Rw==}
+
+  '@zod/core@0.11.6':
+    resolution: {integrity: sha512-03Bv82fFSfjDAvMfdHHdGSS6SOJs0iCcJlWJv1kJHRtoTT02hZpyip/2Lk6oo4l4FtjuwTrsEQTwg/LD8I7dJA==}
 
   '@zodios/core@10.9.6':
     resolution: {integrity: sha512-aH4rOdb3AcezN7ws8vDgBfGboZMk2JGGzEq/DtW65MhnRxyTGRuLJRWVQ/2KxDgWvV2F5oTkAS+5pnjKbl0n+A==}
@@ -6168,11 +6186,6 @@ packages:
     resolution: {integrity: sha512-CzhO+pFNo8ajLM2d2IW/R93ipy99LWjtwblvC1RsoSUMZgyLbYFr221TnSNT7GjGdYui6P459mw9JH/g/zW2ug==}
     engines: {node: '>=18'}
 
-  zod-to-json-schema@3.24.6:
-    resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
-    peerDependencies:
-      zod: ^3.24.1
-
   zod-to-json-schema@3.25.0:
     resolution: {integrity: sha512-HvWtU2UG41LALjajJrML6uQejQhNJx+JBO9IflpSja4R03iNWfKXrj6W2h7ljuLyc1nKS+9yDyL/9tD1U/yBnQ==}
     peerDependencies:
@@ -7233,23 +7246,6 @@ snapshots:
       '@types/fs-extra': 9.0.13
       fs-extra: 10.1.0
 
-  '@modelcontextprotocol/sdk@1.20.1':
-    dependencies:
-      ajv: 6.12.6
-      content-type: 1.0.5
-      cors: 2.8.5
-      cross-spawn: 7.0.6
-      eventsource: 3.0.7
-      eventsource-parser: 3.0.6
-      express: 5.1.0
-      express-rate-limit: 7.5.1(express@5.1.0)
-      pkce-challenge: 5.0.0
-      raw-body: 3.0.1
-      zod: 3.25.76
-      zod-to-json-schema: 3.24.6(zod@3.25.76)
-    transitivePeerDependencies:
-      - supports-color
-
   '@modelcontextprotocol/sdk@1.23.0(zod@4.1.12)':
     dependencies:
       ajv: 8.17.1
@@ -8154,6 +8150,8 @@ snapshots:
     dependencies:
       '@vitest/pretty-format': 4.0.12
       tinyrainbow: 3.0.3
+
+  '@zod/core@0.11.6': {}
 
   '@zodios/core@10.9.6(axios@1.12.2)(zod@3.25.76)':
     dependencies:
@@ -12200,7 +12198,7 @@ snapshots:
 
   whence@2.1.0:
     dependencies:
-      '@babel/parser': 7.28.4
+      '@babel/parser': 7.28.5
       eval-estree-expression: 3.0.1
 
   which-boxed-primitive@1.1.1:
@@ -12322,10 +12320,6 @@ snapshots:
   yoctocolors-cjs@2.1.3: {}
 
   yoctocolors@2.1.2: {}
-
-  zod-to-json-schema@3.24.6(zod@3.25.76):
-    dependencies:
-      zod: 3.25.76
 
   zod-to-json-schema@3.25.0(zod@4.1.12):
     dependencies:
