@@ -51,86 +51,78 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      color-scheme: light dark;
-    }
-    
-    * {
-      box-sizing: border-box;
-    }
-    
-    body {
-      margin: 0;
-      padding: 16px;
-      font-family: 'Lexend', system-ui, -apple-system, sans-serif;
-    }
-    
-    #root {
-      background: #bef2bd;
-      color: #1b3d1c;
-      border-radius: 8px;
-      padding: 16px;
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      #root {
-        background: #1b3d1c;
-        color: #f0f7f0;
-      }
-    }
-    
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(27, 61, 28, 0.2);
-    }
-    
-    @media (prefers-color-scheme: dark) {
-      .header {
-        border-bottom-color: rgba(240, 247, 240, 0.2);
-      }
-    }
-    
-    .logo {
-      width: 32px;
-      height: 32px;
-    }
-    
-    .title {
-      font-weight: 500;
-      font-size: 14px;
-      margin: 0;
-    }
-    
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      font-size: 13px;
-      line-height: 1.5;
-      margin: 0;
-      font-family: 'Lexend', system-ui, -apple-system, sans-serif;
-    }
+    :root { color-scheme: light dark; --g: #bef2bd; --f: #1b3d1c; --l: #f0f7f0; --a: #287d3c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px; font-family: 'Lexend', system-ui, sans-serif; }
+    #root { background: var(--g); color: var(--f); border-radius: 12px; padding: 20px; max-height: 500px; overflow-y: auto; }
+    @media (prefers-color-scheme: dark) { #root { background: var(--f); color: var(--l); } }
+    .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid rgba(27,61,28,.15); }
+    @media (prefers-color-scheme: dark) { .hdr { border-bottom-color: rgba(240,247,240,.15); } }
+    .logo { width: 36px; height: 36px; }
+    .ttl { font-weight: 600; font-size: 16px; margin: 0; }
+    .sec { margin-bottom: 16px; }
+    .sec-ttl { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 10px; opacity: .7; }
+    .list { display: flex; flex-direction: column; gap: 8px; }
+    .item { background: rgba(255,255,255,.5); border-radius: 8px; padding: 12px; border: 1px solid rgba(27,61,28,.1); }
+    @media (prefers-color-scheme: dark) { .item { background: rgba(0,0,0,.2); border-color: rgba(240,247,240,.1); } }
+    .item-ttl { font-weight: 500; font-size: 14px; margin: 0 0 4px; }
+    .meta { font-size: 12px; opacity: .7; margin: 0; }
+    .link { color: var(--a); text-decoration: none; font-size: 12px; font-weight: 500; }
+    @media (prefers-color-scheme: dark) { .link { color: var(--g); } }
+    .badge { background: var(--a); color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+    pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; line-height: 1.5; margin: 0; font-family: monospace; background: rgba(0,0,0,.05); padding: 12px; border-radius: 8px; max-height: 300px; overflow-y: auto; }
+    @media (prefers-color-scheme: dark) { pre { background: rgba(255,255,255,.05); } }
+    .empty { text-align: center; padding: 24px; opacity: .6; font-size: 14px; }
   </style>
 </head>
 <body>
   <div id="root">
-    <div class="header">
-      <img class="logo" src="data:image/png;base64,${OAK_LOGO_BASE64}" alt="Oak National Academy">
-      <h1 class="title">Oak National Academy</h1>
+    <div class="hdr">
+      <img class="logo" src="data:image/png;base64,${OAK_LOGO_BASE64}" alt="Oak">
+      <h1 class="ttl">Oak National Academy</h1>
     </div>
-    <pre id="output"></pre>
+    <div id="c"></div>
   </div>
   <script type="module">
-    // ChatGPT provides tool output via window.openai.toolOutput
-    const output = window.openai?.toolOutput ?? {};
-    document.getElementById('output').textContent = JSON.stringify(output, null, 2);
+    const o = window.openai?.toolOutput ?? {}, c = document.getElementById('c'), d = o.data;
+    const esc = s => typeof s !== 'string' ? '' : s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    if (d?.lessons !== undefined) {
+      let h = '';
+      const ls = d.lessons?.results ?? d.lessons ?? [];
+      if (Array.isArray(ls) && ls.length > 0) {
+        h += '<div class="sec"><h2 class="sec-ttl">Lessons<span class="badge">' + ls.length + '</span></h2><div class="list">';
+        ls.slice(0,5).forEach(l => {
+          const t = l.lessonTitle || l.title || l.slug || 'Untitled', s = l.subjectTitle || '', k = l.keyStage || '', u = l.canonicalUrl || '';
+          h += '<div class="item"><p class="item-ttl">' + esc(t) + '</p>';
+          if (s || k) h += '<p class="meta">' + esc([s,k].filter(Boolean).join(' • ')) + '</p>';
+          if (u) h += '<a class="link" href="' + esc(u) + '" target="_blank">View →</a>';
+          h += '</div>';
+        });
+        if (ls.length > 5) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ls.length-5) + ' more</p>';
+        h += '</div></div>';
+      }
+      const ts = d.transcripts?.results ?? d.transcripts ?? [];
+      if (Array.isArray(ts) && ts.length > 0) {
+        h += '<div class="sec"><h2 class="sec-ttl">Transcripts<span class="badge">' + ts.length + '</span></h2><div class="list">';
+        ts.slice(0,3).forEach(t => {
+          const ttl = t.lessonTitle || t.title || 'Transcript', sn = t.highlightedContent || t.snippet || '';
+          h += '<div class="item"><p class="item-ttl">' + esc(ttl) + '</p>';
+          if (sn) h += '<p class="meta">' + esc(sn.slice(0,150)) + (sn.length>150?'...':'') + '</p>';
+          h += '</div>';
+        });
+        if (ts.length > 3) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ts.length-3) + ' more</p>';
+        h += '</div></div>';
+      }
+      c.innerHTML = h || '<div class="empty">No results found.</div>';
+    } else if (o.status !== undefined || o.data !== undefined) {
+      c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
+    } else if (Object.keys(o).length === 0) {
+      c.innerHTML = '<div class="empty">No data available.</div>';
+    } else {
+      c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
+    }
   </script>
 </body>
 </html>`.trim();
