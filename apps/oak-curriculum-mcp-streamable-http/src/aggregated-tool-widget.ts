@@ -32,62 +32,107 @@ export const AGGREGATED_TOOL_WIDGET_MIME_TYPE = 'text/html+skybridge';
  * Oak-branded HTML widget for rendering tool output.
  *
  * Features:
- * - Oak National Academy logo in header
+ * - Oak National Academy logo in header with optional tool subtitle
  * - Lexend font from Google Fonts (Oak brand typeface)
- * - Oak brand colors with light/dark mode support
+ * - Oak brand colors with light/dark mode support (WCAG AA compliant)
  * - Reads tool output from `window.openai.toolOutput`
  * - Responsive JSON formatting with word wrap
+ * - AI disclaimer footer
  *
  * Light mode colors:
  * - Background: #bef2bd (soft green)
- * - Text: #1b3d1c (dark forest)
+ * - Text: #1a3a1b (dark forest - adjusted for 4.5:1+ contrast)
+ * - Secondary: #3d5e3e (muted green - adjusted for 4.5:1+ contrast)
  *
  * Dark mode colors:
  * - Background: #1b3d1c (dark forest)
  * - Text: #f0f7f0 (off-white)
+ * - Secondary: #b8dab9 (light green - adjusted for 4.5:1+ contrast)
  */
 export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oak National Academy</title>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: light dark; --g: #bef2bd; --f: #1b3d1c; --l: #f0f7f0; --a: #287d3c; }
+    :root {
+      color-scheme: light dark;
+      --bg: #bef2bd;
+      --fg: #1a3a1b;
+      --fg-secondary: #3d5e3e;
+      --accent: #287d3c;
+      --item-bg: rgba(255,255,255,.5);
+      --item-border: rgba(27,61,28,.1);
+      --code-bg: rgba(0,0,0,.12);
+      --border-color: rgba(27,61,28,.15);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1b3d1c;
+        --fg: #f0f7f0;
+        --fg-secondary: #b8dab9;
+        --accent: #8cd98f;
+        --item-bg: rgba(0,0,0,.2);
+        --item-border: rgba(240,247,240,.1);
+        --code-bg: rgba(255,255,255,.1);
+        --border-color: rgba(240,247,240,.15);
+      }
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 16px; font-family: 'Lexend', system-ui, sans-serif; }
-    #root { background: var(--g); color: var(--f); border-radius: 12px; padding: 20px; max-height: 500px; overflow-y: auto; }
-    @media (prefers-color-scheme: dark) { #root { background: var(--f); color: var(--l); } }
-    .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid rgba(27,61,28,.15); }
-    @media (prefers-color-scheme: dark) { .hdr { border-bottom-color: rgba(240,247,240,.15); } }
+    html, body { height: 100%; margin: 0; }
+    body { padding: 16px; font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
+    #root { background: var(--bg); color: var(--fg); border-radius: 12px; padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
+    .hdr-text { display: flex; flex-direction: column; gap: 2px; }
     .logo { width: 36px; height: 36px; }
     .ttl { font-weight: 600; font-size: 16px; margin: 0; }
+    .sub-ttl { font-size: 12px; color: var(--fg-secondary); margin: 0; }
+    #c { flex: 1; }
     .sec { margin-bottom: 16px; }
-    .sec-ttl { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 10px; opacity: .7; }
+    .sec-ttl { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 10px; color: var(--fg-secondary); }
     .list { display: flex; flex-direction: column; gap: 8px; }
-    .item { background: rgba(255,255,255,.5); border-radius: 8px; padding: 12px; border: 1px solid rgba(27,61,28,.1); }
-    @media (prefers-color-scheme: dark) { .item { background: rgba(0,0,0,.2); border-color: rgba(240,247,240,.1); } }
+    .item { background: var(--item-bg); border-radius: 8px; padding: 12px; border: 1px solid var(--item-border); }
     .item-ttl { font-weight: 500; font-size: 14px; margin: 0 0 4px; }
-    .meta { font-size: 12px; opacity: .7; margin: 0; }
-    .link { color: var(--a); text-decoration: none; font-size: 12px; font-weight: 500; }
-    @media (prefers-color-scheme: dark) { .link { color: var(--g); } }
-    .badge { background: var(--a); color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
-    pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; line-height: 1.5; margin: 0; font-family: monospace; background: rgba(0,0,0,.05); padding: 12px; border-radius: 8px; max-height: 300px; overflow-y: auto; }
-    @media (prefers-color-scheme: dark) { pre { background: rgba(255,255,255,.05); } }
-    .empty { text-align: center; padding: 24px; opacity: .6; font-size: 14px; }
+    .meta { font-size: 12px; color: var(--fg-secondary); margin: 0; }
+    .link { color: var(--accent); text-decoration: none; font-size: 12px; font-weight: 500; }
+    .badge { background: var(--accent); color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+    @media (prefers-color-scheme: dark) { .badge { color: #1b3d1c; } }
+    pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; line-height: 1.5; margin: 0; font-family: monospace; background: var(--code-bg); padding: 12px; border-radius: 8px; }
+    code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+    .empty { text-align: center; padding: 24px; color: var(--fg-secondary); font-size: 14px; }
+    .ftr { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
   </style>
 </head>
 <body>
-  <div id="root">
+  <main id="root">
     <div class="hdr">
-      <img class="logo" src="data:image/png;base64,${OAK_LOGO_BASE64}" alt="Oak">
-      <h1 class="ttl">Oak National Academy</h1>
+      <img class="logo" src="data:image/png;base64,${OAK_LOGO_BASE64}" alt="Oak National Academy logo">
+      <div class="hdr-text">
+        <h1 class="ttl">Oak National Academy</h1>
+        <p class="sub-ttl" id="tool-name"></p>
+      </div>
     </div>
     <div id="c"></div>
-  </div>
+    <div class="ftr">AI can make mistakes. Check all generated resources before use.</div>
+  </main>
   <script type="module">
     const c = document.getElementById('c');
+    const toolNameEl = document.getElementById('tool-name');
     const esc = s => typeof s !== 'string' ? '' : s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    function updateToolName() {
+      const input = window.openai?.toolInput;
+      const meta = window.openai?.toolResponseMetadata;
+      const name = meta?.['annotations/title'] || meta?.title || input?.toolName || '';
+      if (name && toolNameEl) {
+        toolNameEl.textContent = name;
+        toolNameEl.style.display = 'block';
+      } else if (toolNameEl) {
+        toolNameEl.style.display = 'none';
+      }
+    }
 
     function renderHelpContent(o) {
       let h = '';
@@ -102,7 +147,7 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
           cats.forEach(([name, cat]) => {
             h += '<div class="item"><p class="item-ttl">' + esc(name) + '</p>';
             h += '<p class="meta">' + esc(cat.description || '') + '</p>';
-            if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px">Tools: ' + cat.tools.map(t => '<code style="background:rgba(0,0,0,.1);padding:2px 6px;border-radius:4px;font-size:11px">' + esc(t) + '</code>').join(' ') + '</p>';
+            if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px">Tools: ' + cat.tools.map(t => '<code>' + esc(t) + '</code>').join(' ') + '</p>';
             h += '</div>';
           });
           h += '</div></div>';
@@ -158,6 +203,7 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
     }
 
     function render() {
+      updateToolName();
       const o = window.openai?.toolOutput ?? {};
       const d = o.data;
       if (o.serverOverview || o.toolCategories || o.workflows) {
