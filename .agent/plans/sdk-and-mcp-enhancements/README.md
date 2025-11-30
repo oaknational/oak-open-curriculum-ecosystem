@@ -14,6 +14,7 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 | [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED        | ~12-14 weeks | Architecture evolution and advanced capabilities |
 | [04: MCP Prompts & Agent Guidance](./04-mcp-prompts-and-agent-guidance-plan.md)       | 🔴 NOT STARTED | ~1.5 hours   | Fix prompt arg passing, establish agent guidance |
 | [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589       |
+| [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟢 READY       | ~15-22 hours | Quick wins, Oak AI research, prompt foundations  |
 
 ---
 
@@ -116,9 +117,39 @@ Fixes the Zod version boundary issue and resolves the TS2589 type complexity err
 
 ---
 
+### 06: UX Improvements & Research
+
+Quick wins and research to inform future prompt enhancements:
+
+- **Phase A**: Quick wins (~3 hours)
+  - A.1: Rename `year` → `yearGroup` parameter
+  - A.2: Enhance landing page with tools/resources/prompts
+- **Phase B**: Research & discovery (~8-12 hours)
+  - B.1: Deep dive into Oak AI Lesson Assistant patterns
+  - B.2: Review all enhancement plans
+  - B.3: Synthesis and recommendations
+- **Phase C**: Foundation work (~4-6 hours)
+  - C.1: Design `keyStageOrYear` union parameter
+  - C.2: Design `quiz-customisation` prompt
+  - C.3: Research `adapt-materials` possibilities
+
+**Key benefit**: Informed by Oak AI's years of pedagogical refinement; prepares foundation for advanced prompts.
+
+**Research outputs**: Documents in `docs/research/` covering prompt architecture, quiz patterns, lesson workflows, and curriculum integration.
+
+---
+
 ## Dependencies
 
 ```
+Plan 06 Phase A (Quick Wins)     ← START HERE (no dependencies)
+         ↓
+Plan 06 Phase B (Research)       ← Informs all prompt work
+         ↓
+Plan 06 Phase C (Foundations)    ← Designs for Plan 04
+         ↓
+    Plan 04 (MCP Prompts)        ← Enhanced with Plan 06 findings
+
 Plan 05 Phase 1 (Zod v4 Exports)
          ↓
 Plan 05 Phase 2 (TS2589 Fix)
@@ -138,6 +169,9 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
     (Infrastructure + Advanced)
 ```
 
+- **Plan 06 Phase A** has **no dependencies** - start immediately with quick wins
+- **Plan 06 Phase B** (research) runs after quick wins; informs all future prompt design
+- **Plan 06 Phase C** produces specifications that enhance Plan 04
 - **Plan 05** is the **immediate priority** - fixes Zod versioning foundation for all SDK consumers
 - **Plan 04** is unblocked by Plan 05 (prompts use Zod schemas for MCP registration)
 - **Plan 00** is a quick POC that validates ontology value (~1 hour, content pre-authored)

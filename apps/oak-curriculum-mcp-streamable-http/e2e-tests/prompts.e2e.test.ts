@@ -200,7 +200,7 @@ describe('MCP Prompts E2E', () => {
       expect(allText).toContain('search');
     });
 
-    it('lesson-planning prompt includes year context', async () => {
+    it('lesson-planning prompt includes yearGroup context', async () => {
       const { app } = createStubbedHttpApp();
 
       const response = await request(app)
@@ -213,7 +213,7 @@ describe('MCP Prompts E2E', () => {
           method: 'prompts/get',
           params: {
             name: 'lesson-planning',
-            arguments: { topic: 'decimals', year: 'Year 5' },
+            arguments: { topic: 'decimals', yearGroup: 'Year 5' },
           },
         });
 

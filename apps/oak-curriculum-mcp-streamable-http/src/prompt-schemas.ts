@@ -42,7 +42,7 @@ export const lessonPlanningArgsSchema = {
   topic: z
     .string()
     .describe('The topic for the lesson (e.g., "adding fractions", "the water cycle")'),
-  year: z.string().describe('The year group (e.g., "Year 4", "Year 9")'),
+  yearGroup: z.string().describe('The year group (e.g., "Year 4", "Year 9")'),
 };
 
 /**

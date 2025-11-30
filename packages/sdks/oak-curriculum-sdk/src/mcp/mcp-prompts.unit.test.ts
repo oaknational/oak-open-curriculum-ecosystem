@@ -41,11 +41,11 @@ describe('MCP_PROMPTS', () => {
     );
   });
 
-  it('lesson-planning has topic and year arguments', () => {
+  it('lesson-planning has topic and yearGroup arguments', () => {
     const prompt = MCP_PROMPTS.find((p) => p.name === 'lesson-planning');
     const argNames = prompt?.arguments?.map((a) => a.name) ?? [];
     expect(argNames).toContain('topic');
-    expect(argNames).toContain('year');
+    expect(argNames).toContain('yearGroup');
   });
 });
 
@@ -72,10 +72,10 @@ describe('getPromptMessages', () => {
   });
 
   describe('lesson-planning prompt', () => {
-    it('returns messages with topic and year', () => {
+    it('returns messages with topic and yearGroup', () => {
       const messages = getPromptMessages('lesson-planning', {
         topic: 'fractions',
-        year: 'Year 4',
+        yearGroup: 'Year 4',
       });
       expect(messages).toBeDefined();
 

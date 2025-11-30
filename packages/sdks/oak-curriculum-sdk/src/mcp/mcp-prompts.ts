@@ -84,7 +84,7 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
         required: true,
       },
       {
-        name: 'year',
+        name: 'yearGroup',
         description: 'The year group (e.g., "Year 4", "Year 9")',
         required: true,
       },
@@ -170,18 +170,17 @@ Please:
  */
 function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
-  // This should be key stage, not year group.
-  const year = args.year ?? 'the year group';
+  const yearGroup = args.yearGroup ?? 'the year group';
 
   return [
     {
       role: 'user',
       content: {
         type: 'text',
-        text: `I'm planning a lesson on "${topic}" for ${year}. Please help me gather materials.
+        text: `I'm planning a lesson on "${topic}" for ${yearGroup}. Please help me gather materials.
 
 Steps:
-1. Search for lessons on "${topic}" that are appropriate for ${year}
+1. Search for lessons on "${topic}" that are appropriate for ${yearGroup}
 2. Select the most relevant lesson
 3. Get the lesson summary for learning objectives and keywords
 4. Get the lesson transcript to understand the content delivery
