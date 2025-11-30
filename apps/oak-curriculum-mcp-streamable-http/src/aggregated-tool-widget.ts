@@ -86,9 +86,48 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
     <div id="c"></div>
   </div>
   <script type="module">
-    const o = window.openai?.toolOutput ?? {}, c = document.getElementById('c'), d = o.data;
+    const c = document.getElementById('c');
     const esc = s => typeof s !== 'string' ? '' : s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    if (d?.lessons !== undefined) {
+
+    function renderHelpContent(o) {
+      let h = '';
+      if (o.serverOverview) {
+        h += '<div class="sec"><h2 class="sec-ttl">Overview</h2>';
+        h += '<p style="margin:0;font-size:14px">' + esc(o.serverOverview.description || '') + '</p></div>';
+      }
+      if (o.toolCategories) {
+        const cats = Object.entries(o.toolCategories);
+        if (cats.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Tool Categories<span class="badge">' + cats.length + '</span></h2><div class="list">';
+          cats.forEach(([name, cat]) => {
+            h += '<div class="item"><p class="item-ttl">' + esc(name) + '</p>';
+            h += '<p class="meta">' + esc(cat.description || '') + '</p>';
+            if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px">Tools: ' + cat.tools.map(t => '<code style="background:rgba(0,0,0,.1);padding:2px 6px;border-radius:4px;font-size:11px">' + esc(t) + '</code>').join(' ') + '</p>';
+            h += '</div>';
+          });
+          h += '</div></div>';
+        }
+      }
+      if (o.workflows) {
+        const wfs = Object.entries(o.workflows);
+        if (wfs.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Workflows<span class="badge">' + wfs.length + '</span></h2><div class="list">';
+          wfs.forEach(([, wf]) => {
+            h += '<div class="item"><p class="item-ttl">' + esc(wf.title || '') + '</p>';
+            h += '<p class="meta">' + esc(wf.description || '') + '</p></div>';
+          });
+          h += '</div></div>';
+        }
+      }
+      if (o.tips?.length) {
+        h += '<div class="sec"><h2 class="sec-ttl">Tips</h2><ul style="margin:0;padding-left:20px">';
+        o.tips.slice(0,5).forEach(t => { h += '<li style="font-size:13px;margin-bottom:4px">' + esc(t) + '</li>'; });
+        h += '</ul></div>';
+      }
+      return h;
+    }
+
+    function renderSearchResults(d) {
       let h = '';
       const ls = d.lessons?.results ?? d.lessons ?? [];
       if (Array.isArray(ls) && ls.length > 0) {
@@ -115,14 +154,29 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
         if (ts.length > 3) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ts.length-3) + ' more</p>';
         h += '</div></div>';
       }
-      c.innerHTML = h || '<div class="empty">No results found.</div>';
-    } else if (o.status !== undefined || o.data !== undefined) {
-      c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
-    } else if (Object.keys(o).length === 0) {
-      c.innerHTML = '<div class="empty">No data available.</div>';
-    } else {
-      c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
+      return h || '<div class="empty">No results found.</div>';
     }
+
+    function render() {
+      const o = window.openai?.toolOutput ?? {};
+      const d = o.data;
+      if (o.serverOverview || o.toolCategories || o.workflows) {
+        c.innerHTML = renderHelpContent(o);
+      } else if (d?.lessons !== undefined || d?.transcripts !== undefined) {
+        c.innerHTML = renderSearchResults(d);
+      } else if (o.status !== undefined || d !== undefined) {
+        c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
+      } else if (Object.keys(o).length === 0) {
+        c.innerHTML = '<div class="empty">Loading...</div>';
+      } else {
+        c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
+      }
+    }
+
+    render();
+    window.addEventListener('openai:set_globals', (e) => {
+      if (e.detail?.globals?.toolOutput !== undefined) render();
+    }, { passive: true });
   </script>
 </body>
 </html>`.trim();
