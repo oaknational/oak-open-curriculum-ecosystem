@@ -119,7 +119,7 @@ For ontology, we need **both patterns**:
 
 The full implementation will provide **both** interfaces to the same underlying ontology:
 
-```
+```text
                        ┌──────────────────────┐
                        │  Ontology Data       │
                        │  (schema + guidance) │
