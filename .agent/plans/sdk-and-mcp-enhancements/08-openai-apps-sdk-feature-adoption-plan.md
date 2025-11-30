@@ -1,7 +1,8 @@
 # Plan 08: OpenAI Apps SDK Feature Adoption
 
 **Created**: 2025-11-30  
-**Status**: 🔴 NOT STARTED  
+**Updated**: 2025-11-30 (Phase 0.6 + Phase 1 complete)  
+**Status**: 🟡 IN PROGRESS  
 **Duration**: ~4-6 days (across phases)  
 **Focus**: Comprehensive adoption of OpenAI Apps SDK features for production readiness
 
@@ -32,6 +33,30 @@ These principles govern all implementation work:
 - **State model**: Requests remain stateless; widget state for UI only
 - **Observability**: MCP logging pipeline extended with Apps SDK telemetry (excludes sensitive learner data)
 
+### Current State Analysis (as of 2025-11-30)
+
+Based on codebase inspection:
+
+**Generated Tools (Camp 1)**:
+
+- 23 tools in `MCP_TOOL_DESCRIPTORS`
+- **NO `_meta` fields** currently emitted - this is a significant gap
+- `ToolDescriptor` contract doesn't define `_meta` interface
+- `annotations` (readOnlyHint, etc.) ARE emitted ✅
+- `securitySchemes` ARE emitted ✅
+
+**Aggregated Tools (Camp 2)**:
+
+- 4 tools: `search`, `fetch`, `get-help`, `get-ontology`
+- `_meta` fields present ✅: `outputTemplate`, `toolInvocation/invoking`, `toolInvocation/invoked`
+- Missing: `widgetAccessible`, `visibility`
+
+**Type Safety Issue**:
+
+- `ToolMeta` interface in `universal-tools/types.ts` has `readonly [x: string]: unknown` index signature
+- This violates project rules: "Record<string, unknown> is NOT ALLOWED"
+- Must be fixed by explicitly enumerating all known OpenAI `_meta` fields
+
 ### Foundational Commitments
 
 All work MUST align with:
@@ -42,10 +67,15 @@ All work MUST align with:
 
 ### Reference Documentation
 
-- [OpenAI Apps SDK Reference](../../reference-docs/openai-apps-sdk-reference.md)
-- [OpenAI Apps Build MCP Server](../../reference-docs/openai-apps-sdk-build-mcp-server.md)
-- [OpenAI Apps Build UI](../../reference-docs/openai-apps-build-ui.md)
-- [OpenAI Apps State Management](../../reference-docs/openai-apps-build-state-management.md)
+All OpenAI Apps SDK reference materials are in `../../reference-docs/openai-apps/`:
+
+- [OpenAI Apps SDK Reference](../../reference-docs/openai-apps/openai-apps-sdk-reference.md) - Core API reference
+- [OpenAI Apps SDK Quickstart](../../reference-docs/openai-apps/openai-apps-sdk-quickstart.md) - Getting started guide
+- [OpenAI Apps Build MCP Server](../../reference-docs/openai-apps/openai-apps-sdk-build-mcp-server.md) - MCP server integration
+- [OpenAI Apps Build UI](../../reference-docs/openai-apps/openai-apps-build-ui.md) - Widget development
+- [OpenAI Apps State Management](../../reference-docs/openai-apps/openai-apps-build-state-management.md) - Widget state
+- [OpenAI Apps Auth](../../reference-docs/openai-apps/openai-apps-auth.md) - Authentication patterns
+- [OpenAI Apps Metadata](../../reference-docs/openai-apps/openai-apps-metadata.md) - Metadata optimization
 
 ---
 
@@ -57,17 +87,35 @@ All work MUST align with:
 
 These are generated at compile time from the Oak Curriculum OpenAPI schema via `pnpm type-gen`:
 
-| Category                    | Count    | Source                                                                       |
-| --------------------------- | -------- | ---------------------------------------------------------------------------- |
-| **Generated Tools**         | ~30      | `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/` |
-| **Documentation Resources** | Multiple | `DOCUMENTATION_RESOURCES` in SDK                                             |
+| Category                    | Count | Source                                                                       |
+| --------------------------- | ----- | ---------------------------------------------------------------------------- |
+| **Generated Tools**         | 23    | `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/` |
+| **Documentation Resources** | TBD   | `DOCUMENTATION_RESOURCES` in SDK                                             |
 
-**Implementation approach**: Update type-gen templates in `type-gen/typegen/mcp-tools/` to emit OpenAI `_meta` fields.
+**Implementation approach**: Update type-gen templates to emit OpenAI `_meta` fields.
 
-**Files**:
+**Key Files to Modify**:
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/templates/*.ts`
+1. **Contract Definition** (add `_meta` to `ToolDescriptor` interface):
+   - `type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
+
+2. **Tool Emission** (emit `_meta` values in each tool file):
+   - `type-gen/typegen/mcp-tools/parts/emit-index.ts` (contains `buildExports` function)
+
+3. **Response Handling** (emit `_meta` in tool results):
+   - `type-gen/typegen/mcp-tools/parts/generate-execute-file.ts`
+
+**Current Generated Tool Structure** (from `get-subjects.ts`):
+
+```typescript
+export const getSubjects = {
+  invoke: async (client, args) => { /* ... */ },
+  name, description, path, method,
+  operationId, documentedStatuses, securitySchemes,
+  annotations: { readOnlyHint: true, /* ... */ },
+  // ⚠️ NO _meta field currently emitted
+} as const satisfies ToolDescriptor<...>;
+```
 
 ### Camp 2: Runtime (Hand-Authored)
 
@@ -93,17 +141,22 @@ These are defined in authored code, not generated:
 
 Every phase of this plan MUST ensure BOTH camps receive equivalent treatment:
 
-| OpenAI Feature                   | Generated Tools | Aggregated Tools | Prompts | Resources     |
-| -------------------------------- | --------------- | ---------------- | ------- | ------------- |
-| `openai/outputTemplate`          | ✅ Type-gen     | ✅ Definition    | N/A     | N/A           |
-| `openai/toolInvocation/invoking` | ✅ Type-gen     | ✅ Definition    | N/A     | N/A           |
-| `openai/toolInvocation/invoked`  | ✅ Type-gen     | ✅ Definition    | N/A     | N/A           |
-| `openai/widgetAccessible`        | ✅ Type-gen     | ✅ Definition    | N/A     | N/A           |
-| `openai/visibility`              | ✅ Type-gen     | ✅ Definition    | N/A     | N/A           |
-| `openai/widgetCSP`               | N/A             | N/A              | N/A     | ✅ Definition |
-| `openai/widgetPrefersBorder`     | N/A             | N/A              | N/A     | ✅ Definition |
-| `openai/widgetDescription`       | N/A             | N/A              | N/A     | ✅ Definition |
-| Tool result `_meta`              | ✅ Execute.ts   | ✅ Handler       | N/A     | N/A           |
+| OpenAI Feature                   | Generated Tools (23) | Aggregated Tools (4) | Resources             |
+| -------------------------------- | -------------------- | -------------------- | --------------------- |
+| `openai/outputTemplate`          | ❌ NOT IMPLEMENTED   | ✅ Already present   | N/A                   |
+| `openai/toolInvocation/invoking` | ❌ NOT IMPLEMENTED   | ✅ Already present   | N/A                   |
+| `openai/toolInvocation/invoked`  | ❌ NOT IMPLEMENTED   | ✅ Already present   | N/A                   |
+| `openai/widgetAccessible`        | ❌ NOT IMPLEMENTED   | ❌ NOT IMPLEMENTED   | N/A                   |
+| `openai/visibility`              | ❌ NOT IMPLEMENTED   | ❌ NOT IMPLEMENTED   | N/A                   |
+| `openai/widgetCSP`               | N/A                  | N/A                  | ✅ Phase 1 COMPLETE   |
+| `openai/widgetPrefersBorder`     | N/A                  | N/A                  | ✅ Phase 1 COMPLETE   |
+| `openai/widgetDescription`       | N/A                  | N/A                  | ✅ Phase 1 COMPLETE   |
+| Tool result `_meta`              | ❌ NOT IMPLEMENTED   | ❌ NOT IMPLEMENTED   | N/A                   |
+| `annotations.readOnlyHint`       | ✅ Already present   | ✅ Already present   | N/A                   |
+| `securitySchemes`                | ✅ Already present   | ✅ Already present   | N/A                   |
+| Server HTTP security headers     | N/A                  | N/A                  | ✅ Phase 0.6 COMPLETE |
+
+**Legend**: ✅ = implemented, ❌ = needs work, N/A = not applicable
 
 ### Verification Matrix
 
@@ -128,6 +181,7 @@ For each OpenAI feature F being implemented:
 | `openai/widgetCSP`                    | CRITICAL | 1     | **Required for production/public release** |
 | `openai/widgetPrefersBorder`          | HIGH     | 1     | Better visual presentation                 |
 | `openai/widgetDescription`            | HIGH     | 1     | Reduces redundant assistant narration      |
+| Full `_meta` on generated tools       | HIGH     | 2     | **Currently missing entirely**             |
 | `openai/widgetAccessible`             | HIGH     | 2     | Enables interactive widgets                |
 | `window.openai.callTool()`            | HIGH     | 2     | Pagination, refresh, actions               |
 | `window.openai.setWidgetState()`      | HIGH     | 2     | UI state persistence                       |
@@ -138,6 +192,32 @@ For each OpenAI feature F being implemented:
 | `window.openai.sendFollowUpMessage()` | LOW      | 5     | Conversational continuity                  |
 | `window.openai.requestDisplayMode()`  | LOW      | 5     | Fullscreen/PiP modes                       |
 | `window.openai.openExternal()`        | LOW      | 5     | External links                             |
+
+---
+
+## Open Questions & Decisions
+
+### Resolved
+
+| Question                                             | Decision                                   | Rationale                                                                                                        |
+| ---------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Should `widgetAccessible` be universal or selective? | **Universal (`true` for all)**             | All Oak tools are read-only; no security risk from widget-initiated calls; enables pagination/refresh everywhere |
+| How to handle `ToolMeta` index signature?            | **Remove it; explicitly enumerate fields** | Index signatures violate project rules; all OpenAI fields are documented and finite                              |
+
+### To Be Confirmed
+
+| Question                                                       | Options                  | Recommendation                                                  |
+| -------------------------------------------------------------- | ------------------------ | --------------------------------------------------------------- |
+| What's the minimum `structuredContent` for token optimization? | Full data / Summary only | Define per-tool guidelines; recommend ≤5 items + summary counts |
+
+### Confirmed Decisions
+
+| Question                | Decision                          | Notes                                                         |
+| ----------------------- | --------------------------------- | ------------------------------------------------------------- |
+| Google Fonts CSP        | **Yes, required**                 | Widget uses Google Fonts                                      |
+| Oak domains CSP         | **Allow `*.thenational.academy`** | For Oak website links/embeds                                  |
+| Iframe CSP              | **Allow iframes**                 | Required for widget functionality                             |
+| Private tools (Phase 4) | **Defer**                         | No concrete use case yet; document capability but don't build |
 
 ---
 
@@ -228,14 +308,85 @@ const description =
 
 ---
 
-## Phase 1: Widget Resource Metadata (CRITICAL)
+## Phase 0.6: Server-Level HTTP Security Headers ✅ COMPLETE
+
+**Duration**: ~2-3 hours  
+**Priority**: HIGH - Protects landing page from XSS/clickjacking  
+**Status**: ✅ COMPLETE (2025-11-30)
+
+### Objective
+
+Add comprehensive HTTP security headers to the MCP server using `helmet` middleware.
+
+### Implementation Summary
+
+**Files created/modified**:
+
+| File                                           | Change                                   |
+| ---------------------------------------------- | ---------------------------------------- |
+| `package.json`                                 | Added `helmet@^8.1.0` dependency         |
+| `src/security-headers.ts`                      | NEW - Helmet CSP config and middleware   |
+| `src/security-headers.unit.test.ts`            | NEW - Unit tests for CSP directives      |
+| `src/security-headers.integration.test.ts`     | NEW - Integration tests for HTTP headers |
+| `src/application.ts`                           | Integrated helmet into bootstrap         |
+| `src/app/bootstrap-helpers.ts`                 | Added `createSecurityHeaders` phase      |
+| `e2e-tests/web-security-selective.e2e.test.ts` | Added security header E2E tests          |
+
+**Security headers enabled**:
+
+| Header                         | Value                                 | Purpose                  |
+| ------------------------------ | ------------------------------------- | ------------------------ |
+| `Content-Security-Policy`      | Restrictive CSP (see below)           | XSS protection           |
+| `X-Content-Type-Options`       | `nosniff`                             | MIME-sniffing prevention |
+| `X-Frame-Options`              | `SAMEORIGIN`                          | Clickjacking protection  |
+| `Strict-Transport-Security`    | `max-age=15552000; includeSubDomains` | HTTPS enforcement        |
+| `Cross-Origin-Resource-Policy` | `cross-origin`                        | MCP client compatibility |
+| `Cross-Origin-Opener-Policy`   | `same-origin-allow-popups`            | OAuth flow support       |
+
+**CSP directives for landing page**:
+
+```
+default-src 'self';
+script-src 'none';          # No JavaScript on landing page
+style-src 'self' 'unsafe-inline' fonts.googleapis.com;
+font-src fonts.gstatic.com;
+img-src 'self' data:;
+connect-src 'self';          # Chrome DevTools compatibility
+frame-ancestors 'self';
+```
+
+### Acceptance Criteria - Phase 0.6 ✅
+
+| Criterion                                       | Status |
+| ----------------------------------------------- | ------ |
+| `helmet` dependency added                       | ✅     |
+| CSP blocks scripts on landing page              | ✅     |
+| CSP allows Google Fonts                         | ✅     |
+| X-Content-Type-Options on all responses         | ✅     |
+| Cross-Origin-Resource-Policy allows MCP clients | ✅     |
+| Unit tests pass                                 | ✅     |
+| Integration tests pass                          | ✅     |
+| E2E tests pass                                  | ✅     |
+| MCP protocol endpoints still work               | ✅     |
+
+---
+
+## Phase 1: Widget Resource Metadata ✅ COMPLETE
 
 **Duration**: ~4-6 hours  
-**Priority**: CRITICAL - Required for production
+**Priority**: CRITICAL - Required for production  
+**Status**: ✅ COMPLETE (2025-11-30)
 
 ### Objective
 
 Add required `_meta` fields to the widget resource registration for production deployment.
+
+### Implementation Summary
+
+**Files modified**:
+
+- `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts` - Added `WIDGET_CSP`, `WIDGET_DESCRIPTION` constants and `_meta` fields to widget resource
+- `apps/oak-curriculum-mcp-streamable-http/src/register-resources.integration.test.ts` - Added 8 integration tests for `_meta` fields
 
 ### 1.1: Add Widget CSP Configuration
 
@@ -281,8 +432,17 @@ contents: [
       'openai/widgetDescription':
         'Oak National Academy curriculum explorer showing lessons, units, quizzes, and teaching resources.',
       'openai/widgetCSP': {
-        connect_domains: [], // Widget doesn't make external API calls
-        resource_domains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+        // Allow connections to Oak domains for API calls
+        connect_domains: ['https://*.thenational.academy'],
+        // Allow Google Fonts (Lexend) and Oak domains for resources
+        resource_domains: [
+          'https://fonts.googleapis.com',
+          'https://fonts.gstatic.com',
+          'https://*.thenational.academy',
+        ],
+        // Note: Widget is inherently protected from arbitrary iframe embedding
+        // because it's served via MCP resources, not a public URL.
+        // Only ChatGPT can access MCP resources through the protocol.
       },
     },
   },
@@ -326,24 +486,25 @@ export interface WidgetCSP {
 }
 ```
 
-### Acceptance Criteria - Phase 1
+### Acceptance Criteria - Phase 1 ✅
 
-| Criterion                                                   | Verification Method   |
-| ----------------------------------------------------------- | --------------------- |
-| Widget resource includes `openai/widgetCSP`                 | Integration test      |
-| CSP allows Google Fonts domains                             | Integration test      |
-| Widget resource includes `openai/widgetPrefersBorder: true` | Integration test      |
-| Widget resource includes `openai/widgetDescription`         | Integration test      |
-| Description is ≤200 characters and meaningful               | Unit test on constant |
-| `WidgetResourceMeta` type exported from SDK                 | Build succeeds        |
-| Documentation resources have appropriate `_meta`            | Integration test      |
-| All existing tests pass                                     | `pnpm test`           |
-| Type-check passes                                           | `pnpm type-check`     |
-| Lint passes                                                 | `pnpm lint`           |
+| Criterion                                                   | Status                     |
+| ----------------------------------------------------------- | -------------------------- |
+| Widget resource includes `openai/widgetCSP`                 | ✅                         |
+| CSP allows Google Fonts domains                             | ✅                         |
+| CSP allows `*.thenational.academy` domains                  | ✅                         |
+| Widget resource includes `openai/widgetPrefersBorder: true` | ✅                         |
+| Widget resource includes `openai/widgetDescription`         | ✅                         |
+| Description is ≤200 characters and meaningful               | ✅                         |
+| `WidgetResourceMeta` type exported from SDK                 | ⏭️ Deferred (not blocking) |
+| Documentation resources have appropriate `_meta`            | ⏭️ Deferred (not blocking) |
+| All existing tests pass                                     | ✅                         |
+| Type-check passes                                           | ✅                         |
+| Lint passes                                                 | ✅                         |
 
 **Camp Coverage - Phase 1**:
 
-- Resources: Widget resource ✅, Documentation resources ✅
+- Resources: Widget resource ✅, Documentation resources ⏭️ (deferred)
 
 ---
 
@@ -356,7 +517,77 @@ export interface WidgetCSP {
 
 Enable the widget to call tools directly and persist UI state across renders.
 
-### 2.1: Enable `widgetAccessible` on Tools
+### 2.1: Fix Type Interface Index Signatures (TYPE SAFETY PREREQUISITE)
+
+**Why**: Both `ToolMeta` and `ToolAnnotations` interfaces have `readonly [x: string]: unknown` which violates project rules.
+
+**File**: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+
+**Current (INVALID)**:
+
+```typescript
+export interface ToolAnnotations {
+  readonly [x: string]: unknown; // ❌ VIOLATES RULES
+  readonly readOnlyHint?: boolean;
+  // ...
+}
+
+export interface ToolMeta {
+  readonly [x: string]: unknown; // ❌ VIOLATES RULES
+  readonly 'openai/outputTemplate'?: string;
+  // ...
+}
+```
+
+**Fixed (EXPLICIT ENUMERATION)**:
+
+```typescript
+/**
+ * MCP tool annotations providing hints about tool behavior.
+ *
+ * All annotation fields are explicitly enumerated per MCP specification.
+ * No index signature - every field must be known at compile time.
+ *
+ * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
+ */
+export interface ToolAnnotations {
+  /** Whether the tool only reads data and doesn't modify state */
+  readonly readOnlyHint?: boolean;
+  /** Whether the tool might cause destructive/irreversible changes */
+  readonly destructiveHint?: boolean;
+  /** Whether repeated calls with same args produce same result */
+  readonly idempotentHint?: boolean;
+  /** Whether the tool interacts with external systems beyond the MCP server */
+  readonly openWorldHint?: boolean;
+  /** Human-readable title for the tool */
+  readonly title?: string;
+}
+
+/**
+ * OpenAI Apps SDK metadata for tool descriptors.
+ *
+ * All known OpenAI _meta fields are explicitly enumerated per project rules.
+ * No index signature - every field must be known at compile time.
+ *
+ * @see https://developers.openai.com/apps-sdk/reference
+ */
+export interface ToolMeta {
+  /** URI of widget resource to render tool output (text/html+skybridge) */
+  readonly 'openai/outputTemplate'?: string;
+  /** Status text shown while tool is running (max 64 characters) */
+  readonly 'openai/toolInvocation/invoking'?: string;
+  /** Status text shown after tool completes (max 64 characters) */
+  readonly 'openai/toolInvocation/invoked'?: string;
+  /** Allow widget to call this tool via window.openai.callTool() */
+  readonly 'openai/widgetAccessible'?: boolean;
+  /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
+  readonly 'openai/visibility'?: 'public' | 'private';
+  /** Mirror securitySchemes for clients that only read _meta */
+  readonly securitySchemes?: readonly SecurityScheme[];
+}
+```
+
+### 2.2: Enable `widgetAccessible` on Tools
 
 **Why**: Required for `window.openai.callTool()` to work from the widget.
 
@@ -364,65 +595,68 @@ Enable the widget to call tools directly and persist UI state across renders.
 
 The `_meta["openai/widgetAccessible"]` field must be added at **type-gen time**, not runtime.
 
-**Files to modify**:
+**Files to modify (Camp 1 - Generated Tools)**:
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+1. **Contract**: `type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
+   - Add `_meta` field to `ToolDescriptor` interface
 
-**Implementation**:
+2. **Emission**: `type-gen/typegen/mcp-tools/parts/emit-index.ts`
+   - Emit `_meta` object in `buildExports()` function
 
-1. **Update `ToolMeta` interface** in types.ts:
+**Implementation Pattern for Generated Tools**:
 
 ```typescript
-export interface ToolMeta {
-  readonly [x: string]: unknown;
-  readonly 'openai/outputTemplate'?: string;
-  readonly 'openai/toolInvocation/invoking'?: string;
-  readonly 'openai/toolInvocation/invoked'?: string;
-  /** Allow widget to call this tool via window.openai.callTool() */
-  readonly 'openai/widgetAccessible'?: boolean;
-  /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
-  readonly 'openai/visibility'?: 'public' | 'private';
-}
+// In emit-index.ts buildExports() function, add _meta emission:
+export const ${descriptorName} = {
+  // ... existing fields ...
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': '${generateInvokingText(toolName)}',
+    'openai/toolInvocation/invoked': '${generateInvokedText(toolName)}',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: ${securitySchemesLiteral},
+  },
+} as const satisfies ToolDescriptor<...>;
 ```
 
-2. **Update type-gen template** (Camp 1 - Generated Tools):
+**Design Decision: `widgetAccessible` Default**
 
-   **File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-tool-descriptor-file.ts`
+OpenAI's default is `false`. We set `true` for ALL tools because:
 
-   ```typescript
-   // Add to _meta generation
-   _meta: {
-     'openai/outputTemplate': AGGREGATED_TOOL_WIDGET_URI,
-     'openai/toolInvocation/invoking': /* generate from operation */,
-     'openai/toolInvocation/invoked': /* generate from operation */,
-     'openai/widgetAccessible': true,  // ← Add for ALL generated tools
-   }
-   ```
+- All Oak tools are read-only (curriculum browsing)
+- Widget refresh/pagination benefits all tools
+- No security risk from widget-initiated calls
 
-   **Verification**: After `pnpm type-gen`, check that ALL ~30 generated tool descriptors include `openai/widgetAccessible: true`.
+If selective control is needed later, add a configuration to type-gen.
 
-3. **Update aggregated tool definitions** (Camp 2 - Aggregated Tools) in SDK:
+**Verification**: After `pnpm type-gen`, check that ALL 23 generated tool descriptors include `_meta` with all fields.
 
-   **Files to update**:
-   - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts`
-   - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.ts`
-   - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-help/definition.ts`
-   - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-ontology.ts`
+### 2.3: Update Aggregated Tool Definitions (Camp 2)
 
-   **Pattern for each**:
+**Files to update** (already have partial `_meta`, need new fields):
 
-   ```typescript
-   // Example: aggregated-search/tool-definition.ts
-   _meta: {
-     'openai/outputTemplate': AGGREGATED_TOOL_WIDGET_URI,
-     'openai/toolInvocation/invoking': 'Searching...',
-     'openai/toolInvocation/invoked': 'Search complete',
-     'openai/widgetAccessible': true,  // ← Add to ALL aggregated tools
-   }
-   ```
+| File                                   | Current `_meta`                      | Add                              |
+| -------------------------------------- | ------------------------------------ | -------------------------------- |
+| `aggregated-search/tool-definition.ts` | ✅ outputTemplate, invoking, invoked | `widgetAccessible`, `visibility` |
+| `aggregated-fetch.ts`                  | ✅ outputTemplate, invoking, invoked | `widgetAccessible`, `visibility` |
+| `aggregated-help/definition.ts`        | ✅ outputTemplate, invoking, invoked | `widgetAccessible`, `visibility` |
+| `aggregated-ontology.ts`               | ✅ outputTemplate, invoking, invoked | `widgetAccessible`, `visibility` |
 
-### 2.2: Implement Widget Tool Calling
+**Pattern**:
+
+```typescript
+// Example: aggregated-search/tool-definition.ts
+_meta: {
+  'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+  'openai/toolInvocation/invoking': 'Searching curriculum…',
+  'openai/toolInvocation/invoked': 'Search complete',
+  'openai/widgetAccessible': true,   // ← ADD
+  'openai/visibility': 'public',      // ← ADD
+},
+```
+
+### 2.4: Implement Widget Tool Calling
 
 **Files to modify**:
 
@@ -459,7 +693,7 @@ async function refreshSearch() {
 
 3. **REFACTOR**: Add error handling and loading states
 
-### 2.3: Implement Widget State Persistence
+### 2.5: Implement Widget State Persistence
 
 **Files to modify**:
 
@@ -506,21 +740,41 @@ document.addEventListener(
 | Widget restores state on re-render                           | Playwright test     |
 | No regression in existing tests                              | `pnpm test:all`     |
 
-**Camp Coverage - Phase 2** (BOTH camps must have `widgetAccessible`):
+**Camp Coverage - Phase 2** (BOTH camps must have full `_meta`):
 
-| Camp           | Tool           | `widgetAccessible` | Verification                        |
-| -------------- | -------------- | ------------------ | ----------------------------------- |
-| **Generated**  | All 30+ tools  | ✅ via type-gen    | Unit test on `MCP_TOOL_DESCRIPTORS` |
-| **Aggregated** | `search`       | ✅ in definition   | Unit test on descriptor             |
-| **Aggregated** | `fetch`        | ✅ in definition   | Unit test on descriptor             |
-| **Aggregated** | `get-help`     | ✅ in definition   | Unit test on descriptor             |
-| **Aggregated** | `get-ontology` | ✅ in definition   | Unit test on descriptor             |
+| Camp           | Tool           | Full `_meta`    | Verification                        |
+| -------------- | -------------- | --------------- | ----------------------------------- |
+| **Generated**  | All 23 tools   | ☐ via type-gen  | Unit test on `MCP_TOOL_DESCRIPTORS` |
+| **Aggregated** | `search`       | ☐ in definition | Unit test on descriptor             |
+| **Aggregated** | `fetch`        | ☐ in definition | Unit test on descriptor             |
+| **Aggregated** | `get-help`     | ☐ in definition | Unit test on descriptor             |
+| **Aggregated** | `get-ontology` | ☐ in definition | Unit test on descriptor             |
 
-**Type-Gen Verification**:
+**Type-Gen Verification** (for Camp 1):
 
-- Run `pnpm type-gen`
-- Inspect generated files for `openai/widgetAccessible: true`
-- Unit test asserts ALL generated tools include the field
+```bash
+# After implementation:
+pnpm type-gen
+# Verify generated file has _meta:
+grep -l "openai/widgetAccessible" packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/data/tools/*.ts | wc -l
+# Should output: 23 (all generated tools)
+```
+
+**Unit Test Requirement**:
+
+```typescript
+// universal-tools.unit.test.ts
+describe('generated tool _meta fields', () => {
+  const allTools = Object.values(MCP_TOOL_DESCRIPTORS);
+
+  it.each(allTools)('$name has complete _meta', (tool) => {
+    expect(tool._meta).toBeDefined();
+    expect(tool._meta['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+    expect(tool._meta['openai/widgetAccessible']).toBe(true);
+    expect(tool._meta['openai/visibility']).toBe('public');
+  });
+});
+```
 
 ---
 
@@ -660,25 +914,23 @@ _meta: { fullData: [...], query: '...', timestamp: Date.now() }
 ## Phase 4: Tool Visibility and Localization
 
 **Duration**: ~4-6 hours  
-**Priority**: MEDIUM
+**Priority**: MEDIUM  
+**Status**: 🟡 PARTIALLY DEFERRED - Private tools deferred until use case emerges
 
 ### Objective
 
 Add private tool support and basic localization.
 
-### 4.1: Private Tool Support
+### 4.1: Private Tool Support (DEFERRED)
 
-**Use Case**: Internal diagnostic/admin tools hidden from model but callable from widget.
+> **Decision**: Private tools capability is documented but NOT implemented until a concrete use case emerges. The type infrastructure (`openai/visibility`) is added in Phase 2, but no private tools are created.
 
-**Files to modify**:
+**Use Case** (future): Internal diagnostic/admin tools hidden from model but callable from widget.
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` (already in Phase 2)
-- Add example private tool for diagnostics
-
-**Implementation**:
+**Example Pattern** (for future reference):
 
 ```typescript
-// Example: Rate limit info tool (widget-only)
+// Example: Rate limit info tool (widget-only) - NOT IMPLEMENTED YET
 const RATE_LIMIT_INFO_DEF = {
   name: 'get-rate-limit-info',
   description: 'Internal: Returns current rate limit status',
@@ -690,6 +942,8 @@ const RATE_LIMIT_INFO_DEF = {
   },
 };
 ```
+
+**When to implement**: When we identify a tool that should be callable from widget but NOT shown to the model (e.g., diagnostics, admin functions, rate limit checks).
 
 ### 4.2: Locale Support
 
@@ -915,9 +1169,11 @@ Ensure compliance with [OpenAI App Developer Guidelines](https://developers.open
 ```
 Phase 0: Prerequisites & Developer Mode Setup
     ↓ (PREREQUISITE - partially complete)
-Phase 1: Widget Resource Metadata (CRITICAL)
-    ↓ (blocks production deployment)
-Phase 2: Interactive Widget Capabilities
+Phase 0.6: Server-Level HTTP Security Headers ✅ COMPLETE
+    ↓
+Phase 1: Widget Resource Metadata ✅ COMPLETE
+    ↓
+Phase 2: Interactive Widget Capabilities ← NEXT
     ↓ (depends on Phase 1 for CSP)
 Phase 3: Tool Result Token Optimization
     ↓ (can run parallel to Phase 2)
@@ -980,19 +1236,22 @@ Per [testing-strategy.md](../../directives-and-memory/testing-strategy.md):
 
 Per [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md):
 
-| Requirement                               | Compliance                     |
-| ----------------------------------------- | ------------------------------ |
-| `_meta` fields generated at type-gen time | ✅ Type-gen templates updated  |
-| No hand-authored type widening            | ✅ All types from SDK          |
-| Runtime files are thin facades            | ✅ Widget reads from SDK types |
-| Generator is single source of truth       | ✅ All metadata from type-gen  |
+| Requirement                               | Current State | After Implementation |
+| ----------------------------------------- | ------------- | -------------------- |
+| `_meta` fields generated at type-gen time | ❌ NOT YET    | ✅ Phase 2           |
+| No hand-authored type widening            | ⚠️ Fix needed | ✅ Phase 2           |
+| Runtime files are thin facades            | ✅ Compliant  | ✅ Maintained        |
+| Generator is single source of truth       | ✅ Compliant  | ✅ Maintained        |
 
-### Prohibited Practices Avoided
+**Current Issue**: `ToolMeta` interface has index signature `[x: string]: unknown` which is hand-authored type widening. This MUST be fixed in Phase 2.
+
+### Prohibited Practices to Verify
 
 - ❌ No `as unknown` or type assertions
 - ❌ No manual editing of generated files
 - ❌ No fallbacks for missing descriptors
 - ❌ No re-validation in runtime code
+- ❌ No index signatures on metadata interfaces
 
 ---
 
@@ -1015,17 +1274,20 @@ Per [schema-first-execution.md](../../directives-and-memory/schema-first-executi
 
 ## Success Metrics
 
-| Metric                            | Target   | Measurement              |
-| --------------------------------- | -------- | ------------------------ |
-| Production CSP configured         | 100%     | Deployment checklist     |
-| Widget accessibility enabled      | 4+ tools | Tool descriptor audit    |
-| Token reduction for large results | ≥50%     | Before/after comparison  |
-| Widget state persistence          | Works    | Playwright test suite    |
-| All tests passing                 | 100%     | CI pipeline              |
-| Golden prompt accuracy            | ≥90%     | Manual testing           |
-| Privacy audit complete            | 100%     | Signed checklist         |
-| Architecture docs created         | 100%     | File existence           |
-| Operational runbook complete      | 100%     | All scenarios documented |
+| Metric                             | Target             | Measurement              |
+| ---------------------------------- | ------------------ | ------------------------ |
+| Production CSP configured          | 100%               | Deployment checklist     |
+| Generated tools have `_meta`       | 23/23 tools        | Unit test on descriptors |
+| Aggregated tools have full `_meta` | 4/4 tools          | Unit test on descriptors |
+| Widget accessibility enabled       | All 27 tools       | Tool descriptor audit    |
+| `ToolMeta` type safety fixed       | No index signature | Type-check passes        |
+| Token reduction for large results  | ≥50%               | Before/after comparison  |
+| Widget state persistence           | Works              | Playwright test suite    |
+| All tests passing                  | 100%               | CI pipeline              |
+| Golden prompt accuracy             | ≥90%               | Manual testing           |
+| Privacy audit complete             | 100%               | Signed checklist         |
+| Architecture docs created          | 100%               | File existence           |
+| Operational runbook complete       | 100%               | All scenarios documented |
 
 ---
 
@@ -1035,23 +1297,24 @@ Per [schema-first-execution.md](../../directives-and-memory/schema-first-executi
 
 ### Tools Checklist
 
-| Feature                          | Generated Tools (~30) | Aggregated Tools (4)            |
-| -------------------------------- | --------------------- | ------------------------------- |
-| `openai/outputTemplate`          | ☐ Type-gen            | ☐ search, fetch, help, ontology |
-| `openai/toolInvocation/invoking` | ☐ Type-gen            | ☐ search, fetch, help, ontology |
-| `openai/toolInvocation/invoked`  | ☐ Type-gen            | ☐ search, fetch, help, ontology |
-| `openai/widgetAccessible`        | ☐ Type-gen            | ☐ search, fetch, help, ontology |
-| `openai/visibility`              | ☐ Type-gen            | ☐ search, fetch, help, ontology |
-| Tool result `_meta`              | ☐ execute.ts          | ☐ Each handler                  |
-| `annotations.readOnlyHint`       | ☐ Already done        | ☐ Already done                  |
+| Feature                          | Generated Tools (23)   | Aggregated Tools (4)            |
+| -------------------------------- | ---------------------- | ------------------------------- |
+| `openai/outputTemplate`          | ☐ Type-gen (Phase 2)   | ✅ Already present              |
+| `openai/toolInvocation/invoking` | ☐ Type-gen (Phase 2)   | ✅ Already present              |
+| `openai/toolInvocation/invoked`  | ☐ Type-gen (Phase 2)   | ✅ Already present              |
+| `openai/widgetAccessible`        | ☐ Type-gen (Phase 2)   | ☐ search, fetch, help, ontology |
+| `openai/visibility`              | ☐ Type-gen (Phase 2)   | ☐ search, fetch, help, ontology |
+| Tool result `_meta`              | ☐ execute.ts (Phase 3) | ☐ Each handler (Phase 3)        |
+| `annotations.readOnlyHint`       | ✅ Already done        | ✅ Already done                 |
+| `securitySchemes`                | ✅ Already done        | ✅ Already done                 |
 
 ### Resources Checklist
 
 | Feature                      | Widget Resource | Documentation Resources |
 | ---------------------------- | --------------- | ----------------------- |
-| `openai/widgetCSP`           | ☐               | N/A                     |
-| `openai/widgetPrefersBorder` | ☐               | N/A                     |
-| `openai/widgetDescription`   | ☐               | ☐ (if applicable)       |
+| `openai/widgetCSP`           | ✅              | N/A                     |
+| `openai/widgetPrefersBorder` | ✅              | N/A                     |
+| `openai/widgetDescription`   | ✅              | ☐ (if applicable)       |
 
 ### Prompts Checklist
 
@@ -1102,7 +1365,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 - [Oak OpenAI App Plan](../archive/oak-openai-app-plan.archived.md) - Original implementation plan, consolidated into this document
 
-### External Documentation
+### External Documentation (Authoritative Sources)
 
 - [OpenAI Apps SDK Reference](https://developers.openai.com/apps-sdk/reference)
 - [OpenAI Apps SDK: Build MCP Server](https://developers.openai.com/apps-sdk/build/mcp-server)
@@ -1112,3 +1375,5 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 - [OpenAI Apps SDK: App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines)
 - [Developer Mode Setup](https://help.openai.com/en/articles/12515353-build-with-the-apps-sdk)
 - [MCP Specification: Tools](https://spec.modelcontextprotocol.io/specification/server/tools/)
+
+**Note**: Local copies of OpenAI docs are maintained in `../../reference-docs/openai-apps/` for offline reference.

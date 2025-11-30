@@ -16,6 +16,7 @@ export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
   | 'createCorsMiddleware'
   | 'createDnsRebindingMiddleware'
+  | 'createSecurityHeaders'
   | 'registerPublicOAuthMetadata'
   | 'addNoCacheToErrors'
   | 'setupGlobalAuthContext'
