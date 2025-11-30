@@ -1,5 +1,19 @@
 # Oak OpenAI App Implementation Plan
 
+> **⚠️ ARCHIVED**: This plan has been superseded by [Plan 08: OpenAI Apps SDK Feature Adoption](../sdk-and-mcp-enhancements/08-openai-apps-sdk-feature-adoption-plan.md).
+>
+> **Archive date**: 2025-11-30  
+> **Reason**: Content consolidated into Plan 08 which provides comprehensive coverage of:
+>
+> - All original phases (POC, Requirements, Architecture, Privacy, Developer Mode, Rollout)
+> - OpenAI Apps SDK feature adoption (CSP, widgets, token optimization)
+> - Two-camp architecture (type-gen vs runtime tools)
+> - Universal coverage requirements
+>
+> **Do not use this plan for new work.** Refer to Plan 08 instead.
+
+---
+
 ## Context and References
 
 - Aligns with the [OpenAI App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines) requirements across purpose, safety, privacy, and verification.

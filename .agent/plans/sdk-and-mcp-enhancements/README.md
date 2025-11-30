@@ -16,6 +16,7 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 | [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589          |
 | [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟡 PHASE A ✅  | ~6-8 hours   | Quick wins, prompt foundations (research → Plan 07) |
 | [07: Oak AI Domain Extraction](./07-oak-ai-domain-extraction-research-plan.md)        | 🔴 NOT STARTED | ~16-24 hours | Comprehensive research into Oak AI domain knowledge |
+| [08: OpenAI Apps SDK Feature Adoption](./08-openai-apps-sdk-feature-adoption-plan.md) | 🔴 NOT STARTED | ~4-6 days    | Production-ready OpenAI Apps SDK integration        |
 
 ---
 
@@ -160,6 +161,35 @@ Comprehensive research plan to extract domain knowledge from the Oak AI Lesson A
 
 ---
 
+### 08: OpenAI Apps SDK Feature Adoption
+
+Comprehensive adoption of OpenAI Apps SDK features for production readiness:
+
+- **Phase 1**: Widget Resource Metadata (CRITICAL)
+  - `openai/widgetCSP` - Content Security Policy (required for production)
+  - `openai/widgetPrefersBorder` - Bordered card rendering
+  - `openai/widgetDescription` - Reduce assistant narration
+- **Phase 2**: Interactive Widget Capabilities
+  - `openai/widgetAccessible` - Enable widget→tool calls
+  - `window.openai.callTool()` - Pagination, refresh
+  - `window.openai.setWidgetState()` - UI state persistence
+- **Phase 3**: Token Optimization
+  - Tool result `_meta` - Data for widget only (hidden from model)
+  - `structuredContent` separation - Minimal data to model
+- **Phase 4**: Tool Visibility & Localization
+  - `openai/visibility: private` - Hidden admin tools
+  - Locale support for UK curriculum terminology
+- **Phase 5**: Enhanced Widget Runtime
+  - `sendFollowUpMessage()` - Conversational continuity
+  - `requestDisplayMode()` - Fullscreen/PiP modes
+  - `openExternal()` - Oak website links
+
+**Key benefit**: Production-ready OpenAI Apps SDK integration with token optimization and interactive widgets.
+
+**Reference**: [OpenAI Apps SDK Documentation](../../reference-docs/openai-apps-sdk-reference.md)
+
+---
+
 ## Dependencies
 
 ```
@@ -188,8 +218,20 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
               ↓
     Plan 03 Phases 1-4
     (Infrastructure + Advanced)
+
+Plan 08 (OpenAI Apps SDK)  ← Can start immediately (Phase 1 is CRITICAL)
+    Phase 1 (CSP)          ← REQUIRED for production deployment
+         ↓
+    Phase 2 (Interactive)  ← Depends on Plan 01 for tool metadata
+         ↓
+    Phase 3 (Token Opt)    ← Can run parallel to Phase 2
+         ↓
+    Phase 4 (Visibility)   ← Depends on Phase 2
+         ↓
+    Phase 5 (Enhanced UX)  ← Depends on Phase 2
 ```
 
+- **Plan 08 Phase 1** is **CRITICAL** for production deployment - should start immediately
 - **Plan 06 Phase A** has **no dependencies** - quick wins mostly complete ✅
 - **Plan 07** is the detailed research plan (formerly Plan 06 Phase B) - 16-24 hours of knowledge extraction
 - **Plan 06 Phase C** produces specifications informed by Plan 07 research
@@ -200,6 +242,7 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
 - Plans 01 and 02 can run **in parallel** after Plan 03 Phase 0 completes
 - Plan 03 Phase 0 is the **foundation** for all advanced work
 - Plan 02 is a **prerequisite** for Plan 03 Phase 4 (advanced tools use ontology)
+- **Plan 08 Phases 2-5** depend on Phase 1 and benefit from Plan 01 metadata work
 - **Upstream API** `/ontology` endpoint is the ideal long-term solution (external dependency)
 
 ---

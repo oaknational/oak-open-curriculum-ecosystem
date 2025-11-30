@@ -5,6 +5,8 @@
 **Duration**: ~4-6 days (across phases)  
 **Focus**: Comprehensive adoption of OpenAI Apps SDK features for production readiness
 
+**Supersedes**: `.agent/plans/openai-app/oak-openai-app-plan.md` (archived)
+
 ---
 
 ## Overview
@@ -17,6 +19,18 @@ This plan implements all OpenAI Apps SDK features not currently being used by th
 2. **Interactive Widgets**: Enable component-initiated tool calls and state persistence
 3. **Token Optimization**: Use tool result `_meta` to reduce model token consumption
 4. **Enhanced UX**: Add localization, display modes, and follow-up messages
+5. **Compliance & Governance**: Privacy, metadata, and operational readiness
+
+### Architectural Principles
+
+These principles govern all implementation work:
+
+- **Primary endpoint**: `apps/oak-curriculum-mcp-streamable-http` deployed at `https://curriculum-mcp-alpha.oaknational.dev/mcp`
+- **Schema-first**: All tool metadata sourced from `pnpm type-gen` outputs
+- **Pedagogical rigor**: Tool composition follows curriculum alignment → objectives → activities → assessment; outputs cite Oak resource IDs
+- **Authentication stance**: Development mode operates unauthenticated (read-only); architecture leaves OAuth hook for production
+- **State model**: Requests remain stateless; widget state for UI only
+- **Observability**: MCP logging pipeline extended with Apps SDK telemetry (excludes sensitive learner data)
 
 ### Foundational Commitments
 
@@ -124,6 +138,93 @@ For each OpenAI feature F being implemented:
 | `window.openai.sendFollowUpMessage()` | LOW      | 5     | Conversational continuity                  |
 | `window.openai.requestDisplayMode()`  | LOW      | 5     | Fullscreen/PiP modes                       |
 | `window.openai.openExternal()`        | LOW      | 5     | External links                             |
+
+---
+
+## Phase 0: Prerequisites & Developer Mode Setup
+
+**Duration**: ~2-4 hours  
+**Priority**: PREREQUISITE - Required before other phases  
+**Status**: Partially complete
+
+### Objective
+
+Establish working Developer Mode connector and validation methodology.
+
+### 0.1: Deployment Verification ✅ COMPLETE
+
+- MCP server deployed at `https://curriculum-mcp-alpha.oaknational.dev/mcp`
+- Verified via MCP Inspector
+- `initialize` and `listTools` handshakes confirmed
+
+### 0.2: Fix STDIO Tool Description Bug
+
+**Intent**: STDIO server overrides rich OpenAPI descriptions with "GET /path" strings, breaking tool discovery.
+
+**File**: `apps/oak-curriculum-mcp-stdio/src/app/server.ts`
+
+**Change**:
+
+```typescript
+// Replace
+const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;
+// With
+const description =
+  descriptor.description ?? `${descriptor.method.toUpperCase()} ${descriptor.path}`;
+```
+
+**Validation**: `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`
+
+### 0.3: Developer Mode Connector Setup
+
+**Instructions** (for team reference):
+
+1. Enable Developer Mode: ChatGPT → **Settings → Apps & Connectors → Advanced settings**
+2. Create connector: **Settings → Connectors → Create**
+3. Configure:
+   - **Name**: "Oak Curriculum Explorer"
+   - **Description**: "Search and explore Oak National Academy's curriculum - lessons, units, quizzes, and teaching resources across all UK key stages and subjects. Use when educators need curriculum content."
+   - **Connector URL**: `https://curriculum-mcp-alpha.oaknational.dev/mcp`
+4. Activate in chat: Click **+ → More…**, select the connector
+5. Refresh metadata after MCP tool changes
+
+**Docs**: [Developer Mode Setup](https://help.openai.com/en/articles/12515353-build-with-the-apps-sdk)
+
+### 0.4: Golden Prompt Test Suite
+
+**Intent**: Systematic evaluation of tool discovery following [OpenAI metadata optimization guidance](https://developers.openai.com/apps-sdk/guides/optimize-metadata).
+
+**File**: Create `docs/development/openai-app-golden-prompts.md`
+
+**Content structure**:
+
+| Category        | Example Prompt                               | Expected Tool     | Success Criteria              |
+| --------------- | -------------------------------------------- | ----------------- | ----------------------------- |
+| **Direct**      | "Find KS3 science lessons on photosynthesis" | `search`          | Tool selected, params correct |
+| **Indirect**    | "Help me teach photosynthesis to year 8"     | `search`          | Infers subject/key stage      |
+| **Negative**    | "Create a new lesson plan from scratch"      | None              | Our tools NOT invoked         |
+| **Composition** | "Show me a quiz for this lesson"             | `get-lesson-quiz` | Correct follow-up tool        |
+
+**Acceptance**: ≥90% correct tool selection; responses cite Oak resource IDs.
+
+### 0.5: Walkthrough Documentation
+
+**Intent**: Shareable artifact proving viability.
+
+**Deliverables** (store under `docs/development/`):
+
+- Connector creation screenshots
+- Short video of successful chat interaction
+- Sanitized server logs showing tool invocations
+
+### Acceptance Criteria - Phase 0
+
+| Criterion                           | Verification Method                         |
+| ----------------------------------- | ------------------------------------------- |
+| STDIO bug fixed                     | Unit tests pass                             |
+| Connector created in Developer Mode | Manual verification                         |
+| Golden prompts documented           | File exists with ≥8 prompts                 |
+| Walkthrough captured                | Reviewable artifacts in `docs/development/` |
 
 ---
 
@@ -706,11 +807,116 @@ async function requestFullscreen() {
 
 ---
 
+## Phase 6: Production Readiness & Compliance
+
+**Duration**: ~4-8 hours  
+**Priority**: REQUIRED for public release  
+**Dependencies**: Phases 1-3 complete
+
+### Objective
+
+Ensure compliance with [OpenAI App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines) and prepare operational documentation.
+
+### 6.1: App Metadata Requirements
+
+**Deliverables** (store in `docs/openai-app/`):
+
+| Field           | Content                                                                                                                                                           |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**        | "Oak Curriculum Explorer"                                                                                                                                         |
+| **Description** | "Access Oak National Academy's openly licensed curriculum - search lessons, units, quizzes, and teaching resources across UK key stages. Designed for educators." |
+| **Categories**  | Education, Teaching Resources                                                                                                                                     |
+| **Icon**        | Oak logo (verify licensing)                                                                                                                                       |
+
+**Guidelines compliance**:
+
+- ❌ No impersonation of other educational platforms
+- ✅ Clear identification as Oak National Academy tool
+- ✅ Accurate capability description
+
+### 6.2: Privacy & Data Governance
+
+**Audit checklist**:
+
+| Check                            | Status | Notes                    |
+| -------------------------------- | ------ | ------------------------ |
+| No location fields requested     | ☐      | Verify all tool inputs   |
+| No sensitive categories          | ☐      | No health/finance/etc.   |
+| No chat history reconstruction   | ☐      | Tools are stateless      |
+| Telemetry matches privacy policy | ☐      | Only resource IDs logged |
+| No PII in tool outputs           | ☐      | Curriculum data only     |
+
+**Deliverables**:
+
+- Data flow diagram in `docs/architecture/data-flow.md`
+- Privacy policy addendum if needed
+- Support contact channel: `curriculum-support@thenational.academy`
+
+### 6.3: Architectural Documentation
+
+**Deliverables** (create in `docs/architecture/`):
+
+1. **openai-app-architecture.md**: Diagram showing:
+
+   ```
+   OpenAPI Schema → type-gen → SDK → MCP Server → ChatGPT
+   ```
+
+2. **tool-composition-patterns.md**: Pedagogical workflows:
+   - **Lesson discovery**: `search` → browse results
+   - **Lesson deep-dive**: `get-lesson-summary` → `get-lesson-quiz` → `get-lesson-downloads`
+   - **Curriculum exploration**: `get-ontology` → `get-subjects` → `get-units`
+
+### 6.4: Operational Runbook
+
+**File**: `docs/development/openai-app-runbook.md`
+
+**Content**:
+
+| Scenario              | Action                                               |
+| --------------------- | ---------------------------------------------------- |
+| Tool metadata changes | Refresh connector in ChatGPT Settings                |
+| New tool added        | Run `pnpm type-gen`, redeploy, refresh connector     |
+| Widget HTML changes   | Redeploy app, no connector refresh needed            |
+| Breaking API change   | Version bump, update tool descriptions, notify users |
+| Incident response     | Disable connector, investigate, redeploy             |
+
+**Re-submission triggers**:
+
+- New tools added
+- Security scheme changes
+- Major capability changes
+- Privacy policy updates
+
+### 6.5: Developer Verification
+
+**Requirements** (when App Store opens):
+
+| Requirement             | Status                                     |
+| ----------------------- | ------------------------------------------ |
+| Legal entity verified   | ☐ Oak National Academy                     |
+| Support mailbox active  | ☐ `curriculum-support@thenational.academy` |
+| Contact details current | ☐ Verify quarterly                         |
+
+### Acceptance Criteria - Phase 6
+
+| Criterion                     | Verification Method               |
+| ----------------------------- | --------------------------------- |
+| App metadata documented       | File exists in `docs/openai-app/` |
+| Privacy audit complete        | Checklist signed off              |
+| Architecture diagrams created | Files in `docs/architecture/`     |
+| Runbook documented            | File exists with all scenarios    |
+| No sensitive fields in tools  | Automated lint check              |
+
+---
+
 ## Implementation Order and Dependencies
 
 ```
+Phase 0: Prerequisites & Developer Mode Setup
+    ↓ (PREREQUISITE - partially complete)
 Phase 1: Widget Resource Metadata (CRITICAL)
-    ↓ (no dependencies)
+    ↓ (blocks production deployment)
 Phase 2: Interactive Widget Capabilities
     ↓ (depends on Phase 1 for CSP)
 Phase 3: Tool Result Token Optimization
@@ -718,15 +924,19 @@ Phase 3: Tool Result Token Optimization
 Phase 4: Tool Visibility and Localization
     ↓ (depends on Phase 2 for widgetAccessible)
 Phase 5: Enhanced Widget Runtime Features
-    (depends on Phase 2 for interactive capabilities)
+    ↓ (depends on Phase 2 for interactive capabilities)
+Phase 6: Production Readiness & Compliance
+    (depends on Phases 1-3; required for public release)
 ```
 
 **Recommended execution**:
 
-1. Phase 1 first (blocks production deployment)
-2. Phases 2 and 3 in parallel
-3. Phase 4 after Phase 2
-4. Phase 5 as time permits
+1. Phase 0 first (complete prerequisites, fix STDIO bug)
+2. Phase 1 immediately after (blocks production)
+3. Phases 2 and 3 in parallel
+4. Phase 4 after Phase 2
+5. Phase 5 as time permits
+6. Phase 6 before any public release
 
 ---
 
@@ -788,24 +998,34 @@ Per [schema-first-execution.md](../../directives-and-memory/schema-first-executi
 
 ## Risk Mitigation
 
-| Risk                                    | Mitigation                                      |
-| --------------------------------------- | ----------------------------------------------- |
-| CSP blocks Google Fonts                 | Test in MCP Inspector before deployment         |
-| `callTool` not available in all clients | Graceful degradation, check for API presence    |
-| Widget state lost on client update      | Persist minimal state, rebuild from tool output |
-| Token optimization breaks clients       | Feature flag, gradual rollout                   |
+| Risk                                    | Mitigation                                                                     |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| CSP blocks Google Fonts                 | Test in MCP Inspector before deployment                                        |
+| `callTool` not available in all clients | Graceful degradation, check for API presence                                   |
+| Widget state lost on client update      | Persist minimal state, rebuild from tool output                                |
+| Token optimization breaks clients       | Feature flag, gradual rollout                                                  |
+| **Type drift**                          | Ground all interfaces in `pnpm type-gen`; fail build on manual schema changes  |
+| **Privacy non-compliance**              | Automated lint to reject sensitive fields; periodic reviews                    |
+| **App review rejection**                | Pre-flight checklist against guideline clauses; evidence of each control       |
+| **Distribution risk**                   | Apps SDK in preview; restrict to Developer Mode testers until submission opens |
+| **Admin dependency**                    | Document workspace admin steps; identify backup admins                         |
+| **Tool discovery failures**             | Golden prompt test suite; iterate on descriptions per metadata guide           |
 
 ---
 
 ## Success Metrics
 
-| Metric                            | Target   | Measurement             |
-| --------------------------------- | -------- | ----------------------- |
-| Production CSP configured         | 100%     | Deployment checklist    |
-| Widget accessibility enabled      | 4+ tools | Tool descriptor audit   |
-| Token reduction for large results | ≥50%     | Before/after comparison |
-| Widget state persistence          | Works    | Playwright test suite   |
-| All tests passing                 | 100%     | CI pipeline             |
+| Metric                            | Target   | Measurement              |
+| --------------------------------- | -------- | ------------------------ |
+| Production CSP configured         | 100%     | Deployment checklist     |
+| Widget accessibility enabled      | 4+ tools | Tool descriptor audit    |
+| Token reduction for large results | ≥50%     | Before/after comparison  |
+| Widget state persistence          | Works    | Playwright test suite    |
+| All tests passing                 | 100%     | CI pipeline              |
+| Golden prompt accuracy            | ≥90%     | Manual testing           |
+| Privacy audit complete            | 100%     | Signed checklist         |
+| Architecture docs created         | 100%     | File existence           |
+| Operational runbook complete      | 100%     | All scenarios documented |
 
 ---
 
@@ -876,6 +1096,11 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 - [Schema-First Execution](../../directives-and-memory/schema-first-execution.md)
 - [Testing Strategy](../../directives-and-memory/testing-strategy.md)
 - [Plan 01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)
+- [Plan 02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)
+
+### Archived Plans (Superseded)
+
+- [Oak OpenAI App Plan](../archive/oak-openai-app-plan.archived.md) - Original implementation plan, consolidated into this document
 
 ### External Documentation
 
@@ -884,4 +1109,6 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 - [OpenAI Apps SDK: Build ChatGPT UI](https://developers.openai.com/apps-sdk/build/chatgpt-ui)
 - [OpenAI Apps SDK: State Management](https://developers.openai.com/apps-sdk/build/state-management)
 - [OpenAI Apps SDK: Optimize Metadata](https://developers.openai.com/apps-sdk/guides/optimize-metadata)
+- [OpenAI Apps SDK: App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines)
+- [Developer Mode Setup](https://help.openai.com/en/articles/12515353-build-with-the-apps-sdk)
 - [MCP Specification: Tools](https://spec.modelcontextprotocol.io/specification/server/tools/)
