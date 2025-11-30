@@ -88,10 +88,10 @@ function makeFixtureUnitSummaryFn(data: FixtureData): OakClient['getUnitSummary'
 function makeFixtureSubjectSequencesFn(data: FixtureData): OakClient['getSubjectSequences'] {
   return async (subject) => {
     const sequences = data.subjectSequences.get(subject);
-    if (!Array.isArray(sequences)) {
+    if (!sequences) {
       return [];
     }
-    return sequences.map((entry): unknown => entry);
+    return sequences;
   };
 }
 

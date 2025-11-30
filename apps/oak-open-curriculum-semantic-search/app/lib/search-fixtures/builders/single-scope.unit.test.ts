@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SearchLessonsResponseSchema } from '@oaknational/oak-curriculum-sdk';
+import { SearchLessonsResponseSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { buildSingleScopeFixture } from './single-scope';
 import {
   ks2MathsLessons,

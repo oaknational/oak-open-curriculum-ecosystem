@@ -2,7 +2,7 @@ import type {
   SearchLessonResult,
   SearchSequenceResult,
   SearchUnitResult,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { SearchResultItem } from './SearchResults.schemas';
 
 function isLessonResult(rec: SearchResultItem): rec is SearchLessonResult {

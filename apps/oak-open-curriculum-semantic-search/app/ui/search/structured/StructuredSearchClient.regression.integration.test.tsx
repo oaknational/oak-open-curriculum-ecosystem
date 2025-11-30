@@ -1,7 +1,7 @@
 import { useState, type ReactElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import StructuredSearchClient from './StructuredSearchClient';
 import { ThemeProvider } from '../../../lib/theme/ThemeContext';
 

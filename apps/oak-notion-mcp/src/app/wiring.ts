@@ -1,5 +1,5 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { MinimalNotionClient } from '../types/notion-types/notion-client.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
 import {
@@ -132,7 +132,7 @@ async function createNotionClient(
 async function createServerDependencies(log: ServerSetupDependencies['log']): Promise<{
   logger: Logger;
   notionClient: MinimalNotionClient;
-  server: Server;
+  server: McpServer;
   runtime: ReturnType<typeof createRuntime>;
 }> {
   log('[STARTUP] Importing dependencies...');

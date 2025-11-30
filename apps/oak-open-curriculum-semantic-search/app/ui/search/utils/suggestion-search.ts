@@ -1,7 +1,7 @@
 import type {
   SearchStructuredRequest,
   SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export interface BuildSuggestionFollowUpInputArgs {
   base: SearchStructuredRequest | null;

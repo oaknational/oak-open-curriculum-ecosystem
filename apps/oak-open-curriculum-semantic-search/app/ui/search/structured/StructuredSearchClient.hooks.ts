@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useCallback, useEffect, useState, useTransition } from 'react';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export interface StructuredHandlers {
   model: SearchStructuredRequest;

@@ -2,7 +2,7 @@
 
 import type { JSX, FormEvent } from 'react';
 import { OakBox, OakTypography } from '@oaknational/oak-components';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   ScopeField,
   QueryField,

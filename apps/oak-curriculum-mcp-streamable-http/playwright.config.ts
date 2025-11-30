@@ -4,7 +4,6 @@ import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3333';
 
 export default defineConfig({
-  testDir: './tests/visual',
   timeout: 30_000,
   expect: { timeout: 5_000 },
   reporter: [['list']],
@@ -15,14 +14,27 @@ export default defineConfig({
     timeout: 60_000,
   },
   use: {
-    baseURL,
     trace: 'on',
     screenshot: 'on',
   },
   projects: [
     {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+      name: 'visual',
+      testDir: './tests/visual',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        baseURL,
+      },
+    },
+    {
+      name: 'widget',
+      testDir: './tests/widget',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+      },
+      // Widget tests use their own Express test server
     },
   ],
 });

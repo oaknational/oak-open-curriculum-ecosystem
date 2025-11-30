@@ -1,6 +1,9 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { toolNames, getToolFromToolName } from '@oaknational/oak-curriculum-sdk';
-import type { ToolName } from '@oaknational/oak-curriculum-sdk';
+import {
+  toolNames,
+  getToolFromToolName,
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import type { ToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 import {
   createStubbedStdioServer,

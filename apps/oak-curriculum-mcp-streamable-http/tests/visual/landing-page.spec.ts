@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Playwright tests for the MCP server landing page.
+ *
+ * Tests verify content rendering and WCAG accessibility compliance.
+ */
+
 import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
@@ -12,6 +18,16 @@ test.describe('Landing page', () => {
 
     // Verify config snippet is present
     await expect(page.getByText(/"mcpServers"/)).toBeVisible();
+  });
+
+  test('displays hero explainer text for educators', async ({ page }) => {
+    await page.goto('/');
+
+    // Hero should be a prominent paragraph after the title
+    const hero = page.locator('.hero');
+    await expect(hero).toBeVisible();
+    await expect(hero).toContainText(/curriculum/i);
+    await expect(hero).toContainText(/teacher|educator/i);
   });
 
   test('passes accessibility checks', async ({ page }) => {

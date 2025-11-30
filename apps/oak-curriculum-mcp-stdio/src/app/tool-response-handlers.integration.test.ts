@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import type { ToolResult } from '@oaknational/oak-curriculum-sdk';
+import type { ToolResult } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 

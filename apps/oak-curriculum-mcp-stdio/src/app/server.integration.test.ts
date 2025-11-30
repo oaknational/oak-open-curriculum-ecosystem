@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getToolFromToolName } from '@oaknational/oak-curriculum-sdk';
+import { getToolFromToolName } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { validateOutput, type ToolExecutionSuccessEnvelope } from './validation.js';
 
 const descriptor = getToolFromToolName('get-lessons-transcript');

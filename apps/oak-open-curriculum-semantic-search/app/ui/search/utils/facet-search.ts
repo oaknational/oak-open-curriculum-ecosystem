@@ -1,5 +1,5 @@
 import type { SequenceFacet } from '../../../../src/lib/hybrid-search/types';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export interface BuildFacetFollowUpInputArgs {
   base: SearchStructuredRequest | null;

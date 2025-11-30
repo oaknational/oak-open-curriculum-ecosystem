@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { vi } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from './structured/StructuredSearch';
 import type { FixtureMode } from '../../lib/fixture-mode';

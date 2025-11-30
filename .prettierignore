@@ -5,6 +5,8 @@ coverage
 **/dist
 **/coverage
 pnpm-lock.yaml
+.pnpm-store
+**/.pnpm-store
 CHANGELOG.md
 reference
 

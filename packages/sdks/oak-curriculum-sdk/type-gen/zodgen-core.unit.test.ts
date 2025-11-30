@@ -17,7 +17,7 @@ vi.mock('node:fs', async (original) => {
 vi.mock('openapi-zod-client', () => ({
   generateZodClientFromOpenAPI: vi.fn().mockResolvedValue(
     `import { z } from "zod";
-const endpoints = makeApi([
+const endpoints = ([
   {
     method: "get",
     path: "/changelog",
@@ -27,7 +27,6 @@ const endpoints = makeApi([
 export const schemas = {
   changelog_changelog_200: z.object({}),
 };
-export const api = new Zodios(endpoints);
 `,
   ),
 }));
@@ -91,7 +90,8 @@ describe('generateZodSchemas', () => {
     if (typeof content !== 'string') {
       throw new Error('Content is not a string');
     }
-    const endpointsIndex = content.indexOf('export const endpoints = makeApi');
+    // After Zod v4 migration, makeApi is removed and endpoints is a typed array
+    const endpointsIndex = content.indexOf('export const endpoints:');
     const curriculumIndex = content.indexOf(
       'export const curriculumSchemas = curriculumSchemaCollection',
     );

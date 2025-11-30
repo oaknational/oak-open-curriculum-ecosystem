@@ -9,7 +9,7 @@ import { normaliseNaturalRequest, submitNaturalSearchRequest } from './NaturalSe
 import {
   SearchStructuredRequestSchema,
   type SearchStructuredRequest,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { getAppTheme } from '../../themes/app-theme-helpers';
 import type { NaturalSummaryState } from './NaturalSearchSummary';
 import { DerivedSummary } from './NaturalSearchSummary';

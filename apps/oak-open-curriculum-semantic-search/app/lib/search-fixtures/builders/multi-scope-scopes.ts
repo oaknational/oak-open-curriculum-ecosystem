@@ -1,4 +1,5 @@
-import { DEFAULT_SUGGESTION_CACHE, isSubject } from '@oaknational/oak-curriculum-sdk';
+import { isSubject } from '@oaknational/oak-curriculum-sdk';
+import { DEFAULT_SUGGESTION_CACHE } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   createSearchSequencesResponse,
   createSearchUnitsResponse,
@@ -6,7 +7,7 @@ import {
   type SearchSequencesResponse,
   type SearchUnitResult,
   type SearchUnitsResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { SingleScopeDatasetKey } from './single-scope';
 import {
   ks2MathsSequences,

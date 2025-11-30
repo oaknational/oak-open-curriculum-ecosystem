@@ -6,20 +6,47 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 
 ## Plan Index
 
-| Plan                                                                                  | Status     | Duration     | Focus                                            |
-| ------------------------------------------------------------------------------------- | ---------- | ------------ | ------------------------------------------------ |
-| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅ | ~4-5 days    | Enriching tool metadata for AI agents            |
-| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED    | ~4 weeks     | Exposing domain model as MCP resource            |
-| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED    | ~12-14 weeks | Architecture evolution and advanced capabilities |
+| Plan                                                                                  | Status         | Duration     | Focus                                               |
+| ------------------------------------------------------------------------------------- | -------------- | ------------ | --------------------------------------------------- |
+| [00: Ontology POC](./00-ontology-poc-static-tool.md)                                  | PLANNED        | ~1 hour      | Quick static tool to validate ontology value        |
+| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅     | ~4-5 days    | Enriching tool metadata for AI agents               |
+| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED        | ~4 weeks     | Exposing domain model as MCP resource               |
+| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED        | ~12-14 weeks | Architecture evolution and advanced capabilities    |
+| [04: MCP Prompts & Agent Guidance](./04-mcp-prompts-and-agent-guidance-plan.md)       | 🔴 NOT STARTED | ~1.5 hours   | Fix prompt arg passing, establish agent guidance    |
+| [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589          |
+| [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟡 PHASE A ✅  | ~6-8 hours   | Quick wins, prompt foundations (research → Plan 07) |
+| [07: Oak AI Domain Extraction](./07-oak-ai-domain-extraction-research-plan.md)        | 🔴 NOT STARTED | ~16-24 hours | Comprehensive research into Oak AI domain knowledge |
+| [08: OpenAI Apps SDK Feature Adoption](./08-openai-apps-sdk-feature-adoption-plan.md) | 🔴 NOT STARTED | ~4-6 days    | Production-ready OpenAI Apps SDK integration        |
 
 ---
 
 ## Plan Summaries
 
+### 00: Ontology POC (Static Tool)
+
+A quick ~1-hour spike to validate whether ChatGPT uses ontology information effectively:
+
+- Pre-authored JSON content available (`ontology-poc-content.json`)
+- `get-ontology` aggregated tool with **full metadata treatment**:
+  - MCP annotations (`readOnlyHint`, `idempotentHint`, `title`)
+  - OpenAI `_meta` fields (invocation status text)
+  - Optimized description ("Use when…" / "Do NOT use for…")
+- No type-gen, no schema extraction
+- **Purpose**: Prove value before investing in full solution
+
+**Includes**: Threads, programme/sequence distinction, KS4 complexity, all 8 lesson components, tool workflows, UK education context, canonical URLs.
+
+**Design Decision**: Tool (not resource) because we want ChatGPT to decide when to request ontology context (model-controlled).
+
+**Key benefit**: Validates the ontology concept with minimal investment. If successful, proceed to Plan 02.
+
+---
+
 ### 01: MCP Tool Metadata Enhancement
 
 Enhances MCP tool metadata to improve ChatGPT/OpenAI Apps SDK integration:
 
+- ⚡ **Quick Win**: STDIO tool description bug fix (~5 mins)
 - ✅ **Phase 0**: Tool annotations (COMPLETE)
 - **Phase 1**: Invocation status strings (`_meta`)
 - **Phase 2**: Security schemes in `_meta`
@@ -60,9 +87,130 @@ Covers architecture evolution and advanced MCP capabilities:
 
 ---
 
+### 04: MCP Prompts & Agent Guidance
+
+Fixes broken prompt argument passing and establishes proper agent guidance architecture:
+
+- **Phase 0**: Validate MCP SDK `registerPrompt` with Zod v4 works correctly
+- **Phase 1**: Fix prompt registration using TDD (remove workaround, use SDK correctly)
+- **Phase 2**: Fix remaining lint errors and add documentation
+- **Phase 3**: Full validation and compliance check
+
+**Key Insight**: The MCP SDK already has Zod v3/v4 compatibility built in. The workaround was unnecessary.
+
+**Key benefit**: Prompts correctly receive arguments; agents can use workflow templates effectively.
+
+**Related ADR**: [ADR-055: Zod Version Boundaries](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
+
+---
+
+### 05: Zod v4 Export Implementation
+
+Fixes the Zod version boundary issue and resolves the TS2589 type complexity error:
+
+- **Phase 1**: Update SDK type-gen to export Zod v4 schemas (using `zod/v4` from Zod 3.25+)
+- **Phase 2**: Resolve TS2589 "Type instantiation excessively deep" error
+
+**Key Insight**: Zod 3.25+ includes `zod/v4` which provides the Zod v4 API. The SDK can generate Zod v3 schemas via `openapi-zod-client` internally, then export Zod v4 equivalents to consumers.
+
+**Key benefit**: Apps receive Zod v4 schemas directly from SDK (schema-first), compatible with MCP SDK, no type assertions needed.
+
+**Related ADR**: [ADR-055: Zod Version Boundaries (Revised)](../../../docs/architecture/architectural-decisions/055-zod-version-boundaries.md)
+
+---
+
+### 06: UX Improvements & Research
+
+Quick wins and foundation work for prompt enhancements:
+
+- **Phase A**: Quick wins (~3 hours) ✅ MOSTLY COMPLETE
+  - A.1: Rename `year` → `yearGroup` parameter ✅
+  - A.2: Enhance landing page with tools/resources/prompts ✅
+  - A.3: Hero text and Playwright tests (pending)
+- **Phase B**: Research & discovery → **DELEGATED TO PLAN 07**
+- **Phase C**: Foundation work (~4-6 hours) - pending Plan 07 completion
+  - C.1: Design `keyStageOrYear` union parameter
+  - C.2: Design `quiz-customisation` prompt
+  - C.3: Research `adapt-materials` possibilities
+
+**Key benefit**: Foundation for advanced prompts, informed by Plan 07 research.
+
+---
+
+### 07: Oak AI Domain Extraction Research
+
+**⚠️ SCOPE: Research and report ONLY. No code modifications.**
+
+Comprehensive research plan to extract domain knowledge from the Oak AI Lesson Assistant codebase:
+
+- **Strategic Goal**: Extract valuable pedagogical expertise and educational patterns, document thoroughly, then (in future work) rebuild to our standards
+- **7 Research Areas**:
+  1. Prompt Architecture and Composition
+  2. Educational Domain Model
+  3. Quiz Generation Expertise
+  4. Content Moderation and Safety
+  5. Lesson Planning Workflow
+  6. Language and Voice
+  7. Teaching Materials Generation
+- **Duration**: 16-24 hours of focused research
+- **Output**: Comprehensive documentation in `.agent/research/aila-modular-extraction/`
+
+**Key benefit**: Preserves years of pedagogical refinement while ensuring longevity through proper software engineering practices.
+
+**This is not a code migration.** This is knowledge archaeology - understanding what domain expertise is encoded in the implementation. Implementation is a separate, subsequent effort.
+
+---
+
+### 08: OpenAI Apps SDK Feature Adoption
+
+Comprehensive adoption of OpenAI Apps SDK features for production readiness:
+
+- **Phase 1**: Widget Resource Metadata (CRITICAL)
+  - `openai/widgetCSP` - Content Security Policy (required for production)
+  - `openai/widgetPrefersBorder` - Bordered card rendering
+  - `openai/widgetDescription` - Reduce assistant narration
+- **Phase 2**: Interactive Widget Capabilities
+  - `openai/widgetAccessible` - Enable widget→tool calls
+  - `window.openai.callTool()` - Pagination, refresh
+  - `window.openai.setWidgetState()` - UI state persistence
+- **Phase 3**: Token Optimization
+  - Tool result `_meta` - Data for widget only (hidden from model)
+  - `structuredContent` separation - Minimal data to model
+- **Phase 4**: Tool Visibility & Localization
+  - `openai/visibility: private` - Hidden admin tools
+  - Locale support for UK curriculum terminology
+- **Phase 5**: Enhanced Widget Runtime
+  - `sendFollowUpMessage()` - Conversational continuity
+  - `requestDisplayMode()` - Fullscreen/PiP modes
+  - `openExternal()` - Oak website links
+
+**Key benefit**: Production-ready OpenAI Apps SDK integration with token optimization and interactive widgets.
+
+**Reference**: [OpenAI Apps SDK Documentation](../../reference-docs/openai-apps-sdk-reference.md)
+
+---
+
 ## Dependencies
 
 ```
+Plan 06 Phase A (Quick Wins)     ← START HERE (no dependencies) ✅ MOSTLY DONE
+         ↓
+     Plan 07 (Oak AI Research)   ← Comprehensive domain extraction (16-24 hours)
+         ↓
+Plan 06 Phase C (Foundations)    ← Designs informed by Plan 07
+         ↓
+    Plan 04 (MCP Prompts)        ← Enhanced with Plan 06/07 findings
+
+Plan 05 Phase 1 (Zod v4 Exports)
+         ↓
+Plan 05 Phase 2 (TS2589 Fix)
+         ↓
+Plan 04 (MCP Prompts)  ←  unblocked by Plan 05
+
+Plan 00 (POC)  →  Plan 02 (Full Ontology)  →  Upstream API /ontology
+    ↓                    ↓
+  Validates          Replaces POC
+
 Plan 01 (Metadata)     Plan 02 (Ontology)
        ↘                 ↙
     Plan 03 Phase 0
@@ -70,11 +218,32 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
               ↓
     Plan 03 Phases 1-4
     (Infrastructure + Advanced)
+
+Plan 08 (OpenAI Apps SDK)  ← Can start immediately (Phase 1 is CRITICAL)
+    Phase 1 (CSP)          ← REQUIRED for production deployment
+         ↓
+    Phase 2 (Interactive)  ← Depends on Plan 01 for tool metadata
+         ↓
+    Phase 3 (Token Opt)    ← Can run parallel to Phase 2
+         ↓
+    Phase 4 (Visibility)   ← Depends on Phase 2
+         ↓
+    Phase 5 (Enhanced UX)  ← Depends on Phase 2
 ```
 
+- **Plan 08 Phase 1** is **CRITICAL** for production deployment - should start immediately
+- **Plan 06 Phase A** has **no dependencies** - quick wins mostly complete ✅
+- **Plan 07** is the detailed research plan (formerly Plan 06 Phase B) - 16-24 hours of knowledge extraction
+- **Plan 06 Phase C** produces specifications informed by Plan 07 research
+- **Plan 05** is the **immediate priority** - fixes Zod versioning foundation for all SDK consumers
+- **Plan 04** is unblocked by Plan 05 (prompts use Zod schemas for MCP registration)
+- **Plan 00** is a quick POC that validates ontology value (~1 hour, content pre-authored)
+- **Plan 02** replaces Plan 00 when POC proves value
 - Plans 01 and 02 can run **in parallel** after Plan 03 Phase 0 completes
 - Plan 03 Phase 0 is the **foundation** for all advanced work
 - Plan 02 is a **prerequisite** for Plan 03 Phase 4 (advanced tools use ontology)
+- **Plan 08 Phases 2-5** depend on Phase 1 and benefit from Plan 01 metadata work
+- **Upstream API** `/ontology` endpoint is the ideal long-term solution (external dependency)
 
 ---
 

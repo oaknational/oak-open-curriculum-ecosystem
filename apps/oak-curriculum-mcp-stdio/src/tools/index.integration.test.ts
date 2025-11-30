@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { McpToolError, type ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import {
+  McpToolError,
+  type ToolExecutionResult,
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 
 import { createMcpToolsModule, type UniversalToolExecutors } from './index.js';

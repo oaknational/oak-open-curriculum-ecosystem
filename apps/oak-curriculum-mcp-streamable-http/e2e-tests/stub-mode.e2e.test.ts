@@ -13,7 +13,7 @@ import {
 import {
   listUniversalTools,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 const ToolEntrySchema = z.object({
   name: z.string(),

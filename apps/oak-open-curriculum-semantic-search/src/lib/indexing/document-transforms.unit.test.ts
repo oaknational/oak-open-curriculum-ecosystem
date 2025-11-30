@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
+import {
+  lessonSummarySchema,
+  unitSummarySchema,
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,

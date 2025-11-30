@@ -14,8 +14,9 @@ import {
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
+import { registerAllResources, registerPrompts } from './register-resources.js';
 
 export interface ToolHandlerDependencies {
   readonly createClient: typeof createOakPathBasedClient;
@@ -79,15 +80,10 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     ? createStubToolExecutionAdapter()
     : undefined;
 
-  const tools = listUniversalTools();
-  for (const tool of tools) {
+  for (const tool of listUniversalTools()) {
     // Use generated Zod schema directly when available (includes .describe() for MCP clients).
     // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
     const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    // Note: securitySchemes and annotations are supported by MCP runtime per OpenAI Apps SDK
-    // documentation but not yet fully typed in MCP TypeScript SDK (as of v1.20.1).
-    // We pass them through and they will be accepted at runtime via JavaScript's dynamic nature.
-    // See: https://platform.openai.com/docs/guides/apps-authentication
     const config = {
       title: tool.annotations?.title ?? tool.name,
       description: tool.description ?? tool.name,
@@ -107,6 +103,9 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
       );
     });
   }
+
+  registerAllResources(server);
+  registerPrompts(server);
 }
 
 /**

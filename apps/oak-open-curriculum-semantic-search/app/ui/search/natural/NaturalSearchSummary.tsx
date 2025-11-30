@@ -7,7 +7,7 @@ import type { NaturalSearchSummary } from './NaturalSearch.helpers';
 import {
   SearchStructuredRequestSchema,
   type SearchStructuredRequest,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { isSubject, isKeyStage } from '../../../../src/adapters/sdk-guards';
 import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../../src/lib/search-scopes';
 import { getAppTheme } from '../../themes/app-theme-helpers';

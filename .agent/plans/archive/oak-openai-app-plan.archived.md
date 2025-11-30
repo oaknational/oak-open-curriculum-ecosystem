@@ -1,5 +1,19 @@
 # Oak OpenAI App Implementation Plan
 
+> **⚠️ ARCHIVED**: This plan has been superseded by [Plan 08: OpenAI Apps SDK Feature Adoption](../sdk-and-mcp-enhancements/08-openai-apps-sdk-feature-adoption-plan.md).
+>
+> **Archive date**: 2025-11-30  
+> **Reason**: Content consolidated into Plan 08 which provides comprehensive coverage of:
+>
+> - All original phases (POC, Requirements, Architecture, Privacy, Developer Mode, Rollout)
+> - OpenAI Apps SDK feature adoption (CSP, widgets, token optimization)
+> - Two-camp architecture (type-gen vs runtime tools)
+> - Universal coverage requirements
+>
+> **Do not use this plan for new work.** Refer to Plan 08 instead.
+
+---
+
 ## Context and References
 
 - Aligns with the [OpenAI App Developer Guidelines](https://developers.openai.com/apps-sdk/app-developer-guidelines) requirements across purpose, safety, privacy, and verification.
@@ -63,44 +77,21 @@
    - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`
    - **Pass/Fail:** STDIO tools list shows descriptions matching OpenAPI schema (e.g., "This tool returns an array of all available subjects…" not "GET /subjects").
 
-6. **Add MCP annotations to tool descriptors** 🔧 _30 minutes_
-   - **Intent:** Mark all 26 curriculum tools as read-only to streamline ChatGPT confirmations and improve model understanding.
-   - **What you do:** Update SDK generator to emit `annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }` in tool descriptors.
-   - **File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
-   - **Implementation:** Add annotations field to tool descriptor export; all curriculum tools are read-only, idempotent (same query = same result), and operate in a closed domain.
-   - **Validation:** `pnpm type-gen`, verify generated tool files include annotations; run `pnpm build && pnpm test`.
-   - **Pass/Fail:** Generated tools expose `readOnlyHint: true` via MCP; ChatGPT reduces confirmation friction for read-only operations.
+6. **Add MCP annotations to tool descriptors** ✅ _COMPLETE_
+   - **Status:** See `.agent/plans/sdk-and-mcp-enhancements/01-mcp-tool-metadata-enhancement-plan.md` Phase 0
+   - **Summary:** All 26 generated tools now have `annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }` and human-readable `title` fields.
 
-7. **Expose outputSchema in tool registration** 🔧 _30 minutes_
-   - **Intent:** Help ChatGPT understand response structure by including output schema in tool metadata.
-   - **What you do:** Update tool registration in both MCP servers to include `descriptor.toolOutputJsonSchema`.
-   - **Files:** `apps/oak-curriculum-mcp-stdio/src/app/server.ts`, `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
-   - **Implementation:** Add `outputSchema: descriptor.toolOutputJsonSchema` to server.registerTool calls.
-   - **Validation:** MCP Inspector shows output schema for each tool; `pnpm test` passes for both servers.
-   - **Pass/Fail:** Tool listings include structured output schemas matching OpenAPI response definitions.
+7. **Expose outputSchema in tool registration** ➡️ _Consolidated_
+   - **Status:** See `.agent/plans/sdk-and-mcp-enhancements/01-mcp-tool-metadata-enhancement-plan.md` Phase 5
+   - **Summary:** Evaluation phase to determine if exposing `outputSchema` is beneficial given existing Zod validation.
 
-8. **Create curriculum ontology resource (shimmed)** 🎯 _4 hours_
-   - **Intent:** Provide ChatGPT with curriculum structure knowledge (key stages, subjects, relationships) until upstream API delivers official endpoint.
-   - **What you do:** Implement MCP resource (not tool) exposing curriculum ontology as static/semi-static data. Two-layer architecture: schema-derived facts (auto-generated at type-gen) + educational guidance (hand-authored JSON).
-   - **Implementation plan:** See `.agent/plans/curriculum-ontology-resource-plan.md` for complete TDD implementation strategy
-   - **Files:**
-     - Type-gen: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/ontology/schema-extractor.ts`
-     - Generated: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/curriculum-ontology.schema.json`
-     - Guidance: `packages/sdks/oak-curriculum-sdk/docs/curriculum-ontology.guidance.json`
-     - Runtime: `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-resource.ts`
-   - **Content:** Schema-derived entities/relationships/enumerations + educational context (ages, tool workflows, domain knowledge)
-   - **Resource URIs:** `curriculum://ontology/full`, `curriculum://ontology/schema`, `curriculum://ontology/guidance`, `curriculum://ontology/summary`
-   - **Validation:** TDD throughout; unit tests for extraction, integration tests for merge, E2E tests for MCP resource access; `pnpm type-gen && pnpm build && pnpm test`.
-   - **Pass/Fail:** Ontology resources accessible via MCP `resources/list` and `resources/read` in both servers; schema extraction succeeds during `pnpm type-gen`; responses include complete curriculum structure metadata.
-   - **Future:** Replace with upstream API endpoint when available (see `.agent/plans/upstream-api-metadata-wishlist.md` item 3).
+8. **Create curriculum ontology resource** ➡️ _Consolidated_
+   - **Status:** See `.agent/plans/sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md`
+   - **Summary:** Two-layer architecture: schema-derived facts (auto-generated) + educational guidance (hand-authored).
 
-9. **Add tool title field** 💡 _1 hour_
-   - **Intent:** Provide human-readable display names for tools (e.g., "Search Lessons" instead of "get-search-lessons").
-   - **What you do:** Generate titles from OpenAPI `operation.summary` or transform tool names in SDK generator.
-   - **File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
-   - **Implementation:** Extract title from `operation.summary` or apply title-case transformation to tool name segments; emit as `title` field in descriptor.
-   - **Validation:** `pnpm type-gen`, verify generated tools include `title` field; MCP Inspector shows titles.
-   - **Pass/Fail:** Tools display user-friendly titles in ChatGPT interface.
+9. **Add tool title field** ✅ _COMPLETE_
+   - **Status:** See `.agent/plans/sdk-and-mcp-enhancements/01-mcp-tool-metadata-enhancement-plan.md` Phase 0
+   - **Summary:** All tools now have `title` in annotations derived from tool name via `kebabToTitleCase`.
 
 10. **Create golden prompt test suite** 📝 _2 hours_
     - **Intent:** Systematic evaluation of tool discovery following OpenAI metadata optimization guidance.

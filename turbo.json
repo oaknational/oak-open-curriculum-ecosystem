@@ -6,8 +6,19 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
+    "build-adapter": {
+      "cache": true,
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts"
+      ]
+    },
     "type-gen": {
-      "dependsOn": ["^type-gen"],
+      "dependsOn": ["^type-gen", "^build-adapter"],
       "cache": true,
       "outputs": ["**/generated/**"],
       "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
@@ -31,7 +42,7 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "type-gen"],
       "cache": false,
       "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
@@ -153,6 +164,7 @@
         "src/**/*.ts",
         "app/**/*.ts",
         "app/**/*.tsx",
+        "tests/**/*.ts",
         "next.config.ts",
         "playwright.config.ts"
       ]

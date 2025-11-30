@@ -9,7 +9,7 @@ import {
   type SearchNaturalLanguageRequest,
   type SearchScopeWithAll,
   type SearchStructuredRequest,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   resolveFixtureModeFromRequest,
   applyFixtureModeCookie,

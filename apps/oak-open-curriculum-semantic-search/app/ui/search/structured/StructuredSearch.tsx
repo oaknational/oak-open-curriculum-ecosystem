@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 import StructuredSearchClient from './StructuredSearchClient';
 import { searchAction } from './structured-search.actions';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type StructuredSearchAction = (
   input: SearchStructuredRequest,

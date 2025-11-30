@@ -2,7 +2,7 @@
   "name": "@oaknational/mcp-ecosystem",
   "version": "0.5.0",
   "private": true,
-  "description": "MCP ecosystem - A collection of MCP servers and supporting frameworks and libraries",
+  "description": "Oak National Academy MCP ecosystem - A collection of MCP servers and supporting frameworks and libraries",
   "type": "module",
   "scripts": {
     "type-gen": "turbo run --continue type-gen",
@@ -28,19 +28,18 @@
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
     "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
-    "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
+    "make": "pnpm i && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm test:e2e:built && pnpm smoke:dev:stub && pnpm smoke:dev:live",
     "re-build": "pnpm clean && pnpm install && pnpm type-gen && pnpm build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint -- --fix ",
     "check": "pnpm clean && pnpm lint:clean && pnpm make && pnpm qg",
     "app:search": "pnpm run dev --filter=@oaknational/open-curriculum-semantic-search",
     "app:mcp": "pnpm run dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
-    "identity-check": "node scripts/identity-check.mjs --mode=enforce",
-    "identity-report": "node scripts/identity-check.mjs --mode=report",
     "prepare": "husky",
     "publish:dry": "pnpm -r publish --dry-run",
     "publish:packages": "pnpm -r publish",
-    "outdated": "pnpm outdated -r"
+    "outdated": "pnpm outdated -r",
+    "update:playwright": "pnpm install --save-dev -w @playwright/test@latest && pnpm exec playwright install --with-deps"
   },
   "keywords": [
     "mcp",
@@ -54,7 +53,7 @@
     "url": "https://github.com/oaknational/oak-mcp-ecosystem.git"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "22.x"
   },
   "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8",
   "license": "MIT",
@@ -95,7 +94,7 @@
     "husky": "^9.1.7",
     "markdownlint-cli": "^0.46.0",
     "prettier": "^3.6.2",
-    "semantic-release": "^24.2.9",
+    "semantic-release": "^25.0.2",
     "supertest": "^7.1.4",
     "ts-morph": "^27.0.0",
     "tsup": "^8.5.1",

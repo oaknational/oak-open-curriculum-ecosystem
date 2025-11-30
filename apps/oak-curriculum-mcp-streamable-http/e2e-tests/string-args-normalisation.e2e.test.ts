@@ -14,7 +14,7 @@ describe('HTTP boundary argument validation', () => {
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
   });
 
-  function extractErrorText(body: string): string {
+  function parseSseDataLine(body: string): string {
     const line = body
       .split('\n')
       .map((value) => value.trim())
@@ -22,10 +22,27 @@ describe('HTTP boundary argument validation', () => {
     if (!line) {
       throw new Error('SSE payload missing data line');
     }
-    const envelope = JSON.parse(line.slice('data: '.length)) as {
+    return line.slice('data: '.length);
+  }
+
+  function extractErrorText(body: string): string {
+    const json = parseSseDataLine(body);
+    const envelope = JSON.parse(json) as {
       readonly error?: { readonly message?: string };
+      readonly result?: {
+        readonly isError?: boolean;
+        readonly content?: readonly { readonly type?: string; readonly text?: string }[];
+      };
     };
-    return envelope.error?.message ?? '';
+    // MCP SDK returns either a JSON-RPC error or a result with isError: true
+    if (envelope.error?.message) {
+      return envelope.error.message;
+    }
+    if (!envelope.result?.isError) {
+      return '';
+    }
+    const textContent = envelope.result.content?.find((c) => c.type === 'text');
+    return textContent?.text ?? '';
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
@@ -42,7 +59,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
@@ -59,7 +77,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
@@ -76,7 +95,8 @@ describe('HTTP boundary argument validation', () => {
 
     expect(res.status).toBe(200);
     const message = extractErrorText(res.text);
-    expect(message).toContain('Expected object, received string');
+    // Zod v3: "Expected object, received string", Zod v4: "expected record, received string"
+    expect(message.toLowerCase()).toContain('received string');
   });
 
   it('accepts structured arguments that match the tool schema', async () => {

@@ -14,7 +14,7 @@ import {
   type SearchUnitsResponse,
   type SearchSequencesResponse,
   type SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type TimedOutSingleScopeFixture = SingleScopeFixture & { readonly timedOut: true };
 export type TimedOutMultiScopeFixture = SearchMultiScopeResponse & {
