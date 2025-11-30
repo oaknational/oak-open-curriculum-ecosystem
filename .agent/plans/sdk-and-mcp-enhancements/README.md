@@ -6,15 +6,16 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 
 ## Plan Index
 
-| Plan                                                                                  | Status         | Duration     | Focus                                            |
-| ------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------------------------------------ |
-| [00: Ontology POC](./00-ontology-poc-static-tool.md)                                  | PLANNED        | ~1 hour      | Quick static tool to validate ontology value     |
-| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅     | ~4-5 days    | Enriching tool metadata for AI agents            |
-| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED        | ~4 weeks     | Exposing domain model as MCP resource            |
-| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED        | ~12-14 weeks | Architecture evolution and advanced capabilities |
-| [04: MCP Prompts & Agent Guidance](./04-mcp-prompts-and-agent-guidance-plan.md)       | 🔴 NOT STARTED | ~1.5 hours   | Fix prompt arg passing, establish agent guidance |
-| [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589       |
-| [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟢 READY       | ~15-22 hours | Quick wins, Oak AI research, prompt foundations  |
+| Plan                                                                                  | Status         | Duration     | Focus                                               |
+| ------------------------------------------------------------------------------------- | -------------- | ------------ | --------------------------------------------------- |
+| [00: Ontology POC](./00-ontology-poc-static-tool.md)                                  | PLANNED        | ~1 hour      | Quick static tool to validate ontology value        |
+| [01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)           | Phase 0 ✅     | ~4-5 days    | Enriching tool metadata for AI agents               |
+| [02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)         | PLANNED        | ~4 weeks     | Exposing domain model as MCP resource               |
+| [03: Infrastructure & Advanced Tools](./03-mcp-infrastructure-advanced-tools-plan.md) | PLANNED        | ~12-14 weeks | Architecture evolution and advanced capabilities    |
+| [04: MCP Prompts & Agent Guidance](./04-mcp-prompts-and-agent-guidance-plan.md)       | 🔴 NOT STARTED | ~1.5 hours   | Fix prompt arg passing, establish agent guidance    |
+| [05: Zod v4 Export Implementation](./05-zod-v4-export-implementation-plan.md)         | 🟡 ACTIVE      | ~2-3 days    | Export Zod v4 schemas from SDK; fix TS2589          |
+| [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟡 PHASE A ✅  | ~6-8 hours   | Quick wins, prompt foundations (research → Plan 07) |
+| [07: Oak AI Domain Extraction](./07-oak-ai-domain-extraction-research-plan.md)        | 🔴 NOT STARTED | ~16-24 hours | Comprehensive research into Oak AI domain knowledge |
 
 ---
 
@@ -119,36 +120,56 @@ Fixes the Zod version boundary issue and resolves the TS2589 type complexity err
 
 ### 06: UX Improvements & Research
 
-Quick wins and research to inform future prompt enhancements:
+Quick wins and foundation work for prompt enhancements:
 
-- **Phase A**: Quick wins (~3 hours)
-  - A.1: Rename `year` → `yearGroup` parameter
-  - A.2: Enhance landing page with tools/resources/prompts
-- **Phase B**: Research & discovery (~8-12 hours)
-  - B.1: Deep dive into Oak AI Lesson Assistant patterns
-  - B.2: Review all enhancement plans
-  - B.3: Synthesis and recommendations
-- **Phase C**: Foundation work (~4-6 hours)
+- **Phase A**: Quick wins (~3 hours) ✅ MOSTLY COMPLETE
+  - A.1: Rename `year` → `yearGroup` parameter ✅
+  - A.2: Enhance landing page with tools/resources/prompts ✅
+  - A.3: Hero text and Playwright tests (pending)
+- **Phase B**: Research & discovery → **DELEGATED TO PLAN 07**
+- **Phase C**: Foundation work (~4-6 hours) - pending Plan 07 completion
   - C.1: Design `keyStageOrYear` union parameter
   - C.2: Design `quiz-customisation` prompt
   - C.3: Research `adapt-materials` possibilities
 
-**Key benefit**: Informed by Oak AI's years of pedagogical refinement; prepares foundation for advanced prompts.
+**Key benefit**: Foundation for advanced prompts, informed by Plan 07 research.
 
-**Research outputs**: Documents in `docs/research/` covering prompt architecture, quiz patterns, lesson workflows, and curriculum integration.
+---
+
+### 07: Oak AI Domain Extraction Research
+
+**⚠️ SCOPE: Research and report ONLY. No code modifications.**
+
+Comprehensive research plan to extract domain knowledge from the Oak AI Lesson Assistant codebase:
+
+- **Strategic Goal**: Extract valuable pedagogical expertise and educational patterns, document thoroughly, then (in future work) rebuild to our standards
+- **7 Research Areas**:
+  1. Prompt Architecture and Composition
+  2. Educational Domain Model
+  3. Quiz Generation Expertise
+  4. Content Moderation and Safety
+  5. Lesson Planning Workflow
+  6. Language and Voice
+  7. Teaching Materials Generation
+- **Duration**: 16-24 hours of focused research
+- **Output**: Comprehensive documentation in `.agent/research/aila-modular-extraction/`
+
+**Key benefit**: Preserves years of pedagogical refinement while ensuring longevity through proper software engineering practices.
+
+**This is not a code migration.** This is knowledge archaeology - understanding what domain expertise is encoded in the implementation. Implementation is a separate, subsequent effort.
 
 ---
 
 ## Dependencies
 
 ```
-Plan 06 Phase A (Quick Wins)     ← START HERE (no dependencies)
+Plan 06 Phase A (Quick Wins)     ← START HERE (no dependencies) ✅ MOSTLY DONE
          ↓
-Plan 06 Phase B (Research)       ← Informs all prompt work
+     Plan 07 (Oak AI Research)   ← Comprehensive domain extraction (16-24 hours)
          ↓
-Plan 06 Phase C (Foundations)    ← Designs for Plan 04
+Plan 06 Phase C (Foundations)    ← Designs informed by Plan 07
          ↓
-    Plan 04 (MCP Prompts)        ← Enhanced with Plan 06 findings
+    Plan 04 (MCP Prompts)        ← Enhanced with Plan 06/07 findings
 
 Plan 05 Phase 1 (Zod v4 Exports)
          ↓
@@ -169,9 +190,9 @@ Plan 01 (Metadata)     Plan 02 (Ontology)
     (Infrastructure + Advanced)
 ```
 
-- **Plan 06 Phase A** has **no dependencies** - start immediately with quick wins
-- **Plan 06 Phase B** (research) runs after quick wins; informs all future prompt design
-- **Plan 06 Phase C** produces specifications that enhance Plan 04
+- **Plan 06 Phase A** has **no dependencies** - quick wins mostly complete ✅
+- **Plan 07** is the detailed research plan (formerly Plan 06 Phase B) - 16-24 hours of knowledge extraction
+- **Plan 06 Phase C** produces specifications informed by Plan 07 research
 - **Plan 05** is the **immediate priority** - fixes Zod versioning foundation for all SDK consumers
 - **Plan 04** is unblocked by Plan 05 (prompts use Zod schemas for MCP registration)
 - **Plan 00** is a quick POC that validates ontology value (~1 hour, content pre-authored)

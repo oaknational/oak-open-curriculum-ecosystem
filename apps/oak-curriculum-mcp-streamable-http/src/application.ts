@@ -7,7 +7,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
 import listRoutes from 'express-list-routes';
 
-import { renderLandingPageHtml } from './landing-page.js';
+import { renderLandingPageHtml } from './landing-page/index.js';
 import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';

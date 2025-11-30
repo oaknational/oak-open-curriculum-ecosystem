@@ -2,21 +2,29 @@
 
 **Created**: 2025-11-29  
 **Updated**: 2025-11-30  
-**Status**: 🟡 PHASE A COMPLETE - Phases B & C pending  
+**Status**: 🟡 PHASE A COMPLETE - Phase B delegated to Plan 07, Phase C pending  
 **Focus**: Quick wins, research discovery, and foundation for future prompt enhancements
 
 ---
 
 ## Overview
 
-This plan captures immediate UX improvements and research activities that will inform future prompt and tool enhancements. The outputs will be integrated into the existing plan sequence (Plans 01-05) once discovery is complete.
+This plan captures immediate UX improvements and coordinates research activities that will inform future prompt and tool enhancements. The outputs will be integrated into the existing plan sequence (Plans 01-05) once discovery is complete.
 
 ### Goals
 
 1. **Quick Wins**: Immediate terminology fixes and landing page improvements
-2. **Research**: Deep exploration of Oak AI Lesson Assistant patterns and codebase review
+2. **Research**: Deep exploration of Oak AI Lesson Assistant patterns and codebase review → **See [Plan 07](./07-oak-ai-domain-extraction-research-plan.md)**
 3. **Foundation**: Prepare architectural patterns for `keyStageOrYear` and advanced prompts
 4. **Integration**: Document findings for incorporation into Plans 04 and future work
+
+### Foundational Commitment
+
+Before beginning any task, re-read and recommit to:
+
+- `.agent/directives-and-memory/rules.md`
+- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives-and-memory/schema-first-execution.md`
 
 ---
 
@@ -81,170 +89,70 @@ function renderResourcesList(): string { ... }
 - [x] Responsive, accessible HTML
 - [x] Dark mode support maintained
 - [x] Quality gates pass
+- [ ] Prominent hero explainer text at the top of the page, under the title
+- [ ] Minimal Playwright test for basic functionality, including a11y, strictly in line with .agent/directives-and-memory/testing-strategy.md
 
 ---
 
-## Phase B: Research and Discovery (~8-12 hours)
+## Phase B: Oak AI Domain Extraction Research
 
-### B.1: Deep Dive into Oak AI Lesson Assistant (~6-8 hours)
+> **⚠️ DELEGATED TO PLAN 07**
+>
+> Phase B has been elevated to its own comprehensive research plan due to its strategic importance.
+>
+> **See: [07-oak-ai-domain-extraction-research-plan.md](./07-oak-ai-domain-extraction-research-plan.md)**
 
-**Repository**: `reference/oak-ai-lesson-assistant/`
+### Strategic Context
 
-This is a comprehensive research task to understand patterns, structures, and approaches used in the main Oak AI product that can inform our MCP server design.
+The Oak AI Lesson Assistant repository contains years of accumulated pedagogical expertise, prompt engineering refinement, and educational domain knowledge. This is not a simple code review - it is **knowledge archaeology**.
 
-#### B.1.1: Prompt Architecture Analysis
+**The goal is not to copy or integrate with Oak AI's existing code.** The goal is to:
 
-**Target directories**:
+1. **Understand** the domain knowledge encoded in their implementation
+2. **Extract** the pedagogical principles and educational patterns
+3. **Rebuild** to our standards (schema-first, TDD, pure functions, type preservation)
 
-```
-packages/core/src/prompts/
-  lesson-assistant/     ← Conversational patterns
-  lesson-planner/       ← Structured workflows
-    extend-lesson-plan-quiz/   ← Quiz generation
-    generate-lesson-plan/      ← Core lesson planning
-    regenerate-lesson-plan/    ← Iteration patterns
-  shared/               ← Cross-cutting concerns
-```
+This ensures the longevity of valuable domain expertise while meeting the highest standards of software engineering excellence.
 
-**Research Questions**:
+### Plan 07 Research Areas
 
-1. How are prompts structured? What's the `parts/` pattern?
-2. How do input schemas define parameters (keyStage, ageRange, subject)?
-3. How do output schemas constrain AI responses?
-4. What's the variant system for (`variants/main/`)?
-5. How is quiz generation handled differently from lesson planning?
-6. What error handling and prompt injection protection exists?
+1. **Prompt Architecture and Composition** - How prompts are structured and composed
+2. **Educational Domain Model** - Lessons, quizzes, learning cycles, key stages
+3. **Quiz Generation Expertise** - Question design, distractor creation, pedagogical constraints
+4. **Content Moderation and Safety** - Moderation categories, safety patterns
+5. **Lesson Planning Workflow** - Complete workflow from request to lesson plan
+6. **Language and Voice** - British English, age-appropriate language
+7. **Teaching Materials Generation** - Beyond the core lesson plan
 
-**Deliverable**: `docs/research/oak-ai-prompt-architecture.md`
+### Deliverables (from Plan 07)
 
----
+**Output Directory**: `.agent/research/aila-modular-extraction/`
 
-#### B.1.2: Quiz Generation Patterns
-
-**Target files**:
-
-```
-packages/core/src/prompts/lesson-planner/extend-lesson-plan-quiz/
-  input.schema.ts    ← What parameters?
-  output.schema.ts   ← What structure?
-  variants/main/parts/
-    task.ts          ← The actual prompt
-    output.ts        ← Output formatting
-```
-
-**Research Questions**:
-
-1. What's the difference between `starterQuiz` and `exitQuiz`?
-2. How does quiz generation build on lesson context?
-3. What's the expected quiz question structure?
-4. How are distractors (wrong answers) generated?
-
-**Deliverable**: Section in `docs/research/oak-ai-quiz-patterns.md`
-
----
-
-#### B.1.3: Input/Output Schema Patterns
-
-**Research Questions**:
-
-1. What parameters are consistently required (keyStage, ageRange, subject)?
-2. How do they handle year groups vs key stages?
-3. What validation patterns are used?
-4. How do output schemas guide AI responses?
-
-**Deliverable**: Section in prompt architecture doc
-
----
-
-#### B.1.4: Lesson Planning Workflows
-
-**Target files**:
-
-```
-packages/aila/src/           ← Core AI assistant
-packages/core/src/models/    ← Domain models
-packages/teaching-materials/ ← Teaching material structures
+```text
+.agent/research/aila-modular-extraction/
+├── README.md                           ← Index and executive summary
+├── prompt-architecture.md              ← Prompt composition patterns
+├── prompt-parts-inventory.md           ← Complete parts catalogue
+├── prompt-patterns-worth-extracting.md ← Extraction candidates
+├── domain-model.md                     ← Educational domain model
+├── quiz-design-principles.md           ← Quiz design knowledge
+├── learning-cycle-pedagogy.md          ← Learning cycle foundation
+├── quiz-generation-expertise.md        ← Quiz generation deep dive
+├── distractor-design-rules.md          ← Distractor design as rules
+├── content-moderation-system.md        ← Moderation documentation
+├── safety-patterns.md                  ← Safety patterns
+├── lesson-planning-workflow.md         ← Workflow documentation
+├── section-generation-patterns.md      ← Section generation
+├── language-and-voice.md               ← Language requirements
+├── teaching-materials.md               ← Teaching materials
+└── extraction-recommendations.md       ← What to extract and how
 ```
 
-**Research Questions**:
+### Phase B Complete When
 
-1. What's the lesson planning workflow (steps, dependencies)?
-2. How are Oak curriculum resources integrated?
-3. What's the feedback/iteration loop for lesson plans?
-4. How are teaching materials structured?
-
-**Deliverable**: `docs/research/oak-ai-lesson-workflow.md`
-
----
-
-#### B.1.5: RAG and Curriculum Integration
-
-**Target directories**:
-
-```
-packages/rag/           ← Retrieval-augmented generation
-packages/ingest/        ← Curriculum ingestion
-packages/db/schemas/    ← Data models
-```
-
-**Research Questions**:
-
-1. How does Oak AI retrieve relevant curriculum content?
-2. What's the lesson/unit/programme data model?
-3. How is semantic search used?
-4. How are curriculum resources cited in outputs?
-
-**Deliverable**: `docs/research/oak-ai-curriculum-integration.md`
-
----
-
-### B.2: Review Enhancement Plans (~2 hours)
-
-**Files to review**:
-
-```
-.agent/plans/sdk-and-mcp-enhancements/
-  00-ontology-poc-static-tool.md
-  01-mcp-tool-metadata-enhancement-plan.md
-  02-curriculum-ontology-resource-plan.md
-  03-mcp-infrastructure-advanced-tools-plan.md
-  04-mcp-prompts-and-agent-guidance-plan.md
-  05-zod-v4-export-implementation-plan.md
-  README.md
-
-.agent/plans/openai-app/
-  oak-openai-app-plan.md
-```
-
-**Research Questions**:
-
-1. What's the current status of each plan?
-2. What are the dependencies between plans?
-3. Where do the new improvements fit?
-4. Are there conflicts or overlaps?
-5. What's the critical path?
-
-**Deliverable**: Update to `README.md` with:
-
-- Status updates
-- Dependency diagram refinement
-- Integration points for new work
-- Priority recommendations
-
----
-
-### B.3: Research Synthesis (~2 hours)
-
-**Task**: Consolidate findings into actionable recommendations.
-
-**Deliverables**:
-
-1. `docs/research/README.md` - Research index and key findings
-2. Updates to `improvements.md` with specific implementation guidance
-3. Draft specifications for:
-   - `keyStageOrYear` union parameter pattern
-   - `quiz-customisation` prompt structure
-   - `adapt-materials` prompt concept
+- [ ] Plan 07 research is complete
+- [ ] `extraction-recommendations.md` provides clear guidance for Phase C
+- [ ] Domain knowledge documented independently of original implementation
 
 ---
 
@@ -299,19 +207,21 @@ _To be executed after Phase B research is complete_
 - [x] Landing page enhanced with tools/resources/prompts
 - [x] All quality gates pass
 - [x] Changes committed
+- [ ] Prominent hero explainer text at the top of the page
+- [ ] Minimal Playwright test for basic functionality (per testing-strategy.md)
 
 ### Phase B Complete When:
 
-- [ ] Research documents created in `docs/research/`
-- [ ] Oak AI patterns documented and understood
-- [ ] Enhancement plans reviewed and updated
-- [ ] Integration points identified
+- [ ] Plan 07 research is complete
+- [ ] All research documents created in `.agent/research/aila-modular-extraction/`
+- [ ] `extraction-recommendations.md` provides clear extraction guidance
+- [ ] Domain knowledge documented independently of implementation
 
 ### Phase C Complete When:
 
-- [ ] `keyStageOrYear` pattern specified
-- [ ] `quiz-customisation` prompt designed
-- [ ] `adapt-materials` concept documented
+- [ ] `keyStageOrYear` pattern specified (informed by Plan 07 domain model research)
+- [ ] `quiz-customisation` prompt designed (informed by Plan 07 quiz expertise research)
+- [ ] `adapt-materials` concept documented (informed by Plan 07 teaching materials research)
 - [ ] Ready for integration into Plans 04+
 
 ---
@@ -320,70 +230,79 @@ _To be executed after Phase B research is complete_
 
 After this plan completes, findings will be integrated:
 
-| Finding                  | Integrates Into            |
-| ------------------------ | -------------------------- |
-| `keyStageOrYear` pattern | Plan 04 (Prompts)          |
-| Quiz prompt design       | Plan 04 (Prompts)          |
-| Adapt-materials concept  | New Plan 07                |
-| Oak AI patterns          | Plans 02, 03, 04           |
-| Landing page             | Plan 01 (Metadata) Phase 6 |
+| Finding                  | Integrates Into            | Source            |
+| ------------------------ | -------------------------- | ----------------- |
+| `keyStageOrYear` pattern | Plan 04 (Prompts)          | Plan 07 → Phase C |
+| Quiz prompt design       | Plan 04 (Prompts)          | Plan 07 → Phase C |
+| Adapt-materials concept  | Plan 04 or New Plan        | Plan 07 → Phase C |
+| Oak AI domain patterns   | Plans 02, 03, 04           | Plan 07 research  |
+| Landing page             | Plan 01 (Metadata) Phase 6 | Phase A           |
 
 ---
 
 ## Estimated Timeline
 
-| Phase                 | Duration  | Dependencies      |
-| --------------------- | --------- | ----------------- |
-| A.1: Rename yearGroup | 15 mins   | None              |
-| A.2: Landing page     | 2-3 hours | None              |
-| B.1: Oak AI deep dive | 6-8 hours | Phase A complete  |
-| B.2: Plan review      | 2 hours   | Parallel with B.1 |
-| B.3: Synthesis        | 2 hours   | B.1, B.2 complete |
-| C.1-C.3: Foundation   | 4-6 hours | Phase B complete  |
+| Phase                    | Duration    | Dependencies          |
+| ------------------------ | ----------- | --------------------- |
+| A.1: Rename yearGroup    | 15 mins     | None ✅ DONE          |
+| A.2: Landing page        | 2-3 hours   | None ✅ DONE (mostly) |
+| A.3: Landing page finish | 1-2 hours   | A.2 complete          |
+| B: Plan 07 Research      | 16-24 hours | Phase A complete      |
+| C.1-C.3: Foundation      | 4-6 hours   | Phase B complete      |
 
-**Total**: ~15-22 hours
+**Total for Plan 06**: ~6-8 hours (Phases A and C)  
+**Total for Plan 07**: ~16-24 hours (detailed research)  
+**Combined Total**: ~22-32 hours
 
 ---
 
 ## Notes
 
-### Why Research First?
+### Why Extract and Rebuild?
 
-The Oak AI Lesson Assistant represents years of pedagogical and UX refinement. Understanding their patterns before implementing our own ensures:
+The Oak AI Lesson Assistant repository contains valuable domain knowledge - years of pedagogical refinement, prompt engineering expertise, and educational design patterns. However, that codebase was not built to the standards of this repository.
 
-1. We don't reinvent solved problems
-2. We align with Oak's established design language
-3. We benefit from their user feedback and iteration
-4. We can identify gaps they haven't addressed
+**We are not integrating with Oak AI.** We are:
 
-### Key Files to Study
+1. **Extracting** the domain knowledge (pedagogical principles, educational patterns, quiz design expertise)
+2. **Rebuilding** to our standards (schema-first, TDD, pure functions, type preservation)
 
-```
-# Must-read files in Oak AI repo
-packages/core/src/prompts/lesson-planner/generate-lesson-plan/input.schema.ts
-packages/core/src/prompts/lesson-planner/extend-lesson-plan-quiz/input.schema.ts
-packages/core/src/prompts/lesson-assistant/parts/body.ts
-packages/aila/src/core/chat/AilaChat.ts
-packages/db/schemas/lesson.ts
-packages/rag/lib/
-```
+This ensures:
 
-### Research Output Structure
+- The valuable domain expertise is preserved
+- Longevity through maintainability and testability
+- Alignment with our architectural principles
+- Proper modularity and encapsulation
 
-```
-docs/research/
-  README.md                           ← Index and key findings
-  oak-ai-prompt-architecture.md       ← Prompt structure patterns
-  oak-ai-quiz-patterns.md             ← Quiz generation specifics
-  oak-ai-lesson-workflow.md           ← Lesson planning flows
-  oak-ai-curriculum-integration.md    ← RAG and data integration
-```
+### Research Delegated to Plan 07
+
+Detailed research into the Oak AI codebase has been elevated to its own comprehensive plan:
+
+**[07-oak-ai-domain-extraction-research-plan.md](./07-oak-ai-domain-extraction-research-plan.md)**
+
+This plan provides:
+
+- Systematic methodology for knowledge extraction
+- 7 detailed research areas
+- Clear deliverables for each area
+- Success criteria and checkpoints
+- Integration guidance for subsequent plans
 
 ---
 
 ## References
 
-- `.agent/plans/sdk-and-mcp-enhancements/improvements.md` - Source requirements
+### Foundational Documents (Re-read before each session)
+
 - `.agent/directives-and-memory/rules.md` - Development rules
 - `.agent/directives-and-memory/testing-strategy.md` - TDD approach
-- `reference/oak-ai-lesson-assistant/` - Research target
+- `.agent/directives-and-memory/schema-first-execution.md` - Type generation mandate
+
+### Related Plans
+
+- `.agent/plans/sdk-and-mcp-enhancements/07-oak-ai-domain-extraction-research-plan.md` - Detailed research plan
+- `.agent/plans/sdk-and-mcp-enhancements/improvements.md` - Source requirements
+
+### Research Target
+
+- `reference/oak-ai-lesson-assistant/` - Oak AI codebase for knowledge extraction
