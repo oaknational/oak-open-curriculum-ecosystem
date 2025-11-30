@@ -56,7 +56,7 @@ After implementation:
 ## Quality Gates
 
 All quality gates must pass before committing:
+
 - `pnpm type-check`
 - `pnpm lint`
 - `pnpm test:ui`
-

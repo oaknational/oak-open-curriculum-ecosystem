@@ -195,9 +195,9 @@ describe('oak-json-viewer widget resource E2E', () => {
       const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
       const html = parsed.data?.contents[0]?.text ?? '';
 
-      // Widget includes Oak logo as base64 embedded image
+      // Widget includes Oak branding (logo image + text)
+      // Note: alt text accessibility is validated by axe-core in widget-accessibility tests
       expect(html).toContain('data:image/png;base64,');
-      expect(html).toContain('alt="Oak National Academy"');
       expect(html).toContain('Oak National Academy');
     });
   });
