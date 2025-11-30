@@ -25,8 +25,16 @@ describe('security-headers', () => {
       expect(CSP_DIRECTIVES.fontSrc).toContain('https://fonts.gstatic.com');
     });
 
-    it('blocks all scripts (landing page has no JavaScript)', () => {
-      expect(CSP_DIRECTIVES.scriptSrc).toEqual(["'none'"]);
+    it('allows same-origin and inline scripts for Cloudflare integration', () => {
+      // Cloudflare injects inline scripts for bot detection/challenge pages
+      // that load additional scripts from /cdn-cgi/challenge-platform/
+      expect(CSP_DIRECTIVES.scriptSrc).toContain("'self'");
+      expect(CSP_DIRECTIVES.scriptSrc).toContain("'unsafe-inline'");
+    });
+
+    it('allows same-origin child frames for Cloudflare integration', () => {
+      // Cloudflare creates hidden iframes for challenge handling
+      expect(CSP_DIRECTIVES.childSrc).toEqual(["'self'"]);
     });
 
     it('allows same-origin and data: URI images', () => {

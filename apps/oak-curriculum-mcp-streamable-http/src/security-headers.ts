@@ -24,13 +24,18 @@ import type { RequestHandler } from 'express';
  * - Inline styles (landing page uses `<style>` tags)
  * - Google Fonts (Lexend font from fonts.googleapis.com and fonts.gstatic.com)
  * - Same-origin images and favicons
+ * - Cloudflare challenge/bot protection scripts (inline + /cdn-cgi/ path)
  *
  * Configured to block:
- * - All scripts (landing page has no JavaScript - very secure!)
- * - External connections (no fetch/XHR from landing page)
+ * - External scripts (only same-origin and Cloudflare allowed)
+ * - External connections except same-origin
  * - Embedding in frames from other origins (clickjacking protection)
  *
  * @remarks
+ * Cloudflare injects inline scripts for bot detection/challenge pages that load
+ * from `/cdn-cgi/challenge-platform/`. The `'unsafe-inline'` directive is required
+ * for the bootstrap script, and `'self'` allows the challenge platform JS files.
+ *
  * These directives are applied to ALL responses but only affect HTML rendering.
  * JSON responses from MCP endpoints ignore CSP headers.
  */
@@ -41,12 +46,19 @@ const LANDING_PAGE_CSP_DIRECTIVES = {
   styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
   /** Fonts: allow Google Fonts font files */
   fontSrc: ['https://fonts.gstatic.com'],
-  /** Scripts: completely blocked - landing page has no JavaScript */
-  scriptSrc: ["'none'"],
+  /**
+   * Scripts: allow same-origin and inline for Cloudflare integration.
+   * - 'self': Cloudflare challenge scripts from /cdn-cgi/challenge-platform/
+   * - 'unsafe-inline': Cloudflare's injected bootstrap script
+   * Note: Landing page itself has no JavaScript; this is purely for Cloudflare.
+   */
+  scriptSrc: ["'self'", "'unsafe-inline'"],
   /** Images: same-origin and data: URIs for inline images */
   imgSrc: ["'self'", 'data:'],
-  /** Connections: allow same-origin for Chrome DevTools compatibility */
+  /** Connections: allow same-origin for Chrome DevTools and Cloudflare */
   connectSrc: ["'self'"],
+  /** Child frames: allow same-origin (Cloudflare creates hidden iframes) */
+  childSrc: ["'self'"],
   /** Frame ancestors: only allow same-origin embedding (clickjacking protection) */
   frameAncestors: ["'self'"],
   /** Base URI: restrict to same-origin (prevents base tag injection) */

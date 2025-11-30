@@ -56,11 +56,12 @@ describe('Security Headers (Integration)', () => {
       expect(csp).toContain('fonts.gstatic.com');
     });
 
-    it('CSP blocks scripts (no JavaScript on landing page)', async () => {
+    it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      expect(csp).toContain("script-src 'none'");
+      // Cloudflare injects inline scripts for bot detection that load from /cdn-cgi/
+      expect(csp).toContain("script-src 'self' 'unsafe-inline'");
     });
 
     it('has X-Content-Type-Options: nosniff', async () => {
