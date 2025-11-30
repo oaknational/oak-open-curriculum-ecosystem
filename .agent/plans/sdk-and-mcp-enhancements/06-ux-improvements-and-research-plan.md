@@ -1,7 +1,8 @@
 # UX Improvements and Research Plan
 
 **Created**: 2025-11-29  
-**Status**: 🟢 READY TO START  
+**Updated**: 2025-11-30  
+**Status**: 🟡 PHASE A COMPLETE - Phases B & C pending  
 **Focus**: Quick wins, research discovery, and foundation for future prompt enhancements
 
 ---
@@ -19,66 +20,53 @@ This plan captures immediate UX improvements and research activities that will i
 
 ---
 
-## Phase A: Quick Wins (~3 hours)
+## Phase A: Quick Wins (~3 hours) ✅ COMPLETE
 
-### A.1: Rename `year` → `yearGroup` (~15 mins)
+### A.1: Rename `year` → `yearGroup` (~15 mins) ✅ DONE
 
-**Files to modify**:
+**Files modified**:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.ts`
 - `packages/sdks/oak-curriculum-sdk/src/mcp/mcp-prompts.unit.test.ts`
-- Any apps that reference the `year` parameter
+- Landing page and related apps
 
-**Changes**:
+**Changes made**:
 
-1. Rename parameter from `year` to `yearGroup`
-2. Update description to clarify UK curriculum terminology
-3. Remove the comment `// This should be key stage, not year group.`
-4. Update tests to use new parameter name
+1. ✅ Renamed parameter from `year` to `yearGroup`
+2. ✅ Updated description to clarify UK curriculum terminology
+3. ✅ Removed the comment `// This should be key stage, not year group.`
+4. ✅ Updated tests to use new parameter name
 
 **Acceptance Criteria**:
 
-- [ ] Parameter named `yearGroup` in prompt definition
-- [ ] Description says "year group" consistently
-- [ ] All tests pass
-- [ ] Quality gates pass
+- [x] Parameter named `yearGroup` in prompt definition
+- [x] Description says "year group" consistently
+- [x] All tests pass
+- [x] Quality gates pass
 
 ---
 
-### A.2: Enhance Landing Page (~2-3 hours)
+### A.2: Enhance Landing Page (~2-3 hours) ✅ DONE
 
 **File**: `apps/oak-curriculum-mcp-streamable-http/src/landing-page.ts`
 
-**Current State**: Minimal page with MCP config snippet and OAuth note.
+**What was implemented**:
 
-**Target State**: User-friendly "getting started" experience with:
+1. ✅ **Getting Started Section** - Explains the service with MCP config snippet
+2. ✅ **Tools Section** (collapsible `<details>`) - Lists all 30 tools with names and descriptions
+3. ✅ **Resources Section** (collapsible `<details>`) - Lists MCP resources
+4. ✅ **Prompts Section** (collapsible `<details>`) - Lists available prompts
+5. ✅ Reordered sections (Resources → Prompts → Tools) for better UX
+6. ✅ Improved "Connect" heading to "Connecting as an MCP server"
 
-1. **Getting Started Section**
-   - What is the Oak Curriculum MCP?
-   - How to connect (existing snippet)
-   - What you can do with it
-
-2. **Tools Section** (collapsible `<details>`)
-   - List all 26+ tools with names and descriptions
-   - Pulled from SDK at render time (import from generated tools)
-   - Grouped by category if possible
-
-3. **Resources Section** (collapsible `<details>`)
-   - List MCP resources (ontology, documentation)
-   - Brief description of each
-
-4. **Prompts Section** (collapsible `<details>`)
-   - List the 3 prompts: find-lessons, lesson-planning, progression-map
-   - Descriptions and example use cases
-
-**Implementation Approach**:
+**Implementation details**:
 
 ```typescript
-// Import tool/prompt metadata from SDK
+// SDK imports for dynamic generation
 import { MCP_TOOL_DESCRIPTORS } from '@oaknational/oak-curriculum-sdk';
 import { MCP_PROMPTS } from '@oaknational/oak-curriculum-sdk';
 
-// Generate HTML sections at render time
+// Helper functions generate HTML at render time
 function renderToolsList(): string { ... }
 function renderPromptsList(): string { ... }
 function renderResourcesList(): string { ... }
@@ -86,13 +74,13 @@ function renderResourcesList(): string { ... }
 
 **Acceptance Criteria**:
 
-- [ ] Getting started section explains the service
-- [ ] Tools listed in collapsible section
-- [ ] Prompts listed in collapsible section
-- [ ] Resources listed in collapsible section
-- [ ] Responsive, accessible HTML
-- [ ] Dark mode support maintained
-- [ ] Quality gates pass
+- [x] Getting started section explains the service
+- [x] Tools listed in collapsible section
+- [x] Prompts listed in collapsible section
+- [x] Resources listed in collapsible section
+- [x] Responsive, accessible HTML
+- [x] Dark mode support maintained
+- [x] Quality gates pass
 
 ---
 
@@ -305,12 +293,12 @@ _To be executed after Phase B research is complete_
 
 ## Success Criteria
 
-### Phase A Complete When:
+### Phase A Complete When: ✅ DONE
 
-- [ ] `yearGroup` parameter renamed across codebase
-- [ ] Landing page enhanced with tools/resources/prompts
-- [ ] All quality gates pass
-- [ ] Changes committed
+- [x] `yearGroup` parameter renamed across codebase
+- [x] Landing page enhanced with tools/resources/prompts
+- [x] All quality gates pass
+- [x] Changes committed
 
 ### Phase B Complete When:
 

@@ -1,7 +1,8 @@
 # Widget Playwright Tests Plan
 
-**Created**: 2025-11-30
-**Status**: READY TO IMPLEMENT
+**Created**: 2025-11-30  
+**Completed**: 2025-11-30  
+**Status**: ✅ COMPLETE  
 **Focus**: Add Playwright tests for the ChatGPT widget with fixture data
 
 ---
@@ -21,6 +22,37 @@ The Oak JSON viewer widget (`aggregated-tool-widget.ts`) renders tool output in 
 
 - Testing actual ChatGPT integration (that's a manual/smoke test)
 - Visual regression testing (could be added later)
+
+---
+
+## Completion Summary
+
+All planned tests implemented plus additional widget UX improvements discovered during testing.
+
+### What Was Implemented
+
+1. **Test infrastructure**: `widget-test-server.ts`, `fixtures.ts`
+2. **Rendering tests**: `widget-rendering.spec.ts` with 9 test cases
+3. **Accessibility tests**: `widget-accessibility.spec.ts` with axe-core
+4. **Config updates**: `playwright.config.ts` projects, `turbo.json` inputs
+
+### Additional Work (Beyond Original Plan)
+
+During testing, accessibility issues were discovered and fixed in the widget itself:
+
+- Added `<title>Oak National Academy</title>` for document title
+- Added tool name subtitle from `annotations.title` or `meta.title`
+- Adjusted CSS color variables to meet WCAG AA contrast ratios
+- Removed `max-height` to prevent internal scrollbars
+- Added AI disclaimer footer
+- Changed `<header>`/`<footer>` to `<div>` elements (embedded iframe semantics)
+- Updated `@playwright/test` to `^1.57.0` to align with `@axe-core/playwright`
+
+### Lessons Learned
+
+1. **Axe-core exclusions for embedded iframes**: Rules like `document-title`, `landmark-one-main`, `region`, and `scrollable-region-focusable` don't apply to embedded widgets
+2. **Browser context injection requires `any`**: `page.addInitScript()` runs in browser context where strict TypeScript types don't apply
+3. **Playwright version alignment**: Monorepo packages must use consistent `@playwright/test` versions
 
 ---
 
@@ -652,14 +684,14 @@ apps/oak-curriculum-mcp-streamable-http/
 
 ## Success Criteria
 
-- [ ] `pnpm test:ui` runs both visual and widget tests
-- [ ] Widget tests verify help content rendering
-- [ ] Widget tests verify search results rendering
-- [ ] Widget tests verify JSON fallback rendering
-- [ ] Widget tests verify empty/loading state
-- [ ] Widget tests verify async event handling
-- [ ] Accessibility tests pass for all widget states
-- [ ] All tests pass in CI (`test:all`)
+- [x] `pnpm test:ui` runs both visual and widget tests
+- [x] Widget tests verify help content rendering
+- [x] Widget tests verify search results rendering
+- [x] Widget tests verify JSON fallback rendering
+- [x] Widget tests verify empty/loading state
+- [x] Widget tests verify async event handling
+- [x] Accessibility tests pass for all widget states
+- [x] All tests pass in CI (`test:all`)
 
 ---
 
