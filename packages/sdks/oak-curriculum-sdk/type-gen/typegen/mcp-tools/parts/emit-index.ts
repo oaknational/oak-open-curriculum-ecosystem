@@ -1,23 +1,9 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
 import { getSecuritySchemeForTool } from '../apply-security-policy.js';
+import { NOAUTH_SCHEME_TYPE } from '../security-types.js';
+import { literalName, collectDocumentedStatuses } from './emit-index-helpers.js';
 import { kebabToTitleCase } from './kebab-to-title-case.js';
-import { toToolDescription } from './tool-description.js';
-
-function literalName(toolName: string): string {
-  const parts = toolName.split(/[^a-zA-Z0-9]+/).filter(Boolean);
-  if (parts.length === 0) {
-    return toolName;
-  }
-  return parts
-    .map((segment, index) => {
-      const lower = segment.toLowerCase();
-      if (index === 0) {
-        return lower;
-      }
-      return lower.charAt(0).toUpperCase() + lower.slice(1);
-    })
-    .join('');
-}
+import { toToolDescription, appendPrerequisiteGuidance } from './tool-description.js';
 
 function buildExports({
   toolName,
@@ -195,32 +181,6 @@ function buildExports({
   return lines.join('\n');
 }
 
-function collectDocumentedStatuses(operation: OperationObject): readonly string[] {
-  const responses = operation.responses ?? {};
-  const keys = Object.keys(responses);
-  if (keys.length === 0) {
-    return ['200'];
-  }
-  return keys.sort(compareStatuses);
-}
-
-function compareStatuses(left: string, right: string): number {
-  const leftNumber = Number(left);
-  const rightNumber = Number(right);
-  const leftIsNumber = Number.isFinite(leftNumber);
-  const rightIsNumber = Number.isFinite(rightNumber);
-  if (leftIsNumber && rightIsNumber) {
-    return leftNumber - rightNumber;
-  }
-  if (leftIsNumber) {
-    return -1;
-  }
-  if (rightIsNumber) {
-    return 1;
-  }
-  return left.localeCompare(right);
-}
-
 export function emitIndex(
   toolName: string,
   path: string,
@@ -228,10 +188,20 @@ export function emitIndex(
   operationId: string,
   operation: OperationObject,
 ): string {
+  // Get base description from OpenAPI spec
+  const baseDescription = toToolDescription(operation);
+
+  // Determine if tool requires authentication (not noauth)
+  const securitySchemes = getSecuritySchemeForTool(toolName);
+  const requiresAuth = securitySchemes[0]?.type !== NOAUTH_SCHEME_TYPE;
+
+  // Conditionally append domain prerequisite guidance
+  const description = appendPrerequisiteGuidance(baseDescription, requiresAuth);
+
   return buildExports({
     toolName,
     descriptorName: literalName(toolName),
-    description: toToolDescription(operation),
+    description,
     path,
     method,
     operationId,

@@ -2,7 +2,7 @@
 
 **Created**: 2025-11-29  
 **Updated**: 2025-11-30  
-**Status**: 🟡 PHASE A COMPLETE - Phase B delegated to Plan 07, Phase C pending  
+**Status**: 🟡 PHASE A ✅ COMPLETE, PHASE B ✅ COMPLETE (via Plan 07), PHASE C pending  
 **Focus**: Quick wins, research discovery, and foundation for future prompt enhancements
 
 ---
@@ -89,8 +89,8 @@ function renderResourcesList(): string { ... }
 - [x] Responsive, accessible HTML
 - [x] Dark mode support maintained
 - [x] Quality gates pass
-- [ ] Prominent hero explainer text at the top of the page, under the title
-- [ ] Minimal Playwright test for basic functionality, including a11y, strictly in line with .agent/directives-and-memory/testing-strategy.md
+- [x] Prominent hero explainer text at the top of the page, under the title
+- [x] Minimal Playwright test for basic functionality, including a11y, strictly in line with .agent/directives-and-memory/testing-strategy.md
 
 ---
 
@@ -207,8 +207,8 @@ _To be executed after Phase B research is complete_
 - [x] Landing page enhanced with tools/resources/prompts
 - [x] All quality gates pass
 - [x] Changes committed
-- [ ] Prominent hero explainer text at the top of the page
-- [ ] Minimal Playwright test for basic functionality (per testing-strategy.md)
+- [x] Prominent hero explainer text at the top of the page
+- [x] Minimal Playwright test for basic functionality (per testing-strategy.md)
 
 ### Phase B Complete When:
 

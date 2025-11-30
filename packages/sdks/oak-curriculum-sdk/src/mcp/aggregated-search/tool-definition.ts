@@ -12,6 +12,7 @@
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
+import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
 
 /**
  * Search tool definition with full MCP metadata.
@@ -26,6 +27,8 @@ import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-para
 export const SEARCH_TOOL_DEF = {
   description: `Search across lessons and transcripts for curriculum content.
 
+${AGGREGATED_PREREQUISITE_GUIDANCE}
+
 Use this when you need to:
 - Find lessons on a topic (e.g., "photosynthesis", "fractions")
 - Discover what content exists for a key stage or subject
@@ -33,7 +36,7 @@ Use this when you need to:
 
 Do NOT use for:
 - Fetching known content by ID (use 'fetch')
-- Understanding the curriculum structure (use 'get-ontology')
+- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
 
 Executes get-search-lessons and get-search-transcripts in parallel.`,
   securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,

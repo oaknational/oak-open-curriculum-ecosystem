@@ -8,7 +8,7 @@ import {
   parseJsonRpcResult,
   getContentArray,
   readFirstTextContent,
-  parseToolSuccessPayload,
+  getFullResultsFromMeta,
 } from './helpers/sse.js';
 import {
   listUniversalTools,
@@ -63,21 +63,18 @@ async function assertFetchLessonResponse(
   const { result } = extractResultAndContent(responseText);
   expect(result.isError).not.toBe(true);
 
-  const envelope = parseToolSuccessPayload(result);
-  if (envelope.status !== 200 && envelope.status !== '200') {
-    throw new Error(`Unexpected status in payload: ${String(envelope.status)}`);
-  }
-  const payload = envelope.data as {
+  // Full data is now in _meta.fullResults (optimized response format)
+  const fullResults = getFullResultsFromMeta(result) as {
     readonly canonicalUrl?: string;
     readonly data?: unknown;
     readonly id?: string;
     readonly type?: string;
   };
 
-  expect(payload.id).toBe(lessonId);
-  expect(payload.type).toBe('lesson');
-  expect(typeof payload.canonicalUrl).toBe('string');
-  expect(payload.canonicalUrl).toContain('thenational.academy');
+  expect(fullResults.id).toBe(lessonId);
+  expect(fullResults.type).toBe('lesson');
+  expect(typeof fullResults.canonicalUrl).toBe('string');
+  expect(fullResults.canonicalUrl).toContain('thenational.academy');
 
   const executor = createStubToolExecutionAdapter();
   const stubResult = await executor('get-lessons-summary', {
@@ -87,7 +84,7 @@ async function assertFetchLessonResponse(
     throw new Error('Stub executor did not return data');
   }
   expect(stubResult.data).toBeDefined();
-  expect(payload.data).toEqual(stubResult.data);
+  expect(fullResults.data).toEqual(stubResult.data);
 }
 
 describe('Streamable HTTP server (stub mode)', () => {

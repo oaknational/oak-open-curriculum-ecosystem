@@ -5,6 +5,8 @@
  * separate from the execution logic.
  */
 
+import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+
 /**
  * Input schema for get-help tool.
  *
@@ -32,6 +34,8 @@ export const GET_HELP_INPUT_SCHEMA = {
 export const GET_HELP_TOOL_DEF = {
   description: `Returns guidance on how to use the Oak Curriculum MCP server's tools effectively.
 
+${HELP_PREREQUISITE_GUIDANCE}
+
 Use this when you need to understand:
 - How to use a specific tool
 - What tools are available and when to use them
@@ -39,7 +43,7 @@ Use this when you need to understand:
 - Best practices and tips for effective tool usage
 
 Do NOT use for:
-- Understanding the curriculum structure (use 'get-ontology')
+- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
 - Fetching actual curriculum content (use 'search' or 'fetch')
 
 Optionally provide a tool_name to get specific help for that tool.`,

@@ -2,13 +2,14 @@
  * @fileoverview Playwright tests for the MCP server landing page.
  *
  * Tests verify content rendering and WCAG accessibility compliance.
+ * Focuses on structural assertions (sections present) rather than content.
  */
 
 import { AxeBuilder } from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Landing page', () => {
-  test('renders correctly with all content', async ({ page }) => {
+  test('renders main heading and config snippet', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' });
 
     // Verify main heading contains Oak
@@ -20,17 +21,25 @@ test.describe('Landing page', () => {
     await expect(page.getByText(/"mcpServers"/)).toBeVisible();
   });
 
-  test('displays hero explainer text for educators', async ({ page }) => {
+  test('displays hero explainer text', async ({ page }) => {
     await page.goto('/');
 
     // Hero should be a prominent paragraph after the title
     const hero = page.locator('.hero');
     await expect(hero).toBeVisible();
-    await expect(hero).toContainText(/curriculum/i);
-    await expect(hero).toContainText(/teacher|educator/i);
   });
 
-  test('passes accessibility checks', async ({ page }) => {
+  test('has collapsible sections for Resources, Prompts, and Tools', async ({ page }) => {
+    await page.goto('/');
+
+    // Each section has a summary element containing an h2 with the section name and count
+    // e.g. "Resources (3)", "Prompts (3)", "Tools (26)"
+    await expect(page.locator('summary h2', { hasText: /Resources \(\d+\)/ })).toBeVisible();
+    await expect(page.locator('summary h2', { hasText: /Prompts \(\d+\)/ })).toBeVisible();
+    await expect(page.locator('summary h2', { hasText: /Tools \(\d+\)/ })).toBeVisible();
+  });
+
+  test('passes WCAG accessibility checks', async ({ page }) => {
     await page.goto('/');
 
     const axe = await new AxeBuilder({ page }).analyze();

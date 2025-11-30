@@ -32,3 +32,52 @@ export function toToolDescription(operation: OperationObject): string | undefine
   }
   return undefined;
 }
+
+/**
+ * Domain prerequisite guidance appended to authenticated tool descriptions.
+ *
+ * Encourages models to call get-ontology first to understand the curriculum
+ * domain before using API tools. Brief to minimize context window impact.
+ *
+ * @remarks
+ * This guidance is only appended to tools that require authentication.
+ * Tools with noauth (get-rate-limit, get-changelog) don't receive this
+ * guidance as they provide API metadata, not curriculum content.
+ */
+export const DOMAIN_PREREQUISITE_GUIDANCE = `
+
+PREREQUISITE: If unfamiliar with Oak's curriculum structure, call \`get-ontology\` first to understand key stages, subjects, entity hierarchy, and ID formats.`;
+
+/**
+ * Conditionally appends domain prerequisite guidance to tool descriptions.
+ *
+ * Pure function that adds guidance nudging models to call get-ontology first
+ * when they haven't loaded the curriculum domain model.
+ *
+ * @param description - Base tool description from OpenAPI spec
+ * @param requiresAuth - Whether the tool requires OAuth authentication
+ * @returns Description with prerequisite appended (if auth required), or original
+ *
+ * @example
+ * ```typescript
+ * // Protected tool - gets prerequisite
+ * appendPrerequisiteGuidance('Lesson summary', true);
+ * // Returns: 'Lesson summary\n\nPREREQUISITE: If unfamiliar with...'
+ *
+ * // Public tool (noauth) - no prerequisite
+ * appendPrerequisiteGuidance('Rate limit status', false);
+ * // Returns: 'Rate limit status'
+ * ```
+ */
+export function appendPrerequisiteGuidance(
+  description: string | undefined,
+  requiresAuth: boolean,
+): string | undefined {
+  if (!description) {
+    return undefined;
+  }
+  if (!requiresAuth) {
+    return description;
+  }
+  return `${description}${DOMAIN_PREREQUISITE_GUIDANCE}`;
+}

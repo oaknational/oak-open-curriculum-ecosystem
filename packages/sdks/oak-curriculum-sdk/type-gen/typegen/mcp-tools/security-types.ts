@@ -18,6 +18,19 @@
 export type SecuritySchemeType = 'noauth' | 'oauth2';
 
 /**
+ * Constant for the noauth security scheme type.
+ *
+ * Use this constant instead of the magic string 'noauth' for type-safe
+ * comparisons when determining if a tool requires authentication.
+ *
+ * @example
+ * ```typescript
+ * const requiresAuth = scheme.type !== NOAUTH_SCHEME_TYPE;
+ * ```
+ */
+export const NOAUTH_SCHEME_TYPE = 'noauth' as const satisfies SecuritySchemeType;
+
+/**
  * No authentication required.
  *
  * Tools with this scheme can be called without a Bearer token.

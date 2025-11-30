@@ -59,6 +59,53 @@ document.addEventListener('scroll', () => {
 }, { passive: true });
 
 // ========================================
+// Locale Support
+// ========================================
+const locale = window.openai?.locale ?? 'en-GB';
+
+/**
+ * Formats a date string according to the user's locale.
+ */
+function formatDate(dateStr) {
+  try {
+    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(dateStr));
+  } catch {
+    return dateStr;
+  }
+}
+
+// ========================================
+// External Links
+// ========================================
+/**
+ * Opens an Oak website URL using the OpenAI Apps SDK openExternal API
+ * when available, with fallback to window.open.
+ */
+function openOnOakWebsite(event, url) {
+  if (event) event.preventDefault();
+  if (window.openai?.openExternal) {
+    window.openai.openExternal({ href: url });
+  } else {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+}
+
+// ========================================
+// Display Mode
+// ========================================
+/**
+ * Requests fullscreen mode using the OpenAI Apps SDK API.
+ * Gracefully handles unavailable API.
+ */
+function requestFullscreen() {
+  if (window.openai?.requestDisplayMode) {
+    window.openai.requestDisplayMode('fullscreen').catch(() => {
+      // Silently fail if display mode change is rejected
+    });
+  }
+}
+
+// ========================================
 // Tool Calling
 // ========================================
 let isLoading = false;
@@ -135,23 +182,52 @@ function updateToolName() {
   else if (toolNameEl) { toolNameEl.style.display = 'none'; }
 }
 
+/**
+ * Gets the full results data for rendering.
+ * Prefers _meta.fullResults (optimized structure) over toolOutput (legacy).
+ * This enables token optimization where full data is hidden from the model
+ * but still available to the widget for rendering.
+ */
+function getFullResults() {
+  const meta = window.openai?.toolResponseMetadata ?? {};
+  const output = window.openai?.toolOutput ?? {};
+  // Prefer fullResults from _meta (optimized structure)
+  if (meta.fullResults) {
+    return meta.fullResults;
+  }
+  // Fall back to data field from structuredContent (e.g., { status: 200, data: {...} })
+  if (output.data && typeof output.data === 'object') {
+    return output.data;
+  }
+  // Fall back to entire toolOutput for legacy format
+  return output;
+}
+
 ${WIDGET_RENDERERS}
 
 function render() {
   updateToolName();
   updateActions();
-  const o = window.openai?.toolOutput ?? {};
-  const d = o.data;
-  if (o.serverOverview || o.toolCategories || o.workflows) {
-    c.innerHTML = renderHelpContent(o);
-  } else if (d?.lessons !== undefined || d?.transcripts !== undefined) {
-    c.innerHTML = renderSearchResults(d);
-  } else if (o.status !== undefined || d !== undefined) {
-    c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
-  } else if (Object.keys(o).length === 0) {
+  const fullData = getFullResults();
+  // Check for help content structure (serverOverview, toolCategories, workflows)
+  if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {
+    c.innerHTML = renderHelpContent(fullData);
+  }
+  // Check for search results structure (lessons, transcripts)
+  else if (fullData.lessons !== undefined || fullData.transcripts !== undefined) {
+    c.innerHTML = renderSearchResults(fullData);
+  }
+  // Check for fetch results (type, data, canonicalUrl)
+  else if (fullData.type && fullData.data !== undefined) {
+    c.innerHTML = renderFetchResult(fullData);
+  }
+  // Fallback: display raw JSON
+  else if (Object.keys(fullData).length > 0) {
+    c.innerHTML = '<pre>' + esc(JSON.stringify(fullData, null, 2)) + '</pre>';
+  }
+  // Empty state
+  else {
     c.innerHTML = '<div class="empty">Loading...</div>';
-  } else {
-    c.innerHTML = '<pre>' + esc(JSON.stringify(o, null, 2)) + '</pre>';
   }
   restoreScrollPosition();
 }

@@ -4,7 +4,6 @@ import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import type { UniversalToolName } from './universal-tools/index.js';
-import { generateCanonicalUrlWithContext } from '../types/generated/api-schema/routing/url-helpers.js';
 
 interface McpToolDefinition {
   readonly description?: string;
@@ -135,20 +134,22 @@ describe('createUniversalToolExecutor', () => {
       q: 'photosynthesis',
     });
     expect(result.isError).toBeUndefined();
-    const payload = parseTextContent(result);
-    expect(payload).toEqual({
-      status: 200,
-      data: {
-        q: 'photosynthesis',
-        keyStage: undefined,
-        subject: undefined,
-        unit: undefined,
-        lessonsStatus: 200,
-        lessons: { lessons: ['lesson-a'] },
-        transcriptsStatus: 200,
-        transcripts: { transcripts: ['transcript-a'] },
-      },
-    });
+
+    // New optimized structure: human-readable content, minimal structuredContent, full data in _meta
+    const firstContent = result.content[0];
+    expect(firstContent.type).toBe('text');
+    if ('text' in firstContent) {
+      expect(firstContent.text).toContain('photosynthesis');
+    }
+
+    // structuredContent has summary for model
+    expect(result.structuredContent).toBeDefined();
+    expect(result.structuredContent).toHaveProperty('summary');
+
+    // _meta has full data for widget
+    expect(result._meta).toBeDefined();
+    expect(result._meta).toHaveProperty('fullResults');
+    expect(result._meta).toHaveProperty('query', 'photosynthesis');
   });
 
   it('aggregates fetch results using the MCP executor', async () => {
@@ -165,17 +166,25 @@ describe('createUniversalToolExecutor', () => {
     expect(executeMcpTool).toHaveBeenCalledWith('get-lessons-summary', {
       lesson: 'maths-lesson',
     });
-    const payload = parseTextContent(result);
-    const expectedCanonicalUrl = generateCanonicalUrlWithContext('lesson', 'lesson:maths-lesson');
-    expect(payload).toEqual({
-      status: 200,
-      data: {
-        id: 'lesson:maths-lesson',
-        type: 'lesson',
-        canonicalUrl: expectedCanonicalUrl,
-        data: { lesson: { id: 'lesson-slug' } },
-      },
-    });
+    expect(result.isError).toBeUndefined();
+
+    // New optimized structure: human-readable content, full data in _meta
+    const firstContent = result.content[0];
+    expect(firstContent.type).toBe('text');
+    if ('text' in firstContent) {
+      expect(firstContent.text).toContain('Lesson');
+    }
+
+    // _meta has full data for widget
+    expect(result._meta).toBeDefined();
+    expect(result._meta).toHaveProperty('fullResults');
+
+    const meta = result._meta;
+    if (meta && 'fullResults' in meta) {
+      const fullResults = meta.fullResults;
+      expect(fullResults).toHaveProperty('id', 'lesson:maths-lesson');
+      expect(fullResults).toHaveProperty('type', 'lesson');
+    }
   });
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
@@ -213,10 +222,25 @@ describe('createUniversalToolExecutor', () => {
     const result = await callUniversalTool('get-ontology', {});
 
     expect(result.isError).toBeUndefined();
-    const payload = parseTextContent(result);
-    expect(payload).toHaveProperty('version');
-    expect(payload).toHaveProperty('curriculumStructure');
-    expect(payload).toHaveProperty('toolUsageGuidance');
+
+    // New optimized structure: summary in content, full data in _meta
+    const firstContent = result.content[0];
+    expect(firstContent.type).toBe('text');
+    if ('text' in firstContent) {
+      expect(firstContent.text).toContain('Curriculum');
+    }
+
+    // _meta has full ontology data
+    expect(result._meta).toBeDefined();
+    expect(result._meta).toHaveProperty('fullResults');
+
+    const meta = result._meta;
+    if (meta && 'fullResults' in meta) {
+      const fullResults = meta.fullResults;
+      expect(fullResults).toHaveProperty('version');
+      expect(fullResults).toHaveProperty('curriculumStructure');
+      expect(fullResults).toHaveProperty('toolUsageGuidance');
+    }
   });
 });
 

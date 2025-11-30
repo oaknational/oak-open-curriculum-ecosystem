@@ -59,7 +59,7 @@ function renderSearchResults(d) {
       const t = l.lessonTitle || l.title || l.slug || 'Untitled', s = l.subjectTitle || '', k = l.keyStage || '', u = l.canonicalUrl || '';
       h += '<div class="item"><p class="item-ttl">' + esc(t) + '</p>';
       if (s || k) h += '<p class="meta">' + esc([s,k].filter(Boolean).join(' • ')) + '</p>';
-      if (u) h += '<a class="link" href="' + esc(u) + '" target="_blank">View →</a>';
+      if (u) h += '<a class="link" href="' + esc(u) + '" target="_blank" onclick="openOnOakWebsite(event, \\'' + esc(u) + '\\')">View on Oak →</a>';
       h += '</div>';
     });
     if (ls.length > 5) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ls.length-5) + ' more</p>';
@@ -78,5 +78,18 @@ function renderSearchResults(d) {
     h += '</div></div>';
   }
   return h || '<div class="empty">No results found.</div>';
+}
+
+function renderFetchResult(data) {
+  let h = '';
+  const type = data.type || 'Resource';
+  const url = data.canonicalUrl;
+  const id = data.id || '';
+  h += '<div class="sec"><h2 class="sec-ttl">' + esc(type.charAt(0).toUpperCase() + type.slice(1)) + '</h2>';
+  if (id) h += '<p class="meta">ID: <code>' + esc(id) + '</code></p>';
+  if (url) h += '<p style="margin-top:8px"><a class="link" href="' + esc(url) + '" target="_blank" onclick="openOnOakWebsite(event, \\'' + esc(url) + '\\')">View on Oak →</a></p>';
+  h += '<div style="margin-top:12px"><pre style="font-size:12px;max-height:300px;overflow:auto">' + esc(JSON.stringify(data.data, null, 2)) + '</pre></div>';
+  h += '</div>';
+  return h;
 }
 `.trim();

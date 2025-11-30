@@ -9,6 +9,7 @@ import { describe, it, expect } from 'vitest';
 import {
   formatData,
   formatError,
+  formatOptimizedResult,
   formatUnknownTool,
   serialiseArg,
   toErrorMessage,
@@ -177,5 +178,151 @@ describe('toErrorMessage', () => {
   it('returns "Unknown error" for other types', () => {
     expect(toErrorMessage({})).toBe('Unknown error');
     expect(toErrorMessage([])).toBe('Unknown error');
+  });
+});
+
+describe('formatOptimizedResult', () => {
+  describe('_meta field (widget-only data)', () => {
+    it('includes _meta with full data for widget access via window.openai.toolResponseMetadata', () => {
+      const fullData = {
+        lessons: [
+          { id: '1', title: 'Lesson 1' },
+          { id: '2', title: 'Lesson 2' },
+          { id: '3', title: 'Lesson 3' },
+        ],
+        totalCount: 3,
+      };
+
+      const result = formatOptimizedResult({
+        summary: 'Found 3 lessons',
+        fullData,
+      });
+
+      expect(result._meta).toEqual({
+        fullResults: fullData,
+      });
+    });
+
+    it('includes query and timestamp in _meta when provided', () => {
+      const result = formatOptimizedResult({
+        summary: 'Results for search',
+        fullData: { items: [] },
+        query: 'photosynthesis',
+        timestamp: 1700000000000,
+      });
+
+      expect(result._meta).toEqual({
+        fullResults: { items: [] },
+        query: 'photosynthesis',
+        timestamp: 1700000000000,
+      });
+    });
+  });
+
+  describe('structuredContent field (model + widget minimal data)', () => {
+    it('includes structuredContent with summary for model reasoning', () => {
+      const result = formatOptimizedResult({
+        summary: 'Found 10 lessons matching your query',
+        fullData: { lessons: [] },
+      });
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toHaveProperty('summary');
+      expect(result.structuredContent).toEqual(
+        expect.objectContaining({ summary: 'Found 10 lessons matching your query' }),
+      );
+    });
+
+    it('includes preview items limited to 5 in structuredContent', () => {
+      const items = Array.from({ length: 10 }, (_, i) => ({
+        id: String(i + 1),
+        title: `Item ${String(i + 1)}`,
+      }));
+
+      const result = formatOptimizedResult({
+        summary: 'Found 10 items',
+        fullData: { items },
+        previewItems: items,
+      });
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toEqual(
+        expect.objectContaining({
+          previewItems: items.slice(0, 5),
+        }),
+      );
+    });
+
+    it('includes hasMore flag when items exceed 5', () => {
+      const items = Array.from({ length: 10 }, (_, i) => ({ id: String(i + 1) }));
+
+      const result = formatOptimizedResult({
+        summary: 'Found 10 items',
+        fullData: { items },
+        previewItems: items,
+      });
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toEqual(expect.objectContaining({ hasMore: true }));
+    });
+
+    it('sets hasMore to false when items are 5 or fewer', () => {
+      const items = Array.from({ length: 3 }, (_, i) => ({ id: String(i + 1) }));
+
+      const result = formatOptimizedResult({
+        summary: 'Found 3 items',
+        fullData: { items },
+        previewItems: items,
+      });
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toEqual(expect.objectContaining({ hasMore: false }));
+    });
+
+    it('includes status in structuredContent', () => {
+      const result = formatOptimizedResult({
+        summary: 'Success',
+        fullData: {},
+        status: 'success',
+      });
+
+      expect(result.structuredContent).toBeDefined();
+      expect(result.structuredContent).toEqual(expect.objectContaining({ status: 'success' }));
+    });
+  });
+
+  describe('content field (human-readable text)', () => {
+    it('returns content array with human-readable text', () => {
+      const result = formatOptimizedResult({
+        summary: 'Found 5 lessons on photosynthesis',
+        fullData: {},
+      });
+
+      expect(result.content).toHaveLength(1);
+      expect(result.content[0]).toEqual({
+        type: 'text',
+        text: 'Found 5 lessons on photosynthesis',
+      });
+    });
+  });
+
+  describe('serialisation', () => {
+    it('serialises bigint values in fullData', () => {
+      const result = formatOptimizedResult({
+        summary: 'Data with bigint',
+        fullData: { count: BigInt(999) },
+      });
+
+      expect(result._meta?.fullResults).toEqual({ count: '999' });
+    });
+  });
+
+  it('does not set isError flag', () => {
+    const result = formatOptimizedResult({
+      summary: 'OK',
+      fullData: {},
+    });
+
+    expect(result.isError).toBeUndefined();
   });
 });

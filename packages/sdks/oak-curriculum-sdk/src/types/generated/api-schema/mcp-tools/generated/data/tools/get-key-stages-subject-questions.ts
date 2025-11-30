@@ -131,7 +131,7 @@ export const getKeyStagesSubjectQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
+  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

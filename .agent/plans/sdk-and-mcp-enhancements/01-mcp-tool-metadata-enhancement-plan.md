@@ -1,9 +1,10 @@
 # MCP Tool Metadata Enhancement Plan
 
-**Status**: PLANNED (Phases 0 & 3 ✅ COMPLETE, Quick Win ready)  
+**Status**: 🟡 PARTIALLY COMPLETE  
 **Created**: 2025-11-27  
+**Updated**: 2025-11-30  
 **Priority**: Post-OAuth, pre-OpenAI App  
-**Estimated Duration**: ~3-4 days remaining (+ 5 min quick win)
+**Remaining Work**: Phase 4 (~1 day), Phase 5 (evaluation only)
 
 ---
 
@@ -11,14 +12,14 @@
 
 Enhance MCP tool metadata to improve ChatGPT/OpenAI Apps SDK integration. This consolidated plan covers:
 
-0. **Quick Win**: STDIO tool description bug fix (~5 mins)
+0. ✅ **Quick Win**: STDIO tool description bug fix (COMPLETE)
 1. ✅ **Phase 0**: Tool annotations (COMPLETE - archived)
-2. **Phase 1**: Invocation status strings in `_meta`
-3. **Phase 2**: Security schemes mirrored in `_meta`
-4. **Phase 3**: Parameter examples from OpenAPI
-5. **Phase 4**: Enhanced error messages
-6. **Phase 5**: Output schema evaluation
-7. **Phase 6**: Aggregated tools alignment
+2. ✅ **Phase 1**: Invocation status strings in `_meta` (COMPLETE)
+3. ✅ **Phase 2**: Security schemes mirrored in `_meta` (COMPLETE)
+4. ✅ **Phase 3**: Parameter examples from OpenAPI (COMPLETE)
+5. ❌ **Phase 4**: Enhanced error messages (NOT STARTED)
+6. ⏸️ **Phase 5**: Output schema evaluation (DEFERRED - evaluate after Phase 4)
+7. ✅ **Phase 6**: Aggregated tools alignment (COMPLETE)
 
 All metadata flows through the type-gen pipeline following schema-first principles.
 
@@ -60,21 +61,21 @@ From generated tool files (e.g., `get-key-stages.ts`):
 
 ### Gap Analysis
 
-| OpenAI Apps SDK Field                     | Purpose                             | Current Status               |
-| ----------------------------------------- | ----------------------------------- | ---------------------------- |
-| `annotations`                             | Tool behavior hints                 | ✅ Complete (Phase 0)        |
-| `_meta["openai/toolInvocation/invoking"]` | Status while tool runs (≤64 chars)  | ❌ Missing                   |
-| `_meta["openai/toolInvocation/invoked"]`  | Status after completion (≤64 chars) | ❌ Missing                   |
-| `_meta["securitySchemes"]`                | Back-compat mirror in `_meta`       | ❌ Missing                   |
-| `inputSchema.properties.*.examples`       | Parameter format examples           | ❌ Missing                   |
-| `outputSchema`                            | Declares expected output structure  | ⚠️ Generated but not exposed |
-| Error messages in tool results            | Rate limit errors, auth errors      | ⚠️ Partial                   |
+| OpenAI Apps SDK Field                     | Purpose                             | Current Status         |
+| ----------------------------------------- | ----------------------------------- | ---------------------- |
+| `annotations`                             | Tool behavior hints                 | ✅ Complete (Phase 0)  |
+| `_meta["openai/toolInvocation/invoking"]` | Status while tool runs (≤64 chars)  | ✅ Complete (Phase 1)  |
+| `_meta["openai/toolInvocation/invoked"]`  | Status after completion (≤64 chars) | ✅ Complete (Phase 1)  |
+| `_meta["securitySchemes"]`                | Back-compat mirror in `_meta`       | ✅ Complete (Phase 2)  |
+| `inputSchema.properties.*.examples`       | Parameter format examples           | ✅ Complete (Phase 3)  |
+| `outputSchema`                            | Declares expected output structure  | ⏸️ Deferred (Phase 5)  |
+| Error messages in tool results            | Rate limit errors, auth errors      | ❌ Remaining (Phase 4) |
 
 ---
 
 ## Quick Win: STDIO Tool Description Bug Fix
 
-**Status**: PLANNED  
+**Status**: ✅ COMPLETE  
 **Duration**: ~5 minutes  
 **Impact**: Critical for ChatGPT tool discovery via STDIO transport
 
@@ -148,7 +149,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
 
 ## Phase 1: Invocation Status Strings
 
-**Status**: PLANNED  
+**Status**: ✅ COMPLETE  
 **Duration**: ~1 day  
 **Impact**: Improved UX in ChatGPT when tools are running
 
@@ -260,7 +261,7 @@ const config = {
 
 ## Phase 2: Security Schemes in \_meta
 
-**Status**: PLANNED  
+**Status**: ✅ COMPLETE  
 **Duration**: ~0.5 days  
 **Impact**: Backwards compatibility with clients that only read `_meta`
 
@@ -301,7 +302,7 @@ lines.push('  },');
 
 ## Phase 3: Parameter Examples from OpenAPI
 
-**Status**: PLANNED  
+**Status**: ✅ COMPLETE  
 **Duration**: ~1 day  
 **Impact**: AI agents understand expected input formats
 
@@ -491,7 +492,7 @@ if (response.status === 429) {
 
 ## Phase 5: Output Schema Evaluation
 
-**Status**: PLANNED (Evaluation)  
+**Status**: ⏸️ DEFERRED (Evaluate after Phase 4)  
 **Duration**: ~0.5 days  
 **Impact**: Potential improved client experience
 
@@ -545,7 +546,7 @@ const config = {
 
 ## Phase 6: Aggregated Tools Alignment
 
-**Status**: PLANNED  
+**Status**: ✅ COMPLETE  
 **Duration**: ~0.5 days  
 **Impact**: Consistency across all tools
 
@@ -651,18 +652,18 @@ However, no clients currently consume this. Defer until there's demand.
 
 ## Implementation Schedule
 
-| Phase                       | Duration | Dependency          |
-| --------------------------- | -------- | ------------------- |
-| Quick Win: STDIO Bug Fix    | 5 mins   | None                |
-| Phase 0: Annotations        | -        | ✅ COMPLETE         |
-| Phase 1: Invocation Status  | 1 day    | None                |
-| Phase 2: Security in \_meta | 0.5 days | Phase 1             |
-| Phase 3: Parameter Examples | 1 day    | None (can parallel) |
-| Phase 4: Error Messages     | 1 day    | None (can parallel) |
-| Phase 5: Output Schema Eval | 0.5 days | Phase 1-4 complete  |
-| Phase 6: Aggregated Tools   | 0.5 days | Phase 1-4           |
+| Phase                       | Duration | Status         |
+| --------------------------- | -------- | -------------- |
+| Quick Win: STDIO Bug Fix    | 5 mins   | ✅ COMPLETE    |
+| Phase 0: Annotations        | -        | ✅ COMPLETE    |
+| Phase 1: Invocation Status  | 1 day    | ✅ COMPLETE    |
+| Phase 2: Security in \_meta | 0.5 days | ✅ COMPLETE    |
+| Phase 3: Parameter Examples | 1 day    | ✅ COMPLETE    |
+| Phase 4: Error Messages     | 1 day    | ❌ NOT STARTED |
+| Phase 5: Output Schema Eval | 0.5 days | ⏸️ DEFERRED    |
+| Phase 6: Aggregated Tools   | 0.5 days | ✅ COMPLETE    |
 
-**Total**: ~3-4 days (Phases 0 and 3 already complete, Quick Win ready to do now)
+**Remaining Work**: ~1 day (Phase 4 only, Phase 5 is evaluation)
 
 ---
 

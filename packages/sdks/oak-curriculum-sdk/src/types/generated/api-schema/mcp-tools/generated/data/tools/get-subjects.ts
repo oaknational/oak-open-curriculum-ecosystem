@@ -101,7 +101,7 @@ export const getSubjects = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.",
+  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,

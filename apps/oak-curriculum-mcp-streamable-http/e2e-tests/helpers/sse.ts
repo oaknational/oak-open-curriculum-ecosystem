@@ -7,9 +7,24 @@ const JsonRpcEnvelopeSchema = z.object({
 
 export type JsonRpcEnvelope = z.infer<typeof JsonRpcEnvelopeSchema>;
 
+/**
+ * Schema for tool call results with the new optimized format.
+ *
+ * The format uses:
+ * - `content[0].text`: Human-readable summary (NOT JSON)
+ * - `structuredContent`: Minimal data for model reasoning
+ * - `_meta.fullResults`: Full data for tests and widgets
+ */
 const JsonRpcResultSchema = z.object({
   tools: z.unknown().optional(),
   content: z.array(z.unknown()).optional(),
+  structuredContent: z.unknown().optional(),
+  _meta: z
+    .object({
+      fullResults: z.unknown().optional(),
+    })
+    .loose()
+    .optional(),
   isError: z.boolean().optional(),
 });
 
@@ -62,6 +77,33 @@ export function readFirstTextContent(content: readonly unknown[]): string {
   throw new Error('SSE envelope missing text content entry');
 }
 
+/**
+ * Extract full results from _meta.fullResults.
+ *
+ * The new optimized response format stores full data in `_meta.fullResults`
+ * while `content[0].text` contains only a human-readable summary.
+ *
+ * @param result - Parsed JSON-RPC result
+ * @returns The full results data from _meta
+ * @throws Error if _meta.fullResults is not present
+ */
+export function getFullResultsFromMeta(result: JsonRpcResult): unknown {
+  const fullResults = result._meta?.fullResults;
+  if (fullResults === undefined) {
+    throw new Error('SSE envelope missing _meta.fullResults - response may be using old format');
+  }
+  return fullResults;
+}
+
+/**
+ * Parse tool success payload from generated tools using formatData().
+ *
+ * Generated tools (via universal-tools/executor.ts) return responses with
+ * JSON in `content[0].text` containing `{ status, data }`.
+ *
+ * For aggregated tools using formatOptimizedResult(), use getFullResultsFromMeta()
+ * which reads from `_meta.fullResults` instead.
+ */
 export function parseToolSuccessPayload(result: JsonRpcResult): ToolSuccessPayload {
   const content = getContentArray(result);
   const textEntry = readFirstTextContent(content);
