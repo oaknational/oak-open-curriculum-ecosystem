@@ -22,7 +22,10 @@ import {
   getToolFromToolName,
   type ToolDescriptorForName,
 } from '../src/types/generated/api-schema/mcp-tools/index.js';
-import { ZodError, type ZodIssue } from 'zod';
+import { ZodError } from 'zod';
+
+/** Type for Zod validation issues (derived from ZodError to avoid deprecated ZodIssue import) */
+type ZodIssueType = ZodError['issues'][number];
 function isPlainObject(value: unknown): value is object {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -54,7 +57,7 @@ function getOwnValue(value: unknown, key: PropertyKey): unknown {
   return descriptor?.value;
 }
 
-function formatZodIssues(issues: ZodIssue[]): string {
+function formatZodIssues(issues: ZodIssueType[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
 }
 

@@ -9,7 +9,7 @@ import {
   OakUL,
 } from '@oaknational/oak-components';
 import type { SequenceFacet } from '../../../../src/lib/hybrid-search/types';
-import { SearchFacetsSchema } from '@oaknational/oak-curriculum-sdk';
+import { SearchFacetsSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 interface SearchFacetsProps {
   facets: unknown;

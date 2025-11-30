@@ -15,7 +15,7 @@ import {
   type SearchSequencesResponse,
   type SearchSuggestionItem,
   type SearchUnitsResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   LessonResultsSchema,
   SequenceResultsSchema,

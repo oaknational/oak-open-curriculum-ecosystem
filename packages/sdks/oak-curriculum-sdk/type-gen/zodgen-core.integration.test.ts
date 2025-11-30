@@ -34,11 +34,10 @@ vi.mock('node:fs', () => ({
 
 const generateZodClientFromOpenAPISpy = vi.hoisted(() =>
   vi.fn().mockResolvedValue(`import { z } from "zod";
-const endpoints = makeApi([]);
+const endpoints = ([]);
 export const schemas = {
   "getLessonTranscript_getLessonTranscript_200": {} as const,
 };
-export const api = new Zodios(endpoints);
 `),
 );
 

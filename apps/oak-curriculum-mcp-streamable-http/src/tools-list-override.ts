@@ -29,7 +29,7 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import { listUniversalTools } from '@oaknational/oak-curriculum-sdk';
+import { listUniversalTools } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 /**
  * Overrides the tools/list handler on an McpServer to return our pre-generated
@@ -46,6 +46,8 @@ export function overrideToolsListHandler(server: McpServer): void {
         description: tool.description,
         inputSchema: tool.inputSchema,
         annotations: tool.annotations,
+        // Include _meta for OpenAI Apps SDK invocation status (when present)
+        ...(tool._meta ? { _meta: tool._meta } : {}),
       })),
     });
   });

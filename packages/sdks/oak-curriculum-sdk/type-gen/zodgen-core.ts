@@ -1,12 +1,16 @@
+/* eslint-disable max-lines -- This is a generator script that produces code, not production code */
 import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
 import type { OpenAPIObject, PathsObject } from 'openapi3-ts/oas31';
+import { generateZodSchemasFromOpenAPI } from './adapter/index.js';
+
 /**
  * Generates Zod endpoint definitions with parameter schemas from an OpenAPI document.
  * Uses the default template to generate complete endpoint definitions including request parameters.
- * @param rawSchema - The OpenAPI document to generate from (unknown input validated internally)
+ *
+ * All generated code uses Zod v4 via the adapter boundary.
+ *
+ * @param openApiDoc - The OpenAPI document to generate from
  * @param outDir - The output directory for generated files
  * @throws {TypeError} If the OpenAPI document is invalid
  */
@@ -15,27 +19,30 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     mkdirSync(outDir, { recursive: true });
   }
 
-  // Resolve ozc built-in default template from node_modules
-  const require = createRequire(import.meta.url);
-  const ozcPkgDir = path.dirname(require.resolve('openapi-zod-client/package.json'));
-  const templatePath = path.join(ozcPkgDir, 'src/templates/default.hbs');
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
-  const openApiDocWithPaths: Parameters<typeof generateZodClientFromOpenAPI>[0]['openApiDoc'] =
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: openapi-zod-client uses an outdated PathsObject definition, so we have to pretend that paths are no optional
+  // openapi-zod-client uses an outdated PathsObject definition
+  const openApiDocWithPaths =
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition
     openApiDoc as OpenAPIObject & { paths: PathsObject };
 
   const methodAndPathToOperationId = new Map<string, string>();
   const primaryStatusByOperationId = new Map<string, string>();
 
   // openapi3-ts exposes path entries via loose index signatures; inspect dynamically with runtime guards.
-  /* eslint-disable @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-argument, @typescript-eslint/consistent-type-assertions */
   const pathEntries = Object.entries(openApiDocWithPaths.paths);
   interface OperationLike {
     operationId?: unknown;
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- openapi3-ts exposes path entries via loose index signatures; inspect dynamically with runtime guards.
     responses?: Record<string, unknown>;
   }
+  function isOperationLike(value: unknown): value is OperationLike {
+    return (
+      typeof value === 'object' && value !== null && 'operationId' in value && 'responses' in value
+    );
+  }
   for (const [rawPath, pathItem] of pathEntries) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime check.
     if (!pathItem) {
       continue;
     }
@@ -44,7 +51,10 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
       if (!operation || typeof operation !== 'object') {
         continue;
       }
-      const operationCandidate = operation as OperationLike;
+      if (!isOperationLike(operation)) {
+        throw new TypeError(`Invalid operation: ${JSON.stringify(operation)}`);
+      }
+      const operationCandidate = operation;
       if (typeof operationCandidate.operationId !== 'string') {
         continue;
       }
@@ -63,19 +73,11 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
       }
     }
   }
-  /* eslint-enable @typescript-eslint/no-restricted-types, @typescript-eslint/no-unsafe-argument, @typescript-eslint/consistent-type-assertions */
 
-  const output = await generateZodClientFromOpenAPI({
-    openApiDoc: openApiDocWithPaths,
-    templatePath,
+  // Use the adapter to generate Zod schemas - output is already Zod v4
+  const { output } = await generateZodSchemasFromOpenAPI({
+    openApiDoc,
     distPath: outFile,
-    // Configure for endpoint generation with parameter schemas
-    options: {
-      shouldExportAllSchemas: true,
-      shouldExportAllTypes: true,
-      groupStrategy: 'none',
-      withAlias: false,
-    },
   });
   console.log('✅ Zod schemas generated');
 
@@ -111,7 +113,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     '  options?: { readonly rename?: (original: string) => string },',
     '): CurriculumSchemaCollection {',
     '  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));',
-    '  const result: Record<string, ZodSchema> = {};',
+    '  const result: Record<string, z.ZodType> = {};',
     '  for (const [key, value] of Object.entries(schemas)) {',
     '    const sanitized = rename(key);',
     '    result[sanitized] = value;',
@@ -119,8 +121,23 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     '  return result;',
     '}',
   ].join('\n');
+  // NOTE: The adapter has already transformed the openapi-zod-client output to Zod v4 compatible code
+  const endpointTypeCode = [
+    '/** Endpoint interface for OpenAPI-derived endpoints */',
+    'interface Endpoint {',
+    '  readonly method: string;',
+    '  readonly path: string;',
+    '  readonly description?: string;',
+    '  readonly requestFormat?: string;',
+    '  readonly response: z.ZodType;',
+    '  readonly errors?: readonly { readonly status: string | number; readonly description?: string; readonly schema: z.ZodType }[];',
+    '  readonly parameters?: readonly { readonly name: string; readonly type: string; readonly schema: z.ZodType }[];',
+    '}',
+  ].join('\n');
   const helpersBlock = [
-    'import { z, type ZodSchema } from "zod";',
+    'import { z } from "zod";',
+    '',
+    endpointTypeCode,
     '',
     operationIdMapCode,
     primaryStatusMapCode,
@@ -131,7 +148,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     '',
   ].join('\n');
   const buildCurriculumSchemasCode = [
-    'function buildCurriculumSchemas(endpoints: ReturnType<typeof makeApi>): CurriculumSchemaCollection {',
+    'function buildCurriculumSchemas(endpoints: readonly Endpoint[]): CurriculumSchemaCollection {',
     '  const baseSchemas = sanitizeSchemaKeys(rawCurriculumSchemas, { rename: renameInlineSchema });',
     '  const statusSchemas: CurriculumSchemaCollection = {};',
     '  for (const endpoint of endpoints) {',
@@ -144,12 +161,11 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     '      const primaryKey = renameInlineSchema(`${operationId}_${primaryStatus}`);',
     '      statusSchemas[primaryKey] = endpoint.response;',
     '    }',
-    '    if (Array.isArray(endpoint.errors)) {',
-    '      for (const error of endpoint.errors) {',
-    '        const statusValue = error.status === "default" ? "default" : String(error.status);',
-    '        const errorKey = renameInlineSchema(`${operationId}_${statusValue}`);',
-    '        statusSchemas[errorKey] = error.schema;',
-    '      }',
+    '    const errors = endpoint.errors ?? [];',
+    '    for (const error of errors) {',
+    '      const statusValue = error.status === "default" ? "default" : String(error.status);',
+    '      const errorKey = renameInlineSchema(`${operationId}_${statusValue}`);',
+    '      statusSchemas[errorKey] = error.schema;',
     '    }',
     '  }',
     '  const changelogEndpoint = endpoints.find((candidate) => candidate.method === "get" && candidate.path === "/changelog");',
@@ -170,23 +186,23 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
   ].join('\n');
 
   // Modify the generated file to export the schemas
+  // The adapter has already converted code to Zod v4 compatible and removed makeApi
   console.log('🔍 Modifying file to export the endpoints');
-  const withTypedImport = output.replace(
-    /import { z } from ['"]zod['"];/,
-    'import { z, type ZodSchema } from "zod";',
-  );
-  const withExportedEndpoints = withTypedImport.replace(
-    /const endpoints = makeApi/g,
-    'export const endpoints = makeApi',
+  // The adapter converts "const endpoints = makeApi([" to "const endpoints = (["
+  const withExportedEndpoints = output.replace(
+    /const endpoints = \(/g,
+    'export const endpoints: readonly Endpoint[] = (',
   );
 
   const schemasPattern = /export const schemas = {[\s\S]*?};/;
   const modifiedContent = withExportedEndpoints.replace(schemasPattern, (substring) => {
     const body = substring.replace('export const schemas = ', '').replace(';', '');
     return [
-      'export type CurriculumSchemaCollection = Record<string, ZodSchema>;',
+      'export type CurriculumSchemaCollection = Record<string, z.ZodType>;',
       'const renameInlineSchema = (original: string) => {\n  if (original === "changelog_changelog_200") {\n    return "ChangelogResponseSchema";\n  }\n  if (original === "changelog_latest_200") {\n    return "ChangelogLatestResponseSchema";\n  }\n  return original.replace(/[^A-Za-z0-9_]/g, "_");\n};',
-      'const rawCurriculumSchemas = ' + body + ' as const satisfies CurriculumSchemaCollection;',
+      'export const rawCurriculumSchemas = ' +
+        body +
+        ' as const satisfies CurriculumSchemaCollection;',
       buildCurriculumSchemasCode,
     ].join('\n\n');
   });
@@ -200,7 +216,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
 
   const schemaMetadata = `const curriculumSchemaCollection = buildCurriculumSchemas(endpoints);
 const curriculumSchemaNames = Object.keys(curriculumSchemaCollection);
-const curriculumSchemaValues: readonly z.ZodTypeAny[] = Object.values(curriculumSchemaCollection);
+const curriculumSchemaValues: readonly z.ZodType[] = Object.values(curriculumSchemaCollection);
 
 export const curriculumSchemas = curriculumSchemaCollection;
 
@@ -233,13 +249,21 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
   return curriculumSchemaValues.includes(value);
 }`;
 
-  const withCurriculumSchemas = withUpdatedBuilder.replace(
-    'export const api = new Zodios(endpoints);',
-    `${schemaMetadata}\n\nexport const api = new Zodios(endpoints);`,
-  );
+  // The adapter may have already removed client exports, so check both cases
+  let withCurriculumSchemas: string;
+  if (withUpdatedBuilder.includes('export const api = new Zodios(endpoints);')) {
+    // Client export still exists - replace it with schema metadata
+    withCurriculumSchemas = withUpdatedBuilder.replace(
+      'export const api = new Zodios(endpoints);',
+      `${schemaMetadata}\n`,
+    );
+  } else {
+    // Client export already removed by adapter - append schema metadata at end
+    withCurriculumSchemas = withUpdatedBuilder.trimEnd() + '\n\n' + schemaMetadata + '\n';
+  }
 
   const sanitizedContent = withCurriculumSchemas.replace(
-    'import { z, type ZodSchema } from "zod";',
+    /import { z } from ["']zod["'];/,
     helpersBlock,
   );
 

@@ -4,7 +4,7 @@ import {
   SearchSuggestionResponseSchema,
   type SearchStructuredRequest,
   type SearchSuggestionResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 const suggestionCacheSchema = SearchSuggestionResponseSchema.shape.cache;
 

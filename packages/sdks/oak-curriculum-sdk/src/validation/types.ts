@@ -1,9 +1,13 @@
+/* eslint-disable max-lines -- validation types module with comprehensive type definitions */
 /**
  * Type definitions for validation module
  * Pure types with no runtime behaviour
  */
 
-import type { SafeParseReturnType, ZodIssue, ZodTypeAny } from 'zod';
+import type { z, ZodError } from 'zod';
+/** ZodIssue type derived from ZodError (not directly exported in Zod v4) */
+type ZodIssue = ZodError['issues'][number];
+
 import {
   curriculumSchemas,
   type CurriculumSchemaDefinition,
@@ -108,12 +112,11 @@ export function isValidationFailure<T>(result: ValidationResult<T>): result is V
 /**
  * Output type helper for Zod schemas consumed by the domain-specific parsing helpers.
  */
-export type SchemaInput<Schema extends ZodTypeAny> = Schema extends { _input: infer Input }
-  ? Input
-  : never;
-export type SchemaOutput<Schema extends ZodTypeAny> = Schema extends { _output: infer Output }
-  ? Output
-  : never;
+/** Input type for a Zod schema (uses infer which works for both input and output in most cases) */
+export type SchemaInput<Schema extends z.ZodType> = z.infer<Schema>;
+
+/** Output type for a Zod schema (Zod v4 compatible) */
+export type SchemaOutput<Schema extends z.ZodType> = z.infer<Schema>;
 
 const searchResponseSchemas = {
   all: SearchMultiScopeResponseSchema,
@@ -138,10 +141,18 @@ const isInvalidTypeIssue = (
 const coerceString = (value: unknown): string =>
   typeof value === 'string' ? value : JSON.stringify(value);
 
+/** Filter ZodIssue path to only include strings and numbers (Zod v4 paths can include symbols) */
+function filterPathToStringOrNumber(path: readonly PropertyKey[]): readonly (string | number)[] {
+  return path.filter(
+    (segment): segment is string | number =>
+      typeof segment === 'string' || typeof segment === 'number',
+  );
+}
+
 function mapValidationIssues(zodIssues: readonly ZodIssue[]): readonly ValidationIssue[] {
   return zodIssues.map((issue) => {
     const base: ValidationIssue = {
-      path: issue.path,
+      path: filterPathToStringOrNumber(issue.path),
       message: issue.message,
       code: issue.code,
     };
@@ -168,13 +179,11 @@ function toValidationFailure(zodIssues: readonly ZodIssue[]): ValidationFailure 
   };
 }
 
-function parseSchema<Schema extends ZodTypeAny>(
+function parseSchema<Schema extends z.ZodType>(
   schema: Schema,
   data: unknown,
 ): ValidationResult<SchemaOutput<Schema>> {
-  const result: SafeParseReturnType<SchemaInput<Schema>, SchemaOutput<Schema>> = schema.safeParse(
-    data,
-  );
+  const result = schema.safeParse(data);
   if (result.success) {
     return { ok: true, value: result.data };
   }
@@ -199,19 +208,44 @@ export function parseWithCurriculumSchemaInstance<Schema extends CurriculumSchem
   return parseSchema(schema, data);
 }
 
-export function parseEndpointParameters<Schema extends ZodTypeAny>(
+export function parseEndpointParameters<Schema extends z.ZodType>(
   schema: Schema,
   data: unknown,
 ): ValidationResult<SchemaOutput<Schema>> {
   return parseSchema(schema, data);
 }
 
+/** Parse search response with type-safe overloads for each scope */
+export function parseSearchResponse(
+  scope: 'all',
+  data: unknown,
+): ValidationResult<z.infer<typeof SearchMultiScopeResponseSchema>>;
+export function parseSearchResponse(
+  scope: 'lessons',
+  data: unknown,
+): ValidationResult<z.infer<typeof SearchLessonsResponseSchema>>;
+export function parseSearchResponse(
+  scope: 'units',
+  data: unknown,
+): ValidationResult<z.infer<typeof SearchUnitsResponseSchema>>;
+export function parseSearchResponse(
+  scope: 'sequences',
+  data: unknown,
+): ValidationResult<z.infer<typeof SearchSequencesResponseSchema>>;
 export function parseSearchResponse<Scope extends SearchScopeWithAll>(
   scope: Scope,
   data: unknown,
-): ValidationResult<SearchResponseForScope<Scope>> {
+): ValidationResult<SearchResponseForScope<Scope>>;
+export function parseSearchResponse(
+  scope: SearchScopeWithAll,
+  data: unknown,
+): ValidationResult<unknown> {
   const schema = searchResponseSchemas[scope];
-  return parseSchema(schema, data);
+  const result = schema.safeParse(data);
+  if (result.success) {
+    return { ok: true, value: result.data };
+  }
+  return toValidationFailure(result.error.issues);
 }
 
 export function parseSearchSuggestionResponse(

@@ -84,7 +84,7 @@ const zTDSource: ZodType<TDSource> = z.object({
   fileName: z.string(),
   line: z.number(),
   character: z.number(),
-  url: z.string().url().optional(),
+  url: z.url().optional(),
 });
 const zTDBlockTag: ZodType<TDBlockTag> = z.object({
   tag: z.string(),
@@ -116,10 +116,7 @@ const zTDTypeKnown: ZodType<TDType> = z.lazy(() =>
 );
 
 // Fallback to accept any other TypeDoc node kinds without failing validation
-const zTDTypeAny: ZodType<unknown> = z.union([
-  zTDTypeKnown,
-  z.object({ type: z.string() }).passthrough(),
-]);
+const zTDTypeAny: ZodType = z.union([zTDTypeKnown, z.object({ type: z.string() }).loose()]);
 
 const zTDParameter: ZodType<TDParameter> = z.object({
   name: z.string(),

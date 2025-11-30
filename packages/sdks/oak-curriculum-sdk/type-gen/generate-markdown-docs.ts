@@ -9,13 +9,16 @@
 import { promises as fs } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ZodError, type ZodIssue } from 'zod';
+import { ZodError } from 'zod';
+
+/** Type for Zod validation issues (derived from ZodError to avoid deprecated ZodIssue import) */
+type ZodIssueType = ZodError['issues'][number];
 
 import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
 
-function formatZodIssues(issues: ZodIssue[]): string {
+function formatZodIssues(issues: ZodIssueType[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
 }
 

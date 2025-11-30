@@ -5,6 +5,7 @@ packages:
   - apps/oak-open-curriculum-semantic-search
   - packages/libs/env
   - packages/libs/logger
+  - packages/libs/openapi-zod-client-adapter
   - packages/libs/storage
   - packages/libs/transport
   - packages/sdks/oak-curriculum-sdk

@@ -65,7 +65,7 @@ The Model Context Protocol allows applications to provide context for LLMs in a 
 npm install @modelcontextprotocol/sdk zod
 ```
 
-This SDK has a **required peer dependency** on `zod` for schema validation. The SDK internally imports from `zod/v4`, but maintains backwards compatibility with projects using Zod v3.25 or later. You can use either API in your code by importing from `zod/v3` or `zod/v4`:
+This SDK has a **required peer dependency** on `zod 4` for schema validation.
 
 ## Quick Start
 

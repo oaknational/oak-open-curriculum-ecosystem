@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 vi.mock('../../lib/search-fixtures/builders', () => ({
   buildFixtureForScope: vi.fn((scope: unknown) => ({ scope, kind: 'fixture' })),

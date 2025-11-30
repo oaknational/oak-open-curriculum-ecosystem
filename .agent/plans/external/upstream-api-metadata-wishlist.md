@@ -473,11 +473,30 @@ description: |
 
 **Current State & Roadmap:**
 
-1. **Short term** (Now): We're building an interim solution that extracts ontology information from your OpenAPI schema at build time and enriches it with educational guidance. This provides immediate value while proper ontology work progresses.
+1. **Immediate** (POC): A static `get-ontology` tool serving hand-authored JSON validates the value proposition in ~2 hours. See `.agent/plans/sdk-and-mcp-enhancements/00-ontology-poc-static-tool.md`.
 
-2. **Medium term** (Data Platform Team): The Data Platform team is working on a proper, comprehensive curriculum ontology that will be the authoritative source of truth for curriculum structure, relationships, and metadata.
+2. **Short term** (MCP Layer): Full schema-extraction implementation that auto-generates ontology from OpenAPI at type-gen time, merged with educational guidance. See `.agent/plans/sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md`.
 
-3. **Long term** (API Integration): When the Data Platform ontology is complete and exposed via the API, we can consume it directly through the `/ontology` endpoint.
+3. **Medium term** (Data Platform Team): The Data Platform team is working on a proper, comprehensive curriculum ontology that will be the authoritative source of truth for curriculum structure, relationships, and metadata.
+
+4. **Long term** (API Integration): When the Data Platform ontology is complete and exposed via the API, we can consume it directly through the `/ontology` endpoint.
+
+**Note on "Start Here" Experience (Nov 2025):**
+
+We have implemented a comprehensive "start here" experience in the MCP layer with hand-crafted metadata:
+
+- **`tool-guidance-data.ts`**: Server overview, tool categories (discovery, browsing, fetching, progression), workflow guides, tips, and ID format documentation
+- **Documentation Resources**: Markdown docs exposed via MCP `resources/list` (`docs://oak/getting-started.md`, `docs://oak/tools.md`, `docs://oak/workflows.md`)
+- **`get-help` Tool**: Aggregated tool returning structured guidance about how to use the server's tools effectively
+- **MCP Prompts**: Workflow templates for common tasks (find-lessons, lesson-planning, progression-map)
+
+This hand-crafted metadata provides server-level onboarding that tool descriptions alone cannot achieve. Ideally, this guidance would eventually be:
+
+1. Generated from enriched OpenAPI metadata (Items #1, #2 in this wishlist)
+2. Supplemented by the upstream `/ontology` endpoint (Item #3)
+3. Enhanced with behavioural metadata for tool safety (Item #8)
+
+See `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts` and related files for the current implementation.
 
 **Benefits of Native API Endpoint:**
 

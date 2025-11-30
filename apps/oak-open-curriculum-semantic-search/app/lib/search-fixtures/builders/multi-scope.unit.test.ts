@@ -4,7 +4,7 @@ import {
   SearchUnitsResponseSchema,
   SearchSequencesResponseSchema,
   type SearchMultiScopeResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { buildMultiScopeFixture } from './multi-scope';
 
 describe('buildMultiScopeFixture', () => {

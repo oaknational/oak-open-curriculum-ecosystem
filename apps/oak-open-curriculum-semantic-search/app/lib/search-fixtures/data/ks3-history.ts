@@ -1,4 +1,4 @@
-import type { SearchSuggestionItem } from '@oaknational/oak-curriculum-sdk';
+import type { SearchSuggestionItem } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 interface LessonRecord {
   readonly id: string;

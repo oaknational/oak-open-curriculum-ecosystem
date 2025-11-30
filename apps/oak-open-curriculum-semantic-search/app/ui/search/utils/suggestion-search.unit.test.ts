@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type {
   SearchStructuredRequest,
   SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { buildSuggestionFollowUpInput } from './suggestion-search';
 
 describe('buildSuggestionFollowUpInput', () => {

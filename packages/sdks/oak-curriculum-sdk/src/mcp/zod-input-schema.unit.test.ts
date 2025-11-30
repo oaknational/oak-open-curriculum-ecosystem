@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
 import {
   zodRawShapeFromToolInputJsonSchema,
   type GenericToolInputJsonSchema,
@@ -29,7 +28,7 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       };
 
       const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
-      const roundTripSchema = zodToJsonSchema(z.object(zodShape));
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
 
       // Verify description survives: JSON Schema → Zod → JSON Schema
       expect(roundTripSchema).toMatchObject({
@@ -52,7 +51,7 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       };
 
       const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
-      const roundTripSchema = zodToJsonSchema(z.object(zodShape));
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
 
       expect(roundTripSchema).toMatchObject({
         properties: {
@@ -77,7 +76,7 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       };
 
       const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
-      const roundTripSchema = zodToJsonSchema(z.object(zodShape));
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
 
       // Verify enum array appears in output (not just "type": "string")
       expect(roundTripSchema).toMatchObject({
@@ -102,7 +101,7 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       };
 
       const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
-      const roundTripSchema = zodToJsonSchema(z.object(zodShape));
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
 
       expect(roundTripSchema).toMatchObject({
         properties: {
@@ -132,7 +131,7 @@ describe('zodRawShapeFromToolInputJsonSchema', () => {
       };
 
       const zodShape = zodRawShapeFromToolInputJsonSchema(inputSchema);
-      const roundTripSchema = zodToJsonSchema(z.object(zodShape));
+      const roundTripSchema = z.toJSONSchema(z.object(zodShape));
 
       expect(roundTripSchema).toMatchObject({
         required: ['id'],

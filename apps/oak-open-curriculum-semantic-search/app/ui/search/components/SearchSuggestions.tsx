@@ -8,7 +8,7 @@ import {
   OakTypography,
   OakUL,
 } from '@oaknational/oak-components';
-import type { SearchSuggestionItem } from '@oaknational/oak-curriculum-sdk';
+import type { SearchSuggestionItem } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export function SearchSuggestions({
   suggestions,

@@ -40,7 +40,7 @@ export type GetUnitSummaryFn = (unitSlug: string) => Promise<unknown>;
 
 export type SubjectSequenceEntry = SearchSubjectSequences[number];
 
-export type GetSubjectSequencesFn = (subject: SearchSubjectSlug) => Promise<readonly unknown[]>;
+export type GetSubjectSequencesFn = (subject: SearchSubjectSlug) => Promise<SearchSubjectSequences>;
 
 export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
 

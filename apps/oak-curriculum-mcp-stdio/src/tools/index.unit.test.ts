@@ -3,7 +3,7 @@ import type {
   ToolName,
   ToolExecutionResult,
   OakApiPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import { createMcpToolsModule } from './index.js';
 

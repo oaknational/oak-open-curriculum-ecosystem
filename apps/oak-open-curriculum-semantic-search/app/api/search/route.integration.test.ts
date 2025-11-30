@@ -11,7 +11,7 @@ import {
   type SearchUnitsResponse,
   type SearchSequencesResponse,
   type SearchMultiScopeResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 const runHybridSearch = vi.hoisted(() =>
   vi.fn<(query: StructuredQuery) => Promise<HybridSearchResult>>(),

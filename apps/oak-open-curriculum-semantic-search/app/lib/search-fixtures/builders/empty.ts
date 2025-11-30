@@ -12,7 +12,7 @@ import {
   type SearchSequencesResponse,
   type SearchMultiScopeResponse,
   type SearchMultiScopeBucket,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type FixtureScope = 'lessons' | 'units' | 'sequences';
 

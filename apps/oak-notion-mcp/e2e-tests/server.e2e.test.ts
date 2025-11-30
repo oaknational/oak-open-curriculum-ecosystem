@@ -152,12 +152,18 @@ describe('E2E: MCP Server with Real Notion API', () => {
 
     expect(response.contents).toBeDefined();
     expect(response.contents.length).toBe(1);
-    expect(response.contents[0]?.mimeType).toBe('application/json');
-    expect(response.contents[0]?.text).toContain('# Notion Workspace Discovery');
+    const content = response.contents[0];
+    expect(content.mimeType).toBe('application/json');
+    // Narrow to text response type
+    if (!('text' in content)) {
+      throw new TypeError('Test: Expected text content, got blob');
+    }
+
+    expect(content.text).toContain('# Notion Workspace Discovery');
 
     // Should contain real data from Notion
-    expect(response.contents[0]?.text).toContain('## Summary');
-    expect(response.contents[0]?.text).toContain('## Resources');
+    expect(content.text).toContain('## Summary');
+    expect(content.text).toContain('## Resources');
   });
 
   it('should list users using the tool', async () => {
@@ -170,7 +176,7 @@ describe('E2E: MCP Server with Real Notion API', () => {
     expect(Array.isArray(response.content)).toBe(true);
 
     if (!Array.isArray(response.content)) {
-      throw new Error('Expected content to be an array');
+      throw new TypeError('Test: Expected content to be an array');
     }
 
     expect(response.content.length).toBeGreaterThan(0);

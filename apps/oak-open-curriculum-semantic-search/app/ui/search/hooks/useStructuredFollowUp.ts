@@ -2,7 +2,7 @@ import { useCallback, useState, useTransition, type Dispatch, type SetStateActio
 import type {
   SearchStructuredRequest,
   SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { StructuredSearchAction } from '../structured/StructuredSearch';
 import type { SearchController } from './useSearchController';
 import type { SequenceFacet } from '../../../../src/lib/hybrid-search/types';

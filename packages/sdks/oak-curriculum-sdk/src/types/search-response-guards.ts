@@ -5,16 +5,16 @@
  */
 
 import type { z } from 'zod';
-import { curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
+import { rawCurriculumSchemas, curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
 
 /** Schema for lesson summaries derived from the OpenAPI specification. */
-export const lessonSummarySchema = curriculumSchemas.LessonSummaryResponseSchema;
+export const lessonSummarySchema = rawCurriculumSchemas.LessonSummaryResponseSchema;
 
 /** Schema for unit summaries derived from the OpenAPI specification. */
-export const unitSummarySchema = curriculumSchemas.UnitSummaryResponseSchema;
+export const unitSummarySchema = rawCurriculumSchemas.UnitSummaryResponseSchema;
 
 /** Schema for subject sequences derived from the OpenAPI specification. */
-export const subjectSequencesSchema = curriculumSchemas.SubjectSequenceResponseSchema;
+export const subjectSequencesSchema = rawCurriculumSchemas.SubjectSequenceResponseSchema;
 
 /** Type alias for the lesson summary schema derived from the OpenAPI specification. */
 export type LessonSummaryResponseSchema = typeof lessonSummarySchema;

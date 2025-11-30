@@ -9,7 +9,7 @@ import {
   getToolFromToolName,
   type ToolDescriptorForName,
   type OakApiPathBasedClient,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
@@ -53,7 +53,12 @@ describe('createToolResponseHandlers', () => {
     const response = handlers.handleExecutionError({ foo: 'bar' }, new Error('boom'));
 
     expect(response.isError).toBe(true);
-    expect(response.content[0].text).toContain('"toolExecutionError"');
+    const firstContent = response.content[0];
+    // Narrow to text response type
+    if (!('text' in firstContent)) {
+      throw new TypeError('Test: Expected text content, got blob');
+    }
+    expect(firstContent.text).toContain('"toolExecutionError"');
     expect(logger.error).toHaveBeenCalledWith(expect.stringContaining('Tool execution failed:'));
     expect(logger.error).toHaveBeenCalledWith(expect.stringContaining('"toolName":"list-tools"'));
   });
@@ -69,7 +74,12 @@ describe('createToolResponseHandlers', () => {
     const response = handlers.handleValidationError({ query: 'oak' }, envelope, 'did not validate');
 
     expect(response.isError).toBe(true);
-    expect(response.content[0].text).toContain('"outputValidationFailed"');
+    const firstContent = response.content[0];
+    // Narrow to text response type
+    if (!('text' in firstContent)) {
+      throw new TypeError('Test: Expected text content, got blob');
+    }
+    expect(firstContent.text).toContain('"outputValidationFailed"');
     expect(logger.error).toHaveBeenCalledWith(
       expect.stringContaining('Tool output validation failed:'),
     );
@@ -85,7 +95,12 @@ describe('createToolResponseHandlers', () => {
     const response = handlers.handleSuccess({ status: 200, data: { success: true } });
 
     expect(response.isError).toBeUndefined();
-    expect(response.content[0].text).toBe(JSON.stringify({ status: 200, data: { success: true } }));
+    const firstContent = response.content[0];
+    // Narrow to text response type
+    if (!('text' in firstContent)) {
+      throw new TypeError('Test: Expected text content, got blob');
+    }
+    expect(firstContent.text).toBe(JSON.stringify({ status: 200, data: { success: true } }));
     expect(logger.info).toHaveBeenCalledWith(
       expect.stringContaining('Tool output validated successfully:'),
     );

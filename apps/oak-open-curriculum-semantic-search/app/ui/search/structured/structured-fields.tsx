@@ -10,7 +10,7 @@ import {
   SEQUENCES_SCOPE,
   MULTI_SCOPE,
 } from '../../../../src/lib/search-scopes';
-import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
+import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type ChangeStructured = (update: Partial<SearchStructuredRequest>) => void;
 

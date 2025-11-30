@@ -11,7 +11,7 @@ import {
   type SearchSuggestionItem,
   type SearchSuggestionResponse,
   type SearchUnitsResponse,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   buildSingleScopeFixture,
   type SingleScopeDatasetKey,

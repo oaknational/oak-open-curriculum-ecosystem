@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { toolNames } from '@oaknational/oak-curriculum-sdk';
+import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
 

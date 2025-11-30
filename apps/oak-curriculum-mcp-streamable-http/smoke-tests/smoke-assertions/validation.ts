@@ -76,10 +76,26 @@ function parseValidationEnvelope(response: JsonResponse, logger: Logger): JsonRp
 }
 
 function assertCanonicalValidationFailure(envelope: JsonRpcEnvelope, logger: Logger): void {
-  if (!envelope.error) {
-    logger.error('Canonical validation envelope did not include an error block', undefined, {
+  // MCP SDK can return errors in two formats:
+  // 1. JSON-RPC error: { error: { code, message }, jsonrpc, id }
+  // 2. Result with isError: { result: { content, isError: true }, jsonrpc, id }
+  const hasJsonRpcError = envelope.error !== undefined;
+  const hasResultIsError = isResultWithError(envelope.result);
+
+  if (!hasJsonRpcError && !hasResultIsError) {
+    logger.error('Canonical validation envelope did not include an error indicator', undefined, {
       envelope,
     });
   }
-  assert.ok(envelope.error, 'Validation failure should produce an error envelope');
+  assert.ok(
+    hasJsonRpcError || hasResultIsError,
+    'Validation failure should produce an error envelope (either error property or result.isError)',
+  );
+}
+
+function isResultWithError(result: unknown): boolean {
+  if (typeof result !== 'object' || result === null) {
+    return false;
+  }
+  return 'isError' in result && result.isError === true;
 }

@@ -9,8 +9,8 @@ import type {
 import { generateMcpToolName } from './name-generator.js';
 import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
-import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateExecuteFile } from './parts/generate-execute-file.js';
+import { generateRuntimeIndexFile } from './parts/generate-runtime-index-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
 import { generateScopesSupportedFile } from './parts/generate-scopes-supported-file.js';
 import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
@@ -232,7 +232,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
 
   result.aliases['types.ts'] = generateTypesFile();
   result.runtime['execute.ts'] = generateExecuteFile(toolNames);
-  result.runtime['lib.ts'] = generateLibFile();
+  result.runtime['index.ts'] = generateRuntimeIndexFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result.data['scopes-supported.ts'] = generateScopesSupportedFile();
   result.data['index.ts'] = generateDataIndexFile();

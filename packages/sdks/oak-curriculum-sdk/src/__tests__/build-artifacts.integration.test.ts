@@ -25,7 +25,7 @@ describe('SDK build artefacts', () => {
     const expectedFiles = [
       join(dist, 'types/generated/search/index.js'),
       join(dist, 'types/generated/api-schema/mcp-tools/index.js'),
-      join(dist, 'mcp/universal-tools.js'),
+      join(dist, 'mcp/universal-tools/index.js'),
     ];
 
     expectedFiles.forEach((file) => {

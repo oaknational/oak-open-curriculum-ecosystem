@@ -38,10 +38,16 @@ async function callWithBadArgs(): Promise<{ status: number; text: string }> {
 }
 
 describe('HTTP /mcp validation failure', () => {
-  it('returns JSON-RPC error when arguments fail Zod validation', async () => {
+  it('returns error when arguments fail Zod validation', async () => {
     const { status, text } = await callWithBadArgs();
     expect(status).toBe(200);
-    const payload = parseFirstSseData(text) as { error?: unknown };
-    expect(typeof payload.error !== 'undefined').toBe(true);
+    const payload = parseFirstSseData(text) as {
+      error?: unknown;
+      result?: { isError?: boolean };
+    };
+    // MCP SDK returns either a JSON-RPC error or a result with isError: true
+    const hasJsonRpcError = typeof payload.error !== 'undefined';
+    const hasResultError = payload.result?.isError === true;
+    expect(hasJsonRpcError || hasResultError).toBe(true);
   });
 });

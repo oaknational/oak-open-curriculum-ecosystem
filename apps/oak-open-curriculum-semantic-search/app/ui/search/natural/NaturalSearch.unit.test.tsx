@@ -2,8 +2,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider } from '../../../lib/theme/ThemeContext';
 import NaturalSearchComponent from './NaturalSearch';
-import type { SearchNaturalLanguageRequest } from '@oaknational/oak-curriculum-sdk';
-import { SearchNaturalLanguageRequestSchema } from '@oaknational/oak-curriculum-sdk';
+import type { SearchNaturalLanguageRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { SearchNaturalLanguageRequestSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 const submitNaturalSearchRequest = vi.hoisted(() =>
   vi.fn().mockResolvedValue({

@@ -12,7 +12,10 @@ import {
   getContentArray,
   readFirstTextContent,
 } from './helpers/sse.js';
-import { McpToolError, type ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import {
+  McpToolError,
+  type ToolExecutionResult,
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 

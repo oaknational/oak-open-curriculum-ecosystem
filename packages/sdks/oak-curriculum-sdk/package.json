@@ -56,6 +56,22 @@
     "./validation/*": {
       "types": "./dist/validation/*.d.ts",
       "default": "./dist/validation/*.js"
+    },
+    "./public/search": {
+      "types": "./dist/public/search.d.ts",
+      "default": "./dist/public/search.js"
+    },
+    "./public/search.js": {
+      "types": "./dist/public/search.d.ts",
+      "default": "./dist/public/search.js"
+    },
+    "./public/mcp-tools": {
+      "types": "./dist/public/mcp-tools.d.ts",
+      "default": "./dist/public/mcp-tools.js"
+    },
+    "./public/mcp-tools.js": {
+      "types": "./dist/public/mcp-tools.d.ts",
+      "default": "./dist/public/mcp-tools.js"
     }
   },
   "scripts": {
@@ -86,16 +102,17 @@
   },
   "dependencies": {
     "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/openapi-zod-client-adapter": "workspace:*",
+    "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
-    "zod": "^3"
+    "zod": "^4"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.20.1",
+    "@modelcontextprotocol/sdk": "^1.23.0",
     "@next/eslint-plugin-next": "^16.0.3",
     "@types/node": "^22.10.5",
     "dotenv": "^17.2.1",
     "openapi-typescript": "^7.10.1",
-    "openapi-zod-client": "^1.18.3",
     "openapi3-ts": "^4.5.0",
     "tsx": "^4.20.5",
     "typedoc": "^0.28.12",

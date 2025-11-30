@@ -33,7 +33,7 @@ export const ZeroHitEventSchema = z
     timestamp: z.number().int().nonnegative(),
     scope: ZeroHitScopeSchema,
     text: z.string().min(1),
-    filters: z.record(z.string()),
+    filters: z.record(z.string(), z.string()),
     indexVersion: z.string().min(1),
     tookMs: z.number().int().nonnegative().optional(),
     timedOut: z.boolean().optional(),

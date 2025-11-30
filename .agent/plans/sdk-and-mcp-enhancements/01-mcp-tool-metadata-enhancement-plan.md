@@ -1,9 +1,9 @@
 # MCP Tool Metadata Enhancement Plan
 
-**Status**: PLANNED (Phase 0 ✅ COMPLETE)  
+**Status**: PLANNED (Phases 0 & 3 ✅ COMPLETE, Quick Win ready)  
 **Created**: 2025-11-27  
 **Priority**: Post-OAuth, pre-OpenAI App  
-**Estimated Duration**: ~4-5 days
+**Estimated Duration**: ~3-4 days remaining (+ 5 min quick win)
 
 ---
 
@@ -11,6 +11,7 @@
 
 Enhance MCP tool metadata to improve ChatGPT/OpenAI Apps SDK integration. This consolidated plan covers:
 
+0. **Quick Win**: STDIO tool description bug fix (~5 mins)
 1. ✅ **Phase 0**: Tool annotations (COMPLETE - archived)
 2. **Phase 1**: Invocation status strings in `_meta`
 3. **Phase 2**: Security schemes mirrored in `_meta`
@@ -68,6 +69,57 @@ From generated tool files (e.g., `get-key-stages.ts`):
 | `inputSchema.properties.*.examples`       | Parameter format examples           | ❌ Missing                   |
 | `outputSchema`                            | Declares expected output structure  | ⚠️ Generated but not exposed |
 | Error messages in tool results            | Rate limit errors, auth errors      | ⚠️ Partial                   |
+
+---
+
+## Quick Win: STDIO Tool Description Bug Fix
+
+**Status**: PLANNED  
+**Duration**: ~5 minutes  
+**Impact**: Critical for ChatGPT tool discovery via STDIO transport
+
+### Problem
+
+The STDIO server currently overrides rich OpenAPI descriptions with generic "GET /path" strings, breaking ChatGPT's ability to understand what tools do.
+
+```typescript
+// Current code in apps/oak-curriculum-mcp-stdio/src/app/server.ts:170
+const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;
+// Produces: "GET /key-stages" instead of "This tool returns all the key stages..."
+```
+
+### Solution
+
+Use `descriptor.description` instead of constructing generic path strings.
+
+### Implementation
+
+**File**: `apps/oak-curriculum-mcp-stdio/src/app/server.ts`
+
+**Change**:
+
+```typescript
+// Before
+const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;
+
+// After
+const description =
+  descriptor.description ?? `${descriptor.method.toUpperCase()} ${descriptor.path}`;
+```
+
+### Acceptance Criteria
+
+| Criterion                                        | Test Method             |
+| ------------------------------------------------ | ----------------------- |
+| STDIO tools show OpenAPI descriptions            | `pnpm test` for STDIO   |
+| Fallback to method/path if no description exists | Unit test               |
+| No change to streamable-http server              | N/A (already uses desc) |
+
+### Validation
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+```
 
 ---
 
@@ -601,6 +653,7 @@ However, no clients currently consume this. Defer until there's demand.
 
 | Phase                       | Duration | Dependency          |
 | --------------------------- | -------- | ------------------- |
+| Quick Win: STDIO Bug Fix    | 5 mins   | None                |
 | Phase 0: Annotations        | -        | ✅ COMPLETE         |
 | Phase 1: Invocation Status  | 1 day    | None                |
 | Phase 2: Security in \_meta | 0.5 days | Phase 1             |
@@ -609,7 +662,7 @@ However, no clients currently consume this. Defer until there's demand.
 | Phase 5: Output Schema Eval | 0.5 days | Phase 1-4 complete  |
 | Phase 6: Aggregated Tools   | 0.5 days | Phase 1-4           |
 
-**Total**: ~4-5 days
+**Total**: ~3-4 days (Phases 0 and 3 already complete, Quick Win ready to do now)
 
 ---
 

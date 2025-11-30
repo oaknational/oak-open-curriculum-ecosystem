@@ -11,7 +11,7 @@ import type {
 import type {
   SearchStructuredRequest,
   SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { FixtureMode } from '../../lib/fixture-mode';
 
 export type MultiScopeResponse = MultiScopeHybridResult & {

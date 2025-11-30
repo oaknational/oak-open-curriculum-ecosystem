@@ -6,7 +6,7 @@
 import { createMcpToolsModule } from '../tools/index.js';
 import type { McpToolsModule } from '../tools/index.js';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
-import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
+import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { resolveToolExecutors } from './stub-executors.js';
 import { type Logger } from '@oaknational/mcp-logger/node';
 import { createStdioLogger } from '../logging/index.js';

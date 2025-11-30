@@ -7,7 +7,7 @@ import {
   isSearchScope,
   type SearchStructuredRequest,
   type SearchSuggestionItem,
-} from '@oaknational/oak-curriculum-sdk';
+} from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { runHybridSearch, runHybridSearchAllScopes } from '../../../src/lib/run-hybrid-search';
 import { logZeroHit } from '../../../src/lib/observability/zero-hit';
@@ -18,7 +18,7 @@ import {
   applyFixtureModeCookie,
   type FixtureMode,
 } from '../../lib/fixture-mode';
-import type { SafeParseReturnType } from 'zod/v3';
+import type { ZodSafeParseResult } from 'zod';
 import {
   buildFixtureResponse,
   isMultiScopePayload,
@@ -26,9 +26,7 @@ import {
   type SearchResponsePayload,
 } from './fixture-responses';
 
-export function parseSearchRequest(
-  payload: unknown,
-): SafeParseReturnType<unknown, SearchStructuredRequest> {
+export function parseSearchRequest(payload: unknown): ZodSafeParseResult<SearchStructuredRequest> {
   return SearchStructuredRequestSchema.safeParse(payload);
 }
 
