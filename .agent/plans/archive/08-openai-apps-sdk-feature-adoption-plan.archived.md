@@ -10,6 +10,17 @@
 
 ---
 
+## Plan Split
+
+Remaining work has been split into two parts:
+
+| Part       | File                                                                               | Status      | Contents                                                                                                                                |
+| ---------- | ---------------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Part 1** | [08a-openai-apps-sdk-part-1.md](./08a-openai-apps-sdk-part-1.md)                   | 🟡 ACTIVE   | Phase 0.2 (STDIO bug), Phase 3 (token optimization), Phase 4.2 (locale), Phase 5.2-5.3 (external links, display modes)                  |
+| **Part 2** | [08b-openai-apps-sdk-part-2-deferred.md](./08b-openai-apps-sdk-part-2-deferred.md) | ⏸️ DEFERRED | Phase 0.4-0.5 (golden prompts, walkthrough), Phase 4.1 (private tools), Phase 5.1 (follow-up messages), Phase 6 (production compliance) |
+
+---
+
 ## Overview
 
 This plan implements all OpenAI Apps SDK features not currently being used by the Oak Curriculum MCP server. These features are critical for production deployment, user experience, and token optimization.
