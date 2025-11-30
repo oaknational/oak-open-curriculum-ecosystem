@@ -68,6 +68,8 @@ export function listUniversalTools(): UniversalToolListEntry[] {
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
+      // Include _meta if present (for OpenAI Apps SDK metadata)
+      _meta: '_meta' in descriptor ? descriptor._meta : undefined,
     };
   });
 

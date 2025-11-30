@@ -276,14 +276,14 @@ describe('get-ontology tool descriptor', () => {
 /**
  * Tests for OpenAI Apps SDK _meta fields on all aggregated tools.
  *
- * These tests verify that all aggregated tools (search, fetch, get-ontology) have
+ * These tests verify that all aggregated tools (search, fetch, get-ontology, get-help) have
  * the required _meta fields for ChatGPT widget integration:
  * - openai/outputTemplate: URI of widget to render output
  * - openai/toolInvocation/invoking: Status text during execution
  * - openai/toolInvocation/invoked: Status text after completion
  */
 describe('aggregated tool _meta fields', () => {
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology'] as const;
+  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
 
   it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
     const tools = listUniversalTools();
@@ -303,6 +303,29 @@ describe('aggregated tool _meta fields', () => {
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
     expect(typeof tool?._meta?.['openai/toolInvocation/invoked']).toBe('string');
+  });
+});
+
+/**
+ * Tests for OpenAI Apps SDK _meta fields enabling widget interactivity.
+ *
+ * Phase 2 adds widgetAccessible and visibility fields to enable:
+ * - Widget-initiated tool calls via window.openai.callTool()
+ * - Tool visibility control (public vs private)
+ */
+describe('aggregated tool widgetAccessible and visibility', () => {
+  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
+
+  it.each(aggregatedToolNames)('%s has openai/widgetAccessible set to true', (toolName) => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
+  });
+
+  it.each(aggregatedToolNames)('%s has openai/visibility set to public', (toolName) => {
+    const tools = listUniversalTools();
+    const tool = tools.find((t) => t.name === toolName);
+    expect(tool?._meta?.['openai/visibility']).toBe('public');
   });
 });
 

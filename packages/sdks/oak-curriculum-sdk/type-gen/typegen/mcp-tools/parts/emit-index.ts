@@ -146,6 +146,19 @@ function buildExports({
   lines.push('    openWorldHint: false,');
   lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
   lines.push('  },');
+  // OpenAI Apps SDK _meta fields for widget integration
+  lines.push('  _meta: {');
+  lines.push(`    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',`);
+  lines.push(
+    `    'openai/toolInvocation/invoking': ${JSON.stringify(`Fetching ${humanReadableTitle}…`)},`,
+  );
+  lines.push(
+    `    'openai/toolInvocation/invoked': ${JSON.stringify(`${humanReadableTitle} loaded`)},`,
+  );
+  lines.push(`    'openai/widgetAccessible': true,`);
+  lines.push(`    'openai/visibility': 'public',`);
+  lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
+  lines.push('  },');
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',

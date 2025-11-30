@@ -143,6 +143,14 @@ export const getKeyStagesSubjectQuestions = {
     openWorldHint: false,
     title: "Get Key Stages Subject Questions",
   },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Key Stages Subject Questions…",
+    'openai/toolInvocation/invoked': "Get Key Stages Subject Questions loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

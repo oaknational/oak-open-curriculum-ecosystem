@@ -55,6 +55,8 @@ Call this FIRST before using other curriculum tools to understand the domain mod
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Loading curriculum model…',
     'openai/toolInvocation/invoked': 'Curriculum model loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;
 

@@ -46,6 +46,8 @@ Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Fetching resource…',
     'openai/toolInvocation/invoked': 'Resource loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;
 

@@ -48,6 +48,8 @@ Executes get-search-lessons and get-search-transcripts in parallel.`,
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Searching curriculum…',
     'openai/toolInvocation/invoked': 'Search complete',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;
 

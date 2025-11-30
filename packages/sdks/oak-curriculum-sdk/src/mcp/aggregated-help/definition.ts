@@ -56,5 +56,7 @@ Optionally provide a tool_name to get specific help for that tool.`,
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Loading help…',
     'openai/toolInvocation/invoked': 'Help loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;

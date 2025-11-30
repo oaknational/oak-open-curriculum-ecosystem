@@ -36,6 +36,14 @@ describe('GET_HELP_TOOL_DEF', () => {
       'ui://widget/oak-json-viewer.html',
     );
   });
+
+  it('has openai/widgetAccessible set to true', () => {
+    expect(GET_HELP_TOOL_DEF._meta['openai/widgetAccessible']).toBe(true);
+  });
+
+  it('has openai/visibility set to public', () => {
+    expect(GET_HELP_TOOL_DEF._meta['openai/visibility']).toBe('public');
+  });
 });
 
 describe('GET_HELP_INPUT_SCHEMA', () => {

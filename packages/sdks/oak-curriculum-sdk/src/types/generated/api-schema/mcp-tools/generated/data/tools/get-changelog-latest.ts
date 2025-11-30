@@ -113,6 +113,14 @@ export const getChangelogLatest = {
     openWorldHint: false,
     title: "Get Changelog Latest",
   },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Changelog Latest…",
+    'openai/toolInvocation/invoked': "Get Changelog Latest loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'noauth' }],
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {
