@@ -61,8 +61,9 @@ const RENDERERS = {
 function updateToolName() {
   const input = window.openai?.toolInput;
   const meta = window.openai?.toolResponseMetadata;
-  const name = meta?.['annotations/title'] || meta?.title || input?.toolName || '';
-  if (name && toolNameEl) { toolNameEl.textContent = name; toolNameEl.style.display = 'block'; }
+  // Use annotations/title from MCP tool metadata (canonical human-readable name)
+  const displayName = meta?.['annotations/title'] || meta?.title || '';
+  if (displayName && toolNameEl) { toolNameEl.textContent = displayName; toolNameEl.style.display = 'block'; }
   else if (toolNameEl) { toolNameEl.style.display = 'none'; }
 }
 

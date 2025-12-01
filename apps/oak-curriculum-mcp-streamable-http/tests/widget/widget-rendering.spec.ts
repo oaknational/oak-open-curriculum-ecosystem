@@ -64,7 +64,7 @@ test.afterAll(() => {
 async function injectToolOutput(page: Page, fixture: object, toolName?: string): Promise<void> {
   await page.addInitScript(
     (args: { data: object; toolName?: string }) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- Browser context injection requires any for window augmentation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- JC: Browser context injection requires any for window augmentation
       (globalThis as any).openai = {
         toolOutput: args.data,
         toolInput: args.toolName ? { toolName: args.toolName } : undefined,
@@ -180,7 +180,7 @@ test.describe('Tool name routing', () => {
     await expect(page.getByRole('heading', { name: /Exit Quiz/ })).toBeVisible();
     // Should show question text
     await expect(page.getByText(/Tick the sentence/)).toBeVisible();
-    // Should show correct answer with checkmark (there are 2, one per quiz)
+    // Should show correct answer with check mark (there are 2, one per quiz)
     await expect(page.getByText(/✓/).first()).toBeVisible();
   });
 
@@ -212,7 +212,7 @@ test.describe('Tool name routing', () => {
 
     // Transcript renderer should show transcript text
     await expect(page.getByRole('heading', { name: /Transcript/ })).toBeVisible();
-    await expect(page.getByText(/Mrs\. Lashley/).first()).toBeVisible();
+    await expect(page.getByText(/Ms\. Example-Teacher/).first()).toBeVisible();
     // Should have VTT section
     await expect(page.getByRole('heading', { name: /VTT Data/ })).toBeVisible();
   });
@@ -231,8 +231,8 @@ test.describe('Tool name routing', () => {
     await injectToolOutput(page, RATE_LIMIT_OUTPUT_FIXTURE, 'get-rate-limit');
     await page.goto(`${serverUrl}/widget`);
 
-    // Rate limit renderer should show status
-    await expect(page.getByText('Rate Limit Status')).toBeVisible();
+    // Rate limit renderer should show status (use heading selector to avoid matching header tool name)
+    await expect(page.getByRole('heading', { name: 'Rate Limit Status' })).toBeVisible();
     await expect(page.getByText(/Remaining/)).toBeVisible();
     await expect(page.getByText(/85/)).toBeVisible();
   });

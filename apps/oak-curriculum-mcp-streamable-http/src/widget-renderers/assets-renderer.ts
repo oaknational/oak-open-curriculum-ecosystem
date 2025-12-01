@@ -66,6 +66,13 @@ function renderAssets(data) {
     h = '<div class="empty">No assets available.</div>';
   }
   
+  // Canonical URL link (for single lesson assets)
+  if (data.canonicalUrl) {
+    h += '<div class="sec" style="margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0">';
+    h += '<a class="link" href="' + esc(data.canonicalUrl) + '" target="_blank" onclick="openOnOakWebsite(event, \\'' + esc(data.canonicalUrl) + '\\')">View original Oak resource →</a>';
+    h += '</div>';
+  }
+  
   return h;
 }
 

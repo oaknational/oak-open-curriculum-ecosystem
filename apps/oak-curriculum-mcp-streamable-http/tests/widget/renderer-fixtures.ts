@@ -29,7 +29,7 @@ export const QUIZ_OUTPUT_FIXTURE = {
       questionType: 'multiple-choice',
       answers: [
         { distractor: true, type: 'text', content: 'shops' },
-        { distractor: true, type: 'text', content: 'Jun' },
+        { distractor: true, type: 'text', content: 'Alex' },
         { distractor: true, type: 'text', content: 'I' },
         { distractor: false, type: 'text', content: 'shout' },
       ],
@@ -77,11 +77,12 @@ export const KEY_STAGES_OUTPUT_FIXTURE = [
 
 /**
  * Transcript output fixture - get-lessons-transcript tool.
+ * Uses fictional teacher name for test data.
  */
 export const TRANSCRIPT_OUTPUT_FIXTURE = {
   transcript:
-    "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today.",
-  vtt: "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>",
+    "Hello, I'm Ms. Example-Teacher. I'm looking forward to guiding you through your learning today.",
+  vtt: "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Ms. Example-Teacher.</v>",
 } as const;
 
 /**
