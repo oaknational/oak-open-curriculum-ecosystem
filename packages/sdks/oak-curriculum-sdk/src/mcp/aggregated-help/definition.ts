@@ -32,7 +32,7 @@ export const GET_HELP_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_HELP_TOOL_DEF = {
-  description: `Returns guidance on how to use the Oak Curriculum MCP server's tools effectively.
+  description: `Returns guidance on how to use the Oak Curriculum MCP server's tools effectively. Use this to understand Oak and how to work with the tools.
 
 ${HELP_PREREQUISITE_GUIDANCE}
 

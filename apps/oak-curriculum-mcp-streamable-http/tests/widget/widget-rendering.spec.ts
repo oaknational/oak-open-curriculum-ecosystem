@@ -128,7 +128,7 @@ test.describe('Widget rendering behaviour', () => {
     await page.goto(`${serverUrl}/widget`);
 
     // Widget should detect search shape and render lesson results
-    await expect(page.getByText('Lessons')).toBeVisible();
+    await expect(page.getByText('From lesson similarity')).toBeVisible();
     await expect(page.getByText('Introduction to Photosynthesis')).toBeVisible();
     // Should render links to Oak
     await expect(page.getByRole('link', { name: /View/ }).first()).toBeVisible();
@@ -138,7 +138,7 @@ test.describe('Widget rendering behaviour', () => {
     await injectToolOutput(page, SEARCH_OUTPUT_FIXTURE);
     await page.goto(`${serverUrl}/widget`);
 
-    await expect(page.getByText('Transcripts')).toBeVisible();
+    await expect(page.getByText('From transcript search')).toBeVisible();
     await expect(page.getByText(/Plants use sunlight/)).toBeVisible();
   });
 
@@ -189,7 +189,7 @@ test.describe('Widget rendering behaviour', () => {
     }, SEARCH_OUTPUT_FIXTURE);
 
     // Widget should now show search results
-    await expect(page.getByText('Lessons')).toBeVisible();
+    await expect(page.getByText('From lesson similarity')).toBeVisible();
   });
 });
 

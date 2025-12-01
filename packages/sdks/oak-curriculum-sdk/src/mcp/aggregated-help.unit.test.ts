@@ -14,6 +14,10 @@ describe('GET_HELP_TOOL_DEF', () => {
     expect(GET_HELP_TOOL_DEF.description).toContain('Do NOT use');
   });
 
+  it('has description mentioning "understand Oak"', () => {
+    expect(GET_HELP_TOOL_DEF.description).toMatch(/understand oak/i);
+  });
+
   it('has readOnlyHint annotation set to true', () => {
     expect(GET_HELP_TOOL_DEF.annotations.readOnlyHint).toBe(true);
   });

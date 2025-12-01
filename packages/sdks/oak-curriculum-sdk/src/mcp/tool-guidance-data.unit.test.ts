@@ -58,6 +58,17 @@ describe('toolGuidanceData structure', () => {
       expect(toolGuidanceData.toolCategories.progression.tools.length).toBeGreaterThan(0);
     });
 
+    it('has agentSupport category with get-help and get-ontology tools', () => {
+      expect(toolGuidanceData.toolCategories.agentSupport).toBeDefined();
+      expect(toolGuidanceData.toolCategories.agentSupport.tools).toBeInstanceOf(Array);
+      expect(toolGuidanceData.toolCategories.agentSupport.tools).toContain('get-help');
+      expect(toolGuidanceData.toolCategories.agentSupport.tools).toContain('get-ontology');
+    });
+
+    it('agentSupport category has isAgentSupport flag set to true', () => {
+      expect(toolGuidanceData.toolCategories.agentSupport.isAgentSupport).toBe(true);
+    });
+
     it('each category has whenToUse description', () => {
       const categories = typeSafeValues(toolGuidanceData.toolCategories);
       for (const category of categories) {
@@ -166,5 +177,10 @@ describe('toolGuidanceData content quality', () => {
       (tip) => tip.includes('fetch') || tip.includes('prefix'),
     );
     expect(hasFetchTip).toBe(true);
+  });
+
+  it('tips include "understand Oak" guidance', () => {
+    const hasUnderstandOakTip = toolGuidanceData.tips.some((tip) => /understand oak/i.test(tip));
+    expect(hasUnderstandOakTip).toBe(true);
   });
 });

@@ -16,6 +16,7 @@ import {
 } from '../universal-tool-shared.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type { SearchArgs } from './types.js';
+import { augmentArrayResponseWithCanonicalUrl } from '../../response-augmentation.js';
 
 /**
  * Builds search arguments for the lessons endpoint.
@@ -95,9 +96,15 @@ export async function runSearchTool(
     return formatError(toErrorMessage(transcriptsData.error));
   }
 
-  // Extract arrays and format response
-  const lessons = Array.isArray(lessonsData.data) ? lessonsData.data : [];
-  const transcripts = Array.isArray(transcriptsData.data) ? transcriptsData.data : [];
+  // Extract arrays and augment with canonical URLs
+  const lessonsRaw = Array.isArray(lessonsData.data) ? lessonsData.data : [];
+  const transcriptsRaw = Array.isArray(transcriptsData.data) ? transcriptsData.data : [];
+  const lessons = augmentArrayResponseWithCanonicalUrl(lessonsRaw, '/search/lessons', 'get');
+  const transcripts = augmentArrayResponseWithCanonicalUrl(
+    transcriptsRaw,
+    '/search/transcripts',
+    'get',
+  );
 
   return formatSearchSuccess(
     args,

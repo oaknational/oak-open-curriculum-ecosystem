@@ -30,7 +30,7 @@ export const GET_ONTOLOGY_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_ONTOLOGY_TOOL_DEF = {
-  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, and tool usage guidance.
+  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, and tool usage guidance. Use this to understand Oak - it's the foundation for effective curriculum exploration.
 
 ${ONTOLOGY_RECOMMENDED_FIRST_STEP}
 

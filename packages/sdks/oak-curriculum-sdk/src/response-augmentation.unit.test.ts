@@ -6,7 +6,10 @@
  */
 
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { augmentResponseWithCanonicalUrl } from './response-augmentation.js';
+import {
+  augmentResponseWithCanonicalUrl,
+  augmentArrayResponseWithCanonicalUrl,
+} from './response-augmentation.js';
 
 describe('augmentResponseWithCanonicalUrl', () => {
   afterEach(() => {
@@ -161,14 +164,193 @@ describe('augmentResponseWithCanonicalUrl', () => {
 
       expect(result).not.toHaveProperty('canonicalUrl');
     });
+  });
 
-    // Non-object responses cannot be passed to this function by type design
+  describe('search path recognition', () => {
+    it('should recognise /search/lessons as lesson content type', () => {
+      const response = [{ lessonSlug: 'test-lesson', lessonTitle: 'Test Lesson' }];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
 
-    it('should handle array responses', () => {
-      const response = ['item1', 'item2'];
-      const result = augmentResponseWithCanonicalUrl(response, '/lessons/add-two-numbers', 'get');
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/test-lesson',
+      );
+    });
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+    it('should recognise /search/transcripts as lesson content type', () => {
+      const response = [{ lessonSlug: 'transcript-lesson', lessonTitle: 'Transcript Lesson' }];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/transcripts', 'get');
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/transcript-lesson',
+      );
+    });
+
+    it('should recognise /key-stages/{ks}/subjects/{subj}/lessons as lesson content type', () => {
+      const response = [{ lessonSlug: 'ks-lesson', lessonTitle: 'KS Lesson' }];
+      const result = augmentArrayResponseWithCanonicalUrl(
+        response,
+        '/key-stages/ks3/subjects/maths/lessons',
+        'get',
+      );
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/ks-lesson',
+      );
+    });
+
+    it('should recognise /key-stages/{ks}/subjects/{subj}/units as unit content type', () => {
+      const response = [
+        { unitSlug: 'ks-unit', unitTitle: 'KS Unit', subjectSlug: 'maths', phaseSlug: 'primary' },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(
+        response,
+        '/key-stages/ks2/subjects/maths/units',
+        'get',
+      );
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/programmes/maths-primary/units/ks-unit',
+      );
+    });
+  });
+
+  describe('array response augmentation', () => {
+    it('should augment each item in an array response with canonicalUrl', () => {
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2' },
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(3);
+      expect(result[0]).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/lessons/lesson-1',
+      );
+      expect(result[1]).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/lessons/lesson-2',
+      );
+      expect(result[2]).toHaveProperty(
+        'canonicalUrl',
+        'https://www.thenational.academy/teachers/lessons/lesson-3',
+      );
+    });
+
+    it('should preserve all original fields when augmenting array items', () => {
+      const response = [
+        {
+          lessonSlug: 'test-lesson',
+          lessonTitle: 'Test Lesson',
+          similarity: 0.95,
+          units: [{ unitSlug: 'unit-1', keyStageSlug: 'ks3' }],
+        },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(result[0]).toHaveProperty('lessonSlug', 'test-lesson');
+      expect(result[0]).toHaveProperty('lessonTitle', 'Test Lesson');
+      expect(result[0]).toHaveProperty('similarity', 0.95);
+      expect(result[0]).toHaveProperty('units');
+      expect(result[0]).toHaveProperty('canonicalUrl');
+    });
+
+    it('should handle empty array responses', () => {
+      const response: object[] = [];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(0);
+    });
+
+    it('should skip items without extractable slug in arrays', () => {
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonTitle: 'No Slug Lesson' }, // Missing lessonSlug
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result).toHaveLength(3);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[1]).not.toHaveProperty('canonicalUrl');
+      expect(result[2]).toHaveProperty('canonicalUrl');
+    });
+  });
+
+  describe('entity-specific slug extraction', () => {
+    it('should extract lessonSlug from lesson responses', () => {
+      const response = { lessonSlug: 'my-lesson', lessonTitle: 'My Lesson' };
+      const result = augmentResponseWithCanonicalUrl(response, '/lessons/my-lesson/summary', 'get');
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/my-lesson',
+      );
+    });
+
+    it('should extract unitSlug from unit responses', () => {
+      const response = {
+        unitSlug: 'my-unit',
+        unitTitle: 'My Unit',
+        subjectSlug: 'english',
+        phaseSlug: 'secondary',
+      };
+      const result = augmentResponseWithCanonicalUrl(response, '/units/my-unit/summary', 'get');
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/programmes/english-secondary/units/my-unit',
+      );
+    });
+
+    it('should extract subjectSlug from subject responses', () => {
+      const response = {
+        subjectSlug: 'science',
+        subjectTitle: 'Science',
+        keyStageSlugs: ['ks3', 'ks4'],
+      };
+      const result = augmentResponseWithCanonicalUrl(response, '/subjects/science', 'get');
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/key-stages/ks3/subjects/science/programmes',
+      );
+    });
+
+    it('should extract sequenceSlug from sequence responses', () => {
+      const response = { sequenceSlug: 'maths-primary', title: 'Maths Primary' };
+      const result = augmentResponseWithCanonicalUrl(
+        response,
+        '/sequences/maths-primary/units',
+        'get',
+      );
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/programmes/maths-primary/units',
+      );
+    });
+
+    it('should prefer slug over entity-specific slug when both present', () => {
+      const response = { slug: 'generic-slug', lessonSlug: 'lesson-slug', lessonTitle: 'Lesson' };
+      const result = augmentResponseWithCanonicalUrl(response, '/lessons/generic-slug', 'get');
+
+      expect(result).toHaveProperty('canonicalUrl');
+      expect(result.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/generic-slug',
+      );
     });
   });
 });

@@ -35,6 +35,8 @@ export interface ToolCategory {
   readonly description: string;
   /** When to use tools in this category */
   readonly whenToUse: string;
+  /** Whether this category is for agent context/support tools (not user-facing search) */
+  readonly isAgentSupport?: boolean;
 }
 
 /**

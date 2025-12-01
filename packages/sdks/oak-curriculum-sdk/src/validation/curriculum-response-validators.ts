@@ -225,9 +225,11 @@ function finalizeOk200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   value: unknown,
 ): ValidationResult<JsonBody200<P, M>> {
   if (isResponseJsonBody200(path, method, value)) {
-    const value200 =
-      method === 'get' ? augmentResponseWithCanonicalUrl(value, path, method) : value;
-    return { ok: true, value: value200 };
+    // Augment with canonical URL for GET requests (single objects; arrays handled higher up)
+    if (method === 'get' && !Array.isArray(value)) {
+      return { ok: true, value: augmentResponseWithCanonicalUrl(value, path, method) };
+    }
+    return { ok: true, value };
   }
   const unexpectedShape: ValidationFailure = {
     ok: false,
