@@ -200,6 +200,8 @@ describe('formatOptimizedResult', () => {
 
       expect(result._meta).toEqual({
         fullResults: fullData,
+        context:
+          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
       });
     });
 
@@ -215,7 +217,62 @@ describe('formatOptimizedResult', () => {
         fullResults: { items: [] },
         query: 'photosynthesis',
         timestamp: 1700000000000,
+        context:
+          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
       });
+    });
+
+    it('includes toolName in _meta when provided', () => {
+      const result = formatOptimizedResult({
+        summary: 'Found lessons',
+        fullData: { lessons: [] },
+        toolName: 'get-search-lessons',
+      });
+
+      expect(result._meta).toHaveProperty('toolName', 'get-search-lessons');
+    });
+
+    it('includes annotationsTitle in _meta when provided', () => {
+      const result = formatOptimizedResult({
+        summary: 'Found lessons',
+        fullData: { lessons: [] },
+        annotationsTitle: 'Search Lessons',
+      });
+
+      expect(result._meta).toHaveProperty('annotations/title', 'Search Lessons');
+    });
+
+    it('includes all metadata fields together in _meta', () => {
+      const result = formatOptimizedResult({
+        summary: 'Found lessons',
+        fullData: { lessons: [] },
+        toolName: 'get-search-lessons',
+        annotationsTitle: 'Search Lessons',
+        query: 'cats',
+        timestamp: 1700000000000,
+      });
+
+      expect(result._meta).toEqual({
+        fullResults: { lessons: [] },
+        toolName: 'get-search-lessons',
+        'annotations/title': 'Search Lessons',
+        query: 'cats',
+        timestamp: 1700000000000,
+        context:
+          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
+      });
+    });
+
+    it('always includes context guidance string in _meta', () => {
+      const result = formatOptimizedResult({
+        summary: 'Basic result',
+        fullData: {},
+      });
+
+      expect(result._meta).toHaveProperty(
+        'context',
+        'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
+      );
     });
   });
 

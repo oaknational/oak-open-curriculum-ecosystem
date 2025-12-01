@@ -38,6 +38,7 @@ import {
   TRANSCRIPT_OUTPUT_FIXTURE,
   CHANGELOG_OUTPUT_FIXTURE,
   RATE_LIMIT_OUTPUT_FIXTURE,
+  SEARCH_LESSONS_ARRAY_FIXTURE,
 } from './renderer-fixtures.js';
 
 let serverUrl: string;
@@ -55,23 +56,45 @@ test.afterAll(() => {
 });
 
 /**
+ * Options for injecting mock window.openai data.
+ */
+interface InjectOptions {
+  readonly toolName?: string;
+  readonly annotationsTitle?: string;
+}
+
+/**
  * Injects mock window.openai data before page load.
  *
  * @param page - Playwright page instance
  * @param fixture - Tool output data to inject
- * @param toolName - Optional tool name for routing
+ * @param toolNameOrOptions - Tool name string or options object
  */
-async function injectToolOutput(page: Page, fixture: object, toolName?: string): Promise<void> {
+async function injectToolOutput(
+  page: Page,
+  fixture: object,
+  toolNameOrOptions?: string | InjectOptions,
+): Promise<void> {
+  const options: InjectOptions =
+    typeof toolNameOrOptions === 'string'
+      ? { toolName: toolNameOrOptions }
+      : (toolNameOrOptions ?? {});
+
   await page.addInitScript(
-    (args: { data: object; toolName?: string }) => {
+    (args: { data: object; toolName?: string; annotationsTitle?: string }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- JC: Browser context injection requires any for window augmentation
       (globalThis as any).openai = {
         toolOutput: args.data,
         toolInput: args.toolName ? { toolName: args.toolName } : undefined,
-        toolResponseMetadata: args.toolName ? { toolName: args.toolName } : undefined,
+        toolResponseMetadata: args.toolName
+          ? {
+              toolName: args.toolName,
+              ...(args.annotationsTitle ? { 'annotations/title': args.annotationsTitle } : {}),
+            }
+          : undefined,
       };
     },
-    { data: fixture, toolName },
+    { data: fixture, toolName: options.toolName, annotationsTitle: options.annotationsTitle },
   );
 }
 
@@ -235,5 +258,41 @@ test.describe('Tool name routing', () => {
     await expect(page.getByRole('heading', { name: 'Rate Limit Status' })).toBeVisible();
     await expect(page.getByText(/Remaining/)).toBeVisible();
     await expect(page.getByText(/85/)).toBeVisible();
+  });
+
+  test('routes get-search-lessons array response to search renderer', async ({ page }) => {
+    // get-search-lessons returns a flat array, NOT { lessons: [...] }
+    // The search renderer must handle this structure
+    await injectToolOutput(page, SEARCH_LESSONS_ARRAY_FIXTURE, 'get-search-lessons');
+    await page.goto(`${serverUrl}/widget`);
+
+    // Should render lesson titles from the array
+    await expect(page.getByText('Introduction to Photosynthesis')).toBeVisible();
+    await expect(page.getByText('Plant Cell Structure')).toBeVisible();
+  });
+
+  test('displays canonical URL link when canonicalUrl is present', async ({ page }) => {
+    await injectToolOutput(page, LESSON_SUMMARY_OUTPUT_FIXTURE, 'get-lessons-summary');
+    await page.goto(`${serverUrl}/widget`);
+
+    // Should render a link to the original Oak resource
+    const oakLink = page.getByRole('link', { name: /View original Oak resource/ });
+    await expect(oakLink).toBeVisible();
+    await expect(oakLink).toHaveAttribute(
+      'href',
+      'https://www.thenational.academy/teachers/lessons/joining-using-and',
+    );
+  });
+
+  test('displays tool title from annotations/title in header', async ({ page }) => {
+    await injectToolOutput(page, LESSON_SUMMARY_OUTPUT_FIXTURE, {
+      toolName: 'get-lessons-summary',
+      annotationsTitle: 'Lesson Summary',
+    });
+    await page.goto(`${serverUrl}/widget`);
+
+    // The tool name element should display the human-readable title
+    // Note: The header has id="tool-name" and should show "Lesson Summary"
+    await expect(page.locator('#tool-name')).toHaveText('Lesson Summary');
   });
 });

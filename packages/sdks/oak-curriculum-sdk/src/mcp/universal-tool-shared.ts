@@ -111,6 +111,10 @@ export interface OptimizedResultOptions {
   readonly timestamp?: number;
   /** Optional status indicator */
   readonly status?: string;
+  /** Tool name for widget routing (e.g., 'get-search-lessons') */
+  readonly toolName?: string;
+  /** Human-readable tool title from annotations (e.g., 'Search Lessons') */
+  readonly annotationsTitle?: string;
 }
 
 /**
@@ -145,47 +149,58 @@ export interface OptimizedResultOptions {
  *
  * @see https://developers.openai.com/apps-sdk/reference#tool-results
  */
-export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {
-  const { summary, fullData, previewItems, query, timestamp, status } = options;
+/**
+ * Context guidance included in all tool responses to help the model
+ * understand the Oak curriculum system.
+ */
+const CONTEXT_GUIDANCE =
+  'If you have not already, use the get-help and get-ontology tools to understand the Oak context';
 
-  // Serialise fullData for _meta (handles bigint and other special types)
-  const serialisedFullData = serialiseArg(fullData);
-
-  // Build _meta with full data for widget access via window.openai.toolResponseMetadata
-  const meta: UnknownRecord = {
-    fullResults: serialisedFullData,
-  };
+/**
+ * Builds the _meta object for widget access via window.openai.toolResponseMetadata.
+ */
+function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown): UnknownRecord {
+  const { toolName, annotationsTitle, query, timestamp } = options;
+  const meta: UnknownRecord = { fullResults: serialisedFullData, context: CONTEXT_GUIDANCE };
+  if (toolName !== undefined) {
+    meta.toolName = toolName;
+  }
+  if (annotationsTitle !== undefined) {
+    meta['annotations/title'] = annotationsTitle;
+  }
   if (query !== undefined) {
     meta.query = query;
   }
   if (timestamp !== undefined) {
     meta.timestamp = timestamp;
   }
+  return meta;
+}
 
-  // Build minimal structuredContent for model reasoning
-  const structuredContent: UnknownRecord = {
-    summary,
-  };
-
+/**
+ * Builds minimal structuredContent for model reasoning.
+ */
+function buildStructuredContent(options: OptimizedResultOptions): UnknownRecord {
+  const { summary, previewItems, status } = options;
+  const structuredContent: UnknownRecord = { summary };
   if (previewItems !== undefined) {
     const serialisedPreview = serialiseArg(previewItems);
     const previewArray = Array.isArray(serialisedPreview) ? serialisedPreview : [];
     structuredContent.previewItems = previewArray.slice(0, MAX_PREVIEW_ITEMS);
     structuredContent.hasMore = previewArray.length > MAX_PREVIEW_ITEMS;
   }
-
   if (status !== undefined) {
     structuredContent.status = status;
   }
+  return structuredContent;
+}
 
-  // Human-readable content for conversation display
-  const content: TextContent = { type: 'text', text: summary };
-
-  return {
-    content: [content],
-    structuredContent,
-    _meta: meta,
-  };
+export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {
+  const serialisedFullData = serialiseArg(options.fullData);
+  const meta = buildMeta(options, serialisedFullData);
+  const structuredContent = buildStructuredContent(options);
+  const content: TextContent = { type: 'text', text: options.summary };
+  return { content: [content], structuredContent, _meta: meta };
 }
 
 export function formatUnknownTool(value: unknown): CallToolResult {

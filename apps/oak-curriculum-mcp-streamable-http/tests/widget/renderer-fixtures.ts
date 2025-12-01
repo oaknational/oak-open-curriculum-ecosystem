@@ -39,12 +39,14 @@ export const QUIZ_OUTPUT_FIXTURE = {
 
 /**
  * Lesson summary output fixture - get-lessons-summary tool.
+ * Includes canonicalUrl for testing canonical link rendering.
  */
 export const LESSON_SUMMARY_OUTPUT_FIXTURE = {
   lessonTitle: "Joining using 'and'",
   unitTitle: 'Simple sentences',
   subjectTitle: 'English',
   keyStageTitle: 'Key Stage 1',
+  canonicalUrl: 'https://www.thenational.academy/teachers/lessons/joining-using-and',
   lessonKeywords: [
     { keyword: 'joining word', description: 'a word that joins words or ideas' },
     { keyword: 'build on', description: 'add to' },
@@ -105,3 +107,24 @@ export const RATE_LIMIT_OUTPUT_FIXTURE = {
   limit: 100,
   reset: 1735689600,
 } as const;
+
+/**
+ * Search lessons output fixture - get-search-lessons tool.
+ * Note: This tool returns a flat ARRAY, not { lessons: [...] }.
+ * This is the real API response structure that the widget must handle.
+ */
+export const SEARCH_LESSONS_ARRAY_FIXTURE = [
+  {
+    lessonSlug: 'photosynthesis-intro',
+    lessonTitle: 'Introduction to Photosynthesis',
+    similarity: 0.92,
+    units: [{ unitSlug: 'plants', unitTitle: 'Plants and Growth' }],
+    canonicalUrl: 'https://www.thenational.academy/teachers/lessons/photosynthesis-intro',
+  },
+  {
+    lessonSlug: 'plant-cells',
+    lessonTitle: 'Plant Cell Structure',
+    similarity: 0.85,
+    units: [{ unitSlug: 'cells', unitTitle: 'Cells and Life' }],
+  },
+] as const;

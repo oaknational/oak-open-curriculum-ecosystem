@@ -10,13 +10,16 @@
  * JavaScript function to render search results in the widget.
  *
  * Handles the following data shapes:
- * - { lessons: [...], transcripts: [...] }
- * - { lessons: { results: [...] }, transcripts: { results: [...] } }
+ * - { lessons: [...], transcripts: [...] } (aggregated search tool)
+ * - { lessons: { results: [...] }, transcripts: { results: [...] } } (nested results)
+ * - [...] (flat array from get-search-lessons or get-search-transcripts)
  */
 export const SEARCH_RENDERER = `
 function renderSearch(d) {
   let h = '';
-  const ls = d.lessons?.results ?? d.lessons ?? [];
+  // Handle flat array root (from get-search-lessons or get-search-transcripts)
+  // Or nested { lessons: [...] } or { lessons: { results: [...] } }
+  const ls = Array.isArray(d) ? d : (d.lessons?.results ?? d.lessons ?? []);
   if (Array.isArray(ls) && ls.length > 0) {
     h += '<div class="sec"><h2 class="sec-ttl">Lessons<span class="badge">' + ls.length + '</span></h2><div class="list">';
     ls.slice(0,5).forEach(l => {
@@ -29,7 +32,8 @@ function renderSearch(d) {
     if (ls.length > 5) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ls.length-5) + ' more</p>';
     h += '</div></div>';
   }
-  const ts = d.transcripts?.results ?? d.transcripts ?? [];
+  // Transcripts only from nested structure (not from flat array)
+  const ts = Array.isArray(d) ? [] : (d.transcripts?.results ?? d.transcripts ?? []);
   if (Array.isArray(ts) && ts.length > 0) {
     h += '<div class="sec"><h2 class="sec-ttl">Transcripts<span class="badge">' + ts.length + '</span></h2><div class="list">';
     ts.slice(0,3).forEach(t => {

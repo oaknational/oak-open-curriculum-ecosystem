@@ -58,6 +58,8 @@ function formatSearchSuccess(
     query: args.q,
     timestamp: Date.now(),
     status: 'success',
+    toolName: 'search',
+    annotationsTitle: 'Search Curriculum',
   });
 }
 

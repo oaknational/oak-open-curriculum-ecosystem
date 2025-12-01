@@ -146,6 +146,8 @@ export async function runFetchTool(
     },
     status: 'success',
     timestamp: Date.now(),
+    toolName: 'fetch',
+    annotationsTitle: 'Fetch Curriculum Resource',
   });
 }
 

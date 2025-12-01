@@ -78,5 +78,7 @@ export function runOntologyTool(): CallToolResult {
     fullData: ontologyData,
     status: 'success',
     timestamp: Date.now(),
+    toolName: 'get-ontology',
+    annotationsTitle: 'Get Curriculum Ontology',
   });
 }

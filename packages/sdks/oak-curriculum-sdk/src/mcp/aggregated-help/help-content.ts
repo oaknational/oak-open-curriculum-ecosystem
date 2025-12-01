@@ -128,6 +128,8 @@ export function getToolSpecificHelp(toolName: string): CallToolResult {
     fullData,
     status: 'success',
     timestamp: Date.now(),
+    toolName: 'get-help',
+    annotationsTitle: 'Get Help',
   });
 }
 
@@ -143,5 +145,7 @@ export function getGeneralHelp(): CallToolResult {
     fullData: toolGuidanceData,
     status: 'success',
     timestamp: Date.now(),
+    toolName: 'get-help',
+    annotationsTitle: 'Get Help',
   });
 }
