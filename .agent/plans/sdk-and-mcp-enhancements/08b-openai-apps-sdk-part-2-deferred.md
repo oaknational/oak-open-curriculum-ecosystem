@@ -21,7 +21,7 @@ This is Part 2 of the OpenAI Apps SDK feature adoption, containing work deferred
 These items are deferred because:
 
 - **Phase 0.4/0.5**: Documentation/validation work, not blocking functionality
-- **Phase 4.1**: No concrete use case for private tools yet
+- **Phase 4.1**: No concrete use case for private tools yet (although direct sematic search might be a good one)
 - **Phase 5.1**: Follow-up messages are nice-to-have UX
 - **Phase 6**: Required before public release, but not blocking development
 

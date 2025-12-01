@@ -60,6 +60,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md)
 - [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-055: Zod Version Boundaries](055-zod-version-boundaries.md)
+- [ADR-056: Conditional Clerk Middleware for Discovery](056-conditional-clerk-middleware-for-discovery.md)
 
 ## Key Architectural Decisions
 

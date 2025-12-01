@@ -1,0 +1,187 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { Logger } from '@oaknational/mcp-logger';
+import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
+
+/**
+ * Integration tests for conditional Clerk middleware.
+ *
+ * Tests that the middleware correctly delegates to or skips clerkMiddleware
+ * based on request properties. Uses simple mocks injected as arguments.
+ *
+ * Per ADR-056: Discovery methods skip Clerk auth context setup to reduce latency.
+ */
+describe('createConditionalClerkMiddleware (Integration)', () => {
+  let mockClerkMw: RequestHandler;
+  let mockLogger: Logger;
+  let mockNext: NextFunction;
+  let mockRes: Response;
+
+  beforeEach(() => {
+    // Mock clerkMiddleware that simulates auth context setup by calling next()
+    mockClerkMw = vi.fn().mockImplementation((req: Request, res: Response, next: NextFunction) => {
+      // Use parameters to avoid unused variable errors - these would be used by real clerkMiddleware
+      void req;
+      void res;
+      next();
+    });
+
+    mockLogger = {
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    } as unknown as Logger;
+
+    mockNext = vi.fn();
+    mockRes = {} as Response;
+  });
+
+  describe('when clerkMiddleware is applied', () => {
+    it('calls clerkMiddleware for non-MCP paths', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/api/other', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
+      expect(mockLogger.debug).not.toHaveBeenCalled();
+    });
+
+    it('calls clerkMiddleware for tools/call on /mcp', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
+    });
+
+    it('calls clerkMiddleware for resources/read on /mcp', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'resources/read',
+        params: { uri: 'curriculum://ontology' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
+    });
+
+    it('calls clerkMiddleware for /mcp with no body', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalledWith(req, mockRes, mockNext);
+    });
+  });
+
+  describe('when clerkMiddleware is skipped', () => {
+    it('skips clerkMiddleware for initialize on /mcp', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', { method: 'initialize' });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockLogger.debug).toHaveBeenCalledWith(
+        'clerkMiddleware skipped for discovery/public method',
+        expect.objectContaining({ mcpMethod: 'initialize' }),
+      );
+    });
+
+    it('skips clerkMiddleware for tools/list on /mcp', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', { method: 'tools/list' });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    it('skips clerkMiddleware for /.well-known/oauth-protected-resource', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/.well-known/oauth-protected-resource', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockLogger.debug).toHaveBeenCalledWith(
+        'clerkMiddleware skipped for discovery/public method',
+        expect.objectContaining({ path: '/.well-known/oauth-protected-resource' }),
+      );
+    });
+
+    it('skips clerkMiddleware for /health', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/health', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    it('skips clerkMiddleware for /ready', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/ready', undefined);
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+  });
+
+  describe('middleware chain behavior', () => {
+    it('passes through when clerkMiddleware calls next()', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      // clerkMiddleware was called and called next()
+      expect(mockClerkMw).toHaveBeenCalled();
+      // The mockClerkMw calls next(), so next is called
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    it('does not call next() when clerkMiddleware does not call next()', () => {
+      // Simulate clerkMiddleware that responds without calling next (e.g. auth failure)
+      const blockingClerkMw: RequestHandler = vi.fn();
+      const conditionalMw = createConditionalClerkMiddleware(blockingClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'tools/call',
+        params: { name: 'get-key-stages' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(blockingClerkMw).toHaveBeenCalled();
+      expect(mockNext).not.toHaveBeenCalled();
+    });
+  });
+});
+
+/**
+ * Creates a mock Express Request for testing.
+ */
+function createMockRequest(path: string, body: unknown): Request {
+  return {
+    path,
+    body,
+    method: 'POST',
+  } as Request;
+}
