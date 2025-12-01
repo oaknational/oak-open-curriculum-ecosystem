@@ -25,6 +25,7 @@ export const RENDERER_IDS = [
   'help',
   'search',
   'fetch',
+  'ontology',
 ] as const;
 
 /**
@@ -99,6 +100,9 @@ export const TOOL_RENDERER_MAP: Readonly<Record<string, RendererId>> = {
 
   // Fetch tool → fetchResultRenderer (existing)
   fetch: 'fetch',
+
+  // Ontology tool → ontologyRenderer
+  'get-ontology': 'ontology',
 } as const;
 
 /**

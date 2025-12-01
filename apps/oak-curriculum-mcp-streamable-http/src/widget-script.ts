@@ -53,6 +53,7 @@ const RENDERERS = {
   assets: renderAssets,
   changelog: renderChangelog,
   rateLimit: renderRateLimit,
+  ontology: renderOntology,
 };
 
 // ========================================

@@ -19,6 +19,7 @@ import { TRANSCRIPT_RENDERER } from './transcript-renderer.js';
 import { ASSETS_RENDERER } from './assets-renderer.js';
 import { CHANGELOG_RENDERER } from './changelog-renderer.js';
 import { RATE_LIMIT_RENDERER } from './rate-limit-renderer.js';
+import { ONTOLOGY_RENDERER } from './ontology-renderer.js';
 
 /**
  * Combined JavaScript functions for all widget renderers.
@@ -38,6 +39,7 @@ import { RATE_LIMIT_RENDERER } from './rate-limit-renderer.js';
  * - 'assets' → renderAssets()
  * - 'changelog' → renderChangelog()
  * - 'rateLimit' → renderRateLimit()
+ * - 'ontology' → renderOntology()
  */
 export const WIDGET_RENDERER_FUNCTIONS = [
   WIDGET_HELPERS,
@@ -51,6 +53,7 @@ export const WIDGET_RENDERER_FUNCTIONS = [
   ASSETS_RENDERER,
   CHANGELOG_RENDERER,
   RATE_LIMIT_RENDERER,
+  ONTOLOGY_RENDERER,
 ].join('\n\n');
 
 /**
@@ -70,6 +73,7 @@ export const RENDERER_FUNCTION_NAMES: Readonly<Record<string, string>> = {
   assets: 'renderAssets',
   changelog: 'renderChangelog',
   rateLimit: 'renderRateLimit',
+  ontology: 'renderOntology',
 } as const;
 
 // Re-export individual renderers for testing
@@ -84,3 +88,4 @@ export { TRANSCRIPT_RENDERER } from './transcript-renderer.js';
 export { ASSETS_RENDERER } from './assets-renderer.js';
 export { CHANGELOG_RENDERER } from './changelog-renderer.js';
 export { RATE_LIMIT_RENDERER } from './rate-limit-renderer.js';
+export { ONTOLOGY_RENDERER } from './ontology-renderer.js';

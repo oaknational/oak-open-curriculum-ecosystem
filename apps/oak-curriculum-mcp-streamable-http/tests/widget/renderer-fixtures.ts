@@ -128,3 +128,53 @@ export const SEARCH_LESSONS_ARRAY_FIXTURE = [
     units: [{ unitSlug: 'cells', unitTitle: 'Cells and Life' }],
   },
 ] as const;
+
+/**
+ * Ontology output fixture - get-ontology tool.
+ * Contains curated curriculum structure for widget rendering.
+ */
+export const ONTOLOGY_OUTPUT_FIXTURE = {
+  version: '0.1.0-poc',
+  curriculumStructure: {
+    keyStages: [
+      { slug: 'ks1', name: 'Key Stage 1', ageRange: '5-7', years: [1, 2], phase: 'primary' },
+      { slug: 'ks2', name: 'Key Stage 2', ageRange: '7-11', years: [3, 4, 5, 6], phase: 'primary' },
+      { slug: 'ks3', name: 'Key Stage 3', ageRange: '11-14', years: [7, 8, 9], phase: 'secondary' },
+      { slug: 'ks4', name: 'Key Stage 4', ageRange: '14-16', years: [10, 11], phase: 'secondary' },
+    ],
+  },
+  entityHierarchy: {
+    description: 'Curriculum content is organised in a hierarchy',
+    levels: [
+      { entity: 'Subject', example: 'maths', contains: 'Sequences / Programmes' },
+      { entity: 'Unit', example: 'fractions-year-4', contains: 'Lessons (typically 4-8 per unit)' },
+      {
+        entity: 'Lesson',
+        example: 'adding-fractions',
+        contains: 'Slides, video, transcript, quizzes',
+      },
+    ],
+  },
+  threads: {
+    definition: 'Conceptual progression strands that connect units across years.',
+    importance:
+      "Threads show how ideas BUILD over time - they are the pedagogical backbone of Oak's curriculum",
+    examples: [
+      {
+        slug: 'number',
+        subject: 'maths',
+        spans: 'Reception → Year 11',
+        progression: 'Counting → Algebra → Surds',
+      },
+    ],
+  },
+  toolUsageGuidance: {
+    discoveryWorkflow: {
+      description: 'When a user wants to find curriculum content',
+      steps: [
+        { step: 1, action: 'Use search tool' },
+        { step: 2, action: 'Use fetch tool' },
+      ],
+    },
+  },
+} as const;

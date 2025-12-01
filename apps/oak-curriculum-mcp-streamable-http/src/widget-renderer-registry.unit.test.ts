@@ -190,5 +190,12 @@ describe('RENDERER_IDS', () => {
     expect(RENDERER_IDS).toContain('help');
     expect(RENDERER_IDS).toContain('search');
     expect(RENDERER_IDS).toContain('fetch');
+    expect(RENDERER_IDS).toContain('ontology');
+  });
+});
+
+describe('ontology tool routing', () => {
+  it('routes get-ontology to ontology renderer', () => {
+    expect(getRendererIdForTool('get-ontology')).toBe('ontology');
   });
 });

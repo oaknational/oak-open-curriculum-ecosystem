@@ -39,6 +39,7 @@ import {
   CHANGELOG_OUTPUT_FIXTURE,
   RATE_LIMIT_OUTPUT_FIXTURE,
   SEARCH_LESSONS_ARRAY_FIXTURE,
+  ONTOLOGY_OUTPUT_FIXTURE,
 } from './renderer-fixtures.js';
 
 let serverUrl: string;
@@ -294,5 +295,46 @@ test.describe('Tool name routing', () => {
     // The tool name element should display the human-readable title
     // Note: The header has id="tool-name" and should show "Lesson Summary"
     await expect(page.locator('#tool-name')).toHaveText('Lesson Summary');
+  });
+
+  test('routes get-ontology to ontology renderer with curated sections', async ({ page }) => {
+    await injectToolOutput(page, ONTOLOGY_OUTPUT_FIXTURE, 'get-ontology');
+    await page.goto(`${serverUrl}/widget`);
+
+    // Should render external links
+    await expect(page.getByRole('link', { name: /Browse Curriculum/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /View Data Model/ })).toBeVisible();
+
+    // Should render Key Stages section heading
+    await expect(page.getByRole('heading', { name: /Key Stages/ })).toBeVisible();
+    await expect(page.getByText('Key Stage 1 (ks1)')).toBeVisible();
+
+    // Should render Content Hierarchy section heading
+    await expect(page.getByRole('heading', { name: /Content Hierarchy/ })).toBeVisible();
+
+    // Should render Threads section heading
+    await expect(page.getByRole('heading', { name: /Threads/ })).toBeVisible();
+  });
+
+  test('ontology renderer links to Oak curriculum page', async ({ page }) => {
+    await injectToolOutput(page, ONTOLOGY_OUTPUT_FIXTURE, 'get-ontology');
+    await page.goto(`${serverUrl}/widget`);
+
+    const curriculumLink = page.getByRole('link', { name: /Browse Curriculum/ });
+    await expect(curriculumLink).toHaveAttribute(
+      'href',
+      'https://www.thenational.academy/teachers/curriculum',
+    );
+  });
+
+  test('ontology renderer links to data model documentation', async ({ page }) => {
+    await injectToolOutput(page, ONTOLOGY_OUTPUT_FIXTURE, 'get-ontology');
+    await page.goto(`${serverUrl}/widget`);
+
+    const dataModelLink = page.getByRole('link', { name: /View Data Model/ });
+    await expect(dataModelLink).toHaveAttribute(
+      'href',
+      'https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams',
+    );
   });
 });
