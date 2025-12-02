@@ -39,9 +39,11 @@ export const AGGREGATED_TOOL_WIDGET_MIME_TYPE = 'text/html+skybridge';
  * - Oak brand colors with light/dark mode support (WCAG AA compliant)
  * - Reads tool output from `window.openai.toolOutput`
  * - Widget state persistence via `window.openai.setWidgetState()`
- * - Tool calling via `window.openai.callTool()` for refresh functionality
  * - Responsive JSON formatting with word wrap
  * - AI disclaimer footer
+ *
+ * NOTE: Refresh button via window.openai.callTool() is disabled but code preserved.
+ * See widget-script-state.ts for implementation details and how to re-enable.
  */
 export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -61,15 +63,14 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
         <p class="sub-ttl" id="tool-name"></p>
       </div>
     </div>
-    <div id="actions" class="actions" style="display:none"></div>
-    <div id="error" class="error" style="display:none"></div>
+    <!-- Actions/Error divs removed - see widget-script-state.ts for refresh button code -->
     <div id="c"></div>
     <div class="ftr">
       <p class="ftr-disclaimer">AI can make mistakes. Check all generated resources before use.</p>
       <p class="ftr-links">
-        <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">Explore more Oak curriculum resources</a>
+        <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link nowrap">Explore more Oak curriculum resources</a>
         <span class="ftr-sep">•</span>
-        <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">For an educator specific experience try Aila - <strong>Oak's AI Lesson Assistant</strong></a>
+        <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link"><span class="nowrap">For an educator specific experience try Aila</span> - <span class="nowrap">Oak's AI Lesson Assistant</span></a>
       </p>
     </div>
   </main>
