@@ -3,6 +3,7 @@ import { typeSafeEntries, typeSafeFromEntries } from '../types/helpers/type-help
 import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
+import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-types -- JC: Sometimes we really do need to deal with unknown records at incoming system boundaries
 type UnknownRecord = Record<string, unknown>;
@@ -83,21 +84,33 @@ export function formatData(data: unknown): CallToolResult {
 }
 
 /**
+ * Formats data for generated tools, optionally including context hint.
+ *
+ * @param options - Options including status, data, and includeContextHint flag
+ * @returns CallToolResult with optional context hint in structuredContent
+ */
+export function formatDataWithContext(options: {
+  readonly status: number | string;
+  readonly data: unknown;
+  readonly includeContextHint: boolean;
+}): CallToolResult {
+  const { status, data, includeContextHint } = options;
+  const normalised = serialiseArg({ status, data });
+  const content: TextContent = { type: 'text', text: JSON.stringify(normalised) };
+  const baseContent = isStructuredContent(normalised) ? normalised : { data: normalised };
+  const structuredContent: StructuredContent = includeContextHint
+    ? { ...baseContent, oakContextHint: OAK_CONTEXT_HINT }
+    : baseContent;
+  return { content: [content], structuredContent };
+}
+
+/**
  * Maximum number of preview items to include in structuredContent.
  * Keeps model context minimal while allowing the widget to show a preview.
  */
 const MAX_PREVIEW_ITEMS = 5;
 
-/**
- * Input options for formatting an optimized tool result.
- *
- * @remarks
- * This interface defines the input structure for `formatOptimizedResult`,
- * which creates MCP tool results optimized for the OpenAI Apps SDK.
- *
- * The key optimization is that `fullData` goes only to the widget via `_meta`,
- * while `structuredContent` remains minimal for model reasoning.
- */
+/** Input options for formatOptimizedResult. Full data goes to _meta, minimal to structuredContent. */
 export interface OptimizedResultOptions {
   /** Human-readable summary for both model and widget */
   readonly summary: string;
@@ -119,49 +132,14 @@ export interface OptimizedResultOptions {
 
 /**
  * Formats data into an optimized MCP CallToolResult for OpenAI Apps SDK.
- *
- * This function implements token optimization by:
- * - Putting full data in `_meta` (widget-only, hidden from model)
- * - Keeping `structuredContent` minimal (summary + limited preview items)
- * - Providing human-readable `content` for conversation display
- *
- * @remarks
- * Use this instead of `formatData` when you want to reduce token usage
- * for large results. The widget can access full data via
- * `window.openai.toolResponseMetadata.fullResults`.
- *
- * @param options - The options for formatting the result
- * @returns A CallToolResult with optimized token usage
- *
- * @example
- * ```typescript
- * const result = formatOptimizedResult({
- *   summary: 'Found 10 lessons on photosynthesis',
- *   fullData: { lessons: allLessons },
- *   previewItems: allLessons,
- *   query: 'photosynthesis',
- * });
- * // Result:
- * // - structuredContent: { summary, previewItems (max 5), hasMore, status }
- * // - content: [{ type: 'text', text: summary }]
- * // - _meta: { fullResults, query, timestamp }
- * ```
- *
+ * Full data in _meta (widget-only), minimal structuredContent for model.
  * @see https://developers.openai.com/apps-sdk/reference#tool-results
  */
-/**
- * Context guidance included in all tool responses to help the model
- * understand the Oak curriculum system.
- */
-const CONTEXT_GUIDANCE =
-  'If you have not already, use the get-help and get-ontology tools to understand the Oak context';
 
-/**
- * Builds the _meta object for widget access via window.openai.toolResponseMetadata.
- */
+/** Builds _meta object for widget. Note: model never sees _meta. */
 function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown): UnknownRecord {
   const { toolName, annotationsTitle, query, timestamp } = options;
-  const meta: UnknownRecord = { fullResults: serialisedFullData, context: CONTEXT_GUIDANCE };
+  const meta: UnknownRecord = { fullResults: serialisedFullData };
   if (toolName !== undefined) {
     meta.toolName = toolName;
   }
@@ -179,10 +157,18 @@ function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown)
 
 /**
  * Builds minimal structuredContent for model reasoning.
+ *
+ * @remarks
+ * Includes oakContextHint to guide the model to call get-ontology
+ * and get-help for domain understanding. All aggregated tools using
+ * formatOptimizedResult automatically include this hint.
  */
 function buildStructuredContent(options: OptimizedResultOptions): UnknownRecord {
   const { summary, previewItems, status } = options;
-  const structuredContent: UnknownRecord = { summary };
+  const structuredContent: UnknownRecord = {
+    summary,
+    oakContextHint: OAK_CONTEXT_HINT,
+  };
   if (previewItems !== undefined) {
     const serialisedPreview = serialiseArg(previewItems);
     const previewArray = Array.isArray(serialisedPreview) ? serialisedPreview : [];

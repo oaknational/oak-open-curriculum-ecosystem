@@ -120,4 +120,32 @@ describe('emitIndex (invoke wrapper emission)', () => {
     expect(code).not.toContain('PREREQUISITE');
     expect(code).toContain('Rate limit status');
   });
+
+  it('emits requiresDomainContext: true for protected tools', () => {
+    const toolName = 'get-lessons'; // Not in PUBLIC_TOOLS - requires auth
+    const path = '/lessons';
+    const method = 'GET';
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+
+    const code = emitIndex(toolName, path, method, 'getLessons', operation);
+
+    // Protected tools need domain context (get-ontology, get-help)
+    expect(code).toContain('requiresDomainContext: true');
+  });
+
+  it('emits requiresDomainContext: false for noauth tools', () => {
+    const toolName = 'get-changelog'; // In PUBLIC_TOOLS - noauth
+    const path = '/changelog';
+    const method = 'GET';
+    const operation: OperationObject = {
+      responses: { '200': { description: 'ok' } },
+    };
+
+    const code = emitIndex(toolName, path, method, 'getChangelog', operation);
+
+    // Utility tools (noauth) don't need domain context
+    expect(code).toContain('requiresDomainContext: false');
+  });
 });

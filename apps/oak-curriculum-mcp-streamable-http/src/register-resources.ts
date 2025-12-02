@@ -41,12 +41,17 @@ const WIDGET_CSP = {
 
 /**
  * Human-readable description for the widget, shown to the model.
- * Reduces redundant assistant narration when the widget loads.
+ * Includes context grounding guidance to call get-ontology first.
  *
- * @remarks Must be ≤200 characters per OpenAI guidance.
+ * @remarks
+ * - Must be ≤200 characters per OpenAI guidance
+ * - Model sees this when widget loads, reducing redundant narration
+ * - Guides model to call get-ontology for domain understanding
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 const WIDGET_DESCRIPTION =
-  'Oak National Academy curriculum explorer showing lessons, units, quizzes, and teaching resources.';
+  'Oak curriculum explorer. For best results, call get-ontology first to understand the curriculum domain model.';
 
 /**
  * Registers the Oak JSON viewer widget as an MCP resource.

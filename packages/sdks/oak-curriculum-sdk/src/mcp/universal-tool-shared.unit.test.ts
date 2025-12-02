@@ -8,6 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   formatData,
+  formatDataWithContext,
   formatError,
   formatOptimizedResult,
   formatUnknownTool,
@@ -73,6 +74,56 @@ describe('formatData', () => {
 
   it('does not set isError flag', () => {
     const result = formatData({ ok: true });
+
+    expect(result.isError).toBeUndefined();
+  });
+});
+
+describe('formatDataWithContext', () => {
+  it('includes oakContextHint in structuredContent when includeContextHint is true', () => {
+    const result = formatDataWithContext({
+      status: 200,
+      data: { items: [] },
+      includeContextHint: true,
+    });
+
+    expect(result.structuredContent).toBeDefined();
+    const hint = (result.structuredContent as { oakContextHint?: string }).oakContextHint;
+    expect(hint).toContain('get-ontology');
+    expect(hint).toContain('get-help');
+  });
+
+  it('does NOT include oakContextHint when includeContextHint is false', () => {
+    const result = formatDataWithContext({
+      status: 200,
+      data: { items: [] },
+      includeContextHint: false,
+    });
+
+    expect(result.structuredContent).toBeDefined();
+    expect(result.structuredContent).not.toHaveProperty('oakContextHint');
+  });
+
+  it('returns content with JSON data like formatData', () => {
+    const result = formatDataWithContext({
+      status: 200,
+      data: { name: 'test' },
+      includeContextHint: true,
+    });
+
+    expect(result.content).toHaveLength(1);
+    expect(result.content[0]).toEqual({
+      type: 'text',
+      text: JSON.stringify({ status: 200, data: { name: 'test' } }),
+    });
+  });
+
+  it('does not set isError flag', () => {
+    const result = formatDataWithContext({
+      status: 200,
+      data: {},
+      includeContextHint: true,
+    });
 
     expect(result.isError).toBeUndefined();
   });
@@ -200,8 +251,6 @@ describe('formatOptimizedResult', () => {
 
       expect(result._meta).toEqual({
         fullResults: fullData,
-        context:
-          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
       });
     });
 
@@ -217,8 +266,6 @@ describe('formatOptimizedResult', () => {
         fullResults: { items: [] },
         query: 'photosynthesis',
         timestamp: 1700000000000,
-        context:
-          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
       });
     });
 
@@ -258,21 +305,19 @@ describe('formatOptimizedResult', () => {
         'annotations/title': 'Search Lessons',
         query: 'cats',
         timestamp: 1700000000000,
-        context:
-          'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
       });
     });
 
-    it('always includes context guidance string in _meta', () => {
+    it('does NOT include context field in _meta (model never sees _meta)', () => {
       const result = formatOptimizedResult({
         summary: 'Basic result',
         fullData: {},
       });
 
-      expect(result._meta).toHaveProperty(
-        'context',
-        'If you have not already, use the get-help and get-ontology tools to understand the Oak context',
-      );
+      // Context guidance was previously in _meta but model never sees _meta.
+      // It has been removed as dead code - context grounding now happens via
+      // structuredContent.oakContextHint which the model CAN see.
+      expect(result._meta).not.toHaveProperty('context');
     });
   });
 
@@ -288,6 +333,19 @@ describe('formatOptimizedResult', () => {
       expect(result.structuredContent).toEqual(
         expect.objectContaining({ summary: 'Found 10 lessons matching your query' }),
       );
+    });
+
+    it('includes oakContextHint in structuredContent for model context grounding', () => {
+      const result = formatOptimizedResult({
+        summary: 'Test result',
+        fullData: {},
+      });
+
+      // Model sees structuredContent, so context grounding hint goes here
+      expect(result.structuredContent).toHaveProperty('oakContextHint');
+      const hint = (result.structuredContent as { oakContextHint?: string }).oakContextHint;
+      expect(hint).toContain('get-ontology');
+      expect(hint).toContain('get-help');
     });
 
     it('includes preview items limited to 5 in structuredContent', () => {
