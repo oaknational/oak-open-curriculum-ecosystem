@@ -173,6 +173,58 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
   });
+
+  describe('public resource authentication bypass', () => {
+    it('skips clerkMiddleware for widget resources/read', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'resources/read',
+        params: { uri: 'ui://widget/oak-json-viewer.html' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    it('skips clerkMiddleware for documentation resources/read', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'resources/read',
+        params: { uri: 'docs://oak/getting-started.md' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).not.toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+
+    it('runs clerkMiddleware for unknown resource URIs', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'resources/read',
+        params: { uri: 'unknown://some/resource' },
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalled();
+    });
+
+    it('runs clerkMiddleware for resources/read without uri param', () => {
+      const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
+      const req = createMockRequest('/mcp', {
+        method: 'resources/read',
+        params: {},
+      });
+
+      conditionalMw(req, mockRes, mockNext);
+
+      expect(mockClerkMw).toHaveBeenCalled();
+    });
+  });
 });
 
 /**

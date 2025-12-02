@@ -23,6 +23,8 @@ import {
   isUniversalToolName,
   type UniversalToolName,
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
+import { isPublicResourceUri } from './auth/public-resources.js';
 
 /**
  * Configuration options for MCP router.
@@ -125,14 +127,35 @@ function getToolNameFromBody(body: unknown): UniversalToolName | undefined {
  *
  * @public
  */
+/**
+ * Determines if a request should skip auth entirely.
+ *
+ * @param method - MCP method from request
+ * @param body - Request body for extracting params
+ * @returns true if auth should be skipped
+ */
+function shouldSkipAuth(method: string | undefined, body: unknown): boolean {
+  // Discovery methods: always skip auth
+  if (method && isDiscoveryMethod(method)) {
+    return true;
+  }
+  // Public resource reads: skip auth
+  if (method === 'resources/read') {
+    const uri = getResourceUriFromBody(body);
+    if (uri && isPublicResourceUri(uri)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function createMcpRouter(options: McpRouterOptions): RequestHandler {
   return (req, res, next) => {
     const method = getMethodFromRequest(req);
     const toolName = getToolNameFromBody(req.body);
 
-    // Discovery methods: always skip auth
-    // These must work without authentication per OpenAI ChatGPT requirements
-    if (method && isDiscoveryMethod(method)) {
+    // Check for methods that skip auth entirely
+    if (shouldSkipAuth(method, req.body)) {
       next();
       return;
     }

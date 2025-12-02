@@ -31,6 +31,8 @@
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 import type { Logger } from '@oaknational/mcp-logger';
 import { isDiscoveryMethod } from './mcp-method-classifier.js';
+import { getResourceUriFromBody } from './auth/mcp-body-parser.js';
+import { isPublicResourceUri } from './auth/public-resources.js';
 
 /**
  * MCP methods that can skip clerkMiddleware entirely.
@@ -83,6 +85,32 @@ interface SkipCheckRequest {
 }
 
 /**
+ * Checks if an MCP method should skip Clerk authentication.
+ *
+ * @param mcpMethod - The MCP method from request body
+ * @param body - Request body for extracting additional params
+ * @returns true if the method should skip auth
+ */
+function shouldMcpMethodSkipClerk(mcpMethod: string, body: unknown): boolean {
+  // Discovery/metadata methods don't need auth
+  if (CLERK_SKIP_METHODS.has(mcpMethod)) {
+    return true;
+  }
+  // Also check using the discovery method classifier
+  if (isDiscoveryMethod(mcpMethod)) {
+    return true;
+  }
+  // Public resource reads (widget HTML, documentation) don't need auth
+  if (mcpMethod === 'resources/read') {
+    const uri = getResourceUriFromBody(body);
+    if (uri && isPublicResourceUri(uri)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Determines if a request should skip clerkMiddleware.
  *
  * @param req - Request with path and body properties
@@ -98,11 +126,7 @@ function shouldSkipClerkMiddleware(req: SkipCheckRequest): boolean {
   // Check exact /mcp path or /mcp/ subpaths, not paths that happen to start with /mcp
   if (req.path === '/mcp' || req.path.startsWith('/mcp/')) {
     const mcpMethod = getMcpMethodFromBody(req.body);
-    if (mcpMethod && CLERK_SKIP_METHODS.has(mcpMethod)) {
-      return true;
-    }
-    // Also check using the discovery method classifier
-    if (mcpMethod && isDiscoveryMethod(mcpMethod)) {
+    if (mcpMethod && shouldMcpMethodSkipClerk(mcpMethod, req.body)) {
       return true;
     }
   }
