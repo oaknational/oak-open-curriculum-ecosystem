@@ -183,4 +183,91 @@ describe('loadRuntimeConfig', () => {
       expect(config.env.OAK_API_KEY).toBe('test-key');
     });
   });
+
+  describe('displayHostname', () => {
+    it('uses VERCEL_PROJECT_PRODUCTION_URL in production environment', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+        VERCEL_ENV: 'production',
+        VERCEL_URL: 'myapp-abc123.vercel.app',
+        VERCEL_PROJECT_PRODUCTION_URL: 'curriculum-mcp-alpha.oaknational.dev',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBe('curriculum-mcp-alpha.oaknational.dev');
+    });
+
+    it('uses VERCEL_URL in preview environment even when production URL exists', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+        VERCEL_ENV: 'preview',
+        VERCEL_URL: 'myapp-abc123.vercel.app',
+        VERCEL_PROJECT_PRODUCTION_URL: 'curriculum-mcp-alpha.oaknational.dev',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBe('myapp-abc123.vercel.app');
+    });
+
+    it('uses VERCEL_URL in development environment', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+        VERCEL_ENV: 'development',
+        VERCEL_URL: 'myapp-abc123.vercel.app',
+        VERCEL_PROJECT_PRODUCTION_URL: 'curriculum-mcp-alpha.oaknational.dev',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBe('myapp-abc123.vercel.app');
+    });
+
+    it('falls back to VERCEL_URL if production URL is missing in production', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+        VERCEL_ENV: 'production',
+        VERCEL_URL: 'myapp-abc123.vercel.app',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBe('myapp-abc123.vercel.app');
+    });
+
+    it('returns undefined when not on Vercel', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBeUndefined();
+    });
+
+    it('lowercases the display hostname', () => {
+      const env = {
+        OAK_API_KEY: 'test-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test',
+        CLERK_SECRET_KEY: 'sk_test',
+        VERCEL_ENV: 'production',
+        VERCEL_PROJECT_PRODUCTION_URL: 'Curriculum-MCP-Alpha.OakNational.DEV',
+      };
+
+      const config = loadRuntimeConfig(env);
+
+      expect(config.displayHostname).toBe('curriculum-mcp-alpha.oaknational.dev');
+    });
+  });
 });

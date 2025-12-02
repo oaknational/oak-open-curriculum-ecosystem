@@ -73,10 +73,11 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .empty { text-align: center; padding: 24px; color: var(--fg-secondary); font-size: 14px; }
 .ftr { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
 .ftr-disclaimer { margin: 0 0 8px; }
-.ftr-links { margin: 0; }
-.ftr-link { color: var(--accent); text-decoration: none; font-weight: 500; }
+.ftr-links { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 0; }
+.ftr-link { color: var(--accent); text-decoration: none; font-weight: 500; white-space: nowrap; }
 .ftr-link:hover { text-decoration: underline; }
 .ftr-sep { margin: 0 8px; opacity: 0.5; }
+@media (max-width: 480px) { .ftr-links { flex-direction: column; gap: 8px; } .ftr-sep { display: none; } }
 .actions { display: flex; gap: 8px; margin-bottom: 12px; }
 .btn { background: var(--accent); color: white; border: none; border-radius: 6px; padding: 8px 16px; font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
 .btn:hover { opacity: 0.9; }
