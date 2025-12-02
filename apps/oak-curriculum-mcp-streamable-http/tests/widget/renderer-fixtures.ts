@@ -168,8 +168,9 @@ export const ONTOLOGY_OUTPUT_FIXTURE = {
       },
     ],
   },
-  toolUsageGuidance: {
-    discoveryWorkflow: {
+  workflows: {
+    findLessons: {
+      title: 'Find lessons on a topic',
       description: 'When a user wants to find curriculum content',
       steps: [
         { step: 1, action: 'Use search tool' },

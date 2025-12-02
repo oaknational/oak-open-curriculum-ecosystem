@@ -9,12 +9,20 @@ It is the conceptual companion to:
 
 ---
 
+> **⚠️ NOTE (December 2025)**: The current `kg-graph.ts` has the wrong emphasis. It's heavily focused on API endpoints and schemas, but agents already receive endpoint information from `tools/list`.
+>
+> The knowledge graph should focus on **concept-to-concept relationships** and **implicit domain knowledge** that helps agents reason about the curriculum domain.
+>
+> See `knowledge-graph-tool-research.md` and `optimised-graph-proposal.md` for the corrected approach. The graph needs to be restructured to remove Endpoint/Schema/SourceDoc nodes and keep only Concept nodes with concept-to-concept edges.
+
+---
+
 ## 1. Goals and scope
 
 The knowledge graph is designed to:
 
-1. **Unify the API and the curriculum ontology** – connect OpenAPI endpoints and response schemas to curriculum concepts like subjects, units, lessons, threads and quizzes.
-2. **Make implicit structure explicit** – represent relationships that are obvious in the documentation (e.g. “a unit contains lessons” or “threads link units vertically”) as first-class graph edges.
+1. ~~**Unify the API and the curriculum ontology**~~ → **REVISED**: Focus on **concept relationships**, not API mappings. Agents see endpoints from `tools/list`.
+2. **Make implicit structure explicit** – represent relationships that are obvious in the documentation (e.g. "a unit contains lessons" or "threads link units vertically") as first-class graph edges.
 3. **Support both humans and machines** – provide a Markdown view for humans and a strongly-typed JSON/TypeScript representation for code.
 
 The graph focuses on the public curriculum API at:

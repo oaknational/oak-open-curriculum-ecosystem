@@ -312,6 +312,10 @@ test.describe('Tool name routing', () => {
 
     // Should render Threads section heading
     await expect(page.getByRole('heading', { name: /Threads/ })).toBeVisible();
+
+    // Should render Workflows section heading (uses o.workflows property)
+    await expect(page.getByRole('heading', { name: /Workflows/ })).toBeVisible();
+    await expect(page.getByText('Find lessons on a topic')).toBeVisible();
   });
 
   test('ontology renderer links to Oak curriculum page', async ({ page }) => {

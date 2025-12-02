@@ -2,25 +2,29 @@
 
 This document analyses how the ontology data and knowledge graph can be designed to be **complementary by construction** — meaning their separation of concerns is clear, intentional, and non-overlapping.
 
+**Last Updated**: December 2025 (corrected to focus on concept relationships, not API mappings)
+
 ---
 
 ## 1. The Complementary Design Principle
 
 ### 1.1 Core Distinction
 
-| Ontology               | Knowledge Graph        |
-| ---------------------- | ---------------------- |
-| **What things mean**   | **How things connect** |
-| Human understanding    | Machine navigation     |
-| Guidance and workflows | Structure and mappings |
-| Rich descriptions      | Terse relationships    |
-| Domain expertise       | API architecture       |
+| Ontology                  | Knowledge Graph             |
+| ------------------------- | --------------------------- |
+| **What things mean**      | **How things connect**      |
+| Rich prose definitions    | Terse relationships (edges) |
+| Guidance and workflows    | Navigable structure         |
+| Enumerated values (lists) | Inferred relationships      |
+| Domain expertise as text  | Domain structure as graph   |
 
 ### 1.2 The Two Questions They Answer
 
 **Ontology answers**: "I'm new to Oak. What should I understand about the curriculum before I start?"
 
-**Knowledge Graph answers**: "I understand Oak. Which endpoint should I call to get Unit data, and what schema will it return?"
+**Knowledge Graph answers**: "How do curriculum concepts relate to each other? What builds on what?"
+
+**NOT what the graph answers**: ~~"Which endpoint returns Unit data?"~~ — agents already know this from `tools/list`.
 
 ---
 
@@ -28,9 +32,9 @@ This document analyses how the ontology data and knowledge graph can be designed
 
 ### 2.1 Concepts — Where Should Definitions Live?
 
-Currently, both contain concept information:
+Both contain concept information, but with different purposes:
 
-**Ontology** (detailed):
+**Ontology** (rich definitions):
 
 ```typescript
 keyStages: [
@@ -46,94 +50,78 @@ keyStages: [
 ];
 ```
 
-**Knowledge Graph** (terse):
+**Knowledge Graph** (identity + relationships):
 
 ```typescript
 {
-  id: 'concept_keystage',
-  type: 'Concept',
+  id: 'keystage',
   label: 'KeyStage',
-  description: 'A formal stage of education (KS1–KS4).'
+  brief: 'A formal stage of education (KS1–KS4).'
 }
+// Plus edges showing relationships
 ```
 
-**Recommendation**:
+**Allocation**:
 
-- Ontology owns **rich concept definitions** with examples, context, and usage guidance
-- Knowledge Graph owns **concept identifiers** and their **relationships**
-- Knowledge Graph can reference ontology sections: "See ontology.curriculumStructure.keyStages for details"
+- Ontology owns **rich definitions** with examples, context, enumerated values
+- Graph owns **concept identifiers** and **edges to other concepts**
+- Brief descriptions in graph are for context, not duplication
 
 ### 2.2 Relationships — Clear Ownership
 
-**Ontology** (implicit via structure):
+**Ontology** describes hierarchy in prose:
 
 ```typescript
 entityHierarchy: {
+  description: 'Curriculum content is organised in a hierarchy',
   levels: [
-    { entity: 'Subject', contains: 'Sequences', schemaRef: '...' },
+    { entity: 'Subject', contains: 'Sequences', note: '...' },
     { entity: 'Sequence', contains: 'Units', note: '...' },
-    // ...
   ];
 }
 ```
 
-**Knowledge Graph** (explicit via edges):
+**Knowledge Graph** provides navigable edges:
 
 ```typescript
-{
-  id: 'edge_subject_sequence',
-  from: 'concept_subject',
-  to: 'concept_sequence',
-  label: 'has sequences'
-}
+{ from: 'subject', to: 'sequence', rel: 'hasSequences' }
+{ from: 'sequence', to: 'unit', rel: 'containsUnits' }
 ```
 
-**Recommendation**:
+**Allocation**:
 
-- Ontology describes **what the hierarchy means** and **why it matters**
-- Knowledge Graph provides **navigable structure** for programmatic traversal
-- Remove `schemaRef` from ontology (belongs in graph)
+- Ontology explains **what the hierarchy means** in prose
+- Graph provides **traversable structure** via edges
+- Consider trimming prose hierarchy if graph captures it adequately
 
-### 2.3 API Mappings — Knowledge Graph Only
+### 2.3 API Mappings — NOT in Knowledge Graph
 
-The knowledge graph uniquely provides:
+**Previous (incorrect) approach**: Graph contained Endpoint and Schema nodes.
 
-- Endpoint → Schema relationships
-- Schema → Concept relationships
-- Concept → Endpoint relationships
+**Correct approach**: Agents learn about endpoints from `tools/list`. The graph should NOT duplicate this.
 
-This information doesn't belong in the ontology, which is about domain understanding.
-
-**Current ontology** (tool references):
+**Ontology** can reference tools for guidance:
 
 ```typescript
 lessonComponents: [
   { name: 'Slide deck', tool: 'get-lessons-assets' },
   { name: 'Starter quiz', tool: 'get-lessons-quiz' },
-  // ...
 ];
 ```
 
-**Recommendation**:
-
-- Keep tool references in ontology for guidance purposes
-- Knowledge Graph provides the authoritative endpoint mappings
-- These serve different purposes and can coexist
+This is **guidance** about which tool to use, not API architecture.
 
 ### 2.4 Workflows and Guidance — Ontology Only
 
-The ontology uniquely provides:
-
 ```typescript
-toolUsageGuidance: {
-  discoveryWorkflow: { ... },
-  browsingWorkflow: { ... },
-  progressionWorkflow: { ... },
-  lessonPlanningWorkflow: { ... },
+workflows: {
+  findLessons: { steps: [...] },
+  lessonPlanning: { steps: [...] },
+  trackProgression: { steps: [...] },
 }
 ```
 
-This doesn't belong in the knowledge graph. The graph is about structure, not process.
+Workflows are about **how to use tools**. This belongs in ontology, not graph.
 
 ### 2.5 Context and Synonyms — Ontology Only
 
@@ -143,7 +131,23 @@ synonyms: { ... },
 canonicalUrls: { ... },
 ```
 
-These help agents understand the domain — clearly ontology territory.
+These help agents understand the domain context — clearly ontology territory.
+
+### 2.6 Inferred Relationships — Knowledge Graph Only
+
+The graph captures relationships that aren't explicit in API or prose:
+
+```typescript
+// Programme is a derived concept (not a direct API entity)
+{ from: 'programme', to: 'tier', rel: 'uses', inferred: true }
+{ from: 'programme', to: 'examboard', rel: 'uses', inferred: true }
+
+// Unit belongs to contexts (inferred from placement)
+{ from: 'unit', to: 'subject', rel: 'belongsTo', inferred: true }
+{ from: 'unit', to: 'keystage', rel: 'belongsTo', inferred: true }
+```
+
+These inferred relationships are valuable domain knowledge that the graph makes explicit.
 
 ---
 
@@ -151,105 +155,115 @@ These help agents understand the domain — clearly ontology territory.
 
 ### 3.1 Ontology Should Own
 
-| Section                 | Purpose                                          |
-| ----------------------- | ------------------------------------------------ |
-| `curriculumStructure`   | Rich definitions of key stages, phases, subjects |
-| `threads`               | What threads are, why they matter, examples      |
-| `programmesVsSequences` | Critical distinction for understanding           |
-| `ks4Complexity`         | Programme factors explained                      |
-| `entityHierarchy`       | Conceptual explanation (without schemaRefs)      |
-| `unitTypes`             | Simple/variant/optionality explained             |
-| `lessonComponents`      | The 8 components and their purposes              |
-| `contentGuidance`       | Supervision levels explained                     |
-| `toolUsageGuidance`     | All workflow guidance                            |
-| `idFormats`             | How to construct prefixed IDs                    |
-| `ukEducationContext`    | National curriculum context                      |
-| `canonicalUrls`         | How to link to Oak website                       |
-| `synonyms`              | Alternative terms mapping                        |
+| Section                 | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| `curriculumStructure`   | Rich definitions of key stages, phases, subjects  |
+| `threads`               | What threads are, why they matter, examples       |
+| `programmesVsSequences` | Critical distinction for understanding            |
+| `ks4Complexity`         | Programme factors explained                       |
+| `entityHierarchy`       | Conceptual explanation (what the hierarchy means) |
+| `unitTypes`             | Simple/variant/optionality explained              |
+| `lessonComponents`      | The 8 components and their purposes               |
+| `contentGuidance`       | Supervision levels explained                      |
+| `workflows`             | All workflow guidance                             |
+| `idFormats`             | How to construct prefixed IDs                     |
+| `ukEducationContext`    | National curriculum context                       |
+| `canonicalUrls`         | How to link to Oak website                        |
+| `synonyms`              | Alternative terms mapping                         |
 
-### 3.2 Knowledge Graph Should Own
+### 3.2 Knowledge Graph Should Own (Revised)
 
-| Node Type      | Purpose                                     |
-| -------------- | ------------------------------------------- |
-| `Concept`      | Concept identifiers with brief descriptions |
-| `Endpoint`     | All API endpoints with paths and methods    |
-| `Schema`       | All response schemas                        |
-| `ExternalLink` | Documentation URLs                          |
+**Concepts only** — no API nodes:
 
-| Edge Type          | Purpose                             |
-| ------------------ | ----------------------------------- |
-| Concept → Concept  | Domain relationships                |
-| Concept → Endpoint | "Which endpoint returns this?"      |
-| Endpoint → Schema  | "What schema does this return?"     |
-| Schema → Concept   | "What concepts does this describe?" |
+| Node Type  | Purpose                                         |
+| ---------- | ----------------------------------------------- |
+| `Concept`  | Concept identifiers with brief descriptions     |
+| (optional) | `ExternalLink` for documentation URLs if useful |
+
+**Concept-to-concept edges only** — no API mappings:
+
+| Edge Type         | Purpose                                  |
+| ----------------- | ---------------------------------------- |
+| Concept → Concept | Domain relationships (contains, uses)    |
+| Concept → Concept | Inferred relationships (belongsTo, etc.) |
+
+**NOT in graph:**
+
+- ~~Endpoint nodes~~ — agents see `tools/list`
+- ~~Schema nodes~~ — internal API detail
+- ~~Concept → Endpoint edges~~ — not needed
+- ~~Endpoint → Schema edges~~ — not needed
 
 ### 3.3 Shared Identifiers (The Bridge)
 
-To make them complementary, use consistent identifiers:
+Use consistent concept IDs between ontology and graph:
 
 ```typescript
-// Ontology
-curriculumStructure.keyStages[].slug === 'ks1'
+// Ontology references concepts
+curriculumStructure.keyStages[].slug === 'ks1'  // Instance
+entityHierarchy.levels[].entity === 'Subject'   // Concept type
 
-// Knowledge Graph
-nodes.find(n => n.id === 'concept_keystage').label === 'KeyStage'
+// Knowledge Graph uses matching IDs
+concepts: [{ id: 'keystage', label: 'KeyStage', ... }]
+concepts: [{ id: 'subject', label: 'Subject', ... }]
 
-// Bridge mapping (could be in either or separate)
-{
-  conceptId: 'concept_keystage',
-  ontologyPath: 'curriculumStructure.keyStages',
-  instances: ['ks1', 'ks2', 'ks3', 'ks4']
-}
+// Edges connect concepts
+edges: [{ from: 'subject', to: 'sequence', rel: 'hasSequences' }]
 ```
+
+The ontology provides the **instances** (ks1, ks2, maths, history).
+The graph provides the **concept structure** (KeyStage, Subject, how they relate).
 
 ---
 
 ## 4. Migration from Current State
 
-### 4.1 Ontology Changes (Minimal)
+### 4.1 Ontology Changes
 
-The current ontology is well-structured for its purpose. Minor changes:
+The current ontology is well-structured. Consider:
 
-1. **Remove schemaRef fields** from entityHierarchy (move to graph)
-2. **Keep tool references** in lessonComponents (useful for guidance)
-3. **Add version/metadata** for complementary tool awareness
+1. **Review entityHierarchy** — prose explanation is valuable, but consider if graph edges make some of it redundant
+2. **Remove schemaRef fields** — these are API implementation details
+3. **Keep tool references** in lessonComponents (useful for guidance)
 
-### 4.2 Knowledge Graph Changes
+### 4.2 Knowledge Graph Changes (Major Restructure)
 
-1. **Remove SourceDoc nodes** — Research provenance, not useful for agents
-2. **Simplify concept descriptions** — Reference ontology for details
-3. **Add cross-references** — Link concepts to ontology sections
-4. **Ensure all endpoints present** — Validate against OpenAPI spec
-5. **Ensure all schemas present** — Validate against OpenAPI spec
+The current graph needs significant revision:
 
-### 4.3 New: Bridge Metadata
+1. **Remove Endpoint nodes** (27 nodes) — agents see `tools/list`
+2. **Remove Schema nodes** (24 nodes) — internal API detail
+3. **Remove SourceDoc nodes** (4 nodes) — research provenance
+4. **Remove all API-mapping edges** — Concept→Endpoint, Endpoint→Schema, etc.
+5. **Keep Concept nodes** (28 nodes) — the domain model
+6. **Keep concept-to-concept edges** — the valuable relationships
+7. **Simplify node IDs** — `concept_subject` → `subject`
 
-Consider a small bridge structure:
+**Result**: From ~89 nodes + ~118 edges to ~28 concepts + ~40 edges.
+
+### 4.3 Cross-References (Not a Bridge)
+
+Rather than a complex bridge structure, use simple cross-references:
+
+**In ontology tool response:**
 
 ```typescript
-export const ontologyGraphBridge = {
-  // Maps graph concept IDs to ontology data paths
-  conceptToOntology: {
-    concept_keystage: 'curriculumStructure.keyStages',
-    concept_subject: 'curriculumStructure.subjects',
-    concept_thread: 'threads',
-    concept_programme: 'programmesVsSequences.programme',
-    concept_sequence: 'programmesVsSequences.sequence',
-    // ...
-  },
-  // Maps ontology sections to related graph subgraphs
-  ontologyToGraph: {
-    curriculumStructure: [
-      'concept_keystage',
-      'concept_phase',
-      'concept_subject',
-      'concept_yeargroup',
-    ],
-    entityHierarchy: ['concept_subject', 'concept_sequence', 'concept_unit', 'concept_lesson'],
-    // ...
-  },
-} as const;
+{
+  structuredContent: { ...ontologyData },
+  // Include hint
+  seeAlso: 'Call get-knowledge-graph for concept relationships'
+}
 ```
+
+**In graph tool response:**
+
+```typescript
+{
+  structuredContent: { ...conceptGraph },
+  seeOntology: 'Call get-ontology for rich definitions and usage guidance'
+}
+```
+
+The complementary relationship is maintained through authoring, not runtime bridges.
 
 ---
 
@@ -264,33 +278,42 @@ Agent: "I'll start by understanding the Oak curriculum..."
        → Understand workflows and ID formats
 ```
 
-### 5.2 Planning API Calls
+### 5.2 Understanding Concept Relationships
 
 ```
-Agent: "Now I need to find lessons about photosynthesis..."
-       → Already have domain understanding from ontology
-       → Optionally call get-knowledge-graph for API mappings
-       → See that Lesson concept links to search and summary endpoints
-       → Plan call sequence: search → fetch lesson summary
+Agent: "How do these concepts connect?"
+       → Call get-knowledge-graph for structure
+       → See: Subject → Sequence → Unit → Lesson hierarchy
+       → See: Thread → Unit links (progression across years)
+       → See: Programme → Tier/ExamBoard (KS4 complexity)
 ```
 
-### 5.3 Debugging or Exploration
+### 5.3 Exploring Progression
 
 ```
-Agent: "I got back a SequenceUnitsResponse schema. What does it contain?"
-       → Call get-knowledge-graph
-       → Find schema_SequenceUnitsResponse node
-       → See edges to concept_unit, concept_thread, concept_category
-       → Understand the response structure
+Agent: "What builds on the Unit concept?"
+       → Graph shows: Unit → Lesson (contains), Unit → Thread (tagged)
+       → Graph shows: Sequence → Unit (contains), Programme → Unit (contains)
+       → Agent can reason about relationships
 ```
 
 ### 5.4 Combined Understanding
 
 ```
 Agent: "What's the full picture of Threads?"
-       → get-ontology: Rich explanation, examples, why they matter
-       → get-knowledge-graph: Thread → Unit edges, Thread → endpoints, Thread → schemas
-       → Complete understanding: meaning + structure + API surface
+       → get-ontology: Rich explanation, examples, why they matter, how to use thread tools
+       → get-knowledge-graph: Thread → Unit edges showing structural relationship
+       → Complete understanding: meaning + structure
+```
+
+### 5.5 NOT How the Graph Should Be Used
+
+```
+❌ Agent: "Which endpoint returns Unit data?"
+   → This is in tools/list, not the graph
+
+❌ Agent: "What schema does GET /subjects return?"
+   → This is API implementation detail, not domain knowledge
 ```
 
 ---
@@ -386,25 +409,31 @@ The design is complementary by construction if:
 - [ ] Synonym mappings
 - [ ] Canonical URL patterns
 - [ ] ID format guidance
-- [ ] Component purposes
+- [ ] Component purposes and tool references
 - [ ] Supervision level meanings
+- [ ] Enumerated values (key stages list, subjects list)
 
 ### Knowledge Graph Owns:
 
-- [ ] Concept identifiers and brief labels
-- [ ] Endpoint nodes with paths/methods
-- [ ] Schema nodes with names
-- [ ] Concept → Concept edges
-- [ ] Concept → Endpoint edges
-- [ ] Endpoint → Schema edges
-- [ ] Schema → Concept edges
+- [ ] Concept identifiers with brief labels
+- [ ] Concept → Concept edges (hierarchy)
+- [ ] Concept → Concept edges (inferred relationships)
 - [ ] Inferred relationship flags
+- [ ] Cross-reference to ontology
+
+### Knowledge Graph Does NOT Own:
+
+- [x] ~~Endpoint nodes~~ — agents see `tools/list`
+- [x] ~~Schema nodes~~ — internal API detail
+- [x] ~~Concept → Endpoint edges~~ — not needed
+- [x] ~~Endpoint → Schema edges~~ — not needed
+- [x] ~~SourceDoc nodes~~ — research provenance
 
 ### Neither Duplicates:
 
-- [ ] Entity definitions (ontology has detail, graph has structure)
-- [ ] API references (ontology has guidance, graph has mappings)
-- [ ] Hierarchy descriptions (ontology explains, graph represents)
+- [ ] Entity definitions (ontology has detail, graph has structure only)
+- [ ] Hierarchy (ontology explains meaning, graph provides edges)
+- [ ] Tool guidance (ontology only — graph doesn't mention tools)
 
 ---
 
