@@ -117,7 +117,7 @@ export const getKeyStagesSubjectUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Units\n\nThis tool returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this tool.",
+  description: "Units\n\nThis tool returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this tool.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -128,6 +128,14 @@ export const getKeyStagesSubjectUnits = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Key Stages Subject Units",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Key Stages Subject Units…",
+    'openai/toolInvocation/invoked': "Get Key Stages Subject Units loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

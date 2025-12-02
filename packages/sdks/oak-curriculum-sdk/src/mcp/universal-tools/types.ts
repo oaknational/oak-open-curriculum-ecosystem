@@ -56,11 +56,12 @@ export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedTool
  * for better UX decisions, such as whether a tool is safe to auto-invoke
  * or requires user confirmation.
  *
+ * All annotation fields are explicitly enumerated per MCP specification.
+ * No index signature - every field must be known at compile time.
+ *
  * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
  */
 export interface ToolAnnotations {
-  /** Allow additional properties for forward compatibility */
-  readonly [x: string]: unknown;
   /** Whether the tool only reads data and doesn't modify state */
   readonly readOnlyHint?: boolean;
   /** Whether the tool might cause destructive/irreversible changes */
@@ -79,11 +80,12 @@ export interface ToolAnnotations {
  * These fields are used by ChatGPT to display status during tool invocation
  * and to render output using a custom widget.
  *
+ * All known OpenAI _meta fields are explicitly enumerated per project rules.
+ * No index signature - every field must be known at compile time.
+ *
  * @see https://developers.openai.com/apps-sdk/reference
  */
 export interface ToolMeta {
-  /** Allow additional properties for forward compatibility */
-  readonly [x: string]: unknown;
   /**
    * URI of widget resource to render tool output.
    * Widget must serve content with text/html+skybridge MIME type.
@@ -93,6 +95,12 @@ export interface ToolMeta {
   readonly 'openai/toolInvocation/invoking'?: string;
   /** Status text shown after tool completes (max 64 characters) */
   readonly 'openai/toolInvocation/invoked'?: string;
+  /** Allow widget to call this tool via window.openai.callTool() */
+  readonly 'openai/widgetAccessible'?: boolean;
+  /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
+  readonly 'openai/visibility'?: 'public' | 'private';
+  /** Mirror securitySchemes for clients that only read _meta */
+  readonly securitySchemes?: readonly SecurityScheme[];
 }
 
 /**

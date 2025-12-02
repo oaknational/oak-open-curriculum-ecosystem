@@ -113,6 +113,28 @@ export interface ToolDescriptor<
     readonly openWorldHint?: boolean;
     readonly title?: string;
   };
+  /**
+   * OpenAI Apps SDK metadata for tool descriptors.
+   *
+   * These fields are used by ChatGPT to display status during tool invocation
+   * and to render output using a custom widget.
+   *
+   * @see https://developers.openai.com/apps-sdk/reference
+   */
+  readonly _meta?: {
+    /** URI of widget resource to render tool output */
+    readonly 'openai/outputTemplate'?: string;
+    /** Status text shown while tool is running (max 64 characters) */
+    readonly 'openai/toolInvocation/invoking'?: string;
+    /** Status text shown after tool completes (max 64 characters) */
+    readonly 'openai/toolInvocation/invoked'?: string;
+    /** Allow widget to call this tool via window.openai.callTool() */
+    readonly 'openai/widgetAccessible'?: boolean;
+    /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
+    readonly 'openai/visibility'?: 'public' | 'private';
+    /** Mirror securitySchemes for clients that only read _meta */
+    readonly securitySchemes?: readonly SecurityScheme[];
+  };
   readonly validateOutput: (value: unknown) =>
     | { readonly ok: true; readonly data: TResult; readonly status: TStatus }
     | {

@@ -82,11 +82,16 @@ export const toolGuidanceData = {
       whenToUse:
         'When you want to understand how a concept builds from early years to GCSE, or find prerequisite/follow-up content.',
     } satisfies ToolCategory,
+
+    agentSupport: {
+      tools: ['get-help', 'get-ontology'],
+      description: 'Tools for understanding Oak Curriculum system and how to use the tools.',
+      whenToUse: 'At conversation start, when user asks to "understand Oak", or to get context.',
+      isAgentSupport: true,
+    } satisfies ToolCategory,
   },
 
-  /**
-   * Common workflows showing how to combine tools for typical tasks.
-   */
+  /** Common workflows showing how to combine tools for typical tasks. */
   workflows: {
     findLessons: {
       title: 'Find lessons on a topic',
@@ -198,9 +203,7 @@ export const toolGuidanceData = {
     } satisfies Workflow,
   },
 
-  /**
-   * Quick tips for effective tool usage.
-   */
+  /** Quick tips for effective tool usage. */
   tips: [
     'Use "search" for free-text queries; use browsing tools for structured exploration.',
     'The "fetch" tool uses prefixed IDs: lesson:slug, unit:slug, thread:slug, subject:slug.',
@@ -208,6 +211,7 @@ export const toolGuidanceData = {
     'Threads show how concepts build across years - great for finding prerequisites or extensions.',
     'Key Stage 4 (GCSE) has additional complexity: tiers (foundation/higher) and exam boards.',
     'All lesson content is aligned to the National Curriculum for England.',
+    'Use get-help or get-ontology to understand Oak - great at the start of a conversation.',
   ],
 
   /**

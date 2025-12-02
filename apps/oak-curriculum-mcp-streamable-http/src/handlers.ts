@@ -178,6 +178,24 @@ function createMcpRequest(req: express.Request): IncomingMessage {
   return proxy as unknown as IncomingMessage;
 }
 
+/**
+ * Type guard for object with method property.
+ */
+function hasMethodProperty(value: unknown): value is { method: unknown } {
+  return typeof value === 'object' && value !== null && 'method' in value;
+}
+
+/**
+ * Extracts MCP method from JSON-RPC request body for logging.
+ * Returns undefined if body is not a valid JSON-RPC request.
+ */
+function extractMcpMethod(body: unknown): string | undefined {
+  if (hasMethodProperty(body) && typeof body.method === 'string') {
+    return body.method;
+  }
+  return undefined;
+}
+
 export function createMcpHandler(
   transport: StreamableHTTPServerTransport,
   logger?: Logger,
@@ -185,11 +203,14 @@ export function createMcpHandler(
   return async (req: express.Request, res: express.Response) => {
     // Extract correlation ID and create correlated logger if available
     const correlationId = extractCorrelationId(res);
+    const mcpMethod = extractMcpMethod(req.body);
+
     if (logger && correlationId) {
       const correlatedLogger = createChildLogger(logger, correlationId);
       correlatedLogger.debug('MCP request received', {
         method: req.method,
         path: req.path,
+        mcpMethod,
       });
     }
 
@@ -209,6 +230,7 @@ export function createMcpHandler(
       const correlatedLogger = createChildLogger(logger, correlationId);
       correlatedLogger.debug('MCP request completed', {
         statusCode: res.statusCode,
+        mcpMethod,
       });
     }
   };

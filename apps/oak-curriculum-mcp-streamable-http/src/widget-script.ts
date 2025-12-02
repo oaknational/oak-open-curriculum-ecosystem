@@ -1,0 +1,118 @@
+/**
+ * JavaScript for the Oak-branded widget.
+ *
+ * Extracted from aggregated-tool-widget.ts for maintainability.
+ *
+ * Features:
+ * - Widget state persistence via window.openai.setWidgetState()
+ * - Tool calling via window.openai.callTool()
+ * - Tool name routing to appropriate renderers
+ * - Rendering orchestration
+ *
+ * @see aggregated-tool-widget.ts
+ * @see widget-renderers/index.ts - Renderer implementations
+ * @see widget-renderer-registry.ts - Tool name to renderer mapping
+ * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui
+ */
+
+import { WIDGET_RENDERER_FUNCTIONS } from './widget-renderers/index.js';
+import { WIDGET_STATE_JS } from './widget-script-state.js';
+
+/**
+ * Widget JavaScript that runs inside the ChatGPT sandbox.
+ *
+ * This script handles:
+ * - Reading tool output from window.openai.toolOutput
+ * - Persisting UI state via window.openai.setWidgetState()
+ * - Calling tools via window.openai.callTool()
+ * - Tool name routing to select appropriate renderer
+ * - Orchestrating rendering of all tool outputs
+ */
+export const WIDGET_SCRIPT = `
+const c = document.getElementById('c');
+const toolNameEl = document.getElementById('tool-name');
+const actionsEl = document.getElementById('actions');
+const errorEl = document.getElementById('error');
+
+${WIDGET_STATE_JS}
+
+// ========================================
+// Renderer Functions
+// ========================================
+${WIDGET_RENDERER_FUNCTIONS}
+
+// Renderer dispatcher - maps renderer IDs to functions
+const RENDERERS = {
+  help: renderHelp,
+  search: renderSearch,
+  fetch: renderFetch,
+  quiz: renderQuiz,
+  entitySummary: renderEntitySummary,
+  entityList: renderEntityList,
+  transcript: renderTranscript,
+  assets: renderAssets,
+  changelog: renderChangelog,
+  rateLimit: renderRateLimit,
+  ontology: renderOntology,
+};
+
+// ========================================
+// Rendering
+// ========================================
+function updateToolName() {
+  const input = window.openai?.toolInput;
+  const meta = window.openai?.toolResponseMetadata;
+  // Use annotations/title from MCP tool metadata (canonical human-readable name)
+  const displayName = meta?.['annotations/title'] || meta?.title || '';
+  if (displayName && toolNameEl) { toolNameEl.textContent = displayName; toolNameEl.style.display = 'block'; }
+  else if (toolNameEl) { toolNameEl.style.display = 'none'; }
+}
+
+function getFullResults() {
+  const meta = window.openai?.toolResponseMetadata ?? {};
+  const output = window.openai?.toolOutput ?? {};
+  if (meta.fullResults) return meta.fullResults;
+  if (output.data && typeof output.data === 'object') return output.data;
+  return output;
+}
+
+function getToolName() {
+  const input = window.openai?.toolInput;
+  const meta = window.openai?.toolResponseMetadata;
+  return meta?.toolName || input?.toolName || null;
+}
+
+function getRendererForTool(toolName) {
+  if (!toolName) return null;
+  const rendererId = TOOL_RENDERER_MAP[toolName];
+  if (!rendererId) return null;
+  return RENDERERS[rendererId] || null;
+}
+
+function render() {
+  updateToolName();
+  updateActions();
+  const fullData = getFullResults();
+  const toolName = getToolName();
+  const renderer = getRendererForTool(toolName);
+  if (renderer) {
+    c.innerHTML = renderer(fullData);
+  } else if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {
+    c.innerHTML = renderHelp(fullData);
+  } else if (fullData.lessons !== undefined || fullData.transcripts !== undefined) {
+    c.innerHTML = renderSearch(fullData);
+  } else if (fullData.type && fullData.data !== undefined) {
+    c.innerHTML = renderFetch(fullData);
+  } else if (Object.keys(fullData).length > 0) {
+    c.innerHTML = '<pre>' + esc(JSON.stringify(fullData, null, 2)) + '</pre>';
+  } else {
+    c.innerHTML = '<div class="empty">Loading...</div>';
+  }
+  restoreScrollPosition();
+}
+
+render();
+window.addEventListener('openai:set_globals', (e) => {
+  if (e.detail?.globals?.toolOutput !== undefined) render();
+}, { passive: true });
+`.trim();

@@ -115,6 +115,99 @@ describe('listUniversalTools annotations', () => {
   });
 });
 
+/**
+ * Integration tests for OpenAI Apps SDK _meta fields across ALL tools.
+ *
+ * These tests verify that listUniversalTools() exposes _meta fields
+ * for BOTH generated tools (from type-gen) and aggregated tools.
+ * This proves the integration point where both camps meet.
+ */
+describe('listUniversalTools _meta integration', () => {
+  it('ALL tools (generated + aggregated) have _meta defined', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta).toBeDefined();
+    }
+  });
+
+  it('ALL tools have openai/outputTemplate pointing to widget', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+    }
+  });
+
+  it('ALL tools have openai/widgetAccessible set to true', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
+    }
+  });
+
+  it('ALL tools have openai/visibility set to public', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta?.['openai/visibility']).toBe('public');
+    }
+  });
+
+  it('ALL tools have openai/toolInvocation/invoking status text', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta?.['openai/toolInvocation/invoking']).toBeDefined();
+      expect(typeof tool._meta?.['openai/toolInvocation/invoking']).toBe('string');
+      expect(tool._meta?.['openai/toolInvocation/invoking']?.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('ALL tools have openai/toolInvocation/invoked status text', () => {
+    const tools = listUniversalTools();
+
+    for (const tool of tools) {
+      expect(tool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
+      expect(typeof tool._meta?.['openai/toolInvocation/invoked']).toBe('string');
+      expect(tool._meta?.['openai/toolInvocation/invoked']?.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+/**
+ * Verify generated tools specifically have _meta.
+ * This catches the bug where listUniversalTools() didn't include _meta for generated tools.
+ */
+describe('generated tools _meta integration', () => {
+  const aggregatedNames = ['search', 'fetch', 'get-ontology', 'get-help'];
+
+  it('generated tools (non-aggregated) have _meta defined', () => {
+    const tools = listUniversalTools();
+    const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
+
+    expect(generatedTools.length).toBeGreaterThan(0);
+
+    for (const tool of generatedTools) {
+      expect(tool._meta).toBeDefined();
+    }
+  });
+
+  it('at least one generated tool has complete _meta with all fields', () => {
+    const tools = listUniversalTools();
+    const generatedTools = tools.filter((t) => !aggregatedNames.includes(t.name));
+    const sampleTool = generatedTools[0];
+
+    expect(sampleTool).toBeDefined();
+    expect(sampleTool._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+    expect(sampleTool._meta?.['openai/widgetAccessible']).toBe(true);
+    expect(sampleTool._meta?.['openai/visibility']).toBe('public');
+    expect(sampleTool._meta?.['openai/toolInvocation/invoking']).toBeDefined();
+    expect(sampleTool._meta?.['openai/toolInvocation/invoked']).toBeDefined();
+  });
+});
+
 /** Helper to find a tool by name, reducing complexity in test functions */
 function findToolByName(name: string) {
   return (t: { name: string }) => t.name === name;

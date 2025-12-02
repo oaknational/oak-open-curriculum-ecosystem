@@ -34,14 +34,28 @@ function parseJsonContent(result: CallToolResult): unknown {
 
 describe('createMcpToolsModule', () => {
   it('delegates search tool calls through the MCP executor dependency and returns aggregated data', async () => {
+    // Mock data: get-search-lessons and get-search-transcripts return arrays
+    // Note: The SDK augments lesson results with canonicalUrl based on lessonSlug
+    const mockLessonsFromApi = [
+      { lessonTitle: 'Photosynthesis Basics', lessonSlug: 'photosynthesis-basics' },
+    ];
+    const mockLessonsWithCanonicalUrl = [
+      {
+        lessonTitle: 'Photosynthesis Basics',
+        lessonSlug: 'photosynthesis-basics',
+        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/photosynthesis-basics',
+      },
+    ];
+    const mockTranscripts = [{ lessonTitle: 'Transcript A' }];
+
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockImplementation(async (name) => {
         if (name === ('get-search-lessons' as ToolName)) {
-          return Promise.resolve({ status: 200, data: { lessons: ['lesson-a'] } });
+          return Promise.resolve({ status: 200, data: mockLessonsFromApi });
         }
         if (name === ('get-search-transcripts' as ToolName)) {
-          return Promise.resolve({ status: 200, data: { transcripts: ['transcript-a'] } });
+          return Promise.resolve({ status: 200, data: mockTranscripts });
         }
         return Promise.resolve({ status: 200, data: null });
       });
@@ -54,8 +68,8 @@ describe('createMcpToolsModule', () => {
     const output = expectCallToolResult(
       await module.handleTool('search', { query: 'photosynthesis' }),
     );
-    const parsed = parseJsonContent(output) as Record<string, unknown>;
 
+    // Verify tool delegation
     expect(executeMcpTool).toHaveBeenCalledWith(
       'get-search-lessons',
       expect.objectContaining({ q: 'photosynthesis' }),
@@ -64,16 +78,25 @@ describe('createMcpToolsModule', () => {
       'get-search-transcripts',
       expect.objectContaining({ q: 'photosynthesis' }),
     );
-    expect(parsed).toMatchObject({
-      status: 200,
-      data: {
-        q: 'photosynthesis',
-        lessons: { lessons: ['lesson-a'] },
-        lessonsStatus: 200,
-        transcripts: { transcripts: ['transcript-a'] },
-        transcriptsStatus: 200,
-      },
-    });
+
+    // formatOptimizedResult returns human-readable summary in content.text
+    const textEntry = output.content.find((entry): entry is TextContent => entry.type === 'text');
+    expect(textEntry?.text).toContain('photosynthesis');
+
+    // structuredContent contains summary and preview
+    expect(output.structuredContent).toHaveProperty('summary');
+    expect(output.structuredContent).toHaveProperty('status', 'success');
+
+    // _meta contains full results for widget access
+    expect(output._meta).toHaveProperty('fullResults');
+    const fullResults = output._meta?.fullResults as {
+      q: string;
+      lessons: unknown[];
+      transcripts: unknown[];
+    };
+    expect(fullResults.q).toBe('photosynthesis');
+    expect(fullResults.lessons).toEqual(mockLessonsWithCanonicalUrl);
+    expect(fullResults.transcripts).toEqual(mockTranscripts);
   });
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {

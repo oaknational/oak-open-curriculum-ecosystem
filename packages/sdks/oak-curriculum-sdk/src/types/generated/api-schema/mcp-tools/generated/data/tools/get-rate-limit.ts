@@ -113,6 +113,14 @@ export const getRateLimit = {
     openWorldHint: false,
     title: "Get Rate Limit",
   },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Rate Limit…",
+    'openai/toolInvocation/invoked': "Get Rate Limit loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'noauth' }],
+  },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {

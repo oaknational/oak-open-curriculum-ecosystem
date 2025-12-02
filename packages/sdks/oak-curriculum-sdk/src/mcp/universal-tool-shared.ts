@@ -82,6 +82,127 @@ export function formatData(data: unknown): CallToolResult {
   return { content: [content], structuredContent };
 }
 
+/**
+ * Maximum number of preview items to include in structuredContent.
+ * Keeps model context minimal while allowing the widget to show a preview.
+ */
+const MAX_PREVIEW_ITEMS = 5;
+
+/**
+ * Input options for formatting an optimized tool result.
+ *
+ * @remarks
+ * This interface defines the input structure for `formatOptimizedResult`,
+ * which creates MCP tool results optimized for the OpenAI Apps SDK.
+ *
+ * The key optimization is that `fullData` goes only to the widget via `_meta`,
+ * while `structuredContent` remains minimal for model reasoning.
+ */
+export interface OptimizedResultOptions {
+  /** Human-readable summary for both model and widget */
+  readonly summary: string;
+  /** Full data that will be available only to the widget via _meta.fullResults */
+  readonly fullData: unknown;
+  /** Optional preview items to include in structuredContent (limited to 5) */
+  readonly previewItems?: readonly unknown[];
+  /** Optional query string for search context */
+  readonly query?: string;
+  /** Optional timestamp for result freshness */
+  readonly timestamp?: number;
+  /** Optional status indicator */
+  readonly status?: string;
+  /** Tool name for widget routing (e.g., 'get-search-lessons') */
+  readonly toolName?: string;
+  /** Human-readable tool title from annotations (e.g., 'Search Lessons') */
+  readonly annotationsTitle?: string;
+}
+
+/**
+ * Formats data into an optimized MCP CallToolResult for OpenAI Apps SDK.
+ *
+ * This function implements token optimization by:
+ * - Putting full data in `_meta` (widget-only, hidden from model)
+ * - Keeping `structuredContent` minimal (summary + limited preview items)
+ * - Providing human-readable `content` for conversation display
+ *
+ * @remarks
+ * Use this instead of `formatData` when you want to reduce token usage
+ * for large results. The widget can access full data via
+ * `window.openai.toolResponseMetadata.fullResults`.
+ *
+ * @param options - The options for formatting the result
+ * @returns A CallToolResult with optimized token usage
+ *
+ * @example
+ * ```typescript
+ * const result = formatOptimizedResult({
+ *   summary: 'Found 10 lessons on photosynthesis',
+ *   fullData: { lessons: allLessons },
+ *   previewItems: allLessons,
+ *   query: 'photosynthesis',
+ * });
+ * // Result:
+ * // - structuredContent: { summary, previewItems (max 5), hasMore, status }
+ * // - content: [{ type: 'text', text: summary }]
+ * // - _meta: { fullResults, query, timestamp }
+ * ```
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#tool-results
+ */
+/**
+ * Context guidance included in all tool responses to help the model
+ * understand the Oak curriculum system.
+ */
+const CONTEXT_GUIDANCE =
+  'If you have not already, use the get-help and get-ontology tools to understand the Oak context';
+
+/**
+ * Builds the _meta object for widget access via window.openai.toolResponseMetadata.
+ */
+function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown): UnknownRecord {
+  const { toolName, annotationsTitle, query, timestamp } = options;
+  const meta: UnknownRecord = { fullResults: serialisedFullData, context: CONTEXT_GUIDANCE };
+  if (toolName !== undefined) {
+    meta.toolName = toolName;
+  }
+  if (annotationsTitle !== undefined) {
+    meta['annotations/title'] = annotationsTitle;
+  }
+  if (query !== undefined) {
+    meta.query = query;
+  }
+  if (timestamp !== undefined) {
+    meta.timestamp = timestamp;
+  }
+  return meta;
+}
+
+/**
+ * Builds minimal structuredContent for model reasoning.
+ */
+function buildStructuredContent(options: OptimizedResultOptions): UnknownRecord {
+  const { summary, previewItems, status } = options;
+  const structuredContent: UnknownRecord = { summary };
+  if (previewItems !== undefined) {
+    const serialisedPreview = serialiseArg(previewItems);
+    const previewArray = Array.isArray(serialisedPreview) ? serialisedPreview : [];
+    structuredContent.previewItems = previewArray.slice(0, MAX_PREVIEW_ITEMS);
+    structuredContent.hasMore = previewArray.length > MAX_PREVIEW_ITEMS;
+  }
+  if (status !== undefined) {
+    structuredContent.status = status;
+  }
+  return structuredContent;
+}
+
+export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {
+  const serialisedFullData = serialiseArg(options.fullData);
+  const meta = buildMeta(options, serialisedFullData);
+  const structuredContent = buildStructuredContent(options);
+  const content: TextContent = { type: 'text', text: options.summary };
+  return { content: [content], structuredContent, _meta: meta };
+}
+
 export function formatUnknownTool(value: unknown): CallToolResult {
   if (typeof value === 'string') {
     return formatError(`Unknown tool: ${value}`);

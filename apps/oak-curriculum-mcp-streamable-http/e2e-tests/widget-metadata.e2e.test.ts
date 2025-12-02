@@ -42,6 +42,8 @@ interface ToolMeta {
   readonly 'openai/outputTemplate'?: string;
   readonly 'openai/toolInvocation/invoking'?: string;
   readonly 'openai/toolInvocation/invoked'?: string;
+  readonly 'openai/widgetAccessible'?: boolean;
+  readonly 'openai/visibility'?: 'public' | 'private';
 }
 
 interface McpToolWithMeta {
@@ -102,7 +104,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
   /**
    * Aggregated tool names that should have widget metadata.
    */
-  const aggregatedToolNames = ['search', 'fetch', 'get-ontology'] as const;
+  const aggregatedToolNames = ['search', 'fetch', 'get-ontology', 'get-help'] as const;
 
   describe('openai/outputTemplate', () => {
     it.each(aggregatedToolNames)(
@@ -169,6 +171,71 @@ describe('ChatGPT Widget Metadata E2E', () => {
         expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
         expect(typeof tool?._meta?.['openai/toolInvocation/invoked']).toBe('string');
         expect(tool?._meta?.['openai/toolInvocation/invoked']?.length).toBeGreaterThan(0);
+      },
+    );
+  });
+
+  describe('openai/widgetAccessible (enables widget tool calling)', () => {
+    const allToolNames = [
+      'search',
+      'fetch',
+      'get-ontology',
+      'get-help',
+      'get-subjects',
+      'get-key-stages',
+    ] as const;
+
+    it.each(allToolNames)(
+      '%s tool has widgetAccessible set to true in tools/list',
+      async (toolName) => {
+        const app = createApp();
+        const { tools, status } = await callToolsList(app);
+        expect(status).toBe(200);
+
+        const tool = findToolByName(tools, toolName);
+        expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
+      },
+    );
+
+    it('ALL tools have widgetAccessible (universal coverage)', async () => {
+      const app = createApp();
+      const { tools, status } = await callToolsList(app);
+      expect(status).toBe(200);
+
+      for (const tool of tools) {
+        expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
+      }
+    });
+  });
+
+  describe('openai/visibility (tool visibility control)', () => {
+    it('ALL tools have visibility set to public', async () => {
+      const app = createApp();
+      const { tools, status } = await callToolsList(app);
+      expect(status).toBe(200);
+
+      for (const tool of tools) {
+        expect(tool._meta?.['openai/visibility']).toBe('public');
+      }
+    });
+  });
+
+  describe('generated tools _meta in MCP response', () => {
+    const generatedToolNames = ['get-subjects', 'get-key-stages', 'get-lessons-summary'] as const;
+
+    it.each(generatedToolNames)(
+      'generated tool %s has complete _meta in tools/list',
+      async (toolName) => {
+        const app = createApp();
+        const { tools, status } = await callToolsList(app);
+        expect(status).toBe(200);
+
+        const tool = findToolByName(tools, toolName);
+        expect(tool).toBeDefined();
+        expect(tool?._meta).toBeDefined();
+        expect(tool?._meta?.['openai/outputTemplate']).toBe(AGGREGATED_TOOL_WIDGET_URI);
+        expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
+        expect(tool?._meta?.['openai/visibility']).toBe('public');
       },
     );
   });

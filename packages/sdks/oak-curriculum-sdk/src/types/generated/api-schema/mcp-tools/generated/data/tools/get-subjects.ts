@@ -101,7 +101,7 @@ export const getSubjects = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.",
+  description: "Subjects\n\nThis tool returns an array of all available subjects and their associated sequences, key stages and years.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -112,6 +112,14 @@ export const getSubjects = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Subjects",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Subjects…",
+    'openai/toolInvocation/invoked': "Get Subjects loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

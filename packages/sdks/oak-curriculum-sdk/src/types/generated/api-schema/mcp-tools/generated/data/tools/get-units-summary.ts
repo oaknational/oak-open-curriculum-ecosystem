@@ -114,7 +114,7 @@ export const getUnitsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+  description: "Unit summary\n\nThis tool returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -125,6 +125,14 @@ export const getUnitsSummary = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Units Summary",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Units Summary…",
+    'openai/toolInvocation/invoked': "Get Units Summary loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

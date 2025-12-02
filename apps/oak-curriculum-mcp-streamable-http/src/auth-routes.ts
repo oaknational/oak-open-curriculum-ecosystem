@@ -11,6 +11,7 @@ import { createMcpHandler } from './handlers.js';
 import { createMcpRouter } from './mcp-router.js';
 import { createMcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { RuntimeConfig } from './runtime-config.js';
+import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
@@ -156,14 +157,23 @@ export function setupGlobalAuthContext(
   const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
     clerkMiddleware(),
   );
-  const clerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
+  const instrumentedClerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
+
+  // Wrap with conditional middleware to skip Clerk for discovery methods
+  // This reduces latency from ~175ms to ~5ms for discovery requests
+  const conditionalClerkMw = measureAuthSetupStep(
+    authLog,
+    'conditionalClerkMiddleware.create',
+    () => createConditionalClerkMiddleware(instrumentedClerkMw, authLog),
+  );
+
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
-    // Apply clerkMiddleware() globally to all routes per Clerk best practices.
-    // This provides authentication context without blocking access.
-    // Selective protection is then applied via createMcpAuthClerk on /mcp routes.
-    // OAuth metadata endpoints (/.well-known/*) remain publicly accessible.
-    authLog.info('Installing Clerk middleware globally (all routes)');
-    app.use(clerkMw);
+    // Apply conditional clerkMiddleware globally to all routes.
+    // Discovery methods (initialize, tools/list, etc.) skip Clerk entirely.
+    // Other requests get full Clerk auth context setup.
+    // Actual enforcement happens via createMcpAuthClerk on /mcp routes.
+    authLog.info('Installing conditional Clerk middleware globally (all routes)');
+    app.use(conditionalClerkMw);
   });
 }
 

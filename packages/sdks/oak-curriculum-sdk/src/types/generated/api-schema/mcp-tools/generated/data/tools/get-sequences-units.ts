@@ -125,7 +125,7 @@ export const getSequencesUnits = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Units within a sequence\n\nThis tool returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.",
+  description: "Units within a sequence\n\nThis tool returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -136,6 +136,14 @@ export const getSequencesUnits = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Sequences Units",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Sequences Units…",
+    'openai/toolInvocation/invoked': "Get Sequences Units loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

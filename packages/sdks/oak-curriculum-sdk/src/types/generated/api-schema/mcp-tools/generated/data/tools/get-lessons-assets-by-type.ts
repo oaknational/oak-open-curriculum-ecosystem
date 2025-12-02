@@ -117,7 +117,7 @@ export const getLessonsAssetsByType = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson asset by type\n\nThis tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.",
+  description: "Lesson asset by type\n\nThis tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -128,6 +128,14 @@ export const getLessonsAssetsByType = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Lessons Assets By Type",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Lessons Assets By Type…",
+    'openai/toolInvocation/invoked': "Get Lessons Assets By Type loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

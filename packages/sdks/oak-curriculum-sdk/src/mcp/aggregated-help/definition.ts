@@ -5,6 +5,8 @@
  * separate from the execution logic.
  */
 
+import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+
 /**
  * Input schema for get-help tool.
  *
@@ -30,7 +32,9 @@ export const GET_HELP_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_HELP_TOOL_DEF = {
-  description: `Returns guidance on how to use the Oak Curriculum MCP server's tools effectively.
+  description: `Returns guidance on how to use the Oak Curriculum MCP server's tools effectively. Use this to understand Oak and how to work with the tools.
+
+${HELP_PREREQUISITE_GUIDANCE}
 
 Use this when you need to understand:
 - How to use a specific tool
@@ -39,7 +43,7 @@ Use this when you need to understand:
 - Best practices and tips for effective tool usage
 
 Do NOT use for:
-- Understanding the curriculum structure (use 'get-ontology')
+- Understanding the curriculum structure (use '${ONTOLOGY_TOOL_NAME}')
 - Fetching actual curriculum content (use 'search' or 'fetch')
 
 Optionally provide a tool_name to get specific help for that tool.`,
@@ -56,5 +60,7 @@ Optionally provide a tool_name to get specific help for that tool.`,
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Loading help…',
     'openai/toolInvocation/invoked': 'Help loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;

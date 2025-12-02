@@ -101,7 +101,7 @@ export const getKeyStages = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Key stages\n\nThis tool returns all the key stages (titles and slugs) that are currently available on Oak",
+  description: "Key stages\n\nThis tool returns all the key stages (titles and slugs) that are currently available on Oak\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -112,6 +112,14 @@ export const getKeyStages = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Key Stages",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Key Stages…",
+    'openai/toolInvocation/invoked': "Get Key Stages loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
