@@ -36,6 +36,19 @@ const ResourcesReadResultSchema = z.object({
   ),
 });
 
+/** Reads a resource and returns its text content */
+async function readResource(uri: string): Promise<string> {
+  const { app } = createStubbedHttpApp();
+  const response = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Accept', STUB_ACCEPT_HEADER)
+    .send({ jsonrpc: '2.0', id: '1', method: 'resources/read', params: { uri } });
+  const envelope = parseSseEnvelope(response.text);
+  const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
+  return parsed.data?.contents[0]?.text ?? '';
+}
+
 describe('Documentation Resources E2E', () => {
   describe('resources/list - Client can discover documentation', () => {
     it('returns getting-started documentation resource', async () => {
@@ -208,29 +221,65 @@ describe('Documentation Resources E2E', () => {
     });
 
     it('workflows provides step-by-step guidance', async () => {
-      const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'docs://oak/workflows.md' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.contents[0]?.text ?? '';
-
-      // Proves: Content provides actionable steps
-      expect(content).toMatch(/1\./); // Has numbered steps
+      const content = await readResource('docs://oak/workflows.md');
+      expect(content).toMatch(/1\./);
       expect(content).toMatch(/2\./);
     });
 
     it('workflows includes common use cases', async () => {
+      const content = await readResource('docs://oak/workflows.md');
+      expect(content).toContain('lesson');
+    });
+
+    it('workflows includes userInteractions workflow first', async () => {
+      const content = await readResource('docs://oak/workflows.md');
+      expect(content).toContain('get-help');
+      expect(content).toContain('get-ontology');
+    });
+
+    it('workflows shows what each step returns', async () => {
+      const content = await readResource('docs://oak/workflows.md');
+      expect(content).toContain('Returns:');
+    });
+
+    it('tools reference includes agentSupport category', async () => {
+      const content = await readResource('docs://oak/tools.md');
+      expect(content).toContain('Agent Support');
+    });
+  });
+});
+
+describe('Ontology Resource E2E', () => {
+  describe('resources/list - Client can discover ontology', () => {
+    it('returns curriculum://ontology resource', async () => {
+      const { app } = createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/list',
+        });
+
+      expect(response.status).toBe(200);
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const resources = parsed.data?.resources ?? [];
+      const ontology = resources.find((r) => r.uri === 'curriculum://ontology');
+
+      expect(ontology).toBeDefined();
+      expect(ontology?.mimeType).toBe('application/json');
+    });
+  });
+
+  describe('resources/read - Client can read ontology', () => {
+    it('curriculum://ontology returns valid JSON', async () => {
       const { app } = createStubbedHttpApp();
 
       const response = await request(app)
@@ -241,15 +290,71 @@ describe('Documentation Resources E2E', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'resources/read',
-          params: { uri: 'docs://oak/workflows.md' },
+          params: { uri: 'curriculum://ontology' },
+        });
+
+      expect(response.status).toBe(200);
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const content = parsed.data?.contents[0]?.text ?? '';
+      expect(content).toBeDefined();
+
+      // Proves: Returns valid JSON
+      expect(() => {
+        JSON.parse(content);
+      }).not.toThrow();
+    });
+
+    it('curriculum://ontology includes curriculum structure', async () => {
+      const { app } = createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/read',
+          params: { uri: 'curriculum://ontology' },
         });
 
       const envelope = parseSseEnvelope(response.text);
       const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
       const content = parsed.data?.contents[0]?.text ?? '';
+      const data = JSON.parse(content) as {
+        curriculumStructure?: { keyStages?: unknown };
+      };
 
-      // Proves: Content covers what teachers actually want to do
-      expect(content).toContain('lesson');
+      // Proves: Contains curriculum domain model
+      expect(data.curriculumStructure).toBeDefined();
+      expect(data.curriculumStructure?.keyStages).toBeDefined();
+    });
+
+    it('curriculum://ontology includes workflows', async () => {
+      const { app } = createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'resources/read',
+          params: { uri: 'curriculum://ontology' },
+        });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
+      const content = parsed.data?.contents[0]?.text ?? '';
+      const data = JSON.parse(content) as { workflows?: unknown };
+
+      // Proves: Contains tool workflow guidance
+      expect(data.workflows).toBeDefined();
     });
   });
 });

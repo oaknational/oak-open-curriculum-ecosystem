@@ -123,6 +123,8 @@ This document describes all available tools organised by category.
 
 ## Tool Categories
 
+${categorySection('Agent Support', toolCategories.agentSupport)}
+
 ${categorySection('Discovery', toolCategories.discovery)}
 
 ${categorySection('Browsing', toolCategories.browsing)}
@@ -141,6 +143,52 @@ ${idFormats.formats.map((f) => `| \`${f.prefix}\` | \`${f.example}\` | ${f.descr
 `;
 }
 
+/** Workflow step type alias for cleaner signatures */
+type WorkflowStep =
+  (typeof toolGuidanceData.workflows)[keyof typeof toolGuidanceData.workflows]['steps'][number];
+
+/**
+ * Formats the tool reference suffix for a workflow step.
+ *
+ * @param step - The workflow step
+ * @returns Tool reference string or empty string
+ */
+function formatStepTool(step: WorkflowStep): string {
+  return 'tool' in step && step.tool ? ` (use \`${step.tool}\`)` : '';
+}
+
+/**
+ * Formats the sub-items (example, returns, note) for a workflow step.
+ *
+ * @param step - The workflow step
+ * @returns Formatted sub-items string
+ */
+function formatStepSubItems(step: WorkflowStep): string {
+  const items: string[] = [];
+  if ('example' in step && step.example) {
+    items.push(`   - Example: \`${step.example}\``);
+  }
+  if ('returns' in step && step.returns) {
+    items.push(`   - Returns: ${step.returns}`);
+  }
+  if ('note' in step && step.note) {
+    items.push(`   - Note: ${step.note}`);
+  }
+  return items.length > 0 ? `\n${items.join('\n')}` : '';
+}
+
+/**
+ * Formats a single workflow step as a markdown numbered list item.
+ *
+ * @param step - The workflow step to format
+ * @returns Formatted markdown string for the step
+ */
+function formatWorkflowStep(step: WorkflowStep): string {
+  const toolRef = formatStepTool(step);
+  const subItems = formatStepSubItems(step);
+  return `${String(step.step)}. ${step.action}${toolRef}${subItems}`;
+}
+
 /**
  * Generates markdown content for the "Workflows" documentation resource.
  *
@@ -152,21 +200,7 @@ export function getWorkflowsMarkdown(): string {
   const { workflows } = toolGuidanceData;
 
   const workflowSection = (workflow: (typeof workflows)[keyof typeof workflows]): string => {
-    const steps = workflow.steps
-      .map((step) => {
-        let line = `${String(step.step)}. ${step.action}`;
-        if ('tool' in step && step.tool) {
-          line += ` (use \`${step.tool}\`)`;
-        }
-        if ('example' in step && step.example) {
-          line += `\n   - Example: \`${step.example}\``;
-        }
-        if ('note' in step && step.note) {
-          line += `\n   - Note: ${step.note}`;
-        }
-        return line;
-      })
-      .join('\n');
+    const steps = workflow.steps.map(formatWorkflowStep).join('\n');
 
     return `## ${workflow.title}
 
@@ -179,6 +213,8 @@ ${steps}
   return `# Common Workflows
 
 Step-by-step guides for common tasks with the Oak Curriculum MCP server.
+
+${workflowSection(workflows.userInteractions)}
 
 ${workflowSection(workflows.findLessons)}
 

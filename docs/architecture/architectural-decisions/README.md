@@ -61,15 +61,10 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-055: Zod Version Boundaries](055-zod-version-boundaries.md)
 - [ADR-056: Conditional Clerk Middleware for Discovery](056-conditional-clerk-middleware-for-discovery.md)
+- [ADR-057: Selective Authentication for Public MCP Resources](057-selective-auth-public-resources.md)
+- [ADR-058: Context Grounding for AI Agents](058-context-grounding-for-ai-agents.md)
 
 ## Key Architectural Decisions
-
-For understanding the deprecated and removed biological architecture:
-
-- **[ADR-020](020-biological-architecture.md)** - Current biological architecture with Greek nomenclature
-- **[ADR-018](018-complete-biological-architecture.md)** - Evolution to complete biological model
-- **[ADR-009](009-mathematical-foundation-for-architecture.md)** - Mathematical grounding from complex systems theory
-- **[ADR-006](006-cellular-architecture-pattern.md)** - Original cellular architecture inspiration
 
 For understanding our API integration approach:
 
@@ -82,6 +77,13 @@ For understanding authentication, authorization, and observability:
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
+
+For understanding the now deprecated and removed biological architecture:
+
+- **[ADR-020](020-biological-architecture.md)** - Current biological architecture with Greek nomenclature
+- **[ADR-018](018-complete-biological-architecture.md)** - Evolution to complete biological model
+- **[ADR-009](009-mathematical-foundation-for-architecture.md)** - Mathematical grounding from complex systems theory
+- **[ADR-006](006-cellular-architecture-pattern.md)** - Original cellular architecture inspiration
 
 ## About ADRs
 

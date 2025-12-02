@@ -30,19 +30,8 @@ function renderHelp(o) {
       cats.forEach(([name, cat]) => {
         h += '<div class="item"><p class="item-ttl">' + esc(name) + '</p>';
         h += '<p class="meta">' + esc(cat.description || '') + '</p>';
-        if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px">Tools: ' + cat.tools.map(t => '<code>' + esc(t) + '</code>').join(' ') + '</p>';
+        if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">Tools: ' + cat.tools.map(t => '<code>' + esc(t) + '</code>').join('') + '</p>';
         h += '</div>';
-      });
-      h += '</div></div>';
-    }
-  }
-  if (o.workflows) {
-    const wfs = Object.entries(o.workflows);
-    if (wfs.length > 0) {
-      h += '<div class="sec"><h2 class="sec-ttl">Workflows<span class="badge">' + wfs.length + '</span></h2><div class="list">';
-      wfs.forEach(([, wf]) => {
-        h += '<div class="item"><p class="item-ttl">' + esc(wf.title || '') + '</p>';
-        h += '<p class="meta">' + esc(wf.description || '') + '</p></div>';
       });
       h += '</div></div>';
     }

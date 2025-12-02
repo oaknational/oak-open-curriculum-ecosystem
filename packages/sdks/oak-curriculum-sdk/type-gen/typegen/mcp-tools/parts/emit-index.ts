@@ -36,6 +36,10 @@ function buildExports({
     })
     .join(', ')}]`;
 
+  // Determine if tool benefits from domain context (get-ontology, get-help)
+  // Utility tools (noauth) like get-rate-limit don't need domain context
+  const requiresDomainContext = securitySchemes[0]?.type !== NOAUTH_SCHEME_TYPE;
+
   const documentedStatuses = collectDocumentedStatuses(operation);
   const documentedStatusLiterals = `[${documentedStatuses
     .map((status) => `'${status}'`)
@@ -123,6 +127,9 @@ function buildExports({
   lines.push('  method,');
   lines.push('  documentedStatuses,');
   lines.push(`  securitySchemes: ${securitySchemesLiteral},`);
+  // requiresDomainContext indicates if the tool benefits from context grounding
+  // (calling get-ontology/get-help first). Utility tools (noauth) don't need this.
+  lines.push(`  requiresDomainContext: ${requiresDomainContext ? 'true' : 'false'},`);
   // MCP annotations: all Oak tools are read-only, non-destructive, idempotent GET operations
   const humanReadableTitle = kebabToTitleCase(toolName);
   lines.push('  annotations: {');

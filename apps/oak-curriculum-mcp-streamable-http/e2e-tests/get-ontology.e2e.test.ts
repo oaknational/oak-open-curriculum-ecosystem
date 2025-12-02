@@ -11,7 +11,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
-import { parseSseEnvelope, parseJsonRpcResult, getFullResultsFromMeta } from './helpers/sse.js';
+import { parseSseEnvelope, parseJsonRpcResult, getStructuredContentData } from './helpers/sse.js';
 import { z } from 'zod';
 
 /**
@@ -34,8 +34,9 @@ const OntologyResponseSchema = z.object({
       }),
     ),
   }),
-  toolUsageGuidance: z.object({
-    discoveryWorkflow: z.object({
+  workflows: z.object({
+    findLessons: z.object({
+      title: z.string(),
       description: z.string(),
       steps: z.array(z.unknown()),
     }),
@@ -111,8 +112,8 @@ describe('get-ontology E2E', () => {
       const result = parseJsonRpcResult(envelope);
       expect(result.isError).not.toBe(true);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const ontologyData = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const ontologyData = getStructuredContentData(result);
 
       // Validate response has the curriculum domain model structure
       const parsed = OntologyResponseSchema.safeParse(ontologyData);
@@ -136,8 +137,8 @@ describe('get-ontology E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const ontologyData = getFullResultsFromMeta(result) as {
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const ontologyData = getStructuredContentData(result) as {
         readonly curriculumStructure: {
           readonly keyStages: readonly { readonly slug: string }[];
         };
@@ -167,21 +168,17 @@ describe('get-ontology E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const ontologyData = getFullResultsFromMeta(result) as {
-        readonly toolUsageGuidance: {
-          readonly discoveryWorkflow: { readonly description: string };
-          readonly browsingWorkflow: { readonly description: string };
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const ontologyData = getStructuredContentData(result) as {
+        readonly workflows: {
+          readonly findLessons: { readonly description: string };
+          readonly browseSubject: { readonly description: string };
         };
       };
 
-      // Verify guidance helps AI agents understand workflows
-      expect(ontologyData.toolUsageGuidance.discoveryWorkflow.description).toContain(
-        'user wants to find',
-      );
-      expect(ontologyData.toolUsageGuidance.browsingWorkflow.description).toContain(
-        'user wants to explore',
-      );
+      // Verify workflows help AI agents understand how to combine tools
+      expect(ontologyData.workflows.findLessons.description).toContain('Search for lessons');
+      expect(ontologyData.workflows.browseSubject.description).toContain('Explore');
     });
   });
 });

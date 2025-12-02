@@ -106,6 +106,7 @@ export const getChangelogLatest = {
   method,
   documentedStatuses,
   securitySchemes: [{ type: 'noauth' }],
+  requiresDomainContext: false,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

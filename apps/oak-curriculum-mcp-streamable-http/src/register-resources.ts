@@ -12,6 +12,8 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
+  ONTOLOGY_RESOURCE,
+  getOntologyJson,
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import {
   AGGREGATED_TOOL_WIDGET_URI,
@@ -41,12 +43,17 @@ const WIDGET_CSP = {
 
 /**
  * Human-readable description for the widget, shown to the model.
- * Reduces redundant assistant narration when the widget loads.
+ * Includes context grounding guidance to call get-ontology first.
  *
- * @remarks Must be ≤200 characters per OpenAI guidance.
+ * @remarks
+ * - Must be ≤200 characters per OpenAI guidance
+ * - Model sees this when widget loads, reducing redundant narration
+ * - Guides model to call get-ontology for domain understanding
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 const WIDGET_DESCRIPTION =
-  'Oak National Academy curriculum explorer showing lessons, units, quizzes, and teaching resources.';
+  'Oak curriculum explorer. For best results, call get-ontology and get-help first to understand the curriculum domain model.';
 
 /**
  * Registers the Oak JSON viewer widget as an MCP resource.
@@ -124,16 +131,48 @@ export function registerDocumentationResources(server: McpServer): void {
 }
 
 /**
+ * Registers the curriculum ontology as an MCP resource.
+ *
+ * This resource exposes the complete curriculum domain model as JSON,
+ * complementing the `get-ontology` tool. While the tool is model-controlled,
+ * this resource allows application-controlled context injection for MCP
+ * clients that support pre-fetching resources.
+ *
+ * @param server - MCP server instance
+ * @see ADR-058 for the dual exposure pattern
+ */
+export function registerOntologyResource(server: McpServer): void {
+  server.registerResource(
+    ONTOLOGY_RESOURCE.name,
+    ONTOLOGY_RESOURCE.uri,
+    {
+      description: ONTOLOGY_RESOURCE.description,
+      mimeType: ONTOLOGY_RESOURCE.mimeType,
+    },
+    () => ({
+      contents: [
+        {
+          uri: ONTOLOGY_RESOURCE.uri,
+          mimeType: ONTOLOGY_RESOURCE.mimeType,
+          text: getOntologyJson(),
+        },
+      ],
+    }),
+  );
+}
+
+/**
  * Registers all static resources with the MCP server.
  *
- * Combines widget and documentation resource registration into a single call
- * for cleaner server setup.
+ * Combines widget, documentation, and ontology resource registration into
+ * a single call for cleaner server setup.
  *
  * @param server - MCP server instance
  */
 export function registerAllResources(server: McpServer): void {
   registerWidgetResource(server);
   registerDocumentationResources(server);
+  registerOntologyResource(server);
 }
 
 // Re-export prompts registration for use in handlers

@@ -13,7 +13,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
-import { parseSseEnvelope, parseJsonRpcResult, getFullResultsFromMeta } from './helpers/sse.js';
+import { parseSseEnvelope, parseJsonRpcResult, getStructuredContentData } from './helpers/sse.js';
 import { z } from 'zod';
 
 const ToolsListResultSchema = z.object({
@@ -27,11 +27,12 @@ const ToolsListResultSchema = z.object({
 });
 
 /**
- * Schema for tool call results with the new optimized response format.
+ * Schema for tool call results per OpenAI Apps SDK reference.
  *
- * The format has:
- * - `content[0].text`: Human-readable summary (NOT JSON)
- * - `_meta.fullResults`: Full data for tests and widgets
+ * Per https://developers.openai.com/apps-sdk/reference#tool-results:
+ * - `content`: Model AND widget see this (human-readable summary)
+ * - `structuredContent`: Model AND widget see this (FULL data for reasoning)
+ * - `_meta`: Widget ONLY sees this (additional widget metadata)
  */
 const ToolCallResultSchema = z.object({
   content: z.array(
@@ -40,12 +41,8 @@ const ToolCallResultSchema = z.object({
       text: z.string().optional(),
     }),
   ),
-  _meta: z
-    .object({
-      fullResults: z.unknown().optional(),
-    })
-    .loose()
-    .optional(),
+  structuredContent: z.record(z.string(), z.unknown()).optional(),
+  _meta: z.record(z.string(), z.unknown()).optional(),
   isError: z.boolean().optional(),
 });
 
@@ -124,8 +121,8 @@ describe('get-help Tool E2E', () => {
       const result = parseJsonRpcResult(envelope);
       expect(result.isError).not.toBe(true);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result);
 
       // Proves: Response provides actionable guidance
       expect(data).toHaveProperty('serverOverview');
@@ -152,8 +149,8 @@ describe('get-help Tool E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result);
 
       // Proves: Response includes step-by-step guidance
       expect(data).toHaveProperty('workflows');
@@ -179,8 +176,8 @@ describe('get-help Tool E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result);
 
       // Proves: Response includes practical tips
       expect(data).toHaveProperty('tips');
@@ -211,8 +208,8 @@ describe('get-help Tool E2E', () => {
       const result = parseJsonRpcResult(envelope);
       expect(result.isError).not.toBe(true);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result) as { tool: string };
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result) as { tool: string };
 
       // Proves: Response is specific to the requested tool
       expect(data.tool).toBe('search');
@@ -238,8 +235,8 @@ describe('get-help Tool E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result);
 
       // Proves: Response helps user understand tool's role
       expect(data).toHaveProperty('category');
@@ -265,8 +262,8 @@ describe('get-help Tool E2E', () => {
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
 
-      // Full data is now in _meta.fullResults (optimized response format)
-      const data = getFullResultsFromMeta(result);
+      // Full data is in structuredContent per OpenAI Apps SDK
+      const data = getStructuredContentData(result);
 
       // Proves: Response shows how tool fits into workflows
       expect(data).toHaveProperty('relatedWorkflows');

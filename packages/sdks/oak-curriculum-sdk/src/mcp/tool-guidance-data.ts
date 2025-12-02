@@ -1,3 +1,5 @@
+/* eslint-disable max-lines -- this is a static tool guidance data file, disabling to maintain readability */
+
 /**
  * Static tool usage guidance data for MCP server documentation.
  *
@@ -91,8 +93,43 @@ export const toolGuidanceData = {
     } satisfies ToolCategory,
   },
 
-  /** Common workflows showing how to combine tools for typical tasks. */
+  /**
+   * Common workflows showing how to combine tools for typical tasks.
+   *
+   * These workflows are included in agent tool responses (structuredContent)
+   * to help agents understand how to use tools together effectively.
+   */
   workflows: {
+    userInteractions: {
+      title: 'When finding or presenting Oak content for the user',
+      description:
+        'When finding or presenting Oak content for the user, you should follow these steps.',
+      steps: [
+        {
+          step: 1,
+          action: 'Use the get-help tool to understand the Oak context',
+          tool: 'get-help',
+          example: 'get-help()',
+          returns: 'An introduction to the Oak curriculum and how to use the tools.',
+        },
+        {
+          step: 2,
+          action: 'Use the get-ontology tool to understand the Oak curriculum',
+          tool: 'get-ontology',
+          example: 'get-ontology()',
+          returns:
+            'A detailed overview of the Oak curriculum including key stages, subjects, units, and lessons.',
+        },
+        {
+          step: 3,
+          action: 'Use the discovery and browsing tools to explore the Oak curriculum',
+        },
+        {
+          step: 4,
+          action: 'Use the fetching tools to find curriculum content and resources',
+        },
+      ],
+    } satisfies Workflow,
     findLessons: {
       title: 'Find lessons on a topic',
       description: 'Search for lessons matching a topic and retrieve detailed content.',
@@ -102,6 +139,7 @@ export const toolGuidanceData = {
           action: 'Search for lessons matching your topic',
           tool: 'search',
           example: 'search({ query: "photosynthesis", keyStage: "ks3" })',
+          returns: 'List of matching lessons with slugs and titles',
         },
         {
           step: 2,
@@ -113,6 +151,7 @@ export const toolGuidanceData = {
           action: 'Fetch full details for selected lessons',
           tool: 'fetch',
           example: 'fetch({ id: "lesson:photosynthesis-in-plants" })',
+          returns: 'Full lesson details including transcript, quiz, assets',
         },
       ],
     } satisfies Workflow,
@@ -125,30 +164,35 @@ export const toolGuidanceData = {
           step: 1,
           action: 'Find a relevant lesson using search or browsing',
           tool: 'search',
+          returns: 'Lessons matching your criteria',
         },
         {
           step: 2,
           action: 'Get lesson summary for learning objectives and keywords',
           tool: 'get-lessons-summary',
           example: 'get-lessons-summary({ lesson: "adding-fractions" })',
+          returns: 'Learning objectives, keywords, misconceptions',
         },
         {
           step: 3,
           action: 'Get lesson transcript to understand content delivery',
           tool: 'get-lessons-transcript',
           example: 'get-lessons-transcript({ lesson: "adding-fractions" })',
+          returns: 'Full video transcript text',
         },
         {
           step: 4,
           action: 'Get quiz questions for assessment ideas',
           tool: 'get-lessons-quiz',
           example: 'get-lessons-quiz({ lesson: "adding-fractions" })',
+          returns: 'Starter and exit quiz questions with answers',
         },
         {
           step: 5,
           action: 'Get downloadable assets (slides, worksheets)',
           tool: 'get-lessons-assets',
           example: 'get-lessons-assets({ lesson: "adding-fractions" })',
+          returns: 'Download URLs for slides, worksheets, and other resources',
         },
       ],
     } satisfies Workflow,
@@ -161,12 +205,14 @@ export const toolGuidanceData = {
           step: 1,
           action: 'List all subjects to find the one you want',
           tool: 'get-subjects',
+          returns: 'List of subjects with key stage coverage',
         },
         {
           step: 2,
           action: 'Get units for a specific subject and key stage',
           tool: 'get-key-stages-subject-units',
           example: 'get-key-stages-subject-units({ keyStage: "ks2", subject: "maths" })',
+          returns: 'Units organised by year',
         },
         {
           step: 3,
@@ -174,6 +220,7 @@ export const toolGuidanceData = {
           tool: 'get-key-stages-subject-lessons',
           example:
             'get-key-stages-subject-lessons({ keyStage: "ks2", subject: "maths", unit: "fractions-year-4" })',
+          returns: 'Lessons with summaries',
         },
       ],
     } satisfies Workflow,
@@ -187,13 +234,15 @@ export const toolGuidanceData = {
           action: 'List available threads for a subject',
           tool: 'get-threads',
           example: 'get-threads({ subject: "maths" })',
+          returns: 'Available conceptual threads for the subject',
         },
         {
           step: 2,
           action: 'Get units in a thread ordered by progression',
           tool: 'get-threads-units',
           example: 'get-threads-units({ threadSlug: "number" })',
-          note: 'Units are ordered by conceptual development (lower unitOrder = earlier)',
+          returns: 'Units ordered by conceptual development across years',
+          note: 'Lower unitOrder = earlier in progression',
         },
         {
           step: 3,
@@ -210,7 +259,6 @@ export const toolGuidanceData = {
     'Get lesson transcript for detailed content understanding; get quiz for assessment ideas.',
     'Threads show how concepts build across years - great for finding prerequisites or extensions.',
     'Key Stage 4 (GCSE) has additional complexity: tiers (foundation/higher) and exam boards.',
-    'All lesson content is aligned to the National Curriculum for England.',
     'Use get-help or get-ontology to understand Oak - great at the start of a conversation.',
   ],
 

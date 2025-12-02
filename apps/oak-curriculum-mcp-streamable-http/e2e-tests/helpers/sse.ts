@@ -8,23 +8,18 @@ const JsonRpcEnvelopeSchema = z.object({
 export type JsonRpcEnvelope = z.infer<typeof JsonRpcEnvelopeSchema>;
 
 /**
- * Schema for tool call results with the new optimized format.
+ * Schema for tool call results per OpenAI Apps SDK reference.
  *
- * The format uses:
- * - `content[0].text`: Human-readable summary (NOT JSON)
- * - `structuredContent`: Minimal data for model reasoning
- * - `_meta.fullResults`: Full data for tests and widgets
+ * Per https://developers.openai.com/apps-sdk/reference#tool-results:
+ * - `content`: Model AND widget see this (human-readable summary)
+ * - `structuredContent`: Model AND widget see this (FULL data for reasoning)
+ * - `_meta`: Widget ONLY sees this (additional widget metadata)
  */
 const JsonRpcResultSchema = z.object({
   tools: z.unknown().optional(),
   content: z.array(z.unknown()).optional(),
-  structuredContent: z.unknown().optional(),
-  _meta: z
-    .object({
-      fullResults: z.unknown().optional(),
-    })
-    .loose()
-    .optional(),
+  structuredContent: z.record(z.string(), z.unknown()).optional(),
+  _meta: z.record(z.string(), z.unknown()).optional(),
   isError: z.boolean().optional(),
 });
 
@@ -77,22 +72,25 @@ export function readFirstTextContent(content: readonly unknown[]): string {
   throw new Error('SSE envelope missing text content entry');
 }
 
+/** structuredContent type from Zod schema - E2E test helper only */
+type StructuredContentData = NonNullable<JsonRpcResult['structuredContent']>;
+
 /**
- * Extract full results from _meta.fullResults.
+ * Extract full data from structuredContent (per OpenAI Apps SDK).
  *
- * The new optimized response format stores full data in `_meta.fullResults`
- * while `content[0].text` contains only a human-readable summary.
+ * Per OpenAI reference: structuredContent is "Surfaced to the model and the component".
+ * This is where the full data lives for aggregated tools.
  *
  * @param result - Parsed JSON-RPC result
- * @returns The full results data from _meta
- * @throws Error if _meta.fullResults is not present
+ * @returns The full data from structuredContent
+ * @throws Error if structuredContent is not present
  */
-export function getFullResultsFromMeta(result: JsonRpcResult): unknown {
-  const fullResults = result._meta?.fullResults;
-  if (fullResults === undefined) {
-    throw new Error('SSE envelope missing _meta.fullResults - response may be using old format');
+export function getStructuredContentData(result: JsonRpcResult): StructuredContentData {
+  const structured = result.structuredContent;
+  if (structured === undefined) {
+    throw new Error('SSE envelope missing structuredContent');
   }
-  return fullResults;
+  return structured;
 }
 
 /**
@@ -101,8 +99,8 @@ export function getFullResultsFromMeta(result: JsonRpcResult): unknown {
  * Generated tools (via universal-tools/executor.ts) return responses with
  * JSON in `content[0].text` containing `{ status, data }`.
  *
- * For aggregated tools using formatOptimizedResult(), use getFullResultsFromMeta()
- * which reads from `_meta.fullResults` instead.
+ * For aggregated tools using formatOptimizedResult(), use getStructuredContentData()
+ * which reads from `structuredContent`.
  */
 export function parseToolSuccessPayload(result: JsonRpcResult): ToolSuccessPayload {
   const content = getContentArray(result);
