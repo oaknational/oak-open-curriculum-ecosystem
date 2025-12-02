@@ -33,7 +33,7 @@
   "dependencies": {
     "@clerk/express": "^1.7.43",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",

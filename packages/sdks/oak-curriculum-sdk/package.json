@@ -108,7 +108,7 @@
     "zod": "^4"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
     "@next/eslint-plugin-next": "^16.0.3",
     "@types/node": "^22.10.5",
     "dotenv": "^17.2.1",
