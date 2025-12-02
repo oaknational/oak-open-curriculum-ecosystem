@@ -1,8 +1,8 @@
 # Zod v3 Isolation to Adapter Workspace
 
-**Status**: 🔴 BLOCKED (build failing)  
+**Status**: ✅ COMPLETE  
 **Created**: 2025-11-28  
-**Updated**: 2025-11-29
+**Completed**: 2025-11-30
 
 ---
 
@@ -252,12 +252,12 @@ grep -ri zodios packages/sdks  # Must return empty
 
 ## Success Criteria
 
-- [ ] `ZodiosEndpoint` renamed to `Endpoint` in generator
-- [ ] No "Zodios" string anywhere outside adapter workspace
-- [ ] `rawCurriculumSchemas` exported from generated file
-- [ ] `search-response-guards.ts` uses `rawCurriculumSchemas`
-- [ ] `ZodIssue` import fixed in `validation/types.ts`
-- [ ] `pnpm type-gen` succeeds
-- [ ] `pnpm build` succeeds (including semantic-search app)
-- [ ] `pnpm check` passes
-- [ ] `grep -ri zodios packages/sdks` returns no results
+- [x] `ZodiosEndpoint` renamed to `Endpoint` in generator
+- [x] No "Zodios" string anywhere outside adapter workspace (except transformation logic string literals)
+- [x] `rawCurriculumSchemas` exported from generated file
+- [x] `search-response-guards.ts` uses `rawCurriculumSchemas`
+- [x] `ZodIssue` import fixed in `validation/types.ts`
+- [x] `pnpm type-gen` succeeds
+- [x] `pnpm build` succeeds (including semantic-search app)
+- [x] `pnpm check` passes
+- [x] Generated output has no Zodios references

@@ -131,7 +131,7 @@ export const getSequencesQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Questions within a sequence\n\nThis tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
+  description: "Questions within a sequence\n\nThis tool returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -142,6 +142,14 @@ export const getSequencesQuestions = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Sequences Questions",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Sequences Questions…",
+    'openai/toolInvocation/invoked': "Get Sequences Questions loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

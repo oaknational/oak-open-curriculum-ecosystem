@@ -20,12 +20,47 @@ import {
 } from './aggregated-tool-widget.js';
 
 /**
+ * OpenAI Apps SDK Content Security Policy for the widget.
+ *
+ * Defines allowed domains for outbound requests from within the widget sandbox.
+ * The widget itself is protected from arbitrary iframe embedding by the MCP
+ * architecture - only ChatGPT can access MCP resources.
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
+ */
+const WIDGET_CSP = {
+  /** Domains the widget can make fetch/XHR requests to */
+  connect_domains: ['https://*.thenational.academy'],
+  /** Domains the widget can load static resources from (fonts, images) */
+  resource_domains: [
+    'https://fonts.googleapis.com',
+    'https://fonts.gstatic.com',
+    'https://*.thenational.academy',
+  ],
+} as const;
+
+/**
+ * Human-readable description for the widget, shown to the model.
+ * Reduces redundant assistant narration when the widget loads.
+ *
+ * @remarks Must be ≤200 characters per OpenAI guidance.
+ */
+const WIDGET_DESCRIPTION =
+  'Oak National Academy curriculum explorer showing lessons, units, quizzes, and teaching resources.';
+
+/**
  * Registers the Oak JSON viewer widget as an MCP resource.
  *
  * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
  * and used by ChatGPT to render tool output with Oak branding.
  *
+ * Includes OpenAI Apps SDK _meta fields required for production deployment:
+ * - openai/widgetCSP: Content Security Policy for outbound requests
+ * - openai/widgetPrefersBorder: Hint for bordered card rendering
+ * - openai/widgetDescription: Human-readable summary for the model
+ *
  * @param server - MCP server instance
+ * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 export function registerWidgetResource(server: McpServer): void {
   server.registerResource(
@@ -41,6 +76,11 @@ export function registerWidgetResource(server: McpServer): void {
           uri: AGGREGATED_TOOL_WIDGET_URI,
           mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
           text: AGGREGATED_TOOL_WIDGET_HTML,
+          _meta: {
+            'openai/widgetCSP': WIDGET_CSP,
+            'openai/widgetPrefersBorder': true,
+            'openai/widgetDescription': WIDGET_DESCRIPTION,
+          },
         },
       ],
     }),

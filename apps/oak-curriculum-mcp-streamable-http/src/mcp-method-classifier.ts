@@ -1,4 +1,27 @@
 /**
+ * MCP methods that are considered discovery/notification methods.
+ * These methods do not require authentication and provide metadata
+ * about the server, its tools, resources, and prompts.
+ *
+ * Per MCP spec and OpenAI Apps requirements, these must work without
+ * authentication to allow discovery before OAuth flow initiates.
+ *
+ * **IMPORTANT**: This set MUST be synchronized with CLERK_SKIP_METHODS
+ * in conditional-clerk-middleware.ts. If Clerk is skipped but auth is
+ * still required, getAuth() will throw.
+ *
+ * @see conditional-clerk-middleware.ts
+ */
+const DISCOVERY_METHODS: ReadonlySet<string> = new Set([
+  'initialize', // Server capability negotiation
+  'tools/list', // Tool catalog discovery
+  'resources/list', // Resource discovery
+  'prompts/list', // Prompt discovery
+  'resources/templates/list', // Template discovery
+  'notifications/initialized', // Client notification (no response needed)
+]);
+
+/**
  * Determines if an MCP method is a discovery method.
  *
  * Discovery methods provide metadata about the server and its tools.
@@ -8,6 +31,10 @@
  * Discovery methods:
  * - `initialize`: Server capability negotiation
  * - `tools/list`: Tool catalog discovery
+ * - `resources/list`: Resource discovery
+ * - `prompts/list`: Prompt discovery
+ * - `resources/templates/list`: Template discovery
+ * - `notifications/initialized`: Client initialization notification
  *
  * All other methods (including `tools/call`) are considered execution
  * methods and require authentication checks.
@@ -33,5 +60,5 @@
  * @public
  */
 export function isDiscoveryMethod(method: string): boolean {
-  return method === 'initialize' || method === 'tools/list';
+  return DISCOVERY_METHODS.has(method);
 }

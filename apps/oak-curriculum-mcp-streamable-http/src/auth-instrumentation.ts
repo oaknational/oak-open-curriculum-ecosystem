@@ -5,6 +5,7 @@ export type AuthSetupStep =
   | 'auth.disabled.register'
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'
+  | 'conditionalClerkMiddleware.create'
   | 'registerPublicOAuthMetadata'
   | 'mcp.auth.register'
   | 'mcp.routes.register';

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { OperationObject } from 'openapi3-ts/oas31';
-import { toToolDescription } from './tool-description.js';
+import { toToolDescription, appendPrerequisiteGuidance } from './tool-description.js';
 
 /**
  * Unit tests for toToolDescription pure function.
@@ -155,5 +155,48 @@ describe('toToolDescription', () => {
       expect(result).toContain('This tool returns the types');
       expect(result).toContain('This tool contains licence information');
     });
+  });
+});
+
+/**
+ * Unit tests for appendPrerequisiteGuidance pure function.
+ *
+ * This function conditionally appends domain prerequisite guidance to tool
+ * descriptions based on whether the tool requires authentication.
+ *
+ * Tools that require auth should guide models to call get-ontology first.
+ * Tools with noauth (rate-limit, changelog) skip the guidance.
+ */
+describe('appendPrerequisiteGuidance', () => {
+  it('appends prerequisite when requiresAuth is true', () => {
+    const result = appendPrerequisiteGuidance('Tool summary', true);
+    expect(result).toContain('Tool summary');
+    expect(result).toContain('PREREQUISITE');
+    expect(result).toContain('get-ontology');
+  });
+
+  it('does NOT append prerequisite when requiresAuth is false', () => {
+    const result = appendPrerequisiteGuidance('Tool summary', false);
+    expect(result).toBe('Tool summary');
+    expect(result).not.toContain('PREREQUISITE');
+  });
+
+  it('returns undefined when description is undefined regardless of auth', () => {
+    expect(appendPrerequisiteGuidance(undefined, true)).toBeUndefined();
+    expect(appendPrerequisiteGuidance(undefined, false)).toBeUndefined();
+  });
+
+  it('preserves full description content when appending prerequisite', () => {
+    const description = 'Lesson summary\n\nThis tool returns a summary for a given lesson';
+    const result = appendPrerequisiteGuidance(description, true);
+    expect(result).toContain('Lesson summary');
+    expect(result).toContain('This tool returns a summary for a given lesson');
+    expect(result).toContain('PREREQUISITE');
+  });
+
+  it('includes key curriculum concepts in prerequisite text', () => {
+    const result = appendPrerequisiteGuidance('Test', true);
+    expect(result).toContain('key stages');
+    expect(result).toContain('subjects');
   });
 });

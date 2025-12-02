@@ -3,3 +3,20 @@ read @rules.md , @testing-strategy.md , and @schema-first-execution.md , and tak
 The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.
 
 When analysing a generated file, always analyse the generator code that produced it as well, as it is the source of truth for the generated file.
+
+After each piece of work, the fully quality gate suite must be run one gate at a time, and analysis of issues must wait until all gates are complete. Analysis must include asking if there are fundamental architectural issues or opportunities for improvement.
+
+```shell
+# From the repo root, with no filters
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint -- --fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
+```

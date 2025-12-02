@@ -114,7 +114,7 @@ export const getLessonsSummary = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson summary\n\nThis tool returns a summary for a given lesson",
+  description: "Lesson summary\n\nThis tool returns a summary for a given lesson\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -125,6 +125,14 @@ export const getLessonsSummary = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Lessons Summary",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Lessons Summary…",
+    'openai/toolInvocation/invoked': "Get Lessons Summary loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

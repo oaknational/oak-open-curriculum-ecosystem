@@ -123,7 +123,7 @@ export const getSearchLessons = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Lesson search using lesson title\n\nSearch for a term and find the 20 most similar lessons with titles that contain similar text.",
+  description: "Lesson search using lesson title\n\nSearch for a term and find the 20 most similar lessons with titles that contain similar text.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -134,6 +134,14 @@ export const getSearchLessons = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Search Lessons",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Search Lessons…",
+    'openai/toolInvocation/invoked': "Get Search Lessons loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

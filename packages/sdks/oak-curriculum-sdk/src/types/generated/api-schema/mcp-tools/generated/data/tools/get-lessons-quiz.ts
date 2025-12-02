@@ -114,7 +114,7 @@ export const getLessonsQuiz = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
+  description: "Quiz questions by lesson\n\nThe endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -125,6 +125,14 @@ export const getLessonsQuiz = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Lessons Quiz",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Lessons Quiz…",
+    'openai/toolInvocation/invoked': "Get Lessons Quiz loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

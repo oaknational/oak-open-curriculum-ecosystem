@@ -9,6 +9,7 @@ import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page/index.js';
 import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
+import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';
 import { createHttpLogger } from './logging/index.js';
@@ -84,6 +85,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
   // Apply CORS globally to ALL routes
   app.use(corsMiddleware);
+  // Phase 2.1: Security headers (CSP, X-Content-Type-Options, etc.) - safe for JSON, required for HTML
+  runBootstrapPhase(log, bootstrapTimer, 'createSecurityHeaders', appId, () => {
+    app.use(createSecurityHeadersMiddleware());
+  });
 
   // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
   // These endpoints MUST be publicly accessible without authentication per RFC 9470.

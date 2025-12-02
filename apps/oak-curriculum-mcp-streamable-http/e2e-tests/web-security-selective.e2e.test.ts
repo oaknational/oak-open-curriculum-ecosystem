@@ -185,3 +185,105 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
   });
 });
+
+/**
+ * E2E tests for HTTP security headers (helmet middleware).
+ *
+ * Verifies that security headers are applied to all responses.
+ */
+describe('Security Headers (Helmet) - Applied Globally', () => {
+  describe('Landing page (/) - HTML response', () => {
+    it('has Content-Security-Policy header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['content-security-policy']).toBeDefined();
+      expect(res.headers['content-security-policy']).toContain("default-src 'self'");
+    });
+
+    it('CSP allows Google Fonts for landing page styling', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const csp = res.headers['content-security-policy'];
+
+      expect(csp).toContain('fonts.googleapis.com');
+      expect(csp).toContain('fonts.gstatic.com');
+    });
+
+    it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const csp = res.headers['content-security-policy'];
+
+      // Cloudflare injects inline scripts for bot detection that load from /cdn-cgi/
+      expect(csp).toContain("script-src 'self' 'unsafe-inline'");
+    });
+
+    it('has X-Content-Type-Options: nosniff', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+    });
+
+    it('has X-Frame-Options: SAMEORIGIN', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      expect(res.headers['x-frame-options']).toBe('SAMEORIGIN');
+    });
+
+    it('has Strict-Transport-Security header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const hsts = res.headers['strict-transport-security'];
+
+      expect(hsts).toBeDefined();
+      expect(hsts).toContain('max-age=');
+    });
+  });
+
+  describe('/healthz - JSON response', () => {
+    it('has security headers (harmless for JSON)', async () => {
+      const app = createApp();
+      const res = await request(app).get('/healthz');
+
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+      expect(res.headers['content-security-policy']).toBeDefined();
+    });
+
+    it('still returns valid JSON', async () => {
+      const app = createApp();
+      const res = await request(app).get('/healthz');
+
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('application/json');
+      expect(res.body).toHaveProperty('status', 'ok');
+    });
+  });
+
+  describe('/mcp - MCP protocol endpoint', () => {
+    it('has Cross-Origin-Resource-Policy: cross-origin (for MCP clients)', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Content-Type', 'application/json')
+        .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
+
+      expect(res.headers['cross-origin-resource-policy']).toBe('cross-origin');
+    });
+
+    it('MCP requests still work with security headers', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Content-Type', 'application/json')
+        .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
+
+      // Should not be a 4xx/5xx error from security headers
+      expect(res.status).toBeLessThan(400);
+    });
+  });
+});

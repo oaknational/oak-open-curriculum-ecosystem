@@ -11,12 +11,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
-import {
-  parseSseEnvelope,
-  parseJsonRpcResult,
-  getContentArray,
-  readFirstTextContent,
-} from './helpers/sse.js';
+import { parseSseEnvelope, parseJsonRpcResult, getFullResultsFromMeta } from './helpers/sse.js';
 import { z } from 'zod';
 
 /**
@@ -116,9 +111,8 @@ describe('get-ontology E2E', () => {
       const result = parseJsonRpcResult(envelope);
       expect(result.isError).not.toBe(true);
 
-      const content = getContentArray(result);
-      const textEntry = readFirstTextContent(content);
-      const ontologyData: unknown = JSON.parse(textEntry);
+      // Full data is now in _meta.fullResults (optimized response format)
+      const ontologyData = getFullResultsFromMeta(result);
 
       // Validate response has the curriculum domain model structure
       const parsed = OntologyResponseSchema.safeParse(ontologyData);
@@ -141,9 +135,9 @@ describe('get-ontology E2E', () => {
 
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
-      const content = getContentArray(result);
-      const textEntry = readFirstTextContent(content);
-      const ontologyData = JSON.parse(textEntry) as {
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const ontologyData = getFullResultsFromMeta(result) as {
         readonly curriculumStructure: {
           readonly keyStages: readonly { readonly slug: string }[];
         };
@@ -172,9 +166,9 @@ describe('get-ontology E2E', () => {
 
       const envelope = parseSseEnvelope(response.text);
       const result = parseJsonRpcResult(envelope);
-      const content = getContentArray(result);
-      const textEntry = readFirstTextContent(content);
-      const ontologyData = JSON.parse(textEntry) as {
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const ontologyData = getFullResultsFromMeta(result) as {
         readonly toolUsageGuidance: {
           readonly discoveryWorkflow: { readonly description: string };
           readonly browsingWorkflow: { readonly description: string };

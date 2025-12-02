@@ -1,8 +1,8 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import {
-  formatData,
   formatError,
+  formatOptimizedResult,
   toErrorMessage,
   extractExecutionData,
 } from './universal-tool-shared.js';
@@ -13,6 +13,7 @@ import {
   extractSlug,
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
+import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
 
 /**
  * Fetch tool definition with full MCP metadata.
@@ -23,6 +24,8 @@ import {
 export const FETCH_TOOL_DEF = {
   description: `Fetch curriculum resource by canonical identifier.
 
+${FETCH_PREREQUISITE_GUIDANCE}
+
 Use this when you need to:
 - Get lesson details (learning objectives, keywords, misconceptions)
 - Get unit information (lessons list, subject context)
@@ -31,7 +34,7 @@ Use this when you need to:
 
 Do NOT use for:
 - Finding content when you don't have the ID (use 'search')
-- Understanding ID formats (use 'get-ontology' first)
+- Understanding ID formats (use '${ONTOLOGY_TOOL_NAME}' first)
 
 Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").`,
   securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
@@ -46,6 +49,8 @@ Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Fetching resource…',
     'openai/toolInvocation/invoked': 'Resource loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;
 
@@ -128,15 +133,35 @@ export async function runFetchTool(
     return formatError(toErrorMessage(result.error));
   }
   const canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
-  return formatData({
-    status: result.status,
-    data: {
+  const summary = buildFetchSummary(type, slug, canonicalUrl);
+
+  return formatOptimizedResult({
+    summary,
+    fullData: {
       id: args.id,
       type,
       canonicalUrl,
+      status: result.status,
       data: result.data,
     },
+    status: 'success',
+    timestamp: Date.now(),
+    toolName: 'fetch',
+    annotationsTitle: 'Fetch Curriculum Resource',
   });
+}
+
+/**
+ * Builds a human-readable summary of the fetch result.
+ */
+function buildFetchSummary(
+  type: ContentType,
+  slug: string,
+  canonicalUrl: string | undefined,
+): string {
+  const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+  const urlPart = canonicalUrl ? ` (${canonicalUrl})` : '';
+  return `Fetched ${typeName}: ${slug}${urlPart}`;
 }
 
 function detectTypeFromId(id: string): ContentType | undefined {

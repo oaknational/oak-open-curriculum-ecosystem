@@ -10,8 +10,9 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatData } from './universal-tool-shared.js';
+import { formatOptimizedResult } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
+import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
 
 /**
  * Input schema for get-ontology tool (no parameters required).
@@ -29,19 +30,21 @@ export const GET_ONTOLOGY_INPUT_SCHEMA = {
  * _meta fields for invocation status display.
  */
 export const GET_ONTOLOGY_TOOL_DEF = {
-  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, and tool usage guidance.
+  description: `Returns the Oak Curriculum domain model including key stages, subjects, entity hierarchy, and tool usage guidance. Use this to understand Oak - it's the foundation for effective curriculum exploration.
+
+${ONTOLOGY_RECOMMENDED_FIRST_STEP}
 
 Use this when you need to understand:
-- How the curriculum is structured (key stages, years, subjects)
+- How the curriculum is structured (key stages KS1-KS4, years, subjects)
 - How entities relate (subject → unit → lesson)
 - Which tools to use for different workflows
-- How to interpret ID formats for the 'fetch' tool
+- How to interpret ID formats for the 'fetch' tool (e.g., "lesson:slug", "unit:slug")
 
 Do NOT use for:
 - Fetching actual curriculum content (use 'search' or 'fetch')
 - Looking up specific lessons, units, or resources
 
-Call this FIRST before using other curriculum tools to understand the domain model.`,
+This tool provides the foundation for effective use of all other curriculum tools.`,
   inputSchema: GET_ONTOLOGY_INPUT_SCHEMA,
   securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }] as const,
   annotations: {
@@ -55,6 +58,8 @@ Call this FIRST before using other curriculum tools to understand the domain mod
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
     'openai/toolInvocation/invoking': 'Loading curriculum model…',
     'openai/toolInvocation/invoked': 'Curriculum model loaded',
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
   },
 } as const;
 
@@ -67,5 +72,13 @@ Call this FIRST before using other curriculum tools to understand the domain mod
  * @returns CallToolResult containing the curriculum ontology as JSON text
  */
 export function runOntologyTool(): CallToolResult {
-  return formatData(ontologyData);
+  return formatOptimizedResult({
+    summary:
+      'Oak Curriculum domain model loaded. Includes key stages, subjects, entity hierarchy, and tool guidance.',
+    fullData: ontologyData,
+    status: 'success',
+    timestamp: Date.now(),
+    toolName: 'get-ontology',
+    annotationsTitle: 'Get Curriculum Ontology',
+  });
 }

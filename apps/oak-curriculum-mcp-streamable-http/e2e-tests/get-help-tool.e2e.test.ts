@@ -13,7 +13,7 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
-import { parseSseEnvelope } from './helpers/sse.js';
+import { parseSseEnvelope, parseJsonRpcResult, getFullResultsFromMeta } from './helpers/sse.js';
 import { z } from 'zod';
 
 const ToolsListResultSchema = z.object({
@@ -26,6 +26,13 @@ const ToolsListResultSchema = z.object({
   ),
 });
 
+/**
+ * Schema for tool call results with the new optimized response format.
+ *
+ * The format has:
+ * - `content[0].text`: Human-readable summary (NOT JSON)
+ * - `_meta.fullResults`: Full data for tests and widgets
+ */
 const ToolCallResultSchema = z.object({
   content: z.array(
     z.object({
@@ -33,6 +40,12 @@ const ToolCallResultSchema = z.object({
       text: z.string().optional(),
     }),
   ),
+  _meta: z
+    .object({
+      fullResults: z.unknown().optional(),
+    })
+    .loose()
+    .optional(),
   isError: z.boolean().optional(),
 });
 
@@ -108,11 +121,11 @@ describe('get-help Tool E2E', () => {
       expect(response.status).toBe(200);
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      expect(parsed.success).toBe(true);
+      const result = parseJsonRpcResult(envelope);
+      expect(result.isError).not.toBe(true);
 
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data: unknown = JSON.parse(content);
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result);
 
       // Proves: Response provides actionable guidance
       expect(data).toHaveProperty('serverOverview');
@@ -137,9 +150,10 @@ describe('get-help Tool E2E', () => {
         });
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data: unknown = JSON.parse(content);
+      const result = parseJsonRpcResult(envelope);
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result);
 
       // Proves: Response includes step-by-step guidance
       expect(data).toHaveProperty('workflows');
@@ -163,9 +177,10 @@ describe('get-help Tool E2E', () => {
         });
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data: unknown = JSON.parse(content);
+      const result = parseJsonRpcResult(envelope);
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result);
 
       // Proves: Response includes practical tips
       expect(data).toHaveProperty('tips');
@@ -193,11 +208,11 @@ describe('get-help Tool E2E', () => {
       expect(response.status).toBe(200);
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      expect(parsed.success).toBe(true);
+      const result = parseJsonRpcResult(envelope);
+      expect(result.isError).not.toBe(true);
 
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data = JSON.parse(content) as { tool: string };
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result) as { tool: string };
 
       // Proves: Response is specific to the requested tool
       expect(data.tool).toBe('search');
@@ -221,9 +236,10 @@ describe('get-help Tool E2E', () => {
         });
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data: unknown = JSON.parse(content);
+      const result = parseJsonRpcResult(envelope);
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result);
 
       // Proves: Response helps user understand tool's role
       expect(data).toHaveProperty('category');
@@ -247,9 +263,10 @@ describe('get-help Tool E2E', () => {
         });
 
       const envelope = parseSseEnvelope(response.text);
-      const parsed = ToolCallResultSchema.safeParse(envelope.result);
-      const content = parsed.data?.content[0]?.text ?? '';
-      const data: unknown = JSON.parse(content);
+      const result = parseJsonRpcResult(envelope);
+
+      // Full data is now in _meta.fullResults (optimized response format)
+      const data = getFullResultsFromMeta(result);
 
       // Proves: Response shows how tool fits into workflows
       expect(data).toHaveProperty('relatedWorkflows');

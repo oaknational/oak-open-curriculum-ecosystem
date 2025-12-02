@@ -3,9 +3,11 @@
  *
  * These fixtures represent different tool output structures
  * that the widget must handle correctly. They match the shapes
- * expected by the widget's rendering logic in aggregated-tool-widget.ts.
+ * expected by the widget's rendering logic.
  *
- * @see ../../src/aggregated-tool-widget.ts - Widget implementation
+ * @see ../../src/widget-script.ts - Widget implementation
+ * @see ../../src/widget-renderer-registry.ts - Tool name routing
+ * @see ./renderer-fixtures.ts - Additional renderer-specific fixtures
  */
 
 /**
@@ -113,13 +115,11 @@ export const SEARCH_OUTPUT_FIXTURE = {
     transcripts: [
       {
         lessonTitle: 'Photosynthesis Overview',
-        highlightedContent:
-          'Plants use sunlight to convert carbon dioxide and water into glucose and oxygen through a process called photosynthesis.',
+        highlightedContent: 'Plants use sunlight to convert carbon dioxide and water into glucose.',
       },
       {
         lessonTitle: 'Chloroplasts and Chlorophyll',
-        highlightedContent:
-          'The green pigment chlorophyll, found in chloroplasts, absorbs light energy for photosynthesis.',
+        highlightedContent: 'The green pigment chlorophyll absorbs light energy.',
       },
     ],
   },
@@ -127,40 +127,22 @@ export const SEARCH_OUTPUT_FIXTURE = {
 
 /**
  * Empty search results fixture.
- *
- * Represents a search that returned no results.
- * Triggers the "No results found" message in the widget.
  */
 export const EMPTY_SEARCH_OUTPUT_FIXTURE = {
   status: 200,
-  data: {
-    q: 'xyznonexistent',
-    lessonsTotal: 0,
-    lessons: [],
-    transcriptsTotal: 0,
-    transcripts: [],
-  },
+  data: { q: 'xyznonexistent', lessonsTotal: 0, lessons: [], transcriptsTotal: 0, transcripts: [] },
 } as const;
 
 /**
- * Generic JSON output fixture.
- *
- * Represents an unknown structure that should render as JSON.
- * Triggers the widget's fallback pre-formatted JSON display.
+ * Generic JSON output fixture - triggers fallback JSON display.
  */
 export const GENERIC_JSON_OUTPUT_FIXTURE = {
   customField: 'some value',
-  nested: {
-    data: 123,
-    array: ['a', 'b', 'c'],
-  },
+  nested: { data: 123, array: ['a', 'b', 'c'] },
   timestamp: '2025-11-30T12:00:00Z',
 } as const;
 
 /**
- * Empty output fixture.
- *
- * Represents the initial state before data arrives.
- * Triggers the "Loading..." message in the widget.
+ * Empty output fixture - triggers "Loading..." message.
  */
 export const EMPTY_OUTPUT_FIXTURE = {} as const;

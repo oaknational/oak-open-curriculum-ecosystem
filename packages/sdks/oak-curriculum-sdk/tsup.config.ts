@@ -85,6 +85,7 @@ export default defineConfig({
     'src/mcp/universal-tools/list-tools.ts',
     'src/mcp/universal-tools/executor.ts',
     'src/mcp/stub-tool-executor.ts',
+    'src/mcp/prerequisite-guidance.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations

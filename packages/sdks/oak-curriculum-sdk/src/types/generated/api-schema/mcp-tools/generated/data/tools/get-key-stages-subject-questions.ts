@@ -131,7 +131,7 @@ export const getKeyStagesSubjectQuestions = {
   inputSchema: toolInputJsonSchema,
   operationId,
   name,
-  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.",
+  description: "Quiz questions by subject and key stage\n\nThis tool returns quiz questions and answers for each lesson within a requested subject and key stage.\n\nPREREQUISITE: If unfamiliar with Oak's curriculum structure, call `get-ontology` first to understand key stages, subjects, entity hierarchy, and ID formats.",
   path,
   method,
   documentedStatuses,
@@ -142,6 +142,14 @@ export const getKeyStagesSubjectQuestions = {
     idempotentHint: true,
     openWorldHint: false,
     title: "Get Key Stages Subject Questions",
+  },
+  _meta: {
+    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/toolInvocation/invoking': "Fetching Get Key Stages Subject Questions…",
+    'openai/toolInvocation/invoked': "Get Key Stages Subject Questions loaded",
+    'openai/widgetAccessible': true,
+    'openai/visibility': 'public',
+    securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
   },
   validateOutput: (data: unknown) => {
     const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];

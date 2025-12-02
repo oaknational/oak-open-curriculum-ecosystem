@@ -1,8 +1,14 @@
 # MCP Prompts Type-Gen Enhancement Plan
 
-**Last Updated**: 2025-11-28  
-**Status**: 🟡 ENHANCEMENT (NOT A FIX)  
+**Last Updated**: 2025-11-30  
+**Status**: ⏸️ DEFERRED (Enhancement)  
 **Scope**: Move MCP prompt definitions to type-gen for architectural consistency; current implementation is working
+
+---
+
+## Deferral Note (2025-11-30)
+
+This plan is deferred as a future enhancement. **Prompts work correctly** - all E2E tests pass. The architectural improvement (moving to type-gen) is nice-to-have but not urgent since prompts are not derived from the OpenAPI schema and don't require schema-first generation.
 
 ---
 

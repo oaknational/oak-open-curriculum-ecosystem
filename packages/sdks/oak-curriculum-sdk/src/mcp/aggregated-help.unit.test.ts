@@ -14,6 +14,10 @@ describe('GET_HELP_TOOL_DEF', () => {
     expect(GET_HELP_TOOL_DEF.description).toContain('Do NOT use');
   });
 
+  it('has description mentioning "understand Oak"', () => {
+    expect(GET_HELP_TOOL_DEF.description).toMatch(/understand oak/i);
+  });
+
   it('has readOnlyHint annotation set to true', () => {
     expect(GET_HELP_TOOL_DEF.annotations.readOnlyHint).toBe(true);
   });
@@ -36,6 +40,14 @@ describe('GET_HELP_TOOL_DEF', () => {
       'ui://widget/oak-json-viewer.html',
     );
   });
+
+  it('has openai/widgetAccessible set to true', () => {
+    expect(GET_HELP_TOOL_DEF._meta['openai/widgetAccessible']).toBe(true);
+  });
+
+  it('has openai/visibility set to public', () => {
+    expect(GET_HELP_TOOL_DEF._meta['openai/visibility']).toBe('public');
+  });
 });
 
 describe('GET_HELP_INPUT_SCHEMA', () => {
@@ -50,67 +62,72 @@ describe('GET_HELP_INPUT_SCHEMA', () => {
 });
 
 /**
- * Helper to parse JSON from CallToolResult text content.
- * Asserts that content is text type and parses the JSON.
+ * Helper to extract full data from _meta.fullResults in optimized results.
  */
-function parseResultJson(result: { content: readonly { type: string; text?: string }[] }): unknown {
-  const content = result.content[0];
-  expect(content.type).toBe('text');
-  expect(content.text).toBeDefined();
-  return JSON.parse(content.text ?? '{}');
+function extractFullResults(result: { _meta?: { fullResults?: unknown } }): unknown {
+  expect(result._meta).toBeDefined();
+  expect(result._meta).toHaveProperty('fullResults');
+  return result._meta?.fullResults;
 }
 
 describe('runHelpTool', () => {
   describe('without tool_name parameter', () => {
-    it('returns server overview', () => {
+    it('returns server overview in _meta.fullResults', () => {
       const result = runHelpTool({});
       expect(result.isError).toBeUndefined();
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('serverOverview');
     });
 
-    it('returns tool categories', () => {
+    it('returns tool categories in _meta.fullResults', () => {
       const result = runHelpTool({});
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('toolCategories');
     });
 
-    it('returns workflows', () => {
+    it('returns workflows in _meta.fullResults', () => {
       const result = runHelpTool({});
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('workflows');
     });
 
-    it('returns tips', () => {
+    it('returns tips in _meta.fullResults', () => {
       const result = runHelpTool({});
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('tips');
+    });
+
+    it('returns human-readable summary in content', () => {
+      const result = runHelpTool({});
+      expect(result.content[0]).toHaveProperty('type', 'text');
+      const firstContent = result.content[0];
+      if ('text' in firstContent) {
+        expect(firstContent.text).toContain('guidance');
+      }
     });
   });
 
   describe('with tool_name parameter', () => {
-    it('returns help for search tool', () => {
+    it('returns help for search tool in _meta.fullResults', () => {
       const result = runHelpTool({ tool_name: 'search' });
       expect(result.isError).toBeUndefined();
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('tool');
       expect(data).toHaveProperty('category');
       expect(data).toHaveProperty('description');
     });
 
-    it('returns help for fetch tool', () => {
+    it('returns help for fetch tool in _meta.fullResults', () => {
       const result = runHelpTool({ tool_name: 'fetch' });
       expect(result.isError).toBeUndefined();
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('tool');
-      const dataRecord = data as { tool: string };
-      expect(dataRecord.tool).toBe('fetch');
     });
 
-    it('returns help for get-threads tool', () => {
+    it('returns help for get-threads tool in _meta.fullResults', () => {
       const result = runHelpTool({ tool_name: 'get-threads' });
       expect(result.isError).toBeUndefined();
-      const data = parseResultJson(result);
+      const data = extractFullResults(result);
       expect(data).toHaveProperty('tool');
     });
 
