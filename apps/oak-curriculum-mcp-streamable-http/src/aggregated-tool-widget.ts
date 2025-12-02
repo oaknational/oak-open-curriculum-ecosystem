@@ -64,7 +64,14 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
     <div id="actions" class="actions" style="display:none"></div>
     <div id="error" class="error" style="display:none"></div>
     <div id="c"></div>
-    <div class="ftr">AI can make mistakes. Check all generated resources before use.</div>
+    <div class="ftr">
+      <p class="ftr-disclaimer">AI can make mistakes. Check all generated resources before use.</p>
+      <p class="ftr-links">
+        <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">Explore more Oak curriculum resources</a>
+        <span class="ftr-sep">•</span>
+        <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">For an educator specific experience try Aila - <strong>Oak's AI Lesson Assistant</strong></a>
+      </p>
+    </div>
   </main>
   <script type="module">${WIDGET_SCRIPT}</script>
 </body>
