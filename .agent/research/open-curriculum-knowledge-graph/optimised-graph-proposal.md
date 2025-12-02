@@ -1,324 +1,390 @@
 # Optimised Knowledge Graph Proposal
 
-This document proposes an optimised structure for the knowledge graph that reduces payload size while maintaining utility for AI agents.
+This document proposes an optimised structure for the knowledge graph that focuses on **concept relationships** rather than API implementation details.
+
+**Last Updated**: December 2025 (major revision: removed API focus, concept-only graph)
 
 ---
 
 ## 1. Optimisation Goals
 
-| Goal           | Current | Target | Approach                                 |
-| -------------- | ------- | ------ | ---------------------------------------- |
-| File size      | ~40KB   | ~20KB  | Remove unnecessary nodes, shorten labels |
-| Node count     | 89      | ~75    | Remove SourceDoc nodes, consolidate      |
-| Edge count     | 118     | ~100   | Remove redundant edges                   |
-| Token estimate | ~10,000 | ~5,000 | Structural simplification                |
+| Goal           | Current | Target | Approach                                       |
+| -------------- | ------- | ------ | ---------------------------------------------- |
+| File size      | ~40KB   | ~8KB   | Remove API nodes, keep concepts only           |
+| Node count     | 89      | ~28    | Concepts only (no Endpoints, Schemas, etc.)    |
+| Edge count     | 118     | ~40    | Concept-to-concept edges only                  |
+| Token estimate | ~10,000 | ~2,000 | Radical simplification to domain relationships |
 
 ---
 
-## 2. Structural Changes
+## 2. Structural Changes (Major Revision)
 
-### 2.1 Remove SourceDoc Nodes
+### 2.1 Remove ALL Non-Concept Nodes
 
-The following nodes are research provenance, not useful for agents:
+**Remove entirely:**
 
-- `src_api_schema_sdk` — Local OpenAPI copy
-- `src_curriculum_ontology_md` — Local markdown
-- `src_official_api_ontology_comparison_md` — Internal comparison
-- `src_ontology_research_summary_md` — Research summary
+| Node Type    | Count | Reason                                     |
+| ------------ | ----- | ------------------------------------------ |
+| Endpoint     | 27    | Agents see `tools/list` — no duplication   |
+| Schema       | 24    | Internal API detail, not domain knowledge  |
+| SourceDoc    | 4     | Research provenance, not useful for agents |
+| ExternalLink | 5     | Consider keeping for documentation refs    |
 
-**Rationale**: Agents don't need to know about research artifacts. They need to understand the curriculum and API.
+**Keep:**
 
-### 2.2 Simplify Edge Labels
+| Node Type | Count | Reason                        |
+| --------- | ----- | ----------------------------- |
+| Concept   | 28    | Domain model — the core value |
 
-| Current Label              | Proposed Label |
-| -------------------------- | -------------- |
-| "has sequences"            | "hasSequences" |
-| "belongs to subject"       | "belongsTo"    |
-| "listed by endpoint"       | "listedBy"     |
-| "returned by endpoint"     | "returnedBy"   |
-| "returns schema"           | "returns"      |
-| "describes subjects"       | "describes"    |
-| "links units across years" | "linksUnits"   |
+### 2.2 Remove ALL API-Mapping Edges
 
-### 2.3 Use Shorter Node IDs
+**Remove entirely:**
 
-| Current ID                   | Proposed ID      |
-| ---------------------------- | ---------------- |
-| "concept_subject"            | "c_subject"      |
-| "concept_keystage"           | "c_ks"           |
-| "ep_subjects_get"            | "ep_subjects"    |
-| "schema_AllSubjectsResponse" | "s_AllSubjects"  |
-| "link_oak_api_overview"      | "x_api_overview" |
+- `Concept → Endpoint` edges ("listed by endpoint", "returned by endpoint")
+- `Endpoint → Schema` edges ("returns schema")
+- `Schema → Concept` edges ("describes", "lists")
 
-### 2.4 Group Edges by Category
+**Keep:**
 
-Instead of a flat edge array, use categorised arrays:
+- `Concept → Concept` edges (hierarchy, relationships)
+- Inferred relationship edges
 
-```typescript
-{
-  edges: {
-    conceptRelations: [ /* concept → concept */ ],
-    apiMappings: [ /* concept → endpoint */ ],
-    schemaMappings: [ /* endpoint → schema, schema → concept */ ]
-  }
-}
-```
+### 2.3 Simplify Node IDs
 
-This allows agents to query only relevant edge types.
+Since we're keeping concepts only:
+
+| Current ID          | Proposed ID |
+| ------------------- | ----------- |
+| "concept_subject"   | "subject"   |
+| "concept_keystage"  | "keystage"  |
+| "concept_sequence"  | "sequence"  |
+| "concept_unit"      | "unit"      |
+| "concept_lesson"    | "lesson"    |
+| "concept_thread"    | "thread"    |
+| "concept_programme" | "programme" |
+
+### 2.4 Simplify Edge Labels
+
+| Current Label              | Proposed Label     |
+| -------------------------- | ------------------ |
+| "has sequences"            | "hasSequences"     |
+| "includes units"           | "containsUnits"    |
+| "contains lessons"         | "containsLessons"  |
+| "links units across years" | "linksAcrossYears" |
+| "belongs to subject"       | "belongsTo"        |
+| "scoped to key stage"      | "scopedTo"         |
 
 ---
 
-## 3. Proposed Optimised Structure
+## 3. Proposed Concept-Only Structure
 
 ```typescript
 /**
- * Optimised Oak Curriculum Knowledge Graph
+ * Oak Curriculum Concept Graph
  *
- * A structural representation of curriculum concepts and their API mappings.
+ * A structural representation of curriculum concept relationships.
  * Use get-ontology for rich concept definitions and workflow guidance.
+ *
+ * This graph captures domain relationships, NOT API mappings.
+ * Agents learn about endpoints from tools/list.
  */
-export interface OptimisedKnowledgeGraph {
+export interface ConceptGraph {
   readonly version: string;
-  readonly generatedAt: string;
-  readonly nodes: {
-    readonly concepts: readonly ConceptNode[];
-    readonly endpoints: readonly EndpointNode[];
-    readonly schemas: readonly SchemaNode[];
-    readonly links: readonly ExternalLinkNode[];
-  };
-  readonly edges: {
-    readonly conceptRelations: readonly ConceptEdge[];
-    readonly apiMappings: readonly ApiMappingEdge[];
-    readonly schemaMappings: readonly SchemaMappingEdge[];
-  };
-  readonly crossReference: {
-    readonly ontologySections: readonly string[];
-    readonly note: string;
-  };
+  readonly concepts: readonly ConceptNode[];
+  readonly edges: readonly ConceptEdge[];
+  readonly seeOntology: string;
 }
 
 interface ConceptNode {
-  readonly id: string; // e.g., "c_subject"
+  readonly id: string; // e.g., "subject"
   readonly label: string; // e.g., "Subject"
   readonly brief: string; // One-line description
+  readonly category?: ConceptCategory;
 }
 
-interface EndpointNode {
-  readonly id: string; // e.g., "ep_subjects"
-  readonly path: string; // e.g., "/subjects"
-  readonly method: 'GET';
-}
-
-interface SchemaNode {
-  readonly id: string; // e.g., "s_AllSubjects"
-  readonly name: string; // e.g., "AllSubjectsResponseSchema"
-}
-
-interface ExternalLinkNode {
-  readonly id: string;
-  readonly label: string;
-  readonly url: string;
-}
+type ConceptCategory =
+  | 'structure' // Subject, Sequence, Unit, Lesson
+  | 'content' // Asset, Transcript, Quiz, Question, Answer
+  | 'metadata' // EducationalMetadata, ContentGuidance, etc.
+  | 'context' // KeyStage, Phase, YearGroup
+  | 'ks4' // Programme, Tier, Pathway, ExamBoard, ExamSubject
+  | 'taxonomy'; // Thread, Category
 
 interface ConceptEdge {
   readonly from: string;
   readonly to: string;
-  readonly rel: string; // Short relationship type
-  readonly inferred?: true;
-}
-
-interface ApiMappingEdge {
-  readonly concept: string;
-  readonly endpoint: string;
-  readonly direction: 'listedBy' | 'returnedBy' | 'usedBy';
-}
-
-interface SchemaMappingEdge {
-  readonly endpoint?: string;
-  readonly schema: string;
-  readonly concept?: string;
-  readonly direction: 'returns' | 'describes';
+  readonly rel: string; // e.g., "containsUnits", "belongsTo"
+  readonly inferred?: true; // Mark relationships not explicit in API
 }
 ```
 
 ---
 
-## 4. Example Optimised Data
+## 4. Example Concept-Only Data
 
-### 4.1 Concepts (Sample)
+### 4.1 Concepts
 
 ```typescript
 concepts: [
-  { id: 'c_subject', label: 'Subject', brief: 'Curriculum subject (maths, history, etc.)' },
-  { id: 'c_seq', label: 'Sequence', brief: 'Internal API grouping of units' },
-  { id: 'c_prog', label: 'Programme', brief: 'User-facing curriculum pathway' },
-  { id: 'c_unit', label: 'Unit', brief: 'Topic of study with lessons' },
-  { id: 'c_lesson', label: 'Lesson', brief: 'Teaching session with objectives' },
-  { id: 'c_thread', label: 'Thread', brief: 'Conceptual strand across years' },
-  { id: 'c_ks', label: 'KeyStage', brief: 'Education stage (KS1-KS4)' },
-  { id: 'c_year', label: 'YearGroup', brief: 'School year (Year 1-11)' },
-  { id: 'c_phase', label: 'Phase', brief: 'Primary or secondary' },
-  { id: 'c_quiz', label: 'Quiz', brief: 'Starter or exit quiz' },
-  { id: 'c_asset', label: 'Asset', brief: 'Downloadable resource' },
-  { id: 'c_transcript', label: 'Transcript', brief: 'Video transcript text' },
-  // ... remaining concepts
+  // Structure concepts
+  {
+    id: 'subject',
+    label: 'Subject',
+    brief: 'Curriculum subject (maths, history, etc.)',
+    category: 'structure',
+  },
+  {
+    id: 'sequence',
+    label: 'Sequence',
+    brief: 'Internal API grouping of units',
+    category: 'structure',
+  },
+  { id: 'unit', label: 'Unit', brief: 'Topic of study with lessons', category: 'structure' },
+  {
+    id: 'lesson',
+    label: 'Lesson',
+    brief: 'Teaching session with objectives',
+    category: 'structure',
+  },
+
+  // Content concepts
+  { id: 'quiz', label: 'Quiz', brief: 'Starter or exit quiz', category: 'content' },
+  { id: 'question', label: 'Question', brief: 'Quiz question with answers', category: 'content' },
+  {
+    id: 'answer',
+    label: 'Answer',
+    brief: 'Answer option (correct or distractor)',
+    category: 'content',
+  },
+  { id: 'asset', label: 'Asset', brief: 'Downloadable resource', category: 'content' },
+  { id: 'transcript', label: 'Transcript', brief: 'Video transcript text', category: 'content' },
+
+  // Context concepts
+  { id: 'keystage', label: 'KeyStage', brief: 'Education stage (KS1-KS4)', category: 'context' },
+  { id: 'yeargroup', label: 'YearGroup', brief: 'School year (Year 1-11)', category: 'context' },
+  { id: 'phase', label: 'Phase', brief: 'Primary or secondary', category: 'context' },
+
+  // Taxonomy concepts
+  { id: 'thread', label: 'Thread', brief: 'Conceptual strand across years', category: 'taxonomy' },
+  { id: 'category', label: 'Category', brief: 'Subject-specific grouping', category: 'taxonomy' },
+
+  // KS4 complexity concepts
+  { id: 'programme', label: 'Programme', brief: 'User-facing curriculum pathway', category: 'ks4' },
+  { id: 'tier', label: 'Tier', brief: 'Foundation or higher', category: 'ks4' },
+  { id: 'pathway', label: 'Pathway', brief: 'Core or GCSE route', category: 'ks4' },
+  { id: 'examboard', label: 'ExamBoard', brief: 'AQA, OCR, Edexcel, etc.', category: 'ks4' },
+  {
+    id: 'examsubject',
+    label: 'ExamSubject',
+    brief: 'Biology, Chemistry, etc. (KS4)',
+    category: 'ks4',
+  },
+
+  // Metadata concepts
+  {
+    id: 'contentguidance',
+    label: 'ContentGuidance',
+    brief: 'Sensitive content advisory',
+    category: 'metadata',
+  },
+  {
+    id: 'supervisionlevel',
+    label: 'SupervisionLevel',
+    brief: 'Adult supervision required',
+    category: 'metadata',
+  },
+  {
+    id: 'educationalmetadata',
+    label: 'EducationalMetadata',
+    brief: 'Prior knowledge, keywords, etc.',
+    category: 'metadata',
+  },
+  // ... remaining ~28 concepts
 ];
 ```
 
-### 4.2 Endpoints (Sample)
+### 4.2 Concept Edges (Core Hierarchy)
 
 ```typescript
-endpoints: [
-  { id: 'ep_subjects', path: '/subjects', method: 'GET' },
-  { id: 'ep_subject', path: '/subjects/{subject}', method: 'GET' },
-  { id: 'ep_ks_units', path: '/key-stages/{ks}/subject/{subj}/units', method: 'GET' },
-  { id: 'ep_lesson_summary', path: '/lessons/{lesson}/summary', method: 'GET' },
-  { id: 'ep_lesson_quiz', path: '/lessons/{lesson}/quiz', method: 'GET' },
-  { id: 'ep_search', path: '/search/lessons', method: 'GET' },
-  { id: 'ep_threads', path: '/threads', method: 'GET' },
-  // ... remaining endpoints
+edges: [
+  // Core hierarchy
+  { from: 'subject', to: 'sequence', rel: 'hasSequences' },
+  { from: 'sequence', to: 'unit', rel: 'containsUnits' },
+  { from: 'unit', to: 'lesson', rel: 'containsLessons' },
+
+  // Content hierarchy
+  { from: 'lesson', to: 'quiz', rel: 'hasQuizzes' },
+  { from: 'lesson', to: 'asset', rel: 'hasAssets' },
+  { from: 'lesson', to: 'transcript', rel: 'hasTranscript' },
+  { from: 'quiz', to: 'question', rel: 'containsQuestions' },
+  { from: 'question', to: 'answer', rel: 'hasAnswers' },
+
+  // Context relationships
+  { from: 'phase', to: 'keystage', rel: 'includesKeyStages' },
+  { from: 'keystage', to: 'yeargroup', rel: 'includesYears' },
+  { from: 'subject', to: 'keystage', rel: 'availableAt' },
+
+  // Taxonomy relationships
+  { from: 'thread', to: 'unit', rel: 'linksAcrossYears' },
+  { from: 'unit', to: 'thread', rel: 'taggedWith' },
+  { from: 'unit', to: 'category', rel: 'taggedWith' },
+
+  // Inferred relationships
+  { from: 'unit', to: 'subject', rel: 'belongsTo', inferred: true },
+  { from: 'unit', to: 'keystage', rel: 'belongsTo', inferred: true },
+  { from: 'unit', to: 'yeargroup', rel: 'targets', inferred: true },
+
+  // KS4 complexity (all inferred - Programme is derived)
+  { from: 'programme', to: 'subject', rel: 'about', inferred: true },
+  { from: 'programme', to: 'keystage', rel: 'scopedTo', inferred: true },
+  { from: 'programme', to: 'unit', rel: 'containsUnits', inferred: true },
+  { from: 'programme', to: 'tier', rel: 'uses', inferred: true },
+  { from: 'programme', to: 'pathway', rel: 'uses', inferred: true },
+  { from: 'programme', to: 'examboard', rel: 'uses', inferred: true },
+  { from: 'sequence', to: 'examsubject', rel: 'branchesInto', inferred: true },
+  { from: 'examsubject', to: 'tier', rel: 'hasTiers', inferred: true },
+
+  // Metadata relationships
+  { from: 'lesson', to: 'contentguidance', rel: 'hasGuidance' },
+  { from: 'contentguidance', to: 'supervisionlevel', rel: 'requiresSupervision' },
+  { from: 'lesson', to: 'educationalmetadata', rel: 'hasMetadata' },
+  { from: 'unit', to: 'educationalmetadata', rel: 'hasMetadata' },
+  // ... remaining ~40 edges
 ];
 ```
 
-### 4.3 Concept Relations (Sample)
-
-```typescript
-conceptRelations: [
-  { from: 'c_subject', to: 'c_seq', rel: 'hasSequences' },
-  { from: 'c_seq', to: 'c_unit', rel: 'includesUnits' },
-  { from: 'c_unit', to: 'c_lesson', rel: 'containsLessons' },
-  { from: 'c_lesson', to: 'c_quiz', rel: 'hasQuizzes' },
-  { from: 'c_lesson', to: 'c_asset', rel: 'hasAssets' },
-  { from: 'c_thread', to: 'c_unit', rel: 'linksUnits' },
-  { from: 'c_ks', to: 'c_year', rel: 'includesYears' },
-  { from: 'c_phase', to: 'c_ks', rel: 'includesKeyStages' },
-  // ... remaining concept relations
-];
-```
-
-### 4.4 API Mappings (Sample)
-
-```typescript
-apiMappings: [
-  { concept: 'c_subject', endpoint: 'ep_subjects', direction: 'listedBy' },
-  { concept: 'c_subject', endpoint: 'ep_subject', direction: 'returnedBy' },
-  { concept: 'c_unit', endpoint: 'ep_ks_units', direction: 'returnedBy' },
-  { concept: 'c_lesson', endpoint: 'ep_search', direction: 'returnedBy' },
-  { concept: 'c_lesson', endpoint: 'ep_lesson_summary', direction: 'returnedBy' },
-  { concept: 'c_quiz', endpoint: 'ep_lesson_quiz', direction: 'returnedBy' },
-  { concept: 'c_thread', endpoint: 'ep_threads', direction: 'listedBy' },
-  // ... remaining API mappings
-];
-```
-
-### 4.5 Schema Mappings (Sample)
-
-```typescript
-schemaMappings: [
-  { endpoint: 'ep_subjects', schema: 's_AllSubjects', direction: 'returns' },
-  { endpoint: 'ep_subject', schema: 's_Subject', direction: 'returns' },
-  { schema: 's_AllSubjects', concept: 'c_subject', direction: 'describes' },
-  { schema: 's_AllSubjects', concept: 'c_seq', direction: 'describes' },
-  { endpoint: 'ep_lesson_summary', schema: 's_LessonSummary', direction: 'returns' },
-  { schema: 's_LessonSummary', concept: 'c_lesson', direction: 'describes' },
-  // ... remaining schema mappings
-];
-```
+**NOTE**: No endpoint or schema nodes/edges. Agents learn about API from `tools/list`.
 
 ---
 
 ## 5. Size Comparison
 
-### Current Structure (~40KB)
+### Current Structure (~40KB) — Wrong Focus
 
 ```
-89 nodes × ~300 bytes average = 26,700 bytes
-118 edges × ~100 bytes average = 11,800 bytes
-Metadata and formatting = ~1,500 bytes
-Total ≈ 40,000 bytes
+89 nodes:
+  - 28 Concept nodes
+  - 27 Endpoint nodes ← REMOVE (agents see tools/list)
+  - 24 Schema nodes ← REMOVE (API detail)
+  - 5 ExternalLink nodes
+  - 5 SourceDoc nodes ← REMOVE (research provenance)
+
+118 edges:
+  - ~30 Concept → Concept ← KEEP
+  - ~40 Concept → Endpoint ← REMOVE
+  - ~27 Endpoint → Schema ← REMOVE
+  - ~21 Schema → Concept ← REMOVE
+
+Total ≈ 40,000 bytes / ~10,000 tokens
 ```
 
-### Optimised Structure (~18KB)
+### Concept-Only Structure (~8KB) — Correct Focus
 
 ```
-~75 nodes × ~80 bytes average = 6,000 bytes (shorter IDs, brief descriptions)
-~100 edges × ~50 bytes average = 5,000 bytes (shorter labels, structured)
-Metadata and formatting = ~7,000 bytes (includes cross-reference)
-Total ≈ 18,000 bytes
+~28 concept nodes × ~120 bytes = 3,360 bytes
+~40 concept edges × ~60 bytes = 2,400 bytes
+Metadata and cross-reference = ~2,000 bytes
+Total ≈ 8,000 bytes / ~2,000 tokens
 ```
 
-**Reduction**: ~55% smaller
+**Reduction**: 80% smaller, 80% fewer tokens
+
+### Combined Token Budget
+
+```
+Ontology: ~12KB (~3,000 tokens)
+Graph:    ~8KB  (~2,000 tokens)
+─────────────────────────────────
+Total:    ~20KB (~5,000 tokens) for complete domain context
+```
+
+This is manageable for agent context windows.
 
 ---
 
 ## 6. Query Patterns Enabled
 
-### 6.1 "What endpoints return Lesson data?"
+### 6.1 "What concepts are related to Unit?"
 
 ```typescript
-// Filter apiMappings where concept is c_lesson
-const lessonEndpoints = graph.edges.apiMappings
-  .filter((e) => e.concept === 'c_lesson')
-  .map((e) => e.endpoint);
-// Result: ['ep_search', 'ep_lesson_summary', 'ep_ks_lessons']
+// Find all edges involving 'unit'
+const related = graph.edges.filter((e) => e.from === 'unit' || e.to === 'unit');
+// Result: relationships to sequence, lesson, thread, category, subject, keystage, yeargroup
 ```
 
-### 6.2 "What schema does GET /subjects return?"
+### 6.2 "What does a Lesson contain?"
 
 ```typescript
-// Find endpoint, then find schema mapping
-const endpoint = graph.nodes.endpoints.find((e) => e.path === '/subjects');
-const schema = graph.edges.schemaMappings.find(
-  (e) => e.endpoint === endpoint?.id && e.direction === 'returns',
-);
-// Result: { endpoint: 'ep_subjects', schema: 's_AllSubjects', direction: 'returns' }
+// Find edges where Lesson is the source
+const lessonContains = graph.edges.filter((e) => e.from === 'lesson');
+// Result: quiz, asset, transcript, contentguidance, educationalmetadata
 ```
 
-### 6.3 "What concepts are related to Unit?"
+### 6.3 "What's the full hierarchy from Subject to Question?"
 
 ```typescript
-// Find all concept edges involving c_unit
-const related = graph.edges.conceptRelations.filter(
-  (e) => e.from === 'c_unit' || e.to === 'c_unit',
-);
-// Result: relationships to c_seq, c_lesson, c_thread, c_category, etc.
+// Trace the path
+const path = ['subject', 'sequence', 'unit', 'lesson', 'quiz', 'question', 'answer'];
+// Agent can reason about depth and navigation
 ```
+
+### 6.4 "What inferred relationships exist?"
+
+```typescript
+// Find all inferred edges
+const inferred = graph.edges.filter((e) => e.inferred);
+// Result: Programme relationships, Unit → Subject/KeyStage, etc.
+// These represent domain knowledge not explicit in the API
+```
+
+**NOT supported (and shouldn't be):**
+
+- ~~"What endpoints return Lesson data?"~~ — use `tools/list`
+- ~~"What schema does GET /subjects return?"~~ — API detail
 
 ---
 
-## 7. Alternative: Minimal Graph for Token Optimisation
+## 7. Alternative: Ultra-Minimal Graph
 
-For extreme token efficiency, a further-reduced "essential graph":
+For extreme token efficiency (if ~8KB is still too much):
 
 ```typescript
-export const essentialGraph = {
-  // Core curriculum hierarchy only
+export const minimalGraph = {
+  // Core hierarchy as adjacency list
   hierarchy: {
-    Subject: ['Sequence'],
-    Sequence: ['Unit'],
-    Unit: ['Lesson'],
-    Lesson: ['Quiz', 'Asset', 'Transcript'],
-    KeyStage: ['YearGroup'],
-    Phase: ['KeyStage'],
-    Thread: ['Unit'],
+    subject: ['sequence'],
+    sequence: ['unit'],
+    unit: ['lesson'],
+    lesson: ['quiz', 'asset', 'transcript'],
+    quiz: ['question'],
+    question: ['answer'],
   },
 
-  // Key endpoint mappings only
-  endpoints: {
-    Subject: '/subjects',
-    Lesson: '/lessons/{lesson}/summary',
-    Unit: '/units/{unit}/summary',
-    Search: '/search/lessons',
-    Thread: '/threads',
+  // Context hierarchy
+  context: {
+    phase: ['keystage'],
+    keystage: ['yeargroup'],
   },
 
-  // Cross-reference to ontology
-  seeOntology: 'Call get-ontology for detailed concept definitions',
-  seeFullGraph: 'Call get-knowledge-graph with detail=full for complete mappings',
+  // Cross-cutting relationships
+  taxonomy: {
+    thread: ['unit'], // Threads link units across years
+    category: ['unit'], // Categories group units within subject
+  },
+
+  // Inferred (KS4 complexity)
+  ks4: {
+    programme: ['unit', 'tier', 'pathway', 'examboard'],
+    examsubject: ['tier'],
+  },
+
+  seeOntology: 'Call get-ontology for definitions and guidance',
 } as const;
 ```
 
-This "essential graph" would be ~2KB and could serve as the default response, with optional `detail` parameter for full graph.
+This ultra-minimal graph would be ~1.5KB (~400 tokens).
+
+**Trade-off**: Loses concept briefs and explicit inferred flags, but captures core structure.
 
 ---
 
@@ -329,42 +395,53 @@ This "essential graph" would be ~2KB and could serve as the default response, wi
 Use `as const` and derive types:
 
 ```typescript
-export const optimisedKnowledgeGraph = {
-  // ... data
+export const conceptGraph = {
+  version: '1.0.0',
+  concepts: [...],
+  edges: [...],
+  seeOntology: 'Call get-ontology for definitions',
 } as const;
 
-export type KnowledgeGraph = typeof optimisedKnowledgeGraph;
-export type ConceptId = KnowledgeGraph['nodes']['concepts'][number]['id'];
-export type EndpointId = KnowledgeGraph['nodes']['endpoints'][number]['id'];
-// etc.
+export type ConceptGraph = typeof conceptGraph;
+export type ConceptId = ConceptGraph['concepts'][number]['id'];
+// Compile-time validation of edge references
 ```
 
 ### 8.2 Validation
 
-At type-gen time, validate:
+At authoring time, validate:
 
-- All endpoint IDs exist in nodes
-- All concept IDs exist in nodes
-- All edge references are valid
-- No orphan nodes (every node has at least one edge)
+- All edge `from`/`to` values reference existing concept IDs
+- No orphan concepts (every concept has at least one edge)
+- Consistent with ontology concept names
+- Inferred edges are marked
 
-### 8.3 Tool Parameters (Optional)
+### 8.3 OpenAI SDK Compliance
 
-If implementing queryable graph:
+The graph goes in `structuredContent` (model needs it):
+
+```typescript
+return {
+  content: [{ type: 'text', text: 'Concept relationships loaded.' }],
+  structuredContent: conceptGraph, // Model reasons about this
+  _meta: {
+    toolName: 'get-knowledge-graph',
+    // Widget hints only, NOT the graph data
+  },
+};
+```
+
+### 8.4 Tool Parameters (Optional Future)
+
+Could add focused queries if needed:
 
 ```typescript
 GET_KNOWLEDGE_GRAPH_INPUT_SCHEMA = {
   type: 'object',
   properties: {
-    detail: {
-      type: 'string',
-      enum: ['essential', 'full'],
-      description: 'Level of detail: essential (~2KB) or full (~18KB)',
-      default: 'essential',
-    },
     focus: {
       type: 'string',
-      description: 'Concept to focus on (returns subgraph centered on this concept)',
+      description: 'Concept to focus on (returns subgraph)',
     },
   },
   additionalProperties: false,
@@ -383,59 +460,46 @@ GET_KNOWLEDGE_GRAPH_INPUT_SCHEMA = {
 
 ---
 
-## 10. Appendix: Full Node List (Optimised IDs)
+## 10. Appendix: Concept-Only Node List
 
-### Concepts (28 → 28, renamed)
+### Concepts (28 total, simplified IDs)
 
-| Current                               | Optimised        | Label                       |
-| ------------------------------------- | ---------------- | --------------------------- |
-| concept_subject                       | c_subject        | Subject                     |
-| concept_sequence                      | c_seq            | Sequence                    |
-| concept_programme                     | c_prog           | Programme                   |
-| concept_unit                          | c_unit           | Unit                        |
-| concept_lesson                        | c_lesson         | Lesson                      |
-| concept_thread                        | c_thread         | Thread                      |
-| concept_keystage                      | c_ks             | KeyStage                    |
-| concept_yeargroup                     | c_year           | YearGroup                   |
-| concept_phase                         | c_phase          | Phase                       |
-| concept_category                      | c_cat            | Category                    |
-| concept_asset                         | c_asset          | Asset                       |
-| concept_transcript                    | c_transcript     | Transcript                  |
-| concept_quiz                          | c_quiz           | Quiz                        |
-| concept_question                      | c_question       | Question                    |
-| concept_answer                        | c_answer         | Answer                      |
-| concept_content_guidance              | c_guidance       | ContentGuidance             |
-| concept_supervision_level             | c_supervision    | SupervisionLevel            |
-| concept_educational_metadata          | c_edumeta        | EducationalMetadata         |
-| concept_exam_subject                  | c_examsubj       | ExamSubject                 |
-| concept_tier                          | c_tier           | Tier                        |
-| concept_pathway                       | c_pathway        | Pathway                     |
-| concept_exam_board                    | c_examboard      | ExamBoard                   |
-| concept_rate_limit                    | c_ratelimit      | RateLimitStatus             |
-| concept_changelog_entry               | c_changelog      | ChangelogEntry              |
-| concept_national_curriculum_statement | c_ncstatement    | NationalCurriculumStatement |
-| concept_prior_knowledge_requirement   | c_priorknowledge | PriorKnowledgeRequirement   |
-| concept_keyword                       | c_keyword        | LessonKeyword               |
-| concept_misconception                 | c_misconception  | Misconception               |
+| Category    | ID                  | Label                       | Brief                      |
+| ----------- | ------------------- | --------------------------- | -------------------------- |
+| structure   | subject             | Subject                     | Curriculum subject         |
+| structure   | sequence            | Sequence                    | Internal API grouping      |
+| structure   | unit                | Unit                        | Topic of study             |
+| structure   | lesson              | Lesson                      | Teaching session           |
+| content     | quiz                | Quiz                        | Starter or exit quiz       |
+| content     | question            | Question                    | Quiz question              |
+| content     | answer              | Answer                      | Answer option              |
+| content     | asset               | Asset                       | Downloadable resource      |
+| content     | transcript          | Transcript                  | Video transcript           |
+| context     | keystage            | KeyStage                    | KS1-KS4                    |
+| context     | yeargroup           | YearGroup                   | Year 1-11                  |
+| context     | phase               | Phase                       | Primary or secondary       |
+| taxonomy    | thread              | Thread                      | Conceptual strand          |
+| taxonomy    | category            | Category                    | Subject-specific grouping  |
+| ks4         | programme           | Programme                   | User-facing pathway        |
+| ks4         | tier                | Tier                        | Foundation or higher       |
+| ks4         | pathway             | Pathway                     | Core or GCSE               |
+| ks4         | examboard           | ExamBoard                   | AQA, OCR, etc.             |
+| ks4         | examsubject         | ExamSubject                 | Biology, Chemistry, etc.   |
+| metadata    | contentguidance     | ContentGuidance             | Sensitive content advisory |
+| metadata    | supervisionlevel    | SupervisionLevel            | Adult supervision level    |
+| metadata    | educationalmetadata | EducationalMetadata         | Prior knowledge, keywords  |
+| metadata    | priorknowledge      | PriorKnowledgeRequirement   | Prerequisite knowledge     |
+| metadata    | curriculumstatement | NationalCurriculumStatement | NC coverage                |
+| metadata    | keyword             | LessonKeyword               | Key vocabulary             |
+| metadata    | misconception       | Misconception               | Common misunderstanding    |
+| operational | ratelimit           | RateLimitStatus             | API rate limit (keep?)     |
+| operational | changelog           | ChangelogEntry              | API change record (keep?)  |
 
-### SourceDocs (5 → 0, removed)
+### Removed Node Types
 
-All removed — research provenance not needed.
-
-### ExternalLinks (5 → 5, renamed)
-
-| Current                    | Optimised      |
-| -------------------------- | -------------- |
-| link_oak_api_overview      | x_api_overview |
-| link_oak_swagger_json      | x_swagger      |
-| link_oak_glossary          | x_glossary     |
-| link_oak_ontology_diagrams | x_diagrams     |
-| link_oak_main_site         | x_oak          |
-
-### Endpoints (27 → 27, renamed)
-
-All renamed from `ep_{path}_get` to `ep_{path}`.
-
-### Schemas (24 → 24, renamed)
-
-All renamed from `schema_{Name}` to `s_{Name}`.
+| Type         | Count | Reason                                    |
+| ------------ | ----- | ----------------------------------------- |
+| Endpoint     | 27    | Agents see `tools/list`                   |
+| Schema       | 24    | Internal API detail                       |
+| SourceDoc    | 4     | Research provenance                       |
+| ExternalLink | 5     | Consider keeping for doc links (optional) |

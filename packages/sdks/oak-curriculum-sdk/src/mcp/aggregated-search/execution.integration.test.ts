@@ -1,10 +1,12 @@
 /**
  * Integration tests for aggregated search tool execution.
  *
- * Tests that the search tool returns optimized results for OpenAI Apps SDK:
- * - `structuredContent`: Minimal data for model reasoning
- * - `_meta`: Full data for widget rendering (hidden from model)
- * - `content`: Human-readable summary
+ * Tests that the search tool returns results per OpenAI Apps SDK reference:
+ * - `structuredContent`: Model AND widget see this (FULL data for reasoning)
+ * - `content`: Model AND widget see this (human-readable summary)
+ * - `_meta`: Widget ONLY sees this (additional widget metadata)
+ *
+ * @see https://developers.openai.com/apps-sdk/reference#tool-results
  *
  * @remarks
  * These are integration tests because they test how the execution function
@@ -37,108 +39,81 @@ function createMockExecutor(
   };
 }
 
-describe('runSearchTool optimized result structure', () => {
-  describe('structuredContent (model-facing minimal data)', () => {
-    it('includes summary with result counts', async () => {
+describe('runSearchTool result structure per OpenAI Apps SDK', () => {
+  describe('structuredContent (model sees this for reasoning)', () => {
+    it('includes FULL lessons data for model reasoning', async () => {
       const lessons = [
-        { lessonSlug: 'lesson-1', lessonTitle: 'Photosynthesis Basics' },
-        { lessonSlug: 'lesson-2', lessonTitle: 'Light Reactions' },
-        { lessonSlug: 'lesson-3', lessonTitle: 'Dark Reactions' },
+        { lessonSlug: 'lesson-1', lessonTitle: 'Photosynthesis Basics', extra: 'full data...' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Light Reactions', extra: 'more data...' },
+        { lessonSlug: 'lesson-3', lessonTitle: 'Dark Reactions', extra: 'even more...' },
       ];
-      const transcripts = [{ lessonSlug: 'lesson-1', transcript: 'Content...' }];
+
+      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+
+      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      const structured = result.structuredContent as { lessons?: unknown[] };
+      expect(structured.lessons).toHaveLength(3);
+    });
+
+    it('includes FULL transcripts data for model reasoning', async () => {
+      const transcripts = [
+        { lessonSlug: 'lesson-1', transcript: 'Full transcript content here...' },
+        { lessonSlug: 'lesson-2', transcript: 'Another full transcript...' },
+      ];
 
       const deps = createMockExecutor(
-        { status: 200, data: lessons },
+        { status: 200, data: [] },
         { status: 200, data: transcripts },
       );
+
+      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      const structured = result.structuredContent as { transcripts?: unknown[] };
+      expect(structured.transcripts).toHaveLength(2);
+    });
+
+    it('includes ALL items (no artificial limit) for model reasoning', async () => {
+      const lessons = Array.from({ length: 100 }, (_, i) => ({
+        lessonSlug: `lesson-${String(i + 1)}`,
+        lessonTitle: `Lesson ${String(i + 1)}`,
+      }));
+
+      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+
+      const result = await runSearchTool({ q: 'test' }, deps);
+
+      expect(result.structuredContent).toBeDefined();
+      const structured = result.structuredContent as { lessons?: unknown[] };
+      expect(structured.lessons).toHaveLength(100);
+    });
+
+    it('includes summary in structuredContent', async () => {
+      const lessons = [{ lessonSlug: 'lesson-1', lessonTitle: 'Test Lesson' }];
+
+      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
 
       const result = await runSearchTool({ q: 'photosynthesis' }, deps);
 
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent).toHaveProperty('summary');
-
-      // Verify summary contains the count
-      const structured = result.structuredContent;
-      if (structured && typeof structured === 'object' && 'summary' in structured) {
-        expect(structured.summary).toContain('3');
-      }
+      const structured = result.structuredContent as { summary?: string };
+      expect(structured.summary).toContain('1');
     });
 
-    it('includes limited preview items (max 5)', async () => {
-      const lessons = Array.from({ length: 10 }, (_, i) => ({
-        lessonSlug: `lesson-${String(i + 1)}`,
-        lessonTitle: `Lesson ${String(i + 1)}`,
-      }));
-
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
+    it('includes oakContextHint for model context grounding', async () => {
+      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
 
       const result = await runSearchTool({ q: 'test' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      const structured = result.structuredContent;
-
-      // Should have preview of lessons limited to 5
-      if (structured && 'lessonPreviews' in structured) {
-        expect(Array.isArray(structured.lessonPreviews)).toBe(true);
-        expect((structured.lessonPreviews as unknown[]).length).toBeLessThanOrEqual(5);
-      }
-    });
-
-    it('includes hasMore flag when results exceed 5', async () => {
-      const lessons = Array.from({ length: 10 }, (_, i) => ({
-        lessonSlug: `lesson-${String(i + 1)}`,
-        lessonTitle: `Lesson ${String(i + 1)}`,
-      }));
-
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
-
-      const result = await runSearchTool({ q: 'test' }, deps);
-
-      expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent).toEqual(expect.objectContaining({ hasMore: true }));
-    });
-
-    it('sets hasMore to false when results are 5 or fewer', async () => {
-      const lessons = [
-        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
-        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2' },
-      ];
-
-      const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
-
-      const result = await runSearchTool({ q: 'test' }, deps);
-
-      expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent).toEqual(expect.objectContaining({ hasMore: false }));
+      expect(result.structuredContent).toHaveProperty('oakContextHint');
     });
   });
 
-  describe('_meta (widget-only full data)', () => {
-    it('includes fullResults with complete lessons data', async () => {
-      const lessons = [
-        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1', fullDetails: 'lots of data...' },
-        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', fullDetails: 'more data...' },
-      ];
-      const transcripts = [{ lessonSlug: 'lesson-1', transcript: 'Full transcript here...' }];
-
-      const deps = createMockExecutor(
-        { status: 200, data: lessons },
-        { status: 200, data: transcripts },
-      );
-
-      const result = await runSearchTool({ q: 'photosynthesis' }, deps);
-
-      expect(result._meta).toBeDefined();
-      expect(result._meta).toHaveProperty('fullResults');
-
-      const meta = result._meta;
-      if (meta && 'fullResults' in meta) {
-        const fullResults = meta.fullResults;
-        expect(fullResults).toHaveProperty('lessons');
-        expect(fullResults).toHaveProperty('transcripts');
-      }
-    });
-
+  describe('_meta (widget-only metadata)', () => {
     it('includes query in _meta', async () => {
       const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
 
@@ -163,10 +138,19 @@ describe('runSearchTool optimized result structure', () => {
         expect(meta.timestamp).toBeLessThanOrEqual(afterTime);
       }
     });
+
+    it('includes toolName in _meta', async () => {
+      const deps = createMockExecutor({ status: 200, data: [] }, { status: 200, data: [] });
+
+      const result = await runSearchTool({ q: 'test' }, deps);
+
+      expect(result._meta).toBeDefined();
+      expect(result._meta).toHaveProperty('toolName', 'search');
+    });
   });
 
-  describe('content (human-readable summary)', () => {
-    it('includes human-readable text describing results', async () => {
+  describe('content (human-readable summary for conversation)', () => {
+    it('returns human-readable summary text', async () => {
       const lessons = [{ lessonSlug: 'lesson-1', lessonTitle: 'Photosynthesis' }];
 
       const deps = createMockExecutor({ status: 200, data: lessons }, { status: 200, data: [] });
@@ -177,7 +161,9 @@ describe('runSearchTool optimized result structure', () => {
       const firstContent = result.content[0];
       expect(firstContent).toHaveProperty('type', 'text');
       if ('text' in firstContent) {
+        // Content is human-readable summary (not JSON)
         expect(firstContent.text).toContain('lesson');
+        expect(firstContent.text).toContain('photosynthesis');
       }
     });
   });

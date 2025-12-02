@@ -10,6 +10,8 @@
  * for the full schema-derived implementation.
  */
 
+import { toolGuidanceData } from './tool-guidance-data.js';
+
 /**
  * Curriculum ontology data describing the Oak curriculum domain model.
  *
@@ -312,77 +314,11 @@ export const ontologyData = {
     note: 'Use supervisionLevel field rather than relying on sub-guidance levels',
   },
 
-  toolUsageGuidance: {
-    discoveryWorkflow: {
-      description: 'When a user wants to find curriculum content',
-      steps: [
-        {
-          step: 1,
-          action: "Use 'search' tool with query text",
-          example: "search({ q: 'photosynthesis', keyStage: 'ks3' })",
-          returns: 'List of matching lessons with IDs',
-        },
-        {
-          step: 2,
-          action: "Use 'fetch' tool with lesson ID from search results",
-          example: "fetch({ id: 'lesson:photosynthesis-in-plants' })",
-          returns: 'Full lesson details including transcript, quiz, assets',
-        },
-      ],
-    },
-    browsingWorkflow: {
-      description: 'When a user wants to explore curriculum structure',
-      steps: [
-        {
-          step: 1,
-          action: "Use 'get-subjects' to see available subjects",
-          returns: 'List of subjects with key stage coverage',
-        },
-        {
-          step: 2,
-          action: "Use 'get-key-stages-subject-units' to browse units",
-          example: "get-key-stages-subject-units({ keyStage: 'ks2', subject: 'maths' })",
-          returns: 'Units organised by year',
-        },
-        {
-          step: 3,
-          action: "Use 'get-key-stages-subject-lessons' to see lessons in a unit",
-          returns: 'Lessons with summaries',
-        },
-      ],
-    },
-    progressionWorkflow: {
-      description: 'When exploring how a concept develops across years',
-      steps: [
-        {
-          step: 1,
-          action: "Use 'get-threads' to list conceptual strands",
-          returns: 'Available threads for the subject',
-        },
-        {
-          step: 2,
-          action: "Use 'get-threads-units' with thread slug",
-          example: "get-threads-units({ threadSlug: 'number' })",
-          returns: 'Units ordered by conceptual development across years',
-        },
-        {
-          step: 3,
-          action: 'Use unit order to identify prerequisites and next steps',
-          note: 'Lower unitOrder = earlier in progression',
-        },
-      ],
-    },
-    lessonPlanningWorkflow: {
-      description: 'When helping a teacher plan lessons',
-      steps: [
-        { step: 1, action: 'Search or browse to find relevant lessons' },
-        { step: 2, action: 'Fetch lesson summary for learning objectives and keywords' },
-        { step: 3, action: 'Fetch lesson transcript to understand content' },
-        { step: 4, action: 'Fetch lesson quiz for assessment ideas' },
-        { step: 5, action: 'Fetch lesson assets for downloadable resources' },
-      ],
-    },
-  },
+  /**
+   * Workflows imported from tool-guidance-data.ts (single source of truth).
+   * These help AI agents understand how to combine tools for common tasks.
+   */
+  workflows: toolGuidanceData.workflows,
 
   idFormats: {
     description: "The 'fetch' tool uses prefixed IDs to route to the correct endpoint",

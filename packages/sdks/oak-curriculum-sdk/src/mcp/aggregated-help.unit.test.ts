@@ -62,38 +62,46 @@ describe('GET_HELP_INPUT_SCHEMA', () => {
 });
 
 /**
- * Helper to extract full data from _meta.fullResults in optimized results.
+ * Helper to extract full data from structuredContent (model sees this).
+ * Per OpenAI Apps SDK: structuredContent is "Surfaced to the model and the component".
  */
-function extractFullResults(result: { _meta?: { fullResults?: unknown } }): unknown {
-  expect(result._meta).toBeDefined();
-  expect(result._meta).toHaveProperty('fullResults');
-  return result._meta?.fullResults;
+function extractStructuredData(result: {
+  structuredContent?: Record<string, unknown>;
+}): Record<string, unknown> {
+  expect(result.structuredContent).toBeDefined();
+  return result.structuredContent ?? {};
 }
 
+/**
+ * Tests per OpenAI Apps SDK reference (https://developers.openai.com/apps-sdk/reference#tool-results):
+ * - structuredContent: Model AND widget see this (full data for reasoning)
+ * - content: Model AND widget see this (human-readable summary)
+ * - _meta: Widget ONLY (model never sees this)
+ */
 describe('runHelpTool', () => {
   describe('without tool_name parameter', () => {
-    it('returns server overview in _meta.fullResults', () => {
+    it('returns server overview in structuredContent (model sees this)', () => {
       const result = runHelpTool({});
       expect(result.isError).toBeUndefined();
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('serverOverview');
     });
 
-    it('returns tool categories in _meta.fullResults', () => {
+    it('returns tool categories in structuredContent', () => {
       const result = runHelpTool({});
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('toolCategories');
     });
 
-    it('returns workflows in _meta.fullResults', () => {
+    it('returns workflows in structuredContent', () => {
       const result = runHelpTool({});
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('workflows');
     });
 
-    it('returns tips in _meta.fullResults', () => {
+    it('returns tips in structuredContent', () => {
       const result = runHelpTool({});
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('tips');
     });
 
@@ -102,32 +110,33 @@ describe('runHelpTool', () => {
       expect(result.content[0]).toHaveProperty('type', 'text');
       const firstContent = result.content[0];
       if ('text' in firstContent) {
+        // Content is human-readable summary for conversation display
         expect(firstContent.text).toContain('guidance');
       }
     });
   });
 
   describe('with tool_name parameter', () => {
-    it('returns help for search tool in _meta.fullResults', () => {
+    it('returns help for search tool in structuredContent', () => {
       const result = runHelpTool({ tool_name: 'search' });
       expect(result.isError).toBeUndefined();
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('tool');
       expect(data).toHaveProperty('category');
       expect(data).toHaveProperty('description');
     });
 
-    it('returns help for fetch tool in _meta.fullResults', () => {
+    it('returns help for fetch tool in structuredContent', () => {
       const result = runHelpTool({ tool_name: 'fetch' });
       expect(result.isError).toBeUndefined();
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('tool');
     });
 
-    it('returns help for get-threads tool in _meta.fullResults', () => {
+    it('returns help for get-threads tool in structuredContent', () => {
       const result = runHelpTool({ tool_name: 'get-threads' });
       expect(result.isError).toBeUndefined();
-      const data = extractFullResults(result);
+      const data = extractStructuredData(result);
       expect(data).toHaveProperty('tool');
     });
 

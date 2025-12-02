@@ -96,6 +96,16 @@ export interface ToolDescriptor<
   readonly documentedStatuses: readonly TDocumentedStatus[];
   readonly securitySchemes?: readonly SecurityScheme[];
   /**
+   * Indicates whether the tool benefits from domain context grounding.
+   *
+   * When true, the model should ideally call get-ontology and get-help
+   * before using this tool to understand the Oak curriculum structure.
+   *
+   * Curriculum content tools (require auth) have this set to true.
+   * Utility tools (noauth) like get-rate-limit have this set to false.
+   */
+  readonly requiresDomainContext: boolean;
+  /**
    * MCP tool annotations providing hints about tool behavior.
    *
    * All Oak curriculum tools are read-only GET operations, so:

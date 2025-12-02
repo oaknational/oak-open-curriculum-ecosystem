@@ -148,6 +148,18 @@ describe('registerWidgetResource', () => {
       expect(description?.length).toBeLessThanOrEqual(200);
       expect(description).toMatch(/oak|curriculum|lesson/i);
     });
+
+    it('widgetDescription includes context grounding guidance to call get-ontology', () => {
+      registerWidgetResource(server);
+
+      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+        contents: readonly { _meta?: { 'openai/widgetDescription'?: string } }[];
+      };
+      const description = resource.contents[0]?._meta?.['openai/widgetDescription'];
+
+      expect(description).toBeDefined();
+      expect(description).toContain('get-ontology');
+    });
   });
 });
 

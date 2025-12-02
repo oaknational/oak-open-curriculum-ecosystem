@@ -106,6 +106,7 @@ export const getThreads = {
   method,
   documentedStatuses,
   securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }],
+  requiresDomainContext: true,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

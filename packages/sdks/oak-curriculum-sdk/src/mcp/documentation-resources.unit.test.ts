@@ -93,6 +93,13 @@ describe('getToolsReferenceMarkdown', () => {
     const markdown = getToolsReferenceMarkdown();
     expect(markdown).toContain('fetch');
   });
+
+  it('includes agentSupport category', () => {
+    const markdown = getToolsReferenceMarkdown();
+    expect(markdown).toContain('Agent Support');
+    expect(markdown).toContain('get-help');
+    expect(markdown).toContain('get-ontology');
+  });
 });
 
 describe('getWorkflowsMarkdown', () => {
@@ -116,5 +123,25 @@ describe('getWorkflowsMarkdown', () => {
     const markdown = getWorkflowsMarkdown();
     expect(markdown).toMatch(/1\./);
     expect(markdown).toMatch(/2\./);
+  });
+
+  it('includes userInteractions workflow FIRST', () => {
+    const markdown = getWorkflowsMarkdown();
+    expect(markdown).toContain('When finding or presenting Oak content');
+    const userInteractionsIndex = markdown.indexOf('When finding or presenting');
+    const findLessonsIndex = markdown.indexOf('Find lessons');
+    expect(userInteractionsIndex).toBeLessThan(findLessonsIndex);
+  });
+
+  it('includes get-help and get-ontology in userInteractions workflow', () => {
+    const markdown = getWorkflowsMarkdown();
+    expect(markdown).toContain('get-help');
+    expect(markdown).toContain('get-ontology');
+  });
+
+  it('includes returns field for workflow steps', () => {
+    const markdown = getWorkflowsMarkdown();
+    expect(markdown).toContain('Returns:');
+    expect(markdown).toContain('List of matching lessons');
   });
 });

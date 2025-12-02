@@ -106,6 +106,7 @@ export const getChangelog = {
   method,
   documentedStatuses,
   securitySchemes: [{ type: 'noauth' }],
+  requiresDomainContext: false,
   annotations: {
     readOnlyHint: true,
     destructiveHint: false,

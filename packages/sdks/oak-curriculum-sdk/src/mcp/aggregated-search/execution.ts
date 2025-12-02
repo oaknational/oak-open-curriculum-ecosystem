@@ -41,7 +41,6 @@ function formatSearchSuccess(
   transcriptsStatus: number | string,
 ): CallToolResult {
   const summary = buildSearchSummary(lessons.length, transcripts.length, args.q);
-  const lessonPreviews = lessons.map(extractLessonPreview);
 
   return formatOptimizedResult({
     summary,
@@ -55,7 +54,6 @@ function formatSearchSuccess(
       transcriptsStatus,
       transcripts,
     },
-    previewItems: lessonPreviews,
     query: args.q,
     timestamp: Date.now(),
     status: 'success',
@@ -140,36 +138,4 @@ function buildSearchSummary(lessonCount: number, transcriptCount: number, query:
   }
 
   return `Found ${parts.join(' and ')} matching "${query}"`;
-}
-
-/**
- * Type guard to check if value is a non-null object.
- */
-function isNonNullObject(value: unknown): value is object {
-  return typeof value === 'object' && value !== null;
-}
-
-/**
- * Type guard to check if object has lessonTitle string property.
- */
-function hasLessonTitle(value: object): value is { lessonTitle: string } {
-  if (!('lessonTitle' in value)) {
-    return false;
-  }
-  const candidate = value.lessonTitle;
-  return typeof candidate === 'string';
-}
-
-/**
- * Extracts preview data from a lesson for the model.
- * Only includes essential identifying information.
- *
- * @param lesson - The lesson data (unknown type from API)
- * @returns Preview object with title
- */
-function extractLessonPreview(lesson: unknown): { title: string } {
-  if (isNonNullObject(lesson) && hasLessonTitle(lesson)) {
-    return { title: lesson.lessonTitle };
-  }
-  return { title: 'Unknown lesson' };
 }

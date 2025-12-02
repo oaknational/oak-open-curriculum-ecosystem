@@ -90,4 +90,10 @@ export {
   type DocumentationResource,
 } from '../mcp/documentation-resources.js';
 
+export {
+  ONTOLOGY_RESOURCE,
+  getOntologyJson,
+  type OntologyResource,
+} from '../mcp/ontology-resource.js';
+
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';

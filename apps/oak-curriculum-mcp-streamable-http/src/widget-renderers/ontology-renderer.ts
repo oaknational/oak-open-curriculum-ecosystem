@@ -15,7 +15,7 @@
  * - curriculumStructure: { keyStages, phases, subjects }
  * - entityHierarchy: { description, levels }
  * - threads: { definition, examples }
- * - toolUsageGuidance: { discoveryWorkflow, browsingWorkflow, ... }
+ * - workflows: { findLessons, lessonPlanning, ... }
  */
 export const ONTOLOGY_RENDERER = `
 function renderOntology(o) {
@@ -75,13 +75,14 @@ function renderOntology(o) {
   }
 
   // Tool workflows summary
-  if (o.toolUsageGuidance) {
-    const workflows = Object.entries(o.toolUsageGuidance);
+  if (o.workflows) {
+    const workflows = Object.entries(o.workflows);
     if (workflows.length > 0) {
       h += '<div class="sec"><h2 class="sec-ttl">Workflows<span class="badge">' + workflows.length + '</span></h2><div class="list">';
       workflows.forEach(([, wf]) => {
-        if (wf.description) {
-          h += '<div class="item"><p class="item-ttl">' + esc(wf.description) + '</p>';
+        if (wf.title || wf.description) {
+          h += '<div class="item"><p class="item-ttl">' + esc(wf.title || wf.description) + '</p>';
+          if (wf.description && wf.title) h += '<p class="meta">' + esc(wf.description) + '</p>';
           if (wf.steps?.length) h += '<p class="meta">' + wf.steps.length + ' steps</p>';
           h += '</div>';
         }

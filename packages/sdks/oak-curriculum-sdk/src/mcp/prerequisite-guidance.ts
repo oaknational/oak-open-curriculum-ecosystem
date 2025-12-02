@@ -60,3 +60,16 @@ export const HELP_PREREQUISITE_GUIDANCE =
  */
 export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
   'RECOMMENDED FIRST STEP: Call this tool before using other curriculum tools to understand the domain model.' as const;
+
+/**
+ * Context hint included in structuredContent for model guidance.
+ *
+ * The model sees structuredContent (unlike _meta), so this hint guides
+ * the model to call get-ontology and get-help for domain understanding.
+ *
+ * @remarks
+ * All aggregated tools using formatOptimizedResult automatically include
+ * this hint, providing consistent context grounding across all tools.
+ */
+export const OAK_CONTEXT_HINT =
+  'For optimal results with Oak curriculum tools, call get-ontology and get-help first.' as const;

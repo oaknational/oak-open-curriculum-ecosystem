@@ -69,6 +69,12 @@ describe('getPromptMessages', () => {
       const hasKeyStage = messages.some((m) => m.content.text.includes('ks2'));
       expect(hasKeyStage).toBe(true);
     });
+
+    it('suggests calling get-ontology first', () => {
+      const messages = getPromptMessages('find-lessons', { topic: 'fractions' });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toContain('get-ontology');
+    });
   });
 
   describe('lesson-planning prompt', () => {
@@ -84,6 +90,15 @@ describe('getPromptMessages', () => {
       expect(content).toContain('fractions');
       expect(content).toContain('Year 4');
     });
+
+    it('suggests calling context tools first', () => {
+      const messages = getPromptMessages('lesson-planning', {
+        topic: 'fractions',
+        yearGroup: 'Year 4',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toMatch(/get-help|get-ontology/);
+    });
   });
 
   describe('progression-map prompt', () => {
@@ -98,6 +113,15 @@ describe('getPromptMessages', () => {
 
       expect(content).toContain('number');
       expect(content).toContain('maths');
+    });
+
+    it('suggests calling context tools first', () => {
+      const messages = getPromptMessages('progression-map', {
+        concept: 'number',
+        subject: 'maths',
+      });
+      const content = messages.map((m) => m.content.text).join(' ');
+      expect(content).toMatch(/get-help|get-ontology/);
     });
   });
 

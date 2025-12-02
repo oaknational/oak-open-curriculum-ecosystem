@@ -111,17 +111,15 @@ test.describe('Widget rendering behaviour', () => {
     await expect(page.getByText('AI can make mistakes')).toBeVisible();
   });
 
-  test('renders help UI when data has serverOverview/toolCategories/workflows', async ({
-    page,
-  }) => {
+  test('renders help UI when data has serverOverview/toolCategories/tips', async ({ page }) => {
     await injectToolOutput(page, HELP_OUTPUT_FIXTURE);
     await page.goto(`${serverUrl}/widget`);
 
     // Widget should detect help shape and render structured sections
     await expect(page.getByText('Overview')).toBeVisible();
     await expect(page.getByText('Tool Categories')).toBeVisible();
-    await expect(page.getByText('Workflows')).toBeVisible();
     await expect(page.getByText('Tips')).toBeVisible();
+    // Note: Workflows are in structuredContent for the model, but not rendered in widget
   });
 
   test('renders lesson cards when data has lessons array', async ({ page }) => {
@@ -314,6 +312,10 @@ test.describe('Tool name routing', () => {
 
     // Should render Threads section heading
     await expect(page.getByRole('heading', { name: /Threads/ })).toBeVisible();
+
+    // Should render Workflows section heading (uses o.workflows property)
+    await expect(page.getByRole('heading', { name: /Workflows/ })).toBeVisible();
+    await expect(page.getByText('Find lessons on a topic')).toBeVisible();
   });
 
   test('ontology renderer links to Oak curriculum page', async ({ page }) => {

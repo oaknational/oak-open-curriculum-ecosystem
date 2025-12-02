@@ -141,7 +141,7 @@ export async function runFetchTool(
       id: args.id,
       type,
       canonicalUrl,
-      status: result.status,
+      httpStatus: result.status,
       data: result.data,
     },
     status: 'success',

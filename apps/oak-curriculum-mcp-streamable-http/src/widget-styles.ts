@@ -53,10 +53,11 @@ export const WIDGET_STYLES = `
     --border-color: rgba(240,247,240,.15);
   }
 }
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-body { padding: 16px; font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
-#root { background: var(--bg); color: var(--fg); border-radius: 12px; padding: 20px; flex: 1; display: flex; flex-direction: column; }
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+html, body { margin: 0; padding: 0; }
+body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
+#root { background: var(--bg); color: var(--fg); padding: 20px; flex: 1; display: flex; flex-direction: column; }
 .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
 .hdr-text { display: flex; flex-direction: column; gap: 2px; }
 .logo { width: 36px; height: 36px; }
@@ -75,7 +76,7 @@ body { padding: 16px; font-family: 'Lexend', system-ui, sans-serif; min-height: 
 pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; line-height: 1.5; margin: 0; font-family: monospace; background: var(--code-bg); padding: 12px; border-radius: 8px; }
 code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 .empty { text-align: center; padding: 24px; color: var(--fg-secondary); font-size: 14px; }
-.ftr { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
+.ftr { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
 .ftr-disclaimer { margin: 0 0 8px; }
 .ftr-links { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; }
 .ftr-link { color: var(--accent-high-contrast); text-decoration: none; font-weight: 600; text-align: center; }

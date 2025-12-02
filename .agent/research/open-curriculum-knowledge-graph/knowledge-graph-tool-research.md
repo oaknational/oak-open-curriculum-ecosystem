@@ -3,7 +3,8 @@
 This document analyses the existing agent support tool patterns and evaluates how a `get-knowledge-graph` tool should be designed to complement the existing `get-ontology` tool.
 
 **Research Date**: December 2025  
-**Status**: Analysis complete, ready for design phase
+**Status**: Analysis complete, ready for design phase  
+**Last Updated**: December 2025 (corrected emphasis and OpenAI SDK understanding)
 
 ---
 
@@ -11,12 +12,14 @@ This document analyses the existing agent support tool patterns and evaluates ho
 
 The knowledge graph and ontology serve **complementary purposes**:
 
-| Aspect       | get-ontology                               | get-knowledge-graph (proposed)                          |
-| ------------ | ------------------------------------------ | ------------------------------------------------------- |
-| **Purpose**  | Domain understanding & guidance            | Structural relationships & API mapping                  |
-| **Content**  | What things mean, how to use tools         | How things connect, what returns what                   |
-| **Use case** | "What is a Thread? How do I find lessons?" | "Which endpoints return Unit data? What schemas exist?" |
-| **Payload**  | ~15KB (490 lines)                          | ~40KB (1321 lines) - needs optimisation                 |
+| Aspect       | get-ontology                               | get-knowledge-graph (proposed)                         |
+| ------------ | ------------------------------------------ | ------------------------------------------------------ |
+| **Purpose**  | Domain understanding & guidance            | Concept relationships & implicit domain knowledge      |
+| **Content**  | What things mean, how to use tools         | How concepts connect, inferred relationships           |
+| **Use case** | "What is a Thread? How do I find lessons?" | "How do concepts relate? What's the progression path?" |
+| **Payload**  | ~15KB (426 lines)                          | Target ~8KB (concept-focused, no API plumbing)         |
+
+**Key distinction**: The knowledge graph is about **domain relationships between curriculum concepts**, NOT about API endpoint mappings. Agents already know about endpoints from `tools/list`. The graph captures implicit knowledge that helps agents reason about the curriculum domain.
 
 Both are agent support tools that help AI agents understand the Oak Curriculum system before making API calls.
 
@@ -77,15 +80,23 @@ Agent support tools follow the **aggregated tool pattern** (hand-authored, not g
    }
    ```
 
-### 2.3 Output Format Pattern
+### 2.3 Output Format Pattern (OpenAI Apps SDK)
 
-Agent support tools use `formatOptimizedResult()` which provides:
+Per the OpenAI Apps SDK documentation, tool results have three sibling payloads with **distinct audiences**:
 
-- **`content`**: Human-readable summary for conversation display
-- **`structuredContent`**: Minimal data for model reasoning (token-optimised)
-- **`_meta.fullResults`**: Complete data for widgets (hidden from model context)
+| Field               | Audience             | Purpose                                              |
+| ------------------- | -------------------- | ---------------------------------------------------- |
+| `structuredContent` | **Model AND widget** | "concise JSON the widget uses _and_ the model reads" |
+| `content`           | **Model**            | "optional narration (Markdown or plaintext)"         |
+| `_meta`             | **Widget ONLY**      | "large or sensitive data exclusively for the widget" |
 
-This pattern is critical for large payloads like the knowledge graph.
+**Critical insight**: `structuredContent` is what the **model reasons about**. If we want agents to understand concept relationships, that information must be in `structuredContent`, NOT hidden in `_meta`.
+
+Current agent support tools use `formatOptimizedResult()` which implements this pattern. For the knowledge graph:
+
+- **`content`**: Brief summary ("Curriculum concept relationships loaded")
+- **`structuredContent`**: The concept graph data that agents need to reason about
+- **`_meta`**: Any widget-specific rendering hints (NOT the graph data itself)
 
 ### 2.4 Cross-Tool References
 
@@ -101,163 +112,190 @@ Tools reference each other through several mechanisms:
 
 ## 3. Comparative Analysis: Ontology vs Knowledge Graph
 
-### 3.1 Content Structure Comparison
+### 3.1 What Each Artifact Should Contain
 
-**Ontology Data** (`ontology-data.ts`):
+**Ontology** (prose-oriented, rich definitions):
 
-```
-├── version, generatedAt, notice
-├── officialDocs (external URL)
-├── curriculumStructure
-│   ├── keyStages[] (slug, name, ageRange, years, phase, description)
-│   ├── phases[] (slug, name, keyStages, years)
-│   └── subjects[] (slug, name, keyStages, hasExamSubjects?)
-├── threads (definition, importance, characteristics, examples, toolUsage)
-├── programmesVsSequences (sequence vs programme distinction)
-├── ks4Complexity (programmeFactors: tier, examBoard, examSubject, pathway)
-├── entityHierarchy (Subject → Sequence → Unit → Lesson)
-├── unitTypes (simple, variant, optionality)
-├── lessonComponents (8 components with tool mappings)
-├── contentGuidance (categories, supervisionLevels)
-├── toolUsageGuidance (workflows: discovery, browsing, progression, lessonPlanning)
-├── idFormats (prefixed IDs for fetch tool)
-├── ukEducationContext (notes, yearToAge mapping)
-├── canonicalUrls (URL patterns for Oak website)
-└── synonyms (alternative terms → canonical slugs)
-```
+- What things **mean** (definitions, examples, context)
+- How to **use tools** (workflows, ID formats, tips)
+- Domain **context** (UK education system, synonyms)
+- **Enumerated values** (key stages, subjects, phases)
 
-**Knowledge Graph** (`kg-graph.ts`):
+**Knowledge Graph** (structure-oriented, relationships):
+
+- How concepts **relate** to each other
+- **Inferred relationships** not explicit in prose
+- **Progression paths** through the curriculum
+- **Dependency chains** (what builds on what)
+
+### 3.2 Current Problem: API-Heavy Graph
+
+The current `kg-graph.ts` is heavily focused on API implementation details:
 
 ```
 ├── nodes[] (89 nodes)
-│   ├── Concept (28) - domain entities
-│   ├── Endpoint (27) - API paths
-│   ├── Schema (24) - response schemas
-│   ├── ExternalLink (5) - documentation URLs
-│   └── SourceDoc (5) - research materials
+│   ├── Concept (28) - ✅ domain entities (KEEP)
+│   ├── Endpoint (27) - ❌ API paths (REMOVE - agents see tools/list)
+│   ├── Schema (24) - ❌ response schemas (REMOVE - implementation detail)
+│   ├── ExternalLink (5) - ⚠️ maybe keep for documentation links
+│   └── SourceDoc (5) - ❌ research artifacts (REMOVE)
 └── edges[] (118 edges)
-    ├── Concept → Concept (domain relationships)
-    ├── Concept → Endpoint (entity → API mapping)
-    ├── Endpoint → Schema (API → response mapping)
-    ├── Schema → Concept (response → entity mapping)
-    └── inferred relationships (marked with flag)
+    ├── Concept → Concept - ✅ domain relationships (KEEP)
+    ├── Concept → Endpoint - ❌ API mapping (REMOVE)
+    ├── Endpoint → Schema - ❌ API mapping (REMOVE)
+    ├── Schema → Concept - ❌ API mapping (REMOVE)
 ```
 
-### 3.2 Complementary Value Analysis
+**Why remove API mappings?** Agents already receive endpoint information from `tools/list`. Duplicating it in the graph adds tokens without value.
 
-| Question                                      | Ontology answers                            | Knowledge Graph answers    |
-| --------------------------------------------- | ------------------------------------------- | -------------------------- |
-| What is a Thread?                             | ✅ Rich definition, examples, importance    | Terse description only     |
-| How do I find lessons?                        | ✅ discoveryWorkflow with steps             | No workflow guidance       |
-| What endpoints return Unit data?              | Partial (entity hierarchy mentions tools)   | ✅ Explicit edges          |
-| What schema does GET /subjects return?        | ❌                                          | ✅ Explicit edges          |
-| How are subjects related to key stages?       | ✅ curriculumStructure.subjects[].keyStages | ✅ Subject → KeyStage edge |
-| What's the tier/pathway/examBoard complexity? | ✅ Detailed ks4Complexity section           | Concept nodes only         |
-| How should I interpret slugs?                 | ✅ idFormats section                        | ❌                         |
-| What synonyms map to "maths"?                 | ✅ synonyms section                         | ❌                         |
+### 3.3 What the Knowledge Graph Should Capture
 
-### 3.3 Overlap and Potential for Unification
+**Valuable concept-to-concept relationships:**
 
-Areas of overlap:
+| Relationship                           | Value for Agents                   |
+| -------------------------------------- | ---------------------------------- |
+| `Subject → Sequence → Unit → Lesson`   | Core hierarchy navigation          |
+| `Thread → Unit` (across years)         | Vertical progression understanding |
+| `Programme → ExamBoard/Tier/Pathway`   | KS4 complexity (inferred)          |
+| `Lesson → Quiz → Question → Answer`    | Assessment structure               |
+| `Unit → Category`                      | Subject-specific groupings         |
+| `EducationalMetadata → PriorKnowledge` | Pedagogical connections            |
+| `ContentGuidance → SupervisionLevel`   | Safety relationships               |
 
-- Both describe curriculum entities (Subject, Unit, Lesson, etc.)
-- Both reference the entity hierarchy
-- Both mention key stages, phases, threads
+**Inferred/implicit relationships worth capturing:**
 
-The knowledge graph adds:
+- `Unit → Subject` (inferred from placement)
+- `Unit → KeyStage` (inferred from year)
+- `Programme → Unit` (derived view, not API entity)
+- `Sequence → ExamSubject` (KS4 branching)
 
-- Explicit API endpoint mappings
-- Schema relationship information
-- Graph-traversable structure
-- Inferred relationship flags
+### 3.4 Complementary Value Analysis (Revised)
 
-Potential for complementary-by-construction:
+| Question                                      | Ontology answers                            | Knowledge Graph answers              |
+| --------------------------------------------- | ------------------------------------------- | ------------------------------------ |
+| What is a Thread?                             | ✅ Rich definition, examples, importance    | Terse label only                     |
+| How do I find lessons?                        | ✅ discoveryWorkflow with steps             | ❌ Not its job                       |
+| How are subjects related to key stages?       | ✅ curriculumStructure.subjects[].keyStages | ✅ Subject → KeyStage edge           |
+| What's the tier/pathway/examBoard complexity? | ✅ Detailed prose explanation               | ✅ Programme → factors edges         |
+| How does a thread connect units?              | Partial (characteristics list)              | ✅ Thread → Unit edges with order    |
+| What concepts build on Unit?                  | ❌                                          | ✅ Traversable from Unit node        |
+| What's the full assessment hierarchy?         | ❌ (components listed but not structured)   | ✅ Lesson → Quiz → Question → Answer |
 
-- Ontology focuses on **meaning, guidance, and usage**
-- Knowledge Graph focuses on **structure, relationships, and API mappings**
-- Some concepts in the knowledge graph could be enriched with ontology content
+### 3.5 Complementary by Construction
+
+The ontology and knowledge graph stay complementary because **we author them together**:
+
+| Ontology Owns                       | Knowledge Graph Owns                     |
+| ----------------------------------- | ---------------------------------------- |
+| Rich definitions with examples      | Concept identifiers with brief labels    |
+| Workflow guidance                   | Edge structure (navigable relationships) |
+| UK education context                | Inferred relationships (marked)          |
+| Synonyms and canonical URLs         | Concept-to-concept edges                 |
+| Tool usage patterns                 | Progression paths                        |
+| Enumerated values (key stages list) | Structural queries (what connects to X?) |
 
 ---
 
 ## 4. Design Considerations
 
-### 4.1 Payload Size Optimisation
+### 4.1 Payload Size: Optimize Ontology and Graph Together
 
-The current knowledge graph is ~40KB (1321 lines). Options:
+Since both artifacts serve the model via `structuredContent`, we must optimize them **together** for token efficiency.
 
-**Option A: Return full graph (like ontology)**
+**Current state:**
 
-- Pros: Simple, complete
-- Cons: Large context window impact (~10K tokens)
+- Ontology: ~15KB (~4K tokens)
+- Graph (as-is): ~40KB (~10K tokens) - **too heavy, wrong focus**
 
-**Option B: Return graph segments on demand**
+**Target state:**
 
-- Add `segment` parameter: `concepts`, `endpoints`, `schemas`, `relationships`
-- Pros: Targeted, smaller payloads
-- Cons: More complex, multiple calls needed
+- Ontology: ~12KB (~3K tokens) - trim any graph-like structure
+- Graph: ~8KB (~2K tokens) - concept relationships only
 
-**Option C: Use optimised format with `_meta.fullResults`**
+**Optimization principles:**
 
-- Return summary + preview in `structuredContent`
-- Full graph in `_meta` for widgets
-- Pros: Token-optimised for model, complete for widgets
-- Cons: Model doesn't see full graph (may need to call again)
+1. **Ontology owns prose** - definitions, examples, guidance, workflows
+2. **Graph owns structure** - edges, relationships, traversable connections
+3. **No duplication** - if ontology has `entityHierarchy` prose, graph has edges (not both describing hierarchy)
+4. **Both go to model** - no hiding graph in `_meta` (that defeats the purpose)
 
-**Option D: Structural optimisation of the graph itself**
+### 4.2 Concept-Focused Graph Structure
 
-- Remove SourceDoc nodes (research artifacts)
-- Condense edge descriptions
-- Use shorter IDs
-- Target: ~20KB
+Remove API implementation details, keep domain relationships:
 
-**Recommendation**: Combine Options C and D. Optimise the graph structure AND use the `formatOptimizedResult` pattern.
+**Remove entirely:**
 
-### 4.2 Graph Structure Refinements
+- Endpoint nodes (agents see `tools/list`)
+- Schema nodes (internal API detail)
+- SourceDoc nodes (research provenance)
+- All `Concept → Endpoint` edges
+- All `Endpoint → Schema` edges
+- All `Schema → Concept` edges
 
-Current structure could be improved:
+**Keep and enhance:**
 
-1. **Remove SourceDoc nodes** - These are research provenance, not useful for agents
-2. **Simplify edge labels** - Many are verbose ("listed by endpoint" → "listedBy")
-3. **Add node categories** - Group related concepts (Structure, Content, Assessment, etc.)
-4. **Add edge weights/importance** - Help agents prioritise traversals
-5. **Consider separate edge lists** - `conceptEdges`, `apiEdges`, `schemaEdges` for easier filtering
+- Concept nodes with brief labels
+- Concept-to-concept edges
+- Inferred relationship flags
+- Edge directionality and semantics
 
-### 4.3 Type Safety Considerations
-
-Current `kg-graph.ts` loses literal types:
+**Proposed minimal structure:**
 
 ```typescript
-// Current - loses literal types
-export const kgGraph: KnowledgeGraph = { ... };
-
-// Better - preserves literal types
-export const kgGraph = { ... } as const;
-export type KnowledgeGraph = typeof kgGraph;
+interface ConceptGraph {
+  readonly version: string;
+  readonly concepts: ReadonlyArray<{
+    readonly id: string; // e.g., "subject"
+    readonly label: string; // e.g., "Subject"
+    readonly brief: string; // One line description
+    readonly category?: string; // e.g., "structure", "content", "assessment"
+  }>;
+  readonly edges: ReadonlyArray<{
+    readonly from: string;
+    readonly to: string;
+    readonly rel: string; // e.g., "contains", "belongsTo", "builds"
+    readonly inferred?: true;
+  }>;
+  readonly seeOntology: string; // Cross-reference
+}
 ```
 
-This would enable:
+### 4.3 Type Safety
 
-- Type-safe node ID references
-- Autocomplete for edge traversals
-- Compile-time validation of graph queries
+Use `as const` to preserve literal types:
+
+```typescript
+export const conceptGraph = {
+  version: '1.0.0',
+  concepts: [
+    { id: 'subject', label: 'Subject', brief: 'Curriculum subject' },
+    // ...
+  ],
+  edges: [
+    { from: 'subject', to: 'sequence', rel: 'hasSequences' },
+    // ...
+  ],
+  seeOntology: 'Call get-ontology for rich definitions and usage guidance',
+} as const;
+
+export type ConceptGraph = typeof conceptGraph;
+export type ConceptId = ConceptGraph['concepts'][number]['id'];
+```
 
 ### 4.4 Integration Points
 
-The tool must integrate with:
-
-1. **Tool guidance data** - Add to `agentSupport` category
-2. **Prerequisite guidance** - Potentially reference from generated tools
-3. **Documentation resources** - New docs resource? Or integrate into existing?
-4. **Prompts** - May benefit progression-map and similar prompts
-5. **Widget renderers** - May need custom renderer for graph visualisation
+1. **Tool guidance data** - Add `get-knowledge-graph` to `agentSupport` category
+2. **Cross-references** - Ontology mentions graph, graph mentions ontology
+3. **Widget** - JSON viewer sufficient (no custom graph viz needed initially)
+4. **Documentation** - Explain the complementary relationship
 
 ### 4.5 Widget Rendering
 
-The OpenAI Apps SDK supports custom widgets via `_meta['openai/outputTemplate']`. Options:
+Since the graph is now concept-focused and smaller:
 
-- **JSON viewer** (like ontology): `ui://widget/oak-json-viewer.html`
-- **Graph viewer** (custom): Would need new widget component
-- **Tree viewer** (hybrid): Render as expandable tree structure
+- **JSON viewer** is sufficient (`ui://widget/oak-json-viewer.html`)
+- Widget shows concepts and their relationships in a tree/list
+- No need for complex graph visualization initially
 
 ---
 
@@ -270,71 +308,74 @@ Neither ontology nor knowledge graph are generated from the OpenAPI schema:
 | Artifact           | Source                 | Notes                                                                       |
 | ------------------ | ---------------------- | --------------------------------------------------------------------------- |
 | `ontology-data.ts` | Hand-authored POC      | Note: "See 02-curriculum-ontology-resource-plan.md for full implementation" |
-| `kg-graph.ts`      | LLM-generated research | Claims "auto-generated" but no pipeline exists                              |
+| `kg-graph.ts`      | LLM-generated research | Current version has wrong emphasis (API-heavy)                              |
 
-### 5.2 Future State Possibilities
+### 5.2 Schema-First Relevance
 
-**What could be generated from OpenAPI:**
+**What the schema-first principle covers:**
 
-- Endpoint nodes and their paths/methods
-- Schema nodes and their names
-- Endpoint → Schema edges (from response types)
-- Schema field → Concept edges (from schema properties)
+- Types, type guards, Zod schemas for API calls
+- Tool definitions generated from OpenAPI operations
+- Response validation
 
-**What requires authored enrichment:**
+**What the knowledge graph is:**
 
-- Concept descriptions and semantics
-- Concept-to-Concept relationships (domain knowledge)
-- Inferred relationships
-- Workflow guidance (in ontology)
-- Synonyms and UK education context (in ontology)
+- Domain knowledge about curriculum concept relationships
+- Authored enrichment that complements the API
+- NOT derived from OpenAPI (concepts like "Thread builds across years" aren't in the schema)
 
 ### 5.3 Compliance Path
 
-Per user guidance, the knowledge graph falls into "additional metadata" category that can be added at type-gen time. A compliant approach:
+The knowledge graph is **additional authored metadata** (like the ontology). It complements rather than duplicates the schema:
 
-1. Generate API structure (endpoints, schemas) from OpenAPI
-2. Merge with authored concept definitions and relationships
-3. Output combined graph at `pnpm type-gen` time
-4. Result: Schema changes automatically update API structure, enrichments remain stable
+1. **Ontology and graph are authored together** - we control both
+2. **Neither duplicates OpenAPI data** - endpoints come from generated tools, not the graph
+3. **Both can be validated** - ensure concept IDs are consistent between them
+4. **Can be extended at type-gen time** - if we later want to extract concept names from schemas
+
+The key insight: The graph captures **domain knowledge that ISN'T in the OpenAPI schema**. Relationships like "threads link units across years" or "programmes are derived views of sequences" are curriculum knowledge, not API structure.
 
 ---
 
 ## 6. Recommendations
 
-### 6.1 Immediate Actions (POC Phase)
+### 6.1 Immediate Actions
 
-1. **Create `get-knowledge-graph` as aggregated tool**
+1. **Redesign the knowledge graph** - Focus on concept relationships, remove API plumbing
+   - Remove: Endpoint nodes, Schema nodes, SourceDoc nodes
+   - Keep: Concept nodes (28), concept-to-concept edges
+   - Add: Clear categorization (structure, content, assessment)
+   - Target: ~8KB total
+
+2. **Review ontology for overlap** - Remove structural content that belongs in graph
+   - Keep prose definitions, examples, workflows
+   - Consider trimming `entityHierarchy` if graph captures the same edges
+
+3. **Create `get-knowledge-graph` tool**
    - Follow existing pattern from `get-ontology`
-   - Use `formatOptimizedResult` for token optimisation
+   - Put graph in `structuredContent` (model needs it!)
    - Add to `agentSupport` category
+   - Cross-reference the ontology in description
 
-2. **Optimise graph payload**
-   - Remove SourceDoc nodes
-   - Shorten edge labels
-   - Target ~20KB
+4. **Move data file to SDK**
+   - Create: `packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts`
+   - New structure: concepts + edges (no API nodes)
 
-3. **Move data file to SDK**
-   - From: `.agent/research/open-curriculum-knowledge-graph/kg-graph.ts`
-   - To: `packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts`
+### 6.2 Complementary Design
 
-4. **Update type declarations**
-   - Add to `AggregatedToolName` union type
-   - Add to `agentSupport` category tools
+Author ontology and graph together with clear separation:
 
-### 6.2 Integration Tasks
-
-1. **Update prerequisite guidance** - Consider adding knowledge graph reference
-2. **Update documentation resources** - Add graph documentation
-3. **Update tool guidance data** - Include knowledge graph in tips
-4. **Consider widget renderer** - May warrant graph-specific visualisation
+| In Ontology                          | In Knowledge Graph                                               |
+| ------------------------------------ | ---------------------------------------------------------------- |
+| "A Thread is a conceptual strand..." | `{ from: 'thread', to: 'unit', rel: 'linksAcrossYears' }`        |
+| "KS4 has tiers: foundation, higher"  | `{ from: 'programme', to: 'tier', rel: 'uses', inferred: true }` |
+| `curriculumStructure.keyStages[]`    | `{ from: 'phase', to: 'keystage', rel: 'includes' }`             |
 
 ### 6.3 Future Considerations
 
-1. **Schema-derived generation** - Extract API structure from OpenAPI
-2. **Complementary-by-construction** - Ensure ontology and graph don't duplicate information
-3. **Queryable graph** - Consider parameters for targeted subgraph retrieval
-4. **Graph analytics** - Use graph structure for intelligent tool recommendations
+1. **Queryable graph** - Parameter to focus on specific concept subgraph
+2. **Graph validation** - Ensure concept IDs match between ontology and graph
+3. **Progressive disclosure** - Start with hierarchy, expand on demand
 
 ---
 
@@ -342,11 +383,10 @@ Per user guidance, the knowledge graph falls into "additional metadata" category
 
 ### New Files
 
-| File                                                                                       | Purpose                       |
-| ------------------------------------------------------------------------------------------ | ----------------------------- |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts`                         | Graph data (optimised)        |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-knowledge-graph.ts`                   | Tool definition and execution |
-| `apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/knowledge-graph-renderer.ts` | Widget (optional)             |
+| File                                                                     | Purpose                              |
+| ------------------------------------------------------------------------ | ------------------------------------ |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts`       | Concept graph data (concept-focused) |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-knowledge-graph.ts` | Tool definition and execution        |
 
 ### Files to Modify
 
@@ -356,81 +396,117 @@ Per user guidance, the knowledge graph falls into "additional metadata" category
 | `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts`          | Add to agentSupport tools, tips |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts` | Add to AGGREGATED_TOOL_DEFS     |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/executor.ts`    | Add execution dispatch          |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/type-guards.ts` | Update type guards              |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts`       | Consider adding KG reference    |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts`               | Review for overlap with graph   |
 
 ---
 
 ## 8. Open Questions
 
-1. **Should generated tool descriptions reference both ontology AND knowledge graph?**
-   - Current: Only references ontology
-   - Consider: Add optional reference to knowledge graph for structural queries?
+1. **How much overlap is acceptable between ontology and graph?**
+   - Current: Both describe entity hierarchy
+   - Option A: Ontology has prose, graph has edges (complementary)
+   - Option B: Remove hierarchy from one or the other
 
-2. **Should there be a combined "get-context" tool?**
-   - Merges ontology + graph into single response
-   - Pros: Single call for complete understanding
-   - Cons: Very large payload, harder to maintain
+2. **Should agents call both tools automatically?**
+   - Current: `get-help` + `get-ontology` are recommended first steps
+   - Consider: Should `get-knowledge-graph` be part of the recommended sequence?
+   - Trade-off: More tokens vs better domain understanding
 
-3. **How should the graph relate to MCP Resources?**
-   - Could expose as a resource (`graph://oak/knowledge-graph.json`)
-   - Allows clients to cache and reference without tool calls
+3. **Do we need concept categorization?**
+   - Categories like: structure, content, assessment, metadata
+   - Would help agents understand concept groupings
+   - Adds complexity to the graph
 
-4. **What level of type safety is needed?**
-   - Current graph: Dynamic string IDs
-   - Ideal: Literal types for compile-time safety
-   - Trade-off: Verbosity vs safety
+4. **Should the graph support queries?**
+   - Parameter to focus on a specific concept and its neighbors
+   - Would reduce token usage for targeted exploration
+   - Adds complexity to the tool
 
 ---
 
-## Appendix A: Current Tool Response Example
+## Appendix A: Proposed Tool Response Example
 
 ```typescript
-// get-ontology response via formatOptimizedResult
+// get-knowledge-graph response
+// NOTE: Graph goes in structuredContent because the MODEL needs to reason about it
 {
   content: [{
     type: 'text',
-    text: 'Oak Curriculum domain model loaded. Includes key stages, subjects, entity hierarchy, and tool guidance.'
+    text: 'Curriculum concept relationships loaded. Use with get-ontology for complete understanding.'
   }],
   structuredContent: {
-    summary: 'Oak Curriculum domain model loaded...',
-    status: 'success'
+    version: '1.0.0',
+    concepts: [
+      { id: 'subject', label: 'Subject', brief: 'Curriculum subject' },
+      { id: 'sequence', label: 'Sequence', brief: 'Internal API grouping of units' },
+      { id: 'unit', label: 'Unit', brief: 'Topic of study with lessons' },
+      // ... ~28 concept nodes
+    ],
+    edges: [
+      { from: 'subject', to: 'sequence', rel: 'hasSequences' },
+      { from: 'sequence', to: 'unit', rel: 'containsUnits' },
+      { from: 'unit', to: 'lesson', rel: 'containsLessons' },
+      { from: 'thread', to: 'unit', rel: 'linksAcrossYears' },
+      // ... ~40 concept-to-concept edges
+    ],
+    seeOntology: 'Call get-ontology for rich definitions and usage guidance',
   },
   _meta: {
-    fullResults: { /* complete ontologyData */ },
-    context: 'If you have not already, use the get-help and get-ontology tools...',
-    toolName: 'get-ontology',
-    'annotations/title': 'Get Curriculum Ontology',
-    timestamp: 1701234567890
+    // Widget rendering hints only - NOT the graph data
+    toolName: 'get-knowledge-graph',
+    'annotations/title': 'Get Concept Graph',
+    timestamp: Date.now(),
   }
 }
 ```
 
 ---
 
-## Appendix B: Graph Size Analysis
+## Appendix B: Graph Size Analysis (Revised)
 
-Current `kg-graph.ts`:
+**Current `kg-graph.ts` (wrong focus):**
 
-- Nodes: 89
-- Edges: 118
+- Concept nodes: 28
+- Endpoint nodes: 27 ❌
+- Schema nodes: 24 ❌
+- Other nodes: 10
+- Edges: 118 (mostly API mappings)
 - File size: ~40KB
 - Estimated tokens: ~10,000
 
-After proposed optimisation:
+**Target concept-focused graph:**
 
-- Nodes: ~80 (remove SourceDocs)
-- Edges: ~115
-- Target file size: ~20KB
-- Estimated tokens: ~5,000
+- Concept nodes: ~28
+- Concept-to-concept edges: ~40
+- File size: ~8KB
+- Estimated tokens: ~2,000
+
+**Combined with ontology:**
+
+- Ontology: ~12KB (~3K tokens)
+- Graph: ~8KB (~2K tokens)
+- Total for full context: ~20KB (~5K tokens)
 
 ---
 
-## Appendix C: References
+## Appendix C: OpenAI Apps SDK Reference
+
+From the SDK documentation:
+
+> **`structuredContent`** – concise JSON the widget uses _and_ the model reads. Include only what the model should see.
+>
+> **`content`** – optional narration (Markdown or plaintext) for the model's response.
+>
+> **`_meta`** – large or sensitive data exclusively for the widget. `_meta` never reaches the model.
+
+**Key insight**: Since `structuredContent` is what the model reasons about, the concept graph must be in `structuredContent`, NOT hidden in `_meta`.
+
+---
+
+## Appendix D: References
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` - Existing ontology implementation
 - `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-ontology.ts` - Tool definition pattern
 - `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts` - Output formatting
-- `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts` - Category definitions
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first principles
+- `.agent/reference-docs/openai-apps/openai-apps-sdk-build-mcp-server.md` - SDK documentation
 - `.agent/directives-and-memory/rules.md` - Project rules

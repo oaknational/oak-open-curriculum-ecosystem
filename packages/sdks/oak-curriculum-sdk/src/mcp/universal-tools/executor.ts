@@ -9,7 +9,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
 import {
-  formatData,
+  formatDataWithContext,
   formatError,
   formatUnknownTool,
   extractExecutionData,
@@ -22,6 +22,10 @@ import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
+import {
+  getToolFromToolName,
+  type ToolName,
+} from '../../types/generated/api-schema/mcp-tools/index.js';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.
@@ -29,15 +33,28 @@ import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
  * Extracts the data from the execution result and formats it appropriately
  * for the MCP response, handling both success and error cases.
  *
+ * Includes context grounding hint in structuredContent for tools that
+ * benefit from domain context (curriculum content tools).
+ *
  * @param result - Execution result from a generated tool
+ * @param toolName - Name of the tool (to look up requiresDomainContext)
  * @returns Formatted CallToolResult for MCP
  */
-function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
+function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): CallToolResult {
   const outcome = extractExecutionData(result);
   if (!outcome.ok) {
     return formatError(toErrorMessage(outcome.error));
   }
-  return formatData({ status: outcome.status, data: outcome.data });
+
+  // Look up requiresDomainContext from the tool descriptor
+  const descriptor = getToolFromToolName(toolName);
+  const includeContextHint = descriptor.requiresDomainContext;
+
+  return formatDataWithContext({
+    status: outcome.status,
+    data: outcome.data,
+    includeContextHint,
+  });
 }
 
 /**
@@ -132,8 +149,9 @@ export function createUniversalToolExecutor(
     }
 
     // Generated tool - dispatch to the MCP tool executor
+    // The name is already validated as a ToolName at this point
     const result = await deps.executeMcpTool(name, input);
-    return mapExecutionResult(result);
+    return mapExecutionResult(result, name);
   };
 }
 
