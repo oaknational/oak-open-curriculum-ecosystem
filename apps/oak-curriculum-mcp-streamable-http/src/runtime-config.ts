@@ -29,6 +29,16 @@ export interface RuntimeConfig {
    * @see https://vercel.com/docs/environment-variables/system-environment-variables
    */
   readonly vercelHostnames: readonly string[];
+  /**
+   * Preferred hostname for display purposes (e.g., landing page config snippets).
+   *
+   * In production: Uses VERCEL_PROJECT_PRODUCTION_URL (custom domain).
+   * In preview/development: Uses VERCEL_URL (deployment-specific URL).
+   * Undefined when not running on Vercel.
+   *
+   * @see https://vercel.com/docs/environment-variables/system-environment-variables
+   */
+  readonly displayHostname?: string;
 }
 
 function toBooleanFlag(value: string | undefined): boolean {
@@ -50,6 +60,27 @@ function toBooleanFlag(value: string | undefined): boolean {
  * @returns Runtime configuration with validated env and derived settings
  * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
+/**
+ * Determines the preferred hostname for display purposes.
+ *
+ * In production: Uses VERCEL_PROJECT_PRODUCTION_URL (custom domain like my-app.com).
+ * In preview/dev: Uses VERCEL_URL (deployment-specific URL like my-app-abc123.vercel.app).
+ *
+ * @param source - Environment variables object
+ * @returns Preferred hostname or undefined if not on Vercel
+ */
+function getDisplayHostname(source: NodeJS.ProcessEnv): string | undefined {
+  // In production, prefer the production URL (custom domain)
+  if (source.VERCEL_ENV === 'production' && source.VERCEL_PROJECT_PRODUCTION_URL) {
+    return source.VERCEL_PROJECT_PRODUCTION_URL.toLowerCase();
+  }
+  // In preview/development, use the deployment-specific URL
+  if (source.VERCEL_URL) {
+    return source.VERCEL_URL.toLowerCase();
+  }
+  return undefined;
+}
+
 /* eslint-disable-next-line no-restricted-syntax -- process.env is needed here to enable building the runtime config */
 export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   const env = readEnv(source);
@@ -69,5 +100,6 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
     useStubTools: toBooleanFlag(source.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
     version: source.npm_package_version ?? '0.0.0',
     vercelHostnames,
+    displayHostname: getDisplayHostname(source),
   };
 }

@@ -116,8 +116,8 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // Phase 5: Static assets and landing page
   // DNS rebinding protection applied ONLY to landing page (/)
   // CORS is already applied globally in Phase 2
-  // Pass first Vercel hostname for display on landing page
-  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, runtimeConfig.vercelHostnames[0]);
+  // Pass display hostname for landing page (prefers custom domain in production)
+  mountStaticContentRoutes(app, dnsRebindingMiddleware, log, runtimeConfig.displayHostname);
 
   // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
   // This runs AFTER clerkMiddleware, so auth context is available here.

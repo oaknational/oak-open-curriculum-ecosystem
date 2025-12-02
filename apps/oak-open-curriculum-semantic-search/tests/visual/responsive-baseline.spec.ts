@@ -29,12 +29,28 @@ async function captureScreenshot(page: Page, name: string, testInfo: TestInfo): 
   });
 }
 
+/**
+ * Captures accessibility analysis results for the current page.
+ *
+ * @param page - Playwright page instance
+ * @param name - Name for the attachment (used in test reports)
+ * @param testInfo - Playwright test info for attaching results
+ * @param exclude - Optional CSS selectors to exclude from analysis (e.g. third-party components)
+ * @returns Axe analysis results
+ */
 async function captureAccessibility(
   page: Page,
   name: string,
   testInfo: TestInfo,
+  exclude?: readonly string[],
 ): Promise<AxeResults> {
-  const results = await new AxeBuilderModule({ page }).analyze();
+  let builder = new AxeBuilderModule({ page });
+  if (exclude) {
+    for (const selector of exclude) {
+      builder = builder.exclude(selector);
+    }
+  }
+  const results = await builder.analyze();
   if (results.violations.length > 0) {
     console.warn(
       `axe detected ${results.violations.length} violation(s) for ${name}:`,
@@ -462,7 +478,9 @@ test.describe('Docs page responsive regressions', () => {
         .evaluate((el) => el.getBoundingClientRect().width);
 
       await captureScreenshot(page, 'docs-main-bp-xxl', testInfo);
-      const axe = await captureAccessibility(page, 'docs-main-bp-xxl', testInfo);
+      // Exclude Redoc from Axe: third-party component with known a11y issues
+      // See: .agent/plans/icebox/redoc-accessibility-remediation.md
+      const axe = await captureAccessibility(page, 'docs-main-bp-xxl', testInfo, ['.redoc-wrap']);
 
       expect.soft(mainWidth).toBeGreaterThanOrEqual(1_200);
       expect.soft(mainWidth).toBeLessThanOrEqual(1_260);

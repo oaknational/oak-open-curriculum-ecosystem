@@ -19,11 +19,13 @@
  * - Background: #bef2bd (soft green)
  * - Text: #1a3a1b (dark forest - adjusted for 4.5:1+ contrast)
  * - Secondary: #3d5e3e (muted green - adjusted for 4.5:1+ contrast)
+ * - Accent high contrast: #1b6330 (dark green - 5.0:1+ for small footer text)
  *
  * Dark mode colors:
  * - Background: #1b3d1c (dark forest)
  * - Text: #f0f7f0 (off-white)
  * - Secondary: #b8dab9 (light green - adjusted for 4.5:1+ contrast)
+ * - Accent high contrast: #8cd98f (same as accent - already high contrast)
  */
 export const WIDGET_STYLES = `
 :root {
@@ -32,6 +34,7 @@ export const WIDGET_STYLES = `
   --fg: #1a3a1b;
   --fg-secondary: #3d5e3e;
   --accent: #287d3c;
+  --accent-high-contrast: #1b6330;
   --item-bg: rgba(255,255,255,.5);
   --item-border: rgba(27,61,28,.1);
   --code-bg: rgba(0,0,0,.12);
@@ -43,6 +46,7 @@ export const WIDGET_STYLES = `
     --fg: #f0f7f0;
     --fg-secondary: #b8dab9;
     --accent: #8cd98f;
+    --accent-high-contrast: #8cd98f;
     --item-bg: rgba(0,0,0,.2);
     --item-border: rgba(240,247,240,.1);
     --code-bg: rgba(255,255,255,.1);
@@ -73,10 +77,12 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .empty { text-align: center; padding: 24px; color: var(--fg-secondary); font-size: 14px; }
 .ftr { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--fg-secondary); text-align: center; }
 .ftr-disclaimer { margin: 0 0 8px; }
-.ftr-links { margin: 0; }
-.ftr-link { color: var(--accent); text-decoration: none; font-weight: 500; }
+.ftr-links { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; }
+.ftr-link { color: var(--accent-high-contrast); text-decoration: none; font-weight: 600; text-align: center; }
 .ftr-link:hover { text-decoration: underline; }
-.ftr-sep { margin: 0 8px; opacity: 0.5; }
+.ftr-sep { opacity: 0.5; }
+.nowrap { white-space: nowrap; }
+@media (max-width: 480px) { .ftr-links { flex-direction: column; gap: 0; } .ftr-sep { display: none; } .ftr-link { padding-top: 8px; border-top: 1px solid var(--border-color); } }
 .actions { display: flex; gap: 8px; margin-bottom: 12px; }
 .btn { background: var(--accent); color: white; border: none; border-radius: 6px; padding: 8px 16px; font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
 .btn:hover { opacity: 0.9; }

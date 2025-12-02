@@ -5,13 +5,13 @@
  *
  * Features:
  * - Widget state persistence via window.openai.setWidgetState()
- * - Tool calling via window.openai.callTool()
  * - Tool name routing to appropriate renderers
  * - Rendering orchestration
  *
  * @see aggregated-tool-widget.ts
  * @see widget-renderers/index.ts - Renderer implementations
  * @see widget-renderer-registry.ts - Tool name to renderer mapping
+ * @see widget-script-state.ts - Contains disabled refresh button code for future reference
  * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui
  */
 
@@ -24,15 +24,15 @@ import { WIDGET_STATE_JS } from './widget-script-state.js';
  * This script handles:
  * - Reading tool output from window.openai.toolOutput
  * - Persisting UI state via window.openai.setWidgetState()
- * - Calling tools via window.openai.callTool()
  * - Tool name routing to select appropriate renderer
  * - Orchestrating rendering of all tool outputs
+ *
+ * NOTE: Tool calling via window.openai.callTool() is implemented but disabled.
+ * See widget-script-state.ts for the commented-out refresh button code.
  */
 export const WIDGET_SCRIPT = `
 const c = document.getElementById('c');
 const toolNameEl = document.getElementById('tool-name');
-const actionsEl = document.getElementById('actions');
-const errorEl = document.getElementById('error');
 
 ${WIDGET_STATE_JS}
 
@@ -91,7 +91,7 @@ function getRendererForTool(toolName) {
 
 function render() {
   updateToolName();
-  updateActions();
+  // NOTE: updateActions() was removed - see widget-script-state.ts for refresh button code
   const fullData = getFullResults();
   const toolName = getToolName();
   const renderer = getRendererForTool(toolName);

@@ -4,7 +4,7 @@ The schema first is an absolute for parts of the sdk related directly to calling
 
 When analysing a generated file, always analyse the generator code that produced it as well, as it is the source of truth for the generated file.
 
-After each piece of work, the fully quality gate suite must be run one gate at a time, and analysis of issues must wait until all gates are complete. Analysis must include asking if there are fundamental architectural issues or opportunities for improvement.
+After each piece of work, the fully quality gate suite must be run one gate at a time, and analysis of issues must wait until all gates are complete. Analysis must include asking if there are fundamental architectural issues or opportunities for improvement. Do not run them now unless explicitly asked to do so.
 
 ```shell
 # From the repo root, with no filters
