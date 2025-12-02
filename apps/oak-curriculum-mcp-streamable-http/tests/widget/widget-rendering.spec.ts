@@ -111,17 +111,15 @@ test.describe('Widget rendering behaviour', () => {
     await expect(page.getByText('AI can make mistakes')).toBeVisible();
   });
 
-  test('renders help UI when data has serverOverview/toolCategories/workflows', async ({
-    page,
-  }) => {
+  test('renders help UI when data has serverOverview/toolCategories/tips', async ({ page }) => {
     await injectToolOutput(page, HELP_OUTPUT_FIXTURE);
     await page.goto(`${serverUrl}/widget`);
 
     // Widget should detect help shape and render structured sections
     await expect(page.getByText('Overview')).toBeVisible();
     await expect(page.getByText('Tool Categories')).toBeVisible();
-    await expect(page.getByText('Workflows')).toBeVisible();
     await expect(page.getByText('Tips')).toBeVisible();
+    // Note: Workflows are in structuredContent for the model, but not rendered in widget
   });
 
   test('renders lesson cards when data has lessons array', async ({ page }) => {
