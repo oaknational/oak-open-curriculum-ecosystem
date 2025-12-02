@@ -35,8 +35,16 @@ function parseJsonContent(result: CallToolResult): unknown {
 describe('createMcpToolsModule', () => {
   it('delegates search tool calls through the MCP executor dependency and returns aggregated data', async () => {
     // Mock data: get-search-lessons and get-search-transcripts return arrays
-    const mockLessons = [
+    // Note: The SDK augments lesson results with canonicalUrl based on lessonSlug
+    const mockLessonsFromApi = [
       { lessonTitle: 'Photosynthesis Basics', lessonSlug: 'photosynthesis-basics' },
+    ];
+    const mockLessonsWithCanonicalUrl = [
+      {
+        lessonTitle: 'Photosynthesis Basics',
+        lessonSlug: 'photosynthesis-basics',
+        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/photosynthesis-basics',
+      },
     ];
     const mockTranscripts = [{ lessonTitle: 'Transcript A' }];
 
@@ -44,7 +52,7 @@ describe('createMcpToolsModule', () => {
       .fn()
       .mockImplementation(async (name) => {
         if (name === ('get-search-lessons' as ToolName)) {
-          return Promise.resolve({ status: 200, data: mockLessons });
+          return Promise.resolve({ status: 200, data: mockLessonsFromApi });
         }
         if (name === ('get-search-transcripts' as ToolName)) {
           return Promise.resolve({ status: 200, data: mockTranscripts });
@@ -87,7 +95,7 @@ describe('createMcpToolsModule', () => {
       transcripts: unknown[];
     };
     expect(fullResults.q).toBe('photosynthesis');
-    expect(fullResults.lessons).toEqual(mockLessons);
+    expect(fullResults.lessons).toEqual(mockLessonsWithCanonicalUrl);
     expect(fullResults.transcripts).toEqual(mockTranscripts);
   });
 
