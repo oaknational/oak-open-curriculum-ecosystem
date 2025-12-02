@@ -105,22 +105,21 @@ export function formatDataWithContext(options: {
 }
 
 /**
- * Maximum number of preview items to include in structuredContent.
- * Keeps model context minimal while allowing the widget to show a preview.
+ * Input options for formatOptimizedResult.
+ *
+ * Per OpenAI Apps SDK reference:
+ * - Full data goes to structuredContent (model + widget see this)
+ * - Summary goes to content (human-readable for conversation)
+ * - Widget metadata goes to _meta (widget-only)
  */
-const MAX_PREVIEW_ITEMS = 5;
-
-/** Input options for formatOptimizedResult. Full data goes to _meta, minimal to structuredContent. */
 export interface OptimizedResultOptions {
-  /** Human-readable summary for both model and widget */
+  /** Human-readable summary for content (conversation display) */
   readonly summary: string;
-  /** Full data that will be available only to the widget via _meta.fullResults */
+  /** Full data for structuredContent (model reasoning + widget display) */
   readonly fullData: unknown;
-  /** Optional preview items to include in structuredContent (limited to 5) */
-  readonly previewItems?: readonly unknown[];
-  /** Optional query string for search context */
+  /** Optional query string for widget context */
   readonly query?: string;
-  /** Optional timestamp for result freshness */
+  /** Optional timestamp for widget context */
   readonly timestamp?: number;
   /** Optional status indicator */
   readonly status?: string;
@@ -131,15 +130,20 @@ export interface OptimizedResultOptions {
 }
 
 /**
- * Formats data into an optimized MCP CallToolResult for OpenAI Apps SDK.
- * Full data in _meta (widget-only), minimal structuredContent for model.
+ * Formats MCP CallToolResult per OpenAI Apps SDK reference.
+ *
+ * Per OpenAI docs (https://developers.openai.com/apps-sdk/reference#tool-results):
+ * - `structuredContent`: Model AND widget see this - contains FULL data for reasoning
+ * - `content`: Model AND widget see this - human-readable summary for conversation
+ * - `_meta`: Widget ONLY sees this - additional computed data like lookups
+ *
  * @see https://developers.openai.com/apps-sdk/reference#tool-results
  */
 
-/** Builds _meta object for widget. Note: model never sees _meta. */
-function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown): UnknownRecord {
+/** Builds _meta object for widget-only data. Model never sees _meta. */
+function buildMeta(options: OptimizedResultOptions): UnknownRecord {
   const { toolName, annotationsTitle, query, timestamp } = options;
-  const meta: UnknownRecord = { fullResults: serialisedFullData };
+  const meta: UnknownRecord = {};
   if (toolName !== undefined) {
     meta.toolName = toolName;
   }
@@ -156,25 +160,25 @@ function buildMeta(options: OptimizedResultOptions, serialisedFullData: unknown)
 }
 
 /**
- * Builds minimal structuredContent for model reasoning.
+ * Builds structuredContent with FULL data for model reasoning.
  *
- * @remarks
- * Includes oakContextHint to guide the model to call get-ontology
- * and get-help for domain understanding. All aggregated tools using
- * formatOptimizedResult automatically include this hint.
+ * Per OpenAI Apps SDK: structuredContent is "Surfaced to the model and the component".
+ * This is where the model gets the data it needs to reason over.
  */
-function buildStructuredContent(options: OptimizedResultOptions): UnknownRecord {
-  const { summary, previewItems, status } = options;
+function buildStructuredContent(
+  options: OptimizedResultOptions,
+  serialisedFullData: unknown,
+): UnknownRecord {
+  const { summary, status } = options;
+  // Full data goes here - model needs this for reasoning
+  const base = isUnknownRecord(serialisedFullData)
+    ? serialisedFullData
+    : { data: serialisedFullData };
   const structuredContent: UnknownRecord = {
+    ...base,
     summary,
     oakContextHint: OAK_CONTEXT_HINT,
   };
-  if (previewItems !== undefined) {
-    const serialisedPreview = serialiseArg(previewItems);
-    const previewArray = Array.isArray(serialisedPreview) ? serialisedPreview : [];
-    structuredContent.previewItems = previewArray.slice(0, MAX_PREVIEW_ITEMS);
-    structuredContent.hasMore = previewArray.length > MAX_PREVIEW_ITEMS;
-  }
   if (status !== undefined) {
     structuredContent.status = status;
   }
@@ -183,8 +187,9 @@ function buildStructuredContent(options: OptimizedResultOptions): UnknownRecord 
 
 export function formatOptimizedResult(options: OptimizedResultOptions): CallToolResult {
   const serialisedFullData = serialiseArg(options.fullData);
-  const meta = buildMeta(options, serialisedFullData);
-  const structuredContent = buildStructuredContent(options);
+  const meta = buildMeta(options);
+  const structuredContent = buildStructuredContent(options, serialisedFullData);
+  // Human-readable summary for conversation display
   const content: TextContent = { type: 'text', text: options.summary };
   return { content: [content], structuredContent, _meta: meta };
 }

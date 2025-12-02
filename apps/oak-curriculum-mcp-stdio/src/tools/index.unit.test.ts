@@ -79,24 +79,21 @@ describe('createMcpToolsModule', () => {
       expect.objectContaining({ q: 'photosynthesis' }),
     );
 
-    // formatOptimizedResult returns human-readable summary in content.text
+    // content has human-readable summary per OpenAI Apps SDK
     const textEntry = output.content.find((entry): entry is TextContent => entry.type === 'text');
     expect(textEntry?.text).toContain('photosynthesis');
 
-    // structuredContent contains summary and preview
+    // structuredContent has FULL data for model reasoning per OpenAI Apps SDK
     expect(output.structuredContent).toHaveProperty('summary');
     expect(output.structuredContent).toHaveProperty('status', 'success');
-
-    // _meta contains full results for widget access
-    expect(output._meta).toHaveProperty('fullResults');
-    const fullResults = output._meta?.fullResults as {
-      q: string;
-      lessons: unknown[];
-      transcripts: unknown[];
+    const structured = output.structuredContent as {
+      q?: string;
+      lessons?: unknown[];
+      transcripts?: unknown[];
     };
-    expect(fullResults.q).toBe('photosynthesis');
-    expect(fullResults.lessons).toEqual(mockLessonsWithCanonicalUrl);
-    expect(fullResults.transcripts).toEqual(mockTranscripts);
+    expect(structured.q).toBe('photosynthesis');
+    expect(structured.lessons).toEqual(mockLessonsWithCanonicalUrl);
+    expect(structured.transcripts).toEqual(mockTranscripts);
   });
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {

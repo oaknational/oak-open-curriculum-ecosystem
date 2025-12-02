@@ -51,7 +51,7 @@ const WIDGET_CSP = {
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
 const WIDGET_DESCRIPTION =
-  'Oak curriculum explorer. For best results, call get-ontology first to understand the curriculum domain model.';
+  'Oak curriculum explorer. For best results, call get-ontology and get-help first to understand the curriculum domain model.';
 
 /**
  * Registers the Oak JSON viewer widget as an MCP resource.

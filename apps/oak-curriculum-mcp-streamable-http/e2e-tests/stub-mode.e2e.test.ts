@@ -8,7 +8,7 @@ import {
   parseJsonRpcResult,
   getContentArray,
   readFirstTextContent,
-  getFullResultsFromMeta,
+  getStructuredContentData,
 } from './helpers/sse.js';
 import {
   listUniversalTools,
@@ -55,6 +55,10 @@ function extractResultAndContent(responseText: string): {
   return { result, content };
 }
 
+/**
+ * Asserts fetch lesson response per OpenAI Apps SDK pattern.
+ * Full data is now in structuredContent (model + widget see this).
+ */
 async function assertFetchLessonResponse(
   responseText: string,
   lessonId: string,
@@ -63,18 +67,18 @@ async function assertFetchLessonResponse(
   const { result } = extractResultAndContent(responseText);
   expect(result.isError).not.toBe(true);
 
-  // Full data is now in _meta.fullResults (optimized response format)
-  const fullResults = getFullResultsFromMeta(result) as {
+  // Full data is in structuredContent per OpenAI Apps SDK
+  const structured = getStructuredContentData(result) as {
     readonly canonicalUrl?: string;
     readonly data?: unknown;
     readonly id?: string;
     readonly type?: string;
   };
 
-  expect(fullResults.id).toBe(lessonId);
-  expect(fullResults.type).toBe('lesson');
-  expect(typeof fullResults.canonicalUrl).toBe('string');
-  expect(fullResults.canonicalUrl).toContain('thenational.academy');
+  expect(structured.id).toBe(lessonId);
+  expect(structured.type).toBe('lesson');
+  expect(typeof structured.canonicalUrl).toBe('string');
+  expect(structured.canonicalUrl).toContain('thenational.academy');
 
   const executor = createStubToolExecutionAdapter();
   const stubResult = await executor('get-lessons-summary', {
@@ -84,7 +88,7 @@ async function assertFetchLessonResponse(
     throw new Error('Stub executor did not return data');
   }
   expect(stubResult.data).toBeDefined();
-  expect(fullResults.data).toEqual(stubResult.data);
+  expect(structured.data).toEqual(stubResult.data);
 }
 
 describe('Streamable HTTP server (stub mode)', () => {

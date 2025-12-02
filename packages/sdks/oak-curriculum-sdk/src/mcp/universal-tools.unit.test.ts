@@ -139,16 +139,18 @@ describe('createUniversalToolExecutor', () => {
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
+      // content has human-readable summary for conversation
       expect(firstContent.text).toContain('photosynthesis');
     }
 
-    // structuredContent has summary for model
+    // structuredContent has FULL data for model reasoning (OpenAI Apps SDK pattern)
     expect(result.structuredContent).toBeDefined();
     expect(result.structuredContent).toHaveProperty('summary');
+    expect(result.structuredContent).toHaveProperty('lessons');
+    expect(result.structuredContent).toHaveProperty('transcripts');
 
-    // _meta has full data for widget
+    // _meta has widget metadata only (not fullResults - that's in structuredContent now)
     expect(result._meta).toBeDefined();
-    expect(result._meta).toHaveProperty('fullResults');
     expect(result._meta).toHaveProperty('query', 'photosynthesis');
   });
 
@@ -168,23 +170,18 @@ describe('createUniversalToolExecutor', () => {
     });
     expect(result.isError).toBeUndefined();
 
-    // New optimized structure: human-readable content, full data in _meta
+    // Content has human-readable summary for conversation display
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
-      expect(firstContent.text).toContain('Lesson');
+      expect(firstContent.text).toContain('lesson');
     }
 
-    // _meta has full data for widget
-    expect(result._meta).toBeDefined();
-    expect(result._meta).toHaveProperty('fullResults');
-
-    const meta = result._meta;
-    if (meta && 'fullResults' in meta) {
-      const fullResults = meta.fullResults;
-      expect(fullResults).toHaveProperty('id', 'lesson:maths-lesson');
-      expect(fullResults).toHaveProperty('type', 'lesson');
-    }
+    // structuredContent has FULL data for model reasoning (OpenAI Apps SDK pattern)
+    expect(result.structuredContent).toBeDefined();
+    const structured = result.structuredContent as { id?: string; type?: string };
+    expect(structured).toHaveProperty('id', 'lesson:maths-lesson');
+    expect(structured).toHaveProperty('type', 'lesson');
   });
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
@@ -223,24 +220,23 @@ describe('createUniversalToolExecutor', () => {
 
     expect(result.isError).toBeUndefined();
 
-    // New optimized structure: summary in content, full data in _meta
+    // Content has human-readable summary for conversation display
     const firstContent = result.content[0];
     expect(firstContent.type).toBe('text');
     if ('text' in firstContent) {
       expect(firstContent.text).toContain('Curriculum');
     }
 
-    // _meta has full ontology data
-    expect(result._meta).toBeDefined();
-    expect(result._meta).toHaveProperty('fullResults');
-
-    const meta = result._meta;
-    if (meta && 'fullResults' in meta) {
-      const fullResults = meta.fullResults;
-      expect(fullResults).toHaveProperty('version');
-      expect(fullResults).toHaveProperty('curriculumStructure');
-      expect(fullResults).toHaveProperty('toolUsageGuidance');
-    }
+    // structuredContent has FULL ontology data for model reasoning (OpenAI Apps SDK pattern)
+    expect(result.structuredContent).toBeDefined();
+    const structured = result.structuredContent as {
+      version?: string;
+      curriculumStructure?: unknown;
+      toolUsageGuidance?: unknown;
+    };
+    expect(structured).toHaveProperty('version');
+    expect(structured).toHaveProperty('curriculumStructure');
+    expect(structured).toHaveProperty('toolUsageGuidance');
   });
 });
 
