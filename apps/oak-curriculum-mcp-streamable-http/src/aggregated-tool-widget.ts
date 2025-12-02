@@ -68,9 +68,9 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
     <div class="ftr">
       <p class="ftr-disclaimer">AI can make mistakes. Check all generated resources before use.</p>
       <p class="ftr-links">
-        <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">Explore more Oak curriculum resources</a>
+        <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link nowrap">Explore more Oak curriculum resources</a>
         <span class="ftr-sep">•</span>
-        <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link">For an educator specific experience try Aila - <strong>Oak's AI Lesson Assistant</strong></a>
+        <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link"><span class="nowrap">For an educator specific experience try Aila</span> - <span class="nowrap">Oak's AI Lesson Assistant</span></a>
       </p>
     </div>
   </main>

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This research document analyzes the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak MCP implementation, and proposes optimizations for both general use and Oak context grounding.
+This research document analyses the three data return mechanisms in the OpenAI Apps SDK (`structuredContent`, `content`, `_meta`), reviews the current Oak MCP implementation, and proposes optimizations for both general use and Oak context grounding.
 
 **Date**: December 2025  
 **Related Docs**:
@@ -64,7 +64,7 @@ The OpenAI Apps SDK defines three sibling payloads in tool responses, each servi
 
 ### 1.4 Summary Comparison
 
-```
+```text
 ┌─────────────────────┬───────────────────┬───────────────────┬───────────────────┐
 │                     │     content       │ structuredContent │       _meta       │
 ├─────────────────────┼───────────────────┼───────────────────┼───────────────────┤
@@ -224,7 +224,7 @@ const WIDGET_DESCRIPTION =
   'Oak National Academy curriculum explorer showing lessons, units, quizzes, and teaching resources.';
 ```
 
-**Assessment**: Generic description; doesn't guide model behavior.
+**Assessment**: Generic description; doesn't guide model behaviour.
 
 ### 2.4 Context Guidance Placement Issue ⚠️
 
@@ -490,7 +490,7 @@ async function measureTokenImpact(toolName: string): Promise<void> {
 }
 ```
 
-### 5.2 Model Behavior Testing
+### 5.2 Model Behaviour Testing
 
 Test whether the model follows context guidance:
 
@@ -524,7 +524,7 @@ This API allows widgets to insert messages into the conversation as if the user 
 
 ```typescript
 await window.openai.sendFollowUpMessage({
-  prompt: 'Draft a tasting itinerary for the pizzerias I favorited.',
+  prompt: 'Draft a tasting itinerary for the pizzerias I favourited.',
 });
 ```
 
