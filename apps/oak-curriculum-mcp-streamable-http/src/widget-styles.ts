@@ -54,7 +54,7 @@ export const WIDGET_STYLES = `
   }
 }
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+html, body { margin: 0; }
 body { padding: 16px; font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
 #root { background: var(--bg); color: var(--fg); border-radius: 12px; padding: 20px; flex: 1; display: flex; flex-direction: column; }
 .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }

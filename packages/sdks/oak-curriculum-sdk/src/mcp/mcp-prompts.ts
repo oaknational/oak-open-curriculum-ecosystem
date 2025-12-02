@@ -155,6 +155,8 @@ function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
         type: 'text',
         text: `I want to find lessons about "${topic}".${keyStageNote}
 
+Before searching, you may want to call get-ontology to understand the curriculum structure (key stages, subjects, units).
+
 Please:
 1. Use the search tool to find lessons matching this topic${keyStage ? ` with keyStage: "${keyStage}"` : ''}
 2. Review the results and identify the most relevant lessons
@@ -178,6 +180,8 @@ function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
       content: {
         type: 'text',
         text: `I'm planning a lesson on "${topic}" for ${yearGroup}. Please help me gather materials.
+
+You may want to call get-help or get-ontology first to understand Oak's curriculum structure and tool usage.
 
 Steps:
 1. Search for lessons on "${topic}" that are appropriate for ${yearGroup}
@@ -211,6 +215,8 @@ function getProgressionMapMessages(args: PromptArgs): PromptMessage[] {
       content: {
         type: 'text',
         text: `I want to understand how the concept of "${concept}" develops across years in ${subject}.
+
+You may want to call get-ontology first to understand Oak's curriculum structure and thread model.
 
 Please:
 1. Use get-threads to find threads related to "${concept}" in ${subject}

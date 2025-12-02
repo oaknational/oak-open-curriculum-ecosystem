@@ -232,11 +232,11 @@ describe('createUniversalToolExecutor', () => {
     const structured = result.structuredContent as {
       version?: string;
       curriculumStructure?: unknown;
-      toolUsageGuidance?: unknown;
+      workflows?: unknown;
     };
     expect(structured).toHaveProperty('version');
     expect(structured).toHaveProperty('curriculumStructure');
-    expect(structured).toHaveProperty('toolUsageGuidance');
+    expect(structured).toHaveProperty('workflows');
   });
 });
 

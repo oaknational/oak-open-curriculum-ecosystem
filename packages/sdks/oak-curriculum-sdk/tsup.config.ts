@@ -77,6 +77,7 @@ export default defineConfig({
     'src/mcp/tool-guidance-data.ts',
     'src/mcp/documentation-resources.ts',
     'src/mcp/mcp-prompts.ts',
+    'src/mcp/ontology-resource.ts',
     'src/mcp/universal-tools/index.ts',
     'src/mcp/universal-tools/definitions.ts',
     'src/mcp/universal-tools/types.ts',

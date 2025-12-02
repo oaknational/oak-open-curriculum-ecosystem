@@ -51,6 +51,8 @@ export interface WorkflowStep {
   readonly tool?: AllToolName;
   /** Example parameters (as string for display) */
   readonly example?: string;
+  /** What this step returns (helps agent understand data flow) */
+  readonly returns?: string;
   /** Additional notes */
   readonly note?: string;
 }

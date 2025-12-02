@@ -34,8 +34,9 @@ const OntologyResponseSchema = z.object({
       }),
     ),
   }),
-  toolUsageGuidance: z.object({
-    discoveryWorkflow: z.object({
+  workflows: z.object({
+    findLessons: z.object({
+      title: z.string(),
       description: z.string(),
       steps: z.array(z.unknown()),
     }),
@@ -169,19 +170,15 @@ describe('get-ontology E2E', () => {
 
       // Full data is in structuredContent per OpenAI Apps SDK
       const ontologyData = getStructuredContentData(result) as {
-        readonly toolUsageGuidance: {
-          readonly discoveryWorkflow: { readonly description: string };
-          readonly browsingWorkflow: { readonly description: string };
+        readonly workflows: {
+          readonly findLessons: { readonly description: string };
+          readonly browseSubject: { readonly description: string };
         };
       };
 
-      // Verify guidance helps AI agents understand workflows
-      expect(ontologyData.toolUsageGuidance.discoveryWorkflow.description).toContain(
-        'user wants to find',
-      );
-      expect(ontologyData.toolUsageGuidance.browsingWorkflow.description).toContain(
-        'user wants to explore',
-      );
+      // Verify workflows help AI agents understand how to combine tools
+      expect(ontologyData.workflows.findLessons.description).toContain('Search for lessons');
+      expect(ontologyData.workflows.browseSubject.description).toContain('Explore');
     });
   });
 });
