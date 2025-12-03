@@ -33,9 +33,8 @@
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.0.0"

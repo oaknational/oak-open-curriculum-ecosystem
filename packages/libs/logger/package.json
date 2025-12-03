@@ -30,12 +30,11 @@
     "lint": "eslint  .",
     "clean": "rm -rf dist .turbo"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "express": "^4.0.0 || ^5.0.0"
+    "express": "^5"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.0.0"

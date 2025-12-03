@@ -105,20 +105,20 @@
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
     "@zod/core": "^0.11.6",
     "openapi-fetch": "^0.15.0",
-    "zod": "^4"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.23.0",
-    "@next/eslint-plugin-next": "^16.0.3",
-    "@types/node": "^22.10.5",
-    "dotenv": "^17.2.1",
+    "@modelcontextprotocol/sdk": "^1.24.1",
+    "@next/eslint-plugin-next": "^16.0.6",
+    "@types/node": "^24.10.1",
+    "dotenv": "^17.2.3",
     "openapi-typescript": "^7.10.1",
     "openapi3-ts": "^4.5.0",
-    "tsx": "^4.20.5",
-    "typedoc": "^0.28.12",
-    "typedoc-plugin-markdown": "^4.8.1",
-    "typescript": "^5.9.2",
-    "vitest": "^4.0.12"
+    "tsx": "^4.21.0",
+    "typedoc": "^0.28.15",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
   },
   "repository": {
     "type": "git",

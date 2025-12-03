@@ -36,20 +36,20 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.23.0",
-    "@oaknational/mcp-logger": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.24.1",
     "@oaknational/mcp-env": "workspace:*",
+    "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-storage": "workspace:*",
     "@oaknational/mcp-transport": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
-    "dotenv": "^17.2.1",
-    "zod": "^4"
+    "dotenv": "^17.2.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@types/node": "^22.10.5",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "vitest": "^4.0.12"
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
   },
   "repository": {
     "type": "git",
