@@ -39,13 +39,13 @@ function generateCtaConfigEntry(cta: CtaConfig): string {
   const escapedPrompt = escapeForTemplateLiteral(cta.prompt);
   const buttonText = formatButtonText(cta.icon, cta.label);
   const loadingText = formatButtonText(cta.icon, cta.loadingLabel);
-  const successText = formatButtonText(cta.icon, cta.successLabel);
+  const understoodText = formatButtonText(cta.icon, cta.understoodLabel);
 
   return `  {
     id: '${cta.id}',
     buttonText: '${buttonText}',
     loadingText: '${loadingText}',
-    successText: '${successText}',
+    understoodText: '${understoodText}',
     prompt: \`${escapedPrompt}\`,
   }`;
 }
@@ -66,9 +66,12 @@ ${entries}
 }
 
 /**
- * Duration to show success state before reverting to original label (2 seconds).
+ * Delay before showing "understood" state after prompt is sent (10 seconds).
+ *
+ * This gives the agent time to process the curriculum information before
+ * the UI indicates completion.
  */
-export const CTA_SUCCESS_DISPLAY_MS = 2000;
+export const CTA_UNDERSTOOD_DELAY_MS = 10000;
 
 /** JavaScript code for the initCtaButtons function */
 const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
@@ -87,12 +90,10 @@ const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
       btn.textContent = cta.loadingText;
       try {
         await window.openai.sendFollowUpMessage({ prompt: cta.prompt });
-        // Show success state for 2 seconds
-        btn.textContent = cta.successText;
+        // Show understood state after 10 seconds, keep button disabled
         setTimeout(() => {
-          btn.textContent = cta.buttonText;
-          btn.disabled = false;
-        }, ${String(CTA_SUCCESS_DISPLAY_MS)});
+          btn.textContent = cta.understoodText;
+        }, ${String(CTA_UNDERSTOOD_DELAY_MS)});
       } catch (error) {
         btn.textContent = cta.buttonText;
         btn.disabled = false;

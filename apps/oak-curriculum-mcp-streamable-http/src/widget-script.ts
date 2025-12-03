@@ -111,10 +111,6 @@ function render() {
     c.innerHTML = '<div class="empty">Loading...</div>';
   }
   restoreScrollPosition();
-  // Initialize renderer-specific CTAs after DOM is updated
-  if (rendererId === 'knowledgeGraph' && typeof initKnowledgeGraphCta === 'function') {
-    initKnowledgeGraphCta();
-  }
 }
 
 render();

@@ -15,7 +15,7 @@ import {
   generateCtaContainerHtml,
   generateCtaHandlerJs,
   CTA_REGISTRY,
-  CTA_SUCCESS_DISPLAY_MS,
+  CTA_UNDERSTOOD_DELAY_MS,
   type CtaConfig,
 } from './widget-cta/index.js';
 
@@ -25,7 +25,7 @@ describe('generateCtaButtonHtml', () => {
       id: 'test-cta',
       label: 'Test Action',
       loadingLabel: 'Loading...',
-      successLabel: 'Done!',
+      understoodLabel: 'Done!',
       icon: '🎯',
       prompt: 'Test prompt',
     };
@@ -51,7 +51,7 @@ describe('generateCtaButtonHtml', () => {
       id: 'no-icon-cta',
       label: 'No Icon Action',
       loadingLabel: 'Working...',
-      successLabel: 'Complete!',
+      understoodLabel: 'Complete!',
       prompt: 'Test prompt',
     };
 
@@ -129,14 +129,14 @@ describe('generateCtaHandlerJs', () => {
     expect(js).toContain('DOMContentLoaded');
   });
 
-  it('includes successText in config entries', () => {
+  it('includes understoodText in config entries', () => {
     const js = generateCtaHandlerJs();
-    expect(js).toContain('successText:');
+    expect(js).toContain('understoodText:');
   });
 
-  it('shows success state with setTimeout for delayed revert', () => {
+  it('shows understood state with setTimeout after successful send', () => {
     const js = generateCtaHandlerJs();
-    expect(js).toContain('btn.textContent = cta.successText');
+    expect(js).toContain('btn.textContent = cta.understoodText');
     expect(js).toContain('setTimeout');
   });
 
@@ -152,14 +152,14 @@ describe('generateCtaHandlerJs', () => {
   });
 });
 
-describe('CTA_SUCCESS_DISPLAY_MS', () => {
-  it('is defined as 2 seconds in milliseconds', () => {
-    expect(CTA_SUCCESS_DISPLAY_MS).toBe(2000);
+describe('CTA_UNDERSTOOD_DELAY_MS', () => {
+  it('is defined as 10 seconds in milliseconds', () => {
+    expect(CTA_UNDERSTOOD_DELAY_MS).toBe(10000);
   });
 
   it('is embedded in generated JavaScript for setTimeout', () => {
     const js = generateCtaHandlerJs();
-    expect(js).toContain(String(CTA_SUCCESS_DISPLAY_MS));
+    expect(js).toContain(String(CTA_UNDERSTOOD_DELAY_MS));
   });
 });
 
@@ -179,8 +179,8 @@ describe('CTA_REGISTRY', () => {
       expect(learnOak.label.length).toBeGreaterThan(0);
     });
 
-    it('has a non-empty successLabel', () => {
-      expect(learnOak.successLabel.length).toBeGreaterThan(0);
+    it('has a non-empty understoodLabel', () => {
+      expect(learnOak.understoodLabel.length).toBeGreaterThan(0);
     });
 
     it('prompts for all three agent support tools', () => {

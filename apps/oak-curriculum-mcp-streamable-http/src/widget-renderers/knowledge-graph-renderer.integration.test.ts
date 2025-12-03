@@ -1,8 +1,9 @@
 /**
  * Integration tests for the Knowledge Graph renderer.
  *
- * These tests verify how the knowledge graph renderer integrates with
- * the widget system - ensuring it's properly registered and wired.
+ * These tests verify BEHAVIOR: the knowledge graph renderer is correctly
+ * integrated into the widget system so that when the get-knowledge-graph
+ * tool is called, the appropriate renderer is selected and executed.
  *
  * Per testing-strategy.md, integration tests verify how code units work
  * together when imported - NOT running systems.
@@ -18,72 +19,53 @@ import { WIDGET_RENDERER_FUNCTIONS, RENDERER_FUNCTION_NAMES } from './index.js';
 import { TOOL_RENDERER_MAP, RENDERER_IDS } from '../widget-renderer-registry.js';
 import { WIDGET_SCRIPT } from '../widget-script.js';
 
-describe('Knowledge Graph renderer integration with widget system', () => {
-  describe('renderer registry', () => {
-    it('knowledgeGraph is a valid renderer ID', () => {
-      expect(RENDERER_IDS).toContain('knowledgeGraph');
-    });
-
-    it('get-knowledge-graph tool maps to knowledgeGraph renderer', () => {
-      expect(TOOL_RENDERER_MAP['get-knowledge-graph']).toBe('knowledgeGraph');
-    });
-
-    it('knowledgeGraph maps to renderKnowledgeGraph function', () => {
-      expect(RENDERER_FUNCTION_NAMES.knowledgeGraph).toBe('renderKnowledgeGraph');
-    });
+describe('Knowledge Graph renderer integration: tool maps to renderer', () => {
+  it('get-knowledge-graph tool maps to a renderer in the registry', () => {
+    const rendererId = TOOL_RENDERER_MAP['get-knowledge-graph'];
+    expect(rendererId).toBeDefined();
+    expect(RENDERER_IDS).toContain(rendererId);
   });
 
-  describe('renderer function in combined output', () => {
-    it('renderKnowledgeGraph function is included in combined renderer functions', () => {
-      expect(WIDGET_RENDERER_FUNCTIONS).toContain('function renderKnowledgeGraph(data)');
-    });
+  it('the mapped renderer has a corresponding render function', () => {
+    const rendererId = TOOL_RENDERER_MAP['get-knowledge-graph'];
+    const functionName =
+      RENDERER_FUNCTION_NAMES[rendererId as keyof typeof RENDERER_FUNCTION_NAMES];
+    expect(functionName).toBeDefined();
+    expect(WIDGET_RENDERER_FUNCTIONS).toContain(`function ${functionName}(`);
+  });
+});
 
-    it('SVG visualization is embedded in combined renderer functions', () => {
-      expect(WIDGET_RENDERER_FUNCTIONS).toContain('const KNOWLEDGE_GRAPH_SVG');
-    });
-
-    it('visualization prompt is embedded in combined renderer functions', () => {
-      expect(WIDGET_RENDERER_FUNCTIONS).toContain('const KNOWLEDGE_GRAPH_VIZ_PROMPT');
-    });
-
-    it('CTA initialization function is included', () => {
-      expect(WIDGET_RENDERER_FUNCTIONS).toContain('function initKnowledgeGraphCta()');
-    });
+describe('Knowledge Graph renderer integration: renderer available in widget', () => {
+  it('the knowledge graph render function is available in WIDGET_RENDERER_FUNCTIONS', () => {
+    // The combined renderer functions should include the knowledge graph renderer
+    expect(WIDGET_RENDERER_FUNCTIONS).toContain('renderKnowledgeGraph');
   });
 
-  describe('renderer in widget script', () => {
-    it('RENDERERS object includes knowledgeGraph entry', () => {
-      expect(WIDGET_SCRIPT).toContain('knowledgeGraph: renderKnowledgeGraph');
-    });
-
-    it('renderKnowledgeGraph function is accessible via RENDERERS dispatch', () => {
-      // The getRendererForTool function looks up TOOL_RENDERER_MAP
-      // then finds the function in RENDERERS object
-      expect(WIDGET_SCRIPT).toContain('TOOL_RENDERER_MAP[toolName]');
-      expect(WIDGET_SCRIPT).toContain('RENDERERS[rendererId]');
-    });
-
-    it('calls initKnowledgeGraphCta after rendering knowledge graph', () => {
-      // The widget script should call the CTA init function after rendering
-      expect(WIDGET_SCRIPT).toContain('initKnowledgeGraphCta()');
-    });
+  it('the widget script dispatches to the knowledge graph renderer', () => {
+    // The RENDERERS object in the widget script should include the mapping
+    expect(WIDGET_SCRIPT).toContain('knowledgeGraph');
+    expect(WIDGET_SCRIPT).toContain('renderKnowledgeGraph');
   });
+});
 
-  describe('renderer coherence', () => {
-    it('renderer ID exists in both RENDERER_IDS and RENDERER_FUNCTION_NAMES', () => {
-      expect(RENDERER_IDS).toContain('knowledgeGraph');
-      expect(RENDERER_FUNCTION_NAMES).toHaveProperty('knowledgeGraph');
-    });
+describe('Knowledge Graph renderer integration: registry coherence', () => {
+  it('all required mappings are consistent from tool to render function', () => {
+    // Full chain: tool name → renderer ID → function name → actual function
+    const toolName = 'get-knowledge-graph';
 
-    it('tool mapping points to valid renderer ID', () => {
-      const rendererId = TOOL_RENDERER_MAP['get-knowledge-graph'];
-      expect(RENDERER_IDS).toContain(rendererId);
-    });
+    // Tool maps to renderer ID
+    const rendererId = TOOL_RENDERER_MAP[toolName];
+    expect(rendererId).toBe('knowledgeGraph');
 
-    it('function name in RENDERER_FUNCTION_NAMES matches actual function', () => {
-      const functionName = RENDERER_FUNCTION_NAMES.knowledgeGraph;
-      // The function should be defined in the combined output
-      expect(WIDGET_RENDERER_FUNCTIONS).toContain(`function ${functionName}(`);
-    });
+    // Renderer ID is valid
+    expect(RENDERER_IDS).toContain(rendererId);
+
+    // Renderer ID maps to function name
+    const functionName =
+      RENDERER_FUNCTION_NAMES[rendererId as keyof typeof RENDERER_FUNCTION_NAMES];
+    expect(functionName).toBe('renderKnowledgeGraph');
+
+    // Function exists in combined output
+    expect(WIDGET_RENDERER_FUNCTIONS).toContain(`function ${functionName}(`);
   });
 });

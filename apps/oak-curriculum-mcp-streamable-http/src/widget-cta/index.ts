@@ -5,6 +5,14 @@
  * `window.openai.sendFollowUpMessage()`. Users can trigger workflows
  * or context-setting actions without manually typing prompts.
  *
+ * ## CTA Button States
+ *
+ * Each CTA button has four states:
+ * 1. **Unpressed** - Shows label, button enabled
+ * 2. **Pressed** - Shows label with CSS `:active` visual feedback
+ * 3. **Sending** - Shows loadingLabel, button disabled
+ * 4. **Understood** - Shows understoodLabel after 10s, button stays disabled
+ *
  * ## Quick Start
  *
  * Add a CTA to the registry, rebuild, and it appears in the widget:
@@ -17,6 +25,7 @@
  *     id: 'my-cta',
  *     label: 'My Action',
  *     loadingLabel: 'Loading...',
+ *     understoodLabel: 'Done',
  *     icon: '🎯',
  *     prompt: 'Help me with...',
  *   },
@@ -40,4 +49,4 @@
 export type { CtaConfig } from './types.js';
 export { CTA_REGISTRY, type CtaName } from './registry.js';
 export { generateCtaButtonHtml, generateCtaContainerHtml } from './html-generators.js';
-export { generateCtaHandlerJs, CTA_SUCCESS_DISPLAY_MS } from './js-generator.js';
+export { generateCtaHandlerJs, CTA_UNDERSTOOD_DELAY_MS } from './js-generator.js';
