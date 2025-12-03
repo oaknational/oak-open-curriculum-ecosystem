@@ -8,7 +8,7 @@
  */
 
 import type { MinimalNotionClient } from '../../types/notion-types/notion-client.js';
-import { createMockPage, createMockDatabase, createMockPersonUser } from './notion-mocks.js';
+import { createMockPage, createMockDataSource, createMockPersonUser } from './notion-mocks.js';
 import { createMockListUsersResponse, createMockSearchResponse } from './notion-api-mocks.js';
 
 /**
@@ -46,7 +46,7 @@ function createSamplePage() {
  * Creates sample database data for E2E tests
  */
 function createSampleDatabase() {
-  return createMockDatabase({
+  return createMockDataSource({
     id: 'e2e-db-456',
     title: [
       {
@@ -118,6 +118,14 @@ function createSampleBlocksList() {
  * Creates mock Notion client for E2E testing
  * Returns MinimalNotionClient with canned responses
  */
+/**
+ * Creates mock Notion client for E2E testing
+ * Returns MinimalNotionClient with canned responses
+ */
+/**
+ * Creates mock Notion client for E2E testing
+ * Returns MinimalNotionClient with canned responses
+ */
 export function createMockNotionClientForE2E(): MinimalNotionClient {
   const samplePage = createSamplePage();
   const sampleDatabase = createSampleDatabase();
@@ -130,29 +138,29 @@ export function createMockNotionClientForE2E(): MinimalNotionClient {
 
     pages: {
       retrieve: (args: { page_id: string }) => {
-        // Simulate 404 for non-existent pages
-        if (
-          args.page_id === 'non-existent-page-id-12345' ||
-          args.page_id.includes('non-existent')
-        ) {
-          return Promise.reject(
-            new Error(`Could not find page with ID: ${args.page_id}. (code: object_not_found)`),
-          );
+        if (args.page_id.includes('non-existent')) {
+          return Promise.reject(new Error('object_not_found'));
         }
         return Promise.resolve(samplePage);
       },
     },
 
     databases: {
-      retrieve: () => Promise.resolve(sampleDatabase),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+      retrieve: () => Promise.resolve(sampleDatabase as any),
+    },
+
+    dataSources: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
+      retrieve: () => Promise.resolve(sampleDatabase as any),
       query: () =>
         Promise.resolve({
           object: 'list',
           results: [samplePage],
           next_cursor: null,
           has_more: false,
-          type: 'page_or_database',
-          page_or_database: {},
+          type: 'page_or_data_source',
+          page_or_data_source: {},
         }),
     },
 

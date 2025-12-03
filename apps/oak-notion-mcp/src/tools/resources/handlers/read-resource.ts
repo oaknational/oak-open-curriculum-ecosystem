@@ -4,7 +4,7 @@
  */
 
 import type { ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
-import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
+import { isFullPage } from '@notionhq/client/build/src/helpers';
 import type { NotionDependencies } from '../../../types/notion-types/dependencies';
 import { parseResourceUri, validateResourceUri, type ResourceIdentifier } from '../uri-parser';
 import { handleDiscoveryResource } from './discovery';
@@ -28,10 +28,7 @@ async function fetchResourceContent(
     }
 
     case 'databases': {
-      const response = await notionClient.databases.retrieve({ database_id: resourceId.id });
-      if (!isFullDatabase(response)) {
-        throw new Error('Invalid database response');
-      }
+      const response = await notionClient.dataSources.retrieve({ data_source_id: resourceId.id });
       return response;
     }
 

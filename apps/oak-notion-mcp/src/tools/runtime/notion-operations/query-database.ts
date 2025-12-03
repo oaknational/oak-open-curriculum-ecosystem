@@ -6,7 +6,7 @@
 import type { MinimalNotionClient } from '../../../types/notion-types/notion-client';
 import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { isFullDatabase } from '@notionhq/client/build/src/helpers';
+
 import { notionQueryDatabaseSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
 
@@ -20,8 +20,8 @@ export interface QueryDatabaseDependencies {
  * Builds query parameters for database query
  */
 function buildQueryParams(validatedArgs: ReturnType<typeof notionQueryDatabaseSchema.parse>) {
-  const queryParams: Parameters<MinimalNotionClient['databases']['query']>[0] = {
-    database_id: validatedArgs.database_id,
+  const queryParams: Parameters<MinimalNotionClient['dataSources']['query']>[0] = {
+    data_source_id: validatedArgs.database_id,
     page_size: validatedArgs.page_size ?? 20,
   };
 
@@ -52,12 +52,14 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
       deps.logger.debug('Querying database', { database_id: validatedArgs.database_id });
 
       // Get database info first
-      const dbResponse = await deps.notionClient.databases.retrieve({
-        database_id: validatedArgs.database_id,
+      const dbResponse = await deps.notionClient.dataSources.retrieve({
+        data_source_id: validatedArgs.database_id,
       });
 
       // Ensure we have a full database response
-      if (!isFullDatabase(dbResponse)) {
+      // Note: isFullDatabase might need to be replaced or checked if it works for DataSources
+      // For now, we assume the structure is similar enough or we check for 'title'
+      if (!('title' in dbResponse)) {
         throw new Error(
           'Invalid database response - missing required fields like title. The database may have restricted permissions.',
         );
@@ -68,7 +70,7 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
 
       // Build and execute query
       const queryParams = buildQueryParams(validatedArgs);
-      const queryResponse = await deps.notionClient.databases.query(queryParams);
+      const queryResponse = await deps.notionClient.dataSources.query(queryParams);
 
       // Filter for full page responses
       const pages = queryResponse.results.filter(

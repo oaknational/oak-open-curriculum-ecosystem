@@ -6,6 +6,7 @@
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
 import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
+import type { DataSourceObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import type { NotionDependencies } from '../../../types/notion-types/dependencies';
 // Transformers will be accessed through deps.notionOperations
 import { scrubSensitiveData } from '../../../logging/scrubbing';
@@ -93,7 +94,10 @@ function transformSearchResults(
       if (isFullPage(item)) {
         return deps.notionOperations.transformers.transformNotionPageToMcpResource(item);
       } else if (isFullDatabase(item)) {
-        return deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(item);
+        return deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          item as unknown as DataSourceObjectResponse,
+        );
       }
       return null;
     })

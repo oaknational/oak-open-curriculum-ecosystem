@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import type { DataSourceObjectResponse as NotionDatabase } from '@notionhq/client/build/src/api-endpoints';
 import { transformNotionDatabaseToMcpResource } from './database-transformer';
-import type { DatabaseObjectResponse } from '@notionhq/client';
 
 describe('transformNotionDatabaseToMcpResource', () => {
-  it('should transform a basic database', () => {
-    const notionDatabase: DatabaseObjectResponse = {
-      object: 'database',
+  it('should transform a basic database correctly', () => {
+    const notionDatabase: NotionDatabase = {
+      object: 'data_source',
       id: 'db-123',
       created_time: '2024-01-01T00:00:00.000Z',
       last_edited_time: '2024-01-02T00:00:00.000Z',
@@ -66,7 +66,8 @@ describe('transformNotionDatabaseToMcpResource', () => {
           },
         },
       },
-      parent: { type: 'workspace', workspace: true },
+      parent: { type: 'database_id', database_id: 'db-parent-123' },
+      database_parent: { type: 'database_id', database_id: 'db-parent-123' },
       url: 'https://www.notion.so/db123',
       public_url: null,
       icon: null,
@@ -93,8 +94,8 @@ describe('transformNotionDatabaseToMcpResource', () => {
   });
 
   it('should handle database without title', () => {
-    const notionDatabase: DatabaseObjectResponse = {
-      object: 'database',
+    const notionDatabase: NotionDatabase = {
+      object: 'data_source',
       id: 'db-456',
       created_time: '2024-01-01T00:00:00.000Z',
       last_edited_time: '2024-01-02T00:00:00.000Z',
@@ -105,7 +106,8 @@ describe('transformNotionDatabaseToMcpResource', () => {
       title: [],
       description: [],
       properties: {},
-      parent: { type: 'workspace', workspace: true },
+      parent: { type: 'database_id', database_id: 'db-parent-123' },
+      database_parent: { type: 'database_id', database_id: 'db-parent-123' },
       url: 'https://www.notion.so/db456',
       public_url: null,
       icon: null,

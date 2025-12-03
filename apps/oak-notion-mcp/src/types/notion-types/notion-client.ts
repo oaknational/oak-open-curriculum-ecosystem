@@ -16,7 +16,10 @@ export interface MinimalNotionClient {
   };
   databases: {
     retrieve: NotionClient['databases']['retrieve'];
-    query: NotionClient['databases']['query'];
+  };
+  dataSources: {
+    query: NotionClient['dataSources']['query'];
+    retrieve: NotionClient['dataSources']['retrieve'];
   };
   blocks: {
     children: {

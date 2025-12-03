@@ -52,7 +52,7 @@ export function ScopeField({
           onChange({ scope: next.value });
         }
       }}
-      $gap="space-between-xs"
+      $gap="spacing-4"
       $flexWrap="wrap"
     >
       {STRUCTURED_SCOPE_OPTIONS.map((option) => (

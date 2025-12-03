@@ -125,9 +125,9 @@ function isValidAddress(
 ): address is AddressInfo {
   return Boolean(
     address &&
-      typeof address !== 'string' &&
-      typeof address.address === 'string' &&
-      address.port === expectedPort,
+    typeof address !== 'string' &&
+    typeof address.address === 'string' &&
+    address.port === expectedPort,
   );
 }
 
@@ -172,8 +172,8 @@ function describeExistingListeners(port: number): string | undefined {
 function isServerNotRunningError(error: unknown): error is NodeJS.ErrnoException {
   return Boolean(
     error &&
-      typeof error === 'object' &&
-      'code' in error &&
-      error.code === 'ERR_SERVER_NOT_RUNNING',
+    typeof error === 'object' &&
+    'code' in error &&
+    error.code === 'ERR_SERVER_NOT_RUNNING',
   );
 }

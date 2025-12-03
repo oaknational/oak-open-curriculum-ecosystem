@@ -136,39 +136,43 @@ function checkResourceParameter(
  */
 export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHandler {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const prmUrl = getPRMUrl(req);
+    try {
+      const prmUrl = getPRMUrl(req);
 
-    // No authorization header - return 401 with WWW-Authenticate pointing to metadata
-    if (!req.headers.authorization) {
-      sendMissingAuthResponse(res, prmUrl);
-      return;
+      // No authorization header - return 401 with WWW-Authenticate pointing to metadata
+      if (!req.headers.authorization) {
+        sendMissingAuthResponse(res, prmUrl);
+        return;
+      }
+
+      // Extract Bearer token
+      const token = extractBearerToken(req.headers.authorization);
+      if (!token) {
+        sendInvalidFormatResponse(res, prmUrl);
+        return;
+      }
+
+      // Verify token using provided verification function
+      const authData = await verifyToken(token, req);
+      if (!authData) {
+        sendVerificationFailedResponse(res, prmUrl);
+        return;
+      }
+
+      // RFC 8707: Validate resource parameter (JWT audience claim)
+      const validation = checkResourceParameter(token, req, logger);
+      if (!validation.valid) {
+        const reason = validation.reason ?? 'Unknown validation error';
+        sendInvalidResourceResponse(res, prmUrl, reason);
+        return;
+      }
+
+      // Token verified - proceed to next middleware
+      // Note: We don't set req.auth here. Clerk's clerkMiddleware() already
+      // sets req.auth to the Clerk auth object which downstream code expects.
+      next();
+    } catch (error) {
+      next(error);
     }
-
-    // Extract Bearer token
-    const token = extractBearerToken(req.headers.authorization);
-    if (!token) {
-      sendInvalidFormatResponse(res, prmUrl);
-      return;
-    }
-
-    // Verify token using provided verification function
-    const authData = await verifyToken(token, req);
-    if (!authData) {
-      sendVerificationFailedResponse(res, prmUrl);
-      return;
-    }
-
-    // RFC 8707: Validate resource parameter (JWT audience claim)
-    const validation = checkResourceParameter(token, req, logger);
-    if (!validation.valid) {
-      const reason = validation.reason ?? 'Unknown validation error';
-      sendInvalidResourceResponse(res, prmUrl, reason);
-      return;
-    }
-
-    // Token verified - proceed to next middleware
-    // Note: We don't set req.auth here. Clerk's clerkMiddleware() already
-    // sets req.auth to the Clerk auth object which downstream code expects.
-    next();
   };
 }

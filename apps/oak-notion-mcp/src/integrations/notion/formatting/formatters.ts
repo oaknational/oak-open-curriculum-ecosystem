@@ -5,9 +5,9 @@
 
 import type {
   PageObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   UserObjectResponse,
-} from '@notionhq/client';
+} from '@notionhq/client/build/src/api-endpoints';
 import type { Resource } from '../transformers';
 import { extractPropertyValue } from './property-extractors';
 import { formatPageMetadata, formatPagePropertiesForDetails } from './formatters-helpers';
@@ -16,7 +16,7 @@ import { formatPageMetadata, formatPagePropertiesForDetails } from './formatters
  * Formats search results into a text representation
  */
 export function formatSearchResults(
-  results: (PageObjectResponse | DatabaseObjectResponse)[],
+  results: (PageObjectResponse | DataSourceObjectResponse)[],
   query: string,
   resources: Resource[],
 ): string {
@@ -35,6 +35,56 @@ export function formatSearchResults(
 
   return text;
 }
+
+export interface NotionFormatters {
+  formatDatabaseList(databases: DataSourceObjectResponse[], resources: Resource[]): Promise<string>;
+  formatDatabaseQueryResults(
+    database: Resource,
+    pages: PageObjectResponse[],
+    pageResources: Resource[],
+  ): Promise<string>;
+  formatSearchResults(
+    results: (PageObjectResponse | DataSourceObjectResponse)[],
+    query: string,
+    resources: Resource[],
+  ): Promise<string>;
+  formatPage(page: PageObjectResponse, resource: Resource): Promise<string>;
+}
+
+export function createNotionFormatters(): NotionFormatters {
+  return {
+    formatDatabaseList(
+      databases: DataSourceObjectResponse[],
+      resources: Resource[],
+    ): Promise<string> {
+      return Promise.resolve(formatDatabaseList(databases, resources));
+    },
+
+    formatDatabaseQueryResults(
+      database: Resource,
+      pages: PageObjectResponse[],
+      pageResources: Resource[],
+    ): Promise<string> {
+      return Promise.resolve(formatDatabaseQueryResults(database, pages, pageResources));
+    },
+
+    formatSearchResults(
+      results: (PageObjectResponse | DataSourceObjectResponse)[],
+      query: string,
+      resources: Resource[],
+    ): Promise<string> {
+      return Promise.resolve(formatSearchResults(results, query, resources));
+    },
+
+    formatPage(page: PageObjectResponse, resource: Resource): Promise<string> {
+      return Promise.resolve(formatPageDetails(resource, page));
+    },
+  };
+}
+
+/**
+ * Formats search results into a text representation
+ */
 
 /**
  * Formats a page summary
@@ -64,7 +114,7 @@ export function formatDatabaseSummary(resource: Resource): string {
  * Formats database list results
  */
 export function formatDatabaseList(
-  databases: DatabaseObjectResponse[],
+  databases: DataSourceObjectResponse[],
   resources: Resource[],
 ): string {
   let text = `Found ${String(databases.length)} database${databases.length === 1 ? '' : 's'}\n\n`;

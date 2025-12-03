@@ -5,9 +5,9 @@
 
 import type {
   PageObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   UserObjectResponse,
-} from '@notionhq/client';
+} from '@notionhq/client/build/src/api-endpoints';
 
 export function createMockPage(overrides: Partial<PageObjectResponse> = {}): PageObjectResponse {
   return {
@@ -25,15 +25,16 @@ export function createMockPage(overrides: Partial<PageObjectResponse> = {}): Pag
     public_url: null,
     icon: null,
     cover: null,
+    is_locked: false, // Added required property
     ...overrides,
   };
 }
 
-export function createMockDatabase(
-  overrides: Partial<DatabaseObjectResponse> = {},
-): DatabaseObjectResponse {
+export function createMockDataSource(
+  overrides: Partial<DataSourceObjectResponse> = {},
+): DataSourceObjectResponse {
   return {
-    object: 'database',
+    object: 'data_source',
     id: 'db-123',
     created_time: '2024-01-01T00:00:00Z',
     last_edited_time: '2024-01-02T00:00:00Z',
@@ -44,7 +45,8 @@ export function createMockDatabase(
     title: [],
     description: [],
     properties: {},
-    parent: { type: 'workspace', workspace: true },
+    parent: { type: 'database_id', database_id: 'db-parent-123' },
+    database_parent: { type: 'workspace', workspace: true },
     url: 'https://notion.so/db-123',
     public_url: null,
     icon: null,

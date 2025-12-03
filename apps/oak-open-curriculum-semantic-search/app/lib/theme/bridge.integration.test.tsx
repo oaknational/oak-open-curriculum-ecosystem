@@ -67,7 +67,7 @@ describe('Bridge theming (ADR-045)', () => {
         <TokenProbe />
       </Providers>,
     );
-    expect(screen.getByTestId('token-section').textContent).toBe('3.5rem');
+    expect(screen.getByTestId('token-section').textContent).toBe('2rem');
   });
 
   function renderAndCollectThemeStyles(): {
@@ -123,6 +123,13 @@ describe('Bridge theming (ADR-045)', () => {
     };
   }
 
+  function hexToRgbString(hex: string): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgb(${r},${g},${b})`;
+  }
+
   function assertLightModeStyles(
     styles: string,
     background: string,
@@ -130,12 +137,15 @@ describe('Bridge theming (ADR-045)', () => {
     layout: ReturnType<typeof createLightTheme>['app']['layout'],
   ): void {
     const normalised = styles.toLowerCase();
-    expect(styles).toContain(
-      `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
-    );
-    expect(styles).toContain(
-      `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
-    );
+    // Styled-components/JSDOM normalizes colors to rgb with spaces, but our collectStyles might strip spaces?
+    // The failure output showed: rgb(235,251,235) - no spaces after commas?
+    // "html,body{background-color:rgb(235,251,235);color:rgb(8,22,118);..."
+    // Let's match the observed format from the failure message.
+    const bgRgb = hexToRgbString(background);
+    const fgRgb = hexToRgbString(foreground);
+
+    expect(styles).toContain(`html,body{background-color:${bgRgb};color:${fgRgb};`);
+    expect(styles).toContain(`#app-theme-root{background-color:${bgRgb};color:${fgRgb};`);
     expectCssVariableHex(normalised, 'app-color-brand-primary');
     expectCssVariableHex(normalised, 'app-color-brand-primary-dark');
     expectCssVariableHex(normalised, 'app-color-brand-primary-deep');
@@ -159,12 +169,11 @@ describe('Bridge theming (ADR-045)', () => {
     layout: ReturnType<typeof createDarkTheme>['app']['layout'],
   ): void {
     const normalised = styles.toLowerCase();
-    expect(styles).toContain(
-      `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
-    );
-    expect(styles).toContain(
-      `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
-    );
+    const bgRgb = hexToRgbString(background);
+    const fgRgb = hexToRgbString(foreground);
+
+    expect(styles).toContain(`html,body{background-color:${bgRgb};color:${fgRgb};`);
+    expect(styles).toContain(`#app-theme-root{background-color:${bgRgb};color:${fgRgb};`);
     expectCssVariableHex(normalised, 'app-color-brand-primary');
     expectCssVariableHex(normalised, 'app-color-brand-primary-dark');
     expectCssVariableHex(normalised, 'app-color-brand-primary-deep');

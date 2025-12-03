@@ -54,7 +54,7 @@ export function SearchFixtureModeToggle({
           }
           state.handleSelect(value);
         }}
-        $gap="space-between-xs"
+        $gap="spacing-4"
       >
         {FIXTURE_MODE_OPTIONS.map((option) => (
           <OakRadioButton

@@ -58,8 +58,8 @@ describe('App theme factories', () => {
   it('resolves Oak spacing tokens to rem values', () => {
     const resolved = resolveAppTokens('light');
 
-    expect(resolved.space.gap.section).toBe('3.5rem');
-    expect(resolved.space.gap.cluster).toBe('1rem');
+    expect(resolved.space.gap.section).toBe('2rem');
+    expect(resolved.space.gap.cluster).toBe('0.5rem');
     expect(resolved.space.gap.stack.endsWith('rem')).toBe(true);
     expect(parseFloat(resolved.space.gap.stack)).toBeGreaterThan(
       parseFloat(resolved.space.gap.cluster),
@@ -67,8 +67,8 @@ describe('App theme factories', () => {
     expect(parseFloat(resolved.space.gap.stack)).toBeLessThan(
       parseFloat(resolved.space.gap.section),
     );
-    expect(resolved.space.padding.card).toBe('1.25rem');
-    expect(resolved.space.padding.pill).toBe('0.5rem');
+    expect(resolved.space.padding.card).toBe('1.5rem');
+    expect(resolved.space.padding.pill).toBe('0.25rem');
   });
 
   it('resolves Oak typography tokens to CSS-ready values', () => {

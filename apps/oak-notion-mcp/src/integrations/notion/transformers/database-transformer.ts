@@ -3,7 +3,7 @@
  * Converts Notion databases to MCP resources
  */
 
-import type { DatabaseObjectResponse as NotionDatabase } from '@notionhq/client';
+import type { DataSourceObjectResponse as NotionDatabase } from '@notionhq/client/build/src/api-endpoints';
 import type { Resource } from '../../../types';
 import { formatNotionRichText } from './rich-text-formatter';
 

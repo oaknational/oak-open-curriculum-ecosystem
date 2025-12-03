@@ -7,7 +7,7 @@ import type { MinimalNotionClient } from '../../../types/notion-types/notion-cli
 import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
 import type {
   PageObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 import { notionSearchSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
@@ -16,6 +16,33 @@ export interface SearchDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
   notionOperations: NotionOperations;
+}
+
+/**
+ * Builds search parameters from validated arguments
+ */
+function buildSearchParams(
+  validatedArgs: ReturnType<typeof notionSearchSchema.parse>,
+): Parameters<MinimalNotionClient['search']>[0] {
+  const searchParams: Parameters<MinimalNotionClient['search']>[0] = {
+    query: validatedArgs.query,
+  };
+
+  if (validatedArgs.filter?.type) {
+    // Map 'database' to 'data_source' for the API
+    const filterValue =
+      validatedArgs.filter.type === 'database' ? 'data_source' : validatedArgs.filter.type;
+    searchParams.filter = { property: 'object', value: filterValue };
+  }
+
+  if (validatedArgs.sort) {
+    searchParams.sort = {
+      timestamp: validatedArgs.sort.timestamp,
+      direction: validatedArgs.sort.direction,
+    };
+  }
+
+  return searchParams;
 }
 
 /**
@@ -31,27 +58,14 @@ export function createSearchExecutor(deps: SearchDependencies): ToolExecutor {
       deps.logger.debug('Searching Notion', { query: validatedArgs.query });
 
       // Build search parameters
-      const searchParams: Parameters<typeof deps.notionClient.search>[0] = {
-        query: validatedArgs.query,
-      };
-
-      if (validatedArgs.filter?.type) {
-        searchParams.filter = { property: 'object', value: validatedArgs.filter.type };
-      }
-
-      if (validatedArgs.sort) {
-        searchParams.sort = {
-          timestamp: validatedArgs.sort.timestamp,
-          direction: validatedArgs.sort.direction,
-        };
-      }
+      const searchParams = buildSearchParams(validatedArgs);
 
       // Execute search
       const searchResponse = await deps.notionClient.search(searchParams);
 
       // Filter to ensure we have full objects with id property
       const results = searchResponse.results.filter(
-        (result): result is PageObjectResponse | DatabaseObjectResponse => 'id' in result,
+        (result): result is PageObjectResponse | DataSourceObjectResponse => 'id' in result,
       );
 
       // Transform results using injected operations

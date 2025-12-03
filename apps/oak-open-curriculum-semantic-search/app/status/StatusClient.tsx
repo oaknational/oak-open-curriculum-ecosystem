@@ -104,7 +104,7 @@ function StatusAlert({ message }: { message: string }): JSX.Element {
         aria-live="assertive"
         $display="flex"
         $flexDirection="column"
-        $gap="space-between-xs"
+        $gap="spacing-4"
         $background="bg-neutral"
         $pa="inner-padding-l"
         $borderRadius="border-radius-m"
