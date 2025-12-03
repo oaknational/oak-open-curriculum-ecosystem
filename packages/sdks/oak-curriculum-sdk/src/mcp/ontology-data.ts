@@ -386,6 +386,11 @@ export const ontologyData = {
     ],
   },
 
+  /**
+   * Cross-reference to the knowledge graph for concept relationships.
+   */
+  seeAlso: 'Call get-knowledge-graph for concept TYPE relationships and domain structure',
+
   synonyms: {
     description: 'Alternative terms users might use. Map to canonical slugs when calling tools.',
     note: 'This is not exhaustive - just examples and suggestions. Use your language understanding to recognise other variations, abbreviations, and natural phrasings.',

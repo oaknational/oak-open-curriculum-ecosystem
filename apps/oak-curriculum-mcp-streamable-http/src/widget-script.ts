@@ -54,6 +54,7 @@ const RENDERERS = {
   changelog: renderChangelog,
   rateLimit: renderRateLimit,
   ontology: renderOntology,
+  knowledgeGraph: renderKnowledgeGraph,
 };
 
 // ========================================
@@ -95,6 +96,7 @@ function render() {
   const fullData = getFullResults();
   const toolName = getToolName();
   const renderer = getRendererForTool(toolName);
+  const rendererId = toolName ? TOOL_RENDERER_MAP[toolName] : null;
   if (renderer) {
     c.innerHTML = renderer(fullData);
   } else if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {

@@ -103,7 +103,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     );
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
-    const aggregatedTools = ['fetch', 'get-help', 'get-ontology', 'search'];
+    const aggregatedTools = ['fetch', 'get-help', 'get-knowledge-graph', 'get-ontology', 'search'];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());
   });
@@ -161,6 +161,32 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       | { capabilities?: { tools?: { listChanged?: boolean } } }
       | undefined;
     expect(result?.capabilities?.tools?.listChanged).toBe(true);
+  });
+
+  it('initialize response includes server instructions for agent guidance', async () => {
+    const app = createApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'init-instructions',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+          clientInfo: { name: 'instructions-test', version: '1.0.0' },
+        },
+      });
+    expect(res.status).toBe(200);
+    const payload = parseFirstSseData(res.text);
+    const result = payload.result as { instructions?: string } | undefined;
+
+    // Verify instructions field exists and contains agent guidance
+    expect(result?.instructions).toBeDefined();
+    expect(result?.instructions).toContain('get-ontology');
+    expect(result?.instructions).toContain('get-knowledge-graph');
+    expect(result?.instructions).toContain('get-help');
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {

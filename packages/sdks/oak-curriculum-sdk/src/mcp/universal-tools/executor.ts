@@ -20,6 +20,7 @@ import { validateSearchArgs, runSearchTool } from '../aggregated-search/index.js
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
 import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
+import { runKnowledgeGraphTool } from '../aggregated-knowledge-graph.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
 import {
@@ -101,6 +102,10 @@ async function executeAggregatedTool(
     return runHelpTool(validation.value);
   }
 
+  if (name === 'get-knowledge-graph') {
+    return runKnowledgeGraphTool();
+  }
+
   // name === 'fetch' (exhaustive handling - TypeScript knows this is the only remaining case)
   const validation = validateFetchArgs(input);
   if (!validation.ok) {
@@ -112,8 +117,9 @@ async function executeAggregatedTool(
 /**
  * Creates a universal tool executor for MCP tool invocations.
  *
- * The executor handles both aggregated tools (search, fetch, get-ontology, get-help)
- * and generated tools from the OpenAPI schema. It performs the following steps:
+ * The executor handles both aggregated tools (search, fetch, get-ontology, get-help,
+ * get-knowledge-graph) and generated tools from the OpenAPI schema. It performs
+ * the following steps:
  *
  * 1. Validates the tool name is known
  * 2. Dispatches to the appropriate handler based on tool type

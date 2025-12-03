@@ -2,11 +2,13 @@
  * Widget state management and utility JavaScript.
  *
  * Contains state persistence, locale support, external links,
- * display mode, and tool calling functionality.
+ * display mode, and CTA (Call-to-Action) functionality.
  *
  * @see widget-script.ts - Main widget script
+ * @see widget-cta/ - CTA configuration and handler generation
  */
 
+import { generateCtaHandlerJs } from './widget-cta/index.js';
 import { TOOL_RENDERER_MAP } from './widget-renderer-registry.js';
 
 /**
@@ -96,6 +98,8 @@ function requestFullscreen() {
     window.openai.requestDisplayMode('fullscreen').catch(() => {});
   }
 }
+
+${generateCtaHandlerJs()}
 
 // ========================================
 // Tool Calling (DISABLED - see note below)

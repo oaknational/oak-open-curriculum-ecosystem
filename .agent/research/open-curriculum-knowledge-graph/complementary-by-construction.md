@@ -1,8 +1,27 @@
 # Making Ontology and Knowledge Graph Complementary by Construction
 
+> **STATUS: V1 DESIGN DOCUMENT**
+>
+> This document defines how ontology and knowledge graph complement each other.
+> For comprehensive synthesis, see `knowledge-graph-analysis-synthesis.md`.
+
 This document analyses how the ontology data and knowledge graph can be designed to be **complementary by construction** — meaning their separation of concerns is clear, intentional, and non-overlapping.
 
 **Last Updated**: December 2025 (corrected to focus on concept relationships, not API mappings)
+
+---
+
+## Terminology: Schema-Level Knowledge Graph
+
+The **Oak Curriculum Knowledge Graph (schema-level)** is the structure and form of the domain model — how concept types relate. It is NOT populated with instances (specific lessons, units).
+
+In formal knowledge representation terms:
+
+- **TBox (Terminological)**: Schema, types, class relationships → Our **Knowledge Graph**
+- **ABox (Assertional)**: Instances, actual entities → Partially in our **Ontology** (enumerated values)
+- **Guidance**: Workflows, definitions, tips → Our **Ontology**
+
+The two artifacts are complementary: the ontology provides meaning and instances, the graph provides navigable structure.
 
 ---
 

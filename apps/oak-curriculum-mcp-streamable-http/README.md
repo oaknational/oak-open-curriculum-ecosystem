@@ -968,6 +968,92 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec; invalid inputs return a formatted error body (200 status, `isError: true`).
 - Successful results are SSE-wrapped JSON-RPC responses formatted with `formatStandardContent`.
 
+## Widget Call-to-Action (CTA) System
+
+The Oak widget includes a reusable CTA system for adding buttons that send follow-up messages to the model. This enables users to trigger workflows without manually typing prompts.
+
+### Overview
+
+When the widget renders in ChatGPT, CTA buttons appear in the header (right side). Clicking a button sends a pre-configured prompt to the model using the OpenAI Apps SDK's `window.openai.sendFollowUpMessage()` API.
+
+**Current CTAs:**
+
+| Button             | Purpose                                                                                                     |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 🌳 Learn About Oak | Prompts the model to call `get-ontology`, `get-knowledge-graph`, and `get-help` to build curriculum context |
+
+### Adding a New CTA
+
+CTAs are defined in `src/widget-cta.ts`. To add a new CTA:
+
+1. **Add an entry to `CTA_REGISTRY`:**
+
+```typescript
+export const CTA_REGISTRY = {
+  learnOak: { ... },
+
+  // New CTA
+  startLessonPlanning: {
+    id: 'start-lesson-planning',
+    label: 'Plan a Lesson',
+    loadingLabel: 'Starting...',
+    icon: '📝',
+    prompt: 'Help me plan a lesson. First ask about the subject and key stage.',
+  },
+} as const satisfies Record<string, CtaConfig>;
+```
+
+2. **Rebuild the widget:**
+
+```bash
+pnpm build
+```
+
+3. **Test in ChatGPT** - The new button automatically appears
+
+### CTA Configuration
+
+Each CTA requires:
+
+| Field          | Type      | Description                                              |
+| -------------- | --------- | -------------------------------------------------------- |
+| `id`           | `string`  | Unique identifier (kebab-case), used for DOM element IDs |
+| `label`        | `string`  | Button text (2-4 words, action verb)                     |
+| `loadingLabel` | `string`  | Text shown while sending (1-2 words + ellipsis)          |
+| `icon`         | `string?` | Optional emoji prefix                                    |
+| `prompt`       | `string`  | Follow-up message sent to the model                      |
+
+### Architecture
+
+The CTA system uses a **registry + generator** pattern:
+
+```text
+src/widget-cta.ts
+├── CTA_REGISTRY           → Single source of truth for all CTAs
+├── generateCtaButtonHtml()     → Pure function: config → button HTML
+├── generateCtaContainerHtml()  → Pure function: all CTAs → container HTML
+└── generateCtaHandlerJs()      → Pure function: all CTAs → JavaScript handlers
+```
+
+Integration points:
+
+- `aggregated-tool-widget.ts` - Embeds `generateCtaContainerHtml()` in header
+- `widget-script-state.ts` - Embeds `generateCtaHandlerJs()` output
+- `widget-styles.ts` - Contains `.cta-container` and `.cta-btn` styles
+
+### UX Behavior
+
+1. **Feature detection**: CTAs only appear when `sendFollowUpMessage` is available
+2. **Loading state**: Button shows "🌳 Loading..." while sending
+3. **Hide on success**: All CTAs hide after any button is clicked
+4. **Error recovery**: Button re-enables on error for retry
+
+### Related Documentation
+
+- [OpenAI Apps SDK - Build UI](https://developers.openai.com/apps-sdk/build/chatgpt-ui)
+- [ADR-061: Widget Call-to-Action System](../../docs/architecture/architectural-decisions/061-widget-cta-system.md)
+- [ADR-060: Agent Support Tool Metadata System](../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md)
+
 ## Testing
 
 This application has comprehensive test coverage across three testing layers:

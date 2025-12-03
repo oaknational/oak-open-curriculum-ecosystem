@@ -9,8 +9,18 @@
  * module. Aggregated tools use these constants to maintain consistency
  * with generated tools while allowing customization where needed.
  *
+ * Server instructions and context hints are now generated from the
+ * AGENT_SUPPORT_TOOL_METADATA to ensure they always include all agent
+ * support tools and their relationships.
+ *
  * @module mcp/prerequisite-guidance
  */
+
+import {
+  generateServerInstructions,
+  generateContextHint,
+  AGENT_SUPPORT_TOOL_NAMES,
+} from './agent-support-tool-metadata.js';
 
 /**
  * The name of the ontology tool that provides domain understanding.
@@ -64,12 +74,47 @@ export const ONTOLOGY_RECOMMENDED_FIRST_STEP =
 /**
  * Context hint included in structuredContent for model guidance.
  *
+ * GENERATED from AGENT_SUPPORT_TOOL_METADATA to ensure it always includes
+ * all agent support tools.
+ *
  * The model sees structuredContent (unlike _meta), so this hint guides
- * the model to call get-ontology and get-help for domain understanding.
+ * the model to call agent support tools for domain understanding.
  *
  * @remarks
  * All aggregated tools using formatOptimizedResult automatically include
  * this hint, providing consistent context grounding across all tools.
  */
-export const OAK_CONTEXT_HINT =
-  'For optimal results with Oak curriculum tools, call get-ontology and get-help first.' as const;
+export const OAK_CONTEXT_HINT = generateContextHint();
+
+/**
+ * Knowledge graph tool name for cross-references.
+ */
+export const KNOWLEDGE_GRAPH_TOOL_NAME = 'get-knowledge-graph' as const;
+
+/**
+ * Knowledge graph prerequisite guidance distinguishing it from ontology.
+ *
+ * The knowledge graph provides structural relationships between concept types,
+ * complementing the ontology's rich definitions.
+ */
+export const KNOWLEDGE_GRAPH_PREREQUISITE_GUIDANCE =
+  `PREREQUISITE: For rich domain definitions and guidance, use \`${ONTOLOGY_TOOL_NAME}\` instead. This tool provides concept TYPE relationships and domain structure, not detailed definitions.` as const;
+
+/**
+ * Server instructions sent in the MCP initialize response.
+ *
+ * GENERATED from AGENT_SUPPORT_TOOL_METADATA to ensure it always includes
+ * all agent support tools, their relationships, and complementary nature.
+ *
+ * This text is delivered to the model once at connection time, providing
+ * guidance on which tools to call first for optimal results.
+ *
+ * @remarks
+ * Unlike tool descriptions (which may be truncated in large tool lists),
+ * server instructions are always visible to the model. Use this for
+ * high-priority guidance about agent support tools.
+ */
+export const SERVER_INSTRUCTIONS = generateServerInstructions();
+
+// Re-export for convenience
+export { AGENT_SUPPORT_TOOL_NAMES };
