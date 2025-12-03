@@ -35,6 +35,7 @@ export const CTA_REGISTRY = {
     id: 'learn-oak',
     label: 'Load Oak Knowledge (Click Me)',
     loadingLabel: 'Understanding Oak...',
+    successLabel: 'Oak Knowledge Loaded!',
     prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum covering from EYFS to KS4.
 
 In order for you to better help the user, some resources and tools have been provided for that specific purpose.

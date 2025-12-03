@@ -15,7 +15,7 @@ import {
   generateCtaContainerHtml,
   generateCtaHandlerJs,
   CTA_REGISTRY,
-  CTA_COOLDOWN_MS,
+  CTA_SUCCESS_DISPLAY_MS,
   type CtaConfig,
 } from './widget-cta/index.js';
 
@@ -25,6 +25,7 @@ describe('generateCtaButtonHtml', () => {
       id: 'test-cta',
       label: 'Test Action',
       loadingLabel: 'Loading...',
+      successLabel: 'Done!',
       icon: '🎯',
       prompt: 'Test prompt',
     };
@@ -50,6 +51,7 @@ describe('generateCtaButtonHtml', () => {
       id: 'no-icon-cta',
       label: 'No Icon Action',
       loadingLabel: 'Working...',
+      successLabel: 'Complete!',
       prompt: 'Test prompt',
     };
 
@@ -127,6 +129,17 @@ describe('generateCtaHandlerJs', () => {
     expect(js).toContain('DOMContentLoaded');
   });
 
+  it('includes successText in config entries', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('successText:');
+  });
+
+  it('shows success state with setTimeout for delayed revert', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('btn.textContent = cta.successText');
+    expect(js).toContain('setTimeout');
+  });
+
   describe('prompt escaping', () => {
     it('escapes backticks in prompts for safe template literal embedding', () => {
       const js = generateCtaHandlerJs();
@@ -139,14 +152,14 @@ describe('generateCtaHandlerJs', () => {
   });
 });
 
-describe('CTA_COOLDOWN_MS', () => {
-  it('is defined as 5 minutes in milliseconds', () => {
-    expect(CTA_COOLDOWN_MS).toBe(5 * 60 * 1000);
+describe('CTA_SUCCESS_DISPLAY_MS', () => {
+  it('is defined as 2 seconds in milliseconds', () => {
+    expect(CTA_SUCCESS_DISPLAY_MS).toBe(2000);
   });
 
-  it('is embedded in generated JavaScript', () => {
+  it('is embedded in generated JavaScript for setTimeout', () => {
     const js = generateCtaHandlerJs();
-    expect(js).toContain(`const COOLDOWN_MS = ${String(CTA_COOLDOWN_MS)}`);
+    expect(js).toContain(String(CTA_SUCCESS_DISPLAY_MS));
   });
 });
 
@@ -164,6 +177,10 @@ describe('CTA_REGISTRY', () => {
 
     it('has a non-empty label', () => {
       expect(learnOak.label.length).toBeGreaterThan(0);
+    });
+
+    it('has a non-empty successLabel', () => {
+      expect(learnOak.successLabel.length).toBeGreaterThan(0);
     });
 
     it('prompts for all three agent support tools', () => {

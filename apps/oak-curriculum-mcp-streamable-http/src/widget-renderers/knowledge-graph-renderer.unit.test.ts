@@ -45,14 +45,19 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('viewBox=');
     });
 
-    it('contains circle nodes', () => {
+    it('contains circle nodes with white fill', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('<circle');
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('class="node"');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('fill: #fff');
     });
 
-    it('contains line edges', () => {
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('<line');
+    it('contains bold white lines with black outline', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('class="edge"');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('stroke: #fff');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('stroke-width: 3');
+      // Black outline via edge-outline class
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('class="edge-outline"');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('stroke: #1b3d1c');
     });
 
     it('includes labels for core curriculum concepts', () => {
@@ -67,11 +72,6 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('>Phase<');
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('>KeyStage<');
     });
-
-    it('distinguishes inferred edges with dashed style', () => {
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('edge-inferred');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('stroke-dasharray');
-    });
   });
 
   describe('renderKnowledgeGraph function', () => {
@@ -83,16 +83,10 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Oak Knowledge Graph');
     });
 
-    it('displays graph statistics when data is available', () => {
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('data?.concepts');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('data?.edges');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('conceptCount');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('edgeCount');
-    });
-
-    it('shows explicit vs inferred edge counts', () => {
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Explicit:');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Inferred:');
+    it('does not include graph statistics section', () => {
+      // Statistics were removed per user feedback
+      expect(KNOWLEDGE_GRAPH_RENDERER).not.toContain('Graph Statistics');
+      expect(KNOWLEDGE_GRAPH_RENDERER).not.toContain('conceptCount');
     });
   });
 
@@ -101,8 +95,8 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('id="kg-viz-cta-btn"');
     });
 
-    it('applies the cta-btn class', () => {
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('class="cta-btn"');
+    it('uses prominent btn class styling', () => {
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('class="btn"');
     });
 
     it('has "Visualize Oak Knowledge Graph" label', () => {
@@ -122,6 +116,10 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
     it('includes loading state during visualization request', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('btn.disabled = true');
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Generating visualization');
+    });
+
+    it('shows success state after successful send', () => {
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Visualization Requested!');
     });
 
     it('includes error recovery', () => {

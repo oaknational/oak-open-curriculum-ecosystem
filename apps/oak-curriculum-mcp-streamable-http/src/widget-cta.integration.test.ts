@@ -98,27 +98,15 @@ describe('CTA integration with widget script', () => {
       expect(WIDGET_STATE_JS).toContain('btn.textContent = cta.buttonText');
     });
 
-    it('restores button state on successful send', () => {
-      // Button should be restored to original state after successful send
-      // Check that within the try block, we restore the button
-      expect(WIDGET_STATE_JS).toContain('// Restore button state after successful send');
+    it('shows success state after successful send', () => {
+      // After successful send, button should show success text
+      expect(WIDGET_STATE_JS).toContain('btn.textContent = cta.successText');
+    });
+
+    it('reverts to original text after showing success state', () => {
+      // Success state should revert after timeout
+      expect(WIDGET_STATE_JS).toContain('setTimeout');
       expect(WIDGET_STATE_JS).toContain('btn.textContent = cta.buttonText');
-      expect(WIDGET_STATE_JS).toContain('btn.disabled = false');
-    });
-
-    it('includes cooldown logic that checks lastCtaClickTime', () => {
-      expect(WIDGET_STATE_JS).toContain('lastCtaClickTime');
-      expect(WIDGET_STATE_JS).toContain('COOLDOWN_MS');
-    });
-
-    it('includes widget state persistence for cooldown tracking', () => {
-      expect(WIDGET_STATE_JS).toContain('window.openai.setWidgetState');
-      expect(WIDGET_STATE_JS).toContain('lastCtaClickTime: Date.now()');
-    });
-
-    it('hides CTA when in cooldown period', () => {
-      // CTA should be hidden if clicked within cooldown period
-      expect(WIDGET_STATE_JS).toContain('// CTA was clicked recently, hide it');
     });
   });
 });

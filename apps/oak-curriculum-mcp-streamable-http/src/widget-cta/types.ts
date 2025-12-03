@@ -18,6 +18,8 @@ export interface CtaConfig {
   readonly label: string;
   /** Text shown while sending (1-2 words + ellipsis) */
   readonly loadingLabel: string;
+  /** Text shown after successful send (1-3 words), reverts to label after 2 seconds */
+  readonly successLabel: string;
   /** Optional emoji prefix for the button */
   readonly icon?: string;
   /** Follow-up message prompt sent to the model */

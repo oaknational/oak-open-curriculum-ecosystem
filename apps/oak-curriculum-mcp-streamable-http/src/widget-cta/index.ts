@@ -40,4 +40,4 @@
 export type { CtaConfig } from './types.js';
 export { CTA_REGISTRY, type CtaName } from './registry.js';
 export { generateCtaButtonHtml, generateCtaContainerHtml } from './html-generators.js';
-export { generateCtaHandlerJs, CTA_COOLDOWN_MS } from './js-generator.js';
+export { generateCtaHandlerJs, CTA_SUCCESS_DISPLAY_MS } from './js-generator.js';

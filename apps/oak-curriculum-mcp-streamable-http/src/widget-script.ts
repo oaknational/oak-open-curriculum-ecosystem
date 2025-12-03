@@ -96,6 +96,7 @@ function render() {
   const fullData = getFullResults();
   const toolName = getToolName();
   const renderer = getRendererForTool(toolName);
+  const rendererId = toolName ? TOOL_RENDERER_MAP[toolName] : null;
   if (renderer) {
     c.innerHTML = renderer(fullData);
   } else if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {
@@ -110,6 +111,10 @@ function render() {
     c.innerHTML = '<div class="empty">Loading...</div>';
   }
   restoreScrollPosition();
+  // Initialize renderer-specific CTAs after DOM is updated
+  if (rendererId === 'knowledgeGraph' && typeof initKnowledgeGraphCta === 'function') {
+    initKnowledgeGraphCta();
+  }
 }
 
 render();

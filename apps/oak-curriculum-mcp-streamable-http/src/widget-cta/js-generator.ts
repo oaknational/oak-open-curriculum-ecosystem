@@ -39,11 +39,13 @@ function generateCtaConfigEntry(cta: CtaConfig): string {
   const escapedPrompt = escapeForTemplateLiteral(cta.prompt);
   const buttonText = formatButtonText(cta.icon, cta.label);
   const loadingText = formatButtonText(cta.icon, cta.loadingLabel);
+  const successText = formatButtonText(cta.icon, cta.successLabel);
 
   return `  {
     id: '${cta.id}',
     buttonText: '${buttonText}',
     loadingText: '${loadingText}',
+    successText: '${successText}',
     prompt: \`${escapedPrompt}\`,
   }`;
 }
@@ -64,31 +66,14 @@ ${entries}
 }
 
 /**
- * Cooldown duration for CTA buttons in milliseconds (5 minutes).
- *
- * @remarks
- * CTA buttons are hidden if they were clicked within this duration.
- * This prevents users from repeatedly clicking the CTA and flooding
- * the conversation with follow-up messages.
+ * Duration to show success state before reverting to original label (2 seconds).
  */
-export const CTA_COOLDOWN_MS = 5 * 60 * 1000;
+export const CTA_SUCCESS_DISPLAY_MS = 2000;
 
 /** JavaScript code for the initCtaButtons function */
 const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
   const ctaContainer = document.getElementById('cta-container');
   if (!window.openai?.sendFollowUpMessage) {
-    if (ctaContainer) ctaContainer.style.display = 'none';
-    return;
-  }
-
-  // Check if CTA is within cooldown period (5 minutes)
-  const COOLDOWN_MS = ${String(CTA_COOLDOWN_MS)};
-  const widgetState = window.openai.widgetState ?? {};
-  const lastClickTime = widgetState.lastCtaClickTime;
-  const now = Date.now();
-
-  if (lastClickTime && (now - lastClickTime) < COOLDOWN_MS) {
-    // CTA was clicked recently, hide it
     if (ctaContainer) ctaContainer.style.display = 'none';
     return;
   }
@@ -102,14 +87,12 @@ const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
       btn.textContent = cta.loadingText;
       try {
         await window.openai.sendFollowUpMessage({ prompt: cta.prompt });
-        // Persist the click time for cooldown tracking
-        if (window.openai.setWidgetState) {
-          const currentState = window.openai.widgetState ?? {};
-          window.openai.setWidgetState({ ...currentState, lastCtaClickTime: Date.now() });
-        }
-        // Restore button state after successful send
-        btn.textContent = cta.buttonText;
-        btn.disabled = false;
+        // Show success state for 2 seconds
+        btn.textContent = cta.successText;
+        setTimeout(() => {
+          btn.textContent = cta.buttonText;
+          btn.disabled = false;
+        }, ${String(CTA_SUCCESS_DISPLAY_MS)});
       } catch (error) {
         btn.textContent = cta.buttonText;
         btn.disabled = false;

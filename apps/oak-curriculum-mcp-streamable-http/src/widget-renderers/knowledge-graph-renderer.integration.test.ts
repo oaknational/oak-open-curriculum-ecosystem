@@ -62,6 +62,11 @@ describe('Knowledge Graph renderer integration with widget system', () => {
       expect(WIDGET_SCRIPT).toContain('TOOL_RENDERER_MAP[toolName]');
       expect(WIDGET_SCRIPT).toContain('RENDERERS[rendererId]');
     });
+
+    it('calls initKnowledgeGraphCta after rendering knowledge graph', () => {
+      // The widget script should call the CTA init function after rendering
+      expect(WIDGET_SCRIPT).toContain('initKnowledgeGraphCta()');
+    });
   });
 
   describe('renderer coherence', () => {
@@ -80,15 +85,5 @@ describe('Knowledge Graph renderer integration with widget system', () => {
       // The function should be defined in the combined output
       expect(WIDGET_RENDERER_FUNCTIONS).toContain(`function ${functionName}(`);
     });
-  });
-});
-
-describe('Knowledge Graph visualization CTA independence', () => {
-  it('visualization CTA does not use the main CTA cooldown system', () => {
-    // The knowledge graph visualization CTA has its own handler
-    // It should NOT be part of CTA_CONFIGS
-    expect(WIDGET_RENDERER_FUNCTIONS).toContain('initKnowledgeGraphCta');
-    // And it should have its own event listener setup
-    expect(WIDGET_RENDERER_FUNCTIONS).toContain("getElementById('kg-viz-cta-btn')");
   });
 });

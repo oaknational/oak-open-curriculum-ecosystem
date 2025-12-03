@@ -1,14 +1,14 @@
 /**
  * Knowledge Graph renderer for the widget.
  *
- * Renders a simplified SVG network diagram representing the Oak Curriculum
+ * Renders a stylized SVG network diagram representing the Oak Curriculum
  * knowledge graph structure, with a CTA button to request a detailed
  * visualization from the AI agent.
  *
- * The SVG is a static, geometric representation with:
+ * The SVG is a stylized, decorative representation with:
+ * - Bold white lines with black outlines
  * - White circles with black outlines for nodes
- * - Lines connecting nodes based on relationships
- * - Organized by concept category
+ * - Organized to suggest network structure (not meant to be accurate)
  *
  * @see widget-renderer-registry.ts - Registry that routes to this renderer
  * @see knowledge-graph-data.ts - Source data for the graph structure
@@ -37,58 +37,59 @@ Create the visualization now.`;
 /**
  * Static SVG network diagram of the knowledge graph.
  *
- * Node positions are pre-computed to show the graph structure clearly:
- * - Core structure (Subject→Sequence→Unit→Lesson) flows left to right
- * - Content items branch down from Lesson
- * - Context items (Phase, KeyStage, YearGroup) are on top
- * - Taxonomy and KS4 concepts are positioned around the periphery
- *
- * Styling: white fill (#fff) with dark green stroke (#1b3d1c), matching Oak branding.
+ * This is a stylized, decorative representation - not meant to be accurate.
+ * Bold white lines with black outlines for a clean, professional look.
  */
 const KNOWLEDGE_GRAPH_SVG = `
 <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;height:auto;display:block;margin:0 auto 16px">
-  <defs>
-    <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
-      <polygon points="0 0, 6 2, 0 4" fill="currentColor" opacity="0.4"/>
-    </marker>
-  </defs>
   <style>
-    .node { fill: #fff; stroke: currentColor; stroke-width: 1.5; }
-    .edge { stroke: currentColor; stroke-width: 1; opacity: 0.3; fill: none; }
-    .edge-inferred { stroke-dasharray: 3,3; }
-    .label { font-size: 7px; fill: currentColor; text-anchor: middle; font-family: inherit; opacity: 0.8; }
+    .node { fill: #fff; stroke: #1b3d1c; stroke-width: 2; }
+    .edge { stroke: #fff; stroke-width: 3; fill: none; paint-order: stroke; }
+    .edge-outline { stroke: #1b3d1c; stroke-width: 5; fill: none; }
+    .label { font-size: 7px; fill: #fff; text-anchor: middle; font-family: inherit; font-weight: 600; }
   </style>
 
-  <!-- Core Structure: Subject → Sequence → Unit → Lesson (horizontal flow) -->
-  <line class="edge" x1="60" y1="100" x2="120" y2="100" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="130" y1="100" x2="190" y2="100" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="200" y1="100" x2="260" y2="100" marker-end="url(#arrowhead)"/>
-  
-  <!-- Context: Phase → KeyStage → YearGroup (top) -->
-  <line class="edge" x1="60" y1="40" x2="120" y2="40" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="130" y1="40" x2="190" y2="40" marker-end="url(#arrowhead)"/>
-  <line class="edge edge-inferred" x1="55" y1="45" x2="55" y2="90"/>
-  <line class="edge edge-inferred" x1="125" y1="45" x2="125" y2="90"/>
-  
-  <!-- Content: branches from Lesson -->
-  <line class="edge" x1="270" y1="105" x2="290" y2="140" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="270" y1="105" x2="330" y2="140" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="270" y1="105" x2="370" y2="140" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="295" y1="150" x2="310" y2="180" marker-end="url(#arrowhead)"/>
-  <line class="edge" x1="315" y1="190" x2="340" y2="210" marker-end="url(#arrowhead)"/>
-  
-  <!-- Taxonomy: Thread ↔ Unit, Category ↔ Unit -->
-  <line class="edge" x1="195" y1="105" x2="195" y2="160"/>
-  <line class="edge" x1="195" y1="105" x2="250" y2="160"/>
-  
-  <!-- KS4: Programme and related concepts (bottom left) -->
-  <line class="edge edge-inferred" x1="60" y1="200" x2="120" y2="200"/>
-  <line class="edge edge-inferred" x1="60" y1="200" x2="80" y2="240"/>
-  <line class="edge edge-inferred" x1="60" y1="200" x2="130" y2="240"/>
-  
-  <!-- Metadata: branches from Lesson (bottom right) -->
-  <line class="edge" x1="270" y1="105" x2="310" y2="60"/>
-  <line class="edge" x1="270" y1="105" x2="350" y2="60"/>
+  <!-- Edge outlines (drawn first, behind white lines) -->
+  <line class="edge-outline" x1="60" y1="100" x2="120" y2="100"/>
+  <line class="edge-outline" x1="130" y1="100" x2="190" y2="100"/>
+  <line class="edge-outline" x1="200" y1="100" x2="260" y2="100"/>
+  <line class="edge-outline" x1="60" y1="40" x2="120" y2="40"/>
+  <line class="edge-outline" x1="130" y1="40" x2="190" y2="40"/>
+  <line class="edge-outline" x1="55" y1="48" x2="55" y2="90"/>
+  <line class="edge-outline" x1="125" y1="48" x2="125" y2="90"/>
+  <line class="edge-outline" x1="270" y1="110" x2="290" y2="140"/>
+  <line class="edge-outline" x1="270" y1="110" x2="330" y2="140"/>
+  <line class="edge-outline" x1="270" y1="110" x2="370" y2="140"/>
+  <line class="edge-outline" x1="295" y1="152" x2="310" y2="180"/>
+  <line class="edge-outline" x1="315" y1="192" x2="340" y2="210"/>
+  <line class="edge-outline" x1="195" y1="110" x2="195" y2="158"/>
+  <line class="edge-outline" x1="200" y1="108" x2="245" y2="158"/>
+  <line class="edge-outline" x1="60" y1="200" x2="115" y2="200"/>
+  <line class="edge-outline" x1="60" y1="200" x2="80" y2="238"/>
+  <line class="edge-outline" x1="65" y1="200" x2="125" y2="238"/>
+  <line class="edge-outline" x1="270" y1="90" x2="310" y2="60"/>
+  <line class="edge-outline" x1="275" y1="90" x2="350" y2="60"/>
+
+  <!-- White edges (on top of outlines) -->
+  <line class="edge" x1="60" y1="100" x2="120" y2="100"/>
+  <line class="edge" x1="130" y1="100" x2="190" y2="100"/>
+  <line class="edge" x1="200" y1="100" x2="260" y2="100"/>
+  <line class="edge" x1="60" y1="40" x2="120" y2="40"/>
+  <line class="edge" x1="130" y1="40" x2="190" y2="40"/>
+  <line class="edge" x1="55" y1="48" x2="55" y2="90"/>
+  <line class="edge" x1="125" y1="48" x2="125" y2="90"/>
+  <line class="edge" x1="270" y1="110" x2="290" y2="140"/>
+  <line class="edge" x1="270" y1="110" x2="330" y2="140"/>
+  <line class="edge" x1="270" y1="110" x2="370" y2="140"/>
+  <line class="edge" x1="295" y1="152" x2="310" y2="180"/>
+  <line class="edge" x1="315" y1="192" x2="340" y2="210"/>
+  <line class="edge" x1="195" y1="110" x2="195" y2="158"/>
+  <line class="edge" x1="200" y1="108" x2="245" y2="158"/>
+  <line class="edge" x1="60" y1="200" x2="115" y2="200"/>
+  <line class="edge" x1="60" y1="200" x2="80" y2="238"/>
+  <line class="edge" x1="65" y1="200" x2="125" y2="238"/>
+  <line class="edge" x1="270" y1="90" x2="310" y2="60"/>
+  <line class="edge" x1="275" y1="90" x2="350" y2="60"/>
 
   <!-- Context Nodes (top) -->
   <circle class="node" cx="50" cy="40" r="8"/>
@@ -147,11 +148,10 @@ const KNOWLEDGE_GRAPH_SVG = `
  * JavaScript function to render knowledge graph content in the widget.
  *
  * Displays:
- * 1. A simplified SVG network diagram of the knowledge graph
- * 2. Summary statistics (concepts, edges, categories)
- * 3. A CTA button to request detailed visualization from the AI
+ * 1. A stylized SVG network diagram of the knowledge graph
+ * 2. A prominent CTA button to request detailed visualization from the AI
  *
- * The CTA does NOT have a time-based gate - it can be clicked anytime.
+ * The CTA is styled with accent background for prominence.
  */
 export const KNOWLEDGE_GRAPH_RENDERER = `
 const KNOWLEDGE_GRAPH_SVG = \`${KNOWLEDGE_GRAPH_SVG}\`;
@@ -169,57 +169,38 @@ function renderKnowledgeGraph(data) {
   // SVG visualization
   h += '<div class="sec" style="text-align:center">';
   h += KNOWLEDGE_GRAPH_SVG;
-  h += '<p style="margin:0;font-size:11px;color:var(--fg-secondary);font-style:italic">Simplified view • Solid lines: explicit relationships • Dashed: inferred</p>';
   h += '</div>';
 
-  // Statistics
-  if (data?.concepts && data?.edges) {
-    const conceptCount = data.concepts.length;
-    const edgeCount = data.edges.length;
-    const categories = [...new Set(data.concepts.map(c => c.category))];
-    
-    h += '<div class="sec"><h2 class="sec-ttl">Graph Statistics</h2>';
-    h += '<div class="list">';
-    h += '<div class="item"><p class="item-ttl">Concepts<span class="badge">' + conceptCount + '</span></p>';
-    h += '<p class="meta">Categories: ' + categories.join(', ') + '</p></div>';
-    h += '<div class="item"><p class="item-ttl">Relationships<span class="badge">' + edgeCount + '</span></p>';
-    const inferredCount = data.edges.filter(e => e.inferred).length;
-    h += '<p class="meta">Explicit: ' + (edgeCount - inferredCount) + ' • Inferred: ' + inferredCount + '</p></div>';
-    h += '</div></div>';
-  }
-
-  // CTA for detailed visualization
-  h += '<div class="sec" style="text-align:center;padding:16px 0">';
-  h += '<button id="kg-viz-cta-btn" class="cta-btn" style="margin:0 auto">Visualize Oak Knowledge Graph</button>';
+  // Prominent CTA for detailed visualization
+  h += '<div class="sec" style="text-align:center;padding:20px 0">';
+  h += '<button id="kg-viz-cta-btn" class="btn" style="font-size:14px;padding:12px 24px">Visualize Oak Knowledge Graph</button>';
   h += '</div>';
 
   return h || '<div class="empty">No knowledge graph data available.</div>';
 }
 
 // Initialize CTA button for knowledge graph visualization
+// This function is called by the main widget script after rendering
 function initKnowledgeGraphCta() {
   const btn = document.getElementById('kg-viz-cta-btn');
   if (!btn || !window.openai?.sendFollowUpMessage) return;
   
   btn.addEventListener('click', async () => {
     btn.disabled = true;
+    const originalText = btn.textContent;
     btn.textContent = 'Generating visualization...';
     try {
       await window.openai.sendFollowUpMessage({ prompt: KNOWLEDGE_GRAPH_VIZ_PROMPT });
-      btn.textContent = 'Visualize Oak Knowledge Graph';
-      btn.disabled = false;
+      btn.textContent = 'Visualization Requested!';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2000);
     } catch (error) {
-      btn.textContent = 'Visualize Oak Knowledge Graph';
+      btn.textContent = originalText;
       btn.disabled = false;
       console.error('Failed to send visualization request:', error);
     }
-  });
-}
-
-// Register the CTA initializer to run after render
-if (typeof window !== 'undefined') {
-  window.addEventListener('load', () => {
-    setTimeout(initKnowledgeGraphCta, 100);
   });
 }
 `.trim();
