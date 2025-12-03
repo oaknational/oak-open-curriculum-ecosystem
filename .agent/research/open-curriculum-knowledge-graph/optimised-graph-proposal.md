@@ -1,8 +1,25 @@
 # Optimised Knowledge Graph Proposal
 
+> **STATUS: V1 TARGET STRUCTURE**
+>
+> This document defines the target structure for V1 implementation:
+> ~28 concept nodes and ~45 edges, concept-only (no API mapping).
+> For comprehensive synthesis, see `knowledge-graph-analysis-synthesis.md`.
+
 This document proposes an optimised structure for the knowledge graph that focuses on **concept relationships** rather than API implementation details.
 
 **Last Updated**: December 2025 (major revision: removed API focus, concept-only graph)
+
+---
+
+## Terminology: Schema-Level Knowledge Graph
+
+The **Oak Curriculum Knowledge Graph (schema-level)** captures:
+
+- **Structure and form**: How concept types relate to each other
+- **NOT substance**: Not specific instances (individual lessons, units)
+
+This is the schema/TBox portion of a full knowledge graph. The ontology provides enumerated instances (actual key stages, subjects) plus rich guidance. Together they form a complete domain model.
 
 ---
 

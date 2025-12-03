@@ -86,7 +86,7 @@ export const toolGuidanceData = {
     } satisfies ToolCategory,
 
     agentSupport: {
-      tools: ['get-help', 'get-ontology'],
+      tools: ['get-help', 'get-ontology', 'get-knowledge-graph'],
       description: 'Tools for understanding Oak Curriculum system and how to use the tools.',
       whenToUse: 'At conversation start, when user asks to "understand Oak", or to get context.',
       isAgentSupport: true,
@@ -260,6 +260,7 @@ export const toolGuidanceData = {
     'Threads show how concepts build across years - great for finding prerequisites or extensions.',
     'Key Stage 4 (GCSE) has additional complexity: tiers (foundation/higher) and exam boards.',
     'Use get-help or get-ontology to understand Oak - great at the start of a conversation.',
+    'Use get-ontology for domain understanding (what things mean), get-knowledge-graph for structure (how things connect).',
   ],
 
   /**

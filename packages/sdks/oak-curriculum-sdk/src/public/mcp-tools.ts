@@ -96,4 +96,11 @@ export {
   type OntologyResource,
 } from '../mcp/ontology-resource.js';
 
+export {
+  KNOWLEDGE_GRAPH_RESOURCE,
+  getKnowledgeGraphJson,
+} from '../mcp/knowledge-graph-resource.js';
+
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
+
+export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';

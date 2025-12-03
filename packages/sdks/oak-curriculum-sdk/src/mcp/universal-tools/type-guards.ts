@@ -29,7 +29,11 @@ import type { AggregatedToolName, UniversalToolName } from './types.js';
  */
 export function isAggregatedToolName(value: unknown): value is AggregatedToolName {
   return (
-    value === 'search' || value === 'fetch' || value === 'get-ontology' || value === 'get-help'
+    value === 'search' ||
+    value === 'fetch' ||
+    value === 'get-ontology' ||
+    value === 'get-help' ||
+    value === 'get-knowledge-graph'
   );
 }
 

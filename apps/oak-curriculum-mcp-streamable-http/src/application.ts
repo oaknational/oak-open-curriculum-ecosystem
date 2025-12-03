@@ -12,6 +12,7 @@ import { createCorsMiddleware, dnsRebindingProtection } from './security.js';
 import { createSecurityHeadersMiddleware } from './security-headers.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { overrideToolsListHandler } from './tools-list-override.js';
+import { SERVER_INSTRUCTIONS } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
@@ -239,7 +240,10 @@ function initializeCoreMcpServer(): {
   server: McpServer;
   transport: StreamableHTTPServerTransport;
 } {
-  const server = new McpServer({ name: 'oak-curriculum-http', version: '0.1.0' });
+  const server = new McpServer(
+    { name: 'oak-curriculum-http', version: '0.1.0' },
+    { instructions: SERVER_INSTRUCTIONS },
+  );
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   return { server, transport };
 }
