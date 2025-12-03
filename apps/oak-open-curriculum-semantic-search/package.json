@@ -33,7 +33,7 @@
     "@oaknational/oak-components": "^1.143.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "ai": "^5.0.98",
-    "next": "16.0.3",
+    "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "redoc": "^2.5.2",
