@@ -32,6 +32,9 @@ export const toolGuidanceData = {
   serverOverview: {
     name: 'Oak Curriculum MCP Server',
     version: '1.0.0',
+    aboutOak:
+      "Oak National Academy is the UK's national curriculum body, providing free, high-quality, fully-resourced curriculum resources for teachers and students.",
+    oakWebsite: 'https://www.thenational.academy',
     description:
       'Access Oak National Academy curriculum resources including lessons, units, quizzes, transcripts, and teaching materials. Covers Key Stages 1-4 across all National Curriculum subjects.',
     authentication: 'OAuth2 with Clerk - sign in with your email to access curriculum resources.',

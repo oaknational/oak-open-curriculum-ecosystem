@@ -20,6 +20,9 @@ export const HELP_OUTPUT_FIXTURE = {
   serverOverview: {
     name: 'Oak Curriculum MCP',
     version: '1.0.0',
+    aboutOak:
+      "Oak National Academy is the UK's national curriculum body, providing free, high-quality, fully-resourced curriculum resources for teachers and students.",
+    oakWebsite: 'https://www.thenational.academy',
     description: 'Access Oak National Academy curriculum resources via MCP.',
     authentication: 'OAuth 2.1 with Clerk',
     documentation: 'https://open-api.thenational.academy/docs',

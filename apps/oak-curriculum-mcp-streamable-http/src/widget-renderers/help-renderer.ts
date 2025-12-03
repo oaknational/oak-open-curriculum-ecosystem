@@ -1,7 +1,7 @@
 /**
  * Help content renderer for the widget.
  *
- * Renders server overview, tool categories, workflows, and tips
+ * Renders About Oak section, server overview, tool categories, workflows, and tips
  * from the get-help tool output.
  *
  * @see widget-renderer-registry.ts - Registry that routes to this renderer
@@ -11,7 +11,7 @@
  * JavaScript function to render help content in the widget.
  *
  * Handles the following data shape:
- * - serverOverview: { description, ... }
+ * - serverOverview: { aboutOak, oakWebsite, description, ... }
  * - toolCategories: { [name]: { description, tools, ... } }
  * - workflows: { [name]: { title, description, ... } }
  * - tips: string[]
@@ -19,9 +19,17 @@
 export const HELP_RENDERER = `
 function renderHelp(o) {
   let h = '';
-  if (o.serverOverview) {
-    h += '<div class="sec"><h2 class="sec-ttl">Overview</h2>';
-    h += '<p style="margin:0;font-size:14px">' + esc(o.serverOverview.description || '') + '</p></div>';
+  if (o.serverOverview?.aboutOak) {
+    h += '<div class="sec"><h2 class="sec-ttl">About Oak</h2>';
+    h += '<p style="margin:0 0 8px;font-size:14px">' + esc(o.serverOverview.aboutOak) + '</p>';
+    if (o.serverOverview.oakWebsite) {
+      h += '<p style="margin:0"><a href="' + esc(o.serverOverview.oakWebsite) + '" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px">' + 'Visit Oak →' + '</a></p>';
+    }
+    h += '</div>';
+  }
+  if (o.serverOverview?.description) {
+    h += '<div class="sec"><h2 class="sec-ttl">MCP Server</h2>';
+    h += '<p style="margin:0;font-size:14px">' + esc(o.serverOverview.description) + '</p></div>';
   }
   if (o.toolCategories) {
     const cats = Object.entries(o.toolCategories);

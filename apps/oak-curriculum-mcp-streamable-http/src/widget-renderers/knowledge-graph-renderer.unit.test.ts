@@ -22,8 +22,8 @@ describe('KNOWLEDGE_GRAPH_RENDERER', () => {
 
     it('includes context concepts', () => {
       expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Phase');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('KeyStage');
-      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('YearGroup');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Key Stage');
+      expect(KNOWLEDGE_GRAPH_RENDERER).toContain('Year Group');
     });
 
     it('includes content type concepts', () => {
