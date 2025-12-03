@@ -39,7 +39,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.1",
+    "@modelcontextprotocol/sdk": "^1.24.2",
     "@notionhq/client": "^5.4.0",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",

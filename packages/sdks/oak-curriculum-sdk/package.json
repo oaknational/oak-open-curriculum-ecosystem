@@ -108,8 +108,8 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.1",
-    "@next/eslint-plugin-next": "^16.0.6",
+    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@next/eslint-plugin-next": "^16.0.7",
     "@types/node": "^24.10.1",
     "dotenv": "^17.2.3",
     "openapi-typescript": "^7.10.1",
