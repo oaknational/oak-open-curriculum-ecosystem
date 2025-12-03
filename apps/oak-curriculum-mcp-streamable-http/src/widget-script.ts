@@ -54,6 +54,7 @@ const RENDERERS = {
   changelog: renderChangelog,
   rateLimit: renderRateLimit,
   ontology: renderOntology,
+  knowledgeGraph: renderKnowledgeGraph,
 };
 
 // ========================================

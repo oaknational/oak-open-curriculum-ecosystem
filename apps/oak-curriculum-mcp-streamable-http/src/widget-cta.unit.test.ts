@@ -15,6 +15,7 @@ import {
   generateCtaContainerHtml,
   generateCtaHandlerJs,
   CTA_REGISTRY,
+  CTA_COOLDOWN_MS,
   type CtaConfig,
 } from './widget-cta/index.js';
 
@@ -135,6 +136,17 @@ describe('generateCtaHandlerJs', () => {
       expect(js).toContain('\\`get-knowledge-graph\\`');
       expect(js).toContain('\\`get-help\\`');
     });
+  });
+});
+
+describe('CTA_COOLDOWN_MS', () => {
+  it('is defined as 5 minutes in milliseconds', () => {
+    expect(CTA_COOLDOWN_MS).toBe(5 * 60 * 1000);
+  });
+
+  it('is embedded in generated JavaScript', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain(`const COOLDOWN_MS = ${String(CTA_COOLDOWN_MS)}`);
   });
 });
 

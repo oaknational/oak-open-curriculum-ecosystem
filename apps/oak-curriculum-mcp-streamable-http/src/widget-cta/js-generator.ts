@@ -63,6 +63,16 @@ ${entries}
 ];`;
 }
 
+/**
+ * Cooldown duration for CTA buttons in milliseconds (5 minutes).
+ *
+ * @remarks
+ * CTA buttons are hidden if they were clicked within this duration.
+ * This prevents users from repeatedly clicking the CTA and flooding
+ * the conversation with follow-up messages.
+ */
+export const CTA_COOLDOWN_MS = 5 * 60 * 1000;
+
 /** JavaScript code for the initCtaButtons function */
 const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
   const ctaContainer = document.getElementById('cta-container');
@@ -70,6 +80,19 @@ const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
     if (ctaContainer) ctaContainer.style.display = 'none';
     return;
   }
+
+  // Check if CTA is within cooldown period (5 minutes)
+  const COOLDOWN_MS = ${String(CTA_COOLDOWN_MS)};
+  const widgetState = window.openai.widgetState ?? {};
+  const lastClickTime = widgetState.lastCtaClickTime;
+  const now = Date.now();
+
+  if (lastClickTime && (now - lastClickTime) < COOLDOWN_MS) {
+    // CTA was clicked recently, hide it
+    if (ctaContainer) ctaContainer.style.display = 'none';
+    return;
+  }
+
   if (ctaContainer) ctaContainer.style.display = 'flex';
   CTA_CONFIGS.forEach(cta => {
     const btn = document.getElementById(cta.id + '-btn');
@@ -79,7 +102,14 @@ const INIT_CTA_BUTTONS_JS = `function initCtaButtons() {
       btn.textContent = cta.loadingText;
       try {
         await window.openai.sendFollowUpMessage({ prompt: cta.prompt });
-        if (ctaContainer) ctaContainer.style.display = 'none';
+        // Persist the click time for cooldown tracking
+        if (window.openai.setWidgetState) {
+          const currentState = window.openai.widgetState ?? {};
+          window.openai.setWidgetState({ ...currentState, lastCtaClickTime: Date.now() });
+        }
+        // Restore button state after successful send
+        btn.textContent = cta.buttonText;
+        btn.disabled = false;
       } catch (error) {
         btn.textContent = cta.buttonText;
         btn.disabled = false;

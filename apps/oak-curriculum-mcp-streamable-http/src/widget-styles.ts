@@ -93,7 +93,8 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .error { background: rgba(200,50,50,0.1); color: #c83232; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
 @media (prefers-color-scheme: dark) { .error { background: rgba(255,100,100,0.15); color: #ff9999; } }
 .cta-container { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-.cta-btn { background: transparent; color: var(--fg); font-size: 12px; padding: 8px 14px; border-radius: 6px; border: 2px solid var(--accent-high-contrast); white-space: nowrap; font-weight: 600; transition: background 0.15s, transform 0.1s; }
-.cta-btn:hover { background: var(--item-bg); }
-.cta-btn:active { transform: scale(0.96); background: var(--code-bg); }
+.cta-btn { background: var(--item-bg); color: var(--fg); font-size: 12px; padding: 8px 14px; border-radius: 6px; border: 2px solid var(--accent-high-contrast); white-space: nowrap; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s, transform 0.1s; }
+.cta-btn:hover { background: var(--code-bg); }
+.cta-btn:active { transform: scale(0.96); background: var(--border-color); }
+.cta-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 `.trim();
