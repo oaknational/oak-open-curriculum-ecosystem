@@ -92,4 +92,7 @@ code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-si
 .loading { opacity: 0.6; pointer-events: none; }
 .error { background: rgba(200,50,50,0.1); color: #c83232; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; }
 @media (prefers-color-scheme: dark) { .error { background: rgba(255,100,100,0.15); color: #ff9999; } }
+.cta-container { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.cta-btn { background: linear-gradient(135deg, var(--accent) 0%, #1b6330 100%); font-size: 12px; padding: 8px 14px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); white-space: nowrap; }
+.cta-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.18); }
 `.trim();

@@ -1,0 +1,171 @@
+/**
+ * Unit tests for the CTA (Call-to-Action) system.
+ *
+ * These tests verify the pure functions that generate CTA HTML and JavaScript.
+ * They prove behavior, not implementation - we can change HOW the HTML/JS is
+ * generated without breaking tests that prove WHAT is generated.
+ *
+ * @see widget-cta/ - Source module
+ * @see testing-strategy.md - Unit test definitions
+ */
+
+import { describe, it, expect } from 'vitest';
+import {
+  generateCtaButtonHtml,
+  generateCtaContainerHtml,
+  generateCtaHandlerJs,
+  CTA_REGISTRY,
+  type CtaConfig,
+} from './widget-cta/index.js';
+
+describe('generateCtaButtonHtml', () => {
+  describe('given a CTA config with icon', () => {
+    const cta: CtaConfig = {
+      id: 'test-cta',
+      label: 'Test Action',
+      loadingLabel: 'Loading...',
+      icon: '🎯',
+      prompt: 'Test prompt',
+    };
+
+    it('generates a button element with correct id', () => {
+      const html = generateCtaButtonHtml(cta);
+      expect(html).toContain('id="test-cta-btn"');
+    });
+
+    it('generates a button element with btn and cta-btn classes', () => {
+      const html = generateCtaButtonHtml(cta);
+      expect(html).toContain('class="btn cta-btn"');
+    });
+
+    it('displays icon followed by label', () => {
+      const html = generateCtaButtonHtml(cta);
+      expect(html).toContain('>🎯 Test Action<');
+    });
+  });
+
+  describe('given a CTA config without icon', () => {
+    const cta: CtaConfig = {
+      id: 'no-icon-cta',
+      label: 'No Icon Action',
+      loadingLabel: 'Working...',
+      prompt: 'Test prompt',
+    };
+
+    it('displays only the label without leading space', () => {
+      const html = generateCtaButtonHtml(cta);
+      expect(html).toContain('>No Icon Action<');
+      expect(html).not.toContain('> No Icon Action<');
+    });
+  });
+});
+
+describe('generateCtaContainerHtml', () => {
+  it('generates a container div with id cta-container', () => {
+    const html = generateCtaContainerHtml();
+    expect(html).toContain('id="cta-container"');
+  });
+
+  it('generates a container with cta-container class', () => {
+    const html = generateCtaContainerHtml();
+    expect(html).toContain('class="cta-container"');
+  });
+
+  it('is hidden by default with inline style', () => {
+    const html = generateCtaContainerHtml();
+    expect(html).toContain('style="display:none"');
+  });
+
+  it('includes a button for each CTA in the registry', () => {
+    const html = generateCtaContainerHtml();
+    const registryKeys = Object.keys(CTA_REGISTRY);
+
+    for (const key of registryKeys) {
+      const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
+      expect(html).toContain(`id="${cta.id}-btn"`);
+    }
+  });
+
+  it('includes the Learn About Oak CTA from the registry', () => {
+    const html = generateCtaContainerHtml();
+    expect(html).toContain('id="learn-oak-btn"');
+    expect(html).toContain('🌳 Learn About Oak');
+  });
+});
+
+describe('generateCtaHandlerJs', () => {
+  it('generates JavaScript containing CTA_CONFIGS array', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('const CTA_CONFIGS = [');
+  });
+
+  it('generates JavaScript containing initCtaButtons function', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('function initCtaButtons()');
+  });
+
+  it('includes config entries for each CTA in the registry', () => {
+    const js = generateCtaHandlerJs();
+    const registryKeys = Object.keys(CTA_REGISTRY);
+
+    for (const key of registryKeys) {
+      const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
+      expect(js).toContain(`id: '${cta.id}'`);
+    }
+  });
+
+  it('includes feature detection for sendFollowUpMessage', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('window.openai?.sendFollowUpMessage');
+  });
+
+  it('includes DOM ready handling', () => {
+    const js = generateCtaHandlerJs();
+    expect(js).toContain('document.readyState');
+    expect(js).toContain('DOMContentLoaded');
+  });
+
+  describe('prompt escaping', () => {
+    it('escapes backticks in prompts for safe template literal embedding', () => {
+      const js = generateCtaHandlerJs();
+      // The Learn Oak prompt contains backticks around tool names
+      // These should be escaped as \` in the output
+      expect(js).toContain('\\`get-ontology\\`');
+      expect(js).toContain('\\`get-knowledge-graph\\`');
+      expect(js).toContain('\\`get-help\\`');
+    });
+  });
+});
+
+describe('CTA_REGISTRY', () => {
+  it('contains the learnOak CTA', () => {
+    expect(CTA_REGISTRY).toHaveProperty('learnOak');
+  });
+
+  describe('learnOak CTA', () => {
+    const learnOak = CTA_REGISTRY.learnOak;
+
+    it('has id "learn-oak"', () => {
+      expect(learnOak.id).toBe('learn-oak');
+    });
+
+    it('has label "Learn About Oak"', () => {
+      expect(learnOak.label).toBe('Learn About Oak');
+    });
+
+    it('has the tree emoji icon', () => {
+      expect(learnOak.icon).toBe('🌳');
+    });
+
+    it('prompts for all three agent support tools', () => {
+      expect(learnOak.prompt).toContain('get-ontology');
+      expect(learnOak.prompt).toContain('get-knowledge-graph');
+      expect(learnOak.prompt).toContain('get-help');
+    });
+
+    it('instructs to call all tools and summarize', () => {
+      expect(learnOak.prompt).toContain('Call all three tools now');
+      expect(learnOak.prompt).toContain('summarize');
+    });
+  });
+});
