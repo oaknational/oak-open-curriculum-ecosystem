@@ -143,13 +143,39 @@ app.get('/widget/json', (req, res) => {
   res.type('text/html').send(htmlWithData);
 });
 
+/**
+ * Serves the knowledge graph view for testing the SVG renderer.
+ */
+app.get('/widget/knowledge-graph', (req, res) => {
+  console.log(`GET ${req.path}`);
+  const kgOutput = {
+    concepts: ['Subject', 'Sequence', 'Unit', 'Lesson'],
+    relationships: [{ from: 'Subject', to: 'Sequence' }],
+  };
+
+  const htmlWithData = AGGREGATED_TOOL_WIDGET_HTML.replace(
+    '</head>',
+    `<script>
+      window.openai = {
+        toolOutput: ${JSON.stringify(kgOutput, null, 2)},
+        toolResponseMetadata: { 
+          'annotations/title': 'Oak Knowledge Graph',
+          toolName: 'get-knowledge-graph'
+        }
+      };
+    </script></head>`,
+  );
+  res.type('text/html').send(htmlWithData);
+});
+
 app.listen(PORT, () => {
   const portStr = String(PORT);
   console.log(`\n🌳 Oak Widget Preview Server`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
   console.log(`\nAvailable routes:`);
-  console.log(`  http://localhost:${portStr}/widget        - Help UI (default)`);
-  console.log(`  http://localhost:${portStr}/widget/search - Search results`);
-  console.log(`  http://localhost:${portStr}/widget/json   - JSON fallback`);
+  console.log(`  http://localhost:${portStr}/widget                - Help UI (default)`);
+  console.log(`  http://localhost:${portStr}/widget/search         - Search results`);
+  console.log(`  http://localhost:${portStr}/widget/json           - JSON fallback`);
+  console.log(`  http://localhost:${portStr}/widget/knowledge-graph - Knowledge graph SVG`);
   console.log(`\nPress Ctrl+C to stop.\n`);
 });

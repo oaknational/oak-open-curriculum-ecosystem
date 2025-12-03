@@ -17,6 +17,33 @@ It is the conceptual companion to:
 
 ---
 
+## Terminology Note: Schema-Level Knowledge Graph
+
+Formally, a **knowledge graph** contains both:
+
+- **Schema (TBox)**: The types of entities and how they can relate
+- **Instances (ABox)**: Actual entities and their specific relationships
+
+What we are building is the **Oak Curriculum Knowledge Graph (schema-level)** — it captures the **structure and form** of curriculum concepts and their relationships, but not the substance (specific lessons, units, etc.). It is:
+
+- A graph of **concept types** (Subject, Unit, Lesson) and their relationships
+- NOT a graph of **instances** (specific lessons like "adding-fractions")
+
+This is still correctly called a "knowledge graph" because:
+
+1. It captures domain **knowledge** about how the curriculum is structured
+2. Industry usage of "knowledge graph" includes schema-level representations
+3. The term communicates intent effectively
+
+The companion **ontology** (`get-ontology`) contains both schema elements AND enumerated instances (actual key stages, subjects), plus rich prose definitions and guidance.
+
+Together, they form a complete domain model:
+
+- **Ontology**: What things mean, enumerated values, how to use tools
+- **Knowledge Graph**: How concept types relate, inferred relationships, structural navigation
+
+---
+
 ## 1. Goals and scope
 
 The knowledge graph is designed to:

@@ -18,7 +18,12 @@ import type { ToolName } from '../types/generated/api-schema/mcp-tools/index.js'
  * These tools combine multiple API calls into a single operation.
  * They're currently defined in runtime but will move to type-gen time.
  */
-export type AggregatedToolName = 'search' | 'fetch' | 'get-ontology' | 'get-help';
+export type AggregatedToolName =
+  | 'search'
+  | 'fetch'
+  | 'get-ontology'
+  | 'get-help'
+  | 'get-knowledge-graph';
 
 /**
  * All available tool names combining generated and aggregated tools.

@@ -11,6 +11,7 @@
  */
 
 import { OAK_LOGO_BASE64 } from './oak-logo-base64.js';
+import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
 
@@ -62,8 +63,8 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
         <h1 class="ttl">Oak National Academy</h1>
         <p class="sub-ttl" id="tool-name"></p>
       </div>
+      ${generateCtaContainerHtml()}
     </div>
-    <!-- Actions/Error divs removed - see widget-script-state.ts for refresh button code -->
     <div id="c"></div>
     <div class="ftr">
       <p class="ftr-disclaimer">AI can make mistakes. Check all generated resources before use.</p>

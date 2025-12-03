@@ -1,9 +1,15 @@
 # Knowledge Graph Tool Research
 
+> **STATUS: AUTHORITATIVE V1 DESIGN DOCUMENT**
+>
+> This document analyses agent support tool patterns and provides the design
+> foundation for the `get-knowledge-graph` tool. For comprehensive synthesis
+> of all findings, see `knowledge-graph-analysis-synthesis.md`.
+
 This document analyses the existing agent support tool patterns and evaluates how a `get-knowledge-graph` tool should be designed to complement the existing `get-ontology` tool.
 
 **Research Date**: December 2025  
-**Status**: Analysis complete, ready for design phase  
+**Status**: Analysis complete, ready for implementation  
 **Last Updated**: December 2025 (corrected emphasis and OpenAI SDK understanding)
 
 ---
@@ -22,6 +28,18 @@ The knowledge graph and ontology serve **complementary purposes**:
 **Key distinction**: The knowledge graph is about **domain relationships between curriculum concepts**, NOT about API endpoint mappings. Agents already know about endpoints from `tools/list`. The graph captures implicit knowledge that helps agents reason about the curriculum domain.
 
 Both are agent support tools that help AI agents understand the Oak Curriculum system before making API calls.
+
+### Terminology: Schema-Level Knowledge Graph
+
+Formally, a knowledge graph contains both schema (types) and instances (actual entities). What we're building is the **Oak Curriculum Knowledge Graph (schema-level)** — it captures the **structure and form** of how concept types relate, but not the substance (specific lessons, units).
+
+| Formal Term      | Our Artifact         | Contains                             |
+| ---------------- | -------------------- | ------------------------------------ |
+| TBox (schema)    | Knowledge Graph      | Concept types + type relationships   |
+| ABox (instances) | Ontology (partially) | Enumerated values (ks1, maths, etc.) |
+| Guidance         | Ontology             | Workflows, definitions, tips         |
+
+This is still correctly called a "knowledge graph" because it captures domain knowledge in graph form, and industry usage includes schema-level representations.
 
 ---
 
