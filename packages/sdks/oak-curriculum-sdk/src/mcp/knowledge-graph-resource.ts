@@ -1,7 +1,7 @@
 /**
  * Knowledge Graph MCP Resource
  *
- * Exposes the concept graph as an MCP resource for application-controlled
+ * Exposes the knowledge graph as an MCP resource for application-controlled
  * context injection. Complements the `get-knowledge-graph` tool which is
  * model-controlled.
  *
@@ -17,7 +17,7 @@ import { conceptGraph } from './knowledge-graph-data.js';
  * Knowledge graph resource metadata for MCP registration.
  *
  * This resource allows MCP clients that support pre-fetching resources
- * (e.g., Claude Desktop) to inject the concept graph into context.
+ * (e.g., Claude Desktop) to inject the knowledge graph into context.
  * ChatGPT uses the tool instead.
  */
 export const KNOWLEDGE_GRAPH_RESOURCE = {
@@ -40,7 +40,7 @@ export const KNOWLEDGE_GRAPH_RESOURCE = {
  *
  * Used by the MCP resource handler to serve the graph content.
  *
- * @returns JSON string representation of the concept graph
+ * @returns JSON string representation of the knowledge graph
  */
 export function getKnowledgeGraphJson(): string {
   return JSON.stringify(conceptGraph, null, 2);

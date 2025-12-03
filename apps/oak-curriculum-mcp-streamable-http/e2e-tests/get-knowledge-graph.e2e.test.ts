@@ -3,7 +3,7 @@
  *
  * These tests prove that:
  * - The tool appears in tools/list
- * - The tool returns a valid concept graph in structuredContent
+ * - The tool returns a valid knowledge graph in structuredContent
  * - The resource appears in resources/list
  * - The resource returns valid JSON
  *
@@ -91,7 +91,7 @@ describe('get-knowledge-graph Tool E2E', () => {
   });
 
   describe('tools/call - Tool execution', () => {
-    it('returns structuredContent with concept graph', async () => {
+    it('returns structuredContent with knowledge graph', async () => {
       const { app } = createStubbedHttpApp();
 
       const response = await request(app)

@@ -124,7 +124,7 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Get Concept Relationship Graph');
+    expect(annotations?.title).toBe('Get Knowledge Graph');
   });
 
   it('get-knowledge-graph tool has OpenAI _meta fields', () => {
@@ -133,10 +133,8 @@ describe('listUniversalTools annotations', () => {
 
     expect(kgTool).toBeDefined();
     expect(kgTool?._meta).toBeDefined();
-    expect(kgTool?._meta?.['openai/toolInvocation/invoking']).toBe(
-      'Loading concept relationship graph…',
-    );
-    expect(kgTool?._meta?.['openai/toolInvocation/invoked']).toBe('Concept graph loaded');
+    expect(kgTool?._meta?.['openai/toolInvocation/invoking']).toBe('Loading knowledge graph…');
+    expect(kgTool?._meta?.['openai/toolInvocation/invoked']).toBe('Knowledge graph loaded');
   });
 });
 

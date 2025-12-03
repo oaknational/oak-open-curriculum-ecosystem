@@ -32,7 +32,7 @@ export const GET_KNOWLEDGE_GRAPH_INPUT_SCHEMA = {
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
 export const GET_KNOWLEDGE_GRAPH_TOOL_DEF = {
-  description: `Returns the Oak Curriculum concept relationship graph.
+  description: `Returns the Oak Curriculum knowledge graph.
 
 This schema-level graph shows how curriculum concept TYPES relate to each other:
 - Core hierarchy: Subject → Sequence → Unit → Lesson
@@ -56,13 +56,13 @@ The graph includes both explicit relationships (from API schema) and inferred re
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Get Concept Relationship Graph',
+    title: 'Get Knowledge Graph',
   },
 
   _meta: {
     'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
-    'openai/toolInvocation/invoking': 'Loading concept relationship graph…',
-    'openai/toolInvocation/invoked': 'Concept graph loaded',
+    'openai/toolInvocation/invoking': 'Loading knowledge graph…',
+    'openai/toolInvocation/invoked': 'Knowledge graph loaded',
     'openai/widgetAccessible': true,
     'openai/visibility': 'public',
   },
@@ -71,7 +71,7 @@ The graph includes both explicit relationships (from API schema) and inferred re
 /**
  * Execute the get-knowledge-graph tool.
  *
- * Returns the complete concept graph in structuredContent for model reasoning.
+ * Returns the complete knowledge graph in structuredContent for model reasoning.
  * This is critical — the model needs to see and process the graph data.
  *
  * @returns CallToolResult with graph in structuredContent
@@ -79,11 +79,11 @@ The graph includes both explicit relationships (from API schema) and inferred re
 export function runKnowledgeGraphTool(): CallToolResult {
   return formatOptimizedResult({
     summary:
-      'Oak Curriculum concept relationships loaded. Use with get-ontology for complete domain understanding.',
+      'Oak Curriculum knowledge graph loaded. Use with get-ontology for complete domain understanding.',
     fullData: conceptGraph,
     status: 'success',
     timestamp: Date.now(),
     toolName: 'get-knowledge-graph',
-    annotationsTitle: 'Get Concept Relationship Graph',
+    annotationsTitle: 'Get Knowledge Graph',
   });
 }

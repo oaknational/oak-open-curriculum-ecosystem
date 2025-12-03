@@ -17,7 +17,7 @@
  */
 
 /**
- * Oak Curriculum Concept Graph
+ * Oak Curriculum Knowledge Graph
  *
  * A structural representation of curriculum concept TYPE relationships.
  * The graph captures domain relationships, NOT API mappings.
@@ -291,7 +291,7 @@ export const conceptGraph = {
 } as const;
 
 /**
- * Type representing the complete concept graph structure.
+ * Type representing the complete knowledge graph structure.
  * Derived from the const data to ensure type safety.
  */
 export type ConceptGraph = typeof conceptGraph;
@@ -308,6 +308,6 @@ export type ConceptId = ConceptGraph['concepts'][number]['id'];
 export type ConceptCategory = ConceptGraph['concepts'][number]['category'];
 
 /**
- * Type representing an edge in the concept graph.
+ * Type representing an edge in the knowledge graph.
  */
 export type ConceptEdge = ConceptGraph['edges'][number];

@@ -54,9 +54,10 @@ describe('CTA integration with widget HTML', () => {
       }
     });
 
-    it('includes the Learn About Oak button', () => {
+    it('includes the learnOak button with correct id and label', () => {
       expect(AGGREGATED_TOOL_WIDGET_HTML).toContain('id="learn-oak-btn"');
-      expect(AGGREGATED_TOOL_WIDGET_HTML).toContain('🌳 Learn About Oak');
+      // Verify the label from the registry appears in the button
+      expect(AGGREGATED_TOOL_WIDGET_HTML).toContain(CTA_REGISTRY.learnOak.label);
     });
   });
 });
