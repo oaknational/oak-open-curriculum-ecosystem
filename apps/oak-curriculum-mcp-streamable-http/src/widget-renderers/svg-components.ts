@@ -18,6 +18,8 @@ export interface NodeConfig {
   readonly height: number;
   readonly position: Position;
   readonly cssClass: string;
+  /** Optional brief description shown as tooltip on hover. */
+  readonly brief?: string;
 }
 
 /** Configuration for a section label. */
@@ -49,15 +51,16 @@ const LABEL_HEIGHT = 20;
 const LABEL_BORDER_RADIUS = 4;
 const LABEL_TEXT_Y = 15;
 
-/** Creates an SVG node (lozenge with centered text). */
+/** Creates an SVG node (lozenge with centered text and optional tooltip). */
 export function createNode(config: NodeConfig): string {
-  const { id, label, width, height, position, cssClass } = config;
+  const { id, label, width, height, position, cssClass, brief } = config;
   const textX = width / 2;
   const textY = height / 2 + 5;
   const rx = height / 2;
   const x = String(position.x);
   const y = String(position.y);
-  return `<g id="${id}" transform="translate(${x}, ${y})"><rect class="${cssClass}" width="${String(width)}" height="${String(height)}" rx="${String(rx)}"/><text class="label" x="${String(textX)}" y="${String(textY)}">${label}</text></g>`;
+  const title = brief !== undefined ? `<title>${label}: ${brief}</title>` : '';
+  return `<g id="${id}" transform="translate(${x}, ${y})">${title}<rect class="${cssClass}" width="${String(width)}" height="${String(height)}" rx="${String(rx)}"/><text class="label" x="${String(textX)}" y="${String(textY)}">${label}</text></g>`;
 }
 
 /** Creates a section label with auto-sized background and centered text. */

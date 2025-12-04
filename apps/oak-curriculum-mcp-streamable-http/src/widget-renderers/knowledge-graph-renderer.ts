@@ -15,12 +15,13 @@ import {
 
 /** Shared CSS styles for both SVG graphs. */
 const SVG_STYLES = `
-  .node-core { fill: #287d3c; stroke: #1b3d1c; stroke-width: 2; }
-  .node-context { fill: #5da0d9; stroke: #2d5a7b; stroke-width: 2; }
-  .node-content { fill: #d97d5d; stroke: #7b3d2d; stroke-width: 2; }
-  .node-taxonomy { fill: #9b7dcf; stroke: #5d4a7b; stroke-width: 2; }
-  .node-ks4 { fill: #cfab5d; stroke: #7b6a2d; stroke-width: 2; }
-  .node-metadata { fill: #7a9e7a; stroke: #3d5a3d; stroke-width: 2; }
+  .node-core { fill: #287d3c; stroke: #1b3d1c; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  .node-context { fill: #5da0d9; stroke: #2d5a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  .node-content { fill: #d97d5d; stroke: #7b3d2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  .node-taxonomy { fill: #9b7dcf; stroke: #5d4a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  .node-ks4 { fill: #cfab5d; stroke: #7b6a2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  .node-metadata { fill: #7a9e7a; stroke: #3d5a3d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+  g[id^="node-"]:hover rect { stroke: #fff; stroke-width: 4; filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)); cursor: pointer; }
   .edge { stroke: #fff; stroke-width: 4; fill: none; }
   .edge-outline { stroke: #1b3d1c; stroke-width: 8; fill: none; }
   .edge-dashed { stroke: #fff; stroke-width: 3; fill: none; stroke-dasharray: 8 5; }
@@ -83,7 +84,7 @@ function renderKnowledgeGraph(data) {
   h += '<summary style="cursor:pointer;font-size:13px;font-weight:500;color:var(--fg-secondary)">Graph overview (18 key concepts)</summary>';
   h += '<div style="margin-top:12px;text-align:center">';
   h += KNOWLEDGE_GRAPH_OVERVIEW_SVG;
-  h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">Hover over edges to see relationship names • Solid: explicit • Dashed: inferred</p>';
+  h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">Hover over nodes for definitions, edges for relationships • Solid: explicit • Dashed: inferred</p>';
   h += '</div>';
   h += '</details>';
   h += '</div>';

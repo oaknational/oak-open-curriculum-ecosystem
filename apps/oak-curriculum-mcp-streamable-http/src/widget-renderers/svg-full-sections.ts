@@ -3,9 +3,18 @@
  * @module widget-renderers/svg-full-sections
  */
 import type { SectionConfig } from './svg-components.js';
+import { getConceptBrief } from './concept-briefs.js';
 
 const n = (id: string, label: string, w: number, h: number, x: number, y: number, c: string) =>
-  ({ id, label, width: w, height: h, position: { x, y }, cssClass: c }) as const;
+  ({
+    id,
+    label,
+    width: w,
+    height: h,
+    position: { x, y },
+    cssClass: c,
+    brief: getConceptBrief(id),
+  }) as const;
 
 export const FULL_CONTEXT_SECTION = {
   id: 'context-section',
