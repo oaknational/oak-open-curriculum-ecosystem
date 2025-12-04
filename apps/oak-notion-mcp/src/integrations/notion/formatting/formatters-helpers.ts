@@ -32,6 +32,7 @@ export function formatPageMetadata(resource: Resource): string {
 export function formatPagePropertiesForDetails(page: PageObjectResponse): string {
   let text = 'Properties:\n';
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(page.properties)) {
     // Skip title as it's already shown in the header
     if ('type' in value && value.type === 'title') {

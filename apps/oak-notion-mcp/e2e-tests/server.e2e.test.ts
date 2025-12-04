@@ -107,7 +107,6 @@ describe('E2E: MCP Server with Real Notion API', () => {
 
     await client.close();
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (serverProcess) {
       serverProcess.kill();
       // Wait for process to exit

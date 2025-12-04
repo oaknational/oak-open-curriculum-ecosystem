@@ -11,6 +11,7 @@ import type { Resource } from '../../../types';
  */
 function extractPageTitle(properties: NotionPage['properties']): string {
   // Properties from PageObjectResponse are already typed by Notion SDK
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [, prop] of Object.entries(properties)) {
     if (prop.type === 'title') {
       // Title is an array of RichTextItemResponse which has plain_text

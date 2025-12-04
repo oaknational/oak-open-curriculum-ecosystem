@@ -458,6 +458,7 @@ describe('Tool Handlers', () => {
       expect(handlers).toHaveProperty('notion-get-page');
       expect(handlers).toHaveProperty('notion-list-users');
 
+      // eslint-disable-next-line no-restricted-properties -- REFACTOR
       expect(Object.keys(handlers)).toHaveLength(6); // 5 tools + getTools method
     });
 

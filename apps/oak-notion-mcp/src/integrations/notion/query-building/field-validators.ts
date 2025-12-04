@@ -82,6 +82,7 @@ export function validateProperties(properties: unknown): {
   const errors: string[] = [];
   const validatedProperties: Record<string, McpPropertyFilter> = {};
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(properties)) {
     const result = validatePropertyFilter(key, value);
 
@@ -94,6 +95,7 @@ export function validateProperties(properties: unknown): {
 
   return {
     validatedProperties:
+      // eslint-disable-next-line no-restricted-properties -- REFACTOR
       Object.keys(validatedProperties).length > 0 ? validatedProperties : undefined,
     errors,
   };
