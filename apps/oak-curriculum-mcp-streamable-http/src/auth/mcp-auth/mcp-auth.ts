@@ -184,6 +184,7 @@ export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHand
       // sets req.auth to the Clerk auth object which downstream code expects.
       next();
     } catch (error) {
+      // Error is logged by handleAuthError
       handleAuthError(error, req, logger, next);
     }
   };
