@@ -10,7 +10,6 @@ function createMockNotionClient(): MinimalNotionClient {
   return {
     search: vi.fn(),
     pages: { retrieve: vi.fn() },
-    databases: { retrieve: vi.fn() },
     dataSources: { retrieve: vi.fn(), query: vi.fn() },
     users: { list: vi.fn() },
     blocks: { children: { list: vi.fn() } },

@@ -5,10 +5,24 @@
 
 import type { MinimalNotionClient } from '../../../types/notion-types/notion-client';
 import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type {
+  PageObjectResponse,
+  DataSourceObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
 import { notionQueryDatabaseSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
+
+/**
+ * Checks if a data source response is a full response (not partial).
+ *
+ * Full responses have `title` array; partial responses only have `id` and `object`.
+ */
+function isFullDataSourceResponse(
+  response: Awaited<ReturnType<MinimalNotionClient['dataSources']['retrieve']>>,
+): response is DataSourceObjectResponse {
+  return 'title' in response;
+}
 
 export interface QueryDatabaseDependencies {
   notionClient: MinimalNotionClient;
@@ -56,12 +70,10 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
         data_source_id: validatedArgs.database_id,
       });
 
-      // Ensure we have a full database response
-      // Note: isFullDatabase might need to be replaced or checked if it works for DataSources
-      // For now, we assume the structure is similar enough or we check for 'title'
-      if (!('title' in dbResponse)) {
+      // Validate we received a full data source response (not partial)
+      if (!isFullDataSourceResponse(dbResponse)) {
         throw new Error(
-          'Invalid database response - missing required fields like title. The database may have restricted permissions.',
+          'Invalid database response - missing required fields. The database may have restricted permissions.',
         );
       }
 

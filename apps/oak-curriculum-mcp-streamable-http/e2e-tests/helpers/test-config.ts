@@ -1,5 +1,11 @@
 import type { RuntimeConfig } from '../../src/runtime-config.js';
 
+/**
+ * Creates a mock RuntimeConfig for E2E tests.
+ *
+ * @param overrides - Optional partial config to override defaults
+ * @returns A complete RuntimeConfig with test-appropriate values
+ */
 export function createMockRuntimeConfig(overrides?: Partial<RuntimeConfig>): RuntimeConfig {
   return {
     env: {
@@ -17,22 +23,3 @@ export function createMockRuntimeConfig(overrides?: Partial<RuntimeConfig>): Run
     ...overrides,
   };
 }
-
-export const mockClerkExpressImplementation = (): {
-  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => void;
-  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => void;
-  getAuth: () => { isAuthenticated: boolean; toAuth: () => Record<string, unknown> };
-} => {
-  return {
-    clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
-      next();
-    },
-    requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
-      next();
-    },
-    getAuth: () => ({
-      isAuthenticated: false,
-      toAuth: () => ({}),
-    }),
-  };
-};

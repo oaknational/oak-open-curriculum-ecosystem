@@ -19,7 +19,7 @@
  * Part of Phase 2, Sub-Phase 2.5
  */
 
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
@@ -258,7 +258,6 @@ describe('Application-Level Method-Aware Auth', () => {
 
   describe('DANGEROUSLY_DISABLE_AUTH compatibility', () => {
     let bypassApp: Express;
-    let originalEnv: string | undefined;
 
     beforeAll(() => {
       bypassApp = createApp({
@@ -272,14 +271,6 @@ describe('Application-Level Method-Aware Auth', () => {
           },
         }),
       });
-    });
-
-    afterAll(() => {
-      if (originalEnv === undefined) {
-        delete process.env.DANGEROUSLY_DISABLE_AUTH;
-      } else {
-        process.env.DANGEROUSLY_DISABLE_AUTH = originalEnv;
-      }
     });
 
     it('allows all methods without token when flag is true', async () => {

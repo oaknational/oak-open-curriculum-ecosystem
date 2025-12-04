@@ -115,20 +115,14 @@ function createSampleBlocksList() {
 }
 
 /**
- * Creates mock Notion client for E2E testing
- * Returns MinimalNotionClient with canned responses
- */
-/**
- * Creates mock Notion client for E2E testing
- * Returns MinimalNotionClient with canned responses
- */
-/**
- * Creates mock Notion client for E2E testing
- * Returns MinimalNotionClient with canned responses
+ * Creates mock Notion client for E2E testing.
+ *
+ * Returns MinimalNotionClient with canned responses. Uses the dataSources API
+ * (not the legacy databases API) per Notion SDK v5.
  */
 export function createMockNotionClientForE2E(): MinimalNotionClient {
   const samplePage = createSamplePage();
-  const sampleDatabase = createSampleDatabase();
+  const sampleDataSource = createSampleDatabase();
   const sampleUser = createMockPersonUser();
 
   return {
@@ -145,14 +139,8 @@ export function createMockNotionClientForE2E(): MinimalNotionClient {
       },
     },
 
-    databases: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-      retrieve: () => Promise.resolve(sampleDatabase as any),
-    },
-
     dataSources: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/consistent-type-assertions
-      retrieve: () => Promise.resolve(sampleDatabase as any),
+      retrieve: () => Promise.resolve(sampleDataSource),
       query: () =>
         Promise.resolve({
           object: 'list',
@@ -170,6 +158,6 @@ export function createMockNotionClientForE2E(): MinimalNotionClient {
       },
     },
 
-    search: () => Promise.resolve(createMockSearchResponse([samplePage, sampleDatabase])),
+    search: () => Promise.resolve(createMockSearchResponse([samplePage, sampleDataSource])),
   };
 }

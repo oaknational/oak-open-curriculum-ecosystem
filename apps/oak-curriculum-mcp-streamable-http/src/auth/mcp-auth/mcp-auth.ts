@@ -100,6 +100,18 @@ function checkResourceParameter(
 }
 
 /**
+ * Log and forward error from auth middleware.
+ */
+function handleAuthError(error: unknown, req: Request, logger: Logger, next: NextFunction): void {
+  logger.error('MCP auth middleware error', {
+    error: error instanceof Error ? error.message : String(error),
+    path: req.path,
+    method: req.method,
+  });
+  next(error);
+}
+
+/**
  * Creates MCP authentication middleware with custom token verification.
  *
  * Returns middleware that:
@@ -172,7 +184,7 @@ export function mcpAuth(verifyToken: TokenVerifier, logger: Logger): RequestHand
       // sets req.auth to the Clerk auth object which downstream code expects.
       next();
     } catch (error) {
-      next(error);
+      handleAuthError(error, req, logger, next);
     }
   };
 }

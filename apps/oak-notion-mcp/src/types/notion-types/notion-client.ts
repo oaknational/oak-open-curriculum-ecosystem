@@ -5,7 +5,10 @@
 import type { Client as NotionClient } from '@notionhq/client';
 
 /**
- * Minimal Notion client interface - only the methods we actually use
+ * Minimal Notion client interface - only the methods we actually use.
+ *
+ * Note: We use `dataSources` API instead of the legacy `databases` API.
+ * The Notion SDK v5 renamed databases to data sources.
  */
 export interface MinimalNotionClient {
   users: {
@@ -13,9 +16,6 @@ export interface MinimalNotionClient {
   };
   pages: {
     retrieve: NotionClient['pages']['retrieve'];
-  };
-  databases: {
-    retrieve: NotionClient['databases']['retrieve'];
   };
   dataSources: {
     query: NotionClient['dataSources']['query'];

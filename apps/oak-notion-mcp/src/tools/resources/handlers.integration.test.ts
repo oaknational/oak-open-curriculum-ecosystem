@@ -66,7 +66,6 @@ describe('createResourceHandlers', () => {
 
   const mockNotionClient: MinimalNotionClient = {
     pages: { retrieve: vi.fn() },
-    databases: { retrieve: vi.fn() },
     dataSources: { retrieve: vi.fn(), query: vi.fn() },
     search: vi.fn(),
     users: { list: vi.fn() },

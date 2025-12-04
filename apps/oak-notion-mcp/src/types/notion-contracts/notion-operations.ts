@@ -15,7 +15,11 @@ import type {
 import type { Resource } from '@modelcontextprotocol/sdk/types.js';
 
 /**
- * Transform functions that convert Notion objects to MCP resources
+ * Transform functions that convert Notion objects to MCP resources.
+ *
+ * Note: All database transformations use DataSourceObjectResponse (SDK v5).
+ * The deprecated DatabaseObjectResponse from search results should be
+ * re-fetched via dataSources.retrieve() before transformation.
  */
 export interface NotionTransformers {
   transformNotionPageToMcpResource: (page: PageObjectResponse) => Resource;

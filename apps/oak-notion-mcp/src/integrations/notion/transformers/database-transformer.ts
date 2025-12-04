@@ -3,15 +3,21 @@
  * Converts Notion databases to MCP resources
  */
 
-import type { DataSourceObjectResponse as NotionDatabase } from '@notionhq/client/build/src/api-endpoints';
+import type { DataSourceObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import type { Resource } from '../../../types';
 import { formatNotionRichText } from './rich-text-formatter';
 
-/* *
- * Transforms a Notion database object into an MCP resource
- * Pure function - no side effects
+/**
+ * Transforms a Notion data source (database) into an MCP resource.
+ *
+ * Uses DataSourceObjectResponse from SDK v5's dataSources API.
+ * For search results that return DatabaseObjectResponse, first fetch
+ * the full data source via dataSources.retrieve() before transforming.
+ *
+ * @param database - Notion DataSourceObjectResponse
+ * @returns MCP Resource representation
  */
-export function transformNotionDatabaseToMcpResource(database: NotionDatabase): Resource {
+export function transformNotionDatabaseToMcpResource(database: DataSourceObjectResponse): Resource {
   const title =
     database.title.length > 0 ? formatNotionRichText(database.title) : 'Untitled Database';
 
