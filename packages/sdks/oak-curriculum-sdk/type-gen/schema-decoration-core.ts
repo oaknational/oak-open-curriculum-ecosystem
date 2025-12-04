@@ -7,8 +7,6 @@
  */
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-/* eslint-disable @typescript-eslint/no-restricted-types */
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 
 import type { OpenAPIObject, SchemaObject } from 'openapi3-ts/oas31';
 

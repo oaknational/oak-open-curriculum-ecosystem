@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-properties */
+/* eslint-disable no-restricted-properties, @typescript-eslint/no-restricted-types */
 
 /**
  * Type safe object helpers

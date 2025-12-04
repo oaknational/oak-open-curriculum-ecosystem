@@ -170,7 +170,7 @@ export function generateServerInstructions(): string {
 
   // Filter to tools that should be called at conversation start
   // Currently all tools have callAtStart=true, but this supports future tools that don't
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- preserve for future tools
+
   const startTools = allTools.filter((t) => t.callAtStart);
 
   const toolLines = startTools
