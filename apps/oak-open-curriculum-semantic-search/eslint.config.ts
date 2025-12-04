@@ -15,7 +15,15 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 
 const eslintConfig = defineConfig(
   // Override default ignores of eslint-config-next
-  globalIgnores([...ignores, '.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  globalIgnores([
+    ...ignores,
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'vitest.config.ts',
+    'vitest.e2e.config.ts',
+  ]),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
   ...configs.strict,

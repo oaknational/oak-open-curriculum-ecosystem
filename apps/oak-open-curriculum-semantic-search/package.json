@@ -14,6 +14,8 @@
     "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "test:e2e:es": "vitest run --config vitest.e2e.config.ts -- es-connection",
     "test:ui": "playwright test",
     "test:watch": "vitest",
     "elastic:setup": "bash scripts/setup.sh",

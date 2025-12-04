@@ -125,4 +125,56 @@ describe('search index document module generation', () => {
     expect(docsModule).toContain('SearchCompletionSuggestPayloadSchema');
     expect(docsModule).toContain("from '../../../src/types/generated/search/index-documents.js'");
   });
+
+  it('emits thread index document schema with required fields', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    const runtimeModule = files['../search/index-documents.ts'];
+
+    // Thread index document schema
+    expect(runtimeModule).toContain('SearchThreadIndexDocSchema');
+    expect(runtimeModule).toContain('thread_slug: z.string().min(1)');
+    expect(runtimeModule).toContain('thread_title: z.string().min(1)');
+    expect(runtimeModule).toContain('unit_count: z.number()');
+
+    // Thread guard function
+    expect(runtimeModule).toContain('isSearchThreadIndexDoc');
+  });
+
+  it('emits thread fields embedded in lesson index schema', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    const runtimeModule = files['../search/index-documents.ts'];
+
+    // Thread fields in lessons
+    expect(runtimeModule).toContain('thread_slugs: z.array(z.string().min(1)).optional()');
+    expect(runtimeModule).toContain('thread_titles: z.array(z.string().min(1)).optional()');
+  });
+
+  it('emits thread fields embedded in unit index schema', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    const runtimeModule = files['../search/index-documents.ts'];
+
+    // Check units schema has thread fields (after unit_url line)
+    const unitSchemaMatch =
+      /SearchUnitsIndexDocSchema[\s\S]*?thread_slugs:[\s\S]*?\.strict\(\)/.exec(runtimeModule);
+    expect(unitSchemaMatch).toBeTruthy();
+  });
+
+  it('emits thread fields embedded in unit rollup schema', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    const runtimeModule = files['../search/index-documents.ts'];
+
+    // Check unit rollup schema has thread fields
+    const rollupSchemaMatch =
+      /SearchUnitRollupDocSchema[\s\S]*?thread_slugs:[\s\S]*?\.strict\(\)/.exec(runtimeModule);
+    expect(rollupSchemaMatch).toBeTruthy();
+  });
+
+  it('exports thread schema in docs module', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    const docsModule = files['../../../../docs/_typedoc_src/types/search-index.ts'];
+
+    expect(docsModule).toContain('SearchThreadIndexDocSchema');
+    expect(docsModule).toContain('isSearchThreadIndexDoc');
+    expect(docsModule).toContain('SearchThreadIndexDoc');
+  });
 });

@@ -1,11 +1,13 @@
 # Search Schema Generator Specification
 
-_Last updated: 2025-11-11_  
-_Status: REFERENCE DOCUMENT_
+_Last updated: 2025-12-04_  
+_Status: ✅ IMPLEMENTATION COMPLETE_
 
 ## Purpose
 
-Define the compile-time artefacts that the Oak Curriculum SDK must emit so the semantic search application consumes a single source of truth for request/response shapes, fixtures, and runtime guards. This specification enumerates the required schemas, TypeScript types, and helper utilities to be produced by `pnpm type-gen` under `packages/sdks/oak-curriculum-sdk/src/types/generated/search` (and companion runtime entry points), replacing bespoke in-app definitions.
+This document describes the compile-time artifacts emitted by the Oak Curriculum SDK for semantic search. All schemas are now generated via `pnpm type-gen` under `packages/sdks/oak-curriculum-sdk/src/types/generated/search/`.
+
+**Status**: All artifacts specified in this document have been implemented and are in production use.
 
 ## Source of Truth
 
@@ -71,24 +73,26 @@ Define the compile-time artefacts that the Oak Curriculum SDK must emit so the s
 
 - For every schema exported, generate matching type guard functions (e.g. `isSearchSuggestionResponse(value: unknown): value is SearchSuggestionResponse`). This enables runtime validation without duplicating `safeParse` logic in the app.
 
-## File Layout Proposal
+## File Layout ✅ IMPLEMENTED
 
 ```text
 src/types/generated/search/
-  facets.ts                 # existing facets
-  requests.ts               # structured + natural request schemas/types
-  responses.lessons.ts      # lesson-specific result schemas
-  responses.units.ts        # unit-specific
-  responses.sequences.ts    # sequence-specific
-  responses.multi.ts        # multi-scope composition
-  suggestions.ts            # suggestion request/response
-  parsed-query.ts           # parsed query schema/type
-  scopes.ts                 # unions/enums & helper guards
-  fixtures.ts               # optional fixture builder helpers
-  index.ts                  # re-exports aggregate API
+  facets.ts                 # ✅ Search facet types
+  fixtures.ts               # ✅ Test fixture builders
+  index-documents.ts        # ✅ Elasticsearch document schemas
+  index.ts                  # ✅ Barrel exports
+  natural-requests.ts       # ✅ Natural language search requests
+  parsed-query.ts           # ✅ Query parser output types
+  requests.ts               # ✅ Structured search request schemas
+  responses.lessons.ts      # ✅ Lesson search responses
+  responses.multi.ts        # ✅ Multi-scope composition
+  responses.sequences.ts    # ✅ Sequence search responses
+  responses.units.ts        # ✅ Unit search responses
+  scopes.ts                 # ✅ Search scope enumerations
+  suggestions.ts            # ✅ Suggestion contracts
 ```
 
-Each module should export both `zod` schemas and TypeScript types, plus helper guard functions. Generated files remain `.ts` with `// GENERATED FILE - DO NOT EDIT` headers to align with existing patterns.
+Each module exports both Zod schemas and TypeScript types. Generated files include `// GENERATED FILE - DO NOT EDIT` headers.
 
 ## Generation Pipeline Requirements
 
@@ -107,19 +111,32 @@ Each module should export both `zod` schemas and TypeScript types, plus helper g
 - In the search app, replace existing imports with generated equivalents and run `pnpm type-check`, `pnpm test`, `pnpm test:ui` with fixtures toggled to confirm parity.
 - Update OpenAPI registration to consume generated schemas instead of local copies.
 
-## Open Questions
+## Resolved Questions
 
-- Do we introduce additional SDK surface for zero-hit telemetry payloads? (Not present in current OpenAPI doc; may remain application-specific.)
-- Should fixture helpers live under `@oaknational/oak-curriculum-sdk/testing` namespace rather than `types/generated/search`? (Needs alignment with maintainers.)
-- Determine whether parsed query schema belongs in SDK (if not defined upstream) or remains app-local but generated from a shared schema definition.
+- ✅ Zero-hit telemetry payloads remain application-specific (not in OpenAPI)
+- ✅ Fixture helpers live in `types/generated/search/fixtures.ts`
+- ✅ Parsed query schema generated in SDK from shared schema definition
 
-## Next Steps
+## Implementation Complete
 
-1. Confirm the OpenAPI specification includes (or can include) the multi-scope `scope: 'all'` variant; if not, define an SDK-specific augmentation to generate the schema.
-2. Extend the generator to emit new modules and re-run `pnpm type-gen` to verify output.
-3. Update search app imports to reference the generated artefacts, deleting redundant runtime schemas.
-4. Adjust fixture builders to consume generated constructors and safeParse helpers.
-5. Update documentation (`semantic-search-phase-1-ux.md`, continuation prompt) with the new data flow once implementation lands.
+All originally planned steps have been completed:
+
+1. ✅ OpenAPI specification extended with multi-scope support
+2. ✅ Generator emits all modules via `pnpm type-gen`
+3. ✅ Search app imports from SDK, runtime schemas removed
+4. ✅ Fixture builders consume generated constructors
+5. ✅ Documentation updated
+
+## Remaining Work (Future Phases)
+
+The following ontology-related schemas need to be added in future phases:
+
+- Thread index document schema (`SearchThreadIndexDoc`)
+- Programme factor fields in existing schemas
+- Unit type classification schema
+- Structured content guidance schema
+- Lesson component availability schema
+- Ontology index document schema (for RAG)
 
 ## Architecture Alignment
 

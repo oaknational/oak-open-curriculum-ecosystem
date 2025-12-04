@@ -38,6 +38,15 @@ For current planning documentation, see:
 
 ## Document History
 
+### 2025-12-04: Schema-First Migration Complete
+
+Schema-first migration completed. Obsolete planning documents archived:
+
+**Superseded Plans Archived**:
+
+- search-schema-inventory.md (runtime schemas now generated via `pnpm type-gen`)
+- search-migration-map.md (migration sequence complete, all schemas in SDK)
+
 ### 2025-11-11: Initial Archive Creation
 
 Reorganization of semantic search plans to create clean, navigable structure:

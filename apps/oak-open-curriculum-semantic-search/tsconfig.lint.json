@@ -4,5 +4,14 @@
     "noEmit": true,
     "incremental": false
   },
-  "exclude": ["node_modules", ".next", "dist", "out", "docs/_typedoc_src/**"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "out",
+    "docs/_typedoc_src/**",
+    "vitest.config.ts",
+    "vitest.e2e.config.ts",
+    "tests/e2e/**"
+  ]
 }
