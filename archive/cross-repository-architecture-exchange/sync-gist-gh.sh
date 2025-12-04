@@ -236,16 +236,16 @@ function fetch_gist() {
             echo "Please resolve conflicts manually in: ${LOCAL_PATH}"
             echo ""
             echo "Conflicts are marked with:"
-            echo "  <<<<<<< (your local changes)"
+            echo "  <<<*<<< (your local changes)"
             echo "  ======="
-            echo "  >>>>>>> (remote changes)"
+            echo "  >>>*>>> (remote changes)"
             
             cp "${TEMP_DIR}/merge-result.md" "${LOCAL_PATH}"
             
             # Show conflict locations
             echo ""
             echo "Conflict locations:"
-            grep -n "^<<<<<<< " "${LOCAL_PATH}" | head -5
+            grep -n "^<<<*<<< " "${LOCAL_PATH}" | head -5
             
             return 1
         fi
@@ -479,7 +479,7 @@ function show_status() {
         echo "  Lines: $(wc -l < "${LOCAL_PATH}" | tr -d ' ')"
         
         # Check for conflict markers
-        if grep -q "^<<<<<<< " "${LOCAL_PATH}" 2>/dev/null; then
+        if grep -q "^<<<*<<< " "${LOCAL_PATH}" 2>/dev/null; then
             echo -e "${RED}  ⚠ Contains unresolved merge conflicts!${NC}"
         fi
     else
