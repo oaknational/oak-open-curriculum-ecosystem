@@ -20,6 +20,7 @@ function withBaseEnv(overrides: EnvOverrides = {}): Record<string, string> {
     ...overrides,
   };
   return Object.fromEntries(
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     Object.entries(merged).filter((entry): entry is [string, string] => entry[1] !== undefined),
   );
 }

@@ -129,6 +129,7 @@ function normaliseFilters(value: unknown): Record<string, string> {
     return {};
   }
   const result: Record<string, string> = {};
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, entry] of Object.entries(value)) {
     if (typeof entry === 'string') {
       result[key] = entry;

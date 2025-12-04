@@ -1,4 +1,4 @@
-export type UnknownObject = Readonly<Record<string, unknown>>;
+export type UnknownObject = Readonly<Record<string, unknown>>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
 export function isUnknownObject(value: unknown): value is UnknownObject {
   return typeof value === 'object' && value !== null;

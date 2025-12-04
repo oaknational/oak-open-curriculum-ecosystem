@@ -98,7 +98,7 @@ interface DisabledSummary {
   latestIndexVersion: string | null;
 }
 
-type JsonObject = Record<string, unknown>;
+type JsonObject = Record<string, unknown>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
 type StringMap = Record<string, string>;
 
@@ -149,6 +149,7 @@ function extractFilters(input: unknown): StringMap | undefined | null {
     return null;
   }
   const result: StringMap = {};
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, entry] of Object.entries(input)) {
     if (typeof entry !== 'string') {
       return null;

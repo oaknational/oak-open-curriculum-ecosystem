@@ -12,7 +12,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   const rawJson: unknown = await req.json();
   const parsed = parseSearchRequest(rawJson);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    // eslint-disable-next-line @typescript-eslint/no-deprecated -- REFACTOR
+    return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
   }
 
   const body = parsed.data;

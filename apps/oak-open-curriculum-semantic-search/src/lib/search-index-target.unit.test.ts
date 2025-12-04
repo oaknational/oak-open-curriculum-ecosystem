@@ -16,6 +16,7 @@ let originalEnv: Map<TestEnvKey, string | undefined>;
 beforeEach(() => {
   // Save original environment
   const keys: TestEnvKey[] = [
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     ...(Object.keys(REQUIRED_ENV) as RequiredEnvKey[]),
     'AI_PROVIDER',
     'SEARCH_INDEX_TARGET',
@@ -39,12 +40,14 @@ afterEach(() => {
 
 function setEnv(overrides: Partial<Record<TestEnvKey, string>> = {}): void {
   // Set all required env vars
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(REQUIRED_ENV)) {
     process.env[key] = value;
   }
   process.env.AI_PROVIDER = 'none';
 
   // Apply overrides (immutable approach - only set defined values)
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(overrides)) {
     if (value !== undefined) {
       process.env[key] = value;

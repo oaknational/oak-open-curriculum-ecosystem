@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-restricted-types -- REFACTOR */
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../../src/lib/env';
 import {

@@ -38,7 +38,7 @@ interface FixtureLessonTranscript {
   readonly vtt: string;
 }
 
-type UnknownFixtureRecord = Readonly<Record<string, unknown>>;
+type UnknownFixtureRecord = Readonly<Record<string, unknown>>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
 /**
  * Aggregated snapshot of all parsed fixture records.
@@ -150,6 +150,7 @@ function parseLessonDescriptor(value: unknown): { lessonSlug: string; lessonTitl
 function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
   const record = assertRecord(value, 'unit summaries must be an object keyed by slug');
   const entries = new Map<string, unknown>();
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [slug, summary] of Object.entries(record)) {
     entries.set(slug, unitSummarySchema.parse(summary));
   }
@@ -159,6 +160,7 @@ function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
 function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
   const record = assertRecord(value, 'lesson summaries must be an object keyed by slug');
   const entries = new Map<string, unknown>();
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [slug, summary] of Object.entries(record)) {
     entries.set(slug, lessonSummarySchema.parse(summary));
   }
@@ -168,6 +170,7 @@ function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
 function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTranscript> {
   const record = assertRecord(value, 'lesson transcripts must be an object keyed by slug');
   const entries = new Map<string, FixtureLessonTranscript>();
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [slug, transcriptValue] of Object.entries(record)) {
     const transcript = assertRecord(transcriptValue, `Invalid transcript entry for ${slug}`);
     entries.set(slug, {
@@ -186,6 +189,7 @@ function parseSubjectSequenceMap(
 ): ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences> {
   const record = assertRecord(value, 'subject sequences must be an object keyed by subject');
   const entries = new Map<SearchSubjectSlug, SearchSubjectSequences>();
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [slug, sequences] of Object.entries(record)) {
     const subject = ensureSubject(
       slug,
@@ -198,6 +202,7 @@ function parseSubjectSequenceMap(
 
 function parseSequenceUnitsMap(value: unknown): ReadonlyMap<string, unknown> {
   const record = assertRecord(value, 'sequence units must be an object keyed by sequence slug');
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return new Map<string, unknown>(Object.entries(record));
 }
 

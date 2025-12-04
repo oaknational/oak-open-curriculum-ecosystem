@@ -54,6 +54,7 @@ export function summariseOperations(
     }
   }
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const totalDocs = Object.values(counts).reduce((acc, value) => acc + value, 0);
   return { target, totalDocs, counts };
 }
@@ -139,6 +140,7 @@ function isIndexAction(value: unknown): value is IndexAction {
   return typeof action._index === 'string';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function isUnknownObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }

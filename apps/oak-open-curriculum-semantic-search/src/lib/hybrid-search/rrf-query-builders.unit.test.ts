@@ -24,6 +24,7 @@ let originalEnv: Map<TestEnvKey, string | undefined>;
 beforeEach(() => {
   // Save original environment
   const keys: TestEnvKey[] = [
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     ...(Object.keys(REQUIRED_ENV) as (keyof typeof REQUIRED_ENV)[]),
     'AI_PROVIDER',
     'SEARCH_INDEX_TARGET',
@@ -31,6 +32,7 @@ beforeEach(() => {
   originalEnv = new Map(keys.map((key) => [key, process.env[key]]));
 
   // Set test environment
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(REQUIRED_ENV)) {
     process.env[key] = value;
   }
