@@ -9,7 +9,7 @@
 // Export Notion object mocks - simple test forms
 export {
   createMockPage,
-  createMockDatabase,
+  createMockDataSource,
   createMockPersonUser,
   createMockBotUser,
 } from './notion-mocks';

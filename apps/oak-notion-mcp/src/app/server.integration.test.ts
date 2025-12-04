@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { MinimalNotionClient } from '../types/notion-types/notion-client';
 import { createMcpServer } from './server';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
@@ -38,23 +39,13 @@ describe('MCP Server', () => {
 
   // Create a partial mock of NotionClient with only the methods we use
   const mockNotionClient = {
-    users: {
-      list: vi.fn(),
-    },
-    pages: {
-      retrieve: vi.fn(),
-    },
-    databases: {
-      retrieve: vi.fn(),
-      query: vi.fn(),
-    },
-    blocks: {
-      children: {
-        list: vi.fn(),
-      },
-    },
     search: vi.fn(),
-  };
+    pages: { retrieve: vi.fn() },
+    databases: { retrieve: vi.fn(), query: vi.fn() },
+    dataSources: { retrieve: vi.fn(), query: vi.fn() },
+    users: { list: vi.fn() },
+    blocks: { children: { list: vi.fn() } },
+  } as unknown as MinimalNotionClient;
 
   beforeEach(() => {
     vi.clearAllMocks();

@@ -1,35 +1,26 @@
 import request from 'supertest';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
-function configureRealApiEnvironment(): () => void {
-  const previous = {
-    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
-    OAK_API_KEY: process.env.OAK_API_KEY,
-  };
-  // Disable auth – this test focuses on response formatting.
-  // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'stub-test-key';
-
-  return () => {
-    if (typeof previous.DANGEROUSLY_DISABLE_AUTH === 'string') {
-      process.env.DANGEROUSLY_DISABLE_AUTH = previous.DANGEROUSLY_DISABLE_AUTH;
-    } else {
-      delete process.env.DANGEROUSLY_DISABLE_AUTH;
-    }
-    if (typeof previous.OAK_API_KEY === 'string') {
-      process.env.OAK_API_KEY = previous.OAK_API_KEY;
-    } else {
-      delete process.env.OAK_API_KEY;
-    }
-  };
-}
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 function assertSuccessfulEnvelope(body: string): void {
   const envelope = parseSseEnvelope(body);
@@ -46,7 +37,6 @@ function assertSuccessfulEnvelope(body: string): void {
 
 describe('Tool response envelope formatting', () => {
   it('wraps successful tool executions in SSE JSON', async () => {
-    const restoreEnv = configureRealApiEnvironment();
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: (name, args, client) => {
         void name;
@@ -69,23 +59,23 @@ describe('Tool response envelope formatting', () => {
       },
     };
 
-    const app = createApp({ toolHandlerOverrides: overrides });
-    try {
-      const res = await request(app)
-        .post('/mcp')
-        .set('Accept', ACCEPT)
-        .set('Host', 'localhost')
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: { params: {} } },
-        });
+    const app = createApp({
+      toolHandlerOverrides: overrides,
+      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    });
 
-      expect(res.status).toBe(200);
-      assertSuccessfulEnvelope(res.text);
-    } finally {
-      restoreEnv();
-    }
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .set('Host', 'localhost')
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'get-key-stages', arguments: { params: {} } },
+      });
+
+    expect(res.status).toBe(200);
+    assertSuccessfulEnvelope(res.text);
   });
 });

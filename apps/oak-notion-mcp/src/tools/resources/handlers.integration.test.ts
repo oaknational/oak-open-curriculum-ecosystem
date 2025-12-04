@@ -5,7 +5,7 @@ import type { Logger } from '@oaknational/mcp-logger';
 import { createMockRuntime } from '../../test/mocks';
 import {
   createMockPage,
-  createMockDatabase,
+  createMockDataSource,
   createMockPersonUser,
 } from '../../test/mocks/notion-mocks';
 import {
@@ -66,7 +66,7 @@ describe('createResourceHandlers', () => {
 
   const mockNotionClient: MinimalNotionClient = {
     pages: { retrieve: vi.fn() },
-    databases: { retrieve: vi.fn(), query: vi.fn() },
+    dataSources: { retrieve: vi.fn(), query: vi.fn() },
     search: vi.fn(),
     users: { list: vi.fn() },
     blocks: { children: { list: vi.fn() } },
@@ -139,7 +139,7 @@ describe('createResourceHandlers', () => {
         url: 'https://notion.so/page-1',
       });
 
-      const mockDb = createMockDatabase({
+      const mockDb = createMockDataSource({
         id: 'db-1',
         title: [
           {
@@ -256,7 +256,7 @@ describe('createResourceHandlers', () => {
     });
 
     it('should read a specific database', async () => {
-      const mockDatabase = createMockDatabase({
+      const mockDatabase = createMockDataSource({
         id: 'db-456',
         title: [
           {
@@ -286,7 +286,8 @@ describe('createResourceHandlers', () => {
         url: 'https://notion.so/db-456',
       });
 
-      vi.mocked(mockNotionClient.databases.retrieve).mockResolvedValueOnce(mockDatabase);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+      vi.mocked(mockNotionClient.dataSources.retrieve).mockResolvedValueOnce(mockDatabase as any);
 
       const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
@@ -308,7 +309,9 @@ describe('createResourceHandlers', () => {
         ],
       });
 
-      expect(mockNotionClient.databases.retrieve).toHaveBeenCalledWith({ database_id: 'db-456' });
+      expect(mockNotionClient.dataSources.retrieve).toHaveBeenCalledWith({
+        data_source_id: 'db-456',
+      });
     });
 
     it('should handle invalid URI', async () => {

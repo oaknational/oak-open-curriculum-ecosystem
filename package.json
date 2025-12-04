@@ -53,15 +53,16 @@
     "url": "https://github.com/oaknational/oak-mcp-ecosystem.git"
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
-  "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8",
+  "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a",
   "license": "MIT",
   "pnpm": {
     "overrides": {
       "axios": "^1.12.2",
       "sucrase": ">=3.35.1",
-      "js-yaml": ">=4.1.1"
+      "js-yaml": ">=4.1.1",
+      "csstype": "^3.2.3"
     },
     "onlyBuiltDependencies": [
       "@clerk/shared",
@@ -77,14 +78,14 @@
     "@eslint/js": "^9.39.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@stryker-mutator/core": "^9.3.0",
-    "@stryker-mutator/typescript-checker": "^9.3.0",
-    "@stryker-mutator/vitest-runner": "^9.3.0",
-    "@types/node": "^22",
+    "@stryker-mutator/core": "^9.4.0",
+    "@stryker-mutator/typescript-checker": "^9.4.0",
+    "@stryker-mutator/vitest-runner": "^9.4.0",
+    "@types/node": "^24.10.1",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.47.0",
-    "@typescript-eslint/parser": "^8.47.0",
-    "@vitest/coverage-v8": "^4.0.12",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "@vitest/coverage-v8": "^4.0.15",
     "cloc": "2.6.0-cloc",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
@@ -93,15 +94,15 @@
     "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
     "markdownlint-cli": "^0.46.0",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "semantic-release": "^25.0.2",
     "supertest": "^7.1.4",
-    "ts-morph": "^27.0.0",
+    "ts-morph": "^27.0.2",
     "tsup": "^8.5.1",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "turbo": "^2.6.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.47.0",
-    "vitest": "^4.0.12"
+    "typescript-eslint": "^8.48.1",
+    "vitest": "^4.0.15"
   }
 }

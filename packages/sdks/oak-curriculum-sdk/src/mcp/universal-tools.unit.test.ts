@@ -68,9 +68,8 @@ function parseTextContent(result: CallToolResult): Record<string, unknown> {
   return parsed;
 }
 
-const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } = await import(
-  './universal-tools/index.js'
-);
+const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } =
+  await import('./universal-tools/index.js');
 
 const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;
 

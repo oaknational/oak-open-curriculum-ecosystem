@@ -23,7 +23,7 @@ function renderHelp(o) {
     h += '<div class="sec"><h2 class="sec-ttl">About Oak</h2>';
     h += '<p style="margin:0 0 8px;font-size:14px">' + esc(o.serverOverview.aboutOak) + '</p>';
     if (o.serverOverview.oakWebsite) {
-      h += '<p style="margin:0"><a href="' + esc(o.serverOverview.oakWebsite) + '" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px">' + 'Visit Oak →' + '</a></p>';
+      h += '<p style="margin:0"><a href="' + esc(o.serverOverview.oakWebsite) + '" target="_blank" rel="noopener" style="color:var(--accent-high-contrast);font-size:13px">' + 'Visit Oak →' + '</a></p>';
     }
     h += '</div>';
   }

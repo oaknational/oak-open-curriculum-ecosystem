@@ -28,13 +28,13 @@
     "lint": "eslint  ."
   },
   "dependencies": {
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "24.x"
   },
   "keywords": [
     "mcp",

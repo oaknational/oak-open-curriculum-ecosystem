@@ -92,7 +92,7 @@ function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' })
   const { state, text, run, outcome } = useStream(url, method ?? 'POST');
 
   return (
-    <OakBox $display="flex" $flexDirection="column" $gap="space-between-xs">
+    <OakBox $display="flex" $flexDirection="column" $gap="spacing-4">
       <OakPrimaryButton
         element="button"
         type="button"

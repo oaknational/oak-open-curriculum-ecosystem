@@ -27,11 +27,25 @@
  * @see https://platform.openai.com/docs/guides/apps-authentication
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
+
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 /**
  * Type guard for OAuth metadata response
@@ -73,23 +87,25 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
   beforeAll(() => {
     // Create isolated env with auth ENABLED (production equivalent)
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test', // NOT development (bypass disabled)
-      CLERK_PUBLISHABLE_KEY: 'REDACTED', // Valid public key format
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing', // Dummy secret for initialization
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      // Explicitly do NOT set DANGEROUSLY_DISABLE_AUTH - auth ENABLED by default
-      // Explicitly do NOT set VERCEL - local but with auth enforced
-    };
-
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    app = createApp({
+      runtimeConfig: createMockRuntimeConfig({
+        // Auth enabled by default in mock config
+        env: {
+          OAK_API_KEY: 'test-api-key',
+          CLERK_PUBLISHABLE_KEY: 'REDACTED',
+          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          NODE_ENV: 'test',
+          LOG_LEVEL: 'debug',
+        },
+      }),
+    });
   });
 
   describe('Discovery Methods (No Auth Required)', () => {
     it('allows initialize without Authorization header', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({
           jsonrpc: '2.0',
@@ -112,6 +128,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     it('allows tools/list via POST without Authorization header', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
@@ -133,6 +150,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     it('returns HTTP 401 with WWW-Authenticate for protected tools without auth', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({
           jsonrpc: '2.0',
@@ -142,6 +160,9 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         });
 
       // HTTP 401 per MCP spec and OpenAI Apps docs
+      if (res.status === 500) {
+        console.error('Server returned 500:', res.text);
+      }
       expect(res.status).toBe(401);
 
       // WWW-Authenticate header per RFC 6750
@@ -154,6 +175,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     it('returns HTTP 401 for invalid Bearer token', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .set('Authorization', 'Bearer invalid-token-12345')
         .send({
@@ -176,6 +198,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     it('returns HTTP 401 for malformed Authorization header', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .set('Authorization', 'NotBearer xyz')
         .send({
@@ -200,6 +223,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       // Step 1: Client calls protected tool without auth → HTTP 401 + WWW-Authenticate
       const step1 = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({
           jsonrpc: '2.0',
@@ -289,15 +313,16 @@ describe('Auth Enforcement - RFC Compliance', () => {
   let app: Express;
 
   beforeAll(() => {
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test',
-      CLERK_PUBLISHABLE_KEY: 'REDACTED',
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-    };
-
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    app = createApp({
+      runtimeConfig: createMockRuntimeConfig({
+        env: {
+          OAK_API_KEY: 'test-api-key',
+          CLERK_PUBLISHABLE_KEY: 'REDACTED',
+          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          NODE_ENV: 'test',
+        },
+      }),
+    });
   });
 
   describe('RFC Compliance', () => {
@@ -363,6 +388,7 @@ describe('Auth Enforcement - RFC Compliance', () => {
     it('WWW-Authenticate header conforms to RFC 6750 Bearer scheme', async () => {
       const res = await request(app)
         .post('/mcp')
+        .set('Host', 'localhost')
         .set('Accept', 'application/json, text/event-stream')
         .send({
           jsonrpc: '2.0',
@@ -402,20 +428,22 @@ describe('Public Tools (noauth)', () => {
   let app: Express;
 
   beforeAll(() => {
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test',
-      CLERK_PUBLISHABLE_KEY: 'REDACTED',
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-    };
-
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    app = createApp({
+      runtimeConfig: createMockRuntimeConfig({
+        env: {
+          OAK_API_KEY: 'test-api-key',
+          CLERK_PUBLISHABLE_KEY: 'REDACTED',
+          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          NODE_ENV: 'test',
+        },
+      }),
+    });
   });
 
   it('allows get-changelog without auth (noauth tool)', async () => {
     const res = await request(app)
       .post('/mcp')
+      .set('Host', 'localhost')
       .set('Accept', 'application/json, text/event-stream')
       .send({
         jsonrpc: '2.0',
@@ -449,6 +477,7 @@ describe('Public Tools (noauth)', () => {
   it('allows get-rate-limit without auth (noauth tool)', async () => {
     const res = await request(app)
       .post('/mcp')
+      .set('Host', 'localhost')
       .set('Accept', 'application/json, text/event-stream')
       .send({
         jsonrpc: '2.0',

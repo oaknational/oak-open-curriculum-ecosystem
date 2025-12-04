@@ -5,7 +5,7 @@
 
 import type { MinimalNotionClient } from '../../../types/notion-types/notion-client';
 import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
-import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type { DataSourceObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { notionListDatabasesSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
 
@@ -30,12 +30,12 @@ export function createListDatabasesExecutor(deps: ListDatabasesDependencies): To
       // Search for all databases
       const searchResponse = await deps.notionClient.search({
         query: '',
-        filter: { property: 'object', value: 'database' },
+        filter: { property: 'object', value: 'data_source' },
       });
 
       // Filter to ensure we have full database objects with title
       const results = searchResponse.results.filter(
-        (result): result is DatabaseObjectResponse => 'title' in result,
+        (result): result is DataSourceObjectResponse => 'title' in result,
       );
 
       // Transform results

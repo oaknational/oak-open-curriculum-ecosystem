@@ -8,7 +8,7 @@ import type {
   SearchResponse,
   UserObjectResponse,
   PageObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 
 /**
@@ -29,11 +29,11 @@ export function createMockListUsersResponse(users: UserObjectResponse[]): ListUs
  * Creates a mock SearchResponse
  */
 export function createMockSearchResponse(
-  results: (PageObjectResponse | DatabaseObjectResponse)[],
+  results: (PageObjectResponse | DataSourceObjectResponse)[],
 ): SearchResponse {
   return {
-    type: 'page_or_database',
-    page_or_database: {}, // EmptyObject - required by type but not used
+    type: 'page_or_data_source',
+    page_or_data_source: {}, // EmptyObject - required by type but not used
     object: 'list',
     results,
     has_more: false,

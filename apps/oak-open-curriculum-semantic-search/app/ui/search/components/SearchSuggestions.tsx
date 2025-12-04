@@ -27,7 +27,7 @@ export function SearchSuggestions({
       aria-label="Search suggestions"
       $display="flex"
       $flexDirection="column"
-      $gap="space-between-xs"
+      $gap="spacing-4"
     >
       <OakHeading tag="h3" $font="heading-6">
         Suggestions

@@ -5,7 +5,7 @@ export const notionSearchSchema = z.object({
   query: z.string().min(1).describe('The search query'),
   filter: z
     .object({
-      type: z.enum(['page', 'database']).describe('Filter results by type'),
+      type: z.enum(['page', 'database', 'data_source']).describe('Filter results by type'),
     })
     .optional(),
   sort: z

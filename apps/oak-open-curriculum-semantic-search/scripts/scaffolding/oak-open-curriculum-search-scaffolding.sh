@@ -60,8 +60,8 @@ write_file "$APP_DIR/package.json" <<'EOF'
   },
   "dependencies": {
     "next": "^15.5.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "zod": "^4",
     "@ai-sdk/openai": "^2.0.24",
     "ai": "^5.0.34",
@@ -69,8 +69,8 @@ write_file "$APP_DIR/package.json" <<'EOF'
     "@elastic/elasticsearch": "^9.0.0"
   },
   "devDependencies": {
-    "@types/react": "^19.1.12",
-    "@types/react-dom": "^19.1.9",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9.35.0",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",

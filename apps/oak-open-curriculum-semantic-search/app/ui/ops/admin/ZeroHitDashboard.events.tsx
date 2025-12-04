@@ -29,7 +29,7 @@ export function RecentEventsList({
         Recent events
       </OakHeading>
       {events.length > 0 ? (
-        <OakUL $reset $display="flex" $flexDirection="column" $gap="space-between-xs">
+        <OakUL $reset $display="flex" $flexDirection="column" $gap="spacing-4">
           {events.map((event) => (
             <RecentEventItem key={`${event.timestamp}-${event.text}`} event={event} />
           ))}

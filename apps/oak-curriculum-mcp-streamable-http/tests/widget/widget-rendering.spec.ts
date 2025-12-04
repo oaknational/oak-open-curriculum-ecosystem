@@ -115,11 +115,20 @@ test.describe('Widget rendering behaviour', () => {
     await injectToolOutput(page, HELP_OUTPUT_FIXTURE);
     await page.goto(`${serverUrl}/widget`);
 
-    // Widget should detect help shape and render structured sections
-    await expect(page.getByText('Overview')).toBeVisible();
-    await expect(page.getByText('Tool Categories')).toBeVisible();
-    await expect(page.getByText('Tips')).toBeVisible();
-    // Note: Workflows are in structuredContent for the model, but not rendered in widget
+    // Behaviour 1: Data flows through - fixture content appears in rendered output
+    // Content from serverOverview.aboutOak should appear
+    await expect(page.getByText(/Oak National Academy is the UK's/)).toBeVisible();
+    // Content from tips should appear
+    await expect(page.getByText(/Use the search tool/)).toBeVisible();
+    // Content from toolCategories should appear
+    await expect(page.getByText(/Tools for finding curriculum content/)).toBeVisible();
+
+    // Behaviour 2: Structure is correct - structured sections rendered, not JSON fallback
+    await expect(page.locator('pre')).not.toBeVisible();
+    // Should render multiple section containers
+    const sections = page.locator('.sec');
+    await expect(sections.first()).toBeVisible();
+    expect(await sections.count()).toBeGreaterThanOrEqual(2);
   });
 
   test('renders lesson cards when data has lessons array', async ({ page }) => {
