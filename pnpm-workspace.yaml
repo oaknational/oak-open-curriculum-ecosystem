@@ -10,6 +10,7 @@ packages:
   - packages/libs/transport
   - packages/sdks/oak-curriculum-sdk
   - packages/providers/mcp-providers-node
+  - packages/libs/oak-eslint
 
 onlyBuiltDependencies:
   - core-js
