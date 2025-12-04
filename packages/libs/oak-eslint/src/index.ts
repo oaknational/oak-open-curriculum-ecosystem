@@ -24,18 +24,18 @@ import { next } from './configs/next.js';
 
 import type { Linter } from 'eslint';
 
-export const configs: Record<string, Linter.Config[]> = {
-  recommended,
-  strict,
-  react,
-  next,
+export const configs: Record<string, Linter.Config> = {
+  recommended: Array.isArray(recommended) ? recommended[0] : recommended,
+  strict: Array.isArray(strict) ? strict[0] : strict,
+  react: Array.isArray(react) ? react[0] : react,
+  next: Array.isArray(next) ? next[0] : next,
 };
 
 import type { ESLint } from 'eslint';
 
 const plugin: ESLint.Plugin = {
   rules: rules as any,
-  configs: configs as any, // Cast to any because ESLint.Plugin configs is Record<string, Linter.Config> | ... mismatch
+  configs: configs,
 };
 
 /**
