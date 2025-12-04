@@ -1,16 +1,16 @@
 packages:
-  - apps/oak-notion-mcp
   - apps/oak-curriculum-mcp-stdio
   - apps/oak-curriculum-mcp-streamable-http
+  - apps/oak-notion-mcp
   - apps/oak-open-curriculum-semantic-search
+  - packages/core/oak-eslint
+  - packages/core/openapi-zod-client-adapter
   - packages/libs/env
   - packages/libs/logger
-  - packages/libs/openapi-zod-client-adapter
   - packages/libs/storage
   - packages/libs/transport
-  - packages/sdks/oak-curriculum-sdk
   - packages/providers/mcp-providers-node
-  - packages/libs/oak-eslint
+  - packages/sdks/oak-curriculum-sdk
 
 onlyBuiltDependencies:
   - core-js

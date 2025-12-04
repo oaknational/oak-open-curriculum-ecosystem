@@ -38,6 +38,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "build-linting": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "vitest run",
