@@ -37,6 +37,27 @@ export function isSearchCompletionSuggestPayload(
   return SearchCompletionSuggestPayloadSchema.safeParse(value).success;
 }
 
+/** Zod schema capturing the thread search document shape. */
+export const SearchThreadIndexDocSchema = z
+  .object({
+    thread_slug: z.string().min(1),
+    thread_title: z.string().min(1),
+    unit_count: z.number(),
+    subject_slugs: z.array(z.string().min(1)).optional(),
+    thread_semantic: z.string().min(1).optional(),
+    thread_url: z.string().min(1),
+    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+  })
+  .strict();
+
+/** Elasticsearch thread document (hybrid search index shape). */
+export type SearchThreadIndexDoc = z.infer<typeof SearchThreadIndexDocSchema>;
+
+/** Guard validating thread search index documents. */
+export function isSearchThreadIndexDoc(value: unknown): value is SearchThreadIndexDoc {
+  return SearchThreadIndexDocSchema.safeParse(value).success;
+}
+
 /** Zod schema capturing the lesson search document shape. */
 export const SearchLessonsIndexDocSchema = z
   .object({
@@ -58,6 +79,8 @@ export const SearchLessonsIndexDocSchema = z
     lesson_semantic: z.string().min(1).optional(),
     lesson_url: z.string().min(1),
     unit_urls: z.array(z.string().min(1)),
+    thread_slugs: z.array(z.string().min(1)).optional(),
+    thread_titles: z.array(z.string().min(1)).optional(),
     title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
   })
   .strict();
@@ -85,6 +108,9 @@ export const SearchUnitsIndexDocSchema = z
     unit_url: z.string().min(1),
     subject_programmes_url: z.string().min(1),
     sequence_ids: z.array(z.string().min(1)).optional(),
+    thread_slugs: z.array(z.string().min(1)).optional(),
+    thread_titles: z.array(z.string().min(1)).optional(),
+    thread_orders: z.array(z.number()).optional(),
     title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
   })
   .strict();
@@ -114,6 +140,9 @@ export const SearchUnitRollupDocSchema = z
     unit_url: z.string().min(1),
     subject_programmes_url: z.string().min(1),
     sequence_ids: z.array(z.string().min(1)).optional(),
+    thread_slugs: z.array(z.string().min(1)).optional(),
+    thread_titles: z.array(z.string().min(1)).optional(),
+    thread_orders: z.array(z.number()).optional(),
     title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
   })
   .strict();

@@ -39,6 +39,24 @@ function createIndexDocumentsModule(): string {
     `): value is SearchCompletionSuggestPayload {\n` +
     `  return SearchCompletionSuggestPayloadSchema.safeParse(value).success;\n` +
     `}\n\n` +
+    `/** Zod schema capturing the thread search document shape. */\n` +
+    `export const SearchThreadIndexDocSchema = z\n` +
+    `  .object({\n` +
+    `    thread_slug: z.string().min(1),\n` +
+    `    thread_title: z.string().min(1),\n` +
+    `    unit_count: z.number(),\n` +
+    `    subject_slugs: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_semantic: z.string().min(1).optional(),\n` +
+    `    thread_url: z.string().min(1),\n` +
+    `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
+    `  })\n` +
+    `  .strict();\n\n` +
+    `/** Elasticsearch thread document (hybrid search index shape). */\n` +
+    `export type SearchThreadIndexDoc = z.infer<typeof SearchThreadIndexDocSchema>;\n\n` +
+    `/** Guard validating thread search index documents. */\n` +
+    `export function isSearchThreadIndexDoc(value: unknown): value is SearchThreadIndexDoc {\n` +
+    `  return SearchThreadIndexDocSchema.safeParse(value).success;\n` +
+    `}\n\n` +
     `/** Zod schema capturing the lesson search document shape. */\n` +
     `export const SearchLessonsIndexDocSchema = z\n` +
     `  .object({\n` +
@@ -60,6 +78,8 @@ function createIndexDocumentsModule(): string {
     `    lesson_semantic: z.string().min(1).optional(),\n` +
     `    lesson_url: z.string().min(1),\n` +
     `    unit_urls: z.array(z.string().min(1)),\n` +
+    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
     `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
     `  })\n` +
     `  .strict();\n\n` +
@@ -84,6 +104,9 @@ function createIndexDocumentsModule(): string {
     `    unit_url: z.string().min(1),\n` +
     `    subject_programmes_url: z.string().min(1),\n` +
     `    sequence_ids: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_orders: z.array(z.number()).optional(),\n` +
     `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
     `  })\n` +
     `  .strict();\n\n` +
@@ -110,6 +133,9 @@ function createIndexDocumentsModule(): string {
     `    unit_url: z.string().min(1),\n` +
     `    subject_programmes_url: z.string().min(1),\n` +
     `    sequence_ids: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
+    `    thread_orders: z.array(z.number()).optional(),\n` +
     `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
     `  })\n` +
     `  .strict();\n\n` +
@@ -154,16 +180,18 @@ function createIndexDocumentsDocsModule(): string {
     DOC_HEADER +
     `export {\n` +
     `  SearchCompletionSuggestPayloadSchema,\n` +
+    `  SearchThreadIndexDocSchema,\n` +
     `  SearchLessonsIndexDocSchema,\n` +
     `  SearchUnitsIndexDocSchema,\n` +
     `  SearchUnitRollupDocSchema,\n` +
     `  SearchSequenceIndexDocSchema,\n` +
     `  isSearchCompletionSuggestPayload,\n` +
+    `  isSearchThreadIndexDoc,\n` +
     `  isSearchLessonsIndexDoc,\n` +
     `  isSearchUnitsIndexDoc,\n` +
     `  isSearchUnitRollupDoc,\n` +
     `  isSearchSequenceIndexDoc,\n` +
-    `} from '../../../src/types/generated/search/index-documents.js';\nexport type {\n  SearchCompletionSuggestPayload,\n  SearchLessonsIndexDoc,\n  SearchUnitsIndexDoc,\n  SearchUnitRollupDoc,\n  SearchSequenceIndexDoc,\n  SearchSubjectSlug,\n} from '../../../src/types/generated/search/index-documents.js';\n`
+    `} from '../../../src/types/generated/search/index-documents.js';\nexport type {\n  SearchCompletionSuggestPayload,\n  SearchThreadIndexDoc,\n  SearchLessonsIndexDoc,\n  SearchUnitsIndexDoc,\n  SearchUnitRollupDoc,\n  SearchSequenceIndexDoc,\n  SearchSubjectSlug,\n} from '../../../src/types/generated/search/index-documents.js';\n`
   );
 }
 

@@ -19,27 +19,37 @@ Before any work, read and internalize these documents:
 - **Schema-first migration**: All 13 search schema modules generated in SDK
 - **MCP tool generation**: 26 tools with full type safety
 - **Plan documentation**: Updated to reflect current state, obsolete docs archived
-- **E2E test for ES connection**: Written at `apps/oak-open-curriculum-semantic-search/tests/e2e/es-connection.e2e.test.ts`
 - **ES setup documentation**: Created at `apps/oak-open-curriculum-semantic-search/docs/ES_SERVERLESS_SETUP.md`
+- **Thread index schemas**: `SearchThreadIndexDocSchema` with all fields, thread fields embedded in lessons/units/rollup schemas, type guards generated
+- **Quality gates**: All 11 gates pass
 
 ### Critical Blockers 🚨
 
 - **ES Serverless NOT provisioned**: All testing is against fixtures only
 - **No data ingested**: Index mappings defined but no real data
 
+### Architecture Correction
+
+The ES connection test was **removed** from `tests/e2e/` because it made network calls to Elasticsearch. Per the testing strategy:
+
+- **E2E tests**: CAN trigger File System and STDIO IO but **NOT network IO**
+- **Smoke tests**: CAN trigger all IO types including network
+
+When ES Serverless is provisioned, a proper **smoke test** should be created in `smoke-tests/` directory.
+
 ### Work In Progress
 
-**Phase 1.1: Thread Index Implementation** - Unit tests written (failing - RED phase)
+**Phase 1.1: Thread Index Implementation** - COMPLETE (GREEN phase)
 
-Tests added to `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-modules.unit.test.ts`:
+All tests passing in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-modules.unit.test.ts`:
 
-- `emits thread index document schema with required fields`
-- `emits thread fields embedded in lesson index schema`
-- `emits thread fields embedded in unit index schema`
-- `emits thread fields embedded in unit rollup schema`
-- `exports thread schema in docs module`
+- `emits thread index document schema with required fields` ✅
+- `emits thread fields embedded in lesson index schema` ✅
+- `emits thread fields embedded in unit index schema` ✅
+- `emits thread fields embedded in unit rollup schema` ✅
+- `exports thread schema in docs module` ✅
 
-**Next Step**: Implement the generator changes in `generate-search-index-docs.ts` to make tests pass (GREEN phase).
+**Next Step**: Continue with phase-1-thread-filter (write tests first - RED phase).
 
 ## Pending Todos
 
@@ -54,19 +64,19 @@ Tests added to `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generat
 
 ### Phase 1: Core Ontology - Threads and Programme Factors
 
-| Todo ID               | Description                                                      | Status      |
-| --------------------- | ---------------------------------------------------------------- | ----------- |
-| phase-1-threads       | Implement thread index, embedded fields, and thread search scope | in_progress |
-| phase-1-thread-filter | Add thread filtering and facets to search                        | pending     |
-| phase-1-programme     | Add programme factor fields and KS4 filtering                    | pending     |
+| Todo ID               | Description                                                      | Status   |
+| --------------------- | ---------------------------------------------------------------- | -------- |
+| phase-1-threads       | Implement thread index, embedded fields, and thread search scope | COMPLETE |
+| phase-1-thread-filter | Add thread filtering and facets to search                        | pending  |
+| phase-1-programme     | Add programme factor fields and KS4 filtering                    | pending  |
 
-**Acceptance Criteria for phase-1-threads**:
+**Acceptance Criteria for phase-1-threads** (ALL MET ✅):
 
-- `SearchThreadIndexDocSchema` generated at type-gen time
-- Thread fields (`thread_slugs`, `thread_titles`) in `SearchLessonsIndexDoc`, `SearchUnitsIndexDoc`, `SearchUnitRollupDoc`
-- Type guard `isSearchThreadIndexDoc` generated
-- Doc re-exports include thread schema
-- Quality gates pass
+- `SearchThreadIndexDocSchema` generated at type-gen time ✅
+- Thread fields (`thread_slugs`, `thread_titles`) in `SearchLessonsIndexDoc`, `SearchUnitsIndexDoc`, `SearchUnitRollupDoc` ✅
+- Type guard `isSearchThreadIndexDoc` generated ✅
+- Doc re-exports include thread schema ✅
+- Quality gates pass ✅
 
 ### Phase 2: Ontology Enrichment
 
@@ -124,21 +134,13 @@ packages/sdks/oak-curriculum-sdk/src/types/generated/search/index-documents.ts
 
 Output of the generator - check this to see current state.
 
-### Unit Tests (RED phase - failing)
+### Unit Tests (GREEN - all passing)
 
 ```
 packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-modules.unit.test.ts
 ```
 
-Contains the failing tests for thread index that need to pass.
-
-### ES Connection E2E Test
-
-```
-apps/oak-open-curriculum-semantic-search/tests/e2e/es-connection.e2e.test.ts
-```
-
-Ready to verify ES connection once provisioned.
+Contains tests for thread index (all passing).
 
 ### Plan Documentation
 
@@ -177,20 +179,19 @@ pnpm smoke:dev:stub
 2. **GREEN**: Write minimal code to make test pass
 3. **REFACTOR**: Clean up while keeping tests green
 
-Current state: RED phase for thread index (tests written, need implementation)
+Current state: Thread index COMPLETE, ready for phase-1-thread-filter
 
 ## Immediate Next Steps
 
-1. **Complete phase-1-threads (GREEN phase)**:
-   - Update `generate-search-index-docs.ts` to add:
-     - `SearchThreadIndexDocSchema` with fields: `thread_slug`, `thread_title`, `unit_count`, `subject_slugs`, `thread_semantic`, `thread_url`, `title_suggest`
-     - Thread fields in lesson schema: `thread_slugs`, `thread_titles`
-     - Thread fields in unit/unit_rollup schemas: `thread_slugs`, `thread_titles`, `thread_orders`
-   - Update doc re-exports
+1. **Start phase-1-thread-filter (RED phase)**:
+   - Write failing tests for thread filtering and facets
+   - Define expected behaviour for thread-based search scope
 
-2. **Run quality gates** to verify changes
+2. **Run quality gates** after each change
 
-3. **Continue with phase-1-thread-filter** (write tests first - RED)
+3. **When ES is provisioned (Phase 0)**:
+   - Create `smoke-tests/` directory in semantic search app
+   - Add ES connection smoke test (NOT E2E - smoke tests CAN access network)
 
 ## Thread Data Structure Reference
 
