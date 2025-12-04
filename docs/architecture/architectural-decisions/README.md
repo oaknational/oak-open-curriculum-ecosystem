@@ -66,6 +66,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-059: Knowledge Graph for Agent Context](059-knowledge-graph-for-agent-context.md)
 - [ADR-060: Agent Support Tool Metadata System](060-agent-support-metadata-system.md)
 - [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md)
+- [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
 
 ## Key Architectural Decisions
 
