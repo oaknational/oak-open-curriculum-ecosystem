@@ -131,6 +131,7 @@ function buildSubjectContexts(
   if (keyStage) {
     contexts.key_stage = [keyStage];
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.keys(contexts).length > 0 ? contexts : undefined;
 }
 
@@ -145,6 +146,7 @@ function buildSequenceContexts(
   if (phaseSlug) {
     contexts.phase = [phaseSlug];
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.keys(contexts).length > 0 ? contexts : undefined;
 }
 

@@ -3,19 +3,22 @@
  */
 
 import { defineConfig } from 'eslint/config';
-import { baseConfig } from '../../../eslint.config.base';
-import { commonSettings } from '../../../eslint-rules/index.js';
+import oakStandards, {
+  ignores,
+  testRules,
+  commonSettings,
+} from '@oaknational/eslint-plugin-standards';
+import type { Linter } from 'eslint';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-// const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config = defineConfig(
-  ...baseConfig,
   {
     ignores: [
+      ...ignores,
       'dist/**',
       'coverage/**',
       '*.log',
@@ -32,12 +35,15 @@ const config = defineConfig(
       'docs/**',
     ],
   },
+
+  // Use recommended and strict configs from standards plugin
+  ...(oakStandards.configs!.strict as Linter.Config[]),
+
   {
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,
-        // project: wsTsProject,
         tsconfigRootDir: thisDir,
       },
     },
@@ -47,68 +53,23 @@ const config = defineConfig(
         ...commonSettings['import-x/resolver'],
         typescript: {
           ...commonSettings['import-x/resolver'].typescript,
-          // project: wsTsProject,
           projectService: true,
         },
       },
     },
+  },
+  // Test file rules
+  {
+    files: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/test-*.ts',
+      '**/__tests__/**',
+    ],
     rules: {
-      // Disallow specific Object.* properties, they lose type information
-      'no-restricted-properties': [
-        'error',
-        {
-          object: 'Object',
-          property: 'keys',
-          message: 'Use typeSafeKeys<T>() for typed keys.',
-        },
-        {
-          object: 'Object',
-          property: 'values',
-          message: 'Use typeSafeValues<T>() for typed values.',
-        },
-        {
-          object: 'Object',
-          property: 'entries',
-          message: 'Use typeSafeEntries<T>() for typed entries.',
-        },
-        {
-          object: 'Object',
-          property: 'fromEntries',
-          message: 'Use typeSafeFromEntries<K,V>().',
-        },
-        {
-          object: 'Object',
-          property: 'getOwnPropertyNames',
-          message: 'Use typeSafeOwnKeys<T>() if you truly need all own keys.',
-        },
-        {
-          object: 'Object',
-          property: 'getOwnPropertySymbols',
-          message: 'Use typeSafeOwnKeys<T>() if you truly need all own keys.',
-        },
-
-        // Disallow Reflect.* methods for key/value access, they lose type information
-        {
-          object: 'Reflect',
-          property: 'get',
-          message: 'Prefer typed property access or typeSafeGet().',
-        },
-        {
-          object: 'Reflect',
-          property: 'set',
-          message: 'Prefer typed property assignment or typeSafeSet().',
-        },
-        {
-          object: 'Reflect',
-          property: 'has',
-          message: 'Prefer the `in` operator or typeSafeHas().',
-        },
-        {
-          object: 'Reflect',
-          property: 'ownKeys',
-          message: 'Use typeSafeOwnKeys<T>() for a typed result.',
-        },
-      ],
+      ...testRules,
     },
   },
   // Rules for the type-gen code
@@ -116,6 +77,7 @@ const config = defineConfig(
     files: ['type-gen/**'],
     rules: {
       'no-restricted-properties': 'off',
+      '@typescript-eslint/no-restricted-types': 'off',
       'max-lines-per-function': 'off',
       'max-statements': 'off',
       'max-depth': 'off',
@@ -146,6 +108,7 @@ const config = defineConfig(
       // Most likely permanent rules
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       'no-irregular-whitespace': 'off',
+      curly: 'off',
     },
   },
   // Rules for the generated files
@@ -169,9 +132,13 @@ const config = defineConfig(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        // project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      'import-x/no-named-as-default-member': 'off',
     },
   },
 );

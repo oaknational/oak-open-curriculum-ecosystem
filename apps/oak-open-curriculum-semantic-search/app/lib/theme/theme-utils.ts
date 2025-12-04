@@ -15,6 +15,7 @@ export const isResolvedThemeMode = (value: unknown): value is ResolvedThemeMode 
   if (typeof value !== 'string') {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const modes: readonly string[] = Object.values(RESOLVED_THEME_MODES);
   return modes.includes(value);
 };
@@ -31,6 +32,7 @@ export function isThemeMode(value: unknown): value is ThemeMode {
   if (typeof value !== 'string') {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const modes: readonly string[] = Object.values(THEME_MODES);
   return modes.includes(value);
 }

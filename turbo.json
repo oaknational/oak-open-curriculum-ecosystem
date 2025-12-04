@@ -17,6 +17,11 @@
         "tsup.config.ts"
       ]
     },
+    "build-linting": {
+      "cache": true,
+      "outputs": ["dist/**"],
+      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "tsconfig.json", "tsup.config.ts"]
+    },
     "type-gen": {
       "dependsOn": ["^type-gen", "^build-adapter"],
       "cache": true,
@@ -42,12 +47,14 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "type-gen", "build-adapter", "build-linting"],
       "cache": false,
       "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/packages/core/mcp-core",
+        "$TURBO_ROOT$/packages/core/oak-eslint",
+        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",
@@ -76,6 +83,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
+      "dependsOn": ["^build-linting"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -84,6 +92,8 @@
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
         "$TURBO_ROOT$/packages/core/mcp-core",
+        "$TURBO_ROOT$/packages/core/oak-eslint",
+        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",
@@ -170,7 +180,7 @@
       ]
     },
     "type-check": {
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [

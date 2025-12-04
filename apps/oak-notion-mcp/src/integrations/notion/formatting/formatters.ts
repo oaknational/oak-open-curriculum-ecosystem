@@ -159,6 +159,7 @@ export function formatDatabaseQueryResults(
 export function formatPageProperties(page: PageObjectResponse): string {
   let text = '';
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, value] of Object.entries(page.properties)) {
     const displayValue = extractPropertyValue(value);
     if (displayValue !== 'N/A' && key !== 'title' && key !== 'Name') {

@@ -1,6 +1,20 @@
 import { AST_NODE_TYPES } from '@typescript-eslint/utils';
 import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
 
+/**
+ * ESLint rule to discourage exporting trivial type aliases.
+ *
+ * A trivial type alias is one that simply renames an imported type without adding any value
+ * (e.g., `export type MyType = ImportedType;`).
+ *
+ * @example
+ * // Invalid
+ * import { Foo } from './foo';
+ * export type Bar = Foo;
+ *
+ * // Valid
+ * export { Foo as Bar } from './foo';
+ */
 const noExportTrivialTypeAliasesRule: TSESLint.RuleModule<'aliasNotAllowed'> = {
   meta: {
     type: 'suggestion',

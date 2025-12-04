@@ -294,7 +294,11 @@ The architecture flows in one direction: **OpenAPI → Generation → Runtime**
    - Implement business logic
    - No manual API definitions
 
-5. **Infrastructure Libraries** (`packages/libs/`)
+5. **Core Infrastructure** (`packages/core/`)
+   - Foundational tools (ESLint plugins, Zod adapters)
+   - Used by SDKs and libraries
+
+6. **Infrastructure Libraries** (`packages/libs/`)
    - Logging, configuration, storage, transport
    - Independent of API schema
    - Reusable across different SDKs

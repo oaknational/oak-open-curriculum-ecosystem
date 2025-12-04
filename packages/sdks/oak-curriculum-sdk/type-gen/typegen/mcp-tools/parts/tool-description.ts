@@ -15,7 +15,7 @@ export function toToolDescription(operation: OperationObject): string | undefine
 
   // Transform "This endpoint" to "This tool" in the description
   const description = rawDescription
-    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
+
     .replace(/\bThis endpoint\b/gi, (match) => (match[0] === 'T' ? 'This tool' : 'this tool'))
     .replace(/\s+/g, ' ')
     .trim();

@@ -28,6 +28,7 @@ export function transformNotionDatabaseToMcpResource(database: DataSourceObjectR
         ? 'Notion database (archived)'
         : 'Notion database';
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const propertyNames = Object.keys(database.properties);
 
   return {

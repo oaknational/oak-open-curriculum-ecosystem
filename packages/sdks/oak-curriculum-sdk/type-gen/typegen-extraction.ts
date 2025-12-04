@@ -242,7 +242,6 @@ export function extractPathParameters(schema: OpenAPIObject): ExtractedPathData 
 
   const result: ExtractedParameters = {};
   for (const parameterName in pathParameters) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime validation
     result[parameterName] = pathParameters[parameterName] ? [...pathParameters[parameterName]] : [];
   }
 

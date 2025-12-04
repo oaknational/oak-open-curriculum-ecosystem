@@ -13,6 +13,7 @@ export function createAssertionLogger(context: SmokeContext, assertion: string):
 export function logAssertionSuccess(logger: Logger, message: string, details?: JsonObject): void {
   logger.info(message, details);
   const detailText =
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     details && Object.keys(details).length > 0 ? ` ${JSON.stringify(details)}` : '';
   console.log(`✅ ${message}${detailText}`);
 }

@@ -56,6 +56,7 @@ function generateCtaConfigEntry(cta: CtaConfig): string {
  * @returns JavaScript array declaration string
  */
 function generateCtaConfigsArray(): string {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const entries = Object.values(CTA_REGISTRY)
     .map((cta) => generateCtaConfigEntry(cta))
     .join(',\n');

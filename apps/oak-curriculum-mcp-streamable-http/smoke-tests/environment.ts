@@ -73,6 +73,7 @@ export function restoreEnv(snapshot: EnvSnapshot): void {
 
 function restoreKey(key: keyof EnvSnapshot, value: string | undefined): void {
   if (value === undefined) {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     Reflect.deleteProperty(process.env, key);
   } else {
     process.env[key] = value;

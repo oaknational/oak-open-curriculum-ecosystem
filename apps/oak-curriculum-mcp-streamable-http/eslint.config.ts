@@ -1,10 +1,12 @@
 import { defineConfig } from 'eslint/config';
-import { baseConfig } from '../../eslint.config.base';
 import {
+  configs,
   appBoundaryRules,
   appArchitectureRules,
   commonSettings,
-} from '../../eslint-rules/index.js';
+  ignores as globalIgnores,
+  testRules,
+} from '@oaknational/eslint-plugin-standards';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import globals from 'globals';
@@ -33,9 +35,9 @@ const config = defineConfig(
   },
   // TypeScript configuration - exclude JS files
   ...defineConfig(
-    ...baseConfig,
     {
       ignores: [
+        ...globalIgnores,
         'dist/**',
         '*.log',
         '.turbo/**',
@@ -47,6 +49,7 @@ const config = defineConfig(
         '../../.agent/reference-docs/**',
       ],
     },
+    ...configs.strict,
     // no special ignores for vitest.e2e.config.ts; treat as config file below
     {
       files: ['**/*.ts'],
@@ -96,6 +99,7 @@ const config = defineConfig(
     {
       files: ['**/*.test.ts', '**/*.spec.ts'],
       rules: {
+        ...testRules,
         'import-x/no-relative-parent-imports': 'off',
         'import-x/no-restricted-paths': 'off',
         '@typescript-eslint/no-restricted-imports': 'off',

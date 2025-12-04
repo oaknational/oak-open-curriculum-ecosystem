@@ -81,14 +81,17 @@ function extractContexts(request: estypes.SearchRequest | undefined): unknown {
   if (typeof request.suggest !== 'object' || request.suggest === null) {
     return undefined;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const suggestions: unknown = Reflect.get(request.suggest, 'suggestions');
   if (typeof suggestions !== 'object' || suggestions === null) {
     return undefined;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const completion: unknown = Reflect.get(suggestions, 'completion');
   if (typeof completion !== 'object' || completion === null) {
     return undefined;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Reflect.get(completion, 'contexts');
 }
 

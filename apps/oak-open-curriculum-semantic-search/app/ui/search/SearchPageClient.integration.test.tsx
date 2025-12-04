@@ -17,6 +17,20 @@ import {
   mockMatchMedia,
 } from './SearchPageClient.test-helpers';
 
+function getStructuredProps() {
+  if (!structuredPropsRef.current) {
+    throw new Error('StructuredSearch was not rendered or props not captured');
+  }
+  return structuredPropsRef.current;
+}
+
+function getFacetProps() {
+  if (!facetPropsRef.current) {
+    throw new Error('SearchFacets was not rendered or props not captured');
+  }
+  return facetPropsRef.current;
+}
+
 describe('SearchPageClient', () => {
   beforeEach(() => {
     resetSearchPageTestState();
@@ -50,8 +64,14 @@ describe('SearchPageClient', () => {
       ),
     ).toBeInTheDocument();
 
+    const fixture = buildSingleScopeFixture({});
+
+    await waitFor(() => {
+      expect(screen.getByTestId('structured-search')).toBeInTheDocument();
+    });
+
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(buildSingleScopeFixture());
+      getStructuredProps().onResults?.(fixture);
     });
 
     await waitFor(() => {
@@ -66,8 +86,12 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
 
+    await waitFor(() => {
+      expect(screen.getByTestId('structured-search')).toBeInTheDocument();
+    });
+
     await act(async () => {
-      structuredPropsRef.current?.setLoading?.(true);
+      getStructuredProps().setLoading?.(true);
     });
 
     expect(screen.getByTestId('search-summary-skeleton')).toBeInTheDocument();
@@ -96,8 +120,12 @@ describe('SearchPageClient', () => {
       },
     });
 
+    await waitFor(() => {
+      expect(screen.getByTestId('structured-search')).toBeInTheDocument();
+    });
+
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(fixture);
+      getStructuredProps().onResults?.(fixture);
     });
 
     await waitFor(() => {
@@ -158,8 +186,12 @@ describe('SearchPageClient', () => {
       includeFacets: true,
     };
 
+    await waitFor(() => {
+      expect(screen.getByTestId('structured-search')).toBeInTheDocument();
+    });
+
     await act(async () => {
-      structuredPropsRef.current?.onSubmitPayload?.(basePayload);
+      getStructuredProps().onSubmitPayload?.(basePayload);
     });
 
     const facet: SequenceFacet = {
@@ -177,8 +209,12 @@ describe('SearchPageClient', () => {
       sequenceUrl: 'https://oak.example/fractions-programme',
     };
 
+    await waitFor(() => {
+      expect(screen.getByTestId('facets')).toBeInTheDocument();
+    });
+
     await act(async () => {
-      facetPropsRef.current?.onSelectSequence?.(facet);
+      getFacetProps().onSelectSequence?.(facet);
     });
 
     await waitFor(() => {
@@ -205,11 +241,11 @@ describe('SearchPageClient', () => {
     };
 
     await act(async () => {
-      structuredPropsRef.current?.onSubmitPayload?.(basePayload);
+      getStructuredProps().onSubmitPayload?.(basePayload);
     });
 
     await act(async () => {
-      structuredPropsRef.current?.onScopeChange?.(LESSONS_SCOPE);
+      getStructuredProps().onScopeChange?.(LESSONS_SCOPE);
     });
 
     await waitFor(() => {
@@ -279,7 +315,7 @@ describe('SearchPageClient', () => {
     };
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(payload);
+      getStructuredProps().onResults?.(payload);
     });
 
     await waitFor(() => {
@@ -359,7 +395,7 @@ describe('SearchPageClient', () => {
     };
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(payload);
+      getStructuredProps().onResults?.(payload);
     });
 
     const supportColumn = screen.getByTestId('search-support-column');
@@ -400,7 +436,7 @@ describe('SearchPageClient', () => {
     });
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(fixture);
+      getStructuredProps().onResults?.(fixture);
     });
 
     const mobileSupport = screen.getByTestId('search-support-mobile');
@@ -450,7 +486,7 @@ describe('SearchPageClient', () => {
     };
 
     await act(async () => {
-      structuredPropsRef.current?.onSubmitPayload?.(basePayload);
+      getStructuredProps().onSubmitPayload?.(basePayload);
     });
 
     const resultPayload = {
@@ -472,7 +508,7 @@ describe('SearchPageClient', () => {
     };
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(resultPayload);
+      getStructuredProps().onResults?.(resultPayload);
     });
 
     const suggestionButton = await screen.findByRole('button', { name: /decimals recap/i });
@@ -503,7 +539,7 @@ describe('SearchPageClient', () => {
     const fixture = buildSingleScopeFixture();
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(fixture);
+      getStructuredProps().onResults?.(fixture);
     });
 
     expect(screen.getByText(/Using fixture scenario: success/i)).toBeInTheDocument();
@@ -535,7 +571,7 @@ describe('SearchPageClient', () => {
     const emptyFixture = buildEmptyFixture({ scope: 'lessons' });
 
     await act(async () => {
-      structuredPropsRef.current?.onResults?.(emptyFixture);
+      getStructuredProps().onResults?.(emptyFixture);
     });
 
     await waitFor(() => {
@@ -555,7 +591,7 @@ describe('SearchPageClient', () => {
     expect(screen.getByText(/Using fixture scenario: simulated outage/i)).toBeInTheDocument();
 
     await act(async () => {
-      structuredPropsRef.current?.onError?.(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
+      getStructuredProps().onError?.(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
     });
 
     const alert = screen.getByRole('alert');

@@ -3,6 +3,7 @@ import { useColorMode } from './ColorModeContext';
 
 function buildCss(vars: Record<string, string>, mode: 'light' | 'dark'): string {
   const selector = `#app-theme-root[data-theme="${mode}"]`;
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const body = Object.entries(vars)
     .map(([k, v]) => `  ${k}: ${v};`)
     .join('\n');

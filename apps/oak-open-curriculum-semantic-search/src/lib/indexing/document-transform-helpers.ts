@@ -3,7 +3,7 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
-type UnknownObject = Readonly<Record<string, unknown>>;
+type UnknownObject = Readonly<Record<string, unknown>>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
 function isUnknownObject(value: unknown): value is UnknownObject {
   return typeof value === 'object' && value !== null;
@@ -30,6 +30,7 @@ function pluckStrings(collection: unknown, key: string): string[] {
     if (typeof entry !== 'object' || entry === null) {
       continue;
     }
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     const raw: unknown = Reflect.get(entry, key);
     const value = safeString(raw);
     if (value) {

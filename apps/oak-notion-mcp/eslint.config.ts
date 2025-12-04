@@ -5,12 +5,15 @@
  */
 
 import { defineConfig } from 'eslint/config';
-import { baseConfig } from '../../eslint.config.base';
 import {
+  configs,
   appBoundaryRules,
   appArchitectureRules,
   commonSettings,
-} from '../../eslint-rules/index.js';
+  ignores as globalIgnores,
+  testRules,
+} from '@oaknational/eslint-plugin-standards';
+import globals from 'globals';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -19,13 +22,17 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config = defineConfig(
-  ...baseConfig,
   {
-    ignores: ['dist/**', '*.log', '.turbo/**', '.logs/**'],
+    ignores: [...globalIgnores, 'dist/**', '*.log', '.turbo/**', '.logs/**'],
   },
+  ...configs.strict,
   {
     files: ['**/*.ts'],
     languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
       parserOptions: {
         projectService: false,
         project: wsTsProject,
@@ -71,6 +78,7 @@ const config = defineConfig(
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
+      ...testRules,
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-restricted-paths': 'off',
       'import-x/no-internal-modules': 'off',

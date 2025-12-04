@@ -1,7 +1,7 @@
 import type { ZeroHitEvent } from './zero-hit-store';
 
 /** Generic record helper for dynamic Elasticsearch payloads. */
-export type UnknownRecord = Record<string, unknown>;
+export type UnknownRecord = Record<string, unknown>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
 /**
  * Shape of the document persisted to the zero-hit Elasticsearch index.

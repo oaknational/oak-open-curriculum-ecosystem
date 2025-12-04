@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-restricted-types -- REFACTOR */
 export interface SummaryScopeBreakdown {
   lessons: number;
   units: number;
@@ -30,6 +31,7 @@ export function parseZeroHitResponse(value: unknown): ZeroHitResponse | null {
     return null;
   }
   const summary = value.summary;
+
   const recent = value.recent;
   if (!isSummarySnapshot(summary) || !Array.isArray(recent)) {
     return null;
@@ -87,6 +89,7 @@ function isRecordOfStrings(value: unknown): value is Record<string, string> {
   if (!isJsonObject(value)) {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.values(value).every((entry) => typeof entry === 'string');
 }
 

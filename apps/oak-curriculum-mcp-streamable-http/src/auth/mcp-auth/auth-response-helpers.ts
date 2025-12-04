@@ -36,11 +36,13 @@ export interface AuthLogContext {
  * ```
  */
 export function createAuthLogContext(req: Request, res: Response): AuthLogContext;
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function createAuthLogContext<T extends object>(
   req: Request,
   res: Response,
   extra: T,
 ): AuthLogContext & T;
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function createAuthLogContext<T extends object = object>(
   req: Request,
   res: Response,

@@ -40,6 +40,7 @@ export function RecentEventsList({
 }
 
 function RecentEventItem({ event }: { event: DashboardEvent }): ReactElement {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const hasFilters = Object.keys(event.filters).length > 0;
 
   return (
@@ -87,6 +88,7 @@ function formatScope(scope: DashboardEvent['scope']): string {
 }
 
 function formatFilters(filters: Record<string, string>): string {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.entries(filters)
     .map(([key, value]) => `${key}: ${value}`)
     .join(', ');
