@@ -2,6 +2,12 @@
 
 Planning documentation for the semantic search backend: API routes, Elasticsearch indices, ingestion pipelines, and schema architecture.
 
+## Status
+
+- **Phase 1 (Schema-First Migration)**: ✅ COMPLETE
+- **ES Deployment**: 🚨 BLOCKING - See `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`
+- **Phase 2+ (Ontology Integration)**: ⏳ Blocked on ES deployment
+
 ## Scope
 
 This directory contains plans for:
@@ -83,9 +89,18 @@ The search indices will be enhanced with ontology metadata to enable:
 import {
   ontologyData, // Curriculum domain model, synonyms
   conceptGraph, // Knowledge graph structure
-  buildElasticsearchSynonyms, // ES synonym export
+  buildElasticsearchSynonyms, // ES synonym set object
+  buildSynonymLookup, // Term → canonical map
+  serialiseElasticsearchSynonyms, // JSON string for ES API
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 ```
+
+**Key facts**:
+
+- Synonyms managed exclusively in SDK's `ontologyData.synonyms`
+- Static `synonyms.json` was **deleted** - ES synonyms generated dynamically
+- ES index mappings in `src/lib/elasticsearch/definitions/` (not `scripts/`)
+- `scripts/generate-synonyms.ts` calls SDK to generate ES synonym payload
 
 ### API Patterns
 

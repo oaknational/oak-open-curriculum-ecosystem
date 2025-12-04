@@ -52,7 +52,7 @@ Before any work, read and internalize these documents:
 | `oak_lesson_planning`    | MEDIUM   | Pedagogical context search                |
 | `oak_assets`             | MEDIUM   | Resource discovery                        |
 
-See `.agent/prompts/elasticsearch-serverless-deployment.prompt.md` for deployment guide.
+See `elasticsearch-serverless-deployment.prompt.md` (same directory) for deployment guide.
 
 ### SDK Data Imports (Single Source of Truth)
 
@@ -60,28 +60,42 @@ The search app should import domain data from the SDK:
 
 ```typescript
 import {
-  ontologyData, // Curriculum domain model
+  ontologyData, // Curriculum domain model, synonyms
   conceptGraph, // Knowledge graph structure
-  buildElasticsearchSynonyms, // ES synonym export
-  buildSynonymLookup, // Term normalisation
+  buildElasticsearchSynonyms, // ES synonym set object
+  buildSynonymLookup, // Term → canonical map
+  serialiseElasticsearchSynonyms, // JSON string for ES API
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 ```
 
 **Key imports**:
 
-- `ontologyData.synonyms` → Use for ES synonyms (via `buildElasticsearchSynonyms()`)
+- `ontologyData.synonyms` → All domain synonyms (subjects, key stages, topics)
 - `ontologyData.curriculumStructure` → Validate keyStage/subject slugs
 - `conceptGraph.concepts` → Build ontology index documents
 - `conceptGraph.edges` → Knowledge graph traversal
+- `buildElasticsearchSynonyms()` → Returns `{ synonyms_set: ElasticsearchSynonymEntry[] }`
+- `serialiseElasticsearchSynonyms()` → JSON string for ES `_synonyms` API
 
-### Architecture Correction
+### Architecture Corrections
 
-The ES connection test was **removed** from `tests/e2e/` because it made network calls to Elasticsearch. Per the testing strategy:
+**E2E Test Removal**: The ES connection test was **removed** from `tests/e2e/` because it made network calls to Elasticsearch. Per the testing strategy:
 
 - **E2E tests**: CAN trigger File System and STDIO IO but **NOT network IO**
 - **Smoke tests**: CAN trigger all IO types including network
 
 When ES Serverless is provisioned, a proper **smoke test** should be created in `smoke-tests/` directory.
+
+**Synonym Consolidation**: Domain synonyms are now managed in the SDK as the single source of truth:
+
+- SDK location: `ontologyData.synonyms` in `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts`
+- Export utilities: `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts`
+- ES synonyms generator: `apps/oak-open-curriculum-semantic-search/scripts/generate-synonyms.ts`
+- Static `synonyms.json` was **deleted** - synonyms are now generated dynamically
+
+**Mapping Files Relocation**: ES index mappings moved from `scripts/mappings/` to `src/lib/elasticsearch/definitions/` for proper code organization.
+
+**SDK Build Entry Point**: `src/mcp/synonym-export.ts` must be in `tsup.config.ts` entry array for runtime JS to compile.
 
 ### Work In Progress
 
@@ -166,7 +180,7 @@ All tests passing in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/g
 
 ### Search Schema Generator
 
-```
+```text
 packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-index-docs.ts
 ```
 
@@ -174,7 +188,7 @@ This file generates the index document schemas. Currently needs thread schema ad
 
 ### Generated Search Schemas
 
-```
+```text
 packages/sdks/oak-curriculum-sdk/src/types/generated/search/index-documents.ts
 ```
 
@@ -182,7 +196,7 @@ Output of the generator - check this to see current state.
 
 ### Unit Tests (GREEN - all passing)
 
-```
+```text
 packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-modules.unit.test.ts
 ```
 
@@ -190,18 +204,28 @@ Contains tests for thread index (all passing).
 
 ### Plan Documentation
 
-```
+```text
 .agent/plans/semantic-search/semantic-search-overview.md
 .agent/plans/semantic-search/index.md
 ```
 
 ### Research Documents
 
-```
+```text
 .agent/research/elasticsearch/semantic-search-plans-review.md
 .agent/research/elasticsearch/expanded-architecture-analysis.md
 .agent/research/elasticsearch/ontology-implementation-gaps.md
 ```
+
+## Known Gotchas
+
+| Issue                              | Solution                                                                                    |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| SDK exports not found at runtime   | Ensure new files are added to `packages/sdks/oak-curriculum-sdk/tsup.config.ts` entry array |
+| `typeSafeEntries` returns `never`  | Don't iterate dynamically over union keys; process each group explicitly                    |
+| E2E tests fail with network errors | E2E tests CANNOT access network - use smoke tests for ES connectivity                       |
+| Mapping files not found            | Mappings are in `src/lib/elasticsearch/definitions/`, NOT `scripts/mappings/`               |
+| Synonyms file not found            | Static `synonyms.json` was deleted - synonyms generate from SDK at runtime                  |
 
 ## Quality Gates (MUST RUN AFTER EACH CHANGE)
 
@@ -286,7 +310,7 @@ Two widgets to implement:
 
 Widget architecture files:
 
-```
+```text
 apps/oak-curriculum-mcp-streamable-http/src/widget-renderers/search-renderer.ts
 apps/oak-curriculum-mcp-streamable-http/src/widget-renderer-registry.ts
 apps/oak-curriculum-mcp-streamable-http/src/widget-cta/registry.ts

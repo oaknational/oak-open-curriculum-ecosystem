@@ -6,7 +6,7 @@ Use this prompt to configure and deploy indexes on the existing ES Serverless in
 
 1. `.agent/directives-and-memory/rules.md` - Cardinal rule and code design principles
 2. `.agent/directives-and-memory/testing-strategy.md` - TDD at all levels (E2E ≠ network, only smoke tests hit network)
-3. `.agent/prompts/semantic-search-implementation.prompt.md` - Current semantic search state
+3. `semantic-search-implementation.prompt.md` (same directory) - Current semantic search state
 
 ## Target Environment
 
@@ -165,9 +165,9 @@ Telemetry index for zero-result queries, created lazily on first write.
 
 ## Synonym Set (oak-syns)
 
-File: `scripts/synonyms.json` - **130+ curriculum-specific synonyms**
+**Source**: SDK `ontologyData.synonyms` (single source of truth)
 
-Categories:
+Synonyms are generated dynamically by `scripts/generate-synonyms.ts` which calls `buildElasticsearchSynonyms()` from the SDK. Categories:
 
 - **Key stages**: ks1-ks4 ↔ year groups, GCSE
 - **Subjects**: maths ↔ mathematics, dt ↔ design and technology
@@ -176,6 +176,8 @@ Categories:
 - **Maths concepts**: addition ↔ add ↔ plus ↔ sum
 - **English**: grammar, punctuation, Shakespeare
 - **Science**: photosynthesis, respiration, forces, energy
+
+**Note**: The static `scripts/synonyms.json` file was deleted. Synonyms now flow from SDK.
 
 ## Environment Configuration
 
@@ -212,12 +214,15 @@ cp .env.example .env.local
 Creates synonyms and indexes in the correct order:
 
 ```bash
-# Creates oak-syns synonym set (MUST happen first - indexes reference it)
-curl -X PUT "${ES_URL}/_synonyms/oak-syns" --data-binary @synonyms.json
+# Generates synonyms dynamically from SDK ontologyData
+SYNONYMS_JSON=$(npx tsx "$SCRIPT_DIR/generate-synonyms.ts")
 
-# Creates indexes with mappings
-for idx in oak_lessons oak_unit_rollup oak_units oak_sequences; do
-  curl -X PUT "${ES_URL}/${idx}" --data-binary @mappings/${idx//_/-}.json
+# Creates oak-syns synonym set (MUST happen first - indexes reference it)
+echo "$SYNONYMS_JSON" | curl -X PUT "${ES_URL}/_synonyms/oak-syns" -d @-
+
+# Creates indexes with mappings from src/lib/elasticsearch/definitions/
+for idx in oak_lessons oak_unit_rollup oak_units oak_sequences oak_sequence_facets; do
+  curl -X PUT "${ES_URL}/${idx}" --data-binary @"${DEFINITIONS_DIR}/${idx//_/-}.json"
 done
 ```
 
@@ -520,18 +525,18 @@ pnpm smoke:dev:stub
 
 ## Success Criteria
 
-| Checkpoint                  | Expected Result                                                   |
-| --------------------------- | ----------------------------------------------------------------- |
-| API key generated           | 64+ character base64 string                                       |
-| Connection test             | `{"status":"green"}` or `"yellow"`                                |
-| Synonyms set created        | `oak-syns` available at `/_synonyms/oak-syns`                     |
-| Indexes created             | 4 indexes: oak_lessons, oak_units, oak_unit_rollup, oak_sequences |
-| Sandbox ingestion (dry-run) | Lists documents with counts per index kind                        |
-| Sandbox ingestion (live)    | Documents appear in indexes (doc count > 0)                       |
-| Lexical search works        | `match_all` returns documents                                     |
-| Semantic search works       | `semantic` query on `*_semantic` fields works                     |
-| Completion suggest works    | `title_suggest` returns autocomplete options                      |
-| Smoke test passes           | ES connection smoke test green                                    |
+| Checkpoint                  | Expected Result                                                                        |
+| --------------------------- | -------------------------------------------------------------------------------------- |
+| API key generated           | 64+ character base64 string                                                            |
+| Connection test             | `{"status":"green"}` or `"yellow"`                                                     |
+| Synonyms set created        | `oak-syns` available at `/_synonyms/oak-syns`                                          |
+| Indexes created             | 5 indexes: oak_lessons, oak_units, oak_unit_rollup, oak_sequences, oak_sequence_facets |
+| Sandbox ingestion (dry-run) | Lists documents with counts per index kind                                             |
+| Sandbox ingestion (live)    | Documents appear in indexes (doc count > 0)                                            |
+| Lexical search works        | `match_all` returns documents                                                          |
+| Semantic search works       | `semantic` query on `*_semantic` fields works                                          |
+| Completion suggest works    | `title_suggest` returns autocomplete options                                           |
+| Smoke test passes           | ES connection smoke test green                                                         |
 
 ## Key Implementation Files
 

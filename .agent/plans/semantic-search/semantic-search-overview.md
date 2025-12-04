@@ -280,11 +280,20 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - SDK type-gen infrastructure for search schemas (COMPLETE)
 - MCP tool generation (COMPLETE - 26 tools)
 - Aggregated tools architecture (COMPLETE - search, fetch, ontology, knowledge-graph)
+- Thread schema generation - `SearchThreadIndexDocSchema` with embedded fields (COMPLETE)
+- SDK synonym export utilities - `buildElasticsearchSynonyms()`, `buildSynonymLookup()` (COMPLETE)
 
 ### Active Dependencies
 
 - **Elasticsearch Serverless**: Production deployment (BLOCKING - not provisioned)
 - **OpenAI API**: For natural language query parsing (AVAILABLE)
+
+### Recent Architectural Changes (2025-12-04)
+
+- **Synonym consolidation**: Domain synonyms now managed in SDK's `ontologyData.synonyms`
+- **Mapping files relocated**: ES index mappings moved to `src/lib/elasticsearch/definitions/`
+- **Dynamic synonym generation**: `scripts/generate-synonyms.ts` calls SDK at runtime
+- **E2E test correction**: Removed ES connection test (E2E cannot access network per testing-strategy.md)
 
 ### Future Dependencies
 
@@ -321,16 +330,17 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 All work must pass the following gates in sequence:
 
 ```bash
-pnpm i                                                    # Install dependencies
-pnpm type-gen                                            # Generate types from schema
-pnpm build                                               # Production build
-pnpm type-check                                          # TypeScript validation
-pnpm lint -- --fix                                       # ESLint + architectural rules
-pnpm -F @oaknational/oak-curriculum-sdk docs:all        # Generate SDK docs
-pnpm format                                              # Format code
-pnpm markdownlint                                        # Lint markdown
-pnpm test                                                # Unit + integration tests
-pnpm test:e2e                                            # E2E tests (manual)
+pnpm type-gen           # Generate types from schema
+pnpm build              # Production build
+pnpm type-check         # TypeScript validation
+pnpm lint -- --fix      # ESLint + architectural rules
+pnpm format:root        # Format code
+pnpm markdownlint:root  # Lint markdown
+pnpm test               # Unit + integration tests
+pnpm test:e2e           # E2E tests
+pnpm test:e2e:built     # E2E tests on built artifacts
+pnpm test:ui            # UI tests (Playwright)
+pnpm smoke:dev:stub     # Smoke tests (stubbed)
 ```
 
 **Note**: After each code fix, the full quality gate sequence must be run from the beginning to prevent hidden regressions.
@@ -372,6 +382,8 @@ pnpm test:e2e                                            # E2E tests (manual)
 
 ## Version History
 
+- 2025-12-04: Added synonym consolidation, mapping relocation, thread schema completion to dependencies
+- 2025-12-04: Fixed quality gates to match actual repository commands
 - 2025-12-04: Updated to reflect schema-first migration COMPLETE; added ES deployment as blocking priority
 - 2025-12-04: Moved obsolete schema docs to archive; updated phase timeline
 - 2025-11-11: Created from consolidation of high-level-plan.md, context.md, search-migration-map.md

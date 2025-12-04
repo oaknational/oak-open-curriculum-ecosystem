@@ -2,25 +2,34 @@
 
 Navigation hub for all semantic search planning documentation.
 
+## ⚠️ Current Priority
+
+**ES Deployment is the BLOCKING priority.** For continuation work, use:
+
+- **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search-implementation.prompt.md`
+- **Deployment Guide**: `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`
+
 ## Overview
 
 The semantic search system provides powerful search capabilities across Oak's curriculum data, integrating with Elasticsearch for hybrid search (semantic + lexical), faceted navigation, and intelligent suggestions. This planning directory documents the architecture, implementation strategy, and ongoing work.
 
 ## Status Summary
 
-| Phase                  | Status      | Notes                                         |
-| ---------------------- | ----------- | --------------------------------------------- |
-| Schema-First Migration | ✅ COMPLETE | All schemas generated via `pnpm type-gen`     |
-| ES Deployment          | 🚨 BLOCKING | Not provisioned; all testing against fixtures |
-| Ontology Integration   | ⏳ PENDING  | Blocked on ES deployment                      |
-| MCP Connectivity       | ⏳ PENDING  | Blocked on ES deployment                      |
-| OpenAI App Widget      | ⏳ PENDING  | Blocked on MCP connectivity                   |
+| Phase                    | Status      | Notes                                         |
+| ------------------------ | ----------- | --------------------------------------------- |
+| Schema-First Migration   | ✅ COMPLETE | All schemas generated via `pnpm type-gen`     |
+| Thread Schema Generation | ✅ COMPLETE | Thread index and embedded fields in SDK       |
+| SDK Synonym Export       | ✅ COMPLETE | Single source of truth for domain synonyms    |
+| ES Deployment            | 🚨 BLOCKING | Not provisioned; all testing against fixtures |
+| Ontology Integration     | ⏳ PENDING  | Blocked on ES deployment                      |
+| MCP Connectivity         | ⏳ PENDING  | Blocked on ES deployment                      |
+| OpenAI App Widget        | ⏳ PENDING  | Blocked on MCP connectivity                   |
 
 ## Quick Links
 
-- [High-Level Overview](./semantic-search-overview.md) - Current state, goals, dependencies, timeline
+- [High-Level Overview](./semantic-search-overview.md) - Strategy, phases, dependencies
 - [Search Service (Backend)](./search-service/index.md) - API routes, Elasticsearch, ingestion
-- [Search UI (Frontend)](./search-ui/index.md) - React components, theme, testing, user experience
+- [Search UI (Frontend)](./search-ui/index.md) - React components, theme, testing
 
 ## Key Documents
 
@@ -29,7 +38,10 @@ The semantic search system provides powerful search capabilities across Oak's cu
 - **semantic-search-overview.md** - High-level strategy, MCP integration, phase timeline
 - **search-service/** - Backend implementation (API, Elasticsearch, ingestion)
 - **search-ui/** - Frontend implementation (components, theme, UX)
-- **search-generator-spec.md** - Documents generated SDK artifacts (13 modules)
+
+### Reference (Complete)
+
+- **search-generator-spec.md** - Documents generated SDK artifacts (13 modules) - ✅ IMPLEMENTATION COMPLETE
 
 ### Research
 
@@ -118,17 +130,34 @@ Domain data is imported from SDK:
 import {
   ontologyData, // Curriculum domain model, synonyms
   conceptGraph, // Knowledge graph structure
-  buildElasticsearchSynonyms, // ES synonym export
+  buildElasticsearchSynonyms, // ES synonym set object
+  buildSynonymLookup, // Term → canonical map
+  serialiseElasticsearchSynonyms, // JSON string for ES API
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 ```
 
+**Key facts**:
+
+- Synonyms managed exclusively in `ontologyData.synonyms` (SDK)
+- Static `synonyms.json` was **deleted** - ES synonyms generated dynamically
+- ES index mappings live in `src/lib/elasticsearch/definitions/` (not `scripts/`)
+- `scripts/generate-synonyms.ts` calls SDK to generate ES synonym payload
+
 ## Dependencies
 
-- Curriculum ontology: `docs/architecture/curriculum-ontology.md` (✅ COMPLETE)
+### Complete ✅
+
+- Curriculum ontology: `docs/architecture/curriculum-ontology.md`
 - Schema-first execution: `.agent/directives-and-memory/schema-first-execution.md`
 - Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
 - Cardinal rule: `.agent/directives-and-memory/rules.md`
-- **Elasticsearch Serverless**: 🚨 NOT PROVISIONED (blocking)
+- SDK type-gen infrastructure for search schemas
+- Thread schema generation (Phase 1.1)
+- SDK synonym export utilities
+
+### Blocking 🚨
+
+- **Elasticsearch Serverless**: NOT PROVISIONED - see deployment prompt
 
 ## Navigation
 

@@ -1,6 +1,6 @@
 # Search Service: Schema-First and Ontology Implementation Plan
 
-Last updated: 2025-11-11
+Last updated: 2025-12-04
 
 ## Executive Summary
 
@@ -8,16 +8,39 @@ This plan details the migration of the semantic search backend from runtime-defi
 
 **Goal**: Migrate all search schemas to type-gen (SDK compile time) and add complete ontology fields (threads, programme factors, unit types, content guidance) to enable powerful, type-safe search across Oak's curriculum data.
 
+**Status**: **Phase 1 COMPLETE** ✅. Blocked on ES deployment for Phase 2.
+
 **Duration**: 6-8 weeks across 3 phases with clear sessions minimizing context switching.
+
+## ⚠️ Phase 1 Status: COMPLETE
+
+**All Phase 1 sessions completed (2025-12-04)**:
+
+- ✅ Session 1.1: Search Index Document Schema Generation
+- ✅ Session 1.2: Request/Response Schema Generation
+- ✅ Session 1.3: Update Search App to Consume Generated Schemas
+- ✅ Session 1.4: Remove Runtime Schema Definitions
+
+**Additional completions**:
+
+- ✅ Thread index document schema (`SearchThreadIndexDocSchema`)
+- ✅ Thread fields embedded in lessons/units/rollup schemas
+- ✅ SDK synonym export utilities (`buildElasticsearchSynonyms()`, `buildSynonymLookup()`)
+- ✅ ES index mappings relocated to `src/lib/elasticsearch/definitions/`
+- ✅ Static `synonyms.json` deleted - synonyms generated from SDK
+
+**Next**: Phase 0 (ES Deployment) is BLOCKING. See `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`.
+
+---
 
 ## Table of Contents
 
 1. [Current State Analysis](#current-state-analysis)
 2. [Why This Matters](#why-this-matters)
 3. [Goals and Success Criteria](#goals-and-success-criteria)
-4. [Phase 1: Schema-First Migration](#phase-1-schema-first-migration)
-5. [Phase 2: Core Ontology Fields](#phase-2-core-ontology-fields)
-6. [Phase 3: Ontology Enrichment](#phase-3-ontology-enrichment)
+4. [Phase 1: Schema-First Migration](#phase-1-schema-first-migration) ✅ COMPLETE
+5. [Phase 2: Core Ontology Fields](#phase-2-core-ontology-fields) - Blocked on ES
+6. [Phase 3: Ontology Enrichment](#phase-3-ontology-enrichment) - Blocked on ES
 7. [Testing and Validation Strategy](#testing-and-validation-strategy)
 8. [Dependencies and Prerequisites](#dependencies-and-prerequisites)
 9. [Risk Management](#risk-management)
@@ -268,7 +291,7 @@ Subject → Phase → Key Stage → Year → Pathway → Exam Board → Exam Sub
 
 1. **Create generator directory structure**
 
-   ```
+   ```text
    packages/sdks/oak-curriculum-sdk/type-gen/typegen/search-indices/
    ├── generate-index-documents.ts
    ├── generate-index-documents.unit.test.ts
@@ -358,7 +381,7 @@ pnpm test -- search-indices
 
 1. **Create request schema generators**
 
-   ```
+   ```text
    type-gen/typegen/search-schemas/
    ├── generate-request-schemas.ts
    ├── generate-response-schemas.ts
@@ -599,6 +622,7 @@ pnpm -F @oaknational/oak-open-curriculum-semantic-search build
    ```
 
 4. **Generate updated types**
+
    ```bash
    pnpm type-gen
    ```
@@ -1463,19 +1487,24 @@ pnpm e2e:thread-search
    - Status: ✅ COMPLETE
    - Defines: Unit/integration/E2E patterns
 
-### Active Dependencies (In Progress)
+### Active Dependencies
 
 1. **SDK type-gen infrastructure**
-   - Status: 🟡 IN PROGRESS
-   - Needs: Search schema generation support
-   - Blocks: Phase 1 cannot start until generator framework ready
+   - Status: ✅ COMPLETE
+   - All 13 search modules generated
+   - Thread schema generation complete
 
-2. **Elasticsearch sandbox**
-   - Status: ✅ AVAILABLE
-   - Location: Development environment
-   - Usage: E2E testing, manual validation
+2. **SDK Synonym Export**
+   - Status: ✅ COMPLETE
+   - `buildElasticsearchSynonyms()` and `buildSynonymLookup()` in SDK
+   - Static `synonyms.json` deleted
 
-3. **OpenAI API access**
+3. **Elasticsearch Serverless**
+   - Status: 🚨 BLOCKING
+   - Instance provisioned but no indexes created
+   - See `.agent/prompts/elasticsearch-serverless-deployment.prompt.md`
+
+4. **OpenAI API access**
    - Status: ✅ AVAILABLE
    - Usage: Natural language query parsing
    - Note: Can be stubbed for testing

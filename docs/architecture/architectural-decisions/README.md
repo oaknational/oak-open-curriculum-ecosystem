@@ -68,6 +68,16 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md)
 - [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
+- [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
+- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
+- [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
+- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
+- [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
+- [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
+- [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
+- [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
+- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
+- [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 
 ## Key Architectural Decisions
 
@@ -75,6 +85,10 @@ For understanding our API integration approach:
 
 - **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
 - **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
+- **[ADR-066](066-sdk-response-caching.md)** - SDK response caching with Redis
+- **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
+- **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
+- **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 
 For understanding authentication, authorization, and observability:
 
@@ -82,6 +96,16 @@ For understanding authentication, authorization, and observability:
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
+
+For understanding semantic search and Elastic-native AI/ML approach:
+
+- **[ADR-074](074-elastic-native-first-philosophy.md)** - Elastic-Native-First Philosophy for AI/ML features
+- **[ADR-071](071-elastic-native-dense-vector-strategy.md)** - Use Elastic-native E5 embeddings instead of OpenAI
+- **[ADR-072](072-three-way-hybrid-search-architecture.md)** - Three-way hybrid search with RRF fusion
+- **[ADR-073](073-dense-vector-field-configuration.md)** - Dense vector field configuration (384-dim, HNSW, cosine)
+- **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
+- **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
+- **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking
 
 For understanding the now deprecated and removed biological architecture:
 
