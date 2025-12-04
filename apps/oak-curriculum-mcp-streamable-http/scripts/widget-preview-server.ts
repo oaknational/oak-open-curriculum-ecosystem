@@ -1,25 +1,38 @@
 /**
- * Widget Preview Server for local development.
- *
- * Serves the Oak-branded ChatGPT widget with mock data for visual testing
- * and development. This allows rapid iteration on widget styling and
- * functionality without needing to deploy or connect to ChatGPT.
- *
- * @example
- * ```bash
- * # From the oak-curriculum-mcp-streamable-http workspace
- * pnpm widget:preview
- * ```
- *
- * Then visit http://localhost:4580/widget in your browser.
- *
- * @see aggregated-tool-widget.ts - The widget HTML template
- * @see widget-styles.ts - The widget CSS styles
+ * Widget Preview Server with hot reload for local development.
+ * Watch `src/widget-renderers/*.ts` - save and refresh to see changes.
+ * Run: pnpm widget:preview, then visit http://localhost:4580/widget
+ * @module scripts/widget-preview-server
  */
 
+import { watch } from 'chokidar';
 import express from 'express';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-import { AGGREGATED_TOOL_WIDGET_HTML } from '../src/aggregated-tool-widget.js';
+/** Dynamically imports the widget HTML, bypassing module cache. */
+async function getWidgetHtml(): Promise<string> {
+  const timestamp = Date.now();
+  const module: unknown = await import(`../src/aggregated-tool-widget.js?t=${String(timestamp)}`);
+  if (
+    module !== null &&
+    typeof module === 'object' &&
+    'AGGREGATED_TOOL_WIDGET_HTML' in module &&
+    typeof module.AGGREGATED_TOOL_WIDGET_HTML === 'string'
+  ) {
+    return module.AGGREGATED_TOOL_WIDGET_HTML;
+  }
+  throw new Error('Invalid widget module');
+}
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+/** Path to widget renderers directory for file watching. */
+const WATCH_PATH = resolve(__dirname, '../src/widget-renderers');
+
+/** Path to widget source files for file watching. */
+const WIDGET_SRC_PATH = resolve(__dirname, '../src');
 
 /**
  * Default port for the widget preview server.
@@ -33,21 +46,34 @@ const PORT = 4580;
  */
 const MOCK_TOOL_OUTPUT = {
   /** Server overview displayed in the help UI */
-  serverOverview: 'Oak National Academy MCP Server',
+  serverOverview: {
+    name: 'Oak Curriculum MCP Server',
+    version: '1.0.0',
+    aboutOak:
+      "Oak National Academy is the UK's national curriculum body, providing free, high-quality, fully-resourced curriculum resources for teachers and students.",
+    oakWebsite: 'https://www.thenational.academy',
+    description:
+      'Access Oak National Academy curriculum resources including lessons, units, quizzes, transcripts, and teaching materials.',
+  },
   /** Tool categories for the help UI */
-  toolCategories: [
-    {
-      category: 'Search',
-      tools: ['get-search-lessons', 'get-search-transcripts'],
+  toolCategories: {
+    discovery: {
+      description: 'Find curriculum content by searching or listing.',
+      tools: ['search', 'get-subjects', 'get-key-stages'],
     },
-    {
-      category: 'Curriculum',
-      tools: ['get-key-stages', 'get-subjects', 'get-units', 'get-lessons'],
+    browsing: {
+      description: 'Explore curriculum structure systematically.',
+      tools: ['get-key-stages-subject-units', 'get-key-stages-subject-lessons'],
     },
-    {
-      category: 'Lesson Content',
-      tools: ['get-lessons-quiz', 'get-lessons-summary', 'get-lessons-transcript'],
+    fetching: {
+      description: 'Get detailed content for specific lessons or units.',
+      tools: ['fetch', 'get-lessons-summary', 'get-lessons-transcript'],
     },
+  },
+  tips: [
+    'Use "search" for free-text queries; use browsing tools for structured exploration.',
+    'The "fetch" tool uses prefixed IDs: lesson:slug, unit:slug, thread:slug.',
+    'Get lesson transcript for detailed content understanding.',
   ],
 };
 
@@ -66,9 +92,10 @@ const app = express();
  * The window.openai object is populated with mock data that simulates
  * what ChatGPT would provide when rendering the widget.
  */
-app.get('/widget', (req, res) => {
+app.get('/widget', async (req, res) => {
   console.log(`GET ${req.path}`);
-  const htmlWithData = AGGREGATED_TOOL_WIDGET_HTML.replace(
+  const widgetHtml = await getWidgetHtml();
+  const htmlWithData = widgetHtml.replace(
     '</head>',
     `<script>
       window.openai = {
@@ -83,7 +110,7 @@ app.get('/widget', (req, res) => {
 /**
  * Serves a search results variant for testing the search renderer.
  */
-app.get('/widget/search', (req, res) => {
+app.get('/widget/search', async (req, res) => {
   console.log(`GET ${req.path}`);
   const searchOutput = {
     lessons: [
@@ -106,7 +133,8 @@ app.get('/widget/search', (req, res) => {
     ],
   };
 
-  const htmlWithData = AGGREGATED_TOOL_WIDGET_HTML.replace(
+  const widgetHtml = await getWidgetHtml();
+  const htmlWithData = widgetHtml.replace(
     '</head>',
     `<script>
       window.openai = {
@@ -121,7 +149,7 @@ app.get('/widget/search', (req, res) => {
 /**
  * Serves raw JSON output for testing the fallback JSON renderer.
  */
-app.get('/widget/json', (req, res) => {
+app.get('/widget/json', async (req, res) => {
   console.log(`GET ${req.path}`);
   const jsonOutput = {
     message: 'This is arbitrary JSON data',
@@ -131,7 +159,8 @@ app.get('/widget/json', (req, res) => {
     },
   };
 
-  const htmlWithData = AGGREGATED_TOOL_WIDGET_HTML.replace(
+  const widgetHtml = await getWidgetHtml();
+  const htmlWithData = widgetHtml.replace(
     '</head>',
     `<script>
       window.openai = {
@@ -146,14 +175,15 @@ app.get('/widget/json', (req, res) => {
 /**
  * Serves the knowledge graph view for testing the SVG renderer.
  */
-app.get('/widget/knowledge-graph', (req, res) => {
+app.get('/widget/knowledge-graph', async (req, res) => {
   console.log(`GET ${req.path}`);
   const kgOutput = {
     concepts: ['Subject', 'Sequence', 'Unit', 'Lesson'],
     relationships: [{ from: 'Subject', to: 'Sequence' }],
   };
 
-  const htmlWithData = AGGREGATED_TOOL_WIDGET_HTML.replace(
+  const widgetHtml = await getWidgetHtml();
+  const htmlWithData = widgetHtml.replace(
     '</head>',
     `<script>
       window.openai = {
@@ -163,19 +193,49 @@ app.get('/widget/knowledge-graph', (req, res) => {
           toolName: 'get-knowledge-graph'
         }
       };
+      // Auto-open details for testing
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.querySelectorAll('details').forEach(d => d.open = true);
+        }, 100);
+      });
     </script></head>`,
   );
   res.type('text/html').send(htmlWithData);
+});
+
+/**
+ * Set up file watcher for hot reload.
+ * Watches widget-renderers and widget source files.
+ * On change, logs a message - the dynamic import handles cache busting.
+ */
+const watcher = watch([WATCH_PATH, WIDGET_SRC_PATH], {
+  ignored: /node_modules|\.test\.ts$/,
+  persistent: true,
+  ignoreInitial: true,
+});
+
+watcher.on('change', (path) => {
+  console.log(`\n🔄 File changed: ${path}`);
+  console.log('   Refresh browser to see changes.\n');
+});
+
+watcher.on('error', (error) => {
+  console.error('Watcher error:', error);
 });
 
 app.listen(PORT, () => {
   const portStr = String(PORT);
   console.log(`\n🌳 Oak Widget Preview Server`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+  console.log(`\n📂 Watching for changes in:`);
+  console.log(`   ${WATCH_PATH}`);
+  console.log(`   ${WIDGET_SRC_PATH}`);
   console.log(`\nAvailable routes:`);
   console.log(`  http://localhost:${portStr}/widget                - Help UI (default)`);
   console.log(`  http://localhost:${portStr}/widget/search         - Search results`);
   console.log(`  http://localhost:${portStr}/widget/json           - JSON fallback`);
   console.log(`  http://localhost:${portStr}/widget/knowledge-graph - Knowledge graph SVG`);
+  console.log(`\n💡 Save a file and refresh browser to see changes.`);
   console.log(`\nPress Ctrl+C to stop.\n`);
 });
