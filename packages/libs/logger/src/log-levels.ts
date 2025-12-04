@@ -53,6 +53,7 @@ export function isLogLevel(value: unknown): value is LogLevel {
   if (typeof value !== 'string') {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.keys(LOG_LEVEL_VALUES).includes(value);
 }
 
@@ -61,6 +62,7 @@ export function isLogLevel(value: unknown): value is LogLevel {
  * @returns The log level marked as default in LOG_LEVEL_VALUES
  */
 export function getDefaultLogLevel(): LogLevel {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const defaultLevel = Object.values(LOG_LEVEL_VALUES).find((level) => level.default)?.label;
   if (defaultLevel === undefined) {
     throw new TypeError('No default log level found in LOG_LEVEL_VALUES');
@@ -83,6 +85,7 @@ export function parseLogLevel(envValue: string | undefined, defaultValue?: LogLe
 
   const upperValue = envValue.toUpperCase();
   if (!isLogLevel(upperValue)) {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     const validLevels = Object.keys(LOG_LEVEL_VALUES).join(', ');
     throw new TypeError(`Log level must be one of: ${validLevels}, got: ${envValue}`);
   }

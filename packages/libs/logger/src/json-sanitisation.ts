@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- REFACTOR */
 /**
  * JSON sanitisation utilities for converting arbitrary values to JSON-safe formats
  */
@@ -7,12 +8,14 @@ import type { JsonValue, JsonObject } from './types.js';
 const CIRCULAR_REFERENCE_PLACEHOLDER = '[Circular]';
 const UNSERIALISABLE_PLACEHOLDER = '[unserializable]';
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 type JsonLike = JsonValue | Date | Error | object | undefined;
 type PlainObject = Record<string, JsonLike>;
 
 type UndefinedStrategy = 'null' | 'omit';
 
 interface SanitiserContext {
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   readonly seen: WeakSet<object>;
   readonly undefinedStrategy: UndefinedStrategy;
 }
@@ -33,6 +36,7 @@ function isPlainObject(value: unknown): value is PlainObject {
 }
 
 function withCircularGuard<T>(
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   candidate: object,
   context: SanitiserContext,
   onCircular: () => T,
@@ -69,6 +73,7 @@ function collectObjectEntries(
 ): [string, JsonValue][] {
   const entries: [string, JsonValue][] = [];
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [key, rawValue] of Object.entries(source)) {
     if (rawValue === undefined) {
       if (context.undefinedStrategy === 'null') {
@@ -165,6 +170,7 @@ function sanitiseUnknown(value: unknown, context: SanitiserContext): JsonValue {
   return serialiseWithJson(value);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function isJsonArrayValue(value: readonly unknown[], seen: WeakSet<object>): boolean {
   return withCircularGuard(
     value,
@@ -174,11 +180,13 @@ function isJsonArrayValue(value: readonly unknown[], seen: WeakSet<object>): boo
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function isJsonPlainObjectValue(value: PlainObject, seen: WeakSet<object>): boolean {
   return withCircularGuard(
     value,
     { seen, undefinedStrategy: 'null' },
     () => false,
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     () => Object.values(value).every((entry) => isJsonValue(entry, seen)),
   );
 }
@@ -189,6 +197,7 @@ function isJsonPlainObjectValue(value: PlainObject, seen: WeakSet<object>): bool
  * @param seen - WeakSet to track seen objects (for circular reference detection)
  * @returns True if the value can be safely serialised to JSON
  */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function isJsonValue(value: unknown, seen = new WeakSet<object>()): value is JsonValue {
   if (isPrimitiveJsonValue(value)) {
     return true;
@@ -215,6 +224,7 @@ export function isJsonValue(value: unknown, seen = new WeakSet<object>()): value
  * - Arrays/objects are recursively sanitised
  * - Unserializable values become '[unserializable]'
  */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function sanitiseForJson(value: unknown, seen = new WeakSet<object>()): JsonValue {
   const context: SanitiserContext = {
     seen,
@@ -233,6 +243,7 @@ export function sanitiseObject(value: unknown): JsonObject | null {
   }
 
   const context: SanitiserContext = {
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
     seen: new WeakSet<object>(),
     undefinedStrategy: 'omit',
   };

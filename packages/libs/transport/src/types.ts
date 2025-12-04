@@ -11,11 +11,17 @@ import type { Readable, Writable } from 'stream';
  * Context can be an Error or any structured data
  */
 export interface Logger {
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   trace(message: string, context?: Error | object): void;
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   debug(message: string, context?: Error | object): void;
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   info(message: string, context?: Error | object): void;
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   warn(message: string, context?: Error | object): void;
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   error(message: string, context?: Error | object): void;
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   fatal(message: string, context?: Error | object): void;
 }
 
