@@ -61,7 +61,8 @@
     "overrides": {
       "axios": "^1.12.2",
       "sucrase": ">=3.35.1",
-      "js-yaml": ">=4.1.1"
+      "js-yaml": ">=4.1.1",
+      "csstype": "^3.2.3"
     },
     "onlyBuiltDependencies": [
       "@clerk/shared",
