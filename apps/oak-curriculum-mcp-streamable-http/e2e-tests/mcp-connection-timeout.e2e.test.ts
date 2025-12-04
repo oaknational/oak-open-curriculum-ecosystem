@@ -13,9 +13,24 @@
  * 3. Timeout behavior - MCP routes return 503 after 5s if connection doesn't complete
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import request from 'supertest';
 import type { Express } from 'express';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
+
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 /**
  * Create a never-resolving Promise to simulate a hanging MCP connection
@@ -33,9 +48,8 @@ function createHangingConnection(): Promise<void> {
 async function createAppWithHangingConnection(): Promise<Express> {
   const express = await import('express');
   const { createHttpLogger } = await import('../src/logging/index.js');
-  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
-
-  const runtimeConfig = loadRuntimeConfig();
+  // Use mock config instead of loading from env
+  const runtimeConfig = createMockRuntimeConfig();
   const log = createHttpLogger(runtimeConfig, { name: 'e2e-test-hanging' });
 
   const { default: expressDefault } = express;
@@ -142,14 +156,13 @@ async function createAppWithDelayedConnection(delayMs: number): Promise<{
 }> {
   const express = await import('express');
   const { createHttpLogger } = await import('../src/logging/index.js');
-  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
   const { McpServer } = await import('@modelcontextprotocol/sdk/server/mcp.js');
-  const { StreamableHTTPServerTransport } = await import(
-    '@modelcontextprotocol/sdk/server/streamableHttp.js'
-  );
+  const { StreamableHTTPServerTransport } =
+    await import('@modelcontextprotocol/sdk/server/streamableHttp.js');
   const { registerHandlers } = await import('../src/handlers.js');
 
-  const runtimeConfig = loadRuntimeConfig();
+  // Use mock config instead of loading from env
+  const runtimeConfig = createMockRuntimeConfig();
   const log = createHttpLogger(runtimeConfig, { name: 'e2e-test-delayed' });
 
   const { default: expressDefault } = express;
@@ -313,8 +326,8 @@ describe('MCP Connection Timeout E2E', () => {
     beforeAll(async () => {
       const { createApp } = await import('../src/application.js');
 
-      // Auth is already disabled in test env via DANGEROUSLY_DISABLE_AUTH=true
-      app = createApp();
+      // Use mock config
+      app = createApp({ runtimeConfig: createMockRuntimeConfig() });
     });
 
     it('should respond to health check immediately with real app', async () => {

@@ -137,7 +137,7 @@ function BucketSection({
 
   if (results.length === 0) {
     return (
-      <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-s">
+      <OakBox as="section" $display="flex" $flexDirection="column" $gap="spacing-12">
         <OakTypography as="h2" $font="heading-6">
           {heading}
         </OakTypography>
@@ -150,7 +150,7 @@ function BucketSection({
   }
 
   return (
-    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-s">
+    <OakBox as="section" $display="flex" $flexDirection="column" $gap="spacing-12">
       <OakTypography as="h2" $font="heading-6">
         {heading}
       </OakTypography>

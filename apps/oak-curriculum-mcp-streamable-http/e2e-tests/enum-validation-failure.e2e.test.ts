@@ -1,8 +1,23 @@
 import request from 'supertest';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
+
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 function parseFirstSseData(raw: string): unknown {
   const line = raw
@@ -31,10 +46,9 @@ function makeInvalidEnumBody() {
 async function post(body: Record<string, unknown>) {
   // Disable auth – this suite exercises validation errors only.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-  process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-  const app = createApp();
+  const app = createApp({
+    runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+  });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }
 

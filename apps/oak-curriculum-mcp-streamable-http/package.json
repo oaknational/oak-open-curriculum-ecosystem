@@ -31,38 +31,38 @@
     "test:ui": "playwright test"
   },
   "dependencies": {
-    "@clerk/express": "^1.7.43",
+    "@clerk/express": "^1.7.54",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@modelcontextprotocol/sdk": "^1.24.2",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
-    "commander": "^12.1.0",
+    "commander": "^14.0.2",
     "cors": "^2.8.5",
-    "express": "^5.2.0",
-    "express-list-routes": "^1.3.1",
+    "express": "^5.2.1",
+    "express-list-routes": "^1.3.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "zod": "^4"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.10.2",
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.57.0",
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "chokidar": "^5.0.0",
     "eslint": "^9.39.1",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "supertest": "^7.1.4",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "vitest": "^4.0.12"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "24.x"
   },
   "repository": {
     "type": "git",

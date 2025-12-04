@@ -39,18 +39,18 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.23.0",
-    "@notionhq/client": "^4.0.1",
+    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@notionhq/client": "^5.4.0",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",
-    "dotenv": "^17.2.1",
-    "zod": "^4"
+    "dotenv": "^17.2.3",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=22.0.0"
+    "node": "24.x"
   },
   "repository": {
     "type": "git",

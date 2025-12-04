@@ -81,8 +81,10 @@ export const isErr = <T, E>(result: Result<T, E>): result is { ok: false; error:
 #### 3. Lifecycle Management
 
 ```typescript
-export interface LifecycleHandler<TInput = unknown, TOutput = unknown>
-  extends Handler<TInput, TOutput> {
+export interface LifecycleHandler<TInput = unknown, TOutput = unknown> extends Handler<
+  TInput,
+  TOutput
+> {
   // Lifecycle hooks
   beforeHandle?(input: TInput): void;
   afterHandle?(input: TInput, output: TOutput): void;

@@ -4,11 +4,32 @@
  */
 
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
-import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
-import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
+import type {
+  PageObjectResponse,
+  DataSourceObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints';
+import { isFullPage } from '@notionhq/client/build/src/helpers';
 import type { NotionDependencies } from '../../../types/notion-types/dependencies';
-// Transformers will be accessed through deps.notionOperations
 import { scrubSensitiveData } from '../../../logging/scrubbing';
+
+/**
+ * Represents filtered search results.
+ */
+interface FilteredSearchResults {
+  pages: PageObjectResponse[];
+  dataSources: DataSourceObjectResponse[];
+}
+
+/**
+ * Checks if a search result is a full DataSourceObjectResponse.
+ *
+ * Full data sources have `title` array; partial responses only have `id` and `object`.
+ */
+function isFullDataSource(
+  result: PageObjectResponse | DataSourceObjectResponse | { object: string; id: string },
+): result is DataSourceObjectResponse {
+  return result.object === 'data_source' && 'title' in result;
+}
 
 /**
  * Handles the special discovery resource
@@ -28,17 +49,23 @@ export async function handleDiscoveryResource(
     ]);
 
     const users = usersResponse.results;
-    // Filter only full pages and databases from search results
-    const searchResults = filterFullResponses(searchResponse);
+
+    // Filter search results into full pages and data sources
+    const { pages, dataSources } = filterSearchResults(searchResponse);
 
     // Transform to MCP resources
     const userResources = users.map((user) =>
       deps.notionOperations.transformers.transformNotionUserToMcpResource(user),
     );
-    const pageAndDbResources = transformSearchResults(searchResults, deps);
+    const pageResources = pages.map((page) =>
+      deps.notionOperations.transformers.transformNotionPageToMcpResource(page),
+    );
+    const dbResources = dataSources.map((ds) =>
+      deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(ds),
+    );
 
     // Create discovery document
-    const discovery = createDiscoveryDocument(userResources, pageAndDbResources);
+    const discovery = createDiscoveryDocument(userResources, pageResources, dbResources);
 
     // Format as readable text
     const text = formatDiscoveryText(discovery);
@@ -59,45 +86,26 @@ export async function handleDiscoveryResource(
 }
 
 /**
- * Filter search results to only include full pages and databases
+ * Filter search results into full pages and data sources.
+ *
+ * SDK v5 search returns DataSourceObjectResponse (not DatabaseObjectResponse).
  */
-function filterFullResponses(
+function filterSearchResults(
   searchResponse: Awaited<ReturnType<NotionDependencies['notionClient']['search']>>,
-): (PageObjectResponse | DatabaseObjectResponse)[] {
-  const filtered: (PageObjectResponse | DatabaseObjectResponse)[] = [];
+): FilteredSearchResults {
+  const pages: PageObjectResponse[] = [];
+  const dataSources: DataSourceObjectResponse[] = [];
 
-  // Process search results which can be pages, databases, or blocks
   for (const result of searchResponse.results) {
-    // The SDK provides these type guards to check for full responses
     if (isFullPage(result)) {
-      filtered.push(result);
-    } else if (isFullDatabase(result)) {
-      filtered.push(result);
+      pages.push(result);
+    } else if (isFullDataSource(result)) {
+      dataSources.push(result);
     }
-    // Partial responses and blocks are ignored
+    // Partial responses are ignored
   }
 
-  return filtered;
-}
-
-/**
- * Transform search results to MCP resources
- */
-function transformSearchResults(
-  results: (PageObjectResponse | DatabaseObjectResponse)[],
-  deps: NotionDependencies,
-): Resource[] {
-  return results
-    .map((item) => {
-      // Use SDK's built-in type guards to check for full responses
-      if (isFullPage(item)) {
-        return deps.notionOperations.transformers.transformNotionPageToMcpResource(item);
-      } else if (isFullDatabase(item)) {
-        return deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(item);
-      }
-      return null;
-    })
-    .filter((r): r is Resource => r !== null);
+  return { pages, dataSources };
 }
 
 /**
@@ -105,7 +113,8 @@ function transformSearchResults(
  */
 function createDiscoveryDocument(
   userResources: Resource[],
-  pageAndDbResources: Resource[],
+  pageResources: Resource[],
+  dbResources: Resource[],
 ): {
   workspace: {
     users: number;
@@ -118,19 +127,16 @@ function createDiscoveryDocument(
     databases: Resource[];
   };
 } {
-  const pages = pageAndDbResources.filter((r) => r.uri.startsWith('notion://pages/'));
-  const databases = pageAndDbResources.filter((r) => r.uri.startsWith('notion://databases/'));
-
   return {
     workspace: {
       users: userResources.length,
-      pages: pages.length,
-      databases: databases.length,
+      pages: pageResources.length,
+      databases: dbResources.length,
     },
     resources: {
       users: userResources,
-      pages,
-      databases,
+      pages: pageResources,
+      databases: dbResources,
     },
   };
 }

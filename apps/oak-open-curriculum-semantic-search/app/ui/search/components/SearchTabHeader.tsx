@@ -20,7 +20,7 @@ function SearchTabHeader({
           setActive(value);
         }
       }}
-      $gap="space-between-s"
+      $gap="spacing-12"
     >
       <OakSecondaryButtonAsRadio value="structured">Structured</OakSecondaryButtonAsRadio>
       <OakSecondaryButtonAsRadio value="nl">Natural language</OakSecondaryButtonAsRadio>

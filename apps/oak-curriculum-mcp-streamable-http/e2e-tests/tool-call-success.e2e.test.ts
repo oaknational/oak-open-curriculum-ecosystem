@@ -1,11 +1,26 @@
 import request from 'supertest';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
+
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 interface CapturedCall {
   readonly tool: unknown;
@@ -35,27 +50,16 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   };
 }
 
-function configureDevEnvironment(): () => void {
-  const previousAuth = process.env.DANGEROUSLY_DISABLE_AUTH;
-  // Disable auth – this suite validates success envelope formatting.
-  // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  return () => {
-    if (typeof previousAuth === 'string') {
-      process.env.DANGEROUSLY_DISABLE_AUTH = previousAuth;
-    } else {
-      Reflect.deleteProperty(process.env, 'DANGEROUSLY_DISABLE_AUTH');
-    }
-  };
-}
-
 async function executeToolCall(): Promise<{
   readonly response: request.Response;
   readonly captured: CapturedCall[];
 }> {
   const captured: CapturedCall[] = [];
   const overrides = createStubOverrides(captured);
-  const app = createApp({ toolHandlerOverrides: overrides });
+  const app = createApp({
+    toolHandlerOverrides: overrides,
+    runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+  });
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
@@ -88,13 +92,8 @@ function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[
 }
 
 async function exerciseToolCallSuccessScenario(): Promise<void> {
-  const restoreEnv = configureDevEnvironment();
-  try {
-    const { response, captured } = await executeToolCall();
-    assertSuccessfulResponse(response, captured);
-  } finally {
-    restoreEnv();
-  }
+  const { response, captured } = await executeToolCall();
+  assertSuccessfulResponse(response, captured);
 }
 
 describe('Tool call success formatting', () => {

@@ -8,10 +8,16 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   reporter: [['list']],
   webServer: {
-    command: 'pnpm dev',
+    command: 'pnpm dev:observe:noauth',
     url: baseURL,
     reuseExistingServer: true,
     timeout: 60_000,
+    env: {
+      OAK_API_KEY: 'test-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_dummy',
+      CLERK_SECRET_KEY: 'sk_test_dummy',
+      DANGEROUSLY_DISABLE_AUTH: 'true',
+    },
   },
   use: {
     trace: 'on',

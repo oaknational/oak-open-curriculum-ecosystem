@@ -16,7 +16,7 @@ import {
 import type { Resource } from './transformers';
 import {
   createMockPage,
-  createMockDatabase,
+  createMockDataSource,
   createMockPersonUser,
   createMockBotUser,
 } from '../../test/mocks/notion-mocks';
@@ -39,8 +39,8 @@ describe('formatSearchResults', () => {
 
   it('should format mixed pages and databases', () => {
     const page = createMockPage({ id: 'page-1' });
-    const database = createMockDatabase({ id: 'db-1' });
-    const results = [page, database];
+    const mockDatabase = createMockDataSource({ id: 'db-1' });
+    const results = [page, mockDatabase];
 
     const resources: Resource[] = [
       {
@@ -178,7 +178,7 @@ describe('formatDatabaseQueryResults', () => {
 
 describe('formatDatabaseList', () => {
   it('should format multiple databases', () => {
-    const databases = [createMockDatabase({ id: 'db-1' }), createMockDatabase({ id: 'db-2' })];
+    const databases = [createMockDataSource({ id: 'db-1' }), createMockDataSource({ id: 'db-2' })];
 
     const resources: Resource[] = [
       {
@@ -208,7 +208,7 @@ describe('formatDatabaseList', () => {
   });
 
   it('should handle singular database', () => {
-    const databases = [createMockDatabase({ id: 'db-1' })];
+    const databases = [createMockDataSource()];
     const resources: Resource[] = [
       {
         uri: 'notion://databases/db-1',

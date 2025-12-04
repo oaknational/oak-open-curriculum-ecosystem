@@ -5,10 +5,24 @@
 
 import type { MinimalNotionClient } from '../../../types/notion-types/notion-client';
 import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { isFullDatabase } from '@notionhq/client/build/src/helpers';
+import type {
+  PageObjectResponse,
+  DataSourceObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints';
+
 import { notionQueryDatabaseSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
+
+/**
+ * Checks if a data source response is a full response (not partial).
+ *
+ * Full responses have `title` array; partial responses only have `id` and `object`.
+ */
+function isFullDataSourceResponse(
+  response: Awaited<ReturnType<MinimalNotionClient['dataSources']['retrieve']>>,
+): response is DataSourceObjectResponse {
+  return 'title' in response;
+}
 
 export interface QueryDatabaseDependencies {
   notionClient: MinimalNotionClient;
@@ -20,8 +34,8 @@ export interface QueryDatabaseDependencies {
  * Builds query parameters for database query
  */
 function buildQueryParams(validatedArgs: ReturnType<typeof notionQueryDatabaseSchema.parse>) {
-  const queryParams: Parameters<MinimalNotionClient['databases']['query']>[0] = {
-    database_id: validatedArgs.database_id,
+  const queryParams: Parameters<MinimalNotionClient['dataSources']['query']>[0] = {
+    data_source_id: validatedArgs.database_id,
     page_size: validatedArgs.page_size ?? 20,
   };
 
@@ -52,14 +66,14 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
       deps.logger.debug('Querying database', { database_id: validatedArgs.database_id });
 
       // Get database info first
-      const dbResponse = await deps.notionClient.databases.retrieve({
-        database_id: validatedArgs.database_id,
+      const dbResponse = await deps.notionClient.dataSources.retrieve({
+        data_source_id: validatedArgs.database_id,
       });
 
-      // Ensure we have a full database response
-      if (!isFullDatabase(dbResponse)) {
+      // Validate we received a full data source response (not partial)
+      if (!isFullDataSourceResponse(dbResponse)) {
         throw new Error(
-          'Invalid database response - missing required fields like title. The database may have restricted permissions.',
+          'Invalid database response - missing required fields. The database may have restricted permissions.',
         );
       }
 
@@ -68,7 +82,7 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
 
       // Build and execute query
       const queryParams = buildQueryParams(validatedArgs);
-      const queryResponse = await deps.notionClient.databases.query(queryParams);
+      const queryResponse = await deps.notionClient.dataSources.query(queryParams);
 
       // Filter for full page responses
       const pages = queryResponse.results.filter(

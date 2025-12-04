@@ -53,7 +53,7 @@ function SequenceFacetList({
   onSelectSequence?: (facet: SequenceFacet) => void;
 }): JSX.Element {
   return (
-    <OakUL $reset $display="grid" $gap="space-between-s">
+    <OakUL $reset $display="grid" $gap="spacing-12">
       {sequences.map((facet) => (
         <OakBox as="li" key={`${facet.sequenceSlug}-${facet.keyStage}`}>
           <FacetButton facet={facet} onSelectSequence={onSelectSequence} />

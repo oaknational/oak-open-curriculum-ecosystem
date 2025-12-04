@@ -19,14 +19,27 @@
  * Part of Phase 2, Sub-Phase 2.5
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import request from 'supertest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import type { Express } from 'express';
+import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
 
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 // E2E tests don't block fetch, so no restoration needed
 
 describe('Application-Level Method-Aware Auth', () => {
@@ -34,16 +47,17 @@ describe('Application-Level Method-Aware Auth', () => {
 
   // Create app once for all tests (like E2E tests do)
   beforeAll(() => {
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test',
-      CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
-      CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      // Auth enabled, but discovery/public tools should work without token
-    };
-
-    const runtimeConfig = loadRuntimeConfig(testEnv);
-    app = createApp({ runtimeConfig });
+    app = createApp({
+      runtimeConfig: createMockRuntimeConfig({
+        // Auth enabled by default in mock config
+        env: {
+          OAK_API_KEY: 'test-api-key',
+          CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+          CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+          NODE_ENV: 'test',
+        },
+      }),
+    });
   });
 
   describe('Discovery methods (no auth required)', () => {
@@ -244,29 +258,19 @@ describe('Application-Level Method-Aware Auth', () => {
 
   describe('DANGEROUSLY_DISABLE_AUTH compatibility', () => {
     let bypassApp: Express;
-    let originalEnv: string | undefined;
 
     beforeAll(() => {
-      originalEnv = process.env.DANGEROUSLY_DISABLE_AUTH;
-
-      const testEnv: NodeJS.ProcessEnv = {
-        NODE_ENV: 'development',
-        OAK_API_KEY: 'test-api-key',
-        DANGEROUSLY_DISABLE_AUTH: 'true',
-        CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
-        CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-      };
-
-      const runtimeConfig = loadRuntimeConfig(testEnv);
-      bypassApp = createApp({ runtimeConfig });
-    });
-
-    afterAll(() => {
-      if (originalEnv === undefined) {
-        delete process.env.DANGEROUSLY_DISABLE_AUTH;
-      } else {
-        process.env.DANGEROUSLY_DISABLE_AUTH = originalEnv;
-      }
+      bypassApp = createApp({
+        runtimeConfig: createMockRuntimeConfig({
+          dangerouslyDisableAuth: true,
+          env: {
+            OAK_API_KEY: 'test-api-key',
+            CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+            CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+            NODE_ENV: 'development',
+          },
+        }),
+      });
     });
 
     it('allows all methods without token when flag is true', async () => {

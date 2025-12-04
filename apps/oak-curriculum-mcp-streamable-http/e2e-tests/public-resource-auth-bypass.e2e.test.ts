@@ -26,11 +26,25 @@
  * @module
  */
 
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
+
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
 
 /**
  * Test configuration: Auth ENABLED (production equivalent).
@@ -39,16 +53,17 @@ import { createApp } from '../src/application.js';
  * DANGEROUSLY_DISABLE_AUTH is NOT set - auth is enforced.
  */
 function createAuthEnabledApp(): Express {
-  const testEnv: NodeJS.ProcessEnv = {
-    NODE_ENV: 'test',
-    CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
-    CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
-    OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-    // DANGEROUSLY_DISABLE_AUTH is NOT set - auth ENABLED
-  };
-
-  const runtimeConfig = loadRuntimeConfig(testEnv);
-  return createApp({ runtimeConfig });
+  return createApp({
+    runtimeConfig: createMockRuntimeConfig({
+      // DANGEROUSLY_DISABLE_AUTH is false by default in createMockRuntimeConfig
+      env: {
+        OAK_API_KEY: 'test-api-key',
+        CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+        CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+        NODE_ENV: 'test',
+      },
+    }),
+  });
 }
 
 describe('Public Resource Authentication Bypass (E2E)', () => {

@@ -1,18 +1,27 @@
 import request from 'supertest';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
+import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
+// Mock Clerk middleware to avoid network IO and requirement for valid keys
+vi.mock('@clerk/express', () => ({
+  clerkMiddleware: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  requireAuth: () => (_req: unknown, _res: unknown, next: () => void) => {
+    next();
+  },
+  getAuth: () => ({
+    isAuthenticated: false,
+    toAuth: () => ({}),
+  }),
+}));
+
 describe('HTTP boundary argument validation', () => {
-  beforeEach(() => {
-    // Disable auth – this suite inspects HTTP argument validation only.
-    // Auth enforcement has dedicated coverage in auth-enforcement.e2e.test.ts and smoke-dev-auth.
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-  });
+  // No beforeEach needed for process.env mutation anymore!
 
   function parseSseDataLine(body: string): string {
     const line = body
@@ -46,7 +55,9 @@ describe('HTTP boundary argument validation', () => {
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
-    const app = createApp();
+    const app = createApp({
+      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -64,7 +75,9 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
-    const app = createApp();
+    const app = createApp({
+      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -82,7 +95,9 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
-    const app = createApp();
+    const app = createApp({
+      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -123,7 +138,10 @@ describe('HTTP boundary argument validation', () => {
           ],
         }),
     };
-    const app = createApp({ toolHandlerOverrides: overrides });
+    const app = createApp({
+      toolHandlerOverrides: overrides,
+      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)

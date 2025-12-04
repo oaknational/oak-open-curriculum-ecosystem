@@ -40,6 +40,7 @@ describe('transformNotionPageToMcpResource', () => {
       public_url: null,
       icon: null,
       cover: null,
+      is_locked: false,
     };
 
     const result = transformNotionPageToMcpResource(notionPage);
@@ -74,6 +75,7 @@ describe('transformNotionPageToMcpResource', () => {
       public_url: null,
       icon: null,
       cover: null,
+      is_locked: false,
     };
 
     const result = transformNotionPageToMcpResource(notionPage);
@@ -119,6 +121,7 @@ describe('transformNotionPageToMcpResource', () => {
       public_url: null,
       icon: null,
       cover: null,
+      is_locked: false,
     };
 
     const result = transformNotionPageToMcpResource(notionPage);

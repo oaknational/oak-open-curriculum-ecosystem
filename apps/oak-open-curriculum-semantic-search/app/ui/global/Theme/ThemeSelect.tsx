@@ -69,7 +69,7 @@ export default function ThemeSelect(): JSX.Element {
       onChange={handleChange}
       $flexDirection="row"
       $flexWrap="wrap"
-      $gap="space-between-xs"
+      $gap="spacing-4"
     >
       {OPTIONS.map((option) => (
         <OakRadioButton

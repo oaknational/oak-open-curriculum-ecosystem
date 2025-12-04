@@ -46,14 +46,14 @@ function buildUiColorMap(overrides: Partial<Record<OakUiRoleToken, OakColorToken
 const sharedAppSpec: Omit<SemanticAppSpec, 'colors' | 'palette'> = {
   space: {
     gap: {
-      grid: 'space-between-m',
-      section: 'space-between-xl',
-      cluster: 'space-between-s',
-      stack: 'space-between-l',
+      grid: 'spacing-16',
+      section: 'spacing-32',
+      cluster: 'spacing-8',
+      stack: 'spacing-24',
     },
     padding: {
-      card: 'inner-padding-l',
-      pill: 'inner-padding-xs',
+      card: 'spacing-24',
+      pill: 'spacing-4',
     },
   },
   radii: {
@@ -101,8 +101,8 @@ const sharedAppSpec: Omit<SemanticAppSpec, 'colors' | 'palette'> = {
     controlColumnMinWidth: '20rem',
     secondaryColumnMinWidth: '18rem',
     inlinePadding: {
-      base: 'space-between-l',
-      wide: 'space-between-xl',
+      base: 'spacing-24',
+      wide: 'spacing-32',
     },
     breakpoints: {
       xs: '0px',

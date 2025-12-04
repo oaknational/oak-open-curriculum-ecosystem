@@ -8,18 +8,22 @@
 
 import type {
   PageObjectResponse,
-  DatabaseObjectResponse,
+  DataSourceObjectResponse,
   UserObjectResponse,
   BlockObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 import type { Resource } from '@modelcontextprotocol/sdk/types.js';
 
 /**
- * Transform functions that convert Notion objects to MCP resources
+ * Transform functions that convert Notion objects to MCP resources.
+ *
+ * Note: All database transformations use DataSourceObjectResponse (SDK v5).
+ * The deprecated DatabaseObjectResponse from search results should be
+ * re-fetched via dataSources.retrieve() before transformation.
  */
 export interface NotionTransformers {
   transformNotionPageToMcpResource: (page: PageObjectResponse) => Resource;
-  transformNotionDatabaseToMcpResource: (database: DatabaseObjectResponse) => Resource;
+  transformNotionDatabaseToMcpResource: (database: DataSourceObjectResponse) => Resource;
   transformNotionUserToMcpResource: (user: UserObjectResponse) => Resource;
   extractTextFromNotionBlocks: (blocks: BlockObjectResponse[]) => string;
 }
@@ -29,11 +33,11 @@ export interface NotionTransformers {
  */
 export interface NotionFormatters {
   formatSearchResults: (
-    results: (PageObjectResponse | DatabaseObjectResponse)[],
+    results: (PageObjectResponse | DataSourceObjectResponse)[],
     query: string,
     resources: Resource[],
   ) => string;
-  formatDatabaseList: (databases: DatabaseObjectResponse[], resources: Resource[]) => string;
+  formatDatabaseList: (databases: DataSourceObjectResponse[], resources: Resource[]) => string;
   formatUserList: (users: UserObjectResponse[], resources: Resource[]) => string;
   formatDatabaseQueryResults: (
     dbResource: Resource,
