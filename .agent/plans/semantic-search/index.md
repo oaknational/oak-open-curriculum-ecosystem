@@ -86,6 +86,42 @@ Semantic search will integrate with MCP via:
 - OpenAI App widget for interactive search
 - Type-safe schemas from generated artifacts
 
+### Index Inventory
+
+**Current Indexes** (mappings in `src/lib/elasticsearch/definitions/`):
+
+| Index                 | Purpose                                   | Status |
+| --------------------- | ----------------------------------------- | ------ |
+| `oak_lessons`         | Lesson documents with semantic embeddings | Active |
+| `oak_unit_rollup`     | Unit aggregated content for search        | Active |
+| `oak_units`           | Basic unit metadata                       | Active |
+| `oak_sequences`       | Programme sequence documents              | Active |
+| `oak_sequence_facets` | Sequence facet navigation data            | Active |
+| `oak_zero_hit_events` | Telemetry (lazy creation)                 | Active |
+
+**Future Indexes** (Phase 2-3):
+
+| Index                    | Priority | Purpose                                   |
+| ------------------------ | -------- | ----------------------------------------- |
+| `oak_threads`            | HIGH     | Thread-centric search scope               |
+| `oak_ontology`           | HIGH     | Domain knowledge RAG                      |
+| `oak_lesson_transcripts` | HIGH     | Chunked transcripts for deep retrieval    |
+| `oak_content_guidance`   | HIGH     | Safeguarding/content warnings (filtering) |
+| `oak_lesson_planning`    | MEDIUM   | Pedagogical context search                |
+| `oak_assets`             | MEDIUM   | Resource discovery                        |
+
+### SDK Data Imports (Single Source of Truth)
+
+Domain data is imported from SDK:
+
+```typescript
+import {
+  ontologyData, // Curriculum domain model, synonyms
+  conceptGraph, // Knowledge graph structure
+  buildElasticsearchSynonyms, // ES synonym export
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+```
+
 ## Dependencies
 
 - Curriculum ontology: `docs/architecture/curriculum-ontology.md` (✅ COMPLETE)

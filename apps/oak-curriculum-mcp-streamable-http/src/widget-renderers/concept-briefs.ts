@@ -1,49 +1,21 @@
 /**
  * Concept brief descriptions for SVG node tooltips.
- * Mirrors the brief descriptions from knowledge-graph-data.ts in the SDK.
+ *
+ * Imports from the SDK knowledge-graph-data.ts - the SINGLE SOURCE OF TRUTH.
+ * Node IDs use the format 'node-{conceptId}'.
+ *
  * @module widget-renderers/concept-briefs
  */
 
+import { conceptGraph } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+
 /**
  * Map of node ID to brief description.
- * Node IDs use the format 'node-{conceptId}'.
- * These descriptions come from the curriculum knowledge graph.
+ * Built from SDK conceptGraph at import time.
  */
-const CONCEPT_BRIEFS: Readonly<Record<string, string>> = {
-  // Structure (core hierarchy)
-  'node-subject': 'Curriculum subject area (maths, history, etc.)',
-  'node-sequence': 'Internal API grouping of units across years',
-  'node-unit': 'Topic of study with ordered lessons',
-  'node-lesson': 'Teaching session with 8 standard components',
-  // Content (within lesson)
-  'node-quiz': 'Starter or exit assessment',
-  'node-question': 'Quiz question with answers',
-  'node-answer': 'Correct answer or distractor',
-  'node-asset': 'Downloadable resource (slides, worksheet)',
-  'node-transcript': 'Video transcript text',
-  // Context (scoping)
-  'node-phase': 'Primary or secondary',
-  'node-keystage': 'KS1-KS4 formal education stage',
-  'node-yeargroup': 'Year 1-11 school year',
-  // Taxonomy (cross-cutting)
-  'node-thread': 'Conceptual strand linking units across years',
-  'node-category': 'Subject-specific grouping of units',
-  // KS4 complexity
-  'node-programme': 'User-facing curriculum pathway (derived view)',
-  'node-tier': 'Foundation or higher difficulty level',
-  'node-pathway': 'Core or GCSE route through KS4',
-  'node-examboard': 'AQA, OCR, Edexcel, Eduqas',
-  'node-examsubject': 'Biology, Chemistry, Physics (KS4 science)',
-  // Educational metadata
-  'node-keyword': 'Critical vocabulary for the lesson',
-  'node-misconception': 'Common misunderstanding to address',
-  'node-contentguidance': 'Sensitive content advisory',
-  'node-supervisionlevel': 'Adult supervision requirement level',
-  'node-priorknowledge': 'Prerequisite understanding required',
-  'node-nationalcurriculum': 'NC coverage alignment',
-  'node-keylearningpoint': 'Main knowledge outcome of lesson',
-  'node-teachertip': 'Pedagogical guidance for delivery',
-};
+const CONCEPT_BRIEFS: Readonly<Record<string, string>> = Object.fromEntries(
+  conceptGraph.concepts.map((c) => [`node-${c.id}`, c.brief]),
+);
 
 /**
  * Gets the brief description for a node ID.

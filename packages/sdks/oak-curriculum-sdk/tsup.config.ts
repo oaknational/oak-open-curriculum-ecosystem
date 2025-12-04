@@ -93,6 +93,7 @@ export default defineConfig({
     'src/mcp/prerequisite-guidance.ts',
     'src/mcp/widget-constants.ts',
     'src/mcp/agent-support-tool-metadata.ts',
+    'src/mcp/synonym-export.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations

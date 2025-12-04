@@ -36,20 +36,56 @@ The search indices will be enhanced with ontology metadata to enable:
 - **Structured content guidance**: Four categories with supervision levels
 - **Lesson component availability**: Boolean flags for worksheets, videos, quizzes, etc.
 
+### Lesson Components (OPTIONAL)
+
+**Critical Design Consideration**: Not all lessons have all components.
+
+| Component            | Availability | Search Implications                                            |
+| -------------------- | ------------ | -------------------------------------------------------------- |
+| Curriculum info      | Always       | Always indexed                                                 |
+| Slide deck           | Optional     | May be null                                                    |
+| Video                | Optional     | Not all lessons have video                                     |
+| Transcript           | Optional     | Only if video exists - `oak_lesson_transcripts` will be sparse |
+| Starter quiz         | Optional     | May be null                                                    |
+| Exit quiz            | Optional     | May be null                                                    |
+| Worksheet            | Optional     | May be null                                                    |
+| Additional materials | Optional     | May be null                                                    |
+
+**Index Design**: Component availability should be indexed as boolean flags to enable filtering (e.g., "show only lessons with quizzes").
+
 ### Search Architecture
 
-**Indices** (Current):
+**Current Indexes** (mappings in `src/lib/elasticsearch/definitions/`):
 
-- `oak_lessons` - Individual lesson documents with transcripts
-- `oak_units` - Unit documents with lesson references
-- `oak_unit_rollup` - Aggregated unit text for semantic search
-- `oak_sequences` - Sequence documents with metadata
-- `oak_sequence_facets` - Facet enrichment for navigation
+| Index                 | Purpose                                                   |
+| --------------------- | --------------------------------------------------------- |
+| `oak_lessons`         | Lesson documents with transcripts and semantic embeddings |
+| `oak_units`           | Unit documents with lesson references                     |
+| `oak_unit_rollup`     | Aggregated unit text for semantic search                  |
+| `oak_sequences`       | Sequence documents with metadata                          |
+| `oak_sequence_facets` | Facet enrichment for navigation                           |
+| `oak_zero_hit_events` | Telemetry (lazy creation with ILM)                        |
 
-**Planned Additions**:
+**Future Indexes** (Phase 2-3):
 
-- `oak_threads` - Thread documents with unit rollups (NEW)
-- Thread/programme fields embedded in existing indices
+| Index                    | Priority | Purpose                                                   |
+| ------------------------ | -------- | --------------------------------------------------------- |
+| `oak_threads`            | HIGH     | Thread-centric search (progression tracking)              |
+| `oak_ontology`           | HIGH     | Domain knowledge RAG                                      |
+| `oak_lesson_transcripts` | HIGH     | Chunked transcripts for deep retrieval                    |
+| `oak_content_guidance`   | HIGH     | Safeguarding/content warnings (filtering)                 |
+| `oak_lesson_planning`    | MEDIUM   | Pedagogical context (key learning points, misconceptions) |
+| `oak_assets`             | MEDIUM   | Resource discovery (worksheets, slides, videos)           |
+
+**SDK Data Imports** (Single Source of Truth):
+
+```typescript
+import {
+  ontologyData, // Curriculum domain model, synonyms
+  conceptGraph, // Knowledge graph structure
+  buildElasticsearchSynonyms, // ES synonym export
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+```
 
 ### API Patterns
 

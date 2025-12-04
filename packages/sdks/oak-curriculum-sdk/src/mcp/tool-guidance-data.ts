@@ -264,6 +264,7 @@ export const toolGuidanceData = {
     'Key Stage 4 (GCSE) has additional complexity: tiers (foundation/higher) and exam boards.',
     'Use get-help or get-ontology to understand Oak - great at the start of a conversation.',
     'Use get-ontology for domain understanding (what things mean), get-knowledge-graph for structure (how things connect).',
+    'Not all lessons have all components - video, transcript, quizzes, and worksheets are OPTIONAL. Check availability before assuming they exist.',
   ],
 
   /**

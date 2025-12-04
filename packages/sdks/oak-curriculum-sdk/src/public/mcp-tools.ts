@@ -106,3 +106,24 @@ export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-promp
 export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';
 
 export { WIDGET_URI } from '../mcp/widget-constants.js';
+// Ontology data (single source of truth for domain knowledge)
+export { ontologyData } from '../mcp/ontology-data.js';
+export type { OntologyData } from '../mcp/ontology-data.js';
+
+// Knowledge graph data
+export { conceptGraph } from '../mcp/knowledge-graph-data.js';
+export type {
+  ConceptGraph,
+  ConceptId,
+  ConceptCategory,
+  ConceptEdge,
+} from '../mcp/knowledge-graph-data.js';
+
+// Synonym utilities (ES export, lookup)
+export {
+  buildElasticsearchSynonyms,
+  buildSynonymLookup,
+  serialiseElasticsearchSynonyms,
+  type ElasticsearchSynonymEntry,
+  type ElasticsearchSynonymSet,
+} from '../mcp/synonym-export.js';

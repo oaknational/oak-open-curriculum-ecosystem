@@ -28,6 +28,52 @@ Before any work, read and internalize these documents:
 - **ES Serverless NOT provisioned**: All testing is against fixtures only
 - **No data ingested**: Index mappings defined but no real data
 
+### Index Inventory
+
+**Current Indexes** (mappings in `src/lib/elasticsearch/definitions/`):
+
+| Index                 | Mapping File                  | Status    |
+| --------------------- | ----------------------------- | --------- |
+| `oak_lessons`         | ✅ `oak-lessons.json`         | Active    |
+| `oak_unit_rollup`     | ✅ `oak-unit-rollup.json`     | Active    |
+| `oak_units`           | ✅ `oak-units.json`           | Active    |
+| `oak_sequences`       | ✅ `oak-sequences.json`       | Active    |
+| `oak_sequence_facets` | ✅ `oak-sequence-facets.json` | Active    |
+| `oak_zero_hit_events` | Code-defined (lazy)           | Telemetry |
+
+**Future Indexes** (Phase 2-3):
+
+| Index                    | Priority | Purpose                                   |
+| ------------------------ | -------- | ----------------------------------------- |
+| `oak_threads`            | HIGH     | Thread-centric search scope               |
+| `oak_ontology`           | HIGH     | Domain knowledge RAG                      |
+| `oak_lesson_transcripts` | HIGH     | Chunked transcripts for deep retrieval    |
+| `oak_content_guidance`   | HIGH     | Safeguarding/content warnings (filtering) |
+| `oak_lesson_planning`    | MEDIUM   | Pedagogical context search                |
+| `oak_assets`             | MEDIUM   | Resource discovery                        |
+
+See `.agent/prompts/elasticsearch-serverless-deployment.prompt.md` for deployment guide.
+
+### SDK Data Imports (Single Source of Truth)
+
+The search app should import domain data from the SDK:
+
+```typescript
+import {
+  ontologyData, // Curriculum domain model
+  conceptGraph, // Knowledge graph structure
+  buildElasticsearchSynonyms, // ES synonym export
+  buildSynonymLookup, // Term normalisation
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+```
+
+**Key imports**:
+
+- `ontologyData.synonyms` → Use for ES synonyms (via `buildElasticsearchSynonyms()`)
+- `ontologyData.curriculumStructure` → Validate keyStage/subject slugs
+- `conceptGraph.concepts` → Build ontology index documents
+- `conceptGraph.edges` → Knowledge graph traversal
+
 ### Architecture Correction
 
 The ES connection test was **removed** from `tests/e2e/` because it made network calls to Elasticsearch. Per the testing strategy:
@@ -192,6 +238,27 @@ Current state: Thread index COMPLETE, ready for phase-1-thread-filter
 3. **When ES is provisioned (Phase 0)**:
    - Create `smoke-tests/` directory in semantic search app
    - Add ES connection smoke test (NOT E2E - smoke tests CAN access network)
+
+## Lesson Components (OPTIONAL)
+
+**Critical**: Not all lessons have all components. Code must handle missing components gracefully.
+
+| Component            | Availability   | Notes                      |
+| -------------------- | -------------- | -------------------------- |
+| Curriculum info      | Always present | Lesson metadata            |
+| Slide deck           | Optional       | Presentation slides        |
+| Video                | Optional       | Not all lessons have video |
+| Transcript           | Optional       | Only if video exists       |
+| Starter quiz         | Optional       | Prior knowledge assessment |
+| Exit quiz            | Optional       | Learning assessment        |
+| Worksheet            | Optional       | Practice tasks             |
+| Additional materials | Optional       | Supplementary resources    |
+
+**Implications for Search Indexes**:
+
+- `oak_lesson_transcripts` index will NOT contain all lessons
+- Component availability flags should be indexed for filtering
+- Queries should not assume all lessons have transcripts/quizzes
 
 ## Thread Data Structure Reference
 

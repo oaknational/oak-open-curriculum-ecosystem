@@ -37,24 +37,42 @@ The API key needs these privileges:
 
 ## Scripts Architecture Overview
 
-The `scripts/` directory contains **foundational infrastructure**, not just simple utilities:
+The `scripts/` directory contains **operational infrastructure**, not just simple utilities:
 
 ```text
 scripts/
-├── setup.sh              # Index bootstrap (synonyms + mappings)
+├── setup.sh              # Index bootstrap (generates synonyms from SDK + creates indexes)
 ├── alias-swap.sh         # Zero-downtime index repointing
-├── synonyms.json         # 130+ curriculum-specific synonyms
-├── mappings/             # ES index configurations
-│   ├── oak-lessons.json
-│   ├── oak-units.json
-│   ├── oak-unit-rollup.json
-│   └── oak-sequences.json
+├── generate-synonyms.ts  # Exports SDK synonyms to ES format
 ├── sandbox/
 │   └── ingest.ts         # CLI-driven fixture/live ingestion
 ├── observability/
 │   └── delete-zero-hit-events.ts  # Telemetry cleanup
-└── scaffolding/          # HISTORICAL - app bootstrap scripts (reference only)
+└── archive/
+    └── scaffolding/      # HISTORICAL - app bootstrap scripts (reference only)
+
+src/lib/elasticsearch/definitions/  # Index mapping files
+├── oak-lessons.json
+├── oak-units.json
+├── oak-unit-rollup.json
+├── oak-sequences.json
+└── oak-sequence-facets.json
 ```
+
+## SDK Data Imports (Single Source of Truth)
+
+**Synonyms, ontology data, and knowledge graph are imported from SDK**:
+
+```typescript
+import {
+  ontologyData, // Curriculum domain model
+  conceptGraph, // Knowledge graph structure
+  buildElasticsearchSynonyms, // ES synonym export
+  buildSynonymLookup, // Term normalisation
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+```
+
+The `setup.sh` script generates synonyms dynamically from SDK at runtime.
 
 ## Search Index Target System
 
@@ -119,9 +137,31 @@ Programme sequence documents for curriculum navigation.
 - `sequence_semantic` (semantic_text)
 - `title_suggest` (completion with subject/phase contexts)
 
-### 5. oak_sequence_facets (additional)
+### 5. oak_sequence_facets
 
-Sequence facet documents for faceted navigation - created during ingestion.
+Sequence facet documents for faceted navigation.
+
+**Key Fields**:
+
+- `subject_slug`, `sequence_slug`, `key_stage`, `key_stage_title`
+- `phase_slug`, `phase_title`
+- `years[]`, `unit_slugs[]`, `unit_titles[]`
+- `unit_count`, `lesson_count`
+- `has_ks4_options` (boolean for KS4 complexity)
+- `sequence_canonical_url`
+
+### 6. oak_zero_hit_events (telemetry)
+
+Telemetry index for zero-result queries, created lazily on first write.
+
+**Key Fields**:
+
+- `@timestamp`, `search_scope`, `query`
+- `filters` (flattened), `index_version`
+- `request_id`, `session_id`
+- `took_ms`, `timed_out`
+
+**Note**: This index is NOT created by `setup.sh`. It is created automatically when the first zero-hit event is persisted, with an ILM policy for automatic retention.
 
 ## Synonym Set (oak-syns)
 
@@ -302,14 +342,15 @@ Verify:
 curl -s -H "Authorization: ApiKey ${ES_KEY}" "${ES_URL}/_cat/indices?v" | grep oak
 ```
 
-Expected output shows 4 indexes (sequence_facets created during ingestion):
+Expected output shows 5 indexes:
 
 ```text
-health status index          uuid                   pri rep docs.count docs.deleted store.size pri.store.size
-green  open   oak_lessons    ...                    1   0   0          0            ...        ...
-green  open   oak_units      ...                    1   0   0          0            ...        ...
-green  open   oak_unit_rollup ...                   1   0   0          0            ...        ...
-green  open   oak_sequences  ...                    1   0   0          0            ...        ...
+health status index               uuid  pri rep docs.count docs.deleted store.size pri.store.size
+green  open   oak_lessons         ...   1   0   0          0            ...        ...
+green  open   oak_units           ...   1   0   0          0            ...        ...
+green  open   oak_unit_rollup     ...   1   0   0          0            ...        ...
+green  open   oak_sequences       ...   1   0   0          0            ...        ...
+green  open   oak_sequence_facets ...   1   0   0          0            ...        ...
 ```
 
 ### Phase 0.4: Initial Data Ingestion
@@ -350,7 +391,7 @@ curl -s -H "Authorization: ApiKey ${ES_KEY}" \
 
 ## Scaffolding Scripts (HISTORICAL REFERENCE)
 
-The `scripts/scaffolding/` directory contains **historical scaffolding scripts** used to bootstrap the app:
+The `scripts/archive/scaffolding/` directory contains **historical scaffolding scripts** used to bootstrap the app:
 
 - `oak-open-curriculum-search-scaffolding.sh` - Full app scaffold (1200+ lines)
 - `apply-split-search-endpoints.sh` - Patch for endpoint separation

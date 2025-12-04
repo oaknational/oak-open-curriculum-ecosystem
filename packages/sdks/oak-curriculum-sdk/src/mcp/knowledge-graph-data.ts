@@ -60,7 +60,7 @@ export const conceptGraph = {
     {
       id: 'lesson',
       label: 'Lesson',
-      brief: 'Teaching session with 8 standard components',
+      brief: 'Teaching session with up to 8 optional components',
       category: 'structure',
     },
 
