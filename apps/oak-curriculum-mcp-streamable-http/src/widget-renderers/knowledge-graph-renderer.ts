@@ -42,8 +42,8 @@ function buildLegend(): string {
   const x = position.x;
   const y = position.y;
   let l = `<rect x="${String(x)}" y="${String(y)}" width="${String(width)}" height="${String(height)}" rx="8" fill="rgba(0,0,0,0.3)"/>`;
-  l += `<rect class="group-label-bg" x="${String(x + 15)}" y="${String(y + 18)}" width="68" height="20" rx="4"/>`;
-  l += `<text class="group-label" x="${String(x + 20)}" y="${String(y + 33)}">Legend:</text>`;
+  l += `<rect class="group-label-bg" x="${String(x + 15)}" y="${String(y + 20)}" width="68" height="24" rx="4"/>`;
+  l += `<text class="group-label" x="${String(x + 49)}" y="${String(y + 38)}" style="text-anchor:middle">Legend:</text>`;
   for (const item of items) {
     l += `<rect class="${item.cssClass}" x="${String(item.x)}" y="${String(y + 20)}" width="24" height="24" rx="6"/>`;
     l += `<text class="label-sm" style="text-anchor:start" x="${String(item.x + 32)}" y="${String(y + 38)}">${item.label}</text>`;

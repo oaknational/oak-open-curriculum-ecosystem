@@ -44,11 +44,10 @@ export interface SectionConfig {
 }
 
 const CHAR_WIDTH = 10;
-const LABEL_PADDING = 14;
+const PADDING_X = 5;
 const LABEL_HEIGHT = 20;
 const LABEL_BORDER_RADIUS = 4;
 const LABEL_TEXT_Y = 15;
-const LABEL_TEXT_X = 5;
 
 /** Creates an SVG node (lozenge with centered text). */
 export function createNode(config: NodeConfig): string {
@@ -61,13 +60,14 @@ export function createNode(config: NodeConfig): string {
   return `<g id="${id}" transform="translate(${x}, ${y})"><rect class="${cssClass}" width="${String(width)}" height="${String(height)}" rx="${String(rx)}"/><text class="label" x="${String(textX)}" y="${String(textY)}">${label}</text></g>`;
 }
 
-/** Creates a section label with auto-sized background. */
+/** Creates a section label with auto-sized background and centered text. */
 export function createSectionLabel(config: SectionLabelConfig): string {
   const { text, position } = config;
-  const width = text.length * CHAR_WIDTH + LABEL_PADDING;
+  const width = PADDING_X + text.length * CHAR_WIDTH + PADDING_X;
   const x = String(position.x);
   const y = String(position.y);
-  return `<g transform="translate(${x}, ${y})"><rect class="group-label-bg" width="${String(width)}" height="${String(LABEL_HEIGHT)}" rx="${String(LABEL_BORDER_RADIUS)}"/><text class="group-label" x="${String(LABEL_TEXT_X)}" y="${String(LABEL_TEXT_Y)}">${text}</text></g>`;
+  const textX = width / 2;
+  return `<g transform="translate(${x}, ${y})"><rect class="group-label-bg" width="${String(width)}" height="${String(LABEL_HEIGHT)}" rx="${String(LABEL_BORDER_RADIUS)}"/><text class="group-label" x="${String(textX)}" y="${String(LABEL_TEXT_Y)}" style="text-anchor:middle">${text}</text></g>`;
 }
 
 /** Creates an edge between two points with relationship tooltip. */

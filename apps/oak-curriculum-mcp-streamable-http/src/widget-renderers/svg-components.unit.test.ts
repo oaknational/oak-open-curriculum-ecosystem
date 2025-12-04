@@ -71,24 +71,24 @@ describe('createNode', () => {
 });
 
 describe('createSectionLabel', () => {
-  it('calculates background width as text.length * 10 + 14 for uppercase bold letter-spacing', () => {
-    // "Context" = 7 chars => 7 * 10 + 14 = 84
+  it('calculates background width with symmetric padding (5 + length * 10 + 5)', () => {
+    // "Context" = 7 chars => 5 + 7 * 10 + 5 = 80
     const svg = createSectionLabel({
       text: 'Context',
       position: { x: 0, y: 0 },
     });
 
-    expect(svg).toContain('width="84"');
+    expect(svg).toContain('width="80"');
   });
 
   it('produces correct width for "Core Structure" (14 chars)', () => {
-    // 14 * 10 + 14 = 154
+    // 14 chars => 5 + 14 * 10 + 5 = 150
     const svg = createSectionLabel({
       text: 'Core Structure',
       position: { x: 0, y: 0 },
     });
 
-    expect(svg).toContain('width="154"');
+    expect(svg).toContain('width="150"');
   });
 
   it('wraps output in <g> with transform for position', () => {
@@ -100,13 +100,15 @@ describe('createSectionLabel', () => {
     expect(svg).toContain('transform="translate(10, 20)"');
   });
 
-  it('positions text at x=5 for left padding', () => {
+  it('centers text horizontally using text-anchor:middle', () => {
+    // "Test" = 4 chars => width = 5 + 4*10 + 5 = 50, center = 25
     const svg = createSectionLabel({
       text: 'Test',
       position: { x: 0, y: 0 },
     });
 
-    expect(svg).toContain('x="5"');
+    expect(svg).toContain('x="25"');
+    expect(svg).toContain('text-anchor:middle');
   });
 
   it('applies correct CSS classes for background and text', () => {
