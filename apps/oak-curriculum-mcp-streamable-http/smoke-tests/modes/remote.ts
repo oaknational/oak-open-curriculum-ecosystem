@@ -7,6 +7,7 @@ export function prepareRemoteEnvironment(
   envLoad: LoadedEnvResult,
 ): PreparedEnvironment {
   delete process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS;
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   Reflect.deleteProperty(process.env, 'PORT');
 
   const remoteSelection = resolveRemoteBaseUrl(

@@ -83,7 +83,7 @@ async function injectToolOutput(
 
   await page.addInitScript(
     (args: { data: object; toolName?: string; annotationsTitle?: string }) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- JC: Browser context injection requires any for window augmentation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JC: Browser context injection requires any for window augmentation
       (globalThis as any).openai = {
         toolOutput: args.data,
         toolInput: args.toolName ? { toolName: args.toolName } : undefined,
@@ -183,7 +183,7 @@ test.describe('Widget rendering behaviour', () => {
 
     // Simulate ChatGPT dispatching set_globals with search data
     await page.evaluate((searchData: object) => {
-      /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call -- Browser context requires any for window.openai access */
+      /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- Browser context requires any for window.openai access */
       const openai = (globalThis as any).openai;
       if (openai) {
         openai.toolOutput = searchData;
@@ -193,7 +193,7 @@ test.describe('Widget rendering behaviour', () => {
           detail: { globals: { toolOutput: searchData } },
         }),
       );
-      /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+      /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
     }, SEARCH_OUTPUT_FIXTURE);
 
     // Widget should now show search results

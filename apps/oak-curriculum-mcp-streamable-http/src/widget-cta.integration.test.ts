@@ -22,6 +22,7 @@ import { CTA_REGISTRY } from './widget-cta/index.js';
 
 describe('CTA integration: registry drives HTML generation', () => {
   it('generates a button element for each CTA defined in the registry', () => {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const key of Object.keys(CTA_REGISTRY)) {
       const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
       expect(AGGREGATED_TOOL_WIDGET_HTML).toContain(`id="${cta.id}-btn"`);
@@ -29,6 +30,7 @@ describe('CTA integration: registry drives HTML generation', () => {
   });
 
   it('includes each CTA label from the registry in the HTML output', () => {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const key of Object.keys(CTA_REGISTRY)) {
       const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
       expect(AGGREGATED_TOOL_WIDGET_HTML).toContain(cta.label);
@@ -46,6 +48,7 @@ describe('CTA integration: registry drives HTML generation', () => {
 
 describe('CTA integration: registry drives JavaScript generation', () => {
   it('includes all registered CTA IDs in the generated JavaScript', () => {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const key of Object.keys(CTA_REGISTRY)) {
       const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
       expect(WIDGET_STATE_JS).toContain(cta.id);
@@ -53,6 +56,7 @@ describe('CTA integration: registry drives JavaScript generation', () => {
   });
 
   it('includes all registered CTA prompts in the generated JavaScript', () => {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const key of Object.keys(CTA_REGISTRY)) {
       const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
       // Prompt content should be present (may be escaped)
@@ -66,6 +70,7 @@ describe('CTA integration: registry drives JavaScript generation', () => {
 describe('CTA integration: HTML and JavaScript coherence', () => {
   it('button IDs in HTML match the IDs referenced in JavaScript', () => {
     // If HTML has id="foo-btn", JS should reference id: 'foo'
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const key of Object.keys(CTA_REGISTRY)) {
       const cta = CTA_REGISTRY[key as keyof typeof CTA_REGISTRY];
 

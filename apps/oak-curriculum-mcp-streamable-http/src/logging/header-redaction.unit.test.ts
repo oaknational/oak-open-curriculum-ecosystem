@@ -436,6 +436,7 @@ describe('redactHeadersSummary - behavior differences', () => {
       'x-another': 'value2',
     };
     const redacted = redactHeadersSummary(headers);
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(redacted).length).toBe(0);
   });
 

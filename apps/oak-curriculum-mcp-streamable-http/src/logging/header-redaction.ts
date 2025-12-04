@@ -88,8 +88,9 @@ export function redactHeaders(
 ): Record<string, string> {
   const redacted: Record<string, string> = {};
 
-  for (const [name, value] of Object.entries(headers)) {
-    redacted[name] = redactHeaderValue(name, value);
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
+  for (const [key, value] of Object.entries(headers)) {
+    redacted[key] = redactHeaderValue(key, value);
   }
 
   return redacted;

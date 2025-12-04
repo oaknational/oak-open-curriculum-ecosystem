@@ -63,7 +63,7 @@ export function createMockServer(
   capturedHandlers: Map<string, (params: Params) => Promise<unknown>>,
 ): ToolRegistrationServer {
   // Create a generic mock function matching MCP SDK's signature
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters -- Generic needed to match MCP SDK signature
+
   function mockRegisterToolImpl<TInput = unknown>(
     name: string,
     _config: unknown,

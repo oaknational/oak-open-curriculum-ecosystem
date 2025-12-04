@@ -35,6 +35,7 @@ interface InspectorToolsResponse {
   tools: { name: string }[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function hasToolsArray(obj: object): obj is { tools: unknown } {
   return 'tools' in obj;
 }

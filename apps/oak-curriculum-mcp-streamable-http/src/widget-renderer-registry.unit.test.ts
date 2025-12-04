@@ -165,6 +165,7 @@ describe('TOOL_RENDERER_MAP', () => {
   });
 
   it('maps all 26 tools to renderer IDs', () => {
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     const mappedTools = Object.keys(TOOL_RENDERER_MAP);
     // 26 tools from the API, plus search and fetch helper tools
     expect(mappedTools.length).toBeGreaterThanOrEqual(26);
@@ -172,6 +173,7 @@ describe('TOOL_RENDERER_MAP', () => {
 
   it('only uses valid renderer IDs', () => {
     const validIds = new Set(RENDERER_IDS);
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     for (const rendererId of Object.values(TOOL_RENDERER_MAP)) {
       expect(validIds.has(rendererId)).toBe(true);
     }

@@ -28,6 +28,7 @@ export function generateCtaButtonHtml(cta: CtaConfig): string {
  * @returns HTML container string
  */
 export function generateCtaContainerHtml(): string {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const buttons = Object.values(CTA_REGISTRY)
     .map((cta) => generateCtaButtonHtml(cta))
     .join('\n      ');

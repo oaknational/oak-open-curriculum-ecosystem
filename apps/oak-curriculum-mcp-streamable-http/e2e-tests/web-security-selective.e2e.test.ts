@@ -68,7 +68,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       // Should be blocked by DNS rebinding protection
       expect(res.status).toBe(403);
       expect(res.body).toHaveProperty('error');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
       expect(res.body.error).toContain('host not allowed');
     });
 
@@ -152,7 +152,7 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
 
       expect(res.status).toBe(403);
       expect(res.body).toHaveProperty('error');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
       expect(res.body.error).toContain('host not allowed');
     });
 
