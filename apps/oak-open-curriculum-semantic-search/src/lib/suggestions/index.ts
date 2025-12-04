@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- REFACTOR */
 import type { estypes } from '@elastic/elasticsearch';
 import { esClient } from '../es-client';
 import { suggestLogger } from '../logger';
@@ -69,6 +70,7 @@ function buildCompletionRequest(
     skip_duplicates: true,
   };
   const contexts = config.buildCompletionContexts(query);
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   if (contexts && Object.keys(contexts).length > 0) {
     completion.contexts = contexts;
   }
@@ -237,10 +239,12 @@ function isCompletionOption(value: unknown): value is CompletionOptionBase {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const id: unknown = Reflect.get(value, '_id');
   if (typeof id !== 'string') {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const source: unknown = Reflect.get(value, '_source');
   return source !== undefined;
 }

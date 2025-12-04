@@ -52,7 +52,7 @@ export function verifyClerkToken(
 
   // Verify that getAuth was called with the correct tokenType
   // This is a programmer error, not an authentication failure
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Runtime safety check
+
   if (auth.tokenType !== 'oauth_token') {
     throw new Error("the auth() function must be called with acceptsToken: 'oauth_token'");
   }
@@ -65,7 +65,6 @@ export function verifyClerkToken(
     return undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Runtime safety check
   if (!auth.scopes) {
     return undefined;
   }

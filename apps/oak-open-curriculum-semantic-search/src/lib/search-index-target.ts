@@ -103,6 +103,7 @@ export function rewriteBulkOperations(
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types
 type UnknownObject = Record<string, unknown>;
 
 interface IndexMetadata extends UnknownObject {

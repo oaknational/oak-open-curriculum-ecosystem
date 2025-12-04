@@ -4,9 +4,7 @@
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-
-/* eslint-disable complexity */
-
+/* eslint-disable complexity */ // REFACTOR
 import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import {
@@ -194,6 +192,7 @@ function extractIdFromPath(response: unknown, path: string): string | undefined 
 }
 
 /** Augments an array response with canonical URL on each item */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   response: TItem[],
   path: string,
@@ -213,6 +212,7 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
 }
 
 /** Augments a single object response with canonical URL */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 export function augmentResponseWithCanonicalUrl<T extends object>(
   response: T,
   path: string,
@@ -229,6 +229,7 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
 }
 
 function extractCanonicalUrlFields(
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   response: object,
   path: string,
   contentType: ContentType,

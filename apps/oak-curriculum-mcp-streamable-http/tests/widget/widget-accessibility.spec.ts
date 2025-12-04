@@ -44,7 +44,7 @@ const EXCLUDED_RULES = ['landmark-one-main', 'region', 'scrollable-region-focusa
 test.describe('Widget accessibility', () => {
   test('help output passes WCAG checks including color contrast', async ({ page }) => {
     await page.addInitScript((fixture: object) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- Browser context injection requires any for window augmentation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Browser context injection requires any for window augmentation
       (globalThis as any).openai = { toolOutput: fixture };
     }, HELP_OUTPUT_FIXTURE);
 
@@ -56,7 +56,7 @@ test.describe('Widget accessibility', () => {
 
   test('search output passes WCAG checks including color contrast', async ({ page }) => {
     await page.addInitScript((fixture: object) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- Browser context injection requires any for window augmentation
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Browser context injection requires any for window augmentation
       (globalThis as any).openai = { toolOutput: fixture };
     }, SEARCH_OUTPUT_FIXTURE);
 

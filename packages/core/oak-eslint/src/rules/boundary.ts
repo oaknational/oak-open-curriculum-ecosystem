@@ -212,7 +212,13 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
  * List of all libraries for reference
  * Update this list when adding new libraries
  */
-export const LIB_PACKAGES = ['logger', 'storage', 'env', 'transport'] as const;
+export const LIB_PACKAGES = [
+  'logger',
+  'storage',
+  'env',
+  'transport',
+  'openapi-zod-client-adapter',
+] as const;
 
 /**
  * Get all other libraries (excluding the current one)

@@ -61,10 +61,12 @@ function makeFieldValidators(result: McpFilters): Record<string, (value: unknown
 }
 
 function collectValidationErrors(
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   source: object,
   validators: Record<string, (value: unknown) => string[]>,
 ): string[] {
   const errors: string[] = [];
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [field, validator] of Object.entries(validators)) {
     const desc = Object.getOwnPropertyDescriptor(source, field);
     if (desc?.value !== undefined) {

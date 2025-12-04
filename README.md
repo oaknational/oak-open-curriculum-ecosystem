@@ -30,6 +30,7 @@ This pattern is implemented for the [Oak National Academy Curriculum API](https:
 | Directory        | Purpose                                                         |
 | ---------------- | --------------------------------------------------------------- |
 | `apps/`          | MCP servers and the Semantic Search web app                     |
+| `packages/core/` | Core infrastructure (ESLint configs, Zod adapters)              |
 | `packages/sdks/` | Generated SDKs (currently the Oak Curriculum SDK)               |
 | `packages/libs/` | Shared libraries for logging, configuration, storage, transport |
 | `docs/`          | Developer documentation, onboarding guides, ADRs                |

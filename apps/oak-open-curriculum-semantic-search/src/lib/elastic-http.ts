@@ -181,6 +181,7 @@ function toHighlightMap(value: unknown): HighlightMap | undefined {
   }
 
   const highlight: HighlightMap = {};
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   for (const [field, entry] of Object.entries(value)) {
     if (!isStringArray(entry)) {
       return undefined;

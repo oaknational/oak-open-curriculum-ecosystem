@@ -286,7 +286,7 @@ describe('createResourceHandlers', () => {
         url: 'https://notion.so/db-456',
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vi.mocked(mockNotionClient.dataSources.retrieve).mockResolvedValueOnce(mockDatabase as any);
 
       const runtime = createMockRuntime(mockLogger);

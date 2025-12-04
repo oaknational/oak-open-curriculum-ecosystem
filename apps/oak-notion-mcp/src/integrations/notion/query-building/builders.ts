@@ -60,10 +60,12 @@ function buildPropertyCondition(propertyName: string, filter: McpPropertyFilter)
 function buildFilterClause(
   properties: McpFilters['properties'],
 ): { and: JsonObject[] } | undefined {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   if (!properties || Object.keys(properties).length === 0) {
     return undefined;
   }
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const conditions = Object.entries(properties).map(([propertyName, filter]) =>
     buildPropertyCondition(propertyName, filter),
   );

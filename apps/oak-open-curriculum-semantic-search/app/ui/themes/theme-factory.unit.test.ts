@@ -11,6 +11,7 @@ const modes = ['light', 'dark'] as const;
 describe('semanticThemeSpec', () => {
   it.each(modes)('provides an Oak colour token for every UI role in %s mode', (mode) => {
     const spec = semanticThemeSpec[mode];
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     const uiRoleKeys = Object.keys(spec.uiColors).sort();
     expect(uiRoleKeys).toEqual([...oakUiRoleTokens].sort());
   });
@@ -19,13 +20,20 @@ describe('semanticThemeSpec', () => {
     const lightApp = semanticThemeSpec.light.app;
     const darkApp = semanticThemeSpec.dark.app;
 
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.colors).sort()).toEqual(Object.keys(lightApp.colors).sort());
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.space.gap).sort()).toEqual(Object.keys(lightApp.space.gap).sort());
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.space.padding).sort()).toEqual(
+      // eslint-disable-next-line no-restricted-properties -- REFACTOR
       Object.keys(lightApp.space.padding).sort(),
     );
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.radii).sort()).toEqual(Object.keys(lightApp.radii).sort());
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.typography).sort()).toEqual(Object.keys(lightApp.typography).sort());
+    // eslint-disable-next-line no-restricted-properties -- REFACTOR
     expect(Object.keys(darkApp.fonts).sort()).toEqual(Object.keys(lightApp.fonts).sort());
   });
 

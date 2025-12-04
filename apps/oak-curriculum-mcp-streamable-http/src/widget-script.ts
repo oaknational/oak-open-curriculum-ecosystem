@@ -105,7 +105,7 @@ function render() {
     c.innerHTML = renderSearch(fullData);
   } else if (fullData.type && fullData.data !== undefined) {
     c.innerHTML = renderFetch(fullData);
-  } else if (Object.keys(fullData).length > 0) {
+  } else if (Object.keys(fullData).length > 0) { // eslint-disable-line no-restricted-properties -- REFACTOR
     c.innerHTML = '<pre>' + esc(JSON.stringify(fullData, null, 2)) + '</pre>';
   } else {
     c.innerHTML = '<div class="empty">Loading...</div>';

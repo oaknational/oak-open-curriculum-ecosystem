@@ -72,6 +72,7 @@ function isStringMap(value: unknown): value is EventFilters {
   if (!isJsonObject(value)) {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.values(value).every((entry) => typeof entry === 'string');
 }
 

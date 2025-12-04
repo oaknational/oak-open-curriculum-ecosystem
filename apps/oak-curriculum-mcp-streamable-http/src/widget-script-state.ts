@@ -15,6 +15,7 @@ import { TOOL_RENDERER_MAP } from './widget-renderer-registry.js';
  * Generates the tool renderer map as JavaScript for embedding in the widget.
  */
 function generateToolRendererMapJs(): string {
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const entries = Object.entries(TOOL_RENDERER_MAP)
     .map(([tool, renderer]) => `  '${tool}': '${renderer}'`)
     .join(',\n');

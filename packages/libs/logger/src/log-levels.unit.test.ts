@@ -18,6 +18,7 @@ import {
 describe('log-levels', () => {
   describe('LOG_LEVEL_VALUES', () => {
     it('should have exactly one default level', () => {
+      // eslint-disable-next-line no-restricted-properties -- REFACTOR
       const defaults = Object.values(LOG_LEVEL_VALUES).filter((level) => level.default);
       expect(defaults).toHaveLength(1);
     });

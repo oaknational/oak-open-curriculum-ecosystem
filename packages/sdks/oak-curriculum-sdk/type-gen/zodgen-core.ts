@@ -33,7 +33,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
   const pathEntries = Object.entries(openApiDocWithPaths.paths);
   interface OperationLike {
     operationId?: unknown;
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- openapi3-ts exposes path entries via loose index signatures; inspect dynamically with runtime guards.
+
     responses?: Record<string, unknown>;
   }
   function isOperationLike(value: unknown): value is OperationLike {
@@ -42,7 +42,6 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
     );
   }
   for (const [rawPath, pathItem] of pathEntries) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime check.
     if (!pathItem) {
       continue;
     }

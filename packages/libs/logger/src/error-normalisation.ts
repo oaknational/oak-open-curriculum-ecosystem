@@ -2,6 +2,7 @@
  * Error normalisation utilities
  */
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function trySerialiseObject(value: object): string | null {
   try {
     const serialised = JSON.stringify(value);
@@ -18,6 +19,7 @@ function isToStringFunction(fn: unknown): fn is (...args: never[]) => string {
   return typeof fn === 'function' && fn !== Object.prototype.toString;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function getCustomToString(value: object): (() => string) | null {
   const ownDescriptor = Object.getOwnPropertyDescriptor(value, 'toString');
   if (ownDescriptor) {
@@ -33,6 +35,7 @@ function getCustomToString(value: object): (() => string) | null {
     return null;
   }
 
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const inherited: unknown = Reflect.get(prototype, 'toString');
   if (isToStringFunction(inherited)) {
     return () => inherited.call(value);
@@ -41,6 +44,7 @@ function getCustomToString(value: object): (() => string) | null {
   return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function trySerialiseViaToString(value: object): string | null {
   const customToString = getCustomToString(value);
   if (!customToString) {
@@ -55,6 +59,7 @@ function trySerialiseViaToString(value: object): string | null {
   return JSON.stringify(stringValue);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function normaliseObjectError(value: object): Error {
   const serialised = trySerialiseObject(value);
   if (serialised) {
@@ -121,6 +126,7 @@ function normaliseByType(error: unknown): Error {
  * @param error - Error value (can be Error, string, number, object, null, undefined)
  * @returns Error object
  */
+
 export function normalizeError(error: unknown): Error {
   if (error instanceof Error) {
     return error;

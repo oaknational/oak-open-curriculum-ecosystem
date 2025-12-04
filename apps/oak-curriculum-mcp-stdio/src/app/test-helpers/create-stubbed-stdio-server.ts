@@ -46,6 +46,7 @@ function isJsonRpcMessage(value: unknown): value is JsonRpcMessage {
   if (!('jsonrpc' in value)) {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Reflect.get(value, 'jsonrpc') === '2.0';
 }
 

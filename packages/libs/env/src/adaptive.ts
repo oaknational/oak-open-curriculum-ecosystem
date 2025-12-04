@@ -23,6 +23,7 @@ function isJsonRecord(value: unknown): value is JsonRecord {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return false;
   }
+  // eslint-disable-next-line no-restricted-properties -- REFACTOR
   return Object.values(value).every((entry) => isJsonValue(entry));
 }
 
