@@ -1,6 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
- * Elasticsearch setup CLI.
+ * @module cli
+ * @description Elasticsearch setup CLI.
  * Creates synonyms set and all search indexes from SDK ontology data.
  * Loads configuration from .env.local in the app directory.
  */
@@ -9,14 +10,15 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAppEnv } from './load-app-env.js';
-import { runSetup, verifyConnection, listIndexes } from './index.js';
+import { runSetup, runReset, verifyConnection, listIndexes } from './index.js';
 import { esClient } from '../../es-client.js';
 import { readIndexMeta } from '../index-meta.js';
+import { sandboxLogger, setLogLevel } from '../../logger';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
 interface CliArgs {
-  readonly command: 'setup' | 'status' | 'help';
+  readonly command: 'setup' | 'reset' | 'status' | 'help';
   readonly verbose: boolean;
 }
 
@@ -27,12 +29,16 @@ function parseArgs(args: readonly string[]): CliArgs {
   if (commandArg === 'status') {
     return { command: 'status', verbose };
   }
+  if (commandArg === 'reset') {
+    return { command: 'reset', verbose };
+  }
   if (commandArg === 'help' || args.includes('--help') || args.includes('-h')) {
     return { command: 'help', verbose };
   }
   return { command: 'setup', verbose };
 }
 
+/** Prints CLI help text. Uses console.log as this is program output, not logging. */
 function printHelp(): void {
   console.log(`
 Elasticsearch Setup CLI
@@ -42,6 +48,7 @@ Usage:
 
 Commands:
   setup     Create synonyms and indexes (default)
+  reset     Delete and recreate all indexes (for mapping changes)
   status    Show cluster info and index counts
   help      Show this help message
 
@@ -59,51 +66,57 @@ async function runStatus(verbose: boolean): Promise<void> {
   const esKey = process.env.ELASTICSEARCH_API_KEY;
 
   if (!esUrl || !esKey) {
-    console.error('Error: ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set');
+    sandboxLogger.error('Missing environment variables', {
+      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
+    });
     process.exitCode = 1;
     return;
   }
 
   const config = { elasticsearchUrl: esUrl, elasticsearchApiKey: esKey, verbose };
 
-  console.log('Checking Elasticsearch connection...\n');
+  sandboxLogger.info('Checking Elasticsearch connection');
 
   const connection = await verifyConnection(config);
   if (!connection.connected) {
-    console.error(`✗ Connection failed: ${connection.error}`);
+    sandboxLogger.error('Connection failed', { error: connection.error });
     process.exitCode = 1;
     return;
   }
 
-  console.log(`✓ Connected to ${connection.clusterName} (v${connection.version})\n`);
+  sandboxLogger.info('Connected to Elasticsearch', {
+    cluster: connection.clusterName,
+    version: connection.version,
+  });
 
   const indexes = await listIndexes(config);
   const oakIndexes = indexes.filter((idx) => idx.index.startsWith('oak_'));
 
   if (oakIndexes.length === 0) {
-    console.log('No Oak indexes found. Run setup to create them.');
+    sandboxLogger.info('No Oak indexes found', { action: 'Run setup to create them' });
     return;
   }
 
-  console.log('Oak Indexes:');
-  console.log('─'.repeat(50));
-  for (const idx of oakIndexes) {
-    const healthIcon = idx.health === 'green' ? '●' : idx.health === 'yellow' ? '◐' : '○';
-    console.log(`  ${healthIcon} ${idx.index.padEnd(25)} ${idx.docsCount.toLocaleString()} docs`);
-  }
+  sandboxLogger.info('Oak Indexes', {
+    indexes: oakIndexes.map((idx) => ({
+      name: idx.index,
+      health: idx.health,
+      docs: idx.docsCount,
+    })),
+  });
 
   // Show index metadata if available
   try {
     const client = esClient();
     const meta = await readIndexMeta(client);
     if (meta) {
-      console.log('\nIndex Version Metadata:');
-      console.log('─'.repeat(50));
-      console.log(`  Version: ${meta.version}`);
-      console.log(`  Last Ingestion: ${meta.timestamp}`);
-      console.log(`  Duration: ${meta.ingestionDuration}s`);
-      console.log(`  Subjects: ${meta.subjects.join(', ')}`);
-      console.log(`  Key Stages: ${meta.keyStages.join(', ')}`);
+      sandboxLogger.info('Index version metadata', {
+        version: meta.version,
+        lastIngestion: meta.timestamp,
+        durationSeconds: meta.ingestionDuration,
+        subjects: meta.subjects,
+        keyStages: meta.keyStages,
+      });
     }
   } catch {
     // No metadata available yet
@@ -113,13 +126,19 @@ async function runStatus(verbose: boolean): Promise<void> {
 async function main(): Promise<void> {
   // Load environment from app directory
   const envResult = loadAppEnv(CURRENT_DIR);
-  if (envResult.loaded) {
-    console.log(`Loaded env from: ${envResult.path}\n`);
-  } else {
-    console.log(`No .env.local found in ${envResult.appRoot}\n`);
-  }
 
   const args = parseArgs(process.argv.slice(2));
+
+  // Set log level based on verbose flag
+  if (args.verbose) {
+    setLogLevel('DEBUG');
+  }
+
+  if (envResult.loaded) {
+    sandboxLogger.debug('Environment loaded', { path: envResult.path });
+  } else {
+    sandboxLogger.debug('No .env.local found', { appRoot: envResult.appRoot });
+  }
 
   if (args.command === 'help') {
     printHelp();
@@ -131,13 +150,15 @@ async function main(): Promise<void> {
     return;
   }
 
-  // Setup command
+  // Setup or reset command
   const esUrl = process.env.ELASTICSEARCH_URL;
   const esKey = process.env.ELASTICSEARCH_API_KEY;
 
   if (!esUrl || !esKey) {
-    console.error('Error: ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set');
-    console.error('Create a .env.local file with these values in the app directory.');
+    sandboxLogger.error('Missing environment variables', {
+      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
+      hint: 'Create a .env.local file with these values in the app directory',
+    });
     process.exitCode = 1;
     return;
   }
@@ -147,32 +168,37 @@ async function main(): Promise<void> {
   // Verify connection first
   const connection = await verifyConnection(config);
   if (!connection.connected) {
-    console.error(`✗ Connection failed: ${connection.error}`);
+    sandboxLogger.error('Connection failed', { error: connection.error });
     process.exitCode = 1;
     return;
   }
-  console.log(`✓ Connected to ${connection.clusterName} (v${connection.version})\n`);
 
-  // Run setup
-  const result = await runSetup(config);
+  sandboxLogger.info('Connected to Elasticsearch', {
+    cluster: connection.clusterName,
+    version: connection.version,
+  });
+
+  // Run setup or reset
+  const result = args.command === 'reset' ? await runReset(config) : await runSetup(config);
 
   // Summary
-  console.log('\n' + '─'.repeat(50));
-  console.log('Summary:');
-  console.log(`  Synonyms: ${result.synonymCount} entries`);
-
   const created = result.indexResults.filter((r) => r.status === 'created').length;
   const exists = result.indexResults.filter((r) => r.status === 'exists').length;
   const errors = result.indexResults.filter((r) => r.status === 'error').length;
 
-  console.log(`  Indexes: ${created} created, ${exists} already exist, ${errors} errors`);
+  sandboxLogger.info('Setup complete', {
+    synonyms: result.synonymCount,
+    indexes: { created, exists, errors },
+  });
 
   if (errors > 0) {
     process.exitCode = 1;
   }
 }
 
-main().catch((error) => {
-  console.error('Fatal error:', error);
+main().catch((error: unknown) => {
+  sandboxLogger.error('Fatal error', error instanceof Error ? error : undefined, {
+    message: error instanceof Error ? error.message : String(error),
+  });
   process.exitCode = 1;
 });

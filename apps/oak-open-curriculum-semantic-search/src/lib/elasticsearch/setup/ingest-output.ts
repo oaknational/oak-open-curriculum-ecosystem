@@ -8,6 +8,7 @@ import type { CliArgs } from './ingest-cli-args.js';
 import type { CachedOakClient } from '../../../adapters/oak-adapter-cached.js';
 import { esClient } from '../../es-client.js';
 import { writeIndexMeta, generateVersionFromTimestamp } from '../index-meta.js';
+import { sandboxLogger } from '../../logger';
 
 /** Ingestion result with document counts. */
 export interface IngestionResult {
@@ -23,35 +24,33 @@ export interface IngestionResult {
   };
 }
 
-/** Print header with ingestion configuration. */
+/** Log header with ingestion configuration. */
 export function printHeader(args: CliArgs): void {
-  console.log('Live Data Ingestion');
-  console.log('─'.repeat(50));
-  console.log(`Key Stages: ${args.keyStages.join(', ')}`);
-  console.log(`Subjects: ${args.subjects.join(', ')}`);
-  console.log(`Dry Run: ${args.dryRun}`);
-  console.log('─'.repeat(50));
-  console.log('');
+  sandboxLogger.info('Live Data Ingestion', {
+    keyStages: args.keyStages,
+    subjects: args.subjects,
+    dryRun: args.dryRun,
+  });
 }
 
-/** Print ingestion summary with document counts. */
+/** Log ingestion summary with document counts. */
 export function printSummary(result: IngestionResult, duration: string): void {
-  console.log('\n' + '─'.repeat(50));
-  console.log('Summary:');
-  console.log(`  Total documents: ${result.summary.totalDocs}`);
-  console.log(`  Lessons: ${result.summary.counts.lessons}`);
-  console.log(`  Units: ${result.summary.counts.units}`);
-  console.log(`  Unit Rollups: ${result.summary.counts.unit_rollup}`);
-  console.log(`  Sequences: ${result.summary.counts.sequences}`);
-  console.log(`  Sequence Facets: ${result.summary.counts.sequence_facets}`);
-  console.log(`  Duration: ${duration}s`);
+  sandboxLogger.info('Ingestion summary', {
+    totalDocs: result.summary.totalDocs,
+    lessons: result.summary.counts.lessons,
+    units: result.summary.counts.units,
+    unitRollups: result.summary.counts.unit_rollup,
+    sequences: result.summary.counts.sequences,
+    sequenceFacets: result.summary.counts.sequence_facets,
+    durationSeconds: duration,
+  });
 }
 
-/** Print cache statistics if caching was used. */
+/** Log cache statistics if caching was used. */
 export function printCacheStats(client: CachedOakClient): void {
   const stats = client.getCacheStats();
   if (stats.connected) {
-    console.log(`  Cache: ${stats.hits} hits, ${stats.misses} misses`);
+    sandboxLogger.info('Cache statistics', { hits: stats.hits, misses: stats.misses });
   }
 }
 
@@ -62,7 +61,7 @@ export async function writeMetadata(
   duration: string,
 ): Promise<void> {
   const version = generateVersionFromTimestamp();
-  console.log(`\n  Writing index metadata (version: ${version})...`);
+  sandboxLogger.debug('Writing index metadata', { version });
   const client = esClient();
   await writeIndexMeta(client, {
     version,
@@ -72,10 +71,10 @@ export async function writeMetadata(
     subjects: args.subjects,
     keyStages: args.keyStages,
   });
-  console.log('  Index metadata written successfully.');
+  sandboxLogger.debug('Index metadata written successfully', { version });
 }
 
-/** Print dry run notice. */
+/** Log dry run notice. */
 export function printDryRunNotice(): void {
-  console.log('\n  (Dry run - no documents written to ES)');
+  sandboxLogger.info('Dry run complete', { action: 'No documents written to ES' });
 }

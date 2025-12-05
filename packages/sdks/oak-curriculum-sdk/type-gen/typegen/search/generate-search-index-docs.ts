@@ -1,12 +1,15 @@
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
 
-const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search index document schemas, types, and guards derived from the Open Curriculum schema.\n */\n\n`;
+import {
+  LESSONS_INDEX_FIELDS,
+  UNITS_INDEX_FIELDS,
+  UNIT_ROLLUP_INDEX_FIELDS,
+  SEQUENCES_INDEX_FIELDS,
+} from './field-definitions.js';
+import { generateZodSchemaFromFields, ZOD_ENUM_EXPRESSIONS } from './zod-schema-generator.js';
 
-const KEY_STAGE_TUPLE =
-  'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]';
-const SUBJECT_TUPLE =
-  'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]';
+const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search index document schemas, types, and guards derived from the Open Curriculum schema.\n */\n\n`;
 
 function createIndexDocumentsModule(): string {
   return (
@@ -58,31 +61,8 @@ function createIndexDocumentsModule(): string {
     `  return SearchThreadIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the lesson search document shape. */\n` +
-    `export const SearchLessonsIndexDocSchema = z\n` +
-    `  .object({\n` +
-    `    lesson_id: z.string().min(1),\n` +
-    `    lesson_slug: z.string().min(1),\n` +
-    `    lesson_title: z.string().min(1),\n` +
-    `    subject_slug: z.enum(${SUBJECT_TUPLE}),\n` +
-    `    key_stage: z.enum(${KEY_STAGE_TUPLE}),\n` +
-    `    years: z.array(z.string().min(1)).optional(),\n` +
-    `    unit_ids: z.array(z.string().min(1)),\n` +
-    `    unit_titles: z.array(z.string().min(1)),\n` +
-    `    unit_count: z.number().int().nonnegative().optional(),\n` +
-    `    lesson_keywords: z.array(z.string().min(1)).optional(),\n` +
-    `    key_learning_points: z.array(z.string().min(1)).optional(),\n` +
-    `    misconceptions_and_common_mistakes: z.array(z.string().min(1)).optional(),\n` +
-    `    teacher_tips: z.array(z.string().min(1)).optional(),\n` +
-    `    content_guidance: z.array(z.string().min(1)).optional(),\n` +
-    `    transcript_text: z.string().min(1),\n` +
-    `    lesson_semantic: z.string().min(1).optional(),\n` +
-    `    lesson_url: z.string().min(1),\n` +
-    `    unit_urls: z.array(z.string().min(1)),\n` +
-    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
-    `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
-    `  })\n` +
-    `  .strict();\n\n` +
+    generateZodSchemaFromFields('SearchLessonsIndexDocSchema', LESSONS_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    '\n\n' +
     `/** Elasticsearch lesson document (hybrid search index shape). */\n` +
     `export type SearchLessonsIndexDoc = z.infer<typeof SearchLessonsIndexDocSchema>;\n\n` +
     `/** Guard validating lesson search index documents. */\n` +
@@ -90,26 +70,8 @@ function createIndexDocumentsModule(): string {
     `  return SearchLessonsIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the unit search document shape. */\n` +
-    `export const SearchUnitsIndexDocSchema = z\n` +
-    `  .object({\n` +
-    `    unit_id: z.string().min(1),\n` +
-    `    unit_slug: z.string().min(1),\n` +
-    `    unit_title: z.string().min(1),\n` +
-    `    subject_slug: z.enum(${SUBJECT_TUPLE}),\n` +
-    `    key_stage: z.enum(${KEY_STAGE_TUPLE}),\n` +
-    `    years: z.array(z.string().min(1)).optional(),\n` +
-    `    lesson_ids: z.array(z.string().min(1)),\n` +
-    `    lesson_count: z.number().int().nonnegative(),\n` +
-    `    unit_topics: z.array(z.string().min(1)).optional(),\n` +
-    `    unit_url: z.string().min(1),\n` +
-    `    subject_programmes_url: z.string().min(1),\n` +
-    `    sequence_ids: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_orders: z.array(z.number()).optional(),\n` +
-    `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
-    `  })\n` +
-    `  .strict();\n\n` +
+    generateZodSchemaFromFields('SearchUnitsIndexDocSchema', UNITS_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    '\n\n' +
     `/** Elasticsearch unit document (hybrid search index shape). */\n` +
     `export type SearchUnitsIndexDoc = z.infer<typeof SearchUnitsIndexDocSchema>;\n\n` +
     `/** Guard validating unit search index documents. */\n` +
@@ -117,28 +79,8 @@ function createIndexDocumentsModule(): string {
     `  return SearchUnitsIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the unit roll-up document shape. */\n` +
-    `export const SearchUnitRollupDocSchema = z\n` +
-    `  .object({\n` +
-    `    unit_id: z.string().min(1),\n` +
-    `    unit_slug: z.string().min(1),\n` +
-    `    unit_title: z.string().min(1),\n` +
-    `    subject_slug: z.enum(${SUBJECT_TUPLE}),\n` +
-    `    key_stage: z.enum(${KEY_STAGE_TUPLE}),\n` +
-    `    years: z.array(z.string().min(1)).optional(),\n` +
-    `    lesson_ids: z.array(z.string().min(1)),\n` +
-    `    lesson_count: z.number().int().nonnegative(),\n` +
-    `    unit_topics: z.array(z.string().min(1)).optional(),\n` +
-    `    rollup_text: z.string().min(1),\n` +
-    `    unit_semantic: z.string().min(1).optional(),\n` +
-    `    unit_url: z.string().min(1),\n` +
-    `    subject_programmes_url: z.string().min(1),\n` +
-    `    sequence_ids: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_slugs: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_titles: z.array(z.string().min(1)).optional(),\n` +
-    `    thread_orders: z.array(z.number()).optional(),\n` +
-    `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
-    `  })\n` +
-    `  .strict();\n\n` +
+    generateZodSchemaFromFields('SearchUnitRollupDocSchema', UNIT_ROLLUP_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    '\n\n' +
     `/** Elasticsearch unit roll-up document (hybrid search index shape). */\n` +
     `export type SearchUnitRollupDoc = z.infer<typeof SearchUnitRollupDocSchema>;\n\n` +
     `/** Guard validating unit roll-up documents. */\n` +
@@ -146,24 +88,8 @@ function createIndexDocumentsModule(): string {
     `  return SearchUnitRollupDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the sequence search document shape. */\n` +
-    `export const SearchSequenceIndexDocSchema = z\n` +
-    `  .object({\n` +
-    `    sequence_id: z.string().min(1),\n` +
-    `    sequence_slug: z.string().min(1),\n` +
-    `    sequence_title: z.string().min(1),\n` +
-    `    subject_slug: z.enum(${SUBJECT_TUPLE}),\n` +
-    `    subject_title: z.string().min(1).optional(),\n` +
-    `    phase_slug: z.string().min(1).optional(),\n` +
-    `    phase_title: z.string().min(1).optional(),\n` +
-    `    category_titles: z.array(z.string().min(1)).optional(),\n` +
-    `    key_stages: z.array(z.string().min(1)).optional(),\n` +
-    `    years: z.array(z.string().min(1)).optional(),\n` +
-    `    unit_slugs: z.array(z.string().min(1)).optional(),\n` +
-    `    sequence_semantic: z.string().min(1).optional(),\n` +
-    `    sequence_url: z.string().min(1),\n` +
-    `    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),\n` +
-    `  })\n` +
-    `  .strict();\n\n` +
+    generateZodSchemaFromFields('SearchSequenceIndexDocSchema', SEQUENCES_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    '\n\n' +
     `/** Elasticsearch sequence document (hybrid search index shape). */\n` +
     `export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema>;\n\n` +
     `/** Guard validating sequence search index documents. */\n` +

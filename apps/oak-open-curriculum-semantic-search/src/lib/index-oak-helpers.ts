@@ -17,12 +17,7 @@ import {
   buildRollupDocuments,
   buildUnitDocuments,
 } from './indexing/index-bulk-helpers';
-
-/** CLI-friendly log helper for progress reporting. */
-function progressLog(message: string): void {
-  const timestamp = new Date().toISOString().slice(11, 19);
-  console.log(`[${timestamp}] ${message}`);
-}
+import { sandboxLogger } from './logger';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -47,19 +42,26 @@ export async function fetchPairData(
   ks: KeyStage,
   subject: SearchSubjectSlug,
 ): Promise<{ units: PairUnits; groups: PairGroups }> {
-  progressLog(`    Fetching units and lessons for ${subject}/${ks}...`);
+  sandboxLogger.debug('Fetching units and lessons', { subject, keyStage: ks });
   const [units, groups] = await Promise.all([
     client.getUnitsByKeyStageAndSubject(ks, subject),
     client.getLessonsByKeyStageAndSubject(ks, subject),
   ]);
-  progressLog(`    Found ${units.length} units, ${groups.length} lesson groups`);
+  sandboxLogger.debug('Found units and lessons', {
+    subject,
+    keyStage: ks,
+    units: units.length,
+    lessonGroups: groups.length,
+  });
   return { units, groups };
 }
 
 /** Generate subject programmes URL, throws if unavailable. */
 function getSubjectProgrammesUrl(subject: SearchSubjectSlug, ks: KeyStage): string {
   const url = generateCanonicalUrl('subject', subject, { subject: { keyStageSlugs: [ks] } });
-  if (!url) throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
+  if (!url) {
+    throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
+  }
   return url;
 }
 
@@ -77,7 +79,7 @@ async function buildCoreDocumentOps(
 }> {
   const { client, ks, subject } = context;
 
-  progressLog(`    Building unit documents...`);
+  sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const { unitSummaries, unitOps } = await buildUnitDocuments(
     client,
     units,
@@ -85,9 +87,9 @@ async function buildCoreDocumentOps(
     ks,
     subjectProgrammesUrl,
   );
-  progressLog(`    Built ${unitOps.length / 2} unit docs`);
+  sandboxLogger.debug('Built unit docs', { subject, keyStage: ks, count: unitOps.length / 2 });
 
-  progressLog(`    Building lesson documents (this may take a while)...`);
+  sandboxLogger.debug('Building lesson documents', { subject, keyStage: ks });
   const { lessonOps, rollupSnippets } = await buildLessonDocuments(
     client,
     groups,
@@ -95,9 +97,9 @@ async function buildCoreDocumentOps(
     subject,
     ks,
   );
-  progressLog(`    Built ${lessonOps.length / 2} lesson docs`);
+  sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: lessonOps.length / 2 });
 
-  progressLog(`    Building rollup documents...`);
+  sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
   const rollupOps = buildRollupDocuments(
     unitSummaries,
     rollupSnippets,
@@ -105,7 +107,7 @@ async function buildCoreDocumentOps(
     ks,
     subjectProgrammesUrl,
   );
-  progressLog(`    Built ${rollupOps.length / 2} rollup docs`);
+  sandboxLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
 
   return { unitOps, lessonOps, rollupOps, unitSummaries };
 }
@@ -145,7 +147,9 @@ export function emitSequenceFacetEvents(
     | ((details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug }) => void)
     | undefined,
 ): void {
-  if (!onEvent) return;
+  if (!onEvent) {
+    return;
+  }
   for (const event of events) {
     onEvent({ ...event, subject });
   }

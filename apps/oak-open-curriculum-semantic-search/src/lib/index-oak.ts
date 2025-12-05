@@ -20,12 +20,6 @@ import {
   type PairBuildContext,
 } from './index-oak-helpers';
 
-/** CLI-friendly log helper for progress reporting. */
-function progressLog(message: string): void {
-  const timestamp = new Date().toISOString().slice(11, 19);
-  console.log(`[${timestamp}] ${message}`);
-}
-
 /** Options for building bulk operations. */
 export interface BuildIndexBulkOpsOptions {
   readonly onSequenceFacetProcessed?: (
@@ -44,10 +38,7 @@ export async function buildIndexBulkOps(
   const filteredSubjects = filterSubjects(subjects);
   const filteredKeyStages = filterKeyStages(keyStages);
 
-  progressLog(
-    `Starting bulk ops build: ${filteredSubjects.length} subjects × ${filteredKeyStages.length} key stages`,
-  );
-  sandboxLogger.info('buildIndexBulkOps.start', {
+  sandboxLogger.debug('Starting bulk ops build', {
     subjectCount: filteredSubjects.length,
     keyStageCount: filteredKeyStages.length,
   });
@@ -55,12 +46,15 @@ export async function buildIndexBulkOps(
   let subjectIndex = 0;
   for (const subject of filteredSubjects) {
     subjectIndex++;
-    progressLog(`[${subjectIndex}/${filteredSubjects.length}] Processing subject: ${subject}`);
+    sandboxLogger.debug('Processing subject', {
+      subject,
+      progress: `${subjectIndex}/${filteredSubjects.length}`,
+    });
     const subjectOps = await buildOpsForSubject(client, subject, filteredKeyStages, options);
     bulkOps.push(...subjectOps);
   }
 
-  progressLog(`Bulk ops build complete: ${bulkOps.length} total operations`);
+  sandboxLogger.debug('Bulk ops build complete', { totalOps: bulkOps.length });
   sandboxLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });
   return bulkOps;
 }
@@ -82,9 +76,9 @@ async function buildOpsForSubject(
   keyStages: readonly KeyStage[],
   options?: BuildIndexBulkOpsOptions,
 ): Promise<unknown[]> {
-  progressLog(`  Fetching sequences for ${subject}...`);
+  sandboxLogger.debug('Fetching sequences', { subject });
   const subjectSequences = await client.getSubjectSequences(subject);
-  progressLog(`  Found ${subjectSequences.length} sequences`);
+  sandboxLogger.debug('Found sequences', { subject, count: subjectSequences.length });
 
   const { sequenceSources, events } = await buildSequenceSourcesWithEvents(
     client,
@@ -97,10 +91,18 @@ async function buildOpsForSubject(
   let ksIndex = 0;
   for (const ks of keyStages) {
     ksIndex++;
-    progressLog(`  [${ksIndex}/${keyStages.length}] Processing ${subject}/${ks}...`);
+    sandboxLogger.debug('Processing key stage', {
+      subject,
+      keyStage: ks,
+      progress: `${ksIndex}/${keyStages.length}`,
+    });
     const pairOps = await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources);
     ops.push(...pairOps);
-    progressLog(`    Generated ${pairOps.length} bulk operations`);
+    sandboxLogger.debug('Generated bulk operations', {
+      subject,
+      keyStage: ks,
+      count: pairOps.length,
+    });
   }
   return ops;
 }
@@ -115,7 +117,7 @@ async function buildSequenceSourcesWithEvents(
   events: readonly SequenceFacetProcessingMetrics[];
 }> {
   const events: SequenceFacetProcessingMetrics[] = [];
-  progressLog(`  Building sequence facet sources...`);
+  sandboxLogger.debug('Building sequence facet sources');
 
   const sequenceSources = await buildSequenceFacetSources(
     (slug) => client.getSequenceUnits(slug),
@@ -131,7 +133,7 @@ async function buildSequenceSourcesWithEvents(
       : undefined,
   );
 
-  progressLog(`  Sequence facet sources built`);
+  sandboxLogger.debug('Sequence facet sources built');
   return { sequenceSources, events };
 }
 

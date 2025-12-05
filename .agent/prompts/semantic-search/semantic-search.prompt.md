@@ -17,6 +17,9 @@ Before any work, read and internalise these documents:
 - All quality gate issues are BLOCKING regardless of location, context, or cause.
 - TDD at all levels: Write tests FIRST (Red → Green → Refactor).
 - No type assertions (`as`, `any`, `!`), no type shortcuts. Use type guards.
+- **No console statements** - Use `@oaknational/mcp-logger` throughout. ESLint should block console usage.
+
+**Re-read foundation documents regularly during work to maintain alignment.**
 
 ---
 
@@ -48,7 +51,6 @@ ES Serverless provides preconfigured inference endpoints. The `semantic_text` fi
 | Schema-first migration   | ✅ COMPLETE | 13 SDK modules generated at type-gen time                        |
 | MCP tool generation      | ✅ COMPLETE | 26 tools with full type safety                                   |
 | ES Serverless deployment | ✅ COMPLETE | Cluster operational, indexes created, synonyms deployed          |
-| Index mappings verified  | ✅ COMPLETE | All mappings match local JSON definitions in ES UI               |
 | Analyzer configuration   | ✅ COMPLETE | Split analyzers working (ES Serverless compatible)               |
 | Synonym set deployed     | ✅ COMPLETE | `oak-syns` with 68 rules from SDK `buildElasticsearchSynonyms()` |
 | Response augmentation    | ✅ COMPLETE | SDK middleware adds `canonicalUrl` to all API responses          |
@@ -56,22 +58,124 @@ ES Serverless provides preconfigured inference endpoints. The `semantic_text` fi
 | Build system optimised   | ✅ COMPLETE | Turbo caching enabled, task dependencies fixed (ADR 065)         |
 | Quality gates passing    | ✅ COMPLETE | All gates pass including `smoke:dev:stub`                        |
 | SDK response caching     | ✅ COMPLETE | Optional Redis caching with 404 fallbacks for 100% hit rate      |
+| ES mappings generated    | ✅ COMPLETE | Mappings generated from SDK at type-gen time (ADR 067)           |
+| Reset CLI command        | ✅ COMPLETE | `npx tsx cli.ts reset` deletes and recreates indexes             |
 
 ### Current Priority: Real Data Ingestion
 
-| Task                    | Status         | Notes                                                 |
-| ----------------------- | -------------- | ----------------------------------------------------- |
-| Clear test/fake data    | ✅ DONE        | Indexes recreated with 0 docs                         |
-| History KS2 test ingest | ✅ DONE        | 153 docs, 226 cached items, 100% cache hits on rerun  |
-| Ingest real Maths data  | ⏳ IN PROGRESS | Run `pnpm es:ingest-live --subject maths --verbose`   |
-| Validate search results | ⏳ PENDING     | Test queries in ES Playground after ingestion         |
-| Phase 2: Threads        | ⏳ PENDING     | Add thread filtering and facets after data validation |
+| Task                    | Status     | Notes                                                                |
+| ----------------------- | ---------- | -------------------------------------------------------------------- |
+| Clear test/fake data    | ✅ DONE    | Indexes recreated with 0 docs                                        |
+| History KS2 test ingest | ✅ DONE    | 153 docs, 226 cached items, 100% cache hits on rerun                 |
+| Ingest real Maths data  | 🚧 BLOCKED | Bulk indexing errors due to Zod/ES mapping mismatch - see Challenges |
+| Validate search results | ⏳ PENDING | Test queries in ES Playground after ingestion                        |
+| Phase 2: Threads        | ⏳ PENDING | Add thread filtering and facets after data validation                |
+
+### Critical Challenges 🚨
+
+#### 1. Zod Schema / ES Mapping Field Mismatch
+
+**Problem**: The SDK generates two parallel sets of field definitions that have drifted:
+
+- **Zod schemas** define document structure
+  - Generator: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-search-index-docs.ts`
+  - Output: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/index-documents.ts`
+
+- **ES mappings** define Elasticsearch field types
+  - Generators: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-mapping-generators*.ts`
+  - Overrides: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+  - Output: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/*.ts`
+
+**Symptom**: Bulk indexing fails with `strict_dynamic_mapping_exception`:
+
+```
+mapping set to strict, dynamic introduction of [unit_title] within [_doc] is not allowed
+```
+
+**Root Cause**: Both generators are hand-coded with different field lists. Fields like `unit_title`, `lesson_ids`, `unit_topics`, `title_suggest` exist in Zod schemas but were missing from ES mappings.
+
+**Indexes Affected**: Primarily `oak_units`, but all indexes should be audited for alignment.
+
+**Temporary Fix Applied**: The `oak_units` mapping was manually updated to add missing fields, but the underlying architecture issue (parallel field lists) remains.
+
+**Solution Required**: See [Architectural Alignment](#architectural-alignment-zod--es-mappings) below.
+
+#### 2. Console Statements Instead of Logger
+
+**Problem**: The ingestion CLI and related code uses `console.log/error` directly instead of `@oaknational/mcp-logger`. This:
+
+- Violates project standards (ESLint should block console usage)
+- Makes verbose/debug mode ineffective
+- Produces inconsistent log output
+
+**Files with console usage** (68 instances across 11 files):
+
+- `src/lib/elasticsearch/setup/cli.ts`
+- `src/lib/elasticsearch/setup/index.ts`
+- `src/lib/elasticsearch/setup/ingest-*.ts`
+- `src/lib/index-oak*.ts`
+- `src/lib/indexing/*.ts`
+
+**Solution Required**: Replace all console statements with proper logger calls. The logger is already configured in `src/lib/logger.ts` with child loggers for different modules.
+
+#### 3. Verbose Flag Not Controlling Log Level
+
+**Problem**: The `--verbose` flag is passed through but doesn't control the logger's minimum severity. Progress during bulk operations is not visible because:
+
+- Console statements aren't going through the logger
+- Logger is hardcoded to INFO level, ignoring verbose flag
+- Debug-level progress messages aren't emitted
+
+### Architectural Alignment: Zod ↔ ES Mappings
+
+**Cardinal Rule Reminder**: All static data structures MUST flow from the OpenAPI schema via `pnpm type-gen`.
+
+**Current Architecture Problem**:
+
+```text
+OpenAPI Schema
+    ↓ (type-gen)
+Zod Index Document Schemas ──┐
+                             ├── DIVERGED (different field lists)
+ES Mapping Generators ───────┘
+```
+
+**Required Architecture**:
+
+```text
+Field Definitions (single source)
+    ↓
+├── Zod Schemas (generated)
+└── ES Mappings (generated, with ES-specific overrides)
+```
+
+**Recommended Approach** (TDD - test first):
+
+1. **Create shared field definition data structure** that defines:
+   - Field name
+   - Zod type (for schema generation)
+   - ES type override (for mapping generation, optional)
+   - Whether field is optional
+
+2. **Generate Zod schemas FROM field definitions** - not hand-coded
+
+3. **Generate ES mappings FROM field definitions** - applying ES-specific overrides where needed (e.g., `semantic_text`, `completion` with contexts)
+
+4. **Ensure parity** - same field list produces both outputs
+
+**Important Distinction**: Search index documents are **derived/aggregated** structures, not direct API mirrors. They include:
+
+- Fields from multiple API endpoints
+- Computed fields (`rollup_text`, `lesson_semantic`)
+- Denormalized data for search performance
+
+So the fields come from search requirements, but Zod and ES mappings MUST stay synchronised.
 
 ### Decision: Data First, Additional Indexes Later
 
 **Approach confirmed:**
 
-1. Use current index structure as-is
+1. Fix Zod/ES mapping alignment first
 2. Clear fake data, ingest real Maths curriculum (all key stages)
 3. Validate search quality with real data
 4. Add additional indexes (threads, ontology) in Phase 2-3
@@ -194,7 +298,7 @@ import {
 
 - Synonyms managed exclusively in SDK's `ontologyData.synonyms`
 - Static `synonyms.json` was **deleted** - ES synonyms generated dynamically
-- ES index mappings in `src/lib/elasticsearch/definitions/` (not `scripts/`)
+- ES index mappings generated at type-gen time in SDK (`packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/`)
 
 ---
 
@@ -386,14 +490,83 @@ pnpm smoke:dev:stub
 
 ## Immediate Next Steps
 
+### Step 0: Fix Architectural Issues (BLOCKING)
+
+Before any data ingestion can succeed, fix these architectural issues:
+
+#### A. Unify Field Definitions (TDD)
+
+1. **Write failing unit tests** for field definition data structure
+2. Create shared field definitions in `type-gen/typegen/search/`
+3. Refactor Zod schema generator to consume field definitions
+4. Refactor ES mapping generator to consume same field definitions
+5. Run `pnpm type-gen` - both outputs should have identical field sets
+6. Run full quality gates
+
+#### B. Replace Console with Logger (TDD)
+
+1. **Check ESLint config** - ensure `no-console` rule is enabled
+2. Replace all console statements in ingestion code with logger calls:
+
+```typescript
+// ❌ WRONG - violates project standards
+console.log(`[${timestamp}] Processing subject: ${subject}`);
+
+// ✅ CORRECT - use the configured logger
+import { sandboxLogger } from '../logger.js';
+sandboxLogger.info('Processing subject', { subject });
+```
+
+3. Make `--verbose` flag control logger level:
+
+```typescript
+// In logger.ts or CLI setup
+const level = args.verbose ? 'DEBUG' : 'INFO';
+```
+
+4. Add progress logging during bulk operations:
+
+```typescript
+sandboxLogger.debug('Bulk operation progress', {
+  processed: currentCount,
+  total: totalCount,
+  percentage: Math.round((currentCount / totalCount) * 100),
+});
+```
+
+#### C. Verify Fixes
+
+After completing A and B, verify the fixes work:
+
+```bash
+# 1. Run type-gen to regenerate both Zod schemas and ES mappings
+pnpm type-gen
+
+# 2. Compare field lists - they should match
+# Check SearchUnitsIndexDocSchema fields vs OAK_UNITS_MAPPING properties
+
+# 3. Run quality gates
+pnpm build && pnpm type-check && pnpm lint:fix && pnpm test
+
+# 4. Reset ES indexes and test ingestion
+cd apps/oak-open-curriculum-semantic-search
+npx tsx src/lib/elasticsearch/setup/cli.ts reset
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose
+
+# 5. Verify no strict_dynamic_mapping_exception errors
+# Check ES status shows expected document counts
+pnpm es:status
+```
+
 ### Step 1: Complete Maths Ingestion
+
+After fixing architectural issues:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Optional: Enable caching for faster re-runs
-pnpm redis:up
-# Add SDK_CACHE_ENABLED=true to .env.local
+# Reset indexes with new mappings
+npx tsx src/lib/elasticsearch/setup/cli.ts reset
 
 # Ingest real Maths curriculum data
 pnpm es:ingest-live --subject maths --verbose
@@ -488,6 +661,11 @@ For detailed implementation plans, see:
 
 ## Version History
 
+- 2025-12-05: **BLOCKING** Discovered Zod/ES mapping field mismatch causing bulk indexing failures
+- 2025-12-05: **BLOCKING** Identified console statement usage instead of proper logger
+- 2025-12-05: Added `reset` CLI command to delete and recreate indexes
+- 2025-12-05: Fixed units mapping to include missing fields (unit_title, lesson_ids, etc.)
+- 2025-12-05: Added bulk error reporting to surface indexing failures
 - 2025-12-05: ES mappings generated from SDK (ADR 067) - deleted static JSON files, thread fields added
 - 2025-12-05: 404 fallback caching - transcript 404s cached for 100% hit rate (226 hits, 0 misses)
 - 2025-12-05: SDK response caching implemented (ADR 066) - Redis-based, optional, 7-day TTL

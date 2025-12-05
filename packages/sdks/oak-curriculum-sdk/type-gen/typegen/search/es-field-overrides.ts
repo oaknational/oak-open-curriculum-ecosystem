@@ -95,6 +95,10 @@ export const LESSONS_FIELD_OVERRIDES = {
  * Field overrides for the oak_units index.
  */
 export const UNITS_FIELD_OVERRIDES = {
+  unit_title: {
+    type: 'text',
+    analyzer: 'standard',
+  },
   unit_url: {
     type: 'keyword',
     ignore_above: 1024,
@@ -113,6 +117,14 @@ export const UNITS_FIELD_OVERRIDES = {
   },
   thread_orders: {
     type: 'integer',
+  },
+  title_suggest: {
+    type: 'completion',
+    contexts: [
+      { name: 'subject', type: 'category' },
+      { name: 'key_stage', type: 'category' },
+      { name: 'sequence', type: 'category' },
+    ],
   },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;
 

@@ -67,14 +67,6 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
           },
         },
       },
-      title_suggest: {
-        type: 'completion',
-        contexts: [
-          { name: 'subject', type: 'category' },
-          { name: 'key_stage', type: 'category' },
-          { name: 'sequence', type: 'category' },
-        ],
-      },
       subject_slug: {
         type: 'keyword',
         normalizer: 'oak_lower',
@@ -87,17 +79,17 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
-      unit_topics: {
-        type: 'text',
-        analyzer: 'oak_text_index',
-        search_analyzer: 'oak_text_search',
-      },
       lesson_ids: {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
       lesson_count: {
         type: 'integer',
+      },
+      unit_topics: {
+        type: 'text',
+        analyzer: 'oak_text_index',
+        search_analyzer: 'oak_text_search',
       },
       rollup_text: {
         type: 'text',
@@ -138,6 +130,14 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       },
       thread_orders: {
         type: 'integer',
+      },
+      title_suggest: {
+        type: 'completion',
+        contexts: [
+          { name: 'subject', type: 'category' },
+          { name: 'key_stage', type: 'category' },
+          { name: 'sequence', type: 'category' },
+        ],
       },
     },
   },

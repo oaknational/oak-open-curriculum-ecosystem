@@ -16,12 +16,7 @@ import {
   extractUnitSequenceIds,
   fetchLessonMaterials,
 } from './index-bulk-support';
-
-/** CLI-friendly log helper for progress reporting */
-function progressLog(message: string): void {
-  const timestamp = new Date().toISOString().slice(11, 19);
-  console.log(`[${timestamp}] ${message}`);
-}
+import { sandboxLogger } from '../logger';
 
 export interface LessonGroup {
   unitSlug: string;
@@ -43,7 +38,11 @@ export async function buildUnitDocuments(
   for (const unit of units) {
     unitIndex++;
     if (unitIndex % 10 === 1 || unitIndex === units.length) {
-      progressLog(`      Fetching unit summaries: ${unitIndex}/${units.length}`);
+      sandboxLogger.debug('Fetching unit summaries', {
+        progress: `${unitIndex}/${units.length}`,
+        subject,
+        keyStage: ks,
+      });
     }
     const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
     if (!isUnitSummary(summaryCandidate)) {
@@ -83,7 +82,12 @@ export async function buildLessonDocuments(
   const totalLessons = groups.reduce((sum, g) => sum + g.lessons.length, 0);
   let processedLessons = 0;
 
-  progressLog(`      Processing ${totalLessons} lessons across ${groups.length} groups...`);
+  sandboxLogger.debug('Processing lessons', {
+    totalLessons,
+    groups: groups.length,
+    subject,
+    keyStage: ks,
+  });
 
   for (const group of groups) {
     const summary = unitSummaries.get(group.unitSlug);
@@ -104,7 +108,7 @@ export async function buildLessonDocuments(
     processedLessons += lessonsProcessed;
   }
 
-  progressLog(`      Completed ${processedLessons} lessons`);
+  sandboxLogger.debug('Completed lessons', { processed: processedLessons, subject, keyStage: ks });
   return { lessonOps, rollupSnippets };
 }
 
@@ -159,9 +163,10 @@ async function buildLessonDocsForGroup(
     const currentTotal = processedSoFar + lessonIndex;
     // Log every 10 lessons or at completion
     if (currentTotal % 10 === 0 || currentTotal === totalLessons) {
-      progressLog(
-        `      Lesson ${currentTotal}/${totalLessons}: ${lesson.lessonSlug.slice(0, 40)}...`,
-      );
+      sandboxLogger.debug('Processing lesson', {
+        progress: `${currentTotal}/${totalLessons}`,
+        lessonSlug: lesson.lessonSlug.slice(0, 40),
+      });
     }
     const entry = await buildLessonDocEntry(client, lesson, context);
     ops.push(entry.operation, entry.document);

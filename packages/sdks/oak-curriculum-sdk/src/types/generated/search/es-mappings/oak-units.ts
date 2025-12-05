@@ -33,6 +33,10 @@ export const OAK_UNITS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      unit_title: {
+        type: 'text',
+        analyzer: 'standard',
+      },
       subject_slug: {
         type: 'keyword',
         normalizer: 'oak_lower',
@@ -45,10 +49,14 @@ export const OAK_UNITS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      lesson_ids: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       lesson_count: {
         type: 'integer',
       },
-      sequence_ids: {
+      unit_topics: {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
@@ -60,8 +68,9 @@ export const OAK_UNITS_MAPPING = {
         type: 'keyword',
         ignore_above: 1024,
       },
-      updated_at: {
-        type: 'date',
+      sequence_ids: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
       },
       thread_slugs: {
         type: 'keyword',
@@ -73,6 +82,14 @@ export const OAK_UNITS_MAPPING = {
       },
       thread_orders: {
         type: 'integer',
+      },
+      title_suggest: {
+        type: 'completion',
+        contexts: [
+          { name: 'subject', type: 'category' },
+          { name: 'key_stage', type: 'category' },
+          { name: 'sequence', type: 'category' },
+        ],
       },
     },
   },

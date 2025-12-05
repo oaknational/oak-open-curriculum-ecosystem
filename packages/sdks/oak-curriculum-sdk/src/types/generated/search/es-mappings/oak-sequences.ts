@@ -67,13 +67,6 @@ export const OAK_SEQUENCES_MAPPING = {
           },
         },
       },
-      title_suggest: {
-        type: 'completion',
-        contexts: [
-          { name: 'subject', type: 'category' },
-          { name: 'phase', type: 'category' },
-        ],
-      },
       subject_slug: {
         type: 'keyword',
         normalizer: 'oak_lower',
@@ -113,6 +106,13 @@ export const OAK_SEQUENCES_MAPPING = {
       sequence_url: {
         type: 'keyword',
         ignore_above: 1024,
+      },
+      title_suggest: {
+        type: 'completion',
+        contexts: [
+          { name: 'subject', type: 'category' },
+          { name: 'phase', type: 'category' },
+        ],
       },
     },
   },

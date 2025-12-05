@@ -130,12 +130,12 @@ describe('oak_units mapping', () => {
     expect(content).toContain('thread_orders:');
   });
 
-  it('includes updated_at field as date', () => {
+  it('includes title_suggest completion field', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
     const content = files['../search/es-mappings/oak-units.ts'];
 
-    expect(content).toContain('updated_at:');
-    expect(content).toContain("type: 'date'");
+    expect(content).toContain('title_suggest:');
+    expect(content).toContain("type: 'completion'");
   });
 });
 

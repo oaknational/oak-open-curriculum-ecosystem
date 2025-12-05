@@ -101,7 +101,7 @@ export function parseArgs(args: readonly string[]): CliArgs {
   };
 }
 
-/** Print CLI help text to console. */
+/** Print CLI help text to console. Uses console.log as this is program output, not logging. */
 export function printHelp(): void {
   console.log(`
 Live Data Ingestion CLI

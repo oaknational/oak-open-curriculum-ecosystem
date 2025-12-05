@@ -1,6 +1,7 @@
 import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
+import { sandboxLogger } from '../logger';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
   ['oak_lessons', 'lessons'],
@@ -66,24 +67,61 @@ export function createNdjson(operations: readonly unknown[]): string {
   return operations.map((entry) => JSON.stringify(entry)).join('\n') + '\n';
 }
 
+/** Elasticsearch bulk response structure. */
+interface BulkResponseItem {
+  readonly index?: {
+    readonly _index: string;
+    readonly status: number;
+    readonly error?: {
+      readonly type: string;
+      readonly reason: string;
+    };
+  };
+}
+
+interface BulkResponse {
+  readonly errors: boolean;
+  readonly items: readonly BulkResponseItem[];
+}
+
+/** Count errors by type from failed bulk items. */
+function countErrorsByType(items: readonly BulkResponseItem[]): Record<string, number> {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const errorType = item.index?.error?.type ?? 'unknown';
+    counts.set(errorType, (counts.get(errorType) ?? 0) + 1);
+  }
+  return Object.fromEntries(counts);
+}
+
+/** Extract and log bulk operation errors. */
+function logBulkErrors(response: BulkResponse): void {
+  const failedItems = response.items.filter((item) => item.index && item.index.status >= 400);
+  const firstError = failedItems[0]?.index?.error;
+  sandboxLogger.error('Bulk indexing errors', undefined, {
+    failureCount: failedItems.length,
+    errorTypes: countErrorsByType(failedItems),
+    firstError: firstError ? { type: firstError.type, reason: firstError.reason } : undefined,
+  });
+}
+
 /**
  * Dispatches the prepared NDJSON payload against the provided Elasticsearch transport.
+ * Logs errors if any bulk operations fail.
  */
 export async function dispatchBulk(
   es: Pick<Client, 'transport'>,
   operations: readonly unknown[],
 ): Promise<void> {
   const ndjson = createNdjson(operations);
-  await es.transport.request(
-    {
-      method: 'POST',
-      path: '/_bulk',
-      body: ndjson,
-    },
-    {
-      headers: { 'content-type': 'application/x-ndjson' },
-    },
-  );
+  const response = (await es.transport.request(
+    { method: 'POST', path: '/_bulk', body: ndjson },
+    { headers: { 'content-type': 'application/x-ndjson' } },
+  )) as BulkResponse;
+
+  if (response.errors) {
+    logBulkErrors(response);
+  }
 }
 
 /**

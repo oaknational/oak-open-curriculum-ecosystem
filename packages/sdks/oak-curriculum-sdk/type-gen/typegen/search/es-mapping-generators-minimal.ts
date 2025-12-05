@@ -13,26 +13,20 @@ import {
   generateMinimalSettingsBlock,
   generatePropertiesBlock,
 } from './es-mapping-utils.js';
+import { UNITS_INDEX_FIELDS } from './field-definitions.js';
+import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
 
 /**
  * Creates the oak_units mapping module.
+ *
+ * Uses unified field definitions from UNITS_INDEX_FIELDS to ensure
+ * the ES mapping stays in sync with the Zod schema.
+ *
+ * @see UNITS_INDEX_FIELDS - Single source of truth for field definitions
+ * @see UNITS_FIELD_OVERRIDES - ES-specific field configurations
  */
 export function createUnitsMappingModule(): string {
-  const fields: [string, EsFieldMapping][] = [
-    ['unit_id', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['unit_slug', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['subject_slug', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['key_stage', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['years', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['lesson_count', { type: 'integer' }],
-    ['sequence_ids', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['unit_url', UNITS_FIELD_OVERRIDES.unit_url],
-    ['subject_programmes_url', UNITS_FIELD_OVERRIDES.subject_programmes_url],
-    ['updated_at', { type: 'date' }],
-    ['thread_slugs', UNITS_FIELD_OVERRIDES.thread_slugs],
-    ['thread_titles', UNITS_FIELD_OVERRIDES.thread_titles],
-    ['thread_orders', UNITS_FIELD_OVERRIDES.thread_orders],
-  ];
+  const fields = generateEsFieldsFromDefinitions(UNITS_INDEX_FIELDS, UNITS_FIELD_OVERRIDES);
 
   return (
     HEADER +

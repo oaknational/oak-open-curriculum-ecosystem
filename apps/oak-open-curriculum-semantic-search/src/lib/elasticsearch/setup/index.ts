@@ -1,5 +1,6 @@
 /**
- * Creates synonyms set and search indexes from SDK.
+ * @module setup
+ * @description Creates synonyms set and search indexes from SDK.
  * Mappings are generated at SDK type-gen time and imported here.
  */
 import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
@@ -11,11 +12,9 @@ import {
   OAK_SEQUENCE_FACETS_MAPPING,
   OAK_META_MAPPING,
 } from '@oaknational/oak-curriculum-sdk/types/generated/search/index';
+import { sandboxLogger } from '../../logger';
 
-/**
- * Index names and their corresponding SDK-generated mappings.
- * Mappings are TypeScript const objects generated at type-gen time.
- */
+/** Index names and their corresponding SDK-generated mappings. */
 const INDEX_MAPPINGS = [
   { indexName: 'oak_lessons', mapping: OAK_LESSONS_MAPPING },
   { indexName: 'oak_unit_rollup', mapping: OAK_UNIT_ROLLUP_MAPPING },
@@ -47,27 +46,18 @@ export interface IndexResult {
 }
 
 function makeHeaders(apiKey: string): Record<string, string> {
-  return {
-    Authorization: `ApiKey ${apiKey}`,
-    'Content-Type': 'application/json',
-  };
+  return { Authorization: `ApiKey ${apiKey}`, 'Content-Type': 'application/json' };
 }
 
-/**
- * Generate Elasticsearch synonym set from SDK ontology data.
- */
+/** Generate Elasticsearch synonym set from SDK ontology data. */
 export function generateSynonymsPayload(): string {
-  const synonymSet = buildElasticsearchSynonyms();
-  return JSON.stringify(synonymSet);
+  return JSON.stringify(buildElasticsearchSynonyms());
 }
 
-/**
- * Create or update the oak-syns synonym set.
- */
+/** Create or update the oak-syns synonym set. */
 async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; count: number }> {
   const synonymPayload = generateSynonymsPayload();
   const synonymData = JSON.parse(synonymPayload) as { synonyms_set: unknown[] };
-
   const url = `${config.elasticsearchUrl}/_synonyms/${SYNONYM_SET_NAME}`;
 
   const response = await fetch(url, {
@@ -80,39 +70,31 @@ async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; 
     const text = await response.text();
     throw new Error(`Failed to upsert synonyms: ${response.status} ${text}`);
   }
-
   return { created: true, count: synonymData.synonyms_set.length };
 }
 
-/**
- * Create a single Elasticsearch index.
- */
-async function createIndex(
-  config: SetupConfig,
-  indexName: string,
-  mapping: object,
-): Promise<IndexResult> {
+/** Delete an Elasticsearch index. */
+async function deleteIndex(config: SetupConfig, indexName: string): Promise<boolean> {
   const url = `${config.elasticsearchUrl}/${indexName}`;
-  const body = JSON.stringify(mapping);
-
   const response = await fetch(url, {
-    method: 'PUT',
+    method: 'DELETE',
     headers: makeHeaders(config.elasticsearchApiKey),
-    body,
   });
+  return response.ok || response.status === 404;
+}
 
-  const responseText = await response.text();
-
-  if (response.status === 200) {
+/** Parse create index response to determine status. */
+function parseCreateIndexResponse(
+  indexName: string,
+  status: number,
+  responseText: string,
+): IndexResult {
+  if (status === 200) {
     return { indexName, status: 'created', httpStatus: 200 };
   }
-
-  // Check if index already exists (400 with resource_already_exists_exception)
-  if (response.status === 400) {
+  if (status === 400) {
     try {
-      const errorBody = JSON.parse(responseText) as {
-        error?: { type?: string };
-      };
+      const errorBody = JSON.parse(responseText) as { error?: { type?: string } };
       if (errorBody.error?.type === 'resource_already_exists_exception') {
         return { indexName, status: 'exists', httpStatus: 400 };
       }
@@ -120,121 +102,105 @@ async function createIndex(
       // Not JSON, fall through to error
     }
   }
-
-  return {
-    indexName,
-    status: 'error',
-    httpStatus: response.status,
-    error: responseText,
-  };
+  return { indexName, status: 'error', httpStatus: status, error: responseText };
 }
 
-/**
- * Run full Elasticsearch setup: synonyms + all indexes.
- */
+/** Create a single Elasticsearch index. */
+async function createIndex(
+  config: SetupConfig,
+  indexName: string,
+  mapping: object,
+): Promise<IndexResult> {
+  const url = `${config.elasticsearchUrl}/${indexName}`;
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: makeHeaders(config.elasticsearchApiKey),
+    body: JSON.stringify(mapping),
+  });
+  const responseText = await response.text();
+  return parseCreateIndexResponse(indexName, response.status, responseText);
+}
+
+/** Run full Elasticsearch setup: synonyms + all indexes. */
 export async function runSetup(config: SetupConfig): Promise<SetupResult> {
   if (config.verbose) {
-    console.log('Generating synonyms from SDK ontology...');
+    sandboxLogger.debug('Generating synonyms from SDK ontology');
   }
-
   const { created: synonymsCreated, count: synonymCount } = await upsertSynonyms(config);
-
   if (config.verbose) {
-    console.log(`Synonyms: ${synonymCount} entries upserted to ${SYNONYM_SET_NAME}`);
-    console.log('Creating indexes...');
+    sandboxLogger.debug('Synonyms upserted', { count: synonymCount, set: SYNONYM_SET_NAME });
   }
 
   const indexResults: IndexResult[] = [];
-
   for (const { indexName, mapping } of INDEX_MAPPINGS) {
     const result = await createIndex(config, indexName, mapping);
     indexResults.push(result);
-
     if (config.verbose) {
-      const statusStr =
-        result.status === 'created'
-          ? '✓ created'
-          : result.status === 'exists'
-            ? '○ exists'
-            : `✗ error: ${result.error}`;
-      console.log(`  ${indexName}: ${statusStr}`);
+      sandboxLogger.debug('Index operation', { index: indexName, status: result.status });
     }
   }
-
-  if (config.verbose) {
-    console.log('Setup complete.');
-  }
-
   return { synonymsCreated, synonymCount, indexResults };
 }
 
-/**
- * Verify Elasticsearch connection by fetching cluster info.
- */
+/** Delete all indexes and recreate them with fresh mappings. */
+export async function runReset(config: SetupConfig): Promise<SetupResult> {
+  if (config.verbose) {
+    sandboxLogger.debug('Deleting existing indexes');
+  }
+  for (const { indexName } of INDEX_MAPPINGS) {
+    const deleted = await deleteIndex(config, indexName);
+    if (config.verbose) {
+      sandboxLogger.debug('Index deleted', { index: indexName, deleted });
+    }
+  }
+  return runSetup(config);
+}
+
+/** Verify Elasticsearch connection by fetching cluster info. */
 export async function verifyConnection(config: SetupConfig): Promise<{
   connected: boolean;
   clusterName?: string;
   version?: string;
   error?: string;
 }> {
-  const url = config.elasticsearchUrl;
-
   try {
-    const response = await fetch(url, {
+    const response = await fetch(config.elasticsearchUrl, {
       method: 'GET',
       headers: makeHeaders(config.elasticsearchApiKey),
     });
-
     if (!response.ok) {
       const text = await response.text();
       return { connected: false, error: `${response.status}: ${text}` };
     }
-
     const data = (await response.json()) as {
       cluster_name?: string;
       version?: { number?: string };
     };
-
-    return {
-      connected: true,
-      clusterName: data.cluster_name,
-      version: data.version?.number,
-    };
+    return { connected: true, clusterName: data.cluster_name, version: data.version?.number };
   } catch (error) {
-    return {
-      connected: false,
-      error: error instanceof Error ? error.message : String(error),
-    };
+    return { connected: false, error: error instanceof Error ? error.message : String(error) };
   }
 }
 
-/**
- * List current indexes and their document counts.
- */
-export async function listIndexes(config: SetupConfig): Promise<
-  readonly {
-    readonly index: string;
-    readonly health: string;
-    readonly docsCount: number;
-  }[]
+/** List current indexes and their document counts. */
+export async function listIndexes(
+  config: SetupConfig,
+): Promise<
+  readonly { readonly index: string; readonly health: string; readonly docsCount: number }[]
 > {
   const url = `${config.elasticsearchUrl}/_cat/indices?format=json`;
-
   const response = await fetch(url, {
     method: 'GET',
     headers: makeHeaders(config.elasticsearchApiKey),
   });
-
   if (!response.ok) {
     throw new Error(`Failed to list indexes: ${response.status}`);
   }
-
   const data = (await response.json()) as readonly {
     readonly index: string;
     readonly health: string;
     readonly 'docs.count': string;
   }[];
-
   return data.map((idx) => ({
     index: idx.index,
     health: idx.health,

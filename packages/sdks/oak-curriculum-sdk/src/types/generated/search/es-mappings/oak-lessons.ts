@@ -67,13 +67,6 @@ export const OAK_LESSONS_MAPPING = {
           },
         },
       },
-      title_suggest: {
-        type: 'completion',
-        contexts: [
-          { name: 'subject', type: 'category' },
-          { name: 'key_stage', type: 'category' },
-        ],
-      },
       subject_slug: {
         type: 'keyword',
         normalizer: 'oak_lower',
@@ -162,6 +155,13 @@ export const OAK_LESSONS_MAPPING = {
             ignore_above: 256,
           },
         },
+      },
+      title_suggest: {
+        type: 'completion',
+        contexts: [
+          { name: 'subject', type: 'category' },
+          { name: 'key_stage', type: 'category' },
+        ],
       },
     },
   },

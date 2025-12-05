@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { loadAppEnv } from './load-app-env.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter-cached.js';
 import { createSandboxHarness } from '../../indexing/sandbox-harness.js';
-import { sandboxLogger } from '../../logger.js';
+import { sandboxLogger, setLogLevel } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient } from './ingest-client-factory.js';
 import {
@@ -25,30 +25,24 @@ import {
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
-/** CLI-friendly log helper for progress reporting. */
-function cliLog(message: string): void {
-  const timestamp = new Date().toISOString().slice(11, 19);
-  console.log(`[${timestamp}] ${message}`);
-}
-
 /** Load environment variables from .env.local. */
 function initEnv(): boolean {
   const envResult = loadAppEnv(CURRENT_DIR);
   if (!envResult.loaded) {
-    console.error(`No .env.local found in ${envResult.appRoot}`);
+    sandboxLogger.error('Environment not loaded', { appRoot: envResult.appRoot });
     process.exitCode = 1;
     return false;
   }
-  console.log(`Loaded env from: ${envResult.path}\n`);
+  sandboxLogger.debug('Environment loaded', { path: envResult.path });
   return true;
 }
 
 /** Handle cache clearing if requested. */
 async function handleCacheClearing(args: CliArgs): Promise<void> {
   if (args.clearCache) {
-    cliLog('Clearing SDK response cache...');
+    sandboxLogger.debug('Clearing SDK response cache');
     const deleted = await clearSdkCache();
-    cliLog(`Cleared ${deleted} cached entries`);
+    sandboxLogger.debug('Cache cleared', { deletedEntries: deleted });
   }
 }
 
@@ -59,9 +53,10 @@ async function runIngestion(args: CliArgs): Promise<void> {
 
   const client = await createIngestionClient();
 
-  cliLog('Creating ingestion harness...');
-  cliLog(`  Subjects: ${args.subjects.join(', ')}`);
-  cliLog(`  Key stages: ${args.keyStages.join(', ')}`);
+  sandboxLogger.debug('Creating ingestion harness', {
+    subjects: args.subjects,
+    keyStages: args.keyStages,
+  });
 
   const harness = await createSandboxHarness({
     client,
@@ -70,16 +65,18 @@ async function runIngestion(args: CliArgs): Promise<void> {
     target: 'primary',
     logger: sandboxLogger,
   });
-  cliLog('Harness created successfully');
+  sandboxLogger.debug('Harness created successfully');
 
-  cliLog(args.dryRun ? 'Starting DRY RUN (no ES writes)...' : 'Starting LIVE ingestion...');
-  cliLog('This may take several minutes - fetching data from Oak API...\n');
+  sandboxLogger.info(args.dryRun ? 'Starting DRY RUN' : 'Starting LIVE ingestion', {
+    dryRun: args.dryRun,
+    note: 'This may take several minutes - fetching data from Oak API',
+  });
 
   const startTime = Date.now();
   const result = await harness.ingest({ dryRun: args.dryRun, verbose: args.verbose });
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
-  cliLog(`Ingestion phase complete in ${duration}s`);
+  sandboxLogger.debug('Ingestion phase complete', { durationSeconds: duration });
   printSummary(result, duration);
   printCacheStats(client);
 
@@ -94,16 +91,28 @@ async function runIngestion(args: CliArgs): Promise<void> {
 
 /** Main CLI entry point. */
 async function main(): Promise<void> {
-  if (!initEnv()) return;
+  if (!initEnv()) {
+    return;
+  }
+
   const args = parseArgs(process.argv.slice(2));
+
+  // Wire verbose flag to log level
+  if (args.verbose) {
+    setLogLevel('DEBUG');
+  }
+
   if (args.help) {
     printHelp();
     return;
   }
+
   await runIngestion(args);
 }
 
-main().catch((error) => {
-  console.error('Fatal error:', error);
+main().catch((error: unknown) => {
+  sandboxLogger.error('Fatal error', error instanceof Error ? error : undefined, {
+    message: error instanceof Error ? error.message : String(error),
+  });
   process.exitCode = 1;
 });

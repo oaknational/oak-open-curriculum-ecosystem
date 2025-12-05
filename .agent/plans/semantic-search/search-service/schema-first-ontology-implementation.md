@@ -1,6 +1,6 @@
 # Search Service: Schema-First and Ontology Implementation Plan
 
-Last updated: 2025-12-04
+Last updated: 2025-12-05
 
 ## Executive Summary
 
@@ -8,11 +8,36 @@ This plan details the migration of the semantic search backend from runtime-defi
 
 **Goal**: Migrate all search schemas to type-gen (SDK compile time) and add complete ontology fields (threads, programme factors, unit types, content guidance) to enable powerful, type-safe search across Oak's curriculum data.
 
-**Status**: **Phase 1 COMPLETE** ✅. **ES Serverless DEPLOYED** ✅. Ready for real data ingestion and Phase 2.
+**Status**: **Phase 1 COMPLETE** ✅. **ES Serverless DEPLOYED** ✅. **BLOCKING ISSUES** discovered during data ingestion.
 
 **Duration**: 6-8 weeks across 3 phases with clear sessions minimizing context switching.
 
-## ⚠️ Phase 1 Status: COMPLETE
+## 🚨 Blocking Issues (2025-12-05)
+
+### 1. Zod/ES Mapping Field Mismatch
+
+The SDK generates two parallel sets of field definitions that have diverged:
+
+- **Zod schemas** (`generate-search-index-docs.ts`) define document structure
+- **ES mappings** (`es-mapping-generators*.ts`) define Elasticsearch field types
+
+This causes bulk indexing failures with `strict_dynamic_mapping_exception`. Fields like `unit_title`, `lesson_ids`, `unit_topics`, `title_suggest` exist in Zod schemas but were missing from ES mappings.
+
+**Fix Required**: Create unified field definitions that both generators consume.
+
+### 2. Console Usage Instead of Logger
+
+Ingestion code uses `console.log/error` directly instead of `@oaknational/mcp-logger`. This violates project standards and makes verbose mode ineffective.
+
+**Fix Required**: Replace all console statements with proper logger calls.
+
+### 3. Verbose Flag Not Controlling Log Level
+
+The `--verbose` flag is passed through but doesn't control the logger's minimum severity.
+
+**Fix Required**: Make verbose flag set logger level to DEBUG.
+
+## ⚠️ Phase 1 Status: COMPLETE (with caveats)
 
 **All Phase 1 sessions completed (2025-12-04)**:
 
@@ -26,10 +51,15 @@ This plan details the migration of the semantic search backend from runtime-defi
 - ✅ Thread index document schema (`SearchThreadIndexDocSchema`)
 - ✅ Thread fields embedded in lessons/units/rollup schemas
 - ✅ SDK synonym export utilities (`buildElasticsearchSynonyms()`, `buildSynonymLookup()`)
-- ✅ ES index mappings relocated to `src/lib/elasticsearch/definitions/`
+- ✅ ES index mappings generated at type-gen time (ADR 067)
 - ✅ Static `synonyms.json` deleted - synonyms generated from SDK
 
-**Next**: Clear test data, ingest real Maths curriculum via `pnpm es:setup && pnpm es:ingest-live --subject maths --verbose`.
+**Outstanding architectural issues**:
+
+- ❌ Zod and ES mapping generators use separate field lists (needs unification)
+- ❌ Console statements in ingestion code (needs logger replacement)
+
+**Next**: Fix blocking issues, then ingest real Maths curriculum.
 
 ---
 

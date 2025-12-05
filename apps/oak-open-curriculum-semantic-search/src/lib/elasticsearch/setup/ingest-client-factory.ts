@@ -10,24 +10,21 @@ import {
   getSdkCacheStatus,
   type CachedOakClient,
 } from '../../../adapters/oak-adapter-cached.js';
-
-/** CLI-friendly log helper for progress reporting. */
-function cliLog(message: string): void {
-  const timestamp = new Date().toISOString().slice(11, 19);
-  console.log(`[${timestamp}] ${message}`);
-}
+import { sandboxLogger } from '../../logger';
 
 /**
  * Create an Oak SDK client with optional caching.
  * Returns a CachedOakClient that gracefully falls back to uncached if Redis unavailable.
  */
 export async function createIngestionClient(): Promise<CachedOakClient> {
-  cliLog('Creating Oak SDK client...');
+  sandboxLogger.debug('Creating Oak SDK client');
   const cacheStatus = await getSdkCacheStatus();
 
   if (cacheStatus.enabled && cacheStatus.connected) {
     const client = await createCachedOakSdkClient();
-    cliLog(`SDK client created with Redis caching (${cacheStatus.keyCount} cached entries)`);
+    sandboxLogger.debug('SDK client created with Redis caching', {
+      cachedEntries: cacheStatus.keyCount,
+    });
     return client;
   }
 
@@ -41,9 +38,9 @@ export async function createIngestionClient(): Promise<CachedOakClient> {
   };
 
   if (cacheStatus.enabled) {
-    cliLog('SDK client created (cache enabled but Redis not available)');
+    sandboxLogger.debug('SDK client created', { note: 'cache enabled but Redis not available' });
   } else {
-    cliLog('SDK client created (caching disabled)');
+    sandboxLogger.debug('SDK client created', { note: 'caching disabled' });
   }
 
   return client;
