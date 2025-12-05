@@ -1,20 +1,28 @@
-/** Creates synonyms set and search indexes from SDK ontology. Mappings in ../definitions/. */
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+/**
+ * Creates synonyms set and search indexes from SDK.
+ * Mappings are generated at SDK type-gen time and imported here.
+ */
 import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import {
+  OAK_LESSONS_MAPPING,
+  OAK_UNITS_MAPPING,
+  OAK_UNIT_ROLLUP_MAPPING,
+  OAK_SEQUENCES_MAPPING,
+  OAK_SEQUENCE_FACETS_MAPPING,
+  OAK_META_MAPPING,
+} from '@oaknational/oak-curriculum-sdk/types/generated/search/index';
 
-const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
-const DEFINITIONS_DIR = join(CURRENT_DIR, '..', 'definitions');
-
-/** Index names and their corresponding mapping file names */
+/**
+ * Index names and their corresponding SDK-generated mappings.
+ * Mappings are TypeScript const objects generated at type-gen time.
+ */
 const INDEX_MAPPINGS = [
-  { indexName: 'oak_lessons', mappingFile: 'oak-lessons.json' },
-  { indexName: 'oak_unit_rollup', mappingFile: 'oak-unit-rollup.json' },
-  { indexName: 'oak_units', mappingFile: 'oak-units.json' },
-  { indexName: 'oak_sequences', mappingFile: 'oak-sequences.json' },
-  { indexName: 'oak_sequence_facets', mappingFile: 'oak-sequence-facets.json' },
-  { indexName: 'oak_meta', mappingFile: 'oak-meta.json' },
+  { indexName: 'oak_lessons', mapping: OAK_LESSONS_MAPPING },
+  { indexName: 'oak_unit_rollup', mapping: OAK_UNIT_ROLLUP_MAPPING },
+  { indexName: 'oak_units', mapping: OAK_UNITS_MAPPING },
+  { indexName: 'oak_sequences', mapping: OAK_SEQUENCES_MAPPING },
+  { indexName: 'oak_sequence_facets', mapping: OAK_SEQUENCE_FACETS_MAPPING },
+  { indexName: 'oak_meta', mapping: OAK_META_MAPPING },
 ] as const;
 
 const SYNONYM_SET_NAME = 'oak-syns';
@@ -77,23 +85,15 @@ async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; 
 }
 
 /**
- * Read index mapping from JSON file.
- */
-function readMappingFile(mappingFile: string): string {
-  const path = join(DEFINITIONS_DIR, mappingFile);
-  return readFileSync(path, 'utf-8');
-}
-
-/**
  * Create a single Elasticsearch index.
  */
 async function createIndex(
   config: SetupConfig,
   indexName: string,
-  mappingFile: string,
+  mapping: object,
 ): Promise<IndexResult> {
   const url = `${config.elasticsearchUrl}/${indexName}`;
-  const body = readMappingFile(mappingFile);
+  const body = JSON.stringify(mapping);
 
   const response = await fetch(url, {
     method: 'PUT',
@@ -146,8 +146,8 @@ export async function runSetup(config: SetupConfig): Promise<SetupResult> {
 
   const indexResults: IndexResult[] = [];
 
-  for (const { indexName, mappingFile } of INDEX_MAPPINGS) {
-    const result = await createIndex(config, indexName, mappingFile);
+  for (const { indexName, mapping } of INDEX_MAPPINGS) {
+    const result = await createIndex(config, indexName, mapping);
     indexResults.push(result);
 
     if (config.verbose) {

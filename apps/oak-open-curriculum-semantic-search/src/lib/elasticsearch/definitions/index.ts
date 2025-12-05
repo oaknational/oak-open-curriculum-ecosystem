@@ -1,20 +1,21 @@
 /**
  * Elasticsearch index definitions for Oak Curriculum Search.
  *
- * This directory contains JSON mapping files for all search indexes.
- * These are static definitions, not generated code.
+ * Index mappings are now generated at SDK type-gen time and imported from:
+ * `@oaknational/oak-curriculum-sdk/types/generated/search/es-mappings/`
  *
  * @module lib/elasticsearch/definitions
  *
  * ## Index Inventory
  *
- * | Index | File | Purpose |
- * |-------|------|---------|
- * | `oak_lessons` | `oak-lessons.json` | Lesson documents with semantic embeddings |
- * | `oak_unit_rollup` | `oak-unit-rollup.json` | Unit aggregated content for search |
- * | `oak_units` | `oak-units.json` | Basic unit metadata |
- * | `oak_sequences` | `oak-sequences.json` | Programme sequence documents |
- * | `oak_sequence_facets` | `oak-sequence-facets.json` | Sequence facet navigation data |
+ * | Index | SDK Export | Purpose |
+ * |-------|------------|---------|
+ * | `oak_lessons` | `OAK_LESSONS_MAPPING` | Lesson documents with semantic embeddings |
+ * | `oak_unit_rollup` | `OAK_UNIT_ROLLUP_MAPPING` | Unit aggregated content for search |
+ * | `oak_units` | `OAK_UNITS_MAPPING` | Basic unit metadata |
+ * | `oak_sequences` | `OAK_SEQUENCES_MAPPING` | Programme sequence documents |
+ * | `oak_sequence_facets` | `OAK_SEQUENCE_FACETS_MAPPING` | Sequence facet navigation data |
+ * | `oak_meta` | `OAK_META_MAPPING` | Ingestion metadata |
  *
  * ## Synonyms
  *
@@ -37,5 +38,5 @@
  */
 
 // This module exists for documentation purposes.
-// The JSON files are imported directly where needed.
+// Mappings are now imported from the SDK in ../setup/index.ts
 export {};

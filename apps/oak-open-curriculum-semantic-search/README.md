@@ -201,3 +201,59 @@ For deeper explanations see:
 - `docs/oak-curriculum-hybrid-search-definitive-guide.md`
 
 Maintain this README alongside code changes to keep onboarding concise and accurate.
+
+## System Topology
+
+```text
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         OpenAPI Schema                                  │
+│           (packages/sdks/oak-curriculum-sdk/schema-cache/)              │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼  pnpm type-gen
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    SDK Type Generation Layer                            │
+│    (packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/)          │
+│                                                                         │
+│  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │
+│  │ generate-search-  │  │ (other search     │  │ (barrel exports)  │    │
+│  │ index-docs.ts     │  │  generators)      │  │                   │    │
+│  └───────────────────┘  └───────────────────┘  └───────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼  13 modules generated
+┌─────────────────────────────────────────────────────────────────────────┐
+│               Generated Search Schemas (SDK)                            │
+│   (packages/sdks/oak-curriculum-sdk/src/types/generated/search/)        │
+│                                                                         │
+│  facets.ts │ fixtures.ts │ index-documents.ts │ requests.ts │ ...       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼  imported by
+┌─────────────────────────────────────────────────────────────────────────┐
+│              Semantic Search App                                        │
+│       (apps/oak-open-curriculum-semantic-search/)                       │
+│                                                                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
+│  │   API       │  │  Indexing   │  │  Adapters   │  │    UI       │     │
+│  │  Routes     │  │  Pipeline   │  │ (Caching)   │  │ Components  │     │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘     │
+│         │                │                │                             │
+│         └────────────────┴────────────────┘                             │
+│                          │                                              │
+│                          ▼                                              │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │             Elasticsearch Serverless                              │  │
+│  │  poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp...     │  │
+│  │                                                                   │  │
+│  │  Indexes: oak_lessons, oak_units, oak_unit_rollup,                │  │
+│  │           oak_sequences, oak_sequence_facets, oak_meta            │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                          │                                              │
+│                          ▼ (optional)                                   │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │               Redis (Docker)                                      │  │
+│  │  SDK Response Caching - 7-day TTL, 404 fallback caching           │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘
+```

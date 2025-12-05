@@ -126,16 +126,18 @@ Transcripts are optional (lessons without video return 404). The cache stores em
 
 ## Index Inventory
 
-### Active Indexes (mappings in `src/lib/elasticsearch/definitions/`)
+### Active Indexes (mappings generated in SDK at type-gen time)
 
-| Index                 | Mapping File               | Purpose                                   | Semantic Field    |
-| --------------------- | -------------------------- | ----------------------------------------- | ----------------- |
-| `oak_lessons`         | `oak-lessons.json`         | Lesson documents with semantic embeddings | `lesson_semantic` |
-| `oak_unit_rollup`     | `oak-unit-rollup.json`     | Aggregated unit text for semantic search  | `unit_semantic`   |
-| `oak_units`           | `oak-units.json`           | Basic unit metadata                       | -                 |
-| `oak_sequences`       | `oak-sequences.json`       | Programme sequence documents              | -                 |
-| `oak_sequence_facets` | `oak-sequence-facets.json` | Sequence facet navigation                 | -                 |
-| `oak_meta`            | `oak-meta.json`            | Index version and ingestion metadata      | -                 |
+| Index                 | SDK Export                    | Purpose                                   | Semantic Field    |
+| --------------------- | ----------------------------- | ----------------------------------------- | ----------------- |
+| `oak_lessons`         | `OAK_LESSONS_MAPPING`         | Lesson documents with semantic embeddings | `lesson_semantic` |
+| `oak_unit_rollup`     | `OAK_UNIT_ROLLUP_MAPPING`     | Aggregated unit text for semantic search  | `unit_semantic`   |
+| `oak_units`           | `OAK_UNITS_MAPPING`           | Basic unit metadata                       | -                 |
+| `oak_sequences`       | `OAK_SEQUENCES_MAPPING`       | Programme sequence documents              | -                 |
+| `oak_sequence_facets` | `OAK_SEQUENCE_FACETS_MAPPING` | Sequence facet navigation                 | -                 |
+| `oak_meta`            | `OAK_META_MAPPING`            | Index version and ingestion metadata      | -                 |
+
+**Note**: ES mappings are generated at `pnpm type-gen` time from SDK Zod schemas + field overrides. See [ADR-067](docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md).
 
 ### Future Indexes (Phase 2-3)
 
@@ -292,17 +294,39 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/
 └── load-app-env.ts  # Environment loading helper
 ```
 
-### Index Definitions
+### ES Mapping Generator (SDK)
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/
-├── index.ts              # Index configuration exports
-├── oak-lessons.json      # Lesson index mapping
-├── oak-units.json        # Unit index mapping
-├── oak-unit-rollup.json  # Unit rollup mapping
-├── oak-sequences.json    # Sequence mapping
-├── oak-sequence-facets.json  # Sequence facets mapping
-└── oak-meta.json         # Metadata index mapping
+packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
+├── es-field-config.ts              # Core types, Zod→ES mapping functions
+├── es-field-overrides.ts           # ES-specific field configurations (source)
+├── es-mapping-utils.ts             # Code generation utilities
+├── es-mapping-generators.ts        # Primary index generators
+├── es-mapping-generators-minimal.ts # Simple index generators
+└── generate-es-mappings.ts         # Generator entry point
+```
+
+### Generated ES Mappings (SDK Output)
+
+```text
+packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/
+├── index.ts                        # Barrel exports
+├── oak-lessons.ts                  # Lessons index mapping
+├── oak-units.ts                    # Units index mapping
+├── oak-unit-rollup.ts              # Unit rollup mapping
+├── oak-sequences.ts                # Sequences mapping
+├── oak-sequence-facets.ts          # Sequence facets mapping
+└── oak-meta.ts                     # Metadata mapping
+```
+
+### Search App ES Setup (Consumer)
+
+```text
+apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/
+├── definitions/
+│   └── index.ts                    # Documentation only (JSON files deleted)
+└── setup/
+    └── index.ts                    # Imports mappings from SDK
 ```
 
 ### SDK Caching
@@ -435,12 +459,13 @@ pnpm es:status
 
 Relevant ADRs for semantic search:
 
-| ADR                                                                                             | Title                   | Description                                       |
-| ----------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------- |
-| [ADR-063](docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK Domain Synonyms     | SDK as single source of truth for domain synonyms |
-| [ADR-064](docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)  | ES Mapping Organization | Elasticsearch index mapping organization          |
-| [ADR-065](docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)             | Turbo Task Dependencies | Build system optimisation                         |
-| [ADR-066](docs/architecture/architectural-decisions/066-sdk-response-caching.md)                | SDK Response Caching    | Optional Redis caching for development            |
+| ADR                                                                                              | Title                     | Description                                       |
+| ------------------------------------------------------------------------------------------------ | ------------------------- | ------------------------------------------------- |
+| [ADR-063](docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)  | SDK Domain Synonyms       | SDK as single source of truth for domain synonyms |
+| [ADR-064](docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)   | ES Mapping Organization   | Superseded by ADR-067                             |
+| [ADR-065](docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)              | Turbo Task Dependencies   | Build system optimisation                         |
+| [ADR-066](docs/architecture/architectural-decisions/066-sdk-response-caching.md)                 | SDK Response Caching      | Optional Redis caching for development            |
+| [ADR-067](docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md) | SDK-Generated ES Mappings | ES mappings generated at type-gen time            |
 
 ---
 
@@ -463,6 +488,7 @@ For detailed implementation plans, see:
 
 ## Version History
 
+- 2025-12-05: ES mappings generated from SDK (ADR 067) - deleted static JSON files, thread fields added
 - 2025-12-05: 404 fallback caching - transcript 404s cached for 100% hit rate (226 hits, 0 misses)
 - 2025-12-05: SDK response caching implemented (ADR 066) - Redis-based, optional, 7-day TTL
 - 2025-12-05: History KS2 test ingestion successful - 153 docs, 226 cached items

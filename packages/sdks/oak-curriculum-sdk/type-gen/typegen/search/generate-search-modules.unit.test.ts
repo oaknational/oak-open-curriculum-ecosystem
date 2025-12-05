@@ -107,6 +107,18 @@ describe('search index module generation', () => {
     expect(content).toContain('export {\n  createSearchLessonsResponse');
     expect(content).toContain('SearchLessonsIndexDocSchema');
   });
+
+  it('exports ES mappings from search barrel', () => {
+    const files = generateSearchIndexModule(MINIMAL_SCHEMA);
+    const content = files['../search/index.ts'];
+    expect(content).toContain('OAK_LESSONS_MAPPING');
+    expect(content).toContain('OAK_UNITS_MAPPING');
+    expect(content).toContain('OAK_UNIT_ROLLUP_MAPPING');
+    expect(content).toContain('OAK_SEQUENCES_MAPPING');
+    expect(content).toContain('OAK_SEQUENCE_FACETS_MAPPING');
+    expect(content).toContain('OAK_META_MAPPING');
+    expect(content).toContain("from './es-mappings/index.js'");
+  });
 });
 
 describe('search index document module generation', () => {

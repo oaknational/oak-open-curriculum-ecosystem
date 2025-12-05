@@ -90,3 +90,20 @@ export {
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
 } from './fixtures.js';
+
+export {
+  OAK_LESSONS_MAPPING,
+  OAK_UNITS_MAPPING,
+  OAK_UNIT_ROLLUP_MAPPING,
+  OAK_SEQUENCES_MAPPING,
+  OAK_SEQUENCE_FACETS_MAPPING,
+  OAK_META_MAPPING,
+} from './es-mappings/index.js';
+export type {
+  OakLessonsMapping,
+  OakUnitsMapping,
+  OakUnitRollupMapping,
+  OakSequencesMapping,
+  OakSequenceFacetsMapping,
+  OakMetaMapping,
+} from './es-mappings/index.js';
