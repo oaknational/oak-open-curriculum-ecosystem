@@ -202,15 +202,15 @@ The following ontology-related schemas need to be added in future phases:
 
 **Document Types**:
 
-| Type        | Source                | Content                                                         |
-| ----------- | --------------------- | --------------------------------------------------------------- |
-| `concept`   | `conceptGraph`        | Knowledge graph concept nodes (subject, lesson, thread, etc.)   |
-| `keystage`  | `ontologyData`        | Key stage definitions (KS1-KS4)                                 |
-| `phase`     | `ontologyData`        | Phase definitions (primary, secondary)                          |
-| `subject`   | `ontologyData`        | Subject definitions with key stage availability                 |
-| `thread`    | `ontologyData`        | Thread definitions with progression examples                    |
-| `workflow`  | `ontologyData`        | Tool usage workflows for AI agents                              |
-| `edge`      | `conceptGraph`        | Knowledge graph edges (relationships between concepts)          |
+| Type       | Source         | Content                                                       |
+| ---------- | -------------- | ------------------------------------------------------------- |
+| `concept`  | `conceptGraph` | Knowledge graph concept nodes (subject, lesson, thread, etc.) |
+| `keystage` | `ontologyData` | Key stage definitions (KS1-KS4)                               |
+| `phase`    | `ontologyData` | Phase definitions (primary, secondary)                        |
+| `subject`  | `ontologyData` | Subject definitions with key stage availability               |
+| `thread`   | `ontologyData` | Thread definitions with progression examples                  |
+| `workflow` | `ontologyData` | Tool usage workflows for AI agents                            |
+| `edge`     | `conceptGraph` | Knowledge graph edges (relationships between concepts)        |
 
 ### Schema Definition
 
@@ -223,15 +223,15 @@ import { z } from 'zod';
  * Base fields for all ontology documents.
  */
 const OntologyDocBaseSchema = z.object({
-  doc_id: z.string(),           // e.g., "concept:lesson", "keystage:ks1", "thread:number"
+  doc_id: z.string(), // e.g., "concept:lesson", "keystage:ks1", "thread:number"
   doc_type: z.enum(['concept', 'keystage', 'phase', 'subject', 'thread', 'workflow', 'edge']),
-  title: z.string(),            // Human-readable title
-  description: z.string(),      // Full text description
+  title: z.string(), // Human-readable title
+  description: z.string(), // Full text description
   // description_semantic is NOT in Zod - it's ES-specific (semantic_text type)
   category: z.string().optional(),
-  related_concepts: z.array(z.string()).optional(),  // Links to other doc_ids
+  related_concepts: z.array(z.string()).optional(), // Links to other doc_ids
   source: z.enum(['ontology-data', 'knowledge-graph-data']),
-  content_text: z.string(),     // Full content for RAG context assembly
+  content_text: z.string(), // Full content for RAG context assembly
 });
 
 /**
@@ -239,7 +239,7 @@ const OntologyDocBaseSchema = z.object({
  */
 export const OntologyConceptDocSchema = OntologyDocBaseSchema.extend({
   doc_type: z.literal('concept'),
-  concept_id: z.string(),       // e.g., "lesson", "unit", "thread"
+  concept_id: z.string(), // e.g., "lesson", "unit", "thread"
   concept_label: z.string(),
   concept_brief: z.string(),
   concept_category: z.enum(['structure', 'content', 'context', 'taxonomy', 'ks4', 'metadata']),
@@ -280,7 +280,7 @@ export const oakOntologyMapping = {
       doc_type: { type: 'keyword' },
       title: { type: 'text', fields: { keyword: { type: 'keyword' } } },
       description: { type: 'text' },
-      description_semantic: { type: 'semantic_text' },  // ELSER auto-assigned
+      description_semantic: { type: 'semantic_text' }, // ELSER auto-assigned
       category: { type: 'keyword' },
       related_concepts: { type: 'keyword' },
       source: { type: 'keyword' },
@@ -301,7 +301,9 @@ export const oakOntologyMapping = {
   },
   settings: {
     // Use same analyzers as other oak_ indexes
-    analysis: { /* oak_text_index, oak_text_search */ },
+    analysis: {
+      /* oak_text_index, oak_text_search */
+    },
   },
 };
 ```
@@ -376,12 +378,12 @@ export function generateOntologyDocuments(): OntologyDoc[] {
 
 **Distinction from `oak_ontology`**:
 
-| Aspect           | `oak_ontology`                    | `oak_curriculum_graph`                     |
-| ---------------- | --------------------------------- | ------------------------------------------ |
-| Content          | Schema-level (concept TYPES)      | Instance-level (actual lessons, units)     |
-| Source           | Static authored data              | Extracted from curriculum API + NER        |
-| When populated   | At type-gen time                  | During/after ingestion (multi-step)        |
-| Example          | "lesson hasKeywords keyword"      | "lesson:fractions-y4 hasKeyword denominator" |
+| Aspect         | `oak_ontology`               | `oak_curriculum_graph`                       |
+| -------------- | ---------------------------- | -------------------------------------------- |
+| Content        | Schema-level (concept TYPES) | Instance-level (actual lessons, units)       |
+| Source         | Static authored data         | Extracted from curriculum API + NER          |
+| When populated | At type-gen time             | During/after ingestion (multi-step)          |
+| Example        | "lesson hasKeywords keyword" | "lesson:fractions-y4 hasKeyword denominator" |
 
 ### Schema Definition
 
@@ -394,34 +396,34 @@ import { z } from 'zod';
  * A triple representing a relationship in the curriculum graph.
  */
 export const CurriculumTripleSchema = z.object({
-  triple_id: z.string(),        // "lesson:slug|relation|keyword:slug"
-  
+  triple_id: z.string(), // "lesson:slug|relation|keyword:slug"
+
   // Source entity
-  source_id: z.string(),        // "lesson:adding-fractions-y4"
-  source_type: z.string(),      // "lesson", "unit", "keyword", "thread", etc.
-  source_label: z.string(),     // Human-readable label
-  
+  source_id: z.string(), // "lesson:adding-fractions-y4"
+  source_type: z.string(), // "lesson", "unit", "keyword", "thread", etc.
+  source_label: z.string(), // Human-readable label
+
   // Relationship
-  relation: z.string(),         // "containedIn", "hasKeyword", "addresses", etc.
+  relation: z.string(), // "containedIn", "hasKeyword", "addresses", etc.
   relation_category: z.enum([
-    'hierarchical',   // lesson→unit→sequence
-    'semantic',       // hasKeyword, mentions
-    'pedagogical',    // addresses (misconception), requiresPriorKnowledge
-    'temporal',       // precedes, follows
-    'taxonomic',      // taggedWith (thread, category)
+    'hierarchical', // lesson→unit→sequence
+    'semantic', // hasKeyword, mentions
+    'pedagogical', // addresses (misconception), requiresPriorKnowledge
+    'temporal', // precedes, follows
+    'taxonomic', // taggedWith (thread, category)
   ]),
-  
+
   // Target entity
   target_id: z.string(),
   target_type: z.string(),
   target_label: z.string(),
-  
+
   // Extraction metadata
-  confidence: z.number().min(0).max(1),  // 1.0 for explicit, lower for inferred
+  confidence: z.number().min(0).max(1), // 1.0 for explicit, lower for inferred
   extraction_source: z.enum(['api', 'ner', 'cooccurrence', 'manual']),
-  source_doc_id: z.string().optional(),  // Document this was extracted from
-  context: z.string().optional(),        // Sentence/context where relationship found
-  
+  source_doc_id: z.string().optional(), // Document this was extracted from
+  context: z.string().optional(), // Sentence/context where relationship found
+
   // Timestamps
   created_at: z.string().datetime(),
   updated_at: z.string().datetime().optional(),
@@ -434,12 +436,12 @@ export type CurriculumTriple = z.infer<typeof CurriculumTripleSchema>;
 
 See [Entity Discovery Pipeline](./entity-discovery-pipeline.md) for the multi-step extraction process.
 
-| Extraction Source | When                  | Confidence | Examples                                    |
-| ----------------- | --------------------- | ---------- | ------------------------------------------- |
-| `api`             | During ingestion      | 1.0        | lesson→unit, lesson→keywords                |
-| `ner`             | Post-ingestion batch  | 0.7-0.95   | lesson mentions "William Shakespeare"       |
-| `cooccurrence`    | Post-ingestion batch  | 0.5-0.9    | keywords that appear together frequently    |
-| `manual`          | Human curation        | 1.0        | Curated corrections or additions            |
+| Extraction Source | When                 | Confidence | Examples                                 |
+| ----------------- | -------------------- | ---------- | ---------------------------------------- |
+| `api`             | During ingestion     | 1.0        | lesson→unit, lesson→keywords             |
+| `ner`             | Post-ingestion batch | 0.7-0.95   | lesson mentions "William Shakespeare"    |
+| `cooccurrence`    | Post-ingestion batch | 0.5-0.9    | keywords that appear together frequently |
+| `manual`          | Human curation       | 1.0        | Curated corrections or additions         |
 
 ---
 
@@ -458,28 +460,38 @@ import { z } from 'zod';
  * A canonical entity in the curriculum knowledge graph.
  */
 export const CurriculumEntitySchema = z.object({
-  entity_id: z.string(),         // "keyword:denominator", "lesson:fractions-y4"
+  entity_id: z.string(), // "keyword:denominator", "lesson:fractions-y4"
   entity_type: z.enum([
-    'lesson', 'unit', 'sequence', 'subject', 'thread', 'category',
-    'keyword', 'misconception', 'person', 'place', 'concept', 'term',
+    'lesson',
+    'unit',
+    'sequence',
+    'subject',
+    'thread',
+    'category',
+    'keyword',
+    'misconception',
+    'person',
+    'place',
+    'concept',
+    'term',
   ]),
-  canonical_label: z.string(),   // "denominator" (normalised)
-  aliases: z.array(z.string()),  // ["the denominator", "denominators"]
+  canonical_label: z.string(), // "denominator" (normalised)
+  aliases: z.array(z.string()), // ["the denominator", "denominators"]
   description: z.string().optional(),
   // description_semantic is ES-specific (semantic_text type)
-  
+
   // Entity source
   source: z.enum(['ontology', 'api', 'ner', 'cooccurrence']),
-  source_doc_ids: z.array(z.string()).optional(),  // Documents where entity appears
-  
+  source_doc_ids: z.array(z.string()).optional(), // Documents where entity appears
+
   // Type-specific metadata (schema varies by entity_type)
   metadata: z.record(z.unknown()).optional(),
-  
+
   // Graph metrics (computed periodically)
-  in_degree: z.number().int().optional(),    // Edges pointing TO this entity
-  out_degree: z.number().int().optional(),   // Edges pointing FROM this entity
-  centrality: z.number().optional(),         // PageRank or similar
-  
+  in_degree: z.number().int().optional(), // Edges pointing TO this entity
+  out_degree: z.number().int().optional(), // Edges pointing FROM this entity
+  centrality: z.number().optional(), // PageRank or similar
+
   // Timestamps
   created_at: z.string().datetime(),
   updated_at: z.string().datetime().optional(),
@@ -490,12 +502,12 @@ export type CurriculumEntity = z.infer<typeof CurriculumEntitySchema>;
 
 ### Entity Population Sources
 
-| Source       | Timing            | Entity Types                              |
-| ------------ | ----------------- | ----------------------------------------- |
-| `ontology`   | Type-gen time     | Concepts from `knowledge-graph-data.ts`   |
-| `api`        | Ingestion time    | lessons, units, sequences, threads        |
-| `ner`        | Post-ingestion    | person, place, scientific_term, etc.      |
-| `cooccurrence` | Post-ingestion  | Discovered keyword clusters               |
+| Source         | Timing         | Entity Types                            |
+| -------------- | -------------- | --------------------------------------- |
+| `ontology`     | Type-gen time  | Concepts from `knowledge-graph-data.ts` |
+| `api`          | Ingestion time | lessons, units, sequences, threads      |
+| `ner`          | Post-ingestion | person, place, scientific_term, etc.    |
+| `cooccurrence` | Post-ingestion | Discovered keyword clusters             |
 
 ## Architecture Alignment
 

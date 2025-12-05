@@ -25,7 +25,8 @@ import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions
  * from the KEY_STAGES and SUBJECTS constants.
  */
 export const ZOD_ENUM_EXPRESSIONS: Readonly<Record<string, string>> = {
-  KEY_STAGE_TUPLE: 'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]',
+  KEY_STAGE_TUPLE:
+    'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]',
   SUBJECT_TUPLE: 'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]',
 } as const;
 
@@ -67,7 +68,10 @@ export interface ZodFieldCodeOptions {
  * // Returns: 'subject_slug: z.enum(SUBJECTS as unknown as [...]),'
  * ```
  */
-export function generateZodFieldCode(field: FieldDefinition, options?: ZodFieldCodeOptions): string {
+export function generateZodFieldCode(
+  field: FieldDefinition,
+  options?: ZodFieldCodeOptions,
+): string {
   let zodExpression: string;
 
   switch (field.zodType) {
@@ -154,4 +158,3 @@ export function generateZodSchemaFromFields(
     '  .strict();',
   ].join('\n');
 }
-

@@ -502,17 +502,17 @@ Query: "What connects photosynthesis to respiration?"
    - Mitigation: TDD approach, incremental generator development, unit tests
    - Validation: Generated code must match runtime schemas exactly
 
-4. **Graph traversal performance** (Medium) — *NEW for Phase 5-6*
+4. **Graph traversal performance** (Medium) — _NEW for Phase 5-6_
    - Concern: Multi-hop queries can explode combinatorially
    - Mitigation: Limit hop depth (max 3), limit neighbours per hop (max 100), cache common subgraphs
    - Validation: Performance tests with real curriculum data
 
-5. **NER extraction quality** (Medium) — *NEW for Phase 5*
+5. **NER extraction quality** (Medium) — _NEW for Phase 5_
    - Concern: Curriculum-specific entities may not be recognized by generic NER models
    - Mitigation: Start with rule-based for curriculum terms, add ML NER for transcripts
    - Validation: Sample-based manual accuracy assessment
 
-6. **LLM cost management** (Low-Medium) — *NEW for Phase 4-6*
+6. **LLM cost management** (Low-Medium) — _NEW for Phase 4-6_
    - Concern: RAG queries involve LLM calls which have per-token costs
    - Mitigation: Add cost monitoring from day one, cache common query patterns
    - Validation: Cost tracking per query, budget alerts

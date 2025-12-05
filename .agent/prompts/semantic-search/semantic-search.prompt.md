@@ -71,6 +71,20 @@ ES Serverless provides preconfigured inference endpoints. The `semantic_text` fi
 | Validate search results | ⏳ PENDING | Test queries in ES Playground after ingestion                        |
 | Phase 2: Threads        | ⏳ PENDING | Add thread filtering and facets after data validation                |
 
+### Expanded Roadmap (Phases 4-8)
+
+After resolving blocking issues and completing Phases 2-3, the roadmap expands to include:
+
+| Phase | Focus                       | Key Deliverables                                                   |
+| ----- | --------------------------- | ------------------------------------------------------------------ |
+| 4     | Static Ontology + RAG       | `oak_ontology` index, RAG pipeline, `ask-curriculum` tool          |
+| 5     | Instance Knowledge Graph    | `oak_curriculum_graph`, entity discovery pipeline, graph traversal |
+| 6     | Graph RAG                   | Multi-hop reasoning, `find-connections` tool, Mermaid diagrams     |
+| 7     | Enhanced MCP + Search Modes | `mode` parameter, graph reranking, entity highlighting             |
+| 8     | OpenAI App Widget           | Graph exploration widget, enhanced renderer                        |
+
+See [Pending Todos by Phase](#pending-todos-by-phase) for detailed task breakdown.
+
 ### Critical Challenges 🚨
 
 #### 1. Zod Schema / ES Mapping Field Mismatch
@@ -243,14 +257,18 @@ Transcripts are optional (lessons without video return 404). The cache stores em
 
 **Note**: ES mappings are generated at `pnpm type-gen` time from SDK Zod schemas + field overrides. See [ADR-067](docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md).
 
-### Future Indexes (Phase 2-3)
+### Future Indexes (Phase 2-6)
 
-| Index                    | Priority | Purpose                                |
-| ------------------------ | -------- | -------------------------------------- |
-| `oak_threads`            | HIGH     | Thread-centric search scope            |
-| `oak_ontology`           | HIGH     | Domain knowledge RAG                   |
-| `oak_lesson_transcripts` | HIGH     | Chunked transcripts for deep retrieval |
-| `oak_content_guidance`   | HIGH     | Safeguarding/content warnings          |
+| Index                    | Phase | Priority | Purpose                                         |
+| ------------------------ | ----- | -------- | ----------------------------------------------- |
+| `oak_threads`            | 2     | HIGH     | Thread-centric search scope                     |
+| `oak_content_guidance`   | 3     | HIGH     | Safeguarding/content warnings                   |
+| `oak_ontology`           | 4     | HIGH     | Combined static ontology + KG for RAG grounding |
+| `oak_lesson_transcripts` | 4     | HIGH     | Chunked transcripts for deep retrieval          |
+| `oak_curriculum_graph`   | 5     | HIGH     | Instance-level knowledge graph (triples)        |
+| `oak_entities`           | 5     | HIGH     | Canonical entity records for disambiguation     |
+
+**Graph & RAG Vision**: See [graph-rag-integration-vision.md](../../research/elasticsearch/ai/graph-rag-integration-vision.md) for comprehensive architecture.
 
 ---
 
@@ -595,36 +613,71 @@ pnpm es:status
 
 | Todo ID               | Description                                   | Status  |
 | --------------------- | --------------------------------------------- | ------- |
-| phase-1-thread-filter | Add thread filtering and facets to search     | pending |
-| phase-1-programme     | Add programme factor fields and KS4 filtering | pending |
+| phase-2-thread-filter | Add thread filtering and facets to search     | pending |
+| phase-2-programme     | Add programme factor fields and KS4 filtering | pending |
 
 ### Phase 3: Ontology Enrichment
 
 | Todo ID            | Description                                             | Status  |
 | ------------------ | ------------------------------------------------------- | ------- |
-| phase-2-unit-type  | Implement unit type classification                      | pending |
-| phase-2-guidance   | Add structured content guidance with supervision levels | pending |
-| phase-2-components | Add lesson component availability flags                 | pending |
+| phase-3-unit-type  | Implement unit type classification                      | pending |
+| phase-3-guidance   | Add structured content guidance with supervision levels | pending |
+| phase-3-components | Add lesson component availability flags                 | pending |
 
-### Phase 4: RAG and Ontology Index
+### Phase 4: Static Ontology Index & RAG Foundation
 
-| Todo ID                | Description                                    | Status  |
-| ---------------------- | ---------------------------------------------- | ------- |
-| phase-3-ontology-index | Create ontology index for domain knowledge RAG | pending |
+| Todo ID                   | Description                                                 | Status  |
+| ------------------------- | ----------------------------------------------------------- | ------- |
+| phase-4-ontology-schema   | Design `oak_ontology` schema combining ontology + KG data   | pending |
+| phase-4-ontology-generate | Generate ontology docs from `ontologyData` + `conceptGraph` | pending |
+| phase-4-transcripts       | Lesson transcript chunking and indexing                     | pending |
+| phase-4-openai-inference  | Configure OpenAI inference endpoint via ES Inference API    | pending |
+| phase-4-rag-pipeline      | Implement RAG pipeline (retrieve → assemble → generate)     | pending |
+| phase-4-ask-curriculum    | Add `ask-curriculum` MCP tool for RAG queries               | pending |
 
-### Phase 5: MCP Connectivity
+### Phase 5: Instance-Level Knowledge Graph
 
-| Todo ID              | Description                                | Status  |
-| -------------------- | ------------------------------------------ | ------- |
-| phase-4-mcp-semantic | Add aggregated semantic-search MCP tool    | pending |
-| phase-4-search-mode  | Add mode parameter to existing search tool | pending |
+See [entity-discovery-pipeline.md](../plans/semantic-search/entity-discovery-pipeline.md) for multi-step extraction process.
 
-### Phase 6: OpenAI App Widget
+| Todo ID                  | Description                                                | Status  |
+| ------------------------ | ---------------------------------------------------------- | ------- |
+| phase-5-graph-schema     | Design `oak_curriculum_graph` triple schema                | pending |
+| phase-5-entity-schema    | Design `oak_entities` entity schema with graph metrics     | pending |
+| phase-5-explicit-extract | Implement explicit entity extraction during ingestion      | pending |
+| phase-5-ner-pipeline     | Implement post-ingestion NER pipeline for transcripts      | pending |
+| phase-5-cooccurrence     | Implement co-occurrence mining using ES Graph API          | pending |
+| phase-5-disambiguation   | Implement entity disambiguation and canonical linking      | pending |
+| phase-5-graph-traversal  | Implement graph traversal functions (neighbourhood, paths) | pending |
+| phase-5-explore-graph    | Add `explore-graph` MCP tool for graph navigation          | pending |
 
-| Todo ID                   | Description                              | Status  |
-| ------------------------- | ---------------------------------------- | ------- |
-| phase-5-search-renderer   | Enhance widget search renderer           | pending |
-| phase-5-standalone-widget | Create standalone semantic search widget | pending |
+### Phase 6: Graph RAG
+
+| Todo ID                  | Description                                              | Status  |
+| ------------------------ | -------------------------------------------------------- | ------- |
+| phase-6-entity-detection | Implement entity detection in user queries               | pending |
+| phase-6-path-finding     | Implement path finding between detected entities         | pending |
+| phase-6-subgraph-serial  | Implement subgraph serialisation to text context         | pending |
+| phase-6-graph-rag-integ  | Integrate graph context with RAG pipeline                | pending |
+| phase-6-mermaid          | Add Mermaid visualisation generation for graph responses | pending |
+| phase-6-find-connections | Add `find-connections` MCP tool for Graph RAG queries    | pending |
+
+### Phase 7: MCP Connectivity & Enhanced Search
+
+| Todo ID                  | Description                                                    | Status  |
+| ------------------------ | -------------------------------------------------------------- | ------- |
+| phase-7-mcp-semantic     | Add aggregated semantic-search MCP tool with graph options     | pending |
+| phase-7-search-modes     | Add mode parameter (`basic`/`semantic`/`graph-enhanced`/`rag`) | pending |
+| phase-7-graph-rerank     | Add graph-based result reranking option                        | pending |
+| phase-7-entity-highlight | Add entity highlighting in search results                      | pending |
+| phase-7-related-concepts | Add related concepts suggestions from graph                    | pending |
+
+### Phase 8: OpenAI App Widget
+
+| Todo ID                   | Description                                                | Status  |
+| ------------------------- | ---------------------------------------------------------- | ------- |
+| phase-8-search-renderer   | Enhance widget search renderer with entity badges          | pending |
+| phase-8-graph-widget      | Create graph exploration widget with Mermaid visualisation | pending |
+| phase-8-standalone-widget | Create standalone semantic search widget                   | pending |
 
 ---
 
@@ -646,10 +699,18 @@ Relevant ADRs for semantic search:
 
 For detailed implementation plans, see:
 
+- `.agent/plans/semantic-search/index.md` - Navigation hub for all semantic search planning
 - `.agent/plans/semantic-search/semantic-search-overview.md` - High-level strategy and phases
+- `.agent/plans/semantic-search/search-generator-spec.md` - Generated SDK artifacts + new index schemas
+- `.agent/plans/semantic-search/entity-discovery-pipeline.md` - Multi-step entity extraction (explicit vs. discovered)
 - `.agent/plans/semantic-search/search-service/schema-first-ontology-implementation.md` - Backend implementation
 - `.agent/plans/semantic-search/search-ui/frontend-implementation.md` - Frontend implementation
-- `.agent/plans/semantic-search/search-generator-spec.md` - Generated SDK artifacts
+
+### Graph & RAG Research
+
+- `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md` - Comprehensive Graph + RAG + Graph RAG strategy
+- `.agent/research/elasticsearch/ai/elasticsearch_serverless_ai_kg_detailed.md` - ES AI capabilities
+- `.agent/research/elasticsearch/ai/Constructing and Leveraging a Knowledge Graph in Elasticsearch for Search Relevance.docx.md` - KG construction patterns
 
 ### Reference Documentation
 
@@ -661,6 +722,7 @@ For detailed implementation plans, see:
 
 ## Version History
 
+- 2025-12-05: **Graph RAG Integration** - Expanded phases 4-8 to include static ontology index, instance-level knowledge graph, Graph RAG, and enhanced MCP tools. Added entity discovery pipeline documentation.
 - 2025-12-05: **BLOCKING** Discovered Zod/ES mapping field mismatch causing bulk indexing failures
 - 2025-12-05: **BLOCKING** Identified console statement usage instead of proper logger
 - 2025-12-05: Added `reset` CLI command to delete and recreate indexes

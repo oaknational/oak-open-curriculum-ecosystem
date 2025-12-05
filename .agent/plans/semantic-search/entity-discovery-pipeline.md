@@ -127,15 +127,15 @@ export function generateStaticOntologyDocuments(): OntologyDoc[] {
 
 ### Entities Produced
 
-| Entity Type | Count | Source               |
-| ----------- | ----- | -------------------- |
-| `concept`   | ~28   | knowledge-graph-data |
-| `edge`      | ~45   | knowledge-graph-data |
-| `keystage`  | 4     | ontology-data        |
-| `phase`     | 2     | ontology-data        |
-| `subject`   | ~13   | ontology-data        |
+| Entity Type | Count | Source                   |
+| ----------- | ----- | ------------------------ |
+| `concept`   | ~28   | knowledge-graph-data     |
+| `edge`      | ~45   | knowledge-graph-data     |
+| `keystage`  | 4     | ontology-data            |
+| `phase`     | 2     | ontology-data            |
+| `subject`   | ~13   | ontology-data            |
 | `thread`    | ~3    | ontology-data (examples) |
-| `workflow`  | ~5    | ontology-data        |
+| `workflow`  | ~5    | ontology-data            |
 
 ---
 
@@ -158,9 +158,7 @@ During curriculum data ingestion — synchronous with document indexing.
 ```typescript
 // apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/ingestion/extract-triples.ts
 
-export async function extractExplicitTriples(
-  lesson: LessonData,
-): Promise<CurriculumTriple[]> {
+export async function extractExplicitTriples(lesson: LessonData): Promise<CurriculumTriple[]> {
   const triples: CurriculumTriple[] = [];
   const timestamp = new Date().toISOString();
 
@@ -224,9 +222,7 @@ export async function extractExplicitTriples(
 }
 
 // Extract entities from triples
-export function extractEntitiesFromTriples(
-  triples: CurriculumTriple[],
-): CurriculumEntity[] {
+export function extractEntitiesFromTriples(triples: CurriculumTriple[]): CurriculumEntity[] {
   const entityMap = new Map<string, CurriculumEntity>();
 
   for (const triple of triples) {
@@ -261,25 +257,25 @@ export function extractEntitiesFromTriples(
 
 ### Triples Produced
 
-| Relation            | Category     | Example                                      |
-| ------------------- | ------------ | -------------------------------------------- |
-| `containedIn`       | hierarchical | lesson:fractions-y4 → unit:fractions-year-4  |
-| `hasKeyword`        | semantic     | lesson:fractions-y4 → keyword:denominator    |
-| `addresses`         | pedagogical  | lesson:fractions-y4 → misconception:...      |
-| `hasKeyLearning`    | pedagogical  | lesson:fractions-y4 → learning:...           |
-| `taggedWith`        | taxonomic    | unit:fractions-y4 → thread:number            |
-| `belongsTo`         | hierarchical | unit:fractions-y4 → sequence:maths-primary   |
+| Relation         | Category     | Example                                     |
+| ---------------- | ------------ | ------------------------------------------- |
+| `containedIn`    | hierarchical | lesson:fractions-y4 → unit:fractions-year-4 |
+| `hasKeyword`     | semantic     | lesson:fractions-y4 → keyword:denominator   |
+| `addresses`      | pedagogical  | lesson:fractions-y4 → misconception:...     |
+| `hasKeyLearning` | pedagogical  | lesson:fractions-y4 → learning:...          |
+| `taggedWith`     | taxonomic    | unit:fractions-y4 → thread:number           |
+| `belongsTo`      | hierarchical | unit:fractions-y4 → sequence:maths-primary  |
 
 ### Entities Produced
 
-| Entity Type     | Source           | Confidence |
-| --------------- | ---------------- | ---------- |
-| `lesson`        | API data         | 1.0        |
-| `unit`          | API data         | 1.0        |
-| `sequence`      | API data         | 1.0        |
-| `keyword`       | Lesson metadata  | 1.0        |
-| `misconception` | Lesson metadata  | 1.0        |
-| `thread`        | Unit metadata    | 1.0        |
+| Entity Type     | Source          | Confidence |
+| --------------- | --------------- | ---------- |
+| `lesson`        | API data        | 1.0        |
+| `unit`          | API data        | 1.0        |
+| `sequence`      | API data        | 1.0        |
+| `keyword`       | Lesson metadata | 1.0        |
+| `misconception` | Lesson metadata | 1.0        |
+| `thread`        | Unit metadata   | 1.0        |
 
 ---
 
@@ -319,7 +315,7 @@ interface NEREntity {
   text: string;
   type: 'person' | 'place' | 'scientific_term' | 'historical_event' | 'concept';
   confidence: number;
-  context: string;  // Surrounding sentence
+  context: string; // Surrounding sentence
   source_doc_id: string;
 }
 
@@ -337,12 +333,8 @@ export async function runNERExtraction(options: {
     size: batchSize,
     query: {
       bool: {
-        must: [
-          { exists: { field: 'transcript_text' } },
-        ],
-        must_not: [
-          { term: { ner_processed: true } },
-        ],
+        must: [{ exists: { field: 'transcript_text' } }],
+        must_not: [{ term: { ner_processed: true } }],
         filter: since ? [{ range: { indexed_at: { gte: since.toISOString() } } }] : [],
       },
     },
@@ -355,10 +347,12 @@ export async function runNERExtraction(options: {
     for (const doc of batch) {
       // Call NER model (via ES Inference API or external)
       const extracted = await extractEntitiesViaNER(doc.transcript_text);
-      entities.push(...extracted.map(e => ({
-        ...e,
-        source_doc_id: doc._id,
-      })));
+      entities.push(
+        ...extracted.map((e) => ({
+          ...e,
+          source_doc_id: doc._id,
+        })),
+      );
     }
 
     // 3. Convert to triples and entities
@@ -370,19 +364,19 @@ export async function runNERExtraction(options: {
     await bulkUpsertEntities(canonicalEntities);
 
     // 5. Mark documents as processed
-    await markNERProcessed(batch.map(d => d._id));
+    await markNERProcessed(batch.map((d) => d._id));
   }
 }
 ```
 
 #### NER Model Options
 
-| Option                 | Pros                              | Cons                         |
-| ---------------------- | --------------------------------- | ---------------------------- |
-| ES Inference API + HF  | Integrated, no external calls     | Limited model selection      |
-| OpenAI via Inference   | High quality                      | Cost per token               |
-| Rule-based patterns    | Fast, domain-specific             | Limited to known patterns    |
-| Hybrid                 | Best of both                      | More complex                 |
+| Option                | Pros                          | Cons                      |
+| --------------------- | ----------------------------- | ------------------------- |
+| ES Inference API + HF | Integrated, no external calls | Limited model selection   |
+| OpenAI via Inference  | High quality                  | Cost per token            |
+| Rule-based patterns   | Fast, domain-specific         | Limited to known patterns |
+| Hybrid                | Best of both                  | More complex              |
 
 **Recommendation**: Start with rule-based for curriculum-specific terms (subjects, key stages), add ML NER for transcript analysis.
 
@@ -394,8 +388,8 @@ Use ES Graph API to discover implicit relationships.
 // apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/discovery/cooccurrence-mining.ts
 
 export async function mineCooccurrences(options: {
-  field: string;           // e.g., 'keywords'
-  minDocCount?: number;    // Minimum document frequency
+  field: string; // e.g., 'keywords'
+  minDocCount?: number; // Minimum document frequency
   minSignificance?: number; // Minimum significance score
 }): Promise<void> {
   const { field, minDocCount = 5, minSignificance = 0.5 } = options;
@@ -418,9 +412,7 @@ export async function mineCooccurrences(options: {
     const graphResponse = await esClient.graph.explore({
       index: 'oak_lessons',
       query: { term: { [field]: term.key } },
-      vertices: [
-        { field, min_doc_count: minDocCount },
-      ],
+      vertices: [{ field, min_doc_count: minDocCount }],
       connections: {
         query: { match_all: {} },
       },
@@ -599,21 +591,21 @@ export async function computeGraphMetrics(): Promise<void> {
 
 ### Entity Coverage
 
-| Metric                    | Target     | Measurement              |
-| ------------------------- | ---------- | ------------------------ |
-| Explicit entity coverage  | 100%       | All API entities indexed |
-| NER entity coverage       | 80%+       | Sample transcript review |
-| Disambiguation accuracy   | 95%+       | Manual audit of merges   |
-| Triple count              | 10K+       | Index stats              |
+| Metric                   | Target | Measurement              |
+| ------------------------ | ------ | ------------------------ |
+| Explicit entity coverage | 100%   | All API entities indexed |
+| NER entity coverage      | 80%+   | Sample transcript review |
+| Disambiguation accuracy  | 95%+   | Manual audit of merges   |
+| Triple count             | 10K+   | Index stats              |
 
 ### Performance
 
-| Metric                  | Target     | Measurement              |
-| ----------------------- | ---------- | ------------------------ |
-| Ingestion extraction    | <100ms/doc | Timing logs              |
-| NER batch processing    | <1min/100  | Batch job duration       |
-| Co-occurrence mining    | <10min     | Full job duration        |
-| Graph query latency     | <500ms     | API response times       |
+| Metric               | Target     | Measurement        |
+| -------------------- | ---------- | ------------------ |
+| Ingestion extraction | <100ms/doc | Timing logs        |
+| NER batch processing | <1min/100  | Batch job duration |
+| Co-occurrence mining | <10min     | Full job duration  |
+| Graph query latency  | <500ms     | API response times |
 
 ---
 
@@ -649,4 +641,3 @@ export async function computeGraphMetrics(): Promise<void> {
 - [Search Generator Spec - Entity Schemas](./search-generator-spec.md#oak_curriculum_graph-triple-schema)
 - [ES Graph API](https://www.elastic.co/guide/en/elasticsearch/reference/current/graph-explore-api.html)
 - [ES Inference API](https://www.elastic.co/docs/solutions/search/using-openai-compatible-models)
-

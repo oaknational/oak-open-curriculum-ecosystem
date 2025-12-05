@@ -261,4 +261,3 @@ describe('generateEsFieldsFromDefinitions', () => {
     expect(unitId?.[1]).toEqual({ type: 'keyword', normalizer: 'oak_lower' });
   });
 });
-

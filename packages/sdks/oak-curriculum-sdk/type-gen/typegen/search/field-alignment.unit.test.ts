@@ -217,12 +217,20 @@ describe('Field Alignment: Summary', () => {
     const indexes = [
       { name: 'units', fields: UNITS_INDEX_FIELDS, overrides: UNITS_FIELD_OVERRIDES },
       { name: 'lessons', fields: LESSONS_INDEX_FIELDS, overrides: LESSONS_FIELD_OVERRIDES },
-      { name: 'unit_rollup', fields: UNIT_ROLLUP_INDEX_FIELDS, overrides: UNIT_ROLLUP_FIELD_OVERRIDES },
+      {
+        name: 'unit_rollup',
+        fields: UNIT_ROLLUP_INDEX_FIELDS,
+        overrides: UNIT_ROLLUP_FIELD_OVERRIDES,
+      },
       { name: 'sequences', fields: SEQUENCES_INDEX_FIELDS, overrides: SEQUENCES_FIELD_OVERRIDES },
     ];
 
     for (const { name, fields, overrides } of indexes) {
-      const zodSchema = generateZodSchemaFromFields(`Test${name}Schema`, fields, ZOD_ENUM_EXPRESSIONS);
+      const zodSchema = generateZodSchemaFromFields(
+        `Test${name}Schema`,
+        fields,
+        ZOD_ENUM_EXPRESSIONS,
+      );
       const esFields = generateEsFieldsFromDefinitions(fields, overrides);
 
       const zodCount = extractZodFieldNames(zodSchema).length;
@@ -233,4 +241,3 @@ describe('Field Alignment: Summary', () => {
     }
   });
 });
-

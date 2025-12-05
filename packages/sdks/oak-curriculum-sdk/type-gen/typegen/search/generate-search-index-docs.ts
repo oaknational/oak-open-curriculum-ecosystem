@@ -61,7 +61,11 @@ function createIndexDocumentsModule(): string {
     `  return SearchThreadIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the lesson search document shape. */\n` +
-    generateZodSchemaFromFields('SearchLessonsIndexDocSchema', LESSONS_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    generateZodSchemaFromFields(
+      'SearchLessonsIndexDocSchema',
+      LESSONS_INDEX_FIELDS,
+      ZOD_ENUM_EXPRESSIONS,
+    ) +
     '\n\n' +
     `/** Elasticsearch lesson document (hybrid search index shape). */\n` +
     `export type SearchLessonsIndexDoc = z.infer<typeof SearchLessonsIndexDocSchema>;\n\n` +
@@ -70,7 +74,11 @@ function createIndexDocumentsModule(): string {
     `  return SearchLessonsIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the unit search document shape. */\n` +
-    generateZodSchemaFromFields('SearchUnitsIndexDocSchema', UNITS_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    generateZodSchemaFromFields(
+      'SearchUnitsIndexDocSchema',
+      UNITS_INDEX_FIELDS,
+      ZOD_ENUM_EXPRESSIONS,
+    ) +
     '\n\n' +
     `/** Elasticsearch unit document (hybrid search index shape). */\n` +
     `export type SearchUnitsIndexDoc = z.infer<typeof SearchUnitsIndexDocSchema>;\n\n` +
@@ -79,7 +87,11 @@ function createIndexDocumentsModule(): string {
     `  return SearchUnitsIndexDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the unit roll-up document shape. */\n` +
-    generateZodSchemaFromFields('SearchUnitRollupDocSchema', UNIT_ROLLUP_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    generateZodSchemaFromFields(
+      'SearchUnitRollupDocSchema',
+      UNIT_ROLLUP_INDEX_FIELDS,
+      ZOD_ENUM_EXPRESSIONS,
+    ) +
     '\n\n' +
     `/** Elasticsearch unit roll-up document (hybrid search index shape). */\n` +
     `export type SearchUnitRollupDoc = z.infer<typeof SearchUnitRollupDocSchema>;\n\n` +
@@ -88,7 +100,11 @@ function createIndexDocumentsModule(): string {
     `  return SearchUnitRollupDocSchema.safeParse(value).success;\n` +
     `}\n\n` +
     `/** Zod schema capturing the sequence search document shape. */\n` +
-    generateZodSchemaFromFields('SearchSequenceIndexDocSchema', SEQUENCES_INDEX_FIELDS, ZOD_ENUM_EXPRESSIONS) +
+    generateZodSchemaFromFields(
+      'SearchSequenceIndexDocSchema',
+      SEQUENCES_INDEX_FIELDS,
+      ZOD_ENUM_EXPRESSIONS,
+    ) +
     '\n\n' +
     `/** Elasticsearch sequence document (hybrid search index shape). */\n` +
     `export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema>;\n\n` +

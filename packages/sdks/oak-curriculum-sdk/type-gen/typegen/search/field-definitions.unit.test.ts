@@ -274,4 +274,3 @@ describe('SEQUENCES_INDEX_FIELDS', () => {
     expect(optional).toHaveLength(9);
   });
 });
-

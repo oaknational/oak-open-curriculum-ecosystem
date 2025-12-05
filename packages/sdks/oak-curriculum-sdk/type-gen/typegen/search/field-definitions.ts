@@ -219,4 +219,3 @@ export const SEQUENCES_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'sequence_url', zodType: 'string', optional: false },
   { name: 'title_suggest', zodType: 'object', optional: true },
 ] as const;
-

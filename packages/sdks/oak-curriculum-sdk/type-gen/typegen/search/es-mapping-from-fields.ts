@@ -115,4 +115,3 @@ export function generateEsFieldsFromDefinitions(
     return [field.name, fieldDefinitionToEsMapping(field)];
   });
 }
-

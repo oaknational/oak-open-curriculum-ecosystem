@@ -236,4 +236,3 @@ describe('generateZodSchemaFromFields', () => {
     expect(code).toContain('title_suggest: SearchCompletionSuggestPayloadSchema.optional(),');
   });
 });
-
