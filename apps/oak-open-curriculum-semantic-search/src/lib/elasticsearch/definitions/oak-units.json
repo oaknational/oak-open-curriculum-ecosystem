@@ -21,7 +21,10 @@
       "sequence_ids": { "type": "keyword", "normalizer": "oak_lower" },
       "unit_url": { "type": "keyword", "ignore_above": 1024 },
       "subject_programmes_url": { "type": "keyword", "ignore_above": 1024 },
-      "updated_at": { "type": "date" }
+      "updated_at": { "type": "date" },
+      "thread_slugs": { "type": "keyword", "normalizer": "oak_lower" },
+      "thread_titles": { "type": "keyword", "normalizer": "oak_lower" },
+      "thread_orders": { "type": "integer" }
     }
   }
 }

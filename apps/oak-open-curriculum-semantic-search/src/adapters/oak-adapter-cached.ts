@@ -1,9 +1,7 @@
 /**
  * @module oak-adapter-cached
- * @description Redis-cached wrapper for the Oak SDK client.
- *
- * Provides optional, persistent caching for Oak API responses during ingestion.
- *
+ * @description Redis-cached wrapper for the Oak SDK client. Provides optional,
+ * persistent caching for Oak API responses during ingestion.
  * @see {@link ../../docs/SDK-CACHING.md} for documentation
  * @see {@link ../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md} for ADR
  */

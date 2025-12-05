@@ -85,9 +85,7 @@ export async function buildLessonDocuments(
 
   progressLog(`      Processing ${totalLessons} lessons across ${groups.length} groups...`);
 
-  let groupIndex = 0;
   for (const group of groups) {
-    groupIndex++;
     const summary = unitSummaries.get(group.unitSlug);
     if (!summary) {
       throw new Error(`Missing unit summary for unit ${group.unitSlug}`);
