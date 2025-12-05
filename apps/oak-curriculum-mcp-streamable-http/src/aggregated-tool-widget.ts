@@ -10,7 +10,7 @@
  * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui
  */
 
-import { OAK_LOGO_BASE64 } from './oak-logo-base64.js';
+import { OAK_LOGO_SVG } from './oak-logo-svg.js';
 import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
@@ -58,7 +58,7 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
 <body>
   <main id="root">
     <div class="hdr">
-      <img class="logo" src="data:image/png;base64,${OAK_LOGO_BASE64}" alt="Oak National Academy logo">
+      <div class="logo">${OAK_LOGO_SVG}</div>
       <div class="hdr-text">
         <h1 class="ttl">Oak National Academy</h1>
         <p class="sub-ttl" id="tool-name"></p>
