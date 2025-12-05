@@ -7,16 +7,19 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port ${SEMANTIC_SEARCH_PORT:-3003}",
     "build": "next build",
     "clean": "rm -rf dist .turbo .next",
     "start": "next start",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "test:ui": "playwright test",
     "test:watch": "vitest",
-    "elastic:setup": "bash scripts/setup.sh",
+    "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
+    "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
+    "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
     "elastic:alias-swap": "bash scripts/alias-swap.sh",
     "sandbox:ingest": "tsx scripts/sandbox/ingest.ts",
     "zero-hit:purge": "tsx scripts/observability/delete-zero-hit-events.ts",
@@ -39,7 +42,8 @@
     "react-dom": "19.2.1",
     "redoc": "^2.5.2",
     "styled-components": "^6.1.19",
-    "zod": "^4.1.13"
+    "zod": "^4.1.13",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",

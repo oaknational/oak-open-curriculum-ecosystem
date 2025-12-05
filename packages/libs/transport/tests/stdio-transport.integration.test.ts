@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { PassThrough, Writable } from 'stream';
-import type { Logger } from '@oaknational/mcp-logger';
-import type { JsonRpcMessage } from '../src/types.js';
+import type { JsonRpcMessage, Logger } from '../src/types.js';
+import { createStdioTransport } from '../src/index.js';
 
 describe('StdioTransport Integration', () => {
   function createMinimalMocks() {
@@ -40,8 +40,7 @@ describe('StdioTransport Integration', () => {
   }
 
   describe('Transport Lifecycle', () => {
-    it('should start and stop without errors', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
+    it('should start and stop without errors', () => {
       const { stdin, stdout, logger } = createMinimalMocks();
 
       const transport = createStdioTransport({
@@ -61,8 +60,7 @@ describe('StdioTransport Integration', () => {
       }).not.toThrow();
     });
 
-    it('should require stdin and stdout', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
+    it('should require stdin and stdout', () => {
       const { logger } = createMinimalMocks();
 
       // Test behavior: throws when required dependencies are missing
@@ -78,7 +76,6 @@ describe('StdioTransport Integration', () => {
 
   describe('Message Sending', () => {
     it('should format and send messages correctly', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
       const { stdin, stdout, logger, getWrittenData } = createMinimalMocks();
 
       const transport = createStdioTransport({
@@ -102,7 +99,6 @@ describe('StdioTransport Integration', () => {
     });
 
     it('should handle write errors gracefully', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
       const { stdin, logger } = createMinimalMocks();
 
       // Create a stdout that always fails
@@ -134,8 +130,7 @@ describe('StdioTransport Integration', () => {
   });
 
   describe('Message Receiving', () => {
-    it('should parse and deliver messages', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
+    it('should parse and deliver messages', () => {
       const { stdin, stdout, logger, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
 
@@ -156,8 +151,7 @@ describe('StdioTransport Integration', () => {
       expect(receivedMessages).toEqual([{ jsonrpc: '2.0', method: 'test', id: 1 }]);
     });
 
-    it('should handle partial messages correctly', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
+    it('should handle partial messages correctly', () => {
       const { stdin, stdout, logger, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
 
@@ -182,8 +176,7 @@ describe('StdioTransport Integration', () => {
       ]);
     });
 
-    it('should ignore invalid JSON', async () => {
-      const { createStdioTransport } = await import('../src/index.js');
+    it('should ignore invalid JSON', () => {
       const { stdin, stdout, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
       let errorCount = 0;

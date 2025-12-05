@@ -1,8 +1,5 @@
 {
   "settings": {
-    "index": {
-      "highlight.max_analyzed_offset": 10000000
-    },
     "analysis": {
       "normalizer": {
         "oak_lower": {
@@ -18,7 +15,12 @@
         }
       },
       "analyzer": {
-        "oak_text": {
+        "oak_text_index": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        },
+        "oak_text_search": {
           "type": "custom",
           "tokenizer": "standard",
           "filter": ["lowercase", "oak_syns_filter"]
@@ -33,7 +35,8 @@
       "unit_slug": { "type": "keyword", "normalizer": "oak_lower" },
       "unit_title": {
         "type": "text",
-        "analyzer": "oak_text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search",
         "fields": {
           "keyword": { "type": "keyword", "ignore_above": 256, "normalizer": "oak_lower" },
           "sa": { "type": "search_as_you_type" }
@@ -44,18 +47,23 @@
         "contexts": [
           { "name": "subject", "type": "category" },
           { "name": "key_stage", "type": "category" },
-          { "name": "sequence", "type": "category", "optional": true }
+          { "name": "sequence", "type": "category" }
         ]
       },
       "subject_slug": { "type": "keyword", "normalizer": "oak_lower" },
       "key_stage": { "type": "keyword", "normalizer": "oak_lower" },
       "years": { "type": "keyword", "normalizer": "oak_lower" },
-      "unit_topics": { "type": "text", "analyzer": "oak_text" },
+      "unit_topics": {
+        "type": "text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search"
+      },
       "lesson_ids": { "type": "keyword", "normalizer": "oak_lower" },
       "lesson_count": { "type": "integer" },
       "rollup_text": {
         "type": "text",
-        "analyzer": "oak_text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search",
         "term_vector": "with_positions_offsets"
       },
       "unit_semantic": { "type": "semantic_text" },

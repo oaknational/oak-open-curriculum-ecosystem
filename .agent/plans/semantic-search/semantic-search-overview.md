@@ -6,7 +6,7 @@ Last updated: 2025-12-04
 
 The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
 
-**Current Status**: Schema-first migration COMPLETE. Elasticsearch deployment and ontology integration are next priorities.
+**Current Status**: ES Serverless DEPLOYED with live curriculum data ingested. Index metadata tracking (`oak_meta`) in place. Ready for Phase 2 ontology integration.
 
 ## Current State Snapshot
 
@@ -15,7 +15,12 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - **Schema-first migration**: All search schemas now generated via `pnpm type-gen` from OpenAPI schema
 - **SDK exports**: 13 generated modules under `packages/sdks/oak-curriculum-sdk/src/types/generated/search/`
 - **MCP tool generation**: 26 tools with full type safety
-- **Five Elasticsearch indices** (defined, not deployed): lessons, units, unit_rollup, sequences, sequence_facets
+- **Elasticsearch Serverless deployed** (2025-12-04): ES cluster operational with indexes and synonyms
+- **Six Elasticsearch indices**: lessons, units, unit_rollup, sequences, sequence_facets, **plus `oak_meta` for version tracking**
+- **Live data ingestion complete**: Full curriculum data ingested via SDK for common subjects across all key stages
+- **Automatic index versioning**: `oak_meta` index stores version, timestamp, doc counts, and ingestion metadata
+- **Synonym set deployed**: `oak-syns` with 68 SDK-generated synonyms
+- **Response augmentation middleware**: SDK client automatically adds `canonicalUrl` to API responses
 - **Three search endpoints**:
   - `POST /api/search` - Structured search with scopes (lessons, units, sequences, all)
   - `POST /api/search/nl` - Natural language search with OpenAI query parsing
@@ -25,11 +30,17 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - **UI**: Next.js 15 App Router with Oak Components design system
 - **Observability**: Zero-hit telemetry tracking empty result scenarios
 - **Fixture testing**: Development mode with mock data for UI testing
+- **TypeScript CLI tools**: ES setup and status via `pnpm es:setup` and `pnpm es:status`
 
 ### Critical Blockers 🚨
 
-1. **ES indexes NOT DEPLOYED**: All testing has been against fixtures only; no real Elasticsearch instance provisioned
-2. **No data ingested**: Index mappings defined but no curriculum data indexed; no embeddings generated
+None - ES deployment and live ingestion complete. Ready for ontology integration.
+
+### Next Steps
+
+1. **Continue Phase 2 - Thread Filter**: Add thread filtering and facets to search (phase-1-thread-filter)
+2. **Programme Factors**: Add KS4 filtering by tier, exam board, pathway
+3. **MCP Semantic Search Tool**: Expose semantic search via MCP
 
 ### Remaining Gaps
 
@@ -47,19 +58,23 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 
 ## Overall Goals and Priorities
 
-### Priority 0: ES Deployment (CRITICAL BLOCKER)
+### Priority 0: ES Deployment ✅ COMPLETE
 
 **Objective**: Provision Elasticsearch Serverless and run initial ingestion.
 
-**Status**: NOT STARTED
+**Status**: COMPLETE (as of 2025-12-04)
 
-**Success Criteria**:
+**Completed Deliverables**:
 
-- ES Serverless project created via Elastic Cloud
-- API keys generated and configured
-- Indexes created from existing mappings
-- Initial data ingestion completed for at least one subject
-- Search queries return real results (not fixtures)
+- ✅ ES Serverless project created via Elastic Cloud (`poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud`)
+- ✅ API keys generated and configured with manage + search privileges
+- ✅ All 6 indexes created (`oak_lessons`, `oak_units`, `oak_unit_rollup`, `oak_sequences`, `oak_sequence_facets`, `oak_meta`)
+- ✅ Synonym set `oak-syns` created with 68 SDK-generated synonyms
+- ✅ Live curriculum data ingested via SDK for maths, english, science, history, geography across all key stages
+- ✅ Index metadata tracking (`oak_meta`) stores version, timestamps, doc counts, and ingestion duration
+- ✅ Search queries return real results from ES
+- ✅ TypeScript CLI for setup (`pnpm es:setup`) and status (`pnpm es:status`)
+- ✅ Live ingestion CLI (`pnpm es:ingest-live`) with subject/key-stage filtering
 
 ### Priority 1: Schema-First Migration ✅ COMPLETE
 
@@ -131,25 +146,28 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 
 ## Timeline and Milestones
 
-### Phase 0: ES Deployment (CRITICAL BLOCKER) - NOT STARTED
+### Phase 0: ES Deployment ✅ COMPLETE
 
-**Duration**: 1-2 weeks
+**Duration**: Completed 2025-12-04 (multiple sessions)
 
-**Tasks**:
+**Completed Tasks**:
 
-1. Provision ES Serverless project via Elastic Cloud
-2. Generate API keys with appropriate scopes
-3. Create indexes from existing mappings
-4. Run initial ingestion for at least one subject
-5. Validate search queries return real results
+1. ✅ Provisioned ES Serverless project via Elastic Cloud
+2. ✅ Generated API keys with manage + search privileges
+3. ✅ Created all 6 indexes from existing mappings (with Serverless compatibility fixes)
+4. ✅ Created `oak-syns` synonym set from SDK ontology (68 synonyms)
+5. ✅ Live SDK ingestion completed for common subjects (maths, english, science, history, geography)
+6. ✅ Validated search queries return real results
+7. ✅ Index metadata (`oak_meta`) tracks version and ingestion details automatically
+8. ✅ TypeScript CLI tools for setup, status, and live ingestion
 
-**Exit Criteria**:
+**Exit Criteria Met**:
 
-- ES Serverless project operational
-- API keys configured in environment
-- `oak_lessons`, `oak_units`, `oak_sequences` indexes created
-- Initial data ingested
-- Quality gates pass
+- ✅ ES Serverless project operational at `poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud`
+- ✅ API keys configured in `.env.local`
+- ✅ All indexes created: `oak_lessons`, `oak_units`, `oak_unit_rollup`, `oak_sequences`, `oak_sequence_facets`, `oak_meta`
+- ✅ Live curriculum data ingested
+- ✅ Quality gates pass
 
 ### Phase 1: Schema-First Migration ✅ COMPLETE
 
@@ -285,15 +303,20 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 
 ### Active Dependencies
 
-- **Elasticsearch Serverless**: Production deployment (BLOCKING - not provisioned)
+- **Elasticsearch Serverless**: ✅ Deployed and operational with live data
 - **OpenAI API**: For natural language query parsing (AVAILABLE)
+- **Full curriculum data**: ✅ Ingested for common subjects
 
 ### Recent Architectural Changes (2025-12-04)
 
 - **Synonym consolidation**: Domain synonyms now managed in SDK's `ontologyData.synonyms`
 - **Mapping files relocated**: ES index mappings moved to `src/lib/elasticsearch/definitions/`
 - **Dynamic synonym generation**: `scripts/generate-synonyms.ts` calls SDK at runtime
-- **E2E test correction**: Removed ES connection test (E2E cannot access network per testing-strategy.md)
+- **E2E test correction**: Moved network-calling E2E test to smoke tests (E2E cannot access network per testing-strategy.md)
+- **Index metadata**: New `oak_meta` index stores version, timestamps, doc counts, ingestion duration automatically
+- **Response augmentation middleware**: SDK client now automatically adds `canonicalUrl` to all API responses
+- **Dev server port**: Configurable via `SEMANTIC_SEARCH_PORT` env var (defaults to 3003 to avoid conflicts)
+- **TypeScript CLI tools**: ES setup/status now via TypeScript CLI with proper env loading
 
 ### Future Dependencies
 
@@ -333,7 +356,7 @@ All work must pass the following gates in sequence:
 pnpm type-gen           # Generate types from schema
 pnpm build              # Production build
 pnpm type-check         # TypeScript validation
-pnpm lint -- --fix      # ESLint + architectural rules
+pnpm lint:fix           # ESLint with auto-fix (or `pnpm lint` for verify-only)
 pnpm format:root        # Format code
 pnpm markdownlint:root  # Lint markdown
 pnpm test               # Unit + integration tests
@@ -342,6 +365,14 @@ pnpm test:e2e:built     # E2E tests on built artifacts
 pnpm test:ui            # UI tests (Playwright)
 pnpm smoke:dev:stub     # Smoke tests (stubbed)
 ```
+
+**Shorthand commands**:
+
+- `pnpm make` - Build, lint:fix, format (development workflow)
+- `pnpm qg` - Full quality gate verification (CI workflow)
+- `pnpm check` - Clean rebuild + full QG (thorough verification)
+
+**Build System Documentation**: See `docs/development/build-system.md` and `docs/architecture/architectural-decisions/065-turbo-task-dependencies.md` for Turbo caching and task dependency details.
 
 **Note**: After each code fix, the full quality gate sequence must be run from the beginning to prevent hidden regressions.
 
@@ -382,6 +413,16 @@ pnpm smoke:dev:stub     # Smoke tests (stubbed)
 
 ## Version History
 
+- 2025-12-05: **Build system optimised** - Turbo caching enabled, task dependencies fixed (ADR 065, build-system.md)
+- 2025-12-05: **lint:fix task added** - Explicit lint with auto-fix in all workspaces
+- 2025-12-05: **Smoke test issue identified** - `smoke:dev:stub` failing on MCP response format
+- 2025-12-04: **Live curriculum data ingestion COMPLETE** - Full SDK data ingested for maths, english, science, history, geography across all key stages
+- 2025-12-04: **Index metadata tracking** - New `oak_meta` index automatically tracks version, timestamps, doc counts, ingestion duration
+- 2025-12-04: **Response augmentation middleware** - SDK client automatically adds `canonicalUrl` to API responses
+- 2025-12-04: **TypeScript CLI tools** - ES setup, status, and live ingestion via TypeScript CLI with proper env loading
+- 2025-12-04: **Dev server port configuration** - `SEMANTIC_SEARCH_PORT` env var (defaults to 3003)
+- 2025-12-04: **Phase 0 ES Deployment COMPLETE** - Elasticsearch Serverless deployed, indexes created, synonyms configured
+- 2025-12-04: Applied ES Serverless compatibility fixes to index mappings (removed `highlight.max_analyzed_offset`, split `oak_text` analyzer into index/search variants for synonym_graph filter)
 - 2025-12-04: Added synonym consolidation, mapping relocation, thread schema completion to dependencies
 - 2025-12-04: Fixed quality gates to match actual repository commands
 - 2025-12-04: Updated to reflect schema-first migration COMPLETE; added ES deployment as blocking priority

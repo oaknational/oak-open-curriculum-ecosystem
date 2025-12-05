@@ -14,7 +14,6 @@ import {
 } from '@oaknational/mcp-logger';
 import type { HttpMethod } from './validation/types.js';
 
-// Module-level logger for warnings (browser-compatible)
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber('WARN'),
   resourceAttributes: buildResourceAttributes({}, 'response-augmentation', '1.0.0'),
@@ -205,10 +204,14 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   if (!contentType) {
     return response;
   }
-  return response.map((item) => ({
-    ...item,
-    ...extractCanonicalUrlFields(item, path, contentType),
-  }));
+  return response.map((item) => {
+    // Idempotent: skip if already augmented (safe: in-check verified property exists)
+    if ('canonicalUrl' in item && typeof item.canonicalUrl === 'string') {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return item as TItem & { canonicalUrl?: string };
+    }
+    return { ...item, ...extractCanonicalUrlFields(item, path, contentType) };
+  });
 }
 
 /** Augments a single object response with canonical URL */
@@ -220,6 +223,11 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
 ): T & { canonicalUrl?: string } {
   if (method !== 'get') {
     return response;
+  }
+  // Idempotent: skip if already augmented (safe: in-check verified property exists)
+  if ('canonicalUrl' in response && typeof response.canonicalUrl === 'string') {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return response as T & { canonicalUrl?: string };
   }
   const contentType = getContentTypeFromPath(path);
   if (!contentType) {

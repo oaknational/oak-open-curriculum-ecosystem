@@ -1,0 +1,176 @@
+# Build System
+
+This document describes the monorepo build system, quality gate commands, and their design rationale.
+
+## Overview
+
+The build system uses:
+
+- **pnpm** - Package manager and workspace orchestration
+- **Turborepo** - Task runner with caching and dependency management
+- **tsup** - TypeScript bundler for libraries
+- **Next.js** - Framework for web apps
+
+## Quality Gate Commands
+
+### `pnpm make` - Build and fix
+
+Prepares the codebase by building, checking, and auto-fixing issues:
+
+```bash
+pnpm i && turbo run build type-check doc-gen lint:fix && pnpm markdownlint:root && pnpm format:root
+```
+
+**Flow**:
+
+1. Install dependencies
+2. Single turbo run:
+   - `build` - compile all workspaces (triggers `type-gen` first)
+   - `type-check` - TypeScript validation
+   - `doc-gen` - generate documentation
+   - `lint:fix` - auto-fix linting issues
+3. Root-only fixes:
+   - `markdownlint:root` - fix markdown in root
+   - `format:root` - format root files
+
+### `pnpm qg` - Quality gates (verification)
+
+Verifies the codebase passes all checks without modifications:
+
+```bash
+pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check lint test test:ui test:e2e test:e2e:built smoke:dev:stub
+```
+
+**Flow**:
+
+1. Root-only checks (no fixes):
+   - `format-check:root` - verify formatting
+   - `markdownlint-check:root` - verify markdown
+2. Single turbo run:
+   - `type-check` - TypeScript validation
+   - `lint` - ESLint (verify only, no --fix)
+   - `test` - unit and integration tests
+   - `test:ui` - Playwright UI tests
+   - `test:e2e` - E2E tests
+   - `test:e2e:built` - E2E tests on built artifacts
+   - `smoke:dev:stub` - smoke tests with stubs
+
+### `pnpm check` - Full clean build and verify
+
+Complete clean rebuild and verification:
+
+```bash
+pnpm clean && pnpm lint:clean && pnpm make && pnpm qg
+```
+
+### `pnpm test:all` - All test suites
+
+Runs all test types in a single turbo invocation:
+
+```bash
+turbo run test test:e2e test:e2e:built test:ui smoke:dev:stub
+```
+
+### `pnpm fix` - Auto-fix only
+
+Quick fix without full build:
+
+```bash
+pnpm format:root && pnpm markdownlint:root && pnpm lint:fix
+```
+
+## Task Dependencies
+
+See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md) for full details.
+
+### Key relationships
+
+```text
+type-gen → build → test
+                 ↘ test:e2e:built
+                 ↘ type-check
+                 ↘ lint / lint:fix
+```
+
+- `test` depends on `^build` - ensures SDK is built before tests run
+- `type-check` depends on `^build` - ensures declaration files exist before type checking
+- `lint` / `lint:fix` depends on `^build` - ensures imports can be resolved for linting
+- `build` depends on `type-gen` - ensures generated types exist before compilation
+- `build` is cached - only rebuilds when inputs change
+
+### Independent tasks
+
+These run in parallel with no build dependency:
+
+- `test:e2e`
+- `test:ui`
+
+## Caching
+
+### Cached tasks (fast on repeat runs)
+
+| Task         | Cached | Notes                                 |
+| ------------ | ------ | ------------------------------------- |
+| `build`      | ✅     | Rebuilds only when inputs change      |
+| `type-gen`   | ✅     | Regenerates only when schema changes  |
+| `type-check` | ✅     | Re-checks only when source changes    |
+| `lint`       | ✅     | Re-lints only when source changes     |
+| `test`       | ✅     | Re-runs only when source/tests change |
+| `test:e2e`   | ✅     | Re-runs only when e2e tests change    |
+| `test:ui`    | ✅     | Re-runs only when UI tests change     |
+| `doc-gen`    | ✅     | Regenerates only when source changes  |
+
+### Uncached tasks (always run)
+
+| Task             | Cached | Reason                                      |
+| ---------------- | ------ | ------------------------------------------- |
+| `lint:fix`       | ❌     | Modifies source files                       |
+| `test:e2e:built` | ❌     | Tests built artifacts, should always verify |
+| `smoke:*`        | ❌     | External system tests, non-deterministic    |
+| `clean`          | ❌     | Destructive operation                       |
+| `dev`            | ❌     | Persistent process                          |
+
+## Mixing pnpm and turbo
+
+### Use turbo for
+
+- Workspace tasks that benefit from caching
+- Tasks with cross-workspace dependencies
+- Parallel execution of independent tasks
+
+### Use pnpm for
+
+- Root-only operations (`format:root`, `markdownlint:root`)
+- Operations without workspace equivalents
+- Simple utility commands
+
+### Why not make root tasks turbo tasks?
+
+Root doesn't have a package.json workspace entry. Making root operations turbo tasks would require special configuration. The current approach is simpler and correct.
+
+## Troubleshooting
+
+### Stale build artifacts
+
+```bash
+pnpm clean
+pnpm make
+```
+
+### Test failures with `/@fs/` errors
+
+This was caused by a race condition where tests ran before SDK build completed. Fixed by adding `dependsOn: ["^build"]` to the `test` task. If you see this error:
+
+1. Verify `turbo.json` has `"test": { "dependsOn": ["^build"], ... }`
+2. Run `pnpm clean && pnpm make`
+
+### Slow repeated runs
+
+Ensure `build` has `cache: true` in `turbo.json`. Run `turbo run build --dry-run` to check if caching is working.
+
+## Related Documentation
+
+- [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md)
+- [ADR 010: tsup for bundling](../architecture/architectural-decisions/010-tsup-for-bundling.md)
+- [ADR 012: pnpm package manager](../architecture/architectural-decisions/012-pnpm-package-manager.md)
+- [Tooling](./tooling.md)

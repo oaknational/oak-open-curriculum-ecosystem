@@ -24,7 +24,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "devDependencies": {

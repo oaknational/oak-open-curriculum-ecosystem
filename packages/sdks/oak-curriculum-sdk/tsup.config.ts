@@ -7,6 +7,7 @@ export default defineConfig({
     'src/client/oak-base-client.ts',
     'src/client/middleware/index.ts',
     'src/client/middleware/auth.ts',
+    'src/client/middleware/response-augmentation.ts',
     'src/config/index.ts',
     'src/types/index.ts',
     'src/types/search-response-guards.ts',

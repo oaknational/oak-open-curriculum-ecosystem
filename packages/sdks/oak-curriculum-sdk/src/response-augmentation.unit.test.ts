@@ -353,4 +353,32 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
   });
+
+  describe('idempotency', () => {
+    it('should preserve existing canonicalUrl on single object', () => {
+      const existingUrl = 'https://custom.example.com/preserved-url';
+      const response = { slug: 'test-lesson', title: 'Test', canonicalUrl: existingUrl };
+      const result = augmentResponseWithCanonicalUrl(response, '/lessons/test-lesson', 'get');
+
+      expect(result.canonicalUrl).toBe(existingUrl);
+    });
+
+    it('should preserve existing canonicalUrl on array items', () => {
+      const existingUrl = 'https://custom.example.com/preserved-url';
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', canonicalUrl: existingUrl },
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+      const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+
+      expect(result[0]?.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/lesson-1',
+      );
+      expect(result[1]?.canonicalUrl).toBe(existingUrl);
+      expect(result[2]?.canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/lessons/lesson-3',
+      );
+    });
+  });
 });

@@ -31,7 +31,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
-      "dependsOn": ["^doc-gen", "type-gen"],
+      "dependsOn": ["^doc-gen", "^build"],
       "cache": true,
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
@@ -49,8 +49,8 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build", "type-gen", "build-adapter", "build-linting"],
-      "cache": false,
+      "dependsOn": ["^build", "type-gen"],
+      "cache": true,
       "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -85,7 +85,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build-linting"],
+      "dependsOn": ["^build-linting", "type-gen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -109,8 +109,31 @@
         "**/*.spec.ts"
       ]
     },
-    "test": {
+    "lint:fix": {
       "dependsOn": ["^build", "type-gen"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/eslint.config.base.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/packages/core/mcp-core",
+        "$TURBO_ROOT$/packages/libs/env",
+        "$TURBO_ROOT$/packages/libs/logger",
+        "$TURBO_ROOT$/packages/libs/storage",
+        "$TURBO_ROOT$/packages/libs/transport",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "tests/**/*.ts",
+        "smoke-tests/**/*.ts",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
+    },
+    "test": {
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [

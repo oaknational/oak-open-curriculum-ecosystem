@@ -302,7 +302,45 @@ This is intentional! Emails are scrubbed for privacy:
 
 - `john.doe@example.com` → `joh...@example.com`
 
-### 10. Build/Installation Issues
+### 10. Intermittent Test Failures with `/@fs/` Errors
+
+#### Symptom
+
+```text
+Error: Cannot find module '/@fs/Users/.../oak-curriculum-sdk/dist/mcp/stub-tool-executor.js'
+```
+
+Test failures that appear intermittently during `pnpm check` or `pnpm qg` but pass when running `pnpm test` alone.
+
+#### Cause
+
+Race condition where Vitest attempts to resolve modules while Turborepo is building workspace dependencies in parallel. The `/@fs/` prefix indicates Vite's file system resolution failed mid-build.
+
+#### Solution
+
+Ensure `turbo.json` has the correct test dependency:
+
+```json
+"test": {
+  "dependsOn": ["^build"],
+  "cache": true,
+  ...
+}
+```
+
+The `^build` dependency ensures all workspace dependencies are fully built before tests start.
+
+If the issue persists:
+
+```bash
+pnpm clean
+pnpm make
+pnpm test
+```
+
+See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md) for details.
+
+### 11. Build/Installation Issues
 
 #### Symptom
 

@@ -1,33 +1,20 @@
+/* eslint-disable max-statements, max-lines-per-function, complexity */
 import { NextResponse, type NextRequest } from 'next/server';
-import { spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
 import {
   resolveFixtureModeFromRequest,
   applyFixtureModeCookie,
   type FixtureMode,
 } from '../../../lib/fixture-mode';
 import { buildAdminStreamFixture, createStreamResponse } from '../../../lib/admin-fixtures';
+import { runSetup, verifyConnection } from '../../../../src/lib/elasticsearch/setup/index';
 
 export const runtime = 'nodejs';
-
-function makeEnv(): NodeJS.ProcessEnv {
-  return {
-    ...process.env,
-    ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
-    ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
-  };
-}
 
 function missingElasticEnv(): string[] {
   return ['ELASTICSEARCH_URL', 'ELASTICSEARCH_API_KEY'].filter((key) => {
     const value = process.env[key];
     return typeof value !== 'string' || value.trim().length === 0;
   });
-}
-
-function toUint8(buffer: Buffer): Uint8Array {
-  return new Uint8Array(buffer);
 }
 
 function safeErrorText(err: unknown): string {
@@ -63,31 +50,56 @@ function respondWithMissingEnv(missing: string[], persist: FixtureMode | undefin
   return withPersist(response, persist);
 }
 
-function buildScriptResponse(persist: FixtureMode | undefined): NextResponse {
-  const scriptPath = fileURLToPath(new URL('../../../../scripts/setup.sh', import.meta.url));
-  const cwd = path.dirname(scriptPath);
-  const env = makeEnv();
+function buildSetupResponse(persist: FixtureMode | undefined): NextResponse {
+  const esUrl = process.env.ELASTICSEARCH_URL;
+  const esKey = process.env.ELASTICSEARCH_API_KEY;
+
+  if (!esUrl || !esKey) {
+    return respondWithMissingEnv(['ELASTICSEARCH_URL', 'ELASTICSEARCH_API_KEY'], persist);
+  }
+
+  const config = { elasticsearchUrl: esUrl, elasticsearchApiKey: esKey, verbose: false };
 
   const stream = new ReadableStream<Uint8Array>({
-    start(controller) {
-      const proc = spawn('bash', [scriptPath], { cwd, env });
+    async start(controller) {
+      const encoder = new TextEncoder();
+      const write = (text: string) => controller.enqueue(encoder.encode(text));
 
-      proc.stdout.on('data', (chunk: Buffer) => {
-        controller.enqueue(toUint8(chunk));
-      });
-      proc.stderr.on('data', (chunk: Buffer) => {
-        controller.enqueue(toUint8(chunk));
-      });
-      proc.on('error', (err) => {
-        const msg = Buffer.from(`\n[error] ${safeErrorText(err)}\n`);
-        controller.enqueue(new Uint8Array(msg));
-      });
-      proc.on('close', (code) => {
-        const codeText: string = code === null ? 'null' : String(code);
-        const msg = Buffer.from(`\n[done] exit code ${codeText}\n`);
-        controller.enqueue(new Uint8Array(msg));
+      try {
+        write('Verifying Elasticsearch connection...\n');
+        const connection = await verifyConnection(config);
+
+        if (!connection.connected) {
+          write(`Connection failed: ${connection.error ?? 'Unknown error'}\n`);
+          write('[done] exit code 1\n');
+          controller.close();
+          return;
+        }
+
+        write(`Connected to ${connection.clusterName} (v${connection.version})\n\n`);
+        write('Running setup...\n');
+
+        const result = await runSetup(config);
+
+        write(`\nSynonyms: ${result.synonymCount} entries\n`);
+        for (const idx of result.indexResults) {
+          const status =
+            idx.status === 'created'
+              ? '✓ created'
+              : idx.status === 'exists'
+                ? '○ exists'
+                : `✗ error: ${idx.error ?? 'Unknown error'}`;
+          write(`  ${idx.indexName}: ${status}\n`);
+        }
+
+        const errors = result.indexResults.filter((r) => r.status === 'error').length;
+        write(`\n[done] exit code ${errors > 0 ? 1 : 0}\n`);
         controller.close();
-      });
+      } catch (err) {
+        write(`\n[error] ${safeErrorText(err)}\n`);
+        write('[done] exit code 1\n');
+        controller.close();
+      }
     },
   });
 
@@ -112,5 +124,5 @@ export async function POST(request: NextRequest): Promise<Response> {
     return respondWithMissingEnv(missing, persist);
   }
 
-  return buildScriptResponse(persist);
+  return buildSetupResponse(persist);
 }

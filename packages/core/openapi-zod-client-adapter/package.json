@@ -22,7 +22,8 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint  .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {

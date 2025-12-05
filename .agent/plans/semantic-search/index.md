@@ -2,12 +2,15 @@
 
 Navigation hub for all semantic search planning documentation.
 
-## ⚠️ Current Priority
+## Current Priority
 
-**ES Deployment is the BLOCKING priority.** For continuation work, use:
+**ES deployment COMPLETE.** One blocking issue remains before Phase 2:
 
-- **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search-implementation.prompt.md`
-- **Deployment Guide**: `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`
+- ⚠️ `smoke:dev:stub` failing - "Successful tool call must not be flagged as error"
+
+For continuation work, use:
+
+- **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search.prompt.md` (consolidated)
 
 ## Overview
 
@@ -15,15 +18,17 @@ The semantic search system provides powerful search capabilities across Oak's cu
 
 ## Status Summary
 
-| Phase                    | Status      | Notes                                         |
-| ------------------------ | ----------- | --------------------------------------------- |
-| Schema-First Migration   | ✅ COMPLETE | All schemas generated via `pnpm type-gen`     |
-| Thread Schema Generation | ✅ COMPLETE | Thread index and embedded fields in SDK       |
-| SDK Synonym Export       | ✅ COMPLETE | Single source of truth for domain synonyms    |
-| ES Deployment            | 🚨 BLOCKING | Not provisioned; all testing against fixtures |
-| Ontology Integration     | ⏳ PENDING  | Blocked on ES deployment                      |
-| MCP Connectivity         | ⏳ PENDING  | Blocked on ES deployment                      |
-| OpenAI App Widget        | ⏳ PENDING  | Blocked on MCP connectivity                   |
+| Phase                    | Status      | Notes                                               |
+| ------------------------ | ----------- | --------------------------------------------------- |
+| Schema-First Migration   | ✅ COMPLETE | All schemas generated via `pnpm type-gen`           |
+| Thread Schema Generation | ✅ COMPLETE | Thread index and embedded fields in SDK             |
+| SDK Synonym Export       | ✅ COMPLETE | Single source of truth for domain synonyms          |
+| ES Deployment            | ✅ COMPLETE | Serverless deployed, indexes created, data ingested |
+| Index Metadata           | ✅ COMPLETE | `oak_meta` index for automatic version tracking     |
+| Live Data Ingestion      | ✅ COMPLETE | Full curriculum data ingested via SDK               |
+| Ontology Integration     | ⏳ PENDING  | Phase 2 ready to start                              |
+| MCP Connectivity         | ⏳ PENDING  | Blocked on ontology integration                     |
+| OpenAI App Widget        | ⏳ PENDING  | Blocked on MCP connectivity                         |
 
 ## Quick Links
 
@@ -155,9 +160,9 @@ import {
 - Thread schema generation (Phase 1.1)
 - SDK synonym export utilities
 
-### Blocking 🚨
+### No Blocking Dependencies
 
-- **Elasticsearch Serverless**: NOT PROVISIONED - see deployment prompt
+All dependencies complete. Ready for Phase 2 ontology integration.
 
 ## Navigation
 

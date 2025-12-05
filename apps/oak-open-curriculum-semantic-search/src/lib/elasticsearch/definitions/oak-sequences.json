@@ -1,8 +1,5 @@
 {
   "settings": {
-    "index": {
-      "highlight.max_analyzed_offset": 10000000
-    },
     "analysis": {
       "normalizer": {
         "oak_lower": {
@@ -18,7 +15,12 @@
         }
       },
       "analyzer": {
-        "oak_text": {
+        "oak_text_index": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"]
+        },
+        "oak_text_search": {
           "type": "custom",
           "tokenizer": "standard",
           "filter": ["lowercase", "oak_syns_filter"]
@@ -33,7 +35,8 @@
       "sequence_slug": { "type": "keyword", "normalizer": "oak_lower" },
       "sequence_title": {
         "type": "text",
-        "analyzer": "oak_text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search",
         "fields": {
           "keyword": { "type": "keyword", "ignore_above": 256, "normalizer": "oak_lower" },
           "sa": { "type": "search_as_you_type" }
@@ -46,11 +49,23 @@
           { "name": "phase", "type": "category" }
         ]
       },
-      "category_titles": { "type": "text", "analyzer": "oak_text" },
+      "category_titles": {
+        "type": "text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search"
+      },
       "subject_slug": { "type": "keyword", "normalizer": "oak_lower" },
-      "subject_title": { "type": "text", "analyzer": "oak_text" },
+      "subject_title": {
+        "type": "text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search"
+      },
       "phase_slug": { "type": "keyword", "normalizer": "oak_lower" },
-      "phase_title": { "type": "text", "analyzer": "oak_text" },
+      "phase_title": {
+        "type": "text",
+        "analyzer": "oak_text_index",
+        "search_analyzer": "oak_text_search"
+      },
       "key_stages": { "type": "keyword", "normalizer": "oak_lower" },
       "years": { "type": "keyword", "normalizer": "oak_lower" },
       "unit_slugs": { "type": "keyword", "normalizer": "oak_lower" },

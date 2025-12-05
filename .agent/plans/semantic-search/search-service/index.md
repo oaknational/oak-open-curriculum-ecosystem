@@ -5,8 +5,9 @@ Planning documentation for the semantic search backend: API routes, Elasticsearc
 ## Status
 
 - **Phase 1 (Schema-First Migration)**: ✅ COMPLETE
-- **ES Deployment**: 🚨 BLOCKING - See `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`
-- **Phase 2+ (Ontology Integration)**: ⏳ Blocked on ES deployment
+- **ES Deployment**: ✅ COMPLETE - Serverless deployed with live curriculum data
+- **Index Metadata**: ✅ COMPLETE - `oak_meta` for automatic version tracking
+- **Phase 2+ (Ontology Integration)**: ⏳ Ready to start
 
 ## Scope
 
@@ -70,6 +71,7 @@ The search indices will be enhanced with ontology metadata to enable:
 | `oak_unit_rollup`     | Aggregated unit text for semantic search                  |
 | `oak_sequences`       | Sequence documents with metadata                          |
 | `oak_sequence_facets` | Facet enrichment for navigation                           |
+| `oak_meta`            | Index version and ingestion metadata (automatic tracking) |
 | `oak_zero_hit_events` | Telemetry (lazy creation with ILM)                        |
 
 **Future Indexes** (Phase 2-3):

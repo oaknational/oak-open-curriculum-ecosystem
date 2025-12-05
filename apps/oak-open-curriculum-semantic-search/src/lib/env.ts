@@ -6,12 +6,16 @@ export const BaseEnvSchema = z.object({
   ELASTICSEARCH_API_KEY: z.string().min(10),
   OAK_API_KEY: z.string().min(6).optional(),
   SEARCH_API_KEY: z.string().min(10),
+  // SEARCH_INDEX_VERSION is optional - prefer reading from ES oak_meta index
+  // If set, it's used as a fallback when ES metadata is unavailable
   SEARCH_INDEX_VERSION: z
     .string()
     .regex(
       /^v[0-9A-Za-z._-]+$/,
       'SEARCH_INDEX_VERSION must start with v and contain version characters.',
-    ),
+    )
+    .optional()
+    .default('v0-unversioned'),
   ZERO_HIT_WEBHOOK_URL: z.union([z.literal('none'), z.url()]).default('none'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
   AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),

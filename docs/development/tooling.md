@@ -2,6 +2,11 @@
 
 All tooling MUST use the latest versions, use `pnpm outdated` to check for updates.
 
+## Build System
+
+- [pnpm](https://pnpm.io) - Package manager and workspace orchestration
+- [Turborepo](https://turbo.build/repo) - Task runner with caching and dependency management (see [Build System docs](./build-system.md))
+
 ## Development
 
 - [pnpm](https://pnpm.io)

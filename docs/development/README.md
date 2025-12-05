@@ -6,6 +6,7 @@ This directory contains documentation for developers working on the Oak MCP ecos
 
 - [Onboarding](./onboarding.md) - Quick start checklist for new developers and AI assistants
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
+- [Build System](./build-system.md) - Turborepo tasks, caching, and quality gate commands
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
 - [CI Policy](./ci-policy.md) - What runs in CI (type-gen policy, build behavior)
 

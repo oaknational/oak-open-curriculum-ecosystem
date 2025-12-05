@@ -3,6 +3,7 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
+// Smoke tests CAN make network calls - use real API
 process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'false';
 
 interface McpTextContent {
@@ -74,7 +75,7 @@ function expectSuccess(result: Awaited<ReturnType<Client['callTool']>>): ToolSuc
   return parsed;
 }
 
-describe('Multi-status transcript handling (E2E)', () => {
+describe('Multi-status transcript handling (Smoke)', () => {
   let client: Client;
   let transport: StdioClientTransport;
 

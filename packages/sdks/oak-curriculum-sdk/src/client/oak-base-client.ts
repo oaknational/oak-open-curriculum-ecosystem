@@ -7,7 +7,7 @@ import createClient, { wrapAsPathBasedClient } from 'openapi-fetch';
 import { apiUrl } from '../config/index.js';
 import type { paths as OakApiPaths } from '../types/generated/api-schema/api-paths-types';
 
-import { createAuthMiddleware } from './middleware/index.js';
+import { createAuthMiddleware, createResponseAugmentationMiddleware } from './middleware/index.js';
 
 /**
  * The base OpenAPI-Fetch client.
@@ -46,8 +46,10 @@ export class BaseApiClient {
     }
     this._apiKey = apiKey;
     const authMiddleware = createAuthMiddleware(this._apiKey);
+    const augmentMiddleware = createResponseAugmentationMiddleware();
     this._client = createClient<OakApiPaths>({ baseUrl: apiUrl });
     this._client.use(authMiddleware);
+    this._client.use(augmentMiddleware);
 
     // Convenience at slight performance cost.
     this._pathBasedClient = wrapAsPathBasedClient(this._client);
