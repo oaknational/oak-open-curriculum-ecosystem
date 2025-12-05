@@ -33,3 +33,6 @@ export const suggestLogger: Logger = child('Suggestions');
 
 /** Logger for sandbox ingestion drills and harness operations. */
 export const sandboxLogger: Logger = child('SandboxHarness');
+
+/** Logger for SDK response caching operations. */
+export const cacheLogger: Logger = child('SdkCache');

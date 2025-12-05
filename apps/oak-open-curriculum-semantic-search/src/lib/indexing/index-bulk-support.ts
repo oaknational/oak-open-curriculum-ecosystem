@@ -8,14 +8,28 @@ export function extractUnitSequenceIds(summary: unknown): string[] | undefined {
   return extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
 }
 
+/**
+ * Fetch lesson materials (transcript + summary) for indexing.
+ * Transcript is optional - returns empty string if lesson has no video/transcript.
+ */
 export async function fetchLessonMaterials(
   client: OakClient,
   lessonSlug: string,
 ): Promise<{ transcript: string; summary: unknown }> {
-  const transcriptResponsePromise = client.getLessonTranscript(lessonSlug);
+  // Fetch both in parallel but handle transcript 404 gracefully
+  const transcriptResponsePromise = client.getLessonTranscript(lessonSlug).catch((error: Error) => {
+    // Many lessons don't have transcripts - this is expected
+    if (error.message.includes('404')) {
+      return { transcript: '', vtt: '' };
+    }
+    throw error;
+  });
   const summaryCandidatePromise = client.getLessonSummary(lessonSlug);
-  const transcriptResponse = await transcriptResponsePromise;
-  const summaryCandidate = await summaryCandidatePromise;
+
+  const [transcriptResponse, summaryCandidate] = await Promise.all([
+    transcriptResponsePromise,
+    summaryCandidatePromise,
+  ]);
 
   if (!isLessonSummary(summaryCandidate)) {
     throw new Error(`Unexpected lesson summary response for ${lessonSlug}`);

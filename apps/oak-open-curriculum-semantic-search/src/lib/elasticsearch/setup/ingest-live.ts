@@ -5,11 +5,23 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAppEnv } from './load-app-env.js';
 import { createOakSdkClient } from '../../../adapters/oak-adapter-sdk.js';
+import {
+  createCachedOakSdkClient,
+  clearSdkCache,
+  getSdkCacheStatus,
+  type CachedOakClient,
+} from '../../../adapters/oak-adapter-cached.js';
 import { createSandboxHarness } from '../../indexing/sandbox-harness.js';
 import { sandboxLogger } from '../../logger.js';
 import { esClient } from '../../es-client.js';
 import { writeIndexMeta, generateVersionFromTimestamp } from '../index-meta.js';
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
+
+/** CLI logger with console output for immediate feedback */
+function cliLog(message: string): void {
+  const timestamp = new Date().toISOString().slice(11, 19);
+  console.log(`[${timestamp}] ${message}`);
+}
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -34,12 +46,13 @@ interface CliArgs {
   readonly dryRun: boolean;
   readonly verbose: boolean;
   readonly help: boolean;
+  readonly clearCache: boolean;
 }
 
 function parseArgs(args: readonly string[]): CliArgs {
   const subjects: SearchSubjectSlug[] = [];
   const keyStages: KeyStage[] = [];
-  const flags = { dryRun: false, verbose: false, help: false };
+  const flags = { dryRun: false, verbose: false, help: false, clearCache: false };
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -60,7 +73,7 @@ function handleArg(
   nextArg: string | undefined,
   subjects: SearchSubjectSlug[],
   keyStages: KeyStage[],
-  flags: { dryRun: boolean; verbose: boolean; help: boolean },
+  flags: { dryRun: boolean; verbose: boolean; help: boolean; clearCache: boolean },
 ): number {
   if (arg === '--help' || arg === '-h') {
     flags.help = true;
@@ -72,6 +85,10 @@ function handleArg(
   }
   if (arg === '--verbose' || arg === '-v') {
     flags.verbose = true;
+    return 0;
+  }
+  if (arg === '--clear-cache') {
+    flags.clearCache = true;
     return 0;
   }
   if (arg === '--subject' && nextArg) {
@@ -103,6 +120,7 @@ Options:
   --subject <slug>    Subject to ingest (can repeat, defaults to common subjects)
   --keystage <ks>     Key stage to ingest (can repeat, defaults to all)
   --dry-run           Preview what would be ingested without writing to ES
+  --clear-cache       Clear SDK response cache before ingestion
   --verbose, -v       Show detailed output
   --help, -h          Show this help message
 
@@ -113,12 +131,17 @@ Examples:
   # Ingest all common subjects for all key stages
   npx tsx src/lib/elasticsearch/setup/ingest-live.ts
 
-  # Dry run for maths
-  npx tsx src/lib/elasticsearch/setup/ingest-live.ts --subject maths --dry-run
+  # Dry run for maths with fresh cache
+  npx tsx src/lib/elasticsearch/setup/ingest-live.ts --subject maths --dry-run --clear-cache
 
 Environment:
   Requires ELASTICSEARCH_URL, ELASTICSEARCH_API_KEY, and OAK_API_KEY
   in .env.local in the app directory.
+
+Caching:
+  SDK responses can be cached in Redis to speed up repeated runs.
+  Set SDK_CACHE_ENABLED=true and ensure Redis is running (docker compose up -d).
+  See docs/SDK-CACHING.md for full documentation.
 
 Note:
   Live ingestion makes many API calls and can take several minutes.
@@ -193,10 +216,41 @@ function initEnv(): boolean {
 
 async function runIngestion(args: CliArgs): Promise<void> {
   printHeader(args);
-  console.log('Creating Oak SDK client...');
-  const client = createOakSdkClient();
 
-  console.log('Creating ingestion harness...');
+  // Handle cache clearing if requested
+  if (args.clearCache) {
+    cliLog('Clearing SDK response cache...');
+    const deleted = await clearSdkCache();
+    cliLog(`Cleared ${deleted} cached entries`);
+  }
+
+  // Check cache status and create appropriate client
+  cliLog('Creating Oak SDK client...');
+  const cacheStatus = await getSdkCacheStatus();
+  let client: CachedOakClient;
+
+  if (cacheStatus.enabled && cacheStatus.connected) {
+    client = await createCachedOakSdkClient();
+    cliLog(`SDK client created with Redis caching (${cacheStatus.keyCount} cached entries)`);
+  } else {
+    // Use uncached client wrapped as CachedOakClient
+    const baseClient = createOakSdkClient();
+    client = {
+      ...baseClient,
+      getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
+      disconnect: async () => {},
+    };
+    if (cacheStatus.enabled) {
+      cliLog('SDK client created (cache enabled but Redis not available)');
+    } else {
+      cliLog('SDK client created (caching disabled)');
+    }
+  }
+
+  cliLog('Creating ingestion harness...');
+  cliLog(`  Subjects: ${args.subjects.join(', ')}`);
+  cliLog(`  Key stages: ${args.keyStages.join(', ')}`);
+
   const harness = await createSandboxHarness({
     client,
     keyStages: args.keyStages,
@@ -204,18 +258,33 @@ async function runIngestion(args: CliArgs): Promise<void> {
     target: 'primary',
     logger: sandboxLogger,
   });
+  cliLog('Harness created successfully');
 
-  console.log(args.dryRun ? 'Running dry run...' : 'Starting ingestion...\n');
+  cliLog(args.dryRun ? 'Starting DRY RUN (no ES writes)...' : 'Starting LIVE ingestion...');
+  cliLog('This may take several minutes - fetching data from Oak API...\n');
+
   const startTime = Date.now();
   const result = await harness.ingest({ dryRun: args.dryRun, verbose: args.verbose });
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
+  cliLog(`Ingestion phase complete in ${duration}s`);
+
   printSummary(result, duration);
+
+  // Print cache statistics
+  const cacheStats = client.getCacheStats();
+  if (cacheStats.connected) {
+    console.log(`  Cache: ${cacheStats.hits} hits, ${cacheStats.misses} misses`);
+  }
+
   if (args.dryRun) {
     console.log('\n  (Dry run - no documents written to ES)');
   } else {
     await writeMetadata(args, result, duration);
   }
+
+  // Clean up Redis connection
+  await client.disconnect();
 }
 
 async function main(): Promise<void> {

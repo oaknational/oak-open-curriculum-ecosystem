@@ -26,6 +26,13 @@ export const BaseEnvSchema = z.object({
     .default('false')
     .transform((value) => value === true || value === 'true'),
   ZERO_HIT_INDEX_RETENTION_DAYS: z.coerce.number().int().min(7).max(365).default(30),
+  // SDK Response Caching (development only)
+  SDK_CACHE_ENABLED: z
+    .union([z.literal('true'), z.literal('false'), z.boolean()])
+    .default('false')
+    .transform((value) => value === true || value === 'true'),
+  SDK_CACHE_REDIS_URL: z.string().default('redis://localhost:6379'),
+  SDK_CACHE_TTL_DAYS: z.coerce.number().int().min(1).max(30).default(7),
 });
 
 export const EnvSchema = BaseEnvSchema.superRefine((value, ctx) => {
@@ -61,6 +68,9 @@ function readProcessEnv(): Record<string, string | undefined> {
     SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
     ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
     ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
+    SDK_CACHE_ENABLED: process.env.SDK_CACHE_ENABLED,
+    SDK_CACHE_REDIS_URL: process.env.SDK_CACHE_REDIS_URL,
+    SDK_CACHE_TTL_DAYS: process.env.SDK_CACHE_TTL_DAYS,
   };
 }
 

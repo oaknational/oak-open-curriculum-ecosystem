@@ -26,10 +26,7 @@ export function HtmlThemeAttribute(): React.JSX.Element | null {
         root.dataset.theme = mode;
       }
     } catch (error: unknown) {
-      logger.error(
-        `Error setting theme mode: ${error}`,
-        error instanceof Error ? error : undefined,
-      );
+      logger.error('Error setting theme mode', error instanceof Error ? error : undefined);
     }
   }, [mode]);
   return null;

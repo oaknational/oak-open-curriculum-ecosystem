@@ -12,6 +12,13 @@ import {
   buildRollupDocuments,
   buildUnitDocuments,
 } from './indexing/index-bulk-helpers';
+import { sandboxLogger } from './logger';
+
+/** CLI-friendly log helper for progress reporting */
+function progressLog(message: string): void {
+  const timestamp = new Date().toISOString().slice(11, 19);
+  console.log(`[${timestamp}] ${message}`);
+}
 
 export interface BuildIndexBulkOpsOptions {
   readonly onSequenceFacetProcessed?: (
@@ -26,9 +33,28 @@ export async function buildIndexBulkOps(
   options?: BuildIndexBulkOpsOptions,
 ): Promise<unknown[]> {
   const bulkOps: unknown[] = [];
-  for (const subject of filterSubjects(subjects)) {
+  const filteredSubjects = filterSubjects(subjects);
+  const filteredKeyStages = filterKeyStages(keyStages);
+
+  progressLog(
+    `Starting bulk ops build: ${filteredSubjects.length} subjects × ${filteredKeyStages.length} key stages`,
+  );
+  sandboxLogger.info('buildIndexBulkOps.start', {
+    subjectCount: filteredSubjects.length,
+    keyStageCount: filteredKeyStages.length,
+  });
+
+  let subjectIndex = 0;
+  for (const subject of filteredSubjects) {
+    subjectIndex++;
+    progressLog(`[${subjectIndex}/${filteredSubjects.length}] Processing subject: ${subject}`);
+
+    progressLog(`  Fetching sequences for ${subject}...`);
     const subjectSequences = await client.getSubjectSequences(subject);
+    progressLog(`  Found ${subjectSequences.length} sequences`);
+
     const events: SequenceFacetProcessingMetrics[] = [];
+    progressLog(`  Building sequence facet sources...`);
     const sequenceSources = await buildSequenceFacetSources(
       (slug) => client.getSequenceUnits(slug),
       subjectSequences,
@@ -42,17 +68,26 @@ export async function buildIndexBulkOps(
           }
         : undefined,
     );
+    progressLog(`  Sequence facet sources built`);
+
     if (options?.onSequenceFacetProcessed) {
       for (const event of events) {
         options.onSequenceFacetProcessed({ ...event, subject });
       }
     }
-    for (const ks of filterKeyStages(keyStages)) {
-      bulkOps.push(
-        ...(await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources)),
-      );
+
+    let ksIndex = 0;
+    for (const ks of filteredKeyStages) {
+      ksIndex++;
+      progressLog(`  [${ksIndex}/${filteredKeyStages.length}] Processing ${subject}/${ks}...`);
+      const pairOps = await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources);
+      bulkOps.push(...pairOps);
+      progressLog(`    Generated ${pairOps.length} bulk operations`);
     }
   }
+
+  progressLog(`Bulk ops build complete: ${bulkOps.length} total operations`);
+  sandboxLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });
   return bulkOps;
 }
 
@@ -71,10 +106,12 @@ async function buildOpsForPair(
   subjectSequences: readonly SubjectSequenceEntry[],
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
 ): Promise<unknown[]> {
+  progressLog(`    Fetching units and lessons for ${subject}/${ks}...`);
   const [units, groups] = await Promise.all([
     client.getUnitsByKeyStageAndSubject(ks, subject),
     client.getLessonsByKeyStageAndSubject(ks, subject),
   ]);
+  progressLog(`    Found ${units.length} units, ${groups.length} lesson groups`);
 
   const subjectProgrammesUrl = generateCanonicalUrl('subject', subject, {
     subject: { keyStageSlugs: [ks] },
@@ -83,6 +120,7 @@ async function buildOpsForPair(
     throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
   }
 
+  progressLog(`    Building unit documents...`);
   const { unitSummaries, unitOps } = await buildUnitDocuments(
     client,
     units,
@@ -90,6 +128,9 @@ async function buildOpsForPair(
     ks,
     subjectProgrammesUrl,
   );
+  progressLog(`    Built ${unitOps.length / 2} unit docs`);
+
+  progressLog(`    Building lesson documents (this may take a while)...`);
   const { lessonOps, rollupSnippets } = await buildLessonDocuments(
     client,
     groups,
@@ -97,6 +138,9 @@ async function buildOpsForPair(
     subject,
     ks,
   );
+  progressLog(`    Built ${lessonOps.length / 2} lesson docs`);
+
+  progressLog(`    Building rollup documents...`);
   const rollupOps = buildRollupDocuments(
     unitSummaries,
     rollupSnippets,
@@ -104,6 +148,8 @@ async function buildOpsForPair(
     ks,
     subjectProgrammesUrl,
   );
+  progressLog(`    Built ${rollupOps.length / 2} rollup docs`);
+
   const sequenceFacetOps = buildSequenceFacetOps({
     subject,
     keyStage: ks,

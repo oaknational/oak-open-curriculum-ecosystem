@@ -68,7 +68,7 @@ The search app currently defines **all other schemas at runtime**, violating the
 
 **Location**: `apps/oak-open-curriculum-semantic-search/`
 
-**Runtime schema files** (detailed in [search-schema-inventory.md](../search-schema-inventory.md)):
+**Runtime schema files** (detailed in [search-schema-inventory.md](../archive/superseded/search-schema-inventory.md)):
 
 1. **app/ui/structured-search.shared.ts** (~350 LOC)
    - `SearchRequest`, `SuggestionResponseSchema`, `HybridResponseSchema`, `MultiScopeHybridResponseSchema`
@@ -2007,8 +2007,8 @@ describe('API error tracking', () => {
 ### Planning Documents
 
 - [Semantic Search Overview](../semantic-search-overview.md)
-- [Schema Migration Map](../search-migration-map.md)
-- [Schema Inventory](../search-schema-inventory.md)
+- [Schema Migration Map](../archive/superseded/search-migration-map.md)
+- [Schema Inventory](../archive/superseded/search-schema-inventory.md)
 - [Generator Specification](../search-generator-spec.md)
 
 ### Architecture

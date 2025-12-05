@@ -31,7 +31,8 @@ The semantic search system provides powerful search capabilities across Oak's cu
 | SDK Synonym Export       | ✅ COMPLETE | 68 rules deployed to ES as `oak-syns`                |
 | ES Serverless Deployment | ✅ COMPLETE | Indexes created, mappings verified, ELSER configured |
 | Quality Gates            | ✅ COMPLETE | All gates passing including `smoke:dev:stub`         |
-| Real Data Ingestion      | ⏳ NEXT     | Clear test data, ingest Maths curriculum             |
+| SDK Response Caching     | ✅ COMPLETE | Redis caching with 404 fallbacks, 100% hit rate      |
+| Real Data Ingestion      | ⏳ NEXT     | History KS2 tested (153 docs), Maths next            |
 | Ontology Integration     | ⏳ PENDING  | Phase 2 - after data validation                      |
 | MCP Connectivity         | ⏳ PENDING  | Phase 5 - blocked on ontology integration            |
 | OpenAI App Widget        | ⏳ PENDING  | Phase 6 - blocked on MCP connectivity                |

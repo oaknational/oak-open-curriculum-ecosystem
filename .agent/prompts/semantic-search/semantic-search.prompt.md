@@ -11,7 +11,12 @@ Before any work, read and internalise these documents:
 3. `.agent/directives-and-memory/schema-first-execution.md` - Schema-first architecture mandate
 4. `.agent/directives-and-memory/AGENT.md` - Agent directives and development commands
 
-**Key Principle**: All types, schemas, and validators MUST flow from the OpenAPI schema via `pnpm type-gen`. No runtime schema definitions. All quality gate issues are BLOCKING regardless of location, context, or cause.
+**Key Principles**:
+
+- All types, schemas, and validators MUST flow from the OpenAPI schema via `pnpm type-gen`. No runtime schema definitions.
+- All quality gate issues are BLOCKING regardless of location, context, or cause.
+- TDD at all levels: Write tests FIRST (Red → Green → Refactor).
+- No type assertions (`as`, `any`, `!`), no type shortcuts. Use type guards.
 
 ---
 
@@ -50,15 +55,17 @@ ES Serverless provides preconfigured inference endpoints. The `semantic_text` fi
 | TypeScript CLI tools     | ✅ COMPLETE | `pnpm es:setup`, `pnpm es:status`, `pnpm es:ingest-live`         |
 | Build system optimised   | ✅ COMPLETE | Turbo caching enabled, task dependencies fixed (ADR 065)         |
 | Quality gates passing    | ✅ COMPLETE | All gates pass including `smoke:dev:stub`                        |
+| SDK response caching     | ✅ COMPLETE | Optional Redis caching with 404 fallbacks for 100% hit rate      |
 
 ### Current Priority: Real Data Ingestion
 
-| Task                    | Status     | Notes                                                 |
-| ----------------------- | ---------- | ----------------------------------------------------- |
-| Clear test/fake data    | ⏳ NEXT    | Run `pnpm es:setup` to recreate clean indexes         |
-| Ingest real Maths data  | ⏳ NEXT    | Run `pnpm es:ingest-live --subject maths --verbose`   |
-| Validate search results | ⏳ PENDING | Test queries in ES Playground after ingestion         |
-| Phase 2: Threads        | ⏳ PENDING | Add thread filtering and facets after data validation |
+| Task                    | Status         | Notes                                                 |
+| ----------------------- | -------------- | ----------------------------------------------------- |
+| Clear test/fake data    | ✅ DONE        | Indexes recreated with 0 docs                         |
+| History KS2 test ingest | ✅ DONE        | 153 docs, 226 cached items, 100% cache hits on rerun  |
+| Ingest real Maths data  | ⏳ IN PROGRESS | Run `pnpm es:ingest-live --subject maths --verbose`   |
+| Validate search results | ⏳ PENDING     | Test queries in ES Playground after ingestion         |
+| Phase 2: Threads        | ⏳ PENDING     | Add thread filtering and facets after data validation |
 
 ### Decision: Data First, Additional Indexes Later
 
@@ -68,6 +75,52 @@ ES Serverless provides preconfigured inference endpoints. The `semantic_text` fi
 2. Clear fake data, ingest real Maths curriculum (all key stages)
 3. Validate search quality with real data
 4. Add additional indexes (threads, ontology) in Phase 2-3
+
+---
+
+## SDK Response Caching (Development Optimisation)
+
+Optional Redis-based caching speeds up repeated ingestion runs during development.
+
+**See**: `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md` for full documentation.
+
+### Quick Start
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Start Redis (persistent storage)
+pnpm redis:up
+
+# Enable caching in .env.local
+echo "SDK_CACHE_ENABLED=true" >> .env.local
+
+# First run: cache miss (normal speed)
+pnpm es:ingest-live --subject maths --dry-run --verbose
+
+# Second run: cache hit (10-20x faster!)
+pnpm es:ingest-live --subject maths --dry-run --verbose
+
+# Clear cache when needed
+pnpm es:ingest-live --subject maths --clear-cache --dry-run
+```
+
+### Cache Configuration
+
+| Variable              | Default                  | Description          |
+| --------------------- | ------------------------ | -------------------- |
+| `SDK_CACHE_ENABLED`   | `false`                  | Enable/disable cache |
+| `SDK_CACHE_REDIS_URL` | `redis://localhost:6379` | Redis connection URL |
+| `SDK_CACHE_TTL_DAYS`  | `7`                      | Cache TTL in days    |
+
+### 404 Fallback Caching
+
+Transcripts are optional (lessons without video return 404). The cache stores empty fallbacks for 404s, enabling 100% cache hit rates on subsequent runs:
+
+- **First run**: Fetches from API, caches both successes AND 404 fallbacks
+- **Second run**: 100% cache hits (e.g., 226 hits, 0 misses, ~4s vs ~70s)
+
+**Architecture**: See [ADR-066](docs/architecture/architectural-decisions/066-sdk-response-caching.md)
 
 ---
 
@@ -164,6 +217,11 @@ SEARCH_INDEX_TARGET=primary  # or sandbox
 # Dev Server
 SEMANTIC_SEARCH_PORT=3003  # Defaults to 3003 to avoid conflicts
 
+# SDK Response Caching (optional, for development)
+SDK_CACHE_ENABLED=false    # Set to 'true' to enable
+SDK_CACHE_REDIS_URL=redis://localhost:6379
+SDK_CACHE_TTL_DAYS=7
+
 # AI Provider (optional)
 AI_PROVIDER=openai  # or 'none' to disable NL search
 OPENAI_API_KEY=your_openai_api_key_here
@@ -172,15 +230,24 @@ OPENAI_API_KEY=your_openai_api_key_here
 ### CLI Commands
 
 ```bash
+cd apps/oak-open-curriculum-semantic-search
+
 # Setup and Status
 pnpm es:setup          # Create indexes and synonyms (clears existing data)
 pnpm es:status         # Show connection, version, index info
 
 # Ingestion
-pnpm es:ingest-live              # Ingest all common subjects
-pnpm es:ingest-live --dry-run    # Preview without writing
-pnpm es:ingest-live --subject maths --verbose  # Maths only, verbose output
+pnpm es:ingest-live                              # Ingest all common subjects
+pnpm es:ingest-live --dry-run                    # Preview without writing
+pnpm es:ingest-live --subject maths --verbose    # Maths only, verbose output
 pnpm es:ingest-live --subject maths --keystage ks2  # Specific filters
+pnpm es:ingest-live --clear-cache                # Clear SDK cache before run
+
+# Caching (requires Redis)
+pnpm redis:up                                    # Start Redis for caching
+pnpm redis:down                                  # Stop Redis (keeps data)
+pnpm redis:reset                                 # Stop Redis, delete cache
+pnpm redis:status                                # Check Redis status
 
 # Development
 pnpm dev               # Start dev server on configured port
@@ -238,6 +305,17 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/
 └── oak-meta.json         # Metadata index mapping
 ```
 
+### SDK Caching
+
+```text
+apps/oak-open-curriculum-semantic-search/
+├── docker-compose.yml                        # Redis container for caching
+├── docs/SDK-CACHING.md                       # User documentation
+└── src/adapters/
+    ├── oak-adapter-cached.ts                 # Cached SDK client implementation
+    └── oak-adapter-cached.unit.test.ts       # Unit tests for pure functions
+```
+
 ---
 
 ## Known Gotchas (ES Serverless Compatibility)
@@ -251,6 +329,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/
 | `number_of_shards/replicas` settings    | Not supported in Serverless. Remove from mappings                                              |
 | Env vars not loading in CLI             | Use `loadAppEnv()` helper with `override: true` for dotenv                                     |
 | Port 3000 conflicts                     | Use `SEMANTIC_SEARCH_PORT=3003` (default)                                                      |
+| Missing lesson transcripts (404)        | Handled gracefully - 404s cached as empty fallbacks for 100% cache hit rate                    |
 
 ---
 
@@ -283,13 +362,14 @@ pnpm smoke:dev:stub
 
 ## Immediate Next Steps
 
-### Step 1: Ingest Real Data (NOW)
+### Step 1: Complete Maths Ingestion
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Recreate clean indexes (clears fake data, resets synonyms)
-pnpm es:setup
+# Optional: Enable caching for faster re-runs
+pnpm redis:up
+# Add SDK_CACHE_ENABLED=true to .env.local
 
 # Ingest real Maths curriculum data
 pnpm es:ingest-live --subject maths --verbose
@@ -351,6 +431,19 @@ pnpm es:status
 
 ---
 
+## Architectural Decision Records
+
+Relevant ADRs for semantic search:
+
+| ADR                                                                                             | Title                   | Description                                       |
+| ----------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------- |
+| [ADR-063](docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK Domain Synonyms     | SDK as single source of truth for domain synonyms |
+| [ADR-064](docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)  | ES Mapping Organization | Elasticsearch index mapping organization          |
+| [ADR-065](docs/architecture/architectural-decisions/065-turbo-task-dependencies.md)             | Turbo Task Dependencies | Build system optimisation                         |
+| [ADR-066](docs/architecture/architectural-decisions/066-sdk-response-caching.md)                | SDK Response Caching    | Optional Redis caching for development            |
+
+---
+
 ## Plan Documents
 
 For detailed implementation plans, see:
@@ -370,6 +463,9 @@ For detailed implementation plans, see:
 
 ## Version History
 
+- 2025-12-05: 404 fallback caching - transcript 404s cached for 100% hit rate (226 hits, 0 misses)
+- 2025-12-05: SDK response caching implemented (ADR 066) - Redis-based, optional, 7-day TTL
+- 2025-12-05: History KS2 test ingestion successful - 153 docs, 226 cached items
 - 2025-12-05: ES UI review complete - verified mappings, analyzers, synonyms, inference endpoints
 - 2025-12-05: Decision: Real data first, additional indexes later
 - 2025-12-05: All quality gates passing (including smoke:dev:stub)

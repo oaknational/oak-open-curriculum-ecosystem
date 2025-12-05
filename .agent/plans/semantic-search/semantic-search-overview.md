@@ -1,6 +1,6 @@
 # Semantic Search High-Level Overview
 
-Last updated: 2025-12-04
+Last updated: 2025-12-05
 
 ## Executive Summary
 
@@ -31,6 +31,7 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - **Observability**: Zero-hit telemetry tracking empty result scenarios
 - **Fixture testing**: Development mode with mock data for UI testing
 - **TypeScript CLI tools**: ES setup and status via `pnpm es:setup` and `pnpm es:status`
+- **SDK response caching**: Optional Redis caching with 404 fallbacks for 100% hit rate (ADR 066)
 
 ### Critical Blockers 🚨
 
@@ -413,6 +414,8 @@ pnpm smoke:dev:stub     # Smoke tests (stubbed)
 
 ## Version History
 
+- 2025-12-05: **SDK response caching complete** - 404 fallback caching for 100% cache hit rates (ADR 066)
+- 2025-12-05: **History KS2 test ingestion** - 153 docs, 226 cached items, 100% cache hits on rerun
 - 2025-12-05: **ES UI verification complete** - Verified mappings, analyzers, synonyms, inference endpoints match local code
 - 2025-12-05: **All quality gates passing** - smoke:dev:stub and all other gates now pass
 - 2025-12-05: **Build system optimised** - Turbo caching enabled, task dependencies fixed (ADR 065, build-system.md)

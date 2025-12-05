@@ -17,6 +17,12 @@ import {
   fetchLessonMaterials,
 } from './index-bulk-support';
 
+/** CLI-friendly log helper for progress reporting */
+function progressLog(message: string): void {
+  const timestamp = new Date().toISOString().slice(11, 19);
+  console.log(`[${timestamp}] ${message}`);
+}
+
 export interface LessonGroup {
   unitSlug: string;
   unitTitle: string;
@@ -33,7 +39,12 @@ export async function buildUnitDocuments(
   const unitSummaries = new Map<string, unknown>();
   const unitOps: unknown[] = [];
 
+  let unitIndex = 0;
   for (const unit of units) {
+    unitIndex++;
+    if (unitIndex % 10 === 1 || unitIndex === units.length) {
+      progressLog(`      Fetching unit summaries: ${unitIndex}/${units.length}`);
+    }
     const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
     if (!isUnitSummary(summaryCandidate)) {
       throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
@@ -69,17 +80,33 @@ export async function buildLessonDocuments(
 ): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
   const lessonOps: unknown[] = [];
   const rollupSnippets = new Map<string, string[]>();
+  const totalLessons = groups.reduce((sum, g) => sum + g.lessons.length, 0);
+  let processedLessons = 0;
 
+  progressLog(`      Processing ${totalLessons} lessons across ${groups.length} groups...`);
+
+  let groupIndex = 0;
   for (const group of groups) {
+    groupIndex++;
     const summary = unitSummaries.get(group.unitSlug);
     if (!summary) {
       throw new Error(`Missing unit summary for unit ${group.unitSlug}`);
     }
-    const { ops, snippets } = await buildLessonDocsForGroup(client, group, summary, subject, ks);
+    const { ops, snippets, lessonsProcessed } = await buildLessonDocsForGroup(
+      client,
+      group,
+      summary,
+      subject,
+      ks,
+      processedLessons,
+      totalLessons,
+    );
     lessonOps.push(...ops);
     rollupSnippets.set(group.unitSlug, snippets);
+    processedLessons += lessonsProcessed;
   }
 
+  progressLog(`      Completed ${processedLessons} lessons`);
   return { lessonOps, rollupSnippets };
 }
 
@@ -121,18 +148,29 @@ async function buildLessonDocsForGroup(
   unitSummary: unknown,
   subject: SearchSubjectSlug,
   ks: KeyStage,
-): Promise<{ ops: unknown[]; snippets: string[] }> {
+  processedSoFar: number,
+  totalLessons: number,
+): Promise<{ ops: unknown[]; snippets: string[]; lessonsProcessed: number }> {
   const ops: unknown[] = [];
   const snippets: string[] = [];
   const context = createLessonBuildContext(unitSummary, group, subject, ks);
 
+  let lessonIndex = 0;
   for (const lesson of group.lessons) {
+    lessonIndex++;
+    const currentTotal = processedSoFar + lessonIndex;
+    // Log every 10 lessons or at completion
+    if (currentTotal % 10 === 0 || currentTotal === totalLessons) {
+      progressLog(
+        `      Lesson ${currentTotal}/${totalLessons}: ${lesson.lessonSlug.slice(0, 40)}...`,
+      );
+    }
     const entry = await buildLessonDocEntry(client, lesson, context);
     ops.push(entry.operation, entry.document);
     snippets.push(entry.snippet);
   }
 
-  return { ops, snippets };
+  return { ops, snippets, lessonsProcessed: group.lessons.length };
 }
 
 interface LessonBuildContext {

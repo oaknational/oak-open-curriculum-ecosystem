@@ -20,6 +20,10 @@
     "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
     "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
     "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
+    "redis:up": "docker compose up -d",
+    "redis:down": "docker compose down",
+    "redis:reset": "docker compose down -v",
+    "redis:status": "docker compose ps",
     "elastic:alias-swap": "bash scripts/alias-swap.sh",
     "sandbox:ingest": "tsx scripts/sandbox/ingest.ts",
     "zero-hit:purge": "tsx scripts/observability/delete-zero-hit-events.ts",
@@ -43,7 +47,8 @@
     "redoc": "^2.5.2",
     "styled-components": "^6.1.19",
     "zod": "^4.1.13",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "ioredis": "^5.6.1"
   },
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",

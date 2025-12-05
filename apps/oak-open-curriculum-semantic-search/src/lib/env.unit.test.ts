@@ -127,6 +127,32 @@ describe('env helpers', () => {
     const { llmEnabled: llmDisabled } = await loadEnvModule();
     expect(llmDisabled()).toBe(false);
   });
+
+  it('SDK cache defaults to disabled', async () => {
+    setProcessEnv({
+      SDK_CACHE_ENABLED: undefined,
+      SDK_CACHE_REDIS_URL: undefined,
+      SDK_CACHE_TTL_DAYS: undefined,
+    });
+    const { env } = await loadEnvModule();
+    const result = env();
+    expect(result.SDK_CACHE_ENABLED).toBe(false);
+    expect(result.SDK_CACHE_REDIS_URL).toBe('redis://localhost:6379');
+    expect(result.SDK_CACHE_TTL_DAYS).toBe(7);
+  });
+
+  it('SDK cache can be enabled with custom settings', async () => {
+    setProcessEnv({
+      SDK_CACHE_ENABLED: 'true',
+      SDK_CACHE_REDIS_URL: 'redis://custom:6380',
+      SDK_CACHE_TTL_DAYS: '14',
+    });
+    const { env } = await loadEnvModule();
+    const result = env();
+    expect(result.SDK_CACHE_ENABLED).toBe(true);
+    expect(result.SDK_CACHE_REDIS_URL).toBe('redis://custom:6380');
+    expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
+  });
 });
 
 afterAll(() => {
