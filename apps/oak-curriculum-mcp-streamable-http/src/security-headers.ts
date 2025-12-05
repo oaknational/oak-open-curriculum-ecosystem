@@ -55,8 +55,8 @@ const LANDING_PAGE_CSP_DIRECTIVES = {
   scriptSrc: ["'self'", "'unsafe-inline'"],
   /** Images: same-origin and data: URIs for inline images */
   imgSrc: ["'self'", 'data:'],
-  /** Connections: allow same-origin for Chrome DevTools and Cloudflare */
-  connectSrc: ["'self'"],
+  /** Connections: allow same-origin for Chrome DevTools and Cloudflare, and data: for widget resources */
+  connectSrc: ["'self'", 'data:'],
   /** Child frames: allow same-origin (Cloudflare creates hidden iframes) */
   childSrc: ["'self'"],
   /** Frame ancestors: only allow same-origin embedding (clickjacking protection) */

@@ -42,8 +42,8 @@ describe('security-headers', () => {
       expect(CSP_DIRECTIVES.imgSrc).toContain('data:');
     });
 
-    it('blocks all connections (no fetch/XHR from landing page)', () => {
-      expect(CSP_DIRECTIVES.connectSrc).toEqual(["'self'"]);
+    it('allows same-origin and data: URI connections', () => {
+      expect(CSP_DIRECTIVES.connectSrc).toEqual(["'self'", 'data:']);
     });
 
     it('restricts frame ancestors to same-origin (clickjacking protection)', () => {

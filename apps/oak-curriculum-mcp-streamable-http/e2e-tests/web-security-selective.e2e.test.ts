@@ -236,6 +236,22 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(csp).toContain('fonts.gstatic.com');
     });
 
+    it('CSP allows data: URIs for images (e.g. logo)', async () => {
+      const app = createTestApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const csp = res.headers['content-security-policy'];
+
+      expect(csp).toContain("img-src 'self' data:");
+    });
+
+    it('CSP allows data: URIs for connections (needed for some widget behaviors)', async () => {
+      const app = createTestApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+      const csp = res.headers['content-security-policy'];
+
+      expect(csp).toContain("connect-src 'self' data:");
+    });
+
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {
       const app = createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
