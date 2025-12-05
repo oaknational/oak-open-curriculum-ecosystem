@@ -143,13 +143,17 @@ Following `.agent/directives-and-memory/testing-strategy.md`:
 All work must pass:
 
 ```bash
-pnpm type-gen      # Generate types from schema
-pnpm format        # Format code
-pnpm type-check    # TypeScript validation
-pnpm lint          # ESLint + architectural rules
-pnpm test          # Unit + integration
-pnpm build         # Production build
-pnpm test:e2e      # E2E tests (manual, sandbox)
+pnpm type-gen           # Generate types from schema
+pnpm build              # Production build
+pnpm type-check         # TypeScript validation
+pnpm lint:fix           # ESLint with auto-fix (or pnpm lint for verify)
+pnpm format:root        # Format code
+pnpm markdownlint:root  # Lint markdown
+pnpm test               # Unit + integration
+pnpm test:e2e           # E2E tests
+pnpm test:e2e:built     # E2E tests on built artifacts
+pnpm test:ui            # UI tests (Playwright)
+pnpm smoke:dev:stub     # Smoke tests (stubbed)
 ```
 
 ## Related Plans

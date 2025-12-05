@@ -8,7 +8,7 @@ This plan details the migration of the semantic search backend from runtime-defi
 
 **Goal**: Migrate all search schemas to type-gen (SDK compile time) and add complete ontology fields (threads, programme factors, unit types, content guidance) to enable powerful, type-safe search across Oak's curriculum data.
 
-**Status**: **Phase 1 COMPLETE** ✅. Blocked on ES deployment for Phase 2.
+**Status**: **Phase 1 COMPLETE** ✅. **ES Serverless DEPLOYED** ✅. Ready for real data ingestion and Phase 2.
 
 **Duration**: 6-8 weeks across 3 phases with clear sessions minimizing context switching.
 
@@ -29,7 +29,7 @@ This plan details the migration of the semantic search backend from runtime-defi
 - ✅ ES index mappings relocated to `src/lib/elasticsearch/definitions/`
 - ✅ Static `synonyms.json` deleted - synonyms generated from SDK
 
-**Next**: Phase 0 (ES Deployment) is BLOCKING. See `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`.
+**Next**: Clear test data, ingest real Maths curriculum via `pnpm es:setup && pnpm es:ingest-live --subject maths --verbose`.
 
 ---
 
@@ -1388,36 +1388,25 @@ describe('Full search flow (E2E test)', () => {
 All work must pass these commands in sequence:
 
 ```bash
-# 1. Install dependencies
-pnpm i
-
-# 2. Generate types from schema
-pnpm type-gen
-
-# 3. Production build
-pnpm build
-
-# 4. TypeScript validation
-pnpm type-check
-
-# 5. Lint and fix
-pnpm lint -- --fix
-
-# 6. Generate SDK docs
-pnpm -F @oaknational/oak-curriculum-sdk docs:all
-
-# 7. Format code
-pnpm format
-
-# 8. Lint markdown
-pnpm markdownlint
-
-# 9. Unit + integration tests
-pnpm test
-
-# 10. E2E tests (manual, requires sandbox)
-pnpm test:e2e
+# From repo root, one at a time, all must pass
+pnpm type-gen           # Generate types from schema
+pnpm build              # Production build
+pnpm type-check         # TypeScript validation
+pnpm lint:fix           # ESLint with auto-fix (or pnpm lint for verify)
+pnpm format:root        # Format code
+pnpm markdownlint:root  # Lint markdown
+pnpm test               # Unit + integration tests
+pnpm test:e2e           # E2E tests
+pnpm test:e2e:built     # E2E tests on built artifacts
+pnpm test:ui            # UI tests (Playwright)
+pnpm smoke:dev:stub     # Smoke tests (stubbed)
 ```
+
+**Shorthand commands**:
+
+- `pnpm make` - Build, lint:fix, format (development workflow)
+- `pnpm qg` - Full quality gate verification (CI workflow)
+- `pnpm check` - Clean rebuild + full QG (thorough verification)
 
 ### Session-Specific Validation
 
@@ -2045,6 +2034,7 @@ describe('API error tracking', () => {
 
 ## Document History
 
+- 2025-12-05: Updated to reflect ES Serverless deployment complete, quality gates updated
 - 2025-11-11: Created comprehensive implementation plan
 - 2025-11-11: Defined all phases and sessions
 - 2025-11-11: Integrated ontology requirements

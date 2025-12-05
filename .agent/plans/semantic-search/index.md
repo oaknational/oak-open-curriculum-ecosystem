@@ -4,37 +4,73 @@ Navigation hub for all semantic search planning documentation.
 
 ## Current Priority
 
-**ES deployment COMPLETE.** One blocking issue remains before Phase 2:
+**ES deployment COMPLETE. All quality gates passing.** Ready to ingest real data.
 
-- ⚠️ `smoke:dev:stub` failing - "Successful tool call must not be flagged as error"
+### Immediate Next Step
+
+Ingest real curriculum data (Maths, all key stages) to validate search quality before Phase 2.
 
 For continuation work, use:
 
-- **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search.prompt.md` (consolidated)
+- **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search.prompt.md`
+
+---
 
 ## Overview
 
-The semantic search system provides powerful search capabilities across Oak's curriculum data, integrating with Elasticsearch for hybrid search (semantic + lexical), faceted navigation, and intelligent suggestions. This planning directory documents the architecture, implementation strategy, and ongoing work.
+The semantic search system provides powerful search capabilities across Oak's curriculum data, integrating with Elasticsearch Serverless for hybrid search (semantic + lexical), faceted navigation, and intelligent suggestions.
+
+---
 
 ## Status Summary
 
-| Phase                    | Status      | Notes                                               |
-| ------------------------ | ----------- | --------------------------------------------------- |
-| Schema-First Migration   | ✅ COMPLETE | All schemas generated via `pnpm type-gen`           |
-| Thread Schema Generation | ✅ COMPLETE | Thread index and embedded fields in SDK             |
-| SDK Synonym Export       | ✅ COMPLETE | Single source of truth for domain synonyms          |
-| ES Deployment            | ✅ COMPLETE | Serverless deployed, indexes created, data ingested |
-| Index Metadata           | ✅ COMPLETE | `oak_meta` index for automatic version tracking     |
-| Live Data Ingestion      | ✅ COMPLETE | Full curriculum data ingested via SDK               |
-| Ontology Integration     | ⏳ PENDING  | Phase 2 ready to start                              |
-| MCP Connectivity         | ⏳ PENDING  | Blocked on ontology integration                     |
-| OpenAI App Widget        | ⏳ PENDING  | Blocked on MCP connectivity                         |
+| Phase                    | Status      | Notes                                                |
+| ------------------------ | ----------- | ---------------------------------------------------- |
+| Schema-First Migration   | ✅ COMPLETE | All schemas generated via `pnpm type-gen`            |
+| Thread Schema Generation | ✅ COMPLETE | Thread index and embedded fields in SDK              |
+| SDK Synonym Export       | ✅ COMPLETE | 68 rules deployed to ES as `oak-syns`                |
+| ES Serverless Deployment | ✅ COMPLETE | Indexes created, mappings verified, ELSER configured |
+| Quality Gates            | ✅ COMPLETE | All gates passing including `smoke:dev:stub`         |
+| Real Data Ingestion      | ⏳ NEXT     | Clear test data, ingest Maths curriculum             |
+| Ontology Integration     | ⏳ PENDING  | Phase 2 - after data validation                      |
+| MCP Connectivity         | ⏳ PENDING  | Phase 5 - blocked on ontology integration            |
+| OpenAI App Widget        | ⏳ PENDING  | Phase 6 - blocked on MCP connectivity                |
+
+---
+
+## Elasticsearch Serverless Details
+
+### Deployment
+
+- **Kibana**: <https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud>
+- **Cluster**: `poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud:443`
+- **Region**: GCP europe-west1
+
+### Inference Endpoints (Auto-Configured)
+
+| Endpoint                               | Type             | Notes                                       |
+| -------------------------------------- | ---------------- | ------------------------------------------- |
+| `.elser-2-elastic`                     | sparse_embedding | **AUTO-ASSIGNED** to `semantic_text` fields |
+| `.elser-2-elasticsearch`               | sparse_embedding | ML Nodes fallback                           |
+| `.multilingual-e5-small-elasticsearch` | text_embedding   | Dense embeddings option                     |
+| `.rerank-v1-elasticsearch`             | rerank           | Result re-ranking (tech preview)            |
+
+### Verified Configuration
+
+- ✅ All 6 index mappings match local JSON definitions
+- ✅ Split analyzers deployed (`oak_text_index`, `oak_text_search`)
+- ✅ Synonyms at search-time only (ES Serverless compatible)
+- ✅ `semantic_text` fields automatically use ELSER
+
+---
 
 ## Quick Links
 
 - [High-Level Overview](./semantic-search-overview.md) - Strategy, phases, dependencies
 - [Search Service (Backend)](./search-service/index.md) - API routes, Elasticsearch, ingestion
 - [Search UI (Frontend)](./search-ui/index.md) - React components, theme, testing
+
+---
 
 ## Key Documents
 
@@ -48,26 +84,33 @@ The semantic search system provides powerful search capabilities across Oak's cu
 
 - **search-generator-spec.md** - Documents generated SDK artifacts (13 modules) - ✅ IMPLEMENTATION COMPLETE
 
+### Elasticsearch Reference
+
+- `.agent/reference-docs/elasticsearch/README.md` - ES documentation index
+- `.agent/reference-docs/elasticsearch/elastic-search-serverless-docs.md` - Serverless concepts
+- `.agent/reference-docs/elasticsearch/elastic-cloud-serverless-api-usage.md` - API examples
+- `.agent/reference-docs/elasticsearch/elasticsearch-serverless-openapi-source.json` - API spec
+
 ### Research
 
-- [Semantic Search Plans Review](../research/elasticsearch/semantic-search-plans-review.md)
-- [Expanded Architecture Analysis](../research/elasticsearch/expanded-architecture-analysis.md)
-- [Ontology Implementation Gaps](../research/elasticsearch/ontology-implementation-gaps.md)
+- [Semantic Search Plans Review](../../research/elasticsearch/semantic-search-plans-review.md)
+- [Expanded Architecture Analysis](../../research/elasticsearch/expanded-architecture-analysis.md)
+- [Ontology Implementation Gaps](../../research/elasticsearch/ontology-implementation-gaps.md)
 
 ### Archive
 
-- **archive/superseded/** - Completed/obsolete documents including:
-  - `search-schema-inventory.md` - Runtime schemas (now generated)
-  - `search-migration-map.md` - Migration sequence (complete)
+- **archive/superseded/** - Completed/obsolete documents
 - **archive/completed/** - Historical plans and resolved issues
+
+---
 
 ## Architecture Context
 
 ### Cardinal Rule Compliance ✅
 
-All static data structures, types, type guards, Zod schemas, and validators **MUST** flow from the Open Curriculum OpenAPI schema via type-gen. Running `pnpm type-gen` must be sufficient to align all workspaces with schema changes.
+All static data structures, types, type guards, Zod schemas, and validators **MUST** flow from the Open Curriculum OpenAPI schema via type-gen.
 
-**Status**: COMPLETE - All search schemas now generated at `packages/sdks/oak-curriculum-sdk/src/types/generated/search/`
+**Status**: COMPLETE - All search schemas generated at `packages/sdks/oak-curriculum-sdk/src/types/generated/search/`
 
 ### Generated Artifacts (13 modules)
 
@@ -85,38 +128,25 @@ All static data structures, types, type guards, Zod schemas, and validators **MU
 - `scopes.ts` - Search scope enumerations
 - `suggestions.ts` - Suggestion contracts
 
-### Ontology Integration
+---
 
-The semantic search implementation is guided by the comprehensive curriculum ontology documented in `docs/architecture/curriculum-ontology.md`, which defines:
+## Index Inventory
 
-- **Core entities**: Programme, Unit, Lesson, Thread, Sequence, Subject
-- **Relationships**: Hierarchical and cross-cutting connections
-- **Enumerated fields**: Phase, KeyStage, Year, Tier, ExamBoard, ContentGuidance
-- **Official Oak API alignment**: Definitions from official glossary and ontology diagrams
+### Current Indexes (Active)
 
-### MCP Integration
+Mappings in `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/`:
 
-Semantic search will integrate with MCP via:
+| Index                 | Purpose                                   | Semantic Field    |
+| --------------------- | ----------------------------------------- | ----------------- |
+| `oak_lessons`         | Lesson documents with semantic embeddings | `lesson_semantic` |
+| `oak_unit_rollup`     | Aggregated unit text for semantic search  | `unit_semantic`   |
+| `oak_units`           | Basic unit metadata                       | -                 |
+| `oak_sequences`       | Programme sequence documents              | -                 |
+| `oak_sequence_facets` | Sequence facet navigation data            | -                 |
+| `oak_meta`            | Index version and ingestion metadata      | -                 |
+| `oak_zero_hit_events` | Telemetry (lazy creation)                 | -                 |
 
-- Aggregated `semantic-search` tool in SDK
-- Enhanced `search` tool with `mode: 'basic' | 'semantic'`
-- OpenAI App widget for interactive search
-- Type-safe schemas from generated artifacts
-
-### Index Inventory
-
-**Current Indexes** (mappings in `src/lib/elasticsearch/definitions/`):
-
-| Index                 | Purpose                                   | Status |
-| --------------------- | ----------------------------------------- | ------ |
-| `oak_lessons`         | Lesson documents with semantic embeddings | Active |
-| `oak_unit_rollup`     | Unit aggregated content for search        | Active |
-| `oak_units`           | Basic unit metadata                       | Active |
-| `oak_sequences`       | Programme sequence documents              | Active |
-| `oak_sequence_facets` | Sequence facet navigation data            | Active |
-| `oak_zero_hit_events` | Telemetry (lazy creation)                 | Active |
-
-**Future Indexes** (Phase 2-3):
+### Future Indexes (Phase 2-3)
 
 | Index                    | Priority | Purpose                                   |
 | ------------------------ | -------- | ----------------------------------------- |
@@ -127,7 +157,9 @@ Semantic search will integrate with MCP via:
 | `oak_lesson_planning`    | MEDIUM   | Pedagogical context search                |
 | `oak_assets`             | MEDIUM   | Resource discovery                        |
 
-### SDK Data Imports (Single Source of Truth)
+---
+
+## SDK Data Imports (Single Source of Truth)
 
 Domain data is imported from SDK:
 
@@ -146,7 +178,68 @@ import {
 - Synonyms managed exclusively in `ontologyData.synonyms` (SDK)
 - Static `synonyms.json` was **deleted** - ES synonyms generated dynamically
 - ES index mappings live in `src/lib/elasticsearch/definitions/` (not `scripts/`)
-- `scripts/generate-synonyms.ts` calls SDK to generate ES synonym payload
+
+---
+
+## MCP Dev Server for Content Exploration
+
+Use the local MCP server to explore curriculum content before ingestion:
+
+```bash
+cd apps/oak-curriculum-mcp-streamable-http
+pnpm dev
+# Server at http://localhost:3333/mcp
+```
+
+Useful tools: `get-subjects`, `get-subjects-sequences`, `get-sequences-units`, `get-key-stages-subject-lessons`, `get-threads`, `get-threads-units`
+
+---
+
+## Phase Roadmap
+
+### Phase 1: Foundation ✅ COMPLETE
+
+- [x] Schema-first migration
+- [x] ES Serverless deployment
+- [x] Index creation and mapping
+- [x] Synonym deployment (68 rules)
+- [x] CLI tools (`es:setup`, `es:status`, `es:ingest-live`)
+
+### Phase 1.5: Real Data (CURRENT)
+
+- [ ] Clear test/fake data
+- [ ] Ingest Maths curriculum (all key stages)
+- [ ] Validate search quality in ES Playground
+- [ ] Test semantic and keyword search
+
+### Phase 2: Core Ontology
+
+- [ ] Thread filtering and facets
+- [ ] Programme factor fields (tier, exam board, pathway)
+- [ ] KS4-specific filtering
+
+### Phase 3: Ontology Enrichment
+
+- [ ] Unit type classification
+- [ ] Content guidance with supervision levels
+- [ ] Lesson component availability flags
+
+### Phase 4: RAG and Deep Search
+
+- [ ] Create ontology index for domain knowledge
+- [ ] Lesson transcript chunking and indexing
+
+### Phase 5: MCP Connectivity
+
+- [ ] Aggregated `semantic-search` MCP tool
+- [ ] Enhanced `search` tool with `mode` parameter
+
+### Phase 6: OpenAI App Widget
+
+- [ ] Enhanced search renderer
+- [ ] Standalone semantic search widget
+
+---
 
 ## Dependencies
 
@@ -156,13 +249,15 @@ import {
 - Schema-first execution: `.agent/directives-and-memory/schema-first-execution.md`
 - Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
 - Cardinal rule: `.agent/directives-and-memory/rules.md`
-- SDK type-gen infrastructure for search schemas
-- Thread schema generation (Phase 1.1)
+- SDK type-gen infrastructure
+- Thread schema generation
 - SDK synonym export utilities
 
 ### No Blocking Dependencies
 
-All dependencies complete. Ready for Phase 2 ontology integration.
+All dependencies complete. Ready for real data ingestion and Phase 2.
+
+---
 
 ## Navigation
 

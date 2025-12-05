@@ -1,7 +1,5 @@
 # Semantic Search Continuation Prompt
 
-Elasticsearch Serverless deployment is here: <https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud/app/elasticsearch/getting_started>
-
 Use this prompt to continue semantic search implementation work in a fresh chat.
 
 ## Foundation Documents (MUST READ FIRST)
@@ -15,52 +13,78 @@ Before any work, read and internalise these documents:
 
 **Key Principle**: All types, schemas, and validators MUST flow from the OpenAPI schema via `pnpm type-gen`. No runtime schema definitions. All quality gate issues are BLOCKING regardless of location, context, or cause.
 
+---
+
+## Elasticsearch Serverless Deployment
+
+**Kibana UI**: <https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud/app/elasticsearch/getting_started>
+
+**Cluster Endpoint**: `https://poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud:443`
+
+### Inference Endpoints (Auto-Configured)
+
+ES Serverless provides preconfigured inference endpoints. The `semantic_text` field type automatically uses ELSER:
+
+| Endpoint                               | Type             | Usage                                       |
+| -------------------------------------- | ---------------- | ------------------------------------------- |
+| `.elser-2-elastic`                     | sparse_embedding | **AUTO-ASSIGNED** to `semantic_text` fields |
+| `.elser-2-elasticsearch`               | sparse_embedding | ML Nodes fallback                           |
+| `.multilingual-e5-small-elasticsearch` | text_embedding   | Dense embeddings (alternative)              |
+| `.rerank-v1-elasticsearch`             | rerank           | Result re-ranking (tech preview)            |
+
+---
+
 ## Current State Summary (2025-12-05)
 
 ### Completed ✅
 
-| Component                | Status      | Notes                                                                                            |
-| ------------------------ | ----------- | ------------------------------------------------------------------------------------------------ |
-| Schema-first migration   | ✅ COMPLETE | 13 SDK modules generated at type-gen time                                                        |
-| MCP tool generation      | ✅ COMPLETE | 26 tools with full type safety                                                                   |
-| ES Serverless deployment | ✅ COMPLETE | Cluster operational at `poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud` |
-| Live data ingestion      | ✅ COMPLETE | Full curriculum for maths, english, science, history, geography (all key stages)                 |
-| Index metadata           | ✅ COMPLETE | `oak_meta` stores version, timestamps, doc counts automatically                                  |
-| Response augmentation    | ✅ COMPLETE | SDK middleware adds `canonicalUrl` to all API responses                                          |
-| TypeScript CLI tools     | ✅ COMPLETE | `pnpm es:setup`, `pnpm es:status`, `pnpm es:ingest-live`                                         |
-| Build system optimised   | ✅ COMPLETE | Turbo caching enabled, task dependencies fixed (ADR 065)                                         |
+| Component                | Status      | Notes                                                            |
+| ------------------------ | ----------- | ---------------------------------------------------------------- |
+| Schema-first migration   | ✅ COMPLETE | 13 SDK modules generated at type-gen time                        |
+| MCP tool generation      | ✅ COMPLETE | 26 tools with full type safety                                   |
+| ES Serverless deployment | ✅ COMPLETE | Cluster operational, indexes created, synonyms deployed          |
+| Index mappings verified  | ✅ COMPLETE | All mappings match local JSON definitions in ES UI               |
+| Analyzer configuration   | ✅ COMPLETE | Split analyzers working (ES Serverless compatible)               |
+| Synonym set deployed     | ✅ COMPLETE | `oak-syns` with 68 rules from SDK `buildElasticsearchSynonyms()` |
+| Response augmentation    | ✅ COMPLETE | SDK middleware adds `canonicalUrl` to all API responses          |
+| TypeScript CLI tools     | ✅ COMPLETE | `pnpm es:setup`, `pnpm es:status`, `pnpm es:ingest-live`         |
+| Build system optimised   | ✅ COMPLETE | Turbo caching enabled, task dependencies fixed (ADR 065)         |
+| Quality gates passing    | ✅ COMPLETE | All gates pass including `smoke:dev:stub`                        |
 
-### Active Issue 🚨
+### Current Priority: Real Data Ingestion
 
-| Issue                    | Status         | Notes                                                                                         |
-| ------------------------ | -------------- | --------------------------------------------------------------------------------------------- |
-| `smoke:dev:stub` failing | ⚠️ INVESTIGATE | "Successful tool call must not be flagged as error" - appears to be MCP response format issue |
+| Task                    | Status     | Notes                                                 |
+| ----------------------- | ---------- | ----------------------------------------------------- |
+| Clear test/fake data    | ⏳ NEXT    | Run `pnpm es:setup` to recreate clean indexes         |
+| Ingest real Maths data  | ⏳ NEXT    | Run `pnpm es:ingest-live --subject maths --verbose`   |
+| Validate search results | ⏳ PENDING | Test queries in ES Playground after ingestion         |
+| Phase 2: Threads        | ⏳ PENDING | Add thread filtering and facets after data validation |
 
-Most quality gates pass. Smoke test failure needs investigation before Phase 2 can proceed.
+### Decision: Data First, Additional Indexes Later
 
-### Next Priority
+**Approach confirmed:**
 
-1. **Phase 2: Thread filtering and facets** - Add thread-based search scope and filtering
-2. **Programme factors** - Add KS4 tier, exam board, pathway filtering
-3. **MCP semantic search tool** - Expose via MCP protocol
+1. Use current index structure as-is
+2. Clear fake data, ingest real Maths curriculum (all key stages)
+3. Validate search quality with real data
+4. Add additional indexes (threads, ontology) in Phase 2-3
 
 ---
 
 ## Index Inventory
 
-**Active Indexes** (mappings in `src/lib/elasticsearch/definitions/`):
+### Active Indexes (mappings in `src/lib/elasticsearch/definitions/`)
 
-| Index                 | Mapping File               | Purpose                                   |
-| --------------------- | -------------------------- | ----------------------------------------- |
-| `oak_lessons`         | `oak-lessons.json`         | Lesson documents with semantic embeddings |
-| `oak_units`           | `oak-units.json`           | Basic unit metadata                       |
-| `oak_unit_rollup`     | `oak-unit-rollup.json`     | Aggregated unit text for semantic search  |
-| `oak_sequences`       | `oak-sequences.json`       | Programme sequence documents              |
-| `oak_sequence_facets` | `oak-sequence-facets.json` | Sequence facet navigation                 |
-| `oak_meta`            | `oak-meta.json`            | Index version and ingestion metadata      |
-| `oak_zero_hit_events` | Code-defined (lazy)        | Telemetry for zero-result queries         |
+| Index                 | Mapping File               | Purpose                                   | Semantic Field    |
+| --------------------- | -------------------------- | ----------------------------------------- | ----------------- |
+| `oak_lessons`         | `oak-lessons.json`         | Lesson documents with semantic embeddings | `lesson_semantic` |
+| `oak_unit_rollup`     | `oak-unit-rollup.json`     | Aggregated unit text for semantic search  | `unit_semantic`   |
+| `oak_units`           | `oak-units.json`           | Basic unit metadata                       | -                 |
+| `oak_sequences`       | `oak-sequences.json`       | Programme sequence documents              | -                 |
+| `oak_sequence_facets` | `oak-sequence-facets.json` | Sequence facet navigation                 | -                 |
+| `oak_meta`            | `oak-meta.json`            | Index version and ingestion metadata      | -                 |
 
-**Future Indexes** (Phase 2-3):
+### Future Indexes (Phase 2-3)
 
 | Index                    | Priority | Purpose                                |
 | ------------------------ | -------- | -------------------------------------- |
@@ -68,6 +92,32 @@ Most quality gates pass. Smoke test failure needs investigation before Phase 2 c
 | `oak_ontology`           | HIGH     | Domain knowledge RAG                   |
 | `oak_lesson_transcripts` | HIGH     | Chunked transcripts for deep retrieval |
 | `oak_content_guidance`   | HIGH     | Safeguarding/content warnings          |
+
+---
+
+## MCP Dev Server for Content Exploration
+
+The MCP server runs locally and can be used to explore curriculum content before ingestion:
+
+```bash
+cd apps/oak-curriculum-mcp-streamable-http
+pnpm dev
+# Server at http://localhost:3333/mcp
+```
+
+**Key tools for understanding indexable content:**
+
+| Tool                             | Purpose                 |
+| -------------------------------- | ----------------------- |
+| `get-subjects`                   | List all subjects       |
+| `get-subjects-sequences`         | Sequences for a subject |
+| `get-sequences-units`            | Units in a sequence     |
+| `get-key-stages-subject-lessons` | Lessons by KS+subject   |
+| `get-lessons-summary`            | Lesson detail           |
+| `get-lessons-transcript`         | Lesson transcripts      |
+| `get-units-summary`              | Unit detail             |
+| `get-threads`                    | All curriculum threads  |
+| `get-threads-units`              | Units within a thread   |
 
 ---
 
@@ -123,12 +173,13 @@ OPENAI_API_KEY=your_openai_api_key_here
 
 ```bash
 # Setup and Status
-pnpm es:setup          # Create indexes and synonyms
+pnpm es:setup          # Create indexes and synonyms (clears existing data)
 pnpm es:status         # Show connection, version, index info
 
 # Ingestion
 pnpm es:ingest-live              # Ingest all common subjects
 pnpm es:ingest-live --dry-run    # Preview without writing
+pnpm es:ingest-live --subject maths --verbose  # Maths only, verbose output
 pnpm es:ingest-live --subject maths --keystage ks2  # Specific filters
 
 # Development
@@ -174,13 +225,18 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/
 └── load-app-env.ts  # Environment loading helper
 ```
 
-### Index Metadata
+### Index Definitions
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/index-meta.ts
+apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/
+├── index.ts              # Index configuration exports
+├── oak-lessons.json      # Lesson index mapping
+├── oak-units.json        # Unit index mapping
+├── oak-unit-rollup.json  # Unit rollup mapping
+├── oak-sequences.json    # Sequence mapping
+├── oak-sequence-facets.json  # Sequence facets mapping
+└── oak-meta.json         # Metadata index mapping
 ```
-
-Functions: `readIndexMeta()`, `writeIndexMeta()`, `getIndexVersion()`, `generateVersionFromTimestamp()`
 
 ---
 
@@ -221,24 +277,38 @@ pnpm smoke:dev:stub
 - `pnpm qg` - Full quality gate verification (for CI)
 - `pnpm check` - Clean rebuild + full QG (thorough verification)
 
-**CRITICAL**: All quality gate issues are BLOCKING regardless of location, context, or cause. There is no such thing as an acceptable failure. There is no such thing as "someone else's problem".
-
-**Build System**: See `docs/development/build-system.md` and ADR 065 for Turbo task dependencies.
+**CRITICAL**: All quality gate issues are BLOCKING regardless of location, context, or cause.
 
 ---
 
-## TDD Workflow Reminder
+## Immediate Next Steps
 
-1. **RED**: Write failing test first
-2. **GREEN**: Write minimal code to make test pass
-3. **REFACTOR**: Clean up while keeping tests green
+### Step 1: Ingest Real Data (NOW)
 
-**Testing Strategy**:
+```bash
+cd apps/oak-open-curriculum-semantic-search
 
-- **Unit tests** (`.unit.test.ts`): Pure functions, no IO, no mocks
-- **Integration tests** (`.integration.test.ts`): Code integration, simple mocks injected as arguments
-- **E2E tests** (`.e2e.test.ts`): Running system, File System/STDIO IO only (NO network)
-- **Smoke tests** (`.smoke.test.ts`): Running system with ALL IO types including network
+# Recreate clean indexes (clears fake data, resets synonyms)
+pnpm es:setup
+
+# Ingest real Maths curriculum data
+pnpm es:ingest-live --subject maths --verbose
+
+# Verify in ES UI or via status
+pnpm es:status
+```
+
+### Step 2: Validate Search Quality
+
+1. Use ES Kibana Playground to test semantic queries
+2. Verify `semantic_text` fields return relevant results
+3. Test synonym expansion (e.g., "fractions" should match "fraction" content)
+
+### Step 3: Phase 2 - Thread Filtering (After validation)
+
+1. Write failing tests for thread filtering
+2. Add thread fields to search requests/responses
+3. Implement thread-based facets
 
 ---
 
@@ -281,25 +351,6 @@ pnpm smoke:dev:stub
 
 ---
 
-## Architecture Alignment
-
-### Cardinal Rule
-
-> ALL static data structures, types, type guards, Zod schemas, and validators MUST flow from the Open Curriculum OpenAPI schema in the SDK, generated at build/compile time. Running `pnpm type-gen` MUST be sufficient to align all workspaces with schema changes.
-
-### Schema-First Execution
-
-> The definitive source of truth for all data shapes is the OpenAPI schema. Types, validators, and runtime behaviour MUST derive from this schema at compile time.
-
-### Testing Strategy
-
-- E2E tests CAN trigger File System and STDIO IO but **NOT network IO**
-- Smoke tests CAN trigger all IO types including network
-- No complex mocks - simple fakes injected as arguments
-- Each test must prove something useful about the product code
-
----
-
 ## Plan Documents
 
 For detailed implementation plans, see:
@@ -315,59 +366,15 @@ For detailed implementation plans, see:
 - `.agent/reference-docs/elasticsearch/elastic-search-serverless-docs.md` - Serverless concepts
 - `.agent/reference-docs/elasticsearch/elastic-cloud-serverless-api-usage.md` - API examples
 
-### Research
-
-- `.agent/research/elasticsearch/semantic-search-plans-review.md`
-- `.agent/research/elasticsearch/expanded-architecture-analysis.md`
-- `.agent/research/elasticsearch/ontology-implementation-gaps.md`
-
----
-
-## Success Metrics
-
-| Phase | Metric              | Target                     | Status                    |
-| ----- | ------------------- | -------------------------- | ------------------------- |
-| 0     | ES connection       | Successful                 | ✅ COMPLETE               |
-| 0     | Live ingestion      | Full curriculum data       | ✅ COMPLETE               |
-| 0     | Index metadata      | Automatic version tracking | ✅ COMPLETE               |
-| 1     | Thread search       | Returns results            | pending                   |
-| 1     | Programme filtering | KS4 filters work           | pending                   |
-| 2     | Unit classification | 100% coverage              | pending                   |
-| 2     | Component filtering | All 8 flags                | pending                   |
-| 3     | Ontology RAG        | Answers domain questions   | pending                   |
-| 4     | MCP semantic-search | Tool functional            | pending                   |
-| 5     | Widget tests        | 100% pass rate             | pending                   |
-| All   | Quality gates       | All pass                   | ⚠️ smoke:dev:stub failing |
-
----
-
-## Immediate Next Steps
-
-1. **Fix smoke:dev:stub failure** (BLOCKING):
-   - Investigate "Successful tool call must not be flagged as error"
-   - Check MCP server response format in `extractToolPayload()`
-   - Ensure all quality gates pass before proceeding
-
-2. **Continue Phase 2 - Thread Filter (RED phase)**:
-   - Write failing tests for thread filtering and facets
-   - Define expected behaviour for thread-based search scope
-
-3. **Programme Factor Implementation**:
-   - Add tier, exam board, pathway fields to schemas
-   - Implement KS4-specific filtering
-
-4. **Run quality gates** after each change - all must pass
-
 ---
 
 ## Version History
 
+- 2025-12-05: ES UI review complete - verified mappings, analyzers, synonyms, inference endpoints
+- 2025-12-05: Decision: Real data first, additional indexes later
+- 2025-12-05: All quality gates passing (including smoke:dev:stub)
 - 2025-12-05: Build system optimised - Turbo caching enabled, task dependencies fixed (ADR 065)
-- 2025-12-05: Added lint:fix task to all workspaces
-- 2025-12-05: Identified smoke:dev:stub failure (MCP response format issue)
-- 2025-12-04: Consolidated from `semantic-search-implementation.prompt.md` and `elasticsearch-serverless-deployment.prompt.md`
-- 2025-12-04: Live curriculum data ingestion COMPLETE
+- 2025-12-04: Live curriculum data ingestion COMPLETE (test data)
 - 2025-12-04: Index metadata tracking (`oak_meta`) COMPLETE
 - 2025-12-04: Response augmentation middleware COMPLETE
 - 2025-12-04: TypeScript CLI tools for ES setup/status/ingestion COMPLETE
-- 2025-12-04: Dev server port configuration added

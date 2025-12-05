@@ -413,9 +413,10 @@ pnpm smoke:dev:stub     # Smoke tests (stubbed)
 
 ## Version History
 
+- 2025-12-05: **ES UI verification complete** - Verified mappings, analyzers, synonyms, inference endpoints match local code
+- 2025-12-05: **All quality gates passing** - smoke:dev:stub and all other gates now pass
 - 2025-12-05: **Build system optimised** - Turbo caching enabled, task dependencies fixed (ADR 065, build-system.md)
 - 2025-12-05: **lint:fix task added** - Explicit lint with auto-fix in all workspaces
-- 2025-12-05: **Smoke test issue identified** - `smoke:dev:stub` failing on MCP response format
 - 2025-12-04: **Live curriculum data ingestion COMPLETE** - Full SDK data ingested for maths, english, science, history, geography across all key stages
 - 2025-12-04: **Index metadata tracking** - New `oak_meta` index automatically tracks version, timestamps, doc counts, ingestion duration
 - 2025-12-04: **Response augmentation middleware** - SDK client automatically adds `canonicalUrl` to API responses

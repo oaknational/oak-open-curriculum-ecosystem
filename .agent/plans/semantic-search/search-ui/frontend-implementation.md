@@ -99,7 +99,7 @@ The search UI uses `@oaknational/oak-components` (v1.149.0+) as the design found
 
 **Current implementation** (~1,200 LOC across 10 files):
 
-```
+```text
 app/lib/theme/
 ├── ColorModeContext.tsx           # Light/dark mode state
 ├── ThemeContext.tsx                # Theme provider wrapper
@@ -424,7 +424,7 @@ export async function POST(request: Request) {
 
 **Fixture Builders**:
 
-```
+```text
 app/ui/search-fixtures/builders/
 ├── single-scope.ts         # Lessons, units, or sequences
 ├── multi-scope.ts          # All scopes combined
@@ -799,7 +799,7 @@ test('Search page has no accessibility violations', async ({ page }) => {
 
 ### Test Structure
 
-```
+```text
 apps/oak-open-curriculum-semantic-search/tests/
 ├── e2e/
 │   ├── search-structured.spec.ts

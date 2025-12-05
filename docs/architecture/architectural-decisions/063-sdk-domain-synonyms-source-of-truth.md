@@ -46,9 +46,8 @@ graph TD
     A -->|buildSynonymLookup| C[Term Lookup Map]
     A -->|serialiseElasticsearchSynonyms| D[JSON for ES API]
 
-    B --> E[scripts/generate-synonyms.ts]
-    E --> F[setup.sh]
-    F --> G[ES _synonyms/oak-syns API]
+    B --> E[TypeScript CLI: pnpm es:setup]
+    E --> G[ES _synonyms/oak-syns API]
 
     C --> H[MCP Tools]
     C --> I[Search UI]
@@ -93,16 +92,21 @@ export function buildElasticsearchSynonyms(): ElasticsearchSynonymSet {
 
 ### Consumer Usage (Search App)
 
-```bash
-# scripts/generate-synonyms.ts
-import { serialiseElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
-process.stdout.write(serialiseElasticsearchSynonyms());
+The search app consumes synonyms via a TypeScript CLI that directly calls the SDK:
+
+```typescript
+// src/lib/elasticsearch/setup/index.ts
+import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+
+async function createSynonymSet(client: Client): Promise<void> {
+  const synonymSet = buildElasticsearchSynonyms();
+  await client.synonyms.putSynonym({ id: 'oak-syns', synonyms_set: synonymSet.synonyms_set });
+}
 ```
 
 ```bash
-# scripts/setup.sh
-SYNONYMS_JSON=$(npx tsx "$SCRIPT_DIR/generate-synonyms.ts")
-echo "$SYNONYMS_JSON" | curl -X PUT "${ES_URL}/_synonyms/oak-syns" -d @-
+# CLI usage
+pnpm es:setup  # Creates indexes and deploys synonyms
 ```
 
 ## Consequences
@@ -119,7 +123,6 @@ echo "$SYNONYMS_JSON" | curl -X PUT "${ES_URL}/_synonyms/oak-syns" -d @-
 
 1. **SDK dependency**: Consumers must import from SDK
 2. **Runtime generation**: ES synonyms generated at setup time, not statically committed
-3. **Build step**: Requires `tsx` to generate synonyms during setup
 
 ### Migration Notes
 
@@ -144,4 +147,4 @@ This decision is successful when:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` - Synonym definitions
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` - Export utilities
-- `apps/oak-open-curriculum-semantic-search/scripts/generate-synonyms.ts` - Consumer script
+- `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/index.ts` - ES setup CLI

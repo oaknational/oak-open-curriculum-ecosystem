@@ -34,46 +34,62 @@ This location:
 
 ```text
 apps/oak-open-curriculum-semantic-search/
-├── scripts/
-│   ├── setup.sh                    # Operational script (reads from definitions/)
-│   ├── generate-synonyms.ts        # Generates synonyms from SDK
-│   └── sandbox/
-│       └── ingest.ts               # Data ingestion CLI
-│
 └── src/lib/elasticsearch/
     ├── definitions/                # ← Index mappings live here
+    │   ├── index.ts                # Index configuration exports
     │   ├── oak-lessons.json
     │   ├── oak-units.json
     │   ├── oak-unit-rollup.json
     │   ├── oak-sequences.json
-    │   └── oak-sequence-facets.json
+    │   ├── oak-sequence-facets.json
+    │   └── oak-meta.json           # Index version and ingestion metadata
+    ├── setup/
+    │   ├── cli.ts                  # Main CLI entry point
+    │   ├── index.ts                # Setup logic (create indexes, synonyms)
+    │   ├── ingest-live.ts          # Live SDK data ingestion
+    │   └── load-app-env.ts         # Environment loading helper
     ├── es-client.ts                # Singleton ES client
     └── elastic-http.ts             # Search helpers
 ```
 
 ## Mapping File Naming Convention
 
-| Index Name            | File Name                  |
-| --------------------- | -------------------------- |
-| `oak_lessons`         | `oak-lessons.json`         |
-| `oak_units`           | `oak-units.json`           |
-| `oak_unit_rollup`     | `oak-unit-rollup.json`     |
-| `oak_sequences`       | `oak-sequences.json`       |
-| `oak_sequence_facets` | `oak-sequence-facets.json` |
+| Index Name            | File Name                  | Purpose                              |
+| --------------------- | -------------------------- | ------------------------------------ |
+| `oak_lessons`         | `oak-lessons.json`         | Lesson documents with semantic field |
+| `oak_units`           | `oak-units.json`           | Basic unit metadata                  |
+| `oak_unit_rollup`     | `oak-unit-rollup.json`     | Aggregated unit text for search      |
+| `oak_sequences`       | `oak-sequences.json`       | Programme sequence documents         |
+| `oak_sequence_facets` | `oak-sequence-facets.json` | Sequence facet navigation            |
+| `oak_meta`            | `oak-meta.json`            | Index version and ingestion metadata |
 
 Note: File names use hyphens (`-`), index names use underscores (`_`).
 
-## Script References
+## CLI Usage
 
-The `setup.sh` script references mappings from the new location:
+The TypeScript CLI creates indexes using mappings from the definitions directory:
 
 ```bash
-DEFINITIONS_DIR="$APP_ROOT/src/lib/elasticsearch/definitions"
+# Create all indexes and deploy synonyms
+pnpm es:setup
 
-for idx in oak_lessons oak_units oak_unit_rollup oak_sequences oak_sequence_facets; do
-  body="$DEFINITIONS_DIR/${idx//_/-}.json"
-  curl -X PUT "${ES_URL}/${idx}" --data-binary @"${body}"
-done
+# Check index status
+pnpm es:status
+
+# Ingest live data from SDK
+pnpm es:ingest-live --subject maths --verbose
+```
+
+The setup code loads mappings directly:
+
+```typescript
+// src/lib/elasticsearch/setup/index.ts
+import { INDEX_CONFIGS } from '../definitions';
+
+async function createIndex(client: Client, indexName: string): Promise<void> {
+  const config = INDEX_CONFIGS[indexName];
+  await client.indices.create({ index: indexName, body: config.mapping });
+}
 ```
 
 ## Consequences
@@ -92,23 +108,24 @@ done
 
 ### Migration Notes
 
-The `scripts/mappings/` directory was **deleted**. All mapping files moved to `src/lib/elasticsearch/definitions/`.
+- The `scripts/mappings/` directory was **deleted**. All mapping files moved to `src/lib/elasticsearch/definitions/`.
+- Shell scripts (`setup.sh`) replaced with TypeScript CLI (`pnpm es:setup`).
 
 ## Validation Criteria
 
 This decision is successful when:
 
 1. **All mappings in definitions/**: No mapping files in scripts/
-2. **Setup script works**: `setup.sh` successfully creates indexes
+2. **TypeScript CLI works**: `pnpm es:setup` successfully creates indexes
 3. **Clear organization**: Developers can find mappings intuitively
 
 ## Related Documents
 
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
 - Semantic search plans: `.agent/plans/semantic-search/`
-- ES deployment guide: `.agent/prompts/semantic-search/elasticsearch-serverless-deployment.prompt.md`
+- Continuation prompt: `.agent/prompts/semantic-search/semantic-search.prompt.md`
 
 ## References
 
 - `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/definitions/` - Mapping files
-- `apps/oak-open-curriculum-semantic-search/scripts/setup.sh` - Setup script
+- `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/` - TypeScript CLI
