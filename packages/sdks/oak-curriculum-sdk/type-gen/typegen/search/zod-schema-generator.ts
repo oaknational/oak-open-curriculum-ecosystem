@@ -6,6 +6,9 @@
  * It is used by the search index document generator to produce `SearchUnitsIndexDocSchema`
  * and other index document schemas.
  *
+ * It also generates per-index completion context schemas from the single source of truth
+ * in `completion-contexts.ts`, ensuring compile-time enforcement of valid contexts.
+ *
  * @example
  * ```typescript
  * import { generateZodSchemaFromFields, ZOD_ENUM_EXPRESSIONS } from './zod-schema-generator.js';
@@ -17,6 +20,7 @@
  */
 
 import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions.js';
+import type { CompletionContextName } from './completion-contexts.js';
 
 /**
  * Maps enum reference names to their full Zod enum expressions.
@@ -149,6 +153,47 @@ export function generateZodSchemaFromFields(
 ): string {
   const options: ZodFieldCodeOptions = enumExpressions ? { enumExpressions } : {};
   const fieldLines = fields.map((field) => `    ${generateZodFieldCode(field, options)}`);
+
+  return [
+    `export const ${schemaName} = z`,
+    '  .object({',
+    ...fieldLines,
+    '  })',
+    '  .strict();',
+  ].join('\n');
+}
+
+/**
+ * Generates a per-index completion contexts Zod schema.
+ *
+ * Creates a strict Zod object schema that only allows the specified context names.
+ * Each context is an optional array of strings (matching ES completion context structure).
+ *
+ * This ensures that at compile time, documents cannot include contexts that are not
+ * defined in the ES mapping for that index.
+ *
+ * @param schemaName - The name of the exported schema constant
+ * @param contexts - The readonly tuple of allowed context names for this index
+ * @returns The complete Zod schema code as a string
+ *
+ * @example
+ * ```typescript
+ * import { LESSONS_COMPLETION_CONTEXTS } from './completion-contexts.js';
+ *
+ * const code = generateCompletionContextsSchema(
+ *   'SearchLessonsCompletionContextsSchema',
+ *   LESSONS_COMPLETION_CONTEXTS
+ * );
+ * // Produces a schema that only allows 'subject' and 'key_stage' contexts
+ * ```
+ */
+export function generateCompletionContextsSchema(
+  schemaName: string,
+  contexts: readonly CompletionContextName[],
+): string {
+  const fieldLines = contexts.map(
+    (contextName) => `    ${contextName}: z.array(z.string().min(1)).optional(),`,
+  );
 
   return [
     `export const ${schemaName} = z`,

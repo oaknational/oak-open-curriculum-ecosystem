@@ -6,10 +6,38 @@
  * derived from Zod types (e.g. semantic_text, completion with contexts, text with analyzers).
  * The generator uses these configurations to produce the actual ES mapping TypeScript modules.
  *
+ * **Single Source of Truth**: Completion contexts are imported from `completion-contexts.ts`
+ * to ensure ES mappings and Zod schemas stay in lockstep.
+ *
  * This is SOURCE CODE - the generator consumes it to produce the generated mappings.
  */
 
 import type { EsFieldMapping } from './es-field-config.js';
+import {
+  LESSONS_COMPLETION_CONTEXTS,
+  UNITS_COMPLETION_CONTEXTS,
+  UNIT_ROLLUP_COMPLETION_CONTEXTS,
+  SEQUENCES_COMPLETION_CONTEXTS,
+  type CompletionContextName,
+} from './completion-contexts.js';
+
+/**
+ * Converts a readonly tuple of context names into ES completion context configs.
+ *
+ * @param contexts - Readonly tuple of context names from completion-contexts.ts
+ * @returns Array of ES completion context configurations
+ *
+ * @example
+ * ```typescript
+ * createCompletionContexts(LESSONS_COMPLETION_CONTEXTS);
+ * // Returns: [{ name: 'subject', type: 'category' }, { name: 'key_stage', type: 'category' }]
+ * ```
+ */
+function createCompletionContexts(
+  contexts: readonly CompletionContextName[],
+): readonly { name: string; type: 'category' }[] {
+  return contexts.map((name) => ({ name, type: 'category' as const }));
+}
 
 /**
  * Creates a text field with Oak's standard analyzers.
@@ -45,6 +73,8 @@ const SEARCH_AS_YOU_TYPE_SUBFIELD: EsFieldMapping = {
 /**
  * Field overrides for the oak_lessons index.
  * These override the default Zod-to-ES type mapping with ES-specific configurations.
+ *
+ * @see LESSONS_COMPLETION_CONTEXTS - Source of truth for completion contexts
  */
 export const LESSONS_FIELD_OVERRIDES = {
   lesson_title: textFieldWithAnalyzers({
@@ -55,10 +85,7 @@ export const LESSONS_FIELD_OVERRIDES = {
   }),
   title_suggest: {
     type: 'completion',
-    contexts: [
-      { name: 'subject', type: 'category' },
-      { name: 'key_stage', type: 'category' },
-    ],
+    contexts: createCompletionContexts(LESSONS_COMPLETION_CONTEXTS),
   },
   unit_titles: textFieldWithAnalyzers({
     fields: {
@@ -93,6 +120,8 @@ export const LESSONS_FIELD_OVERRIDES = {
 
 /**
  * Field overrides for the oak_units index.
+ *
+ * @see UNITS_COMPLETION_CONTEXTS - Source of truth for completion contexts
  */
 export const UNITS_FIELD_OVERRIDES = {
   unit_title: {
@@ -120,16 +149,14 @@ export const UNITS_FIELD_OVERRIDES = {
   },
   title_suggest: {
     type: 'completion',
-    contexts: [
-      { name: 'subject', type: 'category' },
-      { name: 'key_stage', type: 'category' },
-      { name: 'sequence', type: 'category' },
-    ],
+    contexts: createCompletionContexts(UNITS_COMPLETION_CONTEXTS),
   },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;
 
 /**
  * Field overrides for the oak_unit_rollup index.
+ *
+ * @see UNIT_ROLLUP_COMPLETION_CONTEXTS - Source of truth for completion contexts
  */
 export const UNIT_ROLLUP_FIELD_OVERRIDES = {
   unit_title: textFieldWithAnalyzers({
@@ -140,11 +167,7 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
   }),
   title_suggest: {
     type: 'completion',
-    contexts: [
-      { name: 'subject', type: 'category' },
-      { name: 'key_stage', type: 'category' },
-      { name: 'sequence', type: 'category' },
-    ],
+    contexts: createCompletionContexts(UNIT_ROLLUP_COMPLETION_CONTEXTS),
   },
   unit_topics: textFieldWithAnalyzers(),
   rollup_text: textFieldWithAnalyzers({
@@ -177,6 +200,8 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
 
 /**
  * Field overrides for the oak_sequences index.
+ *
+ * @see SEQUENCES_COMPLETION_CONTEXTS - Source of truth for completion contexts
  */
 export const SEQUENCES_FIELD_OVERRIDES = {
   sequence_title: textFieldWithAnalyzers({
@@ -187,10 +212,7 @@ export const SEQUENCES_FIELD_OVERRIDES = {
   }),
   title_suggest: {
     type: 'completion',
-    contexts: [
-      { name: 'subject', type: 'category' },
-      { name: 'phase', type: 'category' },
-    ],
+    contexts: createCompletionContexts(SEQUENCES_COMPLETION_CONTEXTS),
   },
   category_titles: textFieldWithAnalyzers(),
   sequence_semantic: {

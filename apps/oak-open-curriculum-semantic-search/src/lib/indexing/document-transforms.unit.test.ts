@@ -223,7 +223,6 @@ describe('createLessonDocument', () => {
       subject: mathsSubject,
       keyStage: ks4,
       years: ['Year 10'],
-      unitSequenceIds: ['sequence-1'],
       lessonCount: 12,
     });
 
@@ -232,7 +231,10 @@ describe('createLessonDocument', () => {
     expect(doc.lesson_keywords).toEqual(['algebra', 'geometry']);
     expect(doc.key_learning_points).toEqual(['Understand equations', 'Apply formulas']);
     expect(doc.misconceptions_and_common_mistakes).toEqual(['Confuse terms → Clarify definitions']);
-    expect(doc.title_suggest?.contexts?.sequence).toEqual(['sequence-1']);
+    // Lessons use subject + key_stage contexts only (not sequence - that's unit-level)
+    expect(doc.title_suggest?.contexts?.subject).toEqual(['maths']);
+    expect(doc.title_suggest?.contexts?.key_stage).toEqual(['ks4']);
+    expect(doc.title_suggest?.contexts).not.toHaveProperty('sequence');
   });
 
   it('omits optional string arrays when the summary values are nullish', () => {
@@ -252,7 +254,6 @@ describe('createLessonDocument', () => {
       subject: mathsSubject,
       keyStage: ks4,
       years: undefined,
-      unitSequenceIds: undefined,
       lessonCount: 5,
     });
 

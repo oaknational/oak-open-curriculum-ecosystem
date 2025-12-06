@@ -1,10 +1,14 @@
 # Oak Curriculum SDK — API (Markdown)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Generated:
 =======
 Generated: 2025-12-05T13:20:50.661Z
 >>>>>>> 89674174 (feat(semantic-search): add Redis-based SDK response caching with 404 fallback)
+=======
+Generated: 2025-12-06T12:13:24.181Z
+>>>>>>> 4655543e (fix(type-safety): eliminate type shortcuts and improve error messages)
 
 ## Contents
 

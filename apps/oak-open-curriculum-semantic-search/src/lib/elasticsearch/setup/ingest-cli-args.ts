@@ -6,6 +6,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
+import { SEARCH_INDEX_KINDS, type SearchIndexKind } from '../../search-index-target.js';
 
 /** Available key stages for validation. */
 const ALL_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
@@ -17,6 +18,7 @@ const COMMON_SUBJECTS = ['maths', 'english', 'science', 'history', 'geography'] 
 export interface CliArgs {
   readonly subjects: SearchSubjectSlug[];
   readonly keyStages: KeyStage[];
+  readonly indexes: SearchIndexKind[];
   readonly dryRun: boolean;
   readonly verbose: boolean;
   readonly help: boolean;
@@ -31,6 +33,11 @@ function isKeyStage(value: string): value is KeyStage {
 /** Type guard for valid subject values. */
 function isSearchSubject(value: string): value is SearchSubjectSlug {
   return value.length > 0;
+}
+
+/** Type guard for valid index kind values. */
+function isSearchIndexKind(value: string): value is SearchIndexKind {
+  return SEARCH_INDEX_KINDS.includes(value as SearchIndexKind);
 }
 
 /** Process a single flag argument (--help, --dry-run, etc). */
@@ -57,46 +64,89 @@ function processFlag(
   return false;
 }
 
-/** Process a value argument (--subject, --keystage). Returns 1 if value consumed. */
+/** Process --subject argument. Returns 1 if value consumed. */
+function processSubjectArg(
+  arg: string,
+  nextArg: string | undefined,
+  subjects: SearchSubjectSlug[],
+): number {
+  if (arg !== '--subject' || !nextArg) {
+    return 0;
+  }
+  if (!isSearchSubject(nextArg)) {
+    throw new Error(`Invalid subject: ${nextArg}`);
+  }
+  subjects.push(nextArg);
+  return 1;
+}
+
+/** Process --keystage argument. Returns 1 if value consumed. */
+function processKeyStageArg(
+  arg: string,
+  nextArg: string | undefined,
+  keyStages: KeyStage[],
+): number {
+  if (arg !== '--keystage' || !nextArg) {
+    return 0;
+  }
+  if (!isKeyStage(nextArg)) {
+    throw new Error(`Invalid key stage: ${nextArg}. Valid values: ${ALL_KEY_STAGES.join(', ')}`);
+  }
+  keyStages.push(nextArg);
+  return 1;
+}
+
+/** Process --index argument. Returns 1 if value consumed. */
+function processIndexArg(
+  arg: string,
+  nextArg: string | undefined,
+  indexes: SearchIndexKind[],
+): number {
+  if (arg !== '--index' || !nextArg) {
+    return 0;
+  }
+  if (!isSearchIndexKind(nextArg)) {
+    throw new Error(
+      `Invalid index kind: ${nextArg}. Valid values: ${SEARCH_INDEX_KINDS.join(', ')}`,
+    );
+  }
+  indexes.push(nextArg);
+  return 1;
+}
+
+/** Process a value argument (--subject, --keystage, --index). Returns 1 if value consumed. */
 function processValueArg(
   arg: string,
   nextArg: string | undefined,
   subjects: SearchSubjectSlug[],
   keyStages: KeyStage[],
+  indexes: SearchIndexKind[],
 ): number {
-  if (arg === '--subject' && nextArg) {
-    if (!isSearchSubject(nextArg)) {
-      throw new Error(`Invalid subject: ${nextArg}`);
-    }
-    subjects.push(nextArg);
-    return 1;
-  }
-  if (arg === '--keystage' && nextArg) {
-    if (!isKeyStage(nextArg)) {
-      throw new Error(`Invalid key stage: ${nextArg}. Valid values: ${ALL_KEY_STAGES.join(', ')}`);
-    }
-    keyStages.push(nextArg);
-    return 1;
-  }
-  return 0;
+  return (
+    processSubjectArg(arg, nextArg, subjects) ||
+    processKeyStageArg(arg, nextArg, keyStages) ||
+    processIndexArg(arg, nextArg, indexes)
+  );
 }
 
 /** Parse CLI arguments into structured CliArgs. */
 export function parseArgs(args: readonly string[]): CliArgs {
   const subjects: SearchSubjectSlug[] = [];
   const keyStages: KeyStage[] = [];
+  const indexes: SearchIndexKind[] = [];
   const flags = { dryRun: false, verbose: false, help: false, clearCache: false };
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     const nextArg = args[i + 1];
     if (processFlag(arg, flags)) continue;
-    i += processValueArg(arg, nextArg, subjects, keyStages);
+    i += processValueArg(arg, nextArg, subjects, keyStages, indexes);
   }
 
   return {
     subjects: subjects.length > 0 ? subjects : [...COMMON_SUBJECTS],
     keyStages: keyStages.length > 0 ? keyStages : [...ALL_KEY_STAGES],
+    indexes,
     ...flags,
   };
 }
@@ -112,6 +162,8 @@ Usage:
 Options:
   --subject <slug>    Subject to ingest (can repeat, defaults to common subjects)
   --keystage <ks>     Key stage to ingest (can repeat, defaults to all)
+  --index <kind>      Index to ingest: lessons, units, unit_rollup, sequences, sequence_facets
+                      (can repeat, defaults to all)
   --dry-run           Preview what would be ingested without writing to ES
   --clear-cache       Clear SDK response cache before ingestion
   --verbose, -v       Show detailed output

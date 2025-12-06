@@ -67,6 +67,7 @@ export default defineConfig({
     'src/validation/search-response-validators.ts',
     'src/validation/types.ts',
     'src/response-augmentation.ts',
+    'src/response-augmentation-helpers.ts',
     'src/mcp/execute-tool-call.ts',
     'src/mcp/zod-input-schema.ts',
     'src/mcp/universal-tool-shared.ts',

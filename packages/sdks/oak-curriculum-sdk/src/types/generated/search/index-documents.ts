@@ -1,64 +1,108 @@
 /**
  * GENERATED FILE - DO NOT EDIT
- *
- * Search index document schemas, types, and guards derived from the Open Curriculum schema.
+ * Per-index completion context schemas enforce compile-time safety.
  */
 
 import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS, type Subject } from '../api-schema/path-parameters.js';
-
-/** Alias used by search index documents for subject slugs. */
 export type SearchSubjectSlug = Subject;
 
-/** Zod schema describing search completion suggest payloads embedded in documents. */
-export const SearchCompletionSuggestPayloadSchema = z
+// Per-Index Completion Context Schemas
+export const SearchLessonsCompletionContextsSchema = z
+  .object({
+    subject: z.array(z.string().min(1)).optional(),
+    key_stage: z.array(z.string().min(1)).optional(),
+  })
+  .strict();
+export type SearchLessonsCompletionContexts = z.infer<typeof SearchLessonsCompletionContextsSchema>;
+export const SearchUnitsCompletionContextsSchema = z
+  .object({
+    subject: z.array(z.string().min(1)).optional(),
+    key_stage: z.array(z.string().min(1)).optional(),
+    sequence: z.array(z.string().min(1)).optional(),
+  })
+  .strict();
+export type SearchUnitsCompletionContexts = z.infer<typeof SearchUnitsCompletionContextsSchema>;
+export const SearchUnitRollupCompletionContextsSchema = z
+  .object({
+    subject: z.array(z.string().min(1)).optional(),
+    key_stage: z.array(z.string().min(1)).optional(),
+    sequence: z.array(z.string().min(1)).optional(),
+  })
+  .strict();
+export type SearchUnitRollupCompletionContexts = z.infer<typeof SearchUnitRollupCompletionContextsSchema>;
+export const SearchSequenceCompletionContextsSchema = z
+  .object({
+    subject: z.array(z.string().min(1)).optional(),
+    phase: z.array(z.string().min(1)).optional(),
+  })
+  .strict();
+export type SearchSequenceCompletionContexts = z.infer<typeof SearchSequenceCompletionContextsSchema>;
+export const SearchThreadCompletionContextsSchema = z
+  .object({
+    subject: z.array(z.string().min(1)).optional(),
+  })
+  .strict();
+export type SearchThreadCompletionContexts = z.infer<typeof SearchThreadCompletionContextsSchema>;
+
+// Per-Index Completion Payload Schemas
+export const SearchLessonsCompletionPayloadSchema = z
   .object({
     input: z.array(z.string().min(1)).min(1),
     weight: z.number().int().nonnegative().optional(),
-    contexts: z
-      .object({
-        subject: z.array(z.string().min(1)).optional(),
-        key_stage: z.array(z.string().min(1)).optional(),
-        sequence: z.array(z.string().min(1)).optional(),
-        phase: z.array(z.string().min(1)).optional(),
-      })
-      .strict()
-      .optional(),
+    contexts: SearchLessonsCompletionContextsSchema.optional(),
   })
   .strict();
+export type SearchLessonsCompletionPayload = z.infer<typeof SearchLessonsCompletionPayloadSchema>;
+export const SearchUnitsCompletionPayloadSchema = z
+  .object({
+    input: z.array(z.string().min(1)).min(1),
+    weight: z.number().int().nonnegative().optional(),
+    contexts: SearchUnitsCompletionContextsSchema.optional(),
+  })
+  .strict();
+export type SearchUnitsCompletionPayload = z.infer<typeof SearchUnitsCompletionPayloadSchema>;
+export const SearchUnitRollupCompletionPayloadSchema = z
+  .object({
+    input: z.array(z.string().min(1)).min(1),
+    weight: z.number().int().nonnegative().optional(),
+    contexts: SearchUnitRollupCompletionContextsSchema.optional(),
+  })
+  .strict();
+export type SearchUnitRollupCompletionPayload = z.infer<typeof SearchUnitRollupCompletionPayloadSchema>;
+export const SearchSequenceCompletionPayloadSchema = z
+  .object({
+    input: z.array(z.string().min(1)).min(1),
+    weight: z.number().int().nonnegative().optional(),
+    contexts: SearchSequenceCompletionContextsSchema.optional(),
+  })
+  .strict();
+export type SearchSequenceCompletionPayload = z.infer<typeof SearchSequenceCompletionPayloadSchema>;
+export const SearchThreadCompletionPayloadSchema = z
+  .object({
+    input: z.array(z.string().min(1)).min(1),
+    weight: z.number().int().nonnegative().optional(),
+    contexts: SearchThreadCompletionContextsSchema.optional(),
+  })
+  .strict();
+export type SearchThreadCompletionPayload = z.infer<typeof SearchThreadCompletionPayloadSchema>;
 
-/** Completion suggestion payload embedded in search index documents. */
-export type SearchCompletionSuggestPayload = z.infer<typeof SearchCompletionSuggestPayloadSchema>;
-
-/** Guard validating search completion suggest payloads. */
-export function isSearchCompletionSuggestPayload(
-  value: unknown,
-): value is SearchCompletionSuggestPayload {
-  return SearchCompletionSuggestPayloadSchema.safeParse(value).success;
-}
-
-/** Zod schema capturing the thread search document shape. */
+// Index Document Schemas
 export const SearchThreadIndexDocSchema = z
   .object({
     thread_slug: z.string().min(1),
     thread_title: z.string().min(1),
-    unit_count: z.number(),
+    unit_count: z.number().int().nonnegative(),
     subject_slugs: z.array(z.string().min(1)).optional(),
     thread_semantic: z.string().min(1).optional(),
     thread_url: z.string().min(1),
-    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+    title_suggest: SearchThreadCompletionPayloadSchema.optional(),
   })
   .strict();
-
-/** Elasticsearch thread document (hybrid search index shape). */
 export type SearchThreadIndexDoc = z.infer<typeof SearchThreadIndexDocSchema>;
-
-/** Guard validating thread search index documents. */
 export function isSearchThreadIndexDoc(value: unknown): value is SearchThreadIndexDoc {
   return SearchThreadIndexDocSchema.safeParse(value).success;
 }
-
-/** Zod schema capturing the lesson search document shape. */
 export const SearchLessonsIndexDocSchema = z
   .object({
     lesson_id: z.string().min(1),
@@ -81,19 +125,13 @@ export const SearchLessonsIndexDocSchema = z
     unit_urls: z.array(z.string().min(1)),
     thread_slugs: z.array(z.string().min(1)).optional(),
     thread_titles: z.array(z.string().min(1)).optional(),
-    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+    title_suggest: SearchLessonsCompletionPayloadSchema.optional(),
   })
   .strict();
-
-/** Elasticsearch lesson document (hybrid search index shape). */
 export type SearchLessonsIndexDoc = z.infer<typeof SearchLessonsIndexDocSchema>;
-
-/** Guard validating lesson search index documents. */
 export function isSearchLessonsIndexDoc(value: unknown): value is SearchLessonsIndexDoc {
   return SearchLessonsIndexDocSchema.safeParse(value).success;
 }
-
-/** Zod schema capturing the unit search document shape. */
 export const SearchUnitsIndexDocSchema = z
   .object({
     unit_id: z.string().min(1),
@@ -111,19 +149,13 @@ export const SearchUnitsIndexDocSchema = z
     thread_slugs: z.array(z.string().min(1)).optional(),
     thread_titles: z.array(z.string().min(1)).optional(),
     thread_orders: z.array(z.number()).optional(),
-    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+    title_suggest: SearchUnitsCompletionPayloadSchema.optional(),
   })
   .strict();
-
-/** Elasticsearch unit document (hybrid search index shape). */
 export type SearchUnitsIndexDoc = z.infer<typeof SearchUnitsIndexDocSchema>;
-
-/** Guard validating unit search index documents. */
 export function isSearchUnitsIndexDoc(value: unknown): value is SearchUnitsIndexDoc {
   return SearchUnitsIndexDocSchema.safeParse(value).success;
 }
-
-/** Zod schema capturing the unit roll-up document shape. */
 export const SearchUnitRollupDocSchema = z
   .object({
     unit_id: z.string().min(1),
@@ -143,19 +175,13 @@ export const SearchUnitRollupDocSchema = z
     thread_slugs: z.array(z.string().min(1)).optional(),
     thread_titles: z.array(z.string().min(1)).optional(),
     thread_orders: z.array(z.number()).optional(),
-    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+    title_suggest: SearchUnitRollupCompletionPayloadSchema.optional(),
   })
   .strict();
-
-/** Elasticsearch unit roll-up document (hybrid search index shape). */
 export type SearchUnitRollupDoc = z.infer<typeof SearchUnitRollupDocSchema>;
-
-/** Guard validating unit roll-up documents. */
 export function isSearchUnitRollupDoc(value: unknown): value is SearchUnitRollupDoc {
   return SearchUnitRollupDocSchema.safeParse(value).success;
 }
-
-/** Zod schema capturing the sequence search document shape. */
 export const SearchSequenceIndexDocSchema = z
   .object({
     sequence_id: z.string().min(1),
@@ -171,14 +197,10 @@ export const SearchSequenceIndexDocSchema = z
     unit_slugs: z.array(z.string().min(1)).optional(),
     sequence_semantic: z.string().min(1).optional(),
     sequence_url: z.string().min(1),
-    title_suggest: SearchCompletionSuggestPayloadSchema.optional(),
+    title_suggest: SearchSequenceCompletionPayloadSchema.optional(),
   })
   .strict();
-
-/** Elasticsearch sequence document (hybrid search index shape). */
 export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema>;
-
-/** Guard validating sequence search index documents. */
 export function isSearchSequenceIndexDoc(value: unknown): value is SearchSequenceIndexDoc {
   return SearchSequenceIndexDocSchema.safeParse(value).success;
 }

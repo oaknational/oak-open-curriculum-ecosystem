@@ -62,6 +62,7 @@ async function runIngestion(args: CliArgs): Promise<void> {
     client,
     keyStages: args.keyStages,
     subjects: args.subjects,
+    indexes: args.indexes,
     target: 'primary',
     logger: sandboxLogger,
   });

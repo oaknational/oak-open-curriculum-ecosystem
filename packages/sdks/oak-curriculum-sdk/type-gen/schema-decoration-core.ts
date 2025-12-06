@@ -6,28 +6,36 @@
  * by other scripts in the type generation pipeline.
  */
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
+import type { OpenAPIObject, SchemaObject, ReferenceObject } from 'openapi3-ts/oas31';
 
-import type { OpenAPIObject, SchemaObject } from 'openapi3-ts/oas31';
+function isOpenAPIObject(value: unknown): value is OpenAPIObject {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'openapi' in value &&
+    'info' in value &&
+    'paths' in value
+  );
+}
 
 /**
  * Decorates a response schema with canonicalUrl field
  * @param schema - The response schema object
  * @returns Decorated schema with canonicalUrl field added
  */
-export function decorateResponseSchema(schema: SchemaObject | unknown): SchemaObject | unknown {
-  if (typeof schema !== 'object' || schema === null) {
-    return schema;
+export function decorateResponseSchema(
+  schemaObj: SchemaObject | ReferenceObject,
+): SchemaObject | ReferenceObject {
+  // Handle ReferenceObject
+  if ('$ref' in schemaObj) {
+    return schemaObj;
   }
 
-  const schemaObj = schema as Record<string, unknown>;
-
-  // If it's a schema object with properties, add canonicalUrl
-  if (isObjectSchema(schemaObj)) {
+  // Now we know it's SchemaObject
+  if (schemaObj.properties) {
     return addCanonicalUrlToObjectSchema(schemaObj);
   }
 
-  // If it's an array of schemas, decorate each item
   if (schemaObj.type === 'array' && schemaObj.items) {
     return {
       ...schemaObj,
@@ -40,23 +48,10 @@ export function decorateResponseSchema(schema: SchemaObject | unknown): SchemaOb
 }
 
 /**
- * Checks if a schema is an object schema with properties
- */
-function isObjectSchema(schemaObj: Record<string, unknown>): boolean {
-  return (
-    schemaObj.type === 'object' &&
-    Boolean(schemaObj.properties) &&
-    typeof schemaObj.properties === 'object'
-  );
-}
-
-/**
  * Adds canonicalUrl to an object schema
  */
-function addCanonicalUrlToObjectSchema(
-  schemaObj: Record<string, unknown>,
-): Record<string, unknown> {
-  const properties = schemaObj.properties as Record<string, unknown>;
+function addCanonicalUrlToObjectSchema(schemaObj: SchemaObject): SchemaObject {
+  const properties = schemaObj.properties;
   return {
     ...schemaObj,
     properties: {
@@ -73,22 +68,22 @@ function addCanonicalUrlToObjectSchema(
 /**
  * Decorates union schemas (anyOf, oneOf, allOf)
  */
-function decorateUnionSchema(schemaObj: Record<string, unknown>): Record<string, unknown> {
-  if (Array.isArray(schemaObj.anyOf)) {
+function decorateUnionSchema(schemaObj: SchemaObject): SchemaObject {
+  if (schemaObj.anyOf && schemaObj.anyOf.length > 0) {
     return {
       ...schemaObj,
       anyOf: schemaObj.anyOf.map(decorateResponseSchema),
     };
   }
 
-  if (Array.isArray(schemaObj.oneOf)) {
+  if (schemaObj.oneOf && schemaObj.oneOf.length > 0) {
     return {
       ...schemaObj,
       oneOf: schemaObj.oneOf.map(decorateResponseSchema),
     };
   }
 
-  if (Array.isArray(schemaObj.allOf)) {
+  if (schemaObj.allOf && schemaObj.allOf.length > 0) {
     return {
       ...schemaObj,
       allOf: schemaObj.allOf.map(decorateResponseSchema),
@@ -104,17 +99,28 @@ function decorateUnionSchema(schemaObj: Record<string, unknown>): Record<string,
  * @returns Decorated schema with canonicalUrl fields added to response schemas
  */
 export function decorateOpenAPISchema(schema: OpenAPIObject): OpenAPIObject {
-  const decorated = JSON.parse(JSON.stringify(schema)) as OpenAPIObject;
+  // Clone using structuredClone for proper deep copy
+  const cloned: unknown = structuredClone(schema);
 
-  // Add canonicalUrl to all response schemas in components
-  if (decorated.components?.schemas) {
-    const schemaEntries = Object.entries(decorated.components.schemas);
-    for (const [schemaName, schemaDef] of schemaEntries) {
+  if (!isOpenAPIObject(cloned)) {
+    throw new TypeError('Failed to clone OpenAPI schema');
+  }
+
+  // Now cloned is properly typed as OpenAPIObject
+  const decorated: OpenAPIObject = cloned;
+
+  if (!decorated.components?.schemas) {
+    return decorated;
+  }
+
+  // Iterate type-safely over schemas
+  const schemas = decorated.components.schemas;
+  for (const schemaName in schemas) {
+    if (Object.hasOwn(schemas, schemaName)) {
+      const schemaDef = schemas[schemaName];
       // Only decorate response schemas (those that end with "ResponseSchema" or similar patterns)
       if (schemaName.includes('Response') || schemaName.includes('Schema')) {
-        decorated.components.schemas[schemaName] = decorateResponseSchema(
-          schemaDef,
-        ) as SchemaObject;
+        schemas[schemaName] = decorateResponseSchema(schemaDef);
       }
     }
   }

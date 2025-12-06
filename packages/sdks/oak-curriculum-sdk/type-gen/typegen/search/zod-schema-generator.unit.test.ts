@@ -6,8 +6,14 @@ import { describe, expect, it } from 'vitest';
 
 import { type IndexFieldDefinitions } from './field-definitions.js';
 import {
+  LESSONS_COMPLETION_CONTEXTS,
+  SEQUENCES_COMPLETION_CONTEXTS,
+  UNITS_COMPLETION_CONTEXTS,
+} from './completion-contexts.js';
+import {
   generateZodFieldCode,
   generateZodSchemaFromFields,
+  generateCompletionContextsSchema,
   ZOD_ENUM_EXPRESSIONS,
 } from './zod-schema-generator.js';
 
@@ -234,5 +240,69 @@ describe('generateZodSchemaFromFields', () => {
     expect(code).toContain('key_stage: z.enum(KEY_STAGES as unknown as');
     expect(code).toContain('lesson_count: z.number().int().nonnegative(),');
     expect(code).toContain('title_suggest: SearchCompletionSuggestPayloadSchema.optional(),');
+  });
+});
+
+describe('generateCompletionContextsSchema', () => {
+  it('generates schema with only subject and key_stage for lessons', () => {
+    const code = generateCompletionContextsSchema(
+      'SearchLessonsCompletionContextsSchema',
+      LESSONS_COMPLETION_CONTEXTS,
+    );
+
+    expect(code).toContain('export const SearchLessonsCompletionContextsSchema = z');
+    expect(code).toContain('.object({');
+    expect(code).toContain('subject: z.array(z.string().min(1)).optional(),');
+    expect(code).toContain('key_stage: z.array(z.string().min(1)).optional(),');
+    expect(code).toContain('.strict();');
+
+    // Must NOT include sequence or phase (they are not in LESSONS_COMPLETION_CONTEXTS)
+    expect(code).not.toContain('sequence:');
+    expect(code).not.toContain('phase:');
+  });
+
+  it('generates schema with subject, key_stage, and sequence for units', () => {
+    const code = generateCompletionContextsSchema(
+      'SearchUnitsCompletionContextsSchema',
+      UNITS_COMPLETION_CONTEXTS,
+    );
+
+    expect(code).toContain('subject: z.array(z.string().min(1)).optional(),');
+    expect(code).toContain('key_stage: z.array(z.string().min(1)).optional(),');
+    expect(code).toContain('sequence: z.array(z.string().min(1)).optional(),');
+
+    // Must NOT include phase
+    expect(code).not.toContain('phase:');
+  });
+
+  it('generates schema with subject and phase for sequences', () => {
+    const code = generateCompletionContextsSchema(
+      'SearchSequenceCompletionContextsSchema',
+      SEQUENCES_COMPLETION_CONTEXTS,
+    );
+
+    expect(code).toContain('subject: z.array(z.string().min(1)).optional(),');
+    expect(code).toContain('phase: z.array(z.string().min(1)).optional(),');
+
+    // Must NOT include key_stage or sequence
+    expect(code).not.toContain('key_stage:');
+    expect(code).not.toContain('sequence:');
+  });
+
+  it('produces properly indented schema code', () => {
+    const code = generateCompletionContextsSchema('TestContextsSchema', [
+      'subject',
+      'key_stage',
+    ] as const);
+
+    // Check proper indentation (4 spaces for fields)
+    expect(code).toContain('    subject:');
+    expect(code).toContain('    key_stage:');
+  });
+
+  it('uses .strict() to reject extra contexts at runtime', () => {
+    const code = generateCompletionContextsSchema('TestContextsSchema', ['subject'] as const);
+
+    expect(code).toContain('.strict();');
   });
 });

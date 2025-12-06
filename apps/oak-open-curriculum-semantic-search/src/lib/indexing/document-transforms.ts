@@ -83,10 +83,16 @@ export interface CreateLessonDocumentParams {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   years: string[] | undefined;
-  unitSequenceIds: string[] | undefined;
   lessonCount: number;
 }
 
+/**
+ * Creates a lesson document for Elasticsearch indexing.
+ *
+ * Note: Lessons use subject + key_stage completion contexts only.
+ * Sequence context is NOT included - it's a unit-level concept.
+ * This aligns with LESSONS_COMPLETION_CONTEXTS in the SDK.
+ */
 export function createLessonDocument({
   lesson,
   transcript,
@@ -95,7 +101,6 @@ export function createLessonDocument({
   subject,
   keyStage,
   years,
-  unitSequenceIds,
   lessonCount,
 }: CreateLessonDocumentParams): SearchLessonsIndexDoc {
   const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
@@ -126,7 +131,6 @@ export function createLessonDocument({
       contexts: {
         subject: [subject],
         key_stage: [keyStage],
-        sequence: unitSequenceIds,
       },
     },
   };

@@ -11,11 +11,7 @@ import {
 import { readUnitSummaryValue, resolveUnitSummaryIdentifiers } from './document-transform-helpers';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
-import {
-  ensureUnitSummaryMatchesContext,
-  extractUnitSequenceIds,
-  fetchLessonMaterials,
-} from './index-bulk-support';
+import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
 
 export interface LessonGroup {
@@ -181,7 +177,6 @@ interface LessonBuildContext {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   years: string[] | undefined;
-  unitSequenceIds: string[] | undefined;
   lessonCount: number;
 }
 
@@ -204,7 +199,6 @@ function createLessonBuildContext(
   const normalisedLessons = extractUnitLessons(readUnitSummaryValue(unitSummary, 'unitLessons'));
   const lessonCount =
     normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
-  const sequenceIds = extractUnitSequenceIds(unitSummary);
 
   return {
     unitCanonicalUrl,
@@ -214,7 +208,6 @@ function createLessonBuildContext(
       readUnitSummaryValue(unitSummary, 'year'),
       readUnitSummaryValue(unitSummary, 'yearSlug'),
     ),
-    unitSequenceIds: sequenceIds,
     lessonCount,
   };
 }
@@ -233,7 +226,6 @@ async function buildLessonDocEntry(
     subject: context.subject,
     keyStage: context.keyStage,
     years: context.years,
-    unitSequenceIds: context.unitSequenceIds,
     lessonCount: context.lessonCount,
   });
   const snippet = selectLessonPlanningSnippet({

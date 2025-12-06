@@ -100,7 +100,6 @@ export type {
   SearchSequenceResult,
   SearchMultiScopeBucket,
   SearchMultiScopeResponse,
-  SearchCompletionSuggestPayload,
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
@@ -133,12 +132,10 @@ export {
 } from '../types/generated/zod/search/output/index.js';
 
 export {
-  SearchCompletionSuggestPayloadSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
-  isSearchCompletionSuggestPayload,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,

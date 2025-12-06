@@ -100,6 +100,7 @@ export function createChildLogger(parentLogger: Logger, correlationId: string): 
  * @public
  */
 export function extractCorrelationId(res: Response): string | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime check
   return res.locals?.correlationId;
 }
 

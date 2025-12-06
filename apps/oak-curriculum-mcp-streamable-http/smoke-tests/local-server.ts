@@ -1,7 +1,7 @@
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import net from 'node:net';
-import { spawnSync } from 'node:child_process';
+import { describeExistingListeners } from './process-info.js';
 
 const LOOPBACK_HOST = '127.0.0.1';
 const PORT_CHECK_TIMEOUT_MS = 250;
@@ -139,12 +139,18 @@ function buildInvalidAddressMessage(port: number, address: string | AddressInfo 
 }
 
 function buildPortInUseError(port: number): Error {
-  const existing = describeExistingListeners(port);
-  const hint = existing ? `\nExisting listeners:\n${existing}` : '';
+  const processInfo = describeExistingListeners(port);
+  const header = `PORT CONFLICT: Port ${String(port)} is already in use`;
+
+  if (!processInfo) {
+    return new Error(
+      `${header}.\n\nCannot determine which process is using the port.\nStop the conflicting process or run with: --port <different-port>`,
+    );
+  }
+
+  const { summary, fullOutput } = processInfo;
   return new Error(
-    `Smoke test server could not bind to ${LOOPBACK_HOST}:${String(
-      port,
-    )} because the port is already in use.${hint}\nStop the other process or run the smoke suite with a different --port.`,
+    `${header}\n\n${summary}\n\nFull lsof output:\n${fullOutput}\n\nTo resolve:\n  1. Stop the process: kill ${processInfo.pid ?? '<pid>'}\n  2. Or use a different port: --port <different-port>`,
   );
 }
 
@@ -154,19 +160,6 @@ function buildPortCheckTimeoutError(port: number): Error {
       port,
     )}. Verify no other process is bound to this port and try again.`,
   );
-}
-
-function describeExistingListeners(port: number): string | undefined {
-  const result = spawnSync('lsof', ['-nP', '-i', `TCP:${String(port)}`, '-sTCP:LISTEN'], {
-    encoding: 'utf8',
-  });
-  if (result.status === 0) {
-    const trimmed = result.stdout.trim();
-    if (trimmed.length > 0) {
-      return trimmed;
-    }
-  }
-  return undefined;
 }
 
 function isServerNotRunningError(error: unknown): error is NodeJS.ErrnoException {

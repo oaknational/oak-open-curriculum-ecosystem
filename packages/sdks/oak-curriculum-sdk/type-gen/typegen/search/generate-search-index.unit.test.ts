@@ -28,6 +28,36 @@ describe('generateSearchIndexModule', () => {
 
     expect(content).toContain('SearchLessonsIndexDocSchema');
     expect(content).toContain('SearchUnitRollupDocSchema');
-    expect(content).toContain('SearchCompletionSuggestPayloadSchema');
+  });
+
+  it('emits per-index completion context schemas', () => {
+    const files = generateSearchIndexModule(MINIMAL_SCHEMA);
+    const content = files['../search/index.ts'];
+
+    expect(content).toContain('SearchLessonsCompletionContextsSchema');
+    expect(content).toContain('SearchUnitsCompletionContextsSchema');
+    expect(content).toContain('SearchUnitRollupCompletionContextsSchema');
+    expect(content).toContain('SearchSequenceCompletionContextsSchema');
+    expect(content).toContain('SearchThreadCompletionContextsSchema');
+    expect(content).toContain('SearchLessonsCompletionPayloadSchema');
+    expect(content).toContain('SearchUnitsCompletionPayloadSchema');
+    expect(content).toContain('SearchUnitRollupCompletionPayloadSchema');
+    expect(content).toContain('SearchSequenceCompletionPayloadSchema');
+    expect(content).toContain('SearchThreadCompletionPayloadSchema');
+  });
+
+  it('does NOT emit deprecated SearchCompletionSuggestPayload exports', () => {
+    const files = generateSearchIndexModule(MINIMAL_SCHEMA);
+    const content = files['../search/index.ts'];
+
+    expect(content).not.toContain('SearchCompletionSuggestPayloadSchema');
+    expect(content).not.toContain('isSearchCompletionSuggestPayload');
+  });
+
+  it('does NOT contain eslint-disable comments', () => {
+    const files = generateSearchIndexModule(MINIMAL_SCHEMA);
+    const content = files['../search/index.ts'];
+
+    expect(content).not.toContain('eslint-disable');
   });
 });

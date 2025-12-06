@@ -12,25 +12,45 @@ export type { PathOperation, OperationId } from './generated/api-schema/path-par
 
 // Export the helpers
 
-// Hybrid search index types and guards
+// Hybrid search index types and guards (per-index completion schemas)
 export {
-  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsCompletionContextsSchema,
+  SearchUnitsCompletionContextsSchema,
+  SearchUnitRollupCompletionContextsSchema,
+  SearchSequenceCompletionContextsSchema,
+  SearchThreadCompletionContextsSchema,
+  SearchLessonsCompletionPayloadSchema,
+  SearchUnitsCompletionPayloadSchema,
+  SearchUnitRollupCompletionPayloadSchema,
+  SearchSequenceCompletionPayloadSchema,
+  SearchThreadCompletionPayloadSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
-  isSearchCompletionSuggestPayload,
+  SearchThreadIndexDocSchema,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
+  isSearchThreadIndexDoc,
 } from './generated/search/index';
 export type {
-  SearchCompletionSuggestPayload,
+  SearchLessonsCompletionContexts,
+  SearchUnitsCompletionContexts,
+  SearchUnitRollupCompletionContexts,
+  SearchSequenceCompletionContexts,
+  SearchThreadCompletionContexts,
+  SearchLessonsCompletionPayload,
+  SearchUnitsCompletionPayload,
+  SearchUnitRollupCompletionPayload,
+  SearchSequenceCompletionPayload,
+  SearchThreadCompletionPayload,
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
+  SearchThreadIndexDoc,
   SearchSubjectSlug,
 } from './generated/search/index';
 

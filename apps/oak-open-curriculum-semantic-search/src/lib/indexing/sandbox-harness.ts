@@ -13,13 +13,18 @@ import { sandboxLogger } from '../logger';
 import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
 import { dispatchBulk, logPreview, logSummary, summariseOperations } from './sandbox-harness-ops';
-import type { SequenceFacetProcessingMetrics } from './sequence-facet-index';
+import { filterOperationsByIndex } from './sandbox-harness-filtering';
+import {
+  createSequenceFacetMetricsCollector,
+  type SandboxBulkMetrics,
+} from './sandbox-harness-metrics';
 
 interface SandboxHarnessOptions {
   readonly fixtureRoot?: string;
   readonly client?: OakClient;
   readonly keyStages?: readonly KeyStage[];
   readonly subjects?: readonly SearchSubjectSlug[];
+  readonly indexes?: readonly SearchIndexKind[];
   readonly target?: SearchIndexTarget;
   readonly es?: Pick<Client, 'transport'>;
   readonly logger?: Logger;
@@ -29,6 +34,7 @@ interface HarnessContext {
   readonly client: OakClient;
   readonly keyStages: readonly KeyStage[];
   readonly subjects: readonly SearchSubjectSlug[];
+  readonly indexes: readonly SearchIndexKind[];
   readonly target: SearchIndexTarget;
   readonly es: Pick<Client, 'transport'>;
   readonly logger: Logger;
@@ -40,21 +46,6 @@ interface SandboxBulkSummary {
   readonly counts: Record<SearchIndexKind, number>;
 }
 
-interface SequenceFacetMetricsEntry extends SequenceFacetProcessingMetrics {
-  readonly subject: SearchSubjectSlug;
-}
-interface SequenceFacetMetricsSummary {
-  readonly totalSequences: number;
-  readonly includedSequences: number;
-  readonly skippedSequences: number;
-  readonly totalUnitCount: number;
-  readonly totalFetchDurationMs: number;
-  readonly totalExtractionDurationMs: number;
-  readonly entries: readonly SequenceFacetMetricsEntry[];
-}
-interface SandboxBulkMetrics {
-  readonly sequenceFacets: SequenceFacetMetricsSummary;
-}
 interface SandboxBulkResult {
   readonly operations: unknown[];
   readonly summary: SandboxBulkSummary;
@@ -78,8 +69,9 @@ export async function createSandboxHarness(
   const target = options.target ?? currentSearchIndexTarget();
   const logger = options.logger ?? sandboxLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
+  const indexes = options.indexes ?? [];
   const es = resolveTransport(options.es);
-  const context: HarnessContext = { client, keyStages, subjects, target, es, logger };
+  const context: HarnessContext = { client, keyStages, subjects, indexes, target, es, logger };
 
   const prepare = () => prepareOperations(context);
   const ingest = (ingestOptions?: IngestOptions) =>
@@ -163,9 +155,10 @@ async function prepareOperations(context: HarnessContext): Promise<SandboxBulkRe
     onSequenceFacetProcessed: metricsCollector.record,
   });
   const targetedOps = rewriteBulkOperations(bulkOps, context.target);
-  const summary = summariseOperations(targetedOps, context.target);
+  const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
+  const summary = summariseOperations(filteredOps, context.target);
   const metrics = metricsCollector.snapshot();
-  return { operations: targetedOps, summary, metrics };
+  return { operations: filteredOps, summary, metrics };
 }
 
 async function ingestOperations(
@@ -209,39 +202,4 @@ async function ingestOperations(
   }
 
   return result;
-}
-
-function createSequenceFacetMetricsCollector(): {
-  readonly record: (
-    details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
-  ) => void;
-  readonly snapshot: () => SandboxBulkMetrics;
-} {
-  const entries: SequenceFacetMetricsEntry[] = [];
-  return {
-    record(details) {
-      entries.push(details);
-    },
-    snapshot() {
-      const totalSequences = entries.length;
-      const includedSequences = entries.filter((entry) => entry.included).length;
-      const totalUnitCount = entries.reduce((acc, entry) => acc + entry.unitCount, 0);
-      const totalFetchDurationMs = entries.reduce((acc, entry) => acc + entry.fetchDurationMs, 0);
-      const totalExtractionDurationMs = entries.reduce(
-        (acc, entry) => acc + entry.extractionDurationMs,
-        0,
-      );
-      return {
-        sequenceFacets: {
-          totalSequences,
-          includedSequences,
-          skippedSequences: totalSequences - includedSequences,
-          totalUnitCount,
-          totalFetchDurationMs,
-          totalExtractionDurationMs,
-          entries,
-        },
-      } satisfies SandboxBulkMetrics;
-    },
-  };
 }

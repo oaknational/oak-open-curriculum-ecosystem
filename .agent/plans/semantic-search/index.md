@@ -4,20 +4,47 @@ Navigation hub for all semantic search planning documentation.
 
 ## Current Priority
 
-**ES deployment COMPLETE. BLOCKING issues discovered during data ingestion.**
+**BLOCKING: Generator vs Generated Drift**
 
-### Blocking Issues 🚨
+Previous work edited generated files directly instead of updating generator templates. This violates schema-first principles.
 
-1. **Zod/ES Mapping Mismatch** - Field definitions have diverged between Zod schemas and ES mappings, causing bulk indexing failures
-2. **Console Usage** - Ingestion code uses console statements instead of `@oaknational/mcp-logger`
+### Blocking Issue
 
-### Immediate Next Step
+| File                                               | Problem                                                              |
+| -------------------------------------------------- | -------------------------------------------------------------------- |
+| `type-gen/typegen/search/generate-search-index.ts` | Missing per-index completion schemas; still exports deprecated types |
+| `type-gen/typegen/search/index-doc-exports.ts`     | Retains deprecated `SearchCompletionSuggestPayloadSchema`            |
+| `src/types/generated/search/index.ts`              | Manually edited (will revert on type-gen)                            |
+| `src/types/index.ts`                               | Contains forbidden `eslint-disable` comments                         |
 
-Fix architectural issues before data ingestion can proceed. See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for details.
+**Fix**: Update generators, remove deprecated exports, run `pnpm type-gen`, pass quality gates.
+
+### Resolved Issues ✅
+
+1. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture implemented
+2. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
+3. ✅ **Verbose Flag** - Now controls logger level (DEBUG/INFO)
+
+### Elasticsearch State (Verified 2025-12-06)
+
+| Index             | Docs | Notes                         |
+| ----------------- | ---- | ----------------------------- |
+| `oak_unit_rollup` | 105  | Maths KS1 data                |
+| `oak_units`       | 37   | Unit metadata                 |
+| `oak_lessons`     | 0    | Failed with mapping exception |
+
+**142 documents indexed** - unit-level ingestion succeeded, lesson ingestion failed.
+
+### Immediate Next Steps
+
+1. Fix generator drift (update templates, not generated files)
+2. Run quality gates
+3. Resume ingestion after gates pass
 
 For continuation work, use:
 
 - **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search.prompt.md`
+- **Analysis**: `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`
 
 ---
 
@@ -29,23 +56,26 @@ The semantic search system provides powerful search capabilities across Oak's cu
 
 ## Status Summary
 
-| Phase                        | Status      | Notes                                                      |
-| ---------------------------- | ----------- | ---------------------------------------------------------- |
-| Schema-First Migration       | ✅ COMPLETE | All schemas generated via `pnpm type-gen`                  |
-| Thread Schema Generation     | ✅ COMPLETE | Thread index and embedded fields in SDK                    |
-| SDK Synonym Export           | ✅ COMPLETE | 68 rules deployed to ES as `oak-syns`                      |
-| ES Serverless Deployment     | ✅ COMPLETE | Indexes created, mappings verified, ELSER configured       |
-| Quality Gates                | ✅ COMPLETE | All gates passing including `smoke:dev:stub`               |
-| SDK Response Caching         | ✅ COMPLETE | Redis caching with 404 fallbacks, 100% hit rate            |
-| **Zod/ES Mapping Alignment** | 🚨 BLOCKED  | Field definitions diverged - needs unified source of truth |
-| **Logging Standardisation**  | 🚨 BLOCKED  | Console statements must be replaced with proper logger     |
-| Real Data Ingestion          | ⏳ BLOCKED  | Waiting on mapping alignment fix                           |
-| Ontology Integration         | ⏳ PENDING  | Phase 2-3 - after data validation                          |
-| Static Ontology Index (RAG)  | ⏳ PLANNED  | Phase 4 - `oak_ontology` from ontology + KG data           |
-| Instance Knowledge Graph     | ⏳ PLANNED  | Phase 5 - `oak_curriculum_graph` + `oak_entities`          |
-| Graph RAG                    | ⏳ PLANNED  | Phase 6 - multi-hop reasoning combining graph + RAG        |
-| MCP Connectivity             | ⏳ PENDING  | Phase 7 - enhanced search with graph modes                 |
-| OpenAI App Widget            | ⏳ PENDING  | Phase 8 - with graph visualisations                        |
+| Phase                        | Status      | Notes                                                |
+| ---------------------------- | ----------- | ---------------------------------------------------- |
+| Schema-First Migration       | ✅ COMPLETE | All schemas generated via `pnpm type-gen`            |
+| Thread Schema Generation     | ✅ COMPLETE | Thread index and embedded fields in SDK              |
+| SDK Synonym Export           | ✅ COMPLETE | 68 rules deployed to ES as `oak-syns`                |
+| ES Serverless Deployment     | ✅ COMPLETE | Indexes created, mappings verified, ELSER configured |
+| SDK Response Caching         | ✅ COMPLETE | Redis caching with 404 fallbacks, 100% hit rate      |
+| **Zod/ES Mapping Alignment** | ✅ COMPLETE | Unified field definitions architecture implemented   |
+| **Logging Standardisation**  | ✅ COMPLETE | Console replaced with `@oaknational/mcp-logger`      |
+| **Verbose Flag**             | ✅ COMPLETE | `--verbose` controls logger level (DEBUG/INFO)       |
+| **Generator Drift Fix**      | ❌ BLOCKING | Generators must emit per-index completion schemas    |
+| **Quality Gates**            | ⏳ BLOCKED  | Waiting on generator fix                             |
+| Real Data Ingestion          | ⏳ PENDING  | 142 docs indexed; lessons failed, units succeeded    |
+| Reference Indices            | ⏳ PLANNED  | Phase 3 - subjects, key stages, years (see plan)     |
+| Ontology Integration         | ⏳ PENDING  | Phase 2-3 - after data validation                    |
+| Static Ontology Index (RAG)  | ⏳ PLANNED  | Phase 4 - `oak_ontology` from ontology + KG data     |
+| Instance Knowledge Graph     | ⏳ PLANNED  | Phase 5 - `oak_curriculum_graph` + `oak_entities`    |
+| Graph RAG                    | ⏳ PLANNED  | Phase 6 - multi-hop reasoning combining graph + RAG  |
+| MCP Connectivity             | ⏳ PENDING  | Phase 7 - enhanced search with graph modes           |
+| OpenAI App Widget            | ⏳ PENDING  | Phase 8 - with graph visualisations                  |
 
 ---
 
@@ -78,6 +108,7 @@ The semantic search system provides powerful search capabilities across Oak's cu
 ## Quick Links
 
 - [High-Level Overview](./semantic-search-overview.md) - Strategy, phases, dependencies
+- [Reference Indices Plan](./reference-indices-plan.md) - **NEW** Phase 3: subjects, key stages, years
 - [Search Service (Backend)](./search-service/index.md) - API routes, Elasticsearch, ingestion
 - [Search UI (Frontend)](./search-ui/index.md) - React components, theme, testing
 - [Entity Discovery Pipeline](./entity-discovery-pipeline.md) - Multi-step entity extraction process
@@ -122,18 +153,27 @@ The semantic search system provides powerful search capabilities across Oak's cu
 
 ## Architecture Context
 
-### Cardinal Rule Compliance ⚠️
+### Cardinal Rule Compliance ✅
 
 All static data structures, types, type guards, Zod schemas, and validators **MUST** flow from the Open Curriculum OpenAPI schema via type-gen.
 
-**Status**: PARTIAL - Zod schemas generated but ES mappings have diverged.
+**Status**: COMPLETE - Unified field definitions architecture implemented (2025-12-05).
 
-**Issue Discovered (2025-12-05)**: The SDK generates two parallel sets of field definitions:
+**Solution Implemented**:
 
-1. **Zod schemas** (`generate-search-index-docs.ts`) - defines document structure
-2. **ES mappings** (`es-mapping-generators*.ts`) - defines Elasticsearch field types
+```text
+field-definitions.ts (IndexFieldDefinitions)
+    ↓
+├── zod-schema-generator.ts → Zod Schemas
+└── es-mapping-from-fields.ts → ES Mappings (+ es-field-overrides.ts)
+```
 
-These have different field lists, causing bulk indexing failures. Both should derive from a single field definition source.
+Key files in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/`:
+
+- `field-definitions.ts` - Single source of truth for index fields
+- `zod-schema-generator.ts` - Generates Zod from field definitions
+- `es-mapping-from-fields.ts` - Generates ES mappings from field definitions
+- `field-alignment.unit.test.ts` - Proves Zod/ES fields match
 
 ### Logging Standards
 
@@ -264,20 +304,33 @@ Useful tools: `get-subjects`, `get-subjects-sequences`, `get-sequences-units`, `
 - [x] Synonym deployment (68 rules)
 - [x] CLI tools (`es:setup`, `es:status`, `es:ingest-live`)
 
-### Phase 1.5: Real Data (CURRENT - BLOCKED)
+### Phase 1.5: Real Data (CURRENT - GENERATOR FIX NEEDED)
 
-**Blocking Issues**:
+**Completed Fixes** ✅:
 
-- [ ] Fix Zod/ES mapping alignment (unified field definitions)
-- [ ] Replace console statements with proper logger
-- [ ] Make --verbose flag control log level
+- [x] Fix Zod/ES mapping alignment (unified field definitions)
+- [x] Replace console statements with proper logger
+- [x] Make --verbose flag control log level
 
-**After fixes**:
+**Blocking Issue** ❌:
 
-- [ ] Clear test/fake data
-- [ ] Ingest Maths curriculum (all key stages)
+- [ ] **Generator drift**: Previous work edited generated files, not generators
+- [ ] Update `generate-search-index.ts` to emit per-index completion schemas
+- [ ] Remove deprecated `SearchCompletionSuggestPayload*` from generators
+- [ ] Remove forbidden `eslint-disable` comments
+- [ ] Run `pnpm type-gen` and pass quality gates
+
+**Current Ingestion State** (verified 2025-12-06):
+
+- `oak_unit_rollup`: 105 docs (Maths KS1)
+- `oak_units`: 37 docs
+- `oak_lessons`: 0 docs (failed with `strict_dynamic_mapping_exception`)
+
+**After Generator Fix**:
+
+- [ ] Pass all quality gates
+- [ ] Reset indexes and complete Maths ingestion
 - [ ] Validate search quality in ES Playground
-- [ ] Test semantic and keyword search
 
 ### Phase 2: Core Ontology
 
@@ -386,12 +439,19 @@ Target metrics for Graph + RAG capabilities (from [Graph RAG Integration Vision]
 - Thread schema generation
 - SDK synonym export utilities
 
-### Blocking Issues (Must Fix First)
+### Previously Blocking (Resolved) ✅
 
-- **Zod/ES Mapping Alignment** - Create unified field definitions
-- **Logging Standardisation** - Replace console with logger
+- ✅ **Zod/ES Mapping Alignment** - Unified field definitions implemented
+- ✅ **Logging Standardisation** - Console replaced with logger
+- ✅ **Verbose Flag** - Now controls log level
 
-After these are fixed, ready for real data ingestion and Phase 2.
+### Currently Blocking ❌
+
+- ❌ **Generator Drift** - Previous work edited generated files instead of generators
+  - Generators must be updated to emit per-index completion schemas
+  - Deprecated exports must be removed from generators
+  - `eslint-disable` comments must be removed (forbidden per rules.md)
+  - See `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`
 
 ---
 

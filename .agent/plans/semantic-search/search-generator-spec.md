@@ -1,7 +1,7 @@
 # Search Schema Generator Specification
 
 _Last updated: 2025-12-05_  
-_Status: ⚠️ ARCHITECTURAL ISSUE - Zod/ES mapping alignment required_
+_Status: ✅ COMPLETE - Unified field definitions architecture implemented_
 
 ## Purpose
 
@@ -127,56 +127,48 @@ All originally planned steps have been completed:
 4. ✅ Fixture builders consume generated constructors
 5. ✅ Documentation updated
 
-## 🚨 Blocking Issue: Zod/ES Mapping Alignment
+## ✅ Resolved: Zod/ES Mapping Alignment
 
-**Discovered 2025-12-05**: The SDK generates two parallel sets of field definitions that have diverged.
+**Discovered 2025-12-05** | **Resolved 2025-12-05**
 
-### Problem
+### Problem (Historical)
 
-Two separate generators define field lists independently:
+Two separate generators defined field lists independently, causing bulk indexing failures with `strict_dynamic_mapping_exception`.
 
-1. **Zod schemas** (`generate-search-index-docs.ts`) - defines document structure
-2. **ES mappings** (`es-mapping-generators*.ts`) - defines Elasticsearch field types
+### Solution Implemented
 
-These generators have drifted, causing bulk indexing failures with `strict_dynamic_mapping_exception`.
-
-### Root Cause
-
-Both generators hand-code their field lists. When fields are added to Zod schemas, they're not automatically added to ES mappings.
-
-### Required Fix
-
-Create a unified field definition data structure that both generators consume:
+Unified field definitions architecture:
 
 ```text
-Field Definitions (single source)
+field-definitions.ts (IndexFieldDefinitions)
     ↓
-├── Zod Schemas (generated)
-└── ES Mappings (generated, with ES-specific overrides)
+├── zod-schema-generator.ts → Zod Schemas
+└── es-mapping-from-fields.ts → ES Mappings (+ es-field-overrides.ts)
 ```
 
-**Implementation approach** (TDD):
+### Key Files Created
 
-1. Write failing unit tests for unified field definitions
-2. Create field definition data structures per index
-3. Refactor Zod generator to consume field definitions
-4. Refactor ES mapping generator to consume field definitions + apply ES overrides
-5. Verify `pnpm type-gen` produces aligned outputs
-6. Run full quality gates
+| File                             | Purpose                                 |
+| -------------------------------- | --------------------------------------- |
+| `field-definitions.ts`           | Single source of truth for index fields |
+| `field-definitions.unit.test.ts` | Tests for field definitions             |
+| `zod-schema-generator.ts`        | Generates Zod from field definitions    |
+| `es-mapping-from-fields.ts`      | Generates ES mappings from field defs   |
+| `field-alignment.unit.test.ts`   | Proves Zod/ES fields match exactly      |
 
-### Fields Currently Mismatched
+### Indexes Covered
 
-Example from `oak_units` index:
+All content indexes now use unified field definitions:
 
-| Field           | In Zod Schema | In ES Mapping |
-| --------------- | ------------- | ------------- |
-| `unit_title`    | ✅            | ❌ (fixed)    |
-| `lesson_ids`    | ✅            | ❌ (fixed)    |
-| `unit_topics`   | ✅            | ❌ (fixed)    |
-| `sequence_ids`  | ✅            | ❌ (fixed)    |
-| `title_suggest` | ✅            | ❌ (fixed)    |
+- `UNITS_INDEX_FIELDS` → `oak_units`
+- `LESSONS_INDEX_FIELDS` → `oak_lessons`
+- `UNIT_ROLLUP_INDEX_FIELDS` → `oak_unit_rollup`
+- `SEQUENCES_INDEX_FIELDS` → `oak_sequences`
+- `THREADS_INDEX_FIELDS` → `oak_threads`
 
-Note: These were manually fixed but the underlying architecture issue remains.
+### Verification
+
+Field alignment tests prove Zod schemas and ES mappings have identical field sets. Run `pnpm test` in SDK to confirm.
 
 ## Remaining Work (Future Phases)
 

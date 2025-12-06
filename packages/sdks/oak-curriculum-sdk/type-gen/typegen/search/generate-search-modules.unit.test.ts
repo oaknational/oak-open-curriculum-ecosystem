@@ -134,7 +134,9 @@ describe('search index document module generation', () => {
     expect(runtimeModule).toContain('SearchLessonsIndexDocSchema');
     expect(runtimeModule).toContain('isSearchSequenceIndexDoc');
     const docsModule = files['../../../../docs/_typedoc_src/types/search-index.ts'];
-    expect(docsModule).toContain('SearchCompletionSuggestPayloadSchema');
+    expect(docsModule).toContain('SearchLessonsCompletionPayloadSchema');
+    expect(docsModule).toContain('SearchUnitsCompletionPayloadSchema');
+    expect(docsModule).not.toContain('SearchCompletionSuggestPayloadSchema');
     expect(docsModule).toContain("from '../../../src/types/generated/search/index-documents.js'");
   });
 
