@@ -1,12 +1,12 @@
 # Semantic Search High-Level Overview
 
-Last updated: 2025-12-05
+Last updated: 2025-12-06
 
 ## Executive Summary
 
 The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
 
-**Current Status**: ES Serverless DEPLOYED. **BLOCKING ISSUES** discovered during data ingestion - Zod/ES mapping field mismatch and logging standardisation required before proceeding.
+**Current Status**: ES Serverless DEPLOYED. All blocking issues RESOLVED. Quality gates PASSING. Ready for next phase work.
 
 ## Current State Snapshot
 
@@ -33,49 +33,48 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - **TypeScript CLI tools**: ES setup and status via `pnpm es:setup` and `pnpm es:status`
 - **SDK response caching**: Optional Redis caching with 404 fallbacks for 100% hit rate (ADR 066)
 
-### Critical Blockers 🚨
+### Recently Resolved ✅ (2025-12-06)
 
-#### 1. Zod Schema / ES Mapping Field Mismatch
+#### 1. Zod Schema / ES Mapping Field Mismatch - RESOLVED ✅
 
-**Problem**: The SDK generates two parallel sets of field definitions that have diverged:
+**Solution Implemented**: Created unified field definitions architecture that both generators consume.
 
-- **Zod schemas** (`generate-search-index-docs.ts`) define document structure
-- **ES mappings** (`es-mapping-generators*.ts`) define Elasticsearch field types
-
-**Symptom**: Bulk indexing fails with `strict_dynamic_mapping_exception`:
-
-```
-mapping set to strict, dynamic introduction of [unit_title] within [_doc] is not allowed
+```text
+field-definitions.ts (IndexFieldDefinitions)
+    ↓
+├── zod-schema-generator.ts → Zod Schemas
+└── es-mapping-from-fields.ts → ES Mappings (+ es-field-overrides.ts)
 ```
 
-**Root Cause**: Both generators are hand-coded with different field lists. Fields like `unit_title`, `lesson_ids`, `unit_topics`, `title_suggest` exist in Zod schemas but were missing from ES mappings.
+See ADR-067 for full architecture details.
 
-**Solution Required**: Create unified field definitions that both generators consume.
+#### 2. Console Statements Replaced with Logger - RESOLVED ✅
 
-#### 2. Console Statements Instead of Logger
+All `console.log/error` replaced with `@oaknational/mcp-logger` across ingestion codebase.
 
-**Problem**: Ingestion CLI and related code uses `console.log/error` directly instead of `@oaknational/mcp-logger`. This violates project standards and makes verbose mode ineffective.
+#### 3. Verbose Flag Controls Log Level - RESOLVED ✅
 
-**Files affected** (68 console instances across 11 files):
+`--verbose` flag now properly controls logger severity (DEBUG when verbose, INFO otherwise).
 
-- `src/lib/elasticsearch/setup/cli.ts`
-- `src/lib/elasticsearch/setup/index.ts`
-- `src/lib/elasticsearch/setup/ingest-*.ts`
-- `src/lib/index-oak*.ts`
-- `src/lib/indexing/*.ts`
+#### 4. Generator Drift - RESOLVED ✅
 
-**Solution Required**: Replace all console statements with logger calls from `src/lib/logger.ts`.
+Generator templates updated to emit per-index completion schemas. Deprecated exports removed. No forbidden `eslint-disable` comments remain.
 
-#### 3. Verbose Flag Not Controlling Log Level
+#### 5. Type Safety - RESOLVED ✅
 
-**Problem**: The `--verbose` flag is passed through but doesn't control the logger's minimum severity.
+19 lint errors fixed. No type assertions (`as`), no type shortcuts (`any`, `Record<string, unknown>`). All functions complexity ≤8, all files ≤250 lines.
 
-### Next Steps (After Blockers Resolved)
+#### 6. CLI Enhancement - RESOLVED ✅
 
-1. **Fix mapping alignment** - Create unified field definitions for both generators
-2. **Fix logging** - Replace console with logger, make verbose control log level
-3. **Ingest data** - Re-run Maths curriculum ingestion
-4. **Continue Phase 2** - Thread filtering and facets
+Added `--index` filter for selective ingestion (e.g., `--index lessons`). Reduces unnecessary data uploads during development.
+
+### Next Steps
+
+**All blockers resolved!** Choose your path:
+
+1. **Resume Full Ingestion** - Reset and re-ingest with fixed completion contexts
+2. **Selective Ingestion** - Use `--index lessons` to re-ingest only lessons
+3. **Continue Phase Work** - Reference indices, ontology integration, etc.
 
 ### Remaining Gaps
 
