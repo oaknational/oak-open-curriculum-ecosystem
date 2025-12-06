@@ -477,7 +477,7 @@ export const CurriculumEntitySchema = z.object({
   source_doc_ids: z.array(z.string()).optional(), // Documents where entity appears
 
   // Type-specific metadata (schema varies by entity_type)
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(zodMetadataSchema).optional(),
 
   // Graph metrics (computed periodically)
   in_degree: z.number().int().optional(), // Edges pointing TO this entity

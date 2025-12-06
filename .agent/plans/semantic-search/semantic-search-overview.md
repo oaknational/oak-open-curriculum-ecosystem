@@ -6,7 +6,7 @@ Last updated: 2025-12-06
 
 The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
 
-**Current Status**: ES Serverless DEPLOYED. All blocking issues RESOLVED. Quality gates PASSING. Ready for next phase work.
+**Current Status**: ES Serverless DEPLOYED. Type system fully compliant with official ES client types. All blocking issues RESOLVED. **All 10 quality gates PASSING** (1,303+ tests). Ready for next phase work.
 
 ## Current State Snapshot
 
@@ -35,7 +35,38 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 
 ### Recently Resolved ✅ (2025-12-06)
 
-#### 1. Zod Schema / ES Mapping Field Mismatch - RESOLVED ✅
+#### 1. Type System Architecture Upgrade - RESOLVED ✅
+
+**Complete elimination of `Record<string, unknown>`** - Architectural cleanup:
+
+- Replaced ad-hoc ES types with official `@elastic/elasticsearch` estypes
+- Added `@elastic/elasticsearch` as dev dependency to oak-curriculum-sdk
+- All ES types now re-export from official client library
+- Added `'long'` to EsFieldMapping type union for ES numeric fields
+- Properly typed ZeroHitDoc usage in search hit structures
+- Fixed Result type discriminated union handling throughout
+
+**Code Quality Improvements**:
+
+- Refactored `createErrorFromException` (complexity 17→8)
+- Extracted helper functions (isEsError, isMappingException, etc.)
+- Refactored `runIngestion` (62→50 lines, 23→20 statements)
+- Fixed template literal expressions with explicit String() conversions
+
+**Build & Test Fixes**:
+
+- Fixed field-definitions.js import paths
+- Updated ES mapping generator test for oak-zero-hit-telemetry.ts
+- Added missing IngestionResult import after refactoring
+- **All 1,303+ tests passing** across entire monorepo
+
+**Quality Gates - ALL PASSING** ✅:
+
+- type-gen, build, type-check, lint:fix, format:root, markdownlint:root
+- test (1,303 tests), test:e2e (185 tests), test:e2e:built
+- smoke:dev:stub
+
+#### 2. Zod Schema / ES Mapping Field Mismatch - RESOLVED ✅
 
 **Solution Implemented**: Created unified field definitions architecture that both generators consume.
 
@@ -48,23 +79,23 @@ field-definitions.ts (IndexFieldDefinitions)
 
 See ADR-067 for full architecture details.
 
-#### 2. Console Statements Replaced with Logger - RESOLVED ✅
+#### 3. Console Statements Replaced with Logger - RESOLVED ✅
 
 All `console.log/error` replaced with `@oaknational/mcp-logger` across ingestion codebase.
 
-#### 3. Verbose Flag Controls Log Level - RESOLVED ✅
+#### 4. Verbose Flag Controls Log Level - RESOLVED ✅
 
 `--verbose` flag now properly controls logger severity (DEBUG when verbose, INFO otherwise).
 
-#### 4. Generator Drift - RESOLVED ✅
+#### 5. Generator Drift - RESOLVED ✅
 
 Generator templates updated to emit per-index completion schemas. Deprecated exports removed. No forbidden `eslint-disable` comments remain.
 
-#### 5. Type Safety - RESOLVED ✅
+#### 6. Type Safety - RESOLVED ✅
 
 19 lint errors fixed. No type assertions (`as`), no type shortcuts (`any`, `Record<string, unknown>`). All functions complexity ≤8, all files ≤250 lines.
 
-#### 6. CLI Enhancement - RESOLVED ✅
+#### 7. CLI Enhancement - RESOLVED ✅
 
 Added `--index` filter for selective ingestion (e.g., `--index lessons`). Reduces unnecessary data uploads during development.
 

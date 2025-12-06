@@ -461,12 +461,12 @@ export async function runDisambiguation(): Promise<void> {
   const candidates = await findDuplicateCandidates();
 
   // 2. Group by similarity clusters
-  const clusters = clusterBySimilarity(candidates, threshold: 0.9);
+  const clusters = clusterBySimilarity(candidates, { threshold: 0.9 });
 
   // 3. For each cluster, choose canonical form
   for (const cluster of clusters) {
     const canonical = selectCanonicalEntity(cluster);
-    const mergedIds = cluster.filter(e => e.entity_id !== canonical.entity_id);
+    const mergedIds = cluster.filter((e) => e.entity_id !== canonical.entity_id);
 
     // 4. Update entity with aliases
     await esClient.update({
@@ -474,10 +474,7 @@ export async function runDisambiguation(): Promise<void> {
       id: canonical.entity_id,
       body: {
         doc: {
-          aliases: [
-            ...canonical.aliases,
-            ...mergedIds.map(e => e.canonical_label),
-          ],
+          aliases: [...canonical.aliases, ...mergedIds.map((e) => e.canonical_label)],
           updated_at: new Date().toISOString(),
         },
       },
@@ -487,7 +484,7 @@ export async function runDisambiguation(): Promise<void> {
     await rewriteTriplesToCanonical(mergedIds, canonical.entity_id);
 
     // 6. Delete merged entities
-    await bulkDeleteEntities(mergedIds.map(e => e.entity_id));
+    await bulkDeleteEntities(mergedIds.map((e) => e.entity_id));
   }
 }
 ```

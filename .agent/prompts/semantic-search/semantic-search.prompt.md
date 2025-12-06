@@ -12,7 +12,7 @@ The Oak Open Curriculum Semantic Search is a Next.js application providing hybri
 - **Faceted navigation**: Filter by subject, key stage, year, category
 - **Type-ahead suggestions**: Context-aware completion with per-index contexts
 
-**Current State**: ES Serverless deployed and operational. All blocking issues resolved. Quality gates passing. Ready for next phase.
+**Current State**: ES Serverless deployed and operational. Type system fully compliant with official ES client types. All blocking issues resolved. **All 10 quality gates passing** including smoke tests. Ready for next phase.
 
 ## Foundation Documents (MUST READ FIRST)
 
@@ -39,6 +39,38 @@ Before any work, read and internalize:
 ---
 
 ## Recent Improvements ✅
+
+### Type System Architecture Upgrade (2025-12-06)
+
+**All Record<string, unknown> Eliminated** - Complete architectural cleanup:
+
+- ✅ Replaced ad-hoc ES types with official `@elastic/elasticsearch` estypes
+- ✅ Added `@elastic/elasticsearch` as dev dependency to oak-curriculum-sdk
+- ✅ All ES types now re-export from official client library
+- ✅ Added `'long'` to EsFieldMapping type union for ES numeric fields
+- ✅ Properly typed ZeroHitDoc usage in search hit structures
+- ✅ Fixed Result type discriminated union handling throughout
+
+**Code Quality Improvements**:
+
+- ✅ Refactored `createErrorFromException` (complexity 17→8)
+- ✅ Extracted helper functions (isEsError, isMappingException, etc.)
+- ✅ Refactored `runIngestion` (62→50 lines, 23→20 statements)
+- ✅ Fixed template literal expressions with explicit String() conversions
+- ✅ Removed unnecessary conditional checks in Result library tests
+
+**Build & Test Fixes**:
+
+- ✅ Fixed field-definitions.js import paths
+- ✅ Updated ES mapping generator test for oak-zero-hit-telemetry.ts
+- ✅ Added missing IngestionResult import after refactoring
+- ✅ All 1,303+ tests passing across entire monorepo
+
+**Quality Gates - ALL PASSING** ✅:
+
+- ✅ type-gen, build, type-check, lint:fix, format:root, markdownlint:root
+- ✅ test (1,303 tests), test:e2e (185 tests), test:e2e:built
+- ✅ smoke:dev:stub
 
 ### Generator Drift Fixed (2025-12-06)
 
@@ -85,7 +117,7 @@ The generator vs generated drift issue has been **RESOLVED**. All changes now pr
 - ✅ Added boolean zodType support throughout generators
 - ✅ Moved `oak_meta` index to schema-first (IndexMetaDoc, OAK_META_MAPPING)
 - ✅ Moved `oak_zero_hit_telemetry` index to schema-first (ZeroHitDoc, OAK_ZERO_HIT_MAPPING)
-- ✅ Created specific ES types to replace generic `UnknownRecord`
+- ✅ Replaced generic `UnknownRecord` with official ES client types
 
 **Analysis**: See `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md` and `.agent/plans/semantic-search/schema-first_completion_*.plan.md`
 

@@ -8,15 +8,20 @@ Navigation hub for all semantic search planning documentation.
 
 ### Recently Resolved ✅ (2025-12-06)
 
-1. ✅ **Generator Drift** - Generators now properly emit per-index completion schemas
-2. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
-3. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
-4. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
-5. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
-6. ✅ **Smoke Test UX** - Enhanced port conflict error messages
-7. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
-8. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
-9. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
+1. ✅ **Type System Architecture** - Eliminated all `Record<string, unknown>` using official ES client types
+2. ✅ **Quality Gates** - All 10 gates passing (type-gen → smoke:dev:stub)
+3. ✅ **ES Type Safety** - Replaced ad-hoc ES types with `@elastic/elasticsearch` estypes
+4. ✅ **Code Quality** - Reduced complexity (createErrorFromException 17→8, runIngestion 62→50 lines)
+5. ✅ **Build System** - Fixed all build issues, 1,303+ tests passing
+6. ✅ **Generator Drift** - Generators now properly emit per-index completion schemas
+7. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
+8. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
+9. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
+10. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
+11. ✅ **Smoke Test UX** - Enhanced port conflict error messages
+12. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
+13. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
+14. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
 
 ### Elasticsearch State (Verified 2025-12-06)
 
@@ -65,7 +70,8 @@ The semantic search system provides powerful search capabilities across Oak's cu
 | **Generator Drift Fix**      | ✅ COMPLETE | Per-index completion schemas, deprecated exports gone |
 | **Type Safety Cleanup**      | ✅ COMPLETE | 19 lint errors fixed, no type shortcuts, complexity≤8 |
 | **CLI --index Filter**       | ✅ COMPLETE | Selective ingestion by index kind (e.g., lessons)     |
-| **Quality Gates**            | ✅ PASSING  | All gates green, ready for next phase                 |
+| **ES Type Architecture**     | ✅ COMPLETE | Official @elastic/elasticsearch estypes throughout    |
+| **Quality Gates**            | ✅ PASSING  | All 10 gates green (1,303+ tests), ready for next    |
 | Real Data Ingestion          | ⏳ READY    | 142 docs indexed; ready to re-ingest with fixes       |
 | Reference Indices            | ⏳ PLANNED  | Phase 3 - subjects, key stages, years (see plan)      |
 | Ontology Integration         | ⏳ PENDING  | Phase 2-3 - after data validation                     |
@@ -302,33 +308,31 @@ Useful tools: `get-subjects`, `get-subjects-sequences`, `get-sequences-units`, `
 - [x] Synonym deployment (68 rules)
 - [x] CLI tools (`es:setup`, `es:status`, `es:ingest-live`)
 
-### Phase 1.5: Real Data (CURRENT - GENERATOR FIX NEEDED)
+### Phase 1.5: Real Data (CURRENT - READY FOR RE-INGESTION)
 
 **Completed Fixes** ✅:
 
 - [x] Fix Zod/ES mapping alignment (unified field definitions)
 - [x] Replace console statements with proper logger
 - [x] Make --verbose flag control log level
-
-**Blocking Issue** ❌:
-
-- [ ] **Generator drift**: Previous work edited generated files, not generators
-- [ ] Update `generate-search-index.ts` to emit per-index completion schemas
-- [ ] Remove deprecated `SearchCompletionSuggestPayload*` from generators
-- [ ] Remove forbidden `eslint-disable` comments
-- [ ] Run `pnpm type-gen` and pass quality gates
+- [x] **Generator drift** - Updated generators, not generated files
+- [x] Update `generate-search-index.ts` to emit per-index completion schemas
+- [x] Remove deprecated `SearchCompletionSuggestPayload*` from generators
+- [x] Remove forbidden `eslint-disable` comments
+- [x] **Type system architecture** - Replaced ad-hoc ES types with official estypes
+- [x] **All quality gates passing** - 10/10 gates green, 1,303+ tests passing
 
 **Current Ingestion State** (verified 2025-12-06):
 
 - `oak_unit_rollup`: 105 docs (Maths KS1)
 - `oak_units`: 37 docs
-- `oak_lessons`: 0 docs (failed with `strict_dynamic_mapping_exception`)
+- `oak_lessons`: 0 docs (failed with `strict_dynamic_mapping_exception` - now fixed)
 
-**After Generator Fix**:
+**Ready for Next Steps**:
 
-- [ ] Pass all quality gates
-- [ ] Reset indexes and complete Maths ingestion
+- [ ] Reset indexes and complete Maths ingestion with fixed completion contexts
 - [ ] Validate search quality in ES Playground
+- [ ] Expand to additional subjects/key stages
 
 ### Phase 2: Core Ontology
 
