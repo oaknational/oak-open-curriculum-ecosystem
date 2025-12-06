@@ -270,7 +270,7 @@ Now that you understand the `window.openai` API, it's time to scaffold your comp
 
 As best practice, keep the component code separate from your server logic. A common layout is:
 
-```
+```text
 app/
   server/            # MCP server (Python or Node)
   web/               # Component bundle source

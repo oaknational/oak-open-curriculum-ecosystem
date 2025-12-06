@@ -37,6 +37,21 @@ const toolNameEl = document.getElementById('tool-name');
 ${WIDGET_STATE_JS}
 
 // ========================================
+// Safe Area Insets
+// ========================================
+function applySafeAreaInsets() {
+  const safeArea = window.openai?.safeArea;
+  if (safeArea?.insets) {
+    const { top, right, bottom, left } = safeArea.insets;
+    document.documentElement.style.setProperty('--safe-top', \`\${top}px\`);
+    document.documentElement.style.setProperty('--safe-right', \`\${right}px\`);
+    document.documentElement.style.setProperty('--safe-bottom', \`\${bottom}px\`);
+    document.documentElement.style.setProperty('--safe-left', \`\${left}px\`);
+  }
+  // If no safe area insets, CSS fallback values (20px) are used
+}
+
+// ========================================
 // Renderer Functions
 // ========================================
 ${WIDGET_RENDERER_FUNCTIONS}
@@ -113,8 +128,11 @@ function render() {
   restoreScrollPosition();
 }
 
+applySafeAreaInsets();
 render();
 window.addEventListener('openai:set_globals', (e) => {
-  if (e.detail?.globals?.toolOutput !== undefined) render();
+  const globals = e.detail?.globals;
+  if (globals?.toolOutput !== undefined) render();
+  if (globals?.safeArea !== undefined) applySafeAreaInsets();
 }, { passive: true });
 `.trim();

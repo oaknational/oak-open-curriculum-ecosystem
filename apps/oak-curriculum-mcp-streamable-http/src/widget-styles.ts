@@ -30,6 +30,12 @@
 export const WIDGET_STYLES = `
 :root {
   color-scheme: light dark;
+  /* Safe area insets - updated by JavaScript from window.openai.safeArea */
+  --safe-top: 20px;
+  --safe-right: 20px;
+  --safe-bottom: 20px;
+  --safe-left: 20px;
+  /* Oak brand colors */
   --bg: #bef2bd;
   --fg: #1a3a1b;
   --fg-secondary: #3d5e3e;
@@ -57,7 +63,7 @@ html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
 html, body { margin: 0; padding: 0; }
 body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
-#root { background: var(--bg); color: var(--fg); padding: 32px 32px 120px; flex: 1; display: flex; flex-direction: column; }
+#root { background: var(--bg); color: var(--fg); padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left); flex: 1; display: flex; flex-direction: column; }
 .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
 .hdr-text { display: flex; flex-direction: column; gap: 2px; }
 .logo { width: 36px; height: 36px; }
