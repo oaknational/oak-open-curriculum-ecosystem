@@ -15,3 +15,4 @@ export default defineConfig({
   ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
   outDir: 'dist',
 });
+

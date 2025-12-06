@@ -81,3 +81,4 @@ export function extractAuthContext(req: Request, logger: Logger): ToolAuthContex
     scopes: undefined,
   };
 }
+

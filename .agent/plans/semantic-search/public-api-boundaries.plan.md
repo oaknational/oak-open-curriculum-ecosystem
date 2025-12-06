@@ -351,3 +351,4 @@ Public API boundaries defined in `package.json`:
 - `.agent/directives-and-memory/schema-first-execution.md` - Schema-first mandate
 - `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md` - ES mapping generation
 - `.agent/plans/semantic-search/schema-first_completion_*.plan.md` - Previous schema-first work
+

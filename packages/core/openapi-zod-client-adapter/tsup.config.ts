@@ -19,3 +19,4 @@ export default defineConfig({
   treeshake: true,
   external: ['fs', 'path', 'node:fs', 'node:path', 'node:module', 'node:url'],
 });
+

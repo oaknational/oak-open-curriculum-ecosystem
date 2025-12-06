@@ -33,3 +33,4 @@ packages/rag/                  ← Retrieval patterns
 packages/db/schemas/           ← Data models
 packages/teaching-materials/   ← Teaching material structures
 ```
+

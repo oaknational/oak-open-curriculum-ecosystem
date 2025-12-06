@@ -17,6 +17,7 @@ import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 
 // All possible subjects from the OpenAPI schema
+// TODO: This should be generated from the OpenAPI schema
 const ALL_SUBJECTS = [
   'art',
   'citizenship',
@@ -38,9 +39,11 @@ const ALL_SUBJECTS = [
 ] as const;
 
 // All possible key stages
+// TODO: This should be generated from the OpenAPI schema
 const ALL_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
 
 // All possible index kinds
+// TODO: This should be generated from the OpenAPI schema
 const ALL_INDEX_KINDS = [
   'lessons',
   'unit_rollup',

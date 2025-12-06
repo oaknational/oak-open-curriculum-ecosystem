@@ -74,3 +74,4 @@ Throughout the research, continuously ask:
 ---
 
 Begin by reading the foundational documents, then the research plan, then start Phase 1.
+
