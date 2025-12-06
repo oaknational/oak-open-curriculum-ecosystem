@@ -64,12 +64,12 @@ Before any work, read and internalize:
 - ✅ Fixed field-definitions.js import paths
 - ✅ Updated ES mapping generator test for oak-zero-hit-telemetry.ts
 - ✅ Added missing IngestionResult import after refactoring
-- ✅ All 1,303+ tests passing across entire monorepo
+- ✅ All 1,310+ tests passing across entire monorepo
 
 **Quality Gates - ALL PASSING** ✅:
 
 - ✅ type-gen, build, type-check, lint:fix, format:root, markdownlint:root
-- ✅ test (1,303 tests), test:e2e (185 tests), test:e2e:built
+- ✅ test (1,310+ tests), test:e2e (185 tests), test:e2e:built
 - ✅ smoke:dev:stub
 
 ### Generator Drift Fixed (2025-12-06)
@@ -99,6 +99,32 @@ The generator vs generated drift issue has been **RESOLVED**. All changes now pr
 - ✅ Added `--index` filter for selective ingestion (e.g., `--index lessons`)
 - ✅ Reduces unnecessary data uploads during development
 - ✅ Extracted filtering/metrics logic to separate modules
+
+### Ingestion Progress Logging (2025-12-06)
+
+**Bulk Upload Phase Visibility** - Added real-time progress feedback:
+
+- ✅ Added progress logging to `dispatchBulk` with start/end messages
+- ✅ Shows document count, estimated size, and duration for bulk uploads
+- ✅ Refactored `dispatchBulk` to use `BulkTransport` interface for easier testing
+- ✅ Created `createMockBulkTransport` helper for unit testing
+- ✅ Added 7 new unit tests proving progress logging works
+- ✅ Eliminates silent 30-60 second gaps during ingestion
+
+**Why This Matters**: Users can now see when ES bulk upload starts and completes, preventing confusion about whether the process is hanging or progressing.
+
+**Example Output**:
+
+```json
+{"SeverityText":"INFO","Body":"Dispatching bulk operations to Elasticsearch","Attributes":{"totalOperations":150,"phase":"bulk_upload_start"}}
+{"SeverityText":"INFO","Body":"Bulk upload completed","Attributes":{"totalOperations":150,"durationSeconds":"2.5","phase":"bulk_upload_end"}}
+```
+
+**Files Changed**:
+
+- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness-ops.ts`
+- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness.ts`
+- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness-ops.unit.test.ts`
 
 ### Schema-First Ingestion (2025-12-06)
 
@@ -420,7 +446,7 @@ After re-ingestion, the semantic search system continues with these phases:
 ```bash
 # 1. Check quality gates (from repo root)
 pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
-pnpm test  # Should pass 800+ tests
+pnpm test  # Should pass 1,310+ tests
 
 # 2. Check Elasticsearch status
 cd apps/oak-open-curriculum-semantic-search

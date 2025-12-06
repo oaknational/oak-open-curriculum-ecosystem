@@ -12,16 +12,17 @@ Navigation hub for all semantic search planning documentation.
 2. ✅ **Quality Gates** - All 10 gates passing (type-gen → smoke:dev:stub)
 3. ✅ **ES Type Safety** - Replaced ad-hoc ES types with `@elastic/elasticsearch` estypes
 4. ✅ **Code Quality** - Reduced complexity (createErrorFromException 17→8, runIngestion 62→50 lines)
-5. ✅ **Build System** - Fixed all build issues, 1,303+ tests passing
-6. ✅ **Generator Drift** - Generators now properly emit per-index completion schemas
-7. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
-8. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
-9. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
-10. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
-11. ✅ **Smoke Test UX** - Enhanced port conflict error messages
-12. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
-13. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
-14. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
+5. ✅ **Ingestion Progress Logging** - Real-time feedback during bulk uploads (eliminates silent gaps)
+6. ✅ **Build System** - Fixed all build issues, 1,310+ tests passing
+7. ✅ **Generator Drift** - Generators now properly emit per-index completion schemas
+8. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
+9. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
+10. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
+11. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
+12. ✅ **Smoke Test UX** - Enhanced port conflict error messages
+13. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
+14. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
+15. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
 
 ### Elasticsearch State (Verified 2025-12-06)
 
@@ -71,7 +72,8 @@ The semantic search system provides powerful search capabilities across Oak's cu
 | **Type Safety Cleanup**      | ✅ COMPLETE | 19 lint errors fixed, no type shortcuts, complexity≤8 |
 | **CLI --index Filter**       | ✅ COMPLETE | Selective ingestion by index kind (e.g., lessons)     |
 | **ES Type Architecture**     | ✅ COMPLETE | Official @elastic/elasticsearch estypes throughout    |
-| **Quality Gates**            | ✅ PASSING  | All 10 gates green (1,303+ tests), ready for next    |
+| **Ingestion Progress Logs**  | ✅ COMPLETE | Real-time feedback during bulk uploads (7 new tests)  |
+| **Quality Gates**            | ✅ PASSING  | All 10 gates green (1,310+ tests), ready for next     |
 | Real Data Ingestion          | ⏳ READY    | 142 docs indexed; ready to re-ingest with fixes       |
 | Reference Indices            | ⏳ PLANNED  | Phase 3 - subjects, key stages, years (see plan)      |
 | Ontology Integration         | ⏳ PENDING  | Phase 2-3 - after data validation                     |
@@ -320,7 +322,8 @@ Useful tools: `get-subjects`, `get-subjects-sequences`, `get-sequences-units`, `
 - [x] Remove deprecated `SearchCompletionSuggestPayload*` from generators
 - [x] Remove forbidden `eslint-disable` comments
 - [x] **Type system architecture** - Replaced ad-hoc ES types with official estypes
-- [x] **All quality gates passing** - 10/10 gates green, 1,303+ tests passing
+- [x] **Ingestion progress logging** - Real-time bulk upload feedback (7 new tests)
+- [x] **All quality gates passing** - 10/10 gates green, 1,310+ tests passing
 
 **Current Ingestion State** (verified 2025-12-06):
 

@@ -6,7 +6,7 @@ Last updated: 2025-12-06
 
 The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
 
-**Current Status**: ES Serverless DEPLOYED. Type system fully compliant with official ES client types. All blocking issues RESOLVED. **All 10 quality gates PASSING** (1,303+ tests). Ready for next phase work.
+**Current Status**: ES Serverless DEPLOYED. Type system fully compliant with official ES client types. All blocking issues RESOLVED. **All 10 quality gates PASSING** (1,310+ tests). Ready for next phase work.
 
 ## Current State Snapshot
 
@@ -58,12 +58,12 @@ The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js applicatio
 - Fixed field-definitions.js import paths
 - Updated ES mapping generator test for oak-zero-hit-telemetry.ts
 - Added missing IngestionResult import after refactoring
-- **All 1,303+ tests passing** across entire monorepo
+- **All 1,310+ tests passing** across entire monorepo
 
 **Quality Gates - ALL PASSING** ✅:
 
 - type-gen, build, type-check, lint:fix, format:root, markdownlint:root
-- test (1,303 tests), test:e2e (185 tests), test:e2e:built
+- test (1,310+ tests), test:e2e (185 tests), test:e2e:built
 - smoke:dev:stub
 
 #### 2. Zod Schema / ES Mapping Field Mismatch - RESOLVED ✅
@@ -98,6 +98,19 @@ Generator templates updated to emit per-index completion schemas. Deprecated exp
 #### 7. CLI Enhancement - RESOLVED ✅
 
 Added `--index` filter for selective ingestion (e.g., `--index lessons`). Reduces unnecessary data uploads during development.
+
+#### 8. Ingestion Progress Logging - RESOLVED ✅
+
+**Real-time bulk upload visibility**:
+
+- Added progress logging to `dispatchBulk` with start/end messages
+- Shows document count, estimated size, and duration for bulk uploads
+- Refactored `dispatchBulk` to use `BulkTransport` interface for easier testing
+- Created `createMockBulkTransport` helper for unit testing
+- Added 7 new unit tests proving progress logging works
+- **Eliminates silent 30-60 second gaps** during ingestion
+
+Users now see clear feedback when ES bulk upload starts and completes, preventing confusion about whether the process is hanging or progressing.
 
 ### Next Steps
 

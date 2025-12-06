@@ -1,7 +1,19 @@
-import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
 import { sandboxLogger } from '../logger';
+
+/**
+ * Minimal Elasticsearch transport interface for bulk operations.
+ * Defines only the request method needed for bulk uploads.
+ */
+export interface EsTransport {
+  readonly transport: {
+    request(
+      params: { method: string; path: string; body: string },
+      options?: unknown,
+    ): Promise<unknown>;
+  };
+}
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
   ['oak_lessons', 'lessons'],
@@ -95,10 +107,10 @@ function countErrorsByType(items: readonly BulkResponseItem[]): Record<string, n
 }
 
 /** Extract and log bulk operation errors. */
-function logBulkErrors(response: BulkResponse): void {
+function logBulkErrors(response: BulkResponse, logger: Logger): void {
   const failedItems = response.items.filter((item) => item.index && item.index.status >= 400);
   const firstError = failedItems[0]?.index?.error;
-  sandboxLogger.error('Bulk indexing errors', undefined, {
+  logger.error('Bulk indexing errors', undefined, {
     failureCount: failedItems.length,
     errorTypes: countErrorsByType(failedItems),
     firstError: firstError ? { type: firstError.type, reason: firstError.reason } : undefined,
@@ -107,20 +119,38 @@ function logBulkErrors(response: BulkResponse): void {
 
 /**
  * Dispatches the prepared NDJSON payload against the provided Elasticsearch transport.
- * Logs errors if any bulk operations fail.
+ * Logs progress before/after upload and errors if any bulk operations fail.
  */
 export async function dispatchBulk(
-  es: Pick<Client, 'transport'>,
+  es: EsTransport,
   operations: readonly unknown[],
+  logger: Logger = sandboxLogger,
 ): Promise<void> {
+  const docCount = Math.floor(operations.length / 2); // Each doc = action + source
+  const sizeKB = Math.round(JSON.stringify(operations).length / 1024);
+
+  logger.info('Starting bulk upload to Elasticsearch', {
+    documents: docCount,
+    operations: operations.length,
+    estimatedSizeKB: sizeKB,
+  });
+
+  const startTime = Date.now();
   const ndjson = createNdjson(operations);
   const response = (await es.transport.request(
     { method: 'POST', path: '/_bulk', body: ndjson },
     { headers: { 'content-type': 'application/x-ndjson' } },
   )) as BulkResponse;
+  const durationMs = Date.now() - startTime;
 
   if (response.errors) {
-    logBulkErrors(response);
+    logBulkErrors(response, logger);
+  } else {
+    logger.info('Bulk upload completed successfully', {
+      documents: docCount,
+      durationMs,
+      durationSeconds: (durationMs / 1000).toFixed(1),
+    });
   }
 }
 

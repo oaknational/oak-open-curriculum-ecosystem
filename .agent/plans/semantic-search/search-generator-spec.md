@@ -254,7 +254,7 @@ export const OntologyEdgeDocSchema = OntologyDocBaseSchema.extend({
 export const OntologyDocSchema = z.discriminatedUnion('doc_type', [
   OntologyConceptDocSchema,
   OntologyEdgeDocSchema,
-  // Additional schemas for keystage, phase, subject, thread, workflow
+  // Additional schemas for concept, keystage, phase, subject, thread, workflow
 ]);
 
 export type OntologyDoc = z.infer<typeof OntologyDocSchema>;

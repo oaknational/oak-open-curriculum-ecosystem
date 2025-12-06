@@ -1,4 +1,3 @@
-import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
@@ -12,7 +11,13 @@ import {
 import { sandboxLogger } from '../logger';
 import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
-import { dispatchBulk, logPreview, logSummary, summariseOperations } from './sandbox-harness-ops';
+import {
+  dispatchBulk,
+  logPreview,
+  logSummary,
+  summariseOperations,
+  type EsTransport,
+} from './sandbox-harness-ops';
 import { filterOperationsByIndex } from './sandbox-harness-filtering';
 import {
   createSequenceFacetMetricsCollector,
@@ -26,7 +31,7 @@ interface SandboxHarnessOptions {
   readonly subjects?: readonly SearchSubjectSlug[];
   readonly indexes?: readonly SearchIndexKind[];
   readonly target?: SearchIndexTarget;
-  readonly es?: Pick<Client, 'transport'>;
+  readonly es?: EsTransport;
   readonly logger?: Logger;
 }
 
@@ -36,7 +41,7 @@ interface HarnessContext {
   readonly subjects: readonly SearchSubjectSlug[];
   readonly indexes: readonly SearchIndexKind[];
   readonly target: SearchIndexTarget;
-  readonly es: Pick<Client, 'transport'>;
+  readonly es: EsTransport;
   readonly logger: Logger;
 }
 
@@ -141,7 +146,7 @@ function ensureNonEmptyList<T>(value: readonly T[] | undefined, message: string)
   return value;
 }
 
-function resolveTransport(es?: Pick<Client, 'transport'>): Pick<Client, 'transport'> {
+function resolveTransport(es?: EsTransport): EsTransport {
   if (es) {
     return es;
   }
@@ -186,7 +191,7 @@ async function ingestOperations(
     return result;
   }
 
-  await dispatchBulk(context.es, result.operations);
+  await dispatchBulk(context.es, result.operations, context.logger);
 
   logSummary(
     context.logger,
