@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * @module es-field-overrides
  * @description Elasticsearch field override configurations for each index.
@@ -242,5 +243,65 @@ export const META_FIELD_OVERRIDES = {
   },
   ingested_at: {
     type: 'date',
+  },
+  subjects: {
+    type: 'keyword',
+  },
+  key_stages: {
+    type: 'keyword',
+  },
+  duration_ms: {
+    type: 'integer',
+  },
+  doc_counts: {
+    type: 'object',
+    enabled: false, // Store as-is without indexing internal structure
+  },
+} as const satisfies Readonly<Record<string, EsFieldMapping>>;
+
+/**
+ * Field overrides for the oak_zero_hit_telemetry index.
+ * This index tracks zero-result search queries for content gap analysis.
+ *
+ * Key field configurations:
+ * - `@timestamp`: ES date field for time-based queries and ILM
+ * - `query`: text field with keyword subfield for both full-text and exact matching
+ * - `filters`: flattened field for flexible filter structure without mapping bloat
+ * - `took_ms`: long type (not integer) to handle potentially large timing values
+ */
+export const ZERO_HIT_FIELD_OVERRIDES = {
+  '@timestamp': {
+    type: 'date',
+  },
+  search_scope: {
+    type: 'keyword',
+  },
+  query: {
+    type: 'text',
+    fields: {
+      keyword: {
+        type: 'keyword',
+        ignore_above: 256,
+      },
+    },
+  },
+  filters: {
+    type: 'object',
+    enabled: false, // Store filter structure as-is for audit without indexing
+  },
+  index_version: {
+    type: 'keyword',
+  },
+  request_id: {
+    type: 'keyword',
+  },
+  session_id: {
+    type: 'keyword',
+  },
+  took_ms: {
+    type: 'long',
+  },
+  timed_out: {
+    type: 'boolean',
   },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;

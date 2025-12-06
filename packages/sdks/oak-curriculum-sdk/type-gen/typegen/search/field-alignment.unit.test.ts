@@ -13,7 +13,7 @@ import {
   UNITS_INDEX_FIELDS,
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
-} from './field-definitions.js';
+} from './field-definitions/index.js';
 import { generateZodSchemaFromFields, ZOD_ENUM_EXPRESSIONS } from './zod-schema-generator.js';
 import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
 import {

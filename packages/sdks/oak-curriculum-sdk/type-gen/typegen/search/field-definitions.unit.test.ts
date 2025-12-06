@@ -13,7 +13,7 @@ import {
   UNITS_INDEX_FIELDS,
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
-} from './field-definitions.js';
+} from './field-definitions/index.js';
 
 describe('FieldDefinition interface', () => {
   it('allows creating a required string field definition', () => {

@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { type IndexFieldDefinitions } from './field-definitions.js';
+import { type IndexFieldDefinitions } from './field-definitions/index.js';
 import {
   generateEsFieldsFromDefinitions,
   fieldDefinitionToEsMapping,

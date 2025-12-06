@@ -6,7 +6,9 @@ import {
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
   THREADS_INDEX_FIELDS,
-} from './field-definitions.js';
+  META_INDEX_FIELDS,
+  ZERO_HIT_INDEX_FIELDS,
+} from './field-definitions/index.js';
 import {
   LESSONS_COMPLETION_CONTEXTS,
   UNITS_COMPLETION_CONTEXTS,
@@ -18,6 +20,7 @@ import { generateCompletionContextsSchema } from './zod-schema-generator.js';
 import {
   generateCompletionPayloadSchema,
   generateDocSchemaWithTypedCompletion,
+  generateSimpleDocSchema,
   generateTypeGuard,
 } from './index-doc-code-gen.js';
 import { createIndexDocumentsDocsModule } from './index-doc-exports.js';
@@ -105,8 +108,40 @@ function createDocSchemas(): string {
   );
 }
 
+function createMetaDocSchema(): string {
+  const s = generateSimpleDocSchema;
+  const g = generateTypeGuard;
+  return (
+    '// Index Metadata Schema\n' +
+    s('IndexMetaDocSchema', META_INDEX_FIELDS) +
+    '\nexport type IndexMetaDoc = z.infer<typeof IndexMetaDocSchema>;\n' +
+    g('isIndexMetaDoc', 'IndexMetaDocSchema', 'IndexMetaDoc') +
+    '\n'
+  );
+}
+
+function createZeroHitDocSchema(): string {
+  const s = generateSimpleDocSchema;
+  const g = generateTypeGuard;
+  return (
+    '// Zero-Hit Telemetry Schema\n' +
+    s('ZeroHitDocSchema', ZERO_HIT_INDEX_FIELDS) +
+    '\nexport type ZeroHitDoc = z.infer<typeof ZeroHitDocSchema>;\n' +
+    g('isZeroHitDoc', 'ZeroHitDocSchema', 'ZeroHitDoc') +
+    '\n'
+  );
+}
+
 function createIndexDocumentsModule(): string {
-  return HEADER + IMPORTS + createContextSchemas() + createPayloadSchemas() + createDocSchemas();
+  return (
+    HEADER +
+    IMPORTS +
+    createContextSchemas() +
+    createPayloadSchemas() +
+    createDocSchemas() +
+    createMetaDocSchema() +
+    createZeroHitDocSchema()
+  );
 }
 
 export function generateSearchIndexDocumentModules(_schema: OpenAPIObject): FileMap {

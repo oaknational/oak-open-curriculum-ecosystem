@@ -14,7 +14,7 @@ import {
   LESSONS_INDEX_FIELDS,
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
-} from './field-definitions.js';
+} from './field-definitions/index.js';
 import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
 
 // Re-export minimal generators for convenience

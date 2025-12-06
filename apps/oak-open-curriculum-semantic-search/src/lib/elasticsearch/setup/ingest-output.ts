@@ -2,13 +2,21 @@
  * @module ingest-output
  * @description Output formatting and metadata writing for live data ingestion.
  * Handles header, summary, and metadata persistence to Elasticsearch.
+ * Uses Result<T, E> pattern for explicit error handling.
  */
 
+import type { Result } from '@oaknational/result';
+import { isErr } from '@oaknational/result';
 import type { CliArgs } from './ingest-cli-args.js';
 import type { CachedOakClient } from '../../../adapters/oak-adapter-cached.js';
 import { esClient } from '../../es-client.js';
-import { writeIndexMeta, generateVersionFromTimestamp } from '../index-meta.js';
+import {
+  writeIndexMeta,
+  generateVersionFromTimestamp,
+  type IndexMetaError,
+} from '../index-meta.js';
 import { sandboxLogger } from '../../logger';
+import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 /** Ingestion result with document counts. */
 export interface IngestionResult {
@@ -54,24 +62,43 @@ export function printCacheStats(client: CachedOakClient): void {
   }
 }
 
-/** Write index metadata to Elasticsearch. */
+/**
+ * Write index metadata to Elasticsearch.
+ * Returns Result<void, IndexMetaError> for explicit error handling.
+ */
 export async function writeMetadata(
   args: CliArgs,
   result: IngestionResult,
   duration: string,
-): Promise<void> {
+): Promise<Result<void, IndexMetaError>> {
   const version = generateVersionFromTimestamp();
   sandboxLogger.debug('Writing index metadata', { version });
+
   const client = esClient();
-  await writeIndexMeta(client, {
+  const meta: IndexMetaDoc = {
     version,
-    timestamp: new Date().toISOString(),
-    docCounts: result.summary.counts,
-    ingestionDuration: parseFloat(duration),
+    ingested_at: new Date().toISOString(),
+    doc_counts: result.summary.counts,
+    duration_ms: Math.round(parseFloat(duration) * 1000),
     subjects: args.subjects,
-    keyStages: args.keyStages,
-  });
+    key_stages: args.keyStages,
+  };
+
+  const writeResult = await writeIndexMeta(client, meta);
+
+  if (isErr(writeResult)) {
+    const error = writeResult.error;
+    const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
+    sandboxLogger.error('Failed to write metadata', {
+      errorType: error.type,
+      message: errorMessage,
+      version,
+    });
+    return writeResult;
+  }
+
   sandboxLogger.debug('Index metadata written successfully', { version });
+  return writeResult;
 }
 
 /** Log dry run notice. */

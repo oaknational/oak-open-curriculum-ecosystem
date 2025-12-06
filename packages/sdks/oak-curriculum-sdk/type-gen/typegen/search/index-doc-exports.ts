@@ -33,11 +33,15 @@ export function createIndexDocumentsDocsModule(): string {
   SearchUnitsIndexDocSchema,
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
+  IndexMetaDocSchema,
+  ZeroHitDocSchema,
   isSearchThreadIndexDoc,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
+  isIndexMetaDoc,
+  isZeroHitDoc,
 } from '../../../src/types/generated/search/index-documents.js';
 export type {
   SearchLessonsCompletionContexts,
@@ -55,6 +59,8 @@ export type {
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
+  IndexMetaDoc,
+  ZeroHitDoc,
   SearchSubjectSlug,
 } from '../../../src/types/generated/search/index-documents.js';
 `

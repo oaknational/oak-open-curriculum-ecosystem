@@ -1,80 +1,22 @@
 /**
- * @module field-definitions
- * @description Shared field definitions for search indexes.
+ * @module field-definitions/curriculum
+ * @description Field definitions for curriculum-related search indexes.
  *
- * This module defines the canonical field definitions that are consumed by both:
- * - The Zod schema generator (for runtime validation)
- * - The ES mapping generator (for Elasticsearch index configuration)
+ * This module contains field definitions for indexes that store Oak curriculum content:
+ * lessons, units, sequences, and threads. These indexes represent the core educational
+ * content that teachers and students interact with.
+ *
+ * Curriculum indexes are distinguished from observability indexes:
+ * - **Curriculum indexes**: Store educational content (lessons, units, sequences, threads)
+ * - **Observability indexes**: Store system behavior and operational data (metrics, logs, telemetry)
  *
  * By defining fields ONCE in this module, we ensure that Zod schemas and ES mappings
  * can never diverge, eliminating "mapper_parsing_exception" errors during bulk indexing.
  *
- * @example
- * ```typescript
- * import { UNITS_INDEX_FIELDS } from './field-definitions.js';
- *
- * // Use in Zod generator
- * const zodSchema = generateZodSchemaFromFields('SearchUnitsIndexDocSchema', UNITS_INDEX_FIELDS);
- *
- * // Use in ES mapping generator
- * const esFields = generateEsFieldsFromDefinitions(UNITS_INDEX_FIELDS, UNITS_FIELD_OVERRIDES);
- * ```
+ * @see {@link ../field-definitions/observability.ts} for observability index definitions
  */
 
-/**
- * Zod type identifier for field definitions.
- *
- * Maps to Zod schema builders:
- * - `string` → `z.string().min(1)`
- * - `number` → `z.number().int().nonnegative()`
- * - `array-string` → `z.array(z.string().min(1))`
- * - `array-number` → `z.array(z.number())`
- * - `object` → References a specific schema (e.g., SearchCompletionSuggestPayloadSchema)
- */
-export type ZodFieldType = 'string' | 'number' | 'array-string' | 'array-number' | 'object';
-
-/**
- * Definition for a single field in a search index document.
- *
- * This interface captures all information needed to generate both:
- * - A Zod schema field for runtime validation
- * - An Elasticsearch mapping field for index configuration
- *
- * @property name - The field name as it appears in documents
- * @property zodType - The Zod type category for this field
- * @property optional - Whether the field is optional (affects `.optional()` in Zod)
- * @property enumRef - Optional reference to an enum tuple (e.g., 'SUBJECT_TUPLE')
- */
-export interface FieldDefinition {
-  /** The field name as it appears in documents and mappings. */
-  readonly name: string;
-
-  /** The Zod type category for schema generation. */
-  readonly zodType: ZodFieldType;
-
-  /** Whether this field is optional in the document schema. */
-  readonly optional: boolean;
-
-  /**
-   * Optional reference to an enum tuple constant name.
-   * When specified, the Zod generator will use `z.enum(${enumRef})` instead of `z.string()`.
-   * @example 'SUBJECT_TUPLE' | 'KEY_STAGE_TUPLE'
-   */
-  readonly enumRef?: string;
-}
-
-/**
- * A readonly array of field definitions representing all fields in a search index.
- *
- * @example
- * ```typescript
- * const fields: IndexFieldDefinitions = [
- *   { name: 'id', zodType: 'string', optional: false },
- *   { name: 'tags', zodType: 'array-string', optional: true },
- * ] as const;
- * ```
- */
-export type IndexFieldDefinitions = readonly FieldDefinition[];
+import type { IndexFieldDefinitions } from './types.js';
 
 /**
  * Field definitions for the oak_threads search index.

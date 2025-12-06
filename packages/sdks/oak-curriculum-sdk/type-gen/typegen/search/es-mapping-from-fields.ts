@@ -17,7 +17,7 @@
  * ```
  */
 
-import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions.js';
+import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions/types.js';
 import type { EsFieldMapping } from './es-field-config.js';
 
 /**
@@ -59,6 +59,12 @@ export function fieldDefinitionToEsMapping(field: FieldDefinition): EsFieldMappi
       // Numbers map to integer (ES handles multi-value automatically)
       return {
         type: 'integer',
+      };
+
+    case 'boolean':
+      // Booleans map to ES boolean type
+      return {
+        type: 'boolean',
       };
 
     default: {

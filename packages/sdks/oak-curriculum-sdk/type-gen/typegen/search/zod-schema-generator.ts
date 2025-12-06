@@ -19,7 +19,7 @@
  * ```
  */
 
-import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions.js';
+import type { FieldDefinition, IndexFieldDefinitions } from './field-definitions/types.js';
 import type { CompletionContextName } from './completion-contexts.js';
 
 /**
@@ -90,6 +90,10 @@ export function generateZodFieldCode(
 
     case 'number':
       zodExpression = 'z.number().int().nonnegative()';
+      break;
+
+    case 'boolean':
+      zodExpression = 'z.boolean()';
       break;
 
     case 'array-string':

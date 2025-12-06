@@ -38,3 +38,6 @@ export type { OakSequenceFacetsMapping } from './oak-sequence-facets.js';
 
 export { OAK_META_MAPPING } from './oak-meta.js';
 export type { OakMetaMapping } from './oak-meta.js';
+
+export { OAK_ZERO_HIT_MAPPING } from './oak-zero-hit-telemetry.js';
+export type { OakZeroHitMapping } from './oak-zero-hit-telemetry.js';

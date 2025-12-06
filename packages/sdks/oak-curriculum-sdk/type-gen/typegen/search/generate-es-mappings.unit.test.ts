@@ -26,6 +26,7 @@ describe('generateEsMappingModules', () => {
       '../search/es-mappings/oak-sequences.ts',
       '../search/es-mappings/oak-unit-rollup.ts',
       '../search/es-mappings/oak-units.ts',
+      '../search/es-mappings/oak-zero-hit-telemetry.ts',
     ]);
   });
 
@@ -255,5 +256,60 @@ describe('generated code quality', () => {
     for (const specifier of specifiers) {
       expect(specifier.endsWith('.js')).toBe(true);
     }
+  });
+});
+
+describe('oak_meta mapping', () => {
+  it('includes all fields from META_INDEX_FIELDS', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toContain('version: {');
+    expect(metaContent).toContain('ingested_at: {');
+    expect(metaContent).toContain('subjects: {');
+    expect(metaContent).toContain('key_stages: {');
+    expect(metaContent).toContain('duration_ms: {');
+    expect(metaContent).toContain('doc_counts: {');
+  });
+
+  it('uses correct ES field types', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toMatch(/version:\s*\{\s*type:\s*'keyword'/);
+    expect(metaContent).toMatch(/ingested_at:\s*\{\s*type:\s*'date'/);
+    expect(metaContent).toMatch(/subjects:\s*\{\s*type:\s*'keyword'/);
+    expect(metaContent).toMatch(/key_stages:\s*\{\s*type:\s*'keyword'/);
+    expect(metaContent).toMatch(/duration_ms:\s*\{\s*type:\s*'integer'/);
+    expect(metaContent).toMatch(/doc_counts:\s*\{\s*type:\s*'object'/);
+  });
+
+  it('disables indexing for doc_counts object', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toMatch(/doc_counts:\s*\{[^}]*enabled:\s*false/);
+  });
+
+  it('uses strict dynamic mapping', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toContain("dynamic: 'strict'");
+  });
+
+  it('exports OAK_META_MAPPING constant', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toContain('export const OAK_META_MAPPING');
+    expect(metaContent).toContain('as const');
+  });
+
+  it('exports OakMetaMapping type', () => {
+    const files = generateEsMappingModules(MINIMAL_SCHEMA);
+    const metaContent = files['../search/es-mappings/oak-meta.ts'];
+
+    expect(metaContent).toContain('export type OakMetaMapping = typeof OAK_META_MAPPING');
   });
 });

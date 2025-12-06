@@ -10,6 +10,7 @@
  * - oak_sequences: Programme sequence documents
  * - oak_sequence_facets: Sequence facet navigation
  * - oak_meta: Ingestion metadata
+ * - oak_zero_hit_telemetry: Zero-result search tracking
  */
 
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
@@ -21,8 +22,11 @@ import {
   createUnitRollupMappingModule,
   createSequencesMappingModule,
   createSequenceFacetsMappingModule,
-  createMetaMappingModule,
 } from './es-mapping-generators.js';
+import {
+  createMetaMappingModule,
+  createZeroHitMappingModule,
+} from './es-mapping-generators-minimal.js';
 
 /**
  * Creates the barrel export index module.
@@ -63,6 +67,9 @@ export type { OakSequenceFacetsMapping } from './oak-sequence-facets.js';
 
 export { OAK_META_MAPPING } from './oak-meta.js';
 export type { OakMetaMapping } from './oak-meta.js';
+
+export { OAK_ZERO_HIT_MAPPING } from './oak-zero-hit-telemetry.js';
+export type { OakZeroHitMapping } from './oak-zero-hit-telemetry.js';
 `
   );
 }
@@ -84,5 +91,6 @@ export function generateEsMappingModules(_schema: OpenAPIObject): FileMap {
     '../search/es-mappings/oak-sequences.ts': createSequencesMappingModule(),
     '../search/es-mappings/oak-sequence-facets.ts': createSequenceFacetsMappingModule(),
     '../search/es-mappings/oak-meta.ts': createMetaMappingModule(),
+    '../search/es-mappings/oak-zero-hit-telemetry.ts': createZeroHitMappingModule(),
   };
 }

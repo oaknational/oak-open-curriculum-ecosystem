@@ -27,6 +27,10 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
+  IndexMetaDocSchema,
+  isIndexMetaDoc,
+  ZeroHitDocSchema,
+  isZeroHitDoc,
 } from '../types/generated/search/index.js';
 
 export {
@@ -104,6 +108,8 @@ export type {
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
+  IndexMetaDoc,
+  ZeroHitDoc,
   SearchSubjectSlug,
 } from '../types/generated/search/index.js';
 

@@ -1,5 +1,13 @@
 import type { ZeroHitEvent } from './zero-hit-store';
 
+import type { ZeroHitDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { ZeroHitDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import {
+  OAK_ZERO_HIT_MAPPING,
+  type EsIndexBody,
+  type EsIlmPolicyBody,
+} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+
 /** Generic record helper for dynamic Elasticsearch payloads. */
 export type UnknownRecord = Record<string, unknown>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
 
@@ -24,7 +32,7 @@ export function buildLifecyclePolicyName(indexBase: string, retentionDays: numbe
 }
 
 /** Construct the ILM policy body enforcing time-bound retention. */
-export function buildLifecyclePolicyBody(retentionDays: number): UnknownRecord {
+export function buildLifecyclePolicyBody(retentionDays: number): EsIlmPolicyBody {
   return {
     policy: {
       phases: {
@@ -40,8 +48,11 @@ export function buildLifecyclePolicyBody(retentionDays: number): UnknownRecord {
 
 /**
  * Build the index creation payload for the zero-hit telemetry index.
+ *
+ * Uses the generated OAK_ZERO_HIT_MAPPING to ensure mapping stays in sync
+ * with the ZeroHitDoc Zod schema.
  */
-export function buildIndexBody(indexBase: string, retentionDays: number): UnknownRecord {
+export function buildIndexBody(indexBase: string, retentionDays: number): EsIndexBody {
   return {
     settings: {
       index: {
@@ -50,37 +61,26 @@ export function buildIndexBody(indexBase: string, retentionDays: number): Unknow
         },
       },
     },
-    mappings: {
-      dynamic: 'strict',
-      properties: {
-        '@timestamp': { type: 'date' },
-        search_scope: { type: 'keyword' },
-        query: {
-          type: 'text',
-          fields: { keyword: { type: 'keyword', ignore_above: 256 } },
-        },
-        filters: { type: 'flattened' },
-        index_version: { type: 'keyword' },
-        request_id: { type: 'keyword' },
-        session_id: { type: 'keyword' },
-        took_ms: { type: 'long' },
-        timed_out: { type: 'boolean' },
-      },
-    },
+    ...OAK_ZERO_HIT_MAPPING,
   };
 }
 
 /**
  * Serialise an in-memory zero-hit event into the Elasticsearch document format.
+ *
+ * The returned document is validated against ZeroHitDocSchema to ensure
+ * it matches the ES mapping.
  */
-export function createZeroHitDocument(event: ZeroHitEvent): ZeroHitDocument {
-  const doc: ZeroHitDocument = {
+export function createZeroHitDocument(event: ZeroHitEvent): ZeroHitDoc {
+  const doc: ZeroHitDoc = {
     '@timestamp': new Date(event.timestamp).toISOString(),
     search_scope: event.scope,
     query: event.text,
     filters: event.filters,
     index_version: event.indexVersion,
   };
+
+  // Add optional fields only if present
   if (typeof event.tookMs === 'number') {
     doc.took_ms = event.tookMs;
   }
@@ -93,7 +93,14 @@ export function createZeroHitDocument(event: ZeroHitEvent): ZeroHitDocument {
   if (event.sessionId) {
     doc.session_id = event.sessionId;
   }
-  return doc;
+
+  // Validate before returning
+  const result = ZeroHitDocSchema.safeParse(doc);
+  if (!result.success) {
+    throw new Error(`Invalid ZeroHitDoc: ${result.error.message}`);
+  }
+
+  return result.data;
 }
 
 /** Detect an Elasticsearch error signalling the index already exists. */
@@ -144,6 +151,15 @@ export function isIndexNotFoundError(error: unknown): boolean {
   return type === 'index_not_found_exception' || type === 'resource_not_found_exception';
 }
 
-function isUnknownRecord(value: unknown): value is UnknownRecord {
+/**
+ * Type guard for objects with indexable properties.
+ * Used to safely access properties on unknown values from ES errors.
+ */
+type IndexableObject = Record<string, unknown>;
+
+/**
+ * Type guard to check if a value is a non-null object.
+ */
+function isUnknownRecord(value: unknown): value is IndexableObject {
   return typeof value === 'object' && value !== null;
 }

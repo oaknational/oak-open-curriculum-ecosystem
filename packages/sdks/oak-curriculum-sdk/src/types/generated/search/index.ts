@@ -59,11 +59,15 @@ export {
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
   SearchThreadIndexDocSchema,
+  IndexMetaDocSchema,
+  ZeroHitDocSchema,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
   isSearchThreadIndexDoc,
+  isIndexMetaDoc,
+  isZeroHitDoc,
 } from './index-documents.js';
 export type {
   SearchLessonsCompletionContexts,
@@ -81,6 +85,8 @@ export type {
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
   SearchThreadIndexDoc,
+  IndexMetaDoc,
+  ZeroHitDoc,
   SearchSubjectSlug,
 } from './index-documents.js';
 

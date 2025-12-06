@@ -1,16 +1,16 @@
 import type { ZeroHitEvent } from './zero-hit-store';
-import type { UnknownRecord } from './zero-hit-persistence-index';
 import type { SearchScope } from '../../types/oak';
-
-/** Minimal representation of an Elasticsearch hit consumed by the parser. */
-export interface SearchHit {
-  _source?: UnknownRecord;
-}
+import type {
+  EsSearchBody,
+  EsHitSource,
+  EsSearchHit,
+} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+import type { ZeroHitDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 /** Structure of the `hits` section returned by Elasticsearch. */
 export interface SearchHits {
   total?: unknown;
-  hits?: SearchHit[];
+  hits?: EsSearchHit<ZeroHitDoc>[];
 }
 
 /** Aggregation buckets required for the zero-hit dashboard. */
@@ -35,7 +35,7 @@ export interface ZeroHitTelemetrySummary {
 }
 
 /** Build the Elasticsearch search request retrieving zero-hit telemetry. */
-export function buildSearchBody(limit: number): UnknownRecord {
+export function buildSearchBody(limit: number): EsSearchBody {
   return {
     size: limit,
     track_total_hits: true,
@@ -96,7 +96,7 @@ export function parseSearchResponse(
   };
 }
 
-function normaliseHit(hit: SearchHit | undefined): ZeroHitEvent | null {
+function normaliseHit(hit: EsSearchHit<ZeroHitDoc> | undefined): ZeroHitEvent | null {
   const source = resolveHitSource(hit);
   if (!source) {
     return null;
@@ -125,7 +125,7 @@ function normaliseScope(value: unknown): SearchScope {
 }
 
 function normaliseFilters(value: unknown): Record<string, string> {
-  if (!isUnknownRecord(value)) {
+  if (typeof value !== 'object' || value === null) {
     return {};
   }
   const result: Record<string, string> = {};
@@ -142,8 +142,8 @@ function normaliseTotal(value: unknown): number {
   if (typeof value === 'number') {
     return value;
   }
-  if (isUnknownRecord(value)) {
-    const totalValue = value['value'];
+  if (typeof value === 'object' && value !== null) {
+    const totalValue = (value as Record<string, unknown>)['value'];
     if (typeof totalValue === 'number') {
       return totalValue;
     }
@@ -161,11 +161,12 @@ function normaliseScopeBuckets(value: unknown): Record<SearchScope, number> {
     return initial;
   }
   for (const bucket of value) {
-    if (!isUnknownRecord(bucket)) {
+    if (typeof bucket !== 'object' || bucket === null) {
       continue;
     }
-    const key = bucket['key'];
-    const count = bucket['doc_count'];
+    const bucketRec = bucket as Record<string, unknown>;
+    const key = bucketRec['key'];
+    const count = bucketRec['doc_count'];
     if (isRecognisedScope(key) && typeof count === 'number') {
       initial[key] = count;
     }
@@ -184,7 +185,7 @@ function extractLatestVersion(value: unknown): string | null {
     return null;
   }
   const [latest] = value.hits.hits;
-  if (!latest || !isUnknownRecord(latest._source)) {
+  if (!latest || !latest._source) {
     return null;
   }
   const indexVersion = latest._source['index_version'];
@@ -203,24 +204,24 @@ function normaliseOptionalString(value: unknown): string | undefined {
   return typeof value === 'string' && value.length > 0 ? value : undefined;
 }
 
-function isUnknownRecord(value: unknown): value is UnknownRecord {
-  return typeof value === 'object' && value !== null;
-}
-
-function isTopHitsAggregation(value: unknown): value is { hits: { hits: SearchHit[] } } {
-  if (!isUnknownRecord(value)) {
+function isTopHitsAggregation(
+  value: unknown,
+): value is { hits: { hits: EsSearchHit<ZeroHitDoc>[] } } {
+  if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const hitsContainer = value['hits'];
-  if (!isUnknownRecord(hitsContainer)) {
+  const hitsContainer = (value as Record<string, unknown>)['hits'];
+  if (typeof hitsContainer !== 'object' || hitsContainer === null) {
     return false;
   }
-  const hits = hitsContainer['hits'];
+  const hits = (hitsContainer as Record<string, unknown>)['hits'];
   return Array.isArray(hits);
 }
 
-function resolveHitSource(hit: SearchHit | undefined): UnknownRecord | null {
-  return hit && isUnknownRecord(hit._source) ? hit._source : null;
+function resolveHitSource(
+  hit: EsSearchHit<ZeroHitDoc> | undefined,
+): EsHitSource<ZeroHitDoc> | null {
+  return hit && hit._source ? hit._source : null;
 }
 
 function resolveTimestamp(value: unknown): number | null {

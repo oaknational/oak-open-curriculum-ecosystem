@@ -7,6 +7,8 @@ packages:
   - packages/core/openapi-zod-client-adapter
   - packages/libs/env
   - packages/libs/logger
+  - packages/libs/openapi-zod-client-adapter
+  - packages/libs/result
   - packages/libs/storage
   - packages/libs/transport
   - packages/providers/mcp-providers-node

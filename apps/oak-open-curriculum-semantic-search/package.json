@@ -39,6 +39,7 @@
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/oak-components": "^1.167.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/result": "workspace:*",
     "ai": "^5.0.106",
     "csstype": "^3.2.3",
     "next": "16.0.7",

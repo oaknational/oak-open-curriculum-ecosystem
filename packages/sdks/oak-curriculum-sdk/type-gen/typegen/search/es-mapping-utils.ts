@@ -20,6 +20,23 @@ export const HEADER = `/**
 `;
 
 /**
+ * Quotes field names that are not valid JavaScript identifiers.
+ *
+ * Valid JavaScript identifiers match: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+ *
+ * Examples:
+ * - `subject` → `subject` (valid identifier, no quotes needed)
+ * - `@timestamp` → `'@timestamp'` (invalid identifier, quotes added)
+ * - `key_stage` → `key_stage` (valid identifier, no quotes needed)
+ *
+ * @param name - Field name to potentially quote
+ * @returns Field name, quoted if necessary for valid JavaScript
+ */
+function maybeQuoteFieldName(name: string): string {
+  return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name) ? name : `'${name}'`;
+}
+
+/**
  * Serialises an ES field mapping to TypeScript object literal.
  */
 export function serialiseFieldMapping(mapping: EsFieldMapping, indent: number): string {
@@ -56,6 +73,9 @@ export function serialiseFieldMapping(mapping: EsFieldMapping, indent: number): 
       lines.push(`${pad}    ${name}: ${serialiseFieldMapping(subField, indent + 4)},`);
     }
     lines.push(`${pad}  },`);
+  }
+  if (mapping.enabled !== undefined) {
+    lines.push(`${pad}  enabled: ${String(mapping.enabled)},`);
   }
 
   lines.push(`${pad}}`);
@@ -141,7 +161,9 @@ export function generatePropertiesBlock(
   const lines: string[] = [`${pad}properties: {`];
 
   for (const [name, mapping] of fields) {
-    lines.push(`${pad}  ${name}: ${serialiseFieldMapping(mapping, indent + 2)},`);
+    lines.push(
+      `${pad}  ${maybeQuoteFieldName(name)}: ${serialiseFieldMapping(mapping, indent + 2)},`,
+    );
   }
 
   lines.push(`${pad}},`);

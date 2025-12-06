@@ -21,11 +21,18 @@ export const OAK_META_MAPPING = {
       ingested_at: {
         type: 'date',
       },
-      doc_counts: {
+      subjects: {
+        type: 'keyword',
+      },
+      key_stages: {
         type: 'keyword',
       },
       duration_ms: {
         type: 'integer',
+      },
+      doc_counts: {
+        type: 'object',
+        enabled: false,
       },
     },
   },

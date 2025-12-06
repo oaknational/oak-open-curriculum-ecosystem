@@ -109,13 +109,13 @@ async function runStatus(verbose: boolean): Promise<void> {
   try {
     const client = esClient();
     const meta = await readIndexMeta(client);
-    if (meta) {
+    if (meta.ok && meta.value) {
       sandboxLogger.info('Index version metadata', {
-        version: meta.version,
-        lastIngestion: meta.timestamp,
-        durationSeconds: meta.ingestionDuration,
-        subjects: meta.subjects,
-        keyStages: meta.keyStages,
+        version: meta.value.version,
+        ingestedAt: meta.value.ingested_at,
+        durationMs: meta.value.duration_ms,
+        subjects: meta.value.subjects,
+        keyStages: meta.value.key_stages,
       });
     }
   } catch {

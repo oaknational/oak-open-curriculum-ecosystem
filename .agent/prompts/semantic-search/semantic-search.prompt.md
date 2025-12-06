@@ -68,7 +68,26 @@ The generator vs generated drift issue has been **RESOLVED**. All changes now pr
 - ✅ Reduces unnecessary data uploads during development
 - ✅ Extracted filtering/metrics logic to separate modules
 
-**Analysis**: See `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`
+### Schema-First Ingestion (2025-12-06)
+
+**Result<T,E> Error Handling**:
+
+- ✅ Created `packages/libs/result` library for functional error handling
+- ✅ Refactored `index-meta.ts` to use `Result<T,E>` pattern
+- ✅ Fail-fast behavior with detailed ES errors in ingestion pipeline
+
+**Field Definitions Organization**:
+
+- ✅ Reorganized field definitions into domain-focused modules:
+  - `field-definitions/curriculum.ts` - Educational content indexes
+  - `field-definitions/observability.ts` - System behavior indexes (meta, zero-hit)
+  - `field-definitions/types.ts` - Shared types
+- ✅ Added boolean zodType support throughout generators
+- ✅ Moved `oak_meta` index to schema-first (IndexMetaDoc, OAK_META_MAPPING)
+- ✅ Moved `oak_zero_hit_telemetry` index to schema-first (ZeroHitDoc, OAK_ZERO_HIT_MAPPING)
+- ✅ Created specific ES types to replace generic `UnknownRecord`
+
+**Analysis**: See `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md` and `.agent/plans/semantic-search/schema-first_completion_*.plan.md`
 
 ---
 
@@ -233,10 +252,14 @@ Elasticsearch completion suggester contexts vary by index:
 
 ### Unified Field Definitions Architecture
 
-All field definitions flow from a single source:
+All field definitions flow from a single source, organized by domain:
 
 ```text
-field-definitions.ts (IndexFieldDefinitions)
+field-definitions/
+├── types.ts (ZodFieldType, FieldDefinition)
+├── curriculum.ts (lessons, units, sequences, threads)
+├── observability.ts (meta, zero-hit telemetry)
+└── index.ts (barrel export)
     ↓
 ├── zod-schema-generator.ts → Zod Schemas
 └── es-mapping-from-fields.ts → ES Mappings (+ es-field-overrides.ts)
@@ -255,7 +278,10 @@ packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
 ├── generate-search-index.ts          # Main generator
 ├── generate-search-index-docs.ts     # Doc schema generator
 ├── completion-contexts.ts            # Per-index context definitions
-├── field-definitions.ts              # Unified field definitions
+├── field-definitions/                # Domain-organized field definitions
+│   ├── curriculum.ts
+│   ├── observability.ts
+│   └── types.ts
 └── es-field-overrides.ts             # ES-specific overrides
 ```
 
@@ -269,6 +295,28 @@ packages/sdks/oak-curriculum-sdk/src/types/generated/search/
 ```
 
 After editing generators: `pnpm type-gen` → `pnpm build` → verify quality gates.
+
+### Public API Boundaries
+
+**NEVER import from internal paths.** Always use public API entry points defined in `package.json` exports:
+
+✅ **Use These Public APIs**:
+
+- `@oaknational/oak-curriculum-sdk` - Core API (`src/index.ts`)
+- `@oaknational/oak-curriculum-sdk/public/search` - Search types (`src/public/search.ts`)
+- `@oaknational/oak-curriculum-sdk/public/mcp-tools` - MCP tools (`src/public/mcp-tools.ts`)
+
+❌ **Never Deep-Link Past Public Boundaries**:
+
+```typescript
+// ❌ FORBIDDEN - violates boundary discipline
+import { X } from '@oaknational/oak-curriculum-sdk/types/generated/search/es-types.js';
+
+// ✅ CORRECT - use public API
+import { X } from '@oaknational/oak-curriculum-sdk/public/search.js';
+```
+
+If a type is needed but not exported, **add it to the appropriate public entry point first**.
 
 ---
 

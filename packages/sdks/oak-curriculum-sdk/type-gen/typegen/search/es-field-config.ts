@@ -45,11 +45,13 @@ export interface EsFieldMapping {
     | 'keyword'
     | 'text'
     | 'integer'
+    | 'long'
     | 'boolean'
     | 'date'
     | 'semantic_text'
     | 'completion'
-    | 'search_as_you_type';
+    | 'search_as_you_type'
+    | 'object';
   readonly normalizer?: string;
   readonly analyzer?: string;
   readonly search_analyzer?: string;
@@ -57,6 +59,7 @@ export interface EsFieldMapping {
   readonly term_vector?: string;
   readonly contexts?: readonly EsCompletionContext[];
   readonly fields?: Readonly<Record<string, EsFieldMapping>>;
+  readonly enabled?: boolean;
 }
 
 /**

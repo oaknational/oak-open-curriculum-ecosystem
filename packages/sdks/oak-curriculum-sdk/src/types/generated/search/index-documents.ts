@@ -204,3 +204,36 @@ export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema
 export function isSearchSequenceIndexDoc(value: unknown): value is SearchSequenceIndexDoc {
   return SearchSequenceIndexDocSchema.safeParse(value).success;
 }
+// Index Metadata Schema
+export const IndexMetaDocSchema = z
+  .object({
+    version: z.string().min(1),
+    ingested_at: z.string().min(1),
+    subjects: z.array(z.string().min(1)),
+    key_stages: z.array(z.string().min(1)),
+    duration_ms: z.number().int().nonnegative(),
+    doc_counts: z.record(z.string(), z.unknown()),
+  })
+  .strict();
+export type IndexMetaDoc = z.infer<typeof IndexMetaDocSchema>;
+export function isIndexMetaDoc(value: unknown): value is IndexMetaDoc {
+  return IndexMetaDocSchema.safeParse(value).success;
+}
+// Zero-Hit Telemetry Schema
+export const ZeroHitDocSchema = z
+  .object({
+    '@timestamp': z.string().min(1),
+    search_scope: z.string().min(1),
+    query: z.string().min(1),
+    filters: z.record(z.string(), z.unknown()),
+    index_version: z.string().min(1),
+    request_id: z.string().min(1).optional(),
+    session_id: z.string().min(1).optional(),
+    took_ms: z.number().int().nonnegative().optional(),
+    timed_out: z.boolean().optional(),
+  })
+  .strict();
+export type ZeroHitDoc = z.infer<typeof ZeroHitDocSchema>;
+export function isZeroHitDoc(value: unknown): value is ZeroHitDoc {
+  return ZeroHitDocSchema.safeParse(value).success;
+}

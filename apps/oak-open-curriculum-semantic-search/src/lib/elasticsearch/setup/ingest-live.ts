@@ -4,17 +4,21 @@
  * @description Live data ingestion CLI entry point. Orchestrates the ingestion
  * of Oak curriculum data into Elasticsearch.
  *
+ * Uses Result<T, E> pattern for explicit error handling and fail-fast behavior.
+ *
  * Run with: pnpm es:ingest-live -- --subject history --keystage ks2
  */
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isErr } from '@oaknational/result';
 import { loadAppEnv } from './load-app-env.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter-cached.js';
 import { createSandboxHarness } from '../../indexing/sandbox-harness.js';
 import { sandboxLogger, setLogLevel } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient } from './ingest-client-factory.js';
+import type { IngestionResult } from './ingest-output.js';
 import {
   printHeader,
   printSummary,
@@ -46,28 +50,13 @@ async function handleCacheClearing(args: CliArgs): Promise<void> {
   }
 }
 
-/** Execute the main ingestion workflow. */
-async function runIngestion(args: CliArgs): Promise<void> {
-  printHeader(args);
-  await handleCacheClearing(args);
-
-  const client = await createIngestionClient();
-
-  sandboxLogger.debug('Creating ingestion harness', {
-    subjects: args.subjects,
-    keyStages: args.keyStages,
-  });
-
-  const harness = await createSandboxHarness({
-    client,
-    keyStages: args.keyStages,
-    subjects: args.subjects,
-    indexes: args.indexes,
-    target: 'primary',
-    logger: sandboxLogger,
-  });
-  sandboxLogger.debug('Harness created successfully');
-
+/**
+ * Execute ingestion and return result with duration.
+ */
+async function executeIngestion(
+  harness: ReturnType<typeof createSandboxHarness> extends Promise<infer U> ? U : never,
+  args: CliArgs,
+): Promise<{ result: IngestionResult; duration: string }> {
   sandboxLogger.info(args.dryRun ? 'Starting DRY RUN' : 'Starting LIVE ingestion', {
     dryRun: args.dryRun,
     note: 'This may take several minutes - fetching data from Oak API',
@@ -78,16 +67,72 @@ async function runIngestion(args: CliArgs): Promise<void> {
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
   sandboxLogger.debug('Ingestion phase complete', { durationSeconds: duration });
-  printSummary(result, duration);
-  printCacheStats(client);
+  return { result, duration };
+}
 
+/**
+ * Handle post-ingestion metadata write and error reporting.
+ */
+async function handlePostIngestion(
+  args: CliArgs,
+  result: IngestionResult,
+  duration: string,
+): Promise<void> {
   if (args.dryRun) {
     printDryRunNotice();
-  } else {
-    await writeMetadata(args, result, duration);
+    return;
   }
 
-  await client.disconnect();
+  const metadataResult = await writeMetadata(args, result, duration);
+
+  if (isErr(metadataResult)) {
+    const error = metadataResult.error;
+    const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
+    sandboxLogger.error('FATAL: Metadata write failed', {
+      errorType: error.type,
+      message: errorMessage,
+      phase: 'post_ingestion',
+      impact: 'Documents indexed but audit trail incomplete',
+      ...(error.type === 'mapping_error' && { field: error.field }),
+      ...(error.type === 'validation_error' && { details: error.details }),
+    });
+
+    process.exit(1);
+  }
+}
+
+/** Execute the main ingestion workflow. */
+async function runIngestion(args: CliArgs): Promise<void> {
+  printHeader(args);
+  await handleCacheClearing(args);
+
+  const client = await createIngestionClient();
+
+  try {
+    sandboxLogger.debug('Creating ingestion harness', {
+      subjects: args.subjects,
+      keyStages: args.keyStages,
+    });
+
+    const harness = await createSandboxHarness({
+      client,
+      keyStages: args.keyStages,
+      subjects: args.subjects,
+      indexes: args.indexes,
+      target: 'primary',
+      logger: sandboxLogger,
+    });
+    sandboxLogger.debug('Harness created successfully');
+
+    const { result, duration } = await executeIngestion(harness, args);
+
+    printSummary(result, duration);
+    printCacheStats(client);
+
+    await handlePostIngestion(args, result, duration);
+  } finally {
+    await client.disconnect();
+  }
 }
 
 /** Main CLI entry point. */
@@ -112,8 +157,11 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  sandboxLogger.error('Fatal error', error instanceof Error ? error : undefined, {
-    message: error instanceof Error ? error.message : String(error),
+  sandboxLogger.error('FATAL ERROR - Ingestion terminated', {
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+    phase: 'main',
   });
-  process.exitCode = 1;
+  // Fail fast - exit immediately
+  process.exit(1);
 });

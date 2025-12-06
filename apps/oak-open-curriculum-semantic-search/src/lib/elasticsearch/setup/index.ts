@@ -11,7 +11,7 @@ import {
   OAK_SEQUENCES_MAPPING,
   OAK_SEQUENCE_FACETS_MAPPING,
   OAK_META_MAPPING,
-} from '@oaknational/oak-curriculum-sdk/types/generated/search/index';
+} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
 import { sandboxLogger } from '../../logger';
 
 /** Index names and their corresponding SDK-generated mappings. */
