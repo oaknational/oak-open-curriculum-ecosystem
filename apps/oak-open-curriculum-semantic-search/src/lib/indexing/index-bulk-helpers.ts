@@ -1,18 +1,12 @@
-import type { KeyStage, SearchLessonsIndexDoc, SearchSubjectSlug } from '../../types/oak';
-import { isUnitSummary } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import {
-  createLessonDocument,
-  createRollupDocument,
-  createUnitDocument,
-  extractUnitLessons,
-  normaliseYears,
-} from './document-transforms';
-import { readUnitSummaryValue, resolveUnitSummaryIdentifiers } from './document-transform-helpers';
-import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
+import { createRollupDocument } from './document-transforms';
+import { resolveUnitSummaryIdentifiers } from './document-transform-helpers';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
-import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
+import { ensureUnitSummaryMatchesContext } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
+import { processUnitSummary, buildLessonDocsForGroup } from './index-bulk-helpers-internal';
+import type { DataIntegrityReport } from './data-integrity-report';
 
 export interface LessonGroup {
   unitSlug: string;
@@ -26,7 +20,11 @@ export async function buildUnitDocuments(
   subject: SearchSubjectSlug,
   ks: KeyStage,
   subjectProgrammesUrl: string,
-): Promise<{ unitSummaries: Map<string, unknown>; unitOps: unknown[] }> {
+  dataIntegrityReport: DataIntegrityReport,
+): Promise<{
+  unitSummaries: Map<string, unknown>;
+  unitOps: unknown[];
+}> {
   const unitSummaries = new Map<string, unknown>();
   const unitOps: unknown[] = [];
 
@@ -40,27 +38,19 @@ export async function buildUnitDocuments(
         keyStage: ks,
       });
     }
-    const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
-    if (!isUnitSummary(summaryCandidate)) {
-      throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
-    }
-    const summary: unknown = summaryCandidate;
-    const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
-    unitSummaries.set(unitSlug, summary);
-    unitOps.push(
-      {
-        index: {
-          _index: resolvePrimarySearchIndexName('units'),
-          _id: unitSlug,
-        },
-      },
-      createUnitDocument({
-        summary,
+    const result = await processUnitSummary(client, unit, subject, ks, subjectProgrammesUrl);
+    if (result === null) {
+      dataIntegrityReport.skippedUnits.push({
+        unitSlug: unit.unitSlug,
+        unitTitle: unit.unitTitle,
         subject,
         keyStage: ks,
-        subjectProgrammesUrl,
-      }),
-    );
+      });
+      continue;
+    }
+    const { unitSlug } = resolveUnitSummaryIdentifiers(result.summary);
+    unitSummaries.set(unitSlug, result.summary);
+    unitOps.push(...result.ops);
   }
 
   return { unitSummaries, unitOps };
@@ -72,23 +62,30 @@ export async function buildLessonDocuments(
   unitSummaries: Map<string, unknown>,
   subject: SearchSubjectSlug,
   ks: KeyStage,
-): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
+  dataIntegrityReport: DataIntegrityReport,
+): Promise<{
+  lessonOps: unknown[];
+  rollupSnippets: Map<string, string[]>;
+}> {
   const lessonOps: unknown[] = [];
   const rollupSnippets = new Map<string, string[]>();
   const totalLessons = groups.reduce((sum, g) => sum + g.lessons.length, 0);
   let processedLessons = 0;
 
-  sandboxLogger.debug('Processing lessons', {
-    totalLessons,
-    groups: groups.length,
-    subject,
-    keyStage: ks,
-  });
-
   for (const group of groups) {
     const summary = unitSummaries.get(group.unitSlug);
     if (!summary) {
-      throw new Error(`Missing unit summary for unit ${group.unitSlug}`);
+      // Unit summary unavailable - cannot create valid lesson documents
+      const lessonSlugs = group.lessons.map((l) => l.lessonSlug);
+      dataIntegrityReport.skippedLessonGroups.push({
+        unitSlug: group.unitSlug,
+        unitTitle: group.unitTitle,
+        lessonCount: group.lessons.length,
+        lessonSlugs,
+        subject,
+        keyStage: ks,
+      });
+      continue;
     }
     const { ops, snippets, lessonsProcessed } = await buildLessonDocsForGroup(
       client,
@@ -104,7 +101,6 @@ export async function buildLessonDocuments(
     processedLessons += lessonsProcessed;
   }
 
-  sandboxLogger.debug('Completed lessons', { processed: processedLessons, subject, keyStage: ks });
   return { lessonOps, rollupSnippets };
 }
 
@@ -138,105 +134,4 @@ export function buildRollupDocuments(
     );
   }
   return ops;
-}
-
-async function buildLessonDocsForGroup(
-  client: OakClient,
-  group: LessonGroup,
-  unitSummary: unknown,
-  subject: SearchSubjectSlug,
-  ks: KeyStage,
-  processedSoFar: number,
-  totalLessons: number,
-): Promise<{ ops: unknown[]; snippets: string[]; lessonsProcessed: number }> {
-  const ops: unknown[] = [];
-  const snippets: string[] = [];
-  const context = createLessonBuildContext(unitSummary, group, subject, ks);
-
-  let lessonIndex = 0;
-  for (const lesson of group.lessons) {
-    lessonIndex++;
-    const currentTotal = processedSoFar + lessonIndex;
-    // Log every 10 lessons or at completion
-    if (currentTotal % 10 === 0 || currentTotal === totalLessons) {
-      sandboxLogger.debug('Processing lesson', {
-        progress: `${currentTotal}/${totalLessons}`,
-        lessonSlug: lesson.lessonSlug.slice(0, 40),
-      });
-    }
-    const entry = await buildLessonDocEntry(client, lesson, context);
-    ops.push(entry.operation, entry.document);
-    snippets.push(entry.snippet);
-  }
-
-  return { ops, snippets, lessonsProcessed: group.lessons.length };
-}
-
-interface LessonBuildContext {
-  unitCanonicalUrl: string;
-  subject: SearchSubjectSlug;
-  keyStage: KeyStage;
-  years: string[] | undefined;
-  lessonCount: number;
-}
-
-interface LessonDocEntry {
-  operation: { index: { _index: string; _id: string } };
-  document: SearchLessonsIndexDoc;
-  snippet: string;
-}
-
-function createLessonBuildContext(
-  unitSummary: unknown,
-  group: LessonGroup,
-  subject: SearchSubjectSlug,
-  keyStage: KeyStage,
-): LessonBuildContext {
-  ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
-
-  const { canonicalUrl: unitCanonicalUrl } = resolveUnitSummaryIdentifiers(unitSummary);
-
-  const normalisedLessons = extractUnitLessons(readUnitSummaryValue(unitSummary, 'unitLessons'));
-  const lessonCount =
-    normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
-
-  return {
-    unitCanonicalUrl,
-    subject,
-    keyStage,
-    years: normaliseYears(
-      readUnitSummaryValue(unitSummary, 'year'),
-      readUnitSummaryValue(unitSummary, 'yearSlug'),
-    ),
-    lessonCount,
-  };
-}
-
-async function buildLessonDocEntry(
-  client: OakClient,
-  lesson: { lessonSlug: string; lessonTitle: string },
-  context: LessonBuildContext,
-): Promise<LessonDocEntry> {
-  const materials = await fetchLessonMaterials(client, lesson.lessonSlug);
-  const document = createLessonDocument({
-    lesson,
-    transcript: materials.transcript,
-    summary: materials.summary,
-    unitCanonicalUrl: context.unitCanonicalUrl,
-    subject: context.subject,
-    keyStage: context.keyStage,
-    years: context.years,
-    lessonCount: context.lessonCount,
-  });
-  const snippet = selectLessonPlanningSnippet({
-    summary: materials.summary,
-    transcript: materials.transcript,
-  });
-  const operation = {
-    index: {
-      _index: resolvePrimarySearchIndexName('lessons'),
-      _id: lesson.lessonSlug,
-    },
-  };
-  return { operation, document, snippet };
 }

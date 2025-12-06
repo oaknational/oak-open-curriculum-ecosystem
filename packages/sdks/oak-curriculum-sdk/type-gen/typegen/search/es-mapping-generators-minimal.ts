@@ -3,11 +3,11 @@
  * @description Generators for indexes with minimal ES settings (no text analyzers).
  */
 
-import type { EsFieldMapping } from './es-field-config.js';
 import {
   UNITS_FIELD_OVERRIDES,
   META_FIELD_OVERRIDES,
   ZERO_HIT_FIELD_OVERRIDES,
+  SEQUENCE_FACETS_FIELD_OVERRIDES,
 } from './es-field-overrides.js';
 import {
   HEADER,
@@ -18,6 +18,7 @@ import {
   UNITS_INDEX_FIELDS,
   META_INDEX_FIELDS,
   ZERO_HIT_INDEX_FIELDS,
+  SEQUENCE_FACETS_INDEX_FIELDS,
 } from './field-definitions/index.js';
 import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
 
@@ -56,23 +57,28 @@ export type OakUnitsMapping = typeof OAK_UNITS_MAPPING;
 
 /**
  * Creates the oak_sequence_facets mapping module.
+ *
+ * Uses unified field definitions from SEQUENCE_FACETS_INDEX_FIELDS to ensure
+ * the ES mapping stays in sync with the Zod schema. This eliminates the mapping
+ * drift that caused the key_stage vs key_stages mismatch.
+ *
+ * @see SEQUENCE_FACETS_INDEX_FIELDS - Single source of truth
+ * @see SEQUENCE_FACETS_FIELD_OVERRIDES - ES-specific configurations (normalizers)
  */
 export function createSequenceFacetsMappingModule(): string {
-  const fields: [string, EsFieldMapping][] = [
-    ['sequence_slug', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['subject_slug', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['phase_slug', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['key_stages', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['years', { type: 'keyword', normalizer: 'oak_lower' }],
-    ['unit_count', { type: 'integer' }],
-  ];
+  const fields = generateEsFieldsFromDefinitions(
+    SEQUENCE_FACETS_INDEX_FIELDS,
+    SEQUENCE_FACETS_FIELD_OVERRIDES,
+  );
 
   return (
     HEADER +
     `/**
  * @module oak-sequence-facets
  * @description Elasticsearch mapping for the oak_sequence_facets index.
- * Contains sequence facet data for navigation.
+ * Contains sequence facet data for navigation and filtering.
+ *
+ * Generated from SEQUENCE_FACETS_INDEX_FIELDS at type-gen time.
  */
 
 export const OAK_SEQUENCE_FACETS_MAPPING = {

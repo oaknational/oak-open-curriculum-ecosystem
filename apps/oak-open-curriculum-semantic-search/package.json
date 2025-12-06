@@ -20,6 +20,8 @@
     "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
     "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
     "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
+    "ingest:all": "tsx scripts/ingest-all-combinations.ts",
+    "ingest:progress": "tsx scripts/check-progress.ts",
     "redis:up": "docker compose up -d",
     "redis:down": "docker compose down",
     "redis:reset": "docker compose down -v",

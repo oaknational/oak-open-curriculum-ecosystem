@@ -35,7 +35,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
   const subjects: SearchSubjectSlug[] = SUBJECTS.filter(isSubject);
-  const bulkOps = await buildIndexBulkOps(client, keyStages, subjects);
+  const { operations: bulkOps } = await buildIndexBulkOps(client, keyStages, subjects);
   const target = currentSearchIndexTarget();
   const targetedOps = rewriteBulkOperations(bulkOps, target);
 

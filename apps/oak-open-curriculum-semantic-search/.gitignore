@@ -81,6 +81,10 @@ coverage/
 # Ignore local Redis data
 dump.rdb
 
+# Ignore ingestion progress tracking
+.ingest-progress.json
+.ingest-progress.json.backup
+
 # Ignore local Postgres data
 pgdata/
 

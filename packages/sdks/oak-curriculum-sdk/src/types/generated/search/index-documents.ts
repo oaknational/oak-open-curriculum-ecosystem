@@ -204,6 +204,27 @@ export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema
 export function isSearchSequenceIndexDoc(value: unknown): value is SearchSequenceIndexDoc {
   return SearchSequenceIndexDocSchema.safeParse(value).success;
 }
+export const SearchSequenceFacetsIndexDocSchema = z
+  .object({
+    sequence_slug: z.string().min(1),
+    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    phase_slug: z.string().min(1),
+    phase_title: z.string().min(1),
+    key_stages: z.array(z.string().min(1)),
+    key_stage_title: z.string().min(1).optional(),
+    years: z.array(z.string().min(1)),
+    unit_slugs: z.array(z.string().min(1)),
+    unit_titles: z.array(z.string().min(1)),
+    unit_count: z.number().int().nonnegative(),
+    lesson_count: z.number().int().nonnegative(),
+    has_ks4_options: z.boolean(),
+    sequence_canonical_url: z.string().min(1).optional(),
+  })
+  .strict();
+export type SearchSequenceFacetsIndexDoc = z.infer<typeof SearchSequenceFacetsIndexDocSchema>;
+export function isSearchSequenceFacetsIndexDoc(value: unknown): value is SearchSequenceFacetsIndexDoc {
+  return SearchSequenceFacetsIndexDocSchema.safeParse(value).success;
+}
 // Index Metadata Schema
 export const IndexMetaDocSchema = z
   .object({

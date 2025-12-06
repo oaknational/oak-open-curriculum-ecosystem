@@ -88,7 +88,7 @@ export function buildSequenceFacetOps({
     {
       index: {
         _index: resolvePrimarySearchIndexName('sequence_facets'),
-        _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stage}`,
+        _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`,
       },
     },
     doc,

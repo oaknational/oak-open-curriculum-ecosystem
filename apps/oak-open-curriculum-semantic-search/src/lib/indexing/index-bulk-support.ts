@@ -10,12 +10,13 @@ export function extractUnitSequenceIds(summary: unknown): string[] | undefined {
 
 /**
  * Fetch lesson materials (transcript + summary) for indexing.
+ * Returns null if lesson summary is unavailable (404).
  * Transcript is optional - returns empty string if lesson has no video/transcript.
  */
 export async function fetchLessonMaterials(
   client: OakClient,
   lessonSlug: string,
-): Promise<{ transcript: string; summary: unknown }> {
+): Promise<{ transcript: string; summary: unknown } | null> {
   // Fetch both in parallel but handle transcript 404 gracefully
   const transcriptResponsePromise = client.getLessonTranscript(lessonSlug).catch((error: Error) => {
     // Many lessons don't have transcripts - this is expected
@@ -30,6 +31,11 @@ export async function fetchLessonMaterials(
     transcriptResponsePromise,
     summaryCandidatePromise,
   ]);
+
+  // Handle 404 - lesson exists in listing but has no summary data
+  if (summaryCandidate === null) {
+    return null;
+  }
 
   if (!isLessonSummary(summaryCandidate)) {
     throw new Error(`Unexpected lesson summary response for ${lessonSlug}`);

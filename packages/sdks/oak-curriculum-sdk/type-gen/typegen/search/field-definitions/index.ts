@@ -40,6 +40,7 @@ export {
   UNITS_INDEX_FIELDS,
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
+  SEQUENCE_FACETS_INDEX_FIELDS,
 } from './curriculum.js';
 
 // Re-export observability index fields

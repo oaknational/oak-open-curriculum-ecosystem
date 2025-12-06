@@ -107,6 +107,7 @@ export type {
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
+  SearchSequenceFacetsIndexDoc,
   SearchSequenceIndexDoc,
   IndexMetaDoc,
   ZeroHitDoc,
@@ -142,8 +143,10 @@ export {
   SearchUnitsIndexDocSchema,
   SearchUnitRollupDocSchema,
   SearchSequenceIndexDocSchema,
+  SearchSequenceFacetsIndexDocSchema,
   isSearchLessonsIndexDoc,
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
+  isSearchSequenceFacetsIndexDoc,
 } from '../types/generated/search/index.js';

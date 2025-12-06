@@ -19,6 +19,10 @@ import {
   emitSequenceFacetEvents,
   type PairBuildContext,
 } from './index-oak-helpers';
+import {
+  createDataIntegrityCollector,
+  type DataIntegrityReport,
+} from './indexing/data-integrity-report';
 
 /** Options for building bulk operations. */
 export interface BuildIndexBulkOpsOptions {
@@ -27,14 +31,20 @@ export interface BuildIndexBulkOpsOptions {
   ) => void;
 }
 
+export interface BuildIndexBulkOpsResult {
+  operations: unknown[];
+  dataIntegrityReport: DataIntegrityReport;
+}
+
 /** Build bulk operations for all subject/keystage combinations. */
 export async function buildIndexBulkOps(
   client: OakClient,
   keyStages: readonly string[],
   subjects: readonly string[],
   options?: BuildIndexBulkOpsOptions,
-): Promise<unknown[]> {
+): Promise<BuildIndexBulkOpsResult> {
   const bulkOps: unknown[] = [];
+  const dataIntegrityReport = createDataIntegrityCollector();
   const filteredSubjects = filterSubjects(subjects);
   const filteredKeyStages = filterKeyStages(keyStages);
 
@@ -50,13 +60,19 @@ export async function buildIndexBulkOps(
       subject,
       progress: `${subjectIndex}/${filteredSubjects.length}`,
     });
-    const subjectOps = await buildOpsForSubject(client, subject, filteredKeyStages, options);
+    const subjectOps = await buildOpsForSubject(
+      client,
+      subject,
+      filteredKeyStages,
+      dataIntegrityReport,
+      options,
+    );
     bulkOps.push(...subjectOps);
   }
 
   sandboxLogger.debug('Bulk ops build complete', { totalOps: bulkOps.length });
   sandboxLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });
-  return bulkOps;
+  return { operations: bulkOps, dataIntegrityReport };
 }
 
 /** Filter key stages to valid values. */
@@ -74,6 +90,7 @@ async function buildOpsForSubject(
   client: OakClient,
   subject: SearchSubjectSlug,
   keyStages: readonly KeyStage[],
+  dataIntegrityReport: DataIntegrityReport,
   options?: BuildIndexBulkOpsOptions,
 ): Promise<unknown[]> {
   sandboxLogger.debug('Fetching sequences', { subject });
@@ -96,7 +113,14 @@ async function buildOpsForSubject(
       keyStage: ks,
       progress: `${ksIndex}/${keyStages.length}`,
     });
-    const pairOps = await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources);
+    const pairOps = await buildOpsForPair(
+      client,
+      ks,
+      subject,
+      subjectSequences,
+      sequenceSources,
+      dataIntegrityReport,
+    );
     ops.push(...pairOps);
     sandboxLogger.debug('Generated bulk operations', {
       subject,
@@ -144,6 +168,7 @@ async function buildOpsForPair(
   subject: SearchSubjectSlug,
   subjectSequences: readonly SubjectSequenceEntry[],
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
+  dataIntegrityReport: DataIntegrityReport,
 ): Promise<unknown[]> {
   const { units, groups } = await fetchPairData(client, ks, subject);
 
@@ -153,6 +178,7 @@ async function buildOpsForPair(
     subject,
     subjectSequences,
     sequenceSources,
+    dataIntegrityReport,
   };
 
   return buildPairDocuments(context, units, groups);

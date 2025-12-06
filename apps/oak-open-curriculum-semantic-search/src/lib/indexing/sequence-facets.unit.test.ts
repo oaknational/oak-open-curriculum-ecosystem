@@ -87,7 +87,7 @@ describe('createSequenceFacetDocuments', () => {
     expect(docs[0]).toMatchObject({
       subject_slug: 'maths',
       sequence_slug: 'programme-1',
-      key_stage: 'ks1',
+      key_stages: ['ks1'],
       key_stage_title: 'Key stage 1',
       phase_slug: 'primary',
       phase_title: 'Primary',

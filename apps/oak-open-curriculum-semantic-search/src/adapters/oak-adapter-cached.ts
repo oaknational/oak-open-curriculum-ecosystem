@@ -61,28 +61,6 @@ async function createRedisClient(url: string): Promise<Redis | null> {
   }
 }
 
-/** Wrap a function with Redis caching. */
-function withCache<T>(
-  fn: (id: string) => Promise<T>,
-  redis: Redis,
-  resourceType: string,
-  ttlSeconds: number,
-  stats: { hits: number; misses: number },
-): (id: string) => Promise<T> {
-  return async (id: string): Promise<T> => {
-    const key = buildCacheKey(resourceType, id);
-    const cached = await tryReadCache<T>(redis, key);
-    if (cached !== null) {
-      stats.hits++;
-      return cached;
-    }
-    stats.misses++;
-    const result = await fn(id);
-    await tryWriteCache(redis, key, ttlSeconds, result);
-    return result;
-  };
-}
-
 /** Try to read from cache, returns null on miss or error. */
 async function tryReadCache<T>(redis: Redis, key: string): Promise<T | null> {
   try {
@@ -142,6 +120,55 @@ function withCacheAndFallback<T>(
   };
 }
 
+function createCachedClientWrapper(
+  baseClient: OakClient,
+  redis: Redis,
+  ttlSeconds: number,
+  stats: { hits: number; misses: number },
+): CachedOakClient {
+  return {
+    getUnitsByKeyStageAndSubject: baseClient.getUnitsByKeyStageAndSubject,
+    getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
+    getSubjectSequences: baseClient.getSubjectSequences,
+    getSequenceUnits: baseClient.getSequenceUnits,
+    // Unit summaries use fallback caching - some units in listings don't have
+    // full summary data, returning 404. We cache null to avoid repeated network calls.
+    getUnitSummary: withCacheAndFallback(
+      baseClient.getUnitSummary,
+      redis,
+      'unit-summary',
+      ttlSeconds,
+      stats,
+      null, // Fallback for 404s (unit exists in listing but no summary data)
+    ),
+    // Lesson summaries use fallback caching - some lessons in listings don't have
+    // full summary data, returning 404. We cache null to avoid repeated network calls.
+    getLessonSummary: withCacheAndFallback(
+      baseClient.getLessonSummary,
+      redis,
+      'lesson-summary',
+      ttlSeconds,
+      stats,
+      null, // Fallback for 404s (lesson exists in listing but no summary data)
+    ),
+    // Transcripts use fallback caching - many lessons don't have video/transcripts,
+    // returning 404. We cache the empty fallback to avoid repeated network calls.
+    getLessonTranscript: withCacheAndFallback(
+      baseClient.getLessonTranscript,
+      redis,
+      'lesson-transcript',
+      ttlSeconds,
+      stats,
+      { transcript: '', vtt: '' }, // Fallback for 404s (no video/transcript)
+    ),
+    getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),
+    disconnect: async () => {
+      await redis.quit();
+      cacheLogger.info('Disconnected from Redis');
+    },
+  };
+}
+
 /** Create a cached Oak SDK client. Falls back to uncached if Redis unavailable. */
 export async function createCachedOakSdkClient(): Promise<CachedOakClient> {
   const baseClient = createOakSdkClient();
@@ -162,35 +189,7 @@ export async function createCachedOakSdkClient(): Promise<CachedOakClient> {
   const stats = { hits: 0, misses: 0 };
   cacheLogger.info('SDK caching enabled', { ttlDays: config.SDK_CACHE_TTL_DAYS });
 
-  return {
-    getUnitsByKeyStageAndSubject: baseClient.getUnitsByKeyStageAndSubject,
-    getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
-    getSubjectSequences: baseClient.getSubjectSequences,
-    getSequenceUnits: baseClient.getSequenceUnits,
-    getUnitSummary: withCache(baseClient.getUnitSummary, redis, 'unit-summary', ttlSeconds, stats),
-    getLessonSummary: withCache(
-      baseClient.getLessonSummary,
-      redis,
-      'lesson-summary',
-      ttlSeconds,
-      stats,
-    ),
-    // Transcripts use fallback caching - many lessons don't have video/transcripts,
-    // returning 404. We cache the empty fallback to avoid repeated network calls.
-    getLessonTranscript: withCacheAndFallback(
-      baseClient.getLessonTranscript,
-      redis,
-      'lesson-transcript',
-      ttlSeconds,
-      stats,
-      { transcript: '', vtt: '' }, // Fallback for 404s (no video/transcript)
-    ),
-    getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),
-    disconnect: async () => {
-      await redis.quit();
-      cacheLogger.info('Disconnected from Redis');
-    },
-  };
+  return createCachedClientWrapper(baseClient, redis, ttlSeconds, stats);
 }
 
 /** Clear all cached SDK responses from Redis. */

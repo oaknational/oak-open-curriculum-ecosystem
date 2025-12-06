@@ -12,7 +12,7 @@ The Oak Open Curriculum Semantic Search is a Next.js application providing hybri
 - **Faceted navigation**: Filter by subject, key stage, year, category
 - **Type-ahead suggestions**: Context-aware completion with per-index contexts
 
-**Current State**: ES Serverless deployed and operational. Type system fully compliant with official ES client types. All blocking issues resolved. **All 10 quality gates passing** including smoke tests. Ready for next phase.
+**Current State**: ES Serverless deployed and operational. Type system fully compliant with official ES client types. **CURRENT BLOCKING ISSUE**: `sequence_facets` mapping mismatch needs remediation. See "Current Blocking Issue" section below.
 
 ## Foundation Documents (MUST READ FIRST)
 
@@ -38,7 +38,60 @@ Before any work, read and internalize:
 
 ---
 
+## Recent Major Milestone 🎉
+
+### Mapping Remediation COMPLETE (2025-12-06)
+
+**Problem Solved**: Fourth and FINAL occurrence of mapping sync error eliminated through architectural consolidation.
+
+**What Was Fixed**:
+
+- ✅ All 7 search indexes now flow from **single source of truth** (SDK field definitions)
+- ✅ `oak_sequence_facets` mapping mismatch resolved (`key_stage` → `key_stages` array)
+- ✅ Eliminated ad-hoc ES mappings and document interfaces
+- ✅ Generated Zod schemas and TypeScript types from field definitions
+- ✅ Created comprehensive SDK and app documentation
+- ✅ Successfully tested with English KS2 ingestion (348 documents)
+- ✅ All 10 quality gates passing
+
+**Impact**: **IMPOSSIBLE for mapping/data mismatch going forward** - schema changes in SDK field definitions automatically propagate to ES mappings, Zod schemas, and TypeScript types via `pnpm type-gen`.
+
+**Systematic Ingestion Tools Created** (2025-12-06):
+
+- ✅ `scripts/ingest-all-combinations.ts` - Processes all 340 combinations (17 subjects × 4 keystages × 5 indexes)
+- ✅ `scripts/check-progress.ts` - Monitors ingestion progress and ES state
+- ✅ Progress tracking with resume capability (`.ingest-progress.json`)
+- ✅ Can safely interrupt (Ctrl+C) and resume from checkpoint
+- ✅ Tracks success/failure per combination for iterative bug fixing
+
+**Current Elasticsearch State** (2025-12-06):
+
+- ✅ English KS2 fully ingested: 89 lessons, 129 units, 129 unit_rollup, 1 sequence_facet
+- ⏳ Remaining: 339 combinations awaiting ingestion
+
+**Ready for**: Full live ingestion of all 340 combinations
+
+---
+
 ## Recent Improvements ✅
+
+### Systematic Ingestion Tools (2025-12-06)
+
+**Complete Solution for Full Data Ingestion**:
+
+- ✅ Created `scripts/ingest-all-combinations.ts` - processes all 340 combinations
+- ✅ Progress tracking with `.ingest-progress.json` (persistent state)
+- ✅ Resume capability - safely interrupt and resume from checkpoint
+- ✅ Created `scripts/check-progress.ts` - monitors ES state and progress
+- ✅ Added `pnpm ingest:all` and `pnpm ingest:progress` commands
+- ✅ Documented in `scripts/README-INGEST-ALL.md` and ADR-069
+
+**Developer Experience**:
+
+- Can interrupt at any time (Ctrl+C) without losing progress
+- Discover bugs → fix → resume seamlessly
+- Clear visibility of successes and failures
+- Estimated 3-11 hours for all combinations
 
 ### Type System Architecture Upgrade (2025-12-06)
 
@@ -185,20 +238,22 @@ The generator vs generated drift issue has been **RESOLVED**. All changes now pr
 
 ## Current Elasticsearch State
 
-**Last verified**: 2025-12-06 via Kibana
+**Last verified**: 2025-12-06 via `pnpm ingest:progress`
 
-| Index                 | Docs | Status                                    |
-| --------------------- | ---- | ----------------------------------------- |
-| `oak_unit_rollup`     | 105  | ✅ Maths KS1 unit rollups                 |
-| `oak_units`           | 37   | ✅ Unit metadata                          |
-| `oak_lessons`         | 0    | ⚠️ Ready to re-ingest with fixed contexts |
-| `oak_sequences`       | 0    | ⏳ Not yet populated                      |
-| `oak_sequence_facets` | 0    | ⏳ Not yet populated                      |
-| `oak_meta`            | 0    | ⏳ Version tracking index                 |
+| Index                 | Docs | Status                                        |
+| --------------------- | ---- | --------------------------------------------- |
+| `oak_lessons`         | 89   | ✅ English KS2 lessons                        |
+| `oak_units`           | 129  | ✅ English KS2 units                          |
+| `oak_unit_rollup`     | 129  | ✅ English KS2 unit rollups                   |
+| `oak_sequence_facets` | 1    | ✅ English KS2 sequence facet                 |
+| `oak_sequences`       | 0    | ⏳ English KS2 creates no top-level sequences |
+| `oak_meta`            | 1    | ✅ Tracking ingestion metadata (v2025-12-06)  |
 
 **Synonym Set**: `oak-syns` with 68 rules ✅
 
-**Note**: Unit-level ingestion succeeded (142 docs). Lessons failed due to completion context bug (now fixed). Ready to re-ingest.
+**Ingestion Coverage**: 1 of 340 combinations complete (English × KS2 × all indexes)
+
+**Systematic Ingestion Progress**: Use `pnpm ingest:progress` to check current state
 
 ---
 
@@ -214,22 +269,35 @@ The generator vs generated drift issue has been **RESOLVED**. All changes now pr
 All commands run from `apps/oak-open-curriculum-semantic-search`:
 
 ```bash
-# Check Elasticsearch status
-pnpm es:status
+# ===== SYSTEMATIC INGESTION (RECOMMENDED) =====
+# Ingest all 340 combinations with progress tracking
+pnpm ingest:all                    # Start/resume systematic ingestion
+pnpm ingest:all --resume           # Explicitly resume from checkpoint
+pnpm ingest:all --reset            # Clear progress and start fresh
+pnpm ingest:all --dry-run          # Preview without ingesting
+pnpm ingest:progress               # Check current state and progress
 
-# Full ingestion (all subjects, all key stages)
+# ===== MANUAL INGESTION (FOR TESTING) =====
+# Single subject/keystage ingestion
+pnpm es:ingest-live --subject maths --keystage ks2 --verbose
+pnpm es:ingest-live --subject english --keystage ks3 --index lessons --verbose
+
+# Full ingestion (all subjects, all keystages) - USE WITH CAUTION
 pnpm es:ingest-live --verbose
 
-# Filtered ingestion
-pnpm es:ingest-live --subject maths --verbose
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose
-pnpm es:ingest-live --subject maths --index lessons --verbose  # NEW: index filter
+# ===== ELASTICSEARCH MANAGEMENT =====
+# Check Elasticsearch status and document counts
+pnpm es:status
 
-# Reset indexes (destructive)
+# Reset all indexes (destructive)
 npx tsx src/lib/elasticsearch/setup/cli.ts reset
 
-# Development with caching (speeds up repeated ingestion)
-pnpm redis:up  # Start Redis
+# Reset specific index
+npx tsx src/lib/elasticsearch/setup/cli.ts reset --index sequence_facets
+
+# ===== DEVELOPMENT TOOLS =====
+# Enable Redis caching for faster repeated runs
+pnpm redis:up
 SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
 
 # Dry run (preview without uploading)
@@ -257,35 +325,75 @@ pnpm test:ui && pnpm smoke:dev:stub
 
 ## Immediate Next Steps
 
-All blocking issues resolved! Ready to resume semantic search development.
+### Step 1: Run Systematic Full Ingestion 🚀
 
-### Option A: Resume Ingestion
-
-Full re-ingestion with fixed completion contexts:
+All blocking issues resolved! Ready to ingest all 340 combinations:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-npx tsx src/lib/elasticsearch/setup/cli.ts reset
-pnpm es:ingest-live --subject maths --verbose
+
+# Check current state
+pnpm ingest:progress
+
+# Start systematic ingestion (all 340 combinations)
+pnpm ingest:all
+
+# Or preview what would be ingested
+pnpm ingest:all --dry-run
 ```
 
-Verify in Kibana that lessons index successfully (completion contexts now correct).
+**What This Does**:
 
-### Option B: Selective Re-ingestion
+- Processes all 17 subjects × 4 keystages × 5 indexes = 340 combinations
+- Tracks progress in `.ingest-progress.json`
+- Can be safely interrupted (Ctrl+C) and resumed with `pnpm ingest:all --resume`
+- Estimated time: 3-11 hours total (30-120 seconds per combination)
+- Individual failures don't stop the entire process
 
-Use new `--index` filter to re-ingest only lessons:
+**Progress Tracking**:
 
 ```bash
-pnpm es:ingest-live --subject maths --index lessons --verbose
+# Monitor ingestion progress
+pnpm ingest:progress
+
+# View detailed progress file
+cat .ingest-progress.json
+
+# Resume after interruption or bug fix
+pnpm ingest:all --resume
+
+# Reset and start fresh
+pnpm ingest:all --reset
 ```
 
-### Option C: Next Phase Work
+### Step 2: Alternative - Manual Selective Ingestion
 
-Continue with semantic search roadmap:
+For targeted testing or specific subjects:
 
-- Reference indices (subjects, key stages, years)
-- Ontology integration
-- See `.agent/plans/semantic-search/semantic-search-overview.md` for phases
+```bash
+# Single subject/keystage
+pnpm es:ingest-live --subject maths --keystage ks2 --verbose
+
+# Single subject, all keystages
+pnpm es:ingest-live --subject history --verbose
+
+# Specific index only
+pnpm es:ingest-live --subject english --keystage ks3 --index lessons --verbose
+
+# Dry run to preview
+pnpm es:ingest-live --subject science --dry-run --verbose
+```
+
+### Step 3: After Full Ingestion - Next Phase Work
+
+Once all 340 combinations are ingested:
+
+- **Phase 2**: Threads & Enhanced Filtering (programme factors, content guidance)
+- **Phase 3**: Reference Indices (subjects, key stages, years catalogs)
+- **Phase 4**: Static Ontology Index (RAG-ready knowledge graph)
+- **Phase 5**: Instance Knowledge Graph (curriculum relationships)
+
+See `.agent/plans/semantic-search/semantic-search-overview.md` for detailed roadmap
 
 ---
 
@@ -425,17 +533,98 @@ After re-ingestion, the semantic search system continues with these phases:
 
 ## Documentation Links
 
-| Topic                         | Location                                                                                    |
-| ----------------------------- | ------------------------------------------------------------------------------------------- |
-| **Planning Hub**              | `.agent/plans/semantic-search/index.md` ⭐ START HERE                                       |
-| Phase roadmap                 | `.agent/plans/semantic-search/semantic-search-overview.md`                                  |
-| Reference indices plan        | `.agent/plans/semantic-search/reference-indices-plan.md`                                    |
-| Entity discovery pipeline     | `.agent/plans/semantic-search/entity-discovery-pipeline.md`                                 |
-| Graph RAG vision              | `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`                          |
-| SDK caching                   | `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`                              |
-| Discovery analysis            | `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`                     |
-| ADR-067 (ES mappings)         | `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md`     |
-| ADR-068 (completion contexts) | `docs/architecture/architectural-decisions/068-per-index-completion-context-enforcement.md` |
+| Topic                           | Location                                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Planning Hub**                | `.agent/plans/semantic-search/index.md` ⭐ START HERE                                       |
+| Phase roadmap                   | `.agent/plans/semantic-search/semantic-search-overview.md`                                  |
+| Mapping remediation (COMPLETED) | `.agent/plans/semantic-search/mapping-remediation.md`                                       |
+| Reference indices plan          | `.agent/plans/semantic-search/reference-indices-plan.md`                                    |
+| Entity discovery pipeline       | `.agent/plans/semantic-search/entity-discovery-pipeline.md`                                 |
+| Graph RAG vision                | `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`                          |
+| Systematic ingestion guide      | `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`                     |
+| SDK caching                     | `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`                              |
+| Discovery analysis              | `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`                     |
+| ADR-067 (ES mappings)           | `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md`     |
+| ADR-068 (completion contexts)   | `docs/architecture/architectural-decisions/068-per-index-completion-context-enforcement.md` |
+| ADR-069 (systematic ingestion)  | `docs/architecture/architectural-decisions/069-systematic-ingestion-progress-tracking.md`   |
+
+---
+
+## Pre-Ingestion Checklist ✅
+
+Before starting full ingestion, verify all systems are ready:
+
+### 1. Environment Variables
+
+Verify `.env.local` in `apps/oak-open-curriculum-semantic-search`:
+
+```bash
+# Required for Elasticsearch
+ELASTICSEARCH_URL=https://your-elasticsearch-url-here
+ELASTICSEARCH_API_KEY=your_elasticsearch_api_key_here
+
+# Required for Oak API
+OAK_API_KEY=your_oak_api_key_here
+
+# Optional but recommended for speed
+SDK_CACHE_ENABLED=true  # Enables Redis caching
+```
+
+### 2. Infrastructure Status
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Check Elasticsearch is reachable
+pnpm es:status
+
+# (Optional) Start Redis for caching
+pnpm redis:up
+pnpm redis:status  # Verify Redis is running
+```
+
+### 3. Verify Quality Gates Pass
+
+```bash
+# From repo root
+pnpm type-gen && pnpm build && pnpm type-check
+pnpm lint:fix && pnpm format:root && pnpm markdownlint:root
+pnpm test  # Should show 319+ tests passing
+```
+
+### 4. Check Current State
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm ingest:progress
+
+# Expected output:
+# - Elasticsearch shows 348 docs (English KS2)
+# - Progress file either doesn't exist or shows 1/340 complete
+```
+
+### 5. Test Single Combination (Optional)
+
+```bash
+# Verify ingestion works with a small subject
+pnpm es:ingest-live --subject history --keystage ks3 --verbose
+
+# Should complete in ~60 seconds with no errors
+```
+
+### 6. Ready to Start
+
+```bash
+# Start systematic ingestion (can be interrupted safely)
+pnpm ingest:all
+
+# Monitor progress in another terminal
+pnpm ingest:progress
+```
+
+**Estimated Time**: 3-11 hours for all 340 combinations (can run overnight)
+
+**Safe to Interrupt**: Press Ctrl+C at any time, progress is saved automatically
 
 ---
 

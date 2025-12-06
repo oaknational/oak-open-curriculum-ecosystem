@@ -8,6 +8,7 @@ import {
   THREADS_INDEX_FIELDS,
   META_INDEX_FIELDS,
   ZERO_HIT_INDEX_FIELDS,
+  SEQUENCE_FACETS_INDEX_FIELDS,
 } from './field-definitions/index.js';
 import {
   LESSONS_COMPLETION_CONTEXTS,
@@ -74,6 +75,7 @@ function createPayloadSchemas(): string {
 
 function createDocSchemas(): string {
   const d = generateDocSchemaWithTypedCompletion;
+  const s = generateSimpleDocSchema;
   const g = generateTypeGuard;
   return (
     '// Index Document Schemas\n' +
@@ -104,6 +106,14 @@ function createDocSchemas(): string {
     ) +
     '\nexport type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema>;\n' +
     g('isSearchSequenceIndexDoc', 'SearchSequenceIndexDocSchema', 'SearchSequenceIndexDoc') +
+    '\n' +
+    s('SearchSequenceFacetsIndexDocSchema', SEQUENCE_FACETS_INDEX_FIELDS) +
+    '\nexport type SearchSequenceFacetsIndexDoc = z.infer<typeof SearchSequenceFacetsIndexDocSchema>;\n' +
+    g(
+      'isSearchSequenceFacetsIndexDoc',
+      'SearchSequenceFacetsIndexDocSchema',
+      'SearchSequenceFacetsIndexDoc',
+    ) +
     '\n'
   );
 }

@@ -1,4 +1,5 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   expectUnitSummaryString,
   extractUnitLessons,
@@ -20,22 +21,6 @@ export interface SequenceFacetSource {
   unitSlugs: readonly string[];
 }
 
-export interface SequenceFacetDocument {
-  subject_slug: SearchSubjectSlug;
-  sequence_slug: string;
-  key_stage: KeyStage;
-  key_stage_title?: string;
-  phase_slug: string;
-  phase_title: string;
-  years: string[];
-  unit_slugs: string[];
-  unit_titles: string[];
-  unit_count: number;
-  lesson_count: number;
-  has_ks4_options: boolean;
-  sequence_canonical_url?: string;
-}
-
 interface CreateSequenceFacetDocumentsParams {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -50,12 +35,12 @@ export function createSequenceFacetDocuments({
   sequences,
   sequenceSources,
   unitSummaries,
-}: CreateSequenceFacetDocumentsParams): SequenceFacetDocument[] {
+}: CreateSequenceFacetDocumentsParams): SearchSequenceFacetsIndexDoc[] {
   return sequences
     .map((sequence) =>
       createSequenceFacetDocument({ subject, keyStage, sequence, sequenceSources, unitSummaries }),
     )
-    .filter((doc): doc is SequenceFacetDocument => doc !== null);
+    .filter((doc): doc is SearchSequenceFacetsIndexDoc => doc !== null);
 }
 
 interface CreateSequenceFacetDocumentParams {
@@ -72,7 +57,7 @@ function createSequenceFacetDocument({
   sequence,
   sequenceSources,
   unitSummaries,
-}: CreateSequenceFacetDocumentParams): SequenceFacetDocument | null {
+}: CreateSequenceFacetDocumentParams): SearchSequenceFacetsIndexDoc | null {
   const sequenceRecord = ensureSequenceRecord(sequence, 'sequence entry');
   const sequenceSlug = requireSequenceString(sequenceRecord, 'sequenceSlug', 'sequence slug');
   const keyStageEntry = findKeyStageEntry(sequenceRecord, keyStage);
@@ -93,7 +78,7 @@ function createSequenceFacetDocument({
   return {
     subject_slug: subject,
     sequence_slug: sequenceSlug,
-    key_stage: keyStage,
+    key_stages: [keyStage],
     key_stage_title: keyStageEntry.keyStageTitle,
     phase_slug: requireSequenceString(
       sequenceRecord,

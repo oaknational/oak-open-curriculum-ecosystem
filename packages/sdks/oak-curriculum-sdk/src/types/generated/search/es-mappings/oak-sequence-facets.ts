@@ -8,7 +8,9 @@
 /**
  * @module oak-sequence-facets
  * @description Elasticsearch mapping for the oak_sequence_facets index.
- * Contains sequence facet data for navigation.
+ * Contains sequence facet data for navigation and filtering.
+ *
+ * Generated from SEQUENCE_FACETS_INDEX_FIELDS at type-gen time.
  */
 
 export const OAK_SEQUENCE_FACETS_MAPPING = {
@@ -37,7 +39,15 @@ export const OAK_SEQUENCE_FACETS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      phase_title: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       key_stages: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      key_stage_title: {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
@@ -45,8 +55,26 @@ export const OAK_SEQUENCE_FACETS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      unit_slugs: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      unit_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       unit_count: {
         type: 'integer',
+      },
+      lesson_count: {
+        type: 'integer',
+      },
+      has_ks4_options: {
+        type: 'boolean',
+      },
+      sequence_canonical_url: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
       },
     },
   },

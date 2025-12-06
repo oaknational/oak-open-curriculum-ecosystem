@@ -18,6 +18,7 @@ import {
   buildUnitDocuments,
 } from './indexing/index-bulk-helpers';
 import { sandboxLogger } from './logger';
+import type { DataIntegrityReport } from './indexing/data-integrity-report';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -26,6 +27,7 @@ export interface PairBuildContext {
   readonly subject: SearchSubjectSlug;
   readonly subjectSequences: readonly SubjectSequenceEntry[];
   readonly sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
+  readonly dataIntegrityReport: DataIntegrityReport;
 }
 
 /** Unit and lesson group types for pair data. */
@@ -77,7 +79,7 @@ async function buildCoreDocumentOps(
   rollupOps: unknown[];
   unitSummaries: Map<string, unknown>;
 }> {
-  const { client, ks, subject } = context;
+  const { client, ks, subject, dataIntegrityReport } = context;
 
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const { unitSummaries, unitOps } = await buildUnitDocuments(
@@ -86,6 +88,7 @@ async function buildCoreDocumentOps(
     subject,
     ks,
     subjectProgrammesUrl,
+    dataIntegrityReport,
   );
   sandboxLogger.debug('Built unit docs', { subject, keyStage: ks, count: unitOps.length / 2 });
 
@@ -96,6 +99,7 @@ async function buildCoreDocumentOps(
     unitSummaries,
     subject,
     ks,
+    dataIntegrityReport,
   );
   sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: lessonOps.length / 2 });
 

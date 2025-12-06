@@ -227,11 +227,17 @@ export const SEQUENCES_FIELD_OVERRIDES = {
 
 /**
  * Field overrides for the oak_sequence_facets index.
- * This index has minimal overrides as it's primarily keyword-based.
+ *
+ * This index uses normalizers for case-insensitive keyword matching on slug/identifier fields.
+ * All fields are keywords (no text search) for exact filtering and faceted navigation.
  */
-export const SEQUENCE_FACETS_FIELD_OVERRIDES = {} as const satisfies Readonly<
-  Record<string, EsFieldMapping>
->;
+export const SEQUENCE_FACETS_FIELD_OVERRIDES = {
+  sequence_slug: { type: 'keyword', normalizer: 'oak_lower' },
+  subject_slug: { type: 'keyword', normalizer: 'oak_lower' },
+  phase_slug: { type: 'keyword', normalizer: 'oak_lower' },
+  key_stages: { type: 'keyword', normalizer: 'oak_lower' },
+  years: { type: 'keyword', normalizer: 'oak_lower' },
+} as const satisfies Readonly<Record<string, EsFieldMapping>>;
 
 /**
  * Field overrides for the oak_meta index.

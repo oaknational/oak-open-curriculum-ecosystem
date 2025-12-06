@@ -82,6 +82,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
 - [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
 - [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
+- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
 
 ## Key Architectural Decisions
 

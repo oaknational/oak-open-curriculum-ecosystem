@@ -4,43 +4,60 @@ Navigation hub for all semantic search planning documentation.
 
 ## Current Priority
 
-**Ready for Next Phase** - All blocking issues resolved!
+**🚀 READY FOR FULL INGESTION** - All blocking issues permanently resolved!
 
-### Recently Resolved ✅ (2025-12-06)
+### Major Milestone Completed ✅ (2025-12-06)
 
-1. ✅ **Type System Architecture** - Eliminated all `Record<string, unknown>` using official ES client types
-2. ✅ **Quality Gates** - All 10 gates passing (type-gen → smoke:dev:stub)
-3. ✅ **ES Type Safety** - Replaced ad-hoc ES types with `@elastic/elasticsearch` estypes
-4. ✅ **Code Quality** - Reduced complexity (createErrorFromException 17→8, runIngestion 62→50 lines)
-5. ✅ **Ingestion Progress Logging** - Real-time feedback during bulk uploads (eliminates silent gaps)
-6. ✅ **Build System** - Fixed all build issues, 1,310+ tests passing
-7. ✅ **Generator Drift** - Generators now properly emit per-index completion schemas
-8. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
-9. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
-10. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
-11. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
-12. ✅ **Smoke Test UX** - Enhanced port conflict error messages
-13. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
-14. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
-15. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
+**Mapping Remediation COMPLETE**: Fourth and final mapping mismatch eliminated through architectural consolidation.
+
+### Recently Completed (2025-12-06)
+
+1. ✅ **Mapping Remediation** - Consolidated all ES mappings to single source of truth in SDK ⭐
+2. ✅ **Systematic Ingestion Tools** - Created progress-tracked ingestion for all 340 combinations
+3. ✅ **Type System Architecture** - Eliminated all `Record<string, unknown>` using official ES client types
+4. ✅ **Quality Gates** - All 10 gates passing (type-gen → smoke:dev:stub)
+5. ✅ **ES Type Safety** - Replaced ad-hoc ES types with `@elastic/elasticsearch` estypes
+6. ✅ **Code Quality** - Reduced complexity (createErrorFromException 17→8, runIngestion 62→50 lines)
+7. ✅ **Ingestion Progress Logging** - Real-time feedback during bulk uploads
+8. ✅ **Build System** - All build issues fixed, 1,310+ tests passing
+9. ✅ **Generator Drift** - Generators properly emit per-index completion schemas
+10. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
+11. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
+12. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
+13. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
+14. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
+15. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
+16. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
+17. ✅ **English KS2 Test Ingestion** - 348 documents successfully indexed with zero errors
 
 ### Elasticsearch State (Verified 2025-12-06)
 
-| Index             | Docs | Notes                         |
-| ----------------- | ---- | ----------------------------- |
-| `oak_unit_rollup` | 105  | Maths KS1 data                |
-| `oak_units`       | 37   | Unit metadata                 |
-| `oak_lessons`     | 0    | Failed with mapping exception |
+| Index                 | Docs | Status                                       |
+| --------------------- | ---- | -------------------------------------------- |
+| `oak_lessons`         | 89   | ✅ English KS2 lessons                       |
+| `oak_units`           | 129  | ✅ English KS2 units                         |
+| `oak_unit_rollup`     | 129  | ✅ English KS2 unit rollups                  |
+| `oak_sequence_facets` | 1    | ✅ English KS2 sequence facet (key_stages[]) |
+| `oak_sequences`       | 0    | ⏳ Expected for English KS2                  |
+| `oak_meta`            | 1    | ✅ Tracking metadata (v2025-12-06-214452)    |
 
-**142 documents indexed** - unit-level ingestion succeeded, lesson ingestion failed.
+**Ingestion Coverage**: 1 of 340 combinations complete (English × KS2 × all indexes)
+
+**Check Progress**: Run `pnpm ingest:progress` from the semantic search app
 
 ### Next Steps
 
-**All blocking issues resolved!** Choose your path:
+**READY TO EXECUTE**: Full systematic ingestion
 
-1. **Resume Full Ingestion** - Reset and re-ingest with fixed completion contexts
-2. **Selective Ingestion** - Use `--index lessons` to re-ingest only lessons
-3. **Continue Roadmap** - Move to next phase (reference indices, ontology integration)
+1. **Start Full Ingestion** - Run `pnpm ingest:all` to process all 340 combinations
+   - 17 subjects × 4 keystages × 5 indexes
+   - Progress tracked, can resume after interruption
+   - Estimated time: 3-11 hours total
+
+2. **Continue Roadmap** - After full ingestion complete:
+   - Phase 2: Threads & Enhanced Filtering
+   - Phase 3: Reference Indices (subjects, keystages, years catalogs)
+   - Phase 4: Static Ontology Index (RAG-ready)
 
 For continuation work, use:
 

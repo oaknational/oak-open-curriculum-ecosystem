@@ -18,6 +18,11 @@ import {
   summariseOperations,
   type EsTransport,
 } from './sandbox-harness-ops';
+import {
+  hasDataIntegrityIssues,
+  getDataIntegritySummary,
+  type DataIntegrityReport,
+} from './data-integrity-report';
 import { filterOperationsByIndex } from './sandbox-harness-filtering';
 import {
   createSequenceFacetMetricsCollector,
@@ -55,6 +60,7 @@ interface SandboxBulkResult {
   readonly operations: unknown[];
   readonly summary: SandboxBulkSummary;
   readonly metrics?: SandboxBulkMetrics;
+  readonly dataIntegrityReport?: DataIntegrityReport;
 }
 interface IngestOptions {
   readonly dryRun?: boolean;
@@ -156,14 +162,19 @@ function resolveTransport(es?: EsTransport): EsTransport {
 
 async function prepareOperations(context: HarnessContext): Promise<SandboxBulkResult> {
   const metricsCollector = createSequenceFacetMetricsCollector();
-  const bulkOps = await buildIndexBulkOps(context.client, context.keyStages, context.subjects, {
-    onSequenceFacetProcessed: metricsCollector.record,
-  });
+  const { operations: bulkOps, dataIntegrityReport } = await buildIndexBulkOps(
+    context.client,
+    context.keyStages,
+    context.subjects,
+    {
+      onSequenceFacetProcessed: metricsCollector.record,
+    },
+  );
   const targetedOps = rewriteBulkOperations(bulkOps, context.target);
   const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
   const summary = summariseOperations(filteredOps, context.target);
   const metrics = metricsCollector.snapshot();
-  return { operations: filteredOps, summary, metrics };
+  return { operations: filteredOps, summary, metrics, dataIntegrityReport };
 }
 
 async function ingestOperations(
@@ -171,26 +182,41 @@ async function ingestOperations(
   prepare: () => Promise<SandboxBulkResult>,
   options: IngestOptions = {},
 ): Promise<SandboxBulkResult> {
-  const result = await prepare();
-  const dryRun = options.dryRun ?? false;
-  const verbose = options.verbose ?? false;
+  let result: SandboxBulkResult | undefined;
 
-  logSummary(
-    context.logger,
-    'sandbox.ingest.prepared',
-    context.target,
-    result.summary,
-    dryRun,
-    result.metrics,
-  );
+  try {
+    result = await prepare();
+    const dryRun = options.dryRun ?? false;
+    const verbose = options.verbose ?? false;
 
-  if (result.operations.length === 0 || dryRun) {
-    if (verbose) {
-      logPreview(context.logger, context.target, result.operations);
+    logSummary(
+      context.logger,
+      'sandbox.ingest.prepared',
+      context.target,
+      result.summary,
+      dryRun,
+      result.metrics,
+    );
+
+    if (result.operations.length === 0 || dryRun) {
+      if (verbose) {
+        logPreview(context.logger, context.target, result.operations);
+      }
+      return result;
     }
-    return result;
-  }
 
+    await executeAndLogIngestion(context, result, verbose);
+    return result;
+  } finally {
+    logDataIntegrityIssues(context.logger, result?.dataIntegrityReport);
+  }
+}
+
+async function executeAndLogIngestion(
+  context: HarnessContext,
+  result: SandboxBulkResult,
+  verbose: boolean,
+): Promise<void> {
   await dispatchBulk(context.es, result.operations, context.logger);
 
   logSummary(
@@ -205,6 +231,19 @@ async function ingestOperations(
   if (verbose) {
     logPreview(context.logger, context.target, result.operations);
   }
+}
 
-  return result;
+function logDataIntegrityIssues(logger: Logger, report?: DataIntegrityReport): void {
+  if (!report || !hasDataIntegrityIssues(report)) {
+    return;
+  }
+  const summary = getDataIntegritySummary(report);
+  logger.warn('Data integrity issues detected during ingestion', {
+    totalSkippedUnits: summary.totalSkippedUnits,
+    totalSkippedLessons: summary.totalSkippedLessons,
+    affectedSubjects: Array.from(summary.affectedSubjects),
+    affectedKeyStages: Array.from(summary.affectedKeyStages),
+    skippedUnits: report.skippedUnits,
+    skippedLessonGroups: report.skippedLessonGroups,
+  });
 }

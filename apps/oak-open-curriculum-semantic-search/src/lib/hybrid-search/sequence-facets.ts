@@ -1,8 +1,8 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
+import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { esSearch, type EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { SequenceFacetDocument } from '../indexing/sequence-facets';
 import type { SequenceFacet, SearchFacets } from './types';
 
 interface FetchSequenceFacetsParams {
@@ -18,7 +18,7 @@ export async function fetchSequenceFacets(
     filters.push({ term: { subject_slug: params.subject } });
   }
   if (params.keyStage) {
-    filters.push({ term: { key_stage: params.keyStage } });
+    filters.push({ term: { key_stages: params.keyStage } });
   }
 
   const request: EsSearchRequest = {
@@ -28,13 +28,13 @@ export async function fetchSequenceFacets(
     sort: [{ unit_count: { order: 'desc' } }],
   };
 
-  const res = await esSearch<SequenceFacetDocument>(request);
+  const res = await esSearch<SearchSequenceFacetsIndexDoc>(request);
   const sequences = res.hits.hits.map((hit) => toSequenceFacet(hit._source));
   return { sequences };
 }
 
-function toSequenceFacet(doc: SequenceFacetDocument): SequenceFacet {
-  const units = doc.unit_slugs.map((unitSlug, index) => ({
+function toSequenceFacet(doc: SearchSequenceFacetsIndexDoc): SequenceFacet {
+  const units = doc.unit_slugs.map((unitSlug: string, index: number) => ({
     unitSlug,
     unitTitle: doc.unit_titles[index] ?? unitSlug,
   }));
@@ -42,7 +42,7 @@ function toSequenceFacet(doc: SequenceFacetDocument): SequenceFacet {
   return {
     subjectSlug: doc.subject_slug,
     sequenceSlug: doc.sequence_slug,
-    keyStage: doc.key_stage,
+    keyStage: doc.key_stages[0] as KeyStage,
     keyStageTitle: doc.key_stage_title,
     phaseSlug: doc.phase_slug,
     phaseTitle: doc.phase_title,

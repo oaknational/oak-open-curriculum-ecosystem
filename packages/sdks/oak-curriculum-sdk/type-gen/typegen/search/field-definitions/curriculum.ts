@@ -161,3 +161,34 @@ export const SEQUENCES_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'sequence_url', zodType: 'string', optional: false },
   { name: 'title_suggest', zodType: 'object', optional: true },
 ] as const;
+
+/**
+ * Field definitions for the oak_sequence_facets search index.
+ *
+ * Contains 13 fields:
+ * - 11 required fields
+ * - 2 optional fields
+ *
+ * This index provides faceted navigation data for sequences. Key design decisions:
+ * - Uses `key_stages` (plural, array) to match sequences index pattern
+ * - No completion contexts (navigation index, not searchable)
+ * - Minimal text fields (all keywords for exact matching/filtering)
+ *
+ * @see SearchSequenceFacetsIndexDocSchema - Generated Zod schema
+ * @see OAK_SEQUENCE_FACETS_MAPPING - Generated ES mapping
+ */
+export const SEQUENCE_FACETS_INDEX_FIELDS: IndexFieldDefinitions = [
+  { name: 'sequence_slug', zodType: 'string', optional: false },
+  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  { name: 'phase_slug', zodType: 'string', optional: false },
+  { name: 'phase_title', zodType: 'string', optional: false },
+  { name: 'key_stages', zodType: 'array-string', optional: false },
+  { name: 'key_stage_title', zodType: 'string', optional: true },
+  { name: 'years', zodType: 'array-string', optional: false },
+  { name: 'unit_slugs', zodType: 'array-string', optional: false },
+  { name: 'unit_titles', zodType: 'array-string', optional: false },
+  { name: 'unit_count', zodType: 'number', optional: false },
+  { name: 'lesson_count', zodType: 'number', optional: false },
+  { name: 'has_ks4_options', zodType: 'boolean', optional: false },
+  { name: 'sequence_canonical_url', zodType: 'string', optional: true },
+] as const;
