@@ -47,16 +47,9 @@
    - 15 ADRs to create (071-085)
    - Success criteria and quality gates
 
-### Practical Implementation Guide (Read THIRD, 20 minutes)
+**Total reading time**: ~45 minutes. DO NOT SKIP. These documents contain everything needed for success.
 
-5. **`.agent/plans/semantic-search/phase-1a-implementation-guide.md`**
-   - Day-by-day walkthrough for Phase 1A
-   - Code examples with TSDoc
-   - RED → GREEN → REFACTOR patterns
-   - Common issues and solutions
-   - Quality gate checklists
-
-**Total reading time**: ~65 minutes. DO NOT SKIP. These documents contain everything needed for success.
+**Note**: This prompt contains the practical TDD examples and day-by-day guidance for Phase 1A. See "Phase 1A: Start Here" section below.
 
 ---
 
@@ -80,11 +73,22 @@ The Oak Open Curriculum Semantic Search is a Next.js application providing **cut
 
 ### What We're Adding (Maths KS4 Vertical Slice)
 
-- **Three-way hybrid search**: BM25 + ELSER + OpenAI dense vectors
+- **Three-way hybrid search**: BM25 + ELSER + E5 dense vectors (Elastic-native, no external API)
 - **AI-powered relevance**: Cohere ReRank, NER entity extraction
 - **Knowledge graph**: ES Graph API for curriculum relationships
 - **RAG infrastructure**: ES Playground, chunked transcripts, ontology
 - **Advanced features**: Learning to Rank foundations, multi-vector search
+
+### Verified ES Serverless Inference Endpoints (2025-12-07)
+
+| Endpoint                               | Type                     | Status        | Use Case                           |
+| -------------------------------------- | ------------------------ | ------------- | ---------------------------------- |
+| `.elser-2-elasticsearch`               | sparse_embedding         | PRECONFIGURED | ELSER semantic (in use)            |
+| `.multilingual-e5-small-elasticsearch` | text_embedding (384-dim) | PRECONFIGURED | Dense vectors for three-way hybrid |
+| `.rerank-v1-elasticsearch`             | rerank                   | TECH PREVIEW  | Result reranking (Phase 1B)        |
+| `.gp-llm-v2-chat_completion`           | chat_completion          | PRECONFIGURED | RAG chat (Phase 3)                 |
+
+**Key Decision**: Use Elastic-native E5 model instead of OpenAI for dense vectors. No external API dependencies for core search functionality.
 
 ---
 
@@ -144,10 +148,7 @@ ELASTICSEARCH_API_KEY=your_elasticsearch_api_key_here
 # Oak Curriculum API (REQUIRED)
 OAK_API_KEY=your_oak_api_key_here
 
-# OpenAI (REQUIRED for Phase 1A)
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Cohere (REQUIRED for Phase 1B)
+# Cohere (REQUIRED for Phase 1B reranking)
 COHERE_API_KEY=your-cohere-api-key-here
 
 # Search API (REQUIRED)
@@ -159,14 +160,18 @@ LOG_LEVEL=info
 # Optional: Redis caching for faster dev
 SDK_CACHE_ENABLED=false
 SDK_CACHE_REDIS_URL=redis://localhost:6379
+
+# Optional: OpenAI (only needed for RAG chat in Phase 3)
+# OPENAI_API_KEY=your-openai-api-key-here
 ```
 
 **If any required keys are missing**:
 
 - **Elasticsearch**: Contact Oak infrastructure team or use existing deployment
 - **Oak API**: Use existing key from vault
-- **OpenAI**: Create API key at <https://platform.openai.com/api-keys> (needs billing enabled, ~$5 budget sufficient)
 - **Cohere**: Create API key at <https://dashboard.cohere.com/api-keys> (free tier OK for dev)
+
+**Note**: OpenAI API key is NOT required for Phase 1A. Dense vectors use Elastic-native E5 model (`.multilingual-e5-small-elasticsearch`) which is preconfigured and included in the ES Serverless subscription.
 
 #### 4. Quick Smoke Test
 
@@ -230,39 +235,42 @@ If this fails, check API keys and network connectivity.
 ### What You're About to Build (Phase 1A)
 
 **Duration**: 2-3 days  
-**Goal**: Implement three-way hybrid search (BM25 + ELSER + Dense Vectors)
+**Goal**: Implement three-way hybrid search (BM25 + ELSER + E5 Dense Vectors)
 
 **Deliverables**:
 
-- OpenAI Inference API integration
-- Dense vector fields (1536-dim) in 5 indexes
+- E5 dense vector generation using `.multilingual-e5-small-elasticsearch` (Elastic-native)
+- Dense vector fields (384-dim) in lessons and unit_rollup indexes
+- Tier, exam_board, pathway field extraction for Maths KS4
 - Three-way RRF query combining all signals
 - Extraction functions with unit tests
 - Document transforms with integration tests
 - E2E test proving three-way beats two-way
-- 3 ADRs (071-073)
-- 3 docs with examples
+- ADR-071: Elastic-Native Dense Vector Strategy
+- ADR-072: Three-Way Hybrid Search Architecture
+- ADR-073: Dense Vector Field Configuration
 
 **Success criteria**:
 
 - MRR improves from 0.65 → 0.75 (15% gain)
 - All quality gates passing
+- Zero external API dependencies for core search
 - Zero type shortcuts introduced
 
 ---
 
 ## 📋 Implementation Phases Overview
 
-| Phase  | Duration | Focus                            | Key Features                               | ADRs |
-| ------ | -------- | -------------------------------- | ------------------------------------------ | ---- |
-| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | Inference API, dense_vector, three-way RRF | 3    |
-| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules   | 2    |
-| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema          | -    |
-| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor           | 3    |
-| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support              | 1    |
-| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking     | 2    |
-| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution            | 2    |
-| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector              | 2    |
+| Phase  | Duration | Focus                            | Key Features                                        | ADRs |
+| ------ | -------- | -------------------------------- | --------------------------------------------------- | ---- |
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF    | 3    |
+| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules            | 2    |
+| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                   | -    |
+| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                    | 3    |
+| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                       | 1    |
+| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, OpenAI chat | 2    |
+| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                     | 2    |
+| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                       | 2    |
 
 **Total**: 4-5 weeks (22-29 days)
 
@@ -289,33 +297,40 @@ Remind yourself of:
 - No type shortcuts EVER
 - All quality gates must pass
 
-#### 2. Create OpenAI Inference Integration Tests (2 hours)
+#### 2. Create Dense Vector Extraction Tests (2 hours)
 
-**File**: `packages/sdks/oak-curriculum-sdk/src/elasticsearch/inference/openai-endpoints.integration.test.ts` (NEW)
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.unit.test.ts` (NEW)
 
 Write tests FIRST for:
 
-- `registerOpenAIInferenceEndpoint()` - Register text-embedding-3-small
-- `generateEmbedding()` - Generate 1536-dim vector
-- Error handling: Invalid API key, rate limits, network errors
+- `generateDenseVector()` - Generate 384-dim vector using E5 endpoint
+- Error handling: Inference failure, empty input
+- Text preparation for embedding
 
 **Example**:
 
 ```typescript
-describe('OpenAI Inference Endpoint Integration', () => {
-  it('should register text-embedding-3-small endpoint', async () => {
-    const result = await registerOpenAIInferenceEndpoint(esClient, {
-      endpointId: 'openai-text-embedding-3-small',
-      apiKey: 'test-key',
-      model: 'text-embedding-3-small',
+describe('Dense Vector Extraction', () => {
+  it('should generate 384-dimensional vector from text', async () => {
+    const mockEsClient = createMockEsClient({
+      inferenceResponse: {
+        text_embedding: {
+          embeddings: [Array(384).fill(0.1)],
+        },
+      },
     });
 
-    expect(result.success).toBe(true);
-    expect(result.value).toMatchObject({
-      endpointId: 'openai-text-embedding-3-small',
-      service: 'openai',
-      model: 'text-embedding-3-small',
-    });
+    const vector = await generateDenseVector(mockEsClient, 'Pythagoras theorem lesson');
+
+    expect(vector).toHaveLength(384);
+  });
+
+  it('should return undefined on inference failure', async () => {
+    const mockEsClient = createMockEsClient({ throwError: true });
+
+    const vector = await generateDenseVector(mockEsClient, 'test');
+
+    expect(vector).toBeUndefined();
   });
 });
 ```
@@ -323,69 +338,65 @@ describe('OpenAI Inference Endpoint Integration', () => {
 #### 3. Run Tests (Should FAIL - RED)
 
 ```bash
-cd packages/sdks/oak-curriculum-sdk
-pnpm test openai-endpoints.integration.test.ts
+cd apps/oak-open-curriculum-semantic-search
+pnpm test dense-vector-extraction.unit.test.ts
 
-# Expected: FAIL - functions don't exist yet
+# Expected: FAIL - function doesn't exist yet
 ```
 
 This proves tests are actually testing something.
 
 ### Day 1 Afternoon: Implementation (GREEN Phase)
 
-#### 4. Implement OpenAI Inference Functions
+#### 4. Implement Dense Vector Extraction
 
-**File**: `packages/sdks/oak-curriculum-sdk/src/elasticsearch/inference/openai-endpoints.ts` (NEW)
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts` (NEW)
 
 Implement to pass tests:
 
 ````typescript
 /**
- * Registers OpenAI inference endpoint in Elasticsearch.
+ * Generates dense vector embedding using Elastic-native E5 model.
  *
- * @see ADR-071 - OpenAI Inference API Integration
- * @see https://www.elastic.co/docs/solutions/search/using-openai-compatible-models
+ * Uses the preconfigured `.multilingual-e5-small-elasticsearch` endpoint
+ * which produces 384-dimensional dense vectors.
+ *
+ * @see ADR-071 - Elastic-Native Dense Vector Strategy
  *
  * @example
  * ```typescript
- * const result = await registerOpenAIInferenceEndpoint(esClient, {
- *   endpointId: 'openai-embeddings',
- *   apiKey: process.env.OPENAI_API_KEY!,
- *   model: 'text-embedding-3-small',
- * });
+ * const vector = await generateDenseVector(esClient, 'How to teach Pythagoras theorem');
+ * // Returns: number[384] or undefined on error
  * ```
  */
-export async function registerOpenAIInferenceEndpoint(
+export async function generateDenseVector(
   esClient: Client,
-  config: OpenAIEndpointConfig,
-): Promise<Result<InferenceEndpoint>> {
-  // Implementation here
-}
-
-/**
- * Generates embedding using registered OpenAI endpoint.
- *
- * @returns 1536-dimensional vector or undefined on error (graceful degradation)
- */
-export async function generateEmbedding(
-  esClient: Client,
-  params: { endpointId: string; text: string },
+  text: string,
 ): Promise<number[] | undefined> {
-  // Implementation here
+  try {
+    const response = await esClient.inference.inference({
+      inference_id: '.multilingual-e5-small-elasticsearch',
+      input: text,
+    });
+    // Extract and return 384-dim embedding
+  } catch {
+    // Graceful degradation - return undefined, search still works via BM25 + ELSER
+    return undefined;
+  }
 }
 ````
 
 #### 5. Run Tests Again (Should PASS - GREEN)
 
 ```bash
-pnpm test openai-endpoints.integration.test.ts
+pnpm test dense-vector-extraction.unit.test.ts
 
 # Expected: PASS - all tests green
 ```
 
 ### Day 2: Field Definitions & Extraction Functions
 
-See `phase-1a-implementation-guide.md` for complete day-by-day breakdown.
+See the detailed steps in `maths-ks4-implementation-plan.md` Phase 1A section.
 
 **Key steps**:
 
@@ -509,11 +520,11 @@ packages/sdks/oak-curriculum-sdk/
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/
 │   ├── indexing/
-│   │   ├── document-transform-helpers.ts  ← Extraction functions
-│   │   ├── document-transforms.ts         ← Create ES documents
-│   │   └── dense-vector-extraction.ts     ← NEW in Phase 1A
+│   │   ├── document-transform-helpers.ts  ← Extraction functions (tier, exam_board, pathway)
+│   │   ├── document-transforms.ts         ← Create ES documents with dense vectors
+│   │   └── dense-vector-extraction.ts     ← NEW: E5 embedding generation
 │   ├── hybrid-search/
-│   │   └── three-way-rrf.ts               ← NEW in Phase 1A
+│   │   └── rrf-query-builders.ts          ← UPDATE: Add kNN for three-way RRF
 │   └── elasticsearch/
 │       └── client.ts                       ← ES client setup
 └── e2e-tests/                              ← E2E tests
@@ -541,7 +552,7 @@ apps/oak-open-curriculum-semantic-search/
 | Document                               | Purpose                                     |
 | -------------------------------------- | ------------------------------------------- |
 | **`maths-ks4-implementation-plan.md`** | Complete implementation roadmap (MAIN PLAN) |
-| **`phase-1a-implementation-guide.md`** | Practical Phase 1A TDD guide                |
+| **`search-ui-plan.md`**                | Frontend implementation plan                |
 | **`README.md`**                        | Navigation hub for all planning docs        |
 | **`data-completeness-policy.md`**      | What data we upload in full                 |
 | **`es-serverless-feature-matrix.md`**  | Feature tracking matrix                     |
@@ -556,15 +567,15 @@ apps/oak-open-curriculum-semantic-search/
 
 ### ADRs (Architectural Decision Records)
 
-| ADR     | Title                                       |
-| ------- | ------------------------------------------- |
-| **067** | SDK Generated Elasticsearch Mappings        |
-| **068** | Per-Index Completion Context Enforcement    |
-| **069** | Systematic Ingestion Progress Tracking      |
-| **070** | SDK Rate Limiting and Retry                 |
-| **071** | OpenAI Inference API Integration (Phase 1A) |
-| **072** | Three-Way Hybrid Search (Phase 1A)          |
-| **073** | Dense Vector Field Strategy (Phase 1A)      |
+| ADR     | Title                                           | Status      |
+| ------- | ----------------------------------------------- | ----------- |
+| **067** | SDK Generated Elasticsearch Mappings            | ✅ Complete |
+| **068** | Per-Index Completion Context Enforcement        | ✅ Complete |
+| **069** | Systematic Ingestion Progress Tracking          | ✅ Complete |
+| **070** | SDK Rate Limiting and Retry                     | ✅ Complete |
+| **071** | Elastic-Native Dense Vector Strategy (Phase 1A) | 📝 To Write |
+| **072** | Three-Way Hybrid Search Architecture (Phase 1A) | 📝 To Write |
+| **073** | Dense Vector Field Configuration (Phase 1A)     | 📝 To Write |
 
 ---
 
@@ -596,17 +607,20 @@ apps/oak-open-curriculum-semantic-search/
 
 ### Phase 1A Complete When:
 
-- [ ] OpenAI Inference API integrated and tested
-- [ ] Dense vector fields added to 5 indexes
-- [ ] `pnpm type-gen` generates correct mappings
-- [ ] All extraction functions have passing unit tests
+- [x] Dense vector fields added to lessons and unit_rollup indexes (384-dim)
+- [x] ES field overrides configured for dense_vector type
+- [x] `pnpm type-gen` generates correct mappings
+- [ ] All extraction functions have passing unit tests (tier, exam_board, pathway)
+- [ ] Dense vector generation using `.multilingual-e5-small-elasticsearch`
 - [ ] Document transforms include dense vector generation
 - [ ] Three-way RRF query implemented
 - [ ] E2E test proves three-way beats two-way (MRR improvement)
 - [ ] All 10 quality gates passing
-- [ ] 3 ADRs written (071-073)
-- [ ] 3 docs created with examples
+- [ ] ADR-071 written (Elastic-Native Dense Vector Strategy)
+- [ ] ADR-072 written (Three-Way Hybrid Search Architecture)
+- [ ] ADR-073 written (Dense Vector Field Configuration)
 - [ ] No type shortcuts introduced
+- [ ] No external API dependencies for core search
 - [ ] Prompt updated with Phase 1A completion
 
 ### Full Project Complete When:
@@ -659,20 +673,20 @@ apps/oak-open-curriculum-semantic-search/
 
 - [ ] Read foundation documents (rules.md, schema-first, testing-strategy)
 - [ ] Read main plan (maths-ks4-implementation-plan.md)
-- [ ] Read Phase 1A guide (phase-1a-implementation-guide.md)
 - [ ] Verified all quality gates passing
 - [ ] Verified ES status (`pnpm es:status`)
-- [ ] Configured `.env.local` with API keys
-- [ ] OpenAI API key ready
+- [ ] Configured `.env.local` with ES and Oak API keys
+- [ ] Verified E5 endpoint available (`.multilingual-e5-small-elasticsearch`)
 - [ ] Committed to TDD (RED → GREEN → REFACTOR)
 - [ ] Committed to schema-first approach
 - [ ] Committed to zero type shortcuts
+- [ ] Committed to Elastic-native approach (no external API for core search)
 
 ### If ALL checked:
 
-**Begin Phase 1A Day 1**: Write OpenAI inference integration tests (RED phase)
+**Begin Phase 1A Day 1**: Write dense vector extraction tests (RED phase)
 
-**See**: `phase-1a-implementation-guide.md` for step-by-step guidance
+**See**: "Phase 1A: Start Here" section above for step-by-step guidance
 
 ---
 
@@ -697,7 +711,7 @@ When you complete a phase or major milestone:
 
 ---
 
-**Remember**: You have everything you need. The foundation documents, main plan, and implementation guide contain complete specifications. Trust the TDD process: RED → GREEN → REFACTOR. All quality gates must pass. No type shortcuts. Ever.
+**Remember**: You have everything you need. The foundation documents and main plan contain complete specifications. Trust the TDD process: RED → GREEN → REFACTOR. All quality gates must pass. No type shortcuts. Ever.
 
 **Now go build something deeply impressive.** 🚀
 

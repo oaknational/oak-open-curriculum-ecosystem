@@ -1274,7 +1274,7 @@ The search UI requires error tracking and performance monitoring for production 
 **Related Plans:**
 
 - [Logger Sentry & OpenTelemetry Integration Plan](../../observability/logger-sentry-otel-integration-plan.md) - Comprehensive plan for integrating Sentry and OTel
-- [Search Service Observability](../search-service/schema-first-ontology-implementation.md#observability-and-error-tracking) - Backend observability strategy
+- Backend observability strategy is documented in the main implementation plan
 
 ### Current Observability
 

@@ -1,20 +1,12 @@
 /**
  * @module es-field-config
  * @description Configuration for mapping Zod schema types to Elasticsearch field mappings.
- * Defines analyzers, normalizers, filters, and field type overrides used in search index generation.
- *
- * This module provides pure functions for converting Zod type descriptors to ES field mappings,
- * enabling the generator to produce valid Elasticsearch index mappings from the Zod schemas.
+ * Provides pure functions for converting Zod type descriptors to ES field mappings.
  *
  * @example
  * ```typescript
  * import { buildEsFieldMapping, LESSONS_FIELD_OVERRIDES } from './es-field-config.js';
- *
- * const mapping = buildEsFieldMapping(
- *   { type: 'string' },
- *   LESSONS_FIELD_OVERRIDES.lesson_semantic
- * );
- * // { type: 'semantic_text' }
+ * const mapping = buildEsFieldMapping({ type: 'string' }, LESSONS_FIELD_OVERRIDES.lesson_semantic);
  * ```
  */
 
@@ -27,6 +19,18 @@ export {
   SEQUENCE_FACETS_FIELD_OVERRIDES,
   META_FIELD_OVERRIDES,
 } from './es-field-overrides.js';
+
+// Re-export analyzer config from separate module
+export {
+  type EsAnalyzerConfig,
+  type EsNormalizerConfig,
+  type EsFilterConfig,
+  type EsSettings,
+  ES_ANALYZER_CONFIG,
+  ES_NORMALIZER_CONFIG,
+  ES_FILTER_CONFIG,
+  buildEsSettings,
+} from './es-analyzer-config.js';
 
 /**
  * Descriptor for a Zod type, used to determine the corresponding ES field type.
@@ -51,7 +55,8 @@ export interface EsFieldMapping {
     | 'semantic_text'
     | 'completion'
     | 'search_as_you_type'
-    | 'object';
+    | 'object'
+    | 'dense_vector';
   readonly normalizer?: string;
   readonly analyzer?: string;
   readonly search_analyzer?: string;
@@ -60,6 +65,12 @@ export interface EsFieldMapping {
   readonly contexts?: readonly EsCompletionContext[];
   readonly fields?: Readonly<Record<string, EsFieldMapping>>;
   readonly enabled?: boolean;
+  /** Number of dimensions for dense_vector fields. */
+  readonly dims?: number;
+  /** Whether the dense_vector field is indexed for kNN search. */
+  readonly index?: boolean;
+  /** Similarity metric for dense_vector fields. */
+  readonly similarity?: 'cosine' | 'dot_product' | 'l2_norm';
 }
 
 /**
@@ -71,86 +82,7 @@ export interface EsCompletionContext {
 }
 
 /**
- * Elasticsearch analyzer configuration.
- */
-export interface EsAnalyzerConfig {
-  readonly type: 'custom';
-  readonly tokenizer: string;
-  readonly filter: readonly string[];
-}
-
-/**
- * Elasticsearch normalizer configuration.
- */
-export interface EsNormalizerConfig {
-  readonly type: 'custom';
-  readonly filter: readonly string[];
-}
-
-/**
- * Elasticsearch filter configuration for synonyms.
- */
-export interface EsFilterConfig {
-  readonly type: 'synonym_graph';
-  readonly synonyms_set: string;
-  readonly updateable: boolean;
-}
-
-/**
- * Elasticsearch index settings structure.
- */
-export interface EsSettings {
-  readonly analysis: {
-    readonly analyzer: Readonly<Record<string, EsAnalyzerConfig>>;
-    readonly normalizer: Readonly<Record<string, EsNormalizerConfig>>;
-    readonly filter: Readonly<Record<string, EsFilterConfig>>;
-  };
-}
-
-/**
- * Analyzer configurations for Oak search indexes.
- * - `oak_text_index`: Used at index time, applies lowercase normalisation.
- * - `oak_text_search`: Used at search time, includes synonym expansion.
- */
-export const ES_ANALYZER_CONFIG = {
-  oak_text_index: {
-    type: 'custom',
-    tokenizer: 'standard',
-    filter: ['lowercase'],
-  },
-  oak_text_search: {
-    type: 'custom',
-    tokenizer: 'standard',
-    filter: ['lowercase', 'oak_syns_filter'],
-  },
-} as const satisfies Readonly<Record<string, EsAnalyzerConfig>>;
-
-/**
- * Normalizer configurations for Oak search indexes.
- * - `oak_lower`: Applied to keyword fields for case-insensitive filtering.
- */
-export const ES_NORMALIZER_CONFIG = {
-  oak_lower: {
-    type: 'custom',
-    filter: ['lowercase', 'asciifolding'],
-  },
-} as const satisfies Readonly<Record<string, EsNormalizerConfig>>;
-
-/**
- * Filter configurations for Oak search indexes.
- * - `oak_syns_filter`: Updateable synonym graph filter using the oak-syns synonym set.
- */
-export const ES_FILTER_CONFIG = {
-  oak_syns_filter: {
-    type: 'synonym_graph',
-    synonyms_set: 'oak-syns',
-    updateable: true,
-  },
-} as const satisfies Readonly<Record<string, EsFilterConfig>>;
-
-/**
  * Maps a Zod type descriptor to the corresponding ES field type.
- *
  * @param descriptor - The Zod type descriptor to convert
  * @returns The ES field type string
  *
@@ -158,7 +90,6 @@ export const ES_FILTER_CONFIG = {
  * ```typescript
  * zodTypeDescriptorToEsFieldType({ type: 'string' }); // 'keyword'
  * zodTypeDescriptorToEsFieldType({ type: 'number' }); // 'integer'
- * zodTypeDescriptorToEsFieldType({ type: 'array', items: { type: 'string' } }); // 'keyword'
  * ```
  */
 export function zodTypeDescriptorToEsFieldType(
@@ -192,20 +123,14 @@ export function zodTypeDescriptorToEsFieldType(
 
 /**
  * Builds an ES field mapping from a Zod type descriptor and optional override.
- *
  * @param descriptor - The Zod type descriptor
  * @param override - Optional ES-specific field configuration override
  * @returns The complete ES field mapping
  *
  * @example
  * ```typescript
- * // Simple keyword field with normalizer
- * buildEsFieldMapping({ type: 'string' });
- * // { type: 'keyword', normalizer: 'oak_lower' }
- *
- * // Semantic text field with override
- * buildEsFieldMapping({ type: 'string' }, { type: 'semantic_text' });
- * // { type: 'semantic_text' }
+ * buildEsFieldMapping({ type: 'string' }); // { type: 'keyword', normalizer: 'oak_lower' }
+ * buildEsFieldMapping({ type: 'string' }, { type: 'semantic_text' }); // { type: 'semantic_text' }
  * ```
  */
 export function buildEsFieldMapping(
@@ -229,19 +154,4 @@ export function buildEsFieldMapping(
 
   // Non-keyword fields don't need normalizer
   return { type: esType };
-}
-
-/**
- * Builds the ES index settings object with analyzers, normalizers, and filters.
- *
- * @returns The complete ES settings object
- */
-export function buildEsSettings(): EsSettings {
-  return {
-    analysis: {
-      analyzer: ES_ANALYZER_CONFIG,
-      normalizer: ES_NORMALIZER_CONFIG,
-      filter: ES_FILTER_CONFIG,
-    },
-  };
 }

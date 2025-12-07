@@ -31,22 +31,21 @@
 
 ## Document Hierarchy
 
-### Core Documents
+### Core Documents (Flat Structure)
 
-| Document | Purpose | When to Use |
-|----------|---------|-------------|
-| **`maths-ks4-implementation-plan.md`** | Complete implementation plan for Maths KS4 vertical slice with all ES Serverless features | Primary implementation reference |
-| **`phase-1a-implementation-guide.md`** | Day-by-day practical TDD guide for Phase 1A (three-way hybrid search) | When implementing Phase 1A |
-| **`data-completeness-policy.md`** | Policy on what data we upload in full vs summarize | Reference for ingestion decisions |
-| **`es-serverless-feature-matrix.md`** | Feature adoption tracking matrix with impact/cost/risk analysis | Progress tracking and feature prioritization |
+| Document                               | Purpose                                                                                   | When to Use                                  |
+| -------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------- |
+| **`maths-ks4-implementation-plan.md`** | Complete implementation plan for Maths KS4 vertical slice with all ES Serverless features | Primary backend/search implementation        |
+| **`search-ui-plan.md`**                | Frontend implementation: components, theme, fixtures, accessibility, Playwright tests     | UI/frontend implementation                   |
+| **`data-completeness-policy.md`**      | Policy on what data we upload in full vs summarize                                        | Reference for ingestion decisions            |
+| **`es-serverless-feature-matrix.md`**  | Feature adoption tracking matrix with impact/cost/risk analysis                           | Progress tracking and feature prioritization |
 
 ### Archive
 
-| Directory | Contents |
-|-----------|----------|
-| **`archive/superseded-2025-12/`** | Consolidated plans from Dec 2025 merge | Historical reference only |
-| **`archive/superseded/`** | Older superseded plans | Historical reference only |
-| **`archive/completed/`** | Completed work from earlier phases | Historical reference only |
+| Directory                 | Contents                                     |
+| ------------------------- | -------------------------------------------- |
+| **`archive/superseded/`** | Superseded plans (historical reference only) |
+| **`archive/completed/`**  | Completed work from earlier phases           |
 
 ---
 
@@ -66,26 +65,37 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 
 ### What We're Building
 
-- **Three-way hybrid search**: BM25 + ELSER + Dense Vectors
-- **AI-powered relevance**: OpenAI embeddings, Cohere ReRank, NER
+- **Three-way hybrid search**: BM25 + ELSER + E5 Dense Vectors (Elastic-native, no external API)
+- **AI-powered relevance**: Cohere ReRank, NER entity extraction
 - **Knowledge graph**: ES Graph API for curriculum relationships
-- **RAG infrastructure**: Chunked transcripts, ontology grounding
+- **RAG infrastructure**: Chunked transcripts, ontology grounding, ES Playground
 - **Advanced features**: Learning to Rank foundations, multi-vector search
+
+### Key Decision: Elastic-Native Dense Vectors (2025-12-07)
+
+Chose `.multilingual-e5-small-elasticsearch` (384-dim) over OpenAI `text-embedding-3-small` (1536-dim):
+
+- **No external API dependencies** for core search functionality
+- **Included in ES Serverless subscription** (resource-based billing)
+- **PRECONFIGURED** - ready to use immediately
+- **Lower latency** - runs on ML nodes within cluster
+
+See ADR-071 for full decision rationale.
 
 ---
 
 ## Implementation Phases
 
-| Phase | Duration | Focus | Key Features |
-|-------|----------|-------|--------------|
-| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | Inference API, dense_vector, three-way RRF |
-| **1B** | 2-3 days | Relevance Enhancement | Cohere ReRank, filtered kNN, query rules |
-| **1C** | 1 day | Maths KS4 Ingestion | Full content with enhanced schema |
-| **2A** | 3-4 days | Entity Extraction & Graph | NER, Graph API, enrich processor |
-| **2B** | 2-3 days | Reference Indices & Threads | 5 new indices, thread support |
-| **3** | 4-5 days | RAG Infrastructure | ES Playground, semantic_text, chunking |
-| **4** | 5-6 days | Knowledge Graph | Triple store, entity resolution |
-| **5** | 3-4 days | Advanced Features | LTR foundations, multi-vector |
+| Phase  | Duration | Focus                            | Key Features                                        |
+| ------ | -------- | -------------------------------- | --------------------------------------------------- |
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF    |
+| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules            |
+| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                   |
+| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                    |
+| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                       |
+| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, OpenAI chat |
+| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                     |
+| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                       |
 
 **Total**: 4-5 weeks (22-29 days)
 
@@ -184,10 +194,13 @@ pnpm test:e2e:built
 
 ### Ready for Phase 1A ⏭️
 
-- OpenAI API key configuration needed
-- Dense vector field definitions to add
-- Three-way RRF implementation to build
-- Maths KS4 ingestion to run
+- ✅ E5 endpoint verified (`.multilingual-e5-small-elasticsearch` PRECONFIGURED)
+- ✅ Dense vector field definitions added (384-dim)
+- ✅ ES field overrides configured
+- 🔄 Extraction functions to implement (tier, exam_board, pathway)
+- 🔄 Dense vector generation to implement
+- 🔄 Three-way RRF implementation to build
+- 🔄 Maths KS4 ingestion to run
 
 ---
 
@@ -233,10 +246,11 @@ SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
 
 ### For Implementation Questions
 
-1. Review `maths-ks4-implementation-plan.md` for phase details
-2. Check `phase-1a-implementation-guide.md` for practical examples
-3. Re-read foundation documents for principles
-4. Review relevant ADRs in `docs/architecture/architectural-decisions/`
+1. Review `maths-ks4-implementation-plan.md` for backend/search phase details
+2. Review `search-ui-plan.md` for frontend implementation
+3. Check `semantic-search.prompt.md` for TDD examples and quick start
+4. Re-read foundation documents for principles
+5. Review relevant ADRs in `docs/architecture/architectural-decisions/`
 
 ### For Architecture Questions
 

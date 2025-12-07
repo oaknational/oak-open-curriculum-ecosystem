@@ -139,8 +139,8 @@ describe('Field Alignment: oak_lessons', () => {
     );
     const esFields = generateEsFieldsFromDefinitions(LESSONS_INDEX_FIELDS, LESSONS_FIELD_OVERRIDES);
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(21);
-    expect(extractEsFieldNames(esFields)).toHaveLength(21);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(25);
+    expect(extractEsFieldNames(esFields)).toHaveLength(25);
   });
 });
 
@@ -162,7 +162,7 @@ describe('Field Alignment: oak_unit_rollup', () => {
     expect(zodFieldNames).toEqual(esFieldNames);
   });
 
-  it('both have exactly 18 fields', () => {
+  it('both have exactly 21 fields', () => {
     const zodSchema = generateZodSchemaFromFields(
       'SearchUnitRollupDocSchema',
       UNIT_ROLLUP_INDEX_FIELDS,
@@ -173,8 +173,8 @@ describe('Field Alignment: oak_unit_rollup', () => {
       UNIT_ROLLUP_FIELD_OVERRIDES,
     );
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(18);
-    expect(extractEsFieldNames(esFields)).toHaveLength(18);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(21);
+    expect(extractEsFieldNames(esFields)).toHaveLength(21);
   });
 });
 

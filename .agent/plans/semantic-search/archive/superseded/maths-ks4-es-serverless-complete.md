@@ -60,16 +60,16 @@ This plan integrates **ALL high-impact Elasticsearch Serverless features** into 
 
 ## Phase Structure Overview
 
-| Phase | Focus | Duration | Key ES Features | ADRs Required |
-|-------|-------|----------|----------------|---------------|
-| **1A** | Hybrid Fields + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way hybrid | 3 ADRs |
-| **1B** | Relevance Enhancement | 2-3 days | Cohere ReRank, filtered kNN, query rules | 2 ADRs |
-| **1C** | Core Ingestion | 1 day | Maths KS4 with enhanced schema | - |
-| **2A** | Entity Extraction & Graph | 3-4 days | NER models, Graph API, enrich processor | 3 ADRs |
-| **2B** | Thread & Reference Indices | 2-3 days | `oak_threads`, reference data enrichment | 1 ADR |
-| **3** | RAG Infrastructure | 4-5 days | ES Playground, chunked transcripts, ontology | 2 ADRs |
-| **4** | Knowledge Graph | 5-6 days | Triple store, entity resolution, graph traversal | 2 ADRs |
-| **5** | Advanced Features | 3-4 days | LTR foundations, multi-vector, runtime fields | 2 ADRs |
+| Phase  | Focus                         | Duration | Key ES Features                                  | ADRs Required |
+| ------ | ----------------------------- | -------- | ------------------------------------------------ | ------------- |
+| **1A** | Hybrid Fields + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way hybrid    | 3 ADRs        |
+| **1B** | Relevance Enhancement         | 2-3 days | Cohere ReRank, filtered kNN, query rules         | 2 ADRs        |
+| **1C** | Core Ingestion                | 1 day    | Maths KS4 with enhanced schema                   | -             |
+| **2A** | Entity Extraction & Graph     | 3-4 days | NER models, Graph API, enrich processor          | 3 ADRs        |
+| **2B** | Thread & Reference Indices    | 2-3 days | `oak_threads`, reference data enrichment         | 1 ADR         |
+| **3**  | RAG Infrastructure            | 4-5 days | ES Playground, chunked transcripts, ontology     | 2 ADRs        |
+| **4**  | Knowledge Graph               | 5-6 days | Triple store, entity resolution, graph traversal | 2 ADRs        |
+| **5**  | Advanced Features             | 3-4 days | LTR foundations, multi-vector, runtime fields    | 2 ADRs        |
 
 **Total Estimated Time**: 4-5 weeks for complete vertical slice
 
@@ -97,14 +97,14 @@ Implement cutting-edge hybrid search combining BM25 + ELSER sparse + OpenAI dens
 { name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
 { name: 'title_dense_vector', zodType: 'array-number', optional: true },
 
-// UNIT_ROLLUP_INDEX_FIELDS additions  
+// UNIT_ROLLUP_INDEX_FIELDS additions
 { name: 'unit_dense_vector', zodType: 'array-number', optional: true },
 ```
 
 **ES Field Overrides** (`es-field-overrides.ts`):
 
 ```typescript
-lesson_dense_vector: { 
+lesson_dense_vector: {
   type: 'dense_vector',
   dims: 1536,  // OpenAI text-embedding-3-small
   index: true,
@@ -148,10 +148,10 @@ describe('OpenAI Inference Endpoint', () => {
 
 **Implementation**: `src/lib/elasticsearch/inference/openai-endpoints.ts`
 
-```typescript
+````typescript
 /**
  * Registers OpenAI inference endpoint in Elasticsearch.
- * 
+ *
  * @see ADR-071 - OpenAI Inference API Integration
  * @example
  * ```typescript
@@ -163,11 +163,11 @@ describe('OpenAI Inference Endpoint', () => {
  * ```
  */
 export async function registerOpenAIInferenceEndpoint(
-  config: OpenAIEndpointConfig
+  config: OpenAIEndpointConfig,
 ): Promise<Result<InferenceEndpoint, InferenceError>> {
   // Implementation follows TDD
 }
-```
+````
 
 #### 2. Add Dense Vector Extraction (Unit Tests FIRST)
 
@@ -176,11 +176,8 @@ export async function registerOpenAIInferenceEndpoint(
 ```typescript
 describe('extractDenseVector', () => {
   it('should call inference API with lesson text', async () => {
-    const mockInference = vi.fn().mockResolvedValue([0.1, 0.2, /* ... */]);
-    const vector = await extractDenseVector(
-      'Lesson about fractions',
-      mockInference
-    );
+    const mockInference = vi.fn().mockResolvedValue([0.1, 0.2 /* ... */]);
+    const vector = await extractDenseVector('Lesson about fractions', mockInference);
     expect(mockInference).toHaveBeenCalledWith('Lesson about fractions');
     expect(vector).toHaveLength(1536);
   });
@@ -203,7 +200,7 @@ describe('createLessonDocument with dense vectors', () => {
     const mockInferenceClient = {
       generateEmbedding: vi.fn().mockResolvedValue(new Array(1536).fill(0.1)),
     };
-    
+
     const doc = await createLessonDocument({
       lesson: { lessonSlug: 'test', lessonTitle: 'Fractions' },
       transcript: 'Full transcript...',
@@ -245,18 +242,18 @@ describe('Three-Way Hybrid Search E2E', () => {
 
 **Implementation**: `src/lib/hybrid-search/three-way-rrf.ts`
 
-```typescript
+````typescript
 /**
  * Executes three-way hybrid search combining lexical, sparse, and dense retrieval.
- * 
+ *
  * Uses Reciprocal Rank Fusion (RRF) to combine:
  * 1. BM25 lexical matching on text fields
  * 2. ELSER sparse semantic vectors
  * 3. OpenAI dense embeddings
- * 
+ *
  * @see ADR-071 - Three-Way Hybrid Search Architecture
  * @see ADR-067 - ES Mappings Generation
- * 
+ *
  * @example
  * ```typescript
  * const results = await executeThreeWayHybridSearch({
@@ -268,11 +265,11 @@ describe('Three-Way Hybrid Search E2E', () => {
  * ```
  */
 export async function executeThreeWayHybridSearch(
-  request: ThreeWaySearchRequest
+  request: ThreeWaySearchRequest,
 ): Promise<SearchResponse> {
   // Implementation with proper type safety
 }
-```
+````
 
 ### Quality Gates Checklist
 
@@ -356,15 +353,15 @@ describe('rerankResults', () => {
 
 **Implementation**: Two-stage retrieval pattern
 
-```typescript
+````typescript
 /**
  * Executes two-stage retrieval: fast candidate generation → precise reranking.
- * 
+ *
  * Stage 1: Three-way hybrid returns top 50 candidates (fast)
  * Stage 2: Cohere ReRank scores each candidate (slower but accurate)
- * 
+ *
  * @see ADR-074 - Two-Stage Retrieval with Cohere ReRank
- * 
+ *
  * @example
  * ```typescript
  * const results = await twoStageRetrievalSearch({
@@ -376,11 +373,11 @@ describe('rerankResults', () => {
  * ```
  */
 export async function twoStageRetrievalSearch(
-  request: TwoStageSearchRequest
+  request: TwoStageSearchRequest,
 ): Promise<RerankedSearchResponse> {
   // Implementation
 }
-```
+````
 
 #### 2. Filtered kNN Optimization (Integration Test)
 
@@ -390,7 +387,7 @@ export async function twoStageRetrievalSearch(
 describe('filtered kNN search', () => {
   it('should apply filters during vector search', async () => {
     const startTime = Date.now();
-    
+
     const results = await executeFilteredKnnSearch({
       vector: queryEmbedding,
       k: 20,
@@ -403,7 +400,7 @@ describe('filtered kNN search', () => {
 
     const duration = Date.now() - startTime;
     expect(duration).toBeLessThan(100); // ~50% faster than post-filter
-    expect(results.every(r => r.tier === 'foundation')).toBe(true);
+    expect(results.every((r) => r.tier === 'foundation')).toBe(true);
   });
 });
 ```
@@ -426,7 +423,7 @@ describe('Semantic Query Rules', () => {
     });
 
     const data = await response.json();
-    const higherCount = data.results.filter(r => r.tier === 'higher').length;
+    const higherCount = data.results.filter((r) => r.tier === 'higher').length;
     expect(higherCount).toBeGreaterThan(5); // Boosted to top
   });
 });
@@ -512,7 +509,7 @@ describe('extractEntitiesFromTranscript', () => {
 
     const entities = await extractEntitiesFromTranscript(
       'Pythagoras theorem applies to right-angled triangles.',
-      mockNer
+      mockNer,
     );
 
     expect(entities).toHaveLength(2);
@@ -529,7 +526,9 @@ describe('extractEntitiesFromTranscript', () => {
 describe('Graph API - Misconception Networks', () => {
   it('should find lessons sharing common misconceptions', async () => {
     const graph = await exploreGraph({
-      startingTerms: [{ field: 'misconceptions_and_common_mistakes', term: 'denominator confusion' }],
+      startingTerms: [
+        { field: 'misconceptions_and_common_mistakes', term: 'denominator confusion' },
+      ],
       connections: { field: 'lesson_keywords' },
       maxDepth: 2,
     });
@@ -568,7 +567,7 @@ describe('Thread Enrichment Pipeline', () => {
 ### Documentation Deliverables
 
 1. **ADR-076**: NER Entity Extraction Strategy
-2. **ADR-077**: Graph API for Curriculum Relationships  
+2. **ADR-077**: Graph API for Curriculum Relationships
 3. **ADR-078**: Enrich Processor Architecture
 4. **Authored Docs**:
    - `docs/ENTITY-EXTRACTION.md`
@@ -594,6 +593,7 @@ Create searchable thread and reference indices with enriched metadata.
 ### Implementation
 
 All indices follow schema-first pattern:
+
 1. Define fields in `field-definitions/references.ts` (NEW FILE)
 2. Run `pnpm type-gen` to generate mappings
 3. Implement population functions with TDD
@@ -920,16 +920,16 @@ describe('Aspect-Based Vector Search', () => {
 
 ## Timeline Estimate
 
-| Phase | Duration | Cumulative |
-|-------|----------|------------|
-| 1A: Dense Vectors | 2-3 days | 2-3 days |
-| 1B: Reranking | 2-3 days | 4-6 days |
-| 1C: Ingestion | 1 day | 5-7 days |
-| 2A: Entities & Graph | 3-4 days | 8-11 days |
-| 2B: References | 2-3 days | 10-14 days |
-| 3: RAG | 4-5 days | 14-19 days |
-| 4: Knowledge Graph | 5-6 days | 19-25 days |
-| 5: Advanced | 3-4 days | 22-29 days |
+| Phase                | Duration | Cumulative |
+| -------------------- | -------- | ---------- |
+| 1A: Dense Vectors    | 2-3 days | 2-3 days   |
+| 1B: Reranking        | 2-3 days | 4-6 days   |
+| 1C: Ingestion        | 1 day    | 5-7 days   |
+| 2A: Entities & Graph | 3-4 days | 8-11 days  |
+| 2B: References       | 2-3 days | 10-14 days |
+| 3: RAG               | 4-5 days | 14-19 days |
+| 4: Knowledge Graph   | 5-6 days | 19-25 days |
+| 5: Advanced          | 3-4 days | 22-29 days |
 
 **Total**: **4-5 weeks** for complete ES Serverless feature integration
 
@@ -987,4 +987,3 @@ describe('Aspect-Based Vector Search', () => {
 **End of Enhanced Plan**
 
 This plan integrates ALL high-impact ES Serverless features while maintaining strict adherence to foundation documents. Every feature includes TDD approach, schema-first implementation, comprehensive documentation, and appropriate ADRs.
-

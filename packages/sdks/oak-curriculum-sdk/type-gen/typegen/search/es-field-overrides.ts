@@ -117,6 +117,21 @@ export const LESSONS_FIELD_OVERRIDES = {
       keyword: KEYWORD_SUBFIELD,
     },
   }),
+  lesson_dense_vector: {
+    type: 'dense_vector',
+    dims: 384,
+    index: true,
+    similarity: 'cosine',
+  },
+  tier: {
+    type: 'keyword',
+  },
+  exam_board: {
+    type: 'keyword',
+  },
+  pathway: {
+    type: 'keyword',
+  },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;
 
 /**
@@ -196,6 +211,18 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
   }),
   thread_orders: {
     type: 'integer',
+  },
+  unit_dense_vector: {
+    type: 'dense_vector',
+    dims: 384,
+    index: true,
+    similarity: 'cosine',
+  },
+  tier: {
+    type: 'keyword',
+  },
+  exam_board: {
+    type: 'keyword',
   },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;
 

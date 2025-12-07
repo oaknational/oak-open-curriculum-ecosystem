@@ -155,18 +155,18 @@
 ```
 1. Read: .agent/prompts/semantic-search/semantic-search.prompt.md
    ↓ (THE entry point, has everything)
-   
+
 2. Read: .agent/directives-and-memory/rules.md (15 min)
    Read: .agent/directives-and-memory/schema-first-execution.md (5 min)
    Read: .agent/directives-and-memory/testing-strategy.md (5 min)
    ↓ (Foundation principles)
-   
+
 3. Read: .agent/plans/semantic-search/maths-ks4-implementation-plan.md
    ↓ (Complete roadmap, 30 min)
-   
+
 4. Read: .agent/plans/semantic-search/phase-1a-implementation-guide.md
    ↓ (Practical guide, 20 min)
-   
+
 5. START IMPLEMENTATION - Phase 1A Day 1
 ```
 
@@ -340,4 +340,3 @@ Ready for Phase 1A implementation.
 ---
 
 **End of Summary**
-

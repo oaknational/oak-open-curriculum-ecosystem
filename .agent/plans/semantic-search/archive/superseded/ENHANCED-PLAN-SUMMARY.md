@@ -11,6 +11,7 @@
 ### Before (Original Plan)
 
 **Focus**: Basic hybrid field addition (37 fields)
+
 - Tier, exam board, pathway from API
 - Computed difficulty and duration
 - Empty relationship fields
@@ -20,6 +21,7 @@
 ### After (Enhanced Plan)
 
 **Focus**: Complete ES Serverless feature showcase
+
 - Everything from original plan PLUS
 - 23 additional ES Serverless features
 - Three-way hybrid search (BM25 + ELSER + Dense)
@@ -68,12 +70,14 @@
 ### Phase 1A: Three-Way Hybrid Search (2-3 days)
 
 **ES Features**:
+
 - Inference API integration
 - Dense vector fields (1536-dim)
 - OpenAI text-embedding-3-small
 - Three-way RRF (BM25 + ELSER + Dense)
 
 **Deliverables**:
+
 - 3 ADRs (071-073)
 - 20+ unit tests
 - 5+ integration tests
@@ -85,11 +89,13 @@
 ### Phase 1B: Relevance Enhancement (2-3 days)
 
 **ES Features**:
+
 - Cohere ReRank via Inference API
 - Filtered kNN optimization
 - Semantic query rules
 
 **Deliverables**:
+
 - 2 ADRs (074-075)
 - 15+ tests
 - 2 docs
@@ -99,12 +105,14 @@
 ### Phase 2A: Entity Extraction & Graph (3-4 days)
 
 **ES Features**:
+
 - NER models (HuggingFace)
 - Graph API for co-occurrence
 - Enrich processor
 - Significant terms aggregation
 
 **Deliverables**:
+
 - 3 ADRs (076-078)
 - 25+ tests
 - 3 docs
@@ -114,10 +122,12 @@
 ### Phase 2B: Thread & Reference Indices (2-3 days)
 
 **ES Features**:
+
 - New indices: oak_threads, oak_subjects, oak_key_stages, oak_years, oak_maths_topics
 - Cross-index enrichment
 
 **Deliverables**:
+
 - 1 ADR (079)
 - 10+ tests
 - 2 docs
@@ -127,12 +137,14 @@
 ### Phase 3: RAG Infrastructure (4-5 days)
 
 **ES Features**:
+
 - ES Playground for prototyping
 - semantic_text field with auto-chunking
 - LLM chat completion
 - Multi-retriever queries
 
 **Deliverables**:
+
 - 2 ADRs (080-081)
 - 20+ tests
 - 3 docs
@@ -142,11 +154,13 @@
 ### Phase 4: Knowledge Graph (5-6 days)
 
 **ES Features**:
+
 - Triple store index
 - Entity resolution
 - Graph traversal
 
 **Deliverables**:
+
 - 2 ADRs (082-083)
 - 30+ tests
 - 2 docs
@@ -156,12 +170,14 @@
 ### Phase 5: Advanced Features (3-4 days)
 
 **ES Features**:
+
 - Learning to Rank foundations
 - Multi-vector fields
 - Runtime fields
 - Scripted similarity
 
 **Deliverables**:
+
 - 2 ADRs (084-085)
 - 15+ tests
 - 2 docs
@@ -183,6 +199,7 @@
 5. Update generators only
 
 **Example**: Dense vector fields
+
 ```typescript
 // field-definitions/curriculum.ts
 { name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
@@ -219,6 +236,7 @@ lesson_dense_vector: {
    - Written BEFORE implementation changes
 
 **Example from Phase 1A**:
+
 ```typescript
 // 1. RED - Unit test first
 describe('extractDenseVector', () => {
@@ -250,6 +268,7 @@ export async function extractDenseVector(
 4. **Prompt updates** - Keep continuation prompt current
 
 **Total documentation deliverables**:
+
 - 15 new ADRs (071-085)
 - 17 new docs
 - 100% TSDoc coverage
@@ -350,13 +369,13 @@ pnpm test:e2e:built # Built E2E validation
 
 ## Timeline
 
-| Week | Focus | Deliverables |
-|------|-------|--------------|
+| Week  | Focus       | Deliverables                                                    |
+| ----- | ----------- | --------------------------------------------------------------- |
 | **1** | Phase 1A-1C | Three-way hybrid, dense vectors, reranking, Maths KS4 ingestion |
-| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices |
-| **3** | Phase 3 | RAG infrastructure, ES Playground, chunked transcripts |
-| **4** | Phase 4 | Knowledge graph, triple store, entity resolution |
-| **5** | Phase 5 | LTR foundations, multi-vector, polish |
+| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices                 |
+| **3** | Phase 3     | RAG infrastructure, ES Playground, chunked transcripts          |
+| **4** | Phase 4     | Knowledge graph, triple store, entity resolution                |
+| **5** | Phase 5     | LTR foundations, multi-vector, polish                           |
 
 **Total**: 4-5 weeks (22-29 days)
 
@@ -439,4 +458,3 @@ This enhanced plan transforms the Maths KS4 vertical slice from a basic field ad
 ---
 
 **End of Summary**
-

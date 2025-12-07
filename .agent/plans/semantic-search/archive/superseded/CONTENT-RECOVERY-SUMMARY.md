@@ -46,6 +46,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 **Where Added**: `maths-ks4-implementation-plan.md` - "Demo Scenarios" section
 
 **Value**: These scenarios tell a story from a teacher's perspective, showing:
+
 - User intent and context
 - Step-by-step experience
 - Value demonstrated to stakeholders
@@ -75,6 +76,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 **Where Added**: `maths-ks4-implementation-plan.md` - Phase 1A "Field Additions Summary"
 
 **Value**: Shows at-a-glance:
+
 - Current state (82 fields)
 - Phase 1A impact (+37 fields)
 - Future state (119 fields)
@@ -91,18 +93,19 @@ All 11 documents in `archive/superseded-2025-12/`:
 **Content Recovered**:
 
 ```markdown
-| Week | Focus | Deliverables |
-|------|-------|--------------|
+| Week  | Focus       | Deliverables                                                                    |
+| ----- | ----------- | ------------------------------------------------------------------------------- |
 | **1** | Phase 1A-1C | Three-way hybrid, dense vectors, reranking, Maths KS4 ingestion, 5 ADRs, 5 docs |
-| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs |
-| **3** | Phase 3 | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs |
-| **4** | Phase 4 | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs |
-| **5** | Phase 5 | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs |
+| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs                 |
+| **3** | Phase 3     | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs          |
+| **4** | Phase 4     | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs                |
+| **5** | Phase 5     | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs                           |
 ```
 
 **Where Added**: `maths-ks4-implementation-plan.md` - "Implementation Timeline" section
 
 **Value**: Provides:
+
 - Clear weekly milestones
 - Deliverable counts per week
 - Realistic pacing expectations
@@ -120,6 +123,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 **Reason Not Recovered**: All technical implementation details (code examples, TDD steps, ES queries) were already fully integrated into the new main plan. The archived versions had no additional unique technical content.
 
 **Examples**:
+
 - OpenAI inference endpoint setup (fully in new plan)
 - Dense vector field definitions (fully in new plan)
 - Three-way RRF query implementation (fully in new plan)
@@ -208,6 +212,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 **Total Content Intentionally Not Recovered**: Dates, outdated cross-references, redundant status fields
 
 **Result**: The new `maths-ks4-implementation-plan.md` now contains:
+
 - All technical implementation details (from consolidation)
 - All valuable user-focused content (from recovery)
 - Zero redundancy
@@ -220,6 +225,7 @@ All 11 documents in `archive/superseded-2025-12/`:
 ### Before Recovery
 
 Fresh chat would have:
+
 - ✅ Complete technical implementation guidance
 - ❌ Missing stakeholder-friendly demo scenarios
 - ❌ Missing field count overview
@@ -228,6 +234,7 @@ Fresh chat would have:
 ### After Recovery
 
 Fresh chat now has:
+
 - ✅ Complete technical implementation guidance
 - ✅ Stakeholder-friendly demo scenarios
 - ✅ Field count overview
@@ -249,4 +256,3 @@ The audit successfully identified and recovered all valuable content from archiv
 ---
 
 **End of Content Recovery Summary**
-

@@ -139,6 +139,15 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
           { name: 'sequence', type: 'category' },
         ],
       },
+      unit_dense_vector: {
+        type: 'dense_vector',
+      },
+      tier: {
+        type: 'keyword',
+      },
+      exam_board: {
+        type: 'keyword',
+      },
     },
   },
 } as const;

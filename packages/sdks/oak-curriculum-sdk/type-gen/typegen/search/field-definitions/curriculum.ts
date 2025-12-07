@@ -40,9 +40,9 @@ export const THREADS_INDEX_FIELDS: IndexFieldDefinitions = [
 /**
  * Field definitions for the oak_lessons search index.
  *
- * Contains 21 fields:
+ * Contains 25 fields:
  * - 10 required fields
- * - 11 optional fields
+ * - 15 optional fields
  *
  * @see SearchLessonsIndexDocSchema
  * @see OAK_LESSONS_MAPPING
@@ -69,6 +69,10 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_slugs', zodType: 'array-string', optional: true },
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
+  { name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
+  { name: 'tier', zodType: 'string', optional: true },
+  { name: 'exam_board', zodType: 'string', optional: true },
+  { name: 'pathway', zodType: 'string', optional: true },
 ] as const;
 
 /**
@@ -107,9 +111,9 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
 /**
  * Field definitions for the oak_unit_rollup search index.
  *
- * Contains 18 fields:
+ * Contains 21 fields:
  * - 9 required fields
- * - 9 optional fields
+ * - 12 optional fields
  *
  * @see SearchUnitRollupDocSchema
  * @see OAK_UNIT_ROLLUP_MAPPING
@@ -133,6 +137,9 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
+  { name: 'unit_dense_vector', zodType: 'array-number', optional: true },
+  { name: 'tier', zodType: 'string', optional: true },
+  { name: 'exam_board', zodType: 'string', optional: true },
 ] as const;
 
 /**

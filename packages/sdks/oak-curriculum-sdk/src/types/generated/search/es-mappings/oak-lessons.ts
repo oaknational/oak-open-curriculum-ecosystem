@@ -163,6 +163,18 @@ export const OAK_LESSONS_MAPPING = {
           { name: 'key_stage', type: 'category' },
         ],
       },
+      lesson_dense_vector: {
+        type: 'dense_vector',
+      },
+      tier: {
+        type: 'keyword',
+      },
+      exam_board: {
+        type: 'keyword',
+      },
+      pathway: {
+        type: 'keyword',
+      },
     },
   },
 } as const;

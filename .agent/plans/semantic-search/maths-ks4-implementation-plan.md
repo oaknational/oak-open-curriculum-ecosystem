@@ -78,26 +78,26 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ### Phase Overview
 
-| Phase | Focus | Duration | Key ES Features | ADRs |
-|-------|-------|----------|----------------|------|
-| **1A** | Three-Way Hybrid + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way RRF | 3 |
-| **1B** | Relevance Enhancement | 2-3 days | Cohere ReRank, filtered kNN, query rules | 2 |
-| **1C** | Maths KS4 Ingestion | 1 day | Full content with enhanced schema | - |
-| **2A** | Entity Extraction & Graph | 3-4 days | NER models, Graph API, enrich processor | 3 |
-| **2B** | Reference Indices & Threads | 2-3 days | 5 new indices, thread support | 1 |
-| **3** | RAG Infrastructure | 4-5 days | ES Playground, semantic_text, chunking | 2 |
-| **4** | Knowledge Graph | 5-6 days | Triple store, entity resolution | 2 |
-| **5** | Advanced Features | 3-4 days | LTR foundations, multi-vector | 2 |
+| Phase  | Focus                            | Duration | Key ES Features                            | ADRs |
+| ------ | -------------------------------- | -------- | ------------------------------------------ | ---- |
+| **1A** | Three-Way Hybrid + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way RRF | 3    |
+| **1B** | Relevance Enhancement            | 2-3 days | Cohere ReRank, filtered kNN, query rules   | 2    |
+| **1C** | Maths KS4 Ingestion              | 1 day    | Full content with enhanced schema          | -    |
+| **2A** | Entity Extraction & Graph        | 3-4 days | NER models, Graph API, enrich processor    | 3    |
+| **2B** | Reference Indices & Threads      | 2-3 days | 5 new indices, thread support              | 1    |
+| **3**  | RAG Infrastructure               | 4-5 days | ES Playground, semantic_text, chunking     | 2    |
+| **4**  | Knowledge Graph                  | 5-6 days | Triple store, entity resolution            | 2    |
+| **5**  | Advanced Features                | 3-4 days | LTR foundations, multi-vector              | 2    |
 
 ### Week-by-Week Breakdown
 
-| Week | Focus | Deliverables |
-|------|-------|--------------|
+| Week  | Focus       | Deliverables                                                                    |
+| ----- | ----------- | ------------------------------------------------------------------------------- |
 | **1** | Phase 1A-1C | Three-way hybrid, dense vectors, reranking, Maths KS4 ingestion, 5 ADRs, 5 docs |
-| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs |
-| **3** | Phase 3 | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs |
-| **4** | Phase 4 | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs |
-| **5** | Phase 5 | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs |
+| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs                 |
+| **3** | Phase 3     | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs          |
+| **4** | Phase 4     | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs                |
+| **5** | Phase 5     | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs                           |
 
 **Aggressive**: 3 weeks with parallel work  
 **Conservative**: 6 weeks with thorough validation
@@ -108,31 +108,58 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ### Goal
 
-Implement cutting-edge hybrid search combining BM25 + ELSER sparse + OpenAI dense vectors with Reciprocal Rank Fusion.
+Implement cutting-edge hybrid search combining BM25 + ELSER sparse + E5 dense vectors with Reciprocal Rank Fusion, using only Elastic-native services.
+
+### Key Decision: Elastic-Native Dense Vectors (2025-12-07)
+
+Chose `.multilingual-e5-small-elasticsearch` (384-dim) over OpenAI `text-embedding-3-small` (1536-dim):
+
+| Factor       | OpenAI            | E5 (Chosen)                  |
+| ------------ | ----------------- | ---------------------------- |
+| External API | Required          | **None**                     |
+| Dimensions   | 1536              | **384**                      |
+| Billing      | Per-token         | **Included in subscription** |
+| Setup        | Register endpoint | **PRECONFIGURED**            |
+
+See ADR-071 for full rationale.
 
 ### ES Serverless Features Integrated
 
-1. **Inference API** - Direct OpenAI integration for embeddings
-2. **Dense Vector Fields** - `dense_vector` type with HNSW indexing (1536-dim)
-3. **Three-Way RRF** - Fuse lexical + ELSER sparse + dense results
+1. **E5 Inference** - Preconfigured `.multilingual-e5-small-elasticsearch` endpoint
+2. **Dense Vector Fields** - `dense_vector` type with HNSW indexing (384-dim)
+3. **Three-Way RRF** - Fuse lexical + ELSER sparse + E5 dense results
 4. **Query Vector Builder** - Dynamic embedding generation at query time
+
+### Verified Available Endpoints
+
+| Endpoint                               | Type                     | Status        |
+| -------------------------------------- | ------------------------ | ------------- |
+| `.multilingual-e5-small-elasticsearch` | text_embedding (384-dim) | PRECONFIGURED |
+| `.elser-2-elasticsearch`               | sparse_embedding         | PRECONFIGURED |
+| `.rerank-v1-elasticsearch`             | rerank                   | TECH PREVIEW  |
 
 ### Implementation Guide
 
-See `phase-1a-implementation-guide.md` for day-by-day TDD walkthrough with code examples.
+See the detailed TDD examples in `.agent/prompts/semantic-search/semantic-search.prompt.md` and the code patterns in the Phase 1A section below.
 
 ### Field Additions Summary
 
-| Index                 | Current Fields | Phase 1A Adds | New Total | Phase 4 Deferred |
-| --------------------- | -------------- | ------------- | --------- | ---------------- |
-| `oak_lessons`         | 21             | +8            | **29**    | 8 more           |
-| `oak_units`           | 16             | +8            | **24**    | 3 more           |
-| `oak_unit_rollup`     | 18             | +10           | **28**    | 3 more           |
-| `oak_sequences`       | 14             | +6            | **20**    | 2 more           |
-| `oak_sequence_facets` | 13             | +5            | **18**    | 0                |
-| **TOTALS**            | **82**         | **+37**       | **119**   | **16 deferred**  |
+**Implemented (2025-12-07)**:
 
-**Result**: After Phase 1A, we'll have 119 fields across 5 indexes, with 16 AI/Graph fields deferred to Phase 4.
+| Index             | Current Fields | Phase 1A Adds | New Total |
+| ----------------- | -------------- | ------------- | --------- |
+| `oak_lessons`     | 21             | +4            | **25**    |
+| `oak_unit_rollup` | 18             | +3            | **21**    |
+
+**Fields Added**:
+
+- `lesson_dense_vector` (384-dim, E5)
+- `tier` (keyword)
+- `exam_board` (keyword)
+- `pathway` (keyword, lessons only)
+- `unit_dense_vector` (384-dim, E5, unit_rollup only)
+
+**Deferred to Later Phases**: Additional fields for units, sequences, and sequence_facets.
 
 ### Field Additions (Schema-First)
 
@@ -269,15 +296,15 @@ threads_available: { type: 'keyword' },
 ```typescript
 describe('extractTier', () => {
   it('should extract foundation tier from programme factors', () => {
-    const lessonData = createLessonData({ 
-      programmeFactors: { tier: 'foundation' }
+    const lessonData = createLessonData({
+      programmeFactors: { tier: 'foundation' },
     });
     expect(extractTier(lessonData)).toBe('foundation');
   });
 
   it('should extract higher tier', () => {
-    const lessonData = createLessonData({ 
-      programmeFactors: { tier: 'higher' }
+    const lessonData = createLessonData({
+      programmeFactors: { tier: 'higher' },
     });
     expect(extractTier(lessonData)).toBe('higher');
   });
@@ -290,8 +317,8 @@ describe('extractTier', () => {
 
 describe('extractExamBoard', () => {
   it('should extract exam board from programme factors', () => {
-    const lessonData = createLessonData({ 
-      programmeFactors: { examBoard: 'aqa' }
+    const lessonData = createLessonData({
+      programmeFactors: { examBoard: 'aqa' },
     });
     expect(extractExamBoard(lessonData)).toBe('aqa');
   });
@@ -337,12 +364,12 @@ describe('extractResourceTypes', () => {
 
 **File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
 
-```typescript
+````typescript
 import type { LessonData } from '@oaknational/oak-curriculum-sdk/public/search';
 
 /**
  * Extracts tier from lesson programme factors.
- * 
+ *
  * @see ADR-073 - Dense Vector Field Strategy
  * @example
  * ```typescript
@@ -350,9 +377,7 @@ import type { LessonData } from '@oaknational/oak-curriculum-sdk/public/search';
  * // 'foundation' | 'higher' | undefined
  * ```
  */
-export function extractTier(
-  lessonData: LessonData
-): 'foundation' | 'higher' | undefined {
+export function extractTier(lessonData: LessonData): 'foundation' | 'higher' | undefined {
   const tier = lessonData.programmeFactors?.tier;
   if (tier === 'foundation' || tier === 'higher') {
     return tier;
@@ -363,75 +388,71 @@ export function extractTier(
 /**
  * Extracts exam board from lesson programme factors.
  */
-export function extractExamBoard(
-  lessonData: LessonData
-): string | undefined {
+export function extractExamBoard(lessonData: LessonData): string | undefined {
   return lessonData.programmeFactors?.examBoard;
 }
 
 /**
  * Computes difficulty level from tier and year.
- * 
+ *
  * Foundation Year 9-10 → basic
- * Foundation Year 11 → intermediate  
+ * Foundation Year 11 → intermediate
  * Higher Year 10 → intermediate
  * Higher Year 11 → advanced
  */
 export function extractDifficultyLevel(
   tier: 'foundation' | 'higher' | undefined,
-  year: string | undefined
+  year: string | undefined,
 ): 'basic' | 'intermediate' | 'advanced' | undefined {
   if (!tier || !year) return undefined;
-  
+
   const yearNum = parseInt(year, 10);
   if (isNaN(yearNum)) return undefined;
 
   if (tier === 'foundation') {
     return yearNum <= 10 ? 'basic' : 'intermediate';
   }
-  
+
   // higher tier
   return yearNum <= 10 ? 'intermediate' : 'advanced';
 }
 
 /**
  * Extracts resource types from lesson components.
- * 
+ *
  * Maps component flags to searchable resource type keywords.
  */
-export function extractResourceTypes(
-  lessonData: LessonData
-): string[] {
+export function extractResourceTypes(lessonData: LessonData): string[] {
   const types: string[] = [];
   const components = lessonData.lessonComponents;
-  
+
   if (!components) return types;
-  
+
   if (components.video) types.push('video');
   if (components.worksheet) types.push('worksheet');
   if (components.presentation) types.push('slides');
   if (components.starterQuiz || components.exitQuiz) types.push('quiz');
-  
+
   return types;
 }
-```
+````
 
 #### 3. Dense Vector Extraction (OpenAI Integration)
 
 **File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts` (NEW)
 
-```typescript
+````typescript
 import type { Client } from '@elastic/elasticsearch';
 import { generateEmbedding } from '@oaknational/oak-curriculum-sdk/elasticsearch/inference';
 
 /**
  * Generates dense vector embedding for lesson content.
- * 
+ *
  * Combines title + summary into embedding text, calls OpenAI via ES Inference API.
- * 
+ *
  * @see ADR-071 - OpenAI Inference API Integration
  * @see ADR-072 - Three-Way Hybrid Search
- * 
+ *
  * @example
  * ```typescript
  * const vector = await generateLessonEmbedding(esClient, lessonData);
@@ -440,15 +461,12 @@ import { generateEmbedding } from '@oaknational/oak-curriculum-sdk/elasticsearch
  */
 export async function generateLessonEmbedding(
   esClient: Client,
-  lessonData: { title: string; summary?: string }
+  lessonData: { title: string; summary?: string },
 ): Promise<number[] | undefined> {
-  const text = [
-    lessonData.title,
-    lessonData.summary,
-  ].filter(Boolean).join(' ');
-  
+  const text = [lessonData.title, lessonData.summary].filter(Boolean).join(' ');
+
   if (!text.trim()) return undefined;
-  
+
   try {
     return await generateEmbedding(esClient, {
       endpointId: 'openai-text-embedding-3-small',
@@ -462,15 +480,15 @@ export async function generateLessonEmbedding(
 
 /**
  * Generates dense vector for lesson title only.
- * 
+ *
  * Used for title-specific semantic matching.
  */
 export async function generateTitleEmbedding(
   esClient: Client,
-  title: string
+  title: string,
 ): Promise<number[] | undefined> {
   if (!title.trim()) return undefined;
-  
+
   try {
     return await generateEmbedding(esClient, {
       endpointId: 'openai-text-embedding-3-small',
@@ -480,7 +498,7 @@ export async function generateTitleEmbedding(
     return undefined;
   }
 }
-```
+````
 
 ### Integration into Document Transforms
 
@@ -489,17 +507,22 @@ export async function generateTitleEmbedding(
 Update `createLessonDocument` to include new fields:
 
 ```typescript
-import { extractTier, extractExamBoard, extractDifficultyLevel, extractResourceTypes } from './document-transform-helpers.js';
+import {
+  extractTier,
+  extractExamBoard,
+  extractDifficultyLevel,
+  extractResourceTypes,
+} from './document-transform-helpers.js';
 import { generateLessonEmbedding, generateTitleEmbedding } from './dense-vector-extraction.js';
 
 export async function createLessonDocument(
   esClient: Client,
-  lessonData: LessonData
+  lessonData: LessonData,
 ): Promise<LessonDocument> {
   const tier = extractTier(lessonData);
   const examBoard = extractExamBoard(lessonData);
   const year = lessonData.year;
-  
+
   return {
     // ... existing fields ...
     tier,
@@ -520,20 +543,20 @@ export async function createLessonDocument(
 
 **File**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/three-way-rrf.ts` (NEW)
 
-```typescript
+````typescript
 import type { Client } from '@elastic/elasticsearch';
 import { generateEmbedding } from '@oaknational/oak-curriculum-sdk/elasticsearch/inference';
 
 /**
  * Executes three-way hybrid search with RRF fusion.
- * 
+ *
  * Combines:
  * 1. BM25 lexical search (multi_match)
  * 2. ELSER sparse semantic search (text_expansion)
  * 3. Dense vector semantic search (knn)
- * 
+ *
  * @see ADR-072 - Three-Way Hybrid Search
- * 
+ *
  * @example
  * ```typescript
  * const results = await threeWayHybridSearch(esClient, {
@@ -551,16 +574,16 @@ export async function threeWayHybridSearch(
     query: string;
     size?: number;
     filters?: Record<string, unknown>;
-  }
+  },
 ): Promise<SearchResults> {
   const { index, query, size = 20, filters } = params;
-  
+
   // Generate query embedding
   const queryVector = await generateEmbedding(esClient, {
     endpointId: 'openai-text-embedding-3-small',
     text: query,
   });
-  
+
   const response = await esClient.search({
     index,
     size,
@@ -593,16 +616,18 @@ export async function threeWayHybridSearch(
         },
       },
       // 3. Dense vector semantic
-      queryVector ? {
-        query: {
-          knn: {
-            field: 'lesson_dense_vector',
-            query_vector: queryVector,
-            k: 50,
-            num_candidates: 100,
-          },
-        },
-      } : undefined,
+      queryVector
+        ? {
+            query: {
+              knn: {
+                field: 'lesson_dense_vector',
+                query_vector: queryVector,
+                k: 50,
+                num_candidates: 100,
+              },
+            },
+          }
+        : undefined,
     ].filter(Boolean),
     rank: {
       rrf: {
@@ -611,10 +636,10 @@ export async function threeWayHybridSearch(
       },
     },
   });
-  
+
   return parseSearchResponse(response);
 }
-```
+````
 
 ### ADRs to Create
 
@@ -675,12 +700,12 @@ Boost relevance of top-K results using Cohere ReRank and optimize constrained se
 
 **ADR-074: Cohere ReRank Integration**
 
-```typescript
+````typescript
 /**
  * Reranks top-K results using Cohere rerank-english-v3.0 model.
- * 
+ *
  * @see ADR-074 - Cohere ReRank Integration
- * 
+ *
  * @example
  * ```typescript
  * const results = await threeWayHybridSearch(esClient, { query: '...' });
@@ -697,22 +722,22 @@ export async function cohereRerank(
     query: string;
     documents: SearchHit[];
     topN?: number;
-  }
+  },
 ): Promise<SearchHit[]> {
   const { query, documents, topN = 10 } = params;
-  
+
   const response = await esClient.inference.inference({
     inference_id: 'cohere-rerank-english-v3',
     input: {
       query,
-      documents: documents.map(doc => doc._source.title),
+      documents: documents.map((doc) => doc._source.title),
     },
   });
-  
+
   // Sort by relevance scores, return top N
   return applyRerankScores(documents, response.scores).slice(0, topN);
 }
-```
+````
 
 ### Filtered kNN Optimization
 
@@ -850,49 +875,46 @@ Entities come from three sources:
 
 **ADR-076: NER Entity Extraction**
 
-```typescript
+````typescript
 /**
  * Extracts named entities from lesson transcript using HuggingFace NER model.
- * 
+ *
  * @see ADR-076 - NER Entity Extraction
- * 
+ *
  * @example
  * ```typescript
  * const entities = await extractEntities(esClient, transcript);
  * // [{ text: 'Pythagoras', type: 'CONCEPT', confidence: 0.95 }, ...]
  * ```
  */
-export async function extractEntities(
-  esClient: Client,
-  text: string
-): Promise<Entity[]> {
+export async function extractEntities(esClient: Client, text: string): Promise<Entity[]> {
   const response = await esClient.inference.inference({
     inference_id: 'huggingface-ner',
     input: text,
   });
-  
+
   return parseNerResponse(response)
-    .filter(entity => entity.confidence > 0.7)
-    .map(entity => ({
+    .filter((entity) => entity.confidence > 0.7)
+    .map((entity) => ({
       text: entity.word,
       type: entity.entity_group,
       confidence: entity.score,
     }));
 }
-```
+````
 
 ### Graph API Discovery
 
 **ADR-077: Graph API for Curriculum Relationships**
 
-```typescript
+````typescript
 /**
  * Discovers concept relationships using ES Graph API.
- * 
+ *
  * Finds co-occurring concepts within Maths KS4 lessons.
- * 
+ *
  * @see ADR-077 - Graph API for Curriculum Relationships
- * 
+ *
  * @example
  * ```typescript
  * const graph = await discoverConceptGraph(esClient, {
@@ -904,7 +926,7 @@ export async function extractEntities(
  */
 export async function discoverConceptGraph(
   esClient: Client,
-  params: { startConcept: string; depth: number }
+  params: { startConcept: string; depth: number },
 ): Promise<ConceptGraph> {
   const response = await esClient.graph.explore({
     index: 'oak_lessons',
@@ -930,10 +952,10 @@ export async function discoverConceptGraph(
       },
     ],
   });
-  
+
   return buildGraphFromResponse(response);
 }
-```
+````
 
 ### Enrich Processor
 
@@ -1005,6 +1027,7 @@ Create searchable reference indices for subjects, key stages, years, and Maths-s
 ### Thread Support for Maths KS4
 
 Maths threads:
+
 - Number
 - Algebra
 - Geometry and Measures
@@ -1061,6 +1084,7 @@ export function extractThreads(lessonData: LessonData): string[] {
 ### ADR to Create
 
 **ADR-079: Reference Indices for Enum Data**
+
 - Decision: Create separate indices for reference data
 - Rationale: Enable autocomplete, faceting, and enrichment
 - Alternatives: Hardcode in UI (less flexible, no search)
@@ -1109,11 +1133,13 @@ transcript_chunks: {
 ```
 
 Elasticsearch automatically:
+
 - Chunks the text into ~250-word segments
 - Generates embeddings for each chunk
 - Stores chunks with embeddings
 
 At query time:
+
 - Search finds relevant chunks
 - RAG injects chunks into LLM context
 
@@ -1128,12 +1154,12 @@ At query time:
 
 ### LLM Integration
 
-```typescript
+````typescript
 /**
  * Executes RAG query with GPT-4.
- * 
+ *
  * @see ADR-080 - ES Playground RAG Integration
- * 
+ *
  * @example
  * ```typescript
  * const answer = await ragQuery(esClient, {
@@ -1144,7 +1170,7 @@ At query time:
  */
 export async function ragQuery(
   esClient: Client,
-  params: { query: string; conversationId: string }
+  params: { query: string; conversationId: string },
 ): Promise<RagResponse> {
   // 1. Retrieve relevant chunks
   const chunks = await threeWayHybridSearch(esClient, {
@@ -1152,12 +1178,10 @@ export async function ragQuery(
     query: params.query,
     size: 5,
   });
-  
+
   // 2. Build context from chunks
-  const context = chunks.hits
-    .map(hit => hit._source.transcript_chunks)
-    .join('\n\n');
-  
+  const context = chunks.hits.map((hit) => hit._source.transcript_chunks).join('\n\n');
+
   // 3. Call GPT-4 with context
   const response = await esClient.inference.inference({
     inference_id: 'openai-gpt-4',
@@ -1174,16 +1198,16 @@ export async function ragQuery(
       ],
     },
   });
-  
+
   return {
     answer: response.choices[0].message.content,
-    sources: chunks.hits.map(hit => ({
+    sources: chunks.hits.map((hit) => ({
       title: hit._source.title,
       url: hit._source.canonical_url,
     })),
   };
 }
-```
+````
 
 ### Ontology Grounding
 
@@ -1274,46 +1298,43 @@ Merge extracted entities:
 ```typescript
 /**
  * Resolves entity mentions to canonical entity IDs.
- * 
+ *
  * @see ADR-082 - Entity Resolution Strategy
  */
 export async function resolveEntity(
   esClient: Client,
-  mention: string
+  mention: string,
 ): Promise<string | undefined> {
   // 1. Normalize mention (lowercase, remove punctuation)
   const normalized = normalizeMention(mention);
-  
+
   // 2. Search oak_entities for matches
   const matches = await esClient.search({
     index: 'oak_entities',
     query: {
       bool: {
-        should: [
-          { term: { canonical_name: normalized } },
-          { match: { aliases: mention } },
-        ],
+        should: [{ term: { canonical_name: normalized } }, { match: { aliases: mention } }],
       },
     },
   });
-  
+
   // 3. Return canonical ID if confident match
   if (matches.hits.hits[0]?._score > 0.8) {
     return matches.hits.hits[0]._source.entity_id;
   }
-  
+
   return undefined;
 }
 ```
 
 ### Multi-Hop Reasoning
 
-```typescript
+````typescript
 /**
  * Finds learning pathway from concept A to concept B.
- * 
+ *
  * @see ADR-083 - Knowledge Graph Multi-Hop Queries
- * 
+ *
  * @example
  * ```typescript
  * const path = await findLearningPath(esClient, {
@@ -1326,7 +1347,7 @@ export async function resolveEntity(
  */
 export async function findLearningPath(
   esClient: Client,
-  params: { from: string; to: string; maxHops: number }
+  params: { from: string; to: string; maxHops: number },
 ): Promise<string[]> {
   // Use Graph API with hop controls
   const response = await esClient.graph.explore({
@@ -1347,10 +1368,10 @@ export async function findLearningPath(
       ],
     },
   });
-  
+
   return extractShortestPath(response, params.from, params.to);
 }
-```
+````
 
 ### Triple Extraction
 
@@ -1428,24 +1449,21 @@ Add Learning to Rank foundations, multi-vector fields, and runtime field optimiz
 ```typescript
 /**
  * Extracts features for Learning to Rank model training.
- * 
+ *
  * @see ADR-084 - Learning to Rank Foundations
  */
-export function extractLtrFeatures(
-  query: string,
-  document: LessonDocument
-): LtrFeatures {
+export function extractLtrFeatures(query: string, document: LessonDocument): LtrFeatures {
   return {
     // Query-document features
     title_match_score: computeBm25(query, document.title),
-    elser_score: document._score,  // From ELSER
+    elser_score: document._score, // From ELSER
     dense_score: computeCosineSimilarity(queryVector, document.lesson_dense_vector),
-    
+
     // Document features
     tier: document.tier === 'higher' ? 1 : 0,
     has_video: document.resource_types?.includes('video') ? 1 : 0,
     estimated_duration: document.estimated_duration_minutes ?? 0,
-    
+
     // Context features
     query_length: query.split(' ').length,
     has_exam_board: document.exam_board ? 1 : 0,
@@ -1606,6 +1624,7 @@ pnpm test:e2e:built  # E2E with built code
 - **Total**: ~$1,260/month
 
 **Cost Mitigation**:
+
 - Caching (reduce rerank calls by 60%)
 - Batch processing (reduce embedding costs)
 - Feature flags (disable expensive features for low-value queries)
@@ -1752,6 +1771,7 @@ After implementation, validate these technical scenarios work:
 **Query**: "How do I teach Pythagoras theorem to struggling students?"
 
 **Expected**:
+
 - Dense vector captures semantic intent ("teach", "struggling")
 - ELSER captures Maths domain ("Pythagoras", "theorem")
 - BM25 captures exact phrase matches
@@ -1762,6 +1782,7 @@ After implementation, validate these technical scenarios work:
 **Query**: "trigonometry" + Filter: `{ tier: 'higher' }`
 
 **Expected**:
+
 - Vector search applies filter DURING search (not post-filter)
 - Results are 50% faster than unfiltered search
 - Only Higher tier lessons returned
@@ -1771,6 +1792,7 @@ After implementation, validate these technical scenarios work:
 **Query**: "solving quadratic equations"
 
 **Expected**:
+
 - Three-way hybrid returns 50 results
 - Rerank reorders top-10 for better relevance
 - MRR improves by 10-25%
@@ -1780,6 +1802,7 @@ After implementation, validate these technical scenarios work:
 **Query**: "pythagoras"
 
 **Expected**:
+
 - NER identifies "Pythagoras' Theorem" entity
 - Graph API discovers related concepts: "right-angled triangles", "trigonometry"
 - Results include lessons covering related concepts
@@ -1789,6 +1812,7 @@ After implementation, validate these technical scenarios work:
 **Filter**: `{ threads: ['geometry'] }`
 
 **Expected**:
+
 - Returns all Geometry lessons in Maths KS4
 - Facets show other available threads
 - Can refine by tier within thread
@@ -1798,6 +1822,7 @@ After implementation, validate these technical scenarios work:
 **Query**: "What are common misconceptions about fractions in Year 10?"
 
 **Expected**:
+
 - Retrieves relevant transcript chunks
 - Ontology provides domain context
 - GPT-4 generates answer with sources
@@ -1808,6 +1833,7 @@ After implementation, validate these technical scenarios work:
 **Query**: Find pathway from "fractions" to "calculus"
 
 **Expected**:
+
 - Knowledge graph traversal finds intermediate concepts
 - Returns: fractions → algebra → functions → differentiation
 - Each step links to relevant lessons
@@ -1905,7 +1931,7 @@ These scenarios demonstrate the system from a teacher's perspective for stakehol
 
 ### Implementation Guides
 
-- `phase-1a-implementation-guide.md` - Day-by-day Phase 1A walkthrough with code examples
+- `.agent/prompts/semantic-search/semantic-search.prompt.md` - TDD examples and quick start for Phase 1A
 
 ### Reference
 
@@ -1935,9 +1961,8 @@ This plan transforms the Maths KS4 vertical slice into a **comprehensive showcas
 
 **Ready to begin Phase 1A when you are.**
 
-See `phase-1a-implementation-guide.md` for practical day-by-day implementation guidance.
+See `.agent/prompts/semantic-search/semantic-search.prompt.md` for practical TDD examples and quick start guidance.
 
 ---
 
 **End of Plan**
-

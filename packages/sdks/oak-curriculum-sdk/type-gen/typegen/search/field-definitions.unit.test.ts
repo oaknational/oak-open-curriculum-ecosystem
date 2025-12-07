@@ -198,8 +198,8 @@ describe('THREADS_INDEX_FIELDS', () => {
 });
 
 describe('LESSONS_INDEX_FIELDS', () => {
-  it('has exactly 21 fields', () => {
-    expect(LESSONS_INDEX_FIELDS).toHaveLength(21);
+  it('has exactly 25 fields', () => {
+    expect(LESSONS_INDEX_FIELDS).toHaveLength(25);
   });
 
   it('contains expected field names', () => {
@@ -223,8 +223,8 @@ describe('LESSONS_INDEX_FIELDS', () => {
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
-  it('has exactly 18 fields', () => {
-    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(18);
+  it('has exactly 21 fields', () => {
+    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(21);
   });
 
   it('contains expected field names', () => {
