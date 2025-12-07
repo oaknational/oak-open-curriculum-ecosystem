@@ -128,7 +128,7 @@ export const getLessonsSummary = {
     title: "Get Lessons Summary",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-2316bbb4.html",
     'openai/toolInvocation/invoking': "Fetching Get Lessons Summary…",
     'openai/toolInvocation/invoked': "Get Lessons Summary loaded",
     'openai/widgetAccessible': true,

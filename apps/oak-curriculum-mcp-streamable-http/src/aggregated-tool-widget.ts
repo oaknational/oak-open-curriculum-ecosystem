@@ -64,25 +64,27 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
   <style>${WIDGET_STYLES}</style>
 </head>
 <body>
-  <main id="root">
-    <div class="hdr">
+<div id="root">
+  <main id="content-container">
+    <header class="hdr">
       <div class="logo">${OAK_LOGO_SVG}</div>
       <div class="hdr-text">
         <h1 class="ttl">Oak National Academy</h1>
         <p class="sub-ttl" id="tool-name"></p>
       </div>
       ${generateCtaContainerHtml()}
-    </div>
+    </header>
     <div id="c"></div>
-    <div class="ftr">
+    <footer class="ftr">
       <p class="ftr-disclaimer">AI can make mistakes. Check all generated resources before use.</p>
       <p class="ftr-links">
         <a href="https://www.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link nowrap">Explore more Oak curriculum resources</a>
         <span class="ftr-sep">•</span>
         <a href="https://labs.thenational.academy" target="_blank" rel="noopener noreferrer" class="ftr-link"><span class="nowrap">For an educator specific experience try Aila</span> - <span class="nowrap">Oak's AI Lesson Assistant</span></a>
       </p>
-    </div>
+    </footer>
   </main>
-  <script type="module">${WIDGET_SCRIPT}</script>
+</div>
+<script type="module">${WIDGET_SCRIPT}</script>
 </body>
 </html>`.trim();

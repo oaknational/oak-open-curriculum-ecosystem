@@ -63,7 +63,8 @@ html { box-sizing: border-box; }
 *, *::before, *::after { box-sizing: inherit; }
 html, body { margin: 0; padding: 0; }
 body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display: flex; flex-direction: column; }
-#root { background: var(--bg); color: var(--fg); padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left); flex: 1; display: flex; flex-direction: column; }
+#root { background: var(--bg); color: var(--fg); flex: 1; display: flex; flex-direction: column; }
+#content-container { margin: 0.8em; flex: 1; display: flex; flex-direction: column; }
 .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
 .hdr-text { display: flex; flex-direction: column; gap: 2px; }
 .logo { width: 36px; height: 36px; }

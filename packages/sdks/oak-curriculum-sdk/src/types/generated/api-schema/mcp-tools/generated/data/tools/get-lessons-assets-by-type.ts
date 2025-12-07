@@ -131,7 +131,7 @@ export const getLessonsAssetsByType = {
     title: "Get Lessons Assets By Type",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-2316bbb4.html",
     'openai/toolInvocation/invoking': "Fetching Get Lessons Assets By Type…",
     'openai/toolInvocation/invoked': "Get Lessons Assets By Type loaded",
     'openai/widgetAccessible': true,

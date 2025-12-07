@@ -127,7 +127,7 @@ export const getThreadsUnits = {
     title: "Get Threads Units",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-2316bbb4.html",
     'openai/toolInvocation/invoking': "Fetching Get Threads Units…",
     'openai/toolInvocation/invoked': "Get Threads Units loaded",
     'openai/widgetAccessible': true,

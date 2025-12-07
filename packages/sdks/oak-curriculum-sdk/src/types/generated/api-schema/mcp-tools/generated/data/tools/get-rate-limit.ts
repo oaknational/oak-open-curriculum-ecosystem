@@ -115,7 +115,7 @@ export const getRateLimit = {
     title: "Get Rate Limit",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-2316bbb4.html",
     'openai/toolInvocation/invoking': "Fetching Get Rate Limit…",
     'openai/toolInvocation/invoked': "Get Rate Limit loaded",
     'openai/widgetAccessible': true,
