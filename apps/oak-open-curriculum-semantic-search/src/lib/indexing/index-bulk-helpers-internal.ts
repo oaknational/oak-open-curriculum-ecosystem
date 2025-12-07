@@ -1,3 +1,4 @@
+import type { Client } from '@elastic/elasticsearch';
 import type { KeyStage, SearchLessonsIndexDoc, SearchSubjectSlug } from '../../types/oak';
 import { isUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
@@ -95,6 +96,7 @@ function createLessonBuildContext(
 
 async function buildLessonDocEntry(
   client: OakClient,
+  esClient: Client,
   lesson: { lessonSlug: string; lessonTitle: string },
   context: LessonBuildContext,
 ): Promise<LessonDocEntry | null> {
@@ -105,7 +107,7 @@ async function buildLessonDocEntry(
     return null;
   }
 
-  const document = createLessonDocument({
+  const document = await createLessonDocument({
     lesson,
     transcript: materials.transcript,
     summary: materials.summary,
@@ -114,6 +116,7 @@ async function buildLessonDocEntry(
     keyStage: context.keyStage,
     years: context.years,
     lessonCount: context.lessonCount,
+    esClient,
   });
   const snippet = selectLessonPlanningSnippet({
     summary: materials.summary,
@@ -130,6 +133,7 @@ async function buildLessonDocEntry(
 
 export async function buildLessonDocsForGroup(
   client: OakClient,
+  esClient: Client,
   group: {
     unitSlug: string;
     unitTitle: string;
@@ -156,7 +160,7 @@ export async function buildLessonDocsForGroup(
         lessonSlug: lesson.lessonSlug.slice(0, 40),
       });
     }
-    const entry = await buildLessonDocEntry(client, lesson, context);
+    const entry = await buildLessonDocEntry(client, esClient, lesson, context);
 
     // Handle lessons with no summary data (404) - silently skip
     if (entry === null) {

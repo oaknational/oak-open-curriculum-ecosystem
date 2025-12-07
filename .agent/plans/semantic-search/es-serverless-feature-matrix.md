@@ -41,15 +41,15 @@
 
 ### AI & ML Integration
 
-| Feature                 | Status      | Phase  | Impact                     | TDD | ADR     |
-| ----------------------- | ----------- | ------ | -------------------------- | --- | ------- |
-| **ELSER Auto-Assign**   | ✅ Current  | -      | Automatic sparse vectors   | ✅  | -       |
-| **E5 Dense Embeddings** | 🔄 Phase 1A | HIGH   | 384-dim dense vectors      | ✅  | ADR-071 |
-| **Cohere ReRank**       | 🎯 Phase 1B | HIGH   | +10-25% relevance          | ✅  | ADR-074 |
-| **NER Models**          | 🎯 Phase 2A | HIGH   | Entity extraction          | ✅  | ADR-076 |
-| **semantic_text Field** | 🎯 Phase 3  | HIGH   | Auto-chunking + embeddings | ✅  | ADR-081 |
-| **LLM Chat Completion** | 🎯 Phase 3  | MEDIUM | RAG answer generation      | ✅  | ADR-080 |
-| **Learning to Rank**    | 🎯 Phase 5  | MEDIUM | Personalized relevance     | ✅  | ADR-084 |
+| Feature                   | Status      | Phase  | Impact                     | TDD | ADR     |
+| ------------------------- | ----------- | ------ | -------------------------- | --- | ------- |
+| **ELSER Auto-Assign**     | ✅ Current  | -      | Automatic sparse vectors   | ✅  | -       |
+| **E5 Dense Embeddings**   | 🔄 Phase 1A | HIGH   | 384-dim dense vectors      | ✅  | ADR-071 |
+| **Elastic Native ReRank** | 🎯 Phase 1B | HIGH   | +10-25% relevance          | ✅  | ADR-074 |
+| **NER Models**            | 🎯 Phase 2A | HIGH   | Entity extraction          | ✅  | ADR-076 |
+| **semantic_text Field**   | 🎯 Phase 3  | HIGH   | Auto-chunking + embeddings | ✅  | ADR-081 |
+| **LLM Chat Completion**   | 🎯 Phase 3  | MEDIUM | RAG answer generation      | ✅  | ADR-080 |
+| **Learning to Rank**      | 🎯 Phase 5  | MEDIUM | Personalized relevance     | ✅  | ADR-084 |
 
 **Note (2025-12-07)**: Using Elastic-native E5 (`.multilingual-e5-small-elasticsearch`) instead of OpenAI. No external API dependencies for dense vectors.
 
@@ -82,6 +82,22 @@
 | **Ingest Pipelines**  | 🎯 Phase 2A | MEDIUM | Pre-processing        | ✅  | ADR-078 |
 | **Copy To Fields**    | 🎯 Phase 5  | LOW    | Unified search fields | ✅  | -       |
 
+### Curriculum Schema Leverage (API Data)
+
+| Feature                     | Status      | Phase  | Impact                     | TDD | ADR     |
+| --------------------------- | ----------- | ------ | -------------------------- | --- | ------- |
+| **Keyword Definitions**     | 🔄 Phase 1A | HIGH   | Richer embeddings          | ✅  | -       |
+| **Prior Knowledge**         | 🎯 Phase 2B | HIGH   | Prerequisite search/graph  | ✅  | ADR-086 |
+| **National Curriculum**     | 🎯 Phase 2B | HIGH   | Standards alignment        | ✅  | ADR-086 |
+| **Threads**                 | 🎯 Phase 2B | HIGH   | Curriculum coherence/graph | ✅  | ADR-079 |
+| **Pupil Outcomes**          | 🎯 Phase 2B | MEDIUM | "I can..." search          | ✅  | ADR-086 |
+| **Quiz Content**            | 🎯 Phase 2B | MEDIUM | Assessment discovery       | ✅  | ADR-086 |
+| **Misconception Responses** | 🎯 Phase 2B | MEDIUM | Teaching strategy search   | ✅  | ADR-086 |
+| **Why This Why Now**        | 🎯 Phase 2B | LOW    | Pedagogical context        | ✅  | -       |
+| **Content Guidance**        | 🎯 Phase 2B | LOW    | Safeguarding filters       | ✅  | -       |
+
+**Note**: All curriculum schema fields are already available in the Oak API. No external dependencies. See `.agent/research/elasticsearch/curriculum-schema-field-analysis.md`.
+
 ---
 
 ## Impact Assessment by Feature
@@ -96,7 +112,7 @@
 - **Validation**: A/B testing with human evaluators
 - **Status**: Field definitions added, dense vector generation in progress
 
-**Cohere ReRank** (Phase 1B)
+**Elastic Native ReRank** (Phase 1B)
 
 - **Impact**: Additional 10-25% boost on top results
 - **Effort**: 1-2 days
@@ -176,30 +192,30 @@
 
 ### API Costs (Estimated)
 
-| Feature               | Cost per 1K Tokens | Maths KS4 Cost     | Monthly Cost (All)   |
-| --------------------- | ------------------ | ------------------ | -------------------- |
-| **OpenAI Embeddings** | $0.00002           | ~$2                | ~$40                 |
-| **Cohere ReRank**     | $0.002             | ~$10               | ~$200                |
-| **NER Models (HF)**   | $0.0001            | ~$1                | ~$20                 |
-| **GPT-4 Chat**        | $0.01              | ~$50 (100 queries) | ~$1000 (20K queries) |
-| **TOTAL**             | -                  | ~$63               | ~$1,260              |
+| Feature                   | Source                                                  | Maths KS4 Cost | Monthly Cost (All) |
+| ------------------------- | ------------------------------------------------------- | -------------- | ------------------ |
+| **E5 Embeddings**         | Elastic-native (`.multilingual-e5-small-elasticsearch`) | $0             | $0                 |
+| **Elastic Native ReRank** | Elastic-native (`.rerank-v1-elasticsearch`)             | $0             | $0                 |
+| **NER Models**            | Deployed in ES cluster                                  | $0             | $0                 |
+| **Elastic Native LLM**    | Elastic-native (`.gp-llm-v2-chat_completion`)           | $0             | $0                 |
+| **TOTAL**                 | -                                                       | **$0**         | **$0**             |
 
 **Notes**:
 
-- Embedding costs are one-time (ingest only)
-- ReRank cost per query (controllable)
-- GPT-4 depends on usage volume
-- Can reduce costs with caching and batch processing
+- All AI/ML inference features are included in ES Serverless subscription
+- No external API dependencies or per-token costs
+- Resource-based billing only (ES Serverless subscription itself)
+- Oak Curriculum API calls within existing quota
 
 ### Performance Impact
 
-| Feature              | Latency Change       | Throughput Change | Storage Change  |
-| -------------------- | -------------------- | ----------------- | --------------- |
-| **Dense Vectors**    | +50ms                | -10%              | +20% (1536-dim) |
-| **Cohere ReRank**    | +100ms               | -20%              | 0%              |
-| **Three-Way Hybrid** | +20ms                | -5%               | 0%              |
-| **NER Extraction**   | +200ms (ingest only) | N/A               | +5%             |
-| **Graph API**        | +50ms                | -15%              | 0%              |
+| Feature                   | Latency Change       | Throughput Change | Storage Change |
+| ------------------------- | -------------------- | ----------------- | -------------- |
+| **Dense Vectors**         | +50ms                | -10%              | +8% (384-dim)  |
+| **Elastic Native ReRank** | +100ms               | -20%              | 0%             |
+| **Three-Way Hybrid**      | +20ms                | -5%               | 0%             |
+| **NER Extraction**        | +200ms (ingest only) | N/A               | +5%            |
+| **Graph API**             | +50ms                | -15%              | 0%             |
 
 **Mitigation Strategies**:
 

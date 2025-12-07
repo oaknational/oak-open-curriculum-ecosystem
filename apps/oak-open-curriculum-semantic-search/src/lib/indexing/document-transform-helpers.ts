@@ -214,3 +214,74 @@ export function expectLessonSummaryString(summary: unknown, key: string, context
   }
   return value;
 }
+
+// Re-export programme factor extractors from dedicated module
+export { extractTier, extractExamBoard, extractPathway } from './programme-factor-extractors';
+
+/**
+ * Extracts all fields from lesson summary for document creation.
+ * Helper to keep createLessonDocument under max-lines-per-function limit.
+ */
+export function extractLessonDocumentFields(summary: unknown) {
+  const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
+  const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
+    extractLessonPlanningFields(summary);
+  const tier = extractTier(summary);
+  const examBoard = extractExamBoard(summary);
+  const pathway = extractPathway(summary);
+
+  return {
+    unitSlug,
+    unitTitle,
+    canonicalUrl,
+    lessonKeywords,
+    keyLearningPoints,
+    misconceptions,
+    teacherTips,
+    contentGuidance,
+    tier,
+    examBoard,
+    pathway,
+  };
+}
+
+/**
+ * Extracts all fields from unit summary for rollup document creation.
+ * Helper to keep createRollupDocument under max-lines-per-function limit.
+ *
+ * Note: Imports normaliseYears from document-transforms to avoid circular dependency.
+ */
+export function extractRollupDocumentFields(
+  summary: unknown,
+  normaliseYears: (year: unknown, yearSlug: unknown) => string[] | undefined,
+) {
+  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
+  const rollupLessons: UnitLessonInfo[] = extractUnitLessons(
+    readUnitSummaryValue(summary, 'unitLessons'),
+  );
+  const lessonIds = rollupLessons.map((lesson) => lesson.lessonSlug);
+  const unitTopics: string[] | undefined = extractUnitTopics(
+    readUnitSummaryValue(summary, 'categories'),
+  );
+  const years = normaliseYears(
+    readUnitSummaryValue(summary, 'year'),
+    readUnitSummaryValue(summary, 'yearSlug'),
+  );
+  const sequenceIds: string[] | undefined = extractSequenceIds(
+    readUnitSummaryValue(summary, 'threads'),
+  );
+  const tier = extractTier(summary);
+  const examBoard = extractExamBoard(summary);
+
+  return {
+    unitSlug,
+    unitTitle,
+    canonicalUrl,
+    lessonIds,
+    unitTopics,
+    years,
+    sequenceIds,
+    tier,
+    examBoard,
+  };
+}

@@ -4,6 +4,7 @@
  * Extracted from index-oak.ts to reduce function complexity.
  */
 
+import type { Client } from '@elastic/elasticsearch';
 import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
@@ -23,6 +24,7 @@ import type { DataIntegrityReport } from './indexing/data-integrity-report';
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
   readonly client: OakClient;
+  readonly esClient: Client;
   readonly ks: KeyStage;
   readonly subject: SearchSubjectSlug;
   readonly subjectSequences: readonly SubjectSequenceEntry[];
@@ -79,7 +81,7 @@ async function buildCoreDocumentOps(
   rollupOps: unknown[];
   unitSummaries: Map<string, unknown>;
 }> {
-  const { client, ks, subject, dataIntegrityReport } = context;
+  const { client, esClient, ks, subject, dataIntegrityReport } = context;
 
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const { unitSummaries, unitOps } = await buildUnitDocuments(
@@ -95,6 +97,7 @@ async function buildCoreDocumentOps(
   sandboxLogger.debug('Building lesson documents', { subject, keyStage: ks });
   const { lessonOps, rollupSnippets } = await buildLessonDocuments(
     client,
+    esClient,
     groups,
     unitSummaries,
     subject,
@@ -104,7 +107,8 @@ async function buildCoreDocumentOps(
   sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: lessonOps.length / 2 });
 
   sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
-  const rollupOps = buildRollupDocuments(
+  const rollupOps = await buildRollupDocuments(
+    esClient,
     unitSummaries,
     rollupSnippets,
     subject,

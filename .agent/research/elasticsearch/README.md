@@ -8,6 +8,14 @@ This directory contains research and analysis related to Elasticsearch integrati
 
 ## Documents
 
+### Schema Analysis (NEW - 2025-12-08)
+
+- [Curriculum Schema Field Analysis](./curriculum-schema-field-analysis.md) - **Untapped API schema fields** for enhanced search. Catalogs `priorKnowledgeRequirements`, `nationalCurriculumContent`, `threads`, `lessonKeywords[].description`, quiz data, and other pedagogical metadata. Maps fields to implementation phases.
+
+### Natural Language Search
+
+- [Natural Language Search with ES-Native Features](./natural-language-search-with-es-native-features.md) - Research on ES-native NLP capabilities including NER, semantic parsing, and query understanding without external APIs.
+
 ### Deep Review
 
 - [Semantic Search Plans Review](./semantic-search-plans-review.md) - Comprehensive review of `.agent/plans/semantic-search/` comparing original plans to current implementation state. **Key finding**: Schema-first migration is complete; ontology features remain unimplemented.

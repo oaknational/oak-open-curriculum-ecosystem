@@ -9,6 +9,9 @@ import {
   extractUnitLessons,
   resolveLessonSummaryIdentifiers,
   resolveUnitSummaryIdentifiers,
+  extractTier,
+  extractExamBoard,
+  extractPathway,
 } from './document-transform-helpers';
 
 interface UnitSummaryFixture {
@@ -56,6 +59,11 @@ interface LessonSummaryFixture {
   supervisionLevel?: string | null;
   downloadsAvailable?: boolean;
   canonicalUrl?: string;
+  programmeFactors?: {
+    tier?: string;
+    examBoard?: string;
+    pathway?: string;
+  };
 }
 
 function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSummaryFixture {
@@ -224,6 +232,126 @@ describe('document-transform-helpers', () => {
       expect(fields.misconceptions).toEqual(['Confuse numerator → Explain with bar models']);
       expect(fields.teacherTips).toEqual(['Model representations']);
       expect(fields.contentGuidance).toEqual(['Consider prior knowledge']);
+    });
+  });
+
+  describe('extractTier', () => {
+    it('should extract foundation tier from programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { tier: 'foundation' },
+      });
+
+      expect(extractTier(lessonData)).toBe('foundation');
+    });
+
+    it('should extract higher tier from programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { tier: 'higher' },
+      });
+
+      expect(extractTier(lessonData)).toBe('higher');
+    });
+
+    it('should return undefined if no tier in programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: {},
+      });
+
+      expect(extractTier(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined if no programme factors', () => {
+      const lessonData = buildLessonSummary();
+
+      expect(extractTier(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined for invalid tier values', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { tier: 'invalid' },
+      });
+
+      expect(extractTier(lessonData)).toBeUndefined();
+    });
+  });
+
+  describe('extractExamBoard', () => {
+    it('should extract exam board from programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { examBoard: 'aqa' },
+      });
+
+      expect(extractExamBoard(lessonData)).toBe('aqa');
+    });
+
+    it('should extract edexcel exam board', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { examBoard: 'edexcel' },
+      });
+
+      expect(extractExamBoard(lessonData)).toBe('edexcel');
+    });
+
+    it('should return undefined if no exam board in programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: {},
+      });
+
+      expect(extractExamBoard(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined if no programme factors', () => {
+      const lessonData = buildLessonSummary();
+
+      expect(extractExamBoard(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined for empty string exam board', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { examBoard: '' },
+      });
+
+      expect(extractExamBoard(lessonData)).toBeUndefined();
+    });
+  });
+
+  describe('extractPathway', () => {
+    it('should extract pathway from programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { pathway: 'core' },
+      });
+
+      expect(extractPathway(lessonData)).toBe('core');
+    });
+
+    it('should extract gcse pathway', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { pathway: 'gcse' },
+      });
+
+      expect(extractPathway(lessonData)).toBe('gcse');
+    });
+
+    it('should return undefined if no pathway in programme factors', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: {},
+      });
+
+      expect(extractPathway(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined if no programme factors', () => {
+      const lessonData = buildLessonSummary();
+
+      expect(extractPathway(lessonData)).toBeUndefined();
+    });
+
+    it('should return undefined for empty string pathway', () => {
+      const lessonData = buildLessonSummary({
+        programmeFactors: { pathway: '' },
+      });
+
+      expect(extractPathway(lessonData)).toBeUndefined();
     });
   });
 });

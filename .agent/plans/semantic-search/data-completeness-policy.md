@@ -16,23 +16,33 @@
 
 ### `oak_lessons` Index
 
-| Field                                | Data Type | Source                       | Completeness                                        |
-| ------------------------------------ | --------- | ---------------------------- | --------------------------------------------------- |
-| `transcript_text`                    | Text      | API: `getLessonTranscript()` | ✅ **FULL** - Complete transcript, no length limits |
-| `lesson_title`                       | Text      | API: `lessonTitle`           | ✅ **FULL**                                         |
-| `lesson_keywords`                    | Array     | API: `keywords[]`            | ✅ **ALL** keywords                                 |
-| `key_learning_points`                | Array     | API: `keyLearningPoints[]`   | ✅ **ALL** points                                   |
-| `misconceptions_and_common_mistakes` | Array     | API: `misconceptions[]`      | ✅ **ALL** misconceptions                           |
-| `teacher_tips`                       | Array     | API: `teacherTips[]`         | ✅ **ALL** tips                                     |
-| `content_guidance`                   | Array     | API: `contentGuidance[]`     | ✅ **ALL** guidance                                 |
+| Field                                | Data Type | Source                           | Completeness                                           |
+| ------------------------------------ | --------- | -------------------------------- | ------------------------------------------------------ |
+| `transcript_text`                    | Text      | API: `getLessonTranscript()`     | ✅ **FULL** - Complete transcript, no length limits    |
+| `lesson_title`                       | Text      | API: `lessonTitle`               | ✅ **FULL**                                            |
+| `lesson_keywords`                    | Array     | API: `keywords[]`                | ✅ **ALL** keywords                                    |
+| `lesson_keywords_detailed`           | Nested    | API: `lessonKeywords[]`          | ✅ **ALL** keyword objects with definitions (Phase 2B) |
+| `key_learning_points`                | Array     | API: `keyLearningPoints[]`       | ✅ **ALL** points                                      |
+| `misconceptions_and_common_mistakes` | Array     | API: `misconceptions[]`          | ✅ **ALL** misconceptions                              |
+| `misconception_responses`            | Array     | API: `misconceptions[].response` | ✅ **ALL** responses (Phase 2B)                        |
+| `teacher_tips`                       | Array     | API: `teacherTips[]`             | ✅ **ALL** tips                                        |
+| `content_guidance`                   | Array     | API: `contentGuidance[]`         | ✅ **ALL** guidance                                    |
+| `pupil_lesson_outcome`               | Text      | API: `pupilLessonOutcome`        | ✅ **FULL** (Phase 2B)                                 |
+| `quiz_questions_text`                | Array     | API: `starterQuiz`, `exitQuiz`   | ✅ **ALL** question text (Phase 2B)                    |
 
 ### `oak_units` Index
 
-| Field         | Data Type | Source               | Completeness       |
-| ------------- | --------- | -------------------- | ------------------ |
-| `unit_title`  | Text      | API: `unitTitle`     | ✅ **FULL**        |
-| `unit_topics` | Array     | API: `categories[]`  | ✅ **ALL** topics  |
-| `lesson_ids`  | Array     | API: `unitLessons[]` | ✅ **ALL** lessons |
+| Field                          | Data Type | Source                              | Completeness                         |
+| ------------------------------ | --------- | ----------------------------------- | ------------------------------------ |
+| `unit_title`                   | Text      | API: `unitTitle`                    | ✅ **FULL**                          |
+| `unit_topics`                  | Array     | API: `categories[]`                 | ✅ **ALL** topics                    |
+| `lesson_ids`                   | Array     | API: `unitLessons[]`                | ✅ **ALL** lessons                   |
+| `prior_knowledge_requirements` | Array     | API: `priorKnowledgeRequirements[]` | ✅ **ALL** requirements (Phase 2B)   |
+| `national_curriculum_content`  | Array     | API: `nationalCurriculumContent[]`  | ✅ **ALL** statements (Phase 2B)     |
+| `why_this_why_now`             | Text      | API: `whyThisWhyNow`                | ✅ **FULL** (Phase 2B)               |
+| `threads`                      | Nested    | API: `threads[]`                    | ✅ **ALL** thread objects (Phase 2B) |
+| `unit_notes`                   | Text      | API: `notes`                        | ✅ **FULL** (Phase 2B)               |
+| `unit_description`             | Text      | API: `description`                  | ✅ **FULL** (Phase 2B)               |
 
 ### `oak_sequences` Index
 

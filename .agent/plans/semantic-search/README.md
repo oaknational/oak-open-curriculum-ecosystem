@@ -40,6 +40,13 @@
 | **`data-completeness-policy.md`**      | Policy on what data we upload in full vs summarize                                        | Reference for ingestion decisions            |
 | **`es-serverless-feature-matrix.md`**  | Feature adoption tracking matrix with impact/cost/risk analysis                           | Progress tracking and feature prioritization |
 
+### Research Documents
+
+| Document                                                                               | Purpose                                     |
+| -------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **`.agent/research/elasticsearch/curriculum-schema-field-analysis.md`**                | Untapped API schema fields for search (NEW) |
+| **`.agent/research/elasticsearch/natural-language-search-with-es-native-features.md`** | ES-native NLP capabilities                  |
+
 ### Archive
 
 | Directory                 | Contents                                     |
@@ -66,10 +73,23 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 ### What We're Building
 
 - **Three-way hybrid search**: BM25 + ELSER + E5 Dense Vectors (Elastic-native, no external API)
-- **AI-powered relevance**: Cohere ReRank, NER entity extraction
+- **AI-powered relevance**: Elastic Native ReRank, NER entity extraction
 - **Knowledge graph**: ES Graph API for curriculum relationships
 - **RAG infrastructure**: Chunked transcripts, ontology grounding, ES Playground
 - **Advanced features**: Learning to Rank foundations, multi-vector search
+- **Curriculum metadata**: Index all available API schema fields (priorKnowledge, nationalCurriculum, threads, quizzes, outcomes)
+
+### Key Insight: Untapped Schema Fields
+
+The Oak API provides **rich pedagogical metadata** not currently indexed. Phase 2B will leverage:
+
+- `priorKnowledgeRequirements` - Prerequisite search and graph edges
+- `nationalCurriculumContent` - Standards alignment search
+- `threads` - Curriculum coherence graph
+- `pupilLessonOutcome` - "I can..." outcome search
+- `starterQuiz`, `exitQuiz` - Assessment content search
+
+**See**: `.agent/research/elasticsearch/curriculum-schema-field-analysis.md` for complete analysis.
 
 ### Key Decision: Elastic-Native Dense Vectors (2025-12-07)
 
@@ -86,16 +106,16 @@ See ADR-071 for full decision rationale.
 
 ## Implementation Phases
 
-| Phase  | Duration | Focus                            | Key Features                                        |
-| ------ | -------- | -------------------------------- | --------------------------------------------------- |
-| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF    |
-| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules            |
-| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                   |
-| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                    |
-| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                       |
-| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, OpenAI chat |
-| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                     |
-| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                       |
+| Phase  | Duration | Focus                            | Key Features                                               |
+| ------ | -------- | -------------------------------- | ---------------------------------------------------------- |
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF           |
+| **1B** | 2-3 days | Relevance Enhancement            | Elastic Native ReRank, filtered kNN, query rules           |
+| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                          |
+| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                           |
+| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                              |
+| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, Elastic Native LLM |
+| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                            |
+| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                              |
 
 **Total**: 4-5 weeks (22-29 days)
 

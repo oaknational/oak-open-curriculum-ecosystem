@@ -164,6 +164,7 @@ async function prepareOperations(context: HarnessContext): Promise<SandboxBulkRe
   const metricsCollector = createSequenceFacetMetricsCollector();
   const { operations: bulkOps, dataIntegrityReport } = await buildIndexBulkOps(
     context.client,
+    esClient,
     context.keyStages,
     context.subjects,
     {

@@ -74,10 +74,28 @@ The Oak Open Curriculum Semantic Search is a Next.js application providing **cut
 ### What We're Adding (Maths KS4 Vertical Slice)
 
 - **Three-way hybrid search**: BM25 + ELSER + E5 dense vectors (Elastic-native, no external API)
-- **AI-powered relevance**: Cohere ReRank, NER entity extraction
+- **AI-powered relevance**: Elastic Native ReRank, NER entity extraction (deployed on Elasticsearch)
 - **Knowledge graph**: ES Graph API for curriculum relationships
-- **RAG infrastructure**: ES Playground, chunked transcripts, ontology
+- **RAG infrastructure**: ES Playground, chunked transcripts, Elastic Native LLM, ontology
 - **Advanced features**: Learning to Rank foundations, multi-vector search
+- **Curriculum metadata leverage**: Index all available API schema fields (Phase 2B)
+
+### Key Insight: Untapped Schema Fields (2025-12-08)
+
+The Oak API provides **rich pedagogical metadata** not currently indexed:
+
+| Field                          | Value                                  | Phase           |
+| ------------------------------ | -------------------------------------- | --------------- |
+| `lessonKeywords[].description` | Curriculum vocabulary with definitions | 1A (embeddings) |
+| `priorKnowledgeRequirements`   | Prerequisite chain for graph           | 2B              |
+| `nationalCurriculumContent`    | Standards alignment search             | 2B              |
+| `threads`                      | Curriculum coherence graph             | 2B              |
+| `pupilLessonOutcome`           | "I can..." outcome search              | 2B              |
+| `starterQuiz`, `exitQuiz`      | Assessment content search              | 2B              |
+
+**See**: `.agent/research/elasticsearch/curriculum-schema-field-analysis.md` for complete analysis.
+
+**Why this matters**: Expert-curated curriculum data outperforms AI-generated content. Zero external dependencies, zero additional cost.
 
 ### Verified ES Serverless Inference Endpoints (2025-12-07)
 
@@ -148,9 +166,6 @@ ELASTICSEARCH_API_KEY=your_elasticsearch_api_key_here
 # Oak Curriculum API (REQUIRED)
 OAK_API_KEY=your_oak_api_key_here
 
-# Cohere (REQUIRED for Phase 1B reranking)
-COHERE_API_KEY=your-cohere-api-key-here
-
 # Search API (REQUIRED)
 SEARCH_API_KEY=your_search_api_key_here
 
@@ -160,18 +175,14 @@ LOG_LEVEL=info
 # Optional: Redis caching for faster dev
 SDK_CACHE_ENABLED=false
 SDK_CACHE_REDIS_URL=redis://localhost:6379
-
-# Optional: OpenAI (only needed for RAG chat in Phase 3)
-# OPENAI_API_KEY=your-openai-api-key-here
 ```
 
 **If any required keys are missing**:
 
 - **Elasticsearch**: Contact Oak infrastructure team or use existing deployment
 - **Oak API**: Use existing key from vault
-- **Cohere**: Create API key at <https://dashboard.cohere.com/api-keys> (free tier OK for dev)
 
-**Note**: OpenAI API key is NOT required for Phase 1A. Dense vectors use Elastic-native E5 model (`.multilingual-e5-small-elasticsearch`) which is preconfigured and included in the ES Serverless subscription.
+**Note**: All AI/ML features use Elastic-native services. No external API keys required. All inference endpoints (E5 embeddings, ELSER, Elastic ReRank, Elastic LLM) are preconfigured and included in the ES Serverless subscription.
 
 #### 4. Quick Smoke Test
 
@@ -261,16 +272,16 @@ If this fails, check API keys and network connectivity.
 
 ## 📋 Implementation Phases Overview
 
-| Phase  | Duration | Focus                            | Key Features                                        | ADRs |
-| ------ | -------- | -------------------------------- | --------------------------------------------------- | ---- |
-| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF    | 3    |
-| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules            | 2    |
-| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                   | -    |
-| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                    | 3    |
-| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                       | 1    |
-| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, OpenAI chat | 2    |
-| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                     | 2    |
-| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                       | 2    |
+| Phase  | Duration | Focus                            | Key Features                                               | ADRs |
+| ------ | -------- | -------------------------------- | ---------------------------------------------------------- | ---- |
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF           | 3    |
+| **1B** | 2-3 days | Relevance Enhancement            | Elastic Native ReRank, filtered kNN, query rules           | 2    |
+| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                          | -    |
+| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                           | 3    |
+| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                              | 1    |
+| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, Elastic Native LLM | 2    |
+| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                            | 2    |
+| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                              | 2    |
 
 **Total**: 4-5 weeks (22-29 days)
 
@@ -556,6 +567,13 @@ apps/oak-open-curriculum-semantic-search/
 | **`README.md`**                        | Navigation hub for all planning docs        |
 | **`data-completeness-policy.md`**      | What data we upload in full                 |
 | **`es-serverless-feature-matrix.md`**  | Feature tracking matrix                     |
+
+### Research Documents
+
+| Document                                                 | Purpose                                     |
+| -------------------------------------------------------- | ------------------------------------------- |
+| **`curriculum-schema-field-analysis.md`**                | Untapped API schema fields for search (NEW) |
+| **`natural-language-search-with-es-native-features.md`** | ES-native NLP capabilities                  |
 
 ### Foundation Documents (Re-read Regularly)
 

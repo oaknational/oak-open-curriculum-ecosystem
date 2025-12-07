@@ -528,4 +528,4 @@ lesson_dense_vector: {
 
 **End of Phase 1A Guide**
 
-Next: Phase 1B - Cohere ReRank & Filtered kNN
+Next: Phase 1B - Elastic Native ReRank & Filtered kNN

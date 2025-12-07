@@ -1,3 +1,4 @@
+import type { Client } from '@elastic/elasticsearch';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import { createRollupDocument } from './document-transforms';
@@ -58,6 +59,7 @@ export async function buildUnitDocuments(
 
 export async function buildLessonDocuments(
   client: OakClient,
+  esClient: Client,
   groups: readonly LessonGroup[],
   unitSummaries: Map<string, unknown>,
   subject: SearchSubjectSlug,
@@ -89,6 +91,7 @@ export async function buildLessonDocuments(
     }
     const { ops, snippets, lessonsProcessed } = await buildLessonDocsForGroup(
       client,
+      esClient,
       group,
       summary,
       subject,
@@ -104,24 +107,26 @@ export async function buildLessonDocuments(
   return { lessonOps, rollupSnippets };
 }
 
-export function buildRollupDocuments(
+export async function buildRollupDocuments(
+  esClient: Client,
   unitSummaries: Map<string, unknown>,
   rollupSnippets: Map<string, string[]>,
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
   subjectProgrammesUrl: string,
-): unknown[] {
+): Promise<unknown[]> {
   const ops: unknown[] = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
     const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
     const snippets = rollupSnippets.get(unitSlug) ?? [];
-    const rollupDoc = createRollupDocument({
+    const rollupDoc = await createRollupDocument({
       summary,
       snippets,
       subject,
       keyStage,
       subjectProgrammesUrl,
+      esClient,
     });
     ops.push(
       {

@@ -1,8 +1,48 @@
 # Oak Open Curriculum Semantic Search
 
-A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **four Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK's legacy search by providing canonical URLs, lesson-planning metadata, and robust zero-hit logging.
+A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK's legacy search by providing canonical URLs, lesson-planning metadata, and robust zero-hit logging.
 
 > **All curriculum data flows through `@oaknational/oak-curriculum-sdk`; types and validators are generated via `pnpm type-gen` from the OpenAPI schema.** When the API changes, `pnpm type-gen` regenerates types, and this application automatically uses the updated definitions. No manual type definitions exist - everything imports from the generated SDK.
+
+## Features and Possibilities
+
+**🔍 Intelligent Three-Way Hybrid Search** - Combines traditional keyword matching (BM25), semantic search with sparse embeddings (ELSER), dense vector text embeddings (E5) for relevance improvement.
+
+**📚 Curriculum-Aware Vocabulary** - Every lesson includes expert-curated keyword definitions, which are used to improve the relevance of the search results.
+
+**🎯 Advanced Filtering** - Precision targeting by exam board, tier (Foundation/Higher), year group, and pedagogical metadata (misconceptions, key learning points).
+
+The possibility for data enrichment at ingest time, such as:
+
+- Extracting named entities from the transcript text
+- Extracting relationships from the transcript text
+
+## Elastic-Native Philosophy
+
+**This project explores how far we can go using ONLY Elasticsearch Serverless features** - no external AI/ML APIs (Cohere, OpenAI, etc.). We suspect it might be a long way:
+
+- ✅ **Hybrid search** - BM25 lexical + ELSER sparse embeddings (RRF fusion)
+- ✅ **Three-way hybrid** - Add E5 dense vectors (`.multilingual-e5-small-elasticsearch`)
+- 🎯 **Advanced relevance** - Elastic Native ReRank (`.rerank-v1-elasticsearch`)
+- 🎯 **Knowledge graphs** - ES Graph API for curriculum relationships
+- 🎯 **RAG** - Elastic Native LLM (`.gp-llm-v2-chat_completion`) + `semantic_text` chunking
+- 🎯 **Graph RAG** - Combine knowledge graph with RAG for contextual search
+- 🎯 **Chat-based search** - Conversational interface via Elastic Native LLM
+- 🎯 **Entity extraction** - NER models deployed within ES cluster
+
+**Key Principle**: For AI/ML features, we ask: "How far can we go using ONLY Elasticsearch Serverless features?"
+
+And when that isn't possible, we can deploy open source models **within** the ES cluster rather than calling external APIs.
+
+**Benefits**:
+
+- 🔐 **Data sovereignty** - All processing within our ES cluster
+- 💰 **Cost efficiency** - No per-token charges, resource-based billing only
+- ⚡ **Lower latency** - No external API roundtrips
+- 🛡️ **Simplified architecture** - Fewer dependencies, single platform
+- 🔄 **Graceful degradation** - If inference unavailable, fallback to lexical search
+
+See `docs/architecture/architectural-decisions/071-elastic-native-dense-vector-strategy.md` for the detailed rationale.
 
 ---
 

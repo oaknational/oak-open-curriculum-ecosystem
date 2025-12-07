@@ -28,7 +28,7 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 ### What We're Building
 
 **Three-way hybrid search**: BM25 + ELSER sparse + dense vectors via Inference API  
-**AI-powered relevance**: Cohere ReRank, NER entity extraction, LLM query understanding  
+**AI-powered relevance**: Elastic Native ReRank, NER entity extraction, LLM query understanding  
 **Knowledge graph integration**: ES Graph API for curriculum relationships  
 **Advanced retrieval**: Filtered kNN, enrich processors, semantic query rules  
 **RAG infrastructure**: ES Playground prototyping, chunked transcripts, ontology grounding  
@@ -78,16 +78,16 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ### Phase Overview
 
-| Phase  | Focus                            | Duration | Key ES Features                            | ADRs |
-| ------ | -------------------------------- | -------- | ------------------------------------------ | ---- |
-| **1A** | Three-Way Hybrid + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way RRF | 3    |
-| **1B** | Relevance Enhancement            | 2-3 days | Cohere ReRank, filtered kNN, query rules   | 2    |
-| **1C** | Maths KS4 Ingestion              | 1 day    | Full content with enhanced schema          | -    |
-| **2A** | Entity Extraction & Graph        | 3-4 days | NER models, Graph API, enrich processor    | 3    |
-| **2B** | Reference Indices & Threads      | 2-3 days | 5 new indices, thread support              | 1    |
-| **3**  | RAG Infrastructure               | 4-5 days | ES Playground, semantic_text, chunking     | 2    |
-| **4**  | Knowledge Graph                  | 5-6 days | Triple store, entity resolution            | 2    |
-| **5**  | Advanced Features                | 3-4 days | LTR foundations, multi-vector              | 2    |
+| Phase  | Focus                            | Duration | Key ES Features                                  | ADRs |
+| ------ | -------------------------------- | -------- | ------------------------------------------------ | ---- |
+| **1A** | Three-Way Hybrid + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way RRF       | 3    |
+| **1B** | Relevance Enhancement            | 2-3 days | Elastic Native ReRank, filtered kNN, query rules | 2    |
+| **1C** | Maths KS4 Ingestion              | 1 day    | Full content with enhanced schema                | -    |
+| **2A** | Entity Extraction & Graph        | 3-4 days | NER models, Graph API, enrich processor          | 3    |
+| **2B** | Reference Indices & Threads      | 2-3 days | 5 new indices, thread support                    | 1    |
+| **3**  | RAG Infrastructure               | 4-5 days | ES Playground, semantic_text, chunking           | 2    |
+| **4**  | Knowledge Graph                  | 5-6 days | Triple store, entity resolution                  | 2    |
+| **5**  | Advanced Features                | 3-4 days | LTR foundations, multi-vector                    | 2    |
 
 ### Week-by-Week Breakdown
 
@@ -117,7 +117,7 @@ Chose `.multilingual-e5-small-elasticsearch` (384-dim) over OpenAI `text-embeddi
 | Factor       | OpenAI            | E5 (Chosen)                  |
 | ------------ | ----------------- | ---------------------------- |
 | External API | Required          | **None**                     |
-| Dimensions   | 1536              | **384**                      |
+| Dimensions   | 384               | **384**                      |
 | Billing      | Per-token         | **Included in subscription** |
 | Setup        | Register endpoint | **PRECONFIGURED**            |
 
@@ -456,7 +456,7 @@ import { generateEmbedding } from '@oaknational/oak-curriculum-sdk/elasticsearch
  * @example
  * ```typescript
  * const vector = await generateLessonEmbedding(esClient, lessonData);
- * // number[] of length 1536, or undefined on error
+ * // number[] of length 384, or undefined on error
  * ```
  */
 export async function generateLessonEmbedding(
@@ -469,7 +469,7 @@ export async function generateLessonEmbedding(
 
   try {
     return await generateEmbedding(esClient, {
-      endpointId: 'openai-text-embedding-3-small',
+      endpointId: '.multilingual-e5-small-elasticsearch',
       text,
     });
   } catch (error) {
@@ -491,7 +491,7 @@ export async function generateTitleEmbedding(
 
   try {
     return await generateEmbedding(esClient, {
-      endpointId: 'openai-text-embedding-3-small',
+      endpointId: '.multilingual-e5-small-elasticsearch',
       text: title,
     });
   } catch (error) {
@@ -580,7 +580,7 @@ export async function threeWayHybridSearch(
 
   // Generate query embedding
   const queryVector = await generateEmbedding(esClient, {
-    endpointId: 'openai-text-embedding-3-small',
+    endpointId: '.multilingual-e5-small-elasticsearch',
     text: query,
   });
 
@@ -682,29 +682,170 @@ export async function threeWayHybridSearch(
 - [ ] 3 ADRs written and reviewed
 - [ ] 3 docs created with examples
 
+### Phase 1A Enhancement: Curriculum Vocabulary Integration
+
+**Quick Win**: Leverage existing `lessonKeywords` with descriptions for richer embeddings and future features.
+
+#### Current State
+
+Every lesson in the API includes `lessonKeywords` as an array of objects:
+
+```typescript
+{
+  keyword: 'quadratic equations',
+  description: 'An equation where the highest power of the variable is 2, in the form ax² + bx + c = 0'
+}
+```
+
+We currently extract only the keyword strings, discarding the expert-curated definitions.
+
+#### Enhancement 1: Rich Embeddings (Immediate - Phase 1A)
+
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-generation.ts`
+
+Add helper function:
+
+```typescript
+/**
+ * Prepares text for embedding generation by combining title, summary, and keyword definitions.
+ *
+ * Including keyword definitions improves semantic understanding of curriculum-specific terminology.
+ *
+ * @example
+ * const text = prepareTextForEmbedding({
+ *   title: 'Solving quadratic equations',
+ *   summary: 'Learn to solve ax² + bx + c = 0',
+ *   keywords: [{
+ *     keyword: 'quadratic equations',
+ *     description: 'An equation where the highest power of the variable is 2...'
+ *   }]
+ * });
+ * // Returns: "Solving quadratic equations\n\nLearn to solve ax² + bx + c = 0\n\nKeywords: quadratic equations: An equation where..."
+ */
+export function prepareTextForEmbedding(params: {
+  title: string;
+  summary?: string;
+  keywords?: Array<{ keyword: string; description: string }>;
+}): string {
+  const parts = [params.title];
+
+  if (params.summary) {
+    parts.push(params.summary);
+  }
+
+  if (params.keywords?.length) {
+    const keywordText = params.keywords.map((k) => `${k.keyword}: ${k.description}`).join('. ');
+    parts.push(`Keywords: ${keywordText}`);
+  }
+
+  return parts.join('\n\n');
+}
+```
+
+Update `generateDenseVector` to use this helper:
+
+```typescript
+export async function generateDenseVector(
+  esClient: ElasticsearchClient,
+  text: string,
+  inferenceId = '.multilingual-e5-small-elasticsearch',
+): Promise<number[]> {
+  // existing implementation unchanged
+}
+```
+
+Call from document transforms:
+
+```typescript
+const embeddingText = prepareTextForEmbedding({
+  title: lesson.title,
+  summary: lesson.lessonSummary,
+  keywords: lesson.lessonKeywords,
+});
+const vector = await generateDenseVector(esClient, embeddingText);
+```
+
+**Benefit**: Dense vectors understand semantic meaning of curriculum terms, improving recall for terminology-based queries.
+
+**Testing**:
+
+- Unit test `prepareTextForEmbedding` with various input combinations
+- Integration test verifies keywords included in embedding text
+
+#### Enhancement 2: Store Nested Keyword Objects (Phase 1C)
+
+During ingestion, preserve full keyword objects for future features:
+
+- Glossary index (Phase 2B)
+- Keyword-based knowledge graph
+- Completion with definition previews
+- "Define X" queries
+
+**Field definition** (deferred to Phase 1C schema updates):
+
+```typescript
+{
+  name: 'lesson_keywords_detailed',
+  zodType: 'array-object',
+  optional: true,
+  esMapping: { type: 'nested' }
+}
+```
+
+#### Enhancement 3: Curriculum Glossary Index (Phase 2B)
+
+New index `oak_curriculum_glossary` aggregates keywords across all lessons:
+
+```typescript
+{
+  term: 'quadratic equations',
+  definition: 'An equation where the highest power of the variable is 2...',
+  lesson_ids: ['lesson-1', 'lesson-2'],
+  subject: 'maths',
+  key_stage: 'ks4',
+  usage_count: 12
+}
+```
+
+**Features enabled**:
+
+- "Define [term]" queries → instant curriculum definitions
+- Cross-reference lessons by shared vocabulary
+- Subject-specific vocabulary lists
+- Keyword co-occurrence graph (concepts that appear together)
+
+#### Success Criteria
+
+- [x] Identified `lessonKeywords` structure from API schema
+- [ ] `prepareTextForEmbedding` function with unit tests
+- [ ] Document transforms updated to use rich embeddings
+- [ ] Integration test verifies keyword definitions included in vectors
+- [ ] Nested keyword storage planned for Phase 1C
+- [ ] Glossary index planned for Phase 2B
+
 ---
 
 ## Phase 1B: Relevance Enhancement
 
 ### Goal
 
-Boost relevance of top-K results using Cohere ReRank and optimize constrained searches with filtered kNN.
+Boost relevance of top-K results using Elastic Native ReRank and optimize constrained searches with filtered kNN.
 
 ### ES Serverless Features Integrated
 
-1. **Cohere ReRank** - Cross-encoder model via Inference API for top-K reranking
+1. **Elastic Native ReRank** - Cross-encoder model via Inference API for top-K reranking
 2. **Filtered kNN** - Apply filters during vector search (not post-filter)
 3. **Semantic Query Rules** - Define rules for specific query patterns
 
-### Cohere ReRank Integration
+### Elastic Native ReRank Integration
 
-**ADR-074: Cohere ReRank Integration**
+**ADR-074: Elastic Native ReRank Integration**
 
 ````typescript
 /**
- * Reranks top-K results using Cohere rerank-english-v3.0 model.
+ * Reranks top-K results using Elastic Native ReRank-english-v3.0 model.
  *
- * @see ADR-074 - Cohere ReRank Integration
+ * @see ADR-074 - Elastic Native ReRank Integration
  *
  * @example
  * ```typescript
@@ -775,7 +916,7 @@ Instead of post-filtering:
 
 ### Success Criteria
 
-- [ ] Cohere ReRank integrated and tested
+- [ ] Elastic Native ReRank integrated and tested
 - [ ] Filtered kNN implementation with performance benchmarks
 - [ ] 5+ semantic query rules defined
 - [ ] MRR improves by 10-25% on top-10 results
@@ -793,8 +934,7 @@ Ingest complete Maths KS4 content with all Phase 1A+1B enhancements.
 
 ### Prerequisites
 
-- [ ] OpenAI API key configured in `.env.local`
-- [ ] Cohere API key configured
+- [ ] Elasticsearch Serverless connection verified
 - [ ] All field definitions in SDK
 - [ ] `pnpm type-gen` completed
 - [ ] All extraction functions tested
@@ -808,8 +948,8 @@ cd apps/oak-open-curriculum-semantic-search
 # Check prerequisites
 pnpm es:status
 
-# Ingest Maths KS4 with dense vectors
-OPENAI_API_KEY=your_openai_api_key_here
+# Ingest Maths KS4 with dense vectors (E5 embeddings via Elastic-native endpoint)
+pnpm es:ingest-live \
   --subject maths \
   --keystage ks4 \
   --verbose
@@ -822,9 +962,9 @@ OPENAI_API_KEY=your_openai_api_key_here
 - ~15-25 unit rollups with 28 fields
 - ~2-4 sequences with 20 fields
 - ~1 sequence facet with 18 fields
-- **Time**: 15-25 minutes (OpenAI embedding generation adds time)
-- **API cost**: ~$2 (OpenAI embeddings)
-- **Oak API cost**: 100-200 requests
+- **Time**: 15-25 minutes (E5 embedding generation via Elastic-native inference)
+- **API cost**: $0 (all inference is Elastic-native, included in ES Serverless subscription)
+- **Oak API cost**: 100-200 requests (against Oak curriculum API only)
 
 ### Validation
 
@@ -833,7 +973,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 pnpm es:status
 
 # Verify dense vectors populated
-# Query ES directly to check lesson_dense_vector field exists and has 1536 dimensions
+# Query ES directly to check lesson_dense_vector field exists and has 384 dimensions
 
 # Test three-way hybrid search
 # Run E2E test to verify results
@@ -858,7 +998,7 @@ Extract curriculum entities from content and discover non-obvious relationships 
 
 ### ES Serverless Features Integrated
 
-1. **NER Models** - HuggingFace NER via Inference API for entity extraction
+1. **NER Models** - NER model deployed on Elasticsearch via Inference API for entity extraction
 2. **Graph API** - Discover co-occurrence relationships within data
 3. **Enrich Processor** - Join reference data at ingest time
 4. **Significant Terms Aggregation** - Find unusual terms that characterize documents
@@ -877,7 +1017,7 @@ Entities come from three sources:
 
 ````typescript
 /**
- * Extracts named entities from lesson transcript using HuggingFace NER model.
+ * Extracts named entities from lesson transcript using NER model deployed on Elasticsearch model.
  *
  * @see ADR-076 - NER Entity Extraction
  *
@@ -991,7 +1131,7 @@ PUT _ingest/pipeline/enrich-lesson-metadata
 
 ### Implementation Steps
 
-1. Register HuggingFace NER inference endpoint
+1. Register NER model deployed on Elasticsearch inference endpoint
 2. Extract entities from transcripts during ingestion
 3. Store entities in new fields
 4. Run Graph API exploration to discover relationships
@@ -1010,11 +1150,36 @@ PUT _ingest/pipeline/enrich-lesson-metadata
 
 ---
 
-## Phase 2B: Reference Indices & Thread Support
+## Phase 2B: Reference Indices, Thread Support & Curriculum Metadata
 
 ### Goal
 
-Create searchable reference indices for subjects, key stages, years, and Maths-specific topics/threads.
+Create searchable reference indices and leverage **untapped API schema fields** for enhanced curriculum search.
+
+### Schema Fields to Index
+
+The Oak API provides rich pedagogical metadata that is NOT currently indexed. See `.agent/research/elasticsearch/curriculum-schema-field-analysis.md` for complete analysis.
+
+#### Lesson-Level Fields (From API Schema)
+
+| Field                          | Source     | Search Enhancement        |
+| ------------------------------ | ---------- | ------------------------- |
+| `pupilLessonOutcome`           | L5972-5975 | "I can..." outcome search |
+| `misconceptions[].response`    | L5963      | Teaching strategy search  |
+| `starterQuiz`, `exitQuiz`      | L5400-5746 | Assessment content search |
+| `contentGuidance` (structured) | L5999-6014 | Safeguarding filters      |
+| `supervisionLevel`             | L6030-6039 | Content safety filtering  |
+| `downloadsAvailable`           | L6041-6044 | Practical filtering       |
+
+#### Unit-Level Fields (From API Schema)
+
+| Field                        | Source     | Search Enhancement               |
+| ---------------------------- | ---------- | -------------------------------- |
+| `priorKnowledgeRequirements` | L6275-6286 | Prerequisite search, graph edges |
+| `nationalCurriculumContent`  | L6287-6298 | Standards alignment search       |
+| `whyThisWhyNow`              | L6299-6302 | Pedagogical context              |
+| `threads`                    | L6303-6331 | Curriculum coherence, graph      |
+| `notes`, `description`       | L6267-6273 | Additional context               |
 
 ### New Indices
 
@@ -1023,10 +1188,98 @@ Create searchable reference indices for subjects, key stages, years, and Maths-s
 3. **`oak_ref_years`** - Year group metadata
 4. **`oak_maths_topics`** - Maths topic taxonomy (KS4-specific)
 5. **`oak_threads`** - Curriculum threads (Number, Algebra, Geometry, etc.)
+6. **`oak_curriculum_glossary`** - Keywords with definitions (from `lessonKeywords`)
+7. **`oak_curriculum_standards`** - National curriculum statements
+
+### Field Additions Summary
+
+```typescript
+// Add to LESSONS_INDEX_FIELDS
+{ name: 'pupil_lesson_outcome', zodType: 'text', optional: true },
+{ name: 'misconception_responses', zodType: 'string-array', optional: true },
+{ name: 'quiz_question_count', zodType: 'number', optional: true },
+{ name: 'quiz_question_types', zodType: 'string-array', optional: true },  // ['multiple-choice', 'match']
+{ name: 'quiz_questions_text', zodType: 'string-array', optional: true },  // Searchable question text
+{ name: 'content_guidance_areas', zodType: 'string-array', optional: true },
+{ name: 'supervision_level', zodType: 'number', optional: true },
+{ name: 'downloads_available', zodType: 'boolean', optional: true },
+{ name: 'lesson_keywords_detailed', zodType: 'nested', optional: true },  // Full keyword objects
+
+// Add to UNITS_INDEX_FIELDS
+{ name: 'prior_knowledge_requirements', zodType: 'string-array', optional: true },
+{ name: 'national_curriculum_content', zodType: 'string-array', optional: true },
+{ name: 'why_this_why_now', zodType: 'text', optional: true },
+{ name: 'threads', zodType: 'nested', optional: true },  // { slug, title, order }
+{ name: 'unit_notes', zodType: 'text', optional: true },
+{ name: 'unit_description', zodType: 'text', optional: true },
+```
+
+### Extraction Functions (TDD)
+
+#### Quiz Content Extraction
+
+````typescript
+/**
+ * Extracts searchable content from quiz questions.
+ *
+ * @example
+ * ```typescript
+ * const quizData = extractQuizContent(lesson.starterQuiz, lesson.exitQuiz);
+ * // { questionCount: 10, questionTypes: ['match', 'multiple-choice'], questionsText: [...] }
+ * ```
+ */
+export function extractQuizContent(
+  starterQuiz: QuizQuestion[],
+  exitQuiz: QuizQuestion[],
+): QuizContentData {
+  const allQuestions = [...starterQuiz, ...exitQuiz];
+  return {
+    questionCount: allQuestions.length,
+    questionTypes: [...new Set(allQuestions.map((q) => q.questionType))],
+    questionsText: allQuestions.map((q) => q.question),
+  };
+}
+````
+
+#### Prior Knowledge Extraction
+
+````typescript
+/**
+ * Extracts prior knowledge requirements for prerequisite search.
+ *
+ * @example
+ * ```typescript
+ * const priorKnowledge = extractPriorKnowledge(unitSummary);
+ * // ['A simple sentence makes complete sense.', 'Any simple sentence contains one verb...']
+ * ```
+ */
+export function extractPriorKnowledge(unitData: UnitSummary): string[] {
+  return unitData.priorKnowledgeRequirements ?? [];
+}
+````
+
+#### National Curriculum Extraction
+
+````typescript
+/**
+ * Extracts national curriculum statements for standards-aligned search.
+ *
+ * Enables: "Which lessons cover [curriculum objective]?" queries
+ *
+ * @example
+ * ```typescript
+ * const standards = extractNationalCurriculumContent(unitSummary);
+ * // ['Articulate and justify answers', 'Speak audibly and fluently...']
+ * ```
+ */
+export function extractNationalCurriculumContent(unitData: UnitSummary): string[] {
+  return unitData.nationalCurriculumContent ?? [];
+}
+````
 
 ### Thread Support for Maths KS4
 
-Maths threads:
+Maths threads (from API `threads` field):
 
 - Number
 - Algebra
@@ -1038,12 +1291,11 @@ Maths threads:
 
 ```typescript
 // Add to LESSONS_INDEX_FIELDS
-{ name: 'threads', zodType: 'string-array', optional: true },
+{ name: 'threads', zodType: 'nested', optional: true },
 
 // Extraction function
-export function extractThreads(lessonData: LessonData): string[] {
-  // Extract from lesson.tags or lesson.threads field
-  return lessonData.threads?.map(t => t.slug) ?? [];
+export function extractThreads(unitData: UnitSummary): Thread[] {
+  return unitData.threads ?? [];
 }
 ```
 
@@ -1071,33 +1323,83 @@ export function extractThreads(lessonData: LessonData): string[] {
   subject: 'maths',
   description: 'Place value, operations, fractions, decimals...',
   lesson_count: 120,
+  unit_count: 15,
   typical_year_groups: ['7', '8', '9', '10', '11'],
+}
+```
+
+#### `oak_curriculum_glossary`
+
+```typescript
+{
+  term: 'quadratic equations',
+  definition: 'An equation where the highest power of the variable is 2...',
+  lesson_ids: ['lesson-1', 'lesson-2'],
+  subject: 'maths',
+  key_stage: 'ks4',
+  usage_count: 12,
+}
+```
+
+#### `oak_curriculum_standards`
+
+```typescript
+{
+  statement_id: 'nc-maths-ks4-001',
+  statement: 'Articulate and justify answers, arguments and opinions',
+  subject: 'maths',
+  key_stage: 'ks4',
+  unit_ids: ['unit-1', 'unit-2'],
+  lesson_count: 25,
 }
 ```
 
 ### Population Strategy
 
 1. Generate reference data at type-gen time from SDK enums
-2. Augment with counts via aggregation queries against main indices
-3. Ingest into reference indices
+2. Extract fields during ingestion using new extraction functions
+3. Augment with counts via aggregation queries against main indices
+4. Ingest into reference indices
 
-### ADR to Create
+### Search Use Cases Enabled
 
-**ADR-079: Reference Indices for Enum Data**
+| Query Type          | Fields Used                    | Example                                           |
+| ------------------- | ------------------------------ | ------------------------------------------------- |
+| Outcome search      | `pupil_lesson_outcome`         | "Lessons where students learn to solve equations" |
+| Standards search    | `national_curriculum_content`  | "Which lessons cover KS4 algebra objectives?"     |
+| Prerequisite search | `prior_knowledge_requirements` | "What do students need before trigonometry?"      |
+| Assessment search   | `quiz_questions_text`          | "Find multiple-choice questions on fractions"     |
+| Thread navigation   | `threads`                      | "Show Number thread progression KS3→KS4"          |
+| Glossary lookup     | `oak_curriculum_glossary`      | "Define quadratic equations"                      |
+| Safety filtering    | `supervision_level`            | Filter content by safeguarding requirements       |
 
-- Decision: Create separate indices for reference data
-- Rationale: Enable autocomplete, faceting, and enrichment
-- Alternatives: Hardcode in UI (less flexible, no search)
+### ADRs to Create
+
+1. **ADR-079: Reference Indices for Enum Data**
+   - Decision: Create separate indices for reference data
+   - Rationale: Enable autocomplete, faceting, and enrichment
+   - Alternatives: Hardcode in UI (less flexible, no search)
+
+2. **ADR-086: Curriculum Metadata Indexing Strategy**
+   - Decision: Index all available API schema fields for comprehensive search
+   - Rationale: Expert-curated data outperforms AI-generated; zero additional cost
+   - Fields covered: priorKnowledge, nationalCurriculum, threads, quizzes, outcomes
 
 ### Success Criteria
 
-- [ ] 5 reference indices created with mappings
-- [ ] Reference data populated
+- [ ] 7 reference indices created with mappings
+- [ ] All new extraction functions have unit tests
+- [ ] Prior knowledge requirements indexed on units
+- [ ] National curriculum content indexed on units
+- [ ] Quiz content extracted and searchable
+- [ ] Pupil lesson outcomes indexed
 - [ ] Thread support added to lessons/units
 - [ ] Thread-based search working
-- [ ] Autocomplete for subjects/threads/topics
-- [ ] 1 ADR written
-- [ ] 2 docs created
+- [ ] Curriculum glossary populated from lessonKeywords
+- [ ] Standards index populated from nationalCurriculumContent
+- [ ] Autocomplete for subjects/threads/topics/standards
+- [ ] 2 ADRs written
+- [ ] 3 docs created
 
 ---
 
@@ -1111,7 +1413,7 @@ Build production-ready RAG capabilities using ES Playground, chunked transcripts
 
 1. **ES Playground** - Low-code RAG prototyping UI
 2. **`semantic_text` Field** - Auto-chunking with embeddings
-3. **LLM Chat Completion** - GPT-4 integration via Inference API
+3. **LLM Chat Completion** - Elastic Native LLM integration via Inference API
 4. **Multi-Retriever Queries** - Combine multiple search strategies
 
 ### Chunked Transcripts
@@ -1125,7 +1427,7 @@ Instead of storing full transcript as one field, chunk it:
 // ES field override
 transcript_chunks: {
   type: 'semantic_text',
-  inference_id: 'openai-text-embedding-3-small',
+  inference_id: '.multilingual-e5-small-elasticsearch',
   model_settings: {
     task_type: 'text_embedding',
   },
@@ -1156,7 +1458,7 @@ At query time:
 
 ````typescript
 /**
- * Executes RAG query with GPT-4.
+ * Executes RAG query with Elastic Native LLM.
  *
  * @see ADR-080 - ES Playground RAG Integration
  *
@@ -1182,9 +1484,9 @@ export async function ragQuery(
   // 2. Build context from chunks
   const context = chunks.hits.map((hit) => hit._source.transcript_chunks).join('\n\n');
 
-  // 3. Call GPT-4 with context
+  // 3. Call Elastic Native LLM with context
   const response = await esClient.inference.inference({
-    inference_id: 'openai-gpt-4',
+    inference_id: '.gp-llm-v2-chat_completion',
     input: {
       messages: [
         {
@@ -1603,7 +1905,7 @@ pnpm test:e2e:built  # E2E with built code
 - [ ] Impressive stakeholder demo ready
 - [ ] Production-ready code
 - [ ] Scalable to full curriculum
-- [ ] <$100/month operational cost (excluding GPT-4 RAG)
+- [ ] <$100/month operational cost (excluding Elastic Native LLM RAG)
 
 ---
 
@@ -1611,24 +1913,24 @@ pnpm test:e2e:built  # E2E with built code
 
 ### One-Time (Maths KS4 Ingestion)
 
-- OpenAI embeddings: ~$2 (1536-dim, ~100 lessons)
-- NER extraction: ~$1 (HuggingFace Inference API)
-- **Total**: ~$3
+- E5 embeddings: $0 (Elastic-native, included in ES Serverless subscription)
+- NER extraction: $0 (deployed within Elasticsearch cluster)
+- **Total**: $0
 
 ### Ongoing (Monthly, Full Curriculum)
 
-- OpenAI embeddings: ~$40 (new content, ~1,000 lessons/month)
-- Cohere ReRank: ~$200 (20,000 queries, top-10 rerank)
-- NER models: ~$20 (incremental)
-- GPT-4 RAG: ~$1,000 (20,000 queries, 5 chunks per query)
-- **Total**: ~$1,260/month
+- E5 embeddings: $0 (Elastic-native, included in subscription)
+- Elastic Native ReRank: $0 (`.rerank-v1-elasticsearch`, included in subscription)
+- NER models: $0 (deployed within Elasticsearch cluster)
+- Elastic Native LLM: $0 (`.gp-llm-v2-chat_completion`, included in subscription)
+- **Total**: $0/month (all AI/ML features included in ES Serverless subscription)
 
-**Cost Mitigation**:
+**Cost Note**:
 
-- Caching (reduce rerank calls by 60%)
-- Batch processing (reduce embedding costs)
-- Feature flags (disable expensive features for low-value queries)
-- Staged rollout (Phase 3 RAG is optional)
+All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion, NER models deployed in cluster) are included in the Elasticsearch Serverless subscription at no additional cost. The only external costs are:
+
+- Oak Curriculum API calls (within existing quota)
+- Elasticsearch Serverless subscription itself (resource-based billing)
 
 ---
 
@@ -1636,14 +1938,11 @@ pnpm test:e2e:built  # E2E with built code
 
 ### High Risk
 
-1. **OpenAI API Dependency**
-   - **Mitigation**: Graceful degradation to two-way hybrid, caching, fallback embeddings
+1. **Elasticsearch Serverless Availability**
+   - **Mitigation**: Graceful degradation (disable dense vectors/rerank if inference unavailable), caching, monitoring
 
-2. **Cost Escalation**
-   - **Mitigation**: Budget alerts, rate limiting, usage monitoring, feature flags
-
-3. **Latency Regression**
-   - **Mitigation**: Two-stage retrieval (fast first-pass, slow rerank on top-K), performance testing
+2. **Latency Regression**
+   - **Mitigation**: Two-stage retrieval (fast first-pass, slow rerank on top-K), performance testing, feature flags
 
 ### Medium Risk
 
@@ -1675,8 +1974,8 @@ pnpm test:e2e:built  # E2E with built code
 
 ### Phase 1B (2-3 days)
 
-- [ ] Register Cohere inference endpoint
-- [ ] Implement rerank function (TDD)
+- [ ] Verify `.rerank-v1-elasticsearch` endpoint available
+- [ ] Implement rerank function using Elastic Native ReRank (TDD)
 - [ ] Implement filtered kNN (TDD)
 - [ ] Define 5+ semantic query rules
 - [ ] Run performance benchmarks
@@ -1686,16 +1985,15 @@ pnpm test:e2e:built  # E2E with built code
 
 ### Phase 1C (1 day)
 
-- [ ] Configure OpenAI API key
-- [ ] Configure Cohere API key
+- [ ] Verify Elasticsearch Serverless connection and inference endpoints available
 - [ ] Run ingestion: `pnpm es:ingest-live --subject maths --keystage ks4`
-- [ ] Validate results
+- [ ] Validate results (dense vectors populated, correct dimensions)
 - [ ] Run E2E tests
 - [ ] Document results
 
 ### Phase 2A (3-4 days)
 
-- [ ] Register HuggingFace NER endpoint
+- [ ] Register NER model deployed on Elasticsearch endpoint
 - [ ] Add entity fields to SDK
 - [ ] Run `pnpm type-gen`
 - [ ] Implement entity extraction (TDD)
@@ -1787,14 +2085,14 @@ After implementation, validate these technical scenarios work:
 - Results are 50% faster than unfiltered search
 - Only Higher tier lessons returned
 
-#### 3. Cohere Rerank
+#### 3. Elastic Native ReRank
 
 **Query**: "solving quadratic equations"
 
 **Expected**:
 
 - Three-way hybrid returns 50 results
-- Rerank reorders top-10 for better relevance
+- Elastic Native ReRank (`.rerank-v1-elasticsearch`) reorders top-10 for better relevance
 - MRR improves by 10-25%
 
 #### 4. Entity-Based Discovery
@@ -1825,7 +2123,7 @@ After implementation, validate these technical scenarios work:
 
 - Retrieves relevant transcript chunks
 - Ontology provides domain context
-- GPT-4 generates answer with sources
+- Elastic Native LLM generates answer with sources
 - Response cites specific lessons
 
 #### 7. Learning Pathway

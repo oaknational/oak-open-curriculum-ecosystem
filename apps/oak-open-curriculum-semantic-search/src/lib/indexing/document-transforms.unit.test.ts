@@ -21,6 +21,15 @@ import {
 const mathsSubject: SearchSubjectSlug = 'maths';
 const ks4: KeyStage = 'ks4';
 
+// Mock ES client for tests
+const mockEsClient = {
+  inference: {
+    inference: async () => ({
+      text_embedding: [{ embedding: Array(384).fill(0.1) }],
+    }),
+  },
+} as never;
+
 interface UnitSummaryFixture {
   unitSlug: string;
   unitTitle: string;
@@ -69,6 +78,11 @@ interface LessonSummaryFixture {
   supervisionLevel?: string | null;
   downloadsAvailable: boolean;
   canonicalUrl?: string;
+  programmeFactors?: {
+    tier?: string;
+    examBoard?: string;
+    pathway?: string;
+  };
 }
 
 function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSummaryFixture {
@@ -212,10 +226,10 @@ describe('createUnitDocument', () => {
 });
 
 describe('createLessonDocument', () => {
-  it('maps lesson data into a search lesson document', () => {
+  it('maps lesson data into a search lesson document', async () => {
     const lessonSummary = buildLessonSummary();
 
-    const doc: SearchLessonsIndexDoc = createLessonDocument({
+    const doc: SearchLessonsIndexDoc = await createLessonDocument({
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two. Sentence three.',
       summary: lessonSummary,
@@ -224,6 +238,7 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
+      esClient: mockEsClient,
     });
 
     expect(doc.lesson_id).toBe('lesson-1');
@@ -235,9 +250,12 @@ describe('createLessonDocument', () => {
     expect(doc.title_suggest?.contexts?.subject).toEqual(['maths']);
     expect(doc.title_suggest?.contexts?.key_stage).toEqual(['ks4']);
     expect(doc.title_suggest?.contexts).not.toHaveProperty('sequence');
+    // Dense vectors should be generated
+    expect(doc.lesson_dense_vector).toHaveLength(384);
+    expect(doc.title_dense_vector).toHaveLength(384);
   });
 
-  it('omits optional string arrays when the summary values are nullish', () => {
+  it('omits optional string arrays when the summary values are nullish', async () => {
     const lessonSummary = buildLessonSummary({
       lessonKeywords: [],
       keyLearningPoints: [],
@@ -246,7 +264,7 @@ describe('createLessonDocument', () => {
       contentGuidance: null,
     });
 
-    const doc = createLessonDocument({
+    const doc = await createLessonDocument({
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two.',
       summary: lessonSummary,
@@ -255,6 +273,7 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: undefined,
       lessonCount: 5,
+      esClient: mockEsClient,
     });
 
     expect(doc.lesson_keywords).toBeUndefined();
@@ -263,18 +282,45 @@ describe('createLessonDocument', () => {
     expect(doc.teacher_tips).toBeUndefined();
     expect(doc.content_guidance).toBeUndefined();
   });
+
+  it('extracts tier, exam_board, and pathway from programme factors', async () => {
+    const lessonSummary = buildLessonSummary({
+      programmeFactors: {
+        tier: 'foundation',
+        examBoard: 'aqa',
+        pathway: 'gcse',
+      },
+    });
+
+    const doc = await createLessonDocument({
+      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+      transcript: 'Pythagoras theorem content.',
+      summary: lessonSummary,
+      unitCanonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 12,
+      esClient: mockEsClient,
+    });
+
+    expect(doc.tier).toBe('foundation');
+    expect(doc.exam_board).toBe('aqa');
+    expect(doc.pathway).toBe('gcse');
+  });
 });
 
 describe('createRollupDocument', () => {
-  it('maps a unit summary and snippets into a rollup document', () => {
+  it('maps a unit summary and snippets into a rollup document', async () => {
     const summary = buildUnitSummary();
 
-    const doc: SearchUnitRollupDoc = createRollupDocument({
+    const doc: SearchUnitRollupDoc = await createRollupDocument({
       summary,
       snippets: ['Snippet one', 'Snippet two'],
       subject: mathsSubject,
       keyStage: ks4,
       subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      esClient: mockEsClient,
     });
 
     expect(doc.unit_semantic).toContain('Snippet one');
@@ -282,19 +328,23 @@ describe('createRollupDocument', () => {
     expect(doc.sequence_ids).toEqual(['sequence-1', 'sequence-2']);
     expect(doc.subject_slug).toBe(mathsSubject);
     expect(doc.key_stage).toBe(ks4);
+    // Dense vectors should be generated
+    expect(doc.unit_dense_vector).toHaveLength(384);
+    expect(doc.rollup_dense_vector).toHaveLength(384);
   });
 
-  it('throws when the unit canonical URL is missing', () => {
+  it('throws when the unit canonical URL is missing', async () => {
     const summary = buildUnitSummary({ canonicalUrl: undefined });
 
-    expect(() =>
+    await expect(async () =>
       createRollupDocument({
         summary,
         snippets: [],
         subject: mathsSubject,
         keyStage: ks4,
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+        esClient: mockEsClient,
       }),
-    ).toThrowError(/Missing canonical URL/);
+    ).rejects.toThrowError(/Missing canonical URL/);
   });
 });
