@@ -1,475 +1,484 @@
-# Semantic Search Continuation Prompt
+# Semantic Search Implementation - Fresh Chat Entry Point
 
-Use this prompt to continue semantic search implementation work in a fresh session with no prior context.
-
----
-
-## 🚀 Quick Start for New Session
-
-**You are here**: Ready to implement hybrid field strategy for Maths KS4 ingestion
-
-**Immediate action**: Implement 37 new fields across 5 ES indexes using TDD
-
-**Time estimate**: 2-4 hours
-
-**Critical reads FIRST**:
-
-1. `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
-2. `.agent/plans/semantic-search/hybrid-field-strategy.md` - Complete implementation plan with TDD examples
-3. `.agent/plans/semantic-search/maths-ks4-vertical-slice.md` - Strategic context
-
-**What's ready**:
-
-- ✅ All 10 quality gates passing
-- ✅ SDK rate limiting implemented (5 req/sec, exponential backoff)
-- ✅ ES Serverless deployed with 6 indexes
-- ✅ Field definitions architecture (single source of truth)
-- ✅ Full transcripts already uploaded (no sampling)
-
-**What you'll do**:
-
-1. Write tests FIRST for extraction functions (RED)
-2. Add 37 fields to SDK field definitions
-3. Run `pnpm type-gen` to generate schemas
-4. Implement extraction functions (GREEN)
-5. Update ingestion logic (integration tests)
-6. Run quality gates (all must pass)
-7. Ingest Maths KS4 with hybrid schema
-
-**Files you'll modify**:
-
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.unit.test.ts`
+**Git Version**: See `git log` for commit history  
+**Purpose**: Complete context for continuing Maths KS4 semantic search implementation in a fresh chat session  
+**Status**: Active Implementation - Phase 1A Ready to Start
 
 ---
 
-## What is This System?
+## 🚀 Quick Start (60 seconds)
 
-The Oak Open Curriculum Semantic Search is a Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data using Elasticsearch Serverless. It combines:
+**You are here**: Ready to implement **complete ES Serverless feature integration** for Maths KS4
 
-- **Semantic search**: ELSER sparse embeddings for meaning-based retrieval
-- **Lexical search**: Traditional keyword + synonym matching
-- **RRF fusion**: Combines both approaches for optimal results
+**Next action**: Phase 1A - Three-way hybrid search with dense vectors (2-3 days)
+
+**Time estimate**: 4-5 weeks total for complete vertical slice with all ES features
+
+---
+
+## 📖 Critical Reading Order (MUST READ BEFORE ANY WORK)
+
+### Foundation Documents (Read FIRST, 15 minutes)
+
+1. **`.agent/directives-and-memory/rules.md`**
+   - TDD at all levels (RED → GREEN → REFACTOR)
+   - No type shortcuts (`as`, `any`, `!`, `Record<string, unknown>`)
+   - Quality gates must ALL pass
+   - Functions ≤8 complexity, files ≤250 lines
+   - Re-read this REGULARLY during implementation
+
+2. **`.agent/directives-and-memory/schema-first-execution.md`**
+   - ALL types flow from field definitions via `pnpm type-gen`
+   - Never edit generated files
+   - Update generators only
+   - This is MANDATORY for SDK and ES mappings
+
+3. **`.agent/directives-and-memory/testing-strategy.md`**
+   - Unit tests: Pure functions, NO IO, NO side effects, NO mocks
+   - Integration tests: IMPORTED code units, SIMPLE mocks injected as arguments
+   - E2E tests: Running system in separate process, CAN trigger FS/STDIO, NOT network
+
+### Main Implementation Plan (Read SECOND, 30 minutes)
+
+4. **`.agent/plans/semantic-search/maths-ks4-implementation-plan.md`** ⭐ MAIN PLAN
+   - Complete roadmap for all 5 phases
+   - Field definitions, extraction functions, ES queries
+   - TDD approach for every feature
+   - 15 ADRs to create (071-085)
+   - Success criteria and quality gates
+
+### Practical Implementation Guide (Read THIRD, 20 minutes)
+
+5. **`.agent/plans/semantic-search/phase-1a-implementation-guide.md`**
+   - Day-by-day walkthrough for Phase 1A
+   - Code examples with TSDoc
+   - RED → GREEN → REFACTOR patterns
+   - Common issues and solutions
+   - Quality gate checklists
+
+**Total reading time**: ~65 minutes. DO NOT SKIP. These documents contain everything needed for success.
+
+---
+
+## 🎯 What Is This Project?
+
+### System Overview
+
+The Oak Open Curriculum Semantic Search is a Next.js application providing **cutting-edge hybrid search** across Oak's curriculum data using Elasticsearch Serverless. We're building a vertical slice demo with Maths KS4 content.
+
+### Current Capabilities ✅
+
+- **Elasticsearch Serverless deployed** with 6 indexes
+- **Hybrid search**: ELSER sparse embeddings + BM25 lexical with RRF fusion
+- **Three search endpoints**: Structured, natural language, suggestions
 - **Faceted navigation**: Filter by subject, key stage, year, category
-- **Type-ahead suggestions**: Context-aware completion with per-index contexts
+- **Type-ahead suggestions**: Context-aware completion
+- **SDK rate limiting**: 5 req/sec with exponential backoff (ADR-070)
+- **Schema-first architecture**: All types from field definitions (ADR-067)
+- **Per-index completion contexts**: Type-safe at compile time (ADR-068)
+- **Quality gates**: All 10 gates passing (1,310+ tests)
 
-**Current State**: ES Serverless deployed and operational. Type system fully compliant with official ES client types. SDK rate limiting and monitoring implemented. **CURRENT FOCUS**: Maths KS4 vertical slice for impressive demo.
+### What We're Adding (Maths KS4 Vertical Slice)
 
-## Foundation Documents (MUST READ FIRST)
-
-Before any work, read and internalize:
-
-1. `.agent/directives-and-memory/rules.md` - Cardinal rule, code design, quality gates
-2. `.agent/directives-and-memory/testing-strategy.md` - TDD at all levels
-3. `.agent/directives-and-memory/schema-first-execution.md` - Schema-first mandate
-4. `.agent/directives-and-memory/AGENT.md` - Agent directives
-
-**Key Principles** (from foundation documents):
-
-- **Schema-First** (schema-first-execution.md): ALL types, Zod schemas, ES mappings flow from field definitions via `pnpm type-gen`. Never edit generated files. Update generators only.
-- **TDD ALWAYS** (testing-strategy.md): Write tests FIRST at ALL levels. Red (prove it fails) → Green (make it pass) → Refactor (improve while staying green). No exceptions.
-- **Quality Gates** (rules.md): All gate issues are BLOCKING—no exceptions. Never disable checks, never work around them.
-- **No Type Shortcuts** (rules.md): No `as`, `any`, `!`, `Record<string, unknown>`, `Object.*`, `Reflect.*` - they disable the type system.
-- **Preserve Type Information** (rules.md): Never widen types. Keep literal types literal. Every `: string` or `: number` destroys type information irreversibly.
-- **Logging**: Use `@oaknational/mcp-logger`, never `console`
-- **No Disabling**: Never use `eslint-disable` comments—forbidden
-- **Completion Contexts**: Per-index contexts enforced (ADR-068)
-- **Complexity**: Functions ≤8 complexity, files ≤250 lines
-- **Test Types** (testing-strategy.md):
-  - **Unit test** (`*.unit.test.ts`): Single PURE function, NO IO, NO side effects, NO mocks
-  - **Integration test** (`*.integration.test.ts`): Code units working together (IMPORTED, not running system), NO IO, SIMPLE mocks as arguments
-  - **E2E test** (`*.e2e.test.ts`): Running system in separate process, CAN trigger FS/STDIO, NOT network
-
-**Re-read foundation documents regularly during work.**
+- **Three-way hybrid search**: BM25 + ELSER + OpenAI dense vectors
+- **AI-powered relevance**: Cohere ReRank, NER entity extraction
+- **Knowledge graph**: ES Graph API for curriculum relationships
+- **RAG infrastructure**: ES Playground, chunked transcripts, ontology
+- **Advanced features**: Learning to Rank foundations, multi-vector search
 
 ---
 
-## Recent Major Milestones 🎉
+## 🔧 Prerequisites & Environment Setup
 
-### API Rate Limiting & Monitoring COMPLETE (2025-12-07)
+### Step 0: Verify System Ready (5 minutes)
 
-**Problem Solved**: Discovered and resolved API rate limiting issues blocking systematic ingestion.
+**Before starting Phase 1A**, verify:
 
-**What Was Fixed**:
-
-- ✅ Implemented comprehensive rate limit tracking middleware
-- ✅ Added singleton client pattern to ensure shared rate limiting state
-- ✅ Created real-time monitoring with warnings at 75% and 90% quota usage
-- ✅ Discovered Oak API has **1000 requests/hour limit** via `get-rate-limit` endpoint
-- ✅ Test ingestion (Art KS1) completed: 159 requests, 0 failures, 2.08 req/sec
-- ✅ All 867 SDK tests passing with fake timers (no real delays in tests)
-
-**Impact**: Full ingestion now viable but takes **17-24 hours** due to API rate limit (not our throttling). Need to contact API team for higher limit or run overnight.
-
-**Documentation**: See ADR-070, `.agent/analysis/api-rate-limit-investigation.md`, `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md`
-
-### Mapping Remediation COMPLETE (2025-12-06)
-
-**Problem Solved**: Fourth and FINAL occurrence of mapping sync error eliminated through architectural consolidation.
-
-**What Was Fixed**:
-
-- ✅ All 7 search indexes now flow from **single source of truth** (SDK field definitions)
-- ✅ `oak_sequence_facets` mapping mismatch resolved (`key_stage` → `key_stages` array)
-- ✅ Eliminated ad-hoc ES mappings and document interfaces
-- ✅ Generated Zod schemas and TypeScript types from field definitions
-- ✅ Created comprehensive SDK and app documentation
-- ✅ Successfully tested with English KS2 ingestion (348 documents)
-- ✅ All 10 quality gates passing
-
-**Impact**: **IMPOSSIBLE for mapping/data mismatch going forward** - schema changes in SDK field definitions automatically propagate to ES mappings, Zod schemas, and TypeScript types via `pnpm type-gen`.
-
-**Systematic Ingestion Tools Created** (2025-12-06):
-
-- ✅ `scripts/ingest-all-combinations.ts` - Processes all 340 combinations (17 subjects × 4 keystages × 5 indexes)
-- ✅ `scripts/check-progress.ts` - Monitors ingestion progress and ES state
-- ✅ Progress tracking with resume capability (`.ingest-progress.json`)
-- ✅ Can safely interrupt (Ctrl+C) and resume from checkpoint
-- ✅ Tracks success/failure per combination for iterative bug fixing
-
-**Current Elasticsearch State** (2025-12-06):
-
-- ✅ English KS2 fully ingested: 89 lessons, 129 units, 129 unit_rollup, 1 sequence_facet
-- ⏳ Remaining: 339 combinations awaiting ingestion
-
-**Ready for**: Full live ingestion of all 340 combinations
-
----
-
-### Recent Technical Improvements (Archived Details)
-
-For complete historical context, see:
-
-- **Mapping Remediation**: `.agent/plans/semantic-search/archive/mapping-remediation.md`
-- **Type System Upgrade**: Consolidated into ADR-067
-- **CLI Enhancements**: Documented in `scripts/README-INGEST-ALL.md`
-- **Progress Logging**: Part of systematic ingestion (ADR-069)
-- **Field Definitions**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md`
-
----
-
-## System Capabilities
-
-### Infrastructure ✅
-
-- Elasticsearch Serverless deployed with 6 indexes
-- ELSER sparse embeddings for semantic search
-- Synonym set `oak-syns` with 68 rules
-- Redis caching for SDK (optional, 7-day TTL)
-- Rate limiting and monitoring (1000 req/hour API limit)
-
-### Features ✅
-
-- **Hybrid search**: ELSER semantic + lexical with RRF fusion
-- **Three endpoints**: Structured, natural language, suggestions
-- **Faceted navigation**: Filter by subject, key stage, year, category
-- **Type-ahead**: Context-aware completion
-- **SDK rate limiting**: 5 req/sec with exponential backoff retry (ADR-070)
-- **Real-time monitoring**: API quota tracking with 75%/90% warnings
-
-### Architecture ✅
-
-- **Schema-first**: All types flow from OpenAPI via `pnpm type-gen`
-- **Unified field definitions**: Zod + ES mappings from single source (ADR-067)
-- **Per-index completion contexts**: Enforced at type-gen time (ADR-068)
-- **Systematic ingestion**: Progress tracking with resume capability (ADR-069)
-- **Quality gates**: All passing (1,310+ tests)
-
-## Current Elasticsearch State
-
-**Strategy**: Focus on **Maths KS4 vertical slice** before full ingestion
-
-**Last verified**: 2025-12-06 via `pnpm ingest:progress`
-
-| Index                 | Docs | Status                                       |
-| --------------------- | ---- | -------------------------------------------- |
-| `oak_lessons`         | 89   | ✅ English KS2 lessons (test data)           |
-| `oak_units`           | 129  | ✅ English KS2 units (test data)             |
-| `oak_unit_rollup`     | 129  | ✅ English KS2 unit rollups (test data)      |
-| `oak_sequence_facets` | 1    | ✅ English KS2 sequence facet (test data)    |
-| `oak_sequences`       | 0    | ⏳ English KS2 has no sequences              |
-| `oak_meta`            | 1    | ✅ Tracking ingestion metadata (v2025-12-06) |
-
-**Next**: Ingest **Maths KS4** (~100-200 more docs) for production demo
-
-**Synonym Set**: `oak-syns` with 68 rules ✅
-
-**Check Current State**: Use `pnpm es:status` to see document counts
-
----
-
-## Quick Reference
-
-### Elasticsearch Serverless
-
-- **Kibana**: <https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud>
-- **Cluster**: `poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp.elastic.cloud:443`
-
-### CLI Commands
-
-All commands run from `apps/oak-open-curriculum-semantic-search`:
+#### 1. Quality Gates Status
 
 ```bash
-# ===== SYSTEMATIC INGESTION (RECOMMENDED) =====
-# Ingest all 340 combinations with progress tracking
-pnpm ingest:all                    # Start/resume systematic ingestion
-pnpm ingest:all --resume           # Explicitly resume from checkpoint
-pnpm ingest:all --reset            # Clear progress and start fresh
-pnpm ingest:all --dry-run          # Preview without ingesting
-pnpm ingest:progress               # Check current state and progress
+# From repo root
+cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
 
-# ===== MANUAL INGESTION (FOR TESTING) =====
-# Single subject/keystage ingestion
-pnpm es:ingest-live --subject maths --keystage ks2 --verbose
-pnpm es:ingest-live --subject english --keystage ks3 --index lessons --verbose
+# Run gates one at a time
+pnpm type-gen && \
+pnpm build && \
+pnpm type-check && \
+pnpm lint:fix && \
+pnpm format:root && \
+pnpm markdownlint:root && \
+pnpm test && \
+pnpm test:e2e
 
-# Full ingestion (all subjects, all keystages) - USE WITH CAUTION
-pnpm es:ingest-live --verbose
-
-# ===== ELASTICSEARCH MANAGEMENT =====
-# Check Elasticsearch status and document counts
-pnpm es:status
-
-# Reset all indexes (destructive)
-npx tsx src/lib/elasticsearch/setup/cli.ts reset
-
-# Reset specific index
-npx tsx src/lib/elasticsearch/setup/cli.ts reset --index sequence_facets
-
-# ===== DEVELOPMENT TOOLS =====
-# Enable Redis caching for faster repeated runs
-pnpm redis:up
-SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
-
-# Dry run (preview without uploading)
-pnpm es:ingest-live --subject maths --dry-run --verbose
+# Expected: ALL PASS (1,310+ tests)
 ```
 
-**Environment Variables**:
+If any gate fails, **STOP**. Fix issues before proceeding.
 
-- `ELASTICSEARCH_URL` - ES cluster endpoint (from `.env`)
-- `ELASTICSEARCH_API_KEY` - API key for authentication
-- `SDK_CACHE_ENABLED=true` - Enable Redis caching (optional)
-- `OAK_API_KEY` - Oak curriculum API key
-
-### Quality Gates
-
-```bash
-# From repo root, all must pass
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
-pnpm format:root && pnpm markdownlint:root
-pnpm test && pnpm test:e2e && pnpm test:e2e:built
-pnpm test:ui && pnpm smoke:dev:stub
-```
-
----
-
-## Implementation Readiness Status
-
-### ✅ Complete & Ready
-
-- SDK rate limiting (5 req/sec, exponential backoff)
-- Rate limit monitoring (warnings at 75%/90%)
-- Singleton client pattern (shared state)
-- All quality gates passing (1,310+ tests)
-- ES Serverless deployed with 6 indexes
-- Field definitions architecture (single source of truth)
-- Data completeness confirmed (full transcripts uploaded)
-
-### 🎯 Next: Hybrid Field Implementation
-
-- Add 20 Phase 2 fields to 5 existing indexes
-- Update field definitions in SDK
-- Implement extraction functions (TDD)
-- Run `pnpm type-gen` to generate schemas
-- Ingest Maths KS4 with hybrid schema
-
-### 📋 Deferred to Later Phases
-
-- Phase 4: AI/Graph fields (13 fields) - see `phase-4-deferred-fields.md`
-- New indexes: `oak_threads`, `oak_ontology`, `oak_curriculum_graph`, etc.
-
----
-
-## Immediate Next Steps
-
-### Current Strategy: Maths KS4 Vertical Slice ⭐
-
-**Context**: Oak API has **1000 requests/hour limit** (discovered 2025-12-07). Full ingestion of 340 combinations would take 17-24 hours. Instead, we're focusing on **Maths KS4** as a complete vertical slice to demonstrate all capabilities.
-
-**Why Maths KS4?**
-
-- Maximum complexity (tiers, pathways, sequences)
-- High value to teachers (exam preparation)
-- Tests all features with manageable scope
-- ~100-200 requests = **10-20 minutes** to ingest
-
-**See**: `.agent/plans/semantic-search/maths-ks4-vertical-slice.md` for complete plan
-
-### Step 1: Implement Hybrid Field Strategy
-
-**Goal**: Add 20 high-confidence Phase 2 fields NOW to avoid re-uploads
-
-**Context**: We're adding fields that are already in API responses or easily derived. This eliminates the need to re-upload Maths KS4 data in Phase 2.
-
-**Current Schema** (Phase 1):
-
-- `oak_lessons`: 21 fields
-- `oak_units`: 16 fields
-- `oak_unit_rollup`: 18 fields
-- `oak_sequences`: 14 fields
-- `oak_sequence_facets`: 13 fields
-
-**Adding** (Hybrid Strategy):
-
-- `oak_lessons`: +8 fields → 29 total
-- `oak_units`: +8 fields → 24 total
-- `oak_unit_rollup`: +10 fields → 28 total
-- `oak_sequences`: +6 fields → 20 total
-- `oak_sequence_facets`: +5 fields → 18 total
-
-**Key Fields to Add**:
-
-- `tier`, `exam_board`, `pathway` (from API programme factors)
-- `difficulty_level`, `estimated_duration_minutes` (computed)
-- `resource_types`, `prerequisite_lesson_ids`, `related_lesson_ids` (lessons)
-- `unit_type`, `assessment_included`, `prerequisite_unit_ids` (units)
-- `combined_misconceptions`, `combined_keywords` (rollups)
-- `threads_covered` (sequences)
-- `tiers_available`, `exam_boards_available`, `pathways_available`, `threads_available` (facets)
-
-**Data Completeness**: ✅ We already upload **full, untruncated transcripts** to `transcript_text`. No sampling. The `extractPassage()` utility is only for error messages.
-
-**Foundation Alignment**:
-
-- ✅ **Schema-First**: All fields defined in `field-definitions.ts`, generated via `pnpm type-gen`
-- ✅ **TDD**: Write tests FIRST (Red → Green → Refactor) for all extraction functions
-- ✅ **No Type Shortcuts**: Use proper type guards, no `as`, `any`, `!`, or `Record<string, unknown>`
-
-**See**: `.agent/plans/semantic-search/hybrid-field-strategy.md` for complete implementation plan
-
-**Tasks** (TDD at each step):
-
-1. **RED**: Write unit tests for extraction functions (tier, difficulty, resources)
-2. Update field definitions in SDK (`curriculum.ts`)
-3. Run `pnpm type-gen` to generate schemas
-4. **GREEN**: Implement extraction functions to pass tests
-5. **RED**: Write integration tests for document transforms
-6. Update ingestion logic to use extraction functions
-7. **GREEN**: All tests pass
-8. Run quality gates (type-check, lint, format, test)
-9. **REFACTOR**: Improve extraction logic if needed
-10. Ingest Maths KS4 with hybrid schema (full transcripts included)
-
-### Step 2: Ingest Maths KS4
-
-**Goal**: Populate all 5 content indexes with Maths KS4 data (29-33 fields per index)
+#### 2. Elasticsearch Status
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Check current state
+# Check ES connection and indexes
 pnpm es:status
 
-# Ingest Maths KS4 across all indexes (with hybrid fields)
-pnpm es:ingest-live --subject maths --keystage ks4 --verbose
-
-# Check results
-pnpm es:status
+# Expected output:
+# ✓ Connected to ES Serverless
+# ✓ 6 indexes exist: oak_lessons, oak_units, oak_unit_rollup, oak_sequences, oak_sequence_facets, oak_meta
+# ✓ Synonym set 'oak-syns' configured
+# ✓ Test data: English KS2 (~350 documents)
 ```
 
-**Expected Results** (with hybrid fields):
+If ES unreachable or indexes missing, check `.env.local` configuration.
 
-- ~50-100 lessons (**29 fields each**: 21 original + 8 hybrid)
-- ~15-25 units (**24 fields**: 16 original + 8 hybrid)
-- ~15-25 unit rollups (**28 fields**: 18 original + 10 hybrid)
-- ~2-4 sequences (**20 fields**: 14 original + 6 hybrid)
-- ~1 sequence facet (**18 fields**: 13 original + 5 hybrid)
-- **Time**: 10-20 minutes
-- **API cost**: 100-200 requests
-- **New fields**: `tier`, `exam_board`, `pathway`, `difficulty_level`, `resource_types`, etc.
+#### 3. Environment Variables
 
-**Field Population Expectations**:
-
-- `tier`: >80% coverage (from API programme factors)
-- `exam_board`: >60% coverage (may be 'generic' for some)
-- `resource_types`: >90% coverage (derived from lesson components)
-- `prerequisite_lesson_ids`: 0% (empty, populated in Phase 2)
-- `related_lesson_ids`: 0% (empty, populated in Phase 2)
-
-**Rate Limit Monitoring** (automatic during ingestion):
-
-- Logs API quota status every 30 seconds
-- Warns at 75% and 90% quota usage
-- Shows: requests/sec, quota remaining, reset time
-
-### Step 2: Validate Maths KS4 Completeness
-
-**Check what was ingested**:
+**File**: `apps/oak-open-curriculum-semantic-search/.env.local`
 
 ```bash
-# Check document counts
-pnpm es:status
+# Elasticsearch Serverless (REQUIRED)
+ELASTICSEARCH_URL=https://your-elasticsearch-url-here
+ELASTICSEARCH_API_KEY=your_elasticsearch_api_key_here
 
-# Test searches
-# - Structured: "trigonometry" in Maths KS4
-# - Natural language: "How do I teach Pythagoras theorem?"
-# - Facets: Filter by tier (Foundation vs Higher)
-# - Suggestions: Type "trig" → should autocomplete
+# Oak Curriculum API (REQUIRED)
+OAK_API_KEY=your_oak_api_key_here
+
+# OpenAI (REQUIRED for Phase 1A)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Cohere (REQUIRED for Phase 1B)
+COHERE_API_KEY=your-cohere-api-key-here
+
+# Search API (REQUIRED)
+SEARCH_API_KEY=your_search_api_key_here
+
+# Logging
+LOG_LEVEL=info
+
+# Optional: Redis caching for faster dev
+SDK_CACHE_ENABLED=false
+SDK_CACHE_REDIS_URL=redis://localhost:6379
 ```
 
-**Verify**:
+**If any required keys are missing**:
 
-- ✅ All 5 indexes have Maths KS4 data
-- ✅ Search returns relevant results
-- ✅ Facets work for tier filtering
-- ✅ Sequences exist (Foundation, Higher)
-- ✅ No mapping errors
+- **Elasticsearch**: Contact Oak infrastructure team or use existing deployment
+- **Oak API**: Use existing key from vault
+- **OpenAI**: Create API key at <https://platform.openai.com/api-keys> (needs billing enabled, ~$5 budget sufficient)
+- **Cohere**: Create API key at <https://dashboard.cohere.com/api-keys> (free tier OK for dev)
 
-### Step 3: Expand Maths KS4 Features
-
-**Next phases** (see maths-ks4-vertical-slice.md):
-
-- **Phase 2**: Add thread support and enhanced metadata
-- **Phase 3**: Create reference indices (topics, tiers)
-- **Phase 4**: Build ontology for RAG features
-- **Phase 5**: Implement advanced search capabilities
-
-### Alternative: Full Ingestion (If Needed Later)
-
-**For comprehensive coverage** (17-24 hours):
+#### 4. Quick Smoke Test
 
 ```bash
-# Start systematic ingestion (all 340 combinations)
-pnpm ingest:all
+# Dry-run ingestion (no actual upload)
+pnpm es:ingest-live --subject maths --keystage ks1 --dry-run --verbose
 
-# Monitor in another terminal
-watch -n 30 'pnpm ingest:progress'
-
-# Safe to interrupt and resume
-# Press Ctrl+C, then: pnpm ingest:all --resume
+# Expected: Fetches API data, transforms documents, shows what would be uploaded, NO ERRORS
 ```
 
-See `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md` for full strategy
+If this fails, check API keys and network connectivity.
 
 ---
 
-## Key Architectural Concepts
+## 🎯 Current State & What's Next
+
+### Completed Milestones ✅
+
+#### ES Serverless Deployed (2025-12-04)
+
+- 6 indexes operational: lessons, units, unit_rollup, sequences, sequence_facets, meta
+- ELSER sparse embeddings configured
+- Synonym set with 68 rules
+- Kibana access: <https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud>
+
+#### SDK Rate Limiting (2025-12-07, ADR-070)
+
+- Discovered Oak API limit: **1000 requests/hour**
+- Implemented: 5 req/sec throttle, exponential backoff, real-time monitoring
+- Singleton client pattern ensures shared rate limiting state
+- All 867 SDK tests passing with fake timers
+
+#### Mapping Remediation (2025-12-06, ADR-067)
+
+- **Single source of truth**: Field definitions → Zod schemas + ES mappings
+- Impossible for mapping/data mismatch going forward
+- All 7 search indexes flow from SDK field definitions
+- `pnpm type-gen` generates everything
+
+#### Test Data Ingestion (2025-12-06)
+
+- English KS2: 89 lessons, 129 units, 129 rollups, 1 sequence facet
+- Zero mapping errors
+- Full transcripts uploaded (no sampling)
+
+### Current Elasticsearch State
+
+**Last verified**: Run `pnpm es:status` for current state
+
+| Index                 | Docs | Purpose                                  |
+| --------------------- | ---- | ---------------------------------------- |
+| `oak_lessons`         | 89   | Lesson-level search                      |
+| `oak_units`           | 129  | Unit-level search                        |
+| `oak_unit_rollup`     | 129  | Aggregated unit search                   |
+| `oak_sequence_facets` | 1    | Sequence navigation                      |
+| `oak_sequences`       | 0    | Sequence metadata (none for English KS2) |
+| `oak_meta`            | 1    | Ingestion version tracking               |
+
+**Next**: Ingest Maths KS4 with enhanced schema (Phase 1C)
+
+### What You're About to Build (Phase 1A)
+
+**Duration**: 2-3 days  
+**Goal**: Implement three-way hybrid search (BM25 + ELSER + Dense Vectors)
+
+**Deliverables**:
+
+- OpenAI Inference API integration
+- Dense vector fields (1536-dim) in 5 indexes
+- Three-way RRF query combining all signals
+- Extraction functions with unit tests
+- Document transforms with integration tests
+- E2E test proving three-way beats two-way
+- 3 ADRs (071-073)
+- 3 docs with examples
+
+**Success criteria**:
+
+- MRR improves from 0.65 → 0.75 (15% gain)
+- All quality gates passing
+- Zero type shortcuts introduced
+
+---
+
+## 📋 Implementation Phases Overview
+
+| Phase  | Duration | Focus                            | Key Features                               | ADRs |
+| ------ | -------- | -------------------------------- | ------------------------------------------ | ---- |
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | Inference API, dense_vector, three-way RRF | 3    |
+| **1B** | 2-3 days | Relevance Enhancement            | Cohere ReRank, filtered kNN, query rules   | 2    |
+| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema          | -    |
+| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor           | 3    |
+| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support              | 1    |
+| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking     | 2    |
+| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution            | 2    |
+| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector              | 2    |
+
+**Total**: 4-5 weeks (22-29 days)
+
+**See**: `maths-ks4-implementation-plan.md` for complete details on each phase
+
+---
+
+## 🚀 Phase 1A: Start Here (Immediate Next Steps)
+
+### Day 1 Morning: Foundation & Tests (RED Phase)
+
+#### 1. Re-read Foundation Documents (15 min)
+
+```bash
+# Open in editor
+code .agent/directives-and-memory/rules.md
+code .agent/directives-and-memory/schema-first-execution.md
+code .agent/directives-and-memory/testing-strategy.md
+```
+
+Remind yourself of:
+
+- TDD is MANDATORY (RED → GREEN → REFACTOR)
+- No type shortcuts EVER
+- All quality gates must pass
+
+#### 2. Create OpenAI Inference Integration Tests (2 hours)
+
+**File**: `packages/sdks/oak-curriculum-sdk/src/elasticsearch/inference/openai-endpoints.integration.test.ts` (NEW)
+
+Write tests FIRST for:
+
+- `registerOpenAIInferenceEndpoint()` - Register text-embedding-3-small
+- `generateEmbedding()` - Generate 1536-dim vector
+- Error handling: Invalid API key, rate limits, network errors
+
+**Example**:
+
+```typescript
+describe('OpenAI Inference Endpoint Integration', () => {
+  it('should register text-embedding-3-small endpoint', async () => {
+    const result = await registerOpenAIInferenceEndpoint(esClient, {
+      endpointId: 'openai-text-embedding-3-small',
+      apiKey: 'test-key',
+      model: 'text-embedding-3-small',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.value).toMatchObject({
+      endpointId: 'openai-text-embedding-3-small',
+      service: 'openai',
+      model: 'text-embedding-3-small',
+    });
+  });
+});
+```
+
+#### 3. Run Tests (Should FAIL - RED)
+
+```bash
+cd packages/sdks/oak-curriculum-sdk
+pnpm test openai-endpoints.integration.test.ts
+
+# Expected: FAIL - functions don't exist yet
+```
+
+This proves tests are actually testing something.
+
+### Day 1 Afternoon: Implementation (GREEN Phase)
+
+#### 4. Implement OpenAI Inference Functions
+
+**File**: `packages/sdks/oak-curriculum-sdk/src/elasticsearch/inference/openai-endpoints.ts` (NEW)
+
+Implement to pass tests:
+
+````typescript
+/**
+ * Registers OpenAI inference endpoint in Elasticsearch.
+ *
+ * @see ADR-071 - OpenAI Inference API Integration
+ * @see https://www.elastic.co/docs/solutions/search/using-openai-compatible-models
+ *
+ * @example
+ * ```typescript
+ * const result = await registerOpenAIInferenceEndpoint(esClient, {
+ *   endpointId: 'openai-embeddings',
+ *   apiKey: process.env.OPENAI_API_KEY!,
+ *   model: 'text-embedding-3-small',
+ * });
+ * ```
+ */
+export async function registerOpenAIInferenceEndpoint(
+  esClient: Client,
+  config: OpenAIEndpointConfig,
+): Promise<Result<InferenceEndpoint>> {
+  // Implementation here
+}
+
+/**
+ * Generates embedding using registered OpenAI endpoint.
+ *
+ * @returns 1536-dimensional vector or undefined on error (graceful degradation)
+ */
+export async function generateEmbedding(
+  esClient: Client,
+  params: { endpointId: string; text: string },
+): Promise<number[] | undefined> {
+  // Implementation here
+}
+````
+
+#### 5. Run Tests Again (Should PASS - GREEN)
+
+```bash
+pnpm test openai-endpoints.integration.test.ts
+
+# Expected: PASS - all tests green
+```
+
+### Day 2: Field Definitions & Extraction Functions
+
+See `phase-1a-implementation-guide.md` for complete day-by-day breakdown.
+
+**Key steps**:
+
+1. Add field definitions to SDK (`field-definitions/curriculum.ts`)
+2. Run `pnpm type-gen` to generate mappings and Zod schemas
+3. Write unit tests for extraction functions (RED)
+4. Implement extraction functions (GREEN)
+5. Write integration tests for document transforms (RED)
+6. Update document transforms (GREEN)
+7. Run all quality gates
+
+### Day 3: Three-Way RRF Query
+
+1. Write E2E test for three-way hybrid (RED)
+2. Implement three-way RRF query (GREEN)
+3. Benchmark against two-way hybrid
+4. Run all quality gates
+5. Write ADRs 071-073
+6. Create docs with examples
+
+---
+
+## 🧪 Quality Gates (Run After EVERY Phase)
+
+```bash
+# From repo root, one at a time
+cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+
+pnpm type-gen       # Generate artifacts from field definitions
+pnpm build          # Compile TypeScript
+pnpm type-check     # Zero type errors
+pnpm lint:fix       # Zero lint violations (auto-fixes)
+pnpm format:root    # Code formatting (auto-fixes)
+pnpm markdownlint:root  # Doc formatting (auto-fixes)
+pnpm test           # 1,310+ tests must pass
+pnpm test:e2e       # E2E tests in dev mode
+pnpm test:e2e:built # E2E tests with built code
+```
+
+**NO EXCEPTIONS. If any gate fails, STOP and fix before proceeding.**
+
+---
+
+## 📚 Key Architectural Concepts
 
 ### Schema-First Type Generation (ADR-067)
 
-**Cardinal Rule**: All types, Zod schemas, and ES mappings flow from field definitions via `pnpm type-gen`.
+**Cardinal Rule**: ALL types, Zod schemas, and ES mappings flow from field definitions.
 
-**Never edit generated files.** Update generators in:
+**Workflow**:
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/`
+```text
+1. Update field definitions
+   packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts
 
-**After changes**: `pnpm type-gen` → `pnpm build` → verify quality gates
+2. Run type-gen
+   pnpm type-gen
+
+3. Generated outputs:
+   - ES mappings: src/types/generated/search/mappings/*.ts
+   - Zod schemas: src/types/generated/search/schemas/*.ts
+   - TypeScript types: src/types/generated/search/types/*.ts
+```
+
+**Never edit generated files.** Update generators only.
+
+### Test Types (From testing-strategy.md)
+
+1. **Unit test** (`*.unit.test.ts`)
+   - Tests single PURE function
+   - NO IO, NO side effects, NO mocks
+   - Fast and isolated
+
+2. **Integration test** (`*.integration.test.ts`)
+   - Tests code units working together (IMPORTED, not running system)
+   - NO IO, SIMPLE mocks injected as arguments
+   - Uses supertest for Express apps (imported code, not deployed)
+
+3. **E2E test** (`*.e2e.test.ts`)
+   - Tests running system in separate process
+   - CAN trigger File System and STDIO, NOT network
+   - Located in `e2e-tests/` directory
+
+### Rate Limiting & Retry (ADR-070)
+
+- **Oak API limit**: 1000 requests/hour
+- **SDK throttle**: 5 req/sec with exponential backoff
+- **Monitoring**: Real-time quota warnings at 75%/90%
+- **Singleton pattern**: Shared rate limiting state
 
 ### Public API Boundaries
 
-**Use only public exports** from `@oaknational/oak-curriculum-sdk`:
+**Use only public exports**:
 
 - Core: `@oaknational/oak-curriculum-sdk`
 - Search: `.../public/search`
@@ -477,127 +486,100 @@ See `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md` for full st
 
 ❌ Never import from `types/generated/` or internal paths
 
-### Per-Index Completion Contexts (ADR-068)
-
-Completion contexts defined per index in `completion-contexts.ts`:
-
-- Lessons/Units/Unit Rollup: `subject`, `key_stage`, `phase`
-- Sequences/Sequence Facets: `subject`, `phase` (no key_stage)
-- Threads: `subject`, `phase` (threads span keystages)
-
-### Rate Limiting & Retry (ADR-070)
-
-- **API Limit**: 1000 requests/hour
-- **SDK Config**: 5 req/sec with 5-attempt exponential backoff
-- **Monitoring**: Real-time quota tracking with warnings
-- **Singleton**: Shared rate limiting state across app
-
 ---
 
-## Development Roadmap
+## 🗂️ File Locations (Quick Reference)
 
-**Current**: Implementing **Maths KS4 vertical slice** with all features
+### SDK (Type Generation)
 
-See `.agent/plans/semantic-search/maths-ks4-vertical-slice.md` for complete roadmap including:
-
-- **Phase 1**: Core Maths KS4 ingestion (current)
-- **Phase 2**: Enhanced metadata & threads
-- **Phase 3**: Reference indices (topics, tiers)
-- **Phase 4**: Ontology & RAG integration
-- **Phase 5**: Advanced search features
-
-**After Maths KS4 Complete**:
-
-- Expand to other KS4 subjects (Science, English)
-- Add other Maths keystages (KS3, KS2)
-- Gradually scale to full curriculum
-- Migrate to Vercel functions for automation
-
-## Documentation Links
-
-| Topic                            | Location                                                                                    |
-| -------------------------------- | ------------------------------------------------------------------------------------------- |
-| **Planning Hub**                 | `.agent/plans/semantic-search/index.md` ⭐ START HERE                                       |
-| **Maths KS4 Vertical Slice**     | `.agent/plans/semantic-search/maths-ks4-vertical-slice.md` ⭐⭐ CURRENT FOCUS               |
-| **Hybrid Field Strategy**        | `.agent/plans/semantic-search/hybrid-field-strategy.md` ⭐ PHASE 1-2 IMPLEMENTATION         |
-| **Phase 4 Deferred Fields**      | `.agent/plans/semantic-search/phase-4-deferred-fields.md` 📋 AI/GRAPH FIELDS LATER          |
-| **Data Completeness Policy**     | `.agent/plans/semantic-search/data-completeness-policy.md` ✅ WHAT WE UPLOAD IN FULL        |
-| Phase roadmap                    | `.agent/plans/semantic-search/semantic-search-overview.md`                                  |
-| API rate limit resolution        | `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md`                            |
-| Reference indices plan           | `.agent/plans/semantic-search/reference-indices-plan.md`                                    |
-| Entity discovery pipeline        | `.agent/plans/semantic-search/entity-discovery-pipeline.md`                                 |
-| Graph RAG vision                 | `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`                          |
-| Systematic ingestion guide       | `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`                     |
-| SDK caching                      | `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`                              |
-| Comprehensive field requirements | `.agent/analysis/comprehensive-field-requirements-maths-ks4.md`                             |
-| API rate limit investigation     | `.agent/analysis/api-rate-limit-investigation.md`                                           |
-| Vercel migration considerations  | `.agent/analysis/vercel-ingestion-migration-considerations.md`                              |
-| Discovery analysis               | `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`                     |
-| ADR-067 (ES mappings)            | `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md`     |
-| ADR-068 (completion contexts)    | `docs/architecture/architectural-decisions/068-per-index-completion-context-enforcement.md` |
-| ADR-069 (systematic ingestion)   | `docs/architecture/architectural-decisions/069-systematic-ingestion-progress-tracking.md`   |
-| ADR-070 (rate limiting/retry)    | `docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md`              |
-
----
-
-## Quick Start: Ingesting Maths KS4
-
-**Prerequisites**: `.env.local` configured with `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# 1. Check ES is reachable
-pnpm es:status
-
-# 2. (Optional) Start Redis for caching
-pnpm redis:up
-
-# 3. Ingest Maths KS4
-pnpm es:ingest-live --subject maths --keystage ks4 --verbose
-
-# 4. Verify results
-pnpm es:status
+```
+packages/sdks/oak-curriculum-sdk/
+├── type-gen/typegen/search/
+│   ├── field-definitions/
+│   │   └── curriculum.ts          ← ADD NEW FIELDS HERE
+│   ├── es-field-overrides.ts      ← ADD ES OVERRIDES HERE
+│   ├── es-mapping-from-fields.ts  ← Mapping generator
+│   └── zod-schema-generator.ts    ← Zod generator
+└── src/types/generated/search/    ← GENERATED (don't edit)
 ```
 
-**Time**: 10-20 minutes | **API cost**: ~100-200 requests
+### App (Ingestion & Search)
 
-**Quality Gates** (from repo root): `pnpm type-gen && pnpm build && pnpm type-check && pnpm test`
+```
+apps/oak-open-curriculum-semantic-search/
+├── src/lib/
+│   ├── indexing/
+│   │   ├── document-transform-helpers.ts  ← Extraction functions
+│   │   ├── document-transforms.ts         ← Create ES documents
+│   │   └── dense-vector-extraction.ts     ← NEW in Phase 1A
+│   ├── hybrid-search/
+│   │   └── three-way-rrf.ts               ← NEW in Phase 1A
+│   └── elasticsearch/
+│       └── client.ts                       ← ES client setup
+└── e2e-tests/                              ← E2E tests
+```
+
+### Tests
+
+```
+packages/sdks/oak-curriculum-sdk/
+└── src/
+    └── **/*.unit.test.ts                   ← Unit tests (pure functions)
+    └── **/*.integration.test.ts            ← Integration tests (imported code)
+
+apps/oak-open-curriculum-semantic-search/
+└── e2e-tests/
+    └── **/*.e2e.test.ts                    ← E2E tests (running system)
+```
 
 ---
 
-## Verification & Troubleshooting
+## 📖 Documentation Links
 
-### Verify System is Working
+### Primary Documents
 
-```bash
-# 1. Check quality gates (from repo root)
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
-pnpm test  # Should pass 1,310+ tests
+| Document                               | Purpose                                     |
+| -------------------------------------- | ------------------------------------------- |
+| **`maths-ks4-implementation-plan.md`** | Complete implementation roadmap (MAIN PLAN) |
+| **`phase-1a-implementation-guide.md`** | Practical Phase 1A TDD guide                |
+| **`README.md`**                        | Navigation hub for all planning docs        |
+| **`data-completeness-policy.md`**      | What data we upload in full                 |
+| **`es-serverless-feature-matrix.md`**  | Feature tracking matrix                     |
 
-# 2. Check Elasticsearch status
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:status  # Should show index stats
+### Foundation Documents (Re-read Regularly)
 
-# 3. Try a dry-run ingestion
-pnpm es:ingest-live --subject maths --keystage ks1 --dry-run --verbose
-# Should show what would be uploaded without errors
+| Document                        | Purpose                               |
+| ------------------------------- | ------------------------------------- |
+| **`rules.md`**                  | TDD, quality gates, no type shortcuts |
+| **`schema-first-execution.md`** | All types from field definitions      |
+| **`testing-strategy.md`**       | Test types and TDD approach           |
 
-# 4. View Kibana (requires login)
-# https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud
-```
+### ADRs (Architectural Decision Records)
+
+| ADR     | Title                                       |
+| ------- | ------------------------------------------- |
+| **067** | SDK Generated Elasticsearch Mappings        |
+| **068** | Per-Index Completion Context Enforcement    |
+| **069** | Systematic Ingestion Progress Tracking      |
+| **070** | SDK Rate Limiting and Retry                 |
+| **071** | OpenAI Inference API Integration (Phase 1A) |
+| **072** | Three-Way Hybrid Search (Phase 1A)          |
+| **073** | Dense Vector Field Strategy (Phase 1A)      |
+
+---
+
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-| Problem                            | Solution                                                        |
-| ---------------------------------- | --------------------------------------------------------------- |
-| `strict_dynamic_mapping_exception` | Field missing from ES mapping. Check `field-definitions.ts`     |
-| Generator/generated drift          | Update generators, never edit generated files. Run `type-gen`   |
-| Lint errors after `type-gen`       | Generators likely emit bad code. Fix generator templates        |
-| `console` statements               | Replace with `@oaknational/mcp-logger`. See `src/lib/logger.ts` |
-| Completion context mismatch        | Check `completion-contexts.ts`. See ADR-068                     |
-| Port conflict in smoke tests       | Kill process using port 3333 or use `--port`                    |
-| Tests failing                      | Run quality gates one at a time to isolate issue                |
+| Problem                            | Solution                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------- |
+| `strict_dynamic_mapping_exception` | Field missing from ES mapping. Add to field-definitions.ts, run `pnpm type-gen` |
+| Generator/generated drift          | Update generators, never edit generated files. Run `pnpm type-gen`              |
+| Lint errors after `type-gen`       | Generators emit bad code. Fix generator templates                               |
+| `console` statements               | Replace with `@oaknational/mcp-logger`. See `src/lib/logger.ts`                 |
+| Tests failing                      | Run quality gates one at a time to isolate issue                                |
+| Port conflict in smoke tests       | Kill process using port 3333 or use `--port`                                    |
 
 ### ES Serverless Gotchas
 
@@ -607,4 +589,118 @@ pnpm es:ingest-live --subject maths --keystage ks1 --dry-run --verbose
 | `synonym_graph` at index time           | Split analyzers: `oak_text_index` (no synonyms), `oak_text_search` (with) |
 | `optional: true` on completion contexts | Not supported—remove from definitions                                     |
 | `number_of_shards/replicas`             | Not supported in Serverless—omit from mappings                            |
-| `highlight.max_analyzed_offset`         | Not supported in Serverless—omit                                          |
+
+---
+
+## 🎯 Success Criteria (Know When You're Done)
+
+### Phase 1A Complete When:
+
+- [ ] OpenAI Inference API integrated and tested
+- [ ] Dense vector fields added to 5 indexes
+- [ ] `pnpm type-gen` generates correct mappings
+- [ ] All extraction functions have passing unit tests
+- [ ] Document transforms include dense vector generation
+- [ ] Three-way RRF query implemented
+- [ ] E2E test proves three-way beats two-way (MRR improvement)
+- [ ] All 10 quality gates passing
+- [ ] 3 ADRs written (071-073)
+- [ ] 3 docs created with examples
+- [ ] No type shortcuts introduced
+- [ ] Prompt updated with Phase 1A completion
+
+### Full Project Complete When:
+
+- [ ] All 5 phases completed
+- [ ] 23 new ES features integrated
+- [ ] 15 ADRs written (071-085)
+- [ ] 135+ new tests passing
+- [ ] 17 new docs created
+- [ ] MRR: 0.65 → 0.80 (+23%)
+- [ ] NDCG@10: 0.70 → 0.85 (+21%)
+- [ ] Zero-hit rate: 15% → <5%
+- [ ] p95 latency: <300ms
+- [ ] Impressive stakeholder demo ready
+- [ ] <$100/month operational cost
+
+---
+
+## 📞 What To Do If Stuck
+
+### If Tests Won't Pass
+
+1. Check you wrote tests FIRST (RED phase)
+2. Verify test actually fails when implementation is wrong
+3. Review test fixtures and mock data
+4. Check foundation docs for testing patterns
+5. Look at existing tests for similar patterns
+
+### If Quality Gates Fail
+
+1. Run gates one at a time to isolate failure
+2. Read error messages carefully
+3. Check if generator templates need fixes (for type-gen issues)
+4. Review rules.md for coding standards
+5. Never use `eslint-disable` comments
+
+### If Uncertain About Architecture
+
+1. Re-read foundation documents
+2. Check existing ADRs for similar decisions
+3. Review `maths-ks4-implementation-plan.md` for guidance
+4. Prefer schema-first approach
+5. Favor type-safe solutions over shortcuts
+
+---
+
+## 🚦 Ready to Start?
+
+### Final Checklist
+
+- [ ] Read foundation documents (rules.md, schema-first, testing-strategy)
+- [ ] Read main plan (maths-ks4-implementation-plan.md)
+- [ ] Read Phase 1A guide (phase-1a-implementation-guide.md)
+- [ ] Verified all quality gates passing
+- [ ] Verified ES status (`pnpm es:status`)
+- [ ] Configured `.env.local` with API keys
+- [ ] OpenAI API key ready
+- [ ] Committed to TDD (RED → GREEN → REFACTOR)
+- [ ] Committed to schema-first approach
+- [ ] Committed to zero type shortcuts
+
+### If ALL checked:
+
+**Begin Phase 1A Day 1**: Write OpenAI inference integration tests (RED phase)
+
+**See**: `phase-1a-implementation-guide.md` for step-by-step guidance
+
+---
+
+## 📝 After Each Work Session
+
+### Update This Prompt
+
+When you complete a phase or major milestone:
+
+1. Update "Current State & What's Next" section
+2. Add completed ADRs to ADR table
+3. Update success criteria checkboxes
+4. Add any new troubleshooting items discovered
+5. Commit changes with descriptive message
+
+### Maintain Quality
+
+- Run all quality gates before ending session
+- Update phase 1A implementation guide with lessons learned
+- Document any deviations from plan with rationale
+- Keep this prompt as THE single source of truth for fresh chats
+
+---
+
+**Remember**: You have everything you need. The foundation documents, main plan, and implementation guide contain complete specifications. Trust the TDD process: RED → GREEN → REFACTOR. All quality gates must pass. No type shortcuts. Ever.
+
+**Now go build something deeply impressive.** 🚀
+
+---
+
+**End of Entry Point**

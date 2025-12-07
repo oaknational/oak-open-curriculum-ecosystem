@@ -1,0 +1,295 @@
+# Semantic Search Planning Documents
+
+**Git Version**: See `git log` for commit history  
+**Status**: Active Planning - Ready for Implementation  
+**Last Consolidated**: 2025-12-08
+
+---
+
+## 🎯 Start Here
+
+### For New Implementation Sessions
+
+**Read these in order**:
+
+1. **`.agent/prompts/semantic-search/semantic-search.prompt.md`** ⭐ START HERE
+   - Complete context for fresh chat sessions
+   - Prerequisites, environment setup, current state
+   - Quick start guide for Phase 1A
+
+2. **`maths-ks4-implementation-plan.md`** 📋 MAIN PLAN
+   - Complete implementation roadmap
+   - All 5 phases with detailed tasks
+   - TDD approach, ADRs, success criteria
+
+3. **Foundation Documents** (MUST READ)
+   - `.agent/directives-and-memory/rules.md`
+   - `.agent/directives-and-memory/schema-first-execution.md`
+   - `.agent/directives-and-memory/testing-strategy.md`
+
+---
+
+## Document Hierarchy
+
+### Core Documents
+
+| Document | Purpose | When to Use |
+|----------|---------|-------------|
+| **`maths-ks4-implementation-plan.md`** | Complete implementation plan for Maths KS4 vertical slice with all ES Serverless features | Primary implementation reference |
+| **`phase-1a-implementation-guide.md`** | Day-by-day practical TDD guide for Phase 1A (three-way hybrid search) | When implementing Phase 1A |
+| **`data-completeness-policy.md`** | Policy on what data we upload in full vs summarize | Reference for ingestion decisions |
+| **`es-serverless-feature-matrix.md`** | Feature adoption tracking matrix with impact/cost/risk analysis | Progress tracking and feature prioritization |
+
+### Archive
+
+| Directory | Contents |
+|-----------|----------|
+| **`archive/superseded-2025-12/`** | Consolidated plans from Dec 2025 merge | Historical reference only |
+| **`archive/superseded/`** | Older superseded plans | Historical reference only |
+| **`archive/completed/`** | Completed work from earlier phases | Historical reference only |
+
+---
+
+## Implementation Overview
+
+### Strategic Goal
+
+Create a **production-ready demo** of ES Serverless capabilities using Maths KS4 as a complete vertical slice.
+
+### Why Maths KS4?
+
+- ✅ Maximum complexity (tiers, pathways, exam boards, threads)
+- ✅ High teacher value (exam preparation)
+- ✅ Complete feature coverage (all search capabilities)
+- ✅ Manageable scope (~100-200 API requests, 10-20 minutes)
+- ✅ Scalable patterns for full curriculum
+
+### What We're Building
+
+- **Three-way hybrid search**: BM25 + ELSER + Dense Vectors
+- **AI-powered relevance**: OpenAI embeddings, Cohere ReRank, NER
+- **Knowledge graph**: ES Graph API for curriculum relationships
+- **RAG infrastructure**: Chunked transcripts, ontology grounding
+- **Advanced features**: Learning to Rank foundations, multi-vector search
+
+---
+
+## Implementation Phases
+
+| Phase | Duration | Focus | Key Features |
+|-------|----------|-------|--------------|
+| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | Inference API, dense_vector, three-way RRF |
+| **1B** | 2-3 days | Relevance Enhancement | Cohere ReRank, filtered kNN, query rules |
+| **1C** | 1 day | Maths KS4 Ingestion | Full content with enhanced schema |
+| **2A** | 3-4 days | Entity Extraction & Graph | NER, Graph API, enrich processor |
+| **2B** | 2-3 days | Reference Indices & Threads | 5 new indices, thread support |
+| **3** | 4-5 days | RAG Infrastructure | ES Playground, semantic_text, chunking |
+| **4** | 5-6 days | Knowledge Graph | Triple store, entity resolution |
+| **5** | 3-4 days | Advanced Features | LTR foundations, multi-vector |
+
+**Total**: 4-5 weeks (22-29 days)
+
+---
+
+## Foundation Document Alignment
+
+All work MUST adhere to:
+
+### Schema-First (Mandatory)
+
+- All types, Zod schemas, ES mappings flow from field definitions
+- Run `pnpm type-gen` after field definition changes
+- Never edit generated files
+- Update generators only
+
+### TDD at ALL Levels (Mandatory)
+
+- Write tests FIRST (RED → GREEN → REFACTOR)
+- Unit tests: Pure functions, no IO, no mocks
+- Integration tests: Code units together, simple mocks injected
+- E2E tests: Running system, real behavior
+
+### Documentation (Mandatory)
+
+- TSDoc with examples on all functions
+- Authored docs in `apps/oak-open-curriculum-semantic-search/docs/`
+- ADRs for architectural decisions
+- Update continuation prompt with new capabilities
+
+---
+
+## Quality Gates
+
+**ALL phases must pass ALL gates**:
+
+```bash
+# From repo root, one at a time
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+```
+
+**No exceptions. All gates must be green.**
+
+---
+
+## Success Criteria
+
+### Technical
+
+- [ ] 23 new ES features integrated
+- [ ] 15 ADRs written (071-085)
+- [ ] 135+ new tests passing
+- [ ] 17 new docs created
+- [ ] Zero type shortcuts
+- [ ] All quality gates passing
+
+### Search Quality
+
+- [ ] MRR: 0.65 → 0.80 (+23%)
+- [ ] NDCG@10: 0.70 → 0.85 (+21%)
+- [ ] Zero-hit rate: 15% → <5%
+- [ ] p95 latency: <300ms
+
+### Business
+
+- [ ] Impressive stakeholder demo
+- [ ] Production-ready code
+- [ ] Scalable to full curriculum
+- [ ] <$100/month operational cost
+
+---
+
+## Current System State
+
+**Last verified**: See `git log` for latest updates
+
+### Completed ✅
+
+- ES Serverless deployed with 6 indexes
+- ELSER sparse embeddings configured
+- SDK rate limiting implemented (5 req/sec, ADR-070)
+- Synonym set `oak-syns` with 68 rules
+- Field definitions architecture (single source of truth, ADR-067)
+- Per-index completion contexts (ADR-068)
+- Systematic ingestion with progress tracking (ADR-069)
+- All 10 quality gates passing (1,310+ tests)
+- Test data: English KS2 (~350 documents)
+
+### Ready for Phase 1A ⏭️
+
+- OpenAI API key configuration needed
+- Dense vector field definitions to add
+- Three-way RRF implementation to build
+- Maths KS4 ingestion to run
+
+---
+
+## CLI Quick Reference
+
+### Ingestion
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Check ES status
+pnpm es:status
+
+# Ingest Maths KS4 (Phase 1C)
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+
+# Systematic ingestion (all combinations, 17-24 hours)
+pnpm ingest:all
+pnpm ingest:progress
+```
+
+### Elasticsearch
+
+```bash
+# Kibana
+open https://poc-open-curriculum-api-search-dd21a1.kb.europe-west1.gcp.elastic.cloud
+
+# Reset indexes (destructive)
+npx tsx src/lib/elasticsearch/setup/cli.ts reset
+```
+
+### Development
+
+```bash
+# Enable Redis caching
+pnpm redis:up
+SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
+```
+
+---
+
+## Getting Help
+
+### For Implementation Questions
+
+1. Review `maths-ks4-implementation-plan.md` for phase details
+2. Check `phase-1a-implementation-guide.md` for practical examples
+3. Re-read foundation documents for principles
+4. Review relevant ADRs in `docs/architecture/architectural-decisions/`
+
+### For Architecture Questions
+
+1. Check existing ADRs (067-070 currently)
+2. Review foundation documents
+3. Consult `es-serverless-feature-matrix.md` for feature decisions
+
+### For Fresh Chat Sessions
+
+1. Start with `.agent/prompts/semantic-search/semantic-search.prompt.md`
+2. It contains ALL context needed to continue work
+3. Points to this README and main plan
+
+---
+
+## Archive Policy
+
+Documents are archived when:
+
+- **Consolidated**: Multiple plans merged into one
+- **Superseded**: Newer plan replaces older one
+- **Completed**: Work finished and documented in ADRs
+
+Archive directories:
+
+- `archive/superseded-YYYY-MM/` - Superseded plans by month
+- `archive/completed/` - Completed work
+- `archive/` - General archive
+
+Archived documents are kept for historical reference but not used for active work.
+
+---
+
+## Document Maintenance
+
+### When to Update
+
+- **After each phase completes**: Update status, mark TODOs complete
+- **When plans change**: Archive old version, create new with git commit reference
+- **After ADR creation**: Link ADR in relevant plan sections
+- **After docs creation**: Add to references section
+
+### Version Control
+
+- Use git commit hashes, not dates/version numbers in document headers
+- Archive old documents with descriptive directory names (superseded-YYYY-MM)
+- Keep one clear entry point (semantic-search.prompt.md)
+- Keep one main plan (maths-ks4-implementation-plan.md)
+
+---
+
+**Ready to start? Read `.agent/prompts/semantic-search/semantic-search.prompt.md` next.**
+
+---
+
+**End of README**
