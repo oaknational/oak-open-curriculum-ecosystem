@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { listUniversalTools } from './universal-tools/index.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations.
@@ -158,7 +159,7 @@ describe('listUniversalTools _meta integration', () => {
     const tools = listUniversalTools();
 
     for (const tool of tools) {
-      expect(tool._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+      expect(tool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
     }
   });
 
@@ -223,7 +224,7 @@ describe('generated tools _meta integration', () => {
     const sampleTool = generatedTools[0];
 
     expect(sampleTool).toBeDefined();
-    expect(sampleTool._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+    expect(sampleTool._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
     expect(sampleTool._meta?.['openai/widgetAccessible']).toBe(true);
     expect(sampleTool._meta?.['openai/visibility']).toBe('public');
     expect(sampleTool._meta?.['openai/toolInvocation/invoking']).toBeDefined();

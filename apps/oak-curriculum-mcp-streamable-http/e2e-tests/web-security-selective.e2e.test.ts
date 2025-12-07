@@ -236,20 +236,22 @@ describe('Security Headers (Helmet) - Applied Globally', () => {
       expect(csp).toContain('fonts.gstatic.com');
     });
 
-    it('CSP allows data: URIs for images (e.g. logo)', async () => {
+    it('CSP allows images from same origin', async () => {
       const app = createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      expect(csp).toContain("img-src 'self' data:");
+      // Images can be loaded from same origin (logo is inline SVG)
+      expect(csp).toContain("img-src 'self'");
     });
 
-    it('CSP allows data: URIs for connections (needed for some widget behaviors)', async () => {
+    it('CSP allows connections to same origin', async () => {
       const app = createTestApp();
       const res = await request(app).get('/').set('Host', 'localhost');
       const csp = res.headers['content-security-policy'];
 
-      expect(csp).toContain("connect-src 'self' data:");
+      // Connections allowed to same origin (no data: URIs needed)
+      expect(csp).toContain("connect-src 'self'");
     });
 
     it('CSP allows same-origin and inline scripts for Cloudflare', async () => {

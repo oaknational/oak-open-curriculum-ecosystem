@@ -39,6 +39,19 @@ export interface RuntimeConfig {
    * @see https://vercel.com/docs/environment-variables/system-environment-variables
    */
   readonly displayHostname?: string;
+  /**
+   * Cache-busting string for widget URIs (first 8 chars of git commit SHA).
+   *
+   * Derived from VERCEL_GIT_COMMIT_SHA for remote deployments.
+   * Undefined for local development (no cache-busting needed for preview server).
+   *
+   * Used to append ?v=<sha> to widget URIs to force ChatGPT to reload widget
+   * bundles when HTML/CSS/JS changes in breaking ways.
+   *
+   * @see https://vercel.com/docs/environment-variables/system-environment-variables
+   * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting best practice)
+   */
+  readonly widgetCacheBuster?: string;
 }
 
 function toBooleanFlag(value: string | undefined): boolean {
@@ -101,5 +114,6 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
     version: source.npm_package_version ?? '0.0.0',
     vercelHostnames,
     displayHostname: getDisplayHostname(source),
+    widgetCacheBuster: source.VERCEL_GIT_COMMIT_SHA?.slice(0, 8),
   };
 }

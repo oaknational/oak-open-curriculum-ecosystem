@@ -18,10 +18,11 @@ import {
   getKnowledgeGraphJson,
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import {
-  AGGREGATED_TOOL_WIDGET_URI,
+  getAggregatedToolWidgetUri,
   AGGREGATED_TOOL_WIDGET_MIME_TYPE,
   AGGREGATED_TOOL_WIDGET_HTML,
 } from './aggregated-tool-widget.js';
+import type { RuntimeConfig } from './runtime-config.js';
 
 /**
  * OpenAI Apps SDK Content Security Policy for the widget.
@@ -68,13 +69,18 @@ const WIDGET_DESCRIPTION =
  * - openai/widgetPrefersBorder: Hint for bordered card rendering
  * - openai/widgetDescription: Human-readable summary for the model
  *
+ * URI includes cache-busting query parameter (?v=<sha>) for remote deployments
+ * to force ChatGPT to reload widget when HTML/CSS/JS changes.
+ *
  * @param server - MCP server instance
+ * @param config - Runtime configuration (for cache-busting)
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
  */
-export function registerWidgetResource(server: McpServer): void {
+export function registerWidgetResource(server: McpServer, config: RuntimeConfig): void {
+  const widgetUri = getAggregatedToolWidgetUri(config.widgetCacheBuster);
   server.registerResource(
     'oak-json-viewer',
-    AGGREGATED_TOOL_WIDGET_URI,
+    widgetUri,
     {
       description: 'Oak-branded JSON viewer widget for tool output',
       mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
@@ -82,7 +88,7 @@ export function registerWidgetResource(server: McpServer): void {
     () => ({
       contents: [
         {
-          uri: AGGREGATED_TOOL_WIDGET_URI,
+          uri: widgetUri,
           mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
           text: AGGREGATED_TOOL_WIDGET_HTML,
           _meta: {
@@ -201,9 +207,10 @@ export function registerKnowledgeGraphResource(server: McpServer): void {
  * registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
+ * @param config - Runtime configuration (for widget cache-busting)
  */
-export function registerAllResources(server: McpServer): void {
-  registerWidgetResource(server);
+export function registerAllResources(server: McpServer, config: RuntimeConfig): void {
+  registerWidgetResource(server, config);
   registerDocumentationResources(server);
   registerOntologyResource(server);
   registerKnowledgeGraphResource(server);

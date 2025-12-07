@@ -195,10 +195,15 @@ describe('oak-json-viewer widget resource E2E', () => {
       const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
       const html = parsed.data?.contents[0]?.text ?? '';
 
-      // Widget includes Oak branding (logo image + text)
-      // Note: alt text accessibility is validated by axe-core in widget-accessibility tests
-      expect(html).toContain('data:image/png;base64,');
+      // Test behavior: Logo branding is present
       expect(html).toContain('Oak National Academy');
+
+      // Test behavior: Logo container exists in header
+      expect(html).toContain('class="logo"');
+
+      // Test behavior: Logo is present (accept SVG or PNG - both prove logo exists)
+      const hasLogo = html.includes('<svg') || html.includes('data:image/');
+      expect(hasLogo).toBe(true);
     });
   });
 });

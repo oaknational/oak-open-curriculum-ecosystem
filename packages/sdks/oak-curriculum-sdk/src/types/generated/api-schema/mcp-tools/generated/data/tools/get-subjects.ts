@@ -115,7 +115,7 @@ export const getSubjects = {
     title: "Get Subjects",
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': "ui://widget/oak-json-viewer.html",
     'openai/toolInvocation/invoking': "Fetching Get Subjects…",
     'openai/toolInvocation/invoked': "Get Subjects loaded",
     'openai/widgetAccessible': true,

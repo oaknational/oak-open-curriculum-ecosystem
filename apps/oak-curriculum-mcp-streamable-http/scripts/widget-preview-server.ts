@@ -92,7 +92,12 @@ app.get('/widget', async (req, res) => {
   console.log(`GET ${req.path}`);
   const widgetHtml = await getWidgetHtml();
   const emulationHtml = createEmulationWrapper(widgetHtml, MOCK_TOOL_OUTPUT, MOCK_METADATA);
-  res.type('text/html').send(emulationHtml);
+  res
+    .type('text/html')
+    .set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    .set('Pragma', 'no-cache')
+    .set('Expires', '0')
+    .send(emulationHtml);
 });
 
 /**
@@ -117,7 +122,12 @@ app.get('/widget/direct', async (req, res) => {
       };
     </script></head>`,
   );
-  res.type('text/html').send(htmlWithData);
+  res
+    .type('text/html')
+    .set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    .set('Pragma', 'no-cache')
+    .set('Expires', '0')
+    .send(htmlWithData);
 });
 
 /**

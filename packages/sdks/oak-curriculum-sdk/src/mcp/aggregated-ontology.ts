@@ -13,6 +13,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatOptimizedResult } from './universal-tool-shared.js';
 import { ontologyData } from './ontology-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 
 /**
  * Input schema for get-ontology tool (no parameters required).
@@ -55,7 +56,7 @@ This tool provides the foundation for effective use of all other curriculum tool
     title: 'Get Curriculum Ontology',
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': WIDGET_URI,
     'openai/toolInvocation/invoking': 'Loading curriculum model…',
     'openai/toolInvocation/invoked': 'Curriculum model loaded',
     'openai/widgetAccessible': true,

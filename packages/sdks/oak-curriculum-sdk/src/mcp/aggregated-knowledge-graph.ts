@@ -14,6 +14,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatOptimizedResult } from './universal-tool-shared.js';
 import { conceptGraph } from './knowledge-graph-data.js';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from './prerequisite-guidance.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 
 /**
  * Input schema for get-knowledge-graph tool.
@@ -60,7 +61,7 @@ The graph includes both explicit relationships (from API schema) and inferred re
   },
 
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': WIDGET_URI,
     'openai/toolInvocation/invoking': 'Loading knowledge graph…',
     'openai/toolInvocation/invoked': 'Knowledge graph loaded',
     'openai/widgetAccessible': true,

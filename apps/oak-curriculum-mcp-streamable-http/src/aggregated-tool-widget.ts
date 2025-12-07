@@ -14,14 +14,24 @@ import { OAK_LOGO_SVG } from './oak-logo-svg.js';
 import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
+import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { getWidgetUri } from './widget-uri.js';
 
 /**
- * URI for the Oak JSON viewer widget resource.
+ * Generates widget URI with optional cache-busting for remote deployments.
  *
- * This URI is referenced by aggregated tools in their `_meta.openai/outputTemplate` field.
- * ChatGPT fetches this resource after tool execution to render the output.
+ * Wraps SDK's WIDGET_URI constant with deployment-specific cache-busting logic.
+ * SDK is the single source of truth for the base URI.
+ *
+ * @param cacheBuster - Optional cache-busting string (first 8 chars of git commit SHA)
+ * @returns Widget URI with or without cache-busting query param
+ *
+ * @see WIDGET_URI (SDK constant - single source of truth)
+ * @see getWidgetUri (pure function wrapper)
  */
-export const AGGREGATED_TOOL_WIDGET_URI = 'ui://widget/oak-json-viewer.html';
+export function getAggregatedToolWidgetUri(cacheBuster?: string): string {
+  return getWidgetUri(WIDGET_URI, cacheBuster);
+}
 
 /**
  * MIME type for ChatGPT widget resources.

@@ -18,7 +18,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { AGGREGATED_TOOL_WIDGET_URI } from '../src/aggregated-tool-widget.js';
+import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -117,7 +117,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
         const tool = findToolByName(tools, toolName);
         expect(tool).toBeDefined();
         expect(tool?._meta).toBeDefined();
-        expect(tool?._meta?.['openai/outputTemplate']).toBe(AGGREGATED_TOOL_WIDGET_URI);
+        expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
       },
     );
 
@@ -233,7 +233,7 @@ describe('ChatGPT Widget Metadata E2E', () => {
         const tool = findToolByName(tools, toolName);
         expect(tool).toBeDefined();
         expect(tool?._meta).toBeDefined();
-        expect(tool?._meta?.['openai/outputTemplate']).toBe(AGGREGATED_TOOL_WIDGET_URI);
+        expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
         expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
         expect(tool?._meta?.['openai/visibility']).toBe('public');
       },

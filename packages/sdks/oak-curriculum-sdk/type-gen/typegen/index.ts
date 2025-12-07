@@ -50,3 +50,7 @@ export { generateSearchIndexModule } from './search/generate-search-index.js';
 export { generateSearchIndexDocumentModules } from './search/generate-search-index-docs.js';
 export { generateZeroHitFixtureModules } from './observability/generate-zero-hit-fixtures.js';
 export { generateAdminStreamFixtureModules } from './admin/generate-admin-fixtures.js';
+
+// Cross-domain constants
+export { BASE_WIDGET_URI } from './cross-domain-constants.js';
+export { generateWidgetConstants } from './generate-widget-constants.js';

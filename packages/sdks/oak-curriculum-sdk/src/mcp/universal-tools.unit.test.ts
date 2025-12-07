@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
@@ -307,7 +308,7 @@ describe('aggregated tool _meta fields', () => {
   it.each(aggregatedToolNames)('%s has openai/outputTemplate', (toolName) => {
     const tools = listUniversalTools();
     const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/outputTemplate']).toBe('ui://widget/oak-json-viewer.html');
+    expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
   });
 
   it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoking', (toolName) => {
