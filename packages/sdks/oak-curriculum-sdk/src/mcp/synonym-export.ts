@@ -102,6 +102,7 @@ export function buildElasticsearchSynonyms(): ElasticsearchSynonymSet {
     ...processGroup('englishConcepts', ontologyData.synonyms.englishConcepts),
     ...processGroup('scienceConcepts', ontologyData.synonyms.scienceConcepts),
     ...processGroup('generic', ontologyData.synonyms.generic),
+    ...processGroup('educationalAcronyms', ontologyData.synonyms.educationalAcronyms),
   ];
 
   return { synonyms_set: entries };
@@ -133,6 +134,7 @@ export function buildSynonymLookup(): ReadonlyMap<string, string> {
   populateLookup(ontologyData.synonyms.englishConcepts, lookup);
   populateLookup(ontologyData.synonyms.scienceConcepts, lookup);
   populateLookup(ontologyData.synonyms.generic, lookup);
+  populateLookup(ontologyData.synonyms.educationalAcronyms, lookup);
 
   return lookup;
 }

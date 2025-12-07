@@ -1,4 +1,4 @@
-import { SUBJECT_SYNONYM_CONFIG, KEY_STAGE_SYNONYM_CONFIG } from '../synonym-config.js';
+import { ontologyData } from '../../../../src/mcp/ontology-data.js';
 
 interface SynonymBuildResult {
   entries: [string, string][];
@@ -75,8 +75,8 @@ export function generateSynonymsFile(
   subjects: readonly string[],
   keyStages: readonly string[],
 ): { content: string; subjectReport: SynonymBuildResult; keyStageReport: SynonymBuildResult } {
-  const subjectReport = buildSynonymEntries(subjects, SUBJECT_SYNONYM_CONFIG);
-  const keyStageReport = buildSynonymEntries(keyStages, KEY_STAGE_SYNONYM_CONFIG);
+  const subjectReport = buildSynonymEntries(subjects, ontologyData.synonyms.subjects);
+  const keyStageReport = buildSynonymEntries(keyStages, ontologyData.synonyms.keyStages);
 
   const header = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Synonym maps for canonicalising MCP tool arguments.\n */\n\nfunction normaliseSynonymKey(value: string): string {\n  return value.trim().toLowerCase();\n}\n`;
 

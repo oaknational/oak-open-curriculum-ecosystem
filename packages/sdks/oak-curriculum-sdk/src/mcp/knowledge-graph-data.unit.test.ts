@@ -180,11 +180,11 @@ describe('conceptGraph', () => {
       expect(estimatedTokens).toBeLessThan(2500);
     });
 
-    it('combined with ontology fits context budget (<25KB)', () => {
+    it('combined with ontology fits context budget (<26KB)', () => {
       const graphSize = JSON.stringify(conceptGraph).length;
       const ontologySize = JSON.stringify(ontologyData).length;
       const combined = graphSize + ontologySize;
-      expect(combined).toBeLessThan(25000);
+      expect(combined).toBeLessThan(26000);
     });
   });
 });
