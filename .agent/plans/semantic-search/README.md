@@ -133,16 +133,18 @@ All work MUST adhere to:
 **ALL phases must pass ALL gates**:
 
 ```bash
-# From repo root, one at a time
-pnpm type-gen
-pnpm build
+# From repo root, one at a time, with no filters
+pnpm type-gen          # Makes changes
+pnpm build             # Makes changes
 pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
+pnpm lint:fix          # Makes changes
+pnpm format:root       # Makes changes
+pnpm markdownlint:root # Makes changes
 pnpm test
 pnpm test:e2e
 pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
 ```
 
 **No exceptions. All gates must be green.**

@@ -2,7 +2,7 @@
 
 **Git Version**: See `git log` for commit history  
 **Purpose**: Complete context for continuing Maths KS4 semantic search implementation in a fresh chat session  
-**Status**: Active Implementation - Phase 1A Ready to Start
+**Status**: Active Implementation - Phase 1A Infrastructure Complete, Implementation Ready
 
 ---
 
@@ -101,18 +101,18 @@ The Oak Open Curriculum Semantic Search is a Next.js application providing **cut
 #### 1. Quality Gates Status
 
 ```bash
-# From repo root
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
-
-# Run gates one at a time
-pnpm type-gen && \
-pnpm build && \
-pnpm type-check && \
-pnpm lint:fix && \
-pnpm format:root && \
-pnpm markdownlint:root && \
-pnpm test && \
+# From repo root - run one at a time, with no filters
+pnpm type-gen        # Makes changes
+pnpm build           # Makes changes
+pnpm type-check
+pnpm lint:fix        # Makes changes
+pnpm format:root     # Makes changes
+pnpm markdownlint:root  # Makes changes
+pnpm test
 pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
 
 # Expected: ALL PASS (1,310+ tests)
 ```
@@ -422,18 +422,18 @@ See the detailed steps in `maths-ks4-implementation-plan.md` Phase 1A section.
 ## 🧪 Quality Gates (Run After EVERY Phase)
 
 ```bash
-# From repo root, one at a time
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
-
-pnpm type-gen       # Generate artifacts from field definitions
-pnpm build          # Compile TypeScript
-pnpm type-check     # Zero type errors
-pnpm lint:fix       # Zero lint violations (auto-fixes)
-pnpm format:root    # Code formatting (auto-fixes)
-pnpm markdownlint:root  # Doc formatting (auto-fixes)
-pnpm test           # 1,310+ tests must pass
-pnpm test:e2e       # E2E tests in dev mode
-pnpm test:e2e:built # E2E tests with built code
+# From repo root, one at a time, with no filters
+pnpm type-gen          # Makes changes - generates artifacts from field definitions
+pnpm build             # Makes changes - compiles TypeScript
+pnpm type-check        # Zero type errors
+pnpm lint:fix          # Makes changes - zero lint violations
+pnpm format:root       # Makes changes - code formatting
+pnpm markdownlint:root # Makes changes - doc formatting
+pnpm test              # 1,310+ tests must pass
+pnpm test:e2e          # E2E tests in dev mode
+pnpm test:e2e:built    # E2E tests with built code
+pnpm test:ui           # Playwright UI tests
+pnpm smoke:dev:stub    # Smoke tests with stub data
 ```
 
 **NO EXCEPTIONS. If any gate fails, STOP and fix before proceeding.**

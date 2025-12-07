@@ -110,7 +110,7 @@
 
 **Retained as reference**:
 
-- `phase-1a-implementation-guide.md` - Practical TDD walkthrough (essential for implementation)
+- `start-implementation-guide.md` - Practical TDD walkthrough (essential for implementation)
 - `data-completeness-policy.md` - What we upload in full (reference)
 - `es-serverless-feature-matrix.md` - Feature tracking matrix (tracking tool)
 
@@ -124,7 +124,7 @@
 .agent/plans/semantic-search/
 ├── README.md                            ⭐ Navigation hub
 ├── maths-ks4-implementation-plan.md     ⭐ MAIN PLAN (30KB)
-├── phase-1a-implementation-guide.md     📖 Practical TDD guide
+├── start-implementation-guide.md     📖 Practical TDD guide
 ├── data-completeness-policy.md          📋 Reference
 ├── es-serverless-feature-matrix.md      📊 Tracking
 ├── CONSOLIDATION-SUMMARY.md             📝 This file
@@ -164,7 +164,7 @@
 3. Read: .agent/plans/semantic-search/maths-ks4-implementation-plan.md
    ↓ (Complete roadmap, 30 min)
 
-4. Read: .agent/plans/semantic-search/phase-1a-implementation-guide.md
+4. Read: .agent/plans/semantic-search/start-implementation-guide.md
    ↓ (Practical guide, 20 min)
 
 5. START IMPLEMENTATION - Phase 1A Day 1
@@ -243,7 +243,7 @@
 
 ### Kept Unchanged
 
-- `phase-1a-implementation-guide.md` - Still essential for practical implementation
+- `start-implementation-guide.md` - Still essential for practical implementation
 - `data-completeness-policy.md` - Still relevant reference
 - `es-serverless-feature-matrix.md` - Still used for tracking
 - Foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)

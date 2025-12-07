@@ -245,31 +245,31 @@ See the detailed TDD examples in `.agent/prompts/semantic-search/semantic-search
 // Add dense vector overrides
 lesson_dense_vector: {
   type: 'dense_vector',
-  dims: 1536,
+  dims: 384,
   index: true,
   similarity: 'cosine',
 },
 title_dense_vector: {
   type: 'dense_vector',
-  dims: 1536,
+  dims: 384,
   index: true,
   similarity: 'cosine',
 },
 unit_dense_vector: {
   type: 'dense_vector',
-  dims: 1536,
+  dims: 384,
   index: true,
   similarity: 'cosine',
 },
 rollup_dense_vector: {
   type: 'dense_vector',
-  dims: 1536,
+  dims: 384,
   index: true,
   similarity: 'cosine',
 },
 sequence_dense_vector: {
   type: 'dense_vector',
-  dims: 1536,
+  dims: 384,
   index: true,
   similarity: 'cosine',
 },
@@ -1287,7 +1287,7 @@ Build explicit knowledge graph with triples, entity resolution, and multi-hop re
 
 Merge extracted entities:
 
-```
+```text
 'pythagoras' (from lesson A)
 'Pythagoras theorem' (from lesson B)
 'Pythagoras\' Theorem' (from lesson C)

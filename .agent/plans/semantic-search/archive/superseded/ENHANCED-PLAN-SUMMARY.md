@@ -44,7 +44,7 @@
    - 15 new ADRs planned
    - Comprehensive success criteria
 
-2. **`phase-1a-implementation-guide.md`** 📖 PRACTICAL GUIDE
+2. **`start-implementation-guide.md`** 📖 PRACTICAL GUIDE
    - Day-by-day implementation walkthrough
    - RED → GREEN → REFACTOR examples
    - Code templates with TSDoc
@@ -390,7 +390,7 @@ pnpm test:e2e:built # Built E2E validation
 
 1. Re-read foundation documents
 2. Review `maths-ks4-es-serverless-complete.md`
-3. Study `phase-1a-implementation-guide.md`
+3. Study `start-implementation-guide.md`
 4. Set up OpenAI API key
 5. Begin Phase 1A: Write inference endpoint tests (RED)
 
@@ -423,7 +423,7 @@ pnpm test:e2e:built # Built E2E validation
 ### Planning Documents
 
 - 🎯 `maths-ks4-es-serverless-complete.md` - MAIN PLAN
-- 📖 `phase-1a-implementation-guide.md` - Practical guide
+- 📖 `start-implementation-guide.md` - Practical guide
 - 📊 `es-serverless-feature-matrix.md` - Feature tracking
 - 📋 `hybrid-field-strategy.md` - Original field plan
 - 📋 `phase-4-deferred-fields.md` - AI/Graph fields
