@@ -145,7 +145,7 @@ export const getSequencesQuestions = {
     title: "Get Sequences Questions",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
     'openai/toolInvocation/invoking': "Fetching Get Sequences Questions…",
     'openai/toolInvocation/invoked': "Get Sequences Questions loaded",
     'openai/widgetAccessible': true,

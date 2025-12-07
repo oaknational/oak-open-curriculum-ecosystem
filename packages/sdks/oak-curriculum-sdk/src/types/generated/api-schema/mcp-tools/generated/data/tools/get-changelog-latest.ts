@@ -115,7 +115,7 @@ export const getChangelogLatest = {
     title: "Get Changelog Latest",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
     'openai/toolInvocation/invoking': "Fetching Get Changelog Latest…",
     'openai/toolInvocation/invoked': "Get Changelog Latest loaded",
     'openai/widgetAccessible': true,

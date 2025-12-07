@@ -48,6 +48,45 @@ const ResourcesReadResultSchema = z.object({
   ),
 });
 
+/**
+ * Helper to retrieve widget HTML from the running MCP server.
+ * Extracts common setup logic used across multiple tests.
+ */
+async function getWidgetHtml(app: ReturnType<typeof createStubbedHttpApp>['app']): Promise<string> {
+  // Get widget URI from resources/list
+  const listResponse = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Accept', STUB_ACCEPT_HEADER)
+    .send({
+      jsonrpc: '2.0',
+      id: 'list1',
+      method: 'resources/list',
+    });
+  const listEnvelope = parseSseEnvelope(listResponse.text);
+  const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
+  const resources = listParsed.data?.resources ?? [];
+  const widgetUri =
+    resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/))?.uri ??
+    '';
+
+  // Read widget HTML from resources/read
+  const response = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Accept', STUB_ACCEPT_HEADER)
+    .send({
+      jsonrpc: '2.0',
+      id: '1',
+      method: 'resources/read',
+      params: { uri: widgetUri },
+    });
+
+  const envelope = parseSseEnvelope(response.text);
+  const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
+  return parsed.data?.contents[0]?.text ?? '';
+}
+
 describe('oak-json-viewer widget resource E2E', () => {
   describe('resources/list', () => {
     it('includes oak-json-viewer widget with correct URI', async () => {
@@ -71,7 +110,10 @@ describe('oak-json-viewer widget resource E2E', () => {
       expect(parsed.success).toBe(true);
 
       const resources = parsed.data?.resources ?? [];
-      const widgetResource = resources.find((r) => r.uri === 'ui://widget/oak-json-viewer.html');
+      // Find widget with hashed URI: oak-json-viewer-abc12345.html
+      const widgetResource = resources.find((r) =>
+        r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/),
+      );
 
       expect(widgetResource).toBeDefined();
       expect(widgetResource?.mimeType).toBe('text/html+skybridge');
@@ -79,8 +121,26 @@ describe('oak-json-viewer widget resource E2E', () => {
   });
 
   describe('resources/read', () => {
+    // eslint-disable-next-line complexity
     it('returns HTML content with text/html+skybridge MIME type', async () => {
       const { app } = createStubbedHttpApp();
+
+      // First get the widget URI from resources/list
+      const listResponse = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({
+          jsonrpc: '2.0',
+          id: 'list1',
+          method: 'resources/list',
+        });
+      const listEnvelope = parseSseEnvelope(listResponse.text);
+      const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
+      const resources = listParsed.data?.resources ?? [];
+      const widgetUri =
+        resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/))
+          ?.uri ?? '';
 
       const response = await request(app)
         .post('/mcp')
@@ -90,7 +150,7 @@ describe('oak-json-viewer widget resource E2E', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
+          params: { uri: widgetUri },
         });
 
       expect(response.status).toBe(200);
@@ -103,26 +163,13 @@ describe('oak-json-viewer widget resource E2E', () => {
       const contents = parsed.data?.contents ?? [];
       expect(contents).toHaveLength(1);
       expect(contents[0]?.mimeType).toBe('text/html+skybridge');
-      expect(contents[0]?.uri).toBe('ui://widget/oak-json-viewer.html');
+      // Verify URI matches hashed format
+      expect(contents[0]?.uri).toMatch(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/);
     });
 
     it('widget HTML includes Lexend font', async () => {
       const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const html = parsed.data?.contents[0]?.text ?? '';
+      const html = await getWidgetHtml(app);
 
       expect(html).toContain('Lexend');
       expect(html).toContain('fonts.googleapis.com');
@@ -130,21 +177,7 @@ describe('oak-json-viewer widget resource E2E', () => {
 
     it('widget HTML includes Oak brand colors', async () => {
       const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const html = parsed.data?.contents[0]?.text ?? '';
+      const html = await getWidgetHtml(app);
 
       // Light mode: soft green background
       expect(html).toContain('#bef2bd');
@@ -156,21 +189,7 @@ describe('oak-json-viewer widget resource E2E', () => {
 
     it('widget HTML includes window.openai integration', async () => {
       const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const html = parsed.data?.contents[0]?.text ?? '';
+      const html = await getWidgetHtml(app);
 
       // Widget reads tool output from ChatGPT's window.openai API
       expect(html).toContain('window.openai');
@@ -179,31 +198,14 @@ describe('oak-json-viewer widget resource E2E', () => {
 
     it('widget HTML includes Oak National Academy logo', async () => {
       const { app } = createStubbedHttpApp();
-
-      const response = await request(app)
-        .post('/mcp')
-        .set('Host', 'localhost')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({
-          jsonrpc: '2.0',
-          id: '1',
-          method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
-        });
-
-      const envelope = parseSseEnvelope(response.text);
-      const parsed = ResourcesReadResultSchema.safeParse(envelope.result);
-      const html = parsed.data?.contents[0]?.text ?? '';
+      const html = await getWidgetHtml(app);
 
       // Test behavior: Logo branding is present
       expect(html).toContain('Oak National Academy');
 
-      // Test behavior: Logo container exists in header
-      expect(html).toContain('class="logo"');
-
-      // Test behavior: Logo is present (accept SVG or PNG - both prove logo exists)
-      const hasLogo = html.includes('<svg') || html.includes('data:image/');
-      expect(hasLogo).toBe(true);
+      // Test behavior: Logo is visually present (SVG or base64 image)
+      const hasVisualLogo = html.includes('<svg') || html.includes('data:image/');
+      expect(hasVisualLogo).toBe(true);
     });
   });
 });

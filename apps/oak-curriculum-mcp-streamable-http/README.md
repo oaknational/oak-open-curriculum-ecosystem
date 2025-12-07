@@ -968,6 +968,79 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec; invalid inputs return a formatted error body (200 status, `isError: true`).
 - Successful results are SSE-wrapped JSON-RPC responses formatted with `formatStandardContent`.
 
+## Widget Cache-Busting
+
+The Oak JSON viewer widget uses a **hash-based URI strategy** to ensure ChatGPT always loads the latest widget version. This approach eliminates URI mismatches and aligns with OpenAI's best practice: "give the template a new URI" when widget content changes.
+
+### How It Works
+
+Widget cache-busting happens at **type-generation time** (not runtime):
+
+1. During `pnpm type-gen`, a SHA-256 hash is generated from the current timestamp
+2. The hash is embedded in the widget filename: `ui://widget/oak-json-viewer-<hash>.html`
+3. All generated tool descriptors reference this hashed URI in `_meta['openai/outputTemplate']`
+4. The widget resource is registered at the same hashed URI
+5. ChatGPT sees a new URI → fetches fresh widget content (no stale cache)
+
+**Example URIs:**
+
+- Generated URI: `ui://widget/oak-json-viewer-aa744679.html`
+- Next build: `ui://widget/oak-json-viewer-b3c9d412.html`
+
+### Why This Approach
+
+**Previous approach (query parameters):**
+
+- Tool descriptors: `ui://widget/oak-json-viewer.html`
+- Runtime registration: `ui://widget/oak-json-viewer.html?v=abc12345`
+- **Problem**: URI mismatch caused ChatGPT to fail loading widgets (MCP error `-32602: Resource not found`)
+
+**Current approach (hashed filename):**
+
+- Tool descriptors: `ui://widget/oak-json-viewer-abc12345.html`
+- Runtime registration: `ui://widget/oak-json-viewer-abc12345.html`
+- **Result**: URIs match perfectly, no runtime logic needed
+
+### Benefits
+
+- ✅ **Eliminates URI mismatch**: Tools and resource use identical URI
+- ✅ **Simpler architecture**: No runtime cache-busting logic
+- ✅ **Aligns with OpenAI guidance**: New URI for new widget versions
+- ✅ **Works identically** in local dev and production
+- ✅ **Schema-first compliant**: No runtime modification of generated artifacts
+
+### Trade-offs
+
+- Every `pnpm type-gen` produces a new widget URI (even if widget content unchanged)
+- This is an acceptable simplicity trade-off; ChatGPT handles URI changes gracefully
+
+### Implementation Details
+
+**Hash generation** (`type-gen/typegen/cross-domain-constants.ts`):
+
+```typescript
+function generateWidgetUriHash(): string {
+  const timestamp = Date.now().toString();
+  const hash = createHash('sha256').update(timestamp).digest('hex');
+  return hash.slice(0, 8); // First 8 chars
+}
+
+export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriHash()}.html`;
+```
+
+**Runtime usage** (zero transformation):
+
+```typescript
+export function getToolWidgetUri(): string {
+  return WIDGET_URI; // Direct passthrough from SDK
+}
+```
+
+### Related Documentation
+
+- [ADR-071: Widget URI Cache-Busting Simplification](../../docs/architecture/architectural-decisions/071-widget-uri-cache-busting-simplification.md)
+- [OpenAI Apps SDK: Build MCP Server](https://developers.openai.com/apps-sdk/build/mcp-server)
+
 ## Widget Call-to-Action (CTA) System
 
 The Oak widget includes a reusable CTA system for adding buttons that send follow-up messages to the model. This enables users to trigger workflows without manually typing prompts.

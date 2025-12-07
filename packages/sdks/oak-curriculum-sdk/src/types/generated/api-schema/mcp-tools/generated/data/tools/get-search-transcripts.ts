@@ -128,7 +128,7 @@ export const getSearchTranscripts = {
     title: "Get Search Transcripts",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-60e4c0f1.html",
     'openai/toolInvocation/invoking': "Fetching Get Search Transcripts…",
     'openai/toolInvocation/invoked': "Get Search Transcripts loaded",
     'openai/widgetAccessible': true,

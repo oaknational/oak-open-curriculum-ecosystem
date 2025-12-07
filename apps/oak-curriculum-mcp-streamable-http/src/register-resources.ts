@@ -18,11 +18,10 @@ import {
   getKnowledgeGraphJson,
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import {
-  getAggregatedToolWidgetUri,
+  getToolWidgetUri,
   AGGREGATED_TOOL_WIDGET_MIME_TYPE,
   AGGREGATED_TOOL_WIDGET_HTML,
 } from './aggregated-tool-widget.js';
-import type { RuntimeConfig } from './runtime-config.js';
 
 /**
  * OpenAI Apps SDK Content Security Policy for the widget.
@@ -64,20 +63,24 @@ const WIDGET_DESCRIPTION =
  * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
  * and used by ChatGPT to render tool output with Oak branding.
  *
+ * The widget URI includes a cache-busting hash generated at type-gen time.
+ * Each build produces a new hash, ensuring ChatGPT fetches the latest
+ * widget bundle instead of using a stale cached version.
+ *
+ * This aligns with OpenAI's best practice: "give the template a new URI"
+ * whenever widget HTML/CSS/JS changes.
+ *
  * Includes OpenAI Apps SDK _meta fields required for production deployment:
  * - openai/widgetCSP: Content Security Policy for outbound requests
  * - openai/widgetPrefersBorder: Hint for bordered card rendering
  * - openai/widgetDescription: Human-readable summary for the model
  *
- * URI includes cache-busting query parameter (?v=<sha>) for remote deployments
- * to force ChatGPT to reload widget when HTML/CSS/JS changes.
- *
  * @param server - MCP server instance
- * @param config - Runtime configuration (for cache-busting)
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
+ * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting guidance)
  */
-export function registerWidgetResource(server: McpServer, config: RuntimeConfig): void {
-  const widgetUri = getAggregatedToolWidgetUri(config.widgetCacheBuster);
+export function registerWidgetResource(server: McpServer): void {
+  const widgetUri = getToolWidgetUri();
   server.registerResource(
     'oak-json-viewer',
     widgetUri,
@@ -207,10 +210,9 @@ export function registerKnowledgeGraphResource(server: McpServer): void {
  * registration into a single call for cleaner server setup.
  *
  * @param server - MCP server instance
- * @param config - Runtime configuration (for widget cache-busting)
  */
-export function registerAllResources(server: McpServer, config: RuntimeConfig): void {
-  registerWidgetResource(server, config);
+export function registerAllResources(server: McpServer): void {
+  registerWidgetResource(server);
   registerDocumentationResources(server);
   registerOntologyResource(server);
   registerKnowledgeGraphResource(server);

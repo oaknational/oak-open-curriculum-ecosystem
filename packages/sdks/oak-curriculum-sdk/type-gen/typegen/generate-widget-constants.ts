@@ -26,8 +26,15 @@ function generateWidgetConstantsFile(): string {
  * This widget renders tool output with Oak branding, logo, and styling.
  * All generated tools reference this URI in their \`_meta['openai/outputTemplate']\` field.
  *
- * **For HTTP servers**: Import via public API to apply cache-busting:
- * \`@oaknational/oak-curriculum-sdk/public/mcp-tools\`
+ * **Cache-Busting Strategy**: The URI includes a hash generated at type-gen time.
+ * Each build produces a new hash, naturally busting ChatGPT's widget cache.
+ * This aligns with OpenAI's best practice: "give the template a new URI".
+ *
+ * **Format**: \`ui://widget/oak-json-viewer-<hash>.html\`
+ * **Example**: \`ui://widget/oak-json-viewer-abc12345.html\`
+ *
+ * @see type-gen/typegen/cross-domain-constants.ts - Source of truth
+ * @see https://developers.openai.com/apps-sdk/build/mcp-server (OpenAI cache-busting guidance)
  */
 export const WIDGET_URI = ${JSON.stringify(BASE_WIDGET_URI)} as const;
 `;

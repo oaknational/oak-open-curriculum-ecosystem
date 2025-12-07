@@ -11,26 +11,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { registerWidgetResource, registerDocumentationResources } from './register-resources.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { RuntimeConfig } from './runtime-config.js';
-
-/**
- * Creates a mock RuntimeConfig for testing.
- */
-function createMockConfig(): RuntimeConfig {
-  return {
-    env: {
-      OAK_API_KEY: 'test-api-key',
-      CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
-      CLERK_SECRET_KEY: 'test-clerk-secret',
-    },
-    dangerouslyDisableAuth: false,
-    useStubTools: false,
-    version: '0.0.0-test',
-    vercelHostnames: [],
-    displayHostname: undefined,
-    widgetCacheBuster: undefined, // Local dev - no cache busting
-  };
-}
 
 /**
  * Creates a mock MCP server for testing resource registration.
@@ -60,6 +40,19 @@ function createMockServer(): { server: McpServer; registeredResources: Map<strin
   return { server, registeredResources };
 }
 
+/**
+ * Helper to find the dynamically-generated widget URI.
+ */
+function getWidgetUri(registeredResources: Map<string, unknown>): string {
+  const widgetUri = Array.from(registeredResources.keys()).find((uri) =>
+    uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/),
+  );
+  if (!widgetUri) {
+    throw new Error('Widget URI not found in registered resources');
+  }
+  return widgetUri;
+}
+
 describe('registerWidgetResource', () => {
   let server: McpServer;
   let registeredResources: Map<string, unknown>;
@@ -71,18 +64,22 @@ describe('registerWidgetResource', () => {
   });
 
   it('registers the widget resource', () => {
-    const config = createMockConfig();
-    registerWidgetResource(server, config);
+    registerWidgetResource(server);
 
     expect(server.registerResource).toHaveBeenCalledTimes(1);
-    expect(registeredResources.has('ui://widget/oak-json-viewer.html')).toBe(true);
+    // Verify widget URI matches hashed format: oak-json-viewer-abc12345.html
+    const widgetUris = Array.from(registeredResources.keys()).filter((uri) =>
+      uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/),
+    );
+    expect(widgetUris).toHaveLength(1);
   });
 
   it('includes text/html+skybridge MIME type', () => {
-    const config = createMockConfig();
-    registerWidgetResource(server, config);
+    registerWidgetResource(server);
 
-    const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+    // Find the widget URI dynamically
+    const widgetUri = getWidgetUri(registeredResources);
+    const resource = registeredResources.get(widgetUri) as {
       contents: readonly { mimeType: string }[];
     };
     expect(resource.contents[0]?.mimeType).toBe('text/html+skybridge');
@@ -90,10 +87,10 @@ describe('registerWidgetResource', () => {
 
   describe('OpenAI Apps SDK _meta fields (production requirements)', () => {
     it('includes openai/widgetCSP in resource contents _meta', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly { _meta?: { 'openai/widgetCSP'?: unknown } }[];
       };
       const meta = resource.contents[0]?._meta;
@@ -103,10 +100,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('CSP allows Google Fonts domains for resource loading', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly {
           _meta?: { 'openai/widgetCSP'?: { resource_domains?: readonly string[] } };
         }[];
@@ -118,10 +115,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('CSP allows Oak domains for connections and resources', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly {
           _meta?: {
             'openai/widgetCSP'?: {
@@ -138,10 +135,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('includes openai/widgetPrefersBorder: true', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly { _meta?: { 'openai/widgetPrefersBorder'?: boolean } }[];
       };
       const meta = resource.contents[0]?._meta;
@@ -150,10 +147,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('includes openai/widgetDescription', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly { _meta?: { 'openai/widgetDescription'?: string } }[];
       };
       const meta = resource.contents[0]?._meta;
@@ -163,10 +160,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('widgetDescription is meaningful and not too long (≤200 chars)', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly { _meta?: { 'openai/widgetDescription'?: string } }[];
       };
       const description = resource.contents[0]?._meta?.['openai/widgetDescription'];
@@ -178,10 +175,10 @@ describe('registerWidgetResource', () => {
     });
 
     it('widgetDescription includes context grounding guidance to call get-ontology', () => {
-      const config = createMockConfig();
-      registerWidgetResource(server, config);
+      registerWidgetResource(server);
 
-      const resource = registeredResources.get('ui://widget/oak-json-viewer.html') as {
+      const widgetUri = getWidgetUri(registeredResources);
+      const resource = registeredResources.get(widgetUri) as {
         contents: readonly { _meta?: { 'openai/widgetDescription'?: string } }[];
       };
       const description = resource.contents[0]?._meta?.['openai/widgetDescription'];

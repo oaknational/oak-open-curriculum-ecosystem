@@ -104,7 +104,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     });
   }
 
-  registerAllResources(server, options.runtimeConfig);
+  registerAllResources(server);
   registerPrompts(server);
 }
 

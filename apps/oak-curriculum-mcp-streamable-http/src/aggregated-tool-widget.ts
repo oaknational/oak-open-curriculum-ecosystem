@@ -15,22 +15,20 @@ import { generateCtaContainerHtml } from './widget-cta/index.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
 import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
-import { getWidgetUri } from './widget-uri.js';
 
 /**
- * Generates widget URI with optional cache-busting for remote deployments.
+ * Returns the widget URI from the SDK.
  *
- * Wraps SDK's WIDGET_URI constant with deployment-specific cache-busting logic.
- * SDK is the single source of truth for the base URI.
+ * This is a simple passthrough that makes the widget URI
+ * available to the HTTP server's resource registration.
+ * The URI already includes a cache-busting hash generated
+ * at type-gen time.
  *
- * @param cacheBuster - Optional cache-busting string (first 8 chars of git commit SHA)
- * @returns Widget URI with or without cache-busting query param
- *
- * @see WIDGET_URI (SDK constant - single source of truth)
- * @see getWidgetUri (pure function wrapper)
+ * @returns Widget URI with embedded cache-busting hash
+ * @example "ui://widget/oak-json-viewer-abc12345.html"
  */
-export function getAggregatedToolWidgetUri(cacheBuster?: string): string {
-  return getWidgetUri(WIDGET_URI, cacheBuster);
+export function getToolWidgetUri(): string {
+  return WIDGET_URI;
 }
 
 /**
