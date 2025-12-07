@@ -4,65 +4,87 @@ Navigation hub for all semantic search planning documentation.
 
 ## Current Priority
 
-**🚀 READY FOR FULL INGESTION** - All blocking issues permanently resolved!
+**🎯 MATHS KS4 VERTICAL SLICE** - Strategic focus given API constraints
 
-### Major Milestone Completed ✅ (2025-12-06)
+### Major Milestones ✅
 
-**Mapping Remediation COMPLETE**: Fourth and final mapping mismatch eliminated through architectural consolidation.
+**API Rate Limiting Implemented** (2025-12-07):
 
-### Recently Completed (2025-12-06)
+- ✅ Discovered Oak API has **1000 requests/hour limit**
+- ✅ Implemented SDK rate limiting, retry, and monitoring
+- ✅ Full ingestion takes 17-24 hours (not 3-11)
+- ✅ **New Strategy**: Focus on Maths KS4 vertical slice first
 
-1. ✅ **Mapping Remediation** - Consolidated all ES mappings to single source of truth in SDK ⭐
-2. ✅ **Systematic Ingestion Tools** - Created progress-tracked ingestion for all 340 combinations
-3. ✅ **Type System Architecture** - Eliminated all `Record<string, unknown>` using official ES client types
-4. ✅ **Quality Gates** - All 10 gates passing (type-gen → smoke:dev:stub)
-5. ✅ **ES Type Safety** - Replaced ad-hoc ES types with `@elastic/elasticsearch` estypes
-6. ✅ **Code Quality** - Reduced complexity (createErrorFromException 17→8, runIngestion 62→50 lines)
-7. ✅ **Ingestion Progress Logging** - Real-time feedback during bulk uploads
-8. ✅ **Build System** - All build issues fixed, 1,310+ tests passing
-9. ✅ **Generator Drift** - Generators properly emit per-index completion schemas
-10. ✅ **Type Safety** - 19 lint errors fixed, no type shortcuts, complexity ≤8
-11. ✅ **CLI Enhancement** - Added `--index` filter for selective ingestion
-12. ✅ **Deprecated Exports** - Removed `SearchCompletionSuggestPayload*` compatibility layer
-13. ✅ **Forbidden eslint-disable** - All removed, quality gates passing
-14. ✅ **Zod/ES Mapping Mismatch** - Unified field definitions architecture
-15. ✅ **Console Usage** - Replaced with `@oaknational/mcp-logger`
-16. ✅ **Verbose Flag** - Controls logger level (DEBUG/INFO)
-17. ✅ **English KS2 Test Ingestion** - 348 documents successfully indexed with zero errors
+**Mapping Remediation COMPLETE** (2025-12-06):
 
-### Elasticsearch State (Verified 2025-12-06)
+- ✅ Consolidated all ES mappings to single source of truth in SDK
+- ✅ Fixed `key_stages` array in `oak_sequence_facets`
+- ✅ IMPOSSIBLE for mapping/data mismatch going forward
 
-| Index                 | Docs | Status                                       |
-| --------------------- | ---- | -------------------------------------------- |
-| `oak_lessons`         | 89   | ✅ English KS2 lessons                       |
-| `oak_units`           | 129  | ✅ English KS2 units                         |
-| `oak_unit_rollup`     | 129  | ✅ English KS2 unit rollups                  |
-| `oak_sequence_facets` | 1    | ✅ English KS2 sequence facet (key_stages[]) |
-| `oak_sequences`       | 0    | ⏳ Expected for English KS2                  |
-| `oak_meta`            | 1    | ✅ Tracking metadata (v2025-12-06-214452)    |
+### Key Achievements
 
-**Ingestion Coverage**: 1 of 340 combinations complete (English × KS2 × all indexes)
+1. ✅ **SDK Rate Limiting & Retry** (ADR-070) - 5 req/sec, exponential backoff, 46 new tests
+2. ✅ **Rate Limit Monitoring** - Real-time tracking, warns at 75%/90% quota
+3. ✅ **Singleton Client Pattern** - Ensures shared rate limiting state
+4. ✅ **Mapping Remediation** - Single source of truth for ES mappings
+5. ✅ **Systematic Ingestion Tools** - Progress tracking for 340 combinations
+6. ✅ **Type System Architecture** - Official `@elastic/elasticsearch` types throughout
+7. ✅ **Quality Gates** - All passing (1,310+ tests)
+8. ✅ **English KS2 Test Data** - 348 documents successfully indexed
 
-**Check Progress**: Run `pnpm ingest:progress` from the semantic search app
+### Elasticsearch State (Verified 2025-12-07)
 
-### Next Steps
+| Index                 | Docs | Status                             |
+| --------------------- | ---- | ---------------------------------- |
+| `oak_lessons`         | 89   | ✅ English KS2 (test data)         |
+| `oak_units`           | 129  | ✅ English KS2 (test data)         |
+| `oak_unit_rollup`     | 129  | ✅ English KS2 (test data)         |
+| `oak_sequence_facets` | 1    | ✅ English KS2 (test data)         |
+| `oak_sequences`       | 0    | ⏳ English KS2 has none            |
+| `oak_meta`            | 1    | ✅ Tracking metadata (v2025-12-06) |
 
-**READY TO EXECUTE**: Full systematic ingestion
+**Next**: Ingest **Maths KS4** (~100-200 more documents)
 
-1. **Start Full Ingestion** - Run `pnpm ingest:all` to process all 340 combinations
-   - 17 subjects × 4 keystages × 5 indexes
-   - Progress tracked, can resume after interruption
-   - Estimated time: 3-11 hours total
+**Check Current State**: Run `pnpm es:status` from the semantic search app
 
-2. **Continue Roadmap** - After full ingestion complete:
-   - Phase 2: Threads & Enhanced Filtering
-   - Phase 3: Reference Indices (subjects, keystages, years catalogs)
-   - Phase 4: Static Ontology Index (RAG-ready)
+### Current Focus: Maths KS4 Vertical Slice ⭐
 
-For continuation work, use:
+**Strategic Decision** (2025-12-07): Given API rate limit of 1000 req/hour, focus on complete Maths KS4 implementation before broader ingestion.
+
+**Immediate Action**:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+# Time: 10-20 minutes | Cost: ~100-200 API requests
+```
+
+**Implementation Plans**:
+
+- ⭐ **Phase 1-2 Fields**: `.agent/plans/semantic-search/hybrid-field-strategy.md`
+- 📋 **Phase 4 Deferred**: `.agent/plans/semantic-search/phase-4-deferred-fields.md`
+- ✅ **Data Completeness Policy**: `.agent/plans/semantic-search/data-completeness-policy.md` - What we upload in full
+
+**Complete Vision**: `.agent/plans/semantic-search/maths-ks4-vertical-slice.md`
+
+**Hybrid Field Strategy**: Add high-confidence Phase 2 fields (like `tier`, `exam_board`, `pathway`) during Phase 1 upload to eliminate Phase 2 re-uploads. See `hybrid-field-strategy.md` for complete field list and implementation checklist.
+
+**Phase 4 Deferred Fields**: AI/Graph enrichment fields (summaries, NER entities, concepts) documented in `phase-4-deferred-fields.md` for pickup after Phase 2-3 complete. Includes cost estimates and `_update_by_query` strategy.
+
+**After Maths KS4**:
+
+- Phase 2: Populate empty fields, add `oak_threads` index (NO re-upload needed)
+- Phase 3: Reference indices (topics, tiers)
+- Phase 4: Ontology & RAG features
+- Phase 5: Advanced search capabilities
+
+**Full Ingestion**: Available via `pnpm ingest:all` when needed (17-24 hours)
+
+**Key Resources**:
 
 - **Continuation Prompt**: `.agent/prompts/semantic-search/semantic-search.prompt.md`
-- **Discovery Analysis**: `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`
+- **Field Requirements**: `.agent/analysis/comprehensive-field-requirements-maths-ks4.md`
+- **API Rate Limits**: `.agent/analysis/api-rate-limit-investigation.md`
 - **Phase Roadmap**: `.agent/plans/semantic-search/semantic-search-overview.md`
 
 ---

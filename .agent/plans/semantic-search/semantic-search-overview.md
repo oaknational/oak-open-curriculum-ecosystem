@@ -1,12 +1,14 @@
 # Semantic Search High-Level Overview
 
-Last updated: 2025-12-06
+Last updated: 2025-12-07
+
+**⚠️ Current Strategy Change**: Due to API rate limit discovery (1000 req/hour), we are focusing on **Maths KS4 vertical slice** before full curriculum ingestion. See `.agent/plans/semantic-search/maths-ks4-vertical-slice.md` for current roadmap.
 
 ## Executive Summary
 
-The Oak Open Curriculum Semantic Search is a proof-of-concept Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
+The Oak Open Curriculum Semantic Search is a Next.js application providing hybrid search (semantic + lexical) across Oak's curriculum data. The system uses Elasticsearch Serverless with RRF (Reciprocal Rank Fusion) to deliver comprehensive search, faceted navigation, and intelligent suggestions for teachers and educators.
 
-**Current Status**: ES Serverless DEPLOYED. Type system fully compliant with official ES client types. All blocking issues RESOLVED. **All 10 quality gates PASSING** (1,310+ tests). Ready for next phase work.
+**Current Status**: ES Serverless DEPLOYED. SDK rate limiting and monitoring implemented (ADR-070). All blocking issues RESOLVED. **All quality gates PASSING** (1,310+ tests). **Current focus**: Complete Maths KS4 vertical slice with all features.
 
 ## Current State Snapshot
 
