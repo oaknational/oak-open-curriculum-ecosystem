@@ -4,6 +4,7 @@ import type { KeyStage, SearchSubjectSlug } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
 import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { esBulk } from '../../../src/lib/elastic-http';
+import { esClient } from '../../../src/lib/es-client';
 import { getRateLimit } from '../../../src/lib/rate-limit';
 import { buildIndexBulkOps } from '../../../src/lib/index-oak';
 import {
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
   const subjects: SearchSubjectSlug[] = SUBJECTS.filter(isSubject);
-  const { operations: bulkOps } = await buildIndexBulkOps(client, keyStages, subjects);
+  const { operations: bulkOps } = await buildIndexBulkOps(client, esClient(), keyStages, subjects);
   const target = currentSearchIndexTarget();
   const targetedOps = rewriteBulkOperations(bulkOps, target);
 

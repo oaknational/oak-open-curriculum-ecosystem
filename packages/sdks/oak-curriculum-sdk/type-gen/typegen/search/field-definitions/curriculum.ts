@@ -70,6 +70,7 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
   { name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
+  { name: 'title_dense_vector', zodType: 'array-number', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
   { name: 'exam_board', zodType: 'string', optional: true },
   { name: 'pathway', zodType: 'string', optional: true },
@@ -138,6 +139,7 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
   { name: 'unit_dense_vector', zodType: 'array-number', optional: true },
+  { name: 'rollup_dense_vector', zodType: 'array-number', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
   { name: 'exam_board', zodType: 'string', optional: true },
 ] as const;

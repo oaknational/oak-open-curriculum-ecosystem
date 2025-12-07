@@ -123,6 +123,12 @@ export const LESSONS_FIELD_OVERRIDES = {
     index: true,
     similarity: 'cosine',
   },
+  title_dense_vector: {
+    type: 'dense_vector',
+    dims: 384,
+    index: true,
+    similarity: 'cosine',
+  },
   tier: {
     type: 'keyword',
   },
@@ -213,6 +219,12 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
     type: 'integer',
   },
   unit_dense_vector: {
+    type: 'dense_vector',
+    dims: 384,
+    index: true,
+    similarity: 'cosine',
+  },
+  rollup_dense_vector: {
     type: 'dense_vector',
     dims: 384,
     index: true,

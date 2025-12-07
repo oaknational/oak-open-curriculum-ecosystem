@@ -65,7 +65,7 @@ interface OntologyIndexDoc {
   relationships?: string[]; // Related doc_ids
   content_text: string; // Flattened text for semantic search
   content_semantic?: string; // semantic_text field for embeddings
-  metadata: Record<string, unknown>; // Additional structured data
+  // Note: metadata should use specific types from field definitions, not generic Record
 }
 ```
 

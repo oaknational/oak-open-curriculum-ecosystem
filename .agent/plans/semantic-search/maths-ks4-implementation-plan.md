@@ -104,6 +104,68 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ---
 
+## Pre-Phase: ES Field Overrides Audit (BLOCKING)
+
+### Goal
+
+Ensure `es-field-overrides.ts` contains all required field type overrides before any ingestion or query implementation.
+
+### Current State (2025-12-08)
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+
+The following overrides exist:
+
+| Index | Fields with overrides |
+|-------|----------------------|
+| `LESSONS_FIELD_OVERRIDES` | `lesson_dense_vector`, `tier`, `exam_board`, `pathway` ✅ |
+| `UNIT_ROLLUP_FIELD_OVERRIDES` | `unit_dense_vector`, `tier`, `exam_board` ✅ |
+| `UNITS_FIELD_OVERRIDES` | (none for new fields) |
+| `SEQUENCES_FIELD_OVERRIDES` | (none for new fields) |
+| `SEQUENCE_FACETS_FIELD_OVERRIDES` | (none for new fields) |
+
+### Missing Overrides (Must Add)
+
+```typescript
+// LESSONS_FIELD_OVERRIDES - add:
+title_dense_vector: { type: 'dense_vector', dims: 384, index: true, similarity: 'cosine' },
+
+// UNIT_ROLLUP_FIELD_OVERRIDES - add:
+pathway: { type: 'keyword' },
+
+// UNITS_FIELD_OVERRIDES - add:
+tier: { type: 'keyword' },
+exam_board: { type: 'keyword' },
+pathway: { type: 'keyword' },
+unit_type: { type: 'keyword' },
+
+// SEQUENCES_FIELD_OVERRIDES - add:
+tier: { type: 'keyword' },
+exam_board: { type: 'keyword' },
+pathway: { type: 'keyword' },
+
+// SEQUENCE_FACETS_FIELD_OVERRIDES - add:
+tiers_available: { type: 'keyword' },
+exam_boards_available: { type: 'keyword' },
+pathways_available: { type: 'keyword' },
+```
+
+### Implementation Steps
+
+1. **Add missing overrides** to `es-field-overrides.ts`
+2. **Run `pnpm type-gen`** to regenerate ES mappings
+3. **Verify generated mappings** include correct field types
+4. **Run quality gates** to ensure no regressions
+
+### Success Criteria
+
+- [ ] All keyword fields have `type: 'keyword'` in overrides
+- [ ] All dense vector fields have `type: 'dense_vector'` with 384 dims
+- [ ] `pnpm type-gen` produces correct mappings
+- [ ] All quality gates pass
+
+---
+
 ## Phase 1A: Three-Way Hybrid Search with Dense Vectors
 
 ### Goal
@@ -169,47 +231,48 @@ See the detailed TDD examples in `.agent/prompts/semantic-search/semantic-search
 
 ```typescript
 // Add to LESSONS_INDEX_FIELDS
-{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'title_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },  // 'foundation' | 'higher'
-{ name: 'exam_board', zodType: 'string', optional: true },  // e.g., 'aqa', 'edexcel'
-{ name: 'pathway', zodType: 'string', optional: true },  // programme pathway
-{ name: 'difficulty_level', zodType: 'string', optional: true },  // computed
+// Note: zodType is for Zod schema generation; ES types are set via es-field-overrides.ts
+{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector (384-dim)
+{ name: 'title_dense_vector', zodType: 'array-number', optional: true },   // ES: dense_vector (384-dim)
+{ name: 'tier', zodType: 'string', optional: true },            // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true },      // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },         // ES: keyword (faceting)
+{ name: 'difficulty_level', zodType: 'string', optional: true }, // ES: keyword (faceting)
 { name: 'estimated_duration_minutes', zodType: 'number', optional: true },
-{ name: 'resource_types', zodType: 'string-array', optional: true },  // video, worksheet, etc.
-{ name: 'prerequisite_lesson_ids', zodType: 'string-array', optional: true },  // Phase 2
-{ name: 'related_lesson_ids', zodType: 'string-array', optional: true },  // Phase 2
+{ name: 'resource_types', zodType: 'string-array', optional: true },         // ES: keyword[] (faceting)
+{ name: 'prerequisite_lesson_ids', zodType: 'string-array', optional: true }, // ES: keyword[] (IDs)
+{ name: 'related_lesson_ids', zodType: 'string-array', optional: true },      // ES: keyword[] (IDs)
 ```
 
 #### Units Index
 
 ```typescript
 // Add to UNITS_INDEX_FIELDS
-{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },
-{ name: 'exam_board', zodType: 'string', optional: true },
-{ name: 'pathway', zodType: 'string', optional: true },
-{ name: 'unit_type', zodType: 'string', optional: true },  // 'core' | 'support' | 'development'
+{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },      // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },              // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true },        // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },           // ES: keyword (faceting)
+{ name: 'unit_type', zodType: 'string', optional: true },         // ES: keyword (faceting)
 { name: 'estimated_total_hours', zodType: 'number', optional: true },
 { name: 'assessment_included', zodType: 'boolean', optional: true },
-{ name: 'resource_types', zodType: 'string-array', optional: true },
-{ name: 'prerequisite_unit_ids', zodType: 'string-array', optional: true },  // Phase 2
+{ name: 'resource_types', zodType: 'string-array', optional: true },         // ES: keyword[]
+{ name: 'prerequisite_unit_ids', zodType: 'string-array', optional: true },  // ES: keyword[] (IDs)
 ```
 
 #### Unit Rollup Index
 
 ```typescript
 // Add to UNIT_ROLLUP_INDEX_FIELDS
-{ name: 'rollup_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },
-{ name: 'exam_board', zodType: 'string', optional: true },
-{ name: 'pathway', zodType: 'string', optional: true },
-{ name: 'unit_type', zodType: 'string', optional: true },
+{ name: 'rollup_dense_vector', zodType: 'array-number', optional: true },    // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },              // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true },        // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },           // ES: keyword (faceting)
+{ name: 'unit_type', zodType: 'string', optional: true },         // ES: keyword (faceting)
 { name: 'total_lesson_count', zodType: 'number', optional: true },
-{ name: 'combined_misconceptions', zodType: 'string-array', optional: true },
-{ name: 'combined_keywords', zodType: 'string-array', optional: true },
-{ name: 'combined_resource_types', zodType: 'string-array', optional: true },
-{ name: 'average_difficulty', zodType: 'string', optional: true },
+{ name: 'combined_misconceptions', zodType: 'string-array', optional: true }, // ES: text[] (searchable)
+{ name: 'combined_keywords', zodType: 'string-array', optional: true },       // ES: keyword[] (faceting)
+{ name: 'combined_resource_types', zodType: 'string-array', optional: true }, // ES: keyword[]
+{ name: 'average_difficulty', zodType: 'string', optional: true },            // ES: keyword
 { name: 'estimated_total_hours', zodType: 'number', optional: true },
 ```
 
@@ -217,23 +280,23 @@ See the detailed TDD examples in `.agent/prompts/semantic-search/semantic-search
 
 ```typescript
 // Add to SEQUENCES_INDEX_FIELDS
-{ name: 'sequence_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },
-{ name: 'exam_board', zodType: 'string', optional: true },
-{ name: 'pathway', zodType: 'string', optional: true },
-{ name: 'threads_covered', zodType: 'string-array', optional: true },  // Phase 2
+{ name: 'sequence_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },              // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true },        // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },           // ES: keyword (faceting)
+{ name: 'threads_covered', zodType: 'string-array', optional: true },  // ES: keyword[] (faceting)
 { name: 'total_unit_count', zodType: 'number', optional: true },
-{ name: 'progression_summary', zodType: 'text', optional: true },
+{ name: 'progression_summary', zodType: 'text', optional: true },      // ES: text (full-text)
 ```
 
 #### Sequence Facets Index
 
 ```typescript
 // Add to SEQUENCE_FACETS_INDEX_FIELDS
-{ name: 'tiers_available', zodType: 'string-array', optional: true },  // ['foundation', 'higher']
-{ name: 'exam_boards_available', zodType: 'string-array', optional: true },
-{ name: 'pathways_available', zodType: 'string-array', optional: true },
-{ name: 'threads_available', zodType: 'string-array', optional: true },  // Phase 2
+{ name: 'tiers_available', zodType: 'string-array', optional: true },       // ES: keyword[]
+{ name: 'exam_boards_available', zodType: 'string-array', optional: true }, // ES: keyword[]
+{ name: 'pathways_available', zodType: 'string-array', optional: true },    // ES: keyword[]
+{ name: 'threads_available', zodType: 'string-array', optional: true },     // ES: keyword[]
 { name: 'total_sequence_count', zodType: 'number', optional: true },
 ```
 
@@ -570,10 +633,10 @@ import { generateEmbedding } from '@oaknational/oak-curriculum-sdk/elasticsearch
 export async function threeWayHybridSearch(
   esClient: Client,
   params: {
-    index: string;
+    index: SearchIndexName;
     query: string;
     size?: number;
-    filters?: Record<string, unknown>;
+    filters?: SearchFilters;
   },
 ): Promise<SearchResults> {
   const { index, query, size = 20, filters } = params;
@@ -1195,23 +1258,38 @@ The Oak API provides rich pedagogical metadata that is NOT currently indexed. Se
 
 ```typescript
 // Add to LESSONS_INDEX_FIELDS
-{ name: 'pupil_lesson_outcome', zodType: 'text', optional: true },
-{ name: 'misconception_responses', zodType: 'string-array', optional: true },
+{ name: 'pupil_lesson_outcome', zodType: 'text', optional: true },           // ES: text (full-text searchable)
+{ name: 'misconception_responses', zodType: 'string-array', optional: true }, // ES: text[] (full-text)
 { name: 'quiz_question_count', zodType: 'number', optional: true },
-{ name: 'quiz_question_types', zodType: 'string-array', optional: true },  // ['multiple-choice', 'match']
-{ name: 'quiz_questions_text', zodType: 'string-array', optional: true },  // Searchable question text
-{ name: 'content_guidance_areas', zodType: 'string-array', optional: true },
+{ name: 'quiz_question_types', zodType: 'string-array', optional: true },    // ES: keyword[] (faceting)
+{ name: 'quiz_questions_text', zodType: 'string-array', optional: true },    // ES: text[] (full-text)
+{ name: 'content_guidance_areas', zodType: 'string-array', optional: true }, // ES: keyword[] (faceting)
 { name: 'supervision_level', zodType: 'number', optional: true },
 { name: 'downloads_available', zodType: 'boolean', optional: true },
-{ name: 'lesson_keywords_detailed', zodType: 'nested', optional: true },  // Full keyword objects
+{ name: 'lesson_keywords_detailed', zodType: 'nested', optional: true },     // ES: nested
 
 // Add to UNITS_INDEX_FIELDS
-{ name: 'prior_knowledge_requirements', zodType: 'string-array', optional: true },
-{ name: 'national_curriculum_content', zodType: 'string-array', optional: true },
-{ name: 'why_this_why_now', zodType: 'text', optional: true },
-{ name: 'threads', zodType: 'nested', optional: true },  // { slug, title, order }
-{ name: 'unit_notes', zodType: 'text', optional: true },
-{ name: 'unit_description', zodType: 'text', optional: true },
+{ name: 'prior_knowledge_requirements', zodType: 'string-array', optional: true }, // ES: text[] (semantic)
+{ name: 'national_curriculum_content', zodType: 'string-array', optional: true },  // ES: keyword[] (exact match)
+{ name: 'why_this_why_now', zodType: 'text', optional: true },                     // ES: text (semantic)
+{ name: 'threads', zodType: 'nested', optional: true },                            // ES: nested
+{ name: 'unit_notes', zodType: 'text', optional: true },                           // ES: text
+{ name: 'unit_description', zodType: 'text', optional: true },                     // ES: text
+```
+
+### ES Field Overrides for Phase 2B
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+
+```typescript
+// Phase 2B: keyword fields for faceting (exact match, aggregations)
+quiz_question_types: { type: 'keyword' },        // ['multiple-choice', 'match', 'order']
+content_guidance_areas: { type: 'keyword' },     // ['safeguarding', 'sensitive-content']
+national_curriculum_content: { type: 'keyword' }, // Exact match on curriculum statements
+
+// Phase 2B: nested fields for structured objects
+lesson_keywords_detailed: { type: 'nested' },
+threads: { type: 'nested' },
 ```
 
 ### Extraction Functions (TDD)

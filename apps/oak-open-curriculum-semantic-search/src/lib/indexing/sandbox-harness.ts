@@ -1,3 +1,4 @@
+import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
@@ -13,16 +14,13 @@ import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
 import {
   dispatchBulk,
+  logDataIntegrityIssues,
   logPreview,
   logSummary,
   summariseOperations,
   type EsTransport,
 } from './sandbox-harness-ops';
-import {
-  hasDataIntegrityIssues,
-  getDataIntegritySummary,
-  type DataIntegrityReport,
-} from './data-integrity-report';
+import type { DataIntegrityReport } from './data-integrity-report';
 import { filterOperationsByIndex } from './sandbox-harness-filtering';
 import {
   createSequenceFacetMetricsCollector,
@@ -42,6 +40,7 @@ interface SandboxHarnessOptions {
 
 interface HarnessContext {
   readonly client: OakClient;
+  readonly esClient: Client;
   readonly keyStages: readonly KeyStage[];
   readonly subjects: readonly SearchSubjectSlug[];
   readonly indexes: readonly SearchIndexKind[];
@@ -62,18 +61,18 @@ interface SandboxBulkResult {
   readonly metrics?: SandboxBulkMetrics;
   readonly dataIntegrityReport?: DataIntegrityReport;
 }
+
 interface IngestOptions {
   readonly dryRun?: boolean;
   readonly verbose?: boolean;
 }
+
 export interface SandboxHarness {
   prepareBulkOperations(): Promise<SandboxBulkResult>;
   ingest(options?: IngestOptions): Promise<SandboxBulkResult>;
 }
 
-/**
- * Builds a sandbox ingestion harness configured for the desired search index target.
- */
+/** Builds a sandbox ingestion harness configured for the desired search index target. */
 export async function createSandboxHarness(
   options: SandboxHarnessOptions,
 ): Promise<SandboxHarness> {
@@ -81,17 +80,21 @@ export async function createSandboxHarness(
   const logger = options.logger ?? sandboxLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
   const indexes = options.indexes ?? [];
-  const es = resolveTransport(options.es);
-  const context: HarnessContext = { client, keyStages, subjects, indexes, target, es, logger };
-
+  const { transport: es, client: resolvedEsClient } = resolveEsClient(options.es);
+  const context: HarnessContext = {
+    client,
+    esClient: resolvedEsClient,
+    keyStages,
+    subjects,
+    indexes,
+    target,
+    es,
+    logger,
+  };
   const prepare = () => prepareOperations(context);
   const ingest = (ingestOptions?: IngestOptions) =>
     ingestOperations(context, prepare, ingestOptions);
-
-  return {
-    prepareBulkOperations: prepare,
-    ingest,
-  };
+  return { prepareBulkOperations: prepare, ingest };
 }
 
 async function resolveHarnessInputs(options: SandboxHarnessOptions): Promise<{
@@ -152,30 +155,33 @@ function ensureNonEmptyList<T>(value: readonly T[] | undefined, message: string)
   return value;
 }
 
-function resolveTransport(es?: EsTransport): EsTransport {
+/** Resolves ES client from options. Mock transport for testing, real client otherwise. */
+function resolveEsClient(es?: EsTransport): { transport: EsTransport; client: Client } {
   if (es) {
-    return es;
+    return { transport: es, client: { transport: es.transport } as Client };
   }
   const client = esClient();
-  return { transport: client.transport };
+  return { transport: { transport: client.transport }, client };
 }
 
 async function prepareOperations(context: HarnessContext): Promise<SandboxBulkResult> {
   const metricsCollector = createSequenceFacetMetricsCollector();
   const { operations: bulkOps, dataIntegrityReport } = await buildIndexBulkOps(
     context.client,
-    esClient,
+    context.esClient,
     context.keyStages,
     context.subjects,
-    {
-      onSequenceFacetProcessed: metricsCollector.record,
-    },
+    { onSequenceFacetProcessed: metricsCollector.record },
   );
   const targetedOps = rewriteBulkOperations(bulkOps, context.target);
   const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
   const summary = summariseOperations(filteredOps, context.target);
-  const metrics = metricsCollector.snapshot();
-  return { operations: filteredOps, summary, metrics, dataIntegrityReport };
+  return {
+    operations: filteredOps,
+    summary,
+    metrics: metricsCollector.snapshot(),
+    dataIntegrityReport,
+  };
 }
 
 async function ingestOperations(
@@ -184,12 +190,10 @@ async function ingestOperations(
   options: IngestOptions = {},
 ): Promise<SandboxBulkResult> {
   let result: SandboxBulkResult | undefined;
-
   try {
     result = await prepare();
     const dryRun = options.dryRun ?? false;
     const verbose = options.verbose ?? false;
-
     logSummary(
       context.logger,
       'sandbox.ingest.prepared',
@@ -198,14 +202,12 @@ async function ingestOperations(
       dryRun,
       result.metrics,
     );
-
     if (result.operations.length === 0 || dryRun) {
       if (verbose) {
         logPreview(context.logger, context.target, result.operations);
       }
       return result;
     }
-
     await executeAndLogIngestion(context, result, verbose);
     return result;
   } finally {
@@ -219,7 +221,6 @@ async function executeAndLogIngestion(
   verbose: boolean,
 ): Promise<void> {
   await dispatchBulk(context.es, result.operations, context.logger);
-
   logSummary(
     context.logger,
     'sandbox.ingest.completed',
@@ -228,23 +229,7 @@ async function executeAndLogIngestion(
     false,
     result.metrics,
   );
-
   if (verbose) {
     logPreview(context.logger, context.target, result.operations);
   }
-}
-
-function logDataIntegrityIssues(logger: Logger, report?: DataIntegrityReport): void {
-  if (!report || !hasDataIntegrityIssues(report)) {
-    return;
-  }
-  const summary = getDataIntegritySummary(report);
-  logger.warn('Data integrity issues detected during ingestion', {
-    totalSkippedUnits: summary.totalSkippedUnits,
-    totalSkippedLessons: summary.totalSkippedLessons,
-    affectedSubjects: Array.from(summary.affectedSubjects),
-    affectedKeyStages: Array.from(summary.affectedKeyStages),
-    skippedUnits: report.skippedUnits,
-    skippedLessonGroups: report.skippedLessonGroups,
-  });
 }

@@ -585,15 +585,16 @@ apps/oak-open-curriculum-semantic-search/
 
 ### ADRs (Architectural Decision Records)
 
-| ADR     | Title                                           | Status      |
-| ------- | ----------------------------------------------- | ----------- |
-| **067** | SDK Generated Elasticsearch Mappings            | ✅ Complete |
-| **068** | Per-Index Completion Context Enforcement        | ✅ Complete |
-| **069** | Systematic Ingestion Progress Tracking          | ✅ Complete |
-| **070** | SDK Rate Limiting and Retry                     | ✅ Complete |
-| **071** | Elastic-Native Dense Vector Strategy (Phase 1A) | 📝 To Write |
-| **072** | Three-Way Hybrid Search Architecture (Phase 1A) | 📝 To Write |
-| **073** | Dense Vector Field Configuration (Phase 1A)     | 📝 To Write |
+| ADR     | Title                                    | Status      |
+| ------- | ---------------------------------------- | ----------- |
+| **067** | SDK Generated Elasticsearch Mappings     | ✅ Complete |
+| **068** | Per-Index Completion Context Enforcement | ✅ Complete |
+| **069** | Systematic Ingestion Progress Tracking   | ✅ Complete |
+| **070** | SDK Rate Limiting and Retry              | ✅ Complete |
+| **071** | Elastic-Native Dense Vector Strategy     | ✅ Complete |
+| **072** | Three-Way Hybrid Search Architecture     | ✅ Complete |
+| **073** | Dense Vector Field Configuration         | ✅ Complete |
+| **074** | Elastic-Native First Philosophy          | ✅ Complete |
 
 ---
 
@@ -621,6 +622,44 @@ apps/oak-open-curriculum-semantic-search/
 
 ---
 
+## 🚨 Current Blocking Issues (2025-12-08)
+
+### Issue 1: Quality Gates Failing
+
+**3 linting errors** must be fixed before continuing:
+
+```
+src/lib/hybrid-search/rrf-query-builders.ts
+  251:1  error  File has too many lines (404). Maximum allowed is 250
+
+src/lib/indexing/document-transforms.ts
+  251:1  error  File has too many lines (313). Maximum allowed is 250
+
+src/lib/hybrid-search/rrf-query-builders.unit.test.ts
+  4:3  error  'buildUnitRrfRequest' is defined but never used
+```
+
+**Options**:
+
+- **Option A**: Refactor into smaller files (30-60 min)
+- **Option B**: Add `/* eslint-disable max-lines */` temporarily (5 min)
+
+### Issue 2: ES Field Overrides Incomplete
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+
+Missing keyword overrides for:
+- `UNIT_ROLLUP_FIELD_OVERRIDES`: `pathway`
+- `UNITS_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`, `unit_type`
+- `SEQUENCES_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`
+- `SEQUENCE_FACETS_FIELD_OVERRIDES`: `tiers_available`, `exam_boards_available`, `pathways_available`
+
+**Fix**: Add overrides, run `pnpm type-gen`, verify mappings.
+
+**See**: "Pre-Phase: ES Field Overrides Audit" in `maths-ks4-implementation-plan.md`.
+
+---
+
 ## 🎯 Success Criteria (Know When You're Done)
 
 ### Phase 1A Complete When:
@@ -628,17 +667,19 @@ apps/oak-open-curriculum-semantic-search/
 - [x] Dense vector fields added to lessons and unit_rollup indexes (384-dim)
 - [x] ES field overrides configured for dense_vector type
 - [x] `pnpm type-gen` generates correct mappings
-- [ ] All extraction functions have passing unit tests (tier, exam_board, pathway)
-- [ ] Dense vector generation using `.multilingual-e5-small-elasticsearch`
-- [ ] Document transforms include dense vector generation
-- [ ] Three-way RRF query implemented
-- [ ] E2E test proves three-way beats two-way (MRR improvement)
+- [x] Extraction functions implemented (tier, exam_board, pathway) with unit tests
+- [x] Dense vector generation using `.multilingual-e5-small-elasticsearch`
+- [x] Document transforms include dense vector generation
+- [x] Three-way RRF query implemented
+- [x] ADR-071 written (Elastic-Native Dense Vector Strategy)
+- [x] ADR-072 written (Three-Way Hybrid Search Architecture)
+- [x] ADR-073 written (Dense Vector Field Configuration)
+- [x] ADR-074 written (Elastic-Native First Philosophy)
+- [x] No type shortcuts introduced
+- [x] No external API dependencies for core search
+- [ ] **BLOCKING**: Fix linting errors (max-lines, unused import)
+- [ ] E2E test proves three-way beats two-way (requires Phase 1C ingestion)
 - [ ] All 10 quality gates passing
-- [ ] ADR-071 written (Elastic-Native Dense Vector Strategy)
-- [ ] ADR-072 written (Three-Way Hybrid Search Architecture)
-- [ ] ADR-073 written (Dense Vector Field Configuration)
-- [ ] No type shortcuts introduced
-- [ ] No external API dependencies for core search
 - [ ] Prompt updated with Phase 1A completion
 
 ### Full Project Complete When:

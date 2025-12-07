@@ -1,6 +1,11 @@
 import type { Logger } from '@oaknational/mcp-logger';
 import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
 import { sandboxLogger } from '../logger';
+import {
+  hasDataIntegrityIssues,
+  getDataIntegritySummary,
+  type DataIntegrityReport,
+} from './data-integrity-report';
 
 /**
  * Minimal Elasticsearch transport interface for bulk operations.
@@ -211,4 +216,23 @@ function isIndexAction(value: unknown): value is IndexAction {
 // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
 function isUnknownObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
+}
+
+/** Logs data integrity issues if any were detected during ingestion. */
+export function logDataIntegrityIssues(
+  logger: Logger,
+  report: DataIntegrityReport | undefined,
+): void {
+  if (!report || !hasDataIntegrityIssues(report)) {
+    return;
+  }
+  const summary = getDataIntegritySummary(report);
+  logger.warn('Data integrity issues detected during ingestion', {
+    totalSkippedUnits: summary.totalSkippedUnits,
+    totalSkippedLessons: summary.totalSkippedLessons,
+    affectedSubjects: Array.from(summary.affectedSubjects),
+    affectedKeyStages: Array.from(summary.affectedKeyStages),
+    skippedUnits: report.skippedUnits,
+    skippedLessonGroups: report.skippedLessonGroups,
+  });
 }

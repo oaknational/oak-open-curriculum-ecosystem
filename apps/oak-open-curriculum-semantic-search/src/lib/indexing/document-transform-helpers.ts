@@ -1,3 +1,19 @@
+/** Document transformation helpers for ES indexing. @module document-transform-helpers */
+import { extractTier, extractExamBoard, extractPathway } from './programme-factor-extractors';
+import {
+  isUnknownObject,
+  ensureRecord,
+  safeArray,
+  safeString,
+  pluckStrings,
+  optionalStrings,
+  readUnknownField,
+  requireStringField,
+} from './extraction-primitives';
+
+// Re-export programme factor extractors
+export { extractTier, extractExamBoard, extractPathway };
+
 export interface UnitLessonInfo {
   readonly lessonSlug: string;
   readonly lessonTitle: string;
@@ -56,6 +72,7 @@ function requireStringField(record: UnknownObject, key: string, context: string)
   return value;
 }
 
+/** Extracts lesson info from unit lessons array. */
 export function extractUnitLessons(value: unknown): UnitLessonInfo[] {
   const lessons: UnitLessonInfo[] = [];
   for (const entry of safeArray(value)) {
@@ -72,14 +89,17 @@ export function extractUnitLessons(value: unknown): UnitLessonInfo[] {
   return lessons;
 }
 
+/** Extracts unit topics from categories. */
 export function extractUnitTopics(value: unknown): string[] | undefined {
   return optionalStrings(pluckStrings(value, 'categoryTitle'));
 }
 
+/** Extracts sequence IDs from threads. */
 export function extractSequenceIds(value: unknown): string[] | undefined {
   return optionalStrings(pluckStrings(value, 'slug'));
 }
 
+/** Extracts misconception pairs. */
 export function extractMisconceptions(value: unknown): string[] | undefined {
   const pairs: string[] = [];
   for (const entry of safeArray(value)) {
@@ -96,6 +116,7 @@ export function extractMisconceptions(value: unknown): string[] | undefined {
   return pairs.length > 0 ? pairs : undefined;
 }
 
+/** Extracts content guidance descriptions. */
 export function normaliseContentGuidanceEntries(value: unknown): string[] | undefined {
   const descriptions: string[] = [];
   for (const entry of safeArray(value)) {
@@ -110,6 +131,7 @@ export function normaliseContentGuidanceEntries(value: unknown): string[] | unde
   return descriptions.length > 0 ? descriptions : undefined;
 }
 
+/** Extracts lesson planning fields from summary. */
 export function extractLessonPlanningFields(summary: unknown): {
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
@@ -118,28 +140,20 @@ export function extractLessonPlanningFields(summary: unknown): {
   contentGuidance?: string[];
 } {
   const record = ensureRecord(summary, 'lesson summary');
-  const lessonKeywords = optionalStrings(
-    pluckStrings(readUnknownField(record, 'lessonKeywords'), 'keyword'),
-  );
-  const keyLearningPoints = optionalStrings(
-    pluckStrings(readUnknownField(record, 'keyLearningPoints'), 'keyLearningPoint'),
-  );
-  const misconceptions = extractMisconceptions(
-    readUnknownField(record, 'misconceptionsAndCommonMistakes'),
-  );
-  const teacherTips = optionalStrings(
-    pluckStrings(readUnknownField(record, 'teacherTips'), 'teacherTip'),
-  );
-  const contentGuidance = normaliseContentGuidanceEntries(
-    readUnknownField(record, 'contentGuidance'),
-  );
-
   return {
-    lessonKeywords,
-    keyLearningPoints,
-    misconceptions,
-    teacherTips,
-    contentGuidance,
+    lessonKeywords: optionalStrings(
+      pluckStrings(readUnknownField(record, 'lessonKeywords'), 'keyword'),
+    ),
+    keyLearningPoints: optionalStrings(
+      pluckStrings(readUnknownField(record, 'keyLearningPoints'), 'keyLearningPoint'),
+    ),
+    misconceptions: extractMisconceptions(
+      readUnknownField(record, 'misconceptionsAndCommonMistakes'),
+    ),
+    teacherTips: optionalStrings(
+      pluckStrings(readUnknownField(record, 'teacherTips'), 'teacherTip'),
+    ),
+    contentGuidance: normaliseContentGuidanceEntries(readUnknownField(record, 'contentGuidance')),
   };
 }
 
@@ -149,6 +163,7 @@ export interface UnitSummaryIdentifiers {
   readonly canonicalUrl: string;
 }
 
+/** Resolves unit summary identifiers. */
 export function resolveUnitSummaryIdentifiers(summary: unknown): UnitSummaryIdentifiers {
   const record = ensureRecord(summary, 'unit summary');
   const unitSlug = requireStringField(record, 'unitSlug', 'unit summary slug');
@@ -167,6 +182,7 @@ export interface LessonSummaryIdentifiers {
   readonly canonicalUrl: string;
 }
 
+/** Resolves lesson summary identifiers. */
 export function resolveLessonSummaryIdentifiers(summary: unknown): LessonSummaryIdentifiers {
   const record = ensureRecord(summary, 'lesson summary');
   const unitSlug = requireStringField(record, 'unitSlug', 'lesson summary unit slug');
@@ -183,18 +199,22 @@ export function resolveLessonSummaryIdentifiers(summary: unknown): LessonSummary
   return { unitSlug, unitTitle, canonicalUrl };
 }
 
+/** Reads a value from unit summary. */
 export function readUnitSummaryValue(summary: unknown, key: string): unknown {
   return readUnknownField(ensureRecord(summary, 'unit summary'), key);
 }
 
+/** Reads a value from lesson summary. */
 export function readLessonSummaryValue(summary: unknown, key: string): unknown {
   return readUnknownField(ensureRecord(summary, 'lesson summary'), key);
 }
 
+/** Reads string from unit summary. */
 export function readUnitSummaryString(summary: unknown, key: string): string | undefined {
   return safeString(readUnitSummaryValue(summary, key));
 }
 
+/** Requires string from unit summary. */
 export function expectUnitSummaryString(summary: unknown, key: string, context: string): string {
   const value = readUnitSummaryString(summary, key);
   if (!value) {
@@ -203,10 +223,12 @@ export function expectUnitSummaryString(summary: unknown, key: string, context: 
   return value;
 }
 
+/** Reads string from lesson summary. */
 export function readLessonSummaryString(summary: unknown, key: string): string | undefined {
   return safeString(readLessonSummaryValue(summary, key));
 }
 
+/** Requires string from lesson summary. */
 export function expectLessonSummaryString(summary: unknown, key: string, context: string): string {
   const value = readLessonSummaryString(summary, key);
   if (!value) {
@@ -215,13 +237,7 @@ export function expectLessonSummaryString(summary: unknown, key: string, context
   return value;
 }
 
-// Re-export programme factor extractors from dedicated module
-export { extractTier, extractExamBoard, extractPathway } from './programme-factor-extractors';
-
-/**
- * Extracts all fields from lesson summary for document creation.
- * Helper to keep createLessonDocument under max-lines-per-function limit.
- */
+/** Extracts all fields from lesson summary for document creation. */
 export function extractLessonDocumentFields(summary: unknown) {
   const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
@@ -245,12 +261,7 @@ export function extractLessonDocumentFields(summary: unknown) {
   };
 }
 
-/**
- * Extracts all fields from unit summary for rollup document creation.
- * Helper to keep createRollupDocument under max-lines-per-function limit.
- *
- * Note: Imports normaliseYears from document-transforms to avoid circular dependency.
- */
+/** Extracts all fields from unit summary for rollup document creation. */
 export function extractRollupDocumentFields(
   summary: unknown,
   normaliseYears: (year: unknown, yearSlug: unknown) => string[] | undefined,

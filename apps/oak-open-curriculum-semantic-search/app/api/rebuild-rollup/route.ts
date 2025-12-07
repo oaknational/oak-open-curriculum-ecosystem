@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
+import { esClient } from '../../../src/lib/es-client';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
 import { isLessonSummary, isSearchUnitsIndexDoc, isUnitSummary } from '../../../src/types/oak';
@@ -123,5 +124,6 @@ async function rollupUnit(
     subject: unitDoc.subject_slug,
     keyStage: unitDoc.key_stage,
     subjectProgrammesUrl: unitDoc.subject_programmes_url,
+    esClient: esClient(),
   });
 }

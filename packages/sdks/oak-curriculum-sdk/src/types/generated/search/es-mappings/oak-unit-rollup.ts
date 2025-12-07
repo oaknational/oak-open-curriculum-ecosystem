@@ -142,6 +142,9 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       unit_dense_vector: {
         type: 'dense_vector',
       },
+      rollup_dense_vector: {
+        type: 'dense_vector',
+      },
       tier: {
         type: 'keyword',
       },

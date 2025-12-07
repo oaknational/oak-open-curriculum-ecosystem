@@ -166,6 +166,9 @@ export const OAK_LESSONS_MAPPING = {
       lesson_dense_vector: {
         type: 'dense_vector',
       },
+      title_dense_vector: {
+        type: 'dense_vector',
+      },
       tier: {
         type: 'keyword',
       },

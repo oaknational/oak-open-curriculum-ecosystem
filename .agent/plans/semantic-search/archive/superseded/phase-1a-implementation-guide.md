@@ -60,7 +60,7 @@ describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
       };
 
       const vector = await generateDenseVector(
-        mockEsClient as unknown as Client,
+        createMockEsClient({ inferenceResponse: { text_embedding: [Array(384).fill(0.1)] } }),
         'How do I teach Pythagoras theorem to Foundation tier?',
       );
 
@@ -78,7 +78,10 @@ describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
         },
       };
 
-      const vector = await generateDenseVector(mockEsClient as unknown as Client, 'test query');
+      const vector = await generateDenseVector(
+        createMockEsClient({ inferenceError: new Error('Inference failed') }),
+        'test query',
+      );
 
       expect(vector).toBeUndefined();
     });
@@ -90,7 +93,7 @@ describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
         },
       };
 
-      const vector = await generateDenseVector(mockEsClient as unknown as Client, '');
+      const vector = await generateDenseVector(createMockEsClient({}), '');
 
       expect(vector).toBeUndefined();
       expect(mockEsClient.inference.inference).not.toHaveBeenCalled();
@@ -214,15 +217,17 @@ export function prepareTextForEmbedding(params: { title: string; summary?: strin
 
 ```typescript
 // LESSONS_INDEX_FIELDS now includes:
-{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },      // 'foundation' | 'higher'
-{ name: 'exam_board', zodType: 'string', optional: true }, // 'aqa', 'edexcel', etc.
-{ name: 'pathway', zodType: 'string', optional: true },
+{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },       // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true }, // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },    // ES: keyword (faceting)
 
 // UNIT_ROLLUP_INDEX_FIELDS now includes:
-{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },
-{ name: 'exam_board', zodType: 'string', optional: true },
+{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },       // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true }, // ES: keyword (faceting)
+
+// Note: ES field overrides in es-field-overrides.ts map these to correct ES types
 ```
 
 6. **Verify ES field overrides** in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`:

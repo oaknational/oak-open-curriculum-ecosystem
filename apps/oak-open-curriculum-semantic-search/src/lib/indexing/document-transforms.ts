@@ -1,3 +1,12 @@
+/**
+ * Document transformation functions for Elasticsearch indexing.
+ *
+ * Creates unit, lesson, and rollup documents from Oak API data.
+ * Includes dense vector generation for three-way hybrid search.
+ *
+ * @module document-transforms
+ */
+
 import type { Client } from '@elastic/elasticsearch';
 import type {
   KeyStage,
@@ -7,16 +16,11 @@ import type {
   SearchUnitsIndexDoc,
 } from '../../types/oak';
 import {
-  extractLessonPlanningFields,
   extractSequenceIds,
   extractUnitLessons,
   extractUnitTopics,
   readUnitSummaryValue,
-  resolveLessonSummaryIdentifiers,
   resolveUnitSummaryIdentifiers,
-  extractTier,
-  extractExamBoard,
-  extractPathway,
   extractLessonDocumentFields,
   extractRollupDocumentFields,
   type UnitLessonInfo,
@@ -36,6 +40,7 @@ export interface CreateUnitDocumentParams {
   subjectProgrammesUrl: string;
 }
 
+/** Creates a unit document for Elasticsearch indexing. */
 export function createUnitDocument({
   summary,
   subject,
@@ -47,16 +52,12 @@ export function createUnitDocument({
     readUnitSummaryValue(summary, 'unitLessons'),
   );
   const lessonIds: string[] = unitLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics: string[] | undefined = extractUnitTopics(
-    readUnitSummaryValue(summary, 'categories'),
-  );
+  const unitTopics = extractUnitTopics(readUnitSummaryValue(summary, 'categories'));
   const years = normaliseYears(
     readUnitSummaryValue(summary, 'year'),
     readUnitSummaryValue(summary, 'yearSlug'),
   );
-  const sequenceIds: string[] | undefined = extractSequenceIds(
-    readUnitSummaryValue(summary, 'threads'),
-  );
+  const sequenceIds = extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
 
   return {
     unit_id: unitSlug,
@@ -73,11 +74,7 @@ export function createUnitDocument({
     sequence_ids: sequenceIds,
     title_suggest: {
       input: [unitTitle],
-      contexts: {
-        subject: [subject],
-        key_stage: [keyStage],
-        sequence: sequenceIds,
-      },
+      contexts: { subject: [subject], key_stage: [keyStage], sequence: sequenceIds },
     },
   };
 }
@@ -94,30 +91,7 @@ export interface CreateLessonDocumentParams {
   esClient: Client;
 }
 
-/**
- * Generates dense vectors for lesson and title text.
- * Helper to keep createLessonDocument under max-lines-per-function limit.
- */
-async function generateLessonVectors(
-  esClient: Client,
-  transcript: string,
-  title: string,
-): Promise<{ lessonVector?: number[]; titleVector?: number[] }> {
-  const lessonVector = await generateDenseVector(esClient, transcript);
-  const titleVector = await generateDenseVector(esClient, title);
-  return { lessonVector, titleVector };
-}
-
-/**
- * Creates a lesson document for Elasticsearch indexing.
- *
- * Generates dense vector embeddings using the E5 inference endpoint.
- * Extracts tier, exam_board, and pathway from programme factors for KS4/GCSE content.
- *
- * Note: Lessons use subject + key_stage completion contexts only.
- * Sequence context is NOT included - it's a unit-level concept.
- * This aligns with LESSONS_COMPLETION_CONTEXTS in the SDK.
- */
+/** Creates a lesson document for Elasticsearch indexing with dense vectors. */
 export async function createLessonDocument({
   lesson,
   transcript,
@@ -129,11 +103,11 @@ export async function createLessonDocument({
   lessonCount,
   esClient,
 }: CreateLessonDocumentParams): Promise<SearchLessonsIndexDoc> {
-  const fields = extractLessonFields(summary);
-
-  // Generate dense vectors for three-way hybrid search
-  const { lessonVector: lessonDenseVector, titleVector: titleDenseVector } =
-    await generateLessonVectors(esClient, transcript, lesson.lessonTitle);
+  const fields = extractLessonDocumentFields(summary);
+  const [lessonDenseVector, titleDenseVector] = await Promise.all([
+    generateDenseVector(esClient, transcript),
+    generateDenseVector(esClient, lesson.lessonTitle),
+  ]);
 
   return {
     lesson_id: lesson.lessonSlug,
@@ -160,10 +134,7 @@ export async function createLessonDocument({
     title_dense_vector: titleDenseVector,
     title_suggest: {
       input: [lesson.lessonTitle],
-      contexts: {
-        subject: [subject],
-        key_stage: [keyStage],
-      },
+      contexts: { subject: [subject], key_stage: [keyStage] },
     },
   };
 }
@@ -177,62 +148,7 @@ export interface CreateRollupDocumentParams {
   esClient: Client;
 }
 
-/**
- * Extracts all fields from unit summary for rollup document creation.
- * Helper to keep createRollupDocument under max-lines-per-function limit.
- */
-function extractRollupFields(summary: unknown) {
-  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
-  const rollupLessons: UnitLessonInfo[] = extractUnitLessons(
-    readUnitSummaryValue(summary, 'unitLessons'),
-  );
-  const lessonIds = rollupLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics: string[] | undefined = extractUnitTopics(
-    readUnitSummaryValue(summary, 'categories'),
-  );
-  const years = normaliseYears(
-    readUnitSummaryValue(summary, 'year'),
-    readUnitSummaryValue(summary, 'yearSlug'),
-  );
-  const sequenceIds: string[] | undefined = extractSequenceIds(
-    readUnitSummaryValue(summary, 'threads'),
-  );
-  const tier = extractTier(summary);
-  const examBoard = extractExamBoard(summary);
-
-  return {
-    unitSlug,
-    unitTitle,
-    canonicalUrl,
-    lessonIds,
-    unitTopics,
-    years,
-    sequenceIds,
-    tier,
-    examBoard,
-  };
-}
-
-/**
- * Generates dense vectors for unit rollup text and title.
- * Helper to keep createRollupDocument under max-lines-per-function limit.
- */
-async function generateRollupVectors(
-  esClient: Client,
-  rollupText: string,
-  unitTitle: string,
-): Promise<{ unitVector?: number[]; rollupVector?: number[] }> {
-  const unitVector = await generateDenseVector(esClient, rollupText);
-  const rollupVector = await generateDenseVector(esClient, unitTitle);
-  return { unitVector, rollupVector };
-}
-
-/**
- * Creates a rollup document for Elasticsearch indexing.
- *
- * Generates dense vector embeddings for unit-level content.
- * Extracts tier and exam_board from programme factors for KS4/GCSE content.
- */
+/** Creates a rollup document for Elasticsearch indexing with dense vectors. */
 export async function createRollupDocument({
   summary,
   snippets,
@@ -241,12 +157,12 @@ export async function createRollupDocument({
   subjectProgrammesUrl,
   esClient,
 }: CreateRollupDocumentParams): Promise<SearchUnitRollupDoc> {
-  const fields = extractRollupFields(summary);
+  const fields = extractRollupDocumentFields(summary, normaliseYears);
   const rollupText = snippets.join('\n\n');
-
-  // Generate dense vectors for three-way hybrid search
-  const { unitVector: unitDenseVector, rollupVector: rollupDenseVector } =
-    await generateRollupVectors(esClient, rollupText, fields.unitTitle);
+  const [unitDenseVector, rollupDenseVector] = await Promise.all([
+    generateDenseVector(esClient, rollupText),
+    generateDenseVector(esClient, fields.unitTitle),
+  ]);
 
   return {
     unit_id: fields.unitSlug,
@@ -270,6 +186,7 @@ export async function createRollupDocument({
   };
 }
 
+/** Normalises year values to string array. */
 export function normaliseYears(year: unknown, yearSlug: unknown): string[] | undefined {
   if (typeof year === 'number' || typeof year === 'string') {
     return [String(year)];
@@ -280,9 +197,9 @@ export function normaliseYears(year: unknown, yearSlug: unknown): string[] | und
   return undefined;
 }
 
+/** Extracts a passage from text. */
 export function extractPassage(text: string): string {
   const cleaned = text.replace(/\s+/g, ' ').trim();
   const sentences = cleaned.split(/(?<=[.!?])\s+/u);
-  const pick = sentences.slice(0, 2).join(' ');
-  return pick.slice(0, 300);
+  return sentences.slice(0, 2).join(' ').slice(0, 300);
 }

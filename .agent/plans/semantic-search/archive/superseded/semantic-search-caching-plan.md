@@ -82,14 +82,16 @@ Related plans: `semantic-search-api-plan.md`, `semantic-search-ui-plan.md`, `sem
 ```ts
 // cache-key.ts
 import { createHash } from 'node:crypto';
+import type { SearchRequest } from './search-types.js';
 
-export function normalisePayload<T extends Record<string, unknown>>(payload: T): T {
+export function normalisePayload(payload: SearchRequest): SearchRequest {
   // Deterministically sort keys; ensure defaults are present before hashing.
   // Implementation must be pure for testing.
+  // Note: Use specific types from search-types.ts, not generic Record
   return payload;
 }
 
-export function makeCacheKey(payload: unknown, indexVersion: string): string {
+export function makeCacheKey(payload: SearchRequest, indexVersion: string): string {
   const json = JSON.stringify(payload);
   const hash = createHash('sha256').update(json).digest('hex');
   return `${indexVersion}|${hash}`;

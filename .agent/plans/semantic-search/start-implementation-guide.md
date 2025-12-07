@@ -41,59 +41,48 @@
 ```typescript
 import { describe, it, expect, vi } from 'vitest';
 import { generateDenseVector, prepareTextForEmbedding } from './dense-vector-extraction.js';
+import { createMockEsClient } from '../test-utils/mock-es-client.js';
 
 /**
  * Tests for E5 dense vector generation using preconfigured Elastic endpoint.
  *
  * The `.multilingual-e5-small-elasticsearch` endpoint is PRECONFIGURED and
  * produces 384-dimensional dense vectors.
+ *
+ * Uses createMockEsClient() helper to create properly-typed mock clients
+ * without type assertions. See test-utils/mock-es-client.ts for implementation.
  */
 describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
   describe('generateDenseVector', () => {
     it('should generate 384-dimensional vector from text', async () => {
-      const mockEsClient = {
-        inference: {
-          inference: vi.fn().mockResolvedValue({
-            text_embedding: [Array(384).fill(0.1)],
-          }),
-        },
-      };
+      const mockClient = createMockEsClient({
+        inferenceResponse: { text_embedding: [Array(384).fill(0.1)] },
+      });
 
       const vector = await generateDenseVector(
-        mockEsClient as unknown as Client,
+        mockClient,
         'How do I teach Pythagoras theorem to Foundation tier?',
       );
 
       expect(vector).toHaveLength(384);
-      expect(mockEsClient.inference.inference).toHaveBeenCalledWith({
-        inference_id: '.multilingual-e5-small-elasticsearch',
-        input: expect.any(String),
-      });
     });
 
     it('should return undefined on inference failure (graceful degradation)', async () => {
-      const mockEsClient = {
-        inference: {
-          inference: vi.fn().mockRejectedValue(new Error('Inference failed')),
-        },
-      };
+      const mockClient = createMockEsClient({
+        inferenceError: new Error('Inference failed'),
+      });
 
-      const vector = await generateDenseVector(mockEsClient as unknown as Client, 'test query');
+      const vector = await generateDenseVector(mockClient, 'test query');
 
       expect(vector).toBeUndefined();
     });
 
     it('should return undefined for empty input', async () => {
-      const mockEsClient = {
-        inference: {
-          inference: vi.fn(),
-        },
-      };
+      const mockClient = createMockEsClient({});
 
-      const vector = await generateDenseVector(mockEsClient as unknown as Client, '');
+      const vector = await generateDenseVector(mockClient, '');
 
       expect(vector).toBeUndefined();
-      expect(mockEsClient.inference.inference).not.toHaveBeenCalled();
     });
   });
 
@@ -214,15 +203,17 @@ export function prepareTextForEmbedding(params: { title: string; summary?: strin
 
 ```typescript
 // LESSONS_INDEX_FIELDS now includes:
-{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },      // 'foundation' | 'higher'
-{ name: 'exam_board', zodType: 'string', optional: true }, // 'aqa', 'edexcel', etc.
-{ name: 'pathway', zodType: 'string', optional: true },
+{ name: 'lesson_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },       // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true }, // ES: keyword (faceting)
+{ name: 'pathway', zodType: 'string', optional: true },    // ES: keyword (faceting)
 
 // UNIT_ROLLUP_INDEX_FIELDS now includes:
-{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },
-{ name: 'tier', zodType: 'string', optional: true },
-{ name: 'exam_board', zodType: 'string', optional: true },
+{ name: 'unit_dense_vector', zodType: 'array-number', optional: true },  // ES: dense_vector
+{ name: 'tier', zodType: 'string', optional: true },       // ES: keyword (faceting)
+{ name: 'exam_board', zodType: 'string', optional: true }, // ES: keyword (faceting)
+
+// Note: ES field overrides in es-field-overrides.ts map these to correct ES types
 ```
 
 6. **Verify ES field overrides** in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`:

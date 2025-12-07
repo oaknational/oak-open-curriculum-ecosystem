@@ -770,8 +770,11 @@ Following Oak's accessibility standards and WCAG 2.1 Level AA.
 test('Search page has no accessibility violations', async ({ page }) => {
   await page.goto('/');
 
-  const results = await page.evaluate(() => {
-    return (window as any).axe.run();
+  // Inject and run axe-core for accessibility testing
+  const results = await page.evaluate(async () => {
+    // axe-core is injected via test setup, returns AxeResults
+    const axe = await import('axe-core');
+    return axe.run();
   });
 
   expect(results.violations).toHaveLength(0);
@@ -980,9 +983,10 @@ test('Search page should have no axe violations', async ({ page }) => {
     url: 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.8.0/axe.min.js',
   });
 
-  // Run axe
-  const results = await page.evaluate(() => {
-    return (window as any).axe.run();
+  // Run axe-core accessibility check
+  const results = await page.evaluate(async () => {
+    const axe = await import('axe-core');
+    return axe.run();
   });
 
   // Assert no violations

@@ -1,8 +1,8 @@
-# Curriculum Vocabulary Integration - Checkpoint
+# Phase 1A Checkpoint - Quality Gates Blocking
 
-**Date**: 2025-12-07  
-**Status**: Implementation started, quality gates failing  
-**Context**: Quick win enhancement discovered during KS4 Maths vertical slice planning
+**Date**: 2025-12-08  
+**Status**: ⚠️ BLOCKED - Quality gates failing (3 linting errors)  
+**Context**: Phase 1A implementation complete, needs linting fixes before proceeding
 
 ## What Was Done
 
@@ -93,22 +93,13 @@ src/lib/hybrid-search/rrf-query-builders.unit.test.ts
 2. Document why (dense vector generation added fields/logic, will refactor in Phase 1C)
 3. Run full quality gate suite
 
-**Recommendation**: Option B. The files are long because of dense vector integration (Phase 1A work). Natural refactor point is Phase 1C when we add nested keyword storage.
+**Recommendation**: Option A (refactor) is cleaner, but Option B (eslint-disable) is faster.
 
-### Next (Continue Phase 1A)
+### After Fixing Quality Gates
 
-From `maths-ks4-implementation-plan.md`:
-
-1. **Update document transforms to use `prepareTextForEmbedding()`**:
-   - Modify `createLessonDocument()` to pass `keywords` to embedding function
-   - Modify `createRollupDocument()` similarly
-   - Add integration test verifying keyword definitions are included
-
-2. **Phase 1A.5: E2E test for three-way hybrid** (requires Phase 1C ingestion first):
-   - Write E2E test comparing two-way vs three-way MRR scores
-   - Defer until after Phase 1C (needs indexed data)
-
-3. **Move to Phase 1B**: Elastic Native ReRank implementation
+1. **Run full quality gate suite** to confirm all gates pass
+2. **Move to Phase 1B**: Elastic Native ReRank implementation
+3. **Phase 1C**: Ingest Maths KS4 data (enables E2E testing)
 
 ## Key Insights
 
