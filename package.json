@@ -21,7 +21,7 @@
     "smoke:dev:stub": "LOG_LEVEL=debug turbo run smoke:dev:stub",
     "smoke:dev:live": "LOG_LEVEL=debug turbo run smoke:dev:live",
     "smoke:dev:live:auth": "LOG_LEVEL=debug turbo run smoke:dev:live:auth",
-    "test:all": "turbo run test test:e2e test:e2e:built test:ui smoke:dev:stub",
+    "test:all": "pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub",
     "smoke:remote": "LOG_LEVEL=debug turbo run smoke:remote",
     "type-check": "turbo run --continue type-check",
     "format:root": "prettier --write --cache .",

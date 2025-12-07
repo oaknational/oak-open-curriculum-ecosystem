@@ -38,7 +38,24 @@ Before any work, read and internalize:
 
 ---
 
-## Recent Major Milestone 🎉
+## Recent Major Milestones 🎉
+
+### API Rate Limiting & Monitoring COMPLETE (2025-12-07)
+
+**Problem Solved**: Discovered and resolved API rate limiting issues blocking systematic ingestion.
+
+**What Was Fixed**:
+
+- ✅ Implemented comprehensive rate limit tracking middleware
+- ✅ Added singleton client pattern to ensure shared rate limiting state
+- ✅ Created real-time monitoring with warnings at 75% and 90% quota usage
+- ✅ Discovered Oak API has **1000 requests/hour limit** via `get-rate-limit` endpoint
+- ✅ Test ingestion (Art KS1) completed: 159 requests, 0 failures, 2.08 req/sec
+- ✅ All 867 SDK tests passing with fake timers (no real delays in tests)
+
+**Impact**: Full ingestion now viable but takes **17-24 hours** due to API rate limit (not our throttling). Need to contact API team for higher limit or run overnight.
+
+**Documentation**: See ADR-070, `.agent/analysis/api-rate-limit-investigation.md`, `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md`
 
 ### Mapping Remediation COMPLETE (2025-12-06)
 
@@ -325,9 +342,34 @@ pnpm test:ui && pnpm smoke:dev:stub
 
 ## Immediate Next Steps
 
-### Step 1: Run Systematic Full Ingestion 🚀
+### Step 1: Address API Rate Limit ⚠️
 
-All blocking issues resolved! Ready to ingest all 340 combinations:
+**Current Situation**: Oak API has **1000 requests/hour limit**, discovered 2025-12-07.
+
+**Impact**: Full ingestion of 340 combinations requires 17,000-68,000 requests = **17-24 hours minimum**
+
+**Three Options**:
+
+1. **Request API Rate Limit Increase** ⭐ RECOMMENDED
+   - Contact Oak API team with usage data (see `.agent/analysis/api-rate-limit-investigation.md`)
+   - Request 5,000-10,000 req/hour for bulk operations
+   - Would reduce ingestion time to 3-4 hours
+
+2. **Run Overnight Local Ingestion**
+   - Execute `pnpm ingest:all` and let run for 20-24 hours
+   - Safe to interrupt and resume with Ctrl+C
+   - Progress tracked in `.ingest-progress.json`
+   - Real-time monitoring shows quota usage
+
+3. **Future: Migrate to Vercel Function**
+   - Design incremental ingestion (one combination per hour)
+   - Queue-based architecture
+   - Automated re-ingestion on schedule
+   - See `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md`
+
+### Step 2: Run Systematic Full Ingestion
+
+**Prerequisites**: ✅ All blocking issues resolved, SDK ready
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -338,6 +380,9 @@ pnpm ingest:progress
 # Start systematic ingestion (all 340 combinations)
 pnpm ingest:all
 
+# Monitor in another terminal
+watch -n 30 'pnpm ingest:progress'
+
 # Or preview what would be ingested
 pnpm ingest:all --dry-run
 ```
@@ -347,14 +392,18 @@ pnpm ingest:all --dry-run
 - Processes all 17 subjects × 4 keystages × 5 indexes = 340 combinations
 - Tracks progress in `.ingest-progress.json`
 - Can be safely interrupted (Ctrl+C) and resumed with `pnpm ingest:all --resume`
-- Estimated time: 3-11 hours total (30-120 seconds per combination)
+- **Realistic time**: 17-24 hours due to API rate limit (not our code)
 - Individual failures don't stop the entire process
+- Real-time monitoring logs quota usage every 30s
 
-**Progress Tracking**:
+**Progress Tracking & Monitoring**:
 
 ```bash
-# Monitor ingestion progress
+# Monitor ingestion progress (ES state + progress file)
 pnpm ingest:progress
+
+# Monitor continuously (every 30 seconds)
+watch -n 30 'pnpm ingest:progress'
 
 # View detailed progress file
 cat .ingest-progress.json
@@ -365,6 +414,14 @@ pnpm ingest:all --resume
 # Reset and start fresh
 pnpm ingest:all --reset
 ```
+
+**Rate Limit Monitoring** (automatic during ingestion):
+
+- Logs API quota status every 30 seconds
+- Warns at 75% quota usage
+- Critical warning at 90% quota usage
+- Shows: requests/sec, quota remaining, reset time
+- Example: `{"requests":{"count":159,"rate":"2.08/sec"},"rateLimit":{"remaining":329,"limit":1000}}`
 
 ### Step 2: Alternative - Manual Selective Ingestion
 
@@ -533,20 +590,24 @@ After re-ingestion, the semantic search system continues with these phases:
 
 ## Documentation Links
 
-| Topic                           | Location                                                                                    |
-| ------------------------------- | ------------------------------------------------------------------------------------------- |
-| **Planning Hub**                | `.agent/plans/semantic-search/index.md` ⭐ START HERE                                       |
-| Phase roadmap                   | `.agent/plans/semantic-search/semantic-search-overview.md`                                  |
-| Mapping remediation (COMPLETED) | `.agent/plans/semantic-search/mapping-remediation.md`                                       |
-| Reference indices plan          | `.agent/plans/semantic-search/reference-indices-plan.md`                                    |
-| Entity discovery pipeline       | `.agent/plans/semantic-search/entity-discovery-pipeline.md`                                 |
-| Graph RAG vision                | `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`                          |
-| Systematic ingestion guide      | `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`                     |
-| SDK caching                     | `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`                              |
-| Discovery analysis              | `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`                     |
-| ADR-067 (ES mappings)           | `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md`     |
-| ADR-068 (completion contexts)   | `docs/architecture/architectural-decisions/068-per-index-completion-context-enforcement.md` |
-| ADR-069 (systematic ingestion)  | `docs/architecture/architectural-decisions/069-systematic-ingestion-progress-tracking.md`   |
+| Topic                               | Location                                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Planning Hub**                    | `.agent/plans/semantic-search/index.md` ⭐ START HERE                                       |
+| Phase roadmap                       | `.agent/plans/semantic-search/semantic-search-overview.md`                                  |
+| **API rate limit resolution**       | `.agent/plans/semantic-search/api-rate-limit-resolution-plan.md` ⭐ CURRENT                 |
+| Mapping remediation (COMPLETED)     | `.agent/plans/semantic-search/mapping-remediation.md`                                       |
+| Reference indices plan              | `.agent/plans/semantic-search/reference-indices-plan.md`                                    |
+| Entity discovery pipeline           | `.agent/plans/semantic-search/entity-discovery-pipeline.md`                                 |
+| Graph RAG vision                    | `.agent/research/elasticsearch/ai/graph-rag-integration-vision.md`                          |
+| Systematic ingestion guide          | `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`                     |
+| SDK caching                         | `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`                              |
+| **API rate limit investigation**    | `.agent/analysis/api-rate-limit-investigation.md` ⭐ NEW                                    |
+| **Vercel migration considerations** | `.agent/analysis/vercel-ingestion-migration-considerations.md` ⭐ NEW                       |
+| Discovery analysis                  | `.agent/analysis/semantic-search-compliance-and-ingestion-discovery.md`                     |
+| ADR-067 (ES mappings)               | `docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md`     |
+| ADR-068 (completion contexts)       | `docs/architecture/architectural-decisions/068-per-index-completion-context-enforcement.md` |
+| ADR-069 (systematic ingestion)      | `docs/architecture/architectural-decisions/069-systematic-ingestion-progress-tracking.md`   |
+| **ADR-070 (rate limiting/retry)**   | `docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md` ⭐ NEW       |
 
 ---
 

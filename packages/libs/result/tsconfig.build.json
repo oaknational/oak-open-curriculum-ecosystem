@@ -9,4 +9,3 @@
   "include": ["src/**/*.ts"],
   "exclude": ["**/*.test.ts", "**/*.integration.test.ts", "node_modules", "dist"]
 }
-

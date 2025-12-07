@@ -185,10 +185,12 @@ Not all 340 combinations will have data. Some subject/keystage pairs simply don'
 Failures may occur due to:
 
 - **Mapping mismatches** (the reason this script was created!)
-- **Network timeouts**
-- **API rate limits**
+- **Network timeouts** (prolonged connectivity issues)
 - **Memory issues** (large datasets)
 - **Schema validation errors**
+- **Persistent API errors** (500, 502, 504)
+
+**Note**: 429 (rate limit) errors are now automatically handled by the SDK with exponential backoff retry logic, so you should not see these failures anymore.
 
 Failed combinations are tracked in the progress file for later analysis.
 
@@ -240,10 +242,45 @@ pnpm es:setup
 pnpm ingest:all
 ```
 
+## Rate Limiting and Retry Behavior
+
+The SDK now includes automatic rate limiting and retry logic to handle API rate limits gracefully:
+
+### Automatic Rate Limiting
+
+- **Default**: 10 requests per second (100ms minimum interval between requests)
+- **Purpose**: Prevents overwhelming the Oak API with too many requests
+- **Effect on Performance**: Ingestion may take slightly longer, but prevents 429 errors
+
+### Automatic Retry with Exponential Backoff
+
+- **Default**: Up to 3 retry attempts
+- **Backoff Delays**: 1 second, 2 seconds, 4 seconds (exponential)
+- **Retryable Errors**: 429 (rate limit) and 503 (service unavailable)
+- **Effect**: Transient failures are automatically retried without manual intervention
+
+### What This Means for Ingestion
+
+- **No 429 Errors**: The SDK automatically handles rate limits
+- **Longer Runtime**: Ingestion takes longer due to rate limiting and retries
+- **More Reliable**: Transient failures are handled automatically
+- **No Manual Intervention**: You don't need to manually retry failed combinations due to rate limits
+
+### Monitoring Retry Behavior
+
+The SDK logs retry attempts. Watch for messages like:
+
+```text
+Retrying request after rate limit (attempt 0/3, next delay: 1000ms)
+```
+
+If you see many retries, the API may be experiencing heavy load or rate limits may need adjustment.
+
 ## Performance
 
 - **Single combination**: ~30-120 seconds (varies by data size)
 - **Total runtime**: ~3-11 hours for all 340 combinations (estimated)
+  - **Note**: With rate limiting enabled, runtime may be longer but more reliable
 - **Memory usage**: ~500MB-2GB per combination
 - **Network**: Moderate (uses SDK caching if enabled)
 

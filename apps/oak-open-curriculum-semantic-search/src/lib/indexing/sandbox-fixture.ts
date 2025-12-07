@@ -27,6 +27,21 @@ function createFixtureClient(data: FixtureData): OakClient {
     getLessonSummary: makeFixtureLessonSummaryFn(data),
     getUnitSummary: makeFixtureUnitSummaryFn(data),
     getSubjectSequences: makeFixtureSubjectSequencesFn(data),
+    rateLimitTracker: {
+      getStatus: () => ({
+        limit: null,
+        remaining: null,
+        reset: null,
+        resetDate: null,
+        lastChecked: new Date(),
+      }),
+      getRequestCount: () => 0,
+      getRequestRate: () => 0,
+      reset: () => {
+        // No-op for fixture client - no state to reset
+        return;
+      },
+    },
     getSequenceUnits: makeFixtureSequenceUnitsFn(data),
   };
 }

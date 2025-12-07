@@ -1,7 +1,5 @@
 # Oak Curriculum SDK — API (Markdown)
 
-## Contents
-
 ## Quickstart
 
 ```ts

@@ -303,4 +303,3 @@ This is distinct from E2E tests (coming in Tasks 2.7.7-2.7.8) which will validat
 - [ADR-053: Clerk as Identity Provider](053-clerk-as-identity-provider.md) - Auth provider choice
 - [ADR-002: Pure Functions First](002-pure-functions-first.md) - Design principle (error detection as pure functions)
 - [ADR-034: System Boundaries and Type Assertions](034-system-boundaries-and-type-assertions.md) - Type safety at boundaries
-

@@ -130,4 +130,3 @@ export function transformEndpoint(endpoint: RawEndpoint): EndpointDefinition {
     parameters: parameters && parameters.length > 0 ? parameters : undefined,
   };
 }
-

@@ -652,4 +652,3 @@ Per project rules, regularly re-read during implementation:
 Ask at each phase: **Could it be simpler without compromising quality?**
 
 **Important**: Measure latency after Plan 15a before implementing this plan. YAGNI applies.
-

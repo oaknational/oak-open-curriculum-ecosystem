@@ -1,7 +1,12 @@
 import type { KeyStage, SearchSubjectSlug, SearchSubjectSequences } from '../types/oak';
 import { isLessonSummary, isUnitSummary, isSubjectSequences } from '../types/oak';
 import { env } from '../lib/env';
-import { createOakClient, type OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import {
+  createOakBaseClient,
+  type OakApiClient,
+  type OakClientConfig,
+  type RateLimitTracker,
+} from '@oaknational/oak-curriculum-sdk';
 import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guards';
 
 /**
@@ -177,13 +182,50 @@ export interface OakSdkClient {
   getSubjectSequences: GetSubjectSequencesFn;
   /** Get units associated with a sequence. */
   getSequenceUnits: GetSequenceUnitsFn;
+  /** Rate limit tracker for monitoring API usage. */
+  rateLimitTracker: RateLimitTracker;
 }
 
-/** SDK-backed client (preferred). */
+/**
+ * SDK-backed client (preferred).
+ *
+ * Configures rate limiting and retry logic to handle API rate limits gracefully.
+ * Default configuration:
+ * - Rate limit: 5 requests/second (200ms minimum interval) - conservative to avoid rate limits
+ * - Retry: Up to 5 attempts with exponential backoff (1s, 2s, 4s, 8s, 16s) - total ~31s max wait
+ * - Automatically retries 429 (rate limit) and 503 (service unavailable) errors
+ *
+ * NOTE: Returns a singleton instance to ensure rate limiting state is shared across the entire app.
+ */
+let _singletonClient: OakSdkClient | null = null;
+
 export function createOakSdkClient(): OakSdkClient {
+  // Return existing instance if already created
+  if (_singletonClient) {
+    return _singletonClient;
+  }
+
   const { OAK_EFFECTIVE_KEY } = env();
-  const client = createOakClient(OAK_EFFECTIVE_KEY);
-  return {
+
+  // Configure rate limiting and retry to handle API rate limits
+  const config: OakClientConfig = {
+    apiKey: OAK_EFFECTIVE_KEY,
+    rateLimit: {
+      enabled: true,
+      minRequestInterval: 200, // 5 req/sec - conservative to avoid rate limits
+    },
+    retry: {
+      enabled: true,
+      maxRetries: 5, // Retry up to 5 times (1s, 2s, 4s, 8s, 16s)
+      initialDelayMs: 1000, // Start with 1s delay, exponential backoff
+    },
+  };
+
+  // Create base client to access both the API client and the rate limit tracker
+  const baseClient = createOakBaseClient(config);
+  const client = baseClient.client;
+
+  _singletonClient = {
     getUnitsByKeyStageAndSubject: makeGetUnitsByKeyStageAndSubject(client),
     getLessonsByKeyStageAndSubject: makeGetLessonsByKeyStageAndSubject(client),
     getLessonTranscript: makeGetLessonTranscript(client),
@@ -191,7 +233,10 @@ export function createOakSdkClient(): OakSdkClient {
     getUnitSummary: makeGetUnitSummary(client),
     getSubjectSequences: makeGetSubjectSequences(client),
     getSequenceUnits: makeGetSequenceUnits(client),
+    rateLimitTracker: baseClient.rateLimitTracker,
   };
+
+  return _singletonClient;
 }
 
 export type OakClient = ReturnType<typeof createOakSdkClient>;

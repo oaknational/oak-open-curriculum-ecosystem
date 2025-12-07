@@ -59,4 +59,3 @@ export function getDataIntegritySummary(report: DataIntegrityReport): {
     affectedKeyStages,
   };
 }
-

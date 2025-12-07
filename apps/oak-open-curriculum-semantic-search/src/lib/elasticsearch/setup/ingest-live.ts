@@ -108,6 +108,16 @@ async function runIngestion(args: CliArgs): Promise<void> {
 
   const client = await createIngestionClient();
 
+  // Start rate limit monitoring
+  const { logRateLimitStatus, startRateLimitMonitoring } =
+    await import('../../rate-limit-logger.js');
+
+  // Log initial rate limit status
+  logRateLimitStatus(client.rateLimitTracker);
+
+  // Start periodic monitoring (every 30 seconds)
+  const stopMonitoring = startRateLimitMonitoring(client.rateLimitTracker, 30000);
+
   try {
     sandboxLogger.debug('Creating ingestion harness', {
       subjects: args.subjects,
@@ -129,8 +139,13 @@ async function runIngestion(args: CliArgs): Promise<void> {
     printSummary(result, duration);
     printCacheStats(client);
 
+    // Log final rate limit status
+    sandboxLogger.info('Final API usage statistics');
+    logRateLimitStatus(client.rateLimitTracker);
+
     await handlePostIngestion(args, result, duration);
   } finally {
+    stopMonitoring();
     await client.disconnect();
   }
 }

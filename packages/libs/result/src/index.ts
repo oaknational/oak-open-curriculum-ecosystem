@@ -217,4 +217,3 @@ export function unwrapOr<T, E>(result: Result<T, E>, defaultValue: T): T {
 export function unwrapOrElse<T, E>(result: Result<T, E>, fn: (error: E) => T): T {
   return result.ok ? result.value : fn(result.error);
 }
-

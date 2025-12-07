@@ -161,6 +161,7 @@ function createCachedClientWrapper(
       stats,
       { transcript: '', vtt: '' }, // Fallback for 404s (no video/transcript)
     ),
+    rateLimitTracker: baseClient.rateLimitTracker,
     getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),
     disconnect: async () => {
       await redis.quit();

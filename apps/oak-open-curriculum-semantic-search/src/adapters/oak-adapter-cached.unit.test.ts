@@ -32,6 +32,21 @@ describe('CachedOakClient interface', () => {
       getUnitSummary: async () => ({}),
       getLessonSummary: async () => ({}),
       getLessonTranscript: async () => ({ transcript: '', vtt: '' }),
+      rateLimitTracker: {
+        getStatus: () => ({
+          limit: null,
+          remaining: null,
+          reset: null,
+          resetDate: null,
+          lastChecked: new Date(),
+        }),
+        getRequestCount: () => 0,
+        getRequestRate: () => 0,
+        reset: () => {
+          // No-op for test mock - no state to reset
+          return;
+        },
+      },
       getSubjectSequences: async () => [],
       getSequenceUnits: async () => [],
       getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),

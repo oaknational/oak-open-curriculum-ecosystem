@@ -23,8 +23,13 @@
 // Client Factories
 // ============================================================================
 
-export { createOakClient, createOakPathBasedClient } from './client/index.js';
-export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
+export {
+  createOakClient,
+  createOakPathBasedClient,
+  createOakBaseClient,
+  BaseApiClient,
+} from './client/index.js';
+export type { OakApiClient, OakApiPathBasedClient, OakClientConfig } from './client/index.js';
 
 /** @deprecated Use createOakClient instead */
 export { createOakClient as createApiClient } from './client/index.js';
@@ -50,6 +55,13 @@ export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './typ
 // ============================================================================
 
 export { apiUrl, apiSchemaUrl } from './config/index.js';
+
+// Rate limiting and retry configuration
+export type { RateLimitConfig } from './config/rate-limit-config.js';
+export type { RetryConfig } from './config/retry-config.js';
+export type { RateLimitTracker, RateLimitInfo } from './client/middleware/rate-limit-tracker.js';
+export { DEFAULT_RATE_LIMIT_CONFIG } from './config/rate-limit-config.js';
+export { DEFAULT_RETRY_CONFIG } from './config/retry-config.js';
 
 // ============================================================================
 // Path Parameters and Type Guards

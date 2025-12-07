@@ -6,4 +6,3 @@
   "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
-
