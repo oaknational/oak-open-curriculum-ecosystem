@@ -50,7 +50,7 @@ export const MY_NEW_INDEX_FIELD_OVERRIDES = {
 
 ```typescript
 import { MY_NEW_INDEX_FIELDS } from './field-definitions/index.js';
-import { MY_NEW_INDEX_FIELD_OVERRIDES } from './es-field-overrides.js';
+import { MY_NEW_INDEX_FIELD_OVERRIDES } from './es-field-overrides/index.js';
 
 export function createMyNewIndexMappingModule(): string {
   const fields = generateEsFieldsFromDefinitions(MY_NEW_INDEX_FIELDS, MY_NEW_INDEX_FIELD_OVERRIDES);

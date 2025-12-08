@@ -25,7 +25,8 @@ We achieve this by ensuring that ALL static data structures, types, type guards,
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
 - **Handle All Cases Explicitly** - Prefer `Result<T, E>` over exceptions, and handle all cases explicitly.
-- **TSDoc everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have exhaustive, comprehensive in-file TSDoc documentation that can be compiled by `typedoc` to generate public documentation. All public API surfaces MUST be documented with examples and usage patterns.
+- **Document Everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have exhaustive, comprehensive TSDoc annotations that can be compiled by `typedoc`. All public API surfaces MUST be documented with examples and usage patterns. All major engineering or architectural decisions MUST be documented with ADRs. All use cases, public APIs, CLIs, troubleshooting and other concerns must be covered in authored markdown documentation in the appropriate directories, default to the README.md for the current workspace. Observe progressive disclosure, starting with the most general information and working towards the most specific. DO NOT create summary documents of each piece of work.
+- **Onboarding** - We must have a clear onboarding path for new developers and AI agents, from the root README.md, to detailed documentation in the appropriate directories, to specialised documentation in the docs/ directory, to TSDoc annotations and ADRs. Observe progressive disclosure, starting with the most general information and working towards the most specific.
 
 ### Refactoring
 

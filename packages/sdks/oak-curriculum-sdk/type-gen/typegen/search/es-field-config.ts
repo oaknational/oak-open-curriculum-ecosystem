@@ -18,7 +18,7 @@ export {
   SEQUENCES_FIELD_OVERRIDES,
   SEQUENCE_FACETS_FIELD_OVERRIDES,
   META_FIELD_OVERRIDES,
-} from './es-field-overrides.js';
+} from './es-field-overrides/index.js';
 
 // Re-export analyzer config from separate module
 export {

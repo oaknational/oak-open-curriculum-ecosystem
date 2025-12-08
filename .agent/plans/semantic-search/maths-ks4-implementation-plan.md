@@ -727,7 +727,10 @@ export async function threeWayHybridSearch(
 
 1. **Unit tests**: 20+ tests for extraction functions
 2. **Integration tests**: 5+ tests for document transforms with new fields
-3. **E2E test**: 1 test for three-way hybrid query returning better results than two-way
+3. **E2E tests**:
+   - Baseline metrics with two-way hybrid (BM25 + ELSER)
+   - Three-way hybrid metrics (BM25 + ELSER + dense vectors)
+   - Comparison documented in ADR
 
 ### Documentation to Create
 
@@ -742,7 +745,9 @@ export async function threeWayHybridSearch(
 - [x] All extraction functions have passing unit tests ✅
 - [x] Document transforms include new fields ✅
 - [x] Three-way RRF query implemented ✅
-- [ ] E2E test proves three-way beats two-way (requires Phase 1C ingestion)
+- [ ] Baseline metrics established with two-way hybrid (Phase 1C-A)
+- [ ] Three-way metrics compared and documented (Phase 1C-B)
+- [ ] Decision documented in ADR if three-way doesn't improve metrics
 - [x] All quality gates passing ✅
 - [x] 4 ADRs written and reviewed (071-074) ✅
 - [ ] 3 docs created with examples
@@ -991,13 +996,19 @@ Instead of post-filtering:
 
 ---
 
-## Phase 1C: Maths KS4 Ingestion
+## Phase 1C: Maths KS4 Ingestion & Hybrid Search Validation
 
 ### Goal
 
-Ingest complete Maths KS4 content with all Phase 1A+1B enhancements.
+Ingest complete Maths KS4 content and validate that three-way hybrid delivers measurable improvement over two-way hybrid.
 
-### Prerequisites
+### Approach
+
+Test two-way hybrid first to establish baseline, then compare with three-way hybrid to validate the added complexity delivers value.
+
+### Phase 1C-A: Two-Way Hybrid Baseline (1 day)
+
+#### Prerequisites
 
 - [ ] Elasticsearch Serverless connection verified
 - [ ] All field definitions in SDK
@@ -1005,7 +1016,7 @@ Ingest complete Maths KS4 content with all Phase 1A+1B enhancements.
 - [ ] All extraction functions tested
 - [ ] All quality gates passing
 
-### Ingestion Command
+#### Ingestion Command (Two-Way Only)
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -1013,45 +1024,107 @@ cd apps/oak-open-curriculum-semantic-search
 # Check prerequisites
 pnpm es:status
 
-# Ingest Maths KS4 with dense vectors (E5 embeddings via Elastic-native endpoint)
+# Ingest Maths KS4 with two-way hybrid (BM25 + ELSER, NO dense vectors)
+# Temporarily disable dense vector generation in document transforms
 pnpm es:ingest-live \
   --subject maths \
   --keystage ks4 \
+  --no-dense-vectors \
   --verbose
 ```
 
-### Expected Results
+#### Expected Results
 
-- ~50-100 lessons with 29 fields each
-- ~15-25 units with 24 fields
-- ~15-25 unit rollups with 28 fields
-- ~2-4 sequences with 20 fields
-- ~1 sequence facet with 18 fields
-- **Time**: 15-25 minutes (E5 embedding generation via Elastic-native inference)
-- **API cost**: $0 (all inference is Elastic-native, included in ES Serverless subscription)
-- **Oak API cost**: 100-200 requests (against Oak curriculum API only)
+- ~50-100 lessons with core fields (NO dense vectors)
+- ~15-25 units with core fields
+- ~15-25 unit rollups with core fields
+- ~2-4 sequences with core fields
+- ~1 sequence facet with core fields
+- **Time**: 10-15 minutes (no embedding generation)
+- **Cost**: $0 (only Oak API calls, within existing quota)
 
-### Validation
+#### Establish Baseline Metrics
 
 ```bash
-# Check document counts
-pnpm es:status
+# Run E2E tests to measure two-way hybrid performance
+pnpm test:e2e -- two-way-hybrid.e2e.test.ts
 
-# Verify dense vectors populated
-# Query ES directly to check lesson_dense_vector field exists and has 384 dimensions
-
-# Test three-way hybrid search
-# Run E2E test to verify results
+# Expected metrics to capture:
+# - Mean Reciprocal Rank (MRR)
+# - NDCG@10
+# - Zero-hit rate
+# - p95 latency
 ```
 
-### Success Criteria
+#### Success Criteria for Phase 1C-A
 
 - [ ] All 5 indexes have Maths KS4 data
-- [ ] Dense vector fields populated (>80% coverage)
 - [ ] Tier/exam board/pathway fields populated (>60% coverage)
-- [ ] Three-way hybrid search returns better results than two-way (E2E test)
+- [ ] Two-way hybrid baseline metrics established and documented
 - [ ] Zero mapping errors
 - [ ] All quality gates passing
+
+### Phase 1C-B: Three-Way Hybrid Comparison (1 day)
+
+#### Prerequisites
+
+- [x] Phase 1C-A complete with baseline metrics
+- [ ] Dense vector generation code ready and tested
+
+#### Ingestion Command (Three-Way)
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Re-ingest Maths KS4 with dense vectors enabled
+pnpm es:ingest-live \
+  --subject maths \
+  --keystage ks4 \
+  --with-dense-vectors \
+  --verbose
+```
+
+#### Expected Results
+
+- Same document counts as Phase 1C-A
+- **PLUS**: Dense vector fields populated (>80% coverage)
+- **Time**: 15-25 minutes (E5 embedding generation via Elastic-native inference)
+- **API cost**: $0 (all inference is Elastic-native, included in ES Serverless subscription)
+
+#### Compare Metrics
+
+```bash
+# Run E2E tests to measure three-way hybrid performance
+pnpm test:e2e -- three-way-hybrid.e2e.test.ts
+
+# Compare against Phase 1C-A baseline:
+# - MRR improvement
+# - NDCG@10 improvement
+# - Zero-hit rate improvement
+# - Latency impact
+```
+
+#### Success Criteria for Phase 1C-B
+
+- [ ] Dense vector fields populated (>80% coverage)
+- [ ] Three-way hybrid metrics measured and compared to baseline
+- [ ] Measurable improvement in MRR/NDCG documented (target: +10-25%)
+- [ ] Latency impact acceptable (target: <50ms increase)
+- [ ] Decision documented in ADR: Keep three-way if improved, revert to two-way if not
+- [ ] All quality gates passing
+
+#### Decision Point
+
+If three-way hybrid shows **measurable improvement** (MRR +10% or NDCG@10 +10%):
+
+- ✅ Keep three-way hybrid for production
+- Document findings in ADR-072 update
+
+If three-way hybrid shows **no significant improvement** or **unacceptable latency**:
+
+- ⚠️ Revert to two-way hybrid for production
+- Document decision and rationale in ADR
+- Keep dense vector infrastructure for future experimentation
 
 ---
 
@@ -2045,7 +2118,7 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [x] Implement extraction functions (GREEN)
 - [x] Write integration tests for document transforms (RED)
 - [x] Update document transforms (GREEN)
-- [ ] Write E2E test for three-way hybrid (RED) - **Requires Phase 1C ingestion**
+- [ ] Write E2E tests for two-way and three-way hybrid (RED) - **Phase 1C**
 - [x] Implement three-way RRF query (GREEN)
 - [x] Run all quality gates
 - [x] Write ADR-071, ADR-072, ADR-073, ADR-074
@@ -2065,13 +2138,24 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 
 **Note**: ADR-074 (Elastic-Native First Philosophy) was written during Phase 1A.
 
-### Phase 1C (1 day)
+### Phase 1C-A (1 day)
 
-- [ ] Verify Elasticsearch Serverless connection and inference endpoints available
-- [ ] Run ingestion: `pnpm es:ingest-live --subject maths --keystage ks4`
+- [ ] Verify Elasticsearch Serverless connection
+- [ ] Temporarily disable dense vector generation in document transforms
+- [ ] Run ingestion: `pnpm es:ingest-live --subject maths --keystage ks4 --no-dense-vectors`
+- [ ] Validate results (core fields populated)
+- [ ] Run E2E tests to establish two-way hybrid baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
+- [ ] Document baseline metrics
+
+### Phase 1C-B (1 day)
+
+- [ ] Enable dense vector generation in document transforms
+- [ ] Verify inference endpoints available
+- [ ] Re-ingest: `pnpm es:ingest-live --subject maths --keystage ks4 --with-dense-vectors`
 - [ ] Validate results (dense vectors populated, correct dimensions)
-- [ ] Run E2E tests
-- [ ] Document results
+- [ ] Run E2E tests to measure three-way hybrid metrics
+- [ ] Compare metrics against Phase 1C-A baseline
+- [ ] Document findings and decision in ADR
 
 ### Phase 2A (3-4 days)
 

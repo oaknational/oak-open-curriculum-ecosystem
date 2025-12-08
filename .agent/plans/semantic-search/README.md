@@ -49,10 +49,10 @@
 
 ### Archive
 
-| Directory                 | Contents                                     |
-| ------------------------- | -------------------------------------------- |
-| **`archive/superseded/`** | Superseded plans (historical reference only) |
-| **`archive/completed/`**  | Completed work from earlier phases           |
+| Document/Directory                                                | Contents                                       |
+| ----------------------------------------------------------------- | ---------------------------------------------- |
+| **`.agent/prompts/semantic-search/archive/`**                     | Archived prompts and completed phase guides    |
+| **`.agent/prompts/semantic-search/archive/phase-1a-complete.md`** | Phase 1A TDD examples and implementation guide |
 
 ---
 
@@ -110,7 +110,7 @@ See ADR-071 for full decision rationale.
 | ------ | -------- | -------------------------------- | ---------------------------------------------------------- |
 | **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF           |
 | **1B** | 2-3 days | Relevance Enhancement            | Elastic Native ReRank, filtered kNN, query rules           |
-| **1C** | 1 day    | Maths KS4 Ingestion              | Full content with enhanced schema                          |
+| **1C** | 2 days   | Maths KS4 Ingestion & Validation | Two-way baseline, three-way comparison, decision in ADR    |
 | **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                           |
 | **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                              |
 | **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, Elastic Native LLM |
@@ -228,8 +228,8 @@ pnpm smoke:dev:stub
 ### Ready for Phase 1B/1C ⏭️
 
 - 🔄 **Phase 1B**: Elastic Native ReRank, filtered kNN (2-3 days)
-- 🔄 **Phase 1C**: Maths KS4 ingestion (1 day)
-- 🔄 E2E test proving three-way beats two-way (requires Phase 1C)
+- 🔄 **Phase 1C-A**: Maths KS4 ingestion with two-way hybrid, establish baseline (1 day)
+- 🔄 **Phase 1C-B**: Re-ingest with three-way hybrid, compare metrics, document decision (1 day)
 
 ---
 
@@ -303,11 +303,14 @@ Documents are archived when:
 - **Superseded**: Newer plan replaces older one
 - **Completed**: Work finished and documented in ADRs
 
-Archive directories:
+Archive location:
 
-- `archive/superseded-YYYY-MM/` - Superseded plans by month
-- `archive/completed/` - Completed work
-- `archive/` - General archive
+- **`.agent/prompts/semantic-search/archive/`** - All archived prompts and completed phase guides
+
+Current archived files:
+
+- `phase-1a-complete.md` - Phase 1A TDD examples and implementation guide (completed 2025-12-08)
+- `curriculum-vocabulary-checkpoint-RESOLVED.md` - Resolved checkpoint from Phase 1A
 
 Archived documents are kept for historical reference but not used for active work.
 

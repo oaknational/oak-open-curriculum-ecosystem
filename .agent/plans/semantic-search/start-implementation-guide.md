@@ -1,8 +1,11 @@
 # Phase 1A Implementation Guide: Three-Way Hybrid Search
 
+**Status**: ✅ Phase 1A Complete (2025-12-08)  
 **Parent Plan**: `maths-ks4-implementation-plan.md`  
 **Duration**: 2-3 days  
 **Foundation Alignment**: ✅ TDD | Schema-First | Documentation Required
+
+**Note**: This guide is for historical reference. Phase 1A is complete. For TDD examples and implementation patterns from Phase 1A, see `.agent/prompts/semantic-search/archive/phase-1a-complete.md`.
 
 ---
 

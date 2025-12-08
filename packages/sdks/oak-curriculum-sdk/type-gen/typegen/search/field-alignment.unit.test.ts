@@ -21,7 +21,7 @@ import {
   UNITS_FIELD_OVERRIDES,
   UNIT_ROLLUP_FIELD_OVERRIDES,
   SEQUENCES_FIELD_OVERRIDES,
-} from './es-field-overrides.js';
+} from './es-field-overrides/index.js';
 
 /**
  * Extracts field names from a Zod schema code string.

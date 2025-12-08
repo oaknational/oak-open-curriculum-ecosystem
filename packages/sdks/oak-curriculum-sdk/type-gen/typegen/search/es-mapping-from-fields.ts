@@ -10,7 +10,7 @@
  * ```typescript
  * import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
  * import { UNITS_INDEX_FIELDS } from './field-definitions.js';
- * import { UNITS_FIELD_OVERRIDES } from './es-field-overrides.js';
+ * import { UNITS_FIELD_OVERRIDES } from './es-field-overrides/index.js';
  *
  * const fields = generateEsFieldsFromDefinitions(UNITS_INDEX_FIELDS, UNITS_FIELD_OVERRIDES);
  * // Returns: [['unit_id', { type: 'keyword', normalizer: 'oak_lower' }], ...]

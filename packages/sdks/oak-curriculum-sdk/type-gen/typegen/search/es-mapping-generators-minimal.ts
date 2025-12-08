@@ -8,7 +8,7 @@ import {
   META_FIELD_OVERRIDES,
   ZERO_HIT_FIELD_OVERRIDES,
   SEQUENCE_FACETS_FIELD_OVERRIDES,
-} from './es-field-overrides.js';
+} from './es-field-overrides/index.js';
 import {
   HEADER,
   generateMinimalSettingsBlock,
