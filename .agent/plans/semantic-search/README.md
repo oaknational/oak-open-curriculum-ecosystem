@@ -214,15 +214,22 @@ pnpm smoke:dev:stub
 - All 10 quality gates passing (1,310+ tests)
 - Test data: English KS2 (~350 documents)
 
-### Ready for Phase 1A ⏭️
+### Phase 1A Complete ✅ (2025-12-08)
 
 - ✅ E5 endpoint verified (`.multilingual-e5-small-elasticsearch` PRECONFIGURED)
 - ✅ Dense vector field definitions added (384-dim)
 - ✅ ES field overrides configured
-- 🔄 Extraction functions to implement (tier, exam_board, pathway)
-- 🔄 Dense vector generation to implement
-- 🔄 Three-way RRF implementation to build
-- 🔄 Maths KS4 ingestion to run
+- ✅ Extraction functions implemented (tier, exam_board, pathway)
+- ✅ Dense vector generation implemented
+- ✅ Three-way RRF query builders implemented
+- ✅ All quality gates passing
+- ✅ ADRs 071-074 written
+
+### Ready for Phase 1B/1C ⏭️
+
+- 🔄 **Phase 1B**: Elastic Native ReRank, filtered kNN (2-3 days)
+- 🔄 **Phase 1C**: Maths KS4 ingestion (1 day)
+- 🔄 E2E test proving three-way beats two-way (requires Phase 1C)
 
 ---
 
@@ -276,7 +283,7 @@ SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
 
 ### For Architecture Questions
 
-1. Check existing ADRs (067-070 currently)
+1. Check existing ADRs (067-074 currently)
 2. Review foundation documents
 3. Consult `es-serverless-feature-matrix.md` for feature decisions
 

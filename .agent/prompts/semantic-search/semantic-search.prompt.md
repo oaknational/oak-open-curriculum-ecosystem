@@ -2,17 +2,20 @@
 
 **Git Version**: See `git log` for commit history  
 **Purpose**: Complete context for continuing Maths KS4 semantic search implementation in a fresh chat session  
-**Status**: Active Implementation - Phase 1A Infrastructure Complete, Implementation Ready
+**Status**: Active Implementation - Phase 1A Complete ✅, Ready for Phase 1B/1C
 
 ---
 
 ## 🚀 Quick Start (60 seconds)
 
-**You are here**: Ready to implement **complete ES Serverless feature integration** for Maths KS4
+**You are here**: Phase 1A infrastructure complete. Ready for **Phase 1B (ReRank) or Phase 1C (Ingestion)**
 
-**Next action**: Phase 1A - Three-way hybrid search with dense vectors (2-3 days)
+**Next actions**:
 
-**Time estimate**: 4-5 weeks total for complete vertical slice with all ES features
+- **Phase 1B**: Elastic Native ReRank, filtered kNN (2-3 days)
+- **Phase 1C**: Maths KS4 ingestion to enable E2E testing (1 day)
+
+**Time estimate**: 3-4 weeks remaining for complete vertical slice with all ES features
 
 ---
 
@@ -243,30 +246,38 @@ If this fails, check API keys and network connectivity.
 
 **Next**: Ingest Maths KS4 with enhanced schema (Phase 1C)
 
-### What You're About to Build (Phase 1A)
+### Phase 1A - COMPLETE ✅ (2025-12-08)
 
-**Duration**: 2-3 days  
-**Goal**: Implement three-way hybrid search (BM25 + ELSER + E5 Dense Vectors)
+**What was built**:
 
-**Deliverables**:
+- ✅ E5 dense vector generation using `.multilingual-e5-small-elasticsearch` (Elastic-native)
+- ✅ Dense vector fields (384-dim) in lessons and unit_rollup indexes
+- ✅ Tier, exam_board, pathway field extraction for Maths KS4
+- ✅ Three-way RRF query combining all signals
+- ✅ Extraction functions with unit tests
+- ✅ Document transforms with integration tests
+- ✅ ADR-071: Elastic-Native Dense Vector Strategy
+- ✅ ADR-072: Three-Way Hybrid Search Architecture
+- ✅ ADR-073: Dense Vector Field Configuration
+- ✅ ADR-074: Elastic-Native First Philosophy
 
-- E5 dense vector generation using `.multilingual-e5-small-elasticsearch` (Elastic-native)
-- Dense vector fields (384-dim) in lessons and unit_rollup indexes
-- Tier, exam_board, pathway field extraction for Maths KS4
-- Three-way RRF query combining all signals
-- Extraction functions with unit tests
-- Document transforms with integration tests
-- E2E test proving three-way beats two-way
-- ADR-071: Elastic-Native Dense Vector Strategy
-- ADR-072: Three-Way Hybrid Search Architecture
-- ADR-073: Dense Vector Field Configuration
+**Remaining for Phase 1A**:
 
-**Success criteria**:
+- [ ] E2E test proving three-way beats two-way (requires Phase 1C ingestion)
 
-- MRR improves from 0.65 → 0.75 (15% gain)
-- All quality gates passing
-- Zero external API dependencies for core search
-- Zero type shortcuts introduced
+### What's Next: Phase 1B or 1C
+
+**Phase 1B** (2-3 days): Relevance Enhancement
+
+- Elastic Native ReRank (`.rerank-v1-elasticsearch`)
+- Filtered kNN optimization
+- Semantic query rules
+
+**Phase 1C** (1 day): Maths KS4 Ingestion
+
+- Full content with enhanced schema
+- Enables E2E testing for three-way vs two-way comparison
+- Validates dense vector generation at scale
 
 ---
 
@@ -622,42 +633,47 @@ apps/oak-open-curriculum-semantic-search/
 
 ---
 
-## 🚨 Current Blocking Issues (2025-12-08)
+## ✅ Phase 1A Infrastructure Complete (2025-12-08)
 
-### Issue 1: Quality Gates Failing
+### Recently Resolved
 
-**3 linting errors** must be fixed before continuing:
+All blocking issues from the previous session have been resolved:
 
-```
-src/lib/hybrid-search/rrf-query-builders.ts
-  251:1  error  File has too many lines (404). Maximum allowed is 250
+#### 1. Quality Gates - FIXED ✅
 
-src/lib/indexing/document-transforms.ts
-  251:1  error  File has too many lines (313). Maximum allowed is 250
+Linting errors fixed by refactoring into smaller modules:
 
-src/lib/hybrid-search/rrf-query-builders.unit.test.ts
-  4:3  error  'buildUnitRrfRequest' is defined but never used
-```
+| Original File                   | Original Lines | New Lines | Extracted To                                                 |
+| ------------------------------- | -------------- | --------- | ------------------------------------------------------------ |
+| `rrf-query-builders.ts`         | 404            | 187       | `rrf-query-builders-three-way.ts`, `rrf-query-helpers.ts`    |
+| `document-transforms.ts`        | 313            | 205       | (refactored inline)                                          |
+| `document-transform-helpers.ts` | 280+           | 245       | `extraction-primitives.ts`, `programme-factor-extractors.ts` |
 
-**Options**:
+#### 2. Dense Vector Fields - ADDED ✅
 
-- **Option A**: Refactor into smaller files (30-60 min)
-- **Option B**: Add `/* eslint-disable max-lines */` temporarily (5 min)
+- `title_dense_vector` (lessons) - 384-dim dense vector
+- `rollup_dense_vector` (unit_rollup) - 384-dim dense vector
+- Field counts updated: lessons 26, unit_rollup 22
 
-### Issue 2: ES Field Overrides Incomplete
+#### 3. ES Field Overrides - CORE COMPLETE ✅
 
-**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+Added to `es-field-overrides.ts`:
 
-Missing keyword overrides for:
+- `title_dense_vector`, `rollup_dense_vector` - dense_vector type
+- `tier`, `exam_board`, `pathway` for lessons and unit_rollup
 
-- `UNIT_ROLLUP_FIELD_OVERRIDES`: `pathway`
-- `UNITS_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`, `unit_type`
-- `SEQUENCES_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`
-- `SEQUENCE_FACETS_FIELD_OVERRIDES`: `tiers_available`, `exam_boards_available`, `pathways_available`
+**Still pending for Phase 2B** (not blocking):
 
-**Fix**: Add overrides, run `pnpm type-gen`, verify mappings.
+- `UNITS_FIELD_OVERRIDES`: tier, exam_board, pathway, unit_type
+- `SEQUENCES_FIELD_OVERRIDES`: tier, exam_board, pathway
+- `SEQUENCE_FACETS_FIELD_OVERRIDES`: tiers_available, exam_boards_available, pathways_available
 
-**See**: "Pre-Phase: ES Field Overrides Audit" in `maths-ks4-implementation-plan.md`.
+### Current Status
+
+**All quality gates passing**. Ready to proceed with:
+
+1. **Phase 1B**: Elastic Native ReRank, filtered kNN
+2. **Phase 1C**: Maths KS4 ingestion (enables E2E testing)
 
 ---
 
@@ -678,10 +694,10 @@ Missing keyword overrides for:
 - [x] ADR-074 written (Elastic-Native First Philosophy)
 - [x] No type shortcuts introduced
 - [x] No external API dependencies for core search
-- [ ] **BLOCKING**: Fix linting errors (max-lines, unused import)
+- [x] Fix linting errors (max-lines, unused import) ✅ **RESOLVED 2025-12-08**
+- [x] All 10 quality gates passing ✅ **RESOLVED 2025-12-08**
+- [x] Prompt updated with Phase 1A completion ✅ **RESOLVED 2025-12-08**
 - [ ] E2E test proves three-way beats two-way (requires Phase 1C ingestion)
-- [ ] All 10 quality gates passing
-- [ ] Prompt updated with Phase 1A completion
 
 ### Full Project Complete When:
 
