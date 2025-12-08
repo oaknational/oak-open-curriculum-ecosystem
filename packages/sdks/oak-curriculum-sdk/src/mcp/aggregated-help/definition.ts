@@ -6,6 +6,7 @@
  */
 
 import { HELP_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import { WIDGET_URI } from '../../types/generated/widget-constants.js';
 
 /**
  * Input schema for get-help tool.
@@ -57,7 +58,7 @@ Optionally provide a tool_name to get specific help for that tool.`,
     title: 'Get Tool Usage Help',
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': WIDGET_URI,
     'openai/toolInvocation/invoking': 'Loading help…',
     'openai/toolInvocation/invoked': 'Help loaded',
     'openai/widgetAccessible': true,

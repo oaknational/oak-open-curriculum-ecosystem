@@ -37,12 +37,11 @@ describe('security-headers', () => {
       expect(CSP_DIRECTIVES.childSrc).toEqual(["'self'"]);
     });
 
-    it('allows same-origin and data: URI images', () => {
-      expect(CSP_DIRECTIVES.imgSrc).toContain("'self'");
-      expect(CSP_DIRECTIVES.imgSrc).toContain('data:');
+    it('allows same-origin images', () => {
+      expect(CSP_DIRECTIVES.imgSrc).toEqual(["'self'"]);
     });
 
-    it('blocks all connections (no fetch/XHR from landing page)', () => {
+    it('allows same-origin connections', () => {
       expect(CSP_DIRECTIVES.connectSrc).toEqual(["'self'"]);
     });
 

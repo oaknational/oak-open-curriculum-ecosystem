@@ -18,16 +18,19 @@
  * @module
  */
 
-import { AGGREGATED_TOOL_WIDGET_URI } from '../aggregated-tool-widget.js';
-import { DOCUMENTATION_RESOURCES } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+import {
+  WIDGET_URI,
+  DOCUMENTATION_RESOURCES,
+} from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 
 /**
  * Resource URIs that are publicly accessible without authentication.
  *
- * Constructed from source constants to stay synchronised with registered resources.
+ * Uses base widget URI from SDK (single source of truth).
+ * Cache-busting query params don't affect resource matching.
  */
 export const PUBLIC_RESOURCE_URIS = [
-  AGGREGATED_TOOL_WIDGET_URI,
+  WIDGET_URI,
   ...DOCUMENTATION_RESOURCES.map((resource) => resource.uri),
 ] as const;
 

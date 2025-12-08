@@ -4,6 +4,7 @@ import { NOAUTH_SCHEME_TYPE } from '../security-types.js';
 import { literalName, collectDocumentedStatuses } from './emit-index-helpers.js';
 import { kebabToTitleCase } from './kebab-to-title-case.js';
 import { toToolDescription, appendPrerequisiteGuidance } from './tool-description.js';
+import { BASE_WIDGET_URI } from '../../cross-domain-constants.js';
 
 function buildExports({
   toolName,
@@ -141,7 +142,7 @@ function buildExports({
   lines.push('  },');
   // OpenAI Apps SDK _meta fields for widget integration
   lines.push('  _meta: {');
-  lines.push(`    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',`);
+  lines.push(`    'openai/outputTemplate': ${JSON.stringify(BASE_WIDGET_URI)},`);
   lines.push(
     `    'openai/toolInvocation/invoking': ${JSON.stringify(`Fetching ${humanReadableTitle}…`)},`,
   );

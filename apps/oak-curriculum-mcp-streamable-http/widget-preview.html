@@ -1,0 +1,1488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oak National Academy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        /* Safe area insets - updated by JavaScript from window.openai.safeArea */
+        --safe-top: 20px;
+        --safe-right: 20px;
+        --safe-bottom: 20px;
+        --safe-left: 20px;
+        /* Oak brand colors */
+        --bg: #bef2bd;
+        --fg: #1a3a1b;
+        --fg-secondary: #3d5e3e;
+        --accent: #287d3c;
+        --accent-high-contrast: #1b6330;
+        --item-bg: rgba(255, 255, 255, 0.5);
+        --item-border: rgba(27, 61, 28, 0.1);
+        --code-bg: rgba(0, 0, 0, 0.12);
+        --border-color: rgba(27, 61, 28, 0.15);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1b3d1c;
+          --fg: #f0f7f0;
+          --fg-secondary: #b8dab9;
+          --accent: #8cd98f;
+          --accent-high-contrast: #8cd98f;
+          --item-bg: rgba(0, 0, 0, 0.2);
+          --item-border: rgba(240, 247, 240, 0.1);
+          --code-bg: rgba(255, 255, 255, 0.1);
+          --border-color: rgba(240, 247, 240, 0.15);
+        }
+      }
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Lexend', system-ui, sans-serif;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+      }
+      #root {
+        background: var(--bg);
+        color: var(--fg);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      #content-container {
+        margin: 0.8em;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .hdr {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border-color);
+      }
+      .hdr-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .logo {
+        width: 36px;
+        height: 47px;
+      }
+      .ttl {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0;
+      }
+      .sub-ttl {
+        font-size: 12px;
+        color: var(--fg-secondary);
+        margin: 0;
+      }
+      #c {
+        flex: 1;
+      }
+      .sec {
+        margin-bottom: 16px;
+      }
+      .sec-ttl {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 10px;
+        color: var(--fg-secondary);
+      }
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .item {
+        background: var(--item-bg);
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid var(--item-border);
+      }
+      .item-ttl {
+        font-weight: 500;
+        font-size: 14px;
+        margin: 0 0 4px;
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--fg-secondary);
+        margin: 0;
+      }
+      .link {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .badge {
+        background: var(--accent);
+        color: white;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-left: 8px;
+      }
+      @media (prefers-color-scheme: dark) {
+        .badge {
+          color: #1b3d1c;
+        }
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-size: 12px;
+        line-height: 1.5;
+        margin: 0;
+        font-family: monospace;
+        background: var(--code-bg);
+        padding: 12px;
+        border-radius: 8px;
+      }
+      code {
+        background: var(--code-bg);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+      }
+      .empty {
+        text-align: center;
+        padding: 24px;
+        color: var(--fg-secondary);
+        font-size: 14px;
+      }
+      .ftr {
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+        font-size: 11px;
+        color: var(--fg-secondary);
+        text-align: center;
+      }
+      .ftr-disclaimer {
+        margin: 0 0 8px;
+      }
+      .ftr-links {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 4px 8px;
+      }
+      .ftr-link {
+        color: var(--accent-high-contrast);
+        text-decoration: none;
+        font-weight: 600;
+        text-align: center;
+      }
+      .ftr-link:hover {
+        text-decoration: underline;
+      }
+      .ftr-sep {
+        opacity: 0.5;
+      }
+      .nowrap {
+        white-space: nowrap;
+      }
+      @media (max-width: 480px) {
+        .ftr-links {
+          flex-direction: column;
+          gap: 0;
+        }
+        .ftr-sep {
+          display: none;
+        }
+        .ftr-link {
+          padding-top: 8px;
+          border-top: 1px solid var(--border-color);
+        }
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: opacity 0.2s;
+      }
+      .btn:hover {
+        opacity: 0.9;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      @media (prefers-color-scheme: dark) {
+        .btn {
+          color: #1b3d1c;
+        }
+      }
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+      .error {
+        background: rgba(200, 50, 50, 0.1);
+        color: #c83232;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      @media (prefers-color-scheme: dark) {
+        .error {
+          background: rgba(255, 100, 100, 0.15);
+          color: #ff9999;
+        }
+      }
+      .cta-container {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .cta-btn {
+        background: var(--item-bg);
+        color: var(--fg);
+        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: 2px solid var(--accent-high-contrast);
+        white-space: nowrap;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+          background 0.15s,
+          transform 0.1s,
+          box-shadow 0.1s;
+      }
+      .cta-btn:hover {
+        background: var(--code-bg);
+      }
+      .cta-btn:active {
+        transform: scale(0.94);
+        background: var(--accent-high-contrast);
+        color: #fff;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .cta-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+    </style>
+
+    <script>
+      window.openai = {
+        toolOutput: {
+          serverOverview: {
+            name: 'Oak Curriculum MCP Server',
+            version: '1.0.0',
+            aboutOak:
+              "Oak National Academy is the UK's national curriculum body, providing free, high-quality, fully-resourced curriculum resources for teachers and students.",
+            oakWebsite: 'https://www.thenational.academy',
+            description:
+              'Access Oak National Academy curriculum resources including lessons, units, quizzes, transcripts, and teaching materials.',
+          },
+          toolCategories: {
+            discovery: {
+              description: 'Find curriculum content by searching or listing.',
+              tools: ['search', 'get-subjects', 'get-key-stages'],
+            },
+            browsing: {
+              description: 'Explore curriculum structure systematically.',
+              tools: ['get-key-stages-subject-units', 'get-key-stages-subject-lessons'],
+            },
+            fetching: {
+              description: 'Get detailed content for specific lessons or units.',
+              tools: ['fetch', 'get-lessons-summary', 'get-lessons-transcript'],
+            },
+          },
+          tips: [
+            'Use "search" for free-text queries; use browsing tools for structured exploration.',
+            'The "fetch" tool uses prefixed IDs: lesson:slug, unit:slug, thread:slug.',
+            'Get lesson transcript for detailed content understanding.',
+          ],
+        },
+        toolResponseMetadata: {
+          'annotations/title': 'Get Help',
+        },
+        safeArea: { insets: { top: 24, right: 24, bottom: 120, left: 24 } },
+        theme: 'light',
+        displayMode: 'inline',
+        locale: 'en-US',
+        maxHeight: 600,
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <main id="content-container">
+        <header class="hdr">
+          <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 42" fill="none">
+              <path
+                fill="currentColor"
+                d="M16.983 7.198c.86.15 1.602.243 2.328.41a14.603 14.603 0 0 1 8.09 4.962 14.964 14.964 0 0 1 3.513 8.535c.05.58.082 1.16.092 1.74.012.627-.086.738-.676.825-2.213.32-4.468.14-6.604-.522a14.778 14.778 0 0 1-3.871-1.838 13.41 13.41 0 0 1-3.74-3.803 13.242 13.242 0 0 1-2.07-5.484c-.107-.711-.124-1.434-.191-2.234a12.84 12.84 0 0 0-6.444 3.065c-2.65 2.319-4.192 5.266-4.748 8.808.536.108 1.029.224 1.532.303.447.07.71.244.724.76.046 1.658.345 3.3.887 4.865a31.671 31.671 0 0 0 1.983 4.418 16.044 16.044 0 0 0 4.608 5.383 17.553 17.553 0 0 0 3.214 1.861c.383.17 1.015-.104 1.483-.301a13.61 13.61 0 0 0 5.595-4.23c.835-1.076 1.497-2.307 2.12-3.529.755-1.482 1.063-3.115 1.258-4.761.039-.323.15-.454.481-.423.396.04.794.05 1.191.035.474-.026.675.222.613.637-.191 1.314-.306 2.66-.67 3.927a16.895 16.895 0 0 1-4.344 7.268 15.364 15.364 0 0 1-6.6 4.002c-.504.15-.926-.027-1.372-.176-2.78-.924-5.066-2.6-6.995-4.773a28.75 28.75 0 0 1-2.51-3.27 20.02 20.02 0 0 1-2.158-4.435 18.563 18.563 0 0 1-1.074-5.01.49.49 0 0 0-.303-.325c-.592-.193-1.197-.327-1.795-.493a.615.615 0 0 1-.516-.484.628.628 0 0 1-.003-.25c.154-2.56.889-5.05 2.147-7.278a16.25 16.25 0 0 1 4.174-4.84 15.683 15.683 0 0 1 6.32-2.969a1.19 1.19 0 0 1 .326-.071c1.117.102 1.404-.63 1.682-1.53a11.998 11.998 0 0 1 3.683-5.58c.5-.436.564-.436 1.01 0 .26.26.511.53.755.804.361.41.361.594-.048.967-.947.895-1.73 1.95-2.316 3.119-.286.624-.54 1.264-.76 1.915Zm11.554 14.268c-.032-.173-.065-.31-.084-.45a13.55 13.55 0 0 0-2.01-5.465 12.892 12.892 0 0 0-5.012-4.62A12.337 12.337 0 0 0 17 9.671c-.272-.03-.42.046-.414.36.056 2.427.701 4.674 2.12 6.64a11.663 11.663 0 0 0 5.268 4.082c1.465.58 2.978.754 4.564.713Z"
+              />
+            </svg>
+          </div>
+          <div class="hdr-text">
+            <h1 class="ttl">Oak National Academy</h1>
+            <p class="sub-ttl" id="tool-name"></p>
+          </div>
+          <div id="cta-container" class="cta-container" style="display: none">
+            <button id="learn-oak-btn" class="btn cta-btn">Load Oak Knowledge (Click Me)</button>
+          </div>
+        </header>
+        <div id="c"></div>
+        <footer class="ftr">
+          <p class="ftr-disclaimer">
+            AI can make mistakes. Check all generated resources before use.
+          </p>
+          <p class="ftr-links">
+            <a
+              href="https://www.thenational.academy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="ftr-link nowrap"
+              >Explore more Oak curriculum resources</a
+            >
+            <span class="ftr-sep">•</span>
+            <a
+              href="https://labs.thenational.academy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="ftr-link"
+              ><span class="nowrap">For an educator specific experience try Aila</span> -
+              <span class="nowrap">Oak's AI Lesson Assistant</span></a
+            >
+          </p>
+        </footer>
+      </main>
+    </div>
+    <script type="module">
+      const c = document.getElementById('c');
+      const toolNameEl = document.getElementById('tool-name');
+
+      // ========================================
+      // Tool Name → Renderer Mapping
+      // ========================================
+      const TOOL_RENDERER_MAP = {
+        'get-lessons-quiz': 'quiz',
+        'get-key-stages-subject-questions': 'quiz',
+        'get-sequences-questions': 'quiz',
+        'get-lessons-summary': 'entitySummary',
+        'get-units-summary': 'entitySummary',
+        'get-subject-detail': 'entitySummary',
+        'get-key-stages': 'entityList',
+        'get-subjects': 'entityList',
+        'get-subjects-key-stages': 'entityList',
+        'get-subjects-years': 'entityList',
+        'get-subjects-sequences': 'entityList',
+        'get-key-stages-subject-lessons': 'entityList',
+        'get-key-stages-subject-units': 'entityList',
+        'get-sequences-units': 'entityList',
+        'get-threads': 'entityList',
+        'get-threads-units': 'entityList',
+        'get-lessons-transcript': 'transcript',
+        'get-lessons-assets': 'assets',
+        'get-lessons-assets-by-type': 'assets',
+        'get-key-stages-subject-assets': 'assets',
+        'get-sequences-assets': 'assets',
+        'get-changelog': 'changelog',
+        'get-changelog-latest': 'changelog',
+        'get-rate-limit': 'rateLimit',
+        'get-help': 'help',
+        'search': 'search',
+        'get-search-lessons': 'search',
+        'get-search-transcripts': 'search',
+        'fetch': 'fetch',
+        'get-ontology': 'ontology',
+        'get-knowledge-graph': 'knowledgeGraph'
+      };
+
+      // ========================================
+      // Widget State Persistence
+      // ========================================
+      let widgetState = window.openai?.widgetState ?? {
+        expandedSections: [],
+        scrollPosition: 0,
+      };
+
+      function updateWidgetState(newState) {
+        widgetState = { ...widgetState, ...newState };
+        if (window.openai?.setWidgetState) {
+          window.openai.setWidgetState(widgetState);
+        }
+      }
+
+      function restoreScrollPosition() {
+        if (widgetState.scrollPosition > 0) {
+          requestAnimationFrame(() => {
+            document.documentElement.scrollTop = widgetState.scrollPosition;
+          });
+        }
+      }
+
+      document.addEventListener('scroll', () => {
+        updateWidgetState({ scrollPosition: document.documentElement.scrollTop });
+      }, { passive: true });
+
+      // ========================================
+      // Locale Support
+      // ========================================
+      const locale = window.openai?.locale ?? 'en-GB';
+
+      function formatDate(dateStr) {
+        try {
+          return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(dateStr));
+        } catch {
+          return dateStr;
+        }
+      }
+
+      // ========================================
+      // External Links
+      // ========================================
+      function openOnOakWebsite(event, url) {
+        if (event) event.preventDefault();
+        if (window.openai?.openExternal) {
+          window.openai.openExternal({ href: url });
+        } else {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      }
+
+      // ========================================
+      // Display Mode
+      // ========================================
+      function requestFullscreen() {
+        if (window.openai?.requestDisplayMode) {
+          window.openai.requestDisplayMode('fullscreen').catch(() => {});
+        }
+      }
+
+
+      // ========================================
+      // CTA (Call-to-Action) System
+      // ========================================
+      const CTA_CONFIGS = [
+        {
+          id: 'learn-oak',
+          buttonText: 'Load Oak Knowledge (Click Me)',
+          loadingText: 'Understanding Oak...',
+          understoodText: 'Oak Understood',
+          prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum covering from EYFS to KS4.
+
+      In order for you to better help the user, some resources and tools have been provided for that specific purpose.
+
+      First, call the \`get-help\` tool to get an overview of the resources and tools that have been provided.
+
+      The response from that tool should include other tools in the "agent support" category, including but not necessarily limited to \`get-ontology\`, and \`get-knowledge-graph\`. Call those tools now.
+
+      Reflect on the information from all three tools. There is no need to show the user the information, just use it to better understand the Oak curriculum and how to best help the user.
+
+      Tell the user that you are ready to help them use the Oak Open Curriculum resources.`,
+        }
+      ];
+
+      function initCtaButtons() {
+        const ctaContainer = document.getElementById('cta-container');
+        if (!window.openai?.sendFollowUpMessage) {
+          if (ctaContainer) ctaContainer.style.display = 'none';
+          return;
+        }
+
+        if (ctaContainer) ctaContainer.style.display = 'flex';
+        CTA_CONFIGS.forEach(cta => {
+          const btn = document.getElementById(cta.id + '-btn');
+          if (!btn) return;
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = cta.loadingText;
+            try {
+              await window.openai.sendFollowUpMessage({ prompt: cta.prompt });
+              // Show understood state after 10 seconds, keep button disabled
+              setTimeout(() => {
+                btn.textContent = cta.understoodText;
+              }, 10000);
+            } catch (error) {
+              btn.textContent = cta.buttonText;
+              btn.disabled = false;
+              console.error('Failed to send follow-up message:', error);
+            }
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCtaButtons);
+      } else {
+        initCtaButtons();
+      }
+
+      // ========================================
+      // Tool Calling (DISABLED - see note below)
+      // ========================================
+      //
+      // IMPLEMENTATION NOTE: Refresh Button Feature
+      // -------------------------------------------
+      // This feature allowed widgets to re-invoke the same MCP tool that produced
+      // the current output, using window.openai.callTool(). This is useful for:
+      //
+      // - Refreshing search results after content updates
+      // - Polling for changes in rate limits or status
+      // - Re-fetching data that may have changed server-side
+      //
+      // The feature was disabled as it's not currently useful for our use cases,
+      // but the code is preserved here for future reference.
+      //
+      // TO RE-ENABLE:
+      // 1. Uncomment the code below
+      // 2. Add back the HTML elements in aggregated-tool-widget.ts:
+      //    <div id="actions" class="actions" style="display:none"><\/div>
+      //    <div id="error" class="error" style="display:none"><\/div>
+      // 3. Re-add DOM references in widget-script.ts:
+      //    const actionsEl = document.getElementById('actions');
+      //    const errorEl = document.getElementById('error');
+      // 4. Call updateActions() in the render() function
+      // 5. The CSS styles (.actions, .btn, .loading, .error) are already present
+      //
+      // HOW IT WORKED:
+      // - updateToolContext() extracted the tool name and args from window.openai
+      // - updateActions() showed a "↻ Refresh" button if callTool was available
+      // - refreshData() called window.openai.callTool(toolName, args) to re-invoke
+      // - setLoading() added visual feedback during the async call
+      // - showError() displayed any errors with auto-dismiss after 5s
+      //
+      // REFERENCE CODE (uncomment to enable):
+      // --------------------------------------
+      // let isLoading = false;
+      // let currentToolName = null;
+      // let currentToolArgs = null;
+      //
+      // function setLoading(loading) {
+      //   isLoading = loading;
+      //   c.classList.toggle('loading', loading);
+      //   const btns = actionsEl.querySelectorAll('button');
+      //   btns.forEach(btn => { btn.disabled = loading; });
+      // }
+      //
+      // function showError(message) {
+      //   if (errorEl) {
+      //     errorEl.textContent = message;
+      //     errorEl.style.display = 'block';
+      //     setTimeout(() => { errorEl.style.display = 'none'; }, 5000);
+      //   }
+      // }
+      //
+      // function hideError() {
+      //   if (errorEl) { errorEl.style.display = 'none'; }
+      // }
+      //
+      // async function refreshData() {
+      //   if (!window.openai?.callTool) { console.warn('callTool not available'); return; }
+      //   if (!currentToolName || !currentToolArgs) { console.warn('No tool context'); return; }
+      //   if (isLoading) return;
+      //   hideError();
+      //   setLoading(true);
+      //   try {
+      //     await window.openai.callTool(currentToolName, currentToolArgs);
+      //   } catch (error) {
+      //     showError(error instanceof Error ? error.message : 'Failed to refresh');
+      //   } finally {
+      //     setLoading(false);
+      //   }
+      // }
+      //
+      // function updateToolContext() {
+      //   const input = window.openai?.toolInput;
+      //   const meta = window.openai?.toolResponseMetadata;
+      //   currentToolName = meta?.toolName || input?.toolName || null;
+      //   currentToolArgs = input || null;
+      //   if (!currentToolName && input) {
+      //     if (input.query || input.q) currentToolName = 'search';
+      //     else if (input.id) currentToolName = 'fetch';
+      //     else if (input.tool_name !== undefined) currentToolName = 'get-help';
+      //   }
+      // }
+      //
+      // function updateActions() {
+      //   updateToolContext();
+      //   const canRefresh = window.openai?.callTool && currentToolName && currentToolArgs;
+      //   if (canRefresh) {
+      //     actionsEl.innerHTML = '<button class="btn" id="refresh-btn">↻ Refresh<\/button>';
+      //     actionsEl.style.display = 'flex';
+      //     const btn = document.getElementById('refresh-btn');
+      //     if (btn) btn.addEventListener('click', refreshData);
+      //   } else {
+      //     actionsEl.style.display = 'none';
+      //   }
+      // }
+
+      // ========================================
+      // Safe Area Insets
+      // ========================================
+      function applySafeAreaInsets() {
+        const safeArea = window.openai?.safeArea;
+        if (safeArea?.insets) {
+          const { top, right, bottom, left } = safeArea.insets;
+          document.documentElement.style.setProperty('--safe-top', `${top}px`);
+          document.documentElement.style.setProperty('--safe-right', `${right}px`);
+          document.documentElement.style.setProperty('--safe-bottom', `${bottom}px`);
+          document.documentElement.style.setProperty('--safe-left', `${left}px`);
+        }
+        // If no safe area insets, CSS fallback values (20px) are used
+      }
+
+      // ========================================
+      // Renderer Functions
+      // ========================================
+      /**
+       * Escapes HTML entities to prevent XSS.
+       */
+      function esc(s) {
+        if (typeof s !== 'string') return '';
+        return s.replace(/&/g,'&amp;').replace(/<\/g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      /**
+       * Renders a section container with title and optional badge.
+       */
+      function renderSection(title, content, badgeCount) {
+        const badge = badgeCount !== undefined ? '<span class="badge">' + badgeCount + '<\/span>' : '';
+        return '<div class="sec"><h2 class="sec-ttl">' + esc(title) + badge + '<\/h2>' + content + '<\/div>';
+      }
+
+      /**
+       * Renders an item card with title and optional metadata.
+       */
+      function renderItem(title, meta, link) {
+        let h = '<div class="item"><p class="item-ttl">' + esc(title) + '<\/p>';
+        if (meta) h += '<p class="meta">' + esc(meta) + '<\/p>';
+        if (link) h += '<a class="link" href="' + esc(link) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(link) + '\')">View on Oak →<\/a>';
+        h += '<\/div>';
+        return h;
+      }
+
+      /**
+       * Renders a badge with count or text.
+       */
+      function renderBadge(text) {
+        return '<span class="badge">' + esc(String(text)) + '<\/span>';
+      }
+
+      /**
+       * Renders a link to Oak website with openExternal support.
+       */
+      function renderOakLink(url, text) {
+        if (!url) return '';
+        const label = text || 'View on Oak →';
+        return '<a class="link" href="' + esc(url) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(url) + '\')">' + esc(label) + '<\/a>';
+      }
+
+      /**
+       * Renders a list container.
+       */
+      function renderList(items) {
+        return '<div class="list">' + items + '<\/div>';
+      }
+
+      /**
+       * Renders a code block.
+       */
+      function renderCode(text) {
+        return '<code>' + esc(text) + '<\/code>';
+      }
+
+      /**
+       * Renders a pre-formatted JSON block.
+       */
+      function renderJson(data) {
+        return '<pre style="font-size:12px;max-height:300px;overflow:auto">' + esc(JSON.stringify(data, null, 2)) + '<\/pre>';
+      }
+
+      function renderHelp(o) {
+        let h = '';
+        if (o.serverOverview?.aboutOak) {
+          h += '<div class="sec"><h2 class="sec-ttl">About Oak<\/h2>';
+          h += '<p style="margin:0 0 8px;font-size:14px">' + esc(o.serverOverview.aboutOak) + '<\/p>';
+          if (o.serverOverview.oakWebsite) {
+            h += '<p style="margin:0"><a href="' + esc(o.serverOverview.oakWebsite) + '" target="_blank" rel="noopener" style="color:var(--accent-high-contrast);font-size:13px">' + 'Visit Oak →' + '<\/a><\/p>';
+          }
+          h += '<\/div>';
+        }
+        if (o.serverOverview?.description) {
+          h += '<div class="sec"><h2 class="sec-ttl">MCP Server<\/h2>';
+          h += '<p style="margin:0;font-size:14px">' + esc(o.serverOverview.description) + '<\/p><\/div>';
+        }
+        if (o.toolCategories) {
+          const cats = Object.entries(o.toolCategories);
+          if (cats.length > 0) {
+            h += '<div class="sec"><h2 class="sec-ttl">Tool Categories<span class="badge">' + cats.length + '<\/span><\/h2><div class="list">';
+            cats.forEach(([name, cat]) => {
+              h += '<div class="item"><p class="item-ttl">' + esc(name) + '<\/p>';
+              h += '<p class="meta">' + esc(cat.description || '') + '<\/p>';
+              if (cat.tools?.length) h += '<p class="meta" style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">Tools: ' + cat.tools.map(t => '<code>' + esc(t) + '<\/code>').join('') + '<\/p>';
+              h += '<\/div>';
+            });
+            h += '<\/div><\/div>';
+          }
+        }
+        if (o.tips?.length) {
+          h += '<div class="sec"><h2 class="sec-ttl">Tips<\/h2><ul style="margin:0;padding-left:20px">';
+          o.tips.slice(0,5).forEach(t => { h += '<li style="font-size:13px;margin-bottom:4px">' + esc(t) + '<\/li>'; });
+          h += '<\/ul><\/div>';
+        }
+        return h;
+      }
+
+      function renderSearch(d) {
+        let h = '';
+        // Handle flat array root (from get-search-lessons or get-search-transcripts)
+        // Or nested { lessons: [...] } or { lessons: { results: [...] } }
+        const ls = Array.isArray(d) ? d : (d.lessons?.results ?? d.lessons ?? []);
+        if (Array.isArray(ls) && ls.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">From lesson similarity<span class="badge">' + ls.length + '<\/span><\/h2><div class="list">';
+          ls.slice(0,5).forEach(l => {
+            const t = l.lessonTitle || l.title || l.slug || 'Untitled';
+            const un = Array.isArray(l.units) && l.units.length > 0 ? l.units[0] : null;
+            const s = l.subjectTitle || (un ? un.subjectSlug : '') || '';
+            const k = l.keyStage || (un ? un.keyStageSlug : '') || '';
+            const u = l.canonicalUrl || '';
+            h += '<div class="item"><p class="item-ttl">' + esc(t) + '<\/p>';
+            if (s || k) h += '<p class="meta">' + esc([s,k].filter(Boolean).join(' • ')) + '<\/p>';
+            if (u) h += '<a class="link" href="' + esc(u) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(u) + '\')">View on Oak →<\/a>';
+            h += '<\/div>';
+          });
+          if (ls.length > 5) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ls.length-5) + ' more<\/p>';
+          h += '<\/div><\/div>';
+        }
+        // Transcripts only from nested structure (not from flat array)
+        const ts = Array.isArray(d) ? [] : (d.transcripts?.results ?? d.transcripts ?? []);
+        if (Array.isArray(ts) && ts.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">From transcript search<span class="badge">' + ts.length + '<\/span><\/h2><div class="list">';
+          ts.slice(0,3).forEach(t => {
+            const ttl = t.lessonTitle || t.title || 'Transcript', sn = t.highlightedContent || t.snippet || '';
+            h += '<div class="item"><p class="item-ttl">' + esc(ttl) + '<\/p>';
+            if (sn) h += '<p class="meta">' + esc(sn.slice(0,150)) + (sn.length>150?'...':'') + '<\/p>';
+            h += '<\/div>';
+          });
+          if (ts.length > 3) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (ts.length-3) + ' more<\/p>';
+          h += '<\/div><\/div>';
+        }
+        return h || '<div class="empty">No results found.<\/div>';
+      }
+
+      function renderFetch(data) {
+        let h = '';
+        const type = data.type || 'Resource';
+        const url = data.canonicalUrl;
+        const id = data.id || '';
+        h += '<div class="sec"><h2 class="sec-ttl">' + esc(type.charAt(0).toUpperCase() + type.slice(1)) + '<\/h2>';
+        if (id) h += '<p class="meta">ID: <code>' + esc(id) + '<\/code><\/p>';
+        if (url) h += '<p style="margin-top:8px"><a class="link" href="' + esc(url) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(url) + '\')">View on Oak →<\/a><\/p>';
+        h += '<div style="margin-top:12px"><pre style="font-size:12px;max-height:300px;overflow:auto">' + esc(JSON.stringify(data.data, null, 2)) + '<\/pre><\/div>';
+        h += '<\/div>';
+        return h;
+      }
+
+      function renderQuiz(data) {
+        let h = '';
+
+        function renderQuizSection(title, questions) {
+          if (!questions || !Array.isArray(questions) || questions.length === 0) return '';
+          let s = '<div class="sec"><h2 class="sec-ttl">' + esc(title) + '<span class="badge">' + questions.length + '<\/span><\/h2><div class="list">';
+          questions.forEach((q, i) => {
+            s += '<div class="item quiz-q">';
+            s += '<p class="item-ttl"><span class="q-num">' + (i + 1) + '<\/span>' + esc(q.question || '') + '<\/p>';
+            if (q.answers && Array.isArray(q.answers)) {
+              s += '<div class="answers">';
+              q.answers.forEach(a => {
+                const isCorrect = a.distractor === false;
+                const cls = isCorrect ? 'answer correct' : 'answer';
+                const icon = isCorrect ? '✓' : '';
+                const content = a.content || '';
+                s += '<div class="' + cls + '">' + (icon ? '<span class="ans-icon">' + icon + '<\/span>' : '') + esc(content) + '<\/div>';
+              });
+              s += '<\/div>';
+            }
+            s += '<\/div>';
+          });
+          s += '<\/div><\/div>';
+          return s;
+        }
+
+        h += renderQuizSection('Starter Quiz', data.starterQuiz);
+        h += renderQuizSection('Exit Quiz', data.exitQuiz);
+
+        if (!h) {
+          h = '<div class="empty">No quiz data available.<\/div>';
+        }
+
+        // Canonical URL link
+        if (data.canonicalUrl) {
+          h += '<div class="sec" style="margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0">';
+          h += '<a class="link" href="' + esc(data.canonicalUrl) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(data.canonicalUrl) + '\')">View original Oak resource →<\/a>';
+          h += '<\/div>';
+        }
+
+        return h;
+      }
+
+      function renderEntitySummary(data) {
+        let h = '';
+
+        // Detect entity type and get title
+        const title = data.lessonTitle || data.unitTitle || data.subjectTitle || 'Details';
+        const subtitle = [data.subjectTitle, data.keyStageTitle, data.year ? 'Year ' + data.year : ''].filter(Boolean).join(' • ');
+
+        // Header section
+        h += '<div class="sec"><h2 class="sec-ttl">' + esc(title) + '<\/h2>';
+        if (subtitle && subtitle !== title) h += '<p class="meta">' + esc(subtitle) + '<\/p>';
+        h += '<\/div>';
+
+        // Key Learning Points (lessons)
+        if (data.keyLearningPoints && Array.isArray(data.keyLearningPoints) && data.keyLearningPoints.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Key Learning Points<span class="badge">' + data.keyLearningPoints.length + '<\/span><\/h2>';
+          h += '<ul class="klp-list">';
+          data.keyLearningPoints.forEach(p => {
+            const point = typeof p === 'string' ? p : (p.keyLearningPoint || '');
+            if (point) h += '<li>' + esc(point) + '<\/li>';
+          });
+          h += '<\/ul><\/div>';
+        }
+
+        // Keywords (lessons)
+        if (data.lessonKeywords && Array.isArray(data.lessonKeywords) && data.lessonKeywords.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Keywords<span class="badge">' + data.lessonKeywords.length + '<\/span><\/h2>';
+          h += '<dl class="keywords">';
+          data.lessonKeywords.forEach(k => {
+            h += '<dt>' + esc(k.keyword || '') + '<\/dt>';
+            h += '<dd>' + esc(k.description || '') + '<\/dd>';
+          });
+          h += '<\/dl><\/div>';
+        }
+
+        // Prior Knowledge (units)
+        if (data.priorKnowledgeRequirements && Array.isArray(data.priorKnowledgeRequirements) && data.priorKnowledgeRequirements.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Prior Knowledge<\/h2>';
+          h += '<ul class="klp-list">';
+          data.priorKnowledgeRequirements.forEach(p => {
+            h += '<li>' + esc(p) + '<\/li>';
+          });
+          h += '<\/ul><\/div>';
+        }
+
+        // National Curriculum Content (units)
+        if (data.nationalCurriculumContent && Array.isArray(data.nationalCurriculumContent) && data.nationalCurriculumContent.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">National Curriculum<\/h2>';
+          h += '<ul class="klp-list">';
+          data.nationalCurriculumContent.forEach(c => {
+            h += '<li>' + esc(c) + '<\/li>';
+          });
+          h += '<\/ul><\/div>';
+        }
+
+        // Unit Lessons (units)
+        if (data.unitLessons && Array.isArray(data.unitLessons) && data.unitLessons.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Lessons<span class="badge">' + data.unitLessons.length + '<\/span><\/h2><div class="list">';
+          data.unitLessons.forEach(l => {
+            const state = l.state === 'published' ? '' : (l.state === 'new' ? ' <span class="badge new">New<\/span>' : '');
+            h += '<div class="item"><p class="item-ttl">' + (l.lessonOrder || '') + '. ' + esc(l.lessonTitle || l.title || '') + state + '<\/p><\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Sequences (subjects)
+        if (data.sequences && Array.isArray(data.sequences) && data.sequences.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Sequences<span class="badge">' + data.sequences.length + '<\/span><\/h2><div class="list">';
+          data.sequences.forEach(s => {
+            const years = s.years ? 'Years ' + Math.min(...s.years) + '-' + Math.max(...s.years) : '';
+            h += '<div class="item"><p class="item-ttl">' + esc(s.sequenceSlug || s.title || '') + '<\/p>';
+            if (years) h += '<p class="meta">' + esc(years) + '<\/p>';
+            h += '<\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Misconceptions (lessons)
+        if (data.misconceptionsAndCommonMistakes && Array.isArray(data.misconceptionsAndCommonMistakes) && data.misconceptionsAndCommonMistakes.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Misconceptions<\/h2><div class="list">';
+          data.misconceptionsAndCommonMistakes.forEach(m => {
+            h += '<div class="item"><p class="item-ttl">' + esc(m.misconception || '') + '<\/p>';
+            if (m.response) h += '<p class="meta"><strong>Response:<\/strong> ' + esc(m.response) + '<\/p>';
+            h += '<\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Teacher Tips (lessons)
+        if (data.teacherTips && Array.isArray(data.teacherTips) && data.teacherTips.length > 0) {
+          h += '<div class="sec"><h2 class="sec-ttl">Teacher Tips<\/h2><div class="list">';
+          data.teacherTips.forEach(t => {
+            const tip = typeof t === 'string' ? t : (t.teacherTip || '');
+            if (tip) h += '<div class="item"><p class="meta">' + esc(tip) + '<\/p><\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Pupil Outcome (lessons)
+        if (data.pupilLessonOutcome) {
+          h += '<div class="sec"><h2 class="sec-ttl">Pupil Outcome<\/h2>';
+          h += '<p style="margin:0;font-size:14px">' + esc(data.pupilLessonOutcome) + '<\/p><\/div>';
+        }
+
+        // Canonical URL link
+        if (data.canonicalUrl) {
+          h += '<div class="sec" style="margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0">';
+          h += '<a class="link" href="' + esc(data.canonicalUrl) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(data.canonicalUrl) + '\')">View original Oak resource →<\/a>';
+          h += '<\/div>';
+        }
+
+        return h || '<div class="empty">No details available.<\/div>';
+      }
+
+      function renderEntityList(data) {
+        // Handle both array and object with results array
+        const items = Array.isArray(data) ? data : (data.results || data.items || []);
+
+        if (!Array.isArray(items) || items.length === 0) {
+          return '<div class="empty">No items found.<\/div>';
+        }
+
+        const first = items[0] || {};
+
+        // Detect entity type from properties
+        let entityType = 'Items';
+        let titleProp = 'title';
+        let slugProp = 'slug';
+
+        if (first.keyStageTitle || first.keyStageSlug) {
+          entityType = 'Key Stages';
+          titleProp = 'keyStageTitle';
+          slugProp = 'keyStageSlug';
+        } else if (first.subjectTitle || first.subjectSlug) {
+          entityType = 'Subjects';
+          titleProp = 'subjectTitle';
+          slugProp = 'subjectSlug';
+        } else if (first.lessonTitle || first.lessonSlug) {
+          entityType = 'Lessons';
+          titleProp = 'lessonTitle';
+          slugProp = 'lessonSlug';
+        } else if (first.unitTitle || first.unitSlug) {
+          entityType = 'Units';
+          titleProp = 'unitTitle';
+          slugProp = 'unitSlug';
+        } else if (first.threadTitle || first.threadSlug) {
+          entityType = 'Threads';
+          titleProp = 'threadTitle';
+          slugProp = 'threadSlug';
+        } else if (first.sequenceSlug) {
+          entityType = 'Sequences';
+          titleProp = 'sequenceSlug';
+          slugProp = 'sequenceSlug';
+        } else if (first.year !== undefined) {
+          entityType = 'Years';
+          titleProp = 'year';
+        } else if (first.title) {
+          entityType = 'Items';
+          titleProp = 'title';
+          slugProp = 'slug';
+        }
+
+        let h = '<div class="sec"><h2 class="sec-ttl">' + esc(entityType) + '<span class="badge">' + items.length + '<\/span><\/h2><div class="list">';
+
+        const maxItems = 10;
+        const displayItems = items.slice(0, maxItems);
+
+        displayItems.forEach(item => {
+          const title = item[titleProp] || item.title || item.slug || item.name || 'Untitled';
+          const displayTitle = titleProp === 'year' ? 'Year ' + title : title;
+
+          // Build metadata line
+          const metaParts = [];
+          if (item.subjectTitle && titleProp !== 'subjectTitle') metaParts.push(item.subjectTitle);
+          if (item.keyStageTitle && titleProp !== 'keyStageTitle') metaParts.push(item.keyStageTitle);
+          if (item.keyStage) metaParts.push(item.keyStage);
+          if (item.year && titleProp !== 'year') metaParts.push('Year ' + item.year);
+          if (item.phaseTitle) metaParts.push(item.phaseTitle);
+          if (item.order !== undefined) metaParts.push('Order: ' + item.order);
+
+          const meta = metaParts.join(' • ');
+          const url = item.canonicalUrl || '';
+
+          h += '<div class="item"><p class="item-ttl">' + esc(displayTitle) + '<\/p>';
+          if (meta) h += '<p class="meta">' + esc(meta) + '<\/p>';
+
+          // Key stages within subjects/sequences
+          if (item.keyStages && Array.isArray(item.keyStages) && item.keyStages.length > 0) {
+            const ksNames = item.keyStages.map(ks => ks.keyStageTitle || ks.title || ks).join(', ');
+            h += '<p class="meta">Key Stages: ' + esc(ksNames) + '<\/p>';
+          }
+
+          // Years within subjects/sequences
+          if (item.years && Array.isArray(item.years) && item.years.length > 0 && titleProp !== 'year') {
+            const yearRange = 'Years ' + Math.min(...item.years) + '-' + Math.max(...item.years);
+            h += '<p class="meta">' + esc(yearRange) + '<\/p>';
+          }
+
+          // Units within year groups
+          if (item.units && Array.isArray(item.units) && item.units.length > 0) {
+            h += '<p class="meta">' + item.units.length + ' units<\/p>';
+          }
+
+          if (url) h += '<a class="link" href="' + esc(url) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(url) + '\')">View on Oak →<\/a>';
+          h += '<\/div>';
+        });
+
+        if (items.length > maxItems) {
+          h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (items.length - maxItems) + ' more<\/p>';
+        }
+
+        h += '<\/div><\/div>';
+        return h;
+      }
+
+      function renderTranscript(data) {
+        let h = '';
+
+        if (data.transcript) {
+          h += '<div class="sec"><h2 class="sec-ttl">Transcript<\/h2>';
+          h += '<div class="transcript-text" style="font-size:14px;line-height:1.6;max-height:400px;overflow-y:auto;padding:12px;background:#f8f9fa;border-radius:8px">';
+          h += esc(data.transcript);
+          h += '<\/div><\/div>';
+        }
+
+        if (data.vtt) {
+          h += '<div class="sec"><h2 class="sec-ttl">VTT Data<\/h2>';
+          h += '<details style="margin-top:8px"><summary style="cursor:pointer;font-size:13px;color:#666">Show VTT timing data<\/summary>';
+          h += '<pre style="font-size:11px;max-height:200px;overflow:auto;margin-top:8px;background:#f0f0f0;padding:8px;border-radius:4px">' + esc(data.vtt) + '<\/pre>';
+          h += '<\/details><\/div>';
+        }
+
+        if (!h) {
+          h = '<div class="empty">No transcript available.<\/div>';
+        }
+
+        // Canonical URL link
+        if (data.canonicalUrl) {
+          h += '<div class="sec" style="margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0">';
+          h += '<a class="link" href="' + esc(data.canonicalUrl) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(data.canonicalUrl) + '\')">View original Oak resource →<\/a>';
+          h += '<\/div>';
+        }
+
+        return h;
+      }
+
+      function renderAssets(data) {
+        let h = '';
+
+        // Handle different asset structures
+        let assets = [];
+        let groupedByLesson = false;
+
+        if (Array.isArray(data)) {
+          // Could be assets array or lessons-with-assets array
+          if (data.length > 0 && data[0].assets) {
+            groupedByLesson = true;
+            assets = data;
+          } else {
+            assets = data;
+          }
+        } else if (data.assets && Array.isArray(data.assets)) {
+          assets = data.assets;
+        }
+
+        if (groupedByLesson) {
+          // Render assets grouped by lesson
+          h += '<div class="sec"><h2 class="sec-ttl">Assets by Lesson<span class="badge">' + assets.length + ' lessons<\/span><\/h2>';
+          assets.slice(0, 5).forEach(lesson => {
+            const lessonAssets = lesson.assets || [];
+            h += '<div class="item"><p class="item-ttl">' + esc(lesson.lessonTitle || lesson.lessonSlug || 'Lesson') + '<span class="badge">' + lessonAssets.length + '<\/span><\/p>';
+            if (lessonAssets.length > 0) {
+              h += '<div class="asset-list" style="margin-top:8px">';
+              lessonAssets.slice(0, 3).forEach(a => {
+                h += renderAssetItem(a);
+              });
+              if (lessonAssets.length > 3) h += '<p class="meta" style="margin-top:4px">+' + (lessonAssets.length - 3) + ' more assets<\/p>';
+              h += '<\/div>';
+            }
+            h += '<\/div>';
+          });
+          if (assets.length > 5) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (assets.length - 5) + ' more lessons<\/p>';
+          h += '<\/div>';
+        } else if (assets.length > 0) {
+          // Render flat list of assets
+          h += '<div class="sec"><h2 class="sec-ttl">Assets<span class="badge">' + assets.length + '<\/span><\/h2><div class="list">';
+          assets.slice(0, 10).forEach(a => {
+            h += '<div class="item">' + renderAssetItem(a) + '<\/div>';
+          });
+          if (assets.length > 10) h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (assets.length - 10) + ' more<\/p>';
+          h += '<\/div><\/div>';
+        }
+
+        if (!h) {
+          h = '<div class="empty">No assets available.<\/div>';
+        }
+
+        // Canonical URL link (for single lesson assets)
+        if (data.canonicalUrl) {
+          h += '<div class="sec" style="margin-top:16px;padding-top:16px;border-top:1px solid #e0e0e0">';
+          h += '<a class="link" href="' + esc(data.canonicalUrl) + '" target="_blank" onclick="openOnOakWebsite(event, \'' + esc(data.canonicalUrl) + '\')">View original Oak resource →<\/a>';
+          h += '<\/div>';
+        }
+
+        return h;
+      }
+
+      function renderAssetItem(a) {
+        const type = a.type || a.assetType || 'file';
+        const icons = { video: '🎬', image: '🖼️', document: '📄', audio: '🎵', pdf: '📑', worksheet: '📝', slideDeck: '📊', default: '📎' };
+        const icon = icons[type] || icons.default;
+        const title = a.title || a.name || type;
+        const url = a.downloadUrl || a.url || '';
+
+        let item = '<p class="item-ttl">' + icon + ' ' + esc(title) + '<\/p>';
+        if (a.format) item += '<p class="meta">' + esc(a.format.toUpperCase()) + '<\/p>';
+        if (url) item += '<a class="link" href="' + esc(url) + '" target="_blank">Download →<\/a>';
+        return item;
+      }
+
+      function renderChangelog(data) {
+        let h = '';
+
+        // Normalize to array
+        const entries = Array.isArray(data) ? data : [data];
+
+        if (entries.length === 0 || !entries[0].version) {
+          return '<div class="empty">No changelog data available.<\/div>';
+        }
+
+        h += '<div class="sec"><h2 class="sec-ttl">Changelog<span class="badge">' + entries.length + ' versions<\/span><\/h2><div class="list">';
+
+        entries.slice(0, 5).forEach(entry => {
+          h += '<div class="item changelog-entry">';
+          h += '<p class="item-ttl"><span class="version-badge">v' + esc(entry.version || '') + '<\/span>';
+          if (entry.date) h += ' <span class="meta">' + esc(entry.date) + '<\/span>';
+          h += '<\/p>';
+
+          if (entry.changes && Array.isArray(entry.changes) && entry.changes.length > 0) {
+            h += '<ul class="changes-list" style="margin:8px 0 0;padding-left:20px;font-size:13px">';
+            entry.changes.forEach(change => {
+              h += '<li style="margin-bottom:4px">' + esc(change) + '<\/li>';
+            });
+            h += '<\/ul>';
+          }
+          h += '<\/div>';
+        });
+
+        if (entries.length > 5) {
+          h += '<p class="meta" style="text-align:center;margin-top:8px">+' + (entries.length - 5) + ' older versions<\/p>';
+        }
+
+        h += '<\/div><\/div>';
+        return h;
+      }
+
+      function renderRateLimit(data) {
+        let h = '';
+
+        const remaining = data.remaining ?? 0;
+        const limit = data.limit ?? 0;
+        const used = limit - remaining;
+        const percent = limit > 0 ? Math.round((used / limit) * 100) : 0;
+
+        h += '<div class="sec"><h2 class="sec-ttl">Rate Limit Status<\/h2>';
+
+        // Progress bar
+        const barColor = percent > 80 ? '#e74c3c' : (percent > 50 ? '#f39c12' : '#27ae60');
+        h += '<div class="rate-limit-bar" style="background:#eee;border-radius:8px;height:24px;margin:12px 0;overflow:hidden">';
+        h += '<div style="background:' + barColor + ';height:100%;width:' + percent + '%;transition:width 0.3s"><\/div>';
+        h += '<\/div>';
+
+        // Stats
+        h += '<div style="display:flex;justify-content:space-between;font-size:14px">';
+        h += '<span><strong>Used:<\/strong> ' + used + ' / ' + limit + '<\/span>';
+        h += '<span><strong>Remaining:<\/strong> ' + remaining + '<\/span>';
+        h += '<\/div>';
+
+        // Reset time
+        if (data.reset) {
+          let resetText = data.reset;
+          if (typeof data.reset === 'number') {
+            try {
+              resetText = new Date(data.reset * 1000).toLocaleTimeString();
+            } catch (e) {
+              resetText = String(data.reset);
+            }
+          }
+          h += '<p class="meta" style="margin-top:12px;text-align:center">Resets at: ' + esc(resetText) + '<\/p>';
+        }
+
+        h += '<\/div>';
+        return h;
+      }
+
+      function renderOntology(o) {
+        let h = '';
+
+        // Quick Links section with external resources
+        h += '<div class="sec"><h2 class="sec-ttl">Oak Curriculum<\/h2>';
+        h += '<p style="margin:0 0 12px;font-size:14px">The Oak Curriculum covers Key Stages 1-4 across 20+ subjects, aligned to the National Curriculum for England.<\/p>';
+        h += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+        h += '<a class="link" href="https://www.thenational.academy/teachers/curriculum" target="_blank" onclick="openOnOakWebsite(event, \'https://www.thenational.academy/teachers/curriculum\')">Browse Curriculum \u2192<\/a>';
+        h += '<a class="link" href="https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams" target="_blank" onclick="openOnOakWebsite(event, \'https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams\')">View Data Model \u2192<\/a>';
+        h += '<\/div><\/div>';
+
+        // Key Stages summary
+        if (o.curriculumStructure?.keyStages) {
+          const ks = o.curriculumStructure.keyStages;
+          h += '<div class="sec"><h2 class="sec-ttl">Key Stages<span class="badge">' + ks.length + '<\/span><\/h2><div class="list">';
+          ks.forEach(k => {
+            h += '<div class="item"><p class="item-ttl">' + esc(k.name) + ' (' + esc(k.slug) + ')<\/p>';
+            h += '<p class="meta">' + esc(k.phase) + ' \u2022 Ages ' + esc(k.ageRange) + ' \u2022 Years ' + (k.years || []).join(', ') + '<\/p>';
+            if (k.description) h += '<p class="meta">' + esc(k.description) + '<\/p>';
+            h += '<\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Entity Hierarchy
+        if (o.entityHierarchy?.levels) {
+          h += '<div class="sec"><h2 class="sec-ttl">Content Hierarchy<\/h2>';
+          h += '<p style="margin:0 0 8px;font-size:13px;color:#666">' + esc(o.entityHierarchy.description || 'Curriculum content is organised in a hierarchy') + '<\/p>';
+          h += '<div class="list">';
+          o.entityHierarchy.levels.forEach(lvl => {
+            h += '<div class="item"><p class="item-ttl">' + esc(lvl.entity) + '<\/p>';
+            h += '<p class="meta">Contains: ' + esc(lvl.contains || '') + '<\/p>';
+            if (lvl.example) h += '<p class="meta">Example: <code>' + esc(lvl.example) + '<\/code><\/p>';
+            h += '<\/div>';
+          });
+          h += '<\/div><\/div>';
+        }
+
+        // Threads concept
+        if (o.threads) {
+          h += '<div class="sec"><h2 class="sec-ttl">Threads<\/h2>';
+          h += '<p style="margin:0 0 8px;font-size:13px">' + esc(o.threads.definition || '') + '<\/p>';
+          if (o.threads.importance) h += '<p style="margin:0 0 8px;font-size:13px;font-style:italic">' + esc(o.threads.importance) + '<\/p>';
+          if (o.threads.examples?.length) {
+            h += '<div class="list">';
+            o.threads.examples.slice(0,3).forEach(ex => {
+              h += '<div class="item"><p class="item-ttl">' + esc(ex.slug) + ' (' + esc(ex.subject) + ')<\/p>';
+              h += '<p class="meta">' + esc(ex.spans || '') + '<\/p>';
+              if (ex.progression) h += '<p class="meta">' + esc(ex.progression) + '<\/p>';
+              h += '<\/div>';
+            });
+            h += '<\/div>';
+          }
+          h += '<\/div>';
+        }
+
+        // Tool workflows summary
+        if (o.workflows) {
+          const workflows = Object.entries(o.workflows);
+          if (workflows.length > 0) {
+            h += '<div class="sec"><h2 class="sec-ttl">Workflows<span class="badge">' + workflows.length + '<\/span><\/h2><div class="list">';
+            workflows.forEach(([, wf]) => {
+              if (wf.title || wf.description) {
+                h += '<div class="item"><p class="item-ttl">' + esc(wf.title || wf.description) + '<\/p>';
+                if (wf.description && wf.title) h += '<p class="meta">' + esc(wf.description) + '<\/p>';
+                if (wf.steps?.length) h += '<p class="meta">' + wf.steps.length + ' steps<\/p>';
+                h += '<\/div>';
+              }
+            });
+            h += '<\/div><\/div>';
+          }
+        }
+
+        return h || '<div class="empty">No ontology data available.<\/div>';
+      }
+
+      const KNOWLEDGE_GRAPH_OVERVIEW_SVG = `<svg viewBox="0 0 960 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:960px;height:auto;display:block;margin:0 auto"><style>
+        .node-core { fill: #287d3c; stroke: #1b3d1c; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-context { fill: #5da0d9; stroke: #2d5a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-content { fill: #d97d5d; stroke: #7b3d2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-taxonomy { fill: #9b7dcf; stroke: #5d4a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-ks4 { fill: #cfab5d; stroke: #7b6a2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-metadata { fill: #7a9e7a; stroke: #3d5a3d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        g[id^="node-"]:hover rect { stroke: #fff; stroke-width: 4; filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)); cursor: pointer; }
+        .edge { stroke: #fff; stroke-width: 4; fill: none; }
+        .edge-outline { stroke: #1b3d1c; stroke-width: 8; fill: none; }
+        .edge-dashed { stroke: #fff; stroke-width: 3; fill: none; stroke-dasharray: 8 5; }
+        .edge-dashed-outline { stroke: #1b3d1c; stroke-width: 7; fill: none; stroke-dasharray: 8 5; }
+        .label { font-size: 14px; fill: #fff; stroke: #1b3d1c; stroke-width: 3px; paint-order: stroke fill; text-anchor: middle; font-family: inherit; font-weight: 700; }
+        .label-sm { font-size: 11px; fill: #fff; stroke: #1b3d1c; stroke-width: 2px; paint-order: stroke fill; text-anchor: middle; font-family: inherit; font-weight: 600; }
+        .group-label-bg { fill: #000; }
+        .group-label { font-size: 13px; fill: #fff; text-anchor: start; font-family: inherit; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+      <\/style><g><title>includesKeyStages<\/title><line class="edge-outline" x1="80" y1="62.5" x2="260" y2="62.5"/><line class="edge" x1="80" y1="62.5" x2="260" y2="62.5"/><\/g><g><title>includesYears<\/title><line class="edge-outline" x1="260" y1="62.5" x2="475" y2="62.5"/><line class="edge" x1="260" y1="62.5" x2="475" y2="62.5"/><\/g><g><title>hasSequences<\/title><line class="edge-outline" x1="80" y1="180" x2="265" y2="180"/><line class="edge" x1="80" y1="180" x2="265" y2="180"/><\/g><g><title>containsUnits<\/title><line class="edge-outline" x1="265" y1="180" x2="460" y2="180"/><line class="edge" x1="265" y1="180" x2="460" y2="180"/><\/g><g><title>containsLessons<\/title><line class="edge-outline" x1="460" y1="180" x2="730" y2="180"/><line class="edge" x1="460" y1="180" x2="730" y2="180"/><\/g><g><title>belongsTo (inferred)<\/title><line class="edge-dashed-outline" x1="80" y1="62.5" x2="80" y2="180"/><line class="edge-dashed" x1="80" y1="62.5" x2="80" y2="180"/><\/g><g><title>scopedTo (inferred)<\/title><line class="edge-dashed-outline" x1="260" y1="62.5" x2="265" y2="180"/><line class="edge-dashed" x1="260" y1="62.5" x2="265" y2="180"/><\/g><g><title>targets (inferred)<\/title><line class="edge-dashed-outline" x1="475" y1="62.5" x2="460" y2="180"/><line class="edge-dashed" x1="475" y1="62.5" x2="460" y2="180"/><\/g><g><title>taggedWith<\/title><line class="edge-dashed-outline" x1="460" y1="180" x2="345" y2="322.5"/><line class="edge-dashed" x1="460" y1="180" x2="345" y2="322.5"/><\/g><g><title>taggedWith<\/title><line class="edge-dashed-outline" x1="460" y1="180" x2="490" y2="322.5"/><line class="edge-dashed" x1="460" y1="180" x2="490" y2="322.5"/><\/g><g><title>hasQuizzes<\/title><line class="edge-outline" x1="730" y1="180" x2="660" y2="322.5"/><line class="edge" x1="730" y1="180" x2="660" y2="322.5"/><\/g><g><title>hasAssets<\/title><line class="edge-outline" x1="730" y1="180" x2="760" y2="322.5"/><line class="edge" x1="730" y1="180" x2="760" y2="322.5"/><\/g><g><title>hasTranscript<\/title><line class="edge-outline" x1="730" y1="180" x2="887.5" y2="322.5"/><line class="edge" x1="730" y1="180" x2="887.5" y2="322.5"/><\/g><g><title>containsQuestions<\/title><line class="edge-outline" x1="660" y1="322.5" x2="720" y2="432.5"/><line class="edge" x1="660" y1="322.5" x2="720" y2="432.5"/><\/g><g><title>hasAnswers<\/title><line class="edge-outline" x1="720" y1="432.5" x2="747.5" y2="522.5"/><line class="edge" x1="720" y1="432.5" x2="747.5" y2="522.5"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-outline" x1="95" y1="412.5" x2="70" y2="492.5"/><line class="edge" x1="95" y1="412.5" x2="70" y2="492.5"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-outline" x1="95" y1="412.5" x2="185" y2="492.5"/><line class="edge" x1="95" y1="412.5" x2="185" y2="492.5"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-outline" x1="70" y1="492.5" x2="95" y2="572.5"/><line class="edge" x1="70" y1="492.5" x2="95" y2="572.5"/><\/g><g id="context-section" transform="translate(28, 15)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="80" height="20" rx="4"/><text class="group-label" x="40" y="15" style="text-anchor:middle">Context<\/text><\/g><g id="node-phase" transform="translate(2, 30)"><title>Phase: Primary or secondary<\/title><rect class="node-context" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Phase<\/text><\/g><g id="node-keystage" transform="translate(167, 30)"><title>Key Stage: KS1-KS4 formal education stage<\/title><rect class="node-context" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Key Stage<\/text><\/g><g id="node-yeargroup" transform="translate(382, 30)"><title>Year Group: Year 1-11 school year<\/title><rect class="node-context" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Year Group<\/text><\/g><\/g><g id="core-structure-section" transform="translate(28, 145)"><g transform="translate(0, 63)"><rect class="group-label-bg" width="150" height="20" rx="4"/><text class="group-label" x="75" y="15" style="text-anchor:middle">Core Structure<\/text><\/g><g id="node-subject" transform="translate(2, 15)"><title>Subject: Curriculum subject area (maths, history, etc.)<\/title><rect class="node-core" width="100" height="40" rx="20"/><text class="label" x="50" y="25">Subject<\/text><\/g><g id="node-sequence" transform="translate(172, 15)"><title>Sequence: Internal API grouping of units across years<\/title><rect class="node-core" width="130" height="40" rx="20"/><text class="label" x="65" y="25">Sequence<\/text><\/g><g id="node-unit" transform="translate(392, 15)"><title>Unit: Topic of study with ordered lessons<\/title><rect class="node-core" width="80" height="40" rx="20"/><text class="label" x="40" y="25">Unit<\/text><\/g><g id="node-lesson" transform="translate(652, 15)"><title>Lesson: Teaching session with 8 standard components<\/title><rect class="node-core" width="100" height="40" rx="20"/><text class="label" x="50" y="25">Lesson<\/text><\/g><\/g><g id="taxonomy-section" transform="translate(288, 270)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="90" height="20" rx="4"/><text class="group-label" x="45" y="15" style="text-anchor:middle">Taxonomy<\/text><\/g><g id="node-thread" transform="translate(2, 35)"><title>Thread: Conceptual strand linking units across years<\/title><rect class="node-taxonomy" width="110" height="35" rx="17.5"/><text class="label" x="55" y="22.5">Thread<\/text><\/g><g id="node-category" transform="translate(142, 35)"><title>Category: Subject-specific grouping of units<\/title><rect class="node-taxonomy" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Category<\/text><\/g><\/g><g id="content-section" transform="translate(618, 270)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="80" height="20" rx="4"/><text class="group-label" x="40" y="15" style="text-anchor:middle">Content<\/text><\/g><g id="node-quiz" transform="translate(2, 35)"><title>Quiz: Starter or exit assessment<\/title><rect class="node-content" width="80" height="35" rx="17.5"/><text class="label" x="40" y="22.5">Quiz<\/text><\/g><g id="node-asset" transform="translate(102, 35)"><title>Asset: Downloadable resource (slides, worksheet)<\/title><rect class="node-content" width="80" height="35" rx="17.5"/><text class="label" x="40" y="22.5">Asset<\/text><\/g><g id="node-transcript" transform="translate(212, 35)"><title>Transcript: Video transcript text<\/title><rect class="node-content" width="115" height="35" rx="17.5"/><text class="label" x="57.5" y="22.5">Transcript<\/text><\/g><g id="node-question" transform="translate(42, 145)"><title>Question: Quiz question with answers<\/title><rect class="node-content" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Question<\/text><\/g><g id="node-answer" transform="translate(77, 235)"><title>Answer: Correct answer or distractor<\/title><rect class="node-content" width="105" height="35" rx="17.5"/><text class="label" x="52.5" y="22.5">Answer<\/text><\/g><\/g><g id="ks4-section" transform="translate(28, 362)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="40" height="20" rx="4"/><text class="group-label" x="20" y="15" style="text-anchor:middle">KS4<\/text><\/g><g id="node-programme" transform="translate(2, 33)"><title>Programme: User-facing curriculum pathway (derived view)<\/title><rect class="node-ks4" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Programme<\/text><\/g><g id="node-tier" transform="translate(2, 113)"><title>Tier: Foundation or higher difficulty level<\/title><rect class="node-ks4" width="80" height="35" rx="17.5"/><text class="label" x="40" y="22.5">Tier<\/text><\/g><g id="node-pathway" transform="translate(102, 113)"><title>Pathway: Core or GCSE route through KS4<\/title><rect class="node-ks4" width="110" height="35" rx="17.5"/><text class="label" x="55" y="22.5">Pathway<\/text><\/g><g id="node-examboard" transform="translate(2, 193)"><title>Exam Board: AQA, OCR, Edexcel, Eduqas<\/title><rect class="node-ks4" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Exam Board<\/text><\/g><\/g><\/svg>`;
+      const KNOWLEDGE_GRAPH_FULL_SVG = `<svg viewBox="0 0 1250 950" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:1250px;height:auto;display:block;margin:0 auto"><style>
+        .node-core { fill: #287d3c; stroke: #1b3d1c; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-context { fill: #5da0d9; stroke: #2d5a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-content { fill: #d97d5d; stroke: #7b3d2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-taxonomy { fill: #9b7dcf; stroke: #5d4a7b; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-ks4 { fill: #cfab5d; stroke: #7b6a2d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        .node-metadata { fill: #7a9e7a; stroke: #3d5a3d; stroke-width: 2; transition: stroke-width 0.15s, filter 0.15s; }
+        g[id^="node-"]:hover rect { stroke: #fff; stroke-width: 4; filter: drop-shadow(0 0 8px rgba(255,255,255,0.7)); cursor: pointer; }
+        .edge { stroke: #fff; stroke-width: 4; fill: none; }
+        .edge-outline { stroke: #1b3d1c; stroke-width: 8; fill: none; }
+        .edge-dashed { stroke: #fff; stroke-width: 3; fill: none; stroke-dasharray: 8 5; }
+        .edge-dashed-outline { stroke: #1b3d1c; stroke-width: 7; fill: none; stroke-dasharray: 8 5; }
+        .label { font-size: 14px; fill: #fff; stroke: #1b3d1c; stroke-width: 3px; paint-order: stroke fill; text-anchor: middle; font-family: inherit; font-weight: 700; }
+        .label-sm { font-size: 11px; fill: #fff; stroke: #1b3d1c; stroke-width: 2px; paint-order: stroke fill; text-anchor: middle; font-family: inherit; font-weight: 600; }
+        .group-label-bg { fill: #000; }
+        .group-label { font-size: 13px; fill: #fff; text-anchor: start; font-family: inherit; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+      <\/style><g><title>includesKeyStages<\/title><line class="edge-outline" x1="70" y1="55.5" x2="260" y2="55.5"/><line class="edge" x1="70" y1="55.5" x2="260" y2="55.5"/><\/g><g><title>includesYears<\/title><line class="edge-outline" x1="260" y1="55.5" x2="500" y2="55.5"/><line class="edge" x1="260" y1="55.5" x2="500" y2="55.5"/><\/g><g><title>hasSequences<\/title><line class="edge-outline" x1="65" y1="150" x2="265" y2="150"/><line class="edge" x1="65" y1="150" x2="265" y2="150"/><\/g><g><title>containsUnits<\/title><line class="edge-outline" x1="265" y1="150" x2="470" y2="150"/><line class="edge" x1="265" y1="150" x2="470" y2="150"/><\/g><g><title>containsLessons<\/title><line class="edge-outline" x1="470" y1="150" x2="670" y2="150"/><line class="edge" x1="470" y1="150" x2="670" y2="150"/><\/g><g><title>availableAt<\/title><line class="edge-outline" x1="65" y1="150" x2="260" y2="55.5"/><line class="edge" x1="65" y1="150" x2="260" y2="55.5"/><\/g><g><title>hasQuizzes<\/title><line class="edge-outline" x1="670" y1="150" x2="670" y2="267.5"/><line class="edge" x1="670" y1="150" x2="670" y2="267.5"/><\/g><g><title>hasAssets<\/title><line class="edge-outline" x1="670" y1="150" x2="790" y2="267.5"/><line class="edge" x1="670" y1="150" x2="790" y2="267.5"/><\/g><g><title>hasTranscript<\/title><line class="edge-outline" x1="670" y1="150" x2="920" y2="267.5"/><line class="edge" x1="670" y1="150" x2="920" y2="267.5"/><\/g><g><title>containsQuestions<\/title><line class="edge-outline" x1="670" y1="267.5" x2="670" y2="367.5"/><line class="edge" x1="670" y1="267.5" x2="670" y2="367.5"/><\/g><g><title>hasAnswers<\/title><line class="edge-outline" x1="670" y1="367.5" x2="670" y2="467.5"/><line class="edge" x1="670" y1="367.5" x2="670" y2="467.5"/><\/g><g><title>linksAcrossYears<\/title><line class="edge-outline" x1="345" y1="304.5" x2="470" y2="150"/><line class="edge" x1="345" y1="304.5" x2="470" y2="150"/><\/g><g><title>taggedWith<\/title><line class="edge-outline" x1="470" y1="150" x2="490" y2="304.5"/><line class="edge" x1="470" y1="150" x2="490" y2="304.5"/><\/g><g><title>hasKeywords<\/title><line class="edge-outline" x1="670" y1="150" x2="870" y2="567.5"/><line class="edge" x1="670" y1="150" x2="870" y2="567.5"/><\/g><g><title>addressesMisconceptions<\/title><line class="edge-outline" x1="670" y1="150" x2="1020" y2="567.5"/><line class="edge" x1="670" y1="150" x2="1020" y2="567.5"/><\/g><g><title>hasGuidance<\/title><line class="edge-outline" x1="670" y1="150" x2="895" y2="617.5"/><line class="edge" x1="670" y1="150" x2="895" y2="617.5"/><\/g><g><title>delivers<\/title><line class="edge-outline" x1="670" y1="150" x2="1090" y2="617.5"/><line class="edge" x1="670" y1="150" x2="1090" y2="617.5"/><\/g><g><title>hasTips<\/title><line class="edge-outline" x1="670" y1="150" x2="875" y2="667.5"/><line class="edge" x1="670" y1="150" x2="875" y2="667.5"/><\/g><g><title>requiresSupervision<\/title><line class="edge-outline" x1="895" y1="617.5" x2="1050" y2="667.5"/><line class="edge" x1="895" y1="617.5" x2="1050" y2="667.5"/><\/g><g><title>requiresPriorKnowledge<\/title><line class="edge-outline" x1="470" y1="150" x2="890" y2="717.5"/><line class="edge" x1="470" y1="150" x2="890" y2="717.5"/><\/g><g><title>covers<\/title><line class="edge-outline" x1="470" y1="150" x2="1080" y2="717.5"/><line class="edge" x1="470" y1="150" x2="1080" y2="717.5"/><\/g><g><title>derivedFrom (inferred)<\/title><line class="edge-dashed-outline" x1="100" y1="442.5" x2="265" y2="150"/><line class="edge-dashed" x1="100" y1="442.5" x2="265" y2="150"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-dashed-outline" x1="100" y1="442.5" x2="70" y2="539.5"/><line class="edge-dashed" x1="100" y1="442.5" x2="70" y2="539.5"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-dashed-outline" x1="100" y1="442.5" x2="208" y2="539.5"/><line class="edge-dashed" x1="100" y1="442.5" x2="208" y2="539.5"/><\/g><g><title>usesFactorWhen (inferred)<\/title><line class="edge-dashed-outline" x1="100" y1="442.5" x2="100" y2="639.5"/><line class="edge-dashed" x1="100" y1="442.5" x2="100" y2="639.5"/><\/g><g><title>branchesInto (inferred)<\/title><line class="edge-dashed-outline" x1="265" y1="150" x2="348" y2="574.5"/><line class="edge-dashed" x1="265" y1="150" x2="348" y2="574.5"/><\/g><g><title>hasTiers (inferred)<\/title><line class="edge-dashed-outline" x1="348" y1="574.5" x2="70" y2="539.5"/><line class="edge-dashed" x1="348" y1="574.5" x2="70" y2="539.5"/><\/g><g><title>containsUnits (inferred)<\/title><line class="edge-dashed-outline" x1="348" y1="574.5" x2="470" y2="150"/><line class="edge-dashed" x1="348" y1="574.5" x2="470" y2="150"/><\/g><g><title>containsUnits (inferred)<\/title><line class="edge-dashed-outline" x1="70" y1="539.5" x2="470" y2="150"/><line class="edge-dashed" x1="70" y1="539.5" x2="470" y2="150"/><\/g><g><title>belongsTo (inferred)<\/title><line class="edge-dashed-outline" x1="470" y1="150" x2="65" y2="150"/><line class="edge-dashed" x1="470" y1="150" x2="65" y2="150"/><\/g><g><title>scopedTo (inferred)<\/title><line class="edge-dashed-outline" x1="470" y1="150" x2="260" y2="55.5"/><line class="edge-dashed" x1="470" y1="150" x2="260" y2="55.5"/><\/g><g><title>targets (inferred)<\/title><line class="edge-dashed-outline" x1="470" y1="150" x2="500" y2="55.5"/><line class="edge-dashed" x1="470" y1="150" x2="500" y2="55.5"/><\/g><g id="context-section" transform="translate(18, 12)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="80" height="20" rx="4"/><text class="group-label" x="40" y="15" style="text-anchor:middle">Context<\/text><\/g><g id="node-phase" transform="translate(2, 26)"><title>Phase: Primary or secondary<\/title><rect class="node-context" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Phase<\/text><\/g><g id="node-keystage" transform="translate(177, 26)"><title>Key Stage: KS1-KS4 formal education stage<\/title><rect class="node-context" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Key Stage<\/text><\/g><g id="node-yeargroup" transform="translate(417, 26)"><title>Year Group: Year 1-11 school year<\/title><rect class="node-context" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Year Group<\/text><\/g><\/g><g id="core-structure-section" transform="translate(18, 118)"><g transform="translate(0, 60)"><rect class="group-label-bg" width="150" height="20" rx="4"/><text class="group-label" x="75" y="15" style="text-anchor:middle">Core Structure<\/text><\/g><g id="node-subject" transform="translate(2, 12)"><title>Subject: Curriculum subject area (maths, history, etc.)<\/title><rect class="node-core" width="90" height="40" rx="20"/><text class="label" x="45" y="25">Subject<\/text><\/g><g id="node-sequence" transform="translate(182, 12)"><title>Sequence: Internal API grouping of units across years<\/title><rect class="node-core" width="130" height="40" rx="20"/><text class="label" x="65" y="25">Sequence<\/text><\/g><g id="node-unit" transform="translate(412, 12)"><title>Unit: Topic of study with ordered lessons<\/title><rect class="node-core" width="80" height="40" rx="20"/><text class="label" x="40" y="25">Unit<\/text><\/g><g id="node-lesson" transform="translate(602, 12)"><title>Lesson: Teaching session with 8 standard components<\/title><rect class="node-core" width="100" height="40" rx="20"/><text class="label" x="50" y="25">Lesson<\/text><\/g><\/g><g id="content-section" transform="translate(618, 218)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="80" height="20" rx="4"/><text class="group-label" x="40" y="15" style="text-anchor:middle">Content<\/text><\/g><g id="node-quiz" transform="translate(2, 32)"><title>Quiz: Starter or exit assessment<\/title><rect class="node-content" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Quiz<\/text><\/g><g id="node-asset" transform="translate(122, 32)"><title>Asset: Downloadable resource (slides, worksheet)<\/title><rect class="node-content" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Asset<\/text><\/g><g id="node-transcript" transform="translate(242, 32)"><title>Transcript: Video transcript text<\/title><rect class="node-content" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Transcript<\/text><\/g><g id="node-question" transform="translate(-8, 132)"><title>Question: Quiz question with answers<\/title><rect class="node-content" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Question<\/text><\/g><g id="node-answer" transform="translate(2, 232)"><title>Answer: Correct answer or distractor<\/title><rect class="node-content" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Answer<\/text><\/g><\/g><g id="taxonomy-section" transform="translate(288, 255)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="90" height="20" rx="4"/><text class="group-label" x="45" y="15" style="text-anchor:middle">Taxonomy<\/text><\/g><g id="node-thread" transform="translate(2, 32)"><title>Thread: Conceptual strand linking units across years<\/title><rect class="node-taxonomy" width="110" height="35" rx="17.5"/><text class="label" x="55" y="22.5">Thread<\/text><\/g><g id="node-category" transform="translate(132, 32)"><title>Category: Subject-specific grouping of units<\/title><rect class="node-taxonomy" width="140" height="35" rx="17.5"/><text class="label" x="70" y="22.5">Category<\/text><\/g><\/g><g id="ks4-section" transform="translate(18, 398)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="40" height="20" rx="4"/><text class="group-label" x="20" y="15" style="text-anchor:middle">KS4<\/text><\/g><g id="node-programme" transform="translate(2, 27)"><title>Programme: User-facing curriculum pathway (derived view)<\/title><rect class="node-ks4" width="160" height="35" rx="17.5"/><text class="label" x="80" y="22.5">Programme<\/text><\/g><g id="node-tier" transform="translate(2, 124)"><title>Tier: Foundation or higher difficulty level<\/title><rect class="node-ks4" width="100" height="35" rx="17.5"/><text class="label" x="50" y="22.5">Tier<\/text><\/g><g id="node-pathway" transform="translate(130, 124)"><title>Pathway: Core or GCSE route through KS4<\/title><rect class="node-ks4" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Pathway<\/text><\/g><g id="node-examsubject" transform="translate(260, 159)"><title>Exam Subject: Biology, Chemistry, Physics (KS4 science)<\/title><rect class="node-ks4" width="140" height="35" rx="17.5"/><text class="label" x="70" y="22.5">Exam Subject<\/text><\/g><g id="node-examboard" transform="translate(2, 224)"><title>Exam Board: AQA, OCR, Edexcel, Eduqas<\/title><rect class="node-ks4" width="160" height="35" rx="17.5"/><text class="label" x="80" y="22.5">Exam Board<\/text><\/g><\/g><g id="metadata-section" transform="translate(808, 518)"><g transform="translate(0, 0)"><rect class="group-label-bg" width="90" height="20" rx="4"/><text class="group-label" x="45" y="15" style="text-anchor:middle">Metadata<\/text><\/g><g id="node-keyword" transform="translate(2, 32)"><title>Keyword: Critical vocabulary for the lesson<\/title><rect class="node-metadata" width="120" height="35" rx="17.5"/><text class="label" x="60" y="22.5">Keyword<\/text><\/g><g id="node-misconception" transform="translate(142, 32)"><title>Misconception: Common misunderstanding to address<\/title><rect class="node-metadata" width="140" height="35" rx="17.5"/><text class="label" x="70" y="22.5">Misconception<\/text><\/g><g id="node-contentguidance" transform="translate(2, 82)"><title>Content Guidance: Sensitive content advisory<\/title><rect class="node-metadata" width="170" height="35" rx="17.5"/><text class="label" x="85" y="22.5">Content Guidance<\/text><\/g><g id="node-keylearningpoint" transform="translate(192, 82)"><title>Key Learning Point: Main knowledge outcome of lesson<\/title><rect class="node-metadata" width="180" height="35" rx="17.5"/><text class="label" x="90" y="22.5">Key Learning Point<\/text><\/g><g id="node-teachertip" transform="translate(2, 132)"><title>Teacher Tip: Pedagogical guidance for delivery<\/title><rect class="node-metadata" width="130" height="35" rx="17.5"/><text class="label" x="65" y="22.5">Teacher Tip<\/text><\/g><g id="node-supervisionlevel" transform="translate(152, 132)"><title>Supervision Level: Adult supervision requirement level<\/title><rect class="node-metadata" width="180" height="35" rx="17.5"/><text class="label" x="90" y="22.5">Supervision Level<\/text><\/g><g id="node-priorknowledge" transform="translate(2, 182)"><title>Prior Knowledge: Prerequisite understanding required<\/title><rect class="node-metadata" width="160" height="35" rx="17.5"/><text class="label" x="80" y="22.5">Prior Knowledge<\/text><\/g><g id="node-nationalcurriculum" transform="translate(182, 182)"><title>National Curriculum: NC coverage alignment<\/title><rect class="node-metadata" width="180" height="35" rx="17.5"/><text class="label" x="90" y="22.5">National Curriculum<\/text><\/g><\/g><rect x="20" y="800" width="1210" height="70" rx="8" fill="rgba(0,0,0,0.3)"/><rect class="group-label-bg" x="35" y="820" width="68" height="24" rx="4"/><text class="group-label" x="69" y="838" style="text-anchor:middle">Legend:<\/text><rect class="node-core" x="120" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="152" y="838">Structure<\/text><rect class="node-context" x="250" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="282" y="838">Context<\/text><rect class="node-content" x="370" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="402" y="838">Content<\/text><rect class="node-taxonomy" x="490" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="522" y="838">Taxonomy<\/text><rect class="node-ks4" x="620" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="652" y="838">KS4<\/text><rect class="node-metadata" x="720" y="820" width="24" height="24" rx="6"/><text class="label-sm" style="text-anchor:start" x="752" y="838">Metadata<\/text><line class="edge" x1="860" y1="832" x2="910" y2="832"/><text class="label-sm" style="text-anchor:start" x="918" y="838">Explicit<\/text><line class="edge-dashed" x1="1010" y1="832" x2="1060" y2="832"/><text class="label-sm" style="text-anchor:start" x="1068" y="838">Inferred<\/text><\/svg>`;
+
+      function renderKnowledgeGraph(data) {
+        let h = '';
+        h += '<div class="sec"><h2 class="sec-ttl">Oak Knowledge Graph<\/h2>';
+        h += '<p style="margin:0 0 12px;font-size:14px">Schema-level graph showing how curriculum concept types relate to each other.<\/p>';
+        h += '<\/div>';
+        h += '<div class="sec">';
+        h += '<p style="margin:0 0 12px;font-size:14px;color:var(--accent);font-weight:600">✓ Knowledge graph loaded successfully<\/p>';
+        h += '<\/div>';
+        h += '<div class="sec">';
+        h += '<details style="border:1px solid var(--border-color);border-radius:8px;padding:12px">';
+        h += '<summary style="cursor:pointer;font-size:13px;font-weight:500;color:var(--fg-secondary)">Graph overview (18 key concepts)<\/summary>';
+        h += '<div style="margin-top:12px;text-align:center">';
+        h += KNOWLEDGE_GRAPH_OVERVIEW_SVG;
+        h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">Hover over nodes for definitions, edges for relationships • Solid: explicit • Dashed: inferred<\/p>';
+        h += '<\/div>';
+        h += '<\/details>';
+        h += '<\/div>';
+        h += '<div class="sec">';
+        h += '<details style="border:1px solid var(--border-color);border-radius:8px;padding:12px">';
+        h += '<summary style="cursor:pointer;font-size:13px;font-weight:500;color:var(--fg-secondary)">Full graph (28 concepts, 45 edges)<\/summary>';
+        h += '<div style="margin-top:12px;text-align:center">';
+        h += KNOWLEDGE_GRAPH_FULL_SVG;
+        h += '<p style="margin:8px 0 0;font-size:11px;color:var(--fg-secondary);font-style:italic">Hover over edges to see relationship names • All concepts from knowledge-graph-data.ts<\/p>';
+        h += '<\/div>';
+        h += '<\/details>';
+        h += '<\/div>';
+        return h || '<div class="empty">No knowledge graph data available.<\/div>';
+      }
+
+      // Renderer dispatcher - maps renderer IDs to functions
+      const RENDERERS = {
+        help: renderHelp,
+        search: renderSearch,
+        fetch: renderFetch,
+        quiz: renderQuiz,
+        entitySummary: renderEntitySummary,
+        entityList: renderEntityList,
+        transcript: renderTranscript,
+        assets: renderAssets,
+        changelog: renderChangelog,
+        rateLimit: renderRateLimit,
+        ontology: renderOntology,
+        knowledgeGraph: renderKnowledgeGraph,
+      };
+
+      // ========================================
+      // Rendering
+      // ========================================
+      function updateToolName() {
+        const input = window.openai?.toolInput;
+        const meta = window.openai?.toolResponseMetadata;
+        // Use annotations/title from MCP tool metadata (canonical human-readable name)
+        const displayName = meta?.['annotations/title'] || meta?.title || '';
+        if (displayName && toolNameEl) { toolNameEl.textContent = displayName; toolNameEl.style.display = 'block'; }
+        else if (toolNameEl) { toolNameEl.style.display = 'none'; }
+      }
+
+      function getFullResults() {
+        const meta = window.openai?.toolResponseMetadata ?? {};
+        const output = window.openai?.toolOutput ?? {};
+        if (meta.fullResults) return meta.fullResults;
+        if (output.data && typeof output.data === 'object') return output.data;
+        return output;
+      }
+
+      function getToolName() {
+        const input = window.openai?.toolInput;
+        const meta = window.openai?.toolResponseMetadata;
+        return meta?.toolName || input?.toolName || null;
+      }
+
+      function getRendererForTool(toolName) {
+        if (!toolName) return null;
+        const rendererId = TOOL_RENDERER_MAP[toolName];
+        if (!rendererId) return null;
+        return RENDERERS[rendererId] || null;
+      }
+
+      function render() {
+        updateToolName();
+        // NOTE: updateActions() was removed - see widget-script-state.ts for refresh button code
+        const fullData = getFullResults();
+        const toolName = getToolName();
+        const renderer = getRendererForTool(toolName);
+        const rendererId = toolName ? TOOL_RENDERER_MAP[toolName] : null;
+        if (renderer) {
+          c.innerHTML = renderer(fullData);
+        } else if (fullData.serverOverview || fullData.toolCategories || fullData.workflows) {
+          c.innerHTML = renderHelp(fullData);
+        } else if (fullData.lessons !== undefined || fullData.transcripts !== undefined) {
+          c.innerHTML = renderSearch(fullData);
+        } else if (fullData.type && fullData.data !== undefined) {
+          c.innerHTML = renderFetch(fullData);
+        } else if (Object.keys(fullData).length > 0) { // eslint-disable-line no-restricted-properties -- REFACTOR
+          c.innerHTML = '<pre>' + esc(JSON.stringify(fullData, null, 2)) + '<\/pre>';
+        } else {
+          c.innerHTML = '<div class="empty">Loading...<\/div>';
+        }
+        restoreScrollPosition();
+      }
+
+      applySafeAreaInsets();
+      render();
+      window.addEventListener('openai:set_globals', (e) => {
+        const globals = e.detail?.globals;
+        if (globals?.toolOutput !== undefined) render();
+        if (globals?.safeArea !== undefined) applySafeAreaInsets();
+      }, { passive: true });
+    </script>
+  </body>
+</html>

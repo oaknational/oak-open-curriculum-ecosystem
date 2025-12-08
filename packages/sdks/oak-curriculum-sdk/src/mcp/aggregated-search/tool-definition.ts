@@ -13,6 +13,7 @@
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '../../types/generated/api-schema/path-parameters.js';
 import { AGGREGATED_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from '../prerequisite-guidance.js';
+import { WIDGET_URI } from '../../types/generated/widget-constants.js';
 
 /**
  * Search tool definition with full MCP metadata.
@@ -48,7 +49,7 @@ Executes get-search-lessons and get-search-transcripts in parallel.`,
     title: 'Search Curriculum',
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': WIDGET_URI,
     'openai/toolInvocation/invoking': 'Searching curriculum…',
     'openai/toolInvocation/invoked': 'Search complete',
     'openai/widgetAccessible': true,

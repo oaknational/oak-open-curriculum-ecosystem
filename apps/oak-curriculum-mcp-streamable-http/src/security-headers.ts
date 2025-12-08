@@ -53,9 +53,9 @@ const LANDING_PAGE_CSP_DIRECTIVES = {
    * Note: Landing page itself has no JavaScript; this is purely for Cloudflare.
    */
   scriptSrc: ["'self'", "'unsafe-inline'"],
-  /** Images: same-origin and data: URIs for inline images */
-  imgSrc: ["'self'", 'data:'],
-  /** Connections: allow same-origin for Chrome DevTools and Cloudflare */
+  /** Images: same-origin only (data: no longer needed as logo is inline SVG) */
+  imgSrc: ["'self'"],
+  /** Connections: allow same-origin only */
   connectSrc: ["'self'"],
   /** Child frames: allow same-origin (Cloudflare creates hidden iframes) */
   childSrc: ["'self'"],

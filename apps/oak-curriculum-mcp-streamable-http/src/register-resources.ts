@@ -18,7 +18,7 @@ import {
   getKnowledgeGraphJson,
 } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 import {
-  AGGREGATED_TOOL_WIDGET_URI,
+  getToolWidgetUri,
   AGGREGATED_TOOL_WIDGET_MIME_TYPE,
   AGGREGATED_TOOL_WIDGET_HTML,
 } from './aggregated-tool-widget.js';
@@ -63,6 +63,13 @@ const WIDGET_DESCRIPTION =
  * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
  * and used by ChatGPT to render tool output with Oak branding.
  *
+ * The widget URI includes a cache-busting hash generated at type-gen time.
+ * Each build produces a new hash, ensuring ChatGPT fetches the latest
+ * widget bundle instead of using a stale cached version.
+ *
+ * This aligns with OpenAI's best practice: "give the template a new URI"
+ * whenever widget HTML/CSS/JS changes.
+ *
  * Includes OpenAI Apps SDK _meta fields required for production deployment:
  * - openai/widgetCSP: Content Security Policy for outbound requests
  * - openai/widgetPrefersBorder: Hint for bordered card rendering
@@ -70,11 +77,13 @@ const WIDGET_DESCRIPTION =
  *
  * @param server - MCP server instance
  * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
+ * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting guidance)
  */
 export function registerWidgetResource(server: McpServer): void {
+  const widgetUri = getToolWidgetUri();
   server.registerResource(
     'oak-json-viewer',
-    AGGREGATED_TOOL_WIDGET_URI,
+    widgetUri,
     {
       description: 'Oak-branded JSON viewer widget for tool output',
       mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
@@ -82,7 +91,7 @@ export function registerWidgetResource(server: McpServer): void {
     () => ({
       contents: [
         {
-          uri: AGGREGATED_TOOL_WIDGET_URI,
+          uri: widgetUri,
           mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
           text: AGGREGATED_TOOL_WIDGET_HTML,
           _meta: {

@@ -39,9 +39,10 @@ describe('CTA integration: registry drives HTML generation', () => {
 
   it('places the CTA container within the header for layout positioning', () => {
     // Behavior: CTAs appear in header area (important for UX)
-    const headerMatch = /<div class="hdr">[\s\S]*?<\/div>\s*<div id="c">/.exec(
+    const headerMatch = /<header class="hdr">[\s\S]*?<\/header>\s*<div id="c">/.exec(
       AGGREGATED_TOOL_WIDGET_HTML,
     );
+    expect(headerMatch).toBeTruthy();
     expect(headerMatch?.[0]).toContain('cta-container');
   });
 });

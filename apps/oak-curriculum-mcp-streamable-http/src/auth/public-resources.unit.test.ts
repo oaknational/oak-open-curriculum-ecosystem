@@ -8,11 +8,13 @@
 
 import { describe, it, expect } from 'vitest';
 import { isPublicResourceUri } from './public-resources.js';
+import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {
     it('returns true for widget URI', () => {
-      expect(isPublicResourceUri('ui://widget/oak-json-viewer.html')).toBe(true);
+      // Use actual WIDGET_URI from SDK which includes hash
+      expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
     });
 
     it('returns true for getting-started documentation', () => {

@@ -11,7 +11,7 @@
  * ## Solution
  *
  * Skip authentication for public resources that contain no user data:
- * - Widget HTML (`ui://widget/oak-json-viewer.html`) - static shell
+ * - Widget HTML (`ui://widget/oak-json-viewer-abc12345.html`) - static shell with hash
  * - Documentation (`docs://oak/*.md`) - static markdown
  *
  * ## Security Rationale
@@ -74,7 +74,27 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
   });
 
   describe('Widget Resource (No Auth Required)', () => {
+    // eslint-disable-next-line complexity
     it('allows resources/read for widget URI without auth token', async () => {
+      // First get the widget URI from resources/list
+      const listRes = await request(app)
+        .post('/mcp')
+        .set('Accept', 'application/json, text/event-stream')
+        .send({
+          jsonrpc: '2.0',
+          id: 'list1',
+          method: 'resources/list',
+        });
+      const listDataLine = listRes.text.split('\n').find((line) => line.startsWith('data:'));
+      expect(listDataLine).toBeDefined();
+      const listData = JSON.parse(listDataLine?.substring(6) ?? '{}') as {
+        result?: { resources?: { uri: string }[] };
+      };
+      const widgetUri =
+        listData.result?.resources?.find((r) =>
+          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
+        )?.uri ?? '';
+
       const res = await request(app)
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -82,7 +102,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'resources/read',
-          params: { uri: 'ui://widget/oak-json-viewer.html' },
+          params: { uri: widgetUri },
         });
 
       // Widget resource should be accessible without authentication

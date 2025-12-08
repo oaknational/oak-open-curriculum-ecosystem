@@ -14,6 +14,7 @@ import {
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
 import { FETCH_PREREQUISITE_GUIDANCE, ONTOLOGY_TOOL_NAME } from './prerequisite-guidance.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 
 /**
  * Fetch tool definition with full MCP metadata.
@@ -46,7 +47,7 @@ Use format "type:slug" (e.g., "lesson:adding-fractions", "unit:algebra-basics").
     title: 'Fetch Curriculum Resource',
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': WIDGET_URI,
     'openai/toolInvocation/invoking': 'Fetching resource…',
     'openai/toolInvocation/invoked': 'Resource loaded',
     'openai/widgetAccessible': true,

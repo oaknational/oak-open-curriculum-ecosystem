@@ -104,3 +104,5 @@ export {
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 
 export { SERVER_INSTRUCTIONS } from '../mcp/prerequisite-guidance.js';
+
+export { WIDGET_URI } from '../mcp/widget-constants.js';

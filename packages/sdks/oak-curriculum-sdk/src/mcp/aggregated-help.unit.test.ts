@@ -7,6 +7,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { GET_HELP_TOOL_DEF, GET_HELP_INPUT_SCHEMA, runHelpTool } from './aggregated-help/index.js';
+import { WIDGET_URI } from '../types/generated/widget-constants.js';
 
 describe('GET_HELP_TOOL_DEF', () => {
   it('has description with usage guidance', () => {
@@ -36,9 +37,7 @@ describe('GET_HELP_TOOL_DEF', () => {
   });
 
   it('has openai/outputTemplate for widget', () => {
-    expect(GET_HELP_TOOL_DEF._meta['openai/outputTemplate']).toBe(
-      'ui://widget/oak-json-viewer.html',
-    );
+    expect(GET_HELP_TOOL_DEF._meta['openai/outputTemplate']).toBe(WIDGET_URI);
   });
 
   it('has openai/widgetAccessible set to true', () => {

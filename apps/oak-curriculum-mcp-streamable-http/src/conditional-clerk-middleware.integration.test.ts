@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { Logger } from '@oaknational/mcp-logger';
 import { createConditionalClerkMiddleware } from './conditional-clerk-middleware.js';
+import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 
 /**
  * Integration tests for conditional Clerk middleware.
@@ -179,7 +180,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
-        params: { uri: 'ui://widget/oak-json-viewer.html' },
+        params: { uri: WIDGET_URI },
       });
 
       conditionalMw(req, mockRes, mockNext);

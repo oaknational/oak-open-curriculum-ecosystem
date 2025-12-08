@@ -13,8 +13,9 @@ import { CTA_REGISTRY } from './registry.js';
  *
  * @param str - String to escape
  * @returns Escaped string
+ * @internal Exported for testing
  */
-function escapeForTemplateLiteral(str: string): string {
+export function escapeForTemplateLiteral(str: string): string {
   return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
 }
 

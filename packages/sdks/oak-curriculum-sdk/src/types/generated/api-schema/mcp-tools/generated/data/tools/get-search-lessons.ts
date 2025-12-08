@@ -137,7 +137,7 @@ export const getSearchLessons = {
     title: "Get Search Lessons",
   },
   _meta: {
-    'openai/outputTemplate': 'ui://widget/oak-json-viewer.html',
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
     'openai/toolInvocation/invoking': "Fetching Get Search Lessons…",
     'openai/toolInvocation/invoked': "Get Search Lessons loaded",
     'openai/widgetAccessible': true,

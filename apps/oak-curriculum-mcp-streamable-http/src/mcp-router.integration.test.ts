@@ -12,6 +12,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
+import { WIDGET_URI } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;
@@ -69,7 +70,7 @@ describe('createMcpRouter (Integration)', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({
         method: 'resources/read',
-        params: { uri: 'ui://widget/oak-json-viewer.html' },
+        params: { uri: WIDGET_URI },
       });
 
       router(req, mockRes, mockNext);
