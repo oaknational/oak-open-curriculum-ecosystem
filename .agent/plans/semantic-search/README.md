@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Maths KS4 Ingested ✅, RRF API Update Required 🔴  
+**Status**: Active Implementation - Phase 1B Complete ✅, Baseline Metrics Next ⏭️  
 **Last Updated**: 2025-12-08
 
 ---
@@ -82,6 +82,7 @@ We implement the **simpler approach first** and only add complexity when it deli
 
 | Document                                        | Purpose                                                |
 | ----------------------------------------------- | ------------------------------------------------------ |
+| **`reference-ir-metrics-guide.md`**             | IR metrics (MRR, NDCG) explained + implementation code |
 | **`reference-data-completeness-policy.md`**     | Policy on what data we upload in full vs summarise     |
 | **`reference-es-serverless-feature-matrix.md`** | Feature adoption tracking matrix with impact/cost/risk |
 
@@ -121,8 +122,8 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 | Phase  | Duration | Focus                       | Status                    | Key Features                            |
 | ------ | -------- | --------------------------- | ------------------------- | --------------------------------------- |
 | **1A** | ✅ Done  | Maths KS4 Ingestion         | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
-| **1B** | 0.5 days | RRF API Update              | 🔴 Blocker (current)      | Update to ES 8.11+ retriever API        |
-| **1C** | 0.5 days | Baseline Metrics            | ⏭️ Next (after 1B)        | MRR, NDCG@10, zero-hit, latency         |
+| **1B** | ✅ Done  | RRF API Update              | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API       |
+| **1C** | 0.5 days | Baseline Metrics            | ⏭️ Current                | MRR, NDCG@10, zero-hit, latency         |
 | **2**  | 0.5 days | Evaluate Three-Way          | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
 | **3**  | 2-3 days | Relevance Enhancement       | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
 | **4**  | 3-4 days | Entity Extraction & Graph   | ⏸️ Future                 | NER models, Graph API, enrich processor |
@@ -163,31 +164,27 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - ✅ Field definitions architecture (ADR-067)
 - ✅ Per-index completion contexts (ADR-068)
 - ✅ Systematic ingestion (ADR-069)
-- ✅ Two-way RRF query builders (BM25 + ELSER) - **needs API update**
-- ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **needs API update**
+- ✅ Two-way RRF query builders (BM25 + ELSER) - **updated to `retriever` API**
+- ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **updated to `retriever` API**
 - ✅ Tier, exam_board, pathway field extraction
 - ✅ ADRs 071-074 written
 - ✅ All 10 quality gates passing (1,310+ tests)
 
-### Current Blocker 🔴
+### Phase 1B Complete ✅ (2025-12-08)
 
-**RRF API Update Required**:
+**RRF API Updated**:
 
-- 🔴 RRF query builders use deprecated `rank` API
-- 🔴 ES 8.11+ requires new `retriever` API
-- 🔴 Blocking two-way hybrid testing
+- ✅ Migrated from deprecated `rank` API to ES 8.11+ `retriever` API
+- ✅ Two-way RRF query builders updated (`rrf-query-builders.ts`)
+- ✅ Three-way RRF query builders updated (`rrf-query-builders-three-way.ts`)
+- ✅ Validated against live ES Serverless (21 results for "pythagoras theorem")
+- ✅ All quality gates passing
 
-**Files to Update**:
+### Next: Phase 1C (Baseline Metrics) ⏭️
 
-- `apps/.../hybrid-search/rrf-query-builders.ts`
-- `apps/.../hybrid-search/rrf-query-builders-three-way.ts`
-
-### Next: Phase 1B (RRF API) → Phase 1C (Metrics) ⏭️
-
-- 🔄 Fix RRF API deprecation
-- 🔄 Test two-way hybrid search
-- 🔄 Establish baseline metrics
-- 🔄 Decide: two-way vs three-way
+- 🔄 Test two-way hybrid search with representative queries
+- 🔄 Establish baseline metrics (MRR, NDCG@10, zero-hit, latency)
+- 🔄 Decide: two-way sufficient vs evaluate three-way
 
 ---
 
@@ -250,14 +247,17 @@ pnpm smoke:dev:stub
 - [x] Basic BM25 search validated
 - [x] All quality gates passing
 
-### Phase 1B: RRF API Update (Current)
+### Phase 1B: RRF API Update ✅ COMPLETE (2025-12-08)
 
-- [ ] Research ES 8.11+ `retriever` API syntax
-- [ ] Update two-way RRF query builders
-- [ ] Update three-way RRF query builders
-- [ ] Test with Maths KS4 data
+- [x] Researched ES 8.11+ `retriever` API syntax
+- [x] Updated two-way RRF query builders (`rrf-query-builders.ts`)
+- [x] Updated three-way RRF query builders (`rrf-query-builders-three-way.ts`)
+- [x] Updated `elastic-http.ts` to support `retriever` property
+- [x] Updated unit tests for new `retriever` structure
+- [x] Validated with Maths KS4 data against live ES Serverless
+- [x] All quality gates passing
 
-### Phase 1C: Baseline Metrics (Next)
+### Phase 1C: Baseline Metrics ← CURRENT
 
 - [ ] Two-way hybrid search working
 - [ ] Baseline metrics established (MRR, NDCG@10, zero-hit, latency)

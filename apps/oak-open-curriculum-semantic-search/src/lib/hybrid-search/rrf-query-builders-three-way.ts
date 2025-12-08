@@ -1,10 +1,10 @@
 /**
  * Three-way RRF query builders for hybrid search.
  *
- * Combines three retrieval methods using Reciprocal Rank Fusion:
- * 1. BM25 lexical search (multi_match)
- * 2. ELSER sparse embeddings (semantic)
- * 3. E5 dense vectors (kNN with HNSW index)
+ * Combines three retrieval methods using Reciprocal Rank Fusion (ES 8.11+ retriever API):
+ * 1. BM25 lexical search (multi_match via standard retriever)
+ * 2. ELSER sparse embeddings (semantic via standard retriever)
+ * 3. E5 dense vectors (kNN retriever)
  *
  * @see ADR-072 - Three-Way Hybrid Search Architecture
  * @module rrf-query-builders-three-way
@@ -21,14 +21,13 @@ import {
   createLessonFacets,
   createUnitFilters,
   createUnitHighlight,
+  createLessonBm25Retriever,
+  createLessonElserRetriever,
+  createUnitBm25Retriever,
+  createUnitElserRetriever,
 } from './rrf-query-helpers';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
-
-interface RrfRank {
-  rrf: { window_size: number; rank_constant: number };
-  queries: QueryContainer[];
-}
 
 /** Parameters for lesson RRF search. */
 export interface LessonRrfParams {
@@ -53,7 +52,6 @@ export interface UnitRrfParams {
 /**
  * Builds a three-way RRF request for lessons: BM25 + ELSER + Dense Vectors (kNN).
  *
- * Generates a query vector using the E5 inference endpoint and combines three retrieval methods.
  * Gracefully degrades to two-way hybrid (BM25 + ELSER) if dense vector generation fails.
  *
  * @see ADR-072 - Three-Way Hybrid Search Architecture
@@ -76,16 +74,11 @@ export async function buildThreeWayLessonRrfRequest(
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    rank: createThreeWayLessonRank(text, queryVector, filters),
-    query: { bool: { filter: filters } },
+    retriever: createThreeWayLessonRetriever(text, queryVector, filters),
   };
 
-  if (includeHighlights) {
-    request.highlight = createLessonHighlight();
-  }
-  if (includeFacets) {
-    request.aggs = createLessonFacets();
-  }
+  if (includeHighlights) request.highlight = createLessonHighlight();
+  if (includeFacets) request.aggs = createLessonFacets();
 
   return request;
 }
@@ -106,86 +99,80 @@ export async function buildThreeWayUnitRrfRequest(
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    rank: createThreeWayUnitRank(text, queryVector, filters),
-    query: { bool: { filter: filters } },
+    retriever: createThreeWayUnitRetriever(text, queryVector, filters),
   };
 
-  if (includeHighlights) {
-    request.highlight = createUnitHighlight();
-  }
+  if (includeHighlights) request.highlight = createUnitHighlight();
 
   return request;
 }
 
-/** Creates three-way RRF rank for lessons with filtered kNN. */
-function createThreeWayLessonRank(
+/** Creates a three-way RRF retriever for lessons with filtered kNN. */
+function createThreeWayLessonRetriever(
   text: string,
   queryVector: number[] | undefined,
   filters: QueryContainer[],
-): RrfRank {
-  const queries: QueryContainer[] = [
-    {
-      multi_match: {
-        query: text,
-        type: 'best_fields',
-        tie_breaker: 0.2,
-        fields: [
-          'lesson_title^3',
-          'lesson_keywords^2',
-          'key_learning_points^2',
-          'misconceptions_and_common_mistakes',
-          'teacher_tips',
-          'content_guidance',
-          'transcript_text',
-        ],
-      },
-    },
-    { semantic: { field: 'lesson_semantic', query: text } },
+): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  const retrievers: estypes.RetrieverContainer[] = [
+    createLessonBm25Retriever(text, filterClause),
+    createLessonElserRetriever(text, filterClause),
   ];
 
   if (queryVector) {
-    queries.push({
-      knn: {
-        field: 'lesson_dense_vector',
-        query_vector: queryVector,
-        k: 60,
-        num_candidates: 120,
-        filter: filters.length > 0 ? filters : undefined,
-      },
-    });
+    retrievers.push(createLessonKnnRetriever(queryVector, filterClause));
   }
 
-  return { rrf: { window_size: 60, rank_constant: 60 }, queries };
+  return { rrf: { retrievers, rank_window_size: 60, rank_constant: 60 } };
 }
 
-/** Creates three-way RRF rank for units with filtered kNN. */
-function createThreeWayUnitRank(
+/** Creates a three-way RRF retriever for units with filtered kNN. */
+function createThreeWayUnitRetriever(
   text: string,
   queryVector: number[] | undefined,
   filters: QueryContainer[],
-): RrfRank {
-  const queries: QueryContainer[] = [
-    {
-      multi_match: {
-        query: text,
-        type: 'best_fields',
-        fields: ['unit_title^2', 'unit_topics', 'rollup_text'],
-      },
-    },
-    { semantic: { field: 'unit_semantic', query: text } },
+): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  const retrievers: estypes.RetrieverContainer[] = [
+    createUnitBm25Retriever(text, filterClause),
+    createUnitElserRetriever(text, filterClause),
   ];
 
   if (queryVector) {
-    queries.push({
-      knn: {
-        field: 'unit_dense_vector',
-        query_vector: queryVector,
-        k: 40,
-        num_candidates: 80,
-        filter: filters.length > 0 ? filters : undefined,
-      },
-    });
+    retrievers.push(createUnitKnnRetriever(queryVector, filterClause));
   }
 
-  return { rrf: { window_size: 40, rank_constant: 40 }, queries };
+  return { rrf: { retrievers, rank_window_size: 40, rank_constant: 40 } };
+}
+
+/** Creates a kNN retriever for lesson dense vectors. */
+function createLessonKnnRetriever(
+  queryVector: number[],
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    knn: {
+      field: 'lesson_dense_vector',
+      query_vector: queryVector,
+      k: 60,
+      num_candidates: 120,
+      filter,
+    },
+  };
+}
+
+/** Creates a kNN retriever for unit dense vectors. */
+function createUnitKnnRetriever(
+  queryVector: number[],
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    knn: {
+      field: 'unit_dense_vector',
+      query_vector: queryVector,
+      k: 40,
+      num_candidates: 80,
+      filter,
+    },
+  };
 }

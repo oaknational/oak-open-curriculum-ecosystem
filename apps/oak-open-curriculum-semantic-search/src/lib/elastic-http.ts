@@ -2,15 +2,25 @@ import { esClient } from './es-client';
 import type { estypes } from '@elastic/elasticsearch';
 // use types from estypes only
 
-/** Narrow search request shape we use in the app. */
+/**
+ * Narrow search request shape we use in the app.
+ *
+ * Supports two mutually exclusive modes:
+ * 1. Traditional query mode: Uses `query` for search
+ * 2. Retriever mode (ES 8.11+): Uses `retriever` for hybrid RRF search
+ *
+ * When using `retriever`, filters are placed inside each sub-retriever.
+ */
 export interface EsSearchRequest {
   index: string;
   size?: number;
-  query: estypes.QueryDslQueryContainer;
+  /** Traditional query. Omit when using retriever mode. */
+  query?: estypes.QueryDslQueryContainer;
+  /** ES 8.11+ retriever for RRF hybrid search. Replaces deprecated rank API. */
+  retriever?: estypes.RetrieverContainer;
   highlight?: estypes.SearchHighlight;
   sort?: estypes.Sort;
   _source?: string[];
-  rank?: EsRankDefinition;
   aggs?: Record<string, estypes.AggregationsAggregationContainer>;
   from?: number;
 }
@@ -69,16 +79,25 @@ export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchRespon
   return wrapSearchResponse<T>(res, body.index, body.size ?? 25);
 }
 
-interface RankAwareSearchRequest extends estypes.SearchRequest {
-  rank?: EsRankDefinition;
-}
-
-function buildSearchParams(body: EsSearchRequest): RankAwareSearchRequest {
-  const params: RankAwareSearchRequest = {
+/**
+ * Builds the search request parameters for the ES client.
+ *
+ * Supports two modes:
+ * - Query mode: Traditional search with `query` property
+ * - Retriever mode (ES 8.11+): Hybrid RRF search with `retriever` property
+ */
+function buildSearchParams(body: EsSearchRequest): estypes.SearchRequest {
+  const params: estypes.SearchRequest = {
     index: body.index,
     size: body.size ?? 25,
-    query: body.query,
   };
+
+  // Use retriever mode OR query mode (mutually exclusive)
+  if (body.retriever) {
+    params.retriever = body.retriever;
+  } else if (body.query) {
+    params.query = body.query;
+  }
 
   assignOptional(body.highlight, (value) => {
     params.highlight = value;
@@ -88,9 +107,6 @@ function buildSearchParams(body: EsSearchRequest): RankAwareSearchRequest {
   });
   assignOptional(body._source, (value) => {
     params._source = value;
-  });
-  assignOptional(body.rank, (value) => {
-    params.rank = value;
   });
   assignOptional(body.aggs, (value) => {
     params.aggs = value;
@@ -196,11 +212,6 @@ type HighlightMap = Record<string, string[]>;
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
-}
-
-interface EsRankDefinition {
-  rrf: { window_size: number; rank_constant: number };
-  queries: estypes.QueryDslQueryContainer[];
 }
 
 /**

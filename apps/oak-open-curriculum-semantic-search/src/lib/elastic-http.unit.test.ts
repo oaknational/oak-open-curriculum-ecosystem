@@ -26,8 +26,14 @@ describe('esSearch', () => {
     searchMock.mockReset();
   });
 
-  it('passes rank, aggs, and from through to the underlying client', async () => {
-    const rank = { rrf: { window_size: 60, rank_constant: 60 }, queries: [{ match_all: {} }] };
+  it('passes retriever, aggs, and from through to the underlying client', async () => {
+    const retriever: estypes.RetrieverContainer = {
+      rrf: {
+        retrievers: [{ standard: { query: { match_all: {} } } }],
+        rank_window_size: 60,
+        rank_constant: 60,
+      },
+    };
     const aggs = { key_stages: { terms: { field: 'key_stage' } } } satisfies Record<
       string,
       estypes.AggregationsAggregationContainer
@@ -38,8 +44,7 @@ describe('esSearch', () => {
     await esSearch({
       index: 'oak_lessons',
       size: 10,
-      query: { match_all: {} },
-      rank,
+      retriever,
       aggs,
       from: 15,
     });
@@ -48,9 +53,27 @@ describe('esSearch', () => {
       expect.objectContaining({
         index: 'oak_lessons',
         size: 10,
-        rank,
+        retriever,
         aggs,
         from: 15,
+      }),
+    );
+  });
+
+  it('passes query through to the underlying client when not using retriever', async () => {
+    searchMock.mockResolvedValueOnce(baseResponse);
+
+    await esSearch({
+      index: 'oak_lessons',
+      size: 10,
+      query: { match_all: {} },
+    });
+
+    expect(searchMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        index: 'oak_lessons',
+        size: 10,
+        query: { match_all: {} },
       }),
     );
   });

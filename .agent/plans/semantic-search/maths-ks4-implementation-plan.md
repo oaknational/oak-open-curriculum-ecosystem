@@ -1,7 +1,7 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: Phase 1A Complete ✅ | Phase 1B Blocked 🔴 | Phase 1C Next ⏭️  
+**Status**: Phase 1A Complete ✅ | Phase 1B Complete ✅ | Phase 1C Current ⏭️  
 **Priority**: HIGH  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
 
@@ -183,15 +183,30 @@ pathways_available: { type: 'keyword' },
 
 **Status**: Complete - 173 documents successfully indexed.
 
-### Phase 1B: RRF API Update 🔴 CURRENT BLOCKER
+### Phase 1B: RRF API Update ✅ COMPLETE (2025-12-08)
 
 **Goal**: Update RRF query builders to use ES 8.11+ `retriever` API instead of deprecated `rank` API.
 
-**Blocker**: Two-way hybrid search cannot be tested until RRF API is updated.
+**Completed**:
 
-### Phase 1C: Baseline Metrics ⏭️ NEXT
+- ✅ Updated `EsSearchRequest` type in `elastic-http.ts` to use `retriever` property
+- ✅ Updated `rrf-query-builders.ts` with new `retriever` structure
+- ✅ Updated `rrf-query-builders-three-way.ts` with new `retriever` structure
+- ✅ Extracted shared helpers to `rrf-query-helpers.ts`
+- ✅ Updated all unit tests to expect `retriever` structure
+- ✅ Validated against live ES Serverless (21 results for "pythagoras theorem")
+- ✅ All quality gates passing
+
+### Phase 1C: Baseline Metrics ⏭️ CURRENT
 
 **Goal**: Establish baseline metrics with **two-way hybrid search (BM25 + ELSER)** before considering additional complexity.
+
+**Detailed Implementation Guide**: See `.agent/prompts/semantic-search/semantic-search.prompt.md` for:
+
+- IR metrics explanation (MRR, NDCG@10, what they mean)
+- Ground truth creation (relevance judgment methodology)
+- Metrics calculation code examples
+- E2E test suite implementation
 
 ### First Question Applied
 
@@ -230,21 +245,17 @@ Start with two-way hybrid (BM25 + ELSER) instead of immediately implementing thr
 - [x] Basic BM25 search validated with representative queries
 - [x] All quality gates passing
 
-**Phase 1B: RRF API Update 🔴 Current Blocker**
+**Phase 1B: RRF API Update ✅ Complete (2025-12-08)**
 
-- [ ] Research ES 8.11+ `retriever` API syntax for RRF
-- [ ] Update `rrf-query-builders.ts` (two-way: BM25 + ELSER)
-- [ ] Update `rrf-query-builders-three-way.ts` (three-way: BM25 + ELSER + Dense)
-- [ ] Test RRF queries with Maths KS4 data
+- [x] Researched ES 8.11+ `retriever` API syntax for RRF
+- [x] Updated `rrf-query-builders.ts` (two-way: BM25 + ELSER)
+- [x] Updated `rrf-query-builders-three-way.ts` (three-way: BM25 + ELSER + Dense)
+- [x] Updated `elastic-http.ts` to support `retriever` property
+- [x] Updated unit tests to expect new `retriever` structure
+- [x] Tested RRF queries with Maths KS4 data against live ES Serverless
+- [x] All quality gates passing
 
-**Error to fix**:
-
-```
-parsing_exception: Unknown key for a START_OBJECT in [rank]
-Deprecated field [rank] used, replaced by [retriever]
-```
-
-**Phase 1C: Baseline Metrics ⏭️ Next (After 1B)**
+**Phase 1C: Baseline Metrics ⏭️ Current**
 
 **Step 1: Test Two-Way Hybrid Search**
 
@@ -2275,17 +2286,19 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
   - [x] Dense vectors generated (384-dim E5)
 - [x] Basic BM25 search validated with test queries
 
-### Phase 1B: RRF API Update 🔴 CURRENT BLOCKER (0.5 days)
+### Phase 1B: RRF API Update ✅ COMPLETE (2025-12-08)
 
-- [ ] Research ES 8.11+ `retriever` API syntax
-- [ ] Update `apps/.../hybrid-search/rrf-query-builders.ts` to use `retriever` instead of `rank`
-- [ ] Update `apps/.../hybrid-search/rrf-query-builders-three-way.ts` to use `retriever` instead of `rank`
-- [ ] Test two-way RRF with Maths KS4 data
-- [ ] All quality gates passing
+- [x] Researched ES 8.11+ `retriever` API syntax
+- [x] Updated `apps/.../hybrid-search/rrf-query-builders.ts` to use `retriever` instead of `rank`
+- [x] Updated `apps/.../hybrid-search/rrf-query-builders-three-way.ts` to use `retriever` instead of `rank`
+- [x] Updated `apps/.../lib/elastic-http.ts` to support `retriever` property
+- [x] Extracted shared helpers to `apps/.../hybrid-search/rrf-query-helpers.ts`
+- [x] Updated unit tests to expect new `retriever` structure
+- [x] Tested two-way RRF with Maths KS4 data against live ES Serverless
+- [x] Validated: 21 results returned for "pythagoras theorem"
+- [x] All quality gates passing
 
-**Blocking Issue**: RRF query builders use deprecated `rank` API, ES 8.11+ requires `retriever` API
-
-### Phase 1C: Baseline Metrics ⏭️ NEXT (0.5 days)
+### Phase 1C: Baseline Metrics ⏭️ CURRENT (0.5 days)
 
 - [ ] Test two-way hybrid search (BM25 + ELSER) with RRF
 - [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
@@ -2315,10 +2328,12 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 
 ### Infrastructure Already Built (Reference)
 
-The following infrastructure was built during Phase 1A preparation and is available:
+The following infrastructure was built during Phase 1A/1B preparation and is available:
 
 - [x] Dense vector generation code (`dense-vector-generation.ts`)
-- [x] Three-way RRF query builders (`rrf-query-builders-three-way.ts`)
+- [x] Two-way RRF query builders (`rrf-query-builders.ts`) - updated to `retriever` API
+- [x] Three-way RRF query builders (`rrf-query-builders-three-way.ts`) - updated to `retriever` API
+- [x] Shared RRF helpers (`rrf-query-helpers.ts`)
 - [x] ADR-071 (Elastic-Native Dense Vector Strategy)
 - [x] ADR-072 (Three-Way Hybrid Search Architecture)
 - [x] ADR-073 (Dense Vector Field Configuration)

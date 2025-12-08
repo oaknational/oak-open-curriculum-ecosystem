@@ -1,9 +1,9 @@
 /**
  * Two-way RRF query builders for hybrid search.
  *
- * Combines two retrieval methods using Reciprocal Rank Fusion:
- * 1. BM25 lexical search (multi_match)
- * 2. ELSER sparse embeddings (semantic)
+ * Combines two retrieval methods using Reciprocal Rank Fusion (ES 8.11+ retriever API):
+ * 1. BM25 lexical search (multi_match via standard retriever)
+ * 2. ELSER sparse embeddings (semantic via standard retriever)
  *
  * For three-way hybrid search (with dense vectors), see rrf-query-builders-three-way.ts.
  *
@@ -18,8 +18,12 @@ import {
   createLessonFilters,
   createLessonHighlight,
   createLessonFacets,
+  createLessonBm25Retriever,
+  createLessonElserRetriever,
   createUnitFilters,
   createUnitHighlight,
+  createUnitBm25Retriever,
+  createUnitElserRetriever,
 } from './rrf-query-helpers';
 
 // Re-export three-way RRF functions for backwards compatibility
@@ -31,11 +35,6 @@ export {
 } from './rrf-query-builders-three-way';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
-
-interface RrfRank {
-  rrf: { window_size: number; rank_constant: number };
-  queries: QueryContainer[];
-}
 
 /** Parameters for sequence RRF search. */
 export interface SequenceRrfParams {
@@ -66,16 +65,11 @@ export function buildLessonRrfRequest(params: {
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    rank: createLessonRank(text),
-    query: { bool: { filter: filters } },
+    retriever: createLessonRetriever(text, filters),
   };
 
-  if (includeHighlights) {
-    request.highlight = createLessonHighlight();
-  }
-  if (includeFacets) {
-    request.aggs = createLessonFacets();
-  }
+  if (includeHighlights) request.highlight = createLessonHighlight();
+  if (includeFacets) request.aggs = createLessonFacets();
 
   return request;
 }
@@ -94,13 +88,10 @@ export function buildUnitRrfRequest(params: {
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    rank: createUnitRank(text),
-    query: { bool: { filter: filters } },
+    retriever: createUnitRetriever(text, filters),
   };
 
-  if (includeHighlights) {
-    request.highlight = createUnitHighlight();
-  }
+  if (includeHighlights) request.highlight = createUnitHighlight();
 
   return request;
 }
@@ -112,76 +103,84 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
   return {
     index: resolveCurrentSearchIndexName('sequences'),
     size,
-    rank: createSequenceRank(text),
-    query: { bool: { filter: filters } },
+    retriever: createSequenceRetriever(text, filters),
   };
 }
 
-function createLessonRank(text: string): RrfRank {
+/** Creates a two-way RRF retriever for lessons. */
+function createLessonRetriever(
+  text: string,
+  filters: QueryContainer[],
+): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
-    rrf: { window_size: 60, rank_constant: 60 },
-    queries: [
-      {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          tie_breaker: 0.2,
-          fields: [
-            'lesson_title^3',
-            'lesson_keywords^2',
-            'key_learning_points^2',
-            'misconceptions_and_common_mistakes',
-            'teacher_tips',
-            'content_guidance',
-            'transcript_text',
-          ],
-        },
-      },
-      { semantic: { field: 'lesson_semantic', query: text } },
-    ],
-  } satisfies RrfRank;
+    rrf: {
+      retrievers: [
+        createLessonBm25Retriever(text, filterClause),
+        createLessonElserRetriever(text, filterClause),
+      ],
+      rank_window_size: 60,
+      rank_constant: 60,
+    },
+  };
 }
 
-function createUnitRank(text: string): RrfRank {
+/** Creates a two-way RRF retriever for units. */
+function createUnitRetriever(text: string, filters: QueryContainer[]): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
-    rrf: { window_size: 60, rank_constant: 60 },
-    queries: [
-      {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          tie_breaker: 0.2,
-          fields: ['unit_title^3', 'rollup_text', 'unit_topics^1.5'],
-        },
-      },
-      { semantic: { field: 'unit_semantic', query: text } },
-    ],
-  } satisfies RrfRank;
+    rrf: {
+      retrievers: [
+        createUnitBm25Retriever(text, filterClause),
+        createUnitElserRetriever(text, filterClause),
+      ],
+      rank_window_size: 60,
+      rank_constant: 60,
+    },
+  };
 }
 
-function createSequenceRank(text: string): RrfRank {
+/** Sequence BM25 search fields with boosts. */
+const SEQUENCE_BM25_FIELDS = [
+  'sequence_title^2',
+  'category_titles',
+  'subject_title',
+  'phase_title',
+];
+
+/** Creates a two-way RRF retriever for sequences. */
+function createSequenceRetriever(
+  text: string,
+  filters: QueryContainer[],
+): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
-    rrf: { window_size: 40, rank_constant: 40 },
-    queries: [
-      {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
+    rrf: {
+      retrievers: [
+        {
+          standard: {
+            query: {
+              multi_match: { query: text, type: 'best_fields', fields: SEQUENCE_BM25_FIELDS },
+            },
+            filter: filterClause,
+          },
         },
-      },
-      { semantic: { field: 'sequence_semantic', query: text } },
-    ],
-  } satisfies RrfRank;
+        {
+          standard: {
+            query: { semantic: { field: 'sequence_semantic', query: text } },
+            filter: filterClause,
+          },
+        },
+      ],
+      rank_window_size: 40,
+      rank_constant: 40,
+    },
+  };
 }
 
 function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string): QueryContainer[] {
   const filters: QueryContainer[] = [];
-  if (subject) {
-    filters.push({ term: { subject_slug: subject } });
-  }
-  if (phaseSlug) {
-    filters.push({ term: { phase_slug: phaseSlug } });
-  }
+  if (subject) filters.push({ term: { subject_slug: subject } });
+  if (phaseSlug) filters.push({ term: { phase_slug: phaseSlug } });
   return filters;
 }

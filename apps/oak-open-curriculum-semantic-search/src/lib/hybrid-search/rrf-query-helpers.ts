@@ -86,3 +86,73 @@ export function createLessonFacets(): Record<string, estypes.AggregationsAggrega
     subjects: { terms: { field: 'subject_slug', size: 20 } },
   };
 }
+
+/** Lesson BM25 search fields with boosts. */
+const LESSON_BM25_FIELDS = [
+  'lesson_title^3',
+  'lesson_keywords^2',
+  'key_learning_points^2',
+  'misconceptions_and_common_mistakes',
+  'teacher_tips',
+  'content_guidance',
+  'transcript_text',
+];
+
+/** Unit BM25 search fields with boosts. */
+const UNIT_BM25_FIELDS = ['unit_title^3', 'rollup_text', 'unit_topics^1.5'];
+
+/** Creates a BM25 standard retriever for lessons. */
+export function createLessonBm25Retriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    standard: {
+      query: {
+        multi_match: {
+          query: text,
+          type: 'best_fields',
+          tie_breaker: 0.2,
+          fields: LESSON_BM25_FIELDS,
+        },
+      },
+      filter,
+    },
+  };
+}
+
+/** Creates an ELSER semantic retriever for lessons. */
+export function createLessonElserRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return { standard: { query: { semantic: { field: 'lesson_semantic', query: text } }, filter } };
+}
+
+/** Creates a BM25 standard retriever for units. */
+export function createUnitBm25Retriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    standard: {
+      query: {
+        multi_match: {
+          query: text,
+          type: 'best_fields',
+          tie_breaker: 0.2,
+          fields: UNIT_BM25_FIELDS,
+        },
+      },
+      filter,
+    },
+  };
+}
+
+/** Creates an ELSER semantic retriever for units. */
+export function createUnitElserRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return { standard: { query: { semantic: { field: 'unit_semantic', query: text } }, filter } };
+}
