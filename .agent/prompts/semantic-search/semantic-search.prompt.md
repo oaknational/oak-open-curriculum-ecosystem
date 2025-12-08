@@ -2,29 +2,39 @@
 
 **Git Version**: See `git log` for commit history  
 **Purpose**: Quick start for Maths KS4 semantic search implementation  
-**Status**: Ready for Maths KS4 Two-Way Hybrid Ingestion
+**Status**: Maths KS4 Ingested ✅ - RRF API Update Required
 
 ---
 
 ## Quick Start
 
-**Current Phase**: Two-way hybrid search with Maths KS4 ingestion.
+**Current Phase**: RRF API Update Required → Then Baseline Metrics
 
-**Implementation Order** (simpler first):
+**Implementation Status**:
 
-1. **Phase 1: Two-Way Hybrid with Maths KS4** ← CURRENT FOCUS
-   - Ingest Maths KS4 with BM25 + ELSER (two-way hybrid)
-   - Establish baseline metrics (MRR, NDCG@10)
-   - Validate search quality with simpler approach first
-   - Duration: 1-2 days
+1. **Phase 1A: Data Ingestion** ✅ COMPLETE
+   - ✅ Maths KS4 ingested (100 lessons, 36 units, 36 rollups)
+   - ✅ Dense vectors generated successfully
+   - ✅ All quality gates passing
+   - ⚠️ Programme factors NOT populated (expected - not in this dataset)
 
-2. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
-   - If two-way baseline doesn't meet quality targets, add E5 dense vectors
-   - Compare three-way vs two-way metrics
-   - Document decision in ADR
-   - Duration: 1 day
+2. **Phase 1B: RRF API Update** ← CURRENT BLOCKER
+   - 🔴 RRF query builders use deprecated `rank` API
+   - 🔴 ES 8.11+ requires new `retriever` API
+   - Must fix before two-way hybrid can be tested
+   - Duration: 0.5-1 day
 
-3. **Phase 3+**: Additional features (ReRank, filtered kNN, etc.)
+3. **Phase 1C: Baseline Metrics**
+   - Establish baseline with two-way hybrid (BM25 + ELSER)
+   - Calculate MRR, NDCG@10, zero-hit rate, latency
+   - Duration: 0.5-1 day
+
+4. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
+   - Dense vector infrastructure already built ✅
+   - Only activate if Phase 1C baseline doesn't meet targets
+   - Duration: 0.5 day
+
+5. **Phase 3+**: Additional features (ReRank, filtered kNN, etc.)
    - Only proceed after validating foundation
 
 **First Question**: Could it be simpler? Start with two-way hybrid. Only add complexity if it delivers measurable value.
@@ -62,27 +72,46 @@
 
 ## Current State Summary
 
-### Infrastructure Ready ✅
+### Phase 1A Complete ✅
 
-**Built**:
+**Maths KS4 Ingestion** (2025-12-08):
+
+- ✅ **100 lessons** indexed with ELSER semantic_text
+- ✅ **36 units** indexed
+- ✅ **36 unit rollups** indexed with dense vectors
+- ✅ **1 sequence facet** indexed
+- ✅ Dense vectors generated successfully (384-dim E5)
+- ✅ Basic BM25 search validated with representative queries
+- ✅ All ES mappings compatible with app data definitions
+- ℹ️ Programme factors (tier/exam_board/pathway) defined but not populated (expected)
+
+**Infrastructure Built**:
 
 - ✅ ELSER sparse embeddings configured (`.elser-2-elasticsearch`)
-- ✅ Two-way RRF query builders (BM25 + ELSER) implemented
-- ✅ Tier, exam_board, pathway field extraction for Maths KS4
-- ✅ Document transforms ready
-- ✅ Ingestion CLI ready (`pnpm es:ingest-live`)
+- ✅ Dense vector generation working (`.multilingual-e5-small-elasticsearch`)
+- ✅ Two-way RRF query builders (BM25 + ELSER) - **needs API update**
+- ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **ready for Phase 2**
+- ✅ Document transforms with programme factor extraction
+- ✅ Ingestion CLI validated (`pnpm es:ingest-live`)
 - ✅ All quality gates passing (1,310+ tests)
 
-**NOT YET DONE**:
+**Current Blocker**:
 
-- [ ] Maths KS4 data ingested
-- [ ] Two-way hybrid search baseline metrics established
-- [ ] Search quality validated
+- 🔴 RRF query builders use deprecated `rank` API (ES 8.11+ requires `retriever`)
+- 🔴 Two-way hybrid search cannot be tested until RRF API updated
+
+**Next Steps**:
+
+- [ ] Update RRF query builders to use `retriever` API
+- [ ] Test two-way hybrid search (BM25 + ELSER)
+- [ ] Establish baseline metrics (MRR, NDCG@10)
+- [ ] Decide: two-way sufficient OR evaluate three-way
 
 ### ES Serverless Status
 
-**Deployment**: Elasticsearch Serverless operational  
-**Indexes**: 6 indexes with English KS2 test data  
+**Deployment**: Elasticsearch Serverless operational (ES 8.11.0)  
+**Indexes**: 6 indexes with Maths KS4 data (173 documents)  
+**Last Ingestion**: 2025-12-08 14:19:38 (Maths KS4)  
 **Inference Endpoints Available**:
 
 | Endpoint                               | Type             | Status        | Use Case            |
@@ -97,70 +126,98 @@
 
 ## Next Steps
 
-### Phase 1: Two-Way Hybrid with Maths KS4 (1-2 days)
+### Phase 1B: Fix RRF API (Immediate Blocker)
 
-**Goal**: Validate that BM25 + ELSER (two-way hybrid) delivers good search quality before adding complexity.
+**Status**: ✅ Data ingested, 🔴 RRF API blocking two-way hybrid testing
 
-#### Step 1: Ingest Maths KS4
+**Current Issue**:
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# Check prerequisites
-pnpm es:status
-
-# Ingest Maths KS4 with two-way hybrid (BM25 + ELSER)
-pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+```typescript
+// Old API (deprecated in ES 8.11+)
+{
+  rank: {
+    rrf: { window_size: 60, rank_constant: 60 },
+    queries: [...]
+  }
+}
 ```
 
-**Expected**:
+**Error**:
 
-- ~50-100 lessons indexed
-- ~15-25 units indexed
-- ~15-25 unit rollups indexed
-- Duration: 10-20 minutes
+```
+parsing_exception: Unknown key for a START_OBJECT in [rank]
+Deprecated field [rank] used, replaced by [retriever]
+```
 
-#### Step 2: Validate Search Quality
+**Fix Required**:
 
-Test representative queries:
+1. Research ES 8.11+ `retriever` API syntax for RRF
+2. Update `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
+3. Update `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders-three-way.ts`
+4. Test with Maths KS4 data
+5. Duration: 0.5-1 day
 
-- "quadratic equations"
-- "Pythagoras theorem"
-- "trigonometry foundation tier"
-- "solving simultaneous equations"
-- "expanding brackets algebra"
+**Files to Update**:
 
-#### Step 3: Establish Baseline Metrics
+- `rrf-query-builders.ts` (two-way: BM25 + ELSER)
+- `rrf-query-builders-three-way.ts` (three-way: BM25 + ELSER + Dense)
+
+### Phase 1C: Establish Baseline Metrics (After RRF Fix)
+
+**Goal**: Measure two-way hybrid (BM25 + ELSER) search quality.
+
+#### Step 1: Test Two-Way Hybrid Search
+
+Representative queries (already validated with basic BM25):
+
+- "quadratic equations" ✅ Works with BM25
+- "Pythagoras theorem" ✅ Works with BM25
+- "trigonometry" ✅ Works with BM25
+- "solving simultaneous equations" ✅ Works with BM25
+- "expanding brackets algebra" ✅ Works with BM25
+
+#### Step 2: Measure Baseline Metrics
 
 Create E2E test to capture:
 
-- Mean Reciprocal Rank (MRR)
-- NDCG@10
-- Zero-hit rate
-- p95 latency
+- **Mean Reciprocal Rank (MRR)** - Target: > 0.70
+- **NDCG@10** - Target: > 0.75
+- **Zero-hit rate** - Target: < 10%
+- **p95 latency** - Target: < 300ms
 
-#### Step 4: Decision Point
+#### Step 3: Decision Point
 
-**If two-way delivers acceptable quality** (target: MRR > 0.70, NDCG@10 > 0.75):
+**If two-way meets targets**:
 
 - ✅ Proceed with two-way as production approach
-- Document success in ADR
-- Move to Phase 3+ features (ReRank, etc.)
+- ✅ Skip Phase 2 (dense vectors)
+- ✅ Document decision in ADR
+- ✅ Move to Phase 3+ features
 
 **If two-way doesn't meet targets**:
 
-- Move to Phase 2: Evaluate dense vectors
-- Re-ingest with three-way hybrid
-- Compare metrics
+- Move to Phase 2: Enable three-way hybrid
+- Dense vector infrastructure already built ✅
+- Compare three-way vs two-way metrics
+- Document decision
 
-### Phase 2: Evaluate Dense Vectors (Only If Needed)
+### Phase 2: Three-Way Hybrid (Only If Two-Way Insufficient)
 
-**Only proceed here if Phase 1 baseline doesn't meet quality targets.**
+**Pre-condition**: Phase 1C baseline doesn't meet quality targets.
 
-1. Enable dense vector generation during ingestion
-2. Re-ingest Maths KS4 with three-way hybrid
-3. Compare metrics against Phase 1 baseline
+**Already Built**:
+
+- ✅ Dense vector generation working
+- ✅ Three-way RRF query builders implemented
+- ✅ Dense vectors in Maths KS4 data
+
+**Steps**:
+
+1. Update three-way RRF builders with new `retriever` API
+2. Test three-way hybrid search
+3. Compare metrics against Phase 1C baseline
 4. Document decision in ADR
+5. Duration: 0.5 day
 
 ---
 
@@ -296,12 +353,26 @@ pnpm es:status  # Check ES connection and indexes
 
 ## Success Criteria
 
-### Phase 1 Complete When:
+### Phase 1A: Data Ingestion ✅ COMPLETE
 
-- [ ] Maths KS4 ingested with two-way hybrid (BM25 + ELSER)
-- [ ] All 5 indexes have Maths KS4 data
-- [ ] Tier/exam_board/pathway fields populated (>60% coverage)
+- [x] Maths KS4 ingested (100 lessons, 36 units, 36 rollups)
+- [x] All 6 indexes have Maths KS4 data (173 documents total)
+- [x] Dense vectors generated successfully
+- [x] Basic BM25 search validated with representative queries
+- [x] All quality gates passing
+- ℹ️ Tier/exam_board/pathway fields defined but not populated (expected for this dataset)
+
+### Phase 1B: RRF API Update (In Progress)
+
+- [ ] Research ES 8.11+ `retriever` API syntax
+- [ ] Update `rrf-query-builders.ts` to use new API
+- [ ] Update `rrf-query-builders-three-way.ts` to use new API
+- [ ] Test two-way hybrid search with Maths KS4
+
+### Phase 1C: Baseline Metrics (Next)
+
 - [ ] Two-way hybrid baseline metrics established
+- [ ] MRR, NDCG@10, zero-hit rate, latency measured
 - [ ] Search quality validated with test queries
 - [ ] Decision documented: two-way sufficient OR proceed to Phase 2
 

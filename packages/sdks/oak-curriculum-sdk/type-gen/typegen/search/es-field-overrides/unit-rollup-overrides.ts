@@ -73,7 +73,4 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
   exam_board: {
     type: 'keyword',
   },
-  pathway: {
-    type: 'keyword',
-  },
 } as const satisfies Readonly<Record<string, EsFieldMapping>>;

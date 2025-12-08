@@ -1,7 +1,7 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: ACTIVE - Primary Implementation Plan  
+**Status**: Phase 1A Complete ✅ | Phase 1B Blocked 🔴 | Phase 1C Next ⏭️  
 **Priority**: HIGH  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
 
@@ -175,11 +175,23 @@ pathways_available: { type: 'keyword' },
 
 ---
 
-## Phase 1: Two-Way Hybrid Search with Maths KS4 - IN PROGRESS
+## Phase 1: Two-Way Hybrid Search with Maths KS4
 
-### Goal
+### Phase 1A: Data Ingestion ✅ COMPLETE (2025-12-08)
 
-Implement and validate **two-way hybrid search (BM25 + ELSER)** with Maths KS4 data. Establish baseline metrics before considering additional complexity.
+**Goal**: Ingest Maths KS4 data with dense vector generation and ELSER semantic text.
+
+**Status**: Complete - 173 documents successfully indexed.
+
+### Phase 1B: RRF API Update 🔴 CURRENT BLOCKER
+
+**Goal**: Update RRF query builders to use ES 8.11+ `retriever` API instead of deprecated `rank` API.
+
+**Blocker**: Two-way hybrid search cannot be tested until RRF API is updated.
+
+### Phase 1C: Baseline Metrics ⏭️ NEXT
+
+**Goal**: Establish baseline metrics with **two-way hybrid search (BM25 + ELSER)** before considering additional complexity.
 
 ### First Question Applied
 
@@ -198,52 +210,62 @@ Start with two-way hybrid (BM25 + ELSER) instead of immediately implementing thr
 
 ### Quick Start Checklist
 
-#### Prerequisites
+#### Phase 1A Prerequisites ✅ Complete
 
 - [x] Re-read foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)
 - [x] Elasticsearch Serverless running with ELSER configured
-- [x] Two-way RRF query builders implemented
+- [x] Two-way RRF query builders implemented (needs API update for ES 8.11+)
 - [x] Tier, exam_board, pathway field extraction implemented
 - [x] Document transforms ready
-- [ ] All current quality gates passing
+- [x] All current quality gates passing
 
 #### Step-by-Step Execution
 
-**Step 1: Verify Prerequisites**
+**Phase 1A: Data Ingestion ✅ Complete**
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:status  # Verify ES connection
+- [x] Verified ES connection
+- [x] Ingested Maths KS4: `pnpm es:ingest-live --subject maths --keystage ks4 --verbose`
+- [x] **Results**: 100 lessons, 36 units, 36 rollups, 1 sequence facet = 173 documents
+- [x] Dense vectors generated successfully (384-dim E5)
+- [x] Basic BM25 search validated with representative queries
+- [x] All quality gates passing
+
+**Phase 1B: RRF API Update 🔴 Current Blocker**
+
+- [ ] Research ES 8.11+ `retriever` API syntax for RRF
+- [ ] Update `rrf-query-builders.ts` (two-way: BM25 + ELSER)
+- [ ] Update `rrf-query-builders-three-way.ts` (three-way: BM25 + ELSER + Dense)
+- [ ] Test RRF queries with Maths KS4 data
+
+**Error to fix**:
+
+```
+parsing_exception: Unknown key for a START_OBJECT in [rank]
+Deprecated field [rank] used, replaced by [retriever]
 ```
 
-**Step 2: Ingest Maths KS4**
+**Phase 1C: Baseline Metrics ⏭️ Next (After 1B)**
 
-```bash
-pnpm es:ingest-live --subject maths --keystage ks4 --verbose
-```
+**Step 1: Test Two-Way Hybrid Search**
 
-**Expected**: ~50-100 lessons, ~15-25 units, 10-20 minutes
+Representative queries (already validated with basic BM25):
 
-**Step 3: Test Search Quality**
+- "quadratic equations" ✅
+- "Pythagoras theorem" ✅
+- "trigonometry" ✅
+- "solving simultaneous equations" ✅
 
-Run representative queries:
-
-- "quadratic equations"
-- "Pythagoras theorem"
-- "trigonometry foundation tier"
-- "solving simultaneous equations"
-
-**Step 4: Capture Baseline Metrics**
+**Step 2: Capture Baseline Metrics**
 
 - Mean Reciprocal Rank (MRR) - target: > 0.70
 - NDCG@10 - target: > 0.75
 - Zero-hit rate - target: < 10%
 - p95 latency - target: < 300ms
 
-**Step 5: Decision Point**
+**Step 3: Decision Point**
 
 - **If targets met**: Proceed with two-way hybrid, skip Phase 2
-- **If targets not met**: Proceed to Phase 2 to evaluate dense vectors
+- **If targets not met**: Proceed to Phase 2 to evaluate dense vectors (infrastructure already built)
 
 ### ES Serverless Features Used (Phase 1)
 
@@ -2236,20 +2258,39 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 
 ## Implementation Checklist
 
-### Phase 1: Two-Way Hybrid with Maths KS4 (1-2 days) - IN PROGRESS
+### Phase 1A: Data Ingestion ✅ COMPLETE (2025-12-08)
 
 - [x] Re-read foundation documents
-- [x] Field definitions added to SDK (tier, exam_board, pathway)
+- [x] Field definitions added to SDK (tier, exam_board, pathway, dense vectors)
 - [x] `pnpm type-gen` completed
 - [x] Extraction functions implemented with unit tests
 - [x] Document transforms updated
 - [x] Two-way RRF query builders implemented
 - [x] All quality gates passing
-- [ ] **Ingest Maths KS4**: `pnpm es:ingest-live --subject maths --keystage ks4`
-- [ ] Validate search results with test queries
+- [x] **Ingest Maths KS4**: `pnpm es:ingest-live --subject maths --keystage ks4`
+  - [x] 100 lessons indexed
+  - [x] 36 units indexed
+  - [x] 36 unit rollups indexed
+  - [x] 1 sequence facet indexed
+  - [x] Dense vectors generated (384-dim E5)
+- [x] Basic BM25 search validated with test queries
+
+### Phase 1B: RRF API Update 🔴 CURRENT BLOCKER (0.5 days)
+
+- [ ] Research ES 8.11+ `retriever` API syntax
+- [ ] Update `apps/.../hybrid-search/rrf-query-builders.ts` to use `retriever` instead of `rank`
+- [ ] Update `apps/.../hybrid-search/rrf-query-builders-three-way.ts` to use `retriever` instead of `rank`
+- [ ] Test two-way RRF with Maths KS4 data
+- [ ] All quality gates passing
+
+**Blocking Issue**: RRF query builders use deprecated `rank` API, ES 8.11+ requires `retriever` API
+
+### Phase 1C: Baseline Metrics ⏭️ NEXT (0.5 days)
+
+- [ ] Test two-way hybrid search (BM25 + ELSER) with RRF
 - [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
 - [ ] Document baseline metrics
-- [ ] Decision: Phase 1 sufficient OR proceed to Phase 2
+- [ ] Decision: Two-way sufficient OR proceed to Phase 2
 
 ### Phase 2: Evaluate Dense Vectors (1 day) - Only If Needed
 

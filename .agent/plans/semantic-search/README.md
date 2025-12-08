@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Planning - Ready for Two-Way Hybrid Implementation  
+**Status**: Active Implementation - Maths KS4 Ingested ✅, RRF API Update Required 🔴  
 **Last Updated**: 2025-12-08
 
 ---
@@ -118,50 +118,76 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 
 ### Implementation Phases
 
-| Phase | Duration | Focus                       | Key Features                            |
-| ----- | -------- | --------------------------- | --------------------------------------- |
-| **1** | 1-2 days | Two-Way Hybrid + Maths KS4  | BM25 + ELSER, ingest, baseline metrics  |
-| **2** | 1 day    | Evaluate Dense Vectors      | Only if Phase 1 insufficient            |
-| **3** | 2-3 days | Relevance Enhancement       | Elastic Native ReRank, filtered kNN     |
-| **4** | 3-4 days | Entity Extraction & Graph   | NER models, Graph API, enrich processor |
-| **5** | 2-3 days | Reference Indices & Threads | 5 new indices, thread support           |
-| **6** | 4-5 days | RAG Infrastructure          | ES Playground, semantic_text, chunking  |
-| **7** | 5-6 days | Knowledge Graph             | Triple store, entity resolution         |
-| **8** | 3-4 days | Advanced Features           | LTR foundations, multi-vector           |
+| Phase  | Duration | Focus                       | Status                    | Key Features                            |
+| ------ | -------- | --------------------------- | ------------------------- | --------------------------------------- |
+| **1A** | ✅ Done  | Maths KS4 Ingestion         | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
+| **1B** | 0.5 days | RRF API Update              | 🔴 Blocker (current)      | Update to ES 8.11+ retriever API        |
+| **1C** | 0.5 days | Baseline Metrics            | ⏭️ Next (after 1B)        | MRR, NDCG@10, zero-hit, latency         |
+| **2**  | 0.5 days | Evaluate Three-Way          | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
+| **3**  | 2-3 days | Relevance Enhancement       | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
+| **4**  | 3-4 days | Entity Extraction & Graph   | ⏸️ Future                 | NER models, Graph API, enrich processor |
+| **5**  | 2-3 days | Reference Indices & Threads | ⏸️ Future                 | 5 new indices, thread support           |
+| **6**  | 4-5 days | RAG Infrastructure          | ⏸️ Future                 | ES Playground, semantic_text, chunking  |
+| **7**  | 5-6 days | Knowledge Graph             | ⏸️ Future                 | Triple store, entity resolution         |
+| **8**  | 3-4 days | Advanced Features           | ⏸️ Future                 | LTR foundations, multi-vector           |
 
-**Note**: Phases 3+ only proceed after Phase 1 baseline is established and validated.
+**Note**: Phases 3+ only proceed after Phase 1C baseline is established and validated.
 
 ---
 
 ## Current System State
 
-**Last verified**: See `git log` for latest updates
+**Last verified**: 2025-12-08 (See `git log` for latest updates)
 
-### Completed ✅
+### Phase 1A Complete ✅
 
-- ES Serverless deployed with 6 indexes
-- ELSER sparse embeddings configured
-- SDK rate limiting implemented (5 req/sec, ADR-070)
-- Synonym set `oak-syns` with 68 rules
-- Field definitions architecture (single source of truth, ADR-067)
-- Per-index completion contexts (ADR-068)
-- Systematic ingestion with progress tracking (ADR-069)
-- All 10 quality gates passing (1,310+ tests)
-- Test data: English KS2 (~350 documents)
+**Maths KS4 Ingestion** (2025-12-08):
 
-### Infrastructure Ready ✅
+- ✅ **100 lessons** indexed with ELSER semantic_text
+- ✅ **36 units** indexed
+- ✅ **36 unit rollups** indexed with dense vectors
+- ✅ **1 sequence facet** indexed
+- ✅ **Total: 173 documents**
+- ✅ Dense vectors generated successfully (384-dim E5)
+- ✅ Basic BM25 search validated
+- ✅ All ES mappings compatible with app definitions
+- ℹ️ Programme factors defined but not populated (expected)
 
-- ✅ Two-way RRF query builders (BM25 + ELSER)
-- ✅ Dense vector generation code (for Phase 2 if needed)
-- ✅ Three-way RRF query builders (for Phase 2 if needed)
+**Infrastructure Complete**:
+
+- ✅ ES Serverless deployed (ES 8.11.0) with 6 indexes
+- ✅ ELSER sparse embeddings configured (`.elser-2-elasticsearch`)
+- ✅ Dense vector generation working (`.multilingual-e5-small-elasticsearch`)
+- ✅ SDK rate limiting (5 req/sec, ADR-070)
+- ✅ Synonym set `oak-syns` with 68 rules
+- ✅ Field definitions architecture (ADR-067)
+- ✅ Per-index completion contexts (ADR-068)
+- ✅ Systematic ingestion (ADR-069)
+- ✅ Two-way RRF query builders (BM25 + ELSER) - **needs API update**
+- ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **needs API update**
 - ✅ Tier, exam_board, pathway field extraction
 - ✅ ADRs 071-074 written
+- ✅ All 10 quality gates passing (1,310+ tests)
 
-### Ready for Phase 1 ⏭️
+### Current Blocker 🔴
 
-- 🔄 Ingest Maths KS4 with two-way hybrid
+**RRF API Update Required**:
+
+- 🔴 RRF query builders use deprecated `rank` API
+- 🔴 ES 8.11+ requires new `retriever` API
+- 🔴 Blocking two-way hybrid testing
+
+**Files to Update**:
+
+- `apps/.../hybrid-search/rrf-query-builders.ts`
+- `apps/.../hybrid-search/rrf-query-builders-three-way.ts`
+
+### Next: Phase 1B (RRF API) → Phase 1C (Metrics) ⏭️
+
+- 🔄 Fix RRF API deprecation
+- 🔄 Test two-way hybrid search
 - 🔄 Establish baseline metrics
-- 🔄 Validate search quality
+- 🔄 Decide: two-way vs three-way
 
 ---
 
@@ -217,13 +243,26 @@ pnpm smoke:dev:stub
 
 ## Success Criteria
 
-### Phase 1 (Two-Way Hybrid Baseline)
+### Phase 1A: Data Ingestion ✅ COMPLETE
 
-- [ ] Maths KS4 ingested
+- [x] Maths KS4 ingested (100 lessons, 36 units, 36 rollups)
+- [x] Dense vectors generated
+- [x] Basic BM25 search validated
+- [x] All quality gates passing
+
+### Phase 1B: RRF API Update (Current)
+
+- [ ] Research ES 8.11+ `retriever` API syntax
+- [ ] Update two-way RRF query builders
+- [ ] Update three-way RRF query builders
+- [ ] Test with Maths KS4 data
+
+### Phase 1C: Baseline Metrics (Next)
+
 - [ ] Two-way hybrid search working
-- [ ] Baseline metrics established (MRR, NDCG@10)
-- [ ] All quality gates passing
-- [ ] Decision documented: proceed with two-way OR evaluate dense vectors
+- [ ] Baseline metrics established (MRR, NDCG@10, zero-hit, latency)
+- [ ] Search quality validated
+- [ ] Decision documented: two-way sufficient OR evaluate three-way
 
 ### Full Project
 
