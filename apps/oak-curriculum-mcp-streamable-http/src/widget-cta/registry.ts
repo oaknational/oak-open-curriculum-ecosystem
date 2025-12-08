@@ -39,15 +39,15 @@ export const CTA_REGISTRY = {
     label: 'Load Oak Knowledge (Click Me)',
     loadingLabel: 'Understanding Oak...',
     understoodLabel: 'Oak Understood',
-    prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum covering from EYFS to KS4.
+    prompt: `The Oak Open Curriculum is an open source, high quality, free to use, fully resourced curriculum, covering from EYFS to KS4.
 
-In order for you to better help the user, some resources and tools have been provided for that specific purpose.
+The following tools will help you understand the context, and provide better support to the user.
 
-First, call the \`get-help\` tool to get an overview of the resources and tools that have been provided.
+Call the \`get-help\` tool for a resources and tools overview.
 
-The response from that tool should include other tools in the "agent support" category, including but not necessarily limited to \`get-ontology\`, and \`get-knowledge-graph\`. Call those tools now.
+The response includes "agent support" tools, such as \`get-ontology\` and \`get-knowledge-graph\`. Call **all** agent support tools now.
 
-Reflect on the information from all three tools. There is no need to show the user the information, just use it to better understand the Oak curriculum and how to best help the user.
+Reflect on the agent support tools information. Do not show the user, use it to understand the Oak curriculum and the education context.
 
 Tell the user that you are ready to help them use the Oak Open Curriculum resources.`,
   },
