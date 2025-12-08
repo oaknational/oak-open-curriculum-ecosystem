@@ -649,6 +649,7 @@ src/lib/hybrid-search/rrf-query-builders.unit.test.ts
 **File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
 
 Missing keyword overrides for:
+
 - `UNIT_ROLLUP_FIELD_OVERRIDES`: `pathway`
 - `UNITS_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`, `unit_type`
 - `SEQUENCES_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`

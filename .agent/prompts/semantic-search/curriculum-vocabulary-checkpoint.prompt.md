@@ -43,9 +43,9 @@ Attempted to fix linter errors (max-lines, max-lines-per-function) by:
 
 ## Current State
 
-### Quality Gates Status
+### Blocking Issue 1: Quality Gates Failing
 
-**Failing** - 3 linting errors:
+**3 linting errors**:
 
 ```
 src/lib/hybrid-search/rrf-query-builders.ts
@@ -57,6 +57,19 @@ src/lib/indexing/document-transforms.ts
 src/lib/hybrid-search/rrf-query-builders.unit.test.ts
   4:3  error  'buildUnitRrfRequest' is defined but never used
 ```
+
+### Blocking Issue 2: ES Field Overrides Incomplete
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides.ts`
+
+Missing keyword overrides that must be added before ingestion:
+
+- `UNIT_ROLLUP_FIELD_OVERRIDES`: `pathway`
+- `UNITS_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`, `unit_type`
+- `SEQUENCES_FIELD_OVERRIDES`: `tier`, `exam_board`, `pathway`
+- `SEQUENCE_FACETS_FIELD_OVERRIDES`: `tiers_available`, `exam_boards_available`, `pathways_available`
+
+**See**: "Pre-Phase: ES Field Overrides Audit" in `maths-ks4-implementation-plan.md`
 
 ### Tests Status
 

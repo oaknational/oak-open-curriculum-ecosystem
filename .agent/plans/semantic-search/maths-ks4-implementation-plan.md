@@ -116,13 +116,13 @@ Ensure `es-field-overrides.ts` contains all required field type overrides before
 
 The following overrides exist:
 
-| Index | Fields with overrides |
-|-------|----------------------|
-| `LESSONS_FIELD_OVERRIDES` | `lesson_dense_vector`, `tier`, `exam_board`, `pathway` ✅ |
-| `UNIT_ROLLUP_FIELD_OVERRIDES` | `unit_dense_vector`, `tier`, `exam_board` ✅ |
-| `UNITS_FIELD_OVERRIDES` | (none for new fields) |
-| `SEQUENCES_FIELD_OVERRIDES` | (none for new fields) |
-| `SEQUENCE_FACETS_FIELD_OVERRIDES` | (none for new fields) |
+| Index                             | Fields with overrides                                     |
+| --------------------------------- | --------------------------------------------------------- |
+| `LESSONS_FIELD_OVERRIDES`         | `lesson_dense_vector`, `tier`, `exam_board`, `pathway` ✅ |
+| `UNIT_ROLLUP_FIELD_OVERRIDES`     | `unit_dense_vector`, `tier`, `exam_board` ✅              |
+| `UNITS_FIELD_OVERRIDES`           | (none for new fields)                                     |
+| `SEQUENCES_FIELD_OVERRIDES`       | (none for new fields)                                     |
+| `SEQUENCE_FACETS_FIELD_OVERRIDES` | (none for new fields)                                     |
 
 ### Missing Overrides (Must Add)
 
