@@ -923,9 +923,172 @@ If implementing proper programme support requires breaking changes (e.g., restru
 
 ---
 
+## High Priority – Resource Identity & Cross-Service Consistency
+
+### 6. Consistent Resource Identifiers Across Oak Services
+
+> **⚠️ Note:** We need to verify whether identifier inconsistency is actually an issue in practice. The API and OWA may already use consistent slugs—this requires investigation before prioritising any work.
+
+**Current state:**
+
+Resource identifiers (slugs, IDs) may differ between the Open Curriculum API and the Oak Web Application (OWA) at www.thenational.academy. This creates friction when:
+
+- AI tools generate links to OWA that don't work
+- Teachers search for lessons they found on the website using different identifiers
+- Cross-referencing data between services requires complex slug/ID translation
+- Embedding services (semantic search, analytics) can't reliably deduplicate resources
+
+**The problem:**
+
+When a teacher finds a lesson on www.thenational.academy and wants to use it via an AI tool, they may have:
+
+```plaintext
+OWA URL: https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123
+API lookup: GET /lessons/the-roman-invasion-of-britain  → 404 (different slug format)
+```
+
+Or conversely:
+
+```plaintext
+API response: { "lessonSlug": "roman-invasion-britain", ... }
+Generated URL: https://www.thenational.academy/teachers/lessons/roman-invasion-britain → 404
+```
+
+**What we need:**
+
+**Option A: Unified identifiers (Recommended)**
+
+The same identifier works across all Oak services:
+
+```typescript
+// OWA URL
+https://www.thenational.academy/teachers/lessons/roman-invasion-of-britain-6fgh8j
+
+// API request (same slug)
+GET /api/v0/lessons/roman-invasion-of-britain-6fgh8j
+
+// API response
+{
+  "lessonSlug": "roman-invasion-of-britain-6fgh8j",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/roman-invasion-of-britain-6fgh8j"
+}
+```
+
+**Option B: Explicit mapping endpoint**
+
+If identifiers must differ, provide a clear 1:1 mapping:
+
+```typescript
+GET /api/v0/resource-mappings?owaSlug=the-roman-invasion-of-britain-abc123
+
+Response:
+{
+  "owaSlug": "the-roman-invasion-of-britain-abc123",
+  "apiSlug": "roman-invasion-of-britain",
+  "resourceType": "lesson",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123"
+}
+
+// And reverse lookup
+GET /api/v0/resource-mappings?apiSlug=roman-invasion-of-britain
+
+Response:
+{
+  "apiSlug": "roman-invasion-of-britain",
+  "owaSlug": "the-roman-invasion-of-britain-abc123",
+  "resourceType": "lesson",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123"
+}
+```
+
+**Option C: Include both identifiers in all responses**
+
+Every resource response includes both the API identifier and the OWA identifier:
+
+```typescript
+GET /api/v0/lessons/roman-invasion-of-britain/summary
+
+Response:
+{
+  "lessonSlug": "roman-invasion-of-britain",           // API identifier
+  "owaSlug": "the-roman-invasion-of-britain-abc123",   // OWA identifier
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123",
+  "lessonTitle": "The Roman Invasion of Britain",
+  // ... other fields
+}
+```
+
+**Why this matters:**
+
+1. **Teacher workflow continuity**: Teachers browse OWA, then want to use AI tools with the same resources—identifiers must match or map clearly
+2. **AI-generated links must work**: When AI creates lesson plans with Oak links, teachers must be able to click them and land on the correct page
+3. **Cross-service data integrity**: Analytics, search, and caching systems need reliable deduplication
+4. **SDK canonical URL generation**: Without consistent identifiers, SDKs cannot reliably generate working URLs
+5. **Embedding/vector search**: Semantic search indices need stable, unique identifiers to avoid duplicates
+
+**Real teacher scenario:**
+
+Teacher: "Find lessons about the Roman invasion for my Year 4 class and give me the links"
+
+**Without consistent identifiers:**
+
+- AI finds lesson via API: `roman-invasion-britain`
+- AI generates URL: `https://www.thenational.academy/teachers/lessons/roman-invasion-britain`
+- Teacher clicks link → 404 error
+- Teacher loses trust in AI tool
+
+**With consistent identifiers:**
+
+- AI finds lesson via API: `the-roman-invasion-of-britain-abc123`
+- AI generates URL: `https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123`
+- Teacher clicks link → Correct lesson page
+- Teacher trusts AI tool and uses it again
+
+**Applies to:**
+
+All resource types that have both API and OWA representations:
+
+- Lessons
+- Units
+- Programmes
+- Subjects
+- Sequences
+
+**Benefits:**
+
+- **Single source of truth**: One identifier per resource across all Oak systems
+- **Reliable URL generation**: SDKs and AI tools can confidently construct working OWA links
+- **Simpler caching**: Cache keys work across services without translation
+- **Better analytics**: Track resource usage consistently across API and web
+- **Reduced confusion**: Teachers, developers, and AI agents use the same identifiers
+
+**Impact:** **Critical for AI tool reliability.** Broken links destroy teacher trust in AI-generated content.
+
+**Effort:** Depends on current identifier architecture:
+
+- If already consistent: Document and verify (1 day)
+- If mapping exists internally: Expose via Option B or C (2-3 days)
+- If identifiers diverge significantly: Option A requires data migration (significant effort)
+
+**Recommendation:** Start with Option C (include both identifiers in responses) as a short-term fix, then migrate toward Option A (unified identifiers) for long-term consistency.
+
+**Priority:** **High** – broken links are immediately visible failures that undermine all AI tool value.
+
+**Enables:**
+
+- **Layer 1**: Tools return working canonical URLs
+- **Layer 2**: Aggregated tools cross-reference resources reliably
+- **Layer 3**: Semantic search indexes with stable, deduplicable IDs
+- **Layer 4**:
+  - `generate-lesson-plan`: Creates plans with clickable links that actually work
+  - `export-curriculum-data`: Exports include consistent identifiers for external systems
+  - `bulk-unit-summaries`: Can be cached and referenced across services
+
+---
+
 ## Medium Priority – Parameter Richness
 
-### 6. Add Parameter Examples
+### 7. Add Parameter Examples
 
 **Current state:**
 
@@ -982,7 +1145,7 @@ parameters:
 
 ---
 
-### 7. Add Custom Schema Extensions for Tool Metadata
+### 8. Add Custom Schema Extensions for Tool Metadata
 
 **What:** OpenAPI `x-oak-*` extensions providing tool-specific metadata.
 
@@ -1035,7 +1198,7 @@ parameters:
 
 ---
 
-### 8. Add Behavioural Metadata for Tool Safety and Retry Logic
+### 9. Add Behavioural Metadata for Tool Safety and Retry Logic
 
 **What:** Custom OpenAPI extensions indicating tool behaviour characteristics for AI safety and orchestration.
 
@@ -1120,7 +1283,7 @@ A teacher asks: "Find 10 KS3 science lessons about cells and download the assets
 
 ---
 
-### 9. Enhance Thread Endpoints for Progression Analysis
+### 10. Enhance Thread Endpoints for Progression Analysis
 
 **What:** Enrich thread endpoints with metadata about conceptual progression and cross-programme relationships.
 
@@ -1265,7 +1428,7 @@ Teacher: "Show me how fractions progress from Year 1 to Year 6"
 
 ## Medium Priority – Schema Validation & Type Safety
 
-### 10. Standardise Parameter and Schema Types with `$ref`
+### 11. Standardise Parameter and Schema Types with `$ref`
 
 **What:** Use OpenAPI `$ref` to define reusable parameter and schema components, ensuring type consistency across all endpoints.
 
@@ -1390,7 +1553,7 @@ SequenceUnitsResponseSchema:
 
 ---
 
-### 11. Expose Zod Validators for Perfect Type Fidelity
+### 12. Expose Zod Validators for Perfect Type Fidelity
 
 **Current state:**
 
@@ -1568,7 +1731,7 @@ import { lessonSummaryResponseSchema } from '@oaknational/curriculum-api-schemas
 
 ## Medium Priority – Response Metadata
 
-### 12. Add Response Schema Examples
+### 13. Add Response Schema Examples
 
 **Current state:**
 
@@ -1628,7 +1791,7 @@ responses:
 
 ---
 
-### 13. Document Canonical URL Patterns
+### 14. Document Canonical URL Patterns
 
 **Current state:**
 Canonical URLs calculated client-side based on implicit rules.
@@ -1677,7 +1840,7 @@ Included in `/ontology` response (see item 3).
 
 ## Medium Priority – Resource Timestamps for SDK Caching
 
-### 10. Add `lastUpdated` Timestamp to All Resource Responses
+### 15. Add `lastUpdated` Timestamp to All Resource Responses
 
 **Current state:**
 
@@ -2002,7 +2165,7 @@ Teacher opens lesson planning app daily:
 
 ## Low Priority – Performance Hints
 
-### 14. Add Performance and Caching Metadata
+### 16. Add Performance and Caching Metadata
 
 **What:** Extensions indicating response characteristics.
 
@@ -2034,7 +2197,7 @@ Teacher opens lesson planning app daily:
 
 ---
 
-### 15. Complete OpenAPI Best Practices Checklist
+### 17. Complete OpenAPI Best Practices Checklist
 
 **What:** Fill gaps in OpenAPI spec completeness following [OpenAPI Initiative best practices](https://learn.openapis.org/best-practices.html).
 
@@ -2484,16 +2647,18 @@ components:
 | 3. `/ontology` endpoint         | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns             |
 | 4. Error response docs          | **High**        | High          | 2-3 hours | Proper error handling                 |
 | 5. Programme variant metadata   | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs  |
-| 6. Parameter examples           | Medium          | Medium        | Ongoing   | Clearer semantics                     |
-| 7. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
-| 8. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
-| 9. Thread enhancements          | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
-| 10. Standardise types with refs | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
-| 11. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
-| 12. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
-| 13. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
-| 14. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
-| 15. OpenAPI best practices      | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
+| 6. Consistent resource IDs      | **High**        | **Very High** | 1-5 days  | Working cross-service links           |
+| 7. Parameter examples           | Medium          | Medium        | Ongoing   | Clearer semantics                     |
+| 8. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
+| 9. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
+| 10. Thread enhancements         | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
+| 11. Standardise types with refs | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
+| 12. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
+| 13. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
+| 14. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
+| 15. Resource timestamps         | Medium          | Medium-High   | 2-3 days  | Efficient SDK caching                 |
+| 16. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
+| 17. OpenAPI best practices      | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
 
 ---
 

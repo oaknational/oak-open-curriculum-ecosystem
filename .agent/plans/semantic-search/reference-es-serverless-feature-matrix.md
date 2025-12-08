@@ -2,7 +2,7 @@
 
 **Purpose**: Track ES Serverless feature adoption in Maths KS4 vertical slice  
 **Last Updated**: 2025-12-08  
-**Related Plan**: `maths-ks4-es-serverless-complete.md`
+**Related Plan**: `maths-ks4-implementation-plan.md`
 
 ---
 
@@ -342,4 +342,4 @@
 
 **End of Feature Matrix**
 
-This matrix will be updated as features are implemented. Current progress tracked in `maths-ks4-es-serverless-complete.md`.
+This matrix will be updated as features are implemented. Current progress tracked in `maths-ks4-implementation-plan.md`.

@@ -1,8 +1,27 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Planning - Ready for Implementation  
-**Last Consolidated**: 2025-12-08
+**Status**: Active Planning - Ready for Two-Way Hybrid Implementation  
+**Last Updated**: 2025-12-08
+
+---
+
+## 🎯 Strategic Goals
+
+### Current Focus: Maths KS4 Proof of Concept
+
+Validate Elasticsearch Serverless as the platform for intelligent curriculum search using Maths KS4 as a complete vertical slice.
+
+### Future Roadmap
+
+| Milestone             | Scope                                       | Purpose                                         |
+| --------------------- | ------------------------------------------- | ----------------------------------------------- |
+| **Maths KS4**         | Single subject, single key stage            | Prove architecture, validate search quality     |
+| **Full Maths**        | All Maths content (KS1-KS4)                 | Scale within subject, handle curriculum breadth |
+| **All Subjects**      | Complete Oak Curriculum (~340 combinations) | Full production deployment                      |
+| **Advanced Features** | RAG, knowledge graph, personalisation       | Differentiated teacher experience               |
+
+**Full Curriculum Ingestion**: Given the **Oak API 1000 requests/hour limit**, systematic ingestion of all 340 subject/keystage combinations requires 17-24 hours. The ingestion infrastructure (`pnpm ingest:all`, `pnpm ingest:progress`) is ready for this when validation is complete.
 
 ---
 
@@ -15,44 +34,71 @@
 1. **`.agent/prompts/semantic-search/semantic-search.prompt.md`** ⭐ START HERE
    - Complete context for fresh chat sessions
    - Prerequisites, environment setup, current state
-   - Quick start guide for Phase 1A
+   - Quick start guide for Phase 1
 
-2. **`maths-ks4-implementation-plan.md`** 📋 MAIN PLAN
+2. **`maths-ks4-implementation-plan.md`** 📋 MAIN BACKEND PLAN
    - Complete implementation roadmap
-   - All 5 phases with detailed tasks
+   - All phases with detailed tasks
    - TDD approach, ADRs, success criteria
 
-3. **Foundation Documents** (MUST READ)
+3. **`search-ui-plan.md`** 📋 MAIN FRONTEND PLAN
+   - React components, design system
+   - Fixture testing, accessibility
+   - Responsive layout
+
+4. **Foundation Documents** (MUST READ)
    - `.agent/directives-and-memory/rules.md`
    - `.agent/directives-and-memory/schema-first-execution.md`
    - `.agent/directives-and-memory/testing-strategy.md`
 
 ---
 
+## Implementation Philosophy: Simpler First
+
+**First Question**: Could it be simpler without compromising quality?
+
+We implement the **simpler approach first** and only add complexity when it delivers measurable value:
+
+| Phase  | Focus                       | Complexity | Purpose                      |
+| ------ | --------------------------- | ---------- | ---------------------------- |
+| **1**  | Two-way hybrid (BM25+ELSER) | Low        | Establish baseline, validate |
+| **2**  | Evaluate dense vectors      | Medium     | Only if Phase 1 insufficient |
+| **3+** | Advanced features           | High       | ReRank, filtered kNN, RAG    |
+
+**Key Insight**: Don't build three-way hybrid infrastructure before validating that two-way is insufficient.
+
+---
+
 ## Document Hierarchy
 
-### Core Documents (Flat Structure)
+### Implementation Plans
 
-| Document                               | Purpose                                                                                   | When to Use                                  |
-| -------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------- |
-| **`maths-ks4-implementation-plan.md`** | Complete implementation plan for Maths KS4 vertical slice with all ES Serverless features | Primary backend/search implementation        |
-| **`search-ui-plan.md`**                | Frontend implementation: components, theme, fixtures, accessibility, Playwright tests     | UI/frontend implementation                   |
-| **`data-completeness-policy.md`**      | Policy on what data we upload in full vs summarize                                        | Reference for ingestion decisions            |
-| **`es-serverless-feature-matrix.md`**  | Feature adoption tracking matrix with impact/cost/risk analysis                           | Progress tracking and feature prioritization |
+| Document                               | Purpose                                                                                   | When to Use                           |
+| -------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
+| **`maths-ks4-implementation-plan.md`** | Complete implementation plan for Maths KS4 vertical slice with all ES Serverless features | Primary backend/search implementation |
+| **`search-ui-plan.md`**                | Frontend implementation: components, theme, fixtures, accessibility, Playwright tests     | UI/frontend implementation            |
+
+### Reference Documents
+
+| Document                                        | Purpose                                                |
+| ----------------------------------------------- | ------------------------------------------------------ |
+| **`reference-data-completeness-policy.md`**     | Policy on what data we upload in full vs summarise     |
+| **`reference-es-serverless-feature-matrix.md`** | Feature adoption tracking matrix with impact/cost/risk |
 
 ### Research Documents
 
-| Document                                                                               | Purpose                                     |
-| -------------------------------------------------------------------------------------- | ------------------------------------------- |
-| **`.agent/research/elasticsearch/curriculum-schema-field-analysis.md`**                | Untapped API schema fields for search (NEW) |
-| **`.agent/research/elasticsearch/natural-language-search-with-es-native-features.md`** | ES-native NLP capabilities                  |
+| Document                                                                               | Purpose                               |
+| -------------------------------------------------------------------------------------- | ------------------------------------- |
+| **`.agent/research/elasticsearch/curriculum-schema-field-analysis.md`**                | Untapped API schema fields for search |
+| **`.agent/research/elasticsearch/natural-language-search-with-es-native-features.md`** | ES-native NLP capabilities            |
 
 ### Archive
 
-| Document/Directory                                                | Contents                                       |
-| ----------------------------------------------------------------- | ---------------------------------------------- |
-| **`.agent/prompts/semantic-search/archive/`**                     | Archived prompts and completed phase guides    |
-| **`.agent/prompts/semantic-search/archive/phase-1a-complete.md`** | Phase 1A TDD examples and implementation guide |
+| Document/Directory                                                                        | Contents                                    |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **`.agent/prompts/semantic-search/archive/`**                                             | Archived prompts and completed phase guides |
+| **`.agent/prompts/semantic-search/archive/phase-1a-complete.md`**                         | Phase 1A infrastructure TDD examples        |
+| **`.agent/prompts/semantic-search/archive/curriculum-vocabulary-checkpoint-RESOLVED.md`** | Resolved checkpoint from Phase 1A           |
 
 ---
 
@@ -60,7 +106,7 @@
 
 ### Strategic Goal
 
-Create a **production-ready demo** of ES Serverless capabilities using Maths KS4 as a complete vertical slice.
+Create a **production-ready demo** of ES Serverless capabilities using Maths KS4 as a complete vertical slice, starting with the simplest approach that delivers value.
 
 ### Why Maths KS4?
 
@@ -70,54 +116,52 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - ✅ Manageable scope (~100-200 API requests, 10-20 minutes)
 - ✅ Scalable patterns for full curriculum
 
-### What We're Building
+### Implementation Phases
 
-- **Three-way hybrid search**: BM25 + ELSER + E5 Dense Vectors (Elastic-native, no external API)
-- **AI-powered relevance**: Elastic Native ReRank, NER entity extraction
-- **Knowledge graph**: ES Graph API for curriculum relationships
-- **RAG infrastructure**: Chunked transcripts, ontology grounding, ES Playground
-- **Advanced features**: Learning to Rank foundations, multi-vector search
-- **Curriculum metadata**: Index all available API schema fields (priorKnowledge, nationalCurriculum, threads, quizzes, outcomes)
+| Phase | Duration | Focus                       | Key Features                            |
+| ----- | -------- | --------------------------- | --------------------------------------- |
+| **1** | 1-2 days | Two-Way Hybrid + Maths KS4  | BM25 + ELSER, ingest, baseline metrics  |
+| **2** | 1 day    | Evaluate Dense Vectors      | Only if Phase 1 insufficient            |
+| **3** | 2-3 days | Relevance Enhancement       | Elastic Native ReRank, filtered kNN     |
+| **4** | 3-4 days | Entity Extraction & Graph   | NER models, Graph API, enrich processor |
+| **5** | 2-3 days | Reference Indices & Threads | 5 new indices, thread support           |
+| **6** | 4-5 days | RAG Infrastructure          | ES Playground, semantic_text, chunking  |
+| **7** | 5-6 days | Knowledge Graph             | Triple store, entity resolution         |
+| **8** | 3-4 days | Advanced Features           | LTR foundations, multi-vector           |
 
-### Key Insight: Untapped Schema Fields
-
-The Oak API provides **rich pedagogical metadata** not currently indexed. Phase 2B will leverage:
-
-- `priorKnowledgeRequirements` - Prerequisite search and graph edges
-- `nationalCurriculumContent` - Standards alignment search
-- `threads` - Curriculum coherence graph
-- `pupilLessonOutcome` - "I can..." outcome search
-- `starterQuiz`, `exitQuiz` - Assessment content search
-
-**See**: `.agent/research/elasticsearch/curriculum-schema-field-analysis.md` for complete analysis.
-
-### Key Decision: Elastic-Native Dense Vectors (2025-12-07)
-
-Chose `.multilingual-e5-small-elasticsearch` (384-dim) over OpenAI `text-embedding-3-small` (1536-dim):
-
-- **No external API dependencies** for core search functionality
-- **Included in ES Serverless subscription** (resource-based billing)
-- **PRECONFIGURED** - ready to use immediately
-- **Lower latency** - runs on ML nodes within cluster
-
-See ADR-071 for full decision rationale.
+**Note**: Phases 3+ only proceed after Phase 1 baseline is established and validated.
 
 ---
 
-## Implementation Phases
+## Current System State
 
-| Phase  | Duration | Focus                            | Key Features                                               |
-| ------ | -------- | -------------------------------- | ---------------------------------------------------------- |
-| **1A** | 2-3 days | Three-Way Hybrid + Dense Vectors | E5 dense vectors (Elastic-native), three-way RRF           |
-| **1B** | 2-3 days | Relevance Enhancement            | Elastic Native ReRank, filtered kNN, query rules           |
-| **1C** | 2 days   | Maths KS4 Ingestion & Validation | Two-way baseline, three-way comparison, decision in ADR    |
-| **2A** | 3-4 days | Entity Extraction & Graph        | NER, Graph API, enrich processor                           |
-| **2B** | 2-3 days | Reference Indices & Threads      | 5 new indices, thread support                              |
-| **3**  | 4-5 days | RAG Infrastructure               | ES Playground, semantic_text, chunking, Elastic Native LLM |
-| **4**  | 5-6 days | Knowledge Graph                  | Triple store, entity resolution                            |
-| **5**  | 3-4 days | Advanced Features                | LTR foundations, multi-vector                              |
+**Last verified**: See `git log` for latest updates
 
-**Total**: 4-5 weeks (22-29 days)
+### Completed ✅
+
+- ES Serverless deployed with 6 indexes
+- ELSER sparse embeddings configured
+- SDK rate limiting implemented (5 req/sec, ADR-070)
+- Synonym set `oak-syns` with 68 rules
+- Field definitions architecture (single source of truth, ADR-067)
+- Per-index completion contexts (ADR-068)
+- Systematic ingestion with progress tracking (ADR-069)
+- All 10 quality gates passing (1,310+ tests)
+- Test data: English KS2 (~350 documents)
+
+### Infrastructure Ready ✅
+
+- ✅ Two-way RRF query builders (BM25 + ELSER)
+- ✅ Dense vector generation code (for Phase 2 if needed)
+- ✅ Three-way RRF query builders (for Phase 2 if needed)
+- ✅ Tier, exam_board, pathway field extraction
+- ✅ ADRs 071-074 written
+
+### Ready for Phase 1 ⏭️
+
+- 🔄 Ingest Maths KS4 with two-way hybrid
+- 🔄 Establish baseline metrics
+- 🔄 Validate search quality
 
 ---
 
@@ -137,7 +181,7 @@ All work MUST adhere to:
 - Write tests FIRST (RED → GREEN → REFACTOR)
 - Unit tests: Pure functions, no IO, no mocks
 - Integration tests: Code units together, simple mocks injected
-- E2E tests: Running system, real behavior
+- E2E tests: Running system, real behaviour
 
 ### Documentation (Mandatory)
 
@@ -173,63 +217,22 @@ pnpm smoke:dev:stub
 
 ## Success Criteria
 
-### Technical
+### Phase 1 (Two-Way Hybrid Baseline)
 
-- [ ] 23 new ES features integrated
-- [ ] 15 ADRs written (071-085)
-- [ ] 135+ new tests passing
-- [ ] 17 new docs created
-- [ ] Zero type shortcuts
+- [ ] Maths KS4 ingested
+- [ ] Two-way hybrid search working
+- [ ] Baseline metrics established (MRR, NDCG@10)
 - [ ] All quality gates passing
+- [ ] Decision documented: proceed with two-way OR evaluate dense vectors
 
-### Search Quality
+### Full Project
 
-- [ ] MRR: 0.65 → 0.80 (+23%)
-- [ ] NDCG@10: 0.70 → 0.85 (+21%)
-- [ ] Zero-hit rate: 15% → <5%
+- [ ] Production-ready search for Maths KS4
+- [ ] MRR: > 0.70
+- [ ] NDCG@10: > 0.75
+- [ ] Zero-hit rate: <10%
 - [ ] p95 latency: <300ms
-
-### Business
-
 - [ ] Impressive stakeholder demo
-- [ ] Production-ready code
-- [ ] Scalable to full curriculum
-- [ ] <$100/month operational cost
-
----
-
-## Current System State
-
-**Last verified**: See `git log` for latest updates
-
-### Completed ✅
-
-- ES Serverless deployed with 6 indexes
-- ELSER sparse embeddings configured
-- SDK rate limiting implemented (5 req/sec, ADR-070)
-- Synonym set `oak-syns` with 68 rules
-- Field definitions architecture (single source of truth, ADR-067)
-- Per-index completion contexts (ADR-068)
-- Systematic ingestion with progress tracking (ADR-069)
-- All 10 quality gates passing (1,310+ tests)
-- Test data: English KS2 (~350 documents)
-
-### Phase 1A Complete ✅ (2025-12-08)
-
-- ✅ E5 endpoint verified (`.multilingual-e5-small-elasticsearch` PRECONFIGURED)
-- ✅ Dense vector field definitions added (384-dim)
-- ✅ ES field overrides configured
-- ✅ Extraction functions implemented (tier, exam_board, pathway)
-- ✅ Dense vector generation implemented
-- ✅ Three-way RRF query builders implemented
-- ✅ All quality gates passing
-- ✅ ADRs 071-074 written
-
-### Ready for Phase 1B/1C ⏭️
-
-- 🔄 **Phase 1B**: Elastic Native ReRank, filtered kNN (2-3 days)
-- 🔄 **Phase 1C-A**: Maths KS4 ingestion with two-way hybrid, establish baseline (1 day)
-- 🔄 **Phase 1C-B**: Re-ingest with three-way hybrid, compare metrics, document decision (1 day)
 
 ---
 
@@ -243,7 +246,7 @@ cd apps/oak-open-curriculum-semantic-search
 # Check ES status
 pnpm es:status
 
-# Ingest Maths KS4 (Phase 1C)
+# Ingest Maths KS4 (Phase 1)
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 
 # Systematic ingestion (all combinations, 17-24 hours)
@@ -277,7 +280,7 @@ SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
 
 1. Review `maths-ks4-implementation-plan.md` for backend/search phase details
 2. Review `search-ui-plan.md` for frontend implementation
-3. Check `semantic-search.prompt.md` for TDD examples and quick start
+3. Check `.agent/prompts/semantic-search/semantic-search.prompt.md` for entry point
 4. Re-read foundation documents for principles
 5. Review relevant ADRs in `docs/architecture/architectural-decisions/`
 
@@ -285,13 +288,13 @@ SDK_CACHE_ENABLED=true pnpm es:ingest-live --subject maths --dry-run
 
 1. Check existing ADRs (067-074 currently)
 2. Review foundation documents
-3. Consult `es-serverless-feature-matrix.md` for feature decisions
+3. Consult `reference-es-serverless-feature-matrix.md` for feature decisions
 
 ### For Fresh Chat Sessions
 
 1. Start with `.agent/prompts/semantic-search/semantic-search.prompt.md`
 2. It contains ALL context needed to continue work
-3. Points to this README and main plan
+3. Points to this README and implementation plans
 
 ---
 
@@ -309,7 +312,7 @@ Archive location:
 
 Current archived files:
 
-- `phase-1a-complete.md` - Phase 1A TDD examples and implementation guide (completed 2025-12-08)
+- `phase-1a-complete.md` - Phase 1A infrastructure TDD examples and implementation guide
 - `curriculum-vocabulary-checkpoint-RESOLVED.md` - Resolved checkpoint from Phase 1A
 
 Archived documents are kept for historical reference but not used for active work.

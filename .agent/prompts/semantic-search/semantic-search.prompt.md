@@ -1,20 +1,33 @@
 # Semantic Search - Fresh Chat Entry Point
 
 **Git Version**: See `git log` for commit history  
-**Purpose**: Quick start for continuing Maths KS4 semantic search implementation  
-**Status**: Phase 1A Complete ✅ | Ready for Phase 1B/1C
+**Purpose**: Quick start for Maths KS4 semantic search implementation  
+**Status**: Ready for Maths KS4 Two-Way Hybrid Ingestion
 
 ---
 
 ## Quick Start
 
-**Current Phase**: Phase 1A infrastructure complete. Ready for Phase 1B (ReRank, filtered kNN) or Phase 1C (Maths KS4 ingestion with two-way hybrid first, then three-way comparison).
+**Current Phase**: Two-way hybrid search with Maths KS4 ingestion.
 
-**Next Actions**:
+**Implementation Order** (simpler first):
 
-- Phase 1B: Elastic Native ReRank, filtered kNN (2-3 days)
-- Phase 1C-A: Maths KS4 ingestion with two-way hybrid, establish baseline metrics (1 day)
-- Phase 1C-B: Enable dense vectors, re-ingest with three-way hybrid, compare metrics (1 day)
+1. **Phase 1: Two-Way Hybrid with Maths KS4** ← CURRENT FOCUS
+   - Ingest Maths KS4 with BM25 + ELSER (two-way hybrid)
+   - Establish baseline metrics (MRR, NDCG@10)
+   - Validate search quality with simpler approach first
+   - Duration: 1-2 days
+
+2. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
+   - If two-way baseline doesn't meet quality targets, add E5 dense vectors
+   - Compare three-way vs two-way metrics
+   - Document decision in ADR
+   - Duration: 1 day
+
+3. **Phase 3+**: Additional features (ReRank, filtered kNN, etc.)
+   - Only proceed after validating foundation
+
+**First Question**: Could it be simpler? Start with two-way hybrid. Only add complexity if it delivers measurable value.
 
 ---
 
@@ -39,7 +52,7 @@
    - E2E tests: Running system in separate process
 
 4. **`.agent/plans/semantic-search/maths-ks4-implementation-plan.md`** (30 min) ⭐ **MAIN PLAN**
-   - Complete roadmap for all 5 phases
+   - Complete roadmap for implementation
    - Field definitions, extraction functions, ES queries
    - TDD approach, ADRs, success criteria
 
@@ -49,22 +62,22 @@
 
 ## Current State Summary
 
-### Phase 1A Complete ✅ (2025-12-08)
+### Infrastructure Ready ✅
 
 **Built**:
 
-- ✅ E5 dense vector generation (`.multilingual-e5-small-elasticsearch`, 384-dim)
-- ✅ Dense vector fields in lessons and unit_rollup indexes
+- ✅ ELSER sparse embeddings configured (`.elser-2-elasticsearch`)
+- ✅ Two-way RRF query builders (BM25 + ELSER) implemented
 - ✅ Tier, exam_board, pathway field extraction for Maths KS4
-- ✅ Three-way RRF query (BM25 + ELSER + dense vectors)
-- ✅ Extraction functions with unit tests
-- ✅ Document transforms with integration tests
-- ✅ ADRs 071-074 written
+- ✅ Document transforms ready
+- ✅ Ingestion CLI ready (`pnpm es:ingest-live`)
+- ✅ All quality gates passing (1,310+ tests)
 
-**Remaining**:
+**NOT YET DONE**:
 
-- [ ] E2E test comparing two-way vs three-way (requires Phase 1C ingestion)
-- [ ] 3 docs with examples
+- [ ] Maths KS4 data ingested
+- [ ] Two-way hybrid search baseline metrics established
+- [ ] Search quality validated
 
 ### ES Serverless Status
 
@@ -72,12 +85,11 @@
 **Indexes**: 6 indexes with English KS2 test data  
 **Inference Endpoints Available**:
 
-| Endpoint                               | Type                     | Status        | Use Case                    |
-| -------------------------------------- | ------------------------ | ------------- | --------------------------- |
-| `.elser-2-elasticsearch`               | sparse_embedding         | PRECONFIGURED | ELSER semantic (active)     |
-| `.multilingual-e5-small-elasticsearch` | text_embedding (384-dim) | PRECONFIGURED | Dense vectors (active)      |
-| `.rerank-v1-elasticsearch`             | rerank                   | TECH PREVIEW  | Result reranking (Phase 1B) |
-| `.gp-llm-v2-chat_completion`           | chat_completion          | PRECONFIGURED | RAG chat (Phase 3)          |
+| Endpoint                               | Type             | Status        | Use Case            |
+| -------------------------------------- | ---------------- | ------------- | ------------------- |
+| `.elser-2-elasticsearch`               | sparse_embedding | PRECONFIGURED | ELSER semantic ✅   |
+| `.multilingual-e5-small-elasticsearch` | text_embedding   | PRECONFIGURED | Dense vectors (TBD) |
+| `.rerank-v1-elasticsearch`             | rerank           | TECH PREVIEW  | ReRank (later)      |
 
 **Quality Gates**: All 10 gates passing (1,310+ tests)
 
@@ -85,30 +97,70 @@
 
 ## Next Steps
 
-### Phase 1B: Relevance Enhancement (2-3 days)
+### Phase 1: Two-Way Hybrid with Maths KS4 (1-2 days)
 
-1. Verify `.rerank-v1-elasticsearch` endpoint available
-2. Implement Elastic Native ReRank function (TDD)
-3. Implement filtered kNN optimization (TDD)
-4. Write ADR-075
-5. Create 2 docs
+**Goal**: Validate that BM25 + ELSER (two-way hybrid) delivers good search quality before adding complexity.
 
-### Phase 1C: Maths KS4 Ingestion & Validation (2 days)
+#### Step 1: Ingest Maths KS4
 
-**Phase 1C-A** (1 day):
+```bash
+cd apps/oak-open-curriculum-semantic-search
 
-1. Run `pnpm es:ingest-live --subject maths --keystage ks4` with two-way hybrid (BM25 + ELSER only)
-2. Establish baseline MRR/NDCG metrics
-3. Document two-way search quality
+# Check prerequisites
+pnpm es:status
 
-**Phase 1C-B** (1 day):
+# Ingest Maths KS4 with two-way hybrid (BM25 + ELSER)
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+```
+
+**Expected**:
+
+- ~50-100 lessons indexed
+- ~15-25 units indexed
+- ~15-25 unit rollups indexed
+- Duration: 10-20 minutes
+
+#### Step 2: Validate Search Quality
+
+Test representative queries:
+
+- "quadratic equations"
+- "Pythagoras theorem"
+- "trigonometry foundation tier"
+- "solving simultaneous equations"
+- "expanding brackets algebra"
+
+#### Step 3: Establish Baseline Metrics
+
+Create E2E test to capture:
+
+- Mean Reciprocal Rank (MRR)
+- NDCG@10
+- Zero-hit rate
+- p95 latency
+
+#### Step 4: Decision Point
+
+**If two-way delivers acceptable quality** (target: MRR > 0.70, NDCG@10 > 0.75):
+
+- ✅ Proceed with two-way as production approach
+- Document success in ADR
+- Move to Phase 3+ features (ReRank, etc.)
+
+**If two-way doesn't meet targets**:
+
+- Move to Phase 2: Evaluate dense vectors
+- Re-ingest with three-way hybrid
+- Compare metrics
+
+### Phase 2: Evaluate Dense Vectors (Only If Needed)
+
+**Only proceed here if Phase 1 baseline doesn't meet quality targets.**
 
 1. Enable dense vector generation during ingestion
-2. Re-ingest Maths KS4 with three-way hybrid (BM25 + ELSER + dense vectors)
-3. Compare metrics and document findings in ADR
-4. Decision: Keep three-way if measurable improvement, or document why two-way sufficient
-
-**Rationale**: Validates that added complexity of dense vectors delivers measurable value.
+2. Re-ingest Maths KS4 with three-way hybrid
+3. Compare metrics against Phase 1 baseline
+4. Document decision in ADR
 
 ---
 
@@ -141,16 +193,16 @@ apps/oak-open-curriculum-semantic-search/
 │   ├── indexing/
 │   │   ├── document-transform-helpers.ts
 │   │   ├── document-transforms.ts
-│   │   └── dense-vector-generation.ts
+│   │   └── dense-vector-generation.ts  ← For Phase 2 if needed
 │   ├── hybrid-search/
-│   │   ├── rrf-query-builders.ts
-│   │   └── rrf-query-builders-three-way.ts
+│   │   ├── rrf-query-builders.ts       ← Two-way (BM25 + ELSER)
+│   │   └── rrf-query-builders-three-way.ts  ← Three-way (for Phase 2)
 │   └── elasticsearch/
 │       ├── client.ts
 │       └── setup/
 │           ├── cli.ts
-│           ├── cli-commands.ts  ← NEW (after refactor)
-│           └── cli-output.ts    ← NEW (after refactor)
+│           ├── cli-commands.ts
+│           └── cli-output.ts
 └── e2e-tests/                   ← E2E tests
 ```
 
@@ -180,14 +232,14 @@ pnpm smoke:dev:stub    # Smoke tests
 
 ## Troubleshooting Quick Reference
 
-| Problem                               | Solution                                                 |
-| ------------------------------------- | -------------------------------------------------------- |
-| `strict_dynamic_mapping_exception`    | Add field to `field-definitions.ts`, run `pnpm type-gen` |
-| Generator/generated drift             | Update generators, never edit generated files            |
-| Lint errors after `type-gen`          | Fix generator templates                                  |
-| Tests failing                         | Run quality gates one at a time to isolate               |
-| Port conflict in smoke tests          | Kill process using port 3333                             |
-| ES Serverless `_cluster/health` fails | Use `/` or `/_cat/indices?v` instead                     |
+| Problem                            | Solution                                                 |
+| ---------------------------------- | -------------------------------------------------------- |
+| `strict_dynamic_mapping_exception` | Add field to `field-definitions.ts`, run `pnpm type-gen` |
+| Generator/generated drift          | Update generators, never edit generated files            |
+| Lint errors after `type-gen`       | Fix generator templates                                  |
+| Tests failing                      | Run quality gates one at a time to isolate               |
+| Port conflict in smoke tests       | Kill process using port 3333                             |
+| ES Serverless `_cluster/health`    | Use `/` or `/_cat/indices?v` instead                     |
 
 ---
 
@@ -201,7 +253,6 @@ pnpm smoke:dev:stub    # Smoke tests
 | **`README.md`**                        | Navigation hub for all planning docs        |
 | **`data-completeness-policy.md`**      | What data we upload in full                 |
 | **`es-serverless-feature-matrix.md`**  | Feature tracking matrix                     |
-| **`archive/phase-1a-complete.md`**     | Phase 1A TDD examples and guidance          |
 
 ### Foundation Documents (Re-read Regularly)
 
@@ -245,28 +296,23 @@ pnpm es:status  # Check ES connection and indexes
 
 ## Success Criteria
 
-### Phase 1A Complete When:
+### Phase 1 Complete When:
 
-- [x] Dense vector fields added
-- [x] ES field overrides configured
-- [x] Extraction functions with tests
-- [x] Document transforms updated
-- [x] Three-way RRF query implemented
-- [x] ADRs 071-074 written
-- [x] All quality gates passing
-- [ ] E2E test comparing two-way vs three-way (Phase 1C)
-- [ ] 3 docs with examples
+- [ ] Maths KS4 ingested with two-way hybrid (BM25 + ELSER)
+- [ ] All 5 indexes have Maths KS4 data
+- [ ] Tier/exam_board/pathway fields populated (>60% coverage)
+- [ ] Two-way hybrid baseline metrics established
+- [ ] Search quality validated with test queries
+- [ ] Decision documented: two-way sufficient OR proceed to Phase 2
 
 ### Full Project Complete When:
 
-- [ ] All 5 phases completed
-- [ ] 15 ADRs written (071-085)
-- [ ] 135+ new tests passing
-- [ ] MRR: 0.65 → 0.80 (+23%)
-- [ ] NDCG@10: 0.70 → 0.85 (+21%)
-- [ ] Zero-hit rate: <5%
+- [ ] Production-ready search for Maths KS4
+- [ ] MRR: target > 0.70
+- [ ] NDCG@10: target > 0.75
+- [ ] Zero-hit rate: <10%
 - [ ] p95 latency: <300ms
-- [ ] Impressive stakeholder demo ready
+- [ ] All quality gates passing
 
 ---
 
@@ -280,7 +326,14 @@ pnpm es:status  # Check ES connection and indexes
 
 ---
 
-**Remember**: TDD is mandatory (RED → GREEN → REFACTOR). All quality gates must pass. No type shortcuts. Schema-first approach for all types. Re-read foundation documents regularly.
+**Remember**:
+
+- TDD is mandatory (RED → GREEN → REFACTOR)
+- All quality gates must pass
+- No type shortcuts
+- Schema-first approach for all types
+- Re-read foundation documents regularly
+- **Start simple (two-way), only add complexity if it delivers value**
 
 **Now go build something deeply impressive.** 🚀
 

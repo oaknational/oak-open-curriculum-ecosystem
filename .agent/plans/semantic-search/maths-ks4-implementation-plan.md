@@ -9,7 +9,13 @@
 
 ## Executive Summary
 
-This plan integrates **ALL high-impact Elasticsearch Serverless features** into the Maths KS4 vertical slice to create a deeply impressive demonstration of cutting-edge search capabilities.
+This plan implements semantic search for Maths KS4, starting with the **simplest approach that delivers value** (two-way hybrid: BM25 + ELSER) and only adding complexity when validated necessary.
+
+### First Question
+
+**Could it be simpler without compromising quality?**
+
+We start with two-way hybrid search (BM25 + ELSER) and only add dense vectors if baseline metrics don't meet targets.
 
 ### Strategic Goal
 
@@ -25,14 +31,13 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 - ✅ **Manageable scope**: ~100-200 requests = 10-20 minutes to ingest
 - ✅ **Foundation for expansion**: Patterns scale to full curriculum
 
-### What We're Building
+### What We're Building (Phased Approach)
 
-**Three-way hybrid search**: BM25 + ELSER sparse + dense vectors via Inference API  
-**AI-powered relevance**: Elastic Native ReRank, NER entity extraction, LLM query understanding  
-**Knowledge graph integration**: ES Graph API for curriculum relationships  
-**Advanced retrieval**: Filtered kNN, enrich processors, semantic query rules  
-**RAG infrastructure**: ES Playground prototyping, chunked transcripts, ontology grounding  
-**Learning to Rank foundations**: Click-through data collection for personalized relevance
+**Phase 1 - Foundation**: Two-way hybrid search (BM25 + ELSER) with Maths KS4 data  
+**Phase 2 - Validation**: Evaluate if dense vectors add value (only if Phase 1 insufficient)  
+**Phase 3+ - Enhancement**: Elastic Native ReRank, NER entity extraction, RAG, knowledge graph
+
+**Key Principle**: Validate each layer before adding the next.
 
 ---
 
@@ -78,29 +83,31 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ### Phase Overview
 
-| Phase  | Focus                            | Duration | Key ES Features                                  | ADRs |
-| ------ | -------------------------------- | -------- | ------------------------------------------------ | ---- |
-| **1A** | Three-Way Hybrid + Dense Vectors | 2-3 days | Inference API, dense_vector, three-way RRF       | 3    |
-| **1B** | Relevance Enhancement            | 2-3 days | Elastic Native ReRank, filtered kNN, query rules | 2    |
-| **1C** | Maths KS4 Ingestion              | 1 day    | Full content with enhanced schema                | -    |
-| **2A** | Entity Extraction & Graph        | 3-4 days | NER models, Graph API, enrich processor          | 3    |
-| **2B** | Reference Indices & Threads      | 2-3 days | 5 new indices, thread support                    | 1    |
-| **3**  | RAG Infrastructure               | 4-5 days | ES Playground, semantic_text, chunking           | 2    |
-| **4**  | Knowledge Graph                  | 5-6 days | Triple store, entity resolution                  | 2    |
-| **5**  | Advanced Features                | 3-4 days | LTR foundations, multi-vector                    | 2    |
+| Phase | Focus                              | Duration | Key ES Features                                  | ADRs |
+| ----- | ---------------------------------- | -------- | ------------------------------------------------ | ---- |
+| **1** | Two-Way Hybrid + Maths KS4 Ingest  | 1-2 days | BM25 + ELSER RRF, baseline metrics               | 1    |
+| **2** | Evaluate Dense Vectors (if needed) | 1 day    | Only if Phase 1 insufficient                     | 1    |
+| **3** | Relevance Enhancement              | 2-3 days | Elastic Native ReRank, filtered kNN, query rules | 2    |
+| **4** | Entity Extraction & Graph          | 3-4 days | NER models, Graph API, enrich processor          | 3    |
+| **5** | Reference Indices & Threads        | 2-3 days | 5 new indices, thread support                    | 1    |
+| **6** | RAG Infrastructure                 | 4-5 days | ES Playground, semantic_text, chunking           | 2    |
+| **7** | Knowledge Graph                    | 5-6 days | Triple store, entity resolution                  | 2    |
+| **8** | Advanced Features                  | 3-4 days | LTR foundations, multi-vector                    | 2    |
 
 ### Week-by-Week Breakdown
 
-| Week  | Focus       | Deliverables                                                                    |
-| ----- | ----------- | ------------------------------------------------------------------------------- |
-| **1** | Phase 1A-1C | Three-way hybrid, dense vectors, reranking, Maths KS4 ingestion, 5 ADRs, 5 docs |
-| **2** | Phase 2A-2B | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs                 |
-| **3** | Phase 3     | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs          |
-| **4** | Phase 4     | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs                |
-| **5** | Phase 5     | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs                           |
+| Week  | Focus     | Deliverables                                                             |
+| ----- | --------- | ------------------------------------------------------------------------ |
+| **1** | Phase 1-3 | Two-way hybrid, Maths KS4 ingestion, baseline, reranking, 4 ADRs, 4 docs |
+| **2** | Phase 4-5 | Entity extraction, Graph API, reference indices, 4 ADRs, 5 docs          |
+| **3** | Phase 6   | RAG infrastructure, ES Playground, chunked transcripts, 2 ADRs, 3 docs   |
+| **4** | Phase 7   | Knowledge graph, triple store, entity resolution, 2 ADRs, 2 docs         |
+| **5** | Phase 8   | LTR foundations, multi-vector, polish, 2 ADRs, 2 docs                    |
 
 **Aggressive**: 3 weeks with parallel work  
 **Conservative**: 6 weeks with thorough validation
+
+**Key Principle**: Complete Phase 1 baseline before proceeding. Each phase validates assumptions before adding complexity.
 
 ---
 
@@ -168,43 +175,121 @@ pathways_available: { type: 'keyword' },
 
 ---
 
-## Phase 1A: Three-Way Hybrid Search with Dense Vectors - COMPLETE ✅
+## Phase 1: Two-Way Hybrid Search with Maths KS4 - IN PROGRESS
 
 ### Goal
 
-Implement cutting-edge hybrid search combining BM25 + ELSER sparse + E5 dense vectors with Reciprocal Rank Fusion, using only Elastic-native services.
+Implement and validate **two-way hybrid search (BM25 + ELSER)** with Maths KS4 data. Establish baseline metrics before considering additional complexity.
 
-### Key Decision: Elastic-Native Dense Vectors (2025-12-07)
+### First Question Applied
 
-Chose `.multilingual-e5-small-elasticsearch` (384-dim) over OpenAI `text-embedding-3-small` (1536-dim):
+**Could it be simpler?** Yes - start with two-way hybrid (BM25 + ELSER) which is already implemented. Only add dense vectors if baseline metrics don't meet targets.
 
-| Factor       | OpenAI            | E5 (Chosen)                  |
-| ------------ | ----------------- | ---------------------------- |
-| External API | Required          | **None**                     |
-| Dimensions   | 384               | **384**                      |
-| Billing      | Per-token         | **Included in subscription** |
-| Setup        | Register endpoint | **PRECONFIGURED**            |
+### Key Decision: Simpler First (2025-12-08)
 
-See ADR-071 for full rationale.
+Start with two-way hybrid (BM25 + ELSER) instead of immediately implementing three-way:
 
-### ES Serverless Features Integrated
+| Approach             | Complexity | Dependencies    | Risk               |
+| -------------------- | ---------- | --------------- | ------------------ |
+| Two-way (BM25+ELSER) | Low        | None additional | Validated approach |
+| Three-way (+dense)   | Medium     | E5 inference    | May not add value  |
 
-1. **E5 Inference** - Preconfigured `.multilingual-e5-small-elasticsearch` endpoint
-2. **Dense Vector Fields** - `dense_vector` type with HNSW indexing (384-dim)
-3. **Three-Way RRF** - Fuse lexical + ELSER sparse + E5 dense results
-4. **Query Vector Builder** - Dynamic embedding generation at query time
+**Rationale**: Validate that simpler approach meets quality targets before adding complexity.
 
-### Verified Available Endpoints
+### Quick Start Checklist
 
-| Endpoint                               | Type                     | Status        |
-| -------------------------------------- | ------------------------ | ------------- |
-| `.multilingual-e5-small-elasticsearch` | text_embedding (384-dim) | PRECONFIGURED |
-| `.elser-2-elasticsearch`               | sparse_embedding         | PRECONFIGURED |
-| `.rerank-v1-elasticsearch`             | rerank                   | TECH PREVIEW  |
+#### Prerequisites
 
-### Implementation Guide
+- [x] Re-read foundation documents (rules.md, schema-first-execution.md, testing-strategy.md)
+- [x] Elasticsearch Serverless running with ELSER configured
+- [x] Two-way RRF query builders implemented
+- [x] Tier, exam_board, pathway field extraction implemented
+- [x] Document transforms ready
+- [ ] All current quality gates passing
 
-See the detailed TDD examples in `.agent/prompts/semantic-search/semantic-search.prompt.md` and the code patterns in the Phase 1A section below.
+#### Step-by-Step Execution
+
+**Step 1: Verify Prerequisites**
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:status  # Verify ES connection
+```
+
+**Step 2: Ingest Maths KS4**
+
+```bash
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+```
+
+**Expected**: ~50-100 lessons, ~15-25 units, 10-20 minutes
+
+**Step 3: Test Search Quality**
+
+Run representative queries:
+
+- "quadratic equations"
+- "Pythagoras theorem"
+- "trigonometry foundation tier"
+- "solving simultaneous equations"
+
+**Step 4: Capture Baseline Metrics**
+
+- Mean Reciprocal Rank (MRR) - target: > 0.70
+- NDCG@10 - target: > 0.75
+- Zero-hit rate - target: < 10%
+- p95 latency - target: < 300ms
+
+**Step 5: Decision Point**
+
+- **If targets met**: Proceed with two-way hybrid, skip Phase 2
+- **If targets not met**: Proceed to Phase 2 to evaluate dense vectors
+
+### ES Serverless Features Used (Phase 1)
+
+1. **BM25 Lexical Search** - Standard text matching with field boosting
+2. **ELSER Sparse Embeddings** - Semantic understanding via `.elser-2-elasticsearch`
+3. **Two-Way RRF** - Fuse lexical + ELSER results
+4. **Faceting** - Tier, exam_board, pathway filters
+
+### Available Endpoints
+
+| Endpoint                               | Type                     | Status        | Phase 1 Use |
+| -------------------------------------- | ------------------------ | ------------- | ----------- |
+| `.elser-2-elasticsearch`               | sparse_embedding         | PRECONFIGURED | ✅ Active   |
+| `.multilingual-e5-small-elasticsearch` | text_embedding (384-dim) | PRECONFIGURED | Phase 2     |
+| `.rerank-v1-elasticsearch`             | rerank                   | TECH PREVIEW  | Phase 3     |
+
+### Implementation Steps
+
+#### Step 1: Ingest Maths KS4 (Current)
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:status  # Verify connection
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+```
+
+#### Step 2: Validate Search Quality
+
+Test representative queries and capture results:
+
+- "quadratic equations"
+- "Pythagoras theorem"
+- "trigonometry foundation tier"
+- "solving simultaneous equations"
+
+#### Step 3: Establish Baseline Metrics
+
+- Mean Reciprocal Rank (MRR) - target: > 0.70
+- NDCG@10 - target: > 0.75
+- Zero-hit rate - target: < 10%
+- p95 latency - target: < 300ms
+
+#### Step 4: Decision Point
+
+**If two-way meets targets**: Proceed with two-way for production, skip Phase 2
+**If two-way insufficient**: Proceed to Phase 2 to evaluate dense vectors
 
 ### Field Additions Summary
 
@@ -895,7 +980,7 @@ New index `oak_curriculum_glossary` aggregates keywords across all lessons:
 
 ---
 
-## Phase 1B: Relevance Enhancement
+## Phase 3: Relevance Enhancement
 
 ### Goal
 
@@ -996,82 +1081,132 @@ Instead of post-filtering:
 
 ---
 
-## Phase 1C: Maths KS4 Ingestion & Hybrid Search Validation
+## Phase 2: Evaluate Dense Vectors (Only If Phase 1 Insufficient)
 
 ### Goal
 
-Ingest complete Maths KS4 content and validate that three-way hybrid delivers measurable improvement over two-way hybrid.
+**Only proceed to this phase if Phase 1 baseline metrics don't meet targets.**
 
-### Approach
+Add E5 dense vectors and compare three-way hybrid against two-way baseline to determine if added complexity delivers value.
 
-Test two-way hybrid first to establish baseline, then compare with three-way hybrid to validate the added complexity delivers value.
+### Prerequisites
 
-### Phase 1C-A: Two-Way Hybrid Baseline (1 day)
+- [ ] Phase 1 complete with baseline metrics established
+- [ ] Phase 1 baseline doesn't meet targets (MRR < 0.70 or NDCG@10 < 0.75)
+- [x] Dense vector generation code ready and tested
 
-#### Prerequisites
+### Key Decision: Elastic-Native Dense Vectors
 
-- [ ] Elasticsearch Serverless connection verified
-- [ ] All field definitions in SDK
-- [ ] `pnpm type-gen` completed
-- [ ] All extraction functions tested
-- [ ] All quality gates passing
+If we proceed to this phase, use E5 instead of OpenAI:
 
-#### Ingestion Command (Two-Way Only)
+| Factor       | OpenAI            | E5 (Chosen)                  |
+| ------------ | ----------------- | ---------------------------- |
+| External API | Required          | **None**                     |
+| Dimensions   | 1536              | **384**                      |
+| Billing      | Per-token         | **Included in subscription** |
+| Setup        | Register endpoint | **PRECONFIGURED**            |
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
+See ADR-071 for full rationale.
 
-# Check prerequisites
-pnpm es:status
+### Dense Vector TDD Examples (Reference)
 
-# Ingest Maths KS4 with two-way hybrid (BM25 + ELSER, NO dense vectors)
-# Temporarily disable dense vector generation in document transforms
-pnpm es:ingest-live \
-  --subject maths \
-  --keystage ks4 \
-  --no-dense-vectors \
-  --verbose
+The following tests and implementation are ready if Phase 2 is needed:
+
+#### Unit Test: Dense Vector Extraction
+
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.unit.test.ts`
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { generateDenseVector, prepareTextForEmbedding } from './dense-vector-extraction.js';
+import { createMockEsClient } from '../test-utils/mock-es-client.js';
+
+describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
+  describe('generateDenseVector', () => {
+    it('should generate 384-dimensional vector from text', async () => {
+      const mockClient = createMockEsClient({
+        inferenceResponse: { text_embedding: [Array(384).fill(0.1)] },
+      });
+
+      const vector = await generateDenseVector(
+        mockClient,
+        'How do I teach Pythagoras theorem to Foundation tier?',
+      );
+
+      expect(vector).toHaveLength(384);
+    });
+
+    it('should return undefined on inference failure (graceful degradation)', async () => {
+      const mockClient = createMockEsClient({
+        inferenceError: new Error('Inference failed'),
+      });
+
+      const vector = await generateDenseVector(mockClient, 'test query');
+
+      expect(vector).toBeUndefined();
+    });
+  });
+
+  describe('prepareTextForEmbedding', () => {
+    it('should combine title and summary for lesson embedding', () => {
+      const text = prepareTextForEmbedding({
+        title: 'Introduction to Fractions',
+        summary: 'Learn about numerators and denominators',
+      });
+
+      expect(text).toBe('Introduction to Fractions\n\nLearn about numerators and denominators');
+    });
+  });
+});
 ```
 
-#### Expected Results
+#### Implementation: Dense Vector Generation
 
-- ~50-100 lessons with core fields (NO dense vectors)
-- ~15-25 units with core fields
-- ~15-25 unit rollups with core fields
-- ~2-4 sequences with core fields
-- ~1 sequence facet with core fields
-- **Time**: 10-15 minutes (no embedding generation)
-- **Cost**: $0 (only Oak API calls, within existing quota)
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts`
 
-#### Establish Baseline Metrics
+```typescript
+import type { Client } from '@elastic/elasticsearch';
 
-```bash
-# Run E2E tests to measure two-way hybrid performance
-pnpm test:e2e -- two-way-hybrid.e2e.test.ts
+const E5_ENDPOINT_ID = '.multilingual-e5-small-elasticsearch';
+export const E5_DIMENSIONS = 384;
 
-# Expected metrics to capture:
-# - Mean Reciprocal Rank (MRR)
-# - NDCG@10
-# - Zero-hit rate
-# - p95 latency
+export async function generateDenseVector(
+  client: Client,
+  text: string,
+): Promise<number[] | undefined> {
+  if (!text || text.trim().length === 0) {
+    return undefined;
+  }
+
+  try {
+    const response = await client.inference.inference({
+      inference_id: E5_ENDPOINT_ID,
+      input: text.trim(),
+    });
+
+    const embeddings = response.text_embedding;
+    if (Array.isArray(embeddings) && embeddings.length > 0) {
+      return embeddings[0] as number[];
+    }
+
+    return undefined;
+  } catch {
+    // Graceful degradation - search still works via BM25 + ELSER
+    return undefined;
+  }
+}
+
+export function prepareTextForEmbedding(params: { title: string; summary?: string }): string {
+  if (params.summary) {
+    return `${params.title}\n\n${params.summary}`;
+  }
+  return params.title;
+}
 ```
 
-#### Success Criteria for Phase 1C-A
+### Implementation Steps
 
-- [ ] All 5 indexes have Maths KS4 data
-- [ ] Tier/exam board/pathway fields populated (>60% coverage)
-- [ ] Two-way hybrid baseline metrics established and documented
-- [ ] Zero mapping errors
-- [ ] All quality gates passing
-
-### Phase 1C-B: Three-Way Hybrid Comparison (1 day)
-
-#### Prerequisites
-
-- [x] Phase 1C-A complete with baseline metrics
-- [ ] Dense vector generation code ready and tested
-
-#### Ingestion Command (Three-Way)
+#### Step 1: Re-ingest with Dense Vectors
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -1080,55 +1215,47 @@ cd apps/oak-open-curriculum-semantic-search
 pnpm es:ingest-live \
   --subject maths \
   --keystage ks4 \
-  --with-dense-vectors \
   --verbose
 ```
 
-#### Expected Results
+**Note**: Dense vector generation is integrated into document transforms - no special flag needed.
 
-- Same document counts as Phase 1C-A
-- **PLUS**: Dense vector fields populated (>80% coverage)
-- **Time**: 15-25 minutes (E5 embedding generation via Elastic-native inference)
-- **API cost**: $0 (all inference is Elastic-native, included in ES Serverless subscription)
+#### Step 2: Measure Three-Way Metrics
 
-#### Compare Metrics
+Run same test queries as Phase 1 using three-way RRF builders.
 
-```bash
-# Run E2E tests to measure three-way hybrid performance
-pnpm test:e2e -- three-way-hybrid.e2e.test.ts
+#### Step 3: Compare Against Baseline
 
-# Compare against Phase 1C-A baseline:
-# - MRR improvement
-# - NDCG@10 improvement
-# - Zero-hit rate improvement
-# - Latency impact
-```
+| Metric      | Phase 1 (Two-Way) | Phase 2 (Three-Way) | Delta | Decision |
+| ----------- | ----------------- | ------------------- | ----- | -------- |
+| MRR         | ?                 | ?                   | ?     | ?        |
+| NDCG@10     | ?                 | ?                   | ?     | ?        |
+| Zero-hit    | ?                 | ?                   | ?     | ?        |
+| p95 latency | ?                 | ?                   | ?     | ?        |
 
-#### Success Criteria for Phase 1C-B
+#### Step 4: Decision Point
 
-- [ ] Dense vector fields populated (>80% coverage)
-- [ ] Three-way hybrid metrics measured and compared to baseline
-- [ ] Measurable improvement in MRR/NDCG documented (target: +10-25%)
-- [ ] Latency impact acceptable (target: <50ms increase)
-- [ ] Decision documented in ADR: Keep three-way if improved, revert to two-way if not
-- [ ] All quality gates passing
-
-#### Decision Point
-
-If three-way hybrid shows **measurable improvement** (MRR +10% or NDCG@10 +10%):
+**If three-way shows measurable improvement** (MRR +10% or NDCG@10 +10%):
 
 - ✅ Keep three-way hybrid for production
-- Document findings in ADR-072 update
+- Document findings in ADR
 
-If three-way hybrid shows **no significant improvement** or **unacceptable latency**:
+**If no significant improvement** or **unacceptable latency increase** (>50ms):
 
-- ⚠️ Revert to two-way hybrid for production
+- ⚠️ Stay with two-way hybrid for production
 - Document decision and rationale in ADR
-- Keep dense vector infrastructure for future experimentation
+- Dense vector infrastructure remains available for future use
+
+### Success Criteria for Phase 2
+
+- [ ] Three-way hybrid metrics measured
+- [ ] Comparison against Phase 1 baseline documented
+- [ ] Decision documented in ADR
+- [ ] All quality gates passing
 
 ---
 
-## Phase 2A: Entity Extraction & Graph Discovery
+## Phase 4: Entity Extraction & Graph Discovery
 
 ### Goal
 
@@ -1288,7 +1415,7 @@ PUT _ingest/pipeline/enrich-lesson-metadata
 
 ---
 
-## Phase 2B: Reference Indices, Thread Support & Curriculum Metadata
+## Phase 5: Reference Indices, Thread Support & Curriculum Metadata
 
 ### Goal
 
@@ -1556,7 +1683,7 @@ export function extractThreads(unitData: UnitSummary): Thread[] {
 
 ---
 
-## Phase 3: RAG Infrastructure
+## Phase 6: RAG Infrastructure
 
 ### Goal
 
@@ -1712,7 +1839,7 @@ At RAG time, enrich context with ontology snippets.
 
 ---
 
-## Phase 4: Knowledge Graph
+## Phase 7: Knowledge Graph
 
 ### Goal
 
@@ -1868,7 +1995,7 @@ Generate triples from:
 
 ---
 
-## Phase 5: Advanced Features
+## Phase 8: Advanced Features
 
 ### Goal
 
@@ -2109,23 +2236,32 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 
 ## Implementation Checklist
 
-### Phase 1A (2-3 days) - COMPLETE ✅ (2025-12-08)
+### Phase 1: Two-Way Hybrid with Maths KS4 (1-2 days) - IN PROGRESS
 
 - [x] Re-read foundation documents
-- [x] Add field definitions to SDK
-- [x] Run `pnpm type-gen`
-- [x] Write unit tests for extraction functions (RED)
-- [x] Implement extraction functions (GREEN)
-- [x] Write integration tests for document transforms (RED)
-- [x] Update document transforms (GREEN)
-- [ ] Write E2E tests for two-way and three-way hybrid (RED) - **Phase 1C**
-- [x] Implement three-way RRF query (GREEN)
-- [x] Run all quality gates
-- [x] Write ADR-071, ADR-072, ADR-073, ADR-074
-- [ ] Create 3 docs with examples
-- [x] Update semantic-search.prompt.md
+- [x] Field definitions added to SDK (tier, exam_board, pathway)
+- [x] `pnpm type-gen` completed
+- [x] Extraction functions implemented with unit tests
+- [x] Document transforms updated
+- [x] Two-way RRF query builders implemented
+- [x] All quality gates passing
+- [ ] **Ingest Maths KS4**: `pnpm es:ingest-live --subject maths --keystage ks4`
+- [ ] Validate search results with test queries
+- [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
+- [ ] Document baseline metrics
+- [ ] Decision: Phase 1 sufficient OR proceed to Phase 2
 
-### Phase 1B (2-3 days)
+### Phase 2: Evaluate Dense Vectors (1 day) - Only If Needed
+
+**Only proceed if Phase 1 baseline doesn't meet targets (MRR < 0.70 or NDCG@10 < 0.75)**
+
+- [ ] Verify inference endpoints available
+- [ ] Re-ingest with dense vectors: `pnpm es:ingest-live --subject maths --keystage ks4`
+- [ ] Measure three-way hybrid metrics
+- [ ] Compare against Phase 1 baseline
+- [ ] Document findings and decision in ADR
+
+### Phase 3: Relevance Enhancement (2-3 days)
 
 - [ ] Verify `.rerank-v1-elasticsearch` endpoint available
 - [ ] Implement rerank function using Elastic Native ReRank (TDD)
@@ -2136,28 +2272,18 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [ ] Write ADR-075 (ReRank Integration)
 - [ ] Create 2 docs
 
-**Note**: ADR-074 (Elastic-Native First Philosophy) was written during Phase 1A.
+### Infrastructure Already Built (Reference)
 
-### Phase 1C-A (1 day)
+The following infrastructure was built during Phase 1A preparation and is available:
 
-- [ ] Verify Elasticsearch Serverless connection
-- [ ] Temporarily disable dense vector generation in document transforms
-- [ ] Run ingestion: `pnpm es:ingest-live --subject maths --keystage ks4 --no-dense-vectors`
-- [ ] Validate results (core fields populated)
-- [ ] Run E2E tests to establish two-way hybrid baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
-- [ ] Document baseline metrics
+- [x] Dense vector generation code (`dense-vector-generation.ts`)
+- [x] Three-way RRF query builders (`rrf-query-builders-three-way.ts`)
+- [x] ADR-071 (Elastic-Native Dense Vector Strategy)
+- [x] ADR-072 (Three-Way Hybrid Search Architecture)
+- [x] ADR-073 (Dense Vector Field Configuration)
+- [x] ADR-074 (Elastic-Native First Philosophy)
 
-### Phase 1C-B (1 day)
-
-- [ ] Enable dense vector generation in document transforms
-- [ ] Verify inference endpoints available
-- [ ] Re-ingest: `pnpm es:ingest-live --subject maths --keystage ks4 --with-dense-vectors`
-- [ ] Validate results (dense vectors populated, correct dimensions)
-- [ ] Run E2E tests to measure three-way hybrid metrics
-- [ ] Compare metrics against Phase 1C-A baseline
-- [ ] Document findings and decision in ADR
-
-### Phase 2A (3-4 days)
+### Phase 4: Entity Extraction & Graph (3-4 days)
 
 - [ ] Register NER model deployed on Elasticsearch endpoint
 - [ ] Add entity fields to SDK
@@ -2170,7 +2296,7 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [ ] Write ADR-076, ADR-077, ADR-078
 - [ ] Create 3 docs
 
-### Phase 2B (2-3 days)
+### Phase 5: Reference Indices & Threads (2-3 days)
 
 - [ ] Define reference index schemas
 - [ ] Add thread fields to SDK
@@ -2183,7 +2309,7 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [ ] Write ADR-079
 - [ ] Create 2 docs
 
-### Phase 3 (4-5 days)
+### Phase 6: RAG Infrastructure (4-5 days)
 
 - [ ] Add `semantic_text` field to SDK
 - [ ] Run `pnpm type-gen`
@@ -2198,7 +2324,7 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [ ] Write ADR-080, ADR-081
 - [ ] Create 3 docs
 
-### Phase 4 (5-6 days)
+### Phase 7: Knowledge Graph (5-6 days)
 
 - [ ] Define triple store schema
 - [ ] Create `oak_curriculum_graph` index
@@ -2212,7 +2338,7 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [ ] Write ADR-082, ADR-083
 - [ ] Create 2 docs
 
-### Phase 5 (3-4 days)
+### Phase 8: Advanced Features (3-4 days)
 
 - [ ] Create `oak_search_events` index
 - [ ] Implement click-through tracking (TDD)
@@ -2391,16 +2517,66 @@ These scenarios demonstrate the system from a teacher's perspective for stakehol
 
 ---
 
+## Common Issues & Solutions
+
+### Issue: E5 inference returns empty response
+
+**Solution**: Check text input is not empty and endpoint is available.
+
+```typescript
+// Test E5 endpoint manually
+const response = await esClient.inference.inference({
+  inference_id: '.multilingual-e5-small-elasticsearch',
+  input: 'Test query for embedding',
+});
+
+console.log('Embedding length:', response.text_embedding?.[0]?.length);
+// Expected: 384
+```
+
+### Issue: Embeddings not generated during ingestion
+
+**Solution**: Check ES client is passed to document transform functions.
+
+```typescript
+// In createLessonDocument, ensure esClient is available
+const doc = await createLessonDocument({
+  // ... other params
+  esClient, // ← Must be provided for dense vector generation
+});
+```
+
+### Issue: Type errors after `pnpm type-gen`
+
+**Solution**: Check field-definitions.ts and es-field-overrides.ts syntax.
+
+```bash
+# Validate field definitions
+pnpm type-check packages/sdks/oak-curriculum-sdk
+```
+
+### Issue: kNN query fails
+
+**Solution**: Ensure dense_vector field has `index: true` in ES mapping.
+
+```typescript
+// Check mapping in es-field-overrides.ts
+lesson_dense_vector: {
+  type: 'dense_vector',
+  dims: 384,  // Must match E5 dimensions
+  index: true,  // ← Required for kNN
+  similarity: 'cosine',
+},
+```
+
+---
+
 ## Supporting Documents
 
-### Implementation Guides
+### Reference Documents
 
-- `.agent/prompts/semantic-search/semantic-search.prompt.md` - TDD examples and quick start for Phase 1A
-
-### Reference
-
-- `data-completeness-policy.md` - What data we upload in full vs summarize
-- `es-serverless-feature-matrix.md` - Feature adoption tracking matrix
+- `reference-data-completeness-policy.md` - What data we upload in full vs summarize
+- `reference-es-serverless-feature-matrix.md` - Feature adoption tracking matrix
 
 ### Foundation Documents (Re-read Regularly)
 
