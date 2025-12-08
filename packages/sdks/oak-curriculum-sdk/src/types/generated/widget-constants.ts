@@ -22,4 +22,4 @@
  * @see type-gen/typegen/cross-domain-constants.ts - Source of truth
  * @see https://developers.openai.com/apps-sdk/build/mcp-server (OpenAI cache-busting guidance)
  */
-export const WIDGET_URI = "ui://widget/oak-json-viewer-2316bbb4.html" as const;
+export const WIDGET_URI = "ui://widget/oak-json-viewer-local.html" as const;

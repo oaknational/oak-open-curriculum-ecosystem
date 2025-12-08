@@ -145,7 +145,7 @@ export const getKeyStagesSubjectQuestions = {
     title: "Get Key Stages Subject Questions",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-2316bbb4.html",
+    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
     'openai/toolInvocation/invoking': "Fetching Get Key Stages Subject Questions…",
     'openai/toolInvocation/invoked': "Get Key Stages Subject Questions loaded",
     'openai/widgetAccessible': true,

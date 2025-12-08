@@ -15,8 +15,6 @@ describe('isPublicResourceUri', () => {
     it('returns true for widget URI', () => {
       // Use actual WIDGET_URI from SDK which includes hash
       expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
-      // Verify URI has expected hashed format
-      expect(WIDGET_URI).toMatch(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/);
     });
 
     it('returns true for getting-started documentation', () => {

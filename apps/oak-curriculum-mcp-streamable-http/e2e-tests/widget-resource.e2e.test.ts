@@ -66,9 +66,10 @@ async function getWidgetHtml(app: ReturnType<typeof createStubbedHttpApp>['app']
   const listEnvelope = parseSseEnvelope(listResponse.text);
   const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
   const resources = listParsed.data?.resources ?? [];
+  // Match both local dev builds (local) and production builds (8-char hex)
   const widgetUri =
-    resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/))?.uri ??
-    '';
+    resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/))
+      ?.uri ?? '';
 
   // Read widget HTML from resources/read
   const response = await request(app)
@@ -110,9 +111,9 @@ describe('oak-json-viewer widget resource E2E', () => {
       expect(parsed.success).toBe(true);
 
       const resources = parsed.data?.resources ?? [];
-      // Find widget with hashed URI: oak-json-viewer-abc12345.html
+      // Match both local dev builds (local) and production builds (8-char hex)
       const widgetResource = resources.find((r) =>
-        r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/),
+        r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
       );
 
       expect(widgetResource).toBeDefined();
@@ -138,9 +139,11 @@ describe('oak-json-viewer widget resource E2E', () => {
       const listEnvelope = parseSseEnvelope(listResponse.text);
       const listParsed = ResourcesListResultSchema.safeParse(listEnvelope.result);
       const resources = listParsed.data?.resources ?? [];
+      // Match both local dev builds (local) and production builds (8-char hex)
       const widgetUri =
-        resources.find((r) => r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/))
-          ?.uri ?? '';
+        resources.find((r) =>
+          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
+        )?.uri ?? '';
 
       const response = await request(app)
         .post('/mcp')
@@ -163,8 +166,10 @@ describe('oak-json-viewer widget resource E2E', () => {
       const contents = parsed.data?.contents ?? [];
       expect(contents).toHaveLength(1);
       expect(contents[0]?.mimeType).toBe('text/html+skybridge');
-      // Verify URI matches hashed format
-      expect(contents[0]?.uri).toMatch(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/);
+      // Verify URI matches local dev or production hashed format
+      expect(contents[0]?.uri).toMatch(
+        /^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/,
+      );
     });
 
     it('widget HTML includes Lexend font', async () => {

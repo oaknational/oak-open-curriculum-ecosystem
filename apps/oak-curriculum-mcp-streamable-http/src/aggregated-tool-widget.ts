@@ -54,7 +54,14 @@ export const AGGREGATED_TOOL_WIDGET_MIME_TYPE = 'text/html+skybridge';
  * NOTE: Refresh button via window.openai.callTool() is disabled but code preserved.
  * See widget-script-state.ts for implementation details and how to re-enable.
  */
-export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
+/**
+ * Generates the complete widget HTML document.
+ *
+ * @internal Exported for testing to verify HTML syntax
+ * @returns Complete HTML document as string
+ */
+export function generateWidgetHtml(): string {
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -88,3 +95,15 @@ export const AGGREGATED_TOOL_WIDGET_HTML = `<!DOCTYPE html>
 <script type="module">${WIDGET_SCRIPT}</script>
 </body>
 </html>`.trim();
+}
+
+/**
+ * The complete widget HTML document.
+ *
+ * This is the HTML that gets served as a resource to ChatGPT.
+ * It includes embedded CSS and JavaScript for a self-contained widget.
+ *
+ * NOTE: Tool calling via window.openai.callTool() is implemented but disabled.
+ * See widget-script-state.ts for implementation details and how to re-enable.
+ */
+export const AGGREGATED_TOOL_WIDGET_HTML = generateWidgetHtml();

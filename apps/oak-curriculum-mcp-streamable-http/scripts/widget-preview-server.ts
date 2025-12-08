@@ -9,28 +9,20 @@ import { watch } from 'chokidar';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
-import { createEmulationWrapper } from './chatgpt-emulation-wrapper.js';
-
-/** Dynamically imports the widget HTML, bypassing module cache. */
-async function getWidgetHtml(): Promise<string> {
-  const timestamp = Date.now();
-  const module: unknown = await import(`../src/aggregated-tool-widget.js?t=${String(timestamp)}`);
-  if (
-    module !== null &&
-    typeof module === 'object' &&
-    'AGGREGATED_TOOL_WIDGET_HTML' in module &&
-    typeof module.AGGREGATED_TOOL_WIDGET_HTML === 'string'
-  ) {
-    return module.AGGREGATED_TOOL_WIDGET_HTML;
-  }
-  throw new Error('Invalid widget module');
-}
+import { readFile } from 'fs/promises';
+import { generatePreviewWidgetFile } from '../src/widget-file-generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /** Path to widget renderers directory for file watching. */
 const WATCH_PATH = resolve(__dirname, '../src/widget-renderers');
+
+/** Path where generated widget HTML will be written */
+const GENERATED_WIDGET_PATH = resolve(__dirname, '../.generated/preview-widget.html');
+
+/** Flag to track if widget needs regeneration */
+let widgetNeedsRegeneration = true;
 
 /** Path to widget source files for file watching. */
 const WIDGET_SRC_PATH = resolve(__dirname, '../src');
@@ -42,8 +34,7 @@ const WIDGET_SRC_PATH = resolve(__dirname, '../src');
 const PORT = 4580;
 
 /**
- * Mock data representing typical tool output scenarios.
- * Modify these to test different widget rendering paths.
+ * Mock data for widget preview - represents typical "get-help" tool output.
  */
 const MOCK_TOOL_OUTPUT = {
   serverOverview: {
@@ -61,7 +52,7 @@ const MOCK_TOOL_OUTPUT = {
       tools: ['search', 'get-subjects', 'get-key-stages'],
     },
     browsing: {
-      description: 'Explore curriculum structure systemat ically.',
+      description: 'Explore curriculum structure systematically.',
       tools: ['get-key-stages-subject-units', 'get-key-stages-subject-lessons'],
     },
     fetching: {
@@ -76,88 +67,67 @@ const MOCK_TOOL_OUTPUT = {
   ],
 };
 
-/**
- * Mock metadata that would come from tool response annotations.
- */
 const MOCK_METADATA = {
   'annotations/title': 'Get Help',
 };
 
+/** Generates the widget HTML file with mock data */
+async function regenerateWidget(): Promise<void> {
+  await generatePreviewWidgetFile(MOCK_TOOL_OUTPUT, MOCK_METADATA, GENERATED_WIDGET_PATH);
+  widgetNeedsRegeneration = false;
+  console.log('✅ Widget regenerated');
+}
+
 const app = express();
 
 /**
- * Serves the widget with ChatGPT environment emulation.
+ * Serves the widget directly.
  */
 app.get('/widget', async (req, res) => {
   console.log(`GET ${req.path}`);
-  const widgetHtml = await getWidgetHtml();
-  const emulationHtml = createEmulationWrapper(widgetHtml, MOCK_TOOL_OUTPUT, MOCK_METADATA);
+
+  // Regenerate widget if needed
+  if (widgetNeedsRegeneration) {
+    await regenerateWidget();
+  }
+
+  // Serve the widget directly from disk
+  const widgetHtml = await readFile(GENERATED_WIDGET_PATH, 'utf-8');
+
   res
     .type('text/html')
     .set('Cache-Control', 'no-cache, no-store, must-revalidate')
     .set('Pragma', 'no-cache')
     .set('Expires', '0')
-    .send(emulationHtml);
+    .send(widgetHtml);
 });
 
-/**
- * Serves the widget directly (without emulation wrapper) for comparison.
- */
-app.get('/widget/direct', async (req, res) => {
-  console.log(`GET ${req.path}`);
-  const widgetHtml = await getWidgetHtml();
-  const htmlWithData = widgetHtml.replace(
-    '</head>',
-    `<script>
-      window.openai = {
-        toolOutput: ${JSON.stringify(MOCK_TOOL_OUTPUT, null, 2)},
-        toolResponseMetadata: ${JSON.stringify(MOCK_METADATA)},
-        safeArea: {
-          insets: { top: 24, right: 24, bottom: 120, left: 24 }
-        },
-        theme: "light",
-        displayMode: "inline",
-        locale: "en-US",
-        maxHeight: 600
-      };
-    </script></head>`,
-  );
-  res
-    .type('text/html')
-    .set('Cache-Control', 'no-cache, no-store, must-revalidate')
-    .set('Pragma', 'no-cache')
-    .set('Expires', '0')
-    .send(htmlWithData);
-});
-
-/**
- * Set up file watcher for hot reload.
- */
-const watcher = watch([WATCH_PATH, WIDGET_SRC_PATH], {
-  ignored: /node_modules|\.test\.ts$/,
-  persistent: true,
-  ignoreInitial: true,
-});
-
-watcher.on('change', (path) => {
-  console.log(`\n🔄 File changed: ${path}`);
-  console.log('   Refresh browser to see changes.\n');
-});
-
-watcher.on('error', (error) => {
-  console.error('Watcher error:', error);
-});
+// Generate initial widget
+await regenerateWidget();
 
 app.listen(PORT, () => {
-  const portStr = String(PORT);
   console.log(`\n🌳 Oak Widget Preview Server`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
   console.log(`\n📂 Watching for changes in:`);
   console.log(`   ${WATCH_PATH}`);
   console.log(`   ${WIDGET_SRC_PATH}`);
-  console.log(`\nAvailable routes:`);
-  console.log(`  http://localhost:${portStr}/widget        - ChatGPT environment emulation`);
-  console.log(`  http://localhost:${portStr}/widget/direct - Widget only (no emulation)`);
-  console.log(`\n💡 Save a file and refresh browser to see changes.`);
+  console.log(`\nGenerated widget: ${GENERATED_WIDGET_PATH}`);
+  console.log(`\nAvailable at: http://localhost:${PORT}/widget`);
+  console.log(`\n💡 Save a file and the widget will regenerate automatically.`);
   console.log(`\nPress Ctrl+C to stop.\n`);
+});
+
+const watcher = watch([WATCH_PATH, WIDGET_SRC_PATH], {
+  persistent: true,
+  ignoreInitial: true,
+});
+
+watcher.on('change', (file) => {
+  widgetNeedsRegeneration = true;
+  console.log(`\n🔄 File changed: ${file}`);
+  console.log(`   Widget will regenerate on next request.`);
+});
+
+watcher.on('error', (error) => {
+  console.error('Watcher error:', error);
 });

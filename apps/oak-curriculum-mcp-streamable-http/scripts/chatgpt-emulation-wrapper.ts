@@ -89,7 +89,7 @@ export function createEmulationWrapper(
       const widgetHtml = \`${escapedWidgetHtml}\`;
       const toolOutput = ${toolOutputJson};
       const metadata = ${metadataJson};
-      const injectedHtml = widgetHtml.replace('</head>', \`<script>window.openai={toolOutput:\${JSON.stringify(toolOutput)},toolResponseMetadata:\${JSON.stringify(metadata)},safeArea:{insets:\${JSON.stringify(currentSafeArea)}},theme:"\${currentTheme}",displayMode:"\${currentMode}",locale:"en-US",maxHeight:600};<\\/script></head>\`);
+      const injectedHtml = widgetHtml.replace('</head>', \`<script>window.openai={toolOutput:\${JSON.stringify(toolOutput)},toolResponseMetadata:\${JSON.stringify(metadata)},safeArea:{insets:\${JSON.stringify(currentSafeArea)}},theme:"\${currentTheme}",displayMode:"\${currentMode}",locale:"en-US",maxHeight:600};<\\/scri'+'pt></head>\`);
       document.getElementById('widget-iframe').srcdoc = injectedHtml;
     }
     document.getElementById('theme-select').addEventListener('change', (e) => { currentTheme = e.target.value; document.body.className = currentTheme === 'dark' ? 'dark' : ''; loadWidget(); });

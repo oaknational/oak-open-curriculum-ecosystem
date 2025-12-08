@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 
+const isLocal = process.env.VERCEL !== '1';
+
 /**
  * Generates deterministic cache-busting hash for widget URI.
  *
@@ -9,7 +11,10 @@ import { createHash } from 'node:crypto';
  *
  * @returns First 8 characters of SHA-256 hash (e.g., "abc12345")
  */
-function generateWidgetUriHash(): string {
+function generateWidgetUriHash(isLocal: boolean): string {
+  if (isLocal) {
+    return 'local';
+  }
   const timestamp = Date.now().toString();
   const hash = createHash('sha256').update(timestamp).digest('hex');
   return hash.slice(0, 8);
@@ -27,4 +32,4 @@ function generateWidgetUriHash(): string {
  *
  * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting best practice)
  */
-export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriHash()}.html`;
+export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriHash(isLocal)}.html`;

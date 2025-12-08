@@ -92,7 +92,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
       };
       const widgetUri =
         listData.result?.resources?.find((r) =>
-          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-[a-f0-9]{8}\.html$/),
+          r.uri.match(/^ui:\/\/widget\/oak-json-viewer-(local|[a-f0-9]{8})\.html$/),
         )?.uri ?? '';
 
       const res = await request(app)

@@ -67,7 +67,7 @@ body { font-family: 'Lexend', system-ui, sans-serif; min-height: 200px; display:
 #content-container { margin: 0.8em; flex: 1; display: flex; flex-direction: column; }
 .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
 .hdr-text { display: flex; flex-direction: column; gap: 2px; }
-.logo { width: 36px; height: 36px; }
+.logo { width: 36px; height: 47px; }
 .ttl { font-weight: 600; font-size: 16px; margin: 0; }
 .sub-ttl { font-size: 12px; color: var(--fg-secondary); margin: 0; }
 #c { flex: 1; }
