@@ -21,6 +21,7 @@ We achieve this by ensuring that ALL static data structures, types, type guards,
 - **NEVER create compatibility layers, no backwards compatibility** - replace old approaches with new approaches, never create compatibility layers, never prioritise backwards compatibility
 - **Keep it strict** - don't invent optionality, don't add fallback options. We know exactly what is needed, and the proper functioning of the system depends on acknowledging and embracing those restrictions, and the valuing insights offered by the type system.
 - **Pure functions first** - Use TDD to design (_test first_, red, green, refactor), no side effects, no I/O
+- **Consistent Naming** - Use consistent naming conventions for files, modules, functions, data structures, classes, constants, type information and CONCEPTS. For instance, if we use `keyStage` then that is the label, not `keyStageSlug` or `keyStageId`. If you need to add nuance, use TSDoc to provide context, links, and examples.
 - **Build up through scales** - Functions → Modules → Packages (`core`, `libs`, `apps`)
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast with helpful error messages, never silently.

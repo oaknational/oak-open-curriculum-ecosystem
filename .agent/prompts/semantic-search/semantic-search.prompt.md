@@ -2,20 +2,68 @@
 
 **Git Version**: See `git log` for commit history  
 **Purpose**: Quick start for Maths KS4 semantic search implementation  
-**Status**: Phase 1D Complete ✅ | Blocking Issues Resolved ✅ | Ready for Phase 1C Baseline Metrics
+**Status**: Phase 1E (Search Foundation) ← **BLOCKING ISSUES DISCOVERED** - Must fix before Phase 1C
+
+---
+
+## ⚠️ BLOCKING ISSUES (2025-12-09)
+
+**Phase 1C (Baseline Metrics) CANNOT start until these are resolved:**
+
+| ID      | Issue                                                                                       | Priority | Status                |
+| ------- | ------------------------------------------------------------------------------------------- | -------- | --------------------- |
+| **5.1** | Units missing `key_stage_slug` - all 25 Maths units have `null`                             | HIGH     | ❌ NOT FIXED          |
+| **5.2** | Missing units from sequence ingestion (`right-angled-trigonometry` with Pythagoras lessons) | HIGH     | ❌ NOT FIXED          |
+| **5.3** | No fuzzy matching configured - misspellings return 0 hits                                   | HIGH     | ❌ NOT FIXED          |
+| **5.4** | Thread canonical URL bug causing ingestion crashes                                          | FIXED    | ✅ FIXED (2025-12-09) |
+
+### Issue Details
+
+**5.1: Units missing `key_stage_slug`**
+
+- **Symptom**: Searching for Maths KS4 units returns only 5 of 25 indexed units
+- **Cause**: Unit document builder not populating `key_stage_slug` field
+- **Impact**: Filtering by key stage doesn't work correctly
+- **Fix**: Investigate `document-transforms.ts` unit transform, ensure `key_stage_slug` is populated from source data
+
+**5.2: Missing Pythagoras/Trigonometry units**
+
+- **Symptom**: "Pythagoras theorem" query returns unrelated results (shapes, compound shapes)
+- **Cause**: `right-angled-trigonometry` unit not being ingested from sequence data
+- **Impact**: Critical Maths KS4 content missing from search
+- **Fix**: Investigate sequence ingestion - why aren't all units from `maths-secondary` sequence being fetched?
+
+**5.3: No fuzzy matching**
+
+- **Symptom**: Query "pythagorus" (misspelling) returns 0 hits
+- **Cause**: ES not configured for fuzzy matching
+- **Impact**: Poor user experience for typos/misspellings
+- **Fix**: Configure fuzzy matching in ES query builders (this is a search configuration issue, NOT expected behavior)
+
+**5.4: Thread canonical URL bug** ✅ FIXED
+
+- **Symptom**: Ingestion crashed with "Unsupported content type: thread"
+- **Cause**: `generateCanonicalUrlWithContext()` threw error for 'thread' content type instead of returning `undefined`
+- **Fix Applied**: Updated generator at `type-gen/typegen/routing/generate-url-helpers.ts` to handle 'thread' → returns `undefined`
+- **Files Modified**:
+  - `type-gen/typegen/routing/generate-url-helpers.ts` (generator)
+  - `src/types/generated/api-schema/routing/url-helpers.ts` (regenerated)
+  - `src/types/test-generated/url-helpers.unit.test.ts` (tests updated)
 
 ---
 
 ## Quick Start
 
-**Current Phase**: Baseline Metrics (Phase 1C) ← READY TO START
+**Current Phase**: Phase 1E (Search Foundation) ← **FIX BLOCKING ISSUES FIRST**
 
 **Implementation Status**:
 
-1. **Phase 1A: Data Ingestion** ✅ COMPLETE
-   - ✅ Maths KS4 ingested (100 lessons, 36 units, 36 rollups)
+1. **Phase 1A: Data Ingestion** ⚠️ PARTIAL
+   - ✅ Maths KS4 ingested (100 lessons, 36 units, 36 rollups, 201 threads)
    - ✅ Dense vectors generated successfully
-   - ✅ All quality gates passing
+   - ✅ Ingestion completes without crashing (thread bug fixed)
+   - ⚠️ Units missing `key_stage_slug` (all null)
+   - ⚠️ Some units not being fetched from sequence API
    - ⚠️ Programme factors NOT populated (expected - not in this dataset)
 
 2. **Phase 1B: RRF API Update** ✅ COMPLETE (2025-12-08)
@@ -31,30 +79,36 @@
    - ✅ Reference index mappings generated (`oak_ref_subjects`, `oak_ref_key_stages`, `oak_curriculum_glossary`)
    - ✅ Reference document builders implemented with TDD
 
-4. **Blocking Issues** ✅ ALL RESOLVED (2025-12-09)
-   - ✅ All 12 blocking issues resolved (see Resolved Issues section)
+4. **Phase 1D Blocking Issues** ✅ ALL 12 RESOLVED (2025-12-09)
+   - ✅ All 12 schema/facet/integrity issues resolved (see Resolved Issues section)
    - ✅ Search quality infrastructure created (`src/lib/search-quality/`)
    - ✅ MRR and NDCG metrics implemented with TDD (13 unit tests)
-   - ✅ All quality gates passing (1,265+ tests)
 
-5. **Phase 1C: Baseline Metrics** ← READY TO START
+5. **Phase 1E: Search Foundation** ← **CURRENT - FIX THESE FIRST**
+   - [ ] Fix `key_stage_slug` null issue in unit documents
+   - [ ] Fix sequence ingestion to get all units
+   - [ ] Configure fuzzy matching in ES queries
+   - [ ] Re-ingest data with fixes
+   - [ ] Verify search returns expected results
+
+6. **Phase 1C: Baseline Metrics** ← BLOCKED (waiting on Phase 1E)
    - Create ground truth data for Maths KS4 queries
    - Establish baseline with two-way hybrid (BM25 + ELSER)
    - Calculate MRR, NDCG@10, zero-hit rate, latency
    - Duration: 0.5-1 day
 
-6. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
+7. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
    - Dense vector infrastructure already built ✅
    - Only activate if Phase 1C baseline doesn't meet targets
    - Duration: 0.5 day
 
-7. **Phase 3: Reference Indices** (Future)
+8. **Phase 3: Reference Indices** (Future)
    - Populate `oak_ref_subjects`, `oak_ref_key_stages`, `oak_curriculum_glossary`
    - Data source: Existing ontology data (`ontology-data.ts`, `knowledge-graph-data.ts`)
    - No stats extraction needed - use static curriculum metadata
    - Duration: 0.5-1 day
 
-8. **Phase 4+**: Additional features (ReRank, filtered kNN, etc.)
+9. **Phase 4+**: Additional features (ReRank, filtered kNN, etc.)
    - Only proceed after validating foundation
 
 **First Question**: Could it be simpler? Start with two-way hybrid. Only add complexity if it delivers measurable value.
@@ -209,11 +263,98 @@ All 12 blocking issues identified during deep review have been resolved. Phase 1
 
 ## Next Steps
 
-### Phase 1C: Establish Baseline Metrics ← READY TO START
+### Phase 1E: Fix Search Foundation ← **CURRENT PRIORITY**
+
+**Goal**: Fix blocking issues so search returns correct, complete results.
+
+**Prerequisites**: Thread canonical URL bug fixed ✅ (2025-12-09)
+
+---
+
+#### Task 1: Fix `key_stage_slug` null issue
+
+**Problem**: All 25 Maths units have `key_stage_slug: null`, so KS4 filtering only returns 5 units.
+
+**Investigation Steps**:
+
+1. Check `document-transforms.ts` - how is unit data being transformed?
+2. Check source data from Oak API - does it include key stage?
+3. Check if `key_stage_slug` is being extracted during ingestion
+
+**Files to examine**:
+
+- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+- `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts`
+
+---
+
+#### Task 2: Fix missing units from sequence ingestion
+
+**Problem**: `right-angled-trigonometry` unit (with Pythagoras lessons) not being fetched.
+
+**Investigation Steps**:
+
+1. Check `sequence-bulk-helpers.ts` - how are units fetched from sequences?
+2. Compare units in Oak API vs units being indexed
+3. Use MCP tool to list Maths KS4 units and compare with indexed data
+
+**Verification command**:
+
+```bash
+# Use MCP to get full unit list
+mcp_ooc-http-dev-local_get-key-stages-subject-units keyStage=ks4 subject=maths
+```
+
+---
+
+#### Task 3: Configure fuzzy matching in ES
+
+**Problem**: "pythagorus" (misspelling) returns 0 hits - this is NOT expected behavior.
+
+**Investigation Steps**:
+
+1. Check `rrf-query-builders.ts` - is fuzzy matching configured?
+2. Research ES fuzzy matching options (fuzziness parameter in match queries)
+3. Add fuzzy matching to text search components
+
+**Files to modify**:
+
+- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
+- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+
+**ES Documentation**: See Elasticsearch fuzzy query documentation for `fuzziness: "AUTO"` parameter.
+
+---
+
+#### Task 4: Re-ingest and verify
+
+After fixes:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+```
+
+Verify with discovery script:
+
+```bash
+npx tsx scripts/discover-lessons.ts
+```
+
+**Success criteria**:
+
+- [ ] Units have correct `key_stage_slug` values
+- [ ] "Pythagoras theorem" returns Pythagoras lessons
+- [ ] "pythagorus" (misspelling) returns results (fuzzy match)
+- [ ] All expected Maths KS4 units are indexed
+
+---
+
+### Phase 1C: Establish Baseline Metrics ← BLOCKED (waiting on Phase 1E)
 
 **Goal**: Measure two-way hybrid (BM25 + ELSER) search quality.
 
-**Prerequisites**: ✅ ALL 12 blocking issues resolved (2025-12-09). Infrastructure ready.
+**Prerequisites**: Phase 1E complete (all blocking issues fixed).
 
 **📖 MUST READ**: See **`.agent/plans/semantic-search/reference-ir-metrics-guide.md`** for:
 
@@ -235,7 +376,7 @@ All 12 blocking issues identified during deep review have been resolved. Phase 1
 
 ---
 
-#### Implementation Steps
+#### Implementation Steps (after Phase 1E)
 
 **Step 0: Discover actual data** (MUST DO FIRST)
 
@@ -243,7 +384,7 @@ All 12 blocking issues identified during deep review have been resolved. Phase 1
 cd apps/oak-open-curriculum-semantic-search
 pnpm dev &  # Start server
 sleep 5
-npx tsx scripts/discover-lessons.ts  # Create this script - see reference doc
+npx tsx scripts/discover-lessons.ts
 ```
 
 This shows you actual lesson slugs in Maths KS4 - you need these for ground truth.
@@ -499,9 +640,27 @@ pnpm es:status  # Check ES connection and indexes
 - [x] Validated two-way hybrid search against live ES Serverless
 - [x] All quality gates passing
 
-### Phase 1C: Baseline Metrics ← READY TO START
+### Phase 1E: Search Foundation ← **CURRENT**
 
-**Prerequisites** ✅ ALL RESOLVED (2025-12-09):
+**Blocking issues discovered during testing (2025-12-09)**:
+
+- [x] Issue 5.4: Thread canonical URL bug (FIXED - generator updated)
+- [ ] Issue 5.1: Units missing `key_stage_slug` - all 25 Maths units have null
+- [ ] Issue 5.2: Missing units from sequence ingestion (`right-angled-trigonometry`)
+- [ ] Issue 5.3: No fuzzy matching configured - misspellings return 0 hits
+
+**Phase 1E Tasks**:
+
+- [ ] Fix `key_stage_slug` population in unit document transforms
+- [ ] Fix sequence ingestion to fetch all units
+- [ ] Configure fuzzy matching in ES query builders
+- [ ] Re-ingest Maths KS4 data
+- [ ] Verify "Pythagoras theorem" returns Pythagoras lessons
+- [ ] Verify "pythagorus" (misspelling) returns results
+
+### Phase 1C: Baseline Metrics ← BLOCKED (waiting on Phase 1E)
+
+**Prerequisites** (Phase 1D issues - ALL RESOLVED 2025-12-09):
 
 - [x] Issue 1.1: Add pathway field to unit_rollup schema
 - [x] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
@@ -515,7 +674,7 @@ pnpm es:status  # Check ES connection and indexes
 - [x] Issue 4.2: Create src/lib/search-quality/ directory with ground-truth.ts
 - [x] Issue 4.3: Implement metrics.ts with TDD (MRR and NDCG@10)
 
-**Phase 1C Tasks** (Ready to Execute):
+**Phase 1C Tasks** (After Phase 1E):
 
 - [ ] Create ground truth data for Maths KS4 queries using `scripts/discover-lessons.ts`
 - [ ] Two-way hybrid baseline metrics established

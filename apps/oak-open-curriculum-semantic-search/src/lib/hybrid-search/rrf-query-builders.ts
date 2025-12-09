@@ -168,7 +168,11 @@ const SEQUENCE_BM25_FIELDS = [
   'phase_title',
 ];
 
-/** Creates a two-way RRF retriever for sequences. */
+/**
+ * Creates a two-way RRF retriever for sequences.
+ *
+ * Includes `fuzziness: 'AUTO'` for typo tolerance.
+ */
 function createSequenceRetriever(
   text: string,
   filters: QueryContainer[],
@@ -180,7 +184,12 @@ function createSequenceRetriever(
         {
           standard: {
             query: {
-              multi_match: { query: text, type: 'best_fields', fields: SEQUENCE_BM25_FIELDS },
+              multi_match: {
+                query: text,
+                type: 'best_fields',
+                fuzziness: 'AUTO',
+                fields: SEQUENCE_BM25_FIELDS,
+              },
             },
             filter: filterClause,
           },

@@ -123,7 +123,12 @@ const LESSON_BM25_FIELDS = [
 /** Unit BM25 search fields with boosts. */
 const UNIT_BM25_FIELDS = ['unit_title^3', 'rollup_text', 'unit_topics^1.5'];
 
-/** Creates a BM25 standard retriever for lessons. */
+/**
+ * Creates a BM25 standard retriever for lessons.
+ *
+ * Includes `fuzziness: 'AUTO'` to handle common spelling mistakes
+ * (e.g., "pythagorus" matches "pythagoras").
+ */
 export function createLessonBm25Retriever(
   text: string,
   filter: QueryContainer | undefined,
@@ -135,6 +140,7 @@ export function createLessonBm25Retriever(
           query: text,
           type: 'best_fields',
           tie_breaker: 0.2,
+          fuzziness: 'AUTO',
           fields: LESSON_BM25_FIELDS,
         },
       },
@@ -151,7 +157,11 @@ export function createLessonElserRetriever(
   return { standard: { query: { semantic: { field: 'lesson_semantic', query: text } }, filter } };
 }
 
-/** Creates a BM25 standard retriever for units. */
+/**
+ * Creates a BM25 standard retriever for units.
+ *
+ * Includes `fuzziness: 'AUTO'` to handle common spelling mistakes.
+ */
 export function createUnitBm25Retriever(
   text: string,
   filter: QueryContainer | undefined,
@@ -163,6 +173,7 @@ export function createUnitBm25Retriever(
           query: text,
           type: 'best_fields',
           tie_breaker: 0.2,
+          fuzziness: 'AUTO',
           fields: UNIT_BM25_FIELDS,
         },
       },

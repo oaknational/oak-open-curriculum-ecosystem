@@ -1,8 +1,23 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Phase 1D Complete ✅ | Blocking Issues Resolved ✅ | Phase 1C Ready to Start  
+**Status**: Active Implementation - Phase 1E (Search Foundation) ← **BLOCKING ISSUES** - Must fix before Phase 1C  
 **Last Updated**: 2025-12-09
+
+---
+
+## ⚠️ CURRENT BLOCKERS (2025-12-09)
+
+**Phase 1C (Baseline Metrics) is BLOCKED. Fix these first:**
+
+| Issue | Description                                             | Status       |
+| ----- | ------------------------------------------------------- | ------------ |
+| 5.1   | Units missing `key_stage_slug` (all null)               | ❌ NOT FIXED |
+| 5.2   | Missing units from sequence ingestion (Pythagoras/trig) | ❌ NOT FIXED |
+| 5.3   | No fuzzy matching - misspellings return 0 hits          | ❌ NOT FIXED |
+| 5.4   | Thread canonical URL crash                              | ✅ FIXED     |
+
+**See `semantic-search.prompt.md` for full details and investigation steps.**
 
 ---
 

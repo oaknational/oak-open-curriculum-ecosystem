@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildLessonRrfRequest } from './rrf-query-builders';
+
+import { buildLessonRrfRequest, buildUnitRrfRequest } from './rrf-query-builders';
 
 // Mock ES client for tests
 
@@ -18,6 +19,12 @@ describe('buildLessonRrfRequest (two-way)', () => {
   it('wraps BM25 in standard retriever', () => {
     const request = buildLessonRrfRequest({ text: 'pythagoras theorem', size: 10 });
     expect(request.retriever?.rrf?.retrievers?.[0]?.standard?.query).toHaveProperty('multi_match');
+  });
+
+  it('includes fuzziness AUTO for typo tolerance in BM25', () => {
+    const request = buildLessonRrfRequest({ text: 'pythagorus', size: 10 });
+    const bm25Query = request.retriever?.rrf?.retrievers?.[0]?.standard?.query?.multi_match;
+    expect(bm25Query?.fuzziness).toBe('AUTO');
   });
 
   it('wraps ELSER in standard retriever', () => {
@@ -39,5 +46,13 @@ describe('buildLessonRrfRequest (two-way)', () => {
       keyStage: 'ks4',
     });
     expect(request.retriever?.rrf?.retrievers?.[0]?.standard?.filter).toBeDefined();
+  });
+});
+
+describe('buildUnitRrfRequest (two-way)', () => {
+  it('includes fuzziness AUTO for typo tolerance in BM25', () => {
+    const request = buildUnitRrfRequest({ text: 'trigonometree', size: 10 });
+    const bm25Query = request.retriever?.rrf?.retrievers?.[0]?.standard?.query?.multi_match;
+    expect(bm25Query?.fuzziness).toBe('AUTO');
   });
 });

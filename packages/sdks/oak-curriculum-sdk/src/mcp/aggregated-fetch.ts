@@ -226,6 +226,9 @@ async function executeFetchByType(
       );
     }
     default:
-      return { ok: false, error: new TypeError(`Unsupported content type: ${String(type)}`) };
+      return {
+        ok: false,
+        error: new TypeError(`Aggregated fetch failed: Unsupported content type: ${String(type)}`),
+      };
   }
 }
