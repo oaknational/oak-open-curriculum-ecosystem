@@ -173,8 +173,8 @@ describe('Field Alignment: oak_unit_rollup', () => {
       UNIT_ROLLUP_FIELD_OVERRIDES,
     );
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(22);
-    expect(extractEsFieldNames(esFields)).toHaveLength(22);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(23);
+    expect(extractEsFieldNames(esFields)).toHaveLength(23);
   });
 });
 

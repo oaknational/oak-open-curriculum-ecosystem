@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Phase 1D (Missing Indices) Complete ✅, Baseline Metrics (Phase 1C) NOT STARTED - Blocking Issues to Resolve First  
+**Status**: Active Implementation - Phase 1D Complete ✅ | Blocking Issues Resolved ✅ | Phase 1C Ready to Start  
 **Last Updated**: 2025-12-09
 
 ---
@@ -124,7 +124,8 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 | **1A** | ✅ Done   | Maths KS4 Ingestion       | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
 | **1B** | ✅ Done   | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API       |
 | **1D** | ✅ Done   | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices |
-| **1C** | 0.5 days  | Baseline Metrics          | ⏸️ NOT STARTED (Blocking Issues) | MRR, NDCG@10, zero-hit, latency         |
+| **--** | ✅ Done   | Blocking Issues           | ✅ Complete (2025-12-09)  | All 12 issues resolved, infra ready     |
+| **1C** | 0.5 days  | Baseline Metrics          | 🟢 READY TO START         | MRR, NDCG@10, zero-hit, latency         |
 | **2**  | 0.5 days  | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
 | **3**  | 0.5-1 day | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data |
 | **4**  | 2-3 days  | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
@@ -169,7 +170,7 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **updated to `retriever` API**
 - ✅ Tier, exam_board, pathway field extraction
 - ✅ ADRs 071-074 written
-- ✅ All 10 quality gates passing (1,310+ tests)
+- ✅ All 11 quality gates passing (1,265+ tests)
 
 ### Phase 1B Complete ✅ (2025-12-08)
 
@@ -199,50 +200,49 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
 - NO extraction during ingestion - use static curriculum metadata
 
-### Next: Phase 1C (Baseline Metrics) ⏸️ NOT STARTED
+### Next: Phase 1C (Baseline Metrics) 🟢 READY TO START
 
-**All 12 Issues Must Be Resolved First** (See Known Technical Debt below):
+**Prerequisites** ✅ ALL RESOLVED (2025-12-09):
 
-- Issue 1.1: Add pathway field to unit_rollup schema
-- Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
-- Issue 1.3: Document dense vector naming convention in TSDoc
-- Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
-- Issue 2.2: Create createUnitFacets() function
-- Issue 2.3: Document sequence facets as future work
-- Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
-- Issue 3.2: Fix buildThreadOps return type from unknown[] to specific type
-- Issue 3.3: Include pedagogical data in rollup text
-- Issue 4.2: Create e2e-tests/ and src/lib/search-quality/ directories
-- Issue 4.3: Implement ground-truth.ts and metrics.ts with TDD
+- ✅ Issue 1.1: Added pathway field to unit_rollup schema
+- ✅ Issue 1.2: `extractThreadInfo()` populates thread_slugs/titles/orders
+- ✅ Issue 1.3: Dense vector naming convention documented in TSDoc
+- ✅ Issue 2.1: Added tier, exam_board, pathway to `createLessonFacets()`
+- ✅ Issue 2.2: Created `createUnitFacets()` function
+- ✅ Issue 2.3: Sequence facets documented as future work
+- ✅ Issue 3.1: Subject extraction parameterised via `FetchThreadsOptions`
+- ✅ Issue 3.2: `buildThreadOps` returns `ThreadBulkOperation[]`
+- ✅ Issue 3.3: Pedagogical data included via `createEnrichedRollupText()`
+- ✅ Issue 4.2: Created `src/lib/search-quality/` with ground-truth.ts
+- ✅ Issue 4.3: Implemented MRR and NDCG@10 with TDD (13 unit tests)
 
-**Phase 1C Tasks** (After Blocking Issues Resolved):
+**Phase 1C Tasks** (Ready to Execute):
 
+- 🔄 Create ground truth data using `scripts/discover-lessons.ts`
 - 🔄 Test two-way hybrid search with representative queries
 - 🔄 Establish baseline metrics (MRR, NDCG@10, zero-hit, latency)
 - 🔄 Decide: two-way sufficient vs evaluate three-way
 
 ---
 
-## Known Technical Debt (ALL BLOCKING)
+## Technical Debt Resolved ✅ (2025-12-09)
 
-The following 12 issues were identified during deep review (2025-12-09). **ALL issues are strategically vital and must be resolved before Phase 1C can begin.**
+All 12 blocking issues identified during deep review have been resolved. Phase 1C can now proceed.
 
-See `.agent/prompts/semantic-search/semantic-search.prompt.md` for full details including file locations and fix requirements.
-
-| ID  | Category      | Issue                                            | Location                        |
-| --- | ------------- | ------------------------------------------------ | ------------------------------- |
-| 1.1 | Schema/Field  | Missing `pathway` field in unit_rollup           | `field-definitions/curriculum.ts`, `unit-rollup-overrides.ts` |
-| 1.2 | Schema/Field  | `thread_slugs/titles/orders` never populated     | `document-transforms.ts`        |
-| 1.3 | Schema/Field  | Dense vector field naming inconsistency          | `lessons-overrides.ts`, `unit-rollup-overrides.ts` |
-| 2.1 | Facets        | Lesson facets missing tier, exam_board, pathway  | `rrf-query-helpers.ts`          |
-| 2.2 | Facets        | No unit facets exist                             | `rrf-query-builders.ts`         |
-| 2.3 | Facets        | Sequence facets defined but unused               | `rrf-query-helpers.ts`          |
-| 3.1 | Data          | Hardcoded `subjectSlugs: ['maths']`              | `thread-bulk-helpers.ts`        |
-| 3.2 | Data          | `buildThreadOps` returns `unknown[]`             | `thread-bulk-helpers.ts`        |
-| 3.3 | Data          | Rollup text missing pedagogical data             | `document-transforms.ts`        |
-| 4.1 | Status        | Phase 1C marked "CURRENT" but not started        | Multiple docs (DONE)            |
-| 4.2 | Status        | Missing search-quality infrastructure            | N/A                             |
-| 4.3 | Status        | Missing IR metrics implementation                | N/A                             |
+| ID  | Category     | Issue                                           | Status                                                       |
+| --- | ------------ | ----------------------------------------------- | ------------------------------------------------------------ |
+| 1.1 | Schema/Field | Missing `pathway` field in unit_rollup          | ✅ Added to field definitions and ES overrides               |
+| 1.2 | Schema/Field | `thread_slugs/titles/orders` never populated    | ✅ `extractThreadInfo()` created, integrated into transforms |
+| 1.3 | Schema/Field | Dense vector field naming inconsistency         | ✅ Documented in TSDoc comments                              |
+| 2.1 | Facets       | Lesson facets missing tier, exam_board, pathway | ✅ Added to `createLessonFacets()`                           |
+| 2.2 | Facets       | No unit facets exist                            | ✅ Created `createUnitFacets()` with `includeFacets` param   |
+| 2.3 | Facets       | Sequence facets defined but unused              | ✅ Documented as future work in TSDoc                        |
+| 3.1 | Data         | Hardcoded `subjectSlugs: ['maths']`             | ✅ Parameterised via `FetchThreadsOptions`                   |
+| 3.2 | Data         | `buildThreadOps` returns `unknown[]`            | ✅ Replaced with `ThreadBulkOperation[]` type                |
+| 3.3 | Data         | Rollup text missing pedagogical data            | ✅ `extractPedagogicalData()` + `createEnrichedRollupText()` |
+| 4.1 | Status       | Phase 1C marked "CURRENT" but not started       | ✅ Status corrected in all documents                         |
+| 4.2 | Status       | Missing search-quality infrastructure           | ✅ Created `src/lib/search-quality/` with types and exports  |
+| 4.3 | Status       | Missing IR metrics implementation               | ✅ MRR and NDCG@10 implemented with TDD (13 unit tests)      |
 
 ---
 
@@ -325,24 +325,25 @@ pnpm smoke:dev:stub
 - [x] Reference document builders implemented
 - [x] All quality gates passing
 
-### Phase 1C: Baseline Metrics ← NOT STARTED
+### Phase 1C: Baseline Metrics ← READY TO START
 
-**Prerequisites** (All 12 Issues Must Be Resolved):
+**Prerequisites** ✅ ALL RESOLVED (2025-12-09):
 
-- [ ] Issue 1.1: Add pathway field to unit_rollup schema
-- [ ] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
-- [ ] Issue 1.3: Document dense vector naming convention in TSDoc
-- [ ] Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
-- [ ] Issue 2.2: Create createUnitFacets() function
-- [ ] Issue 2.3: Document sequence facets as future work
-- [ ] Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
-- [ ] Issue 3.2: Fix buildThreadOps return type from unknown[]
-- [ ] Issue 3.3: Include pedagogical data in rollup text
-- [ ] Issue 4.2: Create e2e-tests/ and src/lib/search-quality/ directories
-- [ ] Issue 4.3: Implement ground-truth.ts and metrics.ts with TDD
+- [x] Issue 1.1: Add pathway field to unit_rollup schema
+- [x] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
+- [x] Issue 1.3: Document dense vector naming convention in TSDoc
+- [x] Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
+- [x] Issue 2.2: Create createUnitFacets() function
+- [x] Issue 2.3: Document sequence facets as future work
+- [x] Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
+- [x] Issue 3.2: Fix buildThreadOps return type from unknown[]
+- [x] Issue 3.3: Include pedagogical data in rollup text
+- [x] Issue 4.2: Create src/lib/search-quality/ directory with ground-truth.ts
+- [x] Issue 4.3: Implement metrics.ts with TDD (MRR and NDCG@10)
 
-**Phase 1C Tasks**:
+**Phase 1C Tasks** (Ready to Execute):
 
+- [ ] Create ground truth data for Maths KS4 queries
 - [ ] Two-way hybrid search working
 - [ ] Baseline metrics established (MRR, NDCG@10, zero-hit, latency)
 - [ ] Search quality validated

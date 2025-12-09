@@ -23,6 +23,8 @@ import {
   resolveUnitSummaryIdentifiers,
   extractLessonDocumentFields,
   extractRollupDocumentFields,
+  extractPedagogicalData,
+  createEnrichedRollupText,
   type UnitLessonInfo,
 } from './document-transform-helpers';
 import { generateDenseVector } from './dense-vector-generation';
@@ -158,7 +160,8 @@ export async function createRollupDocument({
   esClient,
 }: CreateRollupDocumentParams): Promise<SearchUnitRollupDoc> {
   const fields = extractRollupDocumentFields(summary, normaliseYears);
-  const rollupText = snippets.join('\n\n');
+  const pedagogicalData = extractPedagogicalData(summary);
+  const rollupText = createEnrichedRollupText(snippets, pedagogicalData);
   const [unitDenseVector, rollupDenseVector] = await Promise.all([
     generateDenseVector(esClient, rollupText),
     generateDenseVector(esClient, fields.unitTitle),
@@ -179,8 +182,12 @@ export async function createRollupDocument({
     unit_url: fields.canonicalUrl,
     subject_programmes_url: subjectProgrammesUrl,
     sequence_ids: fields.sequenceIds,
+    thread_slugs: fields.threadSlugs,
+    thread_titles: fields.threadTitles,
+    thread_orders: fields.threadOrders,
     tier: fields.tier,
     exam_board: fields.examBoard,
+    pathway: fields.pathway,
     unit_dense_vector: unitDenseVector,
     rollup_dense_vector: rollupDenseVector,
   };

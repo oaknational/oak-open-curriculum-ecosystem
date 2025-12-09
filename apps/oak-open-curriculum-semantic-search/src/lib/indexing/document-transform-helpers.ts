@@ -8,11 +8,52 @@ import {
   pluckStrings,
   optionalStrings,
   readUnknownField,
-  requireStringField,
 } from './extraction-primitives';
+import {
+  extractThreadInfo,
+  extractPedagogicalData,
+  createEnrichedRollupText,
+  type ThreadInfo,
+  type PedagogicalData,
+} from './thread-and-pedagogical-extractors';
+import {
+  resolveUnitSummaryIdentifiers,
+  resolveLessonSummaryIdentifiers,
+  readUnitSummaryValue,
+  readLessonSummaryValue,
+  readUnitSummaryString,
+  readLessonSummaryString,
+  expectUnitSummaryString,
+  expectLessonSummaryString,
+  type UnitSummaryIdentifiers,
+  type LessonSummaryIdentifiers,
+} from './summary-reader-helpers';
 
 // Re-export programme factor extractors
 export { extractTier, extractExamBoard, extractPathway };
+
+// Re-export thread and pedagogical extractors
+export {
+  extractThreadInfo,
+  extractPedagogicalData,
+  createEnrichedRollupText,
+  type ThreadInfo,
+  type PedagogicalData,
+};
+
+// Re-export summary reader helpers
+export {
+  resolveUnitSummaryIdentifiers,
+  resolveLessonSummaryIdentifiers,
+  readUnitSummaryValue,
+  readLessonSummaryValue,
+  readUnitSummaryString,
+  readLessonSummaryString,
+  expectUnitSummaryString,
+  expectLessonSummaryString,
+  type UnitSummaryIdentifiers,
+  type LessonSummaryIdentifiers,
+};
 
 export interface UnitLessonInfo {
   readonly lessonSlug: string;
@@ -157,86 +198,6 @@ export function extractLessonPlanningFields(summary: unknown): {
   };
 }
 
-export interface UnitSummaryIdentifiers {
-  readonly unitSlug: string;
-  readonly unitTitle: string;
-  readonly canonicalUrl: string;
-}
-
-/** Resolves unit summary identifiers. */
-export function resolveUnitSummaryIdentifiers(summary: unknown): UnitSummaryIdentifiers {
-  const record = ensureRecord(summary, 'unit summary');
-  const unitSlug = requireStringField(record, 'unitSlug', 'unit summary slug');
-  const unitTitle = requireStringField(record, 'unitTitle', `unit summary ${unitSlug} title`);
-  const canonicalUrl = requireStringField(
-    record,
-    'canonicalUrl',
-    `canonical URL for unit ${unitSlug}`,
-  );
-  return { unitSlug, unitTitle, canonicalUrl };
-}
-
-export interface LessonSummaryIdentifiers {
-  readonly unitSlug: string;
-  readonly unitTitle: string;
-  readonly canonicalUrl: string;
-}
-
-/** Resolves lesson summary identifiers. */
-export function resolveLessonSummaryIdentifiers(summary: unknown): LessonSummaryIdentifiers {
-  const record = ensureRecord(summary, 'lesson summary');
-  const unitSlug = requireStringField(record, 'unitSlug', 'lesson summary unit slug');
-  const unitTitle = requireStringField(
-    record,
-    'unitTitle',
-    `lesson summary ${unitSlug} unit title`,
-  );
-  const canonicalUrl = requireStringField(
-    record,
-    'canonicalUrl',
-    `canonical URL for lesson in unit ${unitSlug}`,
-  );
-  return { unitSlug, unitTitle, canonicalUrl };
-}
-
-/** Reads a value from unit summary. */
-export function readUnitSummaryValue(summary: unknown, key: string): unknown {
-  return readUnknownField(ensureRecord(summary, 'unit summary'), key);
-}
-
-/** Reads a value from lesson summary. */
-export function readLessonSummaryValue(summary: unknown, key: string): unknown {
-  return readUnknownField(ensureRecord(summary, 'lesson summary'), key);
-}
-
-/** Reads string from unit summary. */
-export function readUnitSummaryString(summary: unknown, key: string): string | undefined {
-  return safeString(readUnitSummaryValue(summary, key));
-}
-
-/** Requires string from unit summary. */
-export function expectUnitSummaryString(summary: unknown, key: string, context: string): string {
-  const value = readUnitSummaryString(summary, key);
-  if (!value) {
-    throw new Error(`Missing ${context}`);
-  }
-  return value;
-}
-
-/** Reads string from lesson summary. */
-export function readLessonSummaryString(summary: unknown, key: string): string | undefined {
-  return safeString(readLessonSummaryValue(summary, key));
-}
-
-/** Requires string from lesson summary. */
-export function expectLessonSummaryString(summary: unknown, key: string, context: string): string {
-  const value = readLessonSummaryString(summary, key);
-  if (!value) {
-    throw new Error(`Missing ${context}`);
-  }
-  return value;
-}
-
 /** Extracts all fields from lesson summary for document creation. */
 export function extractLessonDocumentFields(summary: unknown) {
   const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
@@ -267,22 +228,18 @@ export function extractRollupDocumentFields(
   normaliseYears: (year: unknown, yearSlug: unknown) => string[] | undefined,
 ) {
   const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
-  const rollupLessons: UnitLessonInfo[] = extractUnitLessons(
-    readUnitSummaryValue(summary, 'unitLessons'),
-  );
+  const rollupLessons = extractUnitLessons(readUnitSummaryValue(summary, 'unitLessons'));
   const lessonIds = rollupLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics: string[] | undefined = extractUnitTopics(
-    readUnitSummaryValue(summary, 'categories'),
-  );
+  const unitTopics = extractUnitTopics(readUnitSummaryValue(summary, 'categories'));
   const years = normaliseYears(
     readUnitSummaryValue(summary, 'year'),
     readUnitSummaryValue(summary, 'yearSlug'),
   );
-  const sequenceIds: string[] | undefined = extractSequenceIds(
-    readUnitSummaryValue(summary, 'threads'),
-  );
+  const sequenceIds = extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
+  const threadInfo = extractThreadInfo(readUnitSummaryValue(summary, 'threads'));
   const tier = extractTier(summary);
   const examBoard = extractExamBoard(summary);
+  const pathway = extractPathway(summary);
 
   return {
     unitSlug,
@@ -292,7 +249,11 @@ export function extractRollupDocumentFields(
     unitTopics,
     years,
     sequenceIds,
+    threadSlugs: threadInfo.slugs,
+    threadTitles: threadInfo.titles,
+    threadOrders: threadInfo.orders,
     tier,
     examBoard,
+    pathway,
   };
 }

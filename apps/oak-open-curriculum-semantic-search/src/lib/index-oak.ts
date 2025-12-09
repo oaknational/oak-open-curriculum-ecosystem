@@ -75,8 +75,9 @@ export async function buildIndexBulkOps(
   }
 
   // Build thread operations (once, not per subject/key-stage)
+  // Pass ingested subjects for thread association
   sandboxLogger.debug('Building thread operations');
-  const threadOps = await fetchAndBuildThreadOps(client);
+  const threadOps = await fetchAndBuildThreadOps(client, { subjectSlugs: filteredSubjects });
   bulkOps.push(...threadOps);
   sandboxLogger.debug('Built thread operations', { count: threadOps.length / 2 });
 

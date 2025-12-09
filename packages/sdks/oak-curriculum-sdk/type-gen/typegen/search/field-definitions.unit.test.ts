@@ -223,8 +223,8 @@ describe('LESSONS_INDEX_FIELDS', () => {
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
-  it('has exactly 22 fields', () => {
-    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(22);
+  it('has exactly 23 fields', () => {
+    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(23);
   });
 
   it('contains expected field names', () => {

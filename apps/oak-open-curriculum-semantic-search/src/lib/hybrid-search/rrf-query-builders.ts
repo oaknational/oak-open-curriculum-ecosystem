@@ -22,6 +22,7 @@ import {
   createLessonElserRetriever,
   createUnitFilters,
   createUnitHighlight,
+  createUnitFacets,
   createUnitBm25Retriever,
   createUnitElserRetriever,
 } from './rrf-query-helpers';
@@ -82,8 +83,17 @@ export function buildUnitRrfRequest(params: {
   keyStage?: KeyStage;
   minLessons?: number;
   includeHighlights?: boolean;
+  includeFacets?: boolean;
 }): EsSearchRequest {
-  const { text, size, subject, keyStage, minLessons, includeHighlights = false } = params;
+  const {
+    text,
+    size,
+    subject,
+    keyStage,
+    minLessons,
+    includeHighlights = false,
+    includeFacets = false,
+  } = params;
   const filters = createUnitFilters(subject, keyStage, minLessons);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
@@ -92,11 +102,21 @@ export function buildUnitRrfRequest(params: {
   };
 
   if (includeHighlights) request.highlight = createUnitHighlight();
+  if (includeFacets) request.aggs = createUnitFacets();
 
   return request;
 }
 
-/** Builds a two-way RRF request for sequences (BM25 + ELSER). */
+/**
+ * Builds a two-way RRF request for sequences (BM25 + ELSER).
+ *
+ * **Note**: Unlike lessons and units, sequence search does not currently include
+ * faceted filtering or aggregations. This is intentional as sequences use a
+ * different navigation pattern via the `oak_sequence_facets` index for browsing.
+ *
+ * @future When faceted sequence search is needed, add `includeFacets` parameter
+ * and implement `createSequenceFacets()` following the lesson/unit pattern.
+ */
 export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequest {
   const { text, size, subject, phaseSlug } = params;
   const filters = createSequenceFilters(subject, phaseSlug);

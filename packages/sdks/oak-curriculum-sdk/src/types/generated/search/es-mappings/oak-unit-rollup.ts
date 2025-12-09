@@ -151,6 +151,9 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       exam_board: {
         type: 'keyword',
       },
+      pathway: {
+        type: 'keyword',
+      },
     },
   },
 } as const;

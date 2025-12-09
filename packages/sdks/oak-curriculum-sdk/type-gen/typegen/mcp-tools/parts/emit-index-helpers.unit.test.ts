@@ -88,4 +88,3 @@ describe('compareStatuses', () => {
     expect(compareStatuses('default', '2XX')).toBeGreaterThan(0);
   });
 });
-

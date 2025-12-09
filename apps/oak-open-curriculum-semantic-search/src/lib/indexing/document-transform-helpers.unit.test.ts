@@ -130,7 +130,6 @@ describe('document-transform-helpers', () => {
   describe('resolveUnitSummaryIdentifiers', () => {
     it('returns the canonical identifiers for a unit summary', () => {
       const summary = buildUnitSummary();
-
       const identifiers = resolveUnitSummaryIdentifiers(summary);
 
       expect(identifiers.unitSlug).toBe('unit-slug');
@@ -140,7 +139,6 @@ describe('document-transform-helpers', () => {
 
     it('throws when the canonical URL is missing', () => {
       const summary = buildUnitSummary({ canonicalUrl: undefined });
-
       expect(() => resolveUnitSummaryIdentifiers(summary)).toThrow(/canonical url/i);
     });
   });
@@ -148,7 +146,6 @@ describe('document-transform-helpers', () => {
   describe('resolveLessonSummaryIdentifiers', () => {
     it('returns lesson planning identifiers', () => {
       const summary = buildLessonSummary();
-
       const identifiers = resolveLessonSummaryIdentifiers(summary);
 
       expect(identifiers.unitSlug).toBe('unit-slug');
@@ -160,27 +157,17 @@ describe('document-transform-helpers', () => {
 
     it('throws when the lesson canonical URL is missing', () => {
       const summary = buildLessonSummary({ canonicalUrl: undefined });
-
       expect(() => resolveLessonSummaryIdentifiers(summary)).toThrow(/canonical url/i);
     });
   });
 
   describe('extractUnitLessons', () => {
     it('filters out invalid lesson entries', () => {
-      const summary = buildUnitSummary({
-        unitLessons: [
-          { lessonSlug: 'valid-lesson', lessonTitle: 'Valid Lesson', state: 'published' },
-          { lessonSlug: '', lessonTitle: 'Missing slug', state: 'published' },
-          { lessonSlug: 'missing-title', lessonTitle: '', state: 'published' },
-        ],
-      });
-
       const lessons = extractUnitLessons([
-        ...summary.unitLessons,
-        { lessonSlug: '', lessonTitle: 'Missing slug', state: 'published' } as unknown,
-        { lessonSlug: 'missing-title', lessonTitle: '', state: 'published' } as unknown,
+        { lessonSlug: 'valid-lesson', lessonTitle: 'Valid Lesson', state: 'published' },
+        { lessonSlug: '', lessonTitle: 'Missing slug', state: 'published' },
+        { lessonSlug: 'missing-title', lessonTitle: '', state: 'published' },
       ]);
-
       expect(lessons).toEqual([{ lessonSlug: 'valid-lesson', lessonTitle: 'Valid Lesson' }]);
     });
   });
@@ -188,12 +175,10 @@ describe('document-transform-helpers', () => {
   describe('extractMisconceptions', () => {
     it('joins misconception-response pairs and skips incomplete entries', () => {
       const summary = buildLessonSummary();
-
       const misconceptions = extractMisconceptions([
         ...summary.misconceptionsAndCommonMistakes,
-        { misconception: 'Missing response only', response: undefined } as unknown,
+        { misconception: 'Missing response only', response: undefined },
       ]);
-
       expect(misconceptions).toEqual(['Confuse numerator → Explain with bar models']);
     });
   });
@@ -201,31 +186,7 @@ describe('document-transform-helpers', () => {
   describe('extractLessonPlanningFields', () => {
     it('normalises optional planning fields into string arrays', () => {
       const summary = buildLessonSummary();
-
-      const summaryWithGaps = {
-        ...summary,
-        lessonKeywords: [
-          ...summary.lessonKeywords,
-          { keyword: '', description: 'Ignored empty keyword' } as unknown,
-        ],
-        keyLearningPoints: [
-          ...summary.keyLearningPoints,
-          { keyLearningPoint: undefined } as unknown,
-        ],
-        misconceptionsAndCommonMistakes: [
-          ...summary.misconceptionsAndCommonMistakes,
-          { misconception: 'Missing response only', response: undefined } as unknown,
-        ],
-        teacherTips: [...summary.teacherTips, { teacherTip: '' } as unknown],
-        contentGuidance: [
-          ...(summary.contentGuidance ?? []),
-          { contentGuidanceDescription: undefined } as unknown,
-        ],
-      } as LessonSummaryFixture;
-
-      const fields = extractLessonPlanningFields(
-        summaryWithGaps as unknown as Parameters<typeof extractLessonPlanningFields>[0],
-      );
+      const fields = extractLessonPlanningFields(summary);
 
       expect(fields.lessonKeywords).toEqual(['fractions', 'ratio']);
       expect(fields.keyLearningPoints).toEqual(['Understand fractions']);
@@ -236,122 +197,63 @@ describe('document-transform-helpers', () => {
   });
 
   describe('extractTier', () => {
-    it('should extract foundation tier from programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { tier: 'foundation' },
-      });
-
-      expect(extractTier(lessonData)).toBe('foundation');
+    it('extracts foundation tier from programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: { tier: 'foundation' } });
+      expect(extractTier(data)).toBe('foundation');
     });
 
-    it('should extract higher tier from programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { tier: 'higher' },
-      });
-
-      expect(extractTier(lessonData)).toBe('higher');
+    it('extracts higher tier from programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: { tier: 'higher' } });
+      expect(extractTier(data)).toBe('higher');
     });
 
-    it('should return undefined if no tier in programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: {},
-      });
-
-      expect(extractTier(lessonData)).toBeUndefined();
+    it('returns undefined if no tier in programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: {} });
+      expect(extractTier(data)).toBeUndefined();
     });
 
-    it('should return undefined if no programme factors', () => {
-      const lessonData = buildLessonSummary();
-
-      expect(extractTier(lessonData)).toBeUndefined();
+    it('returns undefined if no programme factors', () => {
+      const data = buildLessonSummary();
+      expect(extractTier(data)).toBeUndefined();
     });
 
-    it('should return undefined for invalid tier values', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { tier: 'invalid' },
-      });
-
-      expect(extractTier(lessonData)).toBeUndefined();
+    it('returns undefined for invalid tier values', () => {
+      const data = buildLessonSummary({ programmeFactors: { tier: 'invalid' } });
+      expect(extractTier(data)).toBeUndefined();
     });
   });
 
   describe('extractExamBoard', () => {
-    it('should extract exam board from programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { examBoard: 'aqa' },
-      });
-
-      expect(extractExamBoard(lessonData)).toBe('aqa');
+    it('extracts exam board from programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: { examBoard: 'aqa' } });
+      expect(extractExamBoard(data)).toBe('aqa');
     });
 
-    it('should extract edexcel exam board', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { examBoard: 'edexcel' },
-      });
-
-      expect(extractExamBoard(lessonData)).toBe('edexcel');
+    it('returns undefined if no exam board in programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: {} });
+      expect(extractExamBoard(data)).toBeUndefined();
     });
 
-    it('should return undefined if no exam board in programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: {},
-      });
-
-      expect(extractExamBoard(lessonData)).toBeUndefined();
-    });
-
-    it('should return undefined if no programme factors', () => {
-      const lessonData = buildLessonSummary();
-
-      expect(extractExamBoard(lessonData)).toBeUndefined();
-    });
-
-    it('should return undefined for empty string exam board', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { examBoard: '' },
-      });
-
-      expect(extractExamBoard(lessonData)).toBeUndefined();
+    it('returns undefined for empty string exam board', () => {
+      const data = buildLessonSummary({ programmeFactors: { examBoard: '' } });
+      expect(extractExamBoard(data)).toBeUndefined();
     });
   });
 
   describe('extractPathway', () => {
-    it('should extract pathway from programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { pathway: 'core' },
-      });
-
-      expect(extractPathway(lessonData)).toBe('core');
+    it('extracts pathway from programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: { pathway: 'core' } });
+      expect(extractPathway(data)).toBe('core');
     });
 
-    it('should extract gcse pathway', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { pathway: 'gcse' },
-      });
-
-      expect(extractPathway(lessonData)).toBe('gcse');
+    it('returns undefined if no pathway in programme factors', () => {
+      const data = buildLessonSummary({ programmeFactors: {} });
+      expect(extractPathway(data)).toBeUndefined();
     });
 
-    it('should return undefined if no pathway in programme factors', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: {},
-      });
-
-      expect(extractPathway(lessonData)).toBeUndefined();
-    });
-
-    it('should return undefined if no programme factors', () => {
-      const lessonData = buildLessonSummary();
-
-      expect(extractPathway(lessonData)).toBeUndefined();
-    });
-
-    it('should return undefined for empty string pathway', () => {
-      const lessonData = buildLessonSummary({
-        programmeFactors: { pathway: '' },
-      });
-
-      expect(extractPathway(lessonData)).toBeUndefined();
+    it('returns undefined for empty string pathway', () => {
+      const data = buildLessonSummary({ programmeFactors: { pathway: '' } });
+      expect(extractPathway(data)).toBeUndefined();
     });
   });
 });

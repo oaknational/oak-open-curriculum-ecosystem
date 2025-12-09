@@ -10,9 +10,26 @@
  */
 
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { SearchThreadIndexDoc } from '../../types/oak';
 import { createThreadDocument } from './thread-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { sandboxLogger } from '../logger';
+
+/**
+ * Elasticsearch bulk index action metadata.
+ */
+interface BulkIndexAction {
+  readonly index: {
+    readonly _index: string;
+    readonly _id: string;
+  };
+}
+
+/**
+ * A single bulk operation for thread indexing.
+ * Bulk operations alternate between action metadata and document.
+ */
+export type ThreadBulkOperation = BulkIndexAction | SearchThreadIndexDoc;
 
 /**
  * Thread data enriched with unit information.
@@ -25,18 +42,46 @@ export interface EnrichedThread {
 }
 
 /**
+ * Options for fetching and enriching threads.
+ */
+export interface FetchThreadsOptions {
+  /**
+   * Subject slugs to associate with threads.
+   *
+   * Threads in Oak's curriculum are cross-subject progressions. The thread/units
+   * API does not return subject information directly. For subject-specific ingestion
+   * (e.g., Maths KS4 POC), provide the target subject(s) here.
+   *
+   * @example ['maths'] for Maths KS4 POC
+   * @example ['maths', 'science'] for multi-subject ingestion
+   */
+  readonly subjectSlugs: readonly string[];
+}
+
+/**
  * Fetches all threads and enriches them with unit counts.
  *
  * This requires multiple API calls:
  * 1. GET /threads to get all thread slugs and titles
  * 2. GET /threads/{slug}/units for each thread to get unit counts
  *
- * The unit responses also contain subject information that we aggregate.
+ * **Note**: Thread/units API does not return subject information. Subject slugs
+ * must be provided via options. For the Maths KS4 POC, use `{ subjectSlugs: ['maths'] }`.
  *
  * @param client - The Oak API client
+ * @param options - Options including subject slugs for thread association
  * @returns Array of enriched thread data
+ *
+ * @example
+ * ```typescript
+ * // Maths KS4 POC ingestion
+ * const threads = await fetchAndEnrichThreads(client, { subjectSlugs: ['maths'] });
+ * ```
  */
-export async function fetchAndEnrichThreads(client: OakClient): Promise<readonly EnrichedThread[]> {
+export async function fetchAndEnrichThreads(
+  client: OakClient,
+  options: FetchThreadsOptions,
+): Promise<readonly EnrichedThread[]> {
   sandboxLogger.debug('Fetching all threads');
   const threads = await client.getAllThreads();
   sandboxLogger.debug('Found threads', { count: threads.length });
@@ -48,16 +93,11 @@ export async function fetchAndEnrichThreads(client: OakClient): Promise<readonly
       const units = await client.getThreadUnits(thread.slug);
       const unitCount = units.length;
 
-      // For now, we don't have subject information in the thread units response
-      // We'll derive subjects from the units that appear in each thread later
-      // For now, assume maths as the primary subject for most threads
-      const subjectSlugs: string[] = ['maths'];
-
       enrichedThreads.push({
         slug: thread.slug,
         title: thread.title,
         unitCount,
-        subjectSlugs,
+        subjectSlugs: options.subjectSlugs,
       });
     } catch (error) {
       sandboxLogger.warn('Failed to fetch units for thread', {
@@ -78,8 +118,8 @@ export async function fetchAndEnrichThreads(client: OakClient): Promise<readonly
  * @param threads - Array of thread entries from the /threads API
  * @returns Array of bulk operations (alternating metadata and document)
  */
-export function buildThreadOps(threads: readonly EnrichedThread[]): unknown[] {
-  const ops: unknown[] = [];
+export function buildThreadOps(threads: readonly EnrichedThread[]): ThreadBulkOperation[] {
+  const ops: ThreadBulkOperation[] = [];
 
   for (const thread of threads) {
     const doc = createThreadDocument({
@@ -89,15 +129,14 @@ export function buildThreadOps(threads: readonly EnrichedThread[]): unknown[] {
       unitCount: thread.unitCount,
     });
 
-    ops.push(
-      {
-        index: {
-          _index: resolvePrimarySearchIndexName('threads'),
-          _id: thread.slug,
-        },
+    const action: BulkIndexAction = {
+      index: {
+        _index: resolvePrimarySearchIndexName('threads'),
+        _id: thread.slug,
       },
-      doc,
-    );
+    };
+
+    ops.push(action, doc);
   }
 
   return ops;
@@ -109,9 +148,19 @@ export function buildThreadOps(threads: readonly EnrichedThread[]): unknown[] {
  * This is a convenience function that combines fetching and building.
  *
  * @param client - The Oak API client
+ * @param options - Options including subject slugs for thread association
  * @returns Array of bulk operations for thread documents
+ *
+ * @example
+ * ```typescript
+ * // Maths KS4 POC ingestion
+ * const ops = await fetchAndBuildThreadOps(client, { subjectSlugs: ['maths'] });
+ * ```
  */
-export async function fetchAndBuildThreadOps(client: OakClient): Promise<unknown[]> {
-  const threads = await fetchAndEnrichThreads(client);
+export async function fetchAndBuildThreadOps(
+  client: OakClient,
+  options: FetchThreadsOptions,
+): Promise<ThreadBulkOperation[]> {
+  const threads = await fetchAndEnrichThreads(client, options);
   return buildThreadOps(threads);
 }

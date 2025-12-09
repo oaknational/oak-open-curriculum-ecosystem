@@ -185,6 +185,7 @@ export const SearchUnitRollupDocSchema = z
     rollup_dense_vector: z.array(z.number()).optional(),
     tier: z.string().min(1).optional(),
     exam_board: z.string().min(1).optional(),
+    pathway: z.string().min(1).optional(),
   })
   .strict();
 export type SearchUnitRollupDoc = z.infer<typeof SearchUnitRollupDocSchema>;

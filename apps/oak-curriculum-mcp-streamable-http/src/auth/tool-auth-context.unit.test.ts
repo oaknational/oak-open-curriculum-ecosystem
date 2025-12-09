@@ -88,4 +88,3 @@ describe('extractAuthContext', () => {
     expect(result).toBeUndefined();
   });
 });
-

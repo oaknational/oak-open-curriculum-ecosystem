@@ -112,9 +112,9 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
 /**
  * Field definitions for the oak_unit_rollup search index.
  *
- * Contains 21 fields:
+ * Contains 22 fields:
  * - 9 required fields
- * - 12 optional fields
+ * - 13 optional fields
  *
  * @see SearchUnitRollupDocSchema
  * @see OAK_UNIT_ROLLUP_MAPPING
@@ -142,6 +142,7 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'rollup_dense_vector', zodType: 'array-number', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
   { name: 'exam_board', zodType: 'string', optional: true },
+  { name: 'pathway', zodType: 'string', optional: true },
 ] as const;
 
 /**

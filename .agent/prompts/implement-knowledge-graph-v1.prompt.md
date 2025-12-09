@@ -917,4 +917,3 @@ From `schema-first-execution.md`:
 - The two artifacts demonstrably complement each other
 - All quality gates pass
 - Implementation follows TDD at all levels
-
