@@ -26,6 +26,7 @@ const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
   ['oak_units', 'units'],
   ['oak_sequences', 'sequences'],
   ['oak_sequence_facets', 'sequence_facets'],
+  ['oak_threads', 'threads'],
 ]);
 
 const SANDBOX_KIND_BY_INDEX: Record<string, SearchIndexKind> = {
@@ -34,6 +35,7 @@ const SANDBOX_KIND_BY_INDEX: Record<string, SearchIndexKind> = {
   oak_units_sandbox: 'units',
   oak_sequences_sandbox: 'sequences',
   oak_sequence_facets_sandbox: 'sequence_facets',
+  oak_threads_sandbox: 'threads',
 };
 
 /**
@@ -59,6 +61,7 @@ export function summariseOperations(
     units: 0,
     sequences: 0,
     sequence_facets: 0,
+    threads: 0,
   };
 
   for (let i = 0; i < operations.length; i += 2) {

@@ -46,28 +46,28 @@
 
 ### `oak_sequences` Index
 
-| Field             | Data Type | Source                                                                  | Completeness              |
-| ----------------- | --------- | ----------------------------------------------------------------------- | ------------------------- |
-| `sequence_slug`   | Text      | API: `/subjects/{subject}/sequences` → `sequenceSlug`                   | ✅ **FULL**               |
-| `sequence_title`  | Text      | **Constructed**: `${subjectTitle} ${phaseTitle}`                        | ✅ Derived                |
-| `subject_slug`    | Text      | From ingestion context (known at call time)                             | ✅ Available              |
-| `subject_title`   | Text      | API: `/subjects` → `subjectTitle`                                       | ✅ **FULL**               |
-| `phase_slug`      | Text      | API: `/subjects/{subject}/sequences` → `phaseSlug`                      | ✅ **FULL**               |
-| `phase_title`     | Text      | API: `/subjects/{subject}/sequences` → `phaseTitle`                     | ✅ **FULL**               |
-| `key_stages`      | Array     | API: `/subjects/{subject}/sequences` → `keyStages[].keyStageSlug`       | ✅ **ALL**                |
-| `years`           | Array     | API: `/subjects/{subject}/sequences` → `years[]`                        | ✅ **ALL**                |
-| `unit_slugs`      | Array     | API: `/sequences/{seq}/units` → `units[].unitSlug`                      | ✅ **ALL** units          |
+| Field             | Data Type | Source                                                                      | Completeness            |
+| ----------------- | --------- | --------------------------------------------------------------------------- | ----------------------- |
+| `sequence_slug`   | Text      | API: `/subjects/{subject}/sequences` → `sequenceSlug`                       | ✅ **FULL**             |
+| `sequence_title`  | Text      | **Constructed**: `${subjectTitle} ${phaseTitle}`                            | ✅ Derived              |
+| `subject_slug`    | Text      | From ingestion context (known at call time)                                 | ✅ Available            |
+| `subject_title`   | Text      | API: `/subjects` → `subjectTitle`                                           | ✅ **FULL**             |
+| `phase_slug`      | Text      | API: `/subjects/{subject}/sequences` → `phaseSlug`                          | ✅ **FULL**             |
+| `phase_title`     | Text      | API: `/subjects/{subject}/sequences` → `phaseTitle`                         | ✅ **FULL**             |
+| `key_stages`      | Array     | API: `/subjects/{subject}/sequences` → `keyStages[].keyStageSlug`           | ✅ **ALL**              |
+| `years`           | Array     | API: `/subjects/{subject}/sequences` → `years[]`                            | ✅ **ALL**              |
+| `unit_slugs`      | Array     | API: `/sequences/{seq}/units` → `units[].unitSlug`                          | ✅ **ALL** units        |
 | `category_titles` | Array     | Aggregated: `/sequences/{seq}/units` → `units[].categories[].categoryTitle` | ✅ **ALL** (aggregated) |
 
 ### `oak_threads` Index
 
-| Field          | Data Type | Source                                     | Completeness   |
-| -------------- | --------- | ------------------------------------------ | -------------- |
-| `thread_slug`  | Text      | API: `/threads` → `slug`                   | ✅ **FULL**    |
-| `thread_title` | Text      | API: `/threads` → `title`                  | ✅ **FULL**    |
-| `unit_count`   | Number    | **Calculated**: count from unit extraction | ✅ Derived     |
-| `subject_slugs`| Array     | **Aggregated**: from unit summaries (`subjectSlug`) | ✅ Derived |
-| `thread_url`   | Text      | **Constructed**: canonical URL             | ✅ Derived     |
+| Field           | Data Type | Source                                              | Completeness |
+| --------------- | --------- | --------------------------------------------------- | ------------ |
+| `thread_slug`   | Text      | API: `/threads` → `slug`                            | ✅ **FULL**  |
+| `thread_title`  | Text      | API: `/threads` → `title`                           | ✅ **FULL**  |
+| `unit_count`    | Number    | **Calculated**: count from unit extraction          | ✅ Derived   |
+| `subject_slugs` | Array     | **Aggregated**: from unit summaries (`subjectSlug`) | ✅ Derived   |
+| `thread_url`    | Text      | **Constructed**: canonical URL                      | ✅ Derived   |
 
 ---
 

@@ -24,17 +24,30 @@
    - ✅ Three-way RRF query builders updated
    - ✅ Validated against live ES Serverless
 
-3. **Phase 1C: Baseline Metrics** ← CURRENT
+3. **Phase 1D: Missing Indices** ✅ COMPLETE (2025-12-09)
+   - ✅ `oak_threads` mapping generator created
+   - ✅ `oak_sequences` document builder implemented
+   - ✅ `oak_threads` document builder implemented + API integration
+   - ✅ Reference index mappings generated (`oak_ref_subjects`, `oak_ref_key_stages`, `oak_curriculum_glossary`)
+   - ✅ Reference document builders implemented with TDD
+
+4. **Phase 1C: Baseline Metrics** ← CURRENT
    - Establish baseline with two-way hybrid (BM25 + ELSER)
    - Calculate MRR, NDCG@10, zero-hit rate, latency
    - Duration: 0.5-1 day
 
-4. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
+5. **Phase 2: Evaluate Dense Vectors** (only if two-way insufficient)
    - Dense vector infrastructure already built ✅
    - Only activate if Phase 1C baseline doesn't meet targets
    - Duration: 0.5 day
 
-5. **Phase 3+**: Additional features (ReRank, filtered kNN, etc.)
+6. **Phase 3: Reference Indices** (Future)
+   - Populate `oak_ref_subjects`, `oak_ref_key_stages`, `oak_curriculum_glossary`
+   - Data source: Existing ontology data (`ontology-data.ts`, `knowledge-graph-data.ts`)
+   - No stats extraction needed - use static curriculum metadata
+   - Duration: 0.5-1 day
+
+7. **Phase 4+**: Additional features (ReRank, filtered kNN, etc.)
    - Only proceed after validating foundation
 
 **First Question**: Could it be simpler? Start with two-way hybrid. Only add complexity if it delivers measurable value.
@@ -208,6 +221,34 @@ pnpm test:e2e -- search-quality
 3. Document decision in ADR
 4. Duration: 0.5 day
 
+### Phase 3: Reference Indices (Future)
+
+**Purpose**: Populate reference indices with curriculum metadata for faceted navigation and glossary search.
+
+**Indices**:
+
+| Index                     | Data Source                                   | Purpose             |
+| ------------------------- | --------------------------------------------- | ------------------- |
+| `oak_ref_subjects`        | `ontologyData.curriculumStructure.subjects`   | Subject metadata    |
+| `oak_ref_key_stages`      | `ontologyData.curriculumStructure.keyStages`  | Key stage metadata  |
+| `oak_curriculum_glossary` | `ontologyData.synonyms` + concept definitions | Vocabulary/glossary |
+
+**Data Already Available**:
+
+- ✅ ES mappings generated for all 3 indices
+- ✅ Document builders implemented with TDD
+- ✅ Source data exists in `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts`
+- ✅ Concept relationships in `packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts`
+
+**Implementation**: Simple transformation from existing static ontology data - NO extraction or aggregation during ingestion needed.
+
+**Steps**:
+
+1. Create importers that read from `ontology-data.ts` and `knowledge-graph-data.ts`
+2. Transform to ES documents using existing builders
+3. Add to ingestion pipeline as simple step
+4. Duration: 0.5-1 day
+
 ---
 
 ## Key File Locations
@@ -218,17 +259,30 @@ pnpm test:e2e -- search-quality
 packages/sdks/oak-curriculum-sdk/
 ├── type-gen/typegen/search/
 │   ├── field-definitions/
-│   │   └── curriculum.ts          ← ADD NEW FIELDS HERE
+│   │   ├── curriculum.ts          ← ADD NEW FIELDS HERE
+│   │   ├── thread.ts              ← Phase 1D: thread field defs
+│   │   └── reference.ts           ← Phase 1D: ref index field defs
 │   ├── es-field-overrides/        ← ES overrides (split structure)
 │   │   ├── index.ts
 │   │   ├── common.ts
 │   │   ├── lessons-overrides.ts
 │   │   ├── units-overrides.ts
 │   │   ├── unit-rollup-overrides.ts
+│   │   ├── threads-overrides.ts   ← Phase 1D: thread overrides
+│   │   ├── reference-overrides.ts ← Phase 1D: ref index overrides
 │   │   └── ... (other overrides)
-│   ├── es-mapping-from-fields.ts  ← Mapping generator
+│   ├── es-mapping-generators.ts   ← Mapping generators
+│   ├── es-mapping-generators-reference.ts ← Ref index generators
 │   └── zod-schema-generator.ts    ← Zod generator
-└── src/types/generated/search/    ← GENERATED (don't edit)
+├── src/types/generated/search/
+│   └── es-mappings/               ← GENERATED (don't edit)
+│       ├── oak-threads.ts         ← Phase 1D generated
+│       ├── oak-ref-subjects.ts    ← Phase 1D generated
+│       ├── oak-ref-key-stages.ts  ← Phase 1D generated
+│       └── oak-curriculum-glossary.ts ← Phase 1D generated
+└── src/mcp/
+    ├── ontology-data.ts           ← Phase 3 data source for ref indices
+    └── knowledge-graph-data.ts    ← Phase 3 data source for glossary
 ```
 
 ### App (Indexing & Search)
@@ -239,18 +293,26 @@ apps/oak-open-curriculum-semantic-search/
 │   ├── indexing/
 │   │   ├── document-transform-helpers.ts
 │   │   ├── document-transforms.ts
-│   │   └── dense-vector-generation.ts  ← For Phase 2 if needed
+│   │   ├── dense-vector-generation.ts   ← For Phase 2 if needed
+│   │   ├── sequence-document-builder.ts ← Phase 1D: oak_sequences docs
+│   │   ├── sequence-bulk-helpers.ts     ← Phase 1D: sequence bulk ops
+│   │   ├── thread-document-builder.ts   ← Phase 1D: oak_threads docs
+│   │   ├── thread-bulk-helpers.ts       ← Phase 1D: thread API + bulk ops
+│   │   └── reference-document-builders.ts ← Phase 3: ref index docs
 │   ├── hybrid-search/
-│   │   ├── rrf-query-builders.ts       ← Two-way (BM25 + ELSER)
-│   │   ├── rrf-query-helpers.ts        ← Shared helpers
-│   │   └── rrf-query-builders-three-way.ts  ← Three-way (for Phase 2)
+│   │   ├── rrf-query-builders.ts        ← Two-way (BM25 + ELSER)
+│   │   ├── rrf-query-helpers.ts         ← Shared helpers
+│   │   └── rrf-query-builders-three-way.ts ← Three-way (for Phase 2)
 │   └── elasticsearch/
 │       ├── client.ts
 │       └── setup/
 │           ├── cli.ts
 │           ├── cli-commands.ts
 │           └── cli-output.ts
-└── e2e-tests/                   ← E2E tests
+├── src/adapters/
+│   ├── oak-adapter-sdk.ts        ← SDK client with thread APIs
+│   └── oak-adapter-sdk-threads.ts ← Thread API functions
+└── e2e-tests/                    ← E2E tests
 ```
 
 ---

@@ -22,11 +22,17 @@ import {
   createUnitRollupMappingModule,
   createSequencesMappingModule,
   createSequenceFacetsMappingModule,
+  createThreadsMappingModule,
 } from './es-mapping-generators.js';
 import {
   createMetaMappingModule,
   createZeroHitMappingModule,
 } from './es-mapping-generators-minimal.js';
+import {
+  createRefSubjectsMappingModule,
+  createRefKeyStagesMappingModule,
+  createCurriculumGlossaryMappingModule,
+} from './es-mapping-generators-reference.js';
 
 /**
  * Creates the barrel export index module.
@@ -65,6 +71,18 @@ export type { OakSequencesMapping } from './oak-sequences.js';
 export { OAK_SEQUENCE_FACETS_MAPPING } from './oak-sequence-facets.js';
 export type { OakSequenceFacetsMapping } from './oak-sequence-facets.js';
 
+export { OAK_THREADS_MAPPING } from './oak-threads.js';
+export type { OakThreadsMapping } from './oak-threads.js';
+
+export { OAK_REF_SUBJECTS_MAPPING } from './oak-ref-subjects.js';
+export type { OakRefSubjectsMapping } from './oak-ref-subjects.js';
+
+export { OAK_REF_KEY_STAGES_MAPPING } from './oak-ref-key-stages.js';
+export type { OakRefKeyStagesMapping } from './oak-ref-key-stages.js';
+
+export { OAK_CURRICULUM_GLOSSARY_MAPPING } from './oak-curriculum-glossary.js';
+export type { OakCurriculumGlossaryMapping } from './oak-curriculum-glossary.js';
+
 export { OAK_META_MAPPING } from './oak-meta.js';
 export type { OakMetaMapping } from './oak-meta.js';
 
@@ -90,6 +108,10 @@ export function generateEsMappingModules(_schema: OpenAPIObject): FileMap {
     '../search/es-mappings/oak-unit-rollup.ts': createUnitRollupMappingModule(),
     '../search/es-mappings/oak-sequences.ts': createSequencesMappingModule(),
     '../search/es-mappings/oak-sequence-facets.ts': createSequenceFacetsMappingModule(),
+    '../search/es-mappings/oak-threads.ts': createThreadsMappingModule(),
+    '../search/es-mappings/oak-ref-subjects.ts': createRefSubjectsMappingModule(),
+    '../search/es-mappings/oak-ref-key-stages.ts': createRefKeyStagesMappingModule(),
+    '../search/es-mappings/oak-curriculum-glossary.ts': createCurriculumGlossaryMappingModule(),
     '../search/es-mappings/oak-meta.ts': createMetaMappingModule(),
     '../search/es-mappings/oak-zero-hit-telemetry.ts': createZeroHitMappingModule(),
   };

@@ -43,6 +43,9 @@ function createFixtureClient(data: FixtureData): OakClient {
       },
     },
     getSequenceUnits: makeFixtureSequenceUnitsFn(data),
+    // Thread fixtures not implemented yet - return empty for now
+    getAllThreads: async () => [],
+    getThreadUnits: async () => [],
   };
 }
 

@@ -1,7 +1,7 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: Phase 1A Complete ✅ | Phase 1B Complete ✅ | Phase 1C Current ⏭️  
+**Status**: Phase 1A Complete ✅ | Phase 1B Complete ✅ | Phase 1D Complete ✅ | Phase 1C Current ⏭️  
 **Priority**: HIGH  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
 
@@ -2297,6 +2297,26 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - [x] Tested two-way RRF with Maths KS4 data against live ES Serverless
 - [x] Validated: 21 results returned for "pythagoras theorem"
 - [x] All quality gates passing
+
+### Phase 1D: Missing Indices ✅ COMPLETE (2025-12-09)
+
+- [x] Created `oak_threads` mapping generator (`createThreadsMappingModule()`)
+- [x] Created `threads-overrides.ts` with field overrides
+- [x] Implemented `sequence-document-builder.ts` with TDD
+- [x] Implemented `thread-document-builder.ts` with TDD
+- [x] Implemented `thread-bulk-helpers.ts` for API integration
+- [x] Added `/threads` API client functions (`getAllThreads`, `getThreadUnits`)
+- [x] Integrated thread ingestion into `buildIndexBulkOps()` pipeline
+- [x] Created reference index mappings (subjects, key_stages, glossary)
+- [x] Implemented reference document builders with TDD
+- [x] All quality gates passing
+
+**Reference Indices Ready (Phase 3)**:
+
+- `oak_ref_subjects` - mapping + builder ready
+- `oak_ref_key_stages` - mapping + builder ready
+- `oak_curriculum_glossary` - mapping + builder ready
+- Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
 
 ### Phase 1C: Baseline Metrics ⏭️ CURRENT (0.5 days)
 

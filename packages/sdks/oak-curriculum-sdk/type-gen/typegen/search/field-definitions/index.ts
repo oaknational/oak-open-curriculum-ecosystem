@@ -4,6 +4,7 @@
  *
  * This module re-exports field definitions from specialized modules:
  * - **curriculum**: Educational content indexes (lessons, units, sequences, threads)
+ * - **reference**: Entity metadata indexes (subjects, key stages, glossary)
  * - **observability**: System behavior indexes (meta, zero-hit telemetry)
  *
  * By organizing field definitions into separate concerns, we maintain clarity
@@ -26,6 +27,7 @@
  *
  * // Import by category
  * import { LESSONS_INDEX_FIELDS } from './field-definitions/curriculum.js';
+ * import { REF_SUBJECTS_INDEX_FIELDS } from './field-definitions/reference.js';
  * import { META_INDEX_FIELDS } from './field-definitions/observability.js';
  * ```
  */
@@ -42,6 +44,13 @@ export {
   SEQUENCES_INDEX_FIELDS,
   SEQUENCE_FACETS_INDEX_FIELDS,
 } from './curriculum.js';
+
+// Re-export reference index fields
+export {
+  REF_SUBJECTS_INDEX_FIELDS,
+  REF_KEY_STAGES_INDEX_FIELDS,
+  CURRICULUM_GLOSSARY_INDEX_FIELDS,
+} from './reference.js';
 
 // Re-export observability index fields
 export { META_INDEX_FIELDS, ZERO_HIT_INDEX_FIELDS } from './observability.js';

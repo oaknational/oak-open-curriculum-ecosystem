@@ -85,11 +85,7 @@ async function tryWriteCache(
   }
 }
 
-/**
- * Wrap function with caching + 404 fallback. Caches both successes AND 404 errors
- * as fallback values, ensuring 100% cache hits on subsequent runs. Essential for
- * optional resources like transcripts (many lessons have no video).
- */
+/** Wrap function with caching + 404 fallback (caches both successes and 404s). */
 function withCacheAndFallback<T>(
   fn: (id: string) => Promise<T>,
   redis: Redis,
@@ -131,35 +127,31 @@ function createCachedClientWrapper(
     getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
     getSubjectSequences: baseClient.getSubjectSequences,
     getSequenceUnits: baseClient.getSequenceUnits,
-    // Unit summaries use fallback caching - some units in listings don't have
-    // full summary data, returning 404. We cache null to avoid repeated network calls.
+    getAllThreads: baseClient.getAllThreads,
+    getThreadUnits: baseClient.getThreadUnits,
     getUnitSummary: withCacheAndFallback(
       baseClient.getUnitSummary,
       redis,
       'unit-summary',
       ttlSeconds,
       stats,
-      null, // Fallback for 404s (unit exists in listing but no summary data)
+      null,
     ),
-    // Lesson summaries use fallback caching - some lessons in listings don't have
-    // full summary data, returning 404. We cache null to avoid repeated network calls.
     getLessonSummary: withCacheAndFallback(
       baseClient.getLessonSummary,
       redis,
       'lesson-summary',
       ttlSeconds,
       stats,
-      null, // Fallback for 404s (lesson exists in listing but no summary data)
+      null,
     ),
-    // Transcripts use fallback caching - many lessons don't have video/transcripts,
-    // returning 404. We cache the empty fallback to avoid repeated network calls.
     getLessonTranscript: withCacheAndFallback(
       baseClient.getLessonTranscript,
       redis,
       'lesson-transcript',
       ttlSeconds,
       stats,
-      { transcript: '', vtt: '' }, // Fallback for 404s (no video/transcript)
+      { transcript: '', vtt: '' },
     ),
     rateLimitTracker: baseClient.rateLimitTracker,
     getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),

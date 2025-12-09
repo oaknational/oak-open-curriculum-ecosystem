@@ -24,6 +24,7 @@ import {
   createDataIntegrityCollector,
   type DataIntegrityReport,
 } from './indexing/data-integrity-report';
+import { fetchAndBuildThreadOps } from './indexing/thread-bulk-helpers';
 
 /** Options for building bulk operations. */
 export interface BuildIndexBulkOpsOptions {
@@ -72,6 +73,12 @@ export async function buildIndexBulkOps(
     );
     bulkOps.push(...subjectOps);
   }
+
+  // Build thread operations (once, not per subject/key-stage)
+  sandboxLogger.debug('Building thread operations');
+  const threadOps = await fetchAndBuildThreadOps(client);
+  bulkOps.push(...threadOps);
+  sandboxLogger.debug('Built thread operations', { count: threadOps.length / 2 });
 
   sandboxLogger.debug('Bulk ops build complete', { totalOps: bulkOps.length });
   sandboxLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });

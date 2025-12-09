@@ -18,8 +18,16 @@ export { UNITS_FIELD_OVERRIDES } from './units-overrides.js';
 export { UNIT_ROLLUP_FIELD_OVERRIDES } from './unit-rollup-overrides.js';
 export { SEQUENCES_FIELD_OVERRIDES } from './sequences-overrides.js';
 export { SEQUENCE_FACETS_FIELD_OVERRIDES } from './sequence-facets-overrides.js';
+export { THREADS_FIELD_OVERRIDES } from './threads-overrides.js';
 export { META_FIELD_OVERRIDES } from './meta-overrides.js';
 export { ZERO_HIT_FIELD_OVERRIDES } from './zero-hit-overrides.js';
+
+// Re-export reference index field overrides
+export {
+  REF_SUBJECTS_FIELD_OVERRIDES,
+  REF_KEY_STAGES_FIELD_OVERRIDES,
+  CURRICULUM_GLOSSARY_FIELD_OVERRIDES,
+} from './reference-overrides.js';
 
 // Re-export common helpers for use by other modules
 export {

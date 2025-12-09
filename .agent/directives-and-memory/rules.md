@@ -57,6 +57,7 @@ Use the right tool for the job:
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
 - **NEVER disable checks** - Never disable any quality gates, never disable type checks, never disable any linting, never disable any formatting, never disable any tests, never disable Git hooks (`--no-verify`)
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript. ALWAYS fix the root cause, never work around it.
+- **Fix things** - All quality gates are blocking at all times, regardless of location, cause, or context.
 - **Never prefix variables with an underscore** - This is a hack, AND IT DOES NOT WORK. Either use the variable, or delete it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.

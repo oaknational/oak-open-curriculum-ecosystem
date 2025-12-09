@@ -1,8 +1,8 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Phase 1B Complete ✅, Baseline Metrics Next ⏭️  
-**Last Updated**: 2025-12-08
+**Status**: Active Implementation - Phase 1D (Missing Indices) Complete ✅, Baseline Metrics Next ⏭️  
+**Last Updated**: 2025-12-09
 
 ---
 
@@ -119,18 +119,19 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 
 ### Implementation Phases
 
-| Phase  | Duration | Focus                       | Status                    | Key Features                            |
-| ------ | -------- | --------------------------- | ------------------------- | --------------------------------------- |
-| **1A** | ✅ Done  | Maths KS4 Ingestion         | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
-| **1B** | ✅ Done  | RRF API Update              | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API       |
-| **1C** | 0.5 days | Baseline Metrics            | ⏭️ Current                | MRR, NDCG@10, zero-hit, latency         |
-| **2**  | 0.5 days | Evaluate Three-Way          | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
-| **3**  | 2-3 days | Relevance Enhancement       | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
-| **4**  | 3-4 days | Entity Extraction & Graph   | ⏸️ Future                 | NER models, Graph API, enrich processor |
-| **5**  | 2-3 days | Reference Indices & Threads | ⏸️ Future                 | 5 new indices, thread support           |
-| **6**  | 4-5 days | RAG Infrastructure          | ⏸️ Future                 | ES Playground, semantic_text, chunking  |
-| **7**  | 5-6 days | Knowledge Graph             | ⏸️ Future                 | Triple store, entity resolution         |
-| **8**  | 3-4 days | Advanced Features           | ⏸️ Future                 | LTR foundations, multi-vector           |
+| Phase  | Duration  | Focus                     | Status                    | Key Features                            |
+| ------ | --------- | ------------------------- | ------------------------- | --------------------------------------- |
+| **1A** | ✅ Done   | Maths KS4 Ingestion       | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
+| **1B** | ✅ Done   | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API       |
+| **1D** | ✅ Done   | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices |
+| **1C** | 0.5 days  | Baseline Metrics          | ⏭️ Current                | MRR, NDCG@10, zero-hit, latency         |
+| **2**  | 0.5 days  | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
+| **3**  | 0.5-1 day | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data |
+| **4**  | 2-3 days  | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
+| **5**  | 3-4 days  | Entity Extraction & Graph | ⏸️ Future                 | NER models, Graph API, enrich processor |
+| **6**  | 4-5 days  | RAG Infrastructure        | ⏸️ Future                 | ES Playground, semantic_text, chunking  |
+| **7**  | 5-6 days  | Knowledge Graph           | ⏸️ Future                 | Triple store, entity resolution         |
+| **8**  | 3-4 days  | Advanced Features         | ⏸️ Future                 | LTR foundations, multi-vector           |
 
 **Note**: Phases 3+ only proceed after Phase 1C baseline is established and validated.
 
@@ -179,6 +180,24 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - ✅ Three-way RRF query builders updated (`rrf-query-builders-three-way.ts`)
 - ✅ Validated against live ES Serverless (21 results for "pythagoras theorem")
 - ✅ All quality gates passing
+
+### Phase 1D Complete ✅ (2025-12-09)
+
+**Missing Indices Fixed**:
+
+- ✅ `oak_threads` mapping generator created (`createThreadsMappingModule()`)
+- ✅ `oak_sequences` document builder implemented with TDD
+- ✅ `oak_threads` document builder + API integration (`/threads` endpoint)
+- ✅ Thread ingestion integrated into `buildIndexBulkOps()` pipeline
+- ✅ Reference index mappings generated (subjects, key_stages, glossary)
+- ✅ Reference document builders implemented with TDD
+- ✅ All quality gates passing
+
+**Reference Indices (Future - Phase 3)**:
+
+- Mappings and builders ready
+- Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
+- NO extraction during ingestion - use static curriculum metadata
 
 ### Next: Phase 1C (Baseline Metrics) ⏭️
 
@@ -255,6 +274,16 @@ pnpm smoke:dev:stub
 - [x] Updated `elastic-http.ts` to support `retriever` property
 - [x] Updated unit tests for new `retriever` structure
 - [x] Validated with Maths KS4 data against live ES Serverless
+- [x] All quality gates passing
+
+### Phase 1D: Missing Indices ✅ COMPLETE (2025-12-09)
+
+- [x] `OAK_THREADS_MAPPING` generated via `createThreadsMappingModule()`
+- [x] `oak_sequences` document builder with TDD
+- [x] `oak_threads` document builder with TDD + API integration
+- [x] Thread ingestion integrated into main pipeline
+- [x] Reference index mappings generated (3 indices)
+- [x] Reference document builders implemented
 - [x] All quality gates passing
 
 ### Phase 1C: Baseline Metrics ← CURRENT
@@ -353,6 +382,8 @@ Current archived files:
 
 - `phase-1a-complete.md` - Phase 1A infrastructure TDD examples and implementation guide
 - `curriculum-vocabulary-checkpoint-RESOLVED.md` - Resolved checkpoint from Phase 1A
+- `fix-missing-indices-COMPLETE.md` - Phase 1D implementation prompt (completed 2025-12-09)
+- `fix-missing-indices-plan-COMPLETE.md` - Phase 1D detailed plan (completed 2025-12-09)
 
 Archived documents are kept for historical reference but not used for active work.
 

@@ -49,6 +49,19 @@ export type GetSubjectSequencesFn = (subject: SearchSubjectSlug) => Promise<Sear
 
 export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
 
+// Import thread types and factory functions from separate module
+import {
+  makeGetAllThreads,
+  makeGetThreadUnits,
+  type ThreadEntry,
+  type ThreadUnitEntry,
+  type GetAllThreadsFn,
+  type GetThreadUnitsFn,
+} from './oak-adapter-sdk-threads';
+
+// Re-export thread types for external consumers
+export type { ThreadEntry, ThreadUnitEntry, GetAllThreadsFn, GetThreadUnitsFn };
+
 function assertSdkOk(res: { response: Response }): void {
   if (!res.response.ok) {
     const status = String(res.response.status);
@@ -182,46 +195,28 @@ export interface OakSdkClient {
   getSubjectSequences: GetSubjectSequencesFn;
   /** Get units associated with a sequence. */
   getSequenceUnits: GetSequenceUnitsFn;
+  /** Get all curriculum threads. */
+  getAllThreads: GetAllThreadsFn;
+  /** Get units belonging to a thread. */
+  getThreadUnits: GetThreadUnitsFn;
   /** Rate limit tracker for monitoring API usage. */
   rateLimitTracker: RateLimitTracker;
 }
 
-/**
- * SDK-backed client (preferred).
- *
- * Configures rate limiting and retry logic to handle API rate limits gracefully.
- * Default configuration:
- * - Rate limit: 5 requests/second (200ms minimum interval) - conservative to avoid rate limits
- * - Retry: Up to 5 attempts with exponential backoff (1s, 2s, 4s, 8s, 16s) - total ~31s max wait
- * - Automatically retries 429 (rate limit) and 503 (service unavailable) errors
- *
- * NOTE: Returns a singleton instance to ensure rate limiting state is shared across the entire app.
- */
+/** SDK client singleton with rate limiting and retry. */
 let _singletonClient: OakSdkClient | null = null;
 
+/** Creates SDK client with rate limiting (5 req/sec) and retry (5 attempts, exp backoff). */
 export function createOakSdkClient(): OakSdkClient {
-  // Return existing instance if already created
   if (_singletonClient) {
     return _singletonClient;
   }
-
   const { OAK_EFFECTIVE_KEY } = env();
-
-  // Configure rate limiting and retry to handle API rate limits
   const config: OakClientConfig = {
     apiKey: OAK_EFFECTIVE_KEY,
-    rateLimit: {
-      enabled: true,
-      minRequestInterval: 200, // 5 req/sec - conservative to avoid rate limits
-    },
-    retry: {
-      enabled: true,
-      maxRetries: 5, // Retry up to 5 times (1s, 2s, 4s, 8s, 16s)
-      initialDelayMs: 1000, // Start with 1s delay, exponential backoff
-    },
+    rateLimit: { enabled: true, minRequestInterval: 200 },
+    retry: { enabled: true, maxRetries: 5, initialDelayMs: 1000 },
   };
-
-  // Create base client to access both the API client and the rate limit tracker
   const baseClient = createOakBaseClient(config);
   const client = baseClient.client;
 
@@ -233,6 +228,8 @@ export function createOakSdkClient(): OakSdkClient {
     getUnitSummary: makeGetUnitSummary(client),
     getSubjectSequences: makeGetSubjectSequences(client),
     getSequenceUnits: makeGetSequenceUnits(client),
+    getAllThreads: makeGetAllThreads(client),
+    getThreadUnits: makeGetThreadUnits(client),
     rateLimitTracker: baseClient.rateLimitTracker,
   };
 

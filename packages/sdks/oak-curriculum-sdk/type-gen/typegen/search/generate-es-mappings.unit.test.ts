@@ -20,10 +20,14 @@ describe('generateEsMappingModules', () => {
 
     expect(fileNames).toEqual([
       '../search/es-mappings/index.ts',
+      '../search/es-mappings/oak-curriculum-glossary.ts',
       '../search/es-mappings/oak-lessons.ts',
       '../search/es-mappings/oak-meta.ts',
+      '../search/es-mappings/oak-ref-key-stages.ts',
+      '../search/es-mappings/oak-ref-subjects.ts',
       '../search/es-mappings/oak-sequence-facets.ts',
       '../search/es-mappings/oak-sequences.ts',
+      '../search/es-mappings/oak-threads.ts',
       '../search/es-mappings/oak-unit-rollup.ts',
       '../search/es-mappings/oak-units.ts',
       '../search/es-mappings/oak-zero-hit-telemetry.ts',

@@ -49,6 +49,8 @@ describe('CachedOakClient interface', () => {
       },
       getSubjectSequences: async () => [],
       getSequenceUnits: async () => [],
+      getAllThreads: async () => [],
+      getThreadUnits: async () => [],
       getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
       disconnect: async () => {
         /* mock: no Redis connection to close */

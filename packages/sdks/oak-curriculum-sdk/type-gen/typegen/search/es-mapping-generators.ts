@@ -8,12 +8,14 @@ import {
   LESSONS_FIELD_OVERRIDES,
   UNIT_ROLLUP_FIELD_OVERRIDES,
   SEQUENCES_FIELD_OVERRIDES,
+  THREADS_FIELD_OVERRIDES,
 } from './es-field-config.js';
 import { HEADER, generateSettingsBlock, generatePropertiesBlock } from './es-mapping-utils.js';
 import {
   LESSONS_INDEX_FIELDS,
   UNIT_ROLLUP_INDEX_FIELDS,
   SEQUENCES_INDEX_FIELDS,
+  THREADS_INDEX_FIELDS,
 } from './field-definitions/index.js';
 import { generateEsFieldsFromDefinitions } from './es-mapping-from-fields.js';
 
@@ -122,6 +124,45 @@ ${generatePropertiesBlock(fields, 4)}
 } as const;
 
 export type OakSequencesMapping = typeof OAK_SEQUENCES_MAPPING;
+`
+  );
+}
+
+/**
+ * Creates the oak_threads mapping module.
+ *
+ * Uses unified field definitions from THREADS_INDEX_FIELDS to ensure
+ * the ES mapping stays in sync with the Zod schema.
+ *
+ * Threads represent curriculum progressions (e.g., Number, Algebra, Geometry)
+ * that span multiple units and years, providing conceptual navigation.
+ *
+ * @see THREADS_INDEX_FIELDS - Single source of truth for field definitions
+ * @see THREADS_FIELD_OVERRIDES - ES-specific field configurations
+ */
+export function createThreadsMappingModule(): string {
+  const fields = generateEsFieldsFromDefinitions(THREADS_INDEX_FIELDS, THREADS_FIELD_OVERRIDES);
+
+  return (
+    HEADER +
+    `/**
+ * @module oak-threads
+ * @description Elasticsearch mapping for the oak_threads index.
+ * Contains curriculum thread documents for thread-centric navigation.
+ *
+ * Threads represent conceptual progressions (e.g., Number, Algebra) that
+ * span multiple units and key stages within a subject.
+ */
+
+export const OAK_THREADS_MAPPING = {
+${generateSettingsBlock()}
+  mappings: {
+    dynamic: 'strict',
+${generatePropertiesBlock(fields, 4)}
+  },
+} as const;
+
+export type OakThreadsMapping = typeof OAK_THREADS_MAPPING;
 `
   );
 }

@@ -11,6 +11,7 @@ export const SEARCH_INDEX_KINDS = [
   'units',
   'sequences',
   'sequence_facets',
+  'threads',
 ] as const;
 export type SearchIndexKind = (typeof SEARCH_INDEX_KINDS)[number];
 
@@ -20,6 +21,7 @@ const BASE_INDEX_NAMES: Record<SearchIndexKind, string> = {
   units: 'oak_units',
   sequences: 'oak_sequences',
   sequence_facets: 'oak_sequence_facets',
+  threads: 'oak_threads',
 };
 
 const BASE_INDEX_TO_KIND = new Map<string, SearchIndexKind>([
@@ -28,6 +30,7 @@ const BASE_INDEX_TO_KIND = new Map<string, SearchIndexKind>([
   ['oak_units', 'units'],
   ['oak_sequences', 'sequences'],
   ['oak_sequence_facets', 'sequence_facets'],
+  ['oak_threads', 'threads'],
 ]);
 
 /** Resolve the Elasticsearch index name for the supplied kind/target pair. */

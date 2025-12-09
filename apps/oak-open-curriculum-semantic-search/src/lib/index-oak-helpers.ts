@@ -18,6 +18,7 @@ import {
   buildRollupDocuments,
   buildUnitDocuments,
 } from './indexing/index-bulk-helpers';
+import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { sandboxLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 
@@ -144,7 +145,13 @@ export async function buildPairDocuments(
     unitSummaries,
   });
 
-  return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps];
+  const sequenceOps = buildSequenceOps({
+    subject,
+    sequences: subjectSequences,
+    sequenceSources,
+  });
+
+  return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps, ...sequenceOps];
 }
 
 /** Emit sequence facet events to callback if provided. */
