@@ -9,7 +9,7 @@ import {
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import {
-  generateCanonicalUrlWithContext,
+  generateCanonicalUrl,
   extractSlug,
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
@@ -133,7 +133,8 @@ export async function runFetchTool(
   if (!result.ok) {
     return formatError(toErrorMessage(result.error));
   }
-  const canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
+  // Use non-throwing version - canonical URL is nice-to-have, not required for fetch
+  const canonicalUrl = generateCanonicalUrl(type, args.id) ?? null;
   const summary = buildFetchSummary(type, slug, canonicalUrl);
 
   return formatOptimizedResult({
@@ -155,11 +156,7 @@ export async function runFetchTool(
 /**
  * Builds a human-readable summary of the fetch result.
  */
-function buildFetchSummary(
-  type: ContentType,
-  slug: string,
-  canonicalUrl: string | undefined,
-): string {
+function buildFetchSummary(type: ContentType, slug: string, canonicalUrl: string | null): string {
   const typeName = type.charAt(0).toUpperCase() + type.slice(1);
   const urlPart = canonicalUrl ? ` (${canonicalUrl})` : '';
   return `Fetched ${typeName}: ${slug}${urlPart}`;

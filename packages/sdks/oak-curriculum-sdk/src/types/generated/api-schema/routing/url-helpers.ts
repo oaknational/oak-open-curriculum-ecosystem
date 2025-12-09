@@ -45,6 +45,20 @@ function urlForSubject(slug: string, keyStageSlugs?: readonly string[]): string 
     : undefined;
 }
 
+/**
+ * Generate a canonical URL for a resource with context.
+ *
+ * @param type - The content type ('lesson', 'sequence', 'unit', 'subject', or 'thread')
+ * @param id - The ID of the resource
+ * @param context - Context for unit (subjectSlug, phaseSlug) or subject (keyStageSlugs)
+ * @returns The canonical URL, or `null` for threads (no website equivalent)
+ * @throws TypeError if content type is unsupported or required context is missing
+ *
+ * Return semantics:
+ * - `string`: Valid canonical URL
+ * - `null`: Entity type has no canonical URL (e.g., threads)
+ * - Throws: Invalid type or missing required context (fail fast)
+ */
 export function generateCanonicalUrlWithContext(
   type: ContentType,
   id: string,
@@ -52,15 +66,40 @@ export function generateCanonicalUrlWithContext(
     unit?: { subjectSlug?: string; phaseSlug?: string };
     subject?: { keyStageSlugs?: readonly string[] };
   },
-): string | undefined {
+): string | null {
   const slug = extractSlug(id);
-  if (type === 'lesson') return urlForLesson(slug);
-  if (type === 'sequence') return urlForSequence(slug);
-  if (type === 'unit') return urlForUnit(slug, context?.unit);
-  if (type === 'subject') return urlForSubject(slug, context?.subject?.keyStageSlugs);
-  // Threads are data concepts without canonical URLs - return undefined
-  if (type === 'thread') return undefined;
-  throw new TypeError('Canonical URL with context generation failed: Unsupported content type: ' + String(type));
+  let result: string | null | undefined;
+  let validType = false;
+
+  if (type === 'lesson') {
+    result = urlForLesson(slug);
+    validType = true;
+  }
+  if (type === 'sequence') {
+    result = urlForSequence(slug);
+    validType = true;
+  }
+  if (type === 'unit') {
+    result = urlForUnit(slug, context?.unit);
+    validType = true;
+  }
+  if (type === 'subject') {
+    result = urlForSubject(slug, context?.subject?.keyStageSlugs);
+    validType = true;
+  }
+  // Threads are data concepts without canonical URLs - return null
+  if (type === 'thread') {
+    result = null;
+    validType = true;
+  }
+
+  if (!validType) {
+    throw new TypeError(`Canonical URL generation failed: Unsupported content type: ${String(type)}, id: ${id}`);
+  }
+  if (result === undefined) {
+    throw new TypeError(`Canonical URL generation failed: Missing required context for ${String(type)}, id: ${id}, context: ${JSON.stringify(context)}`);
+  }
+  return result;
 }
 
 export function generateCanonicalUrl(

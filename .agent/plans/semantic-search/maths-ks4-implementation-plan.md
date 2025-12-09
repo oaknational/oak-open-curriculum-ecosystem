@@ -1,7 +1,7 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: Phase 1A ✅ | Phase 1B ✅ | Phase 1D ✅ | Blocking Issues ✅ | Phase 1C READY TO START  
+**Status**: Phase 1A ⚠️ | Phase 1B ✅ | Phase 1D ✅ | Phase 1E 🔧 ARCH FIX REQUIRED | Phase 1C ⏸️ BLOCKED  
 **Priority**: HIGH  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
 
@@ -41,9 +41,66 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 
 ---
 
+## 🔧 ARCHITECTURAL FIX REQUIRED (2025-12-09)
+
+**Issue 5.2: Lessons API Pagination - BLOCKING PHASE 1C**
+
+### Root Cause Analysis
+
+The Oak API `/key-stages/{ks}/subject/{subject}/lessons` endpoint has **pagination** (limit 100, no offset parameter). For Maths KS4:
+
+- Expected: 36 lesson groups (one per unit)
+- Actual: Only 5 lesson groups returned
+- Impact: 31 units have ZERO lessons indexed, including `right-angled-trigonometry` (Pythagoras)
+
+### Required Fix
+
+Derive lessons from unit summaries instead of the paginated lessons endpoint:
+
+```typescript
+// Current (broken):
+const lessonGroups = await client.getLessonsByKeyStageAndSubject(ks, subject);
+// Returns only 5 of 36 groups
+
+// Fixed:
+for (const unitSummary of unitSummaries.values()) {
+  const unitLessons = extractUnitLessons(unitSummary); // Already exists!
+  for (const lesson of unitLessons) {
+    const lessonSummary = await client.getLessonSummary(lesson.lessonSlug);
+    // Create lesson document with full pedagogical data
+  }
+}
+```
+
+### Data Available
+
+| Source                     | Data Available                                                |
+| -------------------------- | ------------------------------------------------------------- |
+| Unit Summary `unitLessons` | `lessonSlug`, `lessonTitle`, `lessonOrder`, `state`           |
+| Lesson Summary             | `lessonKeywords`, `keyLearningPoints`, `misconceptions`, etc. |
+
+We need BOTH: unit summaries for complete lesson list, lesson summaries for rich data.
+
+### Implementation Steps (TDD)
+
+1. **RED**: Write failing tests for lessons-from-unit-summaries
+2. **GREEN**: Modify `buildLessonDocuments` to iterate over unit summaries
+3. **REFACTOR**: Clean up unused lessons endpoint code
+4. **VERIFY**: Re-ingest and confirm all 36 units have lessons
+
+### Files to Modify
+
+| File                                     | Change                                          |
+| ---------------------------------------- | ----------------------------------------------- |
+| `src/lib/indexing/index-bulk-helpers.ts` | Change `buildLessonDocuments` data source       |
+| `src/lib/index-oak-helpers.ts`           | Update `fetchPairData` to skip lessons endpoint |
+| `src/adapters/oak-adapter-sdk.ts`        | Verify `getLessonSummary` adapter exists        |
+
+---
+
 ## Technical Debt Resolved ✅ (2025-12-09)
 
-All 12 blocking issues identified during deep review have been resolved. Phase 1C can now proceed.
+All 12 schema/facet/integrity issues resolved. Additionally, Issues 5.3 and 5.4 from search testing resolved.
 
 | ID  | Category     | Issue                                           | Resolution                                                   |
 | --- | ------------ | ----------------------------------------------- | ------------------------------------------------------------ |
@@ -59,6 +116,8 @@ All 12 blocking issues identified during deep review have been resolved. Phase 1
 | 4.1 | Status       | Phase 1C marked "CURRENT" but not started       | ✅ Status corrected in all documents                         |
 | 4.2 | Status       | Missing search-quality infrastructure           | ✅ Created `src/lib/search-quality/` with types and exports  |
 | 4.3 | Status       | Missing IR metrics implementation               | ✅ MRR and NDCG@10 implemented with TDD (13 unit tests)      |
+| 5.3 | Search       | No fuzzy matching - misspellings return 0       | ✅ Added `fuzziness: 'AUTO'` to BM25 queries (TDD)           |
+| 5.4 | Generator    | Thread canonical URL crash                      | ✅ Generator returns `null` for threads, throws for missing  |
 
 ---
 
@@ -198,11 +257,13 @@ pathways_available: { type: 'keyword' },
 
 ## Phase 1: Two-Way Hybrid Search with Maths KS4
 
-### Phase 1A: Data Ingestion ✅ COMPLETE (2025-12-08)
+### Phase 1A: Data Ingestion ⚠️ PARTIAL - NEEDS ARCHITECTURAL FIX
 
 **Goal**: Ingest Maths KS4 data with dense vector generation and ELSER semantic text.
 
-**Status**: Complete - 173 documents successfully indexed.
+**Status**: Partial - 173 documents indexed but only 100 of ~500+ lessons due to API pagination.
+
+**⚠️ BLOCKING**: See "ARCHITECTURAL FIX REQUIRED" section above. The lessons endpoint returns only 5 of 36 lesson groups. Cannot proceed to Phase 1C until this is fixed.
 
 ### Phase 1B: RRF API Update ✅ COMPLETE (2025-12-08)
 
@@ -218,9 +279,33 @@ pathways_available: { type: 'keyword' },
 - ✅ Validated against live ES Serverless (21 results for "pythagoras theorem")
 - ✅ All quality gates passing
 
-### Phase 1C: Baseline Metrics 🟢 READY TO START
+### Phase 1E: Search Foundation 🔧 CURRENT - ARCHITECTURAL FIX REQUIRED
+
+**Goal**: Fix lesson ingestion to get ALL lessons, not just first 100 from paginated API.
+
+**Completed**:
+
+- ✅ Issue 5.4: Thread canonical URL - generator returns `null`, throws for missing context
+- ✅ Issue 5.3: Fuzzy matching - added `fuzziness: 'AUTO'` to BM25 queries (TDD)
+- ✅ All tests updated to expect fail-fast behavior (per rules.md)
+- ✅ All quality gates passing (1,300+ tests)
+
+**Required**:
+
+- [ ] Implement lessons-from-unit-summaries architecture (TDD)
+- [ ] Reset ES indices
+- [ ] Re-ingest Maths KS4 with complete lessons
+- [ ] Verify all 36 units have lessons indexed
+
+See "ARCHITECTURAL FIX REQUIRED" section above for detailed implementation plan.
+
+---
+
+### Phase 1C: Baseline Metrics ⏸️ BLOCKED (waiting on Phase 1E)
 
 **Goal**: Establish baseline metrics with **two-way hybrid search (BM25 + ELSER)** before considering additional complexity.
+
+**BLOCKED**: Cannot start until Phase 1E architectural fix is complete and all lessons are indexed.
 
 **Prerequisites** ✅ ALL RESOLVED (2025-12-09):
 
@@ -232,6 +317,8 @@ pathways_available: { type: 'keyword' },
 | 3.2 | `buildThreadOps` returns `unknown[]`                             | ✅ Replaced with `ThreadBulkOperation[]` type                |
 | 4.2 | Missing search-quality infrastructure                            | ✅ Created `src/lib/search-quality/` with ground-truth.ts    |
 | 4.3 | Missing IR metrics implementation                                | ✅ MRR and NDCG@10 implemented with TDD (13 unit tests)      |
+| 5.3 | No fuzzy matching                                                | ✅ Added `fuzziness: 'AUTO'` to BM25 queries                 |
+| 5.4 | Thread canonical URL crash                                       | ✅ Generator returns `null` for threads                      |
 
 **Detailed Implementation Guide**: See `.agent/prompts/semantic-search/semantic-search.prompt.md` for:
 

@@ -89,9 +89,11 @@ describe('generateCanonicalUrlWithContext', () => {
     );
   });
 
-  it('should return undefined for unit without context', () => {
-    const url = generateCanonicalUrlWithContext('unit', 'unit:fractions-1');
-    expect(url).toBeUndefined();
+  it('should throw for unit without context (fail fast)', () => {
+    expect(() => generateCanonicalUrlWithContext('unit', 'unit:fractions-1')).toThrow(TypeError);
+    expect(() => generateCanonicalUrlWithContext('unit', 'unit:fractions-1')).toThrow(
+      /Missing required context for unit/,
+    );
   });
 
   it('should generate URL for subject with key stage', () => {
@@ -103,29 +105,33 @@ describe('generateCanonicalUrlWithContext', () => {
     );
   });
 
-  it('should return undefined for subject without key stage', () => {
-    const url = generateCanonicalUrlWithContext('subject', 'subject:maths');
-    expect(url).toBeUndefined();
+  it('should throw for subject without key stage (fail fast)', () => {
+    expect(() => generateCanonicalUrlWithContext('subject', 'subject:maths')).toThrow(TypeError);
+    expect(() => generateCanonicalUrlWithContext('subject', 'subject:maths')).toThrow(
+      /Missing required context for subject/,
+    );
   });
 
-  it('should return undefined for thread (threads are data concepts without canonical URLs)', () => {
+  it('should return null for thread (threads are data concepts without canonical URLs)', () => {
     const url = generateCanonicalUrlWithContext('thread', 'thread:number-multiplication-division');
-    expect(url).toBeUndefined();
+    expect(url).toBeNull();
   });
 });
 
 describe('Behavioral consistency between functions', () => {
-  it('both functions should return undefined for threads (data concepts without URLs)', () => {
+  it('both functions indicate threads have no URLs (undefined vs null)', () => {
+    // generateCanonicalUrl returns undefined (can't generate = undefined)
     const url1 = generateCanonicalUrl('thread', 'thread:algebra');
+    // generateCanonicalUrlWithContext returns null (explicitly no URL for this type)
     const url2 = generateCanonicalUrlWithContext('thread', 'thread:algebra');
 
     expect(url1).toBeUndefined();
-    expect(url2).toBeUndefined();
+    expect(url2).toBeNull();
   });
 });
 
 describe('CONTENT_TYPE_PREFIXES coverage', () => {
-  it('all content types return valid URL or undefined (no throws for known types)', () => {
+  it('generateCanonicalUrl: all content types return valid URL or undefined (no throws for known types)', () => {
     const allTypes: ContentType[] = ['lesson', 'sequence', 'unit', 'subject', 'thread'];
 
     // All known content types should not throw - they either return a URL or undefined
@@ -139,11 +145,42 @@ describe('CONTENT_TYPE_PREFIXES coverage', () => {
     });
   });
 
-  it('types with required context return undefined when context is missing', () => {
+  it('generateCanonicalUrl: types with required context return undefined when context is missing', () => {
     // These types need context to generate a URL
     expect(generateCanonicalUrl('unit', 'unit:test-123')).toBeUndefined();
     expect(generateCanonicalUrl('subject', 'subject:test-123')).toBeUndefined();
     // Threads never have URLs regardless of context
     expect(generateCanonicalUrl('thread', 'thread:test-123')).toBeUndefined();
+  });
+
+  it('generateCanonicalUrlWithContext: all content types work with valid context (or throw for missing)', () => {
+    // With full context, all types work
+    expect(() => {
+      generateCanonicalUrlWithContext('lesson', 'lesson:test-123');
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('sequence', 'sequence:test-123');
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('unit', 'unit:test-123', {
+        unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
+      });
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('subject', 'subject:test-123', {
+        subject: { keyStageSlugs: ['ks1'] },
+      });
+    }).not.toThrow();
+    expect(() => {
+      generateCanonicalUrlWithContext('thread', 'thread:test-123');
+    }).not.toThrow();
+
+    // Missing context throws for types that require it
+    expect(() => {
+      generateCanonicalUrlWithContext('unit', 'unit:test-123');
+    }).toThrow(TypeError);
+    expect(() => {
+      generateCanonicalUrlWithContext('subject', 'subject:test-123');
+    }).toThrow(TypeError);
   });
 });

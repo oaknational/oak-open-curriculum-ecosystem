@@ -46,7 +46,15 @@ describe('createMcpToolsModule', () => {
         canonicalUrl: 'https://www.thenational.academy/teachers/lessons/photosynthesis-basics',
       },
     ];
-    const mockTranscripts = [{ lessonTitle: 'Transcript A' }];
+    // Transcripts must have lessonSlug for canonical URL generation
+    const mockTranscriptsFromApi = [{ lessonTitle: 'Transcript A', lessonSlug: 'transcript-a' }];
+    const mockTranscriptsWithCanonicalUrl = [
+      {
+        lessonTitle: 'Transcript A',
+        lessonSlug: 'transcript-a',
+        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/transcript-a',
+      },
+    ];
 
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
@@ -55,7 +63,7 @@ describe('createMcpToolsModule', () => {
           return Promise.resolve({ status: 200, data: mockLessonsFromApi });
         }
         if (name === ('get-search-transcripts' as ToolName)) {
-          return Promise.resolve({ status: 200, data: mockTranscripts });
+          return Promise.resolve({ status: 200, data: mockTranscriptsFromApi });
         }
         return Promise.resolve({ status: 200, data: null });
       });
@@ -93,7 +101,7 @@ describe('createMcpToolsModule', () => {
     };
     expect(structured.q).toBe('photosynthesis');
     expect(structured.lessons).toEqual(mockLessonsWithCanonicalUrl);
-    expect(structured.transcripts).toEqual(mockTranscripts);
+    expect(structured.transcripts).toEqual(mockTranscriptsWithCanonicalUrl);
   });
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {

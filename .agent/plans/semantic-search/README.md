@@ -1,23 +1,27 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Phase 1E (Search Foundation) ← **BLOCKING ISSUES** - Must fix before Phase 1C  
+**Status**: Active Implementation - Phase 1E (Search Foundation) ← **ARCHITECTURAL FIX REQUIRED**  
 **Last Updated**: 2025-12-09
 
 ---
 
-## ⚠️ CURRENT BLOCKERS (2025-12-09)
+## ⚠️ CURRENT BLOCKER (2025-12-09)
 
-**Phase 1C (Baseline Metrics) is BLOCKED. Fix these first:**
+**Phase 1C (Baseline Metrics) is BLOCKED until architectural fix is implemented:**
 
-| Issue | Description                                             | Status       |
-| ----- | ------------------------------------------------------- | ------------ |
-| 5.1   | Units missing `key_stage_slug` (all null)               | ❌ NOT FIXED |
-| 5.2   | Missing units from sequence ingestion (Pythagoras/trig) | ❌ NOT FIXED |
-| 5.3   | No fuzzy matching - misspellings return 0 hits          | ❌ NOT FIXED |
-| 5.4   | Thread canonical URL crash                              | ✅ FIXED     |
+| Issue | Description                                              | Status            |
+| ----- | -------------------------------------------------------- | ----------------- |
+| 5.2   | **Lessons API pagination** - only 5 of 36 groups fetched | 🔧 NEEDS ARCH FIX |
+| 5.1   | Units `key_stage` naming (was misdiagnosed)              | ✅ RESOLVED       |
+| 5.3   | No fuzzy matching - misspellings return 0 hits           | ✅ FIXED          |
+| 5.4   | Thread canonical URL crash                               | ✅ FIXED          |
 
-**See `semantic-search.prompt.md` for full details and investigation steps.**
+**Root Cause (Issue 5.2)**: The Oak API `/lessons` endpoint has pagination (limit 100, no offset). It returns only 5 of 36 lesson groups for Maths KS4, so 31 units have ZERO lessons indexed.
+
+**Required Fix**: Derive lessons from unit summaries (`unitLessons` array) instead of the paginated lessons endpoint. See `semantic-search.prompt.md` for detailed implementation plan.
+
+**Cannot re-ingest until this architectural fix is implemented.**
 
 ---
 
@@ -134,22 +138,23 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 
 ### Implementation Phases
 
-| Phase  | Duration  | Focus                     | Status                    | Key Features                            |
-| ------ | --------- | ------------------------- | ------------------------- | --------------------------------------- |
-| **1A** | ✅ Done   | Maths KS4 Ingestion       | ✅ Complete (2025-12-08)  | 173 docs, dense vectors, ELSER          |
-| **1B** | ✅ Done   | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API       |
-| **1D** | ✅ Done   | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices |
-| **--** | ✅ Done   | Blocking Issues           | ✅ Complete (2025-12-09)  | All 12 issues resolved, infra ready     |
-| **1C** | 0.5 days  | Baseline Metrics          | 🟢 READY TO START         | MRR, NDCG@10, zero-hit, latency         |
-| **2**  | 0.5 days  | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient            |
-| **3**  | 0.5-1 day | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data |
-| **4**  | 2-3 days  | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN     |
-| **5**  | 3-4 days  | Entity Extraction & Graph | ⏸️ Future                 | NER models, Graph API, enrich processor |
-| **6**  | 4-5 days  | RAG Infrastructure        | ⏸️ Future                 | ES Playground, semantic_text, chunking  |
-| **7**  | 5-6 days  | Knowledge Graph           | ⏸️ Future                 | Triple store, entity resolution         |
-| **8**  | 3-4 days  | Advanced Features         | ⏸️ Future                 | LTR foundations, multi-vector           |
+| Phase  | Duration   | Focus                     | Status                    | Key Features                                   |
+| ------ | ---------- | ------------------------- | ------------------------- | ---------------------------------------------- |
+| **1A** | ⚠️ Partial | Maths KS4 Ingestion       | ⚠️ NEEDS ARCH FIX         | 100 lessons (should be 500+), pagination issue |
+| **1B** | ✅ Done    | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API              |
+| **1D** | ✅ Done    | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices        |
+| **--** | ✅ Done    | Blocking Issues           | ✅ Complete (2025-12-09)  | 12 schema issues + fuzzy matching fixed        |
+| **1E** | 🔧 Current | Search Foundation         | 🔧 ARCH FIX REQUIRED      | Lessons-from-unit-summaries architecture       |
+| **1C** | 0.5 days   | Baseline Metrics          | ⏸️ BLOCKED (on 1E)        | MRR, NDCG@10, zero-hit, latency                |
+| **2**  | 0.5 days   | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient                   |
+| **3**  | 0.5-1 day  | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data        |
+| **4**  | 2-3 days   | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN            |
+| **5**  | 3-4 days   | Entity Extraction & Graph | ⏸️ Future                 | NER models, Graph API, enrich processor        |
+| **6**  | 4-5 days   | RAG Infrastructure        | ⏸️ Future                 | ES Playground, semantic_text, chunking         |
+| **7**  | 5-6 days   | Knowledge Graph           | ⏸️ Future                 | Triple store, entity resolution                |
+| **8**  | 3-4 days   | Advanced Features         | ⏸️ Future                 | LTR foundations, multi-vector                  |
 
-**Note**: Phases 3+ only proceed after Phase 1C baseline is established and validated.
+**Note**: Phase 1C is BLOCKED until the lessons ingestion architectural fix in Phase 1E is complete.
 
 ---
 
@@ -215,28 +220,36 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
 - NO extraction during ingestion - use static curriculum metadata
 
-### Next: Phase 1C (Baseline Metrics) 🟢 READY TO START
+### Next: Phase 1E (Architectural Fix) 🔧 CURRENT
 
-**Prerequisites** ✅ ALL RESOLVED (2025-12-09):
+**Fixes Completed (2025-12-09)**:
 
-- ✅ Issue 1.1: Added pathway field to unit_rollup schema
-- ✅ Issue 1.2: `extractThreadInfo()` populates thread_slugs/titles/orders
-- ✅ Issue 1.3: Dense vector naming convention documented in TSDoc
-- ✅ Issue 2.1: Added tier, exam_board, pathway to `createLessonFacets()`
-- ✅ Issue 2.2: Created `createUnitFacets()` function
-- ✅ Issue 2.3: Sequence facets documented as future work
-- ✅ Issue 3.1: Subject extraction parameterised via `FetchThreadsOptions`
-- ✅ Issue 3.2: `buildThreadOps` returns `ThreadBulkOperation[]`
-- ✅ Issue 3.3: Pedagogical data included via `createEnrichedRollupText()`
-- ✅ Issue 4.2: Created `src/lib/search-quality/` with ground-truth.ts
-- ✅ Issue 4.3: Implemented MRR and NDCG@10 with TDD (13 unit tests)
+- ✅ Issue 5.4: Thread canonical URL - returns `null`, throws for missing context (fail-fast)
+- ✅ Issue 5.3: Fuzzy matching - added `fuzziness: 'AUTO'` to BM25 queries (TDD)
+- ✅ Issue 5.1: key_stage naming - investigation confirmed code is correct
+- ✅ All tests updated to expect fail-fast behavior (no error swallowing)
+- ✅ All quality gates passing (1,300+ tests)
 
-**Phase 1C Tasks** (Ready to Execute):
+**Architectural Fix Required (Issue 5.2)**:
 
-- 🔄 Create ground truth data using `scripts/discover-lessons.ts`
-- 🔄 Test two-way hybrid search with representative queries
-- 🔄 Establish baseline metrics (MRR, NDCG@10, zero-hit, latency)
-- 🔄 Decide: two-way sufficient vs evaluate three-way
+The Oak API `/lessons` endpoint has pagination (limit 100). It returns only 5 of 36 lesson groups for Maths KS4. This means 31 units have ZERO lessons indexed.
+
+**Solution**: Derive lessons from unit summaries instead of the paginated lessons endpoint.
+
+```
+Current (broken): /lessons endpoint → 5 groups → 100 lessons
+Fixed:            For each unit → unitLessons → /lessons/{slug}/summary → ALL lessons
+```
+
+**Phase 1E Tasks**:
+
+- [ ] Implement lessons-from-unit-summaries architecture (TDD)
+- [ ] Reset ES indices
+- [ ] Re-ingest Maths KS4 with complete lessons
+- [ ] Verify all 36 units have lessons indexed
+- [ ] Verify "Pythagoras theorem" returns correct results
+
+**Then: Phase 1C (Baseline Metrics)** - BLOCKED until Phase 1E complete
 
 ---
 

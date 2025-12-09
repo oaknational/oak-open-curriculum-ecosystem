@@ -166,7 +166,7 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   response: TItem[],
   path: string,
   method: HttpMethod,
-): (TItem & { canonicalUrl?: string })[] {
+): (TItem & { canonicalUrl?: string | null })[] {
   if (method !== 'get') {
     return response;
   }
@@ -185,7 +185,7 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   response: T,
   path: string,
   method: HttpMethod,
-): T & { canonicalUrl?: string } {
+): T & { canonicalUrl?: string | null } {
   if (method !== 'get') {
     return response;
   }
@@ -196,26 +196,33 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   return Object.assign({}, response, extractCanonicalUrlFields(response, path, contentType));
 }
 
+/**
+ * Extracts canonical URL fields from a response
+ * @param response - The response to extract canonical URL fields from
+ * @param path - The path to extract canonical URL fields from
+ * @param contentType - The content type to extract canonical URL fields from
+ * @returns The canonical URL fields for the response, which is null for threads (no website equivalent)
+ * @throws An error if the content type is unsupported or no result is generated
+ *
+ * @todo Refactor to return a Result<string, Error> instead of throwing errors
+ */
 function extractCanonicalUrlFields(
   // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
   response: object,
   path: string,
   contentType: ContentType,
-): { canonicalUrl?: string } {
+): { canonicalUrl: string | null } {
   // Idempotent: preserve existing canonicalUrl
   if ('canonicalUrl' in response && typeof response.canonicalUrl === 'string') {
     return { canonicalUrl: response.canonicalUrl };
   }
   const id = extractIdFromResponse(response, path);
   if (!id) {
-    logger.warn(`Could not extract ID from response`, { path, contentType });
-    return {};
+    const message = `Could not extract ID for path: ${path} from response: ${JSON.stringify(response)}`;
+    logger.error(message);
+    throw new TypeError(message);
   }
   const context = extractContextFromResponse(response);
   const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);
-  if (!canonicalUrl) {
-    logger.warn(`Could not generate canonical URL`, { contentType, id, context });
-    return {};
-  }
   return { canonicalUrl };
 }

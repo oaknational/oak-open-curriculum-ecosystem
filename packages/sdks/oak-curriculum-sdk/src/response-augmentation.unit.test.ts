@@ -78,23 +78,31 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
 
-    it('should omit canonicalUrl when unit context is missing', () => {
+    it('should throw when unit context is missing (fail fast)', () => {
       const response = { slug: 'place-value', title: 'Place Value' };
-      const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(/Missing required context for unit/);
     });
 
-    it('should omit canonicalUrl when unit context is partial', () => {
+    it('should throw when unit context is partial (fail fast)', () => {
       const response = {
         slug: 'place-value',
         title: 'Place Value',
         subjectSlug: 'maths',
         // missing phaseSlug
       };
-      const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
+      }).toThrow(/Missing required context for unit/);
     });
   });
 
@@ -113,22 +121,30 @@ describe('augmentResponseWithCanonicalUrl', () => {
       );
     });
 
-    it('should omit canonicalUrl when subject context is missing', () => {
+    it('should throw when subject context is missing (fail fast)', () => {
       const response = { slug: 'maths', title: 'Maths' };
-      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
     });
 
-    it('should omit canonicalUrl when subject context is empty', () => {
+    it('should throw when subject context is empty (fail fast)', () => {
       const response = {
         slug: 'maths',
         title: 'Maths',
         keyStageSlugs: [],
       };
-      const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
+      }).toThrow(/Missing required context for subject/);
     });
   });
 
@@ -158,11 +174,15 @@ describe('augmentResponseWithCanonicalUrl', () => {
   });
 
   describe('error handling', () => {
-    it('should warn when ID cannot be extracted', () => {
+    it('should throw when ID cannot be extracted (fail fast)', () => {
       const response = { title: 'Some Content' };
-      const result = augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
 
-      expect(result).not.toHaveProperty('canonicalUrl');
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
+      }).toThrow(/Could not extract ID/);
     });
   });
 
@@ -273,10 +293,25 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('should skip items without extractable slug in arrays', () => {
+    it('should throw when array item lacks extractable slug (fail fast)', () => {
       const response = [
         { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
-        { lessonTitle: 'No Slug Lesson' }, // Missing lessonSlug
+        { lessonTitle: 'No Slug Lesson' }, // Missing lessonSlug - invalid data
+        { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
+      ];
+
+      expect(() => {
+        augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+      }).toThrow(TypeError);
+      expect(() => {
+        augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
+      }).toThrow(/Could not extract ID/);
+    });
+
+    it('should augment all items when all have valid slugs', () => {
+      const response = [
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2' },
         { lessonSlug: 'lesson-3', lessonTitle: 'Lesson 3' },
       ];
       const result = augmentArrayResponseWithCanonicalUrl(response, '/search/lessons', 'get');
@@ -284,7 +319,7 @@ describe('augmentResponseWithCanonicalUrl', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(3);
       expect(result[0]).toHaveProperty('canonicalUrl');
-      expect(result[1]).not.toHaveProperty('canonicalUrl');
+      expect(result[1]).toHaveProperty('canonicalUrl');
       expect(result[2]).toHaveProperty('canonicalUrl');
     });
   });
