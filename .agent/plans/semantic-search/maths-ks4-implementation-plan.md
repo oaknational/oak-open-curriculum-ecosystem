@@ -1,7 +1,7 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: Phase 1A Complete ✅ | Phase 1B Complete ✅ | Phase 1D Complete ✅ | Phase 1C Current ⏭️  
+**Status**: Phase 1A Complete ✅ | Phase 1B Complete ✅ | Phase 1D Complete ✅ | Phase 1C NOT STARTED (Blocking Issues)  
 **Priority**: HIGH  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
 
@@ -38,6 +38,29 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 combinatio
 **Phase 3+ - Enhancement**: Elastic Native ReRank, NER entity extraction, RAG, knowledge graph
 
 **Key Principle**: Validate each layer before adding the next.
+
+---
+
+## Known Technical Debt (ALL BLOCKING - Identified 2025-12-09)
+
+The following 12 issues were identified during deep review. **ALL are strategically vital and must be resolved before Phase 1C.**
+
+See full details in `.agent/prompts/semantic-search/semantic-search.prompt.md`.
+
+| ID  | Category     | Issue                                            | Location                        |
+| --- | ------------ | ------------------------------------------------ | ------------------------------- |
+| 1.1 | Schema/Field | Missing `pathway` field in unit_rollup           | `field-definitions/curriculum.ts`, `unit-rollup-overrides.ts` |
+| 1.2 | Schema/Field | `thread_slugs/titles/orders` never populated     | `document-transforms.ts`        |
+| 1.3 | Schema/Field | Dense vector field naming inconsistency          | `lessons-overrides.ts`, `unit-rollup-overrides.ts` |
+| 2.1 | Facets       | Lesson facets missing tier, exam_board, pathway  | `rrf-query-helpers.ts`          |
+| 2.2 | Facets       | No unit facets exist                             | `rrf-query-builders.ts`         |
+| 2.3 | Facets       | Sequence facets defined but unused               | `rrf-query-helpers.ts`          |
+| 3.1 | Data         | Hardcoded `subjectSlugs: ['maths']`              | `thread-bulk-helpers.ts`        |
+| 3.2 | Data         | `buildThreadOps` returns `unknown[]`             | `thread-bulk-helpers.ts`        |
+| 3.3 | Data         | Rollup text missing pedagogical data             | `document-transforms.ts`        |
+| 4.1 | Status       | Phase 1C marked "CURRENT" but not started        | Multiple docs (DONE)            |
+| 4.2 | Status       | Missing search-quality infrastructure            | N/A                             |
+| 4.3 | Status       | Missing IR metrics implementation                | N/A                             |
 
 ---
 
@@ -197,9 +220,20 @@ pathways_available: { type: 'keyword' },
 - ✅ Validated against live ES Serverless (21 results for "pythagoras theorem")
 - ✅ All quality gates passing
 
-### Phase 1C: Baseline Metrics ⏭️ CURRENT
+### Phase 1C: Baseline Metrics ⏸️ NOT STARTED
 
 **Goal**: Establish baseline metrics with **two-way hybrid search (BM25 + ELSER)** before considering additional complexity.
+
+**BLOCKING ISSUES** (Must Resolve First - Identified 2025-12-09):
+
+| ID | Issue | Location | Fix Required |
+|----|-------|----------|--------------|
+| 1.1 | Missing `pathway` field in unit_rollup | `field-definitions/curriculum.ts`, `unit-rollup-overrides.ts` | Add pathway field to schema and overrides |
+| 1.2 | `thread_slugs`, `thread_titles`, `thread_orders` never populated | `document-transforms.ts` | Extract thread data from API response |
+| 3.1 | Hardcoded `subjectSlugs: ['maths']` | `thread-bulk-helpers.ts` line 21 | Dynamic subject extraction |
+| 3.2 | `buildThreadOps` returns `unknown[]` | `thread-bulk-helpers.ts` | Replace with specific type (type broadening violation) |
+| 4.2 | Missing search-quality infrastructure | N/A | Create `e2e-tests/` and `src/lib/search-quality/` directories |
+| 4.3 | Missing IR metrics implementation | N/A | Implement with TDD (write failing tests FIRST) |
 
 **Detailed Implementation Guide**: See `.agent/prompts/semantic-search/semantic-search.prompt.md` for:
 
@@ -2318,7 +2352,23 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - `oak_curriculum_glossary` - mapping + builder ready
 - Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
 
-### Phase 1C: Baseline Metrics ⏭️ CURRENT (0.5 days)
+### Phase 1C: Baseline Metrics ⏸️ NOT STARTED (0.5 days)
+
+**All 12 Issues Must Be Resolved First**:
+
+- [ ] Issue 1.1: Add pathway field to unit_rollup schema
+- [ ] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
+- [ ] Issue 1.3: Document dense vector naming convention in TSDoc
+- [ ] Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
+- [ ] Issue 2.2: Create createUnitFacets() function
+- [ ] Issue 2.3: Document sequence facets as future work
+- [ ] Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
+- [ ] Issue 3.2: Fix buildThreadOps return type from unknown[] to specific type
+- [ ] Issue 3.3: Include pedagogical data in rollup text
+- [ ] Issue 4.2: Create e2e-tests/ and src/lib/search-quality/ directories
+- [ ] Issue 4.3: Implement ground-truth.ts and metrics.ts with TDD (failing tests FIRST)
+
+**Phase 1C Tasks** (After All Issues Resolved):
 
 - [ ] Test two-way hybrid search (BM25 + ELSER) with RRF
 - [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit rate, latency)

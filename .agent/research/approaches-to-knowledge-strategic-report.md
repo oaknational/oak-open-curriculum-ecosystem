@@ -14,7 +14,7 @@ The question is not whether teachers will use AI—**they already are**.
 
 The question is: **Will AI-generated educational content be any good?**
 
-Generic AI tools lack curriculum alignment, pedagogical guardrails, age-appropriate calibration, and educational rigor. They produce plausible-sounding content that may be factually incorrect, developmentally inappropriate, or misaligned with curriculum objectives.
+Generic AI tools lack curriculum alignment, pedagogical guardrails, age-appropriate calibration, and educational rigour. They produce plausible-sounding content that may be factually incorrect, developmentally inappropriate, or misaligned with curriculum objectives.
 
 Oak National Academy has a unique opportunity: to become the **quality infrastructure layer** for educational AI. Not by replacing AI tools teachers already use, but by providing the foundation, traversal mechanisms, and validation systems that ensure AI outputs are pedagogically sound.
 
@@ -113,7 +113,7 @@ Teachers are pragmatists. When a tool saves time and produces acceptable results
 
 This is happening in staffrooms, on commutes, and late at night. It's individual teachers solving immediate problems with the tools at hand.
 
-### The Problem: Generic AI Lacks Educational Rigor
+### The Problem: Generic AI Lacks Educational Rigour
 
 When a teacher asks ChatGPT for a Year 7 lesson on fractions, the AI doesn't know:
 
@@ -467,7 +467,7 @@ Consider the periodic table: ~118 elements combine to form all known matter. Wha
 Map UK KS4 Pythagoras lesson to atomic concepts:
 `[SPATIAL_RELATIONSHIP: 0.9, APPLY: 0.8, PATTERN: 0.6]`
 
-Search Indian CBSE curriculum by the same pattern → find equivalent content.
+Search Indian CBSE (Central Board of Secondary Education) curriculum by the same pattern → find equivalent content.
 
 **Universal search**
 

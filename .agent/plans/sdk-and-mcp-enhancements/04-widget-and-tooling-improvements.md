@@ -569,3 +569,4 @@ All changes comply with:
 - Schema-first principles (types flow from OpenAPI spec)
 - TDD methodology (RED → GREEN → REFACTOR)
 - Project testing strategy (unit tests for pure functions, Playwright for widget behaviour)
+

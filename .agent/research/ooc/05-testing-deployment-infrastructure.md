@@ -995,3 +995,4 @@ export async function GET() {
    - Move from serverless to Kubernetes
    - Better control over resources
    - Custom runtime optimization
+

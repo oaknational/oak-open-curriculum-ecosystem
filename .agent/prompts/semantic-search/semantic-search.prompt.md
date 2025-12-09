@@ -2,13 +2,13 @@
 
 **Git Version**: See `git log` for commit history  
 **Purpose**: Quick start for Maths KS4 semantic search implementation  
-**Status**: Phase 1B Complete ✅ - Ready for Baseline Metrics
+**Status**: Phase 1D Complete ✅ - Ready for Baseline Metrics (Phase 1C NOT STARTED)
 
 ---
 
 ## Quick Start
 
-**Current Phase**: Baseline Metrics (Phase 1C) ← CURRENT
+**Current Phase**: Baseline Metrics (Phase 1C) ← NOT STARTED
 
 **Implementation Status**:
 
@@ -31,7 +31,8 @@
    - ✅ Reference index mappings generated (`oak_ref_subjects`, `oak_ref_key_stages`, `oak_curriculum_glossary`)
    - ✅ Reference document builders implemented with TDD
 
-4. **Phase 1C: Baseline Metrics** ← CURRENT
+4. **Phase 1C: Baseline Metrics** ← NOT STARTED
+   - Create `e2e-tests/` and `src/lib/search-quality/` directories
    - Establish baseline with two-way hybrid (BM25 + ELSER)
    - Calculate MRR, NDCG@10, zero-hit rate, latency
    - Duration: 0.5-1 day
@@ -120,6 +121,52 @@
 - [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit, latency)
 - [ ] Decide: two-way sufficient OR evaluate three-way
 
+---
+
+## Known Issues Requiring Resolution
+
+The following issues were identified during deep review (2025-12-09) and must be addressed before proceeding with Phase 1C or later phases.
+
+### Category 1: Schema/Field Issues
+
+| ID  | Issue                                                                        | Location                                                                                                                                                | Fix Required                                                                |
+| --- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| 1.1 | Missing `pathway` field in unit_rollup                                       | `field-definitions/curriculum.ts`, `unit-rollup-overrides.ts`                                                                                           | Add pathway field to UNIT_ROLLUP_INDEX_FIELDS and overrides                 |
+| 1.2 | `thread_slugs`, `thread_titles`, `thread_orders` defined but never populated | `document-transforms.ts`                                                                                                                                | Extract thread data from API response and populate in unit rollup documents |
+| 1.3 | Dense vector field naming inconsistency                                      | `lessons-overrides.ts` has `lesson_dense_vector` and `title_dense_vector`; `unit-rollup-overrides.ts` has `unit_dense_vector` and `rollup_dense_vector` | Document convention in TSDoc comments                                       |
+
+### Category 2: Aggregation/Facet Issues
+
+| ID  | Issue                                           | Location                                      | Fix Required                                                   |
+| --- | ----------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------- |
+| 2.1 | Lesson facets missing tier, exam_board, pathway | `rrf-query-helpers.ts` createLessonFacets()   | Add aggregations for these fields                              |
+| 2.2 | No unit facets exist                            | `rrf-query-builders.ts` buildUnitRrfRequest() | Create createUnitFacets() function and add to unit RRF builder |
+| 2.3 | Sequence facets defined but unused              | `rrf-query-helpers.ts` createSequenceFacets() | Document as future work in plans                               |
+
+### Category 3: Data Integrity Issues
+
+| ID  | Issue                                | Location                                    | Fix Required                                                                  |
+| --- | ------------------------------------ | ------------------------------------------- | ----------------------------------------------------------------------------- |
+| 3.1 | Hardcoded `subjectSlugs: ['maths']`  | `thread-bulk-helpers.ts` line 21            | Dynamic subject extraction from thread data                                   |
+| 3.2 | `buildThreadOps` returns `unknown[]` | `thread-bulk-helpers.ts`                    | Replace with specific type from schema (type broadening violation)            |
+| 3.3 | Rollup text missing pedagogical data | `document-transforms.ts` createRollupText() | Include unit-level prior knowledge, key concepts, national curriculum content |
+
+### Category 4: Phase/Status Issues
+
+| ID  | Issue                                     | Location      | Fix Required                                                                                      |
+| --- | ----------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
+| 4.1 | Phase 1C marked "CURRENT" but not started | Multiple docs | Change status to NOT STARTED (DONE in this update)                                                |
+| 4.2 | Missing search-quality infrastructure     | N/A           | Create `e2e-tests/` and `src/lib/search-quality/` directories with ground-truth.ts and metrics.ts |
+| 4.3 | Missing IR metrics implementation         | N/A           | Implement per TDD approach (write failing tests FIRST)                                            |
+
+### All Issues Are Blocking
+
+**All 12 issues are strategically vital and must be resolved before Phase 1C can proceed.**
+
+Issue IDs: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3
+
+---
+
 ### ES Serverless Status
 
 **Deployment**: Elasticsearch Serverless operational (ES 8.11.0)  
@@ -139,9 +186,11 @@
 
 ## Next Steps
 
-### Phase 1C: Establish Baseline Metrics ← CURRENT
+### Phase 1C: Establish Baseline Metrics ← NOT STARTED
 
 **Goal**: Measure two-way hybrid (BM25 + ELSER) search quality.
+
+**BLOCKING**: Before starting Phase 1C, resolve ALL 12 Known Issues (1.1-1.3, 2.1-2.3, 3.1-3.3, 4.2-4.3) listed in the Known Issues section above.
 
 **📖 MUST READ**: See **`.agent/plans/semantic-search/reference-ir-metrics-guide.md`** for:
 
@@ -424,7 +473,23 @@ pnpm es:status  # Check ES connection and indexes
 - [x] Validated two-way hybrid search against live ES Serverless
 - [x] All quality gates passing
 
-### Phase 1C: Baseline Metrics ← CURRENT
+### Phase 1C: Baseline Metrics ← NOT STARTED
+
+**Prerequisites** (All 12 Issues Must Be Resolved First):
+
+- [ ] Issue 1.1: Add pathway field to unit_rollup schema
+- [ ] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
+- [ ] Issue 1.3: Document dense vector naming convention in TSDoc
+- [ ] Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
+- [ ] Issue 2.2: Create createUnitFacets() function
+- [ ] Issue 2.3: Document sequence facets as future work
+- [ ] Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
+- [ ] Issue 3.2: Fix buildThreadOps return type from unknown[] to specific type
+- [ ] Issue 3.3: Include pedagogical data in rollup text
+- [ ] Issue 4.2: Create e2e-tests/ and src/lib/search-quality/ directories
+- [ ] Issue 4.3: Implement ground-truth.ts and metrics.ts with TDD
+
+**Phase 1C Tasks**:
 
 - [ ] Two-way hybrid baseline metrics established
 - [ ] MRR, NDCG@10, zero-hit rate, latency measured

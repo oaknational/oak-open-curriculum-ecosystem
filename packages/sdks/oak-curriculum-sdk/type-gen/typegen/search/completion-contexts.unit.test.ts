@@ -99,3 +99,4 @@ describe('CompletionContextName type', () => {
     expect(contexts).toHaveLength(2);
   });
 });
+

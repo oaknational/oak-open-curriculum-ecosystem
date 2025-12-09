@@ -68,3 +68,4 @@ export interface FieldDefinition {
  * ```
  */
 export type IndexFieldDefinitions = readonly FieldDefinition[];
+

@@ -110,3 +110,4 @@ export interface RawEndpoint {
   readonly errors?: readonly unknown[];
   readonly parameters?: readonly unknown[];
 }
+
