@@ -76,7 +76,9 @@ function dispatcherSection(): string {
   if (type === 'sequence') return urlForSequence(slug);
   if (type === 'unit') return urlForUnit(slug, context?.unit);
   if (type === 'subject') return urlForSubject(slug, context?.subject?.keyStageSlugs);
-  throw new TypeError('Unsupported content type: ' + String(type));
+  // Threads are data concepts without canonical URLs - return undefined
+  if (type === 'thread') return undefined;
+  throw new TypeError('Canonical URL with context generation failed: Unsupported content type: ' + String(type));
 }
 `;
 }
@@ -99,7 +101,9 @@ export function generateUrlHelpers(): string {
   if (type === 'subject') {
     return urlForSubject(slug, context?.subject?.keyStageSlugs);
   }
-  throw new TypeError('Unsupported content type: ' + String(type));
+  // Threads are data concepts without canonical URLs - return undefined
+  if (type === 'thread') return undefined;
+  throw new TypeError('Canonical URL generation failed: Unsupported content type: ' + String(type));
 }`;
   return [
     headerSection(),

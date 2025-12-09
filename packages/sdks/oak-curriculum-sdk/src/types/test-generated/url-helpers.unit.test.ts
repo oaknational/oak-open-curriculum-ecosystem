@@ -63,13 +63,9 @@ describe('generateCanonicalUrl', () => {
     expect(url).toBeUndefined();
   });
 
-  it('should throw TypeError for unsupported content type (thread)', () => {
-    expect(() => {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    }).toThrow(TypeError);
-    expect(() => {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    }).toThrow('Unsupported content type: thread');
+  it('should return undefined for thread (threads are data concepts without canonical URLs)', () => {
+    const url = generateCanonicalUrl('thread', 'thread:number-multiplication-division');
+    expect(url).toBeUndefined();
   });
 });
 
@@ -112,68 +108,28 @@ describe('generateCanonicalUrlWithContext', () => {
     expect(url).toBeUndefined();
   });
 
-  it('should throw TypeError for unsupported content type (thread)', () => {
-    expect(() => {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    }).toThrow(TypeError);
-    expect(() => {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    }).toThrow('Unsupported content type: thread');
+  it('should return undefined for thread (threads are data concepts without canonical URLs)', () => {
+    const url = generateCanonicalUrlWithContext('thread', 'thread:number-multiplication-division');
+    expect(url).toBeUndefined();
   });
 });
 
 describe('Behavioral consistency between functions', () => {
-  const unsupportedTypes: ContentType[] = ['thread'];
+  it('both functions should return undefined for threads (data concepts without URLs)', () => {
+    const url1 = generateCanonicalUrl('thread', 'thread:algebra');
+    const url2 = generateCanonicalUrlWithContext('thread', 'thread:algebra');
 
-  unsupportedTypes.forEach((type) => {
-    it(`both functions should throw TypeError for unsupported type: ${type}`, () => {
-      // generateCanonicalUrl should throw
-      expect(() => {
-        generateCanonicalUrl(type, `${type}:123`);
-      }).toThrow(TypeError);
-
-      // generateCanonicalUrlWithContext should throw (SAME BEHAVIOR)
-      expect(() => {
-        generateCanonicalUrlWithContext(type, `${type}:123`);
-      }).toThrow(TypeError);
-    });
-  });
-
-  it('both functions should have identical error messages for unsupported types', () => {
-    let error1: Error | undefined;
-    let error2: Error | undefined;
-
-    try {
-      generateCanonicalUrl('thread' as ContentType, 'thread:123');
-    } catch (e) {
-      error1 = e as Error;
-    }
-
-    try {
-      generateCanonicalUrlWithContext('thread' as ContentType, 'thread:123');
-    } catch (e) {
-      error2 = e as Error;
-    }
-
-    expect(error1).toBeDefined();
-    expect(error2).toBeDefined();
-    expect(error1?.message).toBe(error2?.message);
-    expect(error1?.constructor).toBe(TypeError);
-    expect(error2?.constructor).toBe(TypeError);
+    expect(url1).toBeUndefined();
+    expect(url2).toBeUndefined();
   });
 });
 
 describe('CONTENT_TYPE_PREFIXES coverage', () => {
-  it('should document which content types are supported vs unsupported', () => {
+  it('all content types return valid URL or undefined (no throws for known types)', () => {
     const allTypes: ContentType[] = ['lesson', 'sequence', 'unit', 'subject', 'thread'];
-    const supportedTypes: ContentType[] = ['lesson', 'sequence', 'unit', 'subject'];
-    const unsupportedTypes: ContentType[] = ['thread'];
 
-    // Verify our lists cover all types
-    expect([...supportedTypes, ...unsupportedTypes].sort()).toEqual(allTypes.sort());
-
-    // Verify supported types work - they don't throw
-    supportedTypes.forEach((type) => {
+    // All known content types should not throw - they either return a URL or undefined
+    allTypes.forEach((type) => {
       expect(() => {
         generateCanonicalUrl(type, `${type}:test-123`, {
           unit: { subjectSlug: 'maths', phaseSlug: 'primary' },
@@ -181,12 +137,13 @@ describe('CONTENT_TYPE_PREFIXES coverage', () => {
         });
       }).not.toThrow();
     });
+  });
 
-    // Verify unsupported types throw
-    unsupportedTypes.forEach((type) => {
-      expect(() => {
-        generateCanonicalUrl(type, `${type}:test-123`);
-      }).toThrow(TypeError);
-    });
+  it('types with required context return undefined when context is missing', () => {
+    // These types need context to generate a URL
+    expect(generateCanonicalUrl('unit', 'unit:test-123')).toBeUndefined();
+    expect(generateCanonicalUrl('subject', 'subject:test-123')).toBeUndefined();
+    // Threads never have URLs regardless of context
+    expect(generateCanonicalUrl('thread', 'thread:test-123')).toBeUndefined();
   });
 });
