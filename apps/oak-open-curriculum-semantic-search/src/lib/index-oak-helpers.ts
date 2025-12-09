@@ -17,6 +17,7 @@ import {
   buildLessonDocuments,
   buildRollupDocuments,
   buildUnitDocuments,
+  deriveLessonGroupsFromUnitSummaries,
 } from './indexing/index-bulk-helpers';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { sandboxLogger } from './logger';
@@ -33,32 +34,33 @@ export interface PairBuildContext {
   readonly dataIntegrityReport: DataIntegrityReport;
 }
 
-/** Unit and lesson group types for pair data. */
+/** Unit type for pair data. */
 export type PairUnits = readonly { unitSlug: string; unitTitle: string }[];
-export type PairGroups = readonly {
-  unitSlug: string;
-  unitTitle: string;
-  lessons: { lessonSlug: string; lessonTitle: string }[];
-}[];
 
-/** Fetch units and lessons for a subject/keystage pair. */
+/**
+ * Fetch units for a subject/keystage pair.
+ *
+ * **Note**: Lesson groups are no longer fetched here because the Oak API
+ * `/key-stages/{ks}/subject/{subject}/lessons` endpoint has pagination
+ * (limit 100) and returns incomplete data. Instead, lesson groups are
+ * derived from unit summaries after they are fetched, which provides
+ * complete lesson coverage.
+ *
+ * @see deriveLessonGroupsFromUnitSummaries
+ */
 export async function fetchPairData(
   client: OakClient,
   ks: KeyStage,
   subject: SearchSubjectSlug,
-): Promise<{ units: PairUnits; groups: PairGroups }> {
-  sandboxLogger.debug('Fetching units and lessons', { subject, keyStage: ks });
-  const [units, groups] = await Promise.all([
-    client.getUnitsByKeyStageAndSubject(ks, subject),
-    client.getLessonsByKeyStageAndSubject(ks, subject),
-  ]);
-  sandboxLogger.debug('Found units and lessons', {
+): Promise<{ units: PairUnits }> {
+  sandboxLogger.debug('Fetching units', { subject, keyStage: ks });
+  const units = await client.getUnitsByKeyStageAndSubject(ks, subject);
+  sandboxLogger.debug('Found units', {
     subject,
     keyStage: ks,
     units: units.length,
-    lessonGroups: groups.length,
   });
-  return { units, groups };
+  return { units };
 }
 
 /** Generate subject programmes URL, throws if unavailable. */
@@ -70,22 +72,15 @@ function getSubjectProgrammesUrl(subject: SearchSubjectSlug, ks: KeyStage): stri
   return url;
 }
 
-/** Build unit, lesson, and rollup operations with progress logging. */
-async function buildCoreDocumentOps(
+/** Build unit documents and return summaries for lesson derivation. */
+async function buildUnitsWithSummaries(
   context: PairBuildContext,
   units: PairUnits,
-  groups: PairGroups,
   subjectProgrammesUrl: string,
-): Promise<{
-  unitOps: unknown[];
-  lessonOps: unknown[];
-  rollupOps: unknown[];
-  unitSummaries: Map<string, unknown>;
-}> {
-  const { client, esClient, ks, subject, dataIntegrityReport } = context;
-
+): Promise<{ unitSummaries: Map<string, unknown>; unitOps: unknown[] }> {
+  const { client, ks, subject, dataIntegrityReport } = context;
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
-  const { unitSummaries, unitOps } = await buildUnitDocuments(
+  const result = await buildUnitDocuments(
     client,
     units,
     subject,
@@ -93,10 +88,29 @@ async function buildCoreDocumentOps(
     subjectProgrammesUrl,
     dataIntegrityReport,
   );
-  sandboxLogger.debug('Built unit docs', { subject, keyStage: ks, count: unitOps.length / 2 });
+  sandboxLogger.debug('Built unit docs', {
+    subject,
+    keyStage: ks,
+    count: result.unitOps.length / 2,
+  });
+  return result;
+}
 
+/** Build lesson documents from derived groups. */
+async function buildLessonsFromSummaries(
+  context: PairBuildContext,
+  unitSummaries: Map<string, unknown>,
+): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
+  const { client, esClient, ks, subject, dataIntegrityReport } = context;
+  const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
+  sandboxLogger.debug('Derived lesson groups from unit summaries', {
+    subject,
+    keyStage: ks,
+    lessonGroups: groups.length,
+    totalLessons: groups.reduce((sum, g) => sum + g.lessons.length, 0),
+  });
   sandboxLogger.debug('Building lesson documents', { subject, keyStage: ks });
-  const { lessonOps, rollupSnippets } = await buildLessonDocuments(
+  const result = await buildLessonDocuments(
     client,
     esClient,
     groups,
@@ -105,7 +119,32 @@ async function buildCoreDocumentOps(
     ks,
     dataIntegrityReport,
   );
-  sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: lessonOps.length / 2 });
+  sandboxLogger.debug('Built lesson docs', {
+    subject,
+    keyStage: ks,
+    count: result.lessonOps.length / 2,
+  });
+  return result;
+}
+
+/** Build unit, lesson, and rollup operations with progress logging. */
+async function buildCoreDocumentOps(
+  context: PairBuildContext,
+  units: PairUnits,
+  subjectProgrammesUrl: string,
+): Promise<{
+  unitOps: unknown[];
+  lessonOps: unknown[];
+  rollupOps: unknown[];
+  unitSummaries: Map<string, unknown>;
+}> {
+  const { esClient, ks, subject } = context;
+  const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
+    context,
+    units,
+    subjectProgrammesUrl,
+  );
+  const { lessonOps, rollupSnippets } = await buildLessonsFromSummaries(context, unitSummaries);
 
   sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
   const rollupOps = await buildRollupDocuments(
@@ -121,11 +160,15 @@ async function buildCoreDocumentOps(
   return { unitOps, lessonOps, rollupOps, unitSummaries };
 }
 
-/** Build all document operations for a subject/keystage pair. */
+/**
+ * Build all document operations for a subject/keystage pair.
+ *
+ * Lesson groups are derived internally from unit summaries, ensuring
+ * complete lesson coverage regardless of Oak API pagination limits.
+ */
 export async function buildPairDocuments(
   context: PairBuildContext,
   units: PairUnits,
-  groups: PairGroups,
 ): Promise<unknown[]> {
   const { ks, subject, subjectSequences, sequenceSources } = context;
   const subjectProgrammesUrl = getSubjectProgrammesUrl(subject, ks);
@@ -133,7 +176,6 @@ export async function buildPairDocuments(
   const { unitOps, lessonOps, rollupOps, unitSummaries } = await buildCoreDocumentOps(
     context,
     units,
-    groups,
     subjectProgrammesUrl,
   );
 

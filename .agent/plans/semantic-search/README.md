@@ -1,27 +1,26 @@
 # Semantic Search Planning Documents
 
 **Git Version**: See `git log` for commit history  
-**Status**: Active Implementation - Phase 1E (Search Foundation) ← **ARCHITECTURAL FIX REQUIRED**  
+**Status**: Phase 1E ✅ COMPLETE | Phase 1C 🟢 READY TO START  
 **Last Updated**: 2025-12-09
 
 ---
 
-## ⚠️ CURRENT BLOCKER (2025-12-09)
+## ✅ ARCHITECTURAL FIX COMPLETE (2025-12-09)
 
-**Phase 1C (Baseline Metrics) is BLOCKED until architectural fix is implemented:**
+**All blocking issues resolved. Phase 1C (Baseline Metrics) is now UNBLOCKED.**
 
-| Issue | Description                                              | Status            |
-| ----- | -------------------------------------------------------- | ----------------- |
-| 5.2   | **Lessons API pagination** - only 5 of 36 groups fetched | 🔧 NEEDS ARCH FIX |
-| 5.1   | Units `key_stage` naming (was misdiagnosed)              | ✅ RESOLVED       |
-| 5.3   | No fuzzy matching - misspellings return 0 hits           | ✅ FIXED          |
-| 5.4   | Thread canonical URL crash                               | ✅ FIXED          |
+| Issue | Description                                              | Status                |
+| ----- | -------------------------------------------------------- | --------------------- |
+| 5.2   | **Lessons API pagination** - only 5 of 36 groups fetched | ✅ FIXED (2025-12-09) |
+| 5.1   | Units `key_stage` naming (was misdiagnosed)              | ✅ RESOLVED           |
+| 5.3   | No fuzzy matching - misspellings return 0 hits           | ✅ FIXED              |
+| 5.4   | Thread canonical URL crash                               | ✅ FIXED              |
+| 5.5   | Sequence canonical URL generation in SDK                 | ✅ FIXED (2025-12-09) |
 
-**Root Cause (Issue 5.2)**: The Oak API `/lessons` endpoint has pagination (limit 100, no offset). It returns only 5 of 36 lesson groups for Maths KS4, so 31 units have ZERO lessons indexed.
+**Solution Implemented**: Created `deriveLessonGroupsFromUnitSummaries()` function to derive lessons from complete unit summaries instead of the paginated `/lessons` endpoint.
 
-**Required Fix**: Derive lessons from unit summaries (`unitLessons` array) instead of the paginated lessons endpoint. See `semantic-search.prompt.md` for detailed implementation plan.
-
-**Cannot re-ingest until this architectural fix is implemented.**
+**Result**: **314 lessons** now indexed (up from ~100), covering all 36 Maths KS4 units.
 
 ---
 
@@ -138,47 +137,44 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 
 ### Implementation Phases
 
-| Phase  | Duration   | Focus                     | Status                    | Key Features                                   |
-| ------ | ---------- | ------------------------- | ------------------------- | ---------------------------------------------- |
-| **1A** | ⚠️ Partial | Maths KS4 Ingestion       | ⚠️ NEEDS ARCH FIX         | 100 lessons (should be 500+), pagination issue |
-| **1B** | ✅ Done    | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API              |
-| **1D** | ✅ Done    | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices        |
-| **--** | ✅ Done    | Blocking Issues           | ✅ Complete (2025-12-09)  | 12 schema issues + fuzzy matching fixed        |
-| **1E** | 🔧 Current | Search Foundation         | 🔧 ARCH FIX REQUIRED      | Lessons-from-unit-summaries architecture       |
-| **1C** | 0.5 days   | Baseline Metrics          | ⏸️ BLOCKED (on 1E)        | MRR, NDCG@10, zero-hit, latency                |
-| **2**  | 0.5 days   | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient                   |
-| **3**  | 0.5-1 day  | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data        |
-| **4**  | 2-3 days   | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN            |
-| **5**  | 3-4 days   | Entity Extraction & Graph | ⏸️ Future                 | NER models, Graph API, enrich processor        |
-| **6**  | 4-5 days   | RAG Infrastructure        | ⏸️ Future                 | ES Playground, semantic_text, chunking         |
-| **7**  | 5-6 days   | Knowledge Graph           | ⏸️ Future                 | Triple store, entity resolution                |
-| **8**  | 3-4 days   | Advanced Features         | ⏸️ Future                 | LTR foundations, multi-vector                  |
-
-**Note**: Phase 1C is BLOCKED until the lessons ingestion architectural fix in Phase 1E is complete.
+| Phase  | Duration  | Focus                     | Status                    | Key Features                             |
+| ------ | --------- | ------------------------- | ------------------------- | ---------------------------------------- |
+| **1A** | ✅ Done   | Maths KS4 Ingestion       | ✅ Complete (2025-12-09)  | 314 lessons, 36 units, 201 threads       |
+| **1B** | ✅ Done   | RRF API Update            | ✅ Complete (2025-12-08)  | Updated to ES 8.11+ retriever API        |
+| **1D** | ✅ Done   | Missing Indices Fix       | ✅ Complete (2025-12-09)  | oak_threads, oak_sequences, ref indices  |
+| **--** | ✅ Done   | Blocking Issues           | ✅ Complete (2025-12-09)  | 12 schema issues + fuzzy matching fixed  |
+| **1E** | ✅ Done   | Search Foundation         | ✅ Complete (2025-12-09)  | Lessons-from-unit-summaries architecture |
+| **1C** | 0.5 days  | Baseline Metrics          | 🟢 **READY TO START**     | MRR, NDCG@10, zero-hit, latency          |
+| **2**  | 0.5 days  | Evaluate Three-Way        | 🔵 Optional (if 1C fails) | Only if two-way insufficient             |
+| **3**  | 0.5-1 day | Reference Index Data      | ⏸️ Future                 | Populate ref indices from ontology data  |
+| **4**  | 2-3 days  | Relevance Enhancement     | ⏸️ Future                 | Elastic Native ReRank, filtered kNN      |
+| **5**  | 3-4 days  | Entity Extraction & Graph | ⏸️ Future                 | NER models, Graph API, enrich processor  |
+| **6**  | 4-5 days  | RAG Infrastructure        | ⏸️ Future                 | ES Playground, semantic_text, chunking   |
+| **7**  | 5-6 days  | Knowledge Graph           | ⏸️ Future                 | Triple store, entity resolution          |
+| **8**  | 3-4 days  | Advanced Features         | ⏸️ Future                 | LTR foundations, multi-vector            |
 
 ---
 
 ## Current System State
 
-**Last verified**: 2025-12-08 (See `git log` for latest updates)
+**Last verified**: 2025-12-09
 
-### Phase 1A Complete ✅
+### Maths KS4 Ingestion ✅ COMPLETE (2025-12-09)
 
-**Maths KS4 Ingestion** (2025-12-08):
+| Index             | Document Count | Status |
+| ----------------- | -------------- | ------ |
+| `oak_lessons`     | **314**        | ✅     |
+| `oak_units`       | 36             | ✅     |
+| `oak_unit_rollup` | 244            | ✅     |
+| `oak_threads`     | 201            | ✅     |
+| `oak_sequences`   | 2              | ✅     |
+| **Total**         | **~799**       | ✅     |
 
-- ✅ **100 lessons** indexed with ELSER semantic_text
-- ✅ **36 units** indexed
-- ✅ **36 unit rollups** indexed with dense vectors
-- ✅ **1 sequence facet** indexed
-- ✅ **Total: 173 documents**
-- ✅ Dense vectors generated successfully (384-dim E5)
-- ✅ Basic BM25 search validated
-- ✅ All ES mappings compatible with app definitions
-- ℹ️ Programme factors defined but not populated (expected)
+**Key Achievement**: All 36 Maths KS4 units now have their lessons indexed (up from only 5 groups/~100 lessons).
 
 **Infrastructure Complete**:
 
-- ✅ ES Serverless deployed (ES 8.11.0) with 6 indexes
+- ✅ ES Serverless deployed (ES 8.11.0) with 7 indexes
 - ✅ ELSER sparse embeddings configured (`.elser-2-elasticsearch`)
 - ✅ Dense vector generation working (`.multilingual-e5-small-elasticsearch`)
 - ✅ SDK rate limiting (5 req/sec, ADR-070)
@@ -189,8 +185,9 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - ✅ Two-way RRF query builders (BM25 + ELSER) - **updated to `retriever` API**
 - ✅ Three-way RRF query builders (BM25 + ELSER + Dense) - **updated to `retriever` API**
 - ✅ Tier, exam_board, pathway field extraction
+- ✅ Lessons derived from unit summaries (not paginated API)
 - ✅ ADRs 071-074 written
-- ✅ All 11 quality gates passing (1,265+ tests)
+- ✅ All 11 quality gates passing (1,300+ tests)
 
 ### Phase 1B Complete ✅ (2025-12-08)
 
@@ -220,42 +217,39 @@ Create a **production-ready demo** of ES Serverless capabilities using Maths KS4
 - Data source: `ontology-data.ts` and `knowledge-graph-data.ts`
 - NO extraction during ingestion - use static curriculum metadata
 
-### Next: Phase 1E (Architectural Fix) 🔧 CURRENT
+### Phase 1E Complete ✅ (2025-12-09)
 
-**Fixes Completed (2025-12-09)**:
+**All Search Foundation Issues Resolved**:
 
 - ✅ Issue 5.4: Thread canonical URL - returns `null`, throws for missing context (fail-fast)
 - ✅ Issue 5.3: Fuzzy matching - added `fuzziness: 'AUTO'` to BM25 queries (TDD)
 - ✅ Issue 5.1: key_stage naming - investigation confirmed code is correct
+- ✅ Issue 5.2: Lessons API pagination - implemented `deriveLessonGroupsFromUnitSummaries()`
+- ✅ Issue 5.5: Sequence canonical URL - fixed `isSingleEntityEndpoint()` in SDK
 - ✅ All tests updated to expect fail-fast behavior (no error swallowing)
+- ✅ ES indices reset and re-ingested with complete lessons
 - ✅ All quality gates passing (1,300+ tests)
 
-**Architectural Fix Required (Issue 5.2)**:
+**Result**: 314 lessons indexed from all 36 units (was 100 from 5 groups).
 
-The Oak API `/lessons` endpoint has pagination (limit 100). It returns only 5 of 36 lesson groups for Maths KS4. This means 31 units have ZERO lessons indexed.
+### Next: Phase 1C (Baseline Metrics) 🟢 READY TO START
 
-**Solution**: Derive lessons from unit summaries instead of the paginated lessons endpoint.
+**Goal**: Establish baseline metrics with two-way hybrid search.
 
-```
-Current (broken): /lessons endpoint → 5 groups → 100 lessons
-Fixed:            For each unit → unitLessons → /lessons/{slug}/summary → ALL lessons
-```
+**Prerequisites** ✅ ALL COMPLETE
 
-**Phase 1E Tasks**:
+**Phase 1C Tasks**:
 
-- [ ] Implement lessons-from-unit-summaries architecture (TDD)
-- [ ] Reset ES indices
-- [ ] Re-ingest Maths KS4 with complete lessons
-- [ ] Verify all 36 units have lessons indexed
-- [ ] Verify "Pythagoras theorem" returns correct results
-
-**Then: Phase 1C (Baseline Metrics)** - BLOCKED until Phase 1E complete
+- [ ] Create ground truth data for Maths KS4 queries
+- [ ] Run two-way hybrid search tests
+- [ ] Measure MRR, NDCG@10, zero-hit rate, latency
+- [ ] Decision: two-way sufficient OR evaluate three-way
 
 ---
 
 ## Technical Debt Resolved ✅ (2025-12-09)
 
-All 12 blocking issues identified during deep review have been resolved. Phase 1C can now proceed.
+All 16 blocking issues identified during deep review have been resolved.
 
 | ID  | Category     | Issue                                           | Status                                                       |
 | --- | ------------ | ----------------------------------------------- | ------------------------------------------------------------ |
@@ -271,6 +265,11 @@ All 12 blocking issues identified during deep review have been resolved. Phase 1
 | 4.1 | Status       | Phase 1C marked "CURRENT" but not started       | ✅ Status corrected in all documents                         |
 | 4.2 | Status       | Missing search-quality infrastructure           | ✅ Created `src/lib/search-quality/` with types and exports  |
 | 4.3 | Status       | Missing IR metrics implementation               | ✅ MRR and NDCG@10 implemented with TDD (13 unit tests)      |
+| 5.1 | Search       | Units key_stage naming                          | ✅ Confirmed correct field name used                         |
+| 5.2 | Search       | Lessons API pagination (100 limit)              | ✅ `deriveLessonGroupsFromUnitSummaries()` implemented       |
+| 5.3 | Search       | No fuzzy matching configured                    | ✅ Added `fuzziness: 'AUTO'` to BM25 queries                 |
+| 5.4 | Generator    | Thread canonical URL crash                      | ✅ Returns `null` for threads, throws for missing context    |
+| 5.5 | SDK          | Sequence canonical URL generation               | ✅ Fixed `isSingleEntityEndpoint()` check order              |
 
 ---
 
@@ -326,9 +325,9 @@ pnpm smoke:dev:stub
 
 ## Success Criteria
 
-### Phase 1A: Data Ingestion ✅ COMPLETE
+### Phase 1A: Data Ingestion ✅ COMPLETE (2025-12-09)
 
-- [x] Maths KS4 ingested (100 lessons, 36 units, 36 rollups)
+- [x] Maths KS4 ingested (**314 lessons**, 36 units, 244 rollups, 201 threads)
 - [x] Dense vectors generated
 - [x] Basic BM25 search validated
 - [x] All quality gates passing
@@ -353,21 +352,24 @@ pnpm smoke:dev:stub
 - [x] Reference document builders implemented
 - [x] All quality gates passing
 
-### Phase 1C: Baseline Metrics ← READY TO START
+### Phase 1E: Search Foundation ✅ COMPLETE (2025-12-09)
+
+- [x] Issue 5.1: key_stage naming confirmed correct
+- [x] Issue 5.2: Lessons-from-unit-summaries architecture implemented
+- [x] Issue 5.3: Fuzzy matching configured
+- [x] Issue 5.4: Thread canonical URL fixed
+- [x] Issue 5.5: Sequence canonical URL fixed
+- [x] ES indices reset and re-ingested
+- [x] 314 lessons indexed (all 36 units)
+- [x] All quality gates passing
+
+### Phase 1C: Baseline Metrics 🟢 READY TO START
 
 **Prerequisites** ✅ ALL RESOLVED (2025-12-09):
 
-- [x] Issue 1.1: Add pathway field to unit_rollup schema
-- [x] Issue 1.2: Populate thread_slugs/titles/orders in unit rollup documents
-- [x] Issue 1.3: Document dense vector naming convention in TSDoc
-- [x] Issue 2.1: Add tier, exam_board, pathway to createLessonFacets()
-- [x] Issue 2.2: Create createUnitFacets() function
-- [x] Issue 2.3: Document sequence facets as future work
-- [x] Issue 3.1: Replace hardcoded ['maths'] with dynamic subject extraction
-- [x] Issue 3.2: Fix buildThreadOps return type from unknown[]
-- [x] Issue 3.3: Include pedagogical data in rollup text
-- [x] Issue 4.2: Create src/lib/search-quality/ directory with ground-truth.ts
-- [x] Issue 4.3: Implement metrics.ts with TDD (MRR and NDCG@10)
+- [x] All Phase 1E issues resolved
+- [x] Search-quality infrastructure created
+- [x] MRR and NDCG metrics implemented with TDD
 
 **Phase 1C Tasks** (Ready to Execute):
 

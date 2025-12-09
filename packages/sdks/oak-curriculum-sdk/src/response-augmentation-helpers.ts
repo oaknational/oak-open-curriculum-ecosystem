@@ -29,7 +29,11 @@ export function isKeyStageScopedEndpoint(path: string): ContentType | undefined 
 }
 
 /**
- * Checks if path is a single entity endpoint
+ * Checks if path is a single entity endpoint.
+ *
+ * Note: Order matters for paths like `/subjects/{subject}/sequences` which
+ * contains both `/subjects/` and ends with `/sequences`. We prioritise based
+ * on what the endpoint actually returns.
  */
 export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (path.includes('/lessons/')) {
@@ -38,11 +42,16 @@ export function isSingleEntityEndpoint(path: string): ContentType | undefined {
   if (path.includes('/units/')) {
     return 'unit';
   }
-  if (path.includes('/subjects/')) {
-    return 'subject';
-  }
   if (path.includes('/sequences/')) {
     return 'sequence';
+  }
+  // /subjects/{subject}/sequences returns sequences, not subjects
+  // Check for sequences endpoint before subjects
+  if (path.endsWith('/sequences')) {
+    return 'sequence';
+  }
+  if (path.includes('/subjects/')) {
+    return 'subject';
   }
   if (path.includes('/threads/')) {
     return 'thread';

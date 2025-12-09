@@ -7,7 +7,7 @@ import {
   type OakClientConfig,
   type RateLimitTracker,
 } from '@oaknational/oak-curriculum-sdk';
-import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guards';
+import { isUnitsGrouped, isTranscriptResponse } from './sdk-guards';
 
 /**
  * Public shape for listing units by key stage and subject.
@@ -17,21 +17,6 @@ export type GetUnitsFn = (
   keyStage: KeyStage,
   subject: SearchSubjectSlug,
 ) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
-
-/**
- * Public shape for listing grouped lessons by key stage and subject.
- * Linked plan: `.agent/plans/generated-document-enhancements-plan.md`
- */
-export type GetLessonsFn = (
-  keyStage: KeyStage,
-  subject: SearchSubjectSlug,
-) => Promise<
-  readonly {
-    unitSlug: string;
-    unitTitle: string;
-    lessons: { lessonSlug: string; lessonTitle: string }[];
-  }[]
->;
 
 /**
  * Public shape for fetching a lesson transcript.
@@ -93,23 +78,6 @@ function makeGetUnitsByKeyStageAndSubject(client: OakApiClient): GetUnitsFn {
       return flat;
     }
     throw new Error('Unexpected units response shape');
-  };
-}
-
-function makeGetLessonsByKeyStageAndSubject(client: OakApiClient): GetLessonsFn {
-  return async (keyStage, subject) => {
-    const res = await client.GET('/key-stages/{keyStage}/subject/{subject}/lessons', {
-      params: { path: { keyStage, subject }, query: { limit: 100 } },
-    });
-    assertSdkOk(res);
-    const data = res.data;
-    if (!data) {
-      return [];
-    }
-    if (isLessonGroups(data)) {
-      return data;
-    }
-    throw new Error('Unexpected lessons response shape');
   };
 }
 
@@ -183,8 +151,6 @@ function makeGetSequenceUnits(client: OakApiClient): GetSequenceUnitsFn {
 export interface OakSdkClient {
   /** List units for a key stage and subject. */
   getUnitsByKeyStageAndSubject: GetUnitsFn;
-  /** List grouped lessons for a key stage and subject. */
-  getLessonsByKeyStageAndSubject: GetLessonsFn;
   /** Get a lesson transcript and VTT. */
   getLessonTranscript: GetTranscriptFn;
   /** Get lesson summary metadata. */
@@ -222,7 +188,6 @@ export function createOakSdkClient(): OakSdkClient {
 
   _singletonClient = {
     getUnitsByKeyStageAndSubject: makeGetUnitsByKeyStageAndSubject(client),
-    getLessonsByKeyStageAndSubject: makeGetLessonsByKeyStageAndSubject(client),
     getLessonTranscript: makeGetLessonTranscript(client),
     getLessonSummary: makeGetLessonSummary(client),
     getUnitSummary: makeGetUnitSummary(client),

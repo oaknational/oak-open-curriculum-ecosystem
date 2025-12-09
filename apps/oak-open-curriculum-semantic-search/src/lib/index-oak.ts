@@ -184,7 +184,7 @@ async function buildOpsForPair(
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<unknown[]> {
-  const { units, groups } = await fetchPairData(client, ks, subject);
+  const { units } = await fetchPairData(client, ks, subject);
 
   const context: PairBuildContext = {
     client,
@@ -196,5 +196,5 @@ async function buildOpsForPair(
     dataIntegrityReport,
   };
 
-  return buildPairDocuments(context, units, groups);
+  return buildPairDocuments(context, units);
 }

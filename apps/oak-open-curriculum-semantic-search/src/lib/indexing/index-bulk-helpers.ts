@@ -1,8 +1,12 @@
 import type { Client } from '@elastic/elasticsearch';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import { createRollupDocument } from './document-transforms';
-import { resolveUnitSummaryIdentifiers } from './document-transform-helpers';
+import { createRollupDocument, extractUnitLessons } from './document-transforms';
+import {
+  resolveUnitSummaryIdentifiers,
+  readUnitSummaryValue,
+  expectUnitSummaryString,
+} from './document-transform-helpers';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
@@ -13,6 +17,49 @@ export interface LessonGroup {
   unitSlug: string;
   unitTitle: string;
   lessons: { lessonSlug: string; lessonTitle: string }[];
+}
+
+/**
+ * Derives lesson groups from unit summaries.
+ *
+ * This function extracts lesson information from the `unitLessons` array in each
+ * unit summary, creating a `LessonGroup` for each unit that has lessons.
+ *
+ * This replaces the previous approach of fetching lesson groups from the
+ * `/key-stages/{ks}/subject/{subject}/lessons` endpoint, which only returns
+ * a paginated subset of lessons (limit 100).
+ *
+ * @param unitSummaries - Map of unit slugs to their summary data
+ * @returns Array of lesson groups, one per unit with lessons
+ *
+ * @example
+ * ```typescript
+ * const unitSummaries = new Map();
+ * unitSummaries.set('unit-1', {
+ *   unitSlug: 'unit-1',
+ *   unitTitle: 'Unit One',
+ *   unitLessons: [{ lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' }]
+ * });
+ * const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
+ * // [{ unitSlug: 'unit-1', unitTitle: 'Unit One', lessons: [...] }]
+ * ```
+ */
+export function deriveLessonGroupsFromUnitSummaries(
+  unitSummaries: Map<string, unknown>,
+): LessonGroup[] {
+  const groups: LessonGroup[] = [];
+
+  for (const [unitSlug, summary] of unitSummaries) {
+    const unitTitle = expectUnitSummaryString(summary, 'unitTitle', `unit title for ${unitSlug}`);
+    const rawLessons = readUnitSummaryValue(summary, 'unitLessons');
+    const lessons = extractUnitLessons(rawLessons);
+
+    if (lessons.length > 0) {
+      groups.push({ unitSlug, unitTitle, lessons });
+    }
+  }
+
+  return groups;
 }
 
 export async function buildUnitDocuments(

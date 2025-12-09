@@ -124,7 +124,6 @@ function createCachedClientWrapper(
 ): CachedOakClient {
   return {
     getUnitsByKeyStageAndSubject: baseClient.getUnitsByKeyStageAndSubject,
-    getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
     getSubjectSequences: baseClient.getSubjectSequences,
     getSequenceUnits: baseClient.getSequenceUnits,
     getAllThreads: baseClient.getAllThreads,

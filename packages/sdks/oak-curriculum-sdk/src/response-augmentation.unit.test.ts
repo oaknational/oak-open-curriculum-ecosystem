@@ -240,6 +240,21 @@ describe('augmentResponseWithCanonicalUrl', () => {
         'https://www.thenational.academy/teachers/programmes/maths-primary/units/ks-unit',
       );
     });
+
+    it('should recognise /subjects/{subject}/sequences as sequence content type', () => {
+      const response = [{ slug: 'maths-ks4', title: 'Maths KS4 Programme' }];
+      const result = augmentArrayResponseWithCanonicalUrl(
+        response,
+        '/subjects/maths/sequences',
+        'get',
+      );
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('canonicalUrl');
+      expect(result[0].canonicalUrl).toBe(
+        'https://www.thenational.academy/teachers/programmes/maths-ks4/units',
+      );
+    });
   });
 
   describe('array response augmentation', () => {

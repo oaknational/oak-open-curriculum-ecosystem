@@ -28,7 +28,6 @@ describe('CachedOakClient interface', () => {
     // Type-level test - if this compiles, the interface is correct
     const mockClient: CachedOakClient = {
       getUnitsByKeyStageAndSubject: async () => [],
-      getLessonsByKeyStageAndSubject: async () => [],
       getUnitSummary: async () => ({}),
       getLessonSummary: async () => ({}),
       getLessonTranscript: async () => ({ transcript: '', vtt: '' }),

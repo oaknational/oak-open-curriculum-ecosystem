@@ -22,7 +22,6 @@ export async function createFixtureOakClient(fixtureRoot: string): Promise<Fixtu
 function createFixtureClient(data: FixtureData): OakClient {
   return {
     getUnitsByKeyStageAndSubject: makeFixtureUnitsFn(data),
-    getLessonsByKeyStageAndSubject: makeFixtureLessonsFn(data),
     getLessonTranscript: makeFixtureTranscriptFn(data),
     getLessonSummary: makeFixtureLessonSummaryFn(data),
     getUnitSummary: makeFixtureUnitSummaryFn(data),
@@ -54,17 +53,6 @@ function makeFixtureUnitsFn(data: FixtureData): OakClient['getUnitsByKeyStageAnd
     data.units
       .filter((unit) => unit.keyStage === keyStage && unit.subject === subject)
       .map((unit) => ({ unitSlug: unit.unitSlug, unitTitle: unit.unitTitle }));
-}
-
-function makeFixtureLessonsFn(data: FixtureData): OakClient['getLessonsByKeyStageAndSubject'] {
-  return async (keyStage, subject) =>
-    data.lessons
-      .filter((group) => group.keyStage === keyStage && group.subject === subject)
-      .map(({ unitSlug, unitTitle, lessons }) => ({
-        unitSlug,
-        unitTitle,
-        lessons: lessons.map((lesson) => ({ ...lesson })),
-      }));
 }
 
 function makeFixtureTranscriptFn(data: FixtureData): OakClient['getLessonTranscript'] {
