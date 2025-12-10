@@ -1,9 +1,35 @@
 # Maths KS4 Complete Implementation Plan
 
 **Git Version**: See `git log` for commit history  
-**Status**: Phase 1A ✅ | Phase 1B ✅ | Phase 1D ✅ | Phase 1E ✅ | Phase 1C 🟢 READY  
-**Priority**: HIGH  
+**Status**: ⚠️ PAUSED FOR CRITICAL REVIEW | Phase 1C Infrastructure Built | Next Steps TBD  
+**Priority**: HIGH - Review Required  
 **Foundation Alignment**: ✅ rules.md | schema-first-execution.md | testing-strategy.md
+
+---
+
+## ⚠️ CRITICAL REVIEW REQUIRED (2025-12-10)
+
+**Phase 1C benchmark infrastructure was built and executed, but proceeding requires human review.**
+
+**📖 READ FIRST**: `.agent/prompts/semantic-search/phase-1c-benchmark-report.md`
+
+### Critical Questions That Must Be Addressed
+
+1. **E2E tests should not use servers** - Current tests require `pnpm dev` running
+2. **What are we actually measuring?** - Ground truth validity is unclear
+3. **Bad results ≠ Add complexity** - Tune current setup before adding dense vectors
+4. **Completeness before performance** - Verify ES contains expected data
+5. **Fundamental question** - What value are we trying to create through impact?
+
+### Before Any Further Work
+
+- [ ] Have a reality check conversation about what we're trying to prove
+- [ ] Verify data completeness in ES (does it contain what we expect?)
+- [ ] Validate that plans and code are in sync
+- [ ] Tune current two-way hybrid setup before considering dense vectors
+- [ ] Create meaningful ground truth with curriculum expert input
+
+**Do NOT proceed with Phase 2 (dense vectors) until these questions are resolved.**
 
 ---
 
@@ -305,11 +331,21 @@ pathways_available: { type: 'keyword' },
 
 ---
 
-### Phase 1C: Baseline Metrics 🟢 READY TO START
+### Phase 1C: Baseline Metrics ⚠️ PAUSED FOR REVIEW (2025-12-10)
 
 **Goal**: Establish baseline metrics with **two-way hybrid search (BM25 + ELSER)** before considering additional complexity.
 
-**Status**: All prerequisites complete. Ready to establish baseline metrics.
+**Status**: Infrastructure built, benchmark executed, but results require interpretation and validation.
+
+**📖 READ**: `.agent/prompts/semantic-search/phase-1c-benchmark-report.md`
+
+**Critical Questions**:
+
+1. What are these metrics actually measuring?
+2. Is the ground truth valid (created by AI, not curriculum experts)?
+3. Does ES contain the data we expect?
+4. Is the current two-way hybrid setup tuned correctly?
+5. Should E2E tests require running servers (testing strategy says no)?
 
 **Prerequisites** ✅ ALL RESOLVED (2025-12-09):
 
@@ -400,6 +436,120 @@ Representative queries (already validated with basic BM25):
 
 - **If targets met**: Proceed with two-way hybrid, skip Phase 2
 - **If targets not met**: Proceed to Phase 2 to evaluate dense vectors (infrastructure already built)
+
+---
+
+### Phase 1F: Search Filter Improvements 📋 PENDING (Post-Benchmarking)
+
+**Goal**: Extend `StructuredQuery` to accept all available filter fields, not just `subject` and `keyStage`.
+
+**Problem Statement**:
+
+Currently, facets are returned for tier, exam_board, and pathway, but these **cannot be used as query filters**:
+
+| Filter         | Field          | In Index   | Has Facet | Can Filter |
+| -------------- | -------------- | ---------- | --------- | ---------- |
+| **Subject**    | `subject_slug` | ✅         | ✅        | ✅ YES     |
+| **Key Stage**  | `key_stage`    | ✅         | ✅        | ✅ YES     |
+| **Tier**       | `tier`         | ✅         | ✅        | ❌ NO      |
+| **Exam Board** | `exam_board`   | ✅         | ✅        | ❌ NO      |
+| **Pathway**    | `pathway`      | ✅         | ✅        | ❌ NO      |
+| **Year Group** | `year`         | ❌ Missing | ❌        | ❌ NO      |
+
+**Implementation Tasks**:
+
+1. **Add missing field to ES index**:
+   - Add `year_group` (or `year`) to `LESSONS_INDEX_FIELDS` and `UNITS_INDEX_FIELDS`
+   - Add ES field override as `keyword` type for faceting
+   - Run `pnpm type-gen` to regenerate mappings
+
+2. **Extend `StructuredQuery` interface** (`types.ts`):
+
+   ```typescript
+   export interface StructuredQuery {
+     scope: SearchScope;
+     text: string;
+     subject?: SearchSubjectSlug;
+     keyStage?: KeyStage;
+     tier?: 'foundation' | 'higher'; // NEW
+     examBoard?: string; // NEW
+     pathway?: string; // NEW
+     yearGroup?: string; // NEW (e.g., '10', '11')
+     minLessons?: number;
+     phaseSlug?: string;
+     size?: number;
+     from?: number;
+     highlight?: boolean;
+     includeFacets?: boolean;
+   }
+   ```
+
+3. **Update query builders** to apply filter clauses for new fields
+
+4. **Update unit tests** (TDD - write failing tests first)
+
+5. **Re-ingest data** if `year_group` field was added
+
+**Success Criteria**:
+
+- [ ] `year_group` field added to lessons and units indices
+- [ ] `StructuredQuery` extended with tier, examBoard, pathway, yearGroup
+- [ ] Query builders apply filters for all new fields
+- [ ] Unit tests cover all filter combinations
+- [ ] E2E test validates filtered search works
+- [ ] All quality gates passing
+
+---
+
+### Phase 1G: API Schema Filter Investigation 📋 PENDING (Post-Benchmarking)
+
+**Goal**: Analyze the Oak API schema to identify additional fields that could be used for filtering search results.
+
+**API Schema Fields to Investigate** (from `api-schema-sdk.json`):
+
+| Field                        | Source         | Potential Use                                   |
+| ---------------------------- | -------------- | ----------------------------------------------- |
+| `yearSlug` / `yearTitle`     | Unit summaries | Year group filtering (Y7-Y11)                   |
+| `tierSlug` / `tierTitle`     | Sequence units | Tier-based filtering (Foundation/Higher)        |
+| `contentGuidance`            | Lesson details | Content safety filtering                        |
+| `supervisionLevel`           | Lesson details | Age-appropriate content filtering               |
+| `downloadsAvailable`         | Lesson details | Practical lesson filtering                      |
+| `phaseSlug`                  | Unit summaries | Primary/Secondary phase filtering               |
+| `subjectSlug`                | Unit summaries | Cross-subject filtering                         |
+| `threads`                    | Unit summaries | Thread-based navigation (Number, Algebra, etc.) |
+| `priorKnowledgeRequirements` | Unit details   | Prerequisite-aware search                       |
+| `nationalCurriculumContent`  | Unit details   | Standards-aligned filtering                     |
+
+**Investigation Tasks**:
+
+1. **Audit current field extraction**:
+   - Which of these fields are already extracted during ingestion?
+   - Which are present in ES mappings but not populated?
+   - Which are completely missing?
+
+2. **Prioritize by value**:
+   - High: `yearGroup`, `tier`, `examBoard` - core teacher workflows
+   - Medium: `threads`, `phase` - curriculum navigation
+   - Low: `contentGuidance`, `supervisionLevel` - niche use cases
+
+3. **Document findings** in semantic-search.prompt.md
+
+4. **Create implementation tickets** for missing high-value filters
+
+**Deliverables**:
+
+- [ ] Audit table showing field availability across indices
+- [ ] Priority matrix for new filter implementation
+- [ ] Updated plan with specific field implementation tasks
+- [ ] Decision on which fields to add in Phase 1 vs defer to Phase 5
+
+**Key Questions to Answer**:
+
+1. Does the API provide year group at lesson level, or only at unit level?
+2. Are tier/examBoard/pathway consistent across lessons within a unit?
+3. What's the cardinality of each potential filter field for Maths KS4?
+
+---
 
 ### ES Serverless Features Used (Phase 1)
 
@@ -2476,26 +2626,69 @@ All AI/ML inference features (E5 embeddings, ELSER, ReRank, LLM chat completion,
 - `src/lib/indexing/thread-and-pedagogical-extractors.ts` - Thread info extraction
 - `src/lib/indexing/summary-reader-helpers.ts` - Summary reader utilities
 
-### Phase 1C: Baseline Metrics 🟢 READY TO START (0.5 days)
+### Phase 1C: Baseline Metrics ⚠️ PAUSED FOR REVIEW (2025-12-10)
 
-**Prerequisites** ✅ ALL COMPLETE:
+**Infrastructure Built**:
 
 - [x] Phase 1E complete - all 314 lessons indexed
 - [x] Search-quality infrastructure created (`src/lib/search-quality/`)
 - [x] MRR and NDCG metrics implemented with TDD (13 tests)
-- [x] All quality gates passing
+- [x] E2E test infrastructure created
+- [x] Ground truth data populated (7 queries)
+- [x] Initial benchmark executed
 
-**Phase 1C Tasks** (Ready to Execute):
+**Critical Review Required** (must complete before proceeding):
 
-- [ ] Create ground truth data for Maths KS4 queries using `scripts/discover-lessons.ts`
-- [ ] Test two-way hybrid search (BM25 + ELSER) with RRF
-- [ ] Establish baseline metrics (MRR, NDCG@10, zero-hit rate, latency)
-- [ ] Document baseline metrics
-- [ ] Decision: Two-way sufficient OR proceed to Phase 2
+- [ ] Reality check conversation about what metrics mean
+- [ ] Verify data completeness in ES (do expected lessons exist?)
+- [ ] Validate ground truth with curriculum expertise (AI-created, validity unclear)
+- [ ] Tune current two-way hybrid setup before adding complexity
+- [ ] Confirm methodology aligns with testing strategy (E2E tests shouldn't use servers)
+- [ ] Determine if MRR/NDCG are the right metrics for this use case
 
-### Phase 2: Evaluate Dense Vectors (1 day) - Only If Needed
+**📖 See**: `.agent/prompts/semantic-search/phase-1c-benchmark-report.md`
 
-**Only proceed if Phase 1C baseline doesn't meet targets (MRR < 0.70 or NDCG@10 < 0.75)**
+### Phase 1F: Search Filter Improvements 📋 PENDING (Post-Benchmarking)
+
+**Goal**: Make facet fields filterable in search queries.
+
+- [ ] Add `year_group` field to `LESSONS_INDEX_FIELDS` and `UNITS_INDEX_FIELDS`
+- [ ] Add ES field override for `year_group` as `keyword` type
+- [ ] Run `pnpm type-gen` to regenerate mappings
+- [ ] Extend `StructuredQuery` interface with `tier`, `examBoard`, `pathway`, `yearGroup`
+- [ ] Update query builders to apply filter clauses for new fields (TDD)
+- [ ] Update unit tests to cover all filter combinations
+- [ ] Re-ingest data to populate `year_group` field
+- [ ] E2E test validates filtered search works
+- [ ] All quality gates passing
+
+### Phase 1G: API Schema Filter Investigation 📋 PENDING (Post-Benchmarking)
+
+**Goal**: Identify additional filter opportunities from API schema.
+
+- [ ] Audit current field extraction vs API schema availability
+- [ ] Document which fields are extracted but not populated
+- [ ] Document which fields are available in API but not extracted
+- [ ] Create priority matrix: High (yearGroup, tier, examBoard), Medium (threads, phase), Low (contentGuidance)
+- [ ] Document findings in semantic-search.prompt.md
+- [ ] Create implementation tickets for missing high-value filters
+- [ ] Decision on which fields to add in Phase 1 vs defer to Phase 5
+
+### Phase 2: Evaluate Dense Vectors ❌ BLOCKED
+
+**DO NOT START** - Must resolve Phase 1C critical questions first.
+
+**Rationale**: Adding complexity (dense vectors) is not the right response to unclear metrics or unverified data. The current two-way hybrid setup must be verified and tuned before evaluating whether additional complexity adds value.
+
+**Must complete first**:
+
+- [ ] Phase 1C critical questions resolved
+- [ ] Data completeness verified
+- [ ] Current setup tuned
+- [ ] Ground truth validated
+- [ ] Metrics understood
+
+**When unblocked**:
 
 - [ ] Verify inference endpoints available
 - [ ] Test with dense vectors already present in data
