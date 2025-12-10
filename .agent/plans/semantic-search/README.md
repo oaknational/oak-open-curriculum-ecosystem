@@ -1,6 +1,6 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 Complete | Baseline Captured | Awaiting Assessment  
+**Status**: Phase 1 Complete | 3/4 Targets Met | Decision Point  
 **Last Updated**: 2025-12-10
 
 ---
@@ -43,13 +43,21 @@ For new implementation sessions, read in this order:
 
 All 36 Maths KS4 units have their lessons indexed.
 
-### Ground Truth ✅ FIXED (2025-12-10)
+### Ground Truth ✅ COMPREHENSIVE (2025-12-10)
 
-Ground truth expectations based on **upstream Oak API content**:
+Ground truth reviewed and expanded using MCP curriculum tools:
 
-- Pythagoras queries expect Pythagoras lessons from `right-angled-trigonometry` unit
-- Trigonometry queries expect trig lessons (sine, cosine, tangent ratios)
-- Methodology documented in `ground-truth.ts`
+- Comprehensive KS4 Maths coverage (algebra, geometry, number, graphs, statistics)
+- Modular structure in `src/lib/search-quality/ground-truth/`
+- Edge cases included (misspellings, natural language queries)
+
+### Synonyms ✅ REFACTORED (2025-12-10)
+
+SDK synonyms extracted into modular themed files:
+
+- Location: `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`
+- Added `numbers` group with `squared → quadratic` mapping
+- Documentation: `apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md`
 
 ---
 
@@ -99,25 +107,50 @@ Ground truth expectations based on **upstream Oak API content**:
 
 ---
 
-## Baseline Results (2025-12-10)
+## Baseline Results (2025-12-10, after ground truth review)
 
-| Metric        | Result | Target  |
-| ------------- | ------ | ------- |
-| MRR           | 0.548  | > 0.70  |
-| NDCG@10       | 0.504  | > 0.75  |
-| Zero-hit rate | 14.3%  | < 10%   |
-| p95 Latency   | 28ms   | < 300ms |
+| Metric        | Result    | Target  | Status   |
+| ------------- | --------- | ------- | -------- |
+| MRR           | **0.893** | > 0.70  | ✅ PASS  |
+| NDCG@10       | 0.648     | > 0.75  | ❌ Below |
+| Zero-hit rate | **0.0%**  | < 10%   | ✅ PASS  |
+| p95 Latency   | 28ms      | < 300ms | ✅ PASS  |
 
-See `phase-1-foundation.md` for per-query breakdown.
+**3 of 4 targets met.** See `phase-1-foundation.md` for per-query breakdown.
 
 ## Next Steps
 
-**Awaiting assessment** of baseline results before determining approach:
+### 1. Sync Synonyms to Elasticsearch
 
-1. Review per-query breakdown in `phase-1-foundation.md`
-2. Investigate underperforming queries
-3. Determine root cause analysis
-4. Decide: tune Phase 1 vs proceed to Phase 2
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm elastic:setup  # Push squared → quadratic synonyms
+```
+
+### 2. Run Smoke Tests
+
+```bash
+# Terminal 1: Start server (clear cache first!)
+cd apps/oak-open-curriculum-semantic-search
+rm -rf .next && pnpm dev
+
+# Terminal 2: Run smoke tests
+pnpm test:smoke
+```
+
+### 3. Establish Repeatable Baseline
+
+Before evaluating dense vectors (Phase 2), we need:
+
+1. **Stable metrics** - run smoke tests multiple times, ensure consistency
+2. **Synonym sync complete** - verify `squared → quadratic` in ES
+3. **Documented baseline** - record metrics with timestamp
+
+Dense vectors will be evaluated regardless - we need empirical data for architecture decisions.
+
+### 4. Proceed to Phase 2
+
+See `phase-2-dense-vectors.md` for three-way hybrid evaluation.
 
 ---
 
@@ -147,28 +180,81 @@ All gates must pass. No exceptions.
 
 ### Ground Truth and Metrics
 
-```
+```text
 apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
-├── ground-truth.ts     # Query expectations (FIXED 2025-12-10)
-├── metrics.ts          # MRR, NDCG calculations
-└── index.ts            # Public exports
+├── ground-truth/           # Modular ground truth (2025-12-10)
+│   ├── algebra.ts          # Algebra queries
+│   ├── geometry.ts         # Geometry queries
+│   ├── number.ts           # Number queries
+│   ├── graphs.ts           # Graphs queries
+│   ├── statistics.ts       # Statistics queries
+│   ├── edge-cases.ts       # Misspellings, natural language
+│   ├── types.ts            # GroundTruthQuery interface
+│   └── index.ts            # Combined exports
+├── ground-truth.ts         # Legacy (imports from ground-truth/)
+├── metrics.ts              # MRR, NDCG calculations
+└── index.ts                # Public exports
+```
+
+### Synonyms (SDK)
+
+```text
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── subjects.ts             # Subject name variations
+├── key-stages.ts           # Key stage aliases
+├── numbers.ts              # Numbers + maths terms (squared → quadratic)
+├── geography.ts            # Geography concepts
+├── history.ts              # History periods
+├── maths.ts                # Maths operations
+├── english.ts              # English concepts
+├── science.ts              # Science concepts
+├── education.ts            # Generic + educational acronyms
+└── index.ts                # Barrel file (exports synonymsData)
 ```
 
 ### Smoke Tests
 
-```
+```text
 apps/oak-open-curriculum-semantic-search/smoke-tests/
 └── search-quality.smoke.test.ts  # Benchmark test suite
 ```
 
 ### RRF Query Builders
 
-```
+```text
 apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ├── rrf-query-builders.ts           # Two-way (BM25 + ELSER)
 ├── rrf-query-builders-three-way.ts # Three-way (Phase 2)
 └── rrf-query-helpers.ts            # Shared helpers
 ```
+
+---
+
+## Development Rules (From Foundation Docs)
+
+### TDD is Mandatory
+
+All new code must follow TDD at ALL levels:
+
+1. **RED** - Write test first, run it, prove it fails
+2. **GREEN** - Write minimal implementation to pass
+3. **REFACTOR** - Improve implementation, tests stay green
+
+### Test Classification
+
+| Type        | File Pattern            | Purpose             | IO Allowed        |
+| ----------- | ----------------------- | ------------------- | ----------------- |
+| Unit        | `*.unit.test.ts`        | Pure functions      | None              |
+| Integration | `*.integration.test.ts` | Code units together | None              |
+| Smoke       | `smoke-tests/`          | Running system      | HTTP to localhost |
+
+### No Type Shortcuts
+
+Never use `as`, `any`, `!`, `Record<string, unknown>`. All types flow from `pnpm type-gen`.
+
+### All Quality Gates Must Pass
+
+No exceptions. No `--no-verify`. Fix issues, don't disable checks.
 
 ---
 

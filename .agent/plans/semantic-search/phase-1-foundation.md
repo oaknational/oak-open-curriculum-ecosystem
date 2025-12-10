@@ -71,9 +71,27 @@ Implement two-way hybrid search (BM25 + ELSER) with Maths KS4 data as a complete
 
 The natural language query "how to solve equations with x squared" has MRR=0.25 (first relevant result at position 4). The phrase "x squared" should semantically match "quadratic" but:
 
-- BM25 won't match (different words)
-- ELSER sparse embeddings may not capture this synonym relationship
+- BM25 won't match (different words) - **synonym added, needs ES sync**
+- ELSER sparse embeddings may not capture this synonym relationship - **synonyms don't help ELSER**
 - Dense vectors (Phase 2) could help with this semantic gap
+
+#### Synonym Architecture (Important)
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    TEXT FIELDS (BM25)                       │
+│  Index Time:  oak_text_index  → lowercase only              │
+│  Query Time:  oak_text_search → lowercase + synonyms        │
+│  → Synonyms HELP BM25                                       │
+├─────────────────────────────────────────────────────────────┤
+│                 SEMANTIC FIELD (ELSER)                      │
+│  lesson_semantic: type: semantic_text                       │
+│  → Processed directly by ELSER, NO custom analyser          │
+│  → Synonyms DO NOT help ELSER                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Implication**: Query-time synonyms improve BM25 recall but not ELSER. Dense vectors (Phase 2) are the solution for semantic gaps that synonyms can't cover.
 
 ### Phase 1D: Missing Indices ✅
 
@@ -125,31 +143,66 @@ The natural language query "how to solve equations with x squared" has MRR=0.25 
 
 ## Files Modified
 
-```
+```text
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/indexing/index-bulk-helpers.ts      # deriveLessonGroupsFromUnitSummaries()
 ├── src/lib/index-oak-helpers.ts                # fetchPairData(), buildCoreDocumentOps()
 ├── src/lib/hybrid-search/rrf-query-builders.ts # ES 8.11+ retriever API
-├── src/lib/search-quality/ground-truth.ts      # Updated expectations
-├── src/lib/search-quality/metrics.ts           # MRR, NDCG@10
-└── smoke-tests/search-quality.smoke.test.ts    # Benchmark suite
+├── src/lib/search-quality/
+│   ├── ground-truth/                           # Modular ground truth (NEW)
+│   │   ├── algebra.ts, geometry.ts, number.ts  # Topic-specific queries
+│   │   ├── edge-cases.ts                       # Misspellings, natural language
+│   │   └── index.ts                            # Combined exports
+│   ├── ground-truth.ts                         # Legacy wrapper
+│   └── metrics.ts                              # MRR, NDCG@10
+├── smoke-tests/search-quality.smoke.test.ts    # Benchmark suite (port fixed)
+└── docs/SYNONYMS.md                            # Synonym system documentation (NEW)
+
+packages/sdks/oak-curriculum-sdk/
+├── src/mcp/synonyms/                           # Modular synonyms (NEW)
+│   ├── numbers.ts                              # squared → quadratic
+│   └── index.ts                                # Barrel file
+├── src/mcp/ontology-data.ts                    # Imports from synonyms/
+└── src/mcp/synonym-export.ts                   # ES export includes numbers group
 ```
 
 ---
 
 ## Next Steps
 
-**Baseline Established**: Smoke tests have been run (2025-12-10). Results documented above.
+### Immediate: Sync Synonyms to Elasticsearch
 
-**Pending Assessment**:
+The `squared → quadratic` synonym has been added to the SDK but needs deployment:
 
-1. Review per-query breakdown to understand failure patterns
-2. Investigate why "Pythagoras theorem" and "trigonometry" queries underperform
-3. Determine root cause of zero-hit for misspelled "pythagorus"
-4. Decide whether to:
-   - Tune Phase 1 (BM25/ELSER weights, fuzzy settings)
-   - Proceed to Phase 2 (add dense vectors for three-way hybrid)
-   - Investigate ground truth accuracy
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm elastic:setup  # Push updated synonyms to ES
+```
+
+Then re-run smoke tests:
+
+```bash
+pnpm test:smoke
+```
+
+### Establish Repeatable Baseline
+
+Before evaluating dense vectors (Phase 2), we need:
+
+1. **Stable metrics** - run smoke tests multiple times, ensure consistency
+2. **Synonym sync complete** - deploy `squared → quadratic` to ES
+3. **Documented baseline** - record metrics with timestamp for comparison
+
+Dense vectors will be evaluated regardless of Phase 1 metrics - we need empirical data to make informed architecture decisions.
+
+### Then Proceed to Phase 2 Evaluation
+
+See `phase-2-dense-vectors.md` for:
+
+- Three-way hybrid (BM25 + ELSER + E5 dense vectors)
+- Expected ~10-25% NDCG improvement
+- Additional complexity trade-offs
+- Before/after comparison methodology
 
 ---
 

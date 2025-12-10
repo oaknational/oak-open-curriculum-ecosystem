@@ -1,6 +1,6 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 Complete | Ready for Baseline Metrics  
+**Status**: Phase 1 Complete | 3/4 Targets Met | Decision Point  
 **Last Updated**: 2025-12-10
 
 ---
@@ -57,41 +57,84 @@ All 36 Maths KS4 units have their lessons indexed.
 - Three-way RRF query builders ready for Phase 2 if needed
 - Fuzzy matching enabled (`fuzziness: 'AUTO'`)
 - MRR and NDCG@10 metrics implemented with TDD
+- Synonym system refactored into modular themed files
 
-### Ground Truth ✅ FIXED
+### Ground Truth ✅ COMPREHENSIVE
 
-Ground truth expectations based on **upstream Oak API content**:
+Ground truth reviewed and expanded using MCP curriculum tools:
 
-- Pythagoras queries expect Pythagoras lessons from `right-angled-trigonometry` unit
-- Trigonometry queries expect trig lessons (sine, cosine, tangent ratios)
+- Comprehensive KS4 Maths coverage (algebra, geometry, number, graphs, statistics)
+- Modular structure: `ground-truth/algebra.ts`, `geometry.ts`, `number.ts`, etc.
+- Edge cases included (misspellings, natural language queries)
 
-### Test Classification ✅ FIXED
+### Synonyms ✅ REFACTORED
 
-- Search quality tests moved to `smoke-tests/` (proper classification per testing-strategy.md)
-- Smoke tests make HTTP calls to running server
-- Fail fast with clear error if server not available (no skipping)
+SDK synonyms extracted into modular themed files:
+
+- Location: `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`
+- Added `numbers` group to ES export (enables "squared" → "quadratic" matching)
+- Documentation: `apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md`
 
 ---
 
-## Baseline Results (2025-12-10)
+## Baseline Results (2025-12-10, after ground truth review)
 
-| Metric        | Result | Target  | Status       |
-| ------------- | ------ | ------- | ------------ |
-| MRR           | 0.548  | > 0.70  | Below target |
-| NDCG@10       | 0.504  | > 0.75  | Below target |
-| Zero-hit rate | 14.3%  | < 10%   | Above target |
-| p95 Latency   | 28ms   | < 300ms | Met          |
+| Metric        | Result    | Target  | Status   |
+| ------------- | --------- | ------- | -------- |
+| MRR           | **0.893** | > 0.70  | ✅ PASS  |
+| NDCG@10       | 0.648     | > 0.75  | ❌ Below |
+| Zero-hit rate | **0.0%**  | < 10%   | ✅ PASS  |
+| p95 Latency   | 28ms      | < 300ms | ✅ PASS  |
 
-**Assessment pending** - see `phase-1-foundation.md` for per-query breakdown.
+**3 of 4 targets met.** See `phase-1-foundation.md` for per-query breakdown.
+
+### Key Findings
+
+1. **Fuzzy matching working** - "pythagorus" misspelling returns correct results
+2. **Cache issue resolved** - stale Next.js cache was causing false zero-hits
+3. **Semantic gap identified** - "x squared" doesn't match "quadratic" (synonym added, needs ES sync)
+
+---
 
 ## Next Steps
 
-Awaiting assessment of baseline results before determining next steps:
+### 1. Sync Synonyms to Elasticsearch
 
-1. Review per-query breakdown in `phase-1-foundation.md`
-2. Investigate underperforming queries (Pythagoras, trigonometry)
-3. Determine root cause of zero-hit for misspelled queries
-4. Decide approach: tune Phase 1 vs proceed to Phase 2
+The `squared → quadratic` synonym has been added to SDK but needs deployment:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm elastic:setup  # Push updated synonyms to ES
+```
+
+### 2. Run Smoke Tests (Requires Running Server)
+
+```bash
+# Terminal 1: Start the server
+cd apps/oak-open-curriculum-semantic-search
+rm -rf .next  # Clear cache (important!)
+pnpm dev
+
+# Terminal 2: Run smoke tests
+cd apps/oak-open-curriculum-semantic-search
+pnpm test:smoke
+```
+
+**Note**: Smoke tests make HTTP calls to `localhost:3003`. Server must be running.
+
+### 3. Establish Repeatable Baseline
+
+Before evaluating dense vectors (Phase 2), we need:
+
+1. **Stable metrics** - run smoke tests multiple times, ensure consistency
+2. **Synonym sync complete** - verify with ES analyse API
+3. **Documented baseline** - record metrics with timestamp for comparison
+
+Dense vectors will be evaluated regardless of Phase 1 metrics - we need empirical data to make informed architecture decisions.
+
+### 4. Proceed to Phase 2 Evaluation
+
+See `phase-2-dense-vectors.md` for three-way hybrid (BM25 + ELSER + E5).
 
 ---
 
@@ -102,9 +145,18 @@ Awaiting assessment of baseline results before determining next steps:
 ```text
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/search-quality/
-│   ├── ground-truth.ts   # Query expectations (FIXED)
-│   ├── metrics.ts        # MRR, NDCG calculations
-│   └── index.ts          # Public exports
+│   ├── ground-truth/              # Modular ground truth
+│   │   ├── algebra.ts             # Algebra queries
+│   │   ├── geometry.ts            # Geometry queries
+│   │   ├── number.ts              # Number queries
+│   │   ├── graphs.ts              # Graphs queries
+│   │   ├── statistics.ts          # Statistics queries
+│   │   ├── edge-cases.ts          # Misspellings, NL queries
+│   │   ├── types.ts               # GroundTruthQuery interface
+│   │   └── index.ts               # Combined exports
+│   ├── ground-truth.ts            # Legacy wrapper
+│   ├── metrics.ts                 # MRR, NDCG calculations (13 unit tests)
+│   └── index.ts                   # Public exports
 └── smoke-tests/
     └── search-quality.smoke.test.ts  # Benchmark suite
 ```
@@ -117,6 +169,20 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ├── rrf-query-builders-three-way.ts # Three-way (for Phase 2)
 └── rrf-query-helpers.ts            # Shared helpers
 ```
+
+### Synonyms (SDK)
+
+```text
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── subjects.ts         # Subject name variations
+├── key-stages.ts       # Key stage aliases
+├── numbers.ts          # Numbers + maths terms (squared → quadratic)
+├── geography.ts        # Geography concepts
+├── maths.ts            # Maths operations
+└── index.ts            # Barrel file (exports synonymsData)
+```
+
+**Synonym Architecture**: Query-time only (BM25 benefits, ELSER does not). See `docs/SYNONYMS.md`.
 
 ---
 
@@ -156,6 +222,20 @@ LOG_LEVEL=info
 
 ---
 
+## Testing Approach (Per Foundation Docs)
+
+| Test Type       | Location                | Purpose                               | IO                |
+| --------------- | ----------------------- | ------------------------------------- | ----------------- |
+| **Unit**        | `*.unit.test.ts`        | Pure functions (metrics calculations) | None              |
+| **Integration** | `*.integration.test.ts` | Code units working together           | None              |
+| **Smoke**       | `smoke-tests/`          | Running system, real ES queries       | HTTP to localhost |
+
+**TDD at all levels**: Write tests FIRST (RED → GREEN → REFACTOR).
+
+**Smoke tests are NOT E2E tests**: They test a running system but are classified as smoke tests per `testing-strategy.md` because they make real network calls.
+
+---
+
 ## Remember
 
 1. **TDD is mandatory** - Write tests FIRST (RED → GREEN → REFACTOR)
@@ -164,7 +244,8 @@ LOG_LEVEL=info
 4. **No skipped tests** - Fix it or delete it
 5. **Fail fast** - Clear error messages, no silent failures
 6. **Simpler first** - Only add complexity when validated necessary
+7. **All quality gates must pass** - No exceptions, no workarounds
 
 ---
 
-**Ready?** Run smoke tests to establish baseline metrics.
+**Ready?** Sync synonyms to ES, then run smoke tests to establish baseline metrics.
