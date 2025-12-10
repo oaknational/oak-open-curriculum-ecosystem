@@ -1,6 +1,6 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 Complete | Ready for Search Quality Evaluation  
+**Status**: Phase 1 Complete | Baseline Captured | Awaiting Assessment  
 **Last Updated**: 2025-12-10
 
 ---
@@ -99,19 +99,25 @@ Ground truth expectations based on **upstream Oak API content**:
 
 ---
 
+## Baseline Results (2025-12-10)
+
+| Metric        | Result | Target  |
+| ------------- | ------ | ------- |
+| MRR           | 0.548  | > 0.70  |
+| NDCG@10       | 0.504  | > 0.75  |
+| Zero-hit rate | 14.3%  | < 10%   |
+| p95 Latency   | 28ms   | < 300ms |
+
+See `phase-1-foundation.md` for per-query breakdown.
+
 ## Next Steps
 
-1. **Run smoke tests** to establish baseline metrics:
+**Awaiting assessment** of baseline results before determining approach:
 
-   ```bash
-   cd apps/oak-open-curriculum-semantic-search
-   pnpm dev  # Start server in one terminal
-   pnpm test:smoke  # Run benchmarks in another
-   ```
-
-2. **Decision Point**:
-   - **If targets met** (MRR > 0.70, NDCG@10 > 0.75): Stay with Phase 1
-   - **If targets not met**: Proceed to Phase 2
+1. Review per-query breakdown in `phase-1-foundation.md`
+2. Investigate underperforming queries
+3. Determine root cause analysis
+4. Decide: tune Phase 1 vs proceed to Phase 2
 
 ---
 

@@ -15,7 +15,7 @@
  * @output Prints lesson slugs and titles for each test query
  */
 
-const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3333';
+const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3003';
 
 const TEST_QUERIES = [
   'Pythagoras theorem',

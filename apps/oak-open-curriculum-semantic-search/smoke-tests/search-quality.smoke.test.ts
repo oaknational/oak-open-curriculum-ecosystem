@@ -26,7 +26,7 @@ import { GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth.js'
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { HybridResponseLessons } from '../src/lib/openapi.schemas.js';
 
-const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3333';
+const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3003';
 
 /** Metrics collected across all queries */
 interface CollectedMetrics {

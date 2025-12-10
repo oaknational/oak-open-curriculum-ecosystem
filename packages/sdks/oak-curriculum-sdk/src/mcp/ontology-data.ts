@@ -1,4 +1,4 @@
-/* eslint-disable max-lines -- this is a static ontology data file, disabling to maintain readability */
+/* eslint-disable max-lines -- static ontology data file, structure requires length */
 /**
  * Static curriculum ontology data for the POC.
  *
@@ -10,6 +10,7 @@
  * for the full schema-derived implementation.
  */
 
+import { synonymsData } from './synonyms/index.js';
 import { toolGuidanceData } from './tool-guidance-data.js';
 
 /**
@@ -412,211 +413,18 @@ export const ontologyData = {
   /**
    * Domain synonyms for curriculum terminology.
    *
-   * This is the SINGLE SOURCE OF TRUTH for synonyms used across:
+   * Imported from the synonyms module - the SINGLE SOURCE OF TRUTH for synonyms used across:
    * - MCP tools (natural language understanding)
    * - Search app (Elasticsearch synonym expansion)
    * - Any other consumer needing term normalisation
    *
+   * @see ./synonyms/index.ts for individual synonym modules
    * @remarks Use `buildElasticsearchSynonyms()` to export ES-compatible format.
    */
   synonyms: {
     description: 'Alternative terms users might use. Map to canonical slugs when calling tools.',
     note: 'This is not exhaustive - just examples and suggestions. Use your language understanding to recognise other variations, abbreviations, and natural phrasings.',
-
-    subjects: {
-      art: ['arts', 'fine art', 'visual art', 'visual arts'],
-      biology: ['life science', 'life sciences'],
-      chemistry: ['chemical science', 'chemical sciences'],
-      citizenship: ['civics', 'citizenship education'],
-      computing: ['computer science', 'cs', 'ict', 'information technology'],
-      'cooking-nutrition': ['cooking', 'food and nutrition', 'food technology', 'food tech'],
-      'design-technology': ['design and technology', 'design technology', 'dt', 'd&t'],
-      english: ['english language', 'english literature', 'literacy', 'language arts'],
-      french: ['french language'],
-      geography: ['geo'],
-      german: ['german language'],
-      history: ['historical studies'],
-      maths: ['math', 'mathematics', 'math.'],
-      music: ['music education'],
-      physics: ['physical science', 'physical sciences'],
-      'physical-education': ['physical education', 'pe', 'p.e.', 'sport', 'sports'],
-      'religious-education': ['religious studies', 'religion', 're', 'r.e.'],
-      'rshe-pshe': [
-        'rshe',
-        'pshe',
-        'rshe education',
-        'pshe education',
-        'relationships and sex education',
-        'personal social health and economic education',
-      ],
-      science: ['sci', 'general science', 'sciences'],
-      spanish: ['spanish language'],
-    },
-
-    keyStages: {
-      ks1: [
-        'key stage 1',
-        'key-stage 1',
-        'key stage one',
-        'y1',
-        'yr 1',
-        'year 1',
-        'y2',
-        'yr 2',
-        'year 2',
-      ],
-      ks2: [
-        'key stage 2',
-        'key-stage 2',
-        'key stage two',
-        'y3',
-        'yr 3',
-        'year 3',
-        'y4',
-        'yr 4',
-        'year 4',
-        'y5',
-        'yr 5',
-        'year 5',
-        'y6',
-        'yr 6',
-        'year 6',
-      ],
-      ks3: [
-        'key stage 3',
-        'key-stage 3',
-        'key stage three',
-        'y7',
-        'yr 7',
-        'year 7',
-        'y8',
-        'yr 8',
-        'year 8',
-        'y9',
-        'yr 9',
-        'year 9',
-      ],
-      ks4: [
-        'key stage 4',
-        'key-stage 4',
-        'key stage four',
-        'gcse',
-        'y10',
-        'yr 10',
-        'year 10',
-        'y11',
-        'yr 11',
-        'year 11',
-      ],
-    },
-
-    /** Geography and environmental themes */
-    geographyThemes: {
-      climate: [
-        'climate change',
-        'global warming',
-        'greenhouse effect',
-        'weather',
-        'climate crisis',
-      ],
-      weather: ['meteorology', 'precipitation', 'rainfall', 'temperature'],
-      mountains: ['alpine', 'highland', 'upland'],
-      rivers: ['fluvial', 'stream', 'drainage basin'],
-      coasts: ['coastal', 'shoreline'],
-      volcanoes: ['volcanic'],
-      earthquakes: ['seismic', 'seismology'],
-      glaciation: ['glacier', 'glaciers', 'ice sheet', 'ice age'],
-      ecosystems: ['biome', 'biomes', 'habitat', 'habitats'],
-      population: ['demography', 'demographic'],
-      settlement: [
-        'settlements',
-        'urbanisation',
-        'urbanization',
-        'city',
-        'cities',
-        'town',
-        'towns',
-      ],
-      industry: ['industrial', 'manufacturing', 'factories'],
-      trade: ['trading', 'commerce', 'economy', 'economic'],
-      sustainability: ['sustainable development', 'environment', 'environmental'],
-    },
-
-    /** History topics and periods */
-    historyTopics: {
-      'world-war-1': ['world war i', 'ww1', 'first world war', 'great war'],
-      'world-war-2': ['world war ii', 'ww2', 'second world war'],
-      'industrial-revolution': ['victorian industry', 'mechanisation', 'mechanization'],
-      tudors: ['tudor'],
-      victorians: ['victorian'],
-      'cold-war': ['superpower rivalry'],
-      'british-empire': ['empire', 'imperial'],
-    },
-
-    /** Mathematics concepts */
-    mathsConcepts: {
-      addition: ['add', 'plus', 'sum'],
-      subtraction: ['subtract', 'minus', 'take away'],
-      multiplication: ['multiply', 'times', 'product'],
-      division: ['divide', 'quotient'],
-      fractions: ['fraction', 'rational number', 'rational numbers'],
-      algebra: ['equation', 'equations', 'expression', 'expressions', 'variable', 'variables'],
-      geometry: ['geometric', 'angle', 'angles', 'polygon', 'polygons'],
-      statistics: ['data handling', 'data analysis'],
-    },
-
-    /** English language concepts */
-    englishConcepts: {
-      grammar: ['syntax'],
-      punctuation: ['commas', 'apostrophes', 'full stops', 'periods'],
-      spelling: ['spellings'],
-      poetry: ['poem', 'poems'],
-      'figurative-language': ['metaphor', 'simile', 'personification', 'literary devices'],
-      shakespeare: ['william shakespeare'],
-    },
-
-    /** Science concepts */
-    scienceConcepts: {
-      photosynthesis: ['chlorophyll', 'chloroplast'],
-      respiration: ['aerobic respiration', 'anaerobic respiration'],
-      'states-of-matter': ['solid', 'liquid', 'gas'],
-      forces: ['force', 'newton', 'newtons', 'gravity', 'gravitational'],
-      energy: ['kinetic energy', 'potential energy', 'conservation of energy'],
-      cells: ['cell', 'cell theory', 'cell biology'],
-      evolution: ['natural selection', 'adaptation'],
-      'rock-cycle': ['igneous', 'sedimentary', 'metamorphic'],
-    },
-
-    /** Generic educational terms */
-    generic: {
-      assessment: ['quiz', 'test', 'exam'],
-    },
-
-    /** Common UK educational acronyms and abbreviations */
-    educationalAcronyms: {
-      sen: ['special educational needs', 'send'],
-      send: ['special educational needs and disabilities'],
-      eal: ['english as an additional language'],
-      eyfs: ['early years foundation stage', 'early years'],
-      sat: ['standard assessment test', 'sats'],
-      gcse: ['general certificate of secondary education'],
-      'a-level': ['a level', 'advanced level'],
-      ofsted: ['office for standards in education'],
-      dfe: ['department for education'],
-      nc: ['national curriculum'],
-      afl: ['assessment for learning'],
-      cpd: ['continuing professional development'],
-      qts: ['qualified teacher status'],
-      nqt: ['newly qualified teacher', 'ect'],
-      ect: ['early career teacher', 'nqt'],
-      hlta: ['higher level teaching assistant'],
-      ta: ['teaching assistant'],
-      semh: ['social emotional mental health'],
-      asd: ['autism spectrum disorder'],
-      adhd: ['attention deficit hyperactivity disorder'],
-      spld: ['specific learning difficulty', 'specific learning difficulties'],
-      mld: ['moderate learning difficulty', 'moderate learning difficulties'],
-    },
+    ...synonymsData,
   },
 } as const;
 

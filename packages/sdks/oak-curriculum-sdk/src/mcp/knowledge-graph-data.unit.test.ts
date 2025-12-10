@@ -180,11 +180,12 @@ describe('conceptGraph', () => {
       expect(estimatedTokens).toBeLessThan(2500);
     });
 
-    it('combined with ontology fits context budget (<26KB)', () => {
+    it('combined with ontology fits context budget (<28KB)', () => {
       const graphSize = JSON.stringify(conceptGraph).length;
       const ontologySize = JSON.stringify(ontologyData).length;
       const combined = graphSize + ontologySize;
-      expect(combined).toBeLessThan(26000);
+      // Budget increased to accommodate expanded synonym definitions (numbers, maths concepts)
+      expect(combined).toBeLessThan(28000);
     });
   });
 });

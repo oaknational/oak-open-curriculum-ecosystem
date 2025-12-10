@@ -73,19 +73,25 @@ Ground truth expectations based on **upstream Oak API content**:
 
 ---
 
+## Baseline Results (2025-12-10)
+
+| Metric        | Result | Target  | Status       |
+| ------------- | ------ | ------- | ------------ |
+| MRR           | 0.548  | > 0.70  | Below target |
+| NDCG@10       | 0.504  | > 0.75  | Below target |
+| Zero-hit rate | 14.3%  | < 10%   | Above target |
+| p95 Latency   | 28ms   | < 300ms | Met          |
+
+**Assessment pending** - see `phase-1-foundation.md` for per-query breakdown.
+
 ## Next Steps
 
-1. **Run smoke tests** to establish baseline metrics:
+Awaiting assessment of baseline results before determining next steps:
 
-   ```bash
-   cd apps/oak-open-curriculum-semantic-search
-   pnpm dev  # Start server in one terminal
-   pnpm test:smoke  # Run benchmarks in another
-   ```
-
-2. **Decision Point**:
-   - **If targets met** (MRR > 0.70, NDCG@10 > 0.75): Stay with two-way hybrid
-   - **If targets not met**: Proceed to Phase 2
+1. Review per-query breakdown in `phase-1-foundation.md`
+2. Investigate underperforming queries (Pythagoras, trigonometry)
+3. Determine root cause of zero-hit for misspelled queries
+4. Decide approach: tune Phase 1 vs proceed to Phase 2
 
 ---
 

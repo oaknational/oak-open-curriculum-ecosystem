@@ -1,7 +1,7 @@
 /**
  * Utilities for exporting synonyms to various formats.
  *
- * The `ontologyData.synonyms` is the SINGLE SOURCE OF TRUTH.
+ * The synonyms module (`./synonyms/index.ts`) is the SINGLE SOURCE OF TRUTH.
  * This module provides exports for:
  * - Elasticsearch synonym sets
  * - Flat lookup maps
@@ -10,7 +10,7 @@
  */
 
 import { typeSafeEntries } from '../types/helpers/type-helpers.js';
-import { ontologyData } from './ontology-data.js';
+import { synonymsData } from './synonyms/index.js';
 
 /**
  * Elasticsearch synonym set entry format.
@@ -94,15 +94,16 @@ export function buildElasticsearchSynonyms(): ElasticsearchSynonymSet {
   // Process each synonym group explicitly for type safety.
   // Dynamic iteration over a union of keys loses type information.
   const entries: ElasticsearchSynonymEntry[] = [
-    ...processGroup('subjects', ontologyData.synonyms.subjects),
-    ...processGroup('keyStages', ontologyData.synonyms.keyStages),
-    ...processGroup('geographyThemes', ontologyData.synonyms.geographyThemes),
-    ...processGroup('historyTopics', ontologyData.synonyms.historyTopics),
-    ...processGroup('mathsConcepts', ontologyData.synonyms.mathsConcepts),
-    ...processGroup('englishConcepts', ontologyData.synonyms.englishConcepts),
-    ...processGroup('scienceConcepts', ontologyData.synonyms.scienceConcepts),
-    ...processGroup('generic', ontologyData.synonyms.generic),
-    ...processGroup('educationalAcronyms', ontologyData.synonyms.educationalAcronyms),
+    ...processGroup('subjects', synonymsData.subjects),
+    ...processGroup('keyStages', synonymsData.keyStages),
+    ...processGroup('numbers', synonymsData.numbers),
+    ...processGroup('geographyThemes', synonymsData.geographyThemes),
+    ...processGroup('historyTopics', synonymsData.historyTopics),
+    ...processGroup('mathsConcepts', synonymsData.mathsConcepts),
+    ...processGroup('englishConcepts', synonymsData.englishConcepts),
+    ...processGroup('scienceConcepts', synonymsData.scienceConcepts),
+    ...processGroup('generic', synonymsData.generic),
+    ...processGroup('educationalAcronyms', synonymsData.educationalAcronyms),
   ];
 
   return { synonyms_set: entries };
@@ -126,15 +127,16 @@ export function buildSynonymLookup(): ReadonlyMap<string, string> {
   const lookup = new Map<string, string>();
 
   // Process each synonym group explicitly for type safety.
-  populateLookup(ontologyData.synonyms.subjects, lookup);
-  populateLookup(ontologyData.synonyms.keyStages, lookup);
-  populateLookup(ontologyData.synonyms.geographyThemes, lookup);
-  populateLookup(ontologyData.synonyms.historyTopics, lookup);
-  populateLookup(ontologyData.synonyms.mathsConcepts, lookup);
-  populateLookup(ontologyData.synonyms.englishConcepts, lookup);
-  populateLookup(ontologyData.synonyms.scienceConcepts, lookup);
-  populateLookup(ontologyData.synonyms.generic, lookup);
-  populateLookup(ontologyData.synonyms.educationalAcronyms, lookup);
+  populateLookup(synonymsData.subjects, lookup);
+  populateLookup(synonymsData.keyStages, lookup);
+  populateLookup(synonymsData.numbers, lookup);
+  populateLookup(synonymsData.geographyThemes, lookup);
+  populateLookup(synonymsData.historyTopics, lookup);
+  populateLookup(synonymsData.mathsConcepts, lookup);
+  populateLookup(synonymsData.englishConcepts, lookup);
+  populateLookup(synonymsData.scienceConcepts, lookup);
+  populateLookup(synonymsData.generic, lookup);
+  populateLookup(synonymsData.educationalAcronyms, lookup);
 
   return lookup;
 }
