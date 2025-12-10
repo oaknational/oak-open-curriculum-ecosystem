@@ -128,6 +128,7 @@ export async function createLessonDocument({
     teacher_tips: fields.teacherTips,
     content_guidance: fields.contentGuidance,
     transcript_text: transcript,
+    lesson_semantic: transcript,
     lesson_url: fields.canonicalUrl,
     tier: fields.tier,
     exam_board: fields.examBoard,

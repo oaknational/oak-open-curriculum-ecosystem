@@ -15,6 +15,10 @@ import { isErr } from '@oaknational/result';
 import { loadAppEnv } from './load-app-env.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter-cached.js';
 import { createSandboxHarness } from '../../indexing/sandbox-harness.js';
+import {
+  getIngestionErrorCollector,
+  resetIngestionErrorCollector,
+} from '../../indexing/ingestion-error-collector.js';
 import { sandboxLogger, setLogLevel } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient } from './ingest-client-factory.js';
@@ -103,6 +107,9 @@ async function handlePostIngestion(
 
 /** Execute the main ingestion workflow. */
 async function runIngestion(args: CliArgs): Promise<void> {
+  // Reset error collector for fresh ingestion run
+  resetIngestionErrorCollector();
+
   printHeader(args);
   await handleCacheClearing(args);
 
@@ -142,6 +149,10 @@ async function runIngestion(args: CliArgs): Promise<void> {
     // Log final rate limit status
     sandboxLogger.info('Final API usage statistics');
     logRateLimitStatus(client.rateLimitTracker);
+
+    // Log ingestion issue summary (errors/warnings encountered)
+    const errorCollector = getIngestionErrorCollector();
+    errorCollector.logSummary(sandboxLogger);
 
     await handlePostIngestion(args, result, duration);
   } finally {

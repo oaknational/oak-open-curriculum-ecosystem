@@ -308,6 +308,29 @@ describe('createLessonDocument', () => {
     expect(doc.exam_board).toBe('aqa');
     expect(doc.pathway).toBe('gcse');
   });
+
+  it('populates lesson_semantic with transcript content for ELSER semantic search', async () => {
+    const lessonSummary = buildLessonSummary();
+    const transcript =
+      'Pythagoras theorem states that in a right-angled triangle, the square of the hypotenuse equals the sum of squares of the other two sides.';
+
+    const doc = await createLessonDocument({
+      lesson: { lessonSlug: 'pythagoras-lesson', lessonTitle: 'Using Pythagoras Theorem' },
+      transcript,
+      summary: lessonSummary,
+      unitCanonicalUrl: 'https://teachers.thenational.academy/units/trigonometry',
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 8,
+      esClient: mockEsClient,
+    });
+
+    // The lesson_semantic field must be populated for ELSER to generate embeddings
+    expect(doc.lesson_semantic).toBeDefined();
+    expect(doc.lesson_semantic).toContain('Pythagoras');
+    expect(doc.lesson_semantic).toContain('hypotenuse');
+  });
 });
 
 describe('createRollupDocument', () => {

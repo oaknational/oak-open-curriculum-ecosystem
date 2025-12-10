@@ -1,6 +1,6 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 Complete | 3/4 Targets Met | Decision Point  
+**Status**: Phase 1 Complete | Two-Way Hybrid Measured | Phase 2 Decision Pending  
 **Last Updated**: 2025-12-10
 
 ---
@@ -26,6 +26,19 @@ For new implementation sessions, read in this order:
    - Current state summary
    - Phase status and next steps
    - Quick reference for commands and file locations
+
+---
+
+## Critical Discovery & Resolution (2025-12-10)
+
+**ELSER semantic search was not operational for lessons.** The `lesson_semantic` field was never being populated during indexing.
+
+- **Problem**: ELSER queries on lessons returned **0 hits**; "hybrid" was actually **BM25-only**
+- **Fix applied**: Added `lesson_semantic: transcript` to `createLessonDocument()`
+- **Verified working**: Re-indexed with 314/314 lessons having `lesson_semantic` populated
+- **Result**: Two-way hybrid now measured; NDCG improved by 5.1%
+
+See `.agent/research/elasticsearch/assumptions-validation.md` for full analysis.
 
 ---
 
@@ -63,11 +76,11 @@ SDK synonyms extracted into modular themed files:
 
 ## Document Structure
 
-```
+```text
 .agent/plans/semantic-search/
 ├── README.md                      # This file - navigation hub
 ├── requirements.md                # Strategic context, risks, costs, demos
-├── phase-1-foundation.md          # ✅ Complete - two-way hybrid
+├── phase-1-foundation.md          # ✅ Complete - lexical baseline + ELSER fix
 ├── phase-2-dense-vectors.md       # ⏸️ If needed - three-way evaluation
 ├── phase-3-plus-roadmap.md        # 📋 Future - NER, RAG, knowledge graph
 ├── reference/                     # Reference documentation
@@ -86,8 +99,8 @@ SDK synonyms extracted into modular themed files:
 | Document                     | Status | Purpose                                         |
 | ---------------------------- | ------ | ----------------------------------------------- |
 | **requirements.md**          | ✅     | Strategic context, risks, costs, demo scenarios |
-| **phase-1-foundation.md**    | ✅     | Two-way hybrid search, data ingestion           |
-| **phase-2-dense-vectors.md** | ⏸️     | Three-way evaluation (if Phase 1 insufficient)  |
+| **phase-1-foundation.md**    | ✅     | Lexical baseline established, ELSER fix applied |
+| **phase-2-dense-vectors.md** | ⏸️     | Three-way evaluation (after two-way hybrid)     |
 | **phase-3-plus-roadmap.md**  | 📋     | NER, RAG, knowledge graph, LTR                  |
 
 ### Reference Documents
@@ -98,6 +111,12 @@ SDK synonyms extracted into modular themed files:
 | **reference-es-serverless-feature-matrix.md** | Feature adoption tracking             |
 | **reference-ir-metrics-guide.md**             | IR metrics (MRR, NDCG) explained      |
 
+### Research Documents
+
+| Document                                                    | Purpose                               |
+| ----------------------------------------------------------- | ------------------------------------- |
+| **.agent/research/elasticsearch/assumptions-validation.md** | ELSER discovery and fix documentation |
+
 ### Archived Documents
 
 | Document                             | Reason for Archive                     |
@@ -107,27 +126,53 @@ SDK synonyms extracted into modular themed files:
 
 ---
 
-## Baseline Results (2025-12-10, after ground truth review)
+## Current Results: Two-Way Hybrid (BM25 + ELSER)
 
 | Metric        | Result    | Target  | Status   |
 | ------------- | --------- | ------- | -------- |
-| MRR           | **0.893** | > 0.70  | ✅ PASS  |
-| NDCG@10       | 0.648     | > 0.75  | ❌ Below |
+| MRR           | **0.908** | > 0.70  | ✅ PASS  |
+| NDCG@10       | 0.725     | > 0.75  | ❌ Below |
 | Zero-hit rate | **0.0%**  | < 10%   | ✅ PASS  |
-| p95 Latency   | 28ms      | < 300ms | ✅ PASS  |
+| p95 Latency   | **198ms** | < 300ms | ✅ PASS  |
 
-**3 of 4 targets met.** See `phase-1-foundation.md` for per-query breakdown.
+**3 of 4 targets met.** NDCG improved 5.1% from lexical baseline but still 2.5% below target.
+
+See `phase-1-foundation.md` for detailed comparison and analysis.
+
+---
+
+## Three-Way Comparison Framework
+
+Empirical measurements of each search approach:
+
+| Approach                       | Status      | MRR   | NDCG@10 | Notes                     |
+| ------------------------------ | ----------- | ----- | ------- | ------------------------- |
+| 1. Lexical (BM25)              | ✅ Measured | 0.920 | 0.690   | Synonyms + fuzzy matching |
+| 2. Two-Way Hybrid (BM25+ELSER) | ✅ Measured | 0.908 | 0.725   | +5.1% NDCG, -38% latency  |
+| 3. Three-Way Hybrid (+E5)      | ⏸️ Phase 2  | TBD   | TBD     | If two-way insufficient   |
+
+Two-way hybrid improved NDCG but still 2.5% below target. Phase 2 decision pending.
+
+---
 
 ## Next Steps
 
-### 1. Sync Synonyms to Elasticsearch
+### Decision Point: Phase 2?
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm elastic:setup  # Push squared → quadratic synonyms
-```
+Two-way hybrid improved NDCG by 5.1% but still misses the 0.75 target by 2.5%.
 
-### 2. Run Smoke Tests
+**Options:**
+
+| Option                 | Description                            | Effort | Expected Gain |
+| ---------------------- | -------------------------------------- | ------ | ------------- |
+| A. Accept 0.725        | Good enough for demo, defer Phase 2    | None   | —             |
+| B. Tune RRF params     | Adjust rank_window_size, rank_constant | Low    | +1-2%         |
+| C. Ground truth review | Ensure expectations match reality      | Low    | Validation    |
+| D. Phase 2 (E5 dense)  | Three-way hybrid (BM25 + ELSER + E5)   | Medium | +5-10%        |
+
+**Recommendation**: Try options B and C first (low effort). If NDCG remains below 0.75, proceed to Phase 2.
+
+### Re-Running Tests
 
 ```bash
 # Terminal 1: Start server (clear cache first!)
@@ -138,19 +183,18 @@ rm -rf .next && pnpm dev
 pnpm test:smoke
 ```
 
-### 3. Establish Repeatable Baseline
+### Re-Ingestion (if needed)
 
-Before evaluating dense vectors (Phase 2), we need:
+**Full ingestion guide**: `apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md`
 
-1. **Stable metrics** - run smoke tests multiple times, ensure consistency
-2. **Synonym sync complete** - verify `squared → quadratic` in ES
-3. **Documented baseline** - record metrics with timestamp
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup
+pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:status
+```
 
-Dense vectors will be evaluated regardless - we need empirical data for architecture decisions.
-
-### 4. Proceed to Phase 2
-
-See `phase-2-dense-vectors.md` for three-way hybrid evaluation.
+See `phase-2-dense-vectors.md` for three-way hybrid evaluation if Phase 2 is needed.
 
 ---
 
@@ -196,6 +240,13 @@ apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
 └── index.ts                # Public exports
 ```
 
+### Document Transforms (ELSER Fix)
+
+```text
+apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+└── document-transforms.ts  # createLessonDocument() - FIXED
+```
+
 ### Synonyms (SDK)
 
 ```text
@@ -217,6 +268,16 @@ packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 ```text
 apps/oak-open-curriculum-semantic-search/smoke-tests/
 └── search-quality.smoke.test.ts  # Benchmark test suite
+```
+
+### Ingestion Documentation
+
+```text
+apps/oak-open-curriculum-semantic-search/docs/
+├── INGESTION-GUIDE.md     # Complete re-indexing guide (NEW)
+├── INDEXING.md            # Technical indexing playbook
+├── SYNONYMS.md            # Synonym system documentation
+└── ES_SERVERLESS_SETUP.md # ES Serverless setup guide
 ```
 
 ### RRF Query Builders
@@ -263,7 +324,8 @@ No exceptions. No `--no-verify`. Fix issues, don't disable checks.
 1. **Re-read foundation documents** - rules.md, schema-first, testing-strategy
 2. **Check the prompt** - semantic-search.prompt.md has current state
 3. **Review phase docs** - phase-1, phase-2, phase-3+
-4. **Check ADRs** - Previous decisions in `docs/architecture/architectural-decisions/`
+4. **Check research** - assumptions-validation.md for ELSER discovery
+5. **Check ADRs** - Previous decisions in `docs/architecture/architectural-decisions/`
 
 ---
 

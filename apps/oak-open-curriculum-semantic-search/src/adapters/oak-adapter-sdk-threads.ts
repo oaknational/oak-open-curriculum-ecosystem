@@ -9,21 +9,25 @@ import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
 
 /**
  * Thread data from the /threads API endpoint.
+ * Note: canonicalUrl is always null for threads since they are data concepts
+ * without corresponding pages on the website.
  */
 export interface ThreadEntry {
   readonly slug: string;
   readonly title: string;
-  readonly canonicalUrl?: string;
+  readonly canonicalUrl?: null;
 }
 
 /**
  * Thread unit data from the /threads/{threadSlug}/units API endpoint.
+ * Note: canonicalUrl is always null for thread units since they are data concepts
+ * without corresponding pages on the website.
  */
 export interface ThreadUnitEntry {
   readonly unitSlug: string;
   readonly unitTitle: string;
   readonly unitOrder: number;
-  readonly canonicalUrl?: string;
+  readonly canonicalUrl?: null;
 }
 
 /**

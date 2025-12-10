@@ -1463,7 +1463,7 @@ const AllThreadsResponseSchema = z.array(
     .object({
       title: z.string(),
       slug: z.string(),
-      canonicalUrl: z.string().optional(),
+      canonicalUrl: z.null().optional(),
     })
     .loose()
 );
@@ -1473,7 +1473,7 @@ const ThreadUnitsResponseSchema = z.array(
       unitTitle: z.string(),
       unitSlug: z.string(),
       unitOrder: z.number(),
-      canonicalUrl: z.string().optional(),
+      canonicalUrl: z.null().optional(),
     })
     .loose()
 );

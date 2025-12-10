@@ -85,7 +85,13 @@ async function tryWriteCache(
   }
 }
 
-/** Wrap function with caching + 404 fallback (caches both successes and 404s). */
+/** Check if an error is a 500-series server error. */
+function isServerError(error: Error): boolean {
+  const msg = error.message;
+  return msg.includes('500') || msg.includes('502') || msg.includes('503') || msg.includes('504');
+}
+
+/** Wrap function with caching + 404/500 fallback (caches successes and 404s, handles 500s gracefully). */
 function withCacheAndFallback<T>(
   fn: (id: string) => Promise<T>,
   redis: Redis,
@@ -107,9 +113,22 @@ function withCacheAndFallback<T>(
       await tryWriteCache(redis, key, ttlSeconds, result);
       return result;
     } catch (error) {
-      if (error instanceof Error && error.message.includes('404')) {
-        await tryWriteCache(redis, key, ttlSeconds, fallback);
-        return fallback;
+      if (error instanceof Error) {
+        // Handle 404 - resource doesn't exist, cache the fallback
+        if (error.message.includes('404')) {
+          await tryWriteCache(redis, key, ttlSeconds, fallback);
+          return fallback;
+        }
+        // Handle 500-series errors - return fallback but DON'T cache (transient)
+        // The SDK retry mechanism will have already attempted retries
+        if (isServerError(error)) {
+          cacheLogger.warn('Upstream 500 error, returning fallback', {
+            resourceType,
+            id,
+            error: error.message,
+          });
+          return fallback;
+        }
       }
       throw error;
     }

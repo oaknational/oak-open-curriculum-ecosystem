@@ -51,6 +51,7 @@ export async function processUnitSummary(
 }
 
 interface LessonBuildContext {
+  unitSlug: string;
   unitCanonicalUrl: string;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -83,6 +84,7 @@ function createLessonBuildContext(
     normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
 
   return {
+    unitSlug: group.unitSlug,
     unitCanonicalUrl,
     subject,
     keyStage,
@@ -100,7 +102,11 @@ async function buildLessonDocEntry(
   lesson: { lessonSlug: string; lessonTitle: string },
   context: LessonBuildContext,
 ): Promise<LessonDocEntry | null> {
-  const materials = await fetchLessonMaterials(client, lesson.lessonSlug);
+  const materials = await fetchLessonMaterials(client, lesson.lessonSlug, {
+    keyStage: context.keyStage,
+    subject: context.subject,
+    unitSlug: context.unitSlug,
+  });
 
   // Handle lessons with no summary data (404)
   if (materials === null) {
