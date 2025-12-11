@@ -1,6 +1,6 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 & 2 Complete | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
+**Status**: Phase 1 & 2 Complete | Phase 3+ Restructured | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
 **Last Updated**: 2025-12-11
 
 ---
@@ -19,8 +19,7 @@ For new implementation sessions, read in this order:
    - Risk mitigation strategies
    - Cost model (spoiler: $0/month for AI/ML features)
    - Demo scenarios for validation
-   - Common issues and solutions
-   - ADR requirements per phase
+   - **New**: Search UI, Cloud Functions, Admin Dashboard deliverables
 
 3. **Entry Point** - `.agent/prompts/semantic-search/semantic-search.prompt.md`
    - Current state summary
@@ -29,48 +28,45 @@ For new implementation sessions, read in this order:
 
 ---
 
-## Critical Discovery & Resolution (2025-12-10)
+## Phase Overview
 
-**ELSER semantic search was not operational for lessons.** The `lesson_semantic` field was never being populated during indexing.
+Remaining work is organized into three parts:
 
-- **Problem**: ELSER queries on lessons returned **0 hits**; "hybrid" was actually **BM25-only**
-- **Fix applied**: Added `lesson_semantic: transcript` to `createLessonDocument()`
-- **Verified working**: Re-indexed with 314/314 lessons having `lesson_semantic` populated
-- **Result**: Two-way hybrid now measured; NDCG improved by 5.1%
+### Part 1: MCP Prerequisites (Phase 3)
 
-See `.agent/research/elasticsearch/assumptions-validation.md` for full analysis.
+Foundation for a `semantic_search` MCP tool that searches lessons and units with filters.
 
----
+| Phase | Name                     | Status  | Effort   | Description                        |
+| ----- | ------------------------ | ------- | -------- | ---------------------------------- |
+| **3** | **Multi-Index & Fields** | 📋 Next | 2-3 days | Unit search, doc_type, OWA aliases |
 
-## Current Status
+### Part 2: Enhancements (Phases 4-9)
 
-### Data Completeness ✅ VERIFIED (2025-12-10)
+UI, admin tooling, query improvements, and curriculum enrichment. Phase 9 transforms raw search into a curriculum discovery interface.
 
-| Index             | Count   | Status |
-| ----------------- | ------- | ------ |
-| `oak_lessons`     | **314** | ✅     |
-| `oak_units`       | 36      | ✅     |
-| `oak_unit_rollup` | 244     | ✅     |
-| `oak_threads`     | 201     | ✅     |
-| `oak_sequences`   | 2       | ✅     |
+| Phase | Name              | Status     | Effort   | Description                            |
+| ----- | ----------------- | ---------- | -------- | -------------------------------------- |
+| 4     | Search UI         | 📋 Planned | 3-4 days | Functional, portable search UX         |
+| 5     | Cloud Functions   | 📋 Planned | 2-3 days | HTTP ingestion endpoints on Vercel     |
+| 6     | Admin Dashboard   | 📋 Planned | 2-3 days | Ingestion control, metrics display     |
+| 7     | Query Enhancement | 📋 Planned | 1-2 days | Production patterns, OWA compatibility |
+| 8     | Entity Extraction | 📋 Future  | 3-4 days | NER, concept graphs                    |
+| 9     | Reference Indices | 📋 Future  | 2-3 days | Subject/keystage metadata, threads     |
 
-All 36 Maths KS4 units have their lessons indexed.
+### Part 3: AI Integration (Phase 10+)
 
-### Ground Truth ✅ COMPREHENSIVE (2025-12-10)
+Advanced AI capabilities: RAG, Knowledge Graph, Learning to Rank.
 
-Ground truth reviewed and expanded using MCP curriculum tools:
+| Phase | Name   | Status    | Effort     | Description               |
+| ----- | ------ | --------- | ---------- | ------------------------- |
+| 10+   | Future | 📋 Future | 15-20 days | RAG, Knowledge Graph, LTR |
 
-- Comprehensive KS4 Maths coverage (algebra, geometry, number, graphs, statistics)
-- Modular structure in `src/lib/search-quality/ground-truth/`
-- Edge cases included (misspellings, natural language queries)
+### Completed Phases
 
-### Synonyms ✅ REFACTORED (2025-12-10)
-
-SDK synonyms extracted into modular themed files:
-
-- Location: `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`
-- Added `numbers` group with `squared → quadratic` mapping
-- Documentation: `apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md`
+| Phase | Name          | Status      | Description                 |
+| ----- | ------------- | ----------- | --------------------------- |
+| 1     | Foundation    | ✅ Complete | Lexical baseline, ELSER fix |
+| 2     | Dense Vectors | ✅ Complete | E5 evaluated, no benefit    |
 
 ---
 
@@ -78,51 +74,30 @@ SDK synonyms extracted into modular themed files:
 
 ```text
 .agent/plans/semantic-search/
-├── README.md                      # This file - navigation hub
-├── requirements.md                # Strategic context, risks, costs, demos
-├── phase-1-foundation.md          # ✅ Complete - lexical baseline + ELSER fix
-├── phase-2-dense-vectors.md       # ⏸️ If needed - three-way evaluation
-├── phase-3-plus-roadmap.md        # 📋 Future - NER, RAG, knowledge graph
-├── reference/                     # Reference documentation
+├── README.md                           # This file - navigation hub
+├── requirements.md                     # Strategic context, risks, costs, demos
+│
+├── phase-3-multi-index-and-fields.md   # 📋 Current - unit search, doc_type, aliases
+├── phase-4-search-ui.md                # 📋 NEW - functional search experience
+├── phase-5-cloud-functions.md          # 📋 NEW - HTTP ingestion endpoints
+├── phase-6-admin-dashboard.md          # 📋 NEW - ingestion control UI
+├── phase-7-query-enhancement.md        # 📋 Query patterns, OWA compatibility
+├── phase-8-entity-extraction.md        # 📋 NER, concept graphs
+├── phase-9-reference-indices.md        # 📋 Reference data, threads
+├── phase-10-plus-future.md             # 📋 RAG, KG, LTR, resource types
+│
+├── reference-docs/                     # Reference documentation
 │   ├── reference-data-completeness-policy.md
 │   ├── reference-es-serverless-feature-matrix.md
 │   └── reference-ir-metrics-guide.md
-└── archive/                       # Superseded documents
-    ├── maths-ks4-implementation-plan.md  # Original 3000-line plan
-    └── search-ui-plan.md                 # UI plan (deferred, see requirements.md)
+│
+└── archive/                            # Completed and superseded documents
+    ├── phase-1-foundation-COMPLETE.md       # ✅ Complete
+    ├── phase-2-dense-vectors-COMPLETE.md    # ✅ Complete
+    ├── phase-3-plus-roadmap-BACKUP.md       # Backup before restructure
+    ├── maths-ks4-implementation-plan.md     # Original 3000-line plan
+    └── search-ui-plan.md                    # Old UI plan (superseded by Phase 4)
 ```
-
----
-
-## Phase Documents
-
-| Document                     | Status | Purpose                                         |
-| ---------------------------- | ------ | ----------------------------------------------- |
-| **requirements.md**          | ✅     | Strategic context, risks, costs, demo scenarios |
-| **phase-1-foundation.md**    | ✅     | Lexical baseline established, ELSER fix applied |
-| **phase-2-dense-vectors.md** | ✅     | E5 & reranking evaluated - no benefit found     |
-| **phase-3-plus-roadmap.md**  | 📋     | NER, RAG, knowledge graph, multi-index search   |
-
-### Reference Documents
-
-| Document                                      | Purpose                               |
-| --------------------------------------------- | ------------------------------------- |
-| **reference-data-completeness-policy.md**     | Policy on what data to upload in full |
-| **reference-es-serverless-feature-matrix.md** | Feature adoption tracking             |
-| **reference-ir-metrics-guide.md**             | IR metrics (MRR, NDCG) explained      |
-
-### Research Documents
-
-| Document                                                    | Purpose                               |
-| ----------------------------------------------------------- | ------------------------------------- |
-| **.agent/research/elasticsearch/assumptions-validation.md** | ELSER discovery and fix documentation |
-
-### Archived Documents
-
-| Document                             | Reason for Archive                     |
-| ------------------------------------ | -------------------------------------- |
-| **maths-ks4-implementation-plan.md** | Superseded - content now in phase docs |
-| **search-ui-plan.md**                | Outdated (November 2025)               |
 
 ---
 
@@ -137,72 +112,30 @@ SDK synonyms extracted into modular themed files:
 
 **3 of 4 targets met.** Two-way hybrid confirmed optimal after extensive Phase 2 experimentation.
 
-**Phase 2 Conclusion**: Neither E5 dense vectors nor reranking improved results. See `phase-2-dense-vectors.md` and `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` for full analysis.
+---
+
+## Key Findings (Phase 1 & 2)
+
+1. **Two-way hybrid is optimal** - BM25 + ELSER provides best balance
+2. **E5 dense vectors provide no benefit** - For this dataset, sparse vectors (ELSER) are sufficient
+3. **Reranker field matters critically** - Full transcripts cause 20+ second latencies; short titles lack semantic signal
+4. **ELSER was not operational for lessons** - Fixed by adding `lesson_semantic: transcript` to document transform
 
 ---
 
-## Search Approach Comparison (Complete)
+## Next Steps: Phase 3
 
-All approaches empirically evaluated:
+### Priority Tasks
 
-| Approach              | Status         | MRR         | NDCG@10     | Latency    | Notes             |
-| --------------------- | -------------- | ----------- | ----------- | ---------- | ----------------- |
-| 1. Lexical (BM25)     | ✅             | 0.920       | 0.690       | 322ms      | Synonyms + fuzzy  |
-| **2. Two-Way Hybrid** | ✅ **OPTIMAL** | **0.900**   | **0.716**   | **153ms**  | Production choice |
-| 3. Three-Way Hybrid   | ✅             | 0.892       | 0.715       | 180ms      | No benefit        |
-| 4. With Reranking     | ✅             | 0.888-0.893 | 0.681-0.683 | 800-1546ms | Hurts quality     |
+| Task                               | Priority     | Notes                               |
+| ---------------------------------- | ------------ | ----------------------------------- |
+| **Verify unit hybrid search**      | **CRITICAL** | Ensure units use BM25 + ELSER       |
+| **Test unit search quality**       | **HIGH**     | Create ground truth and smoke tests |
+| **Experiment with unit reranking** | **HIGH**     | Test with `rollup_text` field       |
+| **Add `doc_type` field**           | Medium       | Distinguish lesson/unit in results  |
+| **Import OWA aliases**             | Medium       | Better query understanding          |
 
-**Conclusion**: Two-way hybrid (BM25 + ELSER) is optimal. Dense vectors and reranking evaluated but provide no benefit.
-
----
-
-## Next Steps: Multi-Index Search Generality
-
-### Current Limitation
-
-All experimentation focused on **lesson search** only. Teachers also need:
-
-1. **Unit search** - Find units by topic
-2. **Combined search** - Single query returning both lessons and units
-3. **Scoped search** - Find lessons within a specific unit
-4. **Result type filtering** - API consumers need to know if result is lesson, unit, or programme
-
-### Phase 3.0 Priorities (See `phase-3-plus-roadmap.md`)
-
-| Task                                 | Priority     | Notes                                                 |
-| ------------------------------------ | ------------ | ----------------------------------------------------- |
-| **Unit hybrid search**               | **CRITICAL** | Units MUST use BM25 + ELSER like lessons              |
-| **Unit reranking experiment**        | **HIGH**     | Test reranking with `rollup_text` (~300 chars/lesson) |
-| **Test unit search quality**         | HIGH         | Create ground truth and smoke tests                   |
-| Can we distinguish result types?     | Medium       | Add `doc_type` field                                  |
-| Can we filter by type?               | Medium       | Unified endpoint with type filter                     |
-| Can we search lessons within a unit? | Medium       | Add unit filter to lesson search                      |
-
-**Key insight**: Unit reranking is feasible NOW because `rollup_text` already has appropriate length for cross-encoders. Lesson reranking requires upstream API `rerank_summary` field.
-
-### Re-Running Tests
-
-```bash
-# Terminal 1: Start server (clear cache first!)
-cd apps/oak-open-curriculum-semantic-search
-rm -rf .next && pnpm dev
-
-# Terminal 2: Run smoke tests
-pnpm test:smoke
-```
-
-### Re-Ingestion (if needed)
-
-**Full ingestion guide**: `apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md`
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup
-pnpm es:ingest-live -- --subject maths --keystage ks4
-pnpm es:status
-```
-
-See `phase-2-dense-vectors.md` for three-way hybrid evaluation if Phase 2 is needed.
+See `phase-3-multi-index-and-fields.md` for full details.
 
 ---
 
@@ -211,16 +144,17 @@ See `phase-2-dense-vectors.md` for three-way hybrid evaluation if Phase 2 is nee
 Run after every piece of work, from repo root, in order:
 
 ```bash
-pnpm i                                            # Install dependencies
 pnpm type-gen                                     # Generate types
 pnpm build                                        # Build all
 pnpm type-check                                   # TypeScript validation
-pnpm lint -- --fix                                # Auto-fix linting
-pnpm -F @oaknational/oak-curriculum-sdk docs:all  # Generate SDK docs
-pnpm format                                       # Format code
-pnpm markdownlint                                 # Markdown lint
+pnpm lint:fix                                     # Auto-fix linting
+pnpm format:root                                  # Format code
+pnpm markdownlint:root                            # Markdown lint
 pnpm test                                         # Unit + integration
 pnpm test:e2e                                     # E2E tests
+pnpm test:e2e:built                               # E2E on built app
+pnpm test:ui                                      # Playwright UI tests
+pnpm smoke:dev:stub                               # Smoke tests
 ```
 
 All gates must pass. No exceptions.
@@ -229,71 +163,25 @@ All gates must pass. No exceptions.
 
 ## Key File Locations
 
-### Ground Truth and Metrics
+### Search Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
-├── ground-truth/           # Modular ground truth (2025-12-10)
-│   ├── algebra.ts          # Algebra queries
-│   ├── geometry.ts         # Geometry queries
-│   ├── number.ts           # Number queries
-│   ├── graphs.ts           # Graphs queries
-│   ├── statistics.ts       # Statistics queries
-│   ├── edge-cases.ts       # Misspellings, natural language
-│   ├── types.ts            # GroundTruthQuery interface
-│   └── index.ts            # Combined exports
-├── ground-truth.ts         # Legacy (imports from ground-truth/)
-├── metrics.ts              # MRR, NDCG calculations
-└── index.ts                # Public exports
+apps/oak-open-curriculum-semantic-search/
+├── src/lib/hybrid-search/            # RRF query builders
+├── src/lib/search-quality/           # Ground truth, metrics
+├── src/lib/indexing/                 # Document transforms
+├── smoke-tests/                      # Search quality benchmarks
+└── docs/                             # INGESTION-GUIDE, SYNONYMS, etc.
 ```
 
-### Document Transforms (ELSER Fix)
-
-```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
-└── document-transforms.ts  # createLessonDocument() - FIXED
-```
-
-### Synonyms (SDK)
+### SDK Synonyms
 
 ```text
 packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
-├── subjects.ts             # Subject name variations
-├── key-stages.ts           # Key stage aliases
-├── numbers.ts              # Numbers + maths terms (squared → quadratic)
-├── geography.ts            # Geography concepts
-├── history.ts              # History periods
-├── maths.ts                # Maths operations
-├── english.ts              # English concepts
-├── science.ts              # Science concepts
-├── education.ts            # Generic + educational acronyms
-└── index.ts                # Barrel file (exports synonymsData)
-```
-
-### Smoke Tests
-
-```text
-apps/oak-open-curriculum-semantic-search/smoke-tests/
-└── search-quality.smoke.test.ts  # Benchmark test suite
-```
-
-### Ingestion Documentation
-
-```text
-apps/oak-open-curriculum-semantic-search/docs/
-├── INGESTION-GUIDE.md     # Complete re-indexing guide (NEW)
-├── INDEXING.md            # Technical indexing playbook
-├── SYNONYMS.md            # Synonym system documentation
-└── ES_SERVERLESS_SETUP.md # ES Serverless setup guide
-```
-
-### RRF Query Builders
-
-```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
-├── rrf-query-builders.ts           # Two-way (BM25 + ELSER)
-├── rrf-query-builders-three-way.ts # Three-way (Phase 2)
-└── rrf-query-helpers.ts            # Shared helpers
+├── subjects.ts                       # Subject name variations
+├── key-stages.ts                     # Key stage aliases
+├── numbers.ts                        # Maths terms (squared → quadratic)
+└── index.ts                          # Barrel exports
 ```
 
 ---
@@ -302,19 +190,9 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 
 ### TDD is Mandatory
 
-All new code must follow TDD at ALL levels:
-
 1. **RED** - Write test first, run it, prove it fails
 2. **GREEN** - Write minimal implementation to pass
 3. **REFACTOR** - Improve implementation, tests stay green
-
-### Test Classification
-
-| Type        | File Pattern            | Purpose             | IO Allowed        |
-| ----------- | ----------------------- | ------------------- | ----------------- |
-| Unit        | `*.unit.test.ts`        | Pure functions      | None              |
-| Integration | `*.integration.test.ts` | Code units together | None              |
-| Smoke       | `smoke-tests/`          | Running system      | HTTP to localhost |
 
 ### No Type Shortcuts
 
@@ -326,13 +204,11 @@ No exceptions. No `--no-verify`. Fix issues, don't disable checks.
 
 ---
 
-## Getting Help
+## Rate Limit Update
 
-1. **Re-read foundation documents** - rules.md, schema-first, testing-strategy
-2. **Check the prompt** - semantic-search.prompt.md has current state
-3. **Review phase docs** - phase-1, phase-2, phase-3+
-4. **Check research** - assumptions-validation.md for ELSER discovery
-5. **Check ADRs** - Previous decisions in `docs/architecture/architectural-decisions/`
+**Oak API rate limit upgraded**: 1,000 → **10,000 requests/hour**
+
+This significantly reduces ingestion time for full curriculum indexing.
 
 ---
 

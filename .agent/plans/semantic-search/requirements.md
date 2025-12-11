@@ -14,7 +14,7 @@ Create a production-ready demo that proves Elasticsearch Serverless as the **def
 
 ## Why Maths KS4 Vertical Slice?
 
-Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 subject/key-stage combinations would take 17-24 hours. Maths KS4 provides:
+Given the **Oak API 10,000 requests/hour limit** (upgraded from 1,000), full ingestion is significantly faster. Maths KS4 provides:
 
 | Reason                        | Benefit                                                   |
 | ----------------------------- | --------------------------------------------------------- |
@@ -46,6 +46,45 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 subject/ke
 | **Production-ready code**       | TDD, documented, all quality gates passing, no type shortcuts                          |
 | **Scalable to full curriculum** | Architecture supports 340+ subject/key-stage combinations                              |
 | **Cost-effective**              | <$100/month operational cost (excluding ES subscription)                               |
+
+### New Deliverables (Updated 2025-12-11)
+
+Remaining work is organized into three parts:
+
+#### Part 1: MCP Prerequisites (Phase 3)
+
+| Deliverable           | Phase | Success Criteria                                |
+| --------------------- | ----- | ----------------------------------------------- |
+| **`semantic_search`** | 3     | MCP tool searching lessons + units with filters |
+
+Phase 3 provides the foundation for a `semantic_search` MCP tool: unit search, `doc_type` field, unified search endpoint.
+
+#### Part 2: Enhancements (Phases 4-9)
+
+| Deliverable           | Phase | Success Criteria                                  |
+| --------------------- | ----- | ------------------------------------------------- |
+| **Search UI**         | 4     | Functional search experience, portable components |
+| **Cloud Functions**   | 5     | HTTP-based ingestion control, timeout-safe        |
+| **Admin Dashboard**   | 6     | Browser-based ingestion control, metrics display  |
+| **Query Enhancement** | 7     | Production patterns, OWA compatibility            |
+| **Entity Extraction** | 8     | NER, concept graphs                               |
+| **Reference Indices** | 9     | Enriched results with titles, prerequisites, NC   |
+
+**Phase 9 Impact**: Transforms `semantic_search` from raw slugs to enriched curriculum discovery (human-readable titles, prerequisites, NC alignment, glossary).
+
+#### Part 3: AI Integration (Phase 10+)
+
+| Deliverable         | Phase | Success Criteria                    |
+| ------------------- | ----- | ----------------------------------- |
+| **RAG**             | 10    | Retrieval-augmented generation      |
+| **Knowledge Graph** | 11    | Curriculum relationship graph       |
+| **LTR**             | 12    | Learning to rank with click signals |
+
+**Design Principles**:
+
+- **Functional over aesthetic** - Clean, working UI; styling deferred
+- **Portable** - Self-contained components for future Oak app integration
+- **External for complexity** - Link to ES Kibana for advanced management
 
 ---
 
@@ -94,10 +133,10 @@ Given the **Oak API 1000 requests/hour limit**, full ingestion of 340 subject/ke
 
 ### Low Risk
 
-| Risk                | Impact         | Mitigation                                                     |
-| ------------------- | -------------- | -------------------------------------------------------------- |
-| **API Rate Limits** | Slow ingestion | Batch requests, off-peak ingestion, caching                    |
-| **Schema Changes**  | Type errors    | Cardinal Rule: `pnpm type-gen` + `pnpm build` brings alignment |
+| Risk                | Impact         | Mitigation                                                         |
+| ------------------- | -------------- | ------------------------------------------------------------------ |
+| **API Rate Limits** | Slow ingestion | 10,000 req/hr limit is generous; batch requests, caching if needed |
+| **Schema Changes**  | Type errors    | Cardinal Rule: `pnpm type-gen` + `pnpm build` brings alignment     |
 
 ---
 

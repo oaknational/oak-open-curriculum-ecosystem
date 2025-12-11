@@ -70,7 +70,7 @@ Per the research in `research/openai-app-ui.research.md`:
 
 ### Architecture After Implementation
 
-```
+```text
 BEFORE (Inline - no caching):
 ┌─────────────┐     resources/read     ┌─────────────┐
 │   ChatGPT   │ ──────────────────────►│ MCP Server  │
@@ -563,7 +563,7 @@ export function registerWidgetResource(server: McpServer): void {
 
 **File**: `apps/oak-curriculum-mcp-streamable-http/.gitignore`
 
-```
+```text
 # Generated widget bundle (built from src/widget/)
 public/widget/
 ```
