@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 Complete | Two-Way Hybrid Measured | Phase 2 Decision Pending  
-**Last Updated**: 2025-12-10
+**Status**: Phase 1 & 2 Complete | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
+**Last Updated**: 2025-12-11
 
 ---
 
@@ -100,8 +100,8 @@ SDK synonyms extracted into modular themed files:
 | ---------------------------- | ------ | ----------------------------------------------- |
 | **requirements.md**          | ✅     | Strategic context, risks, costs, demo scenarios |
 | **phase-1-foundation.md**    | ✅     | Lexical baseline established, ELSER fix applied |
-| **phase-2-dense-vectors.md** | ⏸️     | Three-way evaluation (after two-way hybrid)     |
-| **phase-3-plus-roadmap.md**  | 📋     | NER, RAG, knowledge graph, LTR                  |
+| **phase-2-dense-vectors.md** | ✅     | E5 & reranking evaluated - no benefit found     |
+| **phase-3-plus-roadmap.md**  | 📋     | NER, RAG, knowledge graph, multi-index search   |
 
 ### Reference Documents
 
@@ -126,51 +126,59 @@ SDK synonyms extracted into modular themed files:
 
 ---
 
-## Current Results: Two-Way Hybrid (BM25 + ELSER)
+## Current Results: Two-Way Hybrid (BM25 + ELSER) - CONFIRMED OPTIMAL
 
 | Metric        | Result    | Target  | Status   |
 | ------------- | --------- | ------- | -------- |
-| MRR           | **0.908** | > 0.70  | ✅ PASS  |
-| NDCG@10       | 0.725     | > 0.75  | ❌ Below |
+| MRR           | **0.900** | > 0.70  | ✅ PASS  |
+| NDCG@10       | 0.716     | > 0.75  | ❌ Below |
 | Zero-hit rate | **0.0%**  | < 10%   | ✅ PASS  |
-| p95 Latency   | **198ms** | < 300ms | ✅ PASS  |
+| Avg Latency   | **153ms** | < 300ms | ✅ PASS  |
 
-**3 of 4 targets met.** NDCG improved 5.1% from lexical baseline but still 2.5% below target.
+**3 of 4 targets met.** Two-way hybrid confirmed optimal after extensive Phase 2 experimentation.
 
-See `phase-1-foundation.md` for detailed comparison and analysis.
-
----
-
-## Three-Way Comparison Framework
-
-Empirical measurements of each search approach:
-
-| Approach                       | Status      | MRR   | NDCG@10 | Notes                     |
-| ------------------------------ | ----------- | ----- | ------- | ------------------------- |
-| 1. Lexical (BM25)              | ✅ Measured | 0.920 | 0.690   | Synonyms + fuzzy matching |
-| 2. Two-Way Hybrid (BM25+ELSER) | ✅ Measured | 0.908 | 0.725   | +5.1% NDCG, -38% latency  |
-| 3. Three-Way Hybrid (+E5)      | ⏸️ Phase 2  | TBD   | TBD     | If two-way insufficient   |
-
-Two-way hybrid improved NDCG but still 2.5% below target. Phase 2 decision pending.
+**Phase 2 Conclusion**: Neither E5 dense vectors nor reranking improved results. See `phase-2-dense-vectors.md` and `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` for full analysis.
 
 ---
 
-## Next Steps
+## Search Approach Comparison (Complete)
 
-### Decision Point: Phase 2?
+All approaches empirically evaluated:
 
-Two-way hybrid improved NDCG by 5.1% but still misses the 0.75 target by 2.5%.
+| Approach              | Status         | MRR         | NDCG@10     | Latency    | Notes             |
+| --------------------- | -------------- | ----------- | ----------- | ---------- | ----------------- |
+| 1. Lexical (BM25)     | ✅             | 0.920       | 0.690       | 322ms      | Synonyms + fuzzy  |
+| **2. Two-Way Hybrid** | ✅ **OPTIMAL** | **0.900**   | **0.716**   | **153ms**  | Production choice |
+| 3. Three-Way Hybrid   | ✅             | 0.892       | 0.715       | 180ms      | No benefit        |
+| 4. With Reranking     | ✅             | 0.888-0.893 | 0.681-0.683 | 800-1546ms | Hurts quality     |
 
-**Options:**
+**Conclusion**: Two-way hybrid (BM25 + ELSER) is optimal. Dense vectors and reranking evaluated but provide no benefit.
 
-| Option                 | Description                            | Effort | Expected Gain |
-| ---------------------- | -------------------------------------- | ------ | ------------- |
-| A. Accept 0.725        | Good enough for demo, defer Phase 2    | None   | —             |
-| B. Tune RRF params     | Adjust rank_window_size, rank_constant | Low    | +1-2%         |
-| C. Ground truth review | Ensure expectations match reality      | Low    | Validation    |
-| D. Phase 2 (E5 dense)  | Three-way hybrid (BM25 + ELSER + E5)   | Medium | +5-10%        |
+---
 
-**Recommendation**: Try options B and C first (low effort). If NDCG remains below 0.75, proceed to Phase 2.
+## Next Steps: Multi-Index Search Generality
+
+### Current Limitation
+
+All experimentation focused on **lesson search** only. Teachers also need:
+
+1. **Unit search** - Find units by topic
+2. **Combined search** - Single query returning both lessons and units
+3. **Scoped search** - Find lessons within a specific unit
+4. **Result type filtering** - API consumers need to know if result is lesson, unit, or programme
+
+### Phase 3.0 Priorities (See `phase-3-plus-roadmap.md`)
+
+| Task                                 | Priority     | Notes                                                 |
+| ------------------------------------ | ------------ | ----------------------------------------------------- |
+| **Unit hybrid search**               | **CRITICAL** | Units MUST use BM25 + ELSER like lessons              |
+| **Unit reranking experiment**        | **HIGH**     | Test reranking with `rollup_text` (~300 chars/lesson) |
+| **Test unit search quality**         | HIGH         | Create ground truth and smoke tests                   |
+| Can we distinguish result types?     | Medium       | Add `doc_type` field                                  |
+| Can we filter by type?               | Medium       | Unified endpoint with type filter                     |
+| Can we search lessons within a unit? | Medium       | Add unit filter to lesson search                      |
+
+**Key insight**: Unit reranking is feasible NOW because `rollup_text` already has appropriate length for cross-encoders. Lesson reranking requires upstream API `rerank_summary` field.
 
 ### Re-Running Tests
 
@@ -200,20 +208,19 @@ See `phase-2-dense-vectors.md` for three-way hybrid evaluation if Phase 2 is nee
 
 ## Quality Gates
 
-Run after every piece of work, from repo root:
+Run after every piece of work, from repo root, in order:
 
 ```bash
-pnpm type-gen          # Generate types from schema
-pnpm build             # Build all workspaces
-pnpm type-check        # TypeScript validation
-pnpm lint:fix          # Auto-fix linting
-pnpm format:root       # Format root files
-pnpm markdownlint:root # Markdown lint
-pnpm test              # Unit and integration tests
-pnpm test:e2e          # E2E tests
-pnpm test:e2e:built    # E2E on built artifacts
-pnpm test:ui           # Playwright UI tests
-pnpm smoke:dev:stub    # Smoke tests
+pnpm i                                            # Install dependencies
+pnpm type-gen                                     # Generate types
+pnpm build                                        # Build all
+pnpm type-check                                   # TypeScript validation
+pnpm lint -- --fix                                # Auto-fix linting
+pnpm -F @oaknational/oak-curriculum-sdk docs:all  # Generate SDK docs
+pnpm format                                       # Format code
+pnpm markdownlint                                 # Markdown lint
+pnpm test                                         # Unit + integration
+pnpm test:e2e                                     # E2E tests
 ```
 
 All gates must pass. No exceptions.

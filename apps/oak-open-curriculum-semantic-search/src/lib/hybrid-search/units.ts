@@ -1,7 +1,8 @@
 import { esSearch, type EsHit } from '../elastic-http';
+import { esClient } from '../es-client';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, UnitResult } from './types';
-import { buildUnitRrfRequest } from './rrf-query-builders';
+import { buildThreeWayUnitRrfRequest } from './rrf-query-builders';
 
 export async function runUnitsSearch(
   q: StructuredQuery,
@@ -9,7 +10,7 @@ export async function runUnitsSearch(
   from: number,
   doHighlight: boolean,
 ): Promise<HybridSearchResult> {
-  const request = buildUnitRrfRequest({
+  const request = await buildThreeWayUnitRrfRequest(esClient(), {
     text: q.text,
     size,
     subject: q.subject,

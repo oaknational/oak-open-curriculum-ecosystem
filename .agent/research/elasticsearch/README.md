@@ -1,6 +1,6 @@
 # Elasticsearch Research
 
-_Last updated: 2025-12-04_
+_Last updated: 2025-12-11_
 
 ## Overview
 
@@ -22,6 +22,8 @@ This directory contains research and analysis related to Elasticsearch integrati
 
 ### Evaluations
 
+- [Hybrid Search and Reranking Evaluation](./hybrid-search-reranking-evaluation.md) - **Comprehensive evaluation** (2025-12-11) of two-way vs three-way hybrid search, RRF parameter tuning, and Elastic Rerank model. **Key finding**: Two-way hybrid (BM25 + ELSER) without reranking is optimal. E5 dense vectors provide no benefit; reranking on short fields degrades quality.
+
 - [Elastic MCP Integration Evaluation](./elastic-mcp-integration-evaluation.md) - Analysis of Elastic Agent Builder MCP server and `mcp-server-elasticsearch` package vs our current generated tools approach. **Recommendation**: Continue with current schema-first generated tools.
 
 ### Gap Analysis
@@ -40,46 +42,40 @@ This directory contains research and analysis related to Elasticsearch integrati
 
 ### Completed Work ✅
 
-1. **Schema-First Migration** - All search schemas now generated from OpenAPI via `pnpm type-gen`
+1. **Schema-First Migration** - All search schemas generated from OpenAPI via `pnpm type-gen`
 2. **MCP Tool Generation** - 26 tools with full type safety
-3. **Elasticsearch Index Schemas** - Four index mappings defined and generated
+3. **Elasticsearch Indexes Deployed** - Four indexes on ES Serverless with 314 Maths KS4 lessons
+4. **Hybrid Search Evaluated** - Two-way hybrid (BM25 + ELSER) confirmed optimal
+5. **Reranking Investigated** - Not beneficial without dedicated combined field
 
-### Critical State ⚠️
+### Search Configuration (Production-Ready) ✅
 
-**Elasticsearch indexes are DEFINED but NOT DEPLOYED**:
+**Two-way hybrid (BM25 + ELSER) without reranking**:
 
-- Index mappings exist in `scripts/mappings/`
-- Index document schemas generated in SDK
-- **NO indexes exist** on any Elasticsearch Serverless instance
-- All testing has been against fixtures only
-- Semantic embeddings have never been generated
+- MRR: 0.900 (target: >0.70) ✅
+- NDCG@10: 0.716 (target: >0.75) ❌ 3.4% below
+- Latency: 153ms (target: <300ms) ✅
+- Zero-hit rate: 0% ✅
 
-### Remaining Work ❌
+### What Didn't Work ❌
 
-1. **Deploy ES Serverless Instance** - BLOCKING (CRITICAL priority)
-2. **Run Initial Ingestion** - BLOCKING (CRITICAL priority)
-3. **Thread Index and Fields** - Not started (HIGH priority)
-4. **Programme Factor Fields** - Not started (HIGH priority)
-5. **Unit Type Classification** - Not started (MEDIUM priority)
-6. **Structured Content Guidance** - Not started (MEDIUM priority)
-7. **Lesson Component Availability** - Not started (MEDIUM priority)
-8. **Ontology Index for RAG** - Not started (MEDIUM priority)
+1. **E5 Dense Vectors** - Three-way hybrid provided no improvement over two-way
+2. **Reranking on transcript_text** - 22+ second latency (document length issue)
+3. **Reranking on lesson_title** - Degraded quality (too short for semantic signal)
+4. **RRF Parameter Tuning** - Minimal impact (<1% change)
 
-### MCP Connectivity Options
+### Remaining Work
 
-Identified approaches for exposing semantic search:
+1. **Thread Index and Fields** - Not started (HIGH priority)
+2. **Unit Search Reranking** - Evaluate with `rollup_text` field (MEDIUM priority)
+3. **Combined Rerank Field** - Consider if NDCG gap becomes critical (LOW priority)
 
-1. **Aggregated tool in SDK** (recommended first) - Calls semantic search app
-2. **Enhanced `search` tool** with `mode: semantic` parameter
-3. **Direct MCP from semantic search app** (optional later)
-4. **Elastic Agent Builder** (evaluate if Kibana deployed)
+### Critical Learnings
 
-### New Considerations
-
-- Elastic Agent Builder MCP server exists but doesn't align with schema-first architecture
-- RAG opportunities require ontology index + content enhancements
-- Knowledge graph and ontology data should be indexed for domain knowledge RAG
-- Continue with current approach, re-evaluate after ontology work complete
+- **ELSER is sufficient** - Sparse vectors capture semantic meaning effectively for curriculum content
+- **Reranker field selection matters critically** - Too long = extreme latency; too short = no semantic signal
+- **Cross-encoder O(n²) complexity** - Input length dominates latency, not cold starts
+- **Simplest solution won** - Two-way hybrid outperformed all more complex alternatives
 
 ## Relationship to Plans
 

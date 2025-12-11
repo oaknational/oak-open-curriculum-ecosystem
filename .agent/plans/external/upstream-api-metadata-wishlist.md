@@ -13,6 +13,28 @@
 - Can we enhance the metadata of the API to make it more useful for AI agents?
 - Can we improve data integrity at the API level?
 
+## New Enhancement Request: Rerank-Optimized Summary Field (2025-12-11)
+
+**Context**: Phase 2 semantic search experimentation revealed that cross-encoder reranking models (like Elastic's `.rerank-v1`) require text fields of ~100-200 tokens for effective semantic signal. Full transcripts (5000+ tokens) cause 22+ second latency due to O(n²) complexity. Short titles (~10 tokens) lack semantic signal and actually degrade quality.
+
+**Request**: Add a pre-computed `rerank_summary` field to lesson responses containing a dense ~200 token summary combining:
+
+- Lesson title
+- Keywords
+- Key learning points/pupil lesson outcome
+- First 1-2 sentences of transcript (if space permits)
+
+**Benefits**:
+
+- Enables effective semantic reranking without latency penalty
+- Pre-computed at API level (not computed at query time)
+- Could improve NDCG by enabling cross-encoder reranking
+- Same field could improve search snippets in UI
+
+**Priority**: Medium - current two-way hybrid (BM25 + ELSER) achieves MRR 0.900, NDCG 0.716. Reranking may close remaining NDCG gap but requires this field to be effective.
+
+**See**: `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` for full experimental findings.
+
 ## Executive Summary
 
 Oak National Academy has built something unique: a comprehensive, open curriculum API containing 30,000+ lessons, 1,000+ units, and rich educational metadata. This isn't just another education dataset—it's one of the most complete, openly accessible curriculum resources in the world.
@@ -931,7 +953,7 @@ If implementing proper programme support requires breaking changes (e.g., restru
 
 **Current state:**
 
-Resource identifiers (slugs, IDs) may differ between the Open Curriculum API and the Oak Web Application (OWA) at www.thenational.academy. This creates friction when:
+Resource identifiers (slugs, IDs) may differ between the Open Curriculum API and the Oak Web Application (OWA) at <www.thenational.academy>. This creates friction when:
 
 - AI tools generate links to OWA that don't work
 - Teachers search for lessons they found on the website using different identifiers
@@ -940,7 +962,7 @@ Resource identifiers (slugs, IDs) may differ between the Open Curriculum API and
 
 **The problem:**
 
-When a teacher finds a lesson on www.thenational.academy and wants to use it via an AI tool, they may have:
+When a teacher finds a lesson on <www.thenational.academy> and wants to use it via an AI tool, they may have:
 
 ```plaintext
 OWA URL: https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123

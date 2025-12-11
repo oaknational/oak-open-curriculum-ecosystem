@@ -6,11 +6,12 @@
  * @see {@link ../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md} for ADR
  */
 
-import Redis from 'ioredis';
+import type Redis from 'ioredis';
 import type { OakClient } from './oak-adapter-sdk';
 import { createOakSdkClient } from './oak-adapter-sdk';
 import { optionalEnv } from '../lib/env';
 import { cacheLogger } from '../lib/logger';
+import { createRedisClient, withRedisConnection } from './sdk-cache/redis-connection';
 
 /** Cache key prefix with version for schema change invalidation. */
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
@@ -40,25 +41,6 @@ function createUncachedClient(baseClient: OakClient): CachedOakClient {
     getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
     disconnect: () => Promise.resolve(),
   };
-}
-
-/** Create Redis client with error handling, returns null if unavailable. */
-async function createRedisClient(url: string): Promise<Redis | null> {
-  try {
-    const client = new Redis(url, {
-      maxRetriesPerRequest: 3,
-      retryStrategy: (times) => (times > 3 ? null : Math.min(times * 200, 1000)),
-      lazyConnect: true,
-    });
-    await client.connect();
-    await client.ping();
-    cacheLogger.info('Connected to Redis', { url });
-    return client;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    cacheLogger.warn('Redis connection failed, continuing without cache', { error: msg });
-    return null;
-  }
 }
 
 /** Try to read from cache, returns null on miss or error. */
@@ -91,7 +73,7 @@ function isServerError(error: Error): boolean {
   return msg.includes('500') || msg.includes('502') || msg.includes('503') || msg.includes('504');
 }
 
-/** Wrap function with caching + 404/500 fallback (caches successes and 404s, handles 500s gracefully). */
+/** Wrap function with caching + 404/500 fallback. */
 function withCacheAndFallback<T>(
   fn: (id: string) => Promise<T>,
   redis: Redis,
@@ -114,19 +96,12 @@ function withCacheAndFallback<T>(
       return result;
     } catch (error) {
       if (error instanceof Error) {
-        // Handle 404 - resource doesn't exist, cache the fallback
         if (error.message.includes('404')) {
           await tryWriteCache(redis, key, ttlSeconds, fallback);
           return fallback;
         }
-        // Handle 500-series errors - return fallback but DON'T cache (transient)
-        // The SDK retry mechanism will have already attempted retries
         if (isServerError(error)) {
-          cacheLogger.warn('Upstream 500 error, returning fallback', {
-            resourceType,
-            id,
-            error: error.message,
-          });
+          cacheLogger.warn('Upstream 500 error, returning fallback', { resourceType, id });
           return fallback;
         }
       }
@@ -185,7 +160,6 @@ export async function createCachedOakSdkClient(): Promise<CachedOakClient> {
   const baseClient = createOakSdkClient();
   const config = optionalEnv();
 
-  // If env not available or caching disabled, return uncached client
   if (!config?.SDK_CACHE_ENABLED) {
     cacheLogger.info('SDK caching disabled');
     return createUncachedClient(baseClient);
@@ -211,50 +185,36 @@ export async function clearSdkCache(): Promise<number> {
     return 0;
   }
 
-  const redis = await createRedisClient(config.SDK_CACHE_REDIS_URL);
-  if (!redis) return 0;
-
-  try {
+  return withRedisConnection(config.SDK_CACHE_REDIS_URL, 0, async (redis) => {
     const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
     if (keys.length === 0) {
       cacheLogger.info('No cached entries to clear');
-      await redis.quit();
       return 0;
     }
     const deleted = await redis.del(...keys);
     cacheLogger.info('Cleared cached entries', { count: deleted });
-    await redis.quit();
     return deleted;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    cacheLogger.error('Failed to clear cache', { error: msg });
-    await redis.quit();
-    return 0;
-  }
+  });
 }
 
-/** Check SDK cache status without creating a full client. */
-export async function getSdkCacheStatus(): Promise<{
+/** SDK cache status result. */
+interface CacheStatus {
   enabled: boolean;
   connected: boolean;
   keyCount: number;
-}> {
+}
+
+/** Check SDK cache status without creating a full client. */
+export async function getSdkCacheStatus(): Promise<CacheStatus> {
   const config = optionalEnv();
   if (!config?.SDK_CACHE_ENABLED) {
     return { enabled: false, connected: false, keyCount: 0 };
   }
 
-  const redis = await createRedisClient(config.SDK_CACHE_REDIS_URL);
-  if (!redis) {
-    return { enabled: true, connected: false, keyCount: 0 };
-  }
+  const disconnectedFallback: CacheStatus = { enabled: true, connected: false, keyCount: 0 };
 
-  try {
+  return withRedisConnection(config.SDK_CACHE_REDIS_URL, disconnectedFallback, async (redis) => {
     const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
-    await redis.quit();
     return { enabled: true, connected: true, keyCount: keys.length };
-  } catch {
-    await redis.quit();
-    return { enabled: true, connected: false, keyCount: 0 };
-  }
+  });
 }

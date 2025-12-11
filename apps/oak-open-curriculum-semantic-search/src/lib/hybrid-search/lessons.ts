@@ -1,7 +1,8 @@
 import { esSearch, type EsHit } from '../elastic-http';
+import { esClient } from '../es-client';
 import type { SearchLessonsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, LessonResult } from './types';
-import { buildLessonRrfRequest } from './rrf-query-builders';
+import { buildThreeWayLessonRrfRequest } from './rrf-query-builders';
 
 export async function runLessonsSearch(
   q: StructuredQuery,
@@ -9,7 +10,7 @@ export async function runLessonsSearch(
   from: number,
   doHighlight: boolean,
 ): Promise<HybridSearchResult> {
-  const request = buildLessonRrfRequest({
+  const request = await buildThreeWayLessonRrfRequest(esClient(), {
     text: q.text,
     size,
     subject: q.subject,

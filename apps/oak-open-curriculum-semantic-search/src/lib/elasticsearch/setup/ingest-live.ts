@@ -30,6 +30,7 @@ import {
   printDryRunNotice,
   writeMetadata,
 } from './ingest-output.js';
+import { withRateLimitMonitoring } from '../../rate-limit-logger.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -54,9 +55,7 @@ async function handleCacheClearing(args: CliArgs): Promise<void> {
   }
 }
 
-/**
- * Execute ingestion and return result with duration.
- */
+/** Execute ingestion and return result with duration. */
 async function executeIngestion(
   harness: ReturnType<typeof createSandboxHarness> extends Promise<infer U> ? U : never,
   args: CliArgs,
@@ -74,9 +73,7 @@ async function executeIngestion(
   return { result, duration };
 }
 
-/**
- * Handle post-ingestion metadata write and error reporting.
- */
+/** Handle post-ingestion metadata write and error reporting. */
 async function handlePostIngestion(
   args: CliArgs,
   result: IngestionResult,
@@ -107,56 +104,40 @@ async function handlePostIngestion(
 
 /** Execute the main ingestion workflow. */
 async function runIngestion(args: CliArgs): Promise<void> {
-  // Reset error collector for fresh ingestion run
   resetIngestionErrorCollector();
-
   printHeader(args);
   await handleCacheClearing(args);
 
   const client = await createIngestionClient();
 
-  // Start rate limit monitoring
-  const { logRateLimitStatus, startRateLimitMonitoring } =
-    await import('../../rate-limit-logger.js');
-
-  // Log initial rate limit status
-  logRateLimitStatus(client.rateLimitTracker);
-
-  // Start periodic monitoring (every 30 seconds)
-  const stopMonitoring = startRateLimitMonitoring(client.rateLimitTracker, 30000);
-
   try {
-    sandboxLogger.debug('Creating ingestion harness', {
-      subjects: args.subjects,
-      keyStages: args.keyStages,
+    await withRateLimitMonitoring(client.rateLimitTracker, 30000, async () => {
+      sandboxLogger.debug('Creating ingestion harness', {
+        subjects: args.subjects,
+        keyStages: args.keyStages,
+      });
+
+      const harness = await createSandboxHarness({
+        client,
+        keyStages: args.keyStages,
+        subjects: args.subjects,
+        indexes: args.indexes,
+        target: 'primary',
+        logger: sandboxLogger,
+      });
+      sandboxLogger.debug('Harness created successfully');
+
+      const { result, duration } = await executeIngestion(harness, args);
+
+      printSummary(result, duration);
+      printCacheStats(client);
+
+      const errorCollector = getIngestionErrorCollector();
+      errorCollector.logSummary(sandboxLogger);
+
+      await handlePostIngestion(args, result, duration);
     });
-
-    const harness = await createSandboxHarness({
-      client,
-      keyStages: args.keyStages,
-      subjects: args.subjects,
-      indexes: args.indexes,
-      target: 'primary',
-      logger: sandboxLogger,
-    });
-    sandboxLogger.debug('Harness created successfully');
-
-    const { result, duration } = await executeIngestion(harness, args);
-
-    printSummary(result, duration);
-    printCacheStats(client);
-
-    // Log final rate limit status
-    sandboxLogger.info('Final API usage statistics');
-    logRateLimitStatus(client.rateLimitTracker);
-
-    // Log ingestion issue summary (errors/warnings encountered)
-    const errorCollector = getIngestionErrorCollector();
-    errorCollector.logSummary(sandboxLogger);
-
-    await handlePostIngestion(args, result, duration);
   } finally {
-    stopMonitoring();
     await client.disconnect();
   }
 }
@@ -169,7 +150,6 @@ async function main(): Promise<void> {
 
   const args = parseArgs(process.argv.slice(2));
 
-  // Wire verbose flag to log level
   if (args.verbose) {
     setLogLevel('DEBUG');
   }
@@ -188,6 +168,5 @@ main().catch((error: unknown) => {
     stack: error instanceof Error ? error.stack : undefined,
     phase: 'main',
   });
-  // Fail fast - exit immediately
   process.exit(1);
 });

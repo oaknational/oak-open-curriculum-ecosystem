@@ -69,3 +69,31 @@ export function startRateLimitMonitoring(
   // Return cleanup function
   return () => clearInterval(intervalId);
 }
+
+/**
+ * Execute an async operation with rate limit monitoring.
+ *
+ * Logs initial status, monitors periodically, logs final status on completion.
+ *
+ * @typeParam T - Return type of the operation
+ * @param tracker - Rate limit tracker to monitor
+ * @param intervalMs - Monitoring interval in milliseconds (default 30000)
+ * @param operation - Async operation to execute
+ * @returns Result of the operation
+ */
+export async function withRateLimitMonitoring<T>(
+  tracker: RateLimitTracker,
+  intervalMs: number,
+  operation: () => Promise<T>,
+): Promise<T> {
+  logRateLimitStatus(tracker);
+  const stopMonitoring = startRateLimitMonitoring(tracker, intervalMs);
+
+  try {
+    return await operation();
+  } finally {
+    sandboxLogger.info('Final API usage statistics');
+    logRateLimitStatus(tracker);
+    stopMonitoring();
+  }
+}

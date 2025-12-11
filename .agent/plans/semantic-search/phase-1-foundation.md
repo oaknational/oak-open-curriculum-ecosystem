@@ -1,7 +1,7 @@
 # Phase 1: Foundation (Lexical Baseline + Two-Way Hybrid)
 
-**Status**: ✅ COMPLETE | Two-Way Hybrid Measured  
-**Last Updated**: 2025-12-10
+**Status**: ✅ COMPLETE | Two-Way Hybrid Confirmed Optimal  
+**Last Updated**: 2025-12-11
 
 ---
 
@@ -122,7 +122,7 @@ This creates a high bar for hybrid search to beat.
 
 ---
 
-## Three-Way Comparison Framework
+## Full Comparison (Phase 1 & 2 Complete)
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
@@ -133,15 +133,20 @@ This creates a high bar for hybrid search to beat.
 │     • Query-time synonyms (oak_text_search analyzer)                       │
 │     • MRR: 0.920 | NDCG: 0.690                                             │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  2. TWO-WAY HYBRID (BM25 + ELSER)                         ← MEASURED       │
+│  2. TWO-WAY HYBRID (BM25 + ELSER)                    ✅ PRODUCTION CHOICE  │
 │     • RRF combines lexical + sparse vector                                 │
-│     • MRR: 0.908 | NDCG: 0.725 (+5.1%)                                     │
-│     • p95 Latency: 198ms (-38% from lexical)                               │
+│     • MRR: 0.900 | NDCG: 0.716 | Latency: 153ms                            │
+│     • Best balance of quality and performance                              │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  3. THREE-WAY HYBRID (BM25 + ELSER + E5)                  ← PHASE 2        │
+│  3. THREE-WAY HYBRID (BM25 + ELSER + E5)                  ← NOT BENEFICIAL │
 │     • RRF combines lexical + sparse + dense vectors                        │
-│     • Expected: Additional +5-10% NDCG                                     │
-│     • Requires: Dense vector retriever enabled                             │
+│     • MRR: 0.892 | NDCG: 0.715 | Latency: 180ms                            │
+│     • Result: Slight degradation, not recommended                          │
+├────────────────────────────────────────────────────────────────────────────┤
+│  4. WITH RERANKING                                        ← NOT BENEFICIAL │
+│     • Cross-encoder reranking on lesson_title                              │
+│     • MRR: 0.888-0.893 | NDCG: 0.681-0.683 | Latency: 800-1546ms           │
+│     • Result: Hurts quality, not recommended                               │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -232,14 +237,67 @@ The 0.725 NDCG@10 (2.5% below target) indicates room for improvement in ranking 
 
 ---
 
+## Ingestion Error Handling
+
+Robust error handling added to gracefully handle upstream API failures:
+
+### Error Collector Module
+
+```text
+apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+└── ingestion-error-collector.ts    # Structured error tracking (NEW)
+```
+
+**Features:**
+
+- Tracks errors/warnings with full context (keyStage, subject, unitSlug, lessonSlug)
+- Logs comprehensive summary at ingestion end
+- Singleton pattern for cross-module access
+
+### 500 Error Handling
+
+```text
+apps/oak-open-curriculum-semantic-search/src/adapters/
+└── oak-adapter-cached.ts           # Retry logic for 500 errors
+```
+
+**Behaviour:**
+
+- 3 retry attempts with exponential backoff (1s, 2s, 4s)
+- Graceful fallback to empty transcript on persistent 500s
+- Continue ingestion instead of crashing
+
+### Context Logging
+
+All errors include context about what was being processed:
+
+```typescript
+interface IngestionContext {
+  keyStage?: KeyStage;
+  subject?: SearchSubjectSlug;
+  unitSlug?: string;
+  lessonSlug?: string;
+  operation?: string;
+}
+```
+
+---
+
 ## Files Modified
 
 ```text
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/indexing/
 │   ├── index-bulk-helpers.ts              # deriveLessonGroupsFromUnitSummaries()
+│   ├── index-bulk-helpers-internal.ts     # Context passing to fetchLessonMaterials
+│   ├── index-bulk-support.ts              # Graceful 500 handling with context
+│   ├── ingestion-error-collector.ts       # Structured error tracking (NEW)
 │   ├── document-transforms.ts             # createLessonDocument() - ELSER FIX
 │   └── document-transforms.unit.test.ts   # lesson_semantic test added
+├── src/adapters/
+│   └── oak-adapter-cached.ts              # 500 retry with exponential backoff
+├── src/lib/elasticsearch/setup/
+│   └── ingest-live.ts                     # Error summary logging at end
 ├── src/lib/index-oak-helpers.ts           # fetchPairData(), buildCoreDocumentOps()
 ├── src/lib/hybrid-search/rrf-query-builders.ts # ES 8.11+ retriever API
 ├── src/lib/search-quality/
@@ -266,22 +324,20 @@ packages/sdks/oak-curriculum-sdk/
 
 ---
 
-## Next Steps
+## Phase 2 Completed: Two-Way Hybrid Confirmed Optimal
 
-### Decision Point: Phase 2?
+Phase 2 extensively evaluated alternatives (2025-12-11):
 
-Two-way hybrid improved NDCG by 5.1% but still misses the 0.75 target by 2.5%.
+| Configuration            | MRR       | NDCG@10   | Latency   | Result         |
+| ------------------------ | --------- | --------- | --------- | -------------- |
+| **2-way (BM25 + ELSER)** | **0.900** | **0.716** | **153ms** | ✅ **OPTIMAL** |
+| 3-way (+ E5 dense)       | 0.892     | 0.715     | 180ms     | No benefit     |
+| 2-way + rerank           | 0.893     | 0.683     | 1546ms    | Hurts quality  |
+| 3-way + rerank           | 0.888     | 0.681     | 808ms     | Worst overall  |
 
-**Options:**
+**Decision**: Proceed with two-way hybrid (BM25 + ELSER) as production configuration.
 
-| Option                 | Description                            | Effort | Expected Gain |
-| ---------------------- | -------------------------------------- | ------ | ------------- |
-| A. Accept 0.725        | Good enough for demo, defer Phase 2    | None   | —             |
-| B. Tune RRF params     | Adjust rank_window_size, rank_constant | Low    | +1-2%         |
-| C. Ground truth review | Ensure expectations match reality      | Low    | Validation    |
-| D. Phase 2 (E5 dense)  | Three-way hybrid (BM25 + ELSER + E5)   | Medium | +5-10%        |
-
-**Recommendation**: Try options B and C first (low effort). If NDCG remains below 0.75, proceed to Phase 2.
+See `phase-2-dense-vectors.md` and `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` for full analysis.
 
 ### Re-Running Tests
 
