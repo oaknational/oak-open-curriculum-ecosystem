@@ -74,6 +74,7 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'tier', zodType: 'string', optional: true },
   { name: 'exam_board', zodType: 'string', optional: true },
   { name: 'pathway', zodType: 'string', optional: true },
+  { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
 /**
@@ -107,6 +108,7 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
+  { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
 /**
@@ -143,6 +145,7 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'tier', zodType: 'string', optional: true },
   { name: 'exam_board', zodType: 'string', optional: true },
   { name: 'pathway', zodType: 'string', optional: true },
+  { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
 /**
@@ -170,6 +173,7 @@ export const SEQUENCES_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'sequence_semantic', zodType: 'string', optional: true },
   { name: 'sequence_url', zodType: 'string', optional: false },
   { name: 'title_suggest', zodType: 'object', optional: true },
+  { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
 /**

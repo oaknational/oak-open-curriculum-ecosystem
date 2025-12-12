@@ -5,8 +5,10 @@
  * 1. BM25 lexical search (multi_match via standard retriever)
  * 2. ELSER sparse embeddings (semantic via standard retriever)
  *
- * For three-way hybrid search (with dense vectors), see rrf-query-builders-three-way.ts.
+ * Phase 2 experiments confirmed that two-way hybrid (BM25 + ELSER) is optimal.
+ * Dense vectors (E5) provided no benefit and were removed.
  *
+ * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
  * @module rrf-query-builders
  */
 
@@ -27,14 +29,6 @@ import {
   createUnitElserRetriever,
 } from './rrf-query-helpers';
 
-// Re-export three-way RRF functions for backwards compatibility
-export {
-  buildThreeWayLessonRrfRequest,
-  buildThreeWayUnitRrfRequest,
-  type LessonRrfParams,
-  type UnitRrfParams,
-} from './rrf-query-builders-three-way';
-
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /** Parameters for sequence RRF search. */
@@ -51,6 +45,7 @@ export function buildLessonRrfRequest(params: {
   size: number;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
+  unitSlug?: string;
   includeHighlights?: boolean;
   includeFacets?: boolean;
 }): EsSearchRequest {
@@ -59,10 +54,11 @@ export function buildLessonRrfRequest(params: {
     size,
     subject,
     keyStage,
+    unitSlug,
     includeHighlights = false,
     includeFacets = false,
   } = params;
-  const filters = createLessonFilters(subject, keyStage);
+  const filters = createLessonFilters(subject, keyStage, unitSlug);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,

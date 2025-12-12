@@ -178,6 +178,10 @@ export const OAK_LESSONS_MAPPING = {
       pathway: {
         type: 'keyword',
       },
+      doc_type: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
     },
   },
 } as const;

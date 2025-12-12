@@ -131,6 +131,7 @@ export const SearchLessonsIndexDocSchema = z
     tier: z.string().min(1).optional(),
     exam_board: z.string().min(1).optional(),
     pathway: z.string().min(1).optional(),
+    doc_type: z.string().min(1),
   })
   .strict();
 export type SearchLessonsIndexDoc = z.infer<typeof SearchLessonsIndexDocSchema>;
@@ -155,6 +156,7 @@ export const SearchUnitsIndexDocSchema = z
     thread_titles: z.array(z.string().min(1)).optional(),
     thread_orders: z.array(z.number()).optional(),
     title_suggest: SearchUnitsCompletionPayloadSchema.optional(),
+    doc_type: z.string().min(1),
   })
   .strict();
 export type SearchUnitsIndexDoc = z.infer<typeof SearchUnitsIndexDocSchema>;
@@ -186,6 +188,7 @@ export const SearchUnitRollupDocSchema = z
     tier: z.string().min(1).optional(),
     exam_board: z.string().min(1).optional(),
     pathway: z.string().min(1).optional(),
+    doc_type: z.string().min(1),
   })
   .strict();
 export type SearchUnitRollupDoc = z.infer<typeof SearchUnitRollupDocSchema>;
@@ -208,6 +211,7 @@ export const SearchSequenceIndexDocSchema = z
     sequence_semantic: z.string().min(1).optional(),
     sequence_url: z.string().min(1),
     title_suggest: SearchSequenceCompletionPayloadSchema.optional(),
+    doc_type: z.string().min(1),
   })
   .strict();
 export type SearchSequenceIndexDoc = z.infer<typeof SearchSequenceIndexDocSchema>;

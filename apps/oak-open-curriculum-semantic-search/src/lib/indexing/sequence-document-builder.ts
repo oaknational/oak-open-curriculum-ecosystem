@@ -100,5 +100,6 @@ export function createSequenceDocument(
         phase: [phaseSlug],
       },
     },
+    doc_type: 'sequence',
   };
 }

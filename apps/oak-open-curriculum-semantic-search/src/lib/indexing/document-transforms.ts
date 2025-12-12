@@ -78,6 +78,7 @@ export function createUnitDocument({
       input: [unitTitle],
       contexts: { subject: [subject], key_stage: [keyStage], sequence: sequenceIds },
     },
+    doc_type: 'unit',
   };
 }
 
@@ -139,6 +140,7 @@ export async function createLessonDocument({
       input: [lesson.lessonTitle],
       contexts: { subject: [subject], key_stage: [keyStage] },
     },
+    doc_type: 'lesson',
   };
 }
 
@@ -191,6 +193,7 @@ export async function createRollupDocument({
     pathway: fields.pathway,
     unit_dense_vector: unitDenseVector,
     rollup_dense_vector: rollupDenseVector,
+    doc_type: 'unit',
   };
 }
 

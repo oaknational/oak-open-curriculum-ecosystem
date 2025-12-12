@@ -117,6 +117,7 @@ describe('runSuggestions', () => {
         input: ['Mountains and glaciation'],
         contexts: { subject: ['geography'], key_stage: ['ks4'] },
       },
+      doc_type: 'lesson',
     };
 
     searchMock
@@ -187,6 +188,7 @@ describe('runSuggestions', () => {
         contexts: { subject: ['geography'], key_stage: ['ks3'], sequence: ['sequence-9'] },
       },
       sequence_ids: ['sequence-9'],
+      doc_type: 'unit',
     };
 
     searchMock
@@ -247,6 +249,7 @@ describe('runSuggestions', () => {
         input: ['Earth science'],
         contexts: { subject: ['geography'], phase: ['secondary'] },
       },
+      doc_type: 'sequence',
     };
 
     searchMock

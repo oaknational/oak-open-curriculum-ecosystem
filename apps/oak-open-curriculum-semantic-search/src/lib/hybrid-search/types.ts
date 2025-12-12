@@ -17,6 +17,8 @@ export interface StructuredQuery {
   keyStage?: KeyStage;
   minLessons?: number;
   phaseSlug?: string;
+  /** Filter lessons to a specific unit by unit slug. */
+  unitSlug?: string;
   size?: number;
   from?: number;
   highlight?: boolean;

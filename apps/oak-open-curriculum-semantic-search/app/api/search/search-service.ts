@@ -46,6 +46,7 @@ export function buildStructuredQuery(body: SearchStructuredRequest): StructuredQ
     highlight: body.highlight,
     includeFacets: body.includeFacets,
     phaseSlug: body.phaseSlug,
+    unitSlug: body.unitSlug,
   };
 }
 

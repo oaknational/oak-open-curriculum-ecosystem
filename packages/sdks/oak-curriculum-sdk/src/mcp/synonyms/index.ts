@@ -11,6 +11,7 @@
 
 import { educationalAcronymSynonyms, genericSynonyms } from './education.js';
 import { englishSynonyms } from './english.js';
+import { examBoardSynonyms } from './exam-boards.js';
 import { geographySynonyms } from './geography.js';
 import { historySynonyms } from './history.js';
 import { keyStageSynonyms } from './key-stages.js';
@@ -22,6 +23,7 @@ import { subjectSynonyms } from './subjects.js';
 // Re-export individual modules for direct access
 export { educationalAcronymSynonyms, genericSynonyms } from './education.js';
 export { englishSynonyms } from './english.js';
+export { examBoardSynonyms } from './exam-boards.js';
 export { geographySynonyms } from './geography.js';
 export { historySynonyms } from './history.js';
 export { keyStageSynonyms } from './key-stages.js';
@@ -40,6 +42,7 @@ export const synonymsData = {
   subjects: subjectSynonyms,
   numbers: numberSynonyms,
   keyStages: keyStageSynonyms,
+  examBoards: examBoardSynonyms,
   geographyThemes: geographySynonyms,
   historyTopics: historySynonyms,
   mathsConcepts: mathsSynonyms,

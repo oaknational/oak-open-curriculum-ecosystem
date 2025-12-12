@@ -75,7 +75,7 @@ describe('IndexFieldDefinitions type', () => {
 
 describe('UNITS_INDEX_FIELDS', () => {
   it('has exactly 16 fields', () => {
-    expect(UNITS_INDEX_FIELDS).toHaveLength(16);
+    expect(UNITS_INDEX_FIELDS).toHaveLength(17);
   });
 
   it('contains all expected field names in order', () => {
@@ -96,6 +96,7 @@ describe('UNITS_INDEX_FIELDS', () => {
       'thread_titles',
       'thread_orders',
       'title_suggest',
+      'doc_type',
     ];
 
     const actualNames = UNITS_INDEX_FIELDS.map((f) => f.name);
@@ -165,8 +166,8 @@ describe('UNITS_INDEX_FIELDS', () => {
     const optionalFields = UNITS_INDEX_FIELDS.filter((f) => f.optional);
 
     // Required: unit_id, unit_slug, unit_title, subject_slug, key_stage,
-    //           lesson_ids, lesson_count, unit_url, subject_programmes_url
-    expect(requiredFields).toHaveLength(9);
+    //           lesson_ids, lesson_count, unit_url, subject_programmes_url, doc_type
+    expect(requiredFields).toHaveLength(10);
 
     // Optional: years, unit_topics, sequence_ids, thread_slugs,
     //           thread_titles, thread_orders, title_suggest
@@ -198,8 +199,8 @@ describe('THREADS_INDEX_FIELDS', () => {
 });
 
 describe('LESSONS_INDEX_FIELDS', () => {
-  it('has exactly 26 fields', () => {
-    expect(LESSONS_INDEX_FIELDS).toHaveLength(26);
+  it('has exactly 27 fields', () => {
+    expect(LESSONS_INDEX_FIELDS).toHaveLength(27);
   });
 
   it('contains expected field names', () => {
@@ -223,8 +224,8 @@ describe('LESSONS_INDEX_FIELDS', () => {
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
-  it('has exactly 23 fields', () => {
-    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(23);
+  it('has exactly 24 fields', () => {
+    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(24);
   });
 
   it('contains expected field names', () => {
@@ -247,8 +248,8 @@ describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
 });
 
 describe('SEQUENCES_INDEX_FIELDS', () => {
-  it('has exactly 14 fields', () => {
-    expect(SEQUENCES_INDEX_FIELDS).toHaveLength(14);
+  it('has exactly 15 fields', () => {
+    expect(SEQUENCES_INDEX_FIELDS).toHaveLength(15);
   });
 
   it('contains expected field names', () => {
@@ -264,11 +265,11 @@ describe('SEQUENCES_INDEX_FIELDS', () => {
     expect(field?.enumRef).toBe('SUBJECT_TUPLE');
   });
 
-  it('has 5 required and 9 optional fields', () => {
+  it('has 6 required and 9 optional fields', () => {
     const required = SEQUENCES_INDEX_FIELDS.filter((f) => !f.optional);
     const optional = SEQUENCES_INDEX_FIELDS.filter((f) => f.optional);
-    // Required: sequence_id, sequence_slug, sequence_title, subject_slug, sequence_url
-    expect(required).toHaveLength(5);
+    // Required: sequence_id, sequence_slug, sequence_title, subject_slug, sequence_url, doc_type
+    expect(required).toHaveLength(6);
     // Optional: subject_title, phase_slug, phase_title, category_titles, key_stages,
     //           years, unit_slugs, sequence_semantic, title_suggest
     expect(optional).toHaveLength(9);

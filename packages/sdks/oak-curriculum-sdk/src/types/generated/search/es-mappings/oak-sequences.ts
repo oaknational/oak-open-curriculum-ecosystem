@@ -114,6 +114,10 @@ export const OAK_SEQUENCES_MAPPING = {
           { name: 'phase', type: 'category' },
         ],
       },
+      doc_type: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
     },
   },
 } as const;

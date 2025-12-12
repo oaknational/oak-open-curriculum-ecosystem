@@ -1,9 +1,48 @@
 # Phase 3: Multi-Index Search & Fields
 
-**Status**: 📋 PLANNED  
+**Status**: 🔄 IN PROGRESS  
 **Estimated Effort**: 2-3 days  
 **Prerequisites**: Phase 1 & 2 complete (two-way hybrid confirmed optimal)  
-**Last Updated**: 2025-12-11
+**Last Updated**: 2025-12-12
+
+---
+
+## Completed Work
+
+- ✅ Verified and confirmed unit hybrid search uses BM25 + ELSER (two-way)
+- ✅ Removed unused three-way RRF code (dense vectors provided no benefit)
+- ✅ Updated smoke test documentation to accurately reflect two-way hybrid
+- ✅ Aligned code with Phase 2 findings (documentation now matches implementation)
+- ✅ Expanded unit ground truth from 16 to 43 queries (verified against Oak API)
+- ✅ Fixed incorrect unit slugs in ground truth files
+- ✅ Unit search smoke tests passing: MRR 0.915, NDCG@10 0.924
+- ✅ All quality gates passing
+
+---
+
+## Remaining Work Summary
+
+### Part 3.0: Multi-Index Infrastructure (5 tasks)
+
+| Task                                | Priority | Status     |
+| ----------------------------------- | -------- | ---------- |
+| BM25 vs ELSER vs Hybrid experiment  | **HIGH** | 🔲 Pending |
+| Add `doc_type` field to all indexes | **HIGH** | 🔲 Pending |
+| Verify unit filter on lesson search | Medium   | 🔲 Pending |
+| ADR: unified vs separate endpoints  | Medium   | 🔲 Pending |
+| Unit reranking experiment           | Medium   | 🔲 Pending |
+
+### Part 3a: Feature Parity Quick Wins (5 tasks)
+
+| Task                       | Priority | Status     |
+| -------------------------- | -------- | ---------- |
+| OWA aliases import         | **HIGH** | 🔲 Pending |
+| `pupilLessonOutcome` field | **HIGH** | 🔲 Pending |
+| Display title fields       | Medium   | 🔲 Pending |
+| Unit enrichment fields     | Medium   | 🔲 Pending |
+| ADR: field additions       | Medium   | 🔲 Pending |
+
+**Total remaining: 10 tasks**
 
 ---
 
@@ -12,6 +51,33 @@
 **Enable a `semantic_search` MCP tool** that searches lessons and units with filters.
 
 This is Part 1 of the remaining semantic search work (MCP Prerequisites). After Phase 3, the MCP tool can be created and full curriculum ingest becomes valuable.
+
+---
+
+## Foundation Documents (MUST READ FIRST)
+
+Before starting any work on this phase, read these foundation documents:
+
+1. `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
+2. `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
+3. `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
+
+**All quality gates must pass. No exceptions.**
+
+---
+
+## Elasticsearch Documentation References
+
+For implementation, consult the official ES documentation:
+
+| Topic                        | URL                                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| **Hybrid Search (RRF)**      | https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html                     |
+| **Semantic Search Overview** | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html         |
+| **ELSER (Sparse Vectors)**   | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html   |
+| **Semantic Reranking**       | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html      |
+| **Retriever API**            | https://www.elastic.co/guide/en/elasticsearch/reference/current/retriever.html               |
+| **Multi-index Search**       | https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multiple-indices.html |
 
 ---
 
@@ -25,18 +91,6 @@ This is Part 1 of the remaining semantic search work (MCP Prerequisites). After 
 4. Test patterns first, then scale
 
 **After Phase 3**: Move to full curriculum ingest when MCP tool is ready.
-
----
-
-## Foundation Documents (MUST READ)
-
-Before starting any work on this phase:
-
-1. `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
-2. `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
-3. `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
-
-**All quality gates must pass. No exceptions.**
 
 ---
 
@@ -66,25 +120,63 @@ Teachers don't just want to find lessons - they want to discover **curriculum re
 
 ### Current State
 
-| Index             | Hybrid Search | Tested        | Notes                               |
-| ----------------- | ------------- | ------------- | ----------------------------------- |
-| `oak_lessons`     | BM25 + ELSER  | ✅ Extensive  | 314 Maths KS4 lessons               |
-| `oak_unit_rollup` | BM25 + ELSER  | ❌ Not tested | `unit_semantic` exists but untested |
-| `oak_units`       | BM25 only     | ❌ Not tested | No semantic field                   |
-| `oak_sequences`   | BM25 + ELSER  | ❌ Not tested | `sequence_semantic` exists          |
-| `oak_threads`     | BM25 + ELSER  | ❌ Not tested | `thread_semantic` exists            |
+| Index             | Hybrid Search | Tested        | Notes                      |
+| ----------------- | ------------- | ------------- | -------------------------- |
+| `oak_lessons`     | BM25 + ELSER  | ✅ Extensive  | 314 Maths KS4 lessons      |
+| `oak_unit_rollup` | BM25 + ELSER  | ✅ Confirmed  | Two-way hybrid verified    |
+| `oak_units`       | BM25 only     | ❌ Not tested | No semantic field          |
+| `oak_sequences`   | BM25 + ELSER  | ❌ Not tested | `sequence_semantic` exists |
+| `oak_threads`     | BM25 + ELSER  | ❌ Not tested | `thread_semantic` exists   |
+
+### Technical Background
+
+#### Two-Way Hybrid Search (BM25 + ELSER)
+
+We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine:
+
+1. **BM25** - Lexical/keyword matching (built-in)
+2. **ELSER** - Sparse semantic embeddings via `.elser-2-elasticsearch` inference endpoint
+
+See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
+
+```json
+{
+  "retriever": {
+    "rrf": {
+      "retrievers": [
+        {
+          "standard": {
+            "query": {
+              "multi_match": { "query": "quadratic equations", "fields": ["title", "transcript"] }
+            }
+          }
+        },
+        {
+          "standard": {
+            "query": { "semantic": { "field": "lesson_semantic", "query": "quadratic equations" } }
+          }
+        }
+      ],
+      "rank_window_size": 100,
+      "rank_constant": 60
+    }
+  }
+}
+```
 
 ### Questions & Answers
 
-#### 1. Can ES distinguish result types?
+#### 1. Can ES distinguish result types in multi-index search?
 
-**Answer**: Yes. Each index has distinct structure. Options:
+**Answer**: Yes. Options per ES documentation:
 
 - **`_index` field**: Every ES hit includes `_index` in response - tells you which index the result came from
-- **Explicit `doc_type` field**: Add `doc_type: 'lesson' | 'unit' | 'sequence'` to each document
+- **Explicit `doc_type` field**: Add `doc_type: 'lesson' | 'unit' | 'sequence'` to each document at index time
 - **Field presence**: Lessons have `lesson_slug`, units have `unit_slug`, etc.
 
 **Recommendation**: Use `_index` (already available) + add explicit `doc_type` field for clarity.
+
+See: https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multiple-indices.html
 
 #### 2. Can we filter to only lessons or only units?
 
@@ -115,30 +207,75 @@ Teachers don't just want to find lessons - they want to discover **curriculum re
 
 #### 4. Is unit search using hybrid?
 
-**Current state**: `oak_unit_rollup` has `unit_semantic` field with `copy_to` from title + rollup.
-**Unknown**: Whether the unit search endpoint actually uses RRF with ELSER.
-**Action needed**: Audit and test unit search implementation.
+**Confirmed**: `oak_unit_rollup` has `unit_semantic` field with `copy_to` from title + rollup.
+**Status**: ✅ Unit search endpoint uses two-way RRF (BM25 + ELSER).
+**Verified**: Code audited and aligned with Phase 2 findings.
 
 ### Implementation Tasks (3.0)
 
-| Task                                 | Description                                                                                   | Effort | Priority     |
-| ------------------------------------ | --------------------------------------------------------------------------------------------- | ------ | ------------ |
-| **Verify unit hybrid search**        | Confirm `runUnitsSearch` uses RRF with ELSER (BM25 + ELSER)                                   | Low    | **CRITICAL** |
-| **Test unit hybrid search**          | Create ground truth and smoke tests for units                                                 | Medium | **HIGH**     |
-| **Experiment with unit reranking**   | Test reranking with `rollup_text` (~300 chars/lesson) - field already exists with good length | Low    | **HIGH**     |
-| **Add `doc_type` field**             | Add to all index schemas via field definitions                                                | Low    | Medium       |
-| **Add unit filter to lesson search** | Allow `?unit=slug` parameter                                                                  | Low    | Medium       |
-| **Unified search endpoint**          | Single endpoint returning mixed results with type                                             | Medium | Medium       |
+| Task                                   | Description                                                                       | Effort | Priority     | Status      |
+| -------------------------------------- | --------------------------------------------------------------------------------- | ------ | ------------ | ----------- |
+| **Verify unit hybrid search**          | Confirm `runUnitsSearch` uses RRF with ELSER (BM25 + ELSER)                       | Low    | **CRITICAL** | ✅ COMPLETE |
+| **Test unit hybrid search**            | Create ground truth and smoke tests for units                                     | Medium | **HIGH**     | ✅ COMPLETE |
+| **BM25 vs ELSER vs Hybrid experiment** | Run comparative experiment showing difference between retrieval methods for units | Medium | **HIGH**     | 🔲 Pending  |
+| **Add `doc_type` field**               | Add to all index schemas via field definitions                                    | Low    | **HIGH**     | 🔲 Pending  |
+| **Add unit filter to lesson search**   | Allow `?unit=slug` parameter (verify existing implementation)                     | Low    | Medium       | 🔲 Pending  |
+| **Unified search endpoint**            | Single endpoint returning mixed results with type                                 | Medium | Medium       | ✅ EXISTS   |
+| **ADR: unified vs separate endpoints** | Document architectural decision on search endpoint strategy                       | Low    | Medium       | 🔲 Pending  |
+| **Experiment with unit reranking**     | Test reranking with `rollup_text` (~300 chars/lesson) using ES native rerank      | Low    | Medium       | 🔲 Pending  |
 
-**Note**: Lesson reranking deferred to upstream API (needs `rerank_summary` field). Unit reranking is feasible NOW because `rollup_text` already has appropriate length (~300 chars/lesson).
+#### BM25 vs ELSER vs Hybrid Experiment
+
+**Purpose**: Demonstrate the value of hybrid search by comparing retrieval methods.
+
+**Approach** (following ES documentation patterns):
+
+1. Create a smoke test that runs the same queries against:
+   - BM25 only (lexical)
+   - ELSER only (semantic)
+   - Hybrid (BM25 + ELSER via RRF)
+2. Measure MRR, NDCG@10, zero-hit rate for each
+3. Document findings showing hybrid superiority
+
+See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid
+
+#### Unit Reranking Experiment (Last Item)
+
+**Purpose**: Test if reranking improves unit search quality.
+
+**ES Native ReRank**: Use `.rerank-v1-elasticsearch` inference endpoint (included in ES Serverless at $0 cost).
+
+**Reranking field**: `rollup_text` (~300 chars/lesson) - already indexed and suitable length.
+
+See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html
+
+```json
+{
+  "retriever": {
+    "text_similarity_reranker": {
+      "retriever": {
+        "rrf": {
+          /* existing hybrid retriever */
+        }
+      },
+      "field": "rollup_text",
+      "inference_id": ".rerank-v1-elasticsearch",
+      "inference_text": "user query here",
+      "rank_window_size": 100
+    }
+  }
+}
+```
 
 ### Success Criteria (3.0)
 
-- [ ] Unit search confirmed using hybrid (BM25 + ELSER)
+- [x] Unit search confirmed using hybrid (BM25 + ELSER)
+- [x] Unit search has ground truth (43 queries) and metrics (MRR 0.915, NDCG@10 0.924)
+- [ ] BM25 vs ELSER vs Hybrid comparative experiment completed
 - [ ] `doc_type` field added to all indexes
-- [ ] Lesson search supports unit filter
-- [ ] Unit search has ground truth and metrics
+- [ ] Lesson search with unit filter documented and tested
 - [ ] Decision on unified vs separate endpoints documented (ADR)
+- [ ] Unit reranking experiment completed
 
 ---
 
@@ -225,12 +362,13 @@ From `/units/{unit}/summary`:
 
 ### Success Criteria (3a)
 
-- [ ] OWA aliases merged into synonym system
-- [ ] `pupilLessonOutcome` indexed and queryable
-- [ ] Title fields added to lesson documents
-- [ ] Unit description fields indexed
-- [ ] ADR documenting field additions
+- [ ] OWA aliases merged into synonym system (subjects, key stages, exam boards)
+- [ ] `pupilLessonOutcome` indexed and queryable with BM25 boost
+- [ ] Display title fields (`subjectTitle`, `keyStageTitle`) added to lesson documents
+- [ ] Unit enrichment fields indexed (`description`, `whyThisWhyNow`, `categories`, `priorKnowledgeRequirements`, `nationalCurriculumContent`)
+- [ ] ADR documenting field additions and rationale
 - [ ] All quality gates pass
+- [ ] Re-indexing completed with new fields populated
 
 ---
 
@@ -260,14 +398,14 @@ Per `testing-strategy.md`, all work MUST follow TDD at the appropriate level:
 Run after every piece of work, from repo root, in order:
 
 ```bash
-pnpm type-gen                                     # Generate types
-pnpm build                                        # Build all
-pnpm type-check                                   # TypeScript validation
-pnpm lint:fix                                     # Auto-fix linting
-pnpm format:root                                  # Format code
-pnpm markdownlint:root                            # Markdown lint
-pnpm test                                         # Unit + integration
-pnpm test:e2e                                     # E2E tests
+pnpm type-gen          # Generate types from schema
+pnpm build             # Build all packages
+pnpm type-check        # TypeScript validation
+pnpm lint:fix          # Auto-fix linting issues
+pnpm format:root       # Format code
+pnpm markdownlint:root # Markdown lint
+pnpm test              # Unit + integration tests
+pnpm test:e2e          # E2E tests
 ```
 
 **All gates must pass. No exceptions.**
@@ -305,6 +443,23 @@ packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 ├── subjects.ts         # Subject name variations
 ├── key-stages.ts       # Key stage aliases
 └── index.ts            # Barrel file
+```
+
+### Ground Truth
+
+```text
+apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/
+├── units/              # 43 unit queries (algebra, geometry, number, statistics, graphs)
+└── ...                 # 40 lesson queries
+```
+
+### Smoke Tests
+
+```text
+apps/oak-open-curriculum-semantic-search/smoke-tests/
+├── search-quality.smoke.test.ts           # Lesson search benchmarks
+├── unit-search-quality.smoke.test.ts      # Unit search benchmarks
+└── unit-search-verification.smoke.test.ts # Unit hybrid verification
 ```
 
 ---
@@ -360,3 +515,4 @@ After Phase 3, the tool will support:
 - [Feature Parity Analysis](../../research/feature-parity-analysis.md) - Gap analysis with OWA
 - [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md) - Fields needing API changes
 - [Prompt Entry Point](../../prompts/semantic-search/semantic-search.prompt.md) - Fresh chat starting point
+- [Navigation Hub](./README.md) - All phases overview

@@ -22,6 +22,7 @@ export const SearchStructuredRequestSchema = z
     size: z.number().int().min(1).max(100).optional(),
     includeFacets: z.boolean().optional().default(DEFAULT_INCLUDE_FACETS),
     phaseSlug: z.string().min(1).optional(),
+    unitSlug: z.string().min(1).optional(),
     from: z.number().int().min(0).optional(),
     highlight: z.boolean().optional(),
   })

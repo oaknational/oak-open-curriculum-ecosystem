@@ -1,20 +1,35 @@
 import { esSearch, type EsHit } from '../elastic-http';
-import { esClient } from '../es-client';
 import type { SearchLessonsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, LessonResult } from './types';
-import { buildThreeWayLessonRrfRequest } from './rrf-query-builders';
+import { buildLessonRrfRequest } from './rrf-query-builders';
 
+/**
+ * Runs hybrid search for lessons using two-way RRF (BM25 + ELSER).
+ *
+ * Uses Reciprocal Rank Fusion to combine lexical (BM25) and semantic (ELSER)
+ * retrieval for optimal search quality. This configuration was validated in
+ * Phase 2 experiments which confirmed two-way hybrid outperforms three-way.
+ *
+ * @param q - Structured query with text and optional filters
+ * @param size - Maximum number of results to return
+ * @param from - Offset for pagination
+ * @param doHighlight - Whether to include transcript highlights
+ * @returns Search results with lessons, scores, and metadata
+ *
+ * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
+ */
 export async function runLessonsSearch(
   q: StructuredQuery,
   size: number,
   from: number,
   doHighlight: boolean,
 ): Promise<HybridSearchResult> {
-  const request = await buildThreeWayLessonRrfRequest(esClient(), {
+  const request = buildLessonRrfRequest({
     text: q.text,
     size,
     subject: q.subject,
     keyStage: q.keyStage,
+    unitSlug: q.unitSlug,
     includeHighlights: doHighlight,
     includeFacets: q.includeFacets === true,
   });

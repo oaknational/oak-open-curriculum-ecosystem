@@ -33,6 +33,7 @@ function createStructuredRequestModule(): string {
     `    size: z.number().int().min(1).max(100).optional(),\n` +
     `    includeFacets: z.boolean().optional().default(DEFAULT_INCLUDE_FACETS),\n` +
     `    phaseSlug: z.string().min(1).optional(),\n` +
+    `    unitSlug: z.string().min(1).optional(),\n` +
     `    from: z.number().int().min(0).optional(),\n` +
     `    highlight: z.boolean().optional(),\n` +
     `  })\n` +

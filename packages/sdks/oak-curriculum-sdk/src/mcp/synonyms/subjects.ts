@@ -14,7 +14,7 @@ export const subjectSynonyms = {
   computing: ['computer science', 'cs', 'ict', 'information technology'],
   'cooking-nutrition': ['cooking', 'food and nutrition', 'food technology', 'food tech'],
   'design-technology': ['design and technology', 'design technology', 'dt', 'd&t'],
-  english: ['english language', 'english literature', 'literacy', 'language arts'],
+  english: ['ela', 'english language', 'english literature', 'language arts', 'literacy'],
   french: ['french language'],
   geography: ['geo'],
   german: ['german language'],

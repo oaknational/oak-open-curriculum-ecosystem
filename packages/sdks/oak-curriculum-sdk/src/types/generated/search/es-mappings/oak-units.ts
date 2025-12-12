@@ -91,6 +91,10 @@ export const OAK_UNITS_MAPPING = {
           { name: 'sequence', type: 'category' },
         ],
       },
+      doc_type: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
     },
   },
 } as const;

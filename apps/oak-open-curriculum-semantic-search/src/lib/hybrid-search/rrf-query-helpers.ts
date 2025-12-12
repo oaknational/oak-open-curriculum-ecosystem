@@ -16,6 +16,7 @@ type QueryContainer = estypes.QueryDslQueryContainer;
 export function createLessonFilters(
   subject?: SearchSubjectSlug,
   keyStage?: KeyStage,
+  unitSlug?: string,
 ): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (subject) {
@@ -23,6 +24,9 @@ export function createLessonFilters(
   }
   if (keyStage) {
     filters.push({ term: { key_stage: keyStage } });
+  }
+  if (unitSlug) {
+    filters.push({ term: { unit_ids: unitSlug } });
   }
   return filters;
 }

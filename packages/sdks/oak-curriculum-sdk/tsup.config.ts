@@ -118,6 +118,7 @@ export default defineConfig({
     'src/mcp/synonyms/index.ts',
     'src/mcp/synonyms/education.ts',
     'src/mcp/synonyms/english.ts',
+    'src/mcp/synonyms/exam-boards.ts',
     'src/mcp/synonyms/geography.ts',
     'src/mcp/synonyms/history.ts',
     'src/mcp/synonyms/key-stages.ts',

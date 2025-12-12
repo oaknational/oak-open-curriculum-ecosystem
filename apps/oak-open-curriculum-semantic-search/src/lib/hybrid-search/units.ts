@@ -1,16 +1,30 @@
 import { esSearch, type EsHit } from '../elastic-http';
-import { esClient } from '../es-client';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, UnitResult } from './types';
-import { buildThreeWayUnitRrfRequest } from './rrf-query-builders';
+import { buildUnitRrfRequest } from './rrf-query-builders';
 
+/**
+ * Runs hybrid search for units using two-way RRF (BM25 + ELSER).
+ *
+ * Uses Reciprocal Rank Fusion to combine lexical (BM25) and semantic (ELSER)
+ * retrieval for optimal search quality. Searches the `oak_unit_rollup` index
+ * which contains aggregated lesson content for richer semantic matching.
+ *
+ * @param q - Structured query with text and optional filters
+ * @param size - Maximum number of results to return
+ * @param from - Offset for pagination
+ * @param doHighlight - Whether to include rollup text highlights
+ * @returns Search results with units, scores, and metadata
+ *
+ * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
+ */
 export async function runUnitsSearch(
   q: StructuredQuery,
   size: number,
   from: number,
   doHighlight: boolean,
 ): Promise<HybridSearchResult> {
-  const request = await buildThreeWayUnitRrfRequest(esClient(), {
+  const request = buildUnitRrfRequest({
     text: q.text,
     size,
     subject: q.subject,
@@ -58,5 +72,6 @@ function deriveUnitFromRollup(hit: EsHit<SearchUnitRollupDoc>): SearchUnitsIndex
     subject_programmes_url: hit._source.subject_programmes_url,
     sequence_ids: hit._source.sequence_ids,
     title_suggest: hit._source.title_suggest,
+    doc_type: hit._source.doc_type,
   };
 }

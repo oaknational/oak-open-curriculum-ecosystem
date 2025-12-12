@@ -154,6 +154,10 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       pathway: {
         type: 'keyword',
       },
+      doc_type: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
     },
   },
 } as const;

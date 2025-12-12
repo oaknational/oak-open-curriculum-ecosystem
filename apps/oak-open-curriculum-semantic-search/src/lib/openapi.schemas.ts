@@ -55,6 +55,8 @@ export const StructuredQuerySchema = z
     subject: Subject.optional(),
     keyStage: KeyStage.optional(),
     phaseSlug: z.string().optional(),
+    /** Filter lessons to a specific unit by unit slug. */
+    unitSlug: z.string().optional(),
     minLessons: z.number().int().min(0).optional(),
     size: z.number().int().min(1).max(100).optional(),
     from: z.number().int().min(0).optional(),

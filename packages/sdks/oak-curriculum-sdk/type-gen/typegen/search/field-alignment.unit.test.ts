@@ -80,8 +80,8 @@ describe('Field Alignment: oak_units', () => {
     const zodFieldNames = extractZodFieldNames(zodSchema);
     const esFieldNames = extractEsFieldNames(esFields);
 
-    expect(zodFieldNames).toHaveLength(16);
-    expect(esFieldNames).toHaveLength(16);
+    expect(zodFieldNames).toHaveLength(17);
+    expect(esFieldNames).toHaveLength(17);
   });
 
   it('field order is preserved in both outputs', () => {
@@ -139,8 +139,8 @@ describe('Field Alignment: oak_lessons', () => {
     );
     const esFields = generateEsFieldsFromDefinitions(LESSONS_INDEX_FIELDS, LESSONS_FIELD_OVERRIDES);
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(26);
-    expect(extractEsFieldNames(esFields)).toHaveLength(26);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(27);
+    expect(extractEsFieldNames(esFields)).toHaveLength(27);
   });
 });
 
@@ -173,8 +173,8 @@ describe('Field Alignment: oak_unit_rollup', () => {
       UNIT_ROLLUP_FIELD_OVERRIDES,
     );
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(23);
-    expect(extractEsFieldNames(esFields)).toHaveLength(23);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(24);
+    expect(extractEsFieldNames(esFields)).toHaveLength(24);
   });
 });
 
@@ -207,8 +207,8 @@ describe('Field Alignment: oak_sequences', () => {
       SEQUENCES_FIELD_OVERRIDES,
     );
 
-    expect(extractZodFieldNames(zodSchema)).toHaveLength(14);
-    expect(extractEsFieldNames(esFields)).toHaveLength(14);
+    expect(extractZodFieldNames(zodSchema)).toHaveLength(15);
+    expect(extractEsFieldNames(esFields)).toHaveLength(15);
   });
 });
 
