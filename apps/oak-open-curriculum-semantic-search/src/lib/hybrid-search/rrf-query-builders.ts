@@ -55,7 +55,7 @@ export function buildLessonRrfRequest(params: {
     subject,
     keyStage,
     unitSlug,
-    includeHighlights = false,
+    includeHighlights = true,
     includeFacets = false,
   } = params;
   const filters = createLessonFilters(subject, keyStage, unitSlug);
@@ -87,7 +87,7 @@ export function buildUnitRrfRequest(params: {
     subject,
     keyStage,
     minLessons,
-    includeHighlights = false,
+    includeHighlights = true,
     includeFacets = false,
   } = params;
   const filters = createUnitFilters(subject, keyStage, minLessons);

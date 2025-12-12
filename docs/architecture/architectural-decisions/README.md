@@ -84,6 +84,9 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
 - [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
+- [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-071, 072, 073**
+- [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)
+- [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
 
 ## Key Architectural Decisions
 
@@ -106,12 +109,18 @@ For understanding authentication, authorization, and observability:
 For understanding semantic search and Elastic-native AI/ML approach:
 
 - **[ADR-074](074-elastic-native-first-philosophy.md)** - Elastic-Native-First Philosophy for AI/ML features
-- **[ADR-071](071-elastic-native-dense-vector-strategy.md)** - Use Elastic-native E5 embeddings instead of OpenAI
-- **[ADR-072](072-three-way-hybrid-search-architecture.md)** - Three-way hybrid search with RRF fusion
-- **[ADR-073](073-dense-vector-field-configuration.md)** - Dense vector field configuration (384-dim, HNSW, cosine)
+- **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-071, 072, 073)
+- **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
+- **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking
+
+For historical context on dense vector evaluation (superseded):
+
+- **[ADR-071](071-elastic-native-dense-vector-strategy.md)** - ~~E5 embeddings~~ (SUPERSEDED by ADR-075)
+- **[ADR-072](072-three-way-hybrid-search-architecture.md)** - ~~Three-way hybrid~~ (SUPERSEDED by ADR-075)
+- **[ADR-073](073-dense-vector-field-configuration.md)** - ~~Dense vector config~~ (SUPERSEDED by ADR-075)
 
 For understanding the now deprecated and removed biological architecture:
 

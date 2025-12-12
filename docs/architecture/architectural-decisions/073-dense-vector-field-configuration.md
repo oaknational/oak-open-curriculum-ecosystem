@@ -1,9 +1,12 @@
 # ADR-073: Dense Vector Field Configuration
 
-**Status**: Accepted
-**Date**: 2025-12-07
-**Decision Makers**: Development Team
+**Status**: SUPERSEDED by [ADR-075](075-dense-vector-removal.md)  
+**Date**: 2025-12-07  
+**Superseded Date**: 2025-12-12  
+**Decision Makers**: Development Team  
 **Related**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md)
+
+> ⚠️ **This ADR has been superseded.** Dense vector fields are no longer used. Phase 2 evaluation showed E5 embeddings provide no benefit for curriculum search. See [ADR-075](075-dense-vector-removal.md) for the decision to remove dense vector code.
 
 ## Context
 

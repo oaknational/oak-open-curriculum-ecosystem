@@ -1,9 +1,12 @@
 # ADR-071: Elastic-Native Dense Vector Strategy
 
-**Status**: Accepted
-**Date**: 2025-12-07
-**Decision Makers**: Development Team
+**Status**: SUPERSEDED by [ADR-075](075-dense-vector-removal.md)  
+**Date**: 2025-12-07  
+**Superseded Date**: 2025-12-12  
+**Decision Makers**: Development Team  
 **Related**: [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-073](073-dense-vector-field-configuration.md)
+
+> ⚠️ **This ADR has been superseded.** Phase 2 evaluation showed E5 dense vectors provide no measurable benefit for curriculum search. See [ADR-075](075-dense-vector-removal.md) for the decision to remove dense vector code.
 
 ## Context
 

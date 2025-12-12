@@ -1,6 +1,6 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid Code Written (Not Yet Proven)  
+**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid Confirmed Optimal  
 **Last Updated**: 2025-12-12
 
 ---
@@ -72,16 +72,16 @@ Key ES documentation for this project:
 
 #### Part 3.0: Verification (CRITICAL - must complete first)
 
-| Task                                      | Priority     | Status     |
-| ----------------------------------------- | ------------ | ---------- |
-| BM25 vs ELSER vs Hybrid experiment        | **CRITICAL** | 🔲 Pending |
-| Prove lesson-only search works            | **CRITICAL** | 🔲 Pending |
-| Prove unit-only search works              | **CRITICAL** | 🔲 Pending |
-| Prove joint search with doc_type works    | **CRITICAL** | 🔲 Pending |
-| Prove lesson filter by unit works         | **CRITICAL** | 🔲 Pending |
-| Add `doc_type` field (re-index if needed) | **HIGH**     | 🔲 Pending |
-| ADR: unified vs separate endpoints        | Medium       | 🔲 Pending |
-| Unit reranking experiment                 | Medium       | 🔲 Pending |
+| Task                                      | Priority     | Status       |
+| ----------------------------------------- | ------------ | ------------ |
+| BM25 vs ELSER vs Hybrid experiment        | **CRITICAL** | ✅ Complete  |
+| Prove lesson-only search works            | **CRITICAL** | 🔲 Pending   |
+| Prove unit-only search works              | **CRITICAL** | 🔲 Pending   |
+| Prove joint search with doc_type works    | **CRITICAL** | 🔲 Pending   |
+| Prove lesson filter by unit works         | **CRITICAL** | 🔲 Pending   |
+| Add `doc_type` field (re-index if needed) | **HIGH**     | ✅ Already exists |
+| ADR: unified vs separate endpoints        | Medium       | 🔲 Pending   |
+| Unit reranking experiment                 | Medium       | 🔲 Deferred  |
 
 #### Part 3a: Feature Parity (after verification complete)
 
@@ -93,6 +93,19 @@ Key ES documentation for this project:
 | Unit enrichment fields     | Medium   | 🔲 Pending |
 | ADR: field additions       | Medium   | 🔲 Pending |
 
+#### Part 3b: Semantic Summary Enhancement (NEW)
+
+| Task                                        | Priority   | Status     |
+| ------------------------------------------- | ---------- | ---------- |
+| Remove dense vector code                    | **HIGH**   | 🔲 Pending |
+| Lesson semantic summary template            | **HIGH**   | 🔲 Pending |
+| Unit semantic summary template              | **HIGH**   | 🔲 Pending |
+| Redis caching for summaries                 | Medium     | 🔲 Pending |
+| Compare summary vs transcript ELSER         | Medium     | 🔲 Pending |
+| ADR-075: Dense vector removal               | **HIGH**   | ✅ Complete |
+| ADR-076: ELSER-only strategy                | **HIGH**   | ✅ Complete |
+| ADR-077: Semantic summary generation        | **HIGH**   | ✅ Complete |
+
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
 ---
@@ -101,10 +114,14 @@ See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full de
 
 ### Two-Way Hybrid Search (BM25 + ELSER)
 
-We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine:
+We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **multiple retrievers within a single index**.
 
-1. **BM25** - Lexical/keyword matching (built-in)
-2. **ELSER** - Sparse semantic embeddings via `.elser-2-elasticsearch`
+**Key clarification**: RRF combines **retrievers** (search methods), not indices. All retrievers query the same `oak_lessons` index using different matching strategies.
+
+| Retriever | Type | Field(s) | Purpose |
+| --------- | ---- | -------- | ------- |
+| BM25 | Lexical | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching |
+| ELSER | Sparse semantic | `lesson_semantic` (full transcript) | Semantic matching |
 
 ```json
 {
@@ -125,16 +142,48 @@ We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine:
 }
 ```
 
-See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
+
+### Future: Three-Way Hybrid (BM25 + Transcript ELSER + Summary ELSER)
+
+With semantic summary enhancement (Part 3b), we add a **third retriever** (still same index):
+
+| Retriever | Type | Field | Purpose |
+| --------- | ---- | ----- | ------- |
+| BM25 | Lexical | Multiple text fields | Keyword matching |
+| ELSER (transcript) | Sparse semantic | `lesson_semantic` | Detailed content matching |
+| ELSER (summary) | Sparse semantic | `lesson_summary_semantic` | Conceptual/pedagogical matching |
+
+**⚠️ Important**: This "three-way" refers to BM25 + two ELSER fields, **NOT** dense vectors. Dense vectors were evaluated in Phase 2 and provided no benefit (see ADR-075).
+
+### Why ELSER Only (No Dense Vectors)
+
+Phase 2 evaluated E5 dense vectors - **no benefit for curriculum search**:
+
+- ELSER handles curriculum vocabulary well (quadratic, denominator, photosynthesis)
+- Dense vectors added latency (+33%) without improving MRR/NDCG
+- Simpler architecture with one embedding type
+
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html>
 
 ### ES Serverless Features ($0 additional cost)
 
-| Feature | Endpoint                     | Purpose                |
-| ------- | ---------------------------- | ---------------------- |
-| BM25    | Built-in                     | Lexical search         |
-| ELSER   | `.elser-2-elasticsearch`     | Sparse semantic        |
-| ReRank  | `.rerank-v1-elasticsearch`   | Cross-encoder reranker |
-| LLM     | `.gp-llm-v2-chat_completion` | Future RAG             |
+| Feature | Endpoint                     | Purpose                | Status  |
+| ------- | ---------------------------- | ---------------------- | ------- |
+| BM25    | Built-in                     | Lexical search         | ✅ Used |
+| ELSER   | `.elser-2-elasticsearch`     | Sparse semantic        | ✅ Used |
+| E5      | `.multilingual-e5-small-elasticsearch` | Dense vectors | ❌ Not used |
+| ReRank  | `.rerank-v1-elasticsearch`   | Cross-encoder reranker | 📋 Planned |
+| LLM     | `.gp-llm-v2-chat_completion` | Future RAG / summaries | 📋 Planned |
+
+### ADRs
+
+| ADR | Title | Status |
+| --- | ----- | ------ |
+| [ADR-074](docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
+| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Code Removal | Accepted |
+| [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Embedding Strategy | Accepted |
+| [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic Summary Generation | Accepted |
 
 ---
 
@@ -172,7 +221,47 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
 
 All 36 Maths KS4 units have their lessons indexed.
 
-**Note**: Code uses hybrid, but BM25 vs ELSER vs Hybrid experiment needed to prove ELSER contributes meaningfully.
+**Note**: Hybrid superiority experiment completed. For lessons, hybrid is superior. For units, results are mixed (ELSER slightly better MRR, hybrid better NDCG@10). See `experiments/hybrid-superiority.experiment.ts`.
+
+---
+
+## Embedding Strategy
+
+### Current State
+
+| Resource | ELSER Field       | Content Source              | Token Count |
+| -------- | ----------------- | --------------------------- | ----------- |
+| Lessons  | `lesson_semantic` | Full video transcript       | ~5000       |
+| Units    | `unit_semantic`   | `rollupText` (aggregated)   | ~200-400    |
+
+### Dense Vectors: REMOVED
+
+Phase 2 evaluation showed E5 dense vectors provide **no benefit** for curriculum search:
+
+- MRR: 0.900 (two-way) vs 0.897 (three-way) - no improvement
+- Latency: 180ms (two-way) vs 240ms (three-way) - 33% worse
+
+**Decision**: Remove all dense vector code. See [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md).
+
+⚠️ **Action Required**: Dense vector generation code still exists and must be removed.
+
+### Future Enhancement: Semantic Summaries
+
+Add `semantic_summary` fields (~200 tokens) for information-dense embeddings:
+
+| Resource | Field                     | Content                     | Status      |
+| -------- | ------------------------- | --------------------------- | ----------- |
+| Lessons  | `lesson_summary_semantic` | Template-composed summary   | 🔲 Planned  |
+| Units    | `unit_semantic`           | Replace rollup with summary | 🔲 Planned  |
+
+**Generation approach**:
+
+1. **Template-based** (Phase 3) - Compose from API fields
+2. **LLM-enhanced** (Future) - Use `.gp-llm-v2-chat_completion` for richer summaries
+
+**Caching**: Redis (same instance as curriculum API caching).
+
+See [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md).
 
 ---
 

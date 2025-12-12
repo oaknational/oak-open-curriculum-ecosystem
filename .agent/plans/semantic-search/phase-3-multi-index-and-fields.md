@@ -30,6 +30,9 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 - ✅ Fixed incorrect unit slugs in ground truth files
 - ✅ Unit search smoke tests passing: MRR 0.915, NDCG@10 0.924
 - ✅ All quality gates passing
+- ✅ BM25 vs ELSER vs Hybrid experiment completed (lessons: hybrid superior; units: mixed)
+- ✅ Verified `doc_type` field already exists in indexes
+- ✅ Created ADR-075 (dense vector removal), ADR-076 (ELSER-only), ADR-077 (semantic summaries)
 
 ---
 
@@ -37,16 +40,16 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 
 ### Part 3.0: Verification & Multi-Index Infrastructure
 
-| Task                                         | Priority     | Status     |
-| -------------------------------------------- | ------------ | ---------- |
-| **BM25 vs ELSER vs Hybrid experiment**       | **CRITICAL** | 🔲 Pending |
-| **Prove lesson-only search works**           | **CRITICAL** | 🔲 Pending |
-| **Prove unit-only search works**             | **CRITICAL** | 🔲 Pending |
-| **Prove joint search with `doc_type` works** | **CRITICAL** | 🔲 Pending |
-| **Prove lesson filter by unit works**        | **CRITICAL** | 🔲 Pending |
-| Add `doc_type` field to all indexes          | **HIGH**     | 🔲 Pending |
-| ADR: unified vs separate endpoints           | Medium       | 🔲 Pending |
-| Unit reranking experiment                    | Medium       | 🔲 Pending |
+| Task                                         | Priority     | Status            |
+| -------------------------------------------- | ------------ | ----------------- |
+| **BM25 vs ELSER vs Hybrid experiment**       | **CRITICAL** | ✅ Complete       |
+| **Prove lesson-only search works**           | **CRITICAL** | 🔲 Pending        |
+| **Prove unit-only search works**             | **CRITICAL** | 🔲 Pending        |
+| **Prove joint search with `doc_type` works** | **CRITICAL** | 🔲 Pending        |
+| **Prove lesson filter by unit works**        | **CRITICAL** | 🔲 Pending        |
+| Add `doc_type` field to all indexes          | **HIGH**     | ✅ Already exists |
+| ADR: unified vs separate endpoints           | Medium       | 🔲 Pending        |
+| Unit reranking experiment                    | Medium       | 🔲 Deferred       |
 
 ### Part 3a: Feature Parity (After Verification Complete)
 
@@ -58,7 +61,20 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 | Unit enrichment fields     | Medium   | 🔲 Pending |
 | ADR: field additions       | Medium   | 🔲 Pending |
 
-**Part 3a work begins only after Part 3.0 verification is complete.**
+### Part 3b: Semantic Summary Enhancement (NEW)
+
+| Task                                        | Priority   | Status       |
+| ------------------------------------------- | ---------- | ------------ |
+| **Remove dense vector code**                | **HIGH**   | 🔲 Pending   |
+| **Lesson semantic summary template**        | **HIGH**   | 🔲 Pending   |
+| **Unit semantic summary template**          | **HIGH**   | 🔲 Pending   |
+| Redis caching for summaries                 | Medium     | 🔲 Pending   |
+| Compare summary vs transcript ELSER         | Medium     | 🔲 Pending   |
+| ADR-075: Dense vector removal               | **HIGH**   | ✅ Complete  |
+| ADR-076: ELSER-only strategy                | **HIGH**   | ✅ Complete  |
+| ADR-077: Semantic summary generation        | **HIGH**   | ✅ Complete  |
+
+**Part 3a and 3b work begins only after Part 3.0 verification is complete.**
 
 ---
 
@@ -142,12 +158,16 @@ Teachers don't just want to find lessons - they want to discover **curriculum re
 
 #### Two-Way Hybrid Search (BM25 + ELSER)
 
-We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine:
+We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **multiple retrievers within a single index**.
 
-1. **BM25** - Lexical/keyword matching (built-in)
-2. **ELSER** - Sparse semantic embeddings via `.elser-2-elasticsearch` inference endpoint
+**Key clarification**: RRF combines **retrievers** (search methods), not indices. All retrievers query the same index (e.g., `oak_lessons`) using different matching strategies.
 
-See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
+| Retriever | Type | Field(s) | Purpose |
+| --------- | ---- | -------- | ------- |
+| BM25 | Lexical | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching |
+| ELSER | Sparse semantic | `lesson_semantic` (full transcript) | Semantic matching |
+
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
 ```json
 {
@@ -173,6 +193,8 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
   }
 }
 ```
+
+**Future (Part 3b)**: With semantic summaries, we add a third ELSER retriever for `lesson_summary_semantic`. This "three-way" = BM25 + transcript ELSER + summary ELSER, **NOT** dense vectors (which were removed per ADR-075).
 
 ### Questions & Answers
 
@@ -408,6 +430,173 @@ From `/units/{unit}/summary`:
 - [ ] ADR documenting field additions and rationale
 - [ ] All quality gates pass
 - [ ] Re-indexing completed with new fields populated
+
+### Success Criteria (3b)
+
+- [ ] Dense vector code removed from codebase
+- [ ] Lesson semantic summary template implemented
+- [ ] Unit semantic summary template implemented
+- [ ] Redis caching for semantic summaries working
+- [ ] A/B comparison: summary-based vs transcript-based ELSER
+- [ ] Quality improvement measured (MRR/NDCG delta)
+- [ ] All quality gates pass
+
+---
+
+## Part 3b: Semantic Summary Enhancement
+
+**Priority**: HIGH - Improve embedding quality for pedagogical matching
+
+### Background
+
+Current embedding strategy uses ELSER on:
+
+- **Lessons**: Full transcript (~5000 tokens) - dilutes pedagogical signal
+- **Units**: `rollupText` (~200-400 tokens) - aggregated from lessons, not curated
+
+Semantic summaries provide information-dense text (~200 tokens) optimised for embeddings.
+
+### ADRs
+
+| ADR     | Title                            | Status    |
+| ------- | -------------------------------- | --------- |
+| ADR-075 | Dense Vector Code Removal        | ✅ Accepted |
+| ADR-076 | ELSER-Only Embedding Strategy    | ✅ Accepted |
+| ADR-077 | Semantic Summary Generation      | ✅ Accepted |
+
+### Task 1: Remove Dense Vector Code
+
+**Rationale**: Phase 2 showed E5 dense vectors provide no benefit. Code still exists and should be removed.
+
+**Scope**:
+
+1. `document-transforms.ts` - Remove `generateDenseVector()` calls
+2. `dense-vector-generation.ts` - Delete entire module
+3. Field definitions - Remove `*_dense_vector` fields
+4. Tests - Remove dense vector tests
+
+**Success criteria**: `grep -r "dense_vector" apps/oak-open-curriculum-semantic-search` returns no matches.
+
+### Task 2: Lesson Semantic Summary Template
+
+**Purpose**: Generate ~200 token summary for pedagogical matching.
+
+**Template**:
+
+```text
+{lessonTitle} is a {keyStage} {subject} lesson for Year {year}.
+
+Key learning: {keyLearningPoints[0..2]}.
+
+Keywords: {keywords with descriptions}.
+
+Prior knowledge: {priorKnowledge}.
+
+Common misconception: {misconceptions[0]}.
+
+Pupil outcome: {pupilLessonOutcome}.
+```
+
+**API fields used**:
+
+- `lessonTitle`, `keyStage`, `subject`, `year` - Context
+- `keyLearningPoints` - Learning objectives
+- `lessonKeywords` - Vocabulary with definitions
+- `priorKnowledge` - Prerequisites
+- `misconceptionsAndCommonMistakes` - What to avoid
+- `pupilLessonOutcome` - Expected outcome
+
+**Index field**: `lesson_summary_semantic` (new, ELSER)
+
+### Task 3: Unit Semantic Summary Template
+
+**Purpose**: Replace `rollupText` with curated summary.
+
+**Template**:
+
+```text
+{unitTitle} is a {keyStage} {subject} unit containing {lessonCount} lessons.
+
+Overview: {whyThisWhyNow}.
+
+Key concepts: {derived from lesson titles and keywords}.
+
+Prior knowledge: {priorKnowledgeRequirements[0..2]}.
+
+National curriculum: {nationalCurriculumContent[0..2]}.
+
+Lessons: {lessonTitles as comma-separated list}.
+```
+
+**API fields used**:
+
+- `unitTitle`, `keyStage`, `subject` - Context
+- `unitLessons` - Lesson titles
+- `whyThisWhyNow` - Pedagogical rationale
+- `priorKnowledgeRequirements` - Prerequisites
+- `nationalCurriculumContent` - NC alignment
+
+**Index field**: `unit_semantic` (replace existing content)
+
+**Comparison field**: Keep `rollup_text` for side-by-side comparison.
+
+### Task 4: Redis Caching
+
+**Purpose**: Avoid regenerating summaries on each ingestion.
+
+**Cache key pattern**:
+
+```typescript
+const lessonCacheKey = `semantic_summary:lesson:${lessonSlug}:v1`;
+const unitCacheKey = `semantic_summary:unit:${unitSlug}:v1`;
+```
+
+**TTL**: Same as curriculum API cache (24 hours or until next ingest).
+
+**Version key**: Increment on template changes to invalidate cache.
+
+**Implementation**: Use existing Redis instance from ADR-066.
+
+### Task 5: Compare Summary vs Transcript ELSER
+
+**Purpose**: Measure quality improvement from semantic summaries.
+
+**Experiment design**:
+
+1. Run ground truth queries against:
+   - Current: `lesson_semantic` (transcript)
+   - New: `lesson_summary_semantic` (summary)
+   - Combined: Both fields with RRF
+2. Measure MRR, NDCG@10 for each
+3. Document findings
+
+**Success criteria**: Summary-based search improves MRR or NDCG vs transcript-only.
+
+### Future Enhancement: LLM-Generated Summaries
+
+Template-based composition is the starting point. Future enhancement:
+
+```typescript
+// Use Elastic-native LLM for richer summaries
+const llmSummary = await esClient.inference.inference({
+  inference_id: '.gp-llm-v2-chat_completion',
+  input: `Summarise this lesson for semantic search in ~200 words: ${JSON.stringify(lessonData)}`,
+});
+```
+
+**Benefits**:
+
+- More natural, coherent prose
+- Better semantic signal
+- Can capture nuances templates miss
+
+**Costs**:
+
+- Compute time during ingestion
+- Token costs (check ES Serverless pricing)
+- Cache invalidation complexity
+
+**Decision**: Defer to Phase 4+ after template approach is validated.
 
 ---
 

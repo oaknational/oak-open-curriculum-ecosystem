@@ -61,14 +61,14 @@ Key ES documentation for this project:
 
 **Part 3.0 - Verification (CRITICAL, must complete first):**
 
-- 🔲 BM25 vs ELSER vs Hybrid experiment (prove hybrid is superior)
+- ✅ BM25 vs ELSER vs Hybrid experiment (hybrid superior for lessons)
 - 🔲 Prove lesson-only search works
 - 🔲 Prove unit-only search works
 - 🔲 Prove joint search with `doc_type` categorisation works
 - 🔲 Prove lesson search filtered by unit works
-- 🔲 Add `doc_type` field to indexes (re-index if needed)
+- ✅ `doc_type` field already exists in indexes
 - 🔲 ADR: unified vs separate endpoints
-- 🔲 Unit reranking experiment
+- 🔲 Unit reranking experiment (deferred - no clear benefit)
 
 **Part 3a - Feature Parity (after verification):**
 
@@ -77,6 +77,14 @@ Key ES documentation for this project:
 - 🔲 Display title fields
 - 🔲 Unit enrichment fields
 - 🔲 ADR: field additions
+
+**Part 3b - Semantic Summary Enhancement (NEW):**
+
+- 🔲 Remove dense vector code (ADR-075)
+- 🔲 Lesson semantic summary template
+- 🔲 Unit semantic summary template
+- 🔲 Redis caching for summaries
+- 🔲 Compare summary vs transcript ELSER
 
 **Note**: MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
@@ -131,8 +139,49 @@ See `phase-3-multi-index-and-fields.md` for full details.
 2. **E5 dense vectors provide no benefit** - For this dataset, sparse vectors (ELSER) are sufficient
 3. **Reranker field matters critically** - Full transcripts cause 20+ second latencies; short titles lack semantic signal
 4. **ELSER was not operational for lessons** - Fixed by adding `lesson_semantic: transcript` to document transform
+5. **Dense vector code should be removed** - Still present in codebase despite providing no benefit
 
-See ES hybrid search documentation: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid
+See ES hybrid search documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid>
+
+---
+
+## Embedding Strategy
+
+### Current: ELSER-Only (Two-Way Hybrid)
+
+| Resource | Field             | Content Source            | Purpose           |
+| -------- | ----------------- | ------------------------- | ----------------- |
+| Lessons  | `lesson_semantic` | Full transcript (~5000 tokens) | Semantic matching |
+| Units    | `unit_semantic`   | `rollupText` (~200-400 tokens) | Semantic matching |
+
+**Why ELSER only?** Dense vectors (E5) evaluated in Phase 2 - no benefit, added latency.
+
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html>
+
+### Planned: Semantic Summary Enhancement
+
+Add information-dense summary fields for better pedagogical matching:
+
+| Resource | New Field                 | Content                     | Generation       |
+| -------- | ------------------------- | --------------------------- | ---------------- |
+| Lessons  | `lesson_summary_semantic` | ~200 token summary          | Template-based   |
+| Units    | `unit_semantic`           | Replace rollup with summary | Template-based   |
+
+**Generation approach**:
+
+1. **Phase 3**: Template-based composition from API fields
+2. **Future**: LLM-enhanced via `.gp-llm-v2-chat_completion`
+
+**Caching**: Redis (same instance as curriculum API caching)
+
+### ADRs
+
+| ADR | Title | Status |
+| --- | ----- | ------ |
+| [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
+| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Code Removal | Accepted |
+| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Embedding Strategy | Accepted |
+| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic Summary Generation | Accepted |
 
 ---
 
@@ -240,17 +289,19 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 ## ES Serverless Features Used
 
-| Feature  | ES Endpoint                            | Cost | Purpose                             |
-| -------- | -------------------------------------- | ---- | ----------------------------------- |
-| BM25     | Built-in                               | $0   | Lexical search                      |
-| ELSER    | `.elser-2-elasticsearch`               | $0   | Sparse semantic embeddings          |
-| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0   | Dense vectors (evaluated, not used) |
-| ReRank   | `.rerank-v1-elasticsearch`             | $0   | Cross-encoder reranking             |
-| LLM      | `.gp-llm-v2-chat_completion`           | $0   | Future RAG integration              |
+| Feature  | ES Endpoint                            | Cost | Purpose                             | Status      |
+| -------- | -------------------------------------- | ---- | ----------------------------------- | ----------- |
+| BM25     | Built-in                               | $0   | Lexical search                      | ✅ Used     |
+| ELSER    | `.elser-2-elasticsearch`               | $0   | Sparse semantic embeddings          | ✅ Used     |
+| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0   | Dense vectors                       | ❌ Not used |
+| ReRank   | `.rerank-v1-elasticsearch`             | $0   | Cross-encoder reranking             | 📋 Planned  |
+| LLM      | `.gp-llm-v2-chat_completion`           | $0   | Future RAG / semantic summaries     | 📋 Planned  |
 
 All AI/ML features are included in the ES Serverless subscription at no additional cost.
 
-See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html
+**Note**: E5 dense vectors were evaluated in Phase 2 and provided no benefit. Code should be removed (ADR-075).
+
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html>
 
 ---
 

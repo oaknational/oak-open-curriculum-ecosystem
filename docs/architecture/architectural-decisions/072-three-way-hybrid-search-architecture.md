@@ -1,9 +1,12 @@
 # ADR-072: Three-Way Hybrid Search Architecture
 
-**Status**: Accepted
-**Date**: 2025-12-07
-**Decision Makers**: Development Team
+**Status**: SUPERSEDED by [ADR-075](075-dense-vector-removal.md)  
+**Date**: 2025-12-07  
+**Superseded Date**: 2025-12-12  
+**Decision Makers**: Development Team  
 **Related**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-073](073-dense-vector-field-configuration.md)
+
+> ⚠️ **This ADR has been superseded.** Phase 2 evaluation showed three-way hybrid (BM25 + ELSER + E5) provides no benefit over two-way hybrid (BM25 + ELSER). The architecture reverted to two-way hybrid. See [ADR-075](075-dense-vector-removal.md) for the decision to remove dense vector code.
 
 ## Context
 
