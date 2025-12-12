@@ -57,7 +57,7 @@
 {
   "lessonSlug": "adding-fractions-same-denominator",
   "lessonTitle": "Adding fractions with the same denominator",
-  "semantic_summary": "This KS2 maths lesson teaches Year 4 students to add fractions with common denominators. Students learn that when denominators match, only numerators are added. Key vocabulary includes numerator, denominator, and proper fraction. Prior knowledge: understanding fractions as parts of a whole. Common misconception: adding both numerators and denominators. Practical activities include fraction bar manipulation and pizza sharing problems.",
+  "semantic_summary": "This KS2 maths lesson teaches Year 4 students to add fractions with common denominators. Students learn that when denominators match, only numerators are added. Key vocabulary includes numerator, denominator, and proper fraction. Prior knowledge: understanding fractions as parts of a whole. Common misconception: adding both numerators and denominators. Practical activities include fraction bar manipulation and pizza sharing problems."
   // ... other fields
 }
 ```
@@ -70,7 +70,7 @@
 {
   "unitSlug": "fractions-year-4",
   "unitTitle": "Fractions",
-  "semantic_summary": "This Year 4 maths unit on fractions spans 8 lessons progressing from fraction recognition to addition and subtraction with common denominators. Students build on Year 3 understanding of fractions as parts of wholes. Key concepts: equivalent fractions, comparing fractions, adding/subtracting with same denominators, mixed numbers. Vocabulary includes numerator, denominator, equivalent, proper fraction, improper fraction, mixed number. Unit prepares students for Year 5 work on fractions with different denominators.",
+  "semantic_summary": "This Year 4 maths unit on fractions spans 8 lessons progressing from fraction recognition to addition and subtraction with common denominators. Students build on Year 3 understanding of fractions as parts of wholes. Key concepts: equivalent fractions, comparing fractions, adding/subtracting with same denominators, mixed numbers. Vocabulary includes numerator, denominator, equivalent, proper fraction, improper fraction, mixed number. Unit prepares students for Year 5 work on fractions with different denominators."
   // ... other fields
 }
 ```
@@ -83,7 +83,7 @@
 {
   "programmeSlug": "maths-primary-ks2",
   "programmeTitle": "Mathematics Key Stage 2",
-  "semantic_summary": "The KS2 Mathematics programme covers Years 3-6 (ages 7-11), building from KS1 foundations towards secondary readiness. Number strand progresses from place value and arithmetic to fractions, decimals, and percentages. Geometry develops from 2D shapes to 3D properties, angles, and coordinates. Statistics introduces data handling, charts, and averages. Algebra introduces patterns, sequences, and simple equations. Programme aligns with National Curriculum statutory requirements and prepares for KS3 transition.",
+  "semantic_summary": "The KS2 Mathematics programme covers Years 3-6 (ages 7-11), building from KS1 foundations towards secondary readiness. Number strand progresses from place value and arithmetic to fractions, decimals, and percentages. Geometry develops from 2D shapes to 3D properties, angles, and coordinates. Statistics introduces data handling, charts, and averages. Algebra introduces patterns, sequences, and simple equations. Programme aligns with National Curriculum statutory requirements and prepares for KS3 transition."
   // ... other fields
 }
 ```
@@ -96,7 +96,7 @@
 {
   "threadSlug": "number-fractions-decimals-percentages",
   "threadTitle": "Number: Fractions, Decimals and Percentages",
-  "semantic_summary": "This conceptual thread traces fraction understanding from Year 1 (halves and quarters of shapes) through to Year 11 (algebraic fractions and complex conversions). 118 units across all key stages. Early years focus on concrete representations. KS2 introduces formal notation and operations. KS3 connects fractions to decimals and percentages. KS4 applies to ratio, proportion, and algebraic contexts. Thread demonstrates how abstract number concepts build from physical manipulation to symbolic reasoning.",
+  "semantic_summary": "This conceptual thread traces fraction understanding from Year 1 (halves and quarters of shapes) through to Year 11 (algebraic fractions and complex conversions). 118 units across all key stages. Early years focus on concrete representations. KS2 introduces formal notation and operations. KS3 connects fractions to decimals and percentages. KS4 applies to ratio, proportion, and algebraic contexts. Thread demonstrates how abstract number concepts build from physical manipulation to symbolic reasoning."
   // ... other fields
 }
 ```
@@ -149,7 +149,7 @@ Categories group units thematically within subjects. Currently, categories only 
 {
   "categorySlug": "reading-writing-oracy",
   "categoryTitle": "Reading, writing & oracy",
-  "semantic_summary": "Units focused on developing core literacy skills: reading comprehension, decoding, fluency and inference; writing composition, grammar, punctuation and spelling; and spoken language including listening, discussion, and presentation. These skills form the foundation for accessing all curriculum areas and are developed progressively from EYFS through to KS4.",
+  "semantic_summary": "Units focused on developing core literacy skills: reading comprehension, decoding, fluency and inference; writing composition, grammar, punctuation and spelling; and spoken language including listening, discussion, and presentation. These skills form the foundation for accessing all curriculum areas and are developed progressively from EYFS through to KS4."
   // ... other fields
 }
 ```
@@ -199,15 +199,15 @@ This works but:
 
 Until the upstream API provides `semantic_summary` fields, we can generate them locally during data ingestion. Here's what's feasible with current API data:
 
-| Resource Type | Feasibility | Available Fields for Composition |
-|---------------|-------------|----------------------------------|
-| **Lesson** | ✅ High | `lessonTitle`, `lessonKeywords`, `keyLearningPoints`, `misconceptionsAndCommonMistakes`, `pupilLessonOutcome`, `teacherTips`, transcript excerpt |
-| **Unit** | ✅ High | `unitTitle`, `priorKnowledgeRequirements`, `nationalCurriculumContent`, `whyThisWhyNow`, `threads`, `categories`, `unitLessons[].lessonTitle`, `description` |
-| **Sequence** | ⚠️ Medium | `sequenceSlug`, year groupings, unit titles per year, `ks4Options` (exam board/tier) |
-| **Thread** | ⚠️ Medium | `threadTitle`, `threadSlug`, unit titles with order, key stage span (derivable) |
-| **Subject** | ⚠️ Medium | `subjectTitle`, `sequenceSlugs`, `years`, `keyStages` - limited pedagogical content |
-| **Programme** | ❌ Low | Programme endpoints don't exist yet; would need to derive from sequences |
-| **Category** | ❌ Low | Only `categoryTitle` and `categorySlug` available - no descriptions |
+| Resource Type | Feasibility | Available Fields for Composition                                                                                                                             |
+| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Lesson**    | ✅ High     | `lessonTitle`, `lessonKeywords`, `keyLearningPoints`, `misconceptionsAndCommonMistakes`, `pupilLessonOutcome`, `teacherTips`, transcript excerpt             |
+| **Unit**      | ✅ High     | `unitTitle`, `priorKnowledgeRequirements`, `nationalCurriculumContent`, `whyThisWhyNow`, `threads`, `categories`, `unitLessons[].lessonTitle`, `description` |
+| **Sequence**  | ⚠️ Medium   | `sequenceSlug`, year groupings, unit titles per year, `ks4Options` (exam board/tier)                                                                         |
+| **Thread**    | ⚠️ Medium   | `threadTitle`, `threadSlug`, unit titles with order, key stage span (derivable)                                                                              |
+| **Subject**   | ⚠️ Medium   | `subjectTitle`, `sequenceSlugs`, `years`, `keyStages` - limited pedagogical content                                                                          |
+| **Programme** | ❌ Low      | Programme endpoints don't exist yet; would need to derive from sequences                                                                                     |
+| **Category**  | ❌ Low      | Only `categoryTitle` and `categorySlug` available - no descriptions                                                                                          |
 
 ---
 
@@ -223,17 +223,17 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 
 **Current Embedding State**:
 
-| Resource | ELSER Field       | Content Source              | Issue                          |
-| -------- | ----------------- | --------------------------- | ------------------------------ |
-| Lessons  | `lesson_semantic` | Full transcript (~5000 tok) | Dilutes pedagogical signal     |
-| Units    | `unit_semantic`   | `rollupText` (~200-400 tok) | Aggregated, not curated        |
+| Resource | ELSER Field       | Content Source              | Issue                      |
+| -------- | ----------------- | --------------------------- | -------------------------- |
+| Lessons  | `lesson_semantic` | Full transcript (~5000 tok) | Dilutes pedagogical signal |
+| Units    | `unit_semantic`   | `rollupText` (~200-400 tok) | Aggregated, not curated    |
 
 **Planned Enhancement**:
 
-| Resource | New/Updated Field         | Content                     | Generation       |
-| -------- | ------------------------- | --------------------------- | ---------------- |
-| Lessons  | `lesson_summary_semantic` | ~200 token summary (NEW)    | Template-based   |
-| Units    | `unit_semantic`           | Replace rollup with summary | Template-based   |
+| Resource | New/Updated Field         | Content                     | Generation     |
+| -------- | ------------------------- | --------------------------- | -------------- |
+| Lessons  | `lesson_summary_semantic` | ~200 token summary (NEW)    | Template-based |
+| Units    | `unit_semantic`           | Replace rollup with summary | Template-based |
 
 **Note**: `rollup_text` retained for units to enable side-by-side quality comparison.
 
@@ -244,8 +244,8 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 1. **Template-based composition** (Phase 3): For lessons and units, compose summaries using templates:
 
    ```text
-   Lesson: "{lessonTitle} is a {keyStage} {subject} lesson for Year {year}. 
-   Key learning: {keyLearningPoints[0..2]}. Keywords: {keywords}. 
+   Lesson: "{lessonTitle} is a {keyStage} {subject} lesson for Year {year}.
+   Key learning: {keyLearningPoints[0..2]}. Keywords: {keywords}.
    Prior knowledge: {priorKnowledge}. Common misconception: {misconceptions[0]}.
    Pupil outcome: {pupilLessonOutcome}."
    ```
@@ -2922,26 +2922,26 @@ components:
 
 ## Summary Table
 
-| Item                              | Priority        | Impact        | Effort    | AI Benefit                              |
-| --------------------------------- | --------------- | ------------- | --------- | --------------------------------------- |
-| **NEW: semantic_summary field**   | **High**        | **Very High** | Medium    | High-quality embeddings for all types   |
-| 1. "Use this when" descriptions   | **High**        | Very High     | 2-4 hours | 70% fewer wrong-tool calls              |
-| 2. Operation summaries            | **High**        | Medium        | 1 hour    | Better UI/organisation                  |
-| 3. `/ontology` endpoint           | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns               |
-| 4. Error response docs            | **High**        | High          | 2-3 hours | Proper error handling                   |
-| 5. Programme variant metadata     | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs    |
-| 6. Consistent resource IDs        | **High**        | **Very High** | 1-5 days  | Working cross-service links             |
-| 7. Parameter examples             | Medium          | Medium        | Ongoing   | Clearer semantics                       |
-| 8. Custom schema extensions       | Medium          | Medium        | Low       | Auto-generated metadata                 |
-| 9. Behavioural metadata           | **Medium**      | **High**      | Low       | Safety & retry logic                    |
-| 10. Thread enhancements           | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites    |
-| 11. Standardise types with refs   | **Medium**      | **High**      | Low-Med   | Consistent types & validation           |
-| 12. Expose Zod validators         | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication   |
-| 13. Response examples             | Medium          | Low           | Ongoing   | Better error handling                   |
-| 14. Canonical URL patterns        | Medium          | Medium        | 1 hour    | URL generation                          |
-| 15. Resource timestamps           | Medium          | Medium-High   | 2-3 days  | Efficient SDK caching                   |
-| 16. Performance hints             | Low             | Low           | Low       | Advanced optimisation                   |
-| 17. OpenAPI best practices        | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                   |
+| Item                            | Priority        | Impact        | Effort    | AI Benefit                            |
+| ------------------------------- | --------------- | ------------- | --------- | ------------------------------------- |
+| **NEW: semantic_summary field** | **High**        | **Very High** | Medium    | High-quality embeddings for all types |
+| 1. "Use this when" descriptions | **High**        | Very High     | 2-4 hours | 70% fewer wrong-tool calls            |
+| 2. Operation summaries          | **High**        | Medium        | 1 hour    | Better UI/organisation                |
+| 3. `/ontology` endpoint         | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns             |
+| 4. Error response docs          | **High**        | High          | 2-3 hours | Proper error handling                 |
+| 5. Programme variant metadata   | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs  |
+| 6. Consistent resource IDs      | **High**        | **Very High** | 1-5 days  | Working cross-service links           |
+| 7. Parameter examples           | Medium          | Medium        | Ongoing   | Clearer semantics                     |
+| 8. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
+| 9. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
+| 10. Thread enhancements         | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
+| 11. Standardise types with refs | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
+| 12. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
+| 13. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
+| 14. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
+| 15. Resource timestamps         | Medium          | Medium-High   | 2-3 days  | Efficient SDK caching                 |
+| 16. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
+| 17. OpenAPI best practices      | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
 
 ---
 

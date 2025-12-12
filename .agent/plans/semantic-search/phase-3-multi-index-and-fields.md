@@ -63,16 +63,16 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 
 ### Part 3b: Semantic Summary Enhancement (NEW)
 
-| Task                                        | Priority   | Status       |
-| ------------------------------------------- | ---------- | ------------ |
-| **Remove dense vector code**                | **HIGH**   | 🔲 Pending   |
-| **Lesson semantic summary template**        | **HIGH**   | 🔲 Pending   |
-| **Unit semantic summary template**          | **HIGH**   | 🔲 Pending   |
-| Redis caching for summaries                 | Medium     | 🔲 Pending   |
-| Compare summary vs transcript ELSER         | Medium     | 🔲 Pending   |
-| ADR-075: Dense vector removal               | **HIGH**   | ✅ Complete  |
-| ADR-076: ELSER-only strategy                | **HIGH**   | ✅ Complete  |
-| ADR-077: Semantic summary generation        | **HIGH**   | ✅ Complete  |
+| Task                                 | Priority | Status      |
+| ------------------------------------ | -------- | ----------- |
+| **Remove dense vector code**         | **HIGH** | 🔲 Pending  |
+| **Lesson semantic summary template** | **HIGH** | 🔲 Pending  |
+| **Unit semantic summary template**   | **HIGH** | 🔲 Pending  |
+| Redis caching for summaries          | Medium   | 🔲 Pending  |
+| Compare summary vs transcript ELSER  | Medium   | 🔲 Pending  |
+| ADR-075: Dense vector removal        | **HIGH** | ✅ Complete |
+| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete |
+| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete |
 
 **Part 3a and 3b work begins only after Part 3.0 verification is complete.**
 
@@ -162,10 +162,10 @@ We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **multiple retrie
 
 **Key clarification**: RRF combines **retrievers** (search methods), not indices. All retrievers query the same index (e.g., `oak_lessons`) using different matching strategies.
 
-| Retriever | Type | Field(s) | Purpose |
-| --------- | ---- | -------- | ------- |
-| BM25 | Lexical | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching |
-| ELSER | Sparse semantic | `lesson_semantic` (full transcript) | Semantic matching |
+| Retriever | Type            | Field(s)                                             | Purpose           |
+| --------- | --------------- | ---------------------------------------------------- | ----------------- |
+| BM25      | Lexical         | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching  |
+| ELSER     | Sparse semantic | `lesson_semantic` (full transcript)                  | Semantic matching |
 
 See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
@@ -458,11 +458,11 @@ Semantic summaries provide information-dense text (~200 tokens) optimised for em
 
 ### ADRs
 
-| ADR     | Title                            | Status    |
-| ------- | -------------------------------- | --------- |
-| ADR-075 | Dense Vector Code Removal        | ✅ Accepted |
-| ADR-076 | ELSER-Only Embedding Strategy    | ✅ Accepted |
-| ADR-077 | Semantic Summary Generation      | ✅ Accepted |
+| ADR     | Title                         | Status      |
+| ------- | ----------------------------- | ----------- |
+| ADR-075 | Dense Vector Code Removal     | ✅ Accepted |
+| ADR-076 | ELSER-Only Embedding Strategy | ✅ Accepted |
+| ADR-077 | Semantic Summary Generation   | ✅ Accepted |
 
 ### Task 1: Remove Dense Vector Code
 

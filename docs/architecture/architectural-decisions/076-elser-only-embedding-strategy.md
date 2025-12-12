@@ -52,10 +52,10 @@ Dense vectors (E5) are better for:
 
 **Key clarification**: RRF combines **retrievers** (search methods), not indices. All retrievers query the same `oak_lessons` index using different matching strategies.
 
-| Retriever | Type | Field(s) | Purpose |
-| --------- | ---- | -------- | ------- |
-| BM25 | Lexical | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching |
-| ELSER | Sparse semantic | `lesson_semantic` (full transcript) | Semantic matching |
+| Retriever | Type            | Field(s)                                             | Purpose           |
+| --------- | --------------- | ---------------------------------------------------- | ----------------- |
+| BM25      | Lexical         | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching  |
+| ELSER     | Sparse semantic | `lesson_semantic` (full transcript)                  | Semantic matching |
 
 ```json
 {
@@ -94,11 +94,11 @@ Dense vectors (E5) are better for:
 
 With semantic summaries (ADR-077), we add a **third retriever** (still same index):
 
-| Retriever | Type | Field | Purpose |
-| --------- | ---- | ----- | ------- |
-| BM25 | Lexical | Multiple text fields | Keyword matching |
-| ELSER (transcript) | Sparse semantic | `lesson_semantic` | Detailed content matching |
-| ELSER (summary) | Sparse semantic | `lesson_summary_semantic` | Conceptual/pedagogical matching |
+| Retriever          | Type            | Field                     | Purpose                         |
+| ------------------ | --------------- | ------------------------- | ------------------------------- |
+| BM25               | Lexical         | Multiple text fields      | Keyword matching                |
+| ELSER (transcript) | Sparse semantic | `lesson_semantic`         | Detailed content matching       |
+| ELSER (summary)    | Sparse semantic | `lesson_summary_semantic` | Conceptual/pedagogical matching |
 
 **⚠️ Important terminology**: This "three-way" refers to BM25 + transcript ELSER + summary ELSER, **NOT** the superseded three-way hybrid with dense vectors (ADR-072). Dense vectors provided no benefit and are removed (ADR-075).
 

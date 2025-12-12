@@ -149,8 +149,8 @@ See ES hybrid search documentation: <https://www.elastic.co/guide/en/elasticsear
 
 ### Current: ELSER-Only (Two-Way Hybrid)
 
-| Resource | Field             | Content Source            | Purpose           |
-| -------- | ----------------- | ------------------------- | ----------------- |
+| Resource | Field             | Content Source                 | Purpose           |
+| -------- | ----------------- | ------------------------------ | ----------------- |
 | Lessons  | `lesson_semantic` | Full transcript (~5000 tokens) | Semantic matching |
 | Units    | `unit_semantic`   | `rollupText` (~200-400 tokens) | Semantic matching |
 
@@ -162,10 +162,10 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-s
 
 Add information-dense summary fields for better pedagogical matching:
 
-| Resource | New Field                 | Content                     | Generation       |
-| -------- | ------------------------- | --------------------------- | ---------------- |
-| Lessons  | `lesson_summary_semantic` | ~200 token summary          | Template-based   |
-| Units    | `unit_semantic`           | Replace rollup with summary | Template-based   |
+| Resource | New Field                 | Content                     | Generation     |
+| -------- | ------------------------- | --------------------------- | -------------- |
+| Lessons  | `lesson_summary_semantic` | ~200 token summary          | Template-based |
+| Units    | `unit_semantic`           | Replace rollup with summary | Template-based |
 
 **Generation approach**:
 
@@ -176,12 +176,12 @@ Add information-dense summary fields for better pedagogical matching:
 
 ### ADRs
 
-| ADR | Title | Status |
-| --- | ----- | ------ |
+| ADR                                                                                               | Title                           | Status   |
+| ------------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
 | [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
-| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Code Removal | Accepted |
-| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Embedding Strategy | Accepted |
-| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic Summary Generation | Accepted |
+| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal       | Accepted |
+| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy   | Accepted |
+| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation     | Accepted |
 
 ---
 
@@ -289,13 +289,13 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 ## ES Serverless Features Used
 
-| Feature  | ES Endpoint                            | Cost | Purpose                             | Status      |
-| -------- | -------------------------------------- | ---- | ----------------------------------- | ----------- |
-| BM25     | Built-in                               | $0   | Lexical search                      | ✅ Used     |
-| ELSER    | `.elser-2-elasticsearch`               | $0   | Sparse semantic embeddings          | ✅ Used     |
-| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0   | Dense vectors                       | ❌ Not used |
-| ReRank   | `.rerank-v1-elasticsearch`             | $0   | Cross-encoder reranking             | 📋 Planned  |
-| LLM      | `.gp-llm-v2-chat_completion`           | $0   | Future RAG / semantic summaries     | 📋 Planned  |
+| Feature  | ES Endpoint                            | Cost | Purpose                         | Status      |
+| -------- | -------------------------------------- | ---- | ------------------------------- | ----------- |
+| BM25     | Built-in                               | $0   | Lexical search                  | ✅ Used     |
+| ELSER    | `.elser-2-elasticsearch`               | $0   | Sparse semantic embeddings      | ✅ Used     |
+| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0   | Dense vectors                   | ❌ Not used |
+| ReRank   | `.rerank-v1-elasticsearch`             | $0   | Cross-encoder reranking         | 📋 Planned  |
+| LLM      | `.gp-llm-v2-chat_completion`           | $0   | Future RAG / semantic summaries | 📋 Planned  |
 
 All AI/ML features are included in the ES Serverless subscription at no additional cost.
 

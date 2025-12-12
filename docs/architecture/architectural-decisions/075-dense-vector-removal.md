@@ -11,11 +11,11 @@ Phase 2 of the semantic search project evaluated three-way hybrid search (BM25 +
 
 **Experimental Results (Phase 2)**:
 
-| Metric      | Two-Way (BM25 + ELSER) | Three-Way (+ E5) | Delta   |
-| ----------- | ---------------------- | ---------------- | ------- |
-| **MRR**     | 0.900                  | 0.897            | -0.003  |
-| **NDCG@10** | 0.710                  | 0.708            | -0.002  |
-| **Latency** | 180ms p95              | 240ms p95        | +33%    |
+| Metric      | Two-Way (BM25 + ELSER) | Three-Way (+ E5) | Delta  |
+| ----------- | ---------------------- | ---------------- | ------ |
+| **MRR**     | 0.900                  | 0.897            | -0.003 |
+| **NDCG@10** | 0.710                  | 0.708            | -0.002 |
+| **Latency** | 180ms p95              | 240ms p95        | +33%   |
 
 **Conclusion**: E5 dense vectors provided **no measurable benefit** for curriculum search while adding latency and complexity.
 
@@ -67,8 +67,8 @@ const [lessonDenseVector, titleDenseVector] = await Promise.all([
 
 return {
   // ... other fields ...
-  lesson_dense_vector: lessonDenseVector,  // REMOVE
-  title_dense_vector: titleDenseVector,     // REMOVE
+  lesson_dense_vector: lessonDenseVector, // REMOVE
+  title_dense_vector: titleDenseVector, // REMOVE
 };
 ```
 

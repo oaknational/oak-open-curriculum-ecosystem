@@ -9,10 +9,10 @@
 
 Semantic search quality depends on having information-dense text for embedding creation. Currently:
 
-| Resource | ELSER Field       | Content                         | Issue                              |
-| -------- | ----------------- | ------------------------------- | ---------------------------------- |
-| Lessons  | `lesson_semantic` | Full transcript (~5000 tokens)  | Too long, dilutes pedagogical signal |
-| Units    | `unit_semantic`   | `rollupText` (~200-400 tokens)  | Aggregated from lessons, not curated |
+| Resource | ELSER Field       | Content                        | Issue                                |
+| -------- | ----------------- | ------------------------------ | ------------------------------------ |
+| Lessons  | `lesson_semantic` | Full transcript (~5000 tokens) | Too long, dilutes pedagogical signal |
+| Units    | `unit_semantic`   | `rollupText` (~200-400 tokens) | Aggregated from lessons, not curated |
 
 The upstream Oak API does not provide `semantic_summary` fields optimised for embeddings. Until it does, we need to generate these locally at ingest time.
 
@@ -108,17 +108,17 @@ const cacheKey = `semantic_summary:unit:${unitSlug}:v1`;
 
 For lessons, we maintain both:
 
-| Field                     | Content                        | Purpose                       |
-| ------------------------- | ------------------------------ | ----------------------------- |
-| `lesson_semantic`         | Full transcript                | Detailed content matching     |
-| `lesson_summary_semantic` | Generated summary (~200 tokens)| Conceptual/pedagogical matching |
+| Field                     | Content                         | Purpose                         |
+| ------------------------- | ------------------------------- | ------------------------------- |
+| `lesson_semantic`         | Full transcript                 | Detailed content matching       |
+| `lesson_summary_semantic` | Generated summary (~200 tokens) | Conceptual/pedagogical matching |
 
 For units, we compare:
 
-| Field                   | Content                            | Purpose                  |
-| ----------------------- | ---------------------------------- | ------------------------ |
-| `unit_semantic`         | Generated summary (~250 tokens)    | Primary semantic search  |
-| `rollup_text`           | Legacy aggregated text             | Comparison baseline      |
+| Field           | Content                         | Purpose                 |
+| --------------- | ------------------------------- | ----------------------- |
+| `unit_semantic` | Generated summary (~250 tokens) | Primary semantic search |
+| `rollup_text`   | Legacy aggregated text          | Comparison baseline     |
 
 The `rollup_text` field is retained for side-by-side performance comparison.
 
@@ -158,11 +158,11 @@ unit_semantic: {
 
 With semantic summaries, lesson search uses **three retrievers within the same `oak_lessons` index**:
 
-| Retriever | Type | Field | Purpose |
-| --------- | ---- | ----- | ------- |
-| BM25 | Lexical | `lesson_title`, `lesson_keywords`, etc. | Keyword matching |
-| ELSER (transcript) | Sparse semantic | `lesson_semantic` | Detailed content matching |
-| ELSER (summary) | Sparse semantic | `lesson_summary_semantic` | Conceptual/pedagogical matching |
+| Retriever          | Type            | Field                                   | Purpose                         |
+| ------------------ | --------------- | --------------------------------------- | ------------------------------- |
+| BM25               | Lexical         | `lesson_title`, `lesson_keywords`, etc. | Keyword matching                |
+| ELSER (transcript) | Sparse semantic | `lesson_semantic`                       | Detailed content matching       |
+| ELSER (summary)    | Sparse semantic | `lesson_summary_semantic`               | Conceptual/pedagogical matching |
 
 ```json
 {
