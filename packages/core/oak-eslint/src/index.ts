@@ -1,8 +1,10 @@
 import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 
-// For now, we are exporting the raw logic as we did in eslint-rules
-// But we should aim to expose them as proper configs or rules
+/**
+ * @todo For now, we are exporting the raw logic as we did in eslint-rules
+ *But we should aim to expose them as proper configs or rules
+ */
 export {
   coreBoundaryRules,
   coreTestConfigRules,
@@ -22,7 +24,7 @@ import { strict } from './configs/strict.js';
 import { react } from './configs/react.js';
 import { next } from './configs/next.js';
 
-import type { Linter } from 'eslint';
+import type { Linter, ESLint } from 'eslint';
 
 export const configs: Record<string, Linter.Config[]> = {
   recommended: Array.isArray(recommended) ? recommended : [recommended],
@@ -31,10 +33,16 @@ export const configs: Record<string, Linter.Config[]> = {
   next: Array.isArray(next) ? next : [next],
 };
 
-import type { ESLint } from 'eslint';
-
+/**
+ * ESLint plugin for Oak National Academy standards.
+ *
+ * Note: ESLint's Plugin.rules type uses Rule.RuleModule which is incompatible
+ * with typescript-eslint's RuleModule. The type assertion is necessary because
+ * these types don't align at the boundary between ESLint and typescript-eslint.
+ */
 const plugin: ESLint.Plugin = {
-  rules: rules as any,
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- typescript-eslint RuleModule incompatible with ESLint Rule.RuleModule
+  rules: rules as unknown as ESLint.Plugin['rules'],
   configs: configs,
 };
 
@@ -77,8 +85,9 @@ export const ignores = [
 /**
  * Common rules for test files.
  * Loosens some strictness for testing contexts (e.g., assertions, magic numbers).
+ * Uses `as const satisfies` to preserve tuple types for rule configs.
  */
-export const testRules: Linter.RulesRecord = {
+export const testRules = {
   'max-lines': ['error', 700],
   'max-lines-per-function': ['error', 1000],
   '@typescript-eslint/consistent-type-assertions': [
@@ -92,6 +101,6 @@ export const testRules: Linter.RulesRecord = {
   '@typescript-eslint/no-restricted-types': 'off',
   '@typescript-eslint/unbound-method': 'off',
   'import-x/no-named-as-default-member': 'off',
-};
+} as const satisfies Linter.RulesRecord;
 
 export default plugin;

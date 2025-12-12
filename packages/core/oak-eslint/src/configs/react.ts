@@ -1,12 +1,13 @@
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import type { Linter } from 'eslint';
+import type { ESLint, Linter } from 'eslint';
 
 export const react: Linter.Config[] = [
   {
     plugins: {
       react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- react-hooks plugin has incompatible configs.flat type
+      'react-hooks': reactHooksPlugin as ESLint.Plugin,
     },
     settings: {
       react: {

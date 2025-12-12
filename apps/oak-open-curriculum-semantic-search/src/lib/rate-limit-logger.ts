@@ -6,10 +6,19 @@
 import type { RateLimitTracker, RateLimitInfo } from '@oaknational/oak-curriculum-sdk';
 import { sandboxLogger } from './logger';
 
+/** Structured rate limit info for logging */
+interface FormattedRateLimitInfo {
+  readonly limit: number | 'unknown';
+  readonly remaining: number | 'unknown';
+  readonly used: number | 'unknown';
+  readonly resetTime: string;
+  readonly resetIn: string;
+}
+
 /**
  * Format rate limit info for logging
  */
-function formatRateLimitInfo(info: RateLimitInfo): object {
+function formatRateLimitInfo(info: RateLimitInfo): FormattedRateLimitInfo {
   return {
     limit: info.limit ?? 'unknown',
     remaining: info.remaining ?? 'unknown',

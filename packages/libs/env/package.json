@@ -32,6 +32,7 @@
     "dotenv": "^17.2.3"
   },
   "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
     "typescript": "^5.9.3"
   },
   "engines": {

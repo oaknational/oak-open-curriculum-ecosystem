@@ -37,7 +37,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@modelcontextprotocol/sdk": "^1.24.3",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-storage": "workspace:*",
@@ -47,7 +47,8 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^24",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"

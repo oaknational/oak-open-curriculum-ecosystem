@@ -105,7 +105,9 @@ async function searchUnits(
  * @returns 95th percentile latency
  */
 function calculateP95(latencies: readonly number[]): number {
-  if (latencies.length === 0) return 0;
+  if (latencies.length === 0) {
+    return 0;
+  }
   const sorted = [...latencies].sort((a, b) => a - b);
   const index = Math.floor(sorted.length * 0.95);
   const p95 = sorted[index];
@@ -193,12 +195,18 @@ function logDecisionGuidance(summary: MetricsSummary, targets: TargetResults): v
  */
 function logFailedTargets(summary: MetricsSummary, targets: TargetResults): void {
   console.log('✗ Targets NOT met:');
-  if (!targets.mrrPass) console.log(`  - MRR ${summary.avgMRR.toFixed(3)} <= 0.60`);
-  if (!targets.ndcgPass) console.log(`  - NDCG@10 ${summary.avgNDCG.toFixed(3)} <= 0.65`);
-  if (!targets.zeroHitPass)
+  if (!targets.mrrPass) {
+    console.log(`  - MRR ${summary.avgMRR.toFixed(3)} <= 0.60`);
+  }
+  if (!targets.ndcgPass) {
+    console.log(`  - NDCG@10 ${summary.avgNDCG.toFixed(3)} <= 0.65`);
+  }
+  if (!targets.zeroHitPass) {
     console.log(`  - Zero-hit rate ${(summary.zeroHitRate * 100).toFixed(1)}% >= 15%`);
-  if (!targets.latencyPass)
+  }
+  if (!targets.latencyPass) {
     console.log(`  - p95 latency ${summary.p95Latency.toFixed(0)}ms >= 300ms`);
+  }
 }
 
 describe('Unit Search Quality Baseline (Phase 3, Task 3)', () => {

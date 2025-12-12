@@ -12,7 +12,7 @@
  */
 
 import { Client } from '@elastic/elasticsearch';
-import * as dotenv from 'dotenv';
+import { config } from 'dotenv';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,7 +23,7 @@ import { formatResultRow, compareResults } from './result-analysis';
 
 // Load env from app directory
 const currentDir = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: join(currentDir, '..', '..', '.env.local') });
+config({ path: join(currentDir, '..', '..', '.env.local') });
 
 const client = new Client({
   node: process.env.ELASTICSEARCH_URL,

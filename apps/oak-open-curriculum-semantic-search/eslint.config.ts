@@ -8,6 +8,7 @@
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { defineConfig, globalIgnores } from 'eslint/config';
+import type { Linter } from 'eslint';
 import { parser as tseslintParser } from 'typescript-eslint';
 import { configs, ignores, testRules } from '@oaknational/eslint-plugin-standards';
 
@@ -29,7 +30,8 @@ const eslintConfig = defineConfig(
   ...configs.strict,
 
   // Use the Next.js config from our standards plugin (includes React, React Hooks, Next.js)
-  ...configs.next,
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- eslint-config-next types don't align with defineConfig
+  ...(configs.next as Linter.Config[]),
 
   // React and TypeScript rules for source files
   {
@@ -73,9 +75,8 @@ const eslintConfig = defineConfig(
       '**/test-*.ts',
       '**/__tests__/**',
     ],
-    rules: {
-      ...testRules,
-    },
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- testRules types don't match defineConfig's strict expectations
+    rules: testRules as unknown as Linter.RulesRecord,
   },
 );
 

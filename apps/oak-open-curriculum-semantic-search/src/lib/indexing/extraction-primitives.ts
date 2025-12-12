@@ -7,6 +7,7 @@
  * @module extraction-primitives
  */
 
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- external data boundary: this file handles unknown external data
 type UnknownObject = Readonly<Record<string, unknown>>;
 
 /** Type guard to check if a value is a non-null object. */
@@ -36,10 +37,10 @@ export function safeString(value: unknown): string | undefined {
 export function pluckStrings(collection: unknown, key: string): string[] {
   const results: string[] = [];
   for (const entry of safeArray(collection)) {
-    if (typeof entry !== 'object' || entry === null) {
+    if (!isUnknownObject(entry)) {
       continue;
     }
-    const raw: unknown = Reflect.get(entry, key);
+    const raw: unknown = entry[key];
     const value = safeString(raw);
     if (value) {
       results.push(value);

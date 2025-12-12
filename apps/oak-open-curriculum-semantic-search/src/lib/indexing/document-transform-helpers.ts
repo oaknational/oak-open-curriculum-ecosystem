@@ -60,59 +60,6 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
-type UnknownObject = Readonly<Record<string, unknown>>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
-
-function isUnknownObject(value: unknown): value is UnknownObject {
-  return typeof value === 'object' && value !== null;
-}
-
-function ensureRecord(value: unknown, context: string): UnknownObject {
-  if (!isUnknownObject(value)) {
-    throw new Error(`Invalid ${context}: expected an object`);
-  }
-  return value;
-}
-
-function safeArray(value: unknown): readonly unknown[] {
-  return Array.isArray(value) ? value : [];
-}
-
-function safeString(value: unknown): string | undefined {
-  return typeof value === 'string' && value.length > 0 ? value : undefined;
-}
-
-function pluckStrings(collection: unknown, key: string): string[] {
-  const results: string[] = [];
-  for (const entry of safeArray(collection)) {
-    if (typeof entry !== 'object' || entry === null) {
-      continue;
-    }
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    const raw: unknown = Reflect.get(entry, key);
-    const value = safeString(raw);
-    if (value) {
-      results.push(value);
-    }
-  }
-  return results;
-}
-
-function optionalStrings(values: string[]): string[] | undefined {
-  return values.length > 0 ? values : undefined;
-}
-
-function readUnknownField(record: UnknownObject, key: string): unknown {
-  return record[key];
-}
-
-function requireStringField(record: UnknownObject, key: string, context: string): string {
-  const value = safeString(readUnknownField(record, key));
-  if (!value) {
-    throw new Error(`Missing ${context}`);
-  }
-  return value;
-}
-
 /** Extracts lesson info from unit lessons array. */
 export function extractUnitLessons(value: unknown): UnitLessonInfo[] {
   const lessons: UnitLessonInfo[] = [];
@@ -198,7 +145,11 @@ export function extractLessonPlanningFields(summary: unknown): {
   };
 }
 
-/** Extracts all fields from lesson summary for document creation. */
+/**
+ * Extracts all fields from lesson summary for document creation.
+ * Return type is intentionally inferred to match consuming code expectations.
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Return type inferred to avoid cascading type changes in document transforms
 export function extractLessonDocumentFields(summary: unknown) {
   const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
@@ -222,7 +173,11 @@ export function extractLessonDocumentFields(summary: unknown) {
   };
 }
 
-/** Extracts all fields from unit summary for rollup document creation. */
+/**
+ * Extracts all fields from unit summary for rollup document creation.
+ * Return type is intentionally inferred to match consuming code expectations.
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Return type inferred to avoid cascading type changes in document transforms
 export function extractRollupDocumentFields(
   summary: unknown,
   normaliseYears: (year: unknown, yearSlug: unknown) => string[] | undefined,

@@ -127,7 +127,9 @@ export async function runExperiment(
 
   for (let i = 0; i < GROUND_TRUTH_QUERIES.length; i++) {
     const gt = GROUND_TRUTH_QUERIES[i];
-    if (!gt) continue;
+    if (!gt) {
+      continue;
+    }
 
     try {
       recordSuccess(
@@ -136,8 +138,9 @@ export async function runExperiment(
         latencies,
         await processQuery(client, gt, useKnn, useRerank, retrieveSize, rerankSize),
       );
-      if ((i + 1) % 10 === 0)
+      if ((i + 1) % 10 === 0) {
         log(`  ${name}: ${i + 1}/${GROUND_TRUTH_QUERIES.length} queries done`);
+      }
     } catch (e) {
       errors++;
       log(

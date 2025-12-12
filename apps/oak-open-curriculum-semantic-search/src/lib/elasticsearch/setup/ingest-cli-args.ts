@@ -139,7 +139,9 @@ export function parseArgs(args: readonly string[]): CliArgs {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     const nextArg = args[i + 1];
-    if (processFlag(arg, flags)) continue;
+    if (processFlag(arg, flags)) {
+      continue;
+    }
     i += processValueArg(arg, nextArg, subjects, keyStages, indexes);
   }
 

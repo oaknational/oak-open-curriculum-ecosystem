@@ -55,7 +55,9 @@ describe('Hybrid Superiority Experiment', () => {
   });
 
   afterAll(() => {
-    if (!lessonExperiment || !unitExperiment) console.error('Experiment incomplete');
+    if (!lessonExperiment || !unitExperiment) {
+      console.error('Experiment incomplete');
+    }
   });
 
   it('documents Lesson BM25', () => {

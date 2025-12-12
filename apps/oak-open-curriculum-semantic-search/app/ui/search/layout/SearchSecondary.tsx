@@ -146,8 +146,8 @@ function useBreakpointMatch(name: BreakpointName): boolean {
   const [matches, setMatches] = useState<boolean>(computeMatch);
 
   useEffect(() => {
+    // SSR guard: state is already initialised correctly via computeMatch
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      setMatches(false);
       return undefined;
     }
 
@@ -158,6 +158,8 @@ function useBreakpointMatch(name: BreakpointName): boolean {
       setMatches(event.matches);
     };
 
+    // Synchronise with current match state, then listen for changes
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Initial sync with browser API after hydration; useSyncExternalStore would be overkill for this simple case
     setMatches(media.matches);
     media.addEventListener('change', update);
     return () => {

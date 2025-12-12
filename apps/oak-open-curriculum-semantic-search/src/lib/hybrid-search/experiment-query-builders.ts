@@ -61,8 +61,12 @@ export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearch
     retriever: createLessonBm25Retriever(text, filterClause),
   };
 
-  if (includeHighlights) request.highlight = createLessonHighlight();
-  if (includeFacets) request.aggs = createLessonFacets();
+  if (includeHighlights) {
+    request.highlight = createLessonHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createLessonFacets();
+  }
 
   return request;
 }
@@ -93,8 +97,12 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
     retriever: createLessonElserRetriever(text, filterClause),
   };
 
-  if (includeHighlights) request.highlight = createLessonHighlight();
-  if (includeFacets) request.aggs = createLessonFacets();
+  if (includeHighlights) {
+    request.highlight = createLessonHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createLessonFacets();
+  }
 
   return request;
 }
@@ -136,8 +144,12 @@ export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequ
     retriever: createUnitBm25Retriever(text, filterClause),
   };
 
-  if (includeHighlights) request.highlight = createUnitHighlight();
-  if (includeFacets) request.aggs = createUnitFacets();
+  if (includeHighlights) {
+    request.highlight = createUnitHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createUnitFacets();
+  }
 
   return request;
 }
@@ -168,8 +180,12 @@ export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchReq
     retriever: createUnitElserRetriever(text, filterClause),
   };
 
-  if (includeHighlights) request.highlight = createUnitHighlight();
-  if (includeFacets) request.aggs = createUnitFacets();
+  if (includeHighlights) {
+    request.highlight = createUnitHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createUnitFacets();
+  }
 
   return request;
 }

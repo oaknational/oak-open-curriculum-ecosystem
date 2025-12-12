@@ -132,7 +132,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  target: 'node22',
+  target: 'es2022',
   minify: false,
   bundle: false, // SDK should not bundle dependencies
   platform: 'neutral',

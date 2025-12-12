@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 /**
  * Response augmentation with canonical URLs
  *
  * Pure function that augments API responses with canonical URLs
  * based on content type and available context.
  */
-/* eslint-disable complexity */ // REFACTOR
-=======
-/** Pure function that augments API responses with canonical URLs. */
-
->>>>>>> 4655543e (fix(type-safety): eliminate type shortcuts and improve error messages)
 import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import {
@@ -40,6 +34,23 @@ function isReadonlyStringArray(value: unknown): value is readonly string[] {
   return Array.isArray(value) && value.every((v) => typeof v === 'string');
 }
 
+/**
+ * A non-null object response that can be narrowed via property checks.
+ * This type is used internally by type guards to narrow unknown values
+ * to something compatible with the `in` operator.
+ */
+interface ObjectResponse {
+  readonly [Symbol.toStringTag]?: string;
+}
+
+/**
+ * Type guard that narrows unknown to a non-null object.
+ * Used to enable the `in` operator for property checking.
+ */
+function isNonNullObject(value: unknown): value is ObjectResponse {
+  return typeof value === 'object' && value !== null;
+}
+
 interface UnitContext {
   readonly subjectSlug?: string;
   readonly phaseSlug?: string;
@@ -52,7 +63,8 @@ interface SubjectContext {
 /**
  * Extracts unit context from response data
  */
-function extractUnitContext(response: object): UnitContext | undefined {
+function extractUnitContext(response: unknown): UnitContext | undefined {
+  if (!isNonNullObject(response)) return undefined;
   if ('subjectSlug' in response && 'phaseSlug' in response) {
     return {
       subjectSlug: typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined,
@@ -65,7 +77,8 @@ function extractUnitContext(response: object): UnitContext | undefined {
 /**
  * Extracts subject context from response data
  */
-function extractSubjectContext(response: object): SubjectContext | undefined {
+function extractSubjectContext(response: unknown): SubjectContext | undefined {
+  if (!isNonNullObject(response)) return undefined;
   if ('keyStageSlugs' in response && isReadonlyStringArray(response.keyStageSlugs)) {
     return { keyStageSlugs: response.keyStageSlugs };
   }
@@ -207,13 +220,16 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
  * @todo Refactor to return a Result<string, Error> instead of throwing errors
  */
 function extractCanonicalUrlFields(
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-  response: object,
+  response: unknown,
   path: string,
   contentType: ContentType,
 ): { canonicalUrl: string | null } {
   // Idempotent: preserve existing canonicalUrl
-  if ('canonicalUrl' in response && typeof response.canonicalUrl === 'string') {
+  if (
+    isNonNullObject(response) &&
+    'canonicalUrl' in response &&
+    typeof response.canonicalUrl === 'string'
+  ) {
     return { canonicalUrl: response.canonicalUrl };
   }
   const id = extractIdFromResponse(response, path);

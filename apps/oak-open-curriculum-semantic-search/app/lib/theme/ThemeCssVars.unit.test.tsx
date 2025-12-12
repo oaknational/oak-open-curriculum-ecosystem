@@ -26,11 +26,12 @@ describe('ThemeCssVars', () => {
   });
 
   it('reflects mode updates from ColorModeProvider', () => {
-    const setter: { current: ((mode: 'light' | 'dark') => void) | null } = { current: null };
+    const setterRef: { current: ((mode: 'light' | 'dark') => void) | null } = { current: null };
 
     function Setter(): null {
       const { setMode } = useColorMode();
-      setter.current = setMode;
+      // eslint-disable-next-line react-hooks/immutability -- Test pattern: capturing hook value in ref for external access
+      setterRef.current = setMode;
       return null;
     }
 
@@ -42,7 +43,7 @@ describe('ThemeCssVars', () => {
     );
 
     act(() => {
-      setter.current?.('dark');
+      setterRef.current?.('dark');
     });
 
     const style = document.getElementById('app-theme-vars');

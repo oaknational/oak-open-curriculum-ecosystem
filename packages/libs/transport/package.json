@@ -35,6 +35,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
     "typescript": "^5.9.3"
   },
   "engines": {

@@ -40,7 +40,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@modelcontextprotocol/sdk": "^1.24.3",
     "@notionhq/client": "^5.4.0",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",
@@ -48,6 +48,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
     "typescript": "^5.9.3"
   },
   "engines": {

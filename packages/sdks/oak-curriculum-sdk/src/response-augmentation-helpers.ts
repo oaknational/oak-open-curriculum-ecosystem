@@ -3,6 +3,23 @@
 import type { ContentType } from './types/response-augmentation.js';
 
 /**
+ * A non-null object response that can be narrowed via property checks.
+ * This type is used internally by type guards to narrow unknown values
+ * to something compatible with the `in` operator.
+ */
+interface ObjectResponse {
+  readonly [Symbol.toStringTag]?: string;
+}
+
+/**
+ * Type guard that narrows unknown to a non-null object.
+ * Used to enable the `in` operator for property checking.
+ */
+function isNonNullObject(value: unknown): value is ObjectResponse {
+  return typeof value === 'object' && value !== null;
+}
+
+/**
  * Checks if path is a search endpoint
  */
 export function isSearchEndpoint(path: string): ContentType | undefined {
@@ -74,7 +91,10 @@ export function getContentTypeFromPath(path: string): ContentType | undefined {
 /**
  * Extracts lesson slug from response
  */
-export function extractLessonSlug(response: object): string | undefined {
+export function extractLessonSlug(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('lessonSlug' in response) {
     return typeof response.lessonSlug === 'string' ? response.lessonSlug : undefined;
   }
@@ -84,7 +104,10 @@ export function extractLessonSlug(response: object): string | undefined {
 /**
  * Extracts unit slug from response
  */
-export function extractUnitSlug(response: object): string | undefined {
+export function extractUnitSlug(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('unitSlug' in response) {
     return typeof response.unitSlug === 'string' ? response.unitSlug : undefined;
   }
@@ -94,7 +117,10 @@ export function extractUnitSlug(response: object): string | undefined {
 /**
  * Extracts subject slug from response
  */
-export function extractSubjectSlug(response: object): string | undefined {
+export function extractSubjectSlug(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('subjectSlug' in response) {
     return typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined;
   }
@@ -104,7 +130,10 @@ export function extractSubjectSlug(response: object): string | undefined {
 /**
  * Extracts sequence slug from response
  */
-export function extractSequenceSlug(response: object): string | undefined {
+export function extractSequenceSlug(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('sequenceSlug' in response) {
     return typeof response.sequenceSlug === 'string' ? response.sequenceSlug : undefined;
   }
@@ -114,7 +143,10 @@ export function extractSequenceSlug(response: object): string | undefined {
 /**
  * Extracts thread slug from response
  */
-export function extractThreadSlug(response: object): string | undefined {
+export function extractThreadSlug(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('threadSlug' in response) {
     return typeof response.threadSlug === 'string' ? response.threadSlug : undefined;
   }
@@ -125,7 +157,7 @@ export function extractThreadSlug(response: object): string | undefined {
  * Extracts content-type-specific ID from response
  */
 export function extractContentTypeSpecificId(
-  response: object,
+  response: unknown,
   contentType: ContentType | undefined,
 ): string | undefined {
   if (contentType === 'lesson') {
@@ -149,7 +181,10 @@ export function extractContentTypeSpecificId(
 /**
  * Extracts generic ID fields (slug or id) from response
  */
-export function extractGenericId(response: object): string | undefined {
+export function extractGenericId(response: unknown): string | undefined {
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('slug' in response && typeof response.slug === 'string') {
     return response.slug;
   }

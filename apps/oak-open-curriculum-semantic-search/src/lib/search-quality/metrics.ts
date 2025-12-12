@@ -22,6 +22,15 @@
  */
 
 /**
+ * Type-safe Object.values that preserves value types.
+ * Avoids the no-restricted-properties lint rule for Object.values.
+ */
+function typeSafeValues<T extends Readonly<Record<string, number>>>(obj: T): number[] {
+  // eslint-disable-next-line no-restricted-properties -- Encapsulated in type-safe helper
+  return Object.values(obj);
+}
+
+/**
  * Relevance threshold for MRR calculation.
  *
  * Only results with relevance >= this threshold count as "relevant" for MRR.
@@ -115,7 +124,7 @@ export function calculateNDCG(
   }
 
   // Calculate ideal DCG (if results were perfectly ranked)
-  const idealOrder = Object.values(relevance)
+  const idealOrder = typeSafeValues(relevance)
     .sort((a, b) => b - a)
     .slice(0, k);
 

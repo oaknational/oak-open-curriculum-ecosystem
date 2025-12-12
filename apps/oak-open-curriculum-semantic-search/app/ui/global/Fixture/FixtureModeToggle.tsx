@@ -85,8 +85,15 @@ function useFixtureModeToggle(
   const [statusMessage, setStatusMessage] = useState(resolveStatusMessage(initialMode));
   const [isPending, startTransition] = useTransition();
   const summaryId = useId();
+
+  // Sync props to state when parent changes initialMode.
+  // This is the "semi-controlled" pattern for components that maintain local state
+  // but also respond to prop-driven resets. Alternative patterns (key-based reset)
+  // would require parent component changes.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Prop-to-state sync for semi-controlled component; alternative is key-based reset which requires parent changes
     setMode(initialMode);
+
     setStatusMessage(resolveStatusMessage(initialMode));
     onModeChange?.(initialMode);
   }, [initialMode, onModeChange]);

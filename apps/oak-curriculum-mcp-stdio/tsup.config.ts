@@ -7,7 +7,7 @@ export default defineConfig({
   splitting: true, // Enable code splitting for multi-entry
   sourcemap: true,
   clean: true,
-  target: 'node22',
+  target: 'es2022',
   minify: false,
   bundle: false, // Unbundled for better tree-shaking with multi-entry
   platform: 'neutral', // Use 'neutral' for edge compatibility

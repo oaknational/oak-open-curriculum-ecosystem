@@ -78,6 +78,22 @@ export default ZeroHitDashboard;
 
 type ZeroHitRecentEvents = NonNullable<TelemetryState['data']>['recent'];
 
+/**
+ * Reads fixture mode from cookie. Returns 'live' during SSR.
+ * This must be called within a useEffect or event handler on client components.
+ */
+function readFixtureModeFromCookie(): FixtureMode {
+  if (typeof document === 'undefined') {
+    return 'live';
+  }
+  const cookieValue = readCookie('semantic-search-fixtures');
+  return resolveFixtureMode({
+    cookieValue,
+    queryValue: null,
+    envValue: undefined,
+  }).mode;
+}
+
 function useTelemetryViewModel(): {
   cards: ReturnType<typeof buildCards>;
   loading: boolean;
@@ -88,19 +104,12 @@ function useTelemetryViewModel(): {
   refresh: TelemetryState['refresh'];
 } {
   const { data, loading, error, refresh } = useZeroHitTelemetry();
+  // Client-side state for fixture mode, initialised from cookie after hydration
   const [fixtureMode, setFixtureMode] = useState<FixtureMode>('live');
 
   useEffect(() => {
-    if (typeof document === 'undefined') {
-      return;
-    }
-    const cookieValue = readCookie('semantic-search-fixtures');
-    const resolved = resolveFixtureMode({
-      cookieValue,
-      queryValue: null,
-      envValue: undefined,
-    }).mode;
-    setFixtureMode(resolved);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Cookie reading requires client-side hydration; this is the canonical React pattern for browser-only state initialisation
+    setFixtureMode(readFixtureModeFromCookie());
   }, []);
 
   const cards = useMemo(() => buildCards(data?.summary), [data?.summary]);

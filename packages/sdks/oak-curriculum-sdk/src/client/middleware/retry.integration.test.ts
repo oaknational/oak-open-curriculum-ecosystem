@@ -5,7 +5,7 @@
  * NO network IO, simple mock fetch injected as argument.
  */
 
-/* eslint-disable @typescript-eslint/no-misused-promises, @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import createClient from 'openapi-fetch';

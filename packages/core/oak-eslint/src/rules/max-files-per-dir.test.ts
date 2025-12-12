@@ -1,4 +1,5 @@
 import { RuleTester } from '@typescript-eslint/rule-tester';
+import type { RuleModule } from '@typescript-eslint/utils/ts-eslint';
 import rule from './max-files-per-dir.js';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
@@ -29,7 +30,8 @@ function withTmpDir(setup: (dir: string) => string[]) {
   };
 }
 
-ruleTester.run('max-files-per-dir', rule, {
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- ESLint RuleModule vs typescript-eslint RuleModule type mismatch
+ruleTester.run('max-files-per-dir', rule as unknown as RuleModule<string, unknown[]>, {
   valid: [
     (() => {
       const { dir, cleanup } = withTmpDir((d) => {

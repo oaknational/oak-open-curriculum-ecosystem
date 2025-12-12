@@ -110,7 +110,7 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build-linting", "type-gen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -119,6 +119,8 @@
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
         "$TURBO_ROOT$/packages/core/mcp-core",
+        "$TURBO_ROOT$/packages/core/oak-eslint",
+        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",

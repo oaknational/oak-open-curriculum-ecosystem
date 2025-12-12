@@ -21,11 +21,21 @@ export function isRetryableStatus(status: number | undefined): boolean {
  */
 export function formatContext(context: IngestionContext): string {
   const parts: string[] = [];
-  if (context.keyStage) parts.push(`ks=${context.keyStage}`);
-  if (context.subject) parts.push(`subject=${context.subject}`);
-  if (context.unitSlug) parts.push(`unit=${context.unitSlug}`);
-  if (context.lessonSlug) parts.push(`lesson=${context.lessonSlug}`);
-  if (context.operation) parts.push(`op=${context.operation}`);
+  if (context.keyStage) {
+    parts.push(`ks=${context.keyStage}`);
+  }
+  if (context.subject) {
+    parts.push(`subject=${context.subject}`);
+  }
+  if (context.unitSlug) {
+    parts.push(`unit=${context.unitSlug}`);
+  }
+  if (context.lessonSlug) {
+    parts.push(`lesson=${context.lessonSlug}`);
+  }
+  if (context.operation) {
+    parts.push(`op=${context.operation}`);
+  }
   return parts.join(', ');
 }
 

@@ -26,6 +26,9 @@
     "mutate": "stryker run"
   },
   "dependencies": {},
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*"
+  },
   "engines": {
     "node": "24.x"
   },

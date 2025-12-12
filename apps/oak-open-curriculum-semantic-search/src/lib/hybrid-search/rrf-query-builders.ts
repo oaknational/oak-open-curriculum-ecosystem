@@ -65,8 +65,12 @@ export function buildLessonRrfRequest(params: {
     retriever: createLessonRetriever(text, filters),
   };
 
-  if (includeHighlights) request.highlight = createLessonHighlight();
-  if (includeFacets) request.aggs = createLessonFacets();
+  if (includeHighlights) {
+    request.highlight = createLessonHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createLessonFacets();
+  }
 
   return request;
 }
@@ -97,8 +101,12 @@ export function buildUnitRrfRequest(params: {
     retriever: createUnitRetriever(text, filters),
   };
 
-  if (includeHighlights) request.highlight = createUnitHighlight();
-  if (includeFacets) request.aggs = createUnitFacets();
+  if (includeHighlights) {
+    request.highlight = createUnitHighlight();
+  }
+  if (includeFacets) {
+    request.aggs = createUnitFacets();
+  }
 
   return request;
 }
@@ -205,7 +213,11 @@ function createSequenceRetriever(
 
 function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string): QueryContainer[] {
   const filters: QueryContainer[] = [];
-  if (subject) filters.push({ term: { subject_slug: subject } });
-  if (phaseSlug) filters.push({ term: { phase_slug: phaseSlug } });
+  if (subject) {
+    filters.push({ term: { subject_slug: subject } });
+  }
+  if (phaseSlug) {
+    filters.push({ term: { phase_slug: phaseSlug } });
+  }
   return filters;
 }
