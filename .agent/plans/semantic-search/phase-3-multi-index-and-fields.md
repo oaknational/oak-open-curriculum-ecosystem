@@ -7,9 +7,22 @@
 
 ---
 
+## Phase 3 Goal
+
+**Prove that multi-index search infrastructure works correctly** by verifying:
+
+1. **Hybrid search correctness** - BM25 and ELSER both contribute measurably to search quality
+2. **Lesson-only search** - Can search lessons in isolation
+3. **Unit-only search** - Can search units in isolation
+4. **Joint lesson+unit search** - Can search both with results properly categorised by `doc_type`
+5. **Lesson search filtered by unit** - Can filter lessons to a specific unit
+
+This phase delivers **verified, working search infrastructure**. MCP tool creation is separate work coordinated in `.agent/plans/sdk-and-mcp-enhancements/`.
+
+---
+
 ## Completed Work
 
-- ✅ Verified and confirmed unit hybrid search uses BM25 + ELSER (two-way)
 - ✅ Removed unused three-way RRF code (dense vectors provided no benefit)
 - ✅ Updated smoke test documentation to accurately reflect two-way hybrid
 - ✅ Aligned code with Phase 2 findings (documentation now matches implementation)
@@ -22,17 +35,20 @@
 
 ## Remaining Work Summary
 
-### Part 3.0: Multi-Index Infrastructure (5 tasks)
+### Part 3.0: Verification & Multi-Index Infrastructure
 
-| Task                                | Priority | Status     |
-| ----------------------------------- | -------- | ---------- |
-| BM25 vs ELSER vs Hybrid experiment  | **HIGH** | 🔲 Pending |
-| Add `doc_type` field to all indexes | **HIGH** | 🔲 Pending |
-| Verify unit filter on lesson search | Medium   | 🔲 Pending |
-| ADR: unified vs separate endpoints  | Medium   | 🔲 Pending |
-| Unit reranking experiment           | Medium   | 🔲 Pending |
+| Task                                         | Priority     | Status     |
+| -------------------------------------------- | ------------ | ---------- |
+| **BM25 vs ELSER vs Hybrid experiment**       | **CRITICAL** | 🔲 Pending |
+| **Prove lesson-only search works**           | **CRITICAL** | 🔲 Pending |
+| **Prove unit-only search works**             | **CRITICAL** | 🔲 Pending |
+| **Prove joint search with `doc_type` works** | **CRITICAL** | 🔲 Pending |
+| **Prove lesson filter by unit works**        | **CRITICAL** | 🔲 Pending |
+| Add `doc_type` field to all indexes          | **HIGH**     | 🔲 Pending |
+| ADR: unified vs separate endpoints           | Medium       | 🔲 Pending |
+| Unit reranking experiment                    | Medium       | 🔲 Pending |
 
-### Part 3a: Feature Parity Quick Wins (5 tasks)
+### Part 3a: Feature Parity (After Verification Complete)
 
 | Task                       | Priority | Status     |
 | -------------------------- | -------- | ---------- |
@@ -42,15 +58,7 @@
 | Unit enrichment fields     | Medium   | 🔲 Pending |
 | ADR: field additions       | Medium   | 🔲 Pending |
 
-**Total remaining: 10 tasks**
-
----
-
-## Phase 3 Goal
-
-**Enable a `semantic_search` MCP tool** that searches lessons and units with filters.
-
-This is Part 1 of the remaining semantic search work (MCP Prerequisites). After Phase 3, the MCP tool can be created and full curriculum ingest becomes valuable.
+**Part 3a work begins only after Part 3.0 verification is complete.**
 
 ---
 
@@ -120,13 +128,15 @@ Teachers don't just want to find lessons - they want to discover **curriculum re
 
 ### Current State
 
-| Index             | Hybrid Search | Tested        | Notes                      |
-| ----------------- | ------------- | ------------- | -------------------------- |
-| `oak_lessons`     | BM25 + ELSER  | ✅ Extensive  | 314 Maths KS4 lessons      |
-| `oak_unit_rollup` | BM25 + ELSER  | ✅ Confirmed  | Two-way hybrid verified    |
-| `oak_units`       | BM25 only     | ❌ Not tested | No semantic field          |
-| `oak_sequences`   | BM25 + ELSER  | ❌ Not tested | `sequence_semantic` exists |
-| `oak_threads`     | BM25 + ELSER  | ❌ Not tested | `thread_semantic` exists   |
+| Index             | Hybrid Search | Proven Working | Notes                                          |
+| ----------------- | ------------- | -------------- | ---------------------------------------------- |
+| `oak_lessons`     | BM25 + ELSER  | ⚠️ Not proven  | Code uses hybrid, but BM25 vs ELSER not tested |
+| `oak_unit_rollup` | BM25 + ELSER  | ⚠️ Not proven  | Code uses hybrid, but BM25 vs ELSER not tested |
+| `oak_units`       | BM25 only     | ❌ Not tested  | No semantic field                              |
+| `oak_sequences`   | BM25 + ELSER  | ❌ Not tested  | `sequence_semantic` exists                     |
+| `oak_threads`     | BM25 + ELSER  | ❌ Not tested  | `thread_semantic` exists                       |
+
+**Note**: "Code uses hybrid" is not the same as "hybrid is proven to work". We need to run BM25-only, ELSER-only, and hybrid queries against ground truth to prove ELSER contributes meaningfully.
 
 ### Technical Background
 
@@ -207,37 +217,60 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/search-mult
 
 #### 4. Is unit search using hybrid?
 
-**Confirmed**: `oak_unit_rollup` has `unit_semantic` field with `copy_to` from title + rollup.
-**Status**: ✅ Unit search endpoint uses two-way RRF (BM25 + ELSER).
-**Verified**: Code audited and aligned with Phase 2 findings.
+**Code review**: `oak_unit_rollup` has `unit_semantic` field; `runUnitsSearch` uses two-way RRF.
+**Status**: ⚠️ Code uses hybrid, but **not yet proven** that ELSER contributes meaningfully.
+**Required**: BM25 vs ELSER vs Hybrid experiment to prove hybrid is superior.
 
 ### Implementation Tasks (3.0)
 
-| Task                                   | Description                                                                       | Effort | Priority     | Status      |
-| -------------------------------------- | --------------------------------------------------------------------------------- | ------ | ------------ | ----------- |
-| **Verify unit hybrid search**          | Confirm `runUnitsSearch` uses RRF with ELSER (BM25 + ELSER)                       | Low    | **CRITICAL** | ✅ COMPLETE |
-| **Test unit hybrid search**            | Create ground truth and smoke tests for units                                     | Medium | **HIGH**     | ✅ COMPLETE |
-| **BM25 vs ELSER vs Hybrid experiment** | Run comparative experiment showing difference between retrieval methods for units | Medium | **HIGH**     | 🔲 Pending  |
-| **Add `doc_type` field**               | Add to all index schemas via field definitions                                    | Low    | **HIGH**     | 🔲 Pending  |
-| **Add unit filter to lesson search**   | Allow `?unit=slug` parameter (verify existing implementation)                     | Low    | Medium       | 🔲 Pending  |
-| **Unified search endpoint**            | Single endpoint returning mixed results with type                                 | Medium | Medium       | ✅ EXISTS   |
-| **ADR: unified vs separate endpoints** | Document architectural decision on search endpoint strategy                       | Low    | Medium       | 🔲 Pending  |
-| **Experiment with unit reranking**     | Test reranking with `rollup_text` (~300 chars/lesson) using ES native rerank      | Low    | Medium       | 🔲 Pending  |
+| Task                                   | Description                                                                   | Effort | Priority     | Status     |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ------ | ------------ | ---------- |
+| **BM25 vs ELSER vs Hybrid experiment** | Prove hybrid is superior to either method alone                               | Medium | **CRITICAL** | 🔲 Pending |
+| **Prove lesson-only search**           | Smoke test verifying lesson search returns only lessons with correct doc_type | Low    | **CRITICAL** | 🔲 Pending |
+| **Prove unit-only search**             | Smoke test verifying unit search returns only units with correct doc_type     | Low    | **CRITICAL** | 🔲 Pending |
+| **Prove joint search**                 | Smoke test verifying mixed results are properly categorised                   | Medium | **CRITICAL** | 🔲 Pending |
+| **Prove lesson filter by unit**        | Smoke test verifying unit filter restricts lesson results correctly           | Low    | **CRITICAL** | 🔲 Pending |
+| **Add `doc_type` field**               | Re-index with doc_type if not present in ES (schema exists, data may not)     | Medium | **HIGH**     | 🔲 Pending |
+| **ADR: unified vs separate endpoints** | Document architectural decision on search endpoint strategy                   | Low    | Medium       | 🔲 Pending |
+| **Experiment with unit reranking**     | Test reranking with `rollup_text` (~300 chars/lesson) using ES native rerank  | Low    | Medium       | 🔲 Pending |
 
-#### BM25 vs ELSER vs Hybrid Experiment
+#### BM25 vs ELSER vs Hybrid Experiment (CRITICAL)
 
-**Purpose**: Demonstrate the value of hybrid search by comparing retrieval methods.
+**Purpose**: Prove that hybrid search actually uses both retrieval methods and provides measurable benefit over either in isolation.
+
+**What we need to prove**:
+
+1. BM25-only returns results (lexical matching works)
+2. ELSER-only returns results (semantic matching works)
+3. Hybrid returns results combining both
+4. Hybrid MRR/NDCG exceeds both BM25-only and ELSER-only
 
 **Approach** (following ES documentation patterns):
 
-1. Create a smoke test that runs the same queries against:
-   - BM25 only (lexical)
-   - ELSER only (semantic)
-   - Hybrid (BM25 + ELSER via RRF)
-2. Measure MRR, NDCG@10, zero-hit rate for each
-3. Document findings showing hybrid superiority
+1. Create a smoke test that runs the same ground truth queries against:
+   - BM25 only (lexical) - standard retriever with multi_match
+   - ELSER only (semantic) - standard retriever with semantic query
+   - Hybrid (BM25 + ELSER via RRF) - existing two-way implementation
+2. Measure MRR, NDCG@10, zero-hit rate for each configuration
+3. Compare results to prove hybrid is superior
+4. If hybrid is NOT superior, investigate why (ELSER not working, field misconfiguration, etc.)
+
+**Success criteria**: Hybrid MRR > max(BM25-only MRR, ELSER-only MRR)
 
 See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid
+
+#### Search Functionality Verification (CRITICAL)
+
+**Purpose**: Prove each search mode works correctly before adding more features.
+
+| Search Mode                 | Verification                                            | Success Criteria                             |
+| --------------------------- | ------------------------------------------------------- | -------------------------------------------- |
+| **Lesson-only search**      | Search with `scope: 'lessons'`, verify only lessons     | All results have `doc_type: 'lesson'`        |
+| **Unit-only search**        | Search with `scope: 'units'`, verify only units         | All results have `doc_type: 'unit'`          |
+| **Joint search**            | Search across both, verify results are categorised      | Results include both types, `doc_type` field |
+| **Lesson filtered by unit** | Search lessons with `unitSlug` filter, verify all match | All lessons belong to specified unit         |
+
+**Implementation**: Smoke tests that verify each mode returns correctly typed and filtered results.
 
 #### Unit Reranking Experiment (Last Item)
 
@@ -269,11 +302,17 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-re
 
 ### Success Criteria (3.0)
 
-- [x] Unit search confirmed using hybrid (BM25 + ELSER)
-- [x] Unit search has ground truth (43 queries) and metrics (MRR 0.915, NDCG@10 0.924)
-- [ ] BM25 vs ELSER vs Hybrid comparative experiment completed
-- [ ] `doc_type` field added to all indexes
-- [ ] Lesson search with unit filter documented and tested
+**Verification (MUST complete before Part 3a)**:
+
+- [ ] BM25 vs ELSER vs Hybrid experiment proves hybrid is superior
+- [ ] Lesson-only search verified (returns only lessons)
+- [ ] Unit-only search verified (returns only units)
+- [ ] Joint search verified (returns both types, properly categorised)
+- [ ] Lesson filter by unit verified (filters work correctly)
+
+**Infrastructure**:
+
+- [ ] `doc_type` field present in ES indexes (requires re-index if not)
 - [ ] Decision on unified vs separate endpoints documented (ADR)
 - [ ] Unit reranking experiment completed
 
@@ -468,44 +507,15 @@ apps/oak-open-curriculum-semantic-search/smoke-tests/
 
 - **Upstream**: None (uses existing Open API data)
 - **Blocks**: Phase 4 (Search UI), Phase 7 (Query Enhancement)
-- **Enables**: `semantic_search` MCP tool creation
+- **Enables**: `semantic_search` MCP tool creation (coordinated in `.agent/plans/sdk-and-mcp-enhancements/`)
 
 ---
 
 ## After Phase 3 Completion
 
-1. **Create `semantic_search` MCP tool** in the SDK
+1. **MCP tool creation** - Coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`
 2. **Full curriculum ingest** - 10,000 req/hr rate limit makes this feasible
 3. **Test cross-subject search** - Validate patterns work beyond Maths KS4
-
----
-
-## MCP Tool Preview
-
-After Phase 3, the tool will support:
-
-```typescript
-{
-  name: 'semantic_search',
-  description: 'Search Oak curriculum lessons and units using semantic hybrid search',
-  inputSchema: {
-    properties: {
-      query: { type: 'string', description: 'Search query' },
-      types: { type: 'array', items: { enum: ['lesson', 'unit'] } },
-      filters: {
-        properties: {
-          subject: { type: 'string' },
-          keyStage: { type: 'string' },
-          tier: { enum: ['foundation', 'higher'] },
-          unit: { type: 'string', description: 'Filter lessons to specific unit' }
-        }
-      },
-      limit: { type: 'number', default: 10 }
-    },
-    required: ['query']
-  }
-}
-```
 
 ---
 

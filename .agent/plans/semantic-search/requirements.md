@@ -47,17 +47,22 @@ Given the **Oak API 10,000 requests/hour limit** (upgraded from 1,000), full ing
 | **Scalable to full curriculum** | Architecture supports 340+ subject/key-stage combinations                              |
 | **Cost-effective**              | <$100/month operational cost (excluding ES subscription)                               |
 
-### New Deliverables (Updated 2025-12-11)
+### New Deliverables (Updated 2025-12-12)
 
 Remaining work is organized into three parts:
 
-#### Part 1: MCP Prerequisites (Phase 3)
+#### Part 1: Search Infrastructure Verification (Phase 3)
 
-| Deliverable           | Phase | Success Criteria                                |
-| --------------------- | ----- | ----------------------------------------------- |
-| **`semantic_search`** | 3     | MCP tool searching lessons + units with filters |
+| Deliverable                        | Phase | Success Criteria                                         |
+| ---------------------------------- | ----- | -------------------------------------------------------- |
+| **Hybrid search proven working**   | 3     | BM25 vs ELSER vs Hybrid experiment shows hybrid superior |
+| **Lesson-only search verified**    | 3     | Smoke test proves lesson search returns only lessons     |
+| **Unit-only search verified**      | 3     | Smoke test proves unit search returns only units         |
+| **Joint search verified**          | 3     | Results properly categorised by `doc_type`               |
+| **Lesson filter by unit verified** | 3     | Unit filter correctly restricts lesson results           |
+| **Feature parity fields added**    | 3     | `pupilLessonOutcome`, display titles, unit enrichment    |
 
-Phase 3 provides the foundation for a `semantic_search` MCP tool: unit search, `doc_type` field, unified search endpoint.
+Phase 3 proves the search infrastructure works correctly. MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
 #### Part 2: Enhancements (Phases 4-9)
 

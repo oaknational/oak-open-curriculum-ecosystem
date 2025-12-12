@@ -1,6 +1,6 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid Confirmed Best  
+**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid Code Written (Not Yet Proven)  
 **Last Updated**: 2025-12-12
 
 ---
@@ -9,7 +9,14 @@
 
 Create a production-ready demo proving Elasticsearch Serverless as the **definitive platform** for intelligent curriculum search, using Maths KS4 as a vertical slice that scales to the full Oak curriculum.
 
-**Phase 3 Goal**: Complete multi-index infrastructure and feature parity to enable a `semantic_search` MCP tool.
+**Phase 3 Goal**: Prove multi-index search infrastructure works correctly:
+
+1. Prove BM25 + ELSER hybrid is superior to either alone
+2. Prove lesson-only, unit-only, and joint search all work
+3. Prove lesson search can filter by unit
+4. Add feature parity fields after verification
+
+**MCP tool creation** is separate work coordinated in `.agent/plans/sdk-and-mcp-enhancements/`.
 
 **Why Maths KS4?** Maximum complexity (tiers, pathways, exam boards), high teacher value, complete feature coverage, manageable scope (~10 minutes to ingest).
 
@@ -53,24 +60,30 @@ Key ES documentation for this project:
 
 | Item                                              | Status      |
 | ------------------------------------------------- | ----------- |
-| Two-way hybrid (BM25 + ELSER) confirmed optimal   | ✅ Complete |
+| Two-way hybrid code written (BM25 + ELSER RRF)    | ✅ Complete |
 | Lesson search: MRR 0.908, 40 ground truth queries | ✅ Complete |
 | Unit search: MRR 0.915, 43 ground truth queries   | ✅ Complete |
 | Three-way RRF code removed (dead code cleanup)    | ✅ Complete |
 | All quality gates passing                         | ✅ Complete |
 
-### Phase 3 Remaining Work (10 tasks)
+**⚠️ NOT YET PROVEN**: Hybrid is superior to BM25-only or ELSER-only (experiment pending)
 
-#### Part 3.0: Multi-Index Infrastructure
+### Phase 3 Remaining Work
 
-| Task                                | Priority | Status     |
-| ----------------------------------- | -------- | ---------- |
-| BM25 vs ELSER vs Hybrid experiment  | **HIGH** | 🔲 Pending |
-| Add `doc_type` field to all indexes | **HIGH** | 🔲 Pending |
-| Verify unit filter on lesson search | Medium   | 🔲 Pending |
-| ADR: unified vs separate endpoints  | Medium   | 🔲 Pending |
+#### Part 3.0: Verification (CRITICAL - must complete first)
 
-#### Part 3a: Feature Parity Quick Wins
+| Task                                      | Priority     | Status     |
+| ----------------------------------------- | ------------ | ---------- |
+| BM25 vs ELSER vs Hybrid experiment        | **CRITICAL** | 🔲 Pending |
+| Prove lesson-only search works            | **CRITICAL** | 🔲 Pending |
+| Prove unit-only search works              | **CRITICAL** | 🔲 Pending |
+| Prove joint search with doc_type works    | **CRITICAL** | 🔲 Pending |
+| Prove lesson filter by unit works         | **CRITICAL** | 🔲 Pending |
+| Add `doc_type` field (re-index if needed) | **HIGH**     | 🔲 Pending |
+| ADR: unified vs separate endpoints        | Medium       | 🔲 Pending |
+| Unit reranking experiment                 | Medium       | 🔲 Pending |
+
+#### Part 3a: Feature Parity (after verification complete)
 
 | Task                       | Priority | Status     |
 | -------------------------- | -------- | ---------- |
@@ -79,12 +92,6 @@ Key ES documentation for this project:
 | Display title fields       | Medium   | 🔲 Pending |
 | Unit enrichment fields     | Medium   | 🔲 Pending |
 | ADR: field additions       | Medium   | 🔲 Pending |
-
-#### Final Task
-
-| Task                      | Priority | Status     |
-| ------------------------- | -------- | ---------- |
-| Unit reranking experiment | Medium   | 🔲 Pending |
 
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
@@ -155,15 +162,17 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html
 
 ## Data
 
-| Index             | Count   | Hybrid Search | Status      |
-| ----------------- | ------- | ------------- | ----------- |
-| `oak_lessons`     | **314** | BM25 + ELSER  | ✅ Tested   |
-| `oak_unit_rollup` | 244     | BM25 + ELSER  | ✅ Tested   |
-| `oak_units`       | 36      | BM25 only     | ❌ Untested |
-| `oak_threads`     | 201     | BM25 + ELSER  | ❌ Untested |
-| `oak_sequences`   | 2       | BM25 + ELSER  | ❌ Untested |
+| Index             | Count   | Hybrid Search | Proven Working |
+| ----------------- | ------- | ------------- | -------------- |
+| `oak_lessons`     | **314** | BM25 + ELSER  | ⚠️ Not proven  |
+| `oak_unit_rollup` | 244     | BM25 + ELSER  | ⚠️ Not proven  |
+| `oak_units`       | 36      | BM25 only     | ❌ Untested    |
+| `oak_threads`     | 201     | BM25 + ELSER  | ❌ Untested    |
+| `oak_sequences`   | 2       | BM25 + ELSER  | ❌ Untested    |
 
 All 36 Maths KS4 units have their lessons indexed.
+
+**Note**: Code uses hybrid, but BM25 vs ELSER vs Hybrid experiment needed to prove ELSER contributes meaningfully.
 
 ---
 

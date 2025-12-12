@@ -53,30 +53,32 @@ Key ES documentation for this project:
 
 ### Current Phase
 
-| Phase | Name                     | Status         | Progress   | Description                        |
-| ----- | ------------------------ | -------------- | ---------- | ---------------------------------- |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | 8/18 tasks | Unit search, doc_type, OWA aliases |
+| Phase | Name                     | Status         | Progress | Description                                         |
+| ----- | ------------------------ | -------------- | -------- | --------------------------------------------------- |
+| **3** | **Multi-Index & Fields** | 🔄 In Progress | 5/13     | Verify search functionality, doc_type, field parity |
 
-**Phase 3 Completed:**
+**Phase 3 Goal**: Prove that multi-index search infrastructure works correctly.
 
-- ✅ Unit hybrid search verified (BM25 + ELSER)
-- ✅ Unit ground truth expanded (43 queries)
-- ✅ Unit smoke tests passing (MRR 0.915, NDCG@10 0.924)
-- ✅ Three-way RRF code removed (dead code cleanup)
-- ✅ All quality gates passing
+**Part 3.0 - Verification (CRITICAL, must complete first):**
 
-**Phase 3 Remaining (10 tasks):**
-
-- 🔲 BM25 vs ELSER vs Hybrid comparative experiment
-- 🔲 Add `doc_type` field to all indexes
-- 🔲 Verify unit filter on lesson search
+- 🔲 BM25 vs ELSER vs Hybrid experiment (prove hybrid is superior)
+- 🔲 Prove lesson-only search works
+- 🔲 Prove unit-only search works
+- 🔲 Prove joint search with `doc_type` categorisation works
+- 🔲 Prove lesson search filtered by unit works
+- 🔲 Add `doc_type` field to indexes (re-index if needed)
 - 🔲 ADR: unified vs separate endpoints
+- 🔲 Unit reranking experiment
+
+**Part 3a - Feature Parity (after verification):**
+
 - 🔲 OWA aliases import
 - 🔲 `pupilLessonOutcome` field
 - 🔲 Display title fields
 - 🔲 Unit enrichment fields
 - 🔲 ADR: field additions
-- 🔲 Unit reranking experiment
+
+**Note**: MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
 See `phase-3-multi-index-and-fields.md` for full details.
 

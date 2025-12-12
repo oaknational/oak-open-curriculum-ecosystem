@@ -1,6 +1,7 @@
 # Plan Summary and Status
 
 **Last Updated**: 2025-11-11
+status: outdated, deprecated until reviewed and updated
 
 This document provides a quick reference for all active plans and their current status.
 

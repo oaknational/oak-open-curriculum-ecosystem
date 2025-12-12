@@ -2,6 +2,7 @@
 
 **Last Updated**: 2025-11-11  
 **Scope**: Strategic overview. Details are in individual plan documents.
+status: outdated, deprecated until reviewed and updated
 
 **Recent Changes (2025-11-11)**:
 
