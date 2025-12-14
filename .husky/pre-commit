@@ -5,7 +5,6 @@ export TURBO_UI=0
 
 echo "🔍 Running pre-commit checks..."
 
-# Run lint-staged for formatting only
 echo "📝 Checking formatting..."
 if ! pnpm format-check:root; then
   echo "❌ Formatting issues found!"
@@ -13,19 +12,11 @@ if ! pnpm format-check:root; then
   exit 1
 fi
 
-echo "🔤 Running type checks..."
-pnpm type-check
-
-echo "🔍 Running lint for changed files..."
-pnpm lint
-
-# Run full markdownlint
 echo "🔍 Running full markdownlint..."
 pnpm markdownlint-check:root
 
-# This may not find any relevant tests, that is fine.
-echo "🧪 Running tests on changed files..."
-pnpm test
+echo "🔤 Running quality gate checks..."
+pnpm turbo run type-check lint test
 
 echo "✅ Pre-commit checks completed!"
 

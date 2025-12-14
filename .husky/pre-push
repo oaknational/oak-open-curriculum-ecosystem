@@ -5,7 +5,6 @@ export TURBO_UI=0
 
 echo "🚀 Running pre-push checks..."
 
-# Check formatting (don't modify files)
 echo "📝 Checking formatting..."
 if ! pnpm format-check:root; then
   echo "❌ Formatting issues found!"
@@ -13,29 +12,11 @@ if ! pnpm format-check:root; then
   exit 1
 fi
 
-# Run full type-check
-echo "🔤 Running full type-check..."
-pnpm type-check
-
-# Run full lint (without --fix to avoid modifications)
-echo "🔍 Running full lint..."
-pnpm lint
-
-# Run full markdownlint
 echo "🔍 Running full markdownlint..."
 pnpm markdownlint-check:root
 
-# Run full test suite
-echo "🧪 Running full test suite..."
-pnpm test
+echo "🔤 Running quality gate checks..."
+pnpm turbo run type-gen build type-check lint test test:e2e test:e2e:built
 
-# The network is too flaky for these to pass reliably
-# Run full test:e2e
-# echo "🧪 Running full test:e2e..."
-# pnpm test:e2e
+echo "✅ Pre-push checks completed!"
 
-# Build the workspaces. Happens last because it mutates the filesystem, invalidating the cache.
-echo "📦 Building workspaces..."
-pnpm build
-
-echo "✅ All pre-push checks passed!"
