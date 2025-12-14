@@ -22,6 +22,7 @@
 - NEVER add complex logic to tests - it risks testing the test code rather than the code under test
 - Always ask what a test is proving - it should prove something useful about the code under test
 - Each proof should happen ONCE - repeated proofs are fragile and waste resources
+- NEVER manipulate global state in tests - no `process.env` mutations, no `vi.stubGlobal`, no `vi.doMock`. Product code must accept configuration as parameters. See [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
 
 ## Rules
 
@@ -33,6 +34,7 @@
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it
+- **No global state manipulation** - Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`, or use `vi.doMock`. If a function needs configuration, refactor it to accept config as a parameter. See [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
 
 ## Definitions
 

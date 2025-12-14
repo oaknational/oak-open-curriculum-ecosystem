@@ -1,10 +1,17 @@
 # High-Level Plan
 
-**Last Updated**: 2025-11-11  
+**Last Updated**: 2025-12-14  
 **Scope**: Strategic overview. Details are in individual plan documents.
-status: outdated, deprecated until reviewed and updated
 
-**Recent Changes (2025-11-11)**:
+**Recent Changes (2025-12-14)**:
+
+- Type Discipline Restoration (Phases 1-4 complete) - see `quality-and-maintainability/refactor-plan-logger-object-di.md`
+- Deleted 3 unused packages: `mcp-transport`, `mcp-storage`, `mcp-providers-node` (workspace count: 14 → 11)
+- Created ADR-078 for DI testability patterns
+- Archived completed SDK/MCP plans (00, 01, 05, 07, 08a, 09)
+- Updated foundation documents with DI guidance
+
+**Previous Changes (2025-11-11)**:
 
 - Semantic Search plans reorganized and consolidated
 - Schema-first migration and ontology integration fully planned
@@ -13,15 +20,15 @@ status: outdated, deprecated until reviewed and updated
 - MCP enhancement plans consolidated into comprehensive three-phase plan
 - Plans reorganized into topical subdirectories (dev-tooling-and-dev-ai-support, openai-app, external, mcp-enhancements, etc.)
 
-## Current Priorities (2025-10-28)
+## Current Priorities (2025-12-14)
 
 **Active Work**:
 
-1. Semantic Search (Phase 1 in progress)
-2. Ontology Resource Implementation (planned)
-3. OAuth/Clerk Integration (planned)
+1. **Type Discipline Restoration** - Quality gates passing, Phase 5 (global state DI) deferred
+2. **Semantic Search** - Implementation in progress
+3. **Widget Enhancements** - Universal renderers, knowledge graph SVG
 
-**Future Work**: 4. Advanced MCP Tooling (deferred until priorities 1-3 complete)
+**Future Work**: Ontology Resource, OAuth/Clerk, Advanced MCP Tooling (deferred until foundations complete)
 
 ---
 

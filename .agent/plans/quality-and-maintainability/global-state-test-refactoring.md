@@ -5,7 +5,7 @@
 Many tests manipulate global state (`process.env`, `globalThis`, module cache via `vi.doMock`) instead of using dependency injection. This violates the testing strategy:
 
 > **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have **NO side effects**, and contain **NO MOCKS**.
-
+>
 > **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 
 Global state manipulation causes race conditions when tests run in parallel, leading to flaky failures.

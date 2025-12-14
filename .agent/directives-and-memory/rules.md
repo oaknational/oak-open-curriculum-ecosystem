@@ -75,7 +75,7 @@ Use the right tool for the job:
 
 ### Testing
 
-For further information, see the [Testing Strategy](testing-strategy.md).
+For further information, see the [Testing Strategy](testing-strategy.md) and [ADR-078: Dependency Injection for Testability](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
 
 #### Test Types
 
@@ -86,6 +86,18 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
   - **Integration test**: A test that verifies the behaviour of a collection of units **working together as code**, NOT a running system. Integration tests still import and test code directly within the test process. They DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing. Must be named `*.integration.test.ts`. **Important**: Integration tests are NOT about testing a deployed or running system - they test how multiple code units integrate when imported and called directly.
 - **Out-of-process tests**: Tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
   - **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs. Must be named `*.e2e.test.ts`.
+
+#### Dependency Injection for Testability
+
+**Environment variables MUST be read once at the entry point**, then passed as configuration through the call stack. Product code MUST NOT read `process.env` directly—it must accept configuration as parameters.
+
+**Prohibited in unit/integration tests**:
+
+- `process.env.X = 'value'` - mutates global state, causes race conditions
+- `vi.stubGlobal('fetch', ...)` - mutates global objects
+- `vi.doMock('module', ...)` - manipulates module cache, subtle race conditions
+
+**Required pattern**: Pass configuration as explicit function parameters. Simple fakes injected as constructor arguments, not complex mocks.
 
 #### Universal Testing Rules
 
