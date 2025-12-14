@@ -1,112 +1,86 @@
 # Type Discipline Restoration — Full Repository
 
-**Status**: ❌ BLOCKED — Quality Gates Failing (2 lint errors remain)
+**Status**: ✅ QUALITY GATES PASSING — Ongoing Refinement
 **Last Updated**: 2025-12-14
 **Purpose**: Restore **all workspaces** to disciplined correctness per foundation documents
 
 ---
 
-## BLOCKING: Current Quality Gate Failures
+## Current Quality Gate Status
 
-> **All quality gate issues are blocking at all times, regardless of location, cause, or context. There is no such thing as "someone else's problem" or "pre-existing issue."**
+> **All quality gate issues are blocking at all times, regardless of location, cause, or context.**
 
-| Gate              | Status      | Action Required                                        |
-| ----------------- | ----------- | ------------------------------------------------------ |
-| type-gen          | ✅ PASS     |                                                        |
-| build             | ✅ PASS     |                                                        |
-| type-check        | ✅ PASS     |                                                        |
-| lint:fix          | ❌ 2 errors | Fix remaining `Record<string, unknown>` (see below)    |
-| format:root       | ✅ PASS     |                                                        |
-| markdownlint:root | ✅ PASS     |                                                        |
-| test              | ❓ Unknown  | Re-run to verify status                                |
-| test:e2e          | ✅ PASS     |                                                        |
-| test:e2e:built    | ✅ PASS     |                                                        |
-| test:ui           | ❓ Unknown  | Run `pnpm exec playwright install` then `pnpm test:ui` |
-| smoke:dev:stub    | ✅ PASS     |                                                        |
+| Gate              | Status  | Notes                        |
+| ----------------- | ------- | ---------------------------- |
+| type-gen          | ✅ PASS |                              |
+| build             | ✅ PASS |                              |
+| type-check        | ✅ PASS |                              |
+| lint:fix          | ✅ PASS |                              |
+| format:root       | ✅ PASS |                              |
+| markdownlint:root | ✅ PASS |                              |
+| test              | ✅ PASS | With test isolation settings |
+| test:e2e          | ✅ PASS |                              |
+| test:e2e:built    | ✅ PASS |                              |
+| test:ui           | ✅ PASS |                              |
+| smoke:dev:stub    | ✅ PASS |                              |
 
-### Issues Requiring Immediate Attention
+### Test Infrastructure Notes
 
-1. **Lint Errors (2 remaining)**: Just two `Record<string, unknown>` violations left:
-   - `sandbox-fixture-data.ts:44` — needs Zod schemas for fixture file parsing
-   - `sequence-facet-utils.ts:4` — needs SDK types for sequence data
+- **Test isolation**: Added `isolate: true` + `pool: 'forks'` to vitest configs to prevent race conditions
+- **Turbo concurrency**: Limited to 2 in `check:turbo` to prevent resource starvation
+- **Root cause**: 98 `eslint-disable` comments marked `REFACTOR` need proper DI refactoring
 
-2. **Test Status**: Re-run `pnpm test` to verify current status after code changes.
+See `.agent/plans/quality-and-maintainability/global-state-test-refactoring.md` for the full plan.
 
-3. **UI Test Status**: Run `pnpm exec playwright install` then `pnpm test:ui` to verify.
+## Remaining Work: 98 `REFACTOR` Comments
 
-### How to Fix the 2 Remaining Files
+The quality gates pass, but 98 `eslint-disable` comments are marked `REFACTOR`. These indicate technical debt that should be addressed:
 
-#### 1. `sequence-facet-utils.ts` — Consider DELETING
+### By Category
 
-This file exports generic "unsafe object utilities" that bypass the type system:
+| Category                               | Count | Files | Priority |
+| -------------------------------------- | ----- | ----- | -------- |
+| Logger `object` type                   | 20    | 4     | High     |
+| Transport `object` type                | 6     | 1     | High     |
+| `no-restricted-properties` (Object.\*) | 30+   | 15+   | Medium   |
+| Widget HTML generation                 | 10+   | 6     | Medium   |
+| Test helpers                           | 15+   | 10+   | Low      |
+| Static data files (max-lines)          | 4     | 4     | Skip     |
 
-```typescript
-// CURRENT (BAD): Generic utilities that destroy type info
-export type IndexableObject = Readonly<Record<string, unknown>>;
-export function isUnknownObject(value: unknown): value is IndexableObject { ... }
-export function ensureSequenceRecord(value: unknown, context: string): IndexableObject { ... }
-```
+### High Priority: Logger/Transport Types
 
-**Fix approach**:
-
-1. **Check if this file has any consumers** — run `grep -r "sequence-facet-utils" apps/`
-2. If consumers exist, they should be refactored to use SDK types directly
-3. If no consumers remain, **DELETE the entire file** (it's likely dead code now)
-
-#### 2. `sandbox-fixture-data.ts` — Use SDK Types + Zod
-
-This file loads fixture JSON files and has maps with `unknown` values:
+`packages/libs/logger/` and `packages/libs/transport/` use `object` type extensively:
 
 ```typescript
-// CURRENT (BAD): Maps to unknown destroy type info
-export interface FixtureData {
-  readonly unitSummaries: ReadonlyMap<string, unknown>;
-  readonly lessonSummaries: ReadonlyMap<string, unknown>;
-  readonly sequenceUnits: ReadonlyMap<string, unknown>;
+// packages/libs/transport/src/types.ts
+export interface Logger {
+  trace(message: string, context?: Error | object): void; // REFACTOR
+  // ... 6 methods total
 }
 ```
 
-**Fix approach**:
+**Fix**: Define `LogContext` interface (see plan Phase 3).
 
-1. Replace `ReadonlyMap<string, unknown>` with SDK types:
-   - `unitSummaries: ReadonlyMap<string, SearchUnitSummary>`
-   - `lessonSummaries: ReadonlyMap<string, SearchLessonSummary>`
-   - `sequenceUnits: ReadonlyMap<string, SequenceUnit>` (check SDK for exact type)
+### Medium Priority: Object.\* Methods
 
-2. Remove the `IndexableObject` type alias at line 44
+30+ uses of `Object.keys`, `Object.values`, `Object.entries` need type-safe helpers.
 
-3. Use Zod validation when parsing fixture JSON files at the boundary (where `JSON.parse` happens)
+**Fix**: Use `typeSafeKeys<T>()`, `typeSafeValues<T>()`, `typeSafeEntries<T>()` from SDK.
 
-4. Use SDK type guards (`isUnitSummary`, `isLessonSummary`) after parsing
+### Low Priority: Test Helpers
 
-**SDK types to import:**
+Test files using `REFACTOR` comments often just need the product code to accept dependencies as parameters (DI), then tests can pass simple fakes.
 
-```typescript
-import type {
-  SearchUnitSummary,
-  SearchLessonSummary,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
+See `.agent/plans/quality-and-maintainability/global-state-test-refactoring.md`.
 
-import { isUnitSummary, isLessonSummary } from '@oaknational/oak-curriculum-sdk/public/search.js';
-```
+### Skip: Static Data Files
 
----
+These are acceptable `max-lines` exceptions for static ontology/guidance data:
 
-## Current `pnpm lint:fix` Output (semantic-search app)
-
-> **Last captured**: 2025-12-14
-
-```
-/Users/jim/.../src/lib/indexing/sandbox-fixture-data.ts
-  44:33  error  Don't use `Record<string,unknown>` as a type  @typescript-eslint/no-restricted-types
-
-/Users/jim/.../src/lib/indexing/sequence-facet-utils.ts
-  4:40  error  Don't use `Record<string,unknown>` as a type  @typescript-eslint/no-restricted-types
-
-✖ 2 problems (2 errors, 0 warnings)
-```
-
-**Significant progress**: Down from 13 errors to 2 errors in this session.
+- `ontology-data.ts`
+- `tool-guidance-data.ts`
+- `knowledge-graph-data.ts`
+- `generate-ai-doc.ts`
 
 ---
 

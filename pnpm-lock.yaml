@@ -122,12 +122,6 @@ importers:
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/mcp-storage':
-        specifier: workspace:*
-        version: link:../../packages/libs/storage
-      '@oaknational/mcp-transport':
-        specifier: workspace:*
-        version: link:../../packages/libs/transport
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
@@ -171,9 +165,6 @@ importers:
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/mcp-providers-node':
-        specifier: workspace:*
-        version: link:../../packages/providers/mcp-providers-node
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
@@ -253,9 +244,6 @@ importers:
       '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/mcp-providers-node':
-        specifier: workspace:*
-        version: link:../../packages/providers/mcp-providers-node
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -535,30 +523,6 @@ importers:
       vitest:
         specifier: ^4.0.15
         version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.1)(@vitest/ui@4.0.15)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(tsx@4.21.0)(yaml@2.8.2)
-
-  packages/libs/storage:
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../core/oak-eslint
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
-  packages/libs/transport:
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../core/oak-eslint
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-
-  packages/providers/mcp-providers-node:
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../core/oak-eslint
 
   packages/sdks/oak-curriculum-sdk:
     dependencies:

@@ -5,8 +5,33 @@
 
 import { createMcpToolsModule } from '../tools/index.js';
 import type { McpToolsModule } from '../tools/index.js';
-import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
+
+/**
+ * Creates a simple clock provider for runtime timing needs.
+ */
+function createNodeClock() {
+  return { now: () => Date.now() };
+}
+
+/**
+ * Creates an in-memory key-value storage provider.
+ * Suitable for session-scoped data that doesn't need persistence.
+ */
+function createInMemoryStorage() {
+  const store = new Map<string, string>();
+  return {
+    get: (key: string) => Promise.resolve(store.get(key) ?? null),
+    set: (key: string, value: string) => {
+      store.set(key, value);
+      return Promise.resolve();
+    },
+    delete: (key: string) => {
+      store.delete(key);
+      return Promise.resolve();
+    },
+  };
+}
 import { resolveToolExecutors } from './stub-executors.js';
 import { type Logger } from '@oaknational/mcp-logger/node';
 import { createStdioLogger } from '../logging/index.js';

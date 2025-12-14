@@ -43,7 +43,6 @@
     "@modelcontextprotocol/sdk": "^1.24.3",
     "@notionhq/client": "^5.4.0",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/mcp-providers-node": "workspace:*",
     "dotenv": "^17.2.3",
     "zod": "^4.1.13"
   },

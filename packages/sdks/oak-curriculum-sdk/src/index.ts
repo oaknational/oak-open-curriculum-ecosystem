@@ -123,3 +123,19 @@ export {
   extractSlug,
   type ContentType,
 } from './types/generated/api-schema/routing/url-helpers.js';
+
+// ============================================================================
+// Type-Safe Object Helpers
+// ============================================================================
+
+export {
+  typeSafeKeys,
+  typeSafeValues,
+  typeSafeEntries,
+  typeSafeFromEntries,
+  typeSafeGet,
+  typeSafeSet,
+  typeSafeHas,
+  typeSafeHasOwn,
+  typeSafeOwnKeys,
+} from './types/helpers/type-helpers.js';

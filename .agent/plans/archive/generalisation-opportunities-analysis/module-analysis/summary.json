@@ -1,8 +1,0 @@
-{
-  "total": 25,
-  "generic": 9,
-  "mixed": 10,
-  "specific": 6,
-  "nodeAPIsUsed": ["process.env", "process.exit", "fs", "path", "process.cwd"],
-  "totalLines": 3004
-}

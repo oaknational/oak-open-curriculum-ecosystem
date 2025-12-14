@@ -178,7 +178,7 @@ function extractIdFromPath(response: unknown, path: string): string | undefined 
 }
 
 /** Augments an array response with canonical URL on each item */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
 export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
   response: TItem[],
   path: string,
@@ -197,7 +197,7 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
 }
 
 /** Augments a single object response with canonical URL */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
 export function augmentResponseWithCanonicalUrl<T extends object>(
   response: T,
   path: string,

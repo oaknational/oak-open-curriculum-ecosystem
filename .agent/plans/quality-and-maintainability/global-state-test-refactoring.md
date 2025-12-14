@@ -86,7 +86,41 @@ These are in `.agent/reference-docs/` - historical reference, not active tests.
 
 ## Refactoring Pattern
 
-### Before (Global State Mutation)
+This is not just test refactoring - it requires **architectural changes to product code** to accept configuration as parameters instead of reading from `process.env` directly.
+
+### Product Code: Before
+
+```typescript
+// ❌ BAD: Reads from global state directly
+export function resolveIndexVersion(): string {
+  return process.env.SEARCH_INDEX_VERSION ?? 'v1';
+}
+
+export function createApp() {
+  const apiKey = process.env.OAK_API_KEY;
+  // ... uses apiKey internally
+}
+```
+
+### Product Code: After
+
+```typescript
+// ✅ GOOD: Accepts configuration as parameter
+export function resolveIndexVersion(config: { indexVersion?: string }): string {
+  return config.indexVersion ?? 'v1';
+}
+
+export function createApp(config: AppConfig) {
+  const apiKey = config.oakApiKey;
+  // ... uses apiKey from explicit config
+}
+
+// Entry point reads from env ONCE and passes config down
+const config = loadConfigFromEnv(); // single place that reads process.env
+const app = createApp(config);
+```
+
+### Test: Before
 
 ```typescript
 // ❌ BAD: Mutates global state
@@ -102,7 +136,7 @@ describe('my function', () => {
 });
 ```
 
-### After (Dependency Injection)
+### Test: After
 
 ```typescript
 // ✅ GOOD: Pure function with explicit dependencies
@@ -115,14 +149,95 @@ describe('my function', () => {
 });
 ```
 
+## Architectural Principle
+
+**Environment should be read once at the entry point**, then passed as configuration through the call stack:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Entry Point (index.ts / main.ts)                           │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  const config = loadConfigFromEnv();  // ONLY HERE  │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  createApp(config)    // config passed explicitly   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  createRouter(config) // config passed explicitly   │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                          │                                   │
+│                          ▼                                   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │  handler(request, config) // pure functions         │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+This pattern:
+
+1. Makes all functions pure and testable without global state manipulation
+2. Makes dependencies explicit and discoverable
+3. Eliminates race conditions in parallel test execution
+4. Follows the "fail fast" principle - missing config fails at startup, not deep in a call stack
+
+## Product Code Changes Required
+
+These are the source files that read `process.env` directly and need to be refactored to accept configuration as parameters.
+
+### Semantic Search App
+
+| File                                                                         | Current Pattern                            | Refactor To                                                              |
+| ---------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
+| `apps/oak-open-curriculum-semantic-search/src/lib/suggestions/index.ts:253`  | `process.env.SEARCH_INDEX_VERSION`         | Accept `indexVersion` as parameter                                       |
+| `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts:21`        | `process.env.SEARCH_INDEX_VERSION`         | Accept via route config/context                                          |
+| `apps/oak-open-curriculum-semantic-search/app/lib/fixture-mode.ts:74,79,103` | `process.env.SEMANTIC_SEARCH_USE_FIXTURES` | Already accepts `envValue` param - ensure callers pass it                |
+| `apps/oak-open-curriculum-semantic-search/src/lib/env.ts:61-66`              | Aggregates env vars                        | This is the entry point - keep but ensure downstream uses config objects |
+
+### MCP STDIO App
+
+| File                                                            | Current Pattern                                 | Refactor To                                             |
+| --------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts:8`     | `process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS` | Accept `useStubTools: boolean` as parameter             |
+| `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts:48`            | `process.env.OAK_API_KEY`                       | Already building config - ensure all consumers use this |
+| `apps/oak-curriculum-mcp-stdio/src/app/server.ts:96`            | `process.env.OAK_API_KEY`                       | Accept via config parameter                             |
+| `apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts:44,87` | `process.env.OAK_API_KEY`                       | Entry point - OK to read here, pass to createServer     |
+
+### MCP Streamable HTTP App
+
+| File                                                                       | Current Pattern         | Refactor To                                  |
+| -------------------------------------------------------------------------- | ----------------------- | -------------------------------------------- |
+| `apps/oak-curriculum-mcp-streamable-http/smoke-tests/environment.ts:62-64` | Reads multiple env vars | Smoke test entry point - OK                  |
+| `apps/oak-curriculum-mcp-streamable-http/smoke-tests/modes/*.ts`           | Mutates `process.env`   | Pass env to spawn instead of mutating global |
+
+### SDK
+
+| File                                                          | Current Pattern           | Refactor To                    |
+| ------------------------------------------------------------- | ------------------------- | ------------------------------ |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen.ts:46,133` | `process.env.OAK_API_KEY` | Build script - OK to read here |
+
 ## Priority
 
-1. **High**: Unit tests with `vi.doMock` - these cause the most race conditions
-2. **High**: Unit tests with `process.env` mutation - violates "no side effects" rule
-3. **Medium**: Integration tests with `process.env` mutation
-4. **Low**: E2E tests - process isolation makes this less critical
+1. **High**: Product code reading `process.env` in library functions (not entry points)
+2. **High**: Unit tests with `vi.doMock` - these cause the most race conditions
+3. **High**: Unit tests with `process.env` mutation - violates "no side effects" rule
+4. **Medium**: Integration tests with `process.env` mutation
+5. **Low**: E2E tests - process isolation makes this less critical
 
 ## Acceptance Criteria
+
+### Product Code
+
+- [ ] `resolveToolExecutors()` accepts `useStubTools` parameter
+- [ ] `indexVersion()` in suggestions accepts version as parameter
+- [ ] Search route handlers receive config from context, not `process.env`
+- [ ] `createServer()` receives full config, doesn't read `process.env` internally
+- [ ] Entry points (`bin/*.ts`, `index.ts`) are the ONLY places that read `process.env`
+
+### Tests
 
 - [ ] All unit tests pass without `isolate: true`
 - [ ] All integration tests pass without `pool: 'forks'`

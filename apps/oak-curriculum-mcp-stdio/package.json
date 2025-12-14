@@ -40,8 +40,6 @@
     "@modelcontextprotocol/sdk": "^1.24.3",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
-    "@oaknational/mcp-storage": "workspace:*",
-    "@oaknational/mcp-transport": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "dotenv": "^17.2.3",
     "zod": "^4.1.13"

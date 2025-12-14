@@ -26,31 +26,37 @@ export type JsonValue =
   | readonly JsonValue[];
 
 /**
- * Logger interface for consistent logging across the application
+ * Structured context data for log entries.
+ * All values must be JSON-serialisable.
+ *
+ * Use this type when you want compile-time type safety for log context.
+ * The Logger interface accepts `unknown` for flexibility, but using
+ * `LogContext` ensures your context is properly structured.
+ */
+export type LogContext = JsonObject;
+
+/**
+ * Logger interface for consistent logging across the application.
+ *
+ * Context parameters accept `unknown` for flexibility - the implementation
+ * sanitises all values to JSON-safe format. For type-safe contexts, use
+ * the exported `LogContext` type.
  */
 
 /**
  * Message for the logger. ALL messages must be strings.
  */
 type Message = string;
-/**
- * Context for the logger. This is for configuring the logger, not for logging.
- */
-type Context = unknown;
-/**
- * Error for the logger. This is for logging errors.
- */
-type Error = unknown;
 
 export interface Logger {
-  trace(message: Message, context?: Context): void;
-  debug(message: Message, context?: Context): void;
-  info(message: Message, context?: Context): void;
-  warn(message: Message, context?: Context): void;
-  error(message: Message, error?: Error, context?: Context): void;
-  fatal(message: Message, error?: Error, context?: Context): void;
+  trace(message: Message, context?: unknown): void;
+  debug(message: Message, context?: unknown): void;
+  info(message: Message, context?: unknown): void;
+  warn(message: Message, context?: unknown): void;
+  error(message: Message, error?: unknown, context?: unknown): void;
+  fatal(message: Message, error?: unknown, context?: unknown): void;
   isLevelEnabled?(level: number): boolean;
-  child?(context: JsonObject): Logger;
+  child?(context: LogContext): Logger;
 }
 
 export interface LoggerOptions {

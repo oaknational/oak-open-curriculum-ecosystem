@@ -9,9 +9,6 @@ packages:
   - packages/libs/logger
   - packages/libs/openapi-zod-client-adapter
   - packages/libs/result
-  - packages/libs/storage
-  - packages/libs/transport
-  - packages/providers/mcp-providers-node
   - packages/sdks/oak-curriculum-sdk
 
 onlyBuiltDependencies:

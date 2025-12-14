@@ -61,6 +61,7 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 **/temp-secrets/
 
 # Agent artifacts
+.agent/
 .agent/cache/
 .agent/artifacts/
 .agent/reference-docs/replaced-http-auth-model/

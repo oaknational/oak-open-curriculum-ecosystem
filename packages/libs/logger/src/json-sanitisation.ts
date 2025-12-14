@@ -1,6 +1,12 @@
-/* eslint-disable max-lines -- REFACTOR */
+/* eslint-disable max-lines -- File length is inherent to the sanitisation pipeline */
 /**
  * JSON sanitisation utilities for converting arbitrary values to JSON-safe formats
+ *
+ * This module handles circular reference detection using WeakSet<object>.
+ * The `object` type constraint is inherent to WeakSet - it requires reference types
+ * (non-primitives) because it tracks object identity for cycle detection.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet
  */
 
 import type { JsonValue, JsonObject } from './types.js';
@@ -8,14 +14,31 @@ import type { JsonValue, JsonObject } from './types.js';
 const CIRCULAR_REFERENCE_PLACEHOLDER = '[Circular]';
 const UNSERIALISABLE_PLACEHOLDER = '[unserializable]';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+/**
+ * Represents any value that could potentially be converted to JSON.
+ * The `object` type here is intentionally broad to accept any non-primitive
+ * that might need sanitisation before JSON serialisation.
+ */
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Intentionally broad: accepts any non-primitive for sanitisation
 type JsonLike = JsonValue | Date | Error | object | undefined;
+
+/**
+ * A plain object with string keys and JSON-like values.
+ */
 type PlainObject = Record<string, JsonLike>;
 
 type UndefinedStrategy = 'null' | 'omit';
 
+/**
+ * Context for the sanitisation process.
+ *
+ * The `seen` WeakSet uses `object` type constraint because WeakSet requires
+ * reference types for identity-based tracking. This is fundamental to
+ * circular reference detection - we need to track which exact object instances
+ * have been visited, not their values.
+ */
 interface SanitiserContext {
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
   readonly seen: WeakSet<object>;
   readonly undefinedStrategy: UndefinedStrategy;
 }
@@ -35,8 +58,13 @@ function isPlainObject(value: unknown): value is PlainObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+/**
+ * Guards against circular references by tracking visited objects.
+ * The `object` type for `candidate` is required because we need reference
+ * identity comparison - primitives would always compare by value.
+ */
 function withCircularGuard<T>(
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- Required: reference identity for cycle detection
   candidate: object,
   context: SanitiserContext,
   onCircular: () => T,
@@ -73,7 +101,8 @@ function collectObjectEntries(
 ): [string, JsonValue][] {
   const entries: [string, JsonValue][] = [];
 
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
+  // Object.entries on PlainObject (Record<string, JsonLike>) preserves type information
+  // eslint-disable-next-line no-restricted-properties -- Legitimate: iterating plain object for sanitisation
   for (const [key, rawValue] of Object.entries(source)) {
     if (rawValue === undefined) {
       if (context.undefinedStrategy === 'null') {
@@ -170,7 +199,7 @@ function sanitiseUnknown(value: unknown, context: SanitiserContext): JsonValue {
   return serialiseWithJson(value);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
 function isJsonArrayValue(value: readonly unknown[], seen: WeakSet<object>): boolean {
   return withCircularGuard(
     value,
@@ -180,13 +209,14 @@ function isJsonArrayValue(value: readonly unknown[], seen: WeakSet<object>): boo
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
 function isJsonPlainObjectValue(value: PlainObject, seen: WeakSet<object>): boolean {
   return withCircularGuard(
     value,
     { seen, undefinedStrategy: 'null' },
     () => false,
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
+    // Object.values on PlainObject preserves type information for validation
+    // eslint-disable-next-line no-restricted-properties -- Legitimate: iterating plain object values
     () => Object.values(value).every((entry) => isJsonValue(entry, seen)),
   );
 }
@@ -194,10 +224,11 @@ function isJsonPlainObjectValue(value: PlainObject, seen: WeakSet<object>): bool
 /**
  * Type guard to check if a value is JSON-safe
  * @param value - The value to check
- * @param seen - WeakSet to track seen objects (for circular reference detection)
+ * @param seen - WeakSet to track seen objects (for circular reference detection).
+ *               Uses `object` type because WeakSet requires reference types for identity tracking.
  * @returns True if the value can be safely serialised to JSON
  */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
 export function isJsonValue(value: unknown, seen = new WeakSet<object>()): value is JsonValue {
   if (isPrimitiveJsonValue(value)) {
     return true;
@@ -223,8 +254,11 @@ export function isJsonValue(value: unknown, seen = new WeakSet<object>()): value
  * - Errors become objects with message/stack/name
  * - Arrays/objects are recursively sanitised
  * - Unserializable values become '[unserializable]'
+ *
+ * @param value - The value to sanitise
+ * @param seen - WeakSet for circular reference detection (uses `object` type for identity tracking)
  */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
 export function sanitiseForJson(value: unknown, seen = new WeakSet<object>()): JsonValue {
   const context: SanitiserContext = {
     seen,
@@ -243,7 +277,7 @@ export function sanitiseObject(value: unknown): JsonObject | null {
   }
 
   const context: SanitiserContext = {
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- WeakSet requires object type for reference identity tracking
     seen: new WeakSet<object>(),
     undefinedStrategy: 'omit',
   };

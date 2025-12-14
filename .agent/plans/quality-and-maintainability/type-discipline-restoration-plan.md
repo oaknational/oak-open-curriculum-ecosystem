@@ -1,6 +1,6 @@
 # Type Discipline Restoration Plan — Full Repository
 
-**Status**: ❌ BLOCKED — 2 Lint Errors Remaining
+**Status**: ✅ QUALITY GATES PASSING — Ongoing Refinement
 **Last Updated**: 2025-12-14
 **Prompt**: `.agent/prompts/type-discipline-restoration.prompt.md`
 
@@ -44,34 +44,29 @@ Changes under `packages/sdks/oak-curriculum-sdk/type-gen/**` and changes to SDK 
 
 ---
 
-## BLOCKING: Quality Gate Failures
+## Quality Gate Status
 
 > **Last checked**: 2025-12-14
 
-| Gate                     | Status           | Action Required                                        |
-| ------------------------ | ---------------- | ------------------------------------------------------ |
-| `pnpm type-gen`          | ✅ Passing       |                                                        |
-| `pnpm build`             | ✅ Passing       |                                                        |
-| `pnpm type-check`        | ✅ Passing       |                                                        |
-| `pnpm lint:fix`          | ❌ **2 errors**  | Fix remaining 2 `Record<string, unknown>` violations   |
-| `pnpm format:root`       | ✅ Passing       |                                                        |
-| `pnpm markdownlint:root` | ✅ Passing       |                                                        |
-| `pnpm test`              | ❓ Re-run needed | Verify status after code changes                       |
-| `pnpm test:e2e`          | ✅ Passing       | 198 tests                                              |
-| `pnpm test:e2e:built`    | ✅ Passing       | 4 tests                                                |
-| `pnpm test:ui`           | ❓ Re-run needed | Run `pnpm exec playwright install` then `pnpm test:ui` |
-| `pnpm smoke:dev:stub`    | ✅ Passing       |                                                        |
+| Gate                     | Status     | Notes                                  |
+| ------------------------ | ---------- | -------------------------------------- |
+| `pnpm type-gen`          | ✅ Passing |                                        |
+| `pnpm build`             | ✅ Passing |                                        |
+| `pnpm type-check`        | ✅ Passing |                                        |
+| `pnpm lint:fix`          | ✅ Passing |                                        |
+| `pnpm format:root`       | ✅ Passing |                                        |
+| `pnpm markdownlint:root` | ✅ Passing |                                        |
+| `pnpm test`              | ✅ Passing | With `isolate: true` + `pool: 'forks'` |
+| `pnpm test:e2e`          | ✅ Passing |                                        |
+| `pnpm test:e2e:built`    | ✅ Passing |                                        |
+| `pnpm test:ui`           | ✅ Passing |                                        |
+| `pnpm smoke:dev:stub`    | ✅ Passing |                                        |
 
-### Blocking Issues — 2 Remaining
+### Test Infrastructure Notes
 
-**Lint Errors (2 remaining in `apps/oak-open-curriculum-semantic-search`)**:
+Test isolation settings (`isolate: true`, `pool: 'forks'`) were added to vitest configs to prevent race conditions from global state mutations (`process.env`, `vi.doMock`). See `.agent/plans/quality-and-maintainability/global-state-test-refactoring.md` for the proper fix (dependency injection).
 
-```
-sandbox-fixture-data.ts:44 — Record<string, unknown>
-sequence-facet-utils.ts:4 — Record<string, unknown>
-```
-
-**Significant progress**: Down from 13 errors to 2 errors in the 2025-12-14 session.
+Turbo concurrency limited to 2 in `check:turbo` to prevent resource starvation on dev machines.
 
 ### Understanding the Lint Errors
 
@@ -1046,15 +1041,18 @@ pnpm smoke:dev:stub
 
 ### Summary
 
-| Metric                 | Current Status                             | Target      |
-| ---------------------- | ------------------------------------------ | ----------- |
-| Quality Gates          | ❌ BLOCKED (2 lint errors)                 | ✅ ALL PASS |
-| Lint errors            | **2** (down from 13 in 2025-12-14 session) | 0           |
-| Test failures          | ❓ Re-run needed                           | 0           |
-| UI test failures       | ❓ Re-run needed                           | 0           |
-| `eslint-disable` total | ~180                                       | < 20        |
+| Metric                 | Current Status     | Target  |
+| ---------------------- | ------------------ | ------- |
+| Quality Gates          | ✅ ALL PASS        | ✅ DONE |
+| Lint errors            | 0                  | 0       |
+| Test failures          | 0 (with isolation) | 0       |
+| UI test failures       | 0                  | 0       |
+| `eslint-disable` total | ~158               | < 20    |
+| `REFACTOR` comments    | 98                 | 0       |
 
-**Status: Nearly there** — Only 2 lint errors remain to fix.
+**Status: Quality gates green** — Focus shifts to eliminating `REFACTOR` comments.
+
+See `.agent/plans/quality-and-maintainability/global-state-test-refactoring.md` for test refactoring plan.
 
 ---
 
