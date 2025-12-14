@@ -1,4 +1,10 @@
-import type { KeyStage, SearchSubjectSlug, SearchSubjectSequences } from '../types/oak';
+import type {
+  KeyStage,
+  SearchLessonSummary,
+  SearchSubjectSlug,
+  SearchSubjectSequences,
+  SearchUnitSummary,
+} from '../types/oak';
 import { isLessonSummary, isUnitSummary, isSubjectSequences } from '../types/oak';
 import { env } from '../lib/env';
 import {
@@ -24,9 +30,9 @@ export type GetUnitsFn = (
  */
 export type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
 
-export type GetLessonSummaryFn = (lessonSlug: string) => Promise<unknown>;
+export type GetLessonSummaryFn = (lessonSlug: string) => Promise<SearchLessonSummary>;
 
-export type GetUnitSummaryFn = (unitSlug: string) => Promise<unknown>;
+export type GetUnitSummaryFn = (unitSlug: string) => Promise<SearchUnitSummary>;
 
 export type SubjectSequenceEntry = SearchSubjectSequences[number];
 

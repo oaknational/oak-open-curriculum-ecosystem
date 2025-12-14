@@ -1,12 +1,8 @@
 import type { Client } from '@elastic/elasticsearch';
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import { createRollupDocument, extractUnitLessons } from './document-transforms';
-import {
-  resolveUnitSummaryIdentifiers,
-  readUnitSummaryValue,
-  expectUnitSummaryString,
-} from './document-transform-helpers';
+import { createRollupDocument } from './document-transforms';
+// No longer need extraction helpers - using typed property access
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
@@ -45,17 +41,18 @@ export interface LessonGroup {
  * ```
  */
 export function deriveLessonGroupsFromUnitSummaries(
-  unitSummaries: Map<string, unknown>,
+  unitSummaries: Map<string, SearchUnitSummary>,
 ): LessonGroup[] {
   const groups: LessonGroup[] = [];
 
   for (const [unitSlug, summary] of unitSummaries) {
-    const unitTitle = expectUnitSummaryString(summary, 'unitTitle', `unit title for ${unitSlug}`);
-    const rawLessons = readUnitSummaryValue(summary, 'unitLessons');
-    const lessons = extractUnitLessons(rawLessons);
+    const lessons = summary.unitLessons.map((lesson) => ({
+      lessonSlug: lesson.lessonSlug,
+      lessonTitle: lesson.lessonTitle,
+    }));
 
     if (lessons.length > 0) {
-      groups.push({ unitSlug, unitTitle, lessons });
+      groups.push({ unitSlug, unitTitle: summary.unitTitle, lessons });
     }
   }
 
@@ -70,10 +67,10 @@ export async function buildUnitDocuments(
   subjectProgrammesUrl: string,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<{
-  unitSummaries: Map<string, unknown>;
+  unitSummaries: Map<string, SearchUnitSummary>;
   unitOps: unknown[];
 }> {
-  const unitSummaries = new Map<string, unknown>();
+  const unitSummaries = new Map<string, SearchUnitSummary>();
   const unitOps: unknown[] = [];
 
   let unitIndex = 0;
@@ -96,8 +93,7 @@ export async function buildUnitDocuments(
       });
       continue;
     }
-    const { unitSlug } = resolveUnitSummaryIdentifiers(result.summary);
-    unitSummaries.set(unitSlug, result.summary);
+    unitSummaries.set(result.summary.unitSlug, result.summary);
     unitOps.push(...result.ops);
   }
 
@@ -108,7 +104,7 @@ export async function buildLessonDocuments(
   client: OakClient,
   esClient: Client,
   groups: readonly LessonGroup[],
-  unitSummaries: Map<string, unknown>,
+  unitSummaries: Map<string, SearchUnitSummary>,
   subject: SearchSubjectSlug,
   ks: KeyStage,
   dataIntegrityReport: DataIntegrityReport,
@@ -156,7 +152,7 @@ export async function buildLessonDocuments(
 
 export async function buildRollupDocuments(
   esClient: Client,
-  unitSummaries: Map<string, unknown>,
+  unitSummaries: Map<string, SearchUnitSummary>,
   rollupSnippets: Map<string, string[]>,
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
@@ -165,8 +161,7 @@ export async function buildRollupDocuments(
   const ops: unknown[] = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
-    const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
-    const snippets = rollupSnippets.get(unitSlug) ?? [];
+    const snippets = rollupSnippets.get(summary.unitSlug) ?? [];
     const rollupDoc = await createRollupDocument({
       summary,
       snippets,
@@ -179,7 +174,7 @@ export async function buildRollupDocuments(
       {
         index: {
           _index: resolvePrimarySearchIndexName('unit_rollup'),
-          _id: unitSlug,
+          _id: summary.unitSlug,
         },
       },
       rollupDoc,

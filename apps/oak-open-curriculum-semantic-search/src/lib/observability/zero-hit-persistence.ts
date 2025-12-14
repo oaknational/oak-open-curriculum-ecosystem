@@ -18,7 +18,7 @@ import {
 import {
   buildSearchBody,
   parseSearchResponse,
-  type SearchResponse,
+  type ZeroHitSearchResponse,
 } from './zero-hit-persistence-search';
 import type { SearchScope } from '../../types/oak';
 
@@ -86,7 +86,7 @@ export async function fetchZeroHitTelemetry({
   const size = normaliseLimit(limit);
 
   try {
-    const response = await esClient().transport.request<SearchResponse>(
+    const response = await esClient().transport.request<ZeroHitSearchResponse>(
       {
         method: 'POST',
         path: `/${indexName}/_search`,

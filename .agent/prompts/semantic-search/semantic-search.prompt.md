@@ -1,7 +1,7 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid Confirmed Optimal  
-**Last Updated**: 2025-12-12
+**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -16,7 +16,9 @@ Create a production-ready demo proving Elasticsearch Serverless as the **definit
 3. Prove lesson search can filter by unit
 4. Add feature parity fields after verification
 
-**MCP tool creation** is separate work coordinated in `.agent/plans/sdk-and-mcp-enhancements/`.
+**Next phase (Phase 4)**: Extract the search capability as an **SDK + first-class local CLI**, so it can be consumed by the **Express MCP server** (NL policy stays in MCP via comprehensive tool examples). See `.agent/plans/semantic-search/phase-4-search-sdk-and-cli.md`.
+
+**MCP tool creation** is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/` (Phase 4 prepares the SDK surface the MCP tool will consume).
 
 **Why Maths KS4?** Maximum complexity (tiers, pathways, exam boards), high teacher value, complete feature coverage, manageable scope (~10 minutes to ingest).
 
@@ -32,11 +34,33 @@ Create a production-ready demo proving Elasticsearch Serverless as the **definit
 2. `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
 3. `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
 
+**Source of truth** (for all types and available data):
+
+- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - **The OpenAPI schema**
+- `.agent/plans/external/upstream-api-metadata-wishlist.md` - Fields to request from upstream API
+
 **Requirements & context** (strategic goals, risks, costs, demos):
 
 - `.agent/plans/semantic-search/requirements.md` - **Read this for business context**
 
 **Navigation hub**: `.agent/plans/semantic-search/README.md`
+
+---
+
+## ⚠️ Immediate Priority: Type Discipline Restoration
+
+A stricter ESLint configuration has surfaced **~188 eslint-disable comments** across **all workspaces**. These represent pre-existing architectural drift that must be resolved before feature work continues.
+
+**Prompt**: `.agent/prompts/type-discipline-restoration.prompt.md`
+**Plan**: `.agent/plans/quality-and-maintainability/type-discipline-restoration-plan.md`
+
+This is a **repo-wide** issue affecting all workspaces. Key issues:
+
+- `Record<string, unknown>` type aliases — hiding loose types
+- `Object.*`/`Reflect.*` usage — should use type-safe helpers
+- Missing Zod validation at script boundaries
+- Logger using `object` instead of proper `LogContext` interface
+- Every `eslint-disable` comment is entropy — they hide real issues
 
 ---
 
@@ -65,8 +89,7 @@ Key ES documentation for this project:
 | Unit search: MRR 0.915, 43 ground truth queries   | ✅ Complete |
 | Three-way RRF code removed (dead code cleanup)    | ✅ Complete |
 | All quality gates passing                         | ✅ Complete |
-
-**⚠️ NOT YET PROVEN**: Hybrid is superior to BM25-only or ELSER-only (experiment pending)
+| BM25 vs ELSER vs Hybrid experiment                | ✅ Complete |
 
 ### Phase 3 Remaining Work
 
@@ -284,13 +307,14 @@ See [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-gen
 
 | Phase | Name              | Status     | Effort   |
 | ----- | ----------------- | ---------- | -------- |
-| 4     | Search UI         | 📋 Planned | 3-4 days |
-| 5     | Cloud Functions   | 📋 Planned | 2-3 days |
-| 6     | Admin Dashboard   | 📋 Planned | 2-3 days |
-| 7     | Query Enhancement | 📋 Planned | 1-2 days |
-| 8     | Entity Extraction | 📋 Future  | 3-4 days |
-| 9     | Reference Indices | 📋 Future  | 2-3 days |
-| 10+   | AI Integration    | 📋 Future  | 15-20d   |
+| 4     | Search SDK + CLI  | 📋 Planned | 3-6 days |
+| 5     | Search UI         | 📋 Planned | 3-4 days |
+| 6     | Cloud Functions   | 📋 Planned | 2-3 days |
+| 7     | Admin Dashboard   | 📋 Planned | 2-3 days |
+| 8     | Query Enhancement | 📋 Planned | 1-2 days |
+| 9     | Entity Extraction | 📋 Future  | 3-4 days |
+| 10    | Reference Indices | 📋 Future  | 2-3 days |
+| 11+   | AI Integration    | 📋 Future  | 15-20d   |
 
 **Phase documents**: `.agent/plans/semantic-search/phase-{N}-*.md`
 
@@ -368,7 +392,7 @@ pnpm smoke:dev:stub    # Smoke tests
 ## Running Tests
 
 ```bash
-# Terminal 1: Start the server
+# Terminal 1: Start the server (current Next.js wrapper; Phase 4 moves to SDK + CLI)
 cd apps/oak-open-curriculum-semantic-search
 rm -rf .next  # Clear cache (important!)
 pnpm dev

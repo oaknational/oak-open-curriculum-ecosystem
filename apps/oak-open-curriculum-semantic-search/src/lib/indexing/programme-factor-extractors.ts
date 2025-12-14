@@ -1,107 +1,48 @@
 /**
  * Programme factor extraction utilities for Maths KS4 vertical slice.
  *
- * Extracts tier, exam board, and pathway information from lesson/unit programme factors.
+ * Extracts tier information for KS4 filtering.
  * These fields enable precision filtering in hybrid search queries.
+ *
+ * Important: `programmeFactors` / `pathway` do NOT exist in the upstream API schema.
+ * This module only derives values from schema-defined fields.
  *
  * @module programme-factor-extractors
  */
 
-/**
- * Type guard to check if a value is a non-null object.
- */
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
+import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
 
-/**
- * Safely extracts programmeFactors from an unknown data structure.
- */
-function getProgrammeFactors(data: unknown): Record<string, unknown> | undefined {
-  if (!isObject(data)) {
-    return undefined;
-  }
-  const pf = data['programmeFactors'];
-  if (!isObject(pf)) {
-    return undefined;
-  }
-  return pf;
-}
+type Summary = SearchLessonSummary | SearchUnitSummary;
 
 /**
  * Extracts tier from lesson or unit data programme factors.
  *
  * KS4 Maths has Foundation and Higher tiers with different content difficulty.
  *
- * @param data - Lesson or unit data containing programmeFactors (accepts unknown)
+ * @param summary - Lesson or unit summary (typed SDK data)
  * @returns Tier value or undefined
  *
  * @example
  * ```typescript
- * const tier = extractTier(lessonData);
+ * const tier = extractTier(lessonSummary);
  * // 'foundation' | 'higher' | undefined
  * ```
  */
-export function extractTier(data: unknown): 'foundation' | 'higher' | undefined {
-  const pf = getProgrammeFactors(data);
-  if (!pf) {
-    return undefined;
+export function extractTier(summary: Summary): 'foundation' | 'higher' | undefined {
+  /**
+   * DERIVED: Tier is not explicitly present in lesson/unit summary responses.
+   * We derive it from the unit slug suffix used in KS4 Maths content.
+   *
+   * Examples:
+   * - `...-foundation` -> 'foundation'
+   * - `...-higher` -> 'higher'
+   */
+  const slug = summary.unitSlug;
+  if (slug.includes('-foundation')) {
+    return 'foundation';
   }
-  const tier = pf['tier'];
-  if (tier === 'foundation' || tier === 'higher') {
-    return tier;
-  }
-  return undefined;
-}
-
-/**
- * Extracts exam board from lesson or unit data programme factors.
- *
- * Identifies the exam board for GCSE/A-Level content (e.g., AQA, Edexcel, OCR).
- *
- * @param data - Lesson or unit data containing programmeFactors (accepts unknown)
- * @returns Exam board string or undefined
- *
- * @example
- * ```typescript
- * const examBoard = extractExamBoard(lessonData);
- * // 'aqa' | 'edexcel' | 'ocr' | undefined
- * ```
- */
-export function extractExamBoard(data: unknown): string | undefined {
-  const pf = getProgrammeFactors(data);
-  if (!pf) {
-    return undefined;
-  }
-  const examBoard = pf['examBoard'];
-  if (typeof examBoard === 'string' && examBoard.length > 0) {
-    return examBoard;
-  }
-  return undefined;
-}
-
-/**
- * Extracts pathway from lesson or unit data programme factors.
- *
- * Identifies the programme pathway (e.g., core, GCSE, functional skills).
- *
- * @param data - Lesson or unit data containing programmeFactors (accepts unknown)
- * @returns Pathway string or undefined
- *
- * @example
- * ```typescript
- * const pathway = extractPathway(lessonData);
- * // 'core' | 'gcse' | 'functional-skills' | undefined
- * ```
- */
-export function extractPathway(data: unknown): string | undefined {
-  const pf = getProgrammeFactors(data);
-  if (!pf) {
-    return undefined;
-  }
-  const pathway = pf['pathway'];
-  if (typeof pathway === 'string' && pathway.length > 0) {
-    return pathway;
+  if (slug.includes('-higher')) {
+    return 'higher';
   }
   return undefined;
 }

@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
 **Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
-**Last Updated**: 2025-12-12
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -14,13 +14,17 @@ For new implementation sessions, read in this order:
    - `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
    - `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
 
-2. **Requirements & Context** - `requirements.md`
+2. **Source of Truth** (for all types and available data)
+   - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - **The OpenAPI schema**
+   - `.agent/plans/external/upstream-api-metadata-wishlist.md` - Fields to request from upstream API
+
+3. **Requirements & Context** - `requirements.md`
    - Strategic goals and business success criteria
    - Risk mitigation strategies
    - Cost model ($0/month for AI/ML features - all included in ES Serverless)
    - Demo scenarios for validation
 
-3. **Entry Point** - `.agent/prompts/semantic-search/semantic-search.prompt.md`
+4. **Entry Point** - `.agent/prompts/semantic-search/semantic-search.prompt.md`
    - Current state summary
    - Phase status and next steps
    - Quick reference for commands and file locations
@@ -92,22 +96,23 @@ See `phase-3-multi-index-and-fields.md` for full details.
 
 ### Future Phases
 
-#### Part 2: Enhancements (Phases 4-9)
+#### Part 2: Enhancements (Phases 4-10)
 
-| Phase | Name              | Status     | Effort   | Description                            |
-| ----- | ----------------- | ---------- | -------- | -------------------------------------- |
-| 4     | Search UI         | 📋 Planned | 3-4 days | Functional, portable search UX         |
-| 5     | Cloud Functions   | 📋 Planned | 2-3 days | HTTP ingestion endpoints on Vercel     |
-| 6     | Admin Dashboard   | 📋 Planned | 2-3 days | Ingestion control, metrics display     |
-| 7     | Query Enhancement | 📋 Planned | 1-2 days | Production patterns, OWA compatibility |
-| 8     | Entity Extraction | 📋 Future  | 3-4 days | NER, concept graphs                    |
-| 9     | Reference Indices | 📋 Future  | 2-3 days | Subject/keystage metadata, threads     |
+| Phase | Name              | Status     | Effort   | Description                                                    |
+| ----- | ----------------- | ---------- | -------- | -------------------------------------------------------------- |
+| 4     | Search SDK + CLI  | 📋 Planned | 3-6 days | Extract SDK + first-class local CLI; retire Next.js runtime    |
+| 5     | Search UI         | 📋 Planned | 3-4 days | Reference UX patterns (future UI lives in a different app)     |
+| 6     | Cloud Functions   | 📋 Planned | 2-3 days | (Future) HTTP ingestion endpoints (not required for SDK-first) |
+| 7     | Admin Dashboard   | 📋 Planned | 2-3 days | (Future) UI for ingestion control/metrics (not required now)   |
+| 8     | Query Enhancement | 📋 Planned | 1-2 days | Production patterns, OWA compatibility                         |
+| 9     | Entity Extraction | 📋 Future  | 3-4 days | NER, concept graphs                                            |
+| 10    | Reference Indices | 📋 Future  | 2-3 days | Subject/keystage metadata, threads                             |
 
-#### Part 3: AI Integration (Phase 10+)
+#### Part 3: AI Integration (Phase 11+)
 
 | Phase | Name   | Status    | Effort     | Description               |
 | ----- | ------ | --------- | ---------- | ------------------------- |
-| 10+   | Future | 📋 Future | 15-20 days | RAG, Knowledge Graph, LTR |
+| 11+   | Future | 📋 Future | 15-20 days | RAG, Knowledge Graph, LTR |
 
 ---
 
@@ -185,6 +190,25 @@ Add information-dense summary fields for better pedagogical matching:
 
 ---
 
+## Immediate Priority: Type Discipline Restoration
+
+A stricter ESLint configuration surfaced **~188 eslint-disable comments** across **all workspaces**. These are pre-existing architectural drift that must be resolved.
+
+**Prompt**: `.agent/prompts/type-discipline-restoration.prompt.md`
+**Plan**: `.agent/plans/quality-and-maintainability/type-discipline-restoration-plan.md`
+
+This is a **repo-wide** issue, not just semantic search:
+
+| Workspace                                  | `eslint-disable` Count |
+| ------------------------------------------ | ---------------------- |
+| `apps/oak-open-curriculum-semantic-search` | 63                     |
+| `packages/*` (SDK, libs, core)             | 59                     |
+| `apps/oak-curriculum-mcp-streamable-http`  | 51                     |
+| `apps/oak-notion-mcp`                      | 12                     |
+| `apps/oak-curriculum-mcp-stdio`            | 3                      |
+
+---
+
 ## Document Structure
 
 ```text
@@ -193,13 +217,14 @@ Add information-dense summary fields for better pedagogical matching:
 ├── requirements.md                     # Strategic context, risks, costs, demos
 │
 ├── phase-3-multi-index-and-fields.md   # 🔄 Current - unit search, doc_type, aliases
-├── phase-4-search-ui.md                # 📋 Planned - functional search experience
-├── phase-5-cloud-functions.md          # 📋 Planned - HTTP ingestion endpoints
-├── phase-6-admin-dashboard.md          # 📋 Planned - ingestion control UI
-├── phase-7-query-enhancement.md        # 📋 Planned - query patterns, OWA compatibility
-├── phase-8-entity-extraction.md        # 📋 Future - NER, concept graphs
-├── phase-9-reference-indices.md        # 📋 Future - reference data, threads
-├── phase-10-plus-future.md             # 📋 Future - RAG, KG, LTR, resource types
+├── phase-4-search-sdk-and-cli.md        # 📋 Planned - extract SDK + first-class CLI
+├── phase-5-search-ui.md                 # 📋 Planned - reference UX patterns (future app)
+├── phase-6-cloud-functions.md           # 📋 Planned - (future) HTTP ingestion endpoints
+├── phase-7-admin-dashboard.md           # 📋 Planned - (future) ingestion control UI
+├── phase-8-query-enhancement.md         # 📋 Planned - query patterns, OWA compatibility
+├── phase-9-entity-extraction.md         # 📋 Future - NER, concept graphs
+├── phase-10-reference-indices.md        # 📋 Future - reference data, threads
+├── phase-11-plus-future.md              # 📋 Future - RAG, KG, LTR, resource types
 │
 ├── reference-docs/                     # Reference documentation
 │   ├── reference-data-completeness-policy.md

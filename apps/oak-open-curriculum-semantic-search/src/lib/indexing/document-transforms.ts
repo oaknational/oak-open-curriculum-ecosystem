@@ -11,32 +11,24 @@ import type { Client } from '@elastic/elasticsearch';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
+  SearchLessonSummary,
   SearchSubjectSlug,
   SearchUnitRollupDoc,
   SearchUnitsIndexDoc,
+  SearchUnitSummary,
 } from '../../types/oak';
 import {
-  extractSequenceIds,
-  extractUnitLessons,
-  extractUnitTopics,
-  readUnitSummaryValue,
-  resolveUnitSummaryIdentifiers,
   extractLessonDocumentFields,
   extractRollupDocumentFields,
   extractPedagogicalData,
   createEnrichedRollupText,
-  type UnitLessonInfo,
 } from './document-transform-helpers';
 import { generateDenseVector } from './dense-vector-generation';
 
-export {
-  extractLessonPlanningFields,
-  extractSequenceIds,
-  extractUnitLessons,
-} from './document-transform-helpers';
+export { extractLessonPlanningFields } from './document-transform-helpers';
 
 export interface CreateUnitDocumentParams {
-  summary: unknown;
+  summary: SearchUnitSummary;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   subjectProgrammesUrl: string;
@@ -49,34 +41,31 @@ export function createUnitDocument({
   keyStage,
   subjectProgrammesUrl,
 }: CreateUnitDocumentParams): SearchUnitsIndexDoc {
-  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
-  const unitLessons: UnitLessonInfo[] = extractUnitLessons(
-    readUnitSummaryValue(summary, 'unitLessons'),
-  );
-  const lessonIds: string[] = unitLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics = extractUnitTopics(readUnitSummaryValue(summary, 'categories'));
-  const years = normaliseYears(
-    readUnitSummaryValue(summary, 'year'),
-    readUnitSummaryValue(summary, 'yearSlug'),
-  );
-  const sequenceIds = extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
+  if (!summary.canonicalUrl) {
+    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
+  }
+
+  const lessonIds = summary.unitLessons.map((lesson) => lesson.lessonSlug);
+  const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
+  const years = normaliseYears(summary.year, summary.yearSlug);
+  const sequenceIds = summary.threads?.map((thread) => thread.slug);
 
   return {
-    unit_id: unitSlug,
-    unit_slug: unitSlug,
-    unit_title: unitTitle,
+    unit_id: summary.unitSlug,
+    unit_slug: summary.unitSlug,
+    unit_title: summary.unitTitle,
     subject_slug: subject,
     key_stage: keyStage,
     years,
     lesson_ids: lessonIds,
     lesson_count: lessonIds.length,
     unit_topics: unitTopics,
-    unit_url: canonicalUrl,
+    unit_url: summary.canonicalUrl,
     subject_programmes_url: subjectProgrammesUrl,
     sequence_ids: sequenceIds,
     title_suggest: {
-      input: [unitTitle],
-      contexts: { subject: [subject], key_stage: [keyStage], sequence: sequenceIds },
+      input: [summary.unitTitle],
+      contexts: { subject: [subject], key_stage: [keyStage], sequence: sequenceIds ?? [] },
     },
     doc_type: 'unit',
   };
@@ -85,7 +74,7 @@ export function createUnitDocument({
 export interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
   transcript: string;
-  summary: unknown;
+  summary: SearchLessonSummary;
   unitCanonicalUrl: string;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -132,8 +121,6 @@ export async function createLessonDocument({
     lesson_semantic: transcript,
     lesson_url: fields.canonicalUrl,
     tier: fields.tier,
-    exam_board: fields.examBoard,
-    pathway: fields.pathway,
     lesson_dense_vector: lessonDenseVector,
     title_dense_vector: titleDenseVector,
     title_suggest: {
@@ -145,7 +132,7 @@ export async function createLessonDocument({
 }
 
 export interface CreateRollupDocumentParams {
-  summary: unknown;
+  summary: SearchUnitSummary;
   snippets: string[];
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -189,8 +176,6 @@ export async function createRollupDocument({
     thread_titles: fields.threadTitles,
     thread_orders: fields.threadOrders,
     tier: fields.tier,
-    exam_board: fields.examBoard,
-    pathway: fields.pathway,
     unit_dense_vector: unitDenseVector,
     rollup_dense_vector: rollupDenseVector,
     doc_type: 'unit',

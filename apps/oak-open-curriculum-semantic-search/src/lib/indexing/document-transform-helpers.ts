@@ -1,14 +1,14 @@
-/** Document transformation helpers for ES indexing. @module document-transform-helpers */
-import { extractTier, extractExamBoard, extractPathway } from './programme-factor-extractors';
-import {
-  isUnknownObject,
-  ensureRecord,
-  safeArray,
-  safeString,
-  pluckStrings,
-  optionalStrings,
-  readUnknownField,
-} from './extraction-primitives';
+/**
+ * Document transformation helpers for ES indexing.
+ *
+ * These functions extract and transform fields from typed SDK summaries
+ * for Elasticsearch document creation.
+ *
+ * @module document-transform-helpers
+ */
+
+import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
+import { extractTier } from './programme-factor-extractors';
 import {
   extractThreadInfo,
   extractPedagogicalData,
@@ -16,21 +16,9 @@ import {
   type ThreadInfo,
   type PedagogicalData,
 } from './thread-and-pedagogical-extractors';
-import {
-  resolveUnitSummaryIdentifiers,
-  resolveLessonSummaryIdentifiers,
-  readUnitSummaryValue,
-  readLessonSummaryValue,
-  readUnitSummaryString,
-  readLessonSummaryString,
-  expectUnitSummaryString,
-  expectLessonSummaryString,
-  type UnitSummaryIdentifiers,
-  type LessonSummaryIdentifiers,
-} from './summary-reader-helpers';
 
 // Re-export programme factor extractors
-export { extractTier, extractExamBoard, extractPathway };
+export { extractTier };
 
 // Re-export thread and pedagogical extractors
 export {
@@ -41,174 +29,135 @@ export {
   type PedagogicalData,
 };
 
-// Re-export summary reader helpers
-export {
-  resolveUnitSummaryIdentifiers,
-  resolveLessonSummaryIdentifiers,
-  readUnitSummaryValue,
-  readLessonSummaryValue,
-  readUnitSummaryString,
-  readLessonSummaryString,
-  expectUnitSummaryString,
-  expectLessonSummaryString,
-  type UnitSummaryIdentifiers,
-  type LessonSummaryIdentifiers,
-};
-
 export interface UnitLessonInfo {
   readonly lessonSlug: string;
   readonly lessonTitle: string;
 }
 
-/** Extracts lesson info from unit lessons array. */
-export function extractUnitLessons(value: unknown): UnitLessonInfo[] {
-  const lessons: UnitLessonInfo[] = [];
-  for (const entry of safeArray(value)) {
-    if (!isUnknownObject(entry)) {
-      continue;
-    }
-    const lessonSlug = safeString(entry.lessonSlug);
-    const lessonTitle = safeString(entry.lessonTitle);
-    if (!lessonSlug || !lessonTitle) {
-      continue;
-    }
-    lessons.push({ lessonSlug, lessonTitle });
-  }
-  return lessons;
-}
-
-/** Extracts unit topics from categories. */
-export function extractUnitTopics(value: unknown): string[] | undefined {
-  return optionalStrings(pluckStrings(value, 'categoryTitle'));
-}
-
-/** Extracts sequence IDs from threads. */
-export function extractSequenceIds(value: unknown): string[] | undefined {
-  return optionalStrings(pluckStrings(value, 'slug'));
-}
-
-/** Extracts misconception pairs. */
-export function extractMisconceptions(value: unknown): string[] | undefined {
-  const pairs: string[] = [];
-  for (const entry of safeArray(value)) {
-    if (!isUnknownObject(entry)) {
-      continue;
-    }
-    const misconception = safeString(entry.misconception);
-    const response = safeString(entry.response);
-    if (!misconception || !response) {
-      continue;
-    }
-    pairs.push(`${misconception} → ${response}`);
-  }
-  return pairs.length > 0 ? pairs : undefined;
-}
-
-/** Extracts content guidance descriptions. */
-export function normaliseContentGuidanceEntries(value: unknown): string[] | undefined {
-  const descriptions: string[] = [];
-  for (const entry of safeArray(value)) {
-    if (!isUnknownObject(entry)) {
-      continue;
-    }
-    const description = safeString(entry.contentGuidanceDescription);
-    if (description) {
-      descriptions.push(description);
-    }
-  }
-  return descriptions.length > 0 ? descriptions : undefined;
-}
-
-/** Extracts lesson planning fields from summary. */
-export function extractLessonPlanningFields(summary: unknown): {
+/**
+ * Extracts lesson planning fields from lesson summary.
+ *
+ * @param summary - Lesson summary (typed SDK data)
+ * @returns Extracted lesson planning fields
+ */
+export function extractLessonPlanningFields(summary: SearchLessonSummary): {
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
   teacherTips?: string[];
   contentGuidance?: string[];
 } {
-  const record = ensureRecord(summary, 'lesson summary');
-  return {
-    lessonKeywords: optionalStrings(
-      pluckStrings(readUnknownField(record, 'lessonKeywords'), 'keyword'),
-    ),
-    keyLearningPoints: optionalStrings(
-      pluckStrings(readUnknownField(record, 'keyLearningPoints'), 'keyLearningPoint'),
-    ),
-    misconceptions: extractMisconceptions(
-      readUnknownField(record, 'misconceptionsAndCommonMistakes'),
-    ),
-    teacherTips: optionalStrings(
-      pluckStrings(readUnknownField(record, 'teacherTips'), 'teacherTip'),
-    ),
-    contentGuidance: normaliseContentGuidanceEntries(readUnknownField(record, 'contentGuidance')),
-  };
-}
+  const lessonKeywords =
+    summary.lessonKeywords.length > 0 ? summary.lessonKeywords.map((k) => k.keyword) : undefined;
 
-/**
- * Extracts all fields from lesson summary for document creation.
- * Return type is intentionally inferred to match consuming code expectations.
- */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Return type inferred to avoid cascading type changes in document transforms
-export function extractLessonDocumentFields(summary: unknown) {
-  const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
-  const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
-    extractLessonPlanningFields(summary);
-  const tier = extractTier(summary);
-  const examBoard = extractExamBoard(summary);
-  const pathway = extractPathway(summary);
+  const keyLearningPoints =
+    summary.keyLearningPoints.length > 0
+      ? summary.keyLearningPoints.map((k) => k.keyLearningPoint)
+      : undefined;
+
+  const misconceptions =
+    summary.misconceptionsAndCommonMistakes.length > 0
+      ? summary.misconceptionsAndCommonMistakes.map((m) => `${m.misconception} → ${m.response}`)
+      : undefined;
+
+  const teacherTips =
+    summary.teacherTips.length > 0 ? summary.teacherTips.map((t) => t.teacherTip) : undefined;
+
+  const contentGuidance =
+    summary.contentGuidance && summary.contentGuidance.length > 0
+      ? summary.contentGuidance.map((c) => c.contentGuidanceDescription)
+      : undefined;
 
   return {
-    unitSlug,
-    unitTitle,
-    canonicalUrl,
     lessonKeywords,
     keyLearningPoints,
     misconceptions,
     teacherTips,
     contentGuidance,
-    tier,
-    examBoard,
-    pathway,
+  };
+}
+
+/**
+ * Extracts all fields from lesson summary for document creation.
+ *
+ * @param summary - Lesson summary (typed SDK data)
+ * @returns Extracted fields for lesson document
+ */
+export function extractLessonDocumentFields(summary: SearchLessonSummary): {
+  unitSlug: string;
+  unitTitle: string;
+  canonicalUrl: string;
+  lessonKeywords?: string[];
+  keyLearningPoints?: string[];
+  misconceptions?: string[];
+  teacherTips?: string[];
+  contentGuidance?: string[];
+  tier: 'foundation' | 'higher' | undefined;
+} {
+  if (!summary.canonicalUrl) {
+    throw new Error(`Missing canonical URL for lesson in unit ${summary.unitSlug}`);
+  }
+
+  const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
+    extractLessonPlanningFields(summary);
+
+  return {
+    unitSlug: summary.unitSlug,
+    unitTitle: summary.unitTitle,
+    canonicalUrl: summary.canonicalUrl,
+    lessonKeywords,
+    keyLearningPoints,
+    misconceptions,
+    teacherTips,
+    contentGuidance,
+    tier: extractTier(summary),
   };
 }
 
 /**
  * Extracts all fields from unit summary for rollup document creation.
- * Return type is intentionally inferred to match consuming code expectations.
+ *
+ * @param summary - Unit summary (typed SDK data)
+ * @param normaliseYears - Function to normalise year values
+ * @returns Extracted fields for rollup document
  */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Return type inferred to avoid cascading type changes in document transforms
 export function extractRollupDocumentFields(
-  summary: unknown,
-  normaliseYears: (year: unknown, yearSlug: unknown) => string[] | undefined,
-) {
-  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
-  const rollupLessons = extractUnitLessons(readUnitSummaryValue(summary, 'unitLessons'));
-  const lessonIds = rollupLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics = extractUnitTopics(readUnitSummaryValue(summary, 'categories'));
-  const years = normaliseYears(
-    readUnitSummaryValue(summary, 'year'),
-    readUnitSummaryValue(summary, 'yearSlug'),
-  );
-  const sequenceIds = extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
-  const threadInfo = extractThreadInfo(readUnitSummaryValue(summary, 'threads'));
-  const tier = extractTier(summary);
-  const examBoard = extractExamBoard(summary);
-  const pathway = extractPathway(summary);
+  summary: SearchUnitSummary,
+  normaliseYears: (year: string | number, yearSlug: string) => string[] | undefined,
+): {
+  unitSlug: string;
+  unitTitle: string;
+  canonicalUrl: string;
+  lessonIds: string[];
+  unitTopics: string[] | undefined;
+  years: string[] | undefined;
+  sequenceIds: string[] | undefined;
+  threadSlugs: string[] | undefined;
+  threadTitles: string[] | undefined;
+  threadOrders: number[] | undefined;
+  tier: 'foundation' | 'higher' | undefined;
+} {
+  if (!summary.canonicalUrl) {
+    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
+  }
+
+  const lessonIds = summary.unitLessons.map((lesson) => lesson.lessonSlug);
+  const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
+  const years = normaliseYears(summary.year, summary.yearSlug);
+  const sequenceIds = summary.threads?.map((thread) => thread.slug);
+  const threadInfo = extractThreadInfo(summary.threads);
 
   return {
-    unitSlug,
-    unitTitle,
-    canonicalUrl,
+    unitSlug: summary.unitSlug,
+    unitTitle: summary.unitTitle,
+    canonicalUrl: summary.canonicalUrl,
     lessonIds,
-    unitTopics,
+    unitTopics: unitTopics && unitTopics.length > 0 ? unitTopics : undefined,
     years,
-    sequenceIds,
+    sequenceIds: sequenceIds && sequenceIds.length > 0 ? sequenceIds : undefined,
     threadSlugs: threadInfo.slugs,
     threadTitles: threadInfo.titles,
     threadOrders: threadInfo.orders,
-    tier,
-    examBoard,
-    pathway,
+    tier: extractTier(summary),
   };
 }

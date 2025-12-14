@@ -8,11 +8,42 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { z } from 'zod';
+import { IndexMetaDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
 import { esClient } from '../src/lib/es-client.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROGRESS_FILE = join(__dirname, '..', '.ingest-progress.json');
+
+const IngestProgressSchema = z.object({
+  startedAt: z.string(),
+  lastUpdatedAt: z.string(),
+  totalCombinations: z.number().int().nonnegative(),
+  completed: z.number().int().nonnegative(),
+  failed: z.number().int().nonnegative(),
+  skipped: z.number().int().nonnegative(),
+  results: z.array(
+    z.object({
+      status: z.enum(['pending', 'success', 'failed', 'skipped']),
+      combination: z.object({
+        id: z.string(),
+      }),
+      exitCode: z.number().int().optional(),
+    }),
+  ),
+});
+
+function safeJsonParse(text: string): unknown {
+  return JSON.parse(text);
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'Unknown error';
+}
 
 async function checkElasticsearch() {
   console.log('📊 Elasticsearch Index Status:\n');
@@ -33,8 +64,7 @@ async function checkElasticsearch() {
       const count = await client.count({ index });
       console.log(`   ${index.padEnd(25)} ${count.count.toString().padStart(5)} documents`);
     } catch (err) {
-      const error = err as Error;
-      console.log(`   ${index.padEnd(25)} ERROR: ${error.message}`);
+      console.log(`   ${index.padEnd(25)} ERROR: ${getErrorMessage(err)}`);
     }
   }
 
@@ -43,18 +73,18 @@ async function checkElasticsearch() {
     const search = await client.search({
       index: 'oak_meta',
       size: 1,
-      sort: [{ createdAt: 'desc' }],
+      sort: [{ ingested_at: 'desc' }],
     });
 
     if (search.hits.hits.length > 0) {
-      const meta = search.hits.hits[0]._source as { version: string; createdAt: string };
+      const metaCandidate = search.hits.hits[0]._source;
+      const meta = IndexMetaDocSchema.parse(metaCandidate);
       console.log(`\n📅 Last Index Update:`);
       console.log(`   Version: ${meta.version}`);
-      console.log(`   Created: ${meta.createdAt}`);
+      console.log(`   Ingested at: ${meta.ingested_at}`);
     }
   } catch (err) {
-    const error = err as Error;
-    console.warn(`   oak_meta ERROR: ${error.message}`);
+    console.warn(`   oak_meta ERROR: ${getErrorMessage(err)}`);
     // Meta index might not exist yet
   }
 }
@@ -67,7 +97,7 @@ function checkProgressFile() {
   }
 
   const json = readFileSync(PROGRESS_FILE, 'utf-8');
-  const progress = JSON.parse(json);
+  const progress = IngestProgressSchema.parse(safeJsonParse(json));
 
   console.log('\n📁 Systematic Ingestion Progress:\n');
   console.log(`   Started: ${progress.startedAt}`);
@@ -77,7 +107,7 @@ function checkProgressFile() {
   console.log(`   ❌ Failed: ${progress.failed}`);
   console.log(`   ⏭️  Skipped: ${progress.skipped}`);
 
-  const pending = progress.results.filter((r: { status: string }) => r.status === 'pending').length;
+  const pending = progress.results.filter((result) => result.status === 'pending').length;
   const percentage = (
     ((progress.completed + progress.failed + progress.skipped) / progress.totalCombinations) *
     100
@@ -88,7 +118,7 @@ function checkProgressFile() {
 
   // Show recent successes
   const recentSuccesses = progress.results
-    .filter((r: { status: string }) => r.status === 'success')
+    .filter((result) => result.status === 'success')
     .slice(-5);
 
   if (recentSuccesses.length > 0) {
@@ -99,7 +129,7 @@ function checkProgressFile() {
   }
 
   // Show failures
-  const failures = progress.results.filter((r: { status: string }) => r.status === 'failed');
+  const failures = progress.results.filter((result) => result.status === 'failed');
 
   if (failures.length > 0) {
     console.log('\n   ❌ Failed Combinations:');
@@ -118,8 +148,7 @@ async function main() {
   try {
     await checkElasticsearch();
   } catch (err) {
-    const error = err as Error;
-    console.log(`\n❌ Could not connect to Elasticsearch: ${error.message}`);
+    console.log(`\n❌ Could not connect to Elasticsearch: ${getErrorMessage(err)}`);
   }
 
   console.log('\n' + '='.repeat(80));

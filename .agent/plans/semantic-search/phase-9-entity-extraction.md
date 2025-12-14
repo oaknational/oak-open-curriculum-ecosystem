@@ -1,9 +1,9 @@
-# Phase 8: Entity Extraction & Graph
+# Phase 9: Entity Extraction & Graph
 
 **Status**: 📋 PLANNED  
 **Estimated Effort**: 3-4 days  
-**Prerequisites**: Phase 7 (Query Enhancement)  
-**Last Updated**: 2025-12-11
+**Prerequisites**: Phase 8 (Query Enhancement)  
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -152,7 +152,7 @@ await esClient.ingest.putPipeline({
 
 ## Implementation Tasks
 
-### Phase 8a: NER Setup (1.5 days)
+### Phase 9a: NER Setup (1.5 days)
 
 | Task                    | Description                           | Test Type   |
 | ----------------------- | ------------------------------------- | ----------- |
@@ -162,7 +162,7 @@ await esClient.ingest.putPipeline({
 | Document enrichment     | Add entities to lesson documents      | Integration |
 | Re-index Maths KS4      | Apply NER to existing lessons         | E2E         |
 
-### Phase 8b: Graph Discovery (1 day)
+### Phase 9b: Graph Discovery (1 day)
 
 | Task                      | Description                           | Test Type   |
 | ------------------------- | ------------------------------------- | ----------- |
@@ -170,7 +170,7 @@ await esClient.ingest.putPipeline({
 | Relationship extraction   | Identify concept relationships        | Unit        |
 | Graph data structure      | Store relationships for querying      | Unit        |
 
-### Phase 8c: Enrich Processor (1 day)
+### Phase 9c: Enrich Processor (1 day)
 
 | Task               | Description                                 | Test Type   |
 | ------------------ | ------------------------------------------- | ----------- |
@@ -256,11 +256,11 @@ NER_CONFIDENCE_THRESHOLD=0.7
 ## Dependencies
 
 - **Upstream**: Phase 7 (query infrastructure)
-- **Blocks**: Phase 10 (RAG uses entities for grounding)
+- **Blocks**: Phase 11 (RAG uses entities for grounding)
 
 ---
 
 ## Related Documents
 
-- [Phase 9](./phase-9-reference-indices.md) - Reference indices for enrichment
+- [Phase 10](./phase-10-reference-indices.md) - Reference indices for enrichment
 - [Requirements](./requirements.md) - Entity extraction goals

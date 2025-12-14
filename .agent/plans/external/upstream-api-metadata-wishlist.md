@@ -13,6 +13,79 @@
 - Can we enhance the metadata of the API to make it more useful for AI agents?
 - Can we improve data integrity at the API level?
 
+---
+
+## Derived Fields Registry (2025-12-13)
+
+**Context**: Schema analysis revealed that several fields used in semantic search indexing are **derived** from other schema fields rather than being directly available. These derivations are documented here so they can be added to the upstream API.
+
+### Currently Derived Fields
+
+| Field            | Current Derivation     | Schema Source                                            | Ideal API Field                                                  | Status          |
+| ---------------- | ---------------------- | -------------------------------------------------------- | ---------------------------------------------------------------- | --------------- |
+| `tier`           | Parse from slug suffix | `tiers[].tierSlug` in `SequenceUnitsResponseSchema`      | Flat `tier: 'foundation' \| 'higher' \| null` on lesson/unit     | ✅ Derivable    |
+| `examBoard`      | Use `examBoardTitle`   | `examBoardTitle` in `LessonSearchResponseSchema.units[]` | Consistent `examBoardSlug` and `examBoardTitle` on all resources | ✅ Derivable    |
+| `ks4OptionSlug`  | Use `ks4Options.slug`  | `ks4Options` object on sequences                         | Flat `ks4OptionSlug` on lessons/units                            | ✅ Derivable    |
+| `ks4OptionTitle` | Use `ks4Options.title` | `ks4Options` object on sequences                         | Flat `ks4OptionTitle` on lessons/units                           | ✅ Derivable    |
+| ~~`pathway`~~    | N/A                    | N/A                                                      | N/A                                                              | ❌ GHOST—DELETE |
+
+### Schema Clarifications (2025-12-13)
+
+**What IS in the schema** (all derivable):
+
+| Field            | Location                             | Description                        |
+| ---------------- | ------------------------------------ | ---------------------------------- |
+| `tiers[]`        | `SequenceUnitsResponseSchema`        | Array with `tierTitle`, `tierSlug` |
+| `examBoardTitle` | `LessonSearchResponseSchema.units[]` | String or null                     |
+| `ks4Options`     | Sequence schemas                     | Object with `title`, `slug`        |
+
+**What is NOT in the schema**:
+
+| Concept            | Reality                                  | Action                      |
+| ------------------ | ---------------------------------------- | --------------------------- |
+| `programmeFactors` | **Never existed** — was assumed to exist | **REMOVE** from code        |
+| `pathway`          | **NEVER EXISTED** — pure ghost concept   | **DELETE ALL REFERENCES**   |
+| `tier` standalone  | Derivable from slugs                     | **DERIVE** from slug suffix |
+| `examBoard`        | Available as `examBoardTitle`            | **DERIVE** from searches    |
+
+### ⚠️ `pathway` is a Ghost Concept
+
+The `pathway` field **never existed** in the API. It was a misunderstanding. What actually exists is `ks4Options`:
+
+- **`ks4Options.slug`** — The KS4 study option identifier
+- **`ks4Options.title`** — Human-readable name
+
+All code referencing `pathway` or `extractPathway()` should be deleted.
+
+### Request: Flatten Programme Factors to Lesson/Unit Level
+
+**Problem**: Tier, exam board, and KS4 option information is essential for KS4 filtering, but currently requires traversing the sequence hierarchy to determine.
+
+**Request**: Add flat fields to lesson and unit responses:
+
+```json
+{
+  "lessonSlug": "quadratic-equations-factorising",
+  "tier": "higher", // NEW: flattened from tiers[]
+  "tierTitle": "Higher", // NEW: human-readable
+  "examBoardSlug": "aqa", // NEW: standardized slug
+  "examBoardTitle": "AQA", // EXISTS but inconsistent location
+  "ks4OptionSlug": "gcse-maths-higher-aqa", // NEW: from ks4Options
+  "ks4OptionTitle": "GCSE Maths Higher AQA" // NEW: from ks4Options
+}
+```
+
+**Benefits**:
+
+- Eliminates complex derivation logic in consumers
+- Enables direct ES facet filtering
+- Consistent across all resource types
+- Required for KS4 curriculum navigation
+
+**Priority**: HIGH — KS4 content is incomplete without these fields for filtering.
+
+---
+
 ## New Enhancement Request: Rerank-Optimized Summary Field (2025-12-11)
 
 **Context**: Phase 2 semantic search experimentation revealed that cross-encoder reranking models (like Elastic's `.rerank-v1`) require text fields of ~100-200 tokens for effective semantic signal. Full transcripts (5000+ tokens) cause 22+ second latency due to O(n²) complexity. Short titles (~10 tokens) lack semantic signal and actually degrade quality.

@@ -3,7 +3,7 @@
 **Status**: 🔄 IN PROGRESS  
 **Estimated Effort**: 2-3 days  
 **Prerequisites**: Phase 1 & 2 complete (two-way hybrid confirmed optimal)  
-**Last Updated**: 2025-12-12
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -53,13 +53,14 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 
 ### Part 3a: Feature Parity (After Verification Complete)
 
-| Task                       | Priority | Status     |
-| -------------------------- | -------- | ---------- |
-| OWA aliases import         | **HIGH** | 🔲 Pending |
-| `pupilLessonOutcome` field | **HIGH** | 🔲 Pending |
-| Display title fields       | Medium   | 🔲 Pending |
-| Unit enrichment fields     | Medium   | 🔲 Pending |
-| ADR: field additions       | Medium   | 🔲 Pending |
+| Task                                   | Priority     | Status     |
+| -------------------------------------- | ------------ | ---------- |
+| OWA aliases import                     | **HIGH**     | 🔲 Pending |
+| `pupilLessonOutcome` field             | **HIGH**     | 🔲 Pending |
+| **KS4 Options & Tiers indexing (NEW)** | **CRITICAL** | 🔲 Pending |
+| Display title fields                   | Medium       | 🔲 Pending |
+| Unit enrichment fields                 | Medium       | 🔲 Pending |
+| ADR: field additions                   | Medium       | 🔲 Pending |
 
 ### Part 3b: Semantic Summary Enhancement (NEW)
 
@@ -85,6 +86,11 @@ Before starting any work on this phase, read these foundation documents:
 1. `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
 2. `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
 3. `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
+
+**Source of truth** for all types and available data:
+
+- `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - **The OpenAPI schema**
+- `.agent/plans/external/upstream-api-metadata-wishlist.md` - Fields to request from upstream API
 
 **All quality gates must pass. No exceptions.**
 
@@ -421,12 +427,54 @@ From `/units/{unit}/summary`:
 | `priorKnowledgeRequirements[]` | Prerequisite discovery           |
 | `nationalCurriculumContent[]`  | NC alignment search              |
 
+### Task 5: Index KS4 Options and Tiers (NEW - CRITICAL)
+
+**Schema analysis (2025-12-13)** revealed these fields are essential for KS4 curriculum navigation:
+
+#### What IS in the Schema
+
+| Field               | Location                             | Purpose                                   |
+| ------------------- | ------------------------------------ | ----------------------------------------- |
+| `tiers[]`           | `SequenceUnitsResponseSchema`        | Array of tier objects (Foundation/Higher) |
+| `tiers[].tierTitle` | Tier object                          | Human-readable tier name                  |
+| `tiers[].tierSlug`  | Tier object                          | `"foundation"` or `"higher"`              |
+| `examBoardTitle`    | `LessonSearchResponseSchema.units[]` | `string \| null`                          |
+| `ks4Options`        | Sequence schemas                     | Contains `title` and `slug` for pathway   |
+| `ks4Options.slug`   | ks4Options                           | **This IS the "pathway" concept**         |
+| `ks4Options.title`  | ks4Options                           | Human-readable pathway name               |
+
+#### Schema Clarifications
+
+**IMPORTANT**: Previous code assumed a `programmeFactors` object with `tier`, `examBoard`, and `pathway` fields. This object **does NOT exist** in the schema.
+
+| Concept            | Reality                                                 |
+| ------------------ | ------------------------------------------------------- |
+| `programmeFactors` | **Never existed** — remove any references               |
+| `pathway`          | Is `ks4Options.slug` — not a separate concept           |
+| `tier`             | Derive from `tiers[]` array or parse from sequence slug |
+| `examBoard`        | Use `examBoardTitle` from search results                |
+
+**Implementation**:
+
+1. Index `tiers[]` data for filtering (Foundation vs Higher)
+2. Index `ks4Options` for pathway filtering
+3. Use `examBoardTitle` for exam board facets
+4. Update extractors to use actual schema fields
+5. Document any derivations in upstream wishlist
+
+**Benefit**: Enables critical KS4 filtering for GCSE content (tiers, exam boards, pathways).
+
 ### Success Criteria (3a)
 
 - [ ] OWA aliases merged into synonym system (subjects, key stages, exam boards)
 - [ ] `pupilLessonOutcome` indexed and queryable with BM25 boost
 - [ ] Display title fields (`subjectTitle`, `keyStageTitle`) added to lesson documents
 - [ ] Unit enrichment fields indexed (`description`, `whyThisWhyNow`, `categories`, `priorKnowledgeRequirements`, `nationalCurriculumContent`)
+- [ ] **KS4 Options indexed** (`ks4Options.slug`, `ks4Options.title`) for pathway filtering
+- [ ] **Tiers indexed** (`tierSlug`, `tierTitle`) for Foundation/Higher filtering
+- [ ] **Exam board indexed** (`examBoardTitle`) where available
+- [ ] Programme factor extractors use actual schema fields (not fictional `programmeFactors`)
+- [ ] Derived fields documented in upstream wishlist
 - [ ] ADR documenting field additions and rationale
 - [ ] All quality gates pass
 - [ ] Re-indexing completed with new fields populated
@@ -695,7 +743,7 @@ apps/oak-open-curriculum-semantic-search/smoke-tests/
 ## Dependencies
 
 - **Upstream**: None (uses existing Open API data)
-- **Blocks**: Phase 4 (Search UI), Phase 7 (Query Enhancement)
+- **Blocks**: Phase 4 (Search SDK + CLI), Phase 5 (Search UI), Phase 8 (Query Enhancement)
 - **Enables**: `semantic_search` MCP tool creation (coordinated in `.agent/plans/sdk-and-mcp-enhancements/`)
 
 ---

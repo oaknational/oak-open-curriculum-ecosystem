@@ -44,23 +44,48 @@ export function filterOperationsByIndex(
  * @returns The index name, or null if not found
  */
 function getIndexFromAction(action: unknown): string | null {
-  if (!isUnknownObject(action)) {
+  if (!isBulkIndexAction(action)) {
     return null;
   }
-  const indexAction = action.index;
-  if (!isUnknownObject(indexAction)) {
-    return null;
-  }
-  const indexName = indexAction._index;
-  return typeof indexName === 'string' ? indexName : null;
+  return action.index._index;
 }
 
 /**
- * Type guard to check if a value is a non-null object.
+ * Shape of a bulk index action's index property.
+ * Used only for bulk operation filtering - not a general-purpose type.
+ */
+interface BulkActionIndex {
+  readonly _index: string;
+}
+
+/**
+ * Shape of a bulk index action used in ES bulk operations.
+ * Used only for bulk operation filtering - not a general-purpose type.
+ */
+interface BulkIndexAction {
+  readonly index: BulkActionIndex;
+}
+
+/**
+ * Type guard to check if a value is a bulk index action.
+ * Narrows directly to BulkIndexAction without intermediate generic types.
  *
  * @param value - The value to check
- * @returns True if the value is a non-null object
+ * @returns True if the value is a bulk index action with _index property
  */
-function isUnknownObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isBulkIndexAction(value: unknown): value is BulkIndexAction {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  if (!('index' in value)) {
+    return false;
+  }
+  const indexProp = value.index;
+  if (typeof indexProp !== 'object' || indexProp === null) {
+    return false;
+  }
+  if (!('_index' in indexProp)) {
+    return false;
+  }
+  return typeof indexProp._index === 'string';
 }

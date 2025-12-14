@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { z } from 'zod';
 import { optionalEnv } from '../../env';
 import { getZeroHitRecent, getZeroHitSummary, recordZeroHitEvent } from '../zero-hit-store';
 import {
@@ -10,13 +11,19 @@ import type { SearchScope } from '../../../types/oak';
 
 type ZeroHitScope = SearchScope;
 
-interface WebhookPayload {
-  scope: ZeroHitScope;
-  text: string;
-  indexVersion: string;
-  filters?: Record<string, string>;
-  timestamp?: number;
-}
+/**
+ * Zod schema for zero-hit webhook payload.
+ * Validates external input at the API boundary.
+ */
+const WebhookPayloadSchema = z.object({
+  scope: z.enum(['lessons', 'units', 'sequences']),
+  text: z.string().min(1),
+  indexVersion: z.string().min(1),
+  filters: z.record(z.string(), z.string()).optional(),
+  timestamp: z.number().nonnegative().optional(),
+});
+
+type WebhookPayload = z.infer<typeof WebhookPayloadSchema>;
 
 export async function handleZeroHitSummary(request: NextRequest): Promise<Response> {
   const envVars = optionalEnv();
@@ -98,87 +105,14 @@ interface DisabledSummary {
   latestIndexVersion: string | null;
 }
 
-type JsonObject = Record<string, unknown>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
-
-type StringMap = Record<string, string>;
-
+/**
+ * Parses and validates webhook payload using Zod schema.
+ * Returns null if validation fails.
+ */
 function parseWebhookPayload(value: unknown): WebhookPayload | null {
-  if (!isJsonObject(value)) {
+  const result = WebhookPayloadSchema.safeParse(value);
+  if (!result.success) {
     return null;
   }
-
-  const base = extractBaseFields(value);
-  if (!base) {
-    return null;
-  }
-
-  const filters = extractFilters(value.filters);
-  if (filters === null) {
-    return null;
-  }
-
-  const timestamp = extractTimestamp(value.timestamp);
-  if (timestamp === null) {
-    return null;
-  }
-
-  return {
-    scope: base.scope,
-    text: base.text,
-    indexVersion: base.indexVersion,
-    filters: filters ?? undefined,
-    timestamp: timestamp ?? undefined,
-  };
-}
-
-function extractBaseFields(
-  value: JsonObject,
-): { scope: ZeroHitScope; text: string; indexVersion: string } | null {
-  const { scope, text, indexVersion } = value;
-  if (!isScope(scope) || !isValidString(text) || !isValidString(indexVersion)) {
-    return null;
-  }
-  return { scope, text, indexVersion };
-}
-
-function extractFilters(input: unknown): StringMap | undefined | null {
-  if (input === undefined) {
-    return undefined;
-  }
-  if (!isJsonObject(input)) {
-    return null;
-  }
-  const result: StringMap = {};
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [key, entry] of Object.entries(input)) {
-    if (typeof entry !== 'string') {
-      return null;
-    }
-    result[key] = entry;
-  }
-  return result;
-}
-
-function extractTimestamp(input: unknown): number | undefined | null {
-  if (input === undefined) {
-    return undefined;
-  }
-  if (typeof input !== 'number' || !Number.isFinite(input) || input < 0) {
-    return null;
-  }
-  return input;
-}
-
-function isJsonObject(value: unknown): value is JsonObject {
-  return typeof value === 'object' && value !== null;
-}
-
-function isScope(value: unknown): value is ZeroHitScope {
-  return (
-    typeof value === 'string' && (value === 'lessons' || value === 'units' || value === 'sequences')
-  );
-}
-
-function isValidString(value: unknown): value is string {
-  return typeof value === 'string' && value.length > 0;
+  return result.data;
 }

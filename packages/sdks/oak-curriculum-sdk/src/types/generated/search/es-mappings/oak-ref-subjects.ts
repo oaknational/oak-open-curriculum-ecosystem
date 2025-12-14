@@ -79,9 +79,6 @@ export const OAK_REF_SUBJECTS_MAPPING = {
       has_tiers: {
         type: 'boolean',
       },
-      has_exam_boards: {
-        type: 'boolean',
-      },
       subject_url: {
         type: 'keyword',
         ignore_above: 1024,

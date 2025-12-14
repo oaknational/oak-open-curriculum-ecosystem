@@ -4,10 +4,20 @@ import {
   lessonSummarySchema,
   subjectSequencesSchema,
   unitSummarySchema,
+  sequenceUnitsSchema,
   type SearchSubjectSequences,
+  type SearchUnitSummary,
+  type SearchLessonSummary,
+  type SequenceUnitsResponse,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
-import { isKeyStage, isSubject } from '../../adapters/sdk-guards';
+import {
+  ensureKeyStage,
+  ensureNonEmptyString,
+  ensureSubject,
+  getRecordKeys,
+  parseStringKeyedObject,
+} from './sandbox-fixture-validation';
 
 /**
  * Canonical unit descriptor extracted from the sandbox fixture payloads.
@@ -38,8 +48,6 @@ interface FixtureLessonTranscript {
   readonly vtt: string;
 }
 
-type UnknownFixtureRecord = Readonly<Record<string, unknown>>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
-
 /**
  * Aggregated snapshot of all parsed fixture records.
  */
@@ -48,11 +56,11 @@ export interface FixtureData {
   readonly subjects: readonly SearchSubjectSlug[];
   readonly units: readonly FixtureUnitDescriptor[];
   readonly lessons: readonly FixtureLessonGroup[];
-  readonly unitSummaries: ReadonlyMap<string, unknown>;
-  readonly lessonSummaries: ReadonlyMap<string, unknown>;
+  readonly unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
+  readonly lessonSummaries: ReadonlyMap<string, SearchLessonSummary>;
   readonly lessonTranscripts: ReadonlyMap<string, FixtureLessonTranscript>;
   readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences>;
-  readonly sequenceUnits: ReadonlyMap<string, unknown>;
+  readonly sequenceUnits: ReadonlyMap<string, SequenceUnitsResponse>;
 }
 
 /**
@@ -102,7 +110,7 @@ function parseUnits(value: unknown): FixtureUnitDescriptor[] {
 }
 
 function parseUnitDescriptor(value: unknown): FixtureUnitDescriptor {
-  const record = assertRecord(value, 'unit fixture entries must be objects');
+  const record = parseStringKeyedObject(value, 'unit fixture entries must be objects');
   return {
     keyStage: ensureKeyStage(record.keyStage, 'Invalid unit keyStage value'),
     subject: ensureSubject(record.subject, 'Invalid unit subject value'),
@@ -119,7 +127,7 @@ function parseLessonGroups(value: unknown): FixtureLessonGroup[] {
 }
 
 function parseLessonGroup(value: unknown): FixtureLessonGroup {
-  const record = assertRecord(value, 'lesson group entries must be objects');
+  const record = parseStringKeyedObject(value, 'lesson group entries must be objects');
   const lessonsValue = record.lessons;
   if (!Array.isArray(lessonsValue)) {
     throw new Error('lessons must be an array within lesson groups');
@@ -134,7 +142,7 @@ function parseLessonGroup(value: unknown): FixtureLessonGroup {
 }
 
 function parseLessonDescriptor(value: unknown): { lessonSlug: string; lessonTitle: string } {
-  const record = assertRecord(value, 'lesson descriptors must be objects');
+  const record = parseStringKeyedObject(value, 'lesson descriptors must be objects');
   return {
     lessonSlug: ensureNonEmptyString(
       record.lessonSlug,
@@ -147,32 +155,36 @@ function parseLessonDescriptor(value: unknown): { lessonSlug: string; lessonTitl
   };
 }
 
-function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
-  const record = assertRecord(value, 'unit summaries must be an object keyed by slug');
-  const entries = new Map<string, unknown>();
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [slug, summary] of Object.entries(record)) {
-    entries.set(slug, unitSummarySchema.parse(summary));
+function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, SearchUnitSummary> {
+  const record = parseStringKeyedObject(value, 'unit summaries must be an object keyed by slug');
+  const entries = new Map<string, SearchUnitSummary>();
+  for (const slug of getRecordKeys(record)) {
+    entries.set(slug, unitSummarySchema.parse(record[slug]));
   }
   return entries;
 }
 
-function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
-  const record = assertRecord(value, 'lesson summaries must be an object keyed by slug');
-  const entries = new Map<string, unknown>();
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [slug, summary] of Object.entries(record)) {
-    entries.set(slug, lessonSummarySchema.parse(summary));
+function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, SearchLessonSummary> {
+  const record = parseStringKeyedObject(value, 'lesson summaries must be an object keyed by slug');
+  const entries = new Map<string, SearchLessonSummary>();
+  for (const slug of getRecordKeys(record)) {
+    entries.set(slug, lessonSummarySchema.parse(record[slug]));
   }
   return entries;
 }
 
 function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTranscript> {
-  const record = assertRecord(value, 'lesson transcripts must be an object keyed by slug');
+  const record = parseStringKeyedObject(
+    value,
+    'lesson transcripts must be an object keyed by slug',
+  );
   const entries = new Map<string, FixtureLessonTranscript>();
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [slug, transcriptValue] of Object.entries(record)) {
-    const transcript = assertRecord(transcriptValue, `Invalid transcript entry for ${slug}`);
+  for (const slug of getRecordKeys(record)) {
+    const transcriptValue = record[slug];
+    const transcript = parseStringKeyedObject(
+      transcriptValue,
+      `Invalid transcript entry for ${slug}`,
+    );
     entries.set(slug, {
       transcript: ensureNonEmptyString(
         transcript.transcript,
@@ -187,53 +199,29 @@ function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTr
 function parseSubjectSequenceMap(
   value: unknown,
 ): ReadonlyMap<SearchSubjectSlug, SearchSubjectSequences> {
-  const record = assertRecord(value, 'subject sequences must be an object keyed by subject');
+  const record = parseStringKeyedObject(
+    value,
+    'subject sequences must be an object keyed by subject',
+  );
   const entries = new Map<SearchSubjectSlug, SearchSubjectSequences>();
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [slug, sequences] of Object.entries(record)) {
+  for (const slug of getRecordKeys(record)) {
     const subject = ensureSubject(
       slug,
       `Invalid subject key in subject sequences fixture: ${slug}`,
     );
-    entries.set(subject, subjectSequencesSchema.parse(sequences));
+    entries.set(subject, subjectSequencesSchema.parse(record[slug]));
   }
   return entries;
 }
 
-function parseSequenceUnitsMap(value: unknown): ReadonlyMap<string, unknown> {
-  const record = assertRecord(value, 'sequence units must be an object keyed by sequence slug');
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  return new Map<string, unknown>(Object.entries(record));
-}
-
-function assertRecord(value: unknown, errorMessage: string): UnknownFixtureRecord {
-  if (!isRecord(value)) {
-    throw new Error(errorMessage);
+function parseSequenceUnitsMap(value: unknown): ReadonlyMap<string, SequenceUnitsResponse> {
+  const record = parseStringKeyedObject(
+    value,
+    'sequence units must be an object keyed by sequence slug',
+  );
+  const entries = new Map<string, SequenceUnitsResponse>();
+  for (const key of getRecordKeys(record)) {
+    entries.set(key, sequenceUnitsSchema.parse(record[key]));
   }
-  return value;
-}
-
-function ensureKeyStage(value: unknown, errorMessage: string): KeyStage {
-  if (typeof value !== 'string' || !isKeyStage(value)) {
-    throw new Error(errorMessage);
-  }
-  return value;
-}
-
-function ensureSubject(value: unknown, errorMessage: string): SearchSubjectSlug {
-  if (typeof value !== 'string' || !isSubject(value)) {
-    throw new Error(errorMessage);
-  }
-  return value;
-}
-
-function ensureNonEmptyString(value: unknown, errorMessage: string): string {
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new Error(errorMessage);
-  }
-  return value;
-}
-
-function isRecord(value: unknown): value is UnknownFixtureRecord {
-  return typeof value === 'object' && value !== null;
+  return entries;
 }

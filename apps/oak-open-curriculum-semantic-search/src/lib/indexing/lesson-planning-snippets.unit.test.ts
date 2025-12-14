@@ -1,28 +1,14 @@
 import { describe, expect, it } from 'vitest';
+import type { SearchLessonSummary } from '../../types/oak';
 import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 
-interface LessonSummaryFixture {
-  lessonTitle: string;
-  unitSlug: string;
-  unitTitle: string;
-  subjectSlug: string;
-  subjectTitle: string;
-  keyStageSlug: string;
-  keyStageTitle: string;
-  lessonKeywords: readonly { keyword: string; description: string }[];
-  keyLearningPoints: readonly { keyLearningPoint: string }[];
-  misconceptionsAndCommonMistakes: readonly { misconception: string; response: string }[];
-  pupilLessonOutcome: string;
-  teacherTips: readonly { teacherTip: string }[];
-  contentGuidance: readonly unknown[];
-  supervisionLevel: string;
-  downloadsAvailable: boolean;
-  canonicalUrl: string;
-}
-
-function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
-  const base: LessonSummaryFixture = {
+/**
+ * Builds a typed lesson summary fixture.
+ * Uses Zod schema parsing to ensure fixture matches SDK types.
+ */
+function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
+  const base = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
@@ -39,10 +25,11 @@ function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): Less
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    ...overrides,
   };
-  const summary: LessonSummaryFixture = { ...base, ...overrides };
-  void lessonSummarySchema.parse(summary);
-  return summary;
+  // Parse through schema to get properly typed result
+  const parsed = lessonSummarySchema.parse(base);
+  return parsed;
 }
 
 describe('selectLessonPlanningSnippet', () => {

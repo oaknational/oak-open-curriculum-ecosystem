@@ -3,6 +3,7 @@
  * @description Creates synonyms set and search indexes from SDK.
  * Mappings are generated at SDK type-gen time and imported here.
  */
+import { z } from 'zod';
 import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
 import {
   OAK_LESSONS_MAPPING,
@@ -25,6 +26,8 @@ const INDEX_MAPPINGS = [
 ] as const;
 
 const SYNONYM_SET_NAME = 'oak-syns';
+
+type IndexMapping = (typeof INDEX_MAPPINGS)[number]['mapping'];
 
 export interface SetupConfig {
   readonly elasticsearchUrl: string;
@@ -50,14 +53,14 @@ function makeHeaders(apiKey: string): Record<string, string> {
 }
 
 /** Generate Elasticsearch synonym set from SDK ontology data. */
-export function generateSynonymsPayload(): string {
-  return JSON.stringify(buildElasticsearchSynonyms());
+export function generateSynonymsPayload(): { payload: string; count: number } {
+  const synonyms = buildElasticsearchSynonyms();
+  return { payload: JSON.stringify(synonyms), count: synonyms.synonyms_set.length };
 }
 
 /** Create or update the oak-syns synonym set. */
 async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; count: number }> {
-  const synonymPayload = generateSynonymsPayload();
-  const synonymData = JSON.parse(synonymPayload) as { synonyms_set: unknown[] };
+  const { payload: synonymPayload, count } = generateSynonymsPayload();
   const url = `${config.elasticsearchUrl}/_synonyms/${SYNONYM_SET_NAME}`;
 
   const response = await fetch(url, {
@@ -70,7 +73,7 @@ async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; 
     const text = await response.text();
     throw new Error(`Failed to upsert synonyms: ${response.status} ${text}`);
   }
-  return { created: true, count: synonymData.synonyms_set.length };
+  return { created: true, count };
 }
 
 /** Delete an Elasticsearch index. */
@@ -93,23 +96,36 @@ function parseCreateIndexResponse(
     return { indexName, status: 'created', httpStatus: 200 };
   }
   if (status === 400) {
-    try {
-      const errorBody = JSON.parse(responseText) as { error?: { type?: string } };
-      if (errorBody.error?.type === 'resource_already_exists_exception') {
-        return { indexName, status: 'exists', httpStatus: 400 };
-      }
-    } catch {
-      // Not JSON, fall through to error
+    const parsed = safeJsonParse(responseText);
+    const errorBody = CreateIndexErrorSchema.safeParse(parsed);
+    if (errorBody.success && errorBody.data.error?.type === 'resource_already_exists_exception') {
+      return { indexName, status: 'exists', httpStatus: 400 };
     }
   }
   return { indexName, status: 'error', httpStatus: status, error: responseText };
 }
 
+function safeJsonParse(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+const CreateIndexErrorSchema = z.object({
+  error: z
+    .object({
+      type: z.string().optional(),
+    })
+    .optional(),
+});
+
 /** Create a single Elasticsearch index. */
 async function createIndex(
   config: SetupConfig,
   indexName: string,
-  mapping: object,
+  mapping: IndexMapping,
 ): Promise<IndexResult> {
   const url = `${config.elasticsearchUrl}/${indexName}`;
   const response = await fetch(url, {
@@ -172,15 +188,22 @@ export async function verifyConnection(config: SetupConfig): Promise<{
       const text = await response.text();
       return { connected: false, error: `${response.status}: ${text}` };
     }
-    const data = (await response.json()) as {
-      cluster_name?: string;
-      version?: { number?: string };
-    };
+    const raw: unknown = await response.json();
+    const data = ClusterInfoSchema.parse(raw);
     return { connected: true, clusterName: data.cluster_name, version: data.version?.number };
   } catch (error) {
     return { connected: false, error: error instanceof Error ? error.message : String(error) };
   }
 }
+
+const ClusterInfoSchema = z.object({
+  cluster_name: z.string().optional(),
+  version: z
+    .object({
+      number: z.string().optional(),
+    })
+    .optional(),
+});
 
 /** List current indexes and their document counts. */
 export async function listIndexes(
@@ -196,14 +219,19 @@ export async function listIndexes(
   if (!response.ok) {
     throw new Error(`Failed to list indexes: ${response.status}`);
   }
-  const data = (await response.json()) as readonly {
-    readonly index: string;
-    readonly health: string;
-    readonly 'docs.count': string;
-  }[];
+  const raw: unknown = await response.json();
+  const data = CatIndicesSchema.parse(raw);
   return data.map((idx) => ({
     index: idx.index,
     health: idx.health,
     docsCount: parseInt(idx['docs.count'], 10) || 0,
   }));
 }
+
+const CatIndicesSchema = z.array(
+  z.object({
+    index: z.string(),
+    health: z.string(),
+    'docs.count': z.string(),
+  }),
+);

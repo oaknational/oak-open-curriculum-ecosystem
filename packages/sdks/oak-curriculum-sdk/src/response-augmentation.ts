@@ -64,7 +64,9 @@ interface SubjectContext {
  * Extracts unit context from response data
  */
 function extractUnitContext(response: unknown): UnitContext | undefined {
-  if (!isNonNullObject(response)) return undefined;
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('subjectSlug' in response && 'phaseSlug' in response) {
     return {
       subjectSlug: typeof response.subjectSlug === 'string' ? response.subjectSlug : undefined,
@@ -78,7 +80,9 @@ function extractUnitContext(response: unknown): UnitContext | undefined {
  * Extracts subject context from response data
  */
 function extractSubjectContext(response: unknown): SubjectContext | undefined {
-  if (!isNonNullObject(response)) return undefined;
+  if (!isNonNullObject(response)) {
+    return undefined;
+  }
   if ('keyStageSlugs' in response && isReadonlyStringArray(response.keyStageSlugs)) {
     return { keyStageSlugs: response.keyStageSlugs };
   }

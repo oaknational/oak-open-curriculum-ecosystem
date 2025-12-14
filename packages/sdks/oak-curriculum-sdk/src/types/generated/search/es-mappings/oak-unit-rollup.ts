@@ -148,12 +148,6 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       tier: {
         type: 'keyword',
       },
-      exam_board: {
-        type: 'keyword',
-      },
-      pathway: {
-        type: 'keyword',
-      },
       doc_type: {
         type: 'keyword',
         normalizer: 'oak_lower',

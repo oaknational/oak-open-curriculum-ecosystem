@@ -1,5 +1,6 @@
 import { performance } from 'node:perf_hooks';
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
 import {
   createSequenceFacetDocuments,
   extractSequenceFacetSource,
@@ -28,7 +29,7 @@ interface BuildSequenceFacetSourcesOptions {
 
 export async function buildSequenceFacetSources(
   fetchSequenceUnits: SequenceUnitsFetcher,
-  sequences: readonly unknown[],
+  sequences: readonly SubjectSequenceEntry[],
   options?: BuildSequenceFacetSourcesOptions,
 ): Promise<Map<string, SequenceFacetSource>> {
   const sources = new Map<string, SequenceFacetSource>();
@@ -64,9 +65,9 @@ export async function buildSequenceFacetSources(
 interface BuildSequenceFacetOpsArgs {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
-  sequences: readonly unknown[];
+  sequences: readonly SubjectSequenceEntry[];
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, unknown>;
+  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
 }
 
 export function buildSequenceFacetOps({

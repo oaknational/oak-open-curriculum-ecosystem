@@ -70,9 +70,12 @@ export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
+  sequenceUnitsSchema,
+  isSequenceUnitsResponse,
 } from './search-response-guards';
 export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
+  SequenceUnitsResponse,
 } from './search-response-guards';

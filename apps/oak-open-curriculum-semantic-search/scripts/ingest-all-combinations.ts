@@ -15,32 +15,19 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
+import { z } from 'zod';
+import {
+  KEY_STAGES,
+  SUBJECTS,
+  isKeyStage,
+  isSubject,
+  type KeyStage,
+  type Subject,
+} from '@oaknational/oak-curriculum-sdk';
 
-// All possible subjects from the OpenAPI schema
-// TODO: This should be generated from the OpenAPI schema
-const ALL_SUBJECTS = [
-  'art',
-  'citizenship',
-  'computing',
-  'cooking-nutrition',
-  'design-technology',
-  'english',
-  'french',
-  'geography',
-  'german',
-  'history',
-  'maths',
-  'music',
-  'physical-education',
-  'religious-education',
-  'rshe-pshe',
-  'science',
-  'spanish',
-] as const;
+const ALL_SUBJECTS = SUBJECTS;
 
-// All possible key stages
-// TODO: This should be generated from the OpenAPI schema
-const ALL_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+const ALL_KEY_STAGES = KEY_STAGES;
 
 // All possible index kinds
 // TODO: This should be generated from the OpenAPI schema
@@ -52,36 +39,45 @@ const ALL_INDEX_KINDS = [
   'sequence_facets',
 ] as const;
 
-type Subject = (typeof ALL_SUBJECTS)[number];
-type KeyStage = (typeof ALL_KEY_STAGES)[number];
-type IndexKind = (typeof ALL_INDEX_KINDS)[number];
+const SubjectSchema = z.custom<Subject>((value) => typeof value === 'string' && isSubject(value), {
+  message: 'Invalid subject',
+});
 
-interface Combination {
-  subject: Subject;
-  keyStage: KeyStage;
-  index: IndexKind;
-  id: string; // Unique identifier for this combination
-}
+const KeyStageSchema = z.custom<KeyStage>(
+  (value) => typeof value === 'string' && isKeyStage(value),
+  { message: 'Invalid key stage' },
+);
 
-interface CombinationResult {
-  combination: Combination;
-  status: 'pending' | 'running' | 'success' | 'failed' | 'skipped';
-  startedAt?: string;
-  completedAt?: string;
-  exitCode?: number;
-  error?: string;
-  documentsIngested?: number;
-}
+const IndexKindSchema = z.enum(ALL_INDEX_KINDS);
 
-interface ProgressState {
-  startedAt: string;
-  lastUpdatedAt: string;
-  totalCombinations: number;
-  completed: number;
-  failed: number;
-  skipped: number;
-  results: CombinationResult[];
-}
+const CombinationSchema = z.object({
+  subject: SubjectSchema,
+  keyStage: KeyStageSchema,
+  index: IndexKindSchema,
+  id: z.string(),
+});
+type Combination = z.infer<typeof CombinationSchema>;
+
+const CombinationResultSchema = z.object({
+  combination: CombinationSchema,
+  status: z.enum(['pending', 'running', 'success', 'failed', 'skipped']),
+  startedAt: z.string().optional(),
+  completedAt: z.string().optional(),
+  exitCode: z.number().int().optional(),
+  error: z.string().optional(),
+  documentsIngested: z.number().int().optional(),
+});
+
+const ProgressStateSchema = z.object({
+  startedAt: z.string(),
+  lastUpdatedAt: z.string(),
+  totalCombinations: z.number().int().nonnegative(),
+  completed: z.number().int().nonnegative(),
+  failed: z.number().int().nonnegative(),
+  skipped: z.number().int().nonnegative(),
+  results: z.array(CombinationResultSchema),
+});
+type ProgressState = z.infer<typeof ProgressStateSchema>;
 
 const PROGRESS_FILE = join(process.cwd(), '.ingest-progress.json');
 
@@ -124,7 +120,8 @@ function loadProgress(): ProgressState {
   }
 
   const json = readFileSync(PROGRESS_FILE, 'utf-8');
-  return JSON.parse(json) as ProgressState;
+  const parsed: unknown = JSON.parse(json);
+  return ProgressStateSchema.parse(parsed);
 }
 
 /**

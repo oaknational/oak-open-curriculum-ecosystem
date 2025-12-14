@@ -1,9 +1,9 @@
+import type { SearchLessonSummary } from '../../types/oak';
 import { extractLessonPlanningFields, extractPassage } from './document-transforms';
-import { expectLessonSummaryString } from './document-transform-helpers';
 
 /** Parameters for selecting a formatted lesson-planning snippet. */
 export interface SelectLessonPlanningSnippetParams {
-  summary: unknown;
+  summary: SearchLessonSummary;
   transcript: string;
 }
 
@@ -17,15 +17,14 @@ export function selectLessonPlanningSnippet({
 }: SelectLessonPlanningSnippetParams): string {
   const planningSections = collectLessonPlanningSections(summary);
   if (planningSections.length === 0) {
-    const lessonTitle = expectLessonSummaryString(summary, 'lessonTitle', 'lesson title');
     throw new Error(
-      `Lesson planning data missing for ${lessonTitle}; add lesson planning snippets upstream. Transcript excerpt: ${extractPassage(transcript)}`,
+      `Lesson planning data missing for ${summary.lessonTitle}; add lesson planning snippets upstream. Transcript excerpt: ${extractPassage(transcript)}`,
     );
   }
   return planningSections.join('\n\n');
 }
 
-function collectLessonPlanningSections(summary: unknown): string[] {
+function collectLessonPlanningSections(summary: SearchLessonSummary): string[] {
   const sections: string[] = [];
   const fields = extractLessonPlanningFields(summary);
   appendSection('keywords', fields.lessonKeywords, sections);

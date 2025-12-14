@@ -76,6 +76,38 @@ export function SearchFixtureModeToggle({
   );
 }
 
+async function persistFixtureModeChange(params: {
+  readonly mode: FixtureMode;
+  readonly previousMode: FixtureMode;
+  readonly router: ReturnType<typeof useRouter>;
+  readonly setMode: (mode: FixtureMode) => void;
+  readonly setStatusMessage: (message: string) => void;
+  readonly onModeChange?: (mode: FixtureMode) => void;
+}): Promise<void> {
+  const { mode, previousMode, router, setMode, setStatusMessage, onModeChange } = params;
+
+  try {
+    await setFixtureMode(mode);
+    router.refresh();
+  } catch (error) {
+    console.error('Failed to update fixture mode', error);
+    setMode(previousMode);
+    setStatusMessage('Failed to update fixture mode.');
+    onModeChange?.(previousMode);
+  }
+}
+
+function syncFixtureMode(
+  initialMode: FixtureMode,
+  setMode: (mode: FixtureMode) => void,
+  setStatusMessage: (message: string) => void,
+  onModeChange?: (mode: FixtureMode) => void,
+): void {
+  setMode(initialMode);
+  setStatusMessage(resolveStatusMessage(initialMode));
+  onModeChange?.(initialMode);
+}
+
 function useFixtureModeToggle(
   initialMode: FixtureMode,
   onModeChange?: (mode: FixtureMode) => void,
@@ -86,16 +118,9 @@ function useFixtureModeToggle(
   const [isPending, startTransition] = useTransition();
   const summaryId = useId();
 
-  // Sync props to state when parent changes initialMode.
-  // This is the "semi-controlled" pattern for components that maintain local state
-  // but also respond to prop-driven resets. Alternative patterns (key-based reset)
-  // would require parent component changes.
+  // Sync prop-driven resets for this semi-controlled component.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- Prop-to-state sync for semi-controlled component; alternative is key-based reset which requires parent changes
-    setMode(initialMode);
-
-    setStatusMessage(resolveStatusMessage(initialMode));
-    onModeChange?.(initialMode);
+    syncFixtureMode(initialMode, setMode, setStatusMessage, onModeChange);
   }, [initialMode, onModeChange]);
 
   const handleSelect = useCallback(
@@ -107,25 +132,23 @@ function useFixtureModeToggle(
       setMode(nextMode);
       setStatusMessage(resolveStatusMessage(nextMode));
       onModeChange?.(nextMode);
-      startTransition(async () => {
-        try {
-          await setFixtureMode(nextMode);
-          router.refresh();
-        } catch (error) {
-          console.error('Failed to update fixture mode', error);
-          setMode(previousMode);
-          setStatusMessage('Failed to update fixture mode.');
-          onModeChange?.(previousMode);
-        }
+      startTransition(() => {
+        void persistFixtureModeChange({
+          mode: nextMode,
+          previousMode,
+          router,
+          setMode,
+          setStatusMessage,
+          onModeChange,
+        });
       });
     },
     [mode, onModeChange, router, startTransition],
   );
 
-  const summaryLabel = resolveSummaryLabel(mode);
   return {
     mode,
-    summaryLabel,
+    summaryLabel: resolveSummaryLabel(mode),
     summaryId,
     handleSelect,
     isPending,

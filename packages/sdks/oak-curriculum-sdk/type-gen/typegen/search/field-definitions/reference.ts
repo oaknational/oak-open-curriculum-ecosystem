@@ -23,8 +23,8 @@ import type { IndexFieldDefinitions } from './types.js';
  * Stores subject metadata with aggregated counts for navigation and filtering.
  * Subjects are the top-level curriculum organisation (Maths, English, Science, etc.).
  *
- * Contains 9 fields:
- * - 9 required fields
+ * Contains 8 fields:
+ * - 8 required fields
  * - 0 optional fields
  *
  * @see SearchRefSubjectsIndexDocSchema - Generated Zod schema
@@ -38,7 +38,6 @@ export const REF_SUBJECTS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_count', zodType: 'number', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },
   { name: 'has_tiers', zodType: 'boolean', optional: false },
-  { name: 'has_exam_boards', zodType: 'boolean', optional: false },
   { name: 'subject_url', zodType: 'string', optional: false },
 ] as const;
 

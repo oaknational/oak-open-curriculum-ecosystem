@@ -1,73 +1,23 @@
 import { describe, expect, it } from 'vitest';
+import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
 import {
   lessonSummarySchema,
   unitSummarySchema,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import {
   extractLessonPlanningFields,
-  extractMisconceptions,
-  extractUnitLessons,
-  resolveLessonSummaryIdentifiers,
-  resolveUnitSummaryIdentifiers,
+  extractLessonDocumentFields,
+  extractRollupDocumentFields,
   extractTier,
-  extractExamBoard,
-  extractPathway,
 } from './document-transform-helpers';
 
-interface UnitSummaryFixture {
-  unitSlug: string;
-  unitTitle: string;
-  yearSlug: string;
-  year: string | number;
-  phaseSlug: string;
-  subjectSlug: string;
-  keyStageSlug: string;
-  priorKnowledgeRequirements: readonly string[];
-  nationalCurriculumContent: readonly string[];
-  threads?: readonly { slug: string; title: string; order: number }[];
-  categories?: readonly { categoryTitle: string; categorySlug?: string }[];
-  unitLessons: readonly {
-    lessonSlug: string;
-    lessonTitle: string;
-    lessonOrder?: number;
-    state: 'published' | 'new';
-  }[];
-  canonicalUrl?: string;
-}
-
-interface LessonSummaryFixture {
-  lessonTitle: string;
-  unitSlug: string;
-  unitTitle: string;
-  subjectSlug: string;
-  subjectTitle: string;
-  keyStageSlug: string;
-  keyStageTitle: string;
-  lessonKeywords: readonly { keyword: string; description: string }[];
-  keyLearningPoints: readonly { keyLearningPoint: string }[];
-  misconceptionsAndCommonMistakes: readonly { misconception: string; response: string }[];
-  teacherTips: readonly { teacherTip: string }[];
-  contentGuidance:
-    | readonly {
-        contentGuidanceArea: string;
-        supervisionlevel_id: number;
-        contentGuidanceLabel: string;
-        contentGuidanceDescription: string;
-      }[]
-    | null;
-  pupilLessonOutcome?: string;
-  supervisionLevel?: string | null;
-  downloadsAvailable?: boolean;
-  canonicalUrl?: string;
-  programmeFactors?: {
-    tier?: string;
-    examBoard?: string;
-    pathway?: string;
-  };
-}
-
-function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSummaryFixture {
-  const base: UnitSummaryFixture = {
+/**
+ * Builds a typed unit summary fixture.
+ *
+ * Note: This fixture must match the shape expected by the SDK's unitSummarySchema.
+ */
+function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
+  const base = {
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
     yearSlug: 'year-6',
@@ -84,14 +34,20 @@ function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSumm
       { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', state: 'published' },
     ],
     canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+    ...overrides,
   };
-  const summary: UnitSummaryFixture = { ...base, ...overrides };
-  void unitSummarySchema.parse(summary);
-  return summary;
+  // Validate against schema to ensure fixture is correct
+  const parsed = unitSummarySchema.parse(base);
+  return parsed;
 }
 
-function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
-  const base: LessonSummaryFixture = {
+/**
+ * Builds a typed lesson summary fixture.
+ *
+ * Note: This fixture must match the shape expected by the SDK's lessonSummarySchema.
+ */
+function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
+  const base = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
@@ -120,69 +76,14 @@ function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): Less
     keyStageSlug: 'ks2',
     keyStageTitle: 'Key Stage 2',
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    ...overrides,
   };
-  const summary: LessonSummaryFixture = { ...base, ...overrides };
-  void lessonSummarySchema.parse(summary);
-  return summary;
+  // Validate against schema to ensure fixture is correct
+  const parsed = lessonSummarySchema.parse(base);
+  return parsed;
 }
 
 describe('document-transform-helpers', () => {
-  describe('resolveUnitSummaryIdentifiers', () => {
-    it('returns the canonical identifiers for a unit summary', () => {
-      const summary = buildUnitSummary();
-      const identifiers = resolveUnitSummaryIdentifiers(summary);
-
-      expect(identifiers.unitSlug).toBe('unit-slug');
-      expect(identifiers.unitTitle).toBe('Unit Title');
-      expect(identifiers.canonicalUrl).toBe('https://teachers.thenational.academy/units/unit-slug');
-    });
-
-    it('throws when the canonical URL is missing', () => {
-      const summary = buildUnitSummary({ canonicalUrl: undefined });
-      expect(() => resolveUnitSummaryIdentifiers(summary)).toThrow(/canonical url/i);
-    });
-  });
-
-  describe('resolveLessonSummaryIdentifiers', () => {
-    it('returns lesson planning identifiers', () => {
-      const summary = buildLessonSummary();
-      const identifiers = resolveLessonSummaryIdentifiers(summary);
-
-      expect(identifiers.unitSlug).toBe('unit-slug');
-      expect(identifiers.unitTitle).toBe('Unit Title');
-      expect(identifiers.canonicalUrl).toBe(
-        'https://teachers.thenational.academy/lessons/lesson-slug',
-      );
-    });
-
-    it('throws when the lesson canonical URL is missing', () => {
-      const summary = buildLessonSummary({ canonicalUrl: undefined });
-      expect(() => resolveLessonSummaryIdentifiers(summary)).toThrow(/canonical url/i);
-    });
-  });
-
-  describe('extractUnitLessons', () => {
-    it('filters out invalid lesson entries', () => {
-      const lessons = extractUnitLessons([
-        { lessonSlug: 'valid-lesson', lessonTitle: 'Valid Lesson', state: 'published' },
-        { lessonSlug: '', lessonTitle: 'Missing slug', state: 'published' },
-        { lessonSlug: 'missing-title', lessonTitle: '', state: 'published' },
-      ]);
-      expect(lessons).toEqual([{ lessonSlug: 'valid-lesson', lessonTitle: 'Valid Lesson' }]);
-    });
-  });
-
-  describe('extractMisconceptions', () => {
-    it('joins misconception-response pairs and skips incomplete entries', () => {
-      const summary = buildLessonSummary();
-      const misconceptions = extractMisconceptions([
-        ...summary.misconceptionsAndCommonMistakes,
-        { misconception: 'Missing response only', response: undefined },
-      ]);
-      expect(misconceptions).toEqual(['Confuse numerator → Explain with bar models']);
-    });
-  });
-
   describe('extractLessonPlanningFields', () => {
     it('normalises optional planning fields into string arrays', () => {
       const summary = buildLessonSummary();
@@ -194,66 +95,74 @@ describe('document-transform-helpers', () => {
       expect(fields.teacherTips).toEqual(['Model representations']);
       expect(fields.contentGuidance).toEqual(['Consider prior knowledge']);
     });
+
+    it('returns undefined for empty arrays', () => {
+      const summary = buildLessonSummary({
+        lessonKeywords: [],
+        keyLearningPoints: [],
+        misconceptionsAndCommonMistakes: [],
+        teacherTips: [],
+        contentGuidance: [],
+      });
+      const fields = extractLessonPlanningFields(summary);
+
+      expect(fields.lessonKeywords).toBeUndefined();
+      expect(fields.keyLearningPoints).toBeUndefined();
+      expect(fields.misconceptions).toBeUndefined();
+      expect(fields.teacherTips).toBeUndefined();
+      expect(fields.contentGuidance).toBeUndefined();
+    });
+  });
+
+  describe('extractLessonDocumentFields', () => {
+    it('extracts all lesson document fields', () => {
+      const summary = buildLessonSummary();
+      const fields = extractLessonDocumentFields(summary);
+
+      expect(fields.unitSlug).toBe('unit-slug');
+      expect(fields.unitTitle).toBe('Unit Title');
+      expect(fields.canonicalUrl).toBe('https://teachers.thenational.academy/lessons/lesson-slug');
+      expect(fields.lessonKeywords).toEqual(['fractions', 'ratio']);
+    });
+
+    it('throws when canonical URL is missing', () => {
+      const summary = buildLessonSummary({ canonicalUrl: undefined });
+      expect(() => extractLessonDocumentFields(summary)).toThrow(/canonical url/i);
+    });
+  });
+
+  describe('extractRollupDocumentFields', () => {
+    it('extracts all rollup document fields', () => {
+      const summary = buildUnitSummary();
+      const normaliseYears = (year: string | number, yearSlug: string) =>
+        yearSlug ? [String(year)] : [String(year)];
+      const fields = extractRollupDocumentFields(summary, normaliseYears);
+
+      expect(fields.unitSlug).toBe('unit-slug');
+      expect(fields.unitTitle).toBe('Unit Title');
+      expect(fields.canonicalUrl).toBe('https://teachers.thenational.academy/units/unit-slug');
+      expect(fields.lessonIds).toEqual(['lesson-1', 'lesson-2']);
+    });
+
+    it('throws when canonical URL is missing', () => {
+      const summary = buildUnitSummary({ canonicalUrl: undefined });
+      const normaliseYears = (year: string | number, yearSlug: string) =>
+        yearSlug ? [String(year)] : [String(year)];
+      expect(() => extractRollupDocumentFields(summary, normaliseYears)).toThrow(/canonical url/i);
+    });
   });
 
   describe('extractTier', () => {
-    it('extracts foundation tier from programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: { tier: 'foundation' } });
-      expect(extractTier(data)).toBe('foundation');
+    it('returns undefined when unitSlug does not encode a tier', () => {
+      const summary = buildLessonSummary();
+      expect(extractTier(summary)).toBeUndefined();
     });
 
-    it('extracts higher tier from programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: { tier: 'higher' } });
-      expect(extractTier(data)).toBe('higher');
-    });
-
-    it('returns undefined if no tier in programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: {} });
-      expect(extractTier(data)).toBeUndefined();
-    });
-
-    it('returns undefined if no programme factors', () => {
-      const data = buildLessonSummary();
-      expect(extractTier(data)).toBeUndefined();
-    });
-
-    it('returns undefined for invalid tier values', () => {
-      const data = buildLessonSummary({ programmeFactors: { tier: 'invalid' } });
-      expect(extractTier(data)).toBeUndefined();
-    });
-  });
-
-  describe('extractExamBoard', () => {
-    it('extracts exam board from programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: { examBoard: 'aqa' } });
-      expect(extractExamBoard(data)).toBe('aqa');
-    });
-
-    it('returns undefined if no exam board in programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: {} });
-      expect(extractExamBoard(data)).toBeUndefined();
-    });
-
-    it('returns undefined for empty string exam board', () => {
-      const data = buildLessonSummary({ programmeFactors: { examBoard: '' } });
-      expect(extractExamBoard(data)).toBeUndefined();
-    });
-  });
-
-  describe('extractPathway', () => {
-    it('extracts pathway from programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: { pathway: 'core' } });
-      expect(extractPathway(data)).toBe('core');
-    });
-
-    it('returns undefined if no pathway in programme factors', () => {
-      const data = buildLessonSummary({ programmeFactors: {} });
-      expect(extractPathway(data)).toBeUndefined();
-    });
-
-    it('returns undefined for empty string pathway', () => {
-      const data = buildLessonSummary({ programmeFactors: { pathway: '' } });
-      expect(extractPathway(data)).toBeUndefined();
+    it('derives foundation/higher from KS4-style unitSlug suffixes', () => {
+      expect(extractTier(buildLessonSummary({ unitSlug: 'maths-gcse-foundation' }))).toBe(
+        'foundation',
+      );
+      expect(extractTier(buildLessonSummary({ unitSlug: 'maths-gcse-higher' }))).toBe('higher');
     });
   });
 });

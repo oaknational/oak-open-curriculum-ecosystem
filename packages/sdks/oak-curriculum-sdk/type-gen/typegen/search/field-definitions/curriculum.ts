@@ -72,8 +72,6 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'lesson_dense_vector', zodType: 'array-number', optional: true },
   { name: 'title_dense_vector', zodType: 'array-number', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
-  { name: 'exam_board', zodType: 'string', optional: true },
-  { name: 'pathway', zodType: 'string', optional: true },
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
@@ -143,8 +141,6 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_dense_vector', zodType: 'array-number', optional: true },
   { name: 'rollup_dense_vector', zodType: 'array-number', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
-  { name: 'exam_board', zodType: 'string', optional: true },
-  { name: 'pathway', zodType: 'string', optional: true },
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 

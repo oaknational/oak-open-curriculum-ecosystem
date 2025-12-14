@@ -6,9 +6,11 @@ import {
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
+  SearchLessonSummary,
   SearchSubjectSlug,
   SearchUnitRollupDoc,
   SearchUnitsIndexDoc,
+  SearchUnitSummary,
 } from '../../types/oak';
 import {
   createLessonDocument,
@@ -30,60 +32,9 @@ const mockEsClient = {
   },
 } as never;
 
-interface UnitSummaryFixture {
-  unitSlug: string;
-  unitTitle: string;
-  yearSlug: string;
-  year: string | number;
-  phaseSlug: string;
-  subjectSlug: SearchSubjectSlug;
-  keyStageSlug: KeyStage;
-  notes?: string;
-  description?: string;
-  priorKnowledgeRequirements: readonly string[];
-  nationalCurriculumContent: readonly string[];
-  whyThisWhyNow?: string;
-  threads?: readonly { slug: string; title: string; order: number }[];
-  categories?: readonly { categoryTitle: string; categorySlug?: string }[];
-  unitLessons: readonly {
-    lessonSlug: string;
-    lessonTitle: string;
-    lessonOrder?: number;
-    state: 'published' | 'new';
-  }[];
-  canonicalUrl?: string;
-}
-
-interface LessonSummaryFixture {
-  lessonTitle: string;
-  unitSlug: string;
-  unitTitle: string;
-  subjectSlug: SearchSubjectSlug;
-  subjectTitle: string;
-  keyStageSlug: KeyStage;
-  keyStageTitle: string;
-  lessonKeywords?: readonly { keyword: string; description: string }[];
-  keyLearningPoints?: readonly { keyLearningPoint: string }[];
-  misconceptionsAndCommonMistakes?: readonly { misconception: string; response: string }[];
-  pupilLessonOutcome?: string;
-  teacherTips?: readonly { teacherTip: string }[];
-  contentGuidance?:
-    | readonly {
-        contentGuidanceArea: string;
-        supervisionlevel_id: number;
-        contentGuidanceLabel: string;
-        contentGuidanceDescription: string;
-      }[]
-    | null;
-  supervisionLevel?: string | null;
-  downloadsAvailable: boolean;
-  canonicalUrl?: string;
-  programmeFactors?: {
-    tier?: string;
-    examBoard?: string;
-    pathway?: string;
-  };
-}
+// Use SDK types directly - the local interfaces were redundant
+type UnitSummaryFixture = SearchUnitSummary;
+type LessonSummaryFixture = SearchLessonSummary;
 
 function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSummaryFixture {
   const base: UnitSummaryFixture = {
@@ -283,13 +234,9 @@ describe('createLessonDocument', () => {
     expect(doc.content_guidance).toBeUndefined();
   });
 
-  it('extracts tier, exam_board, and pathway from programme factors', async () => {
+  it('derives tier from unit slug when possible', async () => {
     const lessonSummary = buildLessonSummary({
-      programmeFactors: {
-        tier: 'foundation',
-        examBoard: 'aqa',
-        pathway: 'gcse',
-      },
+      unitSlug: 'maths-gcse-foundation',
     });
 
     const doc = await createLessonDocument({
@@ -305,8 +252,6 @@ describe('createLessonDocument', () => {
     });
 
     expect(doc.tier).toBe('foundation');
-    expect(doc.exam_board).toBe('aqa');
-    expect(doc.pathway).toBe('gcse');
   });
 
   it('populates lesson_semantic with transcript content for ELSER semantic search', async () => {

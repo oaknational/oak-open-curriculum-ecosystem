@@ -7,7 +7,12 @@
  * @module thread-and-pedagogical-extractors
  */
 
-import { isUnknownObject, safeArray, safeString } from './extraction-primitives';
+import type { SearchUnitSummary } from '../../types/oak';
+
+/**
+ * Thread entry structure from SDK unit summary.
+ */
+type ThreadEntry = NonNullable<SearchUnitSummary['threads']>[number];
 
 /**
  * Thread information extracted from unit summary.
@@ -31,26 +36,10 @@ export interface PedagogicalData {
   readonly nationalCurriculum: string[] | undefined;
 }
 
-/** Validates and extracts a single thread entry. */
-function extractSingleThread(
-  entry: unknown,
-): { slug: string; title: string; order: number } | undefined {
-  if (!isUnknownObject(entry)) {
-    return undefined;
-  }
-  const slug = safeString(entry.slug);
-  const title = safeString(entry.title);
-  const order = entry.order;
-  if (!slug || !title || typeof order !== 'number') {
-    return undefined;
-  }
-  return { slug, title, order };
-}
-
 /**
  * Extracts thread information (slugs, titles, orders) from threads array.
  *
- * @param value - Threads array from unit summary
+ * @param threads - Threads array from unit summary (typed SDK data)
  * @returns Thread info with slugs, titles, and orders
  *
  * @example
@@ -60,18 +49,19 @@ function extractSingleThread(
  * // { slugs: ['number'], titles: ['Number'], orders: [1] }
  * ```
  */
-export function extractThreadInfo(value: unknown): ThreadInfo {
+export function extractThreadInfo(threads: readonly ThreadEntry[] | undefined): ThreadInfo {
+  if (!threads || threads.length === 0) {
+    return { slugs: undefined, titles: undefined, orders: undefined };
+  }
+
   const slugs: string[] = [];
   const titles: string[] = [];
   const orders: number[] = [];
 
-  for (const entry of safeArray(value)) {
-    const thread = extractSingleThread(entry);
-    if (thread) {
-      slugs.push(thread.slug);
-      titles.push(thread.title);
-      orders.push(thread.order);
-    }
+  for (const thread of threads) {
+    slugs.push(thread.slug);
+    titles.push(thread.title);
+    orders.push(thread.order);
   }
 
   return {
@@ -81,22 +71,10 @@ export function extractThreadInfo(value: unknown): ThreadInfo {
   };
 }
 
-/** Extracts string array from raw array, filtering invalids. */
-function extractStringArray(rawArray: readonly unknown[]): string[] {
-  const result: string[] = [];
-  for (const item of rawArray) {
-    const str = safeString(item);
-    if (str) {
-      result.push(str);
-    }
-  }
-  return result;
-}
-
 /**
  * Extracts pedagogical data from unit summary.
  *
- * @param summary - Unit summary containing prior knowledge and national curriculum
+ * @param summary - Unit summary (typed SDK data)
  * @returns Pedagogical data for enriching rollup text
  *
  * @example
@@ -105,14 +83,15 @@ function extractStringArray(rawArray: readonly unknown[]): string[] {
  * // { priorKnowledge: ['Basic fractions'], nationalCurriculum: ['Number operations'] }
  * ```
  */
-export function extractPedagogicalData(summary: unknown): PedagogicalData {
-  const record = isUnknownObject(summary) ? summary : {};
-  const priorKnowledge = extractStringArray(safeArray(record.priorKnowledgeRequirements));
-  const nationalCurriculum = extractStringArray(safeArray(record.nationalCurriculumContent));
+export function extractPedagogicalData(summary: SearchUnitSummary): PedagogicalData {
+  const priorKnowledge =
+    summary.priorKnowledgeRequirements.length > 0 ? summary.priorKnowledgeRequirements : undefined;
+  const nationalCurriculum =
+    summary.nationalCurriculumContent.length > 0 ? summary.nationalCurriculumContent : undefined;
 
   return {
-    priorKnowledge: priorKnowledge.length > 0 ? priorKnowledge : undefined,
-    nationalCurriculum: nationalCurriculum.length > 0 ? nationalCurriculum : undefined,
+    priorKnowledge,
+    nationalCurriculum,
   };
 }
 

@@ -4,19 +4,26 @@
  * @see {@link ./fetch-error-handling.ts} for error handling helpers
  */
 
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type {
+  KeyStage,
+  SearchLessonSummary,
+  SearchSubjectSlug,
+  SearchUnitSummary,
+} from '../../types/oak';
 import { isLessonSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import { extractSequenceIds } from './document-transforms';
-import { expectUnitSummaryString, readUnitSummaryValue } from './document-transform-helpers';
+// extractSequenceIds no longer needed - using direct property access
 import { getIngestionErrorCollector } from './ingestion-error-collector';
 import type { IngestionContext } from './ingestion-error-types';
 import { handleFetchError } from './fetch-error-handling';
 import { sandboxLogger } from '../logger';
 
 /** Extract sequence IDs from a unit summary. */
-export function extractUnitSequenceIds(summary: unknown): string[] | undefined {
-  return extractSequenceIds(readUnitSummaryValue(summary, 'threads'));
+export function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
+  if (!summary.threads) {
+    return undefined;
+  }
+  return summary.threads.map((thread) => thread.slug);
 }
 
 /** Context for error tracking during lesson material fetch. */
@@ -36,12 +43,12 @@ function buildErrorContext(lessonSlug: string, context?: FetchContext): Ingestio
   };
 }
 
-/** Validate summary candidate and log error if invalid. */
+/** Validate summary candidate and log error if invalid. Type guard version. */
 function validateSummary(
   summary: unknown,
   lessonSlug: string,
   errorContext: IngestionContext,
-): boolean {
+): summary is SearchLessonSummary {
   if (isLessonSummary(summary)) {
     return true;
   }
@@ -64,7 +71,7 @@ export async function fetchLessonMaterials(
   client: OakClient,
   lessonSlug: string,
   context?: FetchContext,
-): Promise<{ transcript: string; summary: unknown } | null> {
+): Promise<{ transcript: string; summary: SearchLessonSummary } | null> {
   const errorContext = buildErrorContext(lessonSlug, context);
   const errorConfig = {
     errorCollector: getIngestionErrorCollector(),
@@ -95,6 +102,7 @@ export async function fetchLessonMaterials(
     summaryPromise,
   ]);
 
+  // validateSummary is a type guard - after this check, summaryCandidate is SearchLessonSummary
   if (summaryCandidate === null || !validateSummary(summaryCandidate, lessonSlug, errorContext)) {
     return null;
   }
@@ -104,26 +112,16 @@ export async function fetchLessonMaterials(
 
 /** Validate that a unit summary matches the expected subject and key stage. */
 export function ensureUnitSummaryMatchesContext(
-  summary: unknown,
+  summary: SearchUnitSummary,
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
 ): void {
-  const unitSlug = expectUnitSummaryString(summary, 'unitSlug', 'unit summary slug');
-  const subjectSlug = expectUnitSummaryString(
-    summary,
-    'subjectSlug',
-    `subject slug for unit ${unitSlug}`,
-  );
+  const { unitSlug, subjectSlug, keyStageSlug } = summary;
   if (subjectSlug !== subject) {
     throw new Error(
       `Unit summary subject mismatch for ${unitSlug}: expected ${subject}, received ${subjectSlug}`,
     );
   }
-  const keyStageSlug = expectUnitSummaryString(
-    summary,
-    'keyStageSlug',
-    `key stage slug for unit ${unitSlug}`,
-  );
   if (keyStageSlug !== keyStage) {
     throw new Error(
       `Unit summary key stage mismatch for ${unitSlug}: expected ${keyStage}, received ${keyStageSlug}`,

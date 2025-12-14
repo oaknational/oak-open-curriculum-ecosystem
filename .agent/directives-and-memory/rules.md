@@ -65,13 +65,13 @@ Use the right tool for the job:
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }`, or `Object.*` methods, or `Reflect.*` methods - they ALL disable the type system. The goal is to preserve type information as much as possible, not to work around this rule.
+- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }`, or `Object.*` methods, or `Reflect.*` methods, or `isObject` type predicates or similar - they ALL disable the type system, they are all sources of entropy. The goal is to preserve type information as much as possible, not to work around this rule.
 - **Preserve type information** - NEVER widen types by assigning to broader types like `string` or `number`. If you have a literal type `'/api/path'`, keep it as that literal, don't accept it as `string`. Type information flows from data structures with `as const` through to usage. Every `: string` or `: number` parameter destroys type information irreversibly
 - **Single source of truth for types** - Define types ONCE, and import them consistently
 - **Use library types directly where possible** - don't make up a type when you can use a library type
 - **Validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation, use Zod where appropriate
 - **Type imports must be labelled with `type`** - e.g. `import type { Type } from 'package'` or `import { type Type } from 'package'`
-- **Don't use type aliases, use good naming** Don't use type aliases, use good naming.
+- **Don't use type aliases, use good naming** Don't use type aliases, use good naming. Type aliases are a source of entropy.
 
 ### Testing
 

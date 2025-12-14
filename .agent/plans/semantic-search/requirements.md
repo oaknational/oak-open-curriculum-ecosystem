@@ -2,7 +2,7 @@
 
 **Purpose**: Business context, success criteria, risks, and strategic goals for semantic search implementation  
 **Audience**: AI agents and developers starting fresh on semantic search work  
-**Last Updated**: 2025-12-10
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -64,26 +64,27 @@ Remaining work is organized into three parts:
 
 Phase 3 proves the search infrastructure works correctly. MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
-#### Part 2: Enhancements (Phases 4-9)
+#### Part 2: Enhancements (Phases 4-10)
 
-| Deliverable           | Phase | Success Criteria                                  |
-| --------------------- | ----- | ------------------------------------------------- |
-| **Search UI**         | 4     | Functional search experience, portable components |
-| **Cloud Functions**   | 5     | HTTP-based ingestion control, timeout-safe        |
-| **Admin Dashboard**   | 6     | Browser-based ingestion control, metrics display  |
-| **Query Enhancement** | 7     | Production patterns, OWA compatibility            |
-| **Entity Extraction** | 8     | NER, concept graphs                               |
-| **Reference Indices** | 9     | Enriched results with titles, prerequisites, NC   |
+| Deliverable           | Phase | Success Criteria                                          |
+| --------------------- | ----- | --------------------------------------------------------- |
+| **Search SDK + CLI**  | 4     | SDK services + first-class local CLI for admin ops        |
+| **Search UI**         | 5     | Functional search experience, portable components         |
+| **Cloud Functions**   | 6     | (Future) HTTP-based ingestion control, timeout-safe       |
+| **Admin Dashboard**   | 7     | (Future) Browser-based ingestion control, metrics display |
+| **Query Enhancement** | 8     | Production patterns, OWA compatibility                    |
+| **Entity Extraction** | 9     | NER, concept graphs                                       |
+| **Reference Indices** | 10    | Enriched results with titles, prerequisites, NC           |
 
-**Phase 9 Impact**: Transforms `semantic_search` from raw slugs to enriched curriculum discovery (human-readable titles, prerequisites, NC alignment, glossary).
+**Phase 10 Impact**: Transforms `semantic_search` from raw slugs to enriched curriculum discovery (human-readable titles, prerequisites, NC alignment, glossary).
 
-#### Part 3: AI Integration (Phase 10+)
+#### Part 3: AI Integration (Phase 11+)
 
 | Deliverable         | Phase | Success Criteria                    |
 | ------------------- | ----- | ----------------------------------- |
-| **RAG**             | 10    | Retrieval-augmented generation      |
-| **Knowledge Graph** | 11    | Curriculum relationship graph       |
-| **LTR**             | 12    | Learning to rank with click signals |
+| **RAG**             | 11    | Retrieval-augmented generation      |
+| **Knowledge Graph** | 12    | Curriculum relationship graph       |
+| **LTR**             | 13    | Learning to rank with click signals |
 
 **Design Principles**:
 
@@ -373,7 +374,7 @@ Each phase should produce specific ADRs:
 | ADR-075 | Elastic Native ReRank Integration | 📋 Planned |
 | ADR-076 | Filtered kNN Query Optimization   | 📋 Planned |
 
-### Phase 4 ADRs (Entity Extraction)
+### Phase 9 ADRs (Entity Extraction)
 
 | ADR     | Topic                                  | Status     |
 | ------- | -------------------------------------- | ---------- |
@@ -381,16 +382,16 @@ Each phase should produce specific ADRs:
 | ADR-078 | Graph API for Curriculum Relationships | 📋 Planned |
 | ADR-079 | Enrich Processor for Reference Data    | 📋 Planned |
 
-### Phase 5-8 ADRs
+### Phase 10-13 ADRs
 
 | ADR     | Topic                                      | Phase |
 | ------- | ------------------------------------------ | ----- |
-| ADR-080 | Reference Indices for Enum Data            | 5     |
-| ADR-081 | ES Playground RAG Integration              | 6     |
-| ADR-082 | Chunked Transcript Storage (semantic_text) | 6     |
-| ADR-083 | Entity Resolution Strategy                 | 7     |
-| ADR-084 | Knowledge Graph Multi-Hop Queries          | 7     |
-| ADR-085 | Learning to Rank Foundations               | 8     |
+| ADR-080 | Reference Indices for Enum Data            | 10    |
+| ADR-081 | ES Playground RAG Integration              | 11    |
+| ADR-082 | Chunked Transcript Storage (semantic_text) | 11    |
+| ADR-083 | Entity Resolution Strategy                 | 12    |
+| ADR-084 | Knowledge Graph Multi-Hop Queries          | 12    |
+| ADR-085 | Learning to Rank Foundations               | 13    |
 
 ---
 

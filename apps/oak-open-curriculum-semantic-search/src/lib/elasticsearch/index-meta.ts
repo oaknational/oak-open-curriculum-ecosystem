@@ -129,11 +129,10 @@ export function createErrorFromException(error: unknown): IndexMetaError {
  * Type guard for Elasticsearch not-found errors.
  */
 function isNotFoundError(error: unknown): boolean {
-  if (typeof error !== 'object' || error === null) {
+  if (!isEsError(error)) {
     return false;
   }
-  const err = error as { meta?: { statusCode?: number } };
-  return err.meta?.statusCode === 404;
+  return error.meta?.statusCode === 404;
 }
 
 /**

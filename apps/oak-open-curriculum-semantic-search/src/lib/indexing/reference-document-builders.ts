@@ -27,7 +27,6 @@ export interface RefSubjectIndexDoc {
   readonly unit_count: number;
   readonly lesson_count: number;
   readonly has_tiers: boolean;
-  readonly has_exam_boards: boolean;
   readonly subject_url: string;
 }
 
@@ -70,7 +69,6 @@ export interface CreateRefSubjectDocumentParams {
   readonly unitCount: number;
   readonly lessonCount: number;
   readonly hasTiers: boolean;
-  readonly hasExamBoards: boolean;
 }
 
 /**
@@ -86,23 +84,14 @@ export interface CreateRefSubjectDocumentParams {
  *   unitCount: 120,
  *   lessonCount: 450,
  *   hasTiers: true,
- *   hasExamBoards: true,
  * });
  * ```
  */
 export function createRefSubjectDocument(
   params: CreateRefSubjectDocumentParams,
 ): RefSubjectIndexDoc {
-  const {
-    subjectSlug,
-    subjectTitle,
-    keyStages,
-    sequenceCount,
-    unitCount,
-    lessonCount,
-    hasTiers,
-    hasExamBoards,
-  } = params;
+  const { subjectSlug, subjectTitle, keyStages, sequenceCount, unitCount, lessonCount, hasTiers } =
+    params;
 
   const subjectUrl = `https://www.thenational.academy/teachers/subjects/${subjectSlug}`;
 
@@ -114,7 +103,6 @@ export function createRefSubjectDocument(
     unit_count: unitCount,
     lesson_count: lessonCount,
     has_tiers: hasTiers,
-    has_exam_boards: hasExamBoards,
     subject_url: subjectUrl,
   };
 }

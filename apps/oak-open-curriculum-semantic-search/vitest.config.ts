@@ -15,6 +15,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./test.setup.ts'],
     include: ['**/*.unit.test.{ts,tsx}', '**/*.integration.test.{ts,tsx}'],
+    // Force process isolation to prevent global state pollution between tests
+    // TODO: Refactor tests to use dependency injection instead of process.env mutation
+    isolate: true,
+    pool: 'forks',
     exclude: ['**/*.e2e.test.ts', 'node_modules', '.next', 'dist'],
     coverage: {
       provider: 'v8',

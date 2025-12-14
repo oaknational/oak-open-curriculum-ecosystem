@@ -1,9 +1,9 @@
-# Phase 4: Search UI
+# Phase 5: Search UI
 
 **Status**: 📋 PLANNED  
 **Estimated Effort**: 3-4 days  
 **Prerequisites**: Phase 3 (Multi-Index Search & Fields)  
-**Last Updated**: 2025-12-11
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -46,7 +46,7 @@ Create a comprehensive, functional search experience that prioritises **portabil
 | **Loading states**         | Skeleton/spinner during search             | **MEDIUM**   |
 | **Empty states**           | Clear messaging when no results            | **MEDIUM**   |
 
-### Out of Scope (Phase 4)
+### Out of Scope (Phase 5)
 
 - Oak brand styling (deferred to porting phase)
 - Advanced filtering (prerequisites, NC alignment)
@@ -130,7 +130,7 @@ apps/oak-open-curriculum-semantic-search/src/components/
 
 ## Implementation Tasks
 
-### Phase 4a: Core Search (2 days)
+### Phase 5a: Core Search (2 days)
 
 | Task                  | Description                               | Test Type   |
 | --------------------- | ----------------------------------------- | ----------- |
@@ -141,7 +141,7 @@ apps/oak-open-curriculum-semantic-search/src/components/
 | URL state sync        | Sync search params to URL                 | Integration |
 | Loading/empty states  | Skeleton loader, empty state messaging    | Unit        |
 
-### Phase 4b: Filtering (1.5 days)
+### Phase 5b: Filtering (1.5 days)
 
 | Task                   | Description                           | Test Type   |
 | ---------------------- | ------------------------------------- | ----------- |
@@ -152,7 +152,7 @@ apps/oak-open-curriculum-semantic-search/src/components/
 | Tier filter            | Foundation/Higher toggle              | Integration |
 | Clear filters          | Reset all filters                     | Unit        |
 
-### Phase 4c: Polish (0.5 days)
+### Phase 5c: Polish (0.5 days)
 
 | Task                | Description                     | Test Type   |
 | ------------------- | ------------------------------- | ----------- |

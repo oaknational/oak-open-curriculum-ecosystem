@@ -1,9 +1,9 @@
-# Phase 9: Reference Indices & Threads
+# Phase 10: Reference Indices & Threads
 
 **Status**: 📋 PLANNED  
 **Estimated Effort**: 2-3 days  
-**Prerequisites**: Phase 8 (Entity Extraction)  
-**Last Updated**: 2025-12-11
+**Prerequisites**: Phase 9 (Entity Extraction)  
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -153,16 +153,16 @@ const ncAligned = await esClient.search({
 
 ## Implementation Tasks
 
-### Phase 9a: Reference Indices (1 day)
+### Phase 10a: Reference Indices (1 day)
 
 | Task                      | Description                                | Test Type   |
 | ------------------------- | ------------------------------------------ | ----------- |
 | Subject reference index   | Create and populate oak_ref_subjects       | Integration |
 | Key stage reference index | Create and populate oak_ref_key_stages     | Integration |
 | Reference lookup API      | Endpoint for reference data                | Integration |
-| Enrich integration        | Use references in Phase 8 enrich processor | Integration |
+| Enrich integration        | Use references in Phase 9 enrich processor | Integration |
 
-### Phase 9b: Glossary Index (1 day)
+### Phase 10b: Glossary Index (1 day)
 
 | Task                     | Description                        | Test Type   |
 | ------------------------ | ---------------------------------- | ----------- |
@@ -171,7 +171,7 @@ const ncAligned = await esClient.search({
 | Glossary search endpoint | Search definitions by term         | Integration |
 | Related terms linking    | Link related glossary entries      | Unit        |
 
-### Phase 9c: Thread Navigation (1 day)
+### Phase 10c: Thread Navigation (1 day)
 
 | Task                     | Description                                 | Test Type   |
 | ------------------------ | ------------------------------------------- | ----------- |
@@ -261,12 +261,12 @@ packages/sdks/oak-curriculum-sdk/src/
 
 ## Dependencies
 
-- **Upstream**: Phase 8 (enrich processor uses reference indices)
-- **Blocks**: Phase 10 (RAG uses reference data for grounding)
+- **Upstream**: Phase 9 (enrich processor uses reference indices)
+- **Blocks**: Phase 11 (RAG uses reference data for grounding)
 
 ---
 
 ## Related Documents
 
-- [Phase 8](./phase-8-entity-extraction.md) - Enrich processor integration
+- [Phase 9](./phase-9-entity-extraction.md) - Enrich processor integration
 - [Feature Parity Analysis](../../research/feature-parity-analysis.md) - Gap analysis

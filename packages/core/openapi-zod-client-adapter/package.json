@@ -17,7 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build-adapter": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",

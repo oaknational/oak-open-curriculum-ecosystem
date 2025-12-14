@@ -1,9 +1,9 @@
-# Phase 6: Admin Dashboard
+# Phase 7: Admin Dashboard
 
 **Status**: 📋 PLANNED  
 **Estimated Effort**: 2-3 days  
-**Prerequisites**: Phase 5 (Cloud Functions)  
-**Last Updated**: 2025-12-11
+**Prerequisites**: Phase 6 (Cloud Functions)  
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -31,7 +31,7 @@ Create a functional admin interface for ingestion control and metrics display. T
 ### Key Principles
 
 1. **Functional over aesthetic** - Clean, working UI; styling can be refined later
-2. **Portable components** - Reuse patterns from Search UI (Phase 4)
+2. **Portable components** - Reuse patterns from Search UI (Phase 5)
 3. **External for complexity** - Link to ES Kibana for advanced operations
 
 ---
@@ -49,7 +49,7 @@ Create a functional admin interface for ingestion control and metrics display. T
 | **ES console link**   | Link to Kibana for index management         | **MEDIUM**   |
 | **Ingestion history** | Recent ingestion runs with outcomes         | **MEDIUM**   |
 
-### Out of Scope (Phase 6)
+### Out of Scope (Phase 7)
 
 - Inline index editing (use ES Kibana)
 - User management (single admin key)
@@ -64,7 +64,7 @@ Create a functional admin interface for ingestion control and metrics display. T
 
 **Decision**: NextJS pages in same app as Search UI
 
-- Shared component library with Phase 4
+- Shared component library with Phase 5
 - Single deployment
 - Route: `/admin/*`
 
@@ -186,7 +186,7 @@ apps/oak-open-curriculum-semantic-search/src/components/admin/
 
 ## Implementation Tasks
 
-### Phase 6a: Core Dashboard (1.5 days)
+### Phase 7a: Core Dashboard (1.5 days)
 
 | Task                    | Description                             | Test Type   |
 | ----------------------- | --------------------------------------- | ----------- |
@@ -196,7 +196,7 @@ apps/oak-open-curriculum-semantic-search/src/components/admin/
 | `MetricsGrid` component | Fetch and display all metrics           | Integration |
 | Auth protection         | Redirect unauthenticated users          | Integration |
 
-### Phase 6b: Ingestion Control (1 day)
+### Phase 7b: Ingestion Control (1 day)
 
 | Task                   | Description                          | Test Type   |
 | ---------------------- | ------------------------------------ | ----------- |
@@ -205,7 +205,7 @@ apps/oak-open-curriculum-semantic-search/src/components/admin/
 | Polling logic          | Auto-refresh status during ingestion | Integration |
 | Success/error states   | Clear feedback on completion         | Unit        |
 
-### Phase 6c: Error Viewer (0.5 days)
+### Phase 7c: Error Viewer (0.5 days)
 
 | Task                  | Description               | Test Type   |
 | --------------------- | ------------------------- | ----------- |
@@ -260,7 +260,7 @@ pnpm test:ui                                      # Playwright component tests
 
 ## Key Files
 
-### Phase 5 Cloud Functions (Dependencies)
+### Phase 6 Cloud Functions (Dependencies)
 
 ```text
 apps/oak-open-curriculum-semantic-search/src/app/api/admin/
@@ -285,7 +285,7 @@ apps/oak-open-curriculum-semantic-search/src/app/admin/
 
 ## Environment Variables
 
-Reuse from Phase 5:
+Reuse from Phase 6:
 
 ```bash
 # Admin authentication
@@ -299,14 +299,14 @@ ELASTICSEARCH_KIBANA_URL=https://your-kibana-url.elastic.cloud
 
 ## Dependencies
 
-- **Upstream**: Phase 5 (Cloud Functions provide the API)
-- **Shared**: Phase 4 (Search UI component patterns)
+- **Upstream**: Phase 6 (Cloud Functions provide the API)
+- **Shared**: Phase 5 (Search UI component patterns)
 - **Blocks**: None
 
 ---
 
 ## Related Documents
 
-- [Phase 4](./phase-4-search-ui.md) - Shared UI patterns
-- [Phase 5](./phase-5-cloud-functions.md) - API endpoints this UI consumes
+- [Phase 5](./phase-5-search-ui.md) - Shared UI patterns
+- [Phase 6](./phase-6-cloud-functions.md) - API endpoints this UI consumes
 - [Requirements](./requirements.md) - Demo scenarios

@@ -86,30 +86,26 @@ export function createUnitHighlight(): estypes.SearchHighlight {
 /**
  * Creates facet aggregations for lesson queries.
  *
- * Includes programme factors (tier, exam_board, pathway) for KS4 filtering.
+ * Includes programme factors (tier) for KS4 filtering.
  */
 export function createLessonFacets(): Record<string, estypes.AggregationsAggregationContainer> {
   return {
     key_stages: { terms: { field: 'key_stage', size: 10 } },
     subjects: { terms: { field: 'subject_slug', size: 20 } },
     tiers: { terms: { field: 'tier', size: 5 } },
-    exam_boards: { terms: { field: 'exam_board', size: 10 } },
-    pathways: { terms: { field: 'pathway', size: 10 } },
   };
 }
 
 /**
  * Creates facet aggregations for unit queries.
  *
- * Includes programme factors (tier, exam_board, pathway) for KS4 filtering.
+ * Includes programme factors (tier) for KS4 filtering.
  */
 export function createUnitFacets(): Record<string, estypes.AggregationsAggregationContainer> {
   return {
     key_stages: { terms: { field: 'key_stage', size: 10 } },
     subjects: { terms: { field: 'subject_slug', size: 20 } },
     tiers: { terms: { field: 'tier', size: 5 } },
-    exam_boards: { terms: { field: 'exam_board', size: 10 } },
-    pathways: { terms: { field: 'pathway', size: 10 } },
   };
 }
 

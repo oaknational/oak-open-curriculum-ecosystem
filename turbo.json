@@ -6,24 +6,8 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
-    "build-adapter": {
-      "cache": true,
-      "outputs": ["dist/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "tsconfig.json",
-        "tsconfig.build.json",
-        "tsup.config.ts"
-      ]
-    },
-    "build-linting": {
-      "cache": true,
-      "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "tsconfig.json", "tsup.config.ts"]
-    },
     "type-gen": {
-      "dependsOn": ["^type-gen", "^build-adapter"],
+      "dependsOn": ["^type-gen", "^build"],
       "cache": true,
       "outputs": ["**/generated/**"],
       "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
@@ -85,7 +69,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build-linting", "type-gen"],
+      "dependsOn": ["^build", "type-gen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -110,7 +94,7 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^build-linting", "type-gen"],
+      "dependsOn": ["^build", "type-gen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -135,7 +119,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "type-gen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -168,6 +152,7 @@
       ]
     },
     "test:e2e": {
+      "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
       "inputs": [
@@ -184,7 +169,7 @@
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:e2e:built": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "outputs": [],
       "cache": false,
       "inputs": [
@@ -237,7 +222,7 @@
       ]
     },
     "smoke:dev:stub": {
-      "dependsOn": ["^smoke:dev:stub", "^type-gen"],
+      "dependsOn": ["^smoke:dev:stub", "^build", "test:e2e:built"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -249,7 +234,7 @@
       "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
-      "dependsOn": ["^smoke:dev:live", "^type-gen"],
+      "dependsOn": ["^smoke:dev:live", "^build"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -261,7 +246,7 @@
       ]
     },
     "smoke:dev:live:auth": {
-      "dependsOn": ["^smoke:dev:live:auth", "^type-gen"],
+      "dependsOn": ["^smoke:dev:live:auth", "^build"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -273,7 +258,7 @@
       ]
     },
     "smoke:remote": {
-      "dependsOn": ["^smoke:remote", "^type-gen"],
+      "dependsOn": ["^smoke:remote", "^build"],
       "cache": false,
       "outputs": [],
       "inputs": [

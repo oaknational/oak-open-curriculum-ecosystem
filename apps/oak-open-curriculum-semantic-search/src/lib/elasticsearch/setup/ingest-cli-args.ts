@@ -7,9 +7,14 @@
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import { SEARCH_INDEX_KINDS, type SearchIndexKind } from '../../search-index-target.js';
+import {
+  isKeyStage as isValidKeyStage,
+  isSubject as isValidSubject,
+  KEY_STAGES,
+} from '@oaknational/oak-curriculum-sdk';
 
 /** Available key stages for validation. */
-const ALL_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+const ALL_KEY_STAGES = KEY_STAGES;
 
 /** Common subjects for testing (default when none specified). */
 const COMMON_SUBJECTS = ['maths', 'english', 'science', 'history', 'geography'] as const;
@@ -27,17 +32,17 @@ export interface CliArgs {
 
 /** Type guard for valid key stage values. */
 function isKeyStage(value: string): value is KeyStage {
-  return ALL_KEY_STAGES.includes(value as KeyStage);
+  return isValidKeyStage(value);
 }
 
 /** Type guard for valid subject values. */
 function isSearchSubject(value: string): value is SearchSubjectSlug {
-  return value.length > 0;
+  return isValidSubject(value);
 }
 
 /** Type guard for valid index kind values. */
 function isSearchIndexKind(value: string): value is SearchIndexKind {
-  return SEARCH_INDEX_KINDS.includes(value as SearchIndexKind);
+  return SEARCH_INDEX_KINDS.some((kind) => kind === value);
 }
 
 /** Process a single flag argument (--help, --dry-run, etc). */

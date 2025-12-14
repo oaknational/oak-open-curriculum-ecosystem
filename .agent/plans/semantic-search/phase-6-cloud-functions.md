@@ -1,9 +1,9 @@
-# Phase 5: Cloud Functions
+# Phase 6: Cloud Functions
 
 **Status**: 📋 PLANNED  
 **Estimated Effort**: 2-3 days  
 **Prerequisites**: Phase 3 (Multi-Index Search & Fields)  
-**Last Updated**: 2025-12-11
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -46,7 +46,7 @@ Move ingestion and admin functionality from CLI to Vercel serverless functions, 
 | `/api/admin/reset`  | POST   | Clear and rebuild indices               | Yes           |
 | `/api/admin/errors` | GET    | View ingestion errors                   | Yes           |
 
-### Out of Scope (Phase 5)
+### Out of Scope (Phase 6)
 
 - Scheduled/cron ingestion (Vercel Cron Jobs - future)
 - Multi-tenant ingestion (single Oak instance)
@@ -221,7 +221,7 @@ Get recent ingestion errors.
 
 ## Implementation Tasks
 
-### Phase 5a: Core Functions (1.5 days)
+### Phase 6a: Core Functions (1.5 days)
 
 | Task                | Description                                 | Test Type   |
 | ------------------- | ------------------------------------------- | ----------- |
@@ -231,7 +231,7 @@ Get recent ingestion errors.
 | Error handling      | Standardised error responses                | Unit        |
 | Logging setup       | Structured JSON logs                        | Unit        |
 
-### Phase 5b: Advanced Operations (1 day)
+### Phase 6b: Advanced Operations (1 day)
 
 | Task                | Description                                 | Test Type   |
 | ------------------- | ------------------------------------------- | ----------- |
@@ -240,7 +240,7 @@ Get recent ingestion errors.
 | Rate limiting       | Prevent abuse (1 request/minute for ingest) | Integration |
 | Timeout handling    | Graceful handling of long-running ingestion | E2E         |
 
-### Phase 5c: Documentation (0.5 days)
+### Phase 6c: Documentation (0.5 days)
 
 | Task              | Description                       |
 | ----------------- | --------------------------------- |
@@ -337,11 +337,11 @@ vercel env add ADMIN_API_KEY
 ## Dependencies
 
 - **Upstream**: Phase 3 (index schemas with doc_type)
-- **Blocks**: Phase 6 (Admin Dashboard uses these endpoints)
+- **Blocks**: Phase 7 (Admin Dashboard uses these endpoints)
 
 ---
 
 ## Related Documents
 
 - [Requirements](./requirements.md) - Rate limits and ingestion context
-- [Phase 6](./phase-6-admin-dashboard.md) - UI for these endpoints
+- [Phase 7](./phase-7-admin-dashboard.md) - UI for these endpoints

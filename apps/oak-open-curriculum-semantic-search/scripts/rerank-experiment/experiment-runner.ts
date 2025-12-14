@@ -24,11 +24,6 @@ function log(msg: string): void {
   console.log(`[${new Date().toISOString().slice(11, 23)}] ${msg}`);
 }
 
-/** Hit structure from Elasticsearch response. */
-interface LessonHit {
-  _source: { lesson_slug: string };
-}
-
 /** Build search config from parameters. */
 function buildConfig(
   query: string,
@@ -46,9 +41,9 @@ async function executeSearch(
   config: SearchConfig,
 ): Promise<{ results: string[]; latency: number }> {
   const start = Date.now();
-  const res = await client.search(buildSearchBody(config));
-  const hits = res.hits.hits as LessonHit[];
-  return { results: hits.map((h) => h._source.lesson_slug), latency: Date.now() - start };
+  const res = await client.search<{ lesson_slug: string }>(buildSearchBody(config));
+  const results = res.hits.hits.flatMap((hit) => (hit._source ? [hit._source.lesson_slug] : []));
+  return { results, latency: Date.now() - start };
 }
 
 /** Execute a single search query and calculate metrics. */

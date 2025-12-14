@@ -16,6 +16,9 @@ export const unitSummarySchema = rawCurriculumSchemas.UnitSummaryResponseSchema;
 /** Schema for subject sequences derived from the OpenAPI specification. */
 export const subjectSequencesSchema = rawCurriculumSchemas.SubjectSequenceResponseSchema;
 
+/** Schema for sequence units response derived from the OpenAPI specification. */
+export const sequenceUnitsSchema = rawCurriculumSchemas.SequenceUnitsResponseSchema;
+
 /** Type alias for the lesson summary schema derived from the OpenAPI specification. */
 export type LessonSummaryResponseSchema = typeof lessonSummarySchema;
 
@@ -24,6 +27,9 @@ export type UnitSummaryResponseSchema = typeof unitSummarySchema;
 
 /** Type alias for the subject sequence schema derived from the OpenAPI specification. */
 export type SubjectSequenceResponseSchema = typeof subjectSequencesSchema;
+
+/** Type alias for the sequence units response schema derived from the OpenAPI specification. */
+export type SequenceUnitsResponseSchema = typeof sequenceUnitsSchema;
 
 export function isUnitsGrouped(
   v: unknown,
@@ -59,4 +65,11 @@ export type SearchSubjectSequences = z.infer<SubjectSequenceResponseSchema>;
 
 export function isSubjectSequences(v: unknown): v is SearchSubjectSequences {
   return subjectSequencesSchema.safeParse(v).success;
+}
+
+/** Type for sequence units response (API response for /sequences/:sequence/units). */
+export type SequenceUnitsResponse = z.infer<SequenceUnitsResponseSchema>;
+
+export function isSequenceUnitsResponse(v: unknown): v is SequenceUnitsResponse {
+  return sequenceUnitsSchema.safeParse(v).success;
 }

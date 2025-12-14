@@ -1,9 +1,37 @@
 import { describe, expect, it } from 'vitest';
+import { unitSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import type { SearchUnitSummary } from '../../types/oak';
 import {
   extractThreadInfo,
   extractPedagogicalData,
   createEnrichedRollupText,
 } from './thread-and-pedagogical-extractors';
+
+/** Build a valid unit summary fixture with defaults. */
+function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
+  const base: SearchUnitSummary = {
+    unitSlug: 'unit-slug',
+    unitTitle: 'Unit Title',
+    yearSlug: 'year-6',
+    year: 'Year 6',
+    phaseSlug: 'primary',
+    subjectSlug: 'maths',
+    keyStageSlug: 'ks2',
+    priorKnowledgeRequirements: ['Add fractions with like denominators'],
+    nationalCurriculumContent: ['Numerator and denominator'],
+    threads: [{ slug: 'sequence-1', title: 'Sequence 1', order: 1 }],
+    categories: [{ categoryTitle: 'Fractions', categorySlug: 'fractions' }],
+    unitLessons: [
+      { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1', state: 'published' },
+      { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', state: 'published' },
+    ],
+    canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+  };
+  const summary: SearchUnitSummary = { ...base, ...overrides };
+  // Validate against SDK schema to ensure fixture is valid
+  void unitSummarySchema.parse(summary);
+  return summary;
+}
 
 describe('extractThreadInfo', () => {
   it('extracts thread slugs, titles, and orders from threads array', () => {
@@ -35,28 +63,23 @@ describe('extractThreadInfo', () => {
     expect(result.orders).toBeUndefined();
   });
 
-  it('filters out entries missing required fields', () => {
-    const threads = [
-      { slug: 'valid', title: 'Valid', order: 1 },
-      { slug: '', title: 'Missing slug', order: 2 },
-      { slug: 'missing-title', title: '', order: 3 },
-      { slug: 'missing-order', title: 'No Order' },
-    ];
+  it('handles single thread', () => {
+    const threads = [{ slug: 'single', title: 'Single Thread', order: 1 }];
 
     const result = extractThreadInfo(threads);
 
-    expect(result.slugs).toEqual(['valid']);
-    expect(result.titles).toEqual(['Valid']);
+    expect(result.slugs).toEqual(['single']);
+    expect(result.titles).toEqual(['Single Thread']);
     expect(result.orders).toEqual([1]);
   });
 });
 
 describe('extractPedagogicalData', () => {
   it('extracts prior knowledge and national curriculum content', () => {
-    const summary = {
+    const summary = buildUnitSummary({
       priorKnowledgeRequirements: ['Add fractions', 'Understand denominators'],
       nationalCurriculumContent: ['Fractions and decimals', 'Number operations'],
-    };
+    });
 
     const result = extractPedagogicalData(summary);
 
@@ -65,19 +88,10 @@ describe('extractPedagogicalData', () => {
   });
 
   it('returns undefined for empty arrays', () => {
-    const summary = {
+    const summary = buildUnitSummary({
       priorKnowledgeRequirements: [],
       nationalCurriculumContent: [],
-    };
-
-    const result = extractPedagogicalData(summary);
-
-    expect(result.priorKnowledge).toBeUndefined();
-    expect(result.nationalCurriculum).toBeUndefined();
-  });
-
-  it('handles missing fields gracefully', () => {
-    const summary = { unitSlug: 'test', unitTitle: 'Test' };
+    });
 
     const result = extractPedagogicalData(summary);
 

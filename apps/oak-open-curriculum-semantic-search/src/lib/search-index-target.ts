@@ -106,28 +106,39 @@ export function rewriteBulkOperations(
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-types
-type UnknownObject = Record<string, unknown>;
-
-interface IndexMetadata extends UnknownObject {
-  _index: string;
+/**
+ * Shape of an ES bulk index action's metadata.
+ * Used only for bulk operation rewriting - not a general-purpose type.
+ */
+interface IndexMetadata {
+  readonly _index: string;
 }
 
+/**
+ * Shape of an ES bulk index action used in bulk operations.
+ * Used only for bulk operation rewriting - not a general-purpose type.
+ */
 interface IndexAction {
-  index: IndexMetadata;
+  readonly index: IndexMetadata;
 }
 
+/**
+ * Type guard to check if a value is a bulk index action.
+ * Narrows directly to IndexAction without intermediate generic types.
+ */
 function isIndexAction(value: unknown): value is IndexAction {
-  if (!isUnknownObject(value)) {
+  if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const action = value.index;
-  if (!isUnknownObject(action)) {
+  if (!('index' in value)) {
     return false;
   }
-  return typeof action._index === 'string' && action._index.length > 0;
-}
-
-function isUnknownObject(value: unknown): value is UnknownObject {
-  return typeof value === 'object' && value !== null;
+  const indexProp = value.index;
+  if (typeof indexProp !== 'object' || indexProp === null) {
+    return false;
+  }
+  if (!('_index' in indexProp)) {
+    return false;
+  }
+  return typeof indexProp._index === 'string' && indexProp._index.length > 0;
 }

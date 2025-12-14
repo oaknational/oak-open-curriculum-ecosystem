@@ -6,7 +6,7 @@
 
 import type { Client } from '@elastic/elasticsearch';
 import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
-import type { KeyStage, SearchSubjectSlug } from '../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
 import {
@@ -77,7 +77,7 @@ async function buildUnitsWithSummaries(
   context: PairBuildContext,
   units: PairUnits,
   subjectProgrammesUrl: string,
-): Promise<{ unitSummaries: Map<string, unknown>; unitOps: unknown[] }> {
+): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: unknown[] }> {
   const { client, ks, subject, dataIntegrityReport } = context;
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const result = await buildUnitDocuments(
@@ -99,7 +99,7 @@ async function buildUnitsWithSummaries(
 /** Build lesson documents from derived groups. */
 async function buildLessonsFromSummaries(
   context: PairBuildContext,
-  unitSummaries: Map<string, unknown>,
+  unitSummaries: Map<string, SearchUnitSummary>,
 ): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
   const { client, esClient, ks, subject, dataIntegrityReport } = context;
   const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
@@ -136,7 +136,7 @@ async function buildCoreDocumentOps(
   unitOps: unknown[];
   lessonOps: unknown[];
   rollupOps: unknown[];
-  unitSummaries: Map<string, unknown>;
+  unitSummaries: Map<string, SearchUnitSummary>;
 }> {
   const { esClient, ks, subject } = context;
   const { unitSummaries, unitOps } = await buildUnitsWithSummaries(

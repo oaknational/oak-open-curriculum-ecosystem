@@ -131,6 +131,10 @@ export {
   type SearchLessonSummary,
   type SearchUnitSummary,
   type SearchSubjectSequences,
+  sequenceUnitsSchema,
+  type SequenceUnitsResponseSchema,
+  type SequenceUnitsResponse,
+  isSequenceUnitsResponse,
 } from '../types/search-response-guards.js';
 
 export {

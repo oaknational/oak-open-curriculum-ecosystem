@@ -11,6 +11,38 @@ The build system uses:
 - **tsup** - TypeScript bundler for libraries
 - **Next.js** - Framework for web apps
 
+## Build Order
+
+All packages use a unified `build` script. Turbo's `^build` dependency ensures packages build in the correct order based on the workspace dependency graph:
+
+```text
+┌─────────────┐
+│  oak-eslint │  ← leaf, builds first (no workspace deps)
+└──────┬──────┘
+       │ devDep
+       ▼
+┌──────────────────────────────┐
+│ openapi-zod-client-adapter   │  ← builds after oak-eslint
+└──────────────┬───────────────┘
+               │ dep
+               ▼
+┌──────────────────────────────┐
+│    oak-curriculum-sdk        │  ← type-gen, then build
+└──────────────┬───────────────┘
+               │ dep
+               ▼
+┌──────────────────────────────┐
+│          apps/*              │  ← build last
+└──────────────────────────────┘
+```
+
+### Why This Works
+
+- **`^build`** means "run `build` in dependency packages first"
+- **`type-gen`** (no `^`) means "run `type-gen` in this package first"
+
+Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
+
 ## Quality Gate Commands
 
 ### `pnpm make` - Build and fix
@@ -92,11 +124,16 @@ type-gen → build → test
                  ↘ lint / lint:fix
 ```
 
-- `test` depends on `^build` - ensures SDK is built before tests run
-- `type-check` depends on `^build` - ensures declaration files exist before type checking
-- `lint` / `lint:fix` depends on `^build` - ensures imports can be resolved for linting
-- `build` depends on `type-gen` - ensures generated types exist before compilation
-- `build` is cached - only rebuilds when inputs change
+All task dependencies use `^build`:
+
+| Task                | Depends On           | Why                                                   |
+| ------------------- | -------------------- | ----------------------------------------------------- |
+| `type-gen`          | `^build`             | Core adapter must be built before SDK type generation |
+| `build`             | `^build`, `type-gen` | Dependencies build first, then local type generation  |
+| `type-check`        | `^build`, `type-gen` | Declaration files must exist for type checking        |
+| `lint` / `lint:fix` | `^build`, `type-gen` | ESLint plugin must be built before linting            |
+| `test`              | `^build`             | SDK must be built before tests run                    |
+| `doc-gen`           | `^build`             | Source must be built before doc generation            |
 
 ### Independent tasks
 
@@ -163,6 +200,14 @@ This was caused by a race condition where tests ran before SDK build completed. 
 
 1. Verify `turbo.json` has `"test": { "dependsOn": ["^build"], ... }`
 2. Run `pnpm clean && pnpm make`
+
+### Type-check fails with "Cannot find module '@oaknational/eslint-plugin-standards'"
+
+This indicates core packages weren't built before type-check ran. Ensure:
+
+1. `oak-eslint` has a `build` script (not `build-linting`)
+2. `turbo.json` `type-check` depends on `["^build", "type-gen"]`
+3. Run `pnpm clean && pnpm build`
 
 ### Slow repeated runs
 

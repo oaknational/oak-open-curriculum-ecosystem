@@ -12,6 +12,8 @@ import { createOakSdkClient } from './oak-adapter-sdk';
 import { optionalEnv } from '../lib/env';
 import { cacheLogger } from '../lib/logger';
 import { createRedisClient, withRedisConnection } from './sdk-cache/redis-connection';
+import { isLessonSummary, isUnitSummary } from '../types/oak';
+import { isTranscriptResponse } from './sdk-guards';
 
 /** Cache key prefix with version for schema change invalidation. */
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
@@ -43,11 +45,23 @@ function createUncachedClient(baseClient: OakClient): CachedOakClient {
   };
 }
 
+function safeJsonParse(text: string): unknown {
+  return JSON.parse(text);
+}
+
 /** Try to read from cache, returns null on miss or error. */
-async function tryReadCache<T>(redis: Redis, key: string): Promise<T | null> {
+async function tryReadCache<T>(
+  redis: Redis,
+  key: string,
+  isValid: (value: unknown) => value is T,
+): Promise<T | null> {
   try {
     const cached = await redis.get(key);
-    return cached !== null ? (JSON.parse(cached) as T) : null;
+    if (cached === null) {
+      return null;
+    }
+    const parsed = safeJsonParse(cached);
+    return isValid(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -67,46 +81,26 @@ async function tryWriteCache(
   }
 }
 
-/** Check if an error is a 500-series server error. */
-function isServerError(error: Error): boolean {
-  const msg = error.message;
-  return msg.includes('500') || msg.includes('502') || msg.includes('503') || msg.includes('504');
-}
-
-/** Wrap function with caching + 404/500 fallback. */
-function withCacheAndFallback<T>(
+/** Wrap function with caching. */
+function withCache<T>(
   fn: (id: string) => Promise<T>,
   redis: Redis,
   resourceType: string,
   ttlSeconds: number,
   stats: { hits: number; misses: number },
-  fallback: T,
+  isValidCached: (value: unknown) => value is T,
 ): (id: string) => Promise<T> {
   return async (id: string): Promise<T> => {
     const key = buildCacheKey(resourceType, id);
-    const cached = await tryReadCache<T>(redis, key);
+    const cached = await tryReadCache(redis, key, isValidCached);
     if (cached !== null) {
       stats.hits++;
       return cached;
     }
     stats.misses++;
-    try {
-      const result = await fn(id);
-      await tryWriteCache(redis, key, ttlSeconds, result);
-      return result;
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes('404')) {
-          await tryWriteCache(redis, key, ttlSeconds, fallback);
-          return fallback;
-        }
-        if (isServerError(error)) {
-          cacheLogger.warn('Upstream 500 error, returning fallback', { resourceType, id });
-          return fallback;
-        }
-      }
-      throw error;
-    }
+    const result = await fn(id);
+    await tryWriteCache(redis, key, ttlSeconds, result);
+    return result;
   };
 }
 
@@ -122,29 +116,29 @@ function createCachedClientWrapper(
     getSequenceUnits: baseClient.getSequenceUnits,
     getAllThreads: baseClient.getAllThreads,
     getThreadUnits: baseClient.getThreadUnits,
-    getUnitSummary: withCacheAndFallback(
+    getUnitSummary: withCache(
       baseClient.getUnitSummary,
       redis,
       'unit-summary',
       ttlSeconds,
       stats,
-      null,
+      isUnitSummary,
     ),
-    getLessonSummary: withCacheAndFallback(
+    getLessonSummary: withCache(
       baseClient.getLessonSummary,
       redis,
       'lesson-summary',
       ttlSeconds,
       stats,
-      null,
+      isLessonSummary,
     ),
-    getLessonTranscript: withCacheAndFallback(
+    getLessonTranscript: withCache(
       baseClient.getLessonTranscript,
       redis,
       'lesson-transcript',
       ttlSeconds,
       stats,
-      { transcript: '', vtt: '' },
+      isTranscriptResponse,
     ),
     rateLimitTracker: baseClient.rateLimitTracker,
     getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),

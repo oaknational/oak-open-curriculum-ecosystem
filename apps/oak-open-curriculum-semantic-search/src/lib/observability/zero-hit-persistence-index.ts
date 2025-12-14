@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { ZeroHitEvent } from './zero-hit-store';
 
 import type { ZeroHitDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -8,8 +9,22 @@ import {
   type EsIlmPolicyBody,
 } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
 
-/** Generic record helper for dynamic Elasticsearch payloads. */
-export type UnknownRecord = Record<string, unknown>; // eslint-disable-line @typescript-eslint/no-restricted-types -- REFACTOR
+/**
+ * Zod schema for ES error structure.
+ * Used to validate ES error responses at external boundaries.
+ */
+const EsErrorSchema = z.object({
+  meta: z.object({
+    statusCode: z.number(),
+    body: z.object({
+      error: z.object({
+        type: z.string(),
+      }),
+    }),
+  }),
+});
+
+type EsError = z.infer<typeof EsErrorSchema>;
 
 /**
  * Shape of the document persisted to the zero-hit Elasticsearch index.
@@ -103,63 +118,34 @@ export function createZeroHitDocument(event: ZeroHitEvent): ZeroHitDoc {
   return result.data;
 }
 
+/**
+ * Type guard to check if a value is an ES error with expected structure.
+ * Uses Zod validation to reduce complexity.
+ */
+function isEsError(value: unknown): value is EsError {
+  return EsErrorSchema.safeParse(value).success;
+}
+
 /** Detect an Elasticsearch error signalling the index already exists. */
 export function isResourceAlreadyExistsError(error: unknown): boolean {
-  if (!isUnknownRecord(error)) {
+  if (!isEsError(error)) {
     return false;
   }
-  const meta = error['meta'];
-  if (!isUnknownRecord(meta)) {
-    return false;
-  }
-  const statusCode = meta['statusCode'];
+  const { statusCode } = error.meta;
   if (statusCode !== 400 && statusCode !== 409) {
     return false;
   }
-  const body = meta['body'];
-  if (!isUnknownRecord(body)) {
-    return false;
-  }
-  const innerError = body['error'];
-  if (!isUnknownRecord(innerError)) {
-    return false;
-  }
-  return innerError['type'] === 'resource_already_exists_exception';
+  return error.meta.body.error.type === 'resource_already_exists_exception';
 }
 
 /** Detect an Elasticsearch error indicating the zero-hit index is missing. */
 export function isIndexNotFoundError(error: unknown): boolean {
-  if (!isUnknownRecord(error)) {
+  if (!isEsError(error)) {
     return false;
   }
-  const meta = error['meta'];
-  if (!isUnknownRecord(meta)) {
+  if (error.meta.statusCode !== 404) {
     return false;
   }
-  if (meta['statusCode'] !== 404) {
-    return false;
-  }
-  const body = meta['body'];
-  if (!isUnknownRecord(body)) {
-    return false;
-  }
-  const innerError = body['error'];
-  if (!isUnknownRecord(innerError)) {
-    return false;
-  }
-  const type = innerError['type'];
+  const type = error.meta.body.error.type;
   return type === 'index_not_found_exception' || type === 'resource_not_found_exception';
-}
-
-/**
- * Type guard for objects with indexable properties.
- * Used to safely access properties on unknown values from ES errors.
- */
-type IndexableObject = Record<string, unknown>;
-
-/**
- * Type guard to check if a value is a non-null object.
- */
-function isUnknownRecord(value: unknown): value is IndexableObject {
-  return typeof value === 'object' && value !== null;
 }

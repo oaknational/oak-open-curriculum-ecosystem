@@ -25,7 +25,6 @@ describe('createRefSubjectDocument', () => {
     unitCount: 120,
     lessonCount: 450,
     hasTiers: true,
-    hasExamBoards: true,
   };
 
   it('should create a subject reference document with all required fields', () => {
@@ -38,7 +37,6 @@ describe('createRefSubjectDocument', () => {
     expect(doc.unit_count).toBe(120);
     expect(doc.lesson_count).toBe(450);
     expect(doc.has_tiers).toBe(true);
-    expect(doc.has_exam_boards).toBe(true);
   });
 
   it('should generate a valid subject URL', () => {
@@ -47,17 +45,15 @@ describe('createRefSubjectDocument', () => {
     expect(doc.subject_url).toBe('https://www.thenational.academy/teachers/subjects/maths');
   });
 
-  it('should handle subjects without tiers or exam boards', () => {
+  it('should handle subjects without tiers', () => {
     const doc = createRefSubjectDocument({
       ...baseParams,
       subjectSlug: 'english',
       subjectTitle: 'English',
       hasTiers: false,
-      hasExamBoards: false,
     });
 
     expect(doc.has_tiers).toBe(false);
-    expect(doc.has_exam_boards).toBe(false);
   });
 });
 

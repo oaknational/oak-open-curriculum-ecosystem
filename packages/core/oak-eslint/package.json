@@ -37,7 +37,7 @@
     "vitest": "^4.0.15"
   },
   "scripts": {
-    "build-linting": "tsup",
+    "build": "tsup",
     "clean": "rm -rf dist .turbo",
     "dev": "tsup --watch",
     "lint": "eslint .",

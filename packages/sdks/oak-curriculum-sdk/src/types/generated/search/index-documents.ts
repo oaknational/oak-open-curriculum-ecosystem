@@ -129,8 +129,6 @@ export const SearchLessonsIndexDocSchema = z
     lesson_dense_vector: z.array(z.number()).optional(),
     title_dense_vector: z.array(z.number()).optional(),
     tier: z.string().min(1).optional(),
-    exam_board: z.string().min(1).optional(),
-    pathway: z.string().min(1).optional(),
     doc_type: z.string().min(1),
   })
   .strict();
@@ -186,8 +184,6 @@ export const SearchUnitRollupDocSchema = z
     unit_dense_vector: z.array(z.number()).optional(),
     rollup_dense_vector: z.array(z.number()).optional(),
     tier: z.string().min(1).optional(),
-    exam_board: z.string().min(1).optional(),
-    pathway: z.string().min(1).optional(),
     doc_type: z.string().min(1),
   })
   .strict();

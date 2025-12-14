@@ -15,6 +15,8 @@
  * @output Prints lesson slugs and titles for each test query
  */
 
+import { HybridResponseLessons } from '../src/lib/openapi.schemas.js';
+
 const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3003';
 
 const TEST_QUERIES = [
@@ -27,21 +29,7 @@ const TEST_QUERIES = [
   'how to solve equations with x squared', // Natural language
 ] as const;
 
-interface LessonResult {
-  lesson_slug: string;
-  lesson_title: string;
-}
-
-interface SearchResponse {
-  total: number;
-  took: number;
-  results: {
-    lesson: LessonResult;
-    rankScore: number;
-  }[];
-}
-
-async function searchLessons(query: string): Promise<SearchResponse> {
+async function searchLessons(query: string) {
   const response = await fetch(`${BASE_URL}/api/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -58,7 +46,8 @@ async function searchLessons(query: string): Promise<SearchResponse> {
     throw new Error(`Search failed: ${response.status} ${response.statusText}`);
   }
 
-  return response.json() as Promise<SearchResponse>;
+  const raw: unknown = await response.json();
+  return HybridResponseLessons.parse(raw);
 }
 
 function printHeader(): void {
@@ -77,7 +66,10 @@ function printFooter(): void {
   console.log('='.repeat(60));
 }
 
-function printQueryResults(query: string, data: SearchResponse): void {
+function printQueryResults(
+  query: string,
+  data: ReturnType<typeof HybridResponseLessons.parse>,
+): void {
   console.log('query: ', query);
   console.log(`Total hits: ${data.total}, took: ${data.took}ms`);
   console.log(`\nTop 10 results (for ground truth):\n`);

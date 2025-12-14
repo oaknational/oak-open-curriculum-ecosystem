@@ -1,6 +1,7 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
 import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { isKeyStage } from '@oaknational/oak-curriculum-sdk';
 import { esSearch, type EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SequenceFacet, SearchFacets } from './types';
@@ -34,6 +35,10 @@ export async function fetchSequenceFacets(
 }
 
 function toSequenceFacet(doc: SearchSequenceFacetsIndexDoc): SequenceFacet {
+  const keyStageCandidate = doc.key_stages[0];
+  if (!keyStageCandidate || !isKeyStage(keyStageCandidate)) {
+    throw new Error('Invalid key stage in sequence facets document');
+  }
   const units = doc.unit_slugs.map((unitSlug: string, index: number) => ({
     unitSlug,
     unitTitle: doc.unit_titles[index] ?? unitSlug,
@@ -42,7 +47,7 @@ function toSequenceFacet(doc: SearchSequenceFacetsIndexDoc): SequenceFacet {
   return {
     subjectSlug: doc.subject_slug,
     sequenceSlug: doc.sequence_slug,
-    keyStage: doc.key_stages[0] as KeyStage,
+    keyStage: keyStageCandidate,
     keyStageTitle: doc.key_stage_title,
     phaseSlug: doc.phase_slug,
     phaseTitle: doc.phase_title,

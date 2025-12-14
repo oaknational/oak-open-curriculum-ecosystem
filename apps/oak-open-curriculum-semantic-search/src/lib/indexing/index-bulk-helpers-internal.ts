@@ -1,14 +1,14 @@
 import type { Client } from '@elastic/elasticsearch';
-import type { KeyStage, SearchLessonsIndexDoc, SearchSubjectSlug } from '../../types/oak';
+import type {
+  KeyStage,
+  SearchLessonsIndexDoc,
+  SearchSubjectSlug,
+  SearchUnitSummary,
+} from '../../types/oak';
 import { isUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import {
-  createLessonDocument,
-  createUnitDocument,
-  extractUnitLessons,
-  normaliseYears,
-} from './document-transforms';
-import { readUnitSummaryValue, resolveUnitSummaryIdentifiers } from './document-transform-helpers';
+import { createLessonDocument, createUnitDocument, normaliseYears } from './document-transforms';
+// Using typed property access now - no longer need extraction helpers
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
@@ -20,7 +20,7 @@ export async function processUnitSummary(
   subject: SearchSubjectSlug,
   ks: KeyStage,
   subjectProgrammesUrl: string,
-): Promise<{ summary: unknown; ops: unknown[] } | null> {
+): Promise<{ summary: SearchUnitSummary; ops: unknown[] } | null> {
   const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
 
   // Handle 404 - unit exists in listing but has no summary data
@@ -31,13 +31,14 @@ export async function processUnitSummary(
   if (!isUnitSummary(summaryCandidate)) {
     throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
   }
-  const summary: unknown = summaryCandidate;
-  const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
+
+  // After validation, summaryCandidate is now SearchUnitSummary - don't widen!
+  const summary = summaryCandidate;
   const ops = [
     {
       index: {
         _index: resolvePrimarySearchIndexName('units'),
-        _id: unitSlug,
+        _id: summary.unitSlug,
       },
     },
     createUnitDocument({
@@ -66,7 +67,7 @@ interface LessonDocEntry {
 }
 
 function createLessonBuildContext(
-  unitSummary: unknown,
+  unitSummary: SearchUnitSummary,
   group: {
     unitSlug: string;
     unitTitle: string;
@@ -77,21 +78,20 @@ function createLessonBuildContext(
 ): LessonBuildContext {
   ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
 
-  const { canonicalUrl: unitCanonicalUrl } = resolveUnitSummaryIdentifiers(unitSummary);
+  if (!unitSummary.canonicalUrl) {
+    throw new Error(`Missing canonical URL for unit ${unitSummary.unitSlug}`);
+  }
+  const unitCanonicalUrl = unitSummary.canonicalUrl;
 
-  const normalisedLessons = extractUnitLessons(readUnitSummaryValue(unitSummary, 'unitLessons'));
   const lessonCount =
-    normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
+    unitSummary.unitLessons.length > 0 ? unitSummary.unitLessons.length : group.lessons.length;
 
   return {
     unitSlug: group.unitSlug,
     unitCanonicalUrl,
     subject,
     keyStage,
-    years: normaliseYears(
-      readUnitSummaryValue(unitSummary, 'year'),
-      readUnitSummaryValue(unitSummary, 'yearSlug'),
-    ),
+    years: normaliseYears(unitSummary.year, unitSummary.yearSlug),
     lessonCount,
   };
 }
@@ -145,7 +145,7 @@ export async function buildLessonDocsForGroup(
     unitTitle: string;
     lessons: { lessonSlug: string; lessonTitle: string }[];
   },
-  unitSummary: unknown,
+  unitSummary: SearchUnitSummary,
   subject: SearchSubjectSlug,
   ks: KeyStage,
   processedSoFar: number,

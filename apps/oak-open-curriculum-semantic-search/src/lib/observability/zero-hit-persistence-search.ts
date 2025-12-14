@@ -1,30 +1,23 @@
+/**
+ * Zero-hit telemetry search and parsing using ES SDK types.
+ * @module zero-hit-persistence-search
+ */
+import { z } from 'zod';
+import type { estypes } from '@elastic/elasticsearch';
 import type { ZeroHitEvent } from './zero-hit-store';
 import type { SearchScope } from '../../types/oak';
-import type {
-  EsSearchBody,
-  EsHitSource,
-  EsSearchHit,
-} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+import type { EsSearchBody, EsSearchHit } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
 import type { ZeroHitDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
-/** Structure of the `hits` section returned by Elasticsearch. */
-export interface SearchHits {
-  total?: unknown;
-  hits?: EsSearchHit<ZeroHitDoc>[];
-}
+/** Zod schema for top_hits _source containing index_version. */
+const TopHitSourceSchema = z.object({ index_version: z.string().min(1) });
 
-/** Aggregation buckets required for the zero-hit dashboard. */
-export interface SearchAggregations {
-  by_scope?: {
-    buckets?: unknown;
-  };
-  latest_version?: unknown;
-}
+/** Type-safe ES search response for zero-hit telemetry. */
+export type ZeroHitSearchResponse = estypes.SearchResponse<ZeroHitDoc, ZeroHitAggregations>;
 
-/** Subset of the Elasticsearch search response used for telemetry parsing. */
-export interface SearchResponse {
-  hits?: SearchHits;
-  aggregations?: SearchAggregations;
+interface ZeroHitAggregations {
+  by_scope?: estypes.AggregationsStringTermsAggregate;
+  latest_version?: estypes.AggregationsTopHitsAggregate;
 }
 
 /** High-level summary presented on the zero-hit dashboard. */
@@ -71,33 +64,30 @@ export function buildSearchBody(limit: number): EsSearchBody {
 
 /** Parse the search response into dashboard-friendly telemetry structures. */
 export function parseSearchResponse(
-  response: SearchResponse,
+  response: ZeroHitSearchResponse,
   limit: number,
 ): {
   summary: ZeroHitTelemetrySummary;
   recent: ZeroHitEvent[];
 } {
-  const hitsArray = Array.isArray(response.hits?.hits) ? response.hits.hits : [];
+  const hitsArray = response.hits.hits;
   const recent = hitsArray
     .slice(0, limit)
     .map((hit) => normaliseHit(hit))
     .filter((event): event is ZeroHitEvent => event !== null);
-  const total = normaliseTotal(response.hits?.total);
-  const byScope = normaliseScopeBuckets(response.aggregations?.by_scope?.buckets);
-  const latestIndexVersion = extractLatestVersion(response.aggregations?.latest_version);
 
   return {
     summary: {
-      total,
-      byScope,
-      latestIndexVersion,
+      total: normaliseTotal(response.hits.total),
+      byScope: normaliseScopeBuckets(response.aggregations?.by_scope),
+      latestIndexVersion: extractLatestVersion(response.aggregations?.latest_version),
     },
     recent,
   };
 }
 
-function normaliseHit(hit: EsSearchHit<ZeroHitDoc> | undefined): ZeroHitEvent | null {
-  const source = resolveHitSource(hit);
+function normaliseHit(hit: EsSearchHit<ZeroHitDoc>): ZeroHitEvent | null {
+  const source = hit._source;
   if (!source) {
     return null;
   }
@@ -109,129 +99,105 @@ function normaliseHit(hit: EsSearchHit<ZeroHitDoc> | undefined): ZeroHitEvent | 
 
   return {
     timestamp,
-    scope: normaliseScope(source['search_scope']),
-    text: extractStringValue(source['query']),
-    filters: normaliseFilters(source['filters']),
-    indexVersion: extractStringValue(source['index_version']),
-    tookMs: normaliseOptionalNumber(source['took_ms']),
-    timedOut: normaliseOptionalBoolean(source['timed_out']),
-    requestId: normaliseOptionalString(source['request_id']),
-    sessionId: normaliseOptionalString(source['session_id']),
+    scope: normaliseScope(source.search_scope),
+    text: source.query,
+    filters: normaliseFilters(source.filters),
+    indexVersion: source.index_version,
+    tookMs: source.took_ms,
+    timedOut: source.timed_out,
+    requestId: source.request_id,
+    sessionId: source.session_id,
   };
 }
 
-function normaliseScope(value: unknown): SearchScope {
+function normaliseScope(value: string): SearchScope {
   return isRecognisedScope(value) ? value : 'lessons';
 }
 
-function normaliseFilters(value: unknown): Record<string, string> {
-  if (typeof value !== 'object' || value === null) {
-    return {};
-  }
+/** Convert ZeroHitDoc filters to string-only filters. */
+function normaliseFilters(value: ZeroHitDoc['filters']): Record<string, string> {
   const result: Record<string, string> = {};
-  // eslint-disable-next-line no-restricted-properties -- REFACTOR
-  for (const [key, entry] of Object.entries(value)) {
-    if (typeof entry === 'string') {
-      result[key] = entry;
+  for (const key in value) {
+    if (Object.hasOwn(value, key)) {
+      const entry = value[key];
+      if (typeof entry === 'string') {
+        result[key] = entry;
+      }
     }
   }
   return result;
 }
 
-function normaliseTotal(value: unknown): number {
-  if (typeof value === 'number') {
-    return value;
+/** Normalise ES total hits (can be number or { value, relation }). */
+function normaliseTotal(total: estypes.SearchTotalHits | number | undefined): number {
+  if (typeof total === 'number') {
+    return total;
   }
-  if (typeof value === 'object' && value !== null) {
-    const totalValue = (value as Record<string, unknown>)['value'];
-    if (typeof totalValue === 'number') {
-      return totalValue;
-    }
+  if (total && 'value' in total) {
+    return total.value;
   }
   return 0;
 }
 
-function normaliseScopeBuckets(value: unknown): Record<SearchScope, number> {
-  const initial: Record<SearchScope, number> = {
+/** Extract scope counts from ES terms aggregation buckets. */
+function normaliseScopeBuckets(
+  agg: estypes.AggregationsStringTermsAggregate | undefined,
+): Record<SearchScope, number> {
+  const result: Record<SearchScope, number> = {
     lessons: 0,
     units: 0,
     sequences: 0,
   };
-  if (!Array.isArray(value)) {
-    return initial;
+
+  if (!agg || !Array.isArray(agg.buckets)) {
+    return result;
   }
-  for (const bucket of value) {
-    if (typeof bucket !== 'object' || bucket === null) {
-      continue;
+
+  for (const bucket of agg.buckets) {
+    if (isStringTermsBucket(bucket)) {
+      const key = bucket.key;
+      if (typeof key === 'string' && isRecognisedScope(key)) {
+        result[key] = bucket.doc_count;
+      }
     }
-    const bucketRec = bucket as Record<string, unknown>;
-    const key = bucketRec['key'];
-    const count = bucketRec['doc_count'];
-    if (isRecognisedScope(key) && typeof count === 'number') {
-      initial[key] = count;
-    }
   }
-  return initial;
+
+  return result;
 }
 
-function isRecognisedScope(value: unknown): value is SearchScope {
-  return (
-    typeof value === 'string' && (value === 'lessons' || value === 'units' || value === 'sequences')
-  );
+/** Type narrowing for ES string terms bucket (internal, well-typed ES union). */
+function isStringTermsBucket(
+  bucket: estypes.AggregationsStringTermsBucket | estypes.AggregationsStringRareTermsBucket,
+): bucket is estypes.AggregationsStringTermsBucket {
+  return 'key' in bucket && 'doc_count' in bucket;
 }
 
-function extractLatestVersion(value: unknown): string | null {
-  if (!isTopHitsAggregation(value)) {
+function isRecognisedScope(value: string): value is SearchScope {
+  return value === 'lessons' || value === 'units' || value === 'sequences';
+}
+
+/** Extract latest index version from top_hits aggregation using Zod validation. */
+function extractLatestVersion(
+  agg: estypes.AggregationsTopHitsAggregate | undefined,
+): string | null {
+  const hits = agg?.hits?.hits;
+  if (!hits || hits.length === 0) {
     return null;
   }
-  const [latest] = value.hits.hits;
-  if (!latest || !latest._source) {
+
+  const firstHit = hits[0];
+  const source: unknown = firstHit?._source;
+
+  // External boundary: ES top_hits _source is unknown, validate with Zod
+  const parsed = TopHitSourceSchema.safeParse(source);
+  if (!parsed.success) {
     return null;
   }
-  const indexVersion = latest._source['index_version'];
-  return typeof indexVersion === 'string' && indexVersion.length > 0 ? indexVersion : null;
+
+  return parsed.data.index_version;
 }
 
-function normaliseOptionalNumber(value: unknown): number | undefined {
-  return typeof value === 'number' ? value : undefined;
-}
-
-function normaliseOptionalBoolean(value: unknown): boolean | undefined {
-  return typeof value === 'boolean' ? value : undefined;
-}
-
-function normaliseOptionalString(value: unknown): string | undefined {
-  return typeof value === 'string' && value.length > 0 ? value : undefined;
-}
-
-function isTopHitsAggregation(
-  value: unknown,
-): value is { hits: { hits: EsSearchHit<ZeroHitDoc>[] } } {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  const hitsContainer = (value as Record<string, unknown>)['hits'];
-  if (typeof hitsContainer !== 'object' || hitsContainer === null) {
-    return false;
-  }
-  const hits = (hitsContainer as Record<string, unknown>)['hits'];
-  return Array.isArray(hits);
-}
-
-function resolveHitSource(
-  hit: EsSearchHit<ZeroHitDoc> | undefined,
-): EsHitSource<ZeroHitDoc> | null {
-  return hit && hit._source ? hit._source : null;
-}
-
-function resolveTimestamp(value: unknown): number | null {
-  if (typeof value !== 'string') {
-    return null;
-  }
+function resolveTimestamp(value: string): number | null {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : null;
-}
-
-function extractStringValue(value: unknown): string {
-  return typeof value === 'string' ? value : String(value ?? '');
 }

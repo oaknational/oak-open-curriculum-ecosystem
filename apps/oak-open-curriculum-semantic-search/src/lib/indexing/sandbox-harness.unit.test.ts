@@ -20,11 +20,12 @@ afterEach(() => {
 
 describe('sandbox harness', () => {
   it('prepares sandbox-targeted bulk operations with per-index counts', async () => {
-    const es = createMockEsTransport();
+    const mock = createMockEsTransport();
     const harness = await createSandboxHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
-      es,
+      es: mock,
+      esClient: mock.esClient as never,
     });
 
     const { operations, summary, metrics } = await harness.prepareBulkOperations();
@@ -51,19 +52,20 @@ describe('sandbox harness', () => {
   });
 
   it('performs ingestion when dry-run is disabled and logs summary metadata', async () => {
-    const es = createMockEsTransport();
+    const mock = createMockEsTransport();
     const harness = await createSandboxHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
-      es,
+      es: mock,
+      esClient: mock.esClient as never,
     });
 
     const result = await harness.ingest({ dryRun: false, verbose: true });
 
     expect(result.summary.totalDocs).toBeGreaterThan(0);
     expect(result.metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
-    expect(es.requestMock).toHaveBeenCalledTimes(1);
-    const paramsCandidate = es.requests[0];
+    expect(mock.requestMock).toHaveBeenCalledTimes(1);
+    const paramsCandidate = mock.requests[0];
     if (!isUnknownObject(paramsCandidate)) {
       throw new Error('Expected bulk request params');
     }
@@ -76,19 +78,20 @@ describe('sandbox harness', () => {
   });
 
   it('skips network calls when run in dry-run mode', async () => {
-    const es = createMockEsTransport();
+    const mock = createMockEsTransport();
     const harness = await createSandboxHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
-      es,
+      es: mock,
+      esClient: mock.esClient as never,
     });
 
     const result = await harness.ingest({ dryRun: true, verbose: true });
 
     expect(result.summary.totalDocs).toBeGreaterThan(0);
     expect(result.metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
-    expect(es.requestMock).not.toHaveBeenCalled();
-    expect(es.requests).toHaveLength(0);
+    expect(mock.requestMock).not.toHaveBeenCalled();
+    expect(mock.requests).toHaveLength(0);
   });
 });
 
@@ -111,16 +114,31 @@ function collectActionIndexes(operations: readonly unknown[]): string[] {
   return indexes;
 }
 
-function createMockEsTransport(): MockEsTransport {
+interface MockEsClient {
+  inference: {
+    inference: ReturnType<typeof vi.fn>;
+  };
+}
+
+function createMockEsTransport(): MockEsTransport & { esClient: MockEsClient } {
   const requests: unknown[] = [];
   const requestMock = vi.fn(async (...args: unknown[]) => {
     requests.push(args[0]);
-    return {};
+    // Return a valid bulk response structure
+    return { errors: false, items: [] };
   });
   const transport = {
     request: requestMock as unknown as Transport['request'],
   } as unknown as Transport;
-  return { transport, requestMock, requests };
+  // Mock ES client for inference calls (dense vector generation)
+  const esClient: MockEsClient = {
+    inference: {
+      inference: vi.fn(async () => ({
+        text_embedding: [{ embedding: Array(384).fill(0.1) }],
+      })),
+    },
+  };
+  return { transport, requestMock, requests, esClient };
 }
 
 function isUnknownObject(value: unknown): value is { [key: string]: unknown } {

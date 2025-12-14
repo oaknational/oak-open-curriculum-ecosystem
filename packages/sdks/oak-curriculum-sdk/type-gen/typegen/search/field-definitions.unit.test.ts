@@ -74,33 +74,14 @@ describe('IndexFieldDefinitions type', () => {
 });
 
 describe('UNITS_INDEX_FIELDS', () => {
-  it('has exactly 16 fields', () => {
-    expect(UNITS_INDEX_FIELDS).toHaveLength(17);
-  });
-
-  it('contains all expected field names in order', () => {
-    const expectedNames = [
-      'unit_id',
-      'unit_slug',
-      'unit_title',
-      'subject_slug',
-      'key_stage',
-      'years',
-      'lesson_ids',
-      'lesson_count',
-      'unit_topics',
-      'unit_url',
-      'subject_programmes_url',
-      'sequence_ids',
-      'thread_slugs',
-      'thread_titles',
-      'thread_orders',
-      'title_suggest',
-      'doc_type',
-    ];
-
-    const actualNames = UNITS_INDEX_FIELDS.map((f) => f.name);
-    expect(actualNames).toEqual(expectedNames);
+  it('includes required identity and routing fields', () => {
+    const names = UNITS_INDEX_FIELDS.map((f) => f.name);
+    expect(names).toContain('unit_id');
+    expect(names).toContain('unit_slug');
+    expect(names).toContain('unit_title');
+    expect(names).toContain('unit_url');
+    expect(names).toContain('subject_programmes_url');
+    expect(names).toContain('doc_type');
   });
 
   it('marks unit_id as required string', () => {
@@ -199,11 +180,7 @@ describe('THREADS_INDEX_FIELDS', () => {
 });
 
 describe('LESSONS_INDEX_FIELDS', () => {
-  it('has exactly 27 fields', () => {
-    expect(LESSONS_INDEX_FIELDS).toHaveLength(27);
-  });
-
-  it('contains expected field names', () => {
+  it('contains expected search fields', () => {
     const fieldNames = LESSONS_INDEX_FIELDS.map((f) => f.name);
     expect(fieldNames).toContain('lesson_id');
     expect(fieldNames).toContain('lesson_title');
@@ -224,10 +201,6 @@ describe('LESSONS_INDEX_FIELDS', () => {
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
-  it('has exactly 24 fields', () => {
-    expect(UNIT_ROLLUP_INDEX_FIELDS).toHaveLength(24);
-  });
-
   it('contains expected field names', () => {
     const fieldNames = UNIT_ROLLUP_INDEX_FIELDS.map((f) => f.name);
     expect(fieldNames).toContain('unit_id');

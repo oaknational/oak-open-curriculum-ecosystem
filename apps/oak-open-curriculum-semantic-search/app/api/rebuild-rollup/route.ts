@@ -100,7 +100,8 @@ async function rollupUnit(
   if (!isUnitSummary(unitSummaryCandidate)) {
     throw new Error(`Unexpected unit summary response for ${unitDoc.unit_slug}`);
   }
-  const unitSummary: unknown = unitSummaryCandidate;
+  // After validation, keep the typed data - don't widen to unknown!
+  const unitSummary = unitSummaryCandidate;
 
   const snippets: string[] = [];
   for (const lessonId of unitDoc.lesson_ids) {
@@ -108,7 +109,8 @@ async function rollupUnit(
     if (!isLessonSummary(lessonSummaryCandidate)) {
       throw new Error(`Unexpected lesson summary response for ${lessonId}`);
     }
-    const lessonSummary: unknown = lessonSummaryCandidate;
+    // After validation, keep the typed data - don't widen to unknown!
+    const lessonSummary = lessonSummaryCandidate;
     const transcriptResponse = await client.getLessonTranscript(lessonId);
     snippets.push(
       selectLessonPlanningSnippet({

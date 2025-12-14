@@ -6,6 +6,7 @@ import {
   getDataIntegritySummary,
   type DataIntegrityReport,
 } from './data-integrity-report';
+import { BulkResponseSchema, logBulkErrors } from './sandbox-bulk-response';
 
 /**
  * Minimal Elasticsearch transport interface for bulk operations.
@@ -87,44 +88,6 @@ export function createNdjson(operations: readonly unknown[]): string {
   return operations.map((entry) => JSON.stringify(entry)).join('\n') + '\n';
 }
 
-/** Elasticsearch bulk response structure. */
-interface BulkResponseItem {
-  readonly index?: {
-    readonly _index: string;
-    readonly status: number;
-    readonly error?: {
-      readonly type: string;
-      readonly reason: string;
-    };
-  };
-}
-
-interface BulkResponse {
-  readonly errors: boolean;
-  readonly items: readonly BulkResponseItem[];
-}
-
-/** Count errors by type from failed bulk items. */
-function countErrorsByType(items: readonly BulkResponseItem[]): Record<string, number> {
-  const counts = new Map<string, number>();
-  for (const item of items) {
-    const errorType = item.index?.error?.type ?? 'unknown';
-    counts.set(errorType, (counts.get(errorType) ?? 0) + 1);
-  }
-  return Object.fromEntries(counts);
-}
-
-/** Extract and log bulk operation errors. */
-function logBulkErrors(response: BulkResponse, logger: Logger): void {
-  const failedItems = response.items.filter((item) => item.index && item.index.status >= 400);
-  const firstError = failedItems[0]?.index?.error;
-  logger.error('Bulk indexing errors', undefined, {
-    failureCount: failedItems.length,
-    errorTypes: countErrorsByType(failedItems),
-    firstError: firstError ? { type: firstError.type, reason: firstError.reason } : undefined,
-  });
-}
-
 /**
  * Dispatches the prepared NDJSON payload against the provided Elasticsearch transport.
  * Logs progress before/after upload and errors if any bulk operations fail.
@@ -145,10 +108,15 @@ export async function dispatchBulk(
 
   const startTime = Date.now();
   const ndjson = createNdjson(operations);
-  const response = (await es.transport.request(
+  const rawResponse = await es.transport.request(
     { method: 'POST', path: '/_bulk', body: ndjson },
     { headers: { 'content-type': 'application/x-ndjson' } },
-  )) as BulkResponse;
+  );
+  const parseResult = BulkResponseSchema.safeParse(rawResponse);
+  if (!parseResult.success) {
+    throw new Error(`Invalid bulk response from Elasticsearch: ${parseResult.error.message}`);
+  }
+  const response = parseResult.data;
   const durationMs = Date.now() - startTime;
 
   if (response.errors) {
@@ -205,20 +173,25 @@ interface IndexAction {
   };
 }
 
+/**
+ * Type guard to check if a value is an ES bulk index action.
+ * Narrows directly to the specific IndexAction type without intermediate generic types.
+ */
 function isIndexAction(value: unknown): value is IndexAction {
-  if (!isUnknownObject(value)) {
+  if (typeof value !== 'object' || value === null) {
     return false;
   }
-  const action = value.index;
-  if (!isUnknownObject(action)) {
+  if (!('index' in value)) {
     return false;
   }
-  return typeof action._index === 'string';
-}
-
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- REFACTOR
-function isUnknownObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+  const indexProp = value.index;
+  if (typeof indexProp !== 'object' || indexProp === null) {
+    return false;
+  }
+  if (!('_index' in indexProp)) {
+    return false;
+  }
+  return typeof indexProp._index === 'string';
 }
 
 /** Logs data integrity issues if any were detected during ingestion. */

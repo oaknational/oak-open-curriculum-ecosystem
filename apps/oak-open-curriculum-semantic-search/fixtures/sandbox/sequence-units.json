@@ -1,9 +1,14 @@
 {
   "history-ancient-egypt-programme": [
     {
-      "unitSlug": "ancient-egypt",
-      "tiers": [],
-      "lessons": []
+      "year": 1,
+      "units": [
+        {
+          "unitTitle": "Ancient Egypt",
+          "unitOrder": 1,
+          "unitSlug": "ancient-egypt"
+        }
+      ]
     }
   ]
 }

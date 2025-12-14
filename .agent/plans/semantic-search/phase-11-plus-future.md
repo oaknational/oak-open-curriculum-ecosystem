@@ -1,9 +1,9 @@
-# Phase 10+: Future Roadmap
+# Phase 11+: Future Roadmap
 
 **Status**: 📋 FUTURE  
 **Estimated Effort**: 15-20 days total  
-**Prerequisites**: Phases 3-9 complete  
-**Last Updated**: 2025-12-11
+**Prerequisites**: Phases 3-10 complete  
+**Last Updated**: 2025-12-13
 
 ---
 
@@ -25,14 +25,14 @@ This document covers advanced features planned for later phases:
 
 | Phase | Name                   | Focus                             | Estimated Effort |
 | ----- | ---------------------- | --------------------------------- | ---------------- |
-| 10    | RAG Infrastructure     | Retrieval-Augmented Generation    | 4-5 days         |
-| 11    | Knowledge Graph        | Curriculum relationship graph     | 5-6 days         |
-| 12    | Advanced Features      | LTR, multi-vector, runtime fields | 3-4 days         |
-| 13    | Broader Resource Types | Worksheets, quizzes, sequences    | 3-4 days         |
+| 11    | RAG Infrastructure     | Retrieval-Augmented Generation    | 4-5 days         |
+| 12    | Knowledge Graph        | Curriculum relationship graph     | 5-6 days         |
+| 13    | Advanced Features      | LTR, multi-vector, runtime fields | 3-4 days         |
+| 14    | Broader Resource Types | Worksheets, quizzes, sequences    | 3-4 days         |
 
 ---
 
-## Phase 10: RAG Infrastructure (4-5 days)
+## Phase 11: RAG Infrastructure (4-5 days)
 
 ### Features
 
@@ -76,7 +76,7 @@ const response = await esClient.inference.inference({
 
 Domain knowledge enhancement using curriculum ontology.
 
-### Success Criteria (Phase 10)
+### Success Criteria (Phase 11)
 
 - [ ] Chunked transcripts indexed with semantic_text
 - [ ] RAG endpoint implemented
@@ -85,7 +85,7 @@ Domain knowledge enhancement using curriculum ontology.
 
 ---
 
-## Phase 11: Knowledge Graph (5-6 days)
+## Phase 12: Knowledge Graph (5-6 days)
 
 ### Features
 
@@ -129,7 +129,7 @@ const path = await traverseGraph({
 
 **Note**: Could partially address pathway navigation without API changes.
 
-### Success Criteria (Phase 11)
+### Success Criteria (Phase 12)
 
 - [ ] Triple store populated
 - [ ] Entity resolution >90% precision
@@ -137,7 +137,7 @@ const path = await traverseGraph({
 
 ---
 
-## Phase 12: Advanced Features (3-4 days)
+## Phase 13: Advanced Features (3-4 days)
 
 ### Features
 
@@ -184,7 +184,7 @@ Computed fields at query time:
 }
 ```
 
-### Success Criteria (Phase 12)
+### Success Criteria (Phase 13)
 
 - [ ] Click tracking implemented
 - [ ] Multi-vector fields tested
@@ -192,7 +192,7 @@ Computed fields at query time:
 
 ---
 
-## Phase 13: Broader Resource Types (3-4 days)
+## Phase 14: Broader Resource Types (3-4 days)
 
 ### Resource Types to Index
 
@@ -242,7 +242,7 @@ interface QuizDocument {
 }
 ```
 
-### Success Criteria (Phase 13)
+### Success Criteria (Phase 14)
 
 - [ ] Sequence search working
 - [ ] Asset discovery indexed
@@ -282,10 +282,10 @@ See [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md) for f
 
 | Phase | Focus                  | Duration | Dependencies |
 | ----- | ---------------------- | -------- | ------------ |
-| 10    | RAG Infrastructure     | 4-5 days | Phase 9      |
-| 11    | Knowledge Graph        | 5-6 days | Phase 10     |
-| 12    | Advanced Features      | 3-4 days | Phase 11     |
-| 13    | Broader Resource Types | 3-4 days | Phase 12     |
+| 11    | RAG Infrastructure     | 4-5 days | Phase 10     |
+| 12    | Knowledge Graph        | 5-6 days | Phase 11     |
+| 13    | Advanced Features      | 3-4 days | Phase 12     |
+| 14    | Broader Resource Types | 3-4 days | Phase 13     |
 
 **Total Future Work**: ~15-20 days
 

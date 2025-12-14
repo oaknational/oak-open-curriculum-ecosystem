@@ -35,6 +35,8 @@ interface SandboxHarnessOptions {
   readonly indexes?: readonly SearchIndexKind[];
   readonly target?: SearchIndexTarget;
   readonly es?: EsTransport;
+  /** Optional ES client override for testing. When provided, skips creating the real singleton. */
+  readonly esClient?: Client;
   readonly logger?: Logger;
 }
 
@@ -80,7 +82,7 @@ export async function createSandboxHarness(
   const logger = options.logger ?? sandboxLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
   const indexes = options.indexes ?? [];
-  const { transport: es, client: resolvedEsClient } = resolveEsClient(options.es);
+  const { transport: es, client: resolvedEsClient } = resolveEsClient(options.es, options.esClient);
   const context: HarnessContext = {
     client,
     esClient: resolvedEsClient,
@@ -155,12 +157,21 @@ function ensureNonEmptyList<T>(value: readonly T[] | undefined, message: string)
   return value;
 }
 
-/** Resolves ES client from options. Mock transport for testing, real client otherwise. */
-function resolveEsClient(es?: EsTransport): { transport: EsTransport; client: Client } {
+/**
+ * Resolves ES client from options. Uses provided client/transport for testing, real client otherwise.
+ *
+ * @remarks
+ * For testing, provide both `esClient` (for inference) and `es` (for bulk transport).
+ * This avoids network calls to real Elasticsearch during tests.
+ */
+function resolveEsClient(
+  es?: EsTransport,
+  providedClient?: Client,
+): { transport: EsTransport; client: Client } {
+  const client = providedClient ?? esClient();
   if (es) {
-    return { transport: es, client: { transport: es.transport } as Client };
+    return { transport: es, client };
   }
-  const client = esClient();
   return { transport: { transport: client.transport }, client };
 }
 
