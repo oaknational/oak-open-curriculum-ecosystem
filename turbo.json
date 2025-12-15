@@ -169,7 +169,7 @@
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:e2e:built": {
-      "dependsOn": ["build"],
+      "dependsOn": ["build", "test:e2e"],
       "outputs": [],
       "cache": false,
       "inputs": [

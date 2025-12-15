@@ -6,7 +6,7 @@ import {
   validateRequest,
   isValidationSuccess,
 } from '@oaknational/oak-curriculum-sdk';
-import type { KeyStage, Subject } from '@oaknational/oak-curriculum-sdk';
+import type { KeyStage, Subject, OakApiPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
 
 interface TranscriptQuery {
@@ -19,13 +19,40 @@ type TranscriptParseResult =
   | { ok: true; query: TranscriptQuery }
   | { ok: false; status: number; body: unknown };
 
-export async function POST(req: NextRequest): Promise<Response> {
+/**
+ * Dependencies for the search transcripts handler.
+ * Accepts the SDK client factory as a parameter for testability per ADR-078.
+ */
+export interface SearchTranscriptsDependencies {
+  readonly createClient: (apiKey: string) => OakApiPathBasedClient;
+  readonly apiKey: string;
+}
+
+/**
+ * Default dependencies using the real SDK client.
+ * Production code uses this; tests inject simple fakes.
+ */
+export function createDefaultDependencies(): SearchTranscriptsDependencies {
+  return {
+    createClient: createOakPathBasedClient,
+    apiKey: env().OAK_EFFECTIVE_KEY,
+  };
+}
+
+/**
+ * Core handler logic that accepts dependencies as parameters.
+ * This is the testable unit - tests pass simple fakes, no mocking required.
+ */
+export async function handleSearchTranscripts(
+  req: NextRequest,
+  deps: SearchTranscriptsDependencies,
+): Promise<Response> {
   const parsed = parseTranscriptRequest(await req.json());
   if (!parsed.ok) {
     return NextResponse.json(parsed.body, { status: parsed.status });
   }
 
-  const client = createOakPathBasedClient(env().OAK_EFFECTIVE_KEY);
+  const client = deps.createClient(deps.apiKey);
   const response = await client['/search/transcripts'].GET({
     params: {
       query: parsed.query,
@@ -39,6 +66,14 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
   return NextResponse.json(response.data ?? []);
+}
+
+/**
+ * Next.js route handler - thin wrapper that creates default dependencies.
+ * Tests should use handleSearchTranscripts directly with injected fakes.
+ */
+export async function POST(req: NextRequest): Promise<Response> {
+  return handleSearchTranscripts(req, createDefaultDependencies());
 }
 
 function parseTranscriptRequest(raw: unknown): TranscriptParseResult {
