@@ -1,7 +1,91 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
-**Last Updated**: 2025-12-13
+**Status**: Phase 1 & 2 Complete | **Phase 3.0 ✅ VERIFIED** | Phase 3a/3b 🔲 PENDING | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
+**Last Updated**: 2025-12-15
+
+---
+
+## 📋 Current State
+
+**Part 3.0 (Verification) is COMPLETE.** All search infrastructure has been verified:
+
+- ✅ Hybrid superiority experiment: Lessons hybrid > BM25/ELSER; Units ELSER slightly better MRR but hybrid better NDCG
+- ✅ Lesson-only search verified
+- ✅ Unit-only search verified
+- ✅ Joint search (both types) verified
+- ✅ Lesson filter by unit verified
+- ✅ Redis cache TTL updated to 14 days with ±12 hour jitter (ADR-079)
+
+**Next work**: Part 3a (Feature Parity) and Part 3b (Semantic Summary Enhancement).
+
+See `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md` for detailed validation results.
+
+---
+
+## ⚠️ Fresh Chat First Steps (MANDATORY)
+
+**Significant code changes have occurred** since the last semantic search session. Before any feature work:
+
+### 1. Run Full Quality Gates (from repo root)
+
+```bash
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
+```
+
+**All gates must pass before proceeding.** Resolve any issues gate-by-gate.
+
+### 2. ALWAYS Re-Index Fresh (CRITICAL)
+
+**⚠️ Never run search quality smoke tests against stale indices.** The indices may contain data from a previous session with different schema, transforms, or field mappings. Results are meaningless without fresh data.
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup                                           # Ensure mappings are current
+pnpm es:ingest-live -- --subject maths --keystage ks4   # ~5-10 minutes
+pnpm es:status                                          # Verify document counts
+```
+
+**Expected counts**: ~314 lessons, ~36 units for Maths KS4.
+
+### 3. Understand Smoke Test Architecture
+
+There are **two categories** of smoke tests:
+
+| Category        | Examples                                               | Requirements                      |
+| --------------- | ------------------------------------------------------ | --------------------------------- |
+| **API-based**   | `scope-verification`, `search-quality`, `unit-search-*` | Next.js dev server + fresh ES     |
+| **Direct ES**   | `hybrid-superiority`                                   | ES credentials in `.env.local`    |
+
+**API-based tests**: Hit `/api/search` endpoint → full stack validation.
+**Direct ES tests**: Talk to Elasticsearch directly → raw query validation.
+
+Both require **fresh indices** to produce meaningful results. Never skip re-indexing.
+
+### 4. Run Verification Tests in Correct Order
+
+```bash
+# Direct ES tests (no server needed)
+pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
+
+# API-based tests (need server running in separate terminal)
+# Terminal 1: pnpm dev
+# Terminal 2:
+pnpm vitest run -c vitest.smoke.config.ts scope-verification
+```
+
+### 5. Then Proceed with Phase 3 Work
+
+Once quality gates pass, indices are fresh, and verification tests pass, continue with Part 3a/3b work.
 
 ---
 
@@ -47,20 +131,13 @@ Create a production-ready demo proving Elasticsearch Serverless as the **definit
 
 ---
 
-## ⚠️ Immediate Priority: Type Discipline Restoration
+## Type Discipline Status
 
-A stricter ESLint configuration has surfaced **~188 eslint-disable comments** across **all workspaces**. These represent pre-existing architectural drift that must be resolved before feature work continues.
+Quality gates are now **passing**. Type discipline restoration work is ongoing but not blocking semantic search.
 
-**Prompt**: `.agent/prompts/type-discipline-restoration.prompt.md`
 **Plan**: `.agent/plans/quality-and-maintainability/type-discipline-restoration-plan.md`
 
-This is a **repo-wide** issue affecting all workspaces. Key issues:
-
-- `Record<string, unknown>` type aliases — hiding loose types
-- `Object.*`/`Reflect.*` usage — should use type-safe helpers
-- Missing Zod validation at script boundaries
-- Logger using `object` instead of proper `LogContext` interface
-- Every `eslint-disable` comment is entropy — they hide real issues
+**Current state**: 2 lint errors remain; test isolation enabled (`isolate: true` + `pool: 'forks'`).
 
 ---
 
@@ -90,21 +167,41 @@ Key ES documentation for this project:
 | Three-way RRF code removed (dead code cleanup)    | ✅ Complete |
 | All quality gates passing                         | ✅ Complete |
 | BM25 vs ELSER vs Hybrid experiment                | ✅ Complete |
+| Part 3.0 verification (scope, doc_type, filters)  | ✅ Complete |
+| Redis cache TTL 14 days + jitter (ADR-079)        | ✅ Complete |
 
 ### Phase 3 Remaining Work
 
-#### Part 3.0: Verification (CRITICAL - must complete first)
+**📋 Detailed execution plan**: `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md`
 
-| Task                                      | Priority     | Status            |
-| ----------------------------------------- | ------------ | ----------------- |
-| BM25 vs ELSER vs Hybrid experiment        | **CRITICAL** | ✅ Complete       |
-| Prove lesson-only search works            | **CRITICAL** | 🔲 Pending        |
-| Prove unit-only search works              | **CRITICAL** | 🔲 Pending        |
-| Prove joint search with doc_type works    | **CRITICAL** | 🔲 Pending        |
-| Prove lesson filter by unit works         | **CRITICAL** | 🔲 Pending        |
-| Add `doc_type` field (re-index if needed) | **HIGH**     | ✅ Already exists |
-| ADR: unified vs separate endpoints        | Medium       | 🔲 Pending        |
-| Unit reranking experiment                 | Medium       | 🔲 Deferred       |
+#### Phase 0: Redis Cache TTL Configuration ✅ COMPLETE
+
+| Task                                        | Priority | Status      |
+| ------------------------------------------- | -------- | ----------- |
+| Investigate current Redis TTL configuration | **HIGH** | ✅ Complete |
+| Update TTL to 14 days with ±12 hour jitter  | **HIGH** | ✅ Complete |
+| Create ADR-079 for TTL jitter               | **HIGH** | ✅ Complete |
+| Update SDK-CACHING.md documentation         | **HIGH** | ✅ Complete |
+| Create `pnpm cache:reset-ttls` dev tool     | **HIGH** | ✅ Complete |
+
+**Implementation**: `calculateTtlWithJitter()` pure function in `src/adapters/sdk-cache/ttl-jitter.ts` with per-entry jitter for true stampede prevention.
+
+**Dev Tool**: `pnpm cache:reset-ttls` - Reset TTLs on existing cached entries without re-downloading data.
+
+#### Part 3.0: Verification ✅ COMPLETE
+
+| Task                                   | Priority     | Status      |
+| -------------------------------------- | ------------ | ----------- |
+| BM25 vs ELSER vs Hybrid experiment     | **CRITICAL** | ✅ Complete |
+| Prove lesson-only search works         | **CRITICAL** | ✅ Complete |
+| Prove unit-only search works           | **CRITICAL** | ✅ Complete |
+| Prove joint search with doc_type works | **CRITICAL** | ✅ Complete |
+| Prove lesson filter by unit works      | **CRITICAL** | ✅ Complete |
+| `doc_type` field exists                | **HIGH**     | ✅ Complete |
+| ADR: unified vs separate endpoints     | Medium       | 🔲 Deferred |
+| Unit reranking experiment              | Medium       | 🔲 Deferred |
+
+**Verified 2025-12-15** with fresh Maths KS4 data. See validation results in `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md`.
 
 #### Part 3a: Feature Parity (after verification complete)
 
@@ -118,16 +215,16 @@ Key ES documentation for this project:
 
 #### Part 3b: Semantic Summary Enhancement (NEW)
 
-| Task                                 | Priority | Status      |
-| ------------------------------------ | -------- | ----------- |
-| Remove dense vector code             | **HIGH** | 🔲 Pending  |
-| Lesson semantic summary template     | **HIGH** | 🔲 Pending  |
-| Unit semantic summary template       | **HIGH** | 🔲 Pending  |
-| Redis caching for summaries          | Medium   | 🔲 Pending  |
-| Compare summary vs transcript ELSER  | Medium   | 🔲 Pending  |
-| ADR-075: Dense vector removal        | **HIGH** | ✅ Complete |
-| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete |
-| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete |
+| Task                                 | Priority | Status       |
+| ------------------------------------ | -------- | ------------ |
+| Remove dense vector code             | **HIGH** | ✅ Complete  |
+| Lesson semantic summary template     | **HIGH** | 🔲 Pending   |
+| Unit semantic summary template       | **HIGH** | 🔲 Pending   |
+| Redis caching for summaries          | Medium   | 🔲 Pending   |
+| Compare summary vs transcript ELSER  | Medium   | 🔲 Pending   |
+| ADR-075: Dense vector removal        | **HIGH** | ✅ Implemented |
+| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete  |
+| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete  |
 
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
@@ -201,12 +298,13 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-s
 
 ### ADRs
 
-| ADR                                                                                         | Title                           | Status   |
-| ------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
-| [ADR-074](docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
-| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal       | Accepted |
-| [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy   | Accepted |
-| [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation     | Accepted |
+| ADR                                                                                          | Title                           | Status   |
+| -------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
+| [ADR-074](docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md)  | Elastic-Native-First Philosophy | Accepted |
+| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md)             | Dense Vector Code Removal       | Accepted |
+| [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)    | ELSER-Only Embedding Strategy   | Accepted |
+| [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md)      | Semantic Summary Generation     | Accepted |
+| [ADR-079](docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)             | SDK Cache TTL Jitter            | Implemented |
 
 ---
 
@@ -234,17 +332,19 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-s
 
 ## Data
 
-| Index             | Count   | Hybrid Search | Proven Working |
-| ----------------- | ------- | ------------- | -------------- |
-| `oak_lessons`     | **314** | BM25 + ELSER  | ⚠️ Not proven  |
-| `oak_unit_rollup` | 244     | BM25 + ELSER  | ⚠️ Not proven  |
-| `oak_units`       | 36      | BM25 only     | ❌ Untested    |
-| `oak_threads`     | 201     | BM25 + ELSER  | ❌ Untested    |
-| `oak_sequences`   | 2       | BM25 + ELSER  | ❌ Untested    |
+**Last indexed**: 2025-12-15 (Maths KS4)
 
-All 36 Maths KS4 units have their lessons indexed.
+| Index             | Count | Hybrid Search | Status       |
+| ----------------- | ----- | ------------- | ------------ |
+| `oak_lessons`     | 314   | BM25 + ELSER  | ✅ Verified  |
+| `oak_unit_rollup` | 36    | BM25 + ELSER  | ✅ Verified  |
+| `oak_units`       | 36    | BM25 only     | ✅ Verified  |
+| `oak_threads`     | 201   | BM25 + ELSER  | ❌ Untested  |
+| `oak_sequences`   | 2     | BM25 + ELSER  | ❌ Untested  |
 
-**Note**: Hybrid superiority experiment completed. For lessons, hybrid is superior. For units, results are mixed (ELSER slightly better MRR, hybrid better NDCG@10). See `experiments/hybrid-superiority.experiment.ts`.
+All 36 Maths KS4 units have their lessons indexed. Redis cache refreshed with 14-day TTLs (8,109 entries).
+
+**Note**: Hybrid superiority experiment completed. For lessons, hybrid is superior. For units, results are mixed (ELSER slightly better MRR, hybrid better NDCG@10).
 
 ---
 
@@ -257,7 +357,7 @@ All 36 Maths KS4 units have their lessons indexed.
 | Lessons  | `lesson_semantic` | Full video transcript     | ~5000       |
 | Units    | `unit_semantic`   | `rollupText` (aggregated) | ~200-400    |
 
-### Dense Vectors: REMOVED
+### Dense Vectors: REMOVED ✅
 
 Phase 2 evaluation showed E5 dense vectors provide **no benefit** for curriculum search:
 
@@ -266,7 +366,12 @@ Phase 2 evaluation showed E5 dense vectors provide **no benefit** for curriculum
 
 **Decision**: Remove all dense vector code. See [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md).
 
-⚠️ **Action Required**: Dense vector generation code still exists and must be removed.
+✅ **Completed 2025-12-15**: All dense vector code has been removed:
+- `dense-vector-generation.ts` module deleted
+- Dense vector fields removed from document transforms
+- SDK field definitions updated (type-gen regenerated)
+- Rerank experiment scripts simplified to 2-way only
+- All quality gates passing
 
 ### Future Enhancement: Semantic Summaries
 
@@ -391,28 +496,45 @@ pnpm smoke:dev:stub    # Smoke tests
 
 ## Running Tests
 
-```bash
-# Terminal 1: Start the server (current Next.js wrapper; Phase 4 moves to SDK + CLI)
-cd apps/oak-open-curriculum-semantic-search
-rm -rf .next  # Clear cache (important!)
-pnpm dev
+### Direct ES Tests (no server needed)
 
-# Terminal 2: Run smoke tests
-pnpm vitest run -c vitest.smoke.config.ts
+These tests talk directly to Elasticsearch using credentials from `.env.local`:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
 ```
 
-## Re-Ingestion (if needed)
+### API-Based Tests (need server)
+
+These tests hit the `/api/search` endpoint:
+
+```bash
+# Terminal 1: Start the dev server
+cd apps/oak-open-curriculum-semantic-search
+rm -rf .next  # Clear cache
+pnpm dev
+
+# Terminal 2: Run API-based smoke tests
+pnpm vitest run -c vitest.smoke.config.ts scope-verification
+pnpm vitest run -c vitest.smoke.config.ts search-quality
+pnpm vitest run -c vitest.smoke.config.ts unit-search
+```
+
+## Re-Ingestion (MANDATORY before verification)
+
+**⚠️ Always re-index before running smoke tests.** Stale indices invalidate all results.
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Ensure ES cluster is ready
+# Setup indices with current mappings
 pnpm es:setup
 
-# Re-ingest Maths KS4 (takes ~5-10 minutes)
+# Ingest Maths KS4 fresh (~5-10 minutes)
 pnpm es:ingest-live -- --subject maths --keystage ks4
 
-# Verify status
+# Verify document counts (expect ~314 lessons, ~36 units)
 pnpm es:status
 ```
 

@@ -1,6 +1,8 @@
 /**
  * @module rerank-experiment/query-builders.unit.test
  * @description Unit tests for search query builders.
+ *
+ * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -10,38 +12,25 @@ import type { SearchConfig } from './types';
 const DEFAULT_BM25_FIELDS = ['title^2', 'content', 'keywords^1.5'];
 
 describe('buildRetrievers', () => {
-  it('builds 2-way retrievers without KNN when queryVector is null', () => {
-    const retrievers = buildRetrievers('test query', null, DEFAULT_BM25_FIELDS, 50);
+  it('builds 2-way retrievers (BM25 + ELSER semantic)', () => {
+    const retrievers = buildRetrievers('test query', DEFAULT_BM25_FIELDS);
     expect(retrievers).toHaveLength(2);
   });
 
-  it('builds 3-way retrievers with KNN when queryVector is provided', () => {
-    const queryVector = [0.1, 0.2, 0.3];
-    const retrievers = buildRetrievers('test query', queryVector, DEFAULT_BM25_FIELDS, 50);
-    expect(retrievers).toHaveLength(3);
-  });
-
   it('includes BM25 retriever', () => {
-    const retrievers = buildRetrievers('my query', null, DEFAULT_BM25_FIELDS, 50);
+    const retrievers = buildRetrievers('my query', DEFAULT_BM25_FIELDS);
     expect(retrievers[0]).toHaveProperty('standard');
   });
 
   it('includes semantic retriever', () => {
-    const retrievers = buildRetrievers('my query', null, DEFAULT_BM25_FIELDS, 50);
+    const retrievers = buildRetrievers('my query', DEFAULT_BM25_FIELDS);
     expect(retrievers[1]).toHaveProperty('standard');
-  });
-
-  it('includes KNN retriever when vector provided', () => {
-    const queryVector = [0.1, 0.2, 0.3];
-    const retrievers = buildRetrievers('test', queryVector, DEFAULT_BM25_FIELDS, 50);
-    expect(retrievers[2]).toHaveProperty('knn');
   });
 });
 
 describe('buildSearchBody', () => {
   const baseConfig: SearchConfig = {
     query: 'test query',
-    queryVector: null,
     useRerank: false,
     retrieveSize: 50,
     rerankSize: 20,

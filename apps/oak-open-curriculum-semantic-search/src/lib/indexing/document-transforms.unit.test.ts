@@ -23,15 +23,6 @@ import {
 const mathsSubject: SearchSubjectSlug = 'maths';
 const ks4: KeyStage = 'ks4';
 
-// Mock ES client for tests
-const mockEsClient = {
-  inference: {
-    inference: async () => ({
-      text_embedding: [{ embedding: Array(384).fill(0.1) }],
-    }),
-  },
-} as never;
-
 // Use SDK types directly - the local interfaces were redundant
 type UnitSummaryFixture = SearchUnitSummary;
 type LessonSummaryFixture = SearchLessonSummary;
@@ -177,10 +168,10 @@ describe('createUnitDocument', () => {
 });
 
 describe('createLessonDocument', () => {
-  it('maps lesson data into a search lesson document', async () => {
+  it('maps lesson data into a search lesson document', () => {
     const lessonSummary = buildLessonSummary();
 
-    const doc: SearchLessonsIndexDoc = await createLessonDocument({
+    const doc: SearchLessonsIndexDoc = createLessonDocument({
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two. Sentence three.',
       summary: lessonSummary,
@@ -189,7 +180,6 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
-      esClient: mockEsClient,
     });
 
     expect(doc.lesson_id).toBe('lesson-1');
@@ -201,12 +191,10 @@ describe('createLessonDocument', () => {
     expect(doc.title_suggest?.contexts?.subject).toEqual(['maths']);
     expect(doc.title_suggest?.contexts?.key_stage).toEqual(['ks4']);
     expect(doc.title_suggest?.contexts).not.toHaveProperty('sequence');
-    // Dense vectors should be generated
-    expect(doc.lesson_dense_vector).toHaveLength(384);
-    expect(doc.title_dense_vector).toHaveLength(384);
+    // Dense vectors removed per ADR-075 - E5 provides no benefit over BM25+ELSER
   });
 
-  it('omits optional string arrays when the summary values are nullish', async () => {
+  it('omits optional string arrays when the summary values are nullish', () => {
     const lessonSummary = buildLessonSummary({
       lessonKeywords: [],
       keyLearningPoints: [],
@@ -215,7 +203,7 @@ describe('createLessonDocument', () => {
       contentGuidance: null,
     });
 
-    const doc = await createLessonDocument({
+    const doc = createLessonDocument({
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two.',
       summary: lessonSummary,
@@ -224,7 +212,6 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: undefined,
       lessonCount: 5,
-      esClient: mockEsClient,
     });
 
     expect(doc.lesson_keywords).toBeUndefined();
@@ -234,12 +221,12 @@ describe('createLessonDocument', () => {
     expect(doc.content_guidance).toBeUndefined();
   });
 
-  it('derives tier from unit slug when possible', async () => {
+  it('derives tier from unit slug when possible', () => {
     const lessonSummary = buildLessonSummary({
       unitSlug: 'maths-gcse-foundation',
     });
 
-    const doc = await createLessonDocument({
+    const doc = createLessonDocument({
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Pythagoras theorem content.',
       summary: lessonSummary,
@@ -248,18 +235,17 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
-      esClient: mockEsClient,
     });
 
     expect(doc.tier).toBe('foundation');
   });
 
-  it('populates lesson_semantic with transcript content for ELSER semantic search', async () => {
+  it('populates lesson_semantic with transcript content for ELSER semantic search', () => {
     const lessonSummary = buildLessonSummary();
     const transcript =
       'Pythagoras theorem states that in a right-angled triangle, the square of the hypotenuse equals the sum of squares of the other two sides.';
 
-    const doc = await createLessonDocument({
+    const doc = createLessonDocument({
       lesson: { lessonSlug: 'pythagoras-lesson', lessonTitle: 'Using Pythagoras Theorem' },
       transcript,
       summary: lessonSummary,
@@ -268,7 +254,6 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 8,
-      esClient: mockEsClient,
     });
 
     // The lesson_semantic field must be populated for ELSER to generate embeddings
@@ -279,16 +264,15 @@ describe('createLessonDocument', () => {
 });
 
 describe('createRollupDocument', () => {
-  it('maps a unit summary and snippets into a rollup document', async () => {
+  it('maps a unit summary and snippets into a rollup document', () => {
     const summary = buildUnitSummary();
 
-    const doc: SearchUnitRollupDoc = await createRollupDocument({
+    const doc: SearchUnitRollupDoc = createRollupDocument({
       summary,
       snippets: ['Snippet one', 'Snippet two'],
       subject: mathsSubject,
       keyStage: ks4,
       subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
-      esClient: mockEsClient,
     });
 
     expect(doc.unit_semantic).toContain('Snippet one');
@@ -296,23 +280,20 @@ describe('createRollupDocument', () => {
     expect(doc.sequence_ids).toEqual(['sequence-1', 'sequence-2']);
     expect(doc.subject_slug).toBe(mathsSubject);
     expect(doc.key_stage).toBe(ks4);
-    // Dense vectors should be generated
-    expect(doc.unit_dense_vector).toHaveLength(384);
-    expect(doc.rollup_dense_vector).toHaveLength(384);
+    // Dense vectors removed per ADR-075 - E5 provides no benefit over BM25+ELSER
   });
 
-  it('throws when the unit canonical URL is missing', async () => {
+  it('throws when the unit canonical URL is missing', () => {
     const summary = buildUnitSummary({ canonicalUrl: undefined });
 
-    await expect(async () =>
+    expect(() =>
       createRollupDocument({
         summary,
         snippets: [],
         subject: mathsSubject,
         keyStage: ks4,
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
-        esClient: mockEsClient,
       }),
-    ).rejects.toThrowError(/Missing canonical URL/);
+    ).toThrowError(/Missing canonical URL/);
   });
 });

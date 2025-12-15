@@ -128,7 +128,7 @@ describe('env helpers', () => {
     expect(llmDisabled()).toBe(false);
   });
 
-  it('SDK cache defaults to disabled', async () => {
+  it('SDK cache defaults to disabled with 14-day TTL', async () => {
     setProcessEnv({
       SDK_CACHE_ENABLED: undefined,
       SDK_CACHE_REDIS_URL: undefined,
@@ -138,7 +138,9 @@ describe('env helpers', () => {
     const result = env();
     expect(result.SDK_CACHE_ENABLED).toBe(false);
     expect(result.SDK_CACHE_REDIS_URL).toBe('redis://localhost:6379');
-    expect(result.SDK_CACHE_TTL_DAYS).toBe(7);
+    // Default TTL is 14 days (with ±12 hour jitter applied per-entry)
+    // See ADR-079 for cache stampede prevention rationale
+    expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
   });
 
   it('SDK cache can be enabled with custom settings', async () => {

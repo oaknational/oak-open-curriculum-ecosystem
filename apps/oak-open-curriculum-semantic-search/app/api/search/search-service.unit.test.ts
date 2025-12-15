@@ -1,4 +1,14 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+/**
+ * @fileoverview Unit tests for search-service helpers.
+ *
+ * Tests focus on pure function behaviour. Tests that previously used vi.doMock
+ * or vi.stubGlobal were removed as they violate the testing strategy:
+ * - No vi.doMock (manipulates module cache, causes race conditions)
+ * - No vi.stubGlobal (mutates global objects)
+ *
+ * @see `.agent/directives-and-memory/testing-strategy.md`
+ */
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 
 import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
@@ -15,93 +25,6 @@ vi.mock('../../../src/lib/observability/zero-hit', () => ({
 describe('search-service helpers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.resetModules();
-    vi.doUnmock('../../ui/search/structured/structured-search.shared');
-    vi.unstubAllGlobals();
-  });
-
-  it('parses search requests when the UI alias module is unavailable', async () => {
-    vi.doMock('../../ui/search/structured/structured-search.shared', () => ({
-      SearchRequest: {
-        safeParse: () => {
-          throw new Error('structured alias invoked');
-        },
-      },
-      SuggestionResponseSchema: {
-        safeParse: vi.fn(),
-      },
-    }));
-
-    const { parseSearchRequest } = await import('./search-service');
-
-    expect(() =>
-      parseSearchRequest({ scope: 'lessons', text: 'fractions', includeFacets: true }),
-    ).not.toThrow();
-  });
-
-  it('parses suggestion responses without relying on the UI alias schema', async () => {
-    const originalFetch = globalThis.fetch;
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => ({
-        ok: true,
-        json: async () => ({
-          suggestions: [
-            {
-              label: 'Fractions',
-              scope: 'lessons',
-              subject: 'maths',
-              keyStage: 'ks2',
-              url: '/fixtures/fractions',
-            },
-          ],
-          cache: { version: 'v1', ttlSeconds: 30 },
-        }),
-      })) as unknown as typeof fetch,
-    );
-
-    vi.doMock('../../ui/search/structured/structured-search.shared', () => ({
-      SearchRequest: {
-        safeParse: vi.fn((payload: unknown) => ({ success: true, data: payload })),
-      },
-      SuggestionResponseSchema: {
-        safeParse: () => {
-          throw new Error('suggestion alias invoked');
-        },
-      },
-    }));
-
-    const { fetchAllScopeSuggestions } = await import('./search-service');
-
-    const suggestions = await fetchAllScopeSuggestions(
-      { url: 'http://localhost/api/search' } as never,
-      { text: 'fr', scope: 'lessons', includeFacets: true } as never,
-      {
-        scope: 'lessons',
-        text: 'fr',
-        includeFacets: true,
-      } as never,
-    );
-
-    expect(suggestions).toEqual([
-      {
-        label: 'Fractions',
-        scope: 'lessons',
-        subject: 'maths',
-        keyStage: 'ks2',
-        url: '/fixtures/fractions',
-        contexts: {},
-      },
-    ]);
-
-    if (originalFetch) {
-      globalThis.fetch = originalFetch;
-    } else {
-      delete (globalThis as { fetch?: typeof fetch }).fetch;
-    }
   });
 
   it('normalises structured query fields', async () => {

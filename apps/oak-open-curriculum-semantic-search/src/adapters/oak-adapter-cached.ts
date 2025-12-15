@@ -12,6 +12,7 @@ import { createOakSdkClient } from './oak-adapter-sdk';
 import { optionalEnv } from '../lib/env';
 import { cacheLogger } from '../lib/logger';
 import { createRedisClient, withRedisConnection } from './sdk-cache/redis-connection';
+import { calculateTtlWithJitter } from './sdk-cache/ttl-jitter';
 import { isLessonSummary, isUnitSummary } from '../types/oak';
 import { isTranscriptResponse } from './sdk-guards';
 
@@ -81,12 +82,20 @@ async function tryWriteCache(
   }
 }
 
-/** Wrap function with caching. */
+/**
+ * Wrap function with caching and TTL jitter.
+ *
+ * TTL jitter is applied per-entry to prevent cache stampede. Each cached
+ * entry receives a slightly different TTL, spreading expiration over a
+ * 24-hour window (±12 hours jitter on the base TTL).
+ *
+ * @see {@link ./sdk-cache/ttl-jitter} for jitter implementation
+ */
 function withCache<T>(
   fn: (id: string) => Promise<T>,
   redis: Redis,
   resourceType: string,
-  ttlSeconds: number,
+  baseTtlDays: number,
   stats: { hits: number; misses: number },
   isValidCached: (value: unknown) => value is T,
 ): (id: string) => Promise<T> {
@@ -99,15 +108,25 @@ function withCache<T>(
     }
     stats.misses++;
     const result = await fn(id);
-    await tryWriteCache(redis, key, ttlSeconds, result);
+    // Apply jitter per-entry to prevent cache stampede
+    const ttlWithJitter = calculateTtlWithJitter(baseTtlDays);
+    await tryWriteCache(redis, key, ttlWithJitter, result);
     return result;
   };
 }
 
+/**
+ * Create cached client wrapper with TTL jitter per-entry.
+ *
+ * @param baseClient - Underlying Oak SDK client
+ * @param redis - Redis connection
+ * @param baseTtlDays - Base TTL in days (jitter applied per-entry)
+ * @param stats - Cache hit/miss statistics
+ */
 function createCachedClientWrapper(
   baseClient: OakClient,
   redis: Redis,
-  ttlSeconds: number,
+  baseTtlDays: number,
   stats: { hits: number; misses: number },
 ): CachedOakClient {
   return {
@@ -120,7 +139,7 @@ function createCachedClientWrapper(
       baseClient.getUnitSummary,
       redis,
       'unit-summary',
-      ttlSeconds,
+      baseTtlDays,
       stats,
       isUnitSummary,
     ),
@@ -128,7 +147,7 @@ function createCachedClientWrapper(
       baseClient.getLessonSummary,
       redis,
       'lesson-summary',
-      ttlSeconds,
+      baseTtlDays,
       stats,
       isLessonSummary,
     ),
@@ -136,7 +155,7 @@ function createCachedClientWrapper(
       baseClient.getLessonTranscript,
       redis,
       'lesson-transcript',
-      ttlSeconds,
+      baseTtlDays,
       stats,
       isTranscriptResponse,
     ),
@@ -164,11 +183,10 @@ export async function createCachedOakSdkClient(): Promise<CachedOakClient> {
     return createUncachedClient(baseClient);
   }
 
-  const ttlSeconds = config.SDK_CACHE_TTL_DAYS * 24 * 60 * 60;
   const stats = { hits: 0, misses: 0 };
   cacheLogger.info('SDK caching enabled', { ttlDays: config.SDK_CACHE_TTL_DAYS });
 
-  return createCachedClientWrapper(baseClient, redis, ttlSeconds, stats);
+  return createCachedClientWrapper(baseClient, redis, config.SDK_CACHE_TTL_DAYS, stats);
 }
 
 /** Clear all cached SDK responses from Redis. */

@@ -3,18 +3,9 @@
  * @description Field overrides for the oak_lessons index.
  *
  * These overrides define ES-specific field configurations that cannot be automatically
- * derived from Zod types (e.g. text with analyzers, completion with contexts, dense_vector).
+ * derived from Zod types (e.g. text with analyzers, completion with contexts, semantic_text).
  *
- * ## Dense Vector Naming Convention
- *
- * Dense vectors use the pattern `{content_type}_dense_vector` to clearly identify
- * what content was embedded:
- *
- * - **Lessons index**: `lesson_dense_vector` (transcript content), `title_dense_vector` (lesson title)
- * - **Unit rollup index**: `unit_dense_vector` (unit title), `rollup_dense_vector` (aggregated transcript text)
- *
- * This semantic naming ensures clarity about what each vector represents for kNN search.
- * All vectors use 384-dimensional E5 embeddings via `.multilingual-e5-small-elasticsearch`.
+ * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */
 
 import type { EsFieldMapping } from '../es-field-config.js';
@@ -71,26 +62,6 @@ export const LESSONS_FIELD_OVERRIDES = {
       keyword: KEYWORD_SUBFIELD,
     },
   }),
-  /**
-   * Dense vector for lesson transcript content (384-dim E5).
-   * Used in three-way hybrid search for semantic similarity on full lesson content.
-   */
-  lesson_dense_vector: {
-    type: 'dense_vector',
-    dims: 384,
-    index: true,
-    similarity: 'cosine',
-  },
-  /**
-   * Dense vector for lesson title (384-dim E5).
-   * Used for title-focused semantic similarity queries.
-   */
-  title_dense_vector: {
-    type: 'dense_vector',
-    dims: 384,
-    index: true,
-    similarity: 'cosine',
-  },
   tier: {
     type: 'keyword',
   },

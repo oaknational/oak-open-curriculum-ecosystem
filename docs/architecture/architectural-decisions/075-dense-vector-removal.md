@@ -1,7 +1,8 @@
 # ADR-075: Dense Vector Code Removal
 
-**Status**: Accepted  
+**Status**: Implemented ✅  
 **Date**: 2025-12-12  
+**Implemented**: 2025-12-15  
 **Decision Makers**: Development Team  
 **Supersedes**: [ADR-071](071-elastic-native-dense-vector-strategy.md), [ADR-072](072-three-way-hybrid-search-architecture.md), [ADR-073](073-dense-vector-field-configuration.md)
 
@@ -51,26 +52,22 @@ Dense vector code remains in the codebase despite providing no benefit. This dea
 5. **Tests**:
    - Remove tests for dense vector functionality
 
-### Code Already Removed (Phase 2)
+### Code Removed (Implementation Complete 2025-12-15)
 
-- Three-way RRF query construction ✅
-- kNN retriever in hybrid search ✅
+All dense vector code has been removed:
 
-### Code Still Present (To Be Removed)
+| Component                                  | Status               |
+| ------------------------------------------ | -------------------- |
+| Three-way RRF query construction           | ✅ Removed (Phase 2) |
+| kNN retriever in hybrid search             | ✅ Removed (Phase 2) |
+| `generateDenseVector()` function           | ✅ Removed           |
+| `dense-vector-generation.ts` module        | ✅ Deleted           |
+| Dense vector fields in document transforms | ✅ Removed           |
+| Dense vector field definitions in SDK      | ✅ Removed           |
+| Rerank experiment dense vector logic       | ✅ Removed           |
+| Unit tests for dense vectors               | ✅ Deleted           |
 
-```typescript
-// document-transforms.ts - REMOVE
-const [lessonDenseVector, titleDenseVector] = await Promise.all([
-  generateDenseVector(esClient, transcript),
-  generateDenseVector(esClient, lesson.lessonTitle),
-]);
-
-return {
-  // ... other fields ...
-  lesson_dense_vector: lessonDenseVector, // REMOVE
-  title_dense_vector: titleDenseVector, // REMOVE
-};
-```
+**Verification complete**: `grep -r "dense_vector\|generateDenseVector" apps/oak-open-curriculum-semantic-search/src` returns no matches.
 
 ## Consequences
 

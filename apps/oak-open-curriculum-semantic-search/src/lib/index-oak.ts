@@ -4,7 +4,6 @@
  * Orchestrates the creation of unit, lesson, rollup, and sequence facet documents.
  */
 
-import type { Client } from '@elastic/elasticsearch';
 import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
@@ -41,7 +40,6 @@ export interface BuildIndexBulkOpsResult {
 /** Build bulk operations for all subject/keystage combinations. */
 export async function buildIndexBulkOps(
   client: OakClient,
-  esClient: Client,
   keyStages: readonly string[],
   subjects: readonly string[],
   options?: BuildIndexBulkOpsOptions,
@@ -65,7 +63,6 @@ export async function buildIndexBulkOps(
     });
     const subjectOps = await buildOpsForSubject(
       client,
-      esClient,
       subject,
       filteredKeyStages,
       dataIntegrityReport,
@@ -99,7 +96,6 @@ function filterSubjects(list: readonly string[]): SearchSubjectSlug[] {
 /** Build operations for a single subject across all key stages. */
 async function buildOpsForSubject(
   client: OakClient,
-  esClient: Client,
   subject: SearchSubjectSlug,
   keyStages: readonly KeyStage[],
   dataIntegrityReport: DataIntegrityReport,
@@ -127,7 +123,6 @@ async function buildOpsForSubject(
     });
     const pairOps = await buildOpsForPair(
       client,
-      esClient,
       ks,
       subject,
       subjectSequences,
@@ -177,7 +172,6 @@ async function buildSequenceSourcesWithEvents(
 /** Build operations for a single subject/keystage pair. */
 async function buildOpsForPair(
   client: OakClient,
-  esClient: Client,
   ks: KeyStage,
   subject: SearchSubjectSlug,
   subjectSequences: readonly SubjectSequenceEntry[],
@@ -188,7 +182,6 @@ async function buildOpsForPair(
 
   const context: PairBuildContext = {
     client,
-    esClient,
     ks,
     subject,
     subjectSequences,

@@ -17,6 +17,8 @@ import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
 export default mergeConfig(baseE2EConfig, {
   test: {
+    // Load .env.local for real ES credentials before tests run
+    setupFiles: ['./smoke-test.setup.ts'],
     include: ['smoke-tests/**/*.smoke.test.ts'],
     isolate: true,
     pool: 'forks',

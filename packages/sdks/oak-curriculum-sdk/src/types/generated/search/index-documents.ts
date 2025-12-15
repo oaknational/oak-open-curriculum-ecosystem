@@ -126,8 +126,6 @@ export const SearchLessonsIndexDocSchema = z
     thread_slugs: z.array(z.string().min(1)).optional(),
     thread_titles: z.array(z.string().min(1)).optional(),
     title_suggest: SearchLessonsCompletionPayloadSchema.optional(),
-    lesson_dense_vector: z.array(z.number()).optional(),
-    title_dense_vector: z.array(z.number()).optional(),
     tier: z.string().min(1).optional(),
     doc_type: z.string().min(1),
   })
@@ -181,8 +179,6 @@ export const SearchUnitRollupDocSchema = z
     thread_titles: z.array(z.string().min(1)).optional(),
     thread_orders: z.array(z.number()).optional(),
     title_suggest: SearchUnitRollupCompletionPayloadSchema.optional(),
-    unit_dense_vector: z.array(z.number()).optional(),
-    rollup_dense_vector: z.array(z.number()).optional(),
     tier: z.string().min(1).optional(),
     doc_type: z.string().min(1),
   })

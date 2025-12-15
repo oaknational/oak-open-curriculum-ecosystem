@@ -12,9 +12,10 @@ SDK response caching stores API responses in Redis, dramatically speeding up sub
 
 - **Optional** - Caching is disabled by default; enable with `SDK_CACHE_ENABLED=true`
 - **Persistent** - Cache survives script restarts (stored in Redis with Docker volume)
-- **Long TTL** - Default 7-day cache duration (configurable)
+- **Long TTL** - Default 14-day cache duration with ±12 hour jitter (configurable)
 - **Graceful degradation** - If Redis is unavailable, ingestion continues without caching
 - **Easy invalidation** - Multiple ways to clear the cache
+- **Stampede prevention** - Per-entry TTL jitter prevents thundering herd
 
 ## Setup
 
@@ -38,8 +39,8 @@ SDK_CACHE_ENABLED=true
 # Optional: customise Redis URL (default: redis://localhost:6379)
 # SDK_CACHE_REDIS_URL=redis://localhost:6379
 
-# Optional: customise cache TTL in days (default: 7)
-# SDK_CACHE_TTL_DAYS=7
+# Optional: customise base cache TTL in days (default: 14, with ±12 hour jitter)
+# SDK_CACHE_TTL_DAYS=14
 ```
 
 ### 3. Run Ingestion
@@ -54,11 +55,11 @@ pnpm es:ingest-live --subject maths --dry-run --verbose
 
 ## Configuration
 
-| Environment Variable  | Default                  | Description                  |
-| --------------------- | ------------------------ | ---------------------------- |
-| `SDK_CACHE_ENABLED`   | `false`                  | Enable/disable caching       |
-| `SDK_CACHE_REDIS_URL` | `redis://localhost:6379` | Redis connection URL         |
-| `SDK_CACHE_TTL_DAYS`  | `7`                      | Cache entry lifetime in days |
+| Environment Variable  | Default                  | Description                      |
+| --------------------- | ------------------------ | -------------------------------- |
+| `SDK_CACHE_ENABLED`   | `false`                  | Enable/disable caching           |
+| `SDK_CACHE_REDIS_URL` | `redis://localhost:6379` | Redis connection URL             |
+| `SDK_CACHE_TTL_DAYS`  | `14`                     | Base cache TTL in days (±jitter) |
 
 ## Cache Invalidation
 
@@ -115,6 +116,54 @@ pnpm es:ingest-live --subject history --keystage ks2 --dry-run
 pnpm es:ingest-live --subject history --keystage ks2 --dry-run
 # Cache: 226 hits, 0 misses
 ```
+
+## Cache Stampede Prevention
+
+### The Problem
+
+When all cache entries share the same TTL, they expire simultaneously. This causes a
+"cache stampede" where the system must re-fetch all data at once, potentially overwhelming
+the upstream Oak API (rate limited to 10,000 requests/hour).
+
+### The Solution: TTL Jitter
+
+Each cache entry receives a TTL with random jitter applied:
+
+| Configuration   | Value            |
+| --------------- | ---------------- |
+| Base TTL        | 14 days          |
+| Jitter Range    | ±12 hours        |
+| Effective Range | 13.5 - 14.5 days |
+
+This spreads cache expiration over a 24-hour window, ensuring no more than ~4% of entries
+expire per hour.
+
+### How It Works
+
+```typescript
+import { calculateTtlWithJitter } from './sdk-cache/ttl-jitter';
+
+// Each cache write gets a unique TTL
+const ttl1 = calculateTtlWithJitter(14, 12); // e.g., 1,198,543 seconds
+const ttl2 = calculateTtlWithJitter(14, 12); // e.g., 1,223,891 seconds
+```
+
+Jitter is applied **per cache entry** at write time, not once at client creation. This
+ensures all entries have unique TTLs, providing true stampede prevention.
+
+### Testing
+
+The jitter function accepts an injectable random function for deterministic tests:
+
+```typescript
+// Deterministic for testing
+const ttl = calculateTtlWithJitter(14, 12, () => 0.5); // Exactly 14 days
+```
+
+### See Also
+
+- [ADR-079: SDK Cache TTL Jitter](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)
+- [ADR-066: SDK Response Caching](../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md)
 
 ## Cache Key Versioning
 

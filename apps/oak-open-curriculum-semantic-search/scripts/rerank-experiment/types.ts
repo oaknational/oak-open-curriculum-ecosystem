@@ -30,7 +30,6 @@ export interface AccumulatedMetrics {
 /** Configuration for search body building. */
 export interface SearchConfig {
   readonly query: string;
-  readonly queryVector: number[] | null;
   readonly useRerank: boolean;
   readonly retrieveSize: number;
   readonly rerankSize: number;

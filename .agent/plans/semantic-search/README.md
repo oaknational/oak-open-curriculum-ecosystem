@@ -1,7 +1,7 @@
 # Semantic Search Planning Documents
 
 **Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
-**Last Updated**: 2025-12-13
+**Last Updated**: 2025-12-15
 
 ---
 
@@ -63,16 +63,18 @@ Key ES documentation for this project:
 
 **Phase 3 Goal**: Prove that multi-index search infrastructure works correctly.
 
-**Part 3.0 - Verification (CRITICAL, must complete first):**
+**⚠️ CRITICAL**: Always re-index fresh before running smoke tests. Validating stale indices is meaningless.
+
+**Part 3.0 - Verification (requires fresh re-index first):**
 
 - ✅ BM25 vs ELSER vs Hybrid experiment (hybrid superior for lessons)
-- 🔲 Prove lesson-only search works
-- 🔲 Prove unit-only search works
-- 🔲 Prove joint search with `doc_type` categorisation works
-- 🔲 Prove lesson search filtered by unit works
+- 🔲 Prove lesson-only search works (re-verify after fresh ingest)
+- 🔲 Prove unit-only search works (re-verify after fresh ingest)
+- 🔲 Prove joint search with `doc_type` categorisation works (re-verify after fresh ingest)
+- 🔲 Prove lesson search filtered by unit works (re-verify after fresh ingest)
 - ✅ `doc_type` field already exists in indexes
-- 🔲 ADR: unified vs separate endpoints
-- 🔲 Unit reranking experiment (deferred - no clear benefit)
+- 🔲 ADR: unified vs separate endpoints (deferred)
+- 🔲 Unit reranking experiment (deferred)
 
 **Part 3a - Feature Parity (after verification):**
 
@@ -84,7 +86,7 @@ Key ES documentation for this project:
 
 **Part 3b - Semantic Summary Enhancement (NEW):**
 
-- 🔲 Remove dense vector code (ADR-075)
+- ✅ Remove dense vector code (ADR-075) - **Completed 2025-12-15**
 - 🔲 Lesson semantic summary template
 - 🔲 Unit semantic summary template
 - 🔲 Redis caching for summaries
@@ -144,7 +146,7 @@ See `phase-3-multi-index-and-fields.md` for full details.
 2. **E5 dense vectors provide no benefit** - For this dataset, sparse vectors (ELSER) are sufficient
 3. **Reranker field matters critically** - Full transcripts cause 20+ second latencies; short titles lack semantic signal
 4. **ELSER was not operational for lessons** - Fixed by adding `lesson_semantic: transcript` to document transform
-5. **Dense vector code should be removed** - Still present in codebase despite providing no benefit
+5. **Dense vector code removed** - Completed 2025-12-15 per ADR-075
 
 See ES hybrid search documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid>
 
@@ -184,9 +186,10 @@ Add information-dense summary fields for better pedagogical matching:
 | ADR                                                                                               | Title                           | Status   |
 | ------------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
 | [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
-| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal       | Accepted |
+| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal       | Implemented |
 | [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy   | Accepted |
-| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation     | Accepted |
+| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation     | Accepted    |
+| [ADR-079](../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)            | SDK Cache TTL Jitter            | Implemented |
 
 ---
 
@@ -261,6 +264,42 @@ pnpm smoke:dev:stub    # Smoke tests
 
 ---
 
+## Smoke Test Architecture
+
+**⚠️ CRITICAL**: Always re-index before running smoke tests. Stale indices invalidate all metrics.
+
+### Test Categories
+
+| Category        | Tests                                               | Requirements                     | Purpose                          |
+| --------------- | --------------------------------------------------- | -------------------------------- | -------------------------------- |
+| **API-based**   | `scope-verification`, `search-quality`, `unit-search-*` | Next.js dev server + fresh ES    | Full stack validation            |
+| **Direct ES**   | `hybrid-superiority`                                | ES credentials (`.env.local`)    | Raw Elasticsearch query testing  |
+
+### Required Sequence
+
+1. **Re-index fresh** (always, no exceptions)
+2. **Run Direct ES tests** (no server needed)
+3. **Start dev server** (for API-based tests)
+4. **Run API-based tests**
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# 1. Fresh re-index (~5-10 min)
+pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4
+
+# 2. Direct ES tests
+pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
+
+# 3. Start server (in separate terminal)
+pnpm dev
+
+# 4. API-based tests
+pnpm vitest run -c vitest.smoke.config.ts scope-verification
+```
+
+---
+
 ## Key File Locations
 
 ### Search Implementation
@@ -324,7 +363,7 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 All AI/ML features are included in the ES Serverless subscription at no additional cost.
 
-**Note**: E5 dense vectors were evaluated in Phase 2 and provided no benefit. Code should be removed (ADR-075).
+**Note**: E5 dense vectors were evaluated in Phase 2 and provided no benefit. Code removed 2025-12-15 (ADR-075).
 
 See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html>
 

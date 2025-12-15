@@ -171,3 +171,6 @@ Even though we are not building a UI/API layer now, future adapters should be de
 - Hybrid retrieval (RRF): `https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html`
 - Semantic search overview: `https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html`
 - ELSER: `https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html`
+
+
+

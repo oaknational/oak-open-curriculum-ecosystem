@@ -32,7 +32,7 @@ export const BaseEnvSchema = z.object({
     .default('false')
     .transform((value) => value === true || value === 'true'),
   SDK_CACHE_REDIS_URL: z.string().default('redis://localhost:6379'),
-  SDK_CACHE_TTL_DAYS: z.coerce.number().int().min(1).max(30).default(7),
+  SDK_CACHE_TTL_DAYS: z.coerce.number().int().min(1).max(60).default(14),
 });
 
 export const EnvSchema = BaseEnvSchema.superRefine((value, ctx) => {

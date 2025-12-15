@@ -2,12 +2,11 @@
  * Document transformation functions for Elasticsearch indexing.
  *
  * Creates unit, lesson, and rollup documents from Oak API data.
- * Includes dense vector generation for three-way hybrid search.
+ * Uses two-way hybrid search (BM25 + ELSER) per ADR-075.
  *
  * @module document-transforms
  */
 
-import type { Client } from '@elastic/elasticsearch';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
@@ -23,7 +22,6 @@ import {
   extractPedagogicalData,
   createEnrichedRollupText,
 } from './document-transform-helpers';
-import { generateDenseVector } from './dense-vector-generation';
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
 
@@ -80,11 +78,10 @@ export interface CreateLessonDocumentParams {
   keyStage: KeyStage;
   years: string[] | undefined;
   lessonCount: number;
-  esClient: Client;
 }
 
-/** Creates a lesson document for Elasticsearch indexing with dense vectors. */
-export async function createLessonDocument({
+/** Creates a lesson document for Elasticsearch indexing. */
+export function createLessonDocument({
   lesson,
   transcript,
   summary,
@@ -93,13 +90,8 @@ export async function createLessonDocument({
   keyStage,
   years,
   lessonCount,
-  esClient,
-}: CreateLessonDocumentParams): Promise<SearchLessonsIndexDoc> {
+}: CreateLessonDocumentParams): SearchLessonsIndexDoc {
   const fields = extractLessonDocumentFields(summary);
-  const [lessonDenseVector, titleDenseVector] = await Promise.all([
-    generateDenseVector(esClient, transcript),
-    generateDenseVector(esClient, lesson.lessonTitle),
-  ]);
 
   return {
     lesson_id: lesson.lessonSlug,
@@ -121,8 +113,6 @@ export async function createLessonDocument({
     lesson_semantic: transcript,
     lesson_url: fields.canonicalUrl,
     tier: fields.tier,
-    lesson_dense_vector: lessonDenseVector,
-    title_dense_vector: titleDenseVector,
     title_suggest: {
       input: [lesson.lessonTitle],
       contexts: { subject: [subject], key_stage: [keyStage] },
@@ -137,25 +127,19 @@ export interface CreateRollupDocumentParams {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   subjectProgrammesUrl: string;
-  esClient: Client;
 }
 
-/** Creates a rollup document for Elasticsearch indexing with dense vectors. */
-export async function createRollupDocument({
+/** Creates a rollup document for Elasticsearch indexing. */
+export function createRollupDocument({
   summary,
   snippets,
   subject,
   keyStage,
   subjectProgrammesUrl,
-  esClient,
-}: CreateRollupDocumentParams): Promise<SearchUnitRollupDoc> {
+}: CreateRollupDocumentParams): SearchUnitRollupDoc {
   const fields = extractRollupDocumentFields(summary, normaliseYears);
   const pedagogicalData = extractPedagogicalData(summary);
   const rollupText = createEnrichedRollupText(snippets, pedagogicalData);
-  const [unitDenseVector, rollupDenseVector] = await Promise.all([
-    generateDenseVector(esClient, rollupText),
-    generateDenseVector(esClient, fields.unitTitle),
-  ]);
 
   return {
     unit_id: fields.unitSlug,
@@ -176,8 +160,6 @@ export async function createRollupDocument({
     thread_titles: fields.threadTitles,
     thread_orders: fields.threadOrders,
     tier: fields.tier,
-    unit_dense_vector: unitDenseVector,
-    rollup_dense_vector: rollupDenseVector,
     doc_type: 'unit',
   };
 }

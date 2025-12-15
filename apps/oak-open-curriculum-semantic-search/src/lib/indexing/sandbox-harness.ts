@@ -35,14 +35,13 @@ interface SandboxHarnessOptions {
   readonly indexes?: readonly SearchIndexKind[];
   readonly target?: SearchIndexTarget;
   readonly es?: EsTransport;
-  /** Optional ES client override for testing. When provided, skips creating the real singleton. */
+  /** Optional ES client override for testing. When provided, uses its transport for bulk ops. */
   readonly esClient?: Client;
   readonly logger?: Logger;
 }
 
 interface HarnessContext {
   readonly client: OakClient;
-  readonly esClient: Client;
   readonly keyStages: readonly KeyStage[];
   readonly subjects: readonly SearchSubjectSlug[];
   readonly indexes: readonly SearchIndexKind[];
@@ -82,10 +81,9 @@ export async function createSandboxHarness(
   const logger = options.logger ?? sandboxLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
   const indexes = options.indexes ?? [];
-  const { transport: es, client: resolvedEsClient } = resolveEsClient(options.es, options.esClient);
+  const es = resolveEsTransport(options.es, options.esClient);
   const context: HarnessContext = {
     client,
-    esClient: resolvedEsClient,
     keyStages,
     subjects,
     indexes,
@@ -158,28 +156,20 @@ function ensureNonEmptyList<T>(value: readonly T[] | undefined, message: string)
 }
 
 /**
- * Resolves ES client from options. Uses provided client/transport for testing, real client otherwise.
- *
- * @remarks
- * For testing, provide both `esClient` (for inference) and `es` (for bulk transport).
- * This avoids network calls to real Elasticsearch during tests.
+ * Resolves ES transport from options. Uses provided transport for testing, real client transport otherwise.
  */
-function resolveEsClient(
-  es?: EsTransport,
-  providedClient?: Client,
-): { transport: EsTransport; client: Client } {
-  const client = providedClient ?? esClient();
+function resolveEsTransport(es?: EsTransport, providedClient?: Client): EsTransport {
   if (es) {
-    return { transport: es, client };
+    return es;
   }
-  return { transport: { transport: client.transport }, client };
+  const client = providedClient ?? esClient();
+  return { transport: client.transport };
 }
 
 async function prepareOperations(context: HarnessContext): Promise<SandboxBulkResult> {
   const metricsCollector = createSequenceFacetMetricsCollector();
   const { operations: bulkOps, dataIntegrityReport } = await buildIndexBulkOps(
     context.client,
-    context.esClient,
     context.keyStages,
     context.subjects,
     { onSequenceFacetProcessed: metricsCollector.record },

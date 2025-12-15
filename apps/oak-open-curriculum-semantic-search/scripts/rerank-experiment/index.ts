@@ -3,7 +3,8 @@
  * @module rerank-experiment
  * @description Reranker experiment script entry point.
  *
- * Compares two-way and three-way hybrid search with and without reranking.
+ * Compares two-way hybrid search (BM25 + ELSER) with and without reranking.
+ * Uses two-way hybrid search per ADR-075 - dense vectors removed.
  *
  * Usage: npx tsx scripts/rerank-experiment/index.ts
  *
@@ -60,7 +61,6 @@ async function testRerankQuery(): Promise<void> {
       client,
       'quadratic equations',
       { 'solving-quadratic-equations-by-factorising': 3 },
-      false,
       true,
       RETRIEVE_SIZE,
       RERANK_SIZE,
@@ -89,28 +89,14 @@ function printResultsTable(results: readonly ExperimentResult[]): void {
 
 /** Print comparison analysis. */
 function printAnalysis(results: readonly ExperimentResult[]): void {
-  const twoWayNoRerank = results.find((r) => r.name === '2-way (no rerank)');
-  const threeWayNoRerank = results.find((r) => r.name === '3-way (no rerank)');
-  const twoWayRerank = results.find((r) => r.name === '2-way + rerank');
-  const threeWayRerank = results.find((r) => r.name === '3-way + rerank');
+  const noRerank = results.find((r) => r.name === '2-way (no rerank)');
+  const withRerank = results.find((r) => r.name === '2-way + rerank');
 
-  if (twoWayNoRerank && threeWayNoRerank) {
-    const comp = compareResults(twoWayNoRerank, threeWayNoRerank);
-    console.log('Without rerank: 3-way vs 2-way:');
+  if (noRerank && withRerank) {
+    const comp = compareResults(noRerank, withRerank);
+    console.log('Effect of reranking on 2-way hybrid:');
     console.log(`  MRR diff:  ${comp.mrrDiff.toFixed(3)}`);
     console.log(`  NDCG diff: ${comp.ndcgDiff.toFixed(3)}`);
-  }
-
-  if (twoWayRerank && threeWayRerank) {
-    const comp = compareResults(twoWayRerank, threeWayRerank);
-    console.log('With rerank: 3-way vs 2-way:');
-    console.log(`  MRR diff:  ${comp.mrrDiff.toFixed(3)}`);
-    console.log(`  NDCG diff: ${comp.ndcgDiff.toFixed(3)}`);
-
-    if (Math.abs(comp.ndcgDiff) < 0.001) {
-      console.log('');
-      console.log('Warning: 2-way and 3-way with rerank are nearly identical!');
-    }
   }
 }
 
@@ -133,18 +119,8 @@ async function main(): Promise<void> {
 
   const results: ExperimentResult[] = [];
 
-  results.push(
-    await runExperiment(client, '2-way (no rerank)', false, false, RETRIEVE_SIZE, RERANK_SIZE),
-  );
-  results.push(
-    await runExperiment(client, '3-way (no rerank)', true, false, RETRIEVE_SIZE, RERANK_SIZE),
-  );
-  results.push(
-    await runExperiment(client, '2-way + rerank', false, true, RETRIEVE_SIZE, RERANK_SIZE),
-  );
-  results.push(
-    await runExperiment(client, '3-way + rerank', true, true, RETRIEVE_SIZE, RERANK_SIZE),
-  );
+  results.push(await runExperiment(client, '2-way (no rerank)', false, RETRIEVE_SIZE, RERANK_SIZE));
+  results.push(await runExperiment(client, '2-way + rerank', true, RETRIEVE_SIZE, RERANK_SIZE));
 
   printResultsTable(results);
   printAnalysis(results);

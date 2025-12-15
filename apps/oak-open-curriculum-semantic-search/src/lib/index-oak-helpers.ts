@@ -4,7 +4,6 @@
  * Extracted from index-oak.ts to reduce function complexity.
  */
 
-import type { Client } from '@elastic/elasticsearch';
 import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
@@ -26,7 +25,6 @@ import type { DataIntegrityReport } from './indexing/data-integrity-report';
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
   readonly client: OakClient;
-  readonly esClient: Client;
   readonly ks: KeyStage;
   readonly subject: SearchSubjectSlug;
   readonly subjectSequences: readonly SubjectSequenceEntry[];
@@ -101,7 +99,7 @@ async function buildLessonsFromSummaries(
   context: PairBuildContext,
   unitSummaries: Map<string, SearchUnitSummary>,
 ): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
-  const { client, esClient, ks, subject, dataIntegrityReport } = context;
+  const { client, ks, subject, dataIntegrityReport } = context;
   const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
   sandboxLogger.debug('Derived lesson groups from unit summaries', {
     subject,
@@ -112,7 +110,6 @@ async function buildLessonsFromSummaries(
   sandboxLogger.debug('Building lesson documents', { subject, keyStage: ks });
   const result = await buildLessonDocuments(
     client,
-    esClient,
     groups,
     unitSummaries,
     subject,
@@ -138,7 +135,7 @@ async function buildCoreDocumentOps(
   rollupOps: unknown[];
   unitSummaries: Map<string, SearchUnitSummary>;
 }> {
-  const { esClient, ks, subject } = context;
+  const { ks, subject } = context;
   const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
     context,
     units,
@@ -147,8 +144,7 @@ async function buildCoreDocumentOps(
   const { lessonOps, rollupSnippets } = await buildLessonsFromSummaries(context, unitSummaries);
 
   sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
-  const rollupOps = await buildRollupDocuments(
-    esClient,
+  const rollupOps = buildRollupDocuments(
     unitSummaries,
     rollupSnippets,
     subject,

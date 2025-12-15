@@ -48,7 +48,16 @@ async function submitStructuredSearch(page: Page, query = 'fractions'): Promise<
   await queryField.first().fill(query);
   const searchButton = page.getByRole('button', { name: 'Search' }).first();
   await searchButton.click();
-  await page.waitForLoadState('networkidle');
+  // Wait for search to complete by checking for any of these outcomes:
+  // 1. Results grid (success with results)
+  // 2. Empty results message (success without results)
+  // 3. Outage/error message (simulated outage scenario)
+  // This is deterministic (unlike networkidle which hangs in dev mode due to HMR/polling)
+  await Promise.race([
+    page.waitForSelector('[data-testid="search-results-grid"]', { state: 'attached' }),
+    page.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE).waitFor({ state: 'visible' }),
+    page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE).waitFor({ state: 'visible' }),
+  ]);
 }
 
 async function seedFixtureCookie(context: BrowserContext, mode: FixtureMode): Promise<void> {

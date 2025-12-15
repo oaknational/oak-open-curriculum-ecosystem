@@ -1,6 +1,8 @@
 /**
  * @module rerank-experiment/experiment-runner
  * @description Functions for running search experiments.
+ *
+ * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */
 
 import type { Client } from '@elastic/elasticsearch';
@@ -8,7 +10,6 @@ import type { ExperimentResult, QueryResult, SearchConfig } from './types';
 import { buildSearchBody } from './query-builders';
 import { calculateAverages } from './result-analysis';
 import { calculateMRR, calculateNDCG } from '../../src/lib/search-quality/metrics.js';
-import { generateDenseVector } from '../../src/lib/indexing/dense-vector-generation.js';
 import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.js';
 
 /** BM25 fields for lesson search. */
@@ -27,12 +28,11 @@ function log(msg: string): void {
 /** Build search config from parameters. */
 function buildConfig(
   query: string,
-  queryVector: number[] | null,
   useRerank: boolean,
   retrieveSize: number,
   rerankSize: number,
 ): SearchConfig {
-  return { query, queryVector, useRerank, retrieveSize, rerankSize, bm25Fields: BM25_FIELDS };
+  return { query, useRerank, retrieveSize, rerankSize, bm25Fields: BM25_FIELDS };
 }
 
 /** Execute search and calculate metrics. */
@@ -51,13 +51,11 @@ export async function runSingleQuery(
   client: Client,
   query: string,
   expectedRelevance: Record<string, number>,
-  useKnn: boolean,
   useRerank: boolean,
   retrieveSize: number,
   rerankSize: number,
 ): Promise<QueryResult> {
-  const rawVector = useKnn ? await generateDenseVector(client, query) : null;
-  const config = buildConfig(query, rawVector ?? null, useRerank, retrieveSize, rerankSize);
+  const config = buildConfig(query, useRerank, retrieveSize, rerankSize);
   const { results, latency } = await executeSearch(client, config);
   return {
     mrr: calculateMRR(results, expectedRelevance),
@@ -70,7 +68,6 @@ export async function runSingleQuery(
 async function processQuery(
   client: Client,
   gt: { query: string; expectedRelevance: Record<string, number> },
-  useKnn: boolean,
   useRerank: boolean,
   retrieveSize: number,
   rerankSize: number,
@@ -79,7 +76,6 @@ async function processQuery(
     client,
     gt.query,
     gt.expectedRelevance,
-    useKnn,
     useRerank,
     retrieveSize,
     rerankSize,
@@ -108,7 +104,6 @@ function recordFailure(mrrs: number[], ndcgs: number[]): void {
 export async function runExperiment(
   client: Client,
   name: string,
-  useKnn: boolean,
   useRerank: boolean,
   retrieveSize: number,
   rerankSize: number,
@@ -131,7 +126,7 @@ export async function runExperiment(
         mrrs,
         ndcgs,
         latencies,
-        await processQuery(client, gt, useKnn, useRerank, retrieveSize, rerankSize),
+        await processQuery(client, gt, useRerank, retrieveSize, rerankSize),
       );
       if ((i + 1) % 10 === 0) {
         log(`  ${name}: ${i + 1}/${GROUND_TRUTH_QUERIES.length} queries done`);
