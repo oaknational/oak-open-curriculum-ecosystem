@@ -71,7 +71,15 @@ export const OAK_LESSONS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      subject_title: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       key_stage: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      key_stage_title: {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
@@ -132,6 +140,10 @@ export const OAK_LESSONS_MAPPING = {
       lesson_semantic: {
         type: 'semantic_text',
       },
+      lesson_summary_semantic: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       lesson_url: {
         type: 'keyword',
         ignore_above: 1024,
@@ -165,6 +177,42 @@ export const OAK_LESSONS_MAPPING = {
       },
       tier: {
         type: 'keyword',
+      },
+      pupil_lesson_outcome: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      tiers: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      tier_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_boards: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_board_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_subjects: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_subject_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      ks4_options: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      ks4_option_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
       },
       doc_type: {
         type: 'keyword',

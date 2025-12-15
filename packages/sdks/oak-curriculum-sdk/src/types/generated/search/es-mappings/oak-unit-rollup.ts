@@ -71,7 +71,15 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      subject_title: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       key_stage: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      key_stage_title: {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
@@ -141,6 +149,58 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
       },
       tier: {
         type: 'keyword',
+      },
+      description: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      why_this_why_now: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      categories: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      prior_knowledge_requirements: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      national_curriculum_content: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      tiers: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      tier_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_boards: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_board_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_subjects: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      exam_subject_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      ks4_options: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      ks4_option_titles: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
       },
       doc_type: {
         type: 'keyword',

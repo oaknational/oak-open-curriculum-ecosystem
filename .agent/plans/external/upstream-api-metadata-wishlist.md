@@ -57,32 +57,183 @@ The `pathway` field **never existed** in the API. It was a misunderstanding. Wha
 
 All code referencing `pathway` or `extractPathway()` should be deleted.
 
-### Request: Flatten Programme Factors to Lesson/Unit Level
+### Request: KS4 Programme Factors on Lesson/Unit Level (HIGH PRIORITY)
+
+**Status**: 🔴 HIGH PRIORITY, HIGH IMPACT  
+**Updated**: 2025-12-15
 
 **Problem**: Tier, exam board, and KS4 option information is essential for KS4 filtering, but currently requires traversing the sequence hierarchy to determine.
 
-**Request**: Add flat fields to lesson and unit responses:
+#### ⚠️ Critical Complexity: Many-to-Many Relationships
+
+The V0 API wisely handles KS4 attributes top-down (via sequences) rather than bottom-up because **relationships are many-to-many**:
+
+| Relationship                | Cardinality   | Example                                                    |
+| --------------------------- | ------------- | ---------------------------------------------------------- |
+| Lesson → Tiers              | Many-to-many  | "quadratic-factorising" appears in Foundation AND Higher   |
+| Lesson → Exam Boards        | Many-to-many  | Same lesson may appear in AQA AND Edexcel sequences        |
+| Lesson → Units              | Many-to-many  | Same lesson may appear in multiple units                   |
+| Unit → Programmes           | Many-to-many  | Same unit may appear in multiple programme contexts        |
+
+**Bottom-up** (from lesson/unit): Complex—a single lesson can have multiple valid values  
+**Top-down** (from sequence): Deterministic—you traverse a specific path to a specific context
+
+This is why the schema provides these attributes at the sequence level, not the resource level.
+
+#### The Critical Distinction: Search vs Filtering
+
+| Concern       | Purpose                                       | Technical Need                          | Example                                    |
+| ------------- | --------------------------------------------- | --------------------------------------- | ------------------------------------------ |
+| **Search**    | Find relevant content by meaning/keywords     | Full-text fields, semantic embeddings   | "quadratic equations" → ranked results     |
+| **Filtering** | Narrow results by exact categorical criteria  | Keyword/enum fields for faceting        | tier="foundation" AND examBoard="aqa"      |
+
+**Search** is about *relevance ranking*—which results best match the query?  
+**Filtering** is about *inclusion/exclusion*—which results meet exact criteria?
+
+Both are orthogonal and both are essential. The current API supports search well (rich text content) but makes filtering on KS4 attributes difficult without upstream enhancements.
+
+#### What "Good" Looks Like
+
+##### Part 1: Define Enums in OpenAPI Schema (CRITICAL)
+
+All filterable values should be defined as proper enums in `components/schemas`:
+
+```yaml
+components:
+  schemas:
+    Tier:
+      type: string
+      enum: ["foundation", "higher"]
+      description: "GCSE tier level"
+    
+    ExamBoard:
+      type: string
+      enum: ["aqa", "edexcel", "ocr", "eduqas", "edexcelb"]
+      description: "Exam board identifier"
+    
+    KeyStage:
+      type: string
+      enum: ["ks1", "ks2", "ks3", "ks4"]
+      description: "UK National Curriculum key stage"
+    
+    Subject:
+      type: string
+      enum: ["art", "citizenship", "computing", ...]
+      description: "Curriculum subject"
+```
+
+**Why enums matter**:
+
+- **Type safety**: Code generators produce strongly-typed SDKs
+- **Validation**: Invalid values rejected at API boundary
+- **Discovery**: Consumers know all valid values without guessing
+- **Filtering**: Enables `GET /lessons?tier=foundation` with validation
+
+##### Part 2: Include Arrays on Resources (Handles Many-to-Many)
+
+Because relationships are many-to-many, use **arrays** not scalar values:
 
 ```json
 {
   "lessonSlug": "quadratic-equations-factorising",
-  "tier": "higher", // NEW: flattened from tiers[]
-  "tierTitle": "Higher", // NEW: human-readable
-  "examBoardSlug": "aqa", // NEW: standardized slug
-  "examBoardTitle": "AQA", // EXISTS but inconsistent location
-  "ks4OptionSlug": "gcse-maths-higher-aqa", // NEW: from ks4Options
-  "ks4OptionTitle": "GCSE Maths Higher AQA" // NEW: from ks4Options
+  "lessonTitle": "Factorising Quadratic Equations",
+  "tiers": ["foundation", "higher"],
+  "examBoards": ["aqa", "edexcel"],
+  "programmes": [
+    "maths-secondary-ks4-foundation-aqa",
+    "maths-secondary-ks4-higher-aqa",
+    "maths-secondary-ks4-foundation-edexcel",
+    "maths-secondary-ks4-higher-edexcel"
+  ]
 }
 ```
 
-**Benefits**:
+**Why arrays work**:
 
-- Eliminates complex derivation logic in consumers
-- Enables direct ES facet filtering
-- Consistent across all resource types
-- Required for KS4 curriculum navigation
+- **Truthful**: Reflects reality that one lesson can belong to multiple contexts
+- **Filterable**: ES/SQL can query "WHERE 'foundation' IN tiers"
+- **No false negatives**: Searching for "foundation tier" content finds ALL applicable lessons
 
-**Priority**: HIGH — KS4 content is incomplete without these fields for filtering.
+##### Part 3: Support Contextual Fetching (Optional Enhancement)
+
+For consumers who need a specific context, support path-based fetching:
+
+```
+GET /sequences/maths-secondary-ks4-higher-aqa/lessons/quadratic-equations-factorising
+```
+
+Response includes the **context** in which it was fetched:
+
+```json
+{
+  "lessonSlug": "quadratic-equations-factorising",
+  "context": {
+    "tier": "higher",
+    "examBoard": "aqa",
+    "programme": "maths-secondary-ks4-higher-aqa"
+  },
+  "allTiers": ["foundation", "higher"],
+  "allExamBoards": ["aqa", "edexcel"]
+}
+```
+
+#### Consumer Value Matrix
+
+| Enhancement                          | Consumer Benefit                                               | Implementation Effort |
+| ------------------------------------ | -------------------------------------------------------------- | --------------------- |
+| **Define tier/examBoard as enums**   | Type-safe SDKs, validation, discoverability                    | Low                   |
+| **Arrays on lesson/unit responses**  | Truthful representation enabling "any match" filtering         | Medium                |
+| **Contextual path-based fetching**   | Exact context when needed (e.g., for canonical URLs)           | Medium-High           |
+| `GET /lessons?tier=...` query param  | Server-side filtering (most efficient for large result sets)   | Medium-High           |
+
+#### Current Workaround (Suboptimal)
+
+Our semantic search indexing currently:
+
+1. Fetches sequence-level data via top-down traversal
+2. Associates lessons/units with ALL tiers and exam boards they appear in
+3. Indexes as arrays for "any match" ES queries
+4. Cannot efficiently pre-filter at the API level (must fetch all, filter client-side)
+
+This works but is expensive and requires complex traversal logic.
+
+#### Request Summary
+
+**Minimum viable request** (Low effort, high impact):
+
+1. Define `Tier`, `ExamBoard`, and other filterable values as proper enums in OpenAPI schema
+2. Include array fields on lesson/unit responses showing ALL applicable values
+
+```json
+{
+  "lessonSlug": "quadratic-equations-factorising",
+  "tiers": ["foundation", "higher"],
+  "examBoards": ["aqa", "edexcel"]
+}
+```
+
+**Priority**: 🔴 HIGH — KS4 content is incomplete without these fields for filtering. This blocks meaningful GCSE curriculum navigation.
+
+**Note**: The many-to-many nature of these relationships is respected—arrays handle reality accurately.
+
+#### Interim Workaround: Sequence Traversal Denormalisation
+
+Until the upstream API provides flat fields, we implement **denormalisation at ingest time**:
+
+1. Traverse `/sequences/{sequence}/units?year={year}` endpoints
+2. Build lookup tables mapping `unitSlug` → tiers, examBoards, examSubjects
+3. Decorate indexed documents with arrays of all applicable values
+4. Cache all SDK requests in Redis (14-day TTL with jitter)
+
+**Documented in**: [ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)
+
+**Limitations**:
+
+- ~200 additional API calls per full curriculum ingest (cached on subsequent runs)
+- Coverage depends on sequence data availability
+- Requires maintaining parsing logic for exam board extraction from slugs
+
+This workaround enables KS4 filtering now while upstream enhancements are pending.
 
 ---
 
@@ -2995,26 +3146,27 @@ components:
 
 ## Summary Table
 
-| Item                            | Priority        | Impact        | Effort    | AI Benefit                            |
-| ------------------------------- | --------------- | ------------- | --------- | ------------------------------------- |
-| **NEW: semantic_summary field** | **High**        | **Very High** | Medium    | High-quality embeddings for all types |
-| 1. "Use this when" descriptions | **High**        | Very High     | 2-4 hours | 70% fewer wrong-tool calls            |
-| 2. Operation summaries          | **High**        | Medium        | 1 hour    | Better UI/organisation                |
-| 3. `/ontology` endpoint         | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns             |
-| 4. Error response docs          | **High**        | High          | 2-3 hours | Proper error handling                 |
-| 5. Programme variant metadata   | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs  |
-| 6. Consistent resource IDs      | **High**        | **Very High** | 1-5 days  | Working cross-service links           |
-| 7. Parameter examples           | Medium          | Medium        | Ongoing   | Clearer semantics                     |
-| 8. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
-| 9. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
-| 10. Thread enhancements         | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
-| 11. Standardise types with refs | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
-| 12. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
-| 13. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
-| 14. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
-| 15. Resource timestamps         | Medium          | Medium-High   | 2-3 days  | Efficient SDK caching                 |
-| 16. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
-| 17. OpenAPI best practices      | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
+| Item                                  | Priority        | Impact        | Effort    | AI Benefit                            |
+| ------------------------------------- | --------------- | ------------- | --------- | ------------------------------------- |
+| **NEW: Flat tier/examBoard fields**   | **🔴 High**     | **Very High** | Medium    | KS4 filtering for GCSE navigation     |
+| **NEW: semantic_summary field**       | **High**        | **Very High** | Medium    | High-quality embeddings for all types |
+| 1. "Use this when" descriptions       | **High**        | Very High     | 2-4 hours | 70% fewer wrong-tool calls            |
+| 2. Operation summaries                | **High**        | Medium        | 1 hour    | Better UI/organisation                |
+| 3. `/ontology` endpoint               | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns             |
+| 4. Error response docs                | **High**        | High          | 2-3 hours | Proper error handling                 |
+| 5. Programme variant metadata         | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs  |
+| 6. Consistent resource IDs            | **High**        | **Very High** | 1-5 days  | Working cross-service links           |
+| 7. Parameter examples                 | Medium          | Medium        | Ongoing   | Clearer semantics                     |
+| 8. Custom schema extensions           | Medium          | Medium        | Low       | Auto-generated metadata               |
+| 9. Behavioural metadata               | **Medium**      | **High**      | Low       | Safety & retry logic                  |
+| 10. Thread enhancements               | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
+| 11. Standardise types with refs       | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
+| 12. Expose Zod validators             | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
+| 13. Response examples                 | Medium          | Low           | Ongoing   | Better error handling                 |
+| 14. Canonical URL patterns            | Medium          | Medium        | 1 hour    | URL generation                        |
+| 15. Resource timestamps               | Medium          | Medium-High   | 2-3 days  | Efficient SDK caching                 |
+| 16. Performance hints                 | Low             | Low           | Low       | Advanced optimisation                 |
+| 17. OpenAPI best practices            | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
 
 ---
 

@@ -1,3 +1,12 @@
+/**
+ * @module index-bulk-helpers
+ * @description Helpers for building Elasticsearch bulk operations.
+ *
+ * KS4 metadata denormalisation is handled by passing a UnitContextMap through
+ * the document building functions, which decorates lessons and units with
+ * tier, exam board, and exam subject arrays per ADR-080.
+ */
+
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import { createRollupDocument } from './document-transforms';
@@ -7,6 +16,7 @@ import { ensureUnitSummaryMatchesContext } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
 import { processUnitSummary, buildLessonDocsForGroup } from './index-bulk-helpers-internal';
 import type { DataIntegrityReport } from './data-integrity-report';
+import type { UnitContextMap } from './ks4-context-builder';
 
 export interface LessonGroup {
   unitSlug: string;
@@ -64,6 +74,7 @@ export async function buildUnitDocuments(
   subject: SearchSubjectSlug,
   ks: KeyStage,
   subjectProgrammesUrl: string,
+  unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<{
   unitSummaries: Map<string, SearchUnitSummary>;
@@ -82,7 +93,14 @@ export async function buildUnitDocuments(
         keyStage: ks,
       });
     }
-    const result = await processUnitSummary(client, unit, subject, ks, subjectProgrammesUrl);
+    const result = await processUnitSummary(
+      client,
+      unit,
+      subject,
+      ks,
+      subjectProgrammesUrl,
+      unitContextMap,
+    );
     if (result === null) {
       dataIntegrityReport.skippedUnits.push({
         unitSlug: unit.unitSlug,
@@ -105,6 +123,7 @@ export async function buildLessonDocuments(
   unitSummaries: Map<string, SearchUnitSummary>,
   subject: SearchSubjectSlug,
   ks: KeyStage,
+  unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<{
   lessonOps: unknown[];
@@ -136,6 +155,7 @@ export async function buildLessonDocuments(
       summary,
       subject,
       ks,
+      unitContextMap,
       processedLessons,
       totalLessons,
     );
@@ -153,6 +173,7 @@ export function buildRollupDocuments(
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
   subjectProgrammesUrl: string,
+  unitContextMap: UnitContextMap,
 ): unknown[] {
   const ops: unknown[] = [];
   for (const summary of unitSummaries.values()) {
@@ -164,6 +185,7 @@ export function buildRollupDocuments(
       subject,
       keyStage,
       subjectProgrammesUrl,
+      unitContextMap,
     });
     ops.push(
       {

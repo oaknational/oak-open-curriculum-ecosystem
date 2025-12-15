@@ -150,9 +150,11 @@ describe('UNITS_INDEX_FIELDS', () => {
     //           lesson_ids, lesson_count, unit_url, subject_programmes_url, doc_type
     expect(requiredFields).toHaveLength(10);
 
-    // Optional: years, unit_topics, sequence_ids, thread_slugs,
-    //           thread_titles, thread_orders, title_suggest
-    expect(optionalFields).toHaveLength(7);
+    // Optional: subject_title, key_stage_title, years, unit_topics, sequence_ids,
+    //           thread_slugs, thread_titles, thread_orders, title_suggest,
+    //           description, why_this_why_now, categories, prior_knowledge_requirements, national_curriculum_content,
+    //           tiers, tier_titles, exam_boards, exam_board_titles, exam_subjects, exam_subject_titles, ks4_options, ks4_option_titles
+    expect(optionalFields).toHaveLength(22);
   });
 });
 

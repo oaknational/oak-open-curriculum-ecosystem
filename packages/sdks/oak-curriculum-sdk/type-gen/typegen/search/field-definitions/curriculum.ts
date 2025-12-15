@@ -1,32 +1,18 @@
 /**
  * @module field-definitions/curriculum
- * @description Field definitions for curriculum-related search indexes.
+ * @description Field definitions for curriculum-related search indexes (lessons, units,
+ * sequences, threads). These are the core educational content indexes.
  *
- * This module contains field definitions for indexes that store Oak curriculum content:
- * lessons, units, sequences, and threads. These indexes represent the core educational
- * content that teachers and students interact with.
- *
- * Curriculum indexes are distinguished from observability indexes:
- * - **Curriculum indexes**: Store educational content (lessons, units, sequences, threads)
- * - **Observability indexes**: Store system behavior and operational data (metrics, logs, telemetry)
- *
- * By defining fields ONCE in this module, we ensure that Zod schemas and ES mappings
- * can never diverge, eliminating "mapper_parsing_exception" errors during bulk indexing.
+ * By defining fields ONCE in this module, we ensure Zod schemas and ES mappings never
+ * diverge, eliminating "mapper_parsing_exception" errors during bulk indexing.
  *
  * @see {@link ../field-definitions/observability.ts} for observability index definitions
  */
 
 import type { IndexFieldDefinitions } from './types.js';
+import { UNIT_ENRICHMENT_FIELDS } from './unit-enrichment-fields.js';
 
-/**
- * Field definitions for the oak_threads search index.
- *
- * Contains 7 fields:
- * - 3 required fields
- * - 4 optional fields
- *
- * @see SearchThreadIndexDocSchema
- */
+/** Field definitions for the oak_threads search index. @see SearchThreadIndexDocSchema */
 export const THREADS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_slug', zodType: 'string', optional: false },
   { name: 'thread_title', zodType: 'string', optional: false },
@@ -40,19 +26,27 @@ export const THREADS_INDEX_FIELDS: IndexFieldDefinitions = [
 /**
  * Field definitions for the oak_lessons search index.
  *
- * Contains 25 fields:
+ * Contains 34 fields:
  * - 10 required fields
- * - 15 optional fields
+ * - 24 optional fields
+ *
+ * KS4 metadata fields (tiers, exam_boards, exam_subjects, ks4_options) are arrays
+ * to support many-to-many relationships. A lesson can appear in multiple tiers
+ * (e.g., Foundation AND Higher) and multiple exam board sequences.
  *
  * @see SearchLessonsIndexDocSchema
  * @see OAK_LESSONS_MAPPING
+ * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'lesson_id', zodType: 'string', optional: false },
   { name: 'lesson_slug', zodType: 'string', optional: false },
   { name: 'lesson_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  // Display title fields for UI (avoids slug-to-title lookup overhead)
+  { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
+  { name: 'key_stage_title', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'unit_ids', zodType: 'array-string', optional: false },
   { name: 'unit_titles', zodType: 'array-string', optional: false },
@@ -64,12 +58,24 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'content_guidance', zodType: 'array-string', optional: true },
   { name: 'transcript_text', zodType: 'string', optional: false },
   { name: 'lesson_semantic', zodType: 'string', optional: true },
+  { name: 'lesson_summary_semantic', zodType: 'string', optional: true },
   { name: 'lesson_url', zodType: 'string', optional: false },
   { name: 'unit_urls', zodType: 'array-string', optional: false },
   { name: 'thread_slugs', zodType: 'array-string', optional: true },
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
+  // Pupil lesson outcome - used for search result snippets and highlighting
+  { name: 'pupil_lesson_outcome', zodType: 'string', optional: true },
+  // KS4 metadata arrays (many-to-many relationships per ADR-080)
+  { name: 'tiers', zodType: 'array-string', optional: true },
+  { name: 'tier_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_boards', zodType: 'array-string', optional: true },
+  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_subjects', zodType: 'array-string', optional: true },
+  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
+  { name: 'ks4_options', zodType: 'array-string', optional: true },
+  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
@@ -80,19 +86,27 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
  * - `SearchUnitsIndexDocSchema` (Zod schema)
  * - `OAK_UNITS_MAPPING` (Elasticsearch mapping)
  *
- * Contains 16 fields:
- * - 9 required fields
- * - 7 optional fields
+ * Contains 27 fields:
+ * - 10 required fields
+ * - 17 optional fields
+ *
+ * KS4 metadata fields (tiers, exam_boards, exam_subjects, ks4_options) are arrays
+ * to support many-to-many relationships. A unit can appear in multiple tiers
+ * (e.g., Foundation AND Higher) and multiple exam board sequences.
  *
  * @see SearchUnitsIndexDocSchema
  * @see OAK_UNITS_MAPPING
+ * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_id', zodType: 'string', optional: false },
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  // Display title fields for UI (avoids slug-to-title lookup overhead)
+  { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
+  { name: 'key_stage_title', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'lesson_ids', zodType: 'array-string', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },
@@ -104,25 +118,44 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
+  // Unit enrichment fields from /units/{unit}/summary
+  ...UNIT_ENRICHMENT_FIELDS,
+  // KS4 metadata arrays (many-to-many relationships per ADR-080)
+  { name: 'tiers', zodType: 'array-string', optional: true },
+  { name: 'tier_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_boards', zodType: 'array-string', optional: true },
+  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_subjects', zodType: 'array-string', optional: true },
+  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
+  { name: 'ks4_options', zodType: 'array-string', optional: true },
+  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
 /**
  * Field definitions for the oak_unit_rollup search index.
  *
- * Contains 22 fields:
- * - 9 required fields
- * - 13 optional fields
+ * Contains 30 fields:
+ * - 10 required fields
+ * - 20 optional fields
+ *
+ * KS4 metadata fields (tiers, exam_boards, exam_subjects, ks4_options) are arrays
+ * to support many-to-many relationships. A unit can appear in multiple tiers
+ * (e.g., Foundation AND Higher) and multiple exam board sequences.
  *
  * @see SearchUnitRollupDocSchema
  * @see OAK_UNIT_ROLLUP_MAPPING
+ * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_id', zodType: 'string', optional: false },
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  // Display title fields for UI (avoids slug-to-title lookup overhead)
+  { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
+  { name: 'key_stage_title', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'lesson_ids', zodType: 'array-string', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },
@@ -137,6 +170,17 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
   { name: 'tier', zodType: 'string', optional: true },
+  // Unit enrichment fields from /units/{unit}/summary
+  ...UNIT_ENRICHMENT_FIELDS,
+  // KS4 metadata arrays (many-to-many relationships per ADR-080)
+  { name: 'tiers', zodType: 'array-string', optional: true },
+  { name: 'tier_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_boards', zodType: 'array-string', optional: true },
+  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
+  { name: 'exam_subjects', zodType: 'array-string', optional: true },
+  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
+  { name: 'ks4_options', zodType: 'array-string', optional: true },
+  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 

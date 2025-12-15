@@ -2,6 +2,12 @@
  * @module index-oak-helpers
  * @description Helper functions for building Oak curriculum bulk operations.
  * Extracted from index-oak.ts to reduce function complexity.
+ *
+ * KS4 metadata denormalisation is handled by passing a UnitContextMap through
+ * the document building pipeline, which decorates lessons and units with
+ * tier, exam board, and exam subject arrays.
+ *
+ * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 
 import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
@@ -21,6 +27,7 @@ import {
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { sandboxLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
+import type { UnitContextMap } from './indexing/ks4-context-builder';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -29,6 +36,8 @@ export interface PairBuildContext {
   readonly subject: SearchSubjectSlug;
   readonly subjectSequences: readonly SubjectSequenceEntry[];
   readonly sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
+  /** KS4 metadata context for units (tiers, exam boards, etc.) per ADR-080 */
+  readonly unitContextMap: UnitContextMap;
   readonly dataIntegrityReport: DataIntegrityReport;
 }
 
@@ -76,7 +85,7 @@ async function buildUnitsWithSummaries(
   units: PairUnits,
   subjectProgrammesUrl: string,
 ): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: unknown[] }> {
-  const { client, ks, subject, dataIntegrityReport } = context;
+  const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const result = await buildUnitDocuments(
     client,
@@ -84,6 +93,7 @@ async function buildUnitsWithSummaries(
     subject,
     ks,
     subjectProgrammesUrl,
+    unitContextMap,
     dataIntegrityReport,
   );
   sandboxLogger.debug('Built unit docs', {
@@ -99,7 +109,7 @@ async function buildLessonsFromSummaries(
   context: PairBuildContext,
   unitSummaries: Map<string, SearchUnitSummary>,
 ): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
-  const { client, ks, subject, dataIntegrityReport } = context;
+  const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
   sandboxLogger.debug('Derived lesson groups from unit summaries', {
     subject,
@@ -114,6 +124,7 @@ async function buildLessonsFromSummaries(
     unitSummaries,
     subject,
     ks,
+    unitContextMap,
     dataIntegrityReport,
   );
   sandboxLogger.debug('Built lesson docs', {
@@ -135,7 +146,7 @@ async function buildCoreDocumentOps(
   rollupOps: unknown[];
   unitSummaries: Map<string, SearchUnitSummary>;
 }> {
-  const { ks, subject } = context;
+  const { ks, subject, unitContextMap } = context;
   const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
     context,
     units,
@@ -150,6 +161,7 @@ async function buildCoreDocumentOps(
     subject,
     ks,
     subjectProgrammesUrl,
+    unitContextMap,
   );
   sandboxLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
 
@@ -206,4 +218,18 @@ export function emitSequenceFacetEvents(
   for (const event of events) {
     onEvent({ ...event, subject });
   }
+}
+
+/** Resolve sequence slug from a subject sequence entry. */
+export function resolveSequenceSlugFromEntry(entry: SubjectSequenceEntry): string {
+  if (typeof entry === 'string') {
+    return entry;
+  }
+  if (typeof entry === 'object' && entry !== null && 'sequenceSlug' in entry) {
+    const slug = entry.sequenceSlug;
+    if (typeof slug === 'string') {
+      return slug;
+    }
+  }
+  throw new Error(`Cannot resolve sequence slug from entry: ${JSON.stringify(entry)}`);
 }

@@ -1,3 +1,11 @@
+/**
+ * @module index-bulk-helpers-internal
+ * @description Internal helpers for building Elasticsearch bulk operations.
+ *
+ * KS4 metadata denormalisation is handled by passing a UnitContextMap through
+ * to the document creation functions per ADR-080.
+ */
+
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
@@ -12,6 +20,7 @@ import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
+import type { UnitContextMap } from './ks4-context-builder';
 
 export async function processUnitSummary(
   client: OakClient,
@@ -19,6 +28,7 @@ export async function processUnitSummary(
   subject: SearchSubjectSlug,
   ks: KeyStage,
   subjectProgrammesUrl: string,
+  unitContextMap: UnitContextMap,
 ): Promise<{ summary: SearchUnitSummary; ops: unknown[] } | null> {
   const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
 
@@ -45,6 +55,7 @@ export async function processUnitSummary(
       subject,
       keyStage: ks,
       subjectProgrammesUrl,
+      unitContextMap,
     }),
   ];
   return { summary, ops };
@@ -57,6 +68,7 @@ interface LessonBuildContext {
   keyStage: KeyStage;
   years: string[] | undefined;
   lessonCount: number;
+  unitContextMap: UnitContextMap;
 }
 
 interface LessonDocEntry {
@@ -74,6 +86,7 @@ function createLessonBuildContext(
   },
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
+  unitContextMap: UnitContextMap,
 ): LessonBuildContext {
   ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
 
@@ -92,6 +105,7 @@ function createLessonBuildContext(
     keyStage,
     years: normaliseYears(unitSummary.year, unitSummary.yearSlug),
     lessonCount,
+    unitContextMap,
   };
 }
 
@@ -120,6 +134,8 @@ async function buildLessonDocEntry(
     keyStage: context.keyStage,
     years: context.years,
     lessonCount: context.lessonCount,
+    unitContextMap: context.unitContextMap,
+    unitSlug: context.unitSlug,
   });
   const snippet = selectLessonPlanningSnippet({
     summary: materials.summary,
@@ -144,12 +160,13 @@ export async function buildLessonDocsForGroup(
   unitSummary: SearchUnitSummary,
   subject: SearchSubjectSlug,
   ks: KeyStage,
+  unitContextMap: UnitContextMap,
   processedSoFar: number,
   totalLessons: number,
 ): Promise<{ ops: unknown[]; snippets: string[]; lessonsProcessed: number }> {
   const ops: unknown[] = [];
   const snippets: string[] = [];
-  const context = createLessonBuildContext(unitSummary, group, subject, ks);
+  const context = createLessonBuildContext(unitSummary, group, subject, ks, unitContextMap);
 
   let lessonIndex = 0;
   for (const lesson of group.lessons) {

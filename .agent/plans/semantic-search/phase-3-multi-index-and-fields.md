@@ -1,7 +1,7 @@
 # Phase 3: Multi-Index Search & Fields
 
-**Status**: Part 3.0 ✅ COMPLETE | Parts 3a & 3b 🔲 PENDING  
-**Estimated Effort**: 2-3 days remaining (3a + 3b)  
+**Status**: Part 3.0 ✅ COMPLETE | Part 3a ✅ IMPLEMENTED | Part 3b ✅ IMPLEMENTED  
+**Estimated Effort**: Code complete, verification pending  
 **Prerequisites**: Phase 1 & 2 complete (two-way hybrid confirmed optimal)  
 **Last Updated**: 2025-12-15
 
@@ -49,6 +49,47 @@ This plan includes:
 **⚠️ CRITICAL**: Never run search quality smoke tests against stale indices. Results are meaningless without fresh data that matches the current schema and transform logic.
 
 See `.agent/prompts/semantic-search/semantic-search.prompt.md` for detailed steps.
+
+---
+
+## 🚀 Quick Start: Part 3a (Current Work)
+
+**Part 3.0 is complete.** The immediate work is **Part 3a: Feature Parity**.
+
+### Priority Order
+
+1. **KS4 Metadata Denormalisation** (CRITICAL) — [Jump to Task 5](#task-5-index-ks4-options-and-tiers-new---critical)
+   - Add sequence traversal to ingestion pipeline
+   - Build `UnitContextMap` from sequence data
+   - Decorate documents with `tiers[]`, `examBoards[]`, `ks4Options[]`
+   - See [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)
+
+2. **OWA Aliases Import** (HIGH) — [Jump to Task 1](#task-1-owa-alias-system-import-manual-one-time)
+   - Index `OWA-xxx` identifiers for exact ID matching
+
+3. **Lesson Fields** (HIGH) — [Jump to Task 2](#task-2-add-pupillessonoutcome-to-lesson-index)
+   - Add `pupilLessonOutcome` field
+
+4. **Display Titles** (MEDIUM) — [Jump to Task 3](#task-3-add-display-title-fields)
+   - Add `subjectTitle`, `keyStageTitle` for UI display
+
+5. **Unit Enrichment** (MEDIUM) — [Jump to Task 4](#task-4-add-unit-enrichment-fields)
+   - Add `description`, `whyThisWhyNow`, `categories`, etc.
+
+### Key Files to Modify
+
+| File | Purpose |
+|------|---------|
+| `packages/sdks/oak-curriculum-sdk/src/field-definitions/curriculum.ts` | Add new field definitions |
+| `apps/.../src/utils/document-transforms/*.ts` | Transform API data → ES docs |
+| `apps/.../src/services/ingest/*.ts` | Add sequence traversal |
+| `apps/.../tests/smoke/*.test.ts` | Add smoke tests for new filters |
+
+### TDD Approach
+
+- **Unit tests**: Field extraction, `UnitContextMap` building
+- **Smoke tests**: KS4 filtering works in ES queries
+- **No mocking ES** — use real Elasticsearch in smoke tests
 
 ---
 
@@ -114,6 +155,48 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 | Unit reranking experiment                    | Medium       | 🔲 Deferred  |
 
 **Verification completed 2025-12-15** with fresh Maths KS4 data (314 lessons, 36 units). See `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md` for full results.
+
+### Part 3a: Feature Parity ✅ IMPLEMENTED
+
+| Task                                   | Priority     | Status       |
+| -------------------------------------- | ------------ | ------------ |
+| OWA aliases import                     | **HIGH**     | ✅ Complete  |
+| `pupilLessonOutcome` field             | **HIGH**     | ✅ Complete  |
+| Display title fields                   | Medium       | ✅ Complete  |
+| Unit enrichment fields                 | Medium       | ✅ Complete  |
+| **KS4 sequence traversal**             | **CRITICAL** | ✅ Complete  |
+| **UnitContextMap building**            | **CRITICAL** | ✅ Complete  |
+| **KS4 field definitions (arrays)**     | **HIGH**     | ✅ Complete  |
+| **Document decoration with KS4 data**  | **HIGH**     | ✅ Complete  |
+| **KS4 filtering smoke tests**          | **HIGH**     | ✅ Complete  |
+| ADR-080: Denormalisation strategy      | **HIGH**     | ✅ Complete  |
+
+**Implementation files**:
+- `ks4-context-builder.ts` - Traverses sequences, builds UnitContextMap
+- `ks4-context-types.ts` - Types for KS4 context
+- `semantic-summary-generator.ts` - Lesson and unit summary templates
+- `document-transform-helpers.ts` - `extractUnitEnrichmentFields()`, `extractKs4DocumentFields()`
+- `ks4-filtering.smoke.test.ts` - Smoke tests for KS4 filtering
+
+### Part 3b: Semantic Summary Enhancement ✅ IMPLEMENTED
+
+| Task                                 | Priority | Status       |
+| ------------------------------------ | -------- | ------------ |
+| **Remove dense vector code**         | **HIGH** | ✅ Complete  |
+| **Lesson semantic summary template** | **HIGH** | ✅ Complete  |
+| **Unit semantic summary template**   | **HIGH** | ✅ Complete  |
+| **`lesson_summary_semantic` field**  | **HIGH** | ✅ Complete  |
+| Redis caching for summaries          | Medium   | 🔲 Deferred  |
+| Compare summary vs transcript ELSER  | Medium   | 🔲 Deferred  |
+| ADR-075: Dense vector removal        | **HIGH** | ✅ Implemented |
+| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete  |
+| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete  |
+
+**Implementation**:
+- `generateLessonSemanticSummary()` - ~200 token summary from lesson data
+- `generateUnitSemanticSummary()` - ~200 token summary from unit data
+- `lesson_summary_semantic` field added to lessons index
+- `unit_semantic` now uses curated summary (not rollup text)
 
 #### Smoke Test Architecture
 
@@ -234,17 +317,17 @@ Teachers don't just want to find lessons - they want to discover **curriculum re
 
 **Priority**: CRITICAL - Foundation for all search features
 
-### Current State
+### Current State (Post Part 3.0 Verification)
 
-| Index             | Hybrid Search | Proven Working | Notes                                          |
+| Index             | Hybrid Search | Verified       | Notes                                          |
 | ----------------- | ------------- | -------------- | ---------------------------------------------- |
-| `oak_lessons`     | BM25 + ELSER  | ⚠️ Not proven  | Code uses hybrid, but BM25 vs ELSER not tested |
-| `oak_unit_rollup` | BM25 + ELSER  | ⚠️ Not proven  | Code uses hybrid, but BM25 vs ELSER not tested |
-| `oak_units`       | BM25 only     | ❌ Not tested  | No semantic field                              |
-| `oak_sequences`   | BM25 + ELSER  | ❌ Not tested  | `sequence_semantic` exists                     |
-| `oak_threads`     | BM25 + ELSER  | ❌ Not tested  | `thread_semantic` exists                       |
+| `oak_lessons`     | BM25 + ELSER  | ✅ Verified    | Hybrid superior (MRR 0.908)                    |
+| `oak_unit_rollup` | BM25 + ELSER  | ✅ Verified    | ELSER slightly better MRR, hybrid better NDCG  |
+| `oak_units`       | BM25 only     | ✅ Verified    | Functional, no semantic field                  |
+| `oak_sequences`   | BM25 + ELSER  | ❌ Untested    | `sequence_semantic` exists, not validated      |
+| `oak_threads`     | BM25 + ELSER  | ❌ Untested    | `thread_semantic` exists, not validated        |
 
-**Note**: "Code uses hybrid" is not the same as "hybrid is proven to work". We need to run BM25-only, ELSER-only, and hybrid queries against ground truth to prove ELSER contributes meaningfully.
+**Part 3.0 verification completed 2025-12-15.** Lesson and unit search are proven working. Sequence/thread indices are out of scope for Phase 3.
 
 ### Technical Background
 
@@ -335,18 +418,18 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/search-mult
 **Status**: ⚠️ Code uses hybrid, but **not yet proven** that ELSER contributes meaningfully.
 **Required**: BM25 vs ELSER vs Hybrid experiment to prove hybrid is superior.
 
-### Implementation Tasks (3.0)
+### Implementation Tasks (3.0) ✅ COMPLETE
 
-| Task                                   | Description                                                                   | Effort | Priority     | Status     |
-| -------------------------------------- | ----------------------------------------------------------------------------- | ------ | ------------ | ---------- |
-| **BM25 vs ELSER vs Hybrid experiment** | Prove hybrid is superior to either method alone                               | Medium | **CRITICAL** | 🔲 Pending |
-| **Prove lesson-only search**           | Smoke test verifying lesson search returns only lessons with correct doc_type | Low    | **CRITICAL** | 🔲 Pending |
-| **Prove unit-only search**             | Smoke test verifying unit search returns only units with correct doc_type     | Low    | **CRITICAL** | 🔲 Pending |
-| **Prove joint search**                 | Smoke test verifying mixed results are properly categorised                   | Medium | **CRITICAL** | 🔲 Pending |
-| **Prove lesson filter by unit**        | Smoke test verifying unit filter restricts lesson results correctly           | Low    | **CRITICAL** | 🔲 Pending |
-| **Add `doc_type` field**               | Re-index with doc_type if not present in ES (schema exists, data may not)     | Medium | **HIGH**     | 🔲 Pending |
-| **ADR: unified vs separate endpoints** | Document architectural decision on search endpoint strategy                   | Low    | Medium       | 🔲 Pending |
-| **Experiment with unit reranking**     | Test reranking with `rollup_text` (~300 chars/lesson) using ES native rerank  | Low    | Medium       | 🔲 Pending |
+| Task                                   | Description                                                                   | Effort | Priority     | Status       |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ------ | ------------ | ------------ |
+| **BM25 vs ELSER vs Hybrid experiment** | Prove hybrid is superior to either method alone                               | Medium | **CRITICAL** | ✅ Complete  |
+| **Prove lesson-only search**           | Smoke test verifying lesson search returns only lessons with correct doc_type | Low    | **CRITICAL** | ✅ Complete  |
+| **Prove unit-only search**             | Smoke test verifying unit search returns only units with correct doc_type     | Low    | **CRITICAL** | ✅ Complete  |
+| **Prove joint search**                 | Smoke test verifying mixed results are properly categorised                   | Medium | **CRITICAL** | ✅ Complete  |
+| **Prove lesson filter by unit**        | Smoke test verifying unit filter restricts lesson results correctly           | Low    | **CRITICAL** | ✅ Complete  |
+| **`doc_type` field exists**            | Field present in all indexes (verified during 3.0)                            | Medium | **HIGH**     | ✅ Exists    |
+| **ADR: unified vs separate endpoints** | Document architectural decision on search endpoint strategy                   | Low    | Medium       | 🔲 Deferred  |
+| **Experiment with unit reranking**     | Test reranking with `rollup_text` (~300 chars/lesson) using ES native rerank  | Low    | Medium       | 🔲 Deferred  |
 
 #### BM25 vs ELSER vs Hybrid Experiment (CRITICAL)
 
@@ -414,21 +497,21 @@ See: https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-re
 }
 ```
 
-### Success Criteria (3.0)
+### Success Criteria (3.0) ✅ COMPLETE
 
-**Verification (MUST complete before Part 3a)**:
+**Verification (completed 2025-12-15)**:
 
-- [ ] BM25 vs ELSER vs Hybrid experiment proves hybrid is superior
-- [ ] Lesson-only search verified (returns only lessons)
-- [ ] Unit-only search verified (returns only units)
-- [ ] Joint search verified (returns both types, properly categorised)
-- [ ] Lesson filter by unit verified (filters work correctly)
+- [x] BM25 vs ELSER vs Hybrid experiment proves hybrid is superior
+- [x] Lesson-only search verified (returns only lessons)
+- [x] Unit-only search verified (returns only units)
+- [x] Joint search verified (returns both types, properly categorised)
+- [x] Lesson filter by unit verified (filters work correctly)
 
 **Infrastructure**:
 
-- [ ] `doc_type` field present in ES indexes (requires re-index if not)
-- [ ] Decision on unified vs separate endpoints documented (ADR)
-- [ ] Unit reranking experiment completed
+- [x] `doc_type` field present in ES indexes
+- [ ] Decision on unified vs separate endpoints documented (ADR) — **Deferred**
+- [ ] Unit reranking experiment completed — **Deferred**
 
 ---
 
@@ -515,65 +598,262 @@ From `/units/{unit}/summary`:
 
 ### Task 5: Index KS4 Options and Tiers (NEW - CRITICAL)
 
-**Schema analysis (2025-12-13)** revealed these fields are essential for KS4 curriculum navigation:
+**Schema analysis (2025-12-13)** revealed these fields are essential for KS4 curriculum navigation.  
+**Denormalisation strategy documented (2025-12-15)** in [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
 
-#### What IS in the Schema
+#### Architectural Decision
 
-| Field               | Location                             | Purpose                                   |
-| ------------------- | ------------------------------------ | ----------------------------------------- |
-| `tiers[]`           | `SequenceUnitsResponseSchema`        | Array of tier objects (Foundation/Higher) |
-| `tiers[].tierTitle` | Tier object                          | Human-readable tier name                  |
-| `tiers[].tierSlug`  | Tier object                          | `"foundation"` or `"higher"`              |
-| `examBoardTitle`    | `LessonSearchResponseSchema.units[]` | `string \| null`                          |
-| `ks4Options`        | Sequence schemas                     | Contains `title` and `slug` for pathway   |
-| `ks4Options.slug`   | ks4Options                           | **This IS the "pathway" concept**         |
-| `ks4Options.title`  | ks4Options                           | Human-readable pathway name               |
+See **[ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)** for full details.
+
+**Key decision**: Denormalise KS4 metadata at ingest time by traversing sequences and building lookup tables. Index as **arrays** to respect many-to-many relationships.
+
+#### Upstream Enhancement Request
+
+🔴 **HIGH PRIORITY** enhancement request documented in [upstream-api-metadata-wishlist.md](../external/upstream-api-metadata-wishlist.md).
+
+Until upstream provides flat fields, we use sequence traversal as workaround.
+
+#### The Many-to-Many Reality
+
+The V0 API wisely handles KS4 attributes **top-down** (via sequences) because relationships are **many-to-many**:
+
+| Relationship           | Cardinality   | Example                                           |
+| ---------------------- | ------------- | ------------------------------------------------- |
+| Lesson → Tiers         | Many-to-many  | Same lesson appears in Foundation AND Higher      |
+| Lesson → Exam Boards   | Many-to-many  | Same lesson appears in AQA AND Edexcel sequences  |
+| Lesson → Units         | Many-to-many  | Same lesson can appear in multiple units          |
+| Unit → Programmes      | Many-to-many  | Same unit appears in multiple programme contexts  |
+
+**Bottom-up** queries have multiple valid answers.  
+**Top-down** traversal follows a deterministic path.
+
+**Implication**: We must index with **arrays of all applicable values**, not flat fields.
+
+#### Search vs Filtering: Why Both Matter
+
+| Concern       | Purpose                                       | Technical Need                          | Example                                    |
+| ------------- | --------------------------------------------- | --------------------------------------- | ------------------------------------------ |
+| **Search**    | Find relevant content by meaning/keywords     | Full-text fields, semantic embeddings   | "quadratic equations" → ranked results     |
+| **Filtering** | Narrow results by exact categorical criteria  | Keyword/enum fields for faceting        | tier="foundation" AND examBoard="aqa"      |
+
+**Search** is about *relevance ranking*—which results best match the query?  
+**Filtering** is about *inclusion/exclusion*—which results meet exact criteria?
+
+Both are orthogonal and both are essential.
+
+#### API Data Available for Sequence Traversal
+
+**`/subjects` endpoint** provides sequence slugs with KS4 context:
+
+```json
+{
+  "subjectSlug": "science",
+  "sequenceSlugs": [
+    {
+      "sequenceSlug": "science-secondary-aqa",
+      "ks4Options": { "title": "AQA GCSE Science", "slug": "aqa-gcse-science" }
+    }
+  ]
+}
+```
+
+**`/sequences/{sequence}/units?year={year}` endpoint** provides hierarchical KS4 data:
+
+```text
+KS4 Sciences: year → examSubjects[] → tiers[] → units[]
+KS4 Maths:    year → tiers[] → units[]
+KS1-KS3:      year → units[] (no KS4 context)
+```
+
+**Exam board** is encoded in sequence slug (e.g., `science-secondary-aqa` → "aqa").
+
+#### Sequence Traversal Process (NEW)
+
+The sequence traversal is **in addition to** existing ingestion, not a replacement:
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│ PHASE 1: Reference Data (existing)                               │
+│ ├── GET /subjects           → Subject list                       │
+│ ├── GET /subjects/{subject} → Subject details                    │
+│ └── GET /threads            → Thread list                        │
+│                                                                   │
+│ PHASE 2: Sequence Metadata (NEW - for KS4 subjects)              │
+│ ├── For each KS4 sequence (from /subjects response):             │
+│ │   ├── GET /sequences/{seq}/units?year=10                       │
+│ │   │   └── Build: unit → tier/examBoard/examSubject mapping     │
+│ │   └── GET /sequences/{seq}/units?year=11                       │
+│ │       └── Build: unit → tier/examBoard/examSubject mapping     │
+│ │                                                                 │
+│ │   Response structure varies by subject:                        │
+│ │   ┌─────────────┬──────────────────────────────────────┐       │
+│ │   │ Subject     │ Structure                            │       │
+│ │   ├─────────────┼──────────────────────────────────────┤       │
+│ │   │ Sciences    │ examSubjects[] → tiers[] → units[]   │       │
+│ │   │ Maths       │ tiers[] → units[] (no examSubjects)  │       │
+│ │   │ Others      │ units[] (no tiers)                   │       │
+│ │   └─────────────┴──────────────────────────────────────┘       │
+│ │                                                                 │
+│ └── Build UnitContextMap (unit slug → all contexts)              │
+│                                                                   │
+│ PHASE 3: Curriculum Content (existing)                           │
+│ ├── GET /key-stages/{ks}/subjects/{subject}/units                │
+│ ├── GET /units/{unit}/summary                                    │
+│ └── GET /lessons/{lesson}/summary                                │
+│                                                                   │
+│ PHASE 4: Decorate and Index (ENHANCED)                           │
+│ ├── For each unit:                                               │
+│ │   └── Look up tiers/examBoards from UnitContextMap             │
+│ │   └── Add arrays to unit document                              │
+│ ├── For each lesson:                                             │
+│ │   └── Inherit from parent unit(s)                              │
+│ │   └── Add arrays to lesson document                            │
+│ └── Index to Elasticsearch                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### Index Schema (Denormalised)
+
+```typescript
+interface LessonDocument {
+  // ... existing fields ...
+  
+  // KS4 metadata (arrays for many-to-many)
+  tiers: string[];             // ["foundation", "higher"]
+  tierTitles: string[];        // ["Foundation", "Higher"]
+  examBoards: string[];        // ["aqa", "edexcel"]
+  examBoardTitles: string[];   // ["AQA", "Edexcel"]
+  examSubjects: string[];      // ["biology", "chemistry"] (sciences only)
+  examSubjectTitles: string[]; // ["Biology", "Chemistry"]
+  ks4Options: string[];        // ["aqa-gcse-science"]
+  ks4OptionTitles: string[];   // ["AQA GCSE Science"]
+}
+```
+
+#### Redis Caching
+
+**All SDK requests continue to be cached in Redis** per [ADR-066](../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md):
+
+- Sequence endpoint responses cached with 14-day TTL + jitter ([ADR-079](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md))
+- No special treatment—same cache infrastructure
+- ~200 additional API calls per full ingest (cached on subsequent runs)
+
+#### ES Filtering Semantics
+
+With arrays, ES uses "any match" semantics:
+
+```json
+{
+  "query": {
+    "bool": {
+      "filter": [
+        { "term": { "tiers": "foundation" } },
+        { "term": { "examBoards": "aqa" } }
+      ]
+    }
+  }
+}
+```
+
+This matches lessons that appear in Foundation tier AND appear in AQA sequences.
+
+For **exclusive** filtering ("Foundation only, not Higher"):
+
+```json
+{
+  "bool": {
+    "filter": [{ "term": { "tiers": "foundation" } }],
+    "must_not": [{ "term": { "tiers": "higher" } }]
+  }
+}
+```
+
+#### Data Available from OpenAPI Schema (Complete Reference)
+
+**Source**: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json`
+
+| Endpoint                         | Response Schema                  | KS4-Relevant Fields                              |
+| -------------------------------- | -------------------------------- | ------------------------------------------------ |
+| `GET /subjects`                  | `AllSubjectsResponseSchema`      | `sequenceSlugs[].ks4Options` (nullable)          |
+| `GET /subjects/{subject}`        | `SubjectResponseSchema`          | `sequenceSlugs[].ks4Options` (nullable)          |
+| `GET /sequences/{seq}/units`     | `SequenceUnitsResponseSchema`    | Complex union (see below)                        |
+| `GET /search/lessons`            | `LessonSearchResponseSchema`     | `units[].examBoardTitle` (string \| null)        |
+
+**SequenceUnitsResponseSchema structure** (varies by subject and year):
+
+```text
+// KS1-KS3 or non-tiered KS4 subjects
+{ year, units: [{ unitSlug, unitTitle, categories?, threads? }] }
+
+// KS4 Maths (tiered, no exam subjects)
+{ year, tiers: [{ tierSlug, tierTitle, units: [...] }] }
+
+// KS4 Sciences (tiered with exam subjects)
+{ year, examSubjects: [{ examSubjectSlug, examSubjectTitle, tiers: [{ tierSlug, tierTitle, units: [...] }] }] }
+```
+
+**Exam board extraction**:
+
+| Method                        | Data Source                      | Reliability |
+| ----------------------------- | -------------------------------- | ----------- |
+| Parse from sequence slug      | `science-secondary-aqa` → "aqa"  | High        |
+| `ks4Options.slug`             | `/subjects` response             | Medium      |
+| `examBoardTitle`              | `/search/lessons` response       | Medium      |
+
+**Known exam boards** (for slug parsing): `aqa`, `edexcel`, `ocr`, `eduqas`, `edexcelb`
+
+**Known tiers**: `foundation`, `higher`
 
 #### Schema Clarifications
 
-**IMPORTANT**: Previous code assumed a `programmeFactors` object with `tier`, `examBoard`, and `pathway` fields. This object **does NOT exist** in the schema.
+| Concept            | Reality                                               |
+| ------------------ | ----------------------------------------------------- |
+| `programmeFactors` | **Never existed** — remove any references             |
+| `pathway`          | Is `ks4Options.slug` — not a separate concept         |
+| `tier`             | Derive from sequence traversal (`tiers[].tierSlug`)   |
+| `examBoard`        | Parse from sequence slug (e.g., `science-secondary-aqa`) |
+| `examSubject`      | From sequence response (`examSubjects[].examSubjectSlug`) |
 
-| Concept            | Reality                                                 |
-| ------------------ | ------------------------------------------------------- |
-| `programmeFactors` | **Never existed** — remove any references               |
-| `pathway`          | Is `ks4Options.slug` — not a separate concept           |
-| `tier`             | Derive from `tiers[]` array or parse from sequence slug |
-| `examBoard`        | Use `examBoardTitle` from search results                |
+#### Implementation Tasks ✅ COMPLETE
 
-**Implementation**:
+1. [x] Add sequence traversal to ingestion pipeline (`index-oak.ts`, `index-oak-helpers.ts`)
+2. [x] Build `UnitContextMap` from sequence data (`ks4-context-builder.ts`)
+3. [x] Update field definitions in SDK (`field-definitions/curriculum.ts`, `unit-enrichment-fields.ts`)
+4. [x] Decorate documents during `createLessonDocument()` / `createUnitDocument()` / `createRollupDocument()`
+5. [x] Update ES mappings via `pnpm type-gen`
+6. [x] Add unit tests for lookup table building (`ks4-context-builder.unit.test.ts`)
+7. [x] Add smoke tests for KS4 filtering (`ks4-filtering.smoke.test.ts`)
 
-1. Index `tiers[]` data for filtering (Foundation vs Higher)
-2. Index `ks4Options` for pathway filtering
-3. Use `examBoardTitle` for exam board facets
-4. Update extractors to use actual schema fields
-5. Document any derivations in upstream wishlist
+**Benefit**: Enables critical KS4 filtering for GCSE content (tiers, exam boards, exam subjects).
 
-**Benefit**: Enables critical KS4 filtering for GCSE content (tiers, exam boards, pathways).
+**Limitation**: Coverage depends on sequence data availability. Some units/lessons outside KS4 sequences will have empty arrays (correct—they have no KS4 context).
 
-### Success Criteria (3a)
+### Success Criteria (3a) ✅ ACHIEVED
 
-- [ ] OWA aliases merged into synonym system (subjects, key stages, exam boards)
-- [ ] `pupilLessonOutcome` indexed and queryable with BM25 boost
-- [ ] Display title fields (`subjectTitle`, `keyStageTitle`) added to lesson documents
-- [ ] Unit enrichment fields indexed (`description`, `whyThisWhyNow`, `categories`, `priorKnowledgeRequirements`, `nationalCurriculumContent`)
-- [ ] **KS4 Options indexed** (`ks4Options.slug`, `ks4Options.title`) for pathway filtering
-- [ ] **Tiers indexed** (`tierSlug`, `tierTitle`) for Foundation/Higher filtering
-- [ ] **Exam board indexed** (`examBoardTitle`) where available
-- [ ] Programme factor extractors use actual schema fields (not fictional `programmeFactors`)
-- [ ] Derived fields documented in upstream wishlist
-- [ ] ADR documenting field additions and rationale
-- [ ] All quality gates pass
-- [ ] Re-indexing completed with new fields populated
+- [x] OWA aliases merged into synonym system (subjects, key stages, exam boards)
+- [x] `pupilLessonOutcome` indexed and queryable
+- [x] Display title fields (`subjectTitle`, `keyStageTitle`) added to all documents
+- [x] Unit enrichment fields indexed (`description`, `whyThisWhyNow`, `categories`, `priorKnowledgeRequirements`, `nationalCurriculumContent`)
+- [x] **Sequence traversal implemented** (builds UnitContextMap)
+- [x] **KS4 Options indexed** as arrays (`ks4Options[]`, `ks4OptionTitles[]`)
+- [x] **Tiers indexed** as arrays (`tiers[]`, `tierTitles[]`)
+- [x] **Exam boards indexed** as arrays (`examBoards[]`, `examBoardTitles[]`)
+- [x] **Exam subjects indexed** as arrays (`examSubjects[]`, `examSubjectTitles[]`)
+- [x] Derived fields documented in upstream wishlist
+- [x] **[ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)** documenting denormalisation strategy
+- [x] All SDK requests cached in Redis (including sequences)
+- [x] All quality gates pass
+- [ ] **Re-indexing completed with KS4 metadata populated** ⚠️ VERIFICATION PENDING
 
-### Success Criteria (3b)
+### Success Criteria (3b) ✅ ACHIEVED (code complete)
 
-- [ ] Dense vector code removed from codebase
-- [ ] Lesson semantic summary template implemented
-- [ ] Unit semantic summary template implemented
-- [ ] Redis caching for semantic summaries working
-- [ ] A/B comparison: summary-based vs transcript-based ELSER
-- [ ] Quality improvement measured (MRR/NDCG delta)
-- [ ] All quality gates pass
+- [x] Dense vector code removed from codebase
+- [x] Lesson semantic summary template implemented
+- [x] Unit semantic summary template implemented
+- [ ] Redis caching for semantic summaries working (deferred)
+- [ ] A/B comparison: summary-based vs transcript-based ELSER (deferred)
+- [ ] Quality improvement measured (MRR/NDCG delta) ⚠️ VERIFICATION PENDING
+- [x] All quality gates pass
 
 ---
 
@@ -592,12 +872,13 @@ Semantic summaries provide information-dense text (~200 tokens) optimised for em
 
 ### ADRs
 
-| ADR     | Title                         | Status         |
-| ------- | ----------------------------- | -------------- |
-| ADR-075 | Dense Vector Code Removal     | ✅ Implemented |
-| ADR-076 | ELSER-Only Embedding Strategy | ✅ Accepted    |
-| ADR-077 | Semantic Summary Generation   | ✅ Accepted    |
-| ADR-079 | SDK Cache TTL Jitter          | ✅ Implemented |
+| ADR     | Title                              | Status         |
+| ------- | ---------------------------------- | -------------- |
+| ADR-075 | Dense Vector Code Removal          | ✅ Implemented |
+| ADR-076 | ELSER-Only Embedding Strategy      | ✅ Accepted    |
+| ADR-077 | Semantic Summary Generation        | ✅ Accepted    |
+| ADR-079 | SDK Cache TTL Jitter               | ✅ Implemented |
+| ADR-080 | KS4 Metadata Denormalisation       | ✅ Accepted    |
 
 **Dev Tools Added**:
 
@@ -860,9 +1141,20 @@ apps/oak-open-curriculum-semantic-search/smoke-tests/
 
 ## Related Documents
 
+### Planning & Requirements
+
 - [Requirements](./requirements.md) - Business context and success criteria
 - [Feature Parity Analysis](../../research/feature-parity-analysis.md) - Gap analysis with OWA
 - [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md) - Fields needing API changes
 - [Prompt Entry Point](../../prompts/semantic-search/semantic-search.prompt.md) - Fresh chat starting point
 - [Navigation Hub](./README.md) - All phases overview
 - **[ES Reset & Re-Validation Plan](.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md)** - Detailed execution plan with acceptance criteria
+
+### ADRs
+
+- [ADR-066: SDK Response Caching](../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md) - Redis caching for SDK responses
+- [ADR-075: Dense Vector Code Removal](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) - Why dense vectors were removed
+- [ADR-076: ELSER-Only Embedding Strategy](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - Sparse-only strategy
+- [ADR-077: Semantic Summary Generation](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Summary templates
+- [ADR-079: SDK Cache TTL Jitter](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md) - Cache TTL with jitter
+- [ADR-080: KS4 Metadata Denormalisation](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) - Sequence traversal strategy

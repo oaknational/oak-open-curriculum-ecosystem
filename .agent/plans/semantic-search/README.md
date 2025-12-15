@@ -183,13 +183,14 @@ Add information-dense summary fields for better pedagogical matching:
 
 ### ADRs
 
-| ADR                                                                                               | Title                           | Status   |
-| ------------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
-| [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy | Accepted |
-| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal       | Implemented |
-| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy   | Accepted |
-| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation     | Accepted    |
-| [ADR-079](../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)            | SDK Cache TTL Jitter            | Implemented |
+| ADR                                                                                               | Title                              | Status      |
+| ------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------- |
+| [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy    | Accepted    |
+| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal          | Implemented |
+| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy      | Accepted    |
+| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation        | Accepted    |
+| [ADR-079](../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)            | SDK Cache TTL Jitter               | Implemented |
+| [ADR-080](../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
 
 ---
 

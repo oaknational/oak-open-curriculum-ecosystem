@@ -19,9 +19,13 @@ import {
   extractPassage,
   normaliseYears,
 } from './document-transforms';
+import type { UnitContextMap } from './ks4-context-builder';
 
 const mathsSubject: SearchSubjectSlug = 'maths';
 const ks4: KeyStage = 'ks4';
+
+// Empty context map for tests (no KS4 metadata)
+const emptyContextMap: UnitContextMap = new Map();
 
 // Use SDK types directly - the local interfaces were redundant
 type UnitSummaryFixture = SearchUnitSummary;
@@ -143,6 +147,7 @@ describe('createUnitDocument', () => {
       subject: mathsSubject,
       keyStage: ks4,
       subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
     });
 
     expect(doc.unit_id).toBe(summary.unitSlug);
@@ -162,6 +167,7 @@ describe('createUnitDocument', () => {
         subject: mathsSubject,
         keyStage: ks4,
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+        unitContextMap: emptyContextMap,
       }),
     ).toThrowError(/Missing canonical URL/);
   });
@@ -180,6 +186,8 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
+      unitContextMap: emptyContextMap,
+      unitSlug: 'unit-slug',
     });
 
     expect(doc.lesson_id).toBe('lesson-1');
@@ -212,6 +220,8 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: undefined,
       lessonCount: 5,
+      unitContextMap: emptyContextMap,
+      unitSlug: 'unit-slug',
     });
 
     expect(doc.lesson_keywords).toBeUndefined();
@@ -235,6 +245,8 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
+      unitContextMap: emptyContextMap,
+      unitSlug: 'maths-gcse-foundation',
     });
 
     expect(doc.tier).toBe('foundation');
@@ -254,6 +266,8 @@ describe('createLessonDocument', () => {
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 8,
+      unitContextMap: emptyContextMap,
+      unitSlug: 'trigonometry',
     });
 
     // The lesson_semantic field must be populated for ELSER to generate embeddings
@@ -273,9 +287,13 @@ describe('createRollupDocument', () => {
       subject: mathsSubject,
       keyStage: ks4,
       subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
     });
 
-    expect(doc.unit_semantic).toContain('Snippet one');
+    // unit_semantic now contains curated semantic summary for ELSER (ADR-077)
+    expect(doc.unit_semantic).toContain('Unit Title is a ks4 maths unit');
+    expect(doc.unit_semantic).toContain('Lessons: Lesson 1, Lesson 2.');
+    // rollup_text still contains aggregated snippets for BM25 search
     expect(doc.rollup_text).toContain('Snippet two');
     expect(doc.sequence_ids).toEqual(['sequence-1', 'sequence-2']);
     expect(doc.subject_slug).toBe(mathsSubject);
@@ -293,6 +311,7 @@ describe('createRollupDocument', () => {
         subject: mathsSubject,
         keyStage: ks4,
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+        unitContextMap: emptyContextMap,
       }),
     ).toThrowError(/Missing canonical URL/);
   });

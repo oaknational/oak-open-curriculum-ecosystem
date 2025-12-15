@@ -14,6 +14,10 @@ import {
   type SearchIndexTarget,
 } from '../../../src/lib/search-index-target';
 import type { OakClient } from '../../../src/adapters/oak-adapter-sdk';
+import type {
+  AggregatedUnitContext,
+  UnitContextMap,
+} from '../../../src/lib/indexing/ks4-context-builder';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -91,32 +95,72 @@ async function rollupAllUnits(
   return { count: totalProcessed, rest: bulkOps };
 }
 
+/** Fetch and validate unit summary. */
+async function fetchUnitSummary(client: OakClient, unitSlug: string) {
+  const candidate: unknown = await client.getUnitSummary(unitSlug);
+  if (!isUnitSummary(candidate)) {
+    throw new Error(`Unexpected unit summary response for ${unitSlug}`);
+  }
+  return candidate;
+}
+
+/** Build snippets from lesson transcripts. */
+async function buildLessonSnippets(client: OakClient, lessonIds: readonly string[]) {
+  const snippets: string[] = [];
+  for (const lessonId of lessonIds) {
+    const candidate: unknown = await client.getLessonSummary(lessonId);
+    if (!isLessonSummary(candidate)) {
+      throw new Error(`Unexpected lesson summary response for ${lessonId}`);
+    }
+    const transcriptResponse = await client.getLessonTranscript(lessonId);
+    snippets.push(
+      selectLessonPlanningSnippet({
+        summary: candidate,
+        transcript: transcriptResponse.transcript,
+      }),
+    );
+  }
+  return snippets;
+}
+
+/** Check if unit document has any KS4 data. */
+function hasKs4Data(doc: SearchUnitsIndexDoc): boolean {
+  return Boolean(doc.tiers || doc.exam_boards || doc.exam_subjects || doc.ks4_options);
+}
+
+/** Normalizes optional array to empty array. */
+function emptyIfUndefined(arr: readonly string[] | undefined): readonly string[] {
+  return arr ?? [];
+}
+
+/** Extract KS4 context from existing unit document. */
+function extractKs4ContextFromDoc(unitDoc: SearchUnitsIndexDoc): AggregatedUnitContext | null {
+  if (!hasKs4Data(unitDoc)) {
+    return null;
+  }
+  return {
+    tiers: emptyIfUndefined(unitDoc.tiers),
+    tierTitles: emptyIfUndefined(unitDoc.tier_titles),
+    examBoards: emptyIfUndefined(unitDoc.exam_boards),
+    examBoardTitles: emptyIfUndefined(unitDoc.exam_board_titles),
+    examSubjects: emptyIfUndefined(unitDoc.exam_subjects),
+    examSubjectTitles: emptyIfUndefined(unitDoc.exam_subject_titles),
+    ks4Options: emptyIfUndefined(unitDoc.ks4_options),
+    ks4OptionTitles: emptyIfUndefined(unitDoc.ks4_option_titles),
+  };
+}
+
 async function rollupUnit(
   client: OakClient,
   unitDoc: SearchUnitsIndexDoc,
 ): Promise<SearchUnitRollupDoc> {
-  const unitSummaryCandidate: unknown = await client.getUnitSummary(unitDoc.unit_slug);
-  if (!isUnitSummary(unitSummaryCandidate)) {
-    throw new Error(`Unexpected unit summary response for ${unitDoc.unit_slug}`);
-  }
-  // After validation, keep the typed data - don't widen to unknown!
-  const unitSummary = unitSummaryCandidate;
+  const unitSummary = await fetchUnitSummary(client, unitDoc.unit_slug);
+  const snippets = await buildLessonSnippets(client, unitDoc.lesson_ids);
 
-  const snippets: string[] = [];
-  for (const lessonId of unitDoc.lesson_ids) {
-    const lessonSummaryCandidate: unknown = await client.getLessonSummary(lessonId);
-    if (!isLessonSummary(lessonSummaryCandidate)) {
-      throw new Error(`Unexpected lesson summary response for ${lessonId}`);
-    }
-    // After validation, keep the typed data - don't widen to unknown!
-    const lessonSummary = lessonSummaryCandidate;
-    const transcriptResponse = await client.getLessonTranscript(lessonId);
-    snippets.push(
-      selectLessonPlanningSnippet({
-        summary: lessonSummary,
-        transcript: transcriptResponse.transcript,
-      }),
-    );
+  const unitContextMap: UnitContextMap = new Map();
+  const ks4Context = extractKs4ContextFromDoc(unitDoc);
+  if (ks4Context) {
+    unitContextMap.set(unitDoc.unit_slug, ks4Context);
   }
 
   return createRollupDocument({
@@ -125,5 +169,6 @@ async function rollupUnit(
     subject: unitDoc.subject_slug,
     keyStage: unitDoc.key_stage,
     subjectProgrammesUrl: unitDoc.subject_programmes_url,
+    unitContextMap,
   });
 }

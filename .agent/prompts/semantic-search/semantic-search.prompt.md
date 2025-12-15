@@ -1,14 +1,15 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | **Phase 3.0 ✅ VERIFIED** | Phase 3a/3b 🔲 PENDING | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
+**Status**: Phase 1 & 2 Complete | **Phase 3.0 ✅ VERIFIED** | **Phase 3a ✅ IMPLEMENTED** | **Phase 3b ✅ IMPLEMENTED** | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
 **Last Updated**: 2025-12-15
 
 ---
 
 ## 📋 Current State
 
-**Part 3.0 (Verification) is COMPLETE.** All search infrastructure has been verified:
+**Parts 3.0, 3a, and 3b are COMPLETE (code implemented).** All quality gates pass.
 
+### Part 3.0 (Verification) ✅ VERIFIED
 - ✅ Hybrid superiority experiment: Lessons hybrid > BM25/ELSER; Units ELSER slightly better MRR but hybrid better NDCG
 - ✅ Lesson-only search verified
 - ✅ Unit-only search verified
@@ -16,7 +17,33 @@
 - ✅ Lesson filter by unit verified
 - ✅ Redis cache TTL updated to 14 days with ±12 hour jitter (ADR-079)
 
-**Next work**: Part 3a (Feature Parity) and Part 3b (Semantic Summary Enhancement).
+### Part 3a (Feature Parity) ✅ IMPLEMENTED
+- ✅ OWA aliases imported (subjects, key stages, exam boards)
+- ✅ `pupilLessonOutcome` field added to lesson index
+- ✅ Display title fields (`subjectTitle`, `keyStageTitle`) added
+- ✅ Unit enrichment fields added (`description`, `whyThisWhyNow`, `categories`, etc.)
+- ✅ **KS4 Metadata Denormalisation** implemented:
+  - `ks4-context-builder.ts` traverses sequences and builds `UnitContextMap`
+  - KS4 arrays indexed: `tiers[]`, `examBoards[]`, `examSubjects[]`, `ks4Options[]` + titles
+  - Smoke tests for KS4 filtering created
+
+### Part 3b (Semantic Summaries) ✅ IMPLEMENTED
+- ✅ Dense vector code removed (ADR-075)
+- ✅ `generateLessonSemanticSummary()` template implemented
+- ✅ `generateUnitSemanticSummary()` template implemented
+- ✅ `lesson_summary_semantic` field added to lesson index
+- ✅ `unit_semantic` now uses curated summary instead of rollup text
+
+### Remaining Work (Optional Enhancements)
+- 🔲 Redis caching for semantic summaries (deferred)
+- 🔲 Summary vs transcript ELSER experiment (deferred)
+- 🔲 Unit reranking experiment (deferred)
+
+### ⚠️ VERIFICATION NEEDED
+All code is implemented and quality gates pass, but **re-indexing and live verification** is required:
+1. Re-index with fresh data: `pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4`
+2. Run KS4 filtering smoke tests
+3. Run search quality benchmarks to measure MRR/NDCG with new fields
 
 See `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md` for detailed validation results.
 
@@ -169,6 +196,10 @@ Key ES documentation for this project:
 | BM25 vs ELSER vs Hybrid experiment                | ✅ Complete |
 | Part 3.0 verification (scope, doc_type, filters)  | ✅ Complete |
 | Redis cache TTL 14 days + jitter (ADR-079)        | ✅ Complete |
+| **Part 3a: Feature Parity fields**                | ✅ Complete |
+| **Part 3a: KS4 Metadata Denormalisation**         | ✅ Complete |
+| **Part 3b: Dense vector removal**                 | ✅ Complete |
+| **Part 3b: Semantic summary templates**           | ✅ Complete |
 
 ### Phase 3 Remaining Work
 
@@ -203,28 +234,38 @@ Key ES documentation for this project:
 
 **Verified 2025-12-15** with fresh Maths KS4 data. See validation results in `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md`.
 
-#### Part 3a: Feature Parity (after verification complete)
+#### Part 3a: Feature Parity ✅ IMPLEMENTED
 
-| Task                       | Priority | Status     |
-| -------------------------- | -------- | ---------- |
-| OWA aliases import         | **HIGH** | 🔲 Pending |
-| `pupilLessonOutcome` field | **HIGH** | 🔲 Pending |
-| Display title fields       | Medium   | 🔲 Pending |
-| Unit enrichment fields     | Medium   | 🔲 Pending |
-| ADR: field additions       | Medium   | 🔲 Pending |
+| Task                                    | Priority     | Status        |
+| --------------------------------------- | ------------ | ------------- |
+| OWA aliases import                      | **HIGH**     | ✅ Complete   |
+| `pupilLessonOutcome` field              | **HIGH**     | ✅ Complete   |
+| Display title fields                    | Medium       | ✅ Complete   |
+| Unit enrichment fields                  | Medium       | ✅ Complete   |
+| KS4 sequence traversal to ingestion     | **CRITICAL** | ✅ Complete   |
+| Build UnitContextMap from sequences     | **CRITICAL** | ✅ Complete   |
+| KS4 field definitions (arrays)          | **HIGH**     | ✅ Complete   |
+| Decorate documents with KS4 metadata    | **HIGH**     | ✅ Complete   |
+| KS4 filtering smoke tests               | **HIGH**     | ✅ Complete   |
+| ADR-080: Denormalisation strategy       | **HIGH**     | ✅ Complete   |
 
-#### Part 3b: Semantic Summary Enhancement (NEW)
+#### Part 3b: Semantic Summary Enhancement ✅ IMPLEMENTED
 
-| Task                                 | Priority | Status       |
-| ------------------------------------ | -------- | ------------ |
-| Remove dense vector code             | **HIGH** | ✅ Complete  |
-| Lesson semantic summary template     | **HIGH** | 🔲 Pending   |
-| Unit semantic summary template       | **HIGH** | 🔲 Pending   |
-| Redis caching for summaries          | Medium   | 🔲 Pending   |
-| Compare summary vs transcript ELSER  | Medium   | 🔲 Pending   |
+| Task                                 | Priority | Status         |
+| ------------------------------------ | -------- | -------------- |
+| Remove dense vector code             | **HIGH** | ✅ Complete    |
+| Lesson semantic summary template     | **HIGH** | ✅ Complete    |
+| Unit semantic summary template       | **HIGH** | ✅ Complete    |
+| `lesson_summary_semantic` field      | **HIGH** | ✅ Complete    |
+| Redis caching for summaries          | Medium   | 🔲 Deferred    |
+| Compare summary vs transcript ELSER  | Medium   | 🔲 Deferred    |
 | ADR-075: Dense vector removal        | **HIGH** | ✅ Implemented |
-| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete  |
-| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete  |
+| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete    |
+| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete    |
+
+**Approach**: Traverse `/sequences/{sequence}/units` endpoints, build lookup tables mapping units → tiers/examBoards, decorate indexed documents with arrays. See [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
+
+**Redis Caching**: All SDK requests continue to be cached in Redis (14-day TTL with jitter per ADR-079). Sequence endpoints are no exception.
 
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
@@ -298,13 +339,14 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-s
 
 ### ADRs
 
-| ADR                                                                                          | Title                           | Status   |
-| -------------------------------------------------------------------------------------------- | ------------------------------- | -------- |
-| [ADR-074](docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md)  | Elastic-Native-First Philosophy | Accepted |
-| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md)             | Dense Vector Code Removal       | Accepted |
-| [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)    | ELSER-Only Embedding Strategy   | Accepted |
-| [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md)      | Semantic Summary Generation     | Accepted |
-| [ADR-079](docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)             | SDK Cache TTL Jitter            | Implemented |
+| ADR                                                                                          | Title                              | Status      |
+| -------------------------------------------------------------------------------------------- | ---------------------------------- | ----------- |
+| [ADR-074](docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md)  | Elastic-Native-First Philosophy    | Accepted    |
+| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md)             | Dense Vector Code Removal          | Accepted    |
+| [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)    | ELSER-Only Embedding Strategy      | Accepted    |
+| [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md)      | Semantic Summary Generation        | Accepted    |
+| [ADR-079](docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)             | SDK Cache TTL Jitter               | Implemented |
+| [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
 
 ---
 
@@ -373,21 +415,21 @@ Phase 2 evaluation showed E5 dense vectors provide **no benefit** for curriculum
 - Rerank experiment scripts simplified to 2-way only
 - All quality gates passing
 
-### Future Enhancement: Semantic Summaries
+### Semantic Summaries ✅ IMPLEMENTED
 
-Add `semantic_summary` fields (~200 tokens) for information-dense embeddings:
+Semantic summary fields (~200 tokens) for information-dense embeddings:
 
-| Resource | Field                     | Content                     | Status     |
-| -------- | ------------------------- | --------------------------- | ---------- |
-| Lessons  | `lesson_summary_semantic` | Template-composed summary   | 🔲 Planned |
-| Units    | `unit_semantic`           | Replace rollup with summary | 🔲 Planned |
+| Resource | Field                     | Content                     | Status       |
+| -------- | ------------------------- | --------------------------- | ------------ |
+| Lessons  | `lesson_summary_semantic` | Template-composed summary   | ✅ Complete  |
+| Units    | `unit_semantic`           | Curated summary (not rollup)| ✅ Complete  |
 
-**Generation approach**:
+**Implementation**:
+- `generateLessonSemanticSummary()` in `semantic-summary-generator.ts`
+- `generateUnitSemanticSummary()` in `semantic-summary-generator.ts`
+- Templates compose from: title, keyStage, subject, keyLearningPoints, keywords, misconceptions, pupilLessonOutcome
 
-1. **Template-based** (Phase 3) - Compose from API fields
-2. **LLM-enhanced** (Future) - Use `.gp-llm-v2-chat_completion` for richer summaries
-
-**Caching**: Redis (same instance as curriculum API caching).
+**Future enhancement**: LLM-generated summaries via `.gp-llm-v2-chat_completion` for richer prose.
 
 See [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md).
 

@@ -16,6 +16,7 @@ import {
   type ThreadInfo,
   type PedagogicalData,
 } from './thread-and-pedagogical-extractors';
+import type { AggregatedUnitContext } from './ks4-context-builder';
 
 // Re-export programme factor extractors
 export { extractTier };
@@ -28,6 +29,45 @@ export {
   type ThreadInfo,
   type PedagogicalData,
 };
+
+/**
+ * KS4 fields for Elasticsearch documents.
+ * Optional arrays following the denormalisation pattern in ADR-080.
+ */
+export interface Ks4DocumentFields {
+  readonly tiers?: string[];
+  readonly tier_titles?: string[];
+  readonly exam_boards?: string[];
+  readonly exam_board_titles?: string[];
+  readonly exam_subjects?: string[];
+  readonly exam_subject_titles?: string[];
+  readonly ks4_options?: string[];
+  readonly ks4_option_titles?: string[];
+}
+
+/** Converts non-empty readonly array to mutable, or undefined. */
+function nonEmptyOrUndefined(arr: readonly string[]): string[] | undefined {
+  return arr.length > 0 ? [...arr] : undefined;
+}
+
+/**
+ * Extracts KS4 document fields from aggregated unit context.
+ *
+ * @param ks4Context - Aggregated KS4 context from UnitContextMap
+ * @returns KS4 fields ready for spreading into document
+ */
+export function extractKs4DocumentFields(ks4Context: AggregatedUnitContext): Ks4DocumentFields {
+  return {
+    tiers: nonEmptyOrUndefined(ks4Context.tiers),
+    tier_titles: nonEmptyOrUndefined(ks4Context.tierTitles),
+    exam_boards: nonEmptyOrUndefined(ks4Context.examBoards),
+    exam_board_titles: nonEmptyOrUndefined(ks4Context.examBoardTitles),
+    exam_subjects: nonEmptyOrUndefined(ks4Context.examSubjects),
+    exam_subject_titles: nonEmptyOrUndefined(ks4Context.examSubjectTitles),
+    ks4_options: nonEmptyOrUndefined(ks4Context.ks4Options),
+    ks4_option_titles: nonEmptyOrUndefined(ks4Context.ks4OptionTitles),
+  };
+}
 
 export interface UnitLessonInfo {
   readonly lessonSlug: string;
@@ -93,6 +133,9 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
   teacherTips?: string[];
   contentGuidance?: string[];
   tier: 'foundation' | 'higher' | undefined;
+  pupilLessonOutcome?: string;
+  subjectTitle: string;
+  keyStageTitle: string;
 } {
   if (!summary.canonicalUrl) {
     throw new Error(`Missing canonical URL for lesson in unit ${summary.unitSlug}`);
@@ -111,6 +154,9 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
     teacherTips,
     contentGuidance,
     tier: extractTier(summary),
+    pupilLessonOutcome: summary.pupilLessonOutcome,
+    subjectTitle: summary.subjectTitle,
+    keyStageTitle: summary.keyStageTitle,
   };
 }
 
@@ -159,5 +205,25 @@ export function extractRollupDocumentFields(
     threadTitles: threadInfo.titles,
     threadOrders: threadInfo.orders,
     tier: extractTier(summary),
+  };
+}
+
+/** Extracted unit enrichment fields for document creation. */
+export interface UnitEnrichmentFields {
+  description?: string;
+  why_this_why_now?: string;
+  categories?: string[];
+  prior_knowledge_requirements: string[];
+  national_curriculum_content: string[];
+}
+
+/** Extracts unit enrichment fields from a unit summary. */
+export function extractUnitEnrichmentFields(summary: SearchUnitSummary): UnitEnrichmentFields {
+  return {
+    description: summary.description ?? undefined,
+    why_this_why_now: summary.whyThisWhyNow ?? undefined,
+    categories: summary.categories?.map((cat) => cat.categoryTitle),
+    prior_knowledge_requirements: summary.priorKnowledgeRequirements,
+    national_curriculum_content: summary.nationalCurriculumContent,
   };
 }

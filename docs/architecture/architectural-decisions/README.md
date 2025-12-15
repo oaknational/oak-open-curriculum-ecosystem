@@ -87,6 +87,9 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-071, 072, 073**
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)
 - [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
+- [ADR-078: Dependency Injection for Testability](078-dependency-injection-for-testability.md)
+- [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md)
+- [ADR-080: KS4 Metadata Denormalisation Strategy](080-ks4-metadata-denormalization-strategy.md)
 
 ## Key Architectural Decisions
 
@@ -112,6 +115,8 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-075](075-dense-vector-removal.md)** - Dense vector code removal (supersedes ADR-071, 072, 073)
 - **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
+- **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
+- **[ADR-080](080-ks4-metadata-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking

@@ -19,7 +19,7 @@ export const subjectSynonyms = {
   geography: ['geo'],
   german: ['german language'],
   history: ['historical studies'],
-  maths: ['math', 'mathematics', 'math.'],
+  maths: ['math', 'mathematics', 'math.', 'numeracy'],
   music: ['music education'],
   physics: ['physical science', 'physical sciences'],
   'physical-education': ['physical education', 'pe', 'p.e.', 'sport', 'sports'],
@@ -32,7 +32,7 @@ export const subjectSynonyms = {
     'relationships and sex education',
     'personal social health and economic education',
   ],
-  science: ['sci', 'general science', 'sciences'],
+  science: ['sci', 'general science', 'sciences', 'stem'],
   spanish: ['spanish language'],
 } as const;
 
