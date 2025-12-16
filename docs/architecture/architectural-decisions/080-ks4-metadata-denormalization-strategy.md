@@ -1,7 +1,7 @@
 # ADR-080: KS4 Metadata Denormalisation Strategy
 
 **Status**: Accepted  
-**Date**: 2025-12-15  
+**Date**: 2025-12-15 (Updated 2025-12-16)  
 **Decision Makers**: AI Platform Team  
 **Related ADRs**: [ADR-066](066-sdk-response-caching.md), [ADR-067](067-sdk-generated-elasticsearch-mappings.md), [ADR-076](076-elser-only-embedding-strategy.md)
 
@@ -10,7 +10,8 @@
 Teachers need to filter search results by KS4-specific attributes:
 
 - **Tier**: Foundation or Higher (GCSE difficulty levels)
-- **Exam Board**: AQA, Edexcel, OCR, etc.
+- **Exam Board**: AQA, Edexcel, OCR, Eduqas, etc.
+- **Exam Subject**: Biology, Chemistry, Physics (for combined science)
 - **KS4 Option**: Combined Science, Triple Science, etc.
 
 The Oak Open Curriculum API exposes this data via **top-down traversal** (sequence → year → tier → units → lessons), not as flat fields on lesson/unit resources. This design reflects the underlying **many-to-many relationships**:
@@ -33,69 +34,6 @@ To enable filtering in Elasticsearch, we need flat fields on indexed documents. 
 2. We cannot request upstream API changes in the short term
 3. Many-to-many relationships mean flat fields must be **arrays**, not scalars
 
-### Data Available via API
-
-**`/subjects` endpoint** provides:
-
-```json
-{
-  "subjectSlug": "science",
-  "sequenceSlugs": [
-    {
-      "sequenceSlug": "science-secondary-aqa",
-      "ks4Options": { "title": "AQA GCSE Science", "slug": "aqa-gcse-science" }
-    }
-  ]
-}
-```
-
-**`/sequences/{sequence}/units?year={year}` endpoint** provides:
-
-```json
-// KS4 Sciences: year → examSubjects → tiers → units
-{
-  "year": 10,
-  "examSubjects": [
-    {
-      "examSubjectTitle": "Biology",
-      "examSubjectSlug": "biology",
-      "tiers": [
-        {
-          "tierTitle": "Foundation",
-          "tierSlug": "foundation",
-          "units": [{ "unitSlug": "...", "unitTitle": "..." }]
-        },
-        {
-          "tierTitle": "Higher",
-          "tierSlug": "higher",
-          "units": [{ "unitSlug": "...", "unitTitle": "..." }]
-        }
-      ]
-    }
-  ]
-}
-
-// KS4 Maths: year → tiers → units (no examSubjects)
-{
-  "year": 10,
-  "tiers": [
-    {
-      "tierTitle": "Foundation",
-      "tierSlug": "foundation",
-      "units": [{ "unitSlug": "...", "unitTitle": "..." }]
-    }
-  ]
-}
-
-// KS1-KS3: year → units (no tiers)
-{
-  "year": 7,
-  "units": [{ "unitSlug": "...", "unitTitle": "..." }]
-}
-```
-
-**Exam board** is encoded in the sequence slug (e.g., `science-secondary-aqa`).
-
 ## Decision
 
 **Denormalise KS4 metadata at ingest time** by:
@@ -105,7 +43,158 @@ To enable filtering in Elasticsearch, we need flat fields on indexed documents. 
 3. **Decorate indexed documents** with arrays of applicable values
 4. **Continue caching all SDK requests in Redis** (per ADR-066)
 
-### Index Schema (Denormalised)
+## Architecture
+
+### Data Flow Overview
+
+```mermaid
+flowchart TB
+    subgraph "Upstream Oak API"
+        API_SUBJECTS["/subjects"]
+        API_SEQUENCES["/sequences/{seq}/units"]
+        API_UNITS["/units/{unit}/summary"]
+        API_LESSONS["/lessons/{lesson}/summary"]
+    end
+    
+    subgraph "SDK Cache Layer"
+        REDIS[(Redis Cache<br/>14 day TTL + jitter)]
+    end
+    
+    subgraph "Ingestion Pipeline"
+        direction TB
+        FETCH_REF["Phase 1: Fetch Reference Data"]
+        FETCH_SEQ["Phase 2: Traverse KS4 Sequences"]
+        BUILD_MAP["Build UnitContextMap"]
+        FETCH_CONTENT["Phase 3: Fetch Curriculum Content"]
+        DECORATE["Phase 4: Decorate Documents"]
+    end
+    
+    subgraph "Elasticsearch"
+        ES_LESSONS[oak_lessons index]
+        ES_UNITS[oak_units index]
+        ES_ROLLUP[oak_unit_rollup index]
+    end
+    
+    API_SUBJECTS --> REDIS
+    API_SEQUENCES --> REDIS
+    API_UNITS --> REDIS
+    API_LESSONS --> REDIS
+    
+    REDIS --> FETCH_REF
+    REDIS --> FETCH_SEQ
+    REDIS --> FETCH_CONTENT
+    
+    FETCH_REF --> FETCH_SEQ
+    FETCH_SEQ --> BUILD_MAP
+    BUILD_MAP --> DECORATE
+    FETCH_CONTENT --> DECORATE
+    
+    DECORATE --> ES_LESSONS
+    DECORATE --> ES_UNITS
+    DECORATE --> ES_ROLLUP
+```
+
+### UnitContextMap Building Process
+
+```mermaid
+flowchart LR
+    subgraph "Sequence Response Structures"
+        SCIENCES["Sciences Structure<br/>year → examSubjects[] → tiers[] → units[]"]
+        MATHS["Maths Structure<br/>year → tiers[] → units[]"]
+        OTHERS["Other Subjects<br/>year → units[]"]
+    end
+    
+    subgraph "Context Building"
+        PARSE["parseExamBoardFromSlug()"]
+        EXTRACT["extractKs4Option()"]
+        BUILD["buildUnitContextsFromSequenceResponse()"]
+        MERGE["mergeUnitContexts()"]
+    end
+    
+    subgraph "Output"
+        MAP["UnitContextMap<br/>Map&lt;unitSlug, AggregatedUnitContext&gt;"]
+    end
+    
+    SCIENCES --> BUILD
+    MATHS --> BUILD
+    OTHERS --> BUILD
+    
+    PARSE --> BUILD
+    EXTRACT --> BUILD
+    BUILD --> MERGE
+    MERGE --> MAP
+```
+
+### Filtering Architecture
+
+```mermaid
+flowchart LR
+    subgraph "Search Request"
+        REQ["POST /api/search<br/>{tier: 'foundation', examBoard: 'aqa'}"]
+    end
+    
+    subgraph "Query Building"
+        FILTERS["createLessonFilters()<br/>createUnitFilters()"]
+        RRF["RRF Query Builder"]
+    end
+    
+    subgraph "Elasticsearch Query"
+        BOOL["bool filter:<br/>term: {tiers: 'foundation'}<br/>term: {exam_boards: 'aqa'}"]
+    end
+    
+    subgraph "Results"
+        RESULTS["Filtered Results<br/>(only matching documents)"]
+    end
+    
+    REQ --> FILTERS
+    FILTERS --> RRF
+    RRF --> BOOL
+    BOOL --> RESULTS
+```
+
+## Filterable Fields
+
+### KS4 Metadata Fields
+
+All KS4 metadata is indexed as **arrays** to support many-to-many relationships:
+
+| Field               | Type     | Source                        | Purpose                      |
+| ------------------- | -------- | ----------------------------- | ---------------------------- |
+| `tiers`             | string[] | Sequence traversal            | Filter by Foundation/Higher  |
+| `tier_titles`       | string[] | Sequence traversal            | Display titles               |
+| `exam_boards`       | string[] | Parsed from sequence slug     | Filter by AQA/Edexcel/etc    |
+| `exam_board_titles` | string[] | Parsed from sequence slug     | Display titles               |
+| `exam_subjects`     | string[] | Sequence traversal (sciences) | Filter by Biology/Chemistry  |
+| `exam_subject_titles` | string[] | Sequence traversal (sciences) | Display titles             |
+| `ks4_options`       | string[] | `/subjects` endpoint          | Filter by programme pathway  |
+| `ks4_option_titles` | string[] | `/subjects` endpoint          | Display titles               |
+
+### Additional Filterable Fields
+
+These fields are also available from the sequence response and are indexed:
+
+| Field           | Type     | Source              | Purpose                    |
+| --------------- | -------- | ------------------- | -------------------------- |
+| `thread_slugs`  | string[] | Unit threads[]      | Filter by curriculum thread |
+| `thread_titles` | string[] | Unit threads[]      | Display titles             |
+| `categories`    | string[] | Unit categories[]   | Filter by category         |
+
+### Known Values
+
+**Exam Boards** (parsed from sequence slugs):
+
+- `aqa` - AQA
+- `edexcel` - Edexcel
+- `ocr` - OCR
+- `eduqas` - Eduqas
+- `edexcelb` - Edexcel B
+
+**Tiers**:
+
+- `foundation` - Foundation
+- `higher` - Higher
+
+## Index Schema
 
 ```typescript
 interface LessonDocument {
@@ -113,13 +202,13 @@ interface LessonDocument {
 
   // KS4 metadata (arrays for many-to-many)
   tiers: string[]; // e.g., ["foundation", "higher"]
-  tierTitles: string[]; // e.g., ["Foundation", "Higher"]
-  examBoards: string[]; // e.g., ["aqa", "edexcel"]
-  examBoardTitles: string[]; // e.g., ["AQA", "Edexcel"]
-  ks4Options: string[]; // e.g., ["gcse-combined-science"]
-  ks4OptionTitles: string[]; // e.g., ["GCSE Combined Science"]
-  examSubjects: string[]; // e.g., ["biology", "chemistry"]
-  examSubjectTitles: string[]; // e.g., ["Biology", "Chemistry"]
+  tier_titles: string[]; // e.g., ["Foundation", "Higher"]
+  exam_boards: string[]; // e.g., ["aqa", "edexcel"]
+  exam_board_titles: string[]; // e.g., ["AQA", "Edexcel"]
+  exam_subjects: string[]; // e.g., ["biology", "chemistry"]
+  exam_subject_titles: string[]; // e.g., ["Biology", "Chemistry"]
+  ks4_options: string[]; // e.g., ["gcse-combined-science"]
+  ks4_option_titles: string[]; // e.g., ["GCSE Combined Science"]
 }
 
 interface UnitDocument {
@@ -127,17 +216,17 @@ interface UnitDocument {
 
   // Same KS4 metadata arrays
   tiers: string[];
-  tierTitles: string[];
-  examBoards: string[];
-  examBoardTitles: string[];
-  ks4Options: string[];
-  ks4OptionTitles: string[];
-  examSubjects: string[];
-  examSubjectTitles: string[];
+  tier_titles: string[];
+  exam_boards: string[];
+  exam_board_titles: string[];
+  exam_subjects: string[];
+  exam_subject_titles: string[];
+  ks4_options: string[];
+  ks4_option_titles: string[];
 }
 ```
 
-### Ingestion Sequence
+## Ingestion Sequence
 
 The denormalisation happens **in addition to** existing ingestion, not as a replacement:
 
@@ -169,72 +258,58 @@ Phase 4: Decorate and index (ENHANCED)
 └── Index to Elasticsearch
 ```
 
-### Lookup Table Structure
+## Elasticsearch Filtering
 
-```typescript
-// Built from sequence traversal
-interface SequenceMetadata {
-  sequenceSlug: string;
-  examBoard: string | null; // Parsed from slug or ks4Options
-  examBoardTitle: string | null;
-  ks4Option: string | null;
-  ks4OptionTitle: string | null;
-}
-
-// Maps unitSlug → contexts it appears in
-type UnitContextMap = Map<
-  string,
-  {
-    tiers: Set<string>;
-    tierTitles: Set<string>;
-    examBoards: Set<string>;
-    examBoardTitles: Set<string>;
-    examSubjects: Set<string>;
-    examSubjectTitles: Set<string>;
-    ks4Options: Set<string>;
-    ks4OptionTitles: Set<string>;
-  }
->;
-```
-
-### Elasticsearch Filtering
-
-With arrays, ES can filter using "any match" semantics:
+With arrays, ES uses "any match" semantics:
 
 ```json
 {
   "query": {
     "bool": {
-      "filter": [{ "term": { "tiers": "foundation" } }, { "term": { "examBoards": "aqa" } }]
+      "filter": [
+        { "term": { "tiers": "foundation" } },
+        { "term": { "exam_boards": "aqa" } }
+      ]
     }
   }
 }
 ```
 
-This matches lessons that appear in Foundation tier AND appear in AQA sequences, which is the correct semantic for many-to-many relationships.
+This matches lessons that appear in Foundation tier AND appear in AQA sequences.
 
-### Redis Caching
+For **exclusive** filtering ("Foundation only, not Higher"):
 
-**All SDK requests continue to be cached in Redis** per ADR-066:
-
-- Sequence endpoints cached with same TTL (14 days + jitter per ADR-079)
-- Cache key pattern: `oak-curriculum:{operationId}:{hash}`
-- No special treatment for sequence data
-
-### Parsing Exam Board from Sequence Slug
-
-When `ks4Options` doesn't provide explicit exam board, parse from slug:
-
-```typescript
-function parseExamBoardFromSlug(sequenceSlug: string): string | null {
-  const knownExamBoards = ['aqa', 'edexcel', 'ocr', 'eduqas', 'edexcelb'];
-  const slugParts = sequenceSlug.toLowerCase().split('-');
-  return knownExamBoards.find((eb) => slugParts.includes(eb)) ?? null;
+```json
+{
+  "bool": {
+    "filter": [{ "term": { "tiers": "foundation" } }],
+    "must_not": [{ "term": { "tiers": "higher" } }]
+  }
 }
-
-// science-secondary-aqa → "aqa"
-// maths-secondary → null (no exam board for maths)
 ```
+
+## Implementation
+
+### Key Files
+
+| File                                   | Purpose                              |
+| -------------------------------------- | ------------------------------------ |
+| `src/lib/indexing/ks4-context-types.ts` | Type definitions and type guards    |
+| `src/lib/indexing/ks4-context-builder.ts` | Sequence traversal and map building |
+| `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()` |
+| `type-gen/.../curriculum.ts`           | Field definitions (schema source)   |
+
+All files are in `apps/oak-open-curriculum-semantic-search/`.
+
+### Key Functions
+
+| Function                              | Purpose                                    |
+| ------------------------------------- | ------------------------------------------ |
+| `parseExamBoardFromSlug()`            | Extracts exam board from sequence slug     |
+| `buildUnitContextsFromSequenceResponse()` | Parses sequence response structure     |
+| `buildKs4ContextMap()`                | Orchestrates full map building             |
+| `getKs4ContextForUnit()`              | Retrieves aggregated context for a unit    |
+| `extractKs4DocumentFields()`          | Converts context to document fields        |
 
 ## Rationale
 
@@ -312,31 +387,13 @@ With arrays, `tier: "foundation"` matches lessons that **include** Foundation ti
 - A Foundation-only lesson: matches ✓
 - A Foundation+Higher lesson: matches ✓ (may or may not be desired)
 
-For **exclusive** filtering ("Foundation only, not Higher"), query must be:
-
-```json
-{
-  "bool": {
-    "filter": [{ "term": { "tiers": "foundation" } }],
-    "must_not": [{ "term": { "tiers": "higher" } }]
-  }
-}
-```
-
-## Implementation Plan
-
-1. **Add sequence traversal to ingestion** (`document-transforms.ts`)
-2. **Build unit context lookup** from sequence data
-3. **Update field definitions** with new array fields
-4. **Decorate documents** during indexing
-5. **Update ES mappings** via type-gen
-6. **Add unit tests** for lookup table building
-7. **Add smoke tests** for KS4 filtering
+For **exclusive** filtering ("Foundation only, not Higher"), query must explicitly exclude.
 
 ## Related Documentation
 
 - [Upstream API Wishlist](../../../.agent/plans/external/upstream-api-metadata-wishlist.md) - Request for flat fields
 - [Phase 3 Plan](../../../.agent/plans/semantic-search/phase-3-multi-index-and-fields.md) - Implementation context
+- [Semantic Search Prompt](../../../.agent/prompts/semantic-search/semantic-search.prompt.md) - Entry point for AI sessions
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md) - Redis caching strategy
 - [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md) - Cache TTL strategy
 
@@ -344,4 +401,5 @@ For **exclusive** filtering ("Foundation only, not Higher"), query must be:
 
 - Elasticsearch: [Search multiple indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multiple-indices.html)
 - Elasticsearch: [Term query on arrays](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html)
+- Elasticsearch: [RRF (Reciprocal Rank Fusion)](https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html)
 - Oak API: [Sequences endpoint](https://open-api.thenational.academy/docs)

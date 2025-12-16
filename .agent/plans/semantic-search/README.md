@@ -1,7 +1,7 @@
-# Semantic Search Planning Documents
+# Semantic Search - Navigation Hub
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | **Four-Retriever Architecture** (BM25 + ELSER on Content + Structure)  
-**Architecture Decision**: Four retrievers (not two-way) - see Part 3c below  
+**Status**: Phase 3 In Progress  
+**Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Last Updated**: 2025-12-16
 
 ---
@@ -19,31 +19,39 @@ For new implementation sessions, read in this order:
    - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - **The OpenAPI schema**
    - `.agent/plans/external/upstream-api-metadata-wishlist.md` - Fields to request from upstream API
 
-3. **Requirements & Context** - `requirements.md`
+3. **Requirements & Context** - [requirements.md](requirements.md)
    - Strategic goals and business success criteria
    - Risk mitigation strategies
    - Cost model ($0/month for AI/ML features - all included in ES Serverless)
    - Demo scenarios for validation
 
-4. **Entry Point** - `.agent/prompts/semantic-search/semantic-search.prompt.md`
+4. **Entry Point** - [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
    - Current state summary
    - Phase status and next steps
    - Quick reference for commands and file locations
 
 ---
 
+## Entry Points
+
+| Document | Purpose |
+| -------- | ------- |
+| [**Prompt**](../../prompts/semantic-search/semantic-search.prompt.md) | Fresh chat entry point - start here for new sessions |
+| [**Requirements**](requirements.md) | Business context, success criteria, demo scenarios |
+| [**Phase 3 Plan**](phase-3-multi-index-and-fields.md) | Current work - detailed execution plan |
+
+---
+
 ## Elasticsearch Documentation
 
-Key ES documentation for this project:
-
-| Topic                        | URL                                                                                          |
-| ---------------------------- | -------------------------------------------------------------------------------------------- |
-| **Hybrid Search (RRF)**      | https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html                     |
-| **Semantic Search Overview** | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html         |
-| **ELSER (Sparse Vectors)**   | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html   |
-| **Semantic Reranking**       | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html      |
-| **Retriever API**            | https://www.elastic.co/guide/en/elasticsearch/reference/current/retriever.html               |
-| **Multi-index Search**       | https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multiple-indices.html |
+| Topic | URL |
+| ----- | --- |
+| **Hybrid Search (RRF)** | https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html |
+| **Semantic Search Overview** | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html |
+| **ELSER (Sparse Vectors)** | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html |
+| **Semantic Reranking** | https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html |
+| **Retriever API** | https://www.elastic.co/guide/en/elasticsearch/reference/current/retriever.html |
+| **Multi-index Search** | https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multiple-indices.html |
 
 ---
 
@@ -51,16 +59,16 @@ Key ES documentation for this project:
 
 ### Completed Phases
 
-| Phase | Name          | Status      | Key Outcomes                                        |
-| ----- | ------------- | ----------- | --------------------------------------------------- |
-| 1     | Foundation    | ✅ Complete | Lexical baseline, ELSER fix, MRR 0.900 for lessons  |
-| 2     | Dense Vectors | ✅ Complete | E5 evaluated - no benefit, two-way hybrid confirmed |
+| Phase | Name | Status | Key Outcomes |
+| ----- | ---- | ------ | ------------ |
+| 1 | Foundation | ✅ Complete | Lexical baseline, ELSER fix, MRR 0.900 for lessons |
+| 2 | Dense Vectors | ✅ Complete | E5 evaluated - no benefit, two-way hybrid confirmed |
 
 ### Current Phase
 
-| Phase | Name                     | Status         | Progress | Description                                         |
-| ----- | ------------------------ | -------------- | -------- | --------------------------------------------------- |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | 7/13     | Four-retriever architecture, KS4 filtering |
+| Phase | Name | Status | Progress | Description |
+| ----- | ---- | ------ | -------- | ----------- |
+| **3** | **Multi-Index & Fields** | 🔄 In Progress | 7/13 | Four-retriever architecture, KS4 filtering |
 
 **Phase 3 Goal**: Implement four-retriever hybrid search with comprehensive filtering.
 
@@ -84,6 +92,7 @@ Key ES documentation for this project:
 - ✅ Display title fields
 - ✅ Unit enrichment fields
 - ✅ **KS4 Metadata Denormalisation** - sequence traversal, UnitContextMap, array fields
+- ⚠️ **Gap**: KS4 filtering not wired through API layer yet
 
 **Part 3b - Semantic Summary Templates ⚠️ NEEDS REWORK:**
 
@@ -102,31 +111,32 @@ Key ES documentation for this project:
 - 🔲 Add `unit_structure_semantic` field
 - 🔲 Update summary templates to include ALL API fields
 - 🔲 Update query builders to use four retrievers
+- 🔲 **Wire KS4 filtering through API** (`SearchStructuredRequestSchema`, filter functions)
 - 🔲 **CRITICAL: Prove KS4 filtering works after re-indexing**
 
 **Note**: MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
-See `phase-3-multi-index-and-fields.md` for full details.
+See [phase-3-multi-index-and-fields.md](phase-3-multi-index-and-fields.md) for full details.
 
 ### Future Phases
 
 #### Part 2: Enhancements (Phases 4-10)
 
-| Phase | Name              | Status     | Effort   | Description                                                    |
-| ----- | ----------------- | ---------- | -------- | -------------------------------------------------------------- |
-| 4     | Search SDK + CLI  | 📋 Planned | 3-6 days | Extract SDK + first-class local CLI; retire Next.js runtime    |
-| 5     | Search UI         | 📋 Planned | 3-4 days | Reference UX patterns (future UI lives in a different app)     |
-| 6     | Cloud Functions   | 📋 Planned | 2-3 days | (Future) HTTP ingestion endpoints (not required for SDK-first) |
-| 7     | Admin Dashboard   | 📋 Planned | 2-3 days | (Future) UI for ingestion control/metrics (not required now)   |
-| 8     | Query Enhancement | 📋 Planned | 1-2 days | Production patterns, OWA compatibility                         |
-| 9     | Entity Extraction | 📋 Future  | 3-4 days | NER, concept graphs                                            |
-| 10    | Reference Indices | 📋 Future  | 2-3 days | Subject/keystage metadata, threads                             |
+| Phase | Name | Status | Effort | Description |
+| ----- | ---- | ------ | ------ | ----------- |
+| 4 | Search SDK + CLI | 📋 Planned | 3-6 days | Extract SDK + first-class local CLI; retire Next.js runtime |
+| 5 | Search UI | 📋 Planned | 3-4 days | Reference UX patterns (future UI lives in a different app) |
+| 6 | Cloud Functions | 📋 Planned | 2-3 days | (Future) HTTP ingestion endpoints (not required for SDK-first) |
+| 7 | Admin Dashboard | 📋 Planned | 2-3 days | (Future) UI for ingestion control/metrics (not required now) |
+| 8 | Query Enhancement | 📋 Planned | 1-2 days | Production patterns, OWA compatibility |
+| 9 | Entity Extraction | 📋 Future | 3-4 days | NER, concept graphs |
+| 10 | Reference Indices | 📋 Future | 2-3 days | Subject/keystage metadata, threads |
 
 #### Part 3: AI Integration (Phase 11+)
 
-| Phase | Name   | Status    | Effort     | Description               |
-| ----- | ------ | --------- | ---------- | ------------------------- |
-| 11+   | Future | 📋 Future | 15-20 days | RAG, Knowledge Graph, LTR |
+| Phase | Name | Status | Effort | Description |
+| ----- | ---- | ------ | ------ | ----------- |
+| 11+ | Future | 📋 Future | 15-20 days | RAG, Knowledge Graph, LTR |
 
 ---
 
@@ -134,21 +144,21 @@ See `phase-3-multi-index-and-fields.md` for full details.
 
 ### Lesson Search (314 Maths KS4 lessons)
 
-| Metric        | Result    | Target  | Status   |
-| ------------- | --------- | ------- | -------- |
-| MRR           | **0.908** | > 0.70  | ✅ PASS  |
-| NDCG@10       | 0.725     | > 0.75  | ⚠️ Below |
-| Zero-hit rate | **0.0%**  | < 10%   | ✅ PASS  |
-| p95 Latency   | **367ms** | < 300ms | ⚠️ Above |
+| Metric | Result | Target | Status |
+| ------ | ------ | ------ | ------ |
+| MRR | **0.908** | > 0.70 | ✅ PASS |
+| NDCG@10 | 0.725 | > 0.75 | ⚠️ Below |
+| Zero-hit rate | **0.0%** | < 10% | ✅ PASS |
+| p95 Latency | **367ms** | < 300ms | ⚠️ Above |
 
 ### Unit Search (36 Maths KS4 units)
 
-| Metric        | Result    | Target  | Status  |
-| ------------- | --------- | ------- | ------- |
-| MRR           | **0.915** | > 0.60  | ✅ PASS |
-| NDCG@10       | **0.924** | > 0.65  | ✅ PASS |
-| Zero-hit rate | **0.0%**  | < 15%   | ✅ PASS |
-| p95 Latency   | **196ms** | < 300ms | ✅ PASS |
+| Metric | Result | Target | Status |
+| ------ | ------ | ------ | ------ |
+| MRR | **0.915** | > 0.60 | ✅ PASS |
+| NDCG@10 | **0.924** | > 0.65 | ✅ PASS |
+| Zero-hit rate | **0.0%** | < 15% | ✅ PASS |
+| p95 Latency | **196ms** | < 300ms | ✅ PASS |
 
 ---
 
@@ -176,16 +186,18 @@ See ES RRF documentation: <https://www.elastic.co/guide/en/elasticsearch/referen
 
 ---
 
-## Embedding Strategy
+## Architecture
 
-### Target: Four-Retriever Architecture
+### Key Design Decision
 
-Both lessons and units use **four retrievers** combined via RRF:
+**Four-retriever hybrid search** using BM25 + ELSER on both content and structure fields:
 
-1. **BM25 on Content** - Lexical matching on teaching material
-2. **ELSER on Content** - Semantic matching on teaching material
-3. **BM25 on Structure** - Lexical matching on metadata/summaries
-4. **ELSER on Structure** - Semantic matching on metadata/summaries
+| Retriever | Field Type | Purpose |
+| --------- | ---------- | ------- |
+| BM25 on Content | Transcript/rollup text | Lexical matching on teaching material |
+| ELSER on Content | Transcript/rollup text | Semantic matching on teaching material |
+| BM25 on Structure | Curated summary | Lexical matching on metadata |
+| ELSER on Structure | Curated summary | Semantic matching on metadata |
 
 ### Field Nomenclature
 
@@ -194,7 +206,7 @@ Consistent pattern: `<entity>_content|structure[_semantic]`
 #### Lesson Fields
 
 | Field | Type | Content | Purpose |
-|-------|------|---------|---------|
+| ----- | ---- | ------- | ------- |
 | `lesson_content` | text | Full transcript (~5000 tokens) | BM25 lexical |
 | `lesson_content_semantic` | semantic_text | Full transcript | ELSER semantic |
 | `lesson_structure` | text | Curated summary (~200 tokens) | BM25 lexical |
@@ -203,111 +215,51 @@ Consistent pattern: `<entity>_content|structure[_semantic]`
 #### Unit Fields (Rollup)
 
 | Field | Type | Content | Purpose |
-|-------|------|---------|---------|
+| ----- | ---- | ------- | ------- |
 | `unit_content` | text | Aggregated lesson snippets (~200-400 tokens) | BM25 lexical |
 | `unit_content_semantic` | semantic_text | Aggregated lesson snippets | ELSER semantic |
 | `unit_structure` | text | Curated summary (~200 tokens) | BM25 lexical |
 | `unit_structure_semantic` | semantic_text | Curated summary | ELSER semantic |
 
-**Why ELSER only (no dense vectors)?** E5 evaluated in Phase 2 - no benefit, added latency.
+### ES Serverless Features Used
 
-**Why four retrievers (not two)?** Content vs structure serve different query intents:
-- Content: "Find lessons that discuss/teach X" (teaching material)
-- Structure: "Find lessons about topic Y" (metadata, curriculum alignment)
+| Feature | ES Endpoint | Cost | Purpose | Status |
+| ------- | ----------- | ---- | ------- | ------ |
+| BM25 | Built-in | $0 | Lexical search | ✅ Used |
+| ELSER | `.elser-2-elasticsearch` | $0 | Sparse semantic embeddings | ✅ Used |
+| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0 | Dense vectors | ❌ Not used |
+| ReRank | `.rerank-v1-elasticsearch` | $0 | Cross-encoder reranking | 📋 Planned |
+| LLM | `.gp-llm-v2-chat_completion` | $0 | Future RAG / semantic summaries | 📋 Planned |
 
-**No reranker required initially** - RRF with four complementary retrievers provides good coverage.
+All AI/ML features are included in the ES Serverless subscription at no additional cost.
 
-See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
+**Note**: E5 dense vectors were evaluated in Phase 2 and provided no benefit. Code removed 2025-12-15 (ADR-075).
 
-### Structural Summary Content
+### Key ADRs
 
-Summaries include **ALL available API fields**, tolerating missing optional fields.
-
-**Principle**: Include everything - users may search by misconception, by curriculum alignment, by thread, or by lesson title. Comprehensive coverage maximises match potential.
-
-**Caching**: Redis (same instance as curriculum API caching)
-
-### ADRs
-
-| ADR                                                                                               | Title                              | Status      |
-| ------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------- |
-| [ADR-074](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) | Elastic-Native-First Philosophy    | Accepted    |
-| [ADR-075](../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)            | Dense Vector Code Removal          | Implemented |
-| [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy      | Accepted    |
-| [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation        | Accepted    |
-| [ADR-079](../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)            | SDK Cache TTL Jitter               | Implemented |
-| [ADR-080](../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
+| ADR | Title | Purpose |
+| --- | ----- | ------- |
+| [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation | **Tier/examBoard filtering architecture** (with Mermaid diagrams) |
+| [ADR-075](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Removal | Why E5 was removed |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Strategy | Sparse vectors sufficient |
+| [ADR-077](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic Summary Generation | Summary template design |
+| [ADR-079](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md) | SDK Cache TTL Jitter | Cache stampede prevention |
 
 ---
 
-## Immediate Priority: Type Discipline Restoration
+## Implementation Note
 
-A stricter ESLint configuration surfaced **~188 eslint-disable comments** across **all workspaces**. These are pre-existing architectural drift that must be resolved.
+### ⚠️ Next.js App is Deprecated
 
-**Prompt**: `.agent/prompts/type-discipline-restoration.prompt.md`
-**Plan**: `.agent/plans/quality-and-maintainability/type-discipline-restoration-plan.md`
+The `app/` folder in `apps/oak-open-curriculum-semantic-search/` contains a Next.js frontend that is **not used**. All actual search functionality lives in:
 
-This is a **repo-wide** issue, not just semantic search:
+| Directory | Purpose |
+| --------- | ------- |
+| `src/` | Core implementation (indexing, search, transforms) |
+| `scripts/` | CLI tools for ingestion and maintenance |
+| `smoke-tests/` | Search quality verification |
 
-| Workspace                                  | `eslint-disable` Count |
-| ------------------------------------------ | ---------------------- |
-| `apps/oak-open-curriculum-semantic-search` | 63                     |
-| `packages/*` (SDK, libs, core)             | 59                     |
-| `apps/oak-curriculum-mcp-streamable-http`  | 51                     |
-| `apps/oak-notion-mcp`                      | 12                     |
-| `apps/oak-curriculum-mcp-stdio`            | 3                      |
-
----
-
-## Document Structure
-
-```text
-.agent/plans/semantic-search/
-├── README.md                           # This file - navigation hub
-├── requirements.md                     # Strategic context, risks, costs, demos
-│
-├── phase-3-multi-index-and-fields.md   # 🔄 Current - unit search, doc_type, aliases
-├── phase-4-search-sdk-and-cli.md        # 📋 Planned - extract SDK + first-class CLI
-├── phase-5-search-ui.md                 # 📋 Planned - reference UX patterns (future app)
-├── phase-6-cloud-functions.md           # 📋 Planned - (future) HTTP ingestion endpoints
-├── phase-7-admin-dashboard.md           # 📋 Planned - (future) ingestion control UI
-├── phase-8-query-enhancement.md         # 📋 Planned - query patterns, OWA compatibility
-├── phase-9-entity-extraction.md         # 📋 Future - NER, concept graphs
-├── phase-10-reference-indices.md        # 📋 Future - reference data, threads
-├── phase-11-plus-future.md              # 📋 Future - RAG, KG, LTR, resource types
-│
-├── reference-docs/                     # Reference documentation
-│   ├── reference-data-completeness-policy.md
-│   ├── reference-es-serverless-feature-matrix.md
-│   └── reference-ir-metrics-guide.md
-│
-└── archive/                            # Completed and superseded documents
-    ├── phase-1-foundation-COMPLETE.md
-    ├── phase-2-dense-vectors-COMPLETE.md
-    └── ...
-```
-
----
-
-## Quality Gates
-
-Run after every piece of work, from repo root, in order:
-
-```bash
-pnpm type-gen          # Generate types from schema
-pnpm build             # Build all packages
-pnpm type-check        # TypeScript validation
-pnpm lint:fix          # Auto-fix linting issues
-pnpm format:root       # Format code
-pnpm markdownlint:root # Markdown lint
-pnpm test              # Unit + integration tests
-pnpm test:e2e          # E2E tests
-pnpm test:e2e:built    # E2E on built app
-pnpm test:ui           # Playwright UI tests
-pnpm smoke:dev:stub    # Smoke tests
-```
-
-**All gates must pass. No exceptions.**
+**Phase 4** will delete the Next.js app and create a proper SDK + CLI.
 
 ---
 
@@ -317,10 +269,10 @@ pnpm smoke:dev:stub    # Smoke tests
 
 ### Test Categories
 
-| Category        | Tests                                               | Requirements                     | Purpose                          |
-| --------------- | --------------------------------------------------- | -------------------------------- | -------------------------------- |
-| **API-based**   | `scope-verification`, `search-quality`, `unit-search-*` | Next.js dev server + fresh ES    | Full stack validation            |
-| **Direct ES**   | `hybrid-superiority`                                | ES credentials (`.env.local`)    | Raw Elasticsearch query testing  |
+| Category | Tests | Requirements | Purpose |
+| -------- | ----- | ------------ | ------- |
+| **API-based** | `scope-verification`, `search-quality`, `unit-search-*`, `ks4-filtering` | Next.js dev server + fresh ES | Full stack validation |
+| **Direct ES** | `hybrid-superiority` | ES credentials (`.env.local`) | Raw Elasticsearch query testing |
 
 ### Required Sequence
 
@@ -354,12 +306,34 @@ pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
 **Must prove KS4 filtering works** before declaring Phase 3 complete.
 
 Test queries to verify:
-- Filter by `tierSlug` (foundation, higher)
-- Filter by `examBoardSlug` (aqa, edexcel, ocr)
-- Filter by `examSubjectSlug` (gcse-biology, gcse-chemistry, gcse-physics)
-- Filter by `ks4OptionSlug` (core, higher)
+- Filter by `tier` (foundation, higher)
+- Filter by `examBoard` (aqa, edexcel, ocr)
+- Filter by `examSubject` (gcse-biology, gcse-chemistry, gcse-physics)
+- Filter by `ks4Option` (programme pathways)
 
 **File**: `apps/oak-open-curriculum-semantic-search/smoke-tests/ks4-filtering.smoke.test.ts`
+
+---
+
+## Quality Gates
+
+Run after every piece of work, from repo root:
+
+```bash
+pnpm type-gen          # Generate types from schema
+pnpm build             # Build all packages
+pnpm type-check        # TypeScript validation
+pnpm lint:fix          # Auto-fix linting issues
+pnpm format:root       # Format code
+pnpm markdownlint:root # Markdown lint
+pnpm test              # Unit + integration tests
+pnpm test:e2e          # E2E tests
+pnpm test:e2e:built    # E2E on built app
+pnpm test:ui           # Playwright UI tests
+pnpm smoke:dev:stub    # Smoke tests
+```
+
+**All gates must pass. No exceptions.**
 
 ---
 
@@ -380,8 +354,39 @@ apps/oak-open-curriculum-semantic-search/
 
 ```text
 packages/sdks/oak-curriculum-sdk/
+├── type-gen/typegen/search/field-definitions/  # Index schemas (schema-first)
 ├── src/mcp/synonyms/                 # Subject, key stage, number synonyms
-└── src/.../field-definitions/        # Index schemas (schema-first)
+└── src/types/generated/api-schema/   # OpenAPI types (source of truth)
+```
+
+---
+
+## Document Structure
+
+```text
+.agent/plans/semantic-search/
+├── README.md                           # This file - navigation hub
+├── requirements.md                     # Strategic context, risks, costs, demos
+│
+├── phase-3-multi-index-and-fields.md   # 🔄 Current - unit search, doc_type, aliases
+├── phase-4-search-sdk-and-cli.md       # 📋 Planned - extract SDK + first-class CLI
+├── phase-5-search-ui.md                # 📋 Planned - reference UX patterns (future app)
+├── phase-6-cloud-functions.md          # 📋 Planned - (future) HTTP ingestion endpoints
+├── phase-7-admin-dashboard.md          # 📋 Planned - (future) ingestion control UI
+├── phase-8-query-enhancement.md        # 📋 Planned - query patterns, OWA compatibility
+├── phase-9-entity-extraction.md        # 📋 Future - NER, concept graphs
+├── phase-10-reference-indices.md       # 📋 Future - reference data, threads
+├── phase-11-plus-future.md             # 📋 Future - RAG, KG, LTR, resource types
+│
+├── reference-docs/                     # Reference documentation
+│   ├── reference-data-completeness-policy.md
+│   ├── reference-es-serverless-feature-matrix.md
+│   └── reference-ir-metrics-guide.md
+│
+└── archive/                            # Completed and superseded documents
+    ├── phase-1-foundation-COMPLETE.md
+    ├── phase-2-dense-vectors-COMPLETE.md
+    └── ...
 ```
 
 ---
@@ -414,24 +419,6 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 ---
 
-## ES Serverless Features Used
-
-| Feature  | ES Endpoint                            | Cost | Purpose                         | Status      |
-| -------- | -------------------------------------- | ---- | ------------------------------- | ----------- |
-| BM25     | Built-in                               | $0   | Lexical search                  | ✅ Used     |
-| ELSER    | `.elser-2-elasticsearch`               | $0   | Sparse semantic embeddings      | ✅ Used     |
-| E5 Dense | `.multilingual-e5-small-elasticsearch` | $0   | Dense vectors                   | ❌ Not used |
-| ReRank   | `.rerank-v1-elasticsearch`             | $0   | Cross-encoder reranking         | 📋 Planned  |
-| LLM      | `.gp-llm-v2-chat_completion`           | $0   | Future RAG / semantic summaries | 📋 Planned  |
-
-All AI/ML features are included in the ES Serverless subscription at no additional cost.
-
-**Note**: E5 dense vectors were evaluated in Phase 2 and provided no benefit. Code removed 2025-12-15 (ADR-075).
-
-See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html>
-
----
-
 ## Rate Limit
 
 **Oak API rate limit**: **10,000 requests/hour** (upgraded from 1,000)
@@ -440,4 +427,30 @@ This makes full curriculum ingestion feasible in reasonable time.
 
 ---
 
-**Ready to start?** Read `.agent/prompts/semantic-search/semantic-search.prompt.md`
+## Document Index
+
+### Plans
+
+| Document | Description |
+| -------- | ----------- |
+| [Phase 3](phase-3-multi-index-and-fields.md) | Current work - four-retriever architecture |
+| [Phase 4 (planned)](phase-4-search-sdk-and-cli.md) | SDK + CLI extraction |
+| [Requirements](requirements.md) | Business context, success criteria |
+
+### Reference
+
+| Document | Description |
+| -------- | ----------- |
+| [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md) | Fields to request from Oak API |
+| [Feature Parity Analysis](../research/feature-parity-analysis.md) | Gap analysis with OWA |
+
+### Archive
+
+| Document | Description |
+| -------- | ----------- |
+| [Phase 1 (complete)](archive/phase-1-foundation-COMPLETE.md) | Lexical baseline |
+| [Phase 2 (complete)](archive/phase-2-dense-vectors-COMPLETE.md) | Dense vector evaluation |
+
+---
+
+**Ready to start?** Read [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
