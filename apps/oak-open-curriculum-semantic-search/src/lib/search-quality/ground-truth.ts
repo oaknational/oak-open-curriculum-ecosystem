@@ -3,7 +3,6 @@
  *
  * Re-exports from modular ground truth files.
  *
- * @module search-quality/ground-truth
  * @see ./ground-truth/index.ts for full documentation
  */
 

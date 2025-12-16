@@ -1,9 +1,8 @@
 /**
- * @module es-field-overrides/reference-overrides
- * @description Field overrides for reference data indexes.
+ * Field overrides for reference data indexes.
  *
  * Reference indexes store metadata about curriculum entities with aggregated counts.
- * They use minimal ES settings (no text analyzers) since they are primarily used
+ * They use minimal ES settings (no text analysers) since they are primarily used
  * for navigation, filtering, and enrichment rather than full-text search.
  *
  * @see REF_SUBJECTS_INDEX_FIELDS - Subject reference field definitions

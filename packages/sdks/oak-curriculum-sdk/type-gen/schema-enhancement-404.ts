@@ -52,7 +52,6 @@ const transcript404Descriptor: Legitimate404Descriptor = {
           description:
             'Additional metadata describing the failure as emitted by the Oak API gateway.',
           required: ['code', 'httpStatus', 'path'],
-          additionalProperties: true,
           properties: {
             code: {
               type: 'string',
@@ -71,14 +70,13 @@ const transcript404Descriptor: Legitimate404Descriptor = {
             },
             zodError: {
               description:
-                'Optional validation payload describing schema mismatches. Present when the API returns validation metadata.',
-              anyOf: [{ type: 'object', additionalProperties: true }, { type: 'null' }],
+                'Optional validation payload describing schema mismatches. Always null for 404 responses.',
+              type: 'null',
               example: null,
             },
           },
         },
       },
-      additionalProperties: true,
     },
     example: {
       message: 'Transcript not available for this query',

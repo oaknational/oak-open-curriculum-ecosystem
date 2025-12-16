@@ -4,7 +4,6 @@
  * Creates information-dense ~200 token summaries optimised for embeddings.
  * These replace full transcripts/rollup text which dilute pedagogical signals.
  *
- * @module semantic-summary-generator
  * @see ADR-077 Semantic Summary Generation
  */
 

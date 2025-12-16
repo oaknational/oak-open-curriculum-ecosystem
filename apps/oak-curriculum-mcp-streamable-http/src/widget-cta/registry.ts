@@ -2,7 +2,6 @@
  * CTA registry - single source of truth for all CTA definitions.
  *
  * @see index.ts - Public API
- * @module widget-cta/registry
  */
 
 import type { CtaConfig } from './types.js';

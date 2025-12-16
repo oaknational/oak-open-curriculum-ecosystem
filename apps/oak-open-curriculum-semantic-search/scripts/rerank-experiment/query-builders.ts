@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/query-builders
- * @description Pure functions for building Elasticsearch search queries.
+ * Pure functions for building Elasticsearch search queries.
  *
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */

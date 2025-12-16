@@ -16,7 +16,7 @@
  * Per MCP spec and OpenAI Apps docs, HTTP 401 is required for auth failures.
  * This middleware runs BEFORE the MCP SDK to enable proper HTTP 401 responses.
  *
- * @module auth/mcp-auth
+ * @packageDocumentation
  */
 
 export { mcpAuth } from './mcp-auth.js';

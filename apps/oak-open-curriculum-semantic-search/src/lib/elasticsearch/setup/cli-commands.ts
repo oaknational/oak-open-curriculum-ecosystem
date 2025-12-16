@@ -1,6 +1,5 @@
 /**
- * @module cli-commands
- * @description CLI command handlers for Elasticsearch setup.
+ * CLI command handlers for Elasticsearch setup.
  *
  * Handles execution of status, setup, and reset commands.
  */

@@ -7,7 +7,6 @@
  * Important: `programmeFactors` / `pathway` do NOT exist in the upstream API schema.
  * This module only derives values from schema-defined fields.
  *
- * @module programme-factor-extractors
  */
 
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';

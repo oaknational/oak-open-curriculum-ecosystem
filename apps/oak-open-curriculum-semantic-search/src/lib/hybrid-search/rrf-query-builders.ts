@@ -9,7 +9,6 @@
  * Dense vectors (E5) provided no benefit and were removed.
  *
  * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
- * @module rrf-query-builders
  */
 
 import type { estypes } from '@elastic/elasticsearch';

@@ -87,7 +87,7 @@ export function createThreadsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-threads
+ * @packageDocumentation oak-threads
  * @description Elasticsearch mapping for the oak_threads index.
  * Contains curriculum thread documents for thread-centric navigation.
  */

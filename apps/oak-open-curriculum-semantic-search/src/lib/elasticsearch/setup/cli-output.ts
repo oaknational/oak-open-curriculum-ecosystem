@@ -1,6 +1,5 @@
 /**
- * @module cli-output
- * @description CLI output formatting functions.
+ * CLI output formatting functions.
  *
  * Handles help text and summary output for the Elasticsearch setup CLI.
  */

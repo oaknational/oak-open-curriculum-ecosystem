@@ -2908,17 +2908,11 @@ export interface operations {
                              */
                             path: string;
                             /**
-                             * @description Optional validation payload describing schema mismatches. Present when the API returns validation metadata.
+                             * @description Optional validation payload describing schema mismatches. Always null for 404 responses.
                              * @example null
                              */
-                            zodError?: {
-                                [key: string]: unknown;
-                            } | null;
-                        } & {
-                            [key: string]: unknown;
+                            zodError?: null;
                         };
-                    } & {
-                        [key: string]: unknown;
                     };
                 };
             };

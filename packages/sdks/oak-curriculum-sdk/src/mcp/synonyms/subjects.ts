@@ -2,8 +2,6 @@
  * Subject name synonyms.
  *
  * Maps canonical subject slugs to alternative terms users might use.
- *
- * @module synonyms/subjects
  */
 
 export const subjectSynonyms = {

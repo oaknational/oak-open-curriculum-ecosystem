@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/meta-overrides
- * @description Field overrides for the oak_meta index.
+ * Field overrides for the oak_meta index.
  *
  * This index stores ingestion metadata.
  */

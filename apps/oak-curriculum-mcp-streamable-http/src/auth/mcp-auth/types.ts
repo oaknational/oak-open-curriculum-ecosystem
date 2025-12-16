@@ -5,7 +5,6 @@
  * middleware, including declaration merging for Express Request objects and
  * re-exports of external types from Clerk and the MCP SDK.
  *
- * @module auth/mcp-auth/types
  */
 
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';

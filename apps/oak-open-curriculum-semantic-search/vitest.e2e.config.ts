@@ -4,7 +4,6 @@
  * Extends the base E2E config for running search quality benchmarks
  * and other E2E tests against a running Next.js server.
  *
- * @module vitest.e2e.config
  */
 
 import { mergeConfig } from 'vitest/config';

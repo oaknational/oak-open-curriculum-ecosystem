@@ -1,6 +1,6 @@
 /**
- * @module es-mapping-generators
- * @description Generators for primary search indexes with full ES settings.
+ * Generators for primary search indexes with full ES settings.
+ *
  * These indexes use text analyzers for full-text search capabilities.
  */
 
@@ -41,8 +41,8 @@ export function createLessonsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-lessons
- * @description Elasticsearch mapping for the oak_lessons index.
+ * Elasticsearch mapping for the oak_lessons index.
+ *
  * Contains lesson documents with semantic embeddings for hybrid search.
  */
 
@@ -77,8 +77,8 @@ export function createUnitRollupMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-unit-rollup
- * @description Elasticsearch mapping for the oak_unit_rollup index.
+ * Elasticsearch mapping for the oak_unit_rollup index.
+ *
  * Contains aggregated unit content for semantic search across lessons.
  */
 
@@ -110,8 +110,8 @@ export function createSequencesMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-sequences
- * @description Elasticsearch mapping for the oak_sequences index.
+ * Elasticsearch mapping for the oak_sequences index.
+ *
  * Contains programme sequence documents for navigation and search.
  */
 
@@ -146,10 +146,9 @@ export function createThreadsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-threads
- * @description Elasticsearch mapping for the oak_threads index.
- * Contains curriculum thread documents for thread-centric navigation.
+ * Elasticsearch mapping for the oak_threads index.
  *
+ * Contains curriculum thread documents for thread-centric navigation.
  * Threads represent conceptual progressions (e.g., Number, Algebra) that
  * span multiple units and key stages within a subject.
  */

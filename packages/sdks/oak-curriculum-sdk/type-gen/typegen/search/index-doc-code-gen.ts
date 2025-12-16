@@ -1,6 +1,5 @@
 /**
- * @module index-doc-code-gen
- * @description Pure code generation functions for search index document schemas.
+ * Pure code generation functions for search index document schemas.
  *
  * These functions produce TypeScript code strings for Zod schemas and type guards.
  * They are consumed by generate-search-index-docs.ts to produce the final module.

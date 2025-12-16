@@ -1,7 +1,6 @@
 /**
  * SVG Component Functions for Knowledge Graph Rendering.
  * Pure functions that compose to build SVG using nested <g> groups.
- * @module widget-renderers/svg-components
  */
 
 /** 2D position with x and y coordinates. */

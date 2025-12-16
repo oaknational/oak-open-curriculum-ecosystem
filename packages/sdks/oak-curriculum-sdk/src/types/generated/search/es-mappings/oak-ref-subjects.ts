@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-ref-subjects
- * @description Elasticsearch mapping for the oak_ref_subjects index.
+ * Elasticsearch mapping for the oak_ref_subjects index.
+ *
  * Contains subject metadata with aggregated counts for navigation and filtering.
  */
 

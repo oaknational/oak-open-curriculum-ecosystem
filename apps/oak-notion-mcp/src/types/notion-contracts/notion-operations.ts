@@ -1,6 +1,5 @@
 /**
  * @fileoverview Notion operations contract - defines the interface for Notion operations
- * @module substrate/contracts/notion-operations
  *
  * These contracts define what Notion operations MCP can use through dependency injection.
  * This maintains clear module boundaries - MCP doesn't import from Notion internals, it receives these.

@@ -1,12 +1,11 @@
 /**
- * @module es-mapping-generators-reference
- * @description Generators for reference data indexes.
+ * Generators for reference data indexes.
  *
  * Reference indexes store metadata about curriculum entities (subjects, key stages,
  * glossary terms) with aggregated counts. They are used for navigation, autocomplete,
  * and enrichment of primary content indexes.
  *
- * These indexes use text analyzers where appropriate (for term search) but are
+ * These indexes use text analysers where appropriate (for term search) but are
  * generally simpler than content indexes.
  */
 
@@ -49,8 +48,8 @@ export function createRefSubjectsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-ref-subjects
- * @description Elasticsearch mapping for the oak_ref_subjects index.
+ * Elasticsearch mapping for the oak_ref_subjects index.
+ *
  * Contains subject metadata with aggregated counts for navigation and filtering.
  */
 
@@ -88,8 +87,8 @@ export function createRefKeyStagesMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-ref-key-stages
- * @description Elasticsearch mapping for the oak_ref_key_stages index.
+ * Elasticsearch mapping for the oak_ref_key_stages index.
+ *
  * Contains key stage metadata with aggregated counts for navigation and filtering.
  */
 
@@ -127,8 +126,8 @@ export function createCurriculumGlossaryMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-curriculum-glossary
- * @description Elasticsearch mapping for the oak_curriculum_glossary index.
+ * Elasticsearch mapping for the oak_curriculum_glossary index.
+ *
  * Contains curriculum term definitions with semantic search capabilities.
  */
 

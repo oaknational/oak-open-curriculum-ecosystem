@@ -1,6 +1,5 @@
 /**
- * @module thread-bulk-helpers
- * @description Builds bulk operations for the oak_threads index.
+ * Builds bulk operations for the oak_threads index.
  *
  * Threads represent curriculum progressions (e.g., Number, Algebra) that span
  * multiple units and years. This module fetches thread data from the /threads

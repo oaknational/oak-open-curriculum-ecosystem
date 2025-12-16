@@ -1,6 +1,6 @@
 /**
- * @module rate-limit-tracker
- * @description Tracks and logs API rate limit information from response headers.
+ * Tracks and logs API rate limit information from response headers.
+ *
  * Provides visibility into rate limit consumption and warnings when approaching limits.
  */
 

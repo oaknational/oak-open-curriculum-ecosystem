@@ -4,7 +4,7 @@
  * Extracts auth context from Express requests for tool-level authentication.
  * This is used by tool handlers to check auth before execution.
  *
- * @module
+ * @packageDocumentation
  */
 
 import type { Request } from 'express';

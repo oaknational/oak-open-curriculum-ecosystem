@@ -22,7 +22,7 @@
  * } from './aggregated-search/index.js';
  * ```
  *
- * @module aggregated-search
+ * @packageDocumentation
  */
 
 // Tool definition and schema

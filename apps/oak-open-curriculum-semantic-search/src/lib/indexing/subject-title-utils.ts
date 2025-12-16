@@ -1,6 +1,5 @@
 /**
- * @module subject-title-utils
- * @description Utilities for converting subject slugs to human-readable titles.
+ * Utilities for converting subject slugs to human-readable titles.
  *
  * This module provides a simple mapping from subject slugs to display titles.
  * Subject titles are reference data that rarely changes, so a static mapping

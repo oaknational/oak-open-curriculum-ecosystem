@@ -1,6 +1,5 @@
 /**
- * @module reference-document-builders
- * @description Creates Elasticsearch documents for reference data indexes.
+ * Creates Elasticsearch documents for reference data indexes.
  *
  * Reference indexes store metadata about curriculum entities (subjects, key stages,
  * glossary terms) with aggregated counts. They are used for navigation, autocomplete,
@@ -77,13 +76,13 @@ export interface CreateRefSubjectDocumentParams {
  * @example
  * ```typescript
  * const doc = createRefSubjectDocument({
- *   subjectSlug: 'maths',
- *   subjectTitle: 'Mathematics',
- *   keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
- *   sequenceCount: 8,
- *   unitCount: 120,
- *   lessonCount: 450,
- *   hasTiers: true,
+ *  subjectSlug: 'maths',
+ *  subjectTitle: 'Mathematics',
+ *  keyStages: ['ks1', 'ks2', 'ks3', 'ks4'],
+ *  sequenceCount: 8,
+ *  unitCount: 120,
+ *  lessonCount: 450,
+ *  hasTiers: true,
  * });
  * ```
  */
@@ -126,13 +125,13 @@ export interface CreateRefKeyStageDocumentParams {
  * @example
  * ```typescript
  * const doc = createRefKeyStageDocument({
- *   keyStageSlug: 'ks4',
- *   keyStageTitle: 'Key Stage 4',
- *   phase: 'secondary',
- *   years: ['10', '11'],
- *   subjectCount: 12,
- *   unitCount: 200,
- *   lessonCount: 800,
+ *  keyStageSlug: 'ks4',
+ *  keyStageTitle: 'Key Stage 4',
+ *  phase: 'secondary',
+ *  years: ['10', '11'],
+ *  subjectCount: 12,
+ *  unitCount: 200,
+ *  lessonCount: 800,
  * });
  * ```
  */
@@ -185,12 +184,12 @@ function toTermSlug(term: string): string {
  * @example
  * ```typescript
  * const doc = createGlossaryDocument({
- *   term: 'quadratic equations',
- *   definition: 'An equation where the highest power of the variable is 2...',
- *   subjectSlugs: ['maths'],
- *   keyStages: ['ks4'],
- *   lessonIds: ['lesson-1', 'lesson-2'],
- *   usageCount: 12,
+ *  term: 'quadratic equations',
+ *  definition: 'An equation where the highest power of the variable is 2...',
+ *  subjectSlugs: ['maths'],
+ *  keyStages: ['ks4'],
+ *  lessonIds: ['lesson-1', 'lesson-2'],
+ *  usageCount: 12,
  * });
  * ```
  */

@@ -4,7 +4,6 @@
  * Proves that two-way hybrid (BM25 + ELSER) provides measurable benefit
  * over either retrieval method alone for both lessons and units.
  *
- * @module smoke-tests/hybrid-superiority
  *
  * **Classification**: SMOKE TEST
  * - Makes HTTP calls to Elasticsearch (network IO)

@@ -1,6 +1,5 @@
 /**
- * @module es-mapping-utils
- * @description Utility functions for generating ES mapping TypeScript code.
+ * Utility functions for generating ES mapping TypeScript code.
  */
 
 import {

@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { OpenAPIObject, PathItemObject } from 'openapi3-ts/oas31';
 
-import { add404ResponsesWhereExpected } from './schema-enhancement-404.js';
+import {
+  add404ResponsesWhereExpected,
+  ENDPOINTS_WITH_LEGITIMATE_404S,
+} from './schema-enhancement-404.js';
 
 function createBaseSchema(): OpenAPIObject & {
   paths: {
@@ -77,7 +80,6 @@ describe('add404ResponsesWhereExpected', () => {
               data: {
                 type: 'object',
                 required: ['code', 'httpStatus'],
-                additionalProperties: true,
                 properties: {
                   code: { type: 'string' },
                   httpStatus: { type: 'integer' },
@@ -127,5 +129,23 @@ describe('add404ResponsesWhereExpected', () => {
         },
       ]),
     ).toThrowError(/was not found in the schema/);
+  });
+
+  describe('strictness enforcement', () => {
+    it('default descriptors do not use additionalProperties: true alongside explicit properties', () => {
+      // additionalProperties: true is equivalent to z.any() - violates rules.md "No type shortcuts"
+      // When we have explicit properties defined, we should NOT allow arbitrary additional keys
+      const schemaJson = JSON.stringify(ENDPOINTS_WITH_LEGITIMATE_404S);
+      expect(schemaJson).not.toContain('"additionalProperties":true');
+    });
+
+    it('generated 404 response schema uses strict validation', () => {
+      const schema = createBaseSchema();
+      const result = add404ResponsesWhereExpected(schema);
+      const resultJson = JSON.stringify(result);
+
+      // Should NOT contain additionalProperties: true anywhere
+      expect(resultJson).not.toContain('"additionalProperties":true');
+    });
   });
 });

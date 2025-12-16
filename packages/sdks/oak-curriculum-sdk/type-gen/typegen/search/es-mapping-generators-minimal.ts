@@ -1,6 +1,5 @@
 /**
- * @module es-mapping-generators-minimal
- * @description Generators for indexes with minimal ES settings (no text analyzers).
+ * Generators for indexes with minimal ES settings (no text analyzers).
  */
 
 import {
@@ -37,8 +36,8 @@ export function createUnitsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-units
- * @description Elasticsearch mapping for the oak_units index.
+ * Elasticsearch mapping for the oak_units index.
+ *
  * Contains basic unit metadata for filtering and navigation.
  */
 
@@ -74,10 +73,9 @@ export function createSequenceFacetsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-sequence-facets
- * @description Elasticsearch mapping for the oak_sequence_facets index.
- * Contains sequence facet data for navigation and filtering.
+ * Elasticsearch mapping for the oak_sequence_facets index.
  *
+ * Contains sequence facet data for navigation and filtering.
  * Generated from SEQUENCE_FACETS_INDEX_FIELDS at type-gen time.
  */
 
@@ -109,8 +107,8 @@ export function createMetaMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-meta
- * @description Elasticsearch mapping for the oak_meta index.
+ * Elasticsearch mapping for the oak_meta index.
+ *
  * Contains ingestion metadata and version tracking.
  */
 
@@ -143,8 +141,8 @@ export function createZeroHitMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-zero-hit-telemetry
- * @description Elasticsearch mapping for the oak_zero_hit_telemetry index.
+ * Elasticsearch mapping for the oak_zero_hit_telemetry index.
+ *
  * Tracks zero-result search queries for content gap analysis.
  */
 

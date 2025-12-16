@@ -1,6 +1,5 @@
 /**
- * @module ttl-jitter
- * @description Cache TTL jitter utilities to prevent cache stampede.
+ * Cache TTL jitter utilities to prevent cache stampede.
  *
  * ## Why Jitter?
  *

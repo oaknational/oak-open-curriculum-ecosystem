@@ -8,7 +8,6 @@
  * appends req.originalUrl, resulting in broken URLs like:
  * /.well-known/oauth-protected-resource/mcp
  *
- * @module auth/mcp-auth/get-prm-url.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

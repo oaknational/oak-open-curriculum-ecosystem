@@ -1,6 +1,6 @@
 /**
- * @module retry
- * @description Retry logic with exponential backoff for openapi-fetch client.
+ * Retry logic with exponential backoff for openapi-fetch client.
+ *
  * Automatically retries 429 (rate limit) and 503 (service unavailable) errors.
  *
  * Note: This is implemented as a fetch wrapper rather than middleware because

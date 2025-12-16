@@ -1,6 +1,6 @@
 /**
- * @module rate-limit
- * @description Rate limiting middleware for openapi-fetch client.
+ * Rate limiting middleware for openapi-fetch client.
+ *
  * Enforces minimum interval between requests to prevent 429 errors.
  */
 

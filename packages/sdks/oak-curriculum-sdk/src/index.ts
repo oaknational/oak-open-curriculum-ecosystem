@@ -6,7 +6,7 @@
  *
  * ## Additional Entry Points
  *
- * For specialized functionality, import from dedicated entry points:
+ * For specialised functionality, import from dedicated entry points:
  *
  * - **MCP Tools**: `@oaknational/oak-curriculum-sdk/public/mcp-tools`
  *   Model Context Protocol tooling for AI integrations
@@ -16,7 +16,7 @@
  *
  * This separation improves tree-shaking and makes dependencies explicit.
  *
- * @module @oaknational/oak-curriculum-sdk
+ * @packageDocumentation
  */
 
 // ============================================================================

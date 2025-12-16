@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-units
- * @description Elasticsearch mapping for the oak_units index.
+ * Elasticsearch mapping for the oak_units index.
+ *
  * Contains basic unit metadata for filtering and navigation.
  */
 

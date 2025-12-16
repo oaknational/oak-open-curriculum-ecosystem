@@ -2,8 +2,6 @@
  * Geography and environmental theme synonyms.
  *
  * Maps canonical geography topics to alternative terms.
- *
- * @module synonyms/geography
  */
 
 export const geographySynonyms = {

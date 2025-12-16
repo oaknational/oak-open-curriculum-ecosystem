@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for Number topics.
  *
- * @module search-quality/ground-truth/number
  */
 
 import type { GroundTruthQuery } from './types';

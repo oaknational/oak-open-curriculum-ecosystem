@@ -1,6 +1,5 @@
 /**
- * @module ttl-jitter.unit.test
- * @description Unit tests for TTL jitter function - cache stampede prevention.
+ * Unit tests for TTL jitter function - cache stampede prevention.
  *
  * These tests verify the `calculateTtlWithJitter` function correctly applies
  * jitter to cache TTL values to prevent cache stampede.

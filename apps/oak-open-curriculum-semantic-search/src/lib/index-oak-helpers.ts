@@ -1,6 +1,5 @@
 /**
- * @module index-oak-helpers
- * @description Helper functions for building Oak curriculum bulk operations.
+ * Helper functions for building Oak curriculum bulk operations.
  * Extracted from index-oak.ts to reduce function complexity.
  *
  * KS4 metadata denormalisation is handled by passing a UnitContextMap through

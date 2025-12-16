@@ -18,7 +18,7 @@
  * });
  * ```
  *
- * @module landing-page
+ * @packageDocumentation
  */
 
 export { renderLandingPageHtml } from './render-landing-page.js';

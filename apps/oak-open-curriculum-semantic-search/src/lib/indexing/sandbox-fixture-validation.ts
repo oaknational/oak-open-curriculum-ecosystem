@@ -1,6 +1,5 @@
 /**
- * @module sandbox-fixture-validation
- * @description Validation utilities for sandbox fixture JSON parsing.
+ * Validation utilities for sandbox fixture JSON parsing.
  *
  * These utilities handle the external data boundary when parsing fixture
  * JSON files. They use Zod for validation and provide type-safe access

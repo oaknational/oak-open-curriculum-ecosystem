@@ -1,7 +1,6 @@
 /**
  * Experiment runners for hybrid superiority experiments.
  *
- * @module experiments/lib/experiment-runners
  */
 
 import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.js';

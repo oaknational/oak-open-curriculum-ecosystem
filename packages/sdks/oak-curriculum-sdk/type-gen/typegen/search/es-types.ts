@@ -1,6 +1,5 @@
 /**
- * @module es-types
- * @description Elasticsearch type definitions re-exported from @elastic/elasticsearch.
+ * Elasticsearch type definitions re-exported from @elastic/elasticsearch.
  *
  * This module provides type-safe Elasticsearch structures by re-exporting
  * official types from the @elastic/elasticsearch package. This ensures:

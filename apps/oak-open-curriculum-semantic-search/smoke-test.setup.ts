@@ -9,7 +9,6 @@
  * - "Smoke tests DO have side effects"
  * - "Smoke tests DO NOT contain mocks"
  *
- * @module smoke-test.setup
  */
 
 import { config as dotenvConfig } from 'dotenv';

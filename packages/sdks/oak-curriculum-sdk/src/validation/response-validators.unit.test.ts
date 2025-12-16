@@ -62,20 +62,21 @@ describe('validateCurriculumResponse', () => {
       }
     });
 
-    it('should allow additional fields with passthrough', () => {
+    it('should reject additional fields with strict validation (fail fast)', () => {
       const response = {
         transcript: 'Transcript text',
         vtt: 'WEBVTT content',
-        extraField: 'This is allowed',
+        extraField: 'This should be rejected',
       };
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
 
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        const d = Object.getOwnPropertyDescriptor(result.value as object, 'extraField');
-        expect(typeof d?.value === 'string').toBe(true);
-        expect(d?.value).toBe('This is allowed');
+      // Strict validation rejects unknown keys - fail fast, never silently ignore
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.issues.length).toBeGreaterThan(0);
+        // Zod v4 reports unrecognized_keys error
+        expect(result.issues[0].message).toContain('extraField');
       }
     });
   });

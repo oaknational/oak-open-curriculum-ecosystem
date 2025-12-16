@@ -4,7 +4,7 @@
  * Pure functions for extracting data from MCP request bodies with proper type narrowing.
  * These utilities are used by authentication middleware to determine resource URIs.
  *
- * @module
+ * @packageDocumentation
  */
 
 /**

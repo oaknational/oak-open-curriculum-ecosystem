@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/zero-hit-overrides
- * @description Field overrides for the oak_zero_hit_telemetry index.
+ * Field overrides for the oak_zero_hit_telemetry index.
  *
  * This index tracks zero-result search queries for content gap analysis.
  *

@@ -4,7 +4,6 @@
  * Imports from the SDK knowledge-graph-data.ts - the SINGLE SOURCE OF TRUTH.
  * Node IDs use the format 'node-{conceptId}'.
  *
- * @module widget-renderers/concept-briefs
  */
 
 import { conceptGraph } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';

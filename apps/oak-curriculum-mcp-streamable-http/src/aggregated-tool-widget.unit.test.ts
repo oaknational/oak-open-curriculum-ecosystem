@@ -1,7 +1,6 @@
 /**
  * Unit tests for widget HTML generation to verify syntax correctness.
  *
- * @module aggregated-tool-widget.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

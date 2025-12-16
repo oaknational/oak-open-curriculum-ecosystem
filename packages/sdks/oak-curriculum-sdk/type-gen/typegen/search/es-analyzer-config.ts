@@ -1,6 +1,6 @@
 /**
- * @module es-analyzer-config
- * @description Elasticsearch analyzer, normalizer, and filter configurations for Oak search indexes.
+ * Elasticsearch analyser, normaliser, and filter configurations for Oak search indexes.
+ *
  * These settings are applied at index creation time to enable consistent text analysis.
  */
 

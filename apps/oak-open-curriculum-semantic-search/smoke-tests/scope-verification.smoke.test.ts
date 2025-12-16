@@ -8,7 +8,6 @@
  * - Joint search returns both types properly categorised
  * - Lesson filter by unit restricts results correctly
  *
- * @module smoke-tests/scope-verification
  *
  * **Classification**: SMOKE TEST
  * - Makes HTTP calls to a running server (network IO)

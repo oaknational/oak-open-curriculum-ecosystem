@@ -1,7 +1,6 @@
 /**
  * Ground truth type definitions.
  *
- * @module search-quality/ground-truth/types
  */
 
 /**

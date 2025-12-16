@@ -5,8 +5,6 @@
  * This module provides exports for:
  * - Elasticsearch synonym sets
  * - Flat lookup maps
- *
- * @module synonym-export
  */
 
 import { typeSafeEntries } from '../types/helpers/type-helpers.js';

@@ -3,8 +3,6 @@
  *
  * These pure functions are extracted to keep emit-index.ts focused
  * on the main code emission logic while staying under the line limit.
- *
- * @module emit-index-helpers
  */
 
 import type { OperationObject } from 'openapi3-ts/oas31';

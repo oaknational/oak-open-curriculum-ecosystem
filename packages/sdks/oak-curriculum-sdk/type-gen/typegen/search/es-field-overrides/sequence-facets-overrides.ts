@@ -1,8 +1,7 @@
 /**
- * @module es-field-overrides/sequence-facets-overrides
- * @description Field overrides for the oak_sequence_facets index.
+ * Field overrides for the oak_sequence_facets index.
  *
- * This index uses normalizers for case-insensitive keyword matching on slug/identifier fields.
+ * This index uses normalisers for case-insensitive keyword matching on slug/identifier fields.
  * All fields are keywords (no text search) for exact filtering and faceted navigation.
  */
 

@@ -4,7 +4,6 @@
  * Tests verify that BM25 + ELSER hybrid search queries are correctly constructed.
  * Phase 2 confirmed two-way hybrid is optimal; dense vectors provide no benefit.
  *
- * @module rrf-query-builders.unit.test
  */
 
 import { describe, expect, it } from 'vitest';

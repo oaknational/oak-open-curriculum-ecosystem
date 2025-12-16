@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/units-overrides
- * @description Field overrides for the oak_units index.
+ * Field overrides for the oak_units index.
  */
 
 import type { EsFieldMapping } from '../es-field-config.js';

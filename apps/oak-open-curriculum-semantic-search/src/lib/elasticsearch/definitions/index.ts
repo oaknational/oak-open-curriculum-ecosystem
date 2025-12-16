@@ -4,7 +4,7 @@
  * Index mappings are now generated at SDK type-gen time and imported from:
  * `@oaknational/oak-curriculum-sdk/types/generated/search/es-mappings/`
  *
- * @module lib/elasticsearch/definitions
+ * @packageDocumentation
  *
  * ## Index Inventory
  *

@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/query-builders.unit.test
- * @description Unit tests for search query builders.
+ * Unit tests for search query builders.
  *
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */

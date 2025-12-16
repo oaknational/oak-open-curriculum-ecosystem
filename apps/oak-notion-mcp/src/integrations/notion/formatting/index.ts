@@ -1,6 +1,6 @@
 /**
  * @fileoverview Public API for Notion formatting functionality
- * @module notion/formatting
+ * @packageDocumentation
  */
 
 // Re-export formatters

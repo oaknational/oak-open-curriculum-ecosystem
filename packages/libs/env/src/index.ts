@@ -1,9 +1,10 @@
 /**
- * @fileoverview Runtime-adaptive environment utilities for MCP applications
- * @module mcp-env
+ * Runtime-adaptive environment utilities for MCP applications.
  *
  * This library provides adaptive environment variable access that works across
  * different runtime environments (Node.js, Edge, Browser) using feature detection.
+ *
+ * @packageDocumentation
  */
 
 // Export adaptive environment (default)

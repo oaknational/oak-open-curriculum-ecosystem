@@ -72,7 +72,6 @@
  * // ['get-ontology', 'get-knowledge-graph', 'get-help']
  * ```
  *
- * @module mcp/agent-support-tool-metadata
  * @see {@link ../../../docs/architecture/architectural-decisions/060-agent-support-metadata-system.md | ADR-060}
  */
 

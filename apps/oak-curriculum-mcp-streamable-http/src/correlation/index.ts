@@ -1,7 +1,7 @@
 /**
  * Correlation ID support for HTTP request tracing.
  *
- * @module correlation
+ * @packageDocumentation
  */
 
 /**

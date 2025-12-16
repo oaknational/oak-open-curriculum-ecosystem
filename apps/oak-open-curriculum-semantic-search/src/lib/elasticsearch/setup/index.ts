@@ -1,6 +1,6 @@
 /**
- * @module setup
- * @description Creates synonyms set and search indexes from SDK.
+ * @packageDocumentation
+ * Creates synonyms set and search indexes from SDK.
  * Mappings are generated at SDK type-gen time and imported here.
  */
 import { z } from 'zod';

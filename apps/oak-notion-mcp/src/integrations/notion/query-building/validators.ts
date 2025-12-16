@@ -1,6 +1,5 @@
 /**
  * @fileoverview Validation functions for Notion query filters
- * @module notion/query-building
  */
 
 import type { McpFilters, ValidationResult } from '../../../types';

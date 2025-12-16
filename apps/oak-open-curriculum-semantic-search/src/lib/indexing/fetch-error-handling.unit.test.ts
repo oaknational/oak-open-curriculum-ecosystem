@@ -1,6 +1,5 @@
 /**
- * @module fetch-error-handling.unit.test
- * @description Unit tests for fetch error handling helpers.
+ * Unit tests for fetch error handling helpers.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';

@@ -1,7 +1,6 @@
 /**
  * KS4 context types and type guards for denormalising tier, exam board, and exam subject metadata.
  *
- * @module ks4-context-types
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 

@@ -2,8 +2,6 @@
  * Science concept synonyms.
  *
  * Maps canonical science concepts to alternative terms.
- *
- * @module synonyms/science
  */
 
 export const scienceSynonyms = {

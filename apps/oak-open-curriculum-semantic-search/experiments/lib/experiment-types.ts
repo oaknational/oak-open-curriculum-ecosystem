@@ -1,7 +1,6 @@
 /**
  * Type definitions for hybrid superiority experiments.
  *
- * @module experiments/lib/experiment-types
  */
 
 /** Retrieval mode for the experiment */

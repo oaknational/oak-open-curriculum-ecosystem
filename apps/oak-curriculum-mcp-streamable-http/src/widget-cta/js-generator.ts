@@ -2,7 +2,6 @@
  * JavaScript generator for CTA click handlers.
  *
  * @see index.ts - Public API
- * @module widget-cta/js-generator
  */
 
 import type { CtaConfig } from './types.js';

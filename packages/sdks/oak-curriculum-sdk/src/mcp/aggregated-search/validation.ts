@@ -4,8 +4,6 @@
  * This module provides the validateSearchArgs function which validates and
  * normalises raw input into strongly-typed SearchArgs. Uses Zod for schema
  * validation and the generated type guards for enum validation.
- *
- * @module aggregated-search/validation
  */
 
 import { z } from 'zod';

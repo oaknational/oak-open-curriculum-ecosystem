@@ -2,7 +2,6 @@
  * HTML generators for CTA buttons.
  *
  * @see index.ts - Public API
- * @module widget-cta/html-generators
  */
 
 import type { CtaConfig } from './types.js';

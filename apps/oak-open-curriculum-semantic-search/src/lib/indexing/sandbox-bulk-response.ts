@@ -1,6 +1,5 @@
 /**
- * @module sandbox-bulk-response
- * @description Zod schemas and types for Elasticsearch bulk response validation.
+ * Zod schemas and types for Elasticsearch bulk response validation.
  * Used at the external boundary to validate ES responses.
  */
 

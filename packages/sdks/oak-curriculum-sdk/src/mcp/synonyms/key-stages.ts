@@ -2,8 +2,6 @@
  * Key stage synonyms.
  *
  * Maps canonical key stage slugs to alternative terms including year groups.
- *
- * @module synonyms/key-stages
  */
 
 export const keyStageSynonyms = {

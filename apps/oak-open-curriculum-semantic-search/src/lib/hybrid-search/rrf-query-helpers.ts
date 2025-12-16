@@ -4,7 +4,6 @@
  * Contains filter builders, highlight configs, and facet definitions
  * used by both two-way and three-way hybrid search.
  *
- * @module rrf-query-helpers
  */
 
 import type { estypes } from '@elastic/elasticsearch';

@@ -2,15 +2,12 @@
   "history": [
     {
       "sequenceSlug": "history-ancient-egypt-programme",
-      "sequenceTitle": "Ancient Egypt Programme",
       "phaseSlug": "primary",
       "phaseTitle": "Primary",
       "keyStages": [{ "keyStageSlug": "ks2", "keyStageTitle": "Key stage 2" }],
       "years": [4],
       "ks4Options": null,
-      "canonicalUrl": "https://teachers.thenational.academy/programmes/ancient-egypt",
-      "categoryTitles": ["Civilisations"],
-      "unitSlugs": ["ancient-egypt"]
+      "canonicalUrl": "https://teachers.thenational.academy/programmes/ancient-egypt"
     }
   ]
 }

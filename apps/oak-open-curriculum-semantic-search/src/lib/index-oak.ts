@@ -1,6 +1,5 @@
 /**
- * @module index-oak
- * @description Builds Elasticsearch bulk operations for Oak curriculum data.
+ * Builds Elasticsearch bulk operations for Oak curriculum data.
  * Orchestrates the creation of unit, lesson, rollup, and sequence facet documents.
  *
  * KS4 metadata denormalisation (tiers, exam boards, exam subjects) is handled

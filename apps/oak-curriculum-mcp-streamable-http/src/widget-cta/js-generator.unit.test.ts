@@ -1,7 +1,6 @@
 /**
  * Unit tests for CTA JavaScript generator, specifically template literal escaping.
  *
- * @module widget-cta/js-generator.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

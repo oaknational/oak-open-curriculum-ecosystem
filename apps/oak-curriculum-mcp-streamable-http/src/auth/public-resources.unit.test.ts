@@ -3,7 +3,7 @@
  *
  * Pure function tests with no IO, no side effects, no mocks.
  *
- * @module
+ * @packageDocumentation
  */
 
 import { describe, it, expect } from 'vitest';

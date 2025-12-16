@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for Statistics & Probability topics.
  *
- * @module search-quality/ground-truth/statistics
  */
 
 import type { GroundTruthQuery } from './types';

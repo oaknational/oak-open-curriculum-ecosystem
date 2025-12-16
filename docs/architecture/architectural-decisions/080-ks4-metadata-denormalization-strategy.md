@@ -55,11 +55,11 @@ flowchart TB
         API_UNITS["/units/{unit}/summary"]
         API_LESSONS["/lessons/{lesson}/summary"]
     end
-    
+
     subgraph "SDK Cache Layer"
         REDIS[(Redis Cache<br/>14 day TTL + jitter)]
     end
-    
+
     subgraph "Ingestion Pipeline"
         direction TB
         FETCH_REF["Phase 1: Fetch Reference Data"]
@@ -68,27 +68,27 @@ flowchart TB
         FETCH_CONTENT["Phase 3: Fetch Curriculum Content"]
         DECORATE["Phase 4: Decorate Documents"]
     end
-    
+
     subgraph "Elasticsearch"
         ES_LESSONS[oak_lessons index]
         ES_UNITS[oak_units index]
         ES_ROLLUP[oak_unit_rollup index]
     end
-    
+
     API_SUBJECTS --> REDIS
     API_SEQUENCES --> REDIS
     API_UNITS --> REDIS
     API_LESSONS --> REDIS
-    
+
     REDIS --> FETCH_REF
     REDIS --> FETCH_SEQ
     REDIS --> FETCH_CONTENT
-    
+
     FETCH_REF --> FETCH_SEQ
     FETCH_SEQ --> BUILD_MAP
     BUILD_MAP --> DECORATE
     FETCH_CONTENT --> DECORATE
-    
+
     DECORATE --> ES_LESSONS
     DECORATE --> ES_UNITS
     DECORATE --> ES_ROLLUP
@@ -103,22 +103,22 @@ flowchart LR
         MATHS["Maths Structure<br/>year → tiers[] → units[]"]
         OTHERS["Other Subjects<br/>year → units[]"]
     end
-    
+
     subgraph "Context Building"
         PARSE["parseExamBoardFromSlug()"]
         EXTRACT["extractKs4Option()"]
         BUILD["buildUnitContextsFromSequenceResponse()"]
         MERGE["mergeUnitContexts()"]
     end
-    
+
     subgraph "Output"
         MAP["UnitContextMap<br/>Map&lt;unitSlug, AggregatedUnitContext&gt;"]
     end
-    
+
     SCIENCES --> BUILD
     MATHS --> BUILD
     OTHERS --> BUILD
-    
+
     PARSE --> BUILD
     EXTRACT --> BUILD
     BUILD --> MERGE
@@ -132,20 +132,20 @@ flowchart LR
     subgraph "Search Request"
         REQ["POST /api/search<br/>{tier: 'foundation', examBoard: 'aqa'}"]
     end
-    
+
     subgraph "Query Building"
         FILTERS["createLessonFilters()<br/>createUnitFilters()"]
         RRF["RRF Query Builder"]
     end
-    
+
     subgraph "Elasticsearch Query"
         BOOL["bool filter:<br/>term: {tiers: 'foundation'}<br/>term: {exam_boards: 'aqa'}"]
     end
-    
+
     subgraph "Results"
         RESULTS["Filtered Results<br/>(only matching documents)"]
     end
-    
+
     REQ --> FILTERS
     FILTERS --> RRF
     RRF --> BOOL
@@ -158,26 +158,26 @@ flowchart LR
 
 All KS4 metadata is indexed as **arrays** to support many-to-many relationships:
 
-| Field               | Type     | Source                        | Purpose                      |
-| ------------------- | -------- | ----------------------------- | ---------------------------- |
-| `tiers`             | string[] | Sequence traversal            | Filter by Foundation/Higher  |
-| `tier_titles`       | string[] | Sequence traversal            | Display titles               |
-| `exam_boards`       | string[] | Parsed from sequence slug     | Filter by AQA/Edexcel/etc    |
-| `exam_board_titles` | string[] | Parsed from sequence slug     | Display titles               |
-| `exam_subjects`     | string[] | Sequence traversal (sciences) | Filter by Biology/Chemistry  |
-| `exam_subject_titles` | string[] | Sequence traversal (sciences) | Display titles             |
-| `ks4_options`       | string[] | `/subjects` endpoint          | Filter by programme pathway  |
-| `ks4_option_titles` | string[] | `/subjects` endpoint          | Display titles               |
+| Field                 | Type     | Source                        | Purpose                     |
+| --------------------- | -------- | ----------------------------- | --------------------------- |
+| `tiers`               | string[] | Sequence traversal            | Filter by Foundation/Higher |
+| `tier_titles`         | string[] | Sequence traversal            | Display titles              |
+| `exam_boards`         | string[] | Parsed from sequence slug     | Filter by AQA/Edexcel/etc   |
+| `exam_board_titles`   | string[] | Parsed from sequence slug     | Display titles              |
+| `exam_subjects`       | string[] | Sequence traversal (sciences) | Filter by Biology/Chemistry |
+| `exam_subject_titles` | string[] | Sequence traversal (sciences) | Display titles              |
+| `ks4_options`         | string[] | `/subjects` endpoint          | Filter by programme pathway |
+| `ks4_option_titles`   | string[] | `/subjects` endpoint          | Display titles              |
 
 ### Additional Filterable Fields
 
 These fields are also available from the sequence response and are indexed:
 
-| Field           | Type     | Source              | Purpose                    |
-| --------------- | -------- | ------------------- | -------------------------- |
-| `thread_slugs`  | string[] | Unit threads[]      | Filter by curriculum thread |
-| `thread_titles` | string[] | Unit threads[]      | Display titles             |
-| `categories`    | string[] | Unit categories[]   | Filter by category         |
+| Field           | Type     | Source            | Purpose                     |
+| --------------- | -------- | ----------------- | --------------------------- |
+| `thread_slugs`  | string[] | Unit threads[]    | Filter by curriculum thread |
+| `thread_titles` | string[] | Unit threads[]    | Display titles              |
+| `categories`    | string[] | Unit categories[] | Filter by category          |
 
 ### Known Values
 
@@ -266,10 +266,7 @@ With arrays, ES uses "any match" semantics:
 {
   "query": {
     "bool": {
-      "filter": [
-        { "term": { "tiers": "foundation" } },
-        { "term": { "exam_boards": "aqa" } }
-      ]
+      "filter": [{ "term": { "tiers": "foundation" } }, { "term": { "exam_boards": "aqa" } }]
     }
   }
 }
@@ -292,24 +289,24 @@ For **exclusive** filtering ("Foundation only, not Higher"):
 
 ### Key Files
 
-| File                                   | Purpose                              |
-| -------------------------------------- | ------------------------------------ |
-| `src/lib/indexing/ks4-context-types.ts` | Type definitions and type guards    |
-| `src/lib/indexing/ks4-context-builder.ts` | Sequence traversal and map building |
-| `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()` |
-| `type-gen/.../curriculum.ts`           | Field definitions (schema source)   |
+| File                                             | Purpose                             |
+| ------------------------------------------------ | ----------------------------------- |
+| `src/lib/indexing/ks4-context-types.ts`          | Type definitions and type guards    |
+| `src/lib/indexing/ks4-context-builder.ts`        | Sequence traversal and map building |
+| `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()`        |
+| `type-gen/.../curriculum.ts`                     | Field definitions (schema source)   |
 
 All files are in `apps/oak-open-curriculum-semantic-search/`.
 
 ### Key Functions
 
-| Function                              | Purpose                                    |
-| ------------------------------------- | ------------------------------------------ |
-| `parseExamBoardFromSlug()`            | Extracts exam board from sequence slug     |
-| `buildUnitContextsFromSequenceResponse()` | Parses sequence response structure     |
-| `buildKs4ContextMap()`                | Orchestrates full map building             |
-| `getKs4ContextForUnit()`              | Retrieves aggregated context for a unit    |
-| `extractKs4DocumentFields()`          | Converts context to document fields        |
+| Function                                  | Purpose                                 |
+| ----------------------------------------- | --------------------------------------- |
+| `parseExamBoardFromSlug()`                | Extracts exam board from sequence slug  |
+| `buildUnitContextsFromSequenceResponse()` | Parses sequence response structure      |
+| `buildKs4ContextMap()`                    | Orchestrates full map building          |
+| `getKs4ContextForUnit()`                  | Retrieves aggregated context for a unit |
+| `extractKs4DocumentFields()`              | Converts context to document fields     |
 
 ## Rationale
 

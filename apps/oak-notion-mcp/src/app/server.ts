@@ -11,7 +11,6 @@
  * The low-level API is accessed via server.server.setRequestHandler().
  * This is the same pattern used in apps that need custom handler behavior.
  *
- * @module @oak-notion-mcp/server
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

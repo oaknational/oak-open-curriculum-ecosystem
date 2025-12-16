@@ -7,7 +7,6 @@
  * KS4 metadata denormalisation (tiers, exam boards, exam subjects, ks4 options)
  * is handled by looking up units in the UnitContextMap per ADR-080.
  *
- * @module document-transforms
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 

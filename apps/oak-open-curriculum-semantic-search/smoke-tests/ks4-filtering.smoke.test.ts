@@ -7,7 +7,6 @@
  * - Lessons in multiple tiers appear when filtering for either tier
  * - Non-KS4 content has empty arrays (not missing fields)
  *
- * @module smoke-tests/ks4-filtering
  *
  * **Classification**: SMOKE TEST
  * - Makes HTTP calls to a running server (network IO)

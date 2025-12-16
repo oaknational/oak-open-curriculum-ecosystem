@@ -106,7 +106,7 @@ const SequenceUnitsResponseSchema = z.array(
                 unitOptions: z.array(
                   z
                     .object({ unitTitle: z.string(), unitSlug: z.string() })
-                    .loose()
+                    .strict()
                 ),
                 categories: z
                   .array(
@@ -115,7 +115,7 @@ const SequenceUnitsResponseSchema = z.array(
                         categoryTitle: z.string(),
                         categorySlug: z.string().optional(),
                       })
-                      .loose()
+                      .strict()
                   )
                   .optional(),
                 threads: z
@@ -126,11 +126,11 @@ const SequenceUnitsResponseSchema = z.array(
                         threadSlug: z.string(),
                         order: z.number(),
                       })
-                      .loose()
+                      .strict()
                   )
                   .optional(),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 unitTitle: z.string(),
@@ -143,7 +143,7 @@ const SequenceUnitsResponseSchema = z.array(
                         categoryTitle: z.string(),
                         categorySlug: z.string().optional(),
                       })
-                      .loose()
+                      .strict()
                   )
                   .optional(),
                 threads: z
@@ -154,16 +154,16 @@ const SequenceUnitsResponseSchema = z.array(
                         threadSlug: z.string(),
                         order: z.number(),
                       })
-                      .loose()
+                      .strict()
                   )
                   .optional(),
               })
-              .loose(),
+              .strict(),
           ])
         ),
         canonicalUrl: z.string().optional(),
       })
-      .loose(),
+      .strict(),
     z
       .object({
         year: z.number(),
@@ -191,7 +191,7 @@ const SequenceUnitsResponseSchema = z.array(
                                     unitTitle: z.string(),
                                     unitSlug: z.string(),
                                   })
-                                  .loose()
+                                  .strict()
                               ),
                               categories: z
                                 .array(
@@ -200,7 +200,7 @@ const SequenceUnitsResponseSchema = z.array(
                                       categoryTitle: z.string(),
                                       categorySlug: z.string().optional(),
                                     })
-                                    .loose()
+                                    .strict()
                                 )
                                 .optional(),
                               threads: z
@@ -211,11 +211,11 @@ const SequenceUnitsResponseSchema = z.array(
                                       threadSlug: z.string(),
                                       order: z.number(),
                                     })
-                                    .loose()
+                                    .strict()
                                 )
                                 .optional(),
                             })
-                            .loose(),
+                            .strict(),
                           z
                             .object({
                               unitTitle: z.string(),
@@ -228,7 +228,7 @@ const SequenceUnitsResponseSchema = z.array(
                                       categoryTitle: z.string(),
                                       categorySlug: z.string().optional(),
                                     })
-                                    .loose()
+                                    .strict()
                                 )
                                 .optional(),
                               threads: z
@@ -239,18 +239,18 @@ const SequenceUnitsResponseSchema = z.array(
                                       threadSlug: z.string(),
                                       order: z.number(),
                                     })
-                                    .loose()
+                                    .strict()
                                 )
                                 .optional(),
                             })
-                            .loose(),
+                            .strict(),
                         ])
                       ),
                     })
-                    .loose()
+                    .strict()
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 examSubjectTitle: z.string(),
@@ -267,7 +267,7 @@ const SequenceUnitsResponseSchema = z.array(
                               unitTitle: z.string(),
                               unitSlug: z.string(),
                             })
-                            .loose()
+                            .strict()
                         ),
                         categories: z
                           .array(
@@ -276,7 +276,7 @@ const SequenceUnitsResponseSchema = z.array(
                                 categoryTitle: z.string(),
                                 categorySlug: z.string().optional(),
                               })
-                              .loose()
+                              .strict()
                           )
                           .optional(),
                         threads: z
@@ -287,11 +287,11 @@ const SequenceUnitsResponseSchema = z.array(
                                 threadSlug: z.string(),
                                 order: z.number(),
                               })
-                              .loose()
+                              .strict()
                           )
                           .optional(),
                       })
-                      .loose(),
+                      .strict(),
                     z
                       .object({
                         unitTitle: z.string(),
@@ -304,7 +304,7 @@ const SequenceUnitsResponseSchema = z.array(
                                 categoryTitle: z.string(),
                                 categorySlug: z.string().optional(),
                               })
-                              .loose()
+                              .strict()
                           )
                           .optional(),
                         threads: z
@@ -315,20 +315,20 @@ const SequenceUnitsResponseSchema = z.array(
                                 threadSlug: z.string(),
                                 order: z.number(),
                               })
-                              .loose()
+                              .strict()
                           )
                           .optional(),
                       })
-                      .loose(),
+                      .strict(),
                   ])
                 ),
               })
-              .loose(),
+              .strict(),
           ])
         ),
         canonicalUrl: z.string().optional(),
       })
-      .loose(),
+      .strict(),
     z
       .object({
         year: z.number(),
@@ -350,7 +350,7 @@ const SequenceUnitsResponseSchema = z.array(
                             unitTitle: z.string(),
                             unitSlug: z.string(),
                           })
-                          .loose()
+                          .strict()
                       ),
                       categories: z
                         .array(
@@ -359,7 +359,7 @@ const SequenceUnitsResponseSchema = z.array(
                               categoryTitle: z.string(),
                               categorySlug: z.string().optional(),
                             })
-                            .loose()
+                            .strict()
                         )
                         .optional(),
                       threads: z
@@ -370,11 +370,11 @@ const SequenceUnitsResponseSchema = z.array(
                               threadSlug: z.string(),
                               order: z.number(),
                             })
-                            .loose()
+                            .strict()
                         )
                         .optional(),
                     })
-                    .loose(),
+                    .strict(),
                   z
                     .object({
                       unitTitle: z.string(),
@@ -387,7 +387,7 @@ const SequenceUnitsResponseSchema = z.array(
                               categoryTitle: z.string(),
                               categorySlug: z.string().optional(),
                             })
-                            .loose()
+                            .strict()
                         )
                         .optional(),
                       threads: z
@@ -398,19 +398,19 @@ const SequenceUnitsResponseSchema = z.array(
                               threadSlug: z.string(),
                               order: z.number(),
                             })
-                            .loose()
+                            .strict()
                         )
                         .optional(),
                     })
-                    .loose(),
+                    .strict(),
                 ])
               ),
             })
-            .loose()
+            .strict()
         ),
         canonicalUrl: z.string().optional(),
       })
-      .loose(),
+      .strict(),
   ])
 );
 const TranscriptResponseSchema = z
@@ -419,7 +419,7 @@ const TranscriptResponseSchema = z
     vtt: z.string(),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 const SearchTranscriptResponseSchema = z.array(
   z
     .object({
@@ -428,7 +428,7 @@ const SearchTranscriptResponseSchema = z.array(
       transcriptSnippet: z.string().optional(),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const SequenceAssetsResponseSchema = z.array(
   z
@@ -453,11 +453,11 @@ const SequenceAssetsResponseSchema = z.array(
             label: z.string(),
             url: z.string(),
           })
-          .loose()
+          .strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const SubjectAssetsResponseSchema = z.array(
   z
@@ -482,11 +482,11 @@ const SubjectAssetsResponseSchema = z.array(
             label: z.string(),
             url: z.string(),
           })
-          .loose()
+          .strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const LessonAssetsResponseSchema = z
   .object({
@@ -508,12 +508,12 @@ const LessonAssetsResponseSchema = z
           label: z.string(),
           url: z.string(),
         })
-        .loose()
+        .strict()
     ),
     canonicalUrl: z.string(),
   })
   .partial()
-  .loose();
+  .strict();
 const LessonAssetResponseSchema = z.unknown();
 const AllSubjectsResponseSchema = z.array(
   z
@@ -528,26 +528,26 @@ const AllSubjectsResponseSchema = z.array(
             keyStages: z.array(
               z
                 .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-                .loose()
+                .strict()
             ),
             phaseSlug: z.string(),
             phaseTitle: z.string(),
             ks4Options: z
               .object({ title: z.string(), slug: z.string() })
-              .loose()
+              .strict()
               .nullable(),
           })
-          .loose()
+          .strict()
       ),
       years: z.array(z.number()),
       keyStages: z.array(
         z
           .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-          .loose()
+          .strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const SubjectResponseSchema = z
   .object({
@@ -561,26 +561,24 @@ const SubjectResponseSchema = z
           keyStages: z.array(
             z
               .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-              .loose()
+              .strict()
           ),
           phaseSlug: z.string(),
           phaseTitle: z.string(),
           ks4Options: z
             .object({ title: z.string(), slug: z.string() })
-            .loose()
+            .strict()
             .nullable(),
         })
-        .loose()
+        .strict()
     ),
     years: z.array(z.number()),
     keyStages: z.array(
-      z
-        .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-        .loose()
+      z.object({ keyStageTitle: z.string(), keyStageSlug: z.string() }).strict()
     ),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 const SubjectSequenceResponseSchema = z.array(
   z
     .object({
@@ -589,17 +587,17 @@ const SubjectSequenceResponseSchema = z.array(
       keyStages: z.array(
         z
           .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
-          .loose()
+          .strict()
       ),
       phaseSlug: z.string(),
       phaseTitle: z.string(),
       ks4Options: z
         .object({ title: z.string(), slug: z.string() })
-        .loose()
+        .strict()
         .nullable(),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const SubjectKeyStagesResponseSchema = z.array(
   z
@@ -608,7 +606,7 @@ const SubjectKeyStagesResponseSchema = z.array(
       keyStageSlug: z.string(),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const SubjectYearsResponseSchema = z.array(z.number());
 const KeyStageResponseSchema = z.array(
@@ -618,7 +616,7 @@ const KeyStageResponseSchema = z.array(
       title: z.string(),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const KeyStageSubjectLessonsResponseSchema = z.array(
   z
@@ -626,13 +624,11 @@ const KeyStageSubjectLessonsResponseSchema = z.array(
       unitSlug: z.string(),
       unitTitle: z.string(),
       lessons: z.array(
-        z
-          .object({ lessonSlug: z.string(), lessonTitle: z.string() })
-          .loose()
+        z.object({ lessonSlug: z.string(), lessonTitle: z.string() }).strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
   z
@@ -640,11 +636,11 @@ const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
       yearSlug: z.string(),
       yearTitle: z.string(),
       units: z.array(
-        z.object({ unitSlug: z.string(), unitTitle: z.string() }).loose()
+        z.object({ unitSlug: z.string(), unitTitle: z.string() }).strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const QuestionForLessonsResponseSchema = z
   .object({
@@ -667,10 +663,10 @@ const QuestionForLessonsResponseSchema = z
               text: z.string().optional(),
               attribution: z.string().optional(),
             })
-            .loose()
+            .strict()
             .optional(),
         })
-        .loose()
+        .strict()
         .and(
           z.union([
             z
@@ -679,7 +675,7 @@ const QuestionForLessonsResponseSchema = z
                 answers: z.array(
                   z
                     .object({ distractor: z.boolean() })
-                    .loose()
+                    .strict()
                     .and(
                       z.union([
                         z
@@ -687,7 +683,7 @@ const QuestionForLessonsResponseSchema = z
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         z
                           .object({
                             type: z.literal("image"),
@@ -700,24 +696,24 @@ const QuestionForLessonsResponseSchema = z
                                 text: z.string().optional(),
                                 attribution: z.string().optional(),
                               })
-                              .loose(),
+                              .strict(),
                           })
-                          .loose(),
+                          .strict(),
                       ])
                     )
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("short-answer"),
                 answers: z.array(
                   z
                     .object({ type: z.literal("text"), content: z.string() })
-                    .loose()
+                    .strict()
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("match"),
@@ -729,36 +725,36 @@ const QuestionForLessonsResponseSchema = z
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose(),
+                        .strict(),
                       correctChoice: z
                         .object({
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose(),
+                        .strict(),
                     })
-                    .loose()
+                    .strict()
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("order"),
                 answers: z.array(
                   z
                     .object({ order: z.number() })
-                    .loose()
+                    .strict()
                     .and(
                       z
                         .object({
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose()
+                        .strict()
                     )
                 ),
               })
-              .loose(),
+              .strict(),
           ])
         )
     ),
@@ -781,10 +777,10 @@ const QuestionForLessonsResponseSchema = z
               text: z.string().optional(),
               attribution: z.string().optional(),
             })
-            .loose()
+            .strict()
             .optional(),
         })
-        .loose()
+        .strict()
         .and(
           z.union([
             z
@@ -793,7 +789,7 @@ const QuestionForLessonsResponseSchema = z
                 answers: z.array(
                   z
                     .object({ distractor: z.boolean() })
-                    .loose()
+                    .strict()
                     .and(
                       z.union([
                         z
@@ -801,7 +797,7 @@ const QuestionForLessonsResponseSchema = z
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         z
                           .object({
                             type: z.literal("image"),
@@ -814,24 +810,24 @@ const QuestionForLessonsResponseSchema = z
                                 text: z.string().optional(),
                                 attribution: z.string().optional(),
                               })
-                              .loose(),
+                              .strict(),
                           })
-                          .loose(),
+                          .strict(),
                       ])
                     )
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("short-answer"),
                 answers: z.array(
                   z
                     .object({ type: z.literal("text"), content: z.string() })
-                    .loose()
+                    .strict()
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("match"),
@@ -843,42 +839,42 @@ const QuestionForLessonsResponseSchema = z
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose(),
+                        .strict(),
                       correctChoice: z
                         .object({
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose(),
+                        .strict(),
                     })
-                    .loose()
+                    .strict()
                 ),
               })
-              .loose(),
+              .strict(),
             z
               .object({
                 questionType: z.literal("order"),
                 answers: z.array(
                   z
                     .object({ order: z.number() })
-                    .loose()
+                    .strict()
                     .and(
                       z
                         .object({
                           type: z.literal("text"),
                           content: z.string(),
                         })
-                        .loose()
+                        .strict()
                     )
                 ),
               })
-              .loose(),
+              .strict(),
           ])
         )
     ),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 const QuestionsForSequenceResponseSchema = z.array(
   z
     .object({
@@ -903,10 +899,10 @@ const QuestionsForSequenceResponseSchema = z.array(
                 text: z.string().optional(),
                 attribution: z.string().optional(),
               })
-              .loose()
+              .strict()
               .optional(),
           })
-          .loose()
+          .strict()
           .and(
             z.union([
               z
@@ -915,7 +911,7 @@ const QuestionsForSequenceResponseSchema = z.array(
                   answers: z.array(
                     z
                       .object({ distractor: z.boolean() })
-                      .loose()
+                      .strict()
                       .and(
                         z.union([
                           z
@@ -923,7 +919,7 @@ const QuestionsForSequenceResponseSchema = z.array(
                               type: z.literal("text"),
                               content: z.string(),
                             })
-                            .loose(),
+                            .strict(),
                           z
                             .object({
                               type: z.literal("image"),
@@ -936,24 +932,24 @@ const QuestionsForSequenceResponseSchema = z.array(
                                   text: z.string().optional(),
                                   attribution: z.string().optional(),
                                 })
-                                .loose(),
+                                .strict(),
                             })
-                            .loose(),
+                            .strict(),
                         ])
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("short-answer"),
                   answers: z.array(
                     z
                       .object({ type: z.literal("text"), content: z.string() })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("match"),
@@ -965,36 +961,36 @@ const QuestionsForSequenceResponseSchema = z.array(
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         correctChoice: z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                       })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("order"),
                   answers: z.array(
                     z
                       .object({ order: z.number() })
-                      .loose()
+                      .strict()
                       .and(
                         z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose()
+                          .strict()
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
             ])
           )
       ),
@@ -1017,10 +1013,10 @@ const QuestionsForSequenceResponseSchema = z.array(
                 text: z.string().optional(),
                 attribution: z.string().optional(),
               })
-              .loose()
+              .strict()
               .optional(),
           })
-          .loose()
+          .strict()
           .and(
             z.union([
               z
@@ -1029,7 +1025,7 @@ const QuestionsForSequenceResponseSchema = z.array(
                   answers: z.array(
                     z
                       .object({ distractor: z.boolean() })
-                      .loose()
+                      .strict()
                       .and(
                         z.union([
                           z
@@ -1037,7 +1033,7 @@ const QuestionsForSequenceResponseSchema = z.array(
                               type: z.literal("text"),
                               content: z.string(),
                             })
-                            .loose(),
+                            .strict(),
                           z
                             .object({
                               type: z.literal("image"),
@@ -1050,24 +1046,24 @@ const QuestionsForSequenceResponseSchema = z.array(
                                   text: z.string().optional(),
                                   attribution: z.string().optional(),
                                 })
-                                .loose(),
+                                .strict(),
                             })
-                            .loose(),
+                            .strict(),
                         ])
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("short-answer"),
                   answers: z.array(
                     z
                       .object({ type: z.literal("text"), content: z.string() })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("match"),
@@ -1079,42 +1075,42 @@ const QuestionsForSequenceResponseSchema = z.array(
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         correctChoice: z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                       })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("order"),
                   answers: z.array(
                     z
                       .object({ order: z.number() })
-                      .loose()
+                      .strict()
                       .and(
                         z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose()
+                          .strict()
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
             ])
           )
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
   z
@@ -1140,10 +1136,10 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                 text: z.string().optional(),
                 attribution: z.string().optional(),
               })
-              .loose()
+              .strict()
               .optional(),
           })
-          .loose()
+          .strict()
           .and(
             z.union([
               z
@@ -1152,7 +1148,7 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                   answers: z.array(
                     z
                       .object({ distractor: z.boolean() })
-                      .loose()
+                      .strict()
                       .and(
                         z.union([
                           z
@@ -1160,7 +1156,7 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                               type: z.literal("text"),
                               content: z.string(),
                             })
-                            .loose(),
+                            .strict(),
                           z
                             .object({
                               type: z.literal("image"),
@@ -1173,24 +1169,24 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                                   text: z.string().optional(),
                                   attribution: z.string().optional(),
                                 })
-                                .loose(),
+                                .strict(),
                             })
-                            .loose(),
+                            .strict(),
                         ])
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("short-answer"),
                   answers: z.array(
                     z
                       .object({ type: z.literal("text"), content: z.string() })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("match"),
@@ -1202,36 +1198,36 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         correctChoice: z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                       })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("order"),
                   answers: z.array(
                     z
                       .object({ order: z.number() })
-                      .loose()
+                      .strict()
                       .and(
                         z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose()
+                          .strict()
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
             ])
           )
       ),
@@ -1254,10 +1250,10 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                 text: z.string().optional(),
                 attribution: z.string().optional(),
               })
-              .loose()
+              .strict()
               .optional(),
           })
-          .loose()
+          .strict()
           .and(
             z.union([
               z
@@ -1266,7 +1262,7 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                   answers: z.array(
                     z
                       .object({ distractor: z.boolean() })
-                      .loose()
+                      .strict()
                       .and(
                         z.union([
                           z
@@ -1274,7 +1270,7 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                               type: z.literal("text"),
                               content: z.string(),
                             })
-                            .loose(),
+                            .strict(),
                           z
                             .object({
                               type: z.literal("image"),
@@ -1287,24 +1283,24 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                                   text: z.string().optional(),
                                   attribution: z.string().optional(),
                                 })
-                                .loose(),
+                                .strict(),
                             })
-                            .loose(),
+                            .strict(),
                         ])
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("short-answer"),
                   answers: z.array(
                     z
                       .object({ type: z.literal("text"), content: z.string() })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("match"),
@@ -1316,42 +1312,42 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                         correctChoice: z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose(),
+                          .strict(),
                       })
-                      .loose()
+                      .strict()
                   ),
                 })
-                .loose(),
+                .strict(),
               z
                 .object({
                   questionType: z.literal("order"),
                   answers: z.array(
                     z
                       .object({ order: z.number() })
-                      .loose()
+                      .strict()
                       .and(
                         z
                           .object({
                             type: z.literal("text"),
                             content: z.string(),
                           })
-                          .loose()
+                          .strict()
                       )
                   ),
                 })
-                .loose(),
+                .strict(),
             ])
           )
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const LessonSummaryResponseSchema = z
   .object({
@@ -1363,18 +1359,16 @@ const LessonSummaryResponseSchema = z
     keyStageSlug: z.string(),
     keyStageTitle: z.string(),
     lessonKeywords: z.array(
-      z.object({ keyword: z.string(), description: z.string() }).loose()
+      z.object({ keyword: z.string(), description: z.string() }).strict()
     ),
     keyLearningPoints: z.array(
-      z.object({ keyLearningPoint: z.string() }).loose()
+      z.object({ keyLearningPoint: z.string() }).strict()
     ),
     misconceptionsAndCommonMistakes: z.array(
-      z
-        .object({ misconception: z.string(), response: z.string() })
-        .loose()
+      z.object({ misconception: z.string(), response: z.string() }).strict()
     ),
     pupilLessonOutcome: z.string().optional(),
-    teacherTips: z.array(z.object({ teacherTip: z.string() }).loose()),
+    teacherTips: z.array(z.object({ teacherTip: z.string() }).strict()),
     contentGuidance: z.union([
       z.array(
         z
@@ -1384,7 +1378,7 @@ const LessonSummaryResponseSchema = z
             contentGuidanceLabel: z.string(),
             contentGuidanceDescription: z.string(),
           })
-          .loose()
+          .strict()
       ),
       z.null(),
     ]),
@@ -1392,7 +1386,7 @@ const LessonSummaryResponseSchema = z
     downloadsAvailable: z.boolean(),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 const LessonSearchResponseSchema = z.array(
   z
     .object({
@@ -1408,11 +1402,11 @@ const LessonSearchResponseSchema = z.array(
             keyStageSlug: z.string(),
             subjectSlug: z.string(),
           })
-          .loose()
+          .strict()
       ),
       canonicalUrl: z.string().optional(),
     })
-    .loose()
+    .strict()
 );
 const UnitSummaryResponseSchema = z
   .object({
@@ -1432,7 +1426,7 @@ const UnitSummaryResponseSchema = z
       .array(
         z
           .object({ slug: z.string(), title: z.string(), order: z.number() })
-          .loose()
+          .strict()
       )
       .optional(),
     categories: z
@@ -1442,7 +1436,7 @@ const UnitSummaryResponseSchema = z
             categoryTitle: z.string(),
             categorySlug: z.string().optional(),
           })
-          .loose()
+          .strict()
       )
       .optional(),
     unitLessons: z.array(
@@ -1453,11 +1447,11 @@ const UnitSummaryResponseSchema = z
           lessonOrder: z.number().optional(),
           state: z.enum(["published", "new"]),
         })
-        .loose()
+        .strict()
     ),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 const AllThreadsResponseSchema = z.array(
   z
     .object({
@@ -1465,7 +1459,7 @@ const AllThreadsResponseSchema = z.array(
       slug: z.string(),
       canonicalUrl: z.null().optional(),
     })
-    .loose()
+    .strict()
 );
 const ThreadUnitsResponseSchema = z.array(
   z
@@ -1475,7 +1469,7 @@ const ThreadUnitsResponseSchema = z.array(
       unitOrder: z.number(),
       canonicalUrl: z.null().optional(),
     })
-    .loose()
+    .strict()
 );
 const RateLimitResponseSchema = z
   .object({
@@ -1484,7 +1478,7 @@ const RateLimitResponseSchema = z
     reset: z.number(),
     canonicalUrl: z.string().optional(),
   })
-  .loose();
+  .strict();
 
 export type CurriculumSchemaCollection = Record<string, z.ZodType>;
 
@@ -1574,7 +1568,7 @@ export const endpoints: readonly Endpoint[] = ([
           date: z.string(),
           changes: z.array(z.string()),
         })
-        .loose()
+        .strict()
     ),
   },
   {
@@ -1588,7 +1582,7 @@ export const endpoints: readonly Endpoint[] = ([
         date: z.string(),
         changes: z.array(z.string()),
       })
-      .loose(),
+      .strict(),
   },
   {
     method: "get",
@@ -1913,13 +1907,11 @@ Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4`,
                 code: z.string(),
                 httpStatus: z.number().int(),
                 path: z.string(),
-                zodError: z
-                  .union([z.object({}).partial().loose(), z.null()])
-                  .optional(),
+                zodError: z.null().optional(),
               })
-              .loose(),
+              .strict(),
           })
-          .loose(),
+          .strict(),
       },
     ],
   },

@@ -11,7 +11,6 @@
  * @see {@link MCP_PROMPTS} - Prompt definitions in SDK
  * @see https://modelcontextprotocol.io/specification/draft/server/prompts
  *
- * @module prompt-schemas
  */
 
 import { z } from 'zod';

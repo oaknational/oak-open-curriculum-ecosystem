@@ -1,15 +1,16 @@
 /**
- * @module es-field-overrides
- * @description Elasticsearch field override configurations for each index.
+ * Elasticsearch field override configurations for each index.
  *
  * These overrides define ES-specific field configurations that cannot be automatically
- * derived from Zod types (e.g. semantic_text, completion with contexts, text with analyzers).
+ * derived from Zod types (e.g. semantic_text, completion with contexts, text with analysers).
  * The generator uses these configurations to produce the actual ES mapping TypeScript modules.
  *
  * **Single Source of Truth**: Completion contexts are imported from `completion-contexts.ts`
  * to ensure ES mappings and Zod schemas stay in lockstep.
  *
  * This is SOURCE CODE - the generator consumes it to produce the generated mappings.
+ *
+ * @packageDocumentation
  */
 
 // Re-export all field override constants

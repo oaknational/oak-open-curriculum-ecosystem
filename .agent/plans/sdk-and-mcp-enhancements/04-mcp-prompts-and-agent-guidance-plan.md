@@ -519,7 +519,7 @@ Import schemas from SDK and use with registerPrompt():
  * This app uses Zod v4, so schemas are directly compatible.
  *
  * @see @oaknational/oak-curriculum-sdk - Generated prompt schemas
- * @module register-prompts
+ * @packageDocumentation register-prompts
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

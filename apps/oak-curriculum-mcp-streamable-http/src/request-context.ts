@@ -1,7 +1,7 @@
 /**
  * Request context propagation using AsyncLocalStorage.
  * Enables access to Express request object within tool handlers.
- * @module
+ * @packageDocumentation
  */
 
 import { AsyncLocalStorage } from 'node:async_hooks';

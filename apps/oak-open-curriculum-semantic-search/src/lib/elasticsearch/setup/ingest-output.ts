@@ -1,6 +1,5 @@
 /**
- * @module ingest-output
- * @description Output formatting and metadata writing for live data ingestion.
+ * Output formatting and metadata writing for live data ingestion.
  * Handles header, summary, and metadata persistence to Elasticsearch.
  * Uses Result<T, E> pattern for explicit error handling.
  */

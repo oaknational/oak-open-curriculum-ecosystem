@@ -8,7 +8,6 @@
  * so defensive handling of malformed data is not needed - validation
  * happens at the SDK boundary (isUnitSummary type guard).
  *
- * @module index-bulk-helpers.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import { unitSummarySchema } from '@oaknational/oak-curriculum-sdk/public/search.js';

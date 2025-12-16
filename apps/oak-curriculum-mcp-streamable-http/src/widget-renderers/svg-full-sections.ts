@@ -1,6 +1,5 @@
 /**
  * Full SVG Section Configurations.
- * @module widget-renderers/svg-full-sections
  */
 import type { SectionConfig } from './svg-components.js';
 import { getConceptBrief } from './concept-briefs.js';

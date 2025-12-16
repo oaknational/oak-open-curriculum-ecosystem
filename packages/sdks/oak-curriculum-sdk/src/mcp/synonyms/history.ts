@@ -2,8 +2,6 @@
  * History topics and periods synonyms.
  *
  * Maps canonical history topics to alternative terms.
- *
- * @module synonyms/history
  */
 
 export const historySynonyms = {

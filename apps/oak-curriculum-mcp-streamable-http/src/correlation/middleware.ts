@@ -1,7 +1,6 @@
 /**
  * Express middleware for request correlation ID management.
  *
- * @module correlation/middleware
  */
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';

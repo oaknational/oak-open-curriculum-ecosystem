@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-unit-rollup
- * @description Elasticsearch mapping for the oak_unit_rollup index.
+ * Elasticsearch mapping for the oak_unit_rollup index.
+ *
  * Contains aggregated unit content for semantic search across lessons.
  */
 

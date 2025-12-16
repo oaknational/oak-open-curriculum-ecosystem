@@ -2,8 +2,6 @@
  * Generic educational terms and UK education acronyms.
  *
  * Maps common educational terminology and abbreviations.
- *
- * @module synonyms/education
  */
 
 /** Generic educational terms */

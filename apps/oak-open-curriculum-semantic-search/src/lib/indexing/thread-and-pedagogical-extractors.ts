@@ -4,7 +4,6 @@
  * These functions extract thread progression and pedagogical context
  * from unit summaries for enhanced semantic search.
  *
- * @module thread-and-pedagogical-extractors
  */
 
 import type { SearchUnitSummary } from '../../types/oak';

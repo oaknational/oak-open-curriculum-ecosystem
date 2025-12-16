@@ -61,7 +61,7 @@ Based on a comprehensive review of recent refactoring work, significant progress
 
 ### 2. Code Organization Progress
 
-- All logging components are already annotated with `@module @oak-mcp-core/logging`
+- All logging components are already annotated with `@packageDocumentation @oak-mcp-core/logging`
 - Code has been modularized into clear boundaries
 - Pure functions have been extracted (recent commits show this)
 - Dependency injection patterns are in use

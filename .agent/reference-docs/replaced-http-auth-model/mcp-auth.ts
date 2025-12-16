@@ -4,7 +4,7 @@
  * Generic authentication middleware for MCP that enforces OAuth token verification.
  * Uses the fixed getPRMUrl function (without the /mcp suffix bug from @clerk/mcp-tools).
  *
- * @module auth/mcp-auth/mcp-auth
+ * @packageDocumentation auth/mcp-auth/mcp-auth
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';

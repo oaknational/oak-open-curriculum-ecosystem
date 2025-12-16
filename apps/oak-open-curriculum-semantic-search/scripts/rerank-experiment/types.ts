@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/types
- * @description Type definitions for rerank experiment.
+ * Type definitions for rerank experiment.
  */
 
 /** Result of a single experiment configuration. */

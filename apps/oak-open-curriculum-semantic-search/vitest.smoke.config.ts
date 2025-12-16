@@ -9,7 +9,6 @@
  * - "Smoke tests DO have side effects"
  * - "Smoke tests DO NOT contain mocks"
  *
- * @module vitest.smoke.config
  */
 
 import { mergeConfig } from 'vitest/config';

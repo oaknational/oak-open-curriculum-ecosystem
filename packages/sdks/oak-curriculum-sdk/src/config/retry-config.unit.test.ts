@@ -1,6 +1,6 @@
 /**
- * @module retry-config.unit.test
- * @description Unit tests for retry configuration with exponential backoff.
+ * Unit tests for retry configuration with exponential backoff.
+ *
  * Tests PURE functions only - no IO, no side effects, no mocks.
  */
 

@@ -6,8 +6,8 @@
  */
 
 /**
- * @module es-mappings
- * @description Barrel exports for all Elasticsearch index mappings.
+ * Barrel exports for all Elasticsearch index mappings.
+ *
  * Import mappings from this module to use in index creation.
  *
  * @example
@@ -19,6 +19,8 @@
  *   ...OAK_LESSONS_MAPPING,
  * });
  * ```
+ *
+ * @packageDocumentation
  */
 
 export { OAK_LESSONS_MAPPING } from './oak-lessons.js';

@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for Algebra topics.
  *
- * @module search-quality/ground-truth/algebra
  */
 
 import type { GroundTruthQuery } from './types';

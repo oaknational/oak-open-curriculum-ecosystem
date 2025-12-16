@@ -1,6 +1,5 @@
 /**
- * @module index-doc-exports
- * @description Generates the documentation re-exports module for search index documents.
+ * Generates the documentation re-exports module for search index documents.
  */
 
 const DOC_HEADER = `/**

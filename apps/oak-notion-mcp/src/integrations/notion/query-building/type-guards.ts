@@ -1,6 +1,5 @@
 /**
  * @fileoverview Type guards for Notion query types
- * @module notion/query-building
  */
 
 import type { McpPropertyFilter, McpSort } from '../../../types';

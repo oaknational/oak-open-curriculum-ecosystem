@@ -4,7 +4,7 @@
  * These tests verify the pure functions that extract data from MCP request bodies.
  * Per testing-strategy.md: Unit tests are for pure functions with NO IO, NO mocks.
  *
- * @module
+ * @packageDocumentation
  */
 
 import { describe, it, expect } from 'vitest';

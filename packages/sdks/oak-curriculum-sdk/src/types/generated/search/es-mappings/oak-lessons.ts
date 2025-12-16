@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-lessons
- * @description Elasticsearch mapping for the oak_lessons index.
+ * Elasticsearch mapping for the oak_lessons index.
+ *
  * Contains lesson documents with semantic embeddings for hybrid search.
  */
 

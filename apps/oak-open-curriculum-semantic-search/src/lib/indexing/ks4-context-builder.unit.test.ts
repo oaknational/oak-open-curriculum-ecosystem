@@ -5,7 +5,6 @@
  * The tests specify the desired behaviour for building UnitContextMap from
  * sequence traversal data.
  *
- * @module ks4-context-builder.unit.test
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 

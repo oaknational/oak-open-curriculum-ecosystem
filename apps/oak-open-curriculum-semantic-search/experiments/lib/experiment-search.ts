@@ -1,7 +1,6 @@
 /**
  * Search functions for hybrid superiority experiments.
  *
- * @module experiments/lib/experiment-search
  */
 
 import { esSearch } from '../../src/lib/elastic-http.js';

@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/result-analysis
- * @description Pure functions for analysing and formatting experiment results.
+ * Pure functions for analysing and formatting experiment results.
  */
 
 import type { AccumulatedMetrics, ExperimentResult, ResultComparison } from './types';

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Discovery resource handler for Notion workspace
- * @module @notion-mcp/resources/handlers
  */
 
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';

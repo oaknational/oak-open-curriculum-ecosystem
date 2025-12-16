@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for edge cases and natural language queries.
  *
- * @module search-quality/ground-truth/edge-cases
  */
 
 import type { GroundTruthQuery } from './types';

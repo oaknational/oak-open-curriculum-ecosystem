@@ -8,7 +8,6 @@
  * Run experiments with:
  *   pnpm vitest run -c vitest.experiment.config.ts
  *
- * @module vitest.experiment.config
  */
 
 import { mergeConfig } from 'vitest/config';

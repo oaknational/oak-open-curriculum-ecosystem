@@ -1,7 +1,7 @@
 /**
  * Experiment library exports.
  *
- * @module experiments/lib
+ * @packageDocumentation
  */
 
 export type {

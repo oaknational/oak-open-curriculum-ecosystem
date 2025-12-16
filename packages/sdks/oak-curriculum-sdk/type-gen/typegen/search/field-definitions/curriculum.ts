@@ -1,10 +1,10 @@
 /**
- * @module field-definitions/curriculum
- * @description Field definitions for curriculum-related search indexes (lessons, units,
- * sequences, threads). These are the core educational content indexes.
+ * Field definitions for curriculum-related search indexes (lessons, units,
+ * sequences, threads).
  *
- * By defining fields ONCE in this module, we ensure Zod schemas and ES mappings never
- * diverge, eliminating "mapper_parsing_exception" errors during bulk indexing.
+ * These are the core educational content indexes. By defining fields ONCE in this
+ * module, we ensure Zod schemas and ES mappings never diverge, eliminating
+ * "mapper_parsing_exception" errors during bulk indexing.
  *
  * @see {@link ../field-definitions/observability.ts} for observability index definitions
  */

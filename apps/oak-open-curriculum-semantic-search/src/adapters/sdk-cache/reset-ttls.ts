@@ -1,6 +1,5 @@
 /**
- * @module sdk-cache/reset-ttls
- * @description DEV TOOL: Reset TTLs on existing cached SDK responses.
+ * DEV TOOL: Reset TTLs on existing cached SDK responses.
  *
  * Updates TTLs on all cached entries to the current TTL setting with jitter,
  * without re-downloading the data. Useful when TTL configuration changes.

@@ -15,7 +15,7 @@
  * - `get-key-stages-subject-lessons` for lesson slugs
  * - `get-lessons-summary` for lesson details
  *
- * @module search-quality/ground-truth
+ * @packageDocumentation
  */
 
 export type { GroundTruthQuery } from './types';

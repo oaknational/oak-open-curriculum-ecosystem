@@ -1,6 +1,6 @@
 /**
- * @module field-definitions/unit-enrichment-fields
- * @description Shared unit enrichment fields for unit and rollup indexes.
+ * Shared unit enrichment fields for unit and rollup indexes.
+ *
  * These fields provide pedagogical context and curriculum alignment data.
  */
 

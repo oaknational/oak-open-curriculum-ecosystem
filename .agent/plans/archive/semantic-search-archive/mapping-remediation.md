@@ -186,7 +186,7 @@ export function createSequenceFacetsMappingModule(): string {
   return (
     HEADER +
     `/**
- * @module oak-sequence-facets
+ * @packageDocumentation oak-sequence-facets
  * @description Elasticsearch mapping for the oak_sequence_facets index.
  * Contains sequence facet data for navigation.
  */

@@ -5,7 +5,6 @@
  * - Oak JSON viewer widget for tool output rendering
  * - Documentation resources for the "start here" experience
  *
- * @module register-resources
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

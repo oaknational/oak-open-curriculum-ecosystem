@@ -6,7 +6,7 @@
  *
  * ## Architecture
  *
- * The module is organized into single-responsibility files:
+ * The module is organised into single-responsibility files:
  *
  * - `definitions.ts` - Aggregated tool definition map
  * - `types.ts` - Type definitions and interfaces
@@ -34,7 +34,7 @@
  * const result = await executor('search', { query: 'fractions' });
  * ```
  *
- * @module universal-tools
+ * @packageDocumentation
  */
 
 // Aggregated tool definitions

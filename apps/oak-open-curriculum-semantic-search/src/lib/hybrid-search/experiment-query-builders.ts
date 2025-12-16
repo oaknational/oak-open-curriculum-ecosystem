@@ -5,7 +5,6 @@
  * against hybrid search in Phase 3.0 experiments.
  *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
- * @module experiment-query-builders
  */
 
 import type { EsSearchRequest } from '../elastic-http';

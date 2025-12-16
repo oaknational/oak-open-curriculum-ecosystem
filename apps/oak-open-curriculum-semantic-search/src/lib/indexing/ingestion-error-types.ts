@@ -1,6 +1,5 @@
 /**
- * @module ingestion-error-types
- * @description Type definitions for ingestion error collection and reporting.
+ * Type definitions for ingestion error collection and reporting.
  * @see {@link ./ingestion-error-collector.ts} for the collector implementation
  */
 

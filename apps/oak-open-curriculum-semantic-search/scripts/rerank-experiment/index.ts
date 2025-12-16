@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
- * @module rerank-experiment
- * @description Reranker experiment script entry point.
+ * @packageDocumentation
+ * Reranker experiment script entry point.
  *
  * Compares two-way hybrid search (BM25 + ELSER) with and without reranking.
  * Uses two-way hybrid search per ADR-075 - dense vectors removed.

@@ -1,6 +1,5 @@
 /**
- * @module ingestion-error-helpers.unit.test
- * @description Unit tests for ingestion error helper pure functions.
+ * Unit tests for ingestion error helper pure functions.
  */
 
 import { describe, it, expect } from 'vitest';

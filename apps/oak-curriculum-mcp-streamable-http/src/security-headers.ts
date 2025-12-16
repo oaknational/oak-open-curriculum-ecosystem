@@ -11,7 +11,6 @@
  * These headers are safe to apply globally - they protect HTML responses
  * and are harmless for JSON responses consumed by MCP clients.
  *
- * @module security-headers
  */
 
 import helmet from 'helmet';

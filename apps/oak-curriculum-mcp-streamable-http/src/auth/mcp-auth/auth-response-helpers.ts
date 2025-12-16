@@ -1,7 +1,6 @@
 /**
  * Helper functions for sending auth responses.
  *
- * @module auth/mcp-auth/auth-response-helpers
  */
 
 import type { Request, Response } from 'express';

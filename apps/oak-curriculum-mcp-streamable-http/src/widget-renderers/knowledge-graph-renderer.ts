@@ -1,7 +1,6 @@
 /**
  * Knowledge Graph renderer for the widget.
  * Uses component-based architecture with nested <g> groups.
- * @module widget-renderers/knowledge-graph-renderer
  */
 
 import { createSection, createEdge } from './svg-components.js';

@@ -3,11 +3,9 @@
  *
  * This module defines the MCP tool metadata including:
  * - Tool description with usage guidance
- * - MCP annotations for behavior hints
+ * - MCP annotations for behaviour hints
  * - OpenAI Apps SDK _meta fields for invocation status
  * - JSON Schema for tool inputs
- *
- * @module aggregated-search/tool-definition
  */
 
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';

@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-zero-hit-telemetry
- * @description Elasticsearch mapping for the oak_zero_hit_telemetry index.
+ * Elasticsearch mapping for the oak_zero_hit_telemetry index.
+ *
  * Tracks zero-result search queries for content gap analysis.
  */
 

@@ -12,8 +12,6 @@
  *
  * @remarks This is authored domain knowledge that complements the OpenAPI schema.
  * The graph captures relationships that are implied but not explicit in the API.
- *
- * @module knowledge-graph-data
  */
 
 /**

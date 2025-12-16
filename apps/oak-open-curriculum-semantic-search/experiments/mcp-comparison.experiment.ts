@@ -8,7 +8,6 @@
  * - Lesson hybrid search: BM25 (multi_match) + ELSER (semantic on full transcript)
  * - Unit hybrid search: BM25 + ELSER (semantic on rollup text)
  *
- * @module experiments/mcp-comparison
  */
 
 import { config as dotenvConfig } from 'dotenv';

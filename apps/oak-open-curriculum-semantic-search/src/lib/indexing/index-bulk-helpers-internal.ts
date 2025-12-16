@@ -1,6 +1,5 @@
 /**
- * @module index-bulk-helpers-internal
- * @description Internal helpers for building Elasticsearch bulk operations.
+ * Internal helpers for building Elasticsearch bulk operations.
  *
  * KS4 metadata denormalisation is handled by passing a UnitContextMap through
  * to the document creation functions per ADR-080.

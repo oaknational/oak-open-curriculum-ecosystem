@@ -2,8 +2,6 @@
  * Exam board synonyms.
  *
  * Maps canonical exam board slugs to alternative terms users might use.
- *
- * @module synonyms/exam-boards
  */
 
 export const examBoardSynonyms = {

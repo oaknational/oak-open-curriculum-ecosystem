@@ -1,13 +1,12 @@
 /**
- * @module field-definitions
- * @description Aggregated field definitions for all search indexes.
+ * Aggregated field definitions for all search indexes.
  *
- * This module re-exports field definitions from specialized modules:
+ * This module re-exports field definitions from specialised modules:
  * - **curriculum**: Educational content indexes (lessons, units, sequences, threads)
  * - **reference**: Entity metadata indexes (subjects, key stages, glossary)
- * - **observability**: System behavior indexes (meta, zero-hit telemetry)
+ * - **observability**: System behaviour indexes (meta, zero-hit telemetry)
  *
- * By organizing field definitions into separate concerns, we maintain clarity
+ * By organising field definitions into separate concerns, we maintain clarity
  * about the purpose of each index while preserving backward compatibility for
  * code that imports from this barrel module.
  *
@@ -30,6 +29,8 @@
  * import { REF_SUBJECTS_INDEX_FIELDS } from './field-definitions/reference.js';
  * import { META_INDEX_FIELDS } from './field-definitions/observability.js';
  * ```
+ *
+ * @packageDocumentation
  */
 
 // Re-export shared types

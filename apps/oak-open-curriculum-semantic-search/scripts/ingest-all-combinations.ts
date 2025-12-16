@@ -1,15 +1,14 @@
 #!/usr/bin/env npx tsx
 /* eslint-disable max-lines-per-function, max-statements, complexity, max-lines */
 /**
- * @module ingest-all-combinations
- * @description Systematically ingest all combinations of subjects, keystages, and indexes.
+ * Systematically ingest all combinations of subjects, keystages, and indexes.
  * Tracks progress and can resume after interruptions or failures.
  *
  * Usage:
- *   pnpm ingest:all              # Run all combinations
- *   pnpm ingest:all --resume     # Resume from last checkpoint
- *   pnpm ingest:all --dry-run    # Preview without ingesting
- *   pnpm ingest:all --reset      # Reset progress and start fresh
+ *  pnpm ingest:all              # Run all combinations
+ *  pnpm ingest:all --resume     # Resume from last checkpoint
+ *  pnpm ingest:all --dry-run    # Preview without ingesting
+ *  pnpm ingest:all --reset      # Reset progress and start fresh
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';

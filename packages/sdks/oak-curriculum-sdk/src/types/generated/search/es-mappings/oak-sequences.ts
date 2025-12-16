@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-sequences
- * @description Elasticsearch mapping for the oak_sequences index.
+ * Elasticsearch mapping for the oak_sequences index.
+ *
  * Contains programme sequence documents for navigation and search.
  */
 

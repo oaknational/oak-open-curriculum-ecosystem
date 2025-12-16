@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/sequences-overrides
- * @description Field overrides for the oak_sequences index.
+ * Field overrides for the oak_sequences index.
  */
 
 import type { EsFieldMapping } from '../es-field-config.js';

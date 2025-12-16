@@ -3,7 +3,6 @@
  *
  * Unit slugs verified against Oak API Maths KS4 units (2025-12-11).
  *
- * @module search-quality/ground-truth/units/statistics
  */
 
 import type { UnitGroundTruthQuery } from './types';

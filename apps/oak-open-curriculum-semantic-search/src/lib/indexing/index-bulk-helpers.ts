@@ -1,6 +1,5 @@
 /**
- * @module index-bulk-helpers
- * @description Helpers for building Elasticsearch bulk operations.
+ * Helpers for building Elasticsearch bulk operations.
  *
  * KS4 metadata denormalisation is handled by passing a UnitContextMap through
  * the document building functions, which decorates lessons and units with

@@ -4,7 +4,6 @@
  * This function generates the canonical MCP resource URL that should be
  * present in the JWT's `aud` (audience) claim per RFC 8707.
  *
- * @module auth/mcp-auth/get-mcp-resource-url
  */
 
 /**

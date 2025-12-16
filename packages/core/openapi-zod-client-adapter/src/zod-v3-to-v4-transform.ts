@@ -8,9 +8,14 @@
  * - Import path: kept as `"zod"` (consuming packages have `"zod": "^4"`)
  * - Type in imports: `ZodSchema` → `ZodType`
  * - Standalone type usage: `ZodSchema` → `ZodType`
- * - Method: `.passthrough()` → `.loose()`
+ * - `.passthrough()` removed: enforces strict validation (unknown keys rejected)
  * - Zodios import removal: completely removed @zodios/core dependency
  * - Zodios dead code removal: `export const api`, `createApiClient`
+ *
+ * Strict schema enforcement:
+ * - `.passthrough()` is REMOVED to ensure unknown keys cause validation errors
+ * - Combined with `strictObjects: true` in generator options, this ensures
+ *   schemas use `.strict()` only - fail fast, never silently ignore keys
  *
  * @packageDocumentation
  */
@@ -41,8 +46,12 @@ export function transformZodV3ToV4(zodV3Output: string): string {
   // 2. Transform standalone ZodSchema usage to ZodType (not in imports)
   result = result.replace(/\bZodSchema\b/g, 'ZodType');
 
-  // 3. Transform deprecated Zod v3 methods
-  result = result.replace(/\.passthrough\(\)/g, '.loose()');
+  // 3. Remove .passthrough() - we want strict validation, not loose parsing
+  // With strictObjects: true, openapi-zod-client produces .strict() but may also add
+  // .passthrough() for nested objects with additionalProperties not explicitly false.
+  // The combination .strict().passthrough() is contradictory - we want only .strict().
+  // Note: .passthrough() is Zod v3 syntax; in v4 it's .loose() but we remove it entirely.
+  result = result.replace(/\.passthrough\(\)/g, '');
 
   // 4. Remove entire Zodios import (we don't use @zodios/core types to avoid Zod v3 conflicts)
   result = result.replace(

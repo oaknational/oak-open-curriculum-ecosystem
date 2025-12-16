@@ -43,7 +43,7 @@
  * @see ADR-061 - Widget Call-to-Action System
  *
  * @packageDocumentation
- * @module widget-cta
+ * @packageDocumentation
  */
 
 export type { CtaConfig } from './types.js';

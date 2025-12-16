@@ -1,7 +1,6 @@
 /**
  * KS4 context builder for denormalising tier, exam board, and exam subject metadata.
  *
- * @module ks4-context-builder
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  */
 

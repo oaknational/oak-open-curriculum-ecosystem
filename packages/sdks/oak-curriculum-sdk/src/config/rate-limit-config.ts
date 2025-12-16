@@ -1,7 +1,8 @@
 /**
- * @module rate-limit-config
- * @description Configuration for SDK request rate limiting.
+ * Configuration for SDK request rate limiting.
+ *
  * Pure functions for testability - no side effects.
+ *
  * @public
  */
 

@@ -177,7 +177,6 @@ export const schemaBase = {
                         "httpStatus",
                         "path"
                       ],
-                      "additionalProperties": true,
                       "properties": {
                         "code": {
                           "type": "string",
@@ -195,22 +194,13 @@ export const schemaBase = {
                           "description": "Identifier of the upstream operation emitting the error."
                         },
                         "zodError": {
-                          "description": "Optional validation payload describing schema mismatches. Present when the API returns validation metadata.",
-                          "anyOf": [
-                            {
-                              "type": "object",
-                              "additionalProperties": true
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ],
+                          "description": "Optional validation payload describing schema mismatches. Always null for 404 responses.",
+                          "type": "null",
                           "example": null
                         }
                       }
                     }
-                  },
-                  "additionalProperties": true
+                  }
                 },
                 "example": {
                   "message": "Transcript not available for this query",

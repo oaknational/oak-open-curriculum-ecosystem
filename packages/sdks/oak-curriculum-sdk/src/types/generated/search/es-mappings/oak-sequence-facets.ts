@@ -6,10 +6,9 @@
  */
 
 /**
- * @module oak-sequence-facets
- * @description Elasticsearch mapping for the oak_sequence_facets index.
- * Contains sequence facet data for navigation and filtering.
+ * Elasticsearch mapping for the oak_sequence_facets index.
  *
+ * Contains sequence facet data for navigation and filtering.
  * Generated from SEQUENCE_FACETS_INDEX_FIELDS at type-gen time.
  */
 

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Field-specific validation functions
- * @module notion/query-building
  */
 
 import type { McpPropertyFilter, McpSort } from '../../../types';

@@ -1,6 +1,5 @@
 /**
- * @module thread-document-builder
- * @description Creates Elasticsearch documents for the oak_threads index.
+ * Creates Elasticsearch documents for the oak_threads index.
  *
  * Threads represent curriculum progressions (e.g., 'Number', 'Algebra', 'Geometry')
  * that span multiple units and years. They provide conceptual navigation through
@@ -37,10 +36,10 @@ export interface CreateThreadDocumentParams {
  * @example
  * ```typescript
  * const doc = createThreadDocument({
- *   threadSlug: 'number-multiplication-and-division',
- *   threadTitle: 'Number: Multiplication and division',
- *   subjectSlugs: ['maths'],
- *   unitCount: 15,
+ *  threadSlug: 'number-multiplication-and-division',
+ *  threadTitle: 'Number: Multiplication and division',
+ *  subjectSlugs: ['maths'],
+ *  unitCount: 15,
  * });
  * ```
  *

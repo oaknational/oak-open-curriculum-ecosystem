@@ -6,7 +6,6 @@
  *
  * This is a pure function with no side effects, making it ideal for unit testing.
  *
- * @module auth/mcp-auth/verify-clerk-token.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

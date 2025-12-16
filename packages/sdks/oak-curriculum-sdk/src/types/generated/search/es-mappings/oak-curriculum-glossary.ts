@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-curriculum-glossary
- * @description Elasticsearch mapping for the oak_curriculum_glossary index.
+ * Elasticsearch mapping for the oak_curriculum_glossary index.
+ *
  * Contains curriculum term definitions with semantic search capabilities.
  */
 

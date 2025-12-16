@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/threads-overrides
- * @description Field overrides for the oak_threads index.
+ * Field overrides for the oak_threads index.
  *
  * Threads represent curriculum progressions (e.g., Number, Algebra, Geometry)
  * that span multiple units and years. They provide a way to navigate the

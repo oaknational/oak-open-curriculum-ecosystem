@@ -1,7 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * @module ingest-cli-args
- * @description CLI argument parsing for live data ingestion. Handles
+ * CLI argument parsing for live data ingestion. Handles
  * parsing of subject, keystage, and flag arguments with validation.
  */
 

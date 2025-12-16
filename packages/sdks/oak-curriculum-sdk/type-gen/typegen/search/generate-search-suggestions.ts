@@ -22,8 +22,12 @@ function createSuggestionsModule(): string {
     `  .object({\n` +
     `    sequenceId: z.string().min(1).optional(),\n` +
     `    phaseSlug: z.string().min(1).optional(),\n` +
+    `    unitSlug: z.string().min(1).optional(),\n` +
+    `    years: z.array(z.union([z.number().int(), z.string()])).optional(),\n` +
+    `    keyStages: z.array(z.string().min(1)).optional(),\n` +
+    `    ks4OptionSlug: z.string().min(1).optional(),\n` +
     `  })\n` +
-    `  .catchall(z.unknown())\n` +
+    `  .strict()\n` +
     `  .default({});\n\n` +
     `/** Zod schema describing an individual suggestion entry. */\n` +
     `export const SearchSuggestionItemSchema = z\n` +

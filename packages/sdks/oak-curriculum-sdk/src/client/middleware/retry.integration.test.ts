@@ -1,6 +1,6 @@
 /**
- * @module retry.integration.test
- * @description Integration tests for retry middleware with exponential backoff.
+ * Integration tests for retry middleware with exponential backoff.
+ *
  * Tests how the middleware works with the openapi-fetch pattern.
  * NO network IO, simple mock fetch injected as argument.
  */

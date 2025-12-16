@@ -1,6 +1,5 @@
 /**
- * @module field-definitions/reference
- * @description Field definitions for reference data indexes.
+ * Field definitions for reference data indexes.
  *
  * Reference indexes store metadata about curriculum entities (subjects, key stages, etc.)
  * that are used for navigation, autocomplete, and enrichment of primary content indexes.

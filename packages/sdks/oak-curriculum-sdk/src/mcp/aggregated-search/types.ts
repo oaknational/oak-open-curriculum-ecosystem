@@ -1,7 +1,5 @@
 /**
  * Type definitions for the aggregated search tool.
- *
- * @module aggregated-search/types
  */
 
 import type { KeyStage, Subject } from '../../types/generated/api-schema/path-parameters.js';

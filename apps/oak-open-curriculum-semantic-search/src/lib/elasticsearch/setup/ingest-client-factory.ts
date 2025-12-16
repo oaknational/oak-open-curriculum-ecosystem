@@ -1,6 +1,5 @@
 /**
- * @module ingest-client-factory
- * @description Factory for creating Oak SDK clients with optional Redis caching.
+ * Factory for creating Oak SDK clients with optional Redis caching.
  * Handles cache status detection and appropriate client initialization.
  */
 

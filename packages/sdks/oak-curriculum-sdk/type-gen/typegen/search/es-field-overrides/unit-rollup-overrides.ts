@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/unit-rollup-overrides
- * @description Field overrides for the oak_unit_rollup index.
+ * Field overrides for the oak_unit_rollup index.
  *
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */

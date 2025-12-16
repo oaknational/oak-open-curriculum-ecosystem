@@ -1,6 +1,5 @@
 /**
- * @module redis-connection
- * @description Redis connection helpers for SDK caching.
+ * Redis connection helpers for SDK caching.
  */
 
 import Redis from 'ioredis';

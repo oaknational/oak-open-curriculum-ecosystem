@@ -1,6 +1,5 @@
 /**
- * @module oak-adapter-sdk-threads
- * @description Thread-related API client functions.
+ * Thread-related API client functions.
  *
  * Separated from oak-adapter-sdk.ts to keep file size manageable.
  */

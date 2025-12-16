@@ -7,7 +7,6 @@
  * This is a proof-of-concept test per the plan to verify the MCP SDK
  * behavior before refactoring the production code.
  *
- * @module register-prompts.integration.test
  */
 
 import { describe, it, expect } from 'vitest';

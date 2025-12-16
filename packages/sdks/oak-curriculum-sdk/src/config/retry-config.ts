@@ -1,7 +1,8 @@
 /**
- * @module retry-config
- * @description Configuration for SDK request retry with exponential backoff.
+ * Configuration for SDK request retry with exponential backoff.
+ *
  * Pure functions for testability - no side effects.
+ *
  * @public
  */
 

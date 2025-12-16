@@ -8,7 +8,7 @@
  * checkMcpClientAuth needs access to the Express request to validate tokens.
  * Without proper setRequestContext wiring, getRequestContext returns undefined.
  *
- * @module
+ * @packageDocumentation
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';

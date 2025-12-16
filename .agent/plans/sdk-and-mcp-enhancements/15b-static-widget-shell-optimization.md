@@ -124,7 +124,7 @@ AFTER (Shell + CDN):
  * 2. Shell references external JS/CSS with absolute URLs
  * 3. Static assets are served from /widget/
  *
- * @module
+ * @packageDocumentation
  */
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
@@ -219,7 +219,7 @@ describe('Widget Shell Architecture (Integration)', () => {
  *
  * Pure function tests with no IO, no side effects, no mocks.
  *
- * @module
+ * @packageDocumentation
  */
 import { describe, it, expect } from 'vitest';
 import { getWidgetShellHtml, setWidgetAssetsBaseUrl } from './widget-shell.js';
@@ -295,7 +295,7 @@ describe('setWidgetAssetsBaseUrl', () => {
  * The shell is served as `text/html+skybridge` which triggers ChatGPT
  * to inject the `window.openai` API.
  *
- * @module
+ * @packageDocumentation
  * @see research/openai-app-ui.research.md for architecture details
  */
 
@@ -380,7 +380,7 @@ export function getWidgetShellHtml(): string {
  *
  * Bundled to `public/widget/oak-viewer.js` at build time.
  *
- * @module
+ * @packageDocumentation
  */
 
 // Extract from current WIDGET_SCRIPT content

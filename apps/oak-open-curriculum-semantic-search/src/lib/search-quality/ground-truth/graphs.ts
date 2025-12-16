@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for Graphs topics.
  *
- * @module search-quality/ground-truth/graphs
  */
 
 import type { GroundTruthQuery } from './types';

@@ -1,9 +1,8 @@
 /**
- * @module field-definitions/types
- * @description Shared type definitions for field-based index generation.
+ * Shared type definitions for field-based index generation.
  *
  * This module defines the core types used across both curriculum and observability
- * field definitions. By centralizing these types, we ensure consistent field
+ * field definitions. By centralising these types, we ensure consistent field
  * definition structure across all search indexes.
  */
 

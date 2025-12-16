@@ -69,7 +69,7 @@ Two auth layers require updating:
 /**
  * Unit tests for public resource detection.
  * Pure function tests with no IO, no side effects, no mocks.
- * @module
+ * @packageDocumentation
  */
 import { describe, it, expect } from 'vitest';
 import { isPublicResourceUri } from './public-resources.js';
@@ -138,7 +138,7 @@ describe('isPublicResourceUri', () => {
  *
  * Data-fetching tools (tools/call) still require authentication.
  *
- * @module
+ * @packageDocumentation
  * @see ADR-057: Selective Authentication for MCP Resources
  */
 
@@ -252,7 +252,7 @@ describe('public resource authentication bypass', () => {
  * Tests that the router correctly applies or skips auth middleware
  * based on MCP method and resource/tool security metadata.
  *
- * @module
+ * @packageDocumentation
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';

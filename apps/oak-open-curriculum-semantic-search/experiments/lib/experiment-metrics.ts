@@ -1,7 +1,6 @@
 /**
  * Metrics collection and aggregation for hybrid superiority experiments.
  *
- * @module experiments/lib/experiment-metrics
  */
 
 import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.js';

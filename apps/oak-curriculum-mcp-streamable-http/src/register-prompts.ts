@@ -16,7 +16,6 @@
  * @see {@link MCP_PROMPTS} - Prompt definitions from SDK
  * @see https://modelcontextprotocol.io/specification/draft/server/prompts
  *
- * @module register-prompts
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

@@ -4,7 +4,6 @@
  * Generates a complete, ready-to-serve HTML file with all JavaScript embedded.
  * Writes to disk so it can be inspected and served as a static file.
  *
- * @module widget-file-generator
  */
 
 import { writeFile, mkdir } from 'fs/promises';

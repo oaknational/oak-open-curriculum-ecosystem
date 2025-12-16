@@ -11,7 +11,6 @@
  *
  * The correct behavior is to always return the canonical path without any suffix.
  *
- * @module auth/mcp-auth/get-prm-url
  * @see {@link https://datatracker.ietf.org/doc/html/rfc9470 | RFC 9470 - OAuth 2.0 Protected Resource Metadata}
  */
 

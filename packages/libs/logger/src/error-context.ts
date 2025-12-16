@@ -1,11 +1,9 @@
 /**
- * Error context enrichment utilities
+ * Error context enrichment utilities.
  *
  * Provides functionality to enrich Error objects with additional context
  * such as correlation IDs, timing information, and request/tool metadata.
  * This enables better debugging and tracing in production environments.
- *
- * @module error-context
  */
 
 import type { Duration } from './timing';

@@ -2,7 +2,6 @@
  * Widget Preview Server with ChatGPT environment emulation
  * Watch `src/widget-renderers/*.ts` - save and refresh to see changes.
  * Run: pnpm widget:preview, then visit http://localhost:4580/widget
- * @module scripts/widget-preview-server
  */
 
 import { watch } from 'chokidar';

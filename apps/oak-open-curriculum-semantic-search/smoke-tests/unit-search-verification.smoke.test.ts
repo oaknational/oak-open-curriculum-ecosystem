@@ -3,7 +3,6 @@
  *
  * Verifies that unit hybrid search uses BM25 + ELSER two-way RRF.
  *
- * @module smoke-tests/unit-search-verification
  *
  * **Classification**: SMOKE TEST
  * - Makes HTTP calls to a running server (network IO)

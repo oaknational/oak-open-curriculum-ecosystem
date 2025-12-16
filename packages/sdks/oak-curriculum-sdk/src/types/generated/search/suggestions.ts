@@ -16,8 +16,12 @@ export const SearchSuggestionContextSchema = z
   .object({
     sequenceId: z.string().min(1).optional(),
     phaseSlug: z.string().min(1).optional(),
+    unitSlug: z.string().min(1).optional(),
+    years: z.array(z.union([z.number().int(), z.string()])).optional(),
+    keyStages: z.array(z.string().min(1)).optional(),
+    ks4OptionSlug: z.string().min(1).optional(),
   })
-  .catchall(z.unknown())
+  .strict()
   .default({});
 
 /** Zod schema describing an individual suggestion entry. */

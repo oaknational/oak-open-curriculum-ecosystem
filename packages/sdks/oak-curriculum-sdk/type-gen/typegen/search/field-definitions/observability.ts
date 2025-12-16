@@ -1,15 +1,14 @@
 /**
- * @module field-definitions/observability
- * @description Field definitions for observability and operational indexes.
+ * Field definitions for observability and operational indexes.
  *
- * This module contains field definitions for indexes that track system behavior
+ * This module contains field definitions for indexes that track system behaviour
  * and operational data:
  * - **oak_meta**: Ingestion metadata and version tracking
  * - **oak_zero_hit_telemetry**: Zero-result search queries for analysis
  *
  * Observability indexes are distinguished from curriculum indexes:
  * - **Curriculum indexes**: Store educational content (lessons, units, sequences, threads)
- * - **Observability indexes**: Store system behavior and operational data (metrics, logs, telemetry)
+ * - **Observability indexes**: Store system behaviour and operational data (metrics, logs, telemetry)
  *
  * These indexes are critical for:
  * - Audit trails (when data was ingested, what was included)

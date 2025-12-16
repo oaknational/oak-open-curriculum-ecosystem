@@ -1,6 +1,5 @@
 /**
- * @module es-field-overrides/common
- * @description Shared helpers and constants for ES field override configurations.
+ * Shared helpers and constants for ES field override configurations.
  *
  * This module provides reusable field configuration builders and common constants
  * used across all index override modules.

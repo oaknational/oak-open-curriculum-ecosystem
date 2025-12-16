@@ -1,6 +1,6 @@
 /**
- * @module result
- * @description Result type for explicit error handling without exceptions.
+ * Result type for explicit error handling without exceptions.
+ *
  * Forces handling of both success and error cases at compile time.
  *
  * @example
@@ -21,6 +21,8 @@
  *   console.error('Error:', result.error);
  * }
  * ```
+ *
+ * @packageDocumentation
  */
 
 /**

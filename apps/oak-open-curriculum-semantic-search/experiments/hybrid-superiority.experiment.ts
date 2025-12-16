@@ -4,7 +4,6 @@
  * Measures whether two-way hybrid (BM25 + ELSER) provides measurable benefit
  * over either retrieval method alone for lessons and units.
  *
- * @module experiments/hybrid-superiority
  *
  * **Classification**: EXPERIMENT (not a test)
  * - Makes HTTP calls to Elasticsearch (network IO)

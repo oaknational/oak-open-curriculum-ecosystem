@@ -1,8 +1,7 @@
 /**
- * @module generate-es-mappings
- * @description Generator for Elasticsearch index mapping TypeScript modules.
- * Produces typed ES mapping objects that can be imported by the search app.
+ * Generator for Elasticsearch index mapping TypeScript modules.
  *
+ * Produces typed ES mapping objects that can be imported by the search app.
  * This generator creates mapping modules for all search indexes:
  * - oak_lessons: Lesson documents with semantic embeddings
  * - oak_units: Unit metadata
@@ -41,8 +40,8 @@ function createEsMappingsIndexModule(): string {
   return (
     HEADER +
     `/**
- * @module es-mappings
- * @description Barrel exports for all Elasticsearch index mappings.
+ * Barrel exports for all Elasticsearch index mappings.
+ *
  * Import mappings from this module to use in index creation.
  *
  * @example
@@ -54,6 +53,8 @@ function createEsMappingsIndexModule(): string {
  *   ...OAK_LESSONS_MAPPING,
  * });
  * \`\`\`
+ *
+ * @packageDocumentation
  */
 
 export { OAK_LESSONS_MAPPING } from './oak-lessons.js';

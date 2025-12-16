@@ -1,6 +1,5 @@
 /**
- * @module logger
- * @description Shared semantic search logger instance with configurable log level.
+ * Shared semantic search logger instance with configurable log level.
  * Centralising creation avoids multiple logger bindings in Next.js.
  * Uses console for browser compatibility.
  *
@@ -89,7 +88,7 @@ function getLoggers(): NonNullable<typeof loggerCache> {
  * ```typescript
  * // In CLI entry point
  * if (args.verbose) {
- *   setLogLevel('DEBUG');
+ *  setLogLevel('DEBUG');
  * }
  * ```
  */

@@ -3,7 +3,6 @@
  *
  * TDD approach: These tests were written FIRST to specify the desired behaviour.
  *
- * @module thread-document-builder.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

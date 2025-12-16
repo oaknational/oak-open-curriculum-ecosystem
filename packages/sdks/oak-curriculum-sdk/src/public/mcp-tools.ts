@@ -9,7 +9,7 @@
  *
  * Also re-exports core client types needed by MCP applications.
  *
- * @module @oaknational/oak-curriculum-sdk/public/mcp-tools
+ * @packageDocumentation
  */
 
 // Re-export core client types needed by MCP apps

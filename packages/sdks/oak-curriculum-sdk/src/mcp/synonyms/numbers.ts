@@ -3,8 +3,6 @@
  *
  * Maps number words, digits, and mathematical terms to alternatives.
  * Critical for semantic search matching (e.g., "x squared" → "quadratic").
- *
- * @module synonyms/numbers
  */
 
 export const numberSynonyms = {

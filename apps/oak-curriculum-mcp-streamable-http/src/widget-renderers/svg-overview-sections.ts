@@ -1,7 +1,6 @@
 /**
  * Overview SVG Section Configurations.
  * Edges are dynamically calculated from node centers.
- * @module widget-renderers/svg-overview-sections
  */
 import type { SectionConfig, EdgeConfig } from './svg-components.js';
 import { createEdgeBetweenNodes } from './svg-components.js';

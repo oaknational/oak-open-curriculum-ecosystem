@@ -7,8 +7,6 @@
  *
  * @see ADR-058 for the dual-exposure pattern
  * @see knowledge-graph-data.ts for the graph data structure
- *
- * @module knowledge-graph-resource
  */
 
 import { conceptGraph } from './knowledge-graph-data.js';

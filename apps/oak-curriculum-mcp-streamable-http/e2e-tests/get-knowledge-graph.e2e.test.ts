@@ -7,7 +7,6 @@
  * - The resource appears in resources/list
  * - The resource returns valid JSON
  *
- * @module get-knowledge-graph.e2e.test
  */
 
 import request from 'supertest';

@@ -4,7 +4,7 @@
  * This module provides Clerk-integrated authentication middleware for MCP,
  * using the fixed mcpAuth implementation (without the /mcp suffix bug).
  *
- * @module auth/mcp-auth/mcp-auth-clerk
+ * @packageDocumentation auth/mcp-auth/mcp-auth-clerk
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';

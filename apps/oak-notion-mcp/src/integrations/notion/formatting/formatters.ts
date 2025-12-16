@@ -1,6 +1,5 @@
 /**
  * @fileoverview Main formatting functions for Notion data
- * @module notion/formatting
  */
 
 import type {

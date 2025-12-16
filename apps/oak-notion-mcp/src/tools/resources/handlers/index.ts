@@ -1,6 +1,6 @@
 /**
  * @fileoverview Resource handlers public API
- * @module @notion-mcp/resources/handlers
+ * @packageDocumentation
  */
 
 import type {

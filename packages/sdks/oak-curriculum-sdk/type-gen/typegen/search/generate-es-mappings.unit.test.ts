@@ -246,8 +246,9 @@ describe('generated code quality', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
     const lessonsContent = files['../search/es-mappings/oak-lessons.ts'];
 
-    expect(lessonsContent).toContain('@module');
-    expect(lessonsContent).toContain('@description');
+    // Canonical TSDoc: summary as first paragraph, no @description tag
+    expect(lessonsContent).toContain('Elasticsearch mapping for the oak_lessons index');
+    expect(lessonsContent).not.toContain('@description');
   });
 
   it('uses .js file extension in imports', () => {

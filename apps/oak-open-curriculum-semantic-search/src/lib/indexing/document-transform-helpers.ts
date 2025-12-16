@@ -4,7 +4,6 @@
  * These functions extract and transform fields from typed SDK summaries
  * for Elasticsearch document creation.
  *
- * @module document-transform-helpers
  */
 
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';

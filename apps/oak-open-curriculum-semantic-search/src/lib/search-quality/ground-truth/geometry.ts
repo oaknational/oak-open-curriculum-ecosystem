@@ -1,7 +1,6 @@
 /**
  * Ground truth queries for Geometry & Trigonometry topics.
  *
- * @module search-quality/ground-truth/geometry
  */
 
 import type { GroundTruthQuery } from './types';

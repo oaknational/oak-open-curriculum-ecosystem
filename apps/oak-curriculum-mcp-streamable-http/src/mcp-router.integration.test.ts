@@ -6,7 +6,7 @@
  *
  * Uses simple mocks injected as arguments - no complex mock setup.
  *
- * @module
+ * @packageDocumentation
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';

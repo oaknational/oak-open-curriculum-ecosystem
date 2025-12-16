@@ -1,6 +1,5 @@
 /**
- * @module ingestion-error-helpers
- * @description Pure helper functions for ingestion error processing.
+ * Pure helper functions for ingestion error processing.
  * @see {@link ./ingestion-error-collector.ts} for the collector implementation
  */
 

@@ -1,6 +1,6 @@
 /**
- * @module es-field-config
- * @description Configuration for mapping Zod schema types to Elasticsearch field mappings.
+ * Configuration for mapping Zod schema types to Elasticsearch field mappings.
+ *
  * Provides pure functions for converting Zod type descriptors to ES field mappings.
  *
  * @example

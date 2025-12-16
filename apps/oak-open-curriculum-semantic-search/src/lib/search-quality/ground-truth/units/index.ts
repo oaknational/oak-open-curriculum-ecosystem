@@ -16,7 +16,7 @@
  * - 1: Marginally relevant
  * - 0: Not relevant (unlisted)
  *
- * @module search-quality/ground-truth/units
+ * @packageDocumentation
  */
 
 export type { UnitGroundTruthQuery } from './types';

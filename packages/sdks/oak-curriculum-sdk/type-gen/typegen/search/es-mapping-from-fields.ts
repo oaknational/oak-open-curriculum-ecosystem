@@ -1,6 +1,5 @@
 /**
- * @module es-mapping-from-fields
- * @description Pure functions for generating ES field mappings from field definitions.
+ * Pure functions for generating ES field mappings from field definitions.
  *
  * This module converts the shared field definitions into Elasticsearch field mappings.
  * It is used by the ES mapping generators to produce index mappings that are guaranteed

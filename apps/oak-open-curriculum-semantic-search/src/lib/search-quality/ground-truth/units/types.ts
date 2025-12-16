@@ -1,7 +1,6 @@
 /**
  * Ground truth type definitions for unit search.
  *
- * @module search-quality/ground-truth/units/types
  */
 
 /**

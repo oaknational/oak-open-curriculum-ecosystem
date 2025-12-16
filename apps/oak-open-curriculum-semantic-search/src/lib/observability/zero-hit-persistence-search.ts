@@ -1,6 +1,5 @@
 /**
  * Zero-hit telemetry search and parsing using ES SDK types.
- * @module zero-hit-persistence-search
  */
 import { z } from 'zod';
 import type { estypes } from '@elastic/elasticsearch';

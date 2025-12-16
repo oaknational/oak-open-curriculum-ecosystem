@@ -1,6 +1,6 @@
 /**
- * @module rate-limit-config.unit.test
- * @description Unit tests for rate limit configuration.
+ * Unit tests for rate limit configuration.
+ *
  * Tests PURE functions only - no IO, no side effects, no mocks.
  */
 

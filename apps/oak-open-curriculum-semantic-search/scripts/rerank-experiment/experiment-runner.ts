@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/experiment-runner
- * @description Functions for running search experiments.
+ * Functions for running search experiments.
  *
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */

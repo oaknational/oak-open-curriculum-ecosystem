@@ -1,7 +1,6 @@
 /**
  * Logging functions for hybrid superiority experiments.
  *
- * @module experiments/lib/experiment-logging
  */
 
 import type { ContentTypeExperiment, ModeResults } from './experiment-types.js';

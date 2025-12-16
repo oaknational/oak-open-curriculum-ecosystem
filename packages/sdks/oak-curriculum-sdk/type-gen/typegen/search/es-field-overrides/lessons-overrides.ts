@@ -1,9 +1,8 @@
 /**
- * @module es-field-overrides/lessons-overrides
- * @description Field overrides for the oak_lessons index.
+ * Field overrides for the oak_lessons index.
  *
  * These overrides define ES-specific field configurations that cannot be automatically
- * derived from Zod types (e.g. text with analyzers, completion with contexts, semantic_text).
+ * derived from Zod types (e.g. text with analysers, completion with contexts, semantic_text).
  *
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */

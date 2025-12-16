@@ -1,6 +1,5 @@
 /**
- * @module sequence-bulk-helpers
- * @description Builds bulk operations for the oak_sequences index.
+ * Builds bulk operations for the oak_sequences index.
  *
  * Sequences represent curriculum programmes that span key stages.
  * This module creates Elasticsearch bulk index operations from sequence data
@@ -38,9 +37,9 @@ export interface BuildSequenceOpsParams {
  * @example
  * ```typescript
  * const sequenceOps = buildSequenceOps({
- *   subject: 'maths',
- *   sequences: subjectSequences,
- *   sequenceSources: sequenceSourcesMap,
+ *  subject: 'maths',
+ *  sequences: subjectSequences,
+ *  sequenceSources: sequenceSourcesMap,
  * });
  * ```
  *

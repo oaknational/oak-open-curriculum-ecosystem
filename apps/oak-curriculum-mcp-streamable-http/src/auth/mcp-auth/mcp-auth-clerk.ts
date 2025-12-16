@@ -4,7 +4,6 @@
  * This module provides Clerk-integrated authentication middleware for MCP,
  * returning HTTP 401 + WWW-Authenticate for auth failures per MCP spec.
  *
- * @module auth/mcp-auth/mcp-auth-clerk
  */
 
 import type { RequestHandler, Request } from 'express';

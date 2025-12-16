@@ -1,6 +1,5 @@
 /**
  * @fileoverview Query builder functions for Notion API
- * @module notion/query-building
  */
 
 import type {

@@ -1,6 +1,5 @@
 /**
  * @fileoverview Helper functions for formatters
- * @module notion/formatting
  */
 
 import type { Resource } from '../transformers';

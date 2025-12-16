@@ -3,7 +3,7 @@
  *
  * Shared test utilities for auth error interception testing.
  *
- * @module
+ * @packageDocumentation
  */
 
 import { vi } from 'vitest';

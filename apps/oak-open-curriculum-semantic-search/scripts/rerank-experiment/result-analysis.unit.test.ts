@@ -1,6 +1,5 @@
 /**
- * @module rerank-experiment/result-analysis.unit.test
- * @description Unit tests for experiment result analysis.
+ * Unit tests for experiment result analysis.
  */
 
 import { describe, it, expect } from 'vitest';

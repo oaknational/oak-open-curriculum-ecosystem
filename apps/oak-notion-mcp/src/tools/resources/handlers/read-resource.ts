@@ -1,6 +1,5 @@
 /**
  * @fileoverview Read resource handler for Notion resources
- * @module @notion-mcp/resources/handlers
  */
 
 import type { ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';

@@ -11,7 +11,6 @@
  *
  * This middleware runs BEFORE the MCP SDK, allowing proper HTTP 401 responses.
  *
- * @module auth/mcp-auth/mcp-auth
  */
 
 import type { RequestHandler, Request, Response, NextFunction } from 'express';

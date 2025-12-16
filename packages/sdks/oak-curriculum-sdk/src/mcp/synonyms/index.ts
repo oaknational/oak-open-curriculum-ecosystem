@@ -6,7 +6,7 @@
  * - Search app (Elasticsearch synonym expansion)
  * - Any other consumer needing term normalisation
  *
- * @module synonyms
+ * @packageDocumentation
  */
 
 import { educationalAcronymSynonyms, genericSynonyms } from './education.js';

@@ -1,6 +1,5 @@
 /**
- * @module ingestion-error-collector
- * @description Collects and reports errors/warnings during curriculum data ingestion.
+ * Collects and reports errors/warnings during curriculum data ingestion.
  *
  * @see {@link ./ingestion-error-types.ts} for type definitions
  * @see {@link ./ingestion-error-helpers.ts} for pure helper functions

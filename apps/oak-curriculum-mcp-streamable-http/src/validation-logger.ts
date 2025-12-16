@@ -3,7 +3,7 @@
  *
  * Utilities for logging tool validation failures with comprehensive context.
  *
- * @module
+ * @packageDocumentation
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

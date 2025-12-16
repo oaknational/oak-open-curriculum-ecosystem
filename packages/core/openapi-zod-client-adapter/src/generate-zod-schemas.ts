@@ -4,6 +4,10 @@
  * This module wraps the upstream generator and transforms output to Zod v4.
  * All Zod v3 artefacts are contained within this boundary and never escape.
  *
+ * **Strict Mode**: Generated schemas use `.strict()` to enforce that unknown
+ * properties cause validation errors, following the "fail fast" principle.
+ * Unknown keys are never silently ignored.
+ *
  * @packageDocumentation
  */
 
@@ -67,7 +71,7 @@ export async function generateZodSchemasFromOpenAPI(
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition
     openApiDoc as OpenAPIObject & { paths: PathsObject };
 
-  // Call openapi-zod-client - this generates Zod v3 code
+  // Call openapi-zod-client - this generates Zod v3 code with strict schemas
   const zodV3Output = await generateZodClientFromOpenAPI({
     openApiDoc: openApiDocWithPaths,
     templatePath,
@@ -77,6 +81,10 @@ export async function generateZodSchemasFromOpenAPI(
       shouldExportAllTypes: true,
       groupStrategy: 'none',
       withAlias: false,
+      // Enforce strict object validation: unknown properties cause errors (fail fast)
+      strictObjects: true,
+      // Disable .passthrough() - we want strict validation, not loose parsing
+      additionalPropertiesDefaultValue: false,
     },
   });
 

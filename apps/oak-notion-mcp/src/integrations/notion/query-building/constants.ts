@@ -1,6 +1,5 @@
 /**
  * @fileoverview Constants for Notion query building
- * @module notion/query-building
  */
 
 /**

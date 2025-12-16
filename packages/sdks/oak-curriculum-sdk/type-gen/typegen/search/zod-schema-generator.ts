@@ -1,6 +1,5 @@
 /**
- * @module zod-schema-generator
- * @description Pure functions for generating Zod schema code from field definitions.
+ * Pure functions for generating Zod schema code from field definitions.
  *
  * This module converts the shared field definitions into Zod schema TypeScript code.
  * It is used by the search index document generator to produce `SearchUnitsIndexDocSchema`

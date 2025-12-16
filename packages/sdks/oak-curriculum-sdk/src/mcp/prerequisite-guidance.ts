@@ -7,13 +7,11 @@
  * @remarks
  * The generated tools use DOMAIN_PREREQUISITE_GUIDANCE from the type-gen
  * module. Aggregated tools use these constants to maintain consistency
- * with generated tools while allowing customization where needed.
+ * with generated tools while allowing customisation where needed.
  *
  * Server instructions and context hints are now generated from the
  * AGENT_SUPPORT_TOOL_METADATA to ensure they always include all agent
  * support tools and their relationships.
- *
- * @module mcp/prerequisite-guidance
  */
 
 import {

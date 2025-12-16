@@ -214,6 +214,7 @@ describe('schema separation', () => {
         throw new Error('Expected schema object describing the 404 payload');
       }
 
+      // Strict schema: no additionalProperties: true - fail fast on unknown keys
       expect(schema).toStrictEqual({
         type: 'object',
         description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
@@ -234,7 +235,6 @@ describe('schema separation', () => {
             description:
               'Additional metadata describing the failure as emitted by the Oak API gateway.',
             required: ['code', 'httpStatus', 'path'],
-            additionalProperties: true,
             properties: {
               code: {
                 type: 'string',
@@ -253,14 +253,13 @@ describe('schema separation', () => {
               },
               zodError: {
                 description:
-                  'Optional validation payload describing schema mismatches. Present when the API returns validation metadata.',
-                anyOf: [{ type: 'object', additionalProperties: true }, { type: 'null' }],
+                  'Optional validation payload describing schema mismatches. Always null for 404 responses.',
+                type: 'null',
                 example: null,
               },
             },
           },
         },
-        additionalProperties: true,
       });
     });
 

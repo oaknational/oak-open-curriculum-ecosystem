@@ -1,7 +1,6 @@
 /**
  * Section Data Structures for Knowledge Graph SVG.
  * Re-exports section configurations from split module files.
- * @module widget-renderers/svg-section-data
  */
 
 export { OVERVIEW_SECTIONS, createOverviewEdges } from './svg-overview-sections.js';

@@ -1,6 +1,5 @@
 /**
- * @module sequence-document-builder
- * @description Creates Elasticsearch documents for the oak_sequences index.
+ * Creates Elasticsearch documents for the oak_sequences index.
  *
  * Sequences represent curriculum programmes (e.g., 'maths-secondary') that span
  * multiple key stages and contain ordered units.
@@ -47,15 +46,15 @@ export interface CreateSequenceDocumentParams {
  * @example
  * ```typescript
  * const doc = createSequenceDocument({
- *   sequenceSlug: 'maths-secondary',
- *   subjectSlug: 'maths',
- *   subjectTitle: 'Mathematics',
- *   phaseSlug: 'secondary',
- *   phaseTitle: 'Secondary',
- *   keyStages: ['ks3', 'ks4'],
- *   years: ['7', '8', '9', '10', '11'],
- *   unitSlugs: ['unit-1', 'unit-2'],
- *   categoryTitles: ['Algebra', 'Geometry'],
+ *  sequenceSlug: 'maths-secondary',
+ *  subjectSlug: 'maths',
+ *  subjectTitle: 'Mathematics',
+ *  phaseSlug: 'secondary',
+ *  phaseTitle: 'Secondary',
+ *  keyStages: ['ks3', 'ks4'],
+ *  years: ['7', '8', '9', '10', '11'],
+ *  unitSlugs: ['unit-1', 'unit-2'],
+ *  categoryTitles: ['Algebra', 'Geometry'],
  * });
  * ```
  *

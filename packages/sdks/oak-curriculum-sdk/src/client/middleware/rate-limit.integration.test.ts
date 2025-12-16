@@ -1,6 +1,6 @@
 /**
- * @module rate-limit.integration.test
- * @description Integration tests for rate limiting middleware.
+ * Integration tests for rate limiting middleware.
+ *
  * Tests how the middleware works with the openapi-fetch pattern.
  * NO network IO, simple mock fetch injected as argument.
  */

@@ -5,7 +5,6 @@
  * - **MRR** (Mean Reciprocal Rank): How quickly users find the first relevant result
  * - **NDCG** (Normalized Discounted Cumulative Gain): Overall ranking quality
  *
- * @module search-quality/metrics
  *
  * @see `.agent/plans/semantic-search/reference-ir-metrics-guide.md` for detailed explanations
  *

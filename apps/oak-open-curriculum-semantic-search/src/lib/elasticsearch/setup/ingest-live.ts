@@ -1,7 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * @module ingest-live
- * @description Live data ingestion CLI entry point. Orchestrates the ingestion
+ * Live data ingestion CLI entry point. Orchestrates the ingestion
  * of Oak curriculum data into Elasticsearch.
  *
  * Uses Result<T, E> pattern for explicit error handling and fail-fast behavior.

@@ -15,6 +15,109 @@
 
 ---
 
+## Binary Response Schema Fix (2025-12-16)
+
+**Status**: 🔴 HIGH PRIORITY — Causes `z.unknown()` in generated SDK  
+**Endpoint**: `/api/v0/lessons/{lessonSlug}/assets/{assetSlug}`  
+**Response**: `LessonAssetResponse`
+
+### Problem
+
+The upstream OpenAPI schema incorrectly declares a JSON response for what is actually a binary file stream:
+
+```yaml
+# Current (incorrect)
+responses:
+  200:
+    content:
+      application/json:
+        schema: {}   # Empty schema → generates z.unknown()
+```
+
+This generates `LessonAssetResponseSchema = z.unknown()` in the SDK, which:
+
+1. Provides no type information
+2. Cannot validate the response
+3. Violates our strictness requirements
+
+### Requested Fix
+
+Change to idiomatic OpenAPI for binary responses:
+
+```yaml
+# Correct
+responses:
+  200:
+    description: Binary asset file (PDF, image, video, etc.)
+    content:
+      application/octet-stream:
+        schema:
+          type: string
+          format: binary
+      application/pdf:
+        schema:
+          type: string
+          format: binary
+      image/*:
+        schema:
+          type: string
+          format: binary
+```
+
+### Why This Matters
+
+- **Type safety**: SDK can generate proper `Blob` or `ArrayBuffer` types
+- **Documentation**: Consumers understand the response is binary, not JSON
+- **Validation**: Response type validation becomes meaningful
+
+### SDK Workaround (Current)
+
+We currently accept `z.unknown()` for this endpoint because:
+
+1. We cannot validate binary streams with Zod anyway
+2. The upstream schema is the source of truth
+3. This is documented as a legitimate exception pending upstream fix
+
+---
+
+## Legitimate `z.unknown()` Exceptions Registry (2025-12-16)
+
+**Context**: Our strictness requirements mandate that all Zod schemas be explicit. However, some `z.unknown()` usages are **legitimate** due to genuinely dynamic data. This registry documents those exceptions.
+
+### Exception 1: Elasticsearch Aggregations
+
+**Pattern**: `z.record(z.string(), z.unknown())`  
+**Location**: Search response schemas (`responses.lessons.ts`, `responses.units.ts`, etc.)  
+**Field**: `AggregationsSchema`
+
+```typescript
+const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
+```
+
+**Justification**:
+
+- Elasticsearch aggregations have genuinely dynamic structure
+- Shape depends on the query (terms, histogram, nested, etc.)
+- Keys are aggregation names chosen at query time
+- Values are polymorphic aggregation results
+
+**Status**: ✅ LEGITIMATE — Cannot be made stricter without losing functionality
+
+### Exception 2: Binary File Responses (Pending Upstream Fix)
+
+**Pattern**: `z.unknown()`  
+**Location**: `curriculumZodSchemas.ts`  
+**Schema**: `LessonAssetResponseSchema`
+
+**Justification**:
+
+- Upstream declares empty JSON schema for binary endpoint
+- See "Binary Response Schema Fix" section above for upstream request
+
+**Status**: ⚠️ PENDING UPSTREAM — Will become `z.instanceof(Blob)` or similar when fixed
+
+---
+
 ## Derived Fields Registry (2025-12-13)
 
 **Context**: Schema analysis revealed that several fields used in semantic search indexing are **derived** from other schema fields rather than being directly available. These derivations are documented here so they can be added to the upstream API.
@@ -158,7 +261,7 @@ Because relationships are many-to-many, use **arrays** not scalar values:
 
 For consumers who need a specific context, support path-based fetching:
 
-```
+```text
 GET /sequences/maths-secondary-ks4-higher-aqa/lessons/quadratic-equations-factorising
 ```
 

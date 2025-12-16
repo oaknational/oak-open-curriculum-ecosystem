@@ -3,7 +3,7 @@
  *
  * This module provides IR metrics and ground truth for evaluating search quality.
  *
- * @module search-quality
+ * @packageDocumentation
  */
 
 export { calculateMRR, calculateNDCG } from './metrics';

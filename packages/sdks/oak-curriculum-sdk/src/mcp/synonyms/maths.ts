@@ -2,8 +2,6 @@
  * Mathematics concept synonyms.
  *
  * Maps canonical maths concepts to alternative terms.
- *
- * @module synonyms/maths
  */
 
 export const mathsSynonyms = {

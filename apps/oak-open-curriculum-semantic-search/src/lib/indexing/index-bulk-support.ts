@@ -1,6 +1,5 @@
 /**
- * @module index-bulk-support
- * @description Support functions for bulk indexing operations.
+ * Support functions for bulk indexing operations.
  * @see {@link ./fetch-error-handling.ts} for error handling helpers
  */
 

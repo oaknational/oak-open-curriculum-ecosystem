@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-meta
- * @description Elasticsearch mapping for the oak_meta index.
+ * Elasticsearch mapping for the oak_meta index.
+ *
  * Contains ingestion metadata and version tracking.
  */
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * @module cli
- * @description Elasticsearch setup CLI.
+ * Elasticsearch setup CLI.
  *
  * Creates synonyms set and all search indexes from SDK ontology data.
  * Loads configuration from .env.local in the app directory.

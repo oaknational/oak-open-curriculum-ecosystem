@@ -6,10 +6,9 @@
  */
 
 /**
- * @module oak-threads
- * @description Elasticsearch mapping for the oak_threads index.
- * Contains curriculum thread documents for thread-centric navigation.
+ * Elasticsearch mapping for the oak_threads index.
  *
+ * Contains curriculum thread documents for thread-centric navigation.
  * Threads represent conceptual progressions (e.g., Number, Algebra) that
  * span multiple units and key stages within a subject.
  */

@@ -3,8 +3,6 @@
  *
  * TDD: These tests are written FIRST to specify the expected tool structure.
  * Run this file before implementation to confirm RED phase.
- *
- * @module aggregated-knowledge-graph.unit.test
  */
 
 import { describe, it, expect } from 'vitest';

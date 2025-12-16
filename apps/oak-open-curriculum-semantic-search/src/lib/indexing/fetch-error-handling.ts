@@ -1,6 +1,5 @@
 /**
- * @module fetch-error-handling
- * @description Helpers for graceful error handling during API fetch operations.
+ * Helpers for graceful error handling during API fetch operations.
  * Provides consistent patterns for handling 404 and 500-series errors.
  */
 

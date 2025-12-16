@@ -2,8 +2,6 @@
  * English language concept synonyms.
  *
  * Maps canonical English concepts to alternative terms.
- *
- * @module synonyms/english
  */
 
 export const englishSynonyms = {

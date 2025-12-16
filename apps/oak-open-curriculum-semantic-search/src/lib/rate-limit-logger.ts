@@ -1,6 +1,5 @@
 /**
- * @module rate-limit-logger
- * @description Utilities for logging rate limit status and warnings.
+ * Utilities for logging rate limit status and warnings.
  */
 
 import type { RateLimitTracker, RateLimitInfo } from '@oaknational/oak-curriculum-sdk';

@@ -21,7 +21,6 @@
  * `type-gen/typegen/search/field-definitions/`. Never edit generated
  * files directly - always update the generators.
  *
- * @module elasticsearch
  * @see {@link https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html}
  */
 

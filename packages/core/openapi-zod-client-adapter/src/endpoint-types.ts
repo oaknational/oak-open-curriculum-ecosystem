@@ -16,6 +16,17 @@ export interface EndpointDefinitionOptions {
   readonly groupStrategy?: 'none' | 'tag' | 'tag-file' | 'method' | 'method-file';
   /** Whether to use aliases (default: false) */
   readonly withAlias?: boolean;
+  /**
+   * Enforce strict object validation - unknown properties cause errors (default: true).
+   * When true, schemas use `.strict()` to fail fast on unknown keys.
+   */
+  readonly strictObjects?: boolean;
+  /**
+   * Default behavior for additionalProperties when not specified in schema.
+   * Set to false to disable `.passthrough()` generation (default: false).
+   * This ensures unknown keys are rejected, not silently ignored.
+   */
+  readonly additionalPropertiesDefaultValue?: boolean;
 }
 
 /**
@@ -72,12 +83,17 @@ export interface EndpointDefinitionResult {
 
 /**
  * Default options for endpoint extraction.
+ *
+ * IMPORTANT: strictObjects and additionalPropertiesDefaultValue defaults enforce
+ * the fail-fast principle - unknown keys cause validation errors, never silently ignored.
  */
 export const DEFAULT_ENDPOINT_OPTIONS: Required<EndpointDefinitionOptions> = {
   shouldExportAllSchemas: true,
   shouldExportAllTypes: true,
   groupStrategy: 'none',
   withAlias: false,
+  strictObjects: true,
+  additionalPropertiesDefaultValue: false,
 };
 
 /**

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Public API for Notion query building functionality
- * @module notion/query-building
+ * @packageDocumentation
  */
 
 // Re-export all public interfaces and types

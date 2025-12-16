@@ -1,7 +1,6 @@
 /**
  * Full SVG Edge Configurations.
  * Edges are dynamically calculated from node centers.
- * @module widget-renderers/svg-full-edges
  */
 
 import type { EdgeConfig } from './svg-components.js';

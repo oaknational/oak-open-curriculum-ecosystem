@@ -4,7 +4,6 @@
  * Measures search quality metrics against ground truth relevance judgments
  * to establish baseline for two-way hybrid search (BM25 + ELSER).
  *
- * @module smoke-tests/search-quality
  *
  * **Classification**: SMOKE TEST
  * - Makes HTTP calls to a running server (network IO)

@@ -4,7 +4,7 @@
  * Provides a tool for returning tool usage guidance to help
  * users understand how to use the Oak Curriculum MCP server.
  *
- * @module aggregated-help
+ * @packageDocumentation
  */
 
 // Tool definition and schema

@@ -1,6 +1,5 @@
 /**
- * @module completion-contexts
- * @description Single source of truth for per-index completion context definitions.
+ * Single source of truth for per-index completion context definitions.
  *
  * This module defines the exact completion contexts allowed for each search index.
  * Both the Zod schema generator and ES mapping generator consume these definitions,

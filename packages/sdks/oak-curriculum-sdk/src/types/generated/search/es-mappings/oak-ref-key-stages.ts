@@ -6,8 +6,8 @@
  */
 
 /**
- * @module oak-ref-key-stages
- * @description Elasticsearch mapping for the oak_ref_key_stages index.
+ * Elasticsearch mapping for the oak_ref_key_stages index.
+ *
  * Contains key stage metadata with aggregated counts for navigation and filtering.
  */
 
