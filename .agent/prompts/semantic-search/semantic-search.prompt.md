@@ -1,13 +1,14 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 1 & 2 Complete | **Phase 3.0 ✅ VERIFIED** | **Phase 3a ✅ IMPLEMENTED** | **Phase 3b ✅ IMPLEMENTED** | Phase 4 PLANNED (SDK + CLI) | Two-Way Hybrid Confirmed Optimal  
-**Last Updated**: 2025-12-15
+**Status**: Phase 1 & 2 Complete | **Phase 3.0 ✅ VERIFIED** | **Phase 3a ✅ IMPLEMENTED** | **Phase 3b ⚠️ NEEDS REWORK** | Phase 4 PLANNED (SDK + CLI)  
+**Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
+**Last Updated**: 2025-12-16
 
 ---
 
 ## 📋 Current State
 
-**Parts 3.0, 3a, and 3b are COMPLETE (code implemented).** All quality gates pass.
+**Parts 3.0 and 3a are COMPLETE. Part 3b needs rework** to implement four-retriever architecture correctly.
 
 ### Part 3.0 (Verification) ✅ VERIFIED
 - ✅ Hybrid superiority experiment: Lessons hybrid > BM25/ELSER; Units ELSER slightly better MRR but hybrid better NDCG
@@ -27,25 +28,26 @@
   - KS4 arrays indexed: `tiers[]`, `examBoards[]`, `examSubjects[]`, `ks4Options[]` + titles
   - Smoke tests for KS4 filtering created
 
-### Part 3b (Semantic Summaries) ✅ IMPLEMENTED
+### Part 3b (Semantic Summaries) ⚠️ NEEDS REWORK
 - ✅ Dense vector code removed (ADR-075)
-- ✅ `generateLessonSemanticSummary()` template implemented
-- ✅ `generateUnitSemanticSummary()` template implemented
-- ✅ `lesson_summary_semantic` field added to lesson index
-- ✅ `unit_semantic` now uses curated summary instead of rollup text
+- ✅ Semantic summary generator templates exist
+- ⚠️ **ISSUE**: `unit_semantic` was incorrectly replaced with summary instead of adding new field
+- ⚠️ **ISSUE**: Field naming doesn't follow consistent nomenclature
+- 🔲 Four-retriever architecture not yet implemented
 
-### Remaining Work (Optional Enhancements)
-- 🔲 Redis caching for semantic summaries (deferred)
-- 🔲 Summary vs transcript ELSER experiment (deferred)
-- 🔲 Unit reranking experiment (deferred)
+### Part 3c (Four-Retriever Architecture) 🔲 NEW
+- 🔲 Implement consistent field nomenclature (`<entity>_content|structure[_semantic]`)
+- 🔲 Add `lesson_structure` field for BM25 on lesson summaries
+- 🔲 Add `unit_structure` field for BM25 on unit summaries
+- 🔲 Restore `unit_content_semantic` to use rollup content (not summary)
+- 🔲 Add `unit_structure_semantic` for ELSER on unit summaries
+- 🔲 Update query builders to use four retrievers + RRF
+- 🔲 Verify KS4 filtering works with re-indexed data
 
 ### ⚠️ VERIFICATION NEEDED
-All code is implemented and quality gates pass, but **re-indexing and live verification** is required:
-1. Re-index with fresh data: `pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4`
-2. Run KS4 filtering smoke tests
-3. Run search quality benchmarks to measure MRR/NDCG with new fields
-
-See `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md` for detailed validation results.
+1. Re-index with fresh data after Part 3c implementation
+2. Run KS4 filtering smoke tests to prove filtering works
+3. Run search quality benchmarks to measure MRR/NDCG with four retrievers
 
 ---
 
@@ -120,12 +122,14 @@ Once quality gates pass, indices are fresh, and verification tests pass, continu
 
 Create a production-ready demo proving Elasticsearch Serverless as the **definitive platform** for intelligent curriculum search, using Maths KS4 as a vertical slice that scales to the full Oak curriculum.
 
-**Phase 3 Goal**: Prove multi-index search infrastructure works correctly:
+**Phase 3 Goal**: Prove multi-index search infrastructure works correctly with four-retriever hybrid architecture:
 
-1. Prove BM25 + ELSER hybrid is superior to either alone
-2. Prove lesson-only, unit-only, and joint search all work
-3. Prove lesson search can filter by unit
-4. Add feature parity fields after verification
+1. ✅ Prove BM25 + ELSER hybrid is superior to either alone
+2. ✅ Prove lesson-only, unit-only, and joint search all work
+3. ✅ Prove lesson search can filter by unit
+4. ✅ Add feature parity fields (including KS4 metadata)
+5. 🔲 Implement four-retriever architecture (BM25 + ELSER on content + structure)
+6. 🔲 Prove KS4 filtering works after re-indexing
 
 **Next phase (Phase 4)**: Extract the search capability as an **SDK + first-class local CLI**, so it can be consumed by the **Express MCP server** (NL policy stays in MCP via comprehensive tool examples). See `.agent/plans/semantic-search/phase-4-search-sdk-and-cli.md`.
 
@@ -133,7 +137,7 @@ Create a production-ready demo proving Elasticsearch Serverless as the **definit
 
 **Why Maths KS4?** Maximum complexity (tiers, pathways, exam boards), high teacher value, complete feature coverage, manageable scope (~10 minutes to ingest).
 
-**Success**: MRR > 0.70, NDCG@10 > 0.75, impressive stakeholder demo, scalable patterns.
+**Success**: MRR > 0.70, NDCG@10 > 0.75, KS4 filtering proven, impressive stakeholder demo, scalable patterns.
 
 ---
 
@@ -191,81 +195,59 @@ Key ES documentation for this project:
 | Two-way hybrid code written (BM25 + ELSER RRF)    | ✅ Complete |
 | Lesson search: MRR 0.908, 40 ground truth queries | ✅ Complete |
 | Unit search: MRR 0.915, 43 ground truth queries   | ✅ Complete |
-| Three-way RRF code removed (dead code cleanup)    | ✅ Complete |
+| Dense vector code removed (ADR-075)               | ✅ Complete |
 | All quality gates passing                         | ✅ Complete |
 | BM25 vs ELSER vs Hybrid experiment                | ✅ Complete |
 | Part 3.0 verification (scope, doc_type, filters)  | ✅ Complete |
 | Redis cache TTL 14 days + jitter (ADR-079)        | ✅ Complete |
-| **Part 3a: Feature Parity fields**                | ✅ Complete |
-| **Part 3a: KS4 Metadata Denormalisation**         | ✅ Complete |
-| **Part 3b: Dense vector removal**                 | ✅ Complete |
-| **Part 3b: Semantic summary templates**           | ✅ Complete |
+| Part 3a: Feature Parity fields                    | ✅ Complete |
+| Part 3a: KS4 Metadata Denormalisation             | ✅ Complete |
+| Semantic summary generator templates              | ✅ Complete |
 
 ### Phase 3 Remaining Work
 
-**📋 Detailed execution plan**: `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md`
+**📋 Detailed execution plan**: `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
 
-#### Phase 0: Redis Cache TTL Configuration ✅ COMPLETE
+#### Part 3c: Four-Retriever Architecture 🔲 NEW
 
-| Task                                        | Priority | Status      |
-| ------------------------------------------- | -------- | ----------- |
-| Investigate current Redis TTL configuration | **HIGH** | ✅ Complete |
-| Update TTL to 14 days with ±12 hour jitter  | **HIGH** | ✅ Complete |
-| Create ADR-079 for TTL jitter               | **HIGH** | ✅ Complete |
-| Update SDK-CACHING.md documentation         | **HIGH** | ✅ Complete |
-| Create `pnpm cache:reset-ttls` dev tool     | **HIGH** | ✅ Complete |
+| Task | Priority | Status |
+| ---- | -------- | ------ |
+| Rename fields to consistent nomenclature | **CRITICAL** | 🔲 Pending |
+| Add `lesson_structure` field (BM25 text) | **CRITICAL** | 🔲 Pending |
+| Add `unit_structure` field (BM25 text) | **CRITICAL** | 🔲 Pending |
+| Restore `unit_content_semantic` to rollup content | **CRITICAL** | 🔲 Pending |
+| Add `unit_structure_semantic` field | **CRITICAL** | 🔲 Pending |
+| Update summary templates to include ALL API fields | **HIGH** | 🔲 Pending |
+| Update query builders to use four retrievers | **HIGH** | 🔲 Pending |
+| Re-index with new field schema | **HIGH** | 🔲 Pending |
+| Prove KS4 filtering works | **CRITICAL** | 🔲 Pending |
+| Run search quality benchmarks (MRR/NDCG) | **HIGH** | 🔲 Pending |
 
-**Implementation**: `calculateTtlWithJitter()` pure function in `src/adapters/sdk-cache/ttl-jitter.ts` with per-entry jitter for true stampede prevention.
+**Field Rename Mapping**:
 
-**Dev Tool**: `pnpm cache:reset-ttls` - Reset TTLs on existing cached entries without re-downloading data.
+| Current Field | New Field | Notes |
+|---------------|-----------|-------|
+| `transcript_text` | `lesson_content` | Rename |
+| `lesson_semantic` | `lesson_content_semantic` | Rename |
+| `lesson_summary_semantic` | `lesson_structure_semantic` | Rename |
+| (new) | `lesson_structure` | Add BM25 text field |
+| `rollup_text` | `unit_content` | Rename |
+| `unit_semantic` | `unit_content_semantic` | **RESTORE to rollup content** |
+| (new) | `unit_structure` | Add BM25 text field |
+| (new) | `unit_structure_semantic` | Add ELSER field |
 
-#### Part 3.0: Verification ✅ COMPLETE
+#### KS4 Filtering Verification 🔲 CRITICAL
 
-| Task                                   | Priority     | Status      |
-| -------------------------------------- | ------------ | ----------- |
-| BM25 vs ELSER vs Hybrid experiment     | **CRITICAL** | ✅ Complete |
-| Prove lesson-only search works         | **CRITICAL** | ✅ Complete |
-| Prove unit-only search works           | **CRITICAL** | ✅ Complete |
-| Prove joint search with doc_type works | **CRITICAL** | ✅ Complete |
-| Prove lesson filter by unit works      | **CRITICAL** | ✅ Complete |
-| `doc_type` field exists                | **HIGH**     | ✅ Complete |
-| ADR: unified vs separate endpoints     | Medium       | 🔲 Deferred |
-| Unit reranking experiment              | Medium       | 🔲 Deferred |
-
-**Verified 2025-12-15** with fresh Maths KS4 data. See validation results in `.cursor/plans/es_reset_and_re-validation_2c12716d.plan.md`.
-
-#### Part 3a: Feature Parity ✅ IMPLEMENTED
-
-| Task                                    | Priority     | Status        |
-| --------------------------------------- | ------------ | ------------- |
-| OWA aliases import                      | **HIGH**     | ✅ Complete   |
-| `pupilLessonOutcome` field              | **HIGH**     | ✅ Complete   |
-| Display title fields                    | Medium       | ✅ Complete   |
-| Unit enrichment fields                  | Medium       | ✅ Complete   |
-| KS4 sequence traversal to ingestion     | **CRITICAL** | ✅ Complete   |
-| Build UnitContextMap from sequences     | **CRITICAL** | ✅ Complete   |
-| KS4 field definitions (arrays)          | **HIGH**     | ✅ Complete   |
-| Decorate documents with KS4 metadata    | **HIGH**     | ✅ Complete   |
-| KS4 filtering smoke tests               | **HIGH**     | ✅ Complete   |
-| ADR-080: Denormalisation strategy       | **HIGH**     | ✅ Complete   |
-
-#### Part 3b: Semantic Summary Enhancement ✅ IMPLEMENTED
-
-| Task                                 | Priority | Status         |
-| ------------------------------------ | -------- | -------------- |
-| Remove dense vector code             | **HIGH** | ✅ Complete    |
-| Lesson semantic summary template     | **HIGH** | ✅ Complete    |
-| Unit semantic summary template       | **HIGH** | ✅ Complete    |
-| `lesson_summary_semantic` field      | **HIGH** | ✅ Complete    |
-| Redis caching for summaries          | Medium   | 🔲 Deferred    |
-| Compare summary vs transcript ELSER  | Medium   | 🔲 Deferred    |
-| ADR-075: Dense vector removal        | **HIGH** | ✅ Implemented |
-| ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete    |
-| ADR-077: Semantic summary generation | **HIGH** | ✅ Complete    |
+| Task | Status |
+| ---- | ------ |
+| Re-index Maths KS4 with updated schema | 🔲 Pending |
+| Run `ks4-filtering.smoke.test.ts` | 🔲 Pending |
+| Verify tier filtering (`tiers[]`) | 🔲 Pending |
+| Verify exam board filtering (`examBoards[]`) | 🔲 Pending |
+| Verify exam subject filtering (`examSubjects[]`) | 🔲 Pending |
+| Verify KS4 option filtering (`ks4Options[]`) | 🔲 Pending |
 
 **Approach**: Traverse `/sequences/{sequence}/units` endpoints, build lookup tables mapping units → tiers/examBoards, decorate indexed documents with arrays. See [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
-
-**Redis Caching**: All SDK requests continue to be cached in Redis (14-day TTL with jitter per ADR-079). Sequence endpoints are no exception.
 
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
@@ -273,28 +255,52 @@ See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full de
 
 ## Technical Architecture
 
-### Two-Way Hybrid Search (BM25 + ELSER)
+### Four-Retriever Hybrid Search (BM25 + ELSER on Content + Structure)
 
-We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **multiple retrievers within a single index**.
+We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **four retrievers** for each entity type, providing both content-based and structure-based matching across lexical and semantic dimensions.
 
-**Key clarification**: RRF combines **retrievers** (search methods), not indices. All retrievers query the same `oak_lessons` index using different matching strategies.
+**Design rationale**: Content fields contain the actual teaching material (transcripts, lesson snippets). Structure fields contain curated metadata about what the content covers (learning objectives, curriculum alignment, pedagogical context). Both perspectives are valuable for different query types:
+- Content retrievers: "Find lessons that discuss/teach X"
+- Structure retrievers: "Find lessons about topic Y"
 
-| Retriever | Type            | Field(s)                                             | Purpose           |
-| --------- | --------------- | ---------------------------------------------------- | ----------------- |
-| BM25      | Lexical         | `lesson_title`, `lesson_keywords`, `transcript_text` | Keyword matching  |
-| ELSER     | Sparse semantic | `lesson_semantic` (full transcript)                  | Semantic matching |
+### Consistent Field Nomenclature
+
+All entities follow the pattern: `<entity>_content|structure[_semantic]`
+
+| Entity | Content (BM25) | Content (ELSER) | Structure (BM25) | Structure (ELSER) |
+|--------|----------------|-----------------|------------------|-------------------|
+| Lesson | `lesson_content` | `lesson_content_semantic` | `lesson_structure` | `lesson_structure_semantic` |
+| Unit   | `unit_content` | `unit_content_semantic` | `unit_structure` | `unit_structure_semantic` |
+
+### Lesson Fields
+
+| Field | Content Source | Purpose |
+|-------|----------------|---------|
+| `lesson_content` | Full video transcript | BM25 lexical matching on teaching content |
+| `lesson_content_semantic` | Full video transcript | ELSER semantic matching on teaching content |
+| `lesson_structure` | Curated summary (~200 tokens) | BM25 lexical matching on pedagogical metadata |
+| `lesson_structure_semantic` | Curated summary (~200 tokens) | ELSER semantic matching on pedagogical metadata |
+
+### Unit Fields (Rollup)
+
+| Field | Content Source | Purpose |
+|-------|----------------|---------|
+| `unit_content` | Aggregated lesson snippets + pedagogical data | BM25 lexical matching on teaching content |
+| `unit_content_semantic` | Aggregated lesson snippets + pedagogical data | ELSER semantic matching on teaching content |
+| `unit_structure` | Curated summary (~200 tokens) | BM25 lexical matching on unit overview |
+| `unit_structure_semantic` | Curated summary (~200 tokens) | ELSER semantic matching on unit overview |
+
+### RRF Query Structure
 
 ```json
 {
   "retriever": {
     "rrf": {
       "retrievers": [
-        {
-          "standard": {
-            "query": { "multi_match": { "query": "...", "fields": ["title", "transcript"] } }
-          }
-        },
-        { "standard": { "query": { "semantic": { "field": "lesson_semantic", "query": "..." } } } }
+        { "standard": { "query": { "multi_match": { "query": "...", "fields": ["lesson_content", "lesson_title"] } } } },
+        { "standard": { "query": { "multi_match": { "query": "...", "fields": ["lesson_structure"] } } } },
+        { "standard": { "query": { "semantic": { "field": "lesson_content_semantic", "query": "..." } } } },
+        { "standard": { "query": { "semantic": { "field": "lesson_structure_semantic", "query": "..." } } } }
       ],
       "rank_window_size": 100,
       "rank_constant": 60
@@ -305,17 +311,13 @@ We use Elasticsearch's Reciprocal Rank Fusion (RRF) to combine **multiple retrie
 
 See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
-### Future: Three-Way Hybrid (BM25 + Transcript ELSER + Summary ELSER)
+### No Reranker Required Initially
 
-With semantic summary enhancement (Part 3b), we add a **third retriever** (still same index):
+With four complementary retrievers, RRF typically does a good job of combining results. A reranker may be added later if:
+- RRF produces good recall (relevant docs in top-20) but poor precision at top-3
+- Quality metrics show diminishing returns from retriever-only approach
 
-| Retriever          | Type            | Field                     | Purpose                         |
-| ------------------ | --------------- | ------------------------- | ------------------------------- |
-| BM25               | Lexical         | Multiple text fields      | Keyword matching                |
-| ELSER (transcript) | Sparse semantic | `lesson_semantic`         | Detailed content matching       |
-| ELSER (summary)    | Sparse semantic | `lesson_summary_semantic` | Conceptual/pedagogical matching |
-
-**⚠️ Important**: This "three-way" refers to BM25 + two ELSER fields, **NOT** dense vectors. Dense vectors were evaluated in Phase 2 and provided no benefit (see ADR-075).
+**Decision**: Build four-retriever RRF first, measure quality, then evaluate reranking if needed.
 
 ### Why ELSER Only (No Dense Vectors)
 
@@ -326,6 +328,41 @@ Phase 2 evaluated E5 dense vectors - **no benefit for curriculum search**:
 - Simpler architecture with one embedding type
 
 See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html>
+
+### Structural Summary Content
+
+Structural summaries include **all available fields** from the API, tolerating missing optional fields gracefully.
+
+**Lesson Structure Summary** (from `/lessons/{lesson}/summary`):
+
+```text
+{lessonTitle} is a {keyStageTitle} {subjectTitle} lesson.
+
+Key learning: {keyLearningPoints[*].keyLearningPoint}.
+Keywords: {lessonKeywords[*].keyword} - {description}.
+Common misconceptions: {misconceptionsAndCommonMistakes[*].misconception}.
+Teacher tips: {teacherTips[*].teacherTip}.
+Content guidance: {contentGuidance[*].contentGuidanceLabel}.
+Pupil outcome: {pupilLessonOutcome}.
+Unit context: {unitTitle} ({unitSlug}).
+```
+
+**Unit Structure Summary** (from `/units/{unit}/summary`):
+
+```text
+{unitTitle} is a {keyStageSlug} {subjectSlug} unit for {year} containing {lessonCount} lessons.
+
+Overview: {whyThisWhyNow}.
+Description: {description}.
+Notes: {notes}.
+Prior knowledge: {priorKnowledgeRequirements[*]}.
+National curriculum: {nationalCurriculumContent[*]}.
+Threads: {threads[*].title}.
+Categories: {categories[*].categoryTitle}.
+Lessons: {unitLessons[*].lessonTitle} ({lessonSlug}).
+```
+
+**Principle**: Include ALL fields, use `[*]` notation for arrays. The user's query perspective is unknown - they might search by misconception, by curriculum alignment, by thread, or by lesson title. Comprehensive coverage maximises match potential.
 
 ### ES Serverless Features ($0 additional cost)
 
@@ -392,12 +429,19 @@ All 36 Maths KS4 units have their lessons indexed. Redis cache refreshed with 14
 
 ## Embedding Strategy
 
-### Current State
+### Current State (Needs Update to Four-Retriever)
 
-| Resource | ELSER Field       | Content Source            | Token Count |
-| -------- | ----------------- | ------------------------- | ----------- |
-| Lessons  | `lesson_semantic` | Full video transcript     | ~5000       |
-| Units    | `unit_semantic`   | `rollupText` (aggregated) | ~200-400    |
+| Resource | Content Field | Structure Field | Status |
+| -------- | ------------- | --------------- | ------ |
+| Lessons  | `lesson_semantic` (transcript) | `lesson_summary_semantic` (summary) | ⚠️ Needs rename |
+| Units    | `unit_semantic` (incorrectly contains summary) | N/A | ⚠️ Needs fix |
+
+### Target State (Four-Retriever Architecture)
+
+| Resource | Content Field | Structure Field |
+| -------- | ------------- | --------------- |
+| Lessons  | `lesson_content_semantic` (transcript ~5000 tokens) | `lesson_structure_semantic` (summary ~200 tokens) |
+| Units    | `unit_content_semantic` (rollup ~200-400 tokens) | `unit_structure_semantic` (summary ~200 tokens) |
 
 ### Dense Vectors: REMOVED ✅
 
@@ -408,26 +452,20 @@ Phase 2 evaluation showed E5 dense vectors provide **no benefit** for curriculum
 
 **Decision**: Remove all dense vector code. See [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md).
 
-✅ **Completed 2025-12-15**: All dense vector code has been removed:
-- `dense-vector-generation.ts` module deleted
-- Dense vector fields removed from document transforms
-- SDK field definitions updated (type-gen regenerated)
-- Rerank experiment scripts simplified to 2-way only
-- All quality gates passing
+✅ **Completed 2025-12-15**: All dense vector code has been removed.
 
-### Semantic Summaries ✅ IMPLEMENTED
+### Semantic Summary Implementation
 
-Semantic summary fields (~200 tokens) for information-dense embeddings:
+Summary generator templates exist but need updates for comprehensive field coverage:
 
-| Resource | Field                     | Content                     | Status       |
-| -------- | ------------------------- | --------------------------- | ------------ |
-| Lessons  | `lesson_summary_semantic` | Template-composed summary   | ✅ Complete  |
-| Units    | `unit_semantic`           | Curated summary (not rollup)| ✅ Complete  |
+**Implementation files**:
+- `semantic-summary-generator.ts` - `generateLessonSemanticSummary()`, `generateUnitSemanticSummary()`
 
-**Implementation**:
-- `generateLessonSemanticSummary()` in `semantic-summary-generator.ts`
-- `generateUnitSemanticSummary()` in `semantic-summary-generator.ts`
-- Templates compose from: title, keyStage, subject, keyLearningPoints, keywords, misconceptions, pupilLessonOutcome
+**Required changes**:
+1. Update `generateLessonSemanticSummary()` to include ALL fields from `LessonSummaryResponseSchema`
+2. Update `generateUnitSemanticSummary()` to include ALL fields from `UnitSummaryResponseSchema`
+3. Include full lesson list in unit summary (title + slug for each)
+4. Tolerate missing optional fields gracefully
 
 **Future enhancement**: LLM-generated summaries via `.gp-llm-v2-chat_completion` for richer prose.
 

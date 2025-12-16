@@ -1,7 +1,8 @@
 # Semantic Search Planning Documents
 
-**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | Two-Way Hybrid (BM25 + ELSER) Confirmed Optimal  
-**Last Updated**: 2025-12-15
+**Status**: Phase 1 & 2 Complete | Phase 3 IN PROGRESS | **Four-Retriever Architecture** (BM25 + ELSER on Content + Structure)  
+**Architecture Decision**: Four retrievers (not two-way) - see Part 3c below  
+**Last Updated**: 2025-12-16
 
 ---
 
@@ -59,38 +60,49 @@ Key ES documentation for this project:
 
 | Phase | Name                     | Status         | Progress | Description                                         |
 | ----- | ------------------------ | -------------- | -------- | --------------------------------------------------- |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | 5/13     | Verify search functionality, doc_type, field parity |
+| **3** | **Multi-Index & Fields** | 🔄 In Progress | 7/13     | Four-retriever architecture, KS4 filtering |
 
-**Phase 3 Goal**: Prove that multi-index search infrastructure works correctly.
+**Phase 3 Goal**: Implement four-retriever hybrid search with comprehensive filtering.
 
 **⚠️ CRITICAL**: Always re-index fresh before running smoke tests. Validating stale indices is meaningless.
 
-**Part 3.0 - Verification (requires fresh re-index first):**
+**Part 3.0 - Verification ✅ COMPLETE:**
 
 - ✅ BM25 vs ELSER vs Hybrid experiment (hybrid superior for lessons)
-- 🔲 Prove lesson-only search works (re-verify after fresh ingest)
-- 🔲 Prove unit-only search works (re-verify after fresh ingest)
-- 🔲 Prove joint search with `doc_type` categorisation works (re-verify after fresh ingest)
-- 🔲 Prove lesson search filtered by unit works (re-verify after fresh ingest)
+- ✅ Prove lesson-only search works
+- ✅ Prove unit-only search works
+- ✅ Prove joint search with `doc_type` categorisation works
+- ✅ Prove lesson search filtered by unit works
 - ✅ `doc_type` field already exists in indexes
 - 🔲 ADR: unified vs separate endpoints (deferred)
 - 🔲 Unit reranking experiment (deferred)
 
-**Part 3a - Feature Parity (after verification):**
+**Part 3a - Feature Parity ✅ IMPLEMENTED:**
 
-- 🔲 OWA aliases import
-- 🔲 `pupilLessonOutcome` field
-- 🔲 Display title fields
-- 🔲 Unit enrichment fields
-- 🔲 ADR: field additions
+- ✅ OWA aliases import
+- ✅ `pupilLessonOutcome` field
+- ✅ Display title fields
+- ✅ Unit enrichment fields
+- ✅ **KS4 Metadata Denormalisation** - sequence traversal, UnitContextMap, array fields
 
-**Part 3b - Semantic Summary Enhancement (NEW):**
+**Part 3b - Semantic Summary Templates ⚠️ NEEDS REWORK:**
 
 - ✅ Remove dense vector code (ADR-075) - **Completed 2025-12-15**
-- 🔲 Lesson semantic summary template
-- 🔲 Unit semantic summary template
-- 🔲 Redis caching for summaries
-- 🔲 Compare summary vs transcript ELSER
+- ✅ Lesson semantic summary template exists (needs update for ALL fields)
+- ✅ Unit semantic summary template exists (needs update for ALL fields)
+- ⚠️ **ISSUE**: `unit_semantic` was incorrectly replaced with summary instead of adding new field
+- 🔲 Redis caching for summaries (deferred)
+
+**Part 3c - Four-Retriever Architecture 🔲 NEW:**
+
+- 🔲 Rename fields to consistent nomenclature (`<entity>_content|structure[_semantic]`)
+- 🔲 Add `lesson_structure` field (BM25 text for lessons)
+- 🔲 Add `unit_structure` field (BM25 text for units)
+- 🔲 Restore `unit_content_semantic` to rollup content
+- 🔲 Add `unit_structure_semantic` field
+- 🔲 Update summary templates to include ALL API fields
+- 🔲 Update query builders to use four retrievers
+- 🔲 **CRITICAL: Prove KS4 filtering works after re-indexing**
 
 **Note**: MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
@@ -140,44 +152,78 @@ See `phase-3-multi-index-and-fields.md` for full details.
 
 ---
 
-## Key Findings (Phase 1 & 2)
+## Key Findings (Phase 1, 2 & 3)
 
-1. **Two-way hybrid is optimal** - BM25 + ELSER provides best balance of precision and recall
+### Phase 1 & 2
+
+1. **Two-way hybrid is baseline** - BM25 + ELSER provides good balance of precision and recall
 2. **E5 dense vectors provide no benefit** - For this dataset, sparse vectors (ELSER) are sufficient
 3. **Reranker field matters critically** - Full transcripts cause 20+ second latencies; short titles lack semantic signal
 4. **ELSER was not operational for lessons** - Fixed by adding `lesson_semantic: transcript` to document transform
 5. **Dense vector code removed** - Completed 2025-12-15 per ADR-075
 
-See ES hybrid search documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html#semantic-search-hybrid>
+### Phase 3 Architectural Decisions
+
+6. **Four-retriever architecture** - Content + Structure fields with both BM25 and ELSER provide comprehensive matching:
+   - Content retrievers serve "find lessons that discuss/teach X" queries
+   - Structure retrievers serve "find lessons about topic Y" queries
+7. **No reranker required initially** - RRF with four complementary retrievers is sufficient; add reranking later if needed
+8. **Consistent nomenclature** - `<entity>_content|structure[_semantic]` pattern for clarity
+9. **Comprehensive summaries** - Include ALL API fields in structural summaries; users search from unknown perspectives
+10. **KS4 metadata denormalisation** - Traverse sequences to build unit → tier/examBoard/examSubject mapping
+
+See ES RRF documentation: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
 ---
 
 ## Embedding Strategy
 
-### Current: ELSER-Only (Two-Way Hybrid)
+### Target: Four-Retriever Architecture
 
-| Resource | Field             | Content Source                 | Purpose           |
-| -------- | ----------------- | ------------------------------ | ----------------- |
-| Lessons  | `lesson_semantic` | Full transcript (~5000 tokens) | Semantic matching |
-| Units    | `unit_semantic`   | `rollupText` (~200-400 tokens) | Semantic matching |
+Both lessons and units use **four retrievers** combined via RRF:
 
-**Why ELSER only?** Dense vectors (E5) evaluated in Phase 2 - no benefit, added latency.
+1. **BM25 on Content** - Lexical matching on teaching material
+2. **ELSER on Content** - Semantic matching on teaching material
+3. **BM25 on Structure** - Lexical matching on metadata/summaries
+4. **ELSER on Structure** - Semantic matching on metadata/summaries
 
-See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html>
+### Field Nomenclature
 
-### Planned: Semantic Summary Enhancement
+Consistent pattern: `<entity>_content|structure[_semantic]`
 
-Add information-dense summary fields for better pedagogical matching:
+#### Lesson Fields
 
-| Resource | New Field                 | Content                     | Generation     |
-| -------- | ------------------------- | --------------------------- | -------------- |
-| Lessons  | `lesson_summary_semantic` | ~200 token summary          | Template-based |
-| Units    | `unit_semantic`           | Replace rollup with summary | Template-based |
+| Field | Type | Content | Purpose |
+|-------|------|---------|---------|
+| `lesson_content` | text | Full transcript (~5000 tokens) | BM25 lexical |
+| `lesson_content_semantic` | semantic_text | Full transcript | ELSER semantic |
+| `lesson_structure` | text | Curated summary (~200 tokens) | BM25 lexical |
+| `lesson_structure_semantic` | semantic_text | Curated summary | ELSER semantic |
 
-**Generation approach**:
+#### Unit Fields (Rollup)
 
-1. **Phase 3**: Template-based composition from API fields
-2. **Future**: LLM-enhanced via `.gp-llm-v2-chat_completion`
+| Field | Type | Content | Purpose |
+|-------|------|---------|---------|
+| `unit_content` | text | Aggregated lesson snippets (~200-400 tokens) | BM25 lexical |
+| `unit_content_semantic` | semantic_text | Aggregated lesson snippets | ELSER semantic |
+| `unit_structure` | text | Curated summary (~200 tokens) | BM25 lexical |
+| `unit_structure_semantic` | semantic_text | Curated summary | ELSER semantic |
+
+**Why ELSER only (no dense vectors)?** E5 evaluated in Phase 2 - no benefit, added latency.
+
+**Why four retrievers (not two)?** Content vs structure serve different query intents:
+- Content: "Find lessons that discuss/teach X" (teaching material)
+- Structure: "Find lessons about topic Y" (metadata, curriculum alignment)
+
+**No reranker required initially** - RRF with four complementary retrievers provides good coverage.
+
+See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
+
+### Structural Summary Content
+
+Summaries include **ALL available API fields**, tolerating missing optional fields.
+
+**Principle**: Include everything - users may search by misconception, by curriculum alignment, by thread, or by lesson title. Comprehensive coverage maximises match potential.
 
 **Caching**: Redis (same instance as curriculum API caching)
 
@@ -282,6 +328,7 @@ pnpm smoke:dev:stub    # Smoke tests
 2. **Run Direct ES tests** (no server needed)
 3. **Start dev server** (for API-based tests)
 4. **Run API-based tests**
+5. **Run KS4 filtering tests** (CRITICAL for Phase 3 completion)
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -297,7 +344,22 @@ pnpm dev
 
 # 4. API-based tests
 pnpm vitest run -c vitest.smoke.config.ts scope-verification
+
+# 5. KS4 filtering tests (CRITICAL - must pass to complete Phase 3)
+pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
 ```
+
+### KS4 Filtering Verification (CRITICAL)
+
+**Must prove KS4 filtering works** before declaring Phase 3 complete.
+
+Test queries to verify:
+- Filter by `tierSlug` (foundation, higher)
+- Filter by `examBoardSlug` (aqa, edexcel, ocr)
+- Filter by `examSubjectSlug` (gcse-biology, gcse-chemistry, gcse-physics)
+- Filter by `ks4OptionSlug` (core, higher)
+
+**File**: `apps/oak-open-curriculum-semantic-search/smoke-tests/ks4-filtering.smoke.test.ts`
 
 ---
 

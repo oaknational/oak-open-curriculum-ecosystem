@@ -1,9 +1,9 @@
 # Phase 3: Multi-Index Search & Fields
 
-**Status**: Part 3.0 ✅ COMPLETE | Part 3a ✅ IMPLEMENTED | Part 3b ✅ IMPLEMENTED  
-**Estimated Effort**: Code complete, verification pending  
+**Status**: Part 3.0 ✅ COMPLETE | Part 3a ✅ IMPLEMENTED | Part 3b ⚠️ NEEDS REWORK | Part 3c 🔲 NEW  
+**Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Prerequisites**: Phase 1 & 2 complete (two-way hybrid confirmed optimal)  
-**Last Updated**: 2025-12-15
+**Last Updated**: 2025-12-16
 
 ---
 
@@ -178,7 +178,7 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 - `document-transform-helpers.ts` - `extractUnitEnrichmentFields()`, `extractKs4DocumentFields()`
 - `ks4-filtering.smoke.test.ts` - Smoke tests for KS4 filtering
 
-### Part 3b: Semantic Summary Enhancement ✅ IMPLEMENTED
+### Part 3b: Semantic Summary Enhancement ⚠️ NEEDS REWORK
 
 | Task                                 | Priority | Status       |
 | ------------------------------------ | -------- | ------------ |
@@ -192,11 +192,32 @@ This phase delivers **verified, working search infrastructure**. MCP tool creati
 | ADR-076: ELSER-only strategy         | **HIGH** | ✅ Complete  |
 | ADR-077: Semantic summary generation | **HIGH** | ✅ Complete  |
 
-**Implementation**:
+**⚠️ ISSUE IDENTIFIED**: `unit_semantic` was incorrectly replaced with curated summary instead of adding a new field. This breaks the content vs structure separation. Fix required in Part 3c.
+
+**Existing Implementation** (needs update):
 - `generateLessonSemanticSummary()` - ~200 token summary from lesson data
 - `generateUnitSemanticSummary()` - ~200 token summary from unit data
-- `lesson_summary_semantic` field added to lessons index
-- `unit_semantic` now uses curated summary (not rollup text)
+- Templates need expansion to include ALL API fields
+
+### Part 3c: Four-Retriever Architecture 🔲 NEW
+
+**Purpose**: Implement comprehensive hybrid search with both content-based and structure-based matching.
+
+| Task | Priority | Status |
+| ---- | -------- | ------ |
+| Rename fields to consistent nomenclature | **CRITICAL** | 🔲 Pending |
+| Add `lesson_structure` field (BM25 text) | **CRITICAL** | 🔲 Pending |
+| Add `unit_structure` field (BM25 text) | **CRITICAL** | 🔲 Pending |
+| Restore `unit_content_semantic` to rollup content | **CRITICAL** | 🔲 Pending |
+| Add `unit_structure_semantic` field | **CRITICAL** | 🔲 Pending |
+| Update summary templates to include ALL API fields | **HIGH** | 🔲 Pending |
+| Update query builders to use four retrievers | **HIGH** | 🔲 Pending |
+| Update ES mappings via `pnpm type-gen` | **HIGH** | 🔲 Pending |
+| Re-index with new field schema | **HIGH** | 🔲 Pending |
+| **Prove KS4 filtering works** | **CRITICAL** | 🔲 Pending |
+| Run search quality benchmarks (MRR/NDCG) | **HIGH** | 🔲 Pending |
+
+See [Part 3c: Four-Retriever Architecture](#part-3c-four-retriever-architecture) section below for full implementation details.
 
 #### Smoke Test Architecture
 
@@ -907,66 +928,105 @@ Semantic summaries provide information-dense text (~200 tokens) optimised for em
 
 ### Task 2: Lesson Semantic Summary Template
 
-**Purpose**: Generate ~200 token summary for pedagogical matching.
+**Purpose**: Generate ~200 token summary for pedagogical/structural matching (SEPARATE from transcript content).
 
-**Template**:
+**Template** (comprehensive - include ALL available fields):
 
 ```text
-{lessonTitle} is a {keyStage} {subject} lesson for Year {year}.
+{lessonTitle} is a {keyStageTitle} {subjectTitle} lesson.
 
-Key learning: {keyLearningPoints[0..2]}.
+Key learning: {keyLearningPoints[*].keyLearningPoint}.
 
-Keywords: {keywords with descriptions}.
+Keywords: {lessonKeywords[*].keyword} - {description}.
 
-Prior knowledge: {priorKnowledge}.
+Common misconceptions: {misconceptionsAndCommonMistakes[*].misconception} (Response: {response}).
 
-Common misconception: {misconceptions[0]}.
+Teacher tips: {teacherTips[*].teacherTip}.
+
+Content guidance: {contentGuidance[*].contentGuidanceLabel} - {contentGuidanceDescription}.
+
+Supervision level: {supervisionLevel}.
 
 Pupil outcome: {pupilLessonOutcome}.
+
+Unit context: {unitTitle} ({unitSlug}).
 ```
 
-**API fields used**:
+**API fields used** (from `/lessons/{lesson}/summary`):
 
-- `lessonTitle`, `keyStage`, `subject`, `year` - Context
-- `keyLearningPoints` - Learning objectives
-- `lessonKeywords` - Vocabulary with definitions
-- `priorKnowledge` - Prerequisites
-- `misconceptionsAndCommonMistakes` - What to avoid
-- `pupilLessonOutcome` - Expected outcome
+| Field | Required | Use |
+|-------|----------|-----|
+| `lessonTitle` | ✓ | Title |
+| `unitSlug`, `unitTitle` | ✓ | Unit context |
+| `subjectSlug`, `subjectTitle` | ✓ | Subject context |
+| `keyStageSlug`, `keyStageTitle` | ✓ | Key stage context |
+| `lessonKeywords[]` | ✓ | Keywords with definitions |
+| `keyLearningPoints[]` | ✓ | Learning objectives |
+| `misconceptionsAndCommonMistakes[]` | ✓ | Misconceptions with responses |
+| `teacherTips[]` | ✓ | Teaching guidance |
+| `contentGuidance[]` | ✓ | Content warnings (null if none) |
+| `supervisionLevel` | ✓ | Supervision requirement (null if none) |
+| `downloadsAvailable` | ✓ | Asset availability |
+| `pupilLessonOutcome` | Optional | Expected learning outcome |
 
-**Index field**: `lesson_summary_semantic` (new, ELSER)
+**Principle**: Include ALL fields, tolerate missing optional fields gracefully. Users may search by misconception, by curriculum alignment, by teacher tip, or by lesson title.
+
+**Index field**: `lesson_structure_semantic` (renamed from `lesson_summary_semantic`, ELSER)
+
+**BM25 field**: `lesson_structure` (NEW, plain text copy for BM25 matching)
 
 ### Task 3: Unit Semantic Summary Template
 
-**Purpose**: Replace `rollupText` with curated summary.
+**Purpose**: Generate ~200 token summary for conceptual matching (SEPARATE from rollup content).
 
-**Template**:
+**⚠️ CORRECTION**: Original plan said "replace `rollupText`" - this was incorrect. The summary should be a NEW field, not a replacement. The rollup content remains the primary content field.
+
+**Template** (comprehensive - include ALL available fields):
 
 ```text
-{unitTitle} is a {keyStage} {subject} unit containing {lessonCount} lessons.
+{unitTitle} is a {keyStageSlug} {subjectSlug} unit for {year} containing {lessonCount} lessons.
 
 Overview: {whyThisWhyNow}.
 
-Key concepts: {derived from lesson titles and keywords}.
+Description: {description}.
 
-Prior knowledge: {priorKnowledgeRequirements[0..2]}.
+Notes: {notes}.
 
-National curriculum: {nationalCurriculumContent[0..2]}.
+Prior knowledge: {priorKnowledgeRequirements[*]}.
 
-Lessons: {lessonTitles as comma-separated list}.
+National curriculum: {nationalCurriculumContent[*]}.
+
+Threads: {threads[*].title}.
+
+Categories: {categories[*].categoryTitle}.
+
+Lessons:
+- {unitLessons[0].lessonTitle} ({lessonSlug})
+- {unitLessons[1].lessonTitle} ({lessonSlug})
+... [all lessons with title + slug]
 ```
 
-**API fields used**:
+**API fields used** (from `/units/{unit}/summary`):
 
-- `unitTitle`, `keyStage`, `subject` - Context
-- `unitLessons` - Lesson titles
-- `whyThisWhyNow` - Pedagogical rationale
-- `priorKnowledgeRequirements` - Prerequisites
-- `nationalCurriculumContent` - NC alignment
+| Field | Required | Use |
+|-------|----------|-----|
+| `unitSlug`, `unitTitle` | ✓ | Context |
+| `yearSlug`, `year` | ✓ | Context |
+| `phaseSlug`, `subjectSlug`, `keyStageSlug` | ✓ | Context |
+| `priorKnowledgeRequirements[]` | ✓ | Prerequisites |
+| `nationalCurriculumContent[]` | ✓ | NC alignment |
+| `unitLessons[]` | ✓ | Lesson list (title + slug for each) |
+| `notes` | Optional | Additional context |
+| `description` | Optional | Unit description |
+| `whyThisWhyNow` | Optional | Pedagogical rationale |
+| `threads[]` | Optional | Thread associations |
+| `categories[]` | Optional | Category classifications |
 
-**Index field**: `unit_semantic` (replace existing content)
+**Principle**: Include ALL fields, tolerate missing optional fields gracefully. Users may search from any perspective.
 
-**Comparison field**: Keep `rollup_text` for side-by-side comparison.
+**Index field**: `unit_structure_semantic` (NEW field, ELSER)
+
+**Content field**: `unit_content_semantic` should contain rollup text (restored from incorrect change).
 
 ### Task 4: Redis Caching
 
@@ -1025,6 +1085,200 @@ const llmSummary = await esClient.inference.inference({
 - Cache invalidation complexity
 
 **Decision**: Defer to Phase 4+ after template approach is validated.
+
+---
+
+## Part 3c: Four-Retriever Architecture
+
+**Status**: 🔲 NOT STARTED  
+**Prerequisites**: Parts 3a and 3b code exists (needs refactoring)
+
+### Architectural Decision
+
+Both lessons and units use **four retrievers** combined via RRF:
+
+1. **BM25 on Content** - Lexical matching on teaching material
+2. **ELSER on Content** - Semantic matching on teaching material
+3. **BM25 on Structure** - Lexical matching on metadata/summaries
+4. **ELSER on Structure** - Semantic matching on metadata/summaries
+
+**No reranker required initially** - RRF with four complementary retrievers provides good coverage. Add reranking only if quality metrics show diminishing returns.
+
+### Field Nomenclature
+
+Consistent pattern: `<entity>_content|structure[_semantic]`
+
+#### Lesson Fields
+
+| Field | Type | Content | Purpose |
+|-------|------|---------|---------|
+| `lesson_content` | Text | Full video transcript (~5000 tokens) | BM25 lexical matching on teaching content |
+| `lesson_content_semantic` | semantic_text | Full video transcript | ELSER semantic matching on teaching content |
+| `lesson_structure` | Text | Curated summary (~200 tokens) | BM25 lexical matching on pedagogical metadata |
+| `lesson_structure_semantic` | semantic_text | Curated summary | ELSER semantic matching on pedagogical metadata |
+
+#### Unit Fields (Rollup Index)
+
+| Field | Type | Content | Purpose |
+|-------|------|---------|---------|
+| `unit_content` | Text | Aggregated lesson snippets + prior knowledge + NC (~200-400 tokens) | BM25 lexical matching on teaching content |
+| `unit_content_semantic` | semantic_text | Aggregated lesson snippets + prior knowledge + NC | ELSER semantic matching on teaching content |
+| `unit_structure` | Text | Curated summary (~200 tokens) | BM25 lexical matching on unit overview |
+| `unit_structure_semantic` | semantic_text | Curated summary | ELSER semantic matching on unit overview |
+
+### Field Rename Mapping
+
+| Current Field | New Field | Action |
+|---------------|-----------|--------|
+| `transcript_text` | `lesson_content` | Rename |
+| `lesson_semantic` | `lesson_content_semantic` | Rename |
+| `lesson_summary_semantic` | `lesson_structure_semantic` | Rename |
+| (none) | `lesson_structure` | **ADD** - BM25 text field |
+| `rollup_text` | `unit_content` | Rename |
+| `unit_semantic` | `unit_content_semantic` | **RESTORE** - was incorrectly changed to summary |
+| (none) | `unit_structure` | **ADD** - BM25 text field |
+| (none) | `unit_structure_semantic` | **ADD** - ELSER field |
+
+### RRF Query Structure
+
+```typescript
+// Lesson search with four retrievers
+{
+  retriever: {
+    rrf: {
+      retrievers: [
+        // BM25 on content
+        { standard: { query: { multi_match: { query: text, fields: ['lesson_content', 'lesson_title'] } }, filter } },
+        // BM25 on structure
+        { standard: { query: { multi_match: { query: text, fields: ['lesson_structure'] } }, filter } },
+        // ELSER on content
+        { standard: { query: { semantic: { field: 'lesson_content_semantic', query: text } }, filter } },
+        // ELSER on structure
+        { standard: { query: { semantic: { field: 'lesson_structure_semantic', query: text } }, filter } }
+      ],
+      rank_window_size: 100,
+      rank_constant: 60
+    }
+  }
+}
+
+// Unit search with four retrievers
+{
+  retriever: {
+    rrf: {
+      retrievers: [
+        // BM25 on content
+        { standard: { query: { multi_match: { query: text, fields: ['unit_content', 'unit_title'] } }, filter } },
+        // BM25 on structure
+        { standard: { query: { multi_match: { query: text, fields: ['unit_structure'] } }, filter } },
+        // ELSER on content
+        { standard: { query: { semantic: { field: 'unit_content_semantic', query: text } }, filter } },
+        // ELSER on structure
+        { standard: { query: { semantic: { field: 'unit_structure_semantic', query: text } }, filter } }
+      ],
+      rank_window_size: 100,
+      rank_constant: 60
+    }
+  }
+}
+```
+
+### Implementation Tasks
+
+#### 1. Update Field Definitions (SDK)
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
+
+```typescript
+// LESSONS_INDEX_FIELDS changes:
+// - Rename transcript_text → lesson_content
+// - Rename lesson_semantic → lesson_content_semantic
+// - Rename lesson_summary_semantic → lesson_structure_semantic
+// - ADD lesson_structure (text field)
+
+// UNIT_ROLLUP_INDEX_FIELDS changes:
+// - Rename rollup_text → unit_content
+// - Rename unit_semantic → unit_content_semantic (restore to rollup content)
+// - ADD unit_structure (text field)
+// - ADD unit_structure_semantic (semantic_text field)
+```
+
+#### 2. Update Document Transforms
+
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+
+```typescript
+// createLessonDocument():
+// - lesson_content: transcript (was transcript_text)
+// - lesson_content_semantic: transcript (was lesson_semantic)
+// - lesson_structure: curated summary (NEW - use generateLessonSemanticSummary)
+// - lesson_structure_semantic: curated summary (was lesson_summary_semantic)
+
+// createRollupDocument():
+// - unit_content: rollup text (was rollup_text)
+// - unit_content_semantic: rollup text (RESTORE - was incorrectly changed to summary)
+// - unit_structure: curated summary (NEW - use generateUnitSemanticSummary)
+// - unit_structure_semantic: curated summary (NEW - use generateUnitSemanticSummary)
+```
+
+#### 3. Update Summary Generator
+
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/semantic-summary-generator.ts`
+
+- Expand `generateLessonSemanticSummary()` to include ALL API fields
+- Expand `generateUnitSemanticSummary()` to include ALL API fields including full lesson list
+
+#### 4. Update Query Builders
+
+**File**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+
+- Update `buildLessonSemanticRetriever()` → `buildLessonContentRetriever()` + `buildLessonStructureRetriever()`
+- Update `buildUnitSemanticRetriever()` → `buildUnitContentRetriever()` + `buildUnitStructureRetriever()`
+- Update RRF builders to use four retrievers
+
+#### 5. Update ES Mappings
+
+Run `pnpm type-gen` to regenerate mappings from updated field definitions.
+
+#### 6. Re-index and Verify
+
+```bash
+pnpm es:setup        # Recreate indices with new mappings
+pnpm es:ingest-live -- --subject maths --keystage ks4  # Re-index data
+pnpm smoke:dev:stub  # Run smoke tests including KS4 filtering
+```
+
+### KS4 Filtering Verification
+
+**CRITICAL**: Must prove KS4 filtering works before declaring Phase 3 complete.
+
+**Test queries**:
+
+```typescript
+// Filter by tier
+{ subjectSlug: 'maths', keyStageSlug: 'ks4', tierSlug: 'foundation' }
+
+// Filter by exam board
+{ subjectSlug: 'science', keyStageSlug: 'ks4', examBoardSlug: 'aqa' }
+
+// Filter by exam subject
+{ subjectSlug: 'science', keyStageSlug: 'ks4', examSubjectSlug: 'gcse-biology' }
+
+// Filter by KS4 option
+{ subjectSlug: 'maths', keyStageSlug: 'ks4', ks4OptionSlug: 'higher' }
+```
+
+**Files**: `apps/oak-open-curriculum-semantic-search/smoke-tests/ks4-filtering.smoke.test.ts`
+
+### Success Criteria
+
+1. ✅ All four retrievers configured for both lessons and units
+2. ✅ Field names follow consistent nomenclature
+3. ✅ Structure summaries include ALL available API fields
+4. ✅ KS4 filtering returns expected results
+5. ✅ MRR ≥ 0.70, NDCG@10 ≥ 0.75 maintained or improved
+6. ✅ All quality gates pass
+7. ✅ Re-indexed Maths KS4 data passes smoke tests
 
 ---
 
