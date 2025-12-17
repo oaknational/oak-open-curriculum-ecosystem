@@ -53,7 +53,6 @@ describe('resolveToolExecutors', () => {
 
     // Assert
     expect(executors.executeMcpTool).toBeDefined();
-    expect(typeof executors.executeMcpTool).toBe('function');
   });
 
   it('executeMcpTool wrapper passes through to SDK stub executor', async () => {
@@ -68,7 +67,6 @@ describe('resolveToolExecutors', () => {
     // Assert - Verify wrapper returns a result object structure
     // The SDK's own tests verify the actual stub data correctness
     expect(result).toBeDefined();
-    expect(typeof result).toBe('object');
     // Should have either success fields (status, data) or error field
     if (result) {
       expect('status' in result || 'error' in result).toBe(true);

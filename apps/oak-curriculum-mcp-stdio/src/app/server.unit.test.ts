@@ -164,10 +164,7 @@ describe('validation helpers', () => {
 });
 
 describe('registerMcpTools literals', () => {
-  it('iterates over literal tool descriptors in alphabetical order', () => {
-    const sortedToolNames = [...toolNames].toSorted((a, b) => a.localeCompare(b));
-    expect(sortedToolNames).toEqual(sortedToolNames.slice().sort((a, b) => a.localeCompare(b)));
-
+  it('maps each tool name to its corresponding descriptor', () => {
     for (const name of toolNames) {
       const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
       expect(descriptor.name).toBe(name);

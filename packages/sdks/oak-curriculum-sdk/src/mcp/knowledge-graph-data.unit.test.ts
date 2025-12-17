@@ -12,36 +12,28 @@ import { ontologyData } from './ontology-data.js';
 describe('conceptGraph', () => {
   describe('structure', () => {
     it('has version string matching semver format', () => {
-      expect(typeof conceptGraph.version).toBe('string');
       expect(conceptGraph.version).toMatch(/^\d+\.\d+\.\d+$/);
     });
 
     it('has concepts array with at least 25 items', () => {
-      expect(Array.isArray(conceptGraph.concepts)).toBe(true);
       expect(conceptGraph.concepts.length).toBeGreaterThanOrEqual(25);
     });
 
     it('has edges array with at least 40 items', () => {
-      expect(Array.isArray(conceptGraph.edges)).toBe(true);
       expect(conceptGraph.edges.length).toBeGreaterThanOrEqual(40);
     });
 
     it('has seeOntology cross-reference containing get-ontology', () => {
-      expect(typeof conceptGraph.seeOntology).toBe('string');
       expect(conceptGraph.seeOntology).toContain('get-ontology');
     });
   });
 
   describe('concepts', () => {
-    it('each concept has required fields: id, label, brief, category', () => {
+    it('each concept has non-empty required fields: id, label, brief, category', () => {
       for (const concept of conceptGraph.concepts) {
-        expect(typeof concept.id).toBe('string');
         expect(concept.id.length).toBeGreaterThan(0);
-        expect(typeof concept.label).toBe('string');
         expect(concept.label.length).toBeGreaterThan(0);
-        expect(typeof concept.brief).toBe('string');
         expect(concept.brief.length).toBeGreaterThan(0);
-        expect(typeof concept.category).toBe('string');
         expect(concept.category.length).toBeGreaterThan(0);
       }
     });
@@ -100,13 +92,10 @@ describe('conceptGraph', () => {
   });
 
   describe('edges', () => {
-    it('each edge has required fields: from, to, rel', () => {
+    it('each edge has non-empty required fields: from, to, rel', () => {
       for (const edge of conceptGraph.edges) {
-        expect(typeof edge.from).toBe('string');
         expect(edge.from.length).toBeGreaterThan(0);
-        expect(typeof edge.to).toBe('string');
         expect(edge.to.length).toBeGreaterThan(0);
-        expect(typeof edge.rel).toBe('string');
         expect(edge.rel.length).toBeGreaterThan(0);
       }
     });

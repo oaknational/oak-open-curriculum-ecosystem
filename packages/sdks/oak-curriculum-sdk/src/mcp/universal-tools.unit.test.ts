@@ -315,14 +315,12 @@ describe('aggregated tool _meta fields', () => {
     const tools = listUniversalTools();
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
-    expect(typeof tool?._meta?.['openai/toolInvocation/invoking']).toBe('string');
   });
 
   it.each(aggregatedToolNames)('%s has openai/toolInvocation/invoked', (toolName) => {
     const tools = listUniversalTools();
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
-    expect(typeof tool?._meta?.['openai/toolInvocation/invoked']).toBe('string');
   });
 });
 

@@ -34,11 +34,7 @@ describe('createStdioLogger', () => {
 
   it('creates a logger with stdout sink set to null (no stdout)', () => {
     const logger = createStdioLogger(createRuntimeConfig());
-    expect(logger).toBeDefined();
-    expect(typeof logger.debug).toBe('function');
-    expect(typeof logger.info).toBe('function');
-    expect(typeof logger.warn).toBe('function');
-    expect(typeof logger.error).toBe('function');
+    expect(logger).toBeInstanceOf(UnifiedLogger);
   });
 
   it('supports the error signature with error parameter', () => {
@@ -77,7 +73,6 @@ describe('createChildLogger', () => {
     const childLogger = createChildLogger(parentLogger, correlationId);
 
     expect(childLogger).toBeInstanceOf(UnifiedLogger);
-    expect(typeof childLogger.info).toBe('function');
   });
 
   it('throws error if parent logger does not support child() method', () => {

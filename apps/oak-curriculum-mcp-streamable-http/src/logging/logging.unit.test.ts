@@ -24,10 +24,6 @@ describe('createHttpLogger', () => {
     const logger = createHttpLogger(runtimeConfig);
 
     expect(logger).toBeInstanceOf(UnifiedLogger);
-    expect(typeof logger.debug).toBe('function');
-    expect(typeof logger.info).toBe('function');
-    expect(typeof logger.warn).toBe('function');
-    expect(typeof logger.error).toBe('function');
   });
 
   it('creates logger with stdout sink only (no file logging)', () => {
@@ -66,8 +62,6 @@ describe('createChildLogger', () => {
 
     const childLogger = createChildLogger(parentLogger, correlationId);
 
-    expect(childLogger).toBeDefined();
-    expect(typeof childLogger.info).toBe('function');
     expect(childLogger).toBeInstanceOf(UnifiedLogger);
   });
 
