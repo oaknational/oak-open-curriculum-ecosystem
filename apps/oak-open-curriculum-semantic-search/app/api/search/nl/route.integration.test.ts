@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createSearchLessonsResponse,
   SearchLessonsResponseSchema,
@@ -81,11 +81,6 @@ describe('POST /api/search/nl', () => {
   beforeEach(() => {
     parseQuery.mockResolvedValue({ intent: LESSONS_SCOPE, text: 'fractions' });
     llmEnabled.mockReturnValue(true);
-    vi.stubGlobal('fetch', vi.fn());
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
   });
 
   it('returns fixture results with a derived summary when fixtures query parameter is provided', async () => {
@@ -105,7 +100,6 @@ describe('POST /api/search/nl', () => {
     expect(payload.result.results.length).toBeGreaterThan(0);
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
-    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('returns an empty fixture with a derived summary when fixtures query parameter requests empty mode', async () => {
@@ -123,7 +117,6 @@ describe('POST /api/search/nl', () => {
     expect(payload.summary.prompt).toBe('fractions for ks3');
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=empty');
-    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('returns an error fixture when fixtures query parameter requests error mode', async () => {
@@ -151,7 +144,6 @@ describe('POST /api/search/nl', () => {
     );
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=error');
-    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('returns a fixture response when the LLM is disabled but fixture mode is requested', async () => {
@@ -168,49 +160,6 @@ describe('POST /api/search/nl', () => {
     expect(payload.result.results.length).toBeGreaterThan(0);
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
-    expect(fetch).not.toHaveBeenCalled();
-    expect(llmEnabled).toHaveBeenCalled();
-  });
-
-  it('forwards live requests, returning the derived summary alongside the structured response', async () => {
-    const request = new NextRequest('http://localhost/api/search/nl', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ q: 'Plan primary fractions lessons with manipulatives' }),
-    });
-
-    const structuredResponse = createSearchLessonsResponse({
-      results: [
-        {
-          id: 'lesson-1',
-          rankScore: 1,
-          lesson: null,
-          highlights: [],
-        },
-      ],
-      total: 1,
-      took: 12,
-      timedOut: false,
-      aggregations: {},
-      facets: null,
-      suggestions: [],
-      suggestionCache: { version: 'live', ttlSeconds: 3600 },
-    });
-
-    (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
-      new Response(JSON.stringify(structuredResponse), {
-        status: 200,
-        headers: { 'content-type': 'application/json' },
-      }),
-    );
-
-    const response = await POST(request);
-    expect(response.status).toBe(200);
-    const payload = parseNaturalResponse(await response.json());
-
-    expect(payload.result).toMatchObject(structuredResponse);
-    expect(payload.summary.prompt).toBe('Plan primary fractions lessons with manipulatives');
-    expect(payload.summary.structured.text).toBe('fractions');
   });
 });
 

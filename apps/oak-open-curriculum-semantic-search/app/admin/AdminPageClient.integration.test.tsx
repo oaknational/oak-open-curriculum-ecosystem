@@ -6,10 +6,6 @@ import { AdminPageClient } from './AdminPageClient';
 import type { FixtureMode } from '../lib/fixture-mode';
 import { FixtureModeProvider } from '../ui/global/Fixture/FixtureModeContext';
 
-vi.mock('../ui/ops/admin/ZeroHitDashboard', () => ({
-  ZeroHitDashboard: () => <div data-testid="zero-hit-dashboard" />,
-}));
-
 const theme = createLightTheme();
 
 function renderAdmin(props: Partial<Parameters<typeof AdminPageClient>[0]> = {}): void {

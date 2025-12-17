@@ -26,5 +26,4 @@ export type {
 } from './search/client';
 
 export { LandingPage } from './landing/LandingPage';
-export { ZeroHitDashboard } from './ops/admin/ZeroHitDashboard';
 export { WebVitals } from './web-vitals';

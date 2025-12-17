@@ -26,9 +26,3 @@ export const ActionsGrid = styledComponents(OakBox)`
 `;
 
 export const ActionSection = styledComponents(OperationsSection)``;
-
-export const TelemetrySection = styledComponents(ActionSection)`
-  @media (min-width: var(--app-bp-md)) {
-    grid-column: 1 / -1;
-  }
-`;

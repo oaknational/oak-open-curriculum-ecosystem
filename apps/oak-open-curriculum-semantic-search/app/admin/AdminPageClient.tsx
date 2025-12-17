@@ -4,14 +4,7 @@ import { Fragment, type JSX, useEffect } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import type { FixtureMode } from '../lib/fixture-mode';
 import { useStream, type StreamOutcome } from '../lib/useStream';
-import { ZeroHitDashboard } from '../ui/ops/admin/ZeroHitDashboard';
-import {
-  ActionSection,
-  ActionsGrid,
-  IntroSection,
-  QuickLinksSection,
-  TelemetrySection,
-} from './AdminPage.styles';
+import { ActionSection, ActionsGrid, IntroSection, QuickLinksSection } from './AdminPage.styles';
 import { OperationsLayout } from '../ui/ops';
 import { SearchFixtureNotice } from '../ui/global/client';
 
@@ -77,13 +70,6 @@ function AdminActions(): JSX.Element {
       <AdminSection heading="Rebuild rollup">
         <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
       </AdminSection>
-
-      <TelemetrySection as="section">
-        <OakHeading tag="h2" $font="heading-6">
-          Zero-hit telemetry
-        </OakHeading>
-        <ZeroHitDashboard />
-      </TelemetrySection>
     </ActionsGrid>
   );
 }
