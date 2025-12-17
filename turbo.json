@@ -15,7 +15,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
-      "dependsOn": ["^doc-gen", "^build"],
+      "dependsOn": ["^doc-gen", "^build", "type-gen"],
       "cache": true,
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
@@ -69,7 +69,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "build", "type-gen"],
       "cache": true,
       "outputs": [],
       "inputs": [
@@ -94,7 +94,7 @@
       ]
     },
     "lint:fix": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build", "build", "type-gen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -136,6 +136,7 @@
       ]
     },
     "mutate": {
+      "dependsOn": ["^build", "type-gen"],
       "cache": false,
       "outputs": [],
       "inputs": [
@@ -182,7 +183,7 @@
       "passThroughEnv": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"]
     },
     "test:ui": {
-      "dependsOn": ["type-gen"],
+      "dependsOn": ["^build", "build", "type-gen"],
       "outputs": [],
       "cache": true,
       "inputs": [
@@ -234,7 +235,7 @@
       "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
-      "dependsOn": ["^smoke:dev:live", "^build"],
+      "dependsOn": ["^smoke:dev:live", "^build", "build"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -246,7 +247,7 @@
       ]
     },
     "smoke:dev:live:auth": {
-      "dependsOn": ["^smoke:dev:live:auth", "^build"],
+      "dependsOn": ["^smoke:dev:live:auth", "^build", "build"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY", "LOG_LEVEL"],
@@ -258,7 +259,7 @@
       ]
     },
     "smoke:remote": {
-      "dependsOn": ["^smoke:remote", "^build"],
+      "dependsOn": ["^smoke:remote", "^build", "build"],
       "cache": false,
       "outputs": [],
       "inputs": [
