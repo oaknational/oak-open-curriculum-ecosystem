@@ -11,6 +11,7 @@ node_modules/**
 
 # Generated
 packages/sdks/oak-curriculum-sdk/docs/api-md/**
+packages/sdks/oak-curriculum-sdk/docs/api/**
 
 # Playwright test results
 **/test-results/**

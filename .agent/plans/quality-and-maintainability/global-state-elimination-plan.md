@@ -15,17 +15,23 @@
 | Phase 0 | ✅ COMPLETE | Pre-push reliability improvements |
 | Phase 1A | ✅ COMPLETE | Unit test quick wins (3 files) |
 | Phase 2 | ✅ COMPLETE (partial) | `vi.stubGlobal` eliminated; `vi.doMock` deferred to config architecture work |
-| Phase 3 | 🔗 DELEGATED | See [Config Architecture Standardisation Plan](./config-architecture-standardisation-plan.md) |
+| Phase 3 | 🔗 DELEGATED | See [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md) |
 | Phase 1B | ⏳ BLOCKED | Requires Phase 3 |
 | Phase 4A-7 | ⏳ PENDING | Requires Phase 3 |
 
-### Completed Work (2025-12-16)
+### Completed Work (2025-12-16 & 2025-12-17)
 
 **Phase 0: Pre-Push Reliability**
 - ✅ Added `export TURBO_CONCURRENCY=4` to `.husky/pre-push`
 - ✅ Added `--only` flag to `test:e2e` and `test:e2e:built` to skip dependency re-runs
 - ✅ Increased `testTimeout` to 60000ms in `vitest.e2e.config.base.ts`
 - ✅ Validated with 3 consecutive successful pre-push runs
+
+**Turbo Dependency Graph Fix (2025-12-17)**
+- ✅ Fixed race condition: `lint` and `build` running in parallel caused `ENOENT: tsup.config.bundled_*.mjs` errors
+- ✅ Added `build` dependency to `lint`, `lint:fix`, `test:ui`, and smoke tests in `turbo.json`
+- ✅ Added `type-gen` dependency to `doc-gen` and `mutate` tasks
+- ✅ 8 task definitions corrected - ensures tasks wait for own package's build to complete
 
 **Phase 1A: Unit Test Quick Wins**
 - ✅ `fixture-toggle.unit.test.ts` - removed `process.env` mutation
@@ -49,7 +55,7 @@ process.env in unit tests:      22  (was 25, reduced by 3)
 
 The remaining `vi.doMock` and `process.env` issues in `oak-notion-mcp` require architectural refactoring of the config/env layer. This is tracked in a dedicated plan:
 
-**→ [Config Architecture Standardisation Plan](./config-architecture-standardisation-plan.md)**
+**→ [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md)**
 
 ---
 
@@ -989,7 +995,7 @@ All test types (unit, integration, E2E, smoke) run during `git push`. Global sta
 
 ### Related Plans
 
-- **Delegates to**: [Config Architecture Standardisation Plan](./config-architecture-standardisation-plan.md) - Refactors `oak-notion-mcp` config layer to enable Phase 3+
+- **Delegates to**: [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md) - Refactors `oak-notion-mcp` config layer to enable Phase 3+
 - Supersedes: `global-state-test-refactoring.md` → moved to `archive/`
 - Supersedes: `di-architecture-consistency.md` → moved to `archive/`
 - Builds on: `.agent/plans/archive/completed/fix-e2e-test-isolation.md` (added `isolate: true` workaround)
