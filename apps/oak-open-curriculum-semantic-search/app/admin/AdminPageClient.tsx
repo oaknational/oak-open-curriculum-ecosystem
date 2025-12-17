@@ -89,7 +89,7 @@ function AdminActions(): JSX.Element {
 }
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
-  const { state, text, run, outcome } = useStream(url, method ?? 'POST');
+  const { state, text, run, outcome } = useStream(url, { method: method ?? 'POST' });
 
   return (
     <OakBox $display="flex" $flexDirection="column" $gap="spacing-4">

@@ -1,92 +1,69 @@
 /**
  * Unit tests for environment utilities
+ *
+ * Tests parseLogLevel as a pure function with explicit inputs.
+ * No process.env manipulation - values are passed directly.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { parseLogLevel, type LogLevel, LOG_LEVEL_KEY } from '@oaknational/mcp-logger';
+import { describe, it, expect } from 'vitest';
+import { parseLogLevel, type LogLevel } from '@oaknational/mcp-logger';
 
 describe('env-utils', () => {
   describe('parseLogLevel', () => {
-    const originalEnv = process.env;
-
-    beforeEach(() => {
-      // Reset process.env for each test
-      process.env = { ...originalEnv };
-    });
-
-    afterEach(() => {
-      // Restore original env
-      process.env = originalEnv;
-    });
-
-    it('should return default value when env var is not set', () => {
-      process.env.LOG_LEVEL = undefined as unknown as string;
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY], 'WARN');
+    it('returns default value when input is undefined', () => {
+      const result = parseLogLevel(undefined, 'WARN');
       expect(result).toBe('WARN');
     });
 
-    it('should return INFO as default when no default provided and env var not set', () => {
-      process.env.LOG_LEVEL = undefined as unknown as string;
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('returns INFO as default when no default provided and input is undefined', () => {
+      const result = parseLogLevel(undefined);
       expect(result).toBe('INFO');
     });
 
-    it('should parse DEBUG level correctly', () => {
-      process.env[LOG_LEVEL_KEY] = 'debug';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('parses DEBUG level correctly', () => {
+      const result = parseLogLevel('debug');
       expect(result).toBe('DEBUG');
     });
 
-    it('should parse INFO level correctly', () => {
-      process.env[LOG_LEVEL_KEY] = 'info';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('parses INFO level correctly', () => {
+      const result = parseLogLevel('info');
       expect(result).toBe('INFO');
     });
 
-    it('should parse WARN level correctly', () => {
-      process.env[LOG_LEVEL_KEY] = 'warn';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('parses WARN level correctly', () => {
+      const result = parseLogLevel('warn');
       expect(result).toBe('WARN');
     });
 
-    it('should parse ERROR level correctly', () => {
-      process.env[LOG_LEVEL_KEY] = 'error';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('parses ERROR level correctly', () => {
+      const result = parseLogLevel('error');
       expect(result).toBe('ERROR');
     });
 
-    it('should handle uppercase input', () => {
-      process.env[LOG_LEVEL_KEY] = 'ERROR';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('handles uppercase input', () => {
+      const result = parseLogLevel('ERROR');
       expect(result).toBe('ERROR');
     });
 
-    it('should handle mixed case input', () => {
-      process.env[LOG_LEVEL_KEY] = 'WaRn';
-      const result = parseLogLevel(process.env[LOG_LEVEL_KEY]);
+    it('handles mixed case input', () => {
+      const result = parseLogLevel('WaRn');
       expect(result).toBe('WARN');
     });
 
-    it('should throw error for invalid log level', () => {
-      process.env[LOG_LEVEL_KEY] = 'INVALID';
-      expect(() => parseLogLevel(process.env[LOG_LEVEL_KEY])).toThrow(
+    it('throws error for invalid log level', () => {
+      expect(() => parseLogLevel('INVALID')).toThrow(
         'Log level must be one of: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, got: INVALID',
       );
     });
 
-    it('should throw error for empty string', () => {
-      process.env[LOG_LEVEL_KEY] = '';
-      expect(() => parseLogLevel(process.env[LOG_LEVEL_KEY])).toThrow(
+    it('throws error for empty string', () => {
+      expect(() => parseLogLevel('')).toThrow(
         'Log level must be one of: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, got: ',
       );
     });
 
-    it('should maintain type safety without type assertions', () => {
-      // This test ensures the return type is correctly inferred as LogLevel
-      process.env[LOG_LEVEL_KEY] = 'debug';
-      const result: LogLevel = parseLogLevel(process.env[LOG_LEVEL_KEY]);
-
-      // TypeScript should allow this assignment without errors
+    it('maintains type safety without type assertions', () => {
+      const result: LogLevel = parseLogLevel('debug');
       const levels: LogLevel[] = ['DEBUG', 'INFO', 'WARN', 'ERROR'];
       expect(levels).toContain(result);
     });

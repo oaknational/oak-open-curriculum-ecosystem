@@ -41,7 +41,6 @@ describe('logZeroHit', () => {
     error.mockReset();
     noop.mockReset();
     fetchMock.mockReset();
-    vi.stubGlobal('fetch', fetchMock);
     resetZeroHitStore();
     persistZeroHitEvent.mockReset();
     zeroHitPersistenceEnabled.mockReturnValue(false);
@@ -58,6 +57,7 @@ describe('logZeroHit', () => {
       keyStage: 'ks4',
       indexVersion: 'v2025-03-16',
       webhookUrl: 'https://hooks.example.com/zero-hit',
+      fetchImpl: fetchMock,
     });
 
     expect(info).toHaveBeenCalledWith('semantic-search.zero-hit', {
@@ -125,7 +125,6 @@ describe('logZeroHit', () => {
 
   it('allows skipping log, persistence, and webhook', async () => {
     zeroHitPersistenceEnabled.mockReturnValue(true);
-    fetchMock.mockResolvedValueOnce(new Response(null, { status: 202 }));
 
     await logZeroHit({
       total: 0,
@@ -133,6 +132,7 @@ describe('logZeroHit', () => {
       text: 'fixture zero hit',
       indexVersion: 'v-fixture',
       webhookUrl: 'https://hooks.example.com/zero-hit',
+      fetchImpl: fetchMock,
       skipLog: true,
       skipPersistence: true,
       skipWebhook: true,

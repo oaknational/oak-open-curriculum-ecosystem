@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  resolveFixtureMode,
-  modeToCookieValue,
-  resolveFixtureModeFromEnv,
-  type FixtureMode,
-} from './fixture-mode';
+import { resolveFixtureMode, modeToCookieValue, type FixtureMode } from './fixture-mode';
 
 describe('fixture mode resolution', () => {
   it('prefers query value when present', () => {
@@ -61,14 +56,9 @@ describe('fixture mode resolution', () => {
     }
   });
 
-  it('respects environment defaults via resolveFixtureModeFromEnv', () => {
-    const original = process.env.SEMANTIC_SEARCH_USE_FIXTURES;
-    process.env.SEMANTIC_SEARCH_USE_FIXTURES = 'on';
-    expect(resolveFixtureModeFromEnv()).toBe('fixtures');
-    process.env.SEMANTIC_SEARCH_USE_FIXTURES = 'empty';
-    expect(resolveFixtureModeFromEnv()).toBe('fixtures-empty');
-    process.env.SEMANTIC_SEARCH_USE_FIXTURES = 'error';
-    expect(resolveFixtureModeFromEnv()).toBe('fixtures-error');
-    process.env.SEMANTIC_SEARCH_USE_FIXTURES = original;
+  it('respects environment values via resolveFixtureMode', () => {
+    expect(resolveFixtureMode({ envValue: 'on' }).mode).toBe('fixtures');
+    expect(resolveFixtureMode({ envValue: 'empty' }).mode).toBe('fixtures-empty');
+    expect(resolveFixtureMode({ envValue: 'error' }).mode).toBe('fixtures-error');
   });
 });

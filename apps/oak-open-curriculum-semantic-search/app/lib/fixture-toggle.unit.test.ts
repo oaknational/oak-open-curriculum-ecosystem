@@ -23,13 +23,9 @@ describe('resolveFixtureToggleVisibility', () => {
     expect(
       resolveFixtureToggleVisibility({ NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE: '   false   ' }),
     ).toBe(false);
-  });
-
-  it('reads process env when no explicit env is supplied', () => {
-    const original = process.env.NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE;
-    process.env.NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE = ' OFF ';
-    expect(resolveFixtureToggleVisibility()).toBe(false);
-    process.env.NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE = original;
+    expect(resolveFixtureToggleVisibility({ NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE: ' OFF ' })).toBe(
+      false,
+    );
   });
 });
 

@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { useStream } from './useStream';
 
 const okResponse = new Response('Completed', {
@@ -13,17 +13,9 @@ const errorResponse = new Response('Missing required environment variables: ELAS
 });
 
 describe('useStream', () => {
-  beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   it('reports success outcome when the request completes without errors', async () => {
-    (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(okResponse.clone());
-    const { result } = renderHook(() => useStream('/api/admin/example'));
+    const mockFetch = vi.fn<typeof fetch>().mockResolvedValueOnce(okResponse.clone());
+    const { result } = renderHook(() => useStream('/api/admin/example', { fetch: mockFetch }));
 
     await act(async () => {
       await result.current.run();
@@ -32,11 +24,15 @@ describe('useStream', () => {
     expect(result.current.state).toBe('success');
     expect(result.current.outcome?.status).toBe('success');
     expect(result.current.outcome?.message).toContain('status 200');
+    expect(mockFetch).toHaveBeenCalledWith(
+      '/api/admin/example',
+      expect.objectContaining({ method: 'POST' }),
+    );
   });
 
   it('reports error outcome when the request fails', async () => {
-    (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(errorResponse.clone());
-    const { result } = renderHook(() => useStream('/api/admin/example'));
+    const mockFetch = vi.fn<typeof fetch>().mockResolvedValueOnce(errorResponse.clone());
+    const { result } = renderHook(() => useStream('/api/admin/example', { fetch: mockFetch }));
 
     await act(async () => {
       await result.current.run();

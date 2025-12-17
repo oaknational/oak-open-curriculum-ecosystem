@@ -3,6 +3,9 @@
 # Disable turbo TUI
 export TURBO_UI=0
 
+# Limit concurrency to reduce resource contention and timeout failures
+export TURBO_CONCURRENCY=4
+
 echo "🚀 Running pre-push checks..."
 
 echo "📝 Checking formatting..."
@@ -15,8 +18,14 @@ fi
 echo "🔍 Running full markdownlint..."
 pnpm markdownlint-check:root
 
-echo "🔤 Running quality gate checks..."
-pnpm turbo run type-gen build type-check lint test test:e2e test:e2e:built
+echo "🔤 Running build and verification..."
+pnpm turbo run type-gen build type-check lint test
+
+echo "🧪 Running E2E tests..."
+pnpm turbo run test:e2e --only
+
+echo "📦 Running built artifact E2E tests..."
+pnpm turbo run test:e2e:built --only
 
 echo "✅ Pre-push checks completed!"
 

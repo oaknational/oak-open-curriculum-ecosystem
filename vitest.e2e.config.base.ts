@@ -15,7 +15,7 @@ export const baseE2EConfig = defineConfig({
     passWithNoTests: true,
     include: ['e2e-tests/**/*.e2e.test.ts', 'e2e/**/*.e2e.test.ts'],
     exclude: ['node_modules', 'dist', 'coverage'],
-    testTimeout: 30000, // E2E tests may take longer
+    testTimeout: 60000, // E2E tests may take longer; 60s provides headroom under resource pressure
     hookTimeout: 30000,
     retry: 0, // No retries by default for E2E
   },

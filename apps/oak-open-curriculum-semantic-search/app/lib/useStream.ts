@@ -17,7 +17,18 @@ export interface StreamHookResult {
   outcome: StreamOutcome | null;
 }
 
-export function useStream(url: string, method: 'GET' | 'POST' = 'POST'): StreamHookResult {
+/**
+ * Options for the useStream hook.
+ */
+export interface UseStreamOptions {
+  /** HTTP method to use for the request. Defaults to 'POST'. */
+  readonly method?: 'GET' | 'POST';
+  /** Optional fetch implementation for dependency injection in tests. */
+  readonly fetch?: typeof fetch;
+}
+
+export function useStream(url: string, options: UseStreamOptions = {}): StreamHookResult {
+  const { method = 'POST', fetch: fetchFn = fetch } = options;
   const [state, setState] = useState<RunState>('idle');
   const [text, setText] = useState('');
   const [outcome, setOutcome] = useState<StreamOutcome | null>(null);
@@ -26,7 +37,7 @@ export function useStream(url: string, method: 'GET' | 'POST' = 'POST'): StreamH
   async function run(): Promise<void> {
     try {
       prepareRunFor(ctrlRef, setText, setState);
-      const res = await startRequestExternal(url, method, ctrlRef.current?.signal);
+      const res = await startRequestExternal(url, method, ctrlRef.current?.signal, fetchFn);
       const output = await streamOrBufferExternal(res, setText);
       const nextState: RunState = res.ok ? 'success' : 'error';
       setState(nextState);
@@ -65,8 +76,9 @@ async function startRequestExternal(
   u: string,
   m: 'GET' | 'POST',
   signal: AbortSignal | undefined,
+  fetchFn: typeof fetch,
 ): Promise<Response> {
-  return fetch(u, { method: m, signal });
+  return fetchFn(u, { method: m, signal });
 }
 
 async function streamOrBufferExternal(res: Response, update: SetText): Promise<string> {
