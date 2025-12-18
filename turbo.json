@@ -11,7 +11,6 @@
       "cache": true,
       "outputs": ["**/generated/**"],
       "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
-      "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "doc-gen": {
@@ -38,13 +37,6 @@
       "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/core/oak-eslint",
-        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "$TURBO_ROOT$/tsconfig.base.json",
         "tsconfig.json",
         "tsconfig.build.json",
@@ -56,7 +48,6 @@
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ],
-      "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "clean": {
@@ -65,7 +56,6 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
@@ -77,13 +67,6 @@
         "$TURBO_ROOT$/eslint.config.ts",
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/core/oak-eslint",
-        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "eslint.config.ts",
         "tsconfig.lint.json",
         "src/**/*.ts",
@@ -102,13 +85,6 @@
         "$TURBO_ROOT$/eslint.config.ts",
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/core/oak-eslint",
-        "$TURBO_ROOT$/packages/core/openapi-zod-client-adapter",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "eslint.config.ts",
         "tsconfig.lint.json",
         "src/**/*.ts",
@@ -156,17 +132,7 @@
       "dependsOn": ["build"],
       "outputs": [],
       "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "e2e-tests/**/*.ts",
-        "vitest.e2e.config.ts",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport"
-      ],
-      "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
     "test:e2e:built": {
@@ -179,7 +145,6 @@
         "dist/**/*.js",
         "dist/**/*.d.ts"
       ],
-      "env": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["OAK_API_KEY", "CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY", "LOG_LEVEL"]
     },
     "test:ui": {
@@ -205,11 +170,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsconfig.lint.json",
@@ -231,14 +191,12 @@
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ],
-      "env": ["LOG_LEVEL"],
       "passThroughEnv": ["LOG_LEVEL"]
     },
     "smoke:dev:live": {
       "dependsOn": ["^smoke:dev:live", "^build", "build"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -250,7 +208,6 @@
       "dependsOn": ["^smoke:dev:live:auth", "^build", "build"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["OAK_API_KEY", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -267,7 +224,6 @@
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ],
-      "env": ["LOG_LEVEL"],
       "passThroughEnv": ["LOG_LEVEL"]
     }
   }

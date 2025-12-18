@@ -1,7 +1,7 @@
 # ADR 065: Turbo Task Dependencies and Caching Strategy
 
 **Status**: Accepted  
-**Date**: 2025-12-04  
+**Date**: 2025-12-04 (updated 2025-12-18)  
 **Context**: Build system reliability and performance
 
 ## Context
@@ -13,6 +13,10 @@ The monorepo uses Turborepo to orchestrate tasks across workspaces. Several issu
 2. **Slow repeated runs**: The `build` task had `cache: false`, meaning every task depending on `^build` would trigger full rebuilds even when nothing changed.
 
 3. **Inconsistent lint flags**: The `--fix` flag was passed via `pnpm lint -- --fix`, which worked but prevented batching lint with other tasks in a single turbo run.
+
+4. **Cache invalidation from directory inputs** (fixed 2025-12-18): Task inputs included bare directory paths like `$TURBO_ROOT$/packages/libs/logger` which caused Turbo to hash entire directories including build outputs, creating circular cache invalidation.
+
+5. **Redundant env configuration** (fixed 2025-12-18): Tasks specified both `env` and `passThroughEnv` for the same variables, causing env var values to affect cache hashes unnecessarily.
 
 ## Decision
 
@@ -94,6 +98,49 @@ turbo run build type-check doc-gen && pnpm lint -- --fix
 # After: single turbo invocation
 turbo run build type-check doc-gen lint:fix
 ```
+
+### 4. Inputs use file globs, not directory paths
+
+**Problem**: Including bare directory paths as inputs (e.g. `$TURBO_ROOT$/packages/libs/logger`) causes Turbo to hash the entire directory recursively, including:
+
+- Build outputs (`dist/`, `.next/`)
+- Hidden files (`.DS_Store`)
+- All nested files
+
+This creates circular cache invalidation: `build` produces outputs → outputs change directory hash → downstream tasks see changed inputs → cache miss.
+
+**Solution**: Remove directory paths from inputs. Cross-package dependencies are already handled by `dependsOn: ["^build"]`.
+
+```json
+// ❌ Wrong - directory path causes cache invalidation
+"inputs": [
+  "$TURBO_ROOT$/packages/libs/logger",
+  "src/**/*.ts"
+]
+
+// ✅ Correct - only file globs, dependencies handled by ^build
+"inputs": [
+  "$TURBO_ROOT$/tsconfig.base.json",
+  "src/**/*.ts"
+]
+```
+
+### 5. Use `passThroughEnv` not `env` for secrets
+
+**Problem**: Using `env` includes the environment variable's **value** in the cache hash. If `OAK_API_KEY` differs between runs (different terminals, CI vs local), the cache is invalidated.
+
+**Solution**: Use `passThroughEnv` to pass variables to tasks without affecting the cache hash.
+
+```json
+// ❌ Wrong - API key value affects cache
+"env": ["OAK_API_KEY"],
+"passThroughEnv": ["OAK_API_KEY"]
+
+// ✅ Correct - API key passed through but doesn't affect cache
+"passThroughEnv": ["OAK_API_KEY"]
+```
+
+**When to use `env`**: Only when the env var value should legitimately invalidate the cache (e.g. a feature flag that changes build output).
 
 ## Consequences
 

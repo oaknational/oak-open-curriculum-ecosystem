@@ -1,6 +1,6 @@
 # Phase 3: Multi-Index Search & KS4 Filtering
 
-**Status**: 3.0 ✅ | 3a ✅ | 3b ✅ | 3c ✅ | 3d ✅ Live Validation Complete  
+**Status**: 3.0 ✅ | 3a ✅ | 3b ✅ | 3c ✅ | 3d ✅ | 3e 📋 Planned  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Last Updated**: 2025-12-18
 
@@ -32,6 +32,7 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 | 3b   | Semantic Summaries          | ✅ Complete | Enhanced templates with all API fields            |
 | 3c   | Four-Retriever + API Wiring | ✅ Complete | Code implemented, all quality gates pass          |
 | 3d   | Live Validation             | ✅ Complete | Re-indexed 2025-12-18, all metrics improved       |
+| 3e   | ES Native Enhancements      | 📋 Planned  | Fuzzy, stemming, phonetic, typeahead improvements |
 
 ---
 
@@ -602,3 +603,592 @@ pnpm smoke:dev:stub    # Smoke tests
 ```
 
 **All gates must pass. No exceptions.**
+
+---
+
+## Phase 3e: Elasticsearch Native Search Enhancements
+
+**Status**: 📋 Planned  
+**Dependencies**: Phase 3d Complete  
+**Last Updated**: 2025-12-18
+
+### Overview
+
+Phase 3e enhances BM25 lexical search through native Elasticsearch features to improve handling of typos, misspellings, synonyms, and naturalistic queries. This addresses the ablation study findings where single ELSER retrievers outperformed the four-way hybrid on hard queries—indicating BM25 may be adding noise rather than signal for certain query types.
+
+**Foundation Alignment**:
+
+- **TDD**: All changes follow Red → Green → Refactor. Ablation tests measure impact after each phase.
+- **Schema-First**: Analyzer configurations are defined in SDK type-gen and flow to ES mappings.
+- **Rules**: No type shortcuts, no compatibility layers, quality gates after every change.
+
+### Goals
+
+1. **Improve BM25 contribution to hybrid search** on hard/naturalistic queries
+2. **Reduce false positives** from overly aggressive fuzzy matching
+3. **Enhance morphological matching** through stemming
+4. **Reduce noise** from stop words
+5. **Handle severe misspellings** beyond edit-distance tolerance with phonetic matching
+
+### Intended Impact
+
+| Query Type | Current Challenge | Expected Improvement |
+|------------|-------------------|---------------------|
+| Misspellings (`simulatneous`) | Edit distance > 2 may not match | Phonetic + enhanced fuzzy catches more variants |
+| Synonyms (`powers` vs `indices`) | Already covered by `oak-syns` | Stemming ensures morphological variants match |
+| Naturalistic (`that sohcahtoa stuff`) | BM25 fails, relies on ELSER | Stop word removal + phrase matching improves BM25 |
+| Partial words (`quadra`) | No prefix matching | `search_as_you_type` subfields enable prefix matching |
+
+### Measurable Acceptance Criteria
+
+| Metric | Current (Hard Lessons) | Target | Rationale |
+|--------|------------------------|--------|-----------|
+| Four-way hybrid MRR | 0.250 | ≥ 0.300 | +20% improvement |
+| Four-way hybrid NDCG@10 | 0.212 | ≥ 0.250 | +18% improvement |
+| BM25 content MRR | 0.207 | ≥ 0.280 | Approach ELSER performance (0.287) |
+| Hybrid ≥ Single ELSER | ❌ (ELSER wins) | ✅ Hybrid wins | BM25 should add value, not noise |
+| p95 Latency | 602ms | ≤ 650ms | No significant regression |
+
+**Secondary Criteria** (Standard Queries):
+
+- MRR ≥ 0.920 (maintain or improve from 0.931)
+- NDCG@10 ≥ 0.740 (maintain or improve from 0.749)
+- Zero-hit rate = 0%
+
+---
+
+### Task 3e.1: Enhanced Fuzzy Configuration (No Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Low (~1 hour)  
+**Impact**: Medium
+
+**Goal**: Improve typo tolerance for short words while reducing false positives.
+
+**Changes**:
+
+| Setting | Current | New | Rationale |
+|---------|---------|-----|-----------|
+| `fuzziness` | `AUTO` | `AUTO:3,6` | Allow fuzzy on 3+ char words (vs 5+) |
+| `prefix_length` | (not set) | `1` | Require first character match |
+| `fuzzy_transpositions` | (not set) | `true` | Allow `ab` → `ba` swaps |
+
+**Files to Modify**:
+
+- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+
+**TDD Approach**:
+
+1. **RED**: Add test case to ablation suite for enhanced fuzzy (expect improvement)
+2. **GREEN**: Modify `createBm25Retriever()` with new settings
+3. **REFACTOR**: Ensure settings are documented with TSDoc
+
+**Implementation**:
+
+```typescript
+/** Creates a BM25 retriever with enhanced fuzziness for typo tolerance.
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness
+ */
+function createBm25Retriever(
+  text: string,
+  fields: string[],
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    standard: {
+      query: {
+        multi_match: {
+          query: text,
+          type: 'best_fields',
+          tie_breaker: 0.2,
+          fuzziness: 'AUTO:3,6',      // Fuzzy for 3+ char words
+          prefix_length: 1,            // Require first char match
+          fuzzy_transpositions: true,  // Allow ab→ba
+          fields,
+        },
+      },
+      filter,
+    },
+  };
+}
+```
+
+**Elasticsearch Reference**:
+
+- [Fuzziness](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness)
+- [multi_match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html)
+
+**Verification**:
+
+```bash
+# After implementation
+pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+```
+
+**Acceptance Criteria for 3e.1**:
+
+- [ ] BM25 content MRR on hard queries improves (≥ 0.220, from 0.207)
+- [ ] No regression on standard query MRR (≥ 0.880)
+- [ ] Quality gates pass
+
+---
+
+### Task 3e.2: Add Phrase Prefix Boost (No Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Low (~30 minutes)  
+**Impact**: Low-Medium
+
+**Goal**: Improve matching for partial/incomplete queries through phrase prefix boosting.
+
+**Changes**:
+
+Wrap BM25 query in `bool.should` with a secondary `phrase_prefix` match at lower boost.
+
+**Files to Modify**:
+
+- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+
+**Implementation**:
+
+```typescript
+/** Creates a BM25 retriever with fuzzy matching and phrase prefix boost.
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-phrase-prefix
+ */
+function createBm25Retriever(
+  text: string,
+  fields: string[],
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    standard: {
+      query: {
+        bool: {
+          should: [
+            {
+              multi_match: {
+                query: text,
+                type: 'best_fields',
+                tie_breaker: 0.2,
+                fuzziness: 'AUTO:3,6',
+                prefix_length: 1,
+                fuzzy_transpositions: true,
+                fields,
+              },
+            },
+            {
+              multi_match: {
+                query: text,
+                type: 'phrase_prefix',
+                fields,
+                boost: 0.5,
+              },
+            },
+          ],
+          minimum_should_match: 1,
+        },
+      },
+      filter,
+    },
+  };
+}
+```
+
+**Elasticsearch Reference**:
+
+- [phrase_prefix type](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-phrase-prefix)
+
+**Acceptance Criteria for 3e.2**:
+
+- [ ] Cumulative improvement measured (record in ablation results)
+- [ ] No regression on standard queries
+- [ ] Quality gates pass
+
+---
+
+### Task 3e.3: Add Stemming and Stop Words (Requires Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Medium (~2 hours + reindex time)  
+**Impact**: High
+
+**Goal**: Improve morphological matching (`equations` → `equation`) and reduce noise from stop words.
+
+**Schema-First Implementation**:
+
+Changes go in SDK type-gen, then regenerate mappings.
+
+**Files to Modify**:
+
+1. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-analyzer-config.ts`
+2. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-mapping-utils.ts`
+
+**New Filter Definitions**:
+
+```typescript
+/** Filter configurations for Oak search indexes.
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stop-tokenfilter.html
+ */
+export const ES_FILTER_CONFIG = {
+  oak_syns_filter: {
+    type: 'synonym_graph',
+    synonyms_set: 'oak-syns',
+    updateable: true,
+  },
+  english_stop: {
+    type: 'stop',
+    stopwords: '_english_',
+  },
+  english_stemmer: {
+    type: 'stemmer',
+    language: 'light_english',  // Less aggressive for educational content
+  },
+} as const;
+```
+
+**Updated Analyzer Definitions**:
+
+```typescript
+/** Analyzer configurations for Oak search indexes.
+ *
+ * Filter order is critical:
+ * 1. lowercase - normalise case
+ * 2. english_stop - remove noise words
+ * 3. english_stemmer - reduce to root forms
+ * 4. oak_syns_filter - expand synonyms (on stemmed forms)
+ *
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-custom-analyzer.html
+ */
+export const ES_ANALYZER_CONFIG = {
+  oak_text_index: {
+    type: 'custom',
+    tokenizer: 'standard',
+    filter: ['lowercase', 'english_stop', 'english_stemmer'],
+  },
+  oak_text_search: {
+    type: 'custom',
+    tokenizer: 'standard',
+    filter: ['lowercase', 'english_stop', 'english_stemmer', 'oak_syns_filter'],
+  },
+} as const satisfies Readonly<Record<string, EsAnalyzerConfig>>;
+```
+
+**Note on Filter Config Type**:
+
+The `EsFilterConfig` interface needs extending to support multiple filter types:
+
+```typescript
+export type EsFilterConfig =
+  | { readonly type: 'synonym_graph'; readonly synonyms_set: string; readonly updateable: boolean }
+  | { readonly type: 'stop'; readonly stopwords: string }
+  | { readonly type: 'stemmer'; readonly language: string };
+```
+
+**TDD Approach**:
+
+1. **RED**: Write unit test for new filter config generation
+2. **GREEN**: Implement filter configs and update generator
+3. **REFACTOR**: Regenerate all mappings, verify output
+
+**Verification Sequence**:
+
+```bash
+# 1. Regenerate SDK
+pnpm type-gen && pnpm build
+
+# 2. Push new settings and mappings to ES
+pnpm -C apps/oak-open-curriculum-semantic-search es:setup reset
+
+# 3. Full reindex
+pnpm -C apps/oak-open-curriculum-semantic-search es:ingest-live -- --subject maths --keystage ks4
+
+# 4. Run ablation tests
+pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+```
+
+**Elasticsearch Reference**:
+
+- [Stemmer token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
+- [Stop token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stop-tokenfilter.html)
+- [light_english stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html#analysis-stemmer-tokenfilter-language-parm)
+
+**Acceptance Criteria for 3e.3**:
+
+- [ ] Stemming works: `equations` matches documents containing `equation`
+- [ ] Stop words removed: Query for `the quadratic formula` matches `quadratic formula` documents
+- [ ] BM25 content MRR on hard queries ≥ 0.250
+- [ ] Four-way hybrid MRR on hard queries ≥ 0.280
+- [ ] No regression on standard queries (MRR ≥ 0.920)
+- [ ] Quality gates pass
+
+---
+
+### Task 3e.4: Add Phonetic Matching (Requires Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Medium (~2 hours, combined with 3e.3 reindex)  
+**Impact**: Medium
+
+**Goal**: Handle severe misspellings beyond edit-distance tolerance (e.g., `circel` → `circle`).
+
+**Implementation Approach**:
+
+1. Add `phonetic_filter` to analyzer config
+2. Create `oak_text_phonetic` analyzer
+3. Add `.phonetic` subfield to title fields
+4. Optionally include phonetic subfield in query at low boost
+
+**Files to Modify**:
+
+1. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-analyzer-config.ts`
+2. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides/lessons.ts`
+3. `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+
+**Filter Addition**:
+
+```typescript
+phonetic_filter: {
+  type: 'phonetic',
+  encoder: 'double_metaphone',
+},
+```
+
+**Analyzer Addition**:
+
+```typescript
+/** Phonetic analyzer for severe typo tolerance.
+ * @see https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-phonetic.html
+ */
+oak_text_phonetic: {
+  type: 'custom',
+  tokenizer: 'standard',
+  filter: ['lowercase', 'phonetic_filter'],
+},
+```
+
+**Field Override Example**:
+
+```typescript
+lesson_title: {
+  type: 'text',
+  analyzer: 'oak_text_index',
+  search_analyzer: 'oak_text_search',
+  fields: {
+    keyword: { type: 'keyword', ignore_above: 256 },
+    phonetic: { type: 'text', analyzer: 'oak_text_phonetic' },
+  },
+},
+```
+
+**Query Integration** (Optional, low boost):
+
+```typescript
+const fields = [
+  'lesson_title^3',
+  'lesson_title.phonetic^0.5',  // Low boost for phonetic fallback
+  // ... other fields
+];
+```
+
+**Elasticsearch Reference**:
+
+- [Phonetic analysis plugin](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-phonetic.html)
+- [Double Metaphone encoder](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-phonetic-token-filter.html)
+
+**Note**: Phonetic plugin must be available on ES Serverless. Verify availability before implementation.
+
+**Acceptance Criteria for 3e.4**:
+
+- [ ] `circel` matches `circle` documents
+- [ ] `simulatneous` matches `simultaneous` documents
+- [ ] Phonetic false positive rate acceptable (manual review of 10 edge cases)
+- [ ] Cumulative hard query MRR ≥ 0.290
+- [ ] Quality gates pass
+
+---
+
+### Task 3e.5: Add `search_as_you_type` Fields (Requires Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Medium (~1 hour, combined with 3e.3/3e.4 reindex)  
+**Impact**: Medium
+
+**Goal**: Enable prefix matching for typeahead-style queries without full fuzzy overhead.
+
+**Implementation**:
+
+Add `.typeahead` subfield to title fields using `search_as_you_type` mapping.
+
+**Files to Modify**:
+
+1. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides/lessons.ts`
+2. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides/units.ts`
+3. (Query builders for optional typeahead field inclusion)
+
+**Field Override Example**:
+
+```typescript
+lesson_title: {
+  type: 'text',
+  analyzer: 'oak_text_index',
+  search_analyzer: 'oak_text_search',
+  fields: {
+    keyword: { type: 'keyword', ignore_above: 256 },
+    typeahead: { type: 'search_as_you_type' },
+  },
+},
+```
+
+**Elasticsearch Reference**:
+
+- [search_as_you_type field type](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html)
+
+**Acceptance Criteria for 3e.5**:
+
+- [ ] Query for `quadra` matches `quadratic` documents
+- [ ] Typeahead matching works for 2-gram and 3-gram prefixes
+- [ ] Cumulative improvement tracked
+- [ ] Quality gates pass
+
+---
+
+### Task 3e.6: Tune `minimum_should_match` (No Reindex)
+
+**Status**: 📋 Planned  
+**Effort**: Low (~30 minutes)  
+**Impact**: Low
+
+**Goal**: Prevent overly broad matching on long multi-term queries.
+
+**Changes**:
+
+Add `minimum_should_match: '75%'` to `multi_match` queries. This requires at least 75% of search terms to appear in the document.
+
+**Consideration**:
+
+This may reduce recall for naturalistic queries. Measure impact carefully.
+
+**Implementation**:
+
+```typescript
+multi_match: {
+  query: text,
+  type: 'best_fields',
+  fuzziness: 'AUTO:3,6',
+  prefix_length: 1,
+  minimum_should_match: '75%',
+  fields,
+}
+```
+
+**Elasticsearch Reference**:
+
+- [minimum_should_match](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html)
+
+**Acceptance Criteria for 3e.6**:
+
+- [ ] Long queries (4+ terms) return more precise results
+- [ ] No regression on standard queries
+- [ ] If hard query MRR drops, revert this change
+- [ ] Quality gates pass
+
+---
+
+### Implementation Phases
+
+**Phase A: Query-Time Changes (No Reindex)**
+
+| Task | Description | Effort |
+|------|-------------|--------|
+| 3e.1 | Enhanced fuzzy configuration | 1 hour |
+| 3e.2 | Phrase prefix boost | 30 min |
+| 3e.6 | Minimum should match | 30 min |
+
+**Verification after Phase A**:
+
+```bash
+pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+# Record results in ablation study section
+```
+
+**Phase B: Analyzer Changes (Single Reindex)**
+
+| Task | Description | Effort |
+|------|-------------|--------|
+| 3e.3 | Stemming + stop words | 2 hours |
+| 3e.4 | Phonetic matching | 2 hours (combined) |
+| 3e.5 | search_as_you_type fields | 1 hour (combined) |
+
+**Verification after Phase B**:
+
+```bash
+# 1. Regenerate SDK
+pnpm type-gen && pnpm build
+
+# 2. Push settings and reindex
+pnpm -C apps/oak-open-curriculum-semantic-search es:setup reset
+pnpm -C apps/oak-open-curriculum-semantic-search es:ingest-live -- --subject maths --keystage ks4
+
+# 3. Run ablation tests
+pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+# Record results in ablation study section
+```
+
+---
+
+### Risks and Mitigations
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Stemming breaks exact matches | Medium | Medium | Use `light_english` (less aggressive), keep `.keyword` subfields |
+| Stop word removal breaks educational queries | Low | Medium | Test with ablation suite, can revert if needed |
+| Phonetic creates false positives | Medium | Low | Use as low-boost subfield, not primary search path |
+| minimum_should_match reduces recall | Medium | Medium | Measure impact, revert if MRR drops |
+| ES Serverless lacks phonetic plugin | Low | Medium | Verify availability before 3e.4, skip if unavailable |
+
+---
+
+### Results Tracking
+
+Record results after each implementation phase.
+
+#### Phase A Results (Query-Time Changes)
+
+| Configuration | Hard MRR | Hard NDCG | Std MRR | Std NDCG | Notes |
+|---------------|----------|-----------|---------|----------|-------|
+| Baseline (before 3e) | 0.250 | 0.212 | 0.931 | 0.749 | Four-way hybrid |
+| After 3e.1 | TBD | TBD | TBD | TBD | Enhanced fuzzy |
+| After 3e.2 | TBD | TBD | TBD | TBD | + Phrase prefix |
+| After 3e.6 | TBD | TBD | TBD | TBD | + Min should match |
+
+#### Phase B Results (Analyzer Changes)
+
+| Configuration | Hard MRR | Hard NDCG | Std MRR | Std NDCG | Notes |
+|---------------|----------|-----------|---------|----------|-------|
+| After 3e.3 | TBD | TBD | TBD | TBD | + Stemming/stop words |
+| After 3e.4 | TBD | TBD | TBD | TBD | + Phonetic |
+| After 3e.5 | TBD | TBD | TBD | TBD | + search_as_you_type |
+
+#### Final Comparison
+
+| Metric | Before 3e | After 3e | Change | Target Met? |
+|--------|-----------|----------|--------|-------------|
+| Hard Lessons MRR | 0.250 | TBD | TBD | ≥ 0.300 |
+| Hard Lessons NDCG | 0.212 | TBD | TBD | ≥ 0.250 |
+| Std Lessons MRR | 0.931 | TBD | TBD | ≥ 0.920 |
+| Hybrid > Single ELSER | ❌ | TBD | TBD | ✅ |
+
+---
+
+### Related Documents
+
+| Document | Purpose |
+|----------|---------|
+| [ES Fuzziness Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness) | Official fuzzy matching docs |
+| [ES Stemmer Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) | Official stemmer docs |
+| [ES Phonetic Reference](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-phonetic.html) | Official phonetic plugin docs |
+| [ES search_as_you_type Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html) | Official typeahead docs |
+| [testing-strategy.md](../../directives-and-memory/testing-strategy.md) | TDD requirements |
+| [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) | Schema-first approach |
+| [rules.md](../../directives-and-memory/rules.md) | Core development rules |

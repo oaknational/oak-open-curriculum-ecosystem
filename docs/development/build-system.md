@@ -213,6 +213,26 @@ This indicates core packages weren't built before type-check ran. Ensure:
 
 Ensure `build` has `cache: true` in `turbo.json`. Run `turbo run build --dry-run` to check if caching is working.
 
+### Cache misses on every run
+
+Common causes:
+
+1. **Directory paths in inputs** - Using bare directory paths like `$TURBO_ROOT$/packages/libs/logger` causes Turbo to hash entire directories including build outputs. Use file globs instead, or rely on `dependsOn: ["^build"]` for cross-package dependencies.
+
+2. **Both `env` and `passThroughEnv` for same variable** - Using both causes the env var value to affect the cache hash. Use `passThroughEnv` for secrets that shouldn't affect caching.
+
+3. **Unstable generated outputs** - If type-gen produces files with timestamps or random ordering, cache will miss. Ensure generators produce deterministic output.
+
+To debug cache misses:
+
+```bash
+# Check what Turbo sees as inputs
+turbo run build --dry=json | jq '.tasks[0].inputs'
+
+# Compare hashes between runs
+turbo run build --dry=json | jq '.tasks[] | {task: .taskId, hash: .hash}'
+```
+
 ## Related Documentation
 
 - [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md)
