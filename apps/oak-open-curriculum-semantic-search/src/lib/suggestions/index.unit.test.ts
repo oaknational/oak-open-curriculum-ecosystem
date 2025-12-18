@@ -110,7 +110,7 @@ describe('runSuggestions', () => {
       key_stage: 'ks4',
       unit_ids: ['unit-1'],
       unit_titles: ['Glaciation'],
-      transcript_text: 'Sample',
+      lesson_content: 'Sample',
       lesson_url: 'https://example.com/lesson-one',
       unit_urls: ['https://example.com/unit-1'],
       title_suggest: {
@@ -180,7 +180,7 @@ describe('runSuggestions', () => {
       key_stage: 'ks3',
       lesson_ids: ['lesson-a'],
       lesson_count: 10,
-      rollup_text: 'Summary',
+      unit_content: 'Summary',
       unit_url: 'https://example.com/unit-two',
       subject_programmes_url: 'https://example.com/programme',
       title_suggest: {

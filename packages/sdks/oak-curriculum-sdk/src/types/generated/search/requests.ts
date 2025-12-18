@@ -25,6 +25,14 @@ export const SearchStructuredRequestSchema = z
     unitSlug: z.string().min(1).optional(),
     from: z.number().int().min(0).optional(),
     highlight: z.boolean().optional(),
+    // KS4 and metadata filter fields (Phase 3 completion)
+    tier: z.string().min(1).optional(),
+    examBoard: z.string().min(1).optional(),
+    examSubject: z.string().min(1).optional(),
+    ks4Option: z.string().min(1).optional(),
+    year: z.string().min(1).optional(),
+    threadSlug: z.string().min(1).optional(),
+    category: z.string().min(1).optional(),
   })
   .strict();
 

@@ -23,6 +23,21 @@ export interface StructuredQuery {
   from?: number;
   highlight?: boolean;
   includeFacets?: boolean;
+  // KS4 and metadata filter fields (Phase 3 completion)
+  /** Filter by tier (foundation/higher). */
+  tier?: string;
+  /** Filter by exam board (aqa/edexcel/ocr/etc). */
+  examBoard?: string;
+  /** Filter by exam subject (biology/chemistry/physics). */
+  examSubject?: string;
+  /** Filter by KS4 option programme slug. */
+  ks4Option?: string;
+  /** Filter by year group. */
+  year?: string;
+  /** Filter by curriculum thread slug. */
+  threadSlug?: string;
+  /** Filter by category. */
+  category?: string;
 }
 
 export interface UnitResult {

@@ -111,21 +111,22 @@ export interface CreateLessonDocumentParams {
 }
 
 /** Creates a lesson document for Elasticsearch indexing. */
-export function createLessonDocument({
-  lesson,
-  transcript,
-  summary,
-  unitCanonicalUrl,
-  subject,
-  keyStage,
-  years,
-  lessonCount,
-  unitContextMap,
-  unitSlug,
-}: CreateLessonDocumentParams): SearchLessonsIndexDoc {
+export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
+  const {
+    lesson,
+    transcript,
+    summary,
+    unitCanonicalUrl,
+    subject,
+    keyStage,
+    years,
+    lessonCount,
+    unitContextMap,
+    unitSlug,
+  } = params;
   const fields = extractLessonDocumentFields(summary);
   const ks4Fields = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, unitSlug));
-  const lessonSummarySemantic = generateLessonSemanticSummary(summary);
+  const lessonSemantic = generateLessonSemanticSummary(summary);
 
   return {
     lesson_id: lesson.lessonSlug,
@@ -145,9 +146,10 @@ export function createLessonDocument({
     misconceptions_and_common_mistakes: fields.misconceptions,
     teacher_tips: fields.teacherTips,
     content_guidance: fields.contentGuidance,
-    transcript_text: transcript,
-    lesson_semantic: transcript,
-    lesson_summary_semantic: lessonSummarySemantic,
+    lesson_content: transcript,
+    lesson_structure: lessonSemantic,
+    lesson_content_semantic: transcript,
+    lesson_structure_semantic: lessonSemantic,
     lesson_url: fields.canonicalUrl,
     tier: fields.tier,
     pupil_lesson_outcome: fields.pupilLessonOutcome,
@@ -175,23 +177,22 @@ export interface CreateRollupDocumentParams {
 }
 
 /** Creates a rollup document for Elasticsearch indexing. */
-export function createRollupDocument({
-  summary,
-  snippets,
-  subject,
-  subjectTitle,
-  keyStage,
-  keyStageTitle,
-  subjectProgrammesUrl,
-  unitContextMap,
-}: CreateRollupDocumentParams): SearchUnitRollupDoc {
+export function createRollupDocument(params: CreateRollupDocumentParams): SearchUnitRollupDoc {
+  const {
+    summary,
+    snippets,
+    subject,
+    subjectTitle,
+    keyStage,
+    keyStageTitle,
+    subjectProgrammesUrl,
+    unitContextMap,
+  } = params;
   const fields = extractRollupDocumentFields(summary, normaliseYears);
-  const pedagogicalData = extractPedagogicalData(summary);
-  const rollupText = createEnrichedRollupText(snippets, pedagogicalData);
+  const rollupText = createEnrichedRollupText(snippets, extractPedagogicalData(summary));
   const ks4Fields = extractKs4DocumentFields(
     getKs4ContextForUnit(unitContextMap, summary.unitSlug),
   );
-  // Generate curated semantic summary for ELSER (replaces rollup text for embeddings)
   const unitSemantic = generateUnitSemanticSummary(
     summary,
     keyStageTitle ?? keyStage,
@@ -210,8 +211,10 @@ export function createRollupDocument({
     lesson_ids: fields.lessonIds,
     lesson_count: fields.lessonIds.length,
     unit_topics: fields.unitTopics,
-    rollup_text: rollupText,
-    unit_semantic: unitSemantic,
+    unit_content: rollupText,
+    unit_structure: unitSemantic,
+    unit_content_semantic: rollupText,
+    unit_structure_semantic: unitSemantic,
     unit_url: fields.canonicalUrl,
     subject_programmes_url: subjectProgrammesUrl,
     sequence_ids: fields.sequenceIds,

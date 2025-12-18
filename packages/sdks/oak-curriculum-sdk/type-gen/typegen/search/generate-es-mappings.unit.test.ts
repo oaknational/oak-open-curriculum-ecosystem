@@ -89,11 +89,11 @@ describe('oak_lessons mapping', () => {
     expect(content).toContain("type: 'keyword'");
   });
 
-  it('includes lesson_semantic field as semantic_text', () => {
+  it('includes lesson_content_semantic field as semantic_text', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
     const content = files['../search/es-mappings/oak-lessons.ts'];
 
-    expect(content).toContain('lesson_semantic:');
+    expect(content).toContain('lesson_content_semantic:');
     expect(content).toContain("type: 'semantic_text'");
   });
 
@@ -153,19 +153,19 @@ describe('oak_unit_rollup mapping', () => {
     expect(content).toContain('as const');
   });
 
-  it('includes unit_semantic field as semantic_text', () => {
+  it('includes unit_content_semantic field as semantic_text', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
     const content = files['../search/es-mappings/oak-unit-rollup.ts'];
 
-    expect(content).toContain('unit_semantic:');
+    expect(content).toContain('unit_content_semantic:');
     expect(content).toContain("type: 'semantic_text'");
   });
 
-  it('includes rollup_text with term_vector', () => {
+  it('includes unit_content with term_vector', () => {
     const files = generateEsMappingModules(MINIMAL_SCHEMA);
     const content = files['../search/es-mappings/oak-unit-rollup.ts'];
 
-    expect(content).toContain('rollup_text:');
+    expect(content).toContain('unit_content:');
     expect(content).toContain('term_vector:');
     expect(content).toContain("'with_positions_offsets'");
   });

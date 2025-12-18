@@ -14,7 +14,7 @@ import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.
 /** BM25 fields for lesson search. */
 const BM25_FIELDS = [
   'lesson_title^2',
-  'transcript_text',
+  'lesson_content',
   'lesson_keywords^1.5',
   'key_learning_points',
 ] as const;

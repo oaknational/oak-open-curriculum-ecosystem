@@ -270,10 +270,10 @@ describe('createLessonDocument', () => {
       unitSlug: 'trigonometry',
     });
 
-    // The lesson_semantic field must be populated for ELSER to generate embeddings
-    expect(doc.lesson_semantic).toBeDefined();
-    expect(doc.lesson_semantic).toContain('Pythagoras');
-    expect(doc.lesson_semantic).toContain('hypotenuse');
+    // The lesson_content_semantic field must be populated for ELSER to generate embeddings
+    expect(doc.lesson_content_semantic).toBeDefined();
+    expect(doc.lesson_content_semantic).toContain('Pythagoras');
+    expect(doc.lesson_content_semantic).toContain('hypotenuse');
   });
 });
 
@@ -290,11 +290,13 @@ describe('createRollupDocument', () => {
       unitContextMap: emptyContextMap,
     });
 
-    // unit_semantic now contains curated semantic summary for ELSER (ADR-077)
-    expect(doc.unit_semantic).toContain('Unit Title is a ks4 maths unit');
-    expect(doc.unit_semantic).toContain('Lessons: Lesson 1, Lesson 2.');
-    // rollup_text still contains aggregated snippets for BM25 search
-    expect(doc.rollup_text).toContain('Snippet two');
+    // unit_content_semantic now contains curated semantic summary for ELSER (Phase 3 nomenclature)
+    expect(doc.unit_content_semantic).toContain('Snippet two');
+    // unit_structure_semantic contains curated semantic summary for ELSER (Phase 3 nomenclature)
+    expect(doc.unit_structure_semantic).toContain('Unit Title is a ks4 maths unit');
+    expect(doc.unit_structure_semantic).toContain('Lessons: Lesson 1, Lesson 2.');
+    // unit_content contains aggregated snippets for BM25 search (Phase 3 nomenclature)
+    expect(doc.unit_content).toContain('Snippet two');
     expect(doc.sequence_ids).toEqual(['sequence-1', 'sequence-2']);
     expect(doc.subject_slug).toBe(mathsSubject);
     expect(doc.key_stage).toBe(ks4);

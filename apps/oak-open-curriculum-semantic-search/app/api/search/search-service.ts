@@ -47,6 +47,14 @@ export function buildStructuredQuery(body: SearchStructuredRequest): StructuredQ
     includeFacets: body.includeFacets,
     phaseSlug: body.phaseSlug,
     unitSlug: body.unitSlug,
+    // KS4 and metadata filter fields (Phase 3 completion)
+    tier: body.tier,
+    examBoard: body.examBoard,
+    examSubject: body.examSubject,
+    ks4Option: body.ks4Option,
+    year: body.year,
+    threadSlug: body.threadSlug,
+    category: body.category,
   };
 }
 

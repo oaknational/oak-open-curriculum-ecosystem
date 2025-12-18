@@ -1,8 +1,8 @@
 # Semantic Search - Navigation Hub
 
-**Status**: Phase 3 In Progress  
+**Status**: Phase 3 Code Complete, Live Validation Pending  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-16
+**Last Updated**: 2025-12-17
 
 ---
 
@@ -68,7 +68,7 @@ For new implementation sessions, read in this order:
 
 | Phase | Name | Status | Progress | Description |
 | ----- | ---- | ------ | -------- | ----------- |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | 7/13 | Four-retriever architecture, KS4 filtering |
+| **3** | **Multi-Index & Fields** | ✅ Code Complete | 4/5 parts | Live validation pending |
 
 **Phase 3 Goal**: Implement four-retriever hybrid search with comprehensive filtering.
 
@@ -82,37 +82,35 @@ For new implementation sessions, read in this order:
 - ✅ Prove joint search with `doc_type` categorisation works
 - ✅ Prove lesson search filtered by unit works
 - ✅ `doc_type` field already exists in indexes
-- 🔲 ADR: unified vs separate endpoints (deferred)
-- 🔲 Unit reranking experiment (deferred)
 
-**Part 3a - Feature Parity ✅ IMPLEMENTED:**
+**Part 3a - Feature Parity ✅ COMPLETE:**
 
 - ✅ OWA aliases import
 - ✅ `pupilLessonOutcome` field
 - ✅ Display title fields
 - ✅ Unit enrichment fields
 - ✅ **KS4 Metadata Denormalisation** - sequence traversal, UnitContextMap, array fields
-- ⚠️ **Gap**: KS4 filtering not wired through API layer yet
 
-**Part 3b - Semantic Summary Templates ⚠️ NEEDS REWORK:**
+**Part 3b - Semantic Summaries ✅ COMPLETE:**
 
-- ✅ Remove dense vector code (ADR-075) - **Completed 2025-12-15**
-- ✅ Lesson semantic summary template exists (needs update for ALL fields)
-- ✅ Unit semantic summary template exists (needs update for ALL fields)
-- ⚠️ **ISSUE**: `unit_semantic` was incorrectly replaced with summary instead of adding new field
-- 🔲 Redis caching for summaries (deferred)
+- ✅ Dense vector code removed (ADR-075)
+- ✅ Lesson semantic summary enhanced with ALL fields (keywords+descriptions, misconceptions+responses, tips, guidance, outcomes)
+- ✅ Unit semantic summary enhanced with ALL fields (overview, description, notes, prior knowledge, threads, topics, lessons)
+- ✅ Field naming follows `<entity>_content|structure[_semantic]` pattern
 
-**Part 3c - Four-Retriever Architecture 🔲 NEW:**
+**Part 3c - Four-Retriever + API Wiring ✅ COMPLETE:**
 
-- 🔲 Rename fields to consistent nomenclature (`<entity>_content|structure[_semantic]`)
-- 🔲 Add `lesson_structure` field (BM25 text for lessons)
-- 🔲 Add `unit_structure` field (BM25 text for units)
-- 🔲 Restore `unit_content_semantic` to rollup content
-- 🔲 Add `unit_structure_semantic` field
-- 🔲 Update summary templates to include ALL API fields
-- 🔲 Update query builders to use four retrievers
-- 🔲 **Wire KS4 filtering through API** (`SearchStructuredRequestSchema`, filter functions)
-- 🔲 **CRITICAL: Prove KS4 filtering works after re-indexing**
+- ✅ Field nomenclature standardised (`lesson_content`, `lesson_structure`, `unit_content`, `unit_structure` + `_semantic` variants)
+- ✅ Four retrievers in `createLessonRetriever()` and `createUnitRetriever()`
+- ✅ KS4 filtering wired through API (`tier`, `examBoard`, `examSubject`, `ks4Option`, `year`, `threadSlug`, `category`)
+- ✅ All quality gates pass (`pnpm check:turbo` exits 0)
+
+**Part 3d - Live Validation 🔲 PENDING:**
+
+- 🔲 Re-index with new schema
+- 🔲 MRR/NDCG smoke tests (baseline: 0.908/0.915)
+- 🔲 KS4 filtering smoke tests (prove filters reduce results)
+- 🔲 Optional: Four-retriever vs two-retriever comparison
 
 **Note**: MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
@@ -140,25 +138,27 @@ See [phase-3-multi-index-and-fields.md](phase-3-multi-index-and-fields.md) for f
 
 ---
 
-## Current Metrics
+## Metrics
 
-### Lesson Search (314 Maths KS4 lessons)
+### What's Actually Proven
 
-| Metric | Result | Target | Status |
-| ------ | ------ | ------ | ------ |
-| MRR | **0.908** | > 0.70 | ✅ PASS |
-| NDCG@10 | 0.725 | > 0.75 | ⚠️ Below |
-| Zero-hit rate | **0.0%** | < 10% | ✅ PASS |
-| p95 Latency | **367ms** | < 300ms | ⚠️ Above |
+| Claim | Evidence | Status |
+| ----- | -------- | ------ |
+| Code compiles | `pnpm type-check` passes | ✅ Proven |
+| Unit tests pass | `pnpm test` passes | ✅ Proven |
+| All quality gates pass | `pnpm check:turbo` exits 0 | ✅ Proven |
+| Four-retriever improves search | Not measured | ❌ Not proven |
+| KS4 filtering reduces results | Not tested against live ES | ❌ Not proven |
+| MRR/NDCG maintained | Not re-measured | ❌ Not proven |
 
-### Unit Search (36 Maths KS4 units)
+### Historical Baseline (Two-Retriever, Pre-Phase 3c)
 
-| Metric | Result | Target | Status |
-| ------ | ------ | ------ | ------ |
-| MRR | **0.915** | > 0.60 | ✅ PASS |
-| NDCG@10 | **0.924** | > 0.65 | ✅ PASS |
-| Zero-hit rate | **0.0%** | < 15% | ✅ PASS |
-| p95 Latency | **196ms** | < 300ms | ✅ PASS |
+These are **comparison targets**, not proof of current state.
+
+| Scope | MRR | NDCG@10 | Zero-hit | p95 Latency |
+| ----- | --- | ------- | -------- | ----------- |
+| Lessons (314) | 0.908 | 0.725 | 0.0% | 367ms |
+| Units (36) | 0.915 | 0.924 | 0.0% | 196ms |
 
 ---
 
@@ -286,7 +286,8 @@ The `app/` folder in `apps/oak-open-curriculum-semantic-search/` contains a Next
 cd apps/oak-open-curriculum-semantic-search
 
 # 1. Fresh re-index (~5-10 min)
-pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:setup reset
+npx tsx src/lib/elasticsearch/setup/ingest-live.ts --subject maths --keystage ks4
 
 # 2. Direct ES tests
 pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
@@ -368,7 +369,7 @@ packages/sdks/oak-curriculum-sdk/
 ├── README.md                           # This file - navigation hub
 ├── requirements.md                     # Strategic context, risks, costs, demos
 │
-├── phase-3-multi-index-and-fields.md   # 🔄 Current - unit search, doc_type, aliases
+├── phase-3-multi-index-and-fields.md   # ✅ Code complete, Part 3d validation pending
 ├── phase-4-search-sdk-and-cli.md       # 📋 Planned - extract SDK + first-class CLI
 ├── phase-5-search-ui.md                # 📋 Planned - reference UX patterns (future app)
 ├── phase-6-cloud-functions.md          # 📋 Planned - (future) HTTP ingestion endpoints

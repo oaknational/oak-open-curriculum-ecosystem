@@ -131,18 +131,22 @@ export const OAK_LESSONS_MAPPING = {
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
       },
-      transcript_text: {
+      lesson_content: {
         type: 'text',
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
         term_vector: 'with_positions_offsets',
       },
-      lesson_semantic: {
+      lesson_structure: {
+        type: 'text',
+        analyzer: 'oak_text_index',
+        search_analyzer: 'oak_text_search',
+      },
+      lesson_content_semantic: {
         type: 'semantic_text',
       },
-      lesson_summary_semantic: {
-        type: 'keyword',
-        normalizer: 'oak_lower',
+      lesson_structure_semantic: {
+        type: 'semantic_text',
       },
       lesson_url: {
         type: 'keyword',

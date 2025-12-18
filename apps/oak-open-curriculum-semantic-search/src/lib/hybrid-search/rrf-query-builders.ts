@@ -1,12 +1,14 @@
 /**
- * Two-way RRF query builders for hybrid search.
+ * Four-way RRF query builders for hybrid search.
  *
- * Combines two retrieval methods using Reciprocal Rank Fusion (ES 8.11+ retriever API):
- * 1. BM25 lexical search (multi_match via standard retriever)
- * 2. ELSER sparse embeddings (semantic via standard retriever)
+ * Combines four retrieval methods using Reciprocal Rank Fusion (ES 8.11+ retriever API):
+ * 1. BM25 on Content (full transcript/aggregated text)
+ * 2. ELSER on Content (semantic embedding of full content)
+ * 3. BM25 on Structure (curated semantic summary)
+ * 4. ELSER on Structure (semantic embedding of summary)
  *
- * Phase 2 experiments confirmed that two-way hybrid (BM25 + ELSER) is optimal.
- * Dense vectors (E5) provided no benefit and were removed.
+ * Phase 3 enhancement: Four-retriever architecture provides both lexical and semantic
+ * matching on both comprehensive content and curated pedagogical summaries.
  *
  * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
  */
@@ -14,18 +16,23 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { SearchSubjectSlug } from '../../types/oak';
 import {
   createLessonFilters,
   createLessonHighlight,
   createLessonFacets,
-  createLessonBm25Retriever,
-  createLessonElserRetriever,
+  createLessonBm25ContentRetriever,
+  createLessonBm25StructureRetriever,
+  createLessonElserContentRetriever,
+  createLessonElserStructureRetriever,
   createUnitFilters,
   createUnitHighlight,
   createUnitFacets,
-  createUnitBm25Retriever,
-  createUnitElserRetriever,
+  createUnitBm25ContentRetriever,
+  createUnitBm25StructureRetriever,
+  createUnitElserContentRetriever,
+  createUnitElserStructureRetriever,
+  type SearchFilterOptions,
 } from './rrf-query-helpers';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
@@ -38,26 +45,26 @@ export interface SequenceRrfParams {
   phaseSlug?: string;
 }
 
-/** Builds a two-way RRF request for lessons (BM25 + ELSER). */
-export function buildLessonRrfRequest(params: {
+/** Parameters for lesson RRF search including KS4 metadata filters. */
+export interface LessonRrfParams extends SearchFilterOptions {
   text: string;
   size: number;
-  subject?: SearchSubjectSlug;
-  keyStage?: KeyStage;
-  unitSlug?: string;
   includeHighlights?: boolean;
   includeFacets?: boolean;
-}): EsSearchRequest {
-  const {
-    text,
-    size,
-    subject,
-    keyStage,
-    unitSlug,
-    includeHighlights = true,
-    includeFacets = false,
-  } = params;
-  const filters = createLessonFilters(subject, keyStage, unitSlug);
+}
+
+/** Parameters for unit RRF search including KS4 metadata filters. */
+export interface UnitRrfParams extends SearchFilterOptions {
+  text: string;
+  size: number;
+  includeHighlights?: boolean;
+  includeFacets?: boolean;
+}
+
+/** Builds a two-way RRF request for lessons (BM25 + ELSER). */
+export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest {
+  const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+  const filters = createLessonFilters(filterOptions);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
@@ -75,25 +82,9 @@ export function buildLessonRrfRequest(params: {
 }
 
 /** Builds a two-way RRF request for units (BM25 + ELSER). */
-export function buildUnitRrfRequest(params: {
-  text: string;
-  size: number;
-  subject?: SearchSubjectSlug;
-  keyStage?: KeyStage;
-  minLessons?: number;
-  includeHighlights?: boolean;
-  includeFacets?: boolean;
-}): EsSearchRequest {
-  const {
-    text,
-    size,
-    subject,
-    keyStage,
-    minLessons,
-    includeHighlights = true,
-    includeFacets = false,
-  } = params;
-  const filters = createUnitFilters(subject, keyStage, minLessons);
+export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
+  const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+  const filters = createUnitFilters(filterOptions);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
@@ -130,7 +121,10 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
   };
 }
 
-/** Creates a two-way RRF retriever for lessons. */
+/**
+ * Creates a four-way RRF retriever for lessons.
+ * Combines BM25 + ELSER on both content and structure fields.
+ */
 function createLessonRetriever(
   text: string,
   filters: QueryContainer[],
@@ -139,25 +133,32 @@ function createLessonRetriever(
   return {
     rrf: {
       retrievers: [
-        createLessonBm25Retriever(text, filterClause),
-        createLessonElserRetriever(text, filterClause),
+        createLessonBm25ContentRetriever(text, filterClause),
+        createLessonElserContentRetriever(text, filterClause),
+        createLessonBm25StructureRetriever(text, filterClause),
+        createLessonElserStructureRetriever(text, filterClause),
       ],
-      rank_window_size: 60,
+      rank_window_size: 80,
       rank_constant: 60,
     },
   };
 }
 
-/** Creates a two-way RRF retriever for units. */
+/**
+ * Creates a four-way RRF retriever for units.
+ * Combines BM25 + ELSER on both content and structure fields.
+ */
 function createUnitRetriever(text: string, filters: QueryContainer[]): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
     rrf: {
       retrievers: [
-        createUnitBm25Retriever(text, filterClause),
-        createUnitElserRetriever(text, filterClause),
+        createUnitBm25ContentRetriever(text, filterClause),
+        createUnitElserContentRetriever(text, filterClause),
+        createUnitBm25StructureRetriever(text, filterClause),
+        createUnitElserStructureRetriever(text, filterClause),
       ],
-      rank_window_size: 60,
+      rank_window_size: 80,
       rank_constant: 60,
     },
   };

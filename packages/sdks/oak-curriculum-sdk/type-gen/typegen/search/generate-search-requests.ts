@@ -36,6 +36,14 @@ function createStructuredRequestModule(): string {
     `    unitSlug: z.string().min(1).optional(),\n` +
     `    from: z.number().int().min(0).optional(),\n` +
     `    highlight: z.boolean().optional(),\n` +
+    `    // KS4 and metadata filter fields (Phase 3 completion)\n` +
+    `    tier: z.string().min(1).optional(),\n` +
+    `    examBoard: z.string().min(1).optional(),\n` +
+    `    examSubject: z.string().min(1).optional(),\n` +
+    `    ks4Option: z.string().min(1).optional(),\n` +
+    `    year: z.string().min(1).optional(),\n` +
+    `    threadSlug: z.string().min(1).optional(),\n` +
+    `    category: z.string().min(1).optional(),\n` +
     `  })\n` +
     `  .strict();\n\n` +
     `/** Structured hybrid search request payload. */\n` +

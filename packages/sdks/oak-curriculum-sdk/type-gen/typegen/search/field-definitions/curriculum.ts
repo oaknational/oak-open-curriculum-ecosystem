@@ -56,9 +56,12 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'misconceptions_and_common_mistakes', zodType: 'array-string', optional: true },
   { name: 'teacher_tips', zodType: 'array-string', optional: true },
   { name: 'content_guidance', zodType: 'array-string', optional: true },
-  { name: 'transcript_text', zodType: 'string', optional: false },
-  { name: 'lesson_semantic', zodType: 'string', optional: true },
-  { name: 'lesson_summary_semantic', zodType: 'string', optional: true },
+  // BM25 text fields for lexical search (content = full transcript, structure = curated summary)
+  { name: 'lesson_content', zodType: 'string', optional: false },
+  { name: 'lesson_structure', zodType: 'string', optional: true },
+  // ELSER semantic fields (Phase 3 nomenclature: <entity>_content|structure_semantic)
+  { name: 'lesson_content_semantic', zodType: 'string', optional: true },
+  { name: 'lesson_structure_semantic', zodType: 'string', optional: true },
   { name: 'lesson_url', zodType: 'string', optional: false },
   { name: 'unit_urls', zodType: 'array-string', optional: false },
   { name: 'thread_slugs', zodType: 'array-string', optional: true },
@@ -160,8 +163,12 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'lesson_ids', zodType: 'array-string', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },
   { name: 'unit_topics', zodType: 'array-string', optional: true },
-  { name: 'rollup_text', zodType: 'string', optional: false },
-  { name: 'unit_semantic', zodType: 'string', optional: true },
+  // BM25 text fields for lexical search (content = aggregated transcripts, structure = curated summary)
+  { name: 'unit_content', zodType: 'string', optional: false },
+  { name: 'unit_structure', zodType: 'string', optional: true },
+  // ELSER semantic fields (Phase 3 nomenclature: <entity>_content|structure_semantic)
+  { name: 'unit_content_semantic', zodType: 'string', optional: true },
+  { name: 'unit_structure_semantic', zodType: 'string', optional: true },
   { name: 'unit_url', zodType: 'string', optional: false },
   { name: 'subject_programmes_url', zodType: 'string', optional: false },
   { name: 'sequence_ids', zodType: 'array-string', optional: true },
@@ -214,18 +221,8 @@ export const SEQUENCES_INDEX_FIELDS: IndexFieldDefinitions = [
 
 /**
  * Field definitions for the oak_sequence_facets search index.
- *
- * Contains 13 fields:
- * - 11 required fields
- * - 2 optional fields
- *
- * This index provides faceted navigation data for sequences. Key design decisions:
- * - Uses `key_stages` (plural, array) to match sequences index pattern
- * - No completion contexts (navigation index, not searchable)
- * - Minimal text fields (all keywords for exact matching/filtering)
- *
- * @see SearchSequenceFacetsIndexDocSchema - Generated Zod schema
- * @see OAK_SEQUENCE_FACETS_MAPPING - Generated ES mapping
+ * Contains 13 fields (11 required, 2 optional). Provides faceted navigation data.
+ * @see SearchSequenceFacetsIndexDocSchema @see OAK_SEQUENCE_FACETS_MAPPING
  */
 export const SEQUENCE_FACETS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'sequence_slug', zodType: 'string', optional: false },

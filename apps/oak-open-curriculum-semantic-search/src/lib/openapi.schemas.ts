@@ -19,7 +19,8 @@ export const LessonDoc = z
     key_stage: z.string(),
     lesson_url: z.string(),
     unit_urls: z.array(z.string()).default([]),
-    transcript_text: z.string(),
+    /** Full transcript content for BM25 search (renamed from transcript_text in Phase 3). */
+    lesson_content: z.string(),
   })
   .openapi('LessonDoc');
 

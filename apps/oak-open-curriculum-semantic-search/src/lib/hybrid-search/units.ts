@@ -31,6 +31,14 @@ export async function runUnitsSearch(
     keyStage: q.keyStage,
     minLessons: q.minLessons,
     includeHighlights: doHighlight,
+    // KS4 and metadata filter fields (Phase 3 completion)
+    tier: q.tier,
+    examBoard: q.examBoard,
+    examSubject: q.examSubject,
+    ks4Option: q.ks4Option,
+    year: q.year,
+    threadSlug: q.threadSlug,
+    category: q.category,
   });
   if (from > 0) {
     request.from = from;
@@ -53,7 +61,7 @@ function makeUnitResults(hits: EsHit<SearchUnitRollupDoc>[]): UnitResult[] {
     id: hit._id,
     rankScore: hit._score ?? 0,
     unit: deriveUnitFromRollup(hit),
-    highlights: hit.highlight?.rollup_text ?? [],
+    highlights: hit.highlight?.unit_content ?? [],
   }));
 }
 

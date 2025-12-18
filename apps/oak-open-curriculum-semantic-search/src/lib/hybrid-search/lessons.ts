@@ -32,6 +32,14 @@ export async function runLessonsSearch(
     unitSlug: q.unitSlug,
     includeHighlights: doHighlight,
     includeFacets: q.includeFacets === true,
+    // KS4 and metadata filter fields (Phase 3 completion)
+    tier: q.tier,
+    examBoard: q.examBoard,
+    examSubject: q.examSubject,
+    ks4Option: q.ks4Option,
+    year: q.year,
+    threadSlug: q.threadSlug,
+    category: q.category,
   });
   if (from > 0) {
     request.from = from;
@@ -54,6 +62,6 @@ function makeLessonResults(hits: EsHit<SearchLessonsIndexDoc>[]): LessonResult[]
     id: hit._id,
     rankScore: hit._score ?? 0,
     lesson: hit._source,
-    highlights: hit.highlight?.transcript_text ?? [],
+    highlights: hit.highlight?.lesson_content ?? [],
   }));
 }

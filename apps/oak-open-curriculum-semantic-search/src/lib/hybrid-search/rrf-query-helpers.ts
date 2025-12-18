@@ -1,3 +1,4 @@
+/* eslint max-lines: [error, 300] -- JC: defer re-org until directory limits implemented in ESLint */
 /**
  * Shared helper functions for RRF query builders.
  *
@@ -11,52 +12,95 @@ import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
+/**
+ * Filter options for lesson and unit queries.
+ * Uses `terms` query for array document fields (e.g., tiers[], exam_boards[]).
+ */
+export interface SearchFilterOptions {
+  readonly subject?: SearchSubjectSlug;
+  readonly keyStage?: KeyStage;
+  readonly unitSlug?: string;
+  readonly minLessons?: number;
+  // KS4 and metadata filter fields (Phase 3 completion)
+  readonly tier?: string;
+  readonly examBoard?: string;
+  readonly examSubject?: string;
+  readonly ks4Option?: string;
+  readonly year?: string;
+  readonly threadSlug?: string;
+  readonly category?: string;
+}
+
+/** Adds KS4 and metadata filters. For tier, uses bool/should to match tier OR tiers. */
+function addMetadataFilters(filters: QueryContainer[], options: SearchFilterOptions): void {
+  if (options.tier) {
+    filters.push({
+      bool: {
+        should: [{ term: { tier: options.tier } }, { terms: { tiers: [options.tier] } }],
+        minimum_should_match: 1,
+      },
+    });
+  }
+  if (options.examBoard) {
+    filters.push({ terms: { exam_boards: [options.examBoard] } });
+  }
+  if (options.examSubject) {
+    filters.push({ terms: { exam_subjects: [options.examSubject] } });
+  }
+  if (options.ks4Option) {
+    filters.push({ terms: { ks4_options: [options.ks4Option] } });
+  }
+  if (options.year) {
+    filters.push({ terms: { years: [options.year] } });
+  }
+  if (options.threadSlug) {
+    filters.push({ terms: { thread_slugs: [options.threadSlug] } });
+  }
+  if (options.category) {
+    filters.push({ terms: { categories: [options.category] } });
+  }
+}
+
 /** Creates filters for lesson queries. */
-export function createLessonFilters(
-  subject?: SearchSubjectSlug,
-  keyStage?: KeyStage,
-  unitSlug?: string,
-): QueryContainer[] {
+export function createLessonFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
-  if (subject) {
-    filters.push({ term: { subject_slug: subject } });
+  if (options.subject) {
+    filters.push({ term: { subject_slug: options.subject } });
   }
-  if (keyStage) {
-    filters.push({ term: { key_stage: keyStage } });
+  if (options.keyStage) {
+    filters.push({ term: { key_stage: options.keyStage } });
   }
-  if (unitSlug) {
-    filters.push({ term: { unit_ids: unitSlug } });
+  if (options.unitSlug) {
+    filters.push({ term: { unit_ids: options.unitSlug } });
   }
+  addMetadataFilters(filters, options);
   return filters;
 }
 
 /** Creates filters for unit queries. */
-export function createUnitFilters(
-  subject?: SearchSubjectSlug,
-  keyStage?: KeyStage,
-  minLessons?: number,
-): QueryContainer[] {
+export function createUnitFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
-  if (subject) {
-    filters.push({ term: { subject_slug: subject } });
+  if (options.subject) {
+    filters.push({ term: { subject_slug: options.subject } });
   }
-  if (keyStage) {
-    filters.push({ term: { key_stage: keyStage } });
+  if (options.keyStage) {
+    filters.push({ term: { key_stage: options.keyStage } });
   }
-  if (typeof minLessons === 'number') {
-    filters.push({ range: { lesson_count: { gte: minLessons } } });
+  if (typeof options.minLessons === 'number') {
+    filters.push({ range: { lesson_count: { gte: options.minLessons } } });
   }
+  addMetadataFilters(filters, options);
   return filters;
 }
 
-/** Creates highlight configuration for lesson transcripts. */
+/** Creates highlight configuration for lesson content. */
 export function createLessonHighlight(): estypes.SearchHighlight {
   return {
     type: 'unified',
     order: 'score',
     boundary_scanner: 'sentence',
     fields: {
-      transcript_text: {
+      lesson_content: {
         fragment_size: 160,
         number_of_fragments: 2,
         pre_tags: ['<mark>'],
@@ -66,13 +110,13 @@ export function createLessonHighlight(): estypes.SearchHighlight {
   } satisfies estypes.SearchHighlight;
 }
 
-/** Creates highlight configuration for unit rollup text. */
+/** Creates highlight configuration for unit content. */
 export function createUnitHighlight(): estypes.SearchHighlight {
   return {
     type: 'unified',
     boundary_scanner: 'sentence',
     fields: {
-      rollup_text: {
+      unit_content: {
         fragment_size: 160,
         number_of_fragments: 2,
         pre_tags: ['<mark>'],
@@ -108,28 +152,24 @@ export function createUnitFacets(): Record<string, estypes.AggregationsAggregati
   };
 }
 
-/** Lesson BM25 search fields with boosts. */
-const LESSON_BM25_FIELDS = [
+/** BM25 field definitions for four-retriever architecture. */
+const LESSON_BM25_CONTENT = [
   'lesson_title^3',
   'lesson_keywords^2',
   'key_learning_points^2',
   'misconceptions_and_common_mistakes',
   'teacher_tips',
   'content_guidance',
-  'transcript_text',
+  'lesson_content',
 ];
+const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
+const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
+const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
 
-/** Unit BM25 search fields with boosts. */
-const UNIT_BM25_FIELDS = ['unit_title^3', 'rollup_text', 'unit_topics^1.5'];
-
-/**
- * Creates a BM25 standard retriever for lessons.
- *
- * Includes `fuzziness: 'AUTO'` to handle common spelling mistakes
- * (e.g., "pythagorus" matches "pythagoras").
- */
-export function createLessonBm25Retriever(
+/** Creates a BM25 retriever with fuzziness for typo tolerance. */
+function createBm25Retriever(
   text: string,
+  fields: string[],
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
   return {
@@ -140,7 +180,7 @@ export function createLessonBm25Retriever(
           type: 'best_fields',
           tie_breaker: 0.2,
           fuzziness: 'AUTO',
-          fields: LESSON_BM25_FIELDS,
+          fields,
         },
       },
       filter,
@@ -148,43 +188,75 @@ export function createLessonBm25Retriever(
   };
 }
 
-/** Creates an ELSER semantic retriever for lessons. */
-export function createLessonElserRetriever(
+/** Creates an ELSER semantic retriever. */
+function createElserRetriever(
   text: string,
+  field: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return { standard: { query: { semantic: { field: 'lesson_semantic', query: text } }, filter } };
+  return { standard: { query: { semantic: { field, query: text } }, filter } };
 }
 
-/**
- * Creates a BM25 standard retriever for units.
- *
- * Includes `fuzziness: 'AUTO'` to handle common spelling mistakes.
- */
-export function createUnitBm25Retriever(
+/** Creates BM25 content retriever for lessons (full transcript + pedagogical fields). */
+export function createLessonBm25ContentRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return {
-    standard: {
-      query: {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          tie_breaker: 0.2,
-          fuzziness: 'AUTO',
-          fields: UNIT_BM25_FIELDS,
-        },
-      },
-      filter,
-    },
-  };
+  return createBm25Retriever(text, LESSON_BM25_CONTENT, filter);
 }
 
-/** Creates an ELSER semantic retriever for units. */
-export function createUnitElserRetriever(
+/** Creates BM25 structure retriever for lessons (curated summary). */
+export function createLessonBm25StructureRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return { standard: { query: { semantic: { field: 'unit_semantic', query: text } }, filter } };
+  return createBm25Retriever(text, LESSON_BM25_STRUCTURE, filter);
+}
+
+/** Creates ELSER content retriever for lessons. */
+export function createLessonElserContentRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createElserRetriever(text, 'lesson_content_semantic', filter);
+}
+
+/** Creates ELSER structure retriever for lessons. */
+export function createLessonElserStructureRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createElserRetriever(text, 'lesson_structure_semantic', filter);
+}
+
+/** Creates BM25 content retriever for units (aggregated transcripts). */
+export function createUnitBm25ContentRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createBm25Retriever(text, UNIT_BM25_CONTENT, filter);
+}
+
+/** Creates BM25 structure retriever for units (curated summary). */
+export function createUnitBm25StructureRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createBm25Retriever(text, UNIT_BM25_STRUCTURE, filter);
+}
+
+/** Creates ELSER content retriever for units. */
+export function createUnitElserContentRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createElserRetriever(text, 'unit_content_semantic', filter);
+}
+
+/** Creates ELSER structure retriever for units. */
+export function createUnitElserStructureRetriever(
+  text: string,
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return createElserRetriever(text, 'unit_structure_semantic', filter);
 }

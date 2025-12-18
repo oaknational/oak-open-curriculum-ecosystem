@@ -14,13 +14,13 @@ import {
   createLessonFilters,
   createLessonHighlight,
   createLessonFacets,
-  createLessonBm25Retriever,
-  createLessonElserRetriever,
+  createLessonBm25ContentRetriever,
+  createLessonElserContentRetriever,
   createUnitFilters,
   createUnitHighlight,
   createUnitFacets,
-  createUnitBm25Retriever,
-  createUnitElserRetriever,
+  createUnitBm25ContentRetriever,
+  createUnitElserContentRetriever,
 } from './rrf-query-helpers';
 
 /** Common parameters for lesson search requests. */
@@ -52,12 +52,12 @@ export function buildLessonBm25OnlyRequest(params: LessonSearchParams): EsSearch
     includeHighlights = true,
     includeFacets = false,
   } = params;
-  const filters = createLessonFilters(subject, keyStage, unitSlug);
+  const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonBm25Retriever(text, filterClause),
+    retriever: createLessonBm25ContentRetriever(text, filterClause),
   };
 
   if (includeHighlights) {
@@ -88,12 +88,12 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
     includeHighlights = true,
     includeFacets = false,
   } = params;
-  const filters = createLessonFilters(subject, keyStage, unitSlug);
+  const filters = createLessonFilters({ subject, keyStage, unitSlug });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonElserRetriever(text, filterClause),
+    retriever: createLessonElserContentRetriever(text, filterClause),
   };
 
   if (includeHighlights) {
@@ -135,12 +135,12 @@ export function buildUnitBm25OnlyRequest(params: UnitSearchParams): EsSearchRequ
     includeHighlights = true,
     includeFacets = false,
   } = params;
-  const filters = createUnitFilters(subject, keyStage, minLessons);
+  const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitBm25Retriever(text, filterClause),
+    retriever: createUnitBm25ContentRetriever(text, filterClause),
   };
 
   if (includeHighlights) {
@@ -171,12 +171,12 @@ export function buildUnitElserOnlyRequest(params: UnitSearchParams): EsSearchReq
     includeHighlights = true,
     includeFacets = false,
   } = params;
-  const filters = createUnitFilters(subject, keyStage, minLessons);
+  const filters = createUnitFilters({ subject, keyStage, minLessons });
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitElserRetriever(text, filterClause),
+    retriever: createUnitElserContentRetriever(text, filterClause),
   };
 
   if (includeHighlights) {

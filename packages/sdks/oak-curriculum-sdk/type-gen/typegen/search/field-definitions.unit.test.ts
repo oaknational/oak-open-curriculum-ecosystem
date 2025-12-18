@@ -182,12 +182,12 @@ describe('THREADS_INDEX_FIELDS', () => {
 });
 
 describe('LESSONS_INDEX_FIELDS', () => {
-  it('contains expected search fields', () => {
+  it('contains expected search fields (Phase 3 nomenclature)', () => {
     const fieldNames = LESSONS_INDEX_FIELDS.map((f) => f.name);
     expect(fieldNames).toContain('lesson_id');
     expect(fieldNames).toContain('lesson_title');
-    expect(fieldNames).toContain('transcript_text');
-    expect(fieldNames).toContain('lesson_semantic');
+    expect(fieldNames).toContain('lesson_content');
+    expect(fieldNames).toContain('lesson_content_semantic');
     expect(fieldNames).toContain('title_suggest');
   });
 
@@ -203,21 +203,21 @@ describe('LESSONS_INDEX_FIELDS', () => {
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
-  it('contains expected field names', () => {
+  it('contains expected field names (Phase 3 nomenclature)', () => {
     const fieldNames = UNIT_ROLLUP_INDEX_FIELDS.map((f) => f.name);
     expect(fieldNames).toContain('unit_id');
-    expect(fieldNames).toContain('rollup_text');
-    expect(fieldNames).toContain('unit_semantic');
+    expect(fieldNames).toContain('unit_content');
+    expect(fieldNames).toContain('unit_content_semantic');
     expect(fieldNames).toContain('title_suggest');
   });
 
-  it('includes rollup_text as required', () => {
-    const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'rollup_text');
+  it('includes unit_content as required', () => {
+    const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'unit_content');
     expect(field?.optional).toBe(false);
   });
 
-  it('includes unit_semantic as optional', () => {
-    const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'unit_semantic');
+  it('includes unit_content_semantic as optional', () => {
+    const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'unit_content_semantic');
     expect(field?.optional).toBe(true);
   });
 });

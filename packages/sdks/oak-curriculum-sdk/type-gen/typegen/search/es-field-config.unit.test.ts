@@ -183,8 +183,8 @@ describe('buildEsSettings', () => {
 });
 
 describe('LESSONS_FIELD_OVERRIDES', () => {
-  it('defines semantic_text for lesson_semantic field', () => {
-    expect(LESSONS_FIELD_OVERRIDES.lesson_semantic).toEqual({
+  it('defines semantic_text for lesson_content_semantic field (Phase 3 nomenclature)', () => {
+    expect(LESSONS_FIELD_OVERRIDES.lesson_content_semantic).toEqual({
       type: 'semantic_text',
     });
   });
@@ -222,14 +222,14 @@ describe('UNITS_FIELD_OVERRIDES', () => {
 });
 
 describe('UNIT_ROLLUP_FIELD_OVERRIDES', () => {
-  it('defines semantic_text for unit_semantic field', () => {
-    expect(UNIT_ROLLUP_FIELD_OVERRIDES.unit_semantic).toEqual({
+  it('defines semantic_text for unit_content_semantic field (Phase 3 nomenclature)', () => {
+    expect(UNIT_ROLLUP_FIELD_OVERRIDES.unit_content_semantic).toEqual({
       type: 'semantic_text',
     });
   });
 
-  it('defines text with term_vector for rollup_text field', () => {
-    expect(UNIT_ROLLUP_FIELD_OVERRIDES.rollup_text.type).toBe('text');
-    expect(UNIT_ROLLUP_FIELD_OVERRIDES.rollup_text.term_vector).toBe('with_positions_offsets');
+  it('defines text with term_vector for unit_content field (Phase 3 nomenclature)', () => {
+    expect(UNIT_ROLLUP_FIELD_OVERRIDES.unit_content.type).toBe('text');
+    expect(UNIT_ROLLUP_FIELD_OVERRIDES.unit_content.term_vector).toBe('with_positions_offsets');
   });
 });

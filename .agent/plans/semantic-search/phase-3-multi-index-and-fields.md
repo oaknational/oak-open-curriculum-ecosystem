@@ -1,8 +1,8 @@
 # Phase 3: Multi-Index Search & KS4 Filtering
 
-**Status**: 3.0 ✅ | 3a ✅ | 3b ⚠️ | 3c 🔲  
+**Status**: 3.0 ✅ | 3a ✅ | 3b ✅ | 3c ✅ | 3d 🔲 Live Validation  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-16
+**Last Updated**: 2025-12-17
 
 ---
 
@@ -23,30 +23,99 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 
 ---
 
-## ⚠️ Critical Gap: Tier Filtering Not Wired Through API
+## Progress Summary
 
-**Status**: KS4 metadata is indexed but **cannot be filtered** via the API.
-
-| Component | Status | Issue |
-| --------- | ------ | ----- |
-| KS4 metadata indexed | ✅ | `tiers[]`, `exam_boards[]`, etc. are in documents |
-| `SearchStructuredRequestSchema` | ❌ | Missing `tier`, `examBoard`, `examSubject`, `ks4Option` fields |
-| `createLessonFilters()` | ❌ | Does not apply tier filter |
-| `createUnitFilters()` | ❌ | Does not apply tier filter |
-| Smoke tests | ⚠️ | Pass `tier` in request body but it's silently ignored |
-
-**Fix required in Part 3c** - see [Task: Wire KS4 Filtering Through API](#task-wire-ks4-filtering-through-api).
+| Part | Name                        | Status      | Description                                       |
+| ---- | --------------------------- | ----------- | ------------------------------------------------- |
+| 3.0  | Verification                | ✅ Complete | BM25/ELSER/Hybrid experiment, scope filtering     |
+| 3a   | Feature Parity              | ✅ Complete | KS4 metadata indexed, unit enrichment fields      |
+| 3b   | Semantic Summaries          | ✅ Complete | Enhanced templates with all API fields            |
+| 3c   | Four-Retriever + API Wiring | ✅ Complete | Code implemented, all quality gates pass          |
+| 3d   | Live Validation             | 🔲 Pending  | Re-index + smoke tests to prove impact            |
 
 ---
 
-## Progress Summary
+## 🚀 START HERE: Part 3d - Live Validation
 
-| Part | Name | Status | Description |
-| ---- | ---- | ------ | ----------- |
-| 3.0 | Verification | ✅ Complete | BM25/ELSER/Hybrid experiment, scope filtering |
-| 3a | Feature Parity | ✅ Complete | KS4 metadata indexed, unit enrichment fields |
-| 3b | Semantic Summaries | ⚠️ Needs Rework | Field naming incorrect |
-| 3c | Four-Retriever + API Wiring | 🔲 Pending | Implement four-retriever, wire KS4 filtering |
+**All code is complete. Your job is to PROVE it works.**
+
+### Immediate Next Steps
+
+1. **Reset and re-index** (indices have stale field names):
+   ```bash
+   cd apps/oak-open-curriculum-semantic-search
+   pnpm es:setup reset
+   npx tsx src/lib/elasticsearch/setup/ingest-live.ts --subject maths --keystage ks4
+   pnpm es:status  # Expect ~314 lessons, ~36 units
+   ```
+
+2. **Run smoke tests** to prove search quality:
+   ```bash
+   # In one terminal
+   pnpm dev
+   
+   # In another terminal
+   pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
+   pnpm vitest run -c vitest.smoke.config.ts search-quality
+   pnpm vitest run -c vitest.smoke.config.ts unit-search-quality
+   ```
+
+3. **Document results** in this file (update metrics below)
+
+---
+
+## ⚠️ What Remains: Live Validation (Part 3d)
+
+**All code is implemented and quality gates pass.** What's missing is **empirical proof** that the changes work correctly against live Elasticsearch.
+
+| Validation Task              | Status | Why It Matters                                              |
+| ---------------------------- | ------ | ----------------------------------------------------------- |
+| Re-index with new schema     | 🔲     | Indices may have stale data with old field names            |
+| MRR/NDCG smoke tests         | 🔲     | Baseline was 0.908/0.915 - verify maintained or improved    |
+| KS4 filtering smoke tests    | 🔲     | Prove tier/examBoard filters actually reduce results        |
+| Four-retriever comparison    | 🔲     | Optional: Compare 4-retriever vs 2-retriever metrics        |
+
+### Validation Sequence
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# 1. Reset and re-index with fresh schema (~5-10 min)
+pnpm es:setup reset
+npx tsx src/lib/elasticsearch/setup/ingest-live.ts --subject maths --keystage ks4
+
+# 2. Verify document counts
+pnpm es:status  # Expect ~314 lessons, ~36 units
+
+# 3. Direct ES tests (no server needed)
+pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
+
+# 4. Start dev server (in separate terminal)
+pnpm dev
+
+# 5. Run smoke tests
+pnpm vitest run -c vitest.smoke.config.ts scope-verification
+pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
+pnpm vitest run -c vitest.smoke.config.ts search-quality
+pnpm vitest run -c vitest.smoke.config.ts unit-search-quality
+```
+
+---
+
+## ✅ KS4 Filtering Implementation (Complete)
+
+**Status**: Fully wired through API layer.
+
+| Component                       | Status | Implementation                                                 |
+| ------------------------------- | ------ | -------------------------------------------------------------- |
+| KS4 metadata indexed            | ✅     | `tiers[]`, `exam_boards[]`, etc. in documents                  |
+| `SearchStructuredRequestSchema` | ✅     | Has `tier`, `examBoard`, `examSubject`, `ks4Option`, `year`, `threadSlug`, `category` |
+| `StructuredQuery` interface     | ✅     | All filter fields defined with JSDoc                           |
+| `buildStructuredQuery()`        | ✅     | Extracts all filter fields from request body                   |
+| `runLessonsSearch()`            | ✅     | Passes all filters to `buildLessonRrfRequest()`                |
+| `createLessonFilters()`         | ✅     | Applies all filters via `addMetadataFilters()`                 |
+| `createUnitFilters()`           | ✅     | Applies all filters via `addMetadataFilters()`                 |
+| Smoke tests                     | ✅     | Tests exist, awaiting live validation                          |
 
 ---
 
@@ -54,20 +123,21 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 
 **Completed 2025-12-15.**
 
-| Task | Status |
-| ---- | ------ |
+| Task                               | Status                         |
+| ---------------------------------- | ------------------------------ |
 | BM25 vs ELSER vs Hybrid experiment | ✅ Hybrid superior for lessons |
-| Lesson-only search verification | ✅ Returns only lessons |
-| Unit-only search verification | ✅ Returns only units |
-| Joint search with `doc_type` | ✅ Properly categorised |
-| Lesson filter by unit | ✅ Filter works |
-| Redis cache TTL 14 days + jitter | ✅ ADR-079 implemented |
+| Lesson-only search verification    | ✅ Returns only lessons        |
+| Unit-only search verification      | ✅ Returns only units          |
+| Joint search with `doc_type`       | ✅ Properly categorised        |
+| Lesson filter by unit              | ✅ Filter works                |
+| Redis cache TTL 14 days + jitter   | ✅ ADR-079 implemented         |
 
 ### BM25 vs ELSER vs Hybrid Experiment
 
 **Purpose**: Prove that hybrid search actually uses both retrieval methods and provides measurable benefit over either in isolation.
 
 **Results**:
+
 - **Lessons**: Hybrid is superior (MRR 0.908)
 - **Units**: Mixed (ELSER slightly better MRR, hybrid better NDCG@10)
 
@@ -75,51 +145,52 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 
 ## Part 3a: Feature Parity ✅ COMPLETE
 
-**Implementation complete, but tier filtering not wired through API.**
+**Completed 2025-12-15. KS4 filtering wired through API in Part 3c.**
 
-| Task | Status | Implementation |
-| ---- | ------ | -------------- |
-| OWA aliases import | ✅ | `mcp/synonyms/` |
-| `pupilLessonOutcome` field | ✅ | Field definition + transform |
-| Display title fields | ✅ | `subject_title`, `key_stage_title` |
-| Unit enrichment fields | ✅ | `description`, `why_this_why_now`, etc. |
-| KS4 sequence traversal | ✅ | `ks4-context-builder.ts` |
-| UnitContextMap building | ✅ | Maps unit → KS4 metadata |
-| KS4 field definitions | ✅ | `tiers[]`, `exam_boards[]`, etc. |
-| Document decoration | ✅ | `extractKs4DocumentFields()` |
-| KS4 filtering smoke tests | ⚠️ | Tests exist but filtering not wired |
+| Task                       | Status | Implementation                          |
+| -------------------------- | ------ | --------------------------------------- |
+| OWA aliases import         | ✅     | `mcp/synonyms/`                         |
+| `pupilLessonOutcome` field | ✅     | Field definition + transform            |
+| Display title fields       | ✅     | `subject_title`, `key_stage_title`      |
+| Unit enrichment fields     | ✅     | `description`, `why_this_why_now`, etc. |
+| KS4 sequence traversal     | ✅     | `ks4-context-builder.ts`                |
+| UnitContextMap building    | ✅     | Maps unit → KS4 metadata                |
+| KS4 field definitions      | ✅     | `tiers[]`, `exam_boards[]`, etc.        |
+| Document decoration        | ✅     | `extractKs4DocumentFields()`            |
+| KS4 filtering smoke tests  | ✅     | Tests exist, awaiting live validation   |
 
 ### KS4 Filterable Fields
 
 See [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) for complete field list and Mermaid diagrams.
 
-| Field | Type | Values |
-| ----- | ---- | ------ |
-| `tiers` | string[] | `["foundation", "higher"]` |
-| `tier_titles` | string[] | `["Foundation", "Higher"]` |
-| `exam_boards` | string[] | `["aqa", "edexcel", "ocr", "eduqas", "edexcelb"]` |
-| `exam_board_titles` | string[] | `["AQA", "Edexcel", "OCR", "Eduqas", "Edexcel B"]` |
-| `exam_subjects` | string[] | `["biology", "chemistry", "physics"]` |
-| `exam_subject_titles` | string[] | `["Biology", "Chemistry", "Physics"]` |
-| `ks4_options` | string[] | Programme pathway slugs |
-| `ks4_option_titles` | string[] | Programme pathway titles |
+| Field                 | Type     | Values                                             |
+| --------------------- | -------- | -------------------------------------------------- |
+| `tiers`               | string[] | `["foundation", "higher"]`                         |
+| `tier_titles`         | string[] | `["Foundation", "Higher"]`                         |
+| `exam_boards`         | string[] | `["aqa", "edexcel", "ocr", "eduqas", "edexcelb"]`  |
+| `exam_board_titles`   | string[] | `["AQA", "Edexcel", "OCR", "Eduqas", "Edexcel B"]` |
+| `exam_subjects`       | string[] | `["biology", "chemistry", "physics"]`              |
+| `exam_subject_titles` | string[] | `["Biology", "Chemistry", "Physics"]`              |
+| `ks4_options`         | string[] | Programme pathway slugs                            |
+| `ks4_option_titles`   | string[] | Programme pathway titles                           |
 
 **Additional filterable fields** (from sequence response):
+
 - `thread_slugs` / `thread_titles` - Curriculum threads
 - `categories` - Unit categories
 
 ---
 
-## Part 3b: Semantic Summaries ⚠️ NEEDS REWORK
+## Part 3b: Semantic Summaries ✅ COMPLETE
 
-**Issue**: `unit_semantic` was incorrectly replaced with summary instead of adding a new field.
+**Completed 2025-12-17.**
 
-| Task | Status | Issue |
-| ---- | ------ | ----- |
-| Dense vector code removed | ✅ | ADR-075 |
-| Lesson summary template | ✅ | Exists but field naming wrong |
-| Unit summary template | ✅ | Exists but field naming wrong |
-| Field naming | ❌ | Not following content/structure pattern |
+| Task                       | Status | Implementation                                                |
+| -------------------------- | ------ | ------------------------------------------------------------- |
+| Dense vector code removed  | ✅     | ADR-075                                                       |
+| Lesson summary template    | ✅     | Enhanced with all fields (keywords+descriptions, misconceptions+responses, tips, guidance, outcomes) |
+| Unit summary template      | ✅     | Enhanced with all fields (overview, description, notes, prior knowledge, national curriculum, threads, topics, lessons) |
+| Field naming               | ✅     | Follows `<entity>_content\|structure[_semantic]` pattern      |
 
 ### Structural Summary Content
 
@@ -162,24 +233,27 @@ Lessons:
 
 ---
 
-## Part 3c: Four-Retriever + API Wiring 🔲 PENDING
+## Part 3c: Four-Retriever + API Wiring ✅ COMPLETE
 
-### Task: Rename Fields to Consistent Nomenclature
+**Completed 2025-12-17.** All code implemented, quality gates pass.
+
+### Field Nomenclature (Implemented)
 
 Pattern: `<entity>_content|structure[_semantic]`
 
-| Current Field | New Field | Change |
-| ------------- | --------- | ------ |
-| `transcript_text` | `lesson_content` | Rename |
-| `lesson_semantic` | `lesson_content_semantic` | Rename |
-| `lesson_summary_semantic` | `lesson_structure_semantic` | Rename |
-| (new) | `lesson_structure` | Add |
-| `rollup_text` | `unit_content` | Rename |
-| `unit_semantic` | `unit_content_semantic` | **Restore to rollup content** |
-| (new) | `unit_structure` | Add |
-| (new) | `unit_structure_semantic` | Add |
+| Current Field             | New Field                   | Change                        |
+| ------------------------- | --------------------------- | ----------------------------- |
+| `transcript_text`         | `lesson_content`            | Rename                        |
+| `lesson_semantic`         | `lesson_content_semantic`   | Rename                        |
+| `lesson_summary_semantic` | `lesson_structure_semantic` | Rename                        |
+| (new)                     | `lesson_structure`          | Add                           |
+| `rollup_text`             | `unit_content`              | Rename                        |
+| `unit_semantic`           | `unit_content_semantic`     | **Restore to rollup content** |
+| (new)                     | `unit_structure`            | Add                           |
+| (new)                     | `unit_structure_semantic`   | Add                           |
 
 **Files to modify**:
+
 - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
 - `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
 - `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
@@ -256,14 +330,26 @@ const retrievers = [
 
 See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
-### Success Criteria
+### What's Proven vs Not Proven
 
-1. ✅ Four retrievers configured for lessons and units
-2. ✅ Field names follow `<entity>_content|structure[_semantic]` pattern
-3. ✅ KS4 filtering works via API (`tier`, `examBoard`, `examSubject`, `ks4Option`)
-4. ✅ Smoke tests verify filtering actually filters (not just doesn't error)
-5. ✅ MRR ≥ 0.70, NDCG@10 ≥ 0.75 maintained
-6. ✅ All quality gates pass
+| Claim | Evidence | Status |
+| ----- | -------- | ------ |
+| Four retrievers configured | `createLessonRetriever()`, `createUnitRetriever()` | ✅ Code exists |
+| Field nomenclature correct | `curriculum.ts` field definitions | ✅ Code exists |
+| KS4 filter wiring complete | All layers connected | ✅ Code exists |
+| Quality gates pass | `pnpm check:turbo` exits 0 | ✅ Verified |
+| **Four-retriever improves search** | Not measured | ❌ Not proven |
+| **KS4 filtering reduces results** | Not tested live | ❌ Not proven |
+| **MRR ≥ 0.70 maintained** | Not re-measured | ❌ Not proven |
+| **NDCG@10 ≥ 0.75 maintained** | Not re-measured | ❌ Not proven |
+
+### Success Criteria (Part 3d Required)
+
+1. 🔲 Re-index with new schema produces expected document counts (~314 lessons, ~36 units)
+2. 🔲 Smoke tests pass without errors
+3. 🔲 KS4 filtering demonstrably reduces results (tier=foundation returns fewer than unfiltered)
+4. 🔲 MRR ≥ 0.70 for lessons, MRR ≥ 0.60 for units
+5. 🔲 NDCG@10 ≥ 0.75 for lessons, NDCG@10 ≥ 0.65 for units
 
 ---
 
@@ -271,39 +357,39 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
 ### Core Implementation
 
-| File | Purpose |
-| ---- | ------- |
-| `src/lib/indexing/ks4-context-builder.ts` | Sequence traversal, UnitContextMap |
-| `src/lib/indexing/ks4-context-types.ts` | KS4 type definitions |
-| `src/lib/indexing/document-transforms.ts` | Document creation |
-| `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()` |
+| File                                             | Purpose                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| `src/lib/indexing/ks4-context-builder.ts`        | Sequence traversal, UnitContextMap                                 |
+| `src/lib/indexing/ks4-context-types.ts`          | KS4 type definitions                                               |
+| `src/lib/indexing/document-transforms.ts`        | Document creation                                                  |
+| `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()`                                       |
 | `src/lib/indexing/semantic-summary-generator.ts` | `generateLessonSemanticSummary()`, `generateUnitSemanticSummary()` |
-| `src/lib/hybrid-search/rrf-query-builders.ts` | RRF query construction |
-| `src/lib/hybrid-search/rrf-query-helpers.ts` | Filter creation |
+| `src/lib/hybrid-search/rrf-query-builders.ts`    | RRF query construction                                             |
+| `src/lib/hybrid-search/rrf-query-helpers.ts`     | Filter creation                                                    |
 
 ### Schema Definitions
 
-| File | Purpose |
-| ---- | ------- |
-| `type-gen/typegen/search/field-definitions/curriculum.ts` | Index field definitions |
-| `src/types/generated/search/requests.ts` | `SearchStructuredRequestSchema` |
+| File                                                      | Purpose                         |
+| --------------------------------------------------------- | ------------------------------- |
+| `type-gen/typegen/search/field-definitions/curriculum.ts` | Index field definitions         |
+| `src/types/generated/search/requests.ts`                  | `SearchStructuredRequestSchema` |
 
 ### API Layer
 
-| File | Purpose |
-| ---- | ------- |
-| `app/api/search/route.ts` | Next.js API route handler |
+| File                               | Purpose                                          |
+| ---------------------------------- | ------------------------------------------------ |
+| `app/api/search/route.ts`          | Next.js API route handler                        |
 | `app/api/search/search-service.ts` | `buildStructuredQuery()`, `parseSearchRequest()` |
 
 ### Tests
 
-| File | Purpose |
-| ---- | ------- |
-| `smoke-tests/ks4-filtering.smoke.test.ts` | KS4 filtering verification |
-| `smoke-tests/search-quality.smoke.test.ts` | Lesson MRR/NDCG |
-| `smoke-tests/unit-search-quality.smoke.test.ts` | Unit MRR/NDCG |
-| `smoke-tests/scope-verification.smoke.test.ts` | Scope filtering |
-| `smoke-tests/hybrid-superiority.smoke.test.ts` | Direct ES tests |
+| File                                                | Purpose                         |
+| --------------------------------------------------- | ------------------------------- |
+| `smoke-tests/ks4-filtering.smoke.test.ts`           | KS4 filtering verification      |
+| `smoke-tests/search-quality.smoke.test.ts`          | Lesson MRR/NDCG                 |
+| `smoke-tests/unit-search-quality.smoke.test.ts`     | Unit MRR/NDCG                   |
+| `smoke-tests/scope-verification.smoke.test.ts`      | Scope filtering                 |
+| `smoke-tests/hybrid-superiority.smoke.test.ts`      | Direct ES tests                 |
 | `src/lib/indexing/ks4-context-builder.unit.test.ts` | Unit tests for context building |
 
 All paths relative to `apps/oak-open-curriculum-semantic-search/`.
@@ -335,14 +421,14 @@ pnpm vitest run -c vitest.smoke.config.ts unit-search-quality
 
 ### KS4 Filtering Verification Checklist
 
-| Test | Query | Expected Behaviour |
-| ---- | ----- | ------------------ |
-| Tier filtering | `tier: "foundation"` | Only Foundation tier lessons |
-| Tier filtering | `tier: "higher"` | Only Higher tier lessons |
-| Exam board filtering | `examBoard: "aqa"` | Only AQA sequence lessons |
-| Exam subject filtering | `examSubject: "biology"` | Only Biology lessons (sciences) |
-| KS4 option filtering | `ks4Option: "gcse-combined-science"` | Only Combined Science lessons |
-| Combined filters | `tier: "foundation", examBoard: "aqa"` | Foundation tier AND AQA |
+| Test                   | Query                                  | Expected Behaviour              |
+| ---------------------- | -------------------------------------- | ------------------------------- |
+| Tier filtering         | `tier: "foundation"`                   | Only Foundation tier lessons    |
+| Tier filtering         | `tier: "higher"`                       | Only Higher tier lessons        |
+| Exam board filtering   | `examBoard: "aqa"`                     | Only AQA sequence lessons       |
+| Exam subject filtering | `examSubject: "biology"`               | Only Biology lessons (sciences) |
+| KS4 option filtering   | `ks4Option: "gcse-combined-science"`   | Only Combined Science lessons   |
+| Combined filters       | `tier: "foundation", examBoard: "aqa"` | Foundation tier AND AQA         |
 
 ---
 
@@ -374,12 +460,12 @@ The `app/` folder is a **deprecated Next.js frontend**. All actual functionality
 
 Per `testing-strategy.md`, all work MUST follow TDD at the appropriate level:
 
-| Change Type | Test Level | Write First |
-| ----------- | ---------- | ----------- |
-| New field extraction function | Unit | Unit test for pure transform |
-| Unit search endpoint changes | Integration | Integration test for query building |
-| Multi-index search behaviour | E2E/Smoke | Smoke test specifying new behaviour |
-| Ground truth for unit search | Smoke | Define expected results first |
+| Change Type                   | Test Level  | Write First                         |
+| ----------------------------- | ----------- | ----------------------------------- |
+| New field extraction function | Unit        | Unit test for pure transform        |
+| Unit search endpoint changes  | Integration | Integration test for query building |
+| Multi-index search behaviour  | E2E/Smoke   | Smoke test specifying new behaviour |
+| Ground truth for unit search  | Smoke       | Define expected results first       |
 
 **Sequence**:
 
@@ -393,17 +479,17 @@ Per `testing-strategy.md`, all work MUST follow TDD at the appropriate level:
 
 ## Related Documents
 
-| Document | Purpose |
-| -------- | ------- |
+| Document                                                                                                   | Purpose                                            |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 filtering architecture (with Mermaid diagrams) |
-| [ADR-075](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense vector removal |
-| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-only strategy |
-| [ADR-077](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic summary generation |
-| [ADR-079](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md) | SDK cache TTL jitter |
-| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Fresh chat entry point |
-| [README](README.md) | Navigation hub |
-| [Requirements](requirements.md) | Business context |
-| [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md) | Fields to request from Oak API |
+| [ADR-075](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)                  | Dense vector removal                               |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)         | ELSER-only strategy                                |
+| [ADR-077](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)           | Semantic summary generation                        |
+| [ADR-079](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)                  | SDK cache TTL jitter                               |
+| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md)                                          | Fresh chat entry point                             |
+| [README](README.md)                                                                                        | Navigation hub                                     |
+| [Requirements](requirements.md)                                                                            | Business context                                   |
+| [Upstream API Wishlist](../external/upstream-api-metadata-wishlist.md)                                     | Fields to request from Oak API                     |
 
 ---
 

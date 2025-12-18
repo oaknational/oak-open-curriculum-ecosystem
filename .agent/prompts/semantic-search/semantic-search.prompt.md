@@ -1,8 +1,8 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 3 In Progress  
+**Status**: Phase 3 Code Complete, Live Validation Pending  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-16
+**Last Updated**: 2025-12-17
 
 ---
 
@@ -48,26 +48,33 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | ---- | ---- | ------ | ----- |
 | 3.0 | Verification | ✅ Complete | Hybrid superiority proven, scope filtering works |
 | 3a | Feature Parity | ✅ Complete | KS4 metadata indexed, unit enrichment fields added |
-| 3b | Semantic Summaries | ⚠️ Needs Rework | Field naming incorrect, needs four-retriever refactor |
-| 3c | Four-Retriever Architecture | 🔲 Not Started | Implement consistent content/structure nomenclature |
+| 3b | Semantic Summaries | ✅ Complete | Enhanced templates with all API fields |
+| 3c | Four-Retriever + API Wiring | ✅ Complete | Code implemented, quality gates pass |
+| 3d | Live Validation | 🔲 Pending | Re-index + smoke tests to prove impact |
 
-### ⚠️ Critical Gap Identified
+### ⚠️ What Remains: Live Validation
 
-**KS4 filtering is NOT wired through the API layer**. While KS4 metadata is indexed:
+**All code is implemented.** What's missing is **empirical proof** via:
 
-- `SearchStructuredRequestSchema` lacks `tier`, `examBoard`, `examSubject`, `ks4Option` fields
-- `createLessonFilters()` / `createUnitFilters()` don't apply these filters
-- Smoke tests pass `tier` in request body but it's silently ignored
+1. **Re-index** with new schema (indices may have stale field names)
+2. **MRR/NDCG smoke tests** to verify quality maintained (baseline: 0.908/0.915)
+3. **KS4 filtering smoke tests** to prove filters actually reduce results
 
-**This must be fixed before KS4 filtering can work.**
+### ✅ KS4 Filtering (Implemented)
+
+All layers are now wired:
+
+- `SearchStructuredRequestSchema` has `tier`, `examBoard`, `examSubject`, `ks4Option`, `year`, `threadSlug`, `category`
+- `buildStructuredQuery()` extracts all filter fields
+- `createLessonFilters()` / `createUnitFilters()` apply filters via `addMetadataFilters()`
 
 ### Completed Work
 
 | Item | Status |
 | ---- | ------ |
 | Two-way hybrid code written (BM25 + ELSER RRF) | ✅ Complete |
-| Lesson search: MRR 0.908, 40 ground truth queries | ✅ Complete |
-| Unit search: MRR 0.915, 43 ground truth queries | ✅ Complete |
+| Lesson search: MRR 0.908, 40 ground truth queries | ✅ Complete (pre-4-retriever) |
+| Unit search: MRR 0.915, 43 ground truth queries | ✅ Complete (pre-4-retriever) |
 | Dense vector code removed (ADR-075) | ✅ Complete |
 | All quality gates passing | ✅ Complete |
 | BM25 vs ELSER vs Hybrid experiment | ✅ Complete |
@@ -75,7 +82,10 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | Redis cache TTL 14 days + jitter (ADR-079) | ✅ Complete |
 | Part 3a: Feature Parity fields | ✅ Complete |
 | Part 3a: KS4 Metadata Denormalisation | ✅ Complete |
-| Semantic summary generator templates | ✅ Complete |
+| Part 3b: Enhanced semantic summaries (all API fields) | ✅ Complete |
+| Part 3c: Four-retriever architecture | ✅ Complete |
+| Part 3c: Field nomenclature standardisation | ✅ Complete |
+| Part 3c: KS4 filter wiring through API | ✅ Complete |
 
 ---
 
@@ -197,43 +207,43 @@ pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
 
 ---
 
-## Current Metrics
+## What's Proven vs Not Proven
 
-### Lesson Search (314 Maths KS4 lessons)
+### ✅ Proven (Code Quality)
 
-| Metric | Result | Target | Status |
-| ------ | ------ | ------ | ------ |
-| MRR | **0.908** | > 0.70 | ✅ PASS |
-| NDCG@10 | 0.725 | > 0.75 | ⚠️ Below |
-| Zero-hit rate | **0.0%** | < 10% | ✅ PASS |
-| p95 Latency | 367ms | < 300ms | ⚠️ Above |
+| Claim | Evidence |
+| ----- | -------- |
+| Code compiles | `pnpm type-check` passes |
+| Unit tests pass | `pnpm test` passes |
+| All quality gates pass | `pnpm check:turbo` exits 0 |
 
-### Unit Search (36 Maths KS4 units)
+### ❌ Not Proven (Search Quality)
 
-| Metric | Result | Target | Status |
-| ------ | ------ | ------ | ------ |
-| MRR | **0.915** | > 0.60 | ✅ PASS |
-| NDCG@10 | **0.924** | > 0.65 | ✅ PASS |
-| Zero-hit rate | **0.0%** | < 15% | ✅ PASS |
-| p95 Latency | **196ms** | < 300ms | ✅ PASS |
+| Claim | Why Not | How to Prove |
+| ----- | ------- | ------------ |
+| Four-retriever improves search | Not measured | Re-index + smoke tests |
+| KS4 filtering reduces results | Not tested live | Re-index + `ks4-filtering.smoke.test.ts` |
+| MRR/NDCG maintained or improved | Not re-measured | Re-index + `search-quality.smoke.test.ts` |
+
+### Historical Baseline (Comparison Target Only)
+
+| Scope | MRR | NDCG@10 | Zero-hit | p95 Latency |
+| ----- | --- | ------- | -------- | ----------- |
+| Lessons (314) | 0.908 | 0.725 | 0.0% | 367ms |
+| Units (36) | 0.915 | 0.924 | 0.0% | 196ms |
 
 ---
 
 ## Index Status
 
-**Last indexed**: 2025-12-15 (Maths KS4)
+**⚠️ STALE**: Last indexed 2025-12-15 with **two-retriever** schema. **Must re-index** before validation.
 
-| Index | Count | Hybrid Search | Status |
-| ----- | ----- | ------------- | ------ |
-| `oak_lessons` | 314 | BM25 + ELSER | ✅ Verified |
-| `oak_unit_rollup` | 36 | BM25 + ELSER | ✅ Verified |
-| `oak_units` | 36 | BM25 only | ✅ Verified |
-| `oak_threads` | 201 | BM25 + ELSER | ❌ Untested |
-| `oak_sequences` | 2 | BM25 + ELSER | ❌ Untested |
+| Index | Expected Count | Current State |
+| ----- | -------------- | ------------- |
+| `oak_lessons` | ~314 | ❌ Stale (old field names) |
+| `oak_unit_rollup` | ~36 | ❌ Stale (old field names) |
 
-All 36 Maths KS4 units have their lessons indexed. Redis cache refreshed with 14-day TTLs (8,109 entries).
-
-**Note**: Hybrid superiority experiment completed. For lessons, hybrid is superior. For units, results are mixed (ELSER slightly better MRR, hybrid better NDCG@10).
+**First action in Part 3d**: Reset and re-index to get four-retriever field structure.
 
 ---
 
@@ -340,7 +350,7 @@ LOG_LEVEL=info
 
 | Phase | Name | Status | Description |
 | ----- | ---- | ------ | ----------- |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | Four-retriever architecture, KS4 filtering |
+| **3** | **Multi-Index & Fields** | ✅ Code Complete | Part 3d (Live Validation) pending |
 
 ### Future
 

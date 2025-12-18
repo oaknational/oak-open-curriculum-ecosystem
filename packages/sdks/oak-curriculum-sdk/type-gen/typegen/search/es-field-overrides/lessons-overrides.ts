@@ -42,10 +42,18 @@ export const LESSONS_FIELD_OVERRIDES = {
   misconceptions_and_common_mistakes: textFieldWithAnalyzers(),
   teacher_tips: textFieldWithAnalyzers(),
   content_guidance: textFieldWithAnalyzers(),
-  transcript_text: textFieldWithAnalyzers({
+  // BM25 content field (Phase 3 nomenclature: lesson_content)
+  lesson_content: textFieldWithAnalyzers({
     term_vector: 'with_positions_offsets',
   }),
-  lesson_semantic: {
+  // BM25 structure field (curated summary for lexical search)
+  lesson_structure: textFieldWithAnalyzers(),
+  // ELSER semantic content field (Phase 3 nomenclature: lesson_content_semantic)
+  lesson_content_semantic: {
+    type: 'semantic_text',
+  },
+  // ELSER semantic structure field (curated summary for embeddings)
+  lesson_structure_semantic: {
     type: 'semantic_text',
   },
   lesson_url: {

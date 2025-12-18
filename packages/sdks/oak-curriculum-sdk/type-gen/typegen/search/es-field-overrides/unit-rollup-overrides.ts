@@ -30,10 +30,18 @@ export const UNIT_ROLLUP_FIELD_OVERRIDES = {
     contexts: createCompletionContexts(UNIT_ROLLUP_COMPLETION_CONTEXTS),
   },
   unit_topics: textFieldWithAnalyzers(),
-  rollup_text: textFieldWithAnalyzers({
+  // BM25 content field (Phase 3 nomenclature: unit_content)
+  unit_content: textFieldWithAnalyzers({
     term_vector: 'with_positions_offsets',
   }),
-  unit_semantic: {
+  // BM25 structure field (curated summary for lexical search)
+  unit_structure: textFieldWithAnalyzers(),
+  // ELSER semantic content field (Phase 3 nomenclature: unit_content_semantic)
+  unit_content_semantic: {
+    type: 'semantic_text',
+  },
+  // ELSER semantic structure field (curated summary for embeddings)
+  unit_structure_semantic: {
     type: 'semantic_text',
   },
   unit_url: {

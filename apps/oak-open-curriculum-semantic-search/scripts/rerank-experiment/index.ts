@@ -8,7 +8,7 @@
  *
  * Usage: npx tsx scripts/rerank-experiment/index.ts
  *
- * NOTE: Using `lesson_title` for reranker field instead of `transcript_text`.
+ * NOTE: Using `lesson_title` for reranker field instead of `lesson_content`.
  * Full transcripts cause 20+ second latencies due to cross-encoder O(n²) complexity.
  */
 

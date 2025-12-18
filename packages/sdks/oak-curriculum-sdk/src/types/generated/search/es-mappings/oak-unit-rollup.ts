@@ -99,13 +99,21 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
       },
-      rollup_text: {
+      unit_content: {
         type: 'text',
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
         term_vector: 'with_positions_offsets',
       },
-      unit_semantic: {
+      unit_structure: {
+        type: 'text',
+        analyzer: 'oak_text_index',
+        search_analyzer: 'oak_text_search',
+      },
+      unit_content_semantic: {
+        type: 'semantic_text',
+      },
+      unit_structure_semantic: {
         type: 'semantic_text',
       },
       unit_url: {

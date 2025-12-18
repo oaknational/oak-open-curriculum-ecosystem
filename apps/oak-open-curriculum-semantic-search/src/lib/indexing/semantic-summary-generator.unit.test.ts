@@ -62,9 +62,13 @@ describe('generateLessonSemanticSummary', () => {
     expect(result).toContain(
       'Key learning: Add fractions with same denominator; Simplify fractions',
     );
-    expect(result).toContain('Keywords: fraction; numerator; denominator');
+    // Keywords now include descriptions for richer semantics
     expect(result).toContain(
-      'Common misconception: Pupils may add numerators and denominators separately',
+      'Keywords: fraction (A part of a whole); numerator (The top number); denominator (The bottom number)',
+    );
+    // Format changed from 'Common misconception' to 'Misconceptions' with response
+    expect(result).toContain(
+      'Misconceptions: Pupils may add numerators and denominators separately → Remind students that only numerators are added',
     );
     expect(result).toContain('Pupil outcome: I can add fractions with the same denominator');
   });
@@ -85,7 +89,7 @@ describe('generateLessonSemanticSummary', () => {
     expect(result).toContain('Basic Addition is a Key Stage 1 Maths lesson');
     expect(result).not.toContain('Key learning:');
     expect(result).not.toContain('Keywords:');
-    expect(result).not.toContain('Common misconception:');
+    expect(result).not.toContain('Misconceptions:');
     expect(result).not.toContain('Pupil outcome:');
   });
 });
