@@ -1,8 +1,8 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 3d ✅ Complete | Phase 3e 📋 Planned (ES Native Enhancements)  
+**Status**: Phase 3d ✅ Complete (incl. tier fix) | Phase 3e 📋 Next (ES Native Enhancements)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-18
+**Last Updated**: 2025-12-18 (tier metadata fix)
 
 ---
 
@@ -50,7 +50,7 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | 3a | Feature Parity | ✅ Complete | KS4 metadata indexed, unit enrichment fields added |
 | 3b | Semantic Summaries | ✅ Complete | Enhanced templates with all API fields |
 | 3c | Four-Retriever + API Wiring | ✅ Complete | Code implemented, quality gates pass |
-| 3d | Live Validation | ✅ Complete | All metrics improved (2025-12-18) |
+| 3d | Live Validation | ✅ Complete | All metrics improved, tier metadata fixed (2025-12-18) |
 | 3e | ES Native Enhancements | 📋 Planned | Fuzzy, stemming, phonetic, typeahead (see below) |
 
 ### ✅ Phase 3 Validation Results (2025-12-18)
@@ -101,13 +101,17 @@ Enriched SDK synonyms from OWA and OALA reference repositories:
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/17-synonym-enrichment-from-owa-oala.md`
 
-### ✅ KS4 Filtering (Implemented)
+### ✅ KS4 Filtering (Fully Working)
 
-All layers are now wired:
+All layers wired and **tier metadata fix applied (2025-12-18)**:
 
 - `SearchStructuredRequestSchema` has `tier`, `examBoard`, `examSubject`, `ks4Option`, `year`, `threadSlug`, `category`
 - `buildStructuredQuery()` extracts all filter fields
 - `createLessonFilters()` / `createUnitFilters()` apply filters via `addMetadataFilters()`
+- **Tier metadata now populates correctly**: 251 Foundation lessons, 314 Higher lessons
+- Filtering by `tier: "foundation"` or `tier: "higher"` returns correct results
+
+**Root cause fixed**: The `isKs4Sequence()` check was skipping `maths-secondary` (no exam board in slug, no ks4Options). But tier data exists in Year 10/11 entries. Fix: Process ALL sequences—see [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
 
 ### Completed Work
 
@@ -127,6 +131,7 @@ All layers are now wired:
 | Part 3c: Four-retriever architecture | ✅ Complete |
 | Part 3c: Field nomenclature standardisation | ✅ Complete |
 | Part 3c: KS4 filter wiring through API | ✅ Complete |
+| **Part 3d: Tier metadata bug fix** | ✅ Complete (2025-12-18) |
 
 ---
 
@@ -264,6 +269,7 @@ pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
 | ----- | -------- | ------ |
 | Four-retriever improves search | Hybrid MRR 0.931 > BM25 0.892 > ELSER 0.831 | ✅ Proven |
 | KS4 filter wiring complete | End-to-end API connected | ✅ Proven |
+| **Tier filtering works** | 251 Foundation, 314 Higher lessons indexed | ✅ Proven (fixed 2025-12-18) |
 | MRR improved | Lessons 0.931 (+2.5%), Units 1.000 (+9.3%) | ✅ Proven |
 | NDCG@10 improved | Lessons 0.749 (+3.3%), Units 0.981 (+6.2%) | ✅ Proven |
 

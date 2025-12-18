@@ -1,8 +1,8 @@
 # Phase 3: Multi-Index Search & KS4 Filtering
 
-**Status**: 3.0 ✅ | 3a ✅ | 3b ✅ | 3c ✅ | 3d ✅ | 3e 📋 Planned  
+**Status**: 3.0 ✅ | 3a ✅ | 3b ✅ | 3c ✅ | 3d ✅ (incl. tier fix) | 3e 📋 Next  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-18
+**Last Updated**: 2025-12-18 (tier metadata fix applied)
 
 ---
 
@@ -64,7 +64,7 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 | ----------------------- | ------ | ----------------------------------------------- |
 | hybrid-superiority      | ✅     | Hybrid > BM25 > ELSER for both scopes           |
 | scope-verification      | ✅     | doc_type, scope filtering, unit filter all work |
-| ks4-filtering           | ✅     | Filter wiring complete (tier data investigation needed) |
+| ks4-filtering           | ✅     | Filter wiring complete, tier metadata fix applied |
 | search-quality          | ✅     | MRR 0.931, NDCG@10 0.749, 0% zero-hit           |
 | unit-search-quality     | ⚠️     | MRR 1.000, NDCG@10 0.981, p95 latency 314ms (14ms over target) |
 
@@ -83,9 +83,63 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 | ---------------------------- | ------ | ----------------------------------------------------------- |
 | Re-index with new schema     | ✅     | 314 lessons, 36 units with four-retriever fields            |
 | MRR/NDCG smoke tests         | ✅     | All metrics improved over baseline                          |
-| KS4 filtering smoke tests    | ✅     | Filter wiring verified (tier metadata needs investigation)  |
+| KS4 filtering smoke tests    | ✅     | Filter wiring verified, tier metadata fix applied            |
 | Four-retriever comparison    | ✅     | Hybrid superior for both lessons and units                  |
 | **Four-retriever ablation**  | ✅     | New (2025-12-18): Detailed breakdown of each retriever      |
+| **Tier metadata fix**        | ✅     | New (2025-12-18): Maths-style sequences now processed       |
+
+---
+
+## ✅ Tier Metadata Bug Fix (2025-12-18)
+
+### Problem
+
+KS4 filtering smoke tests showed "0 foundation results" despite filter wiring being complete. Demo scenarios requiring tier-based filtering (e.g., "Foundation tier trigonometry lessons") were blocked.
+
+### Root Cause
+
+The `isKs4Sequence()` function was skipping sequences like `maths-secondary` because:
+
+1. No exam board in the slug (no `aqa`, `edexcel`, etc.)
+2. `ks4Options: null` in the subjects API response
+
+However, the `maths-secondary` sequence **DOES** contain tier data embedded in Year 10/11 entries:
+
+```json
+{
+  "year": 10,
+  "tiers": [
+    { "tierSlug": "foundation", "tierTitle": "Foundation", "units": [...] },
+    { "tierSlug": "higher", "tierTitle": "Higher", "units": [...] }
+  ]
+}
+```
+
+### Fix Applied
+
+Removed the early-return check in `processSequenceForKs4Context()`. Now ALL sequences are processed, and `buildUnitContextsFromSequenceResponse()` extracts tier data wherever it exists.
+
+**Commit**: `49e4420f fix(search): process all sequences for KS4 tier metadata extraction`
+
+### Results After Fix
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Foundation tier lessons | 0 | **251** |
+| Higher tier lessons | 0 | **314** |
+| KS4 filtering works | ❌ | ✅ |
+| Stakeholder demo ready | ❌ | ✅ |
+
+### Key Files Modified
+
+- `src/lib/indexing/ks4-context-builder.ts` - Removed `isKs4Sequence()` early return
+- `src/lib/indexing/ks4-context-builder.unit.test.ts` - Added TDD test for Maths-style sequences
+
+### Lesson Learned
+
+**Process ALL sequences**, not just those with explicit exam boards or ks4Options. The tier structure can appear embedded in year entries for subjects like Maths that don't have exam-board-specific sequences.
+
+**Updated in**: [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)
 
 ---
 
@@ -438,7 +492,7 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 
 1. ✅ Re-index with new schema produces expected document counts (314 lessons, 36 units)
 2. ✅ Smoke tests pass (4/5 fully passed, 1 marginal latency fail at 314ms vs 300ms target)
-3. ⚠️ KS4 filtering wiring complete - tier metadata population needs investigation (0 foundation results)
+3. ✅ KS4 filtering fully working - tier metadata fix applied (251 Foundation, 314 Higher lessons)
 4. ✅ MRR ≥ 0.70 for lessons (0.931), MRR ≥ 0.60 for units (1.000)
 5. ✅ NDCG@10 ≥ 0.70 for lessons (0.749), NDCG@10 ≥ 0.65 for units (0.981)
 

@@ -1,7 +1,7 @@
 # ADR-080: KS4 Metadata Denormalisation Strategy
 
 **Status**: Accepted  
-**Date**: 2025-12-15 (Updated 2025-12-16)  
+**Date**: 2025-12-15 (Updated 2025-12-18 - tier metadata fix)  
 **Decision Makers**: AI Platform Team  
 **Related ADRs**: [ADR-066](066-sdk-response-caching.md), [ADR-067](067-sdk-generated-elasticsearch-mappings.md), [ADR-076](076-elser-only-embedding-strategy.md)
 
@@ -307,6 +307,41 @@ All files are in `apps/oak-open-curriculum-semantic-search/`.
 | `buildKs4ContextMap()`                    | Orchestrates full map building          |
 | `getKs4ContextForUnit()`                  | Retrieves aggregated context for a unit |
 | `extractKs4DocumentFields()`              | Converts context to document fields     |
+
+## Implementation Notes
+
+### Critical: Process ALL Sequences (2025-12-18 Fix)
+
+**Lesson learned**: Do NOT skip sequences based on exam board or ks4Options presence.
+
+The original implementation had:
+
+```typescript
+// WRONG - skips Maths-style sequences
+if (!isKs4Sequence(examBoard, ks4Option)) {
+  return contextMap; // Early return
+}
+```
+
+This caused `maths-secondary` to be skipped because:
+
+- No exam board in slug (unlike `science-secondary-aqa`)
+- `ks4Options: null` in subjects API response
+
+But `maths-secondary` **DOES** contain tier data embedded in Year 10/11 entries. The fix is to process ALL sequences and let `buildUnitContextsFromSequenceResponse()` extract tiers wherever they exist:
+
+```typescript
+// CORRECT - process all sequences
+async function processSequenceForKs4Context(...) {
+  // No early return - process all sequences
+  const response = await fetchSequenceUnits(sequence.sequenceSlug);
+  const contexts = buildUnitContextsFromSequenceResponse(response, examBoard, ks4Option);
+  // contexts will be empty for non-tiered years (correct behaviour)
+  return mergeUnitContexts(contextMap, contexts);
+}
+```
+
+**Result**: 251 Foundation lessons, 314 Higher lessons now correctly indexed for Maths KS4.
 
 ## Rationale
 
