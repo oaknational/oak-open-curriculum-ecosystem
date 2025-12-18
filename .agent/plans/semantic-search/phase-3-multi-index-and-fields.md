@@ -693,21 +693,43 @@ Phase 3e enhances BM25 lexical search through native Elasticsearch features to i
 | Naturalistic (`that sohcahtoa stuff`) | BM25 fails, relies on ELSER | Stop word removal + phrase matching improves BM25 |
 | Partial words (`quadra`) | No prefix matching | `search_as_you_type` subfields enable prefix matching |
 
-### Measurable Acceptance Criteria
+### MRR Interpretation Rubric
 
-| Metric | Current (Hard Lessons) | Target | Rationale |
-|--------|------------------------|--------|-----------|
-| Four-way hybrid MRR | 0.250 | ≥ 0.300 | +20% improvement |
-| Four-way hybrid NDCG@10 | 0.212 | ≥ 0.250 | +18% improvement |
-| BM25 content MRR | 0.207 | ≥ 0.280 | Approach ELSER performance (0.287) |
-| Hybrid ≥ Single ELSER | ❌ (ELSER wins) | ✅ Hybrid wins | BM25 should add value, not noise |
-| p95 Latency | 602ms | ≤ 650ms | No significant regression |
+Use this rubric to interpret MRR values consistently:
 
-**Secondary Criteria** (Standard Queries):
+| MRR | Rating | Meaning |
+|-----|--------|---------|
+| ≥ 0.80 | Excellent | Correct result typically 1st or 2nd |
+| ≥ 0.50 | Good | Correct result typically 2nd |
+| ≥ 0.33 | Acceptable | Correct result typically 3rd |
+| ≥ 0.25 | Poor | Correct result typically 4th |
+| < 0.25 | Very Poor | Correct result typically 5th or worse |
 
-- MRR ≥ 0.920 (maintain or improve from 0.931)
-- NDCG@10 ≥ 0.740 (maintain or improve from 0.749)
+This rubric is embedded in the ablation tests for consistent comparison.
+
+### Measurable Acceptance Criteria (Aspirational)
+
+**Primary Target**: Move hard query MRR from "Poor" (0.250) to "Good" (≥0.50)
+
+| Metric | Current | Target | Rating Change |
+|--------|---------|--------|---------------|
+| Hard query MRR | 0.250 (Poor) | **≥ 0.50** | Poor → **Good** |
+| Hard query NDCG@10 | 0.212 | ≥ 0.40 | |
+| BM25 content MRR | 0.207 | ≥ 0.40 | Approach ELSER (0.287) |
+| Hybrid ≥ Single ELSER | ❌ (ELSER wins) | ✅ Hybrid wins | BM25 adds value |
+| p95 Latency | 602ms | ≤ 650ms | No regression |
+
+**Secondary Criteria** (Standard Queries - maintain excellence):
+
+- MRR ≥ 0.92 (maintain Excellent rating)
+- NDCG@10 ≥ 0.74
 - Zero-hit rate = 0%
+
+**If targets are not met**: The learning is valuable. If BM25 enhancements alone cannot achieve "Good" MRR on hard queries, the solution may require:
+
+1. Query classification + dynamic retriever routing (ELSER-only for naturalistic queries)
+2. Reranking with cross-encoder
+3. Query expansion/reformulation
 
 ---
 

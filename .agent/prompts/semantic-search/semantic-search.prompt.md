@@ -77,7 +77,26 @@ The four-retriever ablation study revealed a critical finding:
 
 ### 📋 Phase 3e: ES Native Enhancements (NEXT)
 
-Goal: Improve hard query MRR from 0.250 → ≥0.300 (+20%)
+**Goal**: Improve hard query MRR from 0.250 → ≥0.50 (aspirational "Good" rating)
+
+**MRR Interpretation Rubric**:
+
+| MRR | Rating | Meaning |
+|-----|--------|---------|
+| ≥ 0.80 | Excellent | Correct result typically 1st or 2nd |
+| ≥ 0.50 | Good | Correct result typically 2nd |
+| ≥ 0.33 | Acceptable | Correct result typically 3rd |
+| ≥ 0.25 | Poor | Correct result typically 4th |
+| < 0.25 | Very Poor | Correct result typically 5th or worse |
+
+**Aspirational Targets**:
+
+| Metric | Current | Target | Rating Goal |
+|--------|---------|--------|-------------|
+| Hard query MRR | 0.250 | **≥ 0.50** | Poor → Good |
+| Hard query NDCG@10 | 0.212 | ≥ 0.40 | |
+| Standard MRR | 0.931 | ≥ 0.92 | Maintain Excellent |
+| p95 Latency | 602ms | ≤ 650ms | No regression |
 
 | Task | Description | Reindex? |
 | ---- | ----------- | -------- |

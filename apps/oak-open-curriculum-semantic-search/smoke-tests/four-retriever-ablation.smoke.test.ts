@@ -56,6 +56,53 @@ import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oa
 import type { GroundTruthQuery } from '../src/lib/search-quality/ground-truth/types.js';
 import type { UnitGroundTruthQuery } from '../src/lib/search-quality/ground-truth/units/types.js';
 
+/**
+ * MRR Interpretation Rubric
+ *
+ * MRR (Mean Reciprocal Rank) measures how high the first relevant result appears.
+ * Use this rubric to interpret results consistently.
+ *
+ * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
+ */
+const MRR_RUBRIC = {
+  EXCELLENT: { min: 0.8, label: 'Excellent', meaning: 'Correct result typically 1st or 2nd' },
+  GOOD: { min: 0.5, label: 'Good', meaning: 'Correct result typically 2nd' },
+  ACCEPTABLE: { min: 0.33, label: 'Acceptable', meaning: 'Correct result typically 3rd' },
+  POOR: { min: 0.25, label: 'Poor', meaning: 'Correct result typically 4th' },
+  VERY_POOR: { min: 0.0, label: 'Very Poor', meaning: 'Correct result typically 5th or worse' },
+} as const;
+
+/** Target thresholds for Phase 3e (aspirational) */
+const PHASE_3E_TARGETS = {
+  /** Hard query MRR target - aspirational */
+  HARD_QUERY_MRR: 0.5, // "Good" - correct result typically 2nd
+  /** Hard query NDCG@10 target */
+  HARD_QUERY_NDCG: 0.4,
+  /** Standard query MRR target - maintain excellence */
+  STANDARD_QUERY_MRR: 0.92,
+  /** Standard query NDCG@10 target */
+  STANDARD_QUERY_NDCG: 0.74,
+  /** Maximum acceptable p95 latency */
+  MAX_LATENCY_MS: 650,
+} as const;
+
+/** Get rubric rating for an MRR value */
+function getMrrRating(mrr: number): { label: string; meaning: string } {
+  if (mrr >= MRR_RUBRIC.EXCELLENT.min) {
+    return MRR_RUBRIC.EXCELLENT;
+  }
+  if (mrr >= MRR_RUBRIC.GOOD.min) {
+    return MRR_RUBRIC.GOOD;
+  }
+  if (mrr >= MRR_RUBRIC.ACCEPTABLE.min) {
+    return MRR_RUBRIC.ACCEPTABLE;
+  }
+  if (mrr >= MRR_RUBRIC.POOR.min) {
+    return MRR_RUBRIC.POOR;
+  }
+  return MRR_RUBRIC.VERY_POOR;
+}
+
 /** Ablation configuration identifier */
 type AblationConfig =
   | 'bm25_content'
@@ -305,25 +352,51 @@ function aggregateResults(metrics: ConfigMetrics): ConfigResults {
 function formatConfigRow(result: ConfigResults): string {
   const configStr = result.config.padEnd(18);
   const mrrStr = result.avgMRR.toFixed(3).padEnd(8);
+  const rating = getMrrRating(result.avgMRR);
+  const ratingStr = rating.label.padEnd(10);
   const ndcgStr = result.avgNDCG.toFixed(3).padEnd(8);
   const zeroHitStr = `${(result.zeroHitRate * 100).toFixed(1)}%`.padEnd(9);
   const latencyStr = `${result.p95Latency.toFixed(0)}ms`;
-  return `${configStr} | ${mrrStr} | ${ndcgStr} | ${zeroHitStr} | ${latencyStr}`;
+  return `${configStr} | ${mrrStr} | ${ratingStr} | ${ndcgStr} | ${zeroHitStr} | ${latencyStr}`;
+}
+
+/** Log the MRR interpretation rubric */
+function logMrrRubric(): void {
+  console.log('\n' + '='.repeat(80));
+  console.log('MRR INTERPRETATION RUBRIC');
+  console.log('='.repeat(80));
+  console.log(`${'MRR'.padEnd(10)} | ${'Rating'.padEnd(12)} | Meaning`);
+  console.log('-'.repeat(80));
+  console.log(`≥ 0.80     | Excellent    | Correct result typically 1st or 2nd`);
+  console.log(`≥ 0.50     | Good         | Correct result typically 2nd`);
+  console.log(`≥ 0.33     | Acceptable   | Correct result typically 3rd`);
+  console.log(`≥ 0.25     | Poor         | Correct result typically 4th`);
+  console.log(`< 0.25     | Very Poor    | Correct result typically 5th or worse`);
+  console.log('='.repeat(80));
+  console.log('\nPHASE 3e TARGETS (Aspirational):');
+  console.log(
+    `  Hard queries:     MRR ≥ ${PHASE_3E_TARGETS.HARD_QUERY_MRR} (Good), NDCG@10 ≥ ${PHASE_3E_TARGETS.HARD_QUERY_NDCG}`,
+  );
+  console.log(
+    `  Standard queries: MRR ≥ ${PHASE_3E_TARGETS.STANDARD_QUERY_MRR} (Excellent), NDCG@10 ≥ ${PHASE_3E_TARGETS.STANDARD_QUERY_NDCG}`,
+  );
+  console.log(`  Latency:          p95 ≤ ${PHASE_3E_TARGETS.MAX_LATENCY_MS}ms`);
+  console.log('='.repeat(80));
 }
 
 /** Log the comparison table for a content type. */
 function logComparisonTable(results: ContentTypeResults): void {
   const title = `${results.contentType.toUpperCase()} ABLATION (${results.querySet} queries: ${results.queryCount})`;
   console.log(`\n${title}`);
-  console.log('-'.repeat(70));
+  console.log('-'.repeat(90));
   console.log(
-    `${'Configuration'.padEnd(18)} | ${'MRR'.padEnd(8)} | ${'NDCG@10'.padEnd(8)} | ${'Zero-Hit'.padEnd(9)} | p95 Latency`,
+    `${'Configuration'.padEnd(18)} | ${'MRR'.padEnd(8)} | ${'Rating'.padEnd(10)} | ${'NDCG@10'.padEnd(8)} | ${'Zero-Hit'.padEnd(9)} | p95 Latency`,
   );
-  console.log('-'.repeat(70));
+  console.log('-'.repeat(90));
   for (const result of results.results) {
     console.log(formatConfigRow(result));
   }
-  console.log('-'.repeat(70));
+  console.log('-'.repeat(90));
 }
 
 /** Log a single insight comparison */
@@ -427,15 +500,18 @@ describe('Four-Retriever Ablation (Phase 3)', () => {
     console.log('Running four-retriever ablation experiment...');
     console.log(`Configurations: ${ALL_CONFIGS.length}, This may take several minutes...\n`);
 
+    // Log rubric first so it's visible before results
+    logMrrRubric();
+
     const results = await runAllExperiments();
     lessonStandardResults = results.lessonStandard;
     lessonHardResults = results.lessonHard;
     unitStandardResults = results.unitStandard;
     unitHardResults = results.unitHard;
 
-    console.log('\n' + '='.repeat(70));
+    console.log('\n' + '='.repeat(80));
     console.log('FOUR-RETRIEVER ABLATION EXPERIMENT RESULTS');
-    console.log('='.repeat(70));
+    console.log('='.repeat(80));
 
     logComparisonTable(lessonStandardResults);
     logComparisonTable(lessonHardResults);
