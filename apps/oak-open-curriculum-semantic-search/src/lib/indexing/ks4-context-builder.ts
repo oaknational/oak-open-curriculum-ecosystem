@@ -13,7 +13,6 @@ import {
   mergeIntoAggregated,
   toAggregated,
   extractKs4Option,
-  isKs4Sequence,
   type ExamBoard,
   type Ks4Option,
   type UnitContext,
@@ -183,8 +182,12 @@ export function mergeUnitContexts(
   return result;
 }
 
-/** Processes a single KS4 sequence. */
-async function processKs4Sequence(
+/**
+ * Processes a sequence to extract KS4 context. Processes ALL sequences because
+ * Maths-style sequences have tiered year entries (Year 10/11) without exam board
+ * or ks4Options. Years without tiers return no contexts, which is correct.
+ */
+async function processSequenceForKs4Context(
   fetchSequenceUnits: (slug: string) => Promise<unknown>,
   sequence: SubjectSequenceInfo,
   contextMap: UnitContextMap,
@@ -193,14 +196,19 @@ async function processKs4Sequence(
   const examBoard = parseExamBoardFromSlug(sequence.sequenceSlug);
   const ks4Option = extractKs4Option(sequence);
 
-  if (!isKs4Sequence(examBoard, ks4Option)) {
-    logger?.debug('Skipping non-KS4 sequence', { sequenceSlug: sequence.sequenceSlug });
+  logger?.debug('Processing sequence for KS4 context', { sequenceSlug: sequence.sequenceSlug });
+  const response = await fetchSequenceUnits(sequence.sequenceSlug);
+  const contexts = buildUnitContextsFromSequenceResponse(response, examBoard, ks4Option);
+
+  if (contexts.length === 0) {
+    logger?.debug('No KS4 contexts found in sequence', { sequenceSlug: sequence.sequenceSlug });
     return contextMap;
   }
 
-  logger?.debug('Processing KS4 sequence', { sequenceSlug: sequence.sequenceSlug });
-  const response = await fetchSequenceUnits(sequence.sequenceSlug);
-  const contexts = buildUnitContextsFromSequenceResponse(response, examBoard, ks4Option);
+  logger?.debug('Extracted KS4 contexts from sequence', {
+    sequenceSlug: sequence.sequenceSlug,
+    contextCount: contexts.length,
+  });
   return mergeUnitContexts(contextMap, contexts);
 }
 
@@ -213,7 +221,12 @@ export async function buildKs4ContextMap(
   let contextMap: UnitContextMap = new Map();
 
   for (const sequence of sequences) {
-    contextMap = await processKs4Sequence(fetchSequenceUnits, sequence, contextMap, logger);
+    contextMap = await processSequenceForKs4Context(
+      fetchSequenceUnits,
+      sequence,
+      contextMap,
+      logger,
+    );
   }
 
   logger?.debug('KS4 context map complete', { totalUnits: contextMap.size });

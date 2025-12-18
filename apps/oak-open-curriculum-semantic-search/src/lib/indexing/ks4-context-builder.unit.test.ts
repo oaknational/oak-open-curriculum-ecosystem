@@ -13,6 +13,7 @@ import {
   parseExamBoardFromSlug,
   buildUnitContextsFromSequenceResponse,
   mergeUnitContexts,
+  buildKs4ContextMap,
   type UnitContext,
   type UnitContextMap,
 } from './ks4-context-builder';
@@ -441,5 +442,114 @@ describe('mergeUnitContexts', () => {
 
     // Original should be unchanged
     expect(existingMap.get('fractions')?.tiers).toEqual(['foundation']);
+  });
+});
+
+describe('buildKs4ContextMap', () => {
+  /**
+   * TDD RED: This test captures the Maths-style sequence bug.
+   * The maths-secondary sequence has NO exam board in the slug and NO ks4Options,
+   * BUT it DOES have tiered year entries (Year 10/11 have tiers: foundation/higher).
+   * The context map SHOULD contain tier information for those units.
+   */
+  it('extracts tiers from Maths-style sequences (no exam board, no ks4Options, but tiered years)', async () => {
+    // Simulate maths-secondary sequence structure
+    const mathsSecondaryResponse = [
+      {
+        year: 7,
+        units: [{ unitSlug: 'place-value', unitTitle: 'Place Value', unitOrder: 1 }],
+      },
+      {
+        year: 10,
+        tiers: [
+          {
+            tierSlug: 'foundation',
+            tierTitle: 'Foundation',
+            units: [
+              {
+                unitSlug: 'algebraic-manipulation',
+                unitTitle: 'Algebraic Manipulation',
+                unitOrder: 1,
+              },
+            ],
+          },
+          {
+            tierSlug: 'higher',
+            tierTitle: 'Higher',
+            units: [
+              {
+                unitSlug: 'algebraic-manipulation',
+                unitTitle: 'Algebraic Manipulation',
+                unitOrder: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
+      if (slug === 'maths-secondary') {
+        return mathsSecondaryResponse;
+      }
+      return [];
+    };
+
+    const sequences = [{ sequenceSlug: 'maths-secondary', ks4Options: null }];
+
+    const result = await buildKs4ContextMap(fetchSequenceUnits, sequences);
+
+    // The algebraic-manipulation unit should appear in BOTH foundation and higher tiers
+    const algebraContext = result.get('algebraic-manipulation');
+    expect(algebraContext).toBeDefined();
+    expect(algebraContext?.tiers).toContain('foundation');
+    expect(algebraContext?.tiers).toContain('higher');
+    expect(algebraContext?.tierTitles).toContain('Foundation');
+    expect(algebraContext?.tierTitles).toContain('Higher');
+  });
+
+  it('extracts tiers from Sciences-style sequences (with exam board and ks4Options)', async () => {
+    // Simulate science-secondary-aqa sequence structure
+    const scienceAqaResponse = [
+      {
+        year: 10,
+        examSubjects: [
+          {
+            examSubjectSlug: 'biology',
+            examSubjectTitle: 'Biology',
+            tiers: [
+              {
+                tierSlug: 'foundation',
+                tierTitle: 'Foundation',
+                units: [{ unitSlug: 'cells', unitTitle: 'Cells', unitOrder: 1 }],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const fetchSequenceUnits = async (slug: string): Promise<unknown> => {
+      if (slug === 'science-secondary-aqa') {
+        return scienceAqaResponse;
+      }
+      return [];
+    };
+
+    const sequences = [
+      {
+        sequenceSlug: 'science-secondary-aqa',
+        ks4Options: { slug: 'aqa-gcse-science', title: 'AQA GCSE Science' },
+      },
+    ];
+
+    const result = await buildKs4ContextMap(fetchSequenceUnits, sequences);
+
+    const cellsContext = result.get('cells');
+    expect(cellsContext).toBeDefined();
+    expect(cellsContext?.tiers).toContain('foundation');
+    expect(cellsContext?.examBoards).toContain('aqa');
+    expect(cellsContext?.examSubjects).toContain('biology');
+    expect(cellsContext?.ks4Options).toContain('aqa-gcse-science');
   });
 });
