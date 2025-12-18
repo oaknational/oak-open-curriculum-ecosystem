@@ -21,17 +21,18 @@
 export type { GroundTruthQuery } from './types';
 
 import { ALGEBRA_QUERIES } from './algebra';
-import { GEOMETRY_QUERIES } from './geometry';
-import { NUMBER_QUERIES } from './number';
-import { GRAPHS_QUERIES } from './graphs';
-import { STATISTICS_QUERIES } from './statistics';
 import { EDGE_CASE_QUERIES } from './edge-cases';
+import { GEOMETRY_QUERIES } from './geometry';
+import { GRAPHS_QUERIES } from './graphs';
+import { HARD_QUERIES } from './hard-queries';
+import { NUMBER_QUERIES } from './number';
+import { STATISTICS_QUERIES } from './statistics';
 import type { GroundTruthQuery } from './types';
 
 /**
- * All ground truth queries combined.
+ * Standard ground truth queries (topic-name based).
  *
- * Total: 38 queries covering all major KS4 Maths curriculum areas.
+ * Total: 40 queries covering all major KS4 Maths curriculum areas.
  */
 export const GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
   ...ALGEBRA_QUERIES,
@@ -40,4 +41,24 @@ export const GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
   ...GRAPHS_QUERIES,
   ...STATISTICS_QUERIES,
   ...EDGE_CASE_QUERIES,
+] as const;
+
+/**
+ * Hard ground truth queries (naturalistic, misspellings, multi-concept).
+ *
+ * These queries are designed to challenge the search system and prove
+ * the value of the four-retriever hybrid architecture.
+ *
+ * Total: 15 queries
+ */
+export const HARD_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = HARD_QUERIES;
+
+/**
+ * All ground truth queries (standard + hard).
+ *
+ * Total: 55 queries
+ */
+export const ALL_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
+  ...GROUND_TRUTH_QUERIES,
+  ...HARD_GROUND_TRUTH_QUERIES,
 ] as const;

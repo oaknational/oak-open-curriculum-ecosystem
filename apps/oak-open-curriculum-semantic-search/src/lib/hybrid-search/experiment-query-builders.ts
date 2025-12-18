@@ -4,6 +4,9 @@
  * These builders are used to compare BM25-only and ELSER-only retrieval
  * against hybrid search in Phase 3.0 experiments.
  *
+ * For ablation testing (structure retrievers and two-way hybrids),
+ * see ablation-query-builders.ts
+ *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
  */
 
@@ -22,6 +25,18 @@ import {
   createUnitBm25ContentRetriever,
   createUnitElserContentRetriever,
 } from './rrf-query-helpers';
+
+// Re-export ablation builders for backwards compatibility
+export {
+  buildLessonBm25StructureOnlyRequest,
+  buildLessonElserStructureOnlyRequest,
+  buildUnitBm25StructureOnlyRequest,
+  buildUnitElserStructureOnlyRequest,
+  buildLessonContentHybridRequest,
+  buildLessonStructureHybridRequest,
+  buildUnitContentHybridRequest,
+  buildUnitStructureHybridRequest,
+} from './ablation-query-builders';
 
 /** Common parameters for lesson search requests. */
 export interface LessonSearchParams {

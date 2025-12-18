@@ -84,6 +84,86 @@ Phase 3 implements multi-index search infrastructure with KS4 filtering capabili
 | MRR/NDCG smoke tests         | ✅     | All metrics improved over baseline                          |
 | KS4 filtering smoke tests    | ✅     | Filter wiring verified (tier metadata needs investigation)  |
 | Four-retriever comparison    | ✅     | Hybrid superior for both lessons and units                  |
+| **Four-retriever ablation**  | ✅     | New (2025-12-18): Detailed breakdown of each retriever      |
+
+---
+
+## Four-Retriever Ablation Study (2025-12-18)
+
+Comprehensive analysis of each retriever's contribution to search quality.
+
+### Lessons - Standard Queries (40 queries)
+
+| Configuration      | MRR   | NDCG@10 | Zero-Hit | p95 Latency |
+| ------------------ | ----- | ------- | -------- | ----------- |
+| bm25_content       | 0.892 | 0.696   | 0.0%     | 278ms       |
+| elser_content      | 0.831 | 0.673   | 0.0%     | 225ms       |
+| bm25_structure     | 0.884 | 0.713   | 0.0%     | 209ms       |
+| elser_structure    | 0.886 | 0.737   | 0.0%     | 280ms       |
+| content_hybrid     | 0.908 | 0.726   | 0.0%     | 461ms       |
+| structure_hybrid   | 0.925 | 0.744   | 0.0%     | 396ms       |
+| **four_way_hybrid**| **0.931** | **0.749** | 0.0% | 353ms    |
+
+### Lessons - Hard Queries (15 naturalistic/misspelled queries)
+
+| Configuration      | MRR   | NDCG@10 | Zero-Hit | p95 Latency |
+| ------------------ | ----- | ------- | -------- | ----------- |
+| bm25_content       | 0.207 | 0.168   | 0.0%     | 481ms       |
+| **elser_content**  | **0.287** | 0.205 | 0.0%   | 308ms       |
+| bm25_structure     | 0.239 | 0.203   | 0.0%     | 355ms       |
+| elser_structure    | 0.288 | **0.228** | 0.0%   | 346ms       |
+| content_hybrid     | 0.246 | 0.209   | 0.0%     | 513ms       |
+| structure_hybrid   | 0.237 | 0.209   | 0.0%     | 479ms       |
+| four_way_hybrid    | 0.250 | 0.212   | 0.0%     | 602ms       |
+
+### Units - Standard Queries (43 queries)
+
+| Configuration      | MRR   | NDCG@10 | Zero-Hit | p95 Latency |
+| ------------------ | ----- | ------- | -------- | ----------- |
+| bm25_content       | 0.911 | 0.906   | 0.0%     | 104ms       |
+| elser_content      | 0.919 | 0.918   | 0.0%     | 196ms       |
+| bm25_structure     | 0.900 | 0.900   | 0.0%     | 74ms        |
+| elser_structure    | 0.988 | 0.978   | 0.0%     | 195ms       |
+| content_hybrid     | 0.915 | 0.924   | 0.0%     | 225ms       |
+| structure_hybrid   | 0.977 | 0.964   | 0.0%     | 237ms       |
+| **four_way_hybrid**| **1.000** | **0.981** | 0.0% | 260ms    |
+
+### Units - Hard Queries (15 naturalistic queries)
+
+| Configuration      | MRR   | NDCG@10 | Zero-Hit | p95 Latency |
+| ------------------ | ----- | ------- | -------- | ----------- |
+| bm25_content       | 0.791 | 0.713   | 0.0%     | 194ms       |
+| elser_content      | 0.760 | 0.766   | 0.0%     | 236ms       |
+| bm25_structure     | 0.637 | 0.620   | 0.0%     | 106ms       |
+| **elser_structure**| **0.883** | **0.815** | 0.0% | 230ms    |
+| content_hybrid     | 0.819 | 0.780   | 0.0%     | 358ms       |
+| structure_hybrid   | 0.733 | 0.706   | 0.0%     | 357ms       |
+| four_way_hybrid    | 0.802 | 0.763   | 0.0%     | 427ms       |
+
+### Key Insights
+
+1. **Standard queries: Four-way hybrid wins**
+   - Lessons: 0.931 MRR (+2.5% over content-only hybrid)
+   - Units: 1.000 MRR (perfect score)
+
+2. **Hard queries: Single ELSER retrievers outperform hybrids**
+   - Lessons: ELSER content (0.287) > Four-way hybrid (0.250)
+   - Units: ELSER structure (0.883) > Four-way hybrid (0.802)
+   - **Insight**: RRF fusion may dilute semantic signal with BM25 noise for naturalistic queries
+
+3. **Structure field adds measurable value**
+   - ELSER structure consistently strong across all query types
+   - Structure hybrid outperforms content hybrid on standard lessons
+
+4. **ELSER beats BM25 on hard queries**
+   - 38% higher MRR for lessons (0.287 vs 0.207)
+   - Semantic understanding crucial for misspellings/synonyms
+
+### Implications for Future Work
+
+- Consider **adaptive RRF weighting** based on query characteristics
+- Investigate **query classification** to route naturalistic queries to ELSER-only
+- The structure field (semantic summaries) proves its value for semantic search
 
 ### Validation Sequence
 
