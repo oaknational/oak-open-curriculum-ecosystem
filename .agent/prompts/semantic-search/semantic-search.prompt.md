@@ -1,6 +1,6 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Phase 3 COMPLETE - All Metrics Improved  
+**Status**: Phase 3d ✅ Complete | Phase 3e 📋 Planned (ES Native Enhancements)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Last Updated**: 2025-12-18
 
@@ -51,6 +51,7 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | 3b | Semantic Summaries | ✅ Complete | Enhanced templates with all API fields |
 | 3c | Four-Retriever + API Wiring | ✅ Complete | Code implemented, quality gates pass |
 | 3d | Live Validation | ✅ Complete | All metrics improved (2025-12-18) |
+| 3e | ES Native Enhancements | 📋 Planned | Fuzzy, stemming, phonetic, typeahead (see below) |
 
 ### ✅ Phase 3 Validation Results (2025-12-18)
 
@@ -60,7 +61,45 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | Lessons | NDCG@10  | 0.725    | **0.749**      | **+3.3%** |
 | Units   | MRR      | 0.915    | **1.000**      | **+9.3%** |
 | Units   | NDCG@10  | 0.924    | **0.981**      | **+6.2%** |
-3. **KS4 filtering smoke tests** to prove filters actually reduce results
+
+### ⚠️ Critical Insight: Hard Query Performance (Ablation Study)
+
+The four-retriever ablation study revealed a critical finding:
+
+| Query Type | Best Performer | MRR | Notes |
+| ---------- | -------------- | --- | ----- |
+| Standard (topic names) | Four-way Hybrid | 0.931 | Hybrid wins as expected |
+| **Hard (naturalistic/typos)** | **ELSER alone** | **0.287** | Hybrid only 0.250 |
+
+**Insight**: On hard queries (misspellings like "simulatneous", naturalistic phrasing like "that sohcahtoa stuff"), single ELSER retrievers **outperform** the four-way hybrid. BM25 may be adding noise rather than signal.
+
+**Phase 3e addresses this** with ES native enhancements to improve BM25's contribution.
+
+### 📋 Phase 3e: ES Native Enhancements (NEXT)
+
+Goal: Improve hard query MRR from 0.250 → ≥0.300 (+20%)
+
+| Task | Description | Reindex? |
+| ---- | ----------- | -------- |
+| 3e.1 | Enhanced fuzzy (`AUTO:3,6`, `prefix_length: 1`) | No |
+| 3e.2 | Phrase prefix boost | No |
+| 3e.3 | Stemming + stop words | **Yes** |
+| 3e.4 | Phonetic matching (`double_metaphone`) | **Yes** |
+| 3e.5 | `search_as_you_type` fields | **Yes** |
+| 3e.6 | `minimum_should_match` tuning | No |
+
+**Detailed plan**: `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` (Phase 3e section)
+
+### Synonym Enrichment (Completed 2025-12-18)
+
+Enriched SDK synonyms from OWA and OALA reference repositories:
+- Added common abbreviations (bio, chem, phys, hist, geog, sci)
+- Added EYFS and KS5 key stages with aliases (gcse, a-level, sixth form)
+- Added year format variations (y1, yr1, year1, year 1)
+- Added exam board full names
+- Context budget increased to 30KB
+
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/17-synonym-enrichment-from-owa-oala.md`
 
 ### ✅ KS4 Filtering (Implemented)
 
@@ -239,14 +278,16 @@ pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
 
 ## Index Status
 
-**✅ FRESH**: Last indexed 2025-12-18 with **four-retriever** schema.
+**⚠️ MAY BE STALE**: Last indexed 2025-12-18. Re-index before smoke tests.
 
-| Index | Expected Count | Current State |
-| ----- | -------------- | ------------- |
-| `oak_lessons` | 314 | ✅ Fresh (v2025-12-18-071228) |
-| `oak_unit_rollup` | 36 | ✅ Fresh (v2025-12-18-071228) |
+| Index | Expected Count | Notes |
+| ----- | -------------- | ----- |
+| `oak_lessons` | 314 | Maths KS4 |
+| `oak_unit_rollup` | 36 | Maths KS4 |
 
-**Phase 3 complete.** Proceed to Phase 4 (Search SDK + CLI).
+**Next step**: Phase 3e (ES Native Enhancements) to improve hard query performance.
+
+**After Phase 3e**: Proceed to Phase 4 (Search SDK + CLI).
 
 ---
 
@@ -348,12 +389,13 @@ LOG_LEVEL=info
 | ----- | ---- | ------ | ----------- |
 | 1 | Foundation | ✅ Complete | Lexical baseline, ELSER fix |
 | 2 | Dense Vectors | ✅ Complete | E5 evaluated, no benefit |
+| 3.0-3d | Multi-Index & Fields | ✅ Complete | Four-retriever hybrid, KS4 filtering |
 
 ### Current
 
 | Phase | Name | Status | Description |
 | ----- | ---- | ------ | ----------- |
-| **3** | **Multi-Index & Fields** | ✅ Code Complete | Part 3d (Live Validation) pending |
+| **3e** | **ES Native Enhancements** | 📋 Planned | Fuzzy, stemming, phonetic, typeahead |
 
 ### Future
 
@@ -385,4 +427,6 @@ LOG_LEVEL=info
 
 ---
 
-**Ready?** Start with Phase 3: `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
+**Ready?** Start with Phase 3e (ES Native Enhancements): `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
+
+Look for the "Phase 3e: Elasticsearch Native Search Enhancements" section.
