@@ -2,7 +2,7 @@
 
 **Purpose**: Business context, success criteria, risks, and strategic goals for semantic search implementation  
 **Audience**: AI agents and developers starting fresh on semantic search work  
-**Last Updated**: 2025-12-13
+**Last Updated**: 2025-12-19
 
 ---
 
@@ -30,13 +30,18 @@ Given the **Oak API 10,000 requests/hour limit** (upgraded from 1,000), full ing
 
 ### Technical Success
 
-| Metric                     | Target   | Rationale                                        |
-| -------------------------- | -------- | ------------------------------------------------ |
-| MRR (Mean Reciprocal Rank) | > 0.70   | First relevant result in position 1-2 on average |
-| NDCG@10                    | > 0.75   | Highly relevant results ranked near top          |
-| Zero-hit rate              | < 10%    | Most queries return results                      |
-| p95 latency                | < 300ms  | Good user experience                             |
-| Quality gates              | All pass | No regressions, no shortcuts                     |
+Aligned with [ADR-081](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md):
+
+| Metric | Target | Current | Status | Rationale |
+|--------|--------|---------|--------|-----------|
+| Standard Query MRR | ≥0.92 | 0.931 | ✅ Met | Topic-based queries work well |
+| Hard Query MRR | ≥0.50 | 0.367 | ❌ Gap | Naturalistic, misspelled, intent queries |
+| NDCG@10 | Per category | — | 📋 | Graded relevance by query type |
+| Zero-hit rate | 0% | 0% | ✅ Met | All queries return results |
+| p95 latency | ≤1500ms | ~450ms | ✅ Met | Allows for reranking overhead |
+| Quality gates | All pass | ✅ | ✅ Met | No regressions, no shortcuts |
+
+**Note**: Original targets (MRR > 0.70, p95 < 300ms) were conservative baselines. ADR-081 defines category-specific targets based on actual user query patterns.
 
 ### Business Success
 
@@ -47,44 +52,42 @@ Given the **Oak API 10,000 requests/hour limit** (upgraded from 1,000), full ing
 | **Scalable to full curriculum** | Architecture supports 340+ subject/key-stage combinations                              |
 | **Cost-effective**              | <$100/month operational cost (excluding ES subscription)                               |
 
-### New Deliverables (Updated 2025-12-12)
+### Deliverables (Updated 2025-12-19)
 
-Remaining work is organized into three parts:
+Work is organised using Part → Stream → Task hierarchy. See [part-1-search-excellence.md](part-1-search-excellence.md) for detailed plan.
 
-#### Part 1: Search Infrastructure Verification (Phase 3)
+#### Part 1: Search Excellence [🔄 In Progress]
 
-| Deliverable                        | Phase | Success Criteria                                         |
-| ---------------------------------- | ----- | -------------------------------------------------------- |
-| **Hybrid search proven working**   | 3     | BM25 vs ELSER vs Hybrid experiment shows hybrid superior |
-| **Lesson-only search verified**    | 3     | Smoke test proves lesson search returns only lessons     |
-| **Unit-only search verified**      | 3     | Smoke test proves unit search returns only units         |
-| **Joint search verified**          | 3     | Results properly categorised by `doc_type`               |
-| **Lesson filter by unit verified** | 3     | Unit filter correctly restricts lesson results           |
-| **Feature parity fields added**    | 3     | `pupilLessonOutcome`, display titles, unit enrichment    |
+**Done When**: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
 
-Phase 3 proves the search infrastructure works correctly. MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
+| Stream | Focus | Status | Key Deliverables |
+|--------|-------|--------|------------------|
+| **A: Foundation** | Baseline infrastructure | ✅ Complete | 4-way hybrid, KS4 filtering, ground truth |
+| **B: Relevance Optimisation** | Improve Hard MRR | 📋 Ready | Semantic reranking, linear retriever tuning |
+| **C: Query Intelligence** | Pre-processing | 📋 Blocked | Query expansion, phonetic, classification |
+| **D: Infrastructure** | SDK extraction | 📋 Ready | Search SDK, CLI, retire Next.js |
 
-#### Part 2: Enhancements (Phases 4-10)
+MCP tool creation is coordinated separately in `.agent/plans/sdk-and-mcp-enhancements/`.
 
-| Deliverable           | Phase | Success Criteria                                          |
-| --------------------- | ----- | --------------------------------------------------------- |
-| **Search SDK + CLI**  | 4     | SDK services + first-class local CLI for admin ops        |
-| **Search UI**         | 5     | Functional search experience, portable components         |
-| **Cloud Functions**   | 6     | (Future) HTTP-based ingestion control, timeout-safe       |
-| **Admin Dashboard**   | 7     | (Future) Browser-based ingestion control, metrics display |
-| **Query Enhancement** | 8     | Production patterns, OWA compatibility                    |
-| **Entity Extraction** | 9     | NER, concept graphs                                       |
-| **Reference Indices** | 10    | Enriched results with titles, prerequisites, NC           |
+#### Part 2: MCP Natural Language Tools [📋 Planned]
 
-**Phase 10 Impact**: Transforms `semantic_search` from raw slugs to enriched curriculum discovery (human-readable titles, prerequisites, NC alignment, glossary).
+**Done When**: Agents can search Oak curriculum effectively via MCP
 
-#### Part 3: AI Integration (Phase 11+)
+| Stream | Focus | Key Deliverables |
+|--------|-------|------------------|
+| **A: Structured Search Tools** | SDK consumption | Lesson search, unit search, filter tools |
+| **B: Natural Language Pipeline** | Intent handling | NL→Search routing, intent detection, RAG |
+| **C: Agent Guidance** | Prompts | Tool prompts, workflow prompts, error handling |
 
-| Deliverable         | Phase | Success Criteria                    |
-| ------------------- | ----- | ----------------------------------- |
-| **RAG**             | 11    | Retrieval-augmented generation      |
-| **Knowledge Graph** | 12    | Curriculum relationship graph       |
-| **LTR**             | 13    | Learning to rank with click signals |
+#### Part 3: Future Enhancements [📋 Future]
+
+| Stream | Focus | Reference |
+|--------|-------|-----------|
+| **A: Reference Indices** | Enriched metadata | [phase-10](phase-10-reference-indices.md) |
+| **B: Entity Extraction** | NER, concepts | [phase-9](phase-9-entity-extraction.md) |
+| **C: Learning to Rank** | Click signals | [phase-11+](phase-11-plus-future.md) |
+| **D: Full Curriculum** | All subjects | Scale patterns |
+| **E: Search UI** | User interface | Deferred |
 
 **Design Principles**:
 

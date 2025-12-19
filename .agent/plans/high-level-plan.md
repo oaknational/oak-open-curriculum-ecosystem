@@ -1,35 +1,33 @@
 # High-Level Plan
 
-**Last Updated**: 2025-12-14  
+**Last Updated**: 2025-12-19  
 **Scope**: Strategic overview. Details are in individual plan documents.
 
-**Recent Changes (2025-12-14)**:
+**Recent Changes (2025-12-19)**:
+
+- Semantic Search restructured from Phase 1-11 to Part → Stream → Task hierarchy
+- Created Part 1: Search Excellence with four streams (Foundation, Relevance, Intelligence, Infrastructure)
+- Archived legacy phase documents (phase-5, 6, 7, 8)
+- Aligned metrics with ADR-081 (Standard MRR ≥0.92, Hard MRR ≥0.50)
+
+**Previous Changes (2025-12-14)**:
 
 - Restructured Item #1 into separate workstreams (Semantic Search, Ontology, MCP Infrastructure)
 - Moved OAuth/Clerk to Completed section (plan archived as complete)
-- Fixed broken file references throughout
-- Updated milestone statuses to reflect current reality
 - Type Discipline Restoration quality gates passing (Phase 5 DI deferred)
 - Deleted 3 unused packages: `mcp-transport`, `mcp-storage`, `mcp-providers-node` (workspace count: 14 → 11)
-- Created ADR-078 for DI testability patterns
-
-**Previous Changes (2025-11-11)**:
-
-- Semantic Search plans reorganized into phase structure
-- MCP enhancement plans consolidated and numbered (01-16)
-- Plans reorganized into topical subdirectories
 
 ---
 
-## Current Priorities (2025-12-14)
+## Current Priorities (2025-12-19)
 
 **Active Work**:
 
-1. **Semantic Search Phase 3** — Multi-index verification (4 critical tasks remaining)
+1. **Semantic Search Part 1** — Stream A ✅ Complete; Streams B (Relevance) and D (Infrastructure) ready to start
 2. **Type Discipline Restoration** — Quality gates passing, ongoing refinement
 3. **SDK/MCP Enhancements** — Plan 05 (Zod v4) active
 
-**Next Up**: Semantic Search Phase 4 (SDK + CLI extraction), Ontology Resource (Plan 02)
+**Next Up**: Part 1 Stream B (Semantic Reranking), Part 1 Stream D (SDK extraction), Ontology Resource (Plan 02)
 
 **Deferred**: Global State DI Refactoring, Advanced MCP Tools (Phase 4 of Plan 03)
 
@@ -45,29 +43,25 @@
 
 **Plan**: `.agent/plans/semantic-search/README.md` (navigation hub)
 
-**Current Phase**: Phase 3 (Multi-Index Search & Fields)
+**Current Work**: Part 1: Search Excellence (Stream A Complete, Streams B-D Ready)
 
-| Phase | Name | Status | Key Outcomes |
-|-------|------|--------|--------------|
-| 1 | Foundation | ✅ Complete | Lexical baseline, ELSER fix, MRR 0.908 |
-| 2 | Dense Vectors | ✅ Complete | E5 evaluated — no benefit, two-way hybrid confirmed |
-| **3** | **Multi-Index & Fields** | 🔄 In Progress | 4 critical verification tasks remaining |
-| 4 | Search SDK + CLI | 📋 Planned | Extract SDK, retire Next.js runtime |
-| 5-11+ | Future Phases | 📋 Planned | UI, Cloud Functions, Query Enhancement, etc. |
+| Part | Stream | Focus | Status |
+|------|--------|-------|--------|
+| **1** | **A: Foundation** | 4-way hybrid, KS4 filtering | ✅ Complete |
+| **1** | **B: Relevance Optimisation** | Semantic reranking, linear retriever | 📋 Ready |
+| **1** | **C: Query Intelligence** | Query expansion, phonetic, classification | 📋 Blocked on B.2 |
+| **1** | **D: Infrastructure** | Extract SDK, CLI, retire Next.js | 📋 Ready |
+| 2 | MCP NL Tools | Structured search, NL pipeline | 📋 Planned |
+| 3 | Future | Reference indices, entity extraction, LTR | 📋 Future |
 
-**Phase 3 Critical Tasks** (must complete before feature work):
+**Part 1 Success Criteria** (from [ADR-081](../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)):
 
-- 🔲 Prove lesson-only search works
-- 🔲 Prove unit-only search works
-- 🔲 Prove joint search with `doc_type` works
-- 🔲 Prove lesson filter by unit works
+| Metric | Current | Target | Status |
+|--------|---------|--------|--------|
+| Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
+| Hard Query MRR | 0.367 | ≥0.50 | ❌ Gap: 36% |
 
-**Metrics Achieved**:
-
-- Lesson MRR: 0.908 (target > 0.70) ✅
-- Unit MRR: 0.915 (target > 0.60) ✅
-
-**Acceptance**: Multi-index search verified; Phase 4 SDK extraction complete; quality gates pass.
+**Acceptance**: Hard MRR ≥0.50; Search SDK ready for MCP consumption; quality gates pass.
 
 ---
 
@@ -259,11 +253,11 @@
 
 ### 15. Semantic Search UI & Evidence — Status: ⏸ DEFERRED
 
-**Plan**: `.agent/plans/semantic-search/phase-5-search-ui.md`
+**Plan**: `.agent/plans/semantic-search/archive/phase-5-search-ui.md`
 
 **Scope**: Reference UX patterns; admin/status redesign
 
-**Note**: Phase 1 UI already functional; this is polish/evidence work for future.
+**Note**: Deferred to Part 3. UI already functional; this is polish/evidence work for future.
 
 ---
 
@@ -283,15 +277,16 @@
 | M2 | Broad MCP platform compatibility | ✅ DONE |
 | M3 | Remote Streaming HTTP live (Vercel) | ✅ DONE |
 | M4 | OAuth/Clerk Integration | ✅ DONE |
-| **M5** | **Semantic Search Phase 3 Verification** | 🔄 IN PROGRESS |
-| M6 | Semantic Search Phase 4 (SDK + CLI) | 📋 Planned |
-| M7 | Ontology Resource Implementation | 📋 Planned |
-| M8 | OpenAI Apps SDK Integration | 📋 Planned |
-| M9 | Semantic Search MCP Integration | 📋 Planned (after M6) |
-| M10 | Advanced MCP Tools | ⏸ Deferred |
-| M11 | Contract Testing | 📋 Planned |
-| M12 | SDK Workspace Separation | 📋 Planned |
-| M13 | OpenAPI Framework Extraction | ⏸ Blocked by M12 |
+| **M5** | **Part 1 Stream A: Foundation** | ✅ DONE |
+| **M6** | **Part 1 Stream B: Relevance (Hard MRR ≥0.50)** | 🔄 IN PROGRESS |
+| M7 | Part 1 Stream D: Infrastructure (SDK + CLI) | 📋 Planned |
+| M8 | Ontology Resource Implementation | 📋 Planned |
+| M9 | OpenAI Apps SDK Integration | 📋 Planned |
+| M10 | Part 2: Semantic Search MCP Integration | 📋 Planned (after M7) |
+| M11 | Advanced MCP Tools | ⏸ Deferred |
+| M12 | Contract Testing | 📋 Planned |
+| M13 | SDK Workspace Separation | 📋 Planned |
+| M14 | OpenAPI Framework Extraction | ⏸ Blocked by M13 |
 
 ---
 
@@ -300,11 +295,12 @@
 ```text
 .agent/plans/
 ├── high-level-plan.md              # This file — strategic coordination
-├── semantic-search/                # Elasticsearch search phases (1-11+)
+├── semantic-search/                # Elasticsearch search (Part → Stream → Task)
 │   ├── README.md                   # Navigation hub
-│   ├── phase-3-multi-index-and-fields.md
-│   ├── phase-4-search-sdk-and-cli.md
-│   └── ...
+│   ├── part-1-search-excellence.md # Current work — four streams
+│   ├── phase-3-multi-index-and-fields.md  # Stream A reference
+│   ├── phase-4-search-sdk-and-cli.md      # Stream D reference
+│   └── archive/                    # Superseded phase docs
 ├── sdk-and-mcp-enhancements/       # Numbered plans (00-16)
 │   ├── README.md                   # Plan index with dependencies
 │   ├── 01-mcp-tool-metadata-enhancement-plan.md
