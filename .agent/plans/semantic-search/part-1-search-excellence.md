@@ -24,7 +24,8 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
 | Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR | 0.367 | ≥0.50 | ❌ Gap: 36% |
+| Hard Query MRR (Lessons) | 0.367 | ≥0.50 | ❌ Gap: 36% |
+| Hard Query MRR (Units) | 0.811 | ≥0.50 | ✅ Met |
 | Zero-hit Rate | 0% | 0% | ✅ Met |
 | p95 Latency | ~450ms | ≤1500ms | ✅ Within budget |
 
@@ -45,10 +46,10 @@ Stream A: Foundation                                [✅ Complete]
   A.3  Content-type-aware BM25                             ✅
   A.4  Ground truth queries defined                        ✅
 
-Stream B: Relevance Optimisation                    [📋 Ready]
+Stream B: Relevance Optimisation                    [🔄 In Progress]
 ───────────────────────────────────────────────────────────────────
-  B.1  Baseline documentation ← START HERE          B-001  📋
-  B.2  Semantic reranking experiment                E-001  📋
+  B.1  Baseline documentation                       B-001  ✅ Complete
+  B.2  Semantic reranking experiment ← START HERE   E-001  📋
   B.3  Linear retriever experiment                  E-003  📋
   B.4  Implement winning approaches                        📋
   B.5  Validate MRR ≥0.50                                  📋
@@ -96,29 +97,37 @@ Dependencies:
 
 ---
 
-## Stream B: Relevance Optimisation [📋 Ready to Start]
+## Stream B: Relevance Optimisation [🔄 In Progress]
 
 **Purpose**: Improve Hard Query MRR from 0.367 to ≥0.50 through retrieval and reranking experiments.
 
 **Rationale**: Research ([search-query-optimization-research.md](../../research/search-query-optimization-research.md)) identified that semantic reranking and linear retriever weighting are the highest-impact, lowest-risk approaches.
 
-### ⚠️ B.1 is Mandatory Before Any Experiments
+### B.1 Baseline Documentation [✅ Complete]
 
-**Do not skip B.1.** Without a comprehensive per-query baseline:
+**Completed 2025-12-19**. See [B-001-hard-query-baseline.experiment.md](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md).
 
-- You cannot measure whether an experiment improved or regressed specific queries
-- You cannot identify which failure categories benefit from which approaches
-- You cannot distinguish real improvements from noise
-- Experiment results will be uninterpretable and the work wasted
+Key findings from baseline:
 
-B.1 requires running all 15 hard queries, recording exact ranks, and documenting failure modes. This takes ~1 hour but saves days of wasted experimentation.
+| Category | Lesson MRR | Status | Recommendation |
+|----------|------------|--------|----------------|
+| Misspelling | 0.833 | ✅ Excellent | No action needed |
+| Intent-based | 0.500 | ✅ Good | Monitor |
+| Naturalistic | 0.333 | ⚠️ Acceptable | Query expansion |
+| Multi-concept | 0.250 | ❌ Poor | Reranking |
+| Synonym | 0.167 | ❌ Poor | Query expansion |
+| Colloquial | 0.000 | ❌ Very Poor | Pre-processing + reranking |
+
+**Primary failure modes**: Colloquial noise ("that sohcahtoa stuff"), synonym gaps ("rearrange formulas" → "changing the subject"), vocabulary bridging failures.
+
+**Recommendation**: Start with E-001 (Semantic Reranking) as it addresses multiple failure patterns without query modification complexity.
 
 ### Tasks
 
 | ID | Task | Experiment | Status | Notes |
 |----|------|------------|--------|-------|
-| **B.1** | **Document baseline behaviour** | [B-001](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | 📋 | **START HERE** — Per-query analysis |
-| B.2 | Semantic reranking experiment | [E-001](../../evaluations/experiments/E-001-semantic-reranking.experiment.md) | 📋 | `.rerank-v1-elasticsearch` |
+| **B.1** | Baseline documentation | [B-001](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | ✅ | Complete — per-query data available |
+| **B.2** | **Semantic reranking experiment** | [E-001](../../evaluations/experiments/E-001-semantic-reranking.experiment.md) | 📋 | **START HERE** — `.rerank-v1-elasticsearch` |
 | B.3 | Linear retriever experiment | [E-003](../../evaluations/experiments/E-003-linear-retriever.experiment.md) | 📋 | Weight ELSER higher than BM25 |
 | B.4 | Implement winning approaches | — | 📋 | Based on B.2/B.3 results |
 | B.5 | Validate Hard MRR ≥0.50 | — | 📋 | Final acceptance gate |
@@ -134,7 +143,7 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 
 ### Dependencies
 
-- None — can start immediately
+- B.1 ✅ Complete — baseline data available for comparison
 - Blocks: Stream C (reranking may obviate query expansion)
 
 ---
@@ -145,12 +154,14 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 
 **Rationale**: Different query types (misspellings, naturalistic, intent-based) may benefit from different pre-processing strategies. However, if reranking (B.2) achieves target MRR, complex pre-processing may be unnecessary.
 
+**B.1 Insight**: Misspelling already at 0.833 MRR — phonetic enhancement (E-004) is low priority.
+
 ### Tasks
 
 | ID | Task | Experiment | Status | Notes |
 |----|------|------------|--------|-------|
 | C.1 | Query expansion experiment | [E-002](../../evaluations/experiments/E-002-query-expansion.experiment.md) | 📋 | LLM-based synonym/term expansion |
-| C.2 | Phonetic enhancement experiment | [E-004](../../evaluations/experiments/E-004-phonetic-enhancement.experiment.md) | 📋 | Metaphone/Soundex for misspellings |
+| C.2 | Phonetic enhancement experiment | [E-004](../../evaluations/experiments/E-004-phonetic-enhancement.experiment.md) | 📋 | Low priority — misspelling already good |
 | C.3 | Query classification design | ADR-082 | 📋 | Route queries to optimal pipeline |
 | C.4 | Implement classification routing | — | 📋 | Based on C.3 design |
 
@@ -244,6 +255,7 @@ pnpm smoke:dev:stub
 
 | Document | Purpose |
 |----------|---------|
+| [B-001-hard-query-baseline.experiment.md](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | ✅ Baseline data for experiments |
 | [phase-3-multi-index-and-fields.md](phase-3-multi-index-and-fields.md) | Stream A completed work |
 | [phase-4-search-sdk-and-cli.md](phase-4-search-sdk-and-cli.md) | Stream D detailed checkpoints |
 | [search-query-optimization-research.md](../../research/search-query-optimization-research.md) | Stream B/C technical approaches |
@@ -256,3 +268,4 @@ pnpm smoke:dev:stub
 | Date | Change |
 |------|--------|
 | 2025-12-19 | Initial document created from plan restructure |
+| 2025-12-19 | B.1 complete — baseline documented, smoke test added |

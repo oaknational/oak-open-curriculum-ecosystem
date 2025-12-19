@@ -1,6 +1,6 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 In Progress (Stream A ✅, Streams B/D 📋 Ready)  
+**Status**: Part 1 In Progress (Stream A ✅, Stream B.1 ✅, B.2-B.5 📋 Ready)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Last Updated**: 2025-12-19
 
@@ -36,7 +36,8 @@ Create a production-ready demo proving **Elasticsearch Serverless as the definit
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
 | Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR | 0.367 | ≥0.50 | ❌ Gap: 36% |
+| Hard Query MRR (Lessons) | 0.367 | ≥0.50 | ❌ Gap: 36% |
+| Hard Query MRR (Units) | 0.811 | ≥0.50 | ✅ Met |
 | Zero-hit Rate | 0% | 0% | ✅ Met |
 | p95 Latency | ~450ms | ≤1500ms | ✅ Within budget |
 
@@ -50,10 +51,12 @@ Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
 Stream A: Foundation                              ✅ Complete
   4-way hybrid, KS4 filtering, content-type-aware BM25, ground truth
 
-Stream B: Relevance Optimisation                  📋 Ready to Start
-  B.1 Baseline documentation (B-001) ← START HERE (mandatory)
-  B.2 Semantic reranking experiment (E-001)
-  B.3 Linear retriever experiment (E-003)
+Stream B: Relevance Optimisation                  🔄 In Progress
+  B.1 Baseline documentation (B-001)              ✅ Complete
+  B.2 Semantic reranking experiment (E-001) ← START HERE  📋
+  B.3 Linear retriever experiment (E-003)         📋
+  B.4 Implement winning approaches                📋
+  B.5 Validate MRR ≥0.50                          📋
 
 Stream C: Query Intelligence                      📋 Blocked on B.2
   Query expansion, phonetic, classification (wait for reranking results)
@@ -62,9 +65,14 @@ Stream D: Infrastructure                          📋 Ready to Start
   Extract Search SDK, CLI workspace, retire Next.js
 ```
 
-**Next Step**: Stream B.1 — Complete baseline documentation (B-001)
+**Next Step**: Stream B.2 — Semantic reranking experiment (E-001)
 
-⚠️ **B.1 is mandatory.** Without comprehensive per-query baseline data, experiments cannot be properly evaluated. You must document exact ranks and failure modes for all 15 hard queries before running any experiments.
+**B.1 Baseline Complete**: See [B-001-hard-query-baseline.experiment.md](.agent/evaluations/experiments/B-001-hard-query-baseline.experiment.md) for:
+
+- Per-query results for all 30 hard queries (15 lessons + 15 units)
+- Category breakdown showing colloquial (0.000) and synonym (0.167) as primary failure modes
+- Misspelling handling robust at 0.833 MRR
+- Recommendation: Start with E-001 (Semantic Reranking)
 
 ---
 
@@ -106,6 +114,7 @@ pnpm es:status                                          # Verify document counts
 ```bash
 # Direct ES tests (no server needed)
 pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
+pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline  # NEW: regression detection
 
 # API-based tests (need pnpm dev in another terminal)
 pnpm vitest run -c vitest.smoke.config.ts scope-verification
@@ -164,8 +173,8 @@ Each entity (lesson, unit) uses four retrievers combined via RRF:
 
 ```text
 .agent/evaluations/experiments/
-├── B-001-hard-query-baseline.experiment.md     # Baseline documentation
-├── E-001-semantic-reranking.experiment.md      # Stream B.2
+├── B-001-hard-query-baseline.experiment.md     # ✅ Complete — baseline data
+├── E-001-semantic-reranking.experiment.md      # Stream B.2 — START HERE
 ├── E-002-query-expansion.experiment.md         # Stream C.1
 ├── E-003-linear-retriever.experiment.md        # Stream B.3
 └── E-004-phonetic-enhancement.experiment.md    # Stream C.2
@@ -176,9 +185,9 @@ Each entity (lesson, unit) uses four retrievers combined via RRF:
 ```text
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/hybrid-search/      # RRF query builders
-├── src/lib/search-quality/     # Ground truth, metrics
+├── src/lib/search-quality/     # Ground truth, metrics, baseline-runner
 ├── src/lib/indexing/           # Document transforms
-└── smoke-tests/                # Search quality benchmarks
+└── smoke-tests/                # Search quality benchmarks (incl. hard-query-baseline)
 ```
 
 ---
@@ -207,6 +216,7 @@ LOG_LEVEL=info
 4. **All quality gates must pass** — No exceptions
 5. **Re-index before smoke tests** — Stale data = meaningless results
 6. **Check experiments** — E-001 through E-004 have detailed methodology
+7. **Baseline available** — B-001 has per-query data for experiment comparison
 
 ---
 
@@ -223,4 +233,4 @@ LOG_LEVEL=info
 
 **Ready?** Start with [Part 1: Search Excellence](.agent/plans/semantic-search/part-1-search-excellence.md)
 
-Next task: Stream B.1 — Complete baseline documentation (B-001)
+Next task: Stream B.2 — Semantic reranking experiment (E-001)
