@@ -47,7 +47,7 @@ Stream A: Foundation                                [✅ Complete]
 
 Stream B: Relevance Optimisation                    [📋 Ready]
 ───────────────────────────────────────────────────────────────────
-  B.1  Baseline documentation                       B-001  📋
+  B.1  Baseline documentation ← START HERE          B-001  📋
   B.2  Semantic reranking experiment                E-001  📋
   B.3  Linear retriever experiment                  E-003  📋
   B.4  Implement winning approaches                        📋
@@ -102,11 +102,22 @@ Dependencies:
 
 **Rationale**: Research ([search-query-optimization-research.md](../../research/search-query-optimization-research.md)) identified that semantic reranking and linear retriever weighting are the highest-impact, lowest-risk approaches.
 
+### ⚠️ B.1 is Mandatory Before Any Experiments
+
+**Do not skip B.1.** Without a comprehensive per-query baseline:
+
+- You cannot measure whether an experiment improved or regressed specific queries
+- You cannot identify which failure categories benefit from which approaches
+- You cannot distinguish real improvements from noise
+- Experiment results will be uninterpretable and the work wasted
+
+B.1 requires running all 15 hard queries, recording exact ranks, and documenting failure modes. This takes ~1 hour but saves days of wasted experimentation.
+
 ### Tasks
 
 | ID | Task | Experiment | Status | Notes |
 |----|------|------------|--------|-------|
-| B.1 | Document baseline behaviour | [B-001](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | 📋 | Per-query analysis of current system |
+| **B.1** | **Document baseline behaviour** | [B-001](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | 📋 | **START HERE** — Per-query analysis |
 | B.2 | Semantic reranking experiment | [E-001](../../evaluations/experiments/E-001-semantic-reranking.experiment.md) | 📋 | `.rerank-v1-elasticsearch` |
 | B.3 | Linear retriever experiment | [E-003](../../evaluations/experiments/E-003-linear-retriever.experiment.md) | 📋 | Weight ELSER higher than BM25 |
 | B.4 | Implement winning approaches | — | 📋 | Based on B.2/B.3 results |

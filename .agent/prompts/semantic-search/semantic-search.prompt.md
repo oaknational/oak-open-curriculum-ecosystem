@@ -51,8 +51,8 @@ Stream A: Foundation                              ✅ Complete
   4-way hybrid, KS4 filtering, content-type-aware BM25, ground truth
 
 Stream B: Relevance Optimisation                  📋 Ready to Start
-  B.1 Baseline documentation (B-001)
-  B.2 Semantic reranking experiment (E-001) ← START HERE
+  B.1 Baseline documentation (B-001) ← START HERE (mandatory)
+  B.2 Semantic reranking experiment (E-001)
   B.3 Linear retriever experiment (E-003)
 
 Stream C: Query Intelligence                      📋 Blocked on B.2
@@ -62,7 +62,9 @@ Stream D: Infrastructure                          📋 Ready to Start
   Extract Search SDK, CLI workspace, retire Next.js
 ```
 
-**Next Step**: Stream B.2 — Run semantic reranking experiment (E-001)
+**Next Step**: Stream B.1 — Complete baseline documentation (B-001)
+
+⚠️ **B.1 is mandatory.** Without comprehensive per-query baseline data, experiments cannot be properly evaluated. You must document exact ranks and failure modes for all 15 hard queries before running any experiments.
 
 ---
 
@@ -221,4 +223,4 @@ LOG_LEVEL=info
 
 **Ready?** Start with [Part 1: Search Excellence](.agent/plans/semantic-search/part-1-search-excellence.md)
 
-Next task: Stream B.2 — Semantic reranking experiment (E-001)
+Next task: Stream B.1 — Complete baseline documentation (B-001)
