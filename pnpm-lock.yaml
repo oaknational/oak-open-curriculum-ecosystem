@@ -315,9 +315,6 @@ importers:
       '@asteasolutions/zod-to-openapi':
         specifier: ^8.2.0
         version: 8.2.0(zod@4.1.13)
-      '@axe-core/playwright':
-        specifier: ^4.11.0
-        version: 4.11.0(playwright-core@1.57.0)
       '@eslint/eslintrc':
         specifier: ^3.3.3
         version: 3.3.3
@@ -327,9 +324,6 @@ importers:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
         version: link:../../packages/core/oak-eslint
-      '@playwright/test':
-        specifier: ^1.57.0
-        version: 1.57.0
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.1
