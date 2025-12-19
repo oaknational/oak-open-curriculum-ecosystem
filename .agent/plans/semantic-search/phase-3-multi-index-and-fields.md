@@ -1229,31 +1229,60 @@ pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.conf
 
 Record results after each implementation phase.
 
-#### Phase A Results (Query-Time Changes)
+#### Phase A Results (Query-Time Changes) - 2025-12-18
 
 | Configuration | Hard MRR | Hard NDCG | Std MRR | Std NDCG | Notes |
 |---------------|----------|-----------|---------|----------|-------|
 | Baseline (before 3e) | 0.250 | 0.212 | 0.931 | 0.749 | Four-way hybrid |
-| After 3e.1 | TBD | TBD | TBD | TBD | Enhanced fuzzy |
-| After 3e.2 | TBD | TBD | TBD | TBD | + Phrase prefix |
-| After 3e.6 | TBD | TBD | TBD | TBD | + Min should match |
+| After 3e.1+3e.2+3e.6 | **0.323** | 0.240 | 0.938 | 0.746 | Enhanced fuzzy + phrase prefix + min_should_match |
 
-#### Phase B Results (Analyzer Changes)
+**Phase A Findings:**
+- Hard query MRR improved **+29.2%** (0.250 → 0.323)
+- Four-way hybrid now outperforms single ELSER on hard queries (0.323 > 0.290)
+- Standard queries maintained Excellent rating
+- BM25 zero-hit rate increased to 6.7-20% on hard queries (due to min_should_match)
+
+#### Phase B Results (Analyzer Changes) - 2025-12-18
 
 | Configuration | Hard MRR | Hard NDCG | Std MRR | Std NDCG | Notes |
 |---------------|----------|-----------|---------|----------|-------|
-| After 3e.3 | TBD | TBD | TBD | TBD | + Stemming/stop words |
-| After 3e.4 | TBD | TBD | TBD | TBD | + Phonetic |
-| After 3e.5 | TBD | TBD | TBD | TBD | + search_as_you_type |
+| After 3e.3 | 0.301 | 0.234 | 0.938 | 0.746 | + Stemming/stop words |
+| **REVERTED** | **0.323** | **0.240** | 0.938 | 0.746 | Reverted to Phase A config |
+| 3e.4 | DEFERRED | - | - | - | Phonetic plugin available, deferred |
+| 3e.5 | DEFERRED | - | - | - | search_as_you_type deferred |
 
-#### Final Comparison
+**Phase B Findings:**
+- Stemming + stop words regressed hard query MRR (-6.8%: 0.323 → 0.301)
+- Stop word removal too aggressive for naturalistic queries
+- BM25 structure zero-hit rate increased to 33.3% (above 30% threshold)
+- **Action Taken**: Reverted Phase B changes to restore Phase A performance
+
+#### Final Comparison (After Revert)
 
 | Metric | Before 3e | After 3e | Change | Target Met? |
 |--------|-----------|----------|--------|-------------|
-| Hard Lessons MRR | 0.250 | TBD | TBD | ≥ 0.300 |
-| Hard Lessons NDCG | 0.212 | TBD | TBD | ≥ 0.250 |
-| Std Lessons MRR | 0.931 | TBD | TBD | ≥ 0.920 |
-| Hybrid > Single ELSER | ❌ | TBD | TBD | ✅ |
+| Hard Lessons MRR | 0.250 | **0.323** | **+29.2%** | ✅ ≥ 0.300 |
+| Hard Lessons NDCG | 0.212 | 0.240 | +13.2% | ❌ Target 0.250 |
+| Std Lessons MRR | 0.931 | 0.938 | +0.7% | ✅ ≥ 0.920 |
+| Hybrid > Single ELSER | ❌ | ✅ (0.323 > 0.290) | Fixed | ✅ |
+| p95 Latency | 602ms | ~1341ms | Regression | ❌ ≤ 650ms |
+| BM25 Zero-Hit (hard) | 0% | 6.7-20% | Degraded | ⚠️ Acceptable |
+
+**Summary:**
+Phase 3e achieved the primary goals:
+1. ✅ Hard query MRR improved **+29.2%** (0.250 → 0.323)
+2. ✅ Four-way hybrid now outperforms single ELSER on hard queries
+3. ✅ Standard query excellence maintained
+
+However, several targets were not met:
+- ❌ Target MRR of 0.50 (Good) not reached (achieved 0.323 = Poor/Acceptable boundary)
+- ❌ Latency regressed significantly (~1300ms vs 602ms target)
+
+**Next Steps (see Phase 3f considerations):**
+1. Query classification to route naturalistic queries to ELSER-only
+2. Reranking with `.rerank-v1-elasticsearch` cross-encoder
+3. Query expansion for naturalistic queries
+4. Latency optimisation (reduce from 4 to 2 retrievers based on query type)
 
 ---
 

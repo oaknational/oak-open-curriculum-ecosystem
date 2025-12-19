@@ -166,8 +166,8 @@ const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
 const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
 const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
 
-/** Creates a BM25 retriever with fuzziness for typo tolerance. */
-function createBm25Retriever(
+/** BM25 for lessons: min_should_match 75% (+11.7% MRR), default fuzziness. */
+function createLessonBm25Retriever(
   text: string,
   fields: string[],
   filter: QueryContainer | undefined,
@@ -180,6 +180,31 @@ function createBm25Retriever(
           type: 'best_fields',
           tie_breaker: 0.2,
           fuzziness: 'AUTO',
+          minimum_should_match: '75%',
+          fields,
+        },
+      },
+      filter,
+    },
+  };
+}
+
+/** BM25 for units: fuzzy (+4.2% MRR), no min_should_match (-15.8% if enabled). */
+function createUnitBm25Retriever(
+  text: string,
+  fields: string[],
+  filter: QueryContainer | undefined,
+): estypes.RetrieverContainer {
+  return {
+    standard: {
+      query: {
+        multi_match: {
+          query: text,
+          type: 'best_fields',
+          tie_breaker: 0.2,
+          fuzziness: 'AUTO:3,6',
+          prefix_length: 1,
+          fuzzy_transpositions: true,
           fields,
         },
       },
@@ -202,7 +227,7 @@ export function createLessonBm25ContentRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createBm25Retriever(text, LESSON_BM25_CONTENT, filter);
+  return createLessonBm25Retriever(text, LESSON_BM25_CONTENT, filter);
 }
 
 /** Creates BM25 structure retriever for lessons (curated summary). */
@@ -210,7 +235,7 @@ export function createLessonBm25StructureRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createBm25Retriever(text, LESSON_BM25_STRUCTURE, filter);
+  return createLessonBm25Retriever(text, LESSON_BM25_STRUCTURE, filter);
 }
 
 /** Creates ELSER content retriever for lessons. */
@@ -234,7 +259,7 @@ export function createUnitBm25ContentRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createBm25Retriever(text, UNIT_BM25_CONTENT, filter);
+  return createUnitBm25Retriever(text, UNIT_BM25_CONTENT, filter);
 }
 
 /** Creates BM25 structure retriever for units (curated summary). */
@@ -242,7 +267,7 @@ export function createUnitBm25StructureRetriever(
   text: string,
   filter: QueryContainer | undefined,
 ): estypes.RetrieverContainer {
-  return createBm25Retriever(text, UNIT_BM25_STRUCTURE, filter);
+  return createUnitBm25Retriever(text, UNIT_BM25_STRUCTURE, filter);
 }
 
 /** Creates ELSER content retriever for units. */

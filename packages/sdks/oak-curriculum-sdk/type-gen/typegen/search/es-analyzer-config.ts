@@ -43,8 +43,14 @@ export interface EsSettings {
 
 /**
  * Analyzer configurations for Oak search indexes.
+ *
  * - `oak_text_index`: Used at index time, applies lowercase normalisation.
  * - `oak_text_search`: Used at search time, includes synonym expansion.
+ *
+ * Note: Phase 3e tested stemming and stop words but they regressed hard query performance.
+ * The simpler lowercase + synonyms configuration provides better results.
+ *
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-custom-analyzer.html
  */
 export const ES_ANALYZER_CONFIG = {
   oak_text_index: {
@@ -72,7 +78,11 @@ export const ES_NORMALIZER_CONFIG = {
 
 /**
  * Filter configurations for Oak search indexes.
+ *
  * - `oak_syns_filter`: Updateable synonym graph filter using the oak-syns synonym set.
+ *
+ * Note: Phase 3e tested stop words and stemming but they regressed hard query performance.
+ * Keeping type definitions for future use but not instantiating the filters.
  */
 export const ES_FILTER_CONFIG = {
   oak_syns_filter: {

@@ -103,8 +103,11 @@ export function generateSettingsBlock(): string {
   for (const [name, config] of Object.entries(ES_FILTER_CONFIG)) {
     lines.push(`        ${name}: {`);
     lines.push(`          type: '${config.type}',`);
-    lines.push(`          synonyms_set: '${config.synonyms_set}',`);
-    lines.push(`          updateable: ${String(config.updateable)},`);
+    // Currently only synonym_graph filters are used
+    if (config.type === 'synonym_graph') {
+      lines.push(`          synonyms_set: '${config.synonyms_set}',`);
+      lines.push(`          updateable: ${String(config.updateable)},`);
+    }
     lines.push('        },');
   }
   lines.push('      },');
