@@ -2,13 +2,13 @@
 
 ## Overview
 
-This document describes the full plan for building the **@oaknational/eslint-plugin-standards** package — a reusable, modular ESLint plugin that encapsulates Oak National Academy's internal linting standards for TypeScript, React, and Next.js projects.
+This document captures the architecture and configuration approach for **@oaknational/eslint-plugin-standards**. The plugin already exists in `packages/core/oak-eslint`; this document serves as a reference blueprint rather than an active implementation plan.
 
 The goal is to create a **consistent, extensible foundation** for code quality and type-safety across multiple codebases, especially those integrating AI-driven or automated code generation workflows.
 
 ---
 
-## 1. Package Purpose and Goals
+## 1. Package Purpose and Goals (Reference)
 
 ### 🎯 Objectives
 
@@ -22,7 +22,7 @@ The goal is to create a **consistent, extensible foundation** for code quality a
 
 ---
 
-## 2. Folder Structure
+## 2. Folder Structure (Reference)
 
 ```
 eslint-plugin-standards/
@@ -41,7 +41,7 @@ eslint-plugin-standards/
 
 ---
 
-## 3. `package.json` Template
+## 3. `package.json` Template (Reference)
 
 ```json
 {
@@ -68,7 +68,7 @@ eslint-plugin-standards/
 
 ---
 
-## 4. TypeScript Base Config (`src/configs/typescript.ts`)
+## 4. TypeScript Base Config (`src/configs/typescript.ts`) (Reference)
 
 ```ts
 import { defineConfig } from 'eslint/config';
@@ -123,7 +123,7 @@ export const typescriptConfig = defineConfig(
 
 ---
 
-## 5. React Config (`src/configs/react.ts`)
+## 5. React Config (`src/configs/react.ts`) (Reference)
 
 ```ts
 import { defineConfig } from 'eslint/config';
@@ -151,7 +151,7 @@ export const reactConfig = defineConfig(
 
 ---
 
-## 6. Next.js Config (`src/configs/next.ts`)
+## 6. Next.js Config (`src/configs/next.ts`) (Reference)
 
 ```ts
 import { defineConfig } from 'eslint/config';
@@ -168,7 +168,7 @@ export const nextConfig = defineConfig(...reactConfig, nextPlugin.configs.recomm
 
 ---
 
-## 7. Plugin Entrypoint (`src/index.ts`)
+## 7. Plugin Entrypoint (`src/index.ts`) (Reference)
 
 ```ts
 import { typescriptConfig } from './configs/typescript.js';
@@ -188,7 +188,7 @@ export default { configs, rules };
 
 ---
 
-## 8. Publishing and Usage
+## 8. Publishing and Usage (Reference)
 
 ```bash
 pnpm build
@@ -201,15 +201,27 @@ pnpm publish --access public
 pnpm add -D @oaknational/eslint-plugin-standards
 ```
 
-Then use it in ESLint:
+Then use it in ESLint (flat config):
 
 ```js
-export default [
-  { extends: ['plugin:@oaknational/standards/recommended'] },
-  { extends: ['plugin:@oaknational/standards/react'] },
-  { extends: ['plugin:@oaknational/standards/next'] },
-];
+import { defineConfig } from 'eslint/config';
+import standards from '@oaknational/eslint-plugin-standards';
+
+export default defineConfig([
+  ...standards.configs.recommended,
+  // Add one of these as needed:
+  // ...standards.configs.react,
+  // ...standards.configs.next,
+]);
 ```
+
+## Active Implementation Path
+
+For active work and enforcement tasks, see:
+
+- [ESLint Plans Index](./index.md)
+- [ESLint Centralisation & Strictness Plan](./eslint-enhancement-plan.md)
+- [Max Files Per Directory Implementation Plan](./eslint-max-files-per-dir-implementation-plan.md)
 
 ---
 
@@ -218,7 +230,7 @@ export default [
 - Add internal Oak-specific custom rules under `src/rules/`.
 - Include project-specific presets (e.g. `ai`, `server`, `docs`).
 - Add unit tests with `@eslint/plugin-utils` to validate configs.
-- Remove `@ts-expect-error` once TS-ESLint v9 lands.
+- Remove temporary workarounds once type compatibility issues are resolved.
 
 ---
 

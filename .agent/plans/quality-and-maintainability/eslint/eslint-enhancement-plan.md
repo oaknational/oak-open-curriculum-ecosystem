@@ -9,6 +9,12 @@ Centralize all ESLint configuration into a single, high-quality workspace: `@oak
 > [!IMPORTANT]
 > This plan requires deleting the root `eslint.config.ts` and `eslint.config.base.ts`. This is a significant architectural change that will force all packages to be self-contained regarding linting.
 
+## Navigation
+
+- [ESLint Plans Index](./index.md)
+- [Max Files Per Directory Implementation Plan](./eslint-max-files-per-dir-implementation-plan.md)
+- [Max Files Per Directory Rule Design](./eslint-max-files-per-dir.md)
+
 ## Phases
 
 ### Phase 1: Elevate `@oaknational/eslint-plugin-standards`
@@ -58,19 +64,17 @@ Centralize all ESLint configuration into a single, high-quality workspace: `@oak
 
 - **Strategy**:
   - Adopt `strict` config for all packages.
-  - Use `// eslint-disable-next-line ... -- REFACTOR` comments to "grandfather" existing violations in product code.
+  - Resolve legacy violations directly rather than disabling rules.
   - **Explicitly avoid** creating compatibility layers or fallback configurations.
   - Ensure `pnpm lint` passes cleanly for the entire monorepo.
 
 - **Current Status**:
   - [x] All packages updated to use `strict` config.
-  - [x] `REFACTOR` disables applied to `logger`, `notion`, `streamable-http`, and `semantic-search`.
   - [ ] Resolve persistent lint errors in `streamable-http` and `semantic-search`.
   - [ ] Final full repo verification.
 
 - **Remaining Challenges**:
   - `streamable-http` and `semantic-search` still have failing lint checks despite initial fixes.
-  - Need to ensure `REFACTOR` comments are applied correctly without breaking functionality or types.
 
 ## Next Steps
 

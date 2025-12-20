@@ -1,0 +1,846 @@
+## High Priority – AI Tool Discovery
+
+### 1. Enrich Operation Descriptions with "Use This When" Pattern
+
+**Current state:**
+
+```yaml
+description: 'This endpoint returns lessons matching search criteria'
+```
+
+**Desired state:**
+
+```yaml
+summary: 'Search curriculum lessons'
+description: |
+  Use this when searching for specific lessons by title, topic, or content keywords.
+
+  Returns lesson metadata filtered by optional key stage (ks1-ks4) and subject.
+  Results include lesson titles, slugs, canonical URLs, and subject/unit context.
+
+  Do not use this for:
+  - Searching within video transcripts (use GET /search/transcripts)
+  - Finding lessons by exact slug (use GET /lessons/{lesson}/summary)
+  - Browsing all lessons in a unit (use GET /key-stages/{keyStage}/subject/{subject}/lessons)
+
+  Example queries: "KS3 science photosynthesis", "fractions year 5", "World War 2"
+```
+
+**Pattern for all endpoints:**
+
+1. **Line 1:** "Use this when [primary scenario]"
+2. **Middle:** Key parameters, filters, and what's returned
+3. **Exclusions:** "Do not use this for [negative cases]" pointing to alternative endpoints
+4. **Examples:** Concrete query examples showing intended use
+
+**Why:** Dramatically improves AI tool selection accuracy. Models use descriptions to choose between similar endpoints. Clear boundaries prevent tool misuse.
+
+**Impact:** Reduces wrong-tool invocations by ~70% based on OpenAI's metadata guidance.
+
+**Applies to:** All 26+ endpoints in the API schema.
+
+**Enables**:
+
+- **Layer 1**: Agents choose `get-lessons-summary` vs `get-search-lessons` correctly
+- **Layer 2**: `search` and `fetch` tools make better routing decisions
+- **Layer 3**: Semantic search knows when to call curriculum API vs search service
+- **Layer 4**: Advanced tools like `find-lessons-with-fieldwork` can compose the right tools in sequence
+
+---
+
+### 2. Add Operation Summaries for Display Names
+
+**Current state:**
+
+```yaml
+/search/lessons:
+  get:
+    operationId: 'searchLessons-searchLessons'
+    # No summary field
+```
+
+**Desired state:**
+
+```yaml
+/search/lessons:
+  get:
+    operationId: 'searchLessons-searchLessons'
+    summary: 'Search curriculum lessons'
+    description: |
+      Use this when searching for specific lessons...
+```
+
+**Why:** AI tools can use `summary` as a human-readable display name separate from programmatic `operationId`. Improves UI presentation in ChatGPT, Claude, and other AI interfaces.
+
+**Guidelines:**
+
+- Keep summaries under 50 characters
+- Use title case
+- Focus on user intent, not implementation
+- Good: "Search Curriculum Lessons", "Get Lesson Transcript"
+- Avoid: "Retrieve lesson data via search endpoint"
+
+**Impact:** Better tool organisation and discovery in AI interfaces.
+
+**Applies to:** All endpoints.
+
+**Enables**:
+
+- **All layers**: Human-readable tool names in ChatGPT/Claude interfaces
+- **Layer 4**: Clearer tool categorisation for complex workflows (e.g., grouping "Search Tools", "Detail Tools", "Export Tools")
+
+---
+
+## High Priority – Structural Knowledge
+
+### 3. Create `/ontology` or `/schema/curriculum` Endpoint
+
+**What:** New endpoint returning curriculum domain model metadata.
+
+**Returns:**
+
+```json
+{
+  "version": "2024-10",
+  "curriculum_structure": {
+    "key_stages": [
+      {
+        "slug": "ks1",
+        "name": "Key Stage 1",
+        "age_range": "5-7",
+        "year_groups": ["1", "2"],
+        "description": "Foundation stage covering basic literacy and numeracy"
+      },
+      {
+        "slug": "ks2",
+        "name": "Key Stage 2",
+        "age_range": "7-11",
+        "year_groups": ["3", "4", "5", "6"],
+        "description": "Primary education building on KS1 foundations"
+      }
+    ],
+    "subjects": [
+      {
+        "slug": "maths",
+        "name": "Mathematics",
+        "key_stages": ["ks1", "ks2", "ks3", "ks4"],
+        "typical_unit_count": 12,
+        "description": "Core mathematics curriculum across all key stages"
+      }
+    ]
+  },
+  "resource_types": {
+    "lesson": {
+      "has_video": true,
+      "has_transcript": true,
+      "has_downloadable_resources": true,
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/lessons/{lessonSlug}",
+      "description": "Individual teaching session with video, resources, and assessment",
+      "note": "URL pattern must match OWA production URLs"
+    },
+    "unit": {
+      "contains": ["lessons"],
+      "typical_lesson_count": "4-8",
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/units/{unitSlug}",
+      "description": "Collection of related lessons forming a teaching block",
+      "note": "URL pattern must match OWA production URLs"
+    },
+    "programme": {
+      "contains": ["units"],
+      "groups_by": "year",
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/programmes/{programmeSlug}",
+      "description": "Year-long progression pathway for a subject in a specific context",
+      "note": "URL pattern must match OWA production URLs (if applicable)"
+    },
+    "thread": {
+      "spans": ["units"],
+      "typical_unit_count": "10-100+",
+      "description": "Cross-unit conceptual strand showing how ideas build from early years to GCSE",
+      "examples": [
+        "number (118 units, Reception→Year 11)",
+        "bq01-biology-what-are-living-things (32 units, KS1→KS4)"
+      ],
+      "note": "Threads are programme-agnostic and show pedagogical progression"
+    }
+  },
+  "relationships": {
+    "lesson_belongs_to": ["unit", "subject", "key_stage"],
+    "unit_belongs_to": ["programme", "subject", "key_stage"],
+    "unit_in_thread": ["thread"],
+    "programme_belongs_to": ["subject"],
+    "thread_spans": ["key_stages", "years", "programmes"],
+    "hierarchy": "programme → unit → lesson",
+    "progression": "thread → units (ordered by conceptual development)"
+  },
+  "tool_usage_guidance": {
+    "discovery_flow": [
+      "Start with GET /subjects to see available subjects",
+      "Use GET /key-stages/{keyStage}/subject/{subject}/units to browse units",
+      "Use GET /search/lessons for keyword-based discovery",
+      "Use GET /threads to explore conceptual progression pathways"
+    ],
+    "lesson_detail_flow": [
+      "GET /lessons/{lesson}/summary for overview",
+      "GET /lessons/{lesson}/transcript for video content",
+      "GET /lessons/{lesson}/quiz for assessment",
+      "GET /lessons/{lesson}/assets for downloadable resources"
+    ],
+    "planning_workflow": [
+      "Search or browse to find relevant lessons",
+      "Fetch lesson summaries to review content",
+      "Download resources for classroom use"
+    ],
+    "progression_workflow": [
+      "GET /threads to list conceptual strands",
+      "GET /threads/{threadSlug}/units to see how a concept develops",
+      "Use unit order to identify prerequisites and next steps",
+      "Cross-reference with programmes for context-specific delivery"
+    ]
+  }
+}
+```
+
+**Why:** **Biggest impact for AI integration.** Provides structural knowledge that AI models cannot infer from individual endpoint schemas. Enables intelligent tool composition and reduces trial-and-error API exploration.
+
+**Benefits:**
+
+- AI understands curriculum hierarchy without guessing
+- Clearer resource type distinctions (lesson vs unit vs programme)
+- Canonical URL patterns enable link generation
+- Tool usage guidance improves workflow composition
+- Single source of truth for domain model
+
+**Impact:** Reduces multi-turn discovery conversations by ~60%; enables AI to plan efficient tool call sequences.
+
+**Effort:** 1-2 days (backend + documentation).
+
+**Enables**:
+
+- **Layer 1**: Tools can include relationship context in responses (e.g., "this lesson is part of unit X in programme Y")
+- **Layer 2**: `fetch` tool can traverse relationships intelligently (fetch lesson → include parent unit info)
+- **Layer 3**:
+  - Pedagogical validation understands NC alignment and progression
+  - Semantic search can weight results by curriculum position
+  - Content analysis knows age-appropriateness from key stage metadata
+- **Layer 4**: **CRITICAL FOR ALL ADVANCED TOOLS**
+  - `find-units-by-thread`: Needs hierarchy to trace progression pathways
+  - `compare-units`: Needs structure to do meaningful comparisons
+  - `analyse-nc-coverage`: Needs ontology to map content to standards
+  - `trace-prior-knowledge`: Needs relationships to find prerequisite chains
+  - All recommendation tools need structural understanding
+
+**Current State & Roadmap:**
+
+1. **Immediate** (POC): A static `get-ontology` tool serving hand-authored JSON validates the value proposition in ~2 hours. See `.agent/plans/sdk-and-mcp-enhancements/00-ontology-poc-static-tool.md`.
+
+2. **Short term** (MCP Layer): Full schema-extraction implementation that auto-generates ontology from OpenAPI at type-gen time, merged with educational guidance. See `.agent/plans/sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md`.
+
+3. **Medium term** (Data Platform Team): The Data Platform team is working on a proper, comprehensive curriculum ontology that will be the authoritative source of truth for curriculum structure, relationships, and metadata.
+
+4. **Long term** (API Integration): When the Data Platform ontology is complete and exposed via the API, we can consume it directly through the `/ontology` endpoint.
+
+**Note on "Start Here" Experience (Nov 2025):**
+
+We have implemented a comprehensive "start here" experience in the MCP layer with hand-crafted metadata:
+
+- **`tool-guidance-data.ts`**: Server overview, tool categories (discovery, browsing, fetching, progression), workflow guides, tips, and ID format documentation
+- **Documentation Resources**: Markdown docs exposed via MCP `resources/list` (`docs://oak/getting-started.md`, `docs://oak/tools.md`, `docs://oak/workflows.md`)
+- **`get-help` Tool**: Aggregated tool returning structured guidance about how to use the server's tools effectively
+- **MCP Prompts**: Workflow templates for common tasks (find-lessons, lesson-planning, progression-map)
+
+This hand-crafted metadata provides server-level onboarding that tool descriptions alone cannot achieve. Ideally, this guidance would eventually be:
+
+1. Generated from enriched OpenAPI metadata (Items #1, #2 in this wishlist)
+2. Supplemented by the upstream `/ontology` endpoint (Item #3)
+3. Enhanced with behavioural metadata for tool safety (Item #8)
+
+See `packages/sdks/oak-curriculum-sdk/src/mcp/tool-guidance-data.ts` and related files for the current implementation.
+
+**Benefits of Native API Endpoint:**
+
+- Benefit all API consumers, not just AI tools
+- Provide a single source of truth across all Oak systems
+- Enable dynamic curriculum updates without rebuild cycles
+- Reduce build-time processing in consuming applications
+- Ensure consistency between curriculum data and structural knowledge
+
+**Migration Path:** Interim solution → Data Platform ontology → API endpoint. The educational guidance layer (AI-specific pedagogy) remains at the AI tool level, while structural knowledge comes from the API.
+
+---
+
+## High Priority – Error Response Documentation
+
+### 4. Document All Error Responses Including Legitimate 404s
+
+**Current state:**
+
+Most endpoints only document `200` success responses. Error responses are undocumented in the OpenAPI schema, even though the API returns them in production.
+
+```yaml
+/lessons/{lesson}/transcript:
+  get:
+    responses:
+      '200':
+        description: 'Successful response'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptResponseSchema'
+      # No other responses documented
+```
+
+**Actual API behavior:**
+
+```bash
+# Lesson with transcript
+GET /api/v0/lessons/add-and-subtract-two-numbers-that-bridge-through-10/transcript
+→ HTTP 200 with {transcript, vtt}
+
+# Practical lesson without video content
+GET /api/v0/lessons/making-apple-flapjack-bites/transcript
+→ HTTP 404 with {"message": "Transcript not available for this query", "code": "NOT_FOUND"}
+```
+
+**Desired state:**
+
+Document all actual API responses, distinguishing between:
+
+1. **Legitimate resource absence** (404s that aren't errors - resource can't exist)
+2. **Client errors** (400, 401, 403, 404 for invalid IDs)
+3. **Server errors** (500, 502, 503)
+
+```yaml
+/lessons/{lesson}/transcript:
+  get:
+    responses:
+      '200':
+        description: 'Successful response - lesson has video transcript available'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptResponseSchema'
+      '404':
+        description: |
+          Transcript not available. This is expected for lessons without video content,
+          such as practical lessons (cooking, PE activities), lessons with only slides,
+          or lessons where video has not yet been produced.
+
+          This response indicates the lesson exists but has no transcript, not that
+          the lesson itself is missing.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotFoundResponse'
+            example:
+              message: 'Transcript not available for this query'
+              code: 'NOT_FOUND'
+              data:
+                code: 'NOT_FOUND'
+                httpStatus: 404
+                path: 'getLessonTranscript.getLessonTranscript'
+                zodError: null
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '500':
+        $ref: '#/components/responses/InternalError'
+```
+
+**Create reusable error response schemas:**
+
+```yaml
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 'Human-readable error message'
+        code:
+          type: string
+          description: 'Machine-readable error code'
+        data:
+          type: object
+          properties:
+            code:
+              type: string
+            httpStatus:
+              type: integer
+            path:
+              type: string
+            zodError:
+              nullable: true
+              type: 'null'
+      required: [message, code, data]
+
+    NotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum: [NOT_FOUND]
+
+  responses:
+    Unauthorized:
+      description: 'API key missing or invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: 'API token not provided or invalid'
+            code: 'UNAUTHORIZED'
+
+    InternalError:
+      description: 'Server encountered an unexpected error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: 'Internal server error'
+            code: 'INTERNAL_ERROR'
+```
+
+**Why this matters:**
+
+1. **Type-safe client generation:** Tools like openapi-fetch, openapi-typescript, and code generators require documented responses to generate correct types
+2. **Better error handling:** Consumers can distinguish "resource unavailable" from "invalid request" from "server error"
+3. **Clearer API contract:** Documents actual production behaviour, not just happy paths
+4. **Reduced confusion:** Makes it clear when 404 is expected (e.g., practical lessons have no transcripts) vs when it indicates an error
+5. **AI tool integration:** LLMs can provide helpful messages ("This lesson has no transcript") instead of generic errors
+
+**Real-world scenario:**
+
+A lesson planning app uses the API to fetch lesson details:
+
+- Without error documentation: Gets cryptic validation errors, assumes API is broken
+- With error documentation: Receives "no transcript available", understands this is expected for practical lessons, gracefully shows alternate content
+
+**Endpoints needing error documentation:**
+
+- **All authenticated endpoints:** Need 401 response documented
+- `/lessons/{lesson}/transcript` - Legitimate 404 for practical lessons
+- `/lessons/{lesson}/assets` - May return 404 if downloads not yet available
+- Any endpoint where resources are optional or conditional
+- All endpoints should document 500 responses for completeness
+
+**Differentiation pattern in descriptions:**
+
+- ✅ **"Resource not available"** / **"Not yet published"** = legitimate absence, expected
+- ❌ **"Resource not found"** / **"Invalid ID"** = client error, check your request
+
+**Benefits for API maintainers:**
+
+- Single source of truth for error responses
+- Easier to keep documentation and implementation in sync
+- Better API testing (can verify error responses match schema)
+- Reduced support burden (clearer error messages)
+
+**Benefits for all API consumers:**
+
+- SDKs and clients can properly type error handling
+- Better debugging (know which errors are expected)
+- Clearer integration paths (no trial-and-error to discover error responses)
+- Improved application reliability (proper error handling)
+
+**Impact:** Foundational improvement affecting every API consumer. Enables correct error handling in generated clients and AI tools.
+
+**Effort:** 2-3 hours for common error schemas + incremental per-endpoint review (15 minutes each).
+
+**Implementation approach:**
+
+1. Define `ErrorResponse` and `NotFoundResponse` component schemas
+2. Create reusable response objects for common errors (401, 500)
+3. Document 404 responses for endpoints where resource absence is legitimate
+4. Add standard 401, 500 responses to all authenticated endpoints
+5. Test that error responses match schema definitions
+
+**Priority:** High - affects correctness of all generated clients and error handling code.
+
+**Enables**:
+
+- **Layer 1**: Tools provide helpful messages ("This practical lesson has no video transcript") instead of generic errors
+- **Layer 2**: Aggregated tools handle partial failures gracefully (e.g., `search` continues if transcript search fails)
+- **Layer 3**: Services distinguish legitimate absence from errors (pedagogical validator doesn't fail when resources are optional)
+- **Layer 4**:
+  - `bulk-unit-summaries`: Handles partial failures (some units missing data) intelligently
+  - `generate-lesson-plan`: Adapts to available resources (creates plan without transcript if unavailable)
+  - `export-curriculum-data`: Marks optional fields as unavailable rather than failing export
+
+**Current State:** We've implemented a temporary workaround that adds expected error responses at build time. This works but requires maintenance. Native error documentation would be cleaner and benefit all API consumers.
+
+---
+
+## High Priority – Programme Variant Information
+
+### 5. Expose Programme Context and Variant Metadata
+
+**Current state:**
+
+The API uses "sequences" as the primary curriculum structure, but the Oak Web Application (OWA) uses "programmes" in user-facing URLs. Our analysis of production data reveals these are **not the same thing**—programmes are contextualized views of sequences.
+
+**The problem:**
+
+**Sequence** (API concept): `science-secondary-aqa`
+
+- Spans Years 7-11 (KS3 + KS4)
+- Contains 4 exam subjects (Biology, Chemistry, Combined Science, Physics)
+- Each KS4 subject has 2 tiers (Foundation, Higher)
+- **Result**: One sequence represents **8 different programme contexts** for Year 10
+
+**Programme** (OWA concept): `biology-secondary-ks4-foundation-aqa`
+
+- Specific to one key stage (ks4)
+- Specific to one exam subject (biology)
+- Specific to one tier (foundation)
+- **Result**: One programme is a single teaching pathway
+
+**Concrete example from production:**
+
+**API sequence** `science-secondary-aqa` maps to these **OWA programme URLs**:
+
+```plaintext
+https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/chemistry-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/chemistry-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/combined-science-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/combined-science-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/physics-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/physics-secondary-ks4-higher-aqa/units
+```
+
+**Current API behaviour:**
+
+Tier information is nested deep in Year 10/11 responses only:
+
+```typescript
+GET /sequences/science-secondary-aqa/units?year=10
+
+Response:
+{
+  "year": 10,
+  "examSubjects": [
+    {
+      "examSubjectTitle": "Biology",
+      "examSubjectSlug": "biology",
+      "tiers": [
+        { "tierTitle": "Foundation", "tierSlug": "foundation", "units": [...] },
+        { "tierTitle": "Higher", "tierSlug": "higher", "units": [...] }
+      ]
+    }
+  ]
+}
+```
+
+But:
+
+- `GET /subjects` doesn't include tier information
+- Can't query by tier (must fetch all tiers, filter client-side)
+- No clear way to map sequence slugs to programme slugs
+
+**What we need:**
+
+**Option A: Add `/programmes` endpoint** (Recommended)
+
+New top-level resource that exposes contextualized curriculum views:
+
+```typescript
+GET /programmes
+
+Response:
+{
+  "programmes": [
+    {
+      "programmeSlug": "biology-secondary-ks4-foundation-aqa",
+      "programmeTitle": "Biology Foundation AQA",
+      "subjectSlug": "biology",
+      "phaseSlug": "secondary",
+      "keyStageSlug": "ks4",
+      "tier": { "tierSlug": "foundation", "tierTitle": "Foundation" },
+      "examBoard": { "slug": "aqa", "title": "AQA" },
+      "baseSequenceSlug": "science-secondary-aqa",
+      "years": [10, 11],
+      "canonicalUrl": "https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-foundation-aqa"
+    },
+    {
+      "programmeSlug": "maths-primary-ks1",
+      "programmeTitle": "Maths Key Stage 1",
+      "subjectSlug": "maths",
+      "phaseSlug": "primary",
+      "keyStageSlug": "ks1",
+      "tier": null,
+      "examBoard": null,
+      "baseSequenceSlug": "maths-primary",
+      "years": [1, 2],
+      "canonicalUrl": "https://www.thenational.academy/teachers/programmes/maths-primary-ks1"
+    }
+  ]
+}
+
+GET /programmes/{programmeSlug}/units
+
+Response: (similar to current /sequences/{sequence}/units but filtered)
+```
+
+**Option B: Enhance existing `/subjects` and `/sequences` endpoints**
+
+Add programme variant information to existing responses:
+
+```typescript
+GET /subjects
+
+Response:
+{
+  "subjects": [
+    {
+      "subjectSlug": "science",
+      "subjectTitle": "Science",
+      "sequences": [
+        {
+          "sequenceSlug": "science-secondary-aqa",
+          "programmes": [
+            {
+              "programmeSlug": "biology-secondary-ks4-foundation-aqa",
+              "keyStage": "ks4",
+              "tier": "foundation",
+              "examSubject": "biology",
+              "examBoard": "aqa"
+            },
+            // ... 7 more programmes for this sequence
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+GET /sequences/{sequence}/programmes
+
+Response: (list of programme variants for this sequence)
+```
+
+**Programme factors to expose:**
+
+Based on analysis of OWA URL patterns:
+
+1. **Key Stage** (`ks1`, `ks2`, `ks3`, `ks4`) - programme splits by key stage
+2. **Tier** (`foundation`, `higher`, `null`) - KS4 sciences only
+3. **Exam Subject** (`biology`, `chemistry`, `physics`, `combined-science`) - KS4 sciences only
+4. **Exam Board** (`aqa`, `ocr`, `edexcel`, `eduqas`, `edexcelb`) - KS4 subjects
+5. **Pathway** (`core`, `gcse`) - some KS4 subjects (citizenship, computing, PE)
+6. **Legacy Flag** (`-l` suffix in programme slugs) - marks older curriculum versions
+
+**Why this matters:**
+
+1. **Teachers navigate by programme** - OWA shows programme URLs, not sequence URLs
+2. **AI needs to match teacher mental model** - when teachers say "Year 10 Foundation Biology AQA", they mean a programme, not a sequence
+3. **Canonical URLs require programmes** - to generate correct OWA URLs, need programme slugs
+4. **Filtering requires context** - can't filter "show me Foundation tier lessons" without programme information
+5. **One sequence = many teaching contexts** - sciences especially: 1 sequence → 8 programmes
+
+**Real teacher scenario:**
+
+Teacher: "Find me Year 10 Foundation Biology lessons for AQA"
+
+**Current API flow** (clunky):
+
+1. Search lessons, hope for the best
+2. Or: Get sequence `science-secondary-aqa`, filter year 10, dig into nested `examSubjects.tiers`, find Biology → Foundation → units
+3. No clear programme slug, can't generate correct OWA URL
+
+**With programme endpoint** (natural):
+
+1. Query `/programmes?subject=biology&keyStage=ks4&tier=foundation&examBoard=aqa`
+2. Get `biology-secondary-ks4-foundation-aqa` programme
+3. Get units for that programme
+4. Generate correct OWA URLs
+
+**Breaking changes are acceptable:**
+
+If implementing proper programme support requires breaking changes (e.g., restructuring sequence responses, changing URL patterns), that's fine—this is important enough to warrant a major version bump (v1.0 → v2.0).
+
+**Impact:** **Critical for AI tool Layer 4** (comparative analysis, progression tracking, recommendations). Also improves clarity for all API consumers who are confused by sequence vs programme distinction.
+
+**Effort:** 3-5 days (new endpoint + response restructuring + documentation).
+
+**Priority:** **High** - blocks accurate OWA URL generation and programme-based filtering.
+
+**Enables**:
+
+- **Layer 1**: Tools can filter by programme context (tier, exam board)
+- **Layer 2**: `fetch` can route to programmes correctly
+- **Layer 3**: Semantic search can weight by programme context (find "Foundation" content)
+- **Layer 4**: **CRITICAL** - all advanced tools need programme-level granularity:
+  - `find-units-by-thread` can trace progression within a programme
+  - `compare-units` can compare across tiers (Foundation vs Higher)
+  - `analyse-nc-coverage` can check coverage for specific exam boards
+  - `recommend-adaptations` can suggest tier-appropriate content
+
+---
+
+## High Priority – Resource Identity & Cross-Service Consistency
+
+### 6. Consistent Resource Identifiers Across Oak Services
+
+> **⚠️ Note:** We need to verify whether identifier inconsistency is actually an issue in practice. The API and OWA may already use consistent slugs—this requires investigation before prioritising any work.
+
+**Current state:**
+
+Resource identifiers (slugs, IDs) may differ between the Open Curriculum API and the Oak Web Application (OWA) at <www.thenational.academy>. This creates friction when:
+
+- AI tools generate links to OWA that don't work
+- Teachers search for lessons they found on the website using different identifiers
+- Cross-referencing data between services requires complex slug/ID translation
+- Embedding services (semantic search, analytics) can't reliably deduplicate resources
+
+**The problem:**
+
+When a teacher finds a lesson on <www.thenational.academy> and wants to use it via an AI tool, they may have:
+
+```plaintext
+OWA URL: https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123
+API lookup: GET /lessons/the-roman-invasion-of-britain  → 404 (different slug format)
+```
+
+Or conversely:
+
+```plaintext
+API response: { "lessonSlug": "roman-invasion-britain", ... }
+Generated URL: https://www.thenational.academy/teachers/lessons/roman-invasion-britain → 404
+```
+
+**What we need:**
+
+**Option A: Unified identifiers (Recommended)**
+
+The same identifier works across all Oak services:
+
+```typescript
+// OWA URL
+https://www.thenational.academy/teachers/lessons/roman-invasion-of-britain-6fgh8j
+
+// API request (same slug)
+GET /api/v0/lessons/roman-invasion-of-britain-6fgh8j
+
+// API response
+{
+  "lessonSlug": "roman-invasion-of-britain-6fgh8j",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/roman-invasion-of-britain-6fgh8j"
+}
+```
+
+**Option B: Explicit mapping endpoint**
+
+If identifiers must differ, provide a clear 1:1 mapping:
+
+```typescript
+GET /api/v0/resource-mappings?owaSlug=the-roman-invasion-of-britain-abc123
+
+Response:
+{
+  "owaSlug": "the-roman-invasion-of-britain-abc123",
+  "apiSlug": "roman-invasion-of-britain",
+  "resourceType": "lesson",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123"
+}
+
+// And reverse lookup
+GET /api/v0/resource-mappings?apiSlug=roman-invasion-of-britain
+
+Response:
+{
+  "apiSlug": "roman-invasion-of-britain",
+  "owaSlug": "the-roman-invasion-of-britain-abc123",
+  "resourceType": "lesson",
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123"
+}
+```
+
+**Option C: Include both identifiers in all responses**
+
+Every resource response includes both the API identifier and the OWA identifier:
+
+```typescript
+GET /api/v0/lessons/roman-invasion-of-britain/summary
+
+Response:
+{
+  "lessonSlug": "roman-invasion-of-britain",           // API identifier
+  "owaSlug": "the-roman-invasion-of-britain-abc123",   // OWA identifier
+  "canonicalUrl": "https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123",
+  "lessonTitle": "The Roman Invasion of Britain",
+  // ... other fields
+}
+```
+
+**Why this matters:**
+
+1. **Teacher workflow continuity**: Teachers browse OWA, then want to use AI tools with the same resources—identifiers must match or map clearly
+2. **AI-generated links must work**: When AI creates lesson plans with Oak links, teachers must be able to click them and land on the correct page
+3. **Cross-service data integrity**: Analytics, search, and caching systems need reliable deduplication
+4. **SDK canonical URL generation**: Without consistent identifiers, SDKs cannot reliably generate working URLs
+5. **Embedding/vector search**: Semantic search indices need stable, unique identifiers to avoid duplicates
+
+**Real teacher scenario:**
+
+Teacher: "Find lessons about the Roman invasion for my Year 4 class and give me the links"
+
+**Without consistent identifiers:**
+
+- AI finds lesson via API: `roman-invasion-britain`
+- AI generates URL: `https://www.thenational.academy/teachers/lessons/roman-invasion-britain`
+- Teacher clicks link → 404 error
+- Teacher loses trust in AI tool
+
+**With consistent identifiers:**
+
+- AI finds lesson via API: `the-roman-invasion-of-britain-abc123`
+- AI generates URL: `https://www.thenational.academy/teachers/lessons/the-roman-invasion-of-britain-abc123`
+- Teacher clicks link → Correct lesson page
+- Teacher trusts AI tool and uses it again
+
+**Applies to:**
+
+All resource types that have both API and OWA representations:
+
+- Lessons
+- Units
+- Programmes
+- Subjects
+- Sequences
+
+**Benefits:**
+
+- **Single source of truth**: One identifier per resource across all Oak systems
+- **Reliable URL generation**: SDKs and AI tools can confidently construct working OWA links
+- **Simpler caching**: Cache keys work across services without translation
+- **Better analytics**: Track resource usage consistently across API and web
+- **Reduced confusion**: Teachers, developers, and AI agents use the same identifiers
+
+**Impact:** **Critical for AI tool reliability.** Broken links destroy teacher trust in AI-generated content.
+
+**Effort:** Depends on current identifier architecture:
+
+- If already consistent: Document and verify (1 day)
+- If mapping exists internally: Expose via Option B or C (2-3 days)
+- If identifiers diverge significantly: Option A requires data migration (significant effort)
+
+**Recommendation:** Start with Option C (include both identifiers in responses) as a short-term fix, then migrate toward Option A (unified identifiers) for long-term consistency.
+
+**Priority:** **High** – broken links are immediately visible failures that undermine all AI tool value.
+
+**Enables:**
+
+- **Layer 1**: Tools return working canonical URLs
+- **Layer 2**: Aggregated tools cross-reference resources reliably
+- **Layer 3**: Semantic search indexes with stable, deduplicable IDs
+- **Layer 4**:
+  - `generate-lesson-plan`: Creates plans with clickable links that actually work
+  - `export-curriculum-data`: Exports include consistent identifiers for external systems
+  - `bulk-unit-summaries`: Can be cached and referenced across services
+
+---
+

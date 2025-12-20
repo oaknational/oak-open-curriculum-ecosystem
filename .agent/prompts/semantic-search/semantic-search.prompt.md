@@ -1,78 +1,68 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 In Progress (Stream A ✅, Stream B.1 ✅, B.2-B.5 📋 Ready)  
+**Status**: Part 1 In Progress — Tier 1 Fundamentals  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-19
+**Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
+**Last Updated**: 2025-12-20
 
 ---
 
-## Strategic Goal
+## Before You Start (MANDATORY)
 
-Create a production-ready demo proving **Elasticsearch Serverless as the definitive platform** for intelligent curriculum search, using Maths KS4 as a vertical slice that scales to the full Oak curriculum.
+### 1. Read Foundation Documents
 
-**Why Maths KS4?** Maximum complexity (tiers, pathways, exam boards), high teacher value, complete feature coverage, manageable scope (~10 minutes to ingest).
+These are non-negotiable. Read them before ANY work:
 
----
+1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, no type shortcuts
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types and TDD at ALL levels
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first architecture
+4. **[ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)** — Fundamentals-first strategy
 
-## Quick Start
+### 2. The First Question
 
-1. **Read foundation documents first** (mandatory):
-   - `.agent/directives-and-memory/rules.md` — TDD, quality gates, no type shortcuts
-   - `.agent/directives-and-memory/schema-first-execution.md` — All types from schema
-   - `.agent/directives-and-memory/testing-strategy.md` — Test types and TDD approach
+Before every change, ask: **"Could it be simpler without compromising quality?"**
 
-2. **Current plan**: [Part 1: Search Excellence](.agent/plans/semantic-search/part-1-search-excellence.md)
+### 3. Cardinal Rule
 
-3. **Navigation hub**: [.agent/plans/semantic-search/README.md](.agent/plans/semantic-search/README.md)
-
-4. **Requirements & context**: [.agent/plans/semantic-search/requirements.md](.agent/plans/semantic-search/requirements.md)
+If the upstream schema or SDK changes, running `pnpm type-gen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment.
 
 ---
 
-## Current State Summary
+## Current State
 
-### Success Criteria (from ADR-081)
+For current metrics, index status, and known issues, see:
 
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR (Lessons) | 0.367 | ≥0.50 | ❌ Gap: 36% |
-| Hard Query MRR (Units) | 0.811 | ≥0.50 | ✅ Met |
-| Zero-hit Rate | 0% | 0% | ✅ Met |
-| p95 Latency | ~450ms | ≤1500ms | ✅ Within budget |
+**[current-state.md](../../plans/semantic-search/current-state.md)** — THE single source of truth for current metrics
 
-### Part 1 Stream Status
+Quick summary:
 
-```text
-Part 1: Search Excellence
-═══════════════════════════════════════════════════════════════════
-Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| Lesson Hard MRR | 0.380 | ≥0.50 | ❌ Gap |
+| Standard MRR | 0.931 | ≥0.92 | ✅ Met |
 
-Stream A: Foundation                              ✅ Complete
-  4-way hybrid, KS4 filtering, content-type-aware BM25, ground truth
+---
 
-Stream B: Relevance Optimisation                  🔄 In Progress
-  B.1 Baseline documentation (B-001)              ✅ Complete
-  B.2 Semantic reranking experiment (E-001) ← START HERE  📋
-  B.3 Linear retriever experiment (E-003)         📋
-  B.4 Implement winning approaches                📋
-  B.5 Validate MRR ≥0.50                          📋
+## Historical Context
 
-Stream C: Query Intelligence                      📋 Blocked on B.2
-  Query expansion, phonetic, classification (wait for reranking results)
+For the full history of experiments and their impact:
 
-Stream D: Infrastructure                          📋 Ready to Start
-  Extract Search SDK, CLI workspace, retire Next.js
-```
+**[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** — Chronological experiment history
 
-**Next Step**: Stream B.2 — Semantic reranking experiment (E-001)
+---
 
-**B.1 Baseline Complete**: See [B-001-hard-query-baseline.experiment.md](.agent/evaluations/experiments/B-001-hard-query-baseline.experiment.md) for:
+## Current Work
 
-- Per-query results for all 30 hard queries (15 lessons + 15 units)
-- Category breakdown showing colloquial (0.000) and synonym (0.167) as primary failure modes
-- Misspelling handling robust at 0.833 MRR
-- Recommendation: Start with E-001 (Semantic Reranking)
+The active plan with detailed tasks:
+
+**[Part 1: Search Excellence](../../plans/semantic-search/part-1-search-excellence.md)**
+
+Current tier: **Tier 1 — Search Fundamentals**
+
+Next tasks:
+- B.4 Noise phrase filtering
+- B.5 Phrase query enhancement
+- B.6 Validate Tier 1 (MRR ≥0.45)
 
 ---
 
@@ -94,90 +84,63 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-**All gates must pass before proceeding.** Resolve any issues gate-by-gate.
+**All gates must pass. Fail fast. No exceptions.**
 
 ### 2. Re-Index Fresh Data (Before Any Search Experiments)
 
-**⚠️ Never run search quality smoke tests against stale indices.** Results are meaningless without fresh data.
+**Never run search quality smoke tests against stale indices.**
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup                                           # Ensure mappings are current
-pnpm es:ingest-live -- --subject maths --keystage ks4   # ~5-10 minutes
-pnpm es:status                                          # Verify document counts
+pnpm es:setup
+pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:status
 ```
-
-**Expected counts**: ~314 lessons, ~36 units for Maths KS4.
 
 ### 3. Run Smoke Tests
 
 ```bash
-# Direct ES tests (no server needed)
 pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
-pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline  # NEW: regression detection
-
-# API-based tests (need pnpm dev in another terminal)
-pnpm vitest run -c vitest.smoke.config.ts scope-verification
-pnpm vitest run -c vitest.smoke.config.ts search-quality
-pnpm vitest run -c vitest.smoke.config.ts unit-search
-pnpm vitest run -c vitest.smoke.config.ts ks4-filtering
+pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
 ```
 
 ---
 
-## Architecture Notes
+## Test Types for Search Work
 
-### Four-Retriever Design
+| Test Type | What It Tests | File Pattern |
+|-----------|---------------|--------------|
+| **Unit** | Pure functions, no mocks, no IO | `*.unit.test.ts` |
+| **Integration** | Units + simple injected mocks | `*.integration.test.ts` |
+| **Smoke** | Running ES with real data | `smoke-tests/*.smoke.test.ts` |
 
-Each entity (lesson, unit) uses four retrievers combined via RRF:
-
-1. **BM25 on Content** — Lexical matching on teaching material
-2. **ELSER on Content** — Semantic matching on teaching material
-3. **BM25 on Structure** — Lexical matching on metadata/summaries
-4. **ELSER on Structure** — Semantic matching on metadata/summaries
-
-**Design rationale**: Content fields contain actual teaching material (transcripts). Structure fields contain curated metadata (learning objectives, curriculum alignment). Both perspectives are valuable for different query types.
-
-### ES Serverless Features ($0 additional cost)
-
-| Feature | Endpoint | Status |
-|---------|----------|--------|
-| BM25 | Built-in | ✅ Used |
-| ELSER | `.elser-2-elasticsearch` | ✅ Used |
-| ReRank | `.rerank-v1-elasticsearch` | 📋 E-001 experiment |
-| LLM | `.gp-llm-v2-chat_completion` | 📋 E-002 experiment |
-
-### Key ADRs
-
-| ADR | Title |
-|-----|-------|
-| [ADR-081](docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Evaluation Framework |
-| [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation |
-| [ADR-075](docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Removal |
+**Critical**: Smoke tests are out-of-process tests against a running Elasticsearch instance.
 
 ---
 
 ## Key File Locations
 
-### Current Plan
+### Current State & History
+
+| File | Purpose |
+|------|---------|
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics, index status, known issues |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
+| [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap |
+
+### Active Plan
+
+| File | Purpose |
+|------|---------|
+| [README.md](../../plans/semantic-search/README.md) | Navigation hub |
+| [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md) | Current work |
+
+### Synonyms
 
 ```text
-.agent/plans/semantic-search/
-├── README.md                    # Navigation hub
-├── part-1-search-excellence.md  # Current work — four streams
-├── requirements.md              # Strategic context
-└── phase-3-multi-index-and-fields.md  # Stream A reference
-```
-
-### Experiments
-
-```text
-.agent/evaluations/experiments/
-├── B-001-hard-query-baseline.experiment.md     # ✅ Complete — baseline data
-├── E-001-semantic-reranking.experiment.md      # Stream B.2 — START HERE
-├── E-002-query-expansion.experiment.md         # Stream C.1
-├── E-003-linear-retriever.experiment.md        # Stream B.3
-└── E-004-phonetic-enhancement.experiment.md    # Stream C.2
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── maths.ts     # Maths KS4 synonyms (40+ entries)
+└── index.ts     # Barrel export
 ```
 
 ### Implementation
@@ -185,10 +148,20 @@ Each entity (lesson, unit) uses four retrievers combined via RRF:
 ```text
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/hybrid-search/      # RRF query builders
-├── src/lib/search-quality/     # Ground truth, metrics, baseline-runner
-├── src/lib/indexing/           # Document transforms
-└── smoke-tests/                # Search quality benchmarks (incl. hard-query-baseline)
+├── src/lib/search-quality/     # Ground truth, metrics
+├── smoke-tests/                # Search quality benchmarks
+└── docs/                       # INGESTION-GUIDE, SYNONYMS, etc.
 ```
+
+---
+
+## Key ADRs
+
+| ADR | Title |
+|-----|-------|
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Fundamentals-First Strategy** |
+| [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Evaluation Framework |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK Domain Synonyms |
 
 ---
 
@@ -204,33 +177,18 @@ SEARCH_API_KEY=your_search_api_key_here
 LOG_LEVEL=info
 ```
 
-**Rate Limit**: Oak API upgraded to **10,000 requests/hour**.
+---
+
+## Principles (from Foundation Documents)
+
+1. **First Question**: Could it be simpler without compromising quality?
+2. **TDD at ALL levels**: RED → GREEN → REFACTOR, tests FIRST
+3. **Schema-first**: All types flow from schema via `pnpm type-gen`
+4. **No type shortcuts**: Never `as`, `any`, `!`, `Record<string, unknown>`
+5. **Fail fast**: Never silently fail, helpful error messages
+6. **No global state in tests**: Config as parameters, simple injected mocks
+7. **Delete dead code**: If unused, delete it
 
 ---
 
-## Remember
-
-1. **TDD is mandatory** — Write tests FIRST at ALL levels
-2. **Schema-first** — All types flow from schema via `pnpm type-gen`
-3. **No type shortcuts** — No `as`, `any`, `!`, `Record<string, unknown>`
-4. **All quality gates must pass** — No exceptions
-5. **Re-index before smoke tests** — Stale data = meaningless results
-6. **Check experiments** — E-001 through E-004 have detailed methodology
-7. **Baseline available** — B-001 has per-query data for experiment comparison
-
----
-
-## Elasticsearch Documentation
-
-| Topic | URL |
-|-------|-----|
-| Hybrid Search (RRF) | <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html> |
-| Linear Retriever | <https://www.elastic.co/search-labs/blog/linear-retriever-hybrid-search> |
-| Semantic Reranking | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html> |
-| ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html> |
-
----
-
-**Ready?** Start with [Part 1: Search Excellence](.agent/plans/semantic-search/part-1-search-excellence.md)
-
-Next task: Stream B.2 — Semantic reranking experiment (E-001)
+**Ready?** Start with [Part 1: Search Excellence](../../plans/semantic-search/part-1-search-excellence.md)

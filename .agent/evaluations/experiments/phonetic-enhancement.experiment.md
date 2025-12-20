@@ -1,6 +1,6 @@
 # Experiment: Phonetic Enhancement
 
-**ID**: E-004  
+**Tier**: Search Fundamentals (Tier 1)  
 **Date**: 2025-12-19  
 **Status**: 📋 Planned  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)

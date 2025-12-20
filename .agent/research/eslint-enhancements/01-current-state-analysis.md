@@ -6,7 +6,7 @@ The repository employs a **modern, flat configuration (`eslint.config.ts`)** arc
 
 ## Architecture
 
-### 1. Base Configuration (`eslint.config.base.ts`)
+### 1. Base Configuration (`@oaknational/eslint-plugin-standards`)
 
 - **Role**: Single Source of Truth (SSOT) for shared rules.
 - **Core Stack**:
@@ -16,13 +16,13 @@ The repository employs a **modern, flat configuration (`eslint.config.ts`)** arc
 - **Custom Rule Sets**: Exports `tsRules` and `testRules` objects, which are manually spread into configs.
 - **Status**: Contains `TODO`s to move logic to a dedicated package.
 
-### 2. Custom Rules (`eslint-rules/`)
+### 2. Custom Rules (`packages/core/oak-eslint`)
 
 - **Structure**: A local directory acting as a pseudo-package.
 - **Key Components**:
   - `boundary-rules.ts`: Exports factory functions (`createLibBoundaryRules`) and objects (`appBoundaryRules`) to enforce the architectural model.
   - `no-export-trivial-type-aliases.ts`: A custom rule implementation (currently unused).
-- **Usage**: Imported by relative paths in workspace configs (e.g., `../../eslint-rules/index.js`).
+- **Usage**: Imported from the plugin package (`@oaknational/eslint-plugin-standards`) in workspace configs.
 
 ### 3. Workspace Configurations
 
@@ -45,4 +45,4 @@ The system explicitly codifies the "Architectural Model" from `@rules.md` using 
 
 - **Modernity**: The repo is ahead of the curve in adopting Flat Config.
 - **Strictness**: Type-checking is enabled globally, which is excellent but resource-intensive.
-- **Fragility**: The reliance on relative imports for `eslint-rules` makes moving or refactoring configurations brittle.
+- **Fragility**: Avoid direct relative imports; use the plugin package exports to keep configs stable.

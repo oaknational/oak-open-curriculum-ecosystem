@@ -118,6 +118,53 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 
 ---
 
+## Bulk Download Data Integrity Issues (2025-12-19)
+
+**Context**: Analysis of the bulk download data (`/bulk-download` endpoint) revealed inconsistencies that affect downstream filtering and search capabilities.
+
+### Issue 1: Title Fields Null Despite Slug Fields Populated
+
+**Affected Endpoints**: Bulk download JSON files (e.g., `maths-secondary.json`)
+**Fields Affected**: `yearTitle`, `keyStageTitle`, `subjectTitle`
+
+**Observation**:
+
+```json
+{
+  "yearTitle": null,        // ← null
+  "yearSlug": "year-7",     // ← populated
+  "keyStageTitle": null,    // ← null
+  "keyStageSlug": "ks3",    // ← populated
+  "subjectTitle": null,     // ← null
+  "subjectSlug": null,      // ← also null (double issue)
+  "unitTitle": "Place value",
+  "unitSlug": "place-value"
+}
+```
+
+**Scope**: All 98 units in `maths-secondary.json` have `yearTitle: null` and `keyStageTitle: null`.
+
+**Impact**:
+
+- Consumers expecting human-readable titles get null
+- Inconsistency between slug availability and title availability
+- `subjectSlug` is also null in some cases (expected: `"maths"`)
+
+**Requested Fix**:
+
+Populate all `*Title` fields when corresponding `*Slug` fields are populated:
+
+```json
+{
+  "yearTitle": "Year 7",
+  "yearSlug": "year-7",
+  "keyStageTitle": "Key Stage 3",
+  "keyStageSlug": "ks3",
+  "subjectTitle": "Maths",
+  "subjectSlug": "maths"
+}
+```
+
 ## Derived Fields Registry (2025-12-13)
 
 **Context**: Schema analysis revealed that several fields used in semantic search indexing are **derived** from other schema fields rather than being directly available. These derivations are documented here so they can be added to the upstream API.

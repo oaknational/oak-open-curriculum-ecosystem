@@ -9,9 +9,9 @@ File naming: `[topic].experiment.md`
 
 # Experiment: [Name]
 
-**ID**: E-XXX (sequential)  
 **Date**: YYYY-MM-DD  
-**Status**: 🔬 In Progress | ✅ Complete | ❌ Abandoned  
+**Tier**: Search Fundamentals (1) | Document Relationships (2) | Modern ES (3) | AI Enhancement (4)  
+**Status**: 🔬 In Progress | ✅ Complete | ❌ Rejected  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 
 ## Abstract
@@ -165,9 +165,41 @@ _If accepted: what needs to happen to implement this change?_
 
 _What questions remain? What should we test next?_
 
-| ID | Experiment | Rationale |
-|----|------------|-----------|
-| E-XXX | [Next experiment] | [Why it follows from this one] |
+| Experiment | Rationale |
+|------------|-----------|
+| [Next experiment] | [Why it follows from this one] |
+
+---
+
+## 6. Codify Learnings
+
+After an experiment completes, extract lasting value by updating documentation.
+
+### 6.1 What to Update
+
+| If the experiment... | Then update... |
+|---------------------|----------------|
+| Led to an architectural decision | Create or update an **ADR** |
+| Revealed operational best practices | Update **INGESTION-GUIDE.md**, **SYNONYMS.md**, etc. |
+| Changed the recommended process | Update **NEW-SUBJECT-GUIDE.md** |
+| Produced new ground truth queries | Add to `src/lib/search-quality/ground-truth/` |
+
+### 6.2 Where Things Belong
+
+| Content Type | Location | Example |
+|--------------|----------|---------|
+| **What we decided TO DO** | ADRs, operational guides | "Always run es:setup before ingest" |
+| **What we decided NOT TO DO** | EXPERIMENT-LOG.md, this file | "Generic rerankers don't work" |
+| **Why we made the decision** | This experiment file | Full analysis and reasoning |
+| **Current best practice** | NEW-SUBJECT-GUIDE.md | Step-by-step workflow |
+
+### 6.3 Codification Checklist
+
+- [ ] Added entry to [EXPERIMENT-LOG.md](../EXPERIMENT-LOG.md)
+- [ ] Updated [current-state.md](../../plans/semantic-search/current-state.md) if metrics changed
+- [ ] Created/updated ADR if architectural decision was made
+- [ ] Updated operational guides if best practices emerged
+- [ ] Updated NEW-SUBJECT-GUIDE.md if process changed
 
 ---
 

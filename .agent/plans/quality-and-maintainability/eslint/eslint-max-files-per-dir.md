@@ -5,7 +5,15 @@
 
 ---
 
-## Why this plugin?
+## Related
+
+- [ESLint Plans Index](./index.md)
+- [Max Files Per Directory Implementation Plan](./eslint-max-files-per-dir-implementation-plan.md)
+- [ESLint Centralisation & Strictness Plan](./eslint-enhancement-plan.md)
+
+---
+
+## Why this rule?
 
 Large, catch‑all directories are a design smell: they blur domain boundaries, slow navigation, and make “where should this go?” a daily tax. Most teams already enforce limits **inside** files (cyclomatic complexity, max lines per file, max lines per function). But **nothing stops a folder from ballooning** into a hundred tiny, loosely related files. A simple “max files per folder” constraint nudges code toward clearer modular seams—split by feature, layer, or domain—without prescribing a specific architecture.
 
@@ -58,7 +66,7 @@ type Options = [
 
 ---
 
-## High‑level design
+## High-level design (for `@oaknational/eslint-plugin-standards`)
 
 1. For the file being linted, derive its **directory path** using `context.filename` (ESLint v9 property).
 2. **Skip** if that directory matches an ignored pattern (relative to the lint run’s `cwd`, available at `context.cwd`).
@@ -144,13 +152,12 @@ const rule: Rule.RuleModule = {
     // Merged with defaults by ESLint v9 when meta.defaultOptions is present
     const [{ pattern = '*', maxFiles = 8, ignoreDirs = [] } = {}] = context.options as Options;
 
-    // Prefer physical path when processors might change virtual filenames
-    const filePath = (context as any).physicalFilename ?? context.filename;
-    if (!filePath) return {};
+    // Use the ESLint-provided filename for the current file
+    const filePath = context.getFilename();
+    if (!filePath || filePath === '<input>') return {};
 
     const dirPath = path.dirname(filePath);
-    const cwd = (context as any).cwd ?? process.cwd();
-    const relDir = toPosix(path.relative(cwd, dirPath)) || '.';
+    const relDir = toPosix(path.relative(process.cwd(), dirPath)) || '.';
 
     // Ignore configured directories (match against repo-relative dir path)
     if (ignoreDirs.some((glob) => minimatch(relDir, glob, { dot: true }))) {
@@ -197,8 +204,8 @@ import maxFilesPerDir from './rules/max-files-per-dir.js';
 
 const plugin = {
   meta: {
-    name: '@acme/eslint-plugin-structure',
-    version: '0.1.0',
+    name: '@oaknational/eslint-plugin-standards',
+    version: '1.0.0',
   },
   rules: {
     'max-files-per-dir': maxFilesPerDir,
@@ -208,11 +215,11 @@ const plugin = {
 export default plugin;
 ```
 
-### `package.json` (ESM, Node ≥ 18, ESLint v9 peer)
+### `package.json` (Reference only; plugin already exists)
 
 ```json
 {
-  "name": "@acme/eslint-plugin-structure",
+  "name": "@oaknational/eslint-plugin-standards",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -250,32 +257,26 @@ export default plugin;
 }
 ```
 
-### Consumer setup (flat config)
+### Consumer setup (flat config, `@oaknational/eslint-plugin-standards`)
 
 ```js
 // eslint.config.js in the consuming project
-import { defineConfig, globalIgnores } from 'eslint/config';
-import js from '@eslint/js';
-import structure from '@acme/eslint-plugin-structure';
+import { defineConfig } from 'eslint/config';
+import standards from '@oaknational/eslint-plugin-standards';
 
 export default defineConfig([
-  // Add any global ignore globs (on top of defaults: **/node_modules/, .git/)
-  globalIgnores(['**/dist/**', '**/coverage/**']),
-
-  js.configs.recommended,
-
+  ...standards.configs.strict,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    plugins: { structure },
     rules: {
       // Use defaults: pattern="*", maxFiles=8, ignoreDirs as in rule
-      'structure/max-files-per-dir': 'error',
+      '@oaknational/standards/max-files-per-dir': 'error',
 
-      // Or customize:
-      // "structure/max-files-per-dir": ["error", {
+      // Or customise:
+      // '@oaknational/standards/max-files-per-dir': ['error', {
       //   maxFiles: 12,
-      //   pattern: "*.ts",
-      //   ignoreDirs: ["**/dist/**", "**/scripts/**"]
+      //   pattern: '*.ts',
+      //   ignoreDirs: ['**/dist/**', '**/scripts/**'],
       // }],
     },
   },
@@ -284,7 +285,7 @@ export default defineConfig([
 
 ---
 
-## Testing the rule
+## Testing the rule (plugin workspace)
 
 Use `@typescript-eslint/rule-tester` (a typed wrapper around ESLint’s `RuleTester`) to write deterministic, framework‑agnostic tests.
 
@@ -300,7 +301,9 @@ import rule from '../src/rules/max-files-per-dir.js';
 // import * as test from "node:test";
 // RuleTester.afterAll = test.after; RuleTester.describe = test.describe; RuleTester.it = test.it;
 
-const rt = new RuleTester();
+const rt = new RuleTester({
+  languageOptions: { ecmaVersion: 2022, sourceType: 'module' },
+});
 
 function withTmpDir(setup: (dir: string) => string[]) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'max-files-'));
@@ -312,7 +315,7 @@ function withTmpDir(setup: (dir: string) => string[]) {
   };
 }
 
-rt.run('max-files-per-dir', rule as any, {
+rt.run('max-files-per-dir', rule, {
   valid: [
     (() => {
       const { dir, cleanup } = withTmpDir((d) => {
@@ -358,7 +361,7 @@ rt.run('max-files-per-dir', rule as any, {
 
 - **Start with a warning** at 8–12 to uncover hotspots (`utils/`, `components/`, `api/`). Stabilize and then **tighten to error** at 8.
 - **Pair with**: `complexity`, `max-depth`, `max-lines`, `max-lines-per-function` to keep both _within‑file_ complexity and _cross‑file_ sprawl in check.
-- **Ignore generated content** (e.g., SDKs, codegen, build outputs) via rule `ignoreDirs` or flat config `globalIgnores([...])`.
+- **Ignore generated content** (e.g., SDKs, codegen, build outputs) via rule `ignoreDirs` or flat config ignores.
 - **Don’t count subfolders:** if a sub‑area grows, create a new **feature folder**—that’s the behavior this rule encourages.
 
 ### Performance notes
@@ -382,7 +385,7 @@ rt.run('max-files-per-dir', rule as any, {
   https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
 - Plugin migration & recommended plugin structure for flat config  
   https://eslint.org/docs/latest/extend/plugin-migration-flat-config
-- Flat config ignores & `globalIgnores()`  
+- Flat config ignores  
   https://eslint.org/docs/latest/use/configure/ignore
 - Rule testing with `@typescript-eslint/rule-tester`  
   https://typescript-eslint.io/packages/rule-tester/

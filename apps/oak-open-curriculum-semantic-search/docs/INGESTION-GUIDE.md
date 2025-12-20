@@ -1,7 +1,18 @@
 # Ingestion Guide
 
 **Purpose**: Complete guide to ingesting curriculum data into Elasticsearch.  
-**Last Updated**: 2025-12-10
+**Last Updated**: 2025-12-20
+
+---
+
+## Adding a New Subject?
+
+If you're onboarding a **new subject/keystage** (not just re-ingesting), see [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md) for the complete workflow including:
+
+- Quality baseline establishment
+- Vocabulary gap analysis
+- Synonym addition (TDD)
+- Experiment logging
 
 ---
 
@@ -298,6 +309,7 @@ Run smoke tests after re-indexing to record the two-way hybrid baseline.
 
 ## Related Documentation
 
+- [`NEW-SUBJECT-GUIDE.md`](./NEW-SUBJECT-GUIDE.md) - **Complete workflow for new subjects** (synonyms, quality, logging)
 - [`INDEXING.md`](./INDEXING.md) - Technical indexing playbook
 - [`SYNONYMS.md`](./SYNONYMS.md) - Synonym system documentation
 - [`ES_SERVERLESS_SETUP.md`](./ES_SERVERLESS_SETUP.md) - ES Serverless setup guide

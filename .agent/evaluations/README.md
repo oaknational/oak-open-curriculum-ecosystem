@@ -11,14 +11,31 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 ```text
 .agent/evaluations/
 ├── README.md                    ← You are here
-├── experiments/                 ← Individual experiment documents
+├── EXPERIMENT-LOG.md            ← Chronological experiment history
+├── experiments/                 ← A/B experiments
+│   ├── index.md                 ← Experiment listing with themes
+│   ├── EXPERIMENT-PRIORITIES.md ← Strategic roadmap
 │   ├── template-for-experiments.md
 │   ├── template-for-search-experiments.md
-│   ├── E-001-*.experiment.md    ← A/B experiments
-│   └── B-001-*.experiment.md    ← Baseline documentation
+│   └── *.experiment.md          ← Individual experiments
+├── baselines/                   ← Baseline measurements
+│   ├── index.md                 ← Baseline listing
+│   └── *.md                     ← Individual baselines
 └── guidance/                    ← Practical how-to guides
     └── search-experiment-guidance.md
 ```
+
+---
+
+## Quick Links
+
+| Section | Purpose |
+|---------|---------|
+| **[EXPERIMENT-LOG.md](./EXPERIMENT-LOG.md)** | Chronological history — what happened and why |
+| [Experiments](./experiments/index.md) | A/B experiments comparing approaches |
+| [Baselines](./baselines/index.md) | Baseline measurements of current state |
+| [Priorities](./experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap and tier system |
+| [Current State](../plans/semantic-search/current-state.md) | Current metrics snapshot |
 
 ---
 
@@ -26,25 +43,23 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ### Experiments (`experiments/`)
 
-| Prefix | Purpose | Example |
-|--------|---------|---------|
-| `E-XXX` | **A/B Experiment** — Compare control vs variant | `E-001-semantic-reranking.experiment.md` |
-| `B-XXX` | **Baseline Documentation** — Record current state | `B-001-hard-query-baseline.experiment.md` |
+**Format**: `{kebab-case-description}.experiment.md`
 
-**Format**: `{prefix}-{sequential-number}-{kebab-case-description}.experiment.md`
+**Examples**:
+- `semantic-reranking.experiment.md`
+- `comprehensive-synonym-coverage.experiment.md`
+- `linear-retriever.experiment.md`
 
-**Sequential numbering**:
+### Baselines (`baselines/`)
 
-- Numbers are global across all experiment types
-- Use 3 digits with leading zeros (001, 002, etc.)
-- Never reuse numbers, even for abandoned experiments
+**Format**: `{kebab-case-description}.md`
+
+**Examples**:
+- `hard-query-baseline.md`
 
 ### Guidance (`guidance/`)
 
-| Pattern | Purpose | Example |
-|---------|---------|---------|
-| `{domain}-guidance.md` | How-to guide for a domain | `search-experiment-guidance.md` |
-| `{domain}-evaluation.md` | Completed evaluation/audit | `mcp-agent-guidance-evaluation.md` |
+**Format**: `{domain}-guidance.md` or `{domain}-evaluation.md`
 
 ---
 
@@ -52,18 +67,16 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ```text
 1. DESIGN        Create experiment doc with hypothesis & success criteria
-                 Status: 🔬 In Progress
+                 Status: 📋 Planned
 
 2. EXECUTE       Run experiments (Playground → Smoke Tests)
-                 Document results as you go
+                 Status: 🔬 In Progress
 
 3. ANALYSE       Interpret results, compare to hypothesis
                  Fill in Discussion section
 
 4. DECIDE        Accept / Reject / Inconclusive
-                 Status: ✅ Complete or ❌ Abandoned
-
-5. FOLLOW-UP     Create implementation tasks or next experiment
+                 Status: ✅ Complete or ❌ Rejected or ⏸️ Deferred
 ```
 
 ---
@@ -72,10 +85,9 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 | Situation | Create |
 |-----------|--------|
-| Testing a specific change (control vs variant) | `E-XXX-*.experiment.md` |
-| Documenting current system behaviour | `B-XXX-*.experiment.md` |
+| Testing a specific change (control vs variant) | `*.experiment.md` in `experiments/` |
+| Documenting current system behaviour | `*.md` in `baselines/` |
 | How-to guide for running experiments | `*-guidance.md` in `guidance/` |
-| Completed audit/review | `*-evaluation.md` in `guidance/` |
 
 ---
 
@@ -83,8 +95,8 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 | Template | Use For |
 |----------|---------|
-| [`template-for-experiments.md`](experiments/template-for-experiments.md) | Generic experiments (performance, UX, etc.) |
-| [`template-for-search-experiments.md`](experiments/template-for-search-experiments.md) | Search relevance experiments (MRR, NDCG, etc.) |
+| [`template-for-experiments.md`](experiments/template-for-experiments.md) | Generic experiments |
+| [`template-for-search-experiments.md`](experiments/template-for-search-experiments.md) | Search relevance experiments |
 
 Copy the appropriate template and rename following the conventions above.
 
@@ -93,5 +105,5 @@ Copy the appropriate template and rename following the conventions above.
 ## Related Documents
 
 - **ADR-081**: [Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Decision criteria, metrics definitions
-- **Research**: [Search Query Optimization](../research/search-query-optimization-research.md) — Techniques and experiment plan
+- **ADR-082**: [Fundamentals-First Search Strategy](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) — Tier system, strategic approach
 - **Guidance**: [Search Experiment Guidance](guidance/search-experiment-guidance.md) — Practical how-to

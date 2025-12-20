@@ -1,6 +1,6 @@
 # Baseline: Hard Query Current State
 
-**ID**: B-001  
+**Type**: Baseline  
 **Date**: 2025-12-19  
 **Status**: ✅ Complete  
 **Type**: Baseline Documentation (no variant)  

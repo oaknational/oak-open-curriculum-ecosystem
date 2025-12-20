@@ -23,7 +23,7 @@ This plan prioritises:
 
 ## Related Plans
 
-- **Parent**: [Global State Elimination Plan](../quality-and-maintainability/global-state-elimination-plan.md) - This plan unblocks Phase 3 and subsequent phases
+- **Parent**: [Global State Elimination and Testing Discipline Plan](../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md) - This plan unblocks Phase 3 and subsequent phases
 - **ADR**: [ADR-078: Dependency Injection for Testability](../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
 
 ---
@@ -111,8 +111,8 @@ Each app implements its own:
 Some apps use DI-compatible signatures:
 
 ```typescript
-// Good - accepts source parameter
-function readEnv(source: NodeJS.ProcessEnv = process.env): Env;
+// Good - accepts explicit source parameter
+function readEnv(source: NodeJS.ProcessEnv): Env;
 ```
 
 Others don't:
@@ -156,7 +156,10 @@ const AppEnvSchema = BaseEnvSchema.extend({
   APP_SPECIFIC_VAR: z.string(),
 });
 
-export type Env = z.infer<typeof AppEnvSchema>;
+export interface Env {
+  APP_SPECIFIC_VAR: string;
+}
+
 export const readEnv = createEnvReader(AppEnvSchema);
 ```
 
@@ -339,7 +342,11 @@ export const BaseEnvSchema = z.object({
   ENABLE_DEBUG_LOGGING: z.enum(['true', 'false']).optional(),
 });
 
-export type BaseEnv = z.infer<typeof BaseEnvSchema>;
+export interface BaseEnv {
+  NODE_ENV?: 'development' | 'production' | 'test';
+  LOG_LEVEL?: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+  ENABLE_DEBUG_LOGGING?: 'true' | 'false';
+}
 ```
 
 **Acceptance Criteria**:
@@ -360,15 +367,15 @@ import type { z } from 'zod';
  * Creates a DI-compatible environment reader function.
  *
  * The returned function validates environment variables against the schema
- * and accepts an optional source parameter for testing.
+ * and accepts an explicit source parameter for DI and testing.
  *
  * @example
  * ```typescript
  * const AppEnvSchema = BaseEnvSchema.extend({ API_KEY: z.string() });
  * const readEnv = createEnvReader(AppEnvSchema);
  *
- * // Production: reads from process.env
- * const env = readEnv();
+ * // Production: entry point passes process.env once
+ * const env = readEnv(process.env);
  *
  * // Testing: reads from explicit source
  * const env = readEnv({ API_KEY: 'test-key' });
@@ -376,8 +383,8 @@ import type { z } from 'zod';
  */
 export function createEnvReader<T extends z.ZodType>(
   schema: T,
-): (source?: NodeJS.ProcessEnv) => z.infer<T> {
-  return (source: NodeJS.ProcessEnv = process.env): z.infer<T> => {
+): (source: NodeJS.ProcessEnv) => z.infer<T> {
+  return (source: NodeJS.ProcessEnv): z.infer<T> => {
     const result = schema.safeParse(source);
     if (!result.success) {
       const messages = result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`);
@@ -494,7 +501,11 @@ const NotionEnvSchema = BaseEnvSchema.extend({
   MAX_SEARCH_RESULTS: z.coerce.number().min(1).max(1000).default(100),
 });
 
-export type Env = z.infer<typeof NotionEnvSchema>;
+export interface Env {
+  NOTION_API_KEY: string;
+  MAX_SEARCH_RESULTS: number;
+}
+
 export const readEnv = createEnvReader(NotionEnvSchema);
 ```
 

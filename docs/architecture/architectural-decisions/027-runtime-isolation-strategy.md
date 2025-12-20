@@ -1,137 +1,63 @@
 # ADR-027: Runtime Isolation Strategy
 
-**Status**: Accepted  
+**Status**: Updated  
 **Date**: 2025-01-10  
-**Decision**: Progressive runtime isolation with environment detection
+**Decision**: Node.js-only SDK support with explicit environment injection
 
 ## Context
 
-The MCP ecosystem needs to run in multiple runtime environments:
-
-- Node.js (development and traditional servers)
-- Cloudflare Workers (edge computing)
-- Deno (future)
-- Browser (future)
-
-Each environment has different globals and APIs:
-
-- Node.js: `process.env`, `fs`, `path`, `crypto`
-- Cloudflare Workers: `globalThis.env`, no filesystem, Web APIs
-- Deno: Similar to browser with additional permissions
-- Browser: Web APIs only, no filesystem or environment
+The SDK now targets Node.js only. Multi-runtime support is deferred, so environment handling must be explicit and injected rather than inferred from global objects.
 
 ## Decision
 
-Implement progressive runtime isolation in three phases:
-
-### Phase 1: SDK Isolation (✅ COMPLETED)
-
-Isolate environment variables with try-catch detection:
+Adopt explicit configuration injection for Node.js:
 
 ```typescript
-try {
-  // Node.js environment
-  apiUrl = process.env.OAK_API_URL;
-} catch {
-  try {
-    // Cloudflare Workers environment
-    apiUrl = globalThis.env.OAK_API_URL;
-  } catch {
-    // Use defaults
-  }
+export interface SdkConfig {
+  apiUrl: string;
+  apiSchemaUrl: string;
+}
+
+export function readSdkConfig(env: NodeJS.ProcessEnv): SdkConfig {
+  // validate and return config derived from env
 }
 ```
-
-### Phase 2: Histoi Tissue Isolation (Phase 7)
-
-Create runtime abstraction layer with adapters:
-
-```typescript
-interface RuntimeAdapter {
-  getEnv(key: string): string | undefined;
-  readFile?(path: string): Promise<string>;
-  writeFile?(path: string, content: string): Promise<void>;
-}
-```
-
-### Phase 3: Full Ecosystem Support (Phase 7)
-
-- Dynamic import of runtime-specific code
-- Build targets for each environment
-- Conditional compilation where needed
 
 ## Rationale
 
-### Why Progressive?
+### Why Node.js Only?
 
-- Allows immediate progress on SDK
-- Validates approach before full commitment
-- Reduces risk of over-engineering
-- Enables incremental migration
-
-### Why Try-Catch Detection?
-
-- Simple and effective for environment detection
-- No additional dependencies
-- Works in all environments
-- Graceful fallback behaviour
-
-### Why Adapter Pattern for Histoi?
-
-- Clear separation of concerns
-- Testable with mock adapters
-- Extensible to new runtimes
-- Type-safe interfaces
+- Matches current product scope and deployment targets
+- Reduces ambiguity in config handling
+- Keeps SDK predictable and easier to test
 
 ## Consequences
 
 ### Positive
 
-- SDK works in edge environments today
-- Clear migration path for other packages
-- No breaking changes required
-- Maintains type safety
+- Clear Node.js contract
+- Configuration is explicit and testable
+- Less runtime branching
 
 ### Negative
 
-- Try-catch has minor performance overhead
-- Some code duplication across adapters
-- Build complexity increases
-- Testing burden for multiple environments
-
-### Neutral
-
-- Runtime detection happens at startup
-- Adapter selection is explicit
-- Some features may not be available in all environments
+- No edge/browser support for SDK until revisited
 
 ## Alternatives Considered
 
 1. **Full abstraction from start**: Rejected - over-engineering for current needs
-2. **Node.js only**: Rejected - limits deployment options
+2. **Multi-runtime detection**: Rejected for now - not aligned with current SDK scope
 3. **Build-time polyfills**: Rejected - increases bundle size
-4. **Separate packages per runtime**: Rejected - maintenance nightmare
+4. **Separate packages per runtime**: Rejected - maintenance overhead
 
 ## Implementation Plan
 
 ### Current (SDK Only)
 
-- ✅ Environment variable detection
-- ✅ Fallback to defaults
-- ✅ No hard Node.js dependencies
-
-### Phase 7 (Full Ecosystem)
-
-- [ ] Define RuntimeAdapter interface
-- [ ] Implement Node.js adapter
-- [ ] Implement Cloudflare adapter
-- [ ] Update Histoi tissues
-- [ ] Update MCP servers
-- [ ] Add build targets
+- [ ] Provide `readSdkConfig(env)` with validation
+- [ ] Ensure entry points pass `process.env` once
+- [ ] Remove runtime detection logic from SDK config
 
 ## References
 
-- Phase 7 Plan: `.agent/plans/high-level-plan.md#phase-7-full-ecosystem-runtime-isolation`
-- SDK Implementation: `packages/oak-curriculum-sdk/src/config/index.ts`
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Deno Deploy Documentation](https://deno.com/deploy)
+- SDK Implementation: `packages/sdks/oak-curriculum-sdk/src/config/index.ts`

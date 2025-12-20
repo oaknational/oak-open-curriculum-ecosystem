@@ -1,6 +1,6 @@
 # Experiment: Linear Retriever Fusion
 
-**ID**: E-003  
+**Tier**: Modern ES Features (Tier 3)  
 **Date**: 2025-12-19  
 **Status**: 📋 Planned  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)

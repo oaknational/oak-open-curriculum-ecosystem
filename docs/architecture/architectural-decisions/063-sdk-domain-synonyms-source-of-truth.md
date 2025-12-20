@@ -137,10 +137,110 @@ This decision is successful when:
 3. **Type safety**: All synonym exports are fully typed
 4. **All consumers aligned**: MCP, Search App, and ES use identical synonyms
 
+## Synonym Mining Process
+
+This section documents the methodology for identifying and adding new synonyms, demonstrated with Maths KS4 (see [F-001 experiment](../../.agent/evaluations/experiments/comprehensive-synonym-coverage.experiment.md)).
+
+### Step 1: Identify Vocabulary Gaps
+
+Run hard query baseline tests and analyse failures by category:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
+```
+
+Look for queries where the expected result is not in the top 10, particularly:
+
+- **Synonym failures**: Teacher language ("solving for x") vs curriculum terminology ("linear equations")
+- **Colloquial failures**: Informal phrases ("sohcahtoa", "that thing with triangles")
+- **Abbreviation failures**: Common acronyms not expanded
+
+### Step 2: Mine Vocabulary from Bulk Download
+
+Extract curriculum terminology from the bulk download data:
+
+```bash
+# Extract unique terms from lesson and unit data
+jq '[.[] | .lessonTitle, .unitTitle, (.lessonKeywords // [])[] | .keyword] | unique' \
+  maths-ks4.json > vocabulary.txt
+
+# Look for patterns
+grep -i "equation" vocabulary.txt
+grep -i "trigonometry" vocabulary.txt
+```
+
+Cross-reference teacher query language (from failure analysis) with official curriculum terms.
+
+### Step 3: Add Synonyms Using TDD
+
+**RED**: Write failing smoke test first:
+
+```typescript
+// smoke-tests/synonym-coverage.smoke.test.ts
+describe('Synonym Coverage', () => {
+  it('finds linear equations for "solving for x"', async () => {
+    const results = await searchLessons('solving for x');
+    expect(results.slice(0, 3).map((r) => r.lesson_slug)).toContain(
+      'solving-simple-linear-equations',
+    );
+  });
+});
+```
+
+Run test — it MUST fail before synonyms exist.
+
+**GREEN**: Add synonyms to SDK:
+
+```typescript
+// packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/maths.ts
+export const mathsSynonyms = {
+  // ...existing synonyms
+  'linear-equations': ['solving for x', 'find the unknown', 'solve for the variable'],
+} as const;
+```
+
+Deploy and verify:
+
+```bash
+pnpm type-gen && pnpm build
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup   # Deploys new synonyms to ES
+pnpm vitest run -c vitest.smoke.config.ts synonym-coverage
+```
+
+Run test — it MUST pass.
+
+### Step 4: Measure and Document
+
+Re-run the hard query baseline and document improvement:
+
+```bash
+pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
+```
+
+Record before/after MRR in [EXPERIMENT-LOG.md](../../.agent/evaluations/EXPERIMENT-LOG.md).
+
+### Subject Rollout Priority
+
+| Subject   | Priority          | Rationale                                     |
+| --------- | ----------------- | --------------------------------------------- |
+| Maths     | ✅ Complete (KS4) | Highest complexity, validated approach        |
+| Science   | High              | Rich vocabulary (biology, chemistry, physics) |
+| English   | Medium            | Literature terminology, grammar terms         |
+| History   | Medium            | Historical periods, events, figures           |
+| Geography | Medium            | Physical/human geography terminology          |
+| Others    | Low               | Apply pattern as needed                       |
+
+### For Full Process Documentation
+
+See [NEW-SUBJECT-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/docs/NEW-SUBJECT-GUIDE.md) for the complete subject onboarding runbook.
+
 ## Related Documents
 
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 - [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
+- [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
 - Semantic search plans: `.agent/plans/semantic-search/`
 
 ## References

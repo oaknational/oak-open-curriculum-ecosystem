@@ -26,7 +26,7 @@ The Oak MCP ecosystem currently mixes multiple error handling styles: direct exc
 
 ### Package Location
 
-`packages/libs/result/`
+`packages/core/result/`
 
 ### Core Exports
 
@@ -46,7 +46,7 @@ The Oak MCP ecosystem currently mixes multiple error handling styles: direct exc
    - `AuthError` - Authentication/authorization failures
    - `ConfigError` - Configuration/environment issues
    - `InvariantError` - Programming errors/assertions
-   - `OakErrorKind = 'validation' | 'authorisation' | 'transport' | 'configuration' | 'unexpected' | ...`
+   - `OakErrorKind` values: `'validation' | 'authorisation' | 'transport' | 'configuration' | 'unexpected' | ...`
 
 4. **Helper Constructors**
    - `ok(value)` - Create success result
@@ -110,10 +110,10 @@ function processLessonData(input: unknown): Result<LessonData, OakError> {
 
 Provide adapter modules for common throwing libraries:
 
-- `packages/libs/result/adapters/jose.ts` - JWT verification wrappers
-- `packages/libs/result/adapters/fs.ts` - File system operation wrappers
-- `packages/libs/result/adapters/fetch.ts` - HTTP request wrappers
-- `packages/libs/result/adapters/notion.ts` - Notion SDK wrappers
+- `packages/core/result/adapters/jose.ts` - JWT verification wrappers
+- `packages/core/result/adapters/fs.ts` - File system operation wrappers
+- `packages/core/result/adapters/fetch.ts` - HTTP request wrappers
+- `packages/core/result/adapters/notion.ts` - Notion SDK wrappers
 
 ## Current State Analysis
 

@@ -2,7 +2,7 @@
 
 ## 1. Unused Custom Rules
 
-- **Issue**: The custom rule `no-export-trivial-type-aliases` is implemented and exported in `eslint-rules` but **never registered or enabled** in any configuration.
+- **Issue**: The custom rule `no-export-trivial-type-aliases` is implemented in `packages/core/oak-eslint` but must be registered and enabled via the shared plugin configs.
 - **Risk**: False sense of security; code quality checks that are believed to be active are not running.
 
 ## 2. Configuration Redundancy

@@ -173,17 +173,34 @@ const configs = [
 └─────────────┘     │  (iterate)  │     └──────┬──────┘
                     └─────────────┘            │
                                                ▼
-                    ┌─────────────┐     ┌─────────────┐
-                    │  Document   │◄────│ Smoke Tests │
-                    │  (ADR/exp)  │     │ (validate)  │
-                    └─────────────┘     └─────────────┘
+                    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+                    │   Codify    │◄────│  Document   │◄────│ Smoke Tests │
+                    │  Learnings  │     │  (exp file) │     │ (validate)  │
+                    └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 1. **Form hypothesis** — What do you expect to happen?
 2. **Iterate in Playground** — Fast feedback, try variations
 3. **Identify winner** — Which config looks best?
 4. **Validate with smoke tests** — Reproducible, automated
-5. **Document** — Create experiment doc, update ADR if needed
+5. **Document** — Create experiment file with full analysis
+6. **Codify learnings** — Extract lasting value (see below)
+
+### Step 6: Codify Learnings
+
+This is where we extract lasting value from experiments:
+
+| If the experiment... | Then update... |
+|---------------------|----------------|
+| Led to an architectural decision | Create or update an **ADR** |
+| Revealed best practices | Update **INGESTION-GUIDE.md**, **SYNONYMS.md**, etc. |
+| Changed the process | Update **NEW-SUBJECT-GUIDE.md** |
+| Changed metrics | Update **current-state.md** |
+
+**Key principle**: 
+- **What we DO** → Goes in operational guides (NEW-SUBJECT-GUIDE.md, INGESTION-GUIDE.md)
+- **What we DON'T DO** → Stays in experiment log (EXPERIMENT-LOG.md, experiment files)
+- **Why we decided** → Full reasoning in experiment file
 
 ---
 

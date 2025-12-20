@@ -1,8 +1,19 @@
 # Semantic Search - Navigation Hub
 
-**Status**: Part 1 In Progress (Stream A Complete, Streams B-D Ready)  
+**Status**: Part 1 In Progress — Tier 1 Fundamentals  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Last Updated**: 2025-12-19
+**Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
+**Last Updated**: 2025-12-20
+
+---
+
+## Quick Navigation
+
+| Document | Purpose |
+|----------|---------|
+| **[current-state.md](current-state.md)** | Current metrics, index status, known issues |
+| **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** | Chronological experiment history |
+| **[Part 1: Search Excellence](part-1-search-excellence.md)** | Active plan with tier-based streams |
 
 ---
 
@@ -14,13 +25,39 @@ For new sessions, read in this order:
    - [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates, no type shortcuts
    - [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — All types from schema
    - [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test types and TDD approach
+   - [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) — **Fundamentals-first strategy**
 
 2. **Source of Truth** (for all types and available data)
    - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` — **The OpenAPI schema**
 
-3. **Current Work**
-   - [Part 1: Search Excellence](part-1-search-excellence.md) — Active plan with four streams
-   - [Requirements](requirements.md) — Strategic context, success criteria
+3. **Current State & History**
+   - [current-state.md](current-state.md) — Current metrics and known issues
+   - [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) — Experiment history
+
+4. **Current Work**
+   - [Part 1: Search Excellence](part-1-search-excellence.md) — Active plan with tier-based streams
+   - [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) — Strategic roadmap
+
+---
+
+## Strategic Direction
+
+> "We should be able to do an excellent job with traditional methods, and an amazing job with non-AI recent search methods, and a phenomenal job once we take that already optimised approach and add AI into the mix."
+
+**Semantic Reranking was REJECTED** with a -16.8% regression. This led to a strategic pivot:
+
+```text
+                           ┌─────────────────┐
+                           │   PHENOMENAL    │  ← Tier 4: AI Enhancement (DEFERRED)
+                       ┌───┴─────────────────┴───┐
+                       │       EXCELLENT         │  ← Tier 3: Modern ES Features
+                   ┌───┴─────────────────────────┴───┐
+                   │           VERY GOOD             │  ← Tier 2: Document Relationships
+               ┌───┴─────────────────────────────────┴───┐
+               │              GOOD                       │  ← Tier 1: Search Fundamentals
+               │              ← WE ARE HERE              │
+               └─────────────────────────────────────────┘
+```
 
 ---
 
@@ -28,14 +65,21 @@ For new sessions, read in this order:
 
 ```text
 ═══════════════════════════════════════════════════════════════════
-Part 1: Search Excellence                           [🔄 In Progress]
+Part 1: Search Excellence (Fundamentals-First)      [🔄 In Progress]
 ═══════════════════════════════════════════════════════════════════
 Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
 
   Stream A: Foundation                              ✅ Complete
-  Stream B: Relevance Optimisation                  📋 Ready
-  Stream C: Query Intelligence                      📋 Blocked on B.2
-  Stream D: Infrastructure                          📋 Ready
+  Stream B: Tier 1 — Search Fundamentals            🔄 START HERE
+    B.1 Baseline                                    ✅ Complete
+    B.2 Semantic reranking                          ❌ Rejected
+    B.3 Comprehensive synonyms                      ✅ Complete
+    B.4 Noise filtering                             📋 ← NEXT
+    B.5 Phrase matching                             📋
+  Stream C: Tier 2 — Document Relationships         📋 After Tier 1
+  Stream D: Tier 3 — Modern ES Features             📋 After Tier 2
+  Stream E: AI Enhancement                          ⏸️ DEFERRED
+  Stream F: Infrastructure                          📋 Ready
 
 ═══════════════════════════════════════════════════════════════════
 Part 2: MCP Natural Language Tools                  [📋 Planned]
@@ -65,12 +109,16 @@ Part 3: Future Enhancements                         [📋 Future]
 
 ### Current State
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR | 0.367 | ≥0.50 | ❌ Gap: 36% |
-| Zero-hit Rate | 0% | 0% | ✅ Met |
-| p95 Latency | ~450ms | ≤1500ms | ✅ Within budget |
+For current metrics, index status, and known issues, see **[current-state.md](current-state.md)**.
+
+### Tier Advancement Criteria
+
+| Tier | MRR Target | Exit Criteria |
+|------|------------|---------------|
+| **Tier 1** | ≥0.45 | Synonyms, noise, phrases complete |
+| **Tier 2** | ≥0.55 | Cross-reference demonstrably helps |
+| **Tier 3** | ≥0.60 | Parameters evidence-based |
+| **Tier 4** | ≥0.75 | Only if Tiers 1-3 plateau |
 
 ### What's Actually Proven
 
@@ -80,7 +128,7 @@ Part 3: Future Enhancements                         [📋 Future]
 | Unit tests pass | `pnpm test` passes | ✅ Proven |
 | All quality gates pass | `pnpm check` exits 0 | ✅ Proven |
 | Four-retriever improves search | Ablation study | ✅ Proven |
-| KS4 filtering reduces results | Not tested live | ❌ Not proven |
+| Semantic reranking improves search | Experiment rejected | ❌ Disproven |
 
 ---
 
@@ -102,6 +150,17 @@ Query → [BM25 Content] ─┐
 | BM25 on Structure | Curated summary | Lexical matching on metadata |
 | ELSER on Structure | Curated summary | Semantic matching on metadata |
 
+### Data Assets We Have (But Don't Fully Exploit)
+
+| Asset | Currently Used? | Tier to Address |
+|-------|-----------------|-----------------|
+| Lesson transcripts | ✅ Yes | — |
+| Curated summaries | ✅ Yes | — |
+| Keywords | ✅ Yes (boosted) | — |
+| **Lesson→Unit relationship** | ❌ Not used | **Tier 2** |
+| **Unit→Thread relationship** | ❌ Not used | **Tier 2** |
+| **Thread progression** | ❌ Not used | **Tier 2** |
+
 ### Field Nomenclature
 
 Pattern: `<entity>_content|structure[_semantic]`
@@ -115,26 +174,31 @@ Pattern: `<entity>_content|structure[_semantic]`
 
 ---
 
-## Elasticsearch Documentation
-
-| Topic | URL |
-|-------|-----|
-| Hybrid Search (RRF) | <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html> |
-| Linear Retriever | <https://www.elastic.co/search-labs/blog/linear-retriever-hybrid-search> |
-| Semantic Reranking | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html> |
-| ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html> |
-| Inference API | <https://www.elastic.co/guide/en/elasticsearch/reference/current/inference-apis.html> |
-
----
-
 ## Key ADRs
 
 | ADR | Title | Purpose |
 |-----|-------|---------|
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Fundamentals-First Strategy** | Tier prioritisation |
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Evaluation Framework | Metrics, decision criteria |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK Domain Synonyms | Synonym management |
 | [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation | Tier/examBoard filtering |
 | [ADR-075](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md) | Dense Vector Removal | Why E5 was removed |
 | [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Strategy | Sparse vectors sufficient |
+
+---
+
+## Elasticsearch Documentation
+
+| Topic | URL |
+|-------|-----|
+| Search Relevance | <https://www.elastic.co/docs/solutions/search/full-text/search-relevance> |
+| Synonyms | <https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-synonym-tokenfilter.html> |
+| Terms Lookup | <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-terms-query.html#query-dsl-terms-lookup> |
+| More Like This | <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html> |
+| Hybrid Search (RRF) | <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html> |
+| Linear Retriever | <https://www.elastic.co/search-labs/blog/linear-retriever-hybrid-search> |
+| ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html> |
+| Inference API | <https://www.elastic.co/guide/en/elasticsearch/reference/current/inference-apis.html> |
 
 ---
 
@@ -178,7 +242,7 @@ apps/oak-open-curriculum-semantic-search/
 ```text
 packages/sdks/oak-curriculum-sdk/
 ├── type-gen/typegen/search/field-definitions/  # Index schemas
-├── src/mcp/synonyms/                           # Synonyms
+├── src/mcp/synonyms/                           # Synonyms (ADR-063)
 └── src/types/generated/api-schema/             # OpenAPI types
 ```
 
@@ -186,33 +250,46 @@ packages/sdks/oak-curriculum-sdk/
 
 ## Document Index
 
+### Current State & History
+
+| Document | Purpose |
+|----------|---------|
+| [current-state.md](current-state.md) | **Current metrics**, index status, known issues |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | **Chronological history** — what happened and why |
+
 ### Active Plans
 
 | Document | Purpose |
 |----------|---------|
-| [Part 1: Search Excellence](part-1-search-excellence.md) | Current work — four streams |
-| [Requirements](requirements.md) | Strategic context, success criteria |
+| [Part 1: Search Excellence](part-1-search-excellence.md) | Current work — tier-based streams |
+| [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap — what to try next |
+
+### Experiments
+
+| Document | Status | Notes |
+|----------|--------|-------|
+| [hard-query-baseline](../../evaluations/baselines/hard-query-baseline.md) | ✅ Complete | Baseline data |
+| [semantic-reranking](../../evaluations/experiments/semantic-reranking.experiment.md) | ❌ Rejected | -16.8% regression |
+| [comprehensive-synonym-coverage](../../evaluations/experiments/comprehensive-synonym-coverage.experiment.md) | ✅ Complete | +3.5% MRR |
+| [query-expansion](../../evaluations/experiments/query-expansion.experiment.md) | ⏸️ Deferred | Tier 4 |
+| [linear-retriever](../../evaluations/experiments/linear-retriever.experiment.md) | 📋 Planned | Tier 3 |
+| [phonetic-enhancement](../../evaluations/experiments/phonetic-enhancement.experiment.md) | 📋 Low priority | Misspelling already 0.833 |
 
 ### Reference Plans
 
 | Document | Purpose |
 |----------|---------|
 | [phase-3-multi-index-and-fields.md](phase-3-multi-index-and-fields.md) | Stream A completed work |
-| [phase-4-search-sdk-and-cli.md](phase-4-search-sdk-and-cli.md) | Stream D detailed checkpoints |
+| [phase-4-search-sdk-and-cli.md](phase-4-search-sdk-and-cli.md) | Stream F detailed checkpoints |
 | [phase-9-entity-extraction.md](phase-9-entity-extraction.md) | Part 3 reference |
 | [phase-10-reference-indices.md](phase-10-reference-indices.md) | Part 3 reference |
 | [phase-11-plus-future.md](phase-11-plus-future.md) | Part 3 reference |
 
-### Research & Evaluation
+### Research
 
 | Document | Purpose |
 |----------|---------|
-| [search-query-optimization-research.md](../../research/search-query-optimization-research.md) | Stream B/C technical approaches |
-| [B-001 Baseline](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | Hard query baseline |
-| [E-001 Reranking](../../evaluations/experiments/E-001-semantic-reranking.experiment.md) | Semantic reranking experiment |
-| [E-002 Query Expansion](../../evaluations/experiments/E-002-query-expansion.experiment.md) | LLM query expansion |
-| [E-003 Linear Retriever](../../evaluations/experiments/E-003-linear-retriever.experiment.md) | Weighted fusion experiment |
-| [E-004 Phonetic](../../evaluations/experiments/E-004-phonetic-enhancement.experiment.md) | Phonetic matching for misspellings |
+| [search-query-optimization-research.md](../../research/search-query-optimization-research.md) | Technical approaches |
 
 ### Archive
 
@@ -226,6 +303,13 @@ packages/sdks/oak-curriculum-sdk/
 ---
 
 ## Development Rules
+
+### Fundamentals First (ADR-082)
+
+1. **Tier 1**: Synonyms, phrase matching, noise filtering
+2. **Tier 2**: Document relationships (Unit→Lesson, threads)
+3. **Tier 3**: RRF tuning, Linear Retriever, field boosting
+4. **Tier 4**: AI (only when Tiers 1-3 plateau)
 
 ### TDD at All Levels
 
@@ -251,6 +335,10 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 | Date | Change |
 |------|--------|
+| 2025-12-20 | Metrics section now links to current-state.md (single source of truth) |
+| 2025-12-20 | Removed experiment IDs (E-xxx, F-xxx, B-xxx); use descriptive names only |
+| 2025-12-20 | Added current-state.md, EXPERIMENT-LOG.md; deleted requirements.md, snagging.md |
+| 2025-12-19 | Semantic reranking rejected; ADR-082 created; tier-based strategy adopted |
 | 2025-12-19 | Restructured from Phase to Part → Stream → Task hierarchy |
 | 2025-12-17 | Phase 3 code complete |
 | 2025-12-15 | Dense vector code removed (ADR-075) |

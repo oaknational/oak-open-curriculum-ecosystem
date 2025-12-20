@@ -3,31 +3,62 @@
 **Status**: 🔄 In Progress  
 **Priority**: High  
 **Done When**: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption  
-**Created**: 2025-12-19
+**Created**: 2025-12-19  
+**Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
 
-## Foundation Documents
+## Before You Start: Foundation Documents (MANDATORY)
 
-Before starting any work, read and commit to:
+Read and commit to these before ANY work:
 
-1. [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates, no type shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test types and TDD approach
-3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator-first architecture
+1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, no type shortcuts
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types and TDD at ALL levels
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first architecture
+4. **[ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)** — Fundamentals-first strategy
+
+### The First Question
+
+Before every change, ask: **"Could it be simpler without compromising quality?"**
+
+### Cardinal Rule
+
+If the upstream schema or SDK changes, running `pnpm type-gen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment. This applies to **synonyms** (ADR-063) — they live in the SDK and flow through type-gen.
 
 ---
 
 ## Success Criteria
 
-From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md):
+From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md).
 
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR (Lessons) | 0.367 | ≥0.50 | ❌ Gap: 36% |
-| Hard Query MRR (Units) | 0.811 | ≥0.50 | ✅ Met |
-| Zero-hit Rate | 0% | 0% | ✅ Met |
-| p95 Latency | ~450ms | ≤1500ms | ✅ Within budget |
+For current metrics, see **[current-state.md](current-state.md)**.
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Standard Query MRR | ≥0.92 | ✅ Met |
+| Hard Query MRR (Lessons) | ≥0.50 | ❌ Gap |
+| Hard Query MRR (Units) | ≥0.50 | ✅ Met |
+| Zero-hit Rate | 0% | ✅ Met |
+| p95 Latency | ≤1500ms | ✅ Met |
+
+For experiment history, see **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)**.
+
+---
+
+## Strategic Direction (Updated 2025-12-19)
+
+**B.2 (Semantic Reranking) was REJECTED** with a -16.8% regression on lesson MRR. This led to a strategic pivot documented in [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md):
+
+> "We should be able to do an excellent job with traditional methods, and an amazing job with non-AI recent search methods, and a phenomenal job once we take that already optimised approach and add AI into the mix."
+
+**Key Insight**: AI on weak fundamentals = amplified weakness. AI on strong fundamentals = excellence.
+
+**New Priority Order**:
+
+1. **Tier 1: Search Fundamentals** — Synonyms, phrase matching, noise filtering
+2. **Tier 2: Document Relationships** — Cross-referencing units↔lessons, thread context
+3. **Tier 3: Modern ES Features** — RRF tuning, Linear Retriever
+4. **Tier 4: AI Enhancement** — Only when Tiers 1-3 plateau
 
 ---
 
@@ -35,7 +66,7 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 
 ```text
 ═══════════════════════════════════════════════════════════════════
-Part 1: Search Excellence
+Part 1: Search Excellence (Fundamentals-First Strategy)
 ═══════════════════════════════════════════════════════════════════
 Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
 
@@ -46,32 +77,47 @@ Stream A: Foundation                                [✅ Complete]
   A.3  Content-type-aware BM25                             ✅
   A.4  Ground truth queries defined                        ✅
 
-Stream B: Relevance Optimisation                    [🔄 In Progress]
+Stream B: Tier 1 — Search Fundamentals              [🔄 In Progress]
 ───────────────────────────────────────────────────────────────────
-  B.1  Baseline documentation                       B-001  ✅ Complete
-  B.2  Semantic reranking experiment ← START HERE   E-001  📋
-  B.3  Linear retriever experiment                  E-003  📋
-  B.4  Implement winning approaches                        📋
-  B.5  Validate MRR ≥0.50                                  📋
+  B.1  Baseline documentation                              ✅ Complete
+  B.2  Semantic reranking experiment                       ❌ Rejected
+  B.3  Comprehensive synonym coverage                      ✅ Complete
+  B.4  Noise phrase filtering                              📋
+  B.5  Phrase query enhancement                            📋
+  B.6  Validate Tier 1 (MRR ≥0.45)                         📋
 
-Stream C: Query Intelligence                        [📋 Blocked]
+Stream C: Tier 2 — Document Relationships           [📋 After Tier 1]
 ───────────────────────────────────────────────────────────────────
-  C.1  Query expansion experiment                   E-002  📋
-  C.2  Phonetic enhancement experiment              E-004  📋
-  C.3  Query classification design                  ADR-082 📋
-  C.4  Implement classification routing                    📋
+  C.1  Unit→Lesson cross-reference                         📋
+  C.2  Thread-based relevance                              📋
+  C.3  More Like This                                      📋
+  C.4  Validate Tier 2 (MRR ≥0.55)                         📋
 
-Stream D: Infrastructure                            [📋 Ready]
+Stream D: Tier 3 — Modern ES Features               [📋 After Tier 2]
 ───────────────────────────────────────────────────────────────────
-  D.1  Extract Search SDK                                  📋
-  D.2  Create CLI workspace                                📋
-  D.3  Retire Next.js app                                  📋
-  D.4  Documentation                                       📋
+  D.1  RRF parameter optimisation                          📋
+  D.2  Linear Retriever                                    📋
+  D.3  Field boosting refinement                           📋
+  D.4  Validate Tier 3 (MRR ≥0.60)                         📋
+
+Stream E: AI Enhancement                            [⏸️ DEFERRED]
+───────────────────────────────────────────────────────────────────
+  Only pursue when Tiers 1-3 show diminishing returns
+  E.1  LLM query expansion                                 ⏸️
+  E.2  LLM reranking (domain-aware)                        ⏸️
+
+Stream F: Infrastructure                            [📋 Ready]
+───────────────────────────────────────────────────────────────────
+  F.1  Extract Search SDK                                  📋
+  F.2  Create CLI workspace                                📋
+  F.3  Retire Next.js app                                  📋
+  F.4  Documentation                                       📋
 
 Dependencies:
-  • C.1-C.4 depend on B.2 results (reranking may obviate expansion)
-  • Part 2 depends on D.1-D.3 (SDK must exist for MCP to consume)
-  • Stream D can start immediately (no blockers)
+  • Stream C depends on Stream B (Tier 1 exit criteria)
+  • Stream D depends on Stream C (Tier 2 exit criteria)
+  • Stream E deferred until Tiers 1-3 plateau
+  • Stream F can start immediately (no blockers)
 ```
 
 ---
@@ -97,146 +143,267 @@ Dependencies:
 
 ---
 
-## Stream B: Relevance Optimisation [🔄 In Progress]
+## Stream B: Tier 1 — Search Fundamentals [🔄 START HERE]
 
-**Purpose**: Improve Hard Query MRR from 0.367 to ≥0.50 through retrieval and reranking experiments.
+**Purpose**: Master traditional search techniques before adding complexity.
 
-**Rationale**: Research ([search-query-optimization-research.md](../../research/search-query-optimization-research.md)) identified that semantic reranking and linear retriever weighting are the highest-impact, lowest-risk approaches.
+**Governing ADR**: [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ### B.1 Baseline Documentation [✅ Complete]
 
-**Completed 2025-12-19**. See [B-001-hard-query-baseline.experiment.md](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md).
+See [hard-query-baseline.md](../../evaluations/baselines/hard-query-baseline.md).
 
 Key findings from baseline:
 
-| Category | Lesson MRR | Status | Recommendation |
-|----------|------------|--------|----------------|
-| Misspelling | 0.833 | ✅ Excellent | No action needed |
-| Intent-based | 0.500 | ✅ Good | Monitor |
-| Naturalistic | 0.333 | ⚠️ Acceptable | Query expansion |
-| Multi-concept | 0.250 | ❌ Poor | Reranking |
-| Synonym | 0.167 | ❌ Poor | Query expansion |
-| Colloquial | 0.000 | ❌ Very Poor | Pre-processing + reranking |
+| Category | Lesson MRR | Status | Root Cause |
+|----------|------------|--------|------------|
+| Misspelling | 0.833 | ✅ Excellent | — |
+| Intent-based | 0.500 | ✅ Good | — |
+| Naturalistic | 0.333 | ⚠️ Acceptable | Noise phrases |
+| Multi-concept | 0.250 | ❌ Poor | Cross-reference missing |
+| Synonym | 0.167 | ❌ Poor | **Vocabulary gap** |
+| Colloquial | 0.000 | ❌ Very Poor | Noise + vocabulary |
 
-**Primary failure modes**: Colloquial noise ("that sohcahtoa stuff"), synonym gaps ("rearrange formulas" → "changing the subject"), vocabulary bridging failures.
+**Primary failure modes**: 5/8 lesson failures are vocabulary gaps fixable with synonyms.
 
-**Recommendation**: Start with E-001 (Semantic Reranking) as it addresses multiple failure patterns without query modification complexity.
+### B.2 Semantic Reranking [❌ REJECTED]
 
-### Tasks
+See [semantic-reranking.experiment.md](../../evaluations/experiments/semantic-reranking.experiment.md).
 
-| ID | Task | Experiment | Status | Notes |
-|----|------|------------|--------|-------|
-| **B.1** | Baseline documentation | [B-001](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | ✅ | Complete — per-query data available |
-| **B.2** | **Semantic reranking experiment** | [E-001](../../evaluations/experiments/E-001-semantic-reranking.experiment.md) | 📋 | **START HERE** — `.rerank-v1-elasticsearch` |
-| B.3 | Linear retriever experiment | [E-003](../../evaluations/experiments/E-003-linear-retriever.experiment.md) | 📋 | Weight ELSER higher than BM25 |
-| B.4 | Implement winning approaches | — | 📋 | Based on B.2/B.3 results |
-| B.5 | Validate Hard MRR ≥0.50 | — | 📋 | Final acceptance gate |
+**Result**: -16.8% regression on lesson MRR. Generic cross-encoder doesn't understand curriculum.
 
-### Experiment Decision Criteria
+**Lesson Learned**: AI on weak fundamentals = amplified weakness.
+
+### B.3 Comprehensive Synonym Coverage [✅ Complete]
+
+**Result**: Added 40+ Maths KS4 synonyms. Smoke test passes for vocabulary gap queries.
+
+**Hypothesis**: Adding 50+ curriculum synonyms will improve hard query MRR by ≥20%.
+
+**B.1 Evidence** (from baseline):
+
+| Query | Expected Match | Current Rank | Missing Synonym |
+|-------|---------------|--------------|-----------------|
+| "solving for x" | linear equations | >10 | solving for x → linear equations |
+| "straight line graphs" | linear equations | >10 | straight line → linear |
+| "rearrange formulas" | changing the subject | >10 | rearrange → change the subject |
+| "sohcahtoa" | trigonometry | >10 | SOHCAHTOA → trigonometry |
+| "rules for powers" | laws of indices | >10 | rules → laws |
+
+#### TDD Approach (Reference)
+
+**Test Type**: This is a **smoke test** (out-of-process, validates running ES system with real synonyms).
+
+**Step 1: RED** — Write failing smoke test FIRST
+
+```typescript
+// smoke-tests/synonym-coverage.smoke.test.ts
+describe('B.3: Comprehensive Synonym Coverage', () => {
+  it('finds linear equations for "solving for x"', async () => {
+    const results = await searchLessons('solving for x');
+    const slugs = results.map(r => r.lesson_slug);
+    
+    // This MUST fail before synonyms are added
+    expect(slugs.slice(0, 3)).toContain('solving-linear-equations');
+  });
+  
+  it('finds changing the subject for "rearrange formulas"', async () => {
+    const results = await searchLessons('rearrange formulas');
+    const slugs = results.map(r => r.lesson_slug);
+    
+    expect(slugs.slice(0, 3)).toContain('changing-the-subject');
+  });
+});
+```
+
+Run test → **MUST FAIL** (synonyms don't exist yet).
+
+**Step 2: GREEN** — Add synonyms to SDK source of truth
+
+Synonyms are managed via [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md):
+
+```text
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── maths-synonyms.ts    # ← Add new synonyms here
+└── index.ts
+```
+
+Then run:
+
+```bash
+pnpm type-gen   # Regenerates synonym artefacts
+pnpm build      # Rebuilds all packages
+```
+
+**Step 3: Re-index and Verify**
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup   # Updates index with new synonyms
+pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm vitest run -c vitest.smoke.config.ts synonym-coverage
+```
+
+Run test → **MUST PASS**.
+
+**Step 4: REFACTOR** — Measure MRR improvement
+
+```bash
+pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
+```
+
+Compare to B.1 baseline. Document in experiment file.
+
+**Success Criteria**: Hard query MRR ≥0.45
+
+### B.4 Noise Phrase Filtering [📋 START HERE]
+
+**Hypothesis**: Pre-processing to remove colloquial filler will improve those queries.
+
+| Query | Noise | Signal |
+|-------|-------|--------|
+| "that sohcahtoa stuff for triangles" | "that...stuff for" | "sohcahtoa triangles" |
+| "the bit where you complete the square" | "the bit where you" | "complete the square" |
+
+**TDD Entry Point**: Write unit test for `removeNoisePhrase(query: string): string` FIRST.
+
+### B.5 Phrase Query Enhancement [📋 Planned]
+
+**Hypothesis**: Detecting multi-word curriculum terms and boosting phrase matches will improve precision.
+
+**TDD Entry Point**: Write unit test for `detectCurriculumPhrases(query: string): string[]` FIRST.
+
+### B.6 Tier 1 Validation [📋 Planned]
+
+**Exit Criteria**: Hard query MRR ≥0.45 AND no regression on standard queries.
+
+---
+
+## Stream C: Tier 2 — Document Relationships [📋 After Tier 1]
+
+**Purpose**: Exploit the rich relationships we already have indexed.
+
+**Entry Criteria**: Stream B complete (Tier 1 exit criteria met).
+
+### C.1 Unit→Lesson Cross-Reference
+
+**Hypothesis**: Boosting lessons that belong to top-matching units improves lesson ranking.
+
+**Current State**:
+
+- Lessons have `unit_ids[]` field
+- Units have `lesson_ids[]` field
+- We search these indices SEPARATELY
+
+**TDD Entry Point**: Write unit test for `getLessonIdsFromUnits(units: Unit[]): string[]` FIRST.
+
+### C.2 Thread-Based Relevance
+
+**Hypothesis**: Using thread context can disambiguate similar topics across years.
+
+### C.3 More Like This
+
+**Hypothesis**: MLT can surface related lessons for exploration.
+
+### C.4 Tier 2 Validation
+
+**Exit Criteria**: Hard query MRR ≥0.55 AND cross-reference demonstrably improves ranking.
+
+---
+
+## Stream D: Tier 3 — Modern ES Features [📋 After Tier 2]
+
+**Purpose**: Fine-tune retrieval algorithms after fundamentals are solid.
+
+**Entry Criteria**: Stream C complete (Tier 2 exit criteria met).
+
+| Task | Description |
+|------|-------------|
+| D.1 | RRF parameter optimisation (rank_constant, window_size) |
+| D.2 | Linear Retriever (ELSER weighted higher) |
+| D.3 | Field boosting refinement (pedagogical fields) |
+| D.4 | Tier 3 validation (MRR ≥0.60) |
+
+---
+
+## Stream E: AI Enhancement [⏸️ DEFERRED]
+
+**Purpose**: Apply AI techniques only when fundamentals can't improve further.
+
+**Entry Criteria**: Tiers 1-3 complete AND MRR plateau demonstrated (≤5% improvement in last 3 experiments).
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B.2 | Semantic reranking (moved to Stream B) | ❌ Rejected |
+| E.1 | LLM query expansion | ⏸️ Deferred |
+| E.2 | LLM reranking (domain-aware) | ⏸️ Deferred |
+
+---
+
+## Stream F: Infrastructure [📋 Ready to Start]
+
+**Purpose**: Extract Search SDK for MCP consumption and retire the Next.js app layer.
+
+| ID | Task | Status | Notes |
+|----|------|--------|-------|
+| F.1 | Extract Search SDK | 📋 | `packages/libs/<search-sdk>/` |
+| F.2 | Create CLI workspace | 📋 | First-class CLI, not ad-hoc scripts |
+| F.3 | Retire Next.js app | 📋 | Remove from build graph |
+| F.4 | Documentation | 📋 | Preserve patterns as docs/examples |
+
+**Dependencies**: None — can start immediately.
+
+---
+
+## Test Types for Search Work
+
+From [testing-strategy.md](../../directives-and-memory/testing-strategy.md):
+
+| Test Type | What It Tests | Used For |
+|-----------|---------------|----------|
+| **Unit** (`*.unit.test.ts`) | Pure functions, no mocks, no IO | Query builders, helper functions |
+| **Integration** (`*.integration.test.ts`) | Units working together with simple injected mocks | SDK wiring, pipeline assembly |
+| **Smoke** (`smoke-tests/*.smoke.test.ts`) | Running ES system with real data | **All MRR experiments** |
+
+**Critical**: Smoke tests are out-of-process tests against a running Elasticsearch instance. They are NOT mocked.
+
+---
+
+## Experiment Decision Criteria
 
 From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md):
 
 | Change Type | Accept If | Reject If |
 |-------------|-----------|-----------|
-| Reranking | Hard MRR ≥+15%, Standard MRR ≥0.92 | p95 latency >2000ms |
-| Fusion change | Overall MRR ≥+5% | Hard query MRR regresses |
+| Synonym addition | Any MRR improvement without regression | Standard MRR regresses |
+| Noise filtering | Colloquial MRR improves | Any other category regresses |
+| Cross-reference | Hard MRR ≥+10% | p95 latency >1500ms |
+| RRF tuning | Any MRR improvement | Regression anywhere |
+| AI enhancement | Hard MRR ≥+15% | p95 latency >2000ms |
 
-### Dependencies
+### After Each Experiment: Codify Learnings
 
-- B.1 ✅ Complete — baseline data available for comparison
-- Blocks: Stream C (reranking may obviate query expansion)
+Extract lasting value by updating documentation:
 
----
+| If the experiment... | Then update... |
+|---------------------|----------------|
+| Led to an architectural decision | Create or update an **ADR** |
+| Revealed operational best practices | Update **INGESTION-GUIDE.md**, **SYNONYMS.md**, etc. |
+| Changed the recommended process | Update **NEW-SUBJECT-GUIDE.md** |
 
-## Stream C: Query Intelligence [📋 Blocked on B.2]
-
-**Purpose**: Improve handling of specific hard query categories through pre-processing.
-
-**Rationale**: Different query types (misspellings, naturalistic, intent-based) may benefit from different pre-processing strategies. However, if reranking (B.2) achieves target MRR, complex pre-processing may be unnecessary.
-
-**B.1 Insight**: Misspelling already at 0.833 MRR — phonetic enhancement (E-004) is low priority.
-
-### Tasks
-
-| ID | Task | Experiment | Status | Notes |
-|----|------|------------|--------|-------|
-| C.1 | Query expansion experiment | [E-002](../../evaluations/experiments/E-002-query-expansion.experiment.md) | 📋 | LLM-based synonym/term expansion |
-| C.2 | Phonetic enhancement experiment | [E-004](../../evaluations/experiments/E-004-phonetic-enhancement.experiment.md) | 📋 | Low priority — misspelling already good |
-| C.3 | Query classification design | ADR-082 | 📋 | Route queries to optimal pipeline |
-| C.4 | Implement classification routing | — | 📋 | Based on C.3 design |
-
-### Dependencies
-
-- **Blocked by B.2**: Wait for reranking results before investing in expansion
-- If reranking achieves ≥0.50 MRR, Stream C may be deferred to Part 3
+**Key principle**:
+- **What we DO** → Goes in operational guides
+- **What we DON'T DO** → Stays in experiment log
+- **Why we decided** → Full reasoning in experiment file
 
 ---
 
-## Stream D: Infrastructure [📋 Ready to Start]
+## Quality Gates (MANDATORY)
 
-**Purpose**: Extract Search SDK for MCP consumption and retire the Next.js app layer.
-
-**Rationale**: The current implementation is packaged as a Next.js app, but actual usage is scripts + `src/lib/**`. MCP integration requires a clean SDK boundary.
-
-### Tasks
-
-| ID | Task | Status | Notes |
-|----|------|--------|-------|
-| D.1 | Extract Search SDK | 📋 | `packages/libs/<search-sdk>/` |
-| D.2 | Create CLI workspace | 📋 | First-class CLI, not ad-hoc scripts |
-| D.3 | Retire Next.js app | 📋 | Remove from build graph |
-| D.4 | Documentation | 📋 | Preserve patterns as docs/examples |
-
-### SDK Architecture
-
-From [phase-4-search-sdk-and-cli.md](phase-4-search-sdk-and-cli.md):
-
-```typescript
-// Public API surface
-createSearchSdk({ deps, config }) -> {
-  retrieval,    // RRF query builders, result shaping
-  admin,        // ES setup, ingestion, rollups
-  observability // Zero-hit logging, metrics
-}
-```
-
-**Key Principle**: Config and clients are provided by the consumer. No internal singletons.
-
-### Checkpoints
-
-1. **A**: Confirm assumptions, define contract (TDD entry)
-2. **B**: Extract Retrieval service (read path)
-3. **C**: Extract Admin/Indexing service (write path)
-4. **D**: Extract Observability service
-5. **E**: Build CLI workspace
-6. **F**: MCP integration wiring
-7. **G**: Retire Next.js layer
-
-### Dependencies
-
-- None — can start immediately
-- Enables: Part 2 (MCP Natural Language Tools)
-
----
-
-## Elasticsearch Documentation
-
-| Topic | URL |
-|-------|-----|
-| Hybrid Search (RRF) | <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html> |
-| Linear Retriever | <https://www.elastic.co/search-labs/blog/linear-retriever-hybrid-search> |
-| Semantic Reranking | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html> |
-| ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html> |
-| Inference API | <https://www.elastic.co/guide/en/elasticsearch/reference/current/inference-apis.html> |
-
----
-
-## Quality Gates
-
-Run from repo root after any changes:
+Run from repo root after ANY changes:
 
 ```bash
-pnpm type-gen          # Makes changes
+pnpm type-gen          # Makes changes — REQUIRED for synonym changes
 pnpm build             # Makes changes
 pnpm type-check
 pnpm lint:fix          # Makes changes
@@ -249,17 +416,126 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
+**All gates must pass. No exceptions. Fail fast.**
+
+---
+
+## Elasticsearch Documentation
+
+| Topic | URL |
+|-------|-----|
+| Search Relevance | <https://www.elastic.co/docs/solutions/search/full-text/search-relevance> |
+| Synonyms | <https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-synonym-tokenfilter.html> |
+| Terms Lookup | <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-terms-query.html#query-dsl-terms-lookup> |
+| More Like This | <https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html> |
+| Hybrid Search (RRF) | <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html> |
+| Linear Retriever | <https://www.elastic.co/search-labs/blog/linear-retriever-hybrid-search> |
+| ELSER | <https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html> |
+
+---
+
+## Synonym Rollout Strategy
+
+### B.3 Validated the Approach — Roll Out to All Subjects
+
+The Maths KS4 synonym work (B.3) demonstrated that:
+
+1. **Synonyms fix vocabulary gaps** — 8 of 8 fixable vocabulary gaps addressed
+2. **Measurable MRR improvement** — +3.5% lesson MRR, +4.1% unit MRR
+3. **No regressions** — Standard queries unaffected
+4. **Qualitative wins** — "sohcahtoa" now returns trigonometry, not histograms
+
+**Decision**: Roll out synonyms to all subjects following the same methodology.
+
+### Methodology for Adding New Subjects
+
+Each subject follows this pattern (demonstrated with Maths KS4):
+
+#### 1. Identify Vocabulary Gaps
+
+- Run hard query baseline for the subject
+- Analyse failures by category (synonym, colloquial, multi-concept, etc.)
+- Identify colloquial teacher language vs curriculum terminology
+
+#### 2. Mine Vocabulary from Bulk Download
+
+```bash
+# Extract vocabulary from bulk download
+jq '[.[] | .lessonTitle, .unitTitle, (.lessonKeywords // [])[] | .keyword] | unique' \
+  {subject}-{keystage}.json > vocabulary.txt
+```
+
+#### 3. Create Subject Synonym File (TDD)
+
+```bash
+# Location: packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/{subject}.ts
+```
+
+- Write failing smoke test for vocabulary gaps FIRST
+- Add synonyms to SDK
+- Run `pnpm type-gen && pnpm es:setup`
+- Verify tests pass
+
+#### 4. Document and Validate
+
+- Record MRR before/after
+- Document in experiment file
+- Confirm no regression on other subjects
+
+### Subject Rollout Priority
+
+| Subject | Priority | Rationale |
+|---------|----------|-----------|
+| Maths | ✅ Complete (KS4) | Highest complexity, validated approach |
+| Science | High | Rich vocabulary (biology, chemistry, physics terms) |
+| English | Medium | Literature terminology, grammar terms |
+| History | Medium | Historical periods, events, figures |
+| Geography | Medium | Physical/human geography terminology |
+| Others | Low | Apply pattern as needed |
+
+### Pending ADR Update
+
+**TODO**: Extend [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) with a "Synonym Mining Process" section documenting:
+
+- Ground truth failure analysis methodology
+- Bulk download vocabulary extraction process
+- TDD workflow for adding synonyms
+- Subject-by-subject rollout guidance
+
+---
+
+## Naming Conventions
+
+### Stream/Task Identifiers
+
+Tasks within streams use letter-number codes for tracking:
+
+- **B.x** — Baseline tasks
+- **E.x** — AI/ML experiment tasks
+- **F.x** — Fundamentals/feature tasks
+
+### Experiment Files
+
+Experiment files in `.agent/evaluations/experiments/` use **descriptive names only** (no prefixes):
+
+- `comprehensive-synonym-coverage.experiment.md` (not ~~B-003-comprehensive-synonym-coverage~~)
+- `semantic-reranking.experiment.md` (not ~~E-001-semantic-reranking~~)
+
+The stream/task codes (B.1, B.2, B.3, etc.) are used in plans and trackers to reference these experiments.
+
 ---
 
 ## Related Documents
 
 | Document | Purpose |
 |----------|---------|
-| [B-001-hard-query-baseline.experiment.md](../../evaluations/experiments/B-001-hard-query-baseline.experiment.md) | ✅ Baseline data for experiments |
-| [phase-3-multi-index-and-fields.md](phase-3-multi-index-and-fields.md) | Stream A completed work |
-| [phase-4-search-sdk-and-cli.md](phase-4-search-sdk-and-cli.md) | Stream D detailed checkpoints |
-| [search-query-optimization-research.md](../../research/search-query-optimization-research.md) | Stream B/C technical approaches |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Governing strategy** — Fundamentals-first |
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Metrics and decision criteria |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | **Synonym management via SDK** — To be extended with mining process |
+| [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Detailed experiment tracker |
+| [hard-query-baseline](../../evaluations/baselines/hard-query-baseline.md) | Baseline data |
+| [semantic-reranking](../../evaluations/experiments/semantic-reranking.experiment.md) | Rejected reranking experiment |
+| [comprehensive-synonym-coverage](../../evaluations/experiments/comprehensive-synonym-coverage.experiment.md) | B.3 — Maths KS4 synonyms |
 
 ---
 
@@ -269,3 +545,13 @@ pnpm smoke:dev:stub
 |------|--------|
 | 2025-12-19 | Initial document created from plan restructure |
 | 2025-12-19 | B.1 complete — baseline documented, smoke test added |
+| 2025-12-19 | B.2 rejected (-16.8% regression) — strategy pivot |
+| 2025-12-19 | ADR-082 created — fundamentals-first strategy adopted |
+| 2025-12-19 | Streams restructured to reflect tier-based approach |
+| 2025-12-19 | Added TDD entry points for B.3, B.4, B.5 |
+| 2025-12-19 | Added test type clarification for search experiments |
+| 2025-12-19 | B.3 complete — 40+ Maths KS4 synonyms added, smoke test passing |
+| 2025-12-19 | Updated experiment/baseline file references (prefix-free naming) |
+| 2025-12-19 | Added synonym rollout strategy and methodology for new subjects |
+| 2025-12-19 | Added naming conventions section (stream codes vs experiment files) |
+| 2025-12-19 | Noted pending ADR-063 update for synonym mining process |

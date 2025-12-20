@@ -1,8 +1,8 @@
 # Logger Sentry & OpenTelemetry Integration Plan
 
-**Status**: PLANNING  
+**Status**: Ready for implementation  
 **Created**: 2025-11-11  
-**Related**: [Logger Enhancement Plan](./logger-enhancement-plan.md), [Semantic Search Service Plan](./semantic-search/search-service/schema-first-ontology-implementation.md), [Semantic Search UI Plan](./semantic-search/search-ui/frontend-implementation.md)
+**Related**: None listed
 
 ## Executive Summary
 
@@ -121,23 +121,25 @@ const logger = new UnifiedLogger(baseConfig);
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.SENTRY_ENVIRONMENT || 'development',
+export function initSentryFromEnv(env: NodeJS.ProcessEnv): void {
+  Sentry.init({
+    dsn: env.SENTRY_DSN,
+    environment: env.SENTRY_ENVIRONMENT ?? 'development',
 
-  // Tracing
-  tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+    // Tracing
+    tracesSampleRate: parseFloat(env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1'),
 
-  // Profiling (optional)
-  profilesSampleRate: parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE || '0.1'),
-  integrations: [
-    nodeProfilingIntegration(),
-    Sentry.httpIntegration(), // Auto-instrument HTTP
-  ],
+    // Profiling (optional)
+    profilesSampleRate: parseFloat(env.SENTRY_PROFILES_SAMPLE_RATE ?? '0.1'),
+    integrations: [
+      nodeProfilingIntegration(),
+      Sentry.httpIntegration(), // Auto-instrument HTTP
+    ],
 
-  // Logs (optional, requires enableLogs: true)
-  enableLogs: parseBoolFlag(process.env.SENTRY_ENABLE_LOGS, false),
-});
+    // Logs (optional, requires enableLogs: true)
+    enableLogs: parseBoolFlag(env.SENTRY_ENABLE_LOGS, false),
+  });
+}
 ```
 
 ### Decision 3: Correlation ID Flow
@@ -508,11 +510,16 @@ export function buildOtelOptionsFromEnv(env: NodeJS.ProcessEnv): OtelNodeOptions
 import { trace, context, SpanStatusCode, type Span } from '@opentelemetry/api';
 import { startTimer, type Duration } from './timing';
 
+export interface SpanAttribute {
+  readonly key: string;
+  readonly value: string | number | boolean;
+}
+
 export interface SpanOptions {
   readonly name: string;
   readonly operation: string;
   readonly correlationId?: string;
-  readonly attributes?: Record<string, string | number | boolean>;
+  readonly attributes?: ReadonlyArray<SpanAttribute>;
 }
 
 export async function withSpan<T>(
@@ -530,17 +537,18 @@ export async function withSpan<T>(
       }
       span.setAttribute('operation', options.operation);
       if (options.attributes) {
-        Object.entries(options.attributes).forEach(([key, value]) => {
-          span.setAttribute(key, value);
-        });
+        for (const attribute of options.attributes) {
+          span.setAttribute(attribute.key, attribute.value);
+        }
       }
 
       const result = await fn(span);
       span.setStatus({ code: SpanStatusCode.OK });
       return result;
     } catch (error) {
-      span.recordException(error as Error);
-      span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
+      const recordedError = error instanceof Error ? error : new Error('Unknown error');
+      span.recordException(recordedError);
+      span.setStatus({ code: SpanStatusCode.ERROR, message: recordedError.message });
       throw error;
     } finally {
       const duration = timer.end();
@@ -562,17 +570,18 @@ export function withSpanSync<T>(options: SpanOptions, fn: (span: Span) => T): T 
       }
       span.setAttribute('operation', options.operation);
       if (options.attributes) {
-        Object.entries(options.attributes).forEach(([key, value]) => {
-          span.setAttribute(key, value);
-        });
+        for (const attribute of options.attributes) {
+          span.setAttribute(attribute.key, attribute.value);
+        }
       }
 
       const result = fn(span);
       span.setStatus({ code: SpanStatusCode.OK });
       return result;
     } catch (error) {
-      span.recordException(error as Error);
-      span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
+      const recordedError = error instanceof Error ? error : new Error('Unknown error');
+      span.recordException(recordedError);
+      span.setStatus({ code: SpanStatusCode.ERROR, message: recordedError.message });
       throw error;
     } finally {
       const duration = timer.end();
@@ -755,9 +764,10 @@ export function initSentryNextjsClient(options: SentryNextjsOptions): void {
 ```typescript
 // instrumentation.ts (root of Next.js app)
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
+  const env = process.env;
+  if (env.NEXT_RUNTIME === 'nodejs') {
     const { initSentryNextjsServer, buildSentryOptionsFromEnv } = await import('@oaknational/mcp-logger/nextjs');
-    const options = buildSentryOptionsFromEnv(process.env);
+    const options = buildSentryOptionsFromEnv(env);
     if (options) {
       initSentryNextjsServer(options);
     }
@@ -771,7 +781,8 @@ import { initSentryNextjsClient, buildSentryOptionsFromEnv } from '@oaknational/
 
 export default function RootLayout({ children }) {
   useEffect(() => {
-    const options = buildSentryOptionsFromEnv(process.env);
+    const env = process.env;
+    const options = buildSentryOptionsFromEnv(env);
     if (options) {
       initSentryNextjsClient(options);
     }
@@ -829,7 +840,7 @@ export function withSentryApiRoute<T>(handler: (req: NextRequest) => Promise<Nex
           Sentry.setContext('http', {
             method: req.method,
             url: req.nextUrl.pathname,
-            headers: Object.fromEntries(req.headers),
+            headers: sanitiseHeaders(req.headers),
           });
           Sentry.setTag('correlation_id', correlationId);
 
@@ -954,19 +965,20 @@ import {
 } from '@oaknational/mcp-logger/node';
 
 // Initialize Sentry (optional - auto-initialized if SENTRY_DSN is set)
-const sentryOptions = buildSentryOptionsFromEnv(process.env);
+const env = process.env;
+const sentryOptions = buildSentryOptionsFromEnv(env);
 if (sentryOptions) {
   initSentryNode(sentryOptions);
 }
 
 // Initialize OpenTelemetry (optional)
-const otelOptions = buildOtelOptionsFromEnv(process.env);
+const otelOptions = buildOtelOptionsFromEnv(env);
 const otelSdk = initOtelNode(otelOptions);
 
 // Create logger
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber('INFO'),
-  resourceAttributes: buildResourceAttributes(process.env, 'my-service', '1.0.0'),
+  resourceAttributes: buildResourceAttributes(env, 'my-service', '1.0.0'),
   context: {},
   stdoutSink: createNodeStdoutSink(),
   fileSink: null,
@@ -1207,5 +1219,5 @@ describe('E2E: Sentry integration', () => {
 
 ---
 
-**Status**: PLANNING COMPLETE → READY FOR IMPLEMENTATION  
+**Status**: Ready for implementation  
 **Next Action**: Review plan with team, then begin Phase 1 (Sentry integration for Node.js)

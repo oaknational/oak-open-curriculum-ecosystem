@@ -32,7 +32,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-024: Dependency Injection Pattern](024-dependency-injection-pattern.md)
 - [ADR-025: Erasable Syntax Only](025-erasable-syntax-only.md)
 - [ADR-026: OpenAPI Type Generation Strategy](026-openapi-type-generation-strategy.md)
-- [ADR-027: Runtime Isolation Strategy](027-runtime-isolation-strategy.md)
+- [ADR-027: Runtime Isolation Strategy (Updated: Node.js-only SDK)](027-runtime-isolation-strategy.md)
 - [ADR-028: Zod Validation Deferral](028-zod-validation-deferral.md)
 - [ADR-029: No Manual API Data Structures in MCP](029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
@@ -90,6 +90,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-078: Dependency Injection for Testability](078-dependency-injection-for-testability.md)
 - [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md)
 - [ADR-080: KS4 Metadata Denormalisation Strategy](080-ks4-metadata-denormalization-strategy.md)
+- [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md)
+- [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
 
 ## Key Architectural Decisions
 
@@ -117,6 +119,8 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
 - **[ADR-080](080-ks4-metadata-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
+- **[ADR-081](081-search-approach-evaluation-framework.md)** - Search approach evaluation framework (metrics, harness)
+- **[ADR-082](082-fundamentals-first-search-strategy.md)** - Fundamentals-first search strategy (tier prioritisation)
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking

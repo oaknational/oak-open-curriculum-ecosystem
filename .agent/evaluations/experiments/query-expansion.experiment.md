@@ -1,6 +1,6 @@
 # Experiment: LLM Query Expansion
 
-**ID**: E-002  
+**Tier**: AI Enhancement (Tier 4)  
 **Date**: 2025-12-19  
 **Status**: 📋 Planned  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
