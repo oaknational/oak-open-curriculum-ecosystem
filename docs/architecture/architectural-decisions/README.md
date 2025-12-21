@@ -92,6 +92,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-080: KS4 Metadata Denormalisation Strategy](080-ks4-metadata-denormalization-strategy.md)
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md)
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
+- [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md)
 
 ## Key Architectural Decisions
 

@@ -5,6 +5,39 @@
 
 ---
 
+## 🔴 IMPORTANT: Data Source Architecture
+
+**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+
+The Oak API provides different data sources for different purposes. Using the wrong source leads to incomplete data.
+
+### Lesson Enumeration
+
+| Source                  | Endpoint                                     | Complete?       | Use For            |
+| ----------------------- | -------------------------------------------- | --------------- | ------------------ |
+| ✅ **Lessons Endpoint** | `/key-stages/{ks}/subject/{subject}/lessons` | Yes (paginated) | Lesson enumeration |
+| ❌ Unit Summary         | `/units/{slug}/summary` → `unitLessons[]`    | No (truncated)  | Unit metadata only |
+
+**Why?** The unit summary's `unitLessons` is a truncated snapshot embedded in the sequence materialized view. The lessons endpoint uses a normalised view with complete data.
+
+### Critical: Lessons Can Belong to Multiple Units
+
+When ingesting lessons:
+
+- Index each unique lesson **once** by `lessonSlug`
+- **Aggregate all unit relationships** — don't just deduplicate
+- A lesson in multiple tiers/programmes is legitimate, not a duplicate
+
+### Other Data Sources (OK)
+
+| Data Type | Source                                     | Status      |
+| --------- | ------------------------------------------ | ----------- |
+| Units     | `/key-stages/{ks}/subject/{subject}/units` | ✅ Complete |
+| Threads   | `/threads` + `/threads/{slug}/units`       | ✅ Complete |
+| Sequences | `/subjects/{subject}/sequences`            | ✅ Complete |
+
+---
+
 ## Adding a New Subject?
 
 If you're onboarding a **new subject/keystage** (not just re-ingesting), see [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md) for the complete workflow including:

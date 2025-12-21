@@ -1,9 +1,87 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 In Progress — Tier 1 Fundamentals  
+**Status**: Part 1 PAUSED — Ingestion data quality fixes required  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
 **Last Updated**: 2025-12-20
+
+---
+
+## 🔴 TL;DR — What's Blocking
+
+**Search experimentation is PAUSED until ingestion data quality issues are fixed.**
+
+| Issue | Impact | Status |
+|-------|--------|--------|
+| ~~Lesson count truncated~~ | ~~314 → 431 lessons~~ | ✅ Fixed (ADR-083) |
+| Unit `lesson_count` wrong | 25/36 units have wrong counts | ❌ Blocking |
+| Thread field naming error | `sequence_ids` should be `thread_slugs` | ❌ Blocking |
+| ~~Dead `extractTier()` code~~ | File deleted | ✅ Deleted |
+| Vestigial `tier` field | Singular field should be removed | 🧹 Cleanup |
+
+**Full analysis**: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+
+**Fix required before resuming search experiments**: Derive unit `lesson_count` from aggregated lesson data, rename fields per [Oak Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary).
+
+---
+
+## 🔴 IMMEDIATE: Test Suite Memory Exhaustion (2025-12-21)
+
+**Tier cleanup is functionally complete BUT quality gates failing:**
+
+```bash
+pnpm build      # ✅ PASSES
+pnpm type-check # ✅ PASSES  
+pnpm lint:fix   # ✅ PASSES
+pnpm test       # ❌ FAILS - OOM during cleanup (489/492 tests passed, worker crashed)
+```
+
+**Root Cause**: Shared state + test isolation = memory exhaustion. See [PHASE-1-BLOCKING-ISSUE.md](../../plans/semantic-search/PHASE-1-BLOCKING-ISSUE.md)
+
+**FIRST ACTION**: Fix shared state issues per global-state-elimination plan, THEN resume data quality fixes.
+
+---
+
+## ⚠️ ASSUMPTIONS TO VERIFY (Next Session)
+
+The previous session made the following assumptions. **Verify these before proceeding**:
+
+### Tier Data Assumptions
+
+| Assumption | How to Verify |
+|------------|---------------|
+| `tiers[]` array is correctly populated | `curl oak_lessons/_search` → check `tiers: ["foundation", "higher"]` |
+| `tier_titles[]` array is correctly populated | Same query → check `tier_titles: ["Foundation", "Higher"]` |
+| Tier comes from `/sequences/{sequence}/units` | Read `ks4-context-builder.ts` → `buildKs4ContextMap()` |
+| `buildKs4ContextMap()` is called during ingestion | Read `index-oak.ts` → find call to `buildKs4ContextMap` |
+| Tier data ends up in lesson documents | Read `document-transforms.ts` → `extractKs4DocumentFields()` call |
+
+### Vestigial `tier` Field Assumptions
+
+| Assumption | How to Verify |
+|------------|---------------|
+| `programme-factor-extractors.ts` is deleted | `ls apps/.../lib/indexing/programme-factor-extractors.ts` → should not exist |
+| `tier` (singular) field still in schema | Read `type-gen/.../curriculum.ts` → look for `{ name: 'tier', ...}` |
+| `tier` still referenced in document creation | `grep -r "tier: f.tier\|tier: fields.tier" apps/` |
+| Tests still reference `extractTier` | `grep -r "extractTier" apps/.../indexing/*.test.ts` |
+
+### Lesson Aggregation Assumptions
+
+| Assumption | How to Verify |
+|------------|---------------|
+| `fetchAllLessonsWithPagination()` returns complete data | Read function in `fetch-all-lessons.ts` |
+| `aggregateLessonsBySlug()` preserves all unit relationships | Read function + tests in `lesson-aggregation.ts` |
+| Aggregated data is available for unit document building | Read `index-oak-helpers.ts` → check data flow |
+
+### Unit `lesson_count` Problem
+
+| Assumption | How to Verify |
+|------------|---------------|
+| Unit documents use truncated `unitLessons[]` | Read `document-transforms.ts` → `createUnitDocument()` |
+| Rollup documents use truncated `unitLessons[]` | Read `document-transform-helpers.ts` → `extractRollupDocumentFields()` |
+| 25/36 units have wrong counts | ES query or compare to bulk download |
+
+**If any assumption is wrong, update the plan before proceeding.**
 
 ---
 
@@ -38,8 +116,91 @@ Quick summary:
 
 | Metric | Value | Target | Status |
 |--------|-------|--------|--------|
-| Lesson Hard MRR | 0.380 | ≥0.50 | ❌ Gap |
-| Standard MRR | 0.931 | ≥0.92 | ✅ Met |
+| Lesson Hard MRR | 0.327 | ≥0.50 | ❌ Gap |
+| Unit Hard MRR | 0.761 | ≥0.50 | ✅ Met |
+| Indexed Lessons | 431 | 431 | ✅ Complete |
+| Unit `lesson_count` Correct | 11/36 | 36/36 | ❌ **Blocking** |
+
+### Two Distinct Work Streams
+
+**Stream 1: Ingestion Data Quality (BLOCKING)**
+
+Unit documents have incorrect data. Search experimentation cannot proceed until fixed.
+
+See: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+
+**Stream 2: Search Optimisation (PAUSED)**
+
+Tier 1-4 experiments per ADR-082. Paused until Stream 1 complete.
+
+See: [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md)
+
+---
+
+## 🔴 REQUIRED ACTIONS: Ingestion Data Quality Fixes
+
+Before continuing with Tier 1 search experiments, complete these actions:
+
+### Action 1: Review Documentation
+
+- **Discrepancy Analysis**: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+- **Current State**: [current-state.md](../../plans/semantic-search/current-state.md)
+- **ADR-083**: [Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+
+### Action 2: Fix Unit `lesson_count` (TDD)
+
+Unit documents derive `lesson_count` from truncated `unitLessons[]`. Fix by deriving from aggregated lesson data:
+
+```typescript
+// After fetchAllLessonsWithPagination() returns aggregatedLessons
+const lessonsByUnit = new Map<string, string[]>();
+for (const lesson of aggregatedLessons.values()) {
+  for (const unitSlug of lesson.unitSlugs) {
+    const existing = lessonsByUnit.get(unitSlug) ?? [];
+    existing.push(lesson.lessonSlug);
+    lessonsByUnit.set(unitSlug, existing);
+  }
+}
+// Use lessonsByUnit for unit document lesson_count and lesson_ids
+```
+
+### Action 3: Fix Thread Field Naming
+
+Per [Oak Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary):
+
+- `sequence_ids` contains THREAD data (wrong name)
+- Rename to `thread_slugs`, add `thread_titles`, `thread_orders`
+
+### Action 4: Remove Vestigial `tier` Field
+
+The singular `tier` field is vestigial (per ADR-080, tier is many-to-many). Complete cleanup:
+
+| File | Change |
+|------|--------|
+| ~~`programme-factor-extractors.ts`~~ | ✅ Already deleted |
+| `type-gen/.../curriculum.ts` | Remove `{ name: 'tier', ...}` from `LESSON_FIELDS` and `UNIT_ROLLUP_FIELDS` |
+| `document-transform-helpers.ts` | Remove `tier` from return types, remove `extractTier` import |
+| `document-transforms.ts` | Remove `tier: f.tier` and `tier: fields.tier` |
+| `*.unit.test.ts` | Remove `extractTier` tests and `tier` assertions |
+
+After changes: `pnpm type-gen` to regenerate types.
+
+### Action 5: Re-ingest and Validate
+
+```bash
+redis-cli FLUSHALL  # Flush stale cache (already done 2025-12-20)
+cd apps/oak-open-curriculum-semantic-search
+pnpm index:maths:ks4
+# Run validation tests from discrepancy log
+```
+
+### Completed Actions ✅
+
+- ✅ **Lesson ingestion fixed**: 314 → 431 lessons (ADR-083)
+- ✅ **Redis cache flushed** (2025-12-20)
+- ✅ **Discrepancy analysis complete**: See [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+- ✅ **Tier data verified**: Correctly populated via `tiers`/`tier_titles` from KS4 context map (ASSUMPTION - verify)
+- ✅ **Dead code deleted**: `programme-factor-extractors.ts` removed
 
 ---
 
@@ -60,6 +221,7 @@ The active plan with detailed tasks:
 Current tier: **Tier 1 — Search Fundamentals**
 
 Next tasks:
+
 - B.4 Noise phrase filtering
 - B.5 Phrase query enhancement
 - B.6 Validate Tier 1 (MRR ≥0.45)

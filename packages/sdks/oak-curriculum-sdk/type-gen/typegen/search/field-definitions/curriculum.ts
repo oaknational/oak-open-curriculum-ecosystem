@@ -67,7 +67,6 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_slugs', zodType: 'array-string', optional: true },
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
-  { name: 'tier', zodType: 'string', optional: true },
   // Pupil lesson outcome - used for search result snippets and highlighting
   { name: 'pupil_lesson_outcome', zodType: 'string', optional: true },
   // KS4 metadata arrays (many-to-many relationships per ADR-080)
@@ -176,7 +175,6 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'thread_titles', zodType: 'array-string', optional: true },
   { name: 'thread_orders', zodType: 'array-number', optional: true },
   { name: 'title_suggest', zodType: 'object', optional: true },
-  { name: 'tier', zodType: 'string', optional: true },
   // Unit enrichment fields from /units/{unit}/summary
   ...UNIT_ENRICHMENT_FIELDS,
   // KS4 metadata arrays (many-to-many relationships per ADR-080)

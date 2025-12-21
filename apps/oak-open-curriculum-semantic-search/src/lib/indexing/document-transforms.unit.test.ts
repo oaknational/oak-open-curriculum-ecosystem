@@ -181,17 +181,24 @@ describe('createLessonDocument', () => {
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two. Sentence three.',
       summary: lessonSummary,
-      unitCanonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
       subject: mathsSubject,
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 12,
       unitContextMap: emptyContextMap,
-      unitSlug: 'unit-slug',
+      units: [
+        {
+          unitSlug: 'unit-slug',
+          unitTitle: 'Unit Title',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+        },
+      ],
     });
 
     expect(doc.lesson_id).toBe('lesson-1');
     expect(doc.unit_urls).toEqual(['https://teachers.thenational.academy/units/unit-slug']);
+    expect(doc.unit_ids).toEqual(['unit-slug']);
+    expect(doc.unit_titles).toEqual(['Unit Title']);
     expect(doc.lesson_keywords).toEqual(['algebra', 'geometry']);
     expect(doc.key_learning_points).toEqual(['Understand equations', 'Apply formulas']);
     expect(doc.misconceptions_and_common_mistakes).toEqual(['Confuse terms → Clarify definitions']);
@@ -199,7 +206,41 @@ describe('createLessonDocument', () => {
     expect(doc.title_suggest?.contexts?.subject).toEqual(['maths']);
     expect(doc.title_suggest?.contexts?.key_stage).toEqual(['ks4']);
     expect(doc.title_suggest?.contexts).not.toHaveProperty('sequence');
-    // Dense vectors removed per ADR-075 - E5 provides no benefit over BM25+ELSER
+  });
+
+  it('preserves ALL unit relationships for lessons appearing in multiple units', () => {
+    const lessonSummary = buildLessonSummary();
+
+    const doc: SearchLessonsIndexDoc = createLessonDocument({
+      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+      transcript: 'Multi-unit lesson content.',
+      summary: lessonSummary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 12,
+      unitContextMap: emptyContextMap,
+      units: [
+        {
+          unitSlug: 'unit-higher',
+          unitTitle: 'Higher Unit',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-higher',
+        },
+        {
+          unitSlug: 'unit-foundation',
+          unitTitle: 'Foundation Unit',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-foundation',
+        },
+      ],
+    });
+
+    // ALL unit relationships are preserved - we never throw away information
+    expect(doc.unit_ids).toEqual(['unit-higher', 'unit-foundation']);
+    expect(doc.unit_titles).toEqual(['Higher Unit', 'Foundation Unit']);
+    expect(doc.unit_urls).toEqual([
+      'https://teachers.thenational.academy/units/unit-higher',
+      'https://teachers.thenational.academy/units/unit-foundation',
+    ]);
   });
 
   it('omits optional string arrays when the summary values are nullish', () => {
@@ -215,13 +256,18 @@ describe('createLessonDocument', () => {
       lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
       transcript: 'Sentence one. Sentence two.',
       summary: lessonSummary,
-      unitCanonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
       subject: mathsSubject,
       keyStage: ks4,
       years: undefined,
       lessonCount: 5,
       unitContextMap: emptyContextMap,
-      unitSlug: 'unit-slug',
+      units: [
+        {
+          unitSlug: 'unit-slug',
+          unitTitle: 'Unit Title',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+        },
+      ],
     });
 
     expect(doc.lesson_keywords).toBeUndefined();
@@ -229,27 +275,6 @@ describe('createLessonDocument', () => {
     expect(doc.misconceptions_and_common_mistakes).toBeUndefined();
     expect(doc.teacher_tips).toBeUndefined();
     expect(doc.content_guidance).toBeUndefined();
-  });
-
-  it('derives tier from unit slug when possible', () => {
-    const lessonSummary = buildLessonSummary({
-      unitSlug: 'maths-gcse-foundation',
-    });
-
-    const doc = createLessonDocument({
-      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
-      transcript: 'Pythagoras theorem content.',
-      summary: lessonSummary,
-      unitCanonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
-      subject: mathsSubject,
-      keyStage: ks4,
-      years: ['Year 10'],
-      lessonCount: 12,
-      unitContextMap: emptyContextMap,
-      unitSlug: 'maths-gcse-foundation',
-    });
-
-    expect(doc.tier).toBe('foundation');
   });
 
   it('populates lesson_semantic with transcript content for ELSER semantic search', () => {
@@ -261,19 +286,42 @@ describe('createLessonDocument', () => {
       lesson: { lessonSlug: 'pythagoras-lesson', lessonTitle: 'Using Pythagoras Theorem' },
       transcript,
       summary: lessonSummary,
-      unitCanonicalUrl: 'https://teachers.thenational.academy/units/trigonometry',
       subject: mathsSubject,
       keyStage: ks4,
       years: ['Year 10'],
       lessonCount: 8,
       unitContextMap: emptyContextMap,
-      unitSlug: 'trigonometry',
+      units: [
+        {
+          unitSlug: 'trigonometry',
+          unitTitle: 'Trigonometry',
+          canonicalUrl: 'https://teachers.thenational.academy/units/trigonometry',
+        },
+      ],
     });
 
     // The lesson_content_semantic field must be populated for ELSER to generate embeddings
     expect(doc.lesson_content_semantic).toBeDefined();
     expect(doc.lesson_content_semantic).toContain('Pythagoras');
     expect(doc.lesson_content_semantic).toContain('hypotenuse');
+  });
+
+  it('throws when units array is empty', () => {
+    const lessonSummary = buildLessonSummary();
+
+    expect(() =>
+      createLessonDocument({
+        lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+        transcript: 'Content.',
+        summary: lessonSummary,
+        subject: mathsSubject,
+        keyStage: ks4,
+        years: ['Year 10'],
+        lessonCount: 12,
+        unitContextMap: emptyContextMap,
+        units: [],
+      }),
+    ).toThrow('Lesson lesson-1 has no unit relationships');
   });
 });
 

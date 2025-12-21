@@ -13,60 +13,17 @@ import { createRollupDocument } from './document-transforms';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
-import { processUnitSummary, buildLessonDocsForGroup } from './index-bulk-helpers-internal';
+import { processUnitSummary } from './index-bulk-helpers-internal';
 import type { DataIntegrityReport } from './data-integrity-report';
 import type { UnitContextMap } from './ks4-context-builder';
+import {
+  createPhaseStartEvent,
+  createPhaseEndEvent,
+  createUnitSkippedEvent,
+  formatIngestionEvent,
+} from './ingestion-events';
 
-export interface LessonGroup {
-  unitSlug: string;
-  unitTitle: string;
-  lessons: { lessonSlug: string; lessonTitle: string }[];
-}
-
-/**
- * Derives lesson groups from unit summaries.
- *
- * This function extracts lesson information from the `unitLessons` array in each
- * unit summary, creating a `LessonGroup` for each unit that has lessons.
- *
- * This replaces the previous approach of fetching lesson groups from the
- * `/key-stages/{ks}/subject/{subject}/lessons` endpoint, which only returns
- * a paginated subset of lessons (limit 100).
- *
- * @param unitSummaries - Map of unit slugs to their summary data
- * @returns Array of lesson groups, one per unit with lessons
- *
- * @example
- * ```typescript
- * const unitSummaries = new Map();
- * unitSummaries.set('unit-1', {
- *   unitSlug: 'unit-1',
- *   unitTitle: 'Unit One',
- *   unitLessons: [{ lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' }]
- * });
- * const groups = deriveLessonGroupsFromUnitSummaries(unitSummaries);
- * // [{ unitSlug: 'unit-1', unitTitle: 'Unit One', lessons: [...] }]
- * ```
- */
-export function deriveLessonGroupsFromUnitSummaries(
-  unitSummaries: Map<string, SearchUnitSummary>,
-): LessonGroup[] {
-  const groups: LessonGroup[] = [];
-
-  for (const [unitSlug, summary] of unitSummaries) {
-    const lessons = summary.unitLessons.map((lesson) => ({
-      lessonSlug: lesson.lessonSlug,
-      lessonTitle: lesson.lessonTitle,
-    }));
-
-    if (lessons.length > 0) {
-      groups.push({ unitSlug, unitTitle: summary.unitTitle, lessons });
-    }
-  }
-
-  return groups;
-}
-
+// eslint-disable-next-line max-lines-per-function, max-statements -- Comprehensive logging requires inline event creation
 export async function buildUnitDocuments(
   client: OakClient,
   units: readonly { unitSlug: string; unitTitle: string }[],
@@ -79,8 +36,17 @@ export async function buildUnitDocuments(
   unitSummaries: Map<string, SearchUnitSummary>;
   unitOps: unknown[];
 }> {
+  const startTime = Date.now();
+  const phaseStartEvent = createPhaseStartEvent('units', {
+    subject,
+    keyStage: ks,
+    count: units.length,
+  });
+  sandboxLogger.info(formatIngestionEvent(phaseStartEvent));
+
   const unitSummaries = new Map<string, SearchUnitSummary>();
   const unitOps: unknown[] = [];
+  let skippedCount = 0;
 
   let unitIndex = 0;
   for (const unit of units) {
@@ -101,6 +67,14 @@ export async function buildUnitDocuments(
       unitContextMap,
     );
     if (result === null) {
+      skippedCount++;
+      const unitSkippedEvent = createUnitSkippedEvent({
+        unitSlug: unit.unitSlug,
+        subject,
+        keyStage: ks,
+        reason: 'summary_unavailable',
+      });
+      sandboxLogger.warn(formatIngestionEvent(unitSkippedEvent));
       dataIntegrityReport.skippedUnits.push({
         unitSlug: unit.unitSlug,
         unitTitle: unit.unitTitle,
@@ -113,59 +87,19 @@ export async function buildUnitDocuments(
     unitOps.push(...result.ops);
   }
 
+  const phaseEndEvent = createPhaseEndEvent('units', {
+    subject,
+    keyStage: ks,
+    indexed: unitSummaries.size,
+    skipped: skippedCount,
+    durationMs: Date.now() - startTime,
+  });
+  sandboxLogger.info(formatIngestionEvent(phaseEndEvent));
+
   return { unitSummaries, unitOps };
 }
 
-export async function buildLessonDocuments(
-  client: OakClient,
-  groups: readonly LessonGroup[],
-  unitSummaries: Map<string, SearchUnitSummary>,
-  subject: SearchSubjectSlug,
-  ks: KeyStage,
-  unitContextMap: UnitContextMap,
-  dataIntegrityReport: DataIntegrityReport,
-): Promise<{
-  lessonOps: unknown[];
-  rollupSnippets: Map<string, string[]>;
-}> {
-  const lessonOps: unknown[] = [];
-  const rollupSnippets = new Map<string, string[]>();
-  const totalLessons = groups.reduce((sum, g) => sum + g.lessons.length, 0);
-  let processedLessons = 0;
-
-  for (const group of groups) {
-    const summary = unitSummaries.get(group.unitSlug);
-    if (!summary) {
-      // Unit summary unavailable - cannot create valid lesson documents
-      const lessonSlugs = group.lessons.map((l) => l.lessonSlug);
-      dataIntegrityReport.skippedLessonGroups.push({
-        unitSlug: group.unitSlug,
-        unitTitle: group.unitTitle,
-        lessonCount: group.lessons.length,
-        lessonSlugs,
-        subject,
-        keyStage: ks,
-      });
-      continue;
-    }
-    const { ops, snippets, lessonsProcessed } = await buildLessonDocsForGroup(
-      client,
-      group,
-      summary,
-      subject,
-      ks,
-      unitContextMap,
-      processedLessons,
-      totalLessons,
-    );
-    lessonOps.push(...ops);
-    rollupSnippets.set(group.unitSlug, snippets);
-    processedLessons += lessonsProcessed;
-  }
-
-  return { lessonOps, rollupSnippets };
-}
-
+// eslint-disable-next-line max-lines-per-function -- Comprehensive logging requires inline event creation
 export function buildRollupDocuments(
   unitSummaries: Map<string, SearchUnitSummary>,
   rollupSnippets: Map<string, string[]>,
@@ -174,6 +108,14 @@ export function buildRollupDocuments(
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
 ): unknown[] {
+  const startTime = Date.now();
+  const phaseStartEvent = createPhaseStartEvent('rollups', {
+    subject,
+    keyStage,
+    count: unitSummaries.size,
+  });
+  sandboxLogger.info(formatIngestionEvent(phaseStartEvent));
+
   const ops: unknown[] = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
@@ -196,5 +138,16 @@ export function buildRollupDocuments(
       rollupDoc,
     );
   }
+
+  const rollupCount = ops.length / 2;
+  const phaseEndEvent = createPhaseEndEvent('rollups', {
+    subject,
+    keyStage,
+    indexed: rollupCount,
+    skipped: 0,
+    durationMs: Date.now() - startTime,
+  });
+  sandboxLogger.info(formatIngestionEvent(phaseEndEvent));
+
   return ops;
 }

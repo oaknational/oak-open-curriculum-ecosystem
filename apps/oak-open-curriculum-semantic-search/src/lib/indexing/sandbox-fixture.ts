@@ -45,6 +45,8 @@ function createFixtureClient(data: FixtureData): OakClient {
     // Thread fixtures not implemented yet - return empty for now
     getAllThreads: async () => [],
     getThreadUnits: async () => [],
+    // Lessons by key stage/subject - use fixture data
+    getLessonsByKeyStageAndSubject: makeFixtureLessonsByKeyStageAndSubjectFn(data),
   };
 }
 
@@ -108,5 +110,23 @@ function makeFixtureSequenceUnitsFn(data: FixtureData): OakClient['getSequenceUn
       return [];
     }
     return units.map((entry): unknown => entry);
+  };
+}
+
+function makeFixtureLessonsByKeyStageAndSubjectFn(
+  data: FixtureData,
+): OakClient['getLessonsByKeyStageAndSubject'] {
+  return async (keyStage, subject) => {
+    // Group lessons by unit for the given key stage and subject
+    const relevantUnits = data.units.filter(
+      (unit) => unit.keyStage === keyStage && unit.subject === subject,
+    );
+    return relevantUnits.map((unit) => ({
+      unitSlug: unit.unitSlug,
+      unitTitle: unit.unitTitle,
+      lessons: data.lessons
+        .filter((lg) => lg.unitSlug === unit.unitSlug)
+        .flatMap((lg) => lg.lessons),
+    }));
   };
 }

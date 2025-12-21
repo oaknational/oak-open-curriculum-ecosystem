@@ -45,6 +45,90 @@ For experiment history, see **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-L
 
 ---
 
+## 🔴 BLOCKING ISSUE: Ingestion Gap (2025-12-20)
+
+**All MRR measurements are against an incomplete index. This MUST be fixed before further search experiments.**
+
+**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+
+### Root Cause (Verified via Upstream API Code)
+
+The ingestion derives lessons from unit summaries (`/units/{slug}/summary` → `unitLessons[]`), which are **truncated**. Investigation of `reference/oak-openapi/` revealed:
+
+| Endpoint | Materialized View | Data Source | Status |
+|----------|-------------------|-------------|--------|
+| Unit Summary | `sequenceView` | JSON array embedded in sequence record | ❌ Truncated snapshot |
+| Lessons | `unitVariantLessonsView` | Normalised row-per-lesson view | ✅ Complete with pagination |
+
+The `unitLessons` truncation is **by design** — the `sequenceView` is optimised for quick unit overview, not lesson enumeration. This is not a bug, but we were using the wrong data source.
+
+| Source | Maths KS4 Lessons | Data Loss |
+|--------|-------------------|-----------|
+| Unit Summary (`unitLessons`) | 314 | — |
+| Lessons Endpoint (paginated) | ~650+ | **52% missing** |
+
+**Example**: `algebraic-fractions` unit summary returns **2 lessons**, but lessons endpoint returns **10 lessons** (8 unique).
+
+### Critical Nuance: Aggregation, Not Simple Deduplication
+
+**Lessons can legitimately belong to multiple units, tiers, and programmes.** The lessons endpoint returns one row per (lesson, unit variant) pair.
+
+When indexing lessons:
+
+1. ✅ **Index each unique lesson ONCE** by `lessonSlug`
+2. ✅ **Aggregate ALL unit relationships** — collect all units a lesson belongs to
+3. ❌ **Do NOT simply deduplicate** — this would drop legitimate unit associations
+
+```typescript
+// WRONG: Simple deduplication loses unit relationships
+const uniqueLessons = new Set(lessons.map(l => l.lessonSlug));
+
+// CORRECT: Aggregate by lessonSlug, collect all units
+const lessonMap = new Map<string, {
+  lessonSlug: string;
+  lessonTitle: string;
+  unitSlugs: Set<string>;  // ALL units this lesson belongs to
+}>();
+```
+
+### Required Fix
+
+Change the ingestion flow:
+
+```text
+❌ CURRENT: /units → /units/{slug}/summary → unitLessons[] (TRUNCATED)
+✅ CORRECT: /key-stages/{ks}/subject/{subject}/lessons (PAGINATED) → Aggregate by lessonSlug
+```
+
+Keep unit summaries for unit-level metadata (description, threads, curriculum statements).
+
+### TDD Implementation Steps
+
+1. **RED**: Write integration test asserting `algebraic-fractions` returns 8+ lessons
+2. **GREEN**: Implement pagination + aggregation in `fetchAllLessons()`
+3. **REFACTOR**: Remove `deriveLessonGroupsFromUnitSummaries()` approach
+
+### Actions Before Continuing
+
+1. [ ] **Implement fix** — Refactor ingestion per ADR-083
+2. [ ] **Re-index** — Full re-ingestion with corrected source (`pnpm es:ingest-live`)
+3. [ ] **Verify** — `pnpm es:status` should show ~650+ lessons (not 314)
+4. [ ] **Re-measure baseline** — New MRR metrics against complete index
+5. [ ] ✅ **Update upstream wishlist** — Done (see `00-overview-and-known-issues.md`)
+6. [ ] ✅ **Create ADR** — Done (ADR-083)
+
+### Files to Modify
+
+| File | Change |
+|------|--------|
+| `src/lib/index-oak-helpers.ts` | Add `fetchAllLessons()` with pagination |
+| `src/lib/indexing/index-bulk-helpers.ts` | Replace `deriveLessonGroupsFromUnitSummaries()` |
+| `src/adapters/oak-adapter-sdk.ts` | Ensure pagination params supported |
+
+See [current-state.md](current-state.md) for full analysis.
+
+---
+
 ## Strategic Direction (Updated 2025-12-19)
 
 **B.2 (Semantic Reranking) was REJECTED** with a -16.8% regression on lesson MRR. This led to a strategic pivot documented in [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md):

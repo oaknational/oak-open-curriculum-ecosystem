@@ -18,15 +18,51 @@ Chronological record of search experiments and their impact on system metrics.
 
 For the full current state, see [current-state.md](plans/semantic-search/current-state.md).
 
-| Metric | Value | Last Updated |
-|--------|-------|--------------|
-| Lesson Hard MRR | 0.380 | 2025-12-19 |
-| Unit Hard MRR | 0.844 | 2025-12-19 |
-| Standard MRR | 0.931 | 2025-12-19 |
+| Metric | Value | Last Updated | Note |
+|--------|-------|--------------|------|
+| Lesson Hard MRR | 0.327 | 2025-12-20 | ✅ Against COMPLETE index (431 lessons) |
+| Unit Hard MRR | 0.761 | 2025-12-20 | ✅ Against COMPLETE index |
+
+**Note**: Previous measurements (Lesson MRR=0.380, Unit MRR=0.844) were against an incomplete index with only 314/431 lessons. Current values are TRUE baselines.
 
 ---
 
 ## Log Entries
+
+### 2025-12-20: Ingestion Gap Fix — Complete Lesson Enumeration
+
+**Context**: The ingestion was using a truncated data source (`/units/{slug}/summary` → `unitLessons[]`). Fixed by switching to paginated `/key-stages/{ks}/subject/{subject}/lessons` endpoint per [ADR-083](../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+
+| Metric | Before | After | Delta |
+|--------|--------|-------|-------|
+| Indexed Lessons | 314 | 431 | +37% |
+| Lesson Hard MRR | 0.380* | 0.327 | -14% |
+| Unit Hard MRR | 0.844* | 0.761 | -10% |
+
+_*Previous values were against INCOMPLETE index_
+
+**Decision**: ✅ ACCEPTED — Data completeness is foundational
+
+**Key insight**: The apparent MRR "regression" is actually a correction. The old baselines were artificially high because they were measured against incomplete data. With 37% more lessons in the index, there are more candidates to rank — making it harder to hit top results. The new MRR values are TRUE baselines against complete data.
+
+**What was implemented**:
+
+- Added `getLessonsByKeyStageAndSubject` with pagination support to SDK adapter
+- Implemented `aggregateLessonsBySlug` pure function (TDD)
+- Implemented `fetchAllLessonsWithPagination` orchestrator
+- All unit relationships preserved (lessons can belong to multiple units)
+- Removed deprecated `deriveLessonGroupsFromUnitSummaries`
+
+**Files changed**:
+
+- `src/adapters/oak-adapter-sdk.ts`
+- `src/lib/indexing/lesson-aggregation.ts` (new)
+- `src/lib/indexing/fetch-all-lessons.ts` (new)
+- `src/lib/indexing/lesson-document-builder.ts` (new)
+- `src/lib/index-oak-helpers.ts`
+- `src/lib/indexing/document-transforms.ts`
+
+---
 
 ### 2025-12-19: Comprehensive Synonym Coverage
 
@@ -100,9 +136,10 @@ For the full current state, see [current-state.md](plans/semantic-search/current
 
 | Date | Event | Lesson MRR | Unit MRR | Notes |
 |------|-------|------------|----------|-------|
-| 2025-12-18 | Hard Query Baseline | 0.367 | 0.811 | Starting point for Maths KS4 |
+| 2025-12-18 | Hard Query Baseline | 0.367 | 0.811 | ⚠️ Against incomplete index (314 lessons) |
 | 2025-12-19 | Semantic Reranking Rejected | — | — | -16.8% regression, reverted, led to ADR-082 |
-| 2025-12-19 | Synonym Coverage Accepted | 0.380 | 0.844 | +3.5% / +4.1% improvement via synonyms |
+| 2025-12-19 | Synonym Coverage Accepted | 0.380 | 0.844 | ⚠️ Against incomplete index |
+| **2025-12-20** | **Ingestion Gap Fixed** | **0.327** | **0.761** | ✅ TRUE baseline (431 lessons, +37%) |
 
 ---
 

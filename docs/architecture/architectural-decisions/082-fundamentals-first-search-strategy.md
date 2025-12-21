@@ -287,6 +287,7 @@ All experiments tracked in: `.agent/evaluations/experiments/EXPERIMENT-PRIORITIE
 ## Related Documents
 
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics and harness
+- [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md) — 🔴 Ingestion gap fix (BLOCKING)
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md) — Why sparse, not dense
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md) — Synonym management
 - [E-001 Experiment](../../.agent/evaluations/experiments/E-001-semantic-reranking.experiment.md) — Why AI reranking failed

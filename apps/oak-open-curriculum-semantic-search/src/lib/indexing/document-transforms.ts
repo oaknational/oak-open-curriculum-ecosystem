@@ -1,13 +1,7 @@
 /**
  * Document transformation functions for Elasticsearch indexing.
- *
  * Creates unit, lesson, and rollup documents from Oak API data.
- * Uses two-way hybrid search (BM25 + ELSER) per ADR-075.
- *
- * KS4 metadata denormalisation (tiers, exam boards, exam subjects, ks4 options)
- * is handled by looking up units in the UnitContextMap per ADR-080.
- *
- * @see ADR-080 KS4 Metadata Denormalisation Strategy
+ * @see ADR-075 Two-way Hybrid Search, @see ADR-080 KS4 Metadata Denormalisation
  */
 
 import type {
@@ -32,8 +26,10 @@ import {
   generateLessonSemanticSummary,
   generateUnitSemanticSummary,
 } from './semantic-summary-generator';
+import { normaliseYears } from './document-transform-utils';
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
+export { normaliseYears, extractPassage } from './document-transform-utils';
 
 export interface CreateUnitDocumentParams {
   summary: SearchUnitSummary;
@@ -95,19 +91,33 @@ export function createUnitDocument({
   };
 }
 
+/** Unit info for lesson documents. Each lesson may belong to multiple units. */
+export interface LessonUnitInfo {
+  readonly unitSlug: string;
+  readonly unitTitle: string;
+  readonly canonicalUrl: string;
+}
+
 export interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
   transcript: string;
   summary: SearchLessonSummary;
-  unitCanonicalUrl: string;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   years: string[] | undefined;
   lessonCount: number;
-  /** KS4 metadata context map per ADR-080 */
   unitContextMap: UnitContextMap;
-  /** Unit slug for KS4 context lookup */
-  unitSlug: string;
+  /** ALL units this lesson belongs to - we never discard unit relationships. */
+  units: readonly LessonUnitInfo[];
+}
+
+/** Extracts unit arrays from unit info. Preserves ALL relationships. */
+function extractUnitArrays(units: readonly LessonUnitInfo[]) {
+  return {
+    unitIds: units.map((u) => u.unitSlug),
+    unitTitles: units.map((u) => u.unitTitle),
+    unitUrls: units.map((u) => u.canonicalUrl),
+  };
 }
 
 /** Creates a lesson document for Elasticsearch indexing. */
@@ -116,44 +126,48 @@ export function createLessonDocument(params: CreateLessonDocumentParams): Search
     lesson,
     transcript,
     summary,
-    unitCanonicalUrl,
     subject,
     keyStage,
     years,
     lessonCount,
     unitContextMap,
-    unitSlug,
+    units,
   } = params;
-  const fields = extractLessonDocumentFields(summary);
-  const ks4Fields = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, unitSlug));
-  const lessonSemantic = generateLessonSemanticSummary(summary);
+  if (units.length === 0) {
+    throw new Error(`Lesson ${lesson.lessonSlug} has no unit relationships`);
+  }
+
+  const primaryUnitSlug = units[0].unitSlug;
+  const f = extractLessonDocumentFields(summary);
+  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, primaryUnitSlug));
+  const sem = generateLessonSemanticSummary(summary);
+  const { unitIds, unitTitles, unitUrls } = extractUnitArrays(units);
 
   return {
     lesson_id: lesson.lessonSlug,
     lesson_slug: lesson.lessonSlug,
     lesson_title: lesson.lessonTitle,
     subject_slug: subject,
-    subject_title: fields.subjectTitle,
+    subject_title: f.subjectTitle,
     key_stage: keyStage,
-    key_stage_title: fields.keyStageTitle,
+    key_stage_title: f.keyStageTitle,
     years,
-    unit_ids: [fields.unitSlug],
-    unit_titles: [fields.unitTitle],
+    unit_ids: unitIds,
+    unit_titles: unitTitles,
     unit_count: lessonCount,
-    unit_urls: [unitCanonicalUrl],
-    lesson_keywords: fields.lessonKeywords,
-    key_learning_points: fields.keyLearningPoints,
-    misconceptions_and_common_mistakes: fields.misconceptions,
-    teacher_tips: fields.teacherTips,
-    content_guidance: fields.contentGuidance,
+    unit_urls: unitUrls,
+    lesson_keywords: f.lessonKeywords,
+    key_learning_points: f.keyLearningPoints,
+    misconceptions_and_common_mistakes: f.misconceptions,
+    teacher_tips: f.teacherTips,
+    content_guidance: f.contentGuidance,
     lesson_content: transcript,
-    lesson_structure: lessonSemantic,
+    lesson_structure: sem,
     lesson_content_semantic: transcript,
-    lesson_structure_semantic: lessonSemantic,
-    lesson_url: fields.canonicalUrl,
-    tier: fields.tier,
-    pupil_lesson_outcome: fields.pupilLessonOutcome,
-    ...ks4Fields,
+    lesson_structure_semantic: sem,
+    lesson_url: f.canonicalUrl,
+    pupil_lesson_outcome: f.pupilLessonOutcome,
+    ...ks4,
     title_suggest: {
       input: [lesson.lessonTitle],
       contexts: { subject: [subject], key_stage: [keyStage] },
@@ -166,13 +180,10 @@ export interface CreateRollupDocumentParams {
   summary: SearchUnitSummary;
   snippets: string[];
   subject: SearchSubjectSlug;
-  /** Display title for the subject (e.g., "Mathematics" instead of "maths") */
   subjectTitle?: string;
   keyStage: KeyStage;
-  /** Display title for the key stage (e.g., "Key Stage 2" instead of "ks2") */
   keyStageTitle?: string;
   subjectProgrammesUrl: string;
-  /** KS4 metadata context map per ADR-080 */
   unitContextMap: UnitContextMap;
 }
 
@@ -221,27 +232,8 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     thread_slugs: fields.threadSlugs,
     thread_titles: fields.threadTitles,
     thread_orders: fields.threadOrders,
-    tier: fields.tier,
     ...extractUnitEnrichmentFields(summary),
     ...ks4Fields,
     doc_type: 'unit',
   };
-}
-
-/** Normalises year values to string array. */
-export function normaliseYears(year: unknown, yearSlug: unknown): string[] | undefined {
-  if (typeof year === 'number' || typeof year === 'string') {
-    return [String(year)];
-  }
-  if (typeof yearSlug === 'string') {
-    return [yearSlug];
-  }
-  return undefined;
-}
-
-/** Extracts a passage from text. */
-export function extractPassage(text: string): string {
-  const cleaned = text.replace(/\s+/g, ' ').trim();
-  const sentences = cleaned.split(/(?<=[.!?])\s+/u);
-  return sentences.slice(0, 2).join(' ').slice(0, 300);
 }

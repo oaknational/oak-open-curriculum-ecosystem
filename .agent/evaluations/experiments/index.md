@@ -5,6 +5,8 @@ Experiments evaluating search approaches, techniques, and optimisations.
 **Governing Framework**: [ADR-081: Search Approach Evaluation Framework](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
+> 🔴 **BLOCKING**: All experiments are currently against an incomplete index (~314 vs ~650+ lessons for Maths KS4). Fix ingestion before continuing experiments. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+
 ---
 
 ## Quick Navigation

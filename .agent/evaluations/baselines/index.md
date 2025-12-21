@@ -2,6 +2,8 @@
 
 Baseline measurements documenting current system behaviour for comparison.
 
+> ⚠️ **NOTE**: These baselines were measured against an incomplete index (~314 vs ~650+ lessons for Maths KS4). Results should be re-measured after fixing ingestion. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+
 ---
 
 ## All Baselines

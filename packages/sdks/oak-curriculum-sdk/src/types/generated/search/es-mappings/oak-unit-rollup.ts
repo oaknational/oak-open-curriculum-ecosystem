@@ -155,9 +155,6 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
           { name: 'sequence', type: 'category' },
         ],
       },
-      tier: {
-        type: 'keyword',
-      },
       description: {
         type: 'keyword',
         normalizer: 'oak_lower',

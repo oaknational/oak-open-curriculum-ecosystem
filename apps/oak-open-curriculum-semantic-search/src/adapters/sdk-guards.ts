@@ -11,6 +11,7 @@ import {
 import {
   isUnitsGrouped as sdkIsUnitsGrouped,
   isTranscriptResponse as sdkIsTranscriptResponse,
+  isLessonGroups as sdkIsLessonGroups,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export const isKeyStage = sdkIsKeyStage;
@@ -19,5 +20,5 @@ export const KEY_STAGES = SDK_KEY_STAGES;
 export const SUBJECTS = SDK_SUBJECTS;
 
 export const isUnitsGrouped = sdkIsUnitsGrouped;
-
 export const isTranscriptResponse = sdkIsTranscriptResponse;
+export const isLessonGroups = sdkIsLessonGroups;

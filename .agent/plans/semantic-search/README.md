@@ -130,6 +130,28 @@ For current metrics, index status, and known issues, see **[current-state.md](cu
 | Four-retriever improves search | Ablation study | ✅ Proven |
 | Semantic reranking improves search | Experiment rejected | ❌ Disproven |
 
+### 🔴 Ingestion Data Quality Issues — BLOCKING (2025-12-20)
+
+**Search experimentation is PAUSED until ingestion issues are resolved.**
+
+Lesson ingestion was fixed via ADR-083 (314→431 lessons). However, unit documents still have data quality issues:
+
+| Issue | Impact | Status |
+|-------|--------|--------|
+| Unit `lesson_count` truncated | 25/36 units have wrong counts | ❌ Blocking |
+| `sequence_ids` naming error | Should be `thread_slugs` per [Oak Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary) | ❌ Blocking |
+| Dead `extractTier()` code | Derives tier from slugs (always wrong) | 🧹 Cleanup |
+
+**Full analysis**: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+
+**Required before resuming search experimentation**:
+
+1. Fix unit `lesson_count`/`lesson_ids` to use aggregated lesson data
+2. Rename `sequence_ids` → `thread_slugs`
+3. Re-ingest and validate
+
+See [current-state.md](current-state.md) for details.
+
 ---
 
 ## Architecture
@@ -178,6 +200,7 @@ Pattern: `<entity>_content|structure[_semantic]`
 
 | ADR | Title | Purpose |
 |-----|-------|---------|
+| [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) | **Complete Lesson Enumeration** | Fix ingestion gap |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Fundamentals-First Strategy** | Tier prioritisation |
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Evaluation Framework | Metrics, decision criteria |
 | [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | SDK Domain Synonyms | Synonym management |

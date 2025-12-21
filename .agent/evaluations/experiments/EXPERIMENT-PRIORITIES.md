@@ -1,9 +1,24 @@
 # Search Experiment Priorities
 
 **Status**: 🔄 Active  
-**Last Updated**: 2025-12-19  
+**Last Updated**: 2025-12-20  
 **Principle**: Master fundamentals before adding complexity  
 **Governing ADR**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
+
+---
+
+## 🔴 BLOCKING: Incomplete Index
+
+**All experiments below are against an incomplete index. Prioritise fixing ingestion before further experiments.**
+
+The ingestion process uses `/units/{slug}/summary` which returns **truncated** lesson data. For Maths KS4:
+
+- Indexed: ~314 lessons
+- Actual: ~650+ lessons
+
+**Fix**: Refactor ingestion to use paginated `/key-stages/{ks}/subject/{subject}/lessons` endpoint.
+
+**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
 
 ---
 

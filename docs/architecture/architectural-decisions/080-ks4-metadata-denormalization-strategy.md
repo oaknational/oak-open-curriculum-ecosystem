@@ -343,6 +343,26 @@ async function processSequenceForKs4Context(...) {
 
 **Result**: 251 Foundation lessons, 314 Higher lessons now correctly indexed for Maths KS4.
 
+### Critical: Tier Is Many-to-Many (2025-12-20 Cleanup)
+
+**Lesson learned**: Tier must be modelled as an ARRAY, not a scalar.
+
+A lesson can appear in BOTH Foundation AND Higher tiers:
+
+| Relationship   | Cardinality  | Example                                      |
+| -------------- | ------------ | -------------------------------------------- |
+| Lesson → Tiers | Many-to-many | Same lesson appears in Foundation AND Higher |
+
+**Correct implementation** (already in place):
+
+- `extractKs4DocumentFields()` returns `tiers: string[]` and `tier_titles: string[]`
+- Data comes from `/sequences/{sequence}/units` via `buildKs4ContextMap()`
+
+**Dead code removed** (2025-12-20):
+
+- `programme-factor-extractors.ts` deleted - it tried to derive a SINGLE `tier` value from slug suffixes (never worked)
+- The vestigial singular `tier` field in the schema should also be removed (cleanup pending)
+
 ## Rationale
 
 ### Why Denormalise vs Join at Query Time

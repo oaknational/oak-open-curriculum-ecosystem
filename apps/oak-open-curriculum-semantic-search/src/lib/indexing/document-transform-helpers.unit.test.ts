@@ -8,7 +8,6 @@ import {
   extractLessonPlanningFields,
   extractLessonDocumentFields,
   extractRollupDocumentFields,
-  extractTier,
 } from './document-transform-helpers';
 
 /**
@@ -149,20 +148,6 @@ describe('document-transform-helpers', () => {
       const normaliseYears = (year: string | number, yearSlug: string) =>
         yearSlug ? [String(year)] : [String(year)];
       expect(() => extractRollupDocumentFields(summary, normaliseYears)).toThrow(/canonical url/i);
-    });
-  });
-
-  describe('extractTier', () => {
-    it('returns undefined when unitSlug does not encode a tier', () => {
-      const summary = buildLessonSummary();
-      expect(extractTier(summary)).toBeUndefined();
-    });
-
-    it('derives foundation/higher from KS4-style unitSlug suffixes', () => {
-      expect(extractTier(buildLessonSummary({ unitSlug: 'maths-gcse-foundation' }))).toBe(
-        'foundation',
-      );
-      expect(extractTier(buildLessonSummary({ unitSlug: 'maths-gcse-higher' }))).toBe('higher');
     });
   });
 });

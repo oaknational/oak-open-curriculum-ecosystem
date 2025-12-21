@@ -118,6 +118,94 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 
 ---
 
+## Unit Summary `unitLessons` Truncation (2025-12-20)
+
+**Status**: 🔴 HIGH PRIORITY — OpenAPI schema claims "All" but returns truncated data  
+**Endpoint**: `/api/v0/units/{unitSlug}/summary`  
+**Field**: `unitLessons[]`
+
+### Problem
+
+The `unitLessons` array in unit summary responses is **truncated** and does not return the complete list of lessons for a unit.
+
+**Critical**: The OpenAPI schema explicitly documents this field as:
+
+```json
+"unitLessons": {
+  "type": "array",
+  "items": { ... },
+  "description": "All the lessons contained in the unit"  // ← INCORRECT
+}
+```
+
+The description says **"All the lessons"** but the actual data is truncated. This is a **documentation/data discrepancy** that misleads consumers.
+
+**Example for `algebraic-fractions` unit**:
+
+| Source | Lesson Count | Status |
+|--------|--------------|--------|
+| `/units/algebraic-fractions/summary` → `unitLessons[]` | **2 lessons** | ❌ Truncated |
+| `/key-stages/ks4/subject/maths/lessons?unit=algebraic-fractions` | **10 lessons** | ✅ Complete |
+
+This represents an **80% data loss** for this single unit.
+
+**Impact on Maths KS4**:
+
+| Source | Total Lessons |
+|--------|---------------|
+| Unit summaries (`unitLessons[]`) | ~314 |
+| Lessons endpoint (paginated) | ~650+ |
+
+### Root Cause Analysis
+
+**Verified via upstream API code** (`reference/oak-openapi/`):
+
+- The unit summary uses `sequenceView` (materialized view `published_mv_curriculum_sequence_b_13_0_17`)
+- The `lessons` field is a **JSON array embedded in the sequence record** — a denormalised snapshot
+- This snapshot appears to be truncated at materialization time
+- The lessons endpoint uses `unitVariantLessonsView` — a normalised, row-per-lesson view with complete data
+
+This may be **intentional** (designed for quick overview) or a **data bug** (materialisation should include all lessons). The API team should clarify.
+
+### Requested Fix (Choose One)
+
+**Option A**: Fix the data — make `unitLessons[]` actually contain all lessons
+
+Ensure the materialized view includes all lessons. Add `lessonCount` field to indicate expected count.
+
+**Option B**: Fix the documentation — update OpenAPI schema
+
+Change the description from "All the lessons" to accurately reflect the truncation:
+
+```json
+"description": "Preview of lessons in the unit (may be truncated). For complete lesson list, use /key-stages/{ks}/subject/{subject}/lessons"
+```
+
+**Option C**: Add pagination to unit summary
+
+```yaml
+/units/{unitSlug}/summary:
+  parameters:
+    - name: lessonLimit
+      in: query
+      schema:
+        type: integer
+        default: 10
+    - name: lessonOffset
+      in: query
+      schema:
+        type: integer
+        default: 0
+```
+
+### Our Workaround
+
+Refactor ingestion to use the paginated lessons endpoint (`/key-stages/{ks}/subject/{subject}/lessons`) with proper pagination exhaustion instead of deriving from unit summaries.
+
+**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+
+---
+
 ## Bulk Download Data Integrity Issues (2025-12-19)
 
 **Context**: Analysis of the bulk download data (`/bulk-download` endpoint) revealed inconsistencies that affect downstream filtering and search capabilities.

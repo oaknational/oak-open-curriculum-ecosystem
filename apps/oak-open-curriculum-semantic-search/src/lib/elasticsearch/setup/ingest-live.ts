@@ -18,7 +18,7 @@ import {
   getIngestionErrorCollector,
   resetIngestionErrorCollector,
 } from '../../indexing/ingestion-error-collector.js';
-import { sandboxLogger, setLogLevel } from '../../logger';
+import { sandboxLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient } from './ingest-client-factory.js';
 import type { IngestionResult } from './ingest-output.js';
@@ -141,6 +141,17 @@ async function runIngestion(args: CliArgs): Promise<void> {
   }
 }
 
+/**
+ * Generates a timestamped log file path.
+ *
+ * @returns Log file path in format: logs/ingest-YYYYMMDD-HHMMSS.log
+ */
+function generateLogFilePath(): string {
+  const now = new Date();
+  const timestamp = now.toISOString().replace(/[:.]/g, '-').replace('T', '-').slice(0, 19);
+  return `logs/ingest-${timestamp}.log`;
+}
+
 /** Main CLI entry point. */
 async function main(): Promise<void> {
   if (!initEnv()) {
@@ -153,12 +164,29 @@ async function main(): Promise<void> {
     setLogLevel('DEBUG');
   }
 
+  // Enable file logging for all ingestion runs
+  const logFilePath = generateLogFilePath();
+  const logPath = enableFileSink(logFilePath);
+  if (logPath !== null) {
+    sandboxLogger.info('INGESTION_STARTED', {
+      logFile: logPath,
+      subjects: args.subjects.join(','),
+      keyStages: args.keyStages.join(','),
+    });
+  }
+
   if (args.help) {
     printHelp();
+    disableFileSink();
     return;
   }
 
-  await runIngestion(args);
+  try {
+    await runIngestion(args);
+  } finally {
+    // Ensure file sink is closed and flushed
+    disableFileSink();
+  }
 }
 
 main().catch((error: unknown) => {

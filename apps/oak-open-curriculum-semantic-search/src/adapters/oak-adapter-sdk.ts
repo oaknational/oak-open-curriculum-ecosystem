@@ -13,21 +13,15 @@ import {
   type OakClientConfig,
   type RateLimitTracker,
 } from '@oaknational/oak-curriculum-sdk';
-import { isUnitsGrouped, isTranscriptResponse } from './sdk-guards';
+import { isUnitsGrouped, isTranscriptResponse, isLessonGroups } from './sdk-guards';
 
-/**
- * Public shape for listing units by key stage and subject.
- * Linked plan: `.agent/plans/generated-document-enhancements-plan.md` (docs API curation)
- */
+/** Public shape for listing units by key stage and subject. */
 export type GetUnitsFn = (
   keyStage: KeyStage,
   subject: SearchSubjectSlug,
 ) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
 
-/**
- * Public shape for fetching a lesson transcript.
- * Linked plan: `.agent/plans/generated-document-enhancements-plan.md`
- */
+/** Public shape for fetching a lesson transcript. */
 export type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
 
 export type GetLessonSummaryFn = (lessonSlug: string) => Promise<SearchLessonSummary>;
@@ -39,6 +33,27 @@ export type SubjectSequenceEntry = SearchSubjectSequences[number];
 export type GetSubjectSequencesFn = (subject: SearchSubjectSlug) => Promise<SearchSubjectSequences>;
 
 export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
+
+/** Lesson group as returned by the lessons endpoint. */
+export interface LessonGroupResponse {
+  readonly unitSlug: string;
+  readonly unitTitle: string;
+  readonly lessons: readonly { lessonSlug: string; lessonTitle: string }[];
+}
+
+/** Pagination options for the lessons endpoint. */
+export interface LessonsPaginationOptions {
+  readonly limit?: number;
+  readonly offset?: number;
+  readonly unit?: string;
+}
+
+/** Public shape for fetching lessons by key stage and subject with pagination. */
+export type GetLessonsByKeyStageAndSubjectFn = (
+  keyStage: KeyStage,
+  subject: SearchSubjectSlug,
+  options?: LessonsPaginationOptions,
+) => Promise<readonly LessonGroupResponse[]>;
 
 // Import thread types and factory functions from separate module
 import {
@@ -153,25 +168,41 @@ function makeGetSequenceUnits(client: OakApiClient): GetSequenceUnitsFn {
   };
 }
 
+/** Factory for fetching lessons by key stage and subject with pagination. */
+function makeGetLessonsByKeyStageAndSubject(
+  client: OakApiClient,
+): GetLessonsByKeyStageAndSubjectFn {
+  return async (keyStage, subject, options = {}) => {
+    const { limit = 100, offset = 0, unit } = options;
+    const res = await client.GET('/key-stages/{keyStage}/subject/{subject}/lessons', {
+      params: {
+        path: { keyStage, subject },
+        query: { limit, offset, unit },
+      },
+    });
+    assertSdkOk(res);
+    const data = res.data;
+    if (!data) {
+      return [];
+    }
+    if (isLessonGroups(data)) {
+      return data;
+    }
+    throw new Error('Unexpected lessons response shape');
+  };
+}
+
 /** Documented SDK-backed client interface (narrow, curated). */
 export interface OakSdkClient {
-  /** List units for a key stage and subject. */
   getUnitsByKeyStageAndSubject: GetUnitsFn;
-  /** Get a lesson transcript and VTT. */
   getLessonTranscript: GetTranscriptFn;
-  /** Get lesson summary metadata. */
   getLessonSummary: GetLessonSummaryFn;
-  /** Get unit summary metadata. */
   getUnitSummary: GetUnitSummaryFn;
-  /** Get sequence metadata for a subject. */
   getSubjectSequences: GetSubjectSequencesFn;
-  /** Get units associated with a sequence. */
   getSequenceUnits: GetSequenceUnitsFn;
-  /** Get all curriculum threads. */
   getAllThreads: GetAllThreadsFn;
-  /** Get units belonging to a thread. */
   getThreadUnits: GetThreadUnitsFn;
-  /** Rate limit tracker for monitoring API usage. */
+  getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
   rateLimitTracker: RateLimitTracker;
 }
 
@@ -201,9 +232,9 @@ export function createOakSdkClient(): OakSdkClient {
     getSequenceUnits: makeGetSequenceUnits(client),
     getAllThreads: makeGetAllThreads(client),
     getThreadUnits: makeGetThreadUnits(client),
+    getLessonsByKeyStageAndSubject: makeGetLessonsByKeyStageAndSubject(client),
     rateLimitTracker: baseClient.rateLimitTracker,
   };
-
   return _singletonClient;
 }
 

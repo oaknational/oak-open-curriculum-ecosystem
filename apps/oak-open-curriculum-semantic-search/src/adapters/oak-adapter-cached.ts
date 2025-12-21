@@ -134,6 +134,7 @@ function createCachedClientWrapper(
     getSequenceUnits: baseClient.getSequenceUnits,
     getAllThreads: baseClient.getAllThreads,
     getThreadUnits: baseClient.getThreadUnits,
+    getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
     getUnitSummary: withCache(
       baseClient.getUnitSummary,
       redis,

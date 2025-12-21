@@ -6,6 +6,10 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
+> 🔴 **BLOCKING**: All experiments are currently against an incomplete index (~314 vs ~650+ lessons for Maths KS4). Fix ingestion before continuing experiments. See [ADR-083](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+
+---
+
 ## Directory Structure
 
 ```text

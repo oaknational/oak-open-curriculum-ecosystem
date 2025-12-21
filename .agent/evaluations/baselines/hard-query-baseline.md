@@ -2,9 +2,11 @@
 
 **Type**: Baseline  
 **Date**: 2025-12-19  
-**Status**: ✅ Complete  
+**Status**: ⚠️ Complete (but against incomplete index)  
 **Type**: Baseline Documentation (no variant)  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
+
+> ⚠️ **IMPORTANT**: These results were measured against an incomplete index. The ingestion process only indexed ~314 of ~650+ Maths KS4 lessons due to truncated data from `/units/{slug}/summary`. All MRR values should be re-measured after fixing ingestion. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
 
 ## Abstract
 

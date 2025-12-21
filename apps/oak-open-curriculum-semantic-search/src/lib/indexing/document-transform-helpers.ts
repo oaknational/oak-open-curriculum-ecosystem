@@ -7,7 +7,6 @@
  */
 
 import type { SearchLessonSummary, SearchUnitSummary } from '../../types/oak';
-import { extractTier } from './programme-factor-extractors';
 import {
   extractThreadInfo,
   extractPedagogicalData,
@@ -16,9 +15,6 @@ import {
   type PedagogicalData,
 } from './thread-and-pedagogical-extractors';
 import type { AggregatedUnitContext } from './ks4-context-builder';
-
-// Re-export programme factor extractors
-export { extractTier };
 
 // Re-export thread and pedagogical extractors
 export {
@@ -131,7 +127,6 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
   misconceptions?: string[];
   teacherTips?: string[];
   contentGuidance?: string[];
-  tier: 'foundation' | 'higher' | undefined;
   pupilLessonOutcome?: string;
   subjectTitle: string;
   keyStageTitle: string;
@@ -152,7 +147,6 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
     misconceptions,
     teacherTips,
     contentGuidance,
-    tier: extractTier(summary),
     pupilLessonOutcome: summary.pupilLessonOutcome,
     subjectTitle: summary.subjectTitle,
     keyStageTitle: summary.keyStageTitle,
@@ -180,7 +174,6 @@ export function extractRollupDocumentFields(
   threadSlugs: string[] | undefined;
   threadTitles: string[] | undefined;
   threadOrders: number[] | undefined;
-  tier: 'foundation' | 'higher' | undefined;
 } {
   if (!summary.canonicalUrl) {
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
@@ -203,7 +196,6 @@ export function extractRollupDocumentFields(
     threadSlugs: threadInfo.slugs,
     threadTitles: threadInfo.titles,
     threadOrders: threadInfo.orders,
-    tier: extractTier(summary),
   };
 }
 

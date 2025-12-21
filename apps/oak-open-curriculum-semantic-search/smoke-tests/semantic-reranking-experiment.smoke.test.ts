@@ -10,7 +10,7 @@
  * - Requires Elasticsearch cluster with indexed data
  *
  * **Success Criteria** (from ADR-081):
- * - Hard MRR improvement: ≥+15% (0.367 → 0.422+)
+ * - Hard MRR improvement: ≥+15% (0.327 → 0.376+)
  * - Standard MRR: ≥0.92 (no regression)
  * - p95 Latency: ≤2000ms
  *
@@ -34,11 +34,11 @@ import type { GroundTruthQuery } from '../src/lib/search-quality/ground-truth/ty
 import type { UnitGroundTruthQuery } from '../src/lib/search-quality/ground-truth/units/types.js';
 
 /**
- * Baseline values from B-001 for comparison.
+ * Baseline values (2025-12-20) against COMPLETE index (431 Maths KS4 lessons).
  */
 const BASELINE = {
-  LESSON_MRR: 0.367,
-  UNIT_MRR: 0.811,
+  LESSON_MRR: 0.327,
+  UNIT_MRR: 0.761,
 } as const;
 
 /**

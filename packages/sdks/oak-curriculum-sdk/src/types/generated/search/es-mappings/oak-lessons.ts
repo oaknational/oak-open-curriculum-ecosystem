@@ -179,9 +179,6 @@ export const OAK_LESSONS_MAPPING = {
           { name: 'key_stage', type: 'category' },
         ],
       },
-      tier: {
-        type: 'keyword',
-      },
       pupil_lesson_outcome: {
         type: 'keyword',
         normalizer: 'oak_lower',

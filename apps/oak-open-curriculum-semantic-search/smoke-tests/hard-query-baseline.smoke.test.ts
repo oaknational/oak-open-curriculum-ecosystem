@@ -9,9 +9,9 @@
  * - Per testing-strategy.md: "Smoke tests CAN trigger all IO types"
  * - Requires Elasticsearch cluster with indexed data
  *
- * **Baseline Values** (from B-001, 2025-12-19):
- * - Lesson Hard Query MRR: 0.367
- * - Unit Hard Query MRR: 0.811
+ * **Baseline Values** (2025-12-20, against COMPLETE index with 431 lessons):
+ * - Lesson Hard Query MRR: 0.327
+ * - Unit Hard Query MRR: 0.761
  *
  * @see `.agent/evaluations/experiments/B-001-hard-query-baseline.experiment.md`
  */
@@ -33,15 +33,16 @@ import {
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oak.js';
 
 /**
- * Documented baseline values from B-001 (2025-12-19).
+ * Documented baseline values (2025-12-20).
  *
- * These values serve as regression detection thresholds.
+ * These values are measured against the COMPLETE index (431 Maths KS4 lessons).
+ * Previous baselines (0.367/0.811) were against an incomplete index with only 314 lessons.
  */
 const BASELINE = {
-  /** Lesson hard query MRR baseline */
-  LESSON_MRR: 0.367,
-  /** Unit hard query MRR baseline */
-  UNIT_MRR: 0.811,
+  /** Lesson hard query MRR baseline (against complete index) */
+  LESSON_MRR: 0.327,
+  /** Unit hard query MRR baseline (against complete index) */
+  UNIT_MRR: 0.761,
   /** Acceptable regression percentage (5%) */
   REGRESSION_THRESHOLD: 0.05,
 } as const;

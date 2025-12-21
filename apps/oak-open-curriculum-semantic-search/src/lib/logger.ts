@@ -3,24 +3,31 @@
  * Centralising creation avoids multiple logger bindings in Next.js.
  * Uses console for browser compatibility.
  *
+ * Supports dual-sink logging (stdout + file) for CLI ingestion runs.
+ *
  * @example
  * ```typescript
- * import { sandboxLogger, setLogLevel } from './logger.js';
+ * import { sandboxLogger, setLogLevel, enableFileSink } from './logger.js';
  *
  * // Enable verbose logging for CLI
  * setLogLevel('DEBUG');
+ *
+ * // Enable file logging for ingestion (CLI only)
+ * enableFileSink('logs/ingest-2025-12-20.log');
  *
  * sandboxLogger.info('Processing', { subject: 'maths' });
  * sandboxLogger.debug('Detailed progress', { step: 1, total: 10 });
  * ```
  */
 
+import { logLevelToSeverityNumber } from '@oaknational/mcp-logger';
 import {
   UnifiedLogger,
   buildResourceAttributes,
-  logLevelToSeverityNumber,
+  createNodeFileSink,
   type Logger,
-} from '@oaknational/mcp-logger';
+  type FileSinkInterface,
+} from '@oaknational/mcp-logger/node';
 
 /** Valid log levels for the semantic search logger. */
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
@@ -28,7 +35,13 @@ export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 /** Current minimum log level. Defaults to INFO. */
 let currentLevel: LogLevel = 'INFO';
 
-/** Cached logger instances. Recreated when level changes. */
+/** Current file sink path. Null means no file logging. */
+let currentFilePath: string | null = null;
+
+/** Active file sink instance. */
+let activeFileSink: FileSinkInterface | null = null;
+
+/** Cached logger instances. Recreated when level or file sink changes. */
 let loggerCache: {
   base: UnifiedLogger;
   search: Logger;
@@ -36,6 +49,16 @@ let loggerCache: {
   sandbox: Logger;
   cache: Logger;
 } | null = null;
+
+/**
+ * Creates a file sink for logging.
+ *
+ * @param filePath - Path to the log file
+ * @returns File sink interface or null if creation fails
+ */
+function createLogFileSink(filePath: string): FileSinkInterface | null {
+  return createNodeFileSink({ path: filePath, append: false });
+}
 
 /**
  * Creates or returns cached logger instances.
@@ -52,12 +75,17 @@ function getLoggers(): NonNullable<typeof loggerCache> {
       ? (line: string) => process.stdout.write(line + '\n')
       : (line: string) => console.log(line);
 
+  // Create file sink if path is configured
+  if (currentFilePath !== null && activeFileSink === null) {
+    activeFileSink = createLogFileSink(currentFilePath);
+  }
+
   const base = new UnifiedLogger({
     minSeverity: logLevelToSeverityNumber(currentLevel),
     resourceAttributes: buildResourceAttributes({}, 'SemanticSearch', '1.0.0'),
     context: {},
     stdoutSink: { write: writeLine },
-    fileSink: null,
+    fileSink: activeFileSink,
   });
 
   const createChild = (name: string): Logger => {
@@ -108,102 +136,100 @@ export function getLogLevel(): LogLevel {
   return currentLevel;
 }
 
+/**
+ * Enables file logging to the specified path.
+ *
+ * Creates the parent directory if it doesn't exist. All subsequent log
+ * messages will be written to both stdout and the specified file.
+ *
+ * @param filePath - Path to the log file (relative to cwd or absolute)
+ * @returns The resolved file path, or null if creation failed
+ *
+ * @example
+ * ```typescript
+ * // In CLI ingestion entry point
+ * const logPath = `logs/ingest-${Date.now()}.log`;
+ * const resolvedPath = enableFileSink(logPath);
+ * if (resolvedPath) {
+ *   sandboxLogger.info('Logging to file', { path: resolvedPath });
+ * }
+ * ```
+ */
+export function enableFileSink(filePath: string): string | null {
+  // Close existing file sink if any
+  if (activeFileSink !== null) {
+    activeFileSink.end();
+    activeFileSink = null;
+  }
+
+  currentFilePath = filePath;
+  loggerCache = null; // Force recreation on next access
+
+  // Eagerly create the sink to validate the path
+  activeFileSink = createLogFileSink(filePath);
+
+  if (activeFileSink === null) {
+    currentFilePath = null;
+    return null;
+  }
+
+  return filePath;
+}
+
+/**
+ * Disables file logging and closes the file sink.
+ *
+ * Call this at the end of CLI operations to ensure logs are flushed.
+ */
+export function disableFileSink(): void {
+  if (activeFileSink !== null) {
+    activeFileSink.end();
+    activeFileSink = null;
+  }
+  currentFilePath = null;
+  loggerCache = null;
+}
+
+/** Gets the current file sink path, or null if file logging is disabled. */
+export function getFileSinkPath(): string | null {
+  return currentFilePath;
+}
+
+type LoggerKey = 'search' | 'suggest' | 'sandbox' | 'cache';
+
+/** Creates a lazy-bound logger proxy for a given logger key. */
+function createLoggerProxy(key: LoggerKey): Logger {
+  const get = () => getLoggers()[key];
+  return {
+    get trace() {
+      return get().trace.bind(get());
+    },
+    get debug() {
+      return get().debug.bind(get());
+    },
+    get info() {
+      return get().info.bind(get());
+    },
+    get warn() {
+      return get().warn.bind(get());
+    },
+    get error() {
+      return get().error.bind(get());
+    },
+    get fatal() {
+      return get().fatal.bind(get());
+    },
+    child(context) {
+      return get().child?.(context) ?? get();
+    },
+  };
+}
+
 /** Primary logger for hybrid search orchestration and telemetry. */
-export const searchLogger: Logger = {
-  get trace() {
-    return getLoggers().search.trace.bind(getLoggers().search);
-  },
-  get debug() {
-    return getLoggers().search.debug.bind(getLoggers().search);
-  },
-  get info() {
-    return getLoggers().search.info.bind(getLoggers().search);
-  },
-  get warn() {
-    return getLoggers().search.warn.bind(getLoggers().search);
-  },
-  get error() {
-    return getLoggers().search.error.bind(getLoggers().search);
-  },
-  get fatal() {
-    return getLoggers().search.fatal.bind(getLoggers().search);
-  },
-  child(context) {
-    return getLoggers().search.child?.(context) ?? getLoggers().search;
-  },
-};
-
+export const searchLogger: Logger = createLoggerProxy('search');
 /** Dedicated logger for suggestion/type-ahead flows. */
-export const suggestLogger: Logger = {
-  get trace() {
-    return getLoggers().suggest.trace.bind(getLoggers().suggest);
-  },
-  get debug() {
-    return getLoggers().suggest.debug.bind(getLoggers().suggest);
-  },
-  get info() {
-    return getLoggers().suggest.info.bind(getLoggers().suggest);
-  },
-  get warn() {
-    return getLoggers().suggest.warn.bind(getLoggers().suggest);
-  },
-  get error() {
-    return getLoggers().suggest.error.bind(getLoggers().suggest);
-  },
-  get fatal() {
-    return getLoggers().suggest.fatal.bind(getLoggers().suggest);
-  },
-  child(context) {
-    return getLoggers().suggest.child?.(context) ?? getLoggers().suggest;
-  },
-};
-
+export const suggestLogger: Logger = createLoggerProxy('suggest');
 /** Logger for sandbox ingestion drills and harness operations. */
-export const sandboxLogger: Logger = {
-  get trace() {
-    return getLoggers().sandbox.trace.bind(getLoggers().sandbox);
-  },
-  get debug() {
-    return getLoggers().sandbox.debug.bind(getLoggers().sandbox);
-  },
-  get info() {
-    return getLoggers().sandbox.info.bind(getLoggers().sandbox);
-  },
-  get warn() {
-    return getLoggers().sandbox.warn.bind(getLoggers().sandbox);
-  },
-  get error() {
-    return getLoggers().sandbox.error.bind(getLoggers().sandbox);
-  },
-  get fatal() {
-    return getLoggers().sandbox.fatal.bind(getLoggers().sandbox);
-  },
-  child(context) {
-    return getLoggers().sandbox.child?.(context) ?? getLoggers().sandbox;
-  },
-};
-
+export const sandboxLogger: Logger = createLoggerProxy('sandbox');
 /** Logger for SDK response caching operations. */
-export const cacheLogger: Logger = {
-  get trace() {
-    return getLoggers().cache.trace.bind(getLoggers().cache);
-  },
-  get debug() {
-    return getLoggers().cache.debug.bind(getLoggers().cache);
-  },
-  get info() {
-    return getLoggers().cache.info.bind(getLoggers().cache);
-  },
-  get warn() {
-    return getLoggers().cache.warn.bind(getLoggers().cache);
-  },
-  get error() {
-    return getLoggers().cache.error.bind(getLoggers().cache);
-  },
-  get fatal() {
-    return getLoggers().cache.fatal.bind(getLoggers().cache);
-  },
-  child(context) {
-    return getLoggers().cache.child?.(context) ?? getLoggers().cache;
-  },
-};
+export const cacheLogger: Logger = createLoggerProxy('cache');
