@@ -171,6 +171,108 @@ describe('createUnitDocument', () => {
       }),
     ).toThrowError(/Missing canonical URL/);
   });
+
+  it('uses lessonsByUnit when provided, overriding summary.unitLessons', () => {
+    const summary = buildUnitSummary({
+      unitSlug: 'surds',
+      unitLessons: [
+        // Summary only has 1 lesson (truncated)
+        { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1', lessonOrder: 1, state: 'published' },
+      ],
+    });
+
+    // But aggregated data shows 12 lessons
+    const lessonsByUnit = new Map<string, readonly string[]>([
+      [
+        'surds',
+        [
+          'lesson-1',
+          'lesson-2',
+          'lesson-3',
+          'lesson-4',
+          'lesson-5',
+          'lesson-6',
+          'lesson-7',
+          'lesson-8',
+          'lesson-9',
+          'lesson-10',
+          'lesson-11',
+          'lesson-12',
+        ],
+      ],
+    ]);
+
+    const doc: SearchUnitsIndexDoc = createUnitDocument({
+      summary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
+      lessonsByUnit,
+    });
+
+    expect(doc.lesson_ids).toHaveLength(12);
+    expect(doc.lesson_count).toBe(12);
+    expect(doc.lesson_ids).toContain('lesson-12');
+  });
+
+  it('falls back to summary.unitLessons when lessonsByUnit not provided', () => {
+    const summary = buildUnitSummary({
+      unitLessons: [
+        { lessonSlug: 'lesson-a', lessonTitle: 'Lesson A', lessonOrder: 1, state: 'published' },
+        { lessonSlug: 'lesson-b', lessonTitle: 'Lesson B', lessonOrder: 2, state: 'published' },
+      ],
+    });
+
+    const doc: SearchUnitsIndexDoc = createUnitDocument({
+      summary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
+      // No lessonsByUnit provided
+    });
+
+    expect(doc.lesson_ids).toEqual(['lesson-a', 'lesson-b']);
+    expect(doc.lesson_count).toBe(2);
+  });
+
+  it('populates thread_slugs, thread_titles, and thread_orders from summary.threads', () => {
+    const summary = buildUnitSummary({
+      threads: [
+        { slug: 'number-thread', title: 'Number', order: 1 },
+        { slug: 'algebra-thread', title: 'Algebra', order: 2 },
+      ],
+    });
+
+    const doc: SearchUnitsIndexDoc = createUnitDocument({
+      summary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
+    });
+
+    expect(doc.thread_slugs).toEqual(['number-thread', 'algebra-thread']);
+    expect(doc.thread_titles).toEqual(['Number', 'Algebra']);
+    expect(doc.thread_orders).toEqual([1, 2]);
+  });
+
+  it('handles undefined threads gracefully', () => {
+    const summary = buildUnitSummary({ threads: undefined });
+
+    const doc: SearchUnitsIndexDoc = createUnitDocument({
+      summary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
+    });
+
+    expect(doc.thread_slugs).toBeUndefined();
+    expect(doc.thread_titles).toBeUndefined();
+    expect(doc.thread_orders).toBeUndefined();
+  });
 });
 
 describe('createLessonDocument', () => {

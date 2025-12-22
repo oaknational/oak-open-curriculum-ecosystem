@@ -95,3 +95,39 @@ export function aggregateLessonsBySlug(
 
   return result;
 }
+
+/**
+ * Builds a map of unit slugs to their lesson slugs from aggregated lesson data.
+ *
+ * This inverts the lesson→units relationship to create a unit→lessons lookup,
+ * which is used to populate unit documents with correct lesson counts.
+ *
+ * @param aggregatedLessons - Map of lesson slugs to aggregated lesson data
+ * @returns Map of unit slugs to arrays of lesson slugs
+ *
+ * @example
+ * ```typescript
+ * const lessons = new Map([
+ *   ['lesson-1', { lessonSlug: 'lesson-1', lessonTitle: 'L1', unitSlugs: new Set(['unit-a', 'unit-b']) }],
+ *   ['lesson-2', { lessonSlug: 'lesson-2', lessonTitle: 'L2', unitSlugs: new Set(['unit-a']) }],
+ * ]);
+ * const byUnit = buildLessonsByUnit(lessons);
+ * // byUnit.get('unit-a') === ['lesson-1', 'lesson-2']
+ * // byUnit.get('unit-b') === ['lesson-1']
+ * ```
+ */
+export function buildLessonsByUnit(
+  aggregatedLessons: Map<string, AggregatedLesson>,
+): Map<string, readonly string[]> {
+  const lessonsByUnit = new Map<string, string[]>();
+
+  for (const lesson of aggregatedLessons.values()) {
+    for (const unitSlug of lesson.unitSlugs) {
+      const existing = lessonsByUnit.get(unitSlug) ?? [];
+      existing.push(lesson.lessonSlug);
+      lessonsByUnit.set(unitSlug, existing);
+    }
+  }
+
+  return lessonsByUnit;
+}

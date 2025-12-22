@@ -1,30 +1,34 @@
 # Search Experiment Priorities
 
-**Status**: 🔄 Active  
-**Last Updated**: 2025-12-20  
+**Status**: ✅ Ready — Complete data indexed, baselines re-measured  
+**Last Updated**: 2025-12-22 20:35 UTC  
 **Principle**: Master fundamentals before adding complexity  
 **Governing ADR**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
 
-## 🔴 BLOCKING: Incomplete Index
+## ✅ INGESTION COMPLETE
 
-**All experiments below are against an incomplete index. Prioritise fixing ingestion before further experiments.**
+**All experiments now run against complete, validated index.**
 
-The ingestion process uses `/units/{slug}/summary` which returns **truncated** lesson data. For Maths KS4:
+**Fixed** (2025-12-22):
+- ✅ Ingestion uses unit-by-unit fetching (ADR-083)
+- ✅ 436 unique lessons indexed (was 314)
+- ✅ 36 units with correct `lesson_count` (was 11/36)
+- ✅ Validated against bulk download data
+- ✅ Baselines re-measured with complete data
 
-- Indexed: ~314 lessons
-- Actual: ~650+ lessons
-
-**Fix**: Refactor ingestion to use paginated `/key-stages/{ks}/subject/{subject}/lessons` endpoint.
-
-**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+**Current Metrics** (2025-12-22 20:29 UTC):
+- Lesson Hard MRR: **0.316** (target: ≥0.50)
+- Unit Hard MRR: **0.856** (target: ≥0.50) ✅
+- Lesson Std MRR: **0.944** ✅
+- Unit Std MRR: **0.988** ✅
 
 ---
 
 ## Philosophy
 
-> "We should be able to do an excellent job with traditional methods, and an _amazing_ job with non-AI recent search methods, and a *phenomenal* job once we take that already optimised approach and add AI into the mix."
+> "We should be able to do an excellent job with traditional methods, and an _amazing_ job with non-AI recent search methods, and a _phenomenal_ job once we take that already optimised approach and add AI into the mix."
 
 This document organises experiments into **tiers** based on the principle that:
 
@@ -59,14 +63,16 @@ This document organises experiments into **tiers** based on the principle that:
 
 ---
 
-## Current Status
+## Current Status (2025-12-22)
 
-| Tier | Name | Status | Notes |
-|------|------|--------|-------|
-| **1** | Fundamentals | ⚠️ In Progress | Synonyms complete (+3.5% MRR), phrase matching & noise filtering pending |
-| **2** | Relationships | ❌ Not Started | Cross-referencing not exploited |
-| **3** | Modern ES | ⚠️ Partial | RRF working, Linear not tested |
-| **4** | AI | ❌ Rejected | Premature — fundamentals not mastered |
+| Tier  | Name          | Status         | Current MRR | Target | Notes                                      |
+| ----- | ------------- | -------------- | ----------- | ------ | ------------------------------------------ |
+| **1** | Fundamentals  | 🔄 In Progress | 0.316       | ≥0.45  | Synonyms done, noise & phrases pending     |
+| **2** | Relationships | ❌ Not Started | —           | ≥0.55  | Cross-referencing not exploited            |
+| **3** | Modern ES     | ⚠️ Partial     | —           | ≥0.60  | RRF working, Linear not tested             |
+| **4** | AI            | ⏸️ Deferred    | —           | ≥0.75  | Awaits Tiers 1-3 plateau (per ADR-082)     |
+
+**Next Priority**: B.4 Noise phrase filtering (Tier 1)
 
 ---
 
@@ -75,44 +81,49 @@ This document organises experiments into **tiers** based on the principle that:
 These are non-AI techniques with decades of proven value.
 
 ### Comprehensive Synonym Coverage
+
 **Status**: ✅ Complete (2025-12-19)  
 **Effort**: Medium  
-**Actual Impact**: ⭐⭐⭐⭐ (+3.5% MRR lessons, +4.1% MRR units)
+**Actual Impact**: ⭐⭐⭐⭐ (Qualitative vocabulary gaps fixed)
 
-| Before | After |
-|--------|-------|
-| 8 maths synonym rules | 40+ curriculum-specific rules |
-| Generic English | Maths KS4 vocabulary (sohcahtoa, solving for x, etc.) |
+| Before                | After                                                 |
+| --------------------- | ----------------------------------------------------- |
+| 8 maths synonym rules | 40+ curriculum-specific rules                         |
+| Generic English       | Maths KS4 vocabulary (sohcahtoa, solving for x, etc.) |
 
-**Results**:
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Lesson Hard MRR | 0.367 | 0.380 | +3.5% |
-| Unit Hard MRR | 0.811 | 0.844 | +4.1% |
-| Vocabulary gap tests | 3/11 | 11/11 | +8 tests |
+**Baseline comparison note**: Original measurements (Lesson MRR 0.367→0.380) were on INCOMPLETE index (314 lessons). Current complete index shows 0.316, but direct comparison not valid due to:
+1. Index completeness changed (314→436 lessons)
+2. More lessons = more search space complexity
 
-**Key Fixes**:
-- "sohcahtoa" → Was returning histograms, now returns trigonometry (rank 1)
-- "solving for x" → Now finds linear equations (rank 1)
-- "straight line graphs" → Now finds linear graphs (rank 2)
+**Qualitative wins validated with complete data**:
+- "sohcahtoa" → Now returns trigonometry (rank 1) ✅
+- "solving for x" → Now finds linear equations (rank 1) ✅
+- "straight line graphs" → Now finds linear graphs (rank 2) ✅
+- Vocabulary gap tests: 11/11 pass ✅
 
 **Details**: See [comprehensive-synonym-coverage.experiment.md](./comprehensive-synonym-coverage.experiment.md)
+
+**Current Baseline** (2025-12-22, complete data):
+- Lesson Hard MRR: 0.316
+- Unit Hard MRR: 0.856
 
 ---
 
 ### Noise Phrase Filtering
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐⭐⭐
 
 **Problem**: Colloquial queries fail because filler phrases dilute signal.
 
-| Query | Noise | Signal |
-|-------|-------|--------|
-| "that sohcahtoa stuff for triangles" | "that...stuff for" | "sohcahtoa triangles" |
+| Query                                   | Noise               | Signal                |
+| --------------------------------------- | ------------------- | --------------------- |
+| "that sohcahtoa stuff for triangles"    | "that...stuff for"  | "sohcahtoa triangles" |
 | "the bit where you complete the square" | "the bit where you" | "complete the square" |
 
 **Approach**:
+
 1. Pre-process queries to remove common noise patterns
 2. Patterns: `^the (bit|part|thing) (where|about|with)`, `that .* stuff`
 3. Test on colloquial hard queries
@@ -120,19 +131,21 @@ These are non-AI techniques with decades of proven value.
 ---
 
 ### Phrase Query Enhancement
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐⭐
 
 **Problem**: Multi-word terms are searched as bag-of-words, not phrases.
 
-| Query | Should Match As |
-|-------|-----------------|
-| "completing the square" | Exact phrase, high boost |
+| Query                    | Should Match As          |
+| ------------------------ | ------------------------ |
+| "completing the square"  | Exact phrase, high boost |
 | "simultaneous equations" | Exact phrase, high boost |
-| "circle theorems" | Exact phrase, high boost |
+| "circle theorems"        | Exact phrase, high boost |
 
 **Approach**:
+
 1. Detect multi-word curriculum terms in queries
 2. Add `match_phrase` with boost for detected phrases
 3. Maintain bag-of-words as fallback
@@ -144,17 +157,20 @@ These are non-AI techniques with decades of proven value.
 Exploit the rich structure we already have.
 
 ### Unit → Lesson Cross-Reference
+
 **Status**: 📋 Planned  
 **Effort**: Medium  
 **Expected Impact**: ⭐⭐⭐⭐⭐
 
 **Current State**:
+
 - Lessons have `unit_ids[]` field
 - Units have `lesson_ids[]` field
 - We search these indices SEPARATELY
 
 **Opportunity**:
-```
+
+```text
 User: "quadratic equations"
 ↓
 1. Search oak_unit_rollup → "Solving Quadratic Equations" unit (rank 1)
@@ -167,23 +183,23 @@ Result: Lessons from the best-matching unit are promoted
 **Implementation Options**:
 
 **Option A: Two-Stage Search**
+
 ```typescript
 async function searchWithUnitContext(query: string) {
   // Stage 1: Find best matching units
   const units = await searchUnits(query, { size: 3 });
-  const lessonIdsFromTopUnits = units.flatMap(u => u.lesson_ids);
-  
+  const lessonIdsFromTopUnits = units.flatMap((u) => u.lesson_ids);
+
   // Stage 2: Search lessons, boosting those in top units
   const lessons = await searchLessons(query, {
-    should: [
-      { terms: { lesson_slug: lessonIdsFromTopUnits, boost: 2.0 } }
-    ]
+    should: [{ terms: { lesson_slug: lessonIdsFromTopUnits, boost: 2.0 } }],
   });
   return lessons;
 }
 ```
 
 **Option B: Terms Lookup Query**
+
 ```json
 {
   "query": {
@@ -210,17 +226,20 @@ At index time, compute a "unit relevance" score for each lesson based on how wel
 ---
 
 ### Thread-Based Relevance
+
 **Status**: 📋 Planned  
 **Effort**: Medium  
 **Expected Impact**: ⭐⭐⭐⭐
 
 **Current State**:
+
 - Units have `thread_slugs[]`, `thread_titles[]`
 - Threads represent curriculum progression ("Number: Multiplication and Division")
 - We don't use this for lesson search
 
 **Opportunity**:
-```
+
+```text
 User: "multiplication" (ambiguous - could be year 2 or year 10)
 ↓
 1. Detect user context (if available) or ask
@@ -233,6 +252,7 @@ Result: Coherent results within curriculum progression
 ---
 
 ### More Like This for Related Content
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐⭐
@@ -259,6 +279,7 @@ Result: Coherent results within curriculum progression
 Advanced search techniques that don't require AI.
 
 ### RRF Parameter Optimisation
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐⭐
@@ -275,6 +296,7 @@ Advanced search techniques that don't require AI.
 ---
 
 ### Linear Retriever (Weighted Fusion)
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐⭐
@@ -286,11 +308,13 @@ Advanced search techniques that don't require AI.
 ---
 
 ### Field Boosting Optimisation
+
 **Status**: 📋 Planned  
 **Effort**: Low  
 **Expected Impact**: ⭐⭐
 
 **Current**:
+
 ```typescript
 const fields = [
   'lesson_title^3',
@@ -301,6 +325,7 @@ const fields = [
 ```
 
 **Experiment**: Test boosting pedagogical fields:
+
 - `pupil_lesson_outcome^2` (learning outcomes)
 - `misconceptions_and_common_mistakes^1.5` (common confusions)
 
@@ -311,17 +336,53 @@ const fields = [
 Only pursue after Tiers 1-3 show diminishing returns.
 
 ### Semantic Reranking
+
 **Status**: ❌ Rejected  
 **Result**: -16.8% regression on lesson MRR
 **Lesson**: Generic cross-encoders don't understand curriculum
 
 ### LLM Query Expansion
+
 **Status**: ⏸️ Deferred  
 **Rationale**: May be unnecessary if Tier 1 synonyms solve vocabulary gap
 
 ### LLM Reranking (Domain-Specific)
+
 **Status**: 📋 Planned (if Tier 1-3 insufficient)  
 **Approach**: Use curriculum-aware LLM to judge relevance
+
+---
+
+## Next Steps — Immediate Priorities (2025-12-22)
+
+**Context**: Complete data now indexed (436 lessons, 36 units). Baselines re-measured. Ready for experimentation.
+
+**Current Gap**: Lesson Hard MRR 0.316 → Target ≥0.50 (37% improvement needed)
+
+### Priority 1: B.4 Noise Phrase Filtering (START HERE)
+
+**Rationale**: Colloquial queries fail because filler phrases dilute signal
+
+| Query | Noise | Signal |
+|-------|-------|--------|
+| "that sohcahtoa stuff for triangles" | "that...stuff for" | "sohcahtoa triangles" |
+| "the bit where you complete the square" | "the bit where you" | "complete the square" |
+
+**Approach**: Pre-process queries to remove common noise patterns
+
+**TDD Entry**: Write unit test for `removeNoisePhrase(query: string): string` FIRST
+
+### Priority 2: B.5 Phrase Query Enhancement
+
+**Rationale**: Multi-word curriculum terms treated as bag-of-words, not phrases
+
+**Approach**: Detect curriculum phrases, add `match_phrase` with boost
+
+**TDD Entry**: Write unit test for `detectCurriculumPhrases(query: string): string[]` FIRST
+
+### Priority 3: B.6 Validate Tier 1
+
+**Exit Criteria**: Hard query MRR ≥0.45 AND no regression on standard queries
 
 ---
 
@@ -330,9 +391,9 @@ Only pursue after Tiers 1-3 show diminishing returns.
 ```
 TIER 1: FUNDAMENTALS (Target: MRR 0.45+)
 ═══════════════════════════════════════════
-  └─► Synonym Coverage (+50 rules targeting hard queries)      ✅ Complete
-  └─► Noise Filtering (colloquial query preprocessing)         📋 Next
-  └─► Phrase Matching (multi-word term detection)              📋
+  └─► Synonym Coverage (+40 rules for Maths KS4)               ✅ Complete
+  └─► Noise Filtering (colloquial query preprocessing)         📋 NEXT (Priority 1)
+  └─► Phrase Matching (multi-word term detection)              📋 Priority 2
 
 TIER 2: RELATIONSHIPS (Target: MRR 0.55+)
 ═══════════════════════════════════════════
@@ -360,55 +421,59 @@ Only if Tiers 1-3 plateau:
 
 ### Without Any AI (Target: MRR 0.55+)
 
-| Query Type | Expected Behaviour |
-|------------|-------------------|
-| **Topic** | Exact match on curriculum vocabulary → rank 1 |
-| **Synonym** | Vocabulary bridging via synonyms → rank 1-2 |
-| **Misspelling** | Fuzzy + phonetic → rank 1-2 |
-| **Colloquial** | Noise filtered + synonym → rank 1-3 |
+| Query Type        | Expected Behaviour                                 |
+| ----------------- | -------------------------------------------------- |
+| **Topic**         | Exact match on curriculum vocabulary → rank 1      |
+| **Synonym**       | Vocabulary bridging via synonyms → rank 1-2        |
+| **Misspelling**   | Fuzzy + phonetic → rank 1-2                        |
+| **Colloquial**    | Noise filtered + synonym → rank 1-3                |
 | **Multi-concept** | Cross-reference identifies intersection → rank 1-3 |
-| **Naturalistic** | Phrase matching + structure → rank 1-3 |
+| **Naturalistic**  | Phrase matching + structure → rank 1-3             |
 
 ### With Modern ES (Target: MRR 0.65+)
 
-| Enhancement | Impact |
-|-------------|--------|
-| Optimised RRF | Better fusion of lexical and semantic |
-| Weighted Linear | ELSER prioritised for hard queries |
-| Unit context | Lessons boosted by unit relevance |
-| Thread context | Coherent curriculum progression |
+| Enhancement     | Impact                                |
+| --------------- | ------------------------------------- |
+| Optimised RRF   | Better fusion of lexical and semantic |
+| Weighted Linear | ELSER prioritised for hard queries    |
+| Unit context    | Lessons boosted by unit relevance     |
+| Thread context  | Coherent curriculum progression       |
 
 ### With AI (Target: MRR 0.80+)
 
-| Enhancement | Impact |
-|-------------|--------|
+| Enhancement     | Impact                                |
+| --------------- | ------------------------------------- |
 | Query expansion | Vocabulary gaps bridged automatically |
-| LLM reranking | Curriculum-aware relevance judgement |
-| RAG | Answer synthesis, not just ranking |
+| LLM reranking   | Curriculum-aware relevance judgement  |
+| RAG             | Answer synthesis, not just ranking    |
 
 ---
 
 ## Decision Log
 
-| Date | Decision | Rationale |
-|------|----------|-----------|
-| 2025-12-19 | Semantic reranking rejected | -16.8% regression, generic model |
-| 2025-12-19 | AI experiments deferred | Focus on fundamentals first |
-| 2025-12-19 | Created Tier system | Discipline: master basics before complexity |
-| 2025-12-19 | Synonyms top priority | 5/8 lesson failures fixable with synonyms |
+| Date       | Decision                           | Rationale                                                     |
+| ---------- | ---------------------------------- | ------------------------------------------------------------- |
+| 2025-12-22 | Do NOT re-eval semantic reranking  | Fundamentals still weak, ADR-082 requires Tier 1-3 first      |
+| 2025-12-22 | Resume Tier 1 experiments          | Ingestion complete, baselines re-measured                     |
+| 2025-12-22 | Validated against bulk download    | 436 lessons, 36 units match exactly                           |
+| 2025-12-20 | Implemented ADR-083                | Unit-by-unit fetching to work around upstream API bug         |
+| 2025-12-19 | Semantic reranking rejected        | -16.8% regression, generic model lacks curriculum knowledge   |
+| 2025-12-19 | AI experiments deferred            | Focus on fundamentals first (ADR-082)                         |
+| 2025-12-19 | Created Tier system                | Discipline: master basics before complexity                   |
+| 2025-12-19 | Synonyms top priority              | 5/8 lesson failures fixable with synonyms                     |
 
 ---
 
 ## Related Documents
 
-| Document | Purpose |
-|----------|---------|
-| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Governing ADR** — Strategy rationale and principles |
-| [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Evaluation mechanics — metrics, harness, templates |
-| [Hard Query Baseline](../baselines/hard-query-baseline.md) | Baseline data showing failure patterns |
-| [Semantic Reranking](./semantic-reranking.experiment.md) | Why AI reranking failed |
-| [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md) | Overall search plan |
-| [search-query-optimization-research.md](../../research/search-query-optimization-research.md) | Technical approaches |
+| Document                                                                                                  | Purpose                                               |
+| --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)   | **Governing ADR** — Strategy rationale and principles |
+| [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Evaluation mechanics — metrics, harness, templates    |
+| [Hard Query Baseline](../baselines/hard-query-baseline.md)                                                | Baseline data showing failure patterns                |
+| [Semantic Reranking](./semantic-reranking.experiment.md)                                                  | Why AI reranking failed                               |
+| [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md)                    | Overall search plan                                   |
+| [search-query-optimization-research.md](../../research/search-query-optimization-research.md)             | Technical approaches                                  |
 
 ---
 
@@ -422,4 +487,3 @@ Only if Tiers 1-3 plateau:
 ---
 
 **Remember**: We have world-class educational content, expert-curated metadata, and rich curriculum structure. We should be able to build world-class search by using this data well, before reaching for AI.
-

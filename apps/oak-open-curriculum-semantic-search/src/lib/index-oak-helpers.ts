@@ -16,9 +16,10 @@ import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { sandboxLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { UnitContextMap } from './indexing/ks4-context-builder';
-import { fetchAllLessonsWithPagination } from './indexing/fetch-all-lessons';
+import { fetchAllLessonsByUnit } from './indexing/fetch-all-lessons';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import { processLessonForIndexing } from './indexing/lesson-processing';
+import { buildLessonsByUnit } from './indexing/lesson-aggregation';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -65,6 +66,7 @@ async function buildUnitsWithSummaries(
   context: PairBuildContext,
   units: PairUnits,
   subjectProgrammesUrl: string,
+  lessonsByUnit: ReadonlyMap<string, readonly string[]>,
 ): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: BulkOperations }> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
@@ -76,6 +78,7 @@ async function buildUnitsWithSummaries(
     subjectProgrammesUrl,
     unitContextMap,
     dataIntegrityReport,
+    lessonsByUnit,
   );
   sandboxLogger.debug('Built unit docs', {
     subject,
@@ -85,20 +88,53 @@ async function buildUnitsWithSummaries(
   return result;
 }
 
-/** Build lesson documents from paginated API. @see ADR-083 */
-async function buildLessonsFromSummaries(
+/** Build unit, lesson, and rollup operations with progress logging. */
+// eslint-disable-next-line max-lines-per-function, max-statements -- Core orchestration requires sequential steps
+async function buildCoreDocumentOps(
   context: PairBuildContext,
-  unitSummaries: Map<string, SearchUnitSummary>,
-): Promise<{ lessonOps: BulkOperations; rollupSnippets: Map<string, string[]> }> {
-  const { client, ks, subject } = context;
-  sandboxLogger.info('Fetching all lessons via pagination', { subject, keyStage: ks });
-  const aggregatedLessons = await fetchAllLessonsWithPagination(
+  units: PairUnits,
+  subjectProgrammesUrl: string,
+): Promise<{
+  unitOps: BulkOperations;
+  lessonOps: BulkOperations;
+  rollupOps: BulkOperations;
+  unitSummaries: Map<string, SearchUnitSummary>;
+}> {
+  const { ks, subject, unitContextMap, client } = context;
+
+  // Fetch lessons FIRST to get accurate lesson counts (per ADR-083)
+  // WORKAROUND: Fetch by unit due to upstream API bug (see ADR-083)
+  const unitSlugs = units.map((u) => u.unitSlug);
+  sandboxLogger.info('Fetching all lessons by unit (API bug workaround)', {
+    subject,
+    keyStage: ks,
+    unitCount: unitSlugs.length,
+  });
+  const aggregatedLessons = await fetchAllLessonsByUnit(
     client.getLessonsByKeyStageAndSubject,
     ks,
     subject,
+    unitSlugs,
   );
   sandboxLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
 
+  // Build lessonsByUnit map for accurate unit/rollup lesson counts
+  const lessonsByUnit = buildLessonsByUnit(aggregatedLessons);
+  sandboxLogger.debug('Built lessonsByUnit map', {
+    subject,
+    keyStage: ks,
+    unitCount: lessonsByUnit.size,
+  });
+
+  // Build units with accurate lesson counts
+  const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
+    context,
+    units,
+    subjectProgrammesUrl,
+    lessonsByUnit,
+  );
+
+  // Build lesson documents (reuses aggregatedLessons, doesn't re-fetch)
   const lessonOps: BulkOperations = [],
     rollupSnippets = new Map<string, string[]>();
   let processed = 0,
@@ -119,28 +155,8 @@ async function buildLessonsFromSummaries(
     processed++;
   }
   sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: processed, skipped });
-  return { lessonOps, rollupSnippets };
-}
 
-/** Build unit, lesson, and rollup operations with progress logging. */
-async function buildCoreDocumentOps(
-  context: PairBuildContext,
-  units: PairUnits,
-  subjectProgrammesUrl: string,
-): Promise<{
-  unitOps: BulkOperations;
-  lessonOps: BulkOperations;
-  rollupOps: BulkOperations;
-  unitSummaries: Map<string, SearchUnitSummary>;
-}> {
-  const { ks, subject, unitContextMap } = context;
-  const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
-    context,
-    units,
-    subjectProgrammesUrl,
-  );
-  const { lessonOps, rollupSnippets } = await buildLessonsFromSummaries(context, unitSummaries);
-
+  // Build rollups with accurate lesson counts
   sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
   const rollupOps = buildRollupDocuments(
     unitSummaries,
@@ -149,6 +165,7 @@ async function buildCoreDocumentOps(
     ks,
     subjectProgrammesUrl,
     unitContextMap,
+    lessonsByUnit,
   );
   sandboxLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
 

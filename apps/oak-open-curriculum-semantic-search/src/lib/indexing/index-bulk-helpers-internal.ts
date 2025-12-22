@@ -22,6 +22,7 @@ import type { BulkOperations } from './bulk-operation-types';
  * @param ks - The key stage
  * @param subjectProgrammesUrl - URL for the subject programmes page
  * @param unitContextMap - KS4 metadata context map
+ * @param lessonsByUnit - Aggregated lesson data per unit (if available)
  * @returns The unit summary and index operations, or null if unit not found
  */
 export async function processUnitSummary(
@@ -31,6 +32,7 @@ export async function processUnitSummary(
   ks: KeyStage,
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
 ): Promise<{ summary: SearchUnitSummary; ops: BulkOperations } | null> {
   const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
 
@@ -58,6 +60,7 @@ export async function processUnitSummary(
       keyStage: ks,
       subjectProgrammesUrl,
       unitContextMap,
+      lessonsByUnit,
     }),
   ];
   return { summary, ops };

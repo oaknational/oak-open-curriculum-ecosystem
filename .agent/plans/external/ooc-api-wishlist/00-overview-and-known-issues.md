@@ -206,6 +206,92 @@ Refactor ingestion to use the paginated lessons endpoint (`/key-stages/{ks}/subj
 
 ---
 
+## Lessons Endpoint Pagination Bug (2025-12-22)
+
+**Status**: 🔴 CRITICAL — Unfiltered pagination returns incomplete data  
+**Endpoint**: `/api/v0/key-stages/{keyStage}/subject/{subject}/lessons`  
+**Impact**: 5 lessons missing from Maths KS4 (431 returned instead of 436)
+
+### Problem
+
+The paginated lessons endpoint returns **incomplete data** when called without a unit filter, but returns **complete data** when filtering by unit.
+
+**Verified via MCP tool calls** (2025-12-22):
+
+| Query Type | Parameters | Maths KS4 Lessons Returned | Status |
+|------------|------------|---------------------------|--------|
+| Unfiltered pagination | `limit=100, offset=0..700` | **431 lessons** | ❌ Incomplete |
+| Filtered by unit | `unit=compound-measures` | **11 lessons** (all present) | ✅ Complete |
+| Individual lesson fetch | `/lessons/{slug}/summary` | Returns valid data | ✅ Works |
+
+**Missing lessons** (exist in ES from previous ingestion, confirmed via `/lessons/{slug}/summary`):
+
+1. `problem-solving-with-compound-measures` (unit: `compound-measures`)
+2. `checking-and-securing-understanding-on-chains-of-reasoning-with-angle-facts` (unit: `angles`)
+3. `checking-and-securing-understanding-of-exterior-angles` (unit: `angles`)
+4. `interquartile-range` (unit: `graphical-representations-of-data-cumulative-frequency-and-histograms`)
+5. `constructing-box-plots` (unit: `graphical-representations-of-data-cumulative-frequency-and-histograms`)
+
+### Verification Steps
+
+1. Called `/key-stages/ks4/subject/maths/lessons` with pagination (offset 0-700, limit 100)
+   - **Result**: 7 pages returned, pagination exhausted, **431 unique lessons**
+   - Missing lessons **never appeared** in any page
+
+2. Called `/key-stages/ks4/subject/maths/lessons?unit=compound-measures`
+   - **Result**: Returns `problem-solving-with-compound-measures` ✅
+
+3. Called `/lessons/{slug}/summary` for each missing lesson
+   - **Result**: All 5 return valid 200 responses with full lesson data ✅
+
+### Impact
+
+- **Data Loss**: 1.15% of lessons missing (5/436)
+- **Unit Accuracy**: 3/36 units have incorrect lesson counts
+- **Search Quality**: Missing lessons not discoverable via search
+- **Ingestion Reliability**: Cannot trust unfiltered pagination for complete data
+
+### Affected Units
+
+| Unit | Expected | Returned | Missing |
+|------|----------|----------|---------|
+| `compound-measures` | 11 | 10 | 1 |
+| `angles` | 10 | 8 | 2 |
+| `graphical-representations-of-data-cumulative-frequency-and-histograms` | 11 | 9 | 2 |
+
+### Requested Fix
+
+Investigate why unfiltered pagination excludes these 5 specific lessons. Possible causes:
+
+1. **Filtering logic bug**: Some lessons incorrectly filtered out
+2. **Materialized view issue**: Lessons missing from the view backing unfiltered queries
+3. **Tier/variant handling**: Lessons with specific tier combinations excluded
+4. **State filtering**: Lessons incorrectly marked as non-published in unfiltered view
+
+### Our Workaround
+
+**Implemented** (2025-12-22): Fetch lessons unit-by-unit instead of using unfiltered pagination.
+
+```typescript
+// Instead of:
+const lessons = await fetchAllLessonsWithPagination(client, 'ks4', 'maths');
+
+// Use:
+const units = await client.getUnitsByKeyStageAndSubject('ks4', 'maths');
+const unitSlugs = units.map(u => u.unitSlug);
+const lessons = await fetchAllLessonsByUnit(client, 'ks4', 'maths', unitSlugs);
+```
+
+This workaround:
+- ✅ Returns all 436 lessons
+- ✅ Correctly handles lessons belonging to multiple units
+- ⚠️ Makes N+1 API calls (36 units = 36 calls instead of 7 pages)
+- ⚠️ Slower due to serial fetching
+
+**Code**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/fetch-all-lessons.ts`
+
+---
+
 ## Bulk Download Data Integrity Issues (2025-12-19)
 
 **Context**: Analysis of the bulk download data (`/bulk-download` endpoint) revealed inconsistencies that affect downstream filtering and search capabilities.

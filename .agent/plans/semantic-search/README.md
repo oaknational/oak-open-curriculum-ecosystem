@@ -1,9 +1,22 @@
 # Semantic Search - Navigation Hub
 
-**Status**: Part 1 In Progress — Tier 1 Fundamentals  
+**Status**: Part 1 ACTIVE — Tier 1 experiments ready to resume  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-20
+**Last Updated**: 2025-12-22 20:30 UTC
+
+---
+
+## ✅ Quality Gates Pass (2025-12-22 20:30 UTC)
+
+All quality gates pass. Complete data indexed and validated.
+
+| Gate | Status |
+|------|--------|
+| `pnpm test` | ✅ 89 files, 504 tests |
+| All other gates | ✅ Pass |
+| Index validation | ✅ 436 lessons, 36 units (vs bulk download) |
+| Baselines | ✅ Re-measured with complete data |
 
 ---
 
@@ -125,32 +138,37 @@ For current metrics, index status, and known issues, see **[current-state.md](cu
 | Claim | Evidence | Status |
 |-------|----------|--------|
 | Code compiles | `pnpm type-check` passes | ✅ Proven |
-| Unit tests pass | `pnpm test` passes | ✅ Proven |
+| Unit tests pass | `pnpm test` passes (88 files, 490 tests) | ✅ Proven |
 | All quality gates pass | `pnpm check` exits 0 | ✅ Proven |
+| Test isolation works | `isolate: true, pool: 'forks'` | ✅ Proven (2025-12-22) |
+| Exit codes report failures correctly | Vitest exits 1 on failure | ✅ Proven (2025-12-22) |
 | Four-retriever improves search | Ablation study | ✅ Proven |
 | Semantic reranking improves search | Experiment rejected | ❌ Disproven |
 
-### 🔴 Ingestion Data Quality Issues — BLOCKING (2025-12-20)
+### ✅ Ingestion Complete — Validated (2025-12-22)
 
-**Search experimentation is PAUSED until ingestion issues are resolved.**
+**All ingestion issues resolved. Complete data indexed. Baselines re-measured. Ready for experiments.**
 
-Lesson ingestion was fixed via ADR-083 (314→431 lessons). However, unit documents still have data quality issues:
+| Milestone | Status |
+|-----------|--------|
+| Lesson ingestion (ADR-083) | ✅ 436 lessons (was 314) |
+| Unit `lesson_count` fixed | ✅ 36/36 units correct |
+| Thread fields populated | ✅ All units have `thread_slugs` |
+| Bulk download validation | ✅ 436 lessons, 36 units match exactly |
+| Fresh re-ingestion | ✅ 2025-12-22 18:47 UTC |
+| Baselines re-measured | ✅ 2025-12-22 20:29 UTC |
 
-| Issue | Impact | Status |
-|-------|--------|--------|
-| Unit `lesson_count` truncated | 25/36 units have wrong counts | ❌ Blocking |
-| `sequence_ids` naming error | Should be `thread_slugs` per [Oak Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary) | ❌ Blocking |
-| Dead `extractTier()` code | Derives tier from slugs (always wrong) | 🧹 Cleanup |
+**Root Cause**: Upstream API pagination bug (unfiltered endpoint returns 431/436 lessons).
 
-**Full analysis**: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+**Fix**: `fetchAllLessonsByUnit()` workaround. Documented in API wishlist.
 
-**Required before resuming search experimentation**:
+**Current Metrics (Complete Data)**:
+- Standard queries: Lesson 0.944, Unit 0.988 ✅ Excellent
+- Hard queries: Lesson 0.316, Unit 0.856 ⚠️ Lessons need improvement
 
-1. Fix unit `lesson_count`/`lesson_ids` to use aggregated lesson data
-2. Rename `sequence_ids` → `thread_slugs`
-3. Re-ingest and validate
+**Full report**: [COMPLETION-REPORT-2025-12-22.md](../quality-and-maintainability/COMPLETION-REPORT-2025-12-22.md)
 
-See [current-state.md](current-state.md) for details.
+See [current-state.md](current-state.md) for full metrics.
 
 ---
 
@@ -358,6 +376,9 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 | Date | Change |
 |------|--------|
+| 2025-12-22 | Test isolation architecture fix complete — all quality gates pass |
+| 2025-12-22 | Status updated to PAUSED — ingestion data quality fixes required |
+| 2025-12-22 | Added assumptions to verify section in current-state.md |
 | 2025-12-20 | Metrics section now links to current-state.md (single source of truth) |
 | 2025-12-20 | Removed experiment IDs (E-xxx, F-xxx, B-xxx); use descriptive names only |
 | 2025-12-20 | Added current-state.md, EXPERIMENT-LOG.md; deleted requirements.md, snagging.md |

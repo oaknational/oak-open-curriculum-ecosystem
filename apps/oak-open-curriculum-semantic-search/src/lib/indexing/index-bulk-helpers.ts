@@ -33,6 +33,7 @@ export async function buildUnitDocuments(
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
 ): Promise<{
   unitSummaries: Map<string, SearchUnitSummary>;
   unitOps: BulkOperations;
@@ -66,6 +67,7 @@ export async function buildUnitDocuments(
       ks,
       subjectProgrammesUrl,
       unitContextMap,
+      lessonsByUnit,
     );
     if (result === null) {
       skippedCount++;
@@ -108,6 +110,7 @@ export function buildRollupDocuments(
   keyStage: KeyStage,
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
 ): BulkOperations {
   const startTime = Date.now();
   const phaseStartEvent = createPhaseStartEvent('rollups', {
@@ -128,6 +131,7 @@ export function buildRollupDocuments(
       keyStage,
       subjectProgrammesUrl,
       unitContextMap,
+      lessonsByUnit,
     });
     ops.push(
       {

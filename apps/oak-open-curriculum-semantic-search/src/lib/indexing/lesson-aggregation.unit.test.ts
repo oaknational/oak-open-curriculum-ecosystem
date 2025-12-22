@@ -7,7 +7,12 @@
  * @see ADR-083 Complete Lesson Enumeration Strategy
  */
 import { describe, it, expect } from 'vitest';
-import { aggregateLessonsBySlug, type LessonUnitGroup } from './lesson-aggregation';
+import {
+  aggregateLessonsBySlug,
+  buildLessonsByUnit,
+  type LessonUnitGroup,
+  type AggregatedLesson,
+} from './lesson-aggregation';
 
 describe('aggregateLessonsBySlug', () => {
   it('aggregates a single page with distinct lessons', () => {
@@ -145,5 +150,89 @@ describe('aggregateLessonsBySlug', () => {
     const lesson = result.get('lesson-x');
     expect(lesson?.lessonTitle).toBe('Lesson X (Version 1)');
     expect(lesson?.unitSlugs).toEqual(new Set(['unit-a', 'unit-b']));
+  });
+});
+
+describe('buildLessonsByUnit', () => {
+  it('builds a map of unit slugs to lesson slugs', () => {
+    const aggregatedLessons = new Map<string, AggregatedLesson>([
+      [
+        'lesson-a',
+        {
+          lessonSlug: 'lesson-a',
+          lessonTitle: 'Lesson A',
+          unitSlugs: new Set(['unit-1', 'unit-2']),
+        },
+      ],
+      [
+        'lesson-b',
+        {
+          lessonSlug: 'lesson-b',
+          lessonTitle: 'Lesson B',
+          unitSlugs: new Set(['unit-1']),
+        },
+      ],
+    ]);
+
+    const result = buildLessonsByUnit(aggregatedLessons);
+
+    expect(result.size).toBe(2);
+    expect(result.get('unit-1')).toEqual(['lesson-a', 'lesson-b']);
+    expect(result.get('unit-2')).toEqual(['lesson-a']);
+  });
+
+  it('handles lessons in multiple units (surds case)', () => {
+    // Simulates the surds unit having 12 lessons
+    const aggregatedLessons = new Map<string, AggregatedLesson>();
+    for (let i = 1; i <= 12; i++) {
+      aggregatedLessons.set(`surds-lesson-${i}`, {
+        lessonSlug: `surds-lesson-${i}`,
+        lessonTitle: `Surds Lesson ${i}`,
+        unitSlugs: new Set(['surds']),
+      });
+    }
+
+    const result = buildLessonsByUnit(aggregatedLessons);
+
+    expect(result.get('surds')?.length).toBe(12);
+  });
+
+  it('handles lessons shared across units', () => {
+    const aggregatedLessons = new Map<string, AggregatedLesson>([
+      [
+        'shared-lesson',
+        {
+          lessonSlug: 'shared-lesson',
+          lessonTitle: 'Shared Lesson',
+          unitSlugs: new Set(['foundation', 'higher']),
+        },
+      ],
+      [
+        'foundation-only',
+        {
+          lessonSlug: 'foundation-only',
+          lessonTitle: 'Foundation Only',
+          unitSlugs: new Set(['foundation']),
+        },
+      ],
+      [
+        'higher-only',
+        {
+          lessonSlug: 'higher-only',
+          lessonTitle: 'Higher Only',
+          unitSlugs: new Set(['higher']),
+        },
+      ],
+    ]);
+
+    const result = buildLessonsByUnit(aggregatedLessons);
+
+    expect(result.get('foundation')).toEqual(['shared-lesson', 'foundation-only']);
+    expect(result.get('higher')).toEqual(['shared-lesson', 'higher-only']);
+  });
+
+  it('returns empty map for empty input', () => {
+    const result = buildLessonsByUnit(new Map());
+    expect(result.size).toBe(0);
   });
 });

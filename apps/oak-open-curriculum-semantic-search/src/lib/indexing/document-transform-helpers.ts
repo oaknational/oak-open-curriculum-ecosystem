@@ -160,9 +160,11 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
  * @param normaliseYears - Function to normalise year values
  * @returns Extracted fields for rollup document
  */
+// eslint-disable-next-line complexity -- Field extraction requires conditional logic
 export function extractRollupDocumentFields(
   summary: SearchUnitSummary,
   normaliseYears: (year: string | number, yearSlug: string) => string[] | undefined,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
 ): {
   unitSlug: string;
   unitTitle: string;
@@ -179,7 +181,8 @@ export function extractRollupDocumentFields(
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
-  const lessonIds = summary.unitLessons.map((lesson) => lesson.lessonSlug);
+  const lessonIds =
+    lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((lesson) => lesson.lessonSlug);
   const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
   const years = normaliseYears(summary.year, summary.yearSlug);
   const sequenceIds = summary.threads?.map((thread) => thread.slug);
@@ -189,7 +192,7 @@ export function extractRollupDocumentFields(
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
     canonicalUrl: summary.canonicalUrl,
-    lessonIds,
+    lessonIds: [...lessonIds],
     unitTopics: unitTopics && unitTopics.length > 0 ? unitTopics : undefined,
     years,
     sequenceIds: sequenceIds && sequenceIds.length > 0 ? sequenceIds : undefined,

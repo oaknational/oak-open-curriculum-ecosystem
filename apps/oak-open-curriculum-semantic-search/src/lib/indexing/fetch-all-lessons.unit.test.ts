@@ -7,7 +7,7 @@
  * @see ADR-083 Complete Lesson Enumeration Strategy
  */
 import { describe, it, expect } from 'vitest';
-import { fetchAllLessonsWithPagination } from './fetch-all-lessons';
+import { fetchAllLessonsWithPagination, fetchAllLessonsByUnit } from './fetch-all-lessons';
 import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
@@ -140,5 +140,137 @@ describe('fetchAllLessonsWithPagination', () => {
 
     // Should have 700 unique lessons (7 pages * 100 lessons)
     expect(result.size).toBe(700);
+  });
+});
+
+describe('fetchAllLessonsByUnit', () => {
+  it('fetches lessons for each unit and aggregates', async () => {
+    // Simulate fetching lessons for 3 units
+    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+      expect(ks).toBe('ks4');
+      expect(subj).toBe('maths');
+      const { unit } = options;
+
+      if (unit === 'compound-measures') {
+        return [
+          {
+            unitSlug: 'compound-measures',
+            unitTitle: 'Compound Measures',
+            lessons: [
+              { lessonSlug: 'compound-measures-for-speed', lessonTitle: 'Speed' },
+              { lessonSlug: 'compound-measures-for-density', lessonTitle: 'Density' },
+              {
+                lessonSlug: 'problem-solving-with-compound-measures',
+                lessonTitle: 'Problem Solving',
+              },
+            ],
+          },
+        ];
+      }
+
+      if (unit === 'angles') {
+        return [
+          {
+            unitSlug: 'angles',
+            unitTitle: 'Angles',
+            lessons: [
+              { lessonSlug: 'basic-angle-facts', lessonTitle: 'Basic Angles' },
+              { lessonSlug: 'exterior-angles', lessonTitle: 'Exterior Angles' },
+              {
+                lessonSlug: 'problem-solving-with-compound-measures',
+                lessonTitle: 'Problem Solving',
+              }, // Shared lesson!
+            ],
+          },
+        ];
+      }
+
+      if (unit === 'surds') {
+        return [
+          {
+            unitSlug: 'surds',
+            unitTitle: 'Surds',
+            lessons: [{ lessonSlug: 'simplifying-surds', lessonTitle: 'Simplifying' }],
+          },
+        ];
+      }
+
+      return [];
+    };
+
+    const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', [
+      'compound-measures',
+      'angles',
+      'surds',
+    ]);
+
+    // Should have 6 unique lessons (all lessons from all 3 units)
+    // compound-measures: 3 lessons
+    // angles: 3 lessons (1 shared with compound-measures)
+    // surds: 1 lesson
+    // Total unique: 3 + 2 (angles-only) + 1 = 6
+    expect(result.size).toBe(6);
+
+    // Check the shared lesson belongs to both units
+    const sharedLesson = result.get('problem-solving-with-compound-measures');
+    expect(sharedLesson?.unitSlugs).toEqual(new Set(['compound-measures', 'angles']));
+
+    // Check other lessons belong to single units
+    expect(result.get('compound-measures-for-speed')?.unitSlugs).toEqual(
+      new Set(['compound-measures']),
+    );
+    expect(result.get('exterior-angles')?.unitSlugs).toEqual(new Set(['angles']));
+    expect(result.get('simplifying-surds')?.unitSlugs).toEqual(new Set(['surds']));
+  });
+
+  it('handles empty unit list', async () => {
+    const mockGetLessons: MockGetLessonsFn = async () => {
+      throw new Error('Should not be called');
+    };
+
+    const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', []);
+
+    expect(result.size).toBe(0);
+  });
+
+  it('handles units with no lessons', async () => {
+    const mockGetLessons: MockGetLessonsFn = async () => [];
+
+    const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', ['empty-unit']);
+
+    expect(result.size).toBe(0);
+  });
+
+  it('correctly handles lesson-unit pairs (tier variants)', async () => {
+    // Simulate API returning duplicate lessons for different tiers
+    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+      expect(ks).toBe('ks4');
+      expect(subj).toBe('maths');
+      const { unit } = options;
+
+      if (unit === 'algebra') {
+        return [
+          {
+            unitSlug: 'algebra',
+            unitTitle: 'Algebra',
+            lessons: [
+              { lessonSlug: 'factorising', lessonTitle: 'Factorising' },
+              { lessonSlug: 'factorising', lessonTitle: 'Factorising' }, // Foundation tier
+              { lessonSlug: 'solving-quadratics', lessonTitle: 'Solving Quadratics' },
+              { lessonSlug: 'solving-quadratics', lessonTitle: 'Solving Quadratics' }, // Higher tier
+            ],
+          },
+        ];
+      }
+
+      return [];
+    };
+
+    const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', ['algebra']);
+
+    // Should deduplicate to 2 unique lessons
+    expect(result.size).toBe(2);
+    expect(result.get('factorising')).toBeDefined();
+    expect(result.get('solving-quadratics')).toBeDefined();
   });
 });

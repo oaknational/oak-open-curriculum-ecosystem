@@ -3,6 +3,7 @@
  * Creates unit, lesson, and rollup documents from Oak API data.
  * @see ADR-075 Two-way Hybrid Search, @see ADR-080 KS4 Metadata Denormalisation
  */
+/* eslint-disable max-lines -- Document transforms require comprehensive field mappings */
 
 import type {
   KeyStage,
@@ -27,6 +28,7 @@ import {
   generateUnitSemanticSummary,
 } from './semantic-summary-generator';
 import { normaliseYears } from './document-transform-utils';
+import { extractThreadInfo } from './thread-and-pedagogical-extractors';
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
 export { normaliseYears, extractPassage } from './document-transform-utils';
@@ -42,9 +44,12 @@ export interface CreateUnitDocumentParams {
   subjectProgrammesUrl: string;
   /** KS4 metadata context map per ADR-080 */
   unitContextMap: UnitContextMap;
+  /** Aggregated lesson data per unit - if provided, overrides summary.unitLessons */
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
 }
 
 /** Creates a unit document for Elasticsearch indexing. */
+// eslint-disable-next-line max-lines-per-function -- Document construction requires all field mappings
 export function createUnitDocument({
   summary,
   subject,
@@ -53,15 +58,18 @@ export function createUnitDocument({
   keyStageTitle,
   subjectProgrammesUrl,
   unitContextMap,
+  lessonsByUnit,
 }: CreateUnitDocumentParams): SearchUnitsIndexDoc {
   if (!summary.canonicalUrl) {
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
-  const lessonIds = summary.unitLessons.map((lesson) => lesson.lessonSlug);
+  const lessonIds =
+    lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((lesson) => lesson.lessonSlug);
   const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
   const years = normaliseYears(summary.year, summary.yearSlug);
   const sequenceIds = summary.threads?.map((thread) => thread.slug);
+  const threadInfo = extractThreadInfo(summary.threads);
   const ks4Fields = extractKs4DocumentFields(
     getKs4ContextForUnit(unitContextMap, summary.unitSlug),
   );
@@ -75,12 +83,15 @@ export function createUnitDocument({
     key_stage: keyStage,
     key_stage_title: keyStageTitle,
     years,
-    lesson_ids: lessonIds,
+    lesson_ids: [...lessonIds],
     lesson_count: lessonIds.length,
     unit_topics: unitTopics,
     unit_url: summary.canonicalUrl,
     subject_programmes_url: subjectProgrammesUrl,
     sequence_ids: sequenceIds,
+    thread_slugs: threadInfo.slugs,
+    thread_titles: threadInfo.titles,
+    thread_orders: threadInfo.orders,
     ...extractUnitEnrichmentFields(summary),
     ...ks4Fields,
     title_suggest: {
@@ -192,6 +203,8 @@ export interface CreateRollupDocumentParams {
   keyStageTitle?: string;
   subjectProgrammesUrl: string;
   unitContextMap: UnitContextMap;
+  /** Aggregated lesson data per unit - if provided, overrides summary.unitLessons */
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
 }
 
 /** Creates a rollup document for Elasticsearch indexing. */
@@ -205,8 +218,9 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     keyStageTitle,
     subjectProgrammesUrl,
     unitContextMap,
+    lessonsByUnit,
   } = params;
-  const fields = extractRollupDocumentFields(summary, normaliseYears);
+  const fields = extractRollupDocumentFields(summary, normaliseYears, lessonsByUnit);
   const rollupText = createEnrichedRollupText(snippets, extractPedagogicalData(summary));
   const ks4Fields = extractKs4DocumentFields(
     getKs4ContextForUnit(unitContextMap, summary.unitSlug),

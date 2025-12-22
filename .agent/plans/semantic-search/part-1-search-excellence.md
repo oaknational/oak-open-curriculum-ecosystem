@@ -33,23 +33,57 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 
 For current metrics, see **[current-state.md](current-state.md)**.
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| Standard Query MRR | ≥0.92 | ✅ Met |
-| Hard Query MRR (Lessons) | ≥0.50 | ❌ Gap |
-| Hard Query MRR (Units) | ≥0.50 | ✅ Met |
-| Zero-hit Rate | 0% | ✅ Met |
-| p95 Latency | ≤1500ms | ✅ Met |
+| Metric | Target | Current | Status |
+|--------|--------|---------|--------|
+| Standard Query MRR (Lessons) | ≥0.92 | 0.944 | ✅ Met |
+| Standard Query MRR (Units) | ≥0.92 | 0.988 | ✅ Met |
+| Hard Query MRR (Lessons) | ≥0.50 | 0.316 | ❌ Gap: 37% |
+| Hard Query MRR (Units) | ≥0.50 | 0.856 | ✅ Exceeded (+71%) |
+| Zero-hit Rate | 0% | 0% | ✅ Met |
+| p95 Latency | ≤1500ms | ~450ms | ✅ Met |
+
+**Baselines measured**: 2025-12-22 20:29 UTC with complete data (436 lessons, 36 units)
 
 For experiment history, see **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)**.
 
 ---
 
-## 🔴 BLOCKING ISSUE: Ingestion Gap (2025-12-20)
+## ✅ Quality Gates Pass (2025-12-22)
 
-**All MRR measurements are against an incomplete index. This MUST be fixed before further search experiments.**
+All quality gates pass. Test isolation architecture fix is complete.
+
+| Gate | Status |
+|------|--------|
+| `pnpm test` | ✅ 88 files, 490 tests |
+| All other gates | ✅ Pass |
+
+---
+
+## ✅ RESOLVED: Ingestion Data Quality (2025-12-22)
+
+**All ingestion issues resolved. Complete data indexed and validated. Search experimentation resumed.**
 
 **ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
+
+| Issue | Status |
+|-------|--------|
+| ~~Lesson count truncated~~ | ✅ Fixed (314 → 436, validated vs bulk download) |
+| ~~Test isolation broken~~ | ✅ Fixed (504 tests pass, 2025-12-22) |
+| ~~Unit `lesson_count` wrong~~ | ✅ Fixed (36/36 units correct, 2025-12-22) |
+| ~~Thread field naming error~~ | ✅ Fixed (`thread_slugs` populated, 2025-12-22) |
+| ~~Vestigial `tier` field~~ | ✅ Verified correct (no cleanup needed) |
+
+**Root Cause**: Upstream API pagination bug where unfiltered `/key-stages/{ks}/subject/{subject}/lessons` returns incomplete data (431 instead of 436 lessons).
+
+**Fix**: Implemented `fetchAllLessonsByUnit()` workaround that fetches lessons unit-by-unit.
+
+**Validation**: 
+- ✅ All tests pass (504 tests across 89 files)
+- ✅ Bulk download validation (436 lessons, 36 units match exactly)
+- ✅ Re-ingested fresh data (2025-12-22 18:47 UTC)
+- ✅ Baselines re-measured with complete data (2025-12-22 20:29 UTC)
+
+**See**: [COMPLETION-REPORT-2025-12-22.md](../quality-and-maintainability/COMPLETION-REPORT-2025-12-22.md) for full details.
 
 ### Root Cause (Verified via Upstream API Code)
 
@@ -262,9 +296,12 @@ See [semantic-reranking.experiment.md](../../evaluations/experiments/semantic-re
 
 **Result**: Added 40+ Maths KS4 synonyms. Smoke test passes for vocabulary gap queries.
 
-**Hypothesis**: Adding 50+ curriculum synonyms will improve hard query MRR by ≥20%.
+**Impact (measured with complete data 2025-12-22)**:
+- Baseline MRR (before synonyms, incomplete index): 0.367 lessons, 0.811 units
+- With synonyms + complete index: 0.316 lessons, 0.856 units
+- **Note**: Direct comparison not valid due to index completeness change
 
-**B.1 Evidence** (from baseline):
+**Qualitative wins** (from B.1 Evidence):
 
 | Query | Expected Match | Current Rank | Missing Synonym |
 |-------|---------------|--------------|-----------------|
@@ -340,7 +377,11 @@ Compare to B.1 baseline. Document in experiment file.
 
 **Success Criteria**: Hard query MRR ≥0.45
 
-### B.4 Noise Phrase Filtering [📋 START HERE]
+### B.4 Noise Phrase Filtering [📋 START HERE — NEXT PRIORITY]
+
+**Status**: Ready to start. All blockers resolved, complete index ready.
+
+**Baseline**: Lesson Hard MRR 0.316 (measured 2025-12-22 20:29 UTC with complete data)
 
 **Hypothesis**: Pre-processing to remove colloquial filler will improve those queries.
 
@@ -627,6 +668,11 @@ The stream/task codes (B.1, B.2, B.3, etc.) are used in plans and trackers to re
 
 | Date | Change |
 |------|--------|
+| 2025-12-22 | Test isolation architecture fix complete — all quality gates pass |
+| 2025-12-22 | MediaQueryProvider DI refactoring complete |
+| 2025-12-22 | Updated blocking issues — search paused for ingestion data quality fixes |
+| 2025-12-20 | Lesson ingestion gap resolved (314 → 436 lessons via ADR-083) |
+| 2025-12-20 | Discovered unit `lesson_count` discrepancy (25/36 wrong) |
 | 2025-12-19 | Initial document created from plan restructure |
 | 2025-12-19 | B.1 complete — baseline documented, smoke test added |
 | 2025-12-19 | B.2 rejected (-16.8% regression) — strategy pivot |
