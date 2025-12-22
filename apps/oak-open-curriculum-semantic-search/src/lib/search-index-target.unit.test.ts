@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { BulkOperations, BulkIndexAction } from './indexing/bulk-operation-types';
+import type { SearchLessonsIndexDoc } from '../types/oak';
 
 const REQUIRED_ENV = {
   ELASTICSEARCH_URL: 'https://example.com',
@@ -25,8 +27,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.resetModules();
-  // Restore original environment without mutation
+  // Restore original environment BEFORE resetting modules
   for (const [key, value] of originalEnv.entries()) {
     if (value === undefined) {
       // Using type assertion to work around readonly constraint in test
@@ -36,6 +37,7 @@ afterEach(() => {
       process.env[key] = value;
     }
   }
+  vi.resetModules();
 });
 
 function setEnv(overrides: Partial<Record<TestEnvKey, string>> = {}): void {
@@ -81,16 +83,39 @@ describe('search index target helpers', () => {
   it('rewrites bulk operations for sandbox target while preserving others', async () => {
     setEnv();
     const { rewriteBulkOperations } = await import('./search-index-target');
-    const operations: unknown[] = [
-      { index: { _index: 'oak_lessons', _id: 'lesson-1' } },
-      { foo: 'bar' },
-      { index: { _index: 'oak_unit_rollup', _id: 'unit-1' } },
-      { index: { _index: 'other_index', _id: '123' } },
-    ];
+
+    // Minimal valid document fixture for testing document body passthrough
+    const lessonDoc: SearchLessonsIndexDoc = {
+      lesson_id: 'lesson-1',
+      lesson_slug: 'lesson-one',
+      lesson_title: 'Test Lesson',
+      subject_slug: 'maths',
+      key_stage: 'ks3',
+      unit_ids: ['unit-1'],
+      unit_titles: ['Test Unit'],
+      lesson_content: 'Test content',
+      lesson_url: 'https://example.com/lesson-one',
+      unit_urls: ['https://example.com/unit-1'],
+      doc_type: 'lesson',
+    };
+
+    const oakLessonAction: BulkIndexAction = { index: { _index: 'oak_lessons', _id: 'lesson-1' } };
+    const oakRollupAction: BulkIndexAction = {
+      index: { _index: 'oak_unit_rollup', _id: 'unit-1' },
+    };
+    const nonOakAction: BulkIndexAction = { index: { _index: 'other_index', _id: '123' } };
+
+    const operations: BulkOperations = [oakLessonAction, lessonDoc, oakRollupAction, nonOakAction];
+
     const rewritten = rewriteBulkOperations(operations, 'sandbox');
+
+    // Oak index actions should be rewritten to sandbox
     expect(rewritten[0]).toEqual({ index: { _index: 'oak_lessons_sandbox', _id: 'lesson-1' } });
-    expect(rewritten[1]).toBe(operations[1]);
+    // Document bodies should be passed through unchanged (same reference)
+    expect(rewritten[1]).toBe(lessonDoc);
+    // Oak rollup action should be rewritten
     expect(rewritten[2]).toEqual({ index: { _index: 'oak_unit_rollup_sandbox', _id: 'unit-1' } });
-    expect(rewritten[3]).toBe(operations[3]);
+    // Non-Oak index actions should be passed through unchanged (same reference)
+    expect(rewritten[3]).toBe(nonOakAction);
   });
 });

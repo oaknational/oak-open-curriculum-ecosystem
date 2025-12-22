@@ -84,26 +84,58 @@ export function setStoredThemeMode(mode: ThemeMode): void {
   }
 }
 
-/** Safely read system dark preference using matchMedia. */
-export function getSystemPrefersDark(): boolean {
+/**
+ * Create a fallback MediaQueryList for SSR environments.
+ * @param query - The media query string
+ * @returns A MediaQueryList that never matches
+ */
+function createFallbackMediaQueryList(query: string): MediaQueryList {
+  const result: MediaQueryList = {
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => true,
+  };
+  return result;
+}
+
+/**
+ * Safely read system dark preference using matchMedia.
+ *
+ * @param matchMedia - Optional matchMedia function (defaults to browser API)
+ * @returns true if system prefers dark mode
+ */
+export function getSystemPrefersDark(
+  matchMedia: (query: string) => MediaQueryList = typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia.bind(window)
+    : createFallbackMediaQueryList,
+): boolean {
   try {
-    return (
-      typeof window !== 'undefined' &&
-      !!window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    );
+    return matchMedia('(prefers-color-scheme: dark)').matches;
   } catch {
     return false;
   }
 }
 
-/** Subscribe to system dark-mode changes. Returns an unsubscribe function. */
-export function subscribeToSystemPrefersDark(onChange: (prefersDark: boolean) => void): () => void {
+/**
+ * Subscribe to system dark-mode changes. Returns an unsubscribe function.
+ *
+ * @param onChange - Callback invoked when system preference changes
+ * @param matchMedia - Optional matchMedia function (defaults to browser API)
+ * @returns Unsubscribe function to clean up listener
+ */
+export function subscribeToSystemPrefersDark(
+  onChange: (prefersDark: boolean) => void,
+  matchMedia: (query: string) => MediaQueryList = typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia.bind(window)
+    : createFallbackMediaQueryList,
+): () => void {
   try {
-    if (typeof window === 'undefined' || !window.matchMedia) {
-      return () => undefined;
-    }
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const mql = matchMedia('(prefers-color-scheme: dark)');
     const modernListener = (e: MediaQueryListEvent) => onChange(e.matches);
     if (
       typeof mql.addEventListener === 'function' &&
@@ -124,17 +156,23 @@ export function subscribeToSystemPrefersDark(onChange: (prefersDark: boolean) =>
   }
 }
 
-/** Infer a coarse contrast preference using available media queries. */
-export function getContrastPreference(): ContrastPreference {
+/**
+ * Infer a coarse contrast preference using available media queries.
+ *
+ * @param matchMedia - Optional matchMedia function (defaults to browser API)
+ * @returns Contrast preference based on system settings
+ */
+export function getContrastPreference(
+  matchMedia: (query: string) => MediaQueryList = typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia.bind(window)
+    : createFallbackMediaQueryList,
+): ContrastPreference {
   try {
-    if (typeof window === 'undefined' || !window.matchMedia) {
-      return 'no-preference';
-    }
     // Standard syntax
-    if (window.matchMedia('(prefers-contrast: more)').matches) {
+    if (matchMedia('(prefers-contrast: more)').matches) {
       return 'high';
     }
-    if (window.matchMedia('(prefers-contrast: less)').matches) {
+    if (matchMedia('(prefers-contrast: less)').matches) {
       return 'low';
     }
     // Some engines may expose a custom or non-standard state; if neither matches, assume no-preference

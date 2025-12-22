@@ -7,6 +7,8 @@ import {
   type DataIntegrityReport,
 } from './data-integrity-report';
 import { BulkResponseSchema, logBulkErrors } from './sandbox-bulk-response';
+import type { BulkOperations } from './bulk-operation-types';
+import { isBulkIndexAction } from './bulk-operation-types';
 
 /**
  * Minimal Elasticsearch transport interface for bulk operations.
@@ -53,7 +55,7 @@ export function inferKindFromIndex(indexName: string): SearchIndexKind | null {
  * Reduces a bulk operation list into per-index counts and total document volume.
  */
 export function summariseOperations(
-  operations: readonly unknown[],
+  operations: BulkOperations,
   target: SearchIndexTarget,
 ): { target: SearchIndexTarget; totalDocs: number; counts: Record<SearchIndexKind, number> } {
   const counts: Record<SearchIndexKind, number> = {
@@ -67,7 +69,7 @@ export function summariseOperations(
 
   for (let i = 0; i < operations.length; i += 2) {
     const action = operations[i];
-    if (!isIndexAction(action)) {
+    if (!isBulkIndexAction(action)) {
       continue;
     }
     const kind = inferKindFromIndex(action.index._index);
@@ -84,7 +86,7 @@ export function summariseOperations(
 /**
  * Serialises a bulk operation array into NDJSON suitable for the Elasticsearch bulk API.
  */
-export function createNdjson(operations: readonly unknown[]): string {
+export function createNdjson(operations: BulkOperations): string {
   return operations.map((entry) => JSON.stringify(entry)).join('\n') + '\n';
 }
 
@@ -94,7 +96,7 @@ export function createNdjson(operations: readonly unknown[]): string {
  */
 export async function dispatchBulk(
   es: EsTransport,
-  operations: readonly unknown[],
+  operations: BulkOperations,
   logger: Logger = sandboxLogger,
 ): Promise<void> {
   const docCount = Math.floor(operations.length / 2); // Each doc = action + source
@@ -156,7 +158,7 @@ export function logSummary(
 export function logPreview(
   logger: Logger,
   target: SearchIndexTarget,
-  operations: readonly unknown[],
+  operations: BulkOperations,
 ): void {
   if (operations.length === 0) {
     return;
@@ -165,33 +167,6 @@ export function logPreview(
     target,
     preview: operations.slice(0, 4).map((entry) => JSON.stringify(entry)),
   });
-}
-
-interface IndexAction {
-  readonly index: {
-    readonly _index: string;
-  };
-}
-
-/**
- * Type guard to check if a value is an ES bulk index action.
- * Narrows directly to the specific IndexAction type without intermediate generic types.
- */
-function isIndexAction(value: unknown): value is IndexAction {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('index' in value)) {
-    return false;
-  }
-  const indexProp = value.index;
-  if (typeof indexProp !== 'object' || indexProp === null) {
-    return false;
-  }
-  if (!('_index' in indexProp)) {
-    return false;
-  }
-  return typeof indexProp._index === 'string';
 }
 
 /** Logs data integrity issues if any were detected during ingestion. */

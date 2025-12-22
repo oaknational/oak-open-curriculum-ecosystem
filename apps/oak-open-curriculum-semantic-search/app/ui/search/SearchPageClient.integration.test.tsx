@@ -14,7 +14,6 @@ import {
   structuredPropsRef,
   facetPropsRef,
   resetSearchPageTestState,
-  mockMatchMedia,
 } from './SearchPageClient.test-helpers';
 
 function getStructuredProps() {
@@ -406,11 +405,10 @@ describe('SearchPageClient', () => {
   });
 
   it('collapses suggestion and facet panels behind mobile accordions', async () => {
-    mockMatchMedia(false);
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
     });
-    renderWithTheme(action);
+    renderWithTheme(action, { mediaMatches: false });
 
     const fixture = buildSingleScopeFixture({
       overrides: {

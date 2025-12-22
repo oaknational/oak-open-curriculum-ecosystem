@@ -4,6 +4,8 @@ import { ThemeProvider } from '../../../lib/theme/ThemeContext';
 import NaturalSearchComponent from './NaturalSearch';
 import type { SearchNaturalLanguageRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import { SearchNaturalLanguageRequestSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
+import { createMockMediaQueryAPI } from '../../../lib/media-query/MediaQueryContext.test-helpers';
+import { MediaQueryContext } from '../../../lib/media-query/MediaQueryContext';
 
 const submitNaturalSearchRequest = vi.hoisted(() =>
   vi.fn().mockResolvedValue({
@@ -46,14 +48,17 @@ vi.mock('./NaturalSearch.helpers', () => {
 
 describe('NaturalSearchComponent', () => {
   function renderWithTheme(): void {
+    const mockAPI = createMockMediaQueryAPI(false);
     render(
-      <ThemeProvider initialMode="light">
-        <NaturalSearchComponent
-          onResults={() => undefined}
-          onError={() => undefined}
-          setLoading={() => undefined}
-        />
-      </ThemeProvider>,
+      <MediaQueryContext.Provider value={mockAPI}>
+        <ThemeProvider initialMode="light">
+          <NaturalSearchComponent
+            onResults={() => undefined}
+            onError={() => undefined}
+            setLoading={() => undefined}
+          />
+        </ThemeProvider>
+      </MediaQueryContext.Provider>,
     );
   }
 

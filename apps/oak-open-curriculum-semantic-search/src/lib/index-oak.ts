@@ -31,6 +31,7 @@ import {
 } from './indexing/data-integrity-report';
 import { fetchAndBuildThreadOps } from './indexing/thread-bulk-helpers';
 import { buildKs4ContextMap, type UnitContextMap } from './indexing/ks4-context-builder';
+import type { BulkOperations } from './indexing/bulk-operation-types';
 
 /** Options for building bulk operations. */
 export interface BuildIndexBulkOpsOptions {
@@ -40,7 +41,7 @@ export interface BuildIndexBulkOpsOptions {
 }
 
 export interface BuildIndexBulkOpsResult {
-  operations: unknown[];
+  operations: BulkOperations;
   dataIntegrityReport: DataIntegrityReport;
 }
 
@@ -51,7 +52,7 @@ export async function buildIndexBulkOps(
   subjects: readonly string[],
   options?: BuildIndexBulkOpsOptions,
 ): Promise<BuildIndexBulkOpsResult> {
-  const bulkOps: unknown[] = [];
+  const bulkOps: BulkOperations = [];
   const dataIntegrityReport = createDataIntegrityCollector();
   const filteredSubjects = filterSubjects(subjects);
   const filteredKeyStages = filterKeyStages(keyStages);
@@ -131,8 +132,8 @@ async function buildKeyStageOps(
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
   unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
-): Promise<unknown[]> {
-  const ops: unknown[] = [];
+): Promise<BulkOperations> {
+  const ops: BulkOperations = [];
   let ksIndex = 0;
   for (const ks of keyStages) {
     ksIndex++;
@@ -167,7 +168,7 @@ async function buildOpsForSubject(
   keyStages: readonly KeyStage[],
   dataIntegrityReport: DataIntegrityReport,
   options?: BuildIndexBulkOpsOptions,
-): Promise<unknown[]> {
+): Promise<BulkOperations> {
   sandboxLogger.debug('Fetching sequences', { subject });
   const subjectSequences = await client.getSubjectSequences(subject);
   sandboxLogger.debug('Found sequences', { subject, count: subjectSequences.length });
@@ -230,7 +231,7 @@ async function buildOpsForPair(
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
   unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
-): Promise<unknown[]> {
+): Promise<BulkOperations> {
   const { units } = await fetchPairData(client, ks, subject);
 
   const context: PairBuildContext = {

@@ -32,6 +32,7 @@ import {
   type ResolvedThemeMode,
   type ThemeMode,
 } from './theme-utils';
+import { useMediaQuery } from '../media-query/MediaQueryContext';
 
 export { THEME_MODES };
 export type { ResolvedThemeMode, ThemeMode };
@@ -68,16 +69,20 @@ function useResolvedModeValue(mode: ThemeMode, systemPrefersDark: boolean): Reso
 function useSystemPreferenceSync(
   mode: ThemeMode,
   setSystemPrefersDark: React.Dispatch<React.SetStateAction<boolean>>,
+  matchMedia: (query: string) => MediaQueryList,
 ): void {
   useEffect(() => {
     if (mode !== THEME_MODES.system) {
       return undefined;
     }
-    const prefersDark = getSystemPrefersDark();
+    const prefersDark = getSystemPrefersDark(matchMedia);
     setSystemPrefersDark(prefersDark);
-    const unsubscribe = subscribeToSystemPrefersDark((prefers) => setSystemPrefersDark(prefers));
+    const unsubscribe = subscribeToSystemPrefersDark(
+      (prefers) => setSystemPrefersDark(prefers),
+      matchMedia,
+    );
     return unsubscribe;
-  }, [mode, setSystemPrefersDark]);
+  }, [mode, setSystemPrefersDark, matchMedia]);
 }
 
 function useAppTheme(resolved: ResolvedThemeMode): AppTheme {
@@ -88,6 +93,37 @@ function useAppTheme(resolved: ResolvedThemeMode): AppTheme {
   }, [resolved]);
 }
 
+/**
+ * Create setMode callback that persists theme changes and logs diagnostics.
+ * @param setModeState - State setter for mode
+ * @param matchMedia - matchMedia function for contrast preference logging
+ * @returns Callback to set and persist theme mode
+ */
+function useSetModeCallback(
+  setModeState: (mode: ThemeMode) => void,
+  matchMedia: (query: string) => MediaQueryList,
+): (next: ThemeMode) => void {
+  return useCallback(
+    (next: ThemeMode) => {
+      if (!isThemeMode(next)) {
+        return;
+      }
+      setModeState(next);
+      try {
+        // Persist for client convenience and SSR hint via cookie
+        setStoredThemeMode(next);
+        document.cookie = makeThemeCookie(next);
+        // Log contrast preference requests for telemetry/diagnostics (no-op if unchanged)
+        void getContrastPreference(matchMedia);
+      } catch (error: unknown) {
+        logger.error('Error setting theme mode:', error instanceof Error ? error : undefined);
+        // ignore
+      }
+    },
+    [matchMedia, setModeState],
+  );
+}
+
 export function ThemeProvider({
   initialMode,
   children,
@@ -95,6 +131,7 @@ export function ThemeProvider({
   initialMode: ThemeMode;
   children: React.ReactNode;
 }): JSX.Element {
+  const { matchMedia } = useMediaQuery();
   const [mode, setModeState] = useState<ThemeMode>(
     isThemeMode(initialMode) ? initialMode : THEME_MODES.system,
   );
@@ -104,25 +141,9 @@ export function ThemeProvider({
     () => initialResolvedForRender === THEME_MODES.dark,
   );
 
-  const setMode = useCallback((next: ThemeMode) => {
-    if (!isThemeMode(next)) {
-      return;
-    }
-    setModeState(next);
-    try {
-      // Persist for client convenience and SSR hint via cookie
-      setStoredThemeMode(next);
-      document.cookie = makeThemeCookie(next);
-      // Log contrast preference requests for telemetry/diagnostics (no-op if unchanged)
-      void getContrastPreference();
-    } catch (error: unknown) {
-      logger.error('Error setting theme mode:', error instanceof Error ? error : undefined);
-      // ignore
-    }
-  }, []);
-
+  const setMode = useSetModeCallback(setModeState, matchMedia);
   const resolved: ResolvedThemeMode = useResolvedModeValue(mode, systemPrefersDark);
-  useSystemPreferenceSync(mode, setSystemPrefersDark);
+  useSystemPreferenceSync(mode, setSystemPrefersDark, matchMedia);
   const theme: AppTheme = useAppTheme(resolved);
 
   const value = useMemo<ThemeContextValue>(

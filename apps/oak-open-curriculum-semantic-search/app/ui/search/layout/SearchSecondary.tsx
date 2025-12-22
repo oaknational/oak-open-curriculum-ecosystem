@@ -13,6 +13,7 @@ import {
   SuggestionsPanel,
 } from './SearchPageClient.styles';
 import { resolveBreakpoint, type BreakpointName } from '../../shared/breakpoints';
+import { useMediaQuery } from '../../../lib/media-query/MediaQueryContext';
 
 interface SearchSecondaryProps {
   readonly suggestions: ComponentProps<typeof SearchSuggestions>['suggestions'];
@@ -134,25 +135,18 @@ function MobileSupportAccordion({
 
 function useBreakpointMatch(name: BreakpointName): boolean {
   const theme = useTheme();
+  const { matchMedia } = useMediaQuery();
 
   const computeMatch = useCallback(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return false;
-    }
     const query = `(min-width: ${resolveBreakpoint(theme, name)})`;
-    return window.matchMedia(query).matches;
-  }, [theme, name]);
+    return matchMedia(query).matches;
+  }, [theme, name, matchMedia]);
 
   const [matches, setMatches] = useState<boolean>(computeMatch);
 
   useEffect(() => {
-    // SSR guard: state is already initialised correctly via computeMatch
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
-      return undefined;
-    }
-
     const query = `(min-width: ${resolveBreakpoint(theme, name)})`;
-    const media = window.matchMedia(query);
+    const media = matchMedia(query);
 
     const update = (event: MediaQueryListEvent) => {
       setMatches(event.matches);
@@ -165,7 +159,7 @@ function useBreakpointMatch(name: BreakpointName): boolean {
     return () => {
       media.removeEventListener('change', update);
     };
-  }, [theme, name, computeMatch]);
+  }, [theme, name, matchMedia]);
 
   return matches;
 }

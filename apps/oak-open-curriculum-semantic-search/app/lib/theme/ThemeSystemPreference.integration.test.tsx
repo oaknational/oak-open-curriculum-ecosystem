@@ -1,27 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
-
-// Mock theme-utils to control system preference and subscription behavior
-vi.mock('./theme-utils', async () => {
-  const actual = await vi.importActual('./theme-utils');
-  return {
-    ...actual,
-    getSystemPrefersDark: () => false,
-    subscribeToSystemPrefersDark: (onChange: (pref: boolean) => void) => {
-      // Simulate an async system change to dark
-      setTimeout(() => {
-        try {
-          onChange(true);
-        } catch {
-          // ignore
-        }
-      }, 0);
-      return () => undefined;
-    },
-  };
-});
-
 import { ThemeProvider, useThemeContext } from './ThemeContext';
+import { MediaQueryContext } from '../media-query/MediaQueryContext';
 
 function ResolvedProbe(): React.JSX.Element {
   const { resolved } = useThemeContext();
@@ -38,20 +18,53 @@ describe('ThemeProvider system preference subscription', () => {
   });
 
   it('updates resolved when system preference changes (mocked)', async () => {
-    render(
-      <ThemeProvider initialMode="system">
-        <ResolvedProbe />
-      </ThemeProvider>,
-    );
-
-    // Initial mocked _resolved_system preference is light
-    expect(screen.getByTestId('resolved').textContent).toBe('light');
-
-    // Advance timers to trigger mocked system change to dark
-    act(() => {
-      vi.runAllTimers();
+    // Create a mock MediaQueryList that starts as light and changes to dark
+    let changeListener: ((event: MediaQueryListEvent) => void) | null = null;
+    const mockMatchMedia = vi.fn((query: string) => {
+      const mql = {
+        matches: false, // Initial: light mode
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn((event: string, listener: (e: MediaQueryListEvent) => void) => {
+          if (event === 'change') {
+            changeListener = listener;
+          }
+        }),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(() => true),
+      } as unknown as MediaQueryList;
+      return mql;
     });
 
+    const mockAPI = {
+      matchMedia: mockMatchMedia,
+    };
+
+    render(
+      <MediaQueryContext.Provider value={mockAPI}>
+        <ThemeProvider initialMode="system">
+          <ResolvedProbe />
+        </ThemeProvider>
+      </MediaQueryContext.Provider>,
+    );
+
+    // Initial system preference is light
+    expect(screen.getByTestId('resolved').textContent).toBe('light');
+
+    // Simulate system preference change to dark
+    if (changeListener) {
+      act(() => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- checked above
+        changeListener!({
+          matches: true,
+          media: '(prefers-color-scheme: dark)',
+        } as MediaQueryListEvent);
+      });
+    }
+
+    // Should update to dark
     expect(screen.getByTestId('resolved').textContent).toBe('dark');
   });
 });

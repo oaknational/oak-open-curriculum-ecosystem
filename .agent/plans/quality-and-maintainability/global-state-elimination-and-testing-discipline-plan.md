@@ -4,7 +4,7 @@
 **Priority**: High - Causing flaky test failures in CI + test quality issues  
 **Estimated Effort**: 20-24 hours across multiple sessions  
 **Created**: 2025-12-16  
-**Updated**: 2025-12-17  
+**Updated**: 2025-12-22  
 **Audit Reference**: [vi-mock-audit-report.md](../../research/vi-mock-audit-report.md)
 
 ---
@@ -17,6 +17,7 @@
 | Phase 1A                    | ✅ COMPLETE  | Unit test quick wins (3 files)                                                                              |
 | Phase 2A                    | ✅ COMPLETE  | `vi.stubGlobal` eliminated                                                                                  |
 | Phase 2B                    | ✅ COMPLETE  | `vi.doMock` eliminated                                                                                      |
+| **Phase 2C**                | 🔄 90% DONE  | `window.matchMedia` DI refactoring (completing quality gates)                                               |
 | Phase 3                     | 🔗 DELEGATED | See [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md) |
 | Phase 1B                    | ⏳ BLOCKED   | Requires Phase 3                                                                                            |
 | Phase 4A-7                  | ⏳ PENDING   | Requires Phase 3                                                                                            |
@@ -48,6 +49,13 @@
 
 - ✅ `vi.stubGlobal` eliminated from all unit tests (0 remaining)
 - ✅ `vi.doMock` eliminated from all unit tests (0 remaining)
+- 🔄 **Phase 2C: `window.matchMedia` DI Refactoring (~90% complete)**
+  - ✅ Created `MediaQueryContext` with provider, hook, SSR-safe fallback
+  - ✅ Refactored 4 product files to use injected `matchMedia`
+  - ✅ Refactored 3 test files to inject mocks via Context
+  - ✅ Deleted 3 obsolete mock-match-media files
+  - ✅ Fixed type discipline violations (`unknown[]` → `BulkOperations`) in 15+ files
+  - ⏳ Completing quality gates (type-check, lint:fix in progress)
 
 **Testing Discipline Audit (2025-12-17)**
 
@@ -58,18 +66,152 @@
 ### Current Measurements
 
 ```bash
-# After Phase 0, 1A, 2
+# After Phase 0, 1A, 2A, 2B, 2C (in progress)
 vi.stubGlobal in unit tests:     0  (was 2) ✅
 vi.doMock in unit tests:         0  (was 2) ✅
 process.env in unit tests:      22  (was 25, reduced by 3)
 vi.mock in tests:               33  files (20 need refactoring)
+window.matchMedia mutations:     0  files (was 5, eliminated via DI) 🔄
 
 # Testing Discipline Violations (from audit)
 Type testing instances:       ~700  (toBeDefined, typeof, Array.isArray)
 Implementation testing:       ~200  (mock call assertions)
 Negative type tests:          ~150  (toBeUndefined for types)
 Bug fix verification tests:    ~50  (should be one-time checks)
+
+# Quality Gates Status (Phase 2C)
+type-gen:                        ✅  PASSED
+build:                           ✅  PASSED
+type-check:                      ⏳  3 errors in search-index-target.unit.test.ts
+lint:fix:                        ⏳  5 errors in index-oak-helpers.ts
 ```
+
+---
+
+## Phase 2C: window.matchMedia Global State Mutation (90% COMPLETE)
+
+**Status**: 🔄 IN PROGRESS (completing quality gates)  
+**Impact**: Was causing 2 test failures when tests run without process isolation  
+**Priority**: Critical work ~90% done  
+**Updated**: 2025-12-22
+
+### Problem (RESOLVED)
+
+~~Tests mutate `window.matchMedia` globally via `Object.defineProperty`.~~
+
+**Fix Applied**: Created `MediaQueryContext` provider with DI pattern, refactored all product code and tests.
+
+### Solution Implemented
+
+✅ Created `MediaQueryContext.tsx` with provider, hook, and SSR-safe fallback  
+✅ Refactored product code:
+- `SearchSecondary.tsx` - now uses `useMediaQuery()` hook
+- `theme-utils.ts` - functions accept `matchMedia` parameter with SSR fallback
+- `ThemeContext.tsx` - injects `matchMedia` from context
+- `Providers.tsx` - wraps app with `MediaQueryProvider`
+
+✅ Refactored tests:
+- `SearchPageClient.test-helpers.tsx` - uses `mediaMatches` option to inject mock
+- `ThemeSystemPreference.integration.test.tsx` - uses local `MediaQueryAPI` mock
+- All tests inject mocks via Context, no global mutations
+
+✅ Deleted obsolete files:
+- `mock-match-media.ts`
+- `mock-match-media-registries.ts`
+- `SearchPageClient.test-helpers.unit.test.tsx`
+
+### Remaining Work
+
+⏳ Fix type errors in `search-index-target.unit.test.ts` (user changed `as any` to `as unknown`, needs proper `BulkOperations` typing)  
+⏳ Fix lint errors in `index-oak-helpers.ts` (unsafe assignment + file too long)  
+⏳ Complete quality gate suite
+
+See: [test-isolation-architecture-fix.md](../semantic-search/test-isolation-architecture-fix.md) for detailed status
+
+### Affected Files (COMPLETED)
+
+```bash
+# Files deleted ✅
+apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media.ts
+apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media-registries.ts
+apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.unit.test.tsx
+
+# Product code refactored ✅
+apps/oak-open-curriculum-semantic-search/app/ui/search/layout/SearchSecondary.tsx
+apps/oak-open-curriculum-semantic-search/app/lib/theme/theme-utils.ts
+apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx
+apps/oak-open-curriculum-semantic-search/app/lib/Providers.tsx
+
+# Test files refactored ✅
+apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.tsx
+apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeSystemPreference.integration.test.tsx
+apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.integration.test.tsx
+
+# New files created ✅
+apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.tsx
+apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.test-helpers.tsx
+apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.unit.test.tsx
+```
+
+---
+
+## Critical Notes and Decisions
+
+### SSR Theme Handling
+**Decision**: For SSR, either we know what the theme cookie is, or we don't.
+- **If no cookie**: Render light theme with no-preference
+- **If cookie exists**: Render the correct theme specified in cookie
+- **Rationale**: Prevents hydration mismatches, provides consistent experience
+
+### Type Safety Enforcement Limitation
+**Issue**: Banned types (`unknown[]`, `Record<string, unknown>`, etc.) need to be banned BOTH as type declarations AND as inline type annotations.
+
+**Current State**: ESLint rule `@typescript-eslint/no-restricted-types` only catches type alias declarations:
+```typescript
+// ✅ Caught by ESLint
+type Foo = unknown[];
+
+// ❌ NOT caught by ESLint
+const x: unknown[] = [];
+```
+
+**Requirement**: Need custom ESLint rule to catch inline type annotations, OR accept that manual code review is necessary for inline types during quality gates.
+
+**Tracking**: Added to ESLint enhancement backlog
+
+### Test ESLint Rules Allow Banned Types
+**Issue**: The `testRules` configuration in `packages/core/oak-eslint/src/index.ts` (lines 90-104) **disables** critical type safety rules for test files:
+
+```typescript
+export const testRules = {
+  // ...
+  '@typescript-eslint/consistent-type-assertions': ['off', ...],  // Allows `as unknown as X`
+  '@typescript-eslint/no-restricted-types': 'off',                // Allows `unknown[]`, `Record<string, unknown>`
+  // ...
+};
+```
+
+**Impact**: 
+- 141 instances of `as unknown` in test files are not caught by linting
+- 75 instances of `: unknown[]` inline annotations are not caught
+- Tests can use type-unsafe patterns freely
+
+**Requirement**: After completing DI refactoring (Phase 10), re-enable these rules for test files:
+```typescript
+'@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
+'@typescript-eslint/no-restricted-types': ['error', { /* same as strict config */ }],
+```
+
+**Tracking**: Part of Phase 10 (DI refactoring), cannot be done until tests use proper DI instead of type assertions for mocks
+
+### Generated Files Using Banned Types
+**Issue**: 26+ generated MCP tool files in `packages/sdks/oak-curriculum-sdk/src/types/generated/` contain `: unknown[]` inline type annotations.
+
+**Source of Truth**: Generator templates in `type-gen/typegen/mcp-tools/`
+
+**Requirement**: Audit generator templates to produce more specific types where possible.
+
+**Tracking**: Future work - requires analysis of what specific types the generators could use instead
 
 ---
 
@@ -495,7 +637,7 @@ The remaining `vi.doMock` and `process.env` issues in `oak-notion-mcp` require a
 
 ---
 
-## Baseline Measurements (2025-12-17)
+## Baseline Measurements (2025-12-22)
 
 ```bash
 # Global State (improved from baseline)
@@ -504,6 +646,7 @@ process.env mutations in E2E tests:   25 instances
 process.env mutations in integration:  5 instances
 vi.doMock in unit tests:               0 instances (was 2) ✅
 vi.stubGlobal in unit tests:           0 instances (was 2) ✅
+window.matchMedia mutations:           0 files (was 5, fixed via DI) 🔄
 
 # Testing Discipline (new measurements)
 vi.mock in tests:                     33 files (20 need refactoring)
@@ -520,17 +663,18 @@ Negative assertions:                 ~385 instances (mixed)
 
 ### Hard Requirements (All Must Pass)
 
-| Metric                       | Measurement                                         | Target   |
-| ---------------------------- | --------------------------------------------------- | -------- |
-| vi.doMock in unit tests      | `rg "vi\.doMock" --glob "*.unit.test.ts"`           | 0 ✅     |
-| vi.stubGlobal in unit tests  | `rg "vi\.stubGlobal" --glob "*.unit.test.ts"`       | 0 ✅     |
-| Unit test env mutations      | `rg "process\.env\." --glob "*.unit.test.ts"`       | 0        |
-| E2E test env mutations       | `rg "process\.env\.\w+\s*=" --glob "*.e2e.test.ts"` | 0        |
-| typeof in tests              | `rg "expect\(typeof" --glob "*.test.ts*"`           | 0        |
-| Array.isArray in tests       | `rg "expect\(Array\.isArray" --glob "*.test.ts*"`   | 0        |
-| not.toHaveBeenCalled         | `rg "\.not\.toHaveBeenCalled" --glob "*.test.ts*"`  | 0        |
-| Tests pass without isolation | `pnpm test` (with isolate: false)                   | All pass |
-| Pre-push succeeds first try  | `git push` (no TURBO_CONCURRENCY)                   | Success  |
+| Metric                          | Measurement                                           | Target   |
+| ------------------------------- | ----------------------------------------------------- | -------- |
+| vi.doMock in unit tests         | `rg "vi\.doMock" --glob "*.unit.test.ts"`             | 0 ✅     |
+| vi.stubGlobal in unit tests     | `rg "vi\.stubGlobal" --glob "*.unit.test.ts"`         | 0 ✅     |
+| window.matchMedia mutations     | `rg "Object\.defineProperty\(window.*matchMedia"`     | 0 🔄     |
+| Unit test env mutations         | `rg "process\.env\." --glob "*.unit.test.ts"`         | 0        |
+| E2E test env mutations          | `rg "process\.env\.\w+\s*=" --glob "*.e2e.test.ts"`   | 0        |
+| typeof in tests                 | `rg "expect\(typeof" --glob "*.test.ts*"`             | 0        |
+| Array.isArray in tests          | `rg "expect\(Array\.isArray" --glob "*.test.ts*"`     | 0        |
+| not.toHaveBeenCalled            | `rg "\.not\.toHaveBeenCalled" --glob "*.test.ts*"`    | 0        |
+| Tests pass without isolation    | `pnpm test` (with isolate: false)                     | All pass |
+| Pre-push succeeds first try     | `git push` (no TURBO_CONCURRENCY)                     | Success  |
 
 ### Soft Goals
 

@@ -18,6 +18,7 @@ import type {
   AggregatedUnitContext,
   UnitContextMap,
 } from '../../../src/lib/indexing/ks4-context-builder';
+import type { BulkOperations } from '../../../src/lib/indexing/bulk-operation-types';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -66,10 +67,10 @@ export async function GET(req: NextRequest): Promise<Response> {
 async function rollupAllUnits(
   client: OakClient,
   target: SearchIndexTarget,
-): Promise<{ count: number; rest: unknown[] }> {
+): Promise<{ count: number; rest: BulkOperations }> {
   const size = 500;
   let totalProcessed = 0;
-  let bulkOps: unknown[] = [];
+  let bulkOps: BulkOperations = [];
   const unitsRes = await fetchAllUnits(size);
   for (const uh of unitsRes.hits.hits) {
     const source: unknown = uh._source;

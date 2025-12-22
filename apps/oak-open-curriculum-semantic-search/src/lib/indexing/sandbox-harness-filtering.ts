@@ -1,5 +1,7 @@
 import type { SearchIndexKind } from '../search-index-target';
 import { inferKindFromIndex } from './sandbox-harness-ops';
+import type { BulkOperations, BulkOperationEntry } from './bulk-operation-types';
+import { isBulkIndexAction as isBulkIndexActionTyped } from './bulk-operation-types';
 
 /**
  * Filter bulk operations to only include specified index kinds.
@@ -10,14 +12,14 @@ import { inferKindFromIndex } from './sandbox-harness-ops';
  * @returns Filtered operations array
  */
 export function filterOperationsByIndex(
-  operations: readonly unknown[],
+  operations: BulkOperations,
   allowedKinds: readonly SearchIndexKind[],
-): unknown[] {
+): BulkOperations {
   if (allowedKinds.length === 0) {
     return [...operations];
   }
 
-  const result: unknown[] = [];
+  const result: BulkOperationEntry[] = [];
   for (let i = 0; i < operations.length; i += 2) {
     const action = operations[i];
     const doc = operations[i + 1];
@@ -43,49 +45,9 @@ export function filterOperationsByIndex(
  * @param action - The bulk action object
  * @returns The index name, or null if not found
  */
-function getIndexFromAction(action: unknown): string | null {
-  if (!isBulkIndexAction(action)) {
+function getIndexFromAction(action: BulkOperationEntry): string | null {
+  if (!isBulkIndexActionTyped(action)) {
     return null;
   }
   return action.index._index;
-}
-
-/**
- * Shape of a bulk index action's index property.
- * Used only for bulk operation filtering - not a general-purpose type.
- */
-interface BulkActionIndex {
-  readonly _index: string;
-}
-
-/**
- * Shape of a bulk index action used in ES bulk operations.
- * Used only for bulk operation filtering - not a general-purpose type.
- */
-interface BulkIndexAction {
-  readonly index: BulkActionIndex;
-}
-
-/**
- * Type guard to check if a value is a bulk index action.
- * Narrows directly to BulkIndexAction without intermediate generic types.
- *
- * @param value - The value to check
- * @returns True if the value is a bulk index action with _index property
- */
-function isBulkIndexAction(value: unknown): value is BulkIndexAction {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  if (!('index' in value)) {
-    return false;
-  }
-  const indexProp = value.index;
-  if (typeof indexProp !== 'object' || indexProp === null) {
-    return false;
-  }
-  if (!('_index' in indexProp)) {
-    return false;
-  }
-  return typeof indexProp._index === 'string';
 }

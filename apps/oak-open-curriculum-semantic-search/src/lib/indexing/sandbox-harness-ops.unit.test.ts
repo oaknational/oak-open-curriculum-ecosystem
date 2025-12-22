@@ -4,6 +4,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
+import type { BulkOperations } from './bulk-operation-types';
 import {
   dispatchBulk,
   summariseOperations,
@@ -60,7 +61,7 @@ describe('dispatchBulk', () => {
       { title: 'Lesson 1' },
       { index: { _index: 'oak_lessons', _id: '2' } },
       { title: 'Lesson 2' },
-    ];
+    ] as BulkOperations;
 
     mockRequestFn.mockResolvedValue({ errors: false, items: [] });
 
@@ -85,7 +86,10 @@ describe('dispatchBulk', () => {
   });
 
   it('logs errors when bulk upload has failures', async () => {
-    const operations = [{ index: { _index: 'oak_lessons', _id: '1' } }, { title: 'Lesson 1' }];
+    const operations = [
+      { index: { _index: 'oak_lessons', _id: '1' } },
+      { title: 'Lesson 1' },
+    ] as BulkOperations;
 
     mockRequestFn.mockResolvedValue({
       errors: true,
@@ -113,7 +117,7 @@ describe('dispatchBulk', () => {
       { title: 'Doc 2' },
       { index: { _index: 'oak_lessons', _id: '3' } },
       { title: 'Doc 3' },
-    ];
+    ] as BulkOperations;
 
     mockRequestFn.mockResolvedValue({ errors: false, items: [] });
 
@@ -138,7 +142,7 @@ describe('summariseOperations', () => {
       { data: 'unit1' },
       { index: { _index: 'oak_lessons' } },
       { data: 'lesson2' },
-    ];
+    ] as BulkOperations;
 
     const summary = summariseOperations(operations, 'primary');
 
@@ -158,7 +162,7 @@ describe('summariseOperations', () => {
 
 describe('createNdjson', () => {
   it('converts operations array to NDJSON format', () => {
-    const operations = [{ index: { _index: 'test' } }, { data: 'value' }];
+    const operations = [{ index: { _index: 'test' } }, { data: 'value' }] as BulkOperations;
 
     const ndjson = createNdjson(operations);
 

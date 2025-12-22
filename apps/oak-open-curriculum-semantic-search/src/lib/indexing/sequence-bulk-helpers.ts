@@ -15,6 +15,7 @@ import type { SequenceFacetSource } from './sequence-facets';
 import { createSequenceDocument } from './sequence-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { getSubjectTitle } from './subject-title-utils';
+import type { BulkOperations } from './bulk-operation-types';
 
 /**
  * Parameters for building sequence bulk operations.
@@ -46,10 +47,10 @@ export interface BuildSequenceOpsParams {
  * @param params - The sequence data from ingestion context
  * @returns Array of bulk operations (alternating metadata and document)
  */
-export function buildSequenceOps(params: BuildSequenceOpsParams): unknown[] {
+export function buildSequenceOps(params: BuildSequenceOpsParams): BulkOperations {
   const { subject, sequences, sequenceSources } = params;
   const subjectTitle = getSubjectTitle(subject);
-  const ops: unknown[] = [];
+  const ops: BulkOperations = [];
 
   for (const seq of sequences) {
     const source = sequenceSources.get(seq.sequenceSlug);

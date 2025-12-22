@@ -20,6 +20,7 @@ import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
 import { sandboxLogger } from '../logger';
 import type { UnitContextMap } from './ks4-context-builder';
+import type { BulkOperationEntry, BulkAction } from './bulk-operation-types';
 
 /**
  * Aggregated lesson with all unit relationships.
@@ -37,7 +38,7 @@ export interface AggregatedLessonInput {
  */
 export interface LessonBuildResult {
   readonly lessonSlug: string;
-  readonly ops: readonly unknown[];
+  readonly ops: readonly BulkOperationEntry[];
   readonly snippet: string;
   /** Primary unit slug for rollup aggregation */
   readonly primaryUnitSlug: string;
@@ -81,7 +82,7 @@ async function buildLessonDocEntry(
   client: OakClient,
   lesson: { lessonSlug: string; lessonTitle: string },
   context: LessonBuildContext,
-): Promise<{ operation: unknown; document: SearchLessonsIndexDoc; snippet: string } | null> {
+): Promise<{ operation: BulkAction; document: SearchLessonsIndexDoc; snippet: string } | null> {
   const primaryUnit = context.units[0];
   if (!primaryUnit) {
     throw new Error(`Lesson ${lesson.lessonSlug} has no units in context`);

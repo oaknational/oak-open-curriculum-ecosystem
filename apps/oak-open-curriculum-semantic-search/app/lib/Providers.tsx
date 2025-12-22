@@ -8,6 +8,7 @@ import { ColorModeProvider, useColorMode } from './theme/ColorModeContext';
 import { ThemeBridgeProvider } from './theme/ThemeBridgeProvider';
 import type { FixtureMode } from './fixture-mode';
 import { FixtureModeProvider } from '../ui/global/client';
+import { MediaQueryProvider } from './media-query/MediaQueryContext';
 
 function BridgeComposer({
   children,
@@ -59,11 +60,13 @@ export function Providers({
 }): JSX.Element {
   const ssrResolved: 'light' | 'dark' = initialMode === 'dark' ? 'dark' : 'light';
   return (
-    <ThemeContextProvider initialMode={initialMode}>
-      <FixtureModeProvider initialMode={initialFixtureMode}>
-        <BridgeComposer ssrMode={ssrResolved}>{children}</BridgeComposer>
-      </FixtureModeProvider>
-    </ThemeContextProvider>
+    <MediaQueryProvider>
+      <ThemeContextProvider initialMode={initialMode}>
+        <FixtureModeProvider initialMode={initialFixtureMode}>
+          <BridgeComposer ssrMode={ssrResolved}>{children}</BridgeComposer>
+        </FixtureModeProvider>
+      </ThemeContextProvider>
+    </MediaQueryProvider>
   );
 }
 

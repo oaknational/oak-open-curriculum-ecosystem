@@ -9,7 +9,8 @@ import type { StructuredSearchAction } from './structured/StructuredSearch';
 import type { FixtureMode } from '../../lib/fixture-mode';
 import { FixtureModeProvider } from '../global/Fixture/FixtureModeContext';
 import { createLightTheme } from '../themes/light';
-import { mockMatchMedia as createMockMatchMedia } from './mock-match-media';
+import { createMockMediaQueryAPI } from '../../lib/media-query/MediaQueryContext.test-helpers';
+import { MediaQueryContext } from '../../lib/media-query/MediaQueryContext';
 import SearchPageClient from './SearchPageClient';
 
 export const refreshMock = vi.fn<AppRouterInstance['refresh']>();
@@ -71,8 +72,6 @@ vi.mock('./components/SearchFacets', () => ({
   SearchFacets: renderFacets,
 }));
 
-export const mockMatchMedia = createMockMatchMedia;
-
 export type AppTheme = ReturnType<typeof createLightTheme>;
 
 const FIXTURE_MODES: readonly FixtureMode[] = [
@@ -102,6 +101,7 @@ export function renderWithTheme(
     initialFixtureMode?: FixtureMode;
     showFixtureToggle?: boolean;
     variant?: 'default' | 'structured' | 'natural';
+    mediaMatches?: boolean;
   } = {},
 ): AppTheme {
   let theme: AppTheme = createLightTheme();
@@ -121,23 +121,26 @@ export function renderWithTheme(
     variant = options.variant;
   }
 
+  const mockMediaAPI = createMockMediaQueryAPI(options.mediaMatches ?? true);
+
   render(
-    <StyledThemeProvider theme={theme}>
-      <FixtureModeProvider initialMode={initialFixtureMode}>
-        <SearchPageClient
-          searchStructured={action}
-          initialFixtureMode={initialFixtureMode}
-          showFixtureToggle={showFixtureToggle}
-          variant={variant}
-        />
-      </FixtureModeProvider>
-    </StyledThemeProvider>,
+    <MediaQueryContext.Provider value={mockMediaAPI}>
+      <StyledThemeProvider theme={theme}>
+        <FixtureModeProvider initialMode={initialFixtureMode}>
+          <SearchPageClient
+            searchStructured={action}
+            initialFixtureMode={initialFixtureMode}
+            showFixtureToggle={showFixtureToggle}
+            variant={variant}
+          />
+        </FixtureModeProvider>
+      </StyledThemeProvider>
+    </MediaQueryContext.Provider>,
   );
   return theme;
 }
 
 export function resetSearchPageTestState(): void {
-  mockMatchMedia(true);
   structuredPropsRef.current = null;
   facetPropsRef.current = null;
   refreshMock.mockReset();

@@ -16,6 +16,7 @@ import { sandboxLogger } from '../logger';
 import { processUnitSummary } from './index-bulk-helpers-internal';
 import type { DataIntegrityReport } from './data-integrity-report';
 import type { UnitContextMap } from './ks4-context-builder';
+import type { BulkOperations } from './bulk-operation-types';
 import {
   createPhaseStartEvent,
   createPhaseEndEvent,
@@ -34,7 +35,7 @@ export async function buildUnitDocuments(
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<{
   unitSummaries: Map<string, SearchUnitSummary>;
-  unitOps: unknown[];
+  unitOps: BulkOperations;
 }> {
   const startTime = Date.now();
   const phaseStartEvent = createPhaseStartEvent('units', {
@@ -45,7 +46,7 @@ export async function buildUnitDocuments(
   sandboxLogger.info(formatIngestionEvent(phaseStartEvent));
 
   const unitSummaries = new Map<string, SearchUnitSummary>();
-  const unitOps: unknown[] = [];
+  const unitOps: BulkOperations = [];
   let skippedCount = 0;
 
   let unitIndex = 0;
@@ -107,7 +108,7 @@ export function buildRollupDocuments(
   keyStage: KeyStage,
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
-): unknown[] {
+): BulkOperations {
   const startTime = Date.now();
   const phaseStartEvent = createPhaseStartEvent('rollups', {
     subject,
@@ -116,7 +117,7 @@ export function buildRollupDocuments(
   });
   sandboxLogger.info(formatIngestionEvent(phaseStartEvent));
 
-  const ops: unknown[] = [];
+  const ops: BulkOperations = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
     const snippets = rollupSnippets.get(summary.unitSlug) ?? [];

@@ -26,6 +26,7 @@ import {
   createSequenceFacetMetricsCollector,
   type SandboxBulkMetrics,
 } from './sandbox-harness-metrics';
+import type { BulkOperations } from './bulk-operation-types';
 
 interface SandboxHarnessOptions {
   readonly fixtureRoot?: string;
@@ -57,7 +58,7 @@ interface SandboxBulkSummary {
 }
 
 interface SandboxBulkResult {
-  readonly operations: unknown[];
+  readonly operations: BulkOperations;
   readonly summary: SandboxBulkSummary;
   readonly metrics?: SandboxBulkMetrics;
   readonly dataIntegrityReport?: DataIntegrityReport;

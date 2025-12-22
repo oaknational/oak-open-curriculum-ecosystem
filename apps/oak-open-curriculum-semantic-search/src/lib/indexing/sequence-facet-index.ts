@@ -8,6 +8,7 @@ import {
   type SequenceFacetSource,
 } from './sequence-facets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
+import type { BulkOperations } from './bulk-operation-types';
 
 export type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
 
@@ -76,7 +77,7 @@ export function buildSequenceFacetOps({
   sequences,
   sequenceSources,
   unitSummaries,
-}: BuildSequenceFacetOpsArgs): unknown[] {
+}: BuildSequenceFacetOpsArgs): BulkOperations {
   const docs = createSequenceFacetDocuments({
     subject,
     keyStage,
@@ -85,13 +86,17 @@ export function buildSequenceFacetOps({
     unitSummaries,
   });
 
-  return docs.flatMap((doc) => [
-    {
-      index: {
-        _index: resolvePrimarySearchIndexName('sequence_facets'),
-        _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`,
+  const result: BulkOperations = [];
+  for (const doc of docs) {
+    result.push(
+      {
+        index: {
+          _index: resolvePrimarySearchIndexName('sequence_facets'),
+          _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`,
+        },
       },
-    },
-    doc,
-  ]);
+      doc,
+    );
+  }
+  return result;
 }

@@ -91,6 +91,10 @@ export const strict: Linter.Config[] = [
             object: {
               message: 'Avoid object type. It is too vague.',
             },
+            'unknown[]': {
+              message:
+                'unknown[] is not permitted. It destroys type information. What is the real shape of the data?',
+            },
           },
         },
       ],

@@ -120,28 +120,35 @@ function extractUnitArrays(units: readonly LessonUnitInfo[]) {
   };
 }
 
-/** Creates a lesson document for Elasticsearch indexing. */
-export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
-  const {
-    lesson,
-    transcript,
-    summary,
-    subject,
-    keyStage,
-    years,
-    lessonCount,
-    unitContextMap,
-    units,
-  } = params;
+/**
+ * Extract all derived fields needed for lesson document construction.
+ * @param params - CreateLessonDocumentParams
+ * @returns Extracted fields for document construction
+ */
+function extractDerivedLessonFields(params: CreateLessonDocumentParams): {
+  primaryUnitSlug: string;
+  f: ReturnType<typeof extractLessonDocumentFields>;
+  ks4: ReturnType<typeof extractKs4DocumentFields>;
+  sem: string;
+  unitArrays: ReturnType<typeof extractUnitArrays>;
+} {
+  const { summary, unitContextMap, units, lesson } = params;
   if (units.length === 0) {
     throw new Error(`Lesson ${lesson.lessonSlug} has no unit relationships`);
   }
-
   const primaryUnitSlug = units[0].unitSlug;
   const f = extractLessonDocumentFields(summary);
   const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, primaryUnitSlug));
   const sem = generateLessonSemanticSummary(summary);
-  const { unitIds, unitTitles, unitUrls } = extractUnitArrays(units);
+  const unitArrays = extractUnitArrays(units);
+  return { primaryUnitSlug, f, ks4, sem, unitArrays };
+}
+
+/** Creates a lesson document for Elasticsearch indexing. */
+export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
+  const { lesson, transcript, subject, keyStage, years, lessonCount } = params;
+  const { f, ks4, sem, unitArrays } = extractDerivedLessonFields(params);
+  const { unitIds, unitTitles, unitUrls } = unitArrays;
 
   return {
     lesson_id: lesson.lessonSlug,

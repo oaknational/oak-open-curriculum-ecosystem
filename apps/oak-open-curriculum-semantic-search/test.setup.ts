@@ -3,20 +3,19 @@
  *
  * Configures the test environment for unit and integration tests.
  * No network calls or external dependencies should be used in tests.
+ *
+ * NOTE: Per testing-strategy.md, we do NOT mutate process.env globally here.
+ * Tests that need environment variables should set them in beforeEach/afterEach
+ * with proper cleanup to avoid shared state pollution.
  */
 
-import { afterEach } from 'vitest';
+import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 
-// Cleanup after each test case
+// Cleanup after each test case to prevent state pollution
 afterEach(() => {
-  cleanup();
+  cleanup(); // Clean up React Testing Library state
+  vi.useRealTimers(); // Ensure fake timers are always reset
+  vi.clearAllMocks(); // Clear all mock state
 });
-
-// Mock environment variables for tests
-process.env.ELASTICSEARCH_URL = 'https://test.elasticsearch.com';
-process.env.ELASTICSEARCH_API_KEY = 'test-api-key';
-process.env.OAK_API_KEY = 'test-oak-key';
-process.env.SEARCH_API_KEY = 'test-search-key';
-process.env.AI_PROVIDER = 'none';

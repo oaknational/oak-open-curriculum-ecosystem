@@ -11,6 +11,7 @@ import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import { createUnitDocument } from './document-transforms';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { UnitContextMap } from './ks4-context-builder';
+import type { BulkOperations } from './bulk-operation-types';
 
 /**
  * Processes a unit summary and creates index operations.
@@ -30,7 +31,7 @@ export async function processUnitSummary(
   ks: KeyStage,
   subjectProgrammesUrl: string,
   unitContextMap: UnitContextMap,
-): Promise<{ summary: SearchUnitSummary; ops: unknown[] } | null> {
+): Promise<{ summary: SearchUnitSummary; ops: BulkOperations } | null> {
   const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
 
   // Handle 404 - unit exists in listing but has no summary data

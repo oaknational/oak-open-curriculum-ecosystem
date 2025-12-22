@@ -12,12 +12,13 @@ import {
   type SequenceFacetProcessingMetrics,
 } from './indexing/sequence-facet-index';
 import { buildRollupDocuments, buildUnitDocuments } from './indexing/index-bulk-helpers';
-import { buildLessonDocFromAggregated } from './indexing/lesson-document-builder';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { sandboxLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { UnitContextMap } from './indexing/ks4-context-builder';
 import { fetchAllLessonsWithPagination } from './indexing/fetch-all-lessons';
+import type { BulkOperations } from './indexing/bulk-operation-types';
+import { processLessonForIndexing } from './indexing/lesson-processing';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -64,7 +65,7 @@ async function buildUnitsWithSummaries(
   context: PairBuildContext,
   units: PairUnits,
   subjectProgrammesUrl: string,
-): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: unknown[] }> {
+): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: BulkOperations }> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
   const result = await buildUnitDocuments(
@@ -84,22 +85,12 @@ async function buildUnitsWithSummaries(
   return result;
 }
 
-/** Adds a snippet to the rollup snippets map by unit slug. */
-function addRollupSnippet(map: Map<string, string[]>, unitSlug: string, snippet: string): void {
-  const existing = map.get(unitSlug);
-  if (existing) {
-    existing.push(snippet);
-  } else {
-    map.set(unitSlug, [snippet]);
-  }
-}
-
 /** Build lesson documents from paginated API. @see ADR-083 */
 async function buildLessonsFromSummaries(
   context: PairBuildContext,
   unitSummaries: Map<string, SearchUnitSummary>,
-): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
-  const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
+): Promise<{ lessonOps: BulkOperations; rollupSnippets: Map<string, string[]> }> {
+  const { client, ks, subject } = context;
   sandboxLogger.info('Fetching all lessons via pagination', { subject, keyStage: ks });
   const aggregatedLessons = await fetchAllLessonsWithPagination(
     client.getLessonsByKeyStageAndSubject,
@@ -108,40 +99,24 @@ async function buildLessonsFromSummaries(
   );
   sandboxLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
 
-  const lessonOps: unknown[] = [],
+  const lessonOps: BulkOperations = [],
     rollupSnippets = new Map<string, string[]>();
   let processed = 0,
     skipped = 0;
 
   for (const lesson of aggregatedLessons.values()) {
-    const result = await buildLessonDocFromAggregated(
-      client,
-      {
-        lessonSlug: lesson.lessonSlug,
-        lessonTitle: lesson.lessonTitle,
-        unitSlugs: lesson.unitSlugs,
-      },
+    const skipCount = await processLessonForIndexing(
+      lesson,
+      context,
       unitSummaries,
-      subject,
-      ks,
-      unitContextMap,
+      lessonOps,
+      rollupSnippets,
     );
-    if (result === null) {
+    if (skipCount > 0) {
       skipped++;
-      const unitSlug = Array.from(lesson.unitSlugs)[0] ?? 'unknown';
-      dataIntegrityReport.skippedLessons.push({
-        lessonSlug: lesson.lessonSlug,
-        unitSlug,
-        subject,
-        keyStage: ks,
-        reason: 'summary_404',
-        httpStatus: 404,
-      });
       continue;
     }
-    lessonOps.push(...result.ops);
     processed++;
-    addRollupSnippet(rollupSnippets, result.primaryUnitSlug, result.snippet);
   }
   sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: processed, skipped });
   return { lessonOps, rollupSnippets };
@@ -153,9 +128,9 @@ async function buildCoreDocumentOps(
   units: PairUnits,
   subjectProgrammesUrl: string,
 ): Promise<{
-  unitOps: unknown[];
-  lessonOps: unknown[];
-  rollupOps: unknown[];
+  unitOps: BulkOperations;
+  lessonOps: BulkOperations;
+  rollupOps: BulkOperations;
   unitSummaries: Map<string, SearchUnitSummary>;
 }> {
   const { ks, subject, unitContextMap } = context;
@@ -184,7 +159,7 @@ async function buildCoreDocumentOps(
 export async function buildPairDocuments(
   context: PairBuildContext,
   units: PairUnits,
-): Promise<unknown[]> {
+): Promise<BulkOperations> {
   const { ks, subject, subjectSequences, sequenceSources } = context;
   const subjectProgrammesUrl = getSubjectProgrammesUrl(subject, ks);
 

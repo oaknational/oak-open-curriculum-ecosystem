@@ -4,9 +4,16 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import StructuredSearchClient from './StructuredSearchClient';
 import { ThemeProvider } from '../../../lib/theme/ThemeContext';
+import { createMockMediaQueryAPI } from '../../../lib/media-query/MediaQueryContext.test-helpers';
+import { MediaQueryContext } from '../../../lib/media-query/MediaQueryContext';
 
 function renderWithTheme(ui: ReactElement): void {
-  render(<ThemeProvider initialMode="light">{ui}</ThemeProvider>);
+  const mockAPI = createMockMediaQueryAPI(false);
+  render(
+    <MediaQueryContext.Provider value={mockAPI}>
+      <ThemeProvider initialMode="light">{ui}</ThemeProvider>
+    </MediaQueryContext.Provider>,
+  );
 }
 
 describe('StructuredSearchClient regression', () => {

@@ -25,20 +25,35 @@
 
 ---
 
-## 🔴 IMMEDIATE: Test Suite Memory Exhaustion (2025-12-21)
+## 🔴 BLOCKING: Test Failures (2025-12-21)
 
-**Tier cleanup is functionally complete BUT quality gates failing:**
+**Architecture fixes complete, but tests still failing:**
 
 ```bash
 pnpm build      # ✅ PASSES
 pnpm type-check # ✅ PASSES  
 pnpm lint:fix   # ✅ PASSES
-pnpm test       # ❌ FAILS - OOM during cleanup (489/492 tests passed, worker crashed)
+pnpm test       # ❌ FAILS - 2 tests fail when run with full suite
 ```
 
-**Root Cause**: Shared state + test isolation = memory exhaustion. See [PHASE-1-BLOCKING-ISSUE.md](../../plans/semantic-search/PHASE-1-BLOCKING-ISSUE.md)
+### What Was Fixed
 
-**FIRST ACTION**: Fix shared state issues per global-state-elimination plan, THEN resume data quality fixes.
+1. ✅ **OOM crash resolved** - removed process isolation (`isolate: false`, `pool: 'threads'`)
+2. ✅ **Global state cleaned up** - removed `process.env` mutations from `test.setup.ts`
+3. ✅ **Type shortcuts fixed** - replaced `unknown[]` with proper `BulkOperations` type
+4. ✅ **Memory usage** - ~500MB (single process) vs ~4.4GB (89 processes)
+
+### What's Still Blocking
+
+**2 tests fail when run together, pass in isolation:**
+- `ThemeSystemPreference.integration.test.tsx` (uses fake timers)
+- `SearchPageLayout.error.unit.test.tsx` (uses multiple providers)
+
+**Root cause**: Test interaction/pollution - some preceding test isn't cleaning up properly.
+
+**See**: [test-isolation-architecture-fix.md](../../plans/semantic-search/test-isolation-architecture-fix.md) for investigation details.
+
+**Next**: Fix test interactions, THEN resume data quality fixes (Phase 2-4).
 
 ---
 

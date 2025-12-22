@@ -2,11 +2,18 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ThemeProvider } from '../../../lib/theme/ThemeContext';
 import StructuredSearchClient from './StructuredSearchClient';
+import { createMockMediaQueryAPI } from '../../../lib/media-query/MediaQueryContext.test-helpers';
+import { MediaQueryContext } from '../../../lib/media-query/MediaQueryContext';
 
 const resolve = async (): Promise<{ result: unknown | null; error?: string }> => ({ result: null });
 
 function renderWithTheme(ui: React.ReactElement): void {
-  render(<ThemeProvider initialMode="light">{ui}</ThemeProvider>);
+  const mockAPI = createMockMediaQueryAPI(false);
+  render(
+    <MediaQueryContext.Provider value={mockAPI}>
+      <ThemeProvider initialMode="light">{ui}</ThemeProvider>
+    </MediaQueryContext.Provider>,
+  );
 }
 
 describe('StructuredSearchClient', () => {

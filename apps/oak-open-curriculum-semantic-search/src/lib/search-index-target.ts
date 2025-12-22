@@ -1,4 +1,5 @@
 import { optionalEnv } from './env';
+import type { BulkOperations } from './indexing/bulk-operation-types';
 
 export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
 export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
@@ -75,9 +76,9 @@ export function coerceSearchIndexTarget(value: string | undefined): SearchIndexT
 
 /** Rewrite bulk operations so `_index` entries align with the selected target. */
 export function rewriteBulkOperations(
-  operations: readonly unknown[],
+  operations: BulkOperations,
   target: SearchIndexTarget,
-): unknown[] {
+): BulkOperations {
   if (target === 'primary') {
     // Primary target already matches canonical index names; return original operations.
     return [...operations];

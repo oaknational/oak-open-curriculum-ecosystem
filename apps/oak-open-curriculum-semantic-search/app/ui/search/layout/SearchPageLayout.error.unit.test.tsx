@@ -9,15 +9,20 @@ import type { StructuredFollowUpHandlers } from '../hooks/useStructuredFollowUp'
 import type { SearchController } from '../hooks/useSearchController';
 import type { StructuredSearchAction } from '../structured/StructuredSearch';
 import { FixtureModeProvider } from '../../global/Fixture/FixtureModeContext';
+import { createMockMediaQueryAPI } from '../../../lib/media-query/MediaQueryContext.test-helpers';
+import { MediaQueryContext } from '../../../lib/media-query/MediaQueryContext';
 
 function renderWithProviders(ui: ReactNode) {
   const theme = createLightTheme();
+  const mockAPI = createMockMediaQueryAPI(false);
   return render(
-    <StyledThemeProvider theme={theme}>
-      <OakThemeProvider theme={oakDefaultTheme}>
-        <FixtureModeProvider initialMode="live">{ui}</FixtureModeProvider>
-      </OakThemeProvider>
-    </StyledThemeProvider>,
+    <MediaQueryContext.Provider value={mockAPI}>
+      <StyledThemeProvider theme={theme}>
+        <OakThemeProvider theme={oakDefaultTheme}>
+          <FixtureModeProvider initialMode="live">{ui}</FixtureModeProvider>
+        </OakThemeProvider>
+      </StyledThemeProvider>
+    </MediaQueryContext.Provider>,
   );
 }
 

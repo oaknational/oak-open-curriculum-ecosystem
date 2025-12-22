@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { estypes } from '@elastic/elasticsearch';
 import type {
   SearchLessonsIndexDoc,
@@ -96,9 +96,21 @@ function extractContexts(request: estypes.SearchRequest | undefined): unknown {
 }
 
 describe('runSuggestions', () => {
+  let originalSearchIndexVersion: string | undefined;
+
   beforeEach(() => {
     searchMock.mockReset();
+    originalSearchIndexVersion = process.env.SEARCH_INDEX_VERSION;
     process.env.SEARCH_INDEX_VERSION = 'v-test-index';
+  });
+
+  afterEach(() => {
+    // Restore original environment
+    if (originalSearchIndexVersion === undefined) {
+      delete process.env.SEARCH_INDEX_VERSION;
+    } else {
+      process.env.SEARCH_INDEX_VERSION = originalSearchIndexVersion;
+    }
   });
 
   it('returns completion suggestions for lessons with contextual filters', async () => {
