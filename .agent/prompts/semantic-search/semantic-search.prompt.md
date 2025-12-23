@@ -1,56 +1,47 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 ACTIVE — B.5 Phrase Query Enhancement (IMPLEMENTED, AWAITING VALIDATION)  
+**Status**: Part 1 ACTIVE — B.5 Phrase Query Enhancement (IMPLEMENTED, GATES VERIFIED, AWAITING VALIDATION)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-23 18:00 UTC
+**Last Updated**: 2025-12-23 22:30 UTC
 
 ---
 
-## ⚠️ Quality Gates — NOT VERIFIED
+## ✅ Quality Gates — VERIFIED (2025-12-23)
 
-**Quality gates have NOT been verified after B.5 implementation.** The last verified run was 2025-12-22 18:51 UTC, BEFORE B.5 code was merged.
+**All 11 quality gates pass.** Verified 2025-12-23 ~22:00 UTC after fixing 97 lint errors.
 
-**FIRST ACTION REQUIRED** — Run quality gates before anything else:
+| Gate | Status |
+|------|--------|
+| `pnpm type-gen` | ✅ Pass |
+| `pnpm build` | ✅ Pass |
+| `pnpm type-check` | ✅ Pass |
+| `pnpm lint:fix` | ✅ Pass (97 errors fixed) |
+| `pnpm format:root` | ✅ Pass |
+| `pnpm markdownlint:root` | ✅ Pass |
+| `pnpm test` | ✅ Pass |
+| `pnpm test:e2e` | ✅ Pass |
+| `pnpm test:e2e:built` | ✅ Pass |
+| `pnpm test:ui` | ✅ Pass |
+| `pnpm smoke:dev:stub` | ✅ Pass |
 
-```bash
-# From repo root, one at a time
-pnpm type-gen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm test:e2e
-pnpm test:e2e:built
-pnpm test:ui
-pnpm smoke:dev:stub
-```
-
-**All gates must pass. Fail fast. No exceptions. Fix any issues before proceeding.**
+**Lint fixes included**: Updated eslint config for `operations/ingestion/` (CLI tools), refactored complex functions in analysis scripts, split `diagnostic-queries.ts` into smaller files.
 
 ---
 
-## ⚠️ TL;DR — B.5 Implementation Complete, Quality Gates + Validation Required
+## ⚠️ TL;DR — B.5 Implementation Complete, Validation Required
 
-**B.5 Phrase Query Enhancement code is complete. BUT quality gates have NOT been verified, and the experiment has NOT been run to measure MRR impact.**
+**B.5 Phrase Query Enhancement code is complete. Quality gates verified. The experiment to measure MRR impact has NOT been run yet.**
 
 | Task | Status | Notes |
 |------|--------|-------|
 | B.5 Implementation | ✅ Complete | Code merged |
-| Quality Gates | ❌ **NOT VERIFIED** | Must run full gate suite first |
+| Quality Gates | ✅ **VERIFIED** | All 11 gates pass (2025-12-23) |
 | B.5 Validation | ❌ **NOT DONE** | Must run `pnpm eval:diagnostic` to measure impact |
 
-**⚠️ IMMEDIATE ACTION REQUIRED** (in order):
+**⚠️ IMMEDIATE ACTION REQUIRED**:
 
-**Step 1: Verify quality gates pass** (from repo root):
-
-```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
-```
-
-**Step 2: Run B.5 validation** (only after gates pass):
+**Run B.5 validation** (quality gates already verified):
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -170,7 +161,7 @@ For current metrics, index status, and known issues, see:
 
 **[current-state.md](../../plans/semantic-search/current-state.md)** — THE single source of truth for current metrics
 
-Quick summary (as of 2025-12-23 14:00 UTC):
+Quick summary (as of 2025-12-23 22:30 UTC):
 
 | Metric | Value | Target | Status | Notes |
 |--------|-------|--------|--------|-------|
@@ -227,23 +218,15 @@ The following have been implemented and merged:
 - Integration into `buildLessonRrfRequest()` and `buildUnitRrfRequest()`
 - ADR-084: Phrase Query Boosting for Curriculum Terms
 
-**Quality Gates Status**: ❌ **NOT VERIFIED** — gates have not been run after B.5 code was merged
+**Quality Gates Status**: ✅ **VERIFIED** — all 11 gates pass (2025-12-23 22:00 UTC)
 
 **Validation Status**: ❌ **NOT DONE** — experiment has not been run to measure MRR impact
 
-**⚠️ We declared victory without running quality gates or measuring the impact.**
+**⚠️ Quality gates verified, but MRR impact not yet measured.**
 
-**IMMEDIATE NEXT STEPS** (in order):
+**IMMEDIATE NEXT STEPS**:
 
-**Step 1: Verify quality gates** (from repo root):
-
-```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
-```
-
-Fix any failures before proceeding.
-
-**Step 2: Run B.5 validation** (only after gates pass):
+**Run B.5 validation**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search

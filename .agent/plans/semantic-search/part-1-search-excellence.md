@@ -4,36 +4,28 @@
 **Priority**: High  
 **Done When**: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption  
 **Created**: 2025-12-19  
-**Last Updated**: 2025-12-23 15:00 UTC  
+**Last Updated**: 2025-12-23 22:30 UTC  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
 
 ## 🎯 Quick Start for Fresh Context
 
-**Where we are**: Tier 1 (Search Fundamentals), task B.5 (Phrase Query Enhancement) — **VALIDATION PENDING**
+**Where we are**: Tier 1 (Search Fundamentals), task B.5 (Phrase Query Enhancement) — **GATES VERIFIED, VALIDATION PENDING**
 
 **What's been completed**:
 - ✅ B.4: Noise phrase filtering (+16.8% MRR improvement)
 - ✅ B.4a: 18-query diagnostic analysis (root cause identified)
 - ✅ Complete data indexed (436 lessons, validated)
 - ✅ B.5 **IMPLEMENTATION** complete (code merged, ADR-084 created)
+- ✅ Quality gates verified (2025-12-23 22:00 UTC, 97 lint errors fixed)
 
 **⚠️ What's NOT been done**:
-1. **Quality gates NOT VERIFIED** — gates have not been run after B.5 code was merged
-2. **B.5 VALIDATION NOT DONE** — the experiment to measure MRR impact has NOT been run
+1. **B.5 VALIDATION NOT DONE** — the experiment to measure MRR impact has NOT been run
 
-**IMMEDIATE ACTION REQUIRED** (in order):
+**IMMEDIATE ACTION REQUIRED**:
 
-**Step 1: Verify quality gates** (from repo root):
-
-```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
-```
-
-Fix any failures before proceeding.
-
-**Step 2: Run B.5 validation** (only after gates pass):
+**Run B.5 validation**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -102,14 +94,25 @@ For experiment history, see **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-L
 
 ---
 
-## ✅ Quality Gates Pass (2025-12-22)
+## ✅ Quality Gates Pass (2025-12-23)
 
-All quality gates pass. Test isolation architecture fix is complete.
+All 11 quality gates pass. Verified 2025-12-23 ~22:00 UTC after fixing 97 lint errors.
 
 | Gate | Status |
 |------|--------|
-| `pnpm test` | ✅ 88 files, 490 tests |
-| All other gates | ✅ Pass |
+| `pnpm type-gen` | ✅ Pass |
+| `pnpm build` | ✅ Pass |
+| `pnpm type-check` | ✅ Pass |
+| `pnpm lint:fix` | ✅ Pass (97 errors fixed) |
+| `pnpm format:root` | ✅ Pass |
+| `pnpm markdownlint:root` | ✅ Pass |
+| `pnpm test` | ✅ Pass |
+| `pnpm test:e2e` | ✅ Pass |
+| `pnpm test:e2e:built` | ✅ Pass |
+| `pnpm test:ui` | ✅ Pass |
+| `pnpm smoke:dev:stub` | ✅ Pass |
+
+**Lint fixes included**: Updated eslint config for `operations/ingestion/` (CLI tools), refactored complex functions in analysis scripts, split `diagnostic-queries.ts` into smaller files.
 
 ---
 
@@ -511,15 +514,11 @@ pnpm eval:per-category    # Run full hard query baseline with category breakdown
 pnpm vitest run -c vitest.experiment.config.ts  # Run all experiments
 ```
 
-### B.5 Phrase Query Enhancement [🔄 IMPLEMENTATION COMPLETE — GATES + VALIDATION PENDING]
+### B.5 Phrase Query Enhancement [🔄 GATES VERIFIED — VALIDATION PENDING]
 
-**Status**: Implementation complete (2025-12-23). **QUALITY GATES NOT VERIFIED. VALIDATION NOT DONE.**
+**Status**: Implementation complete (2025-12-23). **Quality gates verified. Validation NOT done.**
 
-**⚠️ CRITICAL**: The code is merged but:
-1. Quality gates have NOT been run after the merge
-2. The experiment to measure MRR impact has NOT been run
-
-Both must be done before this task can be marked complete.
+**⚠️ NEXT STEP**: Run `pnpm eval:diagnostic` to measure MRR impact.
 
 #### What Was Implemented
 

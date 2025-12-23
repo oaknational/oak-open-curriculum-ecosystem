@@ -1,29 +1,19 @@
 # Semantic Search Current State
 
-**Last Updated**: 2025-12-23 18:00 UTC (B.5 implementation complete, validation pending)
+**Last Updated**: 2025-12-23 22:30 UTC (Quality gates verified, B.5 validation pending)
 **Measured Against**: Maths KS4 (vertical slice) — **COMPLETE INDEX**
 
 This is THE authoritative source for current system metrics. All other documents reference this file.
 
 ---
 
-## ⚠️ B.5 Incomplete — Quality Gates + Validation Pending
+## ⚠️ B.5 — Validation Pending
 
-**B.5 Phrase Query Enhancement code is merged.** BUT:
-1. **Quality gates have NOT been verified** after the merge
-2. **The experiment to measure MRR impact has NOT been run**
+**B.5 Phrase Query Enhancement code is merged.** Quality gates verified (2025-12-23). **The experiment to measure MRR impact has NOT been run yet.**
 
-**IMMEDIATE ACTION REQUIRED** (in order):
+**IMMEDIATE ACTION REQUIRED**:
 
-**Step 1: Verify quality gates** (from repo root):
-
-```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
-```
-
-Fix any failures before proceeding.
-
-**Step 2: Run B.5 validation** (only after gates pass):
+**Run B.5 validation**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -37,25 +27,23 @@ pnpm eval:per-category    # Get full category breakdown
 
 ## Quality Gate Status
 
-**⚠️ QUALITY GATES NOT VERIFIED AFTER B.5 MERGE**
+**✅ ALL QUALITY GATES PASS** (verified 2025-12-23 ~22:00 UTC)
 
-Last verified run was 2025-12-22 18:51 UTC — BEFORE B.5 code was merged.
+| Gate                     | Status                       |
+| ------------------------ | ---------------------------- |
+| `pnpm type-gen`          | ✅ Pass                      |
+| `pnpm build`             | ✅ Pass                      |
+| `pnpm type-check`        | ✅ Pass                      |
+| `pnpm lint:fix`          | ✅ Pass (97 errors fixed)    |
+| `pnpm format:root`       | ✅ Pass                      |
+| `pnpm markdownlint:root` | ✅ Pass                      |
+| `pnpm test`              | ✅ Pass                      |
+| `pnpm test:e2e`          | ✅ Pass                      |
+| `pnpm test:e2e:built`    | ✅ Pass                      |
+| `pnpm test:ui`           | ✅ Pass                      |
+| `pnpm smoke:dev:stub`    | ✅ Pass                      |
 
-| Gate                     | Status                                    |
-| ------------------------ | ----------------------------------------- |
-| `pnpm type-gen`          | ❓ Not verified after B.5                 |
-| `pnpm build`             | ❓ Not verified after B.5                 |
-| `pnpm type-check`        | ❓ Not verified after B.5                 |
-| `pnpm lint:fix`          | ❓ Not verified after B.5                 |
-| `pnpm format:root`       | ❓ Not verified after B.5                 |
-| `pnpm markdownlint:root` | ❓ Not verified after B.5                 |
-| `pnpm test`              | ❓ Not verified after B.5                 |
-| `pnpm test:e2e`          | ❓ Not verified after B.5                 |
-| `pnpm test:e2e:built`    | ❓ Not verified after B.5                 |
-| `pnpm test:ui`           | ❓ Not verified after B.5                 |
-| `pnpm smoke:dev:stub`    | ❓ Not verified after B.5                 |
-
-**Run full quality gate suite before proceeding with any work.**
+**Lint fixes applied**: Updated eslint config for `operations/ingestion/` (CLI tools), refactored complex functions in analysis scripts, split `diagnostic-queries.ts` into smaller files.
 
 ---
 
