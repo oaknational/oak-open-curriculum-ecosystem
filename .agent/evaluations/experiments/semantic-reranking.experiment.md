@@ -1,16 +1,42 @@
 # Experiment: Semantic Reranking
 
-**Tier**: AI Enhancement (Tier 4)
-**Date**: 2025-12-19
-**Status**: ❌ Rejected
+**Tier**: AI Enhancement (Tier 4)  
+**Date**: 2025-12-19  
+**Status**: ⚠️ **NEEDS RE-EVALUATION** — Decision based on invalid ground truth  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 
-## Abstract
+---
+
+## 🔴 CRITICAL: Decision May Be Wrong (2025-12-23)
+
+**This experiment was rejected based on INVALID ground truth.** A comprehensive audit revealed that 63 ground truth slugs (15%) were invalid — lesson references that don't exist in the Oak Curriculum API.
+
+### Impact on This Experiment
+
+- The -16.8% regression may be **noise**, not signal
+- The reranker may have been finding REAL lessons, but GT expected phantom ones
+- **We may have discarded a working approach**
+
+### Action Required
+
+Once true baselines are established with corrected ground truth, **re-run this experiment**:
+
+1. Run `pnpm eval:per-category` to get TRUE baseline
+2. Re-run the semantic reranking experiment
+3. Make a new decision based on VALID measurements
+
+**See**: [ground-truth-corrections.md](../ground-truth-corrections.md)
+
+---
+
+## Abstract (⚠️ BASED ON INVALID GROUND TRUTH)
 
 > We evaluated semantic reranking using `.rerank-v1-elasticsearch` on hard
 > queries. The results show a **-16.8% regression** in lesson hard query MRR
 > (0.367 → 0.305) and a -0.7% regression in unit MRR (0.811 → 0.806).
 > **Decision: REJECT** - semantic reranking harms performance on hard queries.
+>
+> **⚠️ This conclusion is UNVERIFIED** — ground truth was invalid.
 
 ---
 

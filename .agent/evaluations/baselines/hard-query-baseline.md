@@ -2,15 +2,51 @@
 
 **Type**: Baseline  
 **Date**: 2025-12-23 (Updated)  
-**Status**: ✅ Complete with full index (436 lessons)  
+**Status**: ⚠️ **UNVERIFIED** — Ground truth was corrected, measurements need re-running  
 **Type**: Baseline Documentation (no variant)  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
+
+---
+
+## 🔴 CRITICAL: Measurements Unverified (2025-12-23)
+
+**This baseline was measured against INVALID ground truth.** 63 slugs (15%) were invalid — lesson references that don't exist in the Oak Curriculum API.
+
+### Impact
+
+- MRR values below are **UNVERIFIED**
+- "Failures" may have been correct — searching for lessons that don't exist
+- "Successes" may have been luck
+- Query-by-query analysis is suspect
+
+### What Was Fixed
+
+- ✅ 63 slugs corrected in lesson ground truth
+- ✅ Integration test created to validate all slugs
+- ✅ Unit and sequence ground truth added
+
+### Action Required
+
+Re-run baseline measurements:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:per-category    # New hard query baseline
+```
+
+Then update this document with VERIFIED values.
+
+**See**: [ground-truth-corrections.md](../ground-truth-corrections.md)
+
+---
 
 > ✅ **COMPLETE INDEX**: These results are measured against the complete index (436 Maths KS4 lessons, validated against bulk download). Previous results from 2025-12-19 were against an incomplete index with only 314 lessons. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) for ingestion fix details.
 
 ## Abstract
 
 Documents the current behaviour of the 4-way hybrid search system on the 30 hard ground truth queries (15 lessons + 15 units). This establishes a baseline before experimental changes.
+
+**⚠️ All measurements in this document are UNVERIFIED** — need re-running with corrected ground truth.
 
 ---
 

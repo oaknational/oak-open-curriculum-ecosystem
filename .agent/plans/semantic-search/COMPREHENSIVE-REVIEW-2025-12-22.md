@@ -1,12 +1,42 @@
 # Comprehensive Review & Status Report (2025-12-22)
 
 **Date**: 2025-12-22 20:40 UTC  
-**Status**: ✅ ALL BLOCKERS RESOLVED — Ready for Search Experimentation  
-**Next Step**: B.4 Noise Phrase Filtering (Tier 1)
+**Status**: ⚠️ HISTORICAL — Superseded by Ground Truth Corrections (2025-12-23)  
+**Original Status**: ~~ALL BLOCKERS RESOLVED — Ready for Search Experimentation~~
 
 ---
 
-## Executive Summary
+## ⚠️ ADDENDUM (2025-12-23): Metrics In This Document Are UNVERIFIED
+
+**This document is now HISTORICAL.** On 2025-12-23, a comprehensive audit revealed that **63 ground truth slugs (15%) were invalid** — referencing lessons that don't exist in the Oak Curriculum API.
+
+### Impact on This Review
+
+| Section | Status |
+|---------|--------|
+| Ingestion fixes | ✅ **STILL VALID** — Index data is correct |
+| Quality gates | ✅ **STILL VALID** — Code quality is verified |
+| Test isolation | ✅ **STILL VALID** — Tests pass correctly |
+| **MRR metrics** | ⚠️ **UNVERIFIED** — Measured against invalid ground truth |
+| **Semantic reranking decision** | ⚠️ **NEEDS RE-EVALUATION** — May have been wrongly rejected |
+| **Baseline comparisons** | ⚠️ **UNVERIFIED** — All comparisons suspect |
+
+### What Was Fixed
+
+- ✅ 63 slugs corrected across lesson ground truth files
+- ✅ Integration test created to validate all slugs exist
+- ✅ Unit and sequence ground truth added with validation
+
+### Current State
+
+For the current verified state, see:
+- **[current-state.md](current-state.md)** — Current metrics (needs re-measurement)
+- **[ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md)** — Details of corrections
+- **[EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md)** — Updated roadmap
+
+---
+
+## Executive Summary (HISTORICAL)
 
 **We are ready to resume search experimentation.** All ingestion blockers have been resolved, complete data has been indexed and validated against bulk download, baselines have been re-measured, and experimental priorities have been assessed.
 

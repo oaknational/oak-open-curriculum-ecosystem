@@ -28,9 +28,9 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: 'Explicit AND: "algebra and graphs". Tests if both concepts must match.',
     expectedRelevance: {
-      'solving-simultaneous-equations-graphically': 3,
-      'checking-and-securing-understanding-of-solving-linear-equations-graphically': 3,
-      'finding-solutions-to-quadratic-equations-graphically': 2,
+      'solving-simultaneous-linear-equations-graphically': 3,
+      'solving-a-quadratic-and-linear-pair-of-simultaneous-equations-graphically': 3,
+      'problem-solving-with-linear-and-quadratic-simultaneous-equations': 2,
     },
   },
   {
@@ -39,8 +39,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: 'Implicit intersection: "quadratics with graphs". Tests natural language AND.',
     expectedRelevance: {
-      'finding-solutions-to-quadratic-equations-graphically': 3,
-      'checking-and-securing-understanding-of-quadratic-graphs': 3,
+      'solving-a-quadratic-and-linear-pair-of-simultaneous-equations-graphically': 3,
+      'key-features-of-a-quadratic-graph': 3,
       'solving-quadratic-equations-by-factorising': 2,
     },
   },
@@ -53,8 +53,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description: 'Concept + Method: "equations" + "substitution". Tests method recognition.',
     expectedRelevance: {
       'solving-simultaneous-linear-equations-by-substitution': 3,
-      'checking-and-securing-understanding-of-solving-simultaneous-equations-using-substitution': 3,
-      'solving-simultaneous-equations-by-elimination': 2,
+      'solving-a-quadratic-and-linear-pair-of-simultaneous-equations-using-substitution': 3,
+      'solving-algebraic-simultaneous-equations-by-elimination': 2,
     },
   },
   {
@@ -65,8 +65,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
       'Concept + Method: "quadratics" + "completing square". Tests method-specific matching.',
     expectedRelevance: {
       'solving-quadratic-equations-by-completing-the-square': 3,
-      'completing-the-square': 3,
-      'solving-complex-quadratic-equations-by-completing-the-square': 2,
+      'solving-complex-quadratic-equations-by-completing-the-square': 3,
+      'factorising-using-the-difference-of-two-squares': 2,
     },
   },
 
@@ -78,8 +78,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Three concepts: "probability" + "fractions" + "diagrams". Tests concept density scoring.',
     expectedRelevance: {
-      'constructing-tree-diagrams-for-combined-probabilities': 3,
-      'using-probability-trees-to-calculate-probability': 3,
+      'conditional-probability-in-a-tree-diagram': 3,
+      'checking-and-securing-calculating-probabilities-from-diagrams': 3,
       'problem-solving-with-conditional-probability': 2,
     },
   },
@@ -90,9 +90,9 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Three geometry concepts: "angles" + "triangles" + "pythagoras". Tests geometric intersection.',
     expectedRelevance: {
-      'problem-solving-with-pythagoras-theorem': 3,
-      'introducing-pythagoras-theorem': 3,
-      'checking-and-securing-understanding-of-pythagoras-theorem': 2,
+      'applying-pythagoras-theorem-in-3d': 3,
+      'checking-and-further-securing-understanding-of-pythagoras-theorem': 3,
+      'using-pythagoras-theorem-to-justify-a-right-angled-triangle': 2,
     },
   },
 
@@ -104,9 +104,9 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Single concept baseline for comparison. Should rank differently than multi-concept.',
     expectedRelevance: {
-      'checking-and-securing-understanding-of-graphs': 3,
-      'linear-graphs': 2,
-      'non-linear-graphs': 2,
+      'checking-and-securing-understanding-of-drawing-linear-graphs': 3,
+      'key-features-of-a-quadratic-graph': 2,
+      'key-features-of-a-cubic-graph': 2,
     },
   },
   {
@@ -117,8 +117,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
       'Four concepts: "linear" + "graphs" + "algebra" + "substitution". Extreme density test.',
     expectedRelevance: {
       'solving-simultaneous-linear-equations-by-substitution': 3,
-      'checking-and-securing-understanding-of-solving-linear-equations-graphically': 3,
-      'finding-the-gradient-of-a-line': 2,
+      'solving-simultaneous-linear-equations-graphically': 3,
+      'checking-and-securing-understanding-of-drawing-linear-graphs': 2,
     },
   },
 
@@ -130,8 +130,8 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Abstract intersection: "geometry and algebra together". Tests semantic bridging for topic overlap.',
     expectedRelevance: {
-      'solving-simultaneous-equations-graphically': 3,
-      'equation-of-a-line-given-a-point-and-the-gradient': 2,
+      'solving-simultaneous-linear-equations-graphically': 3,
+      'geometric-proofs-with-vectors': 2,
       'transforming-graphs-y-equals-f-x-plus-a': 2,
     },
   },

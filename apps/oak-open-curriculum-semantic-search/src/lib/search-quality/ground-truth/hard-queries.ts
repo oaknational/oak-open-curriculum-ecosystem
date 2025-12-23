@@ -25,9 +25,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Pedagogical intent + informal "solving for x" → linear equations. Tests ELSER vocabulary bridging.',
     expectedRelevance: {
-      'solving-simple-linear-equations': 3,
       'checking-and-securing-understanding-of-solving-and-interpreting-linear-equations': 3,
-      'solving-equations-involving-functions': 2,
+      'solving-simple-linear-inequalities': 3,
+      'checking-and-securing-understanding-of-forming-linear-equations': 2,
     },
   },
   {
@@ -37,9 +37,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Descriptive "working out" + "missing angles" → geometry. Tests structure field semantic capture.',
     expectedRelevance: {
-      'angles-in-polygons-investigating-exterior-angles': 3,
-      'angles-in-polygons-investigating-interior-angles': 3,
-      'problem-solving-with-angles': 2,
+      'checking-and-securing-understanding-of-interior-angles': 3,
+      'checking-and-securing-understanding-of-exterior-angles': 3,
+      'forming-equations-with-angles': 2,
     },
   },
   {
@@ -73,7 +73,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Severe misspellings (edit distance >2). Tests limits of fuzzy; phonetic would catch.',
     expectedRelevance: {
-      'the-angle-between-a-tangent-and-a-radius-is-90-degrees': 3,
+      'the-tangent-at-any-point-on-a-circle-is-perpendicular-to-the-radius-at-that-point': 3,
       'the-tangents-from-an-external-point-are-equal-in-length': 3,
       'problem-solving-with-circle-theorems': 2,
     },
@@ -87,7 +87,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     expectedRelevance: {
       'multiplying-numbers-in-standard-form': 3,
       'dividing-numbers-in-standard-form': 3,
-      'checking-and-securing-understanding-of-standard-form': 2,
+      'checking-and-securing-understanding-of-writing-large-numbers-in-standard-form': 2,
     },
   },
 
@@ -98,9 +98,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: '"straight line" = "linear" synonym. Good baseline for synonym handling.',
     expectedRelevance: {
-      'finding-the-gradient-of-a-line': 3,
-      'equation-of-a-line-given-a-point-and-the-gradient': 3,
-      'checking-and-securing-understanding-of-graphs': 2,
+      'estimating-the-gradient-of-a-curve': 3,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-the-graph': 3,
+      'parallel-linear-graphs': 2,
     },
   },
   {
@@ -109,9 +109,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: '"rules" = "laws", "powers/indices" = exponents. Tests synonym filter + ELSER.',
     expectedRelevance: {
-      'checking-and-securing-understanding-of-index-laws-with-numerical-bases': 3,
-      'checking-and-securing-understanding-of-index-laws-with-algebraic-bases': 3,
-      'combining-index-laws': 2,
+      'the-laws-of-indices-multiplication': 3,
+      'the-laws-of-indices-division': 3,
+      'problem-solving-with-the-laws-of-indices': 2,
     },
   },
   {
@@ -121,8 +121,8 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     description:
       '"rearrange formulas" = "changing the subject". No lexical overlap - pure ELSER test.',
     expectedRelevance: {
-      'changing-the-subject-of-a-formula-to-an-embedded-subject': 3,
-      'changing-the-subject-of-a-formula-to-a-subject-that-appears-twice': 3,
+      'changing-the-subject-where-the-variable-appears-in-multiple-terms': 3,
+      'changing-the-subject-with-multiple-algebraic-fractions': 3,
       'checking-and-securing-understanding-of-changing-the-subject-with-simple-algebraic-fractions': 2,
     },
   },
@@ -134,9 +134,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Cross-topic intersection query. Tests if hybrid finds algebra+graphing overlap.',
     expectedRelevance: {
-      'solving-simultaneous-equations-graphically': 3,
-      'checking-and-securing-understanding-of-solving-linear-equations-graphically': 3,
-      'finding-solutions-to-quadratic-equations-graphically': 2,
+      'solving-simultaneous-linear-equations-graphically': 3,
+      'solving-a-quadratic-and-linear-pair-of-simultaneous-equations-graphically': 3,
+      'problem-solving-with-linear-and-quadratic-simultaneous-equations': 2,
     },
   },
   {
@@ -145,8 +145,8 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Three concepts must all match. Tests min_should_match precision.',
     expectedRelevance: {
-      'constructing-tree-diagrams-for-combined-probabilities': 3,
-      'using-probability-trees-to-calculate-probability': 3,
+      'conditional-probability-in-a-tree-diagram': 3,
+      'algebra-in-tree-and-venn-diagrams': 3,
       'problem-solving-with-conditional-probability': 2,
     },
   },
@@ -160,7 +160,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     expectedRelevance: {
       'applying-trigonometric-ratios-in-context': 3,
       'problem-solving-with-right-angled-trigonometry': 3,
-      'introducing-tangent-of-an-angle': 2,
+      'checking-and-securing-understanding-of-tangent-ratio-problems': 2,
     },
   },
   {
@@ -169,9 +169,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: '"the bit where" noise + actual term. Tests min_should_match noise filtering.',
     expectedRelevance: {
-      'completing-the-square': 3,
       'solving-quadratic-equations-by-completing-the-square': 3,
-      'solving-complex-quadratic-equations-by-completing-the-square': 2,
+      'solving-complex-quadratic-equations-by-completing-the-square': 3,
+      'factorising-using-the-difference-of-two-squares': 2,
     },
   },
 
@@ -194,9 +194,9 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Topic present but qualifiers ("visual", "beginners") are semantic. Tests structure field.',
     expectedRelevance: {
-      'introduction-to-vectors': 3,
-      'checking-and-securing-understanding-of-vectors': 3,
-      'adding-and-subtracting-vectors': 2,
+      'column-vectors': 3,
+      'algebraic-vector-notation': 3,
+      'addition-with-vectors': 2,
     },
   },
 ] as const;

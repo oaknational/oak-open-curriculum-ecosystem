@@ -1,27 +1,51 @@
 # Semantic Search Current State
 
-**Last Updated**: 2025-12-23 22:30 UTC (Quality gates verified, B.5 validation pending)
-**Measured Against**: Maths KS4 (vertical slice) — **COMPLETE INDEX**
+**Last Updated**: 2025-12-23 23:00 UTC  
+**Measured Against**: Maths KS4 (vertical slice) — **COMPLETE INDEX**  
+**Ground Truth Status**: ✅ **CORRECTED** — All slugs validated
 
 This is THE authoritative source for current system metrics. All other documents reference this file.
 
 ---
 
-## ⚠️ B.5 — Validation Pending
+## 🔴 CRITICAL: All Metrics Need Re-Measurement (2025-12-23)
 
-**B.5 Phrase Query Enhancement code is merged.** Quality gates verified (2025-12-23). **The experiment to measure MRR impact has NOT been run yet.**
+**Ground truth was corrected. All previous MRR measurements are UNVERIFIED.**
 
-**IMMEDIATE ACTION REQUIRED**:
+### What Happened
 
-**Run B.5 validation**:
+A comprehensive audit revealed **63 invalid slugs** (15% of ground truth data) — lesson references that didn't exist in the Oak Curriculum API:
+
+| Category | Affected Queries | Missing Slugs |
+|----------|-----------------|---------------|
+| synonym | 9 queries | 29 slugs |
+| multi-concept | 9 queries | 24 slugs |
+| naturalistic | 3 queries | 3 slugs |
+| colloquial | 2 queries | 2 slugs |
+| intent-based | 1 query | 3 slugs |
+| misspelling | 2 queries | 2 slugs |
+
+### What Was Fixed
+
+- ✅ **63 slugs corrected** in lesson ground truth files
+- ✅ **Unit slugs validated** — all 36 exist
+- ✅ **Sequence ground truth created** — 41 queries, ~50 slugs
+- ✅ **Integration test created** — `ground-truth.integration.test.ts`
+- ✅ **All quality gates pass**
+
+### What Must Happen Now
+
+**Re-run ALL experiments** to establish TRUE baselines:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm eval:diagnostic      # Measure MRR with phrase boosting active
-pnpm eval:per-category    # Get full category breakdown
+pnpm eval:per-category    # New hard query baseline
+pnpm eval:diagnostic      # New diagnostic baseline
 ```
 
-**Then update this file with actual measured metrics.**
+**Then update this file with VERIFIED metrics.**
+
+**See**: [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md)
 
 ---
 
@@ -34,7 +58,7 @@ pnpm eval:per-category    # Get full category breakdown
 | `pnpm type-gen`          | ✅ Pass                      |
 | `pnpm build`             | ✅ Pass                      |
 | `pnpm type-check`        | ✅ Pass                      |
-| `pnpm lint:fix`          | ✅ Pass (97 errors fixed)    |
+| `pnpm lint:fix`          | ✅ Pass                      |
 | `pnpm format:root`       | ✅ Pass                      |
 | `pnpm markdownlint:root` | ✅ Pass                      |
 | `pnpm test`              | ✅ Pass                      |
@@ -43,105 +67,60 @@ pnpm eval:per-category    # Get full category breakdown
 | `pnpm test:ui`           | ✅ Pass                      |
 | `pnpm smoke:dev:stub`    | ✅ Pass                      |
 
-**Lint fixes applied**: Updated eslint config for `operations/ingestion/` (CLI tools), refactored complex functions in analysis scripts, split `diagnostic-queries.ts` into smaller files.
-
 ---
 
-## Current Metrics
+## Current Metrics (⚠️ UNVERIFIED)
 
 **✅ INGESTION COMPLETE (2025-12-22)**: Index verified against bulk download data with **436** unique Maths KS4 lessons across **36 units**.
 
-**Last Ingestion**: 2025-12-22 18:47:08 UTC (v2025-12-22-184708)  
-**Validation**: Bulk download data (2025-12-07) confirms 436 unique lessons, 36 units ✅
+**⚠️ ALL MRR VALUES BELOW ARE UNVERIFIED** — measured against invalid ground truth. Re-measure with corrected ground truth.
 
 ### Overall Performance
 
-**⚠️ IMPORTANT**: The aggregate "Lesson Hard MRR" hides massive category variation (naturalistic: 0.567 vs synonym: 0.167). **Always analyze by category.**
+| Metric                | Previous Value | Verified Value | Target  | Notes                         |
+| --------------------- | -------------- | -------------- | ------- | ----------------------------- |
+| Lesson Hard MRR (agg) | 0.369          | ???            | ≥0.50   | Re-measure required           |
+| Unit Hard Query MRR   | 0.856          | ???            | ≥0.50   | Re-measure required           |
+| Lesson Std Query MRR  | 0.944          | ???            | ≥0.92   | Re-measure required           |
+| Unit Std Query MRR    | 0.988          | ???            | ≥0.92   | Re-measure required           |
+| Zero-hit Rate         | 0%             | ???            | 0%      | Re-measure required           |
+| p95 Latency           | ~450ms         | ???            | ≤1500ms | Likely unchanged              |
 
-**⚠️ NOTE**: These metrics are BEFORE B.5 phrase boosting validation. B.5 code is merged but the experiment has not been run. Re-measure with `pnpm eval:per-category`.
+### Per-Category Breakdown (Lesson Hard Queries) — ⚠️ UNVERIFIED
 
-| Metric                | Value  | Target  | Status           | Notes                         |
-| --------------------- | ------ | ------- | ---------------- | ----------------------------- |
-| Lesson Hard MRR (agg) | 0.369  | ≥0.50   | ❌ Gap: 26%      | ⚠️ BEFORE B.5 validation      |
-| Unit Hard Query MRR   | 0.856  | ≥0.50   | ✅ Met (+13%)    | Measured 2025-12-22 20:29 UTC |
-| Lesson Std Query MRR  | 0.944  | ≥0.92   | ✅ Met           | Hybrid superiority validated  |
-| Unit Std Query MRR    | 0.988  | ≥0.92   | ✅ Met           | Near perfect performance      |
-| Zero-hit Rate         | 0%     | 0%      | ✅ Met           |                               |
-| p95 Latency           | ~450ms | ≤1500ms | ✅ Within budget | After ELSER warmup            |
+**These values were measured against INVALID ground truth.** Do NOT use for decisions until re-measured.
 
-**B.5 Targets** (after validation):
-- **Synonym category**: 0.167 → Target ≥0.40
-- **Multi-concept category**: 0.083 → Target ≥0.25
-- **Overall Lesson Hard MRR**: 0.369 → Target ≥0.45
+| Category       | Previous MRR | Verified MRR | Notes |
+|----------------|--------------|--------------|-------|
+| naturalistic   | 0.567        | ???          | Re-measure |
+| misspelling    | 0.611        | ???          | Re-measure |
+| synonym        | 0.167        | ???          | Re-measure |
+| multi-concept  | 0.083        | ???          | Re-measure |
+| colloquial     | 0.500        | ???          | Re-measure |
+| intent-based   | 0.167        | ???          | Re-measure |
 
-**Recent improvements** (by category, not aggregate):
-- **Naturalistic category**: 0.300 → 0.567 (+89%) — B.4 noise phrase filtering highly effective
-- **Colloquial category**: 0.000 → 0.500 (+∞) — "complete the square" now works
-- **Synonym category**: Still 0.167 — Synonyms deployed (163 entries) and working, but phrase matching weak
-- **Overall aggregate**: 0.316 → 0.369 (+16.8%) — Driven by naturalistic improvement
+### Implementation Status (Still Valid)
 
-### Per-Category Breakdown (Lesson Hard Queries)
+| Feature | Status | Claimed Impact | Verified Impact |
+|---------|--------|----------------|-----------------|
+| B.4 Noise Filtering | ✅ Implemented | +16.8% | ??? (re-measure) |
+| B.5 Phrase Boosting | ✅ Implemented | (never measured) | ??? (measure) |
+| Synonyms (163 entries) | ✅ Deployed | Working | ??? (validate) |
 
-**Measured**: 2025-12-23 11:07 UTC against complete index (436 lessons)  
-**After**: B.4 (Noise Phrase Filtering) + Complete Synonym Deployment (163 entries)
+---
 
-| Category       | Count | MRR   | Status       | Notes |
-|----------------|-------|-------|--------------|-------|
-| naturalistic   | 3     | 0.567 | ✅ Good       | +89% improvement from noise filtering |
-| misspelling    | 3     | 0.611 | ✅ Good       | Fuzzy matching working well |
-| synonym        | 3     | 0.167 | ❌ Poor       | Synonyms deployed but phrase matching weak |
-| multi-concept  | 2     | 0.083 | ❌ Poor       | Cross-topic queries need work |
-| colloquial     | 2     | 0.500 | ✅ Good       | "complete the square" works; "sohcahtoa" fails |
-| intent-based   | 2     | 0.167 | ❌ Poor       | Abstract pedagogical queries challenging |
+## What We Preserve (Going Forward, Not Back)
 
-**Key Findings**:
+While metrics need re-measurement, the following remain valid:
 
-1. **Naturalistic improvement (+89%)**: Noise phrase filtering successfully handles "the bit where you X", "that X stuff for Y" patterns
-2. **Synonym category still poor (0.167)**: **ROOT CAUSE IDENTIFIED** — Single-word synonyms work (MRR 0.500), but phrase synonyms fail completely (MRR 0.000). See diagnostic analysis ↓
-3. **Multi-concept remains challenging (0.083)**: **KEY INSIGHT** — Concept+Method queries work excellently (MRR 1.000), but generic/explicit AND queries fail (MRR 0.000). See diagnostic analysis ↓
-4. **Colloquial partial success**: "complete the square" works, but "sohcahtoa" still fails — multi-word curriculum terms need phrase matching boost
-
-### Diagnostic Query Analysis (2025-12-23 14:00 UTC)
-
-**18 additional diagnostic queries** (9 synonym, 9 multi-concept) created to granularly understand failure modes and success patterns.
-
-#### Synonym Diagnostics (Overall MRR: 0.204 across 9 queries)
-
-| Pattern | Count | MRR | Status | Key Finding |
-|---------|-------|-----|--------|-------------|
-| Single-word synonym | 2 | 0.500 | ✅ **Good** | "trig" → "trigonometry", "factorise" → "factorising" both work (rank 2) |
-| Phrase synonym (START) | 1 | 0.000 | ❌ **CRITICAL** | "straight line equations" fails despite "straight line" → "linear" synonym |
-| Phrase synonym (END) | 1 | 0.000 | ❌ **CRITICAL** | "equations for straight lines" fails — position irrelevant |
-| Phrase synonym (MIDDLE) | 1 | 0.000 | ❌ **CRITICAL** | "finding straight line slope" fails — same issue |
-| Formal synonym | 1 | 0.500 | ✅ **Good** | "transposition" → "changing the subject" works (rank 2) |
-| Spoken formula | 1 | 0.333 | ✅ **Good** | "y equals mx plus c" works (rank 3) |
-| Multiple synonyms | 1 | 0.000 | ❌ Poor | "rules for index laws" fails — "rules" → "laws" not effective |
-| Multi-word curriculum term | 1 | 0.000 | ❌ Poor | "circle rules" doesn't match "circle theorems" |
-
-**🔥 CRITICAL FINDING**: Elasticsearch synonym filter works for **single tokens only**, not **phrase synonyms**. The 163 synonyms are deployed and active, but ES applies them at the token level after tokenization, not at the phrase level. Phrase "straight line" is tokenized to ["straight", "line"] before synonym expansion, so the phrase rule "straight line => linear" never matches.
-
-**Impact**: All phrase-based synonym rules (approximately 40% of our 163 entries) are currently non-functional.
-
-**Next step (B.5)**: Implement phrase query boost for known multi-word curriculum terms using match_phrase queries with boosting.
-
-#### Multi-Concept Diagnostics (Overall MRR: 0.343 across 9 queries)
-
-| Pattern | Count | MRR | Status | Key Finding |
-|---------|-------|-----|--------|-------------|
-| Concept + Method | 2 | 1.000 | ✅ **EXCELLENT** | "equations using substitution", "quadratics by completing square" both rank #1! |
-| Four concepts | 1 | 0.500 | ✅ **Good** | "linear graphs algebra substitution" ranks 2 — keyword density helps |
-| Implicit intersection | 1 | 0.333 | ✅ **Good** | "quadratics with graphs" works (rank 3) |
-| Three concepts | 1 | 0.250 | ⚠️ Marginal | "probability fractions diagrams" ranks 4 — just below threshold |
-| Explicit AND | 1 | 0.000 | ❌ Poor | "algebra and graphs" fails — too generic |
-| Three geometry concepts | 1 | 0.000 | ❌ Poor | "angles triangles pythagoras" fails — lacks method specificity |
-| Single concept baseline | 1 | 0.000 | ❌ Poor | "graphs" alone too generic — no discriminative power |
-| Abstract intersection | 1 | 0.000 | ❌ Poor | "geometry and algebra together" fails — too abstract |
-
-**🎯 KEY INSIGHT**: The search system **already understands curriculum structure** when queries include **method specificity** ("by substitution", "using completing square"). Generic concept combinations without method context fail.
-
-**Impact**: The issue is not multi-concept scoring per se, but rather lack of semantic understanding for abstract/generic queries.
-
-**Next step**: B.5 phrase query enhancement should focus on boosting **phrase matching** for curriculum terms, not complex multi-concept scoring.
+| Category | What We Keep |
+|----------|--------------|
+| **Implementations** | B.4, B.5, synonyms are all deployed and code-complete |
+| **Architecture** | Four-retriever hybrid, RRF fusion |
+| **Learnings** | ES synonym filter works for tokens not phrases |
+| **Strategy** | Fundamentals-first (ADR-082) |
+| **Index Data** | 436 lessons, 36 units, validated |
+| **Ground Truth** | ✅ NOW VALIDATED — integration test ensures correctness |
 
 ---
 
@@ -150,8 +129,6 @@ pnpm eval:per-category    # Get full category breakdown
 **✅ ALL DATA CORRECT**: Verified via ES query, smoke tests, and bulk download validation 2025-12-22.
 
 **Last Ingestion**: 2025-12-22 18:47:08 UTC (v2025-12-22-184708)
-
-Current document counts for Maths KS4:
 
 | Index                 | Live Docs | Stored Docs | Status                                  |
 | --------------------- | --------- | ----------- | --------------------------------------- |
@@ -162,15 +139,31 @@ Current document counts for Maths KS4:
 | `oak_sequences`       | 2         | 2           | ✅ Complete                            |
 | `oak_sequence_facets` | 1         | 1           | ✅ Complete                            |
 
-\*Stored docs (8736) include all subjects; 436 are Maths KS4 (verified via `subject_slug:maths AND key_stage:ks4`)  
+\*Stored docs (8736) include all subjects; 436 are Maths KS4  
 \*\*357 rollups across all subjects/keystages, 36 are Maths KS4
 
-**Bulk Download Validation** (2025-12-07 snapshot):
-- Unique lessons: 436 ✅ Matches ES
-- Units: 36 ✅ Matches ES
-- Total lesson-unit entries: 809 (includes multi-tier variants)
+---
 
-Verify with: `pnpm es:status` (from `apps/oak-open-curriculum-semantic-search`)
+## Ground Truth Status
+
+### ✅ NEW: Validated Ground Truth (2025-12-23)
+
+| Ground Truth | Queries | Slugs | Validation |
+|--------------|---------|-------|------------|
+| Lesson standard | 40 | 298 | ✅ All exist |
+| Lesson hard | 15 | ~60 | ✅ 15 corrected |
+| Lesson diagnostic | 18 | ~40 | ✅ 18 corrected |
+| Unit standard | Multiple | 36 | ✅ All exist |
+| Unit hard | Multiple | 36 | ✅ All exist |
+| **Sequence standard** | 24 | ~30 | ✅ **NEW** |
+| **Sequence hard** | 17 | ~20 | ✅ **NEW** |
+
+### Integration Test
+
+`ground-truth.integration.test.ts` validates:
+1. All slugs exist in Oak Curriculum API
+2. Structural integrity (format, no duplicates, valid relevance scores)
+3. Runs with `OAK_API_KEY` environment variable
 
 ---
 
@@ -180,173 +173,47 @@ Per [ADR-082: Fundamentals-First Strategy](../../../docs/architecture/architectu
 
 | Tier  | Name                   | Status         | Exit Criteria     |
 | ----- | ---------------------- | -------------- | ----------------- |
-| **1** | Search Fundamentals    | 🔄 In Progress | MRR ≥0.45         |
+| **1** | Search Fundamentals    | 🔄 VERIFY      | MRR ≥0.45 (VERIFIED) |
 | **2** | Document Relationships | 📋 Pending     | MRR ≥0.55         |
 | **3** | Modern ES Features     | 📋 Pending     | MRR ≥0.60         |
-| **4** | AI Enhancement         | ⏸️ Deferred    | Tiers 1-3 plateau |
+| **4** | AI Enhancement         | ⚠️ RE-EVALUATE | Semantic reranking decision may be wrong |
 
-**Current Task**: B.5 Phrase Query Enhancement — IMPLEMENTATION COMPLETE, VALIDATION PENDING
-
-Run `pnpm eval:diagnostic` to measure impact of phrase boosting.
+**Current Task**: Re-establish baselines with corrected ground truth
 
 ---
 
-## Known Issues
+## Experiments Needing Re-Evaluation
 
-### Ingestion Gap (Lessons) — RESOLVED ✅
-
-**Status**: ✅ RESOLVED (lessons complete)
-**Fixed**: 2025-12-20  
-**ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
-
-| Before                  | After                  | Fix                      |
-| ----------------------- | ---------------------- | ------------------------ |
-| 314 lessons (truncated) | 436 lessons (complete) | Pagination + aggregation |
+| Experiment | Previous Decision | Why Re-Evaluate |
+|------------|-------------------|-----------------|
+| **Semantic Reranking** | ❌ REJECTED (-16.8%) | Decision based on invalid GT |
+| B.3 Synonym Coverage | ✅ ACCEPTED (+3.5%) | Verify improvement holds |
+| B.4 Noise Filtering | ✅ ACCEPTED (+16.8%) | Verify improvement holds |
+| B.5 Phrase Boosting | (never measured) | Get actual measurements |
 
 ---
 
-### Ingestion Data Quality Issues — ✅ RESOLVED
+## Immediate Action Required
 
-**Status**: ✅ RESOLVED (2025-12-22 18:51 UTC)  
-**Discovered**: 2025-12-20  
-**Full Analysis**: [curriculum-fetching-discrepancy-log.md](../../evaluations/baselines/curriculum-fetching-discrepancy-log.md)
+### Step 1: Run Evaluation Scripts
 
-**Summary**: All ingestion data quality issues have been resolved. Unit documents now have correct lesson counts and thread fields.
-
-#### Issue 1: Unit `lesson_count` and `lesson_ids` Truncated — ✅ FIXED
-
-| Metric                            | Before   | After      | Status      |
-| --------------------------------- | -------- | ---------- | ----------- |
-| Units with correct `lesson_count` | 11/36    | 36/36      | ✅ Fixed    |
-| Lessons indexed                   | 431      | 436        | ✅ Complete |
-| Example: `surds`                  | 1 lesson | 12 lessons | ✅ Correct  |
-
-**Root cause discovered**: Upstream API `/key-stages/{ks}/subject/{subject}/lessons` endpoint has a bug where unfiltered pagination returns incomplete data (431 lessons instead of 436 for Maths KS4). However, filtering by unit returns complete data.
-
-**Fix implemented**:
-
-- Created `fetchAllLessonsByUnit()` function that fetches lessons unit-by-unit instead of using buggy unfiltered pagination
-- Updated ingestion to use this workaround
-- Added comprehensive unit and integration tests
-- **Documented upstream bug** in `.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md`
-
-**Files changed**:
-
-- `src/lib/indexing/fetch-all-lessons.ts` - Added `fetchAllLessonsByUnit()` with full documentation
-- `src/lib/index-oak-helpers.ts` - Updated to use unit-by-unit fetching
-- `src/lib/indexing/fetch-all-lessons.unit.test.ts` - Added 8 unit tests
-- `src/lib/indexing/unit-lesson-count-correctness.integration.test.ts` - Added 2 integration tests
-
-**Verification**: All smoke tests pass, including `ingestion-validation.smoke.test.ts` which validates all 36 units have correct lesson counts.
-
-#### Issue 2: Thread Field Naming Error — ✅ FIXED
-
-| Field           | Before            | After               | Status   |
-| --------------- | ----------------- | ------------------- | -------- |
-| `thread_slugs`  | undefined (units) | Correctly populated | ✅ Fixed |
-| `thread_titles` | undefined (units) | Correctly populated | ✅ Fixed |
-| `thread_orders` | undefined (units) | Correctly populated | ✅ Fixed |
-
-**Fix implemented**: Unit documents now correctly populate thread fields using `extractThreadInfo()` helper (same pattern as rollups).
-
-#### Issue 3: `tier` Field — ✅ ALREADY CORRECT
-
-Per ADR-080, tier is **many-to-many**. The schema correctly defines:
-
-- `tiers` (array) ← ✅ Correctly populated in ES: `["foundation", "higher"]`
-- `tier_titles` (array) ← ✅ Correctly populated in ES: `["Foundation", "Higher"]`
-
-**VERIFIED 2025-12-22**: No vestigial `tier` (singular) field exists in the schema (`curriculum.ts`). The schema only defines the correct array fields. No cleanup needed.
-
-#### Actions Completed (2025-12-22)
-
-1. [x] ~~**Test isolation fix**~~ ✅ COMPLETE (2025-12-22)
-2. [x] ~~**VERIFY tier cleanup**~~ ✅ COMPLETE — Schema correct, no vestigial field
-3. [x] ~~**FIX**: Derive unit `lesson_count`/`lesson_ids` from aggregated lesson data~~ ✅ COMPLETE
-   - Implemented `fetchAllLessonsByUnit()` to work around upstream API bug
-   - Updated ingestion to fetch lessons unit-by-unit
-   - Added comprehensive unit and integration tests
-4. [x] ~~**FIX**: Populate `thread_slugs`, `thread_titles`, `thread_orders` in unit documents~~ ✅ COMPLETE
-   - Unit documents now use `extractThreadInfo()` helper
-   - All thread fields correctly populated
-5. [x] ~~**RE-INDEX**: Full re-ingestion after fixes~~ ✅ COMPLETE
-   - Redis cache flushed
-   - Full re-ingestion completed
-   - 436 lessons indexed (up from 431)
-6. [x] ~~**VALIDATE**: Add post-ingestion validation tests~~ ✅ COMPLETE
-   - `ingestion-validation.smoke.test.ts` validates all unit lesson counts
-   - `unit-lesson-count-correctness.integration.test.ts` validates the fix at integration level
-   - All tests pass
-
-**Cache Status**: Redis cache cleared 2025-12-20; fresh ingestion completed 2025-12-22 18:47 UTC
-
-**Re-ingestion Required?**: ❌ NO - Current index is complete and correct (v2025-12-22-184708)
-
-**Baseline Re-measurement**: ✅ COMPLETE - New baselines established 2025-12-22 20:29 UTC
-
-**Search Experimentation Status**: ✅ **READY TO RESUME** - All blockers resolved, complete data indexed
-
-**Evaluation Tools** (reorganized 2025-12-23):
 ```bash
-# Analysis scripts (measurement & reporting)
-pnpm eval:diagnostic      # 18-query diagnostic analysis
-pnpm eval:per-category    # Per-category MRR breakdown
-
-# Experiments (hypothesis testing with vitest)
-pnpm vitest run -c vitest.experiment.config.ts
-
-# Operations (ingestion, monitoring, infrastructure)
-pnpm ingest:verify        # Validate ingestion completeness
-pnpm ops:generate-synonyms # Generate synonym JSON from SDK
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:per-category    # Lesson hard queries by category
+pnpm eval:diagnostic      # Detailed pattern analysis
 ```
 
-See `evaluation/README.md` and `operations/README.md` for details.
+### Step 2: Update This Document
 
----
+Replace all "???" values with actual measured numbers.
 
-## Verified Findings (2025-12-22 ES Query Session)
+### Step 3: Update EXPERIMENT-LOG.md
 
-The following were **verified via direct Elasticsearch queries** on 2025-12-22:
+Add entry: "Ground Truth Correction Baseline — 2025-12-23"
 
-### ✅ Confirmed Correct
+### Step 4: Decide on Semantic Reranking
 
-| Finding                                        | Evidence                                                                          |
-| ---------------------------------------------- | --------------------------------------------------------------------------------- |
-| Lesson count is 436 (not 431)                  | `client.count({ index: 'oak_lessons' })` returns 436                              |
-| All 436 lessons are Maths KS4                  | Aggregation by `subject_slug` shows only `maths`, by `key_stage` shows only `ks4` |
-| `tiers[]` correctly populated                  | Sample lesson: `tiers: ["foundation", "higher"]`                                  |
-| `tier_titles[]` correctly populated            | Sample lesson: `tier_titles: ["Foundation", "Higher"]`                            |
-| No vestigial `tier` (singular) field in schema | `curriculum.ts` defines only `tiers` and `tier_titles` arrays                     |
-
-### ❌ Confirmed Broken
-
-| Finding                                            | Evidence                                                                               |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| 25/36 units have wrong `lesson_count`              | ES validation: Correct=11, Wrong=25                                                    |
-| `surds` unit: stored=1, actual=12                  | Direct ES query confirms discrepancy                                                   |
-| Unit docs have `thread_slugs: undefined`           | Sample unit query: `thread_slugs: undefined`                                           |
-| Unit docs populate `sequence_ids` with thread data | Sample: `sequence_ids: ["geometry-and-measure"]` (this is a thread, not sequence)      |
-| Rollup docs have BOTH fields                       | Sample: `sequence_ids: ["number"], thread_slugs: ["number"]` (inconsistent with units) |
-
-### Code Analysis Findings
-
-| Component                          | Finding                                                        | Location                                        |
-| ---------------------------------- | -------------------------------------------------------------- | ----------------------------------------------- |
-| Unit `lesson_ids`                  | Derived from truncated `summary.unitLessons.map(...)`          | `document-transforms.ts` line 61                |
-| Unit `lesson_count`                | Uses `lessonIds.length` (truncated)                            | `document-transforms.ts` line 79                |
-| Unit `sequence_ids`                | Incorrectly set from `summary.threads`                         | `document-transforms.ts` line 64                |
-| Unit `thread_slugs`                | NOT POPULATED in unit docs                                     | `createUnitDocument()` doesn't set it           |
-| Rollup has correct thread fields   | Uses `extractThreadInfo()`                                     | `document-transform-helpers.ts` lines 186-198   |
-| Schema defines both fields         | `sequence_ids` AND `thread_slugs` both exist                   | `curriculum.ts` lines 118-121                   |
-| Aggregation code exists            | `fetchAllLessonsWithPagination()` + `aggregateLessonsBySlug()` | `fetch-all-lessons.ts`, `lesson-aggregation.ts` |
-| Aggregated data NOT used for units | Unit docs don't consume aggregated lesson data                 | Data flow gap in `index-oak-helpers.ts`         |
-
-### Remaining Assumptions (Unverified)
-
-| Assumption                 | Status                                          |
-| -------------------------- | ----------------------------------------------- |
-| All quality gates pass     | ⚠️ Not verified this session — run `pnpm check` |
-| Test isolation is restored | ⚠️ Not verified — check `vitest.config.ts`      |
+Once true baselines are established, re-run the semantic reranking experiment.
 
 ---
 
@@ -355,6 +222,7 @@ The following were **verified via direct Elasticsearch queries** on 2025-12-22:
 For the full history of experiments and their impact on these metrics, see:
 
 - **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** — Chronological experiment history
+- **[ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md)** — Details of the 63 corrections
 - **[EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md)** — Strategic roadmap
 
 ---
@@ -363,16 +231,15 @@ For the full history of experiments and their impact on these metrics, see:
 
 When metrics change (after an experiment or system change):
 
-1. Run the relevant smoke tests to measure new values
-2. Update the metrics tables above
+1. Run the relevant evaluation scripts to measure new values
+2. Update the metrics tables above with **VERIFIED** values
 3. Update the "Last Updated" date
-4. **Add an entry to [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** — This is the historical record
+4. **Add an entry to [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)**
 5. Update [README.md](README.md) and [part-1-search-excellence.md](part-1-search-excellence.md) if needed
-
-**Critical**: Always update EXPERIMENT-LOG.md after completing experiments or making system changes. See "How to Add an Entry" section in that file.
 
 ```bash
 # Measure current metrics
 cd apps/oak-open-curriculum-semantic-search
-pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
+pnpm eval:per-category    # Hard query baseline
+pnpm eval:diagnostic      # Diagnostic analysis
 ```

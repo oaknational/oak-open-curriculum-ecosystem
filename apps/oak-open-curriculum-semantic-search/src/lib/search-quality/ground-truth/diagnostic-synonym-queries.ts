@@ -30,7 +30,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     expectedRelevance: {
       'applying-trigonometric-ratios-in-context': 3,
       'problem-solving-with-right-angled-trigonometry': 3,
-      'introducing-tangent-of-an-angle': 2,
+      'checking-and-securing-understanding-of-tangent-ratio-problems': 2,
     },
   },
   {
@@ -40,9 +40,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Single-word synonym: "factorise" → "factorising"/"factoring". Tests UK/US spelling.',
     expectedRelevance: {
-      'factorising-quadratic-expressions': 3,
+      'factorising-a-quadratic-expression': 3,
       'solving-quadratic-equations-by-factorising': 3,
-      'factorising-quadratic-expressions-in-the-form-ax-squared-plus-bx-plus-c': 2,
+      'factorising-quadratics-of-the-form-ax-2-plus-bx-plus-c': 2,
     },
   },
 
@@ -54,9 +54,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Phrase synonym at START: "straight line" → "linear". Tests phrase position sensitivity.',
     expectedRelevance: {
-      'finding-the-gradient-of-a-line': 3,
-      'equation-of-a-line-given-a-point-and-the-gradient': 3,
-      'equation-of-a-line-given-two-points': 2,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-the-graph': 3,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-coordinates': 3,
+      'parallel-linear-graphs': 2,
     },
   },
   {
@@ -65,9 +65,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: 'Phrase synonym at END: "straight lines" → "linear". Compare with START position.',
     expectedRelevance: {
-      'finding-the-gradient-of-a-line': 3,
-      'equation-of-a-line-given-a-point-and-the-gradient': 3,
-      'equation-of-a-line-given-two-points': 2,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-the-graph': 3,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-coordinates': 3,
+      'parallel-linear-graphs': 2,
     },
   },
   {
@@ -77,9 +77,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Phrase synonym in MIDDLE: "straight line" → "linear". Tests multi-word phrase matching.',
     expectedRelevance: {
-      'finding-the-gradient-of-a-line': 3,
-      'checking-and-securing-understanding-of-graphs': 2,
-      'equation-of-a-line-given-a-point-and-the-gradient': 2,
+      'estimating-the-gradient-of-a-curve': 3,
+      'checking-and-securing-understanding-of-drawing-linear-graphs': 2,
+      'parallel-linear-graphs': 2,
     },
   },
 
@@ -90,9 +90,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'high',
     description: 'Multiple synonyms: "rules"→"laws" AND "index"→"indices". Tests synonym density.',
     expectedRelevance: {
-      'checking-and-securing-understanding-of-index-laws-with-numerical-bases': 3,
-      'checking-and-securing-understanding-of-index-laws-with-algebraic-bases': 3,
-      'combining-index-laws': 2,
+      'the-laws-of-indices-multiplication': 3,
+      'the-laws-of-indices-division': 3,
+      'problem-solving-with-the-laws-of-indices': 2,
     },
   },
   {
@@ -102,8 +102,8 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Formal synonym: "transposition" → "changing the subject"/"rearrange". Tests technical vocabulary.',
     expectedRelevance: {
-      'changing-the-subject-of-a-formula-to-an-embedded-subject': 3,
-      'changing-the-subject-of-a-formula-to-a-subject-that-appears-twice': 3,
+      'changing-the-subject-where-the-variable-appears-in-multiple-terms': 3,
+      'changing-the-subject-with-multiple-algebraic-fractions': 3,
       'checking-and-securing-understanding-of-changing-the-subject-with-simple-algebraic-fractions': 2,
     },
   },
@@ -116,9 +116,9 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Multi-word curriculum term: "circle rules" → "circle theorems". Tests compound term matching.',
     expectedRelevance: {
-      'the-angle-between-a-tangent-and-a-radius-is-90-degrees': 3,
+      'the-tangent-at-any-point-on-a-circle-is-perpendicular-to-the-radius-at-that-point': 3,
       'the-perpendicular-from-the-centre-of-a-circle-to-a-chord-bisects-the-chord': 3,
-      'opposite-angles-in-a-cyclic-quadrilateral-add-to-180-degrees': 2,
+      'the-opposite-angles-of-a-cyclic-quadrilateral-sum-to-180': 2,
     },
   },
   {
@@ -128,8 +128,8 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
     description:
       'Spoken formula: "y equals mx plus c" → "gradient intercept"/"linear graphs". Tests formula recognition.',
     expectedRelevance: {
-      'equation-of-a-line-given-a-point-and-the-gradient': 3,
-      'finding-the-gradient-of-a-line': 3,
+      'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-the-graph': 3,
+      'estimating-the-gradient-of-a-curve': 3,
       'checking-and-securing-understanding-of-drawing-linear-graphs': 2,
     },
   },

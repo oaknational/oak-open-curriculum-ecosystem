@@ -18,20 +18,97 @@ Chronological record of search experiments and their impact on system metrics.
 
 For the full current state, see [current-state.md](../plans/semantic-search/current-state.md).
 
-| Metric | Value | Last Updated | Note |
-|--------|-------|--------------|------|
-| Lesson Hard MRR | 0.369 | 2025-12-23 | ⚠️ BEFORE phrase boosting — needs re-measurement |
-| Unit Hard MRR | 0.856 | 2025-12-22 | ✅ Against COMPLETE index |
-| Lesson Std MRR | 0.944 | 2025-12-22 | ✅ Excellent performance |
-| Unit Std MRR | 0.988 | 2025-12-22 | ✅ Near perfect performance |
+### 🔴 ALL METRICS UNVERIFIED (2025-12-23)
 
-**⚠️ B.5 Status**: Implementation complete. Code merged. **Quality gates NOT VERIFIED after merge. Experiment NOT run to measure impact.**
+**Ground truth was corrected.** 63 invalid slugs (15%) were fixed. All previous MRR measurements are suspect.
 
-Run quality gates first, then `pnpm eval:diagnostic` to get actual metrics.
+| Metric | Previous Value | Verified Value | Note |
+|--------|----------------|----------------|------|
+| Lesson Hard MRR | 0.369 | ??? | ⚠️ Re-measure with corrected GT |
+| Unit Hard MRR | 0.856 | ??? | ⚠️ Re-measure with corrected GT |
+| Lesson Std MRR | 0.944 | ??? | ⚠️ Re-measure with corrected GT |
+| Unit Std MRR | 0.988 | ??? | ⚠️ Re-measure with corrected GT |
+
+**⚠️ IMMEDIATE ACTION**: Run `pnpm eval:per-category` and `pnpm eval:diagnostic` to establish TRUE baselines.
+
+**See**: [ground-truth-corrections.md](ground-truth-corrections.md) for details of all 63 corrections.
 
 ---
 
 ## Log Entries
+
+### 2025-12-23: Ground Truth Corrections — CRITICAL DISCOVERY
+
+**Context**: During B.5 validation, discovered that the search was working correctly for some queries, but the "expected" lesson slugs in ground truth didn't exist in the Oak Curriculum API. This led to a comprehensive audit.
+
+**Discovery**: **63 ground truth slugs (15% of the data) were invalid** — lesson references that don't exist.
+
+| Category | Affected Queries | Missing Slugs |
+|----------|-----------------|---------------|
+| synonym | 9 queries | 29 slugs |
+| multi-concept | 9 queries | 24 slugs |
+| naturalistic | 3 queries | 3 slugs |
+| colloquial | 2 queries | 2 slugs |
+| intent-based | 1 query | 3 slugs |
+| misspelling | 2 queries | 2 slugs |
+
+**Root Cause**: Ground truth was created using assumed slug naming conventions rather than verified API data.
+
+**Impact**: ALL previous MRR measurements are suspect:
+- "Failures" may have been correct — searching for lessons that don't exist
+- "Successes" may have been luck — correct by accident
+- The semantic reranking rejection (-16.8%) may be WRONG
+
+**Actions Taken**:
+
+1. ✅ **63 slugs corrected** in `hard-queries.ts`, `diagnostic-synonym-queries.ts`, `diagnostic-multi-concept-queries.ts`
+2. ✅ **Integration test created** (`ground-truth.integration.test.ts`) validates all slugs exist via Oak API
+3. ✅ **Unit ground truth validated** — all 36 slugs exist
+4. ✅ **Sequence ground truth created** — 41 queries, ~50 slugs, all validated
+5. ✅ **All quality gates pass** including new validation test
+
+**Decision**: 🔴 **ALL EXPERIMENTS MUST BE RE-RUN**
+
+This is not a setback — it's a quality improvement. We now have:
+- Validated ground truth (can trust measurements)
+- Preventative test (can't happen again)
+- Complete coverage (lessons, units, sequences)
+
+**What We Preserve**:
+- ✅ All implementations (B.4, B.5, synonyms)
+- ✅ All architectural decisions (ADR-082, ADR-083, ADR-084)
+- ✅ All learnings (ES synonym filter works for tokens not phrases)
+- ✅ The tier-based strategy
+
+**What Needs Re-Evaluation**:
+- ⚠️ Semantic reranking rejection — may have been wrong
+- ⚠️ B.4 noise filtering improvement (+16.8%) — may be different
+- ⚠️ B.5 phrase boosting — never measured
+- ⚠️ All baseline metrics — need true values
+
+**Next Steps**:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:per-category    # Establish TRUE baseline
+pnpm eval:diagnostic      # Detailed pattern analysis
+```
+
+Then: Update all documentation with VERIFIED metrics.
+
+**Files changed**:
+- `hard-queries.ts` — 15 slugs corrected
+- `diagnostic-synonym-queries.ts` — 9 slugs corrected
+- `diagnostic-multi-concept-queries.ts` — 9 slugs corrected
+- `ground-truth.integration.test.ts` — NEW validation test
+- `sequences/types.ts` — NEW
+- `sequences/standard-queries.ts` — NEW (24 queries)
+- `sequences/hard-queries.ts` — NEW (17 queries)
+- `sequences/index.ts` — NEW
+
+**Documentation**: [ground-truth-corrections.md](ground-truth-corrections.md)
+
+---
 
 ### 2025-12-23: B.5 Phrase Query Enhancement — IMPLEMENTATION COMPLETE, VALIDATION PENDING
 
