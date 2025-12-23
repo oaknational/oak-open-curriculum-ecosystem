@@ -3,18 +3,18 @@
  *
  */
 
-import { esSearch } from '../../src/lib/elastic-http.js';
+import { esSearch } from '../../../../src/lib/elastic-http.js';
 import {
   buildLessonRrfRequest,
   buildUnitRrfRequest,
-} from '../../src/lib/hybrid-search/rrf-query-builders.js';
+} from '../../../../src/lib/hybrid-search/rrf-query-builders.js';
 import {
   buildLessonBm25OnlyRequest,
   buildLessonElserOnlyRequest,
   buildUnitBm25OnlyRequest,
   buildUnitElserOnlyRequest,
-} from '../../src/lib/hybrid-search/experiment-query-builders.js';
-import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../src/types/oak.js';
+} from '../../../../src/lib/hybrid-search/experiment-query-builders.js';
+import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../../../src/types/oak.js';
 import type { RetrievalMode } from './experiment-types.js';
 
 const BASE_PARAMS = {

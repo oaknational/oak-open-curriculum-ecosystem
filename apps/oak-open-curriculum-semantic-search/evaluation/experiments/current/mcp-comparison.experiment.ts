@@ -19,12 +19,12 @@ const appDir = dirname(fileURLToPath(import.meta.url));
 dotenvConfig({ path: join(appDir, '..', '.env.local') });
 
 import { describe, it, expect } from 'vitest';
-import { esSearch } from '../src/lib/elastic-http.js';
+import { esSearch } from '../../../src/lib/elastic-http.js';
 import {
   buildLessonRrfRequest,
   buildUnitRrfRequest,
-} from '../src/lib/hybrid-search/rrf-query-builders.js';
-import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oak.js';
+} from '../../../src/lib/hybrid-search/rrf-query-builders.js';
+import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../../src/types/oak.js';
 
 /** Test queries for comparison. */
 const COMPARISON_QUERIES = [

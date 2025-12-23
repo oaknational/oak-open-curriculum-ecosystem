@@ -15,7 +15,7 @@ import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
 export default mergeConfig(baseE2EConfig, {
   test: {
-    include: ['experiments/**/*.experiment.ts'],
+    include: ['evaluation/experiments/current/**/*.experiment.ts'],
     isolate: true,
     pool: 'forks',
     poolOptions: {

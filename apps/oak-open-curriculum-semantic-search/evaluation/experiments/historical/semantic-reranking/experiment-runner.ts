@@ -8,8 +8,8 @@ import type { Client } from '@elastic/elasticsearch';
 import type { ExperimentResult, QueryResult, SearchConfig } from './types';
 import { buildSearchBody } from './query-builders';
 import { calculateAverages } from './result-analysis';
-import { calculateMRR, calculateNDCG } from '../../src/lib/search-quality/metrics.js';
-import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.js';
+import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
+import { GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
 
 /** BM25 fields for lesson search. */
 const BM25_FIELDS = [

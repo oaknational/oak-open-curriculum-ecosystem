@@ -10,12 +10,38 @@ import { describe, expect, it } from 'vitest';
 
 import { buildLessonRrfRequest, buildUnitRrfRequest } from './rrf-query-builders';
 
-/** Extracts multi_match query from a BM25 retriever. */
+/**
+ * Extracts multi_match from direct query or bool.must[0].
+ */
+function extractMultiMatch(
+  query: estypes.QueryDslQueryContainer | undefined,
+): estypes.QueryDslMultiMatchQuery | undefined {
+  if (!query) {
+    return undefined;
+  }
+  if (query.multi_match) {
+    return query.multi_match;
+  }
+
+  const mustClauses = query.bool?.must;
+  if (!Array.isArray(mustClauses) || mustClauses.length === 0) {
+    return undefined;
+  }
+
+  return mustClauses[0]?.multi_match;
+}
+
+/**
+ * Extracts multi_match query from a BM25 retriever.
+ * Handles both simple queries (no phrases detected) and phrase-boosted queries
+ * where the multi_match is wrapped in a bool.must structure.
+ */
 function getBm25Query(
   request: ReturnType<typeof buildLessonRrfRequest>,
   retrieverIndex: number,
 ): estypes.QueryDslMultiMatchQuery | undefined {
-  return request.retriever?.rrf?.retrievers?.[retrieverIndex]?.standard?.query?.multi_match;
+  const query = request.retriever?.rrf?.retrievers?.[retrieverIndex]?.standard?.query;
+  return extractMultiMatch(query);
 }
 
 describe('buildLessonRrfRequest (four-way)', () => {

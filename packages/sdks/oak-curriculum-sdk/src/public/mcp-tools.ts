@@ -119,10 +119,11 @@ export type {
   ConceptEdge,
 } from '../mcp/knowledge-graph-data.js';
 
-// Synonym utilities (ES export, lookup)
+// Synonym utilities (ES export, lookup, phrase detection)
 export {
   buildElasticsearchSynonyms,
   buildSynonymLookup,
+  buildPhraseVocabulary,
   serialiseElasticsearchSynonyms,
   type ElasticsearchSynonymEntry,
   type ElasticsearchSynonymSet,

@@ -54,9 +54,26 @@ export const GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
 export const HARD_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = HARD_QUERIES;
 
 /**
- * All ground truth queries (standard + hard).
+ * Diagnostic queries for fine-grained failure mode analysis.
  *
- * Total: 55 queries
+ * Purpose: Understand WHY synonym and multi-concept queries fail.
+ * - Synonym: single-word vs phrase vs position vs density
+ * - Multi-concept: AND vs OR, concept density, method recognition
+ *
+ * Total: 18 queries (9 synonym + 9 multi-concept)
+ *
+ * @see `.agent/plans/semantic-search/part-1-search-excellence.md` B.5
+ */
+export {
+  DIAGNOSTIC_QUERIES,
+  SYNONYM_DIAGNOSTIC_QUERIES,
+  MULTI_CONCEPT_DIAGNOSTIC_QUERIES,
+} from './diagnostic-queries';
+
+/**
+ * All ground truth queries (standard + hard + diagnostic).
+ *
+ * Total: 73 queries (40 standard + 15 hard + 18 diagnostic)
  */
 export const ALL_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
   ...GROUND_TRUTH_QUERIES,

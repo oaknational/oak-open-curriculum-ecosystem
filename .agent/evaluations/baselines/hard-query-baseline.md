@@ -1,12 +1,12 @@
 # Baseline: Hard Query Current State
 
 **Type**: Baseline  
-**Date**: 2025-12-19  
-**Status**: ⚠️ Complete (but against incomplete index)  
+**Date**: 2025-12-23 (Updated)  
+**Status**: ✅ Complete with full index (436 lessons)  
 **Type**: Baseline Documentation (no variant)  
 **Related ADR**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 
-> ⚠️ **IMPORTANT**: These results were measured against an incomplete index. The ingestion process only indexed ~314 of ~650+ Maths KS4 lessons due to truncated data from `/units/{slug}/summary`. All MRR values should be re-measured after fixing ingestion. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+> ✅ **COMPLETE INDEX**: These results are measured against the complete index (436 Maths KS4 lessons, validated against bulk download). Previous results from 2025-12-19 were against an incomplete index with only 314 lessons. See [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) for ingestion fix details.
 
 ## Abstract
 
@@ -65,33 +65,34 @@ This is documentation of the current production system's behaviour.
 
 - **ES Instance**: Elastic Cloud Serverless (europe-west1)
 - **Index**: `oak_lessons`, `oak_unit_rollup`
-- **Date**: 2025-12-19
-- **Index Version**: v2025-12-18-144954
+- **Date**: 2025-12-23
+- **Index Version**: v2025-12-22-184708
+- **Indexed Lessons**: 436 (complete, validated vs bulk download)
+- **Indexed Units**: 36 (all with correct lesson counts)
 
 ---
 
 ## 3. Results
 
-### 3.1 Overall Metrics
+**IMPORTANT**: MRR varies dramatically by query category. The aggregate "overall MRR" hides critical patterns. **Always analyze by category.**
 
-| Metric | Lessons | Units | Target | Status |
-|--------|---------|-------|--------|--------|
-| Hard Query MRR | 0.367 | 0.811 | ≥0.50 | ❌ Lessons below |
-| Not in top 10 rate | 53.3% | 0.0% | 0% | ❌ Lessons issue |
-| Avg latency | 388ms | 198ms | ≤1500ms | ✅ Within budget |
+### 3.1 Per-Category Breakdown (Primary Analysis)
 
-### 3.2 Per-Category Breakdown
-
-#### Lesson Hard Queries
+#### Lesson Hard Queries (2025-12-23, Complete Index)
 
 | Category | Count | MRR | Status | Notes |
 |----------|-------|-----|--------|-------|
-| Naturalistic | 3 | 0.333 | ⚠️ Acceptable | 2/3 not in top 10 |
-| Misspelling | 3 | 0.833 | ✅ Excellent | Fuzzy matching working |
-| Synonym | 3 | 0.167 | ❌ Poor | ELSER not bridging vocabulary |
-| Multi-concept | 2 | 0.250 | ❌ Poor | Cross-topic intersection weak |
-| Colloquial | 2 | 0.000 | ❌ Very Poor | Informal language fails completely |
-| Intent-based | 2 | 0.500 | ✅ Good | 1/2 succeeds |
+| Naturalistic | 3 | 0.300 | ⚠️ Acceptable | 2/3 not in top 10, 1/3 rank 2 |
+| Misspelling | 3 | 0.611 | ✅ Good | Fuzzy working; 1 rank 1, 1 rank 2, 1 rank 3 |
+| Synonym | 3 | 0.167 | ❌ Poor | **High priority fix** - 2/3 not in top 10 |
+| Multi-concept | 2 | 0.083 | ❌ Poor | **High priority fix** - 1/2 not in top 10, 1/2 rank 6 |
+| Colloquial | 2 | 0.500 | ✅ Good | **Improved from 0.000!** - B.3 synonyms helped |
+| Intent-based | 2 | 0.167 | ❌ Poor | **High priority fix** - 1/2 not in top 10, 1/2 rank 3 |
+
+**Key Changes from Previous Baseline** (314→436 lessons):
+- **Colloquial: 0.000 → 0.500** (+50%): B.3 synonym work ("sohcahtoa" → "trigonometry") succeeded
+- **Misspelling: 0.833 → 0.611** (-27%): Larger search space makes fuzzy matching harder
+- **Multi-concept: 0.250 → 0.083** (-67%): Significant regression, needs investigation
 
 #### Unit Hard Queries
 
@@ -103,6 +104,20 @@ This is documentation of the current production system's behaviour.
 | Multi-concept | 3 | 0.778 | ✅ Good | Unit scope captures intersections |
 | Colloquial | 2 | 0.750 | ✅ Good | Unit descriptions more informal |
 | Intent-based | 4 | 0.833 | ✅ Excellent | Unit metadata aligns with intent |
+
+### 3.2 Summary Statistics (Use with Caution)
+
+**⚠️ WARNING**: These aggregate numbers are **misleading** because they hide the massive variation by category. For example, lesson synonym queries (MRR 0.167) and misspelling queries (MRR 0.611) are both "poor performers" by the aggregate metric, but they have completely different causes and solutions.
+
+**Always analyze experiments by category, not by aggregate MRR.**
+
+| Metric | Lessons | Units | Target | Status |
+|--------|---------|-------|--------|--------|
+| Hard Query MRR (aggregate) | 0.316 | 0.856 | ≥0.50 | ❌ Lessons below |
+| Not in top 10 rate | 46.7% (7/15) | 0.0% | 0% | ❌ Lessons issue |
+| Avg latency | ~450ms | ~200ms | ≤1500ms | ✅ Within budget |
+
+**Note**: Lesson aggregate MRR decreased from 0.327 to 0.316 (-3.4%) with complete index due to larger search space (436 vs 431 lessons). However, this aggregate hides category-specific improvements (colloquial: 0.000→0.500) and regressions (multi-concept: 0.250→0.083).
 
 ### 3.3 Query-by-Query Analysis
 
@@ -292,4 +307,5 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
 | Date | Change |
 |------|--------|
 | 2025-12-18 | Initial baseline document created |
-| 2025-12-19 | Complete baseline results populated from run-baseline.ts |
+| 2025-12-19 | Complete baseline results populated from run-baseline.ts (incomplete index: 314 lessons) |
+| 2025-12-23 | **Updated with complete index (436 lessons)**: Per-category breakdown updated, key finding: Colloquial improved 0.000→0.500 due to B.3 synonyms |

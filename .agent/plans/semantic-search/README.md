@@ -1,22 +1,25 @@
 # Semantic Search - Navigation Hub
 
-**Status**: Part 1 ACTIVE — Tier 1 experiments ready to resume  
+**Status**: Part 1 ACTIVE — Tier 1: B.5 Phrase Enhancement (IMPLEMENTED, AWAITING VALIDATION)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-22 20:30 UTC
+**Last Updated**: 2025-12-23 18:00 UTC
 
 ---
 
-## ✅ Quality Gates Pass (2025-12-22 20:30 UTC)
+## ⚠️ Quality Gates NOT VERIFIED — B.5 Incomplete (2025-12-23)
 
-All quality gates pass. Complete data indexed and validated.
+**Quality gates have NOT been verified after B.5 implementation.** The experiment to measure MRR impact has also NOT been run.
 
 | Gate | Status |
 |------|--------|
-| `pnpm test` | ✅ 89 files, 504 tests |
-| All other gates | ✅ Pass |
-| Index validation | ✅ 436 lessons, 36 units (vs bulk download) |
-| Baselines | ✅ Re-measured with complete data |
+| **Quality gates** | ❌ **NOT VERIFIED** — must run full suite after B.5 merge |
+| Index validation | ✅ 436 lessons, 36 units, 163 synonyms |
+| B.5 Implementation | ✅ Code merged |
+| **B.5 Validation** | ❌ **NOT DONE** — must run `pnpm eval:diagnostic` |
+| Latest MRR | 0.369 (BEFORE phrase boosting — needs re-measurement) |
+
+**FIRST STEP**: Run quality gates from repo root. Fix any failures before proceeding.
 
 ---
 
@@ -83,12 +86,12 @@ Part 1: Search Excellence (Fundamentals-First)      [🔄 In Progress]
 Done when: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption
 
   Stream A: Foundation                              ✅ Complete
-  Stream B: Tier 1 — Search Fundamentals            🔄 START HERE
+  Stream B: Tier 1 — Search Fundamentals            🔄 In Progress
     B.1 Baseline                                    ✅ Complete
     B.2 Semantic reranking                          ❌ Rejected
-    B.3 Comprehensive synonyms                      ✅ Complete
-    B.4 Noise filtering                             📋 ← NEXT
-    B.5 Phrase matching                             📋
+    B.3 Comprehensive synonyms                      ✅ Complete (163 deployed)
+    B.4 Noise filtering                             ✅ Complete (+16.8% MRR)
+    B.5 Phrase matching                             🔄 IMPL DONE, VALIDATION PENDING
   Stream C: Tier 2 — Document Relationships         📋 After Tier 1
   Stream D: Tier 3 — Modern ES Features             📋 After Tier 2
   Stream E: AI Enhancement                          ⏸️ DEFERRED
@@ -274,6 +277,16 @@ apps/oak-open-curriculum-semantic-search/
 ├── src/lib/hybrid-search/            # RRF query builders
 ├── src/lib/search-quality/           # Ground truth, metrics
 ├── src/lib/indexing/                 # Document transforms
+├── evaluation/
+│   ├── analysis/                     # Measurement scripts (console reports)
+│   └── experiments/
+│       ├── current/                  # Active experiments (vitest)
+│       └── historical/               # Rejected experiments (learning)
+├── operations/
+│   ├── ingestion/                    # Data pipeline tooling
+│   ├── observability/                # Monitoring and cleanup
+│   ├── infrastructure/               # ES management scripts
+│   └── utilities/                    # Helper scripts
 ├── smoke-tests/                      # Search quality benchmarks
 └── docs/                             # INGESTION-GUIDE, SYNONYMS, etc.
 ```
@@ -305,7 +318,23 @@ packages/sdks/oak-curriculum-sdk/
 | [Part 1: Search Excellence](part-1-search-excellence.md) | Current work — tier-based streams |
 | [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap — what to try next |
 
-### Experiments
+### Experiments & Analysis
+
+**Analysis Scripts** (measurement & reporting):
+
+- `pnpm eval:diagnostic` — 18-query diagnostic analysis by pattern
+- `pnpm eval:per-category` — Hard query baseline by category
+- See `evaluation/analysis/README.md` for details
+
+**Experiments** (hypothesis testing):
+
+- **Current** (`evaluation/experiments/current/`):
+  - `hybrid-superiority.experiment.ts` — Validates 4-retriever hybrid ✅
+  - `mcp-comparison.experiment.ts` — Cross-validation with MCP tools ✅
+- **Historical** (`evaluation/experiments/historical/`):
+  - `semantic-reranking/` — B.2 rejected (-16.8% regression) ❌
+
+**Experiment Documents**:
 
 | Document | Status | Notes |
 |----------|--------|-------|
@@ -372,12 +401,27 @@ If code is unused, delete it. No commented-out code. No skipped tests.
 
 ---
 
+## How to Update Documentation After Changes
+
+When metrics change (after an experiment or system change):
+
+1. Run the relevant smoke tests to measure new values
+2. Update the metrics tables in [current-state.md](current-state.md)
+3. Update the "Last Updated" date in this file and current-state.md
+4. **Add an entry to [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** — See "How to Add an Entry" section in that file
+5. Update [part-1-search-excellence.md](part-1-search-excellence.md) if experiment status changes
+
+**Critical**: The experiment log is the historical record. Always update it after completing work.
+
+---
+
 ## Change Log
 
 | Date | Change |
 |------|--------|
+| 2025-12-22 | Ingestion data quality fixes complete — all blockers resolved |
+| 2025-12-22 | Status updated to ACTIVE — ready for Tier 1 experiments |
 | 2025-12-22 | Test isolation architecture fix complete — all quality gates pass |
-| 2025-12-22 | Status updated to PAUSED — ingestion data quality fixes required |
 | 2025-12-22 | Added assumptions to verify section in current-state.md |
 | 2025-12-20 | Metrics section now links to current-state.md (single source of truth) |
 | 2025-12-20 | Removed experiment IDs (E-xxx, F-xxx, B-xxx); use descriptive names only |

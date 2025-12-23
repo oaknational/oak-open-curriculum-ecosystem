@@ -1,51 +1,75 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 ACTIVE — Tier 1 experiments ready to resume  
+**Status**: Part 1 ACTIVE — B.5 Phrase Query Enhancement (IMPLEMENTED, AWAITING VALIDATION)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-22 20:40 UTC
+**Last Updated**: 2025-12-23 18:00 UTC
 
 ---
 
-## ✅ Quality Gates Pass (2025-12-22 18:51 UTC)
+## ⚠️ Quality Gates — NOT VERIFIED
 
-All quality gates pass. Verified via full quality gate suite run.
+**Quality gates have NOT been verified after B.5 implementation.** The last verified run was 2025-12-22 18:51 UTC, BEFORE B.5 code was merged.
+
+**FIRST ACTION REQUIRED** — Run quality gates before anything else:
 
 ```bash
-pnpm type-gen          # ✅
-pnpm build             # ✅
-pnpm type-check        # ✅
-pnpm lint:fix          # ✅
-pnpm format:root       # ✅
-pnpm markdownlint:root # ✅
-pnpm test              # ✅ (504 tests across 89 files)
-pnpm test:e2e          # ✅
-pnpm test:e2e:built    # ✅ (4 tests)
-pnpm test:ui           # ✅ (26 tests)
-pnpm smoke:dev:stub    # ✅
+# From repo root, one at a time
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
 ```
+
+**All gates must pass. Fail fast. No exceptions. Fix any issues before proceeding.**
 
 ---
 
-## ✅ TL;DR — Ready for Search Experimentation
+## ⚠️ TL;DR — B.5 Implementation Complete, Quality Gates + Validation Required
 
-**All blockers resolved. Complete data indexed and validated. Baselines re-measured.**
+**B.5 Phrase Query Enhancement code is complete. BUT quality gates have NOT been verified, and the experiment has NOT been run to measure MRR impact.**
 
-| Issue | Impact | Status |
-|-------|--------|--------|
-| ~~Lesson count truncated~~ | ~~314 → 436 lessons~~ | ✅ Fixed (ADR-083) |
-| ~~Test isolation broken~~ | ~~Tests fail, exit code 0~~ | ✅ Fixed (2025-12-22) |
-| ~~Vestigial `tier` field~~ | ~~Singular field~~ | ✅ Schema correct (verified 2025-12-22) |
-| ~~Unit `lesson_count` wrong~~ | ~~25/36 units wrong~~ | ✅ Fixed (36/36 correct, 2025-12-22) |
-| ~~Unit `thread_slugs` empty~~ | ~~Units don't populate~~ | ✅ Fixed (all populated, 2025-12-22) |
+| Task | Status | Notes |
+|------|--------|-------|
+| B.5 Implementation | ✅ Complete | Code merged |
+| Quality Gates | ❌ **NOT VERIFIED** | Must run full gate suite first |
+| B.5 Validation | ❌ **NOT DONE** | Must run `pnpm eval:diagnostic` to measure impact |
 
-**Index Status**: ✅ Complete (ingested 2025-12-22 18:47 UTC, validated vs bulk download)  
-**Baselines**: ✅ Re-measured with complete data (2025-12-22 20:29 UTC)  
-**Next**: Resume Tier 1 experiments (B.4 Noise phrase filtering)
+**⚠️ IMMEDIATE ACTION REQUIRED** (in order):
 
-**Current Metrics (Complete Data)**:
+**Step 1: Verify quality gates pass** (from repo root):
+
+```bash
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
+```
+
+**Step 2: Run B.5 validation** (only after gates pass):
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:diagnostic      # Measure MRR impact of phrase boosting
+pnpm eval:per-category    # Compare to baseline (0.369 lesson hard MRR)
+```
+
+**Then update**:
+1. `current-state.md` with new metrics
+2. `EXPERIMENT-LOG.md` with actual before/after numbers
+3. Mark B.5 as ✅ VALIDATED or ❌ REJECTED based on results
+
+**Current Metrics (BEFORE B.5 VALIDATION)**:
 - Standard queries: Lesson MRR 0.944, Unit MRR 0.988 ✅ Excellent
-- Hard queries: Lesson MRR 0.316, Unit MRR 0.856 ⚠️ Lessons need improvement
+- Hard queries: Lesson MRR 0.369, Unit MRR 0.856 ⚠️ Lessons need improvement (target: ≥0.45)
+- Synonym category: 0.167 (target: ≥0.40 after B.5)
+- Multi-concept category: 0.083 (target: ≥0.25 after B.5)
+
+**Index Status**: ✅ Complete (ingested 2025-12-22 18:47 UTC, validated vs bulk download)
 
 **Full report**: [COMPLETION-REPORT-2025-12-22.md](../../plans/quality-and-maintainability/COMPLETION-REPORT-2025-12-22.md)
 
@@ -146,24 +170,94 @@ For current metrics, index status, and known issues, see:
 
 **[current-state.md](../../plans/semantic-search/current-state.md)** — THE single source of truth for current metrics
 
-Quick summary:
+Quick summary (as of 2025-12-23 14:00 UTC):
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| Lesson Hard MRR | 0.316 | ≥0.50 | ❌ Gap: 37% |
-| Unit Hard MRR | 0.856 | ≥0.50 | ✅ Exceeded (+71%) |
-| Lesson Std MRR | 0.944 | ≥0.92 | ✅ Excellent |
-| Unit Std MRR | 0.988 | ≥0.92 | ✅ Near perfect |
-| Indexed Lessons | 436 | 436 | ✅ Complete |
-| Unit `lesson_count` Correct | 36/36 | 36/36 | ✅ All correct |
+| Metric | Value | Target | Status | Notes |
+|--------|-------|--------|--------|-------|
+| Lesson Hard MRR (agg) | 0.369 | ≥0.50 | ❌ Gap: 26% | See per-category ↓ |
+| - Naturalistic | 0.567 | ≥0.50 | ✅ Good | +89% from B.4 noise filtering |
+| - Misspelling | 0.611 | ≥0.50 | ✅ Good | Fuzzy matching works |
+| - Synonym | 0.167 | ≥0.50 | ❌ **HIGH PRIORITY** | **ROOT CAUSE: Phrase synonyms broken** |
+| - Multi-concept | 0.083 | ≥0.50 | ❌ **HIGH PRIORITY** | But Concept+Method queries excellent! |
+| Unit Hard MRR | 0.856 | ≥0.50 | ✅ Excellent | Consistent |
+| Lesson Std MRR | 0.944 | ≥0.92 | ✅ Excellent | Hybrid working |
+| Unit Std MRR | 0.988 | ≥0.92 | ✅ Near perfect | Consistent |
+| Indexed Lessons | 436 | 436 | ✅ Complete | Validated |
+| Synonyms Deployed | 163 | 163 | ⚠️ **Only single-word working** | **Phrase synonyms fail after tokenization** |
+
+**⚠️ CRITICAL INSIGHT** (from 18-query diagnostic analysis):
+- ✅ Single-word synonyms: MRR 0.500 ("trig", "factorise" work)
+- ❌ Phrase synonyms: MRR 0.000 ("straight line" → "linear" fails in all positions)
+- ✅ Concept+Method queries: MRR 1.000 (already excellent!)
+- ❌ Generic multi-concept: MRR 0.000 (too vague)
+
+**Root cause**: ES synonym filter applies to tokens, not phrases. After tokenization, "straight line" becomes ["straight", "line"], so phrase rule never matches.
+
+### Recent Diagnostic Analysis (2025-12-23)
+
+**18 diagnostic queries** added to understand failure modes granularly:
+
+**Synonym Diagnostics (MRR: 0.204)**:
+- ✅ Single-word synonyms work (MRR 0.500): "trig", "factorise", "transposition"
+- ❌ Phrase synonyms fail (MRR 0.000): "straight line" fails in ALL positions
+- **Root cause**: ES applies synonyms after tokenization, so phrase rules never match
+
+**Multi-Concept Diagnostics (MRR: 0.343)**:
+- ✅ Concept+Method queries EXCELLENT (MRR 1.000): "equations using substitution" ranks #1!
+- ❌ Generic queries fail (MRR 0.000): "algebra and graphs" too vague
+- **Key insight**: System already understands curriculum structure when method is specified
+
+**Evaluation Tools**: Organized under `evaluation/` with clear separation:
+- **Analysis scripts** (`evaluation/analysis/`): Post-hoc measurement and reporting
+  - `pnpm eval:diagnostic` — Run 18 diagnostic queries with per-pattern analysis
+  - `pnpm eval:per-category` — Run full hard query baseline with category breakdown
+- **Experiments** (`evaluation/experiments/current/`): Hypothesis-testing via Vitest
+  - `pnpm vitest run -c vitest.experiment.config.ts` — Run all experiments
 
 ### Current Focus
 
-**Search Optimisation (ACTIVE)**
+**B.5 Phrase Query Enhancement — VALIDATION REQUIRED**
 
-Tier 1-4 experiments per ADR-082. All ingestion blockers resolved.
+**Implementation Status**: ✅ COMPLETE (2025-12-23)
 
-**Current Priority**: Tier 1 — Search Fundamentals (B.4 Noise phrase filtering)
+The following have been implemented and merged:
+- `buildPhraseVocabulary()` in SDK extracts multi-word terms from synonym data
+- `detectCurriculumPhrases(query)` pure function with unit tests
+- `createPhraseBoosters()` adds `match_phrase` queries for detected phrases
+- Integration into `buildLessonRrfRequest()` and `buildUnitRrfRequest()`
+- ADR-084: Phrase Query Boosting for Curriculum Terms
+
+**Quality Gates Status**: ❌ **NOT VERIFIED** — gates have not been run after B.5 code was merged
+
+**Validation Status**: ❌ **NOT DONE** — experiment has not been run to measure MRR impact
+
+**⚠️ We declared victory without running quality gates or measuring the impact.**
+
+**IMMEDIATE NEXT STEPS** (in order):
+
+**Step 1: Verify quality gates** (from repo root):
+
+```bash
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
+```
+
+Fix any failures before proceeding.
+
+**Step 2: Run B.5 validation** (only after gates pass):
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:diagnostic      # Measure MRR with phrase boosting active
+pnpm eval:per-category    # Get full breakdown
+```
+
+**Then compare to baseline and update docs**:
+- Baseline Synonym MRR: 0.167 → Target: ≥0.40
+- Baseline Multi-concept MRR: 0.083 → Target: ≥0.25
+- Baseline Lesson Hard MRR: 0.369 → Target: ≥0.45
+
+**If targets met**: Mark B.5 ✅ VALIDATED, proceed to B.6 Tier 1 Validation  
+**If targets not met**: Analyse why, iterate or adjust approach
 
 See: [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md)
 
@@ -206,11 +300,13 @@ The active plan with detailed tasks:
 
 Current tier: **Tier 1 — Search Fundamentals**
 
-Next tasks:
+Current tasks:
 
-- B.4 Noise phrase filtering
-- B.5 Phrase query enhancement
-- B.6 Validate Tier 1 (MRR ≥0.45)
+- ✅ B.4 Noise phrase filtering (COMPLETE — +16.8% MRR)
+- 🔄 B.5 Phrase query enhancement (IMPLEMENTATION COMPLETE — **VALIDATION PENDING**)
+- 📋 B.6 Validate Tier 1 (MRR ≥0.45)
+
+**⚠️ B.5 Implementation is done but the experiment has not been run to measure impact. This is the immediate priority.**
 
 ---
 
@@ -297,6 +393,15 @@ packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/hybrid-search/      # RRF query builders
 ├── src/lib/search-quality/     # Ground truth, metrics
+├── evaluation/
+│   ├── analysis/               # Measurement scripts (console reports)
+│   └── experiments/
+│       ├── current/            # Active experiments (vitest)
+│       └── historical/         # Rejected experiments (learning)
+├── operations/
+│   ├── ingestion/              # Data pipeline tooling
+│   ├── observability/          # Monitoring and cleanup
+│   └── infrastructure/         # ES management scripts
 ├── smoke-tests/                # Search quality benchmarks
 └── docs/                       # INGESTION-GUIDE, SYNONYMS, etc.
 ```

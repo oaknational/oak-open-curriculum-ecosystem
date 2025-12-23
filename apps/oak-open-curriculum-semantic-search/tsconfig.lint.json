@@ -13,5 +13,6 @@
     "vitest.config.ts",
     "vitest.e2e.config.ts",
     "tests/e2e/**"
-  ]
+  ],
+  "include": ["evaluation/**/*.ts", "operations/**/*.ts"]
 }

@@ -195,3 +195,100 @@ Expected output should include both the original terms and expanded synonyms.
 - Synonym expansion happens at query time, adding minimal latency
 - Large synonym sets can slow queries; keep entries focused
 - Use `updateable: true` to avoid reindexing when synonyms change
+
+## Phrase Synonym Limitations and Workarounds
+
+### The Problem
+
+Elasticsearch synonym filters apply **after tokenization**. This means multi-word synonyms (phrases) don't work as expected:
+
+```text
+Query: "straight line equations"
+After tokenization: ["straight", "line", "equations"]
+Synonym rule: "straight line => linear"
+Result: Rule never matches because "straight line" is now two tokens
+```
+
+Approximately 40% of the SDK synonyms are multi-word phrases that the ES synonym filter cannot match.
+
+### The Solution: Phrase Query Boosting
+
+We work around this limitation using phrase detection and `match_phrase` boosting at query time:
+
+1. **Phrase Detection**: The `detectCurriculumPhrases()` function scans queries for known multi-word curriculum terms from the SDK vocabulary
+2. **Phrase Boosters**: Detected phrases are added as `match_phrase` queries in the `bool.should` clause
+3. **Combined Matching**: Documents matching the exact phrase get a relevance boost
+
+### How It Works
+
+```typescript
+// Query preprocessing pipeline
+const cleanedText = removeNoisePhrases(text); // B.4
+const detectedPhrases = detectCurriculumPhrases(cleanedText); // B.5
+
+// Detected phrases are passed to retriever builders
+createLessonRetriever(cleanedText, filters, detectedPhrases);
+```
+
+When phrases like "straight line" are detected, the BM25 query structure changes:
+
+```json
+{
+  "bool": {
+    "must": [{ "multi_match": { ... } }],
+    "should": [
+      { "match_phrase": { "lesson_content": { "query": "straight line", "boost": 2.0 } } },
+      { "match_phrase": { "lesson_title": { "query": "straight line", "boost": 2.0 } } }
+    ]
+  }
+}
+```
+
+### Phrase Vocabulary Source
+
+The phrase vocabulary is automatically derived from SDK synonyms:
+
+- Any synonym term **containing a space** is considered a phrase
+- The SDK's `buildPhraseVocabulary()` extracts all such terms
+- Detection uses longest-match-first (greedy) to avoid partial matches
+
+### Adding New Phrase Synonyms
+
+When adding multi-word synonyms to the SDK, they automatically become part of the phrase vocabulary:
+
+```typescript
+// In maths.ts
+'linear-graphs': [
+  'straight line',        // ✅ Will be detected as phrase
+  'straight line graph',  // ✅ Will be detected as phrase
+  'y = mx + c',           // ✅ Will be detected as phrase
+  'gradient',             // Single word - uses ES synonym filter
+],
+```
+
+No additional configuration is needed — the phrase detection system picks up all multi-word terms automatically at import time.
+
+### Verifying Phrase Detection
+
+Run the unit tests:
+
+```bash
+pnpm test -- detect-curriculum-phrases
+```
+
+Or check manually in code:
+
+```typescript
+import { detectCurriculumPhrases } from './lib/query-processing';
+
+detectCurriculumPhrases('straight line equations');
+// Returns: ['straight line']
+
+detectCurriculumPhrases('completing the square quadratics');
+// Returns: ['completing the square']
+```
+
+### Related Documentation
+
+- [ADR-084: Phrase Query Boosting](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
+- [ADR-063: SDK Domain Synonyms Source of Truth](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)

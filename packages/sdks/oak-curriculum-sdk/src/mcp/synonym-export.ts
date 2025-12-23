@@ -145,3 +145,67 @@ export function buildSynonymLookup(): ReadonlyMap<string, string> {
 export function serialiseElasticsearchSynonyms(): string {
   return JSON.stringify(buildElasticsearchSynonyms(), null, 2);
 }
+
+/**
+ * Extracts multi-word terms from a synonym group into a set.
+ *
+ * @param group - The synonym mapping (canonical term -> alternatives)
+ * @param phrases - The set to populate with multi-word terms
+ */
+function collectPhrases(group: SynonymGroup, phrases: Set<string>): void {
+  for (const [canonical, alternatives] of synonymGroupEntries(group)) {
+    // Check canonical term for spaces
+    if (canonical.includes(' ')) {
+      phrases.add(canonical.toLowerCase());
+    }
+
+    // Check each alternative for spaces
+    for (const alt of alternatives) {
+      if (alt.includes(' ')) {
+        phrases.add(alt.toLowerCase());
+      }
+    }
+  }
+}
+
+/**
+ * Extracts all multi-word terms from SDK synonym data.
+ *
+ * Returns a set of lowercased phrases (terms containing spaces) that should
+ * be matched as phrases rather than individual tokens. Used by the search app
+ * for phrase detection during query preprocessing.
+ *
+ * Elasticsearch synonym filters apply after tokenization, so phrase synonyms
+ * like "straight line => linear" never match. This vocabulary enables query-time
+ * phrase detection to add `match_phrase` boosting as a workaround.
+ *
+ * @returns ReadonlySet of multi-word curriculum terms
+ *
+ * @example
+ * ```typescript
+ * const vocab = buildPhraseVocabulary();
+ * vocab.has('straight line');     // true
+ * vocab.has('completing the square'); // true
+ * vocab.has('trigonometry');      // false (single word)
+ * ```
+ *
+ * @see {@link detectCurriculumPhrases} in search app for consumer
+ * @see `.agent/plans/semantic-search/part-1-search-excellence.md` Phase B.5
+ */
+export function buildPhraseVocabulary(): ReadonlySet<string> {
+  const phrases = new Set<string>();
+
+  // Process each synonym group explicitly for type safety.
+  collectPhrases(synonymsData.subjects, phrases);
+  collectPhrases(synonymsData.keyStages, phrases);
+  collectPhrases(synonymsData.numbers, phrases);
+  collectPhrases(synonymsData.geographyThemes, phrases);
+  collectPhrases(synonymsData.historyTopics, phrases);
+  collectPhrases(synonymsData.mathsConcepts, phrases);
+  collectPhrases(synonymsData.englishConcepts, phrases);
+  collectPhrases(synonymsData.scienceConcepts, phrases);
+  collectPhrases(synonymsData.generic, phrases);
+  collectPhrases(synonymsData.educationalAcronyms, phrases);
+
+  return phrases;
+}

@@ -14,6 +14,14 @@
     "incremental": true,
     "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styled.d.ts", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "styled.d.ts",
+    ".next/types/**/*.ts",
+    "evaluation/**/*.ts",
+    "operations/**/*.ts"
+  ],
   "exclude": ["node_modules", "vitest.config.ts", "vitest.e2e.config.ts"]
 }

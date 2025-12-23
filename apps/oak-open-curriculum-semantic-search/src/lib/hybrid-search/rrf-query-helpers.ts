@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 300] -- JC: defer re-org until directory limits implemented in ESLint */
+/* eslint max-lines: [error, 400] -- Phrase boosting added in B.5; defer re-org to ADR-086 */
 /**
  * Shared helper functions for RRF query builders.
  *
@@ -166,22 +166,96 @@ const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
 const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
 const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
 
-/** BM25 for lessons: min_should_match 75% (+11.7% MRR), default fuzziness. */
+/** Default boost factor for phrase matches. */
+const DEFAULT_PHRASE_BOOST = 2.0;
+
+/**
+ * Strips boost suffixes from field names.
+ *
+ * @param field - Field name possibly with boost (e.g., "lesson_title^3")
+ * @returns Field name without boost (e.g., "lesson_title")
+ */
+function stripBoost(field: string): string {
+  const caretIndex = field.indexOf('^');
+  return caretIndex !== -1 ? field.slice(0, caretIndex) : field;
+}
+
+/**
+ * Creates match_phrase queries for detected curriculum phrases.
+ *
+ * These queries are added to the bool.should clause of BM25 retrievers to
+ * boost documents that contain the exact phrase. This compensates for ES
+ * synonym filter limitations with multi-word terms.
+ *
+ * @param phrases - Array of detected curriculum phrases
+ * @param fields - BM25 fields to search (boosts are stripped for phrase matching)
+ * @param boost - Boost factor for phrase matches (default: 2.0)
+ * @returns Array of match_phrase query containers
+ *
+ * @see `.agent/plans/semantic-search/part-1-search-excellence.md` Phase B.5
+ */
+export function createPhraseBoosters(
+  phrases: readonly string[],
+  fields: readonly string[],
+  boost: number = DEFAULT_PHRASE_BOOST,
+): QueryContainer[] {
+  if (phrases.length === 0) {
+    return [];
+  }
+
+  const strippedFields = fields.map(stripBoost);
+  const boosters: QueryContainer[] = [];
+
+  for (const phrase of phrases) {
+    for (const field of strippedFields) {
+      boosters.push({
+        match_phrase: {
+          [field]: {
+            query: phrase,
+            boost,
+          },
+        },
+      });
+    }
+  }
+
+  return boosters;
+}
+
+/**
+ * BM25 for lessons: min_should_match 75% (+11.7% MRR), default fuzziness.
+ * Optionally includes phrase boosters for multi-word curriculum terms.
+ */
 function createLessonBm25Retriever(
   text: string,
   fields: string[],
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
+  const primaryQuery: QueryContainer = {
+    multi_match: {
+      query: text,
+      type: 'best_fields',
+      tie_breaker: 0.2,
+      fuzziness: 'AUTO',
+      minimum_should_match: '75%',
+      fields,
+    },
+  };
+
+  // If no phrases detected, use simple query
+  if (phrases.length === 0) {
+    return { standard: { query: primaryQuery, filter } };
+  }
+
+  // Add phrase boosters to bool.should
+  const phraseBoosters = createPhraseBoosters(phrases, fields);
   return {
     standard: {
       query: {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          tie_breaker: 0.2,
-          fuzziness: 'AUTO',
-          minimum_should_match: '75%',
-          fields,
+        bool: {
+          must: [primaryQuery],
+          should: phraseBoosters,
         },
       },
       filter,
@@ -189,23 +263,41 @@ function createLessonBm25Retriever(
   };
 }
 
-/** BM25 for units: fuzzy (+4.2% MRR), no min_should_match (-15.8% if enabled). */
+/**
+ * BM25 for units: fuzzy (+4.2% MRR), no min_should_match (-15.8% if enabled).
+ * Optionally includes phrase boosters for multi-word curriculum terms.
+ */
 function createUnitBm25Retriever(
   text: string,
   fields: string[],
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
+  const primaryQuery: QueryContainer = {
+    multi_match: {
+      query: text,
+      type: 'best_fields',
+      tie_breaker: 0.2,
+      fuzziness: 'AUTO:3,6',
+      prefix_length: 1,
+      fuzzy_transpositions: true,
+      fields,
+    },
+  };
+
+  // If no phrases detected, use simple query
+  if (phrases.length === 0) {
+    return { standard: { query: primaryQuery, filter } };
+  }
+
+  // Add phrase boosters to bool.should
+  const phraseBoosters = createPhraseBoosters(phrases, fields);
   return {
     standard: {
       query: {
-        multi_match: {
-          query: text,
-          type: 'best_fields',
-          tie_breaker: 0.2,
-          fuzziness: 'AUTO:3,6',
-          prefix_length: 1,
-          fuzzy_transpositions: true,
-          fields,
+        bool: {
+          must: [primaryQuery],
+          should: phraseBoosters,
         },
       },
       filter,
@@ -222,20 +314,28 @@ function createElserRetriever(
   return { standard: { query: { semantic: { field, query: text } }, filter } };
 }
 
-/** Creates BM25 content retriever for lessons (full transcript + pedagogical fields). */
+/**
+ * Creates BM25 content retriever for lessons (full transcript + pedagogical fields).
+ * Includes phrase boosters for detected curriculum phrases.
+ */
 export function createLessonBm25ContentRetriever(
   text: string,
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createLessonBm25Retriever(text, LESSON_BM25_CONTENT, filter);
+  return createLessonBm25Retriever(text, LESSON_BM25_CONTENT, filter, phrases);
 }
 
-/** Creates BM25 structure retriever for lessons (curated summary). */
+/**
+ * Creates BM25 structure retriever for lessons (curated summary).
+ * Includes phrase boosters for detected curriculum phrases.
+ */
 export function createLessonBm25StructureRetriever(
   text: string,
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createLessonBm25Retriever(text, LESSON_BM25_STRUCTURE, filter);
+  return createLessonBm25Retriever(text, LESSON_BM25_STRUCTURE, filter, phrases);
 }
 
 /** Creates ELSER content retriever for lessons. */
@@ -254,20 +354,28 @@ export function createLessonElserStructureRetriever(
   return createElserRetriever(text, 'lesson_structure_semantic', filter);
 }
 
-/** Creates BM25 content retriever for units (aggregated transcripts). */
+/**
+ * Creates BM25 content retriever for units (aggregated transcripts).
+ * Includes phrase boosters for detected curriculum phrases.
+ */
 export function createUnitBm25ContentRetriever(
   text: string,
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createUnitBm25Retriever(text, UNIT_BM25_CONTENT, filter);
+  return createUnitBm25Retriever(text, UNIT_BM25_CONTENT, filter, phrases);
 }
 
-/** Creates BM25 structure retriever for units (curated summary). */
+/**
+ * Creates BM25 structure retriever for units (curated summary).
+ * Includes phrase boosters for detected curriculum phrases.
+ */
 export function createUnitBm25StructureRetriever(
   text: string,
   filter: QueryContainer | undefined,
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
-  return createUnitBm25Retriever(text, UNIT_BM25_STRUCTURE, filter);
+  return createUnitBm25Retriever(text, UNIT_BM25_STRUCTURE, filter, phrases);
 }
 
 /** Creates ELSER content retriever for units. */

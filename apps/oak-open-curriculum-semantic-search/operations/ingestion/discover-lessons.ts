@@ -15,7 +15,7 @@
  * @output Prints lesson slugs and titles for each test query
  */
 
-import { HybridResponseLessons } from '../src/lib/openapi.schemas.js';
+import { HybridResponseLessons } from '../../src/lib/openapi.schemas.js';
 
 const BASE_URL = process.env.TEST_BASE_URL ?? 'http://localhost:3003';
 

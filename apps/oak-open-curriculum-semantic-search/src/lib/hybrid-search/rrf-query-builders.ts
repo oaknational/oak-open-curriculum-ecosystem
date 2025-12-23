@@ -1,3 +1,4 @@
+/* eslint max-lines: [error, 260] -- Phrase boosting added in B.5; defer re-org to ADR-086 */
 /**
  * Four-way RRF query builders for hybrid search.
  *
@@ -17,6 +18,7 @@ import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SearchSubjectSlug } from '../../types/oak';
+import { removeNoisePhrases, detectCurriculumPhrases } from '../query-processing';
 import {
   createLessonFilters,
   createLessonHighlight,
@@ -61,14 +63,27 @@ export interface UnitRrfParams extends SearchFilterOptions {
   includeFacets?: boolean;
 }
 
-/** Builds a two-way RRF request for lessons (BM25 + ELSER). */
+/**
+ * Builds a four-way RRF request for lessons (BM25 + ELSER on Content + Structure).
+ *
+ * Query preprocessing pipeline:
+ * 1. Remove noise phrases (B.4): "that X stuff" → "X"
+ * 2. Detect curriculum phrases (B.5): "straight line" → phrase boost
+ */
 export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest {
   const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+
+  // Preprocess query: remove noise phrases (Phase B.4)
+  const cleanedText = removeNoisePhrases(text);
+
+  // Detect multi-word curriculum phrases for phrase boosting (Phase B.5)
+  const detectedPhrases = detectCurriculumPhrases(cleanedText);
+
   const filters = createLessonFilters(filterOptions);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('lessons'),
     size,
-    retriever: createLessonRetriever(text, filters),
+    retriever: createLessonRetriever(cleanedText, filters, detectedPhrases),
   };
 
   if (includeHighlights) {
@@ -81,14 +96,27 @@ export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest 
   return request;
 }
 
-/** Builds a two-way RRF request for units (BM25 + ELSER). */
+/**
+ * Builds a four-way RRF request for units (BM25 + ELSER on Content + Structure).
+ *
+ * Query preprocessing pipeline:
+ * 1. Remove noise phrases (B.4): "that X stuff" → "X"
+ * 2. Detect curriculum phrases (B.5): "straight line" → phrase boost
+ */
 export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
   const { text, size, includeHighlights = true, includeFacets = false, ...filterOptions } = params;
+
+  // Preprocess query: remove noise phrases (Phase B.4)
+  const cleanedText = removeNoisePhrases(text);
+
+  // Detect multi-word curriculum phrases for phrase boosting (Phase B.5)
+  const detectedPhrases = detectCurriculumPhrases(cleanedText);
+
   const filters = createUnitFilters(filterOptions);
   const request: EsSearchRequest = {
     index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
-    retriever: createUnitRetriever(text, filters),
+    retriever: createUnitRetriever(cleanedText, filters, detectedPhrases),
   };
 
   if (includeHighlights) {
@@ -124,18 +152,20 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
 /**
  * Creates a four-way RRF retriever for lessons.
  * Combines BM25 + ELSER on both content and structure fields.
+ * BM25 retrievers include phrase boosting for detected curriculum phrases.
  */
 function createLessonRetriever(
   text: string,
   filters: QueryContainer[],
+  phrases: readonly string[] = [],
 ): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
     rrf: {
       retrievers: [
-        createLessonBm25ContentRetriever(text, filterClause),
+        createLessonBm25ContentRetriever(text, filterClause, phrases),
         createLessonElserContentRetriever(text, filterClause),
-        createLessonBm25StructureRetriever(text, filterClause),
+        createLessonBm25StructureRetriever(text, filterClause, phrases),
         createLessonElserStructureRetriever(text, filterClause),
       ],
       rank_window_size: 80,
@@ -147,15 +177,20 @@ function createLessonRetriever(
 /**
  * Creates a four-way RRF retriever for units.
  * Combines BM25 + ELSER on both content and structure fields.
+ * BM25 retrievers include phrase boosting for detected curriculum phrases.
  */
-function createUnitRetriever(text: string, filters: QueryContainer[]): estypes.RetrieverContainer {
+function createUnitRetriever(
+  text: string,
+  filters: QueryContainer[],
+  phrases: readonly string[] = [],
+): estypes.RetrieverContainer {
   const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
   return {
     rrf: {
       retrievers: [
-        createUnitBm25ContentRetriever(text, filterClause),
+        createUnitBm25ContentRetriever(text, filterClause, phrases),
         createUnitElserContentRetriever(text, filterClause),
-        createUnitBm25StructureRetriever(text, filterClause),
+        createUnitBm25StructureRetriever(text, filterClause, phrases),
         createUnitElserStructureRetriever(text, filterClause),
       ],
       rank_window_size: 80,

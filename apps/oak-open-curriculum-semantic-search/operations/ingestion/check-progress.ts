@@ -1,8 +1,9 @@
 #!/usr/bin/env npx tsx
-
-/* eslint-disable max-lines-per-function, max-statements */
 /**
  * Check current ingestion progress - both in ES and in progress file
+ *
+ * Outputs current state from Elasticsearch indices and any progress file
+ * from an in-flight systematic ingestion.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -10,8 +11,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { IndexMetaDocSchema } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
-import { esClient } from '../src/lib/es-client.js';
+import { loadAppEnv } from '../../src/lib/elasticsearch/setup/load-app-env.js';
+import { esClient } from '../../src/lib/es-client.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROGRESS_FILE = join(__dirname, '..', '.ingest-progress.json');
@@ -89,7 +90,49 @@ async function checkElasticsearch() {
   }
 }
 
-function checkProgressFile() {
+/** Parsed progress data type */
+type IngestProgress = z.infer<typeof IngestProgressSchema>;
+
+/** Prints summary statistics for progress */
+function printProgressSummary(progress: IngestProgress): void {
+  console.log(`   Started: ${progress.startedAt}`);
+  console.log(`   Last Updated: ${progress.lastUpdatedAt}`);
+  console.log(`   Total Combinations: ${progress.totalCombinations}`);
+  console.log(`   ✅ Completed: ${progress.completed}`);
+  console.log(`   ❌ Failed: ${progress.failed}`);
+  console.log(`   ⏭️  Skipped: ${progress.skipped}`);
+
+  const pending = progress.results.filter((r) => r.status === 'pending').length;
+  const done = progress.completed + progress.failed + progress.skipped;
+  const percentage = ((done / progress.totalCombinations) * 100).toFixed(1);
+
+  console.log(`   ⏳ Pending: ${pending}`);
+  console.log(`   Progress: ${percentage}%`);
+}
+
+/** Prints recent successful combinations */
+function printRecentSuccesses(results: IngestProgress['results']): void {
+  const successes = results.filter((r) => r.status === 'success').slice(-5);
+  if (successes.length === 0) {
+    return;
+  }
+
+  console.log('\n   Recent Successes:');
+  successes.forEach((r) => console.log(`   - ${r.combination.id}`));
+}
+
+/** Prints failed combinations */
+function printFailures(results: IngestProgress['results']): void {
+  const failures = results.filter((r) => r.status === 'failed');
+  if (failures.length === 0) {
+    return;
+  }
+
+  console.log('\n   ❌ Failed Combinations:');
+  failures.forEach((r) => console.log(`   - ${r.combination.id} (exit code: ${r.exitCode})`));
+}
+
+function checkProgressFile(): void {
   if (!existsSync(PROGRESS_FILE)) {
     console.log('\n📁 Progress File: Not found');
     console.log('   Run "pnpm ingest:all" to start systematic ingestion\n');
@@ -100,44 +143,9 @@ function checkProgressFile() {
   const progress = IngestProgressSchema.parse(safeJsonParse(json));
 
   console.log('\n📁 Systematic Ingestion Progress:\n');
-  console.log(`   Started: ${progress.startedAt}`);
-  console.log(`   Last Updated: ${progress.lastUpdatedAt}`);
-  console.log(`   Total Combinations: ${progress.totalCombinations}`);
-  console.log(`   ✅ Completed: ${progress.completed}`);
-  console.log(`   ❌ Failed: ${progress.failed}`);
-  console.log(`   ⏭️  Skipped: ${progress.skipped}`);
-
-  const pending = progress.results.filter((result) => result.status === 'pending').length;
-  const percentage = (
-    ((progress.completed + progress.failed + progress.skipped) / progress.totalCombinations) *
-    100
-  ).toFixed(1);
-
-  console.log(`   ⏳ Pending: ${pending}`);
-  console.log(`   Progress: ${percentage}%`);
-
-  // Show recent successes
-  const recentSuccesses = progress.results
-    .filter((result) => result.status === 'success')
-    .slice(-5);
-
-  if (recentSuccesses.length > 0) {
-    console.log('\n   Recent Successes:');
-    recentSuccesses.forEach((r: { combination: { id: string } }) => {
-      console.log(`   - ${r.combination.id}`);
-    });
-  }
-
-  // Show failures
-  const failures = progress.results.filter((result) => result.status === 'failed');
-
-  if (failures.length > 0) {
-    console.log('\n   ❌ Failed Combinations:');
-    failures.forEach((r: { combination: { id: string }; exitCode?: number }) => {
-      console.log(`   - ${r.combination.id} (exit code: ${r.exitCode})`);
-    });
-  }
-
+  printProgressSummary(progress);
+  printRecentSuccesses(progress.results);
+  printFailures(progress.results);
   console.log('');
 }
 

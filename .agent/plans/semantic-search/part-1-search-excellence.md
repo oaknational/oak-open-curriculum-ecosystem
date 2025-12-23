@@ -4,7 +4,53 @@
 **Priority**: High  
 **Done When**: Hard Query MRR ≥0.50, Search SDK ready for MCP consumption  
 **Created**: 2025-12-19  
+**Last Updated**: 2025-12-23 15:00 UTC  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
+
+---
+
+## 🎯 Quick Start for Fresh Context
+
+**Where we are**: Tier 1 (Search Fundamentals), task B.5 (Phrase Query Enhancement) — **VALIDATION PENDING**
+
+**What's been completed**:
+- ✅ B.4: Noise phrase filtering (+16.8% MRR improvement)
+- ✅ B.4a: 18-query diagnostic analysis (root cause identified)
+- ✅ Complete data indexed (436 lessons, validated)
+- ✅ B.5 **IMPLEMENTATION** complete (code merged, ADR-084 created)
+
+**⚠️ What's NOT been done**:
+1. **Quality gates NOT VERIFIED** — gates have not been run after B.5 code was merged
+2. **B.5 VALIDATION NOT DONE** — the experiment to measure MRR impact has NOT been run
+
+**IMMEDIATE ACTION REQUIRED** (in order):
+
+**Step 1: Verify quality gates** (from repo root):
+
+```bash
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
+```
+
+Fix any failures before proceeding.
+
+**Step 2: Run B.5 validation** (only after gates pass):
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:diagnostic      # Measure MRR with phrase boosting active
+pnpm eval:per-category    # Get full category breakdown
+```
+
+**Then compare to baseline**:
+- Synonym category: 0.167 → Target ≥0.40
+- Multi-concept category: 0.083 → Target ≥0.25
+- Overall Lesson Hard MRR: 0.369 → Target ≥0.45
+
+**Update documentation with actual results**:
+1. `current-state.md` — new metrics
+2. `EXPERIMENT-LOG.md` — actual before/after numbers (currently shows "Next steps: Run eval:diagnostic")
+
+**Key insight from diagnostics**: System already understands curriculum structure when queries include method specificity ("equations using substitution" ranks #1). The issue is phrase-level matching, not complex scoring.
 
 ---
 
@@ -37,12 +83,20 @@ For current metrics, see **[current-state.md](current-state.md)**.
 |--------|--------|---------|--------|
 | Standard Query MRR (Lessons) | ≥0.92 | 0.944 | ✅ Met |
 | Standard Query MRR (Units) | ≥0.92 | 0.988 | ✅ Met |
-| Hard Query MRR (Lessons) | ≥0.50 | 0.316 | ❌ Gap: 37% |
-| Hard Query MRR (Units) | ≥0.50 | 0.856 | ✅ Exceeded (+71%) |
+| Hard Query MRR (Lessons, agg) | ≥0.50 | 0.369 | ❌ See categories ↓ |
+| - Naturalistic | ≥0.50 | 0.567 | ✅ Good |
+| - Misspelling | ≥0.50 | 0.611 | ✅ Good |
+| - Synonym | ≥0.50 | 0.167 | ❌ **HIGH PRIORITY** |
+| - Multi-concept | ≥0.50 | 0.083 | ❌ **HIGH PRIORITY** |
+| - Colloquial | ≥0.50 | 0.500 | ✅ Good |
+| - Intent-based | ≥0.50 | 0.167 | ❌ Medium priority |
+| Hard Query MRR (Units) | ≥0.50 | 0.856 | ✅ Excellent |
 | Zero-hit Rate | 0% | 0% | ✅ Met |
 | p95 Latency | ≤1500ms | ~450ms | ✅ Met |
 
-**Baselines measured**: 2025-12-22 20:29 UTC with complete data (436 lessons, 36 units)
+**⚠️ Critical**: Aggregate lesson hard MRR (0.369) hides massive category variation. **Focus on categories with MRR <0.50**: synonym, multi-concept, intent-based.
+
+**Baselines measured**: 2025-12-23 11:07 UTC (after B.4 noise filtering + synonym deployment)
 
 For experiment history, see **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)**.
 
@@ -200,8 +254,9 @@ Stream B: Tier 1 — Search Fundamentals              [🔄 In Progress]
   B.1  Baseline documentation                              ✅ Complete
   B.2  Semantic reranking experiment                       ❌ Rejected
   B.3  Comprehensive synonym coverage                      ✅ Complete
-  B.4  Noise phrase filtering                              📋
-  B.5  Phrase query enhancement                            📋
+  B.4  Noise phrase filtering                              ✅ Complete
+  B.4a Diagnostic query analysis (18 queries)              ✅ Complete
+  B.5  Phrase query enhancement                            🔄 IMPL DONE, VALIDATION PENDING
   B.6  Validate Tier 1 (MRR ≥0.45)                         📋
 
 Stream C: Tier 2 — Document Relationships           [📋 After Tier 1]
@@ -377,11 +432,12 @@ Compare to B.1 baseline. Document in experiment file.
 
 **Success Criteria**: Hard query MRR ≥0.45
 
-### B.4 Noise Phrase Filtering [📋 START HERE — NEXT PRIORITY]
+### B.4 Noise Phrase Filtering [✅ COMPLETED 2025-12-23]
 
-**Status**: Ready to start. All blockers resolved, complete index ready.
+**Status**: ✅ COMPLETE — Delivered +16.8% MRR improvement (0.316 → 0.369)
 
 **Baseline**: Lesson Hard MRR 0.316 (measured 2025-12-22 20:29 UTC with complete data)
+**Result**: Lesson Hard MRR 0.369 (measured 2025-12-23 11:07 UTC)
 
 **Hypothesis**: Pre-processing to remove colloquial filler will improve those queries.
 
@@ -392,11 +448,123 @@ Compare to B.1 baseline. Document in experiment file.
 
 **TDD Entry Point**: Write unit test for `removeNoisePhrase(query: string): string` FIRST.
 
-### B.5 Phrase Query Enhancement [📋 Planned]
+### B.4a Diagnostic Query Analysis [✅ COMPLETED 2025-12-23]
 
-**Hypothesis**: Detecting multi-word curriculum terms and boosting phrase matches will improve precision.
+**Status**: ✅ COMPLETE — Root cause identified for synonym and multi-concept failures
 
-**TDD Entry Point**: Write unit test for `detectCurriculumPhrases(query: string): string[]` FIRST.
+**Purpose**: Create granular diagnostic queries to understand **why** synonym (0.167) and multi-concept (0.083) categories have poor MRR, not just that they fail.
+
+**What was created**:
+- 18 diagnostic queries (9 synonym, 9 multi-concept)
+- Each query tests a specific pattern (e.g., "phrase synonym at START", "concept + method")
+- Analysis script provides per-pattern MRR and success rates
+- Moved evaluation scripts to `evaluation/` directory with proper linting
+
+**Critical findings**:
+
+1. **🔥 Synonym root cause**: ES synonym filter works for **single tokens only**, not **phrase synonyms**. After tokenization, "straight line" becomes ["straight", "line"], so phrase rule "straight line => linear" never matches. ~40% of our 163 synonym rules are phrase-based and currently non-functional.
+
+2. **🎯 Multi-concept insight**: The system **already works well** for structured queries (concept + method). "equations using substitution" and "quadratics by completing square" both rank #1 (MRR 1.000)! Failures are in generic/abstract queries without method specificity.
+
+3. **Next step clarity**: B.5 should focus on **phrase query enhancement** (match_phrase boosting for curriculum terms), NOT complex multi-concept scoring logic.
+
+**Results**:
+
+| Category | Pattern | MRR | Status | Finding |
+|----------|---------|-----|--------|---------|
+| Synonym | Single-word | 0.500 | ✅ Good | "trig", "factorise" work |
+| Synonym | Phrase (all positions) | 0.000 | ❌ FAIL | "straight line" fails everywhere |
+| Multi-concept | Concept + Method | 1.000 | ✅ EXCELLENT | Both rank #1! |
+| Multi-concept | Generic/Abstract | 0.000 | ❌ FAIL | Too vague |
+
+**Files changed**:
+- Added `src/lib/search-quality/ground-truth/diagnostic-queries.ts` (18 queries)
+- Added `evaluation/analysis/analyze-diagnostic-queries.ts` (analysis script)
+- Added `evaluation/analysis/analyze-per-category.ts` (per-category analysis)
+- Added `evaluation/analysis/README.md` (analysis documentation)
+- Added `evaluation/experiments/README.md` (experiment framework docs)
+- Added `docs/DIAGNOSTIC-QUERIES.md` (usage guide)
+- Updated `eslint.config.ts` to lint `evaluation/` and `operations/` with proper standards
+- Updated `package.json` with `eval:*` and `ops:*` scripts
+
+**Directory Structure** (reorganized 2025-12-23):
+```text
+evaluation/
+├── analysis/               # Post-hoc measurement scripts
+│   ├── analyze-diagnostic-queries.ts
+│   └── analyze-per-category.ts
+└── experiments/            # Hypothesis-testing experiments
+    ├── current/            # Active/accepted experiments
+    └── historical/         # Rejected experiments (e.g., semantic-reranking)
+
+operations/
+├── ingestion/              # Data pipeline tooling
+├── observability/          # Monitoring and cleanup
+├── infrastructure/         # ES management
+└── utilities/              # Helper scripts
+```
+
+**Evaluation Commands**:
+```bash
+pnpm eval:diagnostic      # Run 18 diagnostic queries with per-pattern analysis
+pnpm eval:per-category    # Run full hard query baseline with category breakdown
+pnpm vitest run -c vitest.experiment.config.ts  # Run all experiments
+```
+
+### B.5 Phrase Query Enhancement [🔄 IMPLEMENTATION COMPLETE — GATES + VALIDATION PENDING]
+
+**Status**: Implementation complete (2025-12-23). **QUALITY GATES NOT VERIFIED. VALIDATION NOT DONE.**
+
+**⚠️ CRITICAL**: The code is merged but:
+1. Quality gates have NOT been run after the merge
+2. The experiment to measure MRR impact has NOT been run
+
+Both must be done before this task can be marked complete.
+
+#### What Was Implemented
+
+1. **SDK Phrase Vocabulary** (`packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts`):
+   - `buildPhraseVocabulary()` extracts multi-word terms from synonym data
+   - Exported via `src/public/mcp-tools.ts`
+
+2. **Phrase Detection** (`apps/oak-open-curriculum-semantic-search/src/lib/query-processing/`):
+   - `detectCurriculumPhrases(query: string): readonly string[]` pure function
+   - Unit tests in `detect-curriculum-phrases.unit.test.ts`
+   - Greedy matching (longest phrases first), case-insensitive, word boundary validation
+
+3. **Query Integration** (`apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/`):
+   - `createPhraseBoosters()` creates `match_phrase` queries with boost
+   - Integrated into `createLessonBm25Retriever` and `createUnitBm25Retriever`
+   - Phrase boosters added to `bool.should` clause
+
+4. **Documentation**:
+   - ADR-084: Phrase Query Boosting for Curriculum Terms
+   - EXPERIMENT-LOG.md entry (but says "Next steps: Run eval:diagnostic")
+
+#### VALIDATION REQUIRED
+
+**Baseline** (BEFORE phrase boosting):
+- Synonym category MRR: 0.167
+- Multi-concept category MRR: 0.083
+- Overall Lesson Hard MRR: 0.369
+
+**Run the experiment**:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:diagnostic      # Measure MRR with phrase boosting active
+pnpm eval:per-category    # Get full category breakdown
+```
+
+**Compare to targets**:
+- Synonym category MRR: Target ≥0.40 (+139% from 0.167)
+- Multi-concept category MRR: Target ≥0.25 (+201% from 0.083)
+- Overall Lesson Hard MRR: Target ≥0.45 (Tier 1 exit criteria)
+
+**Then update**:
+1. `current-state.md` with actual measured metrics
+2. `EXPERIMENT-LOG.md` with actual before/after numbers
+3. This file — mark B.5 as ✅ VALIDATED or iterate if targets not met
 
 ### B.6 Tier 1 Validation [📋 Planned]
 
@@ -506,9 +674,15 @@ From [ADR-081](../../../docs/architecture/architectural-decisions/081-search-app
 | RRF tuning | Any MRR improvement | Regression anywhere |
 | AI enhancement | Hard MRR ≥+15% | p95 latency >2000ms |
 
-### After Each Experiment: Codify Learnings
+### After Each Experiment: Update Documentation
 
-Extract lasting value by updating documentation:
+**MANDATORY**: Always update these documents after completing an experiment:
+
+1. **[EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)** — Add entry with before/after metrics, decision, key insight
+2. **[current-state.md](current-state.md)** — Update current metrics table
+3. **This file** — Update experiment status (✅ Complete, ❌ Rejected, etc.)
+
+**Then codify learnings**:
 
 | If the experiment... | Then update... |
 |---------------------|----------------|
@@ -520,6 +694,8 @@ Extract lasting value by updating documentation:
 - **What we DO** → Goes in operational guides
 - **What we DON'T DO** → Stays in experiment log
 - **Why we decided** → Full reasoning in experiment file
+
+**See**: "How to Add an Entry" section in EXPERIMENT-LOG.md for template and instructions.
 
 ---
 

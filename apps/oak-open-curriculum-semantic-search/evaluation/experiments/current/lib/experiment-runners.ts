@@ -3,8 +3,8 @@
  *
  */
 
-import { GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth.js';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth/units/index.js';
+import { GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { UNIT_GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/units/index.js';
 import {
   runLessonModeExperiment,
   runUnitModeExperiment,
