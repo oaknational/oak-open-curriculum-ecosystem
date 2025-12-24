@@ -185,6 +185,8 @@ export function createLessonDocument(params: CreateLessonDocumentParams): Search
     lesson_structure_semantic: sem,
     lesson_url: f.canonicalUrl,
     pupil_lesson_outcome: f.pupilLessonOutcome,
+    supervision_level: f.supervisionLevel,
+    downloads_available: f.downloadsAvailable,
     ...ks4,
     title_suggest: {
       input: [lesson.lessonTitle],

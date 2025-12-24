@@ -2,8 +2,9 @@
 
 **Status**: ACCEPTED  
 **Date**: 2025-12-19  
+**Last Updated**: 2025-12-24  
 **Decision Makers**: Development Team  
-**Related**: [ADR-081](081-search-approach-evaluation-framework.md), [ADR-076](076-elser-only-embedding-strategy.md), [ADR-063](063-sdk-domain-synonyms-source-of-truth.md)
+**Related**: [ADR-081](081-search-approach-evaluation-framework.md), [ADR-085](085-ground-truth-validation-discipline.md), [ADR-076](076-elser-only-embedding-strategy.md), [ADR-063](063-sdk-domain-synonyms-source-of-truth.md)
 
 ## Context
 
@@ -269,29 +270,115 @@ Complexity spiral                     MRR 0.80+ ✓
 
 All experiments tracked in: `.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md`
 
-### Current Status (2025-12-19)
+### Current Status (2025-12-24)
 
-| Tier  | Status            | Notes                                           |
-| ----- | ----------------- | ----------------------------------------------- |
-| **1** | ⚠️ Incomplete     | Synonyms partial (68 rules), no phrase matching |
-| **2** | ❌ Not Started    | Cross-referencing not exploited                 |
-| **3** | ⚠️ Partial        | RRF working, Linear not tested                  |
-| **4** | ❌ E-001 Rejected | Premature — fundamentals not mastered           |
+**✅ TIER 1 EXHAUSTED** — All standard Tier 1 approaches verified (2025-12-24).
 
-### Immediate Next Steps
+All Tier 1 checklist items complete. Intent-based category (0.229) has documented exception (requires Tier 4 metadata/LLM solutions). See [Search Acceptance Criteria](.agent/plans/semantic-search/search-acceptance-criteria.md) for verification details.
 
-1. **F-001**: Add 50+ curriculum synonyms targeting hard query failures
-2. **F-008**: Implement noise phrase filtering for colloquial queries
-3. **F-009**: Add phrase matching for multi-word curriculum terms
+| Tier  | Status           | MRR       | Notes                                            |
+| ----- | ---------------- | --------- | ------------------------------------------------ |
+| **1** | ✅ **EXHAUSTED** | **0.614** | All approaches verified; intent-based exception  |
+| **2** | 🔓 Ready         | —         | Tier 1 exhausted; can proceed when prioritised   |
+| **3** | 📋 Blocked       | —         | Waiting for Tier 2 exhaustion                    |
+| **4** | ⏸️ Deferred      | —         | Only after Tiers 1-3 exhausted and plateau shown |
+
+### Per-Category Breakdown (Lesson Hard Queries)
+
+Measured 2025-12-24 with corrected ground truth (see ADR-085):
+
+| Category         | MRR       | Status       | Root Cause of Remaining Gap        |
+| ---------------- | --------- | ------------ | ---------------------------------- |
+| misspelling      | 0.833     | ✅ Excellent | —                                  |
+| naturalistic     | 0.722     | ✅ Good      | —                                  |
+| multi-concept    | 0.625     | ✅ Good      | —                                  |
+| synonym          | 0.611     | ✅ Good      | —                                  |
+| colloquial       | 0.500     | ✅ Good      | —                                  |
+| **intent-based** | **0.229** | ⚠️ Exception | Exception granted — Tier 4 problem |
+
+### Intent-Based Query Gap Analysis — EXCEPTION GRANTED
+
+The intent-based category (0.229 MRR) has a **documented exception** (2025-12-24). These queries require capabilities beyond Tier 1:
+
+**Example queries**:
+
+- "challenging extension work for able mathematicians" (MRR 0.333)
+- "visual introduction to vectors for beginners" (MRR 0.125)
+
+**What we have indexed**:
+
+- ✅ `tier/tiers` — Foundation/Higher for KS4
+- ✅ `lesson_keywords`, `key_learning_points`, `pupil_lesson_outcome`
+- ✅ `years` — Year group (10, 11)
+
+**What intent-based queries need**:
+
+- ❌ Lesson type classification (intro/consolidation/extension/problem-solving)
+- ❌ Teaching approach metadata (visual/practical/discussion-based)
+- ❌ NL→metadata mapping ("able mathematicians" → tier:higher)
+
+**Potential improvements** (in priority order):
+
+1. **Tier 1**: Add synonyms "extension/challenging" → "problem-solving"
+2. **Tier 1**: Boost lessons with "problem-solving" in title for difficulty queries
+3. **Tier 2**: Use thread sequencing to identify intro vs consolidation lessons
+4. **Tier 4**: LLM query classification and expansion
+
+### When to Pursue AI Enhancement (Tier 4)
+
+AI enhancement (semantic reranking, LLM query expansion) should be re-evaluated when:
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              TIER 4 RE-EVALUATION CRITERIA                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. GROUND TRUTH VALIDATED (ADR-085)                                         │
+│     • All slugs verified via integration test                                │
+│     • No experiments run against invalid data                                │
+│                                                                              │
+│  2. FUNDAMENTALS EXHAUSTED                                                   │
+│     • Tier 1 synonyms complete (intent-based included)                       │
+│     • Tier 2 document relationships tested                                   │
+│     • Tier 3 parameters optimised                                            │
+│                                                                              │
+│  3. PLATEAU DEMONSTRATED                                                     │
+│     • ≤5% improvement in last 3 experiments                                  │
+│     • Category-level analysis shows no simple fixes remaining                │
+│                                                                              │
+│  4. SPECIFIC GAP IDENTIFIED                                                  │
+│     • Intent-based MRR still < 0.5 after fundamentals                        │
+│     • Clear hypothesis for how AI would help                                 │
+│                                                                              │
+│  THEN: Re-run semantic reranking experiment with:                            │
+│     • Validated ground truth                                                 │
+│     • Comparison against fundamentals-optimised baseline                     │
+│     • Per-category analysis (not just aggregate MRR)                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Note**: The original semantic reranking rejection (E-001, -16.8%) was measured against invalid ground truth and may be incorrect. However, re-evaluation is not urgent — the system currently exceeds all tier targets.
+
+### Completed Work
+
+| Experiment               | Status      | Impact                                |
+| ------------------------ | ----------- | ------------------------------------- |
+| F-001 Synonyms           | ✅ Complete | 163 entries deployed                  |
+| F-008 Noise Filtering    | ✅ Complete | Contributing to 0.614 MRR             |
+| F-009 Phrase Boosting    | ✅ Complete | Contributing to 0.614 MRR             |
+| E-001 Semantic Reranking | ❌ Rejected | ⚠️ May need re-evaluation (see above) |
 
 ## Related Documents
 
+- [Search Acceptance Criteria](../../.agent/plans/semantic-search/search-acceptance-criteria.md) — **Defines "Target Met" vs "Exhausted"**
+- [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md) — **Ensures experiment integrity**
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics and harness
-- [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md) — 🔴 Ingestion gap fix (BLOCKING)
+- [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md) — Ingestion completeness (✅ resolved)
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md) — Why sparse, not dense
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md) — Synonym management
-- [E-001 Experiment](../../.agent/evaluations/experiments/E-001-semantic-reranking.experiment.md) — Why AI reranking failed
-- [B-001 Baseline](../../.agent/evaluations/experiments/B-001-hard-query-baseline.experiment.md) — Hard query failure analysis
+- [E-001 Experiment](../../.agent/evaluations/experiments/semantic-reranking.experiment.md) — Semantic reranking (rejected, may need re-evaluation)
+- [ground-truth-corrections.md](../../.agent/evaluations/ground-truth-corrections.md) — The 63-slug correction incident
 - [Experiment Priorities](../../.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md) — Detailed experiment tracker
 
 ## References

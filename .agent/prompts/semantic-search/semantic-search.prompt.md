@@ -1,73 +1,56 @@
 # Semantic Search - Fresh Chat Entry Point
 
-**Status**: Part 1 ACTIVE — 🔴 RE-BASELINE REQUIRED (Ground Truth Corrected)  
+**Status**: Part 1 ACTIVE — Tier 1 EXHAUSTED, Tier 2 READY  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-23 23:00 UTC
+**Last Updated**: 2025-12-24
 
 ---
 
-## 🔴 TL;DR — Ground Truth Fixed, All Experiments Need Re-Running
+## 🎯 TL;DR — What's Actually Happening
 
-**On 2025-12-23, we discovered that 63 ground truth slugs (15%) were invalid** — lesson references that don't exist in the Oak Curriculum API. All previous MRR measurements are suspect.
+**Tier 1 is EXHAUSTED** (2025-12-24). MRR 0.614 exceeds target (0.45), and all standard Tier 1 approaches have been verified. The intent-based category (0.229) has a documented exception — it requires Tier 4 (LLM/metadata) solutions.
 
-### The Situation
+### Current State
 
 | What | Status |
 |------|--------|
-| Ground truth data | ✅ **FIXED** — 63 slugs corrected |
-| Integration test | ✅ **CREATED** — validates all slugs exist |
-| Sequence ground truth | ✅ **CREATED** — 41 queries |
-| Quality gates | ✅ **PASS** — All 11 gates |
-| MRR measurements | ⚠️ **UNVERIFIED** — need re-measurement |
-| Semantic reranking decision | ⚠️ **NEEDS RE-EVALUATION** — may have been wrongly rejected |
+| Ground truth data | ✅ FIXED — 63 slugs corrected (ADR-085) |
+| TRUE baseline | ✅ MEASURED — MRR 0.614 (verified 2025-12-24) |
+| Quality gates | ✅ PASS — All 11 gates |
+| Tier 1 target | ✅ MET — 0.614 ≥ 0.45 |
+| Tier 1 exhaustion | ✅ COMPLETE — All approaches verified (2025-12-24) |
+| Tier 2 | 🔓 READY — Can proceed when prioritised |
 
-### What Must Happen First
+### What Was Verified (2025-12-24)
 
-**Re-run ALL experiments** to establish TRUE baselines:
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category    # New hard query baseline
-pnpm eval:diagnostic      # New diagnostic baseline
-```
-
-**Then**:
-1. Update `current-state.md` with VERIFIED metrics
-2. Add entry to `EXPERIMENT-LOG.md`: "Ground Truth Correction Baseline"
-3. Re-evaluate the semantic reranking decision
-
-### What We Preserve (Going Forward, Not Back)
-
-We are NOT going back in time. The following remain valid:
-
-| Category | What We Keep |
-|----------|--------------|
-| **Implementations** | B.4 noise filtering, B.5 phrase boosting, 163 synonyms |
-| **Architecture** | Four-retriever hybrid, RRF fusion |
-| **Learnings** | ES synonym filter works for tokens not phrases |
-| **Strategy** | Fundamentals-first (ADR-082) |
-| **Ground Truth** | ✅ NOW VALIDATED — can trust future measurements |
+All Tier 1 standard approaches:
+- ✅ Synonyms — All patterns work (single-word, phrase, UK/US, abbreviations, technical)
+- ✅ Query processing — B.4 noise filtering, B.5 phrase boosting, stop words
+- ✅ Vocabulary — Top 20 curriculum keywords analysed, no critical gaps
+- ⚠️ Intent-based — Exception granted (requires Tier 4, not Tier 1)
 
 ---
 
-## Quality Gates — ✅ VERIFIED (2025-12-23)
+## Current Metrics (Verified 2025-12-24)
 
-All 11 quality gates pass. No code changes needed before running experiments.
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| Lesson Hard MRR | **0.614** | ≥0.45 | ✅ Target met |
+| Lesson Std MRR | 0.963 | ≥0.92 | ✅ Met |
+| Unit Hard MRR | 0.806 | ≥0.50 | ✅ Met |
+| Unit Std MRR | 0.988 | ≥0.92 | ✅ Met |
 
-| Gate | Status |
-|------|--------|
-| `pnpm type-gen` | ✅ Pass |
-| `pnpm build` | ✅ Pass |
-| `pnpm type-check` | ✅ Pass |
-| `pnpm lint:fix` | ✅ Pass |
-| `pnpm format:root` | ✅ Pass |
-| `pnpm markdownlint:root` | ✅ Pass |
-| `pnpm test` | ✅ Pass |
-| `pnpm test:e2e` | ✅ Pass |
-| `pnpm test:e2e:built` | ✅ Pass |
-| `pnpm test:ui` | ✅ Pass |
-| `pnpm smoke:dev:stub` | ✅ Pass |
+### Per-Category (Lesson Hard)
+
+| Category | MRR | Status |
+|----------|-----|--------|
+| misspelling | 0.833 | ✅ Excellent |
+| naturalistic | 0.722 | ✅ Good |
+| multi-concept | 0.625 | ✅ Good |
+| synonym | 0.611 | ✅ Good |
+| colloquial | 0.500 | ✅ Good |
+| **intent-based** | **0.229** | ⚠️ Exception granted (Tier 4 problem) |
 
 ---
 
@@ -75,210 +58,126 @@ All 11 quality gates pass. No code changes needed before running experiments.
 
 ### 1. Read Foundation Documents
 
-These are non-negotiable. Read them before ANY work:
-
 1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, no type shortcuts
-2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types and TDD at ALL levels
-3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first architecture
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first
 4. **[ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)** — Fundamentals-first strategy
 
-### 2. Understand the Ground Truth Situation
+### 2. The First Question
 
-Read: **[ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md)**
+Before every change: **"Could it be simpler without compromising quality?"**
 
-Key points:
-- 63 slugs were fabricated or incorrectly named
-- MRR was scoring against phantom lessons
-- "Failures" may have been correct — searching for lessons that don't exist
-- The semantic reranking rejection (-16.8%) may be WRONG
+### 3. Cardinal Rule
 
-### 3. The First Question
-
-Before every change, ask: **"Could it be simpler without compromising quality?"**
-
-### 4. Cardinal Rule
-
-If the upstream schema or SDK changes, running `pnpm type-gen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment.
+`pnpm type-gen && pnpm build` MUST be sufficient to align all workspaces with upstream changes.
 
 ---
 
-## Current State (⚠️ UNVERIFIED)
+## Active Plan Structure
 
-For current metrics, index status, and known issues, see:
+The search excellence work is now organised as:
 
-**[current-state.md](../../plans/semantic-search/current-state.md)** — THE single source of truth
+```
+.agent/plans/semantic-search/part-1-search-excellence/
+├── README.md                       ← Master plan (START HERE)
+├── 01-tier-1-fundamentals.md       ← ✅ COMPLETE (2025-12-24)
+├── 02a-synonym-architecture.md     ← 📋 Fix circular dependency
+├── 02b-vocabulary-mining.md        ← 🌟 COMPREHENSIVE vocabulary mining (HIGH)
+├── 03-evaluation-infrastructure.md ← 📋 Unify directories
+├── 04-documentation-debt.md        ← ✅ COMPLETE (2025-12-24)
+├── 05-complete-data-indexing.md    ← 📋 Index ALL curriculum data
+├── 06-reference-indices.md         ← 📋 Reference data (subjects, key stages)
+└── 07-resource-types.md            ← 📋 Worksheets, quizzes, sequences
+```
 
-Quick summary:
-
-| Metric | Previous Value | Verified Value | Notes |
-|--------|----------------|----------------|-------|
-| Lesson Hard MRR | 0.369 | ??? | Re-measure with corrected GT |
-| Unit Hard MRR | 0.856 | ??? | Re-measure with corrected GT |
-| Lesson Std MRR | 0.944 | ??? | Re-measure with corrected GT |
-| Unit Std MRR | 0.988 | ??? | Re-measure with corrected GT |
-| Indexed Lessons | 436 | 436 | ✅ Validated |
-| Synonyms Deployed | 163 | 163 | ✅ Deployed |
-
----
-
-## Experiments Needing Re-Evaluation
-
-| Experiment | Previous Decision | Action |
-|------------|-------------------|--------|
-| **Semantic Reranking** | ❌ REJECTED (-16.8%) | ⚠️ **RE-RUN** — decision may be wrong |
-| B.3 Synonym Coverage | ✅ ACCEPTED (+3.5%) | 🔄 Verify improvement holds |
-| B.4 Noise Filtering | ✅ ACCEPTED (+16.8%) | 🔄 Verify improvement holds |
-| B.5 Phrase Boosting | (never measured) | 🔄 Get actual measurements |
-
-**Critical**: The semantic reranking experiment was rejected based on invalid ground truth. We may have discarded a working approach.
+**Start with**: [part-1-search-excellence/README.md](../../plans/semantic-search/part-1-search-excellence/README.md)
 
 ---
 
-## Immediate Priorities
+## What's Next
 
-### Priority 1: Establish TRUE Baselines
+### Tier 2: Document Relationships (🔓 Ready)
+
+Tier 1 is exhausted. Tier 2 can proceed when prioritised:
+- [ ] Cross-reference boosting between lessons and units
+- [ ] Prerequisite/successor relationship scoring
+- [ ] Thread context integration
+- [ ] Sequence context integration
+
+### Medium Priority
+
+1. **Fix synonym circular dependency** — `generate-synonyms-file.ts` imports from runtime
+2. **Unify evaluation directories** — `.agent/evaluations/` vs `apps/.../evaluation/`
+
+### Low Priority
+
+3. **Update remaining documentation** — ADR-082 needs Tier 1 status update
+
+---
+
+## Known Architectural Issue
+
+**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-synonyms-file.ts`
+
+**Problem**: Type-gen code imports from SDK runtime code (line 5), which violates the cardinal rule and creates circular dependencies.
+
+**Solution**: Move synonyms into type-gen-time code.
+
+**Tracked in**: [02-synonym-architecture.md](../../plans/semantic-search/part-1-search-excellence/02-synonym-architecture.md)
+
+---
+
+## Fresh Chat First Steps
+
+### 1. Verify Quality Gates
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category    # Lesson hard queries by category
-pnpm eval:diagnostic      # Detailed pattern analysis
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
 ```
 
-Document the results in:
-- `current-state.md` — Replace ??? with actual values
-- `EXPERIMENT-LOG.md` — New entry "Ground Truth Correction Baseline"
+### 2. Read the Master Plan
 
-### Priority 2: Measure B.5 Impact
+[part-1-search-excellence/README.md](../../plans/semantic-search/part-1-search-excellence/README.md)
 
-B.5 Phrase Boosting is implemented but was never measured. Get actual numbers.
+### 3. Pick Next Work
 
-### Priority 3: Re-Evaluate Semantic Reranking
-
-Once true baselines are established, re-run the semantic reranking experiment.
-
----
-
-## Current Implementation Status
-
-### ✅ Implemented (Need Verification)
-
-| Feature | Files | Claimed Impact | Verified? |
-|---------|-------|----------------|-----------|
-| B.4 Noise Filtering | `remove-noise-phrases.ts` | +16.8% | ❌ Re-measure |
-| B.5 Phrase Boosting | `detect-curriculum-phrases.ts`, `rrf-query-helpers.ts` | Unknown | ❌ Measure |
-| Synonyms | `synonyms/maths.ts` (163 entries) | Working | ❌ Validate |
-
-### ✅ INGESTION COMPLETE
-
-All ingestion data quality issues resolved (2025-12-22):
-- 436 lessons indexed (validated vs bulk download)
-- 36 units with correct lesson counts
-- All thread fields populated
-
----
-
-## Ground Truth Files (CORRECTED)
-
-```text
-src/lib/search-quality/ground-truth/
-├── ground-truth.integration.test.ts  # ✅ Validates ALL slugs via API
-├── hard-queries.ts                   # ✅ 15 slugs corrected
-├── diagnostic-synonym-queries.ts     # ✅ 9 slugs corrected
-├── diagnostic-multi-concept-queries.ts # ✅ 9 slugs corrected
-├── units/                            # ✅ All 36 slugs validated
-│   ├── hard-queries.ts
-│   └── *.ts
-└── sequences/                        # ✅ NEW — 41 queries created
-    ├── types.ts
-    ├── standard-queries.ts           # 24 queries
-    ├── hard-queries.ts               # 17 queries
-    └── index.ts
-```
-
----
-
-## Fresh Chat First Steps (MANDATORY)
-
-### 1. Verify Quality Gates (from repo root)
-
-```bash
-pnpm type-gen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm test:e2e
-pnpm test:e2e:built
-pnpm test:ui
-pnpm smoke:dev:stub
-```
-
-**All gates must pass. Fail fast. No exceptions.**
-
-### 2. Run Evaluation Scripts
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category    # Hard query baseline with CORRECTED ground truth
-pnpm eval:diagnostic      # Diagnostic analysis with CORRECTED ground truth
-```
-
-### 3. Update Documentation
-
-1. Update `current-state.md` with VERIFIED metrics
-2. Add entry to `EXPERIMENT-LOG.md`
-3. Update this prompt with verified values
+**Tier 1 is COMPLETE.** Choose from:
+- **Tier 2**: Document relationships (when prioritised)
+- **02-synonym-architecture.md**: Fix circular dependency (medium priority)
+- **03-evaluation-infrastructure.md**: Unify directories (medium priority)
 
 ---
 
 ## Key File Locations
 
-### Ground Truth & Validation
-
+### Plans & State
 | File | Purpose |
 |------|---------|
-| [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md) | Details of all 63 corrections |
-| `ground-truth.integration.test.ts` | Validates all slugs exist in API |
+| [part-1-search-excellence/README.md](../../plans/semantic-search/part-1-search-excellence/README.md) | Master plan |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Verified metrics |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
 
-### Current State & History
-
+### Ground Truth
 | File | Purpose |
 |------|---------|
-| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics (UNVERIFIED) |
-| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
-| [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap |
-
-### Active Plan
-
-| File | Purpose |
-|------|---------|
-| [README.md](../../plans/semantic-search/README.md) | Navigation hub |
-| [part-1-search-excellence.md](../../plans/semantic-search/part-1-search-excellence.md) | Current work |
+| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation |
+| [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md) | The 63-slug incident |
 
 ### Implementation
-
-```text
+```
 apps/oak-open-curriculum-semantic-search/
 ├── src/lib/hybrid-search/      # RRF query builders
-├── src/lib/query-processing/   # B.4 noise, B.5 phrases
+├── src/lib/query-processing/   # Noise filtering, phrase detection
 ├── src/lib/search-quality/     # Ground truth, metrics
-├── evaluation/
-│   ├── analysis/               # Measurement scripts
-│   └── experiments/            # Hypothesis testing
+├── evaluation/analysis/        # Measurement scripts
 └── smoke-tests/                # Search quality benchmarks
 ```
 
----
-
-## Key ADRs
-
-| ADR | Title |
-|-----|-------|
-| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | **Phrase Query Boosting** |
-| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | **Fundamentals-First Strategy** |
-| [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Evaluation Framework |
+### Synonyms
+```
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/  # SOURCE OF TRUTH
+└── *.ts                                            # maths.ts, science.ts, etc.
+```
 
 ---
 
@@ -296,32 +195,20 @@ LOG_LEVEL=info
 
 ---
 
-## Principles (from Foundation Documents)
+## Principles
 
-1. **First Question**: Could it be simpler without compromising quality?
-2. **TDD at ALL levels**: RED → GREEN → REFACTOR, tests FIRST
-3. **Schema-first**: All types flow from schema via `pnpm type-gen`
-4. **No type shortcuts**: Never `as`, `any`, `!`, `Record<string, unknown>`
-5. **Fail fast**: Never silently fail, helpful error messages
-6. **Ground truth discipline**: All slugs must exist, validated by integration test
+1. **Meeting target ≠ complete** — Exhaust options before moving on
+2. **First Question**: Could it be simpler without compromising quality?
+3. **TDD at ALL levels**: RED → GREEN → REFACTOR
+4. **Schema-first**: All types flow from schema via `pnpm type-gen`
+5. **No type shortcuts**: Never `as`, `any`, `!`
+6. **Ground truth discipline**: All slugs validated by validation script
 7. **Delete dead code**: If unused, delete it
 
 ---
 
-## Key Insight: We Are Going Forward, Not Back
+**Ready?**
 
-The ground truth correction is a **quality improvement**, not a setback:
-
-1. **Before**: Measurements were noise — scoring against phantom lessons
-2. **After**: Measurements will be valid — can trust the numbers
-3. **Preserved**: All implementations, architecture, learnings, strategy
-
-The semantic reranking rejection may be wrong. The B.4/B.5 improvements may be larger or smaller than claimed. **We don't know until we measure with valid ground truth.**
-
----
-
-**Ready?** 
-
-1. First: Run `pnpm eval:per-category` to establish TRUE baselines
-2. Then: Update documentation with VERIFIED metrics
-3. Finally: Continue with [Part 1: Search Excellence](../../plans/semantic-search/part-1-search-excellence.md)
+1. Read: [part-1-search-excellence/README.md](../../plans/semantic-search/part-1-search-excellence/README.md)
+2. Pick a sub-plan based on priority
+3. Continue the work

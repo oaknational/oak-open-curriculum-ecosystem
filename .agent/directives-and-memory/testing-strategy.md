@@ -33,7 +33,7 @@
 - **Do not test types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
-- **No skipped tests** - Fix it or delete it
+- **No skipped tests** - Fix it or delete it. NEVER use `it.skip`, `describe.skip`, `it.skipIf`, or any other skipping mechanism. Skipped tests are silent failures waiting to happen. If a test cannot run (e.g., missing API key), the test MUST fail fast with a helpful error message explaining what is needed. Validation scripts that require external resources should be standalone scripts, not tests.
 - **No global state manipulation** - Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`, or use `vi.doMock`. If a function needs configuration, refactor it to accept config as a parameter. See [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
 
 ## Definitions

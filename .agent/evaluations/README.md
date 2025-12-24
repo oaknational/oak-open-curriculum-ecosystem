@@ -4,9 +4,11 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 **Formal framework**: [ADR-081: Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 
+**Acceptance criteria**: [Search Acceptance Criteria](../plans/semantic-search/search-acceptance-criteria.md) — Defines "Target Met" vs "Exhausted"
+
 ---
 
-> 🔴 **BLOCKING**: All experiments are currently against an incomplete index (~314 vs ~650+ lessons for Maths KS4). Fix ingestion before continuing experiments. See [ADR-083](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md).
+> ✅ **INDEX COMPLETE**: 436 Maths KS4 lessons validated (2025-12-22). Ground truth validated (2025-12-23). See [ADR-083](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) and [ADR-085](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md).
 
 ---
 
@@ -108,6 +110,8 @@ Copy the appropriate template and rename following the conventions above.
 
 ## Related Documents
 
+- **Acceptance Criteria**: [Search Acceptance Criteria](../plans/semantic-search/search-acceptance-criteria.md) — **Defines "Target Met" vs "Exhausted"**
 - **ADR-081**: [Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Decision criteria, metrics definitions
 - **ADR-082**: [Fundamentals-First Search Strategy](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) — Tier system, strategic approach
+- **ADR-085**: [Ground Truth Validation Discipline](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) — Ensures experiment integrity
 - **Guidance**: [Search Experiment Guidance](guidance/search-experiment-guidance.md) — Practical how-to

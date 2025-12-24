@@ -69,6 +69,9 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'title_suggest', zodType: 'object', optional: true },
   // Pupil lesson outcome - used for search result snippets and highlighting
   { name: 'pupil_lesson_outcome', zodType: 'string', optional: true },
+  // Lesson metadata (from LessonSummaryResponseSchema)
+  { name: 'supervision_level', zodType: 'string', optional: true },
+  { name: 'downloads_available', zodType: 'boolean', optional: true },
   // KS4 metadata arrays (many-to-many relationships per ADR-080)
   { name: 'tiers', zodType: 'array-string', optional: true },
   { name: 'tier_titles', zodType: 'array-string', optional: true },

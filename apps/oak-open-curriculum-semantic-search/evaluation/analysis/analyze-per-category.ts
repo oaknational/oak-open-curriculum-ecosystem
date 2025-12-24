@@ -13,8 +13,8 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const envLocalPath = resolve(thisDir, '../../../.env.local');
-const repoRootEnv = resolve(thisDir, '../../../../../.env');
+const envLocalPath = resolve(thisDir, '../../.env.local');
+const repoRootEnv = resolve(thisDir, '../../../../.env');
 
 dotenvConfig({ path: envLocalPath });
 dotenvConfig({ path: repoRootEnv });

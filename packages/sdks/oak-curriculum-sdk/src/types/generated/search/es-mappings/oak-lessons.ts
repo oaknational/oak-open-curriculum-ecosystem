@@ -183,6 +183,13 @@ export const OAK_LESSONS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      supervision_level: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
+      downloads_available: {
+        type: 'boolean',
+      },
       tiers: {
         type: 'keyword',
         normalizer: 'oak_lower',

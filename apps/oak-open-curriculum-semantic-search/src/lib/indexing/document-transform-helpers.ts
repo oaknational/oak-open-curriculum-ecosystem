@@ -130,6 +130,8 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
   pupilLessonOutcome?: string;
   subjectTitle: string;
   keyStageTitle: string;
+  supervisionLevel?: string;
+  downloadsAvailable?: boolean;
 } {
   if (!summary.canonicalUrl) {
     throw new Error(`Missing canonical URL for lesson in unit ${summary.unitSlug}`);
@@ -150,6 +152,8 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
     pupilLessonOutcome: summary.pupilLessonOutcome,
     subjectTitle: summary.subjectTitle,
     keyStageTitle: summary.keyStageTitle,
+    supervisionLevel: summary.supervisionLevel ?? undefined,
+    downloadsAvailable: summary.downloadsAvailable,
   };
 }
 

@@ -131,6 +131,8 @@ export const SearchLessonsIndexDocSchema = z
     thread_titles: z.array(z.string().min(1)).optional(),
     title_suggest: SearchLessonsCompletionPayloadSchema.optional(),
     pupil_lesson_outcome: z.string().min(1).optional(),
+    supervision_level: z.string().min(1).optional(),
+    downloads_available: z.boolean().optional(),
     tiers: z.array(z.string().min(1)).optional(),
     tier_titles: z.array(z.string().min(1)).optional(),
     exam_boards: z.array(z.string().min(1)).optional(),

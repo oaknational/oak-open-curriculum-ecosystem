@@ -53,6 +53,72 @@ pnpm eval:per-category
 
 ---
 
+### `analyze-intent-queries.ts`
+
+Deep analysis of intent-based query failures. Examines WHY queries expressing pedagogical intent (difficulty, teaching approach) fail.
+
+**Usage**:
+
+```bash
+pnpm tsx evaluation/analysis/analyze-intent-queries.ts
+```
+
+**What it measures**:
+
+- Actual vs expected results for intent-based queries
+- Gap between query intent and indexed metadata
+- Tier-level metadata available for each result
+
+**Output**: Detailed breakdown showing missing capabilities (lesson type, teaching style metadata).
+
+**Created**: 2025-12-24 (Tier 1 exhaustion analysis)
+
+---
+
+### `analyze-colloquial.ts`
+
+Deep analysis of colloquial query performance. Investigates informal language queries.
+
+**Usage**:
+
+```bash
+pnpm tsx evaluation/analysis/analyze-colloquial.ts
+```
+
+**What it measures**:
+
+- Actual vs expected results for colloquial queries
+- Noise phrase filtering effectiveness
+- Synonym expansion (e.g., SOHCAHTOA → trigonometry)
+
+**Output**: Detailed breakdown with keyword analysis and root cause identification.
+
+**Created**: 2025-12-24 (Tier 1 exhaustion analysis)
+
+---
+
+### `full-metrics-breakdown.ts`
+
+Comprehensive evaluation across all query types (lessons and units, standard and hard).
+
+**Usage**:
+
+```bash
+pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
+```
+
+**What it measures**:
+
+- Lesson standard/hard MRR
+- Unit standard/hard MRR
+- Per-category breakdown for hard queries
+
+**Output**: Summary table with all metrics and targets.
+
+**Created**: 2025-12-22 (baseline measurement)
+
+---
+
 ## Adding New Analysis Scripts
 
 When adding new analysis scripts:

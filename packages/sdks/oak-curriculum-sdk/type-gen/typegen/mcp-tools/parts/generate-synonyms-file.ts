@@ -1,3 +1,7 @@
+/**
+ * 1. is this file used?
+ * 2. type-gen code must not depend on curriculum sdk run-time code. So the import is invalid.
+ */
 import { ontologyData } from '../../../../src/mcp/ontology-data.js';
 
 interface SynonymBuildResult {

@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 // Load environment variables
 const thisDir = dirname(fileURLToPath(import.meta.url));
-dotenvConfig({ path: resolve(thisDir, '../.env.local') });
-dotenvConfig({ path: resolve(thisDir, '../../../.env') });
+dotenvConfig({ path: resolve(thisDir, '../../.env.local') });
+dotenvConfig({ path: resolve(thisDir, '../../../../.env') });
 
 import {
   SYNONYM_DIAGNOSTIC_QUERIES,
