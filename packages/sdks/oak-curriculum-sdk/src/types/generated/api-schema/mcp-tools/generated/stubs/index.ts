@@ -1,7 +1,11 @@
 /* GENERATED FILE - DO NOT EDIT */
+ 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { stubbedToolResponses } from './tools/index.js';
 import type { StubbedToolName } from './tools/index.js';
+
+/** Type alias for structuredContent to avoid Record<string, unknown> in code */
+type StructuredContent = NonNullable<CallToolResult["structuredContent"]>;
 
 /**
  * Creates a stub tool executor that returns pre-defined responses.
@@ -17,8 +21,9 @@ export function createStubToolExecutor(): (name: string) => Promise<CallToolResu
     }
     const payload = entry();
     // structuredContent is required for OpenAI Apps SDK widgets
-    const structuredContent = typeof payload === "object" && payload !== null
-      ? (payload as Record<string, unknown>)
+    // Type assertion necessary: payload type varies by tool, but SDK requires StructuredContent
+    const structuredContent: StructuredContent = typeof payload === "object" && payload !== null
+      ? (payload as StructuredContent)
       : { data: payload };
     return Promise.resolve({ content: [{ type: 'text', text: JSON.stringify(payload) }], structuredContent });
   };

@@ -9,7 +9,7 @@ import {
 import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import {
-  generateCanonicalUrl,
+  generateCanonicalUrlWithContext,
   extractSlug,
   type ContentType,
 } from '../types/generated/api-schema/routing/url-helpers.js';
@@ -133,8 +133,17 @@ export async function runFetchTool(
   if (!result.ok) {
     return formatError(toErrorMessage(result.error));
   }
-  // Use non-throwing version - canonical URL is nice-to-have, not required for fetch
-  const canonicalUrl = generateCanonicalUrl(type, args.id) ?? null;
+
+  // Try to generate canonical URL, but gracefully handle missing context.
+  // Some content types (units, subjects) require context from the API response
+  // that may not always be available.
+  let canonicalUrl: string | null;
+  try {
+    canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
+  } catch {
+    // Context required for URL generation was missing - return null instead of failing
+    canonicalUrl = null;
+  }
   const summary = buildFetchSummary(type, slug, canonicalUrl);
 
   return formatOptimizedResult({
@@ -223,9 +232,6 @@ async function executeFetchByType(
       );
     }
     default:
-      return {
-        ok: false,
-        error: new TypeError(`Aggregated fetch failed: Unsupported content type: ${String(type)}`),
-      };
+      return { ok: false, error: new TypeError(`Unsupported content type: ${String(type)}`) };
   }
 }

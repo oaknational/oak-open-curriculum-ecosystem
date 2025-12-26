@@ -26,6 +26,8 @@ export default defineConfig({
       'tests/**/*.spec.ts',
       'type-gen/**/*.test.ts',
       'type-gen/**/*.spec.ts',
+      'vocab-gen/**/*.test.ts',
+      'vocab-gen/**/*.spec.ts',
     ],
     exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
   },

@@ -53,19 +53,22 @@ vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
   isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
 }));
 
-function assertIsRecord(value: unknown): asserts value is Record<string, unknown> {
+/** Type alias to reference SDK's structuredContent type without direct Record usage */
+type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
+
+function assertIsStructuredContent(value: unknown): asserts value is StructuredContent {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new Error('Expected object payload');
   }
 }
 
-function parseTextContent(result: CallToolResult): Record<string, unknown> {
+function parseTextContent(result: CallToolResult): StructuredContent {
   const firstContent = result.content[0];
   if (firstContent.type !== 'text') {
     throw new Error(`Expected text content but received ${firstContent.type}`);
   }
   const parsed: unknown = JSON.parse(firstContent.text);
-  assertIsRecord(parsed);
+  assertIsStructuredContent(parsed);
   return parsed;
 }
 

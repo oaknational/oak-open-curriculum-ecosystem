@@ -6,6 +6,8 @@
  *
  * @see knowledge-graph-data.ts for the graph data structure
  * @see aggregated-ontology.ts for the companion tool
+ *
+ * @module aggregated-knowledge-graph
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

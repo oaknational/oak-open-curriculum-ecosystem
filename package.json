@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "type-gen": "turbo run --continue type-gen",
+    "vocab-gen": "pnpm --filter @oaknational/oak-curriculum-sdk vocab-gen",
     "doc-gen": "turbo run --continue doc-gen",
     "build": "turbo run --continue build",
     "clean": "turbo run clean && rm -rf .turbo",

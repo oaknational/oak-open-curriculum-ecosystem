@@ -16,6 +16,7 @@
 5. [**Bulk Download System**](./04-bulk-download-system.md) - Offline content packages
 6. [**Testing, Deployment & Infrastructure**](./05-testing-deployment-infrastructure.md) - DevOps & operations
 7. [**API Design Recommendations**](./06-api-design-recommendations.md) - ⭐ Improvement roadmap & best practices
+8. [**Bulk Download Data Quality Report**](./07-bulk-download-data-quality-report.md) - Maths bulk export integrity analysis
 
 ---
 
@@ -316,6 +317,23 @@ const sql = `SELECT * FROM table WHERE "lessonTitle" LIKE '%${q}%'`;
 - Technical deep dive findings
 - OpenAPI Initiative best practices
 - Industry standards (MCP, OpenAI Apps SDK, HTTP semantics)
+
+---
+
+### 07-bulk-download-data-quality-report.md
+
+**Purpose:** Detailed integrity analysis of maths bulk download exports  
+**Read Time:** 20 minutes  
+**Best For:** Data quality review, ingestion reliability, bulk export consumers
+
+**Key Sections:**
+
+- Dataset summary and methodology
+- Structural integrity checks (duplicates, missing references)
+- Field completeness and type consistency
+- Improvement opportunities and validation checks
+
+**When to Read:** When validating bulk export quality or planning schema fixes
 
 ---
 

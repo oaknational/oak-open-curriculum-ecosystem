@@ -3,6 +3,8 @@
  *
  * This module provides the runSearchTool function which executes
  * parallel searches across lessons and transcripts endpoints.
+ *
+ * @module aggregated-search/execution
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

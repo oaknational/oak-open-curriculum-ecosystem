@@ -22,7 +22,7 @@ import type { AggregatedToolName, UniversalToolName } from './types.js';
  * @example
  * ```typescript
  * if (isAggregatedToolName(toolName)) {
- *   // TypeScript knows toolName is 'search' | 'fetch' | 'get-ontology' | 'get-help'
+ *   // TypeScript knows toolName is 'search' | 'fetch' | 'get-ontology' | 'get-help' | ...
  *   return executeAggregatedTool(toolName, args);
  * }
  * ```
@@ -33,7 +33,9 @@ export function isAggregatedToolName(value: unknown): value is AggregatedToolNam
     value === 'fetch' ||
     value === 'get-ontology' ||
     value === 'get-help' ||
-    value === 'get-knowledge-graph'
+    value === 'get-knowledge-graph' ||
+    value === 'get-thread-progressions' ||
+    value === 'get-prerequisite-graph'
   );
 }
 

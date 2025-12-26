@@ -94,6 +94,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
 - [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md)
 - [ADR-084: Phrase Query Boosting for Multi-Word Synonym Support](084-phrase-query-boosting.md)
+- [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md)
+- [ADR-086: Vocabulary Mining and Graph Export Pattern](086-vocab-gen-graph-export-pattern.md)
 
 ## Key Architectural Decisions
 

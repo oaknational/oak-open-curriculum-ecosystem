@@ -339,3 +339,135 @@ Populate all `*Title` fields when corresponding `*Slug` fields are populated:
 }
 ```
 
+### Issue 2: Missing Tier Metadata for Maths Secondary KS4 Variants
+
+**Status**: CONFIRMED as tier variants (2025-12-24)  
+**Affected Endpoint**: Bulk download JSON files (`maths-secondary.json`)  
+**Fields Affected**: `sequence[].unitSlug`, `lessons[].lessonSlug`
+
+**Root Cause Analysis** (2025-12-24):
+
+Investigation confirmed these are **KS4 tier variants** (foundation vs higher), not duplicates:
+
+- 30 unit slugs appear twice with identical metadata except for `unitLessons[]`.
+- 26 of 30 have different lesson lists — one longer (higher tier), one shorter (foundation tier).
+- Example: `algebraic-fractions` appears with 8 lessons (higher) and 2 lessons (foundation).
+- The shorter variant contains a subset of the longer variant's lessons.
+
+**Comparison with other subjects**:
+
+| Subject | Has `examBoards` field | Has `tier` field | Duplicate slugs |
+|---------|------------------------|-----------------|-----------------|
+| maths-secondary | NO | NO | 30 |
+| science-secondary | YES | NO | 0 |
+| All other secondary | YES | NO | 0 |
+
+Maths secondary is **unique** — it's the only KS4 subject with tier variants but no explicit variant metadata.
+
+**Impact**:
+
+- Consumers cannot programmatically distinguish foundation vs higher without analysing lesson list composition.
+- Vocabulary mining requires variant-aware processing or merging.
+- No way to generate unique identifiers for variants.
+
+**Requested Fix**:
+
+Add explicit `tier` field to maths-secondary bulk download:
+
+```json
+{
+  "unitSlug": "algebraic-fractions",
+  "tier": "higher",           // ← NEW: "foundation" | "higher"
+  "tierSlug": "higher",       // ← Optional: for filtering
+  "unitLessons": [/* 8 lessons */]
+}
+```
+
+Alternatively, add `unitVariantSlug` for unique identification:
+
+```json
+{
+  "unitSlug": "algebraic-fractions",
+  "unitVariantSlug": "algebraic-fractions-higher",  // ← Unique per variant
+  "unitLessons": [/* 8 lessons */]
+}
+```
+
+### Issue 3: Missing Lesson Record Referenced by Unit Lessons
+
+**Affected Endpoint**: Bulk download JSON files (for example `maths-secondary.json`)
+**Field Affected**: `sequence[].unitLessons[].lessonSlug`
+
+**Observation**:
+
+- `further-demonstrating-of-pythagoras-theorem` appears in `unitLessons[]` with `state: "new"` but is missing from `lessons[]`.
+
+**Impact**:
+
+- Breaks referential integrity between unit summaries and lesson records.
+- Forces consumers to handle missing data for referenced lessons.
+
+**Requested Fix**:
+
+- Ensure every `unitLessons[].lessonSlug` has a corresponding record in `lessons[]`, or remove non-published lessons from `unitLessons[]` and document the rule.
+
+### Issue 4: Inconsistent Null Semantics for Content Guidance and Supervision
+
+**Affected Endpoint**: Bulk download JSON files (maths primary and secondary)
+**Fields Affected**: `contentGuidance`, `supervisionLevel`
+
+**Observation**:
+
+- `contentGuidance` is a string `NULL` in most lessons, but an array of objects in two maths primary lessons.
+- `supervisionLevel` is a string `NULL` in most lessons, but `"Adult supervision required"` in those same two lessons.
+
+**Impact**:
+
+- Mixed field types (`string` vs `array`) complicate parsing.
+- `NULL` is a string, not JSON null, which creates special-case logic.
+
+**Requested Fix**:
+
+- Use JSON null for absent values.
+- Make `contentGuidance` consistently an array (empty array when absent).
+
+### Issue 5: Missing Transcripts in Maths Primary
+
+**Affected Endpoint**: Bulk download JSON files (`maths-primary.json`)
+**Fields Affected**: `transcript_sentences`, `transcript_vtt`
+
+**Observation**:
+
+Five lessons are missing both transcript fields:
+
+1. `composition-of-decade-numbers-to-100-making-groups-of-10`
+2. `describe-and-represent-hundredths-as-a-decimal-number`
+3. `identify-hundredths-as-part-of-a-whole`
+4. `round-a-decimal-number-with-hundredths-to-the-nearest-whole-number`
+5. `use-known-facts-from-the-10-times-table-to-solve-problems-involving-the-9-times-table`
+
+**Impact**:
+
+- Transcript-based search and accessibility features have coverage gaps.
+
+**Requested Fix**:
+
+- Ensure transcripts are present for all lessons, or include explicit availability flags.
+
+### Issue 6: Missing Threads and Empty Descriptions on Secondary Units
+
+**Affected Endpoint**: Bulk download JSON files (`maths-secondary.json`)
+**Fields Affected**: `threads`, `description`
+
+**Observation**:
+
+- Units without threads: `maths-and-the-environment`, `maths-in-the-workplace`, `thinking-critically-with-maths`, `calculator-functionality`.
+- Units with empty descriptions: `maths-and-the-environment`, `maths-in-the-workplace`, `thinking-critically-with-maths`.
+
+**Impact**:
+
+- Limits thread-based navigation and summary quality.
+
+**Requested Fix**:
+
+- Populate threads and descriptions for all units, or document them as optional with explicit null values.

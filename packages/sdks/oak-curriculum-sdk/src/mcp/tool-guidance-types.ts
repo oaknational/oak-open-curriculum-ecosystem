@@ -23,7 +23,9 @@ export type AggregatedToolName =
   | 'fetch'
   | 'get-ontology'
   | 'get-help'
-  | 'get-knowledge-graph';
+  | 'get-knowledge-graph'
+  | 'get-thread-progressions'
+  | 'get-prerequisite-graph';
 
 /**
  * All available tool names combining generated and aggregated tools.

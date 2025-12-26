@@ -3,7 +3,7 @@
 **Status**: Part 1 ACTIVE — Tier 1 EXHAUSTED, Tier 2 READY  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-24
+**Last Updated**: 2025-12-25
 
 ---
 
@@ -139,7 +139,7 @@ Current: Tier 1 EXHAUSTED (0.614), Tier 2 ready
   Sub-Plans:
     01-tier-1-fundamentals.md       ✅ Complete (2025-12-24)
     02a-synonym-architecture.md     📋 Fix circular dependency
-    02b-vocabulary-mining.md        🌟 COMPREHENSIVE vocabulary mining (HIGH)
+    02b-vocabulary-mining.md        🔄 IN PROGRESS — Thread progressions generated
     03-evaluation-infrastructure.md 📋 Unify duplicate directories
     04-documentation-debt.md        ✅ Complete (2025-12-24)
     05-complete-data-indexing.md    📋 Index ALL curriculum data
@@ -320,7 +320,7 @@ evaluation/validation/
 |----------|---------|
 | [Part 1: Search Excellence](part-1-search-excellence/README.md) | **Master plan** — start here |
 | [01-tier-1-fundamentals.md](part-1-search-excellence/01-tier-1-fundamentals.md) | Exhaust Tier 1 options |
-| [02-synonym-architecture.md](part-1-search-excellence/02-synonym-architecture.md) | Fix circular dependency |
+| [02a-synonym-architecture.md](part-1-search-excellence/02a-synonym-architecture.md) | Fix circular dependency (blocks 02b) |
 | [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap |
 
 ---

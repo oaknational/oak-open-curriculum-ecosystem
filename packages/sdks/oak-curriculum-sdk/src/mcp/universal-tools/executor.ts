@@ -21,6 +21,8 @@ import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
 import { runOntologyTool } from '../aggregated-ontology.js';
 import { validateHelpArgs, runHelpTool } from '../aggregated-help/index.js';
 import { runKnowledgeGraphTool } from '../aggregated-knowledge-graph.js';
+import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
+import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
 import {
@@ -77,41 +79,71 @@ function mapExecutionResult(result: ToolExecutionResult, toolName: ToolName): Ca
  * }
  * ```
  */
-async function executeAggregatedTool(
-  name: AggregatedToolName,
+/**
+ * Handles search tool validation and execution.
+ */
+async function handleSearchTool(
   input: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
-  if (name === 'search') {
-    const validation = validateSearchArgs(input);
-    if (!validation.ok) {
-      return formatError(validation.message);
-    }
-    return runSearchTool(validation.value, deps);
+  const validation = validateSearchArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
   }
+  return runSearchTool(validation.value, deps);
+}
 
-  if (name === 'get-ontology') {
-    return runOntologyTool();
+/**
+ * Handles help tool validation and execution.
+ */
+function handleHelpTool(input: unknown): CallToolResult {
+  const validation = validateHelpArgs(input);
+  if (!validation.ok) {
+    return formatError(validation.message);
   }
+  return runHelpTool(validation.value);
+}
 
-  if (name === 'get-help') {
-    const validation = validateHelpArgs(input);
-    if (!validation.ok) {
-      return formatError(validation.message);
-    }
-    return runHelpTool(validation.value);
-  }
-
-  if (name === 'get-knowledge-graph') {
-    return runKnowledgeGraphTool();
-  }
-
-  // name === 'fetch' (exhaustive handling - TypeScript knows this is the only remaining case)
+/**
+ * Handles fetch tool validation and execution.
+ */
+async function handleFetchTool(
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
   const validation = validateFetchArgs(input);
   if (!validation.ok) {
     return formatError(validation.message);
   }
   return runFetchTool(validation.value, deps);
+}
+
+function executeAggregatedTool(
+  name: AggregatedToolName,
+  input: unknown,
+  deps: UniversalToolExecutorDependencies,
+): Promise<CallToolResult> {
+  switch (name) {
+    case 'search':
+      return handleSearchTool(input, deps);
+    case 'get-ontology':
+      return Promise.resolve(runOntologyTool());
+    case 'get-help':
+      return Promise.resolve(handleHelpTool(input));
+    case 'get-knowledge-graph':
+      return Promise.resolve(runKnowledgeGraphTool());
+    case 'get-thread-progressions':
+      return Promise.resolve(runThreadProgressionsTool());
+    case 'get-prerequisite-graph':
+      return Promise.resolve(runPrerequisiteGraphTool());
+    case 'fetch':
+      return handleFetchTool(input, deps);
+    default: {
+      // Exhaustive check - TypeScript ensures all cases are handled
+      const exhaustiveCheck: never = name;
+      return Promise.reject(new Error(`Unknown aggregated tool: ${exhaustiveCheck}`));
+    }
+  }
 }
 
 /**

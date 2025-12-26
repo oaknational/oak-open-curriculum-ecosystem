@@ -1,26 +1,262 @@
 # Sub-Plan 02b: Comprehensive Curriculum Vocabulary Mining
 
-**Status**: 📋 PLANNED  
-**Priority**: HIGH — Sector-transformative potential  
+**Status**: 🔄 IN PROGRESS — Extraction complete, graph data generated, ES indexing pending  
+**Priority**: HIGH — User value through positive impact  
 **Parent**: [README.md](README.md)  
-**Created**: 2025-12-24
+**Prerequisite**: [02a-synonym-architecture.md](02a-synonym-architecture.md) ✅ COMPLETE  
+**Created**: 2025-12-24  
+**Last Updated**: 2025-12-26
+
+---
+
+> **Note**: MCP tool integration has been deferred to [08-mcp-graph-tools.md](08-mcp-graph-tools.md).
+> This plan focuses on search implementation: extraction, graph generation, and ES indexing.
+
+---
+
+## 🎯 Purpose: User Value Through Impact
+
+**This work exists to enhance the usefulness of search results for multiple audiences.**
+
+We are NOT here to count keywords or celebrate extraction metrics. We are here to create positive impact for:
+
+| Persona | What They Need | How We Help |
+|---------|----------------|-------------|
+| **Student** | Clear definitions, learning paths | Glossary, thread progressions |
+| **Teacher** | Vocabulary to introduce, mistakes to address | Keywords, misconceptions |
+| **School Leader** | Curriculum coverage, progression planning | NC statements, prerequisite graphs |
+| **Curriculum Planner** | Cross-subject vocabulary, dependency chains | Relationship graphs |
+| **Parent (Homeschool)** | Clear structure, what comes next | Thread progressions, prerequisites |
+| **Adult Learner** | Context-appropriate explanations, flexible paths | Curated vocabulary, learning paths |
+
+### Success = Measurable User Impact
+
+Success is NOT "13K keywords extracted." Success is:
+
+- Search MRR improvement on vocabulary queries
+- AI agents correctly answering "What comes before X?"
+- Teachers finding relevant misconceptions for their lessons
+- Students getting clear definitions when they need them
+
+---
+
+## Pipeline Architecture: Extraction → Processing → Impact
+
+The vocabulary mining pipeline is **multi-step by design**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: EXTRACTION (Exploratory)                                             │
+│ ─────────────────────────────────                                            │
+│ Mine EVERYTHING from bulk data. We don't know what will be useful yet.      │
+│ Keywords, phrases, relationships (implicit & explicit), progressions.        │
+│ This step is speculative — capture broadly, decide value later.              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: PROCESSING (Value Creation)                                          │
+│ ────────────────────────────────────                                         │
+│ Transform raw extracted data into user-valuable structures:                  │
+│ • Curate high-value terms from raw keywords                                  │
+│ • Build prerequisite graphs from prior knowledge                             │
+│ • Cluster misconceptions by topic                                            │
+│ • Extract implicit relationships from definitions                            │
+│ • Mine synonyms from "also known as" patterns                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: OUTPUT (User-Facing Impact)                                          │
+│ ───────────────────────────────────                                          │
+│ Generate structures that directly serve user needs:                          │
+│ • Static graph data files (used by search and MCP tools)                     │
+│ • Elasticsearch indexes for search (glossary, misconceptions)                │
+│ • Synonym sets for query expansion                                           │
+│ • Analysis reports for curriculum planning                                   │
+│                                                                               │
+│ Note: MCP tool integration deferred to 08-mcp-graph-tools.md                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key insight**: Extraction is speculative. We mine broadly because we don't yet know what will create the most value. Processing and output steps are where we make deliberate choices about what serves users best.
+
+### Architecture Diagram
+
+```mermaid
+flowchart TD
+    subgraph sources [Source Data]
+        BD[30 Bulk Download Files<br/>~630MB]
+        OD[ontology-data.ts]
+        KG[knowledge-graph-data.ts]
+    end
+
+    subgraph pipeline [vocab-gen Pipeline]
+        BR[Bulk Reader<br/>Zod validation]
+        EX[7 Extractors<br/>Pure functions]
+        PR[Processors<br/>Value creation]
+        GN[Generators<br/>Graph builders]
+        WR[Writers<br/>TypeScript output]
+    end
+
+    subgraph outputs [Generated Outputs]
+        TP[thread-progression-data.ts ✅]
+        PG[prerequisite-graph-data.ts ✅]
+        MG[misconception-graph-data.ts]
+        NC[nc-coverage-graph-data.ts]
+        VG[vocabulary-graph-data.ts]
+        SY[Enhanced Synonyms]
+    end
+
+    BD --> BR
+    OD --> BR
+    KG --> BR
+    BR --> EX
+    EX --> PR
+    PR --> GN
+    GN --> WR
+    WR --> TP
+    WR --> PG
+    WR --> MG
+    WR --> NC
+    WR --> VG
+    WR --> SY
+```
+
+---
+
+## 🚀 Implementation Progress (2025-12-25)
+
+### What's Complete
+
+| Component | Status | User Value |
+|-----------|--------|------------|
+| Pipeline infrastructure | ✅ COMPLETE | Foundation for all extraction |
+| Bulk reader with Zod validation | ✅ COMPLETE | Robust data quality handling |
+| CLI with `--dry-run` flag | ✅ COMPLETE | Safe iteration |
+| **7 Extractors** | ✅ COMPLETE | Raw data for processing |
+| **Thread Progression Generator** | ✅ COMPLETE | "What's the learning path?" |
+| **Thread MCP Tool** | ✅ COMPLETE | `get-thread-progressions` for AI agents |
+
+### Extracted Data (Raw Material)
+
+These counts are informational, not success metrics. The raw data enables processing:
+
+```bash
+$ pnpm vocab-gen --dry-run
+
+Files processed: 30
+Source data: 12,783 lessons, 1,663 units
+
+Extracted data (raw, for processing):
+  Keywords with definitions     ← Enables glossary, synonym mining
+  Misconceptions with responses ← Enables teacher guidance, AI tutoring
+  Learning points               ← Enables outcome mapping
+  Teacher tips                  ← Enables pedagogical guidance
+  Prior knowledge requirements  ← Enables prerequisite graphs
+  NC statements                 ← Enables curriculum coverage
+  Thread progressions           ← ✅ GENERATED: thread-progression-data.ts
+```
+
+### What's In Progress
+
+| Component | Status | User Need It Serves |
+|-----------|--------|---------------------|
+| **Prerequisite Generator** | 🔄 Next | "What should I know before this?" |
+| **Misconception Generator** | 📋 Planned | "What mistakes should I watch for?" |
+| **Vocabulary Processing** | 📋 Planned | Curated terms, synonym mining |
+| **NC Coverage Generator** | 📋 Planned | "Which NC statements does this cover?" |
+
+### Generated Outputs
+
+**Graph Data Files (This Plan)**:
+
+| Output | Status | Location |
+|--------|--------|----------|
+| `thread-progression-data.ts` | ✅ GENERATED | `src/mcp/` |
+| `prerequisite-graph-data.ts` | ✅ GENERATED | `src/mcp/` (1601 units, 3408 edges) |
+| `misconception-graph-data.ts` | 📋 Pending | `src/mcp/` |
+| `vocabulary-graph-data.ts` | 📋 Pending | `src/mcp/` |
+
+**MCP Tools (Deferred to [08-mcp-graph-tools.md](08-mcp-graph-tools.md))**:
+
+| Tool | Status |
+|------|--------|
+| `get-thread-progressions` | ✅ COMPLETE |
+| `get-prerequisite-graph` | ✅ COMPLETE |
+| `get-misconception-graph` | 📋 Deferred |
+| `get-vocabulary-graph` | 📋 Deferred |
+| `get-nc-coverage-graph` | 📋 Deferred |
+
+### Generator Directory Structure
+
+```
+vocab-gen/generators/
+├── thread-progression-generator.ts   ← ✅ COMPLETE
+├── write-graph-file.ts               ← ✅ COMPLETE (shared utility)
+├── index.ts                          ← ✅ COMPLETE
+├── prerequisite-graph-generator.ts   ← Next priority
+├── misconception-graph-generator.ts  ← Planned
+├── vocabulary-processor.ts           ← Planned (curates from raw keywords)
+├── synonym-miner.ts                  ← Planned (extracts from definitions)
+└── nc-coverage-generator.ts          ← Planned
+```
+
+### Current File Structure
+
+```
+packages/sdks/oak-curriculum-sdk/vocab-gen/
+├── run-vocab-gen.ts              ← CLI entry point
+├── vocab-gen.ts                  ← Pipeline orchestrator
+├── vocab-gen-core.ts             ← Core processing (testable, no IO)
+├── vocab-gen-format.ts           ← Output formatting
+├── lib/
+│   ├── bulk-reader.ts            ← Reads 30 files with validation
+│   ├── bulk-file-schema.ts       ← Top-level Zod schema
+│   ├── lesson-schema.ts          ← Lesson record schema
+│   ├── unit-schemas.ts           ← Unit record schemas
+│   ├── vocabulary-schemas.ts     ← Keyword, misconception schemas
+│   ├── content-guidance-schema.ts
+│   └── index.ts
+├── extractors/
+│   ├── keyword-extractor.ts      ← Returns ExtractedKeyword[]
+│   ├── misconception-extractor.ts
+│   ├── learning-point-extractor.ts
+│   ├── teacher-tip-extractor.ts
+│   ├── prior-knowledge-extractor.ts
+│   ├── nc-statement-extractor.ts
+│   ├── thread-extractor.ts
+│   └── index.ts
+└── generators/
+    ├── thread-progression-generator.ts   ← ✅ COMPLETE
+    ├── write-graph-file.ts               ← ✅ Shared serialisation utility
+    └── index.ts
+```
+
+### Data Quality Issues Resolved
+
+| Issue | Solution Implemented |
+|-------|---------------------|
+| `"NULL"` sentinel strings | Zod transforms to `undefined` |
+| `contentGuidance` complex array | Custom schema with supervision levels |
+| `whyThisWhyNow` sometimes undefined | Optional field in schema |
+| `year` as "All years" for PE swimming | Union type: `number \| "All years"` |
+| Empty `teacherTip` strings | Filtered in extractor |
+| Maths-secondary tier variants | Merged by unitSlug (tier-agnostic) |
 
 ---
 
 ## Executive Summary
 
-Oak National Academy has **the most comprehensive structured vocabulary dataset for UK education**:
+Oak National Academy's bulk download data contains **unique, structured educational content** that can transform how people learn and teach. The opportunity is not the raw data itself, but what we can build from it:
 
-| Source | Count | Unique | Has Definition? |
-|--------|-------|--------|-----------------|
-| **Keywords** | 44,638 | 13,349 | ✅ Yes — full definitions |
-| **Misconceptions** | 12,777 | TBD | ✅ Yes — with responses |
-| **Key Learning Points** | 51,894 | TBD | ✅ Yes — structured |
-| **Teacher Tips** | 12,774 | TBD | ✅ Yes — pedagogical guidance |
-| **Prior Knowledge** | TBD | TBD | ✅ Yes — prerequisite concepts |
-| **NC Statements** | TBD | TBD | ✅ Yes — official curriculum |
+| User Need | Data Source | What We Build |
+|-----------|-------------|---------------|
+| "What does X mean?" | Keywords with definitions | Curated glossary, synonym expansion |
+| "What mistakes should I watch for?" | Misconceptions with responses | Teacher guidance, AI tutoring support |
+| "What's the learning path?" | Threads, prior knowledge | Prerequisite graphs, progression data |
+| "Does this cover the NC?" | NC statements | Curriculum coverage maps |
+| "What should I teach?" | Learning points, teacher tips | Pedagogical vocabulary, guidance |
 
-**This is a HUGE opportunity for the sector.** No other organisation has this breadth and depth of structured educational vocabulary.
+**The opportunity**: No other organisation has this breadth and depth of structured educational content. By mining everything and processing it into user-valuable structures, we can enable experiences that weren't previously possible.
 
 ---
 
@@ -91,6 +327,132 @@ export const prerequisiteGraph = {
 
 ---
 
+## Data Quality Handling Strategy
+
+**Reference**: [07-bulk-download-data-quality-report.md](../../../research/ooc/07-bulk-download-data-quality-report.md)
+
+The bulk download data has known quality issues that the pipeline MUST handle robustly.
+
+### 1. Null Sentinel Values
+
+**Problem**: `contentGuidance` and `supervisionLevel` use string `"NULL"` instead of JSON null.
+
+**Solution**: Zod schemas transform `"NULL"` to `undefined`:
+
+```typescript
+const nullSentinel = z.union([
+  z.literal('NULL').transform(() => undefined),
+  z.null().transform(() => undefined),
+  z.string(),
+  z.array(z.unknown()),
+]);
+```
+
+### 2. Implicit KS4 Tier Variants (Maths-Secondary Only)
+
+**Problem**: Maths-secondary has 30 unit slugs that appear twice — these are **foundation/higher tier variants** without explicit tier metadata. Other secondary subjects use `examBoards` field for explicit variants.
+
+**Pattern**:
+- Same `unitSlug`, identical metadata except `unitLessons[]`
+- One variant has more lessons (higher tier), one has fewer (foundation tier)
+- Example: `algebraic-fractions` appears with 8 lessons and 2 lessons
+
+**Solution for vocabulary mining**: **Merge variants** — for vocabulary extraction, tier distinction is not relevant. Keywords and misconceptions from both tier variants should be combined.
+
+```typescript
+// Composite key for unit-level data (when variant distinction matters)
+const unitKey = `${unitSlug}:${lessonCount}`;
+
+// For vocabulary: merge by unitSlug (tier-agnostic)
+const vocabularyKey = unitSlug;
+```
+
+### 3. Subject-Specific Variant Metadata
+
+| Subject Type | Variant Field | Strategy |
+|--------------|---------------|----------|
+| maths-secondary | None (implicit) | Merge by unitSlug |
+| Other secondary | `examBoards[]` | Can filter by exam board if needed |
+| All primary | None (no variants) | Direct extraction |
+
+### 4. Extracted Data Types
+
+Each extractor returns strongly-typed data. These types are defined in `vocab-gen-core.ts`:
+
+```typescript
+/** Keyword with definition, frequency, and context */
+type ExtractedKeyword = {
+  readonly term: string;
+  readonly definition: string;
+  readonly frequency: number;
+  readonly subjects: readonly string[];
+  readonly firstYear: number;
+  readonly lessonSlugs: readonly string[];
+};
+
+/** Misconception with teacher response */
+type ExtractedMisconception = {
+  readonly misconception: string;
+  readonly response: string;
+  readonly lessonSlug: string;
+  readonly subject: string;
+  readonly keyStage: string;
+};
+
+/** Thread with ordered units */
+type ExtractedThread = {
+  readonly slug: string;
+  readonly title: string;
+  readonly subject: string;
+  readonly units: readonly {
+    readonly slug: string;
+    readonly order: number;
+    readonly year: number | undefined;
+  }[];
+};
+
+/** Prior knowledge requirement */
+type ExtractedPriorKnowledge = {
+  readonly requirement: string;
+  readonly unitSlug: string;
+  readonly subject: string;
+  readonly year: number;
+};
+
+/** NC statement with coverage */
+type ExtractedNCStatement = {
+  readonly statement: string;
+  readonly unitSlugs: readonly string[];
+  readonly subject: string;
+  readonly keyStage: string;
+};
+```
+
+### 5. Missing References and Empty Fields
+
+| Issue | Handling |
+|-------|----------|
+| `unitLessons[]` referencing missing lesson | Log warning, skip |
+| Empty `teacherTip` strings | Filter before counting |
+| Units with empty `threads[]` | Include with empty array |
+| Missing transcripts | Log, proceed with available data |
+
+### 5. Data Quality Report Generation
+
+The pipeline MUST generate a data quality report before extraction:
+
+```bash
+pnpm vocab-gen --report-only  # Generate quality report without extraction
+```
+
+Report includes:
+- Per-file duplicate counts
+- Null sentinel field counts
+- Missing reference counts
+- Empty field counts
+
+---
+
 ## Vision
 
 Build a suite of **searchable vocabulary indices** that transform how teachers, students, AI agents, and researchers interact with curriculum content:
@@ -138,19 +500,19 @@ Build a suite of **searchable vocabulary indices** that transform how teachers, 
 
 ## Audience & Context Analysis
 
-### Primary Audiences
+### User Personas
 
-| Audience | Context | Need | Priority |
-|----------|---------|------|----------|
-| **Teachers** | Lesson planning | "What vocabulary should I introduce?" | HIGH |
-| **Teachers** | Formative assessment | "What misconceptions should I check for?" | HIGH |
-| **Teachers** | Curriculum mapping | "Which NC statements does this cover?" | HIGH |
-| **Students** | Self-study | "What does this term mean?" | MEDIUM |
-| **Students** | Revision | "What are common mistakes to avoid?" | MEDIUM |
-| **AI Agents** | Search | Synonym expansion, concept matching | HIGH |
-| **AI Agents** | Tutoring | Misconception detection, prerequisite checking | HIGH |
-| **Researchers** | Analysis | Vocabulary coverage, concept frequency | LOW |
-| **MATs/Schools** | Planning | Curriculum vocabulary progression | MEDIUM |
+| Persona | Context | What They Need | Example Query | Priority |
+|---------|---------|----------------|---------------|----------|
+| **Student** | Learning new concepts | Clear definitions, learning paths | "What does photosynthesis mean?" | HIGH |
+| **Teacher** | Lesson planning | Vocabulary to introduce, mistakes to address | "Common mistakes with fractions" | HIGH |
+| **Teacher** | Curriculum mapping | NC coverage, progression planning | "Which NC statements does this cover?" | HIGH |
+| **School Leader** | Strategic planning | Curriculum coverage, progression mapping | "Year 5 maths NC coverage" | MEDIUM |
+| **Curriculum Planner** | Cross-school design | Cross-subject vocabulary, dependency chains | "What's the learning path for algebra?" | MEDIUM |
+| **Parent (Homeschool)** | Supporting learning | Clear structure, what comes next | "What should my child know before this?" | MEDIUM |
+| **Adult Learner** | Self-directed learning | Context-appropriate explanations, flexible paths | "Explain this for someone new to maths" | MEDIUM |
+| **AI Agent** | Search enhancement | Synonym expansion, concept matching | Query → Canonical → Lessons | HIGH |
+| **AI Agent** | Tutoring support | Misconception detection, prerequisite checking | "What comes before trigonometry?" | HIGH |
 
 ### Use Case Matrix
 
@@ -283,6 +645,59 @@ Location: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-s
 5. **Colloquial terms**: "pythagoras" → "pythagorean theorem"
 
 **Size Estimate**: ~5,000-10,000 synonym mappings
+
+#### 🔗 Synonym Integration Strategy
+
+**Critical Question**: How do mined synonyms integrate with existing curated synonyms?
+
+**Existing System** (see [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)):
+
+```
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── maths.ts          ← ~40 curated entries
+├── science.ts        ← ~15 curated entries
+├── subjects.ts       ← ~13 curated entries
+├── key-stages.ts     ← ~4 curated entries
+└── ...               ← Total: ~160 entries
+```
+
+**Proposed Integration**:
+
+```
+synonyms/
+├── maths.ts              ← CURATED (never touched by vocab-gen)
+├── science.ts            ← CURATED
+├── ...
+└── generated/            ← MINED (regenerated by vocab-gen)
+    ├── definition-synonyms.ts    ← "also known as" patterns
+    ├── cross-subject-terms.ts    ← Terms in 2+ subjects
+    ├── uk-us-variants.ts         ← Spelling variants
+    └── index.ts
+```
+
+**Merge Priority**:
+1. **Curated synonyms always win** — If a curated entry exists, mined is ignored
+2. **Mined synonyms supplement** — Fill gaps curated hasn't addressed
+3. **Confidence threshold** — Only include mined synonyms above threshold
+
+**Extraction Patterns**:
+
+| Pattern | Example in Definition | Extracted Synonym |
+|---------|----------------------|-------------------|
+| "also known as X" | "Mitochondria, also known as the powerhouse of the cell" | mitochondria ↔ powerhouse of the cell |
+| "or X" | "Addition or summing" | addition ↔ summing |
+| "(X)" | "Photosynthesis (plant energy creation)" | photosynthesis ↔ plant energy creation |
+| "sometimes called X" | "Integers, sometimes called whole numbers" | integers ↔ whole numbers |
+
+**Open Questions** (see ADR-063):
+
+1. **Conflict resolution**: Curated always wins, but should conflicts be logged?
+2. **Confidence scoring**: How to score extraction quality?
+   - Pattern clarity (explicit "also known as" > parenthetical)
+   - Definition length (longer = more context = higher confidence)
+   - Cross-reference (same synonym from multiple lessons = higher)
+3. **Promotion workflow**: When does a mined synonym become curated?
+4. **Size limits**: ES may have synonym count limits per category
 
 ### Index 3: Misconception Index
 
@@ -679,44 +1094,189 @@ Term: "photosynthesis"
 
 ## Implementation Phases
 
-### Phase 0: Pipeline Infrastructure (Week 1)
+### Phase 0: Pipeline Infrastructure ✅ COMPLETE
 
-**Goal**: Establish the repeatable pipeline before any extraction work.
+**Status**: ✅ COMPLETE (2025-12-24)
 
-1. **Create pipeline orchestrator** `scripts/vocab-gen/index.ts`
-2. **Implement bulk file discovery** — auto-find all JSON files in bulk download dir
-3. **Create validation schemas** for input and output
-4. **Set up logging and progress reporting**
-5. **Add `pnpm vocab-gen` command** to workspace root
+**What was built**:
 
-**Deliverables**:
-- `scripts/vocab-gen/` — Pipeline orchestrator directory
-- `scripts/vocab-gen/index.ts` — Main entry point
-- `scripts/vocab-gen/lib/bulk-reader.ts` — Read all bulk files
-- `scripts/vocab-gen/lib/logger.ts` — Structured logging
-- `package.json` update with `vocab-gen` script
-- README documenting the pipeline
+```
+packages/sdks/oak-curriculum-sdk/vocab-gen/
+├── run-vocab-gen.ts              ← CLI entry point
+├── vocab-gen.ts                  ← Pipeline orchestrator
+├── vocab-gen-core.ts             ← Core processing (no IO, testable)
+├── vocab-gen-format.ts           ← Output formatting
+└── lib/
+    ├── bulk-reader.ts            ← Reads all 30 bulk files
+    ├── bulk-file-schema.ts       ← Top-level Zod schema
+    ├── lesson-schema.ts          ← Lesson record schema
+    ├── unit-schemas.ts           ← Unit record schemas
+    ├── vocabulary-schemas.ts     ← Keyword, misconception schemas
+    ├── content-guidance-schema.ts ← Handles complex content guidance
+    └── index.ts                  ← Barrel exports
+```
 
-**Acceptance Criteria**:
-- `pnpm vocab-gen` runs and logs "Processing 30 files..."
-- Pipeline is idempotent and deterministic
+**Key decisions**:
 
-### Phase 1: Extraction Foundation (Week 1-2)
+- **Location**: `packages/sdks/oak-curriculum-sdk/vocab-gen/` (not `scripts/` or `apps/`)
+  - Reasoning: follows `type-gen/` pattern within SDK, outputs go to `src/mcp/`
+- **Zod schemas handle all data quality issues** (NULL sentinels, mixed types, etc.)
+- **Core logic in `vocab-gen-core.ts`** is pure and testable without file IO
+- **Integration tests use fixtures** — no real file IO per testing-strategy.md
 
-1. **Extract and deduplicate** all vocabulary from **ALL 30 bulk download files**
-2. **Create extraction modules** in `scripts/vocab-gen/extractors/`
-3. **Generate frequency analysis** for weighting
-4. **Identify cross-subject terms** (terms appearing in multiple subjects)
+**Acceptance criteria met**:
 
-**Deliverables**:
-- `scripts/vocab-gen/extractors/keywords.ts` — Keyword extraction
-- `scripts/vocab-gen/extractors/misconceptions.ts` — Misconception extraction
-- `scripts/vocab-gen/extractors/prerequisites.ts` — Prerequisite extraction
-- `scripts/vocab-gen/extractors/nc-statements.ts` — NC statement extraction
-- `scripts/vocab-gen/outputs/` — Generated analysis reports
-- Zod schemas for all extracted data types
+- ✅ `pnpm vocab-gen` runs from repo root
+- ✅ `--dry-run` flag shows stats without writing files
+- ✅ All 11 quality gates pass
+- ✅ Unit and integration tests with TDD
 
-**Implementation Note**: All extractors are called by the pipeline orchestrator, NOT run manually.
+### Phase 1: Extraction Foundation ✅ COMPLETE
+
+**Status**: ✅ COMPLETE (2025-12-24)
+
+**What was built**:
+
+```
+packages/sdks/oak-curriculum-sdk/vocab-gen/extractors/
+├── keyword-extractor.ts          ← 13,349 unique keywords with frequency
+├── misconception-extractor.ts    ← 12,777 misconceptions with responses
+├── learning-point-extractor.ts   ← 51,894 learning points
+├── teacher-tip-extractor.ts      ← 12,750 teacher tips
+├── prior-knowledge-extractor.ts  ← 7,881 prior knowledge requirements
+├── nc-statement-extractor.ts     ← 7,454 NC statements
+├── thread-extractor.ts           ← 164 unique threads with progressions
+└── index.ts                      ← Barrel exports
+```
+
+**All extractors**:
+
+- Are **pure functions** (no side effects)
+- Have **unit tests** following TDD
+- Return **typed data structures** with rich metadata:
+
+```typescript
+// Example: ExtractedKeyword includes
+type ExtractedKeyword = {
+  term: string;
+  definition: string;
+  frequency: number;
+  subjects: readonly string[];
+  firstYear: number;
+  lessonSlugs: readonly string[];
+};
+```
+
+**Acceptance criteria met**:
+
+- ✅ Extracts from ALL 30 files
+- ✅ Counts match expected values exactly
+- ✅ Empty strings filtered
+- ✅ Maths tier variants merged (tier-agnostic)
+- ✅ All quality gates pass
+
+### Phase 1.5: Generators 🔄 IN PROGRESS
+
+**Goal**: Generate user-valuable output files from extracted data.
+
+**Status**: Thread progressions ✅ COMPLETE. Other generators pending.
+
+**Current structure**:
+
+```
+packages/sdks/oak-curriculum-sdk/vocab-gen/generators/
+├── thread-progression-generator.ts   ← ✅ COMPLETE (164 threads, 14 subjects)
+├── write-graph-file.ts               ← ✅ Shared serialisation utility
+├── index.ts                          ← ✅ Barrel exports
+├── prerequisite-graph-generator.ts   ← 📋 Next (serves "what comes before?")
+├── misconception-graph-generator.ts  ← 📋 Planned (serves teacher guidance)
+├── vocabulary-processor.ts           ← 📋 Planned (curates from raw keywords)
+├── synonym-miner.ts                  ← 📋 Planned (extracts from definitions)
+└── nc-coverage-generator.ts          ← 📋 Planned (serves curriculum planners)
+```
+
+**Generated output files** (in `packages/sdks/oak-curriculum-sdk/src/mcp/`):
+
+| File | Status | User Need It Serves |
+|------|--------|---------------------|
+| `thread-progression-data.ts` | ✅ GENERATED (with MCP tool) | "What's the learning path?" |
+| `prerequisite-graph-data.ts` | ✅ GENERATED (with MCP tool) | "What should I know before?" |
+| `misconception-graph-data.ts` | 📋 Pending | "What mistakes to watch for?" |
+| `vocabulary-graph-data.ts` | 📋 Pending | Curated glossary terms |
+| `nc-coverage-graph-data.ts` | 📋 Pending | "Which NC statements covered?" |
+
+**Pattern to follow**: `knowledge-graph-data.ts` — static `as const` export with version, nodes, edges, and derived types. For large graphs (>5000 lines), use explicit interface types instead of `as const` due to TypeScript serialization limits (see ADR-086).
+
+#### TDD Sequence for Each Generator
+
+For each new generator, follow this sequence:
+
+1. **RED**: Write test for `generate[GraphName](extractedData)` — fails (function doesn't exist)
+2. **GREEN**: Implement generator returning graph structure
+3. **RED**: Write test for serialisation to TypeScript
+4. **GREEN**: Implement serialisation with TSDoc header
+5. **REFACTOR**: Extract common patterns to shared utilities
+
+#### Acceptance Criteria by Generator
+
+##### Prerequisite Graph Generator (NEXT)
+
+| Acceptance Criteria | Measurement |
+|---------------------|-------------|
+| Nodes for all units with prior knowledge | Node count matches units with priorKnowledge |
+| Edges from prior knowledge text matching | Edge count populated |
+| Edges from thread ordering | Thread sequence edges added |
+| Follows `knowledge-graph-data.ts` pattern | Structure matches template |
+| File generated by `pnpm vocab-gen` | File exists after run |
+| Includes version and timestamp | Fields present in output |
+| Uses `as const` | Types inferred correctly |
+| TSDoc documentation | Comments present |
+| Compiles without errors | `pnpm build` passes |
+
+**User need**: "What should I know before this?"
+
+##### Misconception Graph Generator
+
+| Acceptance Criteria | Measurement |
+|---------------------|-------------|
+| Topics extracted from misconceptions | Topic clustering works |
+| Cross-subject patterns identified | Pattern report generated |
+| Summary graph created (not full data) | Size < 500KB |
+| Links misconceptions to lessons | lessonSlug field populated |
+| Supports topic filtering | Filter by subject/topic |
+
+**User need**: "What mistakes should I watch for?"
+
+##### Vocabulary Processor
+
+| Acceptance Criteria | Measurement |
+|---------------------|-------------|
+| Cross-subject terms identified | Terms in 2+ subjects flagged |
+| Definition-based relationships | "Used in definition" edges |
+| Introduction progression | Year progression tracked |
+| High-value terms curated | Quality over quantity |
+
+**User need**: Curated glossary, synonym mining
+
+##### NC Coverage Generator
+
+| Acceptance Criteria | Measurement |
+|---------------------|-------------|
+| All unique NC statements captured | Count logged |
+| Mapped to covering units | Unit links populated |
+| Includes subject/keyStage context | Context fields present |
+| Size < 500KB | Fits in context window |
+
+**User need**: "Which NC statements does this cover?"
+
+#### Foundation Re-commitment Checkpoint
+
+After completing each generator:
+
+1. Run all quality gates
+2. Re-read `rules.md`, `testing-strategy.md`, `schema-first-execution.md`
+3. Confirm TDD was followed (tests written FIRST)
+4. Verify user value is measurable
 
 ### Phase 2: Glossary Index (Week 2-3)
 
@@ -907,9 +1467,8 @@ GET oak-glossary/_search
 | ADR-XXX | Vocabulary Mining Strategy | 📋 Planned |
 | ADR-XXX | Glossary Index Design | 📋 Planned |
 | ADR-XXX | Misconception Index Design | 📋 Planned |
-| ADR-XXX | Prerequisite Graph Design | 📋 Planned |
+| ADR-086 | **Vocabulary Mining and Graph Export Pattern** | ✅ Accepted |
 | ADR-XXX | NC Coverage Map Design | 📋 Planned |
-| ADR-XXX | **Graph Export Pattern for MCP** | 📋 Planned |
 | ADR-XXX | **Large Graph Filtering Strategy** | 📋 Planned |
 
 ---
@@ -942,77 +1501,111 @@ Consider releasing as open data:
 
 ## Success Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Glossary coverage | 95%+ of keywords indexed | Document count |
-| Synonym expansion | 10x current (1,630 entries) | Synonym count |
-| Search improvement | +10% MRR for vocabulary queries | A/B test |
-| NC coverage | 100% of statements mapped | Coverage report |
-| Misconception coverage | 95%+ indexed | Document count |
-| API usage | 1,000+ queries/month | Analytics |
-| **Graph exports** | 5 graphs exported | File count |
-| **MCP tools** | 5 new graph tools | Tool count |
-| **Subject coverage** | ALL 30 bulk files processed | Subject count |
-| **AI agent utility** | Graphs usable in context | Size < 500KB or filterable |
+### Primary Metrics (User Impact)
+
+| Metric | What It Measures | Target |
+|--------|------------------|--------|
+| **Search MRR on vocabulary queries** | Do users find what they need? | +10% improvement |
+| **Learning path accuracy** | Can AI answer "what comes before?" | Correct for 90%+ of queries |
+| **Misconception detection** | Can AI identify common mistakes? | Relevant misconceptions surfaced |
+| **Teacher query satisfaction** | Do teachers find useful content? | Qualitative feedback positive |
+
+### Secondary Metrics (Technical Enablers)
+
+These are means to the above ends, not goals in themselves:
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| Graph exports | 5 graphs generated | Thread ✅, prerequisite, misconception, vocabulary, NC |
+| MCP tools | 5 new graph tools | One per graph |
+| Source coverage | ALL 30 bulk files processed | Extraction complete ✅ |
+| Context compatibility | Graphs < 500KB or filterable | AI agent usability |
 
 ---
 
 ## Related Documents
 
-- [02a-synonym-architecture.md](02a-synonym-architecture.md) — Fix circular dependency (prerequisite)
+- [02a-synonym-architecture.md](02a-synonym-architecture.md) — ✅ COMPLETE (prerequisite)
 - [05-complete-data-indexing.md](05-complete-data-indexing.md) — Index all fields
 - [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Synonym source of truth
-- [ontology-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) — Existing ontology
-- [knowledge-graph-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) — **Pattern for graph exports**
+- [synonyms/README.md](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Synonym module documentation
+- [ontology-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) — Existing ontology (vocab-gen source)
+- [knowledge-graph-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) — **Pattern for graph exports** (vocab-gen source)
 
-### Pipeline Directory Structure
+### Pipeline Directory Structure (Actual — 2025-12-24)
 
 ```text
-scripts/vocab-gen/
-├── index.ts                    ← Main entry point (pnpm vocab-gen)
+packages/sdks/oak-curriculum-sdk/vocab-gen/
+├── run-vocab-gen.ts              ← CLI entry point (pnpm vocab-gen)
+├── vocab-gen.ts                  ← Pipeline orchestrator
+├── vocab-gen-core.ts             ← Core processing (pure, testable)
+├── vocab-gen-format.ts           ← Output formatting
+├── vocab-gen.unit.test.ts        ← Unit tests
+├── vocab-gen.integration.test.ts ← Integration tests (uses fixtures)
 ├── lib/
-│   ├── bulk-reader.ts          ← Reads all 30 bulk files
-│   ├── logger.ts               ← Structured logging
-│   ├── validator.ts            ← Zod validation for all inputs/outputs
-│   └── writer.ts               ← Writes generated files
-├── extractors/
-│   ├── keywords.ts             ← Extract keywords with definitions
-│   ├── misconceptions.ts       ← Extract misconceptions with responses
-│   ├── prerequisites.ts        ← Extract prior knowledge requirements
-│   ├── nc-statements.ts        ← Extract NC statement mappings
-│   ├── threads.ts              ← Extract thread progressions
-│   └── index.ts                ← Barrel export
-├── generators/
-│   ├── prerequisite-graph.ts   ← Generate prerequisite-graph-data.ts
-│   ├── misconception-graph.ts  ← Generate misconception-graph-data.ts
-│   ├── nc-coverage-graph.ts    ← Generate nc-coverage-graph-data.ts
-│   ├── vocabulary-graph.ts     ← Generate vocabulary-graph-data.ts
-│   ├── thread-progression.ts   ← Generate thread-progression-data.ts
-│   ├── synonyms.ts             ← Generate enhanced synonym sets
-│   └── index.ts                ← Barrel export
-├── reports/
-│   ├── frequency-analysis.ts   ← Generate frequency reports
-│   ├── cross-subject.ts        ← Generate cross-subject term report
-│   └── coverage.ts             ← Generate coverage reports
-└── README.md                   ← Pipeline documentation
+│   ├── bulk-reader.ts            ← Reads all 30 bulk files ✅
+│   ├── bulk-file-schema.ts       ← Top-level Zod schema ✅
+│   ├── lesson-schema.ts          ← Lesson record schema ✅
+│   ├── unit-schemas.ts           ← Unit record schemas ✅
+│   ├── vocabulary-schemas.ts     ← Keyword, misconception schemas ✅
+│   ├── content-guidance-schema.ts ← Content guidance handling ✅
+│   ├── bulk-schemas.unit.test.ts ← Schema tests ✅
+│   └── index.ts                  ← Barrel exports ✅
+├── extractors/                   ← ALL COMPLETE ✅
+│   ├── keyword-extractor.ts      ← 13,349 unique keywords
+│   ├── misconception-extractor.ts ← 12,777 misconceptions
+│   ├── learning-point-extractor.ts ← 51,894 learning points
+│   ├── teacher-tip-extractor.ts  ← 12,750 teacher tips
+│   ├── prior-knowledge-extractor.ts ← 7,881 prior knowledge
+│   ├── nc-statement-extractor.ts ← 7,454 NC statements
+│   ├── thread-extractor.ts       ← 164 unique threads
+│   ├── *.unit.test.ts            ← Unit tests for each
+│   └── index.ts                  ← Barrel export
+└── generators/                   ← NOT YET CREATED ❌
+    ├── thread-progression-generator.ts   ← Start here
+    ├── vocabulary-graph-generator.ts
+    ├── prerequisite-graph-generator.ts
+    ├── misconception-graph-generator.ts
+    ├── nc-coverage-graph-generator.ts
+    ├── synonyms-generator.ts
+    └── index.ts
 
 packages/sdks/oak-curriculum-sdk/src/mcp/
-├── knowledge-graph-data.ts     ← Existing (pattern reference)
+├── knowledge-graph-data.ts     ← Existing (PATTERN REFERENCE)
 ├── ontology-data.ts            ← Existing
-├── prerequisite-graph-data.ts  ← GENERATED by vocab-gen
-├── misconception-graph-data.ts ← GENERATED by vocab-gen
-├── nc-coverage-graph-data.ts   ← GENERATED by vocab-gen
-├── vocabulary-graph-data.ts    ← GENERATED by vocab-gen
-└── thread-progression-data.ts  ← GENERATED by vocab-gen
+├── prerequisite-graph-data.ts  ← TO BE GENERATED by vocab-gen
+├── misconception-graph-data.ts ← TO BE GENERATED by vocab-gen
+├── nc-coverage-graph-data.ts   ← TO BE GENERATED by vocab-gen
+├── vocabulary-graph-data.ts    ← TO BE GENERATED by vocab-gen
+└── thread-progression-data.ts  ← TO BE GENERATED by vocab-gen
 ```
 
-### Verification Command
+### Working Commands
 
 ```bash
-# Verify the pipeline is working correctly
-pnpm vocab-gen --dry-run     # Show what would be generated
-pnpm vocab-gen --verify      # Check generated files match source
-pnpm vocab-gen --diff        # Show changes since last run
+# Current: runs extraction, reports statistics, no file output
+pnpm vocab-gen --dry-run
+
+# Example output (verified 2025-12-24):
+# Files processed: 30
+# Source data: 12,783 lessons, 1,663 units
+# Extracted vocabulary:
+#   13,349 unique keywords
+#   12,777 misconceptions
+#   51,894 learning points
+#   12,750 teacher tips
+#   7,881 prior knowledge requirements
+#   7,454 NC statements
+#   164 unique threads
+```
+
+### Commands Not Yet Implemented
+
+```bash
+# These require generators to be built:
+pnpm vocab-gen             # Generate all output files
+pnpm vocab-gen --verify    # Check generated files match source
+pnpm vocab-gen --diff      # Show changes since last run
 ```
 
 ### Pattern Reference: knowledge-graph-data.ts
@@ -1039,20 +1632,108 @@ All new graph exports MUST follow this pattern for consistency.
 
 ## Open Questions
 
+### Glossary & Graph Questions
+
 1. **Should glossary terms link back to lessons or units?** Both? Configurable?
 2. **How to handle term evolution?** Same word, different meanings at different key stages?
 3. **Versioning?** When curriculum updates, how to track vocabulary changes?
 4. **Multi-language?** Welsh curriculum vocabulary?
 5. **Access control?** Public API or authenticated only?
 
+### Synonym Integration Questions (Critical for Phase 3)
+
+See [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) for full context.
+
+6. **Curated vs Mined Priority**: Curated synonyms should always win, but:
+   - Should conflicts be logged for human review?
+   - Should mined synonyms that conflict be discarded silently or flagged?
+
+7. **Confidence Scoring**: How to score mined synonym quality?
+   - Extraction pattern clarity ("also known as" > parenthetical)
+   - Definition context length
+   - Cross-reference count (same synonym from multiple lessons)
+   - Subject specificity (maths-only vs cross-subject)
+
+8. **Promotion Workflow**: How do high-value mined synonyms become curated?
+   - **Option A**: Manual — developer reviews generated file, copies to curated
+   - **Option B**: Semi-auto — vocab-gen generates PR with suggested promotions
+   - **Option C**: Confidence threshold — auto-promote above score X
+
+9. **Size Limits**: ES may have performance issues with 10x synonyms
+   - Per-category limits?
+   - Top-N by confidence per category?
+   - Benchmark needed before full deployment
+
+10. **Regeneration Safety**: vocab-gen must NEVER modify curated files
+    - Generated files in `synonyms/generated/` only
+    - Clear documentation and code guards
+
+### Decisions Needed Before Phase 3
+
+| Question | Decision | Owner |
+|----------|----------|-------|
+| Conflict logging | TBD | — |
+| Confidence algorithm | TBD | — |
+| Promotion workflow | TBD | — |
+| Size limits | TBD (benchmark first) | — |
+
 ---
 
 ## Next Steps
 
-1. ✅ Create this plan document
-2. 📋 Fix circular dependency in 02a first (blocks synonym work)
-3. 📋 Create extraction scripts in `evaluation/vocabulary/`
-4. 📋 Run initial vocabulary analysis
-5. 📋 Design glossary index schema
-6. 📋 Draft ADR for vocabulary mining strategy
+### Completed
 
+1. ✅ Create this plan document (2025-12-24)
+2. ✅ Fix circular dependency in 02a (dead code deleted)
+3. ✅ Create pipeline infrastructure (`packages/sdks/oak-curriculum-sdk/vocab-gen/`)
+4. ✅ Implement bulk reader with Zod validation for all data quality issues
+5. ✅ Create all 7 extractors with TDD
+6. ✅ **Thread progression generator** — `thread-progression-data.ts` generated (2025-12-25)
+7. ✅ **Thread MCP tool** — `get-thread-progressions` tool for AI agents (2025-12-25)
+8. ✅ All quality gates pass
+
+### Immediate Next Steps (By User Need)
+
+| User Need | Generator | Status |
+|-----------|-----------|--------|
+| "What should I know before this?" | `prerequisite-graph-generator.ts` | ✅ COMPLETE |
+| "What mistakes should I watch for?" | `misconception-graph-generator.ts` | 📋 Planned |
+| "Better search for vocabulary queries" | `synonym-miner.ts` | 📋 Planned |
+| "Does this cover the NC?" | `nc-coverage-generator.ts` | 📋 Planned |
+| **Type Preservation Fix** | ESLint + `TypedCallToolResult<T>` | 📋 Planned — See [Addendum C](#addendum-c-type-preservation-architecture-fix) |
+
+### Future Phases
+
+- Phase 2: Glossary ES index, ingestion, endpoint, MCP tool
+- Phase 3: Misconception ES index and MCP tool
+- Phase 4: NC coverage tools for curriculum planners
+- Phase 5: ADRs and documentation
+
+### Key Architectural Decisions Made
+
+- **Location**: `vocab-gen/` lives in SDK alongside `type-gen/` (not in `scripts/` or `apps/`)
+- **Multi-step pipeline**: Extraction is exploratory; processing creates value; output serves users
+- **Core logic is pure**: `vocab-gen-core.ts` has no IO, enabling proper integration tests
+- **Integration tests use fixtures**: No file IO in tests per testing-strategy.md
+- **User value first**: Every output must serve a user persona with measurable impact
+- **Schemas handle data quality**: Zod transforms handle NULL sentinels, mixed types, etc.
+- **Extractors return rich data**: Include frequency, subjects, firstYear, lessonSlugs
+
+### Lessons Learned
+
+1. **Never disable quality gates** — splitting `bulk-schemas.ts` into 5 files was correct fix
+2. **Read real data early** — discovered `contentGuidance` complex structure by inspection
+3. **Integration tests with fixtures are fast** — 2.8s vs 18s with real file IO
+4. **TDD works** — caught schema issues before they became runtime failures
+
+---
+
+## Addendum C: Type Preservation Architecture Fix
+
+**Status**: BLOCKING — Moved to standalone plan  
+**Location**: [type-remediation.plan.md](../../type-remediation.plan.md)  
+**Prompt**: [type-remediation.prompt.md](../../../prompts/type-remediation.prompt.md)
+
+This work was discovered during 02b vocabulary mining and has been extracted to a separate plan. It must be completed before resuming semantic search work.
+
+See the standalone plan for full details.

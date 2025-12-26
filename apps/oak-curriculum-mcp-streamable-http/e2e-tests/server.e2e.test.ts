@@ -103,7 +103,15 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     );
     expect(containsMethodField).toBe(false);
     const baseToolNames = [...toolNames];
-    const aggregatedTools = ['fetch', 'get-help', 'get-knowledge-graph', 'get-ontology', 'search'];
+    const aggregatedTools = [
+      'fetch',
+      'get-help',
+      'get-knowledge-graph',
+      'get-ontology',
+      'get-prerequisite-graph',
+      'get-thread-progressions',
+      'search',
+    ];
     const expectedToolNames = [...baseToolNames, ...aggregatedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());
   });

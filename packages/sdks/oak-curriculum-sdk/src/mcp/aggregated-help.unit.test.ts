@@ -60,13 +60,18 @@ describe('GET_HELP_INPUT_SCHEMA', () => {
   });
 });
 
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+/** Type alias to reference SDK's structuredContent type without direct Record usage */
+type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
+
 /**
  * Helper to extract full data from structuredContent (model sees this).
  * Per OpenAI Apps SDK: structuredContent is "Surfaced to the model and the component".
  */
 function extractStructuredData(result: {
-  structuredContent?: Record<string, unknown>;
-}): Record<string, unknown> {
+  structuredContent?: StructuredContent;
+}): StructuredContent {
   expect(result.structuredContent).toBeDefined();
   return result.structuredContent ?? {};
 }

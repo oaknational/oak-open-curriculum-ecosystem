@@ -82,10 +82,15 @@ export const toolGuidanceData = {
     } satisfies ToolCategory,
 
     progression: {
-      tools: ['get-threads', 'get-threads-units'],
+      tools: [
+        'get-threads',
+        'get-threads-units',
+        'get-thread-progressions',
+        'get-prerequisite-graph',
+      ],
       description: 'Explore how concepts develop across years through curriculum threads.',
       whenToUse:
-        'When you want to understand how a concept builds from early years to GCSE, or find prerequisite/follow-up content.',
+        'When you want to understand how a concept builds from early years to GCSE, or find prerequisite/follow-up content. Use get-thread-progressions for a complete static graph of all 164 threads. Use get-prerequisite-graph for unit dependencies and prior knowledge requirements.',
     } satisfies ToolCategory,
 
     agentSupport: {

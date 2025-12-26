@@ -85,6 +85,7 @@
   "scripts": {
     "type-gen": "pnpm generate:types",
     "posttype-gen": "pnpm -w format:root",
+    "vocab-gen": "tsx vocab-gen/run-vocab-gen.ts",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo src/types/generated",
     "pregenerate:types": "pnpm generate:clean",

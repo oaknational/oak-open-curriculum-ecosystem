@@ -18,6 +18,8 @@ import { FETCH_TOOL_DEF, FETCH_INPUT_SCHEMA } from '../aggregated-fetch.js';
 import { GET_ONTOLOGY_TOOL_DEF } from '../aggregated-ontology.js';
 import { GET_HELP_TOOL_DEF } from '../aggregated-help/index.js';
 import { GET_KNOWLEDGE_GRAPH_TOOL_DEF } from '../aggregated-knowledge-graph.js';
+import { GET_THREAD_PROGRESSIONS_TOOL_DEF } from '../aggregated-thread-progressions.js';
+import { GET_PREREQUISITE_GRAPH_TOOL_DEF } from '../aggregated-prerequisite-graph.js';
 
 /**
  * Map of aggregated tool definitions with full MCP metadata.
@@ -27,6 +29,9 @@ import { GET_KNOWLEDGE_GRAPH_TOOL_DEF } from '../aggregated-knowledge-graph.js';
  * - `fetch`: Retrieve detailed content by prefixed ID
  * - `get-ontology`: Return curriculum domain model structure
  * - `get-help`: Return tool usage guidance
+ * - `get-knowledge-graph`: Return concept type relationships
+ * - `get-thread-progressions`: Return ordered unit sequences within threads
+ * - `get-prerequisite-graph`: Return unit dependencies and prior knowledge
  *
  * Annotations match generated tools: read-only, non-destructive, idempotent.
  * OpenAI Apps SDK _meta fields are included where defined.
@@ -37,4 +42,6 @@ export const AGGREGATED_TOOL_DEFS = {
   'get-ontology': GET_ONTOLOGY_TOOL_DEF,
   'get-help': GET_HELP_TOOL_DEF,
   'get-knowledge-graph': GET_KNOWLEDGE_GRAPH_TOOL_DEF,
+  'get-thread-progressions': GET_THREAD_PROGRESSIONS_TOOL_DEF,
+  'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
 } as const;

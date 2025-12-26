@@ -86,14 +86,25 @@ export const strict: Linter.Config[] = [
           types: {
             'Record<string, unknown>': {
               message:
-                'Avoid Record<string, unknown>. It destroys type information. Refactor or use a defined type.',
+                'FORBIDDEN: Record<string, unknown> destroys type information. ' +
+                'Use a specific type, Zod schema, or generic parameter. ' +
+                'See rules.md "No type shortcuts".',
+            },
+            'Record<string, any>': {
+              message:
+                'FORBIDDEN: Record<string, any> destroys type information. ' +
+                'Use a specific type, Zod schema, or generic parameter. ' +
+                'See rules.md "No type shortcuts".',
             },
             object: {
-              message: 'Avoid object type. It is too vague.',
+              message:
+                'FORBIDDEN: object type is too vague. ' +
+                'Use a specific type that describes the actual shape.',
             },
             'unknown[]': {
               message:
-                'unknown[] is not permitted. It destroys type information. What is the real shape of the data?',
+                'FORBIDDEN: unknown[] destroys type information. ' +
+                'What is the real shape of the data? Use a specific array type.',
             },
           },
         },

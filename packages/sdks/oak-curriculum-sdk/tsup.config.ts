@@ -2,19 +2,42 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
+    // ========================================================================
+    // Root-level entry points
+    // ========================================================================
     'src/index.ts',
+    'src/elasticsearch.ts',
+    'src/response-augmentation.ts',
+    'src/response-augmentation-helpers.ts',
+
+    // ========================================================================
+    // Client entry points
+    // ========================================================================
     'src/client/index.ts',
     'src/client/oak-base-client.ts',
     'src/client/middleware/index.ts',
     'src/client/middleware/auth.ts',
-    'src/client/middleware/response-augmentation.ts',
     'src/client/middleware/rate-limit.ts',
     'src/client/middleware/rate-limit-tracker.ts',
     'src/client/middleware/retry.ts',
+    'src/client/middleware/response-augmentation.ts',
+
+    // ========================================================================
+    // Config entry points
+    // ========================================================================
     'src/config/index.ts',
     'src/config/rate-limit-config.ts',
     'src/config/retry-config.ts',
+
+    // ========================================================================
+    // Types entry points
+    // ========================================================================
     'src/types/index.ts',
+    'src/types/es-types.ts',
+    'src/types/doc-bridges.ts',
+    'src/types/public-types.ts',
+    'src/types/openapi.ts',
+    'src/types/response-augmentation.ts',
     'src/types/search-response-guards.ts',
     'src/types/generated/api-schema/api-paths-types.ts',
     'src/types/generated/api-schema/api-schema-base.ts',
@@ -37,8 +60,6 @@ export default defineConfig({
     'src/types/helpers/type-helpers.ts',
     'src/public/mcp-tools.ts',
     'src/public/search.ts',
-    'src/elasticsearch.ts',
-    'src/types/es-types.ts',
     'src/types/generated/search/index.ts',
     'src/types/generated/search/index-documents.ts',
     'src/types/generated/search/fixtures.ts',
@@ -51,24 +72,26 @@ export default defineConfig({
     'src/types/generated/search/responses.multi.ts',
     'src/types/generated/search/scopes.ts',
     'src/types/generated/search/suggestions.ts',
+    'src/types/generated/search/facets.ts',
+    // ES mappings (generated from field definitions)
     'src/types/generated/search/es-mappings/index.ts',
     'src/types/generated/search/es-mappings/oak-lessons.ts',
     'src/types/generated/search/es-mappings/oak-units.ts',
     'src/types/generated/search/es-mappings/oak-unit-rollup.ts',
     'src/types/generated/search/es-mappings/oak-sequences.ts',
     'src/types/generated/search/es-mappings/oak-sequence-facets.ts',
-    'src/types/generated/search/es-mappings/oak-threads.ts',
-    'src/types/generated/search/es-mappings/oak-ref-subjects.ts',
-    'src/types/generated/search/es-mappings/oak-ref-key-stages.ts',
-    'src/types/generated/search/es-mappings/oak-curriculum-glossary.ts',
     'src/types/generated/search/es-mappings/oak-meta.ts',
     'src/types/generated/search/es-mappings/oak-zero-hit-telemetry.ts',
+    'src/types/generated/search/es-mappings/oak-threads.ts',
+    'src/types/generated/search/es-mappings/oak-curriculum-glossary.ts',
+    'src/types/generated/search/es-mappings/oak-ref-key-stages.ts',
+    'src/types/generated/search/es-mappings/oak-ref-subjects.ts',
     'src/types/generated/query-parser/index.ts',
+    'src/types/generated/widget-constants.ts',
     'src/types/generated/observability/index.ts',
     'src/types/generated/observability/zero-hit-fixtures.ts',
     'src/types/generated/admin/index.ts',
     'src/types/generated/admin/stream-fixtures.ts',
-    'src/types/generated/widget-constants.ts',
     'src/types/generated/zod/search/index.ts',
     'src/types/generated/zod/search/output/index.ts',
     'src/types/generated/zod/search/output/sequence-facets.ts',
@@ -78,8 +101,7 @@ export default defineConfig({
     'src/validation/curriculum-response-validators.ts',
     'src/validation/search-response-validators.ts',
     'src/validation/types.ts',
-    'src/response-augmentation.ts',
-    'src/response-augmentation-helpers.ts',
+    // MCP entry points
     'src/mcp/execute-tool-call.ts',
     'src/mcp/zod-input-schema.ts',
     'src/mcp/universal-tool-shared.ts',
@@ -112,27 +134,33 @@ export default defineConfig({
     'src/mcp/universal-tools/executor.ts',
     'src/mcp/stub-tool-executor.ts',
     'src/mcp/prerequisite-guidance.ts',
-    'src/mcp/widget-constants.ts',
     'src/mcp/agent-support-tool-metadata.ts',
+    'src/mcp/widget-constants.ts',
     'src/mcp/synonym-export.ts',
+    // Synonym data files
     'src/mcp/synonyms/index.ts',
+    'src/mcp/synonyms/maths.ts',
     'src/mcp/synonyms/education.ts',
-    'src/mcp/synonyms/english.ts',
-    'src/mcp/synonyms/exam-boards.ts',
     'src/mcp/synonyms/geography.ts',
     'src/mcp/synonyms/history.ts',
-    'src/mcp/synonyms/key-stages.ts',
-    'src/mcp/synonyms/maths.ts',
     'src/mcp/synonyms/numbers.ts',
-    'src/mcp/synonyms/science.ts',
+    'src/mcp/synonyms/english.ts',
+    'src/mcp/synonyms/exam-boards.ts',
     'src/mcp/synonyms/subjects.ts',
+    'src/mcp/synonyms/key-stages.ts',
+    'src/mcp/synonyms/science.ts',
+    // Prerequisite and thread progression tools
+    'src/mcp/prerequisite-graph-data.ts',
+    'src/mcp/aggregated-prerequisite-graph.ts',
+    'src/mcp/thread-progression-data.ts',
+    'src/mcp/aggregated-thread-progressions.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
   splitting: false,
   sourcemap: true,
   clean: true,
-  target: 'es2022',
+  target: 'node22',
   minify: false,
   bundle: false, // SDK should not bundle dependencies
   platform: 'neutral',

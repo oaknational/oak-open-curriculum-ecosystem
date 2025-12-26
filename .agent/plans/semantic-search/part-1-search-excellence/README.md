@@ -3,7 +3,7 @@
 **Status**: 🔄 IN PROGRESS — Tier 1 EXHAUSTED, Tier 2 ready  
 **Priority**: High  
 **Created**: 2025-12-19  
-**Last Updated**: 2025-12-24  
+**Last Updated**: 2025-12-25  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
@@ -25,8 +25,8 @@ This master plan coordinates workstreams for search excellence. The principle is
 | Sub-Plan                                                           | Focus                                | Priority | Status         |
 | ------------------------------------------------------------------ | ------------------------------------ | -------- | -------------- |
 | [01-tier-1-fundamentals.md](01-tier-1-fundamentals.md)             | Exhaust all Tier 1 improvements      | High     | ✅ Complete    |
-| [02a-synonym-architecture.md](02a-synonym-architecture.md)         | Fix synonym circular dependency      | Medium   | 📋 Pending     |
-| [02b-vocabulary-mining.md](02b-vocabulary-mining.md)               | **Comprehensive vocabulary mining**  | **HIGH** | 📋 Planned     |
+| [02a-synonym-architecture.md](02a-synonym-architecture.md)         | Fix synonym circular dependency      | Medium   | ✅ Complete    |
+| [02b-vocabulary-mining.md](02b-vocabulary-mining.md)               | **Comprehensive vocabulary mining**  | **HIGH** | 🔄 IN PROGRESS |
 | [03-evaluation-infrastructure.md](03-evaluation-infrastructure.md) | Fix evaluation directory duplication | Medium   | 📋 Pending     |
 | [04-documentation-debt.md](04-documentation-debt.md)               | Update outdated documentation        | Low      | ✅ Complete    |
 | [05-complete-data-indexing.md](05-complete-data-indexing.md)       | Index ALL curriculum data            | High     | 📋 Pending     |
@@ -103,19 +103,15 @@ Part 1 is complete when:
 
 ---
 
-## Known Issues (Blocking Progress)
+## Resolved Issues
 
-### 🔴 Architectural Issue: Synonym Type-Gen Circular Dependency
+### ✅ Synonym Type-Gen Circular Dependency (RESOLVED 2025-12-24)
 
-**File**: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-synonyms-file.ts`
+**Problem**: Type-gen code imported from SDK runtime code via `generate-synonyms-file.ts`.
 
-**Problem**: Type-gen code imports from SDK runtime code (`ontologyData`), which is forbidden because it creates circular dependencies.
+**Resolution**: The file was **dead code** — never called from the type-gen pipeline. Deleted the file and documented the current (working) synonym architecture.
 
-**Solution**: Move synonyms into type-gen-time code. The synonyms are static data that should be defined in type-gen and exported to runtime, not the reverse.
-
-**Priority**: Medium (not blocking current work, but violates architecture)
-
-**Tracked in**: [02a-synonym-architecture.md](02a-synonym-architecture.md)
+**See**: [02a-synonym-architecture.md](02a-synonym-architecture.md) (COMPLETE)
 
 ---
 
@@ -169,6 +165,7 @@ This is a **sector-transformative opportunity**. See [02b-vocabulary-mining.md](
 
 | Date       | Change                                                   |
 | ---------- | -------------------------------------------------------- |
+| 2025-12-24 | **02a COMPLETE** — Dead code deleted, synonyms documented |
 | 2025-12-24 | **Tier 1 EXHAUSTED** — All approaches verified           |
 | 2025-12-24 | Intent-based exception documented (requires Tier 4)      |
 | 2025-12-24 | Restructured into directory with sub-plans               |

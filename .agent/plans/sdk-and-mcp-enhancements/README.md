@@ -4,6 +4,29 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 
 ---
 
+## Technical Debt
+
+### Potential Improvements
+
+Potential Improvements (Noted for Future Work, Out of Scope)
+Based on the OpenAI Apps SDK documentation exploration:
+Widget TOOL_RENDERER_MAP could be generated at type-gen time - Currently hardcoded in widget-preview.html
+The distinction between tool descriptor \_meta and result \_meta isn't clearly documented - These serve different purposes
+Local reference docs could be expanded - Add the Reference page findings about window.openai API, CSP, and tool result structure
+
+### Incompatible `structuredContent` Shapes
+
+`formatDataWithContext` (used by generated tools in `executor.ts`) and `formatOptimizedResult` (used by aggregated tools) produce incompatible `structuredContent` shapes:
+
+- **`formatDataWithContext`**: `{ status, data: {...}, oakContextHint }` — data wrapped in `data` property
+- **`formatOptimizedResult`**: `{ ...fullData, summary, oakContextHint, status }` — data spread at root level
+
+Additionally, `formatOptimizedResult` includes `_meta` with widget metadata (`toolName`, `annotationsTitle`, `query`, `timestamp`) while `formatDataWithContext` does not.
+
+Both tool types have the same OpenAI Apps SDK requirements. These should be unified to produce consistent output that widgets and consumers can rely on.
+
+---
+
 ## Plan Index
 
 | Plan                                                                                  | Status         | Duration     | Focus                                               |
@@ -17,6 +40,7 @@ This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Mode
 | [06: UX Improvements & Research](./06-ux-improvements-and-research-plan.md)           | 🟡 PHASE A ✅  | ~6-8 hours   | Quick wins, prompt foundations (research → Plan 07) |
 | [07: Oak AI Domain Extraction](./07-oak-ai-domain-extraction-research-plan.md)        | 🔴 NOT STARTED | ~16-24 hours | Comprehensive research into Oak AI domain knowledge |
 | [08: OpenAI Apps SDK Feature Adoption](./08-openai-apps-sdk-feature-adoption-plan.md) | 🔴 NOT STARTED | ~4-6 days    | Production-ready OpenAI Apps SDK integration        |
+| [09: SDK Build Architecture](./09-sdk-build-architecture-plan.md)                      | 🔴 NOT STARTED | ~2-3 days    | Barrel-only exports + build verification            |
 
 ---
 
@@ -190,6 +214,34 @@ Comprehensive adoption of OpenAI Apps SDK features for production readiness:
 
 ---
 
+### 09: SDK Build Architecture
+
+**Background**: The SDK's `tsup.config.ts` entry points must be manually synchronised with exports in `package.json`, `src/index.ts`, and `src/public/*.ts`. This is fragile—when new files are added and exported, they must also be added to tsup.config.ts or the build produces `.d.ts` files without corresponding `.js` files, breaking module resolution.
+
+**Root Cause**: TypeScript (`tsc --emitDeclarationOnly`) generates declarations for ALL source files, but tsup only generates JavaScript for explicitly listed entry points. The mismatch causes "module not found" errors in consumers.
+
+**Proposed Solution** (Barrel-Only Exports + Build Verification):
+
+- **Phase 1**: Restructure exports so barrel files (`index.ts`) are the only tsup entry points
+  - All public API flows through explicit barrel re-exports
+  - Clear boundaries: barrel files define what's public
+  - Aligns with Cardinal Rule (schema-first, generator-driven)
+
+- **Phase 2**: Add post-build verification step
+  - Verify every `package.json` export has a corresponding `.js` file
+  - Verify every re-export in barrel files resolves to a `.js` file
+  - Fail fast when exports diverge from entry points
+
+- **Phase 3**: Consider generator-driven entry points
+  - Type-gen could emit the entry points list based on what it generates
+  - True schema-first approach for build configuration
+
+**Key benefit**: Eliminates fragile manual synchronisation, fails fast on divergence, aligns with architectural principles.
+
+**Status**: 🔴 NOT STARTED - Quick fix applied (add missing entries); this plan is the long-term solution.
+
+---
+
 ## Dependencies
 
 ```
@@ -229,6 +281,13 @@ Plan 08 (OpenAI Apps SDK)  ← Can start immediately (Phase 1 is CRITICAL)
     Phase 4 (Visibility)   ← Depends on Phase 2
          ↓
     Phase 5 (Enhanced UX)  ← Depends on Phase 2
+
+Plan 09 (SDK Build Architecture)  ← Low priority, addresses technical debt
+    Phase 1 (Barrel-only)         ← Restructure exports
+         ↓
+    Phase 2 (Build verification)  ← Fail fast on divergence
+         ↓
+    Phase 3 (Generator-driven)    ← True schema-first build config
 ```
 
 - **Plan 08 Phase 1** is **CRITICAL** for production deployment - should start immediately
