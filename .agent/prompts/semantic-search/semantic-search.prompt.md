@@ -1,311 +1,331 @@
-# Semantic Search - Fresh Chat Entry Point
+# Semantic Search — Synonym Quality Audit
 
-**Status**: Part 1 ACTIVE — Tier 1 EXHAUSTED, 02b IN PROGRESS (generators pending)  
-**Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
-**Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-26
-
----
-
-> **Scope Note**: This plan focuses on **search implementation** (extraction, graphs, ES indexing).
-> MCP tool integration is deferred to [08-mcp-graph-tools.md](../../plans/semantic-search/part-1-search-excellence/08-mcp-graph-tools.md).
+**Status**: Part 1 ACTIVE — Focus: Synonym Quality Audit  
+**Plan**: [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)  
+**Last Updated**: 2025-12-27
 
 ---
 
-## 🎯 The Goal: User Value Through Impact
+## 🎯 CURRENT TASK: Synonym Quality Audit
 
-**We are here to enhance the usefulness of search results for multiple audiences.**
+**Goal**: Audit existing synonyms for weak entries, add high-value foundational synonyms, and measure impact on search.
 
-This work is NOT about extraction counts or technical metrics in isolation. It's about delivering value to real people through positive impact, enabled by context awareness and truly excellent software and data engineering.
+### Why This First?
 
-### User Personas
-
-| Persona | Context | What They Need | Example Query |
-|---------|---------|----------------|---------------|
-| **Student** | Learning new concepts | Clear definitions, learning paths, "what comes next" | "What does photosynthesis mean?" |
-| **Teacher** | Lesson planning | Vocabulary to introduce, misconceptions to address | "Common mistakes with fractions" |
-| **School Leader** | Curriculum planning | NC coverage, progression mapping | "Which units cover Year 5 NC statements?" |
-| **Curriculum Planner** | Strategic design | Cross-subject vocabulary, prerequisite chains | "What's the learning path for algebra?" |
-| **Parent (Homeschool)** | Supporting learning | Clear structure, prerequisites | "What should my child know before this?" |
-| **Adult Learner** | Self-directed learning | Context-appropriate explanations, flexible paths | "Explain this for someone new to the subject" |
-
-### Success = Measurable User Impact
-
-| Metric | What It Measures | Target |
-|--------|------------------|--------|
-| Search MRR | Do users find what they need? | Tier 1: 0.45 ✅ achieved (0.614) |
-| Query→Lesson match | Does vocabulary help matching? | Improved recall on hard queries |
-| Learning path accuracy | Can AI answer "what comes before?" | Prerequisites traceable |
-| Misconception coverage | Can AI detect common mistakes? | Addressable in tutoring context |
+1. **Top 100 curriculum terms have 0% synonym coverage** — the highest-frequency vocabulary is not covered
+2. **Existing synonyms are unaudited** — we don't know if any are harming precision
+3. **Quick win** — 2-3 hours of work with measurable impact
+4. **Validates approach** — before investing in ES indexing or evaluation corpus
 
 ---
 
-## Pipeline Architecture: Extraction → Processing → Impact
+## 📋 Acceptance Criteria
 
-The vocabulary mining pipeline is **multi-step by design**:
+### Phase 1: Audit Existing Synonyms (~2 hours)
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         VOCAB-GEN PIPELINE                               │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│  STEP 1: EXTRACTION (Exploratory)                                        │
-│  ─────────────────────────────────                                       │
-│  Mine EVERYTHING from bulk data. We don't know what will be useful yet. │
-│  Keywords, phrases, relationships (implicit & explicit), progressions.   │
-│                                                                          │
-│                              ↓                                           │
-│                                                                          │
-│  STEP 2: PROCESSING (Value Creation)                                     │
-│  ────────────────────────────────────                                    │
-│  Transform raw data into user-valuable structures:                       │
-│  • Curate high-value terms from raw keywords                             │
-│  • Build prerequisite graphs from prior knowledge                        │
-│  • Cluster misconceptions by topic                                       │
-│  • Extract implicit relationships                                        │
-│                                                                          │
-│                              ↓                                           │
-│                                                                          │
-│  STEP 3: OUTPUT (User-Facing)                                            │
-│  ─────────────────────────────                                           │
-│  Generate structures that directly serve user needs:                     │
-│  • Static graph files for MCP tools                                      │
-│  • Elasticsearch indexes for search                                      │
-│  • Synonym sets for query expansion                                      │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+| Criterion | How to Verify |
+|-----------|---------------|
+| All 13 synonym files reviewed for weak entries | Checklist completed |
+| Potentially ambiguous synonyms identified | List created with reasoning |
+| Overly broad synonyms identified | List created with reasoning |
+| Category errors identified (e.g., "gravity" as synonym for "forces") | List created |
+| Recommendations documented | Markdown report with keep/remove/scope decisions |
 
-**Key insight**: Extraction is speculative. We mine broadly because we don't yet know what will create the most value. Processing and output steps are where we make deliberate choices about what serves users best.
+**Weak Synonym Indicators**:
+- **Ambiguous**: "difference" could mean subtraction OR general difference
+- **Overly broad**: "total" could match anything with a total
+- **Category error**: "gravity" IS a force, not a synonym for forces
+- **Cross-subject collision**: "gradient" means different things in maths vs art
+
+### Phase 2: Add Foundational Synonyms (~1 hour)
+
+| Criterion | How to Verify |
+|-----------|---------------|
+| ≥15 high-value synonyms added | Count in commit |
+| Synonyms target KS1/KS2 foundational terms | Terms from value-scored list |
+| Each synonym verified against bulk vocabulary data | Definition confirms usage |
+| Quality gates pass | All 11 gates green |
+
+**Target Synonyms** (from value analysis):
+
+| Term | Value | Add to File | Suggested Synonyms |
+|------|-------|-------------|-------------------|
+| `adjective` | 678 | english.ts | describing word, descriptive word |
+| `noun` | 579 | english.ts | naming word |
+| `verb` | 304 | english.ts | action word, doing word |
+| `adverb` | 240 | english.ts | describing verb word |
+| `suffix` | 378 | english.ts | word ending, end of word |
+| `prefix` | 94 | english.ts | word beginning, start of word |
+| `partition` | 207 | maths.ts | break apart, split up |
+| `multiple` | 154 | maths.ts | times table number |
+| `equation` | 118 | maths.ts | number sentence |
+| `denominator` | 55 | maths.ts | bottom number |
+| `numerator` | 44 | maths.ts | top number |
+| `estimate` | 109 | maths.ts | guess, rough answer |
+
+### Phase 3: Measure Impact (~1 hour)
+
+| Criterion | How to Verify |
+|-----------|---------------|
+| Baseline MRR recorded before changes | `pnpm test:smoke` results saved |
+| Synonyms deployed to ES | `pnpm es:setup` successful |
+| Post-deployment MRR measured | `pnpm test:smoke` results saved |
+| Before/after comparison documented | Markdown report |
+| Any precision regressions identified | Compare per-category MRR |
+
+---
+
+## 🎯 Success Metrics
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| Weak synonyms identified | ≥5 entries | Audit report count |
+| High-value synonyms added | ≥15 entries | Commit diff count |
+| Colloquial query MRR | No regression | Before/after comparison |
+| Synonym-dependent query MRR | +5% improvement | Before/after comparison |
+| Precision | No regression | Monitor for false positives |
 
 ---
 
 ## Current State
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Tier 1 target | ✅ MET | MRR 0.614 ≥ 0.45 |
-| 02a Synonym architecture | ✅ COMPLETE | 163 curated synonyms |
-| **02b Extraction** | ✅ COMPLETE | All 7 extractors working |
-| **02b Graph Data** | ✅ PARTIAL | Thread progressions + prerequisite graph generated |
-| **02b ES Indexing** | 📋 PENDING | Glossary, misconception indices |
-| **08 MCP Tools** | 📋 DEFERRED | See [08-mcp-graph-tools.md](../../plans/semantic-search/part-1-search-excellence/08-mcp-graph-tools.md) |
-| Type remediation | ✅ COMPLETE | `formatOptimizedResult` refactored |
-| Quality gates | ✅ PASS | All 11 gates |
+### Synonym Files (~300 entries total)
 
-### What's Been Built
+| File | Entries | Focus |
+|------|---------|-------|
+| `maths.ts` | ~119 | GCSE compounds, algebra, geometry |
+| `key-stages.ts` | ~106 | KS abbreviations |
+| `subjects.ts` | ~51 | Subject name variants |
+| `numbers.ts` | ~17 | one↔1, two↔2, etc. |
+| `history.ts` | ~13 | Historical periods |
+| `education.ts` | ~10 | SEN, CPD, etc. |
+| `science.ts` | ~11 | Concepts |
+| `computing.ts` | ~6 | NEW — raster/bitmap, etc. |
+| `music.ts` | ~8 | NEW — semibreve/whole note |
+| `english.ts` | ~8 | Literary terms |
+| `geography.ts` | ~8 | Themes |
+| `exam-boards.ts` | ~5 | AQA, Edexcel, etc. |
 
-```
-packages/sdks/oak-curriculum-sdk/
-├── vocab-gen/
-│   ├── lib/                    ← Bulk reader with Zod validation
-│   ├── extractors/             ← 7 extractors (keywords, misconceptions, etc.)
-│   └── generators/             ← Thread progressions ✅, prerequisite graph ✅, others pending
-└── src/mcp/
-    ├── knowledge-graph-data.ts ← Pattern reference
-    ├── thread-progression-data.ts ← ✅ GENERATED (164 threads, 14 subjects)
-    └── prerequisite-graph-data.ts ← ✅ GENERATED (1601 units, 3408 edges)
-```
+### Key Discovery: Synonym Strategy is Inverted
 
-> **Note**: MCP tool files (`aggregated-*.ts`) exist but are deferred to [08-mcp-graph-tools.md](../../plans/semantic-search/part-1-search-excellence/08-mcp-graph-tools.md) for remaining work.
+**See [vocabulary-value-analysis.md](../../research/semantic-search/vocabulary-value-analysis.md)**
 
-### What Extraction Captures (Raw Data)
+- Current synonyms target GCSE compounds (low frequency, high complexity)
+- Top 100 curriculum terms (high frequency, foundational) have **0% coverage**
+- Value Score = Frequency × (1 + 1/Year) × (1 + 0.2*(subjects-1))
+- Highest-value uncovered: `adjective` (678), `noun` (579), `suffix` (378)
 
-The extractors mine everything available. Counts are informational, not success metrics:
+### Previous Session Outcomes (2025-12-26/27)
 
-| Data Type | Raw Count | User Value Potential |
-|-----------|-----------|---------------------|
-| Keywords with definitions | ~13K | Glossary, synonym mining |
-| Misconceptions with responses | ~12K | AI tutoring, teacher guidance |
-| Learning points | ~51K | Outcome mapping |
-| Teacher tips | ~12K | Pedagogical guidance |
-| Prior knowledge requirements | ~7K | Prerequisite graphs |
-| NC statements | ~7K | Curriculum coverage |
-| Threads | 164 | Learning paths ✅ |
+- ✅ Bulk mining complete — all 5 generators working
+- ✅ Vocabulary value analysis — scoring framework created
+- ✅ 27 LLM-extracted synonyms added (music.ts, computing.ts created)
+- ✅ Regex synonym mining archived — 93% noise rate documented
+- ✅ Plans 09, 10, 11 created for future work
 
 ---
 
-## What's Next — By User Need
-
-### 1. "What's the learning path for X?" — ✅ Data COMPLETE
-
-**Thread Progressions**: 164 threads showing ordered unit sequences across years.
-
-- Data: `thread-progression-data.ts` (generated by `pnpm vocab-gen`)
-- ES Index: 📋 PENDING — Index for search queries
-
-### 2. "What should I know before this?" — ✅ Data COMPLETE
-
-**Prerequisite Graph**: 1,601 units with prior knowledge requirements and 3,408 edges.
-
-- Data: `prerequisite-graph-data.ts` (generated by `pnpm vocab-gen`)
-- ES Index: 📋 PENDING — Index for prerequisite search queries
-
-### 3. "What mistakes should I watch for?" — PLANNED
-
-**Misconception Graph**: Cluster ~12K misconceptions by topic for searchable access.
-
-- Generator: 📋 PENDING — `misconception-graph-generator.ts`
-- ES Index: 📋 PENDING — `oak-misconceptions` index
-
-User value: Teachers prepare for common errors, search finds lessons addressing specific mistakes.
-
-### 4. "Improve search for vocabulary queries" — PLANNED
-
-**Synonym Enhancement**: Mine definitions for patterns ("also known as", parentheticals).
-
-- Processor: 📋 PENDING — `synonym-miner.ts`
-- ES Synonyms: 📋 PENDING — Update `oak-syns` synonym set
-
-User value: User queries match curriculum content even with different wording.
-
----
-
-## Before You Start (MANDATORY)
+## Before You Start
 
 ### 1. Read Foundation Documents
 
-1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, no type shortcuts
-2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types
-3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first
-4. **[02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md)** — Full plan
+1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates
+2. **[11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)** — Full plan
+3. **[vocabulary-value-analysis.md](../../research/semantic-search/vocabulary-value-analysis.md)** — Value scoring
 
-### 2. The First Question
-
-Before every change: **"Could it be simpler without compromising quality?"**
-
-### 3. User Value Question
-
-Before every feature: **"Which user persona does this serve? How will we measure impact?"**
-
----
-
-## Fresh Chat First Steps
-
-### 1. Verify Quality Gates
+### 2. Verify Quality Gates
 
 ```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm format:root && pnpm markdownlint:root && pnpm test && pnpm test:e2e && pnpm test:e2e:built && pnpm test:ui && pnpm smoke:dev:stub
+cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
 ```
 
-### 2. Verify Pipeline Works
+### 3. Record Baseline MRR
 
 ```bash
-pnpm vocab-gen --dry-run  # Shows extraction stats
-pnpm vocab-gen            # Generates output files
+cd apps/oak-open-curriculum-semantic-search
+pnpm test:smoke 2>&1 | tee /tmp/baseline-mrr.txt
 ```
 
-### 3. Review Generated Output
+---
+
+## Session Flow
+
+### Step 1: Audit Existing Synonyms
+
+For each file in `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`:
+
+```markdown
+## Audit: {filename}
+
+### Entries Reviewed: N
+
+### Potentially Weak Entries:
+
+| Entry | Issue | Recommendation |
+|-------|-------|----------------|
+| `difference: ['subtraction']` | Ambiguous — "difference" used in many contexts | SCOPE: Add comment or remove |
+
+### Category Errors:
+- None found / List...
+
+### Decision: KEEP / REMOVE / SCOPE (with specifics)
+```
+
+### Step 2: Add Foundational Synonyms
+
+For each term in the target list:
+
+1. **Verify in bulk data**: Check `vocabulary-graph-data.ts` for definition
+2. **Confirm synonym is genuine**: Definition should support the alternative
+3. **Add to appropriate file**
+4. **Run quality gates**
+
+### Step 3: Deploy and Measure
 
 ```bash
-cat packages/sdks/oak-curriculum-sdk/src/mcp/thread-progression-data.ts | head -50
+# Rebuild SDK
+pnpm type-gen && pnpm build
+
+# Deploy to ES
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup
+
+# Measure impact
+pnpm test:smoke 2>&1 | tee /tmp/post-synonym-mrr.txt
+
+# Compare
+diff /tmp/baseline-mrr.txt /tmp/post-synonym-mrr.txt
 ```
 
-### 4. Continue With Next User Need
-
-Pick the next generator based on which user need is highest priority.
-
 ---
 
-## Key Principles
+## Synonym Validation Against Bulk Data
 
-1. **User value first** — Every feature serves a persona with measurable impact
-2. **Extraction is exploratory** — Mine everything; we don't know what's valuable yet
-3. **Processing creates value** — Transform raw data into user-serving structures
-4. **Pipeline is multi-step** — Extraction → Processing → Output
-5. **TDD at ALL levels** — RED → GREEN → REFACTOR
-6. **First Question** — Could it be simpler without compromising quality?
-
----
-
-## TDD Sequence for New Generators
-
-For each new generator, follow this exact sequence:
-
-1. **RED**: Write failing test for `generate[GraphName](extractedData)`
-2. **GREEN**: Implement generator to pass the test
-3. **RED**: Write failing test for serialisation
-4. **GREEN**: Implement TypeScript file writer
-5. **REFACTOR**: Extract common patterns
-
-**Then**: Run all quality gates and confirm user value.
-
----
-
-## Quality Gate Checkpoints
-
-After completing any piece of work:
+To verify a synonym is genuine, check the definition in the extracted vocabulary:
 
 ```bash
-# Run one at a time, analyse issues only after ALL complete
-pnpm type-gen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm test:e2e
-pnpm test:e2e:built
-pnpm test:ui
-pnpm smoke:dev:stub
+# Search for term in vocabulary graph
+grep -A5 "term: 'adjective'" packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts
 ```
 
-**Then**: Re-read foundation documents and confirm adherence.
+**A valid synonym should appear in the definition**:
+- `adjective`: "a word that **describes** a noun" → "describing word" ✅
+- `denominator`: "the **bottom number** in a fraction" → "bottom number" ✅
 
----
-
-## Data Quality Notes
-
-The bulk download data has known issues that the pipeline handles:
-
-| Issue | Solution |
-|-------|----------|
-| `"NULL"` sentinel strings | Zod transforms to `undefined` |
-| Maths-secondary tier variants | Merged by unitSlug (tier-agnostic) |
-| Empty `teacherTip` strings | Filtered before extraction |
-| Complex `contentGuidance` array | Custom Zod schema |
-
-See [02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) for full data quality handling strategy.
+**A poor synonym is not supported by the definition**:
+- `forces`: "a push or pull on an object" → "gravity" ❌ (gravity is a TYPE of force)
 
 ---
 
 ## Key File Locations
 
-### Vocab-Gen Pipeline
+### Synonym Files
 
 ```
-packages/sdks/oak-curriculum-sdk/vocab-gen/
-├── run-vocab-gen.ts           ← CLI entry point
-├── vocab-gen.ts               ← Pipeline orchestrator
-├── vocab-gen-core.ts          ← Core processing (pure, testable)
-├── lib/                       ← Bulk reader, schemas
-├── extractors/                ← 7 extractors
-└── generators/                ← Graph generators
+packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
+├── index.ts           ← Barrel export
+├── maths.ts           ← Largest file (~119 entries)
+├── english.ts         ← Target for foundational additions
+├── science.ts         ← Check for category errors
+├── education.ts       ← Acronyms (likely clean)
+└── README.md          ← Documentation
 ```
 
-### Generated Outputs
+### Bulk Vocabulary (for validation)
 
 ```
-packages/sdks/oak-curriculum-sdk/src/mcp/
-├── knowledge-graph-data.ts       ← Pattern reference
-├── thread-progression-data.ts    ← ✅ GENERATED
-├── prerequisite-graph-data.ts    ← TO BE GENERATED
-├── misconception-graph-data.ts   ← TO BE GENERATED
-└── vocabulary-graph-data.ts      ← TO BE GENERATED
+packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts  ← 13K terms with definitions
 ```
 
-### Bulk Download Data
+### Search App
 
 ```
-reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/
-└── 30 files, ~630MB
+apps/oak-open-curriculum-semantic-search/
+├── src/lib/indexing/synonym-config.ts  ← ES synonym configuration
+└── scripts/es-setup.ts                  ← Deploys synonyms to ES
 ```
+
+---
+
+## Quality Gate Checkpoints
+
+After any synonym changes:
+
+```bash
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm test
+```
+
+After ES deployment:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm test:smoke
+```
+
+---
+
+## Audit Checklist Template
+
+Use this for each synonym file:
+
+```markdown
+## Audit: maths.ts
+
+**Entries Reviewed**: 119
+**Issues Found**: N
+
+### Potentially Ambiguous
+
+| Entry | Issue | Recommendation |
+|-------|-------|----------------|
+| ... | ... | ... |
+
+### Overly Broad
+
+| Entry | Issue | Recommendation |
+|-------|-------|----------------|
+| ... | ... | ... |
+
+### Category Errors
+
+| Entry | Issue | Recommendation |
+|-------|-------|----------------|
+| ... | ... | ... |
+
+### Summary
+- KEEP: N entries
+- REMOVE: N entries
+- SCOPE (add comment): N entries
+```
+
+---
+
+## Related Documents
+
+- [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md) — Full plan
+- [vocabulary-value-analysis.md](../../research/semantic-search/vocabulary-value-analysis.md) — Value scoring
+- [elasticsearch-optimization-opportunities.md](../../research/semantic-search/elasticsearch-optimization-opportunities.md) — ES research
+- [synonyms/README.md](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Lessons learned
+
+---
+
+## Constraints
+
+1. **No new MCP tools** — Search optimisation focus
+2. **LLM agent makes final decisions** — Weighting function is first pass only
+3. **Scope is ALL subjects** — Not just maths; bulk data covers full curriculum
+4. **Measure before and after** — No unmeasured changes
 
 ---
 
 **Ready?**
 
-1. Run: `pnpm vocab-gen` to verify generation works
-2. Read: [02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md)
-3. Pick: Next user need to address (focus on search implementation, not MCP tools)
+1. Record baseline MRR
+2. Audit existing synonyms (start with maths.ts — largest file)
+3. Add foundational synonyms from value-scored list
+4. Deploy to ES and measure impact

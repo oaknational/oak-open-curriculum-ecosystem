@@ -12,6 +12,11 @@
  *
  * **F-001 Experiment**: Comprehensive synonym coverage to address hard query failures.
  *
+ * @remarks
+ * Entries marked [MINED-2025-12-26] were extracted from curriculum definitions
+ * by an LLM-powered agent. Regex-based mining was insufficient — language
+ * understanding was required to distinguish true synonyms from examples.
+ *
  * @see `.agent/evaluations/experiments/B-001-hard-query-baseline.experiment.md`
  * @see `.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md`
  */
@@ -312,6 +317,11 @@ export const mathsSynonyms = {
 
   /** Congruence and similarity */
   congruence: ['congruent', 'similar', 'similarity', 'same shape', 'same size'],
+
+  // [MINED-2025-12-26] Extracted by LLM agent from bulk curriculum definitions
+  /** Quartiles - statistical measures */
+  'lower-quartile': ['first quartile', 'q1', '25th percentile'],
+  'upper-quartile': ['third quartile', 'q3', '75th percentile'],
 } as const;
 
 export type MathsSynonyms = typeof mathsSynonyms;

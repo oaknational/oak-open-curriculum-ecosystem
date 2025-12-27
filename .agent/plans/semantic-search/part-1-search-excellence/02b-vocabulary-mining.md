@@ -1,6 +1,6 @@
 # Sub-Plan 02b: Comprehensive Curriculum Vocabulary Mining
 
-**Status**: 🔄 IN PROGRESS — Extraction complete, graph data generated, ES indexing pending  
+**Status**: 🔄 IN PROGRESS — Thread + Prerequisite complete, Bulk mining next  
 **Priority**: HIGH — User value through positive impact  
 **Parent**: [README.md](README.md)  
 **Prerequisite**: [02a-synonym-architecture.md](02a-synonym-architecture.md) ✅ COMPLETE  
@@ -9,8 +9,38 @@
 
 ---
 
-> **Note**: MCP tool integration has been deferred to [08-mcp-graph-tools.md](08-mcp-graph-tools.md).
-> This plan focuses on search implementation: extraction, graph generation, and ES indexing.
+> **⚠️ CRITICAL CONSTRAINT**: No new MCP tools until search optimisation is complete.
+> Focus is on extracting and processing data for search improvement first.
+
+---
+
+## 🚀 NEXT STEP: Bulk Download Mining (Exploratory)
+
+**This is the broadest, least defined piece of work — perfect for exploration.**
+
+The extractors have already captured raw data from all 30 bulk files. The next step is to **mine the entirety of this data** to discover:
+
+1. **Synonym patterns** — "also known as", parentheticals, cross-lesson variants
+2. **Keyword relationships** — Definition-based connections, cross-subject terms
+3. **High-value vocabulary** — Most frequent, most foundational, most cross-referenced
+4. **Misconception clusters** — Topics with highest error density
+5. **Learning progression patterns** — Implicit dependencies not captured by threads
+
+### Why This First?
+
+- **Exploratory work** — We don't know what will create the most value yet
+- **Foundation for all other generators** — Informs synonym mining, vocabulary processor, misconception clustering
+- **Search impact** — Direct contribution to MRR improvement through query expansion
+- **No MCP overhead** — Pure data exploration without tool integration complexity
+
+### Expected Outputs
+
+- **Analysis report** — What patterns exist in the bulk data?
+- **Synonym candidates** — Mined synonyms for review and ES deployment
+- **Vocabulary statistics** — Cross-subject terms, introduction progressions
+- **Misconception map** — Topics by error density
+
+See [ADR-086](../../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) for generator specifications and user persona mappings.
 
 ---
 
@@ -156,14 +186,14 @@ Extracted data (raw, for processing):
   Thread progressions           ← ✅ GENERATED: thread-progression-data.ts
 ```
 
-### What's In Progress
+### What's Next
 
 | Component | Status | User Need It Serves |
 |-----------|--------|---------------------|
-| **Prerequisite Generator** | 🔄 Next | "What should I know before this?" |
-| **Misconception Generator** | 📋 Planned | "What mistakes should I watch for?" |
+| **Misconception Generator** | 📋 Next | "What mistakes should I watch for?" |
 | **Vocabulary Processing** | 📋 Planned | Curated terms, synonym mining |
 | **NC Coverage Generator** | 📋 Planned | "Which NC statements does this cover?" |
+| **ES Indexing** | 📋 Planned | Searchable glossary, misconception indices |
 
 ### Generated Outputs
 
@@ -191,13 +221,13 @@ Extracted data (raw, for processing):
 ```
 vocab-gen/generators/
 ├── thread-progression-generator.ts   ← ✅ COMPLETE
+├── prerequisite-graph-generator.ts   ← ✅ COMPLETE
 ├── write-graph-file.ts               ← ✅ COMPLETE (shared utility)
 ├── index.ts                          ← ✅ COMPLETE
-├── prerequisite-graph-generator.ts   ← Next priority
-├── misconception-graph-generator.ts  ← Planned
-├── vocabulary-processor.ts           ← Planned (curates from raw keywords)
-├── synonym-miner.ts                  ← Planned (extracts from definitions)
-└── nc-coverage-generator.ts          ← Planned
+├── misconception-graph-generator.ts  ← 📋 Next priority
+├── vocabulary-processor.ts           ← 📋 Planned (curates from raw keywords)
+├── synonym-miner.ts                  ← 📋 Planned (extracts from definitions)
+└── nc-coverage-generator.ts          ← 📋 Planned
 ```
 
 ### Current File Structure
@@ -1532,7 +1562,7 @@ These are means to the above ends, not goals in themselves:
 - [ontology-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) — Existing ontology (vocab-gen source)
 - [knowledge-graph-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) — **Pattern for graph exports** (vocab-gen source)
 
-### Pipeline Directory Structure (Actual — 2025-12-24)
+### Pipeline Directory Structure (Actual — 2025-12-26)
 
 ```text
 packages/sdks/oak-curriculum-sdk/vocab-gen/
@@ -1561,32 +1591,38 @@ packages/sdks/oak-curriculum-sdk/vocab-gen/
 │   ├── thread-extractor.ts       ← 164 unique threads
 │   ├── *.unit.test.ts            ← Unit tests for each
 │   └── index.ts                  ← Barrel export
-└── generators/                   ← NOT YET CREATED ❌
-    ├── thread-progression-generator.ts   ← Start here
-    ├── vocabulary-graph-generator.ts
-    ├── prerequisite-graph-generator.ts
-    ├── misconception-graph-generator.ts
-    ├── nc-coverage-graph-generator.ts
-    ├── synonyms-generator.ts
-    └── index.ts
+└── generators/                   ← PARTIALLY COMPLETE
+    ├── thread-progression-generator.ts   ← ✅ COMPLETE
+    ├── prerequisite-graph-generator.ts   ← ✅ COMPLETE
+    ├── write-graph-file.ts               ← ✅ Shared utility
+    ├── index.ts                          ← ✅ Barrel exports
+    ├── misconception-graph-generator.ts  ← 📋 Next priority
+    ├── vocabulary-processor.ts           ← 📋 Planned
+    ├── synonym-miner.ts                  ← 📋 Planned
+    └── nc-coverage-generator.ts          ← 📋 Planned
 
 packages/sdks/oak-curriculum-sdk/src/mcp/
-├── knowledge-graph-data.ts     ← Existing (PATTERN REFERENCE)
-├── ontology-data.ts            ← Existing
-├── prerequisite-graph-data.ts  ← TO BE GENERATED by vocab-gen
-├── misconception-graph-data.ts ← TO BE GENERATED by vocab-gen
-├── nc-coverage-graph-data.ts   ← TO BE GENERATED by vocab-gen
-├── vocabulary-graph-data.ts    ← TO BE GENERATED by vocab-gen
-└── thread-progression-data.ts  ← TO BE GENERATED by vocab-gen
+├── knowledge-graph-data.ts            ← Existing (PATTERN REFERENCE)
+├── ontology-data.ts                   ← Existing
+├── thread-progression-data.ts         ← ✅ GENERATED (164 threads)
+├── prerequisite-graph-data.ts         ← ✅ GENERATED (1601 units, 3408 edges)
+├── aggregated-thread-progressions.ts  ← ✅ MCP tool complete
+├── aggregated-prerequisite-graph.ts   ← ✅ MCP tool complete
+├── misconception-graph-data.ts        ← 📋 TO BE GENERATED
+├── nc-coverage-graph-data.ts          ← 📋 TO BE GENERATED
+└── vocabulary-graph-data.ts           ← 📋 TO BE GENERATED
 ```
 
 ### Working Commands
 
 ```bash
-# Current: runs extraction, reports statistics, no file output
+# Dry run: shows extraction stats without writing files
 pnpm vocab-gen --dry-run
 
-# Example output (verified 2025-12-24):
+# Full run: generates thread-progression-data.ts and prerequisite-graph-data.ts
+pnpm vocab-gen
+
+# Example output (verified 2025-12-26):
 # Files processed: 30
 # Source data: 12,783 lessons, 1,663 units
 # Extracted vocabulary:
@@ -1602,8 +1638,7 @@ pnpm vocab-gen --dry-run
 ### Commands Not Yet Implemented
 
 ```bash
-# These require generators to be built:
-pnpm vocab-gen             # Generate all output files
+# These will be implemented as generators are built:
 pnpm vocab-gen --verify    # Check generated files match source
 pnpm vocab-gen --diff      # Show changes since last run
 ```
@@ -1690,17 +1725,19 @@ See [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-doma
 5. ✅ Create all 7 extractors with TDD
 6. ✅ **Thread progression generator** — `thread-progression-data.ts` generated (2025-12-25)
 7. ✅ **Thread MCP tool** — `get-thread-progressions` tool for AI agents (2025-12-25)
-8. ✅ All quality gates pass
+8. ✅ **Prerequisite graph generator** — `prerequisite-graph-data.ts` generated (2025-12-25)
+9. ✅ **Prerequisite MCP tool** — `get-prerequisite-graph` tool for AI agents (2025-12-25)
+10. ✅ **Type remediation** — Archived; see `.agent/plans/archive/type-remediation.plan.md`
+11. ✅ All quality gates pass
 
 ### Immediate Next Steps (By User Need)
 
 | User Need | Generator | Status |
 |-----------|-----------|--------|
-| "What should I know before this?" | `prerequisite-graph-generator.ts` | ✅ COMPLETE |
-| "What mistakes should I watch for?" | `misconception-graph-generator.ts` | 📋 Planned |
+| "What mistakes should I watch for?" | `misconception-graph-generator.ts` | 📋 Next |
 | "Better search for vocabulary queries" | `synonym-miner.ts` | 📋 Planned |
 | "Does this cover the NC?" | `nc-coverage-generator.ts` | 📋 Planned |
-| **Type Preservation Fix** | ESLint + `TypedCallToolResult<T>` | 📋 Planned — See [Addendum C](#addendum-c-type-preservation-architecture-fix) |
+| "Search the glossary" | ES indexing | 📋 Planned |
 
 ### Future Phases
 
@@ -1728,12 +1765,331 @@ See [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-doma
 
 ---
 
+## Addendum D: Vocabulary Analysis Discoveries (2025-12-26)
+
+**Status**: 🔬 RESEARCH COMPLETE — Insights ready for action  
+**Permanent Record**: [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md)
+
+This section captures critical discoveries from the vocabulary analysis session. The full analysis is permanently recorded in the research document linked above. This plan section may be archived; the research persists.
+
+### Discovery 1: The Synonym Strategy is Inverted
+
+| What We Have | Reality |
+|--------------|---------|
+| 163 curated synonyms | Target GCSE-level compound terms |
+| Focus on "linear-equations", "completing-the-square" | These appear 0-14 times in curriculum vocabulary |
+| Top 100 curriculum terms | **0% synonym coverage** |
+| Highest-value terms | `adjective` (678 value), `noun` (579), `suffix` (378), `evaluate` (371) |
+
+**The current synonyms were created reactively based on search failures**. The bulk data reveals that the **high-volume vocabulary is foundational (KS1-KS2) single words**, not GCSE compound terms.
+
+### Discovery 2: The Value Score Framework
+
+Every curriculum term can be scored by potential search impact:
+
+```
+Value = Frequency × Foundation Bonus × Cross-Subject Bonus
+      = Frequency × (1 + 1/Year) × (1 + 0.2*(subjects-1))
+```
+
+| Factor | Calculation | Why It Matters |
+|--------|-------------|----------------|
+| **Frequency** | Raw count from vocabulary graph | More lessons teach this → more search opportunities |
+| **Foundation Bonus** | `1 + (1/Year)` | Earlier terms are foundational → more users encounter them |
+| **Cross-Subject Bonus** | `1 + 0.2*(subjects-1)` | Terms in multiple subjects → broader search context |
+
+**Top 10 terms by value score**:
+
+| Rank | Term | Value | Freq | Year | Subjects |
+|------|------|-------|------|------|----------|
+| 1 | adjective | 678 | 212 | 1 | 4 |
+| 2 | noun | 579 | 181 | 1 | 4 |
+| 3 | theme | 419 | 131 | 1 | 4 |
+| 4 | synonym | 403 | 126 | 1 | 4 |
+| 5 | suffix | 378 | 135 | 1 | 3 |
+| 6 | texture | 374 | 85 | 1 | 7 |
+| 7 | evaluate | 371 | 58 | 1 | 12 |
+| 8 | structure | 326 | 68 | 1 | 8 |
+| 9 | prediction | 312 | 65 | 1 | 8 |
+| 10 | volume | 308 | 70 | 1 | 7 |
+
+### Discovery 3: High-Value Synonym Candidates
+
+These foundational terms likely need "plain English" synonyms for teacher search:
+
+| Term | Value | Freq | Suggested Synonyms |
+|------|-------|------|-------------------|
+| `adjective` | 678 | 212 | describing word, descriptive word |
+| `noun` | 579 | 181 | naming word, person/place/thing |
+| `suffix` | 378 | 135 | word ending, end of word |
+| `evaluate` | 371 | 58 | work out, calculate, assess |
+| `verb` | 304 | 95 | action word, doing word |
+| `adverb` | 240 | 75 | -ly word, how/when/where word |
+| `partition` | 207 | 74 | break apart, split up |
+| `multiple` | 154 | 77 | times table number |
+| `equation` | 118 | 59 | number sentence, maths problem |
+| `denominator` | 55 | 41 | bottom number, number below the line |
+| `numerator` | 44 | 33 | top number, number above the line |
+
+**These are the terms KS1/KS2 teachers search for** using plain English, but the curriculum uses technical vocabulary.
+
+### Discovery 4: Definitions ARE Synonym Sources
+
+The curriculum definitions contain natural synonym patterns:
+
+```text
+adjective: "a word that DESCRIBES a noun"     → "describing word"
+noun: "a NAMING word for people..."           → "naming word"  
+verb: "a being, DOING or having word"         → "doing word", "action word"
+partition: "to DIVIDE into parts"             → "divide", "split"
+denominator: "the BOTTOM NUMBER in a fraction" → "bottom number"
+```
+
+**The definition text IS the synonym source** — not regex patterns like "also known as". The original synonym mining approach (regex on definitions) was a category error. The definitions contain explanatory phrases that teachers use to search.
+
+### Discovery 5: Mined Synonym Quality Analysis
+
+The regex-based synonym miner produced 382 entries. Analysis shows:
+
+| Category | Count | Examples |
+|----------|-------|----------|
+| **Actually useful** | ~27 | `raster→bitmap`, `semibreve→whole note`, `ppe→personal protective equipment` |
+| **Noise (examples, not synonyms)** | ~355 | `pronoun→it`, `short vowel→cat, hot`, `third person→she, he, they` |
+
+**Recommendation**: Archive `definition-synonyms.ts`. Curate the ~15-20 useful entries into appropriate category files manually. Do not integrate mined synonyms directly into ES.
+
+### Discovery 6: Generated Graph Status
+
+| Graph File | Lines | Content | Connected to Users? |
+|------------|-------|---------|---------------------|
+| `thread-progression-data.ts` | 5,278 | 164 threads | ✅ MCP tool exists |
+| `prerequisite-graph-data.ts` | 45,931 | 1,601 units, 3,408 edges | ✅ MCP tool exists |
+| `vocabulary-graph-data.ts` | 112,328 | 13,349 keywords | ❌ No consumer |
+| `misconception-graph-data.ts` | 121,032 | 12,777 misconceptions | ❌ No consumer |
+| `nc-coverage-graph-data.ts` | 56,732 | NC statements → units | ❌ No consumer |
+| `definition-synonyms.ts` | 450 | 393 mined synonyms | ❌ Not exported, quality issues |
+
+**Gap**: The graphs exist but vocabulary, misconceptions, and NC coverage are not indexed in ES or exposed via MCP tools.
+
+### Discovery 7: Cross-Subject Vocabulary Patterns
+
+Terms appearing in multiple subjects have higher search value:
+
+| Term | Frequency | Subjects |
+|------|-----------|----------|
+| evaluate | 58 | **12 subjects** (art, chemistry, citizenship, combined-science, computing, design-technology, english, geography, maths, music, physical-education, science) |
+| structure | 68 | 8 subjects |
+| prediction | 65 | 8 subjects |
+| power | 52 | 8 subjects |
+| sustainable | 42 | 8 subjects |
+| texture | 85 | 7 subjects |
+| volume | 70 | 7 subjects |
+| evidence | 57 | 7 subjects |
+| data | 47 | 7 subjects |
+| gradient | 50 | 7 subjects |
+
+These terms have different meanings per subject (e.g., "gradient" in maths vs art) but high search volume.
+
+---
+
+### Proposed Next Steps from Discoveries
+
+#### 1. Curate Foundational Synonyms (HIGH PRIORITY)
+
+Add value-scored synonyms to existing curated files:
+
+**`synonyms/english.ts`**:
+```typescript
+adjective: ['describing word', 'descriptive word'],
+noun: ['naming word', 'name word'],
+verb: ['action word', 'doing word', 'being word'],
+adverb: ['describing verb word', '-ly word'],
+suffix: ['word ending', 'end of word'],
+prefix: ['word beginning', 'start of word'],
+```
+
+**`synonyms/maths.ts`**:
+```typescript
+partition: ['break apart', 'split up', 'divide into parts'],
+multiple: ['times table number', 'times result'],
+equation: ['number sentence', 'maths problem', 'sum'],
+denominator: ['bottom number', 'number below the line'],
+numerator: ['top number', 'number above the line'],
+estimate: ['guess', 'rough answer', 'approximately'],
+```
+
+#### 2. Create Value-Scored Synonym Candidate Generator
+
+New vocab-gen command:
+```bash
+pnpm vocab-gen --synonym-candidates
+```
+
+Output: Terms ranked by value score with:
+- Current synonym coverage status
+- Suggested synonyms from definition text
+- Subject distribution
+- Year introduced
+
+#### 3. Design Stratified Evaluation Corpus
+
+Create representative query set stratified by:
+- **Subject**: maths, english, science, history, etc.
+- **Key stage**: KS1, KS2, KS3, KS4
+- **Query type**: definition lookup, topic search, synonym-dependent, multi-concept
+- **Persona**: teacher, student, curriculum planner
+
+This replaces the current ad-hoc diagnostic queries with systematic coverage.
+
+#### 4. Index Vocabulary Graph in ES
+
+The 13,349 terms with definitions should be searchable:
+- Create `oak-curriculum-glossary` index
+- Enable "what does X mean?" queries
+- Enable age-appropriate definition retrieval (filter by year/key stage)
+
+#### 5. Archive Mined Synonyms
+
+- Move `synonyms/generated/definition-synonyms.ts` to archive
+- Curate the ~15-20 useful entries into appropriate category files
+- Update `02b-vocabulary-mining.md` to reflect this as a learning, not a failure
+
+---
+
+## Addendum E: Ideas for Future Exploration
+
+**Status**: 💡 IDEAS — Captured for future work  
+**Permanent Record**: [elasticsearch-optimization-opportunities.md](../../../research/semantic-search/elasticsearch-optimization-opportunities.md)
+
+These ideas emerged from the vocabulary analysis session. They are permanently recorded in the research document linked above. This plan section may be archived; the research persists.
+
+### 1. Definition-Based Synonym Extraction (LLM Approach)
+
+Instead of regex patterns like "also known as", use an LLM to:
+- Parse each definition
+- Identify explanatory phrases that teachers might search for
+- Generate synonym candidates with confidence scores
+
+**Example prompt**:
+```
+Given this curriculum term and definition:
+Term: adjective
+Definition: "a word that describes a noun"
+
+What alternative phrases might a KS1 teacher search for when looking for lessons about this concept? Return only search phrases, not the term itself.
+```
+
+**Why this might work**: The definitions contain the right information; regex can't extract it reliably; LLMs understand pragmatic language patterns.
+
+### 2. Search Log Analysis (If Available)
+
+If we have access to actual search queries:
+- Identify queries that returned zero results
+- Identify queries that had low click-through on first result
+- Map these to curriculum terms that should have matched
+- Generate synonyms that bridge the gap
+
+**This is the gold standard** — synonyms based on actual user behaviour, not theoretical analysis.
+
+### 3. Cross-Subject Disambiguation
+
+Terms like "gradient", "power", "volume" mean different things in different subjects:
+- Maths gradient = slope
+- Art gradient = colour transition
+- Physics power = energy over time
+- Political power = authority
+
+**Idea**: Subject-scoped synonyms that only apply in context:
+```typescript
+// In mathsSynonyms
+gradient: ['slope', 'steepness', 'rate of change'],
+
+// In artSynonyms  
+gradient: ['colour transition', 'colour blend', 'shading'],
+```
+
+**Challenge**: ES synonym filters are global, not per-document. May need query-time handling.
+
+### 4. Year-Appropriate Vocabulary Levels
+
+The same concept has different vocabulary at different year levels:
+- Year 1: "describing word" → adjective
+- Year 4: "adjective" (direct term)
+- Year 7: "modifier", "descriptor"
+
+**Idea**: Year-scoped synonym expansion. When searching for KS1 content, expand with simpler terms.
+
+### 5. Misconception-Driven Synonyms
+
+Common misconceptions might reveal search patterns:
+- If students think "denominator" is the "smaller number", they might search for "smaller number in fraction"
+- If students confuse "perimeter" and "area", they might search with wrong terms
+
+**Idea**: Mine misconceptions for vocabulary confusion patterns, then create synonyms that redirect.
+
+### 6. Phrase Vocabulary from Learning Points
+
+The 51K learning points contain outcome phrases:
+- "I can identify adjectives in a sentence"
+- "I can partition numbers into tens and ones"
+- "I can calculate the area of a rectangle"
+
+**Idea**: Extract action phrases ("identify adjectives", "partition numbers", "calculate area") as searchable vocabulary. These match how teachers think about objectives.
+
+### 7. Automated Synonym Candidate Pipeline
+
+Add a vocab-gen command that generates a synonym candidate report:
+
+```bash
+pnpm vocab-gen --synonym-candidates --top 100
+```
+
+Output:
+```markdown
+## Top 100 Synonym Candidates by Value Score
+
+| Rank | Term | Value | Current Synonyms | Suggested (from definition) |
+|------|------|-------|------------------|---------------------------|
+| 1 | adjective | 678 | NONE | describing word |
+| 2 | noun | 579 | NONE | naming word |
+...
+```
+
+This makes synonym curation a data-driven review process, not ad-hoc.
+
+### 8. Stratified Evaluation Corpus Design
+
+Create a systematic query set for evaluation:
+
+**Stratification axes**:
+1. Subject (16 subjects)
+2. Key stage (KS1, KS2, KS3, KS4)
+3. Query type:
+   - Definition lookup ("what is a noun")
+   - Topic search ("fractions year 4")
+   - Synonym-dependent ("describing words lesson")
+   - Multi-concept ("adding fractions with different denominators")
+4. Persona (teacher, student, curriculum planner)
+
+**Target**: 200-500 queries that systematically cover the space.
+
+**Measurement**: MRR and NDCG per stratum, not just aggregate.
+
+---
+
+### Related Research Documents
+
+- [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md) — Full value score analysis
+- [elasticsearch-optimization-opportunities.md](../../../research/semantic-search/elasticsearch-optimization-opportunities.md) — ES optimization research
+- [2025-12-26-vocabulary-mining-reflection.md](../../../experience/2025-12-26-vocabulary-mining-reflection.md) — Metacognitive reflection
+
+---
+
 ## Addendum C: Type Preservation Architecture Fix
 
-**Status**: BLOCKING — Moved to standalone plan  
-**Location**: [type-remediation.plan.md](../../type-remediation.plan.md)  
-**Prompt**: [type-remediation.prompt.md](../../../prompts/type-remediation.prompt.md)
+**Status**: ✅ ARCHIVED — Complete  
+**Location**: [type-remediation.plan.md](../../archive/type-remediation.plan.md)
 
-This work was discovered during 02b vocabulary mining and has been extracted to a separate plan. It must be completed before resuming semantic search work.
+This work was discovered during 02b vocabulary mining, extracted to a separate plan, and completed on 2025-12-26. The `formatOptimizedResult` function was refactored to use declarative conditional spreading with minimal boundary assertions. ADR-087 was deemed unnecessary as the plan document serves that purpose.
 
-See the standalone plan for full details.
+**No longer blocking** — semantic search work can proceed.

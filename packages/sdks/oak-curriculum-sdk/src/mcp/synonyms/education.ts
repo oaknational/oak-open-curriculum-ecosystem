@@ -2,11 +2,24 @@
  * Generic educational terms and UK education acronyms.
  *
  * Maps common educational terminology and abbreviations.
+ *
+ * @remarks
+ * Entries marked [MINED-2025-12-26] were extracted from curriculum definitions
+ * by an LLM-powered agent. Regex-based mining was insufficient — language
+ * understanding was required to distinguish true synonyms from examples.
  */
 
 /** Generic educational terms */
 export const genericSynonyms = {
   assessment: ['quiz', 'test', 'exam'],
+
+  // [MINED-2025-12-26] Physical education terms
+  sweating: ['perspiration'],
+  'cardiovascular-fitness': ['stamina', 'aerobic endurance', 'cardio fitness'],
+
+  // [MINED-2025-12-26] Design & Technology terms
+  'personal-protective-equipment': ['ppe', 'safety equipment'],
+  'british-standards-institute': ['bsi', 'british standards'],
 } as const;
 
 /** Common UK educational acronyms and abbreviations */

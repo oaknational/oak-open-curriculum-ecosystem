@@ -139,7 +139,9 @@ export default defineConfig({
     'src/mcp/synonym-export.ts',
     // Synonym data files
     'src/mcp/synonyms/index.ts',
+    'src/mcp/synonyms/computing.ts',
     'src/mcp/synonyms/maths.ts',
+    'src/mcp/synonyms/music.ts',
     'src/mcp/synonyms/education.ts',
     'src/mcp/synonyms/geography.ts',
     'src/mcp/synonyms/history.ts',

@@ -1,9 +1,9 @@
 # Part 1: Search Excellence — Master Plan
 
-**Status**: 🔄 IN PROGRESS — Tier 1 EXHAUSTED, Tier 2 ready  
+**Status**: 🔄 IN PROGRESS — Tier 1 EXHAUSTED, 02b Thread+Prereq done, Tier 2 ready  
 **Priority**: High  
 **Created**: 2025-12-19  
-**Last Updated**: 2025-12-25  
+**Last Updated**: 2025-12-26  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
@@ -26,16 +26,22 @@ This master plan coordinates workstreams for search excellence. The principle is
 | ------------------------------------------------------------------ | ------------------------------------ | -------- | -------------- |
 | [01-tier-1-fundamentals.md](01-tier-1-fundamentals.md)             | Exhaust all Tier 1 improvements      | High     | ✅ Complete    |
 | [02a-synonym-architecture.md](02a-synonym-architecture.md)         | Fix synonym circular dependency      | Medium   | ✅ Complete    |
-| [02b-vocabulary-mining.md](02b-vocabulary-mining.md)               | **Comprehensive vocabulary mining**  | **HIGH** | 🔄 IN PROGRESS |
+| [02b-vocabulary-mining.md](02b-vocabulary-mining.md)               | **Comprehensive vocabulary mining**  | **HIGH** | 🔄 Thread + Prereq done |
 | [03-evaluation-infrastructure.md](03-evaluation-infrastructure.md) | Fix evaluation directory duplication | Medium   | 📋 Pending     |
 | [04-documentation-debt.md](04-documentation-debt.md)               | Update outdated documentation        | Low      | ✅ Complete    |
 | [05-complete-data-indexing.md](05-complete-data-indexing.md)       | Index ALL curriculum data            | High     | 📋 Pending     |
 | [06-reference-indices.md](06-reference-indices.md)                 | Reference data (subjects, key stages)| Medium   | 📋 Pending     |
 | [07-resource-types.md](07-resource-types.md)                       | Worksheets, quizzes, sequences       | Medium   | 📋 Pending     |
+| [08-mcp-graph-tools.md](08-mcp-graph-tools.md)                     | MCP tools for graph data             | Medium   | ✅ Partial     |
+| [09-knowledge-graph-evolution.md](09-knowledge-graph-evolution.md) | Property graph → True knowledge graph| Medium   | 📋 Planned     |
+| [10-transcript-mining.md](10-transcript-mining.md)                 | Mine transcripts for spoken synonyms | Medium   | 📋 Planned     |
+| [11-synonym-quality-audit.md](11-synonym-quality-audit.md)         | Audit existing synonyms + weighting  | High     | 📋 Planned     |
 
 ### Principle: Index EVERYTHING
 
 Elasticsearch is most powerful when ALL data is available. Fields like `supervision_level`, `downloads_available`, and `canonical_url` may not contribute to semantic search, but they are vital metadata for filtering, display, and analysis. The index should be a complete view of the curriculum.
+
+> **Scope Clarification**: "Bulk data extraction" ALWAYS means **ALL 30 bulk files** — all subjects, all key stages, all available data. When examples reference specific subjects (e.g., "maths-secondary"), this is for illustration only; the actual extraction covers the complete curriculum.
 
 **Recent additions** (2025-12-24):
 - `supervision_level` - Added to lessons index
@@ -161,10 +167,50 @@ This is a **sector-transformative opportunity**. See [02b-vocabulary-mining.md](
 
 ---
 
+---
+
+## 🆕 New Plans (2025-12-27)
+
+Three new sub-plans emerged from vocabulary mining reflection:
+
+### [09-knowledge-graph-evolution.md](09-knowledge-graph-evolution.md)
+
+**Problem**: What we call a "knowledge graph" is actually a **property graph** (schema-only, no instances).
+
+**Solution**: Connect bulk-mined instance data (13K keywords, 12K misconceptions) to the property graph schema to create a true knowledge graph.
+
+**Impact**: Enables graph-based queries like "what keywords does this lesson teach?" and "which lessons address this misconception?"
+
+### [10-transcript-mining.md](10-transcript-mining.md)
+
+**Problem**: Lesson transcripts contain spoken vocabulary patterns (synonyms, explanations, misconceptions) that keyword definitions don't.
+
+**Solution**: LLM-based extraction of transcript vocabulary (regex is insufficient).
+
+**Impact**: +15-25 foundational synonyms in teacher language; +5-10% colloquial query MRR improvement.
+
+### [11-synonym-quality-audit.md](11-synonym-quality-audit.md)
+
+**Problem**: Existing synonyms may include weak entries that harm precision. No systematic prioritization for new synonyms.
+
+**Solution**: 
+1. Audit all existing synonyms for ambiguity and breadth
+2. Implement weighting function: `Priority = Frequency × FoundationBonus × CrossSubjectBonus × SynonymNeed`
+3. Establish LLM agent review as decision-making process
+
+**Impact**: Improved precision by removing noisy synonyms; data-driven prioritization for additions.
+
+**Key insight**: The weighting function is a **first pass** — it surfaces candidates. An LLM agent makes the final decisions because context matters more than metrics.
+
+---
+
 ## Change Log
 
 | Date       | Change                                                   |
 | ---------- | -------------------------------------------------------- |
+| 2025-12-27 | **NEW**: 09-knowledge-graph-evolution.md created         |
+| 2025-12-27 | **NEW**: 10-transcript-mining.md created                 |
+| 2025-12-27 | **NEW**: 11-synonym-quality-audit.md created             |
 | 2025-12-24 | **02a COMPLETE** — Dead code deleted, synonyms documented |
 | 2025-12-24 | **Tier 1 EXHAUSTED** — All approaches verified           |
 | 2025-12-24 | Intent-based exception documented (requires Tier 4)      |

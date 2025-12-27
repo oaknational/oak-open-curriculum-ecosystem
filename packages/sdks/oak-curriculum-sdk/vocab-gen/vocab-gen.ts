@@ -1,3 +1,6 @@
+/* eslint-disable max-lines -- pipeline orchestrator requires all generator imports */
+/* eslint-disable max-lines-per-function -- generateOutputFiles orchestrates many generators */
+/* eslint-disable max-statements -- orchestration function requires many generator calls */
 /**
  * Vocabulary mining pipeline orchestrator.
  *
@@ -17,13 +20,24 @@
  *
  * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for the pipeline specification
  */
-import { basename } from 'path';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 import {
+  generateAnalysisReport,
+  generateMinedSynonyms,
+  generateMisconceptionGraphData,
+  generateNCCoverageGraphData,
   generatePrerequisiteGraphData,
   generateThreadProgressionData,
+  generateVocabularyGraphData,
+  writeAnalysisReportFile,
+  writeMinedSynonymsFile,
+  writeMisconceptionGraphFile,
+  writeNCCoverageGraphFile,
   writePrerequisiteGraphFile,
   writeThreadProgressionFile,
+  writeVocabularyGraphFile,
 } from './generators/index.js';
 import { readAllBulkFiles } from './lib/index.js';
 import { type BulkDataInput, processBulkData, type ProcessingResult } from './vocab-gen-core.js';
@@ -164,6 +178,42 @@ async function generateOutputFiles(
     config.outputPath,
   );
   outputFiles.push(basename(prerequisiteFilePath));
+
+  // Generate analysis report (written to vocab-gen/reports in the SDK)
+  const analysisReport = generateAnalysisReport(result.extractedData);
+  const vocabGenDir = dirname(fileURLToPath(import.meta.url));
+  const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir);
+  outputFiles.push(`reports/${basename(analysisFilePath)}`);
+
+  // Generate mined synonyms (written to src/mcp/synonyms/generated)
+  const minedSynonyms = generateMinedSynonyms(result.extractedData.keywords);
+  const synonymsDir = join(config.outputPath, 'synonyms');
+  const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir);
+  outputFiles.push(`synonyms/generated/${basename(synonymsFilePath)}`);
+
+  // Generate misconception graph
+  const misconceptionGraph = generateMisconceptionGraphData(
+    result.extractedData.misconceptions,
+    sourceVersion,
+  );
+  const misconceptionFilePath = await writeMisconceptionGraphFile(
+    misconceptionGraph,
+    config.outputPath,
+  );
+  outputFiles.push(basename(misconceptionFilePath));
+
+  // Generate vocabulary graph
+  const vocabularyGraph = generateVocabularyGraphData(result.extractedData.keywords, sourceVersion);
+  const vocabularyFilePath = await writeVocabularyGraphFile(vocabularyGraph, config.outputPath);
+  outputFiles.push(basename(vocabularyFilePath));
+
+  // Generate NC coverage graph
+  const ncCoverageGraph = generateNCCoverageGraphData(
+    result.extractedData.ncStatements,
+    sourceVersion,
+  );
+  const ncCoverageFilePath = await writeNCCoverageGraphFile(ncCoverageGraph, config.outputPath);
+  outputFiles.push(basename(ncCoverageFilePath));
 
   return outputFiles;
 }

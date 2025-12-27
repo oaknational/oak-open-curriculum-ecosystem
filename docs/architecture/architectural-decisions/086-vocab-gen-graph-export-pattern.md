@@ -17,6 +17,20 @@ Oak National Academy has unique, structured educational content in bulk download
 
 This data enables user-valuable features like "What's the learning path for fractions?" and "What should I know before trigonometry?" - questions that AI agents need to answer for teachers, students, and curriculum planners.
 
+### User Personas
+
+All vocabulary mining work exists to serve these audiences:
+
+| Persona                 | Context                | Primary Needs                                                    |
+| ----------------------- | ---------------------- | ---------------------------------------------------------------- |
+| **Student**             | Learning new concepts  | Clear definitions, learning paths, "what comes next"             |
+| **Teacher**             | Lesson planning        | Vocabulary to introduce, misconceptions to address               |
+| **School Leader**       | Curriculum planning    | NC coverage, progression mapping                                 |
+| **Curriculum Planner**  | Strategic design       | Cross-subject vocabulary, prerequisite chains                    |
+| **Parent (Homeschool)** | Supporting learning    | Clear structure, prerequisites                                   |
+| **Adult Learner**       | Self-directed learning | Context-appropriate explanations, flexible paths                 |
+| **AI Agent**            | Search & tutoring      | Query expansion, prerequisite reasoning, misconception detection |
+
 ### Forces
 
 1. **User value first**: Raw extraction counts are not success metrics. Value comes from transformed, user-facing structures.
@@ -75,16 +89,75 @@ export const prerequisiteGraph: PrerequisiteGraph = {
 };
 ```
 
-### 3. MCP Tool Integration
+### 3. Generator Specifications
 
-Each generated graph has a corresponding MCP tool:
+Each generator serves specific user personas with measurable impact:
 
-| Graph               | MCP Tool                  | User Need                    |
-| ------------------- | ------------------------- | ---------------------------- |
-| Thread Progressions | `get-thread-progressions` | "What's the learning path?"  |
-| Prerequisite Graph  | `get-prerequisite-graph`  | "What should I know before?" |
+#### Thread Progression Generator ✅ COMPLETE
+
+| Aspect        | Details                                                                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Audiences** | Student, Teacher, Curriculum Planner, AI Agent                                                                                                                           |
+| **User Need** | "What's the learning path for X?"                                                                                                                                        |
+| **Impact**    | Enables clear progression through curriculum threads across years. Students see what comes next; teachers plan multi-year curricula; AI agents recommend learning paths. |
+| **Output**    | `thread-progression-data.ts` (164 threads, 14 subjects)                                                                                                                  |
+| **MCP Tool**  | `get-thread-progressions`                                                                                                                                                |
+
+#### Prerequisite Graph Generator ✅ COMPLETE
+
+| Aspect        | Details                                                                                                                                                                            |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Audiences** | Student, Teacher, Parent, AI Agent                                                                                                                                                 |
+| **User Need** | "What should I know before this?"                                                                                                                                                  |
+| **Impact**    | Enables learning path planning. Students identify gaps; teachers diagnose readiness; parents plan homeschool curricula; AI agents check prerequisites before recommending content. |
+| **Output**    | `prerequisite-graph-data.ts` (1601 units, 3408 edges)                                                                                                                              |
+| **MCP Tool**  | `get-prerequisite-graph`                                                                                                                                                           |
+
+#### Misconception Graph Generator 📋 PLANNED
+
+| Aspect        | Details                                                                                                                             |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Audiences** | Teacher, AI Agent                                                                                                                   |
+| **User Need** | "What mistakes should I watch for?"                                                                                                 |
+| **Impact**    | Enables proactive error prevention. Teachers prepare for common mistakes; AI tutors detect and address misconceptions in real-time. |
+| **Output**    | `misconception-graph-data.ts` (estimated ~12K misconceptions)                                                                       |
+| **MCP Tool**  | `get-misconception-graph` (deferred until search optimisation complete)                                                             |
+
+#### Vocabulary Processor 📋 PLANNED
+
+| Aspect        | Details                                                                                                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Audiences** | Student, Teacher, AI Agent                                                                                                                                                     |
+| **User Need** | "What does X mean?" "When is Y introduced?"                                                                                                                                    |
+| **Impact**    | Curated glossary enables clear definitions. Students get age-appropriate explanations; teachers know when terms are introduced; AI agents provide accurate vocabulary context. |
+| **Output**    | `vocabulary-graph-data.ts` (curated from 13K raw keywords)                                                                                                                     |
+| **MCP Tool**  | `get-vocabulary-graph` (deferred until search optimisation complete)                                                                                                           |
+
+#### Synonym Miner 📋 PLANNED
+
+| Aspect        | Details                                                                                                                                                        |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Audiences** | AI Agent, Search System                                                                                                                                        |
+| **User Need** | "Find lessons about [synonym]"                                                                                                                                 |
+| **Impact**    | Enables query expansion for search. User queries match curriculum content even with different wording. Improves search recall without manual synonym curation. |
+| **Output**    | Enhanced `synonymsData` (target: 10x current 163 entries)                                                                                                      |
+| **MCP Tool**  | None (feeds into search directly)                                                                                                                              |
+
+#### NC Coverage Generator 📋 PLANNED
+
+| Aspect        | Details                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Audiences** | School Leader, Curriculum Planner                                                                                                                                |
+| **User Need** | "Does this cover the NC?" "What NC gaps exist?"                                                                                                                  |
+| **Impact**    | Enables curriculum gap analysis. School leaders verify coverage; curriculum planners identify missing areas; MAT coordinators ensure consistency across schools. |
+| **Output**    | `nc-coverage-graph-data.ts` (mapping ~7K NC statements to units)                                                                                                 |
+| **MCP Tool**  | `get-nc-coverage-graph` (deferred until search optimisation complete)                                                                                            |
+
+### 4. MCP Tool Integration
 
 Tools return full graph data in `structuredContent` for AI agent reasoning.
+
+**CRITICAL**: No new MCP tools until search optimisation is complete. The focus is on extracting and processing data for search improvement first.
 
 ### 4. Pipeline Location
 

@@ -1,9 +1,9 @@
 # Semantic Search - Navigation Hub
 
-**Status**: Part 1 ACTIVE — Tier 1 EXHAUSTED, Tier 2 READY  
+**Status**: Part 1 ACTIVE — Focus: Synonym Quality Audit (Plan 11)  
 **Architecture**: Four-Retriever Hybrid (BM25 + ELSER on Content + Structure)  
 **Strategy**: [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)  
-**Last Updated**: 2025-12-25
+**Last Updated**: 2025-12-27
 
 ---
 
@@ -138,13 +138,17 @@ Current: Tier 1 EXHAUSTED (0.614), Tier 2 ready
 
   Sub-Plans:
     01-tier-1-fundamentals.md       ✅ Complete (2025-12-24)
-    02a-synonym-architecture.md     📋 Fix circular dependency
-    02b-vocabulary-mining.md        🔄 IN PROGRESS — Thread progressions generated
+    02a-synonym-architecture.md     ✅ Complete (2025-12-24)
+    02b-vocabulary-mining.md        ✅ Extraction complete — All 5 generators done
     03-evaluation-infrastructure.md 📋 Unify duplicate directories
     04-documentation-debt.md        ✅ Complete (2025-12-24)
     05-complete-data-indexing.md    📋 Index ALL curriculum data
     06-reference-indices.md         📋 Reference data (subjects, key stages)
     07-resource-types.md            📋 Worksheets, quizzes, sequences
+    08-mcp-graph-tools.md           ✅ Partial — Thread + prerequisite tools done
+    09-knowledge-graph-evolution.md 📋 Property graph → True KG
+    10-transcript-mining.md         📋 Mine transcripts for spoken synonyms
+    11-synonym-quality-audit.md     🔄 **CURRENT FOCUS** — Audit + add synonyms
 
 ═══════════════════════════════════════════════════════════════════
 Part 2: MCP Natural Language Tools                  [📋 Planned]
