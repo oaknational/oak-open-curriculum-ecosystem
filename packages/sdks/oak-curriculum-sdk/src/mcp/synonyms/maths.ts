@@ -26,8 +26,15 @@ export const mathsSynonyms = {
   // BASIC OPERATIONS
   // ============================================================================
 
-  /** Addition and related terms */
-  addition: ['add', 'plus', 'sum', 'adding', 'total'],
+  /**
+   * Addition and related terms.
+   *
+   * @remarks
+   * "total" was removed during audit (2025-12-27) — too broad,
+   * appears in many contexts (total marks, total cost) and could
+   * cause precision issues via ES expansion.
+   */
+  addition: ['add', 'plus', 'sum', 'adding'],
 
   /** Subtraction and related terms */
   subtraction: ['subtract', 'minus', 'take away', 'difference', 'subtracting'],
@@ -322,6 +329,47 @@ export const mathsSynonyms = {
   /** Quartiles - statistical measures */
   'lower-quartile': ['first quartile', 'q1', '25th percentile'],
   'upper-quartile': ['third quartile', 'q3', '75th percentile'],
+
+  // ============================================================================
+  // FOUNDATIONAL KS1/KS2 TERMS (Added 2025-12-27)
+  // Value-scored from vocabulary analysis; validated against definitions
+  // ============================================================================
+
+  /**
+   * Partition — "to divide into parts".
+   * Value score: 207
+   */
+  partition: ['break apart', 'split up'],
+
+  /**
+   * Multiple — "the result of multiplying a number by another whole number".
+   * Value score: 154
+   */
+  multiple: ['times table number'],
+
+  /**
+   * Equation — "shows that one number or calculation is equal to another".
+   * Value score: 118. KS1/KS2 teachers use "number sentence".
+   */
+  equation: ['number sentence'],
+
+  /**
+   * Denominator — "the bottom number in a fraction".
+   * Value score: 55
+   */
+  denominator: ['bottom number'],
+
+  /**
+   * Numerator — "the top number in a fraction".
+   * Value score: 44
+   */
+  numerator: ['top number'],
+
+  /**
+   * Estimate — "find a value that is close enough".
+   * Value score: 109. "guess" is ES-expanded (single word), "rough answer" is phrase-boosted.
+   */
+  estimate: ['guess', 'rough answer'],
 } as const;
 
 export type MathsSynonyms = typeof mathsSynonyms;

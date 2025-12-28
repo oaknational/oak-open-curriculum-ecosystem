@@ -1,5 +1,5 @@
 import type { SearchIndexKind } from '../search-index-target';
-import { inferKindFromIndex } from './sandbox-harness-ops';
+import { inferKindFromIndex } from './ingest-harness-ops';
 import type { BulkOperations, BulkOperationEntry } from './bulk-operation-types';
 import { isBulkIndexAction as isBulkIndexActionTyped } from './bulk-operation-types';
 

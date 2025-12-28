@@ -1,12 +1,13 @@
 /**
  * Builds Elasticsearch bulk operations for Oak curriculum data.
- * Orchestrates the creation of unit, lesson, rollup, and sequence facet documents.
  *
- * KS4 metadata denormalisation (tiers, exam boards, exam subjects) is handled
- * by building a UnitContextMap during sequence traversal, which is then used
- * to decorate documents during indexing.
+ * This module orchestrates the creation of unit, lesson, rollup, and sequence
+ * facet documents for indexing. KS4 metadata denormalisation (tiers, exam boards,
+ * exam subjects) is handled by building a UnitContextMap during sequence traversal,
+ * which is then used to decorate documents during indexing.
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
+ * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
 import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
@@ -17,14 +18,9 @@ import {
   buildSequenceFacetSources,
   type SequenceFacetProcessingMetrics,
 } from './indexing/sequence-facet-index';
-import { sandboxLogger } from './logger';
-import {
-  fetchPairData,
-  buildPairDocuments,
-  emitSequenceFacetEvents,
-  resolveSequenceSlugFromEntry,
-  type PairBuildContext,
-} from './index-oak-helpers';
+import { ingestLogger } from './logger';
+import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './index-oak-helpers';
+import { buildKeyStageOps } from './index-oak-keystage-ops';
 import {
   createDataIntegrityCollector,
   type DataIntegrityReport,
@@ -57,7 +53,7 @@ export async function buildIndexBulkOps(
   const filteredSubjects = filterSubjects(subjects);
   const filteredKeyStages = filterKeyStages(keyStages);
 
-  sandboxLogger.debug('Starting bulk ops build', {
+  ingestLogger.debug('Starting bulk ops build', {
     subjectCount: filteredSubjects.length,
     keyStageCount: filteredKeyStages.length,
   });
@@ -65,7 +61,7 @@ export async function buildIndexBulkOps(
   let subjectIndex = 0;
   for (const subject of filteredSubjects) {
     subjectIndex++;
-    sandboxLogger.debug('Processing subject', {
+    ingestLogger.debug('Processing subject', {
       subject,
       progress: `${subjectIndex}/${filteredSubjects.length}`,
     });
@@ -79,15 +75,13 @@ export async function buildIndexBulkOps(
     bulkOps.push(...subjectOps);
   }
 
-  // Build thread operations (once, not per subject/key-stage)
-  // Pass ingested subjects for thread association
-  sandboxLogger.debug('Building thread operations');
+  ingestLogger.debug('Building thread operations');
   const threadOps = await fetchAndBuildThreadOps(client, { subjectSlugs: filteredSubjects });
   bulkOps.push(...threadOps);
-  sandboxLogger.debug('Built thread operations', { count: threadOps.length / 2 });
+  ingestLogger.debug('Built thread operations', { count: threadOps.length / 2 });
 
-  sandboxLogger.debug('Bulk ops build complete', { totalOps: bulkOps.length });
-  sandboxLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });
+  ingestLogger.debug('Bulk ops build complete', { totalOps: bulkOps.length });
+  ingestLogger.info('buildIndexBulkOps.complete', { totalOps: bulkOps.length });
   return { operations: bulkOps, dataIntegrityReport };
 }
 
@@ -101,64 +95,42 @@ function filterSubjects(list: readonly string[]): SearchSubjectSlug[] {
   return list.filter((s): s is SearchSubjectSlug => isSubject(s));
 }
 
-/** Build KS4 context map for a subject from its sequences. */
+/**
+ * Build KS4 context map for a subject from its sequences.
+ *
+ * Traverses all sequences for a subject and extracts KS4 metadata
+ * (tiers, exam boards, exam subjects) from sequence units.
+ *
+ * @param client - Oak SDK client for fetching sequence units
+ * @param subject - Subject slug for logging context
+ * @param subjectSequences - Sequences to traverse
+ * @returns Map of unit slugs to their aggregated KS4 context
+ */
 async function buildSubjectKs4ContextMap(
   client: OakClient,
   subject: SearchSubjectSlug,
   subjectSequences: readonly SubjectSequenceEntry[],
 ): Promise<UnitContextMap> {
-  sandboxLogger.debug('Building KS4 context map', { subject });
+  ingestLogger.debug('Building KS4 context map', { subject });
+
   const unitContextMap = await buildKs4ContextMap(
-    (slug) => client.getSequenceUnits(slug),
+    async (slug) => {
+      const result = await client.getSequenceUnits(slug);
+      return result.ok ? result.value : [];
+    },
     subjectSequences.map((seq) => ({
       sequenceSlug: resolveSequenceSlugFromEntry(seq),
       ks4Options: seq.ks4Options ?? null,
     })),
-    sandboxLogger,
+    ingestLogger,
   );
-  sandboxLogger.debug('KS4 context map built', {
+
+  ingestLogger.debug('KS4 context map built', {
     subject,
     unitsWithKs4Context: unitContextMap.size,
   });
-  return unitContextMap;
-}
 
-/** Build operations for all key stages of a subject. */
-async function buildKeyStageOps(
-  client: OakClient,
-  subject: SearchSubjectSlug,
-  keyStages: readonly KeyStage[],
-  subjectSequences: readonly SubjectSequenceEntry[],
-  sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
-  unitContextMap: UnitContextMap,
-  dataIntegrityReport: DataIntegrityReport,
-): Promise<BulkOperations> {
-  const ops: BulkOperations = [];
-  let ksIndex = 0;
-  for (const ks of keyStages) {
-    ksIndex++;
-    sandboxLogger.debug('Processing key stage', {
-      subject,
-      keyStage: ks,
-      progress: `${ksIndex}/${keyStages.length}`,
-    });
-    const pairOps = await buildOpsForPair(
-      client,
-      ks,
-      subject,
-      subjectSequences,
-      sequenceSources,
-      unitContextMap,
-      dataIntegrityReport,
-    );
-    ops.push(...pairOps);
-    sandboxLogger.debug('Generated bulk operations', {
-      subject,
-      keyStage: ks,
-      count: pairOps.length,
-    });
-  }
-  return ops;
+  return unitContextMap;
 }
 
 /** Build operations for a single subject across all key stages. */
@@ -169,9 +141,15 @@ async function buildOpsForSubject(
   dataIntegrityReport: DataIntegrityReport,
   options?: BuildIndexBulkOpsOptions,
 ): Promise<BulkOperations> {
-  sandboxLogger.debug('Fetching sequences', { subject });
-  const subjectSequences = await client.getSubjectSequences(subject);
-  sandboxLogger.debug('Found sequences', { subject, count: subjectSequences.length });
+  ingestLogger.debug('Fetching sequences', { subject });
+  const sequencesResult = await client.getSubjectSequences(subject);
+  if (!sequencesResult.ok) {
+    // Sequence fetching failure is non-recoverable for this subject
+    ingestLogger.error('Failed to fetch sequences', { subject, error: sequencesResult.error });
+    return [];
+  }
+  const subjectSequences = sequencesResult.value;
+  ingestLogger.debug('Found sequences', { subject, count: subjectSequences.length });
 
   const { sequenceSources, events } = await buildSequenceSourcesWithEvents(
     client,
@@ -192,7 +170,12 @@ async function buildOpsForSubject(
   );
 }
 
-/** Build sequence facet sources with event collection. */
+/**
+ * Build sequence facet sources with optional instrumentation.
+ *
+ * Fetches units for each sequence to build facet metadata.
+ * Collects processing events if instrumentation is enabled.
+ */
 async function buildSequenceSourcesWithEvents(
   client: OakClient,
   subjectSequences: readonly SubjectSequenceEntry[],
@@ -202,10 +185,11 @@ async function buildSequenceSourcesWithEvents(
   events: readonly SequenceFacetProcessingMetrics[];
 }> {
   const events: SequenceFacetProcessingMetrics[] = [];
-  sandboxLogger.debug('Building sequence facet sources');
-
   const sequenceSources = await buildSequenceFacetSources(
-    (slug) => client.getSequenceUnits(slug),
+    async (slug) => {
+      const result = await client.getSequenceUnits(slug);
+      return result.ok ? result.value : [];
+    },
     subjectSequences,
     options?.onSequenceFacetProcessed
       ? {
@@ -217,32 +201,5 @@ async function buildSequenceSourcesWithEvents(
         }
       : undefined,
   );
-
-  sandboxLogger.debug('Sequence facet sources built');
   return { sequenceSources, events };
-}
-
-/** Build operations for a single subject/keystage pair. */
-async function buildOpsForPair(
-  client: OakClient,
-  ks: KeyStage,
-  subject: SearchSubjectSlug,
-  subjectSequences: readonly SubjectSequenceEntry[],
-  sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
-  unitContextMap: UnitContextMap,
-  dataIntegrityReport: DataIntegrityReport,
-): Promise<BulkOperations> {
-  const { units } = await fetchPairData(client, ks, subject);
-
-  const context: PairBuildContext = {
-    client,
-    ks,
-    subject,
-    subjectSequences,
-    sequenceSources,
-    unitContextMap,
-    dataIntegrityReport,
-  };
-
-  return buildPairDocuments(context, units);
 }

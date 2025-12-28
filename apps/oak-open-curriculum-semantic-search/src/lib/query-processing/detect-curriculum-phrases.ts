@@ -2,8 +2,9 @@
  * Curriculum phrase detection for search query preprocessing.
  *
  * Detects multi-word curriculum terms in queries to enable phrase-level
- * boosting. This compensates for Elasticsearch synonym filter limitations
- * where phrase synonyms don't match after tokenization.
+ * boosting. ES synonym filters apply after tokenization, so phrase synonyms
+ * cannot expand via that path. Phrase detection provides a complementary
+ * mechanism for boosting documents that contain exact multi-word matches.
  *
  * @packageDocumentation
  * @see `.agent/plans/semantic-search/part-1-search-excellence.md` Phase B.5

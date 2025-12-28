@@ -1,5 +1,5 @@
 /**
- * Unit tests for sandbox harness bulk operations.
+ * Unit tests for ingestion harness bulk operations.
  * Tests progress logging and error handling during ES bulk uploads.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -10,7 +10,7 @@ import {
   summariseOperations,
   createNdjson,
   type EsTransport,
-} from './sandbox-harness-ops.js';
+} from './ingest-harness-ops.js';
 
 /**
  * Create a mock EsTransport for testing.

@@ -1,6 +1,6 @@
 import type { Logger } from '@oaknational/mcp-logger';
 import type { SearchIndexKind, SearchIndexTarget } from '../search-index-target';
-import { sandboxLogger } from '../logger';
+import { ingestLogger } from '../logger';
 import {
   hasDataIntegrityIssues,
   getDataIntegritySummary,
@@ -97,7 +97,7 @@ export function createNdjson(operations: BulkOperations): string {
 export async function dispatchBulk(
   es: EsTransport,
   operations: BulkOperations,
-  logger: Logger = sandboxLogger,
+  logger: Logger = ingestLogger,
 ): Promise<void> {
   const docCount = Math.floor(operations.length / 2); // Each doc = action + source
   const sizeKB = Math.round(JSON.stringify(operations).length / 1024);
@@ -163,7 +163,7 @@ export function logPreview(
   if (operations.length === 0) {
     return;
   }
-  logger.debug('sandbox.ingest.preview', {
+  logger.debug('ingest.preview', {
     target,
     preview: operations.slice(0, 4).map((entry) => JSON.stringify(entry)),
   });

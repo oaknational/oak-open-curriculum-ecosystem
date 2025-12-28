@@ -156,3 +156,6 @@ The work wasn't wasted. The reflection was necessary. The path forward is cleare
 
 *Recorded with gratitude for the question that prompted this reflection.*
 
+
+
+

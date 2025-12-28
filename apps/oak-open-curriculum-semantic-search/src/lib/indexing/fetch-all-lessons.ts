@@ -4,27 +4,55 @@
  * These functions exhaust paginated API responses to fetch ALL lessons
  * for a subject/keystage pair, then aggregate them by lesson slug.
  *
+ * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ *
  * @see ADR-083 Complete Lesson Enumeration Strategy
+ * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter-sdk';
+import type { Result } from '@oaknational/result';
+import { type SdkFetchError, formatSdkError } from '@oaknational/oak-curriculum-sdk';
 import {
   aggregateLessonsBySlug,
   type AggregatedLesson,
   type LessonUnitGroup,
 } from './lesson-aggregation';
+import { ingestLogger } from '../logger';
 
 /**
  * Function signature for fetching lessons by key stage and subject.
  *
  * This matches the OakClient.getLessonsByKeyStageAndSubject method signature.
+ * Returns Result per ADR-088.
  */
 export type GetLessonsFn = (
   keyStage: KeyStage,
   subject: SearchSubjectSlug,
   options?: LessonsPaginationOptions,
-) => Promise<readonly LessonGroupResponse[]>;
+) => Promise<Result<readonly LessonGroupResponse[], SdkFetchError>>;
+
+/**
+ * Unwrap a Result, throwing on error.
+ * Used to convert Result-returning SDK calls to exception-based flow
+ * for pagination exhaustion where errors should terminate the loop.
+ */
+function unwrapResult<T>(
+  result: Result<T, SdkFetchError>,
+  context: { keyStage: KeyStage; subject: SearchSubjectSlug; unit?: string },
+): T {
+  if (!result.ok) {
+    const error = result.error;
+    const message = formatSdkError(error);
+    ingestLogger.error('Failed to fetch lessons', { ...context, error: message });
+    if (error.kind === 'network_error') {
+      throw error.cause;
+    }
+    throw new Error(message);
+  }
+  return result.value;
+}
 
 /**
  * Exhausts paginated lesson responses and aggregates by lesson slug.
@@ -52,7 +80,8 @@ export async function fetchAllLessonsWithPagination(
 
   // Exhaust pagination
   while (true) {
-    const page = await getLessons(keyStage, subject, { limit, offset });
+    const result = await getLessons(keyStage, subject, { limit, offset });
+    const page = unwrapResult(result, { keyStage, subject });
     if (page.length === 0) {
       break;
     }
@@ -94,8 +123,9 @@ export async function fetchAllLessonsWithPagination(
  * @example
  * ```typescript
  * const client = createOakSdkClient();
- * const units = await client.getUnitsByKeyStageAndSubject('ks4', 'maths');
- * const unitSlugs = units.map(u => u.unitSlug);
+ * const unitsResult = await client.getUnitsByKeyStageAndSubject('ks4', 'maths');
+ * if (!unitsResult.ok) throw new Error(formatSdkError(unitsResult.error));
+ * const unitSlugs = unitsResult.value.map(u => u.unitSlug);
  * const lessons = await fetchAllLessonsByUnit(
  *   client.getLessonsByKeyStageAndSubject,
  *   'ks4',
@@ -117,7 +147,8 @@ export async function fetchAllLessonsByUnit(
 
   // Fetch lessons for each unit
   for (const unitSlug of unitSlugs) {
-    const unitLessons = await getLessons(keyStage, subject, { unit: unitSlug, limit: 100 });
+    const result = await getLessons(keyStage, subject, { unit: unitSlug, limit: 100 });
+    const unitLessons = unwrapResult(result, { keyStage, subject, unit: unitSlug });
 
     // Convert to LessonUnitGroup
     for (const group of unitLessons) {

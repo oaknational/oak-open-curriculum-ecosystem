@@ -1,10 +1,39 @@
 # Sub-Plan 11: Synonym Quality Audit & Weighting Function
 
-**Status**: 📋 PLANNED  
+**Status**: 📋 PLANNED (blocked on ingestion completion)  
 **Priority**: High  
 **Parent**: [README.md](README.md)  
 **Created**: 2025-12-27  
+**Updated**: 2025-12-28  
 **Research**: [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md)
+
+---
+
+## ⚠️ PREREQUISITE: Multi-Subject Ingestion
+
+**This plan is blocked until multi-subject ingestion is complete.**
+
+Synonym quality cannot be properly measured without representative curriculum data in Elasticsearch. See [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) for current ingestion status.
+
+### Current Status (2025-12-28)
+
+| Ingested | Pending |
+|----------|---------|
+| english, art, computing, design-technology, citizenship, cooking-nutrition | maths, history, geography, science, french, spanish, german, religious-education, music, physical-education, rshe-pshe |
+
+**6 of 17 subjects ingested.** Complete ingestion before proceeding.
+
+### To Complete Ingestion
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+docker compose up -d  # Start Redis
+
+# Run remaining subjects (each takes 5-30 mins)
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject maths
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject science
+# ... see prompt for full list
+```
 
 ---
 
@@ -15,6 +44,71 @@
 3. **Establish LLM agent review** as the decision-making process for synonym inclusion
 
 > **Scope**: The weighting function uses vocabulary frequency data from ALL subjects, ALL key stages (30 bulk files, ~47K lessons). Examples may reference specific subjects for illustration, but analysis covers the complete curriculum.
+
+---
+
+## Two Complementary Vocabulary Mechanisms
+
+The SDK `synonymsData` feeds **two parallel search mechanisms** — understanding this distinction is critical for the audit.
+
+### 1. ES Synonym Expansion (Single-Word Tokens)
+
+**How it works**: The `oak_syns_filter` applies at query time via ES `synonym_graph`.
+
+```
+Query: "trigonometry" 
+→ Tokenized: ["trigonometry"]
+→ After synonym filter: ["trigonometry", "trig", "sohcahtoa", ...]
+```
+
+**Applies to**: Single-word synonyms only. ES tokenizes first, then expands synonyms.
+
+**Examples that use this path**:
+- `trigonometry` → `"trig"` ✅ (single word)
+- `estimate` → `"guess"` ✅ (single word)
+- `factorising` → `"factoring"` ✅ (single word)
+
+### 2. Phrase Detection + Boosting (Multi-Word Terms)
+
+**How it works**: `detectCurriculumPhrases()` scans queries for known multi-word curriculum terms, then `createPhraseBoosters()` adds `match_phrase` queries with boost to the RRF retriever.
+
+```
+Query: "straight line graphs"
+→ Phrase detection finds: "straight line" (from synonym vocabulary)
+→ Adds match_phrase boost for documents containing "straight line"
+```
+
+**Applies to**: Multi-word terms. These **cannot** expand via ES synonyms because tokenization happens first.
+
+**Examples that use this path**:
+- `adjective` → `"describing word"` (2 words — phrase boost)
+- `denominator` → `"bottom number"` (2 words — phrase boost)
+- `linear-equations` → `"solving for x"` (3 words — phrase boost)
+
+### Why Two Mechanisms?
+
+This is **not** a workaround — it's a principled architectural design:
+
+| Mechanism | Purpose | Strength |
+|-----------|---------|----------|
+| **ES Synonym Expansion** | Token-level term equivalence | Expands at query time, transparent to user |
+| **Phrase Detection + Boosting** | Exact phrase relevance boost | Matches teacher language patterns, boosts ranking |
+
+Both mechanisms draw from the same `synonymsData` source, but serve different purposes:
+- ES synonyms expand the **query itself**
+- Phrase boosting improves **document ranking** for exact matches
+
+### Audit Implications
+
+When auditing synonyms, consider:
+
+| Synonym | Type | Mechanism | Audit Focus |
+|---------|------|-----------|-------------|
+| `"total"` for addition | single-word | ES expansion | Could match too broadly (precision risk) |
+| `"take away"` for subtraction | phrase | phrase boost | Phrase-level precision (less risky) |
+| `"difference"` for subtraction | single-word | ES expansion | Ambiguous term (high precision risk) |
+
+**Key insight**: Single-word synonyms have higher precision risk because they expand the query tokens. Phrase synonyms only boost documents containing the exact phrase.
 
 ---
 
@@ -254,10 +348,13 @@ gradient: ['slope', 'steepness', 'rate of change'],
 
 ## Related Documents
 
+- [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) — Session prompt with ingestion status
 - [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md) — Value scoring framework
 - [synonyms/README.md](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Synonym management
 - [02b-vocabulary-mining.md](02b-vocabulary-mining.md) — Overall vocabulary strategy
 - [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Synonym architecture
+- [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Batch-atomic ingestion
+- [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Result pattern for error handling
 
 ---
 
@@ -266,4 +363,5 @@ gradient: ['slope', 'steepness', 'rate of change'],
 | Date | Change |
 |------|--------|
 | 2025-12-27 | Initial plan created for synonym quality audit |
+| 2025-12-28 | Added prerequisite section for multi-subject ingestion; updated status to blocked |
 

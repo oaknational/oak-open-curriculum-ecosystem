@@ -10,6 +10,10 @@ After each piece of work, the fully quality gate suite must be run one gate at a
 
 Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/development/build-system.md` and ADR 065.
 
+Always ask, "what impact are we trying to create for the user with this change?"
+
+Do not assume you know what the initial step should be, discuss with the user first.
+
 ```shell
 # From the repo root, one at a time, with no filters
 pnpm type-gen # Makes changes

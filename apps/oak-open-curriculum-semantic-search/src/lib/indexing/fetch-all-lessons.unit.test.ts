@@ -4,24 +4,42 @@
  * Tests that the function correctly exhausts paginated API responses
  * and aggregates lessons by slug.
  *
+ * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ *
  * @see ADR-083 Complete Lesson Enumeration Strategy
+ * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 import { describe, it, expect } from 'vitest';
-import { fetchAllLessonsWithPagination, fetchAllLessonsByUnit } from './fetch-all-lessons';
+import {
+  fetchAllLessonsWithPagination,
+  fetchAllLessonsByUnit,
+  type GetLessonsFn,
+} from './fetch-all-lessons';
 import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import { ok, type Result } from '@oaknational/result';
+import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 
-/** Simple mock for the getLessonsByKeyStageAndSubject function. */
-type MockGetLessonsFn = (
-  keyStage: KeyStage,
-  subject: SearchSubjectSlug,
-  options?: LessonsPaginationOptions,
-) => Promise<readonly LessonGroupResponse[]>;
+/**
+ * Helper to create a mock GetLessonsFn from a simple data-returning function.
+ * Wraps the data in ok() Result for ADR-088 compliance.
+ */
+function createMockGetLessons(
+  fn: (
+    keyStage: KeyStage,
+    subject: SearchSubjectSlug,
+    options?: LessonsPaginationOptions,
+  ) => readonly LessonGroupResponse[],
+): GetLessonsFn {
+  return async (ks, subj, opts): Promise<Result<readonly LessonGroupResponse[], SdkFetchError>> => {
+    return ok(fn(ks, subj, opts));
+  };
+}
 
 describe('fetchAllLessonsWithPagination', () => {
   it('exhausts paginated responses and aggregates lessons', async () => {
     // Simulate 3 pages of results
-    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+    const mockGetLessons = createMockGetLessons((ks, subj, options = {}) => {
       // Verify parameters are passed correctly
       expect(ks).toBe('ks4');
       expect(subj).toBe('maths');
@@ -53,7 +71,7 @@ describe('fetchAllLessonsWithPagination', () => {
       }
       // No more results
       return [];
-    };
+    });
 
     const result = await fetchAllLessonsWithPagination(mockGetLessons, 'ks4', 'maths');
 
@@ -74,7 +92,7 @@ describe('fetchAllLessonsWithPagination', () => {
   });
 
   it('handles empty response on first page', async () => {
-    const mockGetLessons: MockGetLessonsFn = async () => [];
+    const mockGetLessons = createMockGetLessons(() => []);
 
     const result = await fetchAllLessonsWithPagination(mockGetLessons, 'ks4', 'maths');
 
@@ -82,7 +100,7 @@ describe('fetchAllLessonsWithPagination', () => {
   });
 
   it('handles single page response', async () => {
-    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+    const mockGetLessons = createMockGetLessons((ks, subj, options = {}) => {
       expect(ks).toBe('ks4');
       expect(subj).toBe('maths');
       const offset = options.offset ?? 0;
@@ -96,7 +114,7 @@ describe('fetchAllLessonsWithPagination', () => {
         ];
       }
       return [];
-    };
+    });
 
     const result = await fetchAllLessonsWithPagination(mockGetLessons, 'ks4', 'maths');
 
@@ -106,7 +124,7 @@ describe('fetchAllLessonsWithPagination', () => {
 
   it('handles many pages (simulating 650+ lessons)', async () => {
     // Simulate 7 pages of 100 lessons each
-    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+    const mockGetLessons = createMockGetLessons((ks, subj, options = {}) => {
       expect(ks).toBe('ks4');
       expect(subj).toBe('maths');
       const offset = options.offset ?? 0;
@@ -134,7 +152,7 @@ describe('fetchAllLessonsWithPagination', () => {
         });
       }
       return groups;
-    };
+    });
 
     const result = await fetchAllLessonsWithPagination(mockGetLessons, 'ks4', 'maths');
 
@@ -146,7 +164,7 @@ describe('fetchAllLessonsWithPagination', () => {
 describe('fetchAllLessonsByUnit', () => {
   it('fetches lessons for each unit and aggregates', async () => {
     // Simulate fetching lessons for 3 units
-    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+    const mockGetLessons = createMockGetLessons((ks, subj, options = {}) => {
       expect(ks).toBe('ks4');
       expect(subj).toBe('maths');
       const { unit } = options;
@@ -196,7 +214,7 @@ describe('fetchAllLessonsByUnit', () => {
       }
 
       return [];
-    };
+    });
 
     const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', [
       'compound-measures',
@@ -224,9 +242,9 @@ describe('fetchAllLessonsByUnit', () => {
   });
 
   it('handles empty unit list', async () => {
-    const mockGetLessons: MockGetLessonsFn = async () => {
+    const mockGetLessons = createMockGetLessons(() => {
       throw new Error('Should not be called');
-    };
+    });
 
     const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', []);
 
@@ -234,7 +252,7 @@ describe('fetchAllLessonsByUnit', () => {
   });
 
   it('handles units with no lessons', async () => {
-    const mockGetLessons: MockGetLessonsFn = async () => [];
+    const mockGetLessons = createMockGetLessons(() => []);
 
     const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', ['empty-unit']);
 
@@ -243,7 +261,7 @@ describe('fetchAllLessonsByUnit', () => {
 
   it('correctly handles lesson-unit pairs (tier variants)', async () => {
     // Simulate API returning duplicate lessons for different tiers
-    const mockGetLessons: MockGetLessonsFn = async (ks, subj, options = {}) => {
+    const mockGetLessons = createMockGetLessons((ks, subj, options = {}) => {
       expect(ks).toBe('ks4');
       expect(subj).toBe('maths');
       const { unit } = options;
@@ -264,7 +282,7 @@ describe('fetchAllLessonsByUnit', () => {
       }
 
       return [];
-    };
+    });
 
     const result = await fetchAllLessonsByUnit(mockGetLessons, 'ks4', 'maths', ['algebra']);
 

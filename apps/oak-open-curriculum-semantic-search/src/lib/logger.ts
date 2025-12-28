@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * import { sandboxLogger, setLogLevel, enableFileSink } from './logger.js';
+ * import { ingestLogger, setLogLevel, enableFileSink } from './logger.js';
  *
  * // Enable verbose logging for CLI
  * setLogLevel('DEBUG');
@@ -15,8 +15,8 @@
  * // Enable file logging for ingestion (CLI only)
  * enableFileSink('logs/ingest-2025-12-20.log');
  *
- * sandboxLogger.info('Processing', { subject: 'maths' });
- * sandboxLogger.debug('Detailed progress', { step: 1, total: 10 });
+ * ingestLogger.info('Processing', { subject: 'maths' });
+ * ingestLogger.debug('Detailed progress', { step: 1, total: 10 });
  * ```
  */
 
@@ -46,7 +46,7 @@ let loggerCache: {
   base: UnifiedLogger;
   search: Logger;
   suggest: Logger;
-  sandbox: Logger;
+  ingest: Logger;
   cache: Logger;
 } | null = null;
 
@@ -99,7 +99,7 @@ function getLoggers(): NonNullable<typeof loggerCache> {
     base,
     search: createChild('HybridSearch'),
     suggest: createChild('Suggestions'),
-    sandbox: createChild('SandboxHarness'),
+    ingest: createChild('IngestHarness'),
     cache: createChild('SdkCache'),
   };
 
@@ -151,7 +151,7 @@ export function getLogLevel(): LogLevel {
  * const logPath = `logs/ingest-${Date.now()}.log`;
  * const resolvedPath = enableFileSink(logPath);
  * if (resolvedPath) {
- *   sandboxLogger.info('Logging to file', { path: resolvedPath });
+ *   ingestLogger.info('Logging to file', { path: resolvedPath });
  * }
  * ```
  */
@@ -195,7 +195,7 @@ export function getFileSinkPath(): string | null {
   return currentFilePath;
 }
 
-type LoggerKey = 'search' | 'suggest' | 'sandbox' | 'cache';
+type LoggerKey = 'search' | 'suggest' | 'ingest' | 'cache';
 
 /** Creates a lazy-bound logger proxy for a given logger key. */
 function createLoggerProxy(key: LoggerKey): Logger {
@@ -229,7 +229,7 @@ function createLoggerProxy(key: LoggerKey): Logger {
 export const searchLogger: Logger = createLoggerProxy('search');
 /** Dedicated logger for suggestion/type-ahead flows. */
 export const suggestLogger: Logger = createLoggerProxy('suggest');
-/** Logger for sandbox ingestion drills and harness operations. */
-export const sandboxLogger: Logger = createLoggerProxy('sandbox');
+/** Logger for ingestion harness operations. */
+export const ingestLogger: Logger = createLoggerProxy('ingest');
 /** Logger for SDK response caching operations. */
 export const cacheLogger: Logger = createLoggerProxy('cache');

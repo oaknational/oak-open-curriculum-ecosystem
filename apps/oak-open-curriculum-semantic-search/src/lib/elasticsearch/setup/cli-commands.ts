@@ -7,7 +7,7 @@
 import { verifyConnection, listIndexes, runSetup, runReset } from './index.js';
 import { esClient } from '../../es-client.js';
 import { readIndexMeta } from '../index-meta.js';
-import { sandboxLogger } from '../../logger';
+import { ingestLogger } from '../../logger';
 
 interface ElasticsearchConfig {
   readonly elasticsearchUrl: string;
@@ -40,7 +40,7 @@ export async function executeStatusCommand(verbose: boolean): Promise<number> {
   const esKey = process.env.ELASTICSEARCH_API_KEY;
 
   if (!esUrl || !esKey) {
-    sandboxLogger.error('Missing environment variables', {
+    ingestLogger.error('Missing environment variables', {
       error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
     });
     return 1;
@@ -62,15 +62,15 @@ export async function executeStatusCommand(verbose: boolean): Promise<number> {
  * @returns Exit code (0 for success, 1 for failure)
  */
 async function executeStatus(config: ElasticsearchConfig): Promise<number> {
-  sandboxLogger.info('Checking Elasticsearch connection');
+  ingestLogger.info('Checking Elasticsearch connection');
 
   const connection: ConnectionResult = await verifyConnection(config);
   if (!connection.connected) {
-    sandboxLogger.error('Connection failed', { error: connection.error });
+    ingestLogger.error('Connection failed', { error: connection.error });
     return 1;
   }
 
-  sandboxLogger.info('Connected to Elasticsearch', {
+  ingestLogger.info('Connected to Elasticsearch', {
     cluster: connection.clusterName,
     version: connection.version,
   });
@@ -79,11 +79,11 @@ async function executeStatus(config: ElasticsearchConfig): Promise<number> {
   const oakIndexes = indexes.filter((idx) => idx.index.startsWith('oak_'));
 
   if (oakIndexes.length === 0) {
-    sandboxLogger.info('No Oak indexes found', { action: 'Run setup to create them' });
+    ingestLogger.info('No Oak indexes found', { action: 'Run setup to create them' });
     return 0;
   }
 
-  sandboxLogger.info('Oak Indexes', {
+  ingestLogger.info('Oak Indexes', {
     indexes: oakIndexes.map((idx) => ({
       name: idx.index,
       health: idx.health,
@@ -103,7 +103,7 @@ async function logIndexMetadata(): Promise<void> {
     const client = esClient();
     const meta = await readIndexMeta(client);
     if (meta.ok && meta.value) {
-      sandboxLogger.info('Index version metadata', {
+      ingestLogger.info('Index version metadata', {
         version: meta.value.version,
         ingestedAt: meta.value.ingested_at,
         durationMs: meta.value.duration_ms,
@@ -129,7 +129,7 @@ export async function executeSetupOrResetCommand(
   const esKey = process.env.ELASTICSEARCH_API_KEY;
 
   if (!esUrl || !esKey) {
-    sandboxLogger.error('Missing environment variables', {
+    ingestLogger.error('Missing environment variables', {
       error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
       hint: 'Create a .env.local file with these values in the app directory',
     });
@@ -159,11 +159,11 @@ async function executeSetupOrReset(
   // Verify connection first
   const connection: ConnectionResult = await verifyConnection(config);
   if (!connection.connected) {
-    sandboxLogger.error('Connection failed', { error: connection.error });
+    ingestLogger.error('Connection failed', { error: connection.error });
     return undefined;
   }
 
-  sandboxLogger.info('Connected to Elasticsearch', {
+  ingestLogger.info('Connected to Elasticsearch', {
     cluster: connection.clusterName,
     version: connection.version,
   });

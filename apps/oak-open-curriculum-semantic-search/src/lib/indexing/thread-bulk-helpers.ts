@@ -5,14 +5,19 @@
  * multiple units and years. This module fetches thread data from the /threads
  * API and creates Elasticsearch bulk index operations.
  *
+ * All SDK methods return Result<T, SdkFetchError> per ADR-088.
+ *
  * @see createThreadDocument - Document creation function
+ * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient, ThreadEntry } from '../../adapters/oak-adapter-sdk';
 import type { SearchThreadIndexDoc } from '../../types/oak';
+import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 import { createThreadDocument } from './thread-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
-import { sandboxLogger } from '../logger';
+import { ingestLogger } from '../logger';
+import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-sdk';
 
 /**
  * Elasticsearch bulk index action metadata.
@@ -57,57 +62,62 @@ export interface FetchThreadsOptions {
   readonly subjectSlugs: readonly string[];
 }
 
-/**
- * Fetches all threads and enriches them with unit counts.
- *
- * This requires multiple API calls:
- * 1. GET /threads to get all thread slugs and titles
- * 2. GET /threads/{slug}/units for each thread to get unit counts
- *
- * **Note**: Thread/units API does not return subject information. Subject slugs
- * must be provided via options. For the Maths KS4 POC, use `{ subjectSlugs: ['maths'] }`.
- *
- * @param client - The Oak API client
- * @param options - Options including subject slugs for thread association
- * @returns Array of enriched thread data
- *
- * @example
- * ```typescript
- * // Maths KS4 POC ingestion
- * const threads = await fetchAndEnrichThreads(client, { subjectSlugs: ['maths'] });
- * ```
- */
+/** Throws formatted error for non-recoverable SDK errors. */
+function throwSdkError(error: SdkFetchError, context: string): never {
+  const message = formatSdkError(error);
+  ingestLogger.error(context, { error: message });
+  if (error.kind === 'network_error') {
+    throw error.cause;
+  }
+  throw new Error(message);
+}
+
+/** Enriches a single thread with unit count. Returns null if skipped. */
+async function enrichThread(
+  client: OakClient,
+  thread: ThreadEntry,
+  subjectSlugs: readonly string[],
+): Promise<EnrichedThread | null> {
+  const unitsResult = await client.getThreadUnits(thread.slug);
+  if (!unitsResult.ok) {
+    if (isRecoverableError(unitsResult.error)) {
+      ingestLogger.warn('Skipping thread - units fetch failed', {
+        threadSlug: thread.slug,
+        error: formatSdkError(unitsResult.error),
+      });
+      return null;
+    }
+    throwSdkError(unitsResult.error, `Failed to fetch units for ${thread.slug}`);
+  }
+  return {
+    slug: thread.slug,
+    title: thread.title,
+    unitCount: unitsResult.value.length,
+    subjectSlugs,
+  };
+}
+
+/** Fetches all threads and enriches them with unit counts. */
 export async function fetchAndEnrichThreads(
   client: OakClient,
   options: FetchThreadsOptions,
 ): Promise<readonly EnrichedThread[]> {
-  sandboxLogger.debug('Fetching all threads');
-  const threads = await client.getAllThreads();
-  sandboxLogger.debug('Found threads', { count: threads.length });
+  ingestLogger.debug('Fetching all threads');
+  const threadsResult = await client.getAllThreads();
+  if (!threadsResult.ok) {
+    throwSdkError(threadsResult.error, 'Failed to fetch threads');
+  }
+  const threads = threadsResult.value;
+  ingestLogger.debug('Found threads', { count: threads.length });
 
   const enrichedThreads: EnrichedThread[] = [];
-
   for (const thread of threads) {
-    try {
-      const units = await client.getThreadUnits(thread.slug);
-      const unitCount = units.length;
-
-      enrichedThreads.push({
-        slug: thread.slug,
-        title: thread.title,
-        unitCount,
-        subjectSlugs: options.subjectSlugs,
-      });
-    } catch (error) {
-      sandboxLogger.warn('Failed to fetch units for thread', {
-        threadSlug: thread.slug,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      // Continue with other threads
+    const enriched = await enrichThread(client, thread, options.subjectSlugs);
+    if (enriched) {
+      enrichedThreads.push(enriched);
     }
   }
-
-  sandboxLogger.debug('Enriched threads', { count: enrichedThreads.length });
+  ingestLogger.debug('Enriched threads', { count: enrichedThreads.length });
   return enrichedThreads;
 }
 

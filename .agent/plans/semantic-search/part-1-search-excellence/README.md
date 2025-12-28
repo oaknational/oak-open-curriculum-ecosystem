@@ -1,10 +1,28 @@
 # Part 1: Search Excellence — Master Plan
 
-**Status**: 🔄 IN PROGRESS — Tier 1 EXHAUSTED, 02b Thread+Prereq done, Tier 2 ready  
+**Status**: 🔄 IN PROGRESS — Multi-Subject Expansion Active  
 **Priority**: High  
 **Created**: 2025-12-19  
-**Last Updated**: 2025-12-26  
+**Last Updated**: 2025-12-27  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
+
+---
+
+## 🚀 Current Focus: Multi-Subject Ingestion (2025-12-27)
+
+**Why**: Synonym audit revealed we cannot measure KS1/KS2 foundational synonym impact with a GCSE Maths-only index. Expanding to all 17 subjects enables proper synonym validation and representative ground truth.
+
+**Plan**: [Multi-Subject Ingestion CLI](../../../../.cursor/plans/multi-subject_ingestion_cli_6ec710f0.plan.md)
+
+| Stage | Subjects | Status |
+|-------|----------|--------|
+| Previously ingested | maths, history, geography | ✅ Complete |
+| Stage 1 | english, science | 🔄 In Progress |
+| Stage 2 | french, spanish, german | 📋 Pending |
+| Stage 3 | citizenship, religious-education | 📋 Pending |
+| Stage 4 | art, music, PE, computing, DT, cooking, RSHE | 📋 Pending |
+
+**CLI Enhanced**: Now requires explicit `--subject` or `--all` flag (TDD complete, 13 tests passing).
 
 ---
 
@@ -14,7 +32,7 @@
 
 **What we learned**: Search excellence requires exhausting ALL fundamental improvements before declaring any tier complete. Meeting a target is the _beginning_ of validation, not the end.
 
-**Current State**: MRR 0.614 exceeds the Tier 1 target (0.45). **Tier 1 is EXHAUSTED** (2025-12-24) — all standard approaches verified. Intent-based category (0.229) has documented exception (requires Tier 4). Tier 2 is ready when prioritised.
+**Current State**: MRR 0.614 exceeds the Tier 1 target (0.45). **Tier 1 is EXHAUSTED** (2025-12-24) — all standard approaches verified. Intent-based category (0.229) has documented exception (requires Tier 4). Now expanding to multi-subject for proper synonym validation.
 
 ---
 
@@ -35,7 +53,8 @@ This master plan coordinates workstreams for search excellence. The principle is
 | [08-mcp-graph-tools.md](08-mcp-graph-tools.md)                     | MCP tools for graph data             | Medium   | ✅ Partial     |
 | [09-knowledge-graph-evolution.md](09-knowledge-graph-evolution.md) | Property graph → True knowledge graph| Medium   | 📋 Planned     |
 | [10-transcript-mining.md](10-transcript-mining.md)                 | Mine transcripts for spoken synonyms | Medium   | 📋 Planned     |
-| [11-synonym-quality-audit.md](11-synonym-quality-audit.md)         | Audit existing synonyms + weighting  | High     | 📋 Planned     |
+| [11-synonym-quality-audit.md](11-synonym-quality-audit.md)         | Audit existing synonyms + weighting  | High     | 🔄 Partially done |
+| **[12-multi-subject-ingestion.md](../../../../.cursor/plans/multi-subject_ingestion_cli_6ec710f0.plan.md)** | **Ingest all 17 subjects** | **HIGH** | **🔄 In Progress** |
 
 ### Principle: Index EVERYTHING
 
@@ -208,6 +227,9 @@ Three new sub-plans emerged from vocabulary mining reflection:
 
 | Date       | Change                                                   |
 | ---------- | -------------------------------------------------------- |
+| 2025-12-27 | **Multi-Subject Ingestion** — CLI enhanced with `--all` flag, TDD complete |
+| 2025-12-27 | CLI now uses schema-derived SUBJECTS (17 total), requires explicit subject selection |
+| 2025-12-27 | Dropped maths-only focus — expanding to all subjects for proper synonym testing |
 | 2025-12-27 | **NEW**: 09-knowledge-graph-evolution.md created         |
 | 2025-12-27 | **NEW**: 10-transcript-mining.md created                 |
 | 2025-12-27 | **NEW**: 11-synonym-quality-audit.md created             |

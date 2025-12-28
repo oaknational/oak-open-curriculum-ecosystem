@@ -1,8 +1,6 @@
 /**
- * Redis-cached wrapper for the Oak SDK client. Provides optional,
- * persistent caching for Oak API responses during ingestion.
- * @see {@link ../../docs/SDK-CACHING.md} for documentation
- * @see {@link ../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md} for ADR
+ * Redis-cached wrapper for Oak SDK. All methods return Result<T, SdkFetchError> per ADR-088.
+ * @see ADR-066 (caching), ADR-088 (Result pattern)
  */
 
 import type Redis from 'ioredis';
@@ -14,6 +12,8 @@ import { createRedisClient, withRedisConnection } from './sdk-cache/redis-connec
 import { calculateTtlWithJitter } from './sdk-cache/ttl-jitter';
 import { isLessonSummary, isUnitSummary } from '../types/oak';
 import { isTranscriptResponse } from './sdk-guards';
+import { ok, type Result } from '@oaknational/result';
+import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 
 /** Cache key prefix with version for schema change invalidation. */
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
@@ -45,7 +45,8 @@ function createUncachedClient(baseClient: OakClient): CachedOakClient {
   };
 }
 
-function safeJsonParse(text: string): unknown {
+/** Parse trusted cache content. */
+function parseJson(text: string): unknown {
   return JSON.parse(text);
 }
 
@@ -60,7 +61,7 @@ async function tryReadCache<T>(
     if (cached === null) {
       return null;
     }
-    const parsed = safeJsonParse(cached);
+    const parsed = parseJson(cached);
     return isValid(parsed) ? parsed : null;
   } catch {
     return null;
@@ -81,47 +82,34 @@ async function tryWriteCache(
   }
 }
 
-/**
- * Wrap function with caching and TTL jitter.
- *
- * TTL jitter is applied per-entry to prevent cache stampede. Each cached
- * entry receives a slightly different TTL, spreading expiration over a
- * 24-hour window (±12 hours jitter on the base TTL).
- *
- * @see {@link ./sdk-cache/ttl-jitter} for jitter implementation
- */
-function withCache<T>(
-  fn: (id: string) => Promise<T>,
+/** Wrap a Result-returning function with caching. Only caches ok results. */
+function withCacheResult<T>(
+  fn: (id: string) => Promise<Result<T, SdkFetchError>>,
   redis: Redis,
   resourceType: string,
   baseTtlDays: number,
   stats: { hits: number; misses: number },
   isValidCached: (value: unknown) => value is T,
-): (id: string) => Promise<T> {
-  return async (id: string): Promise<T> => {
+): (id: string) => Promise<Result<T, SdkFetchError>> {
+  return async (id: string): Promise<Result<T, SdkFetchError>> => {
     const key = buildCacheKey(resourceType, id);
     const cached = await tryReadCache(redis, key, isValidCached);
     if (cached !== null) {
       stats.hits++;
-      return cached;
+      return ok(cached);
     }
     stats.misses++;
     const result = await fn(id);
-    // Apply jitter per-entry to prevent cache stampede
-    const ttlWithJitter = calculateTtlWithJitter(baseTtlDays);
-    await tryWriteCache(redis, key, ttlWithJitter, result);
+    // Only cache successful results - errors should not be cached
+    if (result.ok) {
+      const ttlWithJitter = calculateTtlWithJitter(baseTtlDays);
+      await tryWriteCache(redis, key, ttlWithJitter, result.value);
+    }
     return result;
   };
 }
 
-/**
- * Create cached client wrapper with TTL jitter per-entry.
- *
- * @param baseClient - Underlying Oak SDK client
- * @param redis - Redis connection
- * @param baseTtlDays - Base TTL in days (jitter applied per-entry)
- * @param stats - Cache hit/miss statistics
- */
+/** Create cached client wrapper. Result errors pass through uncached. */
 function createCachedClientWrapper(
   baseClient: OakClient,
   redis: Redis,
@@ -129,13 +117,17 @@ function createCachedClientWrapper(
   stats: { hits: number; misses: number },
 ): CachedOakClient {
   return {
+    // Pass through methods that don't need caching (listing endpoints)
     getUnitsByKeyStageAndSubject: baseClient.getUnitsByKeyStageAndSubject,
     getSubjectSequences: baseClient.getSubjectSequences,
     getSequenceUnits: baseClient.getSequenceUnits,
     getAllThreads: baseClient.getAllThreads,
     getThreadUnits: baseClient.getThreadUnits,
     getLessonsByKeyStageAndSubject: baseClient.getLessonsByKeyStageAndSubject,
-    getUnitSummary: withCache(
+    rateLimitTracker: baseClient.rateLimitTracker,
+
+    // Cached Result-returning methods
+    getUnitSummary: withCacheResult(
       baseClient.getUnitSummary,
       redis,
       'unit-summary',
@@ -143,7 +135,7 @@ function createCachedClientWrapper(
       stats,
       isUnitSummary,
     ),
-    getLessonSummary: withCache(
+    getLessonSummary: withCacheResult(
       baseClient.getLessonSummary,
       redis,
       'lesson-summary',
@@ -151,7 +143,7 @@ function createCachedClientWrapper(
       stats,
       isLessonSummary,
     ),
-    getLessonTranscript: withCache(
+    getLessonTranscript: withCacheResult(
       baseClient.getLessonTranscript,
       redis,
       'lesson-transcript',
@@ -159,7 +151,8 @@ function createCachedClientWrapper(
       stats,
       isTranscriptResponse,
     ),
-    rateLimitTracker: baseClient.rateLimitTracker,
+
+    // Cache management methods
     getCacheStats: () => ({ hits: stats.hits, misses: stats.misses, connected: true }),
     disconnect: async () => {
       await redis.quit();

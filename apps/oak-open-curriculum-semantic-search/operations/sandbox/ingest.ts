@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import path from 'node:path';
 import process from 'node:process';
-import { createSandboxHarness } from '../../src/lib/indexing/sandbox-harness';
+import { createIngestHarness } from '../../src/lib/indexing/ingest-harness';
 import { coerceSearchIndexTarget, type SearchIndexTarget } from '../../src/lib/search-index-target';
-import { sandboxLogger } from '../../src/lib/logger';
+import { ingestLogger } from '../../src/lib/logger';
 
 interface CliFlags {
   target?: SearchIndexTarget;
@@ -75,17 +75,17 @@ async function main(): Promise<void> {
     : path.join(cwd, 'fixtures/sandbox');
   const target = flags.target ?? 'sandbox';
 
-  sandboxLogger.info('sandbox.cli.start', {
+  ingestLogger.info('ingest.fixture.start', {
     target,
     fixtureRoot,
     dryRun: flags.dryRun ?? false,
     verbose: flags.verbose ?? false,
   });
 
-  const harness = await createSandboxHarness({
+  const harness = await createIngestHarness({
     fixtureRoot,
     target,
-    logger: sandboxLogger,
+    logger: ingestLogger,
   });
 
   const result = await harness.ingest({
@@ -93,7 +93,7 @@ async function main(): Promise<void> {
     verbose: flags.verbose ?? false,
   });
 
-  sandboxLogger.info('sandbox.cli.summary', {
+  ingestLogger.info('ingest.fixture.summary', {
     target,
     totalDocs: result.summary.totalDocs,
     counts: result.summary.counts,
@@ -101,6 +101,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error) => {
-  sandboxLogger.error('sandbox.cli.error', error);
+  ingestLogger.error('ingest.fixture.error', error);
   process.exitCode = 1;
 });

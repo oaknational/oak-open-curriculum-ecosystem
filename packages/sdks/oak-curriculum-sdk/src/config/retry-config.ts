@@ -7,8 +7,16 @@
  */
 
 /**
+ * Per-status-code retry limits.
+ * Maps HTTP status codes to their maximum retry count.
+ * @public
+ */
+export type StatusCodeMaxRetries = Readonly<Partial<Record<number, number>>>;
+
+/**
  * Configuration for SDK request retry with exponential backoff.
  * Automatically retries transient failures (429, 503) with increasing delays.
+ * Supports per-status-code retry limits for conservative retries on 404/500.
  * @public
  */
 export interface RetryConfig {
@@ -24,6 +32,12 @@ export interface RetryConfig {
   readonly maxDelayMs: number;
   /** HTTP status codes that trigger retry. Default: [429, 503] */
   readonly retryableStatusCodes: readonly number[];
+  /**
+   * Per-status-code maximum retries. Overrides `maxRetries` for specific codes.
+   * Example: `{ 404: 2, 500: 2 }` limits 404/500 to 2 retries while others use `maxRetries`.
+   * @public
+   */
+  readonly statusCodeMaxRetries?: StatusCodeMaxRetries;
 }
 
 /**
@@ -82,4 +96,22 @@ export function shouldRetry(statusCode: number, config: RetryConfig): boolean {
     return false;
   }
   return config.retryableStatusCodes.includes(statusCode);
+}
+
+/**
+ * Get the maximum retry count for a specific status code.
+ * Uses per-status-code limit if defined, otherwise falls back to `maxRetries`.
+ * Pure function for testability - no side effects.
+ *
+ * @param statusCode - HTTP status code from response
+ * @param config - Retry configuration
+ * @returns Maximum retry attempts for this status code
+ * @public
+ */
+export function getMaxRetriesForStatus(statusCode: number, config: RetryConfig): number {
+  const perStatusLimit = config.statusCodeMaxRetries?.[statusCode];
+  if (perStatusLimit !== undefined) {
+    return perStatusLimit;
+  }
+  return config.maxRetries;
 }

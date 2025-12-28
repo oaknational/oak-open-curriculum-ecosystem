@@ -25,10 +25,10 @@ export default defineConfig({
       'node_modules',
       '.next',
       'dist',
-      // Sandbox harness test causes OOM in forked worker due to heavy import graph.
+      // Ingest harness test causes OOM in forked worker due to heavy import graph.
       // Skipped as this Next.js app is being retired in favor of SDK+CLI.
       // See: .agent/plans/semantic-search/phase-4-search-sdk-and-cli.md
-      'src/lib/indexing/sandbox-harness.unit.test.ts',
+      'src/lib/indexing/ingest-harness.unit.test.ts',
     ],
     coverage: {
       provider: 'v8',

@@ -1,89 +1,312 @@
-# Semantic Search — Synonym Quality Audit
+# Semantic Search — Multi-Subject Expansion
 
-**Status**: Part 1 ACTIVE — Focus: Synonym Quality Audit  
-**Plan**: [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)  
-**Last Updated**: 2025-12-27
+**Status**: Part 1 ACTIVE — Focus: Multi-Subject Ingestion + Synonym Validation  
+**Master Plan**: [Part 1: Search Excellence](../../plans/semantic-search/part-1-search-excellence/README.md)  
+**Last Updated**: 2025-12-28
 
 ---
 
-## 🎯 CURRENT TASK: Synonym Quality Audit
+## 📋 EXPLICIT ASSUMPTIONS
+
+### Previous Work (Completed)
+
+1. **CLI Enhancement**: The `--all` flag and schema-derived subjects are implemented and tested (13 unit tests)
+2. **Batch-Atomic Ingestion (ADR-087)**: Each (subject, keystage) batch commits immediately to ES — process interruption preserves committed data
+3. **Result Pattern (ADR-088)**: SDK adapter uses `Result<T, SdkFetchError>` for explicit error handling; 404/500 errors skip gracefully
+4. **Partial Ingestion**: 6 subjects are in ES (english, art, computing, design-technology, citizenship, cooking-nutrition)
+5. **ES Reset**: Previous maths/history/geography data was lost when ES was reset for index reconfiguration
+6. **Error Types**: `SdkFetchError` discriminated union exists in `src/adapters/sdk-error-types.ts` (to be moved to SDK later)
+
+### Current Work (In Progress)
+
+1. **Ingestion is incomplete**: 11 of 17 subjects still need ingestion
+2. **Logs need analysis**: Ingestion logs contain errors that need categorization (intermittent vs data integrity)
+3. **Error handling is new**: The Result pattern was just implemented; needs validation through full ingestion cycle
+4. **Caching is Redis-based**: SDK responses are cached in Redis when `SDK_CACHE_ENABLED=true`
+
+### Next Work (Blocked)
+
+1. **Synonym quality audit**: Blocked until ingestion is complete — cannot measure impact without representative data
+2. **Ground truth expansion**: Current evaluation corpus is GCSE Maths only; needs multi-subject queries
+3. **SDK error types migration**: Blocked until Result pattern is validated in search app
+4. **Weighting function**: Not yet implemented; planned for synonym candidate prioritization
+
+### Known Risks
+
+1. **Upstream API instability**: 404/500 errors occur intermittently from Oak API
+2. **Memory pressure**: Large batches can trigger ES `inference_exception` due to memory limits
+3. **Long running process**: Full ingestion takes 2-4 hours and can be interrupted
+
+---
+
+## ⚠️ LOG ANALYSIS REQUIRED
+
+**Action needed**: Analyze ingestion logs to create a stable, reliable, repeatable ingestion process.
+
+### Logs Location
+
+`apps/oak-open-curriculum-semantic-search/logs/`
+
+### Key Log Files to Analyze
+
+| File | Status | Notes |
+|------|--------|-------|
+| `ingest-english-20251227-223311.log` | ✅ Success | 96 warnings gracefully handled |
+| `ingest-2025-12-27-22-33-13.log` | ✅ Success | Same as above (duplicate log) |
+| `ingest-2025-12-27-21-05-14.log` | ❌ Failed | 404 error pre-Result pattern |
+| `ingest-2025-12-27-17-45-45.log` | ❌ Failed | 500 error pre-batch-atomic |
+| `ingest-2025-12-27-15-08-14.log` | ❌ Failed | 404 error pre-Result pattern |
+
+### Analysis Tasks
+
+1. **Categorize errors**: Which are intermittent (retryable) vs data integrity issues (permanent)?
+2. **Identify problematic units**: Which unitSlugs consistently fail across runs?
+3. **Validate graceful handling**: Confirm new Result pattern logs warnings correctly
+4. **Document retry behavior**: Are 404/500 retries working as expected (2 max)?
+
+### Log Parsing Commands
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Find all 404 errors
+grep "404" logs/*.log | jq -r '.Attributes.context.unitSlug // .Body' 2>/dev/null
+
+# Find all 500 errors  
+grep "500" logs/*.log | jq -r '.Attributes.context.unitSlug // .Body' 2>/dev/null
+
+# Get issue summary from completed runs
+grep "Issue Summary" logs/*.log | jq '.Attributes'
+
+# Find FATAL errors
+grep "FATAL ERROR" logs/*.log | jq '.Attributes["exception.stacktrace"]'
+```
+
+---
+
+## 📊 INGESTION STATUS (2025-12-28)
+
+### Current Elasticsearch State
+
+| Subject | Lessons | Status | Notes |
+|---------|---------|--------|-------|
+| english | 1,521 | ✅ Complete | 96 warnings handled (86×404, 10×500) |
+| art | 537 | ✅ Complete | From earlier batch run |
+| computing | 528 | ✅ Complete | From earlier batch run |
+| design-technology | 426 | ✅ Complete | From earlier batch run |
+| citizenship | 318 | ✅ Complete | From earlier batch run |
+| cooking-nutrition | 108 | ✅ Complete | From earlier batch run |
+| **maths** | 0 | ❌ **Needs re-ingestion** | Lost on ES reset |
+| **history** | 0 | ❌ **Needs re-ingestion** | Lost on ES reset |
+| **geography** | 0 | ❌ **Needs re-ingestion** | Lost on ES reset |
+| science | 0 | ❌ Not ingested | — |
+| french | 0 | ❌ Not ingested | — |
+| spanish | 0 | ❌ Not ingested | — |
+| german | 0 | ❌ Not ingested | — |
+| religious-education | 0 | ❌ Not ingested | — |
+| music | 0 | ❌ Not ingested | — |
+| physical-education | 0 | ❌ Not ingested | — |
+| rshe-pshe | 0 | ❌ Not ingested | — |
+
+**Total in ES**: ~3,438 lessons across 6 subjects  
+**Remaining**: 11 subjects need ingestion
+
+### Verify ES State
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+source .env.local && curl -s -H "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
+  "$ELASTICSEARCH_URL/oak_lessons/_search" -H "Content-Type: application/json" \
+  -d '{"size": 0, "aggs": {"subjects": {"terms": {"field": "subject_slug", "size": 50}}}}' | jq '.aggregations.subjects.buckets'
+```
+
+---
+
+## 🚀 IMMEDIATE ACTION FOR NEW SESSIONS
+
+### 1. Start Redis (required for caching)
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+docker compose up -d
+```
+
+### 2. Complete Remaining Ingestion
+
+**Priority order** (core curriculum first):
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Stage 0: Re-ingest previously lost subjects
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject maths
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject history
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject geography
+
+# Stage 1: Core subjects
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject science
+
+# Stage 2: Languages
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject french
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject spanish
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject german
+
+# Stage 3: Remaining subjects
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject religious-education
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject music
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject physical-education
+SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject rshe-pshe
+```
+
+Each subject takes **5-30 minutes** depending on size.
+
+---
+
+## 📋 Architecture: Batch-Atomic Ingestion (ADR-087)
+
+### Data Flow
+
+```mermaid
+flowchart TD
+    OpenAPI[OpenAPI Schema] --> TypeGen[pnpm type-gen]
+    TypeGen --> SDK[SUBJECTS + KEY_STAGES in SDK]
+    SDK --> CLI[ingest-cli-args.ts]
+    CLI --> Harness[ingest-harness]
+    Harness --> OakAPI[Oak API]
+    OakAPI --> Redis[Redis Cache]
+    Redis --> ES[Elasticsearch]
+```
+
+### How It Works
+
+Each (subject, keystage) pair is a **batch**:
+1. Fetch all data for the batch from Oak API
+2. Build ES bulk operations in memory
+3. **Commit immediately** to Elasticsearch
+4. Move to next batch
+
+**Benefits**:
+- Process interruption preserves all committed batches
+- Graceful error handling per-unit (404/500 → skip, continue)
+- Clear progress tracking in logs
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/lib/elasticsearch/setup/ingest-cli-args.ts` | CLI argument parsing with `--all` flag |
+| `src/lib/elasticsearch/setup/ingest-cli-args.unit.test.ts` | 13 tests for CLI behavior |
+| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point |
+| `src/lib/indexing/ingest-harness.ts` | Orchestration |
+| `src/lib/indexing/ingest-harness-batch.ts` | Batch iteration |
+| `src/adapters/oak-adapter-sdk.ts` | SDK adapter with Result pattern |
+| `src/adapters/sdk-error-types.ts` | Typed error discrimination |
+
+### Error Types (ADR-088)
+
+```typescript
+type SdkFetchError =
+  | SdkNotFoundError      // 404 - skip and continue
+  | SdkServerError        // 5xx - skip and continue  
+  | SdkRateLimitedError   // 429 - retry with backoff
+  | SdkNetworkError       // Network failure - propagate
+  | SdkValidationError    // Invalid response - propagate
+```
+
+### CLI Usage
+
+```bash
+# Single subject
+pnpm es:ingest-live -- --subject maths
+
+# Multiple subjects
+pnpm es:ingest-live -- --subject maths --subject english
+
+# ALL subjects (17 total from OpenAPI schema)
+pnpm es:ingest-live -- --all
+
+# Error: no subjects specified
+pnpm es:ingest-live  # ❌ Will throw error
+```
+
+---
+
+## 📊 Context: Why Multi-Subject Ingestion?
+
+We are expanding the search system from maths-focused to **all 17 subjects** to:
+
+1. **Enable proper synonym validation** — our KS1/KS2 foundational synonyms (e.g., "describing word" for adjective) cannot be tested with a maths-only index
+2. **Build representative ground truth** — current evaluation corpus is GCSE Maths only; need queries across subjects/key stages
+3. **Complete the "Index EVERYTHING" principle** — Elasticsearch should be a complete view of the curriculum
+
+---
+
+## 📋 NEXT TASK: Synonym Quality Validation
+
+**Blocked until multi-subject ingestion is complete.**
+
+After ingestion, return to validating synonym quality with a representative ground truth corpus.
 
 **Goal**: Audit existing synonyms for weak entries, add high-value foundational synonyms, and measure impact on search.
 
-### Why This First?
+**Full plan**: [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)
+
+### Why This After Ingestion?
 
 1. **Top 100 curriculum terms have 0% synonym coverage** — the highest-frequency vocabulary is not covered
 2. **Existing synonyms are unaudited** — we don't know if any are harming precision
 3. **Quick win** — 2-3 hours of work with measurable impact
-4. **Validates approach** — before investing in ES indexing or evaluation corpus
+4. **NOW MEASURABLE** — with multi-subject data, we can actually test foundational synonyms
 
 ---
 
-## 📋 Acceptance Criteria
+## 🔧 FUTURE WORK
 
-### Phase 1: Audit Existing Synonyms (~2 hours)
+### Move SDK Error Types to SDK Package
 
-| Criterion | How to Verify |
-|-----------|---------------|
-| All 13 synonym files reviewed for weak entries | Checklist completed |
-| Potentially ambiguous synonyms identified | List created with reasoning |
-| Overly broad synonyms identified | List created with reasoning |
-| Category errors identified (e.g., "gravity" as synonym for "forces") | List created |
-| Recommendations documented | Markdown report with keep/remove/scope decisions |
+**Task**: Move `sdk-error-types.ts` from `apps/oak-open-curriculum-semantic-search/src/adapters/` to `packages/sdks/oak-curriculum-sdk/src/`.
 
-**Weak Synonym Indicators**:
-- **Ambiguous**: "difference" could mean subtraction OR general difference
-- **Overly broad**: "total" could match anything with a total
-- **Category error**: "gravity" IS a force, not a synonym for forces
-- **Cross-subject collision**: "gradient" means different things in maths vs art
+**Rationale**: The `SdkFetchError` discriminated union and related types are SDK-level concerns per ADR-088. They should be:
+- Defined once in the SDK
+- Generated at type-gen time from OpenAPI schema error responses where possible
+- Re-exported from the SDK for consumer apps
 
-### Phase 2: Add Foundational Synonyms (~1 hour)
-
-| Criterion | How to Verify |
-|-----------|---------------|
-| ≥15 high-value synonyms added | Count in commit |
-| Synonyms target KS1/KS2 foundational terms | Terms from value-scored list |
-| Each synonym verified against bulk vocabulary data | Definition confirms usage |
-| Quality gates pass | All 11 gates green |
-
-**Target Synonyms** (from value analysis):
-
-| Term | Value | Add to File | Suggested Synonyms |
-|------|-------|-------------|-------------------|
-| `adjective` | 678 | english.ts | describing word, descriptive word |
-| `noun` | 579 | english.ts | naming word |
-| `verb` | 304 | english.ts | action word, doing word |
-| `adverb` | 240 | english.ts | describing verb word |
-| `suffix` | 378 | english.ts | word ending, end of word |
-| `prefix` | 94 | english.ts | word beginning, start of word |
-| `partition` | 207 | maths.ts | break apart, split up |
-| `multiple` | 154 | maths.ts | times table number |
-| `equation` | 118 | maths.ts | number sentence |
-| `denominator` | 55 | maths.ts | bottom number |
-| `numerator` | 44 | maths.ts | top number |
-| `estimate` | 109 | maths.ts | guess, rough answer |
-
-### Phase 3: Measure Impact (~1 hour)
-
-| Criterion | How to Verify |
-|-----------|---------------|
-| Baseline MRR recorded before changes | `pnpm test:smoke` results saved |
-| Synonyms deployed to ES | `pnpm es:setup` successful |
-| Post-deployment MRR measured | `pnpm test:smoke` results saved |
-| Before/after comparison documented | Markdown report |
-| Any precision regressions identified | Compare per-category MRR |
+**Blocked by**: Completing the initial Result pattern adoption in the search app to validate the error type design.
 
 ---
 
-## 🎯 Success Metrics
+## ⚠️ Critical Architecture: Two Complementary Mechanisms
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Weak synonyms identified | ≥5 entries | Audit report count |
-| High-value synonyms added | ≥15 entries | Commit diff count |
-| Colloquial query MRR | No regression | Before/after comparison |
-| Synonym-dependent query MRR | +5% improvement | Before/after comparison |
-| Precision | No regression | Monitor for false positives |
+The SDK `synonymsData` feeds **two parallel search mechanisms**:
+
+### 1. ES Synonym Expansion (Single-Word Tokens)
+
+- **How**: `oak_syns_filter` applies at query time via ES `synonym_graph`
+- **When**: Single-word synonyms only (ES tokenizes first, then expands)
+- **Precision risk**: **Higher** — expands all query tokens containing the synonym
+
+```text
+"guess" for estimate → ES expands query: ["estimate"] → ["estimate", "guess"]
+```
+
+### 2. Phrase Detection + Boosting (Multi-Word Terms)
+
+- **How**: `detectCurriculumPhrases()` → `match_phrase` boost in RRF retriever
+- **When**: Multi-word terms (cannot expand via ES synonyms)
+- **Precision risk**: **Lower** — only boosts documents with exact phrase match
+
+```text
+"describing word" for adjective → Phrase boost for documents containing "describing word"
+```
+
+### Audit Implication
+
+| Synonym Type | Mechanism | Precision Risk | Audit Focus |
+|--------------|-----------|----------------|-------------|
+| Single-word (`"guess"`) | ES expansion | **Higher** | Could match broadly |
+| Multi-word (`"bottom number"`) | Phrase boost | **Lower** | Exact match only |
+
+**Note**: Most foundational synonyms (e.g., "describing word", "bottom number") are phrases — they use phrase boosting, not ES expansion. This is architecturally safer for precision.
 
 ---
 
@@ -115,13 +338,18 @@
 - Value Score = Frequency × (1 + 1/Year) × (1 + 0.2*(subjects-1))
 - Highest-value uncovered: `adjective` (678), `noun` (579), `suffix` (378)
 
-### Previous Session Outcomes (2025-12-26/27)
+### Session Outcomes (2025-12-27/28)
 
 - ✅ Bulk mining complete — all 5 generators working
 - ✅ Vocabulary value analysis — scoring framework created
 - ✅ 27 LLM-extracted synonyms added (music.ts, computing.ts created)
 - ✅ Regex synonym mining archived — 93% noise rate documented
 - ✅ Plans 09, 10, 11 created for future work
+- ✅ **ADR-087**: Batch-atomic ingestion — each (subject, keystage) commits immediately
+- ✅ **ADR-088**: Result pattern for explicit error handling
+- ✅ **english** fully ingested with graceful 404/500 handling
+- ✅ **art, computing, design-technology, citizenship, cooking-nutrition** ingested
+- ⏳ Ingestion of remaining 11 subjects pending
 
 ---
 
@@ -129,8 +357,8 @@
 
 ### 1. Read Foundation Documents
 
-1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates
-2. **[11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)** — Full plan
+1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, Result pattern
+2. **[11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md)** — Full synonym plan
 3. **[vocabulary-value-analysis.md](../../research/semantic-search/vocabulary-value-analysis.md)** — Value scoring
 
 ### 2. Verify Quality Gates
@@ -140,89 +368,34 @@ cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
 pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
 ```
 
-### 3. Record Baseline MRR
+### 3. Check ES State
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm test:smoke 2>&1 | tee /tmp/baseline-mrr.txt
+source .env.local && curl -s -H "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
+  "$ELASTICSEARCH_URL/_cat/indices/oak_*?v&h=index,docs.count"
 ```
-
----
-
-## Session Flow
-
-### Step 1: Audit Existing Synonyms
-
-For each file in `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`:
-
-```markdown
-## Audit: {filename}
-
-### Entries Reviewed: N
-
-### Potentially Weak Entries:
-
-| Entry | Issue | Recommendation |
-|-------|-------|----------------|
-| `difference: ['subtraction']` | Ambiguous — "difference" used in many contexts | SCOPE: Add comment or remove |
-
-### Category Errors:
-- None found / List...
-
-### Decision: KEEP / REMOVE / SCOPE (with specifics)
-```
-
-### Step 2: Add Foundational Synonyms
-
-For each term in the target list:
-
-1. **Verify in bulk data**: Check `vocabulary-graph-data.ts` for definition
-2. **Confirm synonym is genuine**: Definition should support the alternative
-3. **Add to appropriate file**
-4. **Run quality gates**
-
-### Step 3: Deploy and Measure
-
-```bash
-# Rebuild SDK
-pnpm type-gen && pnpm build
-
-# Deploy to ES
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup
-
-# Measure impact
-pnpm test:smoke 2>&1 | tee /tmp/post-synonym-mrr.txt
-
-# Compare
-diff /tmp/baseline-mrr.txt /tmp/post-synonym-mrr.txt
-```
-
----
-
-## Synonym Validation Against Bulk Data
-
-To verify a synonym is genuine, check the definition in the extracted vocabulary:
-
-```bash
-# Search for term in vocabulary graph
-grep -A5 "term: 'adjective'" packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts
-```
-
-**A valid synonym should appear in the definition**:
-- `adjective`: "a word that **describes** a noun" → "describing word" ✅
-- `denominator`: "the **bottom number** in a fraction" → "bottom number" ✅
-
-**A poor synonym is not supported by the definition**:
-- `forces`: "a push or pull on an object" → "gravity" ❌ (gravity is a TYPE of force)
 
 ---
 
 ## Key File Locations
 
+### Ingestion System
+
+```text
+apps/oak-open-curriculum-semantic-search/
+├── src/lib/elasticsearch/setup/ingest-live.ts     ← CLI entry point
+├── src/lib/elasticsearch/setup/ingest-cli-args.ts ← Argument parsing
+├── src/lib/indexing/ingest-harness.ts             ← Orchestration
+├── src/lib/indexing/ingest-harness-batch.ts       ← Batch iteration
+├── src/adapters/oak-adapter-sdk.ts                ← SDK adapter (Result pattern)
+├── src/adapters/sdk-error-types.ts                ← Typed errors
+└── logs/                                           ← Ingestion logs
+```
+
 ### Synonym Files
 
-```
+```text
 packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 ├── index.ts           ← Barrel export
 ├── maths.ts           ← Largest file (~119 entries)
@@ -234,23 +407,15 @@ packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 
 ### Bulk Vocabulary (for validation)
 
-```
+```text
 packages/sdks/oak-curriculum-sdk/src/mcp/vocabulary-graph-data.ts  ← 13K terms with definitions
-```
-
-### Search App
-
-```
-apps/oak-open-curriculum-semantic-search/
-├── src/lib/indexing/synonym-config.ts  ← ES synonym configuration
-└── scripts/es-setup.ts                  ← Deploys synonyms to ES
 ```
 
 ---
 
 ## Quality Gate Checkpoints
 
-After any synonym changes:
+After any code changes:
 
 ```bash
 pnpm type-gen
@@ -269,48 +434,14 @@ pnpm test:smoke
 
 ---
 
-## Audit Checklist Template
-
-Use this for each synonym file:
-
-```markdown
-## Audit: maths.ts
-
-**Entries Reviewed**: 119
-**Issues Found**: N
-
-### Potentially Ambiguous
-
-| Entry | Issue | Recommendation |
-|-------|-------|----------------|
-| ... | ... | ... |
-
-### Overly Broad
-
-| Entry | Issue | Recommendation |
-|-------|-------|----------------|
-| ... | ... | ... |
-
-### Category Errors
-
-| Entry | Issue | Recommendation |
-|-------|-------|----------------|
-| ... | ... | ... |
-
-### Summary
-- KEEP: N entries
-- REMOVE: N entries
-- SCOPE (add comment): N entries
-```
-
----
-
 ## Related Documents
 
 - [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md) — Full plan
 - [vocabulary-value-analysis.md](../../research/semantic-search/vocabulary-value-analysis.md) — Value scoring
 - [elasticsearch-optimization-opportunities.md](../../research/semantic-search/elasticsearch-optimization-opportunities.md) — ES research
 - [synonyms/README.md](../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Lessons learned
+- [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Batch-atomic ingestion
+- [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Result pattern
 
 ---
 
@@ -325,7 +456,9 @@ Use this for each synonym file:
 
 **Ready?**
 
-1. Record baseline MRR
-2. Audit existing synonyms (start with maths.ts — largest file)
-3. Add foundational synonyms from value-scored list
-4. Deploy to ES and measure impact
+1. Analyze ingestion logs (categorize errors, identify patterns)
+2. Complete remaining ingestion (11 subjects)
+3. Record baseline MRR
+4. Audit existing synonyms (start with maths.ts — largest file)
+5. Add foundational synonyms from value-scored list
+6. Deploy to ES and measure impact

@@ -58,7 +58,7 @@ export { apiUrl, apiSchemaUrl } from './config/index.js';
 
 // Rate limiting and retry configuration
 export type { RateLimitConfig } from './config/rate-limit-config.js';
-export type { RetryConfig } from './config/retry-config.js';
+export type { RetryConfig, StatusCodeMaxRetries } from './config/retry-config.js';
 export type { RateLimitTracker, RateLimitInfo } from './client/middleware/rate-limit-tracker.js';
 export { DEFAULT_RATE_LIMIT_CONFIG } from './config/rate-limit-config.js';
 export { DEFAULT_RETRY_CONFIG } from './config/retry-config.js';
@@ -139,3 +139,26 @@ export {
   typeSafeHasOwn,
   typeSafeOwnKeys,
 } from './types/helpers/type-helpers.js';
+
+// ============================================================================
+// SDK Error Types (ADR-088: Result Pattern)
+// ============================================================================
+
+export type {
+  SdkFetchError,
+  SdkNotFoundError,
+  SdkServerError,
+  SdkRateLimitError,
+  SdkNetworkError,
+  SdkValidationError,
+  ResourceType,
+  ServerErrorStatus,
+} from './types/generated/api-schema/error-types/sdk-error-types.js';
+
+export {
+  classifyHttpError,
+  classifyException,
+  validationError,
+  isRecoverableError,
+  formatSdkError,
+} from './types/generated/api-schema/error-types/sdk-error-types.js';

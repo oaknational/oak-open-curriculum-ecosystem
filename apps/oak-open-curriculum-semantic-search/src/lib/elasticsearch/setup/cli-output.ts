@@ -4,7 +4,7 @@
  * Handles help text and summary output for the Elasticsearch setup CLI.
  */
 
-import { sandboxLogger } from '../../logger';
+import { ingestLogger } from '../../logger';
 
 /**
  * Prints CLI help text.
@@ -47,7 +47,7 @@ export function printSetupSummary(result: {
   const exists = result.indexResults.filter((r) => r.status === 'exists').length;
   const errors = result.indexResults.filter((r) => r.status === 'error').length;
 
-  sandboxLogger.info('Setup complete', {
+  ingestLogger.info('Setup complete', {
     synonyms: result.synonymCount,
     indexes: { created, exists, errors },
   });

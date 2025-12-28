@@ -8,6 +8,7 @@
     "src/lib/openapi.ts",
     "src/lib/openapi.register.ts",
     "src/adapters/oak-adapter-sdk.ts",
+    "src/adapters/oak-adapter-sdk-types.ts",
     "src/adapters/sdk-guards.ts"
   ],
   "out": "docs/api",

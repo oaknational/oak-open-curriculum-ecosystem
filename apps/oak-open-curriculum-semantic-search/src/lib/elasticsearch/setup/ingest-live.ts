@@ -13,12 +13,12 @@ import { fileURLToPath } from 'node:url';
 import { isErr } from '@oaknational/result';
 import { loadAppEnv } from './load-app-env.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter-cached.js';
-import { createSandboxHarness } from '../../indexing/sandbox-harness.js';
+import { createIngestHarness } from '../../indexing/ingest-harness.js';
 import {
   getIngestionErrorCollector,
   resetIngestionErrorCollector,
 } from '../../indexing/ingestion-error-collector.js';
-import { sandboxLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
+import { ingestLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient } from './ingest-client-factory.js';
 import type { IngestionResult } from './ingest-output.js';
@@ -37,29 +37,29 @@ const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 function initEnv(): boolean {
   const envResult = loadAppEnv(CURRENT_DIR);
   if (!envResult.loaded) {
-    sandboxLogger.error('Environment not loaded', { appRoot: envResult.appRoot });
+    ingestLogger.error('Environment not loaded', { appRoot: envResult.appRoot });
     process.exitCode = 1;
     return false;
   }
-  sandboxLogger.debug('Environment loaded', { path: envResult.path });
+  ingestLogger.debug('Environment loaded', { path: envResult.path });
   return true;
 }
 
 /** Handle cache clearing if requested. */
 async function handleCacheClearing(args: CliArgs): Promise<void> {
   if (args.clearCache) {
-    sandboxLogger.debug('Clearing SDK response cache');
+    ingestLogger.debug('Clearing SDK response cache');
     const deleted = await clearSdkCache();
-    sandboxLogger.debug('Cache cleared', { deletedEntries: deleted });
+    ingestLogger.debug('Cache cleared', { deletedEntries: deleted });
   }
 }
 
 /** Execute ingestion and return result with duration. */
 async function executeIngestion(
-  harness: ReturnType<typeof createSandboxHarness> extends Promise<infer U> ? U : never,
+  harness: ReturnType<typeof createIngestHarness> extends Promise<infer U> ? U : never,
   args: CliArgs,
 ): Promise<{ result: IngestionResult; duration: string }> {
-  sandboxLogger.info(args.dryRun ? 'Starting DRY RUN' : 'Starting LIVE ingestion', {
+  ingestLogger.info(args.dryRun ? 'Starting DRY RUN' : 'Starting LIVE ingestion', {
     dryRun: args.dryRun,
     note: 'This may take several minutes - fetching data from Oak API',
   });
@@ -68,7 +68,7 @@ async function executeIngestion(
   const result = await harness.ingest({ dryRun: args.dryRun, verbose: args.verbose });
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
-  sandboxLogger.debug('Ingestion phase complete', { durationSeconds: duration });
+  ingestLogger.debug('Ingestion phase complete', { durationSeconds: duration });
   return { result, duration };
 }
 
@@ -88,7 +88,7 @@ async function handlePostIngestion(
   if (isErr(metadataResult)) {
     const error = metadataResult.error;
     const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
-    sandboxLogger.error('FATAL: Metadata write failed', {
+    ingestLogger.error('FATAL: Metadata write failed', {
       errorType: error.type,
       message: errorMessage,
       phase: 'post_ingestion',
@@ -111,20 +111,20 @@ async function runIngestion(args: CliArgs): Promise<void> {
 
   try {
     await withRateLimitMonitoring(client.rateLimitTracker, 30000, async () => {
-      sandboxLogger.debug('Creating ingestion harness', {
+      ingestLogger.debug('Creating ingestion harness', {
         subjects: args.subjects,
         keyStages: args.keyStages,
       });
 
-      const harness = await createSandboxHarness({
+      const harness = await createIngestHarness({
         client,
         keyStages: args.keyStages,
         subjects: args.subjects,
         indexes: args.indexes,
         target: 'primary',
-        logger: sandboxLogger,
+        logger: ingestLogger,
       });
-      sandboxLogger.debug('Harness created successfully');
+      ingestLogger.debug('Harness created successfully');
 
       const { result, duration } = await executeIngestion(harness, args);
 
@@ -132,7 +132,7 @@ async function runIngestion(args: CliArgs): Promise<void> {
       printCacheStats(client);
 
       const errorCollector = getIngestionErrorCollector();
-      errorCollector.logSummary(sandboxLogger);
+      errorCollector.logSummary(ingestLogger);
 
       await handlePostIngestion(args, result, duration);
     });
@@ -168,7 +168,7 @@ async function main(): Promise<void> {
   const logFilePath = generateLogFilePath();
   const logPath = enableFileSink(logFilePath);
   if (logPath !== null) {
-    sandboxLogger.info('INGESTION_STARTED', {
+    ingestLogger.info('INGESTION_STARTED', {
       logFile: logPath,
       subjects: args.subjects.join(','),
       keyStages: args.keyStages.join(','),
@@ -190,7 +190,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  sandboxLogger.error('FATAL ERROR - Ingestion terminated', {
+  ingestLogger.error('FATAL ERROR - Ingestion terminated', {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,
     phase: 'main',

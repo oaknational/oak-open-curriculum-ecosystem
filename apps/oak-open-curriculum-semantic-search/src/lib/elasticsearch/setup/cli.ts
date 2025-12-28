@@ -9,7 +9,7 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAppEnv } from './load-app-env.js';
-import { sandboxLogger, setLogLevel } from '../../logger';
+import { ingestLogger, setLogLevel } from '../../logger';
 import { printHelp, printSetupSummary } from './cli-output.js';
 import { executeStatusCommand, executeSetupOrResetCommand } from './cli-commands.js';
 
@@ -57,9 +57,9 @@ async function main(): Promise<void> {
   }
 
   if (envResult.loaded) {
-    sandboxLogger.debug('Environment loaded', { path: envResult.path });
+    ingestLogger.debug('Environment loaded', { path: envResult.path });
   } else {
-    sandboxLogger.debug('No .env.local found', { appRoot: envResult.appRoot });
+    ingestLogger.debug('No .env.local found', { appRoot: envResult.appRoot });
   }
 
   // Handle commands
@@ -87,7 +87,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  sandboxLogger.error('Fatal error', error instanceof Error ? error : undefined, {
+  ingestLogger.error('Fatal error', error instanceof Error ? error : undefined, {
     message: error instanceof Error ? error.message : String(error),
   });
   process.exitCode = 1;

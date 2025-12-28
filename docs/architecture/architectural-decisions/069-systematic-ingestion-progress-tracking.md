@@ -1,9 +1,11 @@
 # ADR-069: Systematic Ingestion with Progress Tracking
 
-**Status**: Accepted  
+**Status**: Partially Superseded by [ADR-087](087-batch-atomic-ingestion.md)  
 **Date**: 2025-12-06  
 **Deciders**: Development Team  
-**Related**: [ADR-067](067-sdk-generated-elasticsearch-mappings.md), [ADR-064](064-elasticsearch-mapping-organization.md)
+**Related**: [ADR-067](067-sdk-generated-elasticsearch-mappings.md), [ADR-064](064-elasticsearch-mapping-organization.md), [ADR-087](087-batch-atomic-ingestion.md)
+
+> **Note**: The file-based progress tracking approach described in this ADR has been superseded by [ADR-087: Batch-Atomic Ingestion](087-batch-atomic-ingestion.md), which commits each batch to Elasticsearch immediately, using ES as the source of truth for progress. The combination enumeration concept remains valid.
 
 ## Context
 

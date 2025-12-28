@@ -17,8 +17,8 @@ import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import { createLessonDocument, normaliseYears, type LessonUnitInfo } from './document-transforms';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
-import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-support';
-import { sandboxLogger } from '../logger';
+import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-bulk-helpers';
+import { ingestLogger } from '../logger';
 import type { UnitContextMap } from './ks4-context-builder';
 import type { BulkOperationEntry, BulkAction } from './bulk-operation-types';
 
@@ -160,7 +160,7 @@ export async function buildLessonDocFromAggregated(
   const unitSlugsArray = Array.from(lesson.unitSlugs);
   const units = resolveUnitsForLesson(unitSlugsArray, unitSummaries);
   if (units.length === 0) {
-    sandboxLogger.debug('Lesson has no resolvable units', { lessonSlug: lesson.lessonSlug });
+    ingestLogger.debug('Lesson has no resolvable units', { lessonSlug: lesson.lessonSlug });
     return null;
   }
 

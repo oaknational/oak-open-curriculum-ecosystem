@@ -8,7 +8,11 @@
  */
 
 import type { RetryConfig } from '../../config/retry-config.js';
-import { calculateBackoff, shouldRetry } from '../../config/retry-config.js';
+import {
+  calculateBackoff,
+  shouldRetry,
+  getMaxRetriesForStatus,
+} from '../../config/retry-config.js';
 import { sleep } from './rate-limit.js';
 
 /**
@@ -36,8 +40,11 @@ export function createFetchWithRetry(
       return lastResponse;
     }
 
+    // Get max retries for this specific status code (may differ from global maxRetries)
+    const maxRetries = getMaxRetriesForStatus(lastResponse.status, config);
+
     // Attempt retries with exponential backoff
-    for (let attempt = 0; attempt < config.maxRetries; attempt++) {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
       // Calculate and wait for backoff delay
       const delay = calculateBackoff(attempt, config);
       await sleep(delay);
@@ -49,6 +56,13 @@ export function createFetchWithRetry(
       // If success or non-retryable error, return
       if (!shouldRetry(lastResponse.status, config)) {
         return lastResponse;
+      }
+
+      // Re-check max retries for the new status (might have changed, e.g. 500 -> 429)
+      const newMaxRetries = getMaxRetriesForStatus(lastResponse.status, config);
+      if (attempt >= newMaxRetries - 1) {
+        // Already at or past limit for this status code
+        break;
       }
     }
 

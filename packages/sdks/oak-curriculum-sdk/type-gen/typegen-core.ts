@@ -41,6 +41,7 @@ import { generateEsMappingModules } from './typegen/search/generate-es-mappings.
 import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
+import { generateSdkErrorTypes } from './typegen/error-types/index.js';
 import { getEndpointDefinitions } from './adapter/index.js';
 import { ensurePathsOnSchema } from './typegen-core-helpers.js';
 import {
@@ -89,6 +90,9 @@ export function createFileMap(
   const zeroHitFixtures = generateZeroHitFixtureModules(sdkSchema);
   const adminStreamFixtures = generateAdminStreamFixtureModules(sdkSchema);
 
+  // Error types for Result pattern (ADR-088)
+  const errorTypes = { 'error-types/sdk-error-types.ts': generateSdkErrorTypes() };
+
   return {
     ...baseFiles,
     ...searchFacetTypes,
@@ -105,6 +109,7 @@ export function createFileMap(
     ...queryParserModules,
     ...zeroHitFixtures,
     ...adminStreamFixtures,
+    ...errorTypes,
   };
 }
 

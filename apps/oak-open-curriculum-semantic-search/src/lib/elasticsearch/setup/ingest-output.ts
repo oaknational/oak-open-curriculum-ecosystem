@@ -14,7 +14,7 @@ import {
   generateVersionFromTimestamp,
   type IndexMetaError,
 } from '../index-meta.js';
-import { sandboxLogger } from '../../logger';
+import { ingestLogger } from '../../logger';
 import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 /** Ingestion result with document counts. */
@@ -33,7 +33,7 @@ export interface IngestionResult {
 
 /** Log header with ingestion configuration. */
 export function printHeader(args: CliArgs): void {
-  sandboxLogger.info('Live Data Ingestion', {
+  ingestLogger.info('Live Data Ingestion', {
     keyStages: args.keyStages,
     subjects: args.subjects,
     dryRun: args.dryRun,
@@ -42,7 +42,7 @@ export function printHeader(args: CliArgs): void {
 
 /** Log ingestion summary with document counts. */
 export function printSummary(result: IngestionResult, duration: string): void {
-  sandboxLogger.info('Ingestion summary', {
+  ingestLogger.info('Ingestion summary', {
     totalDocs: result.summary.totalDocs,
     lessons: result.summary.counts.lessons,
     units: result.summary.counts.units,
@@ -57,7 +57,7 @@ export function printSummary(result: IngestionResult, duration: string): void {
 export function printCacheStats(client: CachedOakClient): void {
   const stats = client.getCacheStats();
   if (stats.connected) {
-    sandboxLogger.info('Cache statistics', { hits: stats.hits, misses: stats.misses });
+    ingestLogger.info('Cache statistics', { hits: stats.hits, misses: stats.misses });
   }
 }
 
@@ -71,7 +71,7 @@ export async function writeMetadata(
   duration: string,
 ): Promise<Result<void, IndexMetaError>> {
   const version = generateVersionFromTimestamp();
-  sandboxLogger.debug('Writing index metadata', { version });
+  ingestLogger.debug('Writing index metadata', { version });
 
   const client = esClient();
   const meta: IndexMetaDoc = {
@@ -88,7 +88,7 @@ export async function writeMetadata(
   if (isErr(writeResult)) {
     const error = writeResult.error;
     const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
-    sandboxLogger.error('Failed to write metadata', {
+    ingestLogger.error('Failed to write metadata', {
       errorType: error.type,
       message: errorMessage,
       version,
@@ -96,11 +96,11 @@ export async function writeMetadata(
     return writeResult;
   }
 
-  sandboxLogger.debug('Index metadata written successfully', { version });
+  ingestLogger.debug('Index metadata written successfully', { version });
   return writeResult;
 }
 
 /** Log dry run notice. */
 export function printDryRunNotice(): void {
-  sandboxLogger.info('Dry run complete', { action: 'No documents written to ES' });
+  ingestLogger.info('Dry run complete', { action: 'No documents written to ES' });
 }

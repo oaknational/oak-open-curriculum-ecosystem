@@ -3,7 +3,7 @@
  */
 
 import type { RateLimitTracker, RateLimitInfo } from '@oaknational/oak-curriculum-sdk';
-import { sandboxLogger } from './logger';
+import { ingestLogger } from './logger';
 
 /** Structured rate limit info for logging */
 interface FormattedRateLimitInfo {
@@ -35,7 +35,7 @@ export function logRateLimitStatus(tracker: RateLimitTracker): void {
   const requestCount = tracker.getRequestCount();
   const requestRate = tracker.getRequestRate();
 
-  sandboxLogger.info('API Rate Limit Status', {
+  ingestLogger.info('API Rate Limit Status', {
     requests: {
       count: requestCount,
       rate: `${requestRate.toFixed(2)}/sec`,
@@ -48,13 +48,13 @@ export function logRateLimitStatus(tracker: RateLimitTracker): void {
     const percentUsed = ((status.limit - status.remaining) / status.limit) * 100;
 
     if (percentUsed >= 90) {
-      sandboxLogger.warn('⚠️  Rate limit critical: 90%+ quota used', {
+      ingestLogger.warn('⚠️  Rate limit critical: 90%+ quota used', {
         remaining: status.remaining,
         limit: status.limit,
         percentUsed: `${percentUsed.toFixed(1)}%`,
       });
     } else if (percentUsed >= 75) {
-      sandboxLogger.warn('⚠️  Rate limit warning: 75%+ quota used', {
+      ingestLogger.warn('⚠️  Rate limit warning: 75%+ quota used', {
         remaining: status.remaining,
         limit: status.limit,
         percentUsed: `${percentUsed.toFixed(1)}%`,
@@ -100,7 +100,7 @@ export async function withRateLimitMonitoring<T>(
   try {
     return await operation();
   } finally {
-    sandboxLogger.info('Final API usage statistics');
+    ingestLogger.info('Final API usage statistics');
     logRateLimitStatus(tracker);
     stopMonitoring();
   }

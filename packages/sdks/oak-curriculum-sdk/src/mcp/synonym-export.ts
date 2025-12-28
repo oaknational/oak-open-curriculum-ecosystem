@@ -175,9 +175,10 @@ function collectPhrases(group: SynonymGroup, phrases: Set<string>): void {
  * be matched as phrases rather than individual tokens. Used by the search app
  * for phrase detection during query preprocessing.
  *
- * Elasticsearch synonym filters apply after tokenization, so phrase synonyms
- * like "straight line => linear" never match. This vocabulary enables query-time
- * phrase detection to add `match_phrase` boosting as a workaround.
+ * ES synonym filters apply after tokenization, so phrase synonyms like
+ * "straight line => linear" cannot expand via the synonym filter. This vocabulary
+ * enables phrase detection, a complementary mechanism that adds `match_phrase`
+ * boosting to the RRF retriever for exact phrase matches.
  *
  * @returns ReadonlySet of multi-word curriculum terms
  *

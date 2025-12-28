@@ -46,6 +46,7 @@ export default defineConfig({
     'src/types/generated/api-schema/validation/request-parameter-map.ts',
     'src/types/generated/api-schema/response-map.ts',
     'src/types/generated/api-schema/routing/url-helpers.ts',
+    'src/types/generated/api-schema/error-types/sdk-error-types.ts',
     'src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts',
     'src/types/generated/api-schema/mcp-tools/index.ts',
     'src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts',

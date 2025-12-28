@@ -2,7 +2,7 @@
   "name": "@oaknational/mcp-ecosystem",
   "version": "0.5.0",
   "private": true,
-  "description": "Oak National Academy MCP ecosystem - A collection of MCP servers and supporting frameworks and libraries",
+  "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
   "type": "module",
   "scripts": {
     "type-gen": "turbo run --continue type-gen",

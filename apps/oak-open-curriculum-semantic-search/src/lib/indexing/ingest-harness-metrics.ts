@@ -18,7 +18,7 @@ export interface SequenceFacetMetricsSummary {
 }
 
 /** Bulk operation metrics. */
-export interface SandboxBulkMetrics {
+export interface IngestBulkMetrics {
   readonly sequenceFacets: SequenceFacetMetricsSummary;
 }
 
@@ -31,7 +31,7 @@ export function createSequenceFacetMetricsCollector(): {
   readonly record: (
     details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
   ) => void;
-  readonly snapshot: () => SandboxBulkMetrics;
+  readonly snapshot: () => IngestBulkMetrics;
 } {
   const entries: SequenceFacetMetricsEntry[] = [];
   return {
@@ -57,7 +57,7 @@ export function createSequenceFacetMetricsCollector(): {
           totalExtractionDurationMs,
           entries,
         },
-      } satisfies SandboxBulkMetrics;
+      } satisfies IngestBulkMetrics;
     },
   };
 }

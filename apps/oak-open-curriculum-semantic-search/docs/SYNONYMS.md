@@ -196,24 +196,35 @@ Expected output should include both the original terms and expanded synonyms.
 - Large synonym sets can slow queries; keep entries focused
 - Use `updateable: true` to avoid reindexing when synonyms change
 
-## Phrase Synonym Limitations and Workarounds
+## Two Complementary Mechanisms: Synonyms and Phrases
 
-### The Problem
+The SDK vocabulary supports **two parallel search mechanisms** — understanding this is critical for adding new terms.
 
-Elasticsearch synonym filters apply **after tokenization**. This means multi-word synonyms (phrases) don't work as expected:
+### ES Synonym Expansion (Single-Word Tokens)
+
+ES synonym filters apply **after tokenization**. This means they work for single-word synonyms:
+
+```text
+Query: "trigonometry basics"
+After tokenization: ["trigonometry", "basics"]
+Synonym filter expands: ["trigonometry", "trig", "sohcahtoa", "basics"]
+```
+
+### Phrase Detection + Boosting (Multi-Word Terms)
+
+Multi-word synonyms cannot expand via the ES synonym filter because tokenization happens first:
 
 ```text
 Query: "straight line equations"
 After tokenization: ["straight", "line", "equations"]
-Synonym rule: "straight line => linear"
-Result: Rule never matches because "straight line" is now two tokens
+Synonym rule: "straight line => linear" — never matches (already tokenized)
 ```
 
-Approximately 40% of the SDK synonyms are multi-word phrases that the ES synonym filter cannot match.
+Approximately 40% of the SDK synonyms are multi-word phrases. These use a complementary mechanism: phrase detection + boosting.
 
-### The Solution: Phrase Query Boosting
+### How Phrase Boosting Works
 
-We work around this limitation using phrase detection and `match_phrase` boosting at query time:
+Phrase detection finds known multi-word curriculum terms and adds `match_phrase` boosting:
 
 1. **Phrase Detection**: The `detectCurriculumPhrases()` function scans queries for known multi-word curriculum terms from the SDK vocabulary
 2. **Phrase Boosters**: Detected phrases are added as `match_phrase` queries in the `bool.should` clause

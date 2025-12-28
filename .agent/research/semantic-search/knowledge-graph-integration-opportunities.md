@@ -341,3 +341,6 @@ Query: "When is 'fraction' introduced and how does it develop?"
 5. **Pre-existing resources underutilized** — Should validate against schema, cross-reference with ontology
 6. **True knowledge graph enables graph-based search** — Beyond text matching to concept traversal
 
+
+
+

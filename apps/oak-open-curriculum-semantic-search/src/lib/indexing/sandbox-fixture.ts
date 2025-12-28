@@ -1,6 +1,16 @@
+/**
+ * Sandbox fixture client for testing without live API.
+ *
+ * All methods return Result<T, SdkFetchError> per ADR-088.
+ *
+ * @see ADR-088 Result Pattern for Explicit Error Handling
+ */
+
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
+import { ok, err } from '@oaknational/result';
+import type { SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
 
 /**
  * Package of a parsed fixture dataset together with an Oak-compatible client.
@@ -43,8 +53,8 @@ function createFixtureClient(data: FixtureData): OakClient {
     },
     getSequenceUnits: makeFixtureSequenceUnitsFn(data),
     // Thread fixtures not implemented yet - return empty for now
-    getAllThreads: async () => [],
-    getThreadUnits: async () => [],
+    getAllThreads: async () => ok([]),
+    getThreadUnits: async () => ok([]),
     // Lessons by key stage/subject - use fixture data
     getLessonsByKeyStageAndSubject: makeFixtureLessonsByKeyStageAndSubjectFn(data),
   };
@@ -52,18 +62,25 @@ function createFixtureClient(data: FixtureData): OakClient {
 
 function makeFixtureUnitsFn(data: FixtureData): OakClient['getUnitsByKeyStageAndSubject'] {
   return async (keyStage, subject) =>
-    data.units
-      .filter((unit) => unit.keyStage === keyStage && unit.subject === subject)
-      .map((unit) => ({ unitSlug: unit.unitSlug, unitTitle: unit.unitTitle }));
+    ok(
+      data.units
+        .filter((unit) => unit.keyStage === keyStage && unit.subject === subject)
+        .map((unit) => ({ unitSlug: unit.unitSlug, unitTitle: unit.unitTitle })),
+    );
 }
 
 function makeFixtureTranscriptFn(data: FixtureData): OakClient['getLessonTranscript'] {
   return async (lessonSlug) => {
     const entry = data.lessonTranscripts.get(lessonSlug);
     if (!entry) {
-      throw new Error(`Missing transcript for ${lessonSlug}`);
+      const error: SdkNotFoundError = {
+        kind: 'not_found',
+        resource: lessonSlug,
+        resourceType: 'transcript',
+      };
+      return err(error);
     }
-    return { transcript: entry.transcript, vtt: entry.vtt };
+    return ok({ transcript: entry.transcript, vtt: entry.vtt });
   };
 }
 
@@ -71,12 +88,22 @@ function makeFixtureLessonSummaryFn(data: FixtureData): OakClient['getLessonSumm
   return async (lessonSlug) => {
     const summary = data.lessonSummaries.get(lessonSlug);
     if (!summary) {
-      throw new Error(`Missing lesson summary for ${lessonSlug}`);
+      const error: SdkNotFoundError = {
+        kind: 'not_found',
+        resource: lessonSlug,
+        resourceType: 'lesson',
+      };
+      return err(error);
     }
     if (!isLessonSummary(summary)) {
-      throw new Error(`Invalid lesson summary in sandbox fixture for ${lessonSlug}`);
+      return err({
+        kind: 'validation_error',
+        resource: lessonSlug,
+        expected: 'LessonSummary',
+        received: 'invalid',
+      });
     }
-    return summary;
+    return ok(summary);
   };
 }
 
@@ -84,12 +111,22 @@ function makeFixtureUnitSummaryFn(data: FixtureData): OakClient['getUnitSummary'
   return async (unitSlug) => {
     const summary = data.unitSummaries.get(unitSlug);
     if (!summary) {
-      throw new Error(`Missing unit summary for ${unitSlug}`);
+      const error: SdkNotFoundError = {
+        kind: 'not_found',
+        resource: unitSlug,
+        resourceType: 'unit',
+      };
+      return err(error);
     }
     if (!isUnitSummary(summary)) {
-      throw new Error(`Invalid unit summary in sandbox fixture for ${unitSlug}`);
+      return err({
+        kind: 'validation_error',
+        resource: unitSlug,
+        expected: 'UnitSummary',
+        received: 'invalid',
+      });
     }
-    return summary;
+    return ok(summary);
   };
 }
 
@@ -97,9 +134,9 @@ function makeFixtureSubjectSequencesFn(data: FixtureData): OakClient['getSubject
   return async (subject) => {
     const sequences = data.subjectSequences.get(subject);
     if (!sequences) {
-      return [];
+      return ok([]);
     }
-    return sequences;
+    return ok(sequences);
   };
 }
 
@@ -107,9 +144,9 @@ function makeFixtureSequenceUnitsFn(data: FixtureData): OakClient['getSequenceUn
   return async (sequenceSlug) => {
     const units = data.sequenceUnits.get(sequenceSlug);
     if (!Array.isArray(units)) {
-      return [];
+      return ok([]);
     }
-    return units.map((entry): unknown => entry);
+    return ok(units.map((entry): unknown => entry));
   };
 }
 
@@ -121,12 +158,14 @@ function makeFixtureLessonsByKeyStageAndSubjectFn(
     const relevantUnits = data.units.filter(
       (unit) => unit.keyStage === keyStage && unit.subject === subject,
     );
-    return relevantUnits.map((unit) => ({
-      unitSlug: unit.unitSlug,
-      unitTitle: unit.unitTitle,
-      lessons: data.lessons
-        .filter((lg) => lg.unitSlug === unit.unitSlug)
-        .flatMap((lg) => lg.lessons),
-    }));
+    return ok(
+      relevantUnits.map((unit) => ({
+        unitSlug: unit.unitSlug,
+        unitTitle: unit.unitTitle,
+        lessons: data.lessons
+          .filter((lg) => lg.unitSlug === unit.unitSlug)
+          .flatMap((lg) => lg.lessons),
+      })),
+    );
   };
 }

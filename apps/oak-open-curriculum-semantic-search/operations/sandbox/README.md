@@ -6,7 +6,7 @@ Development and testing utilities for ingesting fixture data.
 
 ### `ingest.ts`
 
-Ingests fixture data into a sandbox Elasticsearch index for local development and testing.
+Ingests fixture data into Elasticsearch for local development and testing.
 
 **Usage**:
 
@@ -34,27 +34,27 @@ tsx operations/sandbox/ingest.ts --target sandbox
 - Loads lesson/unit/thread/sequence data from JSON fixtures
 - Transforms to Elasticsearch document format
 - Ingests into specified target index
-- Uses `sandbox-harness` library for orchestration
+- Uses `ingest-harness` library for orchestration
 - Provides structured logging of operations
 
 **CLI Flags**:
 
-- `--target <env>` - Target environment (sandbox|development|production)
+- `--target <env>` - Target environment (sandbox|primary)
 - `--fixture <path>` - Path to fixture directory (default: `fixtures/sandbox`)
 - `--dry-run` - Validate fixtures without ingesting
 - `--verbose` - Enable detailed logging
 
-## Sandbox Harness
+## Ingestion Harness
 
-The sandbox harness (`src/lib/indexing/sandbox-harness.ts`) provides:
+The ingestion harness (`src/lib/indexing/ingest-harness.ts`) provides:
 
 - Fixture loading and validation
 - Document transformation
-- Batch ingestion
+- Batch ingestion with atomic commits
 - Progress reporting
 - Error handling
 
-**Documentation**: See [sandbox-ingestion-harness.md](../../docs/sandbox-ingestion-harness.md)
+**Documentation**: See [ingestion-harness.md](../../docs/ingestion-harness.md)
 
 ## Creating Fixtures
 
@@ -103,6 +103,6 @@ pnpm sandbox:ingest
 
 ## Related Documentation
 
-- [sandbox-ingestion-harness.md](../../docs/sandbox-ingestion-harness.md) - Detailed harness documentation
-- [sandboxLogger](../../src/lib/logger.ts) - Logging utilities
+- [ingestion-harness.md](../../docs/ingestion-harness.md) - Detailed harness documentation
+- [ingestLogger](../../src/lib/logger.ts) - Logging utilities
 - [SearchIndexTarget](../../src/lib/search-index-target.ts) - Environment configuration

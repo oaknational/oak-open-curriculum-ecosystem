@@ -3,7 +3,7 @@ import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
-import { isLessonSummary, isSearchUnitsIndexDoc, isUnitSummary } from '../../../src/types/oak';
+import { isSearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
 import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
 import {
@@ -98,26 +98,28 @@ async function rollupAllUnits(
 
 /** Fetch and validate unit summary. */
 async function fetchUnitSummary(client: OakClient, unitSlug: string) {
-  const candidate: unknown = await client.getUnitSummary(unitSlug);
-  if (!isUnitSummary(candidate)) {
-    throw new Error(`Unexpected unit summary response for ${unitSlug}`);
+  const result = await client.getUnitSummary(unitSlug);
+  if (!result.ok) {
+    throw new Error(`Failed to fetch unit summary for ${unitSlug}`);
   }
-  return candidate;
+  return result.value;
 }
 
 /** Build snippets from lesson transcripts. */
 async function buildLessonSnippets(client: OakClient, lessonIds: readonly string[]) {
   const snippets: string[] = [];
   for (const lessonId of lessonIds) {
-    const candidate: unknown = await client.getLessonSummary(lessonId);
-    if (!isLessonSummary(candidate)) {
-      throw new Error(`Unexpected lesson summary response for ${lessonId}`);
+    const summaryResult = await client.getLessonSummary(lessonId);
+    if (!summaryResult.ok) {
+      // Skip lessons that fail to fetch
+      continue;
     }
-    const transcriptResponse = await client.getLessonTranscript(lessonId);
+    const transcriptResult = await client.getLessonTranscript(lessonId);
+    const transcript = transcriptResult.ok ? transcriptResult.value.transcript : '';
     snippets.push(
       selectLessonPlanningSnippet({
-        summary: candidate,
-        transcript: transcriptResponse.transcript,
+        summary: summaryResult.value,
+        transcript,
       }),
     );
   }

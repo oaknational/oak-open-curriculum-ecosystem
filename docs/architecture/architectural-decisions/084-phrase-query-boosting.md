@@ -1,4 +1,4 @@
-# ADR-084: Phrase Query Boosting for Multi-Word Synonym Support
+# ADR-084: Phrase Query Boosting for Multi-Word Curriculum Terms
 
 ## Status
 
@@ -6,24 +6,29 @@ Accepted
 
 ## Context
 
-Elasticsearch synonym filters apply after tokenization, so phrase synonyms like "straight line => linear" never match. After tokenization, "straight line" becomes `["straight", "line"]`, so the phrase rule never fires.
+The search system uses **two complementary mechanisms** for vocabulary support, both drawing from the same SDK synonym data:
 
-Diagnostic analysis (18 queries) revealed that approximately 40% of the 163 deployed synonyms are multi-word phrases that are currently non-functional:
+1. **ES Synonym Expansion** — Single-word tokens are expanded at query time via the `synonym_graph` filter
+2. **Phrase Detection + Boosting** — Multi-word terms are detected and boosted via `match_phrase` queries
 
-| Pattern                        | MRR   | Status    |
-| ------------------------------ | ----- | --------- |
-| Single-word synonym            | 0.500 | ✅ Works  |
-| Phrase synonym (all positions) | 0.000 | ❌ Broken |
+This ADR documents the phrase boosting mechanism, which is architecturally necessary because ES synonym filters apply after tokenization. Multi-word synonyms like "straight line" are tokenized to `["straight", "line"]` before the synonym filter runs, so phrase-level synonym rules cannot match.
 
-Examples of broken phrase synonyms:
+Diagnostic analysis (18 queries) revealed that approximately 40% of SDK synonyms are multi-word phrases:
 
-- "straight line" (should map to linear-graphs)
-- "completing the square" (should boost quadratics lessons)
-- "circle rules" (should map to circle-theorems)
+| Pattern             | Mechanism                   | Purpose                      |
+| ------------------- | --------------------------- | ---------------------------- |
+| Single-word synonym | ES synonym expansion        | Query token expansion        |
+| Multi-word synonym  | Phrase detection + boosting | Exact phrase relevance boost |
+
+Examples of multi-word curriculum terms requiring phrase boosting:
+
+- "straight line" (boosts linear-graphs lessons)
+- "completing the square" (boosts quadratics lessons)
+- "circle rules" (boosts circle-theorems lessons)
 
 ## Decision
 
-Add phrase detection at query time and boost documents with `match_phrase` queries for detected curriculum phrases. The SDK remains source of truth for phrase vocabulary via the new `buildPhraseVocabulary()` function.
+Add phrase detection at query time and boost documents with `match_phrase` queries for detected curriculum phrases. This is a **complementary mechanism** to ES synonym expansion, not a replacement. The SDK remains single source of truth for all vocabulary via the `buildPhraseVocabulary()` function.
 
 The solution adds three components:
 
@@ -70,6 +75,32 @@ ES Search
 | **Phrase boost queries**    | **Simple, non-invasive, follows existing pattern** |
 
 The chosen approach mirrors the existing query structure patterns in `rrf-query-builders.ts`, keeping changes minimal and architectural consistency high.
+
+### Two Complementary Mechanisms Architecture
+
+The SDK `synonymsData` remains a **single source of truth** for all vocabulary. At export time, two different consumers extract what they need:
+
+```text
+synonymsData (SDK)
+    │
+    ├── buildElasticsearchSynonyms() → All synonyms → ES synonym set
+    │                                   (single-word tokens will expand)
+    │
+    └── buildPhraseVocabulary() → Multi-word terms only → Phrase detection
+                                   (for match_phrase boosting)
+```
+
+This is not a workaround — it's a principled separation of concerns:
+
+- **ES synonym expansion**: Token-level term equivalence (query expansion)
+- **Phrase boosting**: Exact phrase relevance boost (ranking improvement)
+
+Both mechanisms serve different purposes and have different precision characteristics:
+
+| Mechanism            | Precision Risk                       | When Used            |
+| -------------------- | ------------------------------------ | -------------------- |
+| ES synonym expansion | Higher (expands all matching tokens) | Single-word synonyms |
+| Phrase boosting      | Lower (only exact phrase matches)    | Multi-word phrases   |
 
 Key benefits:
 

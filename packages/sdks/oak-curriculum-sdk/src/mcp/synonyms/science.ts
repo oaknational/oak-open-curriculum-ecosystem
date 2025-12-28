@@ -14,7 +14,15 @@ export const scienceSynonyms = {
   photosynthesis: ['chlorophyll', 'chloroplast'],
   respiration: ['aerobic respiration', 'anaerobic respiration'],
   'states-of-matter': ['solid', 'liquid', 'gas'],
-  forces: ['force', 'newton', 'newtons', 'gravity', 'gravitational'],
+  /**
+   * Forces and related terms.
+   *
+   * @remarks
+   * "gravity" and "gravitational" were removed during audit (2025-12-27) —
+   * category error: gravity IS a force (a specific type), not a synonym.
+   * Someone searching "gravity" wants gravity lessons, not generic forces.
+   */
+  forces: ['force', 'newton', 'newtons'],
   energy: ['kinetic energy', 'potential energy', 'conservation of energy'],
   cells: ['cell', 'cell theory', 'cell biology'],
   evolution: ['natural selection', 'adaptation'],

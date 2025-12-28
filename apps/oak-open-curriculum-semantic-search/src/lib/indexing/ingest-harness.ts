@@ -1,34 +1,46 @@
+/**
+ * Ingestion harness for Elasticsearch.
+ *
+ * Provides a unified interface for preparing and dispatching bulk operations
+ * to Elasticsearch, with support for batch-atomic commits and observable progress.
+ *
+ * @packageDocumentation
+ */
+
 import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
-import { buildIndexBulkOps } from '../index-oak';
 import {
   currentSearchIndexTarget,
   rewriteBulkOperations,
   type SearchIndexKind,
   type SearchIndexTarget,
 } from '../search-index-target';
-import { sandboxLogger } from '../logger';
+import { ingestLogger } from '../logger';
 import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
-import {
-  dispatchBulk,
-  logDataIntegrityIssues,
-  logPreview,
-  logSummary,
-  summariseOperations,
-  type EsTransport,
-} from './sandbox-harness-ops';
-import type { DataIntegrityReport } from './data-integrity-report';
-import { filterOperationsByIndex } from './sandbox-harness-filtering';
+import { summariseOperations, type EsTransport } from './ingest-harness-ops';
+import { createDataIntegrityCollector, type DataIntegrityReport } from './data-integrity-report';
+import { filterOperationsByIndex } from './ingest-harness-filtering';
 import {
   createSequenceFacetMetricsCollector,
-  type SandboxBulkMetrics,
-} from './sandbox-harness-metrics';
+  type IngestBulkMetrics,
+} from './ingest-harness-metrics';
 import type { BulkOperations } from './bulk-operation-types';
+import { generateIndexBatches, type BatchGranularity } from '../index-batch-generator';
+import {
+  runBatchIngestion,
+  mergeDataIntegrityReport,
+  type BatchIngestionContext,
+} from './ingest-harness-batch';
 
-interface SandboxHarnessOptions {
+// ============================================================================
+// Types
+// ============================================================================
+
+/** Options for creating an ingestion harness. */
+interface IngestHarnessOptions {
   readonly fixtureRoot?: string;
   readonly client?: OakClient;
   readonly keyStages?: readonly KeyStage[];
@@ -36,54 +48,53 @@ interface SandboxHarnessOptions {
   readonly indexes?: readonly SearchIndexKind[];
   readonly target?: SearchIndexTarget;
   readonly es?: EsTransport;
-  /** Optional ES client override for testing. When provided, uses its transport for bulk ops. */
   readonly esClient?: Client;
   readonly logger?: Logger;
+  /** Batch granularity. Defaults to `{ kind: 'subject-keystage' }`. */
+  readonly granularity?: BatchGranularity;
 }
 
-interface HarnessContext {
-  readonly client: OakClient;
-  readonly keyStages: readonly KeyStage[];
-  readonly subjects: readonly SearchSubjectSlug[];
-  readonly indexes: readonly SearchIndexKind[];
-  readonly target: SearchIndexTarget;
-  readonly es: EsTransport;
-  readonly logger: Logger;
-}
-
-interface SandboxBulkSummary {
+/** Summary of bulk operations by index. */
+interface IngestBulkSummary {
   readonly target: SearchIndexTarget;
   readonly totalDocs: number;
   readonly counts: Record<SearchIndexKind, number>;
 }
 
-interface SandboxBulkResult {
+/** Result of bulk operation preparation or ingestion. */
+interface IngestBulkResult {
   readonly operations: BulkOperations;
-  readonly summary: SandboxBulkSummary;
-  readonly metrics?: SandboxBulkMetrics;
+  readonly summary: IngestBulkSummary;
+  readonly metrics?: IngestBulkMetrics;
   readonly dataIntegrityReport?: DataIntegrityReport;
 }
 
+/** Options for the ingest method. */
 interface IngestOptions {
   readonly dryRun?: boolean;
   readonly verbose?: boolean;
 }
 
-export interface SandboxHarness {
-  prepareBulkOperations(): Promise<SandboxBulkResult>;
-  ingest(options?: IngestOptions): Promise<SandboxBulkResult>;
+/** Ingestion harness interface. */
+export interface IngestHarness {
+  prepareBulkOperations(): Promise<IngestBulkResult>;
+  ingest(options?: IngestOptions): Promise<IngestBulkResult>;
 }
 
-/** Builds a sandbox ingestion harness configured for the desired search index target. */
-export async function createSandboxHarness(
-  options: SandboxHarnessOptions,
-): Promise<SandboxHarness> {
+// ============================================================================
+// Harness Factory
+// ============================================================================
+
+/** Builds an ingestion harness configured for the desired search index target. */
+export async function createIngestHarness(options: IngestHarnessOptions): Promise<IngestHarness> {
   const target = options.target ?? currentSearchIndexTarget();
-  const logger = options.logger ?? sandboxLogger;
+  const logger = options.logger ?? ingestLogger;
   const { client, keyStages, subjects } = await resolveHarnessInputs(options);
   const indexes = options.indexes ?? [];
   const es = resolveEsTransport(options.es, options.esClient);
-  const context: HarnessContext = {
+  const granularity = options.granularity ?? { kind: 'subject-keystage' };
+
+  const context: BatchIngestionContext = {
     client,
     keyStages,
     subjects,
@@ -91,14 +102,20 @@ export async function createSandboxHarness(
     target,
     es,
     logger,
+    granularity,
   };
+
   const prepare = () => prepareOperations(context);
-  const ingest = (ingestOptions?: IngestOptions) =>
-    ingestOperations(context, prepare, ingestOptions);
+  const ingest = (ingestOptions?: IngestOptions) => runBatchIngestion(context, ingestOptions);
+
   return { prepareBulkOperations: prepare, ingest };
 }
 
-async function resolveHarnessInputs(options: SandboxHarnessOptions): Promise<{
+// ============================================================================
+// Input Resolution
+// ============================================================================
+
+async function resolveHarnessInputs(options: IngestHarnessOptions): Promise<{
   client: OakClient;
   keyStages: readonly KeyStage[];
   subjects: readonly SearchSubjectSlug[];
@@ -109,7 +126,7 @@ async function resolveHarnessInputs(options: SandboxHarnessOptions): Promise<{
   return resolveFixtureBackedClient(options);
 }
 
-function resolveProvidedClient(options: SandboxHarnessOptions): {
+function resolveProvidedClient(options: IngestHarnessOptions): {
   client: OakClient;
   keyStages: readonly KeyStage[];
   subjects: readonly SearchSubjectSlug[];
@@ -129,7 +146,7 @@ function resolveProvidedClient(options: SandboxHarnessOptions): {
   return { client, keyStages, subjects };
 }
 
-async function resolveFixtureBackedClient(options: SandboxHarnessOptions): Promise<{
+async function resolveFixtureBackedClient(options: IngestHarnessOptions): Promise<{
   client: OakClient;
   keyStages: readonly KeyStage[];
   subjects: readonly SearchSubjectSlug[];
@@ -140,11 +157,11 @@ async function resolveFixtureBackedClient(options: SandboxHarnessOptions): Promi
   const fixture = await createFixtureOakClient(options.fixtureRoot);
   const keyStages = ensureNonEmptyList(
     options.keyStages ?? fixture.data.keyStages,
-    'Sandbox fixtures must provide at least one key stage.',
+    'Fixtures must provide at least one key stage.',
   );
   const subjects = ensureNonEmptyList(
     options.subjects ?? fixture.data.subjects,
-    'Sandbox fixtures must provide at least one subject.',
+    'Fixtures must provide at least one subject.',
   );
   return { client: fixture.client, keyStages, subjects };
 }
@@ -156,9 +173,6 @@ function ensureNonEmptyList<T>(value: readonly T[] | undefined, message: string)
   return value;
 }
 
-/**
- * Resolves ES transport from options. Uses provided transport for testing, real client transport otherwise.
- */
 function resolveEsTransport(es?: EsTransport, providedClient?: Client): EsTransport {
   if (es) {
     return es;
@@ -167,71 +181,36 @@ function resolveEsTransport(es?: EsTransport, providedClient?: Client): EsTransp
   return { transport: client.transport };
 }
 
-async function prepareOperations(context: HarnessContext): Promise<SandboxBulkResult> {
+// ============================================================================
+// Prepare Operations (collect all batches without dispatch)
+// ============================================================================
+
+async function prepareOperations(context: BatchIngestionContext): Promise<IngestBulkResult> {
   const metricsCollector = createSequenceFacetMetricsCollector();
-  const { operations: bulkOps, dataIntegrityReport } = await buildIndexBulkOps(
-    context.client,
-    context.keyStages,
-    context.subjects,
-    { onSequenceFacetProcessed: metricsCollector.record },
-  );
-  const targetedOps = rewriteBulkOperations(bulkOps, context.target);
+  const allOps: BulkOperations = [];
+  const dataIntegrityReport = createDataIntegrityCollector();
+
+  for await (const batch of generateIndexBatches({
+    client: context.client,
+    subjects: context.subjects,
+    keyStages: context.keyStages,
+    granularity: context.granularity,
+    onSequenceFacetProcessed: metricsCollector.record,
+  })) {
+    allOps.push(...batch.operations);
+    if (batch.kind === 'curriculum') {
+      mergeDataIntegrityReport(dataIntegrityReport, batch.dataIntegrityReport);
+    }
+  }
+
+  const targetedOps = rewriteBulkOperations(allOps, context.target);
   const filteredOps = filterOperationsByIndex(targetedOps, context.indexes);
   const summary = summariseOperations(filteredOps, context.target);
+
   return {
     operations: filteredOps,
     summary,
     metrics: metricsCollector.snapshot(),
     dataIntegrityReport,
   };
-}
-
-async function ingestOperations(
-  context: HarnessContext,
-  prepare: () => Promise<SandboxBulkResult>,
-  options: IngestOptions = {},
-): Promise<SandboxBulkResult> {
-  let result: SandboxBulkResult | undefined;
-  try {
-    result = await prepare();
-    const dryRun = options.dryRun ?? false;
-    const verbose = options.verbose ?? false;
-    logSummary(
-      context.logger,
-      'sandbox.ingest.prepared',
-      context.target,
-      result.summary,
-      dryRun,
-      result.metrics,
-    );
-    if (result.operations.length === 0 || dryRun) {
-      if (verbose) {
-        logPreview(context.logger, context.target, result.operations);
-      }
-      return result;
-    }
-    await executeAndLogIngestion(context, result, verbose);
-    return result;
-  } finally {
-    logDataIntegrityIssues(context.logger, result?.dataIntegrityReport);
-  }
-}
-
-async function executeAndLogIngestion(
-  context: HarnessContext,
-  result: SandboxBulkResult,
-  verbose: boolean,
-): Promise<void> {
-  await dispatchBulk(context.es, result.operations, context.logger);
-  logSummary(
-    context.logger,
-    'sandbox.ingest.completed',
-    context.target,
-    result.summary,
-    false,
-    result.metrics,
-  );
-  if (verbose) {
-    logPreview(context.logger, context.target, result.operations);
-  }
 }

@@ -96,6 +96,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-084: Phrase Query Boosting for Multi-Word Synonym Support](084-phrase-query-boosting.md)
 - [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md)
 - [ADR-086: Vocabulary Mining and Graph Export Pattern](086-vocab-gen-graph-export-pattern.md)
+- [ADR-087: Batch-Atomic Ingestion](087-batch-atomic-ingestion.md) ← **Supersedes aspects of ADR-069**
+- [ADR-088: Result Pattern for Explicit Error Handling](088-result-pattern-for-error-handling.md)
 
 ## Key Architectural Decisions
 
@@ -128,6 +130,7 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking
+- **[ADR-087](087-batch-atomic-ingestion.md)** - Batch-atomic ingestion (supersedes file-based progress from ADR-069)
 
 For historical context on dense vector evaluation (superseded):
 

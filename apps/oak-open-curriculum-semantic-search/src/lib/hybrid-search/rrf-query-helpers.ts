@@ -184,8 +184,9 @@ function stripBoost(field: string): string {
  * Creates match_phrase queries for detected curriculum phrases.
  *
  * These queries are added to the bool.should clause of BM25 retrievers to
- * boost documents that contain the exact phrase. This compensates for ES
- * synonym filter limitations with multi-word terms.
+ * boost documents that contain the exact phrase. This is a complementary
+ * mechanism to ES synonym expansion — synonyms expand single tokens, while
+ * phrase boosting matches multi-word curriculum terms exactly.
  *
  * @param phrases - Array of detected curriculum phrases
  * @param fields - BM25 fields to search (boosts are stripped for phrase matching)

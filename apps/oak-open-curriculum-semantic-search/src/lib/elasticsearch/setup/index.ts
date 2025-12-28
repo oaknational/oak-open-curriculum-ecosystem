@@ -11,9 +11,10 @@ import {
   OAK_UNIT_ROLLUP_MAPPING,
   OAK_SEQUENCES_MAPPING,
   OAK_SEQUENCE_FACETS_MAPPING,
+  OAK_THREADS_MAPPING,
   OAK_META_MAPPING,
 } from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
-import { sandboxLogger } from '../../logger';
+import { ingestLogger } from '../../logger';
 
 /** Index names and their corresponding SDK-generated mappings. */
 const INDEX_MAPPINGS = [
@@ -22,6 +23,7 @@ const INDEX_MAPPINGS = [
   { indexName: 'oak_units', mapping: OAK_UNITS_MAPPING },
   { indexName: 'oak_sequences', mapping: OAK_SEQUENCES_MAPPING },
   { indexName: 'oak_sequence_facets', mapping: OAK_SEQUENCE_FACETS_MAPPING },
+  { indexName: 'oak_threads', mapping: OAK_THREADS_MAPPING },
   { indexName: 'oak_meta', mapping: OAK_META_MAPPING },
 ] as const;
 
@@ -140,11 +142,11 @@ async function createIndex(
 /** Run full Elasticsearch setup: synonyms + all indexes. */
 export async function runSetup(config: SetupConfig): Promise<SetupResult> {
   if (config.verbose) {
-    sandboxLogger.debug('Generating synonyms from SDK ontology');
+    ingestLogger.debug('Generating synonyms from SDK ontology');
   }
   const { created: synonymsCreated, count: synonymCount } = await upsertSynonyms(config);
   if (config.verbose) {
-    sandboxLogger.debug('Synonyms upserted', { count: synonymCount, set: SYNONYM_SET_NAME });
+    ingestLogger.debug('Synonyms upserted', { count: synonymCount, set: SYNONYM_SET_NAME });
   }
 
   const indexResults: IndexResult[] = [];
@@ -152,7 +154,7 @@ export async function runSetup(config: SetupConfig): Promise<SetupResult> {
     const result = await createIndex(config, indexName, mapping);
     indexResults.push(result);
     if (config.verbose) {
-      sandboxLogger.debug('Index operation', { index: indexName, status: result.status });
+      ingestLogger.debug('Index operation', { index: indexName, status: result.status });
     }
   }
   return { synonymsCreated, synonymCount, indexResults };
@@ -161,12 +163,12 @@ export async function runSetup(config: SetupConfig): Promise<SetupResult> {
 /** Delete all indexes and recreate them with fresh mappings. */
 export async function runReset(config: SetupConfig): Promise<SetupResult> {
   if (config.verbose) {
-    sandboxLogger.debug('Deleting existing indexes');
+    ingestLogger.debug('Deleting existing indexes');
   }
   for (const { indexName } of INDEX_MAPPINGS) {
     const deleted = await deleteIndex(config, indexName);
     if (config.verbose) {
-      sandboxLogger.debug('Index deleted', { index: indexName, deleted });
+      ingestLogger.debug('Index deleted', { index: indexName, deleted });
     }
   }
   return runSetup(config);

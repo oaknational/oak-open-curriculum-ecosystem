@@ -9,6 +9,7 @@ import {
   createRetryConfig,
   calculateBackoff,
   shouldRetry,
+  getMaxRetriesForStatus,
   DEFAULT_RETRY_CONFIG,
   type RetryConfig,
 } from './retry-config';
@@ -220,6 +221,50 @@ describe('retry-config', () => {
       expect(shouldRetry(429, customConfig)).toBe(true);
       expect(shouldRetry(500, customConfig)).toBe(false);
       expect(shouldRetry(503, customConfig)).toBe(false);
+    });
+  });
+
+  describe('getMaxRetriesForStatus', () => {
+    const config: RetryConfig = {
+      enabled: true,
+      maxRetries: 5,
+      initialDelayMs: 1000,
+      backoffMultiplier: 2,
+      maxDelayMs: 60000,
+      retryableStatusCodes: [429, 503, 404, 500],
+    };
+
+    it('should return maxRetries when no statusCodeMaxRetries defined', () => {
+      expect(getMaxRetriesForStatus(429, config)).toBe(5);
+      expect(getMaxRetriesForStatus(503, config)).toBe(5);
+      expect(getMaxRetriesForStatus(404, config)).toBe(5);
+    });
+
+    it('should return per-status limit when statusCodeMaxRetries defined', () => {
+      const configWithLimits: RetryConfig = {
+        ...config,
+        statusCodeMaxRetries: { 404: 2, 500: 2 },
+      };
+      expect(getMaxRetriesForStatus(404, configWithLimits)).toBe(2);
+      expect(getMaxRetriesForStatus(500, configWithLimits)).toBe(2);
+    });
+
+    it('should fall back to maxRetries for codes not in statusCodeMaxRetries', () => {
+      const configWithLimits: RetryConfig = {
+        ...config,
+        statusCodeMaxRetries: { 404: 2, 500: 2 },
+      };
+      expect(getMaxRetriesForStatus(429, configWithLimits)).toBe(5);
+      expect(getMaxRetriesForStatus(503, configWithLimits)).toBe(5);
+    });
+
+    it('should handle empty statusCodeMaxRetries', () => {
+      const configWithEmpty: RetryConfig = {
+        ...config,
+        statusCodeMaxRetries: {},
+      };
+      expect(getMaxRetriesForStatus(429, configWithEmpty)).toBe(5);
+      expect(getMaxRetriesForStatus(404, configWithEmpty)).toBe(5);
     });
   });
 });

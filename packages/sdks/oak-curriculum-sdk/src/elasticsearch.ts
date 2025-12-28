@@ -74,6 +74,8 @@ export {
   OAK_SEQUENCES_MAPPING,
   /** oak_sequence_facets index mapping */
   OAK_SEQUENCE_FACETS_MAPPING,
+  /** oak_threads index mapping */
+  OAK_THREADS_MAPPING,
 } from './types/generated/search/es-mappings/index.js';
 
 export type {
@@ -82,6 +84,7 @@ export type {
   OakUnitRollupMapping,
   OakSequencesMapping,
   OakSequenceFacetsMapping,
+  OakThreadsMapping,
 } from './types/generated/search/es-mappings/index.js';
 
 // ============================================================================

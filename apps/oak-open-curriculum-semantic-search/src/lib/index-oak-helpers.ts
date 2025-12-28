@@ -3,7 +3,7 @@
  * @see ADR-080 KS4 Metadata Denormalisation, @see ADR-083 Lesson Enumeration
  */
 
-import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
+import { generateCanonicalUrl, formatSdkError } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
@@ -13,7 +13,7 @@ import {
 } from './indexing/sequence-facet-index';
 import { buildRollupDocuments, buildUnitDocuments } from './indexing/index-bulk-helpers';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
-import { sandboxLogger } from './logger';
+import { ingestLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { UnitContextMap } from './indexing/ks4-context-builder';
 import { fetchAllLessonsByUnit } from './indexing/fetch-all-lessons';
@@ -42,9 +42,21 @@ export async function fetchPairData(
   ks: KeyStage,
   subject: SearchSubjectSlug,
 ): Promise<{ units: PairUnits }> {
-  sandboxLogger.debug('Fetching units', { subject, keyStage: ks });
-  const units = await client.getUnitsByKeyStageAndSubject(ks, subject);
-  sandboxLogger.debug('Found units', {
+  ingestLogger.debug('Fetching units', { subject, keyStage: ks });
+  const result = await client.getUnitsByKeyStageAndSubject(ks, subject);
+
+  if (!result.ok) {
+    const error = result.error;
+    const message = formatSdkError(error);
+    ingestLogger.error('Failed to fetch units', { subject, keyStage: ks, error: message });
+    if (error.kind === 'network_error') {
+      throw error.cause;
+    }
+    throw new Error(message);
+  }
+
+  const units = result.value;
+  ingestLogger.debug('Found units', {
     subject,
     keyStage: ks,
     units: units.length,
@@ -69,7 +81,7 @@ async function buildUnitsWithSummaries(
   lessonsByUnit: ReadonlyMap<string, readonly string[]>,
 ): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: BulkOperations }> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
-  sandboxLogger.debug('Building unit documents', { subject, keyStage: ks });
+  ingestLogger.debug('Building unit documents', { subject, keyStage: ks });
   const result = await buildUnitDocuments(
     client,
     units,
@@ -80,7 +92,7 @@ async function buildUnitsWithSummaries(
     dataIntegrityReport,
     lessonsByUnit,
   );
-  sandboxLogger.debug('Built unit docs', {
+  ingestLogger.debug('Built unit docs', {
     subject,
     keyStage: ks,
     count: result.unitOps.length / 2,
@@ -105,7 +117,7 @@ async function buildCoreDocumentOps(
   // Fetch lessons FIRST to get accurate lesson counts (per ADR-083)
   // WORKAROUND: Fetch by unit due to upstream API bug (see ADR-083)
   const unitSlugs = units.map((u) => u.unitSlug);
-  sandboxLogger.info('Fetching all lessons by unit (API bug workaround)', {
+  ingestLogger.info('Fetching all lessons by unit', {
     subject,
     keyStage: ks,
     unitCount: unitSlugs.length,
@@ -116,11 +128,11 @@ async function buildCoreDocumentOps(
     subject,
     unitSlugs,
   );
-  sandboxLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
+  ingestLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
 
   // Build lessonsByUnit map for accurate unit/rollup lesson counts
   const lessonsByUnit = buildLessonsByUnit(aggregatedLessons);
-  sandboxLogger.debug('Built lessonsByUnit map', {
+  ingestLogger.debug('Built lessonsByUnit map', {
     subject,
     keyStage: ks,
     unitCount: lessonsByUnit.size,
@@ -154,10 +166,10 @@ async function buildCoreDocumentOps(
     }
     processed++;
   }
-  sandboxLogger.debug('Built lesson docs', { subject, keyStage: ks, count: processed, skipped });
+  ingestLogger.debug('Built lesson docs', { subject, keyStage: ks, count: processed, skipped });
 
   // Build rollups with accurate lesson counts
-  sandboxLogger.debug('Building rollup documents', { subject, keyStage: ks });
+  ingestLogger.debug('Building rollup documents', { subject, keyStage: ks });
   const rollupOps = buildRollupDocuments(
     unitSummaries,
     rollupSnippets,
@@ -167,7 +179,7 @@ async function buildCoreDocumentOps(
     unitContextMap,
     lessonsByUnit,
   );
-  sandboxLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
+  ingestLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
 
   return { unitOps, lessonOps, rollupOps, unitSummaries };
 }

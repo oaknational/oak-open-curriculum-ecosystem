@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Client } from '@elastic/elasticsearch';
-import { createSandboxHarness } from './sandbox-harness';
+import { createIngestHarness } from './ingest-harness';
 import { resolveSearchIndexName } from '../search-index-target';
 
 const FIXTURE_ROOT = path.join(process.cwd(), 'fixtures/sandbox');
@@ -18,10 +18,10 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('sandbox harness', () => {
-  it('prepares sandbox-targeted bulk operations with per-index counts', async () => {
+describe('ingest harness', () => {
+  it('prepares bulk operations with per-index counts for sandbox target', async () => {
     const mock = createMockEsTransport();
-    const harness = await createSandboxHarness({
+    const harness = await createIngestHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,
@@ -53,7 +53,7 @@ describe('sandbox harness', () => {
 
   it('performs ingestion when dry-run is disabled and logs summary metadata', async () => {
     const mock = createMockEsTransport();
-    const harness = await createSandboxHarness({
+    const harness = await createIngestHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,
@@ -79,7 +79,7 @@ describe('sandbox harness', () => {
 
   it('skips network calls when run in dry-run mode', async () => {
     const mock = createMockEsTransport();
-    const harness = await createSandboxHarness({
+    const harness = await createIngestHarness({
       fixtureRoot: FIXTURE_ROOT,
       target: 'sandbox',
       es: mock,

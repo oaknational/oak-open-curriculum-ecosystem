@@ -15,6 +15,7 @@
  * | `oak_units` | `OAK_UNITS_MAPPING` | Basic unit metadata |
  * | `oak_sequences` | `OAK_SEQUENCES_MAPPING` | Programme sequence documents |
  * | `oak_sequence_facets` | `OAK_SEQUENCE_FACETS_MAPPING` | Sequence facet navigation data |
+ * | `oak_threads` | `OAK_THREADS_MAPPING` | Thread documents for progression-centric search |
  * | `oak_meta` | `OAK_META_MAPPING` | Ingestion metadata |
  *
  * ## Synonyms
@@ -29,7 +30,6 @@
  *
  * | Index | Purpose |
  * |-------|---------|
- * | `oak_threads` | Thread documents for thread-centric search |
  * | `oak_ontology` | Domain knowledge for RAG |
  * | `oak_lesson_transcripts` | Chunked transcripts for deep retrieval |
  * | `oak_content_guidance` | Safeguarding/content warnings |

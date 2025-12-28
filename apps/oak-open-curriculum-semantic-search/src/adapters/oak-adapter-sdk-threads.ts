@@ -1,10 +1,17 @@
 /**
  * Thread-related API client functions.
  *
- * Separated from oak-adapter-sdk.ts to keep file size manageable.
+ * Separated from oak-adapter-sdk.ts to keep file size manageable per rules.md.
+ * All methods return Result<T, SdkFetchError> per ADR-088.
+ *
+ * @remarks
+ * See `docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
+ * for the full architectural decision record.
  */
 
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient, SdkFetchError } from '@oaknational/oak-curriculum-sdk';
+import { classifyHttpError } from '@oaknational/oak-curriculum-sdk';
+import { ok, err, type Result } from '@oaknational/result';
 
 /**
  * Thread data from the /threads API endpoint.
@@ -30,60 +37,62 @@ export interface ThreadUnitEntry {
 }
 
 /**
- * Public shape for listing all threads.
+ * Public shape for listing all threads. Returns Result per ADR-088.
  */
-export type GetAllThreadsFn = () => Promise<readonly ThreadEntry[]>;
+export type GetAllThreadsFn = () => Promise<Result<readonly ThreadEntry[], SdkFetchError>>;
 
 /**
- * Public shape for getting units belonging to a thread.
+ * Public shape for getting units belonging to a thread. Returns Result per ADR-088.
  */
-export type GetThreadUnitsFn = (threadSlug: string) => Promise<readonly ThreadUnitEntry[]>;
-
-/**
- * Asserts that an SDK response was successful.
- */
-function assertSdkOk(res: { response: Response }): void {
-  if (!res.response.ok) {
-    const status = String(res.response.status);
-    const statusText = res.response.statusText;
-    const message = statusText
-      ? `SDK request failed: ${status} ${statusText}`
-      : `SDK request failed: ${status}`;
-    throw new Error(message);
-  }
-}
+export type GetThreadUnitsFn = (
+  threadSlug: string,
+) => Promise<Result<readonly ThreadUnitEntry[], SdkFetchError>>;
 
 /**
  * Creates a function to fetch all curriculum threads.
+ * Returns Result per ADR-088.
  */
 export function makeGetAllThreads(client: OakApiClient): GetAllThreadsFn {
   return async () => {
     const res = await client.GET('/threads', {});
-    assertSdkOk(res);
+    if (!res.response.ok) {
+      return err(
+        classifyHttpError(res.response.status, 'threads', 'other', res.response.statusText),
+      );
+    }
     const data = res.data ?? [];
-    return data.map((thread) => ({
-      slug: thread.slug,
-      title: thread.title,
-      canonicalUrl: thread.canonicalUrl,
-    }));
+    return ok(
+      data.map((thread) => ({
+        slug: thread.slug,
+        title: thread.title,
+        canonicalUrl: thread.canonicalUrl,
+      })),
+    );
   };
 }
 
 /**
  * Creates a function to fetch units for a specific thread.
+ * Returns Result per ADR-088.
  */
 export function makeGetThreadUnits(client: OakApiClient): GetThreadUnitsFn {
   return async (threadSlug) => {
     const res = await client.GET('/threads/{threadSlug}/units', {
       params: { path: { threadSlug } },
     });
-    assertSdkOk(res);
+    if (!res.response.ok) {
+      return err(
+        classifyHttpError(res.response.status, threadSlug, 'other', res.response.statusText),
+      );
+    }
     const data = res.data ?? [];
-    return data.map((unit) => ({
-      unitSlug: unit.unitSlug,
-      unitTitle: unit.unitTitle,
-      unitOrder: unit.unitOrder,
-      canonicalUrl: unit.canonicalUrl,
-    }));
+    return ok(
+      data.map((unit) => ({
+        unitSlug: unit.unitSlug,
+        unitTitle: unit.unitTitle,
+        unitOrder: unit.unitOrder,
+        canonicalUrl: unit.canonicalUrl,
+      })),
+    );
   };
 }
