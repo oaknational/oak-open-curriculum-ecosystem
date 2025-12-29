@@ -169,12 +169,13 @@ describe('conceptGraph', () => {
       expect(estimatedTokens).toBeLessThan(2500);
     });
 
-    it('combined with ontology fits context budget (<35KB)', () => {
+    it('combined with ontology fits context budget (<45KB)', () => {
       const graphSize = JSON.stringify(conceptGraph).length;
       const ontologySize = JSON.stringify(ontologyData).length;
       const combined = graphSize + ontologySize;
       // Budget increased to accommodate F-001 comprehensive synonym coverage (2025-12-19)
-      expect(combined).toBeLessThan(35000);
+      // Budget increased again to 45KB for modular synonym expansion (2025-12-29)
+      expect(combined).toBeLessThan(45000);
     });
   });
 });

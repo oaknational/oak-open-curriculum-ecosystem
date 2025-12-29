@@ -467,8 +467,8 @@ pnpm vocab-gen --synonym-candidates --top 100
 ## Related Documents
 
 - [vocabulary-value-analysis.md](vocabulary-value-analysis.md) — Synonym value scoring
-- [02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Vocabulary mining plan
-- [05-complete-data-indexing.md](../../plans/semantic-search/part-1-search-excellence/05-complete-data-indexing.md) — Field indexing plan
-- [06-reference-indices.md](../../plans/semantic-search/part-1-search-excellence/06-reference-indices.md) — Reference data plan
+- [vocabulary-mining-bulk.md](../../plans/semantic-search/planned/vocabulary-mining-bulk.md) — Vocabulary mining plan
+- [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md) — Field indexing plan
+- [reference-indices.md](../../plans/semantic-search/planned/reference-indices.md) — Reference data plan
 - [phase-11-plus-future.md](../../plans/semantic-search/phase-11-plus-future.md) — RAG and knowledge graph
 

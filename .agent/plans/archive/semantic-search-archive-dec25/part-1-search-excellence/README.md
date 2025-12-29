@@ -1,28 +1,36 @@
 # Part 1: Search Excellence — Master Plan
 
-**Status**: 🔄 IN PROGRESS — Multi-Subject Expansion Active  
+**Status**: 🔄 BLOCKED — Complete ES Ingestion Required  
 **Priority**: High  
 **Created**: 2025-12-19  
-**Last Updated**: 2025-12-27  
+**Last Updated**: 2025-12-28  
 **Strategy**: [ADR-082: Fundamentals-First Search Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
 
-## 🚀 Current Focus: Multi-Subject Ingestion (2025-12-27)
+## 🚀 Current Focus: Complete ES Ingestion (2025-12-28)
 
-**Why**: Synonym audit revealed we cannot measure KS1/KS2 foundational synonym impact with a GCSE Maths-only index. Expanding to all 17 subjects enables proper synonym validation and representative ground truth.
+**BLOCKED**: All evaluation, ground truth, and synonym validation work is blocked until we have FULL curriculum data in Elasticsearch.
 
-**Plan**: [Multi-Subject Ingestion CLI](../../../../.cursor/plans/multi-subject_ingestion_cli_6ec710f0.plan.md)
+**Prompt**: [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) — Contains ES vs bulk download comparison and ingestion commands
 
-| Stage | Subjects | Status |
-|-------|----------|--------|
-| Previously ingested | maths, history, geography | ✅ Complete |
-| Stage 1 | english, science | 🔄 In Progress |
-| Stage 2 | french, spanish, german | 📋 Pending |
-| Stage 3 | citizenship, religious-education | 📋 Pending |
-| Stage 4 | art, music, PE, computing, DT, cooking, RSHE | 📋 Pending |
+### ES Coverage Status
 
-**CLI Enhanced**: Now requires explicit `--subject` or `--all` flag (TDD complete, 13 tests passing).
+| Category | Subjects | ES Status |
+|----------|----------|-----------|
+| ✅ Complete | art, computing, design-technology, citizenship, cooking-nutrition | 5 subjects ingested |
+| ⚠️ Incomplete | english | Missing ~1,030 lessons |
+| ❌ Lost on Reset | maths, history, geography | Need re-ingestion |
+| ❌ Not Started | science, french, spanish, german, PE, RE, music, rshe-pshe | 8 subjects pending |
+
+**Current coverage**: ~27% (3,438 of ~12,783 lessons from bulk download)
+
+### Requirements Before Proceeding
+
+1. **Complete ingestion of ALL 17 subjects** — Run `pnpm es:ingest-live -- --subject X` for each
+2. **Verify counts against bulk download reference** — See prompt for comparison table
+3. **Comprehensive ground truths** — Queries for ALL subjects and key stages (not just GCSE Maths)
+4. **Comprehensive benchmark evaluations** — Per-subject and per-keystage MRR baselines
 
 ---
 
@@ -47,14 +55,16 @@ This master plan coordinates workstreams for search excellence. The principle is
 | [02b-vocabulary-mining.md](02b-vocabulary-mining.md)               | **Comprehensive vocabulary mining**  | **HIGH** | 🔄 Thread + Prereq done |
 | [03-evaluation-infrastructure.md](03-evaluation-infrastructure.md) | Fix evaluation directory duplication | Medium   | 📋 Pending     |
 | [04-documentation-debt.md](04-documentation-debt.md)               | Update outdated documentation        | Low      | ✅ Complete    |
-| [05-complete-data-indexing.md](05-complete-data-indexing.md)       | Index ALL curriculum data            | High     | 📋 Pending     |
+| [05-complete-data-indexing.md](05-complete-data-indexing.md)       | Index ALL curriculum data            | High     | 🔄 ~27% done   |
 | [06-reference-indices.md](06-reference-indices.md)                 | Reference data (subjects, key stages)| Medium   | 📋 Pending     |
 | [07-resource-types.md](07-resource-types.md)                       | Worksheets, quizzes, sequences       | Medium   | 📋 Pending     |
 | [08-mcp-graph-tools.md](08-mcp-graph-tools.md)                     | MCP tools for graph data             | Medium   | ✅ Partial     |
 | [09-knowledge-graph-evolution.md](09-knowledge-graph-evolution.md) | Property graph → True knowledge graph| Medium   | 📋 Planned     |
 | [10-transcript-mining.md](10-transcript-mining.md)                 | Mine transcripts for spoken synonyms | Medium   | 📋 Planned     |
-| [11-synonym-quality-audit.md](11-synonym-quality-audit.md)         | Audit existing synonyms + weighting  | High     | 🔄 Partially done |
-| **[12-multi-subject-ingestion.md](../../../../.cursor/plans/multi-subject_ingestion_cli_6ec710f0.plan.md)** | **Ingest all 17 subjects** | **HIGH** | **🔄 In Progress** |
+| [11-synonym-quality-audit.md](11-synonym-quality-audit.md)         | Audit existing synonyms + weighting  | High     | 🔄 Blocked on ingestion |
+| [12-curriculum-pattern-config.md](12-curriculum-pattern-config.md) | **Static pattern config for traversal** | **HIGH** | 📋 Planned |
+| [13-thread-based-search.md](13-thread-based-search.md)             | **Thread data for progression search** | **HIGH** | 📋 Planned |
+| **[17-synonym-enrichment.md](../../../plans/sdk-and-mcp-enhancements/17-synonym-enrichment-from-owa-oala.md)** | **OWA/OALA synonym import** | Medium | ✅ Complete |
 
 ### Principle: Index EVERYTHING
 
@@ -63,6 +73,7 @@ Elasticsearch is most powerful when ALL data is available. Fields like `supervis
 > **Scope Clarification**: "Bulk data extraction" ALWAYS means **ALL 30 bulk files** — all subjects, all key stages, all available data. When examples reference specific subjects (e.g., "maths-secondary"), this is for illustration only; the actual extraction covers the complete curriculum.
 
 **Recent additions** (2025-12-24):
+
 - `supervision_level` - Added to lessons index
 - `downloads_available` - Added to lessons index
 
@@ -140,6 +151,40 @@ Part 1 is complete when:
 
 ---
 
+## 🧵 Thread-Based Search: The Learning Progression Advantage
+
+**Threads are the pedagogical backbone of Oak's curriculum** — they show how ideas BUILD over time. No other education search service has this data in a form that can be searched.
+
+### What Threads Enable
+
+| Query Type | Without Threads | With Threads |
+|------------|----------------|--------------|
+| "What comes before fractions?" | ❌ Cannot answer | ✅ Return prior units in Number thread |
+| "How does algebra develop?" | ❌ Keyword match only | ✅ Show Year 7→11 progression |
+| "Related topics to trigonometry" | ❌ Guesswork | ✅ Geometry & Measure thread siblings |
+| "Foundation for this lesson" | ❌ No context | ✅ Thread-ordered prerequisites |
+
+### Thread Data Available
+
+| Data Point | Source | Count |
+|------------|--------|-------|
+| Threads | `/threads` | 164 across 14 subjects |
+| Thread → Unit mappings | `/threads/{slug}/units` | ~1,600 units with thread associations |
+| Unit order within thread | `ThreadUnitsResponse.unitOrder` | Ordered progression data |
+| Thread title | `ThreadUnitsResponse.threadTitle` | Human-readable names |
+
+### Planned Search Features
+
+1. **Progression Search** — "What should I teach before X?"
+2. **Thread Filtering** — Filter results to a conceptual strand
+3. **Sibling Discovery** — "Other units in this thread"
+4. **Vertical Connections** — Show how concept develops across years
+5. **Thread Rollups** — Aggregate metrics per thread (lessons, units, years)
+
+**See**: [13-thread-based-search.md](13-thread-based-search.md) for comprehensive implementation plan
+
+---
+
 ## 🌟 Vocabulary Mining Opportunity
 
 Oak has **the most comprehensive structured vocabulary dataset for UK education**:
@@ -212,7 +257,8 @@ Three new sub-plans emerged from vocabulary mining reflection:
 
 **Problem**: Existing synonyms may include weak entries that harm precision. No systematic prioritization for new synonyms.
 
-**Solution**: 
+**Solution**:
+
 1. Audit all existing synonyms for ambiguity and breadth
 2. Implement weighting function: `Priority = Frequency × FoundationBonus × CrossSubjectBonus × SynonymNeed`
 3. Establish LLM agent review as decision-making process

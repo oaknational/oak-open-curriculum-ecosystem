@@ -149,7 +149,7 @@ All quality gates passed after changes:
 
 ## Related Documents
 
-- [11-synonym-quality-audit.md](../../plans/semantic-search/part-1-search-excellence/11-synonym-quality-audit.md) — Original plan
+- [synonym-quality-audit.md](../../plans/semantic-search/active/synonym-quality-audit.md) — Original plan
 - [vocabulary-value-analysis.md](vocabulary-value-analysis.md) — Value scoring framework
 - [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Synonym architecture
 - [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) — Phrase boosting mechanism

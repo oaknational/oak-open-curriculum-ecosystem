@@ -1,8 +1,22 @@
 # Plan 17: Synonym Enrichment from OWA and OALA
 
-**Status**: 🟡 Ready to Implement  
+**Status**: ✅ COMPLETE  
 **Priority**: HIGH (Directly impacts hard query MRR)  
 **Created**: 2025-12-18  
+**Completed**: 2025-12-28  
+
+---
+
+## ✅ Completion Summary (2025-12-28)
+
+All OWA and OALA synonym aliases have been merged into the SDK:
+
+| Source | Items Added | Location |
+|--------|-------------|----------|
+| OWA subjects | art and design, phys ed, personal development, combined-science, trilogy science | `subjects.ts` |
+| OALA key stages | eyfs, a-level, alevel, sixth form, reception, early years | `key-stages.ts` |
+| OWA year variants | yr1, year1, y1 formats | `key-stages.ts` |
+| Exam boards | AQA, Edexcel, OCR, WJEC/Eduqas | `exam-boards.ts` |
 
 ---
 

@@ -11,12 +11,16 @@ This directory contains a split version of the upstream API metadata wishlist to
 
 ## File map
 
-- `00-overview-and-known-issues.md` — open questions, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues.
+- `00-overview-and-known-issues.md` — open questions, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification.
 - `01-derived-fields-and-ks4-metadata.md` — derived fields registry, ghost pathway note, KS4 programme factors, and interim denormalisation workaround.
 - `02-semantic-summary.md` — rerank summary request and the semantic_summary field definitions with status and rationale.
 - `03-context-and-vision.md` — executive summary, vision, tool ecosystem, schema-first pipeline overview, and audience.
-- `04-high-priority-requests.md` — high priority requests covering tool discovery, ontology, error docs, programme variants, and identity consistency.
+- `04-high-priority-requests.md` — high priority requests covering tool discovery, ontology, error docs, programme variants, identity consistency, and **structural pattern documentation** (NEW 2025-12-28).
 - `05-medium-priority-requests.md` — medium priority items for parameters, extensions, behavioural metadata, thread enhancements, schema refs, and Zod validators.
 - `06-response-metadata-and-caching.md` — response examples, canonical URL patterns, and resource timestamps.
 - `07-low-priority-and-best-practices.md` — performance hints plus the OpenAPI best practices checklist sections A-G.
 - `08-summary-and-coordination.md` — summary table, implementation notes, testing impact, coordination, related docs, next steps, and contact details.
+
+## Related Analysis Documents
+
+- **[Curriculum Structure Analysis](../../curriculum-structure-analysis.md)** — Comprehensive analysis of all 6 structural patterns, traversal strategies, and aggregation requirements (2025-12-28)

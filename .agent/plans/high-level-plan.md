@@ -43,25 +43,27 @@
 
 **Plan**: `.agent/plans/semantic-search/README.md` (navigation hub)
 
-**Current Work**: Part 1: Search Excellence (Stream A Complete, Streams B-D Ready)
+**Current Work**: Tier 1 EXHAUSTED (MRR 0.614), blocking on full curriculum ingestion
 
-| Part | Stream | Focus | Status |
-|------|--------|-------|--------|
-| **1** | **A: Foundation** | 4-way hybrid, KS4 filtering | ✅ Complete |
-| **1** | **B: Relevance Optimisation** | Semantic reranking, linear retriever | 📋 Ready |
-| **1** | **C: Query Intelligence** | Query expansion, phonetic, classification | 📋 Blocked on B.2 |
-| **1** | **D: Infrastructure** | Extract SDK, CLI, retire Next.js | 📋 Ready |
-| 2 | MCP NL Tools | Structured search, NL pipeline | 📋 Planned |
-| 3 | Future | Reference indices, entity extraction, LTR | 📋 Future |
+| Milestone | Focus | Status |
+|-----------|-------|--------|
+| 1 | Complete ES ingestion (all 17 subjects) | 🚫 BLOCKING (~27% complete) |
+| 2 | Pattern-aware ingestion (Science KS4, etc.) | 📋 Pending |
+| 3 | Synonym quality audit | 📋 Pending (blocked) |
+| 4-8 | Transcript mining, threads, reference indices | 📋 Planned |
+| 9-11 | MCP graph tools, knowledge graph, SDK extraction | 📋 Future |
 
-**Part 1 Success Criteria** (from [ADR-081](../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)):
+**Success Criteria** (from [ADR-081](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)):
 
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
-| Standard Query MRR | 0.931 | ≥0.92 | ✅ Met |
-| Hard Query MRR | 0.367 | ≥0.50 | ❌ Gap: 36% |
+| Standard Query MRR | 0.963 | ≥0.92 | ✅ Met |
+| Hard Query MRR | **0.614** | ≥0.45 | ✅ **Exceeded by 36%** |
+| Tier 1 | — | Complete | ✅ **EXHAUSTED (2025-12-24)** |
 
-**Acceptance**: Hard MRR ≥0.50; Search SDK ready for MCP consumption; quality gates pass.
+**Blocking Work**: Complete ES ingestion (~27% done). See [roadmap.md](./semantic-search/roadmap.md).
+
+**Acceptance**: Full curriculum indexed; Search SDK ready for MCP consumption; quality gates pass.
 
 ---
 
@@ -295,12 +297,14 @@
 ```text
 .agent/plans/
 ├── high-level-plan.md              # This file — strategic coordination
-├── semantic-search/                # Elasticsearch search (Part → Stream → Task)
+├── semantic-search/                # Elasticsearch search
 │   ├── README.md                   # Navigation hub
-│   ├── part-1-search-excellence.md # Current work — four streams
-│   ├── phase-3-multi-index-and-fields.md  # Stream A reference
-│   ├── phase-4-search-sdk-and-cli.md      # Stream D reference
-│   └── archive/                    # Superseded phase docs
+│   ├── roadmap.md                  # Single authoritative roadmap
+│   ├── current-state.md            # Current metrics snapshot
+│   ├── search-acceptance-criteria.md # Definition of done
+│   ├── active/                     # Currently blocking work
+│   ├── planned/                    # Future work with specs
+│   └── archive/                    # Completed/superseded work
 ├── sdk-and-mcp-enhancements/       # Numbered plans (00-16)
 │   ├── README.md                   # Plan index with dependencies
 │   ├── 01-mcp-tool-metadata-enhancement-plan.md

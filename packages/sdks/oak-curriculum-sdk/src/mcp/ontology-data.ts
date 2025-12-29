@@ -21,9 +21,19 @@ import { toolGuidanceData } from './tool-guidance-data.js';
 export const ontologyData = {
   version: '0.1.0-poc',
   generatedAt: '2025-11-27T00:00:00Z',
+  purpose:
+    'This ontology describes the Oak National Academy curriculum domain model. It provides context for AI agents to understand the structure of UK education content, including key stages, subjects, entity hierarchies, threads, and tool usage guidance.',
   notice:
-    'This is a static POC. See 02-curriculum-ontology-resource-plan.md for full implementation.',
+    'This is a static POC. A future version will generate this data from the OpenAPI schema at compile time.',
   officialDocs: 'https://open-api.thenational.academy/docs/about-oaks-data/glossary',
+  relatedResources: {
+    propertyGraph:
+      'Call get-knowledge-graph for concept TYPE relationships (schema-level entity connections)',
+    threadProgressions:
+      'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
+    prerequisiteGraph:
+      'Call get-prerequisite-graph for unit dependencies and prior knowledge requirements',
+  },
 
   curriculumStructure: {
     keyStages: [
@@ -109,7 +119,8 @@ export const ontologyData = {
     definition:
       'An attribute assigned to units that groups together units across the curriculum building a common body of knowledge. Threads are important for making vertical connections across year groups in each subject.',
     importance:
-      "Threads show how ideas BUILD over time - they are the pedagogical backbone of Oak's curriculum",
+      "Threads show how ideas BUILD over time — they are the pedagogical backbone of Oak's curriculum. Understanding threads enables powerful queries like 'what comes before this topic?' and 'how does this concept develop from Year 1 to Year 11?'",
+    countSummary: '164 threads across 14 subjects, connecting units into learning progressions',
     characteristics: [
       'Programme-agnostic: A single thread spans multiple programmes, key stages, and years',
       'Ordered: Units within a thread have unitOrder showing conceptual progression',
@@ -205,8 +216,121 @@ export const ontologyData = {
     },
   },
 
+  /**
+   * Structural patterns in the curriculum data.
+   */
+  structuralPatterns: {
+    purpose:
+      'The API response structure varies by subject and key stage. These patterns describe how to traverse the data correctly. Understanding patterns is ESSENTIAL for complete data retrieval.',
+    criticalNote:
+      'Patterns can COMBINE — a subject may have multiple patterns simultaneously. Science KS4 has THREE patterns (exam boards + exam subjects + tiers).',
+    traversalGuidance: {
+      simpleFlatRoute:
+        'GET /key-stages/{ks}/subject/{subject}/lessons — works for KS1-KS3 all subjects',
+      sequenceRoute:
+        'GET /sequences/{sequence}/units?year={year} — required for KS4 patterns with tiers/examSubjects',
+      scienceKs4Warning:
+        'CRITICAL: GET /key-stages/ks4/subject/science/lessons returns EMPTY. Must use sequences endpoint and traverse examSubjects → tiers → units.',
+      mathsKs4Note:
+        'Maths KS4 has tiers but no exam boards. Use sequences endpoint to get tier information.',
+      unitOptionsNote:
+        'When units have unitOptions[], each option is a separate unit with its own lessons.',
+    },
+    note: 'API response structures vary by subject and key stage. Detect pattern from response shape.',
+    patterns: [
+      {
+        id: 'simple-flat',
+        description: 'Standard year → units[] → lessons[] structure',
+        appliesTo: 'All subjects at KS1-KS3, most subjects at KS4',
+        responseShape: '{ data: [{ year, units: [...] }] }',
+        detection: 'Default when no tiers, examSubjects, or unitOptions present',
+      },
+      {
+        id: 'tier-variants',
+        description: 'Year response includes tiers[] at top level',
+        appliesTo: ['maths KS4'],
+        responseShape: '{ data: [{ year, tiers: [{ tierSlug, units }] }] }',
+        detection: "Check for 'tiers' key in year response",
+        note: 'Maths KS4 only. Lessons appear in both Foundation and Higher.',
+      },
+      {
+        id: 'exam-subject-split',
+        description: 'Science KS4 splits into Biology/Chemistry/Physics/Combined',
+        appliesTo: ['science KS4'],
+        responseShape: '{ data: [{ year, examSubjects: [{ examSubjectSlug, tiers: [...] }] }] }',
+        detection: "Check for 'examSubjects' key in year response",
+        critical: '/key-stages/ks4/subject/science/lessons returns EMPTY. Use sequences endpoint.',
+      },
+      {
+        id: 'exam-board-variants',
+        description: 'Subject has multiple sequences for different exam boards',
+        appliesTo: [
+          'citizenship',
+          'computing',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'music',
+          'physical-education',
+          'religious-education',
+          'science',
+          'spanish',
+        ],
+        detection: 'Subject has multiple ks4Options in /subjects/{subject} response',
+        note: 'Science has exam boards AND exam subjects AND tiers (all three)',
+      },
+      {
+        id: 'unit-options',
+        description: 'Units have unitOptions[] with alternative content choices',
+        appliesTo: [
+          'art KS4',
+          'design-technology KS4',
+          'english KS4',
+          'geography KS4',
+          'history KS4',
+          'religious-education KS4',
+        ],
+        responseShape: '{ units: [{ unitTitle, unitOptions: [{ unitSlug, unitTitle }] }] }',
+        detection: "Check for 'unitOptions' key in unit response",
+        note: 'Each unit option is a separate unit with its own lessons',
+      },
+      {
+        id: 'no-ks4',
+        description: 'Subject has no KS4 content',
+        appliesTo: ['cooking-nutrition'],
+        detection: 'Secondary sequence only covers years 7-9',
+      },
+    ],
+    keyStageGaps: {
+      description: 'Not all subjects cover all key stages',
+      gaps: [
+        { subjects: ['french', 'spanish'], gap: 'No KS1 (start at Year 3)' },
+        { subjects: ['german', 'citizenship'], gap: 'No primary content' },
+        { subjects: ['cooking-nutrition'], gap: 'No KS4 content' },
+        { subjects: ['rshe-pshe'], gap: 'No bulk download file (API only)' },
+      ],
+    },
+    combinationMatrix: {
+      description:
+        'Patterns can combine. Science KS4 has all three: exam boards + exam subjects + tiers',
+      examples: [
+        {
+          subject: 'science',
+          patterns: ['exam-board-variants', 'exam-subject-split', 'tier-variants'],
+        },
+        { subject: 'english', patterns: ['exam-board-variants', 'unit-options'] },
+        { subject: 'geography', patterns: ['exam-board-variants', 'unit-options'] },
+        { subject: 'maths', patterns: ['tier-variants'] },
+      ],
+    },
+  },
+
   entityHierarchy: {
-    description: 'Curriculum content is organised in a hierarchy',
+    description: 'Curriculum content is organised in a hierarchy from Subject down to Lesson',
+    traversalNote:
+      'Traversal typically starts from sequences (not subjects) because sequences contain the structural metadata (tiers, exam boards, exam subjects) needed for complete data retrieval. See structuralPatterns for details.',
     levels: [
       {
         entity: 'Subject',
@@ -406,9 +530,14 @@ export const ontologyData = {
   },
 
   /**
-   * Cross-reference to the knowledge graph for concept relationships.
+   * Cross-reference to the property graph for concept relationships.
+   *
+   * The property graph (formerly called "knowledge graph") defines entity TYPES
+   * and their relationships. The ontology includes instance-level patterns.
+   * Together they describe the complete curriculum structure.
    */
-  seeAlso: 'Call get-knowledge-graph for concept TYPE relationships and domain structure',
+  seeAlso:
+    'Call get-knowledge-graph for concept TYPE relationships. See structuralPatterns above for traversal guidance.',
 
   /**
    * Domain synonyms for curriculum terminology.

@@ -10,7 +10,7 @@
 
 Phase 3 implements multi-index search infrastructure with KS4 filtering capability.
 
-**Key ADR**: [ADR-080: KS4 Metadata Denormalisation](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) - Defines the filtering architecture with Mermaid diagrams.
+**Key ADR**: [ADR-080: KS4 Metadata Denormalisation](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) - Defines the filtering architecture with Mermaid diagrams.
 
 **Goal**: Prove that multi-index search infrastructure works correctly by verifying:
 
@@ -139,7 +139,7 @@ Removed the early-return check in `processSequenceForKs4Context()`. Now ALL sequ
 
 **Process ALL sequences**, not just those with explicit exam boards or ks4Options. The tier structure can appear embedded in year entries for subjects like Maths that don't have exam-board-specific sequences.
 
-**Updated in**: [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)
+**Updated in**: [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 
 ---
 
@@ -306,7 +306,7 @@ pnpm vitest run -c vitest.smoke.config.ts unit-search-quality
 
 ### KS4 Filterable Fields
 
-See [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) for complete field list and Mermaid diagrams.
+See [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) for complete field list and Mermaid diagrams.
 
 | Field                 | Type     | Values                                             |
 | --------------------- | -------- | -------------------------------------------------- |
@@ -626,7 +626,7 @@ Per `testing-strategy.md`, all work MUST follow TDD at the appropriate level:
 
 | Document                                                                                                   | Purpose                                            |
 | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 filtering architecture (with Mermaid diagrams) |
+| [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 filtering architecture (with Mermaid diagrams) |
 | [ADR-075](../../../docs/architecture/architectural-decisions/075-dense-vector-removal.md)                  | Dense vector removal                               |
 | [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)         | ELSER-only strategy                                |
 | [ADR-077](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)           | Semantic summary generation                        |

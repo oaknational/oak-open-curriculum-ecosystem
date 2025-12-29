@@ -17,11 +17,21 @@ Synonym quality cannot be properly measured without representative curriculum da
 
 ### Current Status (2025-12-28)
 
-| Ingested | Pending |
-|----------|---------|
-| english, art, computing, design-technology, citizenship, cooking-nutrition | maths, history, geography, science, french, spanish, german, religious-education, music, physical-education, rshe-pshe |
+| Category | Subjects | Status |
+|----------|----------|--------|
+| ✅ Complete | maths, art, computing, design-technology, citizenship, cooking-nutrition | 6 subjects |
+| ⚠️ Incomplete | english | Missing ~1,030 lessons |
+| ❌ Pending | science, history, geography, french, spanish, german, PE, RE, music, rshe-pshe | 10 subjects |
 
-**6 of 17 subjects ingested.** Complete ingestion before proceeding.
+**Coverage: ~43%** (5,372 of ~12,409 unique lessons). Complete ingestion before proceeding.
+
+> **Note**: Bulk download raw counts (12,783) include tier duplicates. Unique lesson target is ~12,409. See [evaluations README](../../../evaluations/README.md) for details.
+
+### Additional Requirements
+
+1. **Comprehensive ground truths** — Queries for ALL subjects and ALL key stages (not just GCSE Maths)
+2. **Comprehensive benchmark evaluations** — Per-subject and per-keystage MRR baselines
+3. **Full curriculum data** — ES must contain ALL lessons to measure synonym impact accurately
 
 ### To Complete Ingestion
 

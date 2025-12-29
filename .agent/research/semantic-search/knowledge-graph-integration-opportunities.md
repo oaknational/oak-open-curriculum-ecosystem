@@ -327,7 +327,7 @@ Query: "When is 'fraction' introduced and how does it develop?"
 
 - [elasticsearch-optimization-opportunities.md](elasticsearch-optimization-opportunities.md) — ES-specific opportunities
 - [vocabulary-value-analysis.md](vocabulary-value-analysis.md) — Value scoring for synonyms
-- [02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Extraction plan
+- [vocabulary-mining-bulk.md](../../plans/semantic-search/planned/vocabulary-mining-bulk.md) — Extraction plan
 - [knowledge-graph-data.ts](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/knowledge-graph-data.ts) — Current property graph
 
 ---

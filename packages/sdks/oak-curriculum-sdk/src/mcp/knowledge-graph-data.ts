@@ -14,27 +14,28 @@
  * The graph captures relationships that are implied but not explicit in the API.
  */
 
-/**
- * Oak Curriculum Knowledge Graph
- *
- * A structural representation of curriculum concept TYPE relationships.
- * The graph captures domain relationships, NOT API mappings.
- * Agents learn about endpoints from `tools/list`.
- *
- * @remarks
- * - ~28 concept nodes organised by category
- * - ~45 edges showing relationships (explicit + inferred)
- * - Inferred edges are marked with `inferred: true`
- * - Combined with ontology provides ~5K tokens of domain context
- */
 export const conceptGraph = {
-  /** Semantic version of the knowledge graph structure */
   version: '1.0.0',
+  purpose:
+    'A structural representation of curriculum concept TYPE relationships (schema-level). This graph captures domain relationships — how entity types connect conceptually. Use this to understand the curriculum data model.',
+  usage: {
+    whyThisExists:
+      'The graph captures relationships that are implied but not explicit in the API schema. Understanding these relationships helps AI agents reason about curriculum queries.',
+    howToUse:
+      'Nodes represent entity TYPES (not instances). Edges show how types relate. Inferred edges (marked inferred: true) are domain knowledge not explicit in the API.',
+    combinedWith:
+      'Call get-ontology for rich definitions, enumerated values, workflow guidance, and structural patterns. Together they provide ~5K tokens of domain context.',
+  },
+  statistics: {
+    conceptNodes:
+      '~28 concept nodes organised by category (structure, content, context, taxonomy, ks4, metadata)',
+    edges: '~45 edges showing relationships (explicit from API + inferred from domain knowledge)',
+    inferredEdgesNote:
+      "Edges with 'inferred: true' are domain relationships implied but not explicit in the API",
+  },
 
-  /**
-   * Concept nodes representing curriculum entity types.
-   * Each concept has an id, label, brief description, and category.
-   */
+  conceptsDescription:
+    'Concept nodes representing curriculum entity types. Each concept has an id, label, brief description, and category. Categories group related concepts: structure (core hierarchy), content (within lesson), context (scoping), taxonomy (cross-cutting), ks4 (KS4 complexity), metadata (educational annotations).',
   concepts: [
     // ===== STRUCTURE (core hierarchy) =====
     {
@@ -211,11 +212,13 @@ export const conceptGraph = {
     },
   ],
 
-  /**
-   * Edges representing relationships between concepts.
-   * Explicit edges come from API schema/glossary.
-   * Inferred edges capture implicit domain knowledge.
-   */
+  edgesDescription: {
+    purpose:
+      'Edges represent relationships between concepts. Each edge has a from node, to node, and relationship type.',
+    explicitVsInferred:
+      "Explicit edges come from the API schema/glossary (documented). Inferred edges (marked 'inferred: true') capture implicit domain knowledge that helps AI agents understand the curriculum.",
+    readingEdges: "Read as: 'from' → 'rel' → 'to'. Example: subject → hasSequences → sequence",
+  },
   edges: [
     // ===== EXPLICIT EDGES (from schema/glossary) =====
 
@@ -284,8 +287,13 @@ export const conceptGraph = {
 
   /**
    * Cross-reference to the ontology tool for rich definitions.
+   *
+   * This property graph defines entity TYPES and relationship TYPES.
+   * For structural patterns (how to traverse the API for different subjects/keystages),
+   * see the ontology's `structuralPatterns` section.
    */
-  seeOntology: 'Call get-ontology for rich definitions, enumerated values, and workflow guidance',
+  seeOntology:
+    'Call get-ontology for rich definitions, enumerated values, workflow guidance, and structural patterns for API traversal',
 } as const;
 
 /**

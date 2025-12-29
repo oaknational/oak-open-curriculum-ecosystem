@@ -247,8 +247,8 @@ Key planning documents reference research:
 
 | Plan | References Research |
 |------|---------------------|
-| `02b-vocabulary-mining.md` | `semantic-search/vocabulary-value-analysis.md`, `semantic-search/elasticsearch-optimization-opportunities.md` |
-| `phase-3-multi-index-and-fields.md` | `elasticsearch/bm25-elser-rrf-rerank.md` |
+| `planned/vocabulary-mining-bulk.md` | `semantic-search/vocabulary-value-analysis.md`, `semantic-search/elasticsearch-optimization-opportunities.md` |
+| `archive/completed/four-retriever-implementation.md` | `elasticsearch/bm25-elser-rrf-rerank.md` |
 
 ### From Prompts to Research
 

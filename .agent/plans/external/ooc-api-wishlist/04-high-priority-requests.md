@@ -844,3 +844,235 @@ All resource types that have both API and OWA representations:
 
 ---
 
+## High Priority – Structural Pattern Documentation
+
+### 7. Document Curriculum Structural Patterns in OpenAPI Schema
+
+**Status**: 🔴 HIGH PRIORITY — Required for reliable API traversal  
+**Date**: 2025-12-28 (Updated with comprehensive 17-subject analysis)  
+**Related Analysis**: [Curriculum Structure Analysis](../../curriculum-structure-analysis.md), [ADR-080](../../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
+
+**The Problem:**
+
+The Oak Curriculum API has **7 distinct structural patterns** that require different traversal strategies. This is not documented anywhere, leading to:
+
+1. **Ingestion failures**: Consumers try simple `subject + keyStage` queries for all combinations
+2. **Missing data**: Science KS4 returns empty from the obvious endpoint
+3. **Incorrect deduplication**: Consumers don't know that duplicate lessons indicate tier/option variants
+
+**The 7 Patterns (Comprehensive Analysis 2025-12-28):**
+
+| Pattern | Description | Response Structure | Subjects |
+|---------|-------------|-------------------|----------|
+| 1 | Simple flat (Primary) | `year → units[] → lessons[]` | 15 subjects at KS1-KS2 |
+| 2 | Simple flat (Secondary KS3) | `year → units[] → lessons[]` | All 17 subjects at KS3 |
+| 3 | Tier variants | `year → tiers[] → units[]` | Maths KS4 only |
+| 4 | Exam board variants | Multiple sequences per subject | 12 subjects at KS4 |
+| 5 | Exam subject split | `year → examSubjects[] → tiers[] → units[]` | Science KS4 only |
+| 6 | Unit options | `units[].unitOptions[]` | 6 subjects (Art, D&T, English, Geography, History, RE) |
+| 7 | No KS4 content | N/A | Cooking-nutrition only |
+
+**Key Stage Coverage Gaps:**
+
+| Gap | Subjects |
+|-----|----------|
+| No KS1 | French, Spanish (start at KS2/Year 3) |
+| No primary | German, Citizenship |
+| No KS4 | Cooking-nutrition |
+| No bulk file | RSHE-PSHE (API only) |
+
+**Critical Issue: Science KS4**
+
+```bash
+# This returns empty - NOT intuitive
+GET /key-stages/ks4/subject/science/lessons
+→ { "data": [] }
+
+# Must use sequences endpoint with nested traversal
+GET /sequences/science-secondary-aqa/units?year=10
+→ { "data": [{ "examSubjects": [{ "examSubjectSlug": "biology", "tiers": [...] }] }] }
+```
+
+The bulk download uses subject slugs (`biology`, `chemistry`, `physics`, `combined-science`) that are NOT in the API subject enum. This creates confusion.
+
+**What We Need:**
+
+**Option A: Add `/curriculum-structure` endpoint (Recommended)**
+
+```json
+GET /curriculum-structure
+
+{
+  "patterns": [
+    {
+      "patternId": "simple-flat",
+      "description": "Direct subject → year → units → lessons traversal",
+      "appliesTo": {
+        "keyStages": ["ks1", "ks2", "ks3"],
+        "subjects": ["all except science at ks4"]
+      },
+      "traversalPath": "GET /key-stages/{ks}/subject/{subject}/lessons",
+      "responseShape": "{ data: [{ unitSlug, lessons: [...] }] }"
+    },
+    {
+      "patternId": "tier-variants",
+      "description": "Year 10-11 content split by tier (foundation/higher)",
+      "appliesTo": {
+        "keyStages": ["ks4"],
+        "subjects": ["maths"]
+      },
+      "traversalPath": "GET /sequences/maths-secondary/units?year={10|11}",
+      "responseShape": "{ data: [{ year, tiers: [{ tierSlug, units: [...] }] }] }",
+      "note": "Lessons may appear in both tiers. Index with tiers: ['foundation', 'higher']"
+    },
+    {
+      "patternId": "exam-subject-split",
+      "description": "Science splits into biology/chemistry/physics/combined-science at KS4",
+      "appliesTo": {
+        "keyStages": ["ks4"],
+        "subjects": ["science"]
+      },
+      "traversalPath": "GET /sequences/science-secondary-{board}/units?year={10|11}",
+      "responseShape": "{ data: [{ examSubjects: [{ examSubjectSlug, tiers: [{ units }] }] }] }",
+      "warning": "GET /key-stages/ks4/subject/science/lessons returns EMPTY. Use sequences endpoint."
+    }
+  ],
+  "subjectPatternMap": {
+    "maths": { "ks1": "simple-flat", "ks2": "simple-flat", "ks3": "simple-flat", "ks4": "tier-variants" },
+    "science": { "ks1": "simple-flat", "ks2": "simple-flat", "ks3": "simple-flat", "ks4": "exam-subject-split" },
+    "english": { "ks1": "simple-flat", "ks2": "simple-flat", "ks3": "simple-flat", "ks4": "exam-board-variants + unit-options" }
+  }
+}
+```
+
+**Option B: Document in OpenAPI schema extensions**
+
+```yaml
+x-oak-structural-patterns:
+  science:
+    ks4:
+      pattern: 'exam-subject-split'
+      traversal: '/sequences/science-secondary-{board}/units'
+      warning: 'Do not use /key-stages/ks4/subject/science/lessons - returns empty'
+```
+
+**Option C: Fix the API to be uniform**
+
+Make `/key-stages/ks4/subject/science/lessons` actually return KS4 science lessons with nested exam subject metadata. This would be the ideal long-term fix.
+
+**Impact:**
+
+- **Without documentation**: Every API consumer must discover patterns through trial and error
+- **With documentation**: Consumers know exactly which endpoint to use for each subject/keyStage combination
+
+**Real-world failure mode:**
+
+```typescript
+// Consumer's reasonable assumption
+async function fetchAllLessons(subject: string, keyStage: string) {
+  return await api.get(`/key-stages/${keyStage}/subject/${subject}/lessons`);
+}
+
+// Works for: maths, english, history, etc. at all key stages
+// FAILS for: science at ks4 (returns empty)
+// Consumer thinks API is broken or data is missing
+```
+
+**Effort:** 
+
+- Option A: 2-3 days (new endpoint + documentation)
+- Option B: 1 day (schema extensions)
+- Option C: Significant (API refactoring)
+
+**Enables:**
+
+- **All layers**: Correct traversal strategy selection
+- **Semantic search ingestion**: Complete data for all subjects
+- **Ontology redesign**: Clear understanding of current structure
+
+---
+
+## High Priority – Bulk Download Enhancements
+
+### 8. Add Tier/Context Metadata to Bulk Download Lessons
+
+**Status**: 🔴 HIGH PRIORITY — Bulk download contains duplicate entries without context  
+**Date**: 2025-12-28  
+**Related**: [Issue 2 in 00-overview-and-known-issues.md](./00-overview-and-known-issues.md)
+
+**The Problem:**
+
+The bulk download files contain **duplicate lesson entries** for lessons that exist in multiple contexts (tiers, unit options), but **without** the discriminating metadata:
+
+| File | Raw Entries | Unique Lessons | Duplicates | Cause |
+|------|-------------|----------------|------------|-------|
+| maths-secondary.json | 1,235 | 862 | 373 | Missing tier field |
+| geography-secondary.json | 527 | 460 | 67 | Missing unitOption context |
+| english-secondary.json | 1,035 | 1,009 | 26 | Missing unitOption context |
+| science-secondary.json | 888 | 887 | 1 | Cross-unit sharing |
+
+**Example (Maths):**
+
+The same lesson appears twice with **byte-for-byte identical data**:
+
+```json
+// Entry 1 (should be foundation)
+{ "lessonSlug": "algebraic-manipulation-1", "unitSlug": "algebraic-manipulation", ... }
+
+// Entry 2 (should be higher) - IDENTICAL
+{ "lessonSlug": "algebraic-manipulation-1", "unitSlug": "algebraic-manipulation", ... }
+```
+
+**What We Need:**
+
+Add discriminating fields to bulk download lessons:
+
+```json
+{
+  "lessonSlug": "algebraic-manipulation-1",
+  "unitSlug": "algebraic-manipulation",
+  "tier": "foundation",           // NEW: Which tier this entry is for
+  "unitOption": null,             // NEW: Which unit option (if applicable)
+  "examBoard": "aqa",             // NEW: Which exam board sequence
+  "examSubject": null,            // NEW: For science KS4 only
+  "contexts": [                   // OR: Array of all contexts this lesson appears in
+    { "tier": "foundation", "examBoard": "aqa" },
+    { "tier": "higher", "examBoard": "aqa" }
+  ]
+}
+```
+
+**Alternative: Deduplicate with aggregated context**
+
+Instead of duplicate entries, have unique lessons with aggregated metadata:
+
+```json
+{
+  "lessonSlug": "algebraic-manipulation-1",
+  "unitSlug": "algebraic-manipulation",
+  "tiers": ["foundation", "higher"],  // All tiers this lesson appears in
+  "examBoards": ["aqa"],
+  "unitOptions": []
+}
+```
+
+**Impact:**
+
+- Without fix: Consumers must detect and handle duplicates, losing context information
+- With fix: Clean data that accurately represents curriculum structure
+
+**Priority:** HIGH — Affects data integrity for all bulk download consumers.
+
+---
+
+### 9. Add RSHE-PSHE Bulk Download File
+
+**Status**: 🟡 MEDIUM PRIORITY — Only subject without bulk data  
+**Date**: 2025-12-28
+
+RSHE-PSHE is the **only subject** without a bulk download file. The API returns lessons for this subject, so the data exists.
+
+**Request:** Add `rshe-pshe-primary.json` and `rshe-pshe-secondary.json` bulk download files for parity with other subjects.
+
+---
+

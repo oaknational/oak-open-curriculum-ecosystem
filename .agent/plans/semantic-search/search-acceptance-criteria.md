@@ -231,6 +231,27 @@ Each experiment must document:
 3. Which checklist items were addressed
 4. Decision (accepted/rejected) with rationale
 
+**Where to Document**:
+- Experiment design: [experiments/*.experiment.md](../../evaluations/experiments/)
+- Results: [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)
+- Ground truth corrections: [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md)
+
+---
+
+## Experiment Protocol
+
+For any search-affecting change:
+
+1. **Design**: Create experiment file in [experiments/](../../evaluations/experiments/) using template
+2. **Baseline**: Run `pnpm eval:per-category` and record results
+3. **Implement**: Make the change
+4. **Measure**: Run `pnpm eval:per-category` again
+5. **Analyse**: Compare baseline vs new, per-category breakdown
+6. **Record**: Update [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) with all results
+7. **Decide**: Accept if improvement ≥ target, reject if regression
+
+**Key principle**: No change is merged without measured impact.
+
 ---
 
 ## Related Documents
@@ -238,7 +259,7 @@ Each experiment must document:
 - [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 - [current-state.md](current-state.md) — Authoritative metrics
 - [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) — Experiment history
-- [01-tier-1-fundamentals.md](part-1-search-excellence/01-tier-1-fundamentals.md) — Tier 1 improvement plan
+- [tier-1-fundamentals.md](archive/completed/tier-1-fundamentals.md) — Tier 1 improvement plan (archived)
 
 ---
 

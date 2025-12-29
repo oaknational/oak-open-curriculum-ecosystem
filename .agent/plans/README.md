@@ -442,6 +442,6 @@ Stream X: [Name]                                    [Annotation]
 
 ## References
 
-- [ADR-081: Search Approach Evaluation Framework](../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Experiment structure
+- [ADR-081: Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Experiment structure
 - [Evaluation README](../evaluations/README.md) — Experiment documentation conventions
 - [high-level-plan.md](high-level-plan.md) — Strategic coordination

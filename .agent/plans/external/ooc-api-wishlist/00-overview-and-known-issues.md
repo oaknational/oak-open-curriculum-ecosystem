@@ -341,9 +341,11 @@ Populate all `*Title` fields when corresponding `*Slug` fields are populated:
 
 ### Issue 2: Missing Tier Metadata for Maths Secondary KS4 Variants
 
-**Status**: CONFIRMED as tier variants (2025-12-24)  
+**Status**: CONFIRMED as tier variants (2025-12-24, updated 2025-12-28)  
 **Affected Endpoint**: Bulk download JSON files (`maths-secondary.json`)  
 **Fields Affected**: `sequence[].unitSlug`, `lessons[].lessonSlug`
+
+#### 2a: Unit-Level Duplicates (sequence[] array)
 
 **Root Cause Analysis** (2025-12-24):
 
@@ -354,13 +356,36 @@ Investigation confirmed these are **KS4 tier variants** (foundation vs higher), 
 - Example: `algebraic-fractions` appears with 8 lessons (higher) and 2 lessons (foundation).
 - The shorter variant contains a subset of the longer variant's lessons.
 
-**Comparison with other subjects**:
+#### 2b: Lesson-Level Duplicates (lessons[] array)
 
-| Subject | Has `examBoards` field | Has `tier` field | Duplicate slugs |
-|---------|------------------------|-----------------|-----------------|
-| maths-secondary | NO | NO | 30 |
-| science-secondary | YES | NO | 0 |
-| All other secondary | YES | NO | 0 |
+**Investigation** (2025-12-28):
+
+The `lessons[]` array contains **byte-for-byte identical duplicate entries** for lessons that exist in both tiers:
+
+| Metric | Count |
+|--------|-------|
+| Raw entries in lessons[] | 1,235 |
+| Unique lessonSlugs | 862 |
+| Duplicate entries | 373 lessons × 2 = 746 entries |
+| Single-appearance lessons | 63 (Higher tier only) |
+
+**Critical Issue**: The two entries for each duplicated lesson are **completely identical** — there is no tier discriminator field to distinguish them. This makes programmatic deduplication require heuristic analysis or merging.
+
+**Verification** (2025-12-28):
+
+```bash
+# Confirmed identical entries
+jq '[.lessons[] | select(.lessonSlug == "solving-complex-quadratic-equations-by-completing-the-square")] | if .[0] == .[1] then "IDENTICAL" else "DIFFERENT" end' maths-secondary.json
+# Result: "IDENTICAL"
+```
+
+#### Comparison with other subjects
+
+| Subject | Has `examBoards` field | Has `tier` field | Duplicate unit slugs | Duplicate lesson slugs |
+|---------|------------------------|-----------------|---------------------|----------------------|
+| maths-secondary | NO | NO | 30 | 373 |
+| science-secondary | YES | NO | 0 | 1 |
+| All other secondary | YES | NO | 0 | 0 |
 
 Maths secondary is **unique** — it's the only KS4 subject with tier variants but no explicit variant metadata.
 
@@ -369,10 +394,13 @@ Maths secondary is **unique** — it's the only KS4 subject with tier variants b
 - Consumers cannot programmatically distinguish foundation vs higher without analysing lesson list composition.
 - Vocabulary mining requires variant-aware processing or merging.
 - No way to generate unique identifiers for variants.
+- Raw lesson counts are misleading (2,307 bulk vs 1,934 unique).
 
 **Requested Fix**:
 
-Add explicit `tier` field to maths-secondary bulk download:
+Add explicit `tier` field to maths-secondary bulk download at BOTH unit and lesson level:
+
+**Unit level**:
 
 ```json
 {
@@ -383,15 +411,17 @@ Add explicit `tier` field to maths-secondary bulk download:
 }
 ```
 
-Alternatively, add `unitVariantSlug` for unique identification:
+**Lesson level**:
 
 ```json
 {
-  "unitSlug": "algebraic-fractions",
-  "unitVariantSlug": "algebraic-fractions-higher",  // ← Unique per variant
-  "unitLessons": [/* 8 lessons */]
+  "lessonSlug": "solving-complex-quadratic-equations-by-completing-the-square",
+  "tiers": ["foundation", "higher"],  // ← NEW: array of tiers this lesson belongs to
+  // ... other fields
 }
 ```
+
+Alternatively, ensure lessons only appear ONCE with an array of associated tiers, rather than duplicating the entire entry.
 
 ### Issue 3: Missing Lesson Record Referenced by Unit Lessons
 
@@ -471,3 +501,102 @@ Five lessons are missing both transcript fields:
 **Requested Fix**:
 
 - Populate threads and descriptions for all units, or document them as optional with explicit null values.
+
+### Issue 7: KS4 Science Accessible Only via Sequences Endpoint (2025-12-28)
+
+**Status**: ⚠️ CLARIFIED — Not a bug, but a documentation/discoverability issue  
+**Affected Endpoints**: `/api/v0/key-stages/ks4/subject/science/lessons` (returns empty)  
+**Working Endpoint**: `/api/v0/sequences/science-secondary-{aqa|edexcel|ocr}/units`  
+**Bulk Download**: `science-secondary.json`
+
+**Investigation Summary** (2025-12-28):
+
+The API **does** expose KS4 science content, but via a different endpoint path than other key stages.
+
+#### The Subject Enum
+
+The `/subjects` endpoint only lists 17 top-level subjects. The KS4 science "exam subjects" (`biology`, `chemistry`, `physics`, `combined-science`) are **not** in this enum — they are nested **within** the `science` subject's sequences.
+
+#### Why `/key-stages/ks4/subject/science/lessons` Returns Empty
+
+At KS4, science content is organised under **exam subjects** within sequences:
+
+```
+science (subject)
+  └── science-secondary-aqa (sequence)
+       └── Year 10 / Year 11
+            └── examSubjects: [
+                  { examSubjectSlug: "biology", tiers: ["foundation", "higher"], units: [...] },
+                  { examSubjectSlug: "chemistry", tiers: [...], units: [...] },
+                  { examSubjectSlug: "physics", tiers: [...], units: [...] },
+                  { examSubjectSlug: "combined-science", tiers: [...], units: [...] }
+                ]
+```
+
+This structure reflects the UK curriculum reality: at GCSE level, students choose between separate sciences (biology, chemistry, physics) or combined science.
+
+#### Accessing KS4 Science via API
+
+**Working approach**:
+
+1. Query sequences: `GET /sequences/science-secondary-aqa/units`
+2. For Year 10/11, iterate through `examSubjects[]` → `tiers[]` → `units[]`
+3. For each unit, fetch lessons via the lessons endpoint
+
+**Example sequence response** (Year 10):
+
+```json
+{
+  "year": 10,
+  "examSubjects": [
+    {
+      "examSubjectSlug": "chemistry",
+      "tiers": [
+        { "tierSlug": "foundation", "units": [...] },
+        { "tierSlug": "higher", "units": [...] }
+      ]
+    },
+    // ... biology, physics, combined-science
+  ]
+}
+```
+
+#### Lesson Counts (via Sequences)
+
+| Sequence | Exam Subject | Foundation Units | Higher Units | Lessons (est.) |
+|----------|-------------|------------------|--------------|----------------|
+| science-secondary-aqa | biology | 13 | 13 | ~200 |
+| science-secondary-aqa | chemistry | 16 | 16 | ~180 |
+| science-secondary-aqa | physics | 13 | 13 | ~170 |
+| science-secondary-aqa | combined-science | 50 | 50 | ~400 |
+
+*(Similar structure for edexcel, ocr sequences)*
+
+#### Bulk Download Discrepancy
+
+The bulk download uses **flat** subject slugs (`biology`, `chemistry`, etc.) which don't match the API enum. This is a data representation difference, not missing data.
+
+| Bulk Slug | API Access Path |
+|-----------|-----------------|
+| `biology` | `sequences/science-secondary-{board}/units` → `examSubjects[slug=biology]` |
+| `chemistry` | `sequences/science-secondary-{board}/units` → `examSubjects[slug=chemistry]` |
+| `physics` | `sequences/science-secondary-{board}/units` → `examSubjects[slug=physics]` |
+| `combined-science` | `sequences/science-secondary-{board}/units` → `examSubjects[slug=combined-science]` |
+
+**Impact**:
+
+- NOT a data availability issue — all 598 KS4 science lessons ARE accessible
+- Ingestion pipelines must use sequences endpoint for KS4 science
+- Simple subject+keyStage queries don't work for KS4 science
+
+**Requested Enhancement** (not a fix):
+
+1. **Documentation**: Clarify that KS4 science uses a different access pattern via sequences
+2. **OpenAPI schema**: Add `examSubjects` to the schema description so it's discoverable
+3. **Consider**: Adding a convenience endpoint like `/key-stages/ks4/subject/science/exam-subjects` that lists the nested subjects
+
+**Our Workaround**:
+
+Enhance the ingestion pipeline to detect subjects with `examSubjects` at KS4 and use the sequences endpoint instead of the simple lessons endpoint.
+
+**Related**: ADR-080 (KS4 metadata denormalization strategy)

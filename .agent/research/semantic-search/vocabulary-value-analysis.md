@@ -243,7 +243,7 @@ Replace ad-hoc diagnostic queries with systematic coverage:
 ## Related Documents
 
 - [elasticsearch-optimization-opportunities.md](elasticsearch-optimization-opportunities.md) — ES optimization research
-- [02b-vocabulary-mining.md](../../plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — Main plan
+- [vocabulary-mining-bulk.md](../../plans/semantic-search/planned/vocabulary-mining-bulk.md) — Main plan
 - [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) — Graph export pattern
 - [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Synonym source of truth
 

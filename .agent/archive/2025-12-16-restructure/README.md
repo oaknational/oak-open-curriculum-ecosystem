@@ -236,7 +236,7 @@ Summaries include **ALL available API fields**, tolerating missing optional fiel
 | [ADR-076](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)   | ELSER-Only Embedding Strategy      | Accepted    |
 | [ADR-077](../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md)     | Semantic Summary Generation        | Accepted    |
 | [ADR-079](../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)            | SDK Cache TTL Jitter               | Implemented |
-| [ADR-080](../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
+| [ADR-080](../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
 
 ---
 

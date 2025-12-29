@@ -62,7 +62,7 @@ See `.agent/prompts/semantic-search/semantic-search.prompt.md` for detailed step
    - Add sequence traversal to ingestion pipeline
    - Build `UnitContextMap` from sequence data
    - Decorate documents with `tiers[]`, `examBoards[]`, `ks4Options[]`
-   - See [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)
+   - See [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 
 2. **OWA Aliases Import** (HIGH) — [Jump to Task 1](#task-1-owa-alias-system-import-manual-one-time)
    - Index `OWA-xxx` identifiers for exact ID matching
@@ -620,11 +620,11 @@ From `/units/{unit}/summary`:
 ### Task 5: Index KS4 Options and Tiers (NEW - CRITICAL)
 
 **Schema analysis (2025-12-13)** revealed these fields are essential for KS4 curriculum navigation.  
-**Denormalisation strategy documented (2025-12-15)** in [ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
+**Denormalisation strategy documented (2025-12-15)** in [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md).
 
 #### Architectural Decision
 
-See **[ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)** for full details.
+See **[ADR-080: KS4 Metadata Denormalisation Strategy](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)** for full details.
 
 **Key decision**: Denormalise KS4 metadata at ingest time by traversing sequences and building lookup tables. Index as **arrays** to respect many-to-many relationships.
 
@@ -861,7 +861,7 @@ For **exclusive** filtering ("Foundation only, not Higher"):
 - [x] **Exam boards indexed** as arrays (`examBoards[]`, `examBoardTitles[]`)
 - [x] **Exam subjects indexed** as arrays (`examSubjects[]`, `examSubjectTitles[]`)
 - [x] Derived fields documented in upstream wishlist
-- [x] **[ADR-080](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md)** documenting denormalisation strategy
+- [x] **[ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)** documenting denormalisation strategy
 - [x] All SDK requests cached in Redis (including sequences)
 - [x] All quality gates pass
 - [ ] **Re-indexing completed with KS4 metadata populated** ⚠️ VERIFICATION PENDING
@@ -1411,4 +1411,4 @@ apps/oak-open-curriculum-semantic-search/smoke-tests/
 - [ADR-076: ELSER-Only Embedding Strategy](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) - Sparse-only strategy
 - [ADR-077: Semantic Summary Generation](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) - Summary templates
 - [ADR-079: SDK Cache TTL Jitter](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md) - Cache TTL with jitter
-- [ADR-080: KS4 Metadata Denormalisation](../../../docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) - Sequence traversal strategy
+- [ADR-080: KS4 Metadata Denormalisation](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) - Sequence traversal strategy

@@ -89,7 +89,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
 - [ADR-078: Dependency Injection for Testability](078-dependency-injection-for-testability.md)
 - [ADR-079: SDK Cache TTL Jitter](079-sdk-cache-ttl-jitter.md)
-- [ADR-080: KS4 Metadata Denormalisation Strategy](080-ks4-metadata-denormalization-strategy.md)
+- [ADR-080: KS4 Metadata Denormalisation Strategy](080-curriculum-data-denormalization-strategy.md)
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md)
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md)
 - [ADR-083: Complete Lesson Enumeration Strategy](083-complete-lesson-enumeration-strategy.md)
@@ -98,6 +98,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-086: Vocabulary Mining and Graph Export Pattern](086-vocab-gen-graph-export-pattern.md)
 - [ADR-087: Batch-Atomic Ingestion](087-batch-atomic-ingestion.md) ← **Supersedes aspects of ADR-069**
 - [ADR-088: Result Pattern for Explicit Error Handling](088-result-pattern-for-error-handling.md)
+- [ADR-089: Index Everything Principle for Elasticsearch](089-index-everything-principle.md)
 
 ## Key Architectural Decisions
 
@@ -124,13 +125,14 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-076](076-elser-only-embedding-strategy.md)** - ELSER-only sparse embedding strategy
 - **[ADR-077](077-semantic-summary-generation.md)** - Local semantic summary generation at ingest time
 - **[ADR-079](079-sdk-cache-ttl-jitter.md)** - SDK cache TTL jitter for stampede prevention
-- **[ADR-080](080-ks4-metadata-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
+- **[ADR-080](080-curriculum-data-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
 - **[ADR-081](081-search-approach-evaluation-framework.md)** - Search approach evaluation framework (metrics, harness)
 - **[ADR-082](082-fundamentals-first-search-strategy.md)** - Fundamentals-first search strategy (tier prioritisation)
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking
 - **[ADR-087](087-batch-atomic-ingestion.md)** - Batch-atomic ingestion (supersedes file-based progress from ADR-069)
+- **[ADR-089](089-index-everything-principle.md)** - Index Everything principle (ES as complete curriculum view)
 
 For historical context on dense vector evaluation (superseded):
 

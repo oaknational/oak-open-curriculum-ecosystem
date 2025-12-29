@@ -247,7 +247,7 @@ Key ES documentation for this project:
 | Verify exam subject filtering (`examSubjects[]`) | 🔲 Pending |
 | Verify KS4 option filtering (`ks4Options[]`) | 🔲 Pending |
 
-**Approach**: Traverse `/sequences/{sequence}/units` endpoints, build lookup tables mapping units → tiers/examBoards, decorate indexed documents with arrays. See [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md).
+**Approach**: Traverse `/sequences/{sequence}/units` endpoints, build lookup tables mapping units → tiers/examBoards, decorate indexed documents with arrays. See [ADR-080](docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md).
 
 See `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md` for full details.
 
@@ -383,7 +383,7 @@ Lessons: {unitLessons[*].lessonTitle} ({lessonSlug}).
 | [ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)    | ELSER-Only Embedding Strategy      | Accepted    |
 | [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-generation.md)      | Semantic Summary Generation        | Accepted    |
 | [ADR-079](docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)             | SDK Cache TTL Jitter               | Implemented |
-| [ADR-080](docs/architecture/architectural-decisions/080-ks4-metadata-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
+| [ADR-080](docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 Metadata Denormalisation  | Accepted    |
 
 ---
 
