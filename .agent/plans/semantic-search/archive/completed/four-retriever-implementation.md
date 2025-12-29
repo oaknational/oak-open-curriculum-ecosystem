@@ -129,3 +129,4 @@ Process ALL sequences for tier extraction; removed early-return check.
 
 Phase 3e is documented in the remaining sections of `phase-3-multi-index-and-fields.md`.
 
+

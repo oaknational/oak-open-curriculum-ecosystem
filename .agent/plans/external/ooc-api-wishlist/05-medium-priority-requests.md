@@ -641,3 +641,254 @@ import { lessonSummaryResponseSchema } from '@oaknational/curriculum-api-schemas
 
 ---
 
+## Medium Priority – Ingestion Efficiency
+
+### 13. Add Boolean Resource Flags to Lesson List Responses
+
+**Status**: 🟡 MEDIUM PRIORITY — Would eliminate bulk assets pre-fetch step  
+**Date**: 2025-12-29 (Added based on efficient API traversal implementation)
+
+**The Problem:**
+
+To determine which lessons have video transcripts, consumers must currently:
+
+1. Call the bulk assets endpoint: `GET /key-stages/{ks}/subject/{subject}/assets`
+2. Parse all assets for each lesson
+3. Check if any asset has `type: 'video'`
+4. Build a lookup map before fetching transcripts
+
+This adds ~1 API call per subject/key-stage pair AND requires parsing/processing large responses just to extract boolean flags.
+
+**Current workaround (implemented 2025-12-29):**
+
+```typescript
+// Fetch all assets for subject/keystage
+const assetsResult = await client.getSubjectAssetsBySubjectAndKeystage(ks, subject);
+
+// Build video availability map
+const videoLessons = new Set<string>();
+for (const lesson of assetsResult.value) {
+  if (lesson.assets.some((asset) => asset.type === 'video')) {
+    videoLessons.add(lesson.lessonSlug);
+  }
+}
+
+// Use map to skip transcript fetches for lessons without video
+const hasVideo = (lessonSlug: string) => videoLessons.has(lessonSlug);
+```
+
+**Desired state:**
+
+Add boolean resource flags directly to lesson list responses:
+
+```json
+GET /key-stages/ks3/subject/maths/lessons
+
+{
+  "data": [
+    {
+      "lessonSlug": "adding-fractions",
+      "lessonTitle": "Adding fractions",
+      "hasVideo": true,
+      "hasTranscript": true,
+      "hasWorksheet": true,
+      "hasQuiz": true
+    },
+    {
+      "lessonSlug": "cooking-flapjacks",
+      "lessonTitle": "Cooking flapjacks (practical)",
+      "hasVideo": false,
+      "hasTranscript": false,
+      "hasWorksheet": true,
+      "hasQuiz": false
+    }
+  ]
+}
+```
+
+**Benefits:**
+
+1. **Eliminates bulk assets pre-fetch**: No need to call assets endpoint just to check video availability
+2. **Faster ingestion**: Can immediately skip transcript fetches for `hasTranscript: false` lessons
+3. **Cleaner caching**: Don't cache 404 responses for transcripts that can't exist
+4. **Better planning**: Consumers know resource availability before making detail requests
+5. **Simpler logic**: Boolean check vs asset array parsing
+
+**Suggested flags:**
+
+| Flag | Description |
+|------|-------------|
+| `hasVideo` | Lesson has associated video content |
+| `hasTranscript` | Lesson has video transcript (implies `hasVideo`) |
+| `hasWorksheet` | Downloadable worksheet available |
+| `hasQuiz` | Quiz/assessment available |
+| `hasSlides` | Presentation slides available |
+
+**Implementation:**
+
+These are likely derivable from existing data at query time:
+
+```sql
+SELECT
+  l.lesson_slug,
+  l.lesson_title,
+  EXISTS(SELECT 1 FROM assets a WHERE a.lesson_id = l.id AND a.type = 'video') AS has_video,
+  EXISTS(SELECT 1 FROM transcripts t WHERE t.lesson_id = l.id) AS has_transcript,
+  -- etc.
+FROM lessons l
+```
+
+**Impact:** Reduces ingestion complexity and eliminates unnecessary API calls during bulk operations.
+
+**Effort:** Low-Medium (database query enhancement + response schema update)
+
+**Priority:** Medium — Current workaround is functional but adds complexity.
+
+**Enables:**
+
+- **Semantic search ingestion**: Skip transcript fetches for practical lessons
+- **Layer 2**: Aggregated tools can filter by available resources
+- **Layer 4**: Export tools can plan downloads based on available assets
+
+---
+
+### 14. Bulk Lesson Materials Endpoint
+
+**Status**: 🟡 MEDIUM PRIORITY — Would dramatically reduce per-lesson API calls  
+**Date**: 2025-12-29 (Added based on ingestion pipeline analysis)
+
+**The Problem:**
+
+For each lesson, consumers currently need two separate API calls:
+
+1. `GET /lessons/{lesson}/summary` — Lesson metadata
+2. `GET /lessons/{lesson}/transcript` — Video transcript
+
+For a subject like Maths KS3 with ~800 lessons, this means:
+- 800 summary calls
+- 800 transcript calls (or ~600 after skipping lessons without video)
+- **Total: ~1,400 API calls** per subject/keystage
+
+**Current state (per-lesson):**
+
+```typescript
+for (const lesson of lessons) {
+  const summary = await client.getLessonSummary(lesson.lessonSlug);
+  const transcript = await client.getLessonTranscript(lesson.lessonSlug);
+  // Process...
+}
+```
+
+**Desired state:**
+
+A bulk endpoint that returns materials for multiple lessons:
+
+**Option A: Subject/keystage bulk endpoint (recommended)**
+
+```typescript
+GET /key-stages/{ks}/subject/{subject}/lesson-materials
+
+Response:
+{
+  "lessons": [
+    {
+      "lessonSlug": "adding-fractions",
+      "summary": {
+        "lessonTitle": "Adding fractions",
+        "keyLearningPoints": [...],
+        "misconceptions": [...],
+        // Full summary data
+      },
+      "transcript": "Welcome to today's lesson on adding fractions...",
+      "hasTranscript": true
+    },
+    {
+      "lessonSlug": "cooking-flapjacks",
+      "summary": {
+        "lessonTitle": "Cooking flapjacks (practical)",
+        // ...
+      },
+      "transcript": null,
+      "hasTranscript": false
+    }
+  ],
+  "pagination": {
+    "total": 127,
+    "offset": 0,
+    "limit": 50,
+    "hasMore": true
+  }
+}
+```
+
+**Option B: Batch endpoint with lesson slugs**
+
+```typescript
+POST /lessons/batch/materials
+{
+  "lessonSlugs": ["adding-fractions", "cooking-flapjacks", "..."],
+  "include": ["summary", "transcript"]
+}
+
+Response:
+{
+  "lessons": [
+    { "lessonSlug": "adding-fractions", "summary": {...}, "transcript": "..." },
+    // ...
+  ],
+  "errors": [
+    { "lessonSlug": "invalid-slug", "error": "NOT_FOUND" }
+  ]
+}
+```
+
+**Benefits:**
+
+| Metric | Per-lesson | Bulk endpoint | Improvement |
+|--------|------------|---------------|-------------|
+| API calls (800 lessons) | 1,400+ | 16 (paginated) | **99% reduction** |
+| Network round-trips | 1,400+ | 16 | **99% reduction** |
+| Time (sequential) | ~140 seconds | ~8 seconds | **95% faster** |
+| Error handling | Per-item | Batch | Simpler |
+
+**Why bulk matters for ingestion:**
+
+1. **Semantic search indexing**: We need summary + transcript for EVERY lesson
+2. **Cache warming**: Pre-populate cache for entire subjects
+3. **Data export**: Generate curriculum packages
+4. **Analytics**: Analyse content patterns across curriculum
+
+**Pagination approach:**
+
+```typescript
+GET /key-stages/ks3/subject/maths/lesson-materials?offset=0&limit=50
+
+// Subsequent calls
+GET /key-stages/ks3/subject/maths/lesson-materials?offset=50&limit=50
+// etc.
+```
+
+**Error handling in bulk:**
+
+For lessons without transcripts, return `transcript: null` rather than omitting the field or returning an error. This allows consumers to process the full response without special error handling.
+
+**Implementation considerations:**
+
+- Limit batch size (e.g., 50-100 lessons per request) to control response size
+- Include pagination metadata for large subjects
+- Support `include` parameter to fetch only needed fields
+- Consider streaming/chunked responses for very large subjects
+
+**Impact:** Transforms ingestion from O(n) API calls to O(n/batch_size) calls.
+
+**Effort:** Medium (new endpoint + pagination logic)
+
+**Priority:** Medium — Current per-lesson approach works but is inefficient for bulk operations.
+
+**Enables:**
+
+- **Semantic search**: Efficient full-curriculum ingestion
+- **Layer 4**: Bulk export and analysis tools
+- **Cache warming**: Pre-populate SDK caches efficiently
+
+---

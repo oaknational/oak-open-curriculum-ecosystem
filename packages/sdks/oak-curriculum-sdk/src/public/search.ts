@@ -135,6 +135,10 @@ export {
   type SequenceUnitsResponseSchema,
   type SequenceUnitsResponse,
   isSequenceUnitsResponse,
+  subjectAssetsSchema,
+  type SubjectAssetsResponseSchema,
+  type SubjectAssets,
+  isSubjectAssets,
 } from '../types/search-response-guards.js';
 
 export {

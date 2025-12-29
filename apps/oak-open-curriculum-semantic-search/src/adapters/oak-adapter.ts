@@ -19,6 +19,7 @@ import type {
   LessonGroupResponse,
   LessonsPaginationOptions,
   SubjectSequenceEntry,
+  SubjectAssetEntry,
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,
@@ -26,12 +27,20 @@ import type {
   GetSubjectSequencesFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
+  GetSubjectAssetsFn,
 } from './oak-adapter-types';
 
 // Re-export types for consumers
 export type { UnitListEntry, LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
-export type { GetUnitsFn, GetTranscriptFn, GetLessonSummaryFn, GetUnitSummaryFn };
+export type {
+  SubjectAssetEntry,
+  GetUnitsFn,
+  GetTranscriptFn,
+  GetLessonSummaryFn,
+  GetUnitSummaryFn,
+};
 export type { GetSubjectSequencesFn, GetSequenceUnitsFn, GetLessonsByKeyStageAndSubjectFn };
+export type { GetSubjectAssetsFn };
 export type {
   ThreadEntry,
   ThreadUnitEntry,
@@ -69,6 +78,8 @@ export interface OakClient {
   getAllThreads: ReturnType<typeof makeGetAllThreads>;
   getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
   getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
+  /** Fetches all assets for a subject/keystage. Used for video availability check. */
+  getSubjectAssets: GetSubjectAssetsFn;
   rateLimitTracker: ReturnType<typeof createOakBaseClient>['rateLimitTracker'];
   getCacheStats: () => CacheStats;
   disconnect: () => Promise<void>;

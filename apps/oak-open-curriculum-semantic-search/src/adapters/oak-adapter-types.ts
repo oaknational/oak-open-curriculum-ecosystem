@@ -51,6 +51,20 @@ export interface LessonsPaginationOptions {
 /** Subject sequence entry type. */
 export type SubjectSequenceEntry = SearchSubjectSequences[number];
 
+/**
+ * Asset entry from subject assets endpoint.
+ * Used to determine video availability for lessons.
+ */
+export interface SubjectAssetEntry {
+  readonly lessonSlug: string;
+  readonly lessonTitle: string;
+  readonly assets: readonly {
+    readonly type: string;
+    readonly label: string;
+    readonly url: string;
+  }[];
+}
+
 // ============================================================================
 // Function Types - All return Result<T, SdkFetchError> per ADR-088
 // ============================================================================
@@ -90,6 +104,16 @@ export type GetLessonsByKeyStageAndSubjectFn = (
   subject: SearchSubjectSlug,
   options?: LessonsPaginationOptions,
 ) => Promise<Result<readonly LessonGroupResponse[], SdkFetchError>>;
+
+/**
+ * Fetches all assets for a subject/keystage.
+ * Used to determine video availability before fetching transcripts.
+ * Returns Result per ADR-088.
+ */
+export type GetSubjectAssetsFn = (
+  keyStage: KeyStage,
+  subject: SearchSubjectSlug,
+) => Promise<Result<readonly SubjectAssetEntry[], SdkFetchError>>;
 
 // NOTE: OakClient interface is defined in oak-adapter.ts
 // It includes all the above function types plus cache management methods.

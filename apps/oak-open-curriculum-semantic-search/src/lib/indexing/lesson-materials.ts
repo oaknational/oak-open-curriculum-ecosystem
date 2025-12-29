@@ -20,11 +20,23 @@ export interface FetchContext {
   readonly keyStage?: KeyStage;
   readonly subject?: SearchSubjectSlug;
   readonly unitSlug?: string;
+  /**
+   * Whether this lesson has a video (from bulk assets check).
+   * If false, transcript fetch is skipped entirely.
+   * If undefined, transcript is fetched (backwards compatible).
+   */
+  readonly hasVideo?: boolean;
 }
 
 /**
  * Fetch lesson materials (transcript + summary) for indexing.
  * Returns null if lesson summary is unavailable or on unrecoverable error.
+ *
+ * If `context.hasVideo` is explicitly false, transcript fetch is skipped
+ * entirely (returns empty string). This optimization prevents 404 errors
+ * for lessons known to lack videos.
+ *
+ * @see efficient-api-traversal.md for the bulk video availability check
  */
 export async function fetchLessonMaterials(
   client: OakClient,
@@ -33,9 +45,21 @@ export async function fetchLessonMaterials(
 ): Promise<{ transcript: string; summary: SearchLessonSummary } | null> {
   const errorContext = buildErrorContext(lessonSlug, context);
 
-  // Fetch both in parallel
+  // If we know the lesson has no video, skip transcript fetch entirely
+  const shouldFetchTranscript = context?.hasVideo !== false;
+
+  if (!shouldFetchTranscript) {
+    ingestLogger.debug(`Skipping transcript fetch for ${lessonSlug} (no video)`, {
+      keyStage: context?.keyStage,
+      subject: context?.subject,
+    });
+  }
+
+  // Fetch transcript conditionally, summary always
   const [transcriptResult, summaryResult] = await Promise.all([
-    client.getLessonTranscript(lessonSlug),
+    shouldFetchTranscript
+      ? client.getLessonTranscript(lessonSlug)
+      : Promise.resolve({ ok: true, value: { transcript: '', vtt: '' } } as const),
     client.getLessonSummary(lessonSlug),
   ]);
 

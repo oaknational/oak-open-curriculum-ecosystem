@@ -57,6 +57,8 @@ function createFixtureClient(data: FixtureData): OakClient {
     getThreadUnits: async () => ok([]),
     // Lessons by key stage/subject - use fixture data
     getLessonsByKeyStageAndSubject: makeFixtureLessonsByKeyStageAndSubjectFn(data),
+    // Subject assets - return lessons with mock video assets
+    getSubjectAssets: makeFixtureSubjectAssetsFn(data),
     // Cache methods (no-op for fixture client)
     getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
     disconnect: async () => Promise.resolve(),
@@ -170,5 +172,42 @@ function makeFixtureLessonsByKeyStageAndSubjectFn(
           .flatMap((lg) => lg.lessons),
       })),
     );
+  };
+}
+
+/**
+ * Create fixture function for getSubjectAssets.
+ * Returns all lessons with video assets if they have transcripts in fixture data.
+ */
+function makeFixtureSubjectAssetsFn(data: FixtureData): OakClient['getSubjectAssets'] {
+  return async (keyStage, subject) => {
+    // Get all lessons for this key stage and subject
+    const relevantUnits = data.units.filter(
+      (unit) => unit.keyStage === keyStage && unit.subject === subject,
+    );
+    const lessonEntries = relevantUnits.flatMap((unit) =>
+      data.lessons
+        .filter((lg) => lg.unitSlug === unit.unitSlug)
+        .flatMap((lg) =>
+          lg.lessons.map((lesson) => {
+            // Check if this lesson has a transcript (means it has a video)
+            const hasTranscript = data.lessonTranscripts.has(lesson.lessonSlug);
+            return {
+              lessonSlug: lesson.lessonSlug,
+              lessonTitle: lesson.lessonTitle,
+              assets: hasTranscript
+                ? [
+                    {
+                      type: 'video',
+                      label: 'Video',
+                      url: `/api/lessons/${lesson.lessonSlug}/video`,
+                    },
+                  ]
+                : [],
+            };
+          }),
+        ),
+    );
+    return ok(lessonEntries);
   };
 }

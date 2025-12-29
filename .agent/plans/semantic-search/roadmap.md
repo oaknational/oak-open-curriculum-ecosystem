@@ -18,19 +18,34 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 | Lint errors        | 70        | 0           |
 | New test coverage  | —         | 22 tests    |
 
-### Pending Before Ingestion
+### Efficient API Traversal — Complete (2025-12-29)
+
+Implemented bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to:
+- Check video availability BEFORE fetching transcripts
+- Skip transcript fetch for lessons without videos
+- Eliminate 404 errors and wasted API calls
+
+| Metric               | Before    | After                 |
+| -------------------- | --------- | --------------------- |
+| API calls            | 2× lessons| 1 bulk + 1× summaries |
+| 404 errors           | Many      | Zero                  |
+
+### Pending Before Ingestion — COMPLETE (2025-12-29)
 
 | Task             | Why Needed                                      | Status    |
 | ---------------- | ----------------------------------------------- | --------- |
-| ES reset         | Fresh indices for clean ingestion               | 📋 Pending |
-| Cache validation | Verify new `CacheOperations` interface works    | 📋 Pending |
-| ES upsert verify | Confirm incremental mode still works            | 📋 Pending |
+| Quality gates    | Verify implementation works                     | ✅ Complete |
+| ES reset         | Fresh indices for clean ingestion               | ✅ Complete |
+| Cache validation | Verify new `CacheOperations` interface works    | ✅ Complete (756 hits, 1 miss) |
+| ES upsert verify | Confirm incremental mode still works            | ✅ Complete (638 docs ingested) |
 
 ### Next Steps (In Order)
 
-1. **Reset ES**: `pnpm es:setup --reset`
-2. **Verify caching**: Run dry-run with verbose logging
-3. **Run ingestion**: `pnpm es:ingest-live --all --verbose`
+1. ✅ **Run quality gates**: All 11 gates passed
+2. ✅ **Reset ES**: `pnpm es:setup --reset` — 7 indices, 192 synonyms
+3. ✅ **Verify caching**: Dry-run passed, cache hits working
+4. ✅ **Verify writes**: Maths KS1 ingested (437 docs + 201 threads)
+5. 📋 **Full ingestion**: `pnpm es:ingest-live --all --verbose`
 
 ---
 

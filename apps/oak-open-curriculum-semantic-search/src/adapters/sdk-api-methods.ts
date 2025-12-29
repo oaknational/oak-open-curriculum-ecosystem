@@ -13,7 +13,12 @@ import { classifyHttpError, validationError } from '@oaknational/oak-curriculum-
 import { ok, err } from '@oaknational/result';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import { isLessonSummary, isUnitSummary, isSubjectSequences } from '../types/oak';
-import { isUnitsGrouped, isTranscriptResponse, isLessonGroups } from './sdk-guards';
+import {
+  isUnitsGrouped,
+  isTranscriptResponse,
+  isLessonGroups,
+  isSubjectAssets,
+} from './sdk-guards';
 import type {
   GetUnitsFn,
   GetTranscriptFn,
@@ -22,6 +27,7 @@ import type {
   GetSubjectSequencesFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
+  GetSubjectAssetsFn,
 } from './oak-adapter-types';
 
 /** Create getUnitsByKeyStageAndSubject method. */
@@ -160,5 +166,35 @@ export function makeGetLessonsByKeyStageAndSubject(
       return ok(res.data);
     }
     return err(validationError(`${keyStage}/${subject}`, 'LessonGroups', res.data));
+  };
+}
+
+/**
+ * Create getSubjectAssets method.
+ * Fetches all assets for a subject/keystage in a single bulk call.
+ * Used to determine video availability before fetching transcripts.
+ */
+export function makeGetSubjectAssets(client: OakApiClient): GetSubjectAssetsFn {
+  return async (keyStage: KeyStage, subject: SearchSubjectSlug) => {
+    const res = await client.GET('/key-stages/{keyStage}/subject/{subject}/assets', {
+      params: { path: { keyStage, subject } },
+    });
+    if (!res.response.ok) {
+      return err(
+        classifyHttpError(
+          res.response.status,
+          `${keyStage}/${subject}/assets`,
+          'other',
+          res.response.statusText,
+        ),
+      );
+    }
+    if (!res.data) {
+      return ok([]);
+    }
+    if (isSubjectAssets(res.data)) {
+      return ok(res.data);
+    }
+    return err(validationError(`${keyStage}/${subject}`, 'SubjectAssets', res.data));
   };
 }

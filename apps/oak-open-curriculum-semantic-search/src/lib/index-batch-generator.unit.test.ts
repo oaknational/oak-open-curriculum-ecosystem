@@ -47,6 +47,7 @@ function createMinimalMockClient(): OakClient {
     getAllThreads: async () => ok([]),
     getThreadUnits: async () => ok([]),
     getLessonsByKeyStageAndSubject: async () => ok([]),
+    getSubjectAssets: async () => ok([]),
     rateLimitTracker,
     getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
     disconnect: async () => Promise.resolve(),

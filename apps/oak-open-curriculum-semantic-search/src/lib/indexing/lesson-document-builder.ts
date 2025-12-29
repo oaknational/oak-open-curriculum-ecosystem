@@ -74,6 +74,12 @@ interface LessonBuildContext {
   readonly years: string[] | undefined;
   readonly lessonCount: number;
   readonly unitContextMap: UnitContextMap;
+  /**
+   * Whether this lesson has a video.
+   * If false, transcript fetch is skipped.
+   * @see video-availability.ts
+   */
+  readonly hasVideo?: boolean;
 }
 
 /**
@@ -93,6 +99,7 @@ async function buildLessonDocEntry(
     keyStage: context.keyStage,
     subject: context.subject,
     unitSlug: primaryUnit.unitSlug,
+    hasVideo: context.hasVideo,
   });
 
   if (materials === null) {
@@ -128,6 +135,7 @@ function createLessonContext(
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
   unitContextMap: UnitContextMap,
+  hasVideo?: boolean,
 ): LessonBuildContext {
   ensureUnitSummaryMatchesContext(primarySummary, subject, keyStage);
   return {
@@ -137,12 +145,20 @@ function createLessonContext(
     years: normaliseYears(primarySummary.year, primarySummary.yearSlug),
     lessonCount: primarySummary.unitLessons.length,
     unitContextMap,
+    hasVideo,
   };
 }
 
 /**
  * Builds a lesson document with ALL its unit relationships.
  *
+ * @param client - Oak API client
+ * @param lesson - Aggregated lesson input
+ * @param unitSummaries - Map of unit summaries
+ * @param subject - Subject slug
+ * @param keyStage - Key stage
+ * @param unitContextMap - KS4 metadata context
+ * @param hasVideo - Optional video availability (if false, transcript fetch skipped)
  * @see ADR-083 Complete Lesson Enumeration Strategy
  */
 export async function buildLessonDocFromAggregated(
@@ -152,6 +168,7 @@ export async function buildLessonDocFromAggregated(
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
   unitContextMap: UnitContextMap,
+  hasVideo?: boolean,
 ): Promise<LessonBuildResult | null> {
   const unitSlugsArray = Array.from(lesson.unitSlugs);
   const units = resolveUnitsForLesson(unitSlugsArray, unitSummaries);
@@ -166,7 +183,14 @@ export async function buildLessonDocFromAggregated(
     throw new Error(`Primary unit ${primaryUnit.unitSlug} has no summary`);
   }
 
-  const context = createLessonContext(units, primarySummary, subject, keyStage, unitContextMap);
+  const context = createLessonContext(
+    units,
+    primarySummary,
+    subject,
+    keyStage,
+    unitContextMap,
+    hasVideo,
+  );
   const entry = await buildLessonDocEntry(client, lesson, context);
   if (entry === null) {
     return null;

@@ -2,10 +2,6 @@
 
 This directory contains a split version of the upstream API metadata wishlist to keep each document short and focused. The content is split sequentially and preserved verbatim within each file.
 
-## Additional wishlist items to integrate into the requests
-
-- boolean flags on lessons, e.g. has_transcript
-
 ## Key references
 
 - API docs: https://open-api.thenational.academy/docs/about-oaks-api/api-overview
@@ -20,7 +16,7 @@ This directory contains a split version of the upstream API metadata wishlist to
 - `02-semantic-summary.md` — rerank summary request and the semantic_summary field definitions with status and rationale.
 - `03-context-and-vision.md` — executive summary, vision, tool ecosystem, schema-first pipeline overview, and audience.
 - `04-high-priority-requests.md` — high priority requests covering tool discovery, ontology, error docs, programme variants, identity consistency, and **structural pattern documentation** (NEW 2025-12-28).
-- `05-medium-priority-requests.md` — medium priority items for parameters, extensions, behavioural metadata, thread enhancements, schema refs, and Zod validators.
+- `05-medium-priority-requests.md` — medium priority items for parameters, extensions, behavioural metadata, thread enhancements, schema refs, Zod validators, and **ingestion efficiency improvements** (boolean resource flags, bulk lesson materials endpoint).
 - `06-response-metadata-and-caching.md` — response examples, canonical URL patterns, and resource timestamps.
 - `07-low-priority-and-best-practices.md` — performance hints plus the OpenAPI best practices checklist sections A-G.
 - `08-summary-and-coordination.md` — summary table, implementation notes, testing impact, coordination, related docs, next steps, and contact details.

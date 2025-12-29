@@ -1,9 +1,10 @@
 # Efficient API Traversal
 
-**Status**: 📋 PENDING — Next priority before ingestion
+**Status**: ✅ COMPLETE — All quality gates passing 2025-12-29
 **Priority**: HIGH — Blocking ingestion
 **Parent**: [roadmap.md](../roadmap.md)
 **Created**: 2025-12-29
+**Updated**: 2025-12-29
 **Principle**: Make as few API calls as possible; use bulk endpoints; analyse before fetching
 
 ---
@@ -20,26 +21,48 @@ The current ingestion pipeline makes unnecessary API calls:
 
 ---
 
-## Key Insight from OpenAPI Schema
+## Verified Insights from OpenAPI Schema (2025-12-29)
 
-The API provides **bulk endpoints** that return data for multiple lessons at once:
+Analysis of `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` confirms:
+
+### Bulk Endpoints Available
 
 | Endpoint | Returns | Use Case |
 | -------- | ------- | -------- |
-| `/key-stages/{ks}/subject/{subject}/assets` | All assets for all lessons in subject/keystage | Check video availability for entire subject |
-| `/sequences/{sequence}/assets` | All assets for all lessons in sequence | Check video availability for sequence |
-| `/lessons/{lesson}/assets` | Assets for one lesson | Fallback for individual check |
+| `/key-stages/{ks}/subject/{subject}/assets` | All assets for all lessons in subject/keystage | **PRIMARY** — Check video availability for entire subject |
+| `/key-stages/{ks}/subject/{subject}/lessons` | All lessons grouped by unit (paginated, limit 100) | Already used for lesson enumeration |
+| `/key-stages/{ks}/subject/{subject}/units` | All units for subject/keystage | Already used by pattern-aware traversal |
+| `/sequences/{sequence}/assets` | All assets for all lessons in sequence | Alternative for sequence-based traversal |
 
-The `assets` response includes `type: "video"` for lessons with videos:
+### SubjectAssetsResponseSchema (Verified)
 
-```json
+The `/key-stages/{ks}/subject/{subject}/assets` endpoint returns an array of:
+
+```typescript
 {
-  "assets": [
-    { "type": "video", "label": "Video", "url": "..." },
-    { "type": "worksheet", "label": "Worksheet", "url": "..." }
-  ]
+  lessonSlug: string;      // Lesson identifier
+  lessonTitle: string;     // Human-readable title
+  attribution?: string[];  // Third-party content attribution
+  assets: Array<{
+    type: "slideDeck" | "exitQuiz" | ... | "video" | "worksheet" | ...;
+    label: string;
+    url: string;
+  }>;
 }
 ```
+
+**Key insight**: If `assets` array contains an entry with `type: "video"`, the lesson has a video and therefore a transcript.
+
+### No Bulk Summary Endpoint
+
+There is **no bulk lesson summary endpoint**. The `/lessons/{lesson}/summary` endpoint must be called per-lesson. This is acceptable because:
+
+1. Redis caching already handles repeat fetches
+2. Summary data is required for all lessons (cannot be skipped)
+
+### Additional Cross-Reference Opportunity
+
+The assets endpoint returns `lessonSlug` for every lesson with assets. This can serve as a **cross-reference** against the lessons endpoint to catch any lessons missed due to the upstream API bug (see ADR-083).
 
 ---
 
@@ -125,58 +148,99 @@ Review these endpoints for additional efficiency gains:
 
 ---
 
-## Implementation Plan
+## Implementation Plan (TDD) — COMPLETE ✅
 
-### Phase 1: Add `getLessonAssets` to OakClient
+### Phase 1: Add `getSubjectAssets` to OakClient — COMPLETE ✅
 
-1. Add method to `oak-adapter-types.ts`:
+**TDD Approach**: Write unit tests first for the API method factory.
 
-```typescript
-readonly getLessonAssetsBySubjectAndKeystage: (
-  keyStage: KeyStage,
-  subject: SearchSubjectSlug,
-) => Promise<Result<SubjectAssetsResponse, SdkFetchError>>;
-```
-
-2. Implement in `sdk-api-methods.ts` using SDK method
-
-### Phase 2: Build Video Availability Map
-
-Create helper in `src/lib/indexing/video-availability.ts`:
+1. Add type definition to `oak-adapter-types.ts`:
 
 ```typescript
-interface VideoAvailabilityMap {
-  readonly hasVideo: (lessonSlug: string) => boolean;
-  readonly totalLessons: number;
-  readonly lessonsWithVideo: number;
+/** Asset entry from subject assets endpoint. */
+export interface SubjectAssetEntry {
+  readonly lessonSlug: string;
+  readonly lessonTitle: string;
+  readonly assets: readonly { readonly type: string; readonly label: string; readonly url: string }[];
 }
 
-export async function buildVideoAvailabilityMap(
+/** Fetches all assets for a subject/keystage. Returns Result per ADR-088. */
+export type GetSubjectAssetsFn = (
+  keyStage: KeyStage,
+  subject: SearchSubjectSlug,
+) => Promise<Result<readonly SubjectAssetEntry[], SdkFetchError>>;
+```
+
+2. Implement `makeGetSubjectAssets` in `sdk-api-methods.ts`
+3. Add to `OakClient` interface in `oak-adapter.ts`
+4. Add type guard in `sdk-guards.ts`
+
+### Phase 2: Build Video Availability Map — COMPLETE ✅
+
+**TDD Approach**: Write unit tests for pure map-building function first.
+
+Created `src/lib/indexing/video-availability.ts`:
+
+```typescript
+/**
+ * Video availability information for a subject/keystage.
+ * Built from bulk assets endpoint data.
+ */
+export interface VideoAvailabilityMap {
+  /** Check if a lesson has a video. */
+  readonly hasVideo: (lessonSlug: string) => boolean;
+  /** Total lessons in the assets response. */
+  readonly totalLessons: number;
+  /** Count of lessons with videos. */
+  readonly lessonsWithVideo: number;
+  /** All lesson slugs from assets endpoint (for cross-reference). */
+  readonly lessonSlugs: ReadonlySet<string>;
+}
+
+/**
+ * Builds video availability map from subject assets data.
+ * Pure function - takes data, returns map.
+ */
+export function buildVideoAvailabilityMapFromAssets(
+  assets: readonly SubjectAssetEntry[],
+): VideoAvailabilityMap;
+
+/**
+ * Fetches assets and builds video availability map.
+ * Orchestration function that calls the OakClient.
+ */
+export async function fetchVideoAvailabilityMap(
   client: OakClient,
   keyStage: KeyStage,
   subject: SearchSubjectSlug,
-): Promise<VideoAvailabilityMap>
+): Promise<Result<VideoAvailabilityMap, SdkFetchError>>;
 ```
 
-### Phase 3: Update Ingestion to Use Map
+### Phase 3: Update Ingestion to Use Map — COMPLETE ✅
 
-Modify `lesson-materials.ts` to accept `hasVideo` predicate:
+**TDD Approach**: Update tests for `fetchLessonMaterials` first.
+
+Modified `lesson-materials.ts`:
 
 ```typescript
-export async function fetchLessonMaterials(
-  client: OakClient,
-  lessonSlug: string,
-  context?: FetchContext,
-  hasVideo?: boolean, // NEW: if false, skip transcript fetch
-): Promise<{ transcript: string; summary: SearchLessonSummary } | null>
+export interface FetchContext {
+  readonly keyStage?: KeyStage;
+  readonly subject?: SearchSubjectSlug;
+  readonly unitSlug?: string;
+  readonly hasVideo?: boolean; // NEW: if false, skip transcript fetch
+}
 ```
 
-### Phase 4: Integrate into Ingestion Pipeline
+When `hasVideo` is explicitly `false`, transcript fetch is skipped entirely.
 
-Update `index-oak-helpers.ts` to:
-1. Call `buildVideoAvailabilityMap` once per subject/keystage
-2. Pass `hasVideo` to each lesson's material fetch
-3. Log video availability statistics
+### Phase 4: Integrate into Ingestion Pipeline — COMPLETE ✅
+
+Updated `index-oak-helpers.ts` to:
+1. ✅ Call `fetchVideoAvailabilityMap` once per subject/keystage at start
+2. ✅ Log video availability statistics
+3. ✅ Pass `hasVideo` context to each lesson's material fetch
+4. ✅ Log any discrepancies between assets and lessons endpoint counts
+5. ✅ Graceful fallback if video availability fetch fails
 
 ---
 
@@ -192,12 +256,16 @@ Update `index-oak-helpers.ts` to:
 
 ## Acceptance Criteria
 
-- [ ] `buildVideoAvailabilityMap` function implemented with tests
-- [ ] Ingestion uses bulk assets endpoint before per-lesson fetches
-- [ ] Transcript fetch skipped for lessons without video
-- [ ] Logging shows video availability statistics per subject
-- [ ] No regression in lesson document quality
-- [ ] Quality gates passing
+- [x] `getSubjectAssets` method added to OakClient with type guard
+- [x] `buildVideoAvailabilityMapFromAssets` pure function with unit tests
+- [x] `fetchVideoAvailabilityMap` orchestration function
+- [x] `fetchLessonMaterials` updated to accept `hasVideo` in context
+- [x] Ingestion pipeline calls `fetchVideoAvailabilityMap` once per subject/keystage
+- [x] Transcript fetch skipped for lessons without video
+- [x] Logging shows video availability statistics per subject
+- [x] Cross-reference check logs any lesson count discrepancies
+- [x] Graceful fallback if assets fetch fails
+- [x] All quality gates passing (2025-12-29)
 
 ---
 

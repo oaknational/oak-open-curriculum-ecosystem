@@ -67,3 +67,4 @@ All Tier 1 (Search Fundamentals) improvements were exhausted, achieving MRR 0.61
 2. **Intent-based queries are a different class of problem** — They require metadata that doesn't exist in the current API.
 3. **ELSER handles UK/US variants automatically** — No need for explicit synonyms for spelling differences.
 
+

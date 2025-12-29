@@ -40,7 +40,7 @@ todos:
     status: completed
   - id: phase2-api-efficiency
     content: Implement efficient API traversal - use bulk assets endpoint to check video availability
-    status: pending
+    status: completed
   - id: phase2-reset
     content: Reset Elasticsearch (delete indices, recreate mappings)
     status: pending
@@ -240,5 +240,3 @@ All gates must pass before proceeding.---
 ---
 
 ## Success Criteria
-
-| Criterion | Target | Status || ----------------------------- | -------------------------------------- | ----------- || Plans reviewed and updated | All in `.agent/plans/semantic-search/` | ✅ Complete || Pattern-aware traversal | All 7 patterns | ✅ Complete || Adapter refactoring | Complexity under limits | ✅ Complete || Quality gates (post-refactor) | All 11 passing | ✅ Complete || ES reset | All indices recreated | 📋 Pending || Cache validation | Verify new CacheOperations works | 📋 Pending || Incremental ingestion | ES `create` action by default | 📋 Pending || Lessons indexed | ~12,316 | 📋 Pending |

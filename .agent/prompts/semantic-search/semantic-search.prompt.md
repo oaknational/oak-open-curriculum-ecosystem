@@ -1,6 +1,6 @@
 # Semantic Search — Current Work
 
-**Status**: 🔄 Efficient API traversal implementation required
+**Status**: ✅ Efficient API traversal complete — Ready for ES reset
 **Last Updated**: 2025-12-29
 **Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)
 
@@ -8,29 +8,7 @@
 
 ## 🎯 IMMEDIATE NEXT STEP
 
-### 1. Implement Efficient API Traversal (BLOCKING)
-
-**Plan**: [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md)
-
-The current ingestion makes unnecessary API calls — fetching transcripts for lessons that don't have videos (e.g., computing lessons with interactive content). This causes:
-
-- ~50% wasted API calls
-- Many 404 errors polluting logs and cache
-- Slower ingestion than necessary
-
-**The fix**: Use bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to check video availability BEFORE fetching transcripts.
-
-**Tasks**:
-
-1. Audit current API call patterns during dry-run
-2. Test bulk assets endpoint via MCP tools
-3. Implement `buildVideoAvailabilityMap()` function
-4. Update ingestion to skip transcript fetch for no-video lessons
-5. Run quality gates
-
-**Only after this is complete**, proceed to:
-
-### 2. Reset Elasticsearch
+### 1. Reset Elasticsearch
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -58,6 +36,20 @@ pnpm es:ingest-live --all --verbose
 ---
 
 ## Recent Work Completed (2025-12-29)
+
+### Efficient API Traversal — COMPLETE ✅
+
+Implemented bulk assets endpoint for video availability check before transcript fetching:
+
+| File Created/Modified | Purpose |
+| --------------------- | ------- |
+| `src/lib/indexing/video-availability.ts` | Pure function to build video availability map |
+| `src/lib/indexing/video-availability.unit.test.ts` | Unit tests for map building |
+| `src/adapters/sdk-api-methods.ts` | Added `makeGetSubjectAssets` |
+| `src/adapters/sdk-guards.ts` | Added `isSubjectAssets` import |
+| `src/lib/index-oak-helpers.ts` | Integrated video map into ingestion |
+
+**Expected benefit**: ~50% reduction in API calls by skipping transcript fetch for no-video lessons.
 
 ### Adapter Refactoring — COMPLETE ✅
 

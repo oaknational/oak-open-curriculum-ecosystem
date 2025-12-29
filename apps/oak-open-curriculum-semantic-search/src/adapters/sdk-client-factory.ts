@@ -31,6 +31,7 @@ import {
   makeGetSubjectSequences,
   makeGetSequenceUnits,
   makeGetLessonsByKeyStageAndSubject,
+  makeGetSubjectAssets,
 } from './sdk-api-methods';
 import type { OakClient, CacheStats } from './oak-adapter';
 import type {
@@ -41,6 +42,7 @@ import type {
   GetSubjectSequencesFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
+  GetSubjectAssetsFn,
 } from './oak-adapter-types';
 
 /** Return type of createBaseMethods - all API methods without cache management. */
@@ -54,6 +56,7 @@ interface BaseMethods {
   readonly getAllThreads: ReturnType<typeof makeGetAllThreads>;
   readonly getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
   readonly getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
+  readonly getSubjectAssets: GetSubjectAssetsFn;
 }
 
 /** Create base client methods without caching. */
@@ -68,6 +71,7 @@ export function createBaseMethods(apiClient: OakApiClient): BaseMethods {
     getAllThreads: makeGetAllThreads(apiClient),
     getThreadUnits: makeGetThreadUnits(apiClient),
     getLessonsByKeyStageAndSubject: makeGetLessonsByKeyStageAndSubject(apiClient),
+    getSubjectAssets: makeGetSubjectAssets(apiClient),
   };
 }
 

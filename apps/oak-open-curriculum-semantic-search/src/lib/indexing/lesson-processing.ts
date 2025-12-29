@@ -30,6 +30,7 @@ export function addRollupSnippet(
  * @param unitSummaries - Map of unit summaries
  * @param lessonOps - Array to add lesson operations to
  * @param rollupSnippets - Map to add rollup snippets to
+ * @param hasVideo - Optional video availability (if false, transcript fetch skipped)
  * @returns Number of lessons skipped (0 or 1)
  */
 export async function processLessonForIndexing(
@@ -38,6 +39,7 @@ export async function processLessonForIndexing(
   unitSummaries: Map<string, SearchUnitSummary>,
   lessonOps: BulkOperations,
   rollupSnippets: Map<string, string[]>,
+  hasVideo?: boolean,
 ): Promise<number> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
   const result = await buildLessonDocFromAggregated(
@@ -51,6 +53,7 @@ export async function processLessonForIndexing(
     subject,
     ks,
     unitContextMap,
+    hasVideo,
   );
   if (result === null) {
     const unitSlug = Array.from(lesson.unitSlugs)[0] ?? 'unknown';
