@@ -1,18 +1,18 @@
 #!/usr/bin/env npx tsx
 /**
- * Live data ingestion CLI entry point. Orchestrates the ingestion
- * of Oak curriculum data into Elasticsearch.
+ * Live data ingestion CLI - canonical way to ingest curriculum data into Elasticsearch.
  *
- * Uses Result<T, E> pattern for explicit error handling and fail-fast behavior.
+ * Usage: `pnpm es:ingest-live --all --verbose`
  *
- * Run with: pnpm es:ingest-live -- --subject history --keystage ks2
+ * @see operations/ingestion/README.md for full documentation
+ * @see ADR-080, ADR-087 for architecture decisions
  */
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isErr } from '@oaknational/result';
 import { loadAppEnv } from './load-app-env.js';
-import { clearSdkCache } from '../../../adapters/oak-adapter-cached.js';
+import { clearSdkCache } from '../../../adapters/oak-adapter.js';
 import { createIngestHarness } from '../../indexing/ingest-harness.js';
 import {
   getIngestionErrorCollector,
@@ -20,7 +20,8 @@ import {
 } from '../../indexing/ingestion-error-collector.js';
 import { ingestLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
 import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
-import { createIngestionClient } from './ingest-client-factory.js';
+import { createIngestionClient, CacheRequiredError } from './ingest-client-factory.js';
+import { setIngestionMode } from '../../indexing/bulk-action-factory.js';
 import type { IngestionResult } from './ingest-output.js';
 import {
   printHeader,
@@ -105,9 +106,21 @@ async function handlePostIngestion(
 async function runIngestion(args: CliArgs): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
+
+  // Set ingestion mode based on --force flag
+  const ingestionMode = args.force ? 'force' : 'incremental';
+  setIngestionMode(ingestionMode);
+  ingestLogger.info('Ingestion mode configured', {
+    mode: ingestionMode,
+    behavior: args.force ? 'overwrite existing documents' : 'skip existing documents (resumable)',
+  });
+
   await handleCacheClearing(args);
 
-  const client = await createIngestionClient();
+  const client = await createIngestionClient({
+    bypassCache: args.bypassCache,
+    ignoreCached404: args.ignoreCached404,
+  });
 
   try {
     await withRateLimitMonitoring(client.rateLimitTracker, 30000, async () => {
@@ -190,6 +203,15 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
+  // Provide clear message for cache requirement errors
+  if (error instanceof CacheRequiredError) {
+    ingestLogger.error('CACHE REQUIRED - Ingestion cannot proceed', {
+      error: error.message,
+      hint: 'Start Redis with: docker compose up -d, or use --bypass-cache',
+    });
+    process.exit(1);
+  }
+
   ingestLogger.error('FATAL ERROR - Ingestion terminated', {
     error: error instanceof Error ? error.message : String(error),
     stack: error instanceof Error ? error.stack : undefined,

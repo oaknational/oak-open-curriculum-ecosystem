@@ -1,6 +1,6 @@
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 
 /**
  * Shape for objects during API response traversal.

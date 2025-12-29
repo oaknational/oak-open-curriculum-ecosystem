@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+/* eslint max-lines:[error, 300] -- JC: keeping the CLI args parsing simple and readable */
 /**
  * CLI argument parsing for live data ingestion. Handles
  * parsing of subject, keystage, and flag arguments with validation.
@@ -32,6 +33,9 @@ export interface CliArgs {
   readonly help: boolean;
   readonly clearCache: boolean;
   readonly all: boolean;
+  readonly bypassCache: boolean;
+  readonly force: boolean;
+  readonly ignoreCached404: boolean;
 }
 
 /** Type guard for valid key stage values. */
@@ -49,29 +53,41 @@ function isSearchIndexKind(value: string): value is SearchIndexKind {
   return SEARCH_INDEX_KINDS.some((kind) => kind === value);
 }
 
+/** Flag container for CLI argument parsing. */
+interface FlagContainer {
+  dryRun: boolean;
+  verbose: boolean;
+  help: boolean;
+  clearCache: boolean;
+  all: boolean;
+  bypassCache: boolean;
+  force: boolean;
+  ignoreCached404: boolean;
+}
+
+/** Flag names that can be set via CLI arguments. */
+type FlagName = keyof FlagContainer;
+
+/** Mapping of CLI arguments to flag names. */
+const FLAG_ARG_MAP: ReadonlyMap<string, FlagName> = new Map([
+  ['--help', 'help'],
+  ['-h', 'help'],
+  ['--dry-run', 'dryRun'],
+  ['--verbose', 'verbose'],
+  ['-v', 'verbose'],
+  ['--clear-cache', 'clearCache'],
+  ['--all', 'all'],
+  ['--bypass-cache', 'bypassCache'],
+  ['--force', 'force'],
+  ['-f', 'force'],
+  ['--ignore-cached-404', 'ignoreCached404'],
+]);
+
 /** Process a single flag argument (--help, --dry-run, --all, etc). */
-function processFlag(
-  arg: string,
-  flags: { dryRun: boolean; verbose: boolean; help: boolean; clearCache: boolean; all: boolean },
-): boolean {
-  if (arg === '--help' || arg === '-h') {
-    flags.help = true;
-    return true;
-  }
-  if (arg === '--dry-run') {
-    flags.dryRun = true;
-    return true;
-  }
-  if (arg === '--verbose' || arg === '-v') {
-    flags.verbose = true;
-    return true;
-  }
-  if (arg === '--clear-cache') {
-    flags.clearCache = true;
-    return true;
-  }
-  if (arg === '--all') {
-    flags.all = true;
+function processFlag(arg: string, flags: FlagContainer): boolean {
+  const flagName = FLAG_ARG_MAP.get(arg);
+  if (flagName !== undefined) {
+    flags[flagName] = true;
     return true;
   }
   return false;
@@ -169,7 +185,16 @@ export function parseArgs(args: readonly string[]): CliArgs {
   const subjects: SearchSubjectSlug[] = [];
   const keyStages: KeyStage[] = [];
   const indexes: SearchIndexKind[] = [];
-  const flags = { dryRun: false, verbose: false, help: false, clearCache: false, all: false };
+  const flags: FlagContainer = {
+    dryRun: false,
+    verbose: false,
+    help: false,
+    clearCache: false,
+    all: false,
+    bypassCache: false,
+    force: false,
+    ignoreCached404: false,
+  };
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -204,20 +229,32 @@ Options:
   --keystage <ks>     Key stage to ingest (can repeat, defaults to all: ks1-ks4)
   --index <kind>      Index to ingest (can repeat, defaults to all)
   --dry-run           Preview without writing to ES
+  --force, -f         Force overwrite existing documents (default: skip existing)
   --clear-cache       Clear SDK response cache before ingestion
+  --bypass-cache      Continue without Redis cache (default: fail if cache unavailable)
+  --ignore-cached-404 Ignore cached 404 responses (re-fetch transcripts that were missing)
   --verbose, -v       Show detailed output
   --help, -h          Show this help message
 
 Available Subjects: ${subjectList}
 
+Ingestion Modes:
+  - Incremental (default): Only creates new documents. Existing documents are skipped.
+    This is safe for resuming interrupted ingestion.
+  - Force (--force): Overwrites all documents, even if they already exist.
+    Use after schema changes or to refresh stale data.
+
 Examples:
-  --subject history --keystage ks2    # Single subject, single key stage
-  --subject maths --subject english   # Multiple subjects
-  --all                               # All subjects (full curriculum)
+  --subject history --keystage ks2    # Single subject, single key stage (incremental)
+  --subject maths --force             # Overwrite maths data
+  --all                               # All subjects (incremental, resumable)
+  --all --force                       # Full refresh of all data
 
 Environment: ELASTICSEARCH_URL, ELASTICSEARCH_API_KEY, OAK_API_KEY in .env.local
 
-Caching: Set SDK_CACHE_ENABLED=true with Redis running (docker compose up -d).
+Caching: By default, Redis cache is REQUIRED (ensures API data downloaded once).
+         Use --bypass-cache to allow uncached operation (not recommended for full ingestion).
+         Start Redis with: docker compose up -d
 `;
 }
 

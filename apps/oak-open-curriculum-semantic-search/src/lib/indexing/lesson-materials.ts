@@ -9,7 +9,7 @@
 
 import type { KeyStage, SearchLessonSummary, SearchSubjectSlug } from '../../types/oak';
 import { isLessonSummary } from '../../types/oak';
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import type { IngestionContext } from './ingestion-error-types';
 import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-sdk';
 import { getIngestionErrorCollector } from './ingestion-error-collector';
@@ -64,6 +64,15 @@ function buildErrorContext(lessonSlug: string, context?: FetchContext): Ingestio
   };
 }
 
+/**
+ * Check if an error should be treated as recoverable during ingestion.
+ * This is broader than SDK's isRecoverableError - we also treat network errors
+ * as recoverable since they are transient and shouldn't crash the entire ingestion.
+ */
+function isIngestionRecoverableError(error: Parameters<typeof isRecoverableError>[0]): boolean {
+  return isRecoverableError(error) || error.kind === 'network_error';
+}
+
 /** Handles transcript fetch result. Returns empty string on recoverable error, null on throw. */
 function handleTranscriptResult(
   result:
@@ -77,18 +86,24 @@ function handleTranscriptResult(
   }
 
   const error = result.error;
-  if (isRecoverableError(error)) {
+
+  // Treat transcripts as optional - network errors and other recoverable errors
+  // should not crash the ingestion, just skip the transcript
+  if (isIngestionRecoverableError(error)) {
     ingestLogger.debug(`Transcript unavailable for ${lessonSlug}`, {
       errorDetail: formatSdkError(error),
     });
+    if (error.kind === 'network_error') {
+      getIngestionErrorCollector().recordError(
+        `Network error fetching transcript: ${lessonSlug}`,
+        errorContext,
+      );
+    }
     return '';
   }
 
-  // Non-recoverable - propagate
+  // Non-recoverable (e.g., validation errors) - propagate
   getIngestionErrorCollector().recordError(formatSdkError(error), errorContext);
-  if (error.kind === 'network_error') {
-    throw error.cause;
-  }
   throw new Error(formatSdkError(error));
 }
 
@@ -103,9 +118,15 @@ function handleSummaryResult(
   if (!result.ok) {
     const error = result.error;
 
-    if (isRecoverableError(error)) {
+    // Treat all ingestion-recoverable errors the same - skip this lesson
+    if (isIngestionRecoverableError(error)) {
       if (error.kind === 'not_found') {
         getIngestionErrorCollector().record404(errorContext, 'getLessonSummary');
+      } else if (error.kind === 'network_error') {
+        getIngestionErrorCollector().recordError(
+          `Network error fetching summary: ${lessonSlug}`,
+          errorContext,
+        );
       } else {
         getIngestionErrorCollector().record500Error(errorContext, 'getLessonSummary');
       }
@@ -115,10 +136,8 @@ function handleSummaryResult(
       return null;
     }
 
+    // Non-recoverable (e.g., validation errors) - propagate
     getIngestionErrorCollector().recordError(formatSdkError(error), errorContext);
-    if (error.kind === 'network_error') {
-      throw error.cause;
-    }
     throw new Error(formatSdkError(error));
   }
 

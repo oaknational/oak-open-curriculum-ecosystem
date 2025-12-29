@@ -16,8 +16,7 @@ import type {
   SearchUnitSummary,
 } from '../types/oak';
 import type { Result } from '@oaknational/result';
-import type { RateLimitTracker, SdkFetchError } from '@oaknational/oak-curriculum-sdk';
-import type { GetAllThreadsFn, GetThreadUnitsFn } from './oak-adapter-sdk-threads';
+import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 
 // ============================================================================
 // Data Types
@@ -92,38 +91,5 @@ export type GetLessonsByKeyStageAndSubjectFn = (
   options?: LessonsPaginationOptions,
 ) => Promise<Result<readonly LessonGroupResponse[], SdkFetchError>>;
 
-// ============================================================================
-// Client Interface - All methods return Result<T, SdkFetchError>
-// ============================================================================
-
-/**
- * Oak SDK client interface.
- * All methods return `Result<T, SdkFetchError>` per ADR-088.
- * There are NO throwing variants.
- *
- * @remarks
- * See `docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`
- * for the full architectural decision record.
- */
-export interface OakSdkClient {
-  /** Fetches units by key stage and subject. Returns Result per ADR-088. */
-  getUnitsByKeyStageAndSubject: GetUnitsFn;
-  /** Fetches a lesson transcript. Returns Result per ADR-088. */
-  getLessonTranscript: GetTranscriptFn;
-  /** Fetches a lesson summary. Returns Result per ADR-088. */
-  getLessonSummary: GetLessonSummaryFn;
-  /** Fetches a unit summary. Returns Result per ADR-088. */
-  getUnitSummary: GetUnitSummaryFn;
-  /** Fetches subject sequences. Returns Result per ADR-088. */
-  getSubjectSequences: GetSubjectSequencesFn;
-  /** Fetches units in a sequence. Returns Result per ADR-088. */
-  getSequenceUnits: GetSequenceUnitsFn;
-  /** Fetches all threads. Returns Result per ADR-088. */
-  getAllThreads: GetAllThreadsFn;
-  /** Fetches units in a thread. Returns Result per ADR-088. */
-  getThreadUnits: GetThreadUnitsFn;
-  /** Fetches lessons by key stage and subject with pagination. Returns Result per ADR-088. */
-  getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
-  /** Rate limit tracker for API usage monitoring. */
-  rateLimitTracker: RateLimitTracker;
-}
+// NOTE: OakClient interface is defined in oak-adapter.ts
+// It includes all the above function types plus cache management methods.

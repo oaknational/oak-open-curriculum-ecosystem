@@ -17,11 +17,24 @@ import type { SearchSequenceFacetsIndexDoc } from '@oaknational/oak-curriculum-s
 
 /**
  * Elasticsearch bulk index action metadata.
+ * Uses 'index' which upserts (creates or updates).
  */
 export interface BulkIndexAction {
   readonly index: {
     readonly _index: string;
     readonly _id?: string;
+  };
+}
+
+/**
+ * Elasticsearch bulk create action metadata.
+ * Uses 'create' which only creates (fails if document exists).
+ * This is the safer option for incremental ingestion.
+ */
+export interface BulkCreateAction {
+  readonly create: {
+    readonly _index: string;
+    readonly _id: string;
   };
 }
 
@@ -38,7 +51,16 @@ export interface BulkDeleteAction {
 /**
  * Union of all action metadata types.
  */
-export type BulkAction = BulkIndexAction | BulkDeleteAction;
+export type BulkAction = BulkIndexAction | BulkCreateAction | BulkDeleteAction;
+
+function isBulkActionObject(value: unknown): value is BulkAction {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    ('index' in value || 'create' in value || 'delete' in value)
+  );
+}
 
 /**
  * Union of all document types that can be indexed.
@@ -68,7 +90,7 @@ export type BulkOperations = BulkOperationEntry[];
  * Type guard to check if a value is a bulk index action.
  */
 export function isBulkIndexAction(value: unknown): value is BulkIndexAction {
-  if (typeof value !== 'object' || value === null) {
+  if (!isBulkActionObject(value)) {
     return false;
   }
   if (!('index' in value)) {
@@ -82,6 +104,33 @@ export function isBulkIndexAction(value: unknown): value is BulkIndexAction {
     return false;
   }
   return typeof indexProp._index === 'string';
+}
+
+/**
+ * Type guard to check if a value is a bulk create action.
+ */
+export function isBulkCreateAction(value: unknown): value is BulkCreateAction {
+  if (!isBulkActionObject(value)) {
+    return false;
+  }
+  if (!('create' in value)) {
+    return false;
+  }
+  const createProp = value.create;
+  if (typeof createProp !== 'object' || createProp === null) {
+    return false;
+  }
+  if (!('_index' in createProp) || !('_id' in createProp)) {
+    return false;
+  }
+  return typeof createProp._index === 'string' && typeof createProp._id === 'string';
+}
+
+/**
+ * Type guard for any indexing action (index or create).
+ */
+export function isBulkIndexingAction(value: unknown): value is BulkIndexAction | BulkCreateAction {
+  return isBulkIndexAction(value) || isBulkCreateAction(value);
 }
 
 /**
@@ -109,8 +158,8 @@ export function isBulkDeleteAction(value: unknown): value is BulkDeleteAction {
 }
 
 /**
- * Type guard to check if a value is a bulk action (index or delete).
+ * Type guard to check if a value is a bulk action (index, create, or delete).
  */
 export function isBulkAction(value: unknown): value is BulkAction {
-  return isBulkIndexAction(value) || isBulkDeleteAction(value);
+  return isBulkIndexAction(value) || isBulkCreateAction(value) || isBulkDeleteAction(value);
 }

@@ -10,6 +10,7 @@ pnpm-lock.yaml
 CHANGELOG.md
 reference
 scratch
+.cursor
 
 # Generated files (DO NOT FORMAT)
 *.generated.ts

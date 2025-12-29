@@ -8,7 +8,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
 import { ingestLogger } from './logger';
 import { fetchPairData, buildPairDocuments, type PairBuildContext } from './index-oak-helpers';
@@ -75,8 +75,9 @@ export async function buildKeyStageOps(
 /**
  * Build operations for a single subject/keystage pair.
  *
- * Fetches unit data for the pair and builds all document types:
- * unit documents, lesson documents, and rollup documents.
+ * Fetches unit data for the pair using pattern-aware traversal
+ * and builds all document types: unit documents, lesson documents, and rollup documents.
+ * Returns empty array for combinations with no data.
  */
 async function buildOpsForPair(
   client: OakClient,
@@ -87,7 +88,12 @@ async function buildOpsForPair(
   unitContextMap: UnitContextMap,
   dataIntegrityReport: DataIntegrityReport,
 ): Promise<BulkOperations> {
-  const { units } = await fetchPairData(client, ks, subject);
+  const { units, skipped, skipReason } = await fetchPairData(client, ks, subject);
+
+  if (skipped) {
+    ingestLogger.debug('Skipping pair (no data)', { subject, keyStage: ks, reason: skipReason });
+    return [];
+  }
 
   const context: PairBuildContext = {
     client,

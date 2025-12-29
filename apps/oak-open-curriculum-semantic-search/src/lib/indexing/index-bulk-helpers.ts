@@ -18,13 +18,14 @@
  */
 
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import { createRollupDocument } from './document-transforms';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { UnitContextMap } from './ks4-context-builder';
 import type { BulkOperations } from './bulk-operation-types';
 import type { DataIntegrityReport } from './data-integrity-report';
 import { ingestLogger } from '../logger';
+import { createBulkAction } from './bulk-action-factory';
 import {
   createPhaseStartEvent,
   createPhaseEndEvent,
@@ -191,7 +192,7 @@ export function buildRollupDocuments(
       lessonsByUnit,
     });
     ops.push(
-      { index: { _index: resolvePrimarySearchIndexName('unit_rollup'), _id: summary.unitSlug } },
+      createBulkAction(resolvePrimarySearchIndexName('unit_rollup'), summary.unitSlug),
       rollupDoc,
     );
   }

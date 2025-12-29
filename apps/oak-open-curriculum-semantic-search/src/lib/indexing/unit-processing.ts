@@ -9,7 +9,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import { createUnitDocument } from './document-transforms';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { UnitContextMap } from './ks4-context-builder';
@@ -18,6 +18,7 @@ import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 import { formatSdkError } from '@oaknational/oak-curriculum-sdk';
 import { getIngestionErrorCollector } from './ingestion-error-collector';
 import { ingestLogger } from '../logger';
+import { createBulkAction } from './bulk-action-factory';
 
 /**
  * Processes a unit summary and creates index operations.
@@ -42,8 +43,8 @@ export async function processUnitSummary(
   }
 
   const summary = result.value;
-  const ops = [
-    { index: { _index: resolvePrimarySearchIndexName('units'), _id: summary.unitSlug } },
+  const ops: BulkOperations = [
+    createBulkAction(resolvePrimarySearchIndexName('units'), summary.unitSlug),
     createUnitDocument({
       summary,
       subject,

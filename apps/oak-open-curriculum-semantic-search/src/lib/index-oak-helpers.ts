@@ -1,11 +1,12 @@
+/* eslint-disable max-lines -- Cohesive module for Oak curriculum bulk operations */
 /**
  * Helper functions for building Oak curriculum bulk operations.
  * @see ADR-080 KS4 Metadata Denormalisation, @see ADR-083 Lesson Enumeration
  */
 
-import { generateCanonicalUrl, formatSdkError } from '@oaknational/oak-curriculum-sdk';
+import { generateCanonicalUrl } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
-import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
 import {
   buildSequenceFacetOps,
@@ -20,6 +21,7 @@ import { fetchAllLessonsByUnit } from './indexing/fetch-all-lessons';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import { processLessonForIndexing } from './indexing/lesson-processing';
 import { buildLessonsByUnit } from './indexing/lesson-aggregation';
+import { fetchUnitsPatternAware } from './indexing/pattern-aware-fetcher';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -36,32 +38,55 @@ export interface PairBuildContext {
 /** Unit type for pair data. */
 export type PairUnits = readonly { unitSlug: string; unitTitle: string }[];
 
-/** Fetch units for a subject/keystage pair. */
+/**
+ * Result of fetching pair data with pattern awareness.
+ */
+export interface PairDataResult {
+  readonly units: PairUnits;
+  readonly skipped: boolean;
+  readonly skipReason?: string;
+}
+
+/**
+ * Fetch units for a subject/keystage pair using pattern-aware traversal.
+ *
+ * This function uses the static pattern configuration to determine the
+ * correct API traversal strategy. Some combinations (e.g., French KS1)
+ * have no data and will be skipped.
+ *
+ * @param client - Oak API client
+ * @param ks - Key stage slug
+ * @param subject - Subject slug
+ * @returns Units and skip status
+ */
 export async function fetchPairData(
   client: OakClient,
   ks: KeyStage,
   subject: SearchSubjectSlug,
-): Promise<{ units: PairUnits }> {
-  ingestLogger.debug('Fetching units', { subject, keyStage: ks });
-  const result = await client.getUnitsByKeyStageAndSubject(ks, subject);
+): Promise<PairDataResult> {
+  ingestLogger.debug('Fetching units (pattern-aware)', { subject, keyStage: ks });
 
-  if (!result.ok) {
-    const error = result.error;
-    const message = formatSdkError(error);
-    ingestLogger.error('Failed to fetch units', { subject, keyStage: ks, error: message });
-    if (error.kind === 'network_error') {
-      throw error.cause;
-    }
-    throw new Error(message);
+  const result = await fetchUnitsPatternAware(client, subject, ks, ingestLogger);
+
+  if (result.skipped) {
+    ingestLogger.info('Skipping combination', {
+      subject,
+      keyStage: ks,
+      pattern: result.pattern.pattern,
+      reason: result.skipReason,
+    });
+    return { units: [], skipped: true, skipReason: result.skipReason };
   }
 
-  const units = result.value;
   ingestLogger.debug('Found units', {
     subject,
     keyStage: ks,
-    units: units.length,
+    units: result.units.length,
+    pattern: result.pattern.pattern,
+    traversal: result.pattern.traversal,
   });
-  return { units };
+
+  return { units: result.units, skipped: false };
 }
 
 /** Generate subject programmes URL, throws if unavailable. */

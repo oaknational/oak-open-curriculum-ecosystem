@@ -23,7 +23,7 @@ import { calculateTtlWithJitter } from './ttl-jitter.js';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 dotenvConfig({ path: resolve(thisDir, '../../../.env.local') });
 
-/** Cache key prefix - must match oak-adapter-cached.ts */
+/** Cache key prefix - must match oak-adapter.ts */
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
 
 interface ResetResult {

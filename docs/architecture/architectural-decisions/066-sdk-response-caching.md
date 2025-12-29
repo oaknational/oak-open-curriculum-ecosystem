@@ -88,12 +88,22 @@ Implement **optional Redis-based caching** for SDK API responses during ingestio
    Only cache per-resource endpoints (unit/lesson summaries, transcripts).
    List endpoints are called once per subject/keystage and don't benefit from caching.
 
-6. **404 Fallback Caching**
+6. **Negative Caching (404 Responses)**
 
    Many Oak resources are optional (e.g., transcripts for lessons without video).
-   When the API returns 404, cache the empty fallback value to avoid repeated
-   network calls. This is critical for achieving 100% cache hit rates - without
-   this, 404s would be re-fetched every run.
+   When the API returns 404, cache a sentinel value (`__NOT_FOUND__`) to avoid
+   repeated network calls. This is critical for achieving 100% cache hit rates -
+   without this, 404s would be re-fetched every run.
+
+   **TTL**: 404s use the same TTL as successful responses (default 7 days).
+   Most missing transcripts are legitimately absent (e.g., art/PE lessons without
+   video content) and will remain absent.
+
+   **Override**: Use `--ignore-cached-404` to re-fetch transcripts that were
+   previously 404. This is useful when new transcripts are added to existing
+   lessons and you want to update without clearing the entire cache.
+
+   See also: [Wikipedia: Negative cache](https://en.wikipedia.org/wiki/Negative_cache)
 
 ### Architecture
 

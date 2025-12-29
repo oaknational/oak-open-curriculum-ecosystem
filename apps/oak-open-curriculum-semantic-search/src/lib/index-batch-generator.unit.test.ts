@@ -11,17 +11,17 @@ import {
   type IngestionBatch,
   type BatchGeneratorOptions,
 } from './index-batch-generator';
-import type { OakSdkClient } from '../adapters/oak-adapter-sdk-types';
+import type { OakClient } from '../adapters/oak-adapter';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { RateLimitTracker } from '@oaknational/oak-curriculum-sdk';
 import { ok } from '@oaknational/result';
 
 /**
- * Creates a minimal mock OakSdkClient that returns empty results for all methods.
+ * Creates a minimal mock OakClient that returns empty results for all methods.
  * All methods return Result types per ADR-088.
  * This allows testing the generator's iteration logic without actual API calls.
  */
-function createMinimalMockClient(): OakSdkClient {
+function createMinimalMockClient(): OakClient {
   const rateLimitTracker: RateLimitTracker = {
     getStatus: () => ({
       limit: null,
@@ -48,6 +48,8 @@ function createMinimalMockClient(): OakSdkClient {
     getThreadUnits: async () => ok([]),
     getLessonsByKeyStageAndSubject: async () => ok([]),
     rateLimitTracker,
+    getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
+    disconnect: async () => Promise.resolve(),
   };
 }
 

@@ -11,29 +11,21 @@
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
-import type { OakClient, ThreadEntry } from '../../adapters/oak-adapter-sdk';
+import type { OakClient, ThreadEntry } from '../../adapters/oak-adapter';
 import type { SearchThreadIndexDoc } from '../../types/oak';
 import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';
 import { createThreadDocument } from './thread-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-sdk';
-
-/**
- * Elasticsearch bulk index action metadata.
- */
-interface BulkIndexAction {
-  readonly index: {
-    readonly _index: string;
-    readonly _id: string;
-  };
-}
+import type { BulkIndexAction, BulkCreateAction } from './bulk-operation-types';
+import { createBulkAction } from './bulk-action-factory';
 
 /**
  * A single bulk operation for thread indexing.
  * Bulk operations alternate between action metadata and document.
  */
-export type ThreadBulkOperation = BulkIndexAction | SearchThreadIndexDoc;
+export type ThreadBulkOperation = BulkIndexAction | BulkCreateAction | SearchThreadIndexDoc;
 
 /**
  * Thread data enriched with unit information.
@@ -138,12 +130,7 @@ export function buildThreadOps(threads: readonly EnrichedThread[]): ThreadBulkOp
       unitCount: thread.unitCount,
     });
 
-    const action: BulkIndexAction = {
-      index: {
-        _index: resolvePrimarySearchIndexName('threads'),
-        _id: thread.slug,
-      },
-    };
+    const action = createBulkAction(resolvePrimarySearchIndexName('threads'), thread.slug);
 
     ops.push(action, doc);
   }

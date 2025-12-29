@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { KeyStage, SearchUnitSummary, SearchSubjectSlug } from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 import { createSequenceFacetDocuments, type SequenceFacetSource } from './sequence-facets';
 import {
   buildSequenceFacetSources,

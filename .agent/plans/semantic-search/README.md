@@ -1,7 +1,8 @@
 # Semantic Search — Navigation Hub
 
-**Status**: Active — Tier 1 EXHAUSTED, blocking on full ingestion  
+**Status**: 🔄 ES reset and cache validation pending
 **Last Updated**: 2025-12-29
+**Index Coverage**: 0% (ES reset required before ingestion)
 
 ---
 
@@ -15,20 +16,83 @@ For new sessions, read in order:
 
 ---
 
-## ⚠️ Critical: Measure Every Change
+## 🔄 Current Status
+
+### Adapter Refactoring — Complete (2025-12-29)
+
+Successfully refactored adapter layer using TDD:
+
+| Metric             | Before    | After       |
+| ------------------ | --------- | ----------- |
+| `oak-adapter.ts`   | 593 lines | 197 lines   |
+| Lint errors        | 70        | 0           |
+| Quality gates      | Blocked   | All passing |
+
+**New files created**:
+
+- `sdk-cache/cache-wrapper.ts` — Cache wrappers with dependency injection
+- `sdk-api-methods.ts` — API method factories
+- `sdk-client-factory.ts` — Client creation helpers
+- `src/adapters/README.md` — Architecture documentation
+
+### Pending Before Ingestion
+
+| Task             | Why Needed                                      | Status    |
+| ---------------- | ----------------------------------------------- | --------- |
+| ES reset         | Fresh indices after code changes                | 📋 Pending |
+| Cache validation | Verify new `CacheOperations` interface works    | 📋 Pending |
+
+### Next Steps (In Order)
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# 1. Reset ES
+pnpm es:setup --reset
+
+# 2. Verify caching (dry run)
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
+
+# 3. Full ingestion
+pnpm es:ingest-live --all --verbose
+```
+
+---
+
+## Canonical Ingestion CLI
+
+**Entry point**: `src/lib/elasticsearch/setup/ingest-live.ts`
+
+| Flag                  | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `--all`               | Ingest all 17 subjects                           |
+| `--subject <slug>`    | Ingest specific subject(s), can be repeated      |
+| `--keystage <slug>`   | Filter by key stage                              |
+| `--index <kind>`      | Filter to specific index kind                    |
+| `--force`             | Overwrite existing documents                     |
+| `--bypass-cache`      | Skip Redis cache requirement                     |
+| `--ignore-cached-404` | Bypass cached 404s for transcripts               |
+| `--verbose`           | Detailed logging                                 |
+| `--dry-run`           | Preview without indexing                         |
+
+If interrupted, re-run the same command - incremental mode skips existing docs.
+
+---
+
+## ⚠️ Measurement Discipline
 
 **Every search-affecting change must be measured.**
 
-| Step | Action | Tool |
-|------|--------|------|
-| 1. Baseline | Record current metrics | `pnpm eval:per-category` |
-| 2. Hypothesis | Document expected impact | `experiments/*.experiment.md` |
-| 3. Implement | Make the change | — |
-| 4. Measure | Run evaluation | `pnpm eval:per-category` |
-| 5. Record | Document results | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) |
-| 6. Decide | Accept/reject based on evidence | — |
+| Step        | Action                     | Tool                         |
+| ----------- | -------------------------- | ---------------------------- |
+| 1. Baseline | Record current metrics     | `pnpm eval:per-category`     |
+| 2. Hypothesis | Document expected impact | `experiments/*.experiment.md`|
+| 3. Implement | Make the change           | —                            |
+| 4. Measure  | Run evaluation             | `pnpm eval:per-category`     |
+| 5. Record   | Document results           | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) |
+| 6. Decide   | Accept/reject based on evidence | —                       |
 
-**Framework**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)  
+**Framework**: [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 **Ground Truths**: [.agent/evaluations/](../../evaluations/README.md)
 
 ---
@@ -54,8 +118,8 @@ For new sessions, read in order:
 
 ## Foundation Documents (MANDATORY)
 
-| Document | Purpose |
-|----------|---------|
+| Document                   | Purpose                              |
+| -------------------------- | ------------------------------------ |
 | [rules.md](../../directives-and-memory/rules.md) | First Question: "Could it be simpler?" |
 | [testing-strategy.md](../../directives-and-memory/testing-strategy.md) | Test pyramid, TDD approach |
 | [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) | Generator is source of truth |
@@ -65,12 +129,11 @@ For new sessions, read in order:
 
 ## Key ADRs
 
-| ADR | Title | Purpose |
-|-----|-------|---------|
+| ADR        | Title                      | Purpose                |
+| ---------- | -------------------------- | ---------------------- |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Tier prioritisation |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground Truth Validation | Slug validation discipline |
-| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | B.5 implementation |
-| [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) | Complete Lesson Enumeration | Fix ingestion gap |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-Atomic Ingestion | Resilient ingestion |
 | [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | Curriculum Denormalization | API traversal patterns |
 
 ---
@@ -107,7 +170,7 @@ pnpm smoke:dev:stub
 ├── README.md                   # This file
 ├── active/                     # Currently blocking work
 │   ├── complete-data-indexing.md    # Milestone 1: Full curriculum ingestion
-│   ├── pattern-aware-ingestion.md   # Milestone 2: Complex traversal patterns
+│   ├── pattern-aware-ingestion.md   # Milestone 2: Complex traversal (COMPLETE)
 │   ├── synonym-quality-audit.md     # Milestone 3: Synonym quality
 │   └── es-native-enhancements.md    # Phase 3e: BM25 optimisation
 ├── planned/                    # Future work with specs
@@ -120,8 +183,8 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-| Document | Purpose |
-|----------|---------|
+| Document                  | Purpose                        |
+| ------------------------- | ------------------------------ |
 | [evaluations/README.md](../../evaluations/README.md) | **Evaluation framework home** |
 | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
 | [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md) | Details of slug corrections |
@@ -132,14 +195,19 @@ pnpm smoke:dev:stub
 
 ---
 
-## Current Metrics (Summary)
+## Current State (Summary — 2025-12-29)
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| Lesson Hard MRR | **0.614** | ≥0.45 | ✅ Tier 1 EXHAUSTED |
-| Lesson Std MRR | 0.963 | ≥0.92 | ✅ Met |
-| Unit Hard MRR | 0.806 | ≥0.50 | ✅ Met |
-| Unit Std MRR | 0.988 | ≥0.92 | ✅ Met |
+| Metric                  | Value            | Target   | Status               |
+| ----------------------- | ---------------- | -------- | -------------------- |
+| Adapter refactoring     | ✅ Complete      | —        | ✅ 593→197 lines     |
+| Pattern-aware traversal | ✅ Complete      | —        | ✅ All 7 patterns    |
+| Quality gates           | ✅ Passing       | —        | ✅ All 11 green      |
+| ES reset                | 📋 Pending       | ✅       | 📋 Need to run       |
+| Cache validation        | 📋 Pending       | ✅       | 📋 Verify new interface |
+| Redis cache             | 12,039 entries   | —        | ⚠️ Verify accessible |
+| Lessons indexed         | 0                | 12,316   | 📋 Pending           |
+
+**Next Step**: Reset ES, verify caching, then run ingestion
 
 **See**: [current-state.md](current-state.md) for full details.
 
@@ -157,3 +225,16 @@ Query → [BM25 Content] ─┐
 ```
 
 **See**: [archive/completed/four-retriever-implementation.md](archive/completed/four-retriever-implementation.md) for implementation details.
+
+### Adapter Architecture (Refactored 2025-12-29)
+
+```text
+oak-adapter.ts (Public API)
+    ├── sdk-client-factory.ts (Client creation)
+    │       ├── sdk-api-methods.ts (API method factories)
+    │       └── sdk-cache/cache-wrapper.ts (Caching with DI)
+    ├── oak-adapter-threads.ts (Thread-specific methods)
+    └── oak-adapter-types.ts (Type definitions)
+```
+
+**See**: [src/adapters/README.md](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for details.

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- Cohesive helper module for batch generation */
 /**
  * Helper functions for batch index generation.
  *
@@ -9,7 +10,7 @@
 
 import { isKeyStage, isSubject, formatSdkError } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import { ingestLogger } from './logger';
@@ -179,7 +180,19 @@ async function buildSequenceSourcesWithEvents(
 // ============================================================================
 
 /**
+ * Result of building operations for a subject/keystage pair.
+ */
+export interface BuildOpsForPairResult {
+  readonly operations: BulkOperations;
+  readonly skipped: boolean;
+  readonly skipReason?: string;
+}
+
+/**
  * Build operations for a single subject/keystage pair.
+ *
+ * Uses pattern-aware fetching to handle different curriculum structures.
+ * Some combinations have no data and will be skipped.
  */
 export async function buildOpsForPair(
   client: OakClient,
@@ -187,9 +200,13 @@ export async function buildOpsForPair(
   subject: SearchSubjectSlug,
   subjectContext: SubjectContext,
   dataIntegrityReport: DataIntegrityReport,
-): Promise<BulkOperations> {
+): Promise<BuildOpsForPairResult> {
   const { subjectSequences, sequenceSources, unitContextMap } = subjectContext;
-  const { units } = await fetchPairData(client, keyStage, subject);
+  const { units, skipped, skipReason } = await fetchPairData(client, keyStage, subject);
+
+  if (skipped) {
+    return { operations: [], skipped: true, skipReason };
+  }
 
   const context: PairBuildContext = {
     client,
@@ -201,7 +218,8 @@ export async function buildOpsForPair(
     dataIntegrityReport,
   };
 
-  return buildPairDocuments(context, units);
+  const operations = await buildPairDocuments(context, units);
+  return { operations, skipped: false };
 }
 
 // ============================================================================

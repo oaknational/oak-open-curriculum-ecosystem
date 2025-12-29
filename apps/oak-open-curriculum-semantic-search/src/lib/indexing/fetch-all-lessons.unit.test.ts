@@ -15,7 +15,7 @@ import {
   fetchAllLessonsByUnit,
   type GetLessonsFn,
 } from './fetch-all-lessons';
-import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter-sdk';
+import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { ok, type Result } from '@oaknational/result';
 import type { SdkFetchError } from '@oaknational/oak-curriculum-sdk';

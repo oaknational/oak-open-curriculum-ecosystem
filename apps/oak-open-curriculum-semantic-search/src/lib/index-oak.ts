@@ -12,7 +12,7 @@
 
 import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
 import {
   buildSequenceFacetSources,

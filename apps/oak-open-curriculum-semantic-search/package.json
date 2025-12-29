@@ -21,8 +21,6 @@
     "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
     "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
     "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
-    "ingest:all": "tsx operations/ingestion/ingest-all-combinations.ts",
-    "ingest:progress": "tsx operations/ingestion/check-progress.ts",
     "ingest:verify": "tsx operations/ingestion/verify-ingestion.ts",
     "eval:diagnostic": "tsx evaluation/analysis/analyze-diagnostic-queries.ts",
     "eval:per-category": "tsx evaluation/analysis/analyze-per-category.ts",

@@ -5,7 +5,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { OakClient } from '../adapters/oak-adapter-sdk';
+import type { OakClient } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { SequenceFacetProcessingMetrics } from './indexing/sequence-facet-index';

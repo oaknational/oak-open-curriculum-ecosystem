@@ -4,36 +4,51 @@ overview: Phase 0 review of all plans and data, then implement pattern-aware cur
 todos:
   - id: phase0-plans
     content: Audit all plans in .agent/plans/semantic-search/ for accuracy and relevance
-    status: pending
+    status: completed
   - id: phase0-code
     content: Review ingestion code architecture to understand current capabilities and gaps
-    status: pending
+    status: completed
   - id: phase0-bulk
     content: Verify bulk download data (30 files, lesson counts, structure)
-    status: pending
+    status: completed
   - id: phase0-api
     content: Verify API structure via MCP tools for each pattern type
-    status: pending
+    status: completed
   - id: phase0-es
     content: Document current Elasticsearch state (indices, counts, gaps)
-    status: pending
+    status: completed
   - id: phase0-update
     content: Update all plan documents with verified findings
-    status: pending
+    status: completed
   - id: phase1-patterns
     content: Implement static pattern configuration for 68 subject x keystage combinations
-    status: pending
+    status: completed
   - id: phase1-traversal
     content: Implement pattern-aware traversal in ingestion code
-    status: pending
+    status: completed
   - id: phase1-validation
     content: Add contract validation for pattern detection
-    status: pending
+    status: completed
   - id: phase1-gates
     content: Run all quality gates after Phase 1
+    status: completed
+  - id: phase2-adapter-refactor
+    content: Refactor oak-adapter.ts - extract caching to sdk-cache/, reduce complexity
+    status: completed
+  - id: phase2-gates-pre
+    content: Run all quality gates after adapter refactoring
+    status: completed
+  - id: phase2-api-efficiency
+    content: Implement efficient API traversal - use bulk assets endpoint to check video availability
     status: pending
   - id: phase2-reset
     content: Reset Elasticsearch (delete indices, recreate mappings)
+    status: pending
+  - id: phase2-cache-validation
+    content: Verify caching still works after refactoring (new CacheOperations interface)
+    status: pending
+  - id: phase2-es-upsert
+    content: Validate ES upserting - only index if doc doesn't exist
     status: pending
   - id: phase2-ingest
     content: Run full curriculum ingestion (all 17 subjects)
@@ -76,106 +91,85 @@ todos:
 
 The current ingestion pipeline uses a single traversal strategy that fails for complex curriculum patterns. The documented metrics and ES state are stale. A thorough review followed by clean-slate implementation is required.---
 
-## Phase 0: Thorough Review and Plan Validation
+## ✅ Phase 0: Thorough Review and Plan Validation — COMPLETE
 
-**Principle**: Assume nothing, verify everything.
+All plan documents audited and updated. Bulk download data verified (30 files, ~12,316 unique lessons). API structure verified via MCP tools. ES state documented.---
 
-### 0.1 Review Existing Plans
+## ✅ Phase 1: Pattern-Aware Ingestion Implementation — COMPLETE
 
-Audit all files in `.agent/plans/semantic-search/`:
+### Implemented Files
 
-- [roadmap.md](.agent/plans/semantic-search/roadmap.md) - Is the milestone order correct?
-- [current-state.md](.agent/plans/semantic-search/current-state.md) - What is actually stale?
-- [search-acceptance-criteria.md](.agent/plans/semantic-search/search-acceptance-criteria.md) - Still valid?
-- `active/` subdirectory - Which plans are actually active vs blocked?
-- `planned/` subdirectory - Are these still relevant?
+| File | Purpose || ----------------------------------------------- | ----------------------------------------------------- || `src/lib/indexing/curriculum-pattern-config.ts` | Static config for 68 subject × key stage combinations || `src/lib/indexing/pattern-aware-fetcher.ts` | Pattern-aware data fetching || `src/lib/indexing/sequence-unit-extraction.ts` | Complex unit extraction || `src/lib/indexing/pattern-config-validator.ts` | Startup validation || `src/lib/indexing/bulk-action-factory.ts` | Incremental vs force mode |
 
-Cross-reference with archive at `.agent/plans/archive/semantic-search-archive-dec25/` for context.
+### All 7 Patterns Implemented
 
-### 0.2 Review Code Architecture
+| Pattern | Subjects || --------------------- | --------------------- || `simple-flat` | All KS1-KS3, some KS4 || `tier-variants` | Maths KS4 || `exam-subject-split` | Science KS4 || `exam-board-variants` | 12 subjects KS4 || `unit-options` | 6 subjects KS4 || `no-ks4` | Cooking-nutrition || `empty` | Edge cases |---
 
-Audit key ingestion code:
+## 🔄 Phase 2: ES Reset and Complete Ingestion — IN PROGRESS
 
-- [index-batch-generator.ts](apps/oak-open-curriculum-semantic-search/src/lib/index-batch-generator.ts)
-- [index-batch-helpers.ts](apps/oak-open-curriculum-semantic-search/src/lib/index-batch-helpers.ts)
-- [ks4-context-builder.ts](apps/oak-open-curriculum-semantic-search/src/lib/indexing/ks4-context-builder.ts)
-- [fetch-all-lessons.ts](apps/oak-open-curriculum-semantic-search/src/lib/indexing/fetch-all-lessons.ts)
+### ✅ 2.1 Adapter Refactoring — COMPLETE (2025-12-29)
 
-Questions to answer:
+Reduced `oak-adapter.ts` from 593 lines to 197 lines using TDD:| New File | Purpose | Lines || ---------------------------- | ------------------------------------------- | ----- || `sdk-cache/cache-wrapper.ts` | `withCache`, `withCacheAndNegative` with DI | 248 || `sdk-api-methods.ts` | API method factories | 143 || `sdk-client-factory.ts` | Client creation helpers | 141 |All 22 adapter tests passing. All 11 quality gates passing.**Key change**: Caching now uses `CacheOperations` interface for dependency injection.
 
-- Does the code already handle any patterns correctly?
-- What's working vs what's broken?
-- Where does pattern-aware logic need to be added?
+### 📋 2.2 Reset Elasticsearch — PENDING
 
-### 0.3 Verify Bulk Download Data
+**Action Required**: Delete all `oak_*` indices and recreate with current mappings.
 
-Audit `reference/bulk_download_data/`:
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup --reset
+```
 
-- Confirm all 30 files present (17 subjects x primary/secondary, minus exceptions)
-- Verify lesson counts match [curriculum-structure-analysis.md](.agent/analysis/curriculum-structure-analysis.md)
-- Confirm RSHE-PSHE has no bulk file (API only)
-- Document any discrepancies
 
-### 0.4 Verify API Structure via MCP Tools
 
-Use OOC MCP tools to confirm documented patterns:
+### 📋 2.3 Cache Validation — PENDING (Re-verification Required)
 
-- `get-subjects` - Verify 17 subjects with correct sequences
-- `get-sequences-units` for each pattern type:
-- `maths-secondary` year 10 - Confirm `tiers[]` structure
-- `science-secondary-aqa` year 10 - Confirm `examSubjects[]` structure
-- `english-secondary-aqa` year 10 - Confirm `unitOptions[]` structure
-- Verify Science KS4 returns empty via `get-key-stages-subject-lessons`
+**Why re-verification needed**: The adapter refactoring introduced a new `CacheOperations` interface that abstracts Redis. Need to verify:
 
-### 0.5 Document Current ES State
+1. **Redis connection** still works via `createRedisClient()`
+2. **Cache reads** work via new `withCache()` wrapper
+3. **Cache writes** work with TTL jitter
+4. **Negative caching** works via `withCacheAndNegative()` for 404s
+5. **`--bypass-cache` flag** still works
+6. **`--ignore-cached-404` flag** still works
 
-Query Elasticsearch directly to understand current state:
+**Verification Commands**:
 
-- Which indices exist?
-- Document counts per subject/keystage
-- What data is present vs missing?
+```bash
+# Check Redis connection and cache status
+cd apps/oak-open-curriculum-semantic-search
 
-### 0.6 Update Plans with Findings
+# Test with cache enabled (should use Redis)
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
 
-Update all plan documents with verified information:
+# Test with cache bypassed
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --bypass-cache --dry-run
 
-- Mark stale sections explicitly
-- Correct any outdated metrics
-- Update roadmap milestones if needed
-- Ensure all plans reference correct file paths
+# Test ignoring cached 404s
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --ignore-cached-404 --dry-run
+```
 
----
 
-## Phase 1: Pattern-Aware Ingestion Implementation
 
-### 1.1 Implement Static Pattern Configuration
+### 📋 2.4 ES Upsert Validation — PENDING
 
-Create static configuration for all 68 subject x key stage combinations based on [ADR-080](docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md).**Key patterns**:| Pattern | Subjects | Traversal ||---------|----------|-----------|| simple-flat | All KS1-KS3, some KS4 | `/key-stages/{ks}/subject/{subject}/lessons` || tier-variants | Maths KS4 | `sequences/{seq}/units` with `tiers[]` || exam-subject-split | Science KS4 | `examSubjects[] -> tiers[]` || exam-board-variants | 12 subjects KS4 | Multiple sequence slugs || unit-options | 6 subjects KS4 | Handle `unitOptions[]` || no-ks4 | Cooking-nutrition | Skip KS4 |
+Verify incremental mode (ES `create` action) still works:
 
-### 1.2 Implement Pattern-Aware Traversal
+- Default mode should fail if doc exists
+- `--force` flag should use ES `index` action (overwrite)
 
-Modify ingestion code to:
+### 📋 2.5 Full Curriculum Ingestion — PENDING
 
-1. Detect pattern from static config
-2. Route to appropriate traversal function
-3. Validate response matches expected pattern
-4. Aggregate metadata correctly
+**Command**:
 
-### 1.3 Add Contract Validation
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:ingest-live --all --verbose
+```
 
-Implement startup validation that samples each unique pattern.---
+**Expected**: ~12,316 unique lessons across 17 subjects.---
 
-## Phase 2: ES Reset and Complete Ingestion
-
-### 2.1 Reset Elasticsearch
-
-Delete all existing indices and recreate with current mappings.
-
-### 2.2 Full Curriculum Ingestion
-
-Ingest all 17 subjects across all key stages.Expected: ~12,316 unique lessons, ~400+ units.---
-
-## Phase 3: Deep Verification
+## Phase 3: Deep Verification — PENDING
 
 ### 3.1 Per-Subject Count Verification
 
@@ -185,17 +179,17 @@ Compare counts from three independent sources:
 2. Live API queries (via OOC MCP tools)
 3. ES aggregation queries
 
-Acceptable variance: +/- 3 lessons per subject.
+Acceptable variance: ±3 lessons per subject.
 
 ### 3.2 Pattern-Specific Verification
 
-| Pattern | Verification ||---------|-------------|| Tier variants | Maths: Both tiers indexed with correct `tiers[]` || Exam subjects | Science: All 4 exam subjects present || Exam boards | Correct aggregation across AQA/Edexcel/OCR || Unit options | Lessons with multiple unit associations |
+| Pattern | Verification || ------------- | ------------------------------------------------ || Tier variants | Maths: Both tiers indexed with correct `tiers[]` || Exam subjects | Science: All 4 exam subjects present || Exam boards | Correct aggregation across AQA/Edexcel/OCR || Unit options | Lessons with multiple unit associations |
 
 ### 3.3 Search Quality Baseline
 
 Establish new baselines with `pnpm eval:per-category` and `pnpm eval:diagnostic`.Update [current-state.md](.agent/plans/semantic-search/current-state.md).---
 
-## Phase 4: SDK/CLI Extraction
+## Phase 4: SDK/CLI Extraction — PENDING
 
 Only after Phase 3 complete with all quality gates passing.
 
@@ -247,4 +241,4 @@ All gates must pass before proceeding.---
 
 ## Success Criteria
 
-| Criterion | Target ||-----------|--------|| Plans reviewed and updated | All in `.agent/plans/semantic-search/` || Lessons indexed | ~12,316 || Subjects complete | 17/17 || Pattern coverage | All 7 patterns || Verification sources agree | Bulk, API, ES || Quality gates | All pass || SDK extracted | Retrieval + Admin + Observability |
+| Criterion | Target | Status || ----------------------------- | -------------------------------------- | ----------- || Plans reviewed and updated | All in `.agent/plans/semantic-search/` | ✅ Complete || Pattern-aware traversal | All 7 patterns | ✅ Complete || Adapter refactoring | Complexity under limits | ✅ Complete || Quality gates (post-refactor) | All 11 passing | ✅ Complete || ES reset | All indices recreated | 📋 Pending || Cache validation | Verify new CacheOperations works | 📋 Pending || Incremental ingestion | ES `create` action by default | 📋 Pending || Lessons indexed | ~12,316 | 📋 Pending |

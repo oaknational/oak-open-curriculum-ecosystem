@@ -11,7 +11,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
-import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter-sdk';
+import type { LessonGroupResponse, LessonsPaginationOptions } from '../../adapters/oak-adapter';
 import type { Result } from '@oaknational/result';
 import { type SdkFetchError, formatSdkError } from '@oaknational/oak-curriculum-sdk';
 import {
@@ -122,7 +122,7 @@ export async function fetchAllLessonsWithPagination(
  *
  * @example
  * ```typescript
- * const client = createOakSdkClient();
+ * const client = await createOakClient();
  * const unitsResult = await client.getUnitsByKeyStageAndSubject('ks4', 'maths');
  * if (!unitsResult.ok) throw new Error(formatSdkError(unitsResult.error));
  * const unitSlugs = unitsResult.value.map(u => u.unitSlug);

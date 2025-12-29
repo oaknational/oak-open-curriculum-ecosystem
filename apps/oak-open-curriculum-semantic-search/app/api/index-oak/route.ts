@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
 import type { KeyStage, SearchSubjectSlug } from '../../../src/types/oak';
-import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
+import { createOakClient } from '../../../src/adapters/oak-adapter';
 import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { esBulk } from '../../../src/lib/elastic-http';
 import { getRateLimit } from '../../../src/lib/rate-limit';
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     /* ignore */
   }
 
-  const client = createOakSdkClient();
+  const client = await createOakClient();
 
   const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
   const subjects: SearchSubjectSlug[] = SUBJECTS.filter(isSubject);

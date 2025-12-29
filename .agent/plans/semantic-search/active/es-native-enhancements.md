@@ -17,6 +17,10 @@ Phase 3e enhances BM25 lexical search through native Elasticsearch features to i
 
 **Goal**: Improve BM25 contribution so that hybrid search consistently outperforms single ELSER on all query types.
 
+### Further Reading
+
+See also [advanced-features.md](../planned/future/advanced-features.md) for further reading.
+
 ---
 
 ## Results Summary

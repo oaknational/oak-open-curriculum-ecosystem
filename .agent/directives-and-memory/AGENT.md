@@ -59,11 +59,12 @@ pnpm build          # Build
 pnpm type-check     # Type check
 pnpm format:root    # Format code
 pnpm markdownlint:root    # Markdown lint
-pnpm lint -- --fix  # Lint
+pnpm lint:fix       # Lint
 pnpm test           # Unit and integration tests
 pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests
-pnpm dev:smoke      # Local smoke tests
+pnpm test:e2e:built # E2E tests on built app
+pnpm smoke:dev:stub # Local smoke tests
 
 # All in one command
 pnpm check          # Clean all build products, then run all of the above
@@ -75,10 +76,10 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 
 ### Structure
 
-- `apps/` – runnable MCP servers
+- `apps/` – runnable apps that provide services to users
 - `packages/libs/` – libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 - `packages/sdks/` – SDKs
-- `packages/core/` – Not currently used, but can be used for shared, low-level code
+- `packages/core/` – Shared, low-level code
 
 ## Remember
 

@@ -6,7 +6,7 @@
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */
 
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
 import { ok, err } from '@oaknational/result';
@@ -57,6 +57,9 @@ function createFixtureClient(data: FixtureData): OakClient {
     getThreadUnits: async () => ok([]),
     // Lessons by key stage/subject - use fixture data
     getLessonsByKeyStageAndSubject: makeFixtureLessonsByKeyStageAndSubjectFn(data),
+    // Cache methods (no-op for fixture client)
+    getCacheStats: () => ({ hits: 0, misses: 0, connected: false }),
+    disconnect: async () => Promise.resolve(),
   };
 }
 

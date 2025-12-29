@@ -88,6 +88,14 @@ Domain knowledge enhancement using curriculum ontology.
 
 ## Phase 12: Knowledge Graph (5-6 days)
 
+**References**:
+
+each requiring further research and investigation.
+
+- [knowledge-graph-integration-opportunities.md](../../../../research/semantic-search/knowledge-graph-integration-opportunities.md) - Knowledge graph integration opportunities
+- [enhanced-search-elasticsearch-neo4j-with-links.md](../../../../research/elasticsearch/graphs/enhanced-search-elasticsearch-neo4j-with-links.md) - Enhanced search with Elasticsearch Serverless and Neo4j Knowledge Graph
+- [elastic-cloud-graph-search.md](../../../../research/elasticsearch/graphs/elastic-cloud-graph-search.md) - Elastic Cloud Graph and Relationship Search Capabilities using Elasticsearch Serverless features (Graph + “Graph-adjacent” features)
+
 ### Features
 
 #### 1. Triple Store (`oak_curriculum_graph`)

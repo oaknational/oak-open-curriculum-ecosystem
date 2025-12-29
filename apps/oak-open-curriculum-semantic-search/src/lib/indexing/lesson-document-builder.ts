@@ -13,7 +13,7 @@ import type {
   SearchSubjectSlug,
   SearchUnitSummary,
 } from '../../types/oak';
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import { createLessonDocument, normaliseYears, type LessonUnitInfo } from './document-transforms';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
@@ -21,6 +21,7 @@ import { ensureUnitSummaryMatchesContext, fetchLessonMaterials } from './index-b
 import { ingestLogger } from '../logger';
 import type { UnitContextMap } from './ks4-context-builder';
 import type { BulkOperationEntry, BulkAction } from './bulk-operation-types';
+import { createBulkAction } from './bulk-action-factory';
 
 /**
  * Aggregated lesson with all unit relationships.
@@ -115,12 +116,7 @@ async function buildLessonDocEntry(
     transcript: materials.transcript,
   });
 
-  const operation = {
-    index: {
-      _index: resolvePrimarySearchIndexName('lessons'),
-      _id: lesson.lessonSlug,
-    },
-  };
+  const operation = createBulkAction(resolvePrimarySearchIndexName('lessons'), lesson.lessonSlug);
 
   return { operation, document, snippet };
 }

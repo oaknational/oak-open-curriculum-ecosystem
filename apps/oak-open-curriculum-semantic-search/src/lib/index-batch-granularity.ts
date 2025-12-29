@@ -10,7 +10,7 @@
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
-import type { OakClient } from '../adapters/oak-adapter-sdk';
+import type { OakClient } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import { createDataIntegrityCollector } from './indexing/data-integrity-report';
 import { ingestLogger } from './logger';
@@ -46,6 +46,7 @@ export async function* yieldCurriculumBatches(
 }
 
 /** Yields one batch per (subject, keyStage) pair. */
+// eslint-disable-next-line max-lines-per-function -- Generator requires sequential flow
 async function* yieldSubjectKeyStageGranularity(
   client: OakClient,
   subjects: readonly SearchSubjectSlug[],
@@ -74,7 +75,7 @@ async function* yieldSubjectKeyStageGranularity(
       });
 
       const dataIntegrityReport = createDataIntegrityCollector();
-      const operations = await buildOpsForPair(
+      const result = await buildOpsForPair(
         client,
         keyStage,
         subject,
@@ -82,7 +83,23 @@ async function* yieldSubjectKeyStageGranularity(
         dataIntegrityReport,
       );
 
-      yield { kind: 'curriculum', subject, keyStage, operations, dataIntegrityReport };
+      // Skip combinations with no data (pattern-aware)
+      if (result.skipped) {
+        ingestLogger.debug('Skipping batch (no data)', {
+          subject,
+          keyStage,
+          reason: result.skipReason,
+        });
+        continue;
+      }
+
+      yield {
+        kind: 'curriculum',
+        subject,
+        keyStage,
+        operations: result.operations,
+        dataIntegrityReport,
+      };
     }
   }
 }
@@ -109,14 +126,17 @@ async function* yieldSubjectGranularity(
     const allOps: BulkOperations = [];
 
     for (const keyStage of keyStages) {
-      const operations = await buildOpsForPair(
+      const result = await buildOpsForPair(
         client,
         keyStage,
         subject,
         subjectContext,
         dataIntegrityReport,
       );
-      allOps.push(...operations);
+      // Skip combinations with no data (pattern-aware)
+      if (!result.skipped) {
+        allOps.push(...result.operations);
+      }
     }
 
     yield { kind: 'curriculum', subject, keyStage: null, operations: allOps, dataIntegrityReport };
@@ -139,14 +159,17 @@ async function* yieldAllGranularity(
     const subjectContext = await buildSubjectContext(client, subject, onSequenceFacetProcessed);
 
     for (const keyStage of keyStages) {
-      const operations = await buildOpsForPair(
+      const result = await buildOpsForPair(
         client,
         keyStage,
         subject,
         subjectContext,
         dataIntegrityReport,
       );
-      allOps.push(...operations);
+      // Skip combinations with no data (pattern-aware)
+      if (!result.skipped) {
+        allOps.push(...result.operations);
+      }
     }
   }
 

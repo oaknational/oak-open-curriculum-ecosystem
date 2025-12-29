@@ -1,272 +1,303 @@
-# Semantic Search — Complete Curriculum Ingestion & Evaluation
+# Semantic Search — Current Work
 
-**Status**: BLOCKED — Complete ES ingestion required before evaluation work  
-**Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)  
-**Last Updated**: 2025-12-28
-
----
-
-## 🎯 PRIMARY OBJECTIVE
-
-**Complete Elasticsearch ingestion of ALL 17 subjects to enable comprehensive ground truth and benchmark evaluation across the full UK curriculum.**
-
-Current state: Only 6 of 17 subjects are in ES. This blocks all evaluation and synonym validation work.
+**Status**: 🔄 Efficient API traversal implementation required
+**Last Updated**: 2025-12-29
+**Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)
 
 ---
 
-## 📊 ES vs BULK DOWNLOAD COMPARISON (2025-12-28)
+## 🎯 IMMEDIATE NEXT STEP
 
-Reference data: `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/`
+### 1. Implement Efficient API Traversal (BLOCKING)
 
-### ⚠️ IMPORTANT: Bulk Download Contains Tier Duplicates
+**Plan**: [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md)
 
-The bulk download contains **duplicate entries** for lessons in multiple tiers (foundation/higher) WITHOUT the tier discriminator field. Our ingestion correctly aggregates these into single documents with `tiers: ["foundation", "higher"]`.
+The current ingestion makes unnecessary API calls — fetching transcripts for lessons that don't have videos (e.g., computing lessons with interactive content). This causes:
 
-**Example**: Maths secondary bulk = 1,235 entries → 862 unique lessons (373 tier duplicates).
+- ~50% wasted API calls
+- Many 404 errors polluting logs and cache
+- Slower ingestion than necessary
 
-See [upstream API wishlist](../../plans/external/ooc-api-wishlist/00-overview-and-known-issues.md) → Issue 2 for fix request.
+**The fix**: Use bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to check video availability BEFORE fetching transcripts.
 
-### Target Counts (Unique Lessons)
+**Tasks**:
 
-| Subject | ES Count | Bulk Raw | Unique Target | Dups | Status |
-|---------|----------|----------|---------------|------|--------|
-| maths | 1,934 | 2,307 | 1,934 | 373 | ✅ Complete |
-| english | 1,521 | 2,551 | 2,525 | 26 | ⚠️ Missing ~1,004 |
-| art | 537 | 403 | 403 | 0 | ✅ Complete (ES has unitOptions) |
-| computing | 528 | 528 | 528 | 0 | ✅ Complete |
-| design-technology | 426 | 360 | 360 | 0 | ✅ Complete (ES has unitOptions) |
-| citizenship | 318 | 318 | 318 | 0 | ✅ Complete |
-| cooking-nutrition | 108 | 108 | 108 | 0 | ✅ Complete |
-| science | 679 | 1,278 | 1,277 | 1 | ⚠️ KS4 needs sequences endpoint |
-| **physical-education** | 0 | 992 | 992 | 0 | ❌ NOT INGESTED |
-| **geography** | 0 | 750 | 683 | 67 | ❌ NOT INGESTED |
-| **history** | 0 | 684 | 684 | 0 | ❌ NOT INGESTED |
-| **religious-education** | 0 | 612 | 612 | 0 | ❌ NOT INGESTED |
-| **french** | 0 | 522 | 522 | 0 | ❌ NOT INGESTED |
-| **spanish** | 0 | 525 | 525 | 0 | ❌ NOT INGESTED |
-| **music** | 0 | 434 | 434 | 0 | ❌ NOT INGESTED |
-| **german** | 0 | 411 | 411 | 0 | ❌ NOT INGESTED |
-| rshe-pshe | 0 | ? | ? | — | ❌ NOT INGESTED (no bulk file) |
+1. Audit current API call patterns during dry-run
+2. Test bulk assets endpoint via MCP tools
+3. Implement `buildVideoAvailabilityMap()` function
+4. Update ingestion to skip transcript fetch for no-video lessons
+5. Run quality gates
 
-**Total in ES**: ~5,372 lessons  
-**Total Unique Target**: ~12,316 lessons  
-**Coverage**: ~44%
+**Only after this is complete**, proceed to:
 
-**Duplicate causes**: Maths (tier variants), English/Geography (unit options), Science (cross-unit)
-
-### Verify ES State
+### 2. Reset Elasticsearch
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-source .env.local && curl -s -H "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
-  "$ELASTICSEARCH_URL/oak_lessons/_search" -H "Content-Type: application/json" \
-  -d '{"size": 0, "aggs": {"subjects": {"terms": {"field": "subject_slug", "size": 50}}}}' | jq '.aggregations.subjects.buckets'
+pnpm es:setup --reset
 ```
 
----
+### 3. Verify Caching Still Works
 
-## 🚀 IMMEDIATE ACTIONS (In Order)
-
-### 1. Start Redis (required for SDK caching)
+The adapter refactoring introduced a new `CacheOperations` interface. Verify:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-docker compose up -d
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
 ```
 
-### 2. Complete ALL Subject Ingestion
-
-Run each subject one at a time. Each takes 5-30 minutes.
+### 4. Run Full Curriculum Ingestion
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-
-# Priority 1: Core curriculum (largest)
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject maths
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject science
-
-# Priority 2: Previously lost
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject history
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject geography
-
-# Priority 3: Languages
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject french
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject spanish
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject german
-
-# Priority 4: Remaining subjects
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject physical-education
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject religious-education
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject music
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject rshe-pshe
+pnpm es:ingest-live --all --verbose
 ```
 
-### 3. Verify Complete Ingestion
+**Expected**: ~12,316 unique lessons across 17 subjects.
 
-After all subjects complete, verify counts match expectations:
+---
+
+## Recent Work Completed (2025-12-29)
+
+### Adapter Refactoring — COMPLETE ✅
+
+Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
+
+| Metric             | Before    | After       | Change     |
+| ------------------ | --------- | ----------- | ---------- |
+| `oak-adapter.ts`   | 593 lines | 197 lines   | **-67%**   |
+| Lint errors        | 70        | 0           | ✅ Fixed   |
+| Quality gates      | Blocked   | All passing | ✅ Fixed   |
+
+### New Architecture
+
+```text
+oak-adapter.ts (197 lines - Public API)
+    ├── sdk-client-factory.ts (141 lines - client creation)
+    │       ├── sdk-api-methods.ts (143 lines - endpoint factories)
+    │       └── sdk-cache/cache-wrapper.ts (248 lines - caching with DI)
+    ├── oak-adapter-threads.ts (98 lines - thread API methods)
+    └── oak-adapter-types.ts (95 lines - type definitions)
+```
+
+### Key Design Decisions
+
+1. **Dependency Injection** — Cache wrappers use `CacheOperations` interface, enabling testing without Redis
+2. **TDD-Driven** — 22 adapter tests covering cache behaviour
+3. **Reduced Complexity** — All functions under 50-line and 20-statement limits
+4. **Documentation** — New `src/adapters/README.md` documents architecture
+
+### Files Created/Modified
+
+| File                               | Purpose                           |
+| ---------------------------------- | --------------------------------- |
+| `sdk-cache/cache-wrapper.ts`       | `withCache`, `withCacheAndNegative` |
+| `sdk-cache/cache-wrapper.unit.test.ts` | 11 unit tests for cache wrappers |
+| `sdk-api-methods.ts`               | API method factories              |
+| `sdk-client-factory.ts`            | Client creation helpers           |
+| `src/adapters/README.md`           | Architecture documentation        |
+
+---
+
+## Background Context
+
+### ES Index Status (Needs Reset)
+
+| Index                | Doc Count | Target   | Status            |
+| -------------------- | --------- | -------- | ----------------- |
+| `oak_lessons`        | 0         | ~12,316  | 📋 Needs reset    |
+| `oak_units`          | 0         | —        | 📋 Needs reset    |
+| `oak_unit_rollup`    | 0         | —        | 📋 Needs reset    |
+| `oak_threads`        | 0         | —        | 📋 Needs reset    |
+| `oak_sequences`      | 0         | —        | 📋 Needs reset    |
+| `oak_sequence_facets`| 0         | —        | 📋 Needs reset    |
+
+### Redis Cache Status (Needs Verification)
+
+| Metric                   | Value     | Status                   |
+| ------------------------ | --------- | ------------------------ |
+| Lesson summaries cached  | 7,089     | ⚠️ Verify still accessible |
+| Lesson transcripts cached| 4,281     | ⚠️ Verify still accessible |
+| Unit summaries cached    | 669       | ⚠️ Verify still accessible |
+| **Total cached**         | **12,039**| ⚠️ Verify after refactoring |
+
+**Why verification needed**: The new `CacheOperations` interface changed how we interact with Redis. Need to confirm reads/writes still work.
+
+### Expected Lesson Counts (from Bulk Download)
+
+| Subject              | Target | Notes                    |
+| -------------------- | ------ | ------------------------ |
+| maths                | 1,934  | Includes KS4 tiers       |
+| english              | 2,525  | Has unit options         |
+| science              | 1,277  | Includes KS4 exam subjects |
+| physical-education   | 992    |                          |
+| geography            | 683    | Has unit options         |
+| history              | 684    |                          |
+| religious-education  | 612    |                          |
+| computing            | 528    | ⚠️ Many may lack videos  |
+| french               | 522    |                          |
+| spanish              | 525    |                          |
+| music                | 434    |                          |
+| german               | 411    |                          |
+| art                  | 403    | Has unit options         |
+| design-technology    | 360    | Has unit options         |
+| citizenship          | 318    |                          |
+| cooking-nutrition    | 108    | No KS4                   |
+| rshe-pshe            | TBD    | API only, no bulk file   |
+| **TOTAL**            | **~12,316** |                     |
+
+---
+
+## Canonical Ingestion CLI
+
+**Entry point**: `src/lib/elasticsearch/setup/ingest-live.ts`
+**Command**: `pnpm es:ingest-live`
+
+| Flag                  | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `--all`               | Ingest all 17 subjects                           |
+| `--subject <slug>`    | Ingest specific subject(s), can be repeated      |
+| `--keystage <slug>`   | Filter by key stage (ks1, ks2, ks3, ks4)         |
+| `--index <kind>`      | Filter to specific index kind (lessons, units)   |
+| `--force`             | Overwrite existing documents (ES `index` action) |
+| `--bypass-cache`      | Skip Redis cache requirement                     |
+| `--ignore-cached-404` | Bypass cached 404s for transcripts               |
+| `--verbose`           | Detailed logging                                 |
+| `--dry-run`           | Preview without indexing                         |
+
+---
+
+## Efficient API Traversal (Next Priority)
+
+**Full plan**: [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md)
+
+The ingestion pipeline currently makes wasteful API calls:
+
+| Problem | Impact |
+| ------- | ------ |
+| Transcript fetch for no-video lessons | ~50% wasted calls, 404 errors |
+| Per-lesson asset checks | Could use bulk endpoint instead |
+
+**Solution**: Use `/key-stages/{ks}/subject/{subject}/assets` to get ALL lesson asset types in ONE call, then only fetch transcripts for lessons with `type: "video"`.
+
+**Key bulk endpoints from OpenAPI schema**:
+
+| Endpoint | Returns |
+| -------- | ------- |
+| `/key-stages/{ks}/subject/{subject}/assets` | All assets for subject/keystage |
+| `/sequences/{sequence}/assets` | All assets for sequence |
+
+This work MUST be completed before running full ingestion.
+
+---
+
+## Quality Gates (All Passing ✅)
+
+Run from repo root after any changes:
 
 ```bash
-# Get per-subject counts
-curl -s -H "Authorization: ApiKey $ELASTICSEARCH_API_KEY" \
-  "$ELASTICSEARCH_URL/oak_lessons/_search" -H "Content-Type: application/json" \
-  -d '{"size": 0, "aggs": {"subjects": {"terms": {"field": "subject_slug", "size": 50}}}}' | \
-  jq '.aggregations.subjects.buckets | sort_by(.doc_count) | reverse'
+pnpm type-gen          # Generate types from schema
+pnpm build             # Build all packages
+pnpm type-check        # TypeScript validation
+pnpm lint:fix          # Auto-fix linting issues
+pnpm format:root       # Format code
+pnpm markdownlint:root # Markdown lint
+pnpm test              # Unit + integration tests
+pnpm test:e2e          # E2E tests
+pnpm test:e2e:built    # E2E on built app
+pnpm test:ui           # Playwright UI tests
+pnpm smoke:dev:stub    # Smoke tests
 ```
 
----
-
-## ✅ COMPLETED WORK
-
-### Plan 17: Synonym Enrichment from OWA/OALA — COMPLETE
-
-All OWA and OALA synonym aliases have been merged:
-
-| Source | Items Added | Location |
-|--------|-------------|----------|
-| OWA subjects | art and design, phys ed, personal development, combined-science | `subjects.ts` |
-| OALA key stages | eyfs, a-level, sixth form, reception | `key-stages.ts` |
-| OWA year variants | yr1, year1, y1 formats | `key-stages.ts` |
-| Exam boards | AQA, Edexcel, OCR, WJEC | `exam-boards.ts` |
-
-### SDK Error Types — COMPLETE
-
-`SdkFetchError` discriminated union is now **generated at type-gen time** in the SDK:
-
-- Location: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/error-types/sdk-error-types.ts`
-- Export: `@oaknational/oak-curriculum-sdk` exports `SdkFetchError`, `classifyHttpError`, `formatSdkError`
-- Search app imports from SDK (no local copy)
-
-### Architecture (ADR-087, ADR-088) — COMPLETE
-
-- **ADR-087**: Batch-atomic ingestion — each (subject, keystage) commits immediately
-- **ADR-088**: Result pattern — all SDK methods return `Result<T, SdkFetchError>`
+**All gates must pass. No exceptions.**
 
 ---
 
-## 🎯 AFTER INGESTION: Ground Truth & Evaluation
+## Foundation Documents (MANDATORY)
 
-### Requirements
+Before any work, read:
 
-1. **Comprehensive Ground Truth Corpus**
-   - Queries for ALL 17 subjects
-   - Queries for ALL 4 key stages (KS1-KS4)
-   - Include all query categories: naturalistic, synonym, misspelling, colloquial, multi-concept, intent-based
-
-2. **Comprehensive Benchmark Evaluations**
-   - Per-subject MRR baseline
-   - Per-keystage MRR baseline
-   - Overall MRR across full curriculum
-   - Category-level breakdown (as currently exists for maths)
-
-3. **Synonym Quality Audit**
-   - Audit existing synonyms for noise/low-value entries
-   - Measure impact of English foundational synonyms (adjective, noun, verb, etc.)
-   - Document precision vs recall tradeoffs
-
-### Current Ground Truth Status
-
-| Scope | Status | Notes |
-|-------|--------|-------|
-| GCSE Maths | ✅ Complete | Existing corpus |
-| KS1-3 Maths | ❌ Missing | |
-| English (all KS) | ❌ Missing | Critical for foundational synonym validation |
-| Science (all KS) | ❌ Missing | |
-| Other subjects | ❌ Missing | |
-
----
-
-## 📋 Architecture Reference
-
-### Error Types (ADR-088)
-
-```typescript
-// Import from SDK — NOT local file
-import { SdkFetchError, classifyHttpError, formatSdkError } from '@oaknational/oak-curriculum-sdk';
-
-type SdkFetchError =
-  | SdkNotFoundError      // 404 - skip and continue
-  | SdkServerError        // 5xx - skip and continue  
-  | SdkRateLimitError     // 429 - retry with backoff
-  | SdkNetworkError       // Network failure - propagate
-  | SdkValidationError    // Invalid response - propagate
-```
-
-### Ingestion CLI
-
-```bash
-# Single subject
-pnpm es:ingest-live -- --subject maths
-
-# Multiple subjects
-pnpm es:ingest-live -- --subject maths --subject english
-
-# ALL subjects (17 total)
-pnpm es:ingest-live -- --all
-```
-
-### Key Files
-
-| File | Purpose |
-|------|---------|
-| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point |
-| `src/lib/indexing/ingest-harness.ts` | Orchestration |
-| `src/lib/indexing/ingest-harness-batch.ts` | Batch iteration |
-| `src/adapters/oak-adapter-sdk.ts` | SDK adapter (Result pattern) |
-
----
-
-## 🔍 Synonym System Architecture
-
-### Two Complementary Mechanisms
-
-| Mechanism | Applies To | How It Works | Precision Risk |
-|-----------|------------|--------------|----------------|
-| ES Synonym Expansion | Single-word tokens | `oak_syns_filter` at query time | Higher |
-| Phrase Detection + Boost | Multi-word terms | `detectCurriculumPhrases()` → `match_phrase` boost | Lower |
-
-### Current Synonym Coverage
-
-| File | Entries | Focus |
-|------|---------|-------|
-| `maths.ts` | ~375 lines | GCSE compounds, algebra, geometry |
-| `key-stages.ts` | ~155 lines | KS abbreviations, OALA mappings |
-| `subjects.ts` | ~118 lines | Subject name variants, OWA aliases |
-| `english.ts` | ~78 lines | Foundational grammar terms |
-| `numbers.ts` | ~69 lines | one↔1, two↔2, etc. |
-| Others | ~200 lines | History, science, computing, music, etc. |
-
----
-
-## Before You Start
-
-### 1. Read Foundation Documents
-
-1. **[rules.md](../../directives-and-memory/rules.md)** — TDD, quality gates, Result pattern
-2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Test types
-3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator-first
-
-### 2. Verify Quality Gates
-
-```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm test
-```
+1. **[rules.md](../../directives-and-memory/rules.md)** — First Question: "Could it be simpler?"
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at all levels
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+4. **[AGENT.md](../../directives-and-memory/AGENT.md)** — Agent-specific directives
 
 ---
 
 ## Related Documents
 
-- [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md) — Master plan
-- [synonym-quality-audit.md](../../plans/semantic-search/active/synonym-quality-audit.md) — Synonym audit plan
-- [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Batch-atomic ingestion
-- [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Result pattern
+| Document                        | Purpose                              |
+| ------------------------------- | ------------------------------------ |
+| [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md) | **NEXT PRIORITY** — Reduce API calls |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Master plan with all milestones |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics snapshot |
+| [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md) | Full ingestion plan |
+| [pattern-aware-ingestion.md](../../plans/semantic-search/active/pattern-aware-ingestion.md) | Pattern implementation (COMPLETE) |
+| [search_ingest_reset_with_review.plan.md](../../../.cursor/plans/search_ingest_reset_with_review_b5516f42.plan.md) | Detailed execution plan |
 
 ---
 
-## Success Criteria
+## Key Files
 
-1. ✅ ALL 17 subjects ingested to ES
-2. ✅ ES counts verified against bulk download reference
-3. ⏳ Ground truth queries created for all subjects/keystages
-4. ⏳ Baseline MRR established across full curriculum
-5. ⏳ Synonym quality audit complete
+### Adapter Layer (Refactored 2025-12-29)
+
+| File                             | Purpose                                                     |
+| -------------------------------- | ----------------------------------------------------------- |
+| `src/adapters/oak-adapter.ts`    | **Public API** — `createOakClient()`, `OakClient` interface |
+| `src/adapters/oak-adapter-types.ts` | Type definitions for all API methods                     |
+| `src/adapters/oak-adapter-threads.ts` | Thread-specific API methods                            |
+| `src/adapters/sdk-api-methods.ts` | Factories for each API endpoint                            |
+| `src/adapters/sdk-client-factory.ts` | Client creation (cached/uncached)                       |
+| `src/adapters/sdk-guards.ts`     | Type guards for API response validation                     |
+| `src/adapters/sdk-cache/`        | Caching infrastructure                                      |
+| `src/adapters/README.md`         | Architecture documentation                                  |
+
+### Caching Layer (New — 2025-12-29)
+
+| File                                     | Purpose                                    |
+| ---------------------------------------- | ------------------------------------------ |
+| `sdk-cache/cache-wrapper.ts`             | `withCache`, `withCacheAndNegative`        |
+| `sdk-cache/cache-wrapper.unit.test.ts`   | 11 unit tests                              |
+| `sdk-cache/redis-connection.ts`          | `createRedisClient`, `withRedisConnection` |
+| `sdk-cache/ttl-jitter.ts`                | `calculateTtlWithJitter` for stampede prevention |
+| `sdk-cache/index.ts`                     | Re-exports                                 |
+
+### Ingestion Pipeline
+
+| File                                     | Purpose                    |
+| ---------------------------------------- | -------------------------- |
+| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point        |
+| `src/lib/index-oak.ts`                   | Main indexing logic        |
+| `src/lib/index-oak-keystage-ops.ts`      | Keystage operations        |
+| `src/lib/indexing/curriculum-pattern-config.ts` | Pattern configuration |
+| `src/lib/indexing/pattern-aware-fetcher.ts` | Pattern-aware traversal |
+
+---
+
+## OpenAPI Schema Reference
+
+For API exploration, the OpenAPI schema is at:
+`packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json`
+
+Key endpoints:
+
+- `/subjects` — All subjects with sequences
+- `/subjects/{subject}/sequences` — Sequence details
+- `/sequences/{sequence}/units` — Units within sequence
+- `/lessons/{lesson}/assets` — Asset types including video availability
+- `/lessons/{lesson}/summary` — Lesson metadata
+- `/lessons/{lesson}/transcript` — Transcript (only if video exists)
+
+---
+
+## MCP Tools Available
+
+For curriculum exploration via OOC MCP server:
+
+| Tool                                             | Purpose                            |
+| ------------------------------------------------ | ---------------------------------- |
+| `mcp_ooc-http-dev-local_get-lessons-assets`      | Check asset types for a lesson     |
+| `mcp_ooc-http-dev-local_get-lessons-summary`     | Get lesson metadata                |
+| `mcp_ooc-http-dev-local_search`                  | Search for lessons by topic        |
+| `mcp_ooc-http-dev-local_get-ontology`            | Understand curriculum structure    |
+| `mcp_ooc-http-dev-local_get-key-stages-subject-lessons` | List lessons by subject/keystage |

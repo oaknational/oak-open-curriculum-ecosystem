@@ -51,7 +51,7 @@ What we currently call a "knowledge graph" (`knowledge-graph-data.ts`) is actual
 
 ### Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    TRUE CURRICULUM KNOWLEDGE GRAPH                   │
 ├─────────────────────────────────────────────────────────────────────┤

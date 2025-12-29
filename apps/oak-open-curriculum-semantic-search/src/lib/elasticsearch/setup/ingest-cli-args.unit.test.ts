@@ -82,4 +82,93 @@ describe('parseArgs', () => {
       }
     });
   });
+
+  describe('--bypass-cache flag', () => {
+    it('defaults to false', () => {
+      const result = parseArgs(['--subject', 'maths']);
+      expect(result.bypassCache).toBe(false);
+    });
+
+    it('sets bypassCache to true when --bypass-cache is specified', () => {
+      const result = parseArgs(['--subject', 'maths', '--bypass-cache']);
+      expect(result.bypassCache).toBe(true);
+    });
+
+    it('works with other flags', () => {
+      const result = parseArgs(['--all', '--bypass-cache', '--verbose']);
+      expect(result.bypassCache).toBe(true);
+      expect(result.verbose).toBe(true);
+      expect(result.subjects).toHaveLength(17);
+    });
+  });
+
+  describe('--force flag', () => {
+    it('defaults to false', () => {
+      const result = parseArgs(['--subject', 'maths']);
+      expect(result.force).toBe(false);
+    });
+
+    it('sets force to true when --force is specified', () => {
+      const result = parseArgs(['--subject', 'maths', '--force']);
+      expect(result.force).toBe(true);
+    });
+
+    it('sets force to true when -f is specified', () => {
+      const result = parseArgs(['--subject', 'maths', '-f']);
+      expect(result.force).toBe(true);
+    });
+
+    it('works with other flags', () => {
+      const result = parseArgs(['--all', '--force', '--dry-run']);
+      expect(result.force).toBe(true);
+      expect(result.dryRun).toBe(true);
+      expect(result.subjects).toHaveLength(17);
+    });
+  });
+
+  describe('--ignore-cached-404 flag', () => {
+    it('defaults to false', () => {
+      const result = parseArgs(['--subject', 'maths']);
+      expect(result.ignoreCached404).toBe(false);
+    });
+
+    it('sets ignoreCached404 to true when --ignore-cached-404 is specified', () => {
+      const result = parseArgs(['--subject', 'maths', '--ignore-cached-404']);
+      expect(result.ignoreCached404).toBe(true);
+    });
+
+    it('works with other flags', () => {
+      const result = parseArgs(['--all', '--ignore-cached-404', '--verbose']);
+      expect(result.ignoreCached404).toBe(true);
+      expect(result.verbose).toBe(true);
+      expect(result.subjects).toHaveLength(17);
+    });
+  });
+
+  describe('flag combinations', () => {
+    it('parses all flags together', () => {
+      const result = parseArgs([
+        '--subject',
+        'maths',
+        '--keystage',
+        'ks4',
+        '--force',
+        '--bypass-cache',
+        '--verbose',
+        '--dry-run',
+      ]);
+      expect(result.subjects).toEqual(['maths']);
+      expect(result.keyStages).toEqual(['ks4']);
+      expect(result.force).toBe(true);
+      expect(result.bypassCache).toBe(true);
+      expect(result.verbose).toBe(true);
+      expect(result.dryRun).toBe(true);
+    });
+
+    it('short flags work together', () => {
+      const result = parseArgs(['--subject', 'maths', '-f', '-v']);
+      expect(result.force).toBe(true);
+      expect(result.verbose).toBe(true);
+    });
+  });
 });

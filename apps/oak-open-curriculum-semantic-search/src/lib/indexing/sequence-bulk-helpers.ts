@@ -10,12 +10,13 @@
  */
 
 import type { SearchSubjectSlug } from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 import type { SequenceFacetSource } from './sequence-facets';
 import { createSequenceDocument } from './sequence-document-builder';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import { getSubjectTitle } from './subject-title-utils';
 import type { BulkOperations } from './bulk-operation-types';
+import { createBulkAction } from './bulk-action-factory';
 
 /**
  * Parameters for building sequence bulk operations.
@@ -80,15 +81,7 @@ export function buildSequenceOps(params: BuildSequenceOpsParams): BulkOperations
       categoryTitles,
     });
 
-    ops.push(
-      {
-        index: {
-          _index: resolvePrimarySearchIndexName('sequences'),
-          _id: seq.sequenceSlug,
-        },
-      },
-      doc,
-    );
+    ops.push(createBulkAction(resolvePrimarySearchIndexName('sequences'), seq.sequenceSlug), doc);
   }
 
   return ops;

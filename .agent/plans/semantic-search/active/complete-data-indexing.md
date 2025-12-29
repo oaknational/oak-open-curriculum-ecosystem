@@ -1,86 +1,190 @@
 # 05: Complete Data Indexing
 
-**Status**: 📋 PENDING  
-**Priority**: High — BLOCKING all other work  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 1)  
-**Created**: 2025-12-24  
+**Status**: 📋 PENDING — ES reset and cache validation required
+**Priority**: High — BLOCKING all other work
+**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 1)
+**Created**: 2025-12-24
+**Updated**: 2025-12-29
 **Principle**: Index EVERYTHING — ES is a complete view of the curriculum
 
 ---
 
-## Overview
+## Current State (2025-12-29)
 
-This sub-plan tracks the work to ensure ALL available fields from the Oak API are indexed in Elasticsearch. The principle is that Elasticsearch should be a complete view of the curriculum, not just a search engine.
+### Completed
 
-**Why this matters**: Fields that don't contribute to semantic search still have value for:
-- Filtering (e.g., `downloads_available` to show only lessons with downloadable assets)
-- Display (e.g., `supervision_level` for content warnings)
-- Analysis (e.g., tracking which content needs supervision)
-- Future features (we don't know what we'll need later)
+| Task                    | Status      |
+| ----------------------- | ----------- |
+| Pattern-aware ingestion | ✅ Complete |
+| Adapter refactoring     | ✅ Complete (593→197 lines) |
+| Quality gates           | ✅ All 11 passing |
 
----
+### Pending Before Ingestion
 
-## Completed Work
-
-### Lesson Fields (2025-12-24)
-
-| Field | Type | Source | Status |
-|-------|------|--------|--------|
-| `supervision_level` | string | `LessonSummaryResponseSchema.supervisionLevel` | ✅ Added |
-| `downloads_available` | boolean | `LessonSummaryResponseSchema.downloadsAvailable` | ✅ Added |
+| Task             | Why Needed                                      | Status    |
+| ---------------- | ----------------------------------------------- | --------- |
+| ES reset         | Fresh indices after code changes                | 📋 Pending |
+| Cache validation | Verify new `CacheOperations` interface works    | 📋 Pending |
+| ES upsert verify | Confirm incremental mode still works            | 📋 Pending |
 
 ---
 
-## Pending Work
+## Next Steps (In Order)
 
-### Lesson Fields to Review
+### 1. Reset Elasticsearch
 
-Review `LessonSummaryResponseSchema` for any remaining unindexed fields:
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup --reset
+```
 
-- [ ] Verify all fields from API schema are indexed or explicitly excluded with reason
+### 2. Verify Caching Works
 
-### Lesson Fields to Add
+The adapter refactoring introduced a new `CacheOperations` interface. Verify:
 
-| Field | Type | Source | Status | Priority |
-|-------|------|--------|--------|----------|
-| `phase_slug` | string | Derive from key stage | 📋 Planned | High |
+| Check                    | How to Verify                              |
+| ------------------------ | ------------------------------------------ |
+| Redis connection         | Run ingestion, check for "SDK caching enabled" |
+| Cache reads              | Check for cache hits in verbose output     |
+| Cache writes             | Check for cache misses followed by API calls |
+| Negative caching (404s)  | Check "Caching 404 response" logs          |
+| `--bypass-cache` flag    | Should log "SDK caching disabled"          |
+| `--ignore-cached-404`    | Should log "Ignoring cached 404"           |
 
-### Unit Fields to Add
+**Verification Commands**:
 
-| Field | Type | Source | Status | Priority |
-|-------|------|--------|--------|----------|
-| `notes` | string | `UnitSummaryResponseSchema.notes` | 📋 Planned | High |
-| `lesson_order` | number | `UnitSummaryResponseSchema.unitLessons[].lessonOrder` | 📋 Planned | High |
-| `phase_slug` | string | Derive from key stage | 📋 Planned | High |
+```bash
+cd apps/oak-open-curriculum-semantic-search
 
-### Thread Fields to Add
+# Test with cache enabled (should connect to Redis)
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
 
-| Field | Type | Source | Status | Priority |
-|-------|------|--------|--------|----------|
-| `unit_order` | number | `ThreadUnitsResponseSchema.unitOrder` | 📋 Planned | High |
+# Test with cache bypassed
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --bypass-cache --dry-run
 
-### Fields Review Checklist
+# Test ignoring cached 404s
+pnpm es:ingest-live --subject maths --keystage ks1 --verbose --ignore-cached-404 --dry-run
+```
 
-- [ ] Verify all `LessonSummaryResponseSchema` fields indexed or explicitly excluded
-- [ ] Verify all `UnitSummaryResponseSchema` fields indexed or explicitly excluded
-- [ ] Verify all `ThreadUnitsResponseSchema` fields indexed or explicitly excluded
+### 3. Run Full Ingestion
+
+```bash
+pnpm es:ingest-live --all --verbose
+```
+
+**Expected**: ~12,316 unique lessons across 17 subjects.
+
+**If interrupted**: Re-run the same command — incremental mode skips existing docs.
 
 ---
 
-## How to Add a New Field
+## Adapter Refactoring (Completed 2025-12-29)
 
-1. **Add field definition** in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
-2. **Run `pnpm type-gen`** to regenerate Zod schemas and ES mappings
-3. **Update document transform** in `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
-4. **Update document creation** in `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
-5. **Run quality gates** to verify all changes
+Resolved 70 lint errors and complexity issues using TDD:
+
+| New File                     | Purpose                                     | Lines |
+| ---------------------------- | ------------------------------------------- | ----- |
+| `sdk-cache/cache-wrapper.ts` | `withCache`, `withCacheAndNegative` with DI | 248   |
+| `sdk-api-methods.ts`         | API method factories                        | 143   |
+| `sdk-client-factory.ts`      | Client creation helpers                     | 141   |
+
+**Key change**: Caching now uses `CacheOperations` interface:
+
+```typescript
+interface CacheOperations {
+  readonly get: (key: string) => Promise<string | null>;
+  readonly setex: (key: string, ttl: number, value: string) => Promise<void>;
+}
+```
+
+This enables testing without Redis (dependency injection).
+
+---
+
+## Possible Transcript Investigation (Pending)
+
+### Observation
+
+During prior ingestion, many "Transcript unavailable" messages appeared for computing KS4 lessons:
+
+```text
+Transcript unavailable for binary-search
+Transcript unavailable for bubble-sort-23973
+Transcript unavailable for insertion-sort
+...
+```
+
+### Hypothesis
+
+Computing KS4 lessons may use interactive/coding-based content rather than video-based lessons. This would make transcript 404s **legitimate**, not a bug.
+
+### Investigation Required
+
+1. **Use `/lessons/{lesson}/assets/` endpoint** to check if these lessons have video assets
+2. If no video asset → 404 is expected
+3. If video asset exists but no transcript → this is a bug
+
+---
+
+## CLI Flags
+
+| Flag                  | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `--all`               | Ingest all 17 subjects                           |
+| `--subject <slug>`    | Ingest specific subject(s)                       |
+| `--keystage <slug>`   | Filter by key stage                              |
+| `--verbose`           | Detailed logging                                 |
+| `--dry-run`           | Show what would be indexed                       |
+| `--force`             | Use `index` action (overwrites existing docs)    |
+| `--bypass-cache`      | Skip Redis cache requirement                     |
+| `--ignore-cached-404` | Re-fetch transcripts that previously returned 404|
+
+---
+
+## Expected Counts (from Bulk Download)
+
+| Subject              | Unique Lessons | Notes                    |
+| -------------------- | -------------- | ------------------------ |
+| maths                | 1,934          | Includes KS4 tiers       |
+| english              | 2,525          | Has unit options         |
+| science              | 1,277          | Includes KS4 exam subjects |
+| physical-education   | 992            |                          |
+| geography            | 683            | Has unit options         |
+| history              | 684            |                          |
+| religious-education  | 612            |                          |
+| computing            | 528            | ⚠️ Many may lack videos  |
+| french               | 522            |                          |
+| spanish              | 525            |                          |
+| music                | 434            |                          |
+| german               | 411            |                          |
+| art                  | 403            | Has unit options         |
+| design-technology    | 360            | Has unit options         |
+| citizenship          | 318            |                          |
+| cooking-nutrition    | 108            | No KS4                   |
+| rshe-pshe            | N/A            | API only, no bulk file   |
+| **TOTAL**            | **~12,316**    |                          |
+
+---
+
+## Acceptance Criteria
+
+- [ ] ES indices reset with current mappings
+- [ ] Cache reads/writes verified with new CacheOperations interface
+- [ ] `--bypass-cache` flag verified
+- [ ] `--ignore-cached-404` flag verified
+- [ ] Incremental mode (ES `create` action) verified
+- [ ] All 17 subjects ingested
+- [ ] Counts verified against bulk download reference (~12,316 unique lessons)
+- [ ] Science KS4 included (requires sequence traversal — IMPLEMENTED)
+- [ ] Ground truths expanded to cover all subjects (not just Maths KS4)
+- [ ] Baseline metrics recorded for full-curriculum search
+- [ ] Quality gates passing after ingestion
 
 ---
 
 ## Related Documents
 
-- [ADR-089](../../../../docs/architecture/architectural-decisions/089-index-everything-principle.md) - **Index Everything principle**
-- [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) - Fundamentals-first strategy
+- [ADR-089](../../../../docs/architecture/architectural-decisions/089-index-everything-principle.md) - Index Everything principle
+- [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) - Batch-atomic ingestion
+- [pattern-aware-ingestion.md](./pattern-aware-ingestion.md) - Pattern traversal (COMPLETE)
 - [Cardinal Rule](../../../directives-and-memory/rules.md) - All types from schema at compile time
-
-

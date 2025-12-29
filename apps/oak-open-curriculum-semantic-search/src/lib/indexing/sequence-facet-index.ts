@@ -1,6 +1,6 @@
 import { performance } from 'node:perf_hooks';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
 import {
   createSequenceFacetDocuments,
   extractSequenceFacetSource,
@@ -9,6 +9,7 @@ import {
 } from './sequence-facets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { BulkOperations } from './bulk-operation-types';
+import { createBulkAction } from './bulk-action-factory';
 
 export type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
 
@@ -88,15 +89,8 @@ export function buildSequenceFacetOps({
 
   const result: BulkOperations = [];
   for (const doc of docs) {
-    result.push(
-      {
-        index: {
-          _index: resolvePrimarySearchIndexName('sequence_facets'),
-          _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`,
-        },
-      },
-      doc,
-    );
+    const docId = `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stages[0]}`;
+    result.push(createBulkAction(resolvePrimarySearchIndexName('sequence_facets'), docId), doc);
   }
   return result;
 }

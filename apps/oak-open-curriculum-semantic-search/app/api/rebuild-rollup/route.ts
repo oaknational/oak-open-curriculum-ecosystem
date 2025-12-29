@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
-import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
+import { createOakClient, type OakClient } from '../../../src/adapters/oak-adapter';
 import { isSearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
 import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
@@ -13,7 +13,6 @@ import {
   rewriteBulkOperations,
   type SearchIndexTarget,
 } from '../../../src/lib/search-index-target';
-import type { OakClient } from '../../../src/adapters/oak-adapter-sdk';
 import type {
   AggregatedUnitContext,
   UnitContextMap,
@@ -55,7 +54,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   if (!authorize(req)) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  const client = createOakSdkClient();
+  const client = await createOakClient();
   const target = currentSearchIndexTarget();
   const { count, rest } = await rollupAllUnits(client, target);
   if (rest.length > 0) {

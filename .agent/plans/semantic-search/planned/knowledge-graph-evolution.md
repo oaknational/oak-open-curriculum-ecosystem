@@ -11,6 +11,8 @@
 
 Evolve the current "knowledge graph" from a **property graph** (schema-only) to a **true knowledge graph** (schema + instances), enabling graph-based search and discovery.
 
+This is about connecting some summary views of the data e.g., keywords, outcomes, misunderstandings, etc. back to the ontology, to enable efficient graph-type queries based on structural relationships between concepts, rather than on lexical similarity or semantic similarity. This is in contrast to more graph-native approaches as discussed in [knowledge-graph-integration-opportunities.md](../../../research/semantic-search/knowledge-graph-integration-opportunities.md) and [enhanced-search-elasticsearch-neo4j-with-links.md](../../../research/elasticsearch/graphs/enhanced-search-elasticsearch-neo4j-with-links.md) and [elastic-cloud-graph-search.md](../../../research/elasticsearch/graphs/elastic-cloud-graph-search.md).
+
 ---
 
 ## The Problem

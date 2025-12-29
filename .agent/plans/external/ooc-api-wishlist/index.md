@@ -2,6 +2,10 @@
 
 This directory contains a split version of the upstream API metadata wishlist to keep each document short and focused. The content is split sequentially and preserved verbatim within each file.
 
+## Additional wishlist items to integrate into the requests
+
+- boolean flags on lessons, e.g. has_transcript
+
 ## Key references
 
 - API docs: https://open-api.thenational.academy/docs/about-oaks-api/api-overview

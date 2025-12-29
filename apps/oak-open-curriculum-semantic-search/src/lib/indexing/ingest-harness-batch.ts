@@ -33,7 +33,7 @@ import {
   type BatchGranularity,
   type IngestionBatch,
 } from '../index-batch-generator';
-import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import type { OakClient } from '../../adapters/oak-adapter';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
 // ============================================================================

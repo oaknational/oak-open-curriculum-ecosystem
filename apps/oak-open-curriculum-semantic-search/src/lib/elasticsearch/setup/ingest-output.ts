@@ -7,7 +7,7 @@
 import type { Result } from '@oaknational/result';
 import { isErr } from '@oaknational/result';
 import type { CliArgs } from './ingest-cli-args.js';
-import type { CachedOakClient } from '../../../adapters/oak-adapter-cached.js';
+import type { OakClient } from '../../../adapters/oak-adapter.js';
 import { esClient } from '../../es-client.js';
 import {
   writeIndexMeta,
@@ -54,7 +54,7 @@ export function printSummary(result: IngestionResult, duration: string): void {
 }
 
 /** Log cache statistics if caching was used. */
-export function printCacheStats(client: CachedOakClient): void {
+export function printCacheStats(client: OakClient): void {
   const stats = client.getCacheStats();
   if (stats.connected) {
     ingestLogger.info('Cache statistics', { hits: stats.hits, misses: stats.misses });
