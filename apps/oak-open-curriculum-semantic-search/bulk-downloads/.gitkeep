@@ -1,0 +1,4 @@
+# This file ensures the bulk-downloads directory is tracked by git
+# The actual JSON files are gitignored
+
+

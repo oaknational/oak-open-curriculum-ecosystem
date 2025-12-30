@@ -1,8 +1,11 @@
 # ADR-091: Video Availability Detection Strategy
 
-**Status**: Accepted  
+**Status**: Superseded by ADR-093 (Bulk-First Ingestion)  
 **Date**: 2025-12-29  
-**Related**: ADR-088 (Result Pattern), ADR-083 (Complete Lesson Enumeration)
+**Superseded**: 2025-12-30  
+**Related**: ADR-088 (Result Pattern), ADR-083 (Complete Lesson Enumeration), ADR-093 (Bulk-First Ingestion)
+
+> ⚠️ **NOTE**: This ADR describes an optimization that is **no longer needed** with the bulk-first ingestion strategy (ADR-093). The bulk download contains transcripts directly, eliminating the need to pre-check video availability. The code in `video-availability.ts` can be removed.
 
 ## Context
 
@@ -100,24 +103,16 @@ if (hasVideo === false) {
 
 ## Implementation
 
-### Code Changes
+### ~~Code Changes~~ — REMOVED (2025-12-30)
 
-1. **`video-availability.ts`**: Updated `hasVideo()` to return `undefined` for unknown lessons
-2. **`lesson-materials.ts`**: Only skips transcript fetch when `hasVideo === false` (explicit)
-3. **Unit tests**: Updated to verify tri-state behavior
+The following files have been **removed** as part of the bulk-first ingestion pivot:
 
-### Monitoring
+1. ~~**`video-availability.ts`**~~ — **Deleted**
+2. ~~**`video-availability.unit.test.ts`**~~ — **Deleted**
+3. **`lesson-materials.ts`** — `hasVideo` parameter preserved but no longer used
+4. **`index-oak-helpers.ts`** — Video availability fetching removed
 
-Log video availability statistics during ingestion:
-
-```text
-Built video availability map:
-  keyStage: ks2, subject: art
-  totalLessons: 36 (from assets endpoint)
-  lessonsWithVideo: 36
-  percentageWithVideo: 100%
-  NOTE: Only TPC-cleared lessons included; actual total is higher
-```
+The transcript optimization is no longer needed because bulk download data contains transcripts directly.
 
 ## Alternatives Considered
 
@@ -143,6 +138,7 @@ Delay implementation until API provides complete video availability data.
 
 ## Related Documents
 
-- [Efficient API Traversal Plan](../../../.agent/plans/semantic-search/active/efficient-api-traversal.md)
+- [Efficient API Traversal Plan (ARCHIVED)](../../../.agent/plans/semantic-search/archive/completed/efficient-api-traversal.md)
+- [ADR-093: Bulk-First Ingestion Strategy](./093-bulk-first-ingestion-strategy.md) — Supersedes this ADR
 - [API Wishlist: Boolean Resource Flags](../../../.agent/plans/external/ooc-api-wishlist/05-medium-priority-requests.md#13-add-boolean-resource-flags-to-lesson-list-responses)
 - [queryGate.ts](../../../reference/oak-openapi/src/lib/queryGate.ts) — Upstream TPC filtering

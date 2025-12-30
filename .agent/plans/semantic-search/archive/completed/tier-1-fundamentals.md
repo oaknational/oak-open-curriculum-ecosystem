@@ -68,3 +68,4 @@ All Tier 1 (Search Fundamentals) improvements were exhausted, achieving MRR 0.61
 3. **ELSER handles UK/US variants automatically** — No need for explicit synonyms for spelling differences.
 
 
+

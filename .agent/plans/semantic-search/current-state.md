@@ -1,16 +1,45 @@
 # Semantic Search Current State
 
 **Last Updated**: 2025-12-30
-**Measured Against**: Post cache categorization enhancement (2025-12-30)
+**Measured Against**: Post strategic pivot to bulk-first (2025-12-30)
 **Ground Truth Status**: ✅ Corrected and Verified (Maths KS4 only)
 
 This is THE authoritative source for current system metrics.
 
 ---
 
+## Strategic Pivot: Bulk-First Ingestion (2025-12-30)
+
+**Decision**: Use bulk download as primary data source with API for supplementary data.
+
+| Source | Purpose | Coverage |
+|--------|---------|----------|
+| **Bulk Download** | Lessons, units, threads, transcripts (81%), metadata | 16/17 subjects |
+| **API** | Tier info (maths KS4), unit options (optional) | Structural data only |
+
+**See**: [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | [bulk-download-vs-api-comparison.md](../../analysis/bulk-download-vs-api-comparison.md)
+
+---
+
+## ⚠️ Existing Infrastructure (REUSE — DO NOT RECREATE)
+
+**Critical**: Bulk download parsing is ALREADY IMPLEMENTED in `vocab-gen`. Do not reinvent:
+
+| Module | Location | Provides |
+|--------|----------|----------|
+| `parseBulkFile()` | `vocab-gen/lib/bulk-reader.ts` | Single file parsing with Zod |
+| `readAllBulkFiles()` | `vocab-gen/lib/bulk-reader.ts` | Multi-file parsing |
+| `lessonSchema` | `vocab-gen/lib/lesson-schema.ts` | Lesson validation |
+| `unitSchema` | `vocab-gen/lib/unit-schemas.ts` | Unit validation |
+| `nullSentinelSchema` | `vocab-gen/lib/vocabulary-schemas.ts` | `"NULL"` → `null` |
+
+**Data quality issues documented**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
+
+---
+
 ## Index Status (2025-12-30)
 
-**🔄 STATUS: Cache categorization complete. Ready for full ingestion.**
+**🔄 STATUS: Strategic pivot decided. Bulk download parser implementation required.**
 
 ### Summary
 
@@ -107,22 +136,18 @@ Ran Maths KS1 ingestion: 638 docs (437 lessons + 201 threads)
 | Zero eslint-disable comments | ✅ |
 | All 11 quality gates | ✅ |
 
-### Efficient API Traversal — COMPLETE ✅ (2025-12-29)
+### ~~Efficient API Traversal~~ — SUPERSEDED (2025-12-30)
 
-Implemented bulk assets endpoint for video availability check:
+> ⚠️ **SUPERSEDED by ADR-093**: The video availability detection approach has been replaced by bulk-first ingestion. The bulk download contains transcripts directly, eliminating the need for video availability detection.
 
-| File | Purpose |
-|------|---------|
-| `src/lib/indexing/video-availability.ts` | Tri-state `hasVideo()` function |
-| `src/lib/indexing/video-availability.unit.test.ts` | Unit tests |
-| `src/adapters/sdk-api-methods.ts` | Added `makeGetSubjectAssets` |
-| `docs/architecture/.../091-video-availability-detection-strategy.md` | ADR |
+**Removed files**:
 
-**Key insight**: Assets endpoint returns only TPC-cleared lessons (~35% for non-maths). Tri-state design:
+| File | Status |
+|------|--------|
+| ~~`src/lib/indexing/video-availability.ts`~~ | **Removed** |
+| ~~`src/lib/indexing/video-availability.unit.test.ts`~~ | **Removed** |
 
-- `true` = has video (skip transcript safe)
-- `false` = no video (skip transcript safe)
-- `undefined` = unknown (fetch transcript as safe default)
+**See**: [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) (superseded by ADR-093)
 
 ### Adapter Refactoring — COMPLETE ✅ (2025-12-29)
 
@@ -194,8 +219,8 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | design-technology    | 360           | Has unit options         |
 | citizenship          | 318           |                          |
 | cooking-nutrition    | 108           | No KS4                   |
-| rshe-pshe            | TBD           | API only, no bulk file   |
-| **TOTAL**            | **~12,316**   |                          |
+| rshe-pshe            | —             | ❌ 422 (bulk unavailable) |
+| **TOTAL**            | **~12,300**   | 16 subjects              |
 
 ---
 
@@ -233,10 +258,13 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 
 | Feature                  | Status      | Notes                                 |
 | ------------------------ | ----------- | ------------------------------------- |
+| **Strategic pivot**      | ✅ Decided  | Bulk-first ingestion (ADR-093)        |
+| **Bulk download infra**  | ✅ Complete | Script, 30 files, 757 MB (2025-12-30) |
+| **vocab-gen parsing**    | ✅ Exists   | Zod schemas, file reader — REUSE      |
 | Pattern-aware traversal  | ✅ Complete | All 7 patterns implemented            |
 | Static pattern config    | ✅ Complete | 68 subject × keystage combinations    |
 | Adapter refactoring      | ✅ Complete | 593→197 lines, TDD-driven             |
-| Efficient API traversal  | ✅ Complete | Tri-state hasVideo() with TPC handling |
+| ~~video-availability.ts~~ | ⛔ Removed  | Superseded by bulk-first (ADR-093)   |
 | Cache categorization     | ✅ Complete | Structured metadata, zero compat layers |
 | Quality gates            | ✅ Passing  | All 11 gates green                    |
 | ES reset                 | ✅ Complete | 7 indices, 192 synonyms (2025-12-29)  |
@@ -246,7 +274,9 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | Force mode               | ✅ Verified | `--force` flag for overwrite          |
 | Four-retriever hybrid    | ✅ Complete | BM25 + ELSER with RRF fusion          |
 | Synonyms (192 entries)   | ✅ Deployed | Loaded at ES reset                    |
-| Full ingestion           | 📋 Pending  | Ready to run                          |
+| **Bulk data adapter**    | 📋 Pending  | Wraps vocab-gen, transforms to ES docs |
+| **Hybrid data source**   | 📋 Pending  | Composes bulk + API                   |
+| Full ingestion           | 📋 Pending  | Blocked on adapter                    |
 
 ---
 
@@ -268,16 +298,19 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 
 ## Bulk Download Reference
 
-**Source**: `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/`
+**Active Source**: `apps/oak-open-curriculum-semantic-search/bulk-downloads/` (2025-12-30)
+**Reference Copy**: `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/`
 
 | Metric         | Value  |
 | -------------- | ------ |
 | Files          | 30     |
-| Raw lessons    | 12,783 |
-| Unique lessons | 12,316 |
-| Duplicates     | 467 (tiers/options) |
+| Raw lessons    | ~12,500 |
+| Unique lessons | ~12,300 |
+| Duplicates     | ~200 (tiers) |
 
-**Note**: RSHE-PSHE has no bulk download file (API only).
+**Missing from bulk**: RSHE-PSHE (returns 422 Unprocessable Content — no API fallback)
+
+**Refresh command**: `cd apps/oak-open-curriculum-semantic-search && pnpm bulk:download`
 
 ---
 

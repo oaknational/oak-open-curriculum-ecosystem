@@ -22,10 +22,6 @@ import type { BulkOperations } from './indexing/bulk-operation-types';
 import { processLessonForIndexing } from './indexing/lesson-processing';
 import { buildLessonsByUnit } from './indexing/lesson-aggregation';
 import { fetchUnitsPatternAware } from './indexing/pattern-aware-fetcher';
-import {
-  fetchVideoAvailabilityMap,
-  type VideoAvailabilityMap,
-} from './indexing/video-availability';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -129,27 +125,6 @@ async function buildUnitsWithSummaries(
   return result;
 }
 
-/**
- * Fetches video availability map for efficient transcript fetching.
- * Returns undefined if fetch fails (graceful degradation).
- */
-async function fetchVideoMapWithGracefulFallback(
-  client: OakClient,
-  ks: KeyStage,
-  subject: SearchSubjectSlug,
-): Promise<VideoAvailabilityMap | undefined> {
-  const result = await fetchVideoAvailabilityMap(client, ks, subject);
-  if (!result.ok) {
-    ingestLogger.warn('Failed to fetch video availability map - falling back to per-lesson check', {
-      subject,
-      keyStage: ks,
-      error: result.error,
-    });
-    return undefined;
-  }
-  return result.value;
-}
-
 /** Build unit, lesson, and rollup operations with progress logging. */
 // eslint-disable-next-line max-lines-per-function, max-statements -- Core orchestration requires sequential steps
 async function buildCoreDocumentOps(
@@ -164,12 +139,9 @@ async function buildCoreDocumentOps(
 }> {
   const { ks, subject, unitContextMap, client } = context;
 
-  // Fetch video availability map FIRST for efficient transcript fetching
-  // This is ONE API call that tells us which lessons have videos
-  const videoMap = await fetchVideoMapWithGracefulFallback(client, ks, subject);
-
   // Fetch lessons FIRST to get accurate lesson counts (per ADR-083)
   // WORKAROUND: Fetch by unit due to upstream API bug (see ADR-083)
+  // NOTE: With bulk-first approach (ADR-093), this will be replaced by bulk download parsing
   const unitSlugs = units.map((u) => u.unitSlug);
   ingestLogger.info('Fetching all lessons by unit', {
     subject,
@@ -183,20 +155,6 @@ async function buildCoreDocumentOps(
     unitSlugs,
   );
   ingestLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
-
-  // Log video availability cross-reference if available
-  if (videoMap) {
-    const lessonCount = aggregatedLessons.size;
-    const videoMapCount = videoMap.totalLessons;
-    if (lessonCount !== videoMapCount) {
-      ingestLogger.warn('Lesson count discrepancy between lessons and assets endpoints', {
-        subject,
-        keyStage: ks,
-        lessonsEndpoint: lessonCount,
-        assetsEndpoint: videoMapCount,
-      });
-    }
-  }
 
   // Build lessonsByUnit map for accurate unit/rollup lesson counts
   const lessonsByUnit = buildLessonsByUnit(aggregatedLessons);
@@ -215,26 +173,19 @@ async function buildCoreDocumentOps(
   );
 
   // Build lesson documents (reuses aggregatedLessons, doesn't re-fetch)
+  // NOTE: hasVideo parameter preserved for future bulk-first integration
   const lessonOps: BulkOperations = [],
     rollupSnippets = new Map<string, string[]>();
   let processed = 0,
-    skipped = 0,
-    transcriptsSkipped = 0;
+    skipped = 0;
 
   for (const lesson of aggregatedLessons.values()) {
-    // Determine if this lesson has a video (for transcript fetch optimization)
-    const hasVideo = videoMap?.hasVideo(lesson.lessonSlug);
-    if (hasVideo === false) {
-      transcriptsSkipped++;
-    }
-
     const skipCount = await processLessonForIndexing(
       lesson,
       context,
       unitSummaries,
       lessonOps,
       rollupSnippets,
-      hasVideo,
     );
     if (skipCount > 0) {
       skipped++;
@@ -248,8 +199,6 @@ async function buildCoreDocumentOps(
     keyStage: ks,
     count: processed,
     skipped,
-    transcriptsSkipped,
-    videoMapAvailable: videoMap !== undefined,
   });
 
   // Build rollups with accurate lesson counts

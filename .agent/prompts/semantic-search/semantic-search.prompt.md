@@ -1,14 +1,189 @@
 # Semantic Search — Session Context
 
-**Status**: 🛑 Strategic decision required before proceeding
+**Status**: ✅ Ready for implementation — Bulk-first ingestion strategy approved
 **Last Updated**: 2025-12-30
 **Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)
+**Implementation Plan**: [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md)
+**Data Quality Report**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
+**ADR**: [ADR-093: Bulk-First Ingestion Strategy](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)
 
 ---
 
-## 🚨 CRITICAL FINDINGS (2025-12-30)
+## 📋 QUICK START FOR NEW SESSIONS
 
-A deep investigation into transcript availability revealed fundamental data source differences that require strategic discussion before proceeding.
+This document provides standalone context to continue semantic search implementation.
+
+### What We're Building
+
+A semantic search system for the Oak curriculum using Elasticsearch. The system indexes ~12,300 lessons across 16 subjects, enabling teachers, students, and AI agents to search curriculum content by meaning.
+
+### Foundation Documents (MANDATORY)
+
+**Read these before any work:**
+
+1. **[rules.md](../../directives-and-memory/rules.md)** — Cardinal Rule, TDD, no type shortcuts
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at ALL levels
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+
+### Current Status
+
+| Milestone | Status |
+|-----------|--------|
+| Strategic pivot to bulk-first | ✅ Complete |
+| Bulk download infrastructure | ✅ Complete |
+| `video-availability.ts` removal | ✅ Complete |
+| Adapter refactoring | ✅ Complete |
+| Pattern-aware traversal | ✅ Complete |
+| **Bulk Data Adapter (TDD)** | 📋 **NEXT STEP** |
+| HybridDataSource composition | 📋 Pending |
+| Full ES ingestion | 📋 Pending |
+
+### Key Commands
+
+```bash
+# From apps/oak-open-curriculum-semantic-search
+
+# Refresh bulk download data (reads OAK_API_KEY from .env.local)
+pnpm bulk:download
+
+# Run quality gates (from repo root)
+pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
+pnpm format:root && pnpm markdownlint:root
+pnpm test && pnpm test:e2e && pnpm test:e2e:built
+```
+
+---
+
+## ⚠️ CRITICAL: Existing Infrastructure to Reuse
+
+**DO NOT reinvent these — they already exist and are production-ready:**
+
+### Bulk Download Parsing (vocab-gen)
+
+| Module | Path | Provides |
+|--------|------|----------|
+| **Zod Schemas** | `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/` | Validated types |
+| `bulk-file-schema.ts` | `bulkDownloadFileSchema` | Top-level file validation |
+| `lesson-schema.ts` | `lessonSchema` | Lesson validation with null handling |
+| `unit-schemas.ts` | `unitSchema` | Unit validation with year handling |
+| `vocabulary-schemas.ts` | `nullSentinelSchema` | `"NULL"` string → `null` |
+| `bulk-reader.ts` | `parseBulkFile()`, `readAllBulkFiles()` | File discovery and parsing |
+
+### Usage
+
+**Note**: `vocab-gen` is currently a dev tool, not exported from SDK. Import via relative path:
+
+```typescript
+// Direct import (search SDK is in same monorepo)
+import { parseBulkFile, readAllBulkFiles } from '../../../../packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.js';
+import type { BulkDownloadFile, Lesson, Unit } from '../../../../packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.js';
+
+// Parse single file with Zod validation
+const data: BulkDownloadFile = await parseBulkFile(bulkDir, 'maths-primary.json');
+```
+
+**Alternative**: Add `vocab-gen` export to SDK's `package.json` for cleaner imports (implementation decision).
+
+### Data Quality Report (READ FIRST)
+
+**[07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)** documents all data quality issues.
+
+Key issues that affect implementation:
+
+- Maths KS4: 373 duplicate lessons (need API tier enrichment)
+- Missing lesson reference: `further-demonstrating-of-pythagoras-theorem`
+- 5 maths-primary lessons without transcripts
+- Units without threads: `maths-and-the-environment`, etc.
+
+---
+
+## ✅ STRATEGIC DECISION (2025-12-30)
+
+**Decision**: Use bulk download as primary data source with API for supplementary structural data only.
+
+See [Bulk Download vs API Comparison](../../analysis/bulk-download-vs-api-comparison.md) for detailed analysis.
+
+### Summary
+
+| Source | Use For | Coverage |
+|--------|---------|----------|
+| **Bulk Download** | Lessons, units, threads, transcripts, keywords, learning points | 16/17 subjects (30 files) |
+| **API** | Tier info (maths KS4), unit options (optional) | Structural data only |
+
+### Key Implementation Notes
+
+1. **Reuse vocab-gen**: Bulk parsing is already implemented — create adapter to transform to ES format
+2. **Maths tier handling**: Must call API's `/sequences/maths-secondary/units` to determine tier
+3. **RSHE-PSHE handling**: Skip in ingestion, return 422 in API (bulk file not available)
+4. **Null handling**: Already done by vocab-gen's `nullSentinelSchema`
+5. **✅ Removed**: `video-availability.ts` — no longer needed with bulk-first approach
+
+---
+
+## 🗂️ Bulk Download Infrastructure (2025-12-30)
+
+Bulk download infrastructure is complete and working.
+
+### Downloaded Files
+
+**Location**: `apps/oak-open-curriculum-semantic-search/bulk-downloads/`
+
+| Metric | Value |
+|--------|-------|
+| Download date | 2025-12-30T16:23:00Z |
+| Source | `https://open-api.thenational.academy/api/bulk` |
+| JSON files | 30 |
+| Total size | ~757 MB |
+| Missing | rshe-pshe-primary.json, rshe-pshe-secondary.json |
+
+### Subject Coverage
+
+**16 subjects available** (30 files):
+
+| Subject | Primary | Secondary |
+|---------|---------|-----------|
+| art | ✅ | ✅ |
+| citizenship | — | ✅ |
+| computing | ✅ | ✅ |
+| cooking-nutrition | ✅ | ✅ |
+| design-technology | ✅ | ✅ |
+| english | ✅ | ✅ |
+| french | ✅ | ✅ |
+| geography | ✅ | ✅ |
+| german | — | ✅ |
+| history | ✅ | ✅ |
+| maths | ✅ | ✅ |
+| music | ✅ | ✅ |
+| physical-education | ✅ | ✅ |
+| religious-education | ✅ | ✅ |
+| **rshe-pshe** | ❌ | ❌ |
+| science | ✅ | ✅ |
+| spanish | ✅ | ✅ |
+
+### RSHE-PSHE Status
+
+**CONFIRMED MISSING**: The Oak bulk download website lists RSHE-PSHE as available, but the API does not return it. This has been verified:
+
+1. Download script requests `rshe-pshe-primary` and `rshe-pshe-secondary`
+2. API returns ZIP with 30 files, RSHE-PSHE not included
+3. No error returned — files simply not in response
+
+**Decision**: Return HTTP 422 Unprocessable Content with clear error message and 24-hour cache header for RSHE-PSHE requests.
+
+### Refresh Cadence
+
+Manual refresh every few weeks:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm bulk:download
+```
+
+---
+
+## 📚 Historical Findings (2025-12-30)
+
+A deep investigation into transcript availability revealed fundamental data source differences.
 
 ### The Core Discovery
 
@@ -22,7 +197,7 @@ A deep investigation into transcript availability revealed fundamental data sour
 
 ### Why This Matters
 
-The current ingestion pipeline fetches transcripts via the live API. For non-maths subjects, this results in:
+The previous ingestion pipeline fetched transcripts via the live API. For non-maths subjects, this resulted in:
 
 - ~65% of transcript requests returning 404
 - Many "transcript not found" warnings (expected, not bugs)
@@ -32,19 +207,17 @@ The current ingestion pipeline fetches transcripts via the live API. For non-mat
 
 > "Currently, the API includes **all lesson resources for KS1-4 maths**, plus a **sample of lesson resources** for [other subjects]"
 
-### ⚠️ Video/Transcript Detection Code is Largely Pointless
+### ✅ Video/Transcript Detection Code REMOVED
 
-The video availability detection code (`video-availability.ts`, ADR-091) was designed to optimize transcript fetching by pre-checking which lessons have videos. **However, this optimization is largely pointless because:**
+The video availability detection code (`video-availability.ts`, ADR-091) was designed to optimize transcript fetching by pre-checking which lessons have videos. **This code has been removed because:**
 
-1. **The assets endpoint is TPC-filtered** — it only returns ~35% of non-maths lessons, so we can't reliably detect video availability for most subjects
-2. **Even when we know a lesson has video, the transcript API returns 404** — the TPC filter applies to transcripts too
-3. **For maths (the only fully-cleared subject), nearly all lessons have both video AND transcript** — so the detection adds overhead without benefit
+1. **Bulk-first approach**: Transcripts come directly from bulk download — no API 404 detection needed
+2. **TPC filtering is no longer relevant**: We don't call the transcript API anymore
+3. **Simpler architecture**: One fewer module to maintain
 
-**Net result**: The detection code adds complexity but doesn't meaningfully reduce failed transcript fetches. The real solution is either:
-- Use bulk download data (has transcripts)
-- Wait for Oak to clear TPC for all subjects (Autumn 2025)
+**Files removed**: `src/lib/indexing/video-availability.ts`, `src/lib/indexing/video-availability.unit.test.ts`
 
-**Code affected**: `src/lib/indexing/video-availability.ts`, ADR-091, ADR-092
+**See**: [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) (superseded by ADR-093)
 
 ---
 
@@ -272,18 +445,30 @@ New items added to `00-overview-and-known-issues.md`:
 
 ## ✅ Completed Work Summary
 
-All prerequisite work is complete. The system is technically ready for full ingestion.
+All prerequisite work is complete. The system is ready for BulkDownloadSource implementation.
 
-### Phase 0: Plan Review — COMPLETE ✅
+### Strategic Pivot — COMPLETE ✅ (2025-12-30)
 
-- All plan documents audited
-- Bulk download data verified (30 files, ~12,783 lessons)
-- API structure verified via MCP tools
-- ES state documented
+| Decision | Outcome |
+|----------|---------|
+| Bulk-first ingestion strategy | Approved — ADR-093 created |
+| Video availability detection | Removed — `video-availability.ts` deleted |
+| RSHE-PSHE handling | 422 Unprocessable Content (no API fallback) |
+| Redis cache | Retained for API supplementation calls |
 
-### Phase 1: Pattern-Aware Ingestion — COMPLETE ✅
+### Bulk Download Infrastructure — COMPLETE ✅ (2025-12-30)
 
-All 7 curriculum structural patterns implemented:
+| Task | Status | Result |
+|------|--------|--------|
+| Download script created | ✅ | `scripts/download-bulk.ts` |
+| pnpm command added | ✅ | `pnpm bulk:download` |
+| Fresh data downloaded | ✅ | 30 files, 757 MB |
+| Manifest created | ✅ | `manifest.json` with timestamps |
+| Gitignore configured | ✅ | JSON files excluded |
+
+### Pattern-Aware Ingestion — COMPLETE ✅
+
+All 7 curriculum structural patterns implemented (used for API calls):
 
 | Pattern | Subjects |
 |---------|----------|
@@ -295,7 +480,7 @@ All 7 curriculum structural patterns implemented:
 | `no-ks4` | Cooking-nutrition |
 | `empty` | Edge cases |
 
-### Phase 2.1-2.5: Infrastructure — COMPLETE ✅
+### Infrastructure — COMPLETE ✅
 
 | Task | Status | Result |
 |------|--------|--------|
@@ -306,35 +491,88 @@ All 7 curriculum structural patterns implemented:
 | Cache categorization | ✅ | Structured metadata, zero compat layers |
 | Quality gates | ✅ | All 11 passing |
 
-### Plan Consolidation — COMPLETE ✅
-
-Legacy `.cursor/plans/` files deleted. Active plan: `.cursor/plans/semantic_search_ingestion_8eaea812.plan.md`
-
 ---
 
-## 📋 Pending Work (from Plan)
+## 📋 Next Implementation Steps
 
-| ID | Task | Phase | Status |
-|----|------|-------|--------|
-| `phase2-ingest` | Run full curriculum ingestion | 2 | ⏸️ Awaiting strategic decision |
-| `phase2-gates` | Run all quality gates after ingestion | 2 | Pending |
-| `phase3-counts` | Verify per-subject counts | 3 | Pending |
-| `phase3-patterns` | Verify pattern-specific data | 3 | Pending |
-| `phase3-baseline` | Establish search quality baseline | 3 | Pending |
-| `phase3-docs` | Update current-state.md and roadmap.md | 3 | Pending |
-| `phase3-gates` | Run all quality gates | 3 | Pending |
+### Phase 1: Bulk Data Adapter (TDD) — **NEXT STEP**
 
-Phase 4 (SDK extraction) is deferred pending Phase 3 completion.
+Create an adapter that wraps vocab-gen bulk reader for search indexing use.
+
+**Full implementation details**: [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md)
+
+**Key insight**: Parsing is already done. We need an adapter that:
+
+1. Loads bulk data using existing `readAllBulkFiles()`
+2. Transforms `Lesson` → `SearchLessonsIndexDoc`
+3. Transforms `Unit` → `SearchUnitsIndexDoc`
+4. Extracts threads from `sequence[].threads[]`
+
+**TDD Sequence**:
+
+1. **RED**: Write test for transforming a `Lesson` to ES doc
+2. **GREEN**: Implement minimal transformer using vocab-gen types
+3. **REFACTOR**: Add year derivation via unit join
+
+**Files to create**:
+
+- `src/lib/indexing/bulk-data-adapter.ts` — Transforms vocab-gen types → ES docs
+- `src/lib/indexing/bulk-data-adapter.unit.test.ts` — Unit tests
+
+**Files to REUSE (not create)**:
+
+- Zod schemas — already in `@oaknational/oak-curriculum-sdk/vocab-gen`
+- Bulk reader — already in `@oaknational/oak-curriculum-sdk/vocab-gen`
+- Types — `BulkDownloadFile`, `Lesson`, `Unit` from vocab-gen
+
+### Phase 2: API Supplementation
+
+Enrich bulk data with structural information:
+
+| Subject | API Call | Purpose |
+|---------|----------|---------|
+| Maths KS4 | `/sequences/maths-secondary/units` | Tier info (foundation/higher) |
+
+**Note**: Unit options (geography/english) can be deferred — not critical for search.
+
+### Phase 3: HybridDataSource
+
+Compose bulk + API into unified data source:
+
+```typescript
+interface HybridDataSource {
+  readonly getLessonsWithMaterials: () => AsyncIterable<LessonWithMaterials>;
+  readonly getUnits: () => AsyncIterable<UnitDocument>;
+  readonly getThreads: () => AsyncIterable<ThreadDocument>;
+  readonly isSubjectSupported: (subject: string) => boolean;  // 422 for RSHE-PSHE
+}
+```
+
+### Phase 4: Pipeline Integration
+
+1. Update `index-oak.ts` to use `HybridDataSource`
+2. Minimal changes to existing pipeline
+3. Run full ingestion: `pnpm es:ingest-live --all --verbose`
 
 ---
 
 ## Infrastructure Status
 
+### Bulk Download Status (2025-12-30)
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Download location | `apps/.../bulk-downloads/` | ✅ Created |
+| JSON files | 30 | ✅ Downloaded |
+| manifest.json | Present | ✅ Written |
+| Download script | `scripts/download-bulk.ts` | ✅ Working |
+| pnpm command | `pnpm bulk:download` | ✅ Available |
+
 ### ES Index Status (After Reset — 2025-12-29)
 
 | Index | Doc Count | Target | Status |
 |-------|-----------|--------|--------|
-| `oak_lessons` | 437 (maths KS1) | ~12,783 | 📋 Needs full ingestion |
+| `oak_lessons` | 437 (maths KS1) | ~12,300 | 📋 Needs full ingestion |
 | `oak_units` | TBD | — | 📋 Needs full ingestion |
 | `oak_unit_rollup` | TBD | — | 📋 Needs full ingestion |
 | `oak_threads` | 201 (maths KS1) | — | 📋 Needs full ingestion |
@@ -349,6 +587,8 @@ Phase 4 (SDK extraction) is deferred pending Phase 3 completion.
 | Lesson transcripts cached | 4,281 | ✅ Accessible |
 | Unit summaries cached | 669 | ✅ Accessible |
 | **Total cached** | **12,039** | ✅ Working |
+
+**Note**: Redis cache is used for API supplementation calls only (maths tier, unit options).
 
 ---
 
@@ -387,6 +627,25 @@ Before any work, read:
 
 ## Key Files Reference
 
+### ⭐ Bulk Parsing Infrastructure (REUSE)
+
+| File | Purpose |
+|------|---------|
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/bulk-reader.ts` | **File reading** — `parseBulkFile()`, `readAllBulkFiles()` |
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/bulk-file-schema.ts` | Top-level Zod schema |
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/lesson-schema.ts` | Lesson Zod schema |
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/unit-schemas.ts` | Unit Zod schema |
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/vocabulary-schemas.ts` | Null sentinel handling |
+| `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.ts` | **Exports** — all types |
+
+### ⭐ ES Document Building (search SDK — REUSE)
+
+| File | Purpose |
+|------|---------|
+| `src/lib/indexing/lesson-document-builder.ts` | Creates lesson ES documents |
+| `src/lib/indexing/document-transforms.ts` | Transform utilities |
+| `src/lib/indexing/bulk-action-factory.ts` | ES bulk action creation |
+
 ### Adapter Layer
 
 | File | Purpose |
@@ -409,7 +668,9 @@ Before any work, read:
 
 | Path | Content |
 |------|---------|
-| `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/` | 30 JSON files, ~12,783 lessons |
+| `apps/.../bulk-downloads/` | **Active data** — 30 JSON files (2025-12-30) |
+| `apps/.../scripts/download-bulk.ts` | Download script |
+| `reference/bulk_download_data/.../` | Reference copy (2025-12-07) |
 
 ---
 

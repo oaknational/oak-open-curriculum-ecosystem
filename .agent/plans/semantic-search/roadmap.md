@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 Full curriculum ingestion pending
+**Status**: 🔄 Strategic pivot to bulk-first ingestion
 **Last Updated**: 2025-12-30
 **Metrics Source**: [current-state.md](current-state.md)
 
@@ -9,6 +9,65 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 ---
 
 ## 🔄 Current Status
+
+### Strategic Pivot: Bulk-First Ingestion (2025-12-30)
+
+**Decision**: Use bulk download as primary data source with API for supplementary data.
+
+| Source | Purpose |
+|--------|---------|
+| **Bulk Download** | Lesson enumeration, transcripts (81%), metadata — all 17 subjects |
+| **API** | Tier info (maths KS4), unit options (geography/english) |
+
+**Key findings from comparison** ([bulk-download-vs-api-comparison.md](../../analysis/bulk-download-vs-api-comparison.md)):
+
+- Bulk has transcripts for 81% of lessons (API only ~16%)
+- Bulk has NO tier information (373 maths lessons duplicated with no discriminator)
+- Bulk has NO unit options (geography/english alternative units)
+- RSHE-PSHE bulk file unavailable → returns 422 Unprocessable Content (no API fallback)
+- Video availability detection code removed (`video-availability.ts` deleted)
+
+**Architecture**:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  BulkDownloadSource (NEW)              OakClient (EXISTING)      │
+│  ├── parseSequence(file)               ├── getSequenceUnits()    │
+│  ├── getLessons()                      └── (tier/unit options)   │
+│  └── getUnits()                                                  │
+│                              ↓                                   │
+│              ┌─────────────────────────────────────┐             │
+│              │      HybridDataSource (NEW)         │             │
+│              │  Composes bulk + API as needed      │             │
+│              └─────────────────────────────────────┘             │
+│                              ↓                                   │
+│              ┌─────────────────────────────────────┐             │
+│              │    Existing Pipeline (UNCHANGED)    │             │
+│              │    index-oak.ts → ES Indexer        │             │
+│              └─────────────────────────────────────┘             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Next steps**:
+
+1. ✅ **Remove `video-availability.ts`** — Complete (2025-12-30)
+2. ✅ **Bulk download infrastructure** — Complete (2025-12-30) — 30 files, 757 MB
+3. 📋 **Implement Bulk Data Adapter** (TDD) — **NEXT STEP**
+   - Wraps existing `vocab-gen` bulk reader
+   - Transforms to ES document format
+   - DO NOT reinvent parsing — use `@oaknational/oak-curriculum-sdk/vocab-gen`
+4. 📋 **Create HybridDataSource** composing bulk + API
+5. 📋 **Update pipeline** to use HybridDataSource
+
+**Existing infrastructure to reuse (DO NOT RECREATE)**:
+
+| Module | Location | Purpose |
+|--------|----------|---------|
+| `parseBulkFile()` | `vocab-gen/lib/bulk-reader.ts` | Parse single file |
+| `readAllBulkFiles()` | `vocab-gen/lib/bulk-reader.ts` | Parse all files |
+| `lessonSchema` | `vocab-gen/lib/lesson-schema.ts` | Zod validation |
+| `unitSchema` | `vocab-gen/lib/unit-schemas.ts` | Zod validation |
+| `nullSentinelSchema` | `vocab-gen/lib/vocabulary-schemas.ts` | `"NULL"` → `null` |
 
 ### Cache Categorization Enhancement — Complete (2025-12-30)
 
@@ -26,18 +85,12 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 | Lint errors        | 70        | 0           |
 | New test coverage  | —         | 22 tests    |
 
-### Efficient API Traversal — Complete (2025-12-29)
+### ~~Efficient API Traversal~~ — SUPERSEDED (2025-12-30)
 
-Implemented bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to:
+> ⚠️ **SUPERSEDED by ADR-093**: The video availability detection approach has been replaced by bulk-first ingestion. The bulk download contains transcripts directly, eliminating the need for video availability detection. `video-availability.ts` has been removed.
 
-- Check video availability BEFORE fetching transcripts
-- Skip transcript fetch for lessons without videos
-- Eliminate 404 errors and wasted API calls
-
-| Metric               | Before    | After                 |
-| -------------------- | --------- | --------------------- |
-| API calls            | 2× lessons| 1 bulk + 1× summaries |
-| 404 errors           | Many      | Zero                  |
+**See**: [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) (superseded by ADR-093)
+**See**: [archive/completed/efficient-api-traversal.md](archive/completed/efficient-api-traversal.md)
 
 ### Validations Complete (2025-12-29/30)
 
@@ -95,44 +148,59 @@ Before implementing any milestone that affects search (synonyms, indices, retrie
 
 ## Blocking Work (Do These First)
 
-### 🔄 Milestone 1: Complete ES Ingestion
+### 🔄 Milestone 1: Complete ES Ingestion (Bulk-First)
 
-**Status**: 📋 READY — All prerequisites complete; run full ingestion
-**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE), cache categorization (COMPLETE)
+**Status**: 📋 BLOCKED — Bulk data adapter implementation required
+**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE), **bulk data adapter (PENDING)**
 **Specification**: [active/complete-data-indexing.md](active/complete-data-indexing.md)
+**Data Quality**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
 
-**Pre-requisites**:
+**Strategic Pivot**: This milestone has been updated to use **bulk-first ingestion** per [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md).
 
-1. ✅ Adapter refactoring complete
-2. ✅ Quality gates passing
-3. ✅ ES reset (7 indices, 192 synonyms)
-4. ✅ Cache validation (756 hits, 1 miss)
-5. ✅ Cache categorization (structured metadata)
+**Implementation phases**:
 
-**Commands**:
+1. 📋 **Phase 1: Bulk Data Adapter** (TDD)
+   - Wraps existing `vocab-gen` bulk reader (DO NOT recreate parsing)
+   - Transforms `Lesson` → `SearchLessonsIndexDoc`
+   - Transforms `Unit` → `SearchUnitsIndexDoc`
+   - Extracts threads from `sequence[].threads[]`
+   - Unit tests with fixtures (not 757MB real data)
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
+2. 📋 **Phase 2: API Supplementation**
+   - Maths KS4 tier info from API
+   - Unit options deferred (not critical for search)
+   - RSHE-PSHE: skip in ingestion, 422 in API
 
-# Optional: Run migration if cache has legacy entries
-SDK_CACHE_REDIS_URL="redis://localhost:6379" npx tsx scripts/migrate-transcript-cache.ts --execute
+3. 📋 **Phase 3: HybridDataSource**
+   - Compose bulk + API
+   - Deduplication logic per subject type
 
-# Full ingestion
-pnpm es:ingest-live --all --verbose
-```
+4. 📋 **Phase 4: Pipeline Integration**
+   - Update `index-oak.ts` to use HybridDataSource
+   - Full ingestion run
 
-**Expected**: ~12,316 unique lessons across all 17 subjects.
+**Existing infrastructure** (REUSE — DO NOT RECREATE):
+
+- ✅ `vocab-gen` bulk parsing (Zod schemas, file reader)
+- ✅ Pattern-aware traversal (for API calls)
+- ✅ Adapter refactoring complete
+- ✅ ES indices reset (7 indices, 192 synonyms)
+- ✅ Cache categorization (for API responses)
+- ✅ Quality gates passing
+
+**Expected**: ~12,300 unique lessons across 16 subjects (RSHE-PSHE returns 422).
 
 **Acceptance Criteria**:
 
 - [x] ES indices reset with current mappings
-- [x] Cache reads/writes verified with new CacheOperations interface
 - [x] Cache categorization providing observability
-- [ ] All 17 subjects ingested
-- [ ] Counts verified against bulk download reference (~12,316 unique lessons)
-- [ ] Science KS4 included (requires sequence traversal — IMPLEMENTED)
-- [ ] Ground truths expanded to cover all subjects (not just Maths KS4)
-- [ ] Baseline metrics recorded for full-curriculum search
+- [x] `video-availability.ts` removed (superseded by bulk-first)
+- [x] Bulk download infrastructure complete (30 files, 757 MB)
+- [ ] BulkDownloadSource implemented with unit tests
+- [ ] HybridDataSource composing bulk + API
+- [ ] All 16 supported subjects ingested
+- [ ] RSHE-PSHE returns 422 with proper error message
+- [ ] Counts verified against bulk download reference
 - [ ] Quality gates passing after ingestion
 
 ---
@@ -364,8 +432,9 @@ pnpm smoke:dev:stub    # Smoke tests
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first strategy |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation |
 | [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-atomic ingestion |
-| [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) | Video availability detection |
+| [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) | ~~Video availability~~ (superseded) |
 | [ADR-092](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Transcript cache categorization |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | **Bulk-first ingestion** |
 
 ---
 

@@ -1,8 +1,8 @@
 # Semantic Search — Navigation Hub
 
-**Status**: 🔄 ES reset and cache validation pending
-**Last Updated**: 2025-12-29
-**Index Coverage**: 0% (ES reset required before ingestion)
+**Status**: 🔄 Strategic pivot to bulk-first ingestion
+**Last Updated**: 2025-12-30
+**Index Coverage**: 3% (437 maths KS1 lessons indexed)
 
 ---
 
@@ -10,72 +10,116 @@
 
 For new sessions, read in order:
 
-1. **[roadmap.md](roadmap.md)** — **Single authoritative roadmap** (11 milestones)
+1. **[roadmap.md](roadmap.md)** — **Single authoritative roadmap** (bulk-first pivot)
 2. **[current-state.md](current-state.md)** — Current metrics snapshot
-3. **[search-acceptance-criteria.md](search-acceptance-criteria.md)** — Definition of done
+3. **[complete-data-indexing.md](active/complete-data-indexing.md)** — **Implementation plan** (NEXT STEP)
+4. **[search-acceptance-criteria.md](search-acceptance-criteria.md)** — Definition of done
+
+**Foundation Documents (MANDATORY)**:
+
+- [rules.md](../../directives-and-memory/rules.md) — Cardinal Rule, TDD, no type shortcuts
+- [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
+- [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
 
 ---
 
-## 🔄 Current Status
+## 🔄 Strategic Pivot: Bulk-First Ingestion (2025-12-30)
 
-### Adapter Refactoring — Complete (2025-12-29)
+**Decision**: Use bulk download as primary data source with API for supplementary data.
 
-Successfully refactored adapter layer using TDD:
+| Source | Purpose | Coverage |
+|--------|---------|----------|
+| **Bulk Download** | Lessons, transcripts (81%), metadata | All 17 subjects |
+| **API** | Tier info (maths KS4), unit options | Structural data only |
 
-| Metric             | Before    | After       |
-| ------------------ | --------- | ----------- |
-| `oak-adapter.ts`   | 593 lines | 197 lines   |
-| Lint errors        | 70        | 0           |
-| Quality gates      | Blocked   | All passing |
+**Key findings** ([bulk-download-vs-api-comparison.md](../../analysis/bulk-download-vs-api-comparison.md)):
 
-**New files created**:
+- Bulk has transcripts for 81% of lessons (API only ~16%)
+- Bulk has NO tier information (373 maths lessons duplicated)
+- Bulk has NO unit options (geography/english KS4)
+- RSHE-PSHE bulk file unavailable → returns 422 Unprocessable Content
 
-- `sdk-cache/cache-wrapper.ts` — Cache wrappers with dependency injection
-- `sdk-api-methods.ts` — API method factories
-- `sdk-client-factory.ts` — Client creation helpers
-- `src/adapters/README.md` — Architecture documentation
+**Bulk download infrastructure**: ✅ Complete (2025-12-30)
 
-### Pending Before Ingestion
+- Script: `apps/.../scripts/download-bulk.ts`
+- Command: `pnpm bulk:download`
+- Files: 30 JSON files, ~757 MB
 
-| Task             | Why Needed                                      | Status    |
-| ---------------- | ----------------------------------------------- | --------- |
-| ES reset         | Fresh indices after code changes                | 📋 Pending |
-| Cache validation | Verify new `CacheOperations` interface works    | 📋 Pending |
+**See**: [ADR-093: Bulk-First Ingestion Strategy](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)
 
-### Next Steps (In Order)
+### Architecture: Composition Pattern
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# 1. Reset ES
-pnpm es:setup --reset
-
-# 2. Verify caching (dry run)
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
-
-# 3. Full ingestion
-pnpm es:ingest-live --all --verbose
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  vocab-gen (EXISTING)                  OakClient (EXISTING)      │
+│  ├── parseBulkFile()                   ├── getSequenceUnits()    │
+│  ├── readAllBulkFiles()                └── (tier only)           │
+│  ├── Lesson, Unit types                                          │
+│  └── Zod validation                                              │
+│                              ↓                                   │
+│              ┌─────────────────────────────────────┐             │
+│              │   Bulk Data Adapter (NEW — thin)    │             │
+│              │   Transforms bulk → ES doc format   │             │
+│              └─────────────────────────────────────┘             │
+│                              ↓                                   │
+│              ┌─────────────────────────────────────┐             │
+│              │      HybridDataSource (NEW)         │             │
+│              │  Composes bulk + API as needed      │             │
+│              └─────────────────────────────────────┘             │
+│                              ↓                                   │
+│              ┌─────────────────────────────────────┐             │
+│              │    Existing Pipeline (MODIFIED)     │             │
+│              │    index-oak.ts → ES Indexer        │             │
+│              └─────────────────────────────────────┘             │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Canonical Ingestion CLI
+## ⚠️ Existing Infrastructure (REUSE — DO NOT RECREATE)
 
-**Entry point**: `src/lib/elasticsearch/setup/ingest-live.ts`
+Bulk download parsing is ALREADY IMPLEMENTED in `vocab-gen`:
 
-| Flag                  | Purpose                                          |
-| --------------------- | ------------------------------------------------ |
-| `--all`               | Ingest all 17 subjects                           |
-| `--subject <slug>`    | Ingest specific subject(s), can be repeated      |
-| `--keystage <slug>`   | Filter by key stage                              |
-| `--index <kind>`      | Filter to specific index kind                    |
-| `--force`             | Overwrite existing documents                     |
-| `--bypass-cache`      | Skip Redis cache requirement                     |
-| `--ignore-cached-404` | Bypass cached 404s for transcripts               |
-| `--verbose`           | Detailed logging                                 |
-| `--dry-run`           | Preview without indexing                         |
+| Module | Location | Purpose |
+|--------|----------|---------|
+| `parseBulkFile()` | `vocab-gen/lib/bulk-reader.ts` | Parse single file |
+| `readAllBulkFiles()` | `vocab-gen/lib/bulk-reader.ts` | Parse all files |
+| `lessonSchema` | `vocab-gen/lib/lesson-schema.ts` | Lesson Zod validation |
+| `unitSchema` | `vocab-gen/lib/unit-schemas.ts` | Unit Zod validation |
+| `nullSentinelSchema` | `vocab-gen/lib/vocabulary-schemas.ts` | `"NULL"` → `null` |
 
-If interrupted, re-run the same command - incremental mode skips existing docs.
+**Data quality issues**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
+
+---
+
+## Next Steps
+
+### Phase 1: Bulk Data Adapter (TDD) — **NEXT STEP**
+
+1. **Wrap vocab-gen** — DO NOT recreate parsing
+2. Transform `Lesson` → `SearchLessonsIndexDoc`
+3. Transform `Unit` → `SearchUnitsIndexDoc`
+4. Extract threads from `sequence[].threads[]`
+
+**Implementation details**: [complete-data-indexing.md](active/complete-data-indexing.md)
+
+### Phase 2: Hybrid Data Source
+
+1. Create `HybridDataSource` composing bulk + API
+2. API calls only for: maths KS4 tiers, geography/english unit options
+3. RSHE-PSHE: Return 422 Unprocessable Content
+
+### Phase 3: Pipeline Integration
+
+1. Update `index-oak.ts` to use `HybridDataSource`
+2. Minimal changes to existing pipeline
+3. Full ingestion run: `pnpm es:ingest-live --all --verbose`
+
+### Completed Infrastructure ✅
+
+- ~~Remove `video-availability.ts`~~ — **Done**
+- ~~Create bulk download script~~ — **Done**
+- ~~Download fresh bulk data~~ — **Done** (30 files, 757 MB)
 
 ---
 
@@ -97,25 +141,6 @@ If interrupted, re-run the same command - incremental mode skips existing docs.
 
 ---
 
-## Strategic Direction
-
-> "We should be able to do an excellent job with traditional methods, and an amazing job with non-AI recent search methods, and a phenomenal job once we take that already optimised approach and add AI into the mix."
-
-```text
-                       ┌─────────────────┐
-                       │   PHENOMENAL    │  ← Tier 4: AI Enhancement
-                   ┌───┴─────────────────┴───┐
-                   │       EXCELLENT         │  ← Tier 3: Modern ES Features
-               ┌───┴─────────────────────────┴───┐
-               │           VERY GOOD             │  ← Tier 2: Document Relationships
-           ┌───┴─────────────────────────────────┴───┐
-           │              GOOD (Tier 1 EXHAUSTED)    │  ← Tier 1: Search Fundamentals
-           │              ✅ WE ARE HERE              │
-           └─────────────────────────────────────────┘
-```
-
----
-
 ## Foundation Documents (MANDATORY)
 
 | Document                   | Purpose                              |
@@ -131,10 +156,11 @@ If interrupted, re-run the same command - incremental mode skips existing docs.
 
 | ADR        | Title                      | Purpose                |
 | ---------- | -------------------------- | ---------------------- |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | **Bulk-First Ingestion** | Strategic pivot |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Tier prioritisation |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground Truth Validation | Slug validation discipline |
 | [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-Atomic Ingestion | Resilient ingestion |
-| [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | Curriculum Denormalization | API traversal patterns |
+| [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) | ~~Video Availability~~ | **Superseded by ADR-093** |
 
 ---
 
@@ -169,13 +195,13 @@ pnpm smoke:dev:stub
 ├── search-acceptance-criteria.md # Definition of done
 ├── README.md                   # This file
 ├── active/                     # Currently blocking work
-│   ├── complete-data-indexing.md    # Milestone 1: Full curriculum ingestion
+│   ├── complete-data-indexing.md    # Milestone 1: Bulk-first ingestion
 │   ├── pattern-aware-ingestion.md   # Milestone 2: Complex traversal (COMPLETE)
-│   ├── synonym-quality-audit.md     # Milestone 3: Synonym quality
-│   └── es-native-enhancements.md    # Phase 3e: BM25 optimisation
+│   └── synonym-quality-audit.md     # Milestone 3: Synonym quality
 ├── planned/                    # Future work with specs
 ├── planned/future/             # Post-SDK work
 ├── archive/completed/          # Summaries of completed work
+│   └── efficient-api-traversal.md   # Superseded by bulk-first
 └── reference-docs/             # Permanent reference material
 ```
 
@@ -185,29 +211,29 @@ pnpm smoke:dev:stub
 
 | Document                  | Purpose                        |
 | ------------------------- | ------------------------------ |
-| [evaluations/README.md](../../evaluations/README.md) | **Evaluation framework home** |
+| [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md) | **Data quality issues** |
+| [bulk-download-vs-api-comparison.md](../../analysis/bulk-download-vs-api-comparison.md) | Strategic analysis |
+| [transcript-availability-analysis.md](../../analysis/transcript-availability-analysis.md) | Transcript coverage findings |
+| [evaluations/README.md](../../evaluations/README.md) | Evaluation framework home |
 | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
-| [ground-truth-corrections.md](../../evaluations/ground-truth-corrections.md) | Details of slug corrections |
-| [EXPERIMENT-PRIORITIES.md](../../evaluations/experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap |
-| [search-experiment-guidance.md](../../evaluations/guidance/search-experiment-guidance.md) | How to run experiments |
-| [curriculum-traversal-strategy.md](../curriculum-traversal-strategy.md) | API traversal patterns (7 patterns) |
-| [high-level-plan.md](../high-level-plan.md) | Strategic coordination |
+| [curriculum-structure-analysis.md](../../analysis/curriculum-structure-analysis.md) | 7 API patterns documented |
 
 ---
 
-## Current State (Summary — 2025-12-29)
+## Current State (Summary — 2025-12-30)
 
 | Metric                  | Value            | Target   | Status               |
 | ----------------------- | ---------------- | -------- | -------------------- |
+| Strategic pivot         | ✅ Decided       | —        | ✅ Bulk-first        |
+| Bulk download infra     | ✅ Complete      | —        | ✅ 30 files, 757 MB  |
+| vocab-gen parsing       | ✅ Exists        | —        | ✅ REUSE             |
 | Adapter refactoring     | ✅ Complete      | —        | ✅ 593→197 lines     |
 | Pattern-aware traversal | ✅ Complete      | —        | ✅ All 7 patterns    |
 | Quality gates           | ✅ Passing       | —        | ✅ All 11 green      |
-| ES reset                | 📋 Pending       | ✅       | 📋 Need to run       |
-| Cache validation        | 📋 Pending       | ✅       | 📋 Verify new interface |
-| Redis cache             | 12,039 entries   | —        | ⚠️ Verify accessible |
-| Lessons indexed         | 0                | 12,316   | 📋 Pending           |
+| **Bulk data adapter**   | 📋 **Pending**   | ✅       | 📋 Wraps vocab-gen   |
+| Lessons indexed         | 437              | ~12,300  | 📋 3% (maths KS1)    |
 
-**Next Step**: Reset ES, verify caching, then run ingestion
+**Next Step**: Implement Bulk Data Adapter using TDD (wraps existing `vocab-gen`)
 
 **See**: [current-state.md](current-state.md) for full details.
 
@@ -215,7 +241,7 @@ pnpm smoke:dev:stub
 
 ## Architecture
 
-### Four-Retriever Hybrid Design
+### Four-Retriever Hybrid Design (Unchanged)
 
 ```text
 Query → [BM25 Content] ─┐
@@ -226,7 +252,7 @@ Query → [BM25 Content] ─┐
 
 **See**: [archive/completed/four-retriever-implementation.md](archive/completed/four-retriever-implementation.md) for implementation details.
 
-### Adapter Architecture (Refactored 2025-12-29)
+### Adapter Architecture (Unchanged)
 
 ```text
 oak-adapter.ts (Public API)

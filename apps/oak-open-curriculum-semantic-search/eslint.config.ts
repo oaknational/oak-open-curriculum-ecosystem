@@ -24,6 +24,7 @@ const eslintConfig = defineConfig(
     'next-env.d.ts',
     'vitest.config.ts',
     'vitest.e2e.config.ts',
+    'bulk-downloads/**',
   ]),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)

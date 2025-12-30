@@ -256,6 +256,17 @@ pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
 - **ADR-082**: This fix supports the Fundamentals-First strategy by ensuring complete data
 - **ADR-069**: Systematic ingestion will re-ingest with corrected source
 
+## Update: Bulk Download as Alternative Enumeration Source (2025-12-30)
+
+**See ADR-093**: The bulk download (`reference/bulk_download_data/`) provides an alternative complete lesson enumeration source that avoids API pagination entirely:
+
+| Source              | Lessons | Pagination         | Notes                           |
+| ------------------- | ------- | ------------------ | ------------------------------- |
+| **Bulk Download**   | ~12,783 | None (local files) | Missing tier info, unit options |
+| **API (paginated)** | ~12,316 | Required           | 5 lessons missing due to bug    |
+
+The bulk-first approach (ADR-093) uses bulk download for enumeration, with API only for supplementary structural data (tier info, unit options).
+
 ## References
 
 - Upstream API code: `reference/oak-openapi/src/lib/handlers/units/units.ts`

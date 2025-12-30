@@ -18,6 +18,7 @@
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:watch": "vitest",
+    "bulk:download": "tsx scripts/download-bulk.ts",
     "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
     "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
     "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
@@ -66,6 +67,7 @@
     "@testing-library/react": "^16.3.0",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "@types/unzipper": "^0.10.11",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
     "@vitejs/plugin-react": "^5.1.2",
@@ -77,6 +79,7 @@
     "typedoc": "^0.28.15",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.9.3",
+    "unzipper": "^0.12.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.15"
   }

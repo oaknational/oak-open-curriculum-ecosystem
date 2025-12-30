@@ -27,12 +27,13 @@ If someone handed you this pack, would you know how to find what you want, and w
 - **Quizzes and questions:** `13-quiz-content-examples.md` and `04-high-priority-requests.md` (Item 4)
 - **Assets and transcripts:** `11-assets-and-transcripts-examples.md` and `06-response-metadata-and-caching.md`
 - **Bulk download integrity:** `15-bulk-download-examples.md` and `00-overview-and-known-issues.md`
+- **Bulk download completeness:** `15-bulk-download-examples.md` (Examples 8-12) and `00-overview-and-known-issues.md` (ER4-ER8)
 - **Schema/validation tooling:** `20-validation-and-schema-examples.md` and `09-schemas-endpoint-rfc.md`
 - **Programme variants and identifiers:** `18-programmes-and-identifiers-examples.md` and `04-high-priority-requests.md` (Items 5-6)
 
 ## File map
 
-- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30).
+- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30), **bulk download completeness requests** (RSHE-PSHE file, tier field, unit options, yearSlug, examBoard) (NEW 2025-12-30).
 - `01-derived-fields-and-ks4-metadata.md` — derived fields registry, ghost pathway note, KS4 programme factors, and interim denormalisation workaround.
 - `02-semantic-summary.md` — rerank summary request and the semantic_summary field definitions with status and rationale.
 - `03-context-and-vision.md` — executive summary, vision, tool ecosystem, schema-first pipeline overview, and audience.

@@ -99,6 +99,9 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-087: Batch-Atomic Ingestion](087-batch-atomic-ingestion.md) ← **Supersedes aspects of ADR-069**
 - [ADR-088: Result Pattern for Explicit Error Handling](088-result-pattern-for-error-handling.md)
 - [ADR-089: Index Everything Principle for Elasticsearch](089-index-everything-principle.md)
+- [ADR-091: Video Availability Detection Strategy](091-video-availability-detection-strategy.md) ← **Superseded by ADR-093**
+- [ADR-092: Transcript Cache Categorization](092-transcript-cache-categorization.md)
+- [ADR-093: Bulk-First Ingestion Strategy](093-bulk-first-ingestion-strategy.md)
 
 ## Key Architectural Decisions
 

@@ -1088,3 +1088,158 @@ Add a dedicated documentation page (e.g., `https://open-api.thenational.academy/
 ```
 
 **See also**: Item 13 in `05-medium-priority-requests.md` (boolean resource flags)
+
+---
+
+## Bulk Download Completeness Requests (2025-12-30)
+
+**Context**: With the bulk-first ingestion strategy (ADR-093), these enhancements would eliminate the need for API supplementation, making the bulk download fully self-sufficient for search index population.
+
+### ER4: Add RSHE-PSHE Bulk Download File
+
+**Status**: 🔴 CONFIRMED MISSING — RSHE-PSHE NOT in bulk download API response (2025-12-30)
+
+**Update**: The [Oak Bulk Download page](https://open-api.thenational.academy/bulk-download) shows RSHE (PSHE) as available, but the actual `/api/bulk` endpoint **does not return these files**. Fresh download on 2025-12-30 confirmed 30 subject files returned, RSHE-PSHE excluded.
+
+**Impact**: RSHE-PSHE content cannot be ingested from bulk. For now, we return 422 Unprocessable Content for this subject until bulk files become available.
+
+**Requested**: Include `rshe-pshe-primary.json` and `rshe-pshe-secondary.json` in the `/api/bulk` response.
+
+### ER5: Add Tier Field to Maths KS4 Lessons in Bulk Download
+
+**Request**: Add explicit `tier` or `tiers` field to maths KS4 lessons to distinguish foundation vs higher.
+
+**Current State**:
+
+- 373 maths KS4 lessons appear as **exact duplicates** in the `lessons[]` array
+- No field distinguishes foundation from higher tier
+- Unit-level data also lacks tier information
+- Total raw entries: 1,235 (but only 862 unique lesson slugs)
+
+**Impact**:
+
+- Cannot determine tier membership without API supplementation
+- Must use heuristics (analyze lesson list composition) or API calls
+- Breaks lesson deduplication logic
+
+**Current Workaround**:
+
+Fetch `/sequences/maths-secondary/units` from API to get tier assignments.
+
+**Requested** (at lesson level):
+
+```json
+{
+  "lessonSlug": "solving-complex-quadratic-equations",
+  "tiers": ["foundation", "higher"]
+}
+```
+
+**OR** (at unit level):
+
+```json
+{
+  "unitSlug": "algebraic-fractions",
+  "tier": "higher",
+  "tierSlug": "higher"
+}
+```
+
+**Priority**: HIGH — affects all maths KS4 ingestion (373 lessons)
+
+**See also**: Issue 2 in "Bulk Download Data Integrity Issues" section above
+
+### ER6: Add Unit Options to Bulk Download
+
+**Request**: Add `unitOptions` field to units that have alternative choices.
+
+**Current State**:
+
+- Geography and English KS4 have unit options (alternative units students can choose)
+- API exposes this via `/sequences/{seq}/units` response
+- Bulk download has **no unit options data**
+
+**Affected Subjects/Key Stages**:
+
+| Subject | Key Stage | Unit Options in API |
+|---------|-----------|---------------------|
+| Geography | KS4 | Yes |
+| English | KS4 | Yes |
+| Art | KS4 | Possibly |
+| Design-Technology | KS4 | Possibly |
+
+**Impact**:
+
+- Cannot represent curriculum choices from bulk data alone
+- Requires API supplementation for unit relationships
+
+**Requested**:
+
+```json
+{
+  "unitSlug": "fieldwork-human-geography",
+  "unitOptions": [
+    { "unitSlug": "fieldwork-physical-geography", "unitTitle": "Fieldwork - Physical Geography" }
+  ]
+}
+```
+
+**Priority**: MEDIUM — affects ~4 subjects but only at KS4
+
+### ER7: Add `yearSlug` to Lessons in Bulk Download
+
+**Request**: Include `yearSlug` directly on lesson records.
+
+**Current State**:
+
+- Units have `yearSlug` field
+- Lessons do **not** have `yearSlug` field
+- Must derive year via `lesson.unitSlug → unit.yearSlug` join
+
+**Impact**:
+
+- Extra processing step required during ingestion
+- Potential for mismatches when lessons belong to multiple units
+- Complicates lesson document building
+
+**Requested**:
+
+```json
+{
+  "lessonSlug": "adding-fractions-with-same-denominator",
+  "unitSlug": "fractions",
+  "yearSlug": "year-4",
+  "yearTitle": "Year 4"
+}
+```
+
+**Priority**: LOW — workaround exists (derive from unit)
+
+### ER8: Add `examBoard` to Science KS4 Lessons in Bulk Download
+
+**Request**: Include `examBoard` directly on lesson records for science KS4.
+
+**Current State**:
+
+- Units have `examBoards` array (e.g., `["aqa", "edexcel", "ocr"]`)
+- Lessons do **not** have exam board information
+- Must derive via unit relationship
+
+**Impact**:
+
+- Cannot filter lessons by exam board without unit join
+- Extra processing during ingestion
+- Science KS4 has complex structure (exam subjects × exam boards × tiers)
+
+**Requested**:
+
+```json
+{
+  "lessonSlug": "photosynthesis-part-1",
+  "examBoards": ["aqa", "edexcel", "ocr"],
+  "examSubject": "biology",
+  "tier": "higher"
+}
+```
+
+**Priority**: LOW — workaround exists (derive from unit)
