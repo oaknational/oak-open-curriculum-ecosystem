@@ -18,10 +18,10 @@ import {
   withCache,
   withCacheAndNegative,
   buildCacheKey,
-  NOT_FOUND_SENTINEL,
   type CacheStats,
   type CacheOperations,
 } from './cache-wrapper';
+import { type TranscriptCacheEntry, serializeTranscriptCacheEntry } from './transcript-cache-types';
 
 // =============================================================================
 // Test Helpers
@@ -32,7 +32,6 @@ function createFakeCacheOps(cache = new Map<string, string>()): CacheOperations 
   return {
     get: vi.fn(async (key: string) => cache.get(key) ?? null),
     setex: vi.fn(async (key: string, ttlSeconds: number, value: string) => {
-      // Store with TTL metadata for potential assertions (TTL stored but not enforced in fake)
       cache.set(key, value);
       cache.set(`${key}:ttl`, String(ttlSeconds));
     }),
@@ -76,15 +75,7 @@ describe('withCache', () => {
     const stats = createStats();
     const underlying = vi.fn();
 
-    const wrapped = withCache(
-      underlying,
-      ops,
-      'test',
-      14,
-      stats,
-      isString,
-      () => 86400, // Fixed TTL for testing
-    );
+    const wrapped = withCache(underlying, ops, 'test', 14, stats, isString, () => 86400);
 
     const result = await wrapped('id1');
 
@@ -158,7 +149,7 @@ describe('withCacheAndNegative', () => {
       14,
       stats,
       isString,
-      false, // ignoreCached404
+      false,
       () => 86400,
     );
 
@@ -169,8 +160,9 @@ describe('withCacheAndNegative', () => {
     expect(underlying).not.toHaveBeenCalled();
   });
 
-  it('should return not_found error on cached 404', async () => {
-    const cache = new Map([['oak-sdk:v1:transcript:lesson1', NOT_FOUND_SENTINEL]]);
+  it('should return not_found error on cached not_found entry', async () => {
+    const notFoundEntry = serializeTranscriptCacheEntry({ status: 'not_found' });
+    const cache = new Map([['oak-sdk:v1:transcript:lesson1', notFoundEntry]]);
     const ops = createFakeCacheOps(cache);
     const stats = createStats();
     const underlying = vi.fn();
@@ -182,7 +174,7 @@ describe('withCacheAndNegative', () => {
       14,
       stats,
       isString,
-      false, // ignoreCached404
+      false,
       () => 86400,
     );
 
@@ -196,8 +188,37 @@ describe('withCacheAndNegative', () => {
     expect(underlying).not.toHaveBeenCalled();
   });
 
-  it('should bypass cached 404 when ignoreCached404 is true', async () => {
-    const cache = new Map([['oak-sdk:v1:transcript:lesson1', NOT_FOUND_SENTINEL]]);
+  it('should return not_found error on cached no_video entry', async () => {
+    const noVideoEntry = serializeTranscriptCacheEntry({ status: 'no_video' });
+    const cache = new Map([['oak-sdk:v1:transcript:lesson1', noVideoEntry]]);
+    const ops = createFakeCacheOps(cache);
+    const stats = createStats();
+    const underlying = vi.fn();
+
+    const wrapped = withCacheAndNegative(
+      underlying,
+      ops,
+      'transcript',
+      14,
+      stats,
+      isString,
+      false,
+      () => 86400,
+    );
+
+    const result = await wrapped('lesson1');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe('not_found');
+    }
+    expect(stats.hits).toBe(1);
+    expect(underlying).not.toHaveBeenCalled();
+  });
+
+  it('should bypass cached not_found when ignoreCached404 is true', async () => {
+    const notFoundEntry = serializeTranscriptCacheEntry({ status: 'not_found' });
+    const cache = new Map([['oak-sdk:v1:transcript:lesson1', notFoundEntry]]);
     const ops = createFakeCacheOps(cache);
     const stats = createStats();
     const underlying = vi.fn().mockResolvedValue(ok('fresh-transcript'));
@@ -209,7 +230,7 @@ describe('withCacheAndNegative', () => {
       14,
       stats,
       isString,
-      true, // ignoreCached404
+      true,
       () => 86400,
     );
 
@@ -220,7 +241,7 @@ describe('withCacheAndNegative', () => {
     expect(underlying).toHaveBeenCalledWith('lesson1');
   });
 
-  it('should cache 404 responses with sentinel value', async () => {
+  it('should cache 404 responses with structured not_found entry', async () => {
     const ops = createFakeCacheOps();
     const stats = createStats();
     const error: SdkNotFoundError = {
@@ -243,11 +264,8 @@ describe('withCacheAndNegative', () => {
 
     await wrapped('lesson1');
 
-    expect(ops.setex).toHaveBeenCalledWith(
-      'oak-sdk:v1:transcript:lesson1',
-      86400,
-      NOT_FOUND_SENTINEL,
-    );
+    const expectedValue = serializeTranscriptCacheEntry({ status: 'not_found' });
+    expect(ops.setex).toHaveBeenCalledWith('oak-sdk:v1:transcript:lesson1', 86400, expectedValue);
   });
 
   it('should write success to cache', async () => {
@@ -273,5 +291,123 @@ describe('withCacheAndNegative', () => {
       86400,
       JSON.stringify('transcript-content'),
     );
+  });
+});
+
+// =============================================================================
+// Structured transcript cache entry tests (ADR-092)
+// =============================================================================
+
+describe('withCacheAndNegative with structured TranscriptCacheEntry format', () => {
+  /**
+   * Type guard for transcript cache entry.
+   */
+  function isTranscriptCacheData(value: unknown): value is TranscriptCacheEntry {
+    if (value === null || typeof value !== 'object') {
+      return false;
+    }
+    const obj = value as { status?: unknown; transcript?: unknown; vtt?: unknown };
+    if (obj.status === 'available') {
+      return typeof obj.transcript === 'string' && typeof obj.vtt === 'string';
+    }
+    if (obj.status === 'no_video' || obj.status === 'not_found') {
+      return true;
+    }
+    return false;
+  }
+
+  it('should handle structured "available" cache format', async () => {
+    const entry: TranscriptCacheEntry = {
+      status: 'available',
+      transcript: 'Hello world',
+      vtt: 'WEBVTT',
+    };
+    const cache = new Map([
+      ['oak-sdk:v1:transcript:lesson1', serializeTranscriptCacheEntry(entry)],
+    ]);
+    const ops = createFakeCacheOps(cache);
+    const stats = createStats();
+    const underlying = vi.fn();
+
+    const wrapped = withCacheAndNegative(
+      underlying,
+      ops,
+      'transcript',
+      14,
+      stats,
+      isTranscriptCacheData,
+      false,
+      () => 86400,
+    );
+
+    const result = await wrapped('lesson1');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual(entry);
+    }
+    expect(stats.hits).toBe(1);
+    expect(underlying).not.toHaveBeenCalled();
+  });
+
+  it('should return not_found status entries as negative cache hits', async () => {
+    const entry: TranscriptCacheEntry = { status: 'not_found' };
+    const cache = new Map([
+      ['oak-sdk:v1:transcript:lesson1', serializeTranscriptCacheEntry(entry)],
+    ]);
+    const ops = createFakeCacheOps(cache);
+    const stats = createStats();
+    const underlying = vi.fn();
+
+    const wrapped = withCacheAndNegative(
+      underlying,
+      ops,
+      'transcript',
+      14,
+      stats,
+      isTranscriptCacheData,
+      false,
+      () => 86400,
+    );
+
+    const result = await wrapped('lesson1');
+
+    // Negative cache entries (not_found, no_video) return as errors
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe('not_found');
+    }
+    expect(stats.hits).toBe(1);
+    expect(underlying).not.toHaveBeenCalled();
+  });
+
+  it('should return no_video status entries as negative cache hits', async () => {
+    const entry: TranscriptCacheEntry = { status: 'no_video' };
+    const cache = new Map([
+      ['oak-sdk:v1:transcript:lesson1', serializeTranscriptCacheEntry(entry)],
+    ]);
+    const ops = createFakeCacheOps(cache);
+    const stats = createStats();
+    const underlying = vi.fn();
+
+    const wrapped = withCacheAndNegative(
+      underlying,
+      ops,
+      'transcript',
+      14,
+      stats,
+      isTranscriptCacheData,
+      false,
+      () => 86400,
+    );
+
+    const result = await wrapped('lesson1');
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe('not_found');
+    }
+    expect(stats.hits).toBe(1);
+    expect(underlying).not.toHaveBeenCalled();
   });
 });

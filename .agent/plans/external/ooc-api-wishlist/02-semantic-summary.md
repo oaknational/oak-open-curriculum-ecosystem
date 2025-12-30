@@ -16,6 +16,8 @@
 - Could improve NDCG by enabling cross-encoder reranking
 - Same field could improve search snippets in UI
 
+**User impact:** Teachers and learners get better search relevance; SDK/MCP engineers can build faster, higher-quality retrieval.
+
 **Priority**: Medium - current two-way hybrid (BM25 + ELSER) achieves MRR 0.900, NDCG 0.716. Reranking may close remaining NDCG gap but requires this field to be effective.
 
 **See**: `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` for full experimental findings.
@@ -266,6 +268,8 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 - **Better search quality**: Optimised summaries improve retrieval metrics
 - **Future-proof**: Supports dense, sparse, and hybrid embedding strategies
 
+**User impact:** Teachers, students, and adult learners get more relevant discovery; AI tool builders and API consumers share consistent semantic signals.
+
 **Priority**: **High** - foundational for semantic search quality across all resource types
 
 **Effort**: Medium - requires content team to define summary composition rules; backend to compute and cache summaries
@@ -279,4 +283,3 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 - Subject-level and sequence-level search (e.g., "find science sequences with practical work focus")
 - Category-aware filtering and discovery
 - Future AI features requiring comprehensive curriculum understanding
-

@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 ES reset and cache validation pending
-**Last Updated**: 2025-12-29
+**Status**: 🔄 Full curriculum ingestion pending
+**Last Updated**: 2025-12-30
 **Metrics Source**: [current-state.md](current-state.md)
 
 This is THE authoritative roadmap for semantic search work. All other plan documents reference this file.
@@ -9,6 +9,14 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 ---
 
 ## 🔄 Current Status
+
+### Cache Categorization Enhancement — Complete (2025-12-30)
+
+| Metric | Before | After |
+|--------|--------|-------|
+| `eslint-disable.*no-deprecated` | 11 | **0** |
+| Migration script | In codebase | **Standalone** |
+| Structured cache metadata | — | `available`, `no_video`, `not_found` |
 
 ### Adapter Refactoring — Complete (2025-12-29)
 
@@ -21,6 +29,7 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 ### Efficient API Traversal — Complete (2025-12-29)
 
 Implemented bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to:
+
 - Check video availability BEFORE fetching transcripts
 - Skip transcript fetch for lessons without videos
 - Eliminate 404 errors and wasted API calls
@@ -30,7 +39,7 @@ Implemented bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to:
 | API calls            | 2× lessons| 1 bulk + 1× summaries |
 | 404 errors           | Many      | Zero                  |
 
-### Pending Before Ingestion — COMPLETE (2025-12-29)
+### Validations Complete (2025-12-29/30)
 
 | Task             | Why Needed                                      | Status    |
 | ---------------- | ----------------------------------------------- | --------- |
@@ -38,14 +47,16 @@ Implemented bulk `/key-stages/{ks}/subject/{subject}/assets` endpoint to:
 | ES reset         | Fresh indices for clean ingestion               | ✅ Complete |
 | Cache validation | Verify new `CacheOperations` interface works    | ✅ Complete (756 hits, 1 miss) |
 | ES upsert verify | Confirm incremental mode still works            | ✅ Complete (638 docs ingested) |
+| Cache categorization | Observability for transcript unavailability | ✅ Complete |
 
-### Next Steps (In Order)
+### Next Steps
 
 1. ✅ **Run quality gates**: All 11 gates passed
 2. ✅ **Reset ES**: `pnpm es:setup --reset` — 7 indices, 192 synonyms
 3. ✅ **Verify caching**: Dry-run passed, cache hits working
 4. ✅ **Verify writes**: Maths KS1 ingested (437 docs + 201 threads)
-5. 📋 **Full ingestion**: `pnpm es:ingest-live --all --verbose`
+5. ✅ **Cache categorization**: Structured metadata implemented
+6. 📋 **Full ingestion**: `pnpm es:ingest-live --all --verbose`
 
 ---
 
@@ -67,17 +78,18 @@ Before implementing any milestone that affects search (synonyms, indices, retrie
 
 ---
 
-## Current State (Snapshot — 2025-12-29)
+## Current State (Snapshot — 2025-12-30)
 
 | Metric                  | Value            | Status                  |
 | ----------------------- | ---------------- | ----------------------- |
 | Tier 1                  | EXHAUSTED        | ✅ All approaches verified (2025-12-24) |
 | Pattern-aware traversal | COMPLETE         | ✅ All 7 patterns implemented |
 | Adapter refactoring     | COMPLETE         | ✅ 593→197 lines, TDD-driven |
+| Cache categorization    | COMPLETE         | ✅ Zero compatibility layers |
 | Quality gates           | PASSING          | ✅ All 11 gates green   |
-| ES reset                | PENDING          | 📋 Need to run          |
-| Cache validation        | PENDING          | 📋 Verify new interface |
-| Redis cache             | 12,039 entries   | ⚠️ Verify accessibility |
+| ES reset                | COMPLETE         | ✅ 7 indices, 192 synonyms |
+| Cache validation        | COMPLETE         | ✅ 756 hits, 1 miss      |
+| Redis cache             | 12,039 entries   | ✅ Verified accessible   |
 
 ---
 
@@ -85,29 +97,27 @@ Before implementing any milestone that affects search (synonyms, indices, retrie
 
 ### 🔄 Milestone 1: Complete ES Ingestion
 
-**Status**: 📋 PENDING — ES reset and cache validation required
-**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE)
+**Status**: 📋 READY — All prerequisites complete; run full ingestion
+**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE), cache categorization (COMPLETE)
 **Specification**: [active/complete-data-indexing.md](active/complete-data-indexing.md)
 
 **Pre-requisites**:
 
 1. ✅ Adapter refactoring complete
 2. ✅ Quality gates passing
-3. 📋 ES reset
-4. 📋 Cache validation
+3. ✅ ES reset (7 indices, 192 synonyms)
+4. ✅ Cache validation (756 hits, 1 miss)
+5. ✅ Cache categorization (structured metadata)
 
 **Commands**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Step 1: Reset ES
-pnpm es:setup --reset
+# Optional: Run migration if cache has legacy entries
+SDK_CACHE_REDIS_URL="redis://localhost:6379" npx tsx scripts/migrate-transcript-cache.ts --execute
 
-# Step 2: Verify caching (dry run)
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
-
-# Step 3: Full ingestion
+# Full ingestion
 pnpm es:ingest-live --all --verbose
 ```
 
@@ -115,8 +125,9 @@ pnpm es:ingest-live --all --verbose
 
 **Acceptance Criteria**:
 
-- [ ] ES indices reset with current mappings
-- [ ] Cache reads/writes verified with new CacheOperations interface
+- [x] ES indices reset with current mappings
+- [x] Cache reads/writes verified with new CacheOperations interface
+- [x] Cache categorization providing observability
 - [ ] All 17 subjects ingested
 - [ ] Counts verified against bulk download reference (~12,316 unique lessons)
 - [ ] Science KS4 included (requires sequence traversal — IMPLEMENTED)
@@ -127,6 +138,25 @@ pnpm es:ingest-live --all --verbose
 ---
 
 ## ✅ Completed Work
+
+### Cache Categorization Enhancement — COMPLETE (2025-12-30)
+
+**Status**: ✅ COMPLETE
+**Specification**: See ADR-092
+
+Structured cache metadata to distinguish transcript unavailability reasons:
+
+| Status | Meaning |
+|--------|---------|
+| `available` | Transcript data exists |
+| `no_video` | Lesson has no video asset |
+| `not_found` | API 404 or empty response |
+
+**Clean architecture**:
+
+- Zero eslint-disable comments
+- Migration script is standalone (no codebase imports)
+- No backwards compatibility layer
 
 ### Milestone 2: Pattern-Aware Ingestion — COMPLETE
 
@@ -160,6 +190,7 @@ All 7 curriculum structural patterns now handled:
 | File                         | Purpose                                |
 | ---------------------------- | -------------------------------------- |
 | `sdk-cache/cache-wrapper.ts` | Cache wrappers with dependency injection |
+| `sdk-cache/transcript-cache-types.ts` | Structured cache entry types |
 | `sdk-api-methods.ts`         | API method factories                   |
 | `sdk-client-factory.ts`      | Client creation helpers                |
 | `src/adapters/README.md`     | Architecture documentation             |
@@ -333,6 +364,8 @@ pnpm smoke:dev:stub    # Smoke tests
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first strategy |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation |
 | [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-atomic ingestion |
+| [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) | Video availability detection |
+| [ADR-092](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Transcript cache categorization |
 
 ---
 

@@ -9,13 +9,140 @@
 - Does OpenAPI 3.0 support `examples` at the path level, rather than just at the parameter level?
 - Can we update the OpenAPI spec to OpenAPI 3.1? Does GCP support this?
 - Can we make sure that the API uses Zod 4?
-- Can we make sure that the API ships the Zod schemas as code snippets, in addition to JSON Schema?
+- Can we make sure that the API ships the Zod schemas as code snippets, in addition to JSON Schema? (See `09-schemas-endpoint-rfc.md`.)
 - Can we enhance the metadata of the API to make it more useful for AI agents?
 - Can we improve data integrity at the API level?
 
 ---
 
+## API Code Review Findings (5 January 2025)
+
+### 1. `/sequences/{sequence}/assets` ignores the year filter
+
+**Status**: 🔴 BUG — parameter accepted but ignored  
+**Endpoint**: `/api/v0/sequences/{sequence}/assets`  
+**Observation**: `year` is defined in the request schema but the handler does not apply it.  
+**Impact**: Consumers cannot scope assets to a year; results require client-side filtering and contradict the documented parameter.  
+**User impact**: SDK/MCP engineers and API consumers get mis-scoped asset sets; teachers see irrelevant resources in year-specific workflows.  
+**Requested fix**: Apply the year filter in the query or remove the parameter until supported.  
+**Examples**: See `11-assets-and-transcripts-examples.md`.
+
+### 2. Subject gating is not documented (blocked subjects and allowlists)
+
+**Observation**:
+
+- `blockedSequenceSubjects` includes `rshe-pshe` and returns `400 BAD_REQUEST` in sequence units, sequence questions, and sequence assets.
+- Assets endpoints use allowlists (`supportedSubjects`, `supportedUnits`, `supportedLessons`) in addition to TPC filtering.
+- Lesson summary can return `404` when blocked for copyright text.
+
+**Impact**: Results can be partial or rejected without clear schema-level reasons, making it hard for clients to predict availability.
+**User impact**: API consumers and SDK/MCP engineers cannot anticipate availability; teachers and curriculum leaders see inconsistent access.
+
+**Requested fix**: Document availability rules in OpenAPI and return explicit reason codes (or provide a discovery endpoint or availability flags).  
+**Examples**: See `10-availability-and-gating-examples.md`.
+
+### 3. `/search/lessons` excludes `financial-education`
+
+**Observation**: Search SQL excludes `subjectSlug = 'financial-education'` regardless of query parameters.  
+**Impact**: Search results are incomplete relative to other endpoints.  
+**User impact**: Teachers and learners miss relevant lessons; API consumers cannot rely on search completeness.  
+**Requested fix**: Document this constraint or add an explicit flag/parameter and reason code.  
+**Examples**: See `12-search-and-enums-examples.md`.
+
+### 4. Questions endpoints silently drop image-based questions for unsupported content
+
+**Observation**: `questionsForQuiz` removes multiple-choice questions with image answers when images are not allowed for the subject/unit.  
+**Impact**: Consumers receive incomplete quizzes without any indication of omitted items.  
+**User impact**: Teachers and students may miss key questions; SDK/MCP engineers cannot report omissions reliably.  
+**Requested fix**: Add response metadata (`imagesAllowed`, `questionsOmitted`, or `omittedReason`) or expose licence/availability flags.  
+**Examples**: See `13-quiz-content-examples.md`.
+
+### 5. Key stage and subject enums come from a static, pre-filtered list
+
+**Observation**: `keyStageAndSubjects.json` is pre-filtered to "new lessons" and drives enum constraints for several request schemas.  
+**Impact**: Valid subjects/key stages may be missing from enum lists or lag the underlying data.  
+**User impact**: API consumers face rejected requests; SDK/MCP engineers cannot target newly available content.  
+**Requested fix**: Generate these lists from live data or document that the enums represent currently supported (non-legacy) content only.  
+**Examples**: See `12-search-and-enums-examples.md`.
+
+---
+
+## PATTERN ANALYSIS: Data Completeness Issues (2025-12-29, Updated)
+
+**Examples**: See `14-listing-and-pagination-examples.md` and `15-bulk-download-examples.md`.
+
+### Issue Classification
+
+After investigating the upstream API code, these issues have **different root causes**:
+
+| Issue | Endpoint | Root Cause | Is Bug? |
+|-------|----------|------------|---------|
+| Unit Summary Truncation | `/units/{unit}/summary` → `unitLessons[]` | `sequenceView` snapshot | Unclear (design choice?) |
+| Pagination Bug | `/key-stages/ks4/subject/maths/lessons` (unfiltered) | `unitVariantLessonsView` filtering | **Yes** (bug) |
+| Assets Incomplete | `/key-stages/ks2/subject/art/assets` | **TPC License Filter** | **No** (intentional) |
+
+### Category 1: Materialized View Issues (Likely Bugs)
+
+**Unit Summary Truncation** and **Pagination Bug** likely share a common cause:
+
+1. **Direct single-resource endpoints** (`/lessons/{lesson}/summary`) **always work** — queries authoritative views
+2. **List endpoints with filters** (`/lessons?unit=X`) **mostly work** — returns complete data
+3. **List endpoints without filters** **sometimes fail** — may hit different query path
+
+### Category 2: Intentional Filtering (Not Bugs)
+
+**Assets Endpoint** filtering is **intentional** — TPC (Third Party Content) license compliance:
+
+```typescript
+// From queryGate.ts
+const supportedSubjects = ['maths'];  // Only maths fully cleared
+
+// Lessons returned only if TPC-cleared via:
+// - supportedSubjects (maths)
+// - supportedUnits.json (213 units)
+// - supportedLessons.json (4,559 lessons)
+```
+
+### Data Access Architecture
+
+```
+┌─────────────────────────┐
+│     Hasura Views        │
+├─────────────────────────┤
+│ lessonView              │ ← Per-lesson queries (always complete)
+│ unitVariantLessonsView  │ ← List queries (may have filtering bugs)
+│ sequenceView            │ ← Unit queries (may truncate lessons)
+│ downloadView            │ ← Asset queries (filtered by TPC)
+└─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────┐
+│    queryGate.ts         │ ← TPC License Filter
+│  - supportedSubjects    │   (intentionally filters assets)
+│  - supportedUnits.json  │
+│  - supportedLessons.json│
+└─────────────────────────┘
+```
+
+### Recommended Fixes
+
+**For Materialized View Issues**:
+1. Audit `unitVariantLessonsView` for the 5 missing maths lessons
+2. Audit `sequenceView` for unit lesson truncation
+3. Add `totalCount` to all list responses
+
+**For Assets Endpoint**:
+1. **Document** the TPC filtering in OpenAPI schema (not a fix, just documentation)
+2. **Consider** a separate endpoint for video availability that bypasses TPC checks
+3. **Add** `hasVideo`/`hasTranscript` flags to lesson list responses (Item 13)
+
+See individual issues below for endpoint-specific details.
+
+---
+
 ## Binary Response Schema Fix (2025-12-16)
+
+**Examples**: See `11-assets-and-transcripts-examples.md`.
 
 **Status**: 🔴 HIGH PRIORITY — Causes `z.unknown()` in generated SDK  
 **Endpoint**: `/api/v0/lessons/{lessonSlug}/assets/{assetSlug}`  
@@ -39,6 +166,8 @@ This generates `LessonAssetResponseSchema = z.unknown()` in the SDK, which:
 1. Provides no type information
 2. Cannot validate the response
 3. Violates our strictness requirements
+
+**User impact**: SDK/MCP engineers cannot validate downloads; API consumers must handle binary responses without reliable schema hints.
 
 ### Requested Fix
 
@@ -82,6 +211,8 @@ We currently accept `z.unknown()` for this endpoint because:
 
 ## Legitimate `z.unknown()` Exceptions Registry (2025-12-16)
 
+**Examples**: See `20-validation-and-schema-examples.md`.
+
 **Context**: Our strictness requirements mandate that all Zod schemas be explicit. However, some `z.unknown()` usages are **legitimate** due to genuinely dynamic data. This registry documents those exceptions.
 
 ### Exception 1: Elasticsearch Aggregations
@@ -120,6 +251,8 @@ const AggregationsSchema = z.record(z.string(), z.unknown()).default({});
 
 ## Unit Summary `unitLessons` Truncation (2025-12-20)
 
+**Examples**: See `14-listing-and-pagination-examples.md`.
+
 **Status**: 🔴 HIGH PRIORITY — OpenAPI schema claims "All" but returns truncated data  
 **Endpoint**: `/api/v0/units/{unitSlug}/summary`  
 **Field**: `unitLessons[]`
@@ -155,6 +288,8 @@ This represents an **80% data loss** for this single unit.
 |--------|---------------|
 | Unit summaries (`unitLessons[]`) | ~314 |
 | Lessons endpoint (paginated) | ~650+ |
+
+**User impact**: Teachers and curriculum leaders see incomplete unit overviews; SDK/MCP engineers cannot trust unit summaries for traversal.
 
 ### Root Cause Analysis
 
@@ -208,9 +343,12 @@ Refactor ingestion to use the paginated lessons endpoint (`/key-stages/{ks}/subj
 
 ## Lessons Endpoint Pagination Bug (2025-12-22)
 
+**Examples**: See `14-listing-and-pagination-examples.md`.
+
 **Status**: 🔴 CRITICAL — Unfiltered pagination returns incomplete data  
 **Endpoint**: `/api/v0/key-stages/{keyStage}/subject/{subject}/lessons`  
 **Impact**: 5 lessons missing from Maths KS4 (431 returned instead of 436)
+**User impact**: Teachers and learners miss content; API consumers and SDK/MCP engineers ingest incomplete datasets.
 
 ### Problem
 
@@ -294,6 +432,8 @@ This workaround:
 
 ## Bulk Download Data Integrity Issues (2025-12-19)
 
+**Examples**: See `15-bulk-download-examples.md`.
+
 **Context**: Analysis of the bulk download data (`/bulk-download` endpoint) revealed inconsistencies that affect downstream filtering and search capabilities.
 
 ### Issue 1: Title Fields Null Despite Slug Fields Populated
@@ -323,6 +463,8 @@ This workaround:
 - Consumers expecting human-readable titles get null
 - Inconsistency between slug availability and title availability
 - `subjectSlug` is also null in some cases (expected: `"maths"`)
+
+**User impact**: Human engineers and curriculum leaders see unreadable records; SDK/MCP ingestion needs extra repair logic.
 
 **Requested Fix**:
 
@@ -396,6 +538,8 @@ Maths secondary is **unique** — it's the only KS4 subject with tier variants b
 - No way to generate unique identifiers for variants.
 - Raw lesson counts are misleading (2,307 bulk vs 1,934 unique).
 
+**User impact**: Teachers and curriculum leaders cannot filter KS4 tiers reliably; API consumers and SDK/MCP engineers must build fragile heuristics.
+
 **Requested Fix**:
 
 Add explicit `tier` field to maths-secondary bulk download at BOTH unit and lesson level:
@@ -437,6 +581,8 @@ Alternatively, ensure lessons only appear ONCE with an array of associated tiers
 - Breaks referential integrity between unit summaries and lesson records.
 - Forces consumers to handle missing data for referenced lessons.
 
+**User impact**: API consumers and SDK/MCP engineers face broken joins; teachers and learners can see missing content.
+
 **Requested Fix**:
 
 - Ensure every `unitLessons[].lessonSlug` has a corresponding record in `lessons[]`, or remove non-published lessons from `unitLessons[]` and document the rule.
@@ -455,6 +601,8 @@ Alternatively, ensure lessons only appear ONCE with an array of associated tiers
 
 - Mixed field types (`string` vs `array`) complicate parsing.
 - `NULL` is a string, not JSON null, which creates special-case logic.
+
+**User impact**: SDK/MCP engineers and data teams need extra sanitisation; API consumers face inconsistent parsing.
 
 **Requested Fix**:
 
@@ -480,6 +628,8 @@ Five lessons are missing both transcript fields:
 
 - Transcript-based search and accessibility features have coverage gaps.
 
+**User impact**: Teachers and learners miss accessibility content; search quality drops for affected lessons.
+
 **Requested Fix**:
 
 - Ensure transcripts are present for all lessons, or include explicit availability flags.
@@ -497,6 +647,8 @@ Five lessons are missing both transcript fields:
 **Impact**:
 
 - Limits thread-based navigation and summary quality.
+
+**User impact**: Curriculum leaders and teachers lose progression context; AI tools provide weaker summaries.
 
 **Requested Fix**:
 
@@ -589,6 +741,8 @@ The bulk download uses **flat** subject slugs (`biology`, `chemistry`, etc.) whi
 - Ingestion pipelines must use sequences endpoint for KS4 science
 - Simple subject+keyStage queries don't work for KS4 science
 
+**User impact**: API consumers and SDK/MCP engineers must implement special-case traversal; teachers and curriculum leaders face confusing access paths.
+
 **Requested Enhancement** (not a fix):
 
 1. **Documentation**: Clarify that KS4 science uses a different access pattern via sequences
@@ -600,3 +754,337 @@ The bulk download uses **flat** subject slugs (`biology`, `chemistry`, etc.) whi
 Enhance the ingestion pipeline to detect subjects with `examSubjects` at KS4 and use the sequences endpoint instead of the simple lessons endpoint.
 
 **Related**: ADR-080 (KS4 metadata denormalization strategy)
+
+---
+
+## Subject Assets Endpoint: TPC License Filtering (2025-12-29)
+
+**Examples**: See `10-availability-and-gating-examples.md`.
+
+**Status**: 🟡 CLARIFIED — Not a bug; intentional Third Party Content license filtering  
+**Endpoint**: `/api/v0/key-stages/{keyStage}/subject/{subject}/assets`  
+**Impact**: Cannot be used for video availability detection (use lessons endpoint instead)
+**User impact**: API consumers and SDK/MCP engineers cannot infer video availability from assets; teachers and learners may face inconsistent transcript access if assumptions are wrong.
+
+### Observation
+
+The `/key-stages/{keyStage}/subject/{subject}/assets` endpoint returns only **15-35%** of lessons for non-maths subjects:
+
+| Subject | Key Stage | Assets Endpoint | Lessons Endpoint | Coverage |
+|---------|-----------|-----------------|------------------|----------|
+| Art | KS2 | **36 lessons** | 102 lessons | ~35% |
+| Computing | KS3 | **60 lessons** | ~116 lessons | ~52% |
+| Maths | KS3 | **~800 lessons** | ~800 lessons | ~100% |
+
+### Root Cause (Confirmed via Code Analysis)
+
+This is **intentional filtering** for Third Party Content (TPC) license compliance.
+
+**From `reference/oak-openapi/src/lib/queryGate.ts`**:
+
+```typescript
+// Line 28 - Only maths is fully TPC-cleared
+const supportedSubjects = ['maths'];
+
+// Lessons only returned if:
+// 1. Subject is 'maths' (fully cleared), OR
+// 2. Unit is in supportedUnits.json (213 units), OR
+// 3. Lesson is in supportedLessons.json (4,559 lessons)
+```
+
+**Key insight**: The assets endpoint returns lessons **cleared for asset DOWNLOAD**, not all lessons with assets. A lesson may have video content but not yet have TPC clearance for its downloadable resources.
+
+### This is NOT the Same Issue as Other Data Inconsistencies
+
+| Issue | Root Cause | Is a Bug? |
+|-------|------------|-----------|
+| Unit summary truncation | Materialized view snapshot | Possibly (design choice) |
+| Pagination missing 5 lessons | View filtering bug | **Yes** |
+| Assets endpoint incomplete | TPC license filter | **No** (correct behavior) |
+
+### Impact on Video Availability Detection
+
+The assets endpoint **cannot** be used to determine video availability across all subjects because:
+1. Maths lessons: ✅ Complete data (fully TPC-cleared)
+2. Other subjects: ❌ Only ~35-52% of lessons returned
+
+### Our Workaround
+
+Implemented tri-state `hasVideo()` function:
+- `true`: Lesson in assets response WITH video
+- `false`: Lesson in assets response WITHOUT video
+- `undefined`: Lesson NOT in assets response (unknown — assume video exists, fetch transcript)
+
+**See**: [ADR-091: Video Availability Detection Strategy](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md)
+
+### Documentation Request (Not a Fix)
+
+The TPC filtering is correct behavior, but should be documented in the OpenAPI schema:
+
+```yaml
+/key-stages/{keyStage}/subject/{subject}/assets:
+  get:
+    description: |
+      Returns downloadable assets for lessons that have completed Third Party Content
+      license auditing. Not all lessons are included — only those cleared for asset
+      distribution.
+      
+      For complete lesson enumeration, use /key-stages/{keyStage}/subject/{subject}/lessons.
+      
+      Currently fully cleared subjects: maths
+      Partial clearance: ~213 units and ~4,559 individual lessons across other subjects
+```
+
+### Future Mitigation
+
+See Item 13 in `05-medium-priority-requests.md`: Add `hasVideo`/`hasTranscript` boolean flags directly to lesson list responses. This would eliminate the need to use the assets endpoint for video availability detection.
+
+---
+
+## Empty Transcript Responses (2025-12-30)
+
+**Examples**: See `11-assets-and-transcripts-examples.md`.
+
+**Status**: 🟡 KNOWN ISSUE — API returns 200 with empty string instead of 404  
+**Endpoint**: `/api/v0/lessons/{lesson}/transcript`  
+**Impact**: Observability issue; cannot distinguish "no transcript" from "error"
+**User impact**: Teachers and learners get confusing transcript behaviour; API consumers and SDK/MCP engineers cannot handle transcript availability reliably.
+
+### Observation
+
+Some lessons return `200 OK` with an empty transcript string instead of `404 Not Found`:
+
+```json
+GET /lessons/some-lesson-slug/transcript
+
+// Expected (when transcript doesn't exist):
+HTTP 404 Not Found
+{ "error": "Transcript not found" }
+
+// Actual (observed during ingestion):
+HTTP 200 OK
+{ "transcript": "", "vtt": "" }
+```
+
+### Impact
+
+1. **Observability Gap**: Cannot distinguish between:
+   - Lesson has no video → transcript doesn't exist
+   - Lesson has video but transcript is missing → data issue
+   - Lesson has video with empty transcript → intentional (unlikely)
+
+2. **Caching Complexity**: Our cache categorization treats empty 200 responses the same as 404s, but this is a workaround not a proper fix.
+
+3. **Error Detection**: Difficult to detect missing transcripts vs. intentionally empty content.
+
+### Our Workaround
+
+Implemented in transcript cache categorization (ADR-092):
+
+```typescript
+// Treat empty 200 responses the same as 404
+if (result.ok && result.value.transcript === '') {
+  cache({ status: 'not_found' });  // Same as 404
+}
+```
+
+Documented as a known issue and added to API wishlist (Item 15).
+
+### Requested Fix
+
+Return appropriate HTTP status codes:
+
+| Scenario | Current Response | Desired Response |
+|----------|------------------|------------------|
+| Lesson has transcript | 200 + content | 200 + content ✅ |
+| Lesson has no video | 200 + empty | **404 Not Found** |
+| Transcript missing (bug) | 200 + empty | **404 Not Found** |
+
+Optionally, add a reason field:
+
+```json
+HTTP 404 Not Found
+{
+  "error": "not_found",
+  "reason": "no_video"  // or "transcript_unavailable"
+}
+```
+
+See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
+
+### Related Documentation
+
+- [ADR-092: Transcript Cache Categorization Strategy](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md)
+- [sdk-cache README](../../../apps/oak-open-curriculum-semantic-search/src/adapters/sdk-cache/README.md)
+
+---
+
+## Clarifying Questions for Upstream Team (2025-12-30)
+
+**Context**: During ingestion development, we identified several areas where API behaviour differs from documentation or differs from bulk download data. These questions help us understand whether observed behaviours are bugs, intentional design, or undocumented constraints.
+
+### Q1: Bulk Download vs API Transcript Availability Discrepancy
+
+**Observation**: The bulk download data (dated 2025-12-07) shows **ALL 189 art-secondary lessons** have `downloadsAvailable: true` and include full transcripts. However, the live API (tested 2025-12-30) returns 404 for transcript requests on many of these same lessons.
+
+**Example**:
+- Lesson: `principles-of-art-volume`
+- Bulk download: Has `downloadsAvailable: true` and full transcript content
+- API `/lessons/principles-of-art-volume/transcript`: Returns 404
+
+**Questions**:
+1. Is the bulk download sourced from a different environment than the API?
+2. Has transcript availability changed since the bulk download was generated?
+3. Is there a TPC or other filter applied to the transcript endpoint that isn't applied during bulk download generation?
+
+### Q2: Maths vs Other Subjects Transcript Availability
+
+**Observation**: Maths lessons consistently return transcripts via API, while art/other subjects frequently return 404.
+
+**Examples**:
+- `GET /lessons/checking-understanding-of-addition-and-subtraction-with-fractions/transcript` → 200 ✅
+- `GET /lessons/principles-of-art-volume/transcript` → 404 ❌
+- `GET /lessons/the-presence-of-nature-in-art/transcript` → 404 ❌
+
+**Questions**:
+1. Is maths a "special category" with different transcript availability rules?
+2. Are non-maths transcripts filtered by TPC (similar to assets)?
+3. If filtered, is this documented anywhere?
+
+### Q3: `downloadsAvailable` Field Accuracy
+
+**Observation**: Lessons in the bulk download have `downloadsAvailable: true` but the API returns 404 for assets and transcripts.
+
+**Questions**:
+1. What does `downloadsAvailable: true` actually indicate?
+2. Is this field accurate in the bulk download, or is it a denormalized snapshot that may be stale?
+3. Should we treat bulk download data as authoritative for initial processing and API for incremental updates?
+
+### Q4: Undocumented Endpoint `/search-index/video-ids`
+
+**Observation**: Our codebase referenced an endpoint `/search-index/video-ids` which does not exist in the OpenAPI schema and returns 404 when called.
+
+**Questions**:
+1. Did this endpoint ever exist? (It appears to be a hallucination from earlier development)
+2. Is there a supported way to get a list of lessons with video/transcript availability without calling each lesson individually?
+3. Would a `hasVideo`/`hasTranscript` boolean on the lessons list response be feasible? (See Item 13 in medium priority requests)
+
+### Q5: Bulk Download Data Recency
+
+**Observation**: The bulk download is dated 2025-12-07 but we're seeing discrepancies with live API data from 2025-12-30.
+
+**Questions**:
+1. How frequently is the bulk download regenerated?
+2. Is there a changelog or timestamp we can use to detect freshness?
+3. Should we document that bulk download is a "snapshot" and may differ from live API?
+
+### Q6: Ingestion Strategy Validation
+
+**Current Strategy**:
+1. Use bulk download for initial lesson enumeration (authoritative for lesson list)
+2. Use API for per-lesson details (transcripts, summaries)
+3. Accept that non-maths subjects may have sparse transcript availability
+
+**Questions**:
+1. Is this a reasonable strategy given the observed discrepancies?
+2. Should we expect transcript availability to improve over time (TPC clearance in progress)?
+3. Is there a preferred ingestion pattern the Oak team recommends?
+
+---
+
+## Enhancement Requests (2025-12-30)
+
+### ER1: Full Data Coverage Across All Subjects
+
+**Request**: Extend full lesson resource availability (transcripts, assets, downloads) to all subjects, matching maths coverage.
+
+**Current State**:
+- Maths: **100%** lesson resource coverage via API
+- Other subjects: **~0-35%** coverage, described as "a sample" in documentation
+
+**Impact**:
+- Semantic search quality severely limited for non-maths subjects
+- Teachers cannot access full transcript content programmatically
+- AI-powered tools limited to maths-only full functionality
+
+**Business Case**:
+- The bulk download **already contains** complete transcripts for 14 of 17 subjects (81% of all lessons)
+- API infrastructure exists — only TPC/license filtering prevents access
+- Teachers for non-maths subjects cannot benefit from transcript-based search
+
+**Requested Priority**: HIGH — this is the single largest blocker to cross-subject semantic search
+
+**Related Documentation**:
+- [Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage)
+- Transcript Availability Analysis (`.agent/analysis/transcript-availability-analysis.md`)
+
+### ER2: Documentation of API vs Bulk Download Differences
+
+**Request**: Provide explicit documentation of all differences between API and bulk download data.
+
+**Current State**:
+- Bulk download and API return different data for the same lessons
+- No documentation exists explaining these differences
+- Consumers must discover discrepancies through trial and error
+
+**Known Discrepancies** (2025-12-30):
+
+| Data Type | Bulk Download | API | Notes |
+|-----------|---------------|-----|-------|
+| **Transcripts** | 14/17 subjects complete | Only maths complete | TPC filtering on API |
+| **`downloadsAvailable`** | Always `true` | Not applicable | Field may be stale |
+| **Asset access** | Not applicable | TPC-filtered | ~35% non-maths |
+| **Tier metadata (maths)** | Missing | Present in responses | Bulk has duplicates |
+| **Null semantics** | String `"NULL"` | JSON `null` | Inconsistent |
+| **Title fields** | Often null | Usually present | Denormalization gap |
+
+**Requested Format**:
+
+Add a dedicated documentation page (e.g., `https://open-api.thenational.academy/docs/about-oaks-data/api-vs-bulk-download`) that covers:
+
+1. **Data freshness**: Bulk download snapshot date vs real-time API
+2. **Coverage differences**: What each source contains that the other doesn't
+3. **Field differences**: Any fields with different values or types
+4. **Recommended usage**: When to use bulk download vs API
+5. **Staleness handling**: How to detect/refresh stale bulk download data
+
+**User impact**: API consumers and SDK/MCP engineers can make informed choices; ingestion pipelines can be designed correctly from the start.
+
+### ER3: Transcript Availability Flags in Lessons Endpoint
+
+**Request**: Add `hasTranscript: boolean` flag to lesson list responses.
+
+**Rationale**: Currently, the only way to know if a lesson has a transcript is to attempt to fetch it (incurring a 404 for ~65% of non-maths lessons). A boolean flag would allow:
+
+- Skip-ahead during ingestion (don't attempt fetch for `hasTranscript: false`)
+- Accurate search result previews ("This lesson includes video transcript")
+- Analytics on transcript coverage without hitting transcript endpoint
+
+**Implementation Suggestion**:
+
+```yaml
+/key-stages/{keyStage}/subject/{subject}/lessons:
+  get:
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lessons:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      lessonSlug:
+                        type: string
+                      hasVideo:
+                        type: boolean         # NEW
+                      hasTranscript:
+                        type: boolean         # NEW
+                      hasWorksheet:
+                        type: boolean         # EXISTING (currently on some responses)
+```
+
+**See also**: Item 13 in `05-medium-priority-requests.md` (boolean resource flags)

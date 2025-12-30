@@ -20,16 +20,29 @@ import { ingestLogger } from '../logger';
 /**
  * Video availability information for a subject/keystage.
  * Built from bulk assets endpoint data.
+ *
+ * IMPORTANT: The assets endpoint returns incomplete data (~15-35% of lessons).
+ * See 00-overview-and-known-issues.md "Subject Assets Endpoint Returns Incomplete Lesson Data".
+ * The hasVideo function returns `undefined` for lessons not in the assets response,
+ * which causes transcript fetching to use the safe default (fetch transcript).
  */
 export interface VideoAvailabilityMap {
   /**
    * Check if a lesson has a video.
-   * Returns false for unknown lessons.
+   *
+   * Returns:
+   * - `true` if lesson is in assets response and has video asset
+   * - `false` if lesson is in assets response but has no video asset
+   * - `undefined` if lesson is NOT in assets response (unknown - use safe default)
+   *
+   * IMPORTANT: Due to upstream API bug, the assets endpoint returns only ~15-35%
+   * of lessons. Most lessons will return `undefined`. Callers should treat
+   * `undefined` as "assume video exists" (safe default to avoid missing transcripts).
    */
-  readonly hasVideo: (lessonSlug: string) => boolean;
-  /** Total lessons in the assets response. */
+  readonly hasVideo: (lessonSlug: string) => boolean | undefined;
+  /** Total lessons in the assets response (may be incomplete!). */
   readonly totalLessons: number;
-  /** Count of lessons with videos. */
+  /** Count of lessons with videos in the response. */
   readonly lessonsWithVideo: number;
   /** All lesson slugs from assets endpoint (for cross-reference). */
   readonly lessonSlugs: ReadonlySet<string>;
@@ -74,7 +87,15 @@ export function buildVideoAvailabilityMapFromAssets(
   }
 
   return {
-    hasVideo: (lessonSlug: string) => videoLessonSlugs.has(lessonSlug),
+    hasVideo: (lessonSlug: string): boolean | undefined => {
+      // If lesson is not in the assets response at all, return undefined
+      // This signals "unknown" - caller should use safe default (assume video exists)
+      if (!allLessonSlugs.has(lessonSlug)) {
+        return undefined;
+      }
+      // Lesson is in assets response - return whether it has a video
+      return videoLessonSlugs.has(lessonSlug);
+    },
     totalLessons: allLessonSlugs.size,
     lessonsWithVideo: videoLessonSlugs.size,
     lessonSlugs: allLessonSlugs,
@@ -124,4 +145,89 @@ export async function fetchVideoAvailabilityMap(
   });
 
   return ok(videoMap);
+}
+
+// ============================================================================
+// Report Generation (uses same code as ingestion)
+// ============================================================================
+
+/**
+ * Video availability statistics for a single subject/keystage combination.
+ */
+export interface VideoAvailabilityStats {
+  readonly subject: SearchSubjectSlug;
+  readonly keyStage: KeyStage;
+  readonly totalLessons: number;
+  readonly lessonsWithVideo: number;
+  readonly lessonsWithoutVideo: number;
+  readonly percentageWithVideo: number;
+}
+
+/**
+ * Full video availability report across all subjects and key stages.
+ */
+export interface VideoAvailabilityReport {
+  readonly stats: readonly VideoAvailabilityStats[];
+  readonly totals: {
+    readonly totalLessons: number;
+    readonly lessonsWithVideo: number;
+    readonly lessonsWithoutVideo: number;
+    readonly percentageWithVideo: number;
+  };
+}
+
+/**
+ * Generates a video availability report for all subject/keystage combinations.
+ *
+ * Reuses the same fetchVideoAvailabilityMap function used during ingestion.
+ *
+ * @param client - Oak client instance
+ * @param subjects - Subjects to check
+ * @param keyStages - Key stages to check
+ * @returns Report with statistics for each combination
+ */
+export async function generateVideoAvailabilityReport(
+  client: OakClient,
+  subjects: readonly SearchSubjectSlug[],
+  keyStages: readonly KeyStage[],
+): Promise<VideoAvailabilityReport> {
+  const stats: VideoAvailabilityStats[] = [];
+
+  for (const subject of subjects) {
+    for (const keyStage of keyStages) {
+      const result = await fetchVideoAvailabilityMap(client, keyStage, subject);
+      if (!result.ok) {
+        continue;
+      } // Silently skip (logged by fetchVideoAvailabilityMap)
+
+      const map = result.value;
+      if (map.totalLessons === 0) {
+        continue;
+      }
+
+      stats.push({
+        subject,
+        keyStage,
+        totalLessons: map.totalLessons,
+        lessonsWithVideo: map.lessonsWithVideo,
+        lessonsWithoutVideo: map.totalLessons - map.lessonsWithVideo,
+        percentageWithVideo:
+          map.totalLessons > 0 ? Math.round((map.lessonsWithVideo / map.totalLessons) * 100) : 0,
+      });
+    }
+  }
+
+  const totalLessons = stats.reduce((sum, s) => sum + s.totalLessons, 0);
+  const lessonsWithVideo = stats.reduce((sum, s) => sum + s.lessonsWithVideo, 0);
+
+  return {
+    stats,
+    totals: {
+      totalLessons,
+      lessonsWithVideo,
+      lessonsWithoutVideo: totalLessons - lessonsWithVideo,
+      percentageWithVideo:
+        totalLessons > 0 ? Math.round((lessonsWithVideo / totalLessons) * 100) : 0,
+    },
+  };
 }

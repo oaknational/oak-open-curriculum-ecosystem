@@ -47,6 +47,8 @@ parameters:
 - Reduces invalid parameter values
 - Provides age-range context for UK education system
 
+**User impact:** API consumers and SDK/MCP engineers avoid invalid filters; teachers and curriculum leaders get accurate age/subject filtering.
+
 **Applies to:** All enum parameters, especially educational domain terms (key stages, subjects, year groups).
 
 **Enables**:
@@ -99,6 +101,8 @@ parameters:
 - Tool categorisation for better organisation
 - Read-only hints for AI confirmation flows
 - Performance expectations for AI planning
+
+**User impact:** SDK/MCP engineers can generate tool metadata without manual mapping; teachers and human engineers see clearer tool grouping.
 
 **Effort:** Low (add fields to existing schema); can be done incrementally.
 
@@ -163,6 +167,8 @@ parameters:
 - Better error handling and recovery
 - More efficient orchestration (parallelise reads, serialise writes)
 - Clearer API contract for all consumers
+
+**User impact:** AI tool builders can safely orchestrate calls; teachers trust that tools will not perform unsafe actions without confirmation.
 
 **Effort:** Low (add to existing endpoints); mechanical process once properties are defined.
 
@@ -299,6 +305,8 @@ GET /threads?contains=unit-slug-here
 - **Gap analysis**: Identify missing units in a thread for specific contexts
 
 **Impact:** **High for Layer 4 tools**. Threads enable the most sophisticated AI capabilities:
+**User impact:** Teachers and curriculum leaders can trace conceptual progression; students and adult learners benefit from coherent learning pathways.
+**Related maths-specific follow-up:** `21-maths-education-enhancements.md` items 2 and 5 (lesson-level thread tags and representation tags).
 
 - `trace-concept-progression`: Show how ideas build across years
 - `find-prerequisites`: Map prerequisite chains
@@ -454,6 +462,8 @@ SequenceUnitsResponseSchema:
 - **Better validation**: Code generators can create proper validators
 - **Self-documenting**: Clear that these are the same concept across endpoints
 
+**User impact:** SDK/MCP engineers and API consumers get consistent types and fewer validation surprises.
+
 **Effort:** Low-Medium (mostly find-replace, but requires careful review)
 
 **Enables**:
@@ -466,6 +476,8 @@ SequenceUnitsResponseSchema:
 ---
 
 ### 12. Expose Zod Validators for Perfect Type Fidelity
+
+See `09-schemas-endpoint-rfc.md` for the endpoint proposal, payload shape, and SDK type-gen integration plan.
 
 **Current state:**
 
@@ -588,6 +600,8 @@ GET /api/v0/schemas
 - Runtime validation with excellent error messages
 - Perfect alignment with API behaviour
 - Easier integration testing
+
+**User impact:** SDK/MCP engineers can reuse exact validators; API consumers get reliable runtime checks.
 
 **Implementation options:**
 
@@ -713,6 +727,8 @@ GET /key-stages/ks3/subject/maths/lessons
 3. **Cleaner caching**: Don't cache 404 responses for transcripts that can't exist
 4. **Better planning**: Consumers know resource availability before making detail requests
 5. **Simpler logic**: Boolean check vs asset array parsing
+
+**User impact:** SDK/MCP engineers and API consumers can skip unnecessary calls; teachers and learners get faster, more reliable access to lesson materials.
 
 **Suggested flags:**
 
@@ -851,6 +867,8 @@ Response:
 | Time (sequential) | ~140 seconds | ~8 seconds | **95% faster** |
 | Error handling | Per-item | Batch | Simpler |
 
+**User impact:** SDK/MCP engineers and data teams can ingest at scale; teachers and curriculum leaders get timely updates.
+
 **Why bulk matters for ingestion:**
 
 1. **Semantic search indexing**: We need summary + transcript for EVERY lesson
@@ -880,6 +898,7 @@ For lessons without transcripts, return `transcript: null` rather than omitting 
 - Consider streaming/chunked responses for very large subjects
 
 **Impact:** Transforms ingestion from O(n) API calls to O(n/batch_size) calls.
+**User impact:** SDK/MCP engineers can build faster pipelines; teachers and learners benefit from more up-to-date content.
 
 **Effort:** Medium (new endpoint + pagination logic)
 
@@ -890,5 +909,106 @@ For lessons without transcripts, return `transcript: null` rather than omitting 
 - **Semantic search**: Efficient full-curriculum ingestion
 - **Layer 4**: Bulk export and analysis tools
 - **Cache warming**: Pre-populate SDK caches efficiently
+
+---
+
+### 15. Consistent Transcript Error Responses
+
+**Status**: 🟡 MEDIUM PRIORITY — Would improve observability and error handling  
+**Date**: 2025-12-30 (Added based on transcript cache categorization work)
+
+**The Problem:**
+
+The transcript endpoint returns `200 OK` with empty content when a transcript doesn't exist:
+
+```json
+GET /lessons/some-lesson-without-video/transcript
+
+// Current response (misleading):
+HTTP 200 OK
+{ "transcript": "", "vtt": "" }
+
+// Expected response:
+HTTP 404 Not Found
+{ "error": "not_found", "reason": "no_video" }
+```
+
+This makes it impossible to distinguish:
+- Lesson has no video → transcript doesn't exist (expected)
+- Lesson has video but transcript is missing (data issue)
+- Lesson has video with intentionally empty transcript (unlikely)
+
+**Current workaround:**
+
+We treat empty 200 responses the same as 404s:
+
+```typescript
+if (result.ok && result.value.transcript === '') {
+  cache({ status: 'not_found' });  // Same as 404
+}
+```
+
+See [ADR-092: Transcript Cache Categorization Strategy](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md).
+
+**Desired state:**
+
+Return appropriate HTTP status codes with reason:
+
+```json
+// When lesson has no video:
+HTTP 404 Not Found
+{
+  "error": "not_found",
+  "reason": "no_video",
+  "message": "This lesson does not have video content"
+}
+
+// When video exists but transcript unavailable:
+HTTP 404 Not Found
+{
+  "error": "not_found",
+  "reason": "transcript_unavailable",
+  "message": "Transcript not available for this lesson"
+}
+
+// When TPC restrictions apply:
+HTTP 403 Forbidden
+{
+  "error": "forbidden",
+  "reason": "tpc_restricted",
+  "message": "Transcript not available due to licensing restrictions"
+}
+```
+
+**Benefits:**
+
+| Scenario | Current | With Fix |
+|----------|---------|----------|
+| Observability | Cannot distinguish empty from missing | Clear reason codes |
+| Error handling | Treat all empty as not_found | Different handling per reason |
+| Monitoring | Can't track why transcripts unavailable | Metrics by reason code |
+| TPC compliance | No visibility | Explicit 403 for TPC blocks |
+
+**User impact:** Teachers and learners get clearer transcript availability signals; SDK/MCP engineers and API consumers can handle errors correctly.
+
+**Implementation:**
+
+1. Check if lesson has video before returning transcript
+2. Return 404 with `reason: "no_video"` if no video asset
+3. Return 404 with `reason: "transcript_unavailable"` if video exists but no transcript
+4. Consider 403 for TPC-restricted content
+
+**Impact:** Improves observability for ingestion pipelines and enables proper error handling.
+
+**Effort:** Low (response logic enhancement)
+
+**Priority:** Medium — Current workaround is functional but hides important information.
+
+**Enables:**
+
+- **Ingestion observability**: Know exactly why transcripts are unavailable
+- **Error monitoring**: Track transcript availability issues
+- **TPC visibility**: Distinguish licensing restrictions from missing data
+- **Debugging**: Clear feedback when diagnosing ingestion issues
 
 ---

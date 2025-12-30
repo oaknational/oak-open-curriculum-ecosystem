@@ -1,40 +1,101 @@
+/* eslint-disable max-lines */
+// TODO(future): Consider splitting cache helpers into separate files if this grows further
 /**
  * Cache wrapper functions for SDK API responses with dependency injection.
- * @see ADR-066 (caching), ADR-078 (dependency injection)
+ *
+ * This module provides higher-order functions that add caching behavior to
+ * Result-returning API functions. Two main wrappers are available:
+ *
+ * - {@link withCache}: Caches successful results only
+ * - {@link withCacheAndNegative}: Also caches 404 responses (negative caching)
+ *
+ * ## Transcript Cache Categorization
+ *
+ * For transcript caching, use structured {@link TranscriptCacheEntry} from
+ * `./transcript-cache-types` instead of the deprecated sentinel value.
+ * This provides observability into WHY transcripts are unavailable.
+ *
+ * @see ADR-066 SDK Response Caching
+ * @see ADR-078 Dependency Injection for Testability
+ * @see ADR-092 Transcript Cache Categorization Strategy
  * @packageDocumentation
  */
 
 import { ok, err, type Result } from '@oaknational/result';
 import type { SdkFetchError, SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
 import { cacheLogger } from '../../lib/logger';
+import {
+  deserializeTranscriptCacheEntry,
+  serializeTranscriptCacheEntry,
+} from './transcript-cache-types';
 
 // =============================================================================
-// Types
+// Constants
 // =============================================================================
 
-/** Cache key prefix with version for schema change invalidation. */
+/**
+ * Cache key prefix with version for schema change invalidation.
+ * Format: `oak-sdk:v1:{resourceType}:{id}`
+ */
 const CACHE_KEY_PREFIX = 'oak-sdk:v1:';
 
 /**
- * Sentinel value for cached 404 responses (negative caching).
- * @see https://en.wikipedia.org/wiki/Negative_cache
+ * Statistics about cache usage during the current session.
+ *
+ * Track hits and misses to monitor cache effectiveness during ingestion.
+ *
+ * @example
+ * ```typescript
+ * const stats: CacheStats = { hits: 0, misses: 0 };
+ * const cachedFn = withCache(fn, ops, 'prefix', 7, stats, guard, calc);
+ * // After calls...
+ * console.log(`Hit rate: ${stats.hits / (stats.hits + stats.misses)}`);
+ * ```
  */
-export const NOT_FOUND_SENTINEL = '__NOT_FOUND__';
-
-/** Statistics about cache usage during the current session. */
 export interface CacheStats {
+  /** Number of cache hits (value found in cache). */
   hits: number;
+  /** Number of cache misses (value not in cache, fetched from API). */
   misses: number;
 }
 
 /**
  * Minimal cache operations interface for dependency injection.
- * This allows testing without a real Redis connection.
+ *
+ * This abstraction allows testing cache logic without a real Redis connection.
+ * Provide a Map-based fake for unit tests, or a real Redis client for production.
+ *
+ * @see ADR-078 Dependency Injection for Testability
+ *
+ * @example
+ * ```typescript
+ * // Production: Use Redis
+ * const ops: CacheOperations = {
+ *   get: (key) => redis.get(key),
+ *   setex: (key, ttl, value) => redis.setex(key, ttl, value).then(() => {}),
+ * };
+ *
+ * // Test: Use Map
+ * const cache = new Map<string, string>();
+ * const ops: CacheOperations = {
+ *   get: async (key) => cache.get(key) ?? null,
+ *   setex: async (key, _, value) => { cache.set(key, value); },
+ * };
+ * ```
  */
 export interface CacheOperations {
-  /** Get a value from cache, returns null if not found. */
+  /**
+   * Get a value from cache.
+   * @param key - Cache key
+   * @returns Cached value or null if not found
+   */
   readonly get: (key: string) => Promise<string | null>;
-  /** Set a value with TTL in seconds. */
+  /**
+   * Set a value with TTL.
+   * @param key - Cache key
+   * @param ttl - Time-to-live in seconds
+   * @param value - Value to cache (JSON string)
+   */
   readonly setex: (key: string, ttl: number, value: string) => Promise<void>;
 }
 
@@ -117,7 +178,33 @@ function createNotFoundError(id: string): SdkNotFoundError {
 // =============================================================================
 
 /**
- * Wrap a Result-returning function with caching. Only caches ok results.
+ * Wrap a Result-returning function with caching.
+ *
+ * Only caches successful (ok) results. Error results are not cached,
+ * allowing retries on subsequent calls.
+ *
+ * @typeParam T - Type of the successful result value
+ * @param fn - The underlying function to wrap
+ * @param ops - Cache operations (get/setex)
+ * @param cacheKeyPrefix - Prefix for cache keys (e.g., 'lesson-summary')
+ * @param baseTtlDays - Base TTL in days (jitter is applied by calculator)
+ * @param stats - Statistics object to track hits/misses
+ * @param isValidCached - Type guard to validate cached values
+ * @param ttlCalculator - Function to calculate TTL with jitter
+ * @returns Wrapped function with caching behavior
+ *
+ * @example
+ * ```typescript
+ * const cachedGetSummary = withCache(
+ *   getSummary,
+ *   cacheOps,
+ *   'lesson-summary',
+ *   7, // 7 days
+ *   stats,
+ *   isLessonSummary,
+ *   calculateTtlWithJitter
+ * );
+ * ```
  */
 export function withCache<T>(
   fn: (id: string) => Promise<Result<T, SdkFetchError>>,
@@ -144,30 +231,35 @@ export function withCache<T>(
   };
 }
 
-/** Result of handling cached 404 - either a result to return or whether stats were updated. */
-interface Cached404Result<T> {
+/** Result of handling cached negative entry - either a result to return or whether stats were updated. */
+interface CachedNegativeResult<T> {
   readonly result: Result<T, SdkFetchError> | null;
   readonly statsUpdated: boolean;
 }
 
-/** Handle cached 404 response. Returns result if handled, or whether stats were updated. */
-function handleCached404<T>(
+/** Handle cached negative response (not_found or no_video). */
+function handleCachedNegative<T>(
   rawCached: string,
   id: string,
   cacheKeyPrefix: string,
   ignoreCached404: boolean,
   stats: CacheStats,
-): Cached404Result<T> {
-  if (rawCached !== NOT_FOUND_SENTINEL) {
+): CachedNegativeResult<T> {
+  const entry = deserializeTranscriptCacheEntry(rawCached);
+  if (entry === null || entry.status === 'available') {
     return { result: null, statsUpdated: false };
   }
+  // entry.status is 'not_found' or 'no_video'
   if (ignoreCached404) {
-    cacheLogger.debug('Ignoring cached 404 (--ignore-cached-404)', { cacheKeyPrefix, id });
+    cacheLogger.debug(`Ignoring cached ${entry.status} (--ignore-cached-404)`, {
+      cacheKeyPrefix,
+      id,
+    });
     stats.misses++;
     return { result: null, statsUpdated: true };
   }
   stats.hits++;
-  cacheLogger.debug('Negative cache hit (404)', { cacheKeyPrefix, id });
+  cacheLogger.debug(`Negative cache hit (${entry.status})`, { cacheKeyPrefix, id });
   return { result: err(createNotFoundError(id)), statsUpdated: true };
 }
 
@@ -202,13 +294,49 @@ async function storeResultToCache<T>(
     await tryWriteCache(ops, key, ttl, result.value);
   } else if (result.error.kind === 'not_found') {
     cacheLogger.debug('Caching 404 response', { cacheKeyPrefix, id, ttl });
-    await tryWriteRaw(ops, key, ttl, NOT_FOUND_SENTINEL);
+    await tryWriteRaw(ops, key, ttl, serializeTranscriptCacheEntry({ status: 'not_found' }));
   }
 }
 
 /**
- * Wrap with caching including negative caching for 404s.
- * Used for transcripts where many legitimately don't exist.
+ * Wrap with caching including negative caching for 404 responses.
+ *
+ * Used for resources where many legitimately don't exist, such as transcripts
+ * for lessons without videos. Caching 404s prevents repeated API calls for
+ * known-missing resources.
+ *
+ * ## Transcript Caching Note
+ *
+ * For transcript caching, consider using structured {@link TranscriptCacheEntry}
+ * format with a type guard that accepts all status variants. This provides
+ * better observability into WHY transcripts are unavailable.
+ *
+ * @typeParam T - Type of the successful result value
+ * @param fn - The underlying function to wrap
+ * @param ops - Cache operations (get/setex)
+ * @param cacheKeyPrefix - Prefix for cache keys (e.g., 'transcript')
+ * @param baseTtlDays - Base TTL in days (jitter is applied by calculator)
+ * @param stats - Statistics object to track hits/misses
+ * @param isValidCached - Type guard to validate cached values
+ * @param ignoreCached404 - If true, bypass cached 404s and re-fetch (--ignore-cached-404 flag)
+ * @param ttlCalculator - Function to calculate TTL with jitter
+ * @returns Wrapped function with caching and negative caching behavior
+ *
+ * @see ADR-092 Transcript Cache Categorization Strategy
+ *
+ * @example
+ * ```typescript
+ * const cachedGetTranscript = withCacheAndNegative(
+ *   getTranscript,
+ *   cacheOps,
+ *   'transcript',
+ *   7, // 7 days
+ *   stats,
+ *   isTranscriptCacheEntry, // From transcript-cache-types
+ *   false, // Don't ignore cached 404s
+ *   calculateTtlWithJitter
+ * );
+ * ```
  */
 export function withCacheAndNegative<T>(
   fn: (id: string) => Promise<Result<T, SdkFetchError>>,
@@ -226,7 +354,13 @@ export function withCacheAndNegative<T>(
 
     let statsUpdated = false;
     if (rawCached !== null) {
-      const cached404 = handleCached404<T>(rawCached, id, cacheKeyPrefix, ignoreCached404, stats);
+      const cached404 = handleCachedNegative<T>(
+        rawCached,
+        id,
+        cacheKeyPrefix,
+        ignoreCached404,
+        stats,
+      );
       if (cached404.result !== null) {
         return cached404.result;
       }

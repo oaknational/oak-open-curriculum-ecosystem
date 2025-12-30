@@ -197,6 +197,8 @@ This works but is expensive and requires complex traversal logic.
 
 **Priority**: 🔴 HIGH — KS4 content is incomplete without these fields for filtering. This blocks meaningful GCSE curriculum navigation.
 
+**User impact:** Teachers and curriculum leaders can filter KS4 pathways accurately; SDK/MCP engineers avoid heavy traversal logic.
+
 **Note**: The many-to-many nature of these relationships is respected—arrays handle reality accurately.
 
 #### Interim Workaround: Sequence Traversal Denormalisation
@@ -219,4 +221,3 @@ Until the upstream API provides flat fields, we implement **denormalisation at i
 This workaround enables KS4 filtering now while upstream enhancements are pending.
 
 ---
-

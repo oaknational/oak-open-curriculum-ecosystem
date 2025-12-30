@@ -36,6 +36,7 @@ description: |
 **Why:** Dramatically improves AI tool selection accuracy. Models use descriptions to choose between similar endpoints. Clear boundaries prevent tool misuse.
 
 **Impact:** Reduces wrong-tool invocations by ~70% based on OpenAI's metadata guidance.
+**User impact:** SDK/MCP engineers and API consumers choose the right endpoints faster; teachers see fewer irrelevant results from AI tools.
 
 **Applies to:** All 26+ endpoints in the API schema.
 
@@ -81,6 +82,7 @@ description: |
 - Avoid: "Retrieve lesson data via search endpoint"
 
 **Impact:** Better tool organisation and discovery in AI interfaces.
+**User impact:** Human engineers and AI interface users find the right tools quickly, reducing setup time and confusion.
 
 **Applies to:** All endpoints.
 
@@ -211,6 +213,7 @@ description: |
 - Single source of truth for domain model
 
 **Impact:** Reduces multi-turn discovery conversations by ~60%; enables AI to plan efficient tool call sequences.
+**User impact:** Curriculum leaders and teachers get clearer, structured guidance; AI tool builders gain dependable structural context.
 
 **Effort:** 1-2 days (backend + documentation).
 
@@ -446,6 +449,7 @@ A lesson planning app uses the API to fetch lesson details:
 - Improved application reliability (proper error handling)
 
 **Impact:** Foundational improvement affecting every API consumer. Enables correct error handling in generated clients and AI tools.
+**User impact:** API consumers and SDK/MCP engineers handle errors correctly; teachers and learners get clearer failure messages.
 
 **Effort:** 2-3 hours for common error schemas + incremental per-endpoint review (15 minutes each).
 
@@ -663,6 +667,7 @@ Teacher: "Find me Year 10 Foundation Biology lessons for AQA"
 If implementing proper programme support requires breaking changes (e.g., restructuring sequence responses, changing URL patterns), that's fine—this is important enough to warrant a major version bump (v1.0 → v2.0).
 
 **Impact:** **Critical for AI tool Layer 4** (comparative analysis, progression tracking, recommendations). Also improves clarity for all API consumers who are confused by sequence vs programme distinction.
+**User impact:** Teachers and curriculum leaders can target programmes precisely; founders focused on maths access in the global South can align interventions to specific pathways.
 
 **Effort:** 3-5 days (new endpoint + response restructuring + documentation).
 
@@ -821,6 +826,7 @@ All resource types that have both API and OWA representations:
 - **Reduced confusion**: Teachers, developers, and AI agents use the same identifiers
 
 **Impact:** **Critical for AI tool reliability.** Broken links destroy teacher trust in AI-generated content.
+**User impact:** Teachers and curriculum leaders get reliable links; SDK/MCP engineers avoid brittle ID mapping.
 
 **Effort:** Depends on current identifier architecture:
 
@@ -965,6 +971,8 @@ Make `/key-stages/ks4/subject/science/lessons` actually return KS4 science lesso
 - **Without documentation**: Every API consumer must discover patterns through trial and error
 - **With documentation**: Consumers know exactly which endpoint to use for each subject/keyStage combination
 
+**User impact:** API consumers and SDK/MCP engineers avoid dead ends; teachers and curriculum leaders access KS4 science without trial and error.
+
 **Real-world failure mode:**
 
 ```typescript
@@ -1061,6 +1069,8 @@ Instead of duplicate entries, have unique lessons with aggregated metadata:
 - Without fix: Consumers must detect and handle duplicates, losing context information
 - With fix: Clean data that accurately represents curriculum structure
 
+**User impact:** Data engineers and curriculum leaders can trust KS4 tier data; API consumers avoid duplicate handling logic.
+
 **Priority:** HIGH — Affects data integrity for all bulk download consumers.
 
 ---
@@ -1073,6 +1083,6 @@ Instead of duplicate entries, have unique lessons with aggregated metadata:
 RSHE-PSHE is the **only subject** without a bulk download file. The API returns lessons for this subject, so the data exists.
 
 **Request:** Add `rshe-pshe-primary.json` and `rshe-pshe-secondary.json` bulk download files for parity with other subjects.
+**User impact:** Teachers and curriculum leaders can plan RSHE/PSHE provision; API consumers gain full subject coverage.
 
 ---
-

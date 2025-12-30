@@ -1,11 +1,62 @@
 # Efficient API Traversal
 
-**Status**: ✅ COMPLETE — All quality gates passing 2025-12-29
-**Priority**: HIGH — Blocking ingestion
+**Status**: ✅ COMPLETE WITH LIMITATIONS — TPC filtering limits optimization scope (2025-12-29)
+**Priority**: HIGH — Ingestion efficiency
 **Parent**: [roadmap.md](../roadmap.md)
 **Created**: 2025-12-29
 **Updated**: 2025-12-29
 **Principle**: Make as few API calls as possible; use bulk endpoints; analyse before fetching
+
+---
+
+## ROOT CAUSE DISCOVERY (2025-12-29)
+
+### Assets Endpoint: Third Party Content (TPC) License Filtering
+
+Investigation of the upstream API code (`reference/oak-openapi/src/lib/queryGate.ts`) revealed that the assets endpoint is **intentionally filtering** based on TPC license clearance:
+
+```typescript
+const supportedSubjects = ['maths'];  // Only maths fully TPC-cleared
+
+// Lessons returned only if:
+// 1. Subject is 'maths' (fully cleared), OR
+// 2. Unit is in supportedUnits.json (213 units), OR
+// 3. Lesson is in supportedLessons.json (4,559 lessons)
+```
+
+**This is NOT a bug** — it's correct license compliance behavior.
+
+| Subject | Key Stage | Assets Endpoint | Actual Lessons | Coverage |
+|---------|-----------|-----------------|----------------|----------|
+| **Maths** | Any | ~100% | ~100% | **Full optimization** |
+| Art | KS2 | 36 lessons | 102 lessons | ~35% (partial) |
+| Computing | KS3 | 60 lessons | ~116 lessons | ~52% (partial) |
+
+### Why This Matters
+
+- **Maths**: Full video availability detection works — all lessons TPC-cleared
+- **Other subjects**: Only ~35-52% coverage — cannot skip transcript fetches for unknown lessons
+
+### Decision: Tri-State `hasVideo()` with Safe Default
+
+See [ADR-091: Video Availability Detection Strategy](../../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md)
+
+```typescript
+hasVideo(lessonSlug): boolean | undefined
+// true:  Lesson in assets response WITH video (skip transcript = safe)
+// false: Lesson in assets response WITHOUT video (skip transcript = safe)  
+// undefined: Lesson NOT in assets (unknown — FETCH transcript to be safe)
+```
+
+### Current Optimization Impact
+
+| Subject | Optimization Level | Notes |
+|---------|-------------------|-------|
+| Maths | **HIGH** | Full TPC clearance — all video availability known |
+| English units in supportedUnits.json | Medium | ~213 units cleared |
+| Other subjects | Low | Only individual lessons in supportedLessons.json |
+
+The optimization automatically improves as Oak completes more TPC audits.
 
 ---
 

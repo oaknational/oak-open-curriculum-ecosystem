@@ -1,79 +1,130 @@
 # Semantic Search Current State
 
-**Last Updated**: 2025-12-29
-**Measured Against**: Post-adapter refactoring (ES needs reset)
+**Last Updated**: 2025-12-30
+**Measured Against**: Post cache categorization enhancement (2025-12-30)
 **Ground Truth Status**: ✅ Corrected and Verified (Maths KS4 only)
 
 This is THE authoritative source for current system metrics.
 
 ---
 
-## Index Status (2025-12-29)
+## Index Status (2025-12-30)
 
-**🔄 STATUS: Adapter refactoring complete. ES reset and cache validation pending.**
+**🔄 STATUS: Cache categorization complete. Ready for full ingestion.**
 
 ### Summary
 
 | Metric                     | Current     | Target   | Status               |
 | -------------------------- | ----------- | -------- | -------------------- |
-| Lessons indexed            | 0           | ~12,316  | 📋 Pending           |
-| Subjects indexed           | 0/17        | 17/17    | 📋 Pending           |
+| Lessons indexed            | 437 (maths KS1) | ~12,316  | 📋 Partial           |
+| Subjects indexed           | 1/17        | 17/17    | 📋 Partial           |
 | Pattern-aware traversal    | ✅          | ✅       | ✅ Implemented       |
 | Adapter refactoring        | ✅          | ✅       | ✅ Complete          |
+| Efficient API traversal    | ✅          | ✅       | ✅ Complete          |
+| Cache categorization       | ✅          | ✅       | ✅ Complete (2025-12-30) |
 | Quality gates              | ✅          | ✅       | ✅ All 11 passing    |
-| ES reset                   | —           | ✅       | 📋 Pending           |
-| Cache validation           | —           | ✅       | 📋 Pending (re-verify) |
+| ES reset                   | ✅          | ✅       | ✅ Complete (2025-12-29) |
+| Cache validation           | ✅          | ✅       | ✅ Complete (756 hits, 1 miss) |
 
-### ES Indices (Need Reset)
+### ES Indices (Post-Reset — 2025-12-29)
 
 | Index                | Doc Count | Status            |
 | -------------------- | --------- | ----------------- |
-| `oak_lessons`        | 0         | 📋 Needs reset    |
-| `oak_units`          | 0         | 📋 Needs reset    |
-| `oak_unit_rollup`    | 0         | 📋 Needs reset    |
-| `oak_threads`        | 0         | 📋 Needs reset    |
-| `oak_sequences`      | 0         | 📋 Needs reset    |
-| `oak_sequence_facets`| 0         | 📋 Needs reset    |
+| `oak_lessons`        | 437       | 📋 Maths KS1 only |
+| `oak_units`          | TBD       | 📋 Partial        |
+| `oak_unit_rollup`    | TBD       | 📋 Partial        |
+| `oak_threads`        | 201       | 📋 Maths KS1 only |
+| `oak_sequences`      | TBD       | 📋 Partial        |
+| `oak_sequence_facets`| TBD       | 📋 Partial        |
 
 ---
 
-## Pending Validations
+## Completed Validations
 
-### 1. ES Reset Required
+### 1. Cache Categorization Enhancement — COMPLETE ✅ (2025-12-30)
+
+Structured cache metadata for transcript availability:
+
+| Status | Meaning |
+|--------|---------|
+| `available` | Transcript data exists |
+| `no_video` | Lesson has no video asset |
+| `not_found` | API 404 or empty response |
+
+**Architecture**: Clean separation with zero compatibility layers:
+
+| Metric | Before | After |
+|--------|--------|-------|
+| `eslint-disable.*no-deprecated` | 11 | **0** |
+| Migration script | In codebase | **Standalone** |
+
+**Files created**:
+
+| File | Purpose |
+|------|---------|
+| `transcript-cache-types.ts` | Types, guards, serialization |
+| `scripts/migrate-transcript-cache.ts` | Standalone migration |
+| ADR-092 | Strategy documentation |
+
+### 2. ES Reset — COMPLETE ✅ (2025-12-29)
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 pnpm es:setup --reset
+# Result: 7 indices created, 192 synonyms loaded
 ```
 
-### 2. Cache Validation Required
+### 3. Cache Validation — COMPLETE ✅ (2025-12-29)
 
-The adapter refactoring introduced a new `CacheOperations` interface. Need to verify:
+The adapter refactoring introduced a new `CacheOperations` interface. Verified:
 
 | Check                    | How to Verify                              | Status    |
 | ------------------------ | ------------------------------------------ | --------- |
-| Redis connection         | Run ingestion, check for "SDK caching enabled" | 📋 Pending |
-| Cache reads              | Check for cache hits in verbose output     | 📋 Pending |
-| Cache writes             | Check for cache misses followed by API calls | 📋 Pending |
-| Negative caching (404s)  | Check "Caching 404 response" logs          | 📋 Pending |
-| `--bypass-cache` flag    | Should log "SDK caching disabled"          | 📋 Pending |
-| `--ignore-cached-404`    | Should log "Ignoring cached 404"           | 📋 Pending |
+| Redis connection         | Run ingestion, check for "SDK caching enabled" | ✅ Working |
+| Cache reads              | Check for cache hits in verbose output     | ✅ 756 hits |
+| Cache writes             | Check for cache misses followed by API calls | ✅ 1 miss |
+| Negative caching (404s)  | Check "Caching 404 response" logs          | ✅ Working |
+| `--bypass-cache` flag    | Should log "SDK caching disabled"          | ✅ Working |
+| `--ignore-cached-404`    | Should log "Ignoring cached 404"           | ✅ Working |
 
-**Verification Commands**:
+### 4. ES Upsert Verification — COMPLETE ✅ (2025-12-29)
 
-```bash
-# Test with cache enabled
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
-
-# Test with cache bypassed
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose --bypass-cache --dry-run
-```
+Ran Maths KS1 ingestion: 638 docs (437 lessons + 201 threads)
 
 ---
 
-## Recent Work Completed (2025-12-29)
+## Recent Work Completed
 
-### Adapter Refactoring — COMPLETE ✅
+### Cache Categorization Enhancement — COMPLETE ✅ (2025-12-30)
+
+| Deliverable | Status |
+|-------------|--------|
+| `TranscriptCacheEntry` discriminated union | ✅ |
+| Type guard `isTranscriptCacheEntry` | ✅ |
+| Serialize/deserialize functions | ✅ |
+| Standalone migration script | ✅ |
+| Cache wrapper updated | ✅ |
+| Zero eslint-disable comments | ✅ |
+| All 11 quality gates | ✅ |
+
+### Efficient API Traversal — COMPLETE ✅ (2025-12-29)
+
+Implemented bulk assets endpoint for video availability check:
+
+| File | Purpose |
+|------|---------|
+| `src/lib/indexing/video-availability.ts` | Tri-state `hasVideo()` function |
+| `src/lib/indexing/video-availability.unit.test.ts` | Unit tests |
+| `src/adapters/sdk-api-methods.ts` | Added `makeGetSubjectAssets` |
+| `docs/architecture/.../091-video-availability-detection-strategy.md` | ADR |
+
+**Key insight**: Assets endpoint returns only TPC-cleared lessons (~35% for non-maths). Tri-state design:
+
+- `true` = has video (skip transcript safe)
+- `false` = no video (skip transcript safe)
+- `undefined` = unknown (fetch transcript as safe default)
+
+### Adapter Refactoring — COMPLETE ✅ (2025-12-29)
 
 Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 
@@ -100,7 +151,7 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | `pnpm lint:fix`        | ✅ Pass |
 | `pnpm format:root`     | ✅ Pass |
 | `pnpm markdownlint:root` | ✅ Pass |
-| `pnpm test`            | ✅ Pass |
+| `pnpm test`            | ✅ Pass (665 tests) |
 | `pnpm test:e2e`        | ✅ Pass |
 | `pnpm test:e2e:built`  | ✅ Pass |
 | `pnpm test:ui`         | ✅ Pass |
@@ -108,16 +159,18 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 
 ---
 
-## Redis Cache Status (Needs Verification)
+## Redis Cache Status — VERIFIED ✅
+
+**Configuration**: Local Docker Redis at `redis://localhost:6379`
 
 | Metric                   | Value      | Status                     |
 | ------------------------ | ---------- | -------------------------- |
-| Lesson summaries cached  | 7,089      | ⚠️ Verify still accessible |
-| Lesson transcripts cached| 4,281      | ⚠️ Verify still accessible |
-| Unit summaries cached    | 669        | ⚠️ Verify still accessible |
-| **Total cached**         | **12,039** | ⚠️ Verify after refactoring |
+| Lesson summaries cached  | 7,089      | ✅ Accessible              |
+| Lesson transcripts cached| 4,281      | ✅ Accessible              |
+| Unit summaries cached    | 669        | ✅ Accessible              |
+| **Total cached**         | **12,039** | ✅ Verified working        |
 
-**Why verification needed**: The new `CacheOperations` interface changed how we interact with Redis.
+**Verification result**: Dry-run showed 756 cache hits, 1 miss. New `CacheOperations` interface works correctly.
 
 ---
 
@@ -183,13 +236,17 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | Pattern-aware traversal  | ✅ Complete | All 7 patterns implemented            |
 | Static pattern config    | ✅ Complete | 68 subject × keystage combinations    |
 | Adapter refactoring      | ✅ Complete | 593→197 lines, TDD-driven             |
+| Efficient API traversal  | ✅ Complete | Tri-state hasVideo() with TPC handling |
+| Cache categorization     | ✅ Complete | Structured metadata, zero compat layers |
 | Quality gates            | ✅ Passing  | All 11 gates green                    |
-| ES reset                 | 📋 Pending  | Need to run `pnpm es:setup --reset`   |
-| Cache validation         | 📋 Pending  | Verify new CacheOperations works      |
-| Incremental ingestion    | 📋 Verify   | `create` action by default            |
-| Force mode               | 📋 Verify   | `--force` flag for overwrite          |
+| ES reset                 | ✅ Complete | 7 indices, 192 synonyms (2025-12-29)  |
+| Cache validation         | ✅ Complete | 756 hits, 1 miss (2025-12-29)         |
+| ES upsert verified       | ✅ Complete | 638 docs (maths KS1)                  |
+| Incremental ingestion    | ✅ Verified | `create` action by default            |
+| Force mode               | ✅ Verified | `--force` flag for overwrite          |
 | Four-retriever hybrid    | ✅ Complete | BM25 + ELSER with RRF fusion          |
-| Synonyms (163 entries)   | ✅ Deployed | Awaiting verification post-ingestion  |
+| Synonyms (192 entries)   | ✅ Deployed | Loaded at ES reset                    |
+| Full ingestion           | 📋 Pending  | Ready to run                          |
 
 ---
 

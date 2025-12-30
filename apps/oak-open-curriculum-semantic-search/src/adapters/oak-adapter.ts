@@ -48,9 +48,6 @@ export type {
   GetThreadUnitsFn,
 } from './oak-adapter-threads';
 
-// Re-export cache constants
-export { NOT_FOUND_SENTINEL } from './sdk-cache';
-
 // =============================================================================
 // Types
 // =============================================================================

@@ -15,7 +15,8 @@ describe('buildVideoAvailabilityMapFromAssets', () => {
     expect(result.totalLessons).toBe(0);
     expect(result.lessonsWithVideo).toBe(0);
     expect(result.lessonSlugs.size).toBe(0);
-    expect(result.hasVideo('any-lesson')).toBe(false);
+    // Unknown lessons return undefined (safe default: assume video exists)
+    expect(result.hasVideo('any-lesson')).toBe(undefined);
   });
 
   it('correctly identifies lessons with videos', () => {
@@ -43,7 +44,7 @@ describe('buildVideoAvailabilityMapFromAssets', () => {
     expect(result.hasVideo('lesson-without-video')).toBe(false);
   });
 
-  it('returns false for unknown lessons', () => {
+  it('returns undefined for unknown lessons (not in assets response)', () => {
     const assets: readonly SubjectAssetEntry[] = [
       {
         lessonSlug: 'known-lesson',
@@ -54,7 +55,9 @@ describe('buildVideoAvailabilityMapFromAssets', () => {
 
     const result = buildVideoAvailabilityMapFromAssets(assets);
 
-    expect(result.hasVideo('unknown-lesson')).toBe(false);
+    // Unknown lessons return undefined - callers should treat this as "assume video exists"
+    // This is the safe default because the assets endpoint returns incomplete data
+    expect(result.hasVideo('unknown-lesson')).toBe(undefined);
   });
 
   it('collects all lesson slugs in lessonSlugs set', () => {

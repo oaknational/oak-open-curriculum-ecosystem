@@ -1,189 +1,358 @@
-# Semantic Search — Current Work
+# Semantic Search — Session Context
 
-**Status**: ✅ Efficient API traversal complete — Ready for ES reset
-**Last Updated**: 2025-12-29
+**Status**: 🛑 Strategic decision required before proceeding
+**Last Updated**: 2025-12-30
 **Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)
 
 ---
 
-## 🎯 IMMEDIATE NEXT STEP
+## 🚨 CRITICAL FINDINGS (2025-12-30)
 
-### 1. Reset Elasticsearch
+A deep investigation into transcript availability revealed fundamental data source differences that require strategic discussion before proceeding.
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
+### The Core Discovery
+
+| Data Source | Transcript Coverage | Notes |
+|-------------|---------------------|-------|
+| **Bulk Download** | ~81% of lessons (14/17 subjects) | Complete transcripts |
+| **Live API** | ~16% of lessons (maths only) | TPC-filtered |
+| **MFL Subjects** | 0% | No video content exists |
+
+**Key insight**: The bulk download and API are not equivalent data sources. They serve different purposes.
+
+### Why This Matters
+
+The current ingestion pipeline fetches transcripts via the live API. For non-maths subjects, this results in:
+
+- ~65% of transcript requests returning 404
+- Many "transcript not found" warnings (expected, not bugs)
+- Semantic search limited to metadata-only for most subjects
+
+**This is documented, expected behavior** — see [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage):
+
+> "Currently, the API includes **all lesson resources for KS1-4 maths**, plus a **sample of lesson resources** for [other subjects]"
+
+### ⚠️ Video/Transcript Detection Code is Largely Pointless
+
+The video availability detection code (`video-availability.ts`, ADR-091) was designed to optimize transcript fetching by pre-checking which lessons have videos. **However, this optimization is largely pointless because:**
+
+1. **The assets endpoint is TPC-filtered** — it only returns ~35% of non-maths lessons, so we can't reliably detect video availability for most subjects
+2. **Even when we know a lesson has video, the transcript API returns 404** — the TPC filter applies to transcripts too
+3. **For maths (the only fully-cleared subject), nearly all lessons have both video AND transcript** — so the detection adds overhead without benefit
+
+**Net result**: The detection code adds complexity but doesn't meaningfully reduce failed transcript fetches. The real solution is either:
+- Use bulk download data (has transcripts)
+- Wait for Oak to clear TPC for all subjects (Autumn 2025)
+
+**Code affected**: `src/lib/indexing/video-availability.ts`, ADR-091, ADR-092
+
+---
+
+## 📊 Data Sources Compared
+
+### Bulk Download (`reference/bulk_download_data/`)
+
+| Attribute | Value |
+|-----------|-------|
+| **Last downloaded** | 2025-12-07 |
+| **Total lessons** | 12,783 |
+| **Subjects with full transcripts** | 14 (art, citizenship, computing, cooking-nutrition, design-technology, english, geography, history, maths, music, religious-education, science, RSHE) |
+| **Subjects with no transcripts** | 3 (french, german, spanish — MFL subjects) |
+| **Subjects with partial transcripts** | 1 (PE — 29% secondary, 0.7% primary) |
+| **Data quality issues** | Null titles, tier duplicates, inconsistent null semantics |
+| **Refresh frequency** | Unknown (no documented schedule) |
+
+### Live API
+
+| Attribute | Value |
+|-----------|-------|
+| **Transcript coverage** | Maths: 100%, Others: "sample" (~0-35%) |
+| **Pagination bug** | 5 lessons missing from maths KS4 unfiltered queries |
+| **TPC filtering** | Assets/transcripts filtered for license compliance |
+| **Production timeline** | Full coverage expected **Autumn 2025** |
+
+### Detailed Transcript Availability (Bulk Download)
+
+| Subject | Primary | Secondary | Notes |
+|---------|---------|-----------|-------|
+| Art | 100% | 100% | |
+| Citizenship | — | 100% | |
+| Computing | 100% | 100% | |
+| Cooking & Nutrition | 100% | 100% | |
+| Design Technology | 100% | 100% | |
+| English | 98% | 100% | 28 lessons without |
+| Geography | 100% | 100% | |
+| History | 100% | 100% | |
+| **Maths** | 99.5% | 100% | 5 lessons without |
+| Music | 100% | 96% | |
+| Religious Education | 100% | 100% | |
+| Science | 100% | 100% | |
+| **French** | **0%** | **0.2%** | MFL — no video |
+| **German** | — | **0.2%** | MFL — no video |
+| **Spanish** | **0.9%** | **0%** | MFL — no video |
+| **PE** | **0.7%** | **29%** | Partial video |
+
+---
+
+## 🔀 Strategic Options
+
+Three approaches are available. None is assumed — discussion required.
+
+### Option A: API-Only Ingestion (Current Implementation)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Continue with current pipeline                                  │
+│                                                                  │
+│  How it works:                                                   │
+│  - Fetch lessons via API (unit-by-unit to avoid pagination bug) │
+│  - Fetch transcripts via API (expect 404 for non-maths)         │
+│  - Index all lessons, with or without transcripts               │
+│                                                                  │
+│  Pros:                                                           │
+│  ✅ Already implemented and tested                               │
+│  ✅ Real-time data (not stale)                                   │
+│  ✅ Can proceed immediately                                      │
+│                                                                  │
+│  Cons:                                                           │
+│  ❌ ~65% of non-maths transcript fetches return 404              │
+│  ❌ Semantic search limited to maths + metadata                  │
+│  ❌ Many expected warnings (noisy logs)                          │
+│                                                                  │
+│  Effort: 0 days                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### 3. Verify Caching Still Works
+### Option B: Bulk Download Hybrid
 
-The adapter refactoring introduced a new `CacheOperations` interface. Verify:
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:ingest-live --subject maths --keystage ks1 --verbose --dry-run
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Use bulk download for transcripts, API for metadata            │
+│                                                                  │
+│  How it works:                                                   │
+│  - Parse bulk download JSON files for lesson enumeration        │
+│  - Extract transcripts from bulk download                       │
+│  - Supplement with API for real-time metadata if needed         │
+│                                                                  │
+│  Pros:                                                           │
+│  ✅ 81% of lessons get full transcripts                          │
+│  ✅ Semantic search works across 14/17 subjects                  │
+│  ✅ No "transcript not found" noise                              │
+│  ✅ Faster ingestion (no per-lesson API calls for transcripts)  │
+│                                                                  │
+│  Cons:                                                           │
+│  ❌ ~4.5 days implementation                                     │
+│  ❌ Bulk download may be stale (no refresh mechanism yet)        │
+│  ❌ Must handle bulk download data issues (null titles, etc.)    │
+│                                                                  │
+│  Effort: ~4.5 days                                               │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### 4. Run Full Curriculum Ingestion
+### Option C: Dual-Index Architecture
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:ingest-live --all --verbose
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Separate indexes for different content types                   │
+│                                                                  │
+│  How it works:                                                   │
+│  - Index 1: Rich (maths + bulk subjects with transcripts)       │
+│  - Index 2: Foundation (MFL + PE without transcripts)           │
+│  - Different retrieval strategies per index                     │
+│                                                                  │
+│  Pros:                                                           │
+│  ✅ Optimized retrieval per content type                         │
+│  ✅ Clear separation of capabilities                             │
+│  ✅ Maths serves as exemplar with full features                  │
+│                                                                  │
+│  Cons:                                                           │
+│  ❌ ~2 days implementation                                       │
+│  ❌ More complex retriever logic                                 │
+│  ❌ Two indexes to maintain                                      │
+│  ❌ User experience question ("why is maths search better?")     │
+│                                                                  │
+│  Effort: ~2 days                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-**Expected**: ~12,316 unique lessons across 17 subjects.
+### Option D: Wait for Autumn 2025
 
----
-
-## Recent Work Completed (2025-12-29)
-
-### Efficient API Traversal — COMPLETE ✅
-
-Implemented bulk assets endpoint for video availability check before transcript fetching:
-
-| File Created/Modified | Purpose |
-| --------------------- | ------- |
-| `src/lib/indexing/video-availability.ts` | Pure function to build video availability map |
-| `src/lib/indexing/video-availability.unit.test.ts` | Unit tests for map building |
-| `src/adapters/sdk-api-methods.ts` | Added `makeGetSubjectAssets` |
-| `src/adapters/sdk-guards.ts` | Added `isSubjectAssets` import |
-| `src/lib/index-oak-helpers.ts` | Integrated video map into ingestion |
-
-**Expected benefit**: ~50% reduction in API calls by skipping transcript fetch for no-video lessons.
-
-### Adapter Refactoring — COMPLETE ✅
-
-Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
-
-| Metric             | Before    | After       | Change     |
-| ------------------ | --------- | ----------- | ---------- |
-| `oak-adapter.ts`   | 593 lines | 197 lines   | **-67%**   |
-| Lint errors        | 70        | 0           | ✅ Fixed   |
-| Quality gates      | Blocked   | All passing | ✅ Fixed   |
-
-### New Architecture
-
-```text
-oak-adapter.ts (197 lines - Public API)
-    ├── sdk-client-factory.ts (141 lines - client creation)
-    │       ├── sdk-api-methods.ts (143 lines - endpoint factories)
-    │       └── sdk-cache/cache-wrapper.ts (248 lines - caching with DI)
-    ├── oak-adapter-threads.ts (98 lines - thread API methods)
-    └── oak-adapter-types.ts (95 lines - type definitions)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Wait for Oak to complete full API coverage                     │
+│                                                                  │
+│  Oak documentation states:                                       │
+│  "Production is expected to finish in Autumn 2025"              │
+│                                                                  │
+│  Pros:                                                           │
+│  ✅ Full transcript coverage via API                             │
+│  ✅ No hybrid complexity                                         │
+│  ✅ Single source of truth                                       │
+│                                                                  │
+│  Cons:                                                           │
+│  ❌ 9+ months delay                                              │
+│  ❌ Uncertain timeline                                           │
+│  ❌ Maths-only semantic search in the meantime                   │
+│                                                                  │
+│  Effort: Time-based                                              │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Key Design Decisions
+---
 
-1. **Dependency Injection** — Cache wrappers use `CacheOperations` interface, enabling testing without Redis
-2. **TDD-Driven** — 22 adapter tests covering cache behaviour
-3. **Reduced Complexity** — All functions under 50-line and 20-statement limits
-4. **Documentation** — New `src/adapters/README.md` documents architecture
+## 🤔 Discussion Points for Next Session
 
-### Files Created/Modified
+Before proceeding, consider:
 
-| File                               | Purpose                           |
-| ---------------------------------- | --------------------------------- |
-| `sdk-cache/cache-wrapper.ts`       | `withCache`, `withCacheAndNegative` |
-| `sdk-cache/cache-wrapper.unit.test.ts` | 11 unit tests for cache wrappers |
-| `sdk-api-methods.ts`               | API method factories              |
-| `sdk-client-factory.ts`            | Client creation helpers           |
-| `src/adapters/README.md`           | Architecture documentation        |
+### 1. What user impact are we optimizing for?
+
+- **Option A**: Ship fast with maths-only semantic search
+- **Option B/C**: Broader coverage but more work
+- **Option D**: Best coverage but long wait
+
+### 2. Is "maths as exemplar" an acceptable interim state?
+
+The current implementation provides full semantic search for maths (~16% of lessons). Is this valuable enough to ship while other subjects get metadata-only search?
+
+### 3. How stale is acceptable for bulk download data?
+
+The bulk download is ~3 weeks old. If we use it:
+- What refresh mechanism do we need?
+- How do we detect/handle new lessons added via API?
+
+### 4. Is dual-index complexity justified?
+
+Option C adds retrieval complexity. Is the benefit of optimized per-type retrieval worth the maintenance cost?
+
+### 5. What does "done" look like for Phase 2.6?
+
+- All lessons indexed (regardless of transcript)? 
+- Verified transcript coverage per subject?
+- Search quality baseline established?
 
 ---
 
-## Background Context
+## 📚 Key References
 
-### ES Index Status (Needs Reset)
+### Analysis Documents
 
-| Index                | Doc Count | Target   | Status            |
-| -------------------- | --------- | -------- | ----------------- |
-| `oak_lessons`        | 0         | ~12,316  | 📋 Needs reset    |
-| `oak_units`          | 0         | —        | 📋 Needs reset    |
-| `oak_unit_rollup`    | 0         | —        | 📋 Needs reset    |
-| `oak_threads`        | 0         | —        | 📋 Needs reset    |
-| `oak_sequences`      | 0         | —        | 📋 Needs reset    |
-| `oak_sequence_facets`| 0         | —        | 📋 Needs reset    |
+| Document | Content |
+|----------|---------|
+| **[transcript-availability-analysis.md](../../analysis/transcript-availability-analysis.md)** | **Comprehensive findings from this investigation** — data tables, assumptions tested, investigation chronology |
+| [curriculum-structure-analysis.md](../../analysis/curriculum-structure-analysis.md) | All 6 structural patterns, traversal strategies |
 
-### Redis Cache Status (Needs Verification)
+### API Wishlist Updates (2025-12-30)
 
-| Metric                   | Value     | Status                   |
-| ------------------------ | --------- | ------------------------ |
-| Lesson summaries cached  | 7,089     | ⚠️ Verify still accessible |
-| Lesson transcripts cached| 4,281     | ⚠️ Verify still accessible |
-| Unit summaries cached    | 669       | ⚠️ Verify still accessible |
-| **Total cached**         | **12,039**| ⚠️ Verify after refactoring |
+New items added to `00-overview-and-known-issues.md`:
 
-**Why verification needed**: The new `CacheOperations` interface changed how we interact with Redis. Need to confirm reads/writes still work.
+| ID | Request | Priority |
+|----|---------|----------|
+| **ER1** | Full data coverage across all subjects | HIGH |
+| **ER2** | Documentation of API vs bulk download differences | MEDIUM |
+| **ER3** | `hasTranscript` boolean flag in lessons endpoint | MEDIUM |
+| Q1-Q6 | Clarifying questions for upstream team | — |
 
-### Expected Lesson Counts (from Bulk Download)
+### ADRs
 
-| Subject              | Target | Notes                    |
-| -------------------- | ------ | ------------------------ |
-| maths                | 1,934  | Includes KS4 tiers       |
-| english              | 2,525  | Has unit options         |
-| science              | 1,277  | Includes KS4 exam subjects |
-| physical-education   | 992    |                          |
-| geography            | 683    | Has unit options         |
-| history              | 684    |                          |
-| religious-education  | 612    |                          |
-| computing            | 528    | ⚠️ Many may lack videos  |
-| french               | 522    |                          |
-| spanish              | 525    |                          |
-| music                | 434    |                          |
-| german               | 411    |                          |
-| art                  | 403    | Has unit options         |
-| design-technology    | 360    | Has unit options         |
-| citizenship          | 318    |                          |
-| cooking-nutrition    | 108    | No KS4                   |
-| rshe-pshe            | TBD    | API only, no bulk file   |
-| **TOTAL**            | **~12,316** |                     |
+| ADR | Decision |
+|-----|----------|
+| [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) | Fetch lessons unit-by-unit (workaround for pagination bug) |
+| [ADR-091](../../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md) | Tri-state `hasVideo()` function for TPC-filtered assets |
+| [ADR-092](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Structured transcript cache metadata |
+
+### External Documentation
+
+| Link | Content |
+|------|---------|
+| [Oak Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage) | Official statement on API resource availability |
+| [Oak Terms](https://open-api.thenational.academy/docs/about-oaks-api/terms) | OGL v3.0 licensing |
+| [Bulk Download](https://open-api.thenational.academy/bulk-download) | Full dataset download |
 
 ---
 
-## Canonical Ingestion CLI
+## ✅ Completed Work Summary
 
-**Entry point**: `src/lib/elasticsearch/setup/ingest-live.ts`
-**Command**: `pnpm es:ingest-live`
+All prerequisite work is complete. The system is technically ready for full ingestion.
 
-| Flag                  | Purpose                                          |
-| --------------------- | ------------------------------------------------ |
-| `--all`               | Ingest all 17 subjects                           |
-| `--subject <slug>`    | Ingest specific subject(s), can be repeated      |
-| `--keystage <slug>`   | Filter by key stage (ks1, ks2, ks3, ks4)         |
-| `--index <kind>`      | Filter to specific index kind (lessons, units)   |
-| `--force`             | Overwrite existing documents (ES `index` action) |
-| `--bypass-cache`      | Skip Redis cache requirement                     |
-| `--ignore-cached-404` | Bypass cached 404s for transcripts               |
-| `--verbose`           | Detailed logging                                 |
-| `--dry-run`           | Preview without indexing                         |
+### Phase 0: Plan Review — COMPLETE ✅
+
+- All plan documents audited
+- Bulk download data verified (30 files, ~12,783 lessons)
+- API structure verified via MCP tools
+- ES state documented
+
+### Phase 1: Pattern-Aware Ingestion — COMPLETE ✅
+
+All 7 curriculum structural patterns implemented:
+
+| Pattern | Subjects |
+|---------|----------|
+| `simple-flat` | All KS1-KS3, some KS4 |
+| `tier-variants` | Maths KS4 |
+| `exam-subject-split` | Science KS4 |
+| `exam-board-variants` | 12 subjects KS4 |
+| `unit-options` | 6 subjects KS4 |
+| `no-ks4` | Cooking-nutrition |
+| `empty` | Edge cases |
+
+### Phase 2.1-2.5: Infrastructure — COMPLETE ✅
+
+| Task | Status | Result |
+|------|--------|--------|
+| Adapter refactoring | ✅ | 593→197 lines, TDD-driven |
+| ES reset | ✅ | 7 indices, 192 synonyms |
+| Cache validation | ✅ | 756 hits, 1 miss |
+| ES upsert verify | ✅ | 638 docs (maths KS1) |
+| Cache categorization | ✅ | Structured metadata, zero compat layers |
+| Quality gates | ✅ | All 11 passing |
+
+### Plan Consolidation — COMPLETE ✅
+
+Legacy `.cursor/plans/` files deleted. Active plan: `.cursor/plans/semantic_search_ingestion_8eaea812.plan.md`
 
 ---
 
-## Efficient API Traversal (Next Priority)
+## 📋 Pending Work (from Plan)
 
-**Full plan**: [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md)
+| ID | Task | Phase | Status |
+|----|------|-------|--------|
+| `phase2-ingest` | Run full curriculum ingestion | 2 | ⏸️ Awaiting strategic decision |
+| `phase2-gates` | Run all quality gates after ingestion | 2 | Pending |
+| `phase3-counts` | Verify per-subject counts | 3 | Pending |
+| `phase3-patterns` | Verify pattern-specific data | 3 | Pending |
+| `phase3-baseline` | Establish search quality baseline | 3 | Pending |
+| `phase3-docs` | Update current-state.md and roadmap.md | 3 | Pending |
+| `phase3-gates` | Run all quality gates | 3 | Pending |
 
-The ingestion pipeline currently makes wasteful API calls:
-
-| Problem | Impact |
-| ------- | ------ |
-| Transcript fetch for no-video lessons | ~50% wasted calls, 404 errors |
-| Per-lesson asset checks | Could use bulk endpoint instead |
-
-**Solution**: Use `/key-stages/{ks}/subject/{subject}/assets` to get ALL lesson asset types in ONE call, then only fetch transcripts for lessons with `type: "video"`.
-
-**Key bulk endpoints from OpenAPI schema**:
-
-| Endpoint | Returns |
-| -------- | ------- |
-| `/key-stages/{ks}/subject/{subject}/assets` | All assets for subject/keystage |
-| `/sequences/{sequence}/assets` | All assets for sequence |
-
-This work MUST be completed before running full ingestion.
+Phase 4 (SDK extraction) is deferred pending Phase 3 completion.
 
 ---
 
-## Quality Gates (All Passing ✅)
+## Infrastructure Status
+
+### ES Index Status (After Reset — 2025-12-29)
+
+| Index | Doc Count | Target | Status |
+|-------|-----------|--------|--------|
+| `oak_lessons` | 437 (maths KS1) | ~12,783 | 📋 Needs full ingestion |
+| `oak_units` | TBD | — | 📋 Needs full ingestion |
+| `oak_unit_rollup` | TBD | — | 📋 Needs full ingestion |
+| `oak_threads` | 201 (maths KS1) | — | 📋 Needs full ingestion |
+| `oak_sequences` | TBD | — | 📋 Needs full ingestion |
+| `oak_sequence_facets` | TBD | — | 📋 Needs full ingestion |
+
+### Redis Cache Status (Verified Working)
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Lesson summaries cached | 7,089 | ✅ Accessible |
+| Lesson transcripts cached | 4,281 | ✅ Accessible |
+| Unit summaries cached | 669 | ✅ Accessible |
+| **Total cached** | **12,039** | ✅ Working |
+
+---
+
+## Quality Gates
 
 Run from repo root after any changes:
 
@@ -216,80 +385,40 @@ Before any work, read:
 
 ---
 
-## Related Documents
+## Key Files Reference
 
-| Document                        | Purpose                              |
-| ------------------------------- | ------------------------------------ |
-| [efficient-api-traversal.md](../../plans/semantic-search/active/efficient-api-traversal.md) | **NEXT PRIORITY** — Reduce API calls |
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Master plan with all milestones |
-| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics snapshot |
-| [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md) | Full ingestion plan |
-| [pattern-aware-ingestion.md](../../plans/semantic-search/active/pattern-aware-ingestion.md) | Pattern implementation (COMPLETE) |
-| [search_ingest_reset_with_review.plan.md](../../../.cursor/plans/search_ingest_reset_with_review_b5516f42.plan.md) | Detailed execution plan |
+### Adapter Layer
 
----
-
-## Key Files
-
-### Adapter Layer (Refactored 2025-12-29)
-
-| File                             | Purpose                                                     |
-| -------------------------------- | ----------------------------------------------------------- |
-| `src/adapters/oak-adapter.ts`    | **Public API** — `createOakClient()`, `OakClient` interface |
-| `src/adapters/oak-adapter-types.ts` | Type definitions for all API methods                     |
-| `src/adapters/oak-adapter-threads.ts` | Thread-specific API methods                            |
-| `src/adapters/sdk-api-methods.ts` | Factories for each API endpoint                            |
-| `src/adapters/sdk-client-factory.ts` | Client creation (cached/uncached)                       |
-| `src/adapters/sdk-guards.ts`     | Type guards for API response validation                     |
-| `src/adapters/sdk-cache/`        | Caching infrastructure                                      |
-| `src/adapters/README.md`         | Architecture documentation                                  |
-
-### Caching Layer (New — 2025-12-29)
-
-| File                                     | Purpose                                    |
-| ---------------------------------------- | ------------------------------------------ |
-| `sdk-cache/cache-wrapper.ts`             | `withCache`, `withCacheAndNegative`        |
-| `sdk-cache/cache-wrapper.unit.test.ts`   | 11 unit tests                              |
-| `sdk-cache/redis-connection.ts`          | `createRedisClient`, `withRedisConnection` |
-| `sdk-cache/ttl-jitter.ts`                | `calculateTtlWithJitter` for stampede prevention |
-| `sdk-cache/index.ts`                     | Re-exports                                 |
+| File | Purpose |
+|------|---------|
+| `src/adapters/oak-adapter.ts` | **Public API** — `createOakClient()`, `OakClient` interface |
+| `src/adapters/oak-adapter-types.ts` | Type definitions for all API methods |
+| `src/adapters/sdk-api-methods.ts` | Factories for each API endpoint |
+| `src/adapters/sdk-cache/` | Caching infrastructure |
 
 ### Ingestion Pipeline
 
-| File                                     | Purpose                    |
-| ---------------------------------------- | -------------------------- |
-| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point        |
-| `src/lib/index-oak.ts`                   | Main indexing logic        |
-| `src/lib/index-oak-keystage-ops.ts`      | Keystage operations        |
-| `src/lib/indexing/curriculum-pattern-config.ts` | Pattern configuration |
+| File | Purpose |
+|------|---------|
+| `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point |
+| `src/lib/index-oak.ts` | Main indexing logic |
+| `src/lib/indexing/lesson-materials.ts` | Transcript + summary fetching |
 | `src/lib/indexing/pattern-aware-fetcher.ts` | Pattern-aware traversal |
 
----
+### Bulk Download Data
 
-## OpenAPI Schema Reference
-
-For API exploration, the OpenAPI schema is at:
-`packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json`
-
-Key endpoints:
-
-- `/subjects` — All subjects with sequences
-- `/subjects/{subject}/sequences` — Sequence details
-- `/sequences/{sequence}/units` — Units within sequence
-- `/lessons/{lesson}/assets` — Asset types including video availability
-- `/lessons/{lesson}/summary` — Lesson metadata
-- `/lessons/{lesson}/transcript` — Transcript (only if video exists)
+| Path | Content |
+|------|---------|
+| `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/` | 30 JSON files, ~12,783 lessons |
 
 ---
 
-## MCP Tools Available
+## Upstream API Code Reference
 
-For curriculum exploration via OOC MCP server:
+For investigating API behavior, the upstream code is at `reference/oak-openapi/`:
 
-| Tool                                             | Purpose                            |
-| ------------------------------------------------ | ---------------------------------- |
-| `mcp_ooc-http-dev-local_get-lessons-assets`      | Check asset types for a lesson     |
-| `mcp_ooc-http-dev-local_get-lessons-summary`     | Get lesson metadata                |
-| `mcp_ooc-http-dev-local_search`                  | Search for lessons by topic        |
-| `mcp_ooc-http-dev-local_get-ontology`            | Understand curriculum structure    |
-| `mcp_ooc-http-dev-local_get-key-stages-subject-lessons` | List lessons by subject/keystage |
+| File | Purpose |
+|------|---------|
+| `src/lib/queryGate.ts` | **TPC license filtering** — explains assets/transcript incompleteness |
+| `src/lib/queryGateData/supportedLessons.json` | 4,559 TPC-cleared lessons |
+| `src/lib/queryGateData/supportedUnits.json` | 213 TPC-cleared units |

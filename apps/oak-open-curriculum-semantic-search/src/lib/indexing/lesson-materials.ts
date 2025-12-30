@@ -1,10 +1,28 @@
 /**
  * Lesson material fetching for bulk indexing operations.
  *
- * Handles fetching lesson transcripts and summaries.
+ * Handles fetching lesson transcripts and summaries. Uses video availability
+ * information to skip unnecessary transcript fetches when lessons are known
+ * to have no video content.
+ *
+ * ## Transcript Fetch Optimization
+ *
+ * When `FetchContext.hasVideo` is explicitly `false` (from bulk assets check),
+ * transcript fetch is skipped entirely, avoiding 404 errors for lessons
+ * known to lack video content.
+ *
+ * | hasVideo Value | Behavior |
+ * |----------------|----------|
+ * | `true` | Fetch transcript from API |
+ * | `undefined` | Fetch transcript (backwards compatible) |
+ * | `false` | Skip transcript fetch, return empty string |
+ *
  * All SDK methods return Result<T, SdkFetchError> per ADR-088.
  *
  * @see ADR-088 Result Pattern for Explicit Error Handling
+ * @see ADR-091 Video Availability Detection Strategy
+ * @see ADR-092 Transcript Cache Categorization Strategy
+ * @packageDocumentation
  */
 
 import type { KeyStage, SearchLessonSummary, SearchSubjectSlug } from '../../types/oak';
@@ -15,28 +33,66 @@ import { formatSdkError, isRecoverableError } from '@oaknational/oak-curriculum-
 import { getIngestionErrorCollector } from './ingestion-error-collector';
 import { ingestLogger } from '../logger';
 
-/** Context for error tracking during lesson material fetch. */
+/**
+ * Context for error tracking and optimization during lesson material fetch.
+ *
+ * Provides curriculum context for error logging and controls transcript
+ * fetch behavior based on video availability information.
+ *
+ * @see ADR-091 Video Availability Detection Strategy
+ */
 export interface FetchContext {
+  /** Key stage for error context (e.g., 'ks2', 'ks3'). */
   readonly keyStage?: KeyStage;
+  /** Subject slug for error context (e.g., 'maths', 'science'). */
   readonly subject?: SearchSubjectSlug;
+  /** Unit slug for error context. */
   readonly unitSlug?: string;
   /**
-   * Whether this lesson has a video (from bulk assets check).
-   * If false, transcript fetch is skipped entirely.
-   * If undefined, transcript is fetched (backwards compatible).
+   * Whether this lesson has a video (from bulk assets endpoint).
+   *
+   * This is a tri-state value from the video availability check:
+   * - `true`: Lesson has video, fetch transcript
+   * - `false`: Lesson has no video, skip transcript fetch
+   * - `undefined`: Unknown (not in assets response), fetch transcript
+   *
+   * When `false`, transcript fetch is skipped entirely to avoid 404 errors.
+   * The cache will record this as `{ status: 'no_video' }`.
+   *
+   * @see ADR-091 Video Availability Detection Strategy
+   * @see ADR-092 Transcript Cache Categorization Strategy
    */
   readonly hasVideo?: boolean;
 }
 
 /**
  * Fetch lesson materials (transcript + summary) for indexing.
+ *
  * Returns null if lesson summary is unavailable or on unrecoverable error.
+ * This allows the ingestion pipeline to skip problematic lessons gracefully.
  *
- * If `context.hasVideo` is explicitly false, transcript fetch is skipped
- * entirely (returns empty string). This optimization prevents 404 errors
- * for lessons known to lack videos.
+ * ## Video Availability Optimization
  *
- * @see efficient-api-traversal.md for the bulk video availability check
+ * If `context.hasVideo` is explicitly `false`, transcript fetch is skipped
+ * entirely and an empty string is returned. This prevents 404 errors for
+ * lessons known to lack video content (determined from bulk assets check).
+ *
+ * ## Error Handling
+ *
+ * | Error Type | Transcript | Summary |
+ * |------------|------------|---------|
+ * | 404 Not Found | Empty string | Return null (skip) |
+ * | Network Error | Empty string | Return null (skip) |
+ * | Server Error | Empty string | Return null (skip) |
+ * | Validation Error | Throw | Throw |
+ *
+ * @param client - Oak API client
+ * @param lessonSlug - Lesson identifier
+ * @param context - Optional fetch context with video availability info
+ * @returns Transcript and summary, or null if summary unavailable
+ *
+ * @see ADR-091 Video Availability Detection Strategy
+ * @see ADR-092 Transcript Cache Categorization Strategy
  */
 export async function fetchLessonMaterials(
   client: OakClient,

@@ -51,6 +51,8 @@ responses:
 - Clearer expectation setting
 - Improved documentation
 
+**User impact:** API consumers and SDK/MCP engineers understand response shapes faster; teachers see more predictable tool behaviour.
+
 **Applies to:** Major list/search endpoints.
 
 **Enables**:
@@ -99,6 +101,7 @@ Included in `/ontology` response (see item 3).
 **Current workaround:** SDK generator adds canonical URLs at type-gen time using hard-coded patterns that attempt to match OWA structure.
 
 **Impact:** Single source of truth for URLs that's guaranteed to match OWA; easier updates when URL patterns change; ensures teachers always get working links.
+**User impact:** Teachers and curriculum leaders get reliable links; SDK/MCP engineers avoid hard-coded URL drift.
 
 **Enables**:
 
@@ -186,6 +189,8 @@ components:
 ```
 
 **Why this matters:**
+
+**User impact:** SDK/MCP engineers can cache safely; teachers and learners see fresher content with fewer delays.
 
 **1. Efficient SDK-layer caching:**
 
@@ -431,4 +436,3 @@ Teacher opens lesson planning app daily:
 4. Consider making it mandatory in v1.0
 
 ---
-

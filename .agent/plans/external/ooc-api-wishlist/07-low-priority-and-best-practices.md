@@ -70,6 +70,7 @@
 ```
 
 **Why:** Per [OpenAPI structure guidelines](https://learn.openapis.org/specification/structure.html), complete `info` metadata is essential for discoverability and legal clarity.
+**User impact:** Human engineers and API consumers get clear legal and support information; organisational stakeholders can assess licence terms quickly.
 
 **Current state:** Missing `description`, `contact`, `license`, `termsOfService`
 
@@ -102,6 +103,7 @@ tags:
 ```
 
 **Why:** [Enhanced tags](https://learn.openapis.org/specification/tags.html) with descriptions and external docs improve navigation in generated documentation.
+**User impact:** API consumers and SDK/MCP engineers find endpoints faster; teachers and curriculum leaders can browse documentation more confidently.
 
 **Current state:** Tags exist but have no descriptions or external documentation links.
 
@@ -142,6 +144,8 @@ Per [OpenAPI documentation guidelines](https://learn.openapis.org/specification/
 - `summary`: Short (for list views, API explorers)
 - `description`: Long with CommonMark formatting (for detail views)
 
+**User impact:** Human engineers and API consumers understand intent quickly; AI tool builders reduce mismatched endpoint usage.
+
 **Current state:** Most operations only have `description`, not `summary`
 
 ---
@@ -172,6 +176,7 @@ description: |
 ```
 
 **Why:** Richer formatting creates better auto-generated documentation.
+**User impact:** API consumers and teachers reading docs can skim and understand structure quickly.
 
 **Current state:** Descriptions are plain text, not using CommonMark features.
 
@@ -208,6 +213,7 @@ responses:
 ```
 
 **Why:** Multiple named examples with summaries improve documentation and enable mock servers.
+**User impact:** SDK/MCP engineers and API consumers can test against realistic examples without guessing response shapes.
 
 **Current state:** Some endpoints use `example` (singular), most have none.
 
@@ -263,6 +269,8 @@ components:
           schema: { type: integer }
         X-RateLimit-Reset:
           schema: { type: integer }
+        X-Retry-After:
+          schema: { type: integer }
       content:
         application/json:
           schema:
@@ -270,6 +278,7 @@ components:
 ```
 
 **Why:** Consistent error handling per [OpenAPI best practices](https://learn.openapis.org/best-practices.html).
+**User impact:** API consumers and SDK/MCP engineers handle errors correctly; teachers see clearer, actionable failures.
 
 ---
 
@@ -278,27 +287,33 @@ components:
 **D1. Document rate limit headers:**
 
 ```yaml
-responses:
-  '200':
-    headers:
-      X-RateLimit-Limit:
-        schema:
-          type: integer
-          example: 1000
-        description: 'Maximum requests per time window'
-      X-RateLimit-Remaining:
-        schema:
-          type: integer
-          example: 953
-        description: 'Requests remaining in current window'
-      X-RateLimit-Reset:
-        schema:
-          type: integer
-          example: 1740164400000
-        description: 'Time when rate limit resets (milliseconds since Unix epoch)'
+    responses:
+      '200':
+        headers:
+          X-RateLimit-Limit:
+            schema:
+              type: integer
+              example: 1000
+            description: 'Maximum requests per time window'
+          X-RateLimit-Remaining:
+            schema:
+              type: integer
+              example: 953
+            description: 'Requests remaining in current window'
+          X-RateLimit-Reset:
+            schema:
+              type: integer
+              example: 1740164400000
+            description: 'Time when rate limit resets (milliseconds since Unix epoch)'
+          X-Retry-After:
+            schema:
+              type: integer
+              example: 1740164400000
+            description: 'Time when it is safe to retry after a 429 response (milliseconds since Unix epoch)'
 ```
 
 **Why:** Oak has `/rate-limit` endpoint but headers aren't documented in spec!
+**User impact:** SDK/MCP engineers can respect limits and avoid throttling; API consumers can plan retries reliably.
 
 **D2. Add caching headers:**
 
@@ -313,6 +328,8 @@ ETag:
     type: string
   description: 'Entity tag for cache validation'
 ```
+
+**User impact:** SDK/MCP engineers can implement reliable caching; teachers and learners see faster responses.
 
 ---
 
@@ -357,6 +374,7 @@ properties:
 ```
 
 **Why:** Better code generation and validation per [reusing descriptions](https://learn.openapis.org/specification/reusing-descriptions.html).
+**User impact:** SDK/MCP engineers get stricter, safer schemas; API consumers hit fewer validation surprises.
 
 ---
 
@@ -393,6 +411,7 @@ KeyStageSubjectLessonsResponse:
 ```
 
 **Why:** Clients need to know if there are more results.
+**User impact:** API consumers and SDK/MCP engineers can paginate correctly; teachers get complete lists.
 
 ---
 
@@ -404,16 +423,18 @@ KeyStageSubjectLessonsResponse:
 servers:
   - url: 'https://{environment}.thenational.academy/api/{version}'
     description: 'Oak Curriculum API'
-    variables:
-      environment:
+  variables:
+    environment:
         default: open-api
         enum: [open-api, open-api-staging]
         description: 'API environment'
       version:
         default: v0
         enum: [v0]
-        description: 'API version'
+      description: 'API version'
 ```
+
+**User impact:** API consumers and SDK/MCP engineers can target the right environment without guesswork.
 
 **G2. Deprecation markers (when needed):**
 
@@ -430,6 +451,8 @@ servers:
       Migration guide: https://docs.thenational.academy/api/migration
 ```
 
+**User impact:** API consumers and SDK/MCP engineers can migrate safely; teachers avoid broken tooling during rollouts.
+
 **G3. Security scheme documentation:**
 
 ```yaml
@@ -445,6 +468,8 @@ components:
         Token lifetime: 1 hour
         Rate limit: 1000 requests/hour
 ```
+
+**User impact:** API consumers and SDK/MCP engineers authenticate correctly; organisational stakeholders understand access controls.
 
 ---
 
@@ -472,4 +497,3 @@ components:
 - **Documentation**: Auto-generated docs are comprehensive and navigable
 
 ---
-
