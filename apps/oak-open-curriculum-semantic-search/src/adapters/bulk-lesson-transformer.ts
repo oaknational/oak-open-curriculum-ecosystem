@@ -1,5 +1,11 @@
 /**
  * Bulk lesson to ES document transformer.
+ *
+ * @remarks
+ * Transforms bulk download lesson data into Elasticsearch document format,
+ * including semantic summary generation for ELSER embeddings.
+ *
+ * @module adapters/bulk-lesson-transformer
  */
 
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
@@ -15,6 +21,82 @@ import {
   normaliseSupervisionLevel,
   normaliseSubjectSlug,
 } from './bulk-transform-helpers.js';
+
+// ============================================================================
+// Semantic Summary Generation (Pure Functions)
+// ============================================================================
+
+/** Adds a formatted line to parts array if items exist. */
+function addSection(parts: string[], label: string, items: readonly string[]): void {
+  if (items.length > 0) {
+    parts.push(`${label}: ${items.join('; ')}.`);
+  }
+}
+
+/**
+ * Generates a semantic summary for a bulk lesson.
+ *
+ * @remarks
+ * Creates an information-dense ~200-400 token summary optimised for ELSER embeddings.
+ * Includes context (title, key stage, subject, unit) and pedagogical content
+ * (key learning points, keywords, misconceptions, teacher tips, pupil outcome).
+ *
+ * @param lesson - The bulk lesson to summarise
+ * @returns A structured semantic summary string
+ */
+function generateBulkLessonSemanticSummary(lesson: Lesson): string {
+  const contextLine = `${lesson.lessonTitle} is a ${lesson.keyStageTitle} ${lesson.subjectTitle} lesson in the unit "${lesson.unitTitle}".`;
+  const parts: string[] = [contextLine];
+
+  // Key learning points
+  if (lesson.keyLearningPoints.length > 0) {
+    addSection(
+      parts,
+      'Key learning',
+      lesson.keyLearningPoints.map((p) => p.keyLearningPoint),
+    );
+  }
+
+  // Keywords with descriptions
+  if (lesson.lessonKeywords.length > 0) {
+    addSection(
+      parts,
+      'Keywords',
+      lesson.lessonKeywords.map((k) =>
+        k.description ? `${k.keyword} (${k.description})` : k.keyword,
+      ),
+    );
+  }
+
+  // Misconceptions with responses
+  if (lesson.misconceptionsAndCommonMistakes.length > 0) {
+    addSection(
+      parts,
+      'Misconceptions',
+      lesson.misconceptionsAndCommonMistakes.map((m) => `${m.misconception} → ${m.response}`),
+    );
+  }
+
+  // Teacher tips
+  if (lesson.teacherTips.length > 0) {
+    addSection(
+      parts,
+      'Teacher tips',
+      lesson.teacherTips.map((t) => t.teacherTip),
+    );
+  }
+
+  // Pupil outcome
+  if (lesson.pupilLessonOutcome) {
+    parts.push(`Pupil outcome: ${lesson.pupilLessonOutcome}`);
+  }
+
+  return parts.join('\n\n');
+}
+
+// ============================================================================
+// Document Building
+// ============================================================================
 
 /** Unit info needed for lesson document construction */
 export interface LessonUnitInfo {
@@ -81,11 +163,12 @@ interface LessonContentFields {
 /** Build content fields for lesson document */
 function buildLessonContentFields(lesson: Lesson): LessonContentFields {
   const transcriptText = lesson.transcript_sentences ?? '[No transcript available]';
+  const structureSummary = generateBulkLessonSemanticSummary(lesson);
   return {
     lesson_content: transcriptText,
-    lesson_structure: undefined,
+    lesson_structure: structureSummary,
     lesson_content_semantic: transcriptText,
-    lesson_structure_semantic: undefined,
+    lesson_structure_semantic: structureSummary,
     lesson_url: generateLessonUrl(lesson.lessonSlug),
     pupil_lesson_outcome: lesson.pupilLessonOutcome || undefined,
     supervision_level: normaliseSupervisionLevel(lesson.supervisionLevel),

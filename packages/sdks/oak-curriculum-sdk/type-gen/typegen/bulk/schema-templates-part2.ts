@@ -55,9 +55,9 @@ export const lessonSchema = z
     // Bulk-specific casing (lowercase 'a')
     downloadsavailable: z.boolean(),
 
-    // Bulk-only transcript fields
-    transcript_sentences: z.string().optional(),
-    transcript_vtt: z.string().optional(),
+    // Bulk-only transcript fields (NULL sentinel handling)
+    transcript_sentences: nullSentinelSchema.optional(),
+    transcript_vtt: nullSentinelSchema.optional(),
   })
   .strict();
 

@@ -185,13 +185,16 @@ Full ingestion run completed but with critical failures:
 - Physical Education and Spanish subjects missing entirely
 
 **Mandatory remediation actions before further development:**
-1. Define parity requirements (bulk vs API ES documents)
-2. Deep code review (find where TDD was skipped)
-3. Investigate lesson count discrepancy
-4. Deep transcript survey (verify ALL subjects)
-5. Implement RSHE-PSHE 422 handling
 
-See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for full details.
+| Action | Status | Specification |
+|--------|--------|---------------|
+| 1. Define parity requirements | ✅ COMPLETE | [bulk-api-parity-requirements.md](active/bulk-api-parity-requirements.md) |
+| 2. Deep code review | ✅ COMPLETE | [bulk-code-review.md](active/bulk-code-review.md) |
+| 3. Investigate lesson count | 📋 **NEXT** | See hypotheses in code review |
+| 4. Deep transcript survey | 📋 Pending | Blocked on Action 3 |
+| 5. RSHE-PSHE 422 handling | 📋 Pending | Blocked on Action 3 |
+
+See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for full details and investigation plan.
 
 ---
 

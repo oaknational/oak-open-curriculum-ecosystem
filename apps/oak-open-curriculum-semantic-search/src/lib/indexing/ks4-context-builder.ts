@@ -35,6 +35,14 @@ export type {
   SubjectSequenceInfo,
 };
 
+/**
+ * Creates an empty UnitContextMap with proper typing.
+ * Use this instead of `new Map()` to avoid unsafe type widening.
+ */
+export function createEmptyUnitContextMap(): UnitContextMap {
+  return new Map<string, AggregatedUnitContext>();
+}
+
 /** Parses the exam board from a sequence slug. */
 export function parseExamBoardFromSlug(sequenceSlug: string): ExamBoard | null {
   const slugParts = sequenceSlug.toLowerCase().split('-');

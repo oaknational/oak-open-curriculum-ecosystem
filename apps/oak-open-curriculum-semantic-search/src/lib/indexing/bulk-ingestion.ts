@@ -33,6 +33,7 @@ export interface BulkIngestionStats {
   readonly filesProcessed: number;
   readonly lessonsIndexed: number;
   readonly unitsIndexed: number;
+  readonly rollupsIndexed: number;
   readonly threadsIndexed: number;
   readonly vocabularyStats: {
     readonly uniqueKeywords: number;
@@ -68,6 +69,7 @@ interface BulkProcessingAccumulator {
   readonly operations: BulkOperationEntry[];
   readonly totalLessons: number;
   readonly totalUnits: number;
+  readonly totalRollups: number;
 }
 
 /**
@@ -92,6 +94,7 @@ function filterBySubject(
 /** Index names for bulk operations */
 const LESSONS_INDEX = 'oak_lessons';
 const UNITS_INDEX = 'oak_units';
+const UNIT_ROLLUP_INDEX = 'oak_unit_rollup';
 const THREADS_INDEX = 'oak_threads';
 
 /**
@@ -108,18 +111,24 @@ async function processSingleBulkFile(
   });
 
   const hybridSource = await createHybridDataSource(fileResult.data, client);
-  const fileOperations = hybridSource.toBulkOperations(LESSONS_INDEX, UNITS_INDEX);
+  const fileOperations = hybridSource.toBulkOperations(
+    LESSONS_INDEX,
+    UNITS_INDEX,
+    UNIT_ROLLUP_INDEX,
+  );
   const stats = hybridSource.getStats();
 
   ingestLogger.debug('Processed bulk file', {
     sequenceSlug: fileResult.data.sequenceSlug,
     operations: fileOperations.length,
+    rollups: stats.rollupCount,
   });
 
   return {
     operations: [...fileOperations],
     totalLessons: stats.lessonCount,
     totalUnits: stats.unitCount,
+    totalRollups: stats.rollupCount,
   };
 }
 
@@ -133,15 +142,17 @@ async function processAllBulkFiles(
   const allOperations: BulkOperationEntry[] = [];
   let totalLessons = 0;
   let totalUnits = 0;
+  let totalRollups = 0;
 
   for (const fileResult of files) {
     const result = await processSingleBulkFile(fileResult, client);
     allOperations.push(...result.operations);
     totalLessons += result.totalLessons;
     totalUnits += result.totalUnits;
+    totalRollups += result.totalRollups;
   }
 
-  return { operations: allOperations, totalLessons, totalUnits };
+  return { operations: allOperations, totalLessons, totalUnits, totalRollups };
 }
 
 /**
@@ -165,6 +176,7 @@ function buildIngestionStats(
     filesProcessed,
     lessonsIndexed: processingResult.totalLessons,
     unitsIndexed: processingResult.totalUnits,
+    rollupsIndexed: processingResult.totalRollups,
     threadsIndexed: threadsCount,
     vocabularyStats: {
       uniqueKeywords: vocabStats.uniqueKeywords,
@@ -181,20 +193,31 @@ interface ThreadExtractionResult {
 }
 
 /** Extracts threads from bulk files and builds bulk operations. */
-function extractAndBuildThreadOperations(files: readonly BulkDownloadFile[]): ThreadExtractionResult {
+function extractAndBuildThreadOperations(
+  files: readonly BulkDownloadFile[],
+): ThreadExtractionResult {
   const threads = extractThreadsFromBulkFiles(files);
   const operations = buildThreadBulkOperations(threads, THREADS_INDEX);
-  ingestLogger.debug('Threads extracted', { uniqueThreads: threads.length, threadOperations: operations.length });
+  ingestLogger.debug('Threads extracted', {
+    uniqueThreads: threads.length,
+    threadOperations: operations.length,
+  });
   return { operations, count: threads.length };
 }
 
 /** Logs file loading details. */
 function logFilesLoaded(total: number, filtered: number, filter?: readonly string[]): void {
-  ingestLogger.debug('Bulk files loaded', { totalFiles: total, filteredFiles: filtered, subjectFilter: filter ?? 'all' });
+  ingestLogger.debug('Bulk files loaded', {
+    totalFiles: total,
+    filteredFiles: filtered,
+    subjectFilter: filter ?? 'all',
+  });
 }
 
 /** Prepares bulk operations from bulk download files using HybridDataSource. */
-export async function prepareBulkIngestion(options: BulkIngestionOptions): Promise<BulkIngestionResult> {
+export async function prepareBulkIngestion(
+  options: BulkIngestionOptions,
+): Promise<BulkIngestionResult> {
   const { bulkDir, client, subjectFilter } = options;
   ingestLogger.info('Starting bulk ingestion preparation', { bulkDir });
 
@@ -207,8 +230,16 @@ export async function prepareBulkIngestion(options: BulkIngestionOptions): Promi
   const threadResult = extractAndBuildThreadOperations(bulkDownloadFiles);
   const allOperations = [...processingResult.operations, ...threadResult.operations];
   const vocabStats = extractVocabularyStats(bulkDownloadFiles);
-  const stats = buildIngestionStats(filteredFiles.length, processingResult, threadResult.count, vocabStats);
+  const stats = buildIngestionStats(
+    filteredFiles.length,
+    processingResult,
+    threadResult.count,
+    vocabStats,
+  );
 
-  ingestLogger.info('Bulk ingestion preparation complete', { ...stats, totalOperations: allOperations.length });
+  ingestLogger.info('Bulk ingestion preparation complete', {
+    ...stats,
+    totalOperations: allOperations.length,
+  });
   return { operations: allOperations, stats };
 }

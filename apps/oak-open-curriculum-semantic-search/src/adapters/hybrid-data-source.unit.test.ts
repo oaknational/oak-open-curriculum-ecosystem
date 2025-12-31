@@ -131,17 +131,17 @@ describe('createHybridDataSource', () => {
     expect(docs[0].doc_type).toBe('unit');
   });
 
-  it('generates bulk operations', async () => {
+  it('generates bulk operations including rollups', async () => {
     const bulkFile = createMockBulkFile();
     const source = await createHybridDataSource(bulkFile, null);
 
-    const ops = source.toBulkOperations('oak_lessons', 'oak_units');
+    const ops = source.toBulkOperations('oak_lessons', 'oak_units', 'oak_unit_rollup');
 
-    // 1 lesson + 1 unit, each with index action + doc = 4 operations
-    expect(ops.length).toBe(4);
+    // 1 lesson + 1 unit + 1 rollup, each with index action + doc = 6 operations
+    expect(ops.length).toBe(6);
   });
 
-  it('provides processing stats', async () => {
+  it('provides processing stats including rollup count', async () => {
     const bulkFile = createMockBulkFile();
     const source = await createHybridDataSource(bulkFile, null);
 
@@ -149,6 +149,7 @@ describe('createHybridDataSource', () => {
 
     expect(stats.lessonCount).toBe(1);
     expect(stats.unitCount).toBe(1);
+    expect(stats.rollupCount).toBe(1);
     expect(stats.ks4LessonsEnriched).toBe(0); // No KS4 lessons in mock
     expect(stats.ks4UnitsEnriched).toBe(0);
   });
@@ -262,7 +263,7 @@ describe('HybridDataSource KS4 enrichment', () => {
 // ============================================================================
 
 describe('processBulkFileBatch', () => {
-  it('processes multiple bulk files', async () => {
+  it('processes multiple bulk files including rollups', async () => {
     const file1 = createMockBulkFile({
       sequenceSlug: 'maths-primary',
       lessons: [createMockLesson({ lessonSlug: 'lesson-1' })],
@@ -273,14 +274,21 @@ describe('processBulkFileBatch', () => {
       lessons: [createMockLesson({ lessonSlug: 'lesson-2', subjectSlug: 'english' })],
     });
 
-    const result = await processBulkFileBatch([file1, file2], null, 'oak_lessons', 'oak_units');
+    const result = await processBulkFileBatch(
+      [file1, file2],
+      null,
+      'oak_lessons',
+      'oak_units',
+      'oak_unit_rollup',
+    );
 
     expect(result.sources).toHaveLength(2);
     expect(result.stats.lessonCount).toBe(2);
     expect(result.stats.unitCount).toBe(2);
+    expect(result.stats.rollupCount).toBe(2);
   });
 
-  it('aggregates statistics across files', async () => {
+  it('aggregates statistics across files including rollups', async () => {
     const file1 = createMockBulkFile({
       lessons: [createMockLesson(), createMockLesson({ lessonSlug: 'l2' })],
       sequence: [createMockUnit()],
@@ -291,9 +299,16 @@ describe('processBulkFileBatch', () => {
       sequence: [createMockUnit({ unitSlug: 'u2' }), createMockUnit({ unitSlug: 'u3' })],
     });
 
-    const result = await processBulkFileBatch([file1, file2], null, 'oak_lessons', 'oak_units');
+    const result = await processBulkFileBatch(
+      [file1, file2],
+      null,
+      'oak_lessons',
+      'oak_units',
+      'oak_unit_rollup',
+    );
 
     expect(result.stats.lessonCount).toBe(3);
     expect(result.stats.unitCount).toBe(3);
+    expect(result.stats.rollupCount).toBe(3);
   });
 });

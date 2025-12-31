@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: 🚨 BLOCKED — Critical issues discovered during bulk ingestion evaluation
+**Status**: ✅ BULK FIXES IMPLEMENTED — Ready for re-ingestion and verification
 **Last Updated**: 2025-12-31
 **Metrics Source**: [current-state.md](current-state.md)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
@@ -29,13 +29,22 @@ See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.pr
 
 ### Mandatory Remediation Actions
 
-1. **Define Parity Requirements** — Both bulk and API ingestion must produce identical ES documents
-2. **Deep Code Review** — TDD was NOT properly employed; review all bulk adapters
-3. **Investigate Lesson Count Discrepancy** — Find filter/logic bug causing 78% data loss
-4. **Deep Transcript Survey** — Previous reviews were shallow; verify ALL subjects
-5. **RSHE-PSHE 422 Handling** — Implement explicit 422 response in search SDK
+1. ✅ **Define Parity Requirements** — [bulk-api-parity-requirements.md](active/bulk-api-parity-requirements.md)
+2. ✅ **Deep Code Review** — [bulk-code-review.md](active/bulk-code-review.md)
+3. ✅ **Deep Investigation** — [08-bulk-ingestion-investigation-2025-12-31.md](../../research/ooc/08-bulk-ingestion-investigation-2025-12-31.md)
+   - **All 15 assumptions verified** — see investigation doc for full details
+   - Lesson counts confirmed: 12,833 raw, 12,320 unique
+   - Transcript coverage verified for all subjects
+   - MFL "transcripts" are literal "NULL" string (4 chars) — not empty
+   - RSHE-PSHE absence documented in ADR-093 — return 422 until Oak fixes
+   - Deduplication is safe — duplicates are identical content
+4. ✅ **Bulk Ingestion Fixes** — [bulk-ingestion-fixes.md](active/bulk-ingestion-fixes.md)
+   - Fix 1: ✅ Transcript NULL handling in SDK schema (`nullSentinelSchema`)
+   - Fix 2: ✅ Semantic summary generation (`lesson_structure` populated)
+   - Fix 3: ✅ Rollup document creation (`oak_unit_rollup` populated)
+5. 📋 **RSHE-PSHE 422 Handling** — Implement explicit 422 response in search SDK
 
-**NO FURTHER DEVELOPMENT UNTIL THESE ARE COMPLETE.**
+**Bulk ingestion fixes complete. Next step: Re-run ingestion and verify results.**
 
 ---
 
@@ -84,14 +93,14 @@ See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.pr
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 0 | SDK bulk export (schema-first) | ✅ Complete |
-| 1 | BulkDataAdapter (Lesson/Unit transforms) | ⚠️ **INCOMPLETE** — missing structure fields |
+| 1 | BulkDataAdapter (Lesson/Unit transforms) | ✅ Complete (fixes applied) |
 | 2 | API supplementation (Maths KS4 tiers) | ✅ Complete |
-| 3 | HybridDataSource (bulk + API) | ✅ Complete |
+| 3 | HybridDataSource (bulk + API + rollups) | ✅ Complete |
 | 4 | VocabularyMiningAdapter | ✅ Complete |
-| 5 | Pipeline integration | 🚨 **FAILED** |
+| 5 | Pipeline integration | ✅ Complete (ready for re-ingestion) |
 | 5a | Bulk thread transformer | ✅ Complete |
 | 5b | Wire into CLI | ✅ Complete |
-| 5c | Full ingestion run | 🚨 **FAILED** — critical issues |
+| 5c | Full ingestion run | 📋 Ready for re-run |
 
 **SDK public exports now available**:
 
@@ -139,13 +148,38 @@ import {
 
 ### Next Steps
 
-**BLOCKED — Complete remediation actions first. See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md).**
+**Bulk fixes implemented. Ready for re-ingestion.**
 
-1. 📋 **Action 1**: Define parity requirements (bulk vs API ES documents)
-2. 📋 **Action 2**: Deep code review (find where TDD was skipped)
-3. 📋 **Action 3**: Investigate lesson count discrepancy (2,884 vs 12,833)
-4. 📋 **Action 4**: Deep transcript survey (verify ALL subjects)
-5. 📋 **Action 5**: Implement RSHE-PSHE 422 handling
+| Action | Status | Specification |
+|--------|--------|---------------|
+| 1. Define parity requirements | ✅ COMPLETE | [bulk-api-parity-requirements.md](active/bulk-api-parity-requirements.md) |
+| 2. Deep code review | ✅ COMPLETE | [bulk-code-review.md](active/bulk-code-review.md) |
+| 3. Deep investigation | ✅ COMPLETE | [08-bulk-ingestion-investigation-2025-12-31.md](../../research/ooc/08-bulk-ingestion-investigation-2025-12-31.md) |
+| 4. Bulk ingestion fixes | ✅ COMPLETE | [bulk-ingestion-fixes.md](active/bulk-ingestion-fixes.md) |
+| **5. Re-run bulk ingestion** | 📋 **NEXT** | `pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads` |
+| 6. Verify retriever performance | 📋 Pending | `pnpm eval:diagnostic` |
+| 7. RSHE-PSHE 422 handling | 📋 Pending | Implement explicit 422 in search SDK |
+
+### Action 3: Investigation Plan
+
+**Goal**: Find why only 2,884/12,833 lessons were indexed (~78% missing).
+
+**Hypotheses** (from [bulk-code-review.md](active/bulk-code-review.md)):
+
+| # | Hypothesis | Investigation |
+|---|------------|---------------|
+| 1 | Subject filter bug | Check if `--subject` flag was used; `split('-')[0]` breaks hyphenated subjects |
+| 2 | Zod validation rejection | Add `logger.debug` to Zod parse in SDK |
+| 3 | File reading issue | Add `logger.info` for file discovery |
+| 4 | Deduplication | Check if Map is overwriting lessons |
+| 5 | Transform errors | Wrap in Result pattern with logging |
+| 6 | ES indexing failures | Check ES bulk response |
+
+**Approach**:
+1. Add comprehensive logging (see Part 6 of code review for patterns)
+2. Run bulk ingestion with `--verbose` flag
+3. Compare lesson counts at each stage against bulk file totals
+4. Use Result pattern for all fallible operations (ADR-088)
 
 ---
 

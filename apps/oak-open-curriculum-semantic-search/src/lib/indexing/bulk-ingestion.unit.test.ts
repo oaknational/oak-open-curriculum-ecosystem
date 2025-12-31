@@ -221,6 +221,7 @@ function createMockHybridDataSource(
     getUnits: () => bulkFile.sequence,
     transformLessonsToES: () => [],
     transformUnitsToES: () => [],
+    transformUnitsToRollupDocs: () => [],
     toBulkOperations: () => {
       // Create minimal valid operations for the count
       return Array.from({ length: operationCount }, (_, i) => ({
@@ -230,6 +231,7 @@ function createMockHybridDataSource(
     getStats: () => ({
       lessonCount,
       unitCount,
+      rollupCount: unitCount,
       ks4LessonsEnriched: 0,
       ks4UnitsEnriched: 0,
     }),

@@ -5,8 +5,10 @@
  * This data source implements the bulk-first ingestion strategy:
  * 1. Primary data comes from bulk downloads (fast, complete)
  * 2. API supplements missing data (KS4 tiers, categories)
+ * 3. Generates rollup documents for unit search
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
+ * @see ADR-093 Bulk-First Ingestion Strategy
  */
 
 import type {
@@ -14,7 +16,12 @@ import type {
   Lesson,
   Unit,
 } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchSubjectSlug } from '../types/oak';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSubjectSlug,
+} from '../types/oak';
 import type { OakClient } from './oak-adapter';
 import { createBulkDataAdapter, type BulkIndexAction } from './bulk-data-adapter';
 import {
@@ -26,6 +33,8 @@ import {
   type Ks4SupplementationContext,
 } from './api-supplementation';
 import { isSubject } from './sdk-guards';
+import { buildRollupDocs } from './bulk-rollup-builder';
+import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
 
 // ============================================================================
 // Types
@@ -40,9 +49,17 @@ export interface HybridDataSourceConfig {
 export interface HybridDataSourceStats {
   readonly lessonCount: number;
   readonly unitCount: number;
+  readonly rollupCount: number;
   readonly ks4LessonsEnriched: number;
   readonly ks4UnitsEnriched: number;
 }
+
+/** Bulk operation entry (action or document) */
+type BulkOperationEntry =
+  | BulkIndexAction
+  | SearchLessonsIndexDoc
+  | SearchUnitsIndexDoc
+  | SearchUnitRollupDoc;
 
 /** Interface for the hybrid data source */
 export interface HybridDataSource {
@@ -53,10 +70,12 @@ export interface HybridDataSource {
   getLessons(): readonly Lesson[];
   transformLessonsToES(): readonly SearchLessonsIndexDoc[];
   transformUnitsToES(): readonly SearchUnitsIndexDoc[];
+  transformUnitsToRollupDocs(): readonly SearchUnitRollupDoc[];
   toBulkOperations(
     lessonsIndex: string,
     unitsIndex: string,
-  ): readonly (BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc)[];
+    rollupIndex: string,
+  ): readonly BulkOperationEntry[];
   getStats(): HybridDataSourceStats;
 }
 
@@ -143,7 +162,6 @@ function enrichUnits(
   if (!ks4Context) {
     return [...docs];
   }
-
   return docs.map((doc) => {
     if (!isKs4(doc.key_stage)) {
       return doc;
@@ -156,13 +174,29 @@ function enrichUnits(
   });
 }
 
-// ============================================================================
-// Factory
-// ============================================================================
+/** Build bulk operations from transformed documents */
+function buildBulkOps(
+  lessons: readonly SearchLessonsIndexDoc[],
+  units: readonly SearchUnitsIndexDoc[],
+  rollups: readonly SearchUnitRollupDoc[],
+  lessonsIndex: string,
+  unitsIndex: string,
+  rollupIndex: string,
+): BulkOperationEntry[] {
+  const ops: BulkOperationEntry[] = [];
+  for (const doc of lessons) {
+    ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } }, doc);
+  }
+  for (const doc of units) {
+    ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } }, doc);
+  }
+  for (const doc of rollups) {
+    ops.push({ index: { _index: rollupIndex, _id: doc.unit_id } }, doc);
+  }
+  return ops;
+}
 
-/**
- * Create a hybrid data source from bulk file data.
- */
+/** Create a hybrid data source from bulk file data. */
 export async function createHybridDataSource(
   bulkFile: BulkDownloadFile,
   client: OakClient | null,
@@ -177,12 +211,19 @@ export async function createHybridDataSource(
     fullConfig.enableKs4Supplementation,
   );
   const tracker = createEnrichmentTracker();
-
-  const transformLessons = (): readonly SearchLessonsIndexDoc[] =>
+  const unitContextMap = ks4Context?.unitContextMap ?? createEmptyUnitContextMap();
+  const transformLessons = () =>
     enrichLessons(bulkAdapter.transformLessonsToES(), ks4Context, tracker);
-
-  const transformUnits = (): readonly SearchUnitsIndexDoc[] =>
-    enrichUnits(bulkAdapter.transformUnitsToES(), ks4Context, tracker);
+  const transformUnits = () => enrichUnits(bulkAdapter.transformUnitsToES(), ks4Context, tracker);
+  const transformRollups = () =>
+    buildRollupDocs(
+      bulkAdapter.getUnits(),
+      bulkAdapter.getLessons(),
+      subjectSlug,
+      bulkFile.subjectTitle,
+      bulkFile.sequenceSlug,
+      unitContextMap,
+    );
 
   return {
     sequenceSlug: bulkFile.sequenceSlug,
@@ -192,21 +233,13 @@ export async function createHybridDataSource(
     getLessons: () => bulkAdapter.getLessons(),
     transformLessonsToES: transformLessons,
     transformUnitsToES: transformUnits,
-    toBulkOperations(lessonsIndex, unitsIndex) {
-      const ops: (BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc)[] = [];
-      for (const doc of transformLessons()) {
-        ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } });
-        ops.push(doc);
-      }
-      for (const doc of transformUnits()) {
-        ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } });
-        ops.push(doc);
-      }
-      return ops;
-    },
+    transformUnitsToRollupDocs: transformRollups,
+    toBulkOperations: (li, ui, ri) =>
+      buildBulkOps(transformLessons(), transformUnits(), transformRollups(), li, ui, ri),
     getStats: () => ({
       lessonCount: bulkAdapter.getLessons().length,
       unitCount: bulkAdapter.getUnits().length,
+      rollupCount: bulkAdapter.getUnits().length,
       ks4LessonsEnriched: tracker.lessonsEnriched,
       ks4UnitsEnriched: tracker.unitsEnriched,
     }),

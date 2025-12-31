@@ -6,22 +6,17 @@ import {
   getDataIntegritySummary,
   type DataIntegrityReport,
 } from './data-integrity-report';
-import { BulkResponseSchema, logBulkErrors } from './sandbox-bulk-response';
 import type { BulkOperations } from './bulk-operation-types';
 import { isBulkIndexAction } from './bulk-operation-types';
+import {
+  chunkOperations,
+  uploadAllChunks,
+  MAX_CHUNK_SIZE_BYTES,
+  type EsTransport,
+} from './bulk-chunk-uploader';
 
-/**
- * Minimal Elasticsearch transport interface for bulk operations.
- * Defines only the request method needed for bulk uploads.
- */
-export interface EsTransport {
-  readonly transport: {
-    request(
-      params: { method: string; path: string; body: string },
-      options?: unknown,
-    ): Promise<unknown>;
-  };
-}
+export type { EsTransport } from './bulk-chunk-uploader';
+export { createNdjson } from './bulk-chunk-uploader';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
   ['oak_lessons', 'lessons'],
@@ -84,62 +79,8 @@ export function summariseOperations(
 }
 
 /**
- * Serialises a bulk operation array into NDJSON suitable for the Elasticsearch bulk API.
- */
-export function createNdjson(operations: BulkOperations): string {
-  return operations.map((entry) => JSON.stringify(entry)).join('\n') + '\n';
-}
-
-/** Maximum chunk size in bytes for bulk uploads (50MB to stay under ES limit). */
-const MAX_CHUNK_SIZE_BYTES = 50 * 1024 * 1024;
-
-/**
- * Splits bulk operations into chunks that don't exceed the size limit.
- *
- * @remarks
- * Each operation pair (action + document) is kept together. Chunks are split
- * based on estimated serialized size to stay under ES HTTP body limits.
- *
- * @param operations - Full list of bulk operations
- * @param maxSizeBytes - Maximum chunk size in bytes
- * @returns Array of operation chunks
- */
-function chunkOperations(operations: BulkOperations, maxSizeBytes: number): BulkOperations[] {
-  const chunks: BulkOperations[] = [];
-  let currentChunk: BulkOperations = [];
-  let currentSize = 0;
-
-  // Process in pairs (action + document)
-  for (let i = 0; i < operations.length; i += 2) {
-    const action = operations[i];
-    const doc = operations[i + 1];
-    if (action === undefined || doc === undefined) {
-      continue;
-    }
-
-    const pairSize = JSON.stringify(action).length + JSON.stringify(doc).length + 2; // +2 for newlines
-
-    if (currentSize + pairSize > maxSizeBytes && currentChunk.length > 0) {
-      chunks.push(currentChunk);
-      currentChunk = [];
-      currentSize = 0;
-    }
-
-    currentChunk.push(action, doc);
-    currentSize += pairSize;
-  }
-
-  if (currentChunk.length > 0) {
-    chunks.push(currentChunk);
-  }
-
-  return chunks;
-}
-
-/**
  * Dispatches the prepared NDJSON payload against the provided Elasticsearch transport.
  * Automatically chunks large payloads to stay under ES HTTP body limits.
- * Logs progress before/after upload and errors if any bulk operations fail.
  */
 export async function dispatchBulk(
   es: EsTransport,
@@ -147,58 +88,18 @@ export async function dispatchBulk(
   logger: Logger = ingestLogger,
 ): Promise<void> {
   const docCount = Math.floor(operations.length / 2);
-  const sizeKB = Math.round(JSON.stringify(operations).length / 1024);
-  const sizeMB = (sizeKB / 1024).toFixed(1);
-
   logger.info('Starting bulk upload to Elasticsearch', {
     documents: docCount,
     operations: operations.length,
-    estimatedSizeMB: sizeMB,
+    estimatedSizeMB: (JSON.stringify(operations).length / 1024 / 1024).toFixed(1),
   });
-
   const chunks = chunkOperations(operations, MAX_CHUNK_SIZE_BYTES);
   logger.info('Bulk upload chunked', {
     chunks: chunks.length,
     maxChunkSizeMB: MAX_CHUNK_SIZE_BYTES / 1024 / 1024,
   });
-
   const startTime = Date.now();
-  let totalUploaded = 0;
-
-  for (let i = 0; i < chunks.length; i++) {
-    const chunk = chunks[i];
-    if (chunk === undefined) {
-      continue;
-    }
-    const chunkDocs = Math.floor(chunk.length / 2);
-    const chunkSizeKB = Math.round(JSON.stringify(chunk).length / 1024);
-
-    logger.debug('Uploading chunk', {
-      chunk: i + 1,
-      of: chunks.length,
-      documents: chunkDocs,
-      sizeKB: chunkSizeKB,
-    });
-
-    const ndjson = createNdjson(chunk);
-    const rawResponse = await es.transport.request(
-      { method: 'POST', path: '/_bulk', body: ndjson },
-      { headers: { 'content-type': 'application/x-ndjson' } },
-    );
-    const parseResult = BulkResponseSchema.safeParse(rawResponse);
-    if (!parseResult.success) {
-      throw new Error(`Invalid bulk response from Elasticsearch: ${parseResult.error.message}`);
-    }
-    const response = parseResult.data;
-
-    if (response.errors) {
-      logBulkErrors(response, logger);
-    }
-
-    totalUploaded += chunkDocs;
-    logger.debug('Chunk uploaded', { chunk: i + 1, totalUploaded, of: docCount });
-  }
-
+  const totalUploaded = await uploadAllChunks(es, chunks, logger, docCount);
   const durationMs = Date.now() - startTime;
   logger.info('Bulk upload completed successfully', {
     documents: totalUploaded,

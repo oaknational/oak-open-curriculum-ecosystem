@@ -72,7 +72,70 @@ describe('unitLessonSchema', () => {
   });
 });
 
+/** Creates a minimal valid lesson object for testing */
+function createMinimalLesson(
+  overrides: Partial<{
+    transcript_sentences: string;
+    transcript_vtt: string;
+  }> = {},
+) {
+  return {
+    lessonTitle: 'Test Lesson',
+    lessonSlug: 'test-lesson',
+    unitSlug: 'test-unit',
+    unitTitle: 'Test Unit',
+    subjectSlug: 'maths',
+    subjectTitle: 'Maths',
+    keyStageSlug: 'ks2',
+    keyStageTitle: 'Key Stage 2',
+    lessonKeywords: [],
+    keyLearningPoints: [],
+    misconceptionsAndCommonMistakes: [],
+    pupilLessonOutcome: 'I can learn.',
+    teacherTips: [],
+    contentGuidance: 'NULL',
+    downloadsavailable: true,
+    supervisionLevel: 'NULL',
+    ...overrides,
+  };
+}
+
 describe('lessonSchema', () => {
+  describe('transcript NULL sentinel handling', () => {
+    it('transforms transcript_sentences NULL sentinel to null', () => {
+      const input = createMinimalLesson({ transcript_sentences: 'NULL' });
+      const result = lessonSchema.parse(input);
+      expect(result.transcript_sentences).toBeNull();
+    });
+
+    it('transforms transcript_vtt NULL sentinel to null', () => {
+      const input = createMinimalLesson({ transcript_vtt: 'NULL' });
+      const result = lessonSchema.parse(input);
+      expect(result.transcript_vtt).toBeNull();
+    });
+
+    it('preserves valid transcript_sentences', () => {
+      const input = createMinimalLesson({ transcript_sentences: 'Hello and welcome...' });
+      const result = lessonSchema.parse(input);
+      expect(result.transcript_sentences).toBe('Hello and welcome...');
+    });
+
+    it('preserves valid transcript_vtt', () => {
+      const input = createMinimalLesson({
+        transcript_vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nHello',
+      });
+      const result = lessonSchema.parse(input);
+      expect(result.transcript_vtt).toBe('WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nHello');
+    });
+
+    it('allows omitted transcript fields', () => {
+      const input = createMinimalLesson();
+      const result = lessonSchema.parse(input);
+      expect(result.transcript_sentences).toBeUndefined();
+      expect(result.transcript_vtt).toBeUndefined();
+    });
+  });
+
   it('parses a lesson with NULL sentinel for contentGuidance', () => {
     const input = {
       lessonTitle: 'Adding fractions',
