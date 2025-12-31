@@ -22,9 +22,9 @@ describe('extractLearningPoints', () => {
     misconceptionsAndCommonMistakes: [],
     pupilLessonOutcome: 'Test outcome',
     teacherTips: [],
-    contentGuidance: undefined,
+    contentGuidance: null,
     downloadsavailable: true,
-    supervisionLevel: undefined,
+    supervisionLevel: null,
     ...overrides,
   });
 

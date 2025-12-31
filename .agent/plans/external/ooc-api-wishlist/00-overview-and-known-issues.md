@@ -500,18 +500,35 @@ Investigation confirmed these are **KS4 tier variants** (foundation vs higher), 
 
 #### 2b: Lesson-Level Duplicates (lessons[] array)
 
-**Investigation** (2025-12-28):
+**Investigation** (2025-12-28, **UPDATED 2025-12-30**):
 
-The `lessons[]` array contains **byte-for-byte identical duplicate entries** for lessons that exist in both tiers:
+The `lessons[]` array contains **byte-for-byte identical duplicate entries**:
 
 | Metric | Count |
 |--------|-------|
 | Raw entries in lessons[] | 1,235 |
 | Unique lessonSlugs | 862 |
-| Duplicate entries | 373 lessons × 2 = 746 entries |
-| Single-appearance lessons | 63 (Higher tier only) |
+| Double-appearance lessons | 373 |
+| Single-appearance lessons | 63 (all in higher-only units) |
 
-**Critical Issue**: The two entries for each duplicated lesson are **completely identical** — there is no tier discriminator field to distinguish them. This makes programmatic deduplication require heuristic analysis or merging.
+**UPDATED Analysis** (2025-12-30):
+
+Deep investigation revealed the 373 double-appearance lessons break down as:
+
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| **Legitimate duplicates** | 210 | Lessons truly shared between BOTH tier variants at unit level |
+| **Spurious duplicates** | 163 | Lessons in ONE tier variant only, but incorrectly duplicated in `lessons[]` |
+
+**Example of spurious duplicate**:
+- `solving-complex-quadratic-equations-by-completing-the-square`
+- Appears in `algebraic-manipulation` unit variant 1 (higher tier, 16 lessons) ✅
+- Does NOT appear in unit variant 2 (foundation tier, 13 lessons) ❌
+- But appears TWICE in `lessons[]` array (data quality bug)
+
+**Critical Issues**:
+1. No tier discriminator field on any entry
+2. 163 lessons are spuriously duplicated (data quality bug)
 
 **Verification** (2025-12-28):
 
@@ -520,6 +537,8 @@ The `lessons[]` array contains **byte-for-byte identical duplicate entries** for
 jq '[.lessons[] | select(.lessonSlug == "solving-complex-quadratic-equations-by-completing-the-square")] | if .[0] == .[1] then "IDENTICAL" else "DIFFERENT" end' maths-secondary.json
 # Result: "IDENTICAL"
 ```
+
+**Solution for consumers**: Simple deduplication by `lessonSlug`, then derive tiers from API `/sequences/maths-secondary/units` endpoint (100% coverage confirmed).
 
 #### Comparison with other subjects
 
@@ -1243,3 +1262,196 @@ Fetch `/sequences/maths-secondary/units` from API to get tier assignments.
 ```
 
 **Priority**: LOW — workaround exists (derive from unit)
+
+---
+
+## Bulk Download Structure Improvements (2025-12-31)
+
+**Context**: Based on implementing the bulk-first ingestion pipeline, these structural improvements would significantly reduce processing complexity and eliminate the need for cross-referencing during ingestion.
+
+### ER9: Add Top-Level Threads Array to Bulk Download
+
+**Request**: Include a deduplicated `threads[]` array at the top level of bulk files.
+
+**Current State**:
+
+- Threads are embedded in `sequence[].threads[]` on each unit
+- Same thread appears on multiple units
+- Extracting unique threads requires iterating all units and deduplicating
+
+**Example of current structure**:
+
+```json
+{
+  "sequence": [
+    {
+      "unitSlug": "fractions-year-3",
+      "threads": [{ "slug": "number-fractions", "order": 1, "title": "Number: Fractions" }]
+    },
+    {
+      "unitSlug": "fractions-year-4",
+      "threads": [{ "slug": "number-fractions", "order": 2, "title": "Number: Fractions" }]
+    }
+  ]
+}
+```
+
+**Requested structure**:
+
+```json
+{
+  "threads": [
+    {
+      "threadSlug": "number-fractions",
+      "threadTitle": "Number: Fractions",
+      "units": [
+        { "unitSlug": "fractions-year-3", "order": 1 },
+        { "unitSlug": "fractions-year-4", "order": 2 }
+      ]
+    }
+  ],
+  "sequence": [/* units without embedded threads, or with threadSlugs only */]
+}
+```
+
+**Benefits**:
+
+- No deduplication required during processing
+- Thread→unit relationships explicit
+- Smaller file size (no repeated thread objects)
+- Enables thread-first traversal patterns
+
+**Priority**: MEDIUM — current workaround requires O(units) processing
+
+### ER10: Use JSON Null Instead of String "NULL" Sentinel
+
+**Request**: Replace all string `"NULL"` sentinel values with JSON `null`.
+
+**Current State**:
+
+- Fields like `contentGuidance` and `supervisionLevel` use string `"NULL"` when absent
+- Requires custom Zod schema transformation: `z.union([z.string(), z.null()]).transform(v => v === "NULL" ? null : v)`
+- Mixed semantics: some fields use `null`, others use `"NULL"`
+
+**Example of current data**:
+
+```json
+{
+  "contentGuidance": "NULL",
+  "supervisionLevel": "NULL"
+}
+```
+
+**Requested**:
+
+```json
+{
+  "contentGuidance": null,
+  "supervisionLevel": null
+}
+```
+
+**Benefits**:
+
+- Standard JSON null handling
+- No custom transformation logic
+- Consistent semantics across all fields
+- Simpler Zod schemas
+
+**Priority**: MEDIUM — current workaround exists but adds complexity
+
+### ER11: Bundle JSON Schema/Zod Schemas with Bulk Download
+
+**Request**: Provide a validation schema alongside bulk download data.
+
+**Rationale**: The bulk download format differs from the API response format. Currently, consumers must reverse-engineer the structure by analyzing sample data. A bundled schema would:
+
+1. **Enable compile-time type generation** — Generate TypeScript types from schema
+2. **Provide validation at parse time** — Catch data issues early
+3. **Document the format** — Schema is documentation
+4. **Version tracking** — Schema version indicates data format changes
+
+**Suggested Formats** (pick one or more):
+
+- **JSON Schema**: Standard, widely supported
+- **Zod schema (TypeScript)**: Native to our stack, best DX
+- **OpenAPI component**: Reuse existing tooling
+
+**Example bundle structure**:
+
+```
+bulk-download-2025-12-30.zip
+├── maths-primary.json
+├── maths-secondary.json
+├── ... (other data files)
+├── schema.json              # JSON Schema
+├── schema.zod.ts            # Optional: Zod schema
+└── manifest.json            # Version, timestamps, file list
+```
+
+**Priority**: MEDIUM — significant DX improvement, but workarounds exist
+
+### ER12: Add Lesson Count to Units in Bulk Download
+
+**Request**: Include `lessonCount` field on unit records.
+
+**Current State**:
+
+- Units have `unitLessons[]` array with lesson slugs
+- Must count array length to get lesson count
+- Some `unitLessons` entries reference lessons not in `lessons[]` array (data integrity issue)
+
+**Requested**:
+
+```json
+{
+  "unitSlug": "algebraic-fractions",
+  "unitTitle": "Algebraic Fractions",
+  "lessonCount": 8,
+  "unitLessons": [/* ... */]
+}
+```
+
+**Benefits**:
+
+- Quick access to lesson counts without array operations
+- Can detect data integrity issues (count vs array length mismatch)
+- Useful for progress tracking during ingestion
+
+**Priority**: LOW — minor convenience improvement
+
+### ER13: Add Subject-Level Metadata to Bulk Download
+
+**Request**: Include subject-level metadata at the top level.
+
+**Current State**:
+
+- `subjectTitle` is at top level
+- `subjectSlug` must be derived from `sequenceSlug` (e.g., `maths-primary` → `maths`)
+- Key stage coverage must be inferred from unit data
+- Phase (primary/secondary) derived from sequence slug
+
+**Requested**:
+
+```json
+{
+  "subjectSlug": "maths",
+  "subjectTitle": "Maths",
+  "sequenceSlug": "maths-primary",
+  "phase": "primary",
+  "phaseSlug": "primary",
+  "keyStages": ["ks1", "ks2"],
+  "totalLessons": 1099,
+  "totalUnits": 98,
+  "totalThreads": 15
+}
+```
+
+**Benefits**:
+
+- No derivation logic needed
+- Explicit key stage coverage
+- Useful summary statistics
+- Consistent with API subject response structure
+
+**Priority**: LOW — workarounds exist

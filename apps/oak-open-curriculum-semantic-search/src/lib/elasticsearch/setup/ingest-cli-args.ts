@@ -36,6 +36,10 @@ export interface CliArgs {
   readonly bypassCache: boolean;
   readonly force: boolean;
   readonly ignoreCached404: boolean;
+  /** Enable bulk-first ingestion mode (uses bulk download files). */
+  readonly bulk: boolean;
+  /** Directory containing bulk download files (required when --bulk is used). */
+  readonly bulkDir: string | undefined;
 }
 
 /** Type guard for valid key stage values. */
@@ -63,6 +67,7 @@ interface FlagContainer {
   bypassCache: boolean;
   force: boolean;
   ignoreCached404: boolean;
+  bulk: boolean;
 }
 
 /** Flag names that can be set via CLI arguments. */
@@ -81,6 +86,7 @@ const FLAG_ARG_MAP: ReadonlyMap<string, FlagName> = new Map([
   ['--force', 'force'],
   ['-f', 'force'],
   ['--ignore-cached-404', 'ignoreCached404'],
+  ['--bulk', 'bulk'],
 ]);
 
 /** Process a single flag argument (--help, --dry-run, --all, etc). */
@@ -143,6 +149,19 @@ function processIndexArg(
   return 1;
 }
 
+/** Process --bulk-dir argument. Returns 1 if value consumed. */
+function processBulkDirArg(
+  arg: string,
+  nextArg: string | undefined,
+  bulkDirRef: { value: string | undefined },
+): number {
+  if (arg !== '--bulk-dir' || !nextArg) {
+    return 0;
+  }
+  bulkDirRef.value = nextArg;
+  return 1;
+}
+
 /** Process a value argument (--subject, --keystage, --index). Returns 1 if value consumed. */
 function processValueArg(
   arg: string,
@@ -185,6 +204,7 @@ export function parseArgs(args: readonly string[]): CliArgs {
   const subjects: SearchSubjectSlug[] = [];
   const keyStages: KeyStage[] = [];
   const indexes: SearchIndexKind[] = [];
+  const bulkDirRef: { value: string | undefined } = { value: undefined };
   const flags: FlagContainer = {
     dryRun: false,
     verbose: false,
@@ -194,6 +214,7 @@ export function parseArgs(args: readonly string[]): CliArgs {
     bypassCache: false,
     force: false,
     ignoreCached404: false,
+    bulk: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -202,13 +223,24 @@ export function parseArgs(args: readonly string[]): CliArgs {
     if (processFlag(arg, flags)) {
       continue;
     }
+    const bulkDirConsumed = processBulkDirArg(arg, nextArg, bulkDirRef);
+    if (bulkDirConsumed > 0) {
+      i += bulkDirConsumed;
+      continue;
+    }
     i += processValueArg(arg, nextArg, subjects, keyStages, indexes);
   }
 
+  // Validate bulk mode requirements
+  if (flags.bulk && bulkDirRef.value === undefined) {
+    throw new Error('--bulk requires --bulk-dir <path> to specify the bulk download directory');
+  }
+
   return {
-    subjects: resolveSubjects(subjects, flags.all),
+    subjects: flags.bulk ? [] : resolveSubjects(subjects, flags.all),
     keyStages: keyStages.length > 0 ? keyStages : [...ALL_KEY_STAGES],
     indexes,
+    bulkDir: bulkDirRef.value,
     ...flags,
   };
 }
@@ -221,9 +253,13 @@ Live Data Ingestion CLI
 
 Usage: npx tsx src/lib/elasticsearch/setup/ingest-live.ts [options]
 
-Subject Selection (REQUIRED):
+Subject Selection (REQUIRED for API mode):
   --subject <slug>    Subject to ingest (can repeat for multiple subjects)
   --all               Ingest ALL subjects (${ALL_SUBJECTS.length} total)
+
+Bulk Mode (alternative to subject selection):
+  --bulk              Use bulk download files instead of API
+  --bulk-dir <path>   Directory containing bulk download JSON files (required with --bulk)
 
 Options:
   --keystage <ks>     Key stage to ingest (can repeat, defaults to all: ks1-ks4)
@@ -239,22 +275,21 @@ Options:
 Available Subjects: ${subjectList}
 
 Ingestion Modes:
-  - Incremental (default): Only creates new documents. Existing documents are skipped.
-    This is safe for resuming interrupted ingestion.
-  - Force (--force): Overwrites all documents, even if they already exist.
-    Use after schema changes or to refresh stale data.
+  - API (default): Fetches data from Oak API. Use --subject or --all to specify subjects.
+  - Bulk (--bulk): Uses pre-downloaded bulk JSON files. Faster and includes all data.
+    Bulk mode extracts lessons, units, and threads from downloaded curriculum files.
+
+Incremental vs Force:
+  - Incremental (default): Only creates new documents. Safe for resuming.
+  - Force (--force): Overwrites all documents. Use after schema changes.
 
 Examples:
-  --subject history --keystage ks2    # Single subject, single key stage (incremental)
-  --subject maths --force             # Overwrite maths data
-  --all                               # All subjects (incremental, resumable)
-  --all --force                       # Full refresh of all data
+  --subject history --keystage ks2    # Single subject via API
+  --all --force                       # Full refresh via API
+  --bulk --bulk-dir ./bulk-downloads  # Bulk ingestion from downloaded files
+  --bulk --bulk-dir ./bulk --dry-run  # Preview bulk ingestion
 
 Environment: ELASTICSEARCH_URL, ELASTICSEARCH_API_KEY, OAK_API_KEY in .env.local
-
-Caching: By default, Redis cache is REQUIRED (ensures API data downloaded once).
-         Use --bypass-cache to allow uncached operation (not recommended for full ingestion).
-         Start Redis with: docker compose up -d
 `;
 }
 

@@ -1,0 +1,161 @@
+/**
+ * BulkDataAdapter - Transforms bulk download data into ES documents.
+ *
+ * @remarks
+ * This adapter takes parsed bulk download files (from the SDK) and transforms
+ * them into Elasticsearch document format. It serves as the primary data source
+ * for bulk-first ingestion.
+ *
+ * @see @oaknational/oak-curriculum-sdk/public/bulk for source types
+ * @see src/types/oak for ES document types
+ */
+
+import type {
+  Lesson,
+  Unit,
+  BulkDownloadFile,
+} from '@oaknational/oak-curriculum-sdk/public/bulk.js';
+import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchSubjectSlug } from '../types/oak';
+import { isSubject } from './sdk-guards';
+import {
+  derivePhaseSlug,
+  generateSubjectProgrammesUrl,
+  generateUnitUrl,
+  normaliseYearsFromUnit,
+} from './bulk-transform-helpers.js';
+import {
+  transformBulkLessonToESDoc,
+  type LessonUnitInfo,
+  type BulkToESLessonParams,
+} from './bulk-lesson-transformer.js';
+import { transformBulkUnitToESDoc, type BulkToESUnitParams } from './bulk-unit-transformer.js';
+
+// Re-export transform functions and types for external use
+export { transformBulkLessonToESDoc, type BulkToESLessonParams, type LessonUnitInfo };
+export { transformBulkUnitToESDoc, type BulkToESUnitParams };
+
+// ============================================================================
+// Types
+// ============================================================================
+
+/** Bulk operation for ES bulk API */
+export interface BulkIndexAction {
+  readonly index: {
+    readonly _index: string;
+    readonly _id: string;
+  };
+}
+
+/** Interface for the bulk data adapter */
+export interface BulkDataAdapter {
+  readonly sequenceSlug: string;
+  readonly subjectTitle: string;
+  getUnits(): readonly Unit[];
+  getLessons(): readonly Lesson[];
+  getLessonsByUnit(unitSlug: string): readonly Lesson[];
+  transformLessonsToES(): readonly SearchLessonsIndexDoc[];
+  transformUnitsToES(): readonly SearchUnitsIndexDoc[];
+  toBulkOperations(
+    lessonsIndex: string,
+    unitsIndex: string,
+  ): readonly (BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc)[];
+}
+
+// ============================================================================
+// Adapter Factory
+// ============================================================================
+
+/** Build lesson lookup map by unit slug */
+function buildLessonsByUnitMap(lessons: readonly Lesson[]): Map<string, Lesson[]> {
+  const map = new Map<string, Lesson[]>();
+  for (const lesson of lessons) {
+    const existing = map.get(lesson.unitSlug) ?? [];
+    existing.push(lesson);
+    map.set(lesson.unitSlug, existing);
+  }
+  return map;
+}
+
+/** Derive subject slug from sequence, returning a validated SearchSubjectSlug */
+function deriveSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
+  const phaseSlug = derivePhaseSlug(sequenceSlug);
+  const derivedSubjectSlug = sequenceSlug.replace(`-${phaseSlug}`, '');
+
+  if (!isSubject(derivedSubjectSlug)) {
+    throw new Error(`Cannot derive valid subject from sequence: ${sequenceSlug}`);
+  }
+  return derivedSubjectSlug;
+}
+
+/** Create lesson transform function */
+function createLessonTransformer(
+  bulkFile: BulkDownloadFile,
+  unitMap: Map<string, Unit>,
+  subjectSlug: string,
+  phaseSlug: string,
+) {
+  return (): readonly SearchLessonsIndexDoc[] =>
+    bulkFile.lessons.map((lesson) => {
+      const unit = unitMap.get(lesson.unitSlug);
+      const years = unit ? normaliseYearsFromUnit(unit.year, unit.yearSlug) : [];
+      const unitInfo: LessonUnitInfo = {
+        unitSlug: lesson.unitSlug,
+        unitTitle: lesson.unitTitle,
+        canonicalUrl: generateUnitUrl(lesson.unitSlug, subjectSlug, phaseSlug),
+      };
+      return transformBulkLessonToESDoc({ lesson, unitInfo, years });
+    });
+}
+
+/** Create unit transform function */
+function createUnitTransformer(bulkFile: BulkDownloadFile, subjectSlug: SearchSubjectSlug) {
+  return (): readonly SearchUnitsIndexDoc[] => {
+    const firstUnit = bulkFile.sequence[0];
+    const keyStageSlug = firstUnit?.keyStageSlug ?? 'ks2';
+    const subjectProgrammesUrl = generateSubjectProgrammesUrl(subjectSlug, keyStageSlug);
+
+    return bulkFile.sequence.map((unit) =>
+      transformBulkUnitToESDoc({
+        unit,
+        subjectSlug,
+        subjectTitle: bulkFile.subjectTitle,
+        subjectProgrammesUrl,
+      }),
+    );
+  };
+}
+
+/**
+ * Create a BulkDataAdapter from parsed bulk file data.
+ */
+export function createBulkDataAdapter(bulkFile: BulkDownloadFile): BulkDataAdapter {
+  const lessonsByUnitMap = buildLessonsByUnitMap(bulkFile.lessons);
+  const unitMap = new Map(bulkFile.sequence.map((u) => [u.unitSlug, u]));
+  const phaseSlug = derivePhaseSlug(bulkFile.sequenceSlug);
+  const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
+
+  const transformLessonsToES = createLessonTransformer(bulkFile, unitMap, subjectSlug, phaseSlug);
+  const transformUnitsToES = createUnitTransformer(bulkFile, subjectSlug);
+
+  return {
+    sequenceSlug: bulkFile.sequenceSlug,
+    subjectTitle: bulkFile.subjectTitle,
+    getUnits: () => bulkFile.sequence,
+    getLessons: () => bulkFile.lessons,
+    getLessonsByUnit: (unitSlug) => lessonsByUnitMap.get(unitSlug) ?? [],
+    transformLessonsToES,
+    transformUnitsToES,
+    toBulkOperations(lessonsIndex, unitsIndex) {
+      const ops: (BulkIndexAction | SearchLessonsIndexDoc | SearchUnitsIndexDoc)[] = [];
+      for (const doc of transformLessonsToES()) {
+        ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } });
+        ops.push(doc);
+      }
+      for (const doc of transformUnitsToES()) {
+        ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } });
+        ops.push(doc);
+      }
+      return ops;
+    },
+  };
+}

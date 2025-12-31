@@ -1,8 +1,17 @@
 /**
  * Core library modules for the vocabulary mining pipeline.
  *
+ * @remarks
+ * Re-exports bulk parsing schemas and utilities from the SDK generated bulk module.
+ * This ensures a single source of truth for bulk data types while
+ * maintaining backwards compatibility with vocab-gen imports.
+ *
  * @module vocab-gen/lib
  */
+
+// ============================================================================
+// Re-export from SDK generated bulk module (single source of truth)
+// ============================================================================
 
 // Vocabulary schemas (keywords, learning points, misconceptions, tips)
 export {
@@ -11,29 +20,36 @@ export {
   misconceptionSchema,
   nullSentinelSchema,
   teacherTipSchema,
-} from './vocabulary-schemas.js';
+} from '../../src/types/generated/bulk/index.js';
 export type {
   KeyLearningPoint,
   LessonKeyword,
   Misconception,
   TeacherTip,
-} from './vocabulary-schemas.js';
+} from '../../src/types/generated/bulk/index.js';
 
 // Content guidance schema
-export { contentGuidanceItemSchema, contentGuidanceSchema } from './content-guidance-schema.js';
-export type { ContentGuidance, ContentGuidanceItem } from './content-guidance-schema.js';
+export {
+  contentGuidanceItemSchema,
+  contentGuidanceSchema,
+} from '../../src/types/generated/bulk/index.js';
+export type { ContentGuidance, ContentGuidanceItem } from '../../src/types/generated/bulk/index.js';
 
 // Unit schemas (threads, lessons, units)
-export { unitLessonSchema, unitSchema, unitThreadSchema } from './unit-schemas.js';
-export type { Unit, UnitLesson, UnitThread } from './unit-schemas.js';
+export {
+  unitLessonSchema,
+  unitSchema,
+  unitThreadSchema,
+} from '../../src/types/generated/bulk/index.js';
+export type { Unit, UnitLesson, UnitThread } from '../../src/types/generated/bulk/index.js';
 
 // Lesson schema
-export { lessonSchema } from './lesson-schema.js';
-export type { Lesson } from './lesson-schema.js';
+export { lessonSchema } from '../../src/types/generated/bulk/index.js';
+export type { Lesson } from '../../src/types/generated/bulk/index.js';
 
 // Bulk download file schema
-export { bulkDownloadFileSchema } from './bulk-file-schema.js';
-export type { BulkDownloadFile } from './bulk-file-schema.js';
+export { bulkDownloadFileSchema } from '../../src/types/generated/bulk/index.js';
+export type { BulkDownloadFile } from '../../src/types/generated/bulk/index.js';
 
 // Bulk reader utilities
 export {
@@ -41,5 +57,5 @@ export {
   extractSubjectPhase,
   parseBulkFile,
   readAllBulkFiles,
-} from './bulk-reader.js';
-export type { SubjectPhase } from './bulk-reader.js';
+} from '../../src/bulk/reader.js';
+export type { SubjectPhase } from '../../src/bulk/reader.js';

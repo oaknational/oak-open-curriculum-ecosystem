@@ -1,10 +1,41 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 Strategic pivot to bulk-first ingestion
-**Last Updated**: 2025-12-30
+**Status**: 🚨 BLOCKED — Critical issues discovered during bulk ingestion evaluation
+**Last Updated**: 2025-12-31
 **Metrics Source**: [current-state.md](current-state.md)
+**Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 This is THE authoritative roadmap for semantic search work. All other plan documents reference this file.
+
+---
+
+## 🚨 CRITICAL: Bulk Ingestion Failures (2025-12-31)
+
+**A live bulk ingestion run revealed fundamental implementation failures.**
+
+See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for full details including:
+- Master list of 15 unverified assumptions
+- 5 mandatory remediation actions
+- Root cause analysis
+
+### Issues Discovered
+
+| Issue | Severity | Impact |
+|-------|----------|--------|
+| **`oak_unit_rollup` empty** | 🔴 CRITICAL | Unit search completely broken (100% zero-hit) |
+| **Missing `lesson_structure` fields** | 🔴 CRITICAL | Structure retrievers fail (100% zero-hit for ELSER) |
+| **Only 2,884/12,833 lessons indexed** | 🔴 CRITICAL | ~78% of curriculum missing |
+| **14/16 subjects indexed** | 🟡 HIGH | Physical Education, Spanish missing entirely |
+
+### Mandatory Remediation Actions
+
+1. **Define Parity Requirements** — Both bulk and API ingestion must produce identical ES documents
+2. **Deep Code Review** — TDD was NOT properly employed; review all bulk adapters
+3. **Investigate Lesson Count Discrepancy** — Find filter/logic bug causing 78% data loss
+4. **Deep Transcript Survey** — Previous reviews were shallow; verify ALL subjects
+5. **RSHE-PSHE 422 Handling** — Implement explicit 422 response in search SDK
+
+**NO FURTHER DEVELOPMENT UNTIL THESE ARE COMPLETE.**
 
 ---
 
@@ -48,26 +79,30 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Next steps**:
+**Implementation status** (2025-12-31):
 
-1. ✅ **Remove `video-availability.ts`** — Complete (2025-12-30)
-2. ✅ **Bulk download infrastructure** — Complete (2025-12-30) — 30 files, 757 MB
-3. 📋 **Implement Bulk Data Adapter** (TDD) — **NEXT STEP**
-   - Wraps existing `vocab-gen` bulk reader
-   - Transforms to ES document format
-   - DO NOT reinvent parsing — use `@oaknational/oak-curriculum-sdk/vocab-gen`
-4. 📋 **Create HybridDataSource** composing bulk + API
-5. 📋 **Update pipeline** to use HybridDataSource
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 0 | SDK bulk export (schema-first) | ✅ Complete |
+| 1 | BulkDataAdapter (Lesson/Unit transforms) | ⚠️ **INCOMPLETE** — missing structure fields |
+| 2 | API supplementation (Maths KS4 tiers) | ✅ Complete |
+| 3 | HybridDataSource (bulk + API) | ✅ Complete |
+| 4 | VocabularyMiningAdapter | ✅ Complete |
+| 5 | Pipeline integration | 🚨 **FAILED** |
+| 5a | Bulk thread transformer | ✅ Complete |
+| 5b | Wire into CLI | ✅ Complete |
+| 5c | Full ingestion run | 🚨 **FAILED** — critical issues |
 
-**Existing infrastructure to reuse (DO NOT RECREATE)**:
+**SDK public exports now available**:
 
-| Module | Location | Purpose |
-|--------|----------|---------|
-| `parseBulkFile()` | `vocab-gen/lib/bulk-reader.ts` | Parse single file |
-| `readAllBulkFiles()` | `vocab-gen/lib/bulk-reader.ts` | Parse all files |
-| `lessonSchema` | `vocab-gen/lib/lesson-schema.ts` | Zod validation |
-| `unitSchema` | `vocab-gen/lib/unit-schemas.ts` | Zod validation |
-| `nullSentinelSchema` | `vocab-gen/lib/vocabulary-schemas.ts` | `"NULL"` → `null` |
+```typescript
+import {
+  parseBulkFile,
+  readAllBulkFiles,
+  processBulkData,
+  generateMinedSynonyms,
+} from '@oaknational/oak-curriculum-sdk/public/bulk';
+```
 
 ### Cache Categorization Enhancement — Complete (2025-12-30)
 
@@ -104,12 +139,13 @@ This is THE authoritative roadmap for semantic search work. All other plan docum
 
 ### Next Steps
 
-1. ✅ **Run quality gates**: All 11 gates passed
-2. ✅ **Reset ES**: `pnpm es:setup --reset` — 7 indices, 192 synonyms
-3. ✅ **Verify caching**: Dry-run passed, cache hits working
-4. ✅ **Verify writes**: Maths KS1 ingested (437 docs + 201 threads)
-5. ✅ **Cache categorization**: Structured metadata implemented
-6. 📋 **Full ingestion**: `pnpm es:ingest-live --all --verbose`
+**BLOCKED — Complete remediation actions first. See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md).**
+
+1. 📋 **Action 1**: Define parity requirements (bulk vs API ES documents)
+2. 📋 **Action 2**: Deep code review (find where TDD was skipped)
+3. 📋 **Action 3**: Investigate lesson count discrepancy (2,884 vs 12,833)
+4. 📋 **Action 4**: Deep transcript survey (verify ALL subjects)
+5. 📋 **Action 5**: Implement RSHE-PSHE 422 handling
 
 ---
 
@@ -148,36 +184,37 @@ Before implementing any milestone that affects search (synonyms, indices, retrie
 
 ## Blocking Work (Do These First)
 
-### 🔄 Milestone 1: Complete ES Ingestion (Bulk-First)
+### 🚨 Milestone 1: Complete ES Ingestion (Bulk-First)
 
-**Status**: 📋 BLOCKED — Bulk data adapter implementation required
-**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE), **bulk data adapter (PENDING)**
+**Status**: 🚨 **FAILED** — Critical issues discovered during evaluation
+**Dependencies**: Pattern-aware traversal (COMPLETE), adapter refactoring (COMPLETE)
 **Specification**: [active/complete-data-indexing.md](active/complete-data-indexing.md)
+**Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Data Quality**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
 
-**Strategic Pivot**: This milestone has been updated to use **bulk-first ingestion** per [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md).
+**Strategic Pivot**: This milestone uses **bulk-first ingestion** per [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md).
 
-**Implementation phases**:
+**Implementation status**:
 
-1. 📋 **Phase 1: Bulk Data Adapter** (TDD)
-   - Wraps existing `vocab-gen` bulk reader (DO NOT recreate parsing)
-   - Transforms `Lesson` → `SearchLessonsIndexDoc`
-   - Transforms `Unit` → `SearchUnitsIndexDoc`
-   - Extracts threads from `sequence[].threads[]`
-   - Unit tests with fixtures (not 757MB real data)
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 0 | SDK bulk export | ✅ Complete |
+| 1 | BulkDataAdapter | ⚠️ **INCOMPLETE** — missing `lesson_structure` fields |
+| 2 | API supplementation | ✅ Complete |
+| 3 | HybridDataSource | ✅ Complete |
+| 4 | VocabularyMiningAdapter | ✅ Complete |
+| 5a | Bulk thread transformer | ✅ Complete |
+| 5b | CLI wiring | ✅ Complete |
+| 5c | Full ingestion | 🚨 **FAILED** |
 
-2. 📋 **Phase 2: API Supplementation**
-   - Maths KS4 tier info from API
-   - Unit options deferred (not critical for search)
-   - RSHE-PSHE: skip in ingestion, 422 in API
+**Issues discovered during evaluation**:
 
-3. 📋 **Phase 3: HybridDataSource**
-   - Compose bulk + API
-   - Deduplication logic per subject type
-
-4. 📋 **Phase 4: Pipeline Integration**
-   - Update `index-oak.ts` to use HybridDataSource
-   - Full ingestion run
+| Issue | Cause | Impact |
+|-------|-------|--------|
+| Only 2,884/12,833 lessons | Unknown filter/logic bug | 78% data missing |
+| `oak_unit_rollup` empty | Not implemented in bulk path | Unit search broken |
+| `lesson_structure` undefined | Explicitly skipped in transformer | Structure retrievers fail |
+| PE, Spanish missing | Unknown | 2 subjects not indexed |
 
 **Existing infrastructure** (REUSE — DO NOT RECREATE):
 
@@ -188,17 +225,17 @@ Before implementing any milestone that affects search (synonyms, indices, retrie
 - ✅ Cache categorization (for API responses)
 - ✅ Quality gates passing
 
-**Expected**: ~12,300 unique lessons across 16 subjects (RSHE-PSHE returns 422).
-
 **Acceptance Criteria**:
 
 - [x] ES indices reset with current mappings
 - [x] Cache categorization providing observability
 - [x] `video-availability.ts` removed (superseded by bulk-first)
 - [x] Bulk download infrastructure complete (30 files, 757 MB)
-- [ ] BulkDownloadSource implemented with unit tests
-- [ ] HybridDataSource composing bulk + API
-- [ ] All 16 supported subjects ingested
+- [x] CLI wiring complete (`--bulk` mode)
+- [ ] ❌ BulkDownloadSource implemented with **complete** field mapping
+- [ ] ❌ `oak_unit_rollup` populated
+- [ ] ❌ All 16 supported subjects ingested
+- [ ] ❌ ~12,300 lessons indexed (actual: 2,884)
 - [ ] RSHE-PSHE returns 422 with proper error message
 - [ ] Counts verified against bulk download reference
 - [ ] Quality gates passing after ingestion

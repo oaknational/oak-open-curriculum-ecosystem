@@ -1,0 +1,381 @@
+/**
+ * Unit tests for bulk-ingestion module.
+ *
+ * @module lib/indexing/bulk-ingestion.unit.test
+ */
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type {
+  BulkDownloadFile,
+  BulkFileResult,
+  Lesson,
+  Unit,
+} from '@oaknational/oak-curriculum-sdk/public/bulk';
+import type { OakClient } from '../../adapters/oak-adapter';
+import type { HybridDataSource } from '../../adapters/hybrid-data-source';
+import type { VocabularyMiningAdapter } from '../../adapters/vocabulary-mining-adapter';
+import type { BulkIngestionOptions, BulkIngestionStats } from './bulk-ingestion';
+
+// Mock the dependencies
+vi.mock('@oaknational/oak-curriculum-sdk/public/bulk', () => ({
+  readAllBulkFiles: vi.fn(),
+}));
+
+vi.mock('../../adapters/hybrid-data-source', () => ({
+  createHybridDataSource: vi.fn(),
+}));
+
+vi.mock('../../adapters/vocabulary-mining-adapter', () => ({
+  createVocabularyMiningAdapter: vi.fn(),
+}));
+
+vi.mock('../../adapters/bulk-thread-transformer', () => ({
+  extractThreadsFromBulkFiles: vi.fn(),
+  buildThreadBulkOperations: vi.fn(),
+}));
+
+vi.mock('../logger', () => ({
+  ingestLogger: {
+    info: vi.fn(),
+    debug: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+describe('bulk-ingestion', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('prepareBulkIngestion', () => {
+    it('processes bulk files and returns operations with stats including threads', async () => {
+      // Arrange - setup mocks via helper
+      const { mockClient } = await setupMocksWithThreads();
+      const options: BulkIngestionOptions = { bulkDir: '/path/to/bulk', client: mockClient };
+
+      // Act
+      const { prepareBulkIngestion } = await import('./bulk-ingestion');
+      const result = await prepareBulkIngestion(options);
+
+      // Assert - verify stats and operations
+      assertBulkIngestionStats(result.stats, {
+        files: 1,
+        lessons: 2,
+        units: 1,
+        threads: 2,
+        keywords: 10,
+        misconceptions: 5,
+        synonyms: 3,
+      });
+      // 6 lesson/unit operations + 4 thread operations (2 threads × 2 entries each)
+      expect(result.operations.length).toBe(10);
+    });
+
+    it('filters by subject when subjectFilter is provided', async () => {
+      // Arrange
+      const mathsFile = createMockBulkFile('maths-primary', 'Maths');
+      const englishFile = createMockBulkFile('english-primary', 'English');
+
+      const mathsFileResult = createMockBulkFileResult(mathsFile);
+      const englishFileResult = createMockBulkFileResult(englishFile);
+
+      const { readAllBulkFiles } = await import('@oaknational/oak-curriculum-sdk/public/bulk');
+      const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+      const { createVocabularyMiningAdapter } =
+        await import('../../adapters/vocabulary-mining-adapter');
+      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+        await import('../../adapters/bulk-thread-transformer');
+
+      vi.mocked(readAllBulkFiles).mockResolvedValue([mathsFileResult, englishFileResult]);
+      vi.mocked(createHybridDataSource).mockResolvedValue(
+        createMockHybridDataSource(mathsFile, 1, 1, 2),
+      );
+      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
+        createMockVocabularyAdapter(5, 2, 1),
+      );
+      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
+      vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+
+      const mockClient = createMockClient();
+      const options: BulkIngestionOptions = {
+        bulkDir: '/path/to/bulk',
+        client: mockClient,
+        subjectFilter: ['maths'],
+      };
+
+      // Act
+      const { prepareBulkIngestion } = await import('./bulk-ingestion');
+      const result = await prepareBulkIngestion(options);
+
+      // Assert - only maths file should be processed
+      expect(result.stats.filesProcessed).toBe(1);
+      expect(createHybridDataSource).toHaveBeenCalledTimes(1);
+      expect(createHybridDataSource).toHaveBeenCalledWith(mathsFile, mockClient);
+    });
+
+    it('handles empty bulk directory', async () => {
+      // Arrange
+      const { readAllBulkFiles } = await import('@oaknational/oak-curriculum-sdk/public/bulk');
+      const { createVocabularyMiningAdapter } =
+        await import('../../adapters/vocabulary-mining-adapter');
+      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+        await import('../../adapters/bulk-thread-transformer');
+
+      vi.mocked(readAllBulkFiles).mockResolvedValue([]);
+      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
+        createMockVocabularyAdapter(0, 0, 0),
+      );
+      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
+      vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+
+      const mockClient = createMockClient();
+      const options: BulkIngestionOptions = {
+        bulkDir: '/empty/path',
+        client: mockClient,
+      };
+
+      // Act
+      const { prepareBulkIngestion } = await import('./bulk-ingestion');
+      const result = await prepareBulkIngestion(options);
+
+      // Assert
+      expect(result.stats.filesProcessed).toBe(0);
+      expect(result.stats.lessonsIndexed).toBe(0);
+      expect(result.stats.unitsIndexed).toBe(0);
+      expect(result.stats.threadsIndexed).toBe(0);
+      expect(result.operations.length).toBe(0);
+    });
+  });
+});
+
+// ============================================================================
+// Test Helpers
+// ============================================================================
+
+function createMockLesson(lessonSlug: string, unitSlug: string): Lesson {
+  return {
+    lessonSlug,
+    lessonTitle: `Lesson ${lessonSlug}`,
+    unitSlug,
+    unitTitle: `Unit ${unitSlug}`,
+    subjectSlug: 'maths',
+    subjectTitle: 'Maths',
+    keyStageSlug: 'ks2',
+    keyStageTitle: 'Key Stage 2',
+    lessonKeywords: [],
+    misconceptionsAndCommonMistakes: [],
+    keyLearningPoints: [],
+    teacherTips: [],
+    pupilLessonOutcome: '',
+    contentGuidance: null,
+    supervisionLevel: null,
+    downloadsavailable: true,
+  };
+}
+
+function createMockUnit(unitSlug: string): Unit {
+  return {
+    unitSlug,
+    unitTitle: `Unit ${unitSlug}`,
+    year: 3,
+    yearSlug: 'year-3',
+    keyStageSlug: 'ks2',
+    unitLessons: [],
+    threads: [],
+    priorKnowledgeRequirements: [],
+    nationalCurriculumContent: [],
+    description: `Description for ${unitSlug}`,
+  };
+}
+
+function createMockBulkFile(sequenceSlug: string, subjectTitle: string): BulkDownloadFile {
+  return {
+    sequenceSlug,
+    subjectTitle,
+    lessons: [createMockLesson('lesson-1', 'unit-1'), createMockLesson('lesson-2', 'unit-1')],
+    sequence: [createMockUnit('unit-1')],
+  };
+}
+
+function createMockBulkFileResult(bulkFile: BulkDownloadFile): BulkFileResult {
+  const [subject, phasePart] = bulkFile.sequenceSlug.split('-');
+  const phase: 'primary' | 'secondary' = phasePart === 'secondary' ? 'secondary' : 'primary';
+  return {
+    filename: `${bulkFile.sequenceSlug}.json`,
+    subjectPhase: { subject: subject ?? 'unknown', phase },
+    data: bulkFile,
+  };
+}
+
+function createMockHybridDataSource(
+  bulkFile: BulkDownloadFile,
+  lessonCount: number,
+  unitCount: number,
+  operationCount: number,
+): HybridDataSource {
+  return {
+    sequenceSlug: bulkFile.sequenceSlug,
+    subjectSlug: 'maths',
+    subjectTitle: bulkFile.subjectTitle,
+    getLessons: () => bulkFile.lessons,
+    getUnits: () => bulkFile.sequence,
+    transformLessonsToES: () => [],
+    transformUnitsToES: () => [],
+    toBulkOperations: () => {
+      // Create minimal valid operations for the count
+      return Array.from({ length: operationCount }, (_, i) => ({
+        index: { _index: 'test', _id: `op-${i}` },
+      }));
+    },
+    getStats: () => ({
+      lessonCount,
+      unitCount,
+      ks4LessonsEnriched: 0,
+      ks4UnitsEnriched: 0,
+    }),
+  };
+}
+
+function createMockVocabularyAdapter(
+  uniqueKeywords: number,
+  totalMisconceptions: number,
+  synonymsExtracted: number,
+): VocabularyMiningAdapter {
+  return {
+    getVocabularyResult: () => ({
+      stats: {
+        uniqueKeywords,
+        totalMisconceptions,
+        totalLearningPoints: 20,
+        totalTeacherTips: 8,
+        totalPriorKnowledge: 3,
+        totalNCStatements: 15,
+        uniqueThreads: 2,
+      },
+      extractedData: {
+        keywords: [],
+        misconceptions: [],
+        learningPoints: [],
+        teacherTips: [],
+        priorKnowledge: [],
+        ncStatements: [],
+        threads: [],
+      },
+    }),
+    getMinedSynonyms: () => ({
+      version: '1.0.0',
+      generatedAt: '2025-01-01T00:00:00.000Z',
+      synonyms: [],
+      stats: {
+        synonymsExtracted,
+        totalKeywordsProcessed: uniqueKeywords,
+        patternCounts: {},
+      },
+    }),
+    getStats: () => ({
+      filesProcessed: 1,
+      totalLessons: 2,
+      totalUnits: 1,
+      uniqueKeywords,
+      totalMisconceptions,
+      totalLearningPoints: 20,
+      totalTeacherTips: 8,
+      totalPriorKnowledge: 3,
+      totalNCStatements: 15,
+      uniqueThreads: 2,
+      synonymsExtracted,
+    }),
+  };
+}
+
+function createMockClient(): OakClient {
+  return {
+    getSubjectSequences: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getSequenceUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getUnitsByKeyStageAndSubject: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getLessonTranscript: vi.fn().mockResolvedValue({ ok: true, value: null }),
+    getLessonsForSubjectKeyStage: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    searchLessons: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    searchLessonTranscripts: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getUnitsWithLessonsForSubjectKeyStage: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getLessonSummary: vi.fn().mockResolvedValue({ ok: true, value: null }),
+    getLessonAssets: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getThreads: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    getThreadUnits: vi.fn().mockResolvedValue({ ok: true, value: [] }),
+    rateLimitTracker: {
+      updateFromHeaders: vi.fn(),
+      getUsage: () => ({ remaining: 1000, limit: 1000, reset: Date.now() }),
+    },
+  } as unknown as OakClient;
+}
+
+// ============================================================================
+// Composite Test Setup Helpers
+// ============================================================================
+
+interface MockSetupResult {
+  mockBulkFile: BulkDownloadFile;
+  mockClient: OakClient;
+}
+
+async function setupMocksWithThreads(): Promise<MockSetupResult> {
+  const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
+  const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
+
+  const { readAllBulkFiles } = await import('@oaknational/oak-curriculum-sdk/public/bulk');
+  const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+  const { createVocabularyMiningAdapter } =
+    await import('../../adapters/vocabulary-mining-adapter');
+  const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+    await import('../../adapters/bulk-thread-transformer');
+
+  vi.mocked(readAllBulkFiles).mockResolvedValue([mockBulkFileResult]);
+  vi.mocked(createHybridDataSource).mockResolvedValue(
+    createMockHybridDataSource(mockBulkFile, 2, 1, 6),
+  );
+  vi.mocked(createVocabularyMiningAdapter).mockReturnValue(createMockVocabularyAdapter(10, 5, 3));
+
+  const mockThreads = [
+    { slug: 'number', title: 'Number', unitCount: 2, subjectSlugs: ['maths'] },
+    { slug: 'algebra', title: 'Algebra', unitCount: 1, subjectSlugs: ['maths'] },
+  ];
+  vi.mocked(extractThreadsFromBulkFiles).mockReturnValue(mockThreads);
+  vi.mocked(buildThreadBulkOperations).mockReturnValue([
+    { index: { _index: 'oak_threads', _id: 'number' } },
+    {
+      thread_slug: 'number',
+      thread_title: 'Number',
+      unit_count: 2,
+      thread_url: 'https://test/number',
+    },
+    { index: { _index: 'oak_threads', _id: 'algebra' } },
+    {
+      thread_slug: 'algebra',
+      thread_title: 'Algebra',
+      unit_count: 1,
+      thread_url: 'https://test/algebra',
+    },
+  ]);
+
+  return { mockBulkFile, mockClient: createMockClient() };
+}
+
+interface ExpectedStats {
+  files: number;
+  lessons: number;
+  units: number;
+  threads: number;
+  keywords: number;
+  misconceptions: number;
+  synonyms: number;
+}
+
+function assertBulkIngestionStats(stats: BulkIngestionStats, expected: ExpectedStats): void {
+  expect(stats.filesProcessed).toBe(expected.files);
+  expect(stats.lessonsIndexed).toBe(expected.lessons);
+  expect(stats.unitsIndexed).toBe(expected.units);
+  expect(stats.threadsIndexed).toBe(expected.threads);
+  expect(stats.vocabularyStats.uniqueKeywords).toBe(expected.keywords);
+  expect(stats.vocabularyStats.totalMisconceptions).toBe(expected.misconceptions);
+  expect(stats.vocabularyStats.synonymsExtracted).toBe(expected.synonyms);
+}

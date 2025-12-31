@@ -1019,6 +1019,15 @@ The bulk download files contain **duplicate lesson entries** for lessons that ex
 | english-secondary.json | 1,035 | 1,009 | 26 | Missing unitOption context |
 | science-secondary.json | 888 | 887 | 1 | Cross-unit sharing |
 
+**UPDATED Analysis (2025-12-30):** The maths 373 duplicates break down as:
+
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| Legitimate | 210 | Shared between BOTH tier variants |
+| **Spurious** | 163 | In ONE tier only — data quality bug |
+
+This is WORSE than previously understood — 163 lessons are incorrectly duplicated when they shouldn't be.
+
 **Example (Maths):**
 
 The same lesson appears twice with **byte-for-byte identical data**:

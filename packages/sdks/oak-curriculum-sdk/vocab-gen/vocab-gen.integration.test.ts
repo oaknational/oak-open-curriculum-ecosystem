@@ -28,9 +28,9 @@ function createLesson(overrides: Partial<Lesson> = {}): Lesson {
     misconceptionsAndCommonMistakes: [],
     pupilLessonOutcome: 'Understand the concept',
     teacherTips: [],
-    contentGuidance: undefined,
+    contentGuidance: null,
     downloadsavailable: true,
-    supervisionLevel: undefined,
+    supervisionLevel: null,
     ...overrides,
   };
 }

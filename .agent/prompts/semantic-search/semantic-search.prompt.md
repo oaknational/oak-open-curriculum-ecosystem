@@ -1,11 +1,265 @@
 # Semantic Search — Session Context
 
-**Status**: ✅ Ready for implementation — Bulk-first ingestion strategy approved
-**Last Updated**: 2025-12-30
+**Status**: 🚨 BLOCKED — Critical issues discovered during bulk ingestion evaluation
+**Last Updated**: 2025-12-31
 **Master Plan**: [Semantic Search Roadmap](../../plans/semantic-search/roadmap.md)
 **Implementation Plan**: [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md)
 **Data Quality Report**: [07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)
 **ADR**: [ADR-093: Bulk-First Ingestion Strategy](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)
+
+---
+
+## 🚨 CRITICAL: Bulk Ingestion Failures (2025-12-31)
+
+**A live bulk ingestion run revealed fundamental implementation failures.**
+
+The bulk ingestion pipeline was improperly specified and implemented. An agent made decisions to skip vital data processing, violating the core principles in [rules.md](../../directives-and-memory/rules.md) and [testing-strategy.md](../../directives-and-memory/testing-strategy.md).
+
+### ⚠️ MASTER LIST OF UNVERIFIED ASSUMPTIONS
+
+**The following assumptions permeate this document and MUST be investigated:**
+
+| ID | Assumption | Open Question |
+|----|------------|---------------|
+| A1 | Bulk download contains ~12,833 lessons | Has anyone counted the actual lessons in the bulk files? |
+| A2 | `oak_unit_rollup` requires enriched documents with lesson snippets | What exactly should this index contain? Is it different from `oak_units`? |
+| A3 | The parity requirements table is correct | What fields does API ingestion actually produce? |
+| A4 | MFL subjects (French, German, Spanish) have ~0% transcripts | Has this been verified by examining actual bulk files? |
+| A5 | RSHE-PSHE absence from bulk download is expected/intentional | Has anyone asked Oak? Is this a bug? |
+| A6 | "MFL — no video" explanation is correct | What IS the lesson format for MFL subjects? |
+| A7 | Transcript percentages in tables are accurate | When were these measured? How? By whom? |
+| A8 | 100% maths KS4 tier coverage was confirmed | When? Has it been re-verified? |
+| A9 | Duplicate lesson categorisation is correct | How were "legitimate" vs "spurious" determined? |
+| A10 | Simple deduplication by lessonSlug is correct | Are we losing data by deduplicating? |
+| A11 | Video availability code removal was justified | Was this validated? Do we ever need the transcript API? |
+| A12 | RSHE is different from RSHE-PSHE | One table says RSHE has "full transcripts", another says RSHE-PSHE is missing |
+| A13 | 422 with 24-hour cache for RSHE-PSHE is correct | What if Oak fixes this tomorrow? |
+| A14 | The 14 subjects listed as "full transcripts" actually have full transcripts | Has this been verified against current bulk data? |
+| A15 | PE has "partial video" explaining low transcript coverage | What format are PE lessons in? |
+
+**NO FURTHER DEVELOPMENT SHOULD PROCEED UNTIL THESE ASSUMPTIONS ARE INVESTIGATED.**
+
+### Issues Discovered
+
+| Issue | Severity | Impact |
+|-------|----------|--------|
+| **`oak_unit_rollup` empty** | 🔴 CRITICAL | Unit search completely broken (100% zero-hit) |
+| **Missing `lesson_structure` fields** | 🔴 CRITICAL | Structure retrievers fail (100% zero-hit for ELSER, 93% for BM25) |
+| **Only 2,884/12,833 lessons indexed** | 🔴 CRITICAL | ~78% of curriculum missing |
+| **14/16 subjects indexed** | 🟡 HIGH | Physical Education, Spanish missing entirely |
+| **Kibana doc count misleading** | 🟡 MEDIUM | Shows 42,456 (ELSER vectors), actual docs = 2,884 |
+
+### Retriever Status (from ablation test)
+
+| Retriever | Lessons Standard | Lessons Hard | Units |
+|-----------|-----------------|--------------|-------|
+| `bm25_content` | 0.456 ✅ | 0.217 | 0.000 ❌ |
+| `elser_content` | 0.393 ✅ | 0.172 | 0.000 ❌ |
+| `bm25_structure` | 0.440 ⚠️ | 0.067 ⚠️ | 0.000 ❌ |
+| `elser_structure` | **0.000** ❌ | **0.000** ❌ | 0.000 ❌ |
+| `four_way_hybrid` | 0.458 ✅ | 0.221 | 0.000 ❌ |
+
+### Root Causes Identified
+
+**1. `bulk-lesson-transformer.ts` explicitly sets structure fields to `undefined`:**
+
+```typescript
+// Lines 86-88 - VITAL DATA INTENTIONALLY SKIPPED
+lesson_structure: undefined,
+lesson_structure_semantic: undefined,
+```
+
+**2. Bulk ingestion does not populate `oak_unit_rollup`:**
+
+> ⚠️ **ASSUMPTION**: The unit rollup index requires enriched documents with lesson snippets.
+> **OPEN QUESTION**: What exactly should `oak_unit_rollup` contain? Is it different from `oak_units`? What is the search contract for unit search?
+
+The bulk pipeline only populated `oak_units` (basic metadata), not `oak_unit_rollup`.
+
+**3. Unknown filter or logic bug causing 78% of lessons to be skipped:**
+
+> ⚠️ **ASSUMPTION**: The bulk download contains ~12,833 lessons.
+> **OPEN QUESTION**: How many lessons are actually in the bulk download files? Has anyone counted them?
+
+Expected: ~12,833 lessons. Actual: 2,884 lessons. The cause is unknown and requires investigation.
+
+---
+
+## 🔴 MANDATORY REMEDIATION ACTIONS
+
+Before ANY further development, the following MUST be completed:
+
+### Action 1: Define Parity Requirements
+
+**Both bulk and API ingestion MUST produce identical ES document structure.**
+
+Create a formal specification document listing:
+
+| Field | Required | Source (Bulk) | Source (API) | Notes |
+|-------|----------|---------------|--------------|-------|
+| `lesson_id` | ✅ | `lessonSlug` | `/lessons/{slug}/summary` | |
+| `lesson_slug` | ✅ | `lessonSlug` | `/lessons/{slug}/summary` | |
+| `lesson_title` | ✅ | `lessonTitle` | `/lessons/{slug}/summary` | |
+| `lesson_content` | ✅ | `transcript_sentences` | `/lessons/{slug}/transcript` | |
+| `lesson_content_semantic` | ✅ | `transcript_sentences` | `/lessons/{slug}/transcript` | ELSER embedding source |
+| `lesson_structure` | ✅ | **MISSING — must synthesise** | Lesson summary fields | BM25 structure target |
+| `lesson_structure_semantic` | ✅ | **MISSING — must synthesise** | Lesson summary fields | ELSER embedding source |
+
+> ⚠️ **ASSUMPTION**: The fields listed above are the correct parity requirements.
+> **OPEN QUESTION**: What fields does the API ingestion actually produce? This list must be validated against the actual API output, not assumed.
+| `lesson_keywords` | ✅ | `lessonKeywords[]` | `/lessons/{slug}/summary` | |
+| `key_learning_points` | ✅ | `keyLearningPoints[]` | `/lessons/{slug}/summary` | |
+| `misconceptions_and_common_mistakes` | ✅ | `misconceptionsAndCommonMistakes[]` | `/lessons/{slug}/summary` | |
+| `teacher_tips` | ✅ | `teacherTips[]` | `/lessons/{slug}/summary` | |
+| ... | ... | ... | ... | **COMPLETE THIS LIST** |
+
+> ⚠️ **ASSUMPTION**: `oak_units` and `oak_unit_rollup` are both required.
+> **OPEN QUESTION**: Why do we have two unit indexes? What are their different purposes? Which one(s) does unit search actually use?
+
+**For units (both `oak_units` AND `oak_unit_rollup`):**
+
+| Field | Required | Source (Bulk) | Source (API) | Notes |
+|-------|----------|---------------|--------------|-------|
+| `unit_id` | ✅ | `unitSlug` | `/units/{slug}/summary` | |
+| `unit_slug` | ✅ | `unitSlug` | `/units/{slug}/summary` | |
+| `unit_content` | ✅ | **MUST BUILD** — from lesson rollups | `/units/{slug}` + lesson data | |
+| `unit_content_semantic` | ✅ | **MUST BUILD** | Enriched text | ELSER embedding source |
+| `unit_structure` | ✅ | **MUST BUILD** | Summary fields | BM25 structure target |
+| `unit_structure_semantic` | ✅ | **MUST BUILD** | Summary fields | ELSER embedding source |
+| ... | ... | ... | ... | **COMPLETE THIS LIST** |
+
+### Action 2: Deep Code Review
+
+**TDD was NOT properly employed.** The [testing-strategy.md](../../directives-and-memory/testing-strategy.md) requires:
+
+> "ALWAYS use TDD at ALL levels (unit, integration, E2E)"
+> "Write tests FIRST. Red → Green → Refactor"
+
+**Evidence of TDD failure:**
+- `bulk-lesson-transformer.ts` has no test asserting `lesson_structure` is populated
+- `bulk-ingestion.ts` has no test asserting `oak_unit_rollup` is populated
+- No integration test verifies ES document parity with API mode
+
+**Required review:**
+
+| File | Review Status | Issues |
+|------|---------------|--------|
+| `src/adapters/bulk-lesson-transformer.ts` | 📋 PENDING | Fields skipped |
+| `src/adapters/bulk-unit-transformer.ts` | 📋 PENDING | Unknown |
+| `src/adapters/bulk-data-adapter.ts` | 📋 PENDING | Unknown |
+| `src/lib/indexing/bulk-ingestion.ts` | 📋 PENDING | Missing rollup |
+| All `*.unit.test.ts` in adapters | 📋 PENDING | Coverage gaps |
+| All `*.integration.test.ts` | 📋 PENDING | Missing parity tests |
+
+### Action 3: Investigate Lesson Count Discrepancy
+
+**Expected: ~12,833 lessons. Actual: 2,884 lessons (~22%).**
+
+Possible causes to investigate:
+
+1. **Filter bug**: Erroneous subject/keyStage filter in bulk processing
+2. **File reading bug**: Not all 30 bulk files being read
+3. **Deduplication bug**: Over-aggressive deduplication removing valid lessons
+4. **Validation bug**: Zod schema rejecting valid lessons
+5. **Silent failures**: Errors being swallowed without logging
+
+**Investigation checklist:**
+
+- [ ] Count lessons in each bulk JSON file (expected ~12,833 total)
+- [ ] Log lesson counts at each processing stage
+- [ ] Check for filter conditions in `prepareBulkIngestion()`
+- [ ] Verify all 30 files are being read
+- [ ] Check deduplication logic
+- [ ] Review Zod validation errors
+
+### Action 4: Deep Transcript Survey
+
+**Previous reviews were shallow. A comprehensive survey is required.**
+
+For EACH subject, for BOTH primary AND secondary:
+
+| Subject | Phase | Total Lessons | With Transcript | % Coverage | Transcript Quality |
+|---------|-------|---------------|-----------------|------------|-------------------|
+| art | primary | ? | ? | ? | TBD |
+| art | secondary | ? | ? | ? | TBD |
+| citizenship | secondary | ? | ? | ? | TBD |
+| computing | primary | ? | ? | ? | TBD |
+| computing | secondary | ? | ? | ? | TBD |
+| cooking-nutrition | primary | ? | ? | ? | TBD |
+| cooking-nutrition | secondary | ? | ? | ? | TBD |
+| design-technology | primary | ? | ? | ? | TBD |
+| design-technology | secondary | ? | ? | ? | TBD |
+| english | primary | ? | ? | ? | TBD |
+| english | secondary | ? | ? | ? | TBD |
+| french | primary | ? | ? | ? | TBD |
+| french | secondary | ? | ? | ? | TBD |
+| geography | primary | ? | ? | ? | TBD |
+| geography | secondary | ? | ? | ? | TBD |
+| german | secondary | ? | ? | ? | TBD |
+| history | primary | ? | ? | ? | TBD |
+| history | secondary | ? | ? | ? | TBD |
+| maths | primary | ? | ? | ? | TBD |
+| maths | secondary | ? | ? | ? | TBD |
+| music | primary | ? | ? | ? | TBD |
+| music | secondary | ? | ? | ? | TBD |
+| physical-education | primary | ? | ? | ? | TBD |
+| physical-education | secondary | ? | ? | ? | TBD |
+| religious-education | primary | ? | ? | ? | TBD |
+| religious-education | secondary | ? | ? | ? | TBD |
+| **rshe-pshe** | primary | **N/A** | **N/A** | **N/A** | **NOT IN BULK** |
+| **rshe-pshe** | secondary | **N/A** | **N/A** | **N/A** | **NOT IN BULK** |
+| science | primary | ? | ? | ? | TBD |
+| science | secondary | ? | ? | ? | TBD |
+| spanish | primary | ? | ? | ? | TBD |
+| spanish | secondary | ? | ? | ? | TBD |
+
+> ⚠️ **ASSUMPTION**: MFL subjects (French, German, Spanish) have ~0% transcripts because "no video content exists".
+> **OPEN QUESTION**: Has this been verified by examining the actual bulk files? What if there are transcripts we're missing due to a filter bug?
+
+**Transcript Quality Assessment:**
+
+For subjects with transcripts, assess:
+- Average transcript length (words)
+- Are transcripts actual lesson content or placeholder text?
+- Are there structural patterns (intro, body, conclusion)?
+
+**Design implications:**
+
+If transcripts are sparse or non-existent for some subjects, we need:
+- Different retrieval strategies per subject
+- Metadata-only indexing for transcript-poor subjects
+- Clear documentation of search capability differences
+
+### Action 5: RSHE-PSHE 422 Handling
+
+**RSHE-PSHE (health) lessons are NOT in the bulk download.**
+
+> ⚠️ **ASSUMPTION**: RSHE-PSHE absence is expected and documented.
+> **OPEN QUESTION**: Why is RSHE-PSHE not in the bulk download? Is this intentional by Oak? Will it be added in future? Is there a different source for this data? Has anyone contacted Oak to confirm this is permanent?
+
+**Required implementation:**
+
+The search SDK MUST return HTTP 422 Unprocessable Content when RSHE-PSHE is requested:
+
+```typescript
+// Example implementation requirement
+if (subject === 'rshe-pshe') {
+  return Response.json(
+    {
+      error: 'RSHE-PSHE content is not available',
+      code: 'SUBJECT_NOT_AVAILABLE',
+      detail: 'RSHE-PSHE lessons are not included in the Oak bulk download. This subject cannot be searched.',
+    },
+    { status: 422, headers: { 'Cache-Control': 'max-age=86400' } }
+  );
+}
+```
+
+**Locations requiring this check:**
+- `app/api/search/route.ts`
+- `app/api/search/nl/route.ts`
+- `app/api/sdk/search-lessons/route.ts`
+- Search SDK client functions
 
 ---
 
@@ -15,7 +269,12 @@ This document provides standalone context to continue semantic search implementa
 
 ### What We're Building
 
-A semantic search system for the Oak curriculum using Elasticsearch. The system indexes ~12,300 lessons across 16 subjects, enabling teachers, students, and AI agents to search curriculum content by meaning.
+A semantic search system for the Oak curriculum using Elasticsearch.
+
+> ⚠️ **ASSUMPTION**: The system indexes ~12,300 lessons across 16 subjects.
+> **OPEN QUESTION**: The actual ingestion only produced 2,884 lessons across 14 subjects. What is the true expected count?
+
+The system enables teachers, students, and AI agents to search curriculum content by meaning.
 
 ### Foundation Documents (MANDATORY)
 
@@ -34,9 +293,16 @@ A semantic search system for the Oak curriculum using Elasticsearch. The system 
 | `video-availability.ts` removal | ✅ Complete |
 | Adapter refactoring | ✅ Complete |
 | Pattern-aware traversal | ✅ Complete |
-| **Bulk Data Adapter (TDD)** | 📋 **NEXT STEP** |
-| HybridDataSource composition | 📋 Pending |
-| Full ES ingestion | 📋 Pending |
+| Maths KS4 tier investigation | ✅ Complete |
+| SDK restructure (bulk export) | ✅ Complete (Phase 0) |
+| Bulk Data Adapter (TDD) | ⚠️ **INCOMPLETE** — missing structure fields |
+| Tier enrichment from API | ✅ Complete (Phase 2) |
+| HybridDataSource composition | ✅ Complete (Phase 3) |
+| Vocabulary Mining Adapter | ✅ Complete (Phase 4) |
+| Bulk Thread Transformer | ✅ Complete (Phase 5a) |
+| CLI Wiring (`--bulk` mode) | ✅ Complete (Phase 5b) |
+| **Full ES ingestion** | 🚨 **FAILED** — critical issues |
+| **Remediation** | 📋 **BLOCKED** — see actions above |
 
 ### Key Commands
 
@@ -45,6 +311,18 @@ A semantic search system for the Oak curriculum using Elasticsearch. The system 
 
 # Refresh bulk download data (reads OAK_API_KEY from .env.local)
 pnpm bulk:download
+
+# Bulk ingestion (CURRENTLY BROKEN)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --verbose
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --dry-run  # Preview
+
+# Evaluation (to verify ingestion results)
+pnpm eval:diagnostic      # 18 diagnostic queries
+pnpm eval:per-category    # Hard query baseline
+pnpm vitest run --config vitest.smoke.config.ts four-retriever-ablation
+
+# ES status check
+pnpm es:status
 
 # Run quality gates (from repo root)
 pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
@@ -71,22 +349,34 @@ pnpm test && pnpm test:e2e && pnpm test:e2e:built
 
 ### Usage
 
-**Note**: `vocab-gen` is currently a dev tool, not exported from SDK. Import via relative path:
+**✅ SDK RESTRUCTURE COMPLETE**: Bulk parsing is now available via public SDK export.
 
 ```typescript
-// Direct import (search SDK is in same monorepo)
-import { parseBulkFile, readAllBulkFiles } from '../../../../packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.js';
-import type { BulkDownloadFile, Lesson, Unit } from '../../../../packages/sdks/oak-curriculum-sdk/vocab-gen/lib/index.js';
+// Clean import from SDK public export
+import { parseBulkFile, readAllBulkFiles } from '@oaknational/oak-curriculum-sdk/public/bulk';
+import type { BulkDownloadFile, Lesson, Unit } from '@oaknational/oak-curriculum-sdk/public/bulk';
 
 // Parse single file with Zod validation
 const data: BulkDownloadFile = await parseBulkFile(bulkDir, 'maths-primary.json');
 ```
 
-**Alternative**: Add `vocab-gen` export to SDK's `package.json` for cleaner imports (implementation decision).
+**Also available**: Extractors and generators from vocab-gen are now in the SDK:
+
+```typescript
+import {
+  extractKeywords,
+  extractMisconceptions,
+  generateMinedSynonyms,
+  processBulkData,
+} from '@oaknational/oak-curriculum-sdk/public/bulk';
+```
 
 ### Data Quality Report (READ FIRST)
 
 **[07-bulk-download-data-quality-report.md](../../research/ooc/07-bulk-download-data-quality-report.md)** documents all data quality issues.
+
+> ⚠️ **ASSUMPTION**: This report is comprehensive and up-to-date.
+> **OPEN QUESTION**: When was this report created? Is it based on the current bulk download or an older version? Have additional data quality issues been discovered since?
 
 Key issues that affect implementation:
 
@@ -103,6 +393,9 @@ Key issues that affect implementation:
 
 See [Bulk Download vs API Comparison](../../analysis/bulk-download-vs-api-comparison.md) for detailed analysis.
 
+> ⚠️ **ASSUMPTION**: This strategic decision is sound.
+> **OPEN QUESTION**: Given the bulk ingestion failures, should this strategy be re-evaluated? Is the bulk download actually more complete than the API?
+
 ### Summary
 
 | Source | Use For | Coverage |
@@ -110,7 +403,13 @@ See [Bulk Download vs API Comparison](../../analysis/bulk-download-vs-api-compar
 | **Bulk Download** | Lessons, units, threads, transcripts, keywords, learning points | 16/17 subjects (30 files) |
 | **API** | Tier info (maths KS4), unit options (optional) | Structural data only |
 
+> ⚠️ **ASSUMPTION**: Coverage claims above are accurate (16/17 subjects, 30 files).
+> **OPEN QUESTION**: Only 14 subjects were indexed. Which 2 are missing and why?
+
 ### Key Implementation Notes
+
+> ⚠️ **ASSUMPTION**: These implementation notes are all correct and current.
+> **OPEN QUESTION**: Have all these been verified as still applicable given the ingestion failures?
 
 1. **Reuse vocab-gen**: Bulk parsing is already implemented — create adapter to transform to ES format
 2. **Maths tier handling**: Must call API's `/sequences/maths-secondary/units` to determine tier
@@ -162,13 +461,24 @@ Bulk download infrastructure is complete and working.
 
 ### RSHE-PSHE Status
 
-**CONFIRMED MISSING**: The Oak bulk download website lists RSHE-PSHE as available, but the API does not return it. This has been verified:
+**MISSING FROM BULK DOWNLOAD**: The Oak bulk download website lists RSHE-PSHE as available, but the API does not return it.
+
+> ⚠️ **ASSUMPTION**: RSHE-PSHE absence has been "confirmed" and verified.
+> **OPEN QUESTION**: When was this verified? Has anyone contacted Oak to ask why? Is this a bug on their end? Will it be fixed?
+
+Observations:
 
 1. Download script requests `rshe-pshe-primary` and `rshe-pshe-secondary`
 2. API returns ZIP with 30 files, RSHE-PSHE not included
 3. No error returned — files simply not in response
 
-**Decision**: Return HTTP 422 Unprocessable Content with clear error message and 24-hour cache header for RSHE-PSHE requests.
+> ⚠️ **ASSUMPTION**: "No error returned" means this is intentional.
+> **OPEN QUESTION**: Could this be a silent failure on Oak's end? Should we report this as a bug?
+
+**Decision**: Return HTTP 422 Unprocessable Content with clear error message and 24-hour cache header for RSHE-PSHE requests. **This MUST be explicitly implemented in the search SDK.**
+
+> ⚠️ **ASSUMPTION**: 422 with 24-hour cache is the correct response.
+> **OPEN QUESTION**: Is 24-hour cache appropriate? What if Oak fixes this tomorrow? Should we check dynamically?
 
 ### Refresh Cadence
 
@@ -181,17 +491,57 @@ pnpm bulk:download
 
 ---
 
+## 📊 ES Index Status (After Failed Bulk Ingestion — 2025-12-31)
+
+| Index | Doc Count | Expected | Status |
+|-------|-----------|----------|--------|
+| `oak_lessons` | 2,884 | ~12,833 | 🚨 **22% — 78% MISSING** |
+| `oak_units` | 1,635 | ~1,665 | ✅ Complete |
+| `oak_unit_rollup` | **0** | ~1,665 | 🚨 **EMPTY — unit search broken** |
+| `oak_threads` | 164 | 164 | ✅ Complete |
+| `oak_sequences` | 0 | — | 📋 Not in scope |
+| `oak_sequence_facets` | 0 | — | 📋 Not in scope |
+
+### Subjects Indexed (Lessons)
+
+| Subject | Doc Count | Expected | Status |
+|---------|-----------|----------|--------|
+| history | 433 | ? | 📋 Needs verification |
+| art | 403 | ? | 📋 Needs verification |
+| english | 399 | ? | 📋 Needs verification |
+| religious-education | 332 | ? | 📋 Needs verification |
+| design-technology | 304 | ? | 📋 Needs verification |
+| maths | 216 | ? | 📋 Needs verification |
+| computing | 199 | ? | 📋 Needs verification |
+| french | 168 | ? | 📋 Needs verification |
+| geography | 136 | ? | 📋 Needs verification |
+| science | 81 | ? | 📋 Needs verification |
+| german | 67 | ? | 📋 Needs verification |
+| citizenship | 65 | ? | 📋 Needs verification |
+| music | 57 | ? | 📋 Needs verification |
+| cooking-nutrition | 24 | ? | 📋 Needs verification |
+| **physical-education** | **0** | ? | 🚨 **MISSING** |
+| **spanish** | **0** | ? | 🚨 **MISSING** |
+
+---
+
 ## 📚 Historical Findings (2025-12-30)
 
 A deep investigation into transcript availability revealed fundamental data source differences.
 
 ### The Core Discovery
 
+> ⚠️ **ASSUMPTION**: The percentages below are accurate.
+> **OPEN QUESTION**: When were these measured? How were they calculated? Have they been re-verified recently?
+
 | Data Source | Transcript Coverage | Notes |
 |-------------|---------------------|-------|
 | **Bulk Download** | ~81% of lessons (14/17 subjects) | Complete transcripts |
 | **Live API** | ~16% of lessons (maths only) | TPC-filtered |
 | **MFL Subjects** | 0% | No video content exists |
+
+> ⚠️ **ASSUMPTION**: "MFL Subjects have 0% because no video content exists."
+> **OPEN QUESTION**: Has this been verified directly? What format are MFL lessons in if not video?
 
 **Key insight**: The bulk download and API are not equivalent data sources. They serve different purposes.
 
@@ -203,13 +553,19 @@ The previous ingestion pipeline fetched transcripts via the live API. For non-ma
 - Many "transcript not found" warnings (expected, not bugs)
 - Semantic search limited to metadata-only for most subjects
 
-**This is documented, expected behavior** — see [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage):
+> ⚠️ **ASSUMPTION**: The following quote explains the 404 behaviour.
+> **OPEN QUESTION**: Does this documentation apply to the bulk download too, or only the API? Are bulk and API data independent?
+
+See [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage):
 
 > "Currently, the API includes **all lesson resources for KS1-4 maths**, plus a **sample of lesson resources** for [other subjects]"
 
 ### ✅ Video/Transcript Detection Code REMOVED
 
 The video availability detection code (`video-availability.ts`, ADR-091) was designed to optimize transcript fetching by pre-checking which lessons have videos. **This code has been removed because:**
+
+> ⚠️ **ASSUMPTION**: The following reasons justify removal.
+> **OPEN QUESTION**: Was this removal decision validated? Do we ever need to call the transcript API?
 
 1. **Bulk-first approach**: Transcripts come directly from bulk download — no API 404 detection needed
 2. **TPC filtering is no longer relevant**: We don't call the transcript API anymore
@@ -225,6 +581,9 @@ The video availability detection code (`video-availability.ts`, ADR-091) was des
 
 ### Bulk Download (`reference/bulk_download_data/`)
 
+> ⚠️ **ASSUMPTION**: The values below are accurate.
+> **OPEN QUESTION**: These numbers differ from Elasticsearch ingestion results. Have they been re-verified by counting the actual bulk files?
+
 | Attribute | Value |
 |-----------|-------|
 | **Last downloaded** | 2025-12-07 |
@@ -234,6 +593,9 @@ The video availability detection code (`video-availability.ts`, ADR-091) was des
 | **Subjects with partial transcripts** | 1 (PE — 29% secondary, 0.7% primary) |
 | **Data quality issues** | Null titles, tier duplicates, inconsistent null semantics |
 | **Refresh frequency** | Unknown (no documented schedule) |
+
+> ⚠️ **ASSUMPTION**: RSHE is listed as having "full transcripts" above, but earlier we said RSHE-PSHE is NOT in the bulk download.
+> **OPEN QUESTION**: Is RSHE different from RSHE-PSHE? This is contradictory and needs investigation.
 
 ### Live API
 
@@ -246,162 +608,98 @@ The video availability detection code (`video-availability.ts`, ADR-091) was des
 
 ### Detailed Transcript Availability (Bulk Download)
 
+**⚠️ WARNING: This table is from shallow analysis. Deep survey required (see Action 4).**
+
+> ⚠️ **ASSUMPTION**: ALL percentages in this table are unverified.
+> **OPEN QUESTION**: When were these measured? By whom? What methodology? Have they been re-verified against the current bulk download?
+
 | Subject | Primary | Secondary | Notes |
 |---------|---------|-----------|-------|
-| Art | 100% | 100% | |
-| Citizenship | — | 100% | |
-| Computing | 100% | 100% | |
-| Cooking & Nutrition | 100% | 100% | |
-| Design Technology | 100% | 100% | |
-| English | 98% | 100% | 28 lessons without |
-| Geography | 100% | 100% | |
-| History | 100% | 100% | |
-| **Maths** | 99.5% | 100% | 5 lessons without |
-| Music | 100% | 96% | |
-| Religious Education | 100% | 100% | |
-| Science | 100% | 100% | |
-| **French** | **0%** | **0.2%** | MFL — no video |
-| **German** | — | **0.2%** | MFL — no video |
-| **Spanish** | **0.9%** | **0%** | MFL — no video |
-| **PE** | **0.7%** | **29%** | Partial video |
+| Art | 100% | 100% | **UNVERIFIED** |
+| Citizenship | — | 100% | **UNVERIFIED** |
+| Computing | 100% | 100% | **UNVERIFIED** |
+| Cooking & Nutrition | 100% | 100% | **UNVERIFIED** |
+| Design Technology | 100% | 100% | **UNVERIFIED** |
+| English | 98% | 100% | 28 lessons without — **UNVERIFIED** |
+| Geography | 100% | 100% | **UNVERIFIED** |
+| History | 100% | 100% | **UNVERIFIED** |
+| **Maths** | 99.5% | 100% | 5 lessons without — **UNVERIFIED** |
+| Music | 100% | 96% | **UNVERIFIED** |
+| Religious Education | 100% | 100% | **UNVERIFIED** |
+| Science | 100% | 100% | **UNVERIFIED** |
+| **French** | **0%** | **0.2%** | MFL — no video — **UNVERIFIED** |
+| **German** | — | **0.2%** | MFL — no video — **UNVERIFIED** |
+| **Spanish** | **0.9%** | **0%** | MFL — no video — **UNVERIFIED** |
+| **PE** | **0.7%** | **29%** | Partial video — **UNVERIFIED** |
+
+> ⚠️ **ASSUMPTION**: "MFL — no video" explanation is correct.
+> **OPEN QUESTION**: What IS the lesson format for MFL subjects? Do they have audio? Slides with text? Something else we could index?
 
 ---
 
-## 🔀 Strategic Options
+## ✅ Confirmed Decisions (2025-12-30)
 
-Three approaches are available. None is assumed — discussion required.
+### Strategy: Option B — Bulk Download Hybrid
 
-### Option A: API-Only Ingestion (Current Implementation)
+**Decided**: Use bulk download as primary data source with API for tier enrichment.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Continue with current pipeline                                  │
-│                                                                  │
-│  How it works:                                                   │
-│  - Fetch lessons via API (unit-by-unit to avoid pagination bug) │
-│  - Fetch transcripts via API (expect 404 for non-maths)         │
-│  - Index all lessons, with or without transcripts               │
-│                                                                  │
-│  Pros:                                                           │
-│  ✅ Already implemented and tested                               │
-│  ✅ Real-time data (not stale)                                   │
-│  ✅ Can proceed immediately                                      │
-│                                                                  │
-│  Cons:                                                           │
-│  ❌ ~65% of non-maths transcript fetches return 404              │
-│  ❌ Semantic search limited to maths + metadata                  │
-│  ❌ Many expected warnings (noisy logs)                          │
-│                                                                  │
-│  Effort: 0 days                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+### Maths KS4 Tier Handling
 
-### Option B: Bulk Download Hybrid
+> ⚠️ **ASSUMPTION**: Investigation confirmed 100% tier coverage.
+> **OPEN QUESTION**: When was this investigation done? Has it been re-verified? What if the API or bulk data has changed since then?
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Use bulk download for transcripts, API for metadata            │
-│                                                                  │
-│  How it works:                                                   │
-│  - Parse bulk download JSON files for lesson enumeration        │
-│  - Extract transcripts from bulk download                       │
-│  - Supplement with API for real-time metadata if needed         │
-│                                                                  │
-│  Pros:                                                           │
-│  ✅ 81% of lessons get full transcripts                          │
-│  ✅ Semantic search works across 14/17 subjects                  │
-│  ✅ No "transcript not found" noise                              │
-│  ✅ Faster ingestion (no per-lesson API calls for transcripts)  │
-│                                                                  │
-│  Cons:                                                           │
-│  ❌ ~4.5 days implementation                                     │
-│  ❌ Bulk download may be stale (no refresh mechanism yet)        │
-│  ❌ Must handle bulk download data issues (null titles, etc.)    │
-│                                                                  │
-│  Effort: ~4.5 days                                               │
-└─────────────────────────────────────────────────────────────────┘
-```
+| Metric | Value |
+|--------|-------|
+| Unique KS4 units in bulk | 36 |
+| Units with tier info from API | 36 ✅ |
+| Unique KS4 lessons in bulk | 436 |
+| Lessons with tier derivable | 436 ✅ |
 
-### Option C: Dual-Index Architecture
+**Tier distribution**:
+- 30 units in BOTH tiers → lessons get `tiers: ['foundation', 'higher']`
+- 6 units HIGHER only → lessons get `tiers: ['higher']`
+- 0 units foundation only
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Separate indexes for different content types                   │
-│                                                                  │
-│  How it works:                                                   │
-│  - Index 1: Rich (maths + bulk subjects with transcripts)       │
-│  - Index 2: Foundation (MFL + PE without transcripts)           │
-│  - Different retrieval strategies per index                     │
-│                                                                  │
-│  Pros:                                                           │
-│  ✅ Optimized retrieval per content type                         │
-│  ✅ Clear separation of capabilities                             │
-│  ✅ Maths serves as exemplar with full features                  │
-│                                                                  │
-│  Cons:                                                           │
-│  ❌ ~2 days implementation                                       │
-│  ❌ More complex retriever logic                                 │
-│  ❌ Two indexes to maintain                                      │
-│  ❌ User experience question ("why is maths search better?")     │
-│                                                                  │
-│  Effort: ~2 days                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+> ⚠️ **ASSUMPTION**: These tier distribution numbers are current.
+> **OPEN QUESTION**: Is this data still accurate? What if Oak has added new tiers or changed the distribution?
 
-### Option D: Wait for Autumn 2025
+**Algorithm**:
+1. Fetch API: `GET /sequences/maths-secondary/units`
+2. Build: `Map<unitSlug, Set<'foundation' | 'higher'>>`
+3. For each bulk KS4 lesson: `tiers = Array.from(map.get(lesson.unitSlug))`
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Wait for Oak to complete full API coverage                     │
-│                                                                  │
-│  Oak documentation states:                                       │
-│  "Production is expected to finish in Autumn 2025"              │
-│                                                                  │
-│  Pros:                                                           │
-│  ✅ Full transcript coverage via API                             │
-│  ✅ No hybrid complexity                                         │
-│  ✅ Single source of truth                                       │
-│                                                                  │
-│  Cons:                                                           │
-│  ❌ 9+ months delay                                              │
-│  ❌ Uncertain timeline                                           │
-│  ❌ Maths-only semantic search in the meantime                   │
-│                                                                  │
-│  Effort: Time-based                                              │
-└─────────────────────────────────────────────────────────────────┘
-```
+### Duplicate Lesson Analysis
 
----
+> ⚠️ **ASSUMPTION**: The categorisation of duplicates is correct.
+> **OPEN QUESTION**: How were "legitimate" vs "spurious" duplicates determined? What defines an "incorrectly duplicated" lesson? Has this analysis been re-verified?
 
-## 🤔 Discussion Points for Next Session
+**373 duplicate lessons break down as**:
 
-Before proceeding, consider:
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| Legitimate | 210 | Shared between BOTH tier variants |
+| Spurious | 163 | Data quality issue — incorrectly duplicated |
 
-### 1. What user impact are we optimizing for?
+> ⚠️ **ASSUMPTION**: Simple deduplication by lessonSlug is the correct solution.
+> **OPEN QUESTION**: What if the duplicates have different content? Are we losing data by deduplicating?
 
-- **Option A**: Ship fast with maths-only semantic search
-- **Option B/C**: Broader coverage but more work
-- **Option D**: Best coverage but long wait
+**Solution**: Simple deduplication by `lessonSlug`. Tier assignment from API unit map.
 
-### 2. Is "maths as exemplar" an acceptable interim state?
+### Architecture: SDK Restructure Required
 
-The current implementation provides full semantic search for maths (~16% of lessons). Is this valuable enough to ship while other subjects get metadata-only search?
+The bulk parsing code in `vocab-gen/lib/` must be relocated to:
+- `src/bulk/` — proper SDK location
+- Export via `@oaknational/oak-curriculum-sdk/public/bulk`
+- No cross-workspace imports
 
-### 3. How stale is acceptable for bulk download data?
+### Success Criteria
 
-The bulk download is ~3 weeks old. If we use it:
-- What refresh mechanism do we need?
-- How do we detect/handle new lessons added via API?
+**These criteria are NOT MET. Remediation required.**
 
-### 4. Is dual-index complexity justified?
-
-Option C adds retrieval complexity. Is the benefit of optimized per-type retrieval worth the maintenance cost?
-
-### 5. What does "done" look like for Phase 2.6?
-
-- All lessons indexed (regardless of transcript)? 
-- Verified transcript coverage per subject?
-- Search quality baseline established?
+- ❌ All 16 subjects fully ingested in all indexes — **FAILED (only 14, 22% of lessons)**
+- ❌ All retrievers working — **FAILED (structure retrievers broken)**
+- ❌ Unit search working — **FAILED (unit_rollup empty)**
+- 📋 Useful search SDK functions — **Pending**
 
 ---
 
@@ -445,7 +743,7 @@ New items added to `00-overview-and-known-issues.md`:
 
 ## ✅ Completed Work Summary
 
-All prerequisite work is complete. The system is ready for BulkDownloadSource implementation.
+**Note: Some "completed" items have been revealed as incomplete during evaluation.**
 
 ### Strategic Pivot — COMPLETE ✅ (2025-12-30)
 
@@ -453,7 +751,7 @@ All prerequisite work is complete. The system is ready for BulkDownloadSource im
 |----------|---------|
 | Bulk-first ingestion strategy | Approved — ADR-093 created |
 | Video availability detection | Removed — `video-availability.ts` deleted |
-| RSHE-PSHE handling | 422 Unprocessable Content (no API fallback) |
+| RSHE-PSHE handling | 422 Unprocessable Content (no API fallback) — **NOT YET IMPLEMENTED** |
 | Redis cache | Retained for API supplementation calls |
 
 ### Bulk Download Infrastructure — COMPLETE ✅ (2025-12-30)
@@ -468,7 +766,8 @@ All prerequisite work is complete. The system is ready for BulkDownloadSource im
 
 ### Pattern-Aware Ingestion — COMPLETE ✅
 
-All 7 curriculum structural patterns implemented (used for API calls):
+> ⚠️ **ASSUMPTION**: All 7 curriculum structural patterns are correctly implemented.
+> **OPEN QUESTION**: Given the ingestion failures, have these patterns been verified against actual bulk data?
 
 | Pattern | Subjects |
 |---------|----------|
@@ -482,6 +781,9 @@ All 7 curriculum structural patterns implemented (used for API calls):
 
 ### Infrastructure — COMPLETE ✅
 
+> ⚠️ **ASSUMPTION**: These infrastructure items are truly "complete".
+> **OPEN QUESTION**: If TDD was properly employed, how did the ingestion fail so badly?
+
 | Task | Status | Result |
 |------|--------|--------|
 | Adapter refactoring | ✅ | 593→197 lines, TDD-driven |
@@ -493,102 +795,69 @@ All 7 curriculum structural patterns implemented (used for API calls):
 
 ---
 
-## 📋 Next Implementation Steps
+## 📋 Implementation Status
 
-### Phase 1: Bulk Data Adapter (TDD) — **NEXT STEP**
+### ✅ Phase 0: SDK Bulk Export — COMPLETE
 
-Create an adapter that wraps vocab-gen bulk reader for search indexing use.
+Bulk parsing code moved to SDK with public exports. Schema-first approach:
 
-**Full implementation details**: [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md)
+- Generated Zod schemas at `type-gen` time via `bulkgen.ts`
+- All extractors and generators moved to `src/bulk/`
+- Export via `@oaknational/oak-curriculum-sdk/public/bulk`
 
-**Key insight**: Parsing is already done. We need an adapter that:
+### ⚠️ Phase 1: BulkDataAdapter — INCOMPLETE
 
-1. Loads bulk data using existing `readAllBulkFiles()`
-2. Transforms `Lesson` → `SearchLessonsIndexDoc`
-3. Transforms `Unit` → `SearchUnitsIndexDoc`
-4. Extracts threads from `sequence[].threads[]`
+Adapter transforms bulk data to ES document format, **but critical fields are missing**:
 
-**TDD Sequence**:
+- `src/adapters/bulk-data-adapter.ts` — Main adapter
+- `src/adapters/bulk-lesson-transformer.ts` — Lesson → ES doc — **MISSING STRUCTURE FIELDS**
+- `src/adapters/bulk-unit-transformer.ts` — Unit → ES doc
+- `src/adapters/bulk-transform-helpers.ts` — URL generation, phase derivation
 
-1. **RED**: Write test for transforming a `Lesson` to ES doc
-2. **GREEN**: Implement minimal transformer using vocab-gen types
-3. **REFACTOR**: Add year derivation via unit join
+### ✅ Phase 2: API Supplementation — COMPLETE
 
-**Files to create**:
+KS4 tier enrichment for Maths:
 
-- `src/lib/indexing/bulk-data-adapter.ts` — Transforms vocab-gen types → ES docs
-- `src/lib/indexing/bulk-data-adapter.unit.test.ts` — Unit tests
+- `src/adapters/api-supplementation.ts` — Fetches tier data from API
+- Builds `UnitContextMap` for tier assignment
+- 100% coverage confirmed for maths KS4
 
-**Files to REUSE (not create)**:
+### ✅ Phase 3: HybridDataSource — COMPLETE
 
-- Zod schemas — already in `@oaknational/oak-curriculum-sdk/vocab-gen`
-- Bulk reader — already in `@oaknational/oak-curriculum-sdk/vocab-gen`
-- Types — `BulkDownloadFile`, `Lesson`, `Unit` from vocab-gen
+Unified data source composing bulk + API:
 
-### Phase 2: API Supplementation
+- `src/adapters/hybrid-data-source.ts` — Main interface
+- `src/adapters/hybrid-batch-processor.ts` — Batch KS4 enrichment
 
-Enrich bulk data with structural information:
+### ✅ Phase 4: Vocabulary Mining — COMPLETE
 
-| Subject | API Call | Purpose |
-|---------|----------|---------|
-| Maths KS4 | `/sequences/maths-secondary/units` | Tier info (foundation/higher) |
+Vocabulary extraction integrated:
 
-**Note**: Unit options (geography/english) can be deferred — not critical for search.
+- `src/adapters/vocabulary-mining-adapter.ts` — Runs extractors, generates synonyms
+- Uses SDK's `processBulkData()` and `generateMinedSynonyms()`
 
-### Phase 3: HybridDataSource
+### ⚠️ Phase 5: Pipeline Integration — INCOMPLETE
 
-Compose bulk + API into unified data source:
+**Completed (Phase 5a)**:
 
-```typescript
-interface HybridDataSource {
-  readonly getLessonsWithMaterials: () => AsyncIterable<LessonWithMaterials>;
-  readonly getUnits: () => AsyncIterable<UnitDocument>;
-  readonly getThreads: () => AsyncIterable<ThreadDocument>;
-  readonly isSubjectSupported: (subject: string) => boolean;  // 422 for RSHE-PSHE
-}
-```
+- `src/adapters/bulk-thread-transformer.ts` — Extracts threads from `sequence[].threads[]`
+- `src/adapters/bulk-thread-transformer.unit.test.ts` — 9 tests passing
+- `src/lib/indexing/bulk-ingestion.ts` — Updated to include thread operations
+- `src/lib/indexing/bulk-ingestion.unit.test.ts` — 3 tests passing
 
-### Phase 4: Pipeline Integration
+**Completed (Phase 5b)**:
 
-1. Update `index-oak.ts` to use `HybridDataSource`
-2. Minimal changes to existing pipeline
-3. Run full ingestion: `pnpm es:ingest-live --all --verbose`
+- `src/lib/elasticsearch/setup/ingest-cli-args.ts` — Added `--bulk` and `--bulk-dir` CLI options
+- `src/lib/elasticsearch/setup/ingest-live.ts` — Bulk mode execution path
+- `src/lib/elasticsearch/setup/ingest-bulk.ts` — Bulk ingestion orchestration
+- `src/lib/elasticsearch/setup/ingest-output.ts` — Output formatting
 
----
+**FAILED (Phase 5c)**:
 
-## Infrastructure Status
-
-### Bulk Download Status (2025-12-30)
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| Download location | `apps/.../bulk-downloads/` | ✅ Created |
-| JSON files | 30 | ✅ Downloaded |
-| manifest.json | Present | ✅ Written |
-| Download script | `scripts/download-bulk.ts` | ✅ Working |
-| pnpm command | `pnpm bulk:download` | ✅ Available |
-
-### ES Index Status (After Reset — 2025-12-29)
-
-| Index | Doc Count | Target | Status |
-|-------|-----------|--------|--------|
-| `oak_lessons` | 437 (maths KS1) | ~12,300 | 📋 Needs full ingestion |
-| `oak_units` | TBD | — | 📋 Needs full ingestion |
-| `oak_unit_rollup` | TBD | — | 📋 Needs full ingestion |
-| `oak_threads` | 201 (maths KS1) | — | 📋 Needs full ingestion |
-| `oak_sequences` | TBD | — | 📋 Needs full ingestion |
-| `oak_sequence_facets` | TBD | — | 📋 Needs full ingestion |
-
-### Redis Cache Status (Verified Working)
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| Lesson summaries cached | 7,089 | ✅ Accessible |
-| Lesson transcripts cached | 4,281 | ✅ Accessible |
-| Unit summaries cached | 669 | ✅ Accessible |
-| **Total cached** | **12,039** | ✅ Working |
-
-**Note**: Redis cache is used for API supplementation calls only (maths tier, unit options).
+- Full ingestion run produced incorrect results
+- Only 2,884/12,833 lessons indexed
+- `oak_unit_rollup` empty
+- Structure fields missing
 
 ---
 
@@ -629,6 +898,9 @@ Before any work, read:
 
 ### ⭐ Bulk Parsing Infrastructure (REUSE)
 
+> ⚠️ **ASSUMPTION**: These schemas are complete and correct.
+> **OPEN QUESTION**: Have the Zod schemas been validated against ALL bulk files? Could schema validation be silently rejecting valid lessons?
+
 | File | Purpose |
 |------|---------|
 | `packages/sdks/oak-curriculum-sdk/vocab-gen/lib/bulk-reader.ts` | **File reading** — `parseBulkFile()`, `readAllBulkFiles()` |
@@ -655,14 +927,32 @@ Before any work, read:
 | `src/adapters/sdk-api-methods.ts` | Factories for each API endpoint |
 | `src/adapters/sdk-cache/` | Caching infrastructure |
 
-### Ingestion Pipeline
+### ⭐ Bulk-First Ingestion Pipeline (Phase 5 — NEEDS REVIEW)
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `src/adapters/bulk-data-adapter.ts` | Main adapter — transforms bulk data to ES format | 📋 Review |
+| `src/adapters/bulk-lesson-transformer.ts` | Lesson → ES doc transformation | 🚨 **Missing fields** |
+| `src/adapters/bulk-unit-transformer.ts` | Unit → ES doc transformation | 📋 Review |
+| `src/adapters/bulk-transform-helpers.ts` | URL generation, phase derivation | 📋 Review |
+| `src/adapters/bulk-thread-transformer.ts` | Thread extraction | ✅ OK |
+| `src/adapters/api-supplementation.ts` | Maths KS4 tier enrichment from API | ✅ OK |
+| `src/adapters/hybrid-data-source.ts` | Composes bulk + API data | 📋 Review |
+| `src/adapters/hybrid-batch-processor.ts` | Batch KS4 enrichment | 📋 Review |
+| `src/adapters/vocabulary-mining-adapter.ts` | Runs extractors, generates synonyms | ✅ OK |
+| `src/lib/indexing/bulk-ingestion.ts` | **Entry point** — orchestrates bulk operations | 🚨 **Missing rollup** |
+| `src/lib/elasticsearch/setup/ingest-cli-args.ts` | CLI args | ✅ OK |
+| `src/lib/elasticsearch/setup/ingest-bulk.ts` | Bulk execution | 📋 Review |
+| `src/lib/elasticsearch/setup/ingest-output.ts` | Output formatting | ✅ OK |
+
+### Ingestion Pipeline (API Mode — Reference)
 
 | File | Purpose |
 |------|---------|
 | `src/lib/elasticsearch/setup/ingest-live.ts` | CLI entry point |
-| `src/lib/index-oak.ts` | Main indexing logic |
-| `src/lib/indexing/lesson-materials.ts` | Transcript + summary fetching |
-| `src/lib/indexing/pattern-aware-fetcher.ts` | Pattern-aware traversal |
+| `src/lib/index-oak.ts` | Main indexing logic (API mode) |
+| `src/lib/indexing/lesson-materials.ts` | Transcript + summary fetching (API mode) |
+| `src/lib/indexing/pattern-aware-fetcher.ts` | Pattern-aware traversal (API mode) |
 
 ### Bulk Download Data
 

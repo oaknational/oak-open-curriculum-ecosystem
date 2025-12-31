@@ -1,10 +1,32 @@
 # Semantic Search Current State
 
-**Last Updated**: 2025-12-30
-**Measured Against**: Post strategic pivot to bulk-first (2025-12-30)
+**Last Updated**: 2025-12-31
+**Status**: 🚨 BLOCKED — Critical issues discovered during bulk ingestion evaluation
+**Measured Against**: Failed bulk ingestion run (2025-12-31)
 **Ground Truth Status**: ✅ Corrected and Verified (Maths KS4 only)
+**Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 This is THE authoritative source for current system metrics.
+
+---
+
+## 🚨 CRITICAL: Bulk Ingestion Failed (2025-12-31)
+
+**A live bulk ingestion run revealed fundamental implementation failures.**
+
+See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for:
+- Master list of 15 unverified assumptions
+- 5 mandatory remediation actions
+- Root cause analysis
+
+### Issues Discovered
+
+| Issue | Severity | Impact |
+|-------|----------|--------|
+| **`oak_unit_rollup` empty** | 🔴 CRITICAL | Unit search 100% zero-hit |
+| **Missing `lesson_structure` fields** | 🔴 CRITICAL | ELSER structure 100% zero-hit |
+| **Only 2,884/12,833 lessons indexed** | 🔴 CRITICAL | ~78% of curriculum missing |
+| **14/16 subjects indexed** | 🟡 HIGH | PE, Spanish missing entirely |
 
 ---
 
@@ -37,34 +59,139 @@ This is THE authoritative source for current system metrics.
 
 ---
 
-## Index Status (2025-12-30)
+## Index Status (2025-12-31)
 
-**🔄 STATUS: Strategic pivot decided. Bulk download parser implementation required.**
+**🚨 STATUS: Bulk ingestion FAILED — Critical issues require investigation.**
 
 ### Summary
 
 | Metric                     | Current     | Target   | Status               |
 | -------------------------- | ----------- | -------- | -------------------- |
-| Lessons indexed            | 437 (maths KS1) | ~12,316  | 📋 Partial           |
-| Subjects indexed           | 1/17        | 17/17    | 📋 Partial           |
-| Pattern-aware traversal    | ✅          | ✅       | ✅ Implemented       |
-| Adapter refactoring        | ✅          | ✅       | ✅ Complete          |
-| Efficient API traversal    | ✅          | ✅       | ✅ Complete          |
-| Cache categorization       | ✅          | ✅       | ✅ Complete (2025-12-30) |
-| Quality gates              | ✅          | ✅       | ✅ All 11 passing    |
-| ES reset                   | ✅          | ✅       | ✅ Complete (2025-12-29) |
-| Cache validation           | ✅          | ✅       | ✅ Complete (756 hits, 1 miss) |
+| Lessons indexed            | **2,884**   | ~12,833  | 🚨 **22% — 78% MISSING** |
+| Subjects indexed           | **14/16**   | 16/16    | 🚨 **PE, Spanish missing** |
+| SDK bulk export            | ✅          | ✅       | ✅ Complete (Phase 0) |
+| BulkDataAdapter            | ⚠️          | ✅       | ⚠️ **Missing structure fields** |
+| API supplementation        | ✅          | ✅       | ✅ Complete (Phase 2) |
+| HybridDataSource           | ✅          | ✅       | ✅ Complete (Phase 3) |
+| VocabularyMiningAdapter    | ✅          | ✅       | ✅ Complete (Phase 4) |
+| Bulk thread transformer    | ✅          | ✅       | ✅ Complete (Phase 5a) |
+| CLI wiring (`--bulk` mode) | ✅          | ✅       | ✅ Complete (Phase 5b) |
+| Full ingestion run         | 🚨          | ✅       | 🚨 **FAILED** (Phase 5c) |
+| Quality gates              | ✅          | ✅       | ✅ All 11 passing |
 
-### ES Indices (Post-Reset — 2025-12-29)
+### ES Indices (After Failed Bulk Ingestion — 2025-12-31)
 
-| Index                | Doc Count | Status            |
-| -------------------- | --------- | ----------------- |
-| `oak_lessons`        | 437       | 📋 Maths KS1 only |
-| `oak_units`          | TBD       | 📋 Partial        |
-| `oak_unit_rollup`    | TBD       | 📋 Partial        |
-| `oak_threads`        | 201       | 📋 Maths KS1 only |
-| `oak_sequences`      | TBD       | 📋 Partial        |
-| `oak_sequence_facets`| TBD       | 📋 Partial        |
+| Index                | Doc Count | Expected | Status            |
+| -------------------- | --------- | -------- | ----------------- |
+| `oak_lessons`        | **2,884** | ~12,833  | 🚨 **22% — 78% MISSING** |
+| `oak_units`          | 1,635     | ~1,665   | ✅ Complete |
+| `oak_unit_rollup`    | **0**     | ~1,665   | 🚨 **EMPTY — unit search broken** |
+| `oak_threads`        | 164       | 164      | ✅ Complete |
+| `oak_sequences`      | 0         | —        | 📋 Not in scope |
+| `oak_sequence_facets`| 0         | —        | 📋 Not in scope |
+
+### Retriever Status (from ablation test)
+
+| Retriever | Lessons Standard | Lessons Hard | Units |
+|-----------|-----------------|--------------|-------|
+| `bm25_content` | 0.456 ✅ | 0.217 | 0.000 ❌ |
+| `elser_content` | 0.393 ✅ | 0.172 | 0.000 ❌ |
+| `bm25_structure` | 0.440 ⚠️ | 0.067 ⚠️ | 0.000 ❌ |
+| `elser_structure` | **0.000** ❌ | **0.000** ❌ | 0.000 ❌ |
+| `four_way_hybrid` | 0.458 ✅ | 0.221 | 0.000 ❌ |
+
+### Subjects Indexed (Lessons)
+
+| Subject | Doc Count | Expected | Status |
+|---------|-----------|----------|--------|
+| history | 433 | ? | 📋 Needs verification |
+| art | 403 | ? | 📋 Needs verification |
+| english | 399 | ? | 📋 Needs verification |
+| religious-education | 332 | ? | 📋 Needs verification |
+| design-technology | 304 | ? | 📋 Needs verification |
+| maths | 216 | ? | 📋 Needs verification |
+| computing | 199 | ? | 📋 Needs verification |
+| french | 168 | ? | 📋 Needs verification |
+| geography | 136 | ? | 📋 Needs verification |
+| science | 81 | ? | 📋 Needs verification |
+| german | 67 | ? | 📋 Needs verification |
+| citizenship | 65 | ? | 📋 Needs verification |
+| music | 57 | ? | 📋 Needs verification |
+| cooking-nutrition | 24 | ? | 📋 Needs verification |
+| **physical-education** | **0** | ? | 🚨 **MISSING** |
+| **spanish** | **0** | ? | 🚨 **MISSING** |
+
+---
+
+## Completed Work (2025-12-31)
+
+### Bulk-First Ingestion Pipeline — EVALUATION REVEALED FAILURES
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| **0** | SDK bulk export with generated schemas | ✅ Complete |
+| **1** | BulkDataAdapter (Lesson/Unit transforms) | ⚠️ **INCOMPLETE** — missing structure fields |
+| **2** | API supplementation (Maths KS4 tiers) | ✅ Complete |
+| **3** | HybridDataSource (bulk + API composition) | ✅ Complete |
+| **4** | VocabularyMiningAdapter (extractors + synonyms) | ✅ Complete |
+| **5a** | Bulk thread transformer | ✅ Complete |
+| **5b** | CLI wiring | ✅ Complete |
+| **5c** | Full ingestion | 🚨 **FAILED** |
+
+**Key files created**:
+
+| File | Purpose |
+|------|---------|
+| `src/adapters/bulk-data-adapter.ts` | Transforms bulk → ES docs |
+| `src/adapters/bulk-lesson-transformer.ts` | Lesson → ES doc transformation |
+| `src/adapters/bulk-unit-transformer.ts` | Unit → ES doc transformation |
+| `src/adapters/bulk-transform-helpers.ts` | URL generation, phase derivation |
+| `src/adapters/bulk-thread-transformer.ts` | Thread extraction and ES doc transformation |
+| `src/adapters/api-supplementation.ts` | KS4 tier enrichment |
+| `src/adapters/hybrid-data-source.ts` | Unified data source |
+| `src/adapters/hybrid-batch-processor.ts` | Batch KS4 enrichment |
+| `src/adapters/vocabulary-mining-adapter.ts` | Vocabulary extraction |
+| `src/lib/indexing/bulk-ingestion.ts` | Pipeline entry point |
+| `src/lib/elasticsearch/setup/ingest-cli-args.ts` | CLI args with `--bulk` mode |
+
+**SDK changes**:
+
+| Change | Purpose |
+|--------|---------|
+| `type-gen/typegen/bulk/` | Generated bulk Zod schemas |
+| `src/bulk/extractors/` | 15 extractors (8 new) |
+| `src/bulk/generators/` | Synonym miner, graph generators |
+| `public/bulk` export | Public SDK entry point |
+
+**Completed (Phase 5a)**:
+
+- `src/adapters/bulk-thread-transformer.ts` — Extracts threads, deduplicates, builds ES docs
+- `src/adapters/bulk-thread-transformer.unit.test.ts` — 9 unit tests
+- `src/lib/indexing/bulk-ingestion.ts` — Updated to include thread operations
+
+**Completed (Phase 5b)**:
+
+- `src/lib/elasticsearch/setup/ingest-cli-args.ts` — Added `--bulk` and `--bulk-dir` options
+- `src/lib/elasticsearch/setup/ingest-live.ts` — Bulk mode execution path
+- `src/lib/elasticsearch/setup/ingest-bulk.ts` — Bulk ingestion orchestration
+- `src/lib/elasticsearch/setup/ingest-output.ts` — Output formatting
+
+**FAILED (Phase 5c)**:
+
+Full ingestion run completed but with critical failures:
+- Only 2,884/12,833 lessons indexed (~22%)
+- `oak_unit_rollup` empty (0 docs)
+- `lesson_structure` fields missing (set to `undefined` in transformer)
+- Physical Education and Spanish subjects missing entirely
+
+**Mandatory remediation actions before further development:**
+1. Define parity requirements (bulk vs API ES documents)
+2. Deep code review (find where TDD was skipped)
+3. Investigate lesson count discrepancy
+4. Deep transcript survey (verify ALL subjects)
+5. Implement RSHE-PSHE 422 handling
+
+See [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) for full details.
 
 ---
 
@@ -176,7 +303,7 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | `pnpm lint:fix`        | ✅ Pass |
 | `pnpm format:root`     | ✅ Pass |
 | `pnpm markdownlint:root` | ✅ Pass |
-| `pnpm test`            | ✅ Pass (665 tests) |
+| `pnpm test`            | ✅ Pass (734 tests) |
 | `pnpm test:e2e`        | ✅ Pass |
 | `pnpm test:e2e:built`  | ✅ Pass |
 | `pnpm test:ui`         | ✅ Pass |
@@ -274,9 +401,13 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | Force mode               | ✅ Verified | `--force` flag for overwrite          |
 | Four-retriever hybrid    | ✅ Complete | BM25 + ELSER with RRF fusion          |
 | Synonyms (192 entries)   | ✅ Deployed | Loaded at ES reset                    |
-| **Bulk data adapter**    | 📋 Pending  | Wraps vocab-gen, transforms to ES docs |
-| **Hybrid data source**   | 📋 Pending  | Composes bulk + API                   |
-| Full ingestion           | 📋 Pending  | Blocked on adapter                    |
+| **Bulk data adapter**    | ⚠️ **INCOMPLETE** | Missing `lesson_structure` fields |
+| **Hybrid data source**   | ✅ Complete | Composes bulk + API                   |
+| **Vocabulary mining**    | ✅ Complete | Extractors + synonym mining           |
+| **Bulk thread transformer** | ✅ Complete | Extracts from `sequence[].threads[]` |
+| **CLI wiring**           | ✅ Complete | `--bulk` and `--bulk-dir` options     |
+| **Full ingestion**       | 🚨 **FAILED** | 2,884/12,833 lessons, unit_rollup empty |
+| **RSHE-PSHE 422**        | 📋 Pending | Not yet implemented in search SDK     |
 
 ---
 
@@ -306,11 +437,38 @@ Reduced `oak-adapter.ts` from **593 lines to 197 lines** using TDD:
 | Files          | 30     |
 | Raw lessons    | ~12,500 |
 | Unique lessons | ~12,300 |
-| Duplicates     | ~200 (tiers) |
+| Duplicates     | 373 (maths KS4) |
 
 **Missing from bulk**: RSHE-PSHE (returns 422 Unprocessable Content — no API fallback)
 
 **Refresh command**: `cd apps/oak-open-curriculum-semantic-search && pnpm bulk:download`
+
+### Maths KS4 Duplicate Analysis (2025-12-30)
+
+**373 duplicate lessons break down as**:
+
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| Legitimate | 210 | Shared between BOTH tier variants |
+| Spurious | 163 | Data quality issue — incorrectly duplicated |
+
+**Solution**: Simple deduplication by `lessonSlug`, apply tiers from API unit→tier map.
+
+### Maths KS4 Tier Coverage (2025-12-30)
+
+**Investigation confirmed 100% tier coverage from API**:
+
+| Metric | Value |
+|--------|-------|
+| Unique KS4 units in bulk | 36 |
+| Units with tier info from API | 36 ✅ |
+| Unique KS4 lessons in bulk | 436 |
+| Lessons with tier derivable | 436 ✅ |
+
+**Tier distribution**:
+- 30 units in BOTH tiers → lessons get `tiers: ['foundation', 'higher']`
+- 6 units HIGHER only → lessons get `tiers: ['higher']`
+- 0 units foundation only
 
 ---
 

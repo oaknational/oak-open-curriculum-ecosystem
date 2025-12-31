@@ -1,5 +1,5 @@
 /**
- * Bulk download file reader for vocabulary mining pipeline.
+ * Bulk download file reader for Oak curriculum data.
  *
  * @remarks
  * Provides pure functions for discovering and parsing bulk download files.
@@ -7,26 +7,28 @@
  *
  * @example
  * ```ts
- * const files = await discoverBulkFiles('reference/bulk_download_data/...');
+ * const files = await discoverBulkFiles('bulk-downloads/');
  * for (const file of files) {
  *   const data = await parseBulkFile(basePath, file);
  *   // Process data...
  * }
  * ```
+ *
+ * @module bulk/reader
  */
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
-import { bulkDownloadFileSchema, type BulkDownloadFile } from './bulk-file-schema.js';
+import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
 
 /**
  * Subject and phase extracted from a bulk download filename.
  */
 export interface SubjectPhase {
   /** Subject slug (e.g., 'maths', 'design-technology') */
-  subject: string;
+  readonly subject: string;
   /** Phase (primary or secondary) */
-  phase: 'primary' | 'secondary';
+  readonly phase: 'primary' | 'secondary';
 }
 
 /**
@@ -69,7 +71,7 @@ export function extractSubjectPhase(filename: string): SubjectPhase | undefined 
  *
  * @example
  * ```ts
- * const files = await discoverBulkFiles('reference/bulk_download_data/...');
+ * const files = await discoverBulkFiles('bulk-downloads/');
  * // Returns: ['maths-primary.json', 'maths-secondary.json', ...]
  * ```
  */
@@ -90,7 +92,7 @@ export async function discoverBulkFiles(basePath: string): Promise<readonly stri
  *
  * @example
  * ```ts
- * const data = await parseBulkFile('reference/bulk_download_data/...', 'maths-primary.json');
+ * const data = await parseBulkFile('bulk-downloads/', 'maths-primary.json');
  * console.log(data.sequenceSlug); // 'maths-primary'
  * console.log(data.lessons.length); // 1072
  * ```
@@ -103,6 +105,18 @@ export async function parseBulkFile(basePath: string, filename: string): Promise
 }
 
 /**
+ * Result of reading a bulk file with metadata.
+ */
+export interface BulkFileResult {
+  /** Original filename */
+  readonly filename: string;
+  /** Extracted subject and phase */
+  readonly subjectPhase: SubjectPhase;
+  /** Parsed and validated bulk download data */
+  readonly data: BulkDownloadFile;
+}
+
+/**
  * Reads all bulk download files from a directory.
  *
  * @param basePath - Path to the bulk download directory
@@ -110,23 +124,13 @@ export async function parseBulkFile(basePath: string, filename: string): Promise
  *
  * @example
  * ```ts
- * const allData = await readAllBulkFiles('reference/bulk_download_data/...');
+ * const allData = await readAllBulkFiles('bulk-downloads/');
  * console.log(allData.length); // 30
  * ```
  */
-export async function readAllBulkFiles(basePath: string): Promise<
-  readonly {
-    filename: string;
-    subjectPhase: SubjectPhase;
-    data: BulkDownloadFile;
-  }[]
-> {
+export async function readAllBulkFiles(basePath: string): Promise<readonly BulkFileResult[]> {
   const files = await discoverBulkFiles(basePath);
-  const results: {
-    filename: string;
-    subjectPhase: SubjectPhase;
-    data: BulkDownloadFile;
-  }[] = [];
+  const results: BulkFileResult[] = [];
 
   for (const filename of files) {
     const subjectPhase = extractSubjectPhase(filename);

@@ -73,6 +73,14 @@
       "types": "./dist/public/mcp-tools.d.ts",
       "default": "./dist/public/mcp-tools.js"
     },
+    "./public/bulk": {
+      "types": "./dist/public/bulk.d.ts",
+      "default": "./dist/public/bulk.js"
+    },
+    "./public/bulk.js": {
+      "types": "./dist/public/bulk.d.ts",
+      "default": "./dist/public/bulk.js"
+    },
     "./elasticsearch": {
       "types": "./dist/elasticsearch.d.ts",
       "default": "./dist/elasticsearch.js"
@@ -89,9 +97,10 @@
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo src/types/generated",
     "pregenerate:types": "pnpm generate:clean",
-    "generate:types": "pnpm generate:openapi && pnpm generate:zod",
+    "generate:types": "pnpm generate:openapi && pnpm generate:zod && pnpm generate:bulk",
     "generate:openapi": "tsx type-gen/typegen.ts",
     "generate:zod": "tsx type-gen/zodgen.ts",
+    "generate:bulk": "tsx type-gen/bulkgen.ts",
     "generate:clean": "rm -rf src/types/generated",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",

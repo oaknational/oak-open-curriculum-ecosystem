@@ -1,11 +1,81 @@
 # Milestone 1: Complete Data Indexing (Bulk-First)
 
-**Status**: 📋 PENDING — Bulk download parser implementation required
+**Status**: 🚨 **FAILED** — Critical issues discovered during evaluation
 **Priority**: High — BLOCKING all other work
 **Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md)
+**Session Context**: [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md)
 **Created**: 2025-12-24
-**Updated**: 2025-12-30
+**Updated**: 2025-12-31
 **Principle**: Index EVERYTHING — ES is a complete view of the curriculum
+
+---
+
+## 🚨 CRITICAL: Bulk Ingestion Failed (2025-12-31)
+
+**A live bulk ingestion run revealed fundamental implementation failures.**
+
+See [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) for:
+
+- **Master list of 15 unverified assumptions** that permeate all documentation
+- **5 mandatory remediation actions** before further development
+- **Root cause analysis** of failures
+
+### Issues Discovered
+
+| Issue | Cause | Impact |
+|-------|-------|--------|
+| **Only 2,884/12,833 lessons** | Unknown filter/logic bug | 78% data missing |
+| **`oak_unit_rollup` empty** | Not implemented in bulk path | Unit search broken |
+| **`lesson_structure` undefined** | Explicitly skipped in transformer | ELSER structure 100% zero-hit |
+| **PE, Spanish missing** | Unknown | 2 subjects not indexed |
+
+### Root Cause: `bulk-lesson-transformer.ts`
+
+```typescript
+// Lines 86-88 - VITAL DATA INTENTIONALLY SKIPPED
+lesson_structure: undefined,
+lesson_structure_semantic: undefined,
+```
+
+**This code deliberately skips required fields with no test asserting they are populated.**
+
+---
+
+## Implementation Progress (2025-12-31)
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| **0** | SDK bulk export (schema-first) | ✅ Complete |
+| **1** | BulkDataAdapter (Lesson/Unit transforms) | ⚠️ **INCOMPLETE** — missing structure fields |
+| **2** | API supplementation (Maths KS4 tiers) | ✅ Complete |
+| **3** | HybridDataSource (bulk + API) | ✅ Complete |
+| **4** | VocabularyMiningAdapter | ✅ Complete |
+| **5a** | Bulk thread transformer | ✅ Complete |
+| **5b** | Wire bulk pipeline into CLI | ✅ Complete |
+| **5c** | Full ingestion run | 🚨 **FAILED** |
+
+**Completed work (Phase 5a)**:
+
+- `src/adapters/bulk-thread-transformer.ts` — Extracts threads from `sequence[].threads[]`, deduplicates, builds ES docs
+- `src/adapters/bulk-thread-transformer.unit.test.ts` — 9 unit tests passing
+- `src/lib/indexing/bulk-ingestion.ts` — Updated to include thread operations in bulk preparation
+- `src/lib/indexing/bulk-ingestion.unit.test.ts` — 3 tests passing with thread assertions
+
+**Completed work (Phase 5b)**:
+
+- `src/lib/elasticsearch/setup/ingest-cli-args.ts` — Added `--bulk` flag and `--bulk-dir` option
+- `src/lib/elasticsearch/setup/ingest-live.ts` — Bulk mode execution path
+- `src/lib/elasticsearch/setup/ingest-bulk.ts` — Bulk ingestion orchestration
+- `src/lib/elasticsearch/setup/ingest-output.ts` — Output formatting
+
+**FAILED (Phase 5c)**:
+
+Ingestion ran but produced incorrect results:
+
+- Only 2,884/12,833 lessons indexed (~22%)
+- `oak_unit_rollup` has 0 documents
+- `lesson_structure` fields are `undefined`
+- Physical Education and Spanish missing entirely
 
 ---
 
@@ -93,11 +163,49 @@ Key findings that affect implementation:
 
 | Issue | Impact | Location in Report |
 |-------|--------|-------------------|
-| Maths KS4: 373 duplicate lessons | Need API tier enrichment | §2 - Implicit KS4 tier variants |
+| Maths KS4: 373 duplicate lessons | Simple deduplication + API tier enrichment | §2 - Implicit KS4 tier variants |
 | Missing lesson reference | `further-demonstrating-of-pythagoras-theorem` not in lessons[] | §1 - Lesson references |
 | 5 maths-primary lessons without transcripts | Handle gracefully | §Transcripts |
 | Units without threads | `maths-and-the-environment`, etc. | §3 - Threads |
 | NULL sentinel in contentGuidance | Already handled by vocab-gen | §Field completeness |
+
+### Maths KS4 Duplicate Analysis (2025-12-30)
+
+**Investigation confirmed** the 373 duplicate lessons break down as:
+
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| **Legitimate duplicates** | 210 | Lessons shared between BOTH tier variants (foundation + higher) |
+| **Spurious duplicates** | 163 | Lessons in ONE tier only, incorrectly duplicated in `lessons[]` |
+
+**Root cause**: The `lessons[]` array has data quality issues — some tier-specific lessons are duplicated even when they only appear in one unit variant.
+
+**Solution**: Simple deduplication by `lessonSlug`, then apply tiers from API tier map.
+
+### Maths KS4 Tier Coverage (2025-12-30)
+
+**Investigation confirmed 100% tier coverage**:
+
+| Metric | Value |
+|--------|-------|
+| Unique KS4 units in bulk | 36 |
+| Units with tier info from API | 36 ✅ |
+| Unique KS4 lessons in bulk | 436 |
+| Lessons with tier derivable | 436 ✅ |
+
+**Tier distribution**:
+- **30 units** in BOTH tiers (foundation AND higher)
+- **6 units** HIGHER only: `circle-theorems`, `non-right-angled-trigonometry`, `functions-and-proof`, `iteration`, `graphical-representations-of-data-cumulative-frequency-and-histograms`, `transformations-of-graphs`
+- **0 units** foundation only
+
+**Algorithm**:
+1. Fetch API: `GET /sequences/maths-secondary/units`
+2. Build: `Map<unitSlug, Set<'foundation' | 'higher'>>`
+3. For each bulk lesson where `keyStageSlug === 'ks4'`:
+   - Look up `lesson.unitSlug` in map
+   - Assign `tiers: Array.from(map.get(unitSlug))`
+4. Deduplicate bulk lessons by `lessonSlug`
+5. Result: 436 unique KS4 lesson documents with correct tier arrays
 
 ---
 
@@ -258,9 +366,10 @@ interface BulkDataAdapter {
 
 | Issue | Solution |
 |-------|----------|
-| Maths duplicates (373 lessons) | Deduplicate after API tier enrichment |
+| Maths duplicates (373 lessons) | Simple deduplication by `lessonSlug` (210 legitimate + 163 spurious) |
 | Missing lesson `further-demonstrating-of-pythagoras-theorem` | Skip with warning |
 | yearSlug on lessons | Join via `unitSlug` to get from unit |
+| Tier assignment (maths KS4) | Derive from API unit→tier map (100% coverage confirmed) |
 
 **Test fixtures**: Use existing vocab-gen test fixtures or create minimal ones:
 
@@ -302,41 +411,38 @@ Cache-Control: public, max-age=86400
 
 **Note**: For general search queries (no subject filter), RSHE-PSHE simply won't appear in results — no error needed.
 
-**Maths tier enrichment logic**:
+**Maths tier enrichment logic** (CONFIRMED 2025-12-30):
 
-The API endpoint `/sequences/maths-secondary/units` returns units with tier structure:
+The API endpoint `/sequences/maths-secondary/units` returns units grouped by year with tier structure for KS4:
 
 ```json
 {
-  "units": [
-    {
-      "unitSlug": "algebraic-fractions",
-      "tiers": [
-        { "tier": "foundation", "lessons": ["lesson-slug-1", "lesson-slug-2"] },
-        { "tier": "higher", "lessons": ["lesson-slug-1", "lesson-slug-3"] }
+  "data": [
+    { "year": 7, "units": [/* KS3 - no tiers */] },
+    { "year": 10, "tiers": [
+        { "tierTitle": "Higher", "tierSlug": "higher", "units": [{ "unitSlug": "algebraic-manipulation", ... }] },
+        { "tierTitle": "Foundation", "tierSlug": "foundation", "units": [{ "unitSlug": "algebraic-manipulation", ... }] }
       ]
-    }
+    },
+    { "year": 11, "tiers": [/* similar structure */] }
   ]
 }
 ```
 
-**Processing**:
+**Processing** (100% coverage confirmed):
 
 1. Fetch API response for maths-secondary units
-2. Build a `Map<lessonSlug, Set<tier>>` — some lessons appear in both tiers
-3. When enriching bulk lessons:
-   - If lesson in foundation only → `tier: 'foundation'`
-   - If lesson in higher only → `tier: 'higher'`
-   - If lesson in both → create TWO index entries (one per tier) OR `tier: 'both'`
+2. Build `Map<unitSlug, Set<'foundation' | 'higher'>>` from years 10-11
+3. For each bulk KS4 lesson:
+   - Look up `lesson.unitSlug` in map
+   - Assign `tiers: Array.from(map.get(unitSlug))`
 
-**Open decision**: For lessons in both tiers, do we:
+**Confirmed tier distribution**:
+- 30 units appear in BOTH tiers → lessons get `tiers: ['foundation', 'higher']`
+- 6 units are HIGHER only → lessons get `tiers: ['higher']`
+- 0 units are foundation only
 
-- A) Create two ES documents (allows tier-specific filtering)
-- B) Create one document with `tier: 'both'` (simpler, smaller index)
-
-**Recommendation**: Option B — simpler, and tier filtering can use `tier IN ['foundation', 'both']`.
-
-**Note**: This decision can be made during implementation — TDD will guide the right choice based on how tier filtering is used in search queries.
+**Decision**: Use `tiers: string[]` (array format) — already matches ES schema. No separate documents needed.
 
 **Unit options enrichment** (geography/english KS4):
 
@@ -366,8 +472,8 @@ The API endpoint `/sequences/{seq}/units` returns unit options:
 
 ```typescript
 interface ApiSupplementation {
-  /** Get tier assignments for maths KS4 lessons */
-  readonly getMathsTierAssignments: () => Promise<Map<string, 'foundation' | 'higher' | 'both'>>;
+  /** Get tier assignments for maths KS4 units (100% coverage confirmed) */
+  readonly getMathsUnitTierMap: () => Promise<Map<string, readonly ('foundation' | 'higher')[]>>;
   
   /** Get unit options for subjects that have them */
   readonly getUnitOptions: (subject: string) => Promise<UnitOption[]>;
@@ -460,13 +566,15 @@ function buildUnitDocument(unit: Unit, sequenceSlug: string): SearchUnitsIndexDo
 3. For geography/english KS4: Enrich with unit options from API
 4. For any subject without bulk data: Return 422 Unprocessable Content
 
-**Deduplication logic**:
+**Deduplication logic** (CONFIRMED 2025-12-30):
 
-| Subject | Duplicates In Bulk | Unique Key After Enrichment |
+| Subject | Duplicates In Bulk | Handling |
 |---------|--------------------|-----------------------------|
-| Maths KS4 | 373 lessons × 2 (no tier discriminator) | `(lessonSlug, tier)` — dedupe to single entry with `tier: 'both'` if in both |
-| Science KS4 | None (subjectSlug distinguishes) | `(lessonSlug, subjectSlug)` — biology, chemistry, physics, combined-science |
-| Others | None | `lessonSlug` |
+| Maths KS4 | 373 (210 legitimate tier-shared + 163 spurious) | Simple dedupe by `lessonSlug`, apply tiers from API unit map |
+| Science KS4 | None (subjectSlug distinguishes) | `lessonSlug` is unique |
+| Others | None | `lessonSlug` is unique |
+
+**Key insight**: The 373 duplicates include 163 spurious duplicates (data quality issue in bulk). Simple deduplication by `lessonSlug` handles both cases correctly. Tier assignment comes from the API unit→tier map, NOT from duplicate analysis.
 
 **Error handling for missing subjects**:
 
@@ -510,6 +618,53 @@ Cache-Control: public, max-age=86400
 - ES indexing logic (document structure unchanged)
 - Cache wrappers (used for API calls)
 - Pattern-aware traversal (used for API-only subjects)
+
+### Phase 5b: CLI Wiring Implementation Detail
+
+**Goal**: Add bulk mode execution path to `ingest-live.ts`
+
+**Key insight**: Bulk mode still needs API calls for maths KS4 tier enrichment. The rate limiting strategy:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Bulk Mode Execution Flow                                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  1. CREATE CLIENT (with rate limit tracker)                      │
+│     └── createIngestionClient({ bypassCache, ignoreCached404 })  │
+│                                                                  │
+│  2. PREPARE BULK OPERATIONS (no rate limit wrapper)              │
+│     └── prepareBulkIngestion({ bulkDir, client })                │
+│         ├── readAllBulkFiles(bulkDir)  ← File I/O, no rate limit │
+│         ├── createHybridDataSource()                             │
+│         │   └── buildKs4SupplementationContext()                 │
+│         │       └── client.getSequenceUnits()  ← API, rate limited│
+│         └── extractThreadsFromBulkFiles()  ← Pure, no rate limit │
+│                                                                  │
+│  3. DISPATCH TO ES (if not dry-run)                              │
+│     └── dispatchBulk(es, operations)  ← ES call, no rate limit   │
+│                                                                  │
+│  4. PRINT SUMMARY AND STATS                                      │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Why no `withRateLimitMonitoring` wrapper for bulk mode**:
+
+- API mode calls the Oak API repeatedly (once per lesson/unit/transcript)
+- Bulk mode calls the Oak API sparingly (once per subject with KS4 tiers)
+- The `OakClient` already has rate limit tracking built in
+- Wrapping the entire bulk operation would be misleading (most work is file I/O)
+
+**Implementation checklist**:
+
+1. Add `if (args.bulk)` branch in `runIngestion` or create `runBulkIngestion` function
+2. Create ES transport using existing `esClient()`
+3. Create `OakClient` using `createIngestionClient()` (for API supplementation)
+4. Call `prepareBulkIngestion({ bulkDir: args.bulkDir, client })`
+5. If dry-run: log stats only
+6. If not dry-run: call `dispatchBulk(es, result.operations)`
+7. Print summary using existing `printSummary` or create bulk-specific output
 
 ---
 
@@ -595,38 +750,78 @@ describe('Bulk ingestion E2E', () => {
 
 ## Acceptance Criteria
 
-### Phase 1: Bulk Data Adapter
+### Phase 0: SDK Bulk Export — ✅ COMPLETE
 
-- [ ] Unit tests written FIRST (TDD red phase)
-- [ ] vocab-gen types reused (no duplicate type definitions)
-- [ ] Transform `Lesson` → `SearchLessonsIndexDoc` works
-- [ ] Transform `Unit` → `SearchUnitsIndexDoc` works
-- [ ] Thread extraction and deduplication works
-- [ ] Year derivation via unit join works
-- [ ] All 30 bulk files parseable (use `readAllBulkFiles()`)
-- [ ] Lesson count matches expected (~12,783 raw, ~12,316 unique)
+- [x] Generated Zod schemas at `type-gen` time (schema-first)
+- [x] All extractors moved to `src/bulk/extractors/`
+- [x] All generators moved to `src/bulk/generators/`
+- [x] Public export via `@oaknational/oak-curriculum-sdk/public/bulk`
+- [x] `vocab-gen` updated to import from SDK (DRY)
 
-### Phase 2: API Supplementation
+### Phase 1: Bulk Data Adapter — ⚠️ INCOMPLETE
 
-- [ ] Maths tier assignments retrieved (373 KS4 lessons)
-- [ ] Tier enrichment tested with simple mock
-- [ ] Unit options retrieved for geography/english (optional - can defer)
-- [ ] RSHE-PSHE handling: skip in ingestion, 422 in API
+- [x] Unit tests written FIRST (TDD red phase)
+- [x] SDK types used (schema-first)
+- [x] Transform `Lesson` → `SearchLessonsIndexDoc` works
+- [x] Transform `Unit` → `SearchUnitsIndexDoc` works
+- [x] Year derivation via unit join works
+- [ ] ❌ **`lesson_structure` fields populated** — explicitly set to `undefined`
+- [ ] ❌ **`lesson_structure_semantic` fields populated** — explicitly set to `undefined`
+- [ ] ❌ **Tests asserting structure fields are populated** — no such tests exist
 
-### Phase 3: HybridDataSource
+### Phase 2: API Supplementation — ✅ COMPLETE
 
-- [ ] Composition logic tested with integration test
-- [ ] Deduplication correct (lesson × tier × exam-subject)
-- [ ] All document types produced (lessons, units, threads)
-- [ ] Error handling: missing file, API failure
+- [x] Maths tier assignments retrieved (436 KS4 lessons)
+- [x] Tier enrichment tested with simple mock
+- [x] 100% coverage confirmed for maths KS4
 
-### Phase 4: Pipeline Integration
+### Phase 3: HybridDataSource — ✅ COMPLETE
 
-- [ ] Full ingestion completes (`pnpm es:ingest-live --all`)
-- [ ] ~12,300 unique lessons indexed
-- [ ] All 6 indices populated
-- [ ] All 16 supported subjects present
-- [ ] Quality gates passing
+- [x] Composition logic tested with unit test
+- [x] KS4 tier enrichment working
+- [x] Lessons and units produced
+
+### Phase 4: Vocabulary Mining — ✅ COMPLETE
+
+- [x] VocabularyMiningAdapter created
+- [x] Uses SDK's `processBulkData()` and `generateMinedSynonyms()`
+- [x] Unit tests passing
+
+### Phase 5: Pipeline Integration — 🚨 FAILED
+
+**Phase 5a: Bulk Thread Transformer — ✅ COMPLETE**
+
+- [x] `bulk-thread-transformer.ts` created with `extractThreadsFromBulkFiles()` and `buildThreadBulkOperations()`
+- [x] Unit tests passing (9 tests)
+- [x] `bulk-ingestion.ts` updated to include thread operations
+- [x] Unit tests passing (3 tests with thread assertions)
+
+**Phase 5b: Wire into CLI — ✅ COMPLETE**
+
+- [x] `ingest-cli-args.ts` — Added `--bulk` flag and `--bulk-dir <path>` option
+- [x] `ingest-live.ts` — Bulk mode execution path
+- [x] `ingest-bulk.ts` — Bulk ingestion orchestration
+- [x] `ingest-output.ts` — Output formatting
+- [x] Quality gates passing
+
+**Phase 5c: Full Ingestion — 🚨 FAILED**
+
+Ingestion completed but with critical failures:
+
+| Expected | Actual | Status |
+|----------|--------|--------|
+| ~12,833 lessons | 2,884 | 🚨 **22% — 78% MISSING** |
+| 16 subjects | 14 | 🚨 **PE, Spanish missing** |
+| `oak_unit_rollup` populated | 0 docs | 🚨 **EMPTY** |
+| `lesson_structure` fields | `undefined` | 🚨 **MISSING** |
+
+**Rate Limiting Approach** (implemented correctly):
+
+| Operation | Rate Limited? | Reason |
+|-----------|---------------|--------|
+| Bulk file I/O (reading JSON from disk) | ❌ No | Local disk, no external calls |
+| ES bulk dispatch (writing to Elasticsearch) | ❌ No | Local ES, not Oak API |
+| Maths KS4 tier enrichment (API call) | ✅ Yes | Calls Oak API `/sequences/maths-secondary/units` |
 
 ### Quality Gates (ALL must pass)
 

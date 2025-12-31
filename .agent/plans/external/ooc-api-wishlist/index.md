@@ -33,7 +33,7 @@ If someone handed you this pack, would you know how to find what you want, and w
 
 ## File map
 
-- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30), **bulk download completeness requests** (RSHE-PSHE file, tier field, unit options, yearSlug, examBoard) (NEW 2025-12-30).
+- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30), **bulk download completeness requests** (RSHE-PSHE file, tier field, unit options, yearSlug, examBoard) (NEW 2025-12-30), **bulk download structure improvements** (top-level threads, null handling, bundled schemas, lesson counts, subject metadata) (NEW 2025-12-31).
 - `01-derived-fields-and-ks4-metadata.md` — derived fields registry, ghost pathway note, KS4 programme factors, and interim denormalisation workaround.
 - `02-semantic-summary.md` — rerank summary request and the semantic_summary field definitions with status and rationale.
 - `03-context-and-vision.md` — executive summary, vision, tool ecosystem, schema-first pipeline overview, and audience.

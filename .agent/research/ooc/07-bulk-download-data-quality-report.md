@@ -60,36 +60,60 @@ Impact:
 
 ### 2. Implicit KS4 tier variants (maths-secondary only)
 
-**Updated 2025-12-24**: Investigation confirmed these are **KS4 tier variants** (foundation vs higher), not duplicates.
+**Updated 2025-12-30**: Deep investigation into the 373 duplicate lessons revealed:
 
-Maths secondary has 30 unit slugs that appear twice, with 373 associated lesson slugs appearing twice. Pattern analysis:
+#### Duplicate Breakdown
 
-- Each "duplicated" unit appears exactly twice with **identical metadata** except for `unitLessons[]`.
-- 26 of 30 have **different lesson lists** — typically one with more lessons (higher tier) and one with fewer (foundation tier).
-- Example: `algebraic-fractions` appears twice — 8 lessons vs 2 lessons (same year/keyStage).
-- The 2-lesson variant contains a subset of the 8-lesson variant (the "checking and securing" lessons).
-- Lesson records themselves are byte-for-byte identical when they appear in both variants.
+| Category | Count | Explanation |
+|----------|-------|-------------|
+| **Legitimate duplicates** | 210 | Lessons shared between BOTH tier variants (foundation + higher) |
+| **Spurious duplicates** | 163 | Lessons in ONE tier only, incorrectly duplicated in `lessons[]` array |
 
-**Root cause**: Maths secondary is the only subject that:
+#### Unit-Level Structure
 
-1. Has KS4 content with tier variants (foundation/higher)
-2. **Lacks explicit tier metadata** in the bulk download
+Maths secondary has 30 unit slugs that appear twice (66 unit entries, 36 unique):
 
-**Comparison with other subjects** (2025-12-24):
+- **26 units** have **different lesson lists** — higher tier has more lessons
+- **4 units** have **identical lesson lists** — same content in both tiers
 
-| Subject | Has `examBoards` field | Duplicate unit slugs | Variant handling |
-|---------|------------------------|---------------------|------------------|
-| maths-secondary | **NO** | **30** | Implicit (different lesson lists) |
-| science-secondary | YES | 0 | Explicit (`examBoards` array) |
-| english-secondary | YES | 0 | Explicit |
-| All other secondary | YES | 0 | Explicit |
-| All primary | NO | 0 | No variants |
+Example: `algebraic-manipulation` appears twice:
+- Occurrence 1: 16 lessons (higher tier content)
+- Occurrence 2: 13 lessons (foundation tier content)
+- 9 lessons shared, 7 higher-only, 4 foundation-only
 
-Impact:
+#### Spurious Duplicates (Data Quality Issue)
 
-- Maths-secondary requires **variant-aware processing** that other subjects do not.
-- Cannot programmatically distinguish foundation vs higher without analysing lesson list composition.
-- For vocabulary mining: use composite keys or merge variants.
+163 lessons appear twice in `lessons[]` but only exist in ONE unit variant:
+
+```
+Example: solving-complex-quadratic-equations-by-completing-the-square
+- In lessons[] array: 2 times
+- In unit variants: 1 time (algebraic-manipulation higher only)
+```
+
+This is a **data quality issue** in the bulk download — the `lessons[]` array incorrectly duplicates tier-specific lessons.
+
+#### Tier Coverage from API (100%)
+
+**Investigation confirmed** (2025-12-30) that the API provides complete tier information:
+
+| Metric | Value |
+|--------|-------|
+| Unique KS4 units in bulk | 36 |
+| Units with tier info from API | 36 ✅ |
+| Unique KS4 lessons in bulk | 436 |
+| Lessons with tier derivable | 436 ✅ |
+
+**Tier distribution**:
+- 30 units in BOTH tiers → lessons get `tiers: ['foundation', 'higher']`
+- 6 units HIGHER only → `circle-theorems`, `non-right-angled-trigonometry`, `functions-and-proof`, `iteration`, `graphical-representations-of-data-cumulative-frequency-and-histograms`, `transformations-of-graphs`
+- 0 units foundation only
+
+#### Solution
+
+1. **Deduplicate** lessons by `lessonSlug` (simple deduplication handles both legitimate and spurious)
+2. **Derive tiers** from API unit→tier map: `lesson.unitSlug` → `unitTierMap` → `tiers[]`
+3. **Do NOT** infer tiers from duplicate count — bulk data unreliable for this
 
 **Requested upstream fix**: Add explicit `tier` field to maths-secondary bulk download:
 

@@ -7,7 +7,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { extractSubjectPhase } from './bulk-reader.js';
+import { extractSubjectPhase } from './reader.js';
 
 describe('extractSubjectPhase', () => {
   it('extracts subject and phase from filename', () => {

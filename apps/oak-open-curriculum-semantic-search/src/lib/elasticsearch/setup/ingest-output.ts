@@ -104,3 +104,38 @@ export async function writeMetadata(
 export function printDryRunNotice(): void {
   ingestLogger.info('Dry run complete', { action: 'No documents written to ES' });
 }
+
+/**
+ * Handle post-ingestion metadata write and error reporting.
+ *
+ * @param args - CLI arguments
+ * @param result - Ingestion result
+ * @param duration - Duration in seconds
+ */
+export async function handlePostIngestion(
+  args: CliArgs,
+  result: IngestionResult,
+  duration: string,
+): Promise<void> {
+  if (args.dryRun) {
+    printDryRunNotice();
+    return;
+  }
+
+  const metadataResult = await writeMetadata(args, result, duration);
+
+  if (isErr(metadataResult)) {
+    const error = metadataResult.error;
+    const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
+    ingestLogger.error('FATAL: Metadata write failed', {
+      errorType: error.type,
+      message: errorMessage,
+      phase: 'post_ingestion',
+      impact: 'Documents indexed but audit trail incomplete',
+      ...(error.type === 'mapping_error' && { field: error.field }),
+      ...(error.type === 'validation_error' && { details: error.details }),
+    });
+
+    process.exit(1);
+  }
+}

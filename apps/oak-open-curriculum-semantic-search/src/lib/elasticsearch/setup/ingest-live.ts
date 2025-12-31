@@ -2,15 +2,16 @@
 /**
  * Live data ingestion CLI - canonical way to ingest curriculum data into Elasticsearch.
  *
- * Usage: `pnpm es:ingest-live --all --verbose`
+ * Supports two modes:
+ * - API mode (default): `pnpm es:ingest-live --all --verbose`
+ * - Bulk mode: `pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --verbose`
  *
  * @see operations/ingestion/README.md for full documentation
- * @see ADR-080, ADR-087 for architecture decisions
+ * @see ADR-080, ADR-087, ADR-093 for architecture decisions
  */
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isErr } from '@oaknational/result';
 import { loadAppEnv } from './load-app-env.js';
 import { clearSdkCache } from '../../../adapters/oak-adapter.js';
 import { createIngestHarness } from '../../indexing/ingest-harness.js';
@@ -27,10 +28,10 @@ import {
   printHeader,
   printSummary,
   printCacheStats,
-  printDryRunNotice,
-  writeMetadata,
+  handlePostIngestion,
 } from './ingest-output.js';
 import { withRateLimitMonitoring } from '../../rate-limit-logger.js';
+import { printBulkHeader, executeBulkIngestion } from './ingest-bulk.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -55,6 +56,16 @@ async function handleCacheClearing(args: CliArgs): Promise<void> {
   }
 }
 
+/** Configure ingestion mode based on --force flag. */
+function configureIngestionMode(args: CliArgs): void {
+  const ingestionMode = args.force ? 'force' : 'incremental';
+  setIngestionMode(ingestionMode);
+  ingestLogger.info('Ingestion mode configured', {
+    mode: ingestionMode,
+    behavior: args.force ? 'overwrite existing documents' : 'skip existing documents (resumable)',
+  });
+}
+
 /** Execute ingestion and return result with duration. */
 async function executeIngestion(
   harness: ReturnType<typeof createIngestHarness> extends Promise<infer U> ? U : never,
@@ -73,48 +84,11 @@ async function executeIngestion(
   return { result, duration };
 }
 
-/** Handle post-ingestion metadata write and error reporting. */
-async function handlePostIngestion(
-  args: CliArgs,
-  result: IngestionResult,
-  duration: string,
-): Promise<void> {
-  if (args.dryRun) {
-    printDryRunNotice();
-    return;
-  }
-
-  const metadataResult = await writeMetadata(args, result, duration);
-
-  if (isErr(metadataResult)) {
-    const error = metadataResult.error;
-    const errorMessage = error.type === 'not_found' ? 'Index metadata not found' : error.message;
-    ingestLogger.error('FATAL: Metadata write failed', {
-      errorType: error.type,
-      message: errorMessage,
-      phase: 'post_ingestion',
-      impact: 'Documents indexed but audit trail incomplete',
-      ...(error.type === 'mapping_error' && { field: error.field }),
-      ...(error.type === 'validation_error' && { details: error.details }),
-    });
-
-    process.exit(1);
-  }
-}
-
-/** Execute the main ingestion workflow. */
-async function runIngestion(args: CliArgs): Promise<void> {
+/** Execute the main API-based ingestion workflow. */
+async function runApiIngestion(args: CliArgs): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
-
-  // Set ingestion mode based on --force flag
-  const ingestionMode = args.force ? 'force' : 'incremental';
-  setIngestionMode(ingestionMode);
-  ingestLogger.info('Ingestion mode configured', {
-    mode: ingestionMode,
-    behavior: args.force ? 'overwrite existing documents' : 'skip existing documents (resumable)',
-  });
-
+  configureIngestionMode(args);
   await handleCacheClearing(args);
 
   const client = await createIngestionClient({
@@ -155,6 +129,48 @@ async function runIngestion(args: CliArgs): Promise<void> {
 }
 
 /**
+ * Execute bulk-first ingestion workflow.
+ *
+ * @remarks
+ * Uses bulk download files as primary data source with API supplementation
+ * for KS4 tier enrichment. Rate limiting applies only to API calls within
+ * buildKs4SupplementationContext, not to bulk file I/O or ES dispatch.
+ *
+ * @see ADR-093 Bulk-First Ingestion Strategy
+ */
+async function runBulkIngestion(args: CliArgs): Promise<void> {
+  resetIngestionErrorCollector();
+  printBulkHeader(args);
+  configureIngestionMode(args);
+  await handleCacheClearing(args);
+
+  const client = await createIngestionClient({
+    bypassCache: args.bypassCache,
+    ignoreCached404: args.ignoreCached404,
+  });
+
+  try {
+    const { result, duration } = await executeBulkIngestion(args, client);
+    if (!args.dryRun) {
+      const errorCollector = getIngestionErrorCollector();
+      errorCollector.logSummary(ingestLogger);
+      await handlePostIngestion(args, result, duration);
+    }
+  } finally {
+    await client.disconnect();
+  }
+}
+
+/** Execute the main ingestion workflow (routes to API or bulk mode). */
+async function runIngestion(args: CliArgs): Promise<void> {
+  if (args.bulk) {
+    await runBulkIngestion(args);
+  } else {
+    await runApiIngestion(args);
+  }
+}
+
+/**
  * Generates a timestamped log file path.
  *
  * @returns Log file path in format: logs/ingest-YYYYMMDD-HHMMSS.log
@@ -183,8 +199,10 @@ async function main(): Promise<void> {
   if (logPath !== null) {
     ingestLogger.info('INGESTION_STARTED', {
       logFile: logPath,
-      subjects: args.subjects.join(','),
-      keyStages: args.keyStages.join(','),
+      mode: args.bulk ? 'bulk' : 'api',
+      ...(args.bulk
+        ? { bulkDir: args.bulkDir }
+        : { subjects: args.subjects.join(','), keyStages: args.keyStages.join(',') }),
     });
   }
 

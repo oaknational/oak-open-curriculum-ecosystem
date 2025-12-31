@@ -20,14 +20,14 @@ import {
 } from './index.js';
 
 describe('nullSentinelSchema', () => {
-  it('transforms string "NULL" to undefined', () => {
+  it('transforms string "NULL" to null', () => {
     const result = nullSentinelSchema.parse('NULL');
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 
-  it('transforms null to undefined', () => {
+  it('keeps null as null', () => {
     const result = nullSentinelSchema.parse(null);
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 
   it('passes through regular strings', () => {
@@ -96,8 +96,8 @@ describe('lessonSchema', () => {
 
     const result = lessonSchema.parse(input);
 
-    expect(result.contentGuidance).toBeUndefined();
-    expect(result.supervisionLevel).toBeUndefined();
+    expect(result.contentGuidance).toBeNull();
+    expect(result.supervisionLevel).toBeNull();
     expect(result.lessonSlug).toBe('adding-fractions');
   });
 
