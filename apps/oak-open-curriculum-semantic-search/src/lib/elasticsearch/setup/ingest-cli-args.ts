@@ -1,26 +1,30 @@
 #!/usr/bin/env npx tsx
-/* eslint max-lines:[error, 300] -- JC: keeping the CLI args parsing simple and readable */
 /**
- * CLI argument parsing for live data ingestion. Handles
- * parsing of subject, keystage, and flag arguments with validation.
+ * CLI argument parsing for live data ingestion.
  *
+ * @remarks
+ * Handles parsing of subject, keystage, and flag arguments with validation.
  * Subject and key stage values are derived from the OpenAPI schema via the SDK.
  * Use --all to ingest all subjects, or --subject to specify individual subjects.
+ *
+ * @module ingest-cli-args
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
-import { SEARCH_INDEX_KINDS, type SearchIndexKind } from '../../search-index-target.js';
+import type { SearchIndexKind } from '../../search-index-target.js';
+import { KEY_STAGES, SUBJECTS } from '@oaknational/oak-curriculum-sdk';
 import {
-  isKeyStage as isValidKeyStage,
-  isSubject as isValidSubject,
-  KEY_STAGES,
-  SUBJECTS,
-} from '@oaknational/oak-curriculum-sdk';
+  processValueArg,
+  processBulkDirArg,
+  processMaxRetriesArg,
+  processRetryDelayArg,
+} from './ingest-cli-processors.js';
 
-/** Available key stages for validation (from schema). */
+// Re-export help functions
+export { printHelp } from './ingest-cli-help.js';
+
+/** Available key stages and subjects from schema. */
 const ALL_KEY_STAGES = KEY_STAGES;
-
-/** All subjects from schema (17 total). */
 const ALL_SUBJECTS = SUBJECTS;
 
 /** Parsed CLI arguments for ingestion. */
@@ -36,25 +40,11 @@ export interface CliArgs {
   readonly bypassCache: boolean;
   readonly force: boolean;
   readonly ignoreCached404: boolean;
-  /** Enable bulk-first ingestion mode (uses bulk download files). */
   readonly bulk: boolean;
-  /** Directory containing bulk download files (required when --bulk is used). */
   readonly bulkDir: string | undefined;
-}
-
-/** Type guard for valid key stage values. */
-function isKeyStage(value: string): value is KeyStage {
-  return isValidKeyStage(value);
-}
-
-/** Type guard for valid subject values. */
-function isSearchSubject(value: string): value is SearchSubjectSlug {
-  return isValidSubject(value);
-}
-
-/** Type guard for valid index kind values. */
-function isSearchIndexKind(value: string): value is SearchIndexKind {
-  return SEARCH_INDEX_KINDS.some((kind) => kind === value);
+  readonly maxRetries: number | undefined;
+  readonly retryDelay: number | undefined;
+  readonly noRetry: boolean;
 }
 
 /** Flag container for CLI argument parsing. */
@@ -68,6 +58,7 @@ interface FlagContainer {
   force: boolean;
   ignoreCached404: boolean;
   bulk: boolean;
+  noRetry: boolean;
 }
 
 /** Flag names that can be set via CLI arguments. */
@@ -87,9 +78,10 @@ const FLAG_ARG_MAP: ReadonlyMap<string, FlagName> = new Map([
   ['-f', 'force'],
   ['--ignore-cached-404', 'ignoreCached404'],
   ['--bulk', 'bulk'],
+  ['--no-retry', 'noRetry'],
 ]);
 
-/** Process a single flag argument (--help, --dry-run, --all, etc). */
+/** Process a single flag argument. */
 function processFlag(arg: string, flags: FlagContainer): boolean {
   const flagName = FLAG_ARG_MAP.get(arg);
   if (flagName !== undefined) {
@@ -99,90 +91,7 @@ function processFlag(arg: string, flags: FlagContainer): boolean {
   return false;
 }
 
-/** Process --subject argument. Returns 1 if value consumed. */
-function processSubjectArg(
-  arg: string,
-  nextArg: string | undefined,
-  subjects: SearchSubjectSlug[],
-): number {
-  if (arg !== '--subject' || !nextArg) {
-    return 0;
-  }
-  if (!isSearchSubject(nextArg)) {
-    throw new Error(`Invalid subject: ${nextArg}`);
-  }
-  subjects.push(nextArg);
-  return 1;
-}
-
-/** Process --keystage argument. Returns 1 if value consumed. */
-function processKeyStageArg(
-  arg: string,
-  nextArg: string | undefined,
-  keyStages: KeyStage[],
-): number {
-  if (arg !== '--keystage' || !nextArg) {
-    return 0;
-  }
-  if (!isKeyStage(nextArg)) {
-    throw new Error(`Invalid key stage: ${nextArg}. Valid values: ${ALL_KEY_STAGES.join(', ')}`);
-  }
-  keyStages.push(nextArg);
-  return 1;
-}
-
-/** Process --index argument. Returns 1 if value consumed. */
-function processIndexArg(
-  arg: string,
-  nextArg: string | undefined,
-  indexes: SearchIndexKind[],
-): number {
-  if (arg !== '--index' || !nextArg) {
-    return 0;
-  }
-  if (!isSearchIndexKind(nextArg)) {
-    throw new Error(
-      `Invalid index kind: ${nextArg}. Valid values: ${SEARCH_INDEX_KINDS.join(', ')}`,
-    );
-  }
-  indexes.push(nextArg);
-  return 1;
-}
-
-/** Process --bulk-dir argument. Returns 1 if value consumed. */
-function processBulkDirArg(
-  arg: string,
-  nextArg: string | undefined,
-  bulkDirRef: { value: string | undefined },
-): number {
-  if (arg !== '--bulk-dir' || !nextArg) {
-    return 0;
-  }
-  bulkDirRef.value = nextArg;
-  return 1;
-}
-
-/** Process a value argument (--subject, --keystage, --index). Returns 1 if value consumed. */
-function processValueArg(
-  arg: string,
-  nextArg: string | undefined,
-  subjects: SearchSubjectSlug[],
-  keyStages: KeyStage[],
-  indexes: SearchIndexKind[],
-): number {
-  return (
-    processSubjectArg(arg, nextArg, subjects) ||
-    processKeyStageArg(arg, nextArg, keyStages) ||
-    processIndexArg(arg, nextArg, indexes)
-  );
-}
-
-/**
- * Resolve subjects based on --all flag and explicit --subject args.
- *
- * @throws Error if neither --all nor --subject is specified
- * @throws Error if --all is combined with --subject
- */
+/** Resolve subjects based on --all flag and explicit --subject args. */
 function resolveSubjects(
   explicitSubjects: readonly SearchSubjectSlug[],
   allFlag: boolean,
@@ -199,13 +108,9 @@ function resolveSubjects(
   return [...explicitSubjects];
 }
 
-/** Parse CLI arguments into structured CliArgs. */
-export function parseArgs(args: readonly string[]): CliArgs {
-  const subjects: SearchSubjectSlug[] = [];
-  const keyStages: KeyStage[] = [];
-  const indexes: SearchIndexKind[] = [];
-  const bulkDirRef: { value: string | undefined } = { value: undefined };
-  const flags: FlagContainer = {
+/** Initial state for flag container. */
+function createInitialFlags(): FlagContainer {
+  return {
     dryRun: false,
     verbose: false,
     help: false,
@@ -215,20 +120,62 @@ export function parseArgs(args: readonly string[]): CliArgs {
     force: false,
     ignoreCached404: false,
     bulk: false,
+    noRetry: false,
   };
+}
 
+/** Process all arguments in a single pass. */
+function processAllArgs(
+  args: readonly string[],
+  subjects: SearchSubjectSlug[],
+  keyStages: KeyStage[],
+  indexes: SearchIndexKind[],
+  bulkDirRef: { value: string | undefined },
+  maxRetriesRef: { value: number | undefined },
+  retryDelayRef: { value: number | undefined },
+  flags: FlagContainer,
+): void {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     const nextArg = args[i + 1];
+
     if (processFlag(arg, flags)) {
       continue;
     }
-    const bulkDirConsumed = processBulkDirArg(arg, nextArg, bulkDirRef);
-    if (bulkDirConsumed > 0) {
-      i += bulkDirConsumed;
-      continue;
+
+    const consumed =
+      processBulkDirArg(arg, nextArg, bulkDirRef) ||
+      processMaxRetriesArg(arg, nextArg, maxRetriesRef) ||
+      processRetryDelayArg(arg, nextArg, retryDelayRef) ||
+      processValueArg(arg, nextArg, subjects, keyStages, indexes);
+
+    if (consumed > 0) {
+      i += consumed;
     }
-    i += processValueArg(arg, nextArg, subjects, keyStages, indexes);
+  }
+}
+
+/** Build CliArgs from parsed components. */
+function buildCliArgs(
+  subjects: SearchSubjectSlug[],
+  keyStages: KeyStage[],
+  indexes: SearchIndexKind[],
+  bulkDirRef: { value: string | undefined },
+  maxRetriesRef: { value: number | undefined },
+  retryDelayRef: { value: number | undefined },
+  flags: FlagContainer,
+): CliArgs {
+  // Skip validation for help mode
+  if (flags.help) {
+    return {
+      subjects: [],
+      keyStages: [...ALL_KEY_STAGES],
+      indexes,
+      bulkDir: bulkDirRef.value,
+      maxRetries: maxRetriesRef.value,
+      retryDelay: retryDelayRef.value,
+      ...flags,
+    };
   }
 
   // Validate bulk mode requirements
@@ -241,59 +188,50 @@ export function parseArgs(args: readonly string[]): CliArgs {
     keyStages: keyStages.length > 0 ? keyStages : [...ALL_KEY_STAGES],
     indexes,
     bulkDir: bulkDirRef.value,
+    maxRetries: maxRetriesRef.value,
+    retryDelay: retryDelayRef.value,
     ...flags,
   };
 }
 
-/** Generate CLI help text. */
-function generateHelpText(): string {
-  const subjectList = ALL_SUBJECTS.join(', ');
-  return `
-Live Data Ingestion CLI
-
-Usage: npx tsx src/lib/elasticsearch/setup/ingest-live.ts [options]
-
-Subject Selection (REQUIRED for API mode):
-  --subject <slug>    Subject to ingest (can repeat for multiple subjects)
-  --all               Ingest ALL subjects (${ALL_SUBJECTS.length} total)
-
-Bulk Mode (alternative to subject selection):
-  --bulk              Use bulk download files instead of API
-  --bulk-dir <path>   Directory containing bulk download JSON files (required with --bulk)
-
-Options:
-  --keystage <ks>     Key stage to ingest (can repeat, defaults to all: ks1-ks4)
-  --index <kind>      Index to ingest (can repeat, defaults to all)
-  --dry-run           Preview without writing to ES
-  --force, -f         Force overwrite existing documents (default: skip existing)
-  --clear-cache       Clear SDK response cache before ingestion
-  --bypass-cache      Continue without Redis cache (default: fail if cache unavailable)
-  --ignore-cached-404 Ignore cached 404 responses (re-fetch transcripts that were missing)
-  --verbose, -v       Show detailed output
-  --help, -h          Show this help message
-
-Available Subjects: ${subjectList}
-
-Ingestion Modes:
-  - API (default): Fetches data from Oak API. Use --subject or --all to specify subjects.
-  - Bulk (--bulk): Uses pre-downloaded bulk JSON files. Faster and includes all data.
-    Bulk mode extracts lessons, units, and threads from downloaded curriculum files.
-
-Incremental vs Force:
-  - Incremental (default): Only creates new documents. Safe for resuming.
-  - Force (--force): Overwrites all documents. Use after schema changes.
-
-Examples:
-  --subject history --keystage ks2    # Single subject via API
-  --all --force                       # Full refresh via API
-  --bulk --bulk-dir ./bulk-downloads  # Bulk ingestion from downloaded files
-  --bulk --bulk-dir ./bulk --dry-run  # Preview bulk ingestion
-
-Environment: ELASTICSEARCH_URL, ELASTICSEARCH_API_KEY, OAK_API_KEY in .env.local
-`;
+/** Reference container for optional string value. */
+interface StringRef {
+  value: string | undefined;
 }
 
-/** Print CLI help text to console. Uses console.log as this is program output, not logging. */
-export function printHelp(): void {
-  console.log(generateHelpText());
+/** Reference container for optional number value. */
+interface NumberRef {
+  value: number | undefined;
+}
+
+/** Parse CLI arguments into structured CliArgs. */
+export function parseArgs(args: readonly string[]): CliArgs {
+  const subjects: SearchSubjectSlug[] = [];
+  const keyStages: KeyStage[] = [];
+  const indexes: SearchIndexKind[] = [];
+  const bulkDirRef: StringRef = { value: undefined };
+  const maxRetriesRef: NumberRef = { value: undefined };
+  const retryDelayRef: NumberRef = { value: undefined };
+  const flags = createInitialFlags();
+
+  processAllArgs(
+    args,
+    subjects,
+    keyStages,
+    indexes,
+    bulkDirRef,
+    maxRetriesRef,
+    retryDelayRef,
+    flags,
+  );
+
+  return buildCliArgs(
+    subjects,
+    keyStages,
+    indexes,
+    bulkDirRef,
+    maxRetriesRef,
+    retryDelayRef,
+    flags,
+  );
 }

@@ -22,6 +22,8 @@
     "es:setup": "tsx src/lib/elasticsearch/setup/cli.ts setup",
     "es:status": "tsx src/lib/elasticsearch/setup/cli.ts status",
     "es:ingest-live": "tsx src/lib/elasticsearch/setup/ingest-live.ts",
+    "diagnose:elser": "tsx scripts/diagnose-elser-failures.ts",
+    "analyze:elser": "tsx scripts/analyze-elser-failures.ts",
     "ingest:verify": "tsx operations/ingestion/verify-ingestion.ts",
     "eval:diagnostic": "tsx evaluation/analysis/analyze-diagnostic-queries.ts",
     "eval:per-category": "tsx evaluation/analysis/analyze-per-category.ts",

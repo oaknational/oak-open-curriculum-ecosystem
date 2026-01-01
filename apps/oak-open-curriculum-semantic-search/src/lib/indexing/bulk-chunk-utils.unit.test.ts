@@ -11,8 +11,10 @@ import {
   calculatePairSize,
   chunkOperations,
   createNdjson,
+  extractFailedOperations,
   extractOperationPairs,
   flattenPairs,
+  isRetryableError,
   MAX_CHUNK_SIZE_BYTES,
   DEFAULT_CHUNK_DELAY_MS,
   MAX_RETRY_ATTEMPTS,
@@ -32,6 +34,7 @@ function createTestLessonDoc(slug: string): SearchLessonsIndexDoc {
     unit_ids: ['test-unit'],
     unit_titles: ['Test Unit'],
     unit_urls: ['https://example.com/units/test-unit'],
+    has_transcript: true,
     lesson_content: `Content for ${slug}`,
     lesson_url: `https://example.com/lessons/${slug}`,
     doc_type: 'lesson',
@@ -47,12 +50,12 @@ function createIndexAction(id: string): BulkIndexAction {
 
 describe('bulk-chunk-utils', () => {
   describe('constants', () => {
-    it('has MAX_CHUNK_SIZE_BYTES set to 20MB', () => {
-      expect(MAX_CHUNK_SIZE_BYTES).toBe(20 * 1024 * 1024);
+    it('has MAX_CHUNK_SIZE_BYTES set to 10MB (reduced to prevent ELSER queue overflow)', () => {
+      expect(MAX_CHUNK_SIZE_BYTES).toBe(10 * 1024 * 1024);
     });
 
-    it('has DEFAULT_CHUNK_DELAY_MS set to 500ms', () => {
-      expect(DEFAULT_CHUNK_DELAY_MS).toBe(500);
+    it('has DEFAULT_CHUNK_DELAY_MS set to 2000ms (increased to allow ELSER queue drainage)', () => {
+      expect(DEFAULT_CHUNK_DELAY_MS).toBe(2000);
     });
 
     it('has MAX_RETRY_ATTEMPTS set to 3', () => {
@@ -254,6 +257,156 @@ describe('bulk-chunk-utils', () => {
 
     it('handles empty array', () => {
       expect(createNdjson([])).toBe('\n');
+    });
+  });
+
+  describe('isRetryableError', () => {
+    // Retryable status codes
+    it('returns true for status 429 (rate limit / ELSER queue overflow)', () => {
+      expect(isRetryableError(429, 'inference_exception')).toBe(true);
+    });
+
+    it('returns true for status 502 (bad gateway)', () => {
+      expect(isRetryableError(502, 'bad_gateway')).toBe(true);
+    });
+
+    it('returns true for status 503 (service unavailable)', () => {
+      expect(isRetryableError(503, 'service_unavailable')).toBe(true);
+    });
+
+    it('returns true for status 504 (gateway timeout)', () => {
+      expect(isRetryableError(504, 'gateway_timeout')).toBe(true);
+    });
+
+    // Non-retryable status codes
+    it('returns false for status 400 (bad request / mapping error)', () => {
+      expect(isRetryableError(400, 'mapper_parsing_exception')).toBe(false);
+    });
+
+    it('returns false for status 404 (not found)', () => {
+      expect(isRetryableError(404, 'index_not_found_exception')).toBe(false);
+    });
+
+    it('returns false for status 409 (version conflict)', () => {
+      expect(isRetryableError(409, 'version_conflict_engine_exception')).toBe(false);
+    });
+
+    it('returns false for status 200 (success)', () => {
+      expect(isRetryableError(200, '')).toBe(false);
+    });
+  });
+
+  describe('extractFailedOperations', () => {
+    it('returns empty array when no failures', () => {
+      const ops: BulkOperations = [
+        createIndexAction('doc-1'),
+        createTestLessonDoc('doc-1'),
+        createIndexAction('doc-2'),
+        createTestLessonDoc('doc-2'),
+      ];
+      const response = {
+        errors: false,
+        items: [
+          { index: { _index: 'oak_lessons', _id: 'doc-1', status: 200 } },
+          { index: { _index: 'oak_lessons', _id: 'doc-2', status: 200 } },
+        ],
+      };
+
+      const failed = extractFailedOperations(response, ops);
+      expect(failed).toHaveLength(0);
+    });
+
+    it('returns operations for retryable failures (inference_exception)', () => {
+      const ops: BulkOperations = [
+        createIndexAction('doc-1'),
+        createTestLessonDoc('doc-1'),
+        createIndexAction('doc-2'),
+        createTestLessonDoc('doc-2'),
+      ];
+      const response = {
+        errors: true,
+        items: [
+          { index: { _index: 'oak_lessons', _id: 'doc-1', status: 200 } },
+          {
+            index: {
+              _index: 'oak_lessons',
+              _id: 'doc-2',
+              status: 429,
+              error: { type: 'inference_exception', reason: 'Queue full' },
+            },
+          },
+        ],
+      };
+
+      const failed = extractFailedOperations(response, ops);
+      // Should contain action + doc for doc-2
+      expect(failed).toHaveLength(2);
+      expect(failed[0]).toEqual(createIndexAction('doc-2'));
+    });
+
+    it('excludes non-retryable failures (mapping exception)', () => {
+      const ops: BulkOperations = [
+        createIndexAction('doc-1'),
+        createTestLessonDoc('doc-1'),
+        createIndexAction('doc-2'),
+        createTestLessonDoc('doc-2'),
+      ];
+      const response = {
+        errors: true,
+        items: [
+          {
+            index: {
+              _index: 'oak_lessons',
+              _id: 'doc-1',
+              status: 400,
+              error: { type: 'mapper_parsing_exception', reason: 'Bad field' },
+            },
+          },
+          { index: { _index: 'oak_lessons', _id: 'doc-2', status: 200 } },
+        ],
+      };
+
+      const failed = extractFailedOperations(response, ops);
+      // Should NOT include doc-1 since mapping errors are not retryable
+      expect(failed).toHaveLength(0);
+    });
+
+    it('handles mixed success, retryable failure, and non-retryable failure', () => {
+      const ops: BulkOperations = [
+        createIndexAction('doc-1'),
+        createTestLessonDoc('doc-1'),
+        createIndexAction('doc-2'),
+        createTestLessonDoc('doc-2'),
+        createIndexAction('doc-3'),
+        createTestLessonDoc('doc-3'),
+      ];
+      const response = {
+        errors: true,
+        items: [
+          { index: { _index: 'oak_lessons', _id: 'doc-1', status: 200 } }, // success
+          {
+            index: {
+              _index: 'oak_lessons',
+              _id: 'doc-2',
+              status: 429,
+              error: { type: 'inference_exception', reason: 'Queue full' },
+            },
+          }, // retryable
+          {
+            index: {
+              _index: 'oak_lessons',
+              _id: 'doc-3',
+              status: 400,
+              error: { type: 'mapper_parsing_exception', reason: 'Bad' },
+            },
+          }, // not retryable
+        ],
+      };
+
+      const failed = extractFailedOperations(response, ops);
+      // Only doc-2 should be retried
+      expect(failed).toHaveLength(2);
+      expect(failed[0]).toEqual(createIndexAction('doc-2'));
     });
   });
 });

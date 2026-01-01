@@ -100,9 +100,9 @@ This proposal is about package boundaries, but it’s grounded in the Elasticsea
 
 Internal repo research already documents these decisions and empirical evaluation:
 
-- `.agent/research/elasticsearch/assumptions-validation.md`
-- `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
-- `.agent/research/elasticsearch/bm25-elser-rrf-rerank.md`
+- `.agent/research/elasticsearch/system/assumptions-validation.md`
+- `.agent/research/elasticsearch/system/hybrid-search-reranking-evaluation.md`
+- `.agent/research/elasticsearch/archive/bm25-elser-rrf-rerank.md`
 
 This document does not re-evaluate ranking; it focuses on where the code should live to maximise reuse, maintainability, and MCP integration.
 
@@ -335,12 +335,11 @@ The tool docs become the place where NL heuristics live, and the SDK remains det
 Even though we are not building a UI now, it’s worth explicitly capturing the “future UI” design space with @Elasticsearch references:
 
 - **Elastic Search UI (React)**: Elastic’s `search-ui` is a reusable UI framework for search experiences.
+  - Search UI reference: [@Elasticsearch: Search UI](https://www.elastic.co/docs/reference/search-ui)
   - Start guide (website search): [@Elasticsearch: Website Search quick start](https://www.elastic.co/guide/en/enterprise-search/current/website-search-start.html)
-  - App Search React reference UI: [@Elasticsearch: App Search React Reference UI](https://www.elastic.co/guide/en/app-search/current/reference-ui-react.html)
 - **Search Applications (Elasticsearch-native)**: a way to define a “search application” over indices and query templates, potentially providing a stable contract for a UI connector.
-  - Overview: [@Elasticsearch: Search applications](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-application-overview.html)
-  - APIs: [@Elasticsearch: Search application APIs](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-application-apis.html)
-  - Search endpoint: [@Elasticsearch: Search application search API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-application-search-api.html)
+  - Overview: [@Elasticsearch: Search applications](https://www.elastic.co/docs/solutions/search/search-applications)
+  - Search endpoint: [@Elasticsearch: Search application search API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-search-application-search)
 
 Fit notes (important):
 
@@ -432,6 +431,7 @@ Run the full repo quality gate sequence one gate at a time, from repo root, afte
 This document should be read alongside:
 
 - `.agent/research/elasticsearch/README.md` (index of research)
-- `.agent/research/elasticsearch/assumptions-validation.md` (field/mapping correctness checks)
-- `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md` (ranking + latency evaluation)
-- `.agent/research/elasticsearch/elastic-mcp-integration-evaluation.md` (MCP integration options)
+- `.agent/research/elasticsearch/system/assumptions-validation.md` (field/mapping correctness checks)
+- `.agent/research/elasticsearch/system/hybrid-search-reranking-evaluation.md` (ranking + latency evaluation)
+- `.agent/research/elasticsearch/methods/mcp-agent-integration.md` (current MCP patterns)
+- `.agent/research/elasticsearch/archive/elastic-mcp-integration-evaluation.md` (historical evaluation)

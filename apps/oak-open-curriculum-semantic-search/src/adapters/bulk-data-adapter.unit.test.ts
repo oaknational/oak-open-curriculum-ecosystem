@@ -250,7 +250,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
   });
 
-  it('uses empty string for missing transcript', () => {
+  it('omits content fields and sets has_transcript to false when transcript is missing', () => {
     const lesson = createMockLesson({ transcript_sentences: undefined });
     const params: BulkToESLessonParams = {
       lesson,
@@ -260,8 +260,12 @@ describe('transformBulkLessonToESDoc', () => {
 
     const doc = transformBulkLessonToESDoc(params);
 
-    // lesson_content is required, must have a fallback
-    expect(doc.lesson_content).toBe('[No transcript available]');
+    // Content fields omitted to avoid polluting BM25/ELSER indexes (ADR-095)
+    expect(doc.has_transcript).toBe(false);
+    expect(doc.lesson_content).toBeUndefined();
+    expect(doc.lesson_content_semantic).toBeUndefined();
+    // Structure fields should still be populated
+    expect(doc.lesson_structure).toBeDefined();
   });
 });
 

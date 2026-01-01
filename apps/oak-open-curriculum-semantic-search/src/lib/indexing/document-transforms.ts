@@ -111,7 +111,13 @@ export interface LessonUnitInfo {
 
 export interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
-  transcript: string;
+  /**
+   * Lesson transcript text. When undefined, null, or empty, content fields are
+   * omitted from the document to avoid polluting BM25/ELSER indexes.
+   *
+   * @see ADR-095 for rationale on conditional field inclusion
+   */
+  transcript: string | undefined | null;
   summary: SearchLessonSummary;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -155,11 +161,25 @@ function extractDerivedLessonFields(params: CreateLessonDocumentParams): {
   return { primaryUnitSlug, f, ks4, sem, unitArrays };
 }
 
-/** Creates a lesson document for Elasticsearch indexing. */
+/**
+ * Creates a lesson document for Elasticsearch indexing.
+ *
+ * Content fields (`lesson_content`, `lesson_content_semantic`) are conditionally
+ * included based on transcript availability. This prevents placeholder text from
+ * polluting the BM25 index and wasting ELSER inference.
+ *
+ * Structure fields (`lesson_structure`, `lesson_structure_semantic`) are always
+ * populated from pedagogical metadata.
+ *
+ * @see ADR-094 for `has_transcript` field rationale
+ * @see ADR-095 for conditional field inclusion rationale
+ */
 export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
   const { lesson, transcript, subject, keyStage, years, lessonCount } = params;
   const { f, ks4, sem, unitArrays } = extractDerivedLessonFields(params);
   const { unitIds, unitTitles, unitUrls } = unitArrays;
+
+  const hasTranscript = typeof transcript === 'string' && transcript.length > 0;
 
   return {
     lesson_id: lesson.lessonSlug,
@@ -179,9 +199,12 @@ export function createLessonDocument(params: CreateLessonDocumentParams): Search
     misconceptions_and_common_mistakes: f.misconceptions,
     teacher_tips: f.teacherTips,
     content_guidance: f.contentGuidance,
-    lesson_content: transcript,
+    has_transcript: hasTranscript,
+    // Only include content fields if transcript exists
+    lesson_content: hasTranscript ? transcript : undefined,
+    lesson_content_semantic: hasTranscript ? transcript : undefined,
+    // Structure fields always populated from pedagogical data
     lesson_structure: sem,
-    lesson_content_semantic: transcript,
     lesson_structure_semantic: sem,
     lesson_url: f.canonicalUrl,
     pupil_lesson_outcome: f.pupilLessonOutcome,

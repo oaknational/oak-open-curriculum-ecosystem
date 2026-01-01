@@ -16,7 +16,7 @@ import { buildLessonRrfRequest } from './rrf-query-builders';
  * @param doHighlight - Whether to include transcript highlights
  * @returns Search results with lessons, scores, and metadata
  *
- * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
+ * @see `.agent/research/elasticsearch/methods/hybrid-retrieval.md`
  */
 export async function runLessonsSearch(
   q: StructuredQuery,

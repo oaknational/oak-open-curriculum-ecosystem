@@ -13,13 +13,24 @@ import type { BulkOperationEntry, BulkOperations } from './bulk-operation-types'
  * Maximum chunk size in bytes for bulk uploads.
  *
  * @remarks
- * Reduced from 50MB to 20MB to prevent ELSER inference memory pressure.
- * Smaller chunks allow the ELSER queue to drain between uploads.
+ * Set to 10MB based on ELSER characterisation testing (2026-01-01).
+ * Smaller chunks reduce queue pressure and allow better retry granularity.
+ *
+ * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
  */
-export const MAX_CHUNK_SIZE_BYTES = 20 * 1024 * 1024;
+export const MAX_CHUNK_SIZE_BYTES = 10 * 1024 * 1024;
 
-/** Default delay between chunks in milliseconds (allows ELSER queue to drain). */
-export const DEFAULT_CHUNK_DELAY_MS = 500;
+/**
+ * Default delay between chunks in milliseconds.
+ *
+ * @remarks
+ * Increased to 2000ms based on ELSER characterisation testing (2026-01-01).
+ * Allows ELSER inference queue to drain between chunk uploads, reducing
+ * queue overflow errors (HTTP 429 inference_exception).
+ *
+ * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
+ */
+export const DEFAULT_CHUNK_DELAY_MS = 2000;
 
 /** Maximum number of retry attempts for transient failures. */
 export const MAX_RETRY_ATTEMPTS = 3;
@@ -146,3 +157,5 @@ export function calculateBackoffWithJitter(attempt: number, baseDelayMs: number)
   return Math.floor(jitter);
 }
 
+// Re-export retry utilities for backwards compatibility
+export { isRetryableError, extractFailedOperations } from './bulk-retry-utils';

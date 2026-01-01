@@ -167,4 +167,3 @@ export function summarizeYearPhaseInfo(yearInfo: readonly ExtractedYearInfo[]): 
     unitsByKeyStage,
   };
 }
-

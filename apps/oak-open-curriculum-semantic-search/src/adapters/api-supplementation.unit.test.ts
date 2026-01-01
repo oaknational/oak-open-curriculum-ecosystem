@@ -73,6 +73,7 @@ const createMockLessonDoc = (
   unit_ids: ['test-unit'],
   unit_titles: ['Test Unit'],
   unit_urls: ['https://example.com/units/test-unit'],
+  has_transcript: true,
   lesson_content: 'Test content',
   lesson_url: 'https://example.com/lessons/test-lesson',
   doc_type: 'lesson',

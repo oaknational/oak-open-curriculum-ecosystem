@@ -425,6 +425,87 @@ describe('createLessonDocument', () => {
       }),
     ).toThrow('Lesson lesson-1 has no unit relationships');
   });
+
+  it('sets has_transcript to true and includes content fields when transcript exists', () => {
+    const lessonSummary = buildLessonSummary();
+
+    const doc = createLessonDocument({
+      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+      transcript: 'Hello and welcome to this lesson.',
+      summary: lessonSummary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 8,
+      unitContextMap: emptyContextMap,
+      units: [
+        {
+          unitSlug: 'unit-slug',
+          unitTitle: 'Unit Title',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+        },
+      ],
+    });
+
+    expect(doc.has_transcript).toBe(true);
+    expect(doc.lesson_content).toBe('Hello and welcome to this lesson.');
+    expect(doc.lesson_content_semantic).toBe('Hello and welcome to this lesson.');
+  });
+
+  it('sets has_transcript to false and omits content fields when transcript is undefined', () => {
+    const lessonSummary = buildLessonSummary();
+
+    const doc = createLessonDocument({
+      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+      transcript: undefined,
+      summary: lessonSummary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 8,
+      unitContextMap: emptyContextMap,
+      units: [
+        {
+          unitSlug: 'unit-slug',
+          unitTitle: 'Unit Title',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+        },
+      ],
+    });
+
+    expect(doc.has_transcript).toBe(false);
+    expect(doc.lesson_content).toBeUndefined();
+    expect(doc.lesson_content_semantic).toBeUndefined();
+    // Structure fields should still be populated
+    expect(doc.lesson_structure).toBeDefined();
+    expect(doc.lesson_structure_semantic).toBeDefined();
+  });
+
+  it('sets has_transcript to false and omits content fields when transcript is empty string', () => {
+    const lessonSummary = buildLessonSummary();
+
+    const doc = createLessonDocument({
+      lesson: { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1' },
+      transcript: '',
+      summary: lessonSummary,
+      subject: mathsSubject,
+      keyStage: ks4,
+      years: ['Year 10'],
+      lessonCount: 8,
+      unitContextMap: emptyContextMap,
+      units: [
+        {
+          unitSlug: 'unit-slug',
+          unitTitle: 'Unit Title',
+          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+        },
+      ],
+    });
+
+    expect(doc.has_transcript).toBe(false);
+    expect(doc.lesson_content).toBeUndefined();
+    expect(doc.lesson_content_semantic).toBeUndefined();
+  });
 });
 
 describe('createRollupDocument', () => {

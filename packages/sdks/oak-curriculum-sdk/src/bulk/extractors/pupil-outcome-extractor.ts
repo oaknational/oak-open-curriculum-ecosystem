@@ -67,4 +67,3 @@ export function extractPupilOutcomes(lessons: readonly Lesson[]): readonly Extra
 
   return outcomes;
 }
-

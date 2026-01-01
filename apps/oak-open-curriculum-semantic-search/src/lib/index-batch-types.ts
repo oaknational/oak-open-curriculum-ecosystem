@@ -79,4 +79,3 @@ export interface BatchGeneratorOptions {
     details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
   ) => void;
 }
-

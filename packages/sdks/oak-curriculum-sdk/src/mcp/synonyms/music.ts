@@ -31,4 +31,3 @@ export const musicSynonyms = {
 } as const;
 
 export type MusicSynonyms = typeof musicSynonyms;
-

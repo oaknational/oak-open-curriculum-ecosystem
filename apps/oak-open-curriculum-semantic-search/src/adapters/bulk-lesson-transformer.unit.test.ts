@@ -170,7 +170,7 @@ describe('bulk-lesson-transformer', () => {
     });
 
     describe('transcript handling', () => {
-      it('uses transcript when available', () => {
+      it('includes content fields and sets has_transcript to true when transcript exists', () => {
         const lesson = createMinimalLesson({
           transcript_sentences: 'Hello and welcome to this lesson.',
         });
@@ -178,11 +178,12 @@ describe('bulk-lesson-transformer', () => {
 
         const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
 
+        expect(doc.has_transcript).toBe(true);
         expect(doc.lesson_content).toBe('Hello and welcome to this lesson.');
         expect(doc.lesson_content_semantic).toBe('Hello and welcome to this lesson.');
       });
 
-      it('uses fallback text when transcript is null', () => {
+      it('omits content fields and sets has_transcript to false when transcript is null', () => {
         const lesson = createMinimalLesson({
           transcript_sentences: null,
         });
@@ -190,11 +191,12 @@ describe('bulk-lesson-transformer', () => {
 
         const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
 
-        expect(doc.lesson_content).toBe('[No transcript available]');
-        expect(doc.lesson_content_semantic).toBe('[No transcript available]');
+        expect(doc.has_transcript).toBe(false);
+        expect(doc.lesson_content).toBeUndefined();
+        expect(doc.lesson_content_semantic).toBeUndefined();
       });
 
-      it('uses fallback text when transcript is undefined', () => {
+      it('omits content fields and sets has_transcript to false when transcript is undefined', () => {
         const lesson = createMinimalLesson({
           transcript_sentences: undefined,
         });
@@ -202,8 +204,38 @@ describe('bulk-lesson-transformer', () => {
 
         const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
 
-        expect(doc.lesson_content).toBe('[No transcript available]');
-        expect(doc.lesson_content_semantic).toBe('[No transcript available]');
+        expect(doc.has_transcript).toBe(false);
+        expect(doc.lesson_content).toBeUndefined();
+        expect(doc.lesson_content_semantic).toBeUndefined();
+      });
+
+      it('omits content fields and sets has_transcript to false when transcript is empty string', () => {
+        const lesson = createMinimalLesson({
+          transcript_sentences: '',
+        });
+        const unitInfo = createMinimalUnitInfo();
+
+        const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
+
+        expect(doc.has_transcript).toBe(false);
+        expect(doc.lesson_content).toBeUndefined();
+        expect(doc.lesson_content_semantic).toBeUndefined();
+      });
+
+      it('always includes structure fields regardless of transcript availability', () => {
+        const lesson = createMinimalLesson({
+          transcript_sentences: null,
+          keyLearningPoints: [{ keyLearningPoint: 'Test learning point' }],
+        });
+        const unitInfo = createMinimalUnitInfo();
+
+        const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
+
+        expect(doc.has_transcript).toBe(false);
+        expect(doc.lesson_structure).toBeDefined();
+        expect(doc.lesson_structure).toContain('Test learning point');
+        expect(doc.lesson_structure_semantic).toBeDefined();
+        expect(doc.lesson_structure_semantic).toBe(doc.lesson_structure);
       });
     });
 

@@ -123,4 +123,3 @@ export function createLessonToUnitMap(
 
   return map;
 }
-

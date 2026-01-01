@@ -51,4 +51,3 @@ function getIndexFromAction(action: BulkOperationEntry): string | null {
   }
   return action.index._index;
 }
-

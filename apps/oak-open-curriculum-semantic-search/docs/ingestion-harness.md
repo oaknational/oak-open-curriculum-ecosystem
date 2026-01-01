@@ -102,4 +102,3 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 - Extend the CLI with an option to emit counts as JSON for pipeline consumption (optional).
 - Layer an integration test that drives the CLI entrypoint once end-to-end verification is required.
 - Surface index metrics in the admin dashboard so operators can compare primary vs sandbox populations.
-

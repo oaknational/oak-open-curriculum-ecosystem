@@ -1095,3 +1095,77 @@ RSHE-PSHE is the **only subject** without a bulk download file. The API returns 
 **User impact:** Teachers and curriculum leaders can plan RSHE/PSHE provision; API consumers gain full subject coverage.
 
 ---
+
+### 10. Mark Transcript Fields as Optional in Lesson Schemas
+
+**Status**: 🟡 MEDIUM PRIORITY — Improves schema accuracy for downstream consumers  
+**Date**: 2026-01-01  
+**Related ADRs**: [ADR-094](../../../../docs/architecture/architectural-decisions/094-has-transcript-field.md), [ADR-095](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md)
+
+**Current state:**
+
+The `transcript_sentences` field in bulk download lesson data appears to be implicitly optional (can be `null` or `undefined`), but this is not explicitly documented in any schema. Approximately 19% of lessons lack transcripts:
+
+| Subject Group | Transcript Coverage |
+|---------------|---------------------|
+| MFL (French, German, Spanish) | ~0% |
+| PE Primary | ~0.6% |
+| PE Secondary | ~28.5% |
+| All other subjects | 95-100% |
+
+**The problem:**
+
+Without explicit schema documentation, API consumers must:
+
+1. Discover through trial and error that transcripts can be missing
+2. Implement defensive coding without knowing which lesson types lack transcripts
+3. Risk polluting search indexes with placeholder text (e.g., "[No transcript available]")
+
+**What we need:**
+
+1. **Explicitly mark `transcript_sentences` as optional** in:
+   - OpenAPI schema for API responses
+   - JSON schema for bulk download files (if schema exists)
+   - TypeScript type definitions (if published)
+
+2. **Document which lesson types typically lack transcripts:**
+   ```yaml
+   transcript_sentences:
+     type: string
+     nullable: true
+     description: |
+       Full transcript text from lesson video. May be null for:
+       - MFL lessons (French, German, Spanish) - audio content not transcribed
+       - PE practical lessons - physical activity without narration
+       - Lessons with slides only - no video component
+       - Lessons where video has not yet been produced
+   ```
+
+3. **Consider adding a native `has_transcript` boolean field:**
+   ```yaml
+   has_transcript:
+     type: boolean
+     description: |
+       Indicates whether this lesson has transcript content available.
+       Useful for filtering and UI indication without fetching transcript data.
+   ```
+
+**Why this matters:**
+
+1. **Schema accuracy**: Types should reflect reality; nullable fields should be marked nullable
+2. **Consumer correctness**: Generated clients and SDKs handle optional fields properly
+3. **Search quality**: Consumers know to conditionally include content fields
+4. **Reduced support burden**: Clear documentation prevents confusion
+
+**Impact:**
+
+- Without fix: Consumers must handle missing transcripts defensively, often incorrectly
+- With fix: Clear contract enables correct handling across all consumers
+
+**User impact:** API consumers, SDK/MCP engineers, and search implementers handle transcript availability correctly; teachers see better search results because indexes aren't polluted with placeholder text.
+
+**Effort:** 1 day (schema update + documentation).
+
+**Priority:** MEDIUM — Improves correctness but has known workaround (check for null/empty).
+
+---

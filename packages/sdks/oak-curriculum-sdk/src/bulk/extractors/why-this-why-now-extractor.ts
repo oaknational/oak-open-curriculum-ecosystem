@@ -89,4 +89,3 @@ export function extractWhyThisWhyNow(units: readonly Unit[]): readonly Extracted
 
   return results;
 }
-

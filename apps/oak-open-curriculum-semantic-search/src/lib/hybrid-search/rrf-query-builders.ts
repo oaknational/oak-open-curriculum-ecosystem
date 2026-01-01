@@ -11,7 +11,7 @@
  * Phase 3 enhancement: Four-retriever architecture provides both lexical and semantic
  * matching on both comprehensive content and curated pedagogical summaries.
  *
- * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
+ * @see `.agent/research/elasticsearch/methods/hybrid-retrieval.md`
  */
 
 import type { estypes } from '@elastic/elasticsearch';

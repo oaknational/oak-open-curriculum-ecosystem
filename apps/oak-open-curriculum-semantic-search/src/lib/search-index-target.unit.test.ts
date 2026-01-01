@@ -93,6 +93,7 @@ describe('search index target helpers', () => {
       key_stage: 'ks3',
       unit_ids: ['unit-1'],
       unit_titles: ['Test Unit'],
+      has_transcript: true,
       lesson_content: 'Test content',
       lesson_url: 'https://example.com/lesson-one',
       unit_urls: ['https://example.com/unit-1'],

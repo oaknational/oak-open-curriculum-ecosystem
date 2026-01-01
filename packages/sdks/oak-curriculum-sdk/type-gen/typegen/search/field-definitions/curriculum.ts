@@ -26,9 +26,9 @@ export const THREADS_INDEX_FIELDS: IndexFieldDefinitions = [
 /**
  * Field definitions for the oak_lessons search index.
  *
- * Contains 34 fields:
- * - 10 required fields
- * - 24 optional fields
+ * Contains 35 fields:
+ * - 11 required fields (includes `has_transcript`)
+ * - 24 optional fields (includes `lesson_content` for lessons without transcripts)
  *
  * KS4 metadata fields (tiers, exam_boards, exam_subjects, ks4_options) are arrays
  * to support many-to-many relationships. A lesson can appear in multiple tiers
@@ -56,10 +56,12 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'misconceptions_and_common_mistakes', zodType: 'array-string', optional: true },
   { name: 'teacher_tips', zodType: 'array-string', optional: true },
   { name: 'content_guidance', zodType: 'array-string', optional: true },
-  // BM25 text fields for lexical search (content = full transcript, structure = curated summary)
-  { name: 'lesson_content', zodType: 'string', optional: false },
+  /** Whether transcript is available. MFL/PE lessons often lack transcripts. @see ADR-094 */
+  { name: 'has_transcript', zodType: 'boolean', optional: false },
+  /** BM25 transcript text. Optional: omitted when no transcript to avoid index pollution. @see ADR-095 */
+  { name: 'lesson_content', zodType: 'string', optional: true },
   { name: 'lesson_structure', zodType: 'string', optional: true },
-  // ELSER semantic fields (Phase 3 nomenclature: <entity>_content|structure_semantic)
+  /** ELSER transcript text. Optional: same rationale as lesson_content. @see ADR-095 */
   { name: 'lesson_content_semantic', zodType: 'string', optional: true },
   { name: 'lesson_structure_semantic', zodType: 'string', optional: true },
   { name: 'lesson_url', zodType: 'string', optional: false },

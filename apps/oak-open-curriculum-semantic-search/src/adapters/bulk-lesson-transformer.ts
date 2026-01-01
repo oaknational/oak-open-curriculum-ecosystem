@@ -148,11 +148,21 @@ function buildLessonPedagogicalFields(lesson: Lesson) {
   };
 }
 
-/** Lesson content fields */
+/**
+ * Lesson content fields including transcript availability indicator.
+ *
+ * `lesson_content` and `lesson_content_semantic` are optional because
+ * MFL lessons and some practical lessons lack transcripts. These fields
+ * are omitted entirely to avoid polluting the BM25/ELSER indexes.
+ *
+ * @see ADR-094 for `has_transcript` field rationale
+ * @see ADR-095 for conditional field inclusion rationale
+ */
 interface LessonContentFields {
-  readonly lesson_content: string;
+  readonly has_transcript: boolean;
+  readonly lesson_content: string | undefined;
   readonly lesson_structure: string | undefined;
-  readonly lesson_content_semantic: string;
+  readonly lesson_content_semantic: string | undefined;
   readonly lesson_structure_semantic: string | undefined;
   readonly lesson_url: string;
   readonly pupil_lesson_outcome: string | undefined;
@@ -160,14 +170,36 @@ interface LessonContentFields {
   readonly downloads_available: boolean;
 }
 
-/** Build content fields for lesson document */
+/**
+ * Build content fields for lesson document.
+ *
+ * Content fields (`lesson_content`, `lesson_content_semantic`) are conditionally
+ * included based on transcript availability. This prevents garbage tokens like
+ * "No transcript available" from polluting the BM25 index and wasting ELSER
+ * inference on meaningless placeholder text.
+ *
+ * Structure fields (`lesson_structure`, `lesson_structure_semantic`) are always
+ * populated from pedagogical metadata, enabling lessons without transcripts to
+ * still be found via structure retrievers.
+ *
+ * @param lesson - The bulk lesson to build content fields for
+ * @returns Content fields with conditional transcript inclusion
+ *
+ * @see ADR-094 for `has_transcript` field rationale
+ * @see ADR-095 for conditional field inclusion rationale
+ */
 function buildLessonContentFields(lesson: Lesson): LessonContentFields {
-  const transcriptText = lesson.transcript_sentences ?? '[No transcript available]';
+  const transcript = lesson.transcript_sentences;
+  const hasTranscript = typeof transcript === 'string' && transcript.length > 0;
   const structureSummary = generateBulkLessonSemanticSummary(lesson);
+
   return {
-    lesson_content: transcriptText,
+    has_transcript: hasTranscript,
+    // Only include content fields if transcript exists
+    lesson_content: hasTranscript ? transcript : undefined,
+    lesson_content_semantic: hasTranscript ? transcript : undefined,
+    // Structure fields always populated from pedagogical data
     lesson_structure: structureSummary,
-    lesson_content_semantic: transcriptText,
     lesson_structure_semantic: structureSummary,
     lesson_url: generateLessonUrl(lesson.lessonSlug),
     pupil_lesson_outcome: lesson.pupilLessonOutcome || undefined,

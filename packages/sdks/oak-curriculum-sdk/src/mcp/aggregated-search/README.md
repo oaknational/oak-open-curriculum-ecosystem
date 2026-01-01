@@ -11,4 +11,4 @@ Once the Elasticsearch Serverless instance is deployed and populated, the aggreg
 3. **Support programme factors** - Filter by tier, exam board, pathway (KS4)
 4. **Enable faceted navigation** - Subject, key stage, year, thread facets in responses
 
-See `.agent/research/elasticsearch/expanded-architecture-analysis.md` for the full architecture proposal.
+See `.agent/research/elasticsearch/system/expanded-architecture-analysis.md` for the full architecture proposal.

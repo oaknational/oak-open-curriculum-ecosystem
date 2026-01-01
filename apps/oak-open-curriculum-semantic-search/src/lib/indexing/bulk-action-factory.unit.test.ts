@@ -162,4 +162,3 @@ describe('bulk-action-factory', () => {
     });
   });
 });
-

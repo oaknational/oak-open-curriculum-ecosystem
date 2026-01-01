@@ -140,4 +140,3 @@ export function createVocabularyMiningAdapter(
     getStats: () => stats,
   };
 }
-

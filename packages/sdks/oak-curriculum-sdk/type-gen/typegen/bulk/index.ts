@@ -9,4 +9,3 @@
  */
 
 export { generateBulkSchemas } from './generate-bulk-schemas.js';
-

@@ -1,0 +1,383 @@
+{
+  "runId": "elser-diagnostic-1767283089249",
+  "startTime": "2026-01-01T15:58:09.249Z",
+  "endTime": "2026-01-01T15:58:13.177Z",
+  "configuration": {
+    "maxChunkSizeBytes": 20971520,
+    "chunkDelayMs": 500,
+    "documentLimit": 50
+  },
+  "summary": {
+    "totalDocuments": 50,
+    "totalSuccess": 50,
+    "totalFailures": 0,
+    "successRate": 1,
+    "chunksProcessed": 1,
+    "totalDurationMs": 3928
+  },
+  "errorDistribution": {},
+  "chunkStats": [
+    {
+      "chunkIndex": 0,
+      "documentCount": 50,
+      "successCount": 50,
+      "failureCount": 0,
+      "durationMs": 1907,
+      "startTime": "2026-01-01T15:58:11.269Z",
+      "endTime": "2026-01-01T15:58:13.176Z"
+    }
+  ],
+  "failures": [],
+  "sampleSuccesses": [
+    {
+      "documentId": "take-and-edit-a-portrait-photograph",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 0,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "make-a-print-profile-portrait",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 1,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "create-an-identity-mood-board",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 2,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "profile-portraits-in-art",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 3,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "relief-sculpture-profile-portrait",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 4,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "draw-a-profile-portrait",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 5,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "expressive-mark-making",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 6,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "building-drawing-machines",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 7,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "mark-making-and-patterns",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 8,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "how-artists-make-marks",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 9,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "mark-making-with-ink-and-water",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 10,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "textured-marks-with-charcoal",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 11,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "make-an-architectural-3d-model",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 12,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "present-a-group-design-proposal",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 13,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "investigate-an-architect",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 14,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "draw-buildings-using-simple-perspective",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 15,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "develop-a-collaborative-group-design",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 16,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "tonally-shade-architecture",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 17,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "artists-who-use-the-rainforest-as-inspiration-for-their-artwork",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 18,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "explore-the-shades-textures-and-colours-of-a-rainforest",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 19,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "draw-the-rainforest-studies-of-plants-and-leaves-20895",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 20,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "paint-a-rainforest",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 21,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "make-frottage-leaf-studies",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 22,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "collage-skills-using-the-rainforest-as-inspiration",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 23,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "create-expressive-typographic-work",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 24,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "learn-to-draw-typographic-letter-forms",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 25,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "design-an-expressive-letter-form",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 26,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "create-a-concrete-poem",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 27,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "graphic-design-the-art-of-letters",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 28,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "practise-calligraphic-techniques",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 29,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "developing-graffiti-letter-designs-using-digital-media",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 30,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "artists-who-create-street-art",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 31,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "use-digital-techniques-to-make-street-art-compositions",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 32,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "sketching-street-art-and-designing-graffiti-letters",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 33,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "exploring-social-messages-in-street-art",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 34,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "design-a-street-art-mural",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 35,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "drawing-like-an-architect",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 36,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "make-a-monoprint-of-a-building",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 37,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "drawing-buildings-using-charcoal",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 38,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "sustainable-architecture",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 39,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "design-and-build-a-home-using-recycled-materials",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 40,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "drawing-and-painting-my-dream-building",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 41,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "painting-the-foundations-of-a-facial-expression",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 42,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "drawing-use-tone-and-colour-for-facial-expressions",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 43,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "analyse-a-facial-expression-through-drawing",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 44,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "investigate-facial-expressions-in-portraits",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 45,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "digital-photography-creating-a-series-of-facial-expression-photographs",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 46,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "painting-finalising-a-facial-expression-painting",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 47,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "sketchbook-experimentation-water-like-marks",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 48,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    },
+    {
+      "documentId": "how-has-water-been-depicted-by-artists-makers-and-designers",
+      "index": "oak_lessons",
+      "chunkIndex": 0,
+      "positionInChunk": 49,
+      "timestamp": "2026-01-01T15:58:13.176Z"
+    }
+  ]
+}

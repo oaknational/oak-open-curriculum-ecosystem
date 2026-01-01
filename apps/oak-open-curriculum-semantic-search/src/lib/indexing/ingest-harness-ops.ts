@@ -9,9 +9,9 @@ import {
 import type { BulkOperations } from './bulk-operation-types';
 import { isBulkIndexAction } from './bulk-operation-types';
 import { chunkOperations, MAX_CHUNK_SIZE_BYTES } from './bulk-chunk-utils';
-import { uploadAllChunks, type EsTransport } from './bulk-chunk-uploader';
+import { uploadAllChunks, type EsTransport, type BulkUploadConfig } from './bulk-chunk-uploader';
 
-export type { EsTransport } from './bulk-chunk-uploader';
+export type { EsTransport, BulkUploadConfig } from './bulk-chunk-uploader';
 export { createNdjson } from './bulk-chunk-utils';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
@@ -77,11 +77,20 @@ export function summariseOperations(
 /**
  * Dispatches the prepared NDJSON payload against the provided Elasticsearch transport.
  * Automatically chunks large payloads to stay under ES HTTP body limits.
+ *
+ * @param es - Elasticsearch transport
+ * @param operations - Bulk operations to dispatch
+ * @param logger - Logger instance
+ * @param config - Optional upload configuration (retry settings, delays)
+ *
+ * @see uploadAllChunks for retry behavior
+ * @see BulkUploadConfig for configuration options
  */
 export async function dispatchBulk(
   es: EsTransport,
   operations: BulkOperations,
   logger: Logger = ingestLogger,
+  config: BulkUploadConfig = {},
 ): Promise<void> {
   const docCount = Math.floor(operations.length / 2);
   // Estimate size by sampling first 100 operations to avoid stringifying entire array
@@ -94,6 +103,11 @@ export async function dispatchBulk(
     documents: docCount,
     operations: operations.length,
     estimatedSizeMB: (estimatedTotalBytes / 1024 / 1024).toFixed(1),
+    retryConfig: {
+      documentRetryEnabled: config.documentRetryEnabled ?? true,
+      documentMaxRetries: config.documentMaxRetries,
+      documentRetryDelayMs: config.documentRetryDelayMs,
+    },
   });
   const chunks = chunkOperations(operations, MAX_CHUNK_SIZE_BYTES);
   logger.info('Bulk upload chunked', {
@@ -101,7 +115,7 @@ export async function dispatchBulk(
     maxChunkSizeMB: MAX_CHUNK_SIZE_BYTES / 1024 / 1024,
   });
   const startTime = Date.now();
-  const totalUploaded = await uploadAllChunks(es, chunks, logger, docCount);
+  const totalUploaded = await uploadAllChunks(es, chunks, logger, docCount, config);
   const durationMs = Date.now() - startTime;
   logger.info('Bulk upload completed successfully', {
     documents: totalUploaded,

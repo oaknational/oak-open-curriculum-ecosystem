@@ -16,7 +16,11 @@ import type { OakClient } from '../../../adapters/oak-adapter.js';
 import type { IngestionResult } from './ingest-output.js';
 import { prepareBulkIngestion, type BulkIngestionStats } from '../../indexing/bulk-ingestion.js';
 import { esClient } from '../../es-client.js';
-import { dispatchBulk, summariseOperations } from '../../indexing/ingest-harness-ops.js';
+import {
+  dispatchBulk,
+  summariseOperations,
+  type BulkUploadConfig,
+} from '../../indexing/ingest-harness-ops.js';
 import { ingestLogger } from '../../logger';
 import { printDryRunNotice, printCacheStats } from './ingest-output.js';
 
@@ -61,12 +65,18 @@ async function prepareBulkOperations(
   return { operations: result };
 }
 
-/** Dispatch bulk operations to Elasticsearch. */
+/**
+ * Dispatch bulk operations to Elasticsearch.
+ *
+ * @param operations - Prepared bulk operations
+ * @param config - Upload configuration (retry settings)
+ */
 async function dispatchOperations(
   operations: Awaited<ReturnType<typeof prepareBulkIngestion>>['operations'],
+  config: BulkUploadConfig,
 ): Promise<void> {
   const es = esClient();
-  await dispatchBulk({ transport: es.transport }, operations, ingestLogger);
+  await dispatchBulk({ transport: es.transport }, operations, ingestLogger, config);
 }
 
 /** Convert bulk stats to IngestionResult format. */
@@ -96,6 +106,20 @@ export interface BulkIngestionExecutionResult {
 }
 
 /**
+ * Creates BulkUploadConfig from CLI arguments.
+ *
+ * @param args - CLI arguments containing retry configuration
+ * @returns BulkUploadConfig for dispatchBulk
+ */
+function createUploadConfig(args: CliArgs): BulkUploadConfig {
+  return {
+    documentRetryEnabled: !args.noRetry,
+    documentMaxRetries: args.maxRetries,
+    documentRetryDelayMs: args.retryDelay,
+  };
+}
+
+/**
  * Execute bulk ingestion preparation and optionally dispatch to ES.
  *
  * @param args - CLI arguments
@@ -109,6 +133,11 @@ export async function executeBulkIngestion(
   ingestLogger.info(args.dryRun ? 'Starting BULK DRY RUN' : 'Starting BULK LIVE ingestion', {
     dryRun: args.dryRun,
     note: 'Reading from bulk download files, API used only for KS4 tier enrichment',
+    retryConfig: {
+      documentRetryEnabled: !args.noRetry,
+      maxRetries: args.maxRetries ?? 'default (3)',
+      retryDelay: args.retryDelay ?? 'default (5000ms)',
+    },
   });
 
   const startTime = Date.now();
@@ -137,8 +166,9 @@ export async function executeBulkIngestion(
     return { stats, duration, result: createIngestionResult(operations) };
   }
 
-  // Dispatch to Elasticsearch
-  await dispatchOperations(operations);
+  // Dispatch to Elasticsearch with retry configuration
+  const uploadConfig = createUploadConfig(args);
+  await dispatchOperations(operations, uploadConfig);
 
   printBulkSummary(stats, duration);
   printCacheStats(client);

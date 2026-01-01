@@ -122,6 +122,7 @@ describe('runSuggestions', () => {
       key_stage: 'ks4',
       unit_ids: ['unit-1'],
       unit_titles: ['Glaciation'],
+      has_transcript: true,
       lesson_content: 'Sample',
       lesson_url: 'https://example.com/lesson-one',
       unit_urls: ['https://example.com/unit-1'],

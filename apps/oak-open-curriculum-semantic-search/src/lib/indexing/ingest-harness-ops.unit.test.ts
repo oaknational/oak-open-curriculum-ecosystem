@@ -63,7 +63,14 @@ describe('dispatchBulk', () => {
       { title: 'Lesson 2' },
     ] as BulkOperations;
 
-    mockRequestFn.mockResolvedValue({ errors: false, items: [] });
+    // Return proper bulk response with success items
+    mockRequestFn.mockResolvedValue({
+      errors: false,
+      items: [
+        { index: { _index: 'oak_lessons', status: 201 } },
+        { index: { _index: 'oak_lessons', status: 201 } },
+      ],
+    });
 
     await dispatchBulk(mockEs, operations, mockLogger);
 
@@ -126,7 +133,15 @@ describe('dispatchBulk', () => {
       { title: 'Doc 3' },
     ] as BulkOperations;
 
-    mockRequestFn.mockResolvedValue({ errors: false, items: [] });
+    // Return proper bulk response with success items
+    mockRequestFn.mockResolvedValue({
+      errors: false,
+      items: [
+        { index: { _index: 'oak_lessons', status: 201 } },
+        { index: { _index: 'oak_units', status: 201 } },
+        { index: { _index: 'oak_lessons', status: 201 } },
+      ],
+    });
 
     await dispatchBulk(mockEs, operations, mockLogger);
 

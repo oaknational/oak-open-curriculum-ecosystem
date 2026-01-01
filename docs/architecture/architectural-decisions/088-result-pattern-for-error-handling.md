@@ -350,4 +350,3 @@ async function getUnitSummary(slug: string): Promise<Result<UnitSummary, SdkFetc
 - [Rust Error Handling](https://doc.rust-lang.org/book/ch09-00-error-handling.html)
 - [ADR-054: Tool-Level Auth Error Interception](054-tool-level-auth-error-interception.md) - Uses Result pattern in tool execution
 - [rules.md](../../.agent/directives-and-memory/rules.md) - "Handle All Cases Explicitly - Don't throw, use the result pattern"
-

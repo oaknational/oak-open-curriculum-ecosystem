@@ -131,6 +131,9 @@ export const OAK_LESSONS_MAPPING = {
         analyzer: 'oak_text_index',
         search_analyzer: 'oak_text_search',
       },
+      has_transcript: {
+        type: 'boolean',
+      },
       lesson_content: {
         type: 'text',
         analyzer: 'oak_text_index',

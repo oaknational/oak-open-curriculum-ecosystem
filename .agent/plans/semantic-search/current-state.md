@@ -1,75 +1,118 @@
 # Semantic Search Current State
 
 **Last Updated**: 2026-01-01
-**Status**: 🚨 **BLOCKED** — Missing transcript handling must complete first
+**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 This is THE authoritative source for current system metrics.
 
 ---
 
-## 🚨 BLOCKED — Missing Transcript Handling
+## ✅ IMPLEMENTATION COMPLETE
 
-**All re-ingestion work is blocked until missing transcript handling is complete.**
+### Two-Tier Retry System Implemented
 
-See [missing-transcript-handling.md](active/missing-transcript-handling.md) for full details.
+All code work is complete. Only verification against live Elasticsearch remains.
 
-| # | Blocking Task | Status |
-|---|---------------|--------|
-| 1 | TDD: Update unit tests FIRST | ⬜ |
-| 2 | Make transcript fields optional in schema | ⬜ |
-| 3 | Add `has_transcript` field | ⬜ |
-| 4 | Update transformer | ⬜ |
-| 5 | Resolve DRY issue | ⬜ |
-| 6 | Add upstream API wishlist item | ⬜ |
-| 7 | Run quality gates | ⬜ |
+| Phase | Task | Status |
+|-------|------|--------|
+| 1 | Integration tests (TDD RED) | ✅ Complete |
+| 2 | Document-level retry (TDD GREEN) | ✅ Complete |
+| 3 | CLI flags | ✅ Complete |
+| 4 | Refactor for excellence | ✅ Complete |
+| 5 | Documentation (ADR-096, README, TSDoc) | ✅ Complete |
+| 6 | Quality gates | ✅ All passing |
+| **7** | **Full ingestion verification** | 📋 **NEXT SESSION** |
 
----
+### Solution: ADR-096
 
-## 🎯 Next Action (After Blocking Complete)
+- **Tier 1** (HTTP-level): Retries entire chunk on transport errors
+- **Tier 2** (document-level): Retries individual documents that fail with transient errors
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force
-pnpm es:status
-```
+See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md).
 
 ---
 
-## 📊 Expected Results After Re-ingest
+## Pre-Implementation ES State (Before Retry)
 
-| Index | Expected Count | Previous (Broken) |
-|-------|----------------|-------------------|
-| `oak_lessons` | ~12,320 | 2,884 |
-| `oak_units` | ~1,665 | 1,635 |
-| `oak_unit_rollup` | ~1,665 | **0** (empty!) |
-| `oak_threads` | ~164 | 164 |
+**Note**: These metrics are from before the retry system was implemented.
+
+### Verified ES Index Counts (Pre-retry)
+
+| Index | Count | Expected | Completion | Has semantic_text |
+|-------|-------|----------|------------|-------------------|
+| `oak_lessons` | 6,572 | ~12,320 | ~53% | ✅ Yes (2 fields) |
+| `oak_unit_rollup` | 523 | ~1,665 | ~31% | ✅ Yes (2 fields) |
+| `oak_units` | 1,635 | ~1,665 | ~98% | ❌ No |
+| `oak_threads` | 164 | ~164 | 100% | ❌ No |
+
+### Root Cause Analysis (Complete)
+
+**ELSER queue overflow** causes document-level failures:
+
+| Finding | Evidence |
+|---------|----------|
+| Queue builds over time | First 2 chunks: 100%, Chunks 3+: degraded |
+| Position-dependent failures | 93% overlap between runs (750/803 same docs) |
+| HTTP 429 errors | All failures are `inference_exception` |
+| Only semantic_text affected | Indices without ELSER: 100% success |
 
 ---
 
-## 📋 Pending Work
+## Retry Error Classification
 
-| Item | Status | Document |
-|------|--------|----------|
-| Missing transcript handling (Option D) | 🚨 BLOCKING | [missing-transcript-handling.md](active/missing-transcript-handling.md) |
-| Fuzzy matching investigation | 📋 Pending | Create diagnostic script |
-| Unit hard query categories | 📋 Pending | Add `category` field |
-| RSHE-PSHE 422 handling | 📋 Pending | Implement in search SDK |
+**Retryable (transient failures):**
+
+- HTTP 429: Rate limit / queue overflow (ELSER `inference_exception`)
+- HTTP 502: Bad gateway
+- HTTP 503: Service unavailable
+- HTTP 504: Gateway timeout
+
+**Non-retryable (permanent failures):**
+
+- HTTP 400: Bad request (mapping errors)
+- HTTP 404: Not found
+- HTTP 409: Version conflict
 
 ---
 
-## 📊 Search Quality Metrics
+## Expected Post-Implementation Metrics
 
-**Evaluation data lives in** [evaluations/baselines/hard-query-baseline.md](../../evaluations/baselines/hard-query-baseline.md).
+After running full ingestion with retry:
 
-**Status**: Measurements need re-running after blocking work + re-ingest.
+| Index | Expected Count |
+|-------|----------------|
+| `oak_lessons` | ~12,320 |
+| `oak_units` | ~1,665 |
+| `oak_unit_rollup` | ~1,665 |
+| `oak_threads` | ~164 |
 
-```bash
-# Run after re-ingest
-cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category
-```
+---
+
+## Empty Indices (Known Gap)
+
+| Index | Count | Status |
+|-------|-------|--------|
+| `oak_sequence_facets` | 0 | ✅ Known gap - not in bulk path |
+| `oak_sequences` | 0 | ✅ Known gap - not in bulk path |
+
+**Finding**: The bulk-first ingestion strategy (ADR-093) does not include sequence operations. This is a known gap, not a bug.
+
+---
+
+## ✅ Missing Transcript Handling Complete
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | TDD: Update unit tests FIRST | ✅ |
+| 2 | Make transcript fields optional in schema | ✅ |
+| 3 | Add `has_transcript` field | ✅ |
+| 4 | Update transformer | ✅ |
+| 5 | Resolve DRY issue | ✅ |
+| 6 | Add upstream API wishlist item | ✅ |
+| 7 | Run quality gates | ✅ |
+
+See [missing-transcript-handling.md](active/missing-transcript-handling.md) for details.
 
 ---
 
@@ -78,14 +121,14 @@ pnpm eval:per-category
 | Component | Status |
 |-----------|--------|
 | SDK bulk export (schema-first) | ✅ Complete |
-| BulkDataAdapter | ✅ Complete (fixes applied) |
+| BulkDataAdapter | ✅ Complete |
 | API supplementation (Maths KS4 tiers) | ✅ Complete |
 | HybridDataSource (bulk + API + rollups) | ✅ Complete |
 | Bulk thread transformer | ✅ Complete |
 | CLI wiring (`--bulk` mode) | ✅ Complete |
-| Bulk upload robustness (retry/backoff) | ✅ Complete |
-| **Missing transcript handling** | 🚨 BLOCKING |
-| Quality gates | ⏳ After blocking work |
+| Missing transcript handling | ✅ Complete |
+| **ELSER retry system** | ✅ Complete |
+| Quality gates | ✅ All passing (809 tests) |
 
 ---
 
@@ -94,8 +137,11 @@ pnpm eval:per-category
 | Document | Purpose |
 |----------|---------|
 | [roadmap.md](roadmap.md) | Master plan and milestones |
+| [elser-retry-robustness.md](active/elser-retry-robustness.md) | Solution spec |
 | [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Session context |
-| [missing-transcript-handling.md](active/missing-transcript-handling.md) | Active work: Blocking |
+| [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) | ELSER research |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **NEW** ES Bulk Retry |
+| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | Retry pattern (reused) |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Idempotent re-runs |
+| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Typed error handling |
 | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy |
-| [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` field |
-| [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing transcript handling |

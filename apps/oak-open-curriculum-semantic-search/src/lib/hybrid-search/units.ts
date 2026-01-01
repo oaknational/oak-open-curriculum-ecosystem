@@ -16,7 +16,7 @@ import { buildUnitRrfRequest } from './rrf-query-builders';
  * @param doHighlight - Whether to include rollup text highlights
  * @returns Search results with units, scores, and metadata
  *
- * @see `.agent/research/elasticsearch/hybrid-search-reranking-evaluation.md`
+ * @see `.agent/research/elasticsearch/methods/hybrid-retrieval.md`
  */
 export async function runUnitsSearch(
   q: StructuredQuery,

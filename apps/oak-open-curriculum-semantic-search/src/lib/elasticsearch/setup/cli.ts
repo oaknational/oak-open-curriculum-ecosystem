@@ -20,23 +20,32 @@ interface CliArgs {
   readonly verbose: boolean;
 }
 
+/** Checks if any of the specified flags are present in args. */
+function hasFlag(args: readonly string[], ...flags: readonly string[]): boolean {
+  return flags.some((flag) => args.includes(flag));
+}
+
 /**
  * Parses command line arguments.
+ *
+ * Supports both positional commands and flags:
+ * - `pnpm es:setup reset` (positional)
+ * - `pnpm es:setup --reset` (flag)
  *
  * @param args - Command line arguments
  * @returns Parsed CLI arguments
  */
 function parseArgs(args: readonly string[]): CliArgs {
-  const verbose = args.includes('--verbose') || args.includes('-v');
+  const verbose = hasFlag(args, '--verbose', '-v');
   const commandArg = args.find((a) => !a.startsWith('-'));
 
   if (commandArg === 'status') {
     return { command: 'status', verbose };
   }
-  if (commandArg === 'reset') {
+  if (commandArg === 'reset' || hasFlag(args, '--reset', '-r')) {
     return { command: 'reset', verbose };
   }
-  if (commandArg === 'help' || args.includes('--help') || args.includes('-h')) {
+  if (commandArg === 'help' || hasFlag(args, '--help', '-h')) {
     return { command: 'help', verbose };
   }
   return { command: 'setup', verbose };

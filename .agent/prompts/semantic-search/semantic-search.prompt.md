@@ -1,70 +1,122 @@
 # Semantic Search — Session Context
 
-**Status**: 🚨 **BLOCKED** — Missing transcript handling must complete first
+**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
 **Last Updated**: 2026-01-01
 
 ---
 
-## 📖 What This Is
+## 🎯 NEXT SESSION: Verify Full Ingestion
 
-The **Oak Open Curriculum Semantic Search** app (`apps/oak-open-curriculum-semantic-search`) indexes Oak National Academy's curriculum into Elasticsearch for hybrid search (BM25 + ELSER).
+### Single Remaining Task
 
-**Elasticsearch indices:**
+Run full bulk ingestion against live Elasticsearch and verify ~12,320 lessons indexed.
 
-| Index | Content | Expected Count |
-|-------|---------|----------------|
-| `oak_lessons` | Lesson documents with transcripts, keywords, learning points | ~12,320 |
-| `oak_units` | Unit documents | ~1,665 |
-| `oak_unit_rollup` | Aggregated lesson snippets per unit | ~1,665 |
-| `oak_threads` | Cross-unit conceptual strands | ~164 |
+```bash
+cd apps/oak-open-curriculum-semantic-search
 
-**Four-retriever hybrid search:**
+# Option 1: Default retry settings (3 retries, 5000ms base delay)
+pnpm es:setup --reset
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
+pnpm es:status
 
+# Option 2: Custom retry settings (if needed)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --max-retries 5 --retry-delay 10000
 ```
-Query → [BM25 Content] ─┐
-     → [BM25 Structure] ─┼─→ RRF Fusion → Results
-     → [ELSER Content] ──┤
-     → [ELSER Structure]─┘
-```
+
+### Expected Results
+
+| Index | Expected Count |
+|-------|----------------|
+| `oak_lessons` | ~12,320 |
+| `oak_units` | ~1,665 |
+| `oak_unit_rollup` | ~1,665 |
+| `oak_threads` | ~164 |
+
+### Prerequisites
+
+- Elasticsearch instance running with ELSER configured
+- Bulk download files in `./bulk-downloads`
+- Valid `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` in `.env.local`
 
 ---
 
 ## ✅ What's Complete
 
-- Bulk-first ingestion infrastructure (ADR-093)
-- SDK bulk export with schema-first types
-- BulkDataAdapter, HybridDataSource, rollup builder
-- CLI wiring (`--bulk` mode)
-- Bulk upload robustness (chunking, retry, backoff)
-- Quality gates all passing
+### Implementation (All Code Work Done)
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Two-tier retry system | ✅ Complete | HTTP + document-level retry |
+| CLI flags | ✅ Complete | `--max-retries`, `--retry-delay`, `--no-retry` |
+| Integration tests | ✅ Complete | 6 tests in `bulk-chunk-uploader.integration.test.ts` |
+| E2E tests | ✅ Complete | 6 tests in `bulk-retry-cli.e2e.test.ts` |
+| ADR-096 | ✅ Complete | ES Bulk Retry Strategy documented |
+| README | ✅ Complete | `src/lib/indexing/README.md` |
+| TSDoc | ✅ Complete | All public interfaces documented |
+| All quality gates | ✅ Pass | 809 unit tests, 6 E2E tests |
+
+### New Files Created
+
+```text
+src/lib/indexing/
+├── http-retry.ts          # Tier 1 (HTTP-level) retry logic
+├── document-retry.ts      # Tier 2 (document-level) retry logic
+├── README.md              # Module documentation
+
+src/lib/elasticsearch/setup/
+├── ingest-cli-help.ts      # CLI help text (extracted)
+├── ingest-cli-processors.ts # Argument processors (extracted)
+
+docs/architecture/architectural-decisions/
+└── 096-es-bulk-retry-strategy.md  # ADR documenting solution
+```
+
+### CLI Flags Added
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--max-retries <n>` | 3 | Maximum document-level retry attempts |
+| `--retry-delay <ms>` | 5000 | Base delay for exponential backoff |
+| `--no-retry` | false | Disable document-level retry |
 
 ---
 
-## 🚨 BLOCKING WORK — DO NOT RE-INGEST
+## 📖 Architecture Overview
 
-**All items below must complete BEFORE running re-ingest.**
+### Two-Tier Retry Strategy (ADR-096)
 
-See [missing-transcript-handling.md](../../plans/semantic-search/active/missing-transcript-handling.md) for full details.
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                   Bulk Upload Flow                          │
+│                                                             │
+│  Chunk 1 ──┐                                               │
+│  Chunk 2 ──┼──► Tier 1: HTTP Retry ──► ES Bulk API        │
+│  Chunk N ──┘   (transport errors)                          │
+│                     │                                       │
+│                     ▼                                       │
+│              Collect Failed Docs                           │
+│                     │                                       │
+│                     ▼                                       │
+│            Tier 2: Document Retry                          │
+│           (429, 502, 503, 504)                             │
+│                     │                                       │
+│                     ▼                                       │
+│              Exponential Backoff                           │
+│           (allow ELSER to drain)                           │
+└─────────────────────────────────────────────────────────────┘
+```
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | TDD: Update unit tests FIRST (remove `[No transcript available]` assertions) | ⬜ |
-| 2 | Make transcript fields optional in search schema with TSDoc explaining why | ⬜ |
-| 3 | Add `has_transcript` field to search schema and mapping | ⬜ |
-| 4 | Update transformer to conditionally include content fields | ⬜ |
-| 5 | Investigate and resolve DRY issue (document-transforms.ts vs bulk-lesson-transformer.ts) | ⬜ |
-| 6 | Add upstream API wishlist item for optional transcript schema | ⬜ |
-| 7 | Run all quality gates | ⬜ |
+### Retryable vs Non-Retryable Errors
 
----
-
-## 📖 ES Documentation Finding
-
-**Official Elasticsearch null_value documentation confirms:**
-
-> "A `null` value cannot be indexed or searched. When a field is set to `null`, (or an empty array or an array of `null` values) it is treated as though that field has no values."
-
-**Conclusion**: We can safely omit `lesson_content` and `lesson_content_semantic` for lessons without transcripts. Documents will still be indexed and searchable via structure fields. **No experiment needed** — the official docs are definitive.
+| Status | Type | Retry? | Example |
+|--------|------|--------|---------|
+| 429 | Rate limit | ✅ Yes | ELSER queue overflow |
+| 502 | Bad gateway | ✅ Yes | Proxy errors |
+| 503 | Unavailable | ✅ Yes | Service restarting |
+| 504 | Timeout | ✅ Yes | Gateway timeout |
+| 400 | Bad request | ❌ No | Mapping errors |
+| 404 | Not found | ❌ No | Missing index |
+| 409 | Conflict | ❌ No | Version conflict |
 
 ---
 
@@ -76,63 +128,71 @@ See [missing-transcript-handling.md](../../plans/semantic-search/active/missing-
 2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
 
+**Read relevant ADRs:**
+
+- [ADR-096: ES Bulk Retry Strategy](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) — **NEW** Two-tier retry
+- [ADR-070: SDK Rate Limiting and Retry](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) — Pattern source
+- [ADR-087: Batch-Atomic Ingestion](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Idempotent re-runs
+- [ADR-088: Result Pattern](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Typed errors
+
 **Do NOT guess how ES works — read the official documentation:**
 
-- [ES null_value](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/null-value)
 - [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
-
-**Understand current state:**
-
-- [current-state.md](../../plans/semantic-search/current-state.md) — Authoritative metrics
-- [roadmap.md](../../plans/semantic-search/roadmap.md) — Master plan and milestones
-- [complete-data-indexing.md](../../plans/semantic-search/active/complete-data-indexing.md) — Implementation phases
+- [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)
+- [Inference queue docs](https://www.elastic.co/docs/explore-analyze/machine-learning/inference/inference-queue)
 
 ---
 
-## 🎯 NEXT ACTION (After Blocking Work Complete)
+## 📚 Key Files
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force
-pnpm es:status
-```
-
----
-
-## 📋 Active Work
-
-| Document | Purpose | Status |
-|----------|---------|--------|
-| [missing-transcript-handling.md](../../plans/semantic-search/active/missing-transcript-handling.md) | ADR-095: Omit content fields for lessons without transcripts | 🚨 BLOCKING |
+| File | Purpose |
+|------|---------|
+| `src/lib/indexing/bulk-chunk-uploader.ts` | Upload orchestration |
+| `src/lib/indexing/http-retry.ts` | Tier 1 retry (transport) |
+| `src/lib/indexing/document-retry.ts` | Tier 2 retry (document-level) |
+| `src/lib/indexing/bulk-retry-utils.ts` | `isRetryableError`, `extractFailedOperations` |
+| `src/lib/elasticsearch/setup/ingest-cli-args.ts` | CLI argument parsing |
+| `src/lib/indexing/README.md` | Module documentation |
 
 ---
 
 ## 🔧 Quality Gates
 
-Run after blocking work complete, from repo root:
+Run after every piece of work, from repo root:
 
 ```bash
-pnpm type-gen && pnpm build && pnpm type-check && pnpm lint:fix
-pnpm format:root && pnpm markdownlint:root
-pnpm test && pnpm test:e2e
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
 ```
+
+**All gates must pass. No exceptions.**
 
 ---
 
-## 📚 Key ADRs
+## 📚 Related Documents
 
-| ADR | Topic |
-|-----|-------|
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first ingestion strategy |
-| [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` field |
-| [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing transcript handling (Option D) |
+| Document | Purpose |
+|----------|---------|
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative roadmap |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
+| [elser-retry-robustness.md](../../plans/semantic-search/active/elser-retry-robustness.md) | Solution spec |
+| [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) | ELSER research |
 
 ---
 
 ## ⚠️ Key Principles
 
-1. **Read the docs** — Don't guess how ES works, read official documentation
-2. **TDD always** — Red → Green → Refactor, update tests FIRST
-3. **Single source of truth** — Don't duplicate code/information
-4. **Schema-first** — Types flow from OpenAPI via `pnpm type-gen`
+1. **TDD always** — Red → Green → Refactor
+2. **Reuse patterns** — ADR-070 retry pattern adapted for ES bulk
+3. **Distinguish failure modes** — Only retry transient errors (429, 502, 503, 504)
+4. **Schema-first** — Types flow from OpenAPI spec
+5. **No type shortcuts** — No `as`, `any`, `!`
