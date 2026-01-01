@@ -242,6 +242,64 @@ For deeper explanations see:
 
 Maintain this README alongside code changes to keep onboarding concise and accurate.
 
+## CLI Reference — Bulk Ingestion
+
+The bulk ingestion CLI provides commands for managing Elasticsearch indices and ingesting curriculum data from bulk download files.
+
+### Setup and Reset
+
+```bash
+# Reset indices (wipes data, recreates with fresh synonyms)
+pnpm es:setup --reset
+
+# Check index status
+pnpm es:status
+```
+
+### Bulk Ingestion
+
+```bash
+# Preview (dry run)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --dry-run
+
+# Full ingestion (incremental - skips existing)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads
+
+# Force ingestion (overwrites existing documents)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force
+```
+
+### Flags
+
+| Flag                | Description                                                     |
+| ------------------- | --------------------------------------------------------------- |
+| `--bulk`            | Enable bulk mode (reads from files instead of API)              |
+| `--bulk-dir <path>` | Path to bulk download directory (default: `./bulk-downloads`)   |
+| `--dry-run`         | Preview operations without executing                            |
+| `--force`           | Use `index` action (upsert) instead of `create` (skip existing) |
+| `--verbose`         | Detailed logging                                                |
+| `--subject <slug>`  | Filter to specific subject(s)                                   |
+| `--keystage <slug>` | Filter to specific key stage(s)                                 |
+
+### Refresh Bulk Data
+
+```bash
+# Download fresh bulk data from Oak API
+pnpm bulk:download
+```
+
+### Evaluation Commands
+
+```bash
+# Run diagnostic queries
+pnpm eval:diagnostic
+
+# Run retriever ablation tests
+pnpm vitest run --config vitest.smoke.config.ts four-retriever-ablation
+```
+
+---
+
 ## System Topology
 
 ```text

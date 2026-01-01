@@ -8,15 +8,11 @@ import {
 } from './data-integrity-report';
 import type { BulkOperations } from './bulk-operation-types';
 import { isBulkIndexAction } from './bulk-operation-types';
-import {
-  chunkOperations,
-  uploadAllChunks,
-  MAX_CHUNK_SIZE_BYTES,
-  type EsTransport,
-} from './bulk-chunk-uploader';
+import { chunkOperations, MAX_CHUNK_SIZE_BYTES } from './bulk-chunk-utils';
+import { uploadAllChunks, type EsTransport } from './bulk-chunk-uploader';
 
 export type { EsTransport } from './bulk-chunk-uploader';
-export { createNdjson } from './bulk-chunk-uploader';
+export { createNdjson } from './bulk-chunk-utils';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
   ['oak_lessons', 'lessons'],
@@ -88,10 +84,16 @@ export async function dispatchBulk(
   logger: Logger = ingestLogger,
 ): Promise<void> {
   const docCount = Math.floor(operations.length / 2);
+  // Estimate size by sampling first 100 operations to avoid stringifying entire array
+  const sampleSize = Math.min(100, operations.length);
+  const sampleBytes = operations
+    .slice(0, sampleSize)
+    .reduce((acc, op) => acc + JSON.stringify(op).length, 0);
+  const estimatedTotalBytes = (sampleBytes / sampleSize) * operations.length;
   logger.info('Starting bulk upload to Elasticsearch', {
     documents: docCount,
     operations: operations.length,
-    estimatedSizeMB: (JSON.stringify(operations).length / 1024 / 1024).toFixed(1),
+    estimatedSizeMB: (estimatedTotalBytes / 1024 / 1024).toFixed(1),
   });
   const chunks = chunkOperations(operations, MAX_CHUNK_SIZE_BYTES);
   logger.info('Bulk upload chunked', {

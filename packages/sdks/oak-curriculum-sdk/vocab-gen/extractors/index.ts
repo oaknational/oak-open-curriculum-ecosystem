@@ -18,3 +18,4 @@ export { extractNCStatements, type ExtractedNCStatement } from './nc-statement-e
 export { extractThreads, type ExtractedThread, type ThreadUnit } from './thread-extractor.js';
 export { extractLearningPoints, type ExtractedLearningPoint } from './learning-point-extractor.js';
 export { extractTeacherTips, type ExtractedTeacherTip } from './teacher-tip-extractor.js';
+

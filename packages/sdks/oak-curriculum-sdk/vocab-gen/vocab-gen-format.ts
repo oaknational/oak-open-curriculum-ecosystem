@@ -66,3 +66,4 @@ export function formatPipelineResult(result: PipelineResult): string {
 
   return lines.join('\n');
 }
+

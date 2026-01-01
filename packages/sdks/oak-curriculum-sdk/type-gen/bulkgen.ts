@@ -27,3 +27,4 @@ console.log('🔨 Generating bulk download Zod schemas...');
 generateBulkSchemas(outDirectory);
 
 console.log('✅ Bulk schema generation complete!');
+

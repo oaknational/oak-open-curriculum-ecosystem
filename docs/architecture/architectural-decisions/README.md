@@ -102,6 +102,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-091: Video Availability Detection Strategy](091-video-availability-detection-strategy.md) ← **Superseded by ADR-093**
 - [ADR-092: Transcript Cache Categorization](092-transcript-cache-categorization.md)
 - [ADR-093: Bulk-First Ingestion Strategy](093-bulk-first-ingestion-strategy.md)
+- [ADR-094: has_transcript Field for Transcript Presence](094-has-transcript-field.md)
+- [ADR-095: Missing Transcript Handling](095-missing-transcript-handling.md)
 
 ## Key Architectural Decisions
 
@@ -136,6 +138,14 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking
 - **[ADR-087](087-batch-atomic-ingestion.md)** - Batch-atomic ingestion (supersedes file-based progress from ADR-069)
 - **[ADR-089](089-index-everything-principle.md)** - Index Everything principle (ES as complete curriculum view)
+
+For understanding the unified ingestion pipeline architecture:
+
+- **[ADR-093](093-bulk-first-ingestion-strategy.md)** - Bulk-first ingestion (bulk download as primary, API for supplementation)
+- **[ADR-094](094-has-transcript-field.md)** - `has_transcript` field for filtering/debugging
+- **[ADR-095](095-missing-transcript-handling.md)** - Missing transcript handling (omit content fields, don't pollute index)
+
+**Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for detailed architecture.
 
 For historical context on dense vector evaluation (superseded):
 

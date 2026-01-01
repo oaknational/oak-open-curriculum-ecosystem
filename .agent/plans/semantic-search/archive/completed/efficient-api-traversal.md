@@ -1,16 +1,11 @@
 # Efficient API Traversal
 
-**Status**: ✅ SUPERSEDED — Replaced by bulk-first ingestion (ADR-093)
-**Priority**: ~~HIGH~~ Archived
-**Parent**: [roadmap.md](../../roadmap.md)
+**Status**: ✅ COMPLETE WITH LIMITATIONS — TPC filtering limits optimization scope (2025-12-29)
+**Priority**: HIGH — Ingestion efficiency
+**Parent**: [roadmap.md](../roadmap.md)
 **Created**: 2025-12-29
-**Updated**: 2025-12-30
-**Archived**: 2025-12-30
-**Principle**: ~~Make as few API calls as possible~~ Use bulk download as primary source
-
-> ⚠️ **SUPERSEDED**: This plan has been superseded by the bulk-first ingestion strategy ([ADR-093](../../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)). The bulk download provides transcripts directly, eliminating the need for video availability detection. This file is preserved for historical context.
->
-> **See instead**: [complete-data-indexing.md](../../active/complete-data-indexing.md)
+**Updated**: 2025-12-29
+**Principle**: Make as few API calls as possible; use bulk endpoints; analyse before fetching
 
 ---
 

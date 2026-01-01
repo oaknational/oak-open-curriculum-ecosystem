@@ -146,3 +146,4 @@ export function getUniqueSupervisionLevels(lessons: readonly Lesson[]): Readonly
 
   return levels;
 }
+

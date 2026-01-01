@@ -130,3 +130,4 @@ describe('extractThreads', () => {
     expect(result).toHaveLength(0);
   });
 });
+

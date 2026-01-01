@@ -215,3 +215,4 @@ export async function runBatchIngestion(
     logDataIntegrityIssues(context.logger, state.dataIntegrityReport);
   }
 }
+
