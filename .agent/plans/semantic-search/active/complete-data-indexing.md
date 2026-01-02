@@ -28,7 +28,7 @@
 | Constant | Value |
 |----------|-------|
 | `MAX_CHUNK_SIZE_BYTES` | 8MB |
-| `DEFAULT_CHUNK_DELAY_MS` | 6000ms |
+| `DEFAULT_CHUNK_DELAY_MS` | 6500ms |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× |
 | Initial retry delay | ✅ Enabled |
 

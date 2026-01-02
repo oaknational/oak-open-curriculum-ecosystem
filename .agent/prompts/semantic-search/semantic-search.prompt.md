@@ -164,7 +164,7 @@ pnpm es:status
 | Constant | Value | Purpose |
 |----------|-------|---------|
 | `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS` | 6000ms | Base delay between chunk uploads |
+| `DEFAULT_CHUNK_DELAY_MS` | 6500ms | Base delay between chunk uploads |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
 
 ---
