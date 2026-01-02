@@ -2,6 +2,10 @@
 
 This note outlines a method for combining Elasticsearch (fast retrieval and ranking) with Neo4j (deep graph traversal).
 
+## Positioning (later-phase)
+
+Neo4j is a **later-phase** addition for true multi-hop traversal. Keep Elasticsearch as the primary retrieval layer, and plan to **export graph-derived views into Elasticsearch** (paths, concept clusters, derived subjects) to strengthen search and enable novel subjects.
+
 ## 1. When Elastic Alone Is Enough
 
 Elastic is often sufficient when you need:
@@ -25,6 +29,7 @@ Common pattern:
 1. Use Elastic for retrieval and ranking.
 2. Use Neo4j to expand or validate relationships for the top results.
 3. Surface graph-derived features back into ranking or UI.
+4. Materialise graph-derived views into Elasticsearch indices for retrieval, faceting, and novel-subject workflows.
 
 ## 4. Data Synchronisation
 

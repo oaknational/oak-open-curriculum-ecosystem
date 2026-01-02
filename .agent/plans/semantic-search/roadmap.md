@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
-**Last Updated**: 2026-01-01
+**Status**: ✅ **VERIFIED** — Full ingestion complete, sequence indexing pending
+**Last Updated**: 2026-01-02
 **Metrics Source**: [current-state.md](current-state.md)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -9,124 +9,110 @@ This is THE authoritative roadmap for semantic search work.
 
 ---
 
-## ✅ ELSER RETRY IMPLEMENTATION COMPLETE
+## ✅ MILESTONE 1 COMPLETE: Full Ingestion Verified
 
-### Implementation Summary
+### Verification Results (2026-01-02)
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1.1 | Diagnostic script for failure analysis | ✅ Complete |
-| 1.2 | Analyse document characteristics | ✅ Complete |
-| 1.3 | Multiple run comparison | ✅ Complete |
-| 2 | Root cause analysis with evidence | ✅ Complete |
-| 3 | Solution design (informed by data) | ✅ Complete |
-| 4.1 | Parameter tuning (10MB chunks, 2000ms delay) | ✅ Complete (60%→85%) |
-| 4.2 | Retry utilities (`isRetryableError`, `extractFailedOperations`) | ✅ Complete |
-| 4.3 | Integration with uploader | ✅ Complete |
-| 4.4 | CLI flags for retry config | ✅ Complete |
-| 5 | ADR-096 documentation | ✅ Complete |
-| **6** | **Full ingestion verification** | 📋 **NEXT SESSION** |
+| Metric | Value |
+|--------|-------|
+| **Documents indexed** | 16,327 (100%) |
+| **Lessons** | 12,833 |
+| **Units** | 1,665 |
+| **Initial failures** | 21 (0.13%) |
+| **Final failures** | 0 |
+| **Retry rounds** | 1 |
+| **Duration** | ~21 minutes |
 
-### Root Cause (Confirmed)
-
-ELSER queue overflow causes document-level failures. Evidence:
-
-| Finding | Evidence |
-|---------|----------|
-| Queue builds over time | First 2 chunks: 100%, Chunks 3+: degraded |
-| Position-dependent failures | 93% overlap between runs (750/803 same docs) |
-| HTTP 429 errors | All failures are `inference_exception` |
-| Only semantic_text affected | Indices without ELSER: 100% success |
-
-### Solution: Two-Tier Retry (ADR-096)
-
-- **Tier 1** (HTTP-level): Retries entire chunk on transport errors
-- **Tier 2** (document-level): Retries individual documents that fail with transient errors (429, 502, 503, 504)
+See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for optimisation history.
 
 ---
 
-## 📋 Secondary Investigation Complete
+## 📋 NEXT TASK: Wire Sequence Ingestion
 
-| Issue | Status | Notes |
-|-------|--------|-------|
-| `oak_sequence_facets` has 0 docs | ✅ Known gap | Not in bulk-first path (ADR-093) |
-| `oak_sequences` has 0 docs | ✅ Known gap | Not in bulk-first path (ADR-093) |
+### Problem
 
----
+The bulk download files contain sequence data (`sequenceSlug`, `sequence` array), but the bulk-first ingestion pipeline does not currently process sequences:
 
-## ✅ Missing Transcript Handling Complete
+- `oak_sequences`: 0 documents (should have data)
+- `oak_sequence_facets`: 0 documents (should have data)
 
-See [missing-transcript-handling.md](active/missing-transcript-handling.md) for implementation details.
+### Solution
 
----
+Wire sequence document building into the existing bulk ingestion pipeline.
 
-## 🎯 Next Action
+**Key constraint from [rules.md](../../directives-and-memory/rules.md)**: One ingestion pipeline with thin adapters. Any duplication of pipeline logic is a DRY violation.
 
-**Verify full ingestion in next session:**
+### Implementation Approach
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
-pnpm es:status
-```
+1. **Existing builders**: `sequence-bulk-helpers.ts` already has:
+   - `buildSequenceOps()`
+   - `buildSequenceFacetOps()`
 
-**Expected results:**
+2. **Integration point**: `bulk-ingestion.ts` orchestrates document building:
+   - Currently calls `buildLessonIndexDoc`, `buildUnitIndexDoc`, `buildThreadDocs`
+   - Add calls to sequence builders
 
-| Index | Expected Count |
-|-------|----------------|
-| `oak_lessons` | ~12,320 |
-| `oak_units` | ~1,665 |
-| `oak_unit_rollup` | ~1,665 |
-| `oak_threads` | ~164 |
+3. **Data source**: Bulk download files already contain sequence data:
+   - Each file has `sequenceSlug` and `sequence` array
+   - No additional API calls needed
 
----
+4. **Single pipeline**: Use the same `dispatchBulk` flow — do NOT create separate sequence ingestion
 
-## 🔧 Implementation Status
+### Acceptance Criteria
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 0 | SDK bulk export (schema-first) | ✅ Complete |
-| 1 | BulkDataAdapter (Lesson/Unit transforms) | ✅ Complete |
-| 2 | API supplementation (Maths KS4 tiers) | ✅ Complete |
-| 3 | HybridDataSource (bulk + API + rollups) | ✅ Complete |
-| 4 | VocabularyMiningAdapter | ✅ Complete |
-| 5a | Bulk thread transformer | ✅ Complete |
-| 5b | CLI wiring | ✅ Complete |
-| 5c | Missing transcript handling | ✅ Complete |
-| 5d | ELSER retry - Parameter tuning | ✅ Complete (60%→85%) |
-| 5e | ELSER retry - Retry utilities | ✅ Complete |
-| 5f | ELSER retry - Integration | ✅ Complete |
-| 5g | ELSER retry - CLI flags | ✅ Complete |
-| 5h | ELSER retry - Documentation | ✅ Complete |
-| **5i** | **Full ingestion run** | 📋 **NEXT SESSION** |
+- [ ] `oak_sequences` populated from bulk data
+- [ ] `oak_sequence_facets` populated from bulk data
+- [ ] No duplication of ingestion pipeline logic
+- [ ] All quality gates pass
+- [ ] TDD: tests first
 
 ---
 
-## Linear Path to Success
+## ✅ Completed Work
 
 ### Milestone 1: Complete ES Ingestion (Bulk-First)
 
-**Status**: ✅ Implementation complete, verification pending
-**Specification**: [complete-data-indexing.md](active/complete-data-indexing.md)
+| Phase | Description | Status |
+|-------|-------------|--------|
+| SDK bulk export | Schema-first types | ✅ Complete |
+| BulkDataAdapter | Lesson/Unit transforms | ✅ Complete |
+| API supplementation | Maths KS4 tiers | ✅ Complete |
+| HybridDataSource | Bulk + API + rollups | ✅ Complete |
+| VocabularyMiningAdapter | Keyword extraction | ✅ Complete |
+| Bulk thread transformer | Thread documents | ✅ Complete |
+| CLI wiring | `--bulk` mode | ✅ Complete |
+| Missing transcript handling | ADR-094, ADR-095 | ✅ Complete |
+| ELSER retry implementation | ADR-096 | ✅ Complete |
+| **Full ingestion verification** | 16,327 docs | ✅ **VERIFIED** |
 
-### Milestone 2: Missing Transcript Handling
+### Two-Tier Retry System (ADR-096)
 
-**Status**: ✅ COMPLETE
-**Specification**: [missing-transcript-handling.md](active/missing-transcript-handling.md)
-**ADRs**: [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md), [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md)
+| Component | Status |
+|-----------|--------|
+| Tier 1 (HTTP-level) retry | ✅ Complete |
+| Tier 2 (document-level) retry | ✅ Complete |
+| Progressive chunk delay (×1.5) | ✅ Complete |
+| Initial retry delay | ✅ Complete |
+| CLI flags | ✅ Complete |
+| JSON failure report | ✅ Complete |
+| **Production verification** | ✅ **VERIFIED** |
+
+---
+
+## Future Milestones
+
+### Milestone 2: Sequence Indexing
+**Status**: 📋 Next task
+**Specification**: This roadmap (above)
 
 ### Milestone 3: Synonym Quality Audit
-
-**Status**: 📋 Pending (blocked on Milestone 1 verification)
+**Status**: 📋 Pending (blocked on sequences)
 **Specification**: [synonym-quality-audit.md](planned/future/synonym-quality-audit.md)
 
 ### Milestone 4-11: Future Work
-
 See individual specification files in `planned/` directory.
 
 ### Milestone 12: Conversational Search (Tier 4)
-
 **Status**: 📋 Deferred — Tier 4 work
 **Specification**: [conversational-search.md](planned/future/conversational-search.md)
 
@@ -159,14 +145,10 @@ pnpm smoke:dev:stub
 | Document | Purpose |
 |----------|---------|
 | [current-state.md](current-state.md) | Authoritative metrics |
-| [elser-retry-robustness.md](active/elser-retry-robustness.md) | Solution spec |
 | [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Session context |
-| [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) | ELSER research |
-| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | Retry pattern (reused) |
-| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Idempotent re-runs |
-| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Typed error handling |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry (verified) |
 | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **NEW** ES Bulk Retry |
+| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | Retry pattern (reused) |
 
 ---
 
@@ -177,7 +159,6 @@ Before any work, read:
 1. [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no type shortcuts
 2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
-4. [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) — ELSER behaviour
 
 **Do NOT guess how ES works** — read the official documentation:
 

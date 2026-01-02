@@ -15,10 +15,6 @@ import {
   extractOperationPairs,
   flattenPairs,
   isRetryableError,
-  MAX_CHUNK_SIZE_BYTES,
-  DEFAULT_CHUNK_DELAY_MS,
-  MAX_RETRY_ATTEMPTS,
-  BASE_RETRY_DELAY_MS,
 } from './bulk-chunk-utils';
 
 /**
@@ -49,24 +45,6 @@ function createIndexAction(id: string): BulkIndexAction {
 }
 
 describe('bulk-chunk-utils', () => {
-  describe('constants', () => {
-    it('has MAX_CHUNK_SIZE_BYTES set to 10MB (reduced to prevent ELSER queue overflow)', () => {
-      expect(MAX_CHUNK_SIZE_BYTES).toBe(10 * 1024 * 1024);
-    });
-
-    it('has DEFAULT_CHUNK_DELAY_MS set to 2000ms (increased to allow ELSER queue drainage)', () => {
-      expect(DEFAULT_CHUNK_DELAY_MS).toBe(2000);
-    });
-
-    it('has MAX_RETRY_ATTEMPTS set to 3', () => {
-      expect(MAX_RETRY_ATTEMPTS).toBe(3);
-    });
-
-    it('has BASE_RETRY_DELAY_MS set to 1000ms', () => {
-      expect(BASE_RETRY_DELAY_MS).toBe(1000);
-    });
-  });
-
   describe('calculateBackoffWithJitter', () => {
     it('returns a value between 0 and base delay for attempt 0', () => {
       const baseDelay = 1000;

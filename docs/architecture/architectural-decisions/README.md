@@ -104,6 +104,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-093: Bulk-First Ingestion Strategy](093-bulk-first-ingestion-strategy.md)
 - [ADR-094: has_transcript Field for Transcript Presence](094-has-transcript-field.md)
 - [ADR-095: Missing Transcript Handling](095-missing-transcript-handling.md)
+- [ADR-096: ES Bulk Retry Strategy](096-es-bulk-retry-strategy.md)
 
 ## Key Architectural Decisions
 
@@ -144,6 +145,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-093](093-bulk-first-ingestion-strategy.md)** - Bulk-first ingestion (bulk download as primary, API for supplementation)
 - **[ADR-094](094-has-transcript-field.md)** - `has_transcript` field for filtering/debugging
 - **[ADR-095](095-missing-transcript-handling.md)** - Missing transcript handling (omit content fields, don't pollute index)
+- **[ADR-096](096-es-bulk-retry-strategy.md)** - Two-tier retry for ELSER queue overflow recovery
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for detailed architecture.
 

@@ -9,9 +9,14 @@ import {
 import type { BulkOperations } from './bulk-operation-types';
 import { isBulkIndexAction } from './bulk-operation-types';
 import { chunkOperations, MAX_CHUNK_SIZE_BYTES } from './bulk-chunk-utils';
-import { uploadAllChunks, type EsTransport, type BulkUploadConfig } from './bulk-chunk-uploader';
+import {
+  uploadAllChunks,
+  type EsTransport,
+  type BulkUploadConfig,
+  type BulkUploadResult,
+} from './bulk-chunk-uploader';
 
-export type { EsTransport, BulkUploadConfig } from './bulk-chunk-uploader';
+export type { EsTransport, BulkUploadConfig, BulkUploadResult } from './bulk-chunk-uploader';
 export { createNdjson } from './bulk-chunk-utils';
 
 const KIND_BY_INDEX = new Map<string, SearchIndexKind>([
@@ -91,7 +96,7 @@ export async function dispatchBulk(
   operations: BulkOperations,
   logger: Logger = ingestLogger,
   config: BulkUploadConfig = {},
-): Promise<void> {
+): Promise<BulkUploadResult> {
   const docCount = Math.floor(operations.length / 2);
   // Estimate size by sampling first 100 operations to avoid stringifying entire array
   const sampleSize = Math.min(100, operations.length);
@@ -115,14 +120,15 @@ export async function dispatchBulk(
     maxChunkSizeMB: MAX_CHUNK_SIZE_BYTES / 1024 / 1024,
   });
   const startTime = Date.now();
-  const totalUploaded = await uploadAllChunks(es, chunks, logger, docCount, config);
+  const result = await uploadAllChunks(es, chunks, logger, docCount, config);
   const durationMs = Date.now() - startTime;
   logger.info('Bulk upload completed successfully', {
-    documents: totalUploaded,
+    documents: result.successCount,
     chunks: chunks.length,
     durationMs,
     durationSeconds: (durationMs / 1000).toFixed(1),
   });
+  return result;
 }
 
 /**

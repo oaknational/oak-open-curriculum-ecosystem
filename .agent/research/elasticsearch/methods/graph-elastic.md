@@ -2,6 +2,10 @@
 
 This note focuses on Elastic-native features for graph-style discovery without a separate graph database.
 
+## Positioning (near-term)
+
+These ES-only, graph-adjacent features are intended for **immediate** search improvements. They also remain useful after a future Neo4j adoption, because graph-derived views can be materialised back into Elasticsearch for retrieval and faceting. For the later-phase Neo4j path, see `graph-elastic-neo4j.md`.
+
 ## 1. Graph Explore API
 
 The Graph Explore API surfaces connections between terms and entities based on co-occurrence. Use it to:

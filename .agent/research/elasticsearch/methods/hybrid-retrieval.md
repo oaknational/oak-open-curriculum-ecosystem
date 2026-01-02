@@ -63,7 +63,19 @@ POST my-index/_search
 }
 ```
 
-## 4. Example: RRF with BM25 + Dense Vector kNN
+Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields) and two retrievers for sequences.
+
+## 4. Oak Integration Notes (Current)
+
+These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
+
+- Lessons and units use four-way RRF (BM25 + ELSER on content and structure fields) via `src/lib/hybrid-search/rrf-query-builders.ts`.
+- Sequences use two-way RRF (BM25 + ELSER) with a smaller rank window in the same module.
+- Query preprocessing removes noise phrases and boosts curriculum phrases from the SDK synonym vocabulary (`src/lib/query-processing/*`).
+- Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters (`src/lib/hybrid-search/rrf-query-helpers.ts`).
+- Index targeting is environment-driven (primary vs sandbox) via `src/lib/search-index-target.ts`.
+
+## 5. Example: RRF with BM25 + Dense Vector kNN
 
 ```json
 POST my-index/_search
@@ -95,7 +107,7 @@ POST my-index/_search
 }
 ```
 
-## 5. Reranking Guidance
+## 6. Reranking Guidance
 
 Reranking is effective only when the rerank field is:
 
@@ -104,7 +116,7 @@ Reranking is effective only when the rerank field is:
 
 Avoid reranking on full transcripts or very short titles. If you plan to rerank, create a dedicated "search summary" field designed for the cross-encoder.
 
-## 6. Graph-Friendly Signals
+## 7. Graph-Friendly Signals
 
 To incorporate graph signals without a graph database:
 

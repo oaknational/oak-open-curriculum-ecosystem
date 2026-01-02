@@ -1,7 +1,7 @@
 # Semantic Search — Navigation Hub
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
-**Last Updated**: 2026-01-01
+**Status**: ✅ **VERIFIED** — Full ingestion complete, sequence indexing pending
+**Last Updated**: 2026-01-02
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 ---
@@ -16,7 +16,7 @@ Then read:
 
 1. **[roadmap.md](roadmap.md)** — Authoritative roadmap
 2. **[current-state.md](current-state.md)** — Current metrics
-3. **[ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)** — ES Bulk Retry Strategy
+3. **[ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)** — ES Bulk Retry Strategy (verified)
 
 **Foundation Documents (MANDATORY)**:
 
@@ -26,45 +26,39 @@ Then read:
 
 ---
 
-## ✅ Implementation Complete
+## ✅ Verification Complete
+
+### Full Ingestion Results (2026-01-02)
+
+| Metric | Value |
+|--------|-------|
+| **Documents indexed** | 16,327 (100%) |
+| **Lessons** | 12,833 |
+| **Units** | 1,665 |
+| **Initial failures** | 21 (0.13%) |
+| **Final failures** | 0 |
+| **Duration** | ~21 minutes |
 
 ### Two-Tier Retry System (ADR-096)
 
-All code work is complete:
-
-| Task | Status |
-|------|--------|
-| Integration tests | ✅ 6 tests passing |
-| E2E tests | ✅ 6 tests passing |
-| Tier 1 retry (HTTP-level) | ✅ Complete |
-| Tier 2 retry (document-level) | ✅ Complete |
-| CLI flags (`--max-retries`, `--retry-delay`, `--no-retry`) | ✅ Complete |
-| ADR-096 documentation | ✅ Complete |
-| README documentation | ✅ Complete |
-| TSDoc on all interfaces | ✅ Complete |
-| All quality gates | ✅ Pass (809 tests) |
-
-### Remaining Work (Next Session)
-
-| Task | Status |
-|------|--------|
-| Run full ingestion against live ES | 📋 Pending |
-| Verify ~12,320 lessons indexed | 📋 Pending |
+| Component | Status |
+|-----------|--------|
+| Tier 1 (HTTP-level) retry | ✅ Verified |
+| Tier 2 (document-level) retry | ✅ Verified |
+| Progressive chunk delay (×1.5) | ✅ Verified |
+| Initial retry delay | ✅ Verified |
+| JSON failure report | ✅ Verified |
+| **Production verification** | ✅ **COMPLETE** |
 
 ---
 
-## ✅ What's Complete
+## 📋 Next Task: Sequence Indexing
 
-| Component | Status |
-|-----------|--------|
-| Bulk-first ingestion strategy (ADR-093) | ✅ Complete |
-| SDK bulk export with schema-first types | ✅ Complete |
-| BulkDataAdapter, HybridDataSource, rollup builder | ✅ Complete |
-| CLI wiring (`--bulk` mode) | ✅ Complete |
-| Missing transcript handling (ADR-094, ADR-095) | ✅ Complete |
-| ELSER root cause analysis | ✅ Complete |
-| **ELSER retry implementation (ADR-096)** | ✅ Complete |
-| Quality gates | ✅ All passing (809 tests) |
+**Problem**: `oak_sequences` and `oak_sequence_facets` are empty despite data being available in bulk downloads.
+
+**Solution**: Wire sequence document building into existing bulk ingestion pipeline (NO pipeline duplication).
+
+**See**: [roadmap.md](roadmap.md) for full task details.
 
 ---
 
@@ -86,7 +80,7 @@ All code work is complete:
 │           (429, 502, 503, 504)                             │
 │                     │                                       │
 │                     ▼                                       │
-│              Exponential Backoff                           │
+│        Progressive Chunk Delay (×1.5)                      │
 │           (allow ELSER to drain)                           │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -97,15 +91,14 @@ All code work is complete:
 
 ## Key ADRs
 
-| ADR | Title | Purpose |
-|-----|-------|---------|
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **ES Bulk Retry Strategy** | **NEW** Two-tier retry |
-| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | SDK Rate Limiting and Retry | Retry pattern source |
+| ADR | Title | Status |
+|-----|-------|--------|
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **ES Bulk Retry Strategy** | ✅ Verified |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-First Ingestion | ✅ Complete |
+| [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` Field | ✅ Complete |
+| [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing Transcript Handling | ✅ Complete |
+| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | SDK Rate Limiting and Retry | Pattern source |
 | [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-Atomic Ingestion | Idempotent re-runs |
-| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result Pattern | Typed error handling |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-First Ingestion | Strategic pivot |
-| [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` Field | Filtering/debugging |
-| [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing Transcript Handling | Option D: Omit content fields |
 
 ---
 
@@ -132,25 +125,16 @@ pnpm test:ui && pnpm smoke:dev:stub
 ├── current-state.md            # Current metrics snapshot
 ├── README.md                   # This file (navigation hub)
 ├── active/                     # Currently active work
-│   ├── elser-retry-robustness.md  # ✅ IMPLEMENTATION COMPLETE
-│   ├── missing-transcript-handling.md  # ✅ Complete
-│   └── complete-data-indexing.md       # Implementation phases
+│   └── complete-data-indexing.md  # ✅ Archived (verified)
 ├── planned/
 │   ├── sdk-extraction/         # SDK + CLI extraction (Milestone 11)
 │   └── future/                 # Post-SDK enhancements
 ├── archive/completed/          # Completed work
+│   ├── elser-retry-robustness.md  # ✅ Archived
+│   ├── missing-transcript-handling.md  # ✅ Archived
+│   └── ...
 └── reference-docs/             # Permanent reference material
 ```
-
----
-
-## Related Documents
-
-| Document | Purpose |
-|----------|---------|
-| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | **Session entry point** |
-| [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) | ELSER research |
-| [bulk-ingestion-sequence-gap.md](../../research/elasticsearch/bulk-ingestion-sequence-gap.md) | Empty sequence indices |
 
 ---
 

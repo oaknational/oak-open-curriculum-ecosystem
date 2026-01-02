@@ -1,58 +1,42 @@
 # Milestone 1: Complete Data Indexing (Bulk-First)
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
+**Status**: ✅ **VERIFIED** — Should be archived
 **Parent**: [roadmap.md](../roadmap.md)
 **Session Context**: [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md)
-**Updated**: 2026-01-01
+**Updated**: 2026-01-02
 
 ---
 
-## ✅ ELSER RETRY IMPLEMENTATION COMPLETE
+## ✅ VERIFICATION COMPLETE
 
-All code work is done. Only verification against live Elasticsearch remains.
+### Full Ingestion Results (2026-01-02)
 
-### Implementation Summary
+| Metric | Value |
+|--------|-------|
+| **Documents indexed** | 16,327 (100%) |
+| **Lessons** | 12,833 |
+| **Units** | 1,665 |
+| **Unit rollups** | 1,665 |
+| **Threads** | 164 |
+| **Initial failures** | 21 (0.13%) |
+| **Final failures** | 0 |
+| **Retry rounds** | 1 |
+| **Duration** | ~21 minutes |
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1 | Diagnostic tooling | ✅ Complete |
-| 2 | Root cause analysis | ✅ Complete |
-| 3 | Solution design | ✅ Complete |
-| 4.1 | Parameter tuning (10MB chunks, 2000ms delay) | ✅ Complete (60%→85%) |
-| 4.2 | Retry utilities | ✅ Complete |
-| 4.3 | Integration with uploader | ✅ Complete |
-| 4.4 | CLI flags | ✅ Complete |
-| 5 | Documentation (ADR-096) | ✅ Complete |
-| 6 | Quality gates | ✅ All passing |
-| **7** | **Full ingestion verification** | 📋 **NEXT SESSION** |
+### Optimised Parameters
 
-See [elser-retry-robustness.md](elser-retry-robustness.md) and [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for details.
+| Constant | Value |
+|----------|-------|
+| `MAX_CHUNK_SIZE_BYTES` | 8MB |
+| `DEFAULT_CHUNK_DELAY_MS` | 6000ms |
+| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× |
+| Initial retry delay | ✅ Enabled |
 
----
-
-## Pre-Implementation ES State
-
-| Index | Count | Expected | Completion |
-|-------|-------|----------|------------|
-| `oak_lessons` | 6,572 | ~12,320 | ~53% |
-| `oak_unit_rollup` | 523 | ~1,665 | ~31% |
-| `oak_units` | 1,635 | ~1,665 | ~98% |
-| `oak_threads` | 164 | ~164 | 100% |
-
-### Root Cause (Confirmed)
-
-ELSER queue overflow causes document-level failures:
-
-| Finding | Evidence |
-|---------|----------|
-| Queue builds over time | First 2 chunks: 100%, Chunks 3+: degraded |
-| Position-dependent failures | 93% overlap between runs (750/803 same docs) |
-| HTTP 429 errors | All failures are `inference_exception` |
-| Only semantic_text affected | Indices without ELSER: 100% success |
+See [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for full optimisation history.
 
 ---
 
-## ✅ Completed Phases
+## ✅ All Phases Complete
 
 | Phase | Description | Status |
 |-------|-------------|--------|
@@ -69,29 +53,17 @@ ELSER queue overflow causes document-level failures:
 | 5f | ELSER retry - Integration | ✅ Complete |
 | 5g | ELSER retry - CLI flags | ✅ Complete |
 | 5h | ELSER retry - Documentation | ✅ Complete |
-| **5i** | **Full ingestion run** | 📋 **NEXT SESSION** |
+| 5i | ELSER retry - Progressive delay | ✅ Complete |
+| 5j | ELSER retry - JSON failure report | ✅ Complete |
+| **5k** | **Full ingestion verification** | ✅ **VERIFIED** |
 
 ---
 
-## 🎯 Next Action (Next Session)
+## 📋 Next Task: Sequence Indexing
 
-Run full ingestion and verify success:
+This milestone is complete. The next task is wiring sequence ingestion into the bulk pipeline.
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
-pnpm es:status
-```
-
-**Expected results:**
-
-| Index | Expected Count |
-|-------|----------------|
-| `oak_lessons` | ~12,320 |
-| `oak_units` | ~1,665 |
-| `oak_unit_rollup` | ~1,665 |
-| `oak_threads` | ~164 |
+**See**: [roadmap.md](../roadmap.md) for full task details.
 
 ---
 
@@ -99,22 +71,19 @@ pnpm es:status
 
 ### ADRs (Architectural Decisions)
 
-| ADR | Topic |
-|-----|-------|
-| [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **NEW** ES Bulk Retry Strategy |
-| [ADR-070](../../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | Retry pattern (reused) |
-| [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-atomic ingestion, idempotent re-runs |
-| [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Typed error handling |
-| [ADR-093](../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first ingestion strategy |
-| [ADR-094](../../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` field |
-| [ADR-095](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing transcript handling |
+| ADR | Topic | Status |
+|-----|-------|--------|
+| [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | ✅ Verified |
+| [ADR-093](../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first ingestion | ✅ Complete |
+| [ADR-094](../../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` field | ✅ Complete |
+| [ADR-095](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing transcript handling | ✅ Complete |
 
 ### App Documentation
 
 | Document | Purpose |
 |----------|---------|
 | [Search App README](../../../../apps/oak-open-curriculum-semantic-search/README.md) | CLI usage, setup |
-| [Indexing README](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/README.md) | **NEW** Module documentation |
+| [Indexing README](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/README.md) | Module documentation |
 | [Adapters README](../../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) | Adapter architecture |
 
 ---

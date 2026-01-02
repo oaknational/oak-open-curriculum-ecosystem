@@ -35,6 +35,15 @@ Track:
 
 If you control model allocations (non-serverless deployments), increase allocations for ingestion and keep threads at 1 per allocation for throughput.
 
+## 5. Oak CLI/SDK Integration Notes (Current)
+
+These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
+
+- Bulk uploads are chunked to 10MB with a default 2500ms delay between chunks to reduce ELSER queue pressure (`src/lib/indexing/bulk-chunk-utils.ts`).
+- Two-tier retry is in place: HTTP-level chunk retry plus document-level retry for retryable status codes (429, 502, 503, 504) with exponential backoff and jitter (`src/lib/indexing/bulk-chunk-uploader.ts`, `src/lib/indexing/retry/*`).
+- Bulk ingestion CLI flags (`--max-retries`, `--retry-delay`, `--no-retry`) tune document-level retry for bulk-first ingestion (`src/lib/elasticsearch/setup/ingest-live.ts`, `src/lib/elasticsearch/setup/ingest-bulk.ts`).
+- Ingestion is batch-atomic by default (subject + key stage granularity) via `src/lib/index-batch-generator.ts` and `src/lib/indexing/ingest-harness.ts`.
+
 ## References
 
 - ELSER: https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-elser

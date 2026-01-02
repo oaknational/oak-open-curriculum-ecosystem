@@ -1,7 +1,7 @@
-## Semantic Search: extract the “SDK” + first-class CLI; retire the Next.js app layer (proposal)
+## Semantic Search: CLI/SDK-first; retire hosted API routes
 
-**Date**: 2025-12-13  
-**Status**: RESEARCH → PROPOSAL (no code changes made by this document)  
+**Date**: 2026-01-01  
+**Status**: DECISION (documenting CLI/SDK-only; no hosted API routes)  
 **Audience**: Oak engineers + agents working on Elasticsearch-backed curriculum search and MCP tooling
 
 ---
@@ -13,7 +13,7 @@ We currently have a workspace at `apps/oak-open-curriculum-semantic-search/` tha
 - a **search/indexing library** (`src/lib/**`, `src/adapters/**`)
 - a **collection of operational scripts/CLIs** (`scripts/**`, plus an existing CLI under `src/lib/elasticsearch/setup/cli.ts`)
 
-The Next.js **UI** and **HTTP surface** exist, but are not currently the value-bearing layer for the system.
+The Next.js **UI** and **HTTP surface** exist in the repo, but they are **no longer part of the active system** and should not be extended.
 
 Based on stakeholder intent (captured in this thread):
 
@@ -22,7 +22,7 @@ Based on stakeholder intent (captured in this thread):
 - The goal is a **search SDK** consumed by an **Express-based MCP server**, with **NL handling living in MCP**, expressed as comprehensive tool examples mapping user intent → SDK calls
 - The “admin app” should be **local-first** and likely **CLI-driven**, not a deployed Next.js service
 
-Therefore: the right-layer refactor is to **acknowledge and extract the SDK**, and **promote the CLI to a first-class citizen**, while **preserving useful patterns from the Next.js layer as documentation/examples**.
+Decision: the workspace is **CLI/SDK-only**. Hosted API routes are retired. Any Next.js patterns worth keeping should live only as documentation/examples.
 
 This is a system-level simplification (fewer deployed surfaces, clearer boundaries, better DX) that keeps the Elasticsearch / IR work intact.
 
@@ -30,14 +30,14 @@ This is a system-level simplification (fewer deployed surfaces, clearer boundari
 
 ## Constraints and non-negotiables (repo foundations)
 
-These are the foundation constraints that shape the proposal:
+These are the foundation constraints that shape the decision:
 
 - **Schema-first** (Cardinal Rule): static types/guards/validators flow from the Open Curriculum OpenAPI schema and are generated at type-gen time (see `.agent/directives-and-memory/rules.md` and `.agent/directives-and-memory/schema-first-execution.md`).
 - **Type discipline**: external inputs are `unknown`, validated immediately, and then **never widened** again; avoid `as`, `any`, `!`, broad `Record`, `Object.*`, `Reflect.*` patterns (see `.agent/directives-and-memory/rules.md`).
 - **TDD**: behaviour-first tests, prefer pure functions; integration points accept simple injected fakes (see `.agent/directives-and-memory/testing-strategy.md`).
 - **No compatibility layers**: refactor by replacing, not “supporting both”.
 
-This proposal includes an implementation plan that requires periodically re-reading and re-committing to those docs (see “Implementation plan”).
+This decision includes an implementation plan that requires periodically re-reading and re-committing to those docs (see “Implementation plan”).
 
 ---
 
@@ -51,23 +51,20 @@ In `apps/oak-open-curriculum-semantic-search/` we have:
   - `src/lib/**`: hybrid retrieval (BM25 + ELSER + optional dense vectors), RRF builders, indexing transforms, ES setup helpers, zero-hit observability, suggestions.
   - `src/adapters/**`: Oak SDK adapters (including caching + threads utilities).
 - **Operational scripts / CLI (durable value)**
-  - `src/lib/elasticsearch/setup/cli.ts`: already a CLI (setup/reset/status).
-  - `scripts/**`: ingestion harnesses, progress checks, synonyms generation, sandbox ingestion, observability maintenance.
-- **Next.js HTTP adapter (currently not needed)**
-  - `app/api/**`: structured search, suggest, admin endpoints, OpenAPI JSON, docs page, etc.
-  - It contains Next-specific caching (`unstable_cache`) and cookie-based fixture mode handling.
-- **Next.js UI (currently not used)**
-  - `app/ui/**`, `app/*/page.tsx`: landing/search/ops pages, theming, fixture toggle, Playwright visual tests.
+  - `src/lib/elasticsearch/setup/cli.ts`: CLI (setup/reset/status).
+  - `src/lib/elasticsearch/setup/ingest-live.ts`: ingestion CLI (API mode + bulk-first mode).
+  - `scripts/**` and `operations/**`: ingestion/diagnostics/observability helpers.
+- **Deprecated Next.js adapter**
+  - `app/api/**` and `app/ui/**` are not part of the current runtime and should be treated as archived patterns only.
 
 This matches the repo’s own description in `apps/oak-open-curriculum-semantic-search/README.md` (“Next.js App Router workspace… serves server-side RRF…”), but _usage has shifted_: the “app” is acting as a convenient wrapper around a search/indexing toolkit.
 
 ### Key “SDK-ish” signals already present
 
-- **Search types already flow from the SDK** via `@oaknational/oak-curriculum-sdk/public/search.js` and are re-exported in `apps/oak-open-curriculum-semantic-search/src/types/oak.ts`.
-- **Indexing and retrieval are already cleanly modularised** in `src/lib/indexing/**` and `src/lib/hybrid-search/**`.
-- **Elasticsearch setup already exists as a CLI**:
-  - `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/cli.ts`
-  - with subcommands in `cli-commands.ts`
+- **Search and index types flow from the SDK** via `@oaknational/oak-curriculum-sdk/public/search.js` and are re-exported in `apps/oak-open-curriculum-semantic-search/src/types/oak.ts`.
+- **Indexing and retrieval are already modularised** in `src/lib/indexing/**` and `src/lib/hybrid-search/**`.
+- **Setup and mappings are SDK-led**: `src/lib/elasticsearch/setup/index.ts` uses `@oaknational/oak-curriculum-sdk/elasticsearch.js` for mappings and `@oaknational/oak-curriculum-sdk/public/mcp-tools` for synonyms.
+- **CLI ingestion is first-class**: `src/lib/elasticsearch/setup/ingest-live.ts` and `src/lib/elasticsearch/setup/ingest-bulk.ts` wrap `src/lib/indexing/ingest-harness.ts` and `src/lib/indexing/bulk-ingestion.ts`.
 
 ### Key “app-shaped” coupling that blocks a clean SDK boundary (to address during extraction)
 
@@ -78,8 +75,8 @@ These are the biggest blockers to a portable “SDK”:
 - **Singleton infrastructure clients**:
   - `src/lib/es-client.ts` memoises a global `Client` using `env()`
   - `src/adapters/oak-adapter-sdk.ts` memoises a global Oak SDK client using `env()`
-- **Next.js-specific caching concerns mixed into orchestration**:
-  - `app/api/search/search-service.ts` uses `unstable_cache` and Next request/response types.
+- **Next.js-specific adapter code**:
+  - Retain only as documentation examples; do not treat as runtime dependencies.
 
 For an SDK, the consuming app (MCP server, local CLI) must provide config and dependencies explicitly. That is now a stated requirement.
 
@@ -87,7 +84,7 @@ For an SDK, the consuming app (MCP server, local CLI) must provide config and de
 
 ## Elasticsearch context (what we’re building “around”)
 
-This proposal is about package boundaries, but it’s grounded in the Elasticsearch capabilities the system already relies on:
+This decision is about package boundaries, but it is grounded in the Elasticsearch capabilities the system already relies on:
 
 - **Hybrid retrieval**:
   - lexical BM25 queries over curated fields
@@ -102,7 +99,7 @@ Internal repo research already documents these decisions and empirical evaluatio
 
 - `.agent/research/elasticsearch/system/assumptions-validation.md`
 - `.agent/research/elasticsearch/system/hybrid-search-reranking-evaluation.md`
-- `.agent/research/elasticsearch/archive/bm25-elser-rrf-rerank.md`
+- `.agent/research/elasticsearch/methods/hybrid-retrieval.md`
 
 This document does not re-evaluate ranking; it focuses on where the code should live to maximise reuse, maintainability, and MCP integration.
 
@@ -110,13 +107,13 @@ This document does not re-evaluate ranking; it focuses on where the code should 
 
 ## The “right layer” target: SDK + CLI + docs/examples
 
-### Goal state summary
+### Direction summary
 
 We want:
 
 - a **Search SDK** (library) that exposes **services** (not just functions)
 - a **first-class CLI/admin surface** (local-only) that consumes those services
-- **no Next.js runtime dependency** today
+- **no hosted API routes** or Next.js runtime dependency
 - a lightweight “future service adapter” option later (Next.js or other), but not now
 - extracted UI patterns and route orchestration captured as **docs/examples**, not a built artifact
 
@@ -196,8 +193,8 @@ This mapping is intentionally mechanical; it reduces ambiguity and makes extract
 | `src/adapters/**`                                       | `src/adapters/**`                              | Convert singletons → factories/interfaces; remove `env()` dependency. |
 | `src/lib/env.ts`                                        | `src/config/**`                                | SDK should validate config objects, not process.env directly.         |
 | `scripts/**`                                            | CLI workspace commands                         | Preserve behaviour, not file locations.                               |
-| `app/api/**`                                            | docs/examples (not runtime)                    | Preserve patterns only.                                               |
-| `app/ui/**`                                             | docs/patterns (not runtime)                    | Preserve UX/accessibility patterns only.                              |
+| `app/api/**`                                            | removed/archived patterns (not runtime)        | Hosted API routes are retired.                                        |
+| `app/ui/**`                                             | removed/archived patterns (not runtime)        | UI is not part of the active system.                                  |
 
 ---
 
@@ -280,7 +277,7 @@ Model the CLI around operator intent:
 - **`search-cli sandbox ingest`**: ingest from fixtures (for offline & deterministic runs)
 - **`search-cli telemetry zero-hit purge`**: maintenance operations
 
-All of these already exist in some form; the proposal is to unify them behind one cohesive CLI that uses the same SDK services as the MCP server will.
+All of these already exist in some form; the direction is to unify them behind one cohesive CLI that uses the same SDK services as the MCP server will.
 
 ---
 
@@ -288,7 +285,7 @@ All of these already exist in some form; the proposal is to unify them behind on
 
 ### Keep as documentation/examples (recommended)
 
-The Next.js layer has useful patterns worth preserving even if we delete the runtime:
+The Next.js layer has useful patterns worth preserving as documentation, even after retirement:
 
 - **Caching model**: the “index version tag” approach (`SEARCH_INDEX_VERSION`) is a good conceptual model for future UI/app caching, even if the mechanism (Next `unstable_cache`) is Next-specific.
 - **Fixture mode**: deterministic fixtures and a toggle are excellent DX patterns for offline development and repeatable evidence.
@@ -301,12 +298,12 @@ Instead of keeping Next as a deployable app, preserve it as:
 
 ### Explicitly retire / delete (recommended)
 
-Given “no UI, no HTTP layer needed right now”, the Next.js workspace becomes:
+Given “no UI, no HTTP layer needed”, the Next.js workspace becomes:
 
 - build complexity (Next build, Playwright UI tests, SSR theming)
 - dependency magnet (React, Next, styled-components, redoc)
 
-The proposal is to remove these _from the active build graph_ and keep only the extracted docs/examples.
+The decision is to remove these from the active build graph and keep only the extracted docs/examples.
 
 ---
 
@@ -323,7 +320,7 @@ This is the right choice:
 Concretely: the MCP tool should ship **comprehensive examples** showing mappings like:
 
 - “Find KS4 geography units about mountains” → `retrieval.searchStructured({ scope: 'units', text: 'mountains', subject: 'geography', keyStage: 'ks4' })`
-- “Give me suggestions as I type ‘pyth’ in units” → `retrieval.suggest({ prefix: 'pyth', scope: 'units', ... })`
+- "Give me suggestions as I type 'pyth' in units" → `retrieval.suggest({ prefix: 'pyth', scope: 'units', ... })`
 - “Reindex everything for ks3 maths (sandbox)” → `admin.ingest({ target: 'sandbox', subject: 'maths', keyStages: ['ks3'], ... })`
 
 The tool docs become the place where NL heuristics live, and the SDK remains deterministic and testable.
@@ -372,7 +369,7 @@ The extraction is an opportunity to align the search SDK with repo-wide type dis
 
 ### 4) Documentation drift signals
 
-Some docs reference endpoints that are not present in the current `app/api/**` tree (e.g. `GET /api/index-oak/status` is referenced in multiple docs but not found as a route file). When we remove Next, we should also reconcile which docs are authoritative and where the “current state” truth lives.
+Remove references to hosted API routes and ensure CLI/SDK examples are the authoritative integration points. Any remaining Next.js paths should be treated as archived patterns only.
 
 ---
 
@@ -434,4 +431,3 @@ This document should be read alongside:
 - `.agent/research/elasticsearch/system/assumptions-validation.md` (field/mapping correctness checks)
 - `.agent/research/elasticsearch/system/hybrid-search-reranking-evaluation.md` (ranking + latency evaluation)
 - `.agent/research/elasticsearch/methods/mcp-agent-integration.md` (current MCP patterns)
-- `.agent/research/elasticsearch/archive/elastic-mcp-integration-evaluation.md` (historical evaluation)

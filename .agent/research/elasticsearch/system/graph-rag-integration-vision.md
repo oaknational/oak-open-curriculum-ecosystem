@@ -13,6 +13,13 @@ This document synthesises research on Elasticsearch's AI capabilities with Oak's
 
 The goal is to provide powerful insight and exploration tools that work together to enhance our MCP tools and search capabilities.
 
+## Positioning and Phasing (ES-only now, Neo4j later)
+
+- **Near-term**: ES-native, graph-adjacent features (Graph Explore API, significant terms, transforms, entity-centric indices) for immediate improvements to search and discovery.
+- **Later**: Neo4j for true multi-hop traversal. Export graph-derived views back into Elasticsearch (paths, concept clusters, derived subjects) to strengthen retrieval and enable novel subjects.
+
+This vision focuses on ES-based graph, RAG, and Graph RAG; treat Neo4j as a later-phase extension that complements, rather than replaces, Elasticsearch.
+
 ---
 
 ## 1. Current State: What We Have
@@ -68,6 +75,7 @@ Current Elasticsearch Serverless deployment:
 - **Synonyms**: 68 rules deployed as `oak-syns`
 
 **Blocking Issue**: Zod/ES mapping field mismatch — must be resolved before real data ingestion.
+**Status note (2026-01-01)**: Schema-first alignment is now resolved; see `semantic-search-plans-review.md` for current state.
 
 ---
 
@@ -1298,10 +1306,13 @@ This vision depends on resolving current blocking issues:
 
 ### Research Documents (This Repo)
 
-- `elasticsearch_serverless_ai_kg_detailed.md` — Comprehensive Elastic AI capabilities
-- `Constructing and Leveraging a Knowledge Graph in Elasticsearch for Search Relevance.docx.md` — KG construction patterns
-- `AI-Driven Features and Capabilities in Elasticsearch Serverless.docx.md` — Serverless AI features
+- `../methods/ai-capabilities-elastic.md` — Elastic AI capabilities (ELSER, inference, rerankers)
+- `../methods/graph-elastic.md` — ES-only graph-adjacent features for near-term improvements
+- `../methods/graph-elastic-neo4j.md` — Later-phase Neo4j integration and graph export back into ES
+- `../methods/conversational-rag.md` — RAG patterns and grounding checks
+- `../features/elastic-and-neo4j-novel-subjects.md` — Derived subjects and Elastic + Neo4j future-state
 - `expanded-architecture-analysis.md` — Architecture proposals for ontology/graph indexing
+- `semantic-search-plans-review.md` — Current system status and remaining gaps
 
 ### Elastic Blog Posts
 

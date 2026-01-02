@@ -9,8 +9,7 @@
  *
  * Rate limiting between chunks prevents ELSER memory pressure.
  *
- * @see ./http-retry.ts for HTTP-level retry logic
- * @see ./document-retry.ts for document-level retry logic
+ * @see ./retry for retry logic
  * @see ADR-070 SDK Rate Limiting and Retry
  * @module bulk-chunk-uploader
  */
@@ -18,14 +17,36 @@ import type { Logger } from '@oaknational/mcp-logger';
 import type { BulkOperations } from './bulk-operation-types';
 import {
   DEFAULT_CHUNK_DELAY_MS,
-  MAX_RETRY_ATTEMPTS,
-  BASE_RETRY_DELAY_MS,
+  HTTP_MAX_RETRY_ATTEMPTS,
+  HTTP_BASE_RETRY_DELAY_MS,
 } from './bulk-chunk-utils';
-import { executeDocumentRetry } from './document-retry';
-import { attemptChunkUpload, uploadChunkWithRetry, type EsTransport } from './http-retry';
+import {
+  executeDocumentRetry,
+  attemptChunkUpload,
+  uploadChunkWithRetry,
+  type EsTransport,
+} from './retry';
 
 // Re-export for consumers
-export type { EsTransport, ChunkUploadResult } from './http-retry';
+export type { EsTransport, ChunkUploadResult } from './retry';
+
+/**
+ * Result of a bulk upload operation.
+ *
+ * @remarks
+ * Preserves information about both successes and failures so callers can:
+ * 1. Report accurate success counts
+ * 2. Access failed documents for targeted retry or reporting
+ *
+ * The `permanentlyFailed` field contains the raw bulk operations that failed
+ * after all retry attempts. Use `extractDocumentIds` to get human-readable IDs.
+ */
+export interface BulkUploadResult {
+  /** Number of documents successfully indexed */
+  readonly successCount: number;
+  /** Operations that permanently failed after all retries */
+  readonly permanentlyFailed: BulkOperations;
+}
 
 /**
  * Configuration for bulk upload behaviour.
@@ -49,7 +70,7 @@ export type { EsTransport, ChunkUploadResult } from './http-retry';
  * @see ADR-070 SDK Rate Limiting and Retry
  */
 export interface BulkUploadConfig {
-  /** Delay between chunks in ms (default: 2000ms) */
+  /** Delay between chunks in ms (default: 4000ms) */
   readonly chunkDelayMs?: number;
   /** Maximum HTTP-level retry attempts per chunk (default: 3) */
   readonly maxRetries?: number;
@@ -67,7 +88,7 @@ export interface BulkUploadConfig {
 const DEFAULT_DOCUMENT_RETRY_DELAY_MS = 5000;
 
 /** Default number of document-level retry attempts. */
-const DEFAULT_DOCUMENT_MAX_RETRIES = 3;
+const DEFAULT_DOCUMENT_MAX_RETRIES = 4;
 
 /** Resolved configuration with all defaults applied. */
 interface ResolvedConfig {
@@ -88,8 +109,8 @@ function sleep(ms: number): Promise<void> {
 function resolveConfig(config: BulkUploadConfig): ResolvedConfig {
   return {
     chunkDelayMs: config.chunkDelayMs ?? DEFAULT_CHUNK_DELAY_MS,
-    maxRetries: config.maxRetries ?? MAX_RETRY_ATTEMPTS,
-    baseRetryDelayMs: config.baseRetryDelayMs ?? BASE_RETRY_DELAY_MS,
+    maxRetries: config.maxRetries ?? HTTP_MAX_RETRY_ATTEMPTS,
+    baseRetryDelayMs: config.baseRetryDelayMs ?? HTTP_BASE_RETRY_DELAY_MS,
     documentRetryEnabled: config.documentRetryEnabled ?? true,
     documentMaxRetries: config.documentMaxRetries ?? DEFAULT_DOCUMENT_MAX_RETRIES,
     documentRetryDelayMs: config.documentRetryDelayMs ?? DEFAULT_DOCUMENT_RETRY_DELAY_MS,
@@ -153,15 +174,19 @@ async function uploadInitialChunks(
  * @param logger - Logger instance
  * @param docCount - Total document count for progress logging
  * @param config - Upload configuration (delays, retries)
- * @returns Total documents successfully uploaded
+ * @returns Result containing success count and any permanently failed operations
  *
  * @example
  * ```typescript
- * const uploaded = await uploadAllChunks(es, chunks, logger, 1000, {
+ * const result = await uploadAllChunks(es, chunks, logger, 1000, {
  *   chunkDelayMs: 2000,
  *   documentRetryEnabled: true,
  *   documentMaxRetries: 3,
  * });
+ * console.log(`Uploaded: ${result.successCount}`);
+ * if (result.permanentlyFailed.length > 0) {
+ *   // Handle or report failures
+ * }
  * ```
  *
  * @see uploadChunkWithRetry for Tier 1 retry
@@ -174,7 +199,7 @@ export async function uploadAllChunks(
   logger: Logger,
   docCount: number,
   config: BulkUploadConfig = {},
-): Promise<number> {
+): Promise<BulkUploadResult> {
   const resolved = resolveConfig(config);
 
   // Phase 1: Upload initial chunks with HTTP-level retry
@@ -193,7 +218,7 @@ export async function uploadAllChunks(
         failedDocuments: Math.floor(allFailedOperations.length / 2),
       });
     }
-    return totalUploaded;
+    return { successCount: totalUploaded, permanentlyFailed: allFailedOperations };
   }
 
   const retryResult = await executeDocumentRetry(
@@ -208,5 +233,8 @@ export async function uploadAllChunks(
     },
   );
 
-  return totalUploaded + retryResult.successCount;
+  return {
+    successCount: totalUploaded + retryResult.successCount,
+    permanentlyFailed: retryResult.permanentlyFailed,
+  };
 }

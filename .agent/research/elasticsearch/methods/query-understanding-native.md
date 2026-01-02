@@ -42,6 +42,13 @@ If you need lightweight expansion without external NLP:
 - Use Graph Explore API to expand entities based on co-occurrence.
 - Apply expansions with low boosts to avoid query drift.
 
+## 6. Oak Integration Notes (Current)
+
+These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
+
+- Suggestions use the completion suggester first, then fall back to a `bool_prefix` multi_match when completions are sparse (`src/lib/suggestions/index.ts`).
+- Synonym sets are generated from the SDK vocabulary and pushed as `oak-syns` during CLI setup (`src/lib/elasticsearch/setup/index.ts`).
+
 ## References
 
 - Query string query: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html

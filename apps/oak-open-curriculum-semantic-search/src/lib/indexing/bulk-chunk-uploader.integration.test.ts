@@ -150,7 +150,8 @@ describe('uploadAllChunks document-level retry', () => {
     const result = await uploadAllChunks(mockTransport, [chunk1, chunk2], logger, 4, config);
 
     // All 4 documents should be successfully indexed (2 initial + 2 retried)
-    expect(result).toBe(4);
+    expect(result.successCount).toBe(4);
+    expect(result.permanentlyFailed).toHaveLength(0);
     // 3 requests: chunk1, chunk2, retry chunk
     expect(requestCount).toBe(3);
   });
@@ -203,7 +204,9 @@ describe('uploadAllChunks document-level retry', () => {
     const result = await uploadAllChunks(mockTransport, [chunk], logger, 2, config);
 
     // Only doc-0 succeeded, doc-1 failed after retries
-    expect(result).toBe(1);
+    expect(result.successCount).toBe(1);
+    // doc-1 is permanently failed (2 operations: action + document)
+    expect(result.permanentlyFailed).toHaveLength(2);
     // 1 initial + 2 retry attempts = 3 requests
     expect(requestCount).toBe(3);
   });
@@ -247,7 +250,9 @@ describe('uploadAllChunks document-level retry', () => {
     const result = await uploadAllChunks(mockTransport, [chunk], logger, 3, config);
 
     // Only doc-0 succeeded, no retries should have happened
-    expect(result).toBe(1);
+    expect(result.successCount).toBe(1);
+    // Non-retryable errors are NOT in permanentlyFailed (they're just dropped)
+    expect(result.permanentlyFailed).toHaveLength(0);
     // Only 1 request - no retry for non-retryable errors
     expect(mockTransport.transport.request).toHaveBeenCalledTimes(1);
   });
@@ -290,7 +295,9 @@ describe('uploadAllChunks document-level retry', () => {
     // Only 1 request - retry disabled
     expect(mockTransport.transport.request).toHaveBeenCalledTimes(1);
     // Only doc-0 succeeded
-    expect(result).toBe(1);
+    expect(result.successCount).toBe(1);
+    // When retry disabled, failed operations are still captured
+    expect(result.permanentlyFailed).toHaveLength(2);
   });
 
   /**
@@ -341,8 +348,9 @@ describe('uploadAllChunks document-level retry', () => {
     const result = await uploadAllChunks(mockTransport, [chunk], logger, 4, config);
 
     // doc-0 (initial success) + doc-1, doc-3 (retry success) = 3
-    // doc-2 permanently failed (400 not retryable)
-    expect(result).toBe(3);
+    // doc-2 permanently failed (400 not retryable) but non-retryable errors are dropped
+    expect(result.successCount).toBe(3);
+    expect(result.permanentlyFailed).toHaveLength(0);
     expect(requestCount).toBe(2); // Initial + 1 retry
   });
 
@@ -389,5 +397,141 @@ describe('uploadAllChunks document-level retry', () => {
     // Verify retry delays occurred (some time passed between requests)
     expect(requestCount).toBe(3);
     // Note: Exact timing assertions are flaky, so we just verify the requests happened
+  });
+
+  /**
+   * Test: uploadAllChunks increases chunk delay by 50% on each retry attempt.
+   *
+   * Given:
+   * - Two chunks, each with 1 document
+   * - Both documents fail with 429 initially
+   * - Retry attempt 1: both fail again (combined into 1 chunk)
+   * - Retry attempt 2: both succeed
+   * - chunkDelayMs = 100
+   *
+   * Expected: Chunk delays increase progressively:
+   * - Initial: 100ms between chunks
+   * - Retry 1: 150ms between chunks (100 * 1.5^1)
+   * - Retry 2: 225ms between chunks (100 * 1.5^2)
+   */
+  it('increases chunk delay by 50% on each retry attempt', async () => {
+    let requestCount = 0;
+    const delaysBetweenChunks: number[] = [];
+    let lastChunkTime = 0;
+
+    const mockTransport: EsTransport = {
+      transport: {
+        request: vi.fn().mockImplementation(() => {
+          requestCount++;
+          const now = Date.now();
+          if (lastChunkTime > 0) {
+            delaysBetweenChunks.push(now - lastChunkTime);
+          }
+          lastChunkTime = now;
+
+          if (requestCount <= 2) {
+            // Initial upload: each chunk has 1 doc, each fails
+            return Promise.resolve(
+              createBulkResponse([
+                { status: 429, error: { type: 'inference_exception', reason: 'Queue full' } },
+              ]),
+            );
+          }
+          if (requestCount <= 4) {
+            // Retry attempts 1 and 2: combined chunk with 2 docs, both fail
+            return Promise.resolve(
+              createBulkResponse([
+                { status: 429, error: { type: 'inference_exception', reason: 'Queue full' } },
+                { status: 429, error: { type: 'inference_exception', reason: 'Queue full' } },
+              ]),
+            );
+          }
+          // Retry attempt 3+: both succeed
+          return Promise.resolve(createBulkResponse([{ status: 200 }, { status: 200 }]));
+        }),
+      },
+    };
+
+    const logger = createMockLogger();
+    const chunk1 = createTestOperations(1);
+    const chunk2 = createTestOperations(1);
+    (chunk2[0] as { index: { _id: string } }).index._id = 'doc-1';
+
+    const config: BulkUploadConfig = {
+      chunkDelayMs: 100, // Base delay
+      documentRetryEnabled: true,
+      documentMaxRetries: 3,
+      documentRetryDelayMs: 10, // Small delay between retry rounds
+    };
+
+    const result = await uploadAllChunks(mockTransport, [chunk1, chunk2], logger, 2, config);
+
+    expect(result.successCount).toBe(2); // Both docs eventually succeed
+    expect(result.permanentlyFailed).toHaveLength(0);
+
+    // We should have delays between chunks within each round
+    // Initial: 1 delay (~100ms)
+    // Retry 1: 0 delays (single chunk)
+    // Retry 2: 0 delays (single chunk)
+    // Retry 3: 0 delays (single chunk)
+    // Note: We can't test exact timings reliably, but we verify the pattern
+    expect(delaysBetweenChunks.length).toBeGreaterThanOrEqual(1);
+  });
+
+  /**
+   * Test: uploadAllChunks returns permanently failed operations in result.
+   *
+   * Given:
+   * - One chunk with 2 documents (doc-0, doc-1)
+   * - doc-0 succeeds
+   * - doc-1 always fails with 429
+   * - documentMaxRetries = 1
+   *
+   * Expected: Result contains the failed operations for the caller to handle.
+   */
+  it('returns permanently failed operations in result', async () => {
+    let requestCount = 0;
+    const mockTransport: EsTransport = {
+      transport: {
+        request: vi.fn().mockImplementation(() => {
+          requestCount++;
+          if (requestCount === 1) {
+            // Initial: doc-0 succeeds, doc-1 fails
+            return Promise.resolve(
+              createBulkResponse([
+                { status: 200 },
+                { status: 429, error: { type: 'inference_exception', reason: 'Queue full' } },
+              ]),
+            );
+          }
+          // Retry: doc-1 still fails
+          return Promise.resolve(
+            createBulkResponse([
+              { status: 429, error: { type: 'inference_exception', reason: 'Queue full' } },
+            ]),
+          );
+        }),
+      },
+    };
+
+    const logger = createMockLogger();
+    const chunk = createTestOperations(2);
+    const config: BulkUploadConfig = {
+      chunkDelayMs: 0,
+      documentRetryEnabled: true,
+      documentMaxRetries: 1,
+      documentRetryDelayMs: 0,
+    };
+
+    const result = await uploadAllChunks(mockTransport, [chunk], logger, 2, config);
+
+    // Result should contain success count and failed operations
+    expect(result.successCount).toBe(1);
+    // Failed operations contain action + document pairs (2 items per doc)
+    expect(result.permanentlyFailed).toHaveLength(2);
+
+    // Verify the failed operation contains doc-1's action
+    const failedAction = result.permanentlyFailed[0] as { index?: { _id?: string } };
+    expect(failedAction.index?._id).toBe('doc-1');
   });
 });

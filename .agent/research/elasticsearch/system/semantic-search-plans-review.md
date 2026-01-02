@@ -1,11 +1,11 @@
 # Semantic Search Plans Deep Review
 
-_Date: 2025-12-04_
-_Status: RESEARCH COMPLETE_
+_Date: 2025-12-04 (updated 2026-01-01)_
+_Status: RESEARCH UPDATED_
 
 ## Executive Summary
 
-A deep review of the semantic search plans in `.agent/plans/semantic-search/` reveals that **significant progress has been made** since those plans were written on 2025-11-11. The repository has evolved substantially, with the **schema-first migration largely complete** and comprehensive MCP tool generation now in place. However, **key ontology features remain unimplemented**, and **new Elasticsearch MCP server capabilities** present architectural opportunities not considered in the original plans.
+A deep review of the semantic search plans in `.agent/plans/semantic-search/` shows that **most foundational work is complete** and the system has shifted to a **CLI/SDK-only model** (hosted API routes are retired). As of 2026-01-01, the **schema-first migration is complete**, **threads and programme factor fields are implemented**, and the **hybrid retrieval pipeline uses RRF with BM25 + ELSER**. Remaining gaps are now concentrated in **ontology/graph indexing**, **structured content guidance**, **component availability flags**, **unit classification**, and **production observability wiring**.
 
 ---
 
@@ -32,14 +32,13 @@ The original plans documented ~2,000 LOC of runtime schema definitions that need
 - `facets.ts` - `SearchFacets`, `SequenceFacet`, `SequenceFacetUnit`
 - `fixtures.ts` - Factory functions for test fixtures
 
-**Search App Migration**:
+**CLI/SDK Integration**:
 
 - `src/types/oak.ts` now **re-exports everything from SDK** (`@oaknational/oak-curriculum-sdk/public/search.js`)
 - Zero local Zod schema definitions for search functionality
-- API routes import schemas from SDK
-- Fixtures use SDK factory functions
+- CLI ingestion/setup imports SDK mappings and synonyms (no hosted API routes)
 
-**Evidence**: Running `grep "export const.*Schema = z\.object"` on the search app returns only 2 matches (env.ts and a scaffolding script), confirming runtime schemas have been eliminated.
+**Evidence**: Running `grep "export const.*Schema = z\.object"` on the semantic search workspace returns only 2 matches (env.ts and a scaffolding script), confirming runtime schemas have been eliminated.
 
 #### 2. MCP Tool Generation - COMPLETE
 
@@ -64,127 +63,39 @@ Each tool has:
 
 #### 3. Elasticsearch Index Infrastructure - OPERATIONAL
 
-Four indices are defined with mappings:
+Core indices are defined with mappings:
 
 - `oak_lessons` - Lesson documents with transcript, semantic text, completion suggestions
-- `oak_units` - Basic unit documents
+- `oak_units` - Unit documents
 - `oak_unit_rollup` - Aggregated unit text for semantic search
 - `oak_sequences` - Sequence documents
+- `oak_sequence_facets` - Sequence facet index for navigation
+- `oak_threads` - Thread documents
+- `oak_meta` - Index metadata
 
 ---
 
-### What Remains Unimplemented ❌
+### What Remains Unimplemented / Partially Implemented
 
-#### 1. Thread Index and Fields (Phase 2) - NOT STARTED
+#### 1. Ontology/graph index - NOT STARTED
 
-**Original Plan**: Create `oak_threads` index and add thread fields to all documents.
+**Gap**: No dedicated ontology index for concepts, relationships, and graph traversal.
 
-**Current State**:
+#### 2. Structured content guidance - NOT STARTED
 
-- NO `oak_threads` index exists
-- NO thread fields in any index document schemas
-- NO thread search scope (`'threads'` not in `SEARCH_SCOPES`)
-- SDK has `get-threads` and `get-threads-units` tools, but search app doesn't use them
+**Gap**: `content_guidance` remains a flat array. Structured categories (resources, pupil, classroom, overarching) are not implemented.
 
-**Missing Fields** (from original plan):
+#### 3. Lesson component availability flags - PARTIAL
 
-```typescript
-interface ThreadFields {
-  thread_slugs: string[];
-  thread_titles: string[];
-  thread_orders: number[];
-}
-```
+**Gap**: `downloads_available` and `has_transcript` exist, but per-component flags (video, slide deck, quizzes, worksheets) are still missing.
 
-#### 2. Programme Factor Fields (Phase 2) - NOT STARTED
+#### 4. Unit classification fields - NOT STARTED
 
-**Original Plan**: Add programme context filtering (tier, exam board, pathway).
+**Gap**: No `unit_type` or `has_variants/has_optionality` fields in search documents.
 
-**Current State**:
+#### 5. Production observability wiring - PARTIAL
 
-- NO programme factor fields in any index documents
-- NO tier/exam_board/pathway filtering in search requests
-- `SearchStructuredRequestSchema` only has: `scope`, `text`, `subject`, `keyStage`, `minLessons`, `size`, `includeFacets`, `phaseSlug`, `from`, `highlight`
-
-**Missing Fields** (from original plan):
-
-```typescript
-interface ProgrammeFactorFields {
-  programme_slugs: string[];
-  phase?: 'primary' | 'secondary';
-  pathway?: 'core' | 'gcse';
-  exam_board?: 'aqa' | 'ocr' | 'edexcel' | 'eduqas' | 'edexcelb';
-  exam_subject?: string;
-  tier?: 'foundation' | 'higher';
-  parent_subject?: string;
-}
-```
-
-#### 3. Unit Type Classification (Phase 3) - NOT STARTED
-
-**Original Plan**: Classify units as simple/variant/optionality.
-
-**Current State**:
-
-- NO unit type fields in `SearchUnitsIndexDocSchema`
-- NO classification logic
-- NO filtering by unit type
-
-**Missing Fields**:
-
-```typescript
-interface UnitClassification {
-  unit_type: 'simple' | 'variant' | 'optionality';
-  has_variants: boolean;
-  has_optionality: boolean;
-}
-```
-
-#### 4. Structured Content Guidance (Phase 3) - NOT STARTED
-
-**Original Plan**: Replace simple content guidance array with structured categories.
-
-**Current State**:
-
-- `SearchLessonsIndexDocSchema` has `content_guidance: z.array(z.string())` (flat array)
-- NO supervision level field
-- NO category structure
-
-**Missing Fields**:
-
-```typescript
-interface ContentGuidanceStructured {
-  resources: string[];
-  pupil: string[];
-  classroom: string[];
-  overarching: string[];
-}
-supervision_level?: 1 | 2 | 3 | 4;
-```
-
-#### 5. Lesson Component Availability (Phase 3) - NOT STARTED
-
-**Original Plan**: Boolean flags for each lesson component type.
-
-**Current State**:
-
-- NO component availability fields in `SearchLessonsIndexDocSchema`
-- Cannot filter by "lessons with video" or "lessons with worksheet"
-
-**Missing Fields**:
-
-```typescript
-interface LessonComponentAvailability {
-  has_slide_deck: boolean;
-  has_video: boolean;
-  has_starter_quiz: boolean;
-  has_exit_quiz: boolean;
-  has_worksheet: boolean;
-  has_transcript: boolean;
-  has_additional_materials: boolean;
-  has_supplementary_materials: boolean;
-}
-```
+**Gap**: Zero-hit persistence and ingestion metrics exist in code, but need verified wiring and operational dashboards.
 
 ---
 
@@ -222,14 +133,14 @@ interface LessonComponentAvailability {
 
 The `search-schema-inventory.md` is now **outdated**. It documents runtime schemas that no longer exist. Should be updated to reflect SDK-generated state and remaining gaps.
 
-### Priority 2: Consolidate Thread/Ontology Work
+### Priority 2: Consolidate Ontology + Enrichment Work
 
 The original three-phase approach (Phase 1: Schema Migration, Phase 2: Core Ontology, Phase 3: Ontology Enrichment) should be **collapsed**:
 
 - Phase 1 is COMPLETE
-- Phases 2 and 3 should be **re-planned as a single phase** focused on ontology enrichment
+- Phase 2 and Phase 3 should be **re-planned as a single phase** focused on ontology indexing and remaining enrichment gaps
 
-### Priority 3: Evaluate Elastic MCP Integration
+### Priority 3: Evaluate Elastic MCP Integration (Optional)
 
 Create an architectural decision record (ADR) to:
 
@@ -242,33 +153,33 @@ Create an architectural decision record (ADR) to:
 Original timeline (6-8 weeks from 2025-11-11) has passed. New timeline needed reflecting:
 
 - Completed work
-- Remaining ontology features
+- Remaining ontology and enrichment features
 - Elastic MCP evaluation
 
 ---
 
 ## Files Requiring Updates
 
-| File                                                     | Status             | Action                                           |
-| -------------------------------------------------------- | ------------------ | ------------------------------------------------ |
-| `semantic-search-overview.md`                            | OUTDATED           | Update current state, mark Phase 1 complete      |
-| `search-schema-inventory.md`                             | OBSOLETE           | Archive or rewrite for remaining gaps only       |
-| `search-migration-map.md`                                | COMPLETE           | Move to archive                                  |
-| `search-generator-spec.md`                               | PARTIALLY COMPLETE | Update to reflect what's done, specify remaining |
-| `search-service/schema-first-ontology-implementation.md` | OUTDATED           | Update sessions, mark Phase 1 done               |
-| `search-ui/frontend-implementation.md`                   | PARTIALLY OUTDATED | Remove ontology UI that depends on backend       |
+| File                                                     | Status             | Action                                                     |
+| -------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
+| `semantic-search-overview.md`                            | OUTDATED           | Update current state, note CLI/SDK-only                    |
+| `search-schema-inventory.md`                             | OBSOLETE           | Archive or rewrite for remaining gaps only                 |
+| `search-migration-map.md`                                | COMPLETE           | Move to archive                                            |
+| `search-generator-spec.md`                               | PARTIALLY COMPLETE | Update to reflect what's done, specify remaining           |
+| `search-service/schema-first-ontology-implementation.md` | OUTDATED           | Update sessions, note ontology/indexing gap                |
+| `search-ui/frontend-implementation.md`                   | OUTDATED           | Retire (hosted UI and API routes are no longer in scope)   |
 
 ---
 
 ## Summary
 
-The semantic search plans represent solid architectural thinking that has been **partially executed**. The schema-first migration is essentially complete, which is a major achievement. The remaining work focuses on **ontology enrichment** (threads, programme factors, unit types, content guidance, component availability).
+The semantic search plans represent solid architectural thinking that has been **mostly executed**. The schema-first migration is complete, threads and programme factors are implemented, and the hybrid retrieval pipeline is mature. The remaining work focuses on **ontology indexing** and **enrichment gaps** (unit classification, structured content guidance, component availability), plus **production observability**.
 
-The emergence of Elastic Agent Builder MCP server is a **new architectural consideration** that should be evaluated before proceeding with further MCP integration work.
+The emergence of Elastic Agent Builder MCP server remains an **optional architectural consideration** if Kibana becomes a dependency.
 
 **Recommended Next Steps**:
 
 1. Archive completed plan sections
-2. Create consolidated ontology implementation plan
-3. Evaluate Elastic MCP integration
+2. Create consolidated ontology + enrichment plan
+3. Decide on MCP integration posture (SDK-in-process vs Agent Builder)
 4. Update timelines and dependencies

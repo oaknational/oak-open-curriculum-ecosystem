@@ -1,6 +1,6 @@
 # Expanded Architecture Analysis: Elasticsearch Integration
 
-_Date: 2025-12-04_
+_Date: 2025-12-04 (updated 2026-01-01)_
 _Status: RESEARCH - STRATEGIC PLANNING_
 
 ## Overview
@@ -65,6 +65,11 @@ interface OntologyIndexDoc {
   relationships?: string[]; // Related doc_ids
   content_text: string; // Flattened text for semantic search
   content_semantic?: string; // semantic_text field for embeddings
+  metadata?: {
+    ageRange?: string;
+    years?: string[];
+    phase?: string;
+  };
   // Note: metadata should use specific types from field definitions, not generic Record
 }
 ```
@@ -214,158 +219,60 @@ interface KnowledgeGraphEdgeDoc {
 
 ### Proposed Options
 
-#### Option A: Expose MCP Tools Directly from Semantic Search App
+#### Option A: Use the SDK directly inside the MCP server (preferred)
 
-Add MCP endpoint to the Next.js semantic search app:
+Embed the search SDK in the MCP server process and call it directly:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│               oak-open-curriculum-semantic-search                    │
+│                    MCP Server (stdio/HTTP)                           │
 │  ┌─────────────────────┐  ┌─────────────────────────────────────┐  │
-│  │ POST /api/mcp       │  │  Existing Endpoints                  │  │
-│  │ (MCP SSE transport) │  │  - POST /api/search                  │  │
-│  │                     │  │  - POST /api/search/nl               │  │
-│  │ Tools:              │  │  - POST /api/search/suggest          │  │
-│  │ - semantic-search   │  │                                      │  │
-│  │ - nl-search         │  │                                      │  │
-│  │ - suggest           │  │                                      │  │
+│  │ semantic-search     │  │  SDK retrieval + admin services      │  │
+│  │ suggest             │  │  (hybrid RRF, suggestions, ingest)   │  │
 │  └─────────────────────┘  └─────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                           Elasticsearch                              │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 **Pros**:
 
-- Direct access to semantic search from any MCP client
-- Bypasses need for intermediate aggregation
-- Can leverage Elasticsearch features directly
-- Independent deployment/scaling
-
-**Cons**:
-
-- Separate MCP endpoint to manage
-- Doesn't integrate with curriculum tools
-- Users need to know about multiple MCP servers
-
-**Implementation**:
-
-```typescript
-// apps/oak-open-curriculum-semantic-search/app/api/mcp/route.ts
-import { Server } from '@modelcontextprotocol/sdk/server';
-import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse';
-
-const server = new Server({
-  name: 'oak-semantic-search',
-  version: '1.0.0',
-});
-
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [
-    {
-      name: 'semantic-search',
-      description: 'Hybrid semantic + lexical search across curriculum',
-      inputSchema: SearchStructuredRequestSchema,
-    },
-    // nl-search, suggest, etc.
-  ],
-}));
-```
-
-#### Option B: Build Aggregated Tool in SDK to Interact with Semantic Search App
-
-Add a new aggregated tool that calls the semantic search API:
-
-```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-semantic-search/
-export const SEMANTIC_SEARCH_TOOL_DEF = {
-  description: `Hybrid semantic + lexical search across Oak curriculum content.
-  
-Uses Elasticsearch RRF to combine:
-- Semantic embeddings for conceptual similarity
-- Lexical matching for exact terms
-- Faceted filtering by subject, key stage, year, thread
-
-Use this when you need:
-- More relevant results than basic text search
-- Cross-cutting queries ("Year 5 geometry lessons with video")
-- Thread-based navigation
-- Programme factor filtering (KS4 tier, exam board)
-
-Requires semantic search service to be deployed.`,
-  inputSchema: {
-    /* ... */
-  },
-};
-```
-
-**Pros**:
-
-- Integrated with other curriculum tools
+- No HTTP hop or extra deployment
+- Full type safety and schema-first alignment
 - Single MCP endpoint for users
-- Can compose with other aggregated tools
 
 **Cons**:
 
-- Adds network hop (SDK → Semantic Search App → ES)
-- Requires semantic search app to be deployed
-- Coupling between SDK and external service
+- MCP server must manage ES client config and credentials
+- Operational concerns (timeouts/retries) sit in-process
 
-**Implementation**:
-
-```typescript
-// packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-semantic-search/execution.ts
-export async function runSemanticSearchTool(
-  args: SemanticSearchArgs,
-  deps: { semanticSearchUrl: string },
-): Promise<CallToolResult> {
-  const response = await fetch(`${deps.semanticSearchUrl}/api/search`, {
-    method: 'POST',
-    body: JSON.stringify(args),
-  });
-  // ...
-}
-```
-
-#### Option C: Enhance Existing `search` Aggregated Tool
-
-Extend the current `search` aggregated tool to optionally use semantic search:
+**Implementation (pseudo-code)**:
 
 ```typescript
-// Enhanced search tool
-export const SEARCH_TOOL_DEF = {
-  description: `Search across curriculum content.
+import { runHybridSearch } from '@oaknational/open-curriculum-search-sdk';
+import { runSuggestions } from '@oaknational/open-curriculum-search-sdk';
 
-Modes:
-- Basic (default): get-search-lessons + get-search-transcripts via API
-- Semantic (if available): Hybrid RRF search via Elasticsearch
-
-Use 'mode: semantic' for:
-- More relevant results
-- Thread filtering
-- Programme factor filtering
-- Faceted navigation`,
-  inputSchema: {
-    properties: {
-      q: { type: 'string' },
-      mode: { enum: ['basic', 'semantic'], default: 'basic' },
-      // ...
-    },
-  },
-};
+const result = await runHybridSearch({ text, scope, subject, keyStage });
+const suggestions = await runSuggestions({ prefix, scope });
 ```
+
+#### Option B: Aggregated tool wrapper inside the SDK
+
+Keep the MCP tool surface in the SDK, but call the SDK services directly (no HTTP):
 
 **Pros**:
 
-- Single tool for all search needs
-- Graceful degradation (falls back to basic if semantic unavailable)
-- Users don't need to learn new tool names
+- Consistent tool behaviour across MCP deployments
+- Easier to evolve without public API churn
 
 **Cons**:
 
-- More complex tool logic
-- Mode parameter adds cognitive load
-- Harder to optimize each mode independently
+- Slightly more indirection in the SDK
 
-#### Option D: Elastic Agent Builder Integration
+#### Option C: Elastic Agent Builder Integration
 
 Use Elastic's native MCP server for semantic search:
 
@@ -395,22 +302,8 @@ Use Elastic's native MCP server for semantic search:
 
 ### Recommendation
 
-**Phased Approach**:
-
-1. **Now**: Option B (Aggregated Tool) + Option C (Enhanced `search`)
-   - Add `aggregated-semantic-search` that calls semantic search app
-   - Add `mode` parameter to existing `search` tool
-   - Graceful degradation when semantic search unavailable
-
-2. **Later**: Option A (Direct MCP from Semantic Search App)
-   - Once semantic search is production-ready
-   - For clients that need direct ES access
-   - Optional - not required
-
-3. **Evaluate**: Option D (Elastic Agent Builder)
-   - If we deploy Kibana for other reasons
-   - If RAG requirements exceed custom implementation
-   - Keep monitoring Elastic's MCP development
+**Now**: Option A (SDK in MCP server) plus Option B (SDK tool wrapper).  
+**Later**: Option C only if Kibana becomes a dependency for other reasons.
 
 ---
 
@@ -439,9 +332,9 @@ Retrieval Augmented Generation (RAG) with Elasticsearch enables:
 
 **Index requirements**:
 
-- Thread fields in unit documents ✅ (planned)
-- Semantic embeddings on unit descriptions ✅ (existing `unit_semantic`)
-- Programme factor context ❌ (not yet implemented)
+- Thread fields in unit documents ✅ (existing)
+- Semantic embeddings on unit descriptions ✅ (unit_content_semantic + unit_structure_semantic)
+- Programme factor context ✅ (tiers, exam boards, exam subjects, ks4 options)
 
 #### Pattern 2: Domain Knowledge RAG
 
@@ -470,7 +363,7 @@ Retrieval Augmented Generation (RAG) with Elasticsearch enables:
 
 **Index requirements**:
 
-- Component availability flags ❌ (not yet implemented)
+- Component availability flags ◐ (partial: downloads_available, has_transcript)
 - Content guidance structure ❌ (not yet implemented)
 
 #### Pattern 4: Cross-Cutting Query RAG
@@ -485,9 +378,9 @@ Retrieval Augmented Generation (RAG) with Elasticsearch enables:
 
 **Index requirements**:
 
-- Thread fields ❌ (planned)
+- Thread fields ✅ (existing)
 - Year fields ✅ (existing)
-- Prior knowledge fields ❌ (not in current schema)
+- Prior knowledge fields ✅ (prior_knowledge_requirements)
 
 ### Implementation with Elastic
 
@@ -607,7 +500,9 @@ This means:
 
 ```bash
 # From apps/oak-open-curriculum-semantic-search
-./scripts/setup.sh
+pnpm es:setup
+# Reset when you need a clean rebuild
+pnpm es:setup reset
 ```
 
 This creates:
@@ -616,21 +511,22 @@ This creates:
 - `oak_units` - Unit documents
 - `oak_unit_rollup` - Aggregated unit text
 - `oak_sequences` - Sequence documents
+- `oak_sequence_facets` - Sequence facet index
+- `oak_threads` - Thread documents
+- `oak_meta` - Index metadata
 
 #### 3. Synonym Set
 
-```bash
-curl -X PUT "${ES_URL}/_synonyms/oak-syns" \
-  -H "Authorization: ApiKey ${ES_API_KEY}" \
-  -d @scripts/synonyms.json
-```
+The `es:setup` command also creates the `oak-syns` synonym set from SDK ontology data.
 
 #### 4. Ingestion
 
 ```bash
-# Trigger ingestion (requires API key)
-curl -X GET "http://localhost:3000/api/index-oak" \
-  -H "Authorization: Bearer ${SEARCH_API_KEY}"
+# Full ingestion (API mode)
+pnpm es:ingest-live --all --verbose
+
+# Bulk-first ingestion (uses bulk downloads with API supplementation)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --verbose
 ```
 
 This:
@@ -638,7 +534,7 @@ This:
 - Fetches all subjects, sequences, units, lessons from Oak Curriculum API
 - Transforms to index document format
 - Bulk indexes with semantic_text fields (triggers embedding generation)
-- Swaps aliases for zero-downtime updates
+- Targets the configured index target (primary or sandbox); alias swaps are a separate operation
 
 #### 5. Verification
 
@@ -661,7 +557,7 @@ This:
 ### Deployment Sequence
 
 1. **Provision ES Serverless** → Get endpoints + API keys
-2. **Create indexes** → Run setup.sh
+2. **Create indexes** → Run `pnpm es:setup`
 3. **Ingest subset** → Test with single subject first
 4. **Verify queries** → Check RRF, embeddings, suggestions
 5. **Full ingestion** → All subjects, all key stages
@@ -677,57 +573,42 @@ This:
 │                              AI Agents / MCP Clients                        │
 └────────────────────────────────────────────────────────────────────────────┘
                                         │
-            ┌───────────────────────────┼───────────────────────────┐
-            ▼                           ▼                           ▼
-┌───────────────────────┐   ┌───────────────────────┐   ┌───────────────────────┐
-│   Curriculum MCP      │   │  Semantic Search MCP   │   │  (Future) Elastic     │
-│   (stdio/streamable)  │   │  (optional direct)     │   │  Agent Builder MCP    │
-│                       │   │                        │   │                        │
-│ Tools:                │   │ Tools:                 │   │ Tools:                │
-│ - search (enhanced)   │◄──│ - semantic-search      │   │ - ES-native search    │
-│ - fetch               │   │ - nl-search            │   │ - RAG patterns        │
-│ - get-ontology        │   │ - suggest              │   │ - Custom Oak tools    │
-│ - get-help            │   └───────────────────────┘   └───────────────────────┘
-│ - get-knowledge-graph │               │                           │
-│ - semantic-search ────┼───────────────┘                           │
-│   (aggregated)        │                                           │
-└───────────────────────┘                                           │
-            │                                                       │
-            ▼                                                       │
-┌───────────────────────┐                                           │
-│  Oak Curriculum API   │                                           │
-│  (upstream)           │                                           │
-└───────────────────────┘                                           │
-                                                                    │
-┌────────────────────────────────────────────────────────────────────┘
-│                      Elasticsearch Serverless                       │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │
-│  │ oak_lessons │  │ oak_units   │  │ oak_unit_   │  │ oak_       │ │
-│  │             │  │             │  │ rollup      │  │ sequences  │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘ │
-│  ┌─────────────┐  ┌─────────────┐                                  │
-│  │ oak_threads │  │ oak_        │  (Future indices)                │
-│  │ (planned)   │  │ ontology    │                                  │
-│  └─────────────┘  └─────────────┘                                  │
+                                        ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│                 Curriculum MCP (stdio/streamable HTTP)                      │
+│  Tools: search (hybrid via SDK), suggest, fetch, get-ontology, get-help      │
+│  Uses: Search SDK (retrieval/admin) + Oak Curriculum API                     │
+└────────────────────────────────────────────────────────────────────────────┘
+            │                                 │
+            ▼                                 ▼
+┌──────────────────────────────┐   ┌────────────────────────────────────────┐
+│  Oak Curriculum API (upstream)│   │            Elasticsearch               │
+└──────────────────────────────┘   └────────────────────────────────────────┘
+                                        │
+                                        ▼
+┌────────────────────────────────────────────────────────────────────┐
+│                      Elasticsearch Indices                           │
+│  oak_lessons, oak_units, oak_unit_rollup, oak_sequences,              │
+│  oak_sequence_facets, oak_threads, oak_meta                           │
+│  Future: oak_ontology (domain/RAG)                                     │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Next Steps
 
-1. **Provision ES Serverless** and run initial ingestion
-2. **Add ontology index** for domain knowledge RAG
-3. **Implement thread fields** in content indices
-4. **Add `semantic-search` aggregated tool** to SDK
-5. **Enhance `search` tool** with mode parameter
-6. **Test RAG patterns** with real data
-7. **Evaluate Elastic Agent Builder** if Kibana deployed
+1. **Provision ES Serverless** and run `pnpm es:setup` + `pnpm es:ingest-live` on real data
+2. **Validate hybrid search and suggestions** (RRF, facets, phrase boosts) against real queries
+3. **Add ontology index** for domain knowledge RAG (if still required)
+4. **Add SDK-based semantic-search MCP tool** (no HTTP) and decide whether to fold into `search`
+5. **Expand observability** (zero-hit telemetry, ingestion metrics) for production readiness
+6. **Evaluate Elastic Agent Builder** only if Kibana becomes a dependency
 
 ---
 
 ## References
 
 - [Semantic Search Plans Review](./semantic-search-plans-review.md)
-- [Elastic MCP Integration Evaluation](./elastic-mcp-integration-evaluation.md)
 - [Ontology Implementation Gaps](./ontology-implementation-gaps.md)
-- [Elasticsearch RAG Documentation](../../reference-docs/elasticsearch/elasticsearch-rag-index.md)
-- [Elasticsearch Tools and APIs](../../reference-docs/elasticsearch/elasticsearch-tools-and-apis.md)
+- [MCP and Agent Integration Patterns](../methods/mcp-agent-integration.md)
+- [Conversational RAG](../methods/conversational-rag.md)
+- [Graph + Elastic](../methods/graph-elastic.md)

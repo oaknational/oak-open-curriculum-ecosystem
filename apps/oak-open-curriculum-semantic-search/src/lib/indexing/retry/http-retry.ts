@@ -7,14 +7,14 @@
  *
  * @see ./document-retry.ts for Tier 2 (document-level) retry
  * @see ADR-070 SDK Rate Limiting and Retry
- * @module http-retry
+ * @module retry/http-retry
  */
 import type { Logger } from '@oaknational/mcp-logger';
-import type { BulkOperations } from './bulk-operation-types';
-import type { BulkResponse } from './sandbox-bulk-response';
-import { BulkResponseSchema, logBulkErrors } from './sandbox-bulk-response';
-import { calculateBackoffWithJitter, createNdjson } from './bulk-chunk-utils';
-import { extractFailedOperations } from './bulk-retry-utils';
+import type { BulkOperations } from '../bulk-operation-types';
+import type { BulkResponse } from '../sandbox-bulk-response';
+import { BulkResponseSchema, logBulkErrors } from '../sandbox-bulk-response';
+import { calculateBackoffWithJitter, createNdjson } from '../bulk-chunk-utils';
+import { extractFailedOperations } from '../bulk-retry-utils';
 
 /**
  * Minimal Elasticsearch transport interface for bulk operations.

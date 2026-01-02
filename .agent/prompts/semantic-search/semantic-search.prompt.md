@@ -1,83 +1,136 @@
 # Semantic Search — Session Context
 
-**Status**: ✅ **IMPLEMENTATION COMPLETE** — Verification pending
-**Last Updated**: 2026-01-01
+**Status**: ✅ **VERIFIED** — Sequence indexing pending
+**Last Updated**: 2026-01-02
 
 ---
 
-## 🎯 NEXT SESSION: Verify Full Ingestion
+## 📖 Project Context
 
-### Single Remaining Task
+### What This Project Is
 
-Run full bulk ingestion against live Elasticsearch and verify ~12,320 lessons indexed.
+This is the **Oak National Academy MCP Ecosystem** — a monorepo containing:
+
+- **MCP servers** that expose Oak's curriculum data to AI agents (Claude, etc.)
+- **Semantic search application** that powers natural language search over the curriculum
+- **SDK** that provides typed access to Oak's curriculum API
+
+### What Semantic Search Does
+
+The semantic search app (`apps/oak-open-curriculum-semantic-search`) indexes Oak's entire curriculum into Elasticsearch for teachers and students to search using natural language. For example:
+
+- "How do I teach fractions to Year 5?"
+- "Lessons about the water cycle"
+- "KS4 physics electricity"
+
+The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic embeddings, enabling search by meaning rather than just keywords.
+
+### Current State (Verified 2026-01-02)
+
+| Metric | Value |
+|--------|-------|
+| **Documents indexed** | 16,327 (100%) |
+| **Lessons** | 12,833 |
+| **Units** | 1,665 |
+| **Threads** | 164 |
+| **Sequences** | 0 (📋 next task) |
+
+### Architectural Principles
+
+This codebase follows strict rules:
+
+- **Schema-first**: All types flow from the OpenAPI spec via the SDK
+- **TDD**: Tests first, always
+- **No type shortcuts**: Never use `as`, `any`, `!`, or `Record<string, unknown>`
+- **Quality gates**: All checks must pass after every change
+- **Single pipeline**: One ingestion pipeline with thin adapters — NO duplication
+
+For full details, see [rules.md](../../directives-and-memory/rules.md).
+
+---
+
+## 🎯 YOUR TASK: Wire Sequence Ingestion
+
+### Problem
+
+The bulk download files contain sequence data (`sequenceSlug`, `sequence` array), but the bulk-first ingestion pipeline does not currently process sequences:
+
+- `oak_sequences`: 0 documents (should have data)
+- `oak_sequence_facets`: 0 documents (should have data)
+
+### Solution
+
+Wire sequence document building into the **existing** bulk ingestion pipeline.
+
+**Key constraint**: One ingestion pipeline with thin adapters. Any duplication of pipeline logic is a DRY violation per [rules.md](../../directives-and-memory/rules.md).
+
+### Implementation Approach
+
+1. **Existing builders**: `sequence-bulk-helpers.ts` already has:
+   - `buildSequenceOps()`
+   - `buildSequenceFacetOps()`
+
+2. **Integration point**: `bulk-ingestion.ts` orchestrates document building:
+   - Currently calls `buildLessonIndexDoc`, `buildUnitIndexDoc`, `buildThreadDocs`
+   - Add calls to sequence builders
+
+3. **Data source**: Bulk download files already contain sequence data:
+   - Each file has `sequenceSlug` and `sequence` array
+   - No additional API calls needed
+
+4. **Single pipeline**: Use the same `dispatchBulk` flow — do NOT create separate sequence ingestion
+
+### Acceptance Criteria
+
+- [ ] `oak_sequences` populated from bulk data
+- [ ] `oak_sequence_facets` populated from bulk data
+- [ ] No duplication of ingestion pipeline logic
+- [ ] All quality gates pass
+- [ ] TDD: tests written FIRST
+
+### Verification Command
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-
-# Option 1: Default retry settings (3 retries, 5000ms base delay)
 pnpm es:setup --reset
 pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
 pnpm es:status
-
-# Option 2: Custom retry settings (if needed)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --max-retries 5 --retry-delay 10000
+# Verify oak_sequences and oak_sequence_facets have document counts
 ```
-
-### Expected Results
-
-| Index | Expected Count |
-|-------|----------------|
-| `oak_lessons` | ~12,320 |
-| `oak_units` | ~1,665 |
-| `oak_unit_rollup` | ~1,665 |
-| `oak_threads` | ~164 |
-
-### Prerequisites
-
-- Elasticsearch instance running with ELSER configured
-- Bulk download files in `./bulk-downloads`
-- Valid `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` in `.env.local`
 
 ---
 
-## ✅ What's Complete
+## ✅ What's Complete (No Changes Needed)
 
-### Implementation (All Code Work Done)
+### Full Ingestion Verified (2026-01-02)
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Two-tier retry system | ✅ Complete | HTTP + document-level retry |
-| CLI flags | ✅ Complete | `--max-retries`, `--retry-delay`, `--no-retry` |
-| Integration tests | ✅ Complete | 6 tests in `bulk-chunk-uploader.integration.test.ts` |
-| E2E tests | ✅ Complete | 6 tests in `bulk-retry-cli.e2e.test.ts` |
-| ADR-096 | ✅ Complete | ES Bulk Retry Strategy documented |
-| README | ✅ Complete | `src/lib/indexing/README.md` |
-| TSDoc | ✅ Complete | All public interfaces documented |
-| All quality gates | ✅ Pass | 809 unit tests, 6 E2E tests |
+| Component | Status |
+|-----------|--------|
+| Two-tier retry system | ✅ Verified |
+| Bulk-first ingestion (lessons, units, threads) | ✅ Verified |
+| Missing transcript handling | ✅ Complete |
+| Quality gates | ✅ All passing |
 
-### New Files Created
+### CLI Usage
 
-```text
-src/lib/indexing/
-├── http-retry.ts          # Tier 1 (HTTP-level) retry logic
-├── document-retry.ts      # Tier 2 (document-level) retry logic
-├── README.md              # Module documentation
+```bash
+# Full bulk ingestion (recommended)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
 
-src/lib/elasticsearch/setup/
-├── ingest-cli-help.ts      # CLI help text (extracted)
-├── ingest-cli-processors.ts # Argument processors (extracted)
-
-docs/architecture/architectural-decisions/
-└── 096-es-bulk-retry-strategy.md  # ADR documenting solution
+# Reset and verify
+pnpm es:setup --reset
+pnpm es:status
 ```
 
-### CLI Flags Added
+### CLI Flags Available
 
 | Flag | Default | Description |
 |------|---------|-------------|
-| `--max-retries <n>` | 3 | Maximum document-level retry attempts |
+| `--max-retries <n>` | 4 | Maximum document-level retry attempts |
 | `--retry-delay <ms>` | 5000 | Base delay for exponential backoff |
 | `--no-retry` | false | Disable document-level retry |
+| `--verbose` | false | Enable detailed logging |
+| `--force` | false | Proceed even if data exists |
 
 ---
 
@@ -101,64 +154,34 @@ docs/architecture/architectural-decisions/
 │           (429, 502, 503, 504)                             │
 │                     │                                       │
 │                     ▼                                       │
-│              Exponential Backoff                           │
+│        Progressive Chunk Delay (×1.5)                      │
 │           (allow ELSER to drain)                           │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Retryable vs Non-Retryable Errors
+### Optimised Constants
 
-| Status | Type | Retry? | Example |
-|--------|------|--------|---------|
-| 429 | Rate limit | ✅ Yes | ELSER queue overflow |
-| 502 | Bad gateway | ✅ Yes | Proxy errors |
-| 503 | Unavailable | ✅ Yes | Service restarting |
-| 504 | Timeout | ✅ Yes | Gateway timeout |
-| 400 | Bad request | ❌ No | Mapping errors |
-| 404 | Not found | ❌ No | Missing index |
-| 409 | Conflict | ❌ No | Version conflict |
+| Constant | Value | Purpose |
+|----------|-------|---------|
+| `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
+| `DEFAULT_CHUNK_DELAY_MS` | 6000ms | Base delay between chunk uploads |
+| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
 
 ---
 
-## 📖 Before You Start
-
-**Read foundation documents:**
-
-1. [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no type shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
-3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
-
-**Read relevant ADRs:**
-
-- [ADR-096: ES Bulk Retry Strategy](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) — **NEW** Two-tier retry
-- [ADR-070: SDK Rate Limiting and Retry](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) — Pattern source
-- [ADR-087: Batch-Atomic Ingestion](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Idempotent re-runs
-- [ADR-088: Result Pattern](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Typed errors
-
-**Do NOT guess how ES works — read the official documentation:**
-
-- [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
-- [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)
-- [Inference queue docs](https://www.elastic.co/docs/explore-analyze/machine-learning/inference/inference-queue)
-
----
-
-## 📚 Key Files
+## 📚 Key Files (For Reference)
 
 | File | Purpose |
 |------|---------|
+| `src/lib/indexing/bulk-ingestion.ts` | Bulk-first ingestion pipeline |
+| `src/lib/indexing/sequence-bulk-helpers.ts` | Sequence document builders |
 | `src/lib/indexing/bulk-chunk-uploader.ts` | Upload orchestration |
-| `src/lib/indexing/http-retry.ts` | Tier 1 retry (transport) |
-| `src/lib/indexing/document-retry.ts` | Tier 2 retry (document-level) |
-| `src/lib/indexing/bulk-retry-utils.ts` | `isRetryableError`, `extractFailedOperations` |
-| `src/lib/elasticsearch/setup/ingest-cli-args.ts` | CLI argument parsing |
 | `src/lib/indexing/README.md` | Module documentation |
+| `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md` | ADR |
 
 ---
 
-## 🔧 Quality Gates
-
-Run after every piece of work, from repo root:
+## 🔧 Quality Gates (Run After Any Changes)
 
 ```bash
 pnpm type-gen
@@ -178,21 +201,23 @@ pnpm smoke:dev:stub
 
 ---
 
+## ⚠️ Key Principles (MANDATORY)
+
+1. **TDD always** — Red → Green → Refactor
+2. **No type shortcuts** — No `as`, `any`, `!`
+3. **Single pipeline** — NO duplication of ingestion logic
+4. **Read foundation docs first**:
+   - [rules.md](../../directives-and-memory/rules.md)
+   - [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
+   - [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)
+
+---
+
 ## 📚 Related Documents
 
 | Document | Purpose |
 |----------|---------|
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative roadmap |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Master roadmap |
 | [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
-| [elser-retry-robustness.md](../../plans/semantic-search/active/elser-retry-robustness.md) | Solution spec |
-| [elser-scaling-notes.md](../../research/elasticsearch/elser/elser-scaling-notes.md) | ELSER research |
-
----
-
-## ⚠️ Key Principles
-
-1. **TDD always** — Red → Green → Refactor
-2. **Reuse patterns** — ADR-070 retry pattern adapted for ES bulk
-3. **Distinguish failure modes** — Only retry transient errors (429, 502, 503, 504)
-4. **Schema-first** — Types flow from OpenAPI spec
-5. **No type shortcuts** — No `as`, `any`, `!`
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry (verified) |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy |

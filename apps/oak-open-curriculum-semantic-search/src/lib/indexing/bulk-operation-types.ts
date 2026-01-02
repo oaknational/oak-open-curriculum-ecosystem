@@ -163,3 +163,26 @@ export function isBulkDeleteAction(value: unknown): value is BulkDeleteAction {
 export function isBulkAction(value: unknown): value is BulkAction {
   return isBulkIndexAction(value) || isBulkCreateAction(value) || isBulkDeleteAction(value);
 }
+
+/**
+ * Extracts document IDs from bulk operations.
+ *
+ * @remarks
+ * Bulk operations alternate action and document: [action, doc, action, doc, ...].
+ * The document ID is in the action's `index._id` or `create._id` field.
+ *
+ * @param operations - Bulk operations array
+ * @returns Array of document IDs (empty if ID not found in action)
+ */
+export function extractDocumentIds(operations: BulkOperations): readonly string[] {
+  const ids: string[] = [];
+  for (let i = 0; i < operations.length; i += 2) {
+    const action = operations[i];
+    if (isBulkIndexAction(action) && action.index._id !== undefined) {
+      ids.push(action.index._id);
+    } else if (isBulkCreateAction(action)) {
+      ids.push(action.create._id);
+    }
+  }
+  return ids;
+}

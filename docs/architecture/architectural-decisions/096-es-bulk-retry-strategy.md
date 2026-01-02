@@ -1,6 +1,6 @@
 # ADR-096: Elasticsearch Bulk Retry Strategy
 
-**Status**: Accepted
+**Status**: Accepted — ✅ **VERIFIED** (2026-01-02)
 
 **Date**: 2026-01-01
 
@@ -34,7 +34,7 @@ The diagnostic runner (`elser-diagnostic-runner.ts`) proved that failures are **
 
 - Same documents that failed on first run succeeded when retried
 - Failures correlated with queue position, not document content
-- Parameter tuning (10MB chunks, 2000ms delay) improved success from 60% to 85%
+- Parameter tuning (8MB chunks, 6000ms delay) improved success from 60% to 99.87%
 - Document-level retry was necessary to achieve 100%
 
 ## Decision
@@ -116,13 +116,25 @@ export function isRetryableError(status: number, errorType: string): boolean {
 
 ```typescript
 interface BulkUploadConfig {
-  chunkDelayMs?: number; // Default: 2000ms
+  chunkDelayMs?: number; // Default: 6000ms (optimised 2026-01-02)
   maxRetries?: number; // Default: 3 (HTTP-level)
   documentRetryEnabled?: boolean; // Default: true
-  documentMaxRetries?: number; // Default: 3
+  documentMaxRetries?: number; // Default: 4
   documentRetryDelayMs?: number; // Default: 5000ms
 }
 ```
+
+### Optimised Constants (Verified 2026-01-02)
+
+| Constant                                | Value  | Purpose                                    |
+| --------------------------------------- | ------ | ------------------------------------------ |
+| `MAX_CHUNK_SIZE_BYTES`                  | 8MB    | Smaller chunks reduce ELSER queue pressure |
+| `DEFAULT_CHUNK_DELAY_MS`                | 6000ms | Base delay between chunk uploads           |
+| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5×   | Progressive delay increase per retry       |
+| `HTTP_MAX_RETRY_ATTEMPTS`               | 3      | Transport-level retry attempts             |
+| `HTTP_BASE_RETRY_DELAY_MS`              | 1000ms | Base delay for HTTP backoff                |
+
+**Initial retry delay**: Before each document retry round, an additional delay equal to the progressive chunk delay is applied to let the ELSER queue settle.
 
 ### CLI Integration
 
@@ -240,18 +252,33 @@ Easy to test, no side effects, predictable behavior.
 
 ## Implementation
 
+### Module Structure
+
+Retry logic is organized in `src/lib/indexing/retry/`:
+
+```text
+src/lib/indexing/retry/
+├── index.ts              # Barrel file - public API
+├── types.ts              # Retry-specific types
+├── http-retry.ts         # Tier 1: HTTP-level retry
+├── document-retry.ts     # Tier 2: document-level orchestration
+└── chunk-processor.ts    # Retry chunk processing logic
+```
+
 ### Files Modified
 
-- `bulk-chunk-uploader.ts` - Main retry implementation
+- `bulk-chunk-uploader.ts` - Main retry orchestration (imports from `./retry`)
 - `ingest-cli-args.ts` - CLI flag parsing
 - `ingest-bulk.ts` - Config wiring
 - `ingest-harness-ops.ts` - dispatchBulk config parameter
 
 ### Files Created
 
+- `src/lib/indexing/retry/` - Retry module (see structure above)
 - `bulk-chunk-uploader.integration.test.ts` - Integration tests
 - `e2e-tests/bulk-retry-cli.e2e.test.ts` - CLI E2E tests
 - `src/lib/indexing/README.md` - Module documentation
+- `src/lib/elasticsearch/setup/ingest-failure-report.ts` - JSON failure report generation
 
 ### Test Coverage
 
@@ -269,13 +296,25 @@ Easy to test, no side effects, predictable behavior.
 | Failure rate    | ~47%                           |
 | Failure type    | HTTP 429 `inference_exception` |
 
-### Expected After Implementation
+### After Implementation (✅ Verified 2026-01-02)
 
-| Metric          | Value              |
-| --------------- | ------------------ |
-| Lessons indexed | ~12,320 (100%)     |
-| Failure rate    | 0% (after retries) |
-| Additional time | 10-20% longer      |
+| Metric                   | Value           |
+| ------------------------ | --------------- |
+| **Documents indexed**    | 16,327 (100%)   |
+| **Initial failure rate** | 0.13% (21 docs) |
+| **Final failure rate**   | 0%              |
+| **Retry rounds needed**  | 1               |
+| **Total duration**       | ~21 minutes     |
+
+### Optimisation History
+
+| Run   | Chunk Size | Delay                    | Initial Failures | Retries | Time         |
+| ----- | ---------- | ------------------------ | ---------------- | ------- | ------------ |
+| 1     | 10MB       | 2500ms                   | 4,518 (28%)      | 4       | 21.3 min     |
+| 2     | 10MB       | 4000ms                   | 1,896 (12%)      | 4       | 21.0 min     |
+| 3     | 10MB       | 4000ms (+init delay)     | 2,363 (14%)      | 3       | 20.9 min     |
+| 4     | 9MB        | 5000ms (+init delay)     | 677 (4%)         | 2       | 19.7 min     |
+| **5** | **8MB**    | **6000ms** (+init delay) | **21 (0.13%)**   | **1**   | **21.0 min** |
 
 ### Verification Command
 

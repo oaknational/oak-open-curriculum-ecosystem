@@ -20,9 +20,11 @@ import {
   dispatchBulk,
   summariseOperations,
   type BulkUploadConfig,
+  type BulkUploadResult,
 } from '../../indexing/ingest-harness-ops.js';
 import { ingestLogger } from '../../logger';
 import { printDryRunNotice, printCacheStats } from './ingest-output.js';
+import { handleUploadComplete } from './ingest-failure-report.js';
 
 /**
  * Log bulk ingestion summary with document counts.
@@ -70,13 +72,27 @@ async function prepareBulkOperations(
  *
  * @param operations - Prepared bulk operations
  * @param config - Upload configuration (retry settings)
+ * @returns Upload result with success count and any permanently failed operations
  */
 async function dispatchOperations(
   operations: Awaited<ReturnType<typeof prepareBulkIngestion>>['operations'],
   config: BulkUploadConfig,
-): Promise<void> {
+): Promise<BulkUploadResult> {
   const es = esClient();
-  await dispatchBulk({ transport: es.transport }, operations, ingestLogger, config);
+  return dispatchBulk({ transport: es.transport }, operations, ingestLogger, config);
+}
+
+/** Log ingestion start with configuration details. */
+function logIngestionStart(args: CliArgs): void {
+  ingestLogger.info(args.dryRun ? 'Starting BULK DRY RUN' : 'Starting BULK LIVE ingestion', {
+    dryRun: args.dryRun,
+    note: 'Reading from bulk download files, API used only for KS4 tier enrichment',
+    retryConfig: {
+      documentRetryEnabled: !args.noRetry,
+      maxRetries: args.maxRetries ?? 'default (3)',
+      retryDelay: args.retryDelay ?? 'default (5000ms)',
+    },
+  });
 }
 
 /** Convert bulk stats to IngestionResult format. */
@@ -130,16 +146,7 @@ export async function executeBulkIngestion(
   args: CliArgs,
   client: OakClient,
 ): Promise<BulkIngestionExecutionResult> {
-  ingestLogger.info(args.dryRun ? 'Starting BULK DRY RUN' : 'Starting BULK LIVE ingestion', {
-    dryRun: args.dryRun,
-    note: 'Reading from bulk download files, API used only for KS4 tier enrichment',
-    retryConfig: {
-      documentRetryEnabled: !args.noRetry,
-      maxRetries: args.maxRetries ?? 'default (3)',
-      retryDelay: args.retryDelay ?? 'default (5000ms)',
-    },
-  });
-
+  logIngestionStart(args);
   const startTime = Date.now();
 
   const bulkDir = args.bulkDir;
@@ -151,7 +158,6 @@ export async function executeBulkIngestion(
   const { operations, stats } = prepResult;
   const duration = ((Date.now() - startTime) / 1000).toFixed(1);
 
-  // Log summary
   const summary = summariseOperations(operations, 'primary');
   ingestLogger.debug('Bulk operations prepared', {
     totalOperations: operations.length,
@@ -166,12 +172,10 @@ export async function executeBulkIngestion(
     return { stats, duration, result: createIngestionResult(operations) };
   }
 
-  // Dispatch to Elasticsearch with retry configuration
-  const uploadConfig = createUploadConfig(args);
-  await dispatchOperations(operations, uploadConfig);
-
+  const uploadResult = await dispatchOperations(operations, createUploadConfig(args));
   printBulkSummary(stats, duration);
   printCacheStats(client);
+  handleUploadComplete(uploadResult, bulkDir);
 
   return { stats, duration, result: createIngestionResult(operations) };
 }
