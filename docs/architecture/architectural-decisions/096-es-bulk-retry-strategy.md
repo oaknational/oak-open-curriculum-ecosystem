@@ -34,7 +34,7 @@ The diagnostic runner (`elser-diagnostic-runner.ts`) proved that failures are **
 
 - Same documents that failed on first run succeeded when retried
 - Failures correlated with queue position, not document content
-- Parameter tuning (8MB chunks, 6500ms delay) improved success from 60% to 99.87%
+- Parameter tuning (8MB chunks, 7001ms delay) improved success from 60% to 99.87%
 - Document-level retry was necessary to achieve 100%
 
 ## Decision
@@ -116,7 +116,7 @@ export function isRetryableError(status: number, errorType: string): boolean {
 
 ```typescript
 interface BulkUploadConfig {
-  chunkDelayMs?: number; // Default: 6500ms (optimised 2026-01-02)
+  chunkDelayMs?: number; // Default: 7001ms (optimised 2026-01-02)
   maxRetries?: number; // Default: 3 (HTTP-level)
   documentRetryEnabled?: boolean; // Default: true
   documentMaxRetries?: number; // Default: 4
@@ -129,7 +129,7 @@ interface BulkUploadConfig {
 | Constant                                | Value  | Purpose                                    |
 | --------------------------------------- | ------ | ------------------------------------------ |
 | `MAX_CHUNK_SIZE_BYTES`                  | 8MB    | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS`                | 6500ms | Base delay between chunk uploads           |
+| `DEFAULT_CHUNK_DELAY_MS`                | 7001ms | Base delay between chunk uploads           |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5×   | Progressive delay increase per retry       |
 | `HTTP_MAX_RETRY_ATTEMPTS`               | 3      | Transport-level retry attempts             |
 | `HTTP_BASE_RETRY_DELAY_MS`              | 1000ms | Base delay for HTTP backoff                |
@@ -300,11 +300,16 @@ src/lib/indexing/retry/
 
 | Metric                   | Value           |
 | ------------------------ | --------------- |
-| **Documents indexed**    | 16,327 (100%)   |
-| **Initial failure rate** | 0.13% (21 docs) |
+| **Documents indexed**    | 16,414          |
+| **Lessons**              | 12,833          |
+| **Units**                | 1,665           |
+| **Threads**              | 164             |
+| **Sequences**            | 30              |
+| **Sequence facets**      | 57              |
+| **Initial failure rate** | 0.10% (17 docs) |
 | **Final failure rate**   | 0%              |
 | **Retry rounds needed**  | 1               |
-| **Total duration**       | ~21 minutes     |
+| **Total duration**       | ~22 minutes     |
 
 ### Optimisation History
 
@@ -314,7 +319,8 @@ src/lib/indexing/retry/
 | 2     | 10MB       | 4000ms                   | 1,896 (12%)      | 4       | 21.0 min     |
 | 3     | 10MB       | 4000ms (+init delay)     | 2,363 (14%)      | 3       | 20.9 min     |
 | 4     | 9MB        | 5000ms (+init delay)     | 677 (4%)         | 2       | 19.7 min     |
-| **5** | **8MB**    | **6500ms** (+init delay) | **21 (0.13%)**   | **1**   | **21.0 min** |
+| 5     | 8MB        | 6500ms (+init delay)     | 21 (0.13%)       | 1       | 21.0 min     |
+| **6** | **8MB**    | **7001ms** (+init delay) | **17 (0.10%)**   | **1**   | **22.0 min** |
 
 ### Verification Command
 

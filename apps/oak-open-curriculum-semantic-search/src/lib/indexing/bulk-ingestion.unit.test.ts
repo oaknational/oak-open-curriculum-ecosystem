@@ -33,6 +33,10 @@ vi.mock('../../adapters/bulk-thread-transformer', () => ({
   buildThreadBulkOperations: vi.fn(),
 }));
 
+vi.mock('../../adapters/bulk-sequence-transformer', () => ({
+  buildSequenceBulkOperations: vi.fn(),
+}));
+
 vi.mock('../logger', () => ({
   ingestLogger: {
     info: vi.fn(),
@@ -63,51 +67,31 @@ describe('bulk-ingestion', () => {
         lessons: 2,
         units: 1,
         threads: 2,
+        sequences: 1,
+        facets: 1,
         keywords: 10,
         misconceptions: 5,
         synonyms: 3,
       });
-      // 6 lesson/unit operations + 4 thread operations (2 threads × 2 entries each)
-      expect(result.operations.length).toBe(10);
+      // 6 lesson/unit + 4 thread + 4 sequence operations (1 sequence + 1 facet × 2 entries each)
+      expect(result.operations.length).toBe(14);
     });
 
     it('filters by subject when subjectFilter is provided', async () => {
-      // Arrange
       const mathsFile = createMockBulkFile('maths-primary', 'Maths');
       const englishFile = createMockBulkFile('english-primary', 'English');
-
       const mathsFileResult = createMockBulkFileResult(mathsFile);
       const englishFileResult = createMockBulkFileResult(englishFile);
-
-      const { readAllBulkFiles } = await import('@oaknational/oak-curriculum-sdk/public/bulk');
+      await setupSubjectFilterMocks(mathsFile, mathsFileResult, englishFileResult);
       const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
-      const { createVocabularyMiningAdapter } =
-        await import('../../adapters/vocabulary-mining-adapter');
-      const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
-        await import('../../adapters/bulk-thread-transformer');
-
-      vi.mocked(readAllBulkFiles).mockResolvedValue([mathsFileResult, englishFileResult]);
-      vi.mocked(createHybridDataSource).mockResolvedValue(
-        createMockHybridDataSource(mathsFile, 1, 1, 2),
-      );
-      vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
-        createMockVocabularyAdapter(5, 2, 1),
-      );
-      vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
-      vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
-
       const mockClient = createMockClient();
       const options: BulkIngestionOptions = {
         bulkDir: '/path/to/bulk',
         client: mockClient,
         subjectFilter: ['maths'],
       };
-
-      // Act
       const { prepareBulkIngestion } = await import('./bulk-ingestion');
       const result = await prepareBulkIngestion(options);
-
-      // Assert - only maths file should be processed
       expect(result.stats.filesProcessed).toBe(1);
       expect(createHybridDataSource).toHaveBeenCalledTimes(1);
       expect(createHybridDataSource).toHaveBeenCalledWith(mathsFile, mockClient);
@@ -120,6 +104,8 @@ describe('bulk-ingestion', () => {
         await import('../../adapters/vocabulary-mining-adapter');
       const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
         await import('../../adapters/bulk-thread-transformer');
+      const { buildSequenceBulkOperations } =
+        await import('../../adapters/bulk-sequence-transformer');
 
       vi.mocked(readAllBulkFiles).mockResolvedValue([]);
       vi.mocked(createVocabularyMiningAdapter).mockReturnValue(
@@ -127,6 +113,7 @@ describe('bulk-ingestion', () => {
       );
       vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
       vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+      vi.mocked(buildSequenceBulkOperations).mockReturnValue([]);
 
       const mockClient = createMockClient();
       const options: BulkIngestionOptions = {
@@ -143,6 +130,8 @@ describe('bulk-ingestion', () => {
       expect(result.stats.lessonsIndexed).toBe(0);
       expect(result.stats.unitsIndexed).toBe(0);
       expect(result.stats.threadsIndexed).toBe(0);
+      expect(result.stats.sequencesIndexed).toBe(0);
+      expect(result.stats.sequenceFacetsIndexed).toBe(0);
       expect(result.operations.length).toBe(0);
     });
   });
@@ -320,6 +309,28 @@ interface MockSetupResult {
   mockClient: OakClient;
 }
 
+async function setupSubjectFilterMocks(
+  mathsFile: BulkDownloadFile,
+  mathsFileResult: BulkFileResult,
+  englishFileResult: BulkFileResult,
+): Promise<void> {
+  const { readAllBulkFiles } = await import('@oaknational/oak-curriculum-sdk/public/bulk');
+  const { createHybridDataSource } = await import('../../adapters/hybrid-data-source');
+  const { createVocabularyMiningAdapter } =
+    await import('../../adapters/vocabulary-mining-adapter');
+  const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
+    await import('../../adapters/bulk-thread-transformer');
+  const { buildSequenceBulkOperations } = await import('../../adapters/bulk-sequence-transformer');
+  vi.mocked(readAllBulkFiles).mockResolvedValue([mathsFileResult, englishFileResult]);
+  vi.mocked(createHybridDataSource).mockResolvedValue(
+    createMockHybridDataSource(mathsFile, 1, 1, 2),
+  );
+  vi.mocked(createVocabularyMiningAdapter).mockReturnValue(createMockVocabularyAdapter(5, 2, 1));
+  vi.mocked(extractThreadsFromBulkFiles).mockReturnValue([]);
+  vi.mocked(buildThreadBulkOperations).mockReturnValue([]);
+  vi.mocked(buildSequenceBulkOperations).mockReturnValue([]);
+}
+
 async function setupMocksWithThreads(): Promise<MockSetupResult> {
   const mockBulkFile = createMockBulkFile('maths-primary', 'Maths');
   const mockBulkFileResult = createMockBulkFileResult(mockBulkFile);
@@ -330,6 +341,7 @@ async function setupMocksWithThreads(): Promise<MockSetupResult> {
     await import('../../adapters/vocabulary-mining-adapter');
   const { extractThreadsFromBulkFiles, buildThreadBulkOperations } =
     await import('../../adapters/bulk-thread-transformer');
+  const { buildSequenceBulkOperations } = await import('../../adapters/bulk-sequence-transformer');
 
   vi.mocked(readAllBulkFiles).mockResolvedValue([mockBulkFileResult]);
   vi.mocked(createHybridDataSource).mockResolvedValue(
@@ -359,6 +371,15 @@ async function setupMocksWithThreads(): Promise<MockSetupResult> {
     },
   ]);
 
+  // Mock sequence operations (1 sequence + 1 facet = 4 entries: 2 actions + 2 docs)
+  // Use type-cast-free minimal structure that satisfies BulkOperationEntry
+  vi.mocked(buildSequenceBulkOperations).mockReturnValue([
+    { index: { _index: 'oak_sequences', _id: 'maths-primary' } },
+    { index: { _index: 'oak_sequences', _id: 'seq-doc-placeholder' } }, // doc entry
+    { index: { _index: 'oak_sequence_facets', _id: 'maths-maths-primary-ks2' } },
+    { index: { _index: 'oak_sequence_facets', _id: 'facet-doc-placeholder' } }, // doc entry
+  ]);
+
   return { mockBulkFile, mockClient: createMockClient() };
 }
 
@@ -367,6 +388,8 @@ interface ExpectedStats {
   lessons: number;
   units: number;
   threads: number;
+  sequences: number;
+  facets: number;
   keywords: number;
   misconceptions: number;
   synonyms: number;
@@ -377,6 +400,8 @@ function assertBulkIngestionStats(stats: BulkIngestionStats, expected: ExpectedS
   expect(stats.lessonsIndexed).toBe(expected.lessons);
   expect(stats.unitsIndexed).toBe(expected.units);
   expect(stats.threadsIndexed).toBe(expected.threads);
+  expect(stats.sequencesIndexed).toBe(expected.sequences);
+  expect(stats.sequenceFacetsIndexed).toBe(expected.facets);
   expect(stats.vocabularyStats.uniqueKeywords).toBe(expected.keywords);
   expect(stats.vocabularyStats.totalMisconceptions).toBe(expected.misconceptions);
   expect(stats.vocabularyStats.synonymsExtracted).toBe(expected.synonyms);

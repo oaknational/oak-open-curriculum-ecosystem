@@ -1,72 +1,56 @@
 # Semantic Search Current State
 
 **Last Updated**: 2026-01-02
-**Status**: ✅ **VERIFIED** — Full ingestion complete
+**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 This is THE authoritative source for current system metrics.
 
 ---
 
-## ✅ VERIFICATION COMPLETE
+## ✅ Full Ingestion Verified (2026-01-02)
 
-### Full Ingestion Results (2026-01-02)
+### Document Counts
+
+| Index | Indexed | ES Count | Notes |
+|-------|---------|----------|-------|
+| `oak_lessons` | 12,833 | 184,985 | ES count includes ELSER sub-documents |
+| `oak_units` | 1,665 | 1,635 | ✅ |
+| `oak_unit_rollup` | 1,665 | 165,345 | ES count includes ELSER sub-documents |
+| `oak_threads` | 164 | 164 | ✅ |
+| `oak_sequences` | 30 | 30 | ✅ NEW |
+| `oak_sequence_facets` | 57 | 57 | ✅ NEW |
+| **Total** | **16,414** | — | |
+
+**Note**: ES document counts for indexes with `semantic_text` fields are higher due to ELSER creating internal sub-documents for sparse vector storage.
+
+### Ingestion Metrics
 
 | Metric | Value |
 |--------|-------|
-| **Documents indexed** | 16,327 (100%) |
-| **Lessons** | 12,833 |
-| **Units** | 1,665 |
-| **Unit rollups** | 1,665 |
-| **Threads** | 164 |
-| **Initial failure rate** | 0.13% (21 docs) |
-| **Final failure rate** | 0% |
-| **Retry rounds needed** | 1 |
-| **Total duration** | ~21 minutes |
+| **Documents indexed** | 16,414 |
+| **Initial failures** | 17 (0.10%) |
+| **Final failures** | 0 |
+| **Retry rounds** | 1 |
+| **Duration** | ~22 minutes |
 
 ### Optimised Parameters
 
 | Constant | Value | Purpose |
 |----------|-------|---------|
 | `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS` | 6500ms | Base delay between chunk uploads |
+| `DEFAULT_CHUNK_DELAY_MS` | 7001ms | Base delay between chunk uploads |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
 | Initial retry delay | ✅ Enabled | Delay before first retry chunk |
 
-See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for full verification history.
+See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for implementation details.
 
 ---
 
-## ES Index Counts (Verified)
+## Next Priority: DRY/SRP Refactoring (Milestone 4)
 
-| Index | Count | Expected | Status |
-|-------|-------|----------|--------|
-| `oak_lessons` | 12,833 | ~12,320 | ✅ Complete |
-| `oak_units` | 1,665 | ~1,665 | ✅ Complete |
-| `oak_unit_rollup` | 1,665 | ~1,665 | ✅ Complete |
-| `oak_threads` | 164 | ~164 | ✅ Complete |
-| `oak_sequences` | 0 | TBD | 📋 Next task |
-| `oak_sequence_facets` | 0 | TBD | 📋 Next task |
-
----
-
-## 📋 Next Task: Wire Sequence Ingestion
-
-### Problem
-
-The bulk download files contain sequence data, but the bulk-first ingestion pipeline does not currently process sequences. The sequence document builders exist but are not wired into the unified pipeline.
-
-### Solution
-
-Wire sequence document building into the existing bulk ingestion pipeline using the same adapter pattern:
-
-1. **Existing builders**: `sequence-bulk-helpers.ts` has `buildSequenceOps` and `buildSequenceFacetOps`
-2. **Single pipeline**: Use the same `dispatchBulk` flow — NO duplication
-3. **Thin adapter**: Add sequence extraction to `BulkDataAdapter` or create `SequenceAdapter`
-
-**Key constraint**: One ingestion pipeline with switchable data source adapters. Any duplication of pipeline logic is a DRY violation.
-
-See [roadmap.md](roadmap.md) for full task details.
+The DRY/SRP pattern used for sequences **must** be applied to lessons, units, and threads.
+See [roadmap.md](roadmap.md) Milestone 4 — **HIGH priority**.
 
 ---
 
@@ -75,9 +59,10 @@ See [roadmap.md](roadmap.md) for full task details.
 | Component | Status | Documentation |
 |-----------|--------|---------------|
 | Two-tier retry system | ✅ Verified | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) |
-| Bulk-first ingestion | ✅ Complete | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) |
+| Bulk-first ingestion | ✅ Verified | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) |
 | Missing transcript handling | ✅ Complete | [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md), [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) |
-| Quality gates | ✅ All passing | 817+ tests |
+| Sequence indexing | ✅ Verified | [roadmap.md](roadmap.md) Milestone 2 |
+| Quality gates | ✅ All passing | 835 tests |
 
 ---
 

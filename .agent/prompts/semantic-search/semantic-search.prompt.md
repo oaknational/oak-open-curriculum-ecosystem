@@ -1,6 +1,6 @@
 # Semantic Search — Session Context
 
-**Status**: ✅ **VERIFIED** — Sequence indexing pending
+**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
 **Last Updated**: 2026-01-02
 
 ---
@@ -27,13 +27,14 @@ The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic emb
 
 ### Current State (Verified 2026-01-02)
 
-| Metric | Value |
-|--------|-------|
-| **Documents indexed** | 16,327 (100%) |
+| Index | Count |
+|-------|-------|
 | **Lessons** | 12,833 |
 | **Units** | 1,665 |
 | **Threads** | 164 |
-| **Sequences** | 0 (📋 next task) |
+| **Sequences** | 30 |
+| **Sequence facets** | 57 |
+| **Total** | 16,414 |
 
 ### Architectural Principles
 
@@ -49,67 +50,99 @@ For full details, see [rules.md](../../directives-and-memory/rules.md).
 
 ---
 
-## 🎯 YOUR TASK: Wire Sequence Ingestion
+## 🎯 NEXT TASK: DRY/SRP Refactoring (Milestone 4)
 
 ### Problem
 
-The bulk download files contain sequence data (`sequenceSlug`, `sequence` array), but the bulk-first ingestion pipeline does not currently process sequences:
+The sequence document builders follow a DRY/SRP-compliant pattern:
 
-- `oak_sequences`: 0 documents (should have data)
-- `oak_sequence_facets`: 0 documents (should have data)
+```text
+[Bulk Data] → [Extractor] → [Params] → [Shared Builder] → [ES Doc]
+[API Data]  → [Adapter]   → [Params] → [Shared Builder] → [ES Doc]
+```
 
-### Solution
+Other document types have **duplicated logic** between bulk and API paths.
 
-Wire sequence document building into the **existing** bulk ingestion pipeline.
+### Data Source Analysis
 
-**Key constraint**: One ingestion pipeline with thin adapters. Any duplication of pipeline logic is a DRY violation per [rules.md](../../directives-and-memory/rules.md).
+All document types have **both API and bulk paths** available (from OpenAPI spec):
 
-### Implementation Approach
+| Document | API Endpoints | Bulk Available |
+|----------|--------------|----------------|
+| **Threads** | `GET /threads`, `GET /threads/{slug}/units` | ✅ Yes |
+| **Sequences** | `GET /sequences/{seq}/units`, etc. | ✅ Yes |
+| **Lessons** | `GET /lessons/{lesson}/summary`, etc. | ✅ Yes |
+| **Units** | `GET /units/{unit}/summary` | ✅ Yes |
 
-1. **Existing builders**: `sequence-bulk-helpers.ts` already has:
-   - `buildSequenceOps()`
-   - `buildSequenceFacetOps()`
+### Current DRY Violations
 
-2. **Integration point**: `bulk-ingestion.ts` orchestrates document building:
-   - Currently calls `buildLessonIndexDoc`, `buildUnitIndexDoc`, `buildThreadDocs`
-   - Add calls to sequence builders
+| Type | Shared Builder | Bulk Transformer | Status |
+|------|---------------|------------------|--------|
+| **Sequences** | `createSequenceDocument()` | ✅ Calls shared | ✅ DRY |
+| **Threads** | `createThreadDocument()` | ❌ `transformThreadToESDoc()` duplicates | **FIX** |
+| **Lessons** | `createLessonDocument()` | ❌ `transformBulkLessonToESDoc()` duplicates | **FIX** |
+| **Units** | `createUnitDocument()` | ❌ `transformBulkUnitToESDoc()` duplicates | **FIX** |
 
-3. **Data source**: Bulk download files already contain sequence data:
-   - Each file has `sequenceSlug` and `sequence` array
-   - No additional API calls needed
+### Reference Implementation
 
-4. **Single pipeline**: Use the same `dispatchBulk` flow — do NOT create separate sequence ingestion
+**Follow the sequence pattern** — see these files:
+
+| File | Role |
+|------|------|
+| `src/lib/indexing/sequence-document-builder.ts` | Shared builder with input-agnostic `CreateSequenceDocumentParams` |
+| `src/adapters/bulk-sequence-transformer.ts` | Bulk extractor that calls `createSequenceDocument()` |
+
+### Files to Refactor
+
+**Priority order** (simplest first):
+
+1. **Threads** (simplest — shared builder already exists):
+   - `src/lib/indexing/thread-document-builder.ts` — Already has `createThreadDocument()`
+   - `src/adapters/bulk-thread-transformer.ts` — Change `transformThreadToESDoc()` to call `createThreadDocument()`
+
+2. **Lessons** (more complex — needs params interface extraction):
+   - `src/lib/indexing/document-transforms.ts` — Has `createLessonDocument()` but API-centric params
+   - `src/adapters/bulk-lesson-transformer.ts` — Has separate `transformBulkLessonToESDoc()`
+   - Extract input-agnostic `CreateLessonDocumentParams` interface
+
+3. **Units** (similar to lessons):
+   - `src/lib/indexing/document-transforms.ts` — Has `createUnitDocument()` but API-centric params
+   - `src/adapters/bulk-unit-transformer.ts` — Has separate `transformBulkUnitToESDoc()`
+   - Extract input-agnostic `CreateUnitDocumentParams` interface
+
+### Implementation Pattern
+
+For each document type:
+
+1. Define `Create<DocType>Params` interface (input-agnostic)
+2. Refactor existing builder to accept params interface
+3. Update bulk transformer to call shared builder
+4. Update API adapter to call shared builder
+5. Delete duplicated transformation code
 
 ### Acceptance Criteria
 
-- [ ] `oak_sequences` populated from bulk data
-- [ ] `oak_sequence_facets` populated from bulk data
-- [ ] No duplication of ingestion pipeline logic
+- [ ] Threads: `bulk-thread-transformer.ts` calls `createThreadDocument()`
+- [ ] Lessons: Single `createLessonDocument()` used by both paths
+- [ ] Units: Single `createUnitDocument()` used by both paths
 - [ ] All quality gates pass
-- [ ] TDD: tests written FIRST
+- [ ] TDD: tests first for each change
 
-### Verification Command
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm es:setup --reset
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
-pnpm es:status
-# Verify oak_sequences and oak_sequence_facets have document counts
-```
+**See**: [roadmap.md](../../plans/semantic-search/roadmap.md) Milestone 4
 
 ---
 
-## ✅ What's Complete (No Changes Needed)
+## ✅ What's Complete
 
 ### Full Ingestion Verified (2026-01-02)
 
 | Component | Status |
 |-----------|--------|
 | Two-tier retry system | ✅ Verified |
-| Bulk-first ingestion (lessons, units, threads) | ✅ Verified |
+| Bulk-first ingestion (all document types) | ✅ Verified |
+| Sequence indexing | ✅ Verified |
 | Missing transcript handling | ✅ Complete |
-| Quality gates | ✅ All passing |
+| Quality gates | ✅ All passing (835 tests) |
 
 ### CLI Usage
 
@@ -164,7 +197,7 @@ pnpm es:status
 | Constant | Value | Purpose |
 |----------|-------|---------|
 | `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS` | 6500ms | Base delay between chunk uploads |
+| `DEFAULT_CHUNK_DELAY_MS` | 7001ms | Base delay between chunk uploads |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
 
 ---
@@ -174,7 +207,9 @@ pnpm es:status
 | File | Purpose |
 |------|---------|
 | `src/lib/indexing/bulk-ingestion.ts` | Bulk-first ingestion pipeline |
-| `src/lib/indexing/sequence-bulk-helpers.ts` | Sequence document builders |
+| `src/lib/indexing/sequence-document-builder.ts` | Shared sequence document builder |
+| `src/lib/indexing/sequence-facets.ts` | Shared sequence facet builder |
+| `src/adapters/bulk-sequence-transformer.ts` | Bulk-specific extractor |
 | `src/lib/indexing/bulk-chunk-uploader.ts` | Upload orchestration |
 | `src/lib/indexing/README.md` | Module documentation |
 | `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md` | ADR |

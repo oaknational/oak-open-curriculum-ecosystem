@@ -1,11 +1,82 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { KeyStage, SearchUnitSummary, SearchSubjectSlug } from '../../types/oak';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
-import { createSequenceFacetDocuments, type SequenceFacetSource } from './sequence-facets';
+import {
+  createSequenceFacetDoc,
+  createSequenceFacetDocuments,
+  type CreateSequenceFacetDocParams,
+  type SequenceFacetSource,
+} from './sequence-facets';
 import {
   buildSequenceFacetSources,
   type SequenceFacetProcessingMetrics,
 } from './sequence-facet-index';
+
+// ============================================================================
+// Test for input-agnostic document builder (DRY - shared by bulk and API)
+// ============================================================================
+
+describe('createSequenceFacetDoc', () => {
+  it('creates a sequence facet document from input-agnostic params', () => {
+    const params: CreateSequenceFacetDocParams = {
+      sequenceSlug: 'maths-primary',
+      subjectSlug: 'maths',
+      phaseSlug: 'primary',
+      phaseTitle: 'Primary',
+      keyStage: 'ks1',
+      keyStageTitle: 'Key Stage 1',
+      years: ['2', '1'], // Intentionally unsorted to test sorting
+      unitSlugs: ['unit-a', 'unit-b'],
+      unitTitles: ['Unit A', 'Unit B'],
+      lessonCount: 15,
+      hasKs4Options: false,
+    };
+
+    const doc = createSequenceFacetDoc(params);
+
+    expect(doc).toEqual({
+      subject_slug: 'maths',
+      sequence_slug: 'maths-primary',
+      key_stages: ['ks1'],
+      key_stage_title: 'Key Stage 1',
+      phase_slug: 'primary',
+      phase_title: 'Primary',
+      years: ['1', '2'], // Sorted
+      unit_slugs: ['unit-a', 'unit-b'],
+      unit_titles: ['Unit A', 'Unit B'],
+      unit_count: 2,
+      lesson_count: 15,
+      has_ks4_options: false,
+      sequence_canonical_url: undefined,
+    });
+  });
+
+  it('includes canonical URL when provided', () => {
+    const params: CreateSequenceFacetDocParams = {
+      sequenceSlug: 'science-secondary',
+      subjectSlug: 'science',
+      phaseSlug: 'secondary',
+      phaseTitle: 'Secondary',
+      keyStage: 'ks4',
+      keyStageTitle: 'Key Stage 4',
+      years: ['10', '11'],
+      unitSlugs: ['unit-x'],
+      unitTitles: ['Unit X'],
+      lessonCount: 20,
+      hasKs4Options: true,
+      canonicalUrl: 'https://example.com/science-secondary',
+    };
+
+    const doc = createSequenceFacetDoc(params);
+
+    expect(doc.has_ks4_options).toBe(true);
+    expect(doc.sequence_canonical_url).toBe('https://example.com/science-secondary');
+  });
+});
+
+// ============================================================================
+// Test for API-specific adapter
+// ============================================================================
 
 function makeSequenceEntry(overrides: Partial<SubjectSequenceEntry> = {}): SubjectSequenceEntry {
   return {

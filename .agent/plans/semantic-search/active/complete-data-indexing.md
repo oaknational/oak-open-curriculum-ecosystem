@@ -28,7 +28,7 @@
 | Constant | Value |
 |----------|-------|
 | `MAX_CHUNK_SIZE_BYTES` | 8MB |
-| `DEFAULT_CHUNK_DELAY_MS` | 6500ms |
+| `DEFAULT_CHUNK_DELAY_MS` | 7001ms |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× |
 | Initial retry delay | ✅ Enabled |
 
@@ -59,11 +59,13 @@ See [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-
 
 ---
 
-## 📋 Next Task: Sequence Indexing
+## 📋 Next Task: DRY/SRP Refactoring (Milestone 4)
 
-This milestone is complete. The next task is wiring sequence ingestion into the bulk pipeline.
+This milestone is complete. Sequence indexing is also verified (30 sequences, 57 facets).
 
-**See**: [roadmap.md](../roadmap.md) for full task details.
+The next task is applying the DRY/SRP pattern to all document builders.
+
+**See**: [roadmap.md](../roadmap.md) Milestone 4 for full details.
 
 ---
 

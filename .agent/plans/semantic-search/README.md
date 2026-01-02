@@ -1,6 +1,6 @@
 # Semantic Search — Navigation Hub
 
-**Status**: ✅ **VERIFIED** — Full ingestion complete, sequence indexing pending
+**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
 **Last Updated**: 2026-01-02
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -26,39 +26,31 @@ Then read:
 
 ---
 
-## ✅ Verification Complete
+## ✅ Full Ingestion Verified (2026-01-02)
 
-### Full Ingestion Results (2026-01-02)
+| Index | Count | Status |
+|-------|-------|--------|
+| Lessons | 12,833 | ✅ |
+| Units | 1,665 | ✅ |
+| Threads | 164 | ✅ |
+| Sequences | 30 | ✅ |
+| Sequence facets | 57 | ✅ |
+| **Total** | **16,414** | |
 
 | Metric | Value |
 |--------|-------|
-| **Documents indexed** | 16,327 (100%) |
-| **Lessons** | 12,833 |
-| **Units** | 1,665 |
-| **Initial failures** | 21 (0.13%) |
-| **Final failures** | 0 |
-| **Duration** | ~21 minutes |
-
-### Two-Tier Retry System (ADR-096)
-
-| Component | Status |
-|-----------|--------|
-| Tier 1 (HTTP-level) retry | ✅ Verified |
-| Tier 2 (document-level) retry | ✅ Verified |
-| Progressive chunk delay (×1.5) | ✅ Verified |
-| Initial retry delay | ✅ Verified |
-| JSON failure report | ✅ Verified |
-| **Production verification** | ✅ **COMPLETE** |
+| Initial failures | 17 (0.10%) |
+| Final failures | 0 |
+| Retry rounds | 1 |
+| Duration | ~22 minutes |
 
 ---
 
-## 📋 Next Task: Sequence Indexing
+## 📋 Next Task: DRY/SRP Refactoring (Milestone 4)
 
-**Problem**: `oak_sequences` and `oak_sequence_facets` are empty despite data being available in bulk downloads.
+Apply the sequence architecture pattern to all document types (lessons, units, threads, unit rollups).
 
-**Solution**: Wire sequence document building into existing bulk ingestion pipeline (NO pipeline duplication).
-
-**See**: [roadmap.md](roadmap.md) for full task details.
+**See**: [roadmap.md](roadmap.md) Milestone 4 — **HIGH priority**.
 
 ---
 

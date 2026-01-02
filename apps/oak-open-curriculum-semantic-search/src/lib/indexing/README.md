@@ -28,12 +28,18 @@ The indexing pipeline processes curriculum data from bulk download files and the
 - **`document-transforms.ts`** - Core document transformation logic
 - **`lesson-document-builder.ts`** - Creates lesson index documents
 - **`thread-document-builder.ts`** - Creates thread index documents
-- **`sequence-document-builder.ts`** - Creates sequence index documents
+- **`sequence-document-builder.ts`** - Creates sequence index documents (input-agnostic)
+- **`sequence-facets.ts`** - Creates sequence facet documents (input-agnostic)
 
 ### Ingestion Orchestration
 
-- **`bulk-ingestion.ts`** - Bulk-first ingestion pipeline
+- **`bulk-ingestion.ts`** - Bulk-first ingestion pipeline (lessons, units, threads, sequences)
 - **`ingest-harness.ts`** - Main ingestion harness
+
+### Bulk Transformers (`src/adapters/`)
+
+- **`bulk-thread-transformer.ts`** - Extracts threads from bulk files and builds ES operations
+- **`bulk-sequence-transformer.ts`** - Extracts sequences from bulk files and builds ES operations for `oak_sequences` and `oak_sequence_facets` indexes
 
 ## Retry Strategy
 
@@ -56,7 +62,7 @@ The module implements a two-tier retry strategy for ELSER queue overflow errors:
 import { uploadAllChunks } from './bulk-chunk-uploader';
 
 const result = await uploadAllChunks(es, chunks, logger, 1000, {
-  chunkDelayMs: 6500, // Delay between chunks to prevent queue overflow
+  chunkDelayMs: 7001, // Delay between chunks to prevent queue overflow
   documentRetryEnabled: true, // Enable Tier 2 retry
   documentMaxRetries: 4, // Retry failed docs up to 4 times
   documentRetryDelayMs: 5000, // Base delay for document retry backoff
@@ -84,7 +90,7 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
 
 | Option                 | CLI Flag        | Default | Description                        |
 | ---------------------- | --------------- | ------- | ---------------------------------- |
-| `chunkDelayMs`         | -               | 6500    | Delay between chunks (ms)          |
+| `chunkDelayMs`         | -               | 7001    | Delay between chunks (ms)          |
 | `maxRetries`           | -               | 3       | HTTP-level retry attempts          |
 | `documentRetryEnabled` | `--no-retry`    | true    | Enable document-level retry        |
 | `documentMaxRetries`   | `--max-retries` | 4       | Document-level retry attempts      |
@@ -95,7 +101,7 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
 | Constant                                | Value  | Purpose                                    |
 | --------------------------------------- | ------ | ------------------------------------------ |
 | `MAX_CHUNK_SIZE_BYTES`                  | 8MB    | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS`                | 6500ms | Base delay between chunk uploads           |
+| `DEFAULT_CHUNK_DELAY_MS`                | 7001ms | Base delay between chunk uploads           |
 | `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5×   | Progressive delay per retry attempt        |
 
 ## Troubleshooting
