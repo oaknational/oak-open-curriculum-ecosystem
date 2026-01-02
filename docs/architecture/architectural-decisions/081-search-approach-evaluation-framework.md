@@ -409,7 +409,8 @@ When implementing query classification and pre-processing:
 
 ## Related Documents
 
-- [Research: Hard Query Optimization](../../.agent/research/search-query-optimization-research.md)
+- [Research: Hybrid Retrieval and Query Routing](../../.agent/research/elasticsearch/methods/hybrid-retrieval.md)
+- [Research: Evaluation and Quality Gates](../../.agent/research/elasticsearch/methods/evaluation-quality-gates.md)
 - [ADR-072: Three-Way Hybrid Search](072-three-way-hybrid-search-architecture.md) (superseded)
 - [ADR-075: Dense Vector Removal](075-dense-vector-removal.md)
 - [Phase 3 Plan](../../.agent/plans/semantic-search/phase-3-multi-index-and-fields.md)

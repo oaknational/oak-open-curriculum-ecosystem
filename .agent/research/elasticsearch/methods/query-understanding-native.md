@@ -16,7 +16,22 @@ Use dedicated suggesters for interactive experiences:
 - `search_as_you_type` for field-backed typeahead.
 - Term suggest for spell correction (if you want a "did you mean").
 
-## 3. Synonym Expansion
+Add curriculum context to suggestions where possible:
+
+- Use contexts for subject, key stage, or phase to avoid noisy suggestions.
+- Include glossary terms and curriculum statement phrases, not only lesson titles.
+
+## 3. Misspellings and Phonetic Matching
+
+Fuzzy matching covers small typos, but it fails on severe misspellings. For those:
+
+- Add a phonetic subfield (Double Metaphone) for titles and key terms.
+- Query the phonetic subfield at low boost to reduce false positives.
+- Treat this as a reindexing change (phonetic fields are indexed at ingest time).
+
+This is a high-impact approach for queries such as "simulatneous", "circel", or "pythagorus".
+
+## 4. Synonym Expansion
 
 Synonyms are the most reliable way to normalise:
 
@@ -26,7 +41,7 @@ Synonyms are the most reliable way to normalise:
 
 Use query-time synonyms if you want to update synonym sets without reindexing.
 
-## 4. Query-Time Enrichment (Cautious Use)
+## 5. Query-Time Enrichment (Cautious Use)
 
 Runtime fields can help when you need derived values for filtering or ranking, but:
 
@@ -34,7 +49,7 @@ Runtime fields can help when you need derived values for filtering or ranking, b
 - Use them for short-lived experiments, not as a long-term substitute for indexed fields.
 - Avoid dynamic scripts that parse user language; do that in the application or agent layer.
 
-## 5. Query Expansion Patterns
+## 6. Query Expansion Patterns
 
 If you need lightweight expansion without external NLP:
 
@@ -42,7 +57,7 @@ If you need lightweight expansion without external NLP:
 - Use Graph Explore API to expand entities based on co-occurrence.
 - Apply expansions with low boosts to avoid query drift.
 
-## 6. Oak Integration Notes (Current)
+## 7. Oak Integration Notes (Current)
 
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 

@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 2025-12-26  
+**Last Updated**: 2 January 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -27,15 +27,15 @@ Core research on search implementation, optimization, and curriculum vocabulary.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
-| **[semantic-search/](semantic-search/)** | Semantic search discoveries | |
-| ├─ [elasticsearch-optimization-opportunities.md](semantic-search/elasticsearch-optimization-opportunities.md) | Untapped data, ES patterns, new indices | 13K glossary terms, 12K misconceptions unindexed; 10 ES patterns for education |
-| └─ [vocabulary-value-analysis.md](semantic-search/vocabulary-value-analysis.md) | Value scoring for synonyms | Top 100 terms have 0% synonym coverage; Value = Freq × Foundation × Cross-Subject |
-| **[elasticsearch/](elasticsearch/)** | ES implementation research | |
-| ├─ [README.md](elasticsearch/README.md) | ES research index | |
-| ├─ [bm25-elser-rrf-rerank.md](elasticsearch/bm25-elser-rrf-rerank.md) | Hybrid search architecture | Four-retriever design, RRF fusion |
-| ├─ [hybrid-search-reranking-evaluation.md](elasticsearch/hybrid-search-reranking-evaluation.md) | Reranking evaluation | Semantic reranking initially rejected (revisit) |
-| └─ [natural-language-search-with-es-native-features.md](elasticsearch/natural-language-search-with-es-native-features.md) | ES-native NLP | ELSER, semantic_text, completion |
-| [search-query-optimization-research.md](search-query-optimization-research.md) | Query optimization | Phrase boosting, noise filtering |
+| **[elasticsearch/](elasticsearch/)** | ES research index | Methods, system notes, and feature studies |
+| ├─ [README.md](elasticsearch/README.md) | ES research index | Entry point for methods/features/system |
+| ├─ [methods/hybrid-retrieval.md](elasticsearch/methods/hybrid-retrieval.md) | Hybrid retrieval | RRF vs linear retriever, query routing, reranking |
+| ├─ [methods/query-understanding-native.md](elasticsearch/methods/query-understanding-native.md) | Query understanding | Suggestions, phonetic matching, synonyms |
+| ├─ [methods/ai-capabilities-elastic.md](elasticsearch/methods/ai-capabilities-elastic.md) | Elastic AI features | Reranking and LLM query expansion |
+| ├─ [methods/search-operations-governance.md](elasticsearch/methods/search-operations-governance.md) | Search operations | Synonym lifecycle, value scoring, curation |
+| ├─ [methods/evaluation-quality-gates.md](elasticsearch/methods/evaluation-quality-gates.md) | Evaluation | Stratified query sets, MRR bands |
+| ├─ [system/curriculum-schema-field-analysis.md](elasticsearch/system/curriculum-schema-field-analysis.md) | Field analysis | Bulk-only fields, proposed indices |
+| └─ [system/graph-rag-integration-vision.md](elasticsearch/system/graph-rag-integration-vision.md) | Graph/RAG vision | Instance graph + RAG layers |
 
 ### 📚 Curriculum & Ontology
 
@@ -128,9 +128,9 @@ Research on API structure and data analysis.
 
 | Document | Summary |
 |----------|---------|
-| [semantic-search/knowledge-graph-integration-opportunities.md](semantic-search/knowledge-graph-integration-opportunities.md) | **NEW (2025-12-27)**: Property graph vs knowledge graph distinction. Connecting bulk-mined instances to schema would create true KG. Transcript mining opportunities. Weighting functions for synonym prioritization. |
-| [semantic-search/elasticsearch-optimization-opportunities.md](semantic-search/elasticsearch-optimization-opportunities.md) | Comprehensive ES optimization research: untapped bulk data (13K glossary, 12K misconceptions), 10 idiomatic ES approaches, 4 proposed new indices, 8+ novel ideas |
-| [semantic-search/vocabulary-value-analysis.md](semantic-search/vocabulary-value-analysis.md) | Value scoring framework for synonym prioritization. Discovery: top 100 terms have 0% synonym coverage |
+| [elasticsearch/system/graph-rag-integration-vision.md](elasticsearch/system/graph-rag-integration-vision.md) | Property graph vs instance graph, transcript mining opportunities, unified export guidance |
+| [elasticsearch/system/curriculum-schema-field-analysis.md](elasticsearch/system/curriculum-schema-field-analysis.md) | Untapped bulk data, proposed reference indices (glossary, misconceptions, NC coverage, prerequisites) |
+| [elasticsearch/methods/search-operations-governance.md](elasticsearch/methods/search-operations-governance.md) | Synonym value scoring, candidate pipelines, precision audit notes |
 
 ## Key Lessons Recorded (2025-12-27)
 
@@ -247,14 +247,14 @@ Key planning documents reference research:
 
 | Plan | References Research |
 |------|---------------------|
-| `planned/vocabulary-mining-bulk.md` | `semantic-search/vocabulary-value-analysis.md`, `semantic-search/elasticsearch-optimization-opportunities.md` |
-| `archive/completed/four-retriever-implementation.md` | `elasticsearch/bm25-elser-rrf-rerank.md` |
+| `planned/vocabulary-mining-bulk.md` | `elasticsearch/methods/search-operations-governance.md`, `elasticsearch/system/curriculum-schema-field-analysis.md` |
+| `archive/completed/four-retriever-implementation.md` | `elasticsearch/methods/hybrid-retrieval.md` |
 
 ### From Prompts to Research
 
 | Prompt | References Research |
 |--------|---------------------|
-| `semantic-search.prompt.md` | `semantic-search/` folder |
+| `semantic-search.prompt.md` | `elasticsearch/` folder |
 
 ---
 
@@ -265,5 +265,4 @@ This index should be updated when:
 - Research is reorganized
 - Major discoveries are made
 
-**Last reviewed**: 2025-12-26
-
+**Last reviewed**: 2 January 2026

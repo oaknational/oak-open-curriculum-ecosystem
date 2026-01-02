@@ -11,7 +11,7 @@
  * - **medium**: Multi-concept/colloquial - ELSER strengths
  * - **exploratory**: Intent-based - may need NL→DSL pipeline
  *
- * @see `.agent/research/search-query-optimization-research.md` Appendix H
+ * @see `.agent/research/elasticsearch/methods/evaluation-quality-gates.md`
  */
 
 import type { GroundTruthQuery } from './types';

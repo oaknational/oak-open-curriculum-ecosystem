@@ -15,14 +15,18 @@ This note describes a method-led approach to hybrid retrieval in Elasticsearch, 
 1. Define the lexical fields:
    - Titles, short descriptions, curated keywords.
    - Apply boosts to high-signal fields.
-2. Add synonyms for domain terms and numeric normalisation:
+2. Tune lexical behaviour by content type:
+   - Lessons: prioritise precision with `min_should_match` (e.g. 75%) to reduce noise on naturalistic queries.
+   - Units: allow more recall (e.g. broader fuzziness) for longer, summarised queries.
+   - Avoid stemming and aggressive stop-word removal if they regress hard-query relevance.
+3. Add synonyms for domain terms and numeric normalisation:
    - Synonyms are required for cases like "2" vs "two", "KS2" vs "Key Stage 2".
-3. Choose a semantic path:
+4. Choose a semantic path:
    - ELSER with `semantic_text` fields for sparse semantic search.
    - Dense vectors with `dense_vector` + kNN for dense semantic search.
-4. Fuse with RRF:
+5. Fuse with RRF:
    - Use RRF to combine ranked lists without score calibration.
-5. Add filters and light boosts:
+6. Add filters and light boosts:
    - Use structured filters (subject, phase, content type).
    - Optionally boost documents that share entities or relationships with the query.
 
@@ -65,7 +69,33 @@ POST my-index/_search
 
 Note: Oak's current implementation uses four retrievers for lessons and units (BM25 + ELSER on content and structure fields) and two retrievers for sequences.
 
-## 4. Oak Integration Notes (Current)
+## 4. Weighted Fusion vs RRF
+
+RRF is a robust default because it avoids score calibration, but it does not support per-retriever weights. If you need to down-weight noisy lexical signals for hard queries, use the Linear retriever (ES 8.18+ preview, 9.0+ GA).
+
+When to prefer Linear retriever:
+
+- You need retriever weights (e.g. higher weight for ELSER on naturalistic queries).
+- You want content-type-specific weighting (lessons vs units).
+- You want to preserve score magnitudes rather than rank-only fusion.
+
+Keep RRF when:
+
+- You need a simple, low-tuning baseline.
+- Retrievers are on very different score scales and you do not want to normalise.
+
+## 5. Query Routing by Type
+
+Different query types benefit from different retrieval strategies. A lightweight classifier (rule-based or LLM-assisted) can route queries to:
+
+- Topic queries: full hybrid (BM25 + ELSER).
+- Naturalistic queries: ELSER-weighted fusion or reranked path.
+- Misspellings: phonetic + fuzzy lexical path, low-boost semantic.
+- Intent-only queries: reranked path with outcome and misconception fields boosted.
+
+Routing lets you avoid "one size fits all" fusion that dilutes the strongest signal for hard queries.
+
+## 6. Oak Integration Notes (Current)
 
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 
@@ -74,8 +104,9 @@ These notes are system-specific and may drift; treat them as integration example
 - Query preprocessing removes noise phrases and boosts curriculum phrases from the SDK synonym vocabulary (`src/lib/query-processing/*`).
 - Structured filters include KS4 programme factors (tier, exam board, exam subject, ks4 options) and thread/category filters (`src/lib/hybrid-search/rrf-query-helpers.ts`).
 - Index targeting is environment-driven (primary vs sandbox) via `src/lib/search-index-target.ts`.
+- Ablation notes: `min_should_match: 75%` improved lesson hard-query MRR (0.250 -> 0.367), while `fuzziness: AUTO:3,6` helped units but not lessons; stemming and stop-word filters regressed hard queries.
 
-## 5. Example: RRF with BM25 + Dense Vector kNN
+## 7. Example: RRF with BM25 + Dense Vector kNN
 
 ```json
 POST my-index/_search
@@ -107,7 +138,7 @@ POST my-index/_search
 }
 ```
 
-## 6. Reranking Guidance
+## 8. Reranking Guidance
 
 Reranking is effective only when the rerank field is:
 
@@ -116,13 +147,17 @@ Reranking is effective only when the rerank field is:
 
 Avoid reranking on full transcripts or very short titles. If you plan to rerank, create a dedicated "search summary" field designed for the cross-encoder.
 
-## 7. Graph-Friendly Signals
+## 9. Graph-Friendly Signals
 
 To incorporate graph signals without a graph database:
 
 - Tag documents with entities (topics, threads, standards).
 - Boost results that share entity tags with the query entity.
 - Use significant_terms or Graph Explore API to generate related entities and apply lightweight boosts.
+
+## 10. Related Content (More Like This)
+
+For "similar lesson" recommendations, use `more_like_this` on short, high-signal fields (title, summary, keywords). Avoid using full transcripts, which add noise and cost.
 
 ## References
 

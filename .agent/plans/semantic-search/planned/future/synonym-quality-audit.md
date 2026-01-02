@@ -1,396 +1,248 @@
-# Sub-Plan 11: Synonym Quality Audit & Weighting Function
+# Milestone 3: Search Quality Optimization
 
-**Status**: 📋 PLANNED (blocked on ingestion completion)  
-**Priority**: High  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 3)  
-**Created**: 2025-12-27  
-**Updated**: 2025-12-28  
-**Research**: [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md)
+**Status**: 📋 Ready to start
+**Priority**: HIGH
+**Parent**: [roadmap.md](../../roadmap.md)
+**Created**: 2025-12-27
+**Updated**: 2026-01-02
 
 ---
 
-## ⚠️ PREREQUISITE: Multi-Subject Ingestion
+## Overview
 
-**This plan is blocked until multi-subject ingestion is complete.**
+This milestone combines synonym audit, bulk download data analysis, and comprehensive benchmarking into a unified search quality optimization effort.
 
-Synonym quality cannot be properly measured without representative curriculum data in Elasticsearch. See [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) for current ingestion status.
+**Prerequisites**: ✅ All met
+- Full curriculum indexed (16,414 documents) ✅
+- DRY/SRP refactoring complete ✅
+- Data completeness resolved ✅
 
-### Current Status (2025-12-28)
+---
 
-| Category | Subjects | Status |
-|----------|----------|--------|
-| ✅ Complete | maths, art, computing, design-technology, citizenship, cooking-nutrition | 6 subjects |
-| ⚠️ Incomplete | english | Missing ~1,030 lessons |
-| ❌ Pending | science, history, geography, french, spanish, german, PE, RE, music, rshe-pshe | 10 subjects |
+## Phase 1: Comprehensive Ground Truths
 
-**Coverage: ~43%** (5,372 of ~12,409 unique lessons). Complete ingestion before proceeding.
+### Current State
 
-> **Note**: Bulk download raw counts (12,783) include tier duplicates. Unique lesson target is ~12,409. See [evaluations README](../../../evaluations/README.md) for details.
+Ground truth covers **KS4 Maths only**:
+- 40 standard queries (topic-based)
+- 15 hard queries (6 categories)
+- 18 diagnostic queries (9 synonym + 9 multi-concept)
 
-### Additional Requirements
+**Total**: 73 queries for 1 subject, 1 key stage.
 
-1. **Comprehensive ground truths** — Queries for ALL subjects and ALL key stages (not just GCSE Maths)
-2. **Comprehensive benchmark evaluations** — Per-subject and per-keystage MRR baselines
-3. **Full curriculum data** — ES must contain ALL lessons to measure synonym impact accurately
+### Gap Analysis
 
-### To Complete Ingestion
+| Dimension | Current | Required |
+|-----------|---------|----------|
+| Subjects | 1 (Maths) | 17 |
+| Key Stages | 1 (KS4) | 4 |
+| Document coverage | ~2K lessons | 12,833 lessons |
+
+### Required Ground Truths
+
+Create ground truth queries for:
+
+| Subject Group | Subjects | Priority |
+|---------------|----------|----------|
+| Core | English, Maths, Science | HIGH |
+| Humanities | History, Geography, RE | MEDIUM |
+| Languages | French, Spanish, German | MEDIUM |
+| Arts/Tech | Art, Music, Computing, D&T | LOWER |
+| Other | PE, Citizenship, RSHE, Cooking | LOWER |
+
+**Per-subject minimum**:
+- 10 standard queries (topic-based)
+- 5 hard queries (naturalistic, synonym, multi-concept)
+- All slugs validated via API
+
+### Query Categories (Preserve Existing)
+
+| Category | Description | Priority |
+|----------|-------------|----------|
+| naturalistic | Teacher/student language | high |
+| misspelling | Typos, mobile errors | critical |
+| synonym | Alternative terminology | high |
+| multi-concept | Topic intersections | medium |
+| colloquial | Informal language | medium |
+| intent-based | Pedagogical purpose | exploratory |
+
+### User Story Groupings (NEW)
+
+Group benchmarks by user intent:
+
+| User Story | Example Queries |
+|------------|-----------------|
+| **Teacher planning** | "KS2 fractions introduction" |
+| **Student revision** | "GCSE biology cell division" |
+| **Curriculum navigation** | "what comes before quadratics" |
+| **Resource discovery** | "worksheets for photosynthesis" |
+
+---
+
+## Phase 2: Baseline Benchmarks
+
+### Before ANY Changes
+
+Establish comprehensive baselines:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-docker compose up -d  # Start Redis
 
-# Run remaining subjects (each takes 5-30 mins)
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject maths
-SDK_CACHE_ENABLED=true pnpm es:ingest-live -- --subject science
-# ... see prompt for full list
+# Current benchmarks (KS4 Maths only)
+pnpm eval:per-category
+pnpm eval:diagnostic
+
+# Full metrics (lessons + units)
+pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
 ```
+
+### Document Results
+
+Record in [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md):
+- Per-category MRR
+- Per-subject MRR (once ground truths exist)
+- Per-user-story MRR
 
 ---
 
-## 🎯 Goal
+## Phase 3: Synonym Audit
 
-1. **Audit existing synonyms** for weak entries that add noise without significant value
-2. **Implement weighting function** to prioritize synonym candidates by impact
-3. **Establish LLM agent review** as the decision-making process for synonym inclusion
+### Goal
 
-> **Scope**: The weighting function uses vocabulary frequency data from ALL subjects, ALL key stages (30 bulk files, ~47K lessons). Examples may reference specific subjects for illustration, but analysis covers the complete curriculum.
+Remove low-value noise, add high-impact synonyms based on **measured impact**, not arbitrary counts.
 
----
+### Current Synonyms
 
-## Two Complementary Vocabulary Mechanisms
+163 curated synonyms across 13 files:
 
-The SDK `synonymsData` feeds **two parallel search mechanisms** — understanding this distinction is critical for the audit.
+| File | Count | Focus |
+|------|-------|-------|
+| `maths.ts` | ~140 | KS4 vocabulary |
+| `science.ts` | ~20 | Biology, Chemistry, Physics |
+| `english.ts` | ~10 | Grammar, literature |
+| `education.ts` | ~25 | Pedagogical terms |
+| Others | ~30 | Key stages, subjects, exam boards |
 
-### 1. ES Synonym Expansion (Single-Word Tokens)
+### Two Vocabulary Mechanisms
 
-**How it works**: The `oak_syns_filter` applies at query time via ES `synonym_graph`.
+**1. ES Synonym Expansion** (single-word tokens):
 
-```
-Query: "trigonometry" 
-→ Tokenized: ["trigonometry"]
-→ After synonym filter: ["trigonometry", "trig", "sohcahtoa", ...]
-```
-
-**Applies to**: Single-word synonyms only. ES tokenizes first, then expands synonyms.
-
-**Examples that use this path**:
-- `trigonometry` → `"trig"` ✅ (single word)
-- `estimate` → `"guess"` ✅ (single word)
-- `factorising` → `"factoring"` ✅ (single word)
-
-### 2. Phrase Detection + Boosting (Multi-Word Terms)
-
-**How it works**: `detectCurriculumPhrases()` scans queries for known multi-word curriculum terms, then `createPhraseBoosters()` adds `match_phrase` queries with boost to the RRF retriever.
-
-```
-Query: "straight line graphs"
-→ Phrase detection finds: "straight line" (from synonym vocabulary)
-→ Adds match_phrase boost for documents containing "straight line"
+```text
+Query: "trig" → Tokenized → Synonym filter → ["trig", "trigonometry"]
 ```
 
-**Applies to**: Multi-word terms. These **cannot** expand via ES synonyms because tokenization happens first.
+**2. Phrase Detection + Boosting** (multi-word terms):
 
-**Examples that use this path**:
-- `adjective` → `"describing word"` (2 words — phrase boost)
-- `denominator` → `"bottom number"` (2 words — phrase boost)
-- `linear-equations` → `"solving for x"` (3 words — phrase boost)
-
-### Why Two Mechanisms?
-
-This is **not** a workaround — it's a principled architectural design:
-
-| Mechanism | Purpose | Strength |
-|-----------|---------|----------|
-| **ES Synonym Expansion** | Token-level term equivalence | Expands at query time, transparent to user |
-| **Phrase Detection + Boosting** | Exact phrase relevance boost | Matches teacher language patterns, boosts ranking |
-
-Both mechanisms draw from the same `synonymsData` source, but serve different purposes:
-- ES synonyms expand the **query itself**
-- Phrase boosting improves **document ranking** for exact matches
-
-### Audit Implications
-
-When auditing synonyms, consider:
-
-| Synonym | Type | Mechanism | Audit Focus |
-|---------|------|-----------|-------------|
-| `"total"` for addition | single-word | ES expansion | Could match too broadly (precision risk) |
-| `"take away"` for subtraction | phrase | phrase boost | Phrase-level precision (less risky) |
-| `"difference"` for subtraction | single-word | ES expansion | Ambiguous term (high precision risk) |
-
-**Key insight**: Single-word synonyms have higher precision risk because they expand the query tokens. Phrase synonyms only boost documents containing the exact phrase.
-
----
-
-## The Problem
-
-### Current Synonym Quality is Unknown
-
-We have ~190 curated synonyms across 13 files. But we don't know:
-- Which synonyms are actually used in searches?
-- Which synonyms add value vs add noise?
-- Are there synonyms that harm search precision?
-
-### Weak Synonyms Reduce Precision
-
-**Example of potentially weak synonyms**:
-
-```typescript
-// maths.ts — do these help or hurt?
-addition: ['add', 'plus', 'sum', 'adding', 'total'],  // 'total' might be too broad
-subtraction: ['take away', 'difference'],  // 'difference' is ambiguous (maths/general)
+```text
+Query: "straight line graphs" → Phrase detection → Match_phrase boost
 ```
 
-A synonym like `difference` might match lessons about "differences in culture" when the user searched for subtraction.
+See [ADR-084: Phrase Query Boosting](../../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md).
 
-### Weighting Function as First Pass, Not Final Decision
+### Audit Process
 
-**Key insight**: A weighting function provides **prioritization**, not **decisions**.
+1. **Identify weak synonyms** — High frequency but low precision (e.g., "difference" for subtraction)
+2. **Identify missing synonyms** — High-frequency terms without coverage
+3. **Subject-specific gaps** — Synonyms for non-Maths subjects
+4. **Measure impact** — Before/after MRR for each change
 
-```
-The function scores candidates.
-An LLM agent (or human) makes the final inclusion decision.
-```
-
-This is critical because:
-- "the" has high frequency but zero value
-- "ornithology" has low frequency but high value (examinable, needs plain English synonym)
-- Context matters more than metrics
-
----
-
-## 🚀 Intended Impact
-
-### Search Quality
-
-| Before | After |
-|--------|-------|
-| Unknown synonym quality | Audited, high-confidence synonyms |
-| Synonyms may reduce precision | Weak synonyms identified and removed |
-| Ad-hoc synonym selection | Data-driven prioritization + LLM review |
-
-### Quantified Target
-
-- **Identify ≥5 weak synonyms** that should be removed or scoped
-- **+2-3% precision improvement** by removing noisy synonyms
-- **Establish review process** for future synonym additions
-
----
-
-## Weighting Function Design
-
-### Purpose
-
-The weighting function produces a **priority score** for synonym candidates. It is explicitly a **first pass** — not a final decision.
-
-### Formula
-
-```
-Priority = Frequency × FoundationBonus × CrossSubjectBonus × SynonymNeed × InverseStopWordPenalty
-
-Where:
-- Frequency: Count of term occurrences in curriculum
-- FoundationBonus: 1 + (1/Year) — earlier years = more foundational
-- CrossSubjectBonus: 1 + 0.2*(subjects-1) — multi-subject terms have broader search
-- SynonymNeed: 2 if term has obvious plain-English alternative, 1 otherwise
-- InverseStopWordPenalty: 0.01 for stop words, 1 otherwise
-```
-
-### Examples
-
-| Term | Freq | Year | Subj | Need | Score | Decision |
-|------|------|------|------|------|-------|----------|
-| `adjective` | 212 | 1 | 4 | 2 | 1357 | ✅ High priority, add synonym |
-| `the` | 50000 | all | 16 | 1 | 0.5 | ❌ Stop word, reject |
-| `ornithology` | 2 | 10 | 1 | 2 | 4.4 | ⚠️ LLM review: examinable, valuable |
-| `gradient` | 89 | 7 | 3 | 2 | 45 | ⚠️ LLM review: subject-ambiguous |
-
-### The LLM Agent Makes Final Decisions
-
-The weighting function **surfaces candidates**. The LLM agent evaluates:
-
-1. **Is this a true synonym?** (same meaning, not just related)
-2. **Does it improve recall?** (would users search with this term?)
-3. **Does it harm precision?** (would it match irrelevant results?)
-4. **Is it subject-scoped?** (does "gradient" mean different things in maths vs art?)
-
----
-
-## Phases
-
-### Phase 1: Audit Existing Synonyms
-
-**Effort**: ~3 hours  
-**Impact**: Quality baseline
-
-Review all existing synonyms for:
-
-| Check | Question | Action |
-|-------|----------|--------|
-| **Overly broad** | Does "total" as synonym for "addition" match too much? | Consider removal |
-| **Ambiguous** | Does "difference" (subtraction) conflict with "difference" (general)? | Consider scoping |
-| **Redundant** | Are any synonyms duplicated across files? | Remove duplicates |
-| **Low value** | Do any synonyms add noise without measurable benefit? | Consider removal |
-
-**Files to audit**:
-- `maths.ts` (~140 entries)
-- `science.ts` (~20 entries)
-- `english.ts` (~10 entries)
-- `history.ts` (~15 entries)
-- `geography.ts` (~10 entries)
-- `computing.ts` (6 entries) — NEW, likely clean
-- `music.ts` (8 entries) — NEW, likely clean
-- `education.ts` (~25 entries)
-- `key-stages.ts` (~10 entries)
-- `subjects.ts` (~15 entries)
-- `exam-boards.ts` (~10 entries)
-- `numbers.ts` (~10 entries)
-
-### Phase 2: Implement Weighting Function
-
-**Effort**: ~2 hours  
-**Impact**: Enables data-driven prioritization
-
-Add to vocab-gen:
-
-```bash
-pnpm vocab-gen --synonym-candidates --limit 100
-```
-
-Output format:
-```markdown
-## Top 100 Synonym Candidates by Priority Score
-
-| Rank | Term | Score | Freq | Year | Subjects | Current Synonyms | Suggested |
-|------|------|-------|------|------|----------|------------------|-----------|
-| 1 | adjective | 1357 | 212 | 1 | 4 | NONE | describing word |
-| 2 | noun | 1158 | 181 | 1 | 4 | NONE | naming word |
-...
-```
-
-### Phase 3: LLM Agent Review Process
-
-**Effort**: ~1 hour setup, ongoing  
-**Impact**: Quality gates for synonym inclusion
-
-Establish review checklist:
-
-```markdown
-## Synonym Review Checklist (for LLM Agent)
+### Decision Process
 
 For each candidate synonym:
-
-1. [ ] **True synonym?** Same meaning in context, not just related term
-2. [ ] **Search improvement?** Would real users search with this term?
-3. [ ] **Precision risk?** Could this match irrelevant results?
-4. [ ] **Subject scope?** Does this term mean different things in different subjects?
-5. [ ] **Already covered?** Is this already a synonym for another term?
-6. [ ] **Plain English?** Is this the everyday language version of a curriculum term?
-
-Include if:
-- Answers 1, 2, 6 = YES
-- Answers 3, 4, 5 = NO or "scoped correctly"
-```
-
-### Phase 4: Remove/Scope Weak Synonyms
-
-**Effort**: ~2 hours  
-**Impact**: Improved precision
-
-Based on audit findings:
-1. Remove synonyms that clearly harm precision
-2. Add subject-scoping comments where ambiguity exists
-3. Document decisions in commit messages
-
-**Example scoping**:
-```typescript
-// Before (ambiguous)
-gradient: ['slope', 'steepness'],
-
-// After (scoped)
-/** Maths only - art/design "gradient" means colour transition */
-gradient: ['slope', 'steepness', 'rate of change'],
-```
-
-### Phase 5: Measure Impact
-
-**Effort**: ~2 hours  
-**Impact**: Validates approach
-
-1. Run evaluation corpus before changes
-2. Apply synonym removals/scoping
-3. Rebuild and redeploy
-4. Run evaluation corpus after changes
-5. Compare precision metrics
+1. Is it a **true synonym** (same meaning, not just related)?
+2. Would users **actually search** with this term?
+3. Does it **harm precision** (match irrelevant results)?
+4. Is it **subject-scoped** correctly?
 
 ---
 
-## Audit Checklist for Existing Files
+## Phase 4: Bulk Download Data Analysis
 
-### Likely Issues to Check
+### Goal
 
-| File | Potential Issues |
-|------|------------------|
-| `maths.ts` | "difference" (ambiguous), "total" (broad), "product" (ambiguous) |
-| `science.ts` | "forces" including "gravity" (category error — gravity IS a force) |
-| `english.ts` | Potentially well-scoped (domain-specific terms) |
-| `education.ts` | Acronyms are safe; generic terms might be broad |
-| `numbers.ts` | Likely safe (one↔1 is unambiguous) |
+Extract valuable metadata from bulk downloads to enrich search quality.
 
-### Questions for Each Entry
+### Data Sources
 
-1. If I search for [synonym], would I expect [canonical term] results?
-2. If I search for [synonym], would I get irrelevant results?
-3. Is [synonym] specific enough to be useful?
+From `BulkLesson` schema (30 files, ~47K lessons):
+
+| Field | Count | Value |
+|-------|-------|-------|
+| `lessonKeywords` | 13,349 unique | Term definitions |
+| `misconceptionsAndCommonMistakes` | 12,777 | Teacher guidance |
+| `teacherTips` | Varies | Pedagogical advice |
+| `transcript_sentences` | ~47K | Spoken language |
+
+### Extraction Approach
+
+**Preprocessing step** — Run before ingestion:
+
+1. **Analyze bulk data** for vocabulary patterns
+2. **Generate enrichment files** (static TypeScript)
+3. **Consume at ingestion** as additional metadata
+
+### NOT LLM-First
+
+**Critical learning** (2025-12-26): Regex-based extraction produced 93% noise.
+
+Approach:
+1. Start with **structured data** (keywords, misconceptions)
+2. Use **statistical analysis** for frequency/co-occurrence
+3. Apply **LLM only** for complex patterns (transcript mining)
+
+### Outputs
+
+| Output | Purpose |
+|--------|---------|
+| High-frequency vocabulary list | Synonym candidate prioritisation |
+| Subject-specific term maps | Subject-aware synonym scoping |
+| Misconception clusters | Search guidance |
+| Cross-subject terms | Universal synonym candidates |
 
 ---
 
-## Success Criteria
+## Phase 5: Measure and Iterate
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Weak synonyms identified | ≥5 entries | Audit findings |
-| Precision improvement | +2% on affected queries | Before/after |
-| Review process documented | Checklist created | Documentation |
-| Weighting function implemented | `--synonym-candidates` command | Code complete |
+### Experiment Protocol
+
+For **every change**:
+
+1. **Design** — Document hypothesis in experiment file
+2. **Baseline** — Run benchmarks, record in EXPERIMENT-LOG
+3. **Implement** — Make the change
+4. **Measure** — Run benchmarks again
+5. **Analyse** — Compare per-category, per-subject, per-user-story
+6. **Decide** — Accept if improvement, reject if regression
+
+### Success Criteria
+
+**NOT arbitrary numbers**. Success is:
+- Measurable MRR improvement
+- No category regression
+- Coverage across subjects (not just Maths)
 
 ---
 
-## Evaluation Requirements
+## Implementation Tasks
 
-Every phase that modifies synonyms **must** follow this protocol:
-
-1. **Before**: Record baseline via `pnpm eval:per-category`
-2. **Create experiment file**: Use template from [experiments/](../../../evaluations/experiments/)
-3. **Make changes**: Add, remove, or scope synonyms
-4. **After**: Re-run `pnpm eval:per-category`
-5. **Analyse**: Compare aggregate and per-category MRR
-6. **Record**: Update [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md)
-7. **Decide**: Accept if precision improves or equals; reject if regression
-
-**Key metrics for synonym work**:
-- **Precision**: Do synonym results match user intent?
-- **Recall**: Do synonyms help find relevant content?
-- **Per-category breakdown**: Which query types are affected?
+| Task | Description | Status |
+|------|-------------|--------|
+| Create subject ground truths | 10+ queries per subject | 📋 |
+| Validate all new slugs | API integration test | 📋 |
+| Establish baselines | Per-subject, per-category | 📋 |
+| Audit existing synonyms | Identify weak entries | 📋 |
+| Analyze bulk vocabulary | High-frequency terms | 📋 |
+| Add subject-specific synonyms | Based on analysis | 📋 |
+| Measure and document | EXPERIMENT-LOG | 📋 |
 
 ---
 
 ## Related Documents
 
-- [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) — Session prompt with ingestion status
-- [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md) — Value scoring framework
-- [synonyms/README.md](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Synonym management
-- [vocabulary-mining-bulk.md](../planned/vocabulary-mining-bulk.md) — Overall vocabulary strategy
-- [ADR-063](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) — Synonym architecture
-- [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) — Batch-atomic ingestion
-- [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) — Result pattern for error handling
-
----
-
-## Change Log
-
-| Date | Change |
-|------|--------|
-| 2025-12-27 | Initial plan created for synonym quality audit |
-| 2025-12-28 | Added prerequisite section for multi-subject ingestion; updated status to blocked |
-
+| Document | Purpose |
+|----------|---------|
+| [roadmap.md](../../roadmap.md) | Master roadmap |
+| [search-acceptance-criteria.md](../../search-acceptance-criteria.md) | Tier definitions |
+| [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| [ADR-084](../../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase boosting |
+| [vocabulary-mining-bulk.md](../sdk-extraction/vocabulary-mining-bulk.md) | Vocab extraction |

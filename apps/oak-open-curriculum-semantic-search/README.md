@@ -4,6 +4,16 @@ A Next.js App Router workspace that ingests Oak Curriculum content via the offic
 
 > **All curriculum data flows through `@oaknational/oak-curriculum-sdk`; types and validators are generated via `pnpm type-gen` from the OpenAPI schema.** When the API changes, `pnpm type-gen` regenerates types, and this application automatically uses the updated definitions. No manual type definitions exist - everything imports from the generated SDK.
 
+## What It Does
+
+The semantic search app indexes Oak's entire curriculum into Elasticsearch for teachers and students to search using natural language. For example:
+
+- "How do I teach fractions to Year 5?"
+- "Lessons about the water cycle"
+- "KS4 physics electricity"
+
+The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic embeddings, enabling search by meaning rather than just keywords.
+
 ## Features and Possibilities
 
 **🔍 Intelligent Three-Way Hybrid Search** - Combines traditional keyword matching (BM25), semantic search with sparse embeddings (ELSER), dense vector text embeddings (E5) for relevance improvement.
@@ -271,15 +281,18 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force
 
 ### Flags
 
-| Flag                | Description                                                     |
-| ------------------- | --------------------------------------------------------------- |
-| `--bulk`            | Enable bulk mode (reads from files instead of API)              |
-| `--bulk-dir <path>` | Path to bulk download directory (default: `./bulk-downloads`)   |
-| `--dry-run`         | Preview operations without executing                            |
-| `--force`           | Use `index` action (upsert) instead of `create` (skip existing) |
-| `--verbose`         | Detailed logging                                                |
-| `--subject <slug>`  | Filter to specific subject(s)                                   |
-| `--keystage <slug>` | Filter to specific key stage(s)                                 |
+| Flag                 | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| `--bulk`             | Enable bulk mode (reads from files instead of API)              |
+| `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)   |
+| `--dry-run`          | Preview operations without executing                            |
+| `--force`            | Use `index` action (upsert) instead of `create` (skip existing) |
+| `--verbose`          | Detailed logging                                                |
+| `--subject <slug>`   | Filter to specific subject(s)                                   |
+| `--keystage <slug>`  | Filter to specific key stage(s)                                 |
+| `--max-retries <n>`  | Maximum document-level retry attempts (default: 4)              |
+| `--retry-delay <ms>` | Base delay for exponential backoff (default: 5000)              |
+| `--no-retry`         | Disable document-level retry (fail fast)                        |
 
 ### Refresh Bulk Data
 

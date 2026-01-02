@@ -4,11 +4,15 @@
  * Sequences represent curriculum programmes (e.g., 'maths-secondary') that span
  * multiple key stages and contain ordered units.
  *
+ * Uses shared canonical URL generator for DRY compliance.
+ *
  * @see SearchSequenceIndexDoc - The Zod-validated type this produces
  * @see SEQUENCES_INDEX_FIELDS - Field definitions in SDK
+ * @see generateSequenceCanonicalUrl - URL generation (single source of truth)
  */
 
 import type { SearchSequenceIndexDoc, SearchSubjectSlug } from '../../types/oak';
+import { generateSequenceCanonicalUrl } from './canonical-url-generator';
 
 /**
  * Parameters for creating a sequence document.
@@ -77,7 +81,7 @@ export function createSequenceDocument(
   } = params;
 
   const sequenceTitle = `${subjectTitle} ${phaseTitle}`;
-  const sequenceUrl = `https://www.thenational.academy/teachers/programmes/${sequenceSlug}/units`;
+  const sequenceUrl = generateSequenceCanonicalUrl(sequenceSlug);
 
   return {
     sequence_id: sequenceSlug,

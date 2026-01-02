@@ -30,14 +30,25 @@ Options:
 
 Use chunking to avoid large, low-signal fields dominating retrieval.
 
-## 4. Typeahead and Suggestions
+## 4. Reference Indices for Domain Knowledge
+
+Some high-value queries are better served by dedicated indices rather than by overloading lesson/unit documents:
+
+- Glossary terms with definitions (definition lookup, "what does X mean").
+- Misconceptions with responses (teacher guidance search).
+- National curriculum statements with coverage links (standards alignment).
+- Prerequisite edges for learning-path discovery.
+
+These indices can be queried directly or used to enrich lesson/unit retrieval.
+
+## 5. Typeahead and Suggestions
 
 Use `search_as_you_type` or completion suggester fields for:
 
 - Prefix search.
 - Search-as-you-type UI.
 
-## 5. Field Types
+## 6. Field Types
 
 Recommended types:
 
@@ -45,6 +56,14 @@ Recommended types:
 - `semantic_text` for sparse semantic retrieval.
 - `dense_vector` for dense semantic retrieval.
 - `search_as_you_type` for suggestions.
+
+## 7. Progression and Safety Signals
+
+Representation can encode progression and safeguarding signals:
+
+- Use `firstYear` and prerequisite depth to approximate concept difficulty.
+- Track vocabulary progression across years for "when is this introduced" queries.
+- Index supervision level and content guidance as filterable fields to support safe lesson planning.
 
 ## References
 

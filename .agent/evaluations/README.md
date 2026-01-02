@@ -8,7 +8,23 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
-## 📊 Curriculum Baseline Counts (2025-12-28)
+## ⚠️ Critical Gap: Ground Truth Coverage (2026-01-02)
+
+**Ground truth covers KS4 Maths ONLY.** Full curriculum is indexed but benchmarks are incomplete.
+
+| Dimension | Current | Required |
+|-----------|---------|----------|
+| Subjects | Maths only | 17 subjects |
+| Key Stages | KS4 only | KS1-4 |
+| Queries | 73 | 200+ |
+
+**Next step**: Create ground truths for all subjects before meaningful cross-curriculum evaluation.
+
+See [Milestone 3: Search Quality Optimization](../plans/semantic-search/roadmap.md).
+
+---
+
+## 📊 Curriculum Baseline Counts (2026-01-02)
 
 Reference data: `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/`
 
@@ -66,23 +82,20 @@ Use these **unique lesson counts** as acceptance criteria for ES ingestion:
 | KS3 | Secondary | Years 7-9 | Pre-GCSE |
 | KS4 | Secondary | Years 10-11 | GCSE |
 
-### Current ES Coverage (2025-12-28)
+### Current ES Coverage (2026-01-02)
 
-| Subject | ES Count | Unique Target | Coverage | Notes |
-|---------|----------|---------------|----------|-------|
-| maths | 1,934 | 1,934 | ✅ 100% | Ingested today |
-| english | 1,521 | ~2,551 | 60% | Missing ~1,030 |
-| art | 537 | ~403 | 133%* | ES has tier variants |
-| computing | 528 | 528 | ✅ 100% | |
-| design-technology | 426 | ~360 | 118%* | ES has tier variants |
-| citizenship | 318 | 318 | ✅ 100% | |
-| cooking-nutrition | 108 | 108 | ✅ 100% | |
-| science | 679 | ~1,278 | 53% | KS4 accessible via sequences endpoint |
-| All others | 0 | ~7,836 | ❌ 0% | Pending ingestion |
+**Full curriculum ingestion complete** via bulk downloads.
 
-*\*ES correctly shows more lessons because our ingestion traverses tier variants via the API, while bulk download has missing tier metadata.*
+| Index | Documents |
+|-------|-----------|
+| `oak_lessons` | 12,833 |
+| `oak_units` | 1,665 |
+| `oak_threads` | 164 |
+| `oak_sequences` | 30 |
+| `oak_sequence_facets` | 57 |
+| **Total** | **16,414** |
 
-**Overall coverage**: ~51% (6,051 of ~11,810 accessible lessons)
+**Note**: ES document counts for `oak_lessons` and `oak_unit_rollup` are higher (184,985 and 165,345) due to ELSER sub-documents.
 
 ### Science KS4 Structure Clarification (2025-12-28)
 
@@ -115,7 +128,7 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 
 ---
 
-> ⚠️ **INGESTION INCOMPLETE**: Only 6 of 17 subjects are in ES. See [semantic-search.prompt.md](../prompts/semantic-search/semantic-search.prompt.md) for ingestion commands.
+> ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth coverage is the current gap — see [semantic-search.prompt.md](../prompts/semantic-search/semantic-search.prompt.md).
 
 ---
 
@@ -148,6 +161,8 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 | [Experiments](./experiments/index.md) | A/B experiments comparing approaches |
 | [Baselines](./baselines/index.md) | Baseline measurements of current state |
 | [Priorities](./experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap and tier system |
+| [Guidance](./guidance/search-experiment-guidance.md) | Practical how-to guides for running experiments |
+| [Roadmap](../plans/semantic-search/roadmap.md) | Strategic roadmap for the semantic search system |
 | [Current State](../plans/semantic-search/current-state.md) | Current metrics snapshot |
 
 ---

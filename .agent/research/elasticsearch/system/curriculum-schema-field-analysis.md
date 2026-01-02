@@ -69,6 +69,37 @@ The Oak Curriculum API schema (`api-schema-sdk.json`) contains **rich pedagogica
 | `notes`                      | string   | L6267-6269      | ⭐⭐         | 2B                   |
 | `description`                | string   | L6271-6273      | ⭐⭐         | 2B                   |
 
+### Bulk Download Extras and Graph Exports (Not Yet Indexed)
+
+The bulk download and vocab-gen pipeline surface additional datasets and fields that are not indexed.
+
+#### Graph-derived datasets not indexed
+
+| Data Type | Extracted Count | Source | Potential Use |
+| --------- | --------------- | ------ | ------------- |
+| Keywords with definitions | 13,349 | `vocabulary-graph-data.ts` | Glossary index, definition lookup |
+| Misconceptions with responses | 12,777 | `misconception-graph-data.ts` | Teacher guidance search |
+| National curriculum statements | 7,454 | `nc-coverage-graph-data.ts` | Standards coverage search |
+| Prior knowledge requirements | 7,881 | `prerequisite-graph-data.ts` | Prerequisite queries |
+| Unit prerequisite edges | 3,408 edges | `prerequisite-graph-data.ts` | Learning-path traversal |
+| Thread progressions | 164 | Thread tooling | Progression queries |
+
+#### Bulk-only fields not currently mined
+
+| Field | Structure | Potential Use |
+| ----- | --------- | ------------- |
+| `transcript_sentences` | Array of time-coded sentences | Time-based video search, synonym mining |
+| `transcript_vtt` | WebVTT subtitle format | Transcript search, chaptering |
+| `unitLessons[].lessonOrder` | Sequence order | Lesson flow queries |
+| `threads[].order` | Thread ordering | Progression queries |
+| `description` (units) | Rich text | Semantic recall for units |
+| `whyThisWhyNow` | Rationale text | "Why teach this?" intent queries |
+
+#### Extracted but under-used
+
+- `teacherTips` and `keyLearningPoints` are indexed as arrays but not leveraged for intent-based ranking.
+- `lessonKeywords[].description` contains definition text that can drive glossary and synonym work.
+
 ### Quiz Data Structure
 
 ```typescript
@@ -326,6 +357,83 @@ interface Thread {
 | `priorKnowledgeRequirements` | Generate prerequisite relationship triples |
 | `threads`                    | Generate thread progression triples        |
 | `nationalCurriculumContent`  | Link to curriculum standard entities       |
+
+---
+
+## Reference Indices (Proposed)
+
+These indices turn graph exports into first-class search surfaces.
+
+### `oak_curriculum_glossary`
+
+```typescript
+interface GlossaryDocument {
+  term: string;
+  definition: string;
+  subjects: string[];
+  key_stages: string[];
+  first_year: number;
+  frequency: number;
+  value_score: number;
+  is_cross_subject: boolean;
+  lesson_slugs: string[];
+  definition_semantic?: string;
+}
+```
+
+### `oak_misconceptions`
+
+```typescript
+interface MisconceptionDocument {
+  misconception: string;
+  response: string;
+  lesson_slug: string;
+  lesson_title: string;
+  unit_slug: string;
+  subject: string;
+  key_stage: string;
+  year: number;
+  misconception_semantic?: string;
+}
+```
+
+### `oak_nc_coverage`
+
+```typescript
+interface NCCoverageDocument {
+  statement: string;
+  statement_id: string;
+  subject: string;
+  key_stage: string;
+  unit_slugs: string[];
+  lesson_slugs: string[];
+  coverage_depth: number;
+  statement_semantic?: string;
+}
+```
+
+### `oak_prerequisites`
+
+```typescript
+interface PrerequisiteEdgeDocument {
+  from_unit: string;
+  to_unit: string;
+  from_title: string;
+  to_title: string;
+  subject: string;
+  thread_slug?: string;
+  edge_type: 'explicit' | 'thread_sequence' | 'prior_knowledge';
+}
+```
+
+### Priority Summary
+
+| Opportunity | Impact | Effort | Priority |
+| ----------- | ------ | ------ | -------- |
+| Glossary index | High | Medium | High |
+| Misconception index | High | Medium | High |
+| NC coverage index | Medium | Medium | Medium |
+| Prerequisite edge index | Medium | Medium | Medium |
 
 ---
 

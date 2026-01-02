@@ -1,6 +1,6 @@
 # Semantic Search — Navigation Hub
 
-**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
+**Status**: ✅ **Full ingestion verified** — Now optimising search quality
 **Last Updated**: 2026-01-02
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -10,13 +10,13 @@
 
 **For new sessions, start with the prompt file:**
 
-➡️ **[semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)** — Session entry point
+➡️ **[semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)** — Standalone session entry point
 
 Then read:
 
 1. **[roadmap.md](roadmap.md)** — Authoritative roadmap
 2. **[current-state.md](current-state.md)** — Current metrics
-3. **[ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)** — ES Bulk Retry Strategy (verified)
+3. **[search-acceptance-criteria.md](search-acceptance-criteria.md)** — Tier definitions
 
 **Foundation Documents (MANDATORY)**:
 
@@ -26,31 +26,44 @@ Then read:
 
 ---
 
-## ✅ Full Ingestion Verified (2026-01-02)
+## Current ES Index State (2026-01-02)
 
-| Index | Count | Status |
-|-------|-------|--------|
-| Lessons | 12,833 | ✅ |
-| Units | 1,665 | ✅ |
-| Threads | 164 | ✅ |
-| Sequences | 30 | ✅ |
-| Sequence facets | 57 | ✅ |
-| **Total** | **16,414** | |
+| Index | Documents | Storage |
+|-------|-----------|---------|
+| `oak_lessons` | 184,985 | 806.62MB |
+| `oak_unit_rollup` | 165,345 | 706.06MB |
+| `oak_units` | 1,635 | 8.94MB |
+| `oak_threads` | 164 | 255.53KB |
+| `oak_sequence_facets` | 57 | 375.14KB |
+| `oak_sequences` | 30 | 267.67KB |
+| `oak_meta` | 1 | 5.34KB |
 
-| Metric | Value |
-|--------|-------|
-| Initial failures | 17 (0.10%) |
-| Final failures | 0 |
-| Retry rounds | 1 |
-| Duration | ~22 minutes |
+**Actual documents**: 16,414 (ES counts include ELSER sub-documents)
 
 ---
 
-## 📋 Next Task: DRY/SRP Refactoring (Milestone 4)
+## 🎯 Next Priority: Search Quality Optimization
 
-Apply the sequence architecture pattern to all document types (lessons, units, threads, unit rollups).
+**Milestone 3** combines:
+- Comprehensive ground truths (all subjects, all key stages)
+- Baseline benchmarks
+- Synonym audit and improvement
+- Bulk download data analysis
 
-**See**: [roadmap.md](roadmap.md) Milestone 4 — **HIGH priority**.
+**Current gap**: Ground truths cover KS4 Maths only (73 queries). Need 200+ for full curriculum.
+
+See [roadmap.md](roadmap.md) for details.
+
+---
+
+## ✅ Completed Milestones
+
+| Milestone | Status |
+|-----------|--------|
+| M1: Complete ES Ingestion | ✅ Verified |
+| M2: Sequence Indexing | ✅ Verified |
+| M4: DRY/SRP Refactoring | ✅ Complete |
+| M5: Data Completeness | ✅ Complete |
 
 ---
 
@@ -85,12 +98,11 @@ Apply the sequence architecture pattern to all document types (lessons, units, t
 
 | ADR | Title | Status |
 |-----|-------|--------|
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | **ES Bulk Retry Strategy** | ✅ Verified |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | ✅ Verified |
+| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment | ✅ Complete |
 | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-First Ingestion | ✅ Complete |
-| [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md) | `has_transcript` Field | ✅ Complete |
-| [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) | Missing Transcript Handling | ✅ Complete |
-| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | SDK Rate Limiting and Retry | Pattern source |
-| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-Atomic Ingestion | Idempotent re-runs |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | ✅ Implemented |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Active |
 
 ---
 
@@ -115,16 +127,15 @@ pnpm test:ui && pnpm smoke:dev:stub
 .agent/plans/semantic-search/
 ├── roadmap.md                  # Authoritative linear roadmap
 ├── current-state.md            # Current metrics snapshot
+├── search-acceptance-criteria.md # Tier definitions
 ├── README.md                   # This file (navigation hub)
-├── active/                     # Currently active work
-│   └── complete-data-indexing.md  # ✅ Archived (verified)
 ├── planned/
-│   ├── sdk-extraction/         # SDK + CLI extraction (Milestone 11)
-│   └── future/                 # Post-SDK enhancements
+│   ├── future/                 # Future milestones
+│   │   ├── synonym-quality-audit.md  # M3: Search quality
+│   │   ├── conversational-search.md  # M11: LLM search
+│   │   └── ...
+│   └── sdk-extraction/         # SDK + CLI extraction
 ├── archive/completed/          # Completed work
-│   ├── elser-retry-robustness.md  # ✅ Archived
-│   ├── missing-transcript-handling.md  # ✅ Archived
-│   └── ...
 └── reference-docs/             # Permanent reference material
 ```
 

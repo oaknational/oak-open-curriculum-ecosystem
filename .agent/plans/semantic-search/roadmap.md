@@ -1,192 +1,261 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
+**Status**: ✅ **Full ingestion verified** — Now optimising search quality
 **Last Updated**: 2026-01-02
 **Metrics Source**: [current-state.md](current-state.md)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
-**Scope note**: The `app/api` layer is no longer in scope. Search delivery will be via a separate UI and MCP tool (potentially in a separate repository). This roadmap focuses on SDK/CLI and search data capabilities only.
+**Scope**: Search SDK/CLI capabilities. UI delivery is out of scope (separate repository).
 
 This is THE authoritative roadmap for semantic search work.
 
 ---
 
-## ✅ MILESTONE 1 COMPLETE: Full Ingestion Verified
+## Current ES Index State (2026-01-02)
 
-### Verification Results (2026-01-02)
+| Index | Documents | Storage |
+|-------|-----------|---------|
+| `oak_lessons` | 184,985 | 806.62MB |
+| `oak_unit_rollup` | 165,345 | 706.06MB |
+| `oak_units` | 1,635 | 8.94MB |
+| `oak_threads` | 164 | 255.53KB |
+| `oak_sequence_facets` | 57 | 375.14KB |
+| `oak_sequences` | 30 | 267.67KB |
+| `oak_meta` | 1 | 5.34KB |
 
-| Metric                | Value         |
-| --------------------- | ------------- |
-| **Documents indexed** | 16,414        |
-| **Lessons**           | 12,833        |
-| **Units**             | 1,665         |
-| **Sequences**         | 30            |
-| **Sequence facets**   | 57            |
-| **Threads**           | 164           |
-| **Initial failures**  | 17 (0.10%)    |
-| **Final failures**    | 0             |
-| **Retry rounds**      | 1             |
-| **Duration**          | ~22 minutes   |
-
-See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for optimisation history.
+**Note**: `oak_lessons` and `oak_unit_rollup` counts include ELSER sub-documents for sparse vectors.
 
 ---
 
-## ✅ MILESTONE 2 COMPLETE: Sequence Indexing
+## ✅ Completed Milestones
 
-### Verification Results (2026-01-02)
+### Milestone 1: Complete ES Ingestion ✅
 
-| Index | Count | Status |
-|-------|-------|--------|
-| `oak_sequences` | 30 | ✅ Verified |
-| `oak_sequence_facets` | 57 | ✅ Verified |
+| Metric | Value |
+|--------|-------|
+| Documents indexed | 16,414 |
+| Initial failures | 17 (0.10%) |
+| Final failures | 0 |
+| Duration | ~22 minutes |
 
-### Architecture Pattern (DRY/SRP Compliant)
+See [ADR-096: ES Bulk Retry Strategy](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md).
+
+### Milestone 2: Sequence Indexing ✅
+
+| Index | Count |
+|-------|-------|
+| `oak_sequences` | 30 |
+| `oak_sequence_facets` | 57 |
+
+### Milestone 4: DRY/SRP Refactoring ✅
+
+All document builders follow the shared pattern:
 
 ```text
 [Bulk Data] → [Extractor] → [Params] → [Shared Builder] → [ES Doc]
 [API Data]  → [Adapter]   → [Params] → [Shared Builder] → [ES Doc]
 ```
 
-**Key files**:
-- `sequence-document-builder.ts` — shared `createSequenceDocument()` function
-- `sequence-facets.ts` — shared `createSequenceFacetDoc()` function
-- `bulk-sequence-transformer.ts` — bulk-specific extractor
+New shared utilities:
+- `canonical-url-generator.ts` — Single source of truth for URLs
+- `slug-derivation.ts` — Subject/phase extraction from slugs
 
-### Acceptance Criteria
+### Milestone 5: Data Completeness ✅
 
-- [x] `oak_sequences` populated from bulk data (30 docs)
-- [x] `oak_sequence_facets` populated from bulk data (57 docs)
-- [x] No duplication of ingestion pipeline logic (DRY)
-- [x] Clear separation of concerns (SRP)
-- [x] All quality gates pass (835 tests)
-- [x] TDD: tests first
-- [x] **Verified with live ingestion**
+| Field | Resolution |
+|-------|------------|
+| `unit_topics` / `categories` | API supplementation via CategoryMap |
+| `category_titles` | Aggregated from unit categories |
+| `sequence_canonical_url` | Shared URL generator |
+| `thread_slugs`, `thread_titles`, `thread_orders` | Extracted from bulk data |
+
+**Key Discovery**: Categories are subject-specific (English, Science, RE only). See [category-availability-by-subject.md](../../analysis/category-availability-by-subject.md).
 
 ---
 
-## ✅ Completed Work
+## 🎯 NEXT: Milestone 3 — Search Quality Optimization
 
-### Milestone 1: Complete ES Ingestion (Bulk-First)
+**Status**: 📋 Ready to start
+**Priority**: HIGH — Foundation for all future search work
+**ADR**: [ADR-097: Context Enrichment Architecture](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md)
 
-| Phase                           | Description            | Status          |
-| ------------------------------- | ---------------------- | --------------- |
-| SDK bulk export                 | Schema-first types     | ✅ Complete     |
-| BulkDataAdapter                 | Lesson/Unit transforms | ✅ Complete     |
-| API supplementation             | Maths KS4 tiers        | ✅ Complete     |
-| HybridDataSource                | Bulk + API + rollups   | ✅ Complete     |
-| VocabularyMiningAdapter         | Keyword extraction     | ✅ Complete     |
-| Bulk thread transformer         | Thread documents       | ✅ Complete     |
-| CLI wiring                      | `--bulk` mode          | ✅ Complete     |
-| Missing transcript handling     | ADR-094, ADR-095       | ✅ Complete     |
-| ELSER retry implementation      | ADR-096                | ✅ Complete     |
-| **Full ingestion verification** | 16,327 docs            | ✅ **VERIFIED** |
+This milestone combines:
+1. **Synonym quality audit** — Remove noise, add high-impact synonyms
+2. **Bulk download data analysis** — Extract valuable metadata for search enrichment
+3. **Comprehensive ground truths** — Cover ALL subjects, ALL key stages
+4. **Benchmarking infrastructure** — Measure search quality by user story
 
-### Milestone 2: Sequence Indexing (Complete)
+### Phase 1: Comprehensive Ground Truths
 
-| Phase                           | Description                       | Status          |
-| ------------------------------- | --------------------------------- | --------------- |
-| Input-agnostic params interface | `CreateSequenceFacetDocParams`    | ✅ Complete     |
-| Shared document builders        | `createSequenceFacetDoc()`        | ✅ Complete     |
-| Bulk extractor                  | `bulk-sequence-transformer.ts`    | ✅ Complete     |
-| Pipeline integration            | `bulk-ingestion.ts`               | ✅ Complete     |
-| TDD tests                       | 20 transformer + 3 pipeline tests | ✅ Complete     |
-| Quality gates                   | All passing                       | ✅ Complete     |
-| **Ingestion verified**          | 30 sequences, 57 facets           | ✅ **VERIFIED** |
+**Current gap**: Ground truths cover KS4 Maths only (73 queries). Full curriculum has 16,414 documents.
 
-### Two-Tier Retry System (ADR-096)
+| Required | Current | Gap |
+|----------|---------|-----|
+| All 17 subjects | Maths only | 16 subjects |
+| All 4 key stages | KS4 only | KS1-3 |
+| All query categories | 6 categories ✅ | — |
 
-| Component                      | Status          |
-| ------------------------------ | --------------- |
-| Tier 1 (HTTP-level) retry      | ✅ Complete     |
-| Tier 2 (document-level) retry  | ✅ Complete     |
-| Progressive chunk delay (×1.5) | ✅ Complete     |
-| Initial retry delay            | ✅ Complete     |
-| CLI flags                      | ✅ Complete     |
-| JSON failure report            | ✅ Complete     |
-| **Production verification**    | ✅ **VERIFIED** |
+**Categories** (preserve existing):
+- naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based
+
+**Grouping** (by user story):
+- Teacher planning queries
+- Student revision queries  
+- Curriculum navigation queries
+- Resource discovery queries
+
+### Phase 2: Baseline Benchmarks
+
+Establish comprehensive MRR baselines BEFORE any changes:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm eval:per-category    # Per-category breakdown
+pnpm eval:diagnostic      # Pattern analysis
+```
+
+Document in [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md).
+
+### Phase 3: Synonym Audit
+
+**Goal**: Remove low-value noise, add high-impact synonyms.
+
+**NOT about arbitrary counts** — focus on measured impact:
+- Audit existing 163 synonyms for precision issues
+- Identify vocabulary gaps across ALL subjects
+- Add synonyms that demonstrably improve MRR
+
+**Two mechanisms** (from [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)):
+1. ES synonym expansion (single-word tokens)
+2. Phrase detection + boosting (multi-word terms)
+
+### Phase 4: Bulk Download Data Analysis
+
+**Goal**: Extract valuable metadata from bulk downloads to enrich search.
+
+**Sources** (from `BulkLesson` schema):
+- `lessonKeywords` — 13K+ unique keywords with definitions
+- `misconceptionsAndCommonMistakes` — 12K+ misconceptions
+- `teacherTips` — Pedagogical guidance
+- `contentGuidance` — Content warnings/context
+- `transcript_sentences` — Spoken teacher language
+
+**Output**: Generated files consumed at ingestion time (preprocessing step).
+
+### Phase 5: Measure and Iterate
+
+After each change:
+1. Run full benchmark suite
+2. Compare MRR by category and user story
+3. Document in EXPERIMENT-LOG.md
+4. Accept/reject based on measured impact
+
+**Success criteria**: Measurable improvement in search quality across ALL subjects.
 
 ---
 
 ## Future Milestones
 
-### Milestone 3: Synonym Quality Audit
+### Milestone 6: ES Native MCP Research (NEW)
 
-**Status**: 📋 Pending
-**Specification**: [synonym-quality-audit.md](planned/future/synonym-quality-audit.md)
+**Status**: 📋 Planned
+**Purpose**: Evaluate ES MCP features vs building custom MCP tools
 
-### Milestone 4: Document Builder DRY/SRP Refactoring
+Research questions:
+- Can ES native MCP capabilities replace custom MCP tools?
+- Should we use ES MCP alongside custom tools?
+- What capabilities does ES MCP offer?
 
-**Status**: 📋 Pending
-**Priority**: 🔴 **HIGH** — Complete immediately after sequence ingestion verified
+**Deliverable**: ADR with decision and rationale.
 
-Apply the sequence architecture pattern to other document types.
+### Milestone 7: SDK/CLI Extraction
 
-**Note**: All document types have both API and bulk data sources available (per OpenAPI spec).
-The issue is **duplicated document creation logic**, not missing data paths.
+**Status**: 📋 Planned
+**Specification**: [search-sdk-cli.md](planned/sdk-extraction/search-sdk-cli.md)
 
-| Document Type    | Shared Builder           | Bulk Transformer              | Issue                  |
-| ---------------- | ------------------------ | ----------------------------- | ---------------------- |
-| **Sequences**    | `createSequenceDocument` | ✅ Calls shared builder       | None (done)            |
-| **Threads**      | `createThreadDocument`   | ❌ `transformThreadToESDoc`   | Duplicates logic       |
-| **Lessons**      | `createLessonDocument`   | ❌ `transformBulkLessonToESDoc` | Duplicates logic     |
-| **Units**        | `createUnitDocument`     | ❌ `transformBulkUnitToESDoc` | Duplicates logic       |
-| **Unit Rollups** | `createRollupDocument`   | TBD                           | Needs analysis         |
+Extract semantic search into:
+1. **Search SDK** — `packages/libs/search-sdk/`
+2. **Search CLI** — First-class CLI workspace
+3. **Retire Next.js** — Remove app layer
 
-**Pattern to apply**:
+### Milestone 8: Search MCP Tool
 
-```text
-[Bulk Data] → [Extractor] → [Params Interface] → [Shared Builder] → [ES Doc]
-[API Data]  → [Adapter]   → [Params Interface] → [Shared Builder] → [ES Doc]
-```
+**Status**: 📋 Planned (after M7)
+**Purpose**: Expose search via MCP for AI agents
 
-**Benefits**:
+Prerequisites:
+- SDK extraction complete (M7)
+- ES MCP research complete (M6)
 
-- Single source of truth for document creation logic (DRY)
-- Clear separation between data extraction and document building (SRP)
-- Easier testing: shared builders can be tested with simple params
-- Flexibility: any data source can produce documents via the params interface
+### Milestone 9: Search Delivery Parity
 
-**Implementation approach**:
+**Status**: 📋 Planned
+**Purpose**: Match current OWA search capabilities
+**Research**: [feature-parity-analysis.md](../../research/feature-parity-analysis.md)
 
-1. Define `Create<DocType>Params` interface (input-agnostic)
-2. Extract pure `create<DocType>Doc(params)` function
-3. Create source-specific extractors/adapters that produce params
-4. Update existing code to use new pattern
+#### Scope Clarification (2026-01-02)
 
-### Milestone 5-11: Future Work
+**NOT needed** (Open API is all new curriculum):
+- `cohort` field — No legacy content exists
+- `isLegacy` field — All content is current
 
-See individual specification files in `planned/` directory.
+**AVAILABLE via API**:
+- Tier info (`tierSlug`, `tierTitle`) — Via `/sequences/{sequence}/units` KS4 structure
+- Exam board (`examBoardTitle`) — Via `/search/lessons` results
 
-### Milestone 12: Conversational Search (Tier 4)
+**NOT in API** (OWA synthetic):
+- `programmeSlug` — Derivable: sequence + year + tier + examboard
+- `pathways[]` array — Different structure (tiered hierarchy)
 
-**Status**: 📋 Deferred — Tier 4 work
+#### Implementation Tasks
+
+1. **Multi-select faceted filtering**
+   - Subject, key stage, year (✅ facets exist)
+   - Exam board, tier (need to expose from sequence data)
+
+2. **Mixed content ranking**
+   - Interleave lessons + units in results
+   - Score normalisation across indices
+
+3. **KS4 pathway handling**
+   - Derive programme context from sequence + filters
+   - Generate OWA-compatible URLs without `programmeSlug`
+
+4. **Response schema alignment**
+   - Map field names to OWA expectations
+   - Add `keyStageShortCode` (derivable from slug)
+
+### Milestone 10: Collaborative Improvements
+
+**Status**: 📋 Planned
+**Purpose**: Enhance search beyond current capabilities
+
+- Pedagogical intent enrichment
+- Relationship-aware ranking
+- Typeahead integration
+
+### Milestone 11: Conversational Search
+
+**Status**: 📋 Deferred (Tier 4)
 **Specification**: [conversational-search.md](planned/future/conversational-search.md)
 
-### Milestone 13: Search Delivery Parity (SDK/CLI + External UI/MCP)
+LLM-based query understanding for intent-based queries. Only after M3-M10 are exhausted.
 
-**Status**: 📋 Pending
-**Purpose**: Provide the same end-user value as the current system, without building `app/api`.
+---
 
-**Acceptance Criteria**:
+## Backlog (Post-MVP)
 
-- Stable, versioned search contract in the SDK (schema-first) for UI/MCP consumers.
-- Multi-select filters for subject, key stage, year group, exam board, and content type.
-- Cohort filtering (explicit cohort values, no hidden defaults).
-- Mixed content ranking (lessons + units interleaved for parity with current UX expectations).
-- Deterministic intent hints (rule-based suggestions) consumable by UI/MCP.
+These features are documented but not prioritised:
 
-### Milestone 14: Collaborative Improvements Beyond the Current API
-
-**Status**: 📋 Pending
-**Purpose**: Build on the strong foundations of the current system with shared improvements that benefit end users.
-
-**Acceptance Criteria**:
-
-- Pedagogical intent enrichment (e.g. intro, extension, visual) to support queries that are not consistently served today.
-- Relationship-aware ranking using sequences/threads for clearer progression-based discovery.
-- Measured search quality improvements using the acceptance criteria and evaluation tools.
-- Typeahead integration using existing ES data, surfaced via SDK contract for UI/MCP use.
+| Feature | Specification | Notes |
+|---------|---------------|-------|
+| Reference Indices | [reference-indices.md](planned/future/reference-indices.md) | Glossary, NC coverage |
+| Entity Extraction | [entity-extraction.md](planned/future/entity-extraction.md) | May be ingestion tweak |
+| Knowledge Graph | [knowledge-graph-evolution.md](planned/future/knowledge-graph-evolution.md) | Property → instance graph |
+| Advanced ES Features | [es-native-enhancements.md](planned/future/es-native-enhancements.md) | Phonetic, reranking |
+| MCP Graph Tools | [mcp-graph-tools.md](planned/future/mcp-graph-tools.md) | Expose graphs via MCP |
+| Resource Types | [resource-types.md](planned/future/resource-types.md) | Worksheets, quizzes |
+| Evaluation Infrastructure | [evaluation-infrastructure.md](planned/sdk-extraction/evaluation-infrastructure.md) | Unify eval directories |
 
 ---
 
@@ -214,13 +283,14 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-| Document                                                                                           | Purpose                  |
-| -------------------------------------------------------------------------------------------------- | ------------------------ |
-| [current-state.md](current-state.md)                                                               | Authoritative metrics    |
-| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)               | Session context          |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)        | ES Bulk Retry (verified) |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy      |
-| [ADR-070](../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md)   | Retry pattern (reused)   |
+| Document | Purpose |
+|----------|---------|
+| [current-state.md](current-state.md) | Authoritative metrics |
+| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Session context |
+| [search-acceptance-criteria.md](search-acceptance-criteria.md) | Tier definitions |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry |
+| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment |
 
 ---
 

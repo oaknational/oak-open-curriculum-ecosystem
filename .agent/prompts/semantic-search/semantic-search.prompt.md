@@ -1,222 +1,138 @@
-# Semantic Search — Session Context
+# Semantic Search — Session Entry Point
 
-**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
 **Last Updated**: 2026-01-02
 
----
-
-## 📖 Project Context
-
-### What This Project Is
-
-This is the **Oak National Academy MCP Ecosystem** — a monorepo containing:
-
-- **MCP servers** that expose Oak's curriculum data to AI agents (Claude, etc.)
-- **Semantic search application** that powers natural language search over the curriculum
-- **SDK** that provides typed access to Oak's curriculum API
-
-### What Semantic Search Does
-
-The semantic search app (`apps/oak-open-curriculum-semantic-search`) indexes Oak's entire curriculum into Elasticsearch for teachers and students to search using natural language. For example:
-
-- "How do I teach fractions to Year 5?"
-- "Lessons about the water cycle"
-- "KS4 physics electricity"
-
-The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic embeddings, enabling search by meaning rather than just keywords.
-
-### Current State (Verified 2026-01-02)
-
-| Index | Count |
-|-------|-------|
-| **Lessons** | 12,833 |
-| **Units** | 1,665 |
-| **Threads** | 164 |
-| **Sequences** | 30 |
-| **Sequence facets** | 57 |
-| **Total** | 16,414 |
-
-### Architectural Principles
-
-This codebase follows strict rules:
-
-- **Schema-first**: All types flow from the OpenAPI spec via the SDK
-- **TDD**: Tests first, always
-- **No type shortcuts**: Never use `as`, `any`, `!`, or `Record<string, unknown>`
-- **Quality gates**: All checks must pass after every change
-- **Single pipeline**: One ingestion pipeline with thin adapters — NO duplication
-
-For full details, see [rules.md](../../directives-and-memory/rules.md).
+This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
-## 🎯 NEXT TASK: DRY/SRP Refactoring (Milestone 4)
+## 🎯 NEXT PRIORITY: Milestone 3 — Search Quality Optimization
 
-### Problem
+**Full ingestion is complete** (16,414 documents). Now optimising search quality.
 
-The sequence document builders follow a DRY/SRP-compliant pattern:
+**Detailed Plan**: [synonym-quality-audit.md](../../plans/semantic-search/planned/future/synonym-quality-audit.md)
 
-```text
-[Bulk Data] → [Extractor] → [Params] → [Shared Builder] → [ES Doc]
-[API Data]  → [Adapter]   → [Params] → [Shared Builder] → [ES Doc]
+### Phases
+
+| Phase | Focus | Status |
+|-------|-------|--------|
+| **1. Ground Truths** | Create queries for all 17 subjects, all 4 key stages | 📋 Start here |
+| **2. Baselines** | Establish per-subject, per-category MRR before changes | 📋 |
+| **3. Synonym Audit** | Remove noise, add high-impact terms | 📋 |
+| **4. Bulk Data Analysis** | Extract vocabulary from `lessonKeywords`, transcripts | 📋 |
+| **5. Measure & Iterate** | Experiment, measure, accept/reject | 📋 |
+
+### Current Ground Truth Gap
+
+| Dimension | Current | Required |
+|-----------|---------|----------|
+| Subjects covered | Maths only | 17 subjects |
+| Key Stages | KS4 only | KS1-4 |
+| Ground truth queries | 73 | 200+ |
+
+### Key Files for M3
+
+| File | Purpose |
+|------|---------|
+| `evaluation/ground-truth/standard-queries.json` | Standard ground truth queries |
+| `evaluation/ground-truth/hard-queries.json` | Hard query set (category-tagged) |
+| `packages/libs/oak-curriculum-search-lib/src/synonyms/` | Synonym files (163 terms) |
+| `reference/bulk_download_data/` | Bulk download data for analysis |
+
+---
+
+## Current ES Index State
+
+From Elastic Cloud (2026-01-02):
+
+| Index | Documents | Storage |
+|-------|-----------|---------|
+| `oak_lessons` | 184,985 | 806.62MB |
+| `oak_unit_rollup` | 165,345 | 706.06MB |
+| `oak_units` | 1,635 | 8.94MB |
+| `oak_threads` | 164 | 255.53KB |
+| `oak_sequence_facets` | 57 | 375.14KB |
+| `oak_sequences` | 30 | 267.67KB |
+| `oak_meta` | 1 | 5.34KB |
+
+**Actual documents**: 16,414 (ES counts include ELSER sub-documents).
+
+---
+
+## Search Quality Metrics (KS4 Maths Only)
+
+| Category | MRR | Status |
+|----------|-----|--------|
+| Misspelling | 0.833 | ✅ Excellent |
+| Naturalistic | 0.722 | ✅ Good |
+| Multi-concept | 0.625 | ✅ Good |
+| Synonym | 0.611 | ✅ Good |
+| Colloquial | 0.500 | ⚠️ Acceptable |
+| Intent-based | 0.229 | ❌ Exception granted |
+| **Overall** | **0.614** | ✅ Tier 1 target met |
+
+**These metrics only cover KS4 Maths.** Full curriculum benchmarks needed.
+
+---
+
+## Evaluation Commands
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Current benchmarks (KS4 Maths only)
+pnpm eval:per-category    # Per-category MRR breakdown
+pnpm eval:diagnostic      # Detailed pattern analysis
+
+# Full metrics
+pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
 ```
 
-Other document types have **duplicated logic** between bulk and API paths.
+---
 
-### Data Source Analysis
+## Experiment Protocol
 
-All document types have **both API and bulk paths** available (from OpenAPI spec):
+**For every change**, follow this workflow:
 
-| Document | API Endpoints | Bulk Available |
-|----------|--------------|----------------|
-| **Threads** | `GET /threads`, `GET /threads/{slug}/units` | ✅ Yes |
-| **Sequences** | `GET /sequences/{seq}/units`, etc. | ✅ Yes |
-| **Lessons** | `GET /lessons/{lesson}/summary`, etc. | ✅ Yes |
-| **Units** | `GET /units/{unit}/summary` | ✅ Yes |
+1. **Design** — Document hypothesis in `.experiment.md` file
+2. **Baseline** — Run `pnpm eval:per-category`, record in [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)
+3. **Implement** — Make the change
+4. **Measure** — Run benchmarks again
+5. **Decide** — Accept if improvement, reject if regression
 
-### Current DRY Violations
+**Templates**: [experiments/template-for-search-experiments.md](../../evaluations/experiments/template-for-search-experiments.md)
 
-| Type | Shared Builder | Bulk Transformer | Status |
-|------|---------------|------------------|--------|
-| **Sequences** | `createSequenceDocument()` | ✅ Calls shared | ✅ DRY |
-| **Threads** | `createThreadDocument()` | ❌ `transformThreadToESDoc()` duplicates | **FIX** |
-| **Lessons** | `createLessonDocument()` | ❌ `transformBulkLessonToESDoc()` duplicates | **FIX** |
-| **Units** | `createUnitDocument()` | ❌ `transformBulkUnitToESDoc()` duplicates | **FIX** |
-
-### Reference Implementation
-
-**Follow the sequence pattern** — see these files:
-
-| File | Role |
-|------|------|
-| `src/lib/indexing/sequence-document-builder.ts` | Shared builder with input-agnostic `CreateSequenceDocumentParams` |
-| `src/adapters/bulk-sequence-transformer.ts` | Bulk extractor that calls `createSequenceDocument()` |
-
-### Files to Refactor
-
-**Priority order** (simplest first):
-
-1. **Threads** (simplest — shared builder already exists):
-   - `src/lib/indexing/thread-document-builder.ts` — Already has `createThreadDocument()`
-   - `src/adapters/bulk-thread-transformer.ts` — Change `transformThreadToESDoc()` to call `createThreadDocument()`
-
-2. **Lessons** (more complex — needs params interface extraction):
-   - `src/lib/indexing/document-transforms.ts` — Has `createLessonDocument()` but API-centric params
-   - `src/adapters/bulk-lesson-transformer.ts` — Has separate `transformBulkLessonToESDoc()`
-   - Extract input-agnostic `CreateLessonDocumentParams` interface
-
-3. **Units** (similar to lessons):
-   - `src/lib/indexing/document-transforms.ts` — Has `createUnitDocument()` but API-centric params
-   - `src/adapters/bulk-unit-transformer.ts` — Has separate `transformBulkUnitToESDoc()`
-   - Extract input-agnostic `CreateUnitDocumentParams` interface
-
-### Implementation Pattern
-
-For each document type:
-
-1. Define `Create<DocType>Params` interface (input-agnostic)
-2. Refactor existing builder to accept params interface
-3. Update bulk transformer to call shared builder
-4. Update API adapter to call shared builder
-5. Delete duplicated transformation code
-
-### Acceptance Criteria
-
-- [ ] Threads: `bulk-thread-transformer.ts` calls `createThreadDocument()`
-- [ ] Lessons: Single `createLessonDocument()` used by both paths
-- [ ] Units: Single `createUnitDocument()` used by both paths
-- [ ] All quality gates pass
-- [ ] TDD: tests first for each change
-
-**See**: [roadmap.md](../../plans/semantic-search/roadmap.md) Milestone 4
+**Guidance**: [search-experiment-guidance.md](../../evaluations/guidance/search-experiment-guidance.md)
 
 ---
 
 ## ✅ What's Complete
 
-### Full Ingestion Verified (2026-01-02)
-
-| Component | Status |
+| Milestone | Status |
 |-----------|--------|
-| Two-tier retry system | ✅ Verified |
-| Bulk-first ingestion (all document types) | ✅ Verified |
-| Sequence indexing | ✅ Verified |
-| Missing transcript handling | ✅ Complete |
-| Quality gates | ✅ All passing (835 tests) |
+| M1: Complete ES Ingestion | ✅ |
+| M2: Sequence Indexing | ✅ |
+| M4: DRY/SRP Refactoring | ✅ |
+| M5: Data Completeness | ✅ |
 
-### CLI Usage
+---
+
+## CLI Usage
 
 ```bash
-# Full bulk ingestion (recommended)
+# Full bulk ingestion
 pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
 
-# Reset and verify
+# Reset indices
 pnpm es:setup --reset
 pnpm es:status
 ```
 
-### CLI Flags Available
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--max-retries <n>` | 4 | Maximum document-level retry attempts |
-| `--retry-delay <ms>` | 5000 | Base delay for exponential backoff |
-| `--no-retry` | false | Disable document-level retry |
-| `--verbose` | false | Enable detailed logging |
-| `--force` | false | Proceed even if data exists |
-
 ---
 
-## 📖 Architecture Overview
+## Quality Gates
 
-### Two-Tier Retry Strategy (ADR-096)
-
-```text
-┌─────────────────────────────────────────────────────────────┐
-│                   Bulk Upload Flow                          │
-│                                                             │
-│  Chunk 1 ──┐                                               │
-│  Chunk 2 ──┼──► Tier 1: HTTP Retry ──► ES Bulk API        │
-│  Chunk N ──┘   (transport errors)                          │
-│                     │                                       │
-│                     ▼                                       │
-│              Collect Failed Docs                           │
-│                     │                                       │
-│                     ▼                                       │
-│            Tier 2: Document Retry                          │
-│           (429, 502, 503, 504)                             │
-│                     │                                       │
-│                     ▼                                       │
-│        Progressive Chunk Delay (×1.5)                      │
-│           (allow ELSER to drain)                           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Optimised Constants
-
-| Constant | Value | Purpose |
-|----------|-------|---------|
-| `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS` | 7001ms | Base delay between chunk uploads |
-| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
-
----
-
-## 📚 Key Files (For Reference)
-
-| File | Purpose |
-|------|---------|
-| `src/lib/indexing/bulk-ingestion.ts` | Bulk-first ingestion pipeline |
-| `src/lib/indexing/sequence-document-builder.ts` | Shared sequence document builder |
-| `src/lib/indexing/sequence-facets.ts` | Shared sequence facet builder |
-| `src/adapters/bulk-sequence-transformer.ts` | Bulk-specific extractor |
-| `src/lib/indexing/bulk-chunk-uploader.ts` | Upload orchestration |
-| `src/lib/indexing/README.md` | Module documentation |
-| `docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md` | ADR |
-
----
-
-## 🔧 Quality Gates (Run After Any Changes)
+Run after every change:
 
 ```bash
 pnpm type-gen
@@ -232,27 +148,41 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-**All gates must pass. No exceptions.**
+---
+
+## Key Documents
+
+| Document | Purpose |
+|----------|---------|
+| **[roadmap.md](../../plans/semantic-search/roadmap.md)** | Master roadmap |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
+| [search-acceptance-criteria.md](../../plans/semantic-search/search-acceptance-criteria.md) | Tier definitions |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
 
 ---
 
-## ⚠️ Key Principles (MANDATORY)
+## Foundation Documents (MANDATORY)
+
+Before any work, read:
+
+1. **[rules.md](../../directives-and-memory/rules.md)** — First Question, TDD, no type shortcuts
+2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at ALL levels
+3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+
+---
+
+## Key Principles
 
 1. **TDD always** — Red → Green → Refactor
 2. **No type shortcuts** — No `as`, `any`, `!`
 3. **Single pipeline** — NO duplication of ingestion logic
-4. **Read foundation docs first**:
-   - [rules.md](../../directives-and-memory/rules.md)
-   - [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
-   - [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)
+4. **Measure before/after** — Every experiment needs baselines
 
 ---
 
-## 📚 Related Documents
+## ES Documentation
 
-| Document | Purpose |
-|----------|---------|
-| [roadmap.md](../../plans/semantic-search/roadmap.md) | Master roadmap |
-| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry (verified) |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy |
+**Do NOT guess how ES works** — read the official documentation:
+
+- [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
+- [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)

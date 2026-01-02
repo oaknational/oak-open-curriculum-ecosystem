@@ -1,7 +1,13 @@
 /**
  * Document transformation functions for Elasticsearch indexing.
  * Creates unit, lesson, and rollup documents from Oak API data.
- * @see ADR-075 Two-way Hybrid Search, @see ADR-080 KS4 Metadata Denormalisation
+ *
+ * Lesson documents use the shared `buildLessonDocument()` builder
+ * for DRY compliance with bulk ingestion paths.
+ *
+ * @see ADR-075 Two-way Hybrid Search
+ * @see ADR-080 KS4 Metadata Denormalisation
+ * @see buildLessonDocument - Shared lesson document builder
  */
 /* eslint-disable max-lines -- Document transforms require comprehensive field mappings */
 
@@ -29,10 +35,26 @@ import {
 } from './semantic-summary-generator';
 import { normaliseYears } from './document-transform-utils';
 import { extractThreadInfo } from './thread-and-pedagogical-extractors';
+import {
+  buildLessonDocument,
+  type CreateLessonDocParams,
+  type LessonUnitInfo,
+} from './lesson-document-core';
+import { buildUnitDocument, type CreateUnitDocParams } from './unit-document-core';
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
 export { normaliseYears, extractPassage } from './document-transform-utils';
 
+// Re-export LessonUnitInfo from shared module for backwards compatibility
+export type { LessonUnitInfo } from './lesson-document-core';
+
+/**
+ * Parameters for creating a unit document via API path.
+ *
+ * This interface is specific to the API path, accepting API types
+ * (SearchUnitSummary, UnitContextMap). The function extracts
+ * relevant fields and delegates to the shared builder.
+ */
 export interface CreateUnitDocumentParams {
   summary: SearchUnitSummary;
   subject: SearchSubjectSlug;
@@ -48,67 +70,88 @@ export interface CreateUnitDocumentParams {
   lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
 }
 
-/** Creates a unit document for Elasticsearch indexing. */
-// eslint-disable-next-line max-lines-per-function -- Document construction requires all field mappings
-export function createUnitDocument({
-  summary,
-  subject,
-  subjectTitle,
-  keyStage,
-  keyStageTitle,
-  subjectProgrammesUrl,
-  unitContextMap,
-  lessonsByUnit,
-}: CreateUnitDocumentParams): SearchUnitsIndexDoc {
+/** Convert ThreadInfo to UnitThreadInfo format */
+function convertThreadInfo(info: ReturnType<typeof extractThreadInfo>) {
+  if (!info.slugs || info.slugs.length === 0) {
+    return undefined;
+  }
+  return { slugs: info.slugs, titles: info.titles ?? [], orders: info.orders ?? [] };
+}
+
+/** Get lesson IDs from params */
+function getLessonIds(
+  summary: SearchUnitSummary,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
+) {
+  const ids = lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((l) => l.lessonSlug);
+  return [...ids];
+}
+
+/**
+ * Extracts unit document params from API types.
+ *
+ * This function transforms API-specific types into the input-agnostic
+ * `CreateUnitDocParams` interface used by the shared builder.
+ */
+export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): CreateUnitDocParams {
+  const {
+    summary,
+    subject,
+    subjectTitle,
+    keyStage,
+    keyStageTitle,
+    subjectProgrammesUrl,
+    unitContextMap,
+    lessonsByUnit,
+  } = params;
+
   if (!summary.canonicalUrl) {
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
-  const lessonIds =
-    lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
-  const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug);
-  const threadInfo = extractThreadInfo(summary.threads);
-  const ks4Fields = extractKs4DocumentFields(
-    getKs4ContextForUnit(unitContextMap, summary.unitSlug),
-  );
-
   return {
-    unit_id: summary.unitSlug,
-    unit_slug: summary.unitSlug,
-    unit_title: summary.unitTitle,
-    subject_slug: subject,
-    subject_title: subjectTitle,
-    key_stage: keyStage,
-    key_stage_title: keyStageTitle,
-    years,
-    lesson_ids: [...lessonIds],
-    lesson_count: lessonIds.length,
-    unit_topics: unitTopics,
-    unit_url: summary.canonicalUrl,
-    subject_programmes_url: subjectProgrammesUrl,
-    sequence_ids: sequenceIds,
-    thread_slugs: threadInfo.slugs,
-    thread_titles: threadInfo.titles,
-    thread_orders: threadInfo.orders,
-    ...extractUnitEnrichmentFields(summary),
-    ...ks4Fields,
-    title_suggest: {
-      input: [summary.unitTitle],
-      contexts: { subject: [subject], key_stage: [keyStage], sequence: sequenceIds ?? [] },
+    unitSlug: summary.unitSlug,
+    unitTitle: summary.unitTitle,
+    subjectSlug: subject,
+    subjectTitle,
+    keyStage,
+    keyStageTitle,
+    years: normaliseYears(summary.year, summary.yearSlug),
+    lessonIds: getLessonIds(summary, lessonsByUnit),
+    unitUrl: summary.canonicalUrl,
+    subjectProgrammesUrl,
+    threadInfo: convertThreadInfo(extractThreadInfo(summary.threads)),
+    enrichment: {
+      unit_topics: summary.categories?.map((cat) => cat.categoryTitle),
+      ...extractUnitEnrichmentFields(summary),
     },
-    doc_type: 'unit',
+    ks4: extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, summary.unitSlug)),
   };
 }
 
-/** Unit info for lesson documents. Each lesson may belong to multiple units. */
-export interface LessonUnitInfo {
-  readonly unitSlug: string;
-  readonly unitTitle: string;
-  readonly canonicalUrl: string;
+/**
+ * Creates a unit document for Elasticsearch indexing.
+ *
+ * Uses the shared `buildUnitDocument()` builder to ensure DRY compliance
+ * and a single source of truth for unit document creation logic.
+ *
+ * @param params - API path params including SearchUnitSummary and UnitContextMap
+ * @returns SearchUnitsIndexDoc ready for ES indexing
+ *
+ * @see buildUnitDocument - Shared builder this delegates to
+ */
+export function createUnitDocument(params: CreateUnitDocumentParams): SearchUnitsIndexDoc {
+  const docParams = extractUnitParamsFromAPI(params);
+  return buildUnitDocument(docParams);
 }
 
+/**
+ * Parameters for creating a lesson document via API path.
+ *
+ * This interface is specific to the API path, accepting API types
+ * (SearchLessonSummary, UnitContextMap). The function extracts
+ * relevant fields and delegates to the shared builder.
+ */
 export interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
   /**
@@ -128,41 +171,69 @@ export interface CreateLessonDocumentParams {
   units: readonly LessonUnitInfo[];
 }
 
-/** Extracts unit arrays from unit info. Preserves ALL relationships. */
-function extractUnitArrays(units: readonly LessonUnitInfo[]) {
+/**
+ * Extracts lesson document params from API types.
+ *
+ * This function transforms API-specific types into the input-agnostic
+ * `CreateLessonDocParams` interface used by the shared builder.
+ *
+ * @param params - API path params
+ * @returns Params for `buildLessonDocument()`
+ */
+export function extractLessonParamsFromAPI(
+  params: CreateLessonDocumentParams,
+): CreateLessonDocParams {
+  const {
+    lesson,
+    transcript,
+    summary,
+    subject,
+    keyStage,
+    years,
+    lessonCount,
+    unitContextMap,
+    units,
+  } = params;
+
+  if (units.length === 0) {
+    throw new Error(`Lesson ${lesson.lessonSlug} has no unit relationships`);
+  }
+
+  const primaryUnitSlug = units[0].unitSlug;
+  const f = extractLessonDocumentFields(summary);
+  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, primaryUnitSlug));
+  const lessonStructure = generateLessonSemanticSummary(summary);
+
   return {
-    unitIds: units.map((u) => u.unitSlug),
-    unitTitles: units.map((u) => u.unitTitle),
-    unitUrls: units.map((u) => u.canonicalUrl),
+    lessonSlug: lesson.lessonSlug,
+    lessonTitle: lesson.lessonTitle,
+    subjectSlug: subject,
+    subjectTitle: f.subjectTitle,
+    keyStage,
+    keyStageTitle: f.keyStageTitle,
+    years,
+    units,
+    unitCount: lessonCount,
+    lessonKeywords: f.lessonKeywords,
+    keyLearningPoints: f.keyLearningPoints,
+    misconceptions: f.misconceptions,
+    teacherTips: f.teacherTips,
+    contentGuidance: f.contentGuidance,
+    transcript,
+    lessonStructure,
+    lessonUrl: f.canonicalUrl,
+    pupilLessonOutcome: f.pupilLessonOutcome,
+    supervisionLevel: f.supervisionLevel,
+    downloadsAvailable: f.downloadsAvailable,
+    ks4,
   };
 }
 
 /**
- * Extract all derived fields needed for lesson document construction.
- * @param params - CreateLessonDocumentParams
- * @returns Extracted fields for document construction
- */
-function extractDerivedLessonFields(params: CreateLessonDocumentParams): {
-  primaryUnitSlug: string;
-  f: ReturnType<typeof extractLessonDocumentFields>;
-  ks4: ReturnType<typeof extractKs4DocumentFields>;
-  sem: string;
-  unitArrays: ReturnType<typeof extractUnitArrays>;
-} {
-  const { summary, unitContextMap, units, lesson } = params;
-  if (units.length === 0) {
-    throw new Error(`Lesson ${lesson.lessonSlug} has no unit relationships`);
-  }
-  const primaryUnitSlug = units[0].unitSlug;
-  const f = extractLessonDocumentFields(summary);
-  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, primaryUnitSlug));
-  const sem = generateLessonSemanticSummary(summary);
-  const unitArrays = extractUnitArrays(units);
-  return { primaryUnitSlug, f, ks4, sem, unitArrays };
-}
-
-/**
  * Creates a lesson document for Elasticsearch indexing.
+ *
+ * Uses the shared `buildLessonDocument()` builder to ensure DRY compliance
+ * and a single source of truth for lesson document creation logic.
  *
  * Content fields (`lesson_content`, `lesson_content_semantic`) are conditionally
  * included based on transcript availability. This prevents placeholder text from
@@ -171,52 +242,16 @@ function extractDerivedLessonFields(params: CreateLessonDocumentParams): {
  * Structure fields (`lesson_structure`, `lesson_structure_semantic`) are always
  * populated from pedagogical metadata.
  *
+ * @param params - API path params including SearchLessonSummary and UnitContextMap
+ * @returns SearchLessonsIndexDoc ready for ES indexing
+ *
+ * @see buildLessonDocument - Shared builder this delegates to
  * @see ADR-094 for `has_transcript` field rationale
  * @see ADR-095 for conditional field inclusion rationale
  */
 export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
-  const { lesson, transcript, subject, keyStage, years, lessonCount } = params;
-  const { f, ks4, sem, unitArrays } = extractDerivedLessonFields(params);
-  const { unitIds, unitTitles, unitUrls } = unitArrays;
-
-  const hasTranscript = typeof transcript === 'string' && transcript.length > 0;
-
-  return {
-    lesson_id: lesson.lessonSlug,
-    lesson_slug: lesson.lessonSlug,
-    lesson_title: lesson.lessonTitle,
-    subject_slug: subject,
-    subject_title: f.subjectTitle,
-    key_stage: keyStage,
-    key_stage_title: f.keyStageTitle,
-    years,
-    unit_ids: unitIds,
-    unit_titles: unitTitles,
-    unit_count: lessonCount,
-    unit_urls: unitUrls,
-    lesson_keywords: f.lessonKeywords,
-    key_learning_points: f.keyLearningPoints,
-    misconceptions_and_common_mistakes: f.misconceptions,
-    teacher_tips: f.teacherTips,
-    content_guidance: f.contentGuidance,
-    has_transcript: hasTranscript,
-    // Only include content fields if transcript exists
-    lesson_content: hasTranscript ? transcript : undefined,
-    lesson_content_semantic: hasTranscript ? transcript : undefined,
-    // Structure fields always populated from pedagogical data
-    lesson_structure: sem,
-    lesson_structure_semantic: sem,
-    lesson_url: f.canonicalUrl,
-    pupil_lesson_outcome: f.pupilLessonOutcome,
-    supervision_level: f.supervisionLevel,
-    downloads_available: f.downloadsAvailable,
-    ...ks4,
-    title_suggest: {
-      input: [lesson.lessonTitle],
-      contexts: { subject: [subject], key_stage: [keyStage] },
-    },
-    doc_type: 'lesson',
-  };
+  const docParams = extractLessonParamsFromAPI(params);
+  return buildLessonDocument(docParams);
 }
 
 export interface CreateRollupDocumentParams {

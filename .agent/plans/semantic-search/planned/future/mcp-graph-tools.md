@@ -1,9 +1,9 @@
 # MCP Graph Tools
 
-**Status**: 📋 Planned  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 9)  
-**Priority**: Medium  
-**Dependencies**: Vocabulary mining generators complete
+**Status**: 📋 Backlog  
+**Parent**: [README.md](../README.md) | [roadmap.md](../../roadmap.md)  
+**Priority**: Low (Post-MVP)  
+**Dependencies**: Vocabulary mining generators, SDK extraction complete
 
 ---
 

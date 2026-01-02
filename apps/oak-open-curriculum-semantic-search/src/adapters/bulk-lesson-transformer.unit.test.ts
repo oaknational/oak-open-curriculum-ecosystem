@@ -4,12 +4,19 @@
  * @remarks
  * Tests the transformation of bulk download lesson data into ES documents,
  * including semantic summary generation for ELSER embeddings.
+ * Verifies DRY compliance by ensuring bulk transformer produces identical
+ * output to the shared `buildLessonDocument()` builder.
  *
  * @module adapters/bulk-lesson-transformer.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';
-import { transformBulkLessonToESDoc, type LessonUnitInfo } from './bulk-lesson-transformer';
+import {
+  transformBulkLessonToESDoc,
+  extractLessonParamsFromBulk,
+  type LessonUnitInfo,
+} from './bulk-lesson-transformer';
+import { buildLessonDocument } from '../lib/indexing/lesson-document-core';
 
 /**
  * Creates a minimal valid bulk lesson fixture for testing.
@@ -297,6 +304,49 @@ describe('bulk-lesson-transformer', () => {
         const doc = transformBulkLessonToESDoc({ lesson, unitInfo, years: [] });
 
         expect(doc.doc_type).toBe('lesson');
+      });
+    });
+
+    describe('DRY compliance', () => {
+      it('produces identical output to buildLessonDocument with extracted params', () => {
+        const lesson = createMinimalLesson({
+          lessonSlug: 'fractions-intro',
+          lessonTitle: 'Introduction to Fractions',
+          subjectSlug: 'maths',
+          subjectTitle: 'Mathematics',
+          keyStageSlug: 'ks2',
+          keyStageTitle: 'Key Stage 2',
+          transcript_sentences: 'Welcome to this lesson about fractions.',
+          lessonKeywords: [
+            { keyword: 'fraction', description: 'Part of a whole' },
+            { keyword: 'numerator', description: 'Top number in a fraction' },
+          ],
+          keyLearningPoints: [{ keyLearningPoint: 'Understand fractions' }],
+          misconceptionsAndCommonMistakes: [
+            { misconception: 'Bigger denominator means bigger fraction', response: 'Use visuals' },
+          ],
+          teacherTips: [{ teacherTip: 'Use fraction walls' }],
+          pupilLessonOutcome: 'I can identify fractions',
+          downloadsavailable: true,
+        });
+        const unitInfo = createMinimalUnitInfo({
+          unitSlug: 'fractions-year-3',
+          unitTitle: 'Fractions Year 3',
+          canonicalUrl: 'https://example.com/units/fractions-year-3',
+        });
+        const years = ['3', '4'];
+
+        const bulkParams = { lesson, unitInfo, years };
+
+        // Extract params and build via shared builder
+        const extractedParams = extractLessonParamsFromBulk(bulkParams);
+        const docViaSharedBuilder = buildLessonDocument(extractedParams);
+
+        // Build via bulk transformer
+        const docViaBulkTransformer = transformBulkLessonToESDoc(bulkParams);
+
+        // They should be identical
+        expect(docViaBulkTransformer).toEqual(docViaSharedBuilder);
       });
     });
   });

@@ -1,8 +1,24 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2025-12-24  
-**Status**: Active  
+**Last Updated**: 2026-01-02
+**Status**: Active
 **Purpose**: Defines what "exhausted" means for each tier, vs "target met"
+
+---
+
+## ⚠️ Critical Gap: Ground Truth Coverage
+
+**Current ground truth covers KS4 Maths ONLY.**
+
+| Dimension | Current | Required |
+|-----------|---------|----------|
+| Subjects | Maths only | All 17 subjects |
+| Key Stages | KS4 only | KS1-4 |
+| Queries | 73 | 200+ |
+
+**Implication**: Tier metrics are valid for KS4 Maths, but we cannot claim cross-curriculum search quality without comprehensive ground truths.
+
+**Next milestone** (M3: Search Quality Optimization) addresses this gap.
 
 ---
 
@@ -267,6 +283,7 @@ For any search-affecting change:
 
 | Date | Change |
 |------|--------|
+| 2026-01-02 | Added critical gap section about ground truth coverage |
 | 2025-12-24 | Added intent-based documented exception with root cause analysis |
 | 2025-12-24 | Created — defines target met vs exhausted, per-category thresholds, standard approaches checklists |
 

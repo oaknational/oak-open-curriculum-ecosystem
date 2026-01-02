@@ -1,9 +1,11 @@
 # Transcript Mining for Vocabulary Enrichment
 
-**Status**: 📋 Planned  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 4)  
+**Status**: 📋 Planned (Folded into M3)  
+**Parent**: [synonym-quality-audit.md](synonym-quality-audit.md) | [roadmap.md](../../roadmap.md) (Milestone 3 Phase 4)  
 **Priority**: Medium  
 **Dependencies**: LLM extraction pipeline
+
+> **Note**: This work is now part of Milestone 3 "Search Quality Optimization" under Phase 4: Bulk Download Data Analysis. The standalone milestone was removed during roadmap reorganisation (2026-01-02).
 
 ---
 

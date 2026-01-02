@@ -12,6 +12,15 @@ Create a small, curated query set that reflects real use:
 
 Keep the set stable and versioned so results are comparable over time.
 
+Stratify the corpus to avoid overfitting:
+
+- Subject (all major subjects).
+- Key stage (KS1 to KS4).
+- Query type (misspellings, naturalistic, synonyms, multi-concept, colloquial, intent-based).
+- Persona (teacher, student, curriculum planner).
+
+Keep a small holdout set to validate that improvements generalise beyond the tuning set.
+
 ## 2. Offline Metrics
 
 Standard retrieval metrics:
@@ -21,6 +30,13 @@ Standard retrieval metrics:
 - Recall@k for coverage.
 
 Elastic supports offline rank evaluation via the rank evaluation API.
+
+Interpret MRR with simple bands to guide decisions:
+
+- >= 0.80: excellent (result in top 1 to 2 positions).
+- >= 0.50: good (result in top 2 to 3 positions).
+- >= 0.33: acceptable (result in top 3 to 5 positions).
+- < 0.33: poor (users are likely to reformulate).
 
 ## 3. Online Metrics
 
@@ -46,6 +62,7 @@ Treat these as required gates for changes that affect ranking:
 - Offline evaluation within acceptable bounds.
 - No regression in p95 latency.
 - No spike in zero-hit rate.
+- No regression on standard-query MRR while improving hard-query MRR.
 
 ## References
 

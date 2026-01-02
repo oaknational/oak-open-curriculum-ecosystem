@@ -102,6 +102,17 @@ This instance-level graph would enable:
 - "Show how the concept 'denominator' develops across years"
 - "What lessons connect Year 3 and Year 7 geometry?"
 
+#### From Property Graph to Instance Graph
+
+Our current `knowledge-graph-data.ts` is a property graph (schema only). The instance data already exists in graph exports (vocabulary, misconceptions, prerequisites, NC coverage), but it is not connected to the schema.
+
+Practical steps to close the gap:
+
+- Validate extracted entity types against the schema concept list before export.
+- Generate explicit edges from instance data (e.g. lesson -> hasKeyword -> keyword).
+- Produce a unified export that combines schema, instances, and edges for downstream tools.
+- Use ontology data (subjects, key stages, threads) as authoritative validation inputs.
+
 ### 2.2 Graph Generation from Content
 
 We're not extracting relationships from our content:
@@ -109,6 +120,7 @@ We're not extracting relationships from our content:
 - Named Entity Recognition on transcripts
 - Keyword co-occurrence analysis
 - Implicit relationships from curriculum structure
+- Transcript pattern mining (e.g. "also called", "remember, X means", "don't confuse X with Y") for synonyms and misconceptions; LLM extraction is more reliable than regex
 
 ### 2.3 RAG Infrastructure
 

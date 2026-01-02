@@ -1,76 +1,144 @@
 # Semantic Search Current State
 
 **Last Updated**: 2026-01-02
-**Status**: ✅ **VERIFIED** — Full ingestion complete including sequences
+**Status**: ✅ **Full ingestion verified** — Now optimising search quality
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 This is THE authoritative source for current system metrics.
 
 ---
 
-## ✅ Full Ingestion Verified (2026-01-02)
+## Current ES Index State
 
-### Document Counts
+From Elastic Cloud Index Management (2026-01-02):
 
-| Index | Indexed | ES Count | Notes |
-|-------|---------|----------|-------|
-| `oak_lessons` | 12,833 | 184,985 | ES count includes ELSER sub-documents |
-| `oak_units` | 1,665 | 1,635 | ✅ |
-| `oak_unit_rollup` | 1,665 | 165,345 | ES count includes ELSER sub-documents |
-| `oak_threads` | 164 | 164 | ✅ |
-| `oak_sequences` | 30 | 30 | ✅ NEW |
-| `oak_sequence_facets` | 57 | 57 | ✅ NEW |
-| **Total** | **16,414** | — | |
+| Index | Documents | Storage |
+|-------|-----------|---------|
+| `oak_lessons` | 184,985 | 806.62MB |
+| `oak_unit_rollup` | 165,345 | 706.06MB |
+| `oak_units` | 1,635 | 8.94MB |
+| `oak_threads` | 164 | 255.53KB |
+| `oak_sequence_facets` | 57 | 375.14KB |
+| `oak_sequences` | 30 | 267.67KB |
+| `oak_meta` | 1 | 5.34KB |
 
-**Note**: ES document counts for indexes with `semantic_text` fields are higher due to ELSER creating internal sub-documents for sparse vector storage.
+**Note**: `oak_lessons` and `oak_unit_rollup` counts include ELSER sub-documents for sparse vector storage. Actual document counts:
 
-### Ingestion Metrics
-
-| Metric | Value |
-|--------|-------|
-| **Documents indexed** | 16,414 |
-| **Initial failures** | 17 (0.10%) |
-| **Final failures** | 0 |
-| **Retry rounds** | 1 |
-| **Duration** | ~22 minutes |
-
-### Optimised Parameters
-
-| Constant | Value | Purpose |
-|----------|-------|---------|
-| `MAX_CHUNK_SIZE_BYTES` | 8MB | Smaller chunks reduce ELSER queue pressure |
-| `DEFAULT_CHUNK_DELAY_MS` | 7001ms | Base delay between chunk uploads |
-| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay per retry attempt |
-| Initial retry delay | ✅ Enabled | Delay before first retry chunk |
-
-See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) for implementation details.
+| Document Type | Count |
+|---------------|-------|
+| Lessons | 12,833 |
+| Units | 1,665 |
+| Threads | 164 |
+| Sequences | 30 |
+| Sequence facets | 57 |
+| **Total** | **16,414** |
 
 ---
 
-## Next Priority: DRY/SRP Refactoring (Milestone 4)
+## Search Quality Metrics
 
-The DRY/SRP pattern used for sequences **must** be applied to lessons, units, and threads.
-See [roadmap.md](roadmap.md) Milestone 4 — **HIGH priority**.
+### Ground Truth Coverage
+
+| Dimension | Current | Gap |
+|-----------|---------|-----|
+| Subjects | Maths KS4 only | 16 subjects missing |
+| Key Stages | KS4 only | KS1-3 missing |
+| Query count | 73 queries | Need 200+ for full coverage |
+
+### Current MRR (KS4 Maths only)
+
+From [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) (2025-12-24):
+
+| Category | MRR | Status |
+|----------|-----|--------|
+| Misspelling | 0.833 | ✅ Excellent |
+| Naturalistic | 0.722 | ✅ Good |
+| Multi-concept | 0.625 | ✅ Good |
+| Synonym | 0.611 | ✅ Good |
+| Colloquial | 0.500 | ⚠️ Acceptable |
+| Intent-based | 0.229 | ❌ Exception granted |
+| **Overall** | **0.614** | ✅ Tier 1 target met |
+
+**Tier 1 status**: ✅ EXHAUSTED (all standard approaches tried for KS4 Maths)
+
+**Key gap**: These metrics only cover KS4 Maths. Full curriculum benchmarks needed.
+
+---
+
+## Data Completeness
+
+### Categories (Subject-Specific)
+
+Only 3 subjects have categories:
+
+| Subject | Categories |
+|---------|------------|
+| English | Grammar, Handwriting, Reading/writing/oracy |
+| Science | Biology, Chemistry, Physics |
+| Religious Education | Theology, Philosophy, Social science |
+
+Other subjects use **threads** for navigation (all 164 threads indexed).
+
+See [category-availability-by-subject.md](../../analysis/category-availability-by-subject.md).
+
+### Thread Context
+
+Unit documents now include:
+- `thread_slugs` — All associated thread slugs
+- `thread_titles` — Human-readable thread names
+- `thread_orders` — Position in each thread
 
 ---
 
 ## ✅ Completed Work
 
-| Component | Status | Documentation |
-|-----------|--------|---------------|
-| Two-tier retry system | ✅ Verified | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) |
-| Bulk-first ingestion | ✅ Verified | [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) |
-| Missing transcript handling | ✅ Complete | [ADR-094](../../../docs/architecture/architectural-decisions/094-has-transcript-field.md), [ADR-095](../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md) |
-| Sequence indexing | ✅ Verified | [roadmap.md](roadmap.md) Milestone 2 |
-| Quality gates | ✅ All passing | 835 tests |
+| Milestone | Status | ADR |
+|-----------|--------|-----|
+| M1: Complete ES Ingestion | ✅ Verified | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) |
+| M2: Sequence Indexing | ✅ Verified | — |
+| M4: DRY/SRP Refactoring | ✅ Complete | — |
+| M5: Data Completeness | ✅ Complete | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) |
+
+## 🎯 Next Priority
+
+**Milestone 3: Search Quality Optimization**
+
+1. Create comprehensive ground truths (all subjects, all key stages)
+2. Establish baseline benchmarks
+3. Audit and improve synonyms
+4. Analyze bulk download data for enrichment
+5. Measure and iterate
+
+See [roadmap.md](roadmap.md) for full details.
 
 ---
 
-## 📚 Related Documents
+## Ingestion Performance
+
+| Metric | Value |
+|--------|-------|
+| Documents indexed | 16,414 |
+| Initial failures | 17 (0.10%) |
+| Final failures | 0 |
+| Retry rounds | 1 |
+| Duration | ~22 minutes |
+
+### Optimised Parameters
+
+| Constant | Value | Purpose |
+|----------|-------|---------|
+| `MAX_CHUNK_SIZE_BYTES` | 8MB | Reduce ELSER queue pressure |
+| `DEFAULT_CHUNK_DELAY_MS` | 7001ms | Base delay between chunks |
+| `DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER` | 1.5× | Progressive delay |
+
+---
+
+## Related Documents
 
 | Document | Purpose |
 |----------|---------|
-| [roadmap.md](roadmap.md) | Master plan and milestones |
-| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Session context |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry (verified) |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-first strategy |
+| [roadmap.md](roadmap.md) | Master plan |
+| [search-acceptance-criteria.md](search-acceptance-criteria.md) | Tier definitions |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry |
+| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment |

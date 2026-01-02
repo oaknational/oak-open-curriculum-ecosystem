@@ -1,52 +1,33 @@
 # Search Experiment Priorities
 
-**Status**: 🔄 RE-BASELINE REQUIRED — Ground truth corrected, all measurements need verification  
-**Last Updated**: 2025-12-23 23:00 UTC  
-**Principle**: Master fundamentals before adding complexity  
+**Status**: ✅ Tier 1 EXHAUSTED (KS4 Maths) — Need ground truths for full curriculum
+**Last Updated**: 2026-01-02
+**Principle**: Master fundamentals before adding complexity
 **Governing ADR**: [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
 
 ---
 
-## 🔴 CRITICAL: Ground Truth Corrections Applied (2025-12-23)
+## Ground Truth Status (2026-01-02)
 
-**All previous MRR measurements are UNVERIFIED.** A comprehensive audit revealed **63 invalid slugs** (15% of ground truth data) — lesson references that didn't exist in the Oak Curriculum API.
+### ✅ Corrected Ground Truth (KS4 Maths)
 
-### What Happened
+Ground truth slugs were corrected (2025-12-23):
+- **63 invalid slugs fixed** — All now validated via API
+- **Integration test created** — Prevents future issues
+- **Measurements verified** — MRR 0.614 for KS4 Maths
 
-1. Ground truth queries referenced slugs that were fabricated or incorrectly named
-2. MRR calculations scored against phantom lessons that don't exist
-3. "Failing" queries may have been correct — they couldn't find lessons that don't exist
-4. "Passing" queries may have been accidental — correct by luck, not algorithm
+### ⚠️ Gap: Cross-Curriculum Ground Truths
 
-### What Was Fixed
+**Ground truth covers KS4 Maths ONLY.**
 
-1. ✅ **63 slugs corrected** across `hard-queries.ts`, `diagnostic-synonym-queries.ts`, `diagnostic-multi-concept-queries.ts`
-2. ✅ **Integration test created** (`ground-truth.integration.test.ts`) validates all slugs exist via Oak API
-3. ✅ **Unit and sequence ground truth added** with full validation
-4. ✅ **All quality gates pass** including the new validation tests
+Full curriculum indexed (16,414 documents) but evaluation is limited to 1 subject.
 
-### What Must Happen Now
+**Milestone 3** will address:
+- Ground truths for all 17 subjects
+- Ground truths for all key stages (KS1-4)
+- Benchmarks grouped by user story
 
-**Re-run ALL experiments with corrected ground truth** to establish TRUE baselines:
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category    # New hard query baseline (lessons)
-pnpm eval:diagnostic      # New diagnostic baseline
-```
-
-**Then**: Update all metrics in documentation with actual measured values.
-
-### What We Keep
-
-We are **NOT going back in time**. We preserve:
-
-- ✅ All implementation work (B.4 noise filtering, B.5 phrase boosting)
-- ✅ All architectural decisions (ADR-082, ADR-083, ADR-084)
-- ✅ The tier-based strategy (fundamentals first)
-- ✅ The learnings (generic AI reranking failed, phrase synonyms need special handling)
-
-We are going **forward with enhanced understanding** — now we can trust our measurements.
+See [roadmap.md](../../plans/semantic-search/roadmap.md).
 
 ---
 
@@ -87,16 +68,18 @@ This document organises experiments into **tiers** based on the principle that:
 
 ---
 
-## Current Status (2025-12-23)
+## Current Status (2026-01-02)
 
-| Tier  | Name          | Status                  | Previous MRR | Verified MRR | Target | Notes                              |
-| ----- | ------------- | ----------------------- | ------------ | ------------ | ------ | ---------------------------------- |
-| **1** | Fundamentals  | 🔄 NEEDS RE-MEASUREMENT | 0.369        | ???          | ≥0.45  | B.4 + B.5 implemented, unverified  |
-| **2** | Relationships | ❌ Not Started          | —            | —            | ≥0.55  | Cross-referencing not exploited    |
-| **3** | Modern ES     | ⚠️ Partial              | —            | —            | ≥0.60  | RRF working, Linear not tested     |
-| **4** | AI            | ⏸️ NEEDS RE-EVALUATION  | -16.8%       | ???          | ≥0.75  | May have been wrongly rejected     |
+| Tier  | Name          | Status                  | MRR | Target | Notes                              |
+| ----- | ------------- | ----------------------- | --- | ------ | ---------------------------------- |
+| **1** | Fundamentals  | ✅ EXHAUSTED (KS4 Maths) | 0.614 | ≥0.45 | All standard approaches tried |
+| **2** | Relationships | ❌ Not Started          | — | ≥0.55 | Thread context indexed but not exploited |
+| **3** | Modern ES     | ⚠️ Partial              | — | ≥0.60 | RRF working, tuning needed |
+| **4** | AI            | ⏸️ DEFERRED             | — | ≥0.75 | After Tier 1-3 exhausted |
 
-**Next Priority**: Re-establish baselines with corrected ground truth
+**Critical Gap**: Ground truths cover KS4 Maths only. Need comprehensive coverage before claiming cross-curriculum quality.
+
+**Next Priority**: Milestone 3 — Create ground truths for all subjects, establish baselines, optimize synonyms.
 
 ---
 

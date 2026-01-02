@@ -35,6 +35,16 @@ Prefer denormalised fields (arrays of ids/tags) for search performance. Use:
 - `nested` fields when you need per-object matching in arrays.
 - `join` fields only if you run a non-serverless cluster and genuinely need parent/child relations.
 
+## 5. Learning Path Queries (Prerequisites)
+
+Learning-path questions ("what comes before X") can be served from ES if you materialise prerequisite edges:
+
+- Store unit-to-unit or concept-to-concept edges in a dedicated index.
+- Add edge metadata (subject, thread, edge_type) for filtering.
+- Use adjacency queries to step through 1 to 2 hops and surface a path.
+
+This provides lightweight traversal without a full graph database, and it can be combined with Graph Explore or significant terms for expansion.
+
 ## References
 
 - Graph overview: https://www.elastic.co/docs/explore-analyze/visualize/graph

@@ -65,6 +65,14 @@ function makeUnitResults(hits: EsHit<SearchUnitRollupDoc>[]): UnitResult[] {
   }));
 }
 
+/**
+ * Derives unit document from rollup hit, including curriculum context.
+ *
+ * Includes thread context (slugs, titles, orders) for progression navigation
+ * and unit_topics for topical filtering.
+ *
+ * @see ADR-097 Context Enrichment Architecture
+ */
 function deriveUnitFromRollup(hit: EsHit<SearchUnitRollupDoc>): SearchUnitsIndexDoc {
   return {
     unit_id: hit._source.unit_id,
@@ -79,6 +87,10 @@ function deriveUnitFromRollup(hit: EsHit<SearchUnitRollupDoc>): SearchUnitsIndex
     unit_url: hit._source.unit_url,
     subject_programmes_url: hit._source.subject_programmes_url,
     sequence_ids: hit._source.sequence_ids,
+    // Thread context for curriculum progression
+    thread_slugs: hit._source.thread_slugs,
+    thread_titles: hit._source.thread_titles,
+    thread_orders: hit._source.thread_orders,
     title_suggest: hit._source.title_suggest,
     doc_type: hit._source.doc_type,
   };

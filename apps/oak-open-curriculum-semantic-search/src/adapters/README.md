@@ -93,7 +93,8 @@ This directory contains adapters for curriculum data ingestion into Elasticsearc
 │  ┌──────────────────────────────────────────────────────────────────────┐  │
 │  │                    Elasticsearch Serverless                          │  │
 │  │                                                                      │  │
-│  │  Indices: oak_lessons, oak_units, oak_unit_rollup, oak_threads      │  │
+│  │  Indices: oak_lessons, oak_units, oak_unit_rollup, oak_threads,     │  │
+│  │           oak_sequences, oak_sequence_facets, oak_meta              │  │
 │  └──────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -136,18 +137,20 @@ All types flow from two sources:
 
 ### Bulk Ingestion Infrastructure
 
-| File                           | Purpose                                      |
-| ------------------------------ | -------------------------------------------- |
-| `bulk-data-adapter.ts`         | Loads bulk JSON, builds lookup maps          |
-| `bulk-lesson-transformer.ts`   | `Lesson` → `SearchLessonsIndexDoc`           |
-| `bulk-unit-transformer.ts`     | `Unit` → `SearchUnitsIndexDoc`               |
-| `bulk-thread-transformer.ts`   | Extracts threads, builds `ThreadDoc`         |
-| `bulk-rollup-builder.ts`       | Aggregates lessons → `SearchUnitRollupDoc`   |
-| `bulk-transform-helpers.ts`    | Shared pure functions (URL generation, etc.) |
-| `hybrid-data-source.ts`        | Composes bulk + API supplementation          |
-| `hybrid-batch-processor.ts`    | Batched iteration for memory efficiency      |
-| `api-supplementation.ts`       | Fetches Maths KS4 tier info from API         |
-| `vocabulary-mining-adapter.ts` | Extracts vocabulary for synonym mining       |
+| File                           | Purpose                                       |
+| ------------------------------ | --------------------------------------------- |
+| `bulk-data-adapter.ts`         | Loads bulk JSON, builds lookup maps           |
+| `bulk-lesson-transformer.ts`   | `Lesson` → `SearchLessonsIndexDoc`            |
+| `bulk-unit-transformer.ts`     | `Unit` → `SearchUnitsIndexDoc`                |
+| `bulk-thread-transformer.ts`   | Extracts threads, builds `ThreadDoc`          |
+| `bulk-sequence-transformer.ts` | Extracts sequences → `oak_sequences` + facets |
+| `bulk-rollup-builder.ts`       | Aggregates lessons → `SearchUnitRollupDoc`    |
+| `bulk-transform-helpers.ts`    | Shared pure functions (URL generation, etc.)  |
+| `category-supplementation.ts`  | Builds category maps from API for enrichment  |
+| `hybrid-data-source.ts`        | Composes bulk + API supplementation           |
+| `hybrid-batch-processor.ts`    | Batched iteration for memory efficiency       |
+| `api-supplementation.ts`       | Fetches Maths KS4 tier info from API          |
+| `vocabulary-mining-adapter.ts` | Extracts vocabulary for synonym mining        |
 
 ### API Client Infrastructure
 
@@ -297,14 +300,16 @@ const client = await createOakClient({
 
 ## Related ADRs
 
-| ADR                                                                                                       | Topic                         |
-| --------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| [ADR-093](../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)     | Bulk-first ingestion strategy |
-| [ADR-094](../../../../docs/architecture/architectural-decisions/094-has-transcript-field.md)              | `has_transcript` field        |
-| [ADR-095](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md)       | Missing transcript handling   |
-| [ADR-066](../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md)              | SDK response caching          |
-| [ADR-079](../../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)              | Cache TTL jitter              |
-| [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result pattern                |
+| ADR                                                                                                       | Topic                           |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| [ADR-093](../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)     | Bulk-first ingestion strategy   |
+| [ADR-094](../../../../docs/architecture/architectural-decisions/094-has-transcript-field.md)              | `has_transcript` field          |
+| [ADR-095](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md)       | Missing transcript handling     |
+| [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)            | ES bulk retry strategy          |
+| [ADR-097](../../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md)   | Context enrichment architecture |
+| [ADR-066](../../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md)              | SDK response caching            |
+| [ADR-079](../../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md)              | Cache TTL jitter                |
+| [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result pattern                  |
 
 ---
 

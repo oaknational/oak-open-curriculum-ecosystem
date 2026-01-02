@@ -14,9 +14,15 @@ import {
   type CreateSequenceFacetDocParams,
 } from '../lib/indexing/sequence-facets';
 import { createSequenceDocument } from '../lib/indexing/sequence-document-builder';
-import { derivePhaseSlug, normaliseSubjectSlug } from './bulk-transform-helpers';
+import {
+  derivePhaseSlug,
+  normaliseSubjectSlug,
+  generateSequenceCanonicalUrl,
+  deriveSubjectSlugFromSequence,
+} from './bulk-transform-helpers';
 import { isSubject } from './sdk-guards';
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
+import { getCategoriesForUnit, type CategoryMap } from './category-supplementation';
 
 /** Accumulated unit data grouped by key stage. */
 interface KeyStageUnitAccumulator {
@@ -27,14 +33,15 @@ interface KeyStageUnitAccumulator {
   lessonCount: number;
 }
 
-/** Derives subject slug from sequence slug (e.g., 'maths-primary' -> 'maths'). */
-function deriveSubjectSlugFromSequence(sequenceSlug: string): SearchSubjectSlug {
-  const parts = sequenceSlug.split('-');
-  const lastPart = parts[parts.length - 1];
-  const subjectPart =
-    lastPart === 'primary' || lastPart === 'secondary'
-      ? parts.slice(0, -1).join('-')
-      : sequenceSlug;
+/**
+ * Derives and validates subject slug from sequence slug.
+ *
+ * @param sequenceSlug - The sequence slug (e.g., 'maths-primary')
+ * @returns Validated SearchSubjectSlug
+ * @throws If the derived subject is not a valid subject slug
+ */
+function deriveAndValidateSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
+  const subjectPart = deriveSubjectSlugFromSequence(sequenceSlug);
   const normalised = normaliseSubjectSlug(subjectPart);
   if (!isSubject(normalised)) {
     throw new Error(`Cannot derive valid subject from sequence: ${sequenceSlug}`);
@@ -64,14 +71,44 @@ function isValidKeyStage(slug: string): slug is KeyStage {
 }
 
 /**
+ * Collects unique category titles from all units in a sequence.
+ *
+ * @param units - Units from bulk file
+ * @param categoryMap - Optional category map for supplementation
+ * @returns Sorted array of unique category titles
+ */
+function collectCategoryTitles(
+  units: readonly Unit[],
+  categoryMap: CategoryMap | undefined,
+): readonly string[] {
+  if (!categoryMap) {
+    return [];
+  }
+
+  const titles = new Set<string>();
+  for (const unit of units) {
+    const categories = getCategoriesForUnit(categoryMap, unit.unitSlug);
+    if (categories) {
+      for (const cat of categories) {
+        titles.add(cat.title);
+      }
+    }
+  }
+  return Array.from(titles).sort();
+}
+
+/**
  * Extracts sequence document params from a bulk file.
+ *
  * @param bulkFile - The bulk download file
+ * @param categoryMap - Optional category map for aggregating category titles
  * @returns Params for creating a sequence document via `createSequenceDocument()`
  */
 export function extractSequenceParamsFromBulkFile(
   bulkFile: BulkDownloadFile,
+  categoryMap?: CategoryMap,
 ): CreateSequenceDocumentParams {
-  const subjectSlug = deriveSubjectSlugFromSequence(bulkFile.sequenceSlug);
+  const subjectSlug = deriveAndValidateSubjectSlug(bulkFile.sequenceSlug);
   const phaseSlug = derivePhaseSlug(bulkFile.sequenceSlug);
   const phaseTitle = capitalise(phaseSlug);
   const keyStagesSet = new Set<string>();
@@ -82,6 +119,7 @@ export function extractSequenceParamsFromBulkFile(
     yearsSet.add(getYearString(unit));
     unitSlugs.push(unit.unitSlug);
   }
+  const categoryTitles = collectCategoryTitles(bulkFile.sequence, categoryMap);
   return {
     sequenceSlug: bulkFile.sequenceSlug,
     subjectSlug,
@@ -91,7 +129,7 @@ export function extractSequenceParamsFromBulkFile(
     keyStages: Array.from(keyStagesSet).sort(),
     years: Array.from(yearsSet).sort(),
     unitSlugs,
-    categoryTitles: [],
+    categoryTitles,
   };
 }
 
@@ -130,10 +168,11 @@ function groupUnitsByKeyStage(units: readonly Unit[]): Map<KeyStage, KeyStageUni
 export function extractSequenceFacetParamsFromBulkFile(
   bulkFile: BulkDownloadFile,
 ): readonly CreateSequenceFacetDocParams[] {
-  const subjectSlug = deriveSubjectSlugFromSequence(bulkFile.sequenceSlug);
+  const subjectSlug = deriveAndValidateSubjectSlug(bulkFile.sequenceSlug);
   const phaseSlug = derivePhaseSlug(bulkFile.sequenceSlug);
   const phaseTitle = capitalise(phaseSlug);
   const hasKs4Options = Boolean(bulkFile.ks4Options && bulkFile.ks4Options.length > 0);
+  const canonicalUrl = generateSequenceCanonicalUrl(bulkFile.sequenceSlug);
   const groups = groupUnitsByKeyStage(bulkFile.sequence);
   const results: CreateSequenceFacetDocParams[] = [];
   for (const [keyStage, group] of groups) {
@@ -150,6 +189,7 @@ export function extractSequenceFacetParamsFromBulkFile(
       unitTitles: group.unitTitles,
       lessonCount: group.lessonCount,
       hasKs4Options,
+      canonicalUrl,
     });
   }
   return results;
@@ -160,9 +200,10 @@ function buildOpsForFile(
   bulkFile: BulkDownloadFile,
   sequencesIndex: string,
   facetsIndex: string,
+  categoryMap?: CategoryMap,
 ): BulkOperationEntry[] {
   const ops: BulkOperationEntry[] = [];
-  const seqParams = extractSequenceParamsFromBulkFile(bulkFile);
+  const seqParams = extractSequenceParamsFromBulkFile(bulkFile, categoryMap);
   const seqDoc = createSequenceDocument(seqParams);
   const seqAction: BulkIndexAction = {
     index: { _index: sequencesIndex, _id: bulkFile.sequenceSlug },
@@ -182,19 +223,22 @@ function buildOpsForFile(
 
 /**
  * Builds Elasticsearch bulk operations for sequences from all bulk files.
+ *
  * @param bulkFiles - Array of bulk download files
  * @param sequencesIndex - Name of the sequences index
  * @param facetsIndex - Name of the sequence facets index
+ * @param categoryMap - Optional category map for enriching sequences with category titles
  * @returns Array of bulk operations (alternating action and document)
  */
 export function buildSequenceBulkOperations(
   bulkFiles: readonly BulkDownloadFile[],
   sequencesIndex: string,
   facetsIndex: string,
+  categoryMap?: CategoryMap,
 ): BulkOperationEntry[] {
   const ops: BulkOperationEntry[] = [];
   for (const bulkFile of bulkFiles) {
-    ops.push(...buildOpsForFile(bulkFile, sequencesIndex, facetsIndex));
+    ops.push(...buildOpsForFile(bulkFile, sequencesIndex, facetsIndex, categoryMap));
   }
   return ops;
 }

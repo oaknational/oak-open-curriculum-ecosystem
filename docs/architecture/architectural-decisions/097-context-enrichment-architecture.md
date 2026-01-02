@@ -1,0 +1,112 @@
+# ADR-097: Context Enrichment Architecture for Curriculum Search
+
+## Status
+
+Accepted
+
+## Context
+
+The semantic search system indexes lessons, units, sequences, and threads. An investigation into empty Elasticsearch fields revealed that:
+
+1. **Categories** (unit topics) are missing from bulk downloads but available via API
+2. **Sequence canonical URLs** were not being populated in facet documents
+3. **Semantic text fields** for sequences/threads were empty and undefined
+
+We needed to determine:
+
+- Which empty fields should be populated
+- How sequences and threads should be represented in search
+- What value each field provides to end users
+
+## Decision
+
+### Sequences and Threads Are Structural Metadata, Not Search Targets
+
+We determined that sequences (curriculum programmes) and threads (learning progressions) are fundamentally different from lessons and units:
+
+| Content Type | Primary Purpose                                    | Search Role            |
+| ------------ | -------------------------------------------------- | ---------------------- |
+| Lessons      | Educational content (videos, transcripts, quizzes) | Primary search target  |
+| Units        | Grouped lessons with pedagogical context           | Primary search target  |
+| Sequences    | Curriculum structure (subject + phase)             | Navigation, not search |
+| Threads      | Learning progression across years                  | Context enrichment     |
+
+**Decision**: Sequences and threads are NOT primary search targets. Their value is:
+
+1. **Navigation** - "Show me the KS3 science curriculum structure"
+2. **Progression** - "What comes before/after this unit?"
+3. **Enrichment** - Adding curriculum context to lesson/unit results
+
+### Context Enrichment Model
+
+We implement a **context enrichment model** where:
+
+- Lessons and units are the primary search surfaces
+- Sequences and threads provide context displayed in results
+- Categories enable faceted filtering
+
+### Fields to Populate
+
+| Field                        | Index                 | Action                    | Rationale                    |
+| ---------------------------- | --------------------- | ------------------------- | ---------------------------- |
+| `unit_topics`                | `oak_units`           | **Populate from API**     | Enables topic faceting       |
+| `categories`                 | `oak_units`           | **Alias for unit_topics** | Same data, different name    |
+| `category_titles`            | `oak_sequences`       | **Aggregate from units**  | Sequence-level topic summary |
+| `sequence_canonical_url`     | `oak_sequence_facets` | **Populate**              | Navigation links             |
+| `thread_slugs/titles/orders` | `oak_units`           | **Already populated**     | From bulk data               |
+
+### Fields NOT Populated
+
+| Field               | Index           | Decision | Rationale                       |
+| ------------------- | --------------- | -------- | ------------------------------- |
+| `sequence_semantic` | `oak_sequences` | **Skip** | Sequences aren't search targets |
+| `thread_semantic`   | `oak_threads`   | **Skip** | Threads aren't search targets   |
+
+### API Supplementation Strategy
+
+Categories require API supplementation during bulk ingestion:
+
+1. **Endpoint**: `GET /api/sequences/{sequenceSlug}/units`
+2. **Build CategoryMap**: Extract categories from API response
+3. **Enrich during transform**: Pass CategoryMap to unit/sequence transformers
+
+### Shared Utilities
+
+Created shared utilities for DRY compliance:
+
+- `canonical-url-generator.ts` - Single source of truth for URL patterns
+- `slug-derivation.ts` - Extracting subject/phase from sequence slugs
+- `category-supplementation.ts` - Building and using category maps
+
+## Consequences
+
+### Positive
+
+1. **Clear separation of concerns** - search targets vs. navigation/context
+2. **No wasted resources** - ELSER inference not spent on non-searchable content
+3. **Category faceting enabled** - Users can filter by topic
+4. **Context enrichment** - Results show curriculum position
+5. **DRY compliance** - Shared utilities prevent duplication
+
+### Negative
+
+1. **API calls during ingestion** - ~200 extra API calls for categories
+2. **Partial category coverage** - Not all subjects have categories (e.g., maths)
+
+### Neutral
+
+1. **Sequences/threads searchable by title** - BM25 on title_suggest still works
+2. **Thread data already in bulk** - No API supplementation needed
+
+## Implementation
+
+- `category-supplementation.ts` - Category map building and lookup
+- `bulk-unit-transformer.ts` - Updated to accept CategoryMap
+- `bulk-sequence-transformer.ts` - Updated for canonical URLs and category titles
+- `canonical-url-generator.ts` - Shared URL generation
+- `slug-derivation.ts` - Shared slug parsing
+
+## Related Decisions
+
+- [ADR-093](./093-bulk-first-ingestion-strategy.md) - Bulk-First Ingestion Strategy
+- [ADR-080](./080-ks4-metadata-denormalisation.md) - KS4 Metadata Denormalisation

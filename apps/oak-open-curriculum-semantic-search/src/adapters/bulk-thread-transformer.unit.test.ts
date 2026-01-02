@@ -3,6 +3,8 @@
  *
  * @remarks
  * Tests the transformation of bulk download thread data into ES documents.
+ * Verifies DRY compliance by ensuring bulk transformer produces identical
+ * output to the shared `createThreadDocument()` builder.
  *
  * @module adapters/bulk-thread-transformer.unit.test
  */
@@ -14,6 +16,7 @@ import {
   buildThreadBulkOperations,
   type BulkExtractedThread,
 } from './bulk-thread-transformer';
+import { createThreadDocument } from '../lib/indexing/thread-document-builder';
 
 /**
  * Creates a minimal valid bulk file fixture for testing.
@@ -171,6 +174,25 @@ describe('bulk-thread-transformer', () => {
           subject: ['maths'],
         },
       });
+    });
+
+    it('produces identical output to createThreadDocument (DRY compliance)', () => {
+      const thread: BulkExtractedThread = {
+        slug: 'number-multiplication',
+        title: 'Number: Multiplication and division',
+        unitCount: 12,
+        subjectSlugs: ['maths', 'science'],
+      };
+
+      const bulkDoc = transformThreadToESDoc(thread);
+      const sharedDoc = createThreadDocument({
+        threadSlug: thread.slug,
+        threadTitle: thread.title,
+        unitCount: thread.unitCount,
+        subjectSlugs: thread.subjectSlugs,
+      });
+
+      expect(bulkDoc).toEqual(sharedDoc);
     });
   });
 

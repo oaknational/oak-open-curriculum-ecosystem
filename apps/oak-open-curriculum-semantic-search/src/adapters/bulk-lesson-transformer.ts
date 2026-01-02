@@ -2,14 +2,20 @@
  * Bulk lesson to ES document transformer.
  *
  * @remarks
- * Transforms bulk download lesson data into Elasticsearch document format,
- * including semantic summary generation for ELSER embeddings.
+ * Extracts lesson data from bulk download files and transforms them into
+ * Elasticsearch documents for the oak_lessons index via the shared
+ * `buildLessonDocument()` builder.
  *
+ * Follows DRY by reusing the shared document builder, ensuring a single source
+ * of truth for lesson document creation logic.
+ *
+ * @see ADR-093 Bulk-First Ingestion Strategy
+ * @see buildLessonDocument - Shared document builder
  * @module adapters/bulk-lesson-transformer
  */
 
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import type { SearchLessonsIndexDoc, SearchSubjectSlug, KeyStage } from '../types/oak';
+import type { SearchLessonsIndexDoc } from '../types/oak';
 import { isKeyStage, isSubject } from './sdk-guards';
 import {
   generateLessonUrl,
@@ -21,6 +27,11 @@ import {
   normaliseSupervisionLevel,
   normaliseSubjectSlug,
 } from './bulk-transform-helpers.js';
+import {
+  buildLessonDocument,
+  type CreateLessonDocParams,
+  type LessonUnitInfo,
+} from '../lib/indexing/lesson-document-core';
 
 // ============================================================================
 // Semantic Summary Generation (Pure Functions)
@@ -98,12 +109,8 @@ function generateBulkLessonSemanticSummary(lesson: Lesson): string {
 // Document Building
 // ============================================================================
 
-/** Unit info needed for lesson document construction */
-export interface LessonUnitInfo {
-  readonly unitSlug: string;
-  readonly unitTitle: string;
-  readonly canonicalUrl: string;
-}
+// Re-export LessonUnitInfo from shared module for backwards compatibility
+export type { LessonUnitInfo } from '../lib/indexing/lesson-document-core';
 
 /** Parameters for transforming a bulk lesson to ES document */
 export interface BulkToESLessonParams {
@@ -112,110 +119,23 @@ export interface BulkToESLessonParams {
   readonly years: readonly string[];
 }
 
-/** Build core fields for lesson document */
-function buildLessonCoreFields(
-  lesson: Lesson,
-  subjectSlug: SearchSubjectSlug,
-  keyStage: KeyStage,
-  years: readonly string[],
-  unitInfo: LessonUnitInfo,
-) {
-  return {
-    lesson_id: lesson.lessonSlug,
-    lesson_slug: lesson.lessonSlug,
-    lesson_title: lesson.lessonTitle,
-    subject_slug: subjectSlug,
-    subject_title: lesson.subjectTitle,
-    key_stage: keyStage,
-    key_stage_title: lesson.keyStageTitle,
-    years: years.length > 0 ? [...years] : undefined,
-    unit_ids: [unitInfo.unitSlug],
-    unit_titles: [unitInfo.unitTitle],
-    unit_urls: [unitInfo.canonicalUrl],
-  };
-}
-
-/** Build pedagogical fields for lesson document */
-function buildLessonPedagogicalFields(lesson: Lesson) {
-  return {
-    lesson_keywords: extractKeywordStrings(lesson.lessonKeywords),
-    key_learning_points: extractLearningPointStrings(lesson.keyLearningPoints),
-    misconceptions_and_common_mistakes: extractMisconceptionStrings(
-      lesson.misconceptionsAndCommonMistakes,
-    ),
-    teacher_tips: extractTeacherTipStrings(lesson.teacherTips),
-    content_guidance: extractContentGuidanceLabels(lesson.contentGuidance),
-  };
-}
-
 /**
- * Lesson content fields including transcript availability indicator.
+ * Extracts lesson document params from a bulk lesson.
  *
- * `lesson_content` and `lesson_content_semantic` are optional because
- * MFL lessons and some practical lessons lack transcripts. These fields
- * are omitted entirely to avoid polluting the BM25/ELSER indexes.
+ * This function transforms bulk-specific types into the input-agnostic
+ * `CreateLessonDocParams` interface used by the shared builder.
  *
- * @see ADR-094 for `has_transcript` field rationale
- * @see ADR-095 for conditional field inclusion rationale
+ * @param params - Bulk lesson params
+ * @returns Params for `buildLessonDocument()`
+ *
+ * @example
+ * ```typescript
+ * const bulkParams: BulkToESLessonParams = { lesson, unitInfo, years };
+ * const docParams = extractLessonParamsFromBulk(bulkParams);
+ * const doc = buildLessonDocument(docParams);
+ * ```
  */
-interface LessonContentFields {
-  readonly has_transcript: boolean;
-  readonly lesson_content: string | undefined;
-  readonly lesson_structure: string | undefined;
-  readonly lesson_content_semantic: string | undefined;
-  readonly lesson_structure_semantic: string | undefined;
-  readonly lesson_url: string;
-  readonly pupil_lesson_outcome: string | undefined;
-  readonly supervision_level: string | undefined;
-  readonly downloads_available: boolean;
-}
-
-/**
- * Build content fields for lesson document.
- *
- * Content fields (`lesson_content`, `lesson_content_semantic`) are conditionally
- * included based on transcript availability. This prevents garbage tokens like
- * "No transcript available" from polluting the BM25 index and wasting ELSER
- * inference on meaningless placeholder text.
- *
- * Structure fields (`lesson_structure`, `lesson_structure_semantic`) are always
- * populated from pedagogical metadata, enabling lessons without transcripts to
- * still be found via structure retrievers.
- *
- * @param lesson - The bulk lesson to build content fields for
- * @returns Content fields with conditional transcript inclusion
- *
- * @see ADR-094 for `has_transcript` field rationale
- * @see ADR-095 for conditional field inclusion rationale
- */
-function buildLessonContentFields(lesson: Lesson): LessonContentFields {
-  const transcript = lesson.transcript_sentences;
-  const hasTranscript = typeof transcript === 'string' && transcript.length > 0;
-  const structureSummary = generateBulkLessonSemanticSummary(lesson);
-
-  return {
-    has_transcript: hasTranscript,
-    // Only include content fields if transcript exists
-    lesson_content: hasTranscript ? transcript : undefined,
-    lesson_content_semantic: hasTranscript ? transcript : undefined,
-    // Structure fields always populated from pedagogical data
-    lesson_structure: structureSummary,
-    lesson_structure_semantic: structureSummary,
-    lesson_url: generateLessonUrl(lesson.lessonSlug),
-    pupil_lesson_outcome: lesson.pupilLessonOutcome || undefined,
-    supervision_level: normaliseSupervisionLevel(lesson.supervisionLevel),
-    downloads_available: lesson.downloadsavailable,
-  };
-}
-
-/**
- * Transform a bulk lesson into an ES lesson document.
- *
- * @remarks
- * Subject slugs are normalised from bulk variants (e.g., 'combined-science')
- * to API subjects (e.g., 'science') before validation.
- */
-export function transformBulkLessonToESDoc(params: BulkToESLessonParams): SearchLessonsIndexDoc {
+export function extractLessonParamsFromBulk(params: BulkToESLessonParams): CreateLessonDocParams {
   const { lesson, unitInfo, years } = params;
 
   // Normalise subject slug (e.g., 'combined-science' → 'science')
@@ -235,13 +155,50 @@ export function transformBulkLessonToESDoc(params: BulkToESLessonParams): Search
       })();
 
   return {
-    ...buildLessonCoreFields(lesson, subjectSlug, keyStage, years, unitInfo),
-    ...buildLessonPedagogicalFields(lesson),
-    ...buildLessonContentFields(lesson),
-    title_suggest: {
-      input: [lesson.lessonTitle],
-      contexts: { subject: [subjectSlug], key_stage: [keyStage] },
-    },
-    doc_type: 'lesson',
+    lessonSlug: lesson.lessonSlug,
+    lessonTitle: lesson.lessonTitle,
+    subjectSlug,
+    subjectTitle: lesson.subjectTitle,
+    keyStage,
+    keyStageTitle: lesson.keyStageTitle,
+    years: years.length > 0 ? years : undefined,
+    units: [unitInfo],
+    unitCount: 1,
+    lessonKeywords: extractKeywordStrings(lesson.lessonKeywords),
+    keyLearningPoints: extractLearningPointStrings(lesson.keyLearningPoints),
+    misconceptions: extractMisconceptionStrings(lesson.misconceptionsAndCommonMistakes),
+    teacherTips: extractTeacherTipStrings(lesson.teacherTips),
+    contentGuidance: extractContentGuidanceLabels(lesson.contentGuidance),
+    transcript: lesson.transcript_sentences,
+    lessonStructure: generateBulkLessonSemanticSummary(lesson),
+    lessonUrl: generateLessonUrl(lesson.lessonSlug),
+    pupilLessonOutcome: lesson.pupilLessonOutcome || undefined,
+    supervisionLevel: normaliseSupervisionLevel(lesson.supervisionLevel),
+    downloadsAvailable: lesson.downloadsavailable,
+    ks4: undefined, // KS4 is added via enrichment in HybridDataSource
   };
+}
+
+/**
+ * Transform a bulk lesson into an ES lesson document.
+ *
+ * Uses the shared `buildLessonDocument()` builder to ensure DRY compliance
+ * and a single source of truth for lesson document creation logic.
+ *
+ * @remarks
+ * Subject slugs are normalised from bulk variants (e.g., 'combined-science')
+ * to API subjects (e.g., 'science') before validation.
+ *
+ * KS4 metadata is NOT included in the document returned by this function.
+ * It is added later via enrichment in HybridDataSource.
+ *
+ * @param params - Bulk lesson params
+ * @returns SearchLessonsIndexDoc ready for ES indexing
+ *
+ * @see buildLessonDocument - Shared builder this delegates to
+ * @see enrichLessonDocWithKs4 - KS4 enrichment applied later
+ */
+export function transformBulkLessonToESDoc(params: BulkToESLessonParams): SearchLessonsIndexDoc {
+  const docParams = extractLessonParamsFromBulk(params);
+  return buildLessonDocument(docParams);
 }

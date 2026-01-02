@@ -37,7 +37,21 @@ Use text similarity reranking for precision improvements when:
 
 Avoid reranking on full transcripts or very short titles.
 
-## 5. Semantic Text Field
+Elastic's text similarity reranker supports cross-encoder scoring at query time. In Serverless, rerank endpoints are commonly preconfigured (for example, `.rerank-v1-elasticsearch`), but always verify availability in Kibana before relying on them.
+
+## 5. LLM Query Expansion and Reformulation
+
+Use the Inference API to expand colloquial or intent-only queries into curriculum language:
+
+- Expand short, naturalistic phrases into subject terminology.
+- Add synonyms or related concepts when the query lacks topic nouns.
+- Keep the original query terms to avoid drift.
+
+This is most effective for natural language and intent-based queries, and can be cached for common queries.
+
+In Serverless, chat-completion endpoints such as `.gp-llm-v2-chat_completion` are often preconfigured, but availability should be confirmed in the target cluster.
+
+## 6. Semantic Text Field
 
 `semantic_text` helps with automatic chunking and inference at ingest time. It is useful when:
 

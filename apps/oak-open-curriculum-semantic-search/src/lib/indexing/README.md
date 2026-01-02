@@ -25,11 +25,63 @@ The indexing pipeline processes curriculum data from bulk download files and the
 
 ### Document Transformation
 
-- **`document-transforms.ts`** - Core document transformation logic
-- **`lesson-document-builder.ts`** - Creates lesson index documents
-- **`thread-document-builder.ts`** - Creates thread index documents
+- **`document-transforms.ts`** - API path document transformation (delegates to shared builders)
+- **`lesson-document-core.ts`** - Shared lesson document builder (DRY)
+- **`unit-document-core.ts`** - Shared unit document builder (DRY)
+- **`lesson-document-builder.ts`** - High-level lesson building from aggregated data
+- **`thread-document-builder.ts`** - Creates thread index documents (DRY)
 - **`sequence-document-builder.ts`** - Creates sequence index documents (input-agnostic)
 - **`sequence-facets.ts`** - Creates sequence facet documents (input-agnostic)
+
+### Shared Utilities
+
+- **`canonical-url-generator.ts`** - Single source of truth for all canonical URL patterns
+- **`slug-derivation.ts`** - Extracting subject/phase from sequence slugs
+
+## DRY Pattern for Document Builders
+
+Document builders follow a DRY (Don't Repeat Yourself) pattern that ensures a **single source of truth** for document creation logic. Both API and bulk ingestion paths delegate to shared builders.
+
+### Architecture
+
+```text
+[Bulk Data] --> [Extractor] --> [Params Interface] --> [Shared Builder] --> [ES Doc]
+[API Data]  --> [Adapter]   --> [Params Interface] --> [Shared Builder] --> [ES Doc]
+```
+
+### Implementation Pattern
+
+Each document type follows this structure:
+
+1. **Shared Core Builder** (`*-document-core.ts` or `*-document-builder.ts`)
+   - Defines input-agnostic `Create*DocParams` interface
+   - Implements `build*Document()` function that creates ES documents
+   - Contains no knowledge of API or bulk input types
+
+2. **Bulk Adapter** (`bulk-*-transformer.ts` in `src/adapters/`)
+   - Defines `extract*ParamsFromBulk()` to convert bulk types to params interface
+   - Calls shared builder to create ES document
+
+3. **API Adapter** (`document-transforms.ts`)
+   - Defines `extract*ParamsFromAPI()` to convert API types to params interface
+   - Calls shared builder to create ES document
+
+### Document Type Status
+
+| Document Type | Shared Builder             | Bulk Path       | API Path        | Status |
+| ------------- | -------------------------- | --------------- | --------------- | ------ |
+| Threads       | `createThreadDocument()`   | ✅ Calls shared | ✅ Direct       | DRY    |
+| Lessons       | `buildLessonDocument()`    | ✅ Calls shared | ✅ Calls shared | DRY    |
+| Units         | `buildUnitDocument()`      | ✅ Calls shared | ✅ Calls shared | DRY    |
+| Sequences     | `createSequenceDocument()` | ✅ Calls shared | N/A             | DRY    |
+| Rollups       | `createRollupDocument()`   | ✅ Calls shared | ✅ Direct       | DRY    |
+
+### Benefits
+
+- **Single Source of Truth**: Document structure defined once, used everywhere
+- **Testability**: Shared builders have focused unit tests
+- **Maintainability**: Changes to ES document structure only need one update
+- **Type Safety**: Input-agnostic interfaces ensure both paths provide required data
 
 ### Ingestion Orchestration
 
@@ -40,6 +92,12 @@ The indexing pipeline processes curriculum data from bulk download files and the
 
 - **`bulk-thread-transformer.ts`** - Extracts threads from bulk files and builds ES operations
 - **`bulk-sequence-transformer.ts`** - Extracts sequences from bulk files and builds ES operations for `oak_sequences` and `oak_sequence_facets` indexes
+- **`bulk-unit-transformer.ts`** - Transforms bulk units to ES documents, with optional category enrichment
+
+### Data Supplementation (`src/adapters/`)
+
+- **`category-supplementation.ts`** - Builds category maps from API for enriching bulk data
+- **`api-supplementation.ts`** - KS4 metadata enrichment from API
 
 ## Retry Strategy
 
@@ -164,8 +222,25 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## Key Files Reference
+
+| File                           | Purpose                                         |
+| ------------------------------ | ----------------------------------------------- |
+| `bulk-ingestion.ts`            | Bulk-first ingestion pipeline orchestrator      |
+| `bulk-chunk-uploader.ts`       | Upload orchestration with two-tier retry        |
+| `lesson-document-builder.ts`   | High-level lesson building from aggregated data |
+| `lesson-document-core.ts`      | Shared lesson document builder (DRY)            |
+| `unit-document-core.ts`        | Shared unit document builder (DRY)              |
+| `thread-document-builder.ts`   | Creates thread index documents                  |
+| `sequence-document-builder.ts` | Creates sequence index documents                |
+| `sequence-facets.ts`           | Creates sequence facet documents                |
+| `canonical-url-generator.ts`   | Single source of truth for URL patterns         |
+| `slug-derivation.ts`           | Extracting subject/phase from sequence slugs    |
+
 ## Related Documentation
 
 - [ADR-070: SDK Rate Limiting and Retry](../../../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md)
 - [ADR-087: Batch Atomic Ingestion](../../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)
+- [ADR-093: Bulk-First Ingestion Strategy](../../../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)
 - [ADR-096: ES Bulk Retry Strategy](../../../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)
+- [ADR-097: Context Enrichment Architecture](../../../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md)

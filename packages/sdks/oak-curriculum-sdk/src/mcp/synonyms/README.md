@@ -243,8 +243,8 @@ Instead of regex mining, consider:
 
 See:
 
-- [elasticsearch-optimization-opportunities.md](../../../../../../.agent/research/semantic-search/elasticsearch-optimization-opportunities.md) — Full analysis
-- [vocabulary-value-analysis.md](../../../../../../.agent/research/semantic-search/vocabulary-value-analysis.md) — Value scoring
+- [search-operations-governance.md](../../../../../../.agent/research/elasticsearch/methods/search-operations-governance.md) — Synonym lifecycle, value scoring
+- [curriculum-schema-field-analysis.md](../../../../../../.agent/research/elasticsearch/system/curriculum-schema-field-analysis.md) — Glossary and extracted vocabulary context
 
 See:
 

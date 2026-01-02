@@ -59,13 +59,18 @@ See [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-
 
 ---
 
-## 📋 Next Task: DRY/SRP Refactoring (Milestone 4)
+## ✅ All Related Milestones Complete
 
-This milestone is complete. Sequence indexing is also verified (30 sequences, 57 facets).
+| Milestone | Status |
+|-----------|--------|
+| Milestone 1: Complete ES Ingestion | ✅ Verified |
+| Milestone 2: Sequence Indexing | ✅ Verified |
+| Milestone 4: DRY/SRP Refactoring | ✅ Complete |
+| Milestone 5: Data Completeness | ✅ Complete |
 
-The next task is applying the DRY/SRP pattern to all document builders.
+**This file should be moved to `archive/completed/`.**
 
-**See**: [roadmap.md](../roadmap.md) Milestone 4 for full details.
+**See**: [roadmap.md](../roadmap.md) for next priorities (Milestone 3, Milestone 14).
 
 ---
 

@@ -43,27 +43,30 @@
 
 **Plan**: `.agent/plans/semantic-search/README.md` (navigation hub)
 
-**Current Work**: Tier 1 EXHAUSTED (MRR 0.614), blocking on full curriculum ingestion
+**Current Work**: Full ingestion complete (16,414 docs). Now optimising search quality.
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
-| 1 | Complete ES ingestion (all 17 subjects) | 🚫 BLOCKING (~27% complete) |
-| 2 | Pattern-aware ingestion (Science KS4, etc.) | 📋 Pending |
-| 3 | Synonym quality audit | 📋 Pending (blocked) |
-| 4-8 | Transcript mining, threads, reference indices | 📋 Planned |
-| 9-11 | MCP graph tools, knowledge graph, SDK extraction | 📋 Future |
+| 1 | Complete ES ingestion | ✅ Complete (16,414 docs) |
+| 2 | Sequence indexing | ✅ Complete (30 sequences, 57 facets) |
+| 4 | DRY/SRP refactoring | ✅ Complete |
+| 5 | Data completeness | ✅ Complete (thread context, categories) |
+| **3** | **Search quality optimization** | 🔄 **NEXT** — Ground truths, benchmarks, synonyms |
+| 6 | ES Native MCP research | 📋 Planned |
+| 7 | SDK/CLI extraction | 📋 Planned |
+| 8+ | MCP tool, conversational search | 📋 Future |
 
 **Success Criteria** (from [ADR-081](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)):
 
 | Metric | Current | Target | Status |
 |--------|---------|--------|--------|
-| Standard Query MRR | 0.963 | ≥0.92 | ✅ Met |
+| Standard Query MRR | 0.944 | ≥0.92 | ✅ Met |
 | Hard Query MRR | **0.614** | ≥0.45 | ✅ **Exceeded by 36%** |
-| Tier 1 | — | Complete | ✅ **EXHAUSTED (2025-12-24)** |
+| Tier 1 (KS4 Maths) | — | Complete | ✅ **EXHAUSTED** |
 
-**Blocking Work**: Complete ES ingestion (~27% done). See [roadmap.md](./semantic-search/roadmap.md).
+**Gap**: Ground truths cover KS4 Maths only. Need comprehensive coverage (all subjects, all key stages).
 
-**Acceptance**: Full curriculum indexed; Search SDK ready for MCP consumption; quality gates pass.
+**Next Priority**: M3 Search Quality Optimization. See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 

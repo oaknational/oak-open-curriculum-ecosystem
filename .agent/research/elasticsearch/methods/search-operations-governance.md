@@ -8,19 +8,58 @@ This note outlines operational fundamentals that keep search reliable and mainta
 - Prefer query-time synonyms so updates do not require reindexing.
 - Test synonym expansions on the evaluation query set.
 
+Prioritise synonyms using value scoring rather than ad-hoc fixes:
+
+```
+Value = Frequency x (1 + 1/Year) x (1 + 0.2 * (subjects - 1))
+```
+
+This favours foundational, cross-subject terms where teacher language diverges from curriculum language.
+
+Prefer precision-safe mechanisms:
+
+- Multi-word teacher phrases via phrase boosting rather than single-token expansion.
+- Subject-scoped synonym sets for ambiguous terms (e.g. "gradient" in maths vs art).
+- Remove overly broad synonyms that introduce false positives (for example, "total" for addition).
+
+Use structured sources for candidate generation:
+
+- Curriculum definitions (the definition often contains the natural synonym).
+- Transcript mining for "also called" and "remember, X means" patterns (LLM extraction is more reliable than regex).
+- Search logs: zero-hit and low-click queries are the highest-value synonym signals.
+
+Definition-derived examples that regularly surface in primary search:
+
+- adjective -> describing word
+- noun -> naming word
+- denominator -> bottom number
+- prefix -> word beginning
+
+An audit approach that removes risky synonyms and adds foundational ones can improve precision without regressing MRR when tested against the evaluation set. For example, the 2025-12-27 audit removed broad or category-error synonyms (e.g. "total" for addition, "gravity" for forces) and added KS1/KS2 grammar and fractions terms, with no MRR regression.
+
+Coverage note: synonym sets often skew towards GCSE compound terms. Track coverage for high-value KS1/KS2 vocabulary to avoid leaving foundational queries unsupported.
+
 ## 2. Query Safety
 
 - Avoid `query_string` unless you explicitly want full syntax.
 - Keep wildcard and regex usage limited.
 - Prefer filters for structured constraints.
 
-## 3. Index Lifecycle
+## 3. Curation and Contextual Relevance
+
+Operational relevance levers that work well in education domains:
+
+- Curations (pinned results) for critical concepts or canonical "first lesson" queries.
+- Context-aware boosting by audience (teacher vs student vs planner) when that context is known.
+- Faceted navigation aligned to curriculum hierarchy (subject -> key stage -> year -> thread -> unit -> lesson).
+
+## 4. Index Lifecycle
 
 - Use aliases for zero-downtime reindexing.
 - Keep index naming consistent and predictable.
 - For read-only indices, consider force-merge and cache warm-up when appropriate.
 
-## 4. Monitoring
+## 5. Monitoring
 
 Track:
 
@@ -28,7 +67,7 @@ Track:
 - Zero-hit rate.
 - Cache utilisation (request and query cache).
 
-## 5. Oak Integration Notes (Current)
+## 6. Oak Integration Notes (Current)
 
 These notes are system-specific and may drift; treat them as integration examples and check `../system/` for current status.
 

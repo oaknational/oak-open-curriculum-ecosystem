@@ -365,20 +365,29 @@ type SearchResultsItemProps = {
 | `subjectTitle`       | `/lessons/{lesson}/summary` | MEDIUM   | Add to lesson index for UI display    |
 | `keyStageTitle`      | `/lessons/{lesson}/summary` | MEDIUM   | Add to lesson index for UI display    |
 | Unit `description`   | `/units/{unit}/summary`     | MEDIUM   | Add to unit index                     |
-| Unit `categories`    | `/units/{unit}/summary`     | LOW      | Optional metadata                     |
+| Unit `categories`    | `/units/{unit}/summary`     | ✅ DONE  | Implemented via CategoryMap           |
 | Unit `whyThisWhyNow` | `/units/{unit}/summary`     | LOW      | Could improve semantic search         |
 
-### Fields NOT Available in Open API (Production-Only)
+### Corrections (2026-01-02)
 
-| Field           | Purpose                  | Impact                                         |
+> **CRITICAL**: The Open API contains ONLY new curriculum. There is NO legacy content.
+
+| Field           | OLD Assessment            | CORRECT Assessment                                   |
+| --------------- | ------------------------- | ---------------------------------------------------- |
+| `cohort`        | ❌ Cannot show NEW badges | ✅ **NOT NEEDED** — All API content is new           |
+| `isLegacy`      | ❌ Cannot filter legacy   | ✅ **NOT NEEDED** — No legacy content exists         |
+| `tierTitle`     | ❌ Not available          | ✅ **AVAILABLE** — In `/sequences/.../units` KS4     |
+| `tierSlug`      | ❌ Not available          | ✅ **AVAILABLE** — In `/sequences/.../units` KS4     |
+| `examBoardTitle`| ❌ Not available          | ✅ **AVAILABLE** — In `/search/lessons` results      |
+
+### Fields NOT Available in Open API (Genuinely Missing)
+
+| Field           | Purpose                  | Workaround                                     |
 | --------------- | ------------------------ | ---------------------------------------------- |
-| `cohort`        | "NEW" promotional badge  | Cannot show NEW badges                         |
-| `isLegacy`      | Filter 2020-2023 content | Cannot differentiate curriculum versions       |
-| `pathways[]`    | Multi-pathway dropdown   | Cannot show tier/examboard variants in results |
-| `programmeSlug` | URL generation           | Must generate URLs differently                 |
-| `unitVariantId` | Deduplication            | Must handle deduplication differently          |
-| `yearTitle`     | Display "Year 3" text    | Must derive from year number                   |
-| `tierTitle`     | Display "Higher" text    | Cannot show without lookup                     |
+| `programmeSlug` | OWA URL generation       | Derive from sequence + year + tier + examboard |
+| `pathways[]`    | Flat array of variants   | Use tiered structure from sequences API        |
+| `unitVariantId` | Deduplication            | Handle via slug-based deduplication            |
+| `yearTitle`     | Display "Year 3" text    | Derive: `Year ${year}` from number             |
 
 ### Impact Assessment
 

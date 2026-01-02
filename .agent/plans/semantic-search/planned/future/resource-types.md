@@ -1,9 +1,11 @@
 # Broader Resource Types
 
-**Status**: 📋 Planned  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 7)  
-**Priority**: Medium  
-**Dependencies**: Milestone 1 (complete ES ingestion)
+**Status**: 📋 Backlog  
+**Parent**: [README.md](../README.md) | [roadmap.md](../../roadmap.md)  
+**Priority**: Low (Post-MVP)  
+**Dependencies**: SDK extraction complete
+
+> **Note**: Overlaps with [advanced-features.md](advanced-features.md) Phase 14. Consider consolidating.
 
 ---
 

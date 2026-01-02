@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 400] -- Phrase boosting added in B.5; defer re-org to ADR-086 */
+/* eslint max-lines: [error, 410] -- Phrase boosting (B.5), topic facets (ADR-097); defer re-org to ADR-086 */
 /**
  * Shared helper functions for RRF query builders.
  *
@@ -142,13 +142,19 @@ export function createLessonFacets(): Record<string, estypes.AggregationsAggrega
 /**
  * Creates facet aggregations for unit queries.
  *
- * Includes programme factors (tier) for KS4 filtering.
+ * Includes:
+ * - Key stages and subjects for filtering
+ * - Tiers for KS4 programme differentiation
+ * - Topics (categories) for topical filtering
+ *
+ * @see ADR-097 Context Enrichment Architecture
  */
 export function createUnitFacets(): Record<string, estypes.AggregationsAggregationContainer> {
   return {
     key_stages: { terms: { field: 'key_stage', size: 10 } },
     subjects: { terms: { field: 'subject_slug', size: 20 } },
     tiers: { terms: { field: 'tier', size: 5 } },
+    topics: { terms: { field: 'unit_topics', size: 30 } },
   };
 }
 

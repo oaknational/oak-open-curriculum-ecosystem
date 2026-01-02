@@ -10,14 +10,20 @@
  * 1. Extracts all threads from units across all bulk files
  * 2. Deduplicates by thread slug
  * 3. Aggregates unit counts and subject slugs
- * 4. Transforms to ES document format
+ * 4. Transforms to ES document format via the shared `createThreadDocument()` builder
+ *
+ * Follows DRY by reusing the shared document builder, ensuring a single source
+ * of truth for thread document creation logic.
  *
  * @see ADR-093 Bulk-First Ingestion Strategy
+ * @see createThreadDocument - Shared document builder
  * @module adapters/bulk-thread-transformer
  */
 import type { BulkDownloadFile } from '@oaknational/oak-curriculum-sdk/public/bulk';
 import type { SearchThreadIndexDoc } from '../types/oak';
 import type { BulkIndexAction, BulkOperationEntry } from '../lib/indexing/bulk-operation-types';
+import { createThreadDocument } from '../lib/indexing/thread-document-builder';
+import { deriveSubjectSlugFromSequence } from './bulk-transform-helpers';
 
 /**
  * Extracted thread data from bulk files.
@@ -42,23 +48,8 @@ interface ThreadAccumulator {
   subjectSlugs: Set<string>;
 }
 
-/**
- * Derives subject slug from sequence slug.
- *
- * @example
- * deriveSubjectFromSequence('maths-primary') // 'maths'
- * deriveSubjectFromSequence('design-technology-secondary') // 'design-technology'
- */
-function deriveSubjectFromSequence(sequenceSlug: string): string {
-  const parts = sequenceSlug.split('-');
-  const lastPart = parts[parts.length - 1];
-
-  if (lastPart === 'primary' || lastPart === 'secondary') {
-    return parts.slice(0, -1).join('-');
-  }
-
-  return sequenceSlug;
-}
+// Note: deriveSubjectFromSequence is now imported from bulk-transform-helpers
+// which re-exports from lib/indexing/slug-derivation for DRY compliance
 
 /**
  * Processes a single unit's threads into the accumulator map.
@@ -103,7 +94,7 @@ export function extractThreadsFromBulkFiles(
   const threadMap = new Map<string, ThreadAccumulator>();
 
   for (const file of bulkFiles) {
-    const subjectSlug = deriveSubjectFromSequence(file.sequenceSlug);
+    const subjectSlug = deriveSubjectSlugFromSequence(file.sequenceSlug);
 
     for (const unit of file.sequence) {
       processUnitThreads(unit.unitSlug, unit.threads, subjectSlug, threadMap);
@@ -127,25 +118,33 @@ export function extractThreadsFromBulkFiles(
 /**
  * Transforms an extracted thread to ES document format.
  *
- * @param thread - Extracted thread data
+ * Uses the shared `createThreadDocument()` builder to ensure DRY compliance
+ * and a single source of truth for thread document creation logic.
+ *
+ * @param thread - Extracted thread data from bulk files
  * @returns SearchThreadIndexDoc ready for ES indexing
+ *
+ * @example
+ * ```typescript
+ * const thread: BulkExtractedThread = {
+ *   slug: 'number-fractions',
+ *   title: 'Number: Fractions',
+ *   unitCount: 5,
+ *   subjectSlugs: ['maths'],
+ * };
+ * const doc = transformThreadToESDoc(thread);
+ * // doc is identical to createThreadDocument() output
+ * ```
+ *
+ * @see createThreadDocument - Shared builder this delegates to
  */
 export function transformThreadToESDoc(thread: BulkExtractedThread): SearchThreadIndexDoc {
-  const threadUrl = `https://www.thenational.academy/teachers/curriculum/threads/${thread.slug}`;
-
-  return {
-    thread_slug: thread.slug,
-    thread_title: thread.title,
-    unit_count: thread.unitCount,
-    subject_slugs: [...thread.subjectSlugs],
-    thread_url: threadUrl,
-    title_suggest: {
-      input: [thread.title],
-      contexts: {
-        subject: [...thread.subjectSlugs],
-      },
-    },
-  };
+  return createThreadDocument({
+    threadSlug: thread.slug,
+    threadTitle: thread.title,
+    unitCount: thread.unitCount,
+    subjectSlugs: thread.subjectSlugs,
+  });
 }
 
 /**

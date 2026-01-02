@@ -3,35 +3,34 @@
  *
  * @remarks
  * Extracts and normalises data from bulk download format for ES indexing.
+ *
+ * URL generation and slug derivation are re-exported from shared modules
+ * for backwards compatibility.
+ *
+ * @see canonical-url-generator.ts - Shared URL generation (single source of truth)
+ * @see slug-derivation.ts - Shared slug derivation (single source of truth)
  */
 
 import type { Lesson, Unit } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
 import type { KeyStage } from '../types/oak';
 
 // ============================================================================
-// Constants
+// Re-exports from shared modules (DRY - single source of truth)
 // ============================================================================
 
-export const BASE_URL = 'https://www.thenational.academy/teachers';
+export {
+  OAK_BASE_URL as BASE_URL,
+  generateLessonCanonicalUrl as generateLessonUrl,
+  generateUnitCanonicalUrl as generateUnitUrl,
+  generateSubjectProgrammesUrl,
+  generateSequenceCanonicalUrl,
+  generateThreadCanonicalUrl,
+} from '../lib/indexing/canonical-url-generator';
 
-// ============================================================================
-// URL Generation
-// ============================================================================
-
-/** Generate canonical URL for a lesson */
-export function generateLessonUrl(lessonSlug: string): string {
-  return `${BASE_URL}/lessons/${lessonSlug}`;
-}
-
-/** Generate canonical URL for a unit */
-export function generateUnitUrl(unitSlug: string, subjectSlug: string, phaseSlug: string): string {
-  return `${BASE_URL}/programmes/${subjectSlug}-${phaseSlug}/units/${unitSlug}`;
-}
-
-/** Generate subject programmes URL */
-export function generateSubjectProgrammesUrl(subjectSlug: string, keyStageSlug: string): string {
-  return `${BASE_URL}/key-stages/${keyStageSlug}/subjects/${subjectSlug}/programmes`;
-}
+export {
+  deriveSubjectSlugFromSequence,
+  derivePhaseSlugFromSequence,
+} from '../lib/indexing/slug-derivation';
 
 // ============================================================================
 // Field Extraction Helpers
@@ -91,17 +90,9 @@ export function normaliseSupervisionLevel(level: Lesson['supervisionLevel']): st
   return level;
 }
 
-/** Derive phase slug from sequence slug */
-export function derivePhaseSlug(sequenceSlug: string): string {
-  if (sequenceSlug.endsWith('-primary')) {
-    return 'primary';
-  }
-  if (sequenceSlug.endsWith('-secondary')) {
-    return 'secondary';
-  }
-  const parts = sequenceSlug.split('-');
-  return parts[parts.length - 1] ?? 'unknown';
-}
+// Note: derivePhaseSlug is now re-exported as derivePhaseSlugFromSequence from slug-derivation.ts
+// Keeping alias for backwards compatibility
+export { derivePhaseSlugFromSequence as derivePhaseSlug } from '../lib/indexing/slug-derivation';
 
 /** Normalise years from unit year value */
 export function normaliseYearsFromUnit(year: Unit['year'], yearSlug: Unit['yearSlug']): string[] {
