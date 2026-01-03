@@ -1,6 +1,8 @@
 # Indexing Playbook
 
-Use this guide when populating Elasticsearch Serverless with Oak Curriculum data. It assumes the definitive alignment architecture is in place.
+**Last Updated**: 2026-01-03
+
+Use this guide when populating Elasticsearch Serverless with Oak Curriculum data.
 
 ## Data sources
 
@@ -142,4 +144,14 @@ async function indexDocuments({
 - **Missing metadata**: Confirm SDK exposes required fields; escalate upstream rather than hardcoding fallbacks.
 - **Cache staleness**: Confirm `SEARCH_INDEX_VERSION` bumped and `revalidateTag` invoked; check logs for cache key usage.
 
-Maintain this playbook alongside the alignment plan; update it whenever ingestion or mapping behaviour changes.
+---
+
+## Related ADRs
+
+| ADR                                                                                                       | Topic                                    |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [ADR-064](../../../docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)   | Elasticsearch Index Mapping Organization |
+| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md) | SDK Generated Elasticsearch Mappings     |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion                   |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy            |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy                   |

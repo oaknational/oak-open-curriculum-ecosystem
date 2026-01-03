@@ -1,5 +1,7 @@
 # SDK Response Caching
 
+**Last Updated**: 2026-01-03
+
 This document describes the optional Redis-based caching system for Oak SDK API responses during ingestion.
 
 ## Overview
@@ -229,7 +231,9 @@ Typical performance improvement with warm cache:
 
 _Note: Actual times depend on network conditions and API response times._
 
-## See Also
+## Related ADRs
 
-- [ADR-066: SDK Response Caching](../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md) - Architecture decision record
-- [Semantic Search Prompt](.agent/prompts/semantic-search/semantic-search.prompt.md) - Complete context for continuation
+| ADR                                                                                       | Topic                |
+| ----------------------------------------------------------------------------------------- | -------------------- |
+| [ADR-066](../../../docs/architecture/architectural-decisions/066-sdk-response-caching.md) | SDK Response Caching |
+| [ADR-079](../../../docs/architecture/architectural-decisions/079-sdk-cache-ttl-jitter.md) | SDK Cache TTL Jitter |

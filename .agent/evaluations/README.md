@@ -128,7 +128,7 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 
 ---
 
-> ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth coverage is the current gap — see [semantic-search.prompt.md](../prompts/semantic-search/semantic-search.prompt.md).
+> ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth coverage is the current gap — see [M3: Search Quality Optimization](../plans/semantic-search/active/m3-search-quality-optimization.md).
 
 ---
 
@@ -232,8 +232,31 @@ Copy the appropriate template and rename following the conventions above.
 
 ## Related Documents
 
+### Evaluation References (App-Level)
+
+Technical documentation for search evaluation lives in the search app workspace:
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| **IR Metrics Guide** | [apps/.../docs/IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG@10, zero-hit rate definitions |
+| **Data Completeness** | [apps/.../docs/DATA-COMPLETENESS.md](../../apps/oak-open-curriculum-semantic-search/docs/DATA-COMPLETENESS.md) | Which fields are indexed completely |
+| **Querying** | [apps/.../docs/QUERYING.md](../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | How hybrid search queries work |
+| **Indexing** | [apps/.../docs/INDEXING.md](../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md) | Index structure and field mappings |
+| **Synonyms** | [apps/.../docs/SYNONYMS.md](../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) | Synonym expansion strategy |
+| **Diagnostic Queries** | [apps/.../docs/DIAGNOSTIC-QUERIES.md](../../apps/oak-open-curriculum-semantic-search/docs/DIAGNOSTIC-QUERIES.md) | Diagnostic query categories |
+
+### Planning Documents
+
 - **Acceptance Criteria**: [Search Acceptance Criteria](../plans/semantic-search/search-acceptance-criteria.md) — **Defines "Target Met" vs "Exhausted"**
+- **Roadmap**: [Semantic Search Roadmap](../plans/semantic-search/roadmap.md) — Master roadmap
+- **Current State**: [Current State](../plans/semantic-search/current-state.md) — Authoritative metrics
+
+### ADRs
+
 - **ADR-081**: [Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) — Decision criteria, metrics definitions
 - **ADR-082**: [Fundamentals-First Search Strategy](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) — Tier system, strategic approach
 - **ADR-085**: [Ground Truth Validation Discipline](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) — Ensures experiment integrity
-- **Guidance**: [Search Experiment Guidance](guidance/search-experiment-guidance.md) — Practical how-to
+
+### Guidance
+
+- **Search Experiment Guidance**: [search-experiment-guidance.md](guidance/search-experiment-guidance.md) — Practical how-to

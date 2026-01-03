@@ -1,7 +1,7 @@
 # Semantic Search — Navigation Hub
 
 **Status**: ✅ **Full ingestion verified** — Now optimising search quality
-**Last Updated**: 2026-01-02
+**Last Updated**: 2026-01-03
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 ---
@@ -26,83 +26,109 @@ Then read:
 
 ---
 
+## Directory Structure
+
+```
+.agent/plans/semantic-search/
+├── README.md                      # This file (navigation hub)
+├── roadmap.md                     # Authoritative linear roadmap
+├── current-state.md               # Current metrics snapshot
+├── search-acceptance-criteria.md  # Tier definitions
+│
+├── active/                        # CURRENT executable work
+│   └── m3-search-quality-optimization.md  # Ground truths + synonyms + ES tuning
+│
+├── pre-sdk-extraction/            # Must complete before SDK extraction
+│   ├── README.md                  # Overview
+│   ├── bulk-data-analysis.md      # Vocabulary mining, transcripts, entities
+│   ├── tier-2-document-relationships.md  # Cross-referencing, threads
+│   └── tier-3-modern-es-features.md      # RRF tuning, field boosting
+│
+├── sdk-extraction/                # The SDK migration itself
+│   ├── README.md                  # Overview
+│   └── search-sdk-cli.md          # Full extraction specification
+│
+├── post-sdk-extraction/           # Requires SDK to exist first
+│   ├── README.md                  # Overview
+│   ├── mcp-search-tool.md         # MCP integration
+│   ├── tier-4-ai-enhancement.md   # LLM pre-processing
+│   └── advanced-features.md       # RAG, knowledge graph, etc.
+│
+├── backlog/                       # No clear timeline, documented ideas
+│   ├── README.md                  # Overview
+│   ├── reference-indices.md       # Glossary, NC coverage
+│   └── resource-types.md          # Worksheets, quizzes
+│
+└── archive/completed/             # Completed work (historical)
+```
+
+---
+
+## Dependency Chain
+
+```
+M3: Search Quality Optimization (active/)
+        ↓
+Bulk Data Analysis (pre-sdk-extraction/)
+        ↓
+Tier 2: Document Relationships (pre-sdk-extraction/)
+        ↓
+Tier 3: Modern ES Features (pre-sdk-extraction/)
+        ↓
+SDK Extraction (sdk-extraction/)
+        ↓
+Post-SDK Work (post-sdk-extraction/)
+```
+
+---
+
+## Two SDKs
+
+This project involves TWO distinct SDKs:
+
+| SDK               | Location                                | Purpose                              |
+| ----------------- | --------------------------------------- | ------------------------------------ |
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Access to upstream Oak API, type-gen |
+| **Search SDK**    | To be: `packages/libs/search-sdk/`      | Elasticsearch-backed semantic search |
+
+The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
+
+---
+
 ## Current ES Index State (2026-01-02)
 
-| Index | Documents | Storage |
-|-------|-----------|---------|
-| `oak_lessons` | 184,985 | 806.62MB |
-| `oak_unit_rollup` | 165,345 | 706.06MB |
-| `oak_units` | 1,635 | 8.94MB |
-| `oak_threads` | 164 | 255.53KB |
-| `oak_sequence_facets` | 57 | 375.14KB |
-| `oak_sequences` | 30 | 267.67KB |
-| `oak_meta` | 1 | 5.34KB |
+| Index               | Documents | Storage    |
+| ------------------- | --------- | ---------- |
+| `oak_lessons`       | 184,985   | 806.62MB   |
+| `oak_unit_rollup`   | 165,345   | 706.06MB   |
+| `oak_units`         | 1,635     | 8.94MB     |
+| `oak_threads`       | 164       | 255.53KB   |
+| `oak_sequence_facets` | 57      | 375.14KB   |
+| `oak_sequences`     | 30        | 267.67KB   |
+| `oak_meta`          | 1         | 5.34KB     |
 
 **Actual documents**: 16,414 (ES counts include ELSER sub-documents)
 
 ---
 
-## 🎯 Next Priority: Search Quality Optimization
+## 🎯 Next Priority: M3 Search Quality Optimization
 
-**Milestone 3** combines:
-- Comprehensive ground truths (all subjects, all key stages)
-- Baseline benchmarks
-- Synonym audit and improvement
-- Bulk download data analysis
+**Status**: 📋 Ready to start
+
+See [active/m3-search-quality-optimization.md](active/m3-search-quality-optimization.md)
 
 **Current gap**: Ground truths cover KS4 Maths only (73 queries). Need 200+ for full curriculum.
-
-See [roadmap.md](roadmap.md) for details.
-
----
-
-## ✅ Completed Milestones
-
-| Milestone | Status |
-|-----------|--------|
-| M1: Complete ES Ingestion | ✅ Verified |
-| M2: Sequence Indexing | ✅ Verified |
-| M4: DRY/SRP Refactoring | ✅ Complete |
-| M5: Data Completeness | ✅ Complete |
-
----
-
-## Architecture: Two-Tier Retry
-
-```text
-┌─────────────────────────────────────────────────────────────┐
-│                   Bulk Upload Flow                          │
-│                                                             │
-│  Chunk 1 ──┐                                               │
-│  Chunk 2 ──┼──► Tier 1: HTTP Retry ──► ES Bulk API        │
-│  Chunk N ──┘   (transport errors)                          │
-│                     │                                       │
-│                     ▼                                       │
-│              Collect Failed Docs                           │
-│                     │                                       │
-│                     ▼                                       │
-│            Tier 2: Document Retry                          │
-│           (429, 502, 503, 504)                             │
-│                     │                                       │
-│                     ▼                                       │
-│        Progressive Chunk Delay (×1.5)                      │
-│           (allow ELSER to drain)                           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**See**: [ADR-096: ES Bulk Retry Strategy](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)
 
 ---
 
 ## Key ADRs
 
-| ADR | Title | Status |
-|-----|-------|--------|
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | ✅ Verified |
-| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment | ✅ Complete |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-First Ingestion | ✅ Complete |
-| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | ✅ Implemented |
+| ADR      | Title                        | Status      |
+| -------- | ---------------------------- | ----------- |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Active |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | Implemented |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | Verified |
+| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment | Complete |
 
 ---
 
@@ -121,23 +147,19 @@ pnpm test:ui && pnpm smoke:dev:stub
 
 ---
 
-## Directory Structure
+## Technical Documentation (Search App)
 
-```text
-.agent/plans/semantic-search/
-├── roadmap.md                  # Authoritative linear roadmap
-├── current-state.md            # Current metrics snapshot
-├── search-acceptance-criteria.md # Tier definitions
-├── README.md                   # This file (navigation hub)
-├── planned/
-│   ├── future/                 # Future milestones
-│   │   ├── synonym-quality-audit.md  # M3: Search quality
-│   │   ├── conversational-search.md  # M11: LLM search
-│   │   └── ...
-│   └── sdk-extraction/         # SDK + CLI extraction
-├── archive/completed/          # Completed work
-└── reference-docs/             # Permanent reference material
-```
+All operational documentation lives in the search app workspace:
+
+| Document | Location | Purpose |
+| -------- | -------- | ------- |
+| **IR Metrics Guide** | [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG@10, zero-hit rate definitions |
+| **Querying** | [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | How hybrid search queries work |
+| **Indexing** | [INDEXING.md](../../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md) | Index structure and fields |
+| **Synonyms** | [SYNONYMS.md](../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) | Synonym expansion strategy |
+| **Diagnostic Queries** | [DIAGNOSTIC-QUERIES.md](../../../apps/oak-open-curriculum-semantic-search/docs/DIAGNOSTIC-QUERIES.md) | Diagnostic query categories |
+| **Ingestion Guide** | [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md) | How to run ingestion |
+| **Data Completeness** | [DATA-COMPLETENESS.md](../../../apps/oak-open-curriculum-semantic-search/docs/DATA-COMPLETENESS.md) | Ingestion completeness policy |
 
 ---
 

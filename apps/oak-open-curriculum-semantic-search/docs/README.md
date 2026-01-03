@@ -1,33 +1,92 @@
 # Oak Curriculum Hybrid Search — Documentation
 
-This directory contains authored documentation for the semantic search workspace. Generated TypeDoc output lives under `docs/api/` and must be regenerated with `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` whenever the API surface changes. Follow GO.md when editing docs—record ACTION/REVIEW pairs and perform regular grounding.
+**Last Updated**: 2026-01-03
 
-## Authored guides
+This directory contains authored documentation for the semantic search workspace. Generated TypeDoc output lives under `docs/api/` and must be regenerated with `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` whenever the API surface changes.
 
-- `ARCHITECTURE.md` – High-level system overview: four-index topology, endpoints, observability.
-- `SETUP.md` – Environment configuration, Elasticsearch bootstrap, ingestion/rollup, quality gates.
-- `INDEXING.md` – Resilient ingestion playbook, canonical payloads, alias rotation.
-- `ROLLUP.md` – Unit snippet generation, semantic copy, cache invalidation.
-- `QUERYING.md` – Canonical RRF queries, facets, suggestions, zero-hit logging.
-- `SDK-ENDPOINTS.md` – Parity routes for regression comparison.
-- `oak-curriculum-hybrid-search-definitive-guide.md` – Deep-dive reference for architecture and mappings.
+---
 
-## Generated artefacts
+## Authored Guides
 
-- `docs/api/` – TypeDoc output for the workspace.
-- `/api/openapi.json` – Generated automatically from Zod schemas; human-readable version at `/api/docs`.
+### Core Documentation
 
-## Editing workflow
+| Document                             | Purpose                                                              |
+| ------------------------------------ | -------------------------------------------------------------------- |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | High-level system overview: index topology, endpoints, observability |
+| [SETUP.md](./SETUP.md)               | Environment configuration, Elasticsearch bootstrap, quality gates    |
+| [INDEXING.md](./INDEXING.md)         | Resilient ingestion playbook, canonical payloads, alias rotation     |
+| [QUERYING.md](./QUERYING.md)         | Canonical RRF queries, facets, suggestions, zero-hit logging         |
+| [SYNONYMS.md](./SYNONYMS.md)         | Synonym expansion strategy and phrase boosting                       |
 
-1. Read `.agent/directives-and-memory/rules.md`, `.agent/directives-and-memory/testing-strategy.md`, and GO.md.
-2. Update authored Markdown alongside code changes; ensure British spelling.
-3. Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` to regenerate TypeDoc and verify zero warnings.
-4. Add notes to the alignment refresh plan’s Review Log summarising documentation changes and quality gate outcomes.
+### Ingestion and Operations
 
-## Quality gates for documentation changes
+| Document                                           | Purpose                                                    |
+| -------------------------------------------------- | ---------------------------------------------------------- |
+| [INGESTION-GUIDE.md](./INGESTION-GUIDE.md)         | Complete guide to ingesting curriculum data                |
+| [ingestion-harness.md](./ingestion-harness.md)     | Repeatable ingestion workflow and harness                  |
+| [ROLLUP.md](./ROLLUP.md)                           | Unit snippet generation, semantic copy, cache invalidation |
+| [SDK-CACHING.md](./SDK-CACHING.md)                 | Redis-based SDK response caching                           |
+| [ES_SERVERLESS_SETUP.md](./ES_SERVERLESS_SETUP.md) | Elasticsearch Serverless provisioning                      |
 
-- `pnpm lint` (Markdown linting included via unified configuration).
-- `pnpm test` (ensure doc-related tests pass if any).
-- `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` (TypeDoc + OpenAPI regeneration).
+### Search Quality
+
+| Document                                         | Purpose                                     |
+| ------------------------------------------------ | ------------------------------------------- |
+| [IR-METRICS.md](./IR-METRICS.md)                 | MRR, NDCG@10, zero-hit rate definitions     |
+| [DIAGNOSTIC-QUERIES.md](./DIAGNOSTIC-QUERIES.md) | Diagnostic query suite for failure analysis |
+| [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md)   | Workflow for onboarding new subjects        |
+| [DATA-COMPLETENESS.md](./DATA-COMPLETENESS.md)   | Which fields are indexed completely         |
+
+### Deprecated
+
+| Document                                                 | Purpose                                   |
+| -------------------------------------------------------- | ----------------------------------------- |
+| [SDK-ENDPOINTS.md](./SDK-ENDPOINTS.md)                   | SDK parity routes (deprecated)            |
+| [oak-components-theming.md](./oak-components-theming.md) | UI theming guide (UI layer being retired) |
+
+---
+
+## Generated Artefacts
+
+- `docs/api/` — TypeDoc output for the workspace
+- `/api/openapi.json` — Generated automatically from Zod schemas; human-readable version at `/api/docs`
+
+---
+
+## Related ADRs
+
+Architectural decisions relevant to this workspace:
+
+| ADR                                                                                                       | Topic                                    |
+| --------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)  | SDK Domain Synonyms Source of Truth      |
+| [ADR-064](../../../docs/architecture/architectural-decisions/064-elasticsearch-mapping-organization.md)   | Elasticsearch Index Mapping Organization |
+| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md) | SDK Generated Elasticsearch Mappings     |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)        | ELSER-Only Embedding Strategy            |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)   | Fundamentals-First Search Strategy       |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)                | Phrase Query Boosting                    |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion                   |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy            |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy                   |
+
+---
+
+## Editing Workflow
+
+1. Update authored Markdown alongside code changes; ensure British spelling.
+2. Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` to regenerate TypeDoc and verify zero warnings.
+3. Run quality gates after documentation changes.
+
+---
+
+## Quality Gates
+
+After documentation changes:
+
+```bash
+pnpm lint                                                    # Markdown linting
+pnpm test                                                    # Ensure doc-related tests pass
+pnpm -C apps/oak-open-curriculum-semantic-search doc-gen     # TypeDoc + OpenAPI regeneration
+```
 
 Keep this README updated if new guides are added or responsibilities change.

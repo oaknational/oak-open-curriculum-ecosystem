@@ -1,19 +1,32 @@
-# Milestone 11: Search SDK + CLI Extraction
+# Search SDK + CLI Extraction
 
-**Status**: 📋 PLANNED  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 11)  
-**Estimated Effort**: 3-6 days (depends on how much Next.js removal + CLI consolidation is bundled)  
-**Prerequisites**: Milestones 1-10 (complete ingestion, vocabulary work, graph tools)  
-**Last Updated**: 2025-12-29
+**Status**: 📋 PLANNED
+**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
+**Estimated Effort**: 3-6 days (depends on how much Next.js removal + CLI consolidation is bundled)
+**Prerequisites**: All pre-SDK work complete (M3, Bulk Analysis, Tiers 2-3)
+**Last Updated**: 2026-01-03
+
+---
+
+## Context: Two SDKs
+
+This project involves TWO distinct SDKs:
+
+| SDK               | Location                                | Purpose                           |
+| ----------------- | --------------------------------------- | --------------------------------- |
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Access to upstream Oak API, type generation |
+| **Search SDK**    | To be: `packages/libs/search-sdk/`      | Elasticsearch-backed semantic search |
+
+The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
 
 ---
 
 ## Purpose (right problem, right layer)
 
-We have built a powerful Elasticsearch-backed semantic search capability, but it is currently packaged as a Next.js “app”.
+We have built a powerful Elasticsearch-backed semantic search capability, but it is currently packaged as a Next.js "app".
 
-**Actual usage today**: scripts + `src/lib/**` (indexing, retrieval, observability).  
-**Required usage next**: an **SDK** consumed by an **Express MCP server** (NL mapping stays in MCP), plus a **first-class local CLI** for admin/indexing workflows.  
+**Actual usage today**: scripts + `src/lib/**` (indexing, retrieval, observability).
+**Required usage next**: an **SDK** consumed by an **Express MCP server** (NL mapping stays in MCP), plus a **first-class local CLI** for admin/indexing workflows.
 **Not required now**: UI and HTTP API layers inside this workspace.
 
 This phase makes the boundaries explicit:
@@ -56,35 +69,37 @@ Additionally, ensure you are still solving the right problem at the right layer:
 2. **Promote CLI to first-class citizen**
    - Replace `scripts/**` ad-hoc entrypoints with a cohesive CLI workspace
    - Preserve behaviour, not file locations
-   - Provide “operator intent” commands (setup/status/ingest/rollup/telemetry)
+   - Provide "operator intent" commands (setup/status/ingest/rollup/telemetry)
 
 3. **Prepare MCP integration**
    - Express MCP server consumes the SDK
    - NL mapping lives in MCP via comprehensive tool examples (not inside SDK)
 
 4. **Retire Next.js runtime from this workspace**
-   - Remove the Next.js “app” layer from the active build graph once consumers have migrated
+   - Remove the Next.js "app" layer from the active build graph once consumers have migrated
    - Preserve selected UI/HTTP patterns as docs/examples
 
 ### Explicitly out of scope
 
 - Building a new UI (will live in a different app)
 - Building a deployed HTTP API layer (may be Next.js later, but not now)
-- Relevance re-tuning (Phase 3 remains the verification phase for IR correctness)
+- Relevance re-tuning (pre-SDK work is the verification phase for IR correctness)
 
 ---
 
-## Architectural decisions (must be explicit before moving files)
+## Architectural Decisions
 
 ### 1) Where the SDK lives
 
-Preferred: **`packages/libs/<search-sdk>/`** (aligns with repo architecture: shared runtime-adaptive libraries).
+Preferred: **`packages/libs/search-sdk/`** (aligns with repo architecture: shared runtime-adaptive libraries).
 
-### 2) SDK public surface: “services”
+### 2) SDK public surface: "services"
 
-Public API should be a small set of services returned from a constructor, for example:
+Public API should be a small set of services returned from a constructor:
 
-- `createSearchSdk({ deps, config }) -> { retrieval, admin, observability }`
+```typescript
+createSearchSdk({ deps, config }) -> { retrieval, admin, observability }
+```
 
 Key rule: **config and clients are provided by the consumer**. No internal singletons.
 
@@ -145,7 +160,7 @@ NL stays in the **MCP layer**. The SDK remains deterministic.
 
 ---
 
-## Quality gates (mandatory)
+## Quality Gates (mandatory)
 
 Run from repo root, one at a time, no filters:
 
@@ -165,43 +180,23 @@ pnpm smoke:dev:stub
 
 ---
 
-## Notes: @Elasticsearch references for future adapters (non-goals in this phase)
+## ES Documentation References
 
-Even though we are not building a UI/API layer now, future adapters should be designed with Elasticsearch-native capabilities in mind:
+Future adapters should be designed with Elasticsearch-native capabilities in mind:
 
-- Hybrid retrieval (RRF): `https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html`
-- Semantic search overview: `https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html`
-- ELSER: `https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html`
+- [Hybrid retrieval (RRF)](https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html)
+- [Semantic search overview](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search.html)
+- [ELSER](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-search-elser.html)
 
 ---
 
 ## Related Documents
 
-| Document | Purpose |
-|----------|---------|
-| [roadmap.md](../roadmap.md) | Linear milestone sequence |
-| [README.md](../README.md) | Navigation hub |
+| Document                                                                                      | Purpose              |
+| --------------------------------------------------------------------------------------------- | -------------------- |
+| [../roadmap.md](../roadmap.md)                                                                | Linear milestone sequence |
+| [README.md](README.md)                                                                        | SDK extraction overview |
 | [semantic-search-sdk-and-cli-extraction.md](../../../research/elasticsearch/semantic-search-sdk-and-cli-extraction.md) | Research analysis |
-| [four-retriever-implementation.md](../archive/completed/four-retriever-implementation.md) | Retrieval architecture |
+| [four-retriever-implementation.md](../archive/completed/four-retriever-implementation.md)     | Retrieval architecture |
 | [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Tier strategy |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1,6 +1,8 @@
 # Rollup Generation Guide
 
-The rollup process produces unit-level documents in `oak_unit_rollup` that power semantic unit search, snippets, and suggestion payloads. This guide outlines the definitive approach.
+**Last Updated**: 2026-01-03
+
+The rollup process produces unit-level documents in `oak_unit_rollup` that power semantic unit search, snippets, and suggestion payloads.
 
 ## Objectives
 
@@ -57,4 +59,11 @@ The rollup process produces unit-level documents in `oak_unit_rollup` that power
 - **Highlight issues**: ensure `term_vector` and `highlight.max_analyzed_offset` set appropriately; regenerate index mappings if needed.
 - **Cache staleness**: verify `SEARCH_INDEX_VERSION` bumped and `revalidateTag` executed; check logs for alias swap success.
 
-Keep this guide in sync with the ingestion pipeline and semantic-search API plan whenever rollup logic changes.
+---
+
+## Related ADRs
+
+| ADR                                                                                              | Topic                       |
+| ------------------------------------------------------------------------------------------------ | --------------------------- |
+| [ADR-077](../../../docs/architecture/architectural-decisions/077-semantic-summary-generation.md) | Semantic Summary Generation |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)      | Batch-Atomic Ingestion      |

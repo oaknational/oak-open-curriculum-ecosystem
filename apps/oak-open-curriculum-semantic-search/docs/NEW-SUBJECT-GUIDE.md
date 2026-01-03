@@ -2,7 +2,7 @@
 
 **Purpose**: Complete workflow for adding a new subject/keystage to Elasticsearch search.  
 **Audience**: Developers and AI agents onboarding new curriculum content.  
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-01-03
 
 ---
 

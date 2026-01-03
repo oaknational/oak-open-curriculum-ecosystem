@@ -1,5 +1,7 @@
 # Elasticsearch Ingestion Harness
 
+**Last Updated**: 2026-01-03
+
 ## Purpose
 
 Establish a repeatable ingestion workflow that exercises the full indexing pipeline against Elasticsearch. The harness must:
@@ -97,8 +99,18 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 5. Use Kibana Dev Tools or `@elastic/elasticsearch` client to query `_cat/indices/oak_lessons_sandbox` etc., confirming document totals and mappings.
 6. Run `pnpm sandbox:ingest --target sandbox --dry-run` to ensure dry-run path emits NDJSON without mutating indices.
 
-## Follow-up tasks
+## Follow-up Tasks
 
 - Extend the CLI with an option to emit counts as JSON for pipeline consumption (optional).
 - Layer an integration test that drives the CLI entrypoint once end-to-end verification is required.
 - Surface index metrics in the admin dashboard so operators can compare primary vs sandbox populations.
+
+---
+
+## Related ADRs
+
+| ADR                                                                                                | Topic                         |
+| -------------------------------------------------------------------------------------------------- | ----------------------------- |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)        | Batch-Atomic Ingestion        |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md) | Bulk-First Ingestion Strategy |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)        | ES Bulk Retry Strategy        |

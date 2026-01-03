@@ -1,9 +1,9 @@
-# Sub-Plan 03: Evaluation Infrastructure — Fix Duplication
+# Evaluation Infrastructure — Fix Duplication
 
-**Status**: 📋 Backlog  
-**Parent**: [README.md](../README.md) | [roadmap.md](../../roadmap.md)  
-**Priority**: Low — Nice-to-have, not blocking M3
-**Last Updated**: 2026-01-02
+**Status**: 📋 Backlog
+**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
+**Priority**: Low — Nice-to-have, not blocking other work
+**Last Updated**: 2026-01-03
 
 ---
 
@@ -21,7 +21,7 @@ We have TWO evaluation directories:
 
 ```text
 .agent/evaluations/
-├── README.md                    # Navigation (outdated)
+├── README.md                    # Navigation
 ├── EXPERIMENT-LOG.md            # Chronological history ✅
 ├── ground-truth-corrections.md  # Incident documentation ✅
 ├── experiments/                 # Experiment DESIGN docs (*.experiment.md)
@@ -29,9 +29,9 @@ We have TWO evaluation directories:
 │   ├── EXPERIMENT-PRIORITIES.md
 │   ├── template-for-experiments.md
 │   └── *.experiment.md
-├── baselines/                   # Baseline DOCUMENTATION
+├── baselines/
 │   └── *.md
-└── guidance/                    # How-to guides
+└── guidance/
     └── *.md
 ```
 
@@ -53,8 +53,7 @@ apps/oak-open-curriculum-semantic-search/evaluation/
 
 1. **Unclear boundaries**: Where does documentation end and code begin?
 2. **Duplicate `experiments/` directories**: One has docs, one has... unclear
-3. **Outdated README**: `.agent/evaluations/README.md` still says index is incomplete
-4. **Cross-references missing**: No clear link between design docs and execution scripts
+3. **Cross-references missing**: No clear link between design docs and execution scripts
 
 ---
 
@@ -66,55 +65,11 @@ apps/oak-open-curriculum-semantic-search/evaluation/
 - **Execution** → `apps/.../evaluation/` (no design docs)
 - **Cross-reference** → Each references the other explicitly
 
-### `.agent/evaluations/` — Pure Documentation
-
-```text
-.agent/evaluations/
-├── README.md                    # Navigation, status
-├── EXPERIMENT-LOG.md            # Chronological history
-├── ground-truth-corrections.md  # Incident documentation
-├── experiments/                 # Experiment DESIGN only
-│   ├── index.md                 # Links to execution scripts
-│   ├── EXPERIMENT-PRIORITIES.md
-│   ├── templates/
-│   │   ├── experiment-template.md
-│   │   └── search-experiment-template.md
-│   └── *.experiment.md          # Design docs reference execution scripts
-├── baselines/
-│   └── *.md
-└── guidance/
-    └── *.md
-```
-
-### `apps/.../evaluation/` — Pure Execution
-
-```text
-apps/oak-open-curriculum-semantic-search/evaluation/
-├── README.md                    # How to run scripts, links to design docs
-├── analysis/                    # Measurement scripts
-│   ├── per-category.ts
-│   ├── diagnostic-queries.ts
-│   ├── intent-queries.ts
-│   └── full-metrics.ts
-├── audit/                       # Validation scripts
-│   └── *.ts
-└── scripts/                     # Renamed from experiments/
-    └── *.ts                     # Ad-hoc scripts, clearly labeled
-```
-
 ---
 
 ## Pending Work
 
-### 1. Update `.agent/evaluations/README.md`
-
-**Current Issue**: ~~Line 9 still says "🔴 BLOCKING: All experiments are currently against an incomplete index"~~
-
-**Status**: ✅ DONE (2026-01-02) — README now reflects complete index and ground truth gap
-
-### 2. Rename/Reorganize App-Level `experiments/`
-
-**Current**: `apps/.../evaluation/experiments/` — unclear purpose
+### 1. Rename/Reorganize App-Level `experiments/`
 
 **Options**:
 
@@ -124,13 +79,13 @@ apps/oak-open-curriculum-semantic-search/evaluation/
 
 **Action**: Audit contents and decide
 
-### 3. Add Cross-References
+### 2. Add Cross-References
 
 **In each `.experiment.md`**: Add "Execution Script" section linking to app-level script
 
 **In each app-level script**: Add header comment linking to design doc
 
-### 4. Create Unified README
+### 3. Create Unified README
 
 Update both README files to:
 
@@ -154,3 +109,4 @@ Update both README files to:
 
 - [ADR-081: Search Approach Evaluation Framework](../../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 - [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md)
+

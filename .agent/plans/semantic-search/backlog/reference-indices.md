@@ -1,9 +1,9 @@
 # Reference Indices
 
-**Status**: 📋 Planned  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 6)  
-**Priority**: Medium  
-**Dependencies**: Milestone 1 (complete ES ingestion)
+**Status**: 📋 Backlog — No clear timeline
+**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
+**Priority**: Low — Document ideas for future consideration
+**Dependencies**: Core search complete
 
 ---
 
@@ -20,12 +20,12 @@ Create reference indices for curriculum metadata to enable:
 
 ## Proposed Indices
 
-| Index | Purpose | Data Source |
-|-------|---------|-------------|
-| `oak_ref_subjects` | Subject metadata | `/subjects` API |
-| `oak_ref_key_stages` | Key stage metadata | `/key-stages` API |
-| `oak_curriculum_glossary` | Keywords with definitions | Extracted from lessons |
-| `oak_curriculum_standards` | National curriculum statements | Extracted from units |
+| Index                     | Purpose                  | Data Source               |
+| ------------------------- | ------------------------ | ------------------------- |
+| `oak_ref_subjects`        | Subject metadata         | `/subjects` API           |
+| `oak_ref_key_stages`      | Key stage metadata       | `/key-stages` API         |
+| `oak_curriculum_glossary` | Keywords with definitions | Extracted from lessons   |
+| `oak_curriculum_standards`| National curriculum statements | Extracted from units |
 
 ---
 
@@ -87,10 +87,9 @@ interface CurriculumStandard {
 
 ## Features
 
-### 1. Reference Data Lookup
+### Reference Data Lookup
 
 ```typescript
-// Fast lookup of display titles
 const keyStage = await esClient.get({
   index: 'oak_ref_key_stages',
   id: keyStageSlug,
@@ -98,7 +97,7 @@ const keyStage = await esClient.get({
 // { title: 'Key Stage 4', short_code: 'KS4', ... }
 ```
 
-### 2. Glossary Search
+### Glossary Search
 
 Enable "what does X mean?" queries:
 
@@ -109,7 +108,7 @@ const definition = await esClient.search({
 });
 ```
 
-### 3. National Curriculum Alignment
+### National Curriculum Alignment
 
 ```typescript
 const ncAligned = await esClient.search({
@@ -134,36 +133,30 @@ const ncAligned = await esClient.search({
 
 ---
 
-## Success Criteria
+## When to Prioritize
 
-- [ ] Reference indices created and populated
-- [ ] Reference lookup API working
-- [ ] Glossary search returning definitions
-- [ ] All quality gates pass
+Promote from backlog when:
+
+1. User research shows demand for glossary/NC search
+2. MRR experiments show vocabulary queries underperforming
+3. Teacher feedback indicates need for curriculum alignment
 
 ---
 
-## Evaluation Requirements
+## Overlap with Bulk Data Analysis
 
-Reference indices enable new query types that need ground truth validation:
+The glossary and standards indices overlap with [bulk-data-analysis.md](../pre-sdk-extraction/bulk-data-analysis.md). Consider whether:
 
-1. **Create ground truths** for reference queries:
-   - "What is a coefficient?" → Expected glossary definition
-   - "What subjects are available?" → Expected subject list
-   - "What key stages cover algebra?" → Expected key stage list
-
-2. **Measure response quality**:
-   - Accuracy: Does the definition match expectations?
-   - Completeness: Are all reference items indexed?
-
-3. **Record results** in [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md)
-
-**Success metric**: Reference queries return correct results (100% accuracy on structured lookups)
+- Reference indices are separate Elasticsearch indices
+- OR they are views/exports from bulk analysis outputs
 
 ---
 
 ## Related Documents
 
-- [roadmap.md](../roadmap.md) — Linear execution path
-- [Cardinal Rule](../../../directives-and-memory/rules.md) — All types from schema at compile time
+| Document                                                                                      | Purpose              |
+| --------------------------------------------------------------------------------------------- | -------------------- |
+| [../roadmap.md](../roadmap.md)                                                                | Linear execution path |
+| [Cardinal Rule](../../../directives-and-memory/rules.md)                                      | Types from schema    |
+| [../pre-sdk-extraction/bulk-data-analysis.md](../pre-sdk-extraction/bulk-data-analysis.md)    | Related work         |
 

@@ -1,5 +1,7 @@
 # Synonyms
 
+**Last Updated**: 2026-01-03
+
 This document explains the synonym system used for search query expansion.
 
 ## Single Source of Truth

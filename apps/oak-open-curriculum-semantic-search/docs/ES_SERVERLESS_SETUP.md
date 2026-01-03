@@ -1,5 +1,7 @@
 # Elasticsearch Serverless Setup Guide
 
+**Last Updated**: 2026-01-03
+
 This guide documents the steps required to provision and configure Elasticsearch Serverless for the Oak Open Curriculum Semantic Search application.
 
 ## Prerequisites
@@ -122,4 +124,9 @@ This will create:
 
 - [Elastic Cloud Serverless Documentation](https://www.elastic.co/docs/serverless)
 - [Elasticsearch API Key Management](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html)
-- [Semantic Search Plans](./../../../.agent/plans/semantic-search/semantic-search-overview.md)
+
+## Related ADRs
+
+| ADR                                                                                                | Topic                         |
+| -------------------------------------------------------------------------------------------------- | ----------------------------- |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) | ELSER-Only Embedding Strategy |

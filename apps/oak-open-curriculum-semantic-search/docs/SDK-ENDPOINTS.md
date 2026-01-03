@@ -1,5 +1,9 @@
 # SDK Parity Endpoints
 
+**Last Updated**: 2026-01-03
+
+> **Deprecated**: These parity endpoints are no longer actively maintained. They were used during initial development for regression testing against the baseline Oak Curriculum API. Consider removing this functionality when the SDK extraction is complete.
+
 We retain parity endpoints under `/api/sdk/*` to compare the enriched Elasticsearch experience against the baseline Oak Curriculum API. These routes proxy the official SDK and are primarily for regression testing and incident response. They require the same environment configuration as the hybrid endpoints and are typically shielded behind feature flags.
 
 ## `POST /api/sdk/search-lessons`

@@ -1,7 +1,7 @@
 # Ingestion Guide
 
 **Purpose**: Complete guide to ingesting curriculum data into Elasticsearch.  
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-01-03
 
 ---
 
@@ -342,8 +342,19 @@ Run smoke tests after re-indexing to record the two-way hybrid baseline.
 
 ## Related Documentation
 
-- [`NEW-SUBJECT-GUIDE.md`](./NEW-SUBJECT-GUIDE.md) - **Complete workflow for new subjects** (synonyms, quality, logging)
-- [`INDEXING.md`](./INDEXING.md) - Technical indexing playbook
-- [`SYNONYMS.md`](./SYNONYMS.md) - Synonym system documentation
-- [`ES_SERVERLESS_SETUP.md`](./ES_SERVERLESS_SETUP.md) - ES Serverless setup guide
-- [`SDK-CACHING.md`](./SDK-CACHING.md) - SDK response caching
+| Document                                           | Purpose                                                         |
+| -------------------------------------------------- | --------------------------------------------------------------- |
+| [NEW-SUBJECT-GUIDE.md](./NEW-SUBJECT-GUIDE.md)     | Complete workflow for new subjects (synonyms, quality, logging) |
+| [INDEXING.md](./INDEXING.md)                       | Technical indexing playbook                                     |
+| [SYNONYMS.md](./SYNONYMS.md)                       | Synonym system documentation                                    |
+| [ES_SERVERLESS_SETUP.md](./ES_SERVERLESS_SETUP.md) | ES Serverless setup guide                                       |
+| [SDK-CACHING.md](./SDK-CACHING.md)                 | SDK response caching                                            |
+
+## Related ADRs
+
+| ADR                                                                                                       | Topic                                |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [ADR-083](../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md) | Complete Lesson Enumeration Strategy |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion               |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy        |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy               |

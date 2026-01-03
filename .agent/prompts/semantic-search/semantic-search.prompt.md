@@ -1,25 +1,25 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-02
+**Last Updated**: 2026-01-03
 
 This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
-## 🎯 NEXT PRIORITY: Milestone 3 — Search Quality Optimization
+## 🎯 CURRENT PRIORITY: Milestone 3 — Search Quality Optimization
 
 **Full ingestion is complete** (16,414 documents). Now optimising search quality.
 
-**Detailed Plan**: [synonym-quality-audit.md](../../plans/semantic-search/planned/future/synonym-quality-audit.md)
+**Detailed Plan**: [m3-search-quality-optimization.md](../../plans/semantic-search/active/m3-search-quality-optimization.md)
 
-### Phases
+### M3 Phases
 
 | Phase | Focus | Status |
 |-------|-------|--------|
 | **1. Ground Truths** | Create queries for all 17 subjects, all 4 key stages | 📋 Start here |
 | **2. Baselines** | Establish per-subject, per-category MRR before changes | 📋 |
 | **3. Synonym Audit** | Remove noise, add high-impact terms | 📋 |
-| **4. Bulk Data Analysis** | Extract vocabulary from `lessonKeywords`, transcripts | 📋 |
+| **4. ES Tuning** | Evaluate deferred query-time enhancements | 📋 |
 | **5. Measure & Iterate** | Experiment, measure, accept/reject | 📋 |
 
 ### Current Ground Truth Gap
@@ -71,7 +71,7 @@ From Elastic Cloud (2026-01-02):
 | Intent-based | 0.229 | ❌ Exception granted |
 | **Overall** | **0.614** | ✅ Tier 1 target met |
 
-**These metrics only cover KS4 Maths.** Full curriculum benchmarks needed.
+**These metrics only cover KS4 Maths.** Full curriculum benchmarks needed — see M3.
 
 ---
 
@@ -95,12 +95,12 @@ pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
 **For every change**, follow this workflow:
 
 1. **Design** — Document hypothesis in `.experiment.md` file
-2. **Baseline** — Run `pnpm eval:per-category`, record in [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)
+2. **Baseline** — Run `pnpm eval:per-category`, record in EXPERIMENT-LOG
 3. **Implement** — Make the change
 4. **Measure** — Run benchmarks again
 5. **Decide** — Accept if improvement, reject if regression
 
-**Templates**: [experiments/template-for-search-experiments.md](../../evaluations/experiments/template-for-search-experiments.md)
+**Templates**: [template-for-search-experiments.md](../../evaluations/experiments/template-for-search-experiments.md)
 
 **Guidance**: [search-experiment-guidance.md](../../evaluations/guidance/search-experiment-guidance.md)
 
@@ -132,7 +132,7 @@ pnpm es:status
 
 ## Quality Gates
 
-Run after every change:
+Run after every change (from repo root):
 
 ```bash
 pnpm type-gen
@@ -150,14 +150,34 @@ pnpm smoke:dev:stub
 
 ---
 
-## Key Documents
+## Navigation
+
+### Plans (How we're going to do it)
 
 | Document | Purpose |
 |----------|---------|
-| **[roadmap.md](../../plans/semantic-search/roadmap.md)** | Master roadmap |
-| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
-| [search-acceptance-criteria.md](../../plans/semantic-search/search-acceptance-criteria.md) | Tier definitions |
-| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| **[roadmap.md](../../plans/semantic-search/roadmap.md)** | Master roadmap and dependency chain |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics snapshot |
+| [search-acceptance-criteria.md](../../plans/semantic-search/search-acceptance-criteria.md) | Tier definitions ("Target Met" vs "Exhausted") |
+| [README.md](../../plans/semantic-search/README.md) | Navigation hub for all plans |
+
+### Evaluations (How we measure success)
+
+| Document | Purpose |
+|----------|---------|
+| [evaluations/README.md](../../evaluations/README.md) | Evaluation framework overview |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
+| [experiments/index.md](../../evaluations/experiments/index.md) | Experiment listing |
+
+### Technical Documentation (How things work)
+
+| Document | Purpose |
+|----------|---------|
+| [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG@10, zero-hit rate definitions |
+| [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | How hybrid search queries work |
+| [INDEXING.md](../../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md) | Index structure and field mappings |
+| [SYNONYMS.md](../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) | Synonym expansion strategy |
+| [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md) | How to run ingestion |
 
 ---
 
@@ -180,9 +200,21 @@ Before any work, read:
 
 ---
 
+## Two SDKs
+
+| SDK | Location | Purpose |
+|-----|----------|---------|
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
+| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
+
+The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
+
+---
+
 ## ES Documentation
 
 **Do NOT guess how ES works** — read the official documentation:
 
 - [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
 - [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)
+- [Inference queue docs](https://www.elastic.co/docs/explore-analyze/machine-learning/inference/inference-queue)

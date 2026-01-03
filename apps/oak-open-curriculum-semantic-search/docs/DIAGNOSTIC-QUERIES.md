@@ -1,10 +1,10 @@
 # Diagnostic Query Suite
 
+**Last Updated**: 2026-01-03
+
 **Purpose**: Fine-grained failure mode analysis for synonym and multi-concept queries.
 
-**Status**: 18 diagnostic queries added (9 synonym + 9 multi-concept)  
-**Date**: 2025-12-23  
-**Related**: [Part 1 B.5](../.agent/plans/semantic-search/part-1-search-excellence.md#b5-phrase-query-enhancement)
+**Status**: 18 diagnostic queries added (9 synonym + 9 multi-concept)
 
 ---
 
@@ -177,8 +177,10 @@ Example:
 
 ---
 
-## See Also
+## Related ADRs
 
-- [Hard Query Baseline](../.agent/evaluations/baselines/hard-query-baseline.md) - Original 15 hard queries
-- [Part 1 B.5](../.agent/plans/semantic-search/part-1-search-excellence.md#b5-phrase-query-enhancement) - Phrase enhancement plan
-- [ADR-082](../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) - Fundamentals-first strategy
+| ADR                                                                                                       | Topic                                |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Search Approach Evaluation Framework |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)   | Fundamentals-First Search Strategy   |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)                | Phrase Query Boosting                |

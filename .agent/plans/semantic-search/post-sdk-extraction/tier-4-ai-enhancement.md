@@ -1,9 +1,22 @@
-# Milestone 12: Conversational Search (LLM Pre-processing)
+# Tier 4: AI Enhancement
 
-**Status**: 📋 PENDING — Tier 4 (deferred until Tiers 1-3 exhausted)
-**Created**: 2025-12-31
-**Dependencies**: Milestones 1-11
-**Parent**: [roadmap.md](../../roadmap.md)
+**Status**: 📋 DEFERRED — Requires Tiers 1-3 exhausted
+**Priority**: LOW until prerequisites met
+**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
+**Created**: 2026-01-03 (Extracted from conversational-search.md and reranking analysis)
+
+---
+
+## Overview
+
+Tier 4 adds AI/LLM capabilities to search when traditional approaches are exhausted. This includes query understanding, intent classification, and semantic reranking.
+
+**Entry Criteria** (per [ADR-082: Fundamentals-First Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)):
+
+1. Tiers 1-3 are exhausted (all checklists complete)
+2. Aggregate MRR plateau demonstrated (≤5% improvement × 3 experiments)
+3. Specific category gaps remain that cannot be addressed by traditional means
+4. Cost/benefit analysis completed
 
 ---
 
@@ -11,24 +24,24 @@
 
 Certain query types cannot be solved by retrieval alone. They require **intent understanding**:
 
-| Query | Issue | Required Understanding |
-|-------|-------|------------------------|
+| Query                                            | Issue        | Required Understanding               |
+| ------------------------------------------------ | ------------ | ------------------------------------ |
 | "challenging extension work for able mathematicians" | Intent-based | Difficulty level, pedagogical intent |
-| "visual introduction to vectors for beginners" | Intent-based | Content format, difficulty level |
-| "that thing with triangles and squares" | Colloquial | Entity resolution (Pythagorean theorem) |
-| "what comes before GCSE trigonometry" | Progression | Curriculum sequence awareness |
-| "help struggling students with fractions" | Pedagogical | Remediation intent |
+| "visual introduction to vectors for beginners"   | Intent-based | Content format, difficulty level     |
+| "that thing with triangles and squares"          | Colloquial   | Entity resolution (Pythagorean theorem) |
+| "what comes before GCSE trigonometry"            | Progression  | Curriculum sequence awareness        |
+| "help struggling students with fractions"        | Pedagogical  | Remediation intent                   |
 
 **Current retrieval limitations**:
 
 - BM25 cannot map colloquial language to curriculum vocabulary
-- ELSER has some semantic understanding but not pedagogical intent
+- ELSER has semantic understanding but not pedagogical intent
 - Synonyms cannot capture fuzzy intent ("visual" → "diagram", "video", "animation")
 - Filters cannot be inferred from natural language
 
 ---
 
-## Architecture
+## Architecture: LLM Pre-processor
 
 ```
                         ┌─────────────────────────────────────────┐
@@ -54,7 +67,7 @@ User Query ─────────────│                           
                                         │
                                         ▼
                         ┌─────────────────────────────────────────┐
-                        │        Existing Search Pipeline         │
+                        │        Search SDK Pipeline              │
                         │  (BM25 + ELSER + RRF + synonyms)        │
                         └───────────────┬─────────────────────────┘
                                         │
@@ -102,18 +115,25 @@ interface PreprocessedQuery {
 
 ---
 
-## Why Tier 4
+## Semantic Reranking
 
-Per [ADR-082: Fundamentals-First Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md):
+### Status: DEFERRED
 
-| Tier | Name | Focus |
-|------|------|-------|
-| 1 | Search Fundamentals | ✅ EXHAUSTED — Fuzzy, synonyms, basic retrieval |
-| 2 | Document Relationships | Threads, progressions, cross-references |
-| 3 | Modern ES Features | ELSER tuning, RRF optimization, field boosting |
-| **4** | **AI Enhancement** | **LLM pre-processing (this milestone)** |
+Per [SEMANTIC-RERANKING-REASSESSMENT.md](../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md):
 
-**Rationale**: LLM calls add latency and cost. Fundamentals must be maximized first.
+The previous rejection of semantic reranking was based on invalid ground truth data (15% invalid slugs). However, the decision to defer remains valid because:
+
+1. **Fundamentals-First**: Tiers 1-3 are not yet exhausted
+2. **Cost/Benefit**: Reranking adds latency without guaranteed benefit
+3. **Simpler Alternatives**: Query reformulation may be more effective
+
+### When to Revisit
+
+Revisit reranking ONLY when:
+
+1. Tiers 1-3 are exhausted (all checklists complete)
+2. Specific query categories show plateau
+3. LLM pre-processing alone is insufficient
 
 ---
 
@@ -121,12 +141,12 @@ Per [ADR-082: Fundamentals-First Strategy](../../../../docs/architecture/archite
 
 ### LLM Selection
 
-| Option | Latency | Cost | Quality |
-|--------|---------|------|---------|
-| GPT-4 | ~1-2s | High | Excellent |
-| GPT-3.5-turbo | ~300ms | Low | Good |
-| Claude Haiku | ~200ms | Low | Good |
-| Local (Llama) | ~100ms | None | Moderate |
+| Option         | Latency | Cost | Quality   |
+| -------------- | ------- | ---- | --------- |
+| GPT-4          | ~1-2s   | High | Excellent |
+| GPT-3.5-turbo  | ~300ms  | Low  | Good      |
+| Claude Haiku   | ~200ms  | Low  | Good      |
+| Local (Llama)  | ~100ms  | None | Moderate  |
 
 **Recommendation**: Start with GPT-3.5-turbo for balance, measure quality degradation.
 
@@ -162,31 +182,23 @@ If LLM pre-processing fails:
 
 ## Ground Truth Queries (Candidates)
 
-These queries should be moved from "hard" to "solved" after implementation:
+These queries should improve after implementation:
 
-| Query | Current MRR | Expected MRR |
-|-------|-------------|--------------|
-| "challenging extension work for able mathematicians" | 0.000 | ≥ 0.80 |
-| "visual introduction to vectors for beginners" | 0.000 | ≥ 0.70 |
-| "that thing with triangles and squares" | 0.000 | ≥ 0.90 |
-| "what comes before GCSE trigonometry" | N/A | ≥ 0.80 |
+| Query                                            | Current MRR | Expected MRR |
+| ------------------------------------------------ | ----------- | ------------ |
+| "challenging extension work for able mathematicians" | 0.000     | ≥ 0.80       |
+| "visual introduction to vectors for beginners"   | 0.000       | ≥ 0.70       |
+| "that thing with triangles and squares"          | 0.000       | ≥ 0.90       |
+| "what comes before GCSE trigonometry"            | N/A         | ≥ 0.80       |
 
 ---
 
 ## Related Documents
 
-| Document | Purpose |
-|----------|---------|
-| [roadmap.md](../../roadmap.md) | Master plan |
-| [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first justification |
-| [entity-extraction.md](entity-extraction.md) | Related future work |
-
----
-
-## Change Log
-
-| Date | Change | Author |
-|------|--------|--------|
-| 2025-12-31 | Initial specification | Agent |
-
+| Document                                                                                      | Purpose              |
+| --------------------------------------------------------------------------------------------- | -------------------- |
+| [../roadmap.md](../roadmap.md)                                                                | Master plan          |
+| [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first   |
+| [../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md](../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md) | Reranking analysis |
+| [../search-acceptance-criteria.md](../search-acceptance-criteria.md)                          | Tier 4 entry criteria |
 

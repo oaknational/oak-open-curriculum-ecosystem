@@ -1,6 +1,18 @@
 # Oak Components Integration & Theming Guide
 
-This document explains how to consume and extend `@oaknational/oak-components` in applications outside the Oak Web Application (OWA). It captures the additional work required to support light/dark theming in the Semantic Search app and should be treated as the canonical reference when wiring the Oak styling into other runtimes. A reference checkout of OWA lives in `reference/Oak-Web-Application`, and a reference checkout of the component library lives in `reference/oak-components`; consult them when cross-checking behaviour.
+**Last Updated**: 2026-01-03
+
+> **Deprecated**: This document describes UI theming for the Next.js application layer. The UI layer is being retired in favour of CLI/SDK architecture. This documentation is retained for historical reference only.
+
+This document explains how to consume and extend `@oaknational/oak-components` in applications outside the Oak Web Application (OWA). It captures the additional work required to support light/dark theming in the Semantic Search app.
+
+## Related ADRs
+
+| ADR                                                                                                           | Topic                                    |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| [ADR-045](../../../docs/architecture/architectural-decisions/045-hybrid-theming-bridge-for-oak-components.md) | Hybrid Theming Bridge for Oak Components |
+
+---
 
 ## 0. Provider stack quick-start
 

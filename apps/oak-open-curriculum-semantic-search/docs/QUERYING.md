@@ -1,6 +1,8 @@
 # Query Patterns
 
-The definitive architecture uses **server-side Reciprocal Rank Fusion (RRF)** to combine lexical and semantic relevance in a single Elasticsearch `_search` per scope. RRF allows us to keep lexical lesson-planning fields and semantic embeddings in sync without multiple network hops, and it produces stable scoring even when one signal is sparse. This guide documents the canonical request bodies, highlights, facets, suggestions, and how fixture modes interact with the query layer.
+**Last Updated**: 2026-01-03
+
+Server-side **Reciprocal Rank Fusion (RRF)** combines lexical and semantic relevance in a single Elasticsearch `_search` per scope. RRF keeps lexical lesson-planning fields and semantic embeddings in sync without multiple network hops, producing stable scoring even when one signal is sparse. This guide documents canonical request bodies, highlights, facets, and suggestions.
 
 ## Lessons (`oak_lessons`)
 
@@ -242,11 +244,19 @@ pnpm -C apps/oak-open-curriculum-semantic-search zero-hit:purge --force \
 
 The script issues a `delete_by_query` request targeting `@timestamp < now-<days>d`. The `--force` flag is mandatory to prevent accidental deletions.
 
-## Implementation guidance
+## Implementation Guidance
 
 - Build queries using pure functions (see `src/lib/queries`) so they are unit testable.
 - Always normalise filters (lowercase slugs) before hashing for caching.
 - Honour `SEARCH_INDEX_TARGET` when constructing index names so sandbox runs stay isolated.
 - Update this document, SDK fixtures, and corresponding tests whenever mappings or query logic change.
 
-For more context, review `semantic-search-api-plan.md`, the caching plan, and the fixtures module to see how queries integrate with versioned caching and deterministic data.
+---
+
+## Related ADRs
+
+| ADR                                                                                                     | Topic                              |
+| ------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)      | ELSER-Only Embedding Strategy      |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)              | Phrase Query Boosting              |
+| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Search Strategy |
