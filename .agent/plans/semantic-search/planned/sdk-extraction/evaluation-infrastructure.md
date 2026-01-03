@@ -1,8 +1,9 @@
 # Sub-Plan 03: Evaluation Infrastructure — Fix Duplication
 
-**Status**: 📋 PENDING  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md)  
-**Priority**: Medium
+**Status**: 📋 Backlog  
+**Parent**: [README.md](../README.md) | [roadmap.md](../../roadmap.md)  
+**Priority**: Low — Nice-to-have, not blocking M3
+**Last Updated**: 2026-01-02
 
 ---
 
@@ -107,9 +108,9 @@ apps/oak-open-curriculum-semantic-search/evaluation/
 
 ### 1. Update `.agent/evaluations/README.md`
 
-**Current Issue**: Line 9 still says "🔴 BLOCKING: All experiments are currently against an incomplete index"
+**Current Issue**: ~~Line 9 still says "🔴 BLOCKING: All experiments are currently against an incomplete index"~~
 
-**Action**: Update to reflect current state (index complete, ground truth corrected)
+**Status**: ✅ DONE (2026-01-02) — README now reflects complete index and ground truth gap
 
 ### 2. Rename/Reorganize App-Level `experiments/`
 

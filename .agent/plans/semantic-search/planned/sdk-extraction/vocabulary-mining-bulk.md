@@ -1,9 +1,11 @@
 # Vocabulary Mining: Bulk Data Mining
 
-**Status**: 📋 Planned (blocked on Milestone 1)  
-**Parent**: [README.md](../README.md) | [roadmap.md](../roadmap.md) (Milestone 8)  
-**Priority**: High  
-**Dependencies**: Milestones 1, 3, 4 (complete ingestion, synonym audit, transcript mining)
+**Status**: 📋 Ready — Feeds M3 Phase 4  
+**Parent**: [README.md](../README.md) | [roadmap.md](../../roadmap.md)  
+**Priority**: High — Part of **Milestone 3: Search Quality Optimization**  
+**Last Updated**: 2026-01-02
+
+> **Note**: This work now feeds directly into [M3 Phase 4: Bulk Download Data Analysis](../future/synonym-quality-audit.md#phase-4-bulk-download-data-analysis). The milestone reference was updated from "Milestone 8" (pre-reorg) to the current roadmap.
 
 ---
 

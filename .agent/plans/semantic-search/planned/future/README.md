@@ -1,65 +1,66 @@
-# Future Enhancements — Post-SDK Work
+# Future Enhancements
 
-**Status**: 📋 PLANNED — After SDK extraction
-**Purpose**: Search quality improvements and advanced features
+**Status**: Mixed — M3 is IMMEDIATE, others are post-SDK
+**Last Updated**: 2026-01-02
 
 ---
 
 ## Overview
 
-These documents cover enhancements to the search system that can be
-implemented **after** the core SDK extraction is complete.
+This directory contains detailed plans for search enhancements. **Note**: Despite the directory name, **Milestone 3 is the immediate next priority**.
 
 ---
 
-## Documents
+## 🎯 IMMEDIATE: Milestone 3 — Search Quality Optimization
 
-### Search Quality
-
-| Document | Purpose | Priority |
-|----------|---------|----------|
-| [synonym-quality-audit.md](synonym-quality-audit.md) | Audit and improve synonym coverage | Milestone 3 |
-| [es-native-enhancements.md](es-native-enhancements.md) | BM25 query-time improvements | Medium |
-| [advanced-features.md](advanced-features.md) | Reranking, phonetic matching, etc. | Low |
-
-### Content Mining
-
-| Document | Purpose | Priority |
-|----------|---------|----------|
-| [transcript-mining.md](transcript-mining.md) | Extract pedagogical content from transcripts | Medium |
-| [entity-extraction.md](entity-extraction.md) | Named entity recognition for search | Low |
-
-### Graph and Navigation
-
-| Document | Purpose | Priority |
-|----------|---------|----------|
-| [knowledge-graph-evolution.md](knowledge-graph-evolution.md) | Curriculum graph enhancements | Medium |
-| [mcp-graph-tools.md](mcp-graph-tools.md) | MCP tools for graph exploration | Medium |
-| [thread-based-search.md](thread-based-search.md) | Search across curriculum threads | Medium |
-
-### Advanced Search
-
-| Document | Purpose | Priority |
-|----------|---------|----------|
-| [conversational-search.md](conversational-search.md) | Intent-aware search (Tier 4) | Low |
-| [reference-indices.md](reference-indices.md) | Additional ES indices | Low |
-| [resource-types.md](resource-types.md) | Expand beyond lessons/units | Low |
+| Document | Purpose | Status |
+|----------|---------|--------|
+| **[synonym-quality-audit.md](synonym-quality-audit.md)** | **M3 detailed plan** | 📋 **START HERE** |
+| [transcript-mining.md](transcript-mining.md) | Folded into M3 Phase 4 | Part of M3 |
 
 ---
 
-## Prerequisites
+## Post-M3: Search Quality
 
-Before this work can begin:
+| Document | Purpose | Roadmap |
+|----------|---------|---------|
+| [es-native-enhancements.md](es-native-enhancements.md) | BM25 query-time improvements | Backlog |
+| [advanced-features.md](advanced-features.md) | Reranking, phonetic matching | Backlog |
 
-1. ✅ SDK extraction complete (Milestone 11)
-2. ✅ MCP integration working
-3. ✅ Complete curriculum indexed
+---
+
+## Post-SDK: Content Mining
+
+| Document | Purpose | Roadmap |
+|----------|---------|---------|
+| [entity-extraction.md](entity-extraction.md) | Named entity recognition | Backlog |
+
+---
+
+## Post-SDK: Graph and Navigation
+
+| Document | Purpose | Roadmap |
+|----------|---------|---------|
+| [knowledge-graph-evolution.md](knowledge-graph-evolution.md) | Curriculum graph enhancements | Backlog |
+| [mcp-graph-tools.md](mcp-graph-tools.md) | MCP tools for graph exploration | Backlog |
+| [thread-based-search.md](thread-based-search.md) | Thread context (Phase 1-2 ✅ done) | Backlog |
+
+---
+
+## Post-SDK: Advanced Search
+
+| Document | Purpose | Roadmap |
+|----------|---------|---------|
+| [conversational-search.md](conversational-search.md) | Intent-aware search (Tier 4) | M11 |
+| [reference-indices.md](reference-indices.md) | Additional ES indices | Backlog |
+| [resource-types.md](resource-types.md) | Expand beyond lessons/units | Backlog |
 
 ---
 
 ## Related
 
-- [roadmap.md](../../roadmap.md) — Master roadmap
-- [sdk-extraction/](../sdk-extraction/) — SDK extraction work
+- [roadmap.md](../../roadmap.md) — Master roadmap (authoritative)
+- [sdk-extraction/](../sdk-extraction/) — SDK extraction plans
+- [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) — Session entry point
 
 

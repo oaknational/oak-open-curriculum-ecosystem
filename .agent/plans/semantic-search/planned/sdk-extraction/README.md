@@ -1,7 +1,8 @@
 # SDK Extraction — Planned Work
 
-**Status**: 📋 PLANNED — Blocked on Milestones 1-2
+**Status**: 📋 PLANNED — After Milestone 3
 **Purpose**: Extract NextJS search app into a pure SDK + CLI
+**Last Updated**: 2026-01-02
 
 ---
 
@@ -18,27 +19,29 @@ application into:
 
 ## Documents
 
-| Document | Purpose | Depends On |
-|----------|---------|------------|
-| [search-sdk-cli.md](search-sdk-cli.md) | Main extraction plan (Milestone 11) | Milestones 1-10 |
-| [evaluation-infrastructure.md](evaluation-infrastructure.md) | Testing and validation infrastructure | — |
-| [vocabulary-mining-bulk.md](vocabulary-mining-bulk.md) | Vocabulary extraction and synonym mining | Complete ingestion |
+| Document | Purpose | Roadmap |
+|----------|---------|---------|
+| [search-sdk-cli.md](search-sdk-cli.md) | Main extraction plan | Milestone 7 |
+| [evaluation-infrastructure.md](evaluation-infrastructure.md) | Unify evaluation directories | Backlog |
+| [vocabulary-mining-bulk.md](vocabulary-mining-bulk.md) | Vocabulary extraction — **feeds M3** | M3 Phase 4 |
 
 ---
 
 ## Prerequisites
 
-Before SDK extraction can begin:
-
-1. ✅ Complete ingestion working (Milestones 1-2)
-2. ✅ All quality gates passing
-3. 📋 Synonym quality audit (Milestone 3)
+| Prerequisite | Status |
+|--------------|--------|
+| Complete ingestion (M1, M2) | ✅ Complete |
+| DRY/SRP refactoring (M4) | ✅ Complete |
+| Data completeness (M5) | ✅ Complete |
+| Search quality optimization (M3) | 📋 **NEXT** |
 
 ---
 
 ## Related
 
 - [roadmap.md](../../roadmap.md) — Master roadmap
+- [synonym-quality-audit.md](../future/synonym-quality-audit.md) — M3 detailed plan
 - [future/](../future/) — Post-SDK enhancements
 
 

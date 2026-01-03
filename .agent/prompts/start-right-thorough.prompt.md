@@ -1,6 +1,6 @@
 read @rules.md , @testing-strategy.md , and @schema-first-execution.md , and take to heart that it is encouraged to take a step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you. Identify and question assumptions. Even before the First Question, ask, are we solving the right problem, at the right layer? Any generated plans must include regularly re-reading and re-committing to those foundation documents.
 
-**Commit** to software engineering best practices, architectural systems design excellence, and great developer experience.
+**Commit** to excellence in systems' architecture design, software engineering and developer experience. We are building foundation systems that will be in use for years, so we put the time in now to get make sure they are easy to understand, maintain, and extend. Make the long-term architectural choice over expediency every time. There is no time pressure, instead we need to build with excellence for the years to come.
 
 The schema first is an absolute for parts of the sdk related directly to calling the upstream api, or e.g. extracting information from the upstream OpenAPI spec, but it is okay to e.g. add additional metadata to mcp tools at type-gen time.
 
@@ -12,7 +12,7 @@ All plans must include instructions to create comprehensive TSDoc (general on al
 
 Quality gate definitions for later. Note some of these gates will trigger earlier ones, caching should prevent duplicate work, see `docs/development/build-system.md` and ADR 065.
 
-Always ask, "what impact are we trying to create for the user with this change?"
+Always ask, "what impact are we trying to create for which users with this change?"
 
 Do not assume you know what the initial step should be, discuss with the user first.
 
