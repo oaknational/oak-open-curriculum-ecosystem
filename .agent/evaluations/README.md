@@ -2,25 +2,29 @@
 
 Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
+## 🎯 Start Here
+
+**[EXPERIMENTAL-PROTOCOL.md](./EXPERIMENTAL-PROTOCOL.md)** — The canonical reference for how to design, execute, record, and learn from search experiments.
+
 **Formal framework**: [ADR-081: Search Approach Evaluation Framework](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 
 **Acceptance criteria**: [Search Acceptance Criteria](../plans/semantic-search/search-acceptance-criteria.md) — Defines "Target Met" vs "Exhausted"
 
 ---
 
-## ⚠️ Critical Gap: Ground Truth Coverage (2026-01-02)
+## ✅ Ground Truth Expansion Complete (2026-01-03)
 
-**Ground truth covers KS4 Maths ONLY.** Full curriculum is indexed but benchmarks are incomplete.
+**M3 ground truth expansion complete.** 263 queries across 16 subjects.
 
-| Dimension | Current | Required |
-|-----------|---------|----------|
-| Subjects | Maths only | 17 subjects |
-| Key Stages | KS4 only | KS1-4 |
-| Queries | 73 | 200+ |
+| Dimension | Previous | Current | Status |
+|-----------|----------|---------|--------|
+| Subjects | 1 (Maths) | **16** | ✅ Complete |
+| Key Stages | KS4 only | **KS1-4** | ✅ Complete |
+| Queries | 73 | **263** | ✅ M3 Target exceeded |
 
-**Next step**: Create ground truths for all subjects before meaningful cross-curriculum evaluation.
+**Remaining**: RSHE/PSHE deferred (no bulk data). 5 subject baselines pending (English, Science, History, Geography, RE).
 
-See [Milestone 3: Search Quality Optimization](../plans/semantic-search/roadmap.md).
+See [Milestone 3: Search Quality Optimization](../plans/semantic-search/active/m3-search-quality-optimization.md).
 
 ---
 
@@ -137,6 +141,7 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 ```text
 .agent/evaluations/
 ├── README.md                    ← You are here
+├── EXPERIMENTAL-PROTOCOL.md     ← 🎯 CANONICAL: How to run experiments
 ├── EXPERIMENT-LOG.md            ← Chronological experiment history
 ├── experiments/                 ← A/B experiments
 │   ├── index.md                 ← Experiment listing with themes

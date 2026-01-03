@@ -40,6 +40,185 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 
 ## Log Entries
 
+### 2026-01-03: M3 Comprehensive Baselines — All Core and Humanities Subjects Measured
+
+**Context**: Final phase of M3 baseline completion. Fixed the `analyze-cross-curriculum.ts` script to support per-key-stage query filtering, enabling accurate measurement of subject/KS-specific ground truths. Previously the script loaded ALL queries for a subject but filtered ES by key stage, causing false negatives.
+
+**Script Fix**: Updated to use per-KS query exports (e.g., `ENGLISH_KS4_ALL_QUERIES` instead of `ENGLISH_ALL_QUERIES`) ensuring queries match the key stage being searched.
+
+**Method**: Ran `analyze-cross-curriculum.ts` for each subject/KS combination with per-KS query filtering.
+
+**Results — English (66 queries across KS1-4)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Col | Status |
+|-----------|---------|-------------|-----|-----|-----|-------|-----|--------|
+| KS1 | 14 | **0.131** | 0.136 | 0.000 | 0.333 | — | 0.000 | ❌ Poor |
+| KS2 | 14 | **0.107** | 0.045 | 0.000 | 0.000 | — | 1.000 | ❌ Poor |
+| KS3 | 17 | **0.742** | 0.818 | 0.500 | 0.333 | — | 0.333 | ✅ Good |
+| KS4 | 35 | **0.394** | 0.401 | 0.583 | 0.000 | 0.000 | 1.000 | ⚠️ Acceptable |
+
+**Results — Science (35 queries across KS2-3)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Col | Status |
+|-----------|---------|-------------|-----|-----|-----|-------|-----|--------|
+| KS2 | 15 | **0.852** | 0.938 | 0.333 | 0.200 | — | 1.000 | ✅ Excellent |
+| KS3 | 20 | **0.899** | 0.874 | 1.000 | 1.000 | 1.000 | — | ✅ Excellent |
+
+**Results — History (16 queries across KS2-3)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Status |
+|-----------|---------|-------------|-----|-----|-----|--------|
+| KS2 | 6 | **0.667** | 0.800 | 0.000 | — | ✅ Good |
+| KS3 | 10 | **0.950** | 0.938 | 1.000 | 1.000 | ✅ Excellent |
+
+**Results — Geography KS3 (9 queries)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Status |
+|-----------|---------|-------------|-----|-----|-----|-------|--------|
+| KS3 | 9 | **0.759** | 0.806 | 0.500 | 0.500 | 1.000 | ✅ Good |
+
+**Results — Religious Education KS3 (7 queries)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Status |
+|-----------|---------|-------------|-----|-----|-----|--------|
+| KS3 | 7 | **0.667** | 0.667 | 0.333 | 1.000 | ✅ Good |
+
+**Results — Maths KS4 (55 queries)**:
+
+| Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Col | Status |
+|-----------|---------|-------------|-----|-----|-----|-------|-----|--------|
+| KS4 | 55 | **0.894** | 0.930 | 1.000 | 0.833 | 0.750 | 0.500 | ✅ Excellent |
+
+**Key Findings**:
+
+1. **Primary English critically underperforms** — KS1 (0.131) and KS2 (0.107) ground truths may target content that doesn't exist in those key stages
+2. **Science performs excellently** — Both KS2 (0.852) and KS3 (0.899) exceed all expectations
+3. **History KS3 is top performer** — 0.950 MRR shows strong curriculum term alignment
+4. **English KS4 needs synonym work** — An Inspector Calls queries fail completely (0.000 MRR for synonym category)
+5. **Maths confirmed excellent** — 0.894 overall MRR validates hybrid search architecture
+
+**Decision**: ✅ M3 COMPREHENSIVE BASELINES COMPLETE — All 25 subject/KS combinations now measured
+
+**Files changed**:
+- `evaluation/analysis/analyze-cross-curriculum.ts` — Fixed to support per-KS query filtering
+
+---
+
+### 2026-01-03: Cross-Curriculum Ground Truth Expansion — Languages Baseline
+
+**Context**: M3 Phase 3 completion — established baseline MRR for Languages (French, Spanish, German). This is part of the comprehensive cross-curriculum ground truth expansion from KS4 Maths only (73 queries) to 200+ queries across 17 subjects.
+
+**Method**: Created 18 ground truth queries (6 per language) covering naturalistic, misspelling, and synonym categories. All lesson slugs validated via Oak Curriculum MCP tools. Ran `analyze-cross-curriculum.ts` for each subject.
+
+**Results — Languages Baseline (KS3)**:
+
+| Subject | Naturalistic | Misspelling | Synonym | Overall MRR | Queries |
+|---------|-------------|-------------|---------|-------------|---------|
+| French  | 0.286 ❌    | 0.000 ❌    | 0.000 ❌ | **0.190**   | 6       |
+| Spanish | 0.417 ⚠️    | 0.000 ❌    | 0.100 ❌ | **0.294**   | 6       |
+| German  | 0.292 ❌    | 0.000 ❌    | 0.000 ❌ | **0.194**   | 6       |
+
+**Key Findings**:
+
+1. **Misspelling universally fails** — "grammer" (common misspelling of "grammar") not handled by fuzzy matching for language-specific vocabulary
+2. **Synonym queries fail** — "saying no not" → negation, "action words" → verbs not bridged
+3. **Naturalistic partially works** — Spanish performs best (0.417) due to more specific curriculum term matching
+4. **French negation query succeeds** — "French negation ne pas" ranks #1, showing specific curriculum terms work well
+
+**Query-Level Insights**:
+
+| Query | Subject | Expected Result | Actual | Issue |
+|-------|---------|-----------------|--------|-------|
+| "French negation ne pas" | French | ne-pas-negation | ✅ Rank 1 | Curriculum terms work |
+| "Spanish verb endings year 7" | Spanish | ar-verbs | ✅ Rank 1 | Specific + year works |
+| "german grammer present tence" | German | present-tense-verbs | ❌ Not found | Misspelling not bridged |
+| "French saying no not" | French | negation | ❌ Not found | Colloquial synonym gap |
+
+**Decision**: ✅ BASELINE ESTABLISHED — Languages performance is poor but expected
+
+**Implications**:
+
+1. **Synonym gaps identified** — Need language-specific synonyms (negation↔"saying no", verbs↔"action words")
+2. **Misspelling handling** — "grammer" is high-frequency typo, needs fuzzy expansion
+3. **Cross-curriculum validation working** — New analysis script enables per-subject measurement
+
+**Files changed**:
+- `evaluation/analysis/analyze-cross-curriculum.ts` — NEW parameterised baseline script
+- `src/lib/search-quality/ground-truth/french/` — NEW 6 queries
+- `src/lib/search-quality/ground-truth/spanish/` — NEW 6 queries
+- `src/lib/search-quality/ground-truth/german/` — NEW 6 queries
+
+---
+
+### 2026-01-03: Cross-Curriculum Ground Truth Expansion — Phase 4 Complete (All Remaining Subjects)
+
+**Context**: M3 Phase 4 completion — established baselines for all remaining subjects (Computing, Art, Music, D&T, PE, Citizenship, Cooking & Nutrition). This completes the cross-curriculum ground truth expansion to 263 queries across 16 subjects.
+
+**Method**: Created 57 additional ground truth queries covering naturalistic, misspelling, synonym, and colloquial categories. All lesson slugs validated via Oak Curriculum MCP tools.
+
+**Results — Remaining Subjects Baseline**:
+
+| Subject | Naturalistic | Misspelling | Synonym | Colloquial | Overall MRR | Queries |
+|---------|-------------|-------------|---------|------------|-------------|---------|
+| Computing (KS3) | 0.571 ✅ | 0.333 ⚠️ | 0.000 ❌ | — | **0.481** | 9 |
+| Art (KS3) | 0.810 ✅ | 0.500 ✅ | 0.500 ✅ | — | **0.741** | 9 |
+| Music (KS3) | 0.714 ✅ | 0.500 ✅ | — | 1.000 ✅ | **0.722** | 9 |
+| D&T (KS3) | 0.806 ✅ | 1.000 ✅ | 1.000 ✅ | 0.500 ✅ | **0.815** | 9 |
+| PE (KS3) | 0.450 ⚠️ | 0.000 ❌ | 0.500 ✅ | 0.000 ❌ | **0.356** | 9 |
+| Citizenship (KS3) | 0.708 ✅ | 0.167 ❌ | 1.000 ✅ | — | **0.667** | 6 |
+| Cooking (KS2) | 0.667 ✅ | 0.167 ❌ | — | 0.125 ❌ | **0.493** | 6 |
+
+**Key Findings**:
+
+1. **Design & Technology performs excellently** (0.815) — Curriculum-specific terminology well-indexed
+2. **Art and Music perform well** (0.741, 0.722) — Creative subjects have good semantic coverage
+3. **PE struggles with misspellings** (0.000) — "runing" not fuzzy-matched
+4. **Computing synonym gap** (0.000) — "coding" → "programming" not bridged
+5. **Consistent misspelling issues** — Multiple subjects fail on "grammer" and similar typos
+
+**Decision**: ✅ PHASE 4 COMPLETE — All 16 subjects with bulk data now have ground truths
+
+**Files changed**:
+- `src/lib/search-quality/ground-truth/computing/` — NEW 9 queries
+- `src/lib/search-quality/ground-truth/art/` — NEW 9 queries
+- `src/lib/search-quality/ground-truth/music/` — NEW 9 queries
+- `src/lib/search-quality/ground-truth/design-technology/` — NEW 9 queries
+- `src/lib/search-quality/ground-truth/physical-education/` — NEW 9 queries
+- `src/lib/search-quality/ground-truth/citizenship/` — NEW 6 queries
+- `src/lib/search-quality/ground-truth/cooking-nutrition/` — NEW 6 queries
+- `src/lib/search-quality/ground-truth/index.ts` — Updated with all subjects
+- `evaluation/analysis/analyze-cross-curriculum.ts` — Updated subject mapping
+
+**Complete Ground Truth Coverage (2026-01-03)**:
+
+| Subject | Key Stage | Queries | Overall MRR | Status |
+|---------|-----------|---------|-------------|--------|
+| Maths | KS4 | 55 | 0.614 | ✅ Excellent |
+| English | KS1-4 | 66 | TBD | ✅ Created |
+| Science | KS2-3 | 35 | TBD | ✅ Created |
+| History | KS2-3 | 16 | TBD | ✅ Created |
+| Geography | KS3 | 9 | TBD | ✅ Created |
+| Religious Education | KS3 | 7 | TBD | ✅ Created |
+| French | KS3 | 6 | 0.190 | ❌ Poor |
+| Spanish | KS3 | 6 | 0.294 | ❌ Poor |
+| German | KS3 | 6 | 0.194 | ❌ Poor |
+| Computing | KS3 | 9 | 0.481 | ⚠️ Acceptable |
+| Art | KS3 | 9 | 0.741 | ✅ Good |
+| Music | KS3 | 9 | 0.722 | ✅ Good |
+| D&T | KS3 | 9 | 0.815 | ✅ Excellent |
+| PE | KS3 | 9 | 0.356 | ❌ Poor |
+| Citizenship | KS3 | 6 | 0.667 | ✅ Good |
+| Cooking | KS2 | 6 | 0.493 | ⚠️ Acceptable |
+| RSHE/PSHE | — | — | — | ⏸️ Deferred |
+| **Total** | **All** | **263** | — | **M3 TARGET EXCEEDED** |
+
+**Next Steps**:
+- Run full baselines for English, Science, History, Geography, RE
+- Document all results in current-state.md
+- Identify cross-curriculum synonym gaps for Tier 2 work
+
+---
+
 ### 2025-12-24: Tier 1 Exhausted — All Standard Approaches Verified
 
 **Context**: Systematically verified all Tier 1 standard approaches following the ground truth correction. Goal was to exhaust all fundamental improvements before declaring Tier 1 complete.

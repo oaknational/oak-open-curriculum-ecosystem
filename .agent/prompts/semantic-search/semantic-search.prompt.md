@@ -6,11 +6,139 @@ This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
+## 🚨 Architectural Discovery: Phase-Aligned Ground Truths
+
+**Discovery (2026-01-03)**: The per-key-stage baseline approach is fundamentally misaligned with curriculum structure.
+
+### The Problem
+
+English KS1 and KS2 baselines showed catastrophically low MRR (0.131 and 0.107):
+
+| Key Stage | MRR | Root Cause |
+|-----------|-----|------------|
+| KS1 | 0.131 | ❌ BFG queries fail — BFG content is KS2 |
+| KS2 | 0.107 | ❌ Billy Goats queries fail — Billy Goats content is KS1 |
+
+**The same "Primary" ground truths were used for both**, but expected slugs are key-stage-specific. This is a **test design flaw**, not a search quality issue.
+
+### The Solution
+
+**Phases** (primary/secondary) are the fundamental curriculum division, not key stages.
+
+| Concept | Definition |
+|---------|------------|
+| **Phase** | `primary` (Years 1-6, KS1+KS2) or `secondary` (Years 7-11, KS3+KS4) |
+| **Sequence** | Subject + Phase + optional exam board (e.g., `english-secondary-aqa`) |
+| **Key Stage** | Overlay on years (KS1=Y1-2, KS2=Y3-6, KS3=Y7-9, KS4=Y10-11) |
+
+**Ground truths should be organised by phase**, with search filters supporting flexible combinations.
+
+---
+
+## 🚀 Current Priority: M3 Revised Plan
+
+**Plan**: [m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)
+
+This plan:
+1. **Restructures ground truths by phase** (primary/secondary/gcse)
+2. **Enhances search filters** to support arrays (keyStages, years, phases)
+3. **Achieves all original M3 goals** (comprehensive baselines)
+4. **Incorporates comprehensive filter testing**
+
+### Implementation Phases
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Filter architecture enhancement (arrays, phases) | 📋 Planned |
+| 2 | Ground truth restructure (by phase) | 📋 Planned |
+| 3 | Analysis script update (phase-aware) | 📋 Planned |
+| 4 | Run comprehensive baselines (by phase) | 📋 Planned |
+| 5 | Comprehensive filter testing | 📋 Planned |
+
+---
+
+## Current Baseline Status (Pre-Restructure)
+
+These baselines used the **flawed per-key-stage approach** — they will be superseded by phase-based baselines.
+
+| Subject | KS1 | KS2 | KS3 | KS4 | Notes |
+|---------|-----|-----|-----|-----|-------|
+| **Maths** | — | — | — | ✅ 0.894 | Only KS4 ground truths exist |
+| **English** | ⚠️ 0.131 | ⚠️ 0.107 | ✅ 0.742 | ⚠️ 0.394 | KS1/KS2 are test design flaws |
+| **Science** | — | ✅ 0.852 | ✅ 0.899 | — | Excellent |
+| **History** | — | ✅ 0.667 | ✅ 0.950 | — | Excellent |
+| **Geography** | — | — | ✅ 0.759 | — | Good |
+| **RE** | — | — | ✅ 0.667 | — | Good |
+| **French** | — | — | ❌ 0.190 | — | Upstream transcript issue |
+| **Spanish** | — | — | ❌ 0.294 | — | Upstream transcript issue |
+| **German** | — | — | ❌ 0.194 | — | Upstream transcript issue |
+| **Art** | — | — | ✅ 0.741 | — | Good |
+| **Music** | — | — | ✅ 0.722 | — | Good |
+| **Computing** | — | — | ⚠️ 0.481 | — | Acceptable |
+| **D&T** | — | — | ✅ 0.815 | — | Excellent |
+| **PE** | — | — | ❌ 0.356 | — | Poor |
+| **Citizenship** | — | — | ✅ 0.667 | — | Good |
+| **Cooking** | — | ⚠️ 0.493 | — | — | Acceptable |
+
+**Key insight**: Most "secondary" subjects (KS3) perform well. The issues are:
+1. **English KS1/KS2**: Test design flaw (fixed by phase restructure)
+2. **English KS4**: Needs GCSE-specific synonyms (set texts)
+3. **MFL Languages**: Upstream transcript issue (cannot fix)
+4. **PE**: Needs synonyms and fuzzy matching
+
+---
+
+## Architecture Overview
+
+### Filter Combinations (Proposed)
+
+```typescript
+interface SearchFilters {
+  // Curriculum dimensions (all optional, combinable)
+  subjects?: SubjectSlug[];       // Filter by subject(s)
+  keyStages?: KeyStage[];         // Filter by key stage(s)
+  years?: Year[];                 // Filter by year(s)
+  phases?: Phase[];               // Filter by phase(s)
+  
+  // Content dimensions
+  threads?: ThreadSlug[];
+  categories?: CategorySlug[];    // English, Science, RE only
+  
+  // KS4-specific dimensions
+  tiers?: Tier[];                 // 'foundation' | 'higher'
+  examBoards?: ExamBoard[];
+  unitOptions?: string[];         // Set texts, specialisms
+}
+```
+
+**Invalid combinations** (e.g., year 7 + ks1) return empty results, not errors.
+
+### Ground Truth Structure (Proposed)
+
+```
+ground-truth/
+├── english/
+│   ├── primary/           # Years 1-6 (KS1+KS2)
+│   ├── secondary/         # Years 7-11 (KS3+KS4)
+│   └── gcse/              # KS4 edge cases (set texts)
+├── maths/
+│   ├── primary/           # NEW
+│   ├── secondary/         # Existing (restructured)
+│   └── gcse/              # Complex topics
+├── science/
+│   ├── primary/           # Existing
+│   └── secondary/         # Existing
+└── [other subjects]/
+    └── secondary/         # Most have secondary only
+```
+
+---
+
 ## What Is This Project?
 
 **Oak National Academy** provides free, high-quality curriculum resources for UK schools (KS1-KS4, ages 5-16). This project builds **semantic search** over Oak's 16,000+ lessons to help teachers and AI agents find relevant educational content.
 
-**Impact**: Teachers can find "lessons about equivalent fractions for Year 5" instead of navigating taxonomy trees. AI agents can retrieve curriculum-aligned content for lesson planning.
+**Impact**: Teachers can find "lessons about equivalent fractions for Year 5" instead of navigating taxonomy trees.
 
 ---
 
@@ -18,104 +146,60 @@ This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 | Location | Purpose |
 |----------|---------|
-| `apps/oak-open-curriculum-semantic-search/` | Search app (transitioning to SDK/CLI) |
-| `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API access, type-gen |
-| `packages/libs/oak-curriculum-search-lib/` | Shared search library (synonyms, types) |
+| `apps/oak-open-curriculum-semantic-search/` | Search app |
+| `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API access |
+| `packages/libs/oak-curriculum-search-lib/` | Shared search library |
 | `.agent/plans/semantic-search/` | Planning documents |
-| `.agent/evaluations/` | Experiment framework and logs |
-
-**Key directories in the search app**:
-
-| Directory | Purpose |
-|-----------|---------|
-| `src/lib/` | Core search logic (hybrid search, indexing) |
-| `evaluation/` | Ground truths, benchmarks, analysis scripts |
-| `docs/` | Technical documentation |
-| `cli/` | CLI commands for ingestion, search, status |
+| `.agent/evaluations/` | Experiment framework |
 
 ---
 
 ## Before You Start
 
-1. **Verify ES access**: `cd apps/oak-open-curriculum-semantic-search && pnpm es:status`
-   - Should show 7 indices with 16,414 documents total
-   - If this fails, check `.env` has valid `ELASTICSEARCH_*` credentials
+### 1. Read Foundation Documents (MANDATORY)
 
-2. **Run current benchmarks**: `pnpm eval:per-category`
-   - This establishes your baseline before any changes
+- **[rules.md](../../directives-and-memory/rules.md)** — First Question, TDD, no type shortcuts
+- **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at ALL levels
+- **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
 
-3. **Read the M3 plan**: [m3-search-quality-optimization.md](../../plans/semantic-search/active/m3-search-quality-optimization.md)
+### 2. Verify Environment
 
-4. **Read foundation documents** (linked below) — TDD, quality gates, type discipline
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:status  # Should show 7 indices, 16,414 documents
+```
+
+### 3. Read the Current Plan
+
+**[m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)**
 
 ---
 
-## 🎯 CURRENT PRIORITY: Milestone 3 — Search Quality Optimization
+## Known Data Issues
 
-**Full ingestion is complete** (16,414 documents). Now optimising search quality.
+### MFL Transcripts Don't Exist (Upstream)
 
-**Detailed Plan**: [m3-search-quality-optimization.md](../../plans/semantic-search/active/m3-search-quality-optimization.md)
+| Subject | Coverage | Implication |
+|---------|----------|-------------|
+| French | 0.2% | Search relies on metadata only |
+| Spanish | 0.2% | Expected MRR ~0.2 is acceptable |
+| German | 0.2% | Cannot fix without upstream change |
 
-### M3 Phases
+See [mfl-multilingual-embeddings.md](../../plans/semantic-search/post-sdk-extraction/mfl-multilingual-embeddings.md).
 
-| Phase | Focus | Status |
-|-------|-------|--------|
-| **1. Ground Truths** | Create queries for all 17 subjects, all 4 key stages | 📋 Start here |
-| **2. Baselines** | Establish per-subject, per-category MRR before changes | 📋 |
-| **3. Synonym Audit** | Remove noise, add high-impact terms | 📋 |
-| **4. ES Tuning** | Evaluate deferred query-time enhancements | 📋 |
-| **5. Measure & Iterate** | Experiment, measure, accept/reject | 📋 |
+### Data Variances
 
-### Current Ground Truth Gap
+**Essential reading**: [DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md)
 
-| Dimension | Current | Required |
-|-----------|---------|----------|
-| Subjects covered | Maths only | 17 subjects |
-| Key Stages | KS4 only | KS1-4 |
-| Ground truth queries | 73 | 200+ |
+---
 
-### Key Files for M3
+## Key Files
 
 | File | Purpose |
 |------|---------|
-| `evaluation/ground-truth/standard-queries.json` | Standard ground truth queries |
-| `evaluation/ground-truth/hard-queries.json` | Hard query set (category-tagged) |
-| `packages/libs/oak-curriculum-search-lib/src/synonyms/` | Synonym files (163 terms) |
-| `reference/bulk_download_data/` | Bulk download data for analysis |
-
----
-
-## Current ES Index State
-
-From Elastic Cloud (2026-01-02):
-
-| Index | Documents | Storage |
-|-------|-----------|---------|
-| `oak_lessons` | 184,985 | 806.62MB |
-| `oak_unit_rollup` | 165,345 | 706.06MB |
-| `oak_units` | 1,635 | 8.94MB |
-| `oak_threads` | 164 | 255.53KB |
-| `oak_sequence_facets` | 57 | 375.14KB |
-| `oak_sequences` | 30 | 267.67KB |
-| `oak_meta` | 1 | 5.34KB |
-
-**Actual documents**: 16,414 (ES counts include ELSER sub-documents).
-
----
-
-## Search Quality Metrics (KS4 Maths Only)
-
-| Category | MRR | Status |
-|----------|-----|--------|
-| Misspelling | 0.833 | ✅ Excellent |
-| Naturalistic | 0.722 | ✅ Good |
-| Multi-concept | 0.625 | ✅ Good |
-| Synonym | 0.611 | ✅ Good |
-| Colloquial | 0.500 | ⚠️ Acceptable |
-| Intent-based | 0.229 | ❌ Exception granted |
-| **Overall** | **0.614** | ✅ Tier 1 target met |
-
-**These metrics only cover KS4 Maths.** Full curriculum benchmarks needed — see M3.
+| `src/lib/search-quality/ground-truth/` | Ground truths (being restructured) |
+| `evaluation/analysis/analyze-cross-curriculum.ts` | Baseline analysis |
+| `src/lib/hybrid-search/rrf-query-builders.ts` | ES query construction |
 
 ---
 
@@ -124,59 +208,20 @@ From Elastic Cloud (2026-01-02):
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Current benchmarks (KS4 Maths only)
-pnpm eval:per-category    # Per-category MRR breakdown
-pnpm eval:diagnostic      # Detailed pattern analysis
+# Current (single key stage)
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject maths --keyStage ks4
 
-# Full metrics
-pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
-```
-
----
-
-## Experiment Protocol
-
-**For every change**, follow this workflow:
-
-1. **Design** — Document hypothesis in `.experiment.md` file
-2. **Baseline** — Run `pnpm eval:per-category`, record in EXPERIMENT-LOG
-3. **Implement** — Make the change
-4. **Measure** — Run benchmarks again
-5. **Decide** — Accept if improvement, reject if regression
-
-**Templates**: [template-for-search-experiments.md](../../evaluations/experiments/template-for-search-experiments.md)
-
-**Guidance**: [search-experiment-guidance.md](../../evaluations/guidance/search-experiment-guidance.md)
-
----
-
-## ✅ What's Complete
-
-| Milestone | Status |
-|-----------|--------|
-| M1: Complete ES Ingestion | ✅ |
-| M2: Sequence Indexing | ✅ |
-| M4: DRY/SRP Refactoring | ✅ |
-| M5: Data Completeness | ✅ |
-
----
-
-## CLI Usage
-
-```bash
-# Full bulk ingestion
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
-
-# Reset indices
-pnpm es:setup --reset
-pnpm es:status
+# After M3 Revised (phase-based)
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject english --phase primary
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject english --phase secondary
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject english --gcse
 ```
 
 ---
 
 ## Quality Gates
 
-Run after every change (from repo root):
+Run after every change:
 
 ```bash
 pnpm type-gen
@@ -196,69 +241,37 @@ pnpm smoke:dev:stub
 
 ## Navigation
 
-### Plans (How we're going to do it)
+### Plans
 
 | Document | Purpose |
 |----------|---------|
-| **[roadmap.md](../../plans/semantic-search/roadmap.md)** | Master roadmap and dependency chain |
-| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics snapshot |
-| [search-acceptance-criteria.md](../../plans/semantic-search/search-acceptance-criteria.md) | Tier definitions ("Target Met" vs "Exhausted") |
-| [README.md](../../plans/semantic-search/README.md) | Navigation hub for all plans |
+| **[m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)** | **Current plan** |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Master roadmap |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Current metrics |
+| [m3-search-quality-optimization.md](../../plans/semantic-search/active/m3-search-quality-optimization.md) | Original M3 (superseded) |
 
-### Evaluations (How we measure success)
-
-| Document | Purpose |
-|----------|---------|
-| [evaluations/README.md](../../evaluations/README.md) | Evaluation framework overview |
-| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Chronological experiment history |
-| [experiments/index.md](../../evaluations/experiments/index.md) | Experiment listing |
-
-### Technical Documentation (How things work)
+### Evaluations
 
 | Document | Purpose |
 |----------|---------|
-| [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG@10, zero-hit rate definitions |
-| [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | How hybrid search queries work |
-| [INDEXING.md](../../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md) | Index structure and field mappings |
-| [SYNONYMS.md](../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) | Synonym expansion strategy |
-| [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md) | How to run ingestion |
+| **[EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md)** | **How to run experiments — READ THIS** |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Record all baselines and experiments here |
+| [experiments/template-for-search-experiments.md](../../evaluations/experiments/template-for-search-experiments.md) | Template for new experiments |
 
----
+### Technical Docs
 
-## Foundation Documents (MANDATORY)
-
-Before any work, read:
-
-1. **[rules.md](../../directives-and-memory/rules.md)** — First Question, TDD, no type shortcuts
-2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at ALL levels
-3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+| Document | Purpose |
+|----------|---------|
+| **[DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md)** | Curriculum data differences |
+| [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR definitions |
+| [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | Hybrid search queries |
 
 ---
 
 ## Key Principles
 
-1. **TDD always** — Red → Green → Refactor
-2. **No type shortcuts** — No `as`, `any`, `!`
-3. **Single pipeline** — NO duplication of ingestion logic
-4. **Measure before/after** — Every experiment needs baselines
-
----
-
-## Two SDKs
-
-| SDK | Location | Purpose |
-|-----|----------|---------|
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
-
-The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
-
----
-
-## ES Documentation
-
-**Do NOT guess how ES works** — read the official documentation:
-
-- [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
-- [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)
-- [Inference queue docs](https://www.elastic.co/docs/explore-analyze/machine-learning/inference/inference-queue)
+1. **Phase is the fundamental division** — not key stage
+2. **Ground truths align with filter scope** — Primary queries test Primary content
+3. **TDD always** — Red → Green → Refactor
+4. **No type shortcuts** — No `as`, `any`, `!`
+5. **Comprehensive coverage** — ALL phases × ALL subjects × ALL categories

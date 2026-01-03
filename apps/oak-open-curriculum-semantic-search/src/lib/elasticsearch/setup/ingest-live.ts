@@ -84,15 +84,22 @@ async function executeIngestion(
   return { result, duration };
 }
 
-/** Execute the main API-based ingestion workflow. */
+/**
+ * Execute the main API-based ingestion workflow.
+ *
+ * @remarks
+ * In dry-run mode, cache is bypassed to avoid Redis network IO.
+ * This enables E2E tests to verify CLI behavior without triggering network calls.
+ */
 async function runApiIngestion(args: CliArgs): Promise<void> {
   resetIngestionErrorCollector();
   printHeader(args);
   configureIngestionMode(args);
   await handleCacheClearing(args);
 
+  // In dry-run mode, bypass cache to avoid Redis network IO
   const client = await createIngestionClient({
-    bypassCache: args.bypassCache,
+    bypassCache: args.bypassCache || args.dryRun,
     ignoreCached404: args.ignoreCached404,
   });
 
@@ -136,6 +143,9 @@ async function runApiIngestion(args: CliArgs): Promise<void> {
  * for KS4 tier enrichment. Rate limiting applies only to API calls within
  * buildKs4SupplementationContext, not to bulk file I/O or ES dispatch.
  *
+ * In dry-run mode, cache is bypassed to avoid network IO (Redis connection).
+ * This enables E2E tests to verify CLI behavior without triggering network calls.
+ *
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
 async function runBulkIngestion(args: CliArgs): Promise<void> {
@@ -144,8 +154,9 @@ async function runBulkIngestion(args: CliArgs): Promise<void> {
   configureIngestionMode(args);
   await handleCacheClearing(args);
 
+  // In dry-run mode, bypass cache to avoid Redis network IO
   const client = await createIngestionClient({
-    bypassCache: args.bypassCache,
+    bypassCache: args.bypassCache || args.dryRun,
     ignoreCached404: args.ignoreCached404,
   });
 

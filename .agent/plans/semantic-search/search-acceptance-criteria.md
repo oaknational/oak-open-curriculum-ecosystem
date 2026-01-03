@@ -1,24 +1,24 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-02
+**Last Updated**: 2026-01-03
 **Status**: Active
 **Purpose**: Defines what "exhausted" means for each tier, vs "target met"
 
 ---
 
-## ⚠️ Critical Gap: Ground Truth Coverage
+## ✅ Ground Truth Coverage Complete (2026-01-03)
 
-**Current ground truth covers KS4 Maths ONLY.**
+**M3 ground truth expansion complete.** 263 queries across 16 subjects.
 
-| Dimension | Current | Required |
-|-----------|---------|----------|
-| Subjects | Maths only | All 17 subjects |
-| Key Stages | KS4 only | KS1-4 |
-| Queries | 73 | 200+ |
+| Dimension | Previous | Current | Status |
+|-----------|----------|---------|--------|
+| Subjects | 1 (Maths) | **16** | ✅ Complete |
+| Key Stages | KS4 only | **KS1-4** | ✅ Complete |
+| Queries | 73 | **263** | ✅ M3 Target exceeded |
 
-**Implication**: Tier metrics are valid for KS4 Maths, but we cannot claim cross-curriculum search quality without comprehensive ground truths.
+**Remaining**: RSHE/PSHE deferred (no bulk data). English/Science/History/Geography/RE baselines pending.
 
-**Next milestone** (M3: Search Quality Optimization) addresses this gap.
+**Implication**: Cross-curriculum search quality can now be validated. Priority subjects for improvement identified.
 
 ---
 
@@ -45,7 +45,7 @@ These thresholds apply to individual query categories within each tier:
 | **Good** | ≥ 0.60 | Solid performance; no urgent action needed |
 | **Excellent** | ≥ 0.80 | Outstanding; focus effort elsewhere |
 
-### Current Category Status (2025-12-24)
+### Current Category Status — Maths KS4 (2025-12-24)
 
 | Category | MRR | Status |
 |----------|-----|--------|
@@ -55,6 +55,15 @@ These thresholds apply to individual query categories within each tier:
 | Synonym | 0.611 | Good |
 | Colloquial | 0.500 | Acceptable |
 | **Intent-based** | **0.229** | **Exception granted** (see below) |
+
+### Cross-Curriculum Performance Tiers (2026-01-03)
+
+| Tier | Subjects | Overall MRR |
+|------|----------|-------------|
+| ✅ Excellent | Maths, Art, Music, D&T, Citizenship | 0.61-0.82 |
+| ⚠️ Acceptable | Computing, Cooking | 0.48-0.49 |
+| ❌ Poor | French, Spanish, German, PE | 0.19-0.36 |
+| ⏸️ Pending | English, Science, History, Geography, RE | — |
 
 ---
 
@@ -256,6 +265,8 @@ Each experiment must document:
 
 ## Experiment Protocol
 
+**Canonical reference**: [EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md) — **Read this first**
+
 For any search-affecting change:
 
 1. **Design**: Create experiment file in [experiments/](../../evaluations/experiments/) using template
@@ -272,10 +283,15 @@ For any search-affecting change:
 
 ## Related Documents
 
-- [ADR-082: Fundamentals-First Search Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)
-- [current-state.md](current-state.md) — Authoritative metrics
-- [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) — Experiment history
-- [tier-1-fundamentals.md](archive/completed/tier-1-fundamentals.md) — Tier 1 improvement plan (archived)
+| Document | Purpose |
+|----------|---------|
+| [EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md) | **Canonical**: How to run experiments |
+| [ADR-081: Evaluation Framework](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Metrics and decision criteria |
+| [ADR-082: Fundamentals-First](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Tier system rationale |
+| [ADR-085: Ground Truth Discipline](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Data integrity |
+| [current-state.md](current-state.md) | Authoritative metrics |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| [tier-1-fundamentals.md](archive/completed/tier-1-fundamentals.md) | Tier 1 plan (archived) |
 
 ---
 
@@ -283,6 +299,8 @@ For any search-affecting change:
 
 | Date | Change |
 |------|--------|
+| 2026-01-03 | Updated: M3 ground truth expansion complete (263 queries, 16 subjects) |
+| 2026-01-03 | Added cross-curriculum performance tiers |
 | 2026-01-02 | Added critical gap section about ground truth coverage |
 | 2025-12-24 | Added intent-based documented exception with root cause analysis |
 | 2025-12-24 | Created — defines target met vs exhausted, per-category thresholds, standard approaches checklists |

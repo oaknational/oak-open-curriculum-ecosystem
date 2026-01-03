@@ -20,11 +20,21 @@ SDK Extraction (../sdk-extraction/)
 
 ## Plans in This Folder
 
-| Plan | Prerequisites | Description |
-|------|---------------|-------------|
-| [bulk-data-analysis.md](bulk-data-analysis.md) | M3 complete | Consolidated vocabulary mining, transcript mining, entity extraction |
-| [tier-2-document-relationships.md](tier-2-document-relationships.md) | Bulk analysis complete | Cross-referencing, threads, prerequisites |
-| [tier-3-modern-es-features.md](tier-3-modern-es-features.md) | Tier 2 complete | RRF tuning, field boosting, kNN evaluation |
+| Plan | Prerequisites | Priority | Description |
+|------|---------------|----------|-------------|
+| **[comprehensive-filter-testing.md](comprehensive-filter-testing.md)** | M3 complete | **HIGH** | Understand all filter combinations across subjects/key stages |
+| [bulk-data-analysis.md](bulk-data-analysis.md) | M3 complete | HIGH | Vocabulary mining, transcript mining, entity extraction |
+| [tier-2-document-relationships.md](tier-2-document-relationships.md) | Bulk analysis complete | MEDIUM | Cross-referencing, threads, prerequisites |
+| [tier-3-modern-es-features.md](tier-3-modern-es-features.md) | Tier 2 complete | MEDIUM | RRF tuning, field boosting, kNN evaluation |
+
+### ⚠️ Critical: Filter Testing Before SDK Extraction
+
+**[comprehensive-filter-testing.md](comprehensive-filter-testing.md)** is HIGH PRIORITY because:
+
+- KS4 Maths is NOT representative of the whole curriculum
+- Different subjects have different metadata (tiers, exam boards, categories, unit options)
+- We cannot design a clean SDK filter API without understanding all edge cases
+- Testing after extraction risks breaking changes
 
 ---
 

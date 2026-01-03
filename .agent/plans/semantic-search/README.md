@@ -69,6 +69,8 @@ Then read:
 ```
 M3: Search Quality Optimization (active/)
         ↓
+Comprehensive Filter Testing (pre-sdk-extraction/) ← HIGH PRIORITY
+        ↓
 Bulk Data Analysis (pre-sdk-extraction/)
         ↓
 Tier 2: Document Relationships (pre-sdk-extraction/)
@@ -77,7 +79,11 @@ Tier 3: Modern ES Features (pre-sdk-extraction/)
         ↓
 SDK Extraction (sdk-extraction/)
         ↓
-Post-SDK Work (post-sdk-extraction/)
+MFL Multilingual Embeddings (post-sdk-extraction/) ← HIGH PRIORITY
+        ↓
+MCP Search Tool (post-sdk-extraction/)
+        ↓
+Tier 4: AI Enhancement (post-sdk-extraction/)
 ```
 
 ---
@@ -111,13 +117,19 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ---
 
-## 🎯 Next Priority: M3 Search Quality Optimization
+## ✅ Complete: M3 Search Quality Optimization
 
-**Status**: 📋 Ready to start
+**Status**: ✅ Ground truth expansion complete (263 queries, 16 subjects)
 
 See [active/m3-search-quality-optimization.md](active/m3-search-quality-optimization.md)
 
-**Current gap**: Ground truths cover KS4 Maths only (73 queries). Need 200+ for full curriculum.
+### Next Priorities
+
+| Priority | Work | Why |
+|----------|------|-----|
+| **1. Filter Testing** | [comprehensive-filter-testing.md](pre-sdk-extraction/comprehensive-filter-testing.md) | KS4 Maths is NOT representative; must understand all filters before SDK extraction |
+| **2. MFL Hypothesis** | [mfl-multilingual-embeddings.md](post-sdk-extraction/mfl-multilingual-embeddings.md) | Verify ELSER English-only limitation before designing solution |
+| 3. Synonym Audit | [m3-search-quality-optimization.md](active/m3-search-quality-optimization.md) | Add high-impact synonyms based on M3 findings |
 
 ---
 

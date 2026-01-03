@@ -1,10 +1,26 @@
 # Semantic Search Current State
 
-**Last Updated**: 2026-01-02
-**Status**: ✅ **Full ingestion verified** — Now optimising search quality
+**Last Updated**: 2026-01-03
+**Status**: 🔄 **M3 Revised** — Architectural discovery requires phase-aligned restructure
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Current Plan**: [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
 This is THE authoritative source for current system metrics.
+
+---
+
+## 🚨 Architectural Discovery (2026-01-03)
+
+**The per-key-stage baseline approach is fundamentally flawed.**
+
+English KS1 (0.131) and KS2 (0.107) show catastrophically low MRR because:
+- The same "Primary" ground truths were used for both KS1 and KS2 tests
+- But expected slugs are key-stage-specific (BFG is KS2, Billy Goats is KS1)
+- This is a **test design flaw**, not a search quality issue
+
+**Solution**: Restructure ground truths and filters around **phases** (primary/secondary) as the fundamental division.
+
+See [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md) for the revised plan.
 
 ---
 
@@ -37,31 +53,107 @@ From Elastic Cloud Index Management (2026-01-02):
 
 ## Search Quality Metrics
 
-### Ground Truth Coverage
+### Ground Truth Coverage (2026-01-03)
 
-| Dimension | Current | Gap |
-|-----------|---------|-----|
-| Subjects | Maths KS4 only | 16 subjects missing |
-| Key Stages | KS4 only | KS1-3 missing |
-| Query count | 73 queries | Need 200+ for full coverage |
+| Dimension | Previous | Current | Status |
+|-----------|----------|---------|--------|
+| Subjects | 1 (Maths) | **16** | ✅ Complete |
+| Key Stages | KS4 only | **KS1-4** | ✅ Complete |
+| Query count | 73 | **263** | ✅ M3 Target exceeded |
 
-### Current MRR (KS4 Maths only)
+### Cross-Curriculum MRR Baselines (2026-01-03)
 
-From [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) (2025-12-24):
+#### Core Subjects (Per Key Stage)
 
-| Category | MRR | Status |
-|----------|-----|--------|
-| Misspelling | 0.833 | ✅ Excellent |
-| Naturalistic | 0.722 | ✅ Good |
-| Multi-concept | 0.625 | ✅ Good |
-| Synonym | 0.611 | ✅ Good |
-| Colloquial | 0.500 | ⚠️ Acceptable |
-| Intent-based | 0.229 | ❌ Exception granted |
-| **Overall** | **0.614** | ✅ Tier 1 target met |
+| Subject | Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Col | Status |
+|---------|-----------|---------|-------------|-----|-----|-----|-------|-----|--------|
+| **Maths** | KS4 | 55 | **0.894** | 0.930 | 1.000 | 0.833 | 0.750 | 0.500 | ✅ Excellent |
+| **English** | KS1 | 14 | **0.131** | 0.136 | 0.000 | 0.333 | — | 0.000 | ⚠️ TEST FLAW |
+| **English** | KS2 | 14 | **0.107** | 0.045 | 0.000 | 0.000 | — | 1.000 | ⚠️ TEST FLAW |
+| **English** | KS3 | 17 | **0.742** | 0.818 | 0.500 | 0.333 | — | 0.333 | ✅ Good |
+| **English** | KS4 | 35 | **0.394** | 0.401 | 0.583 | 0.000 | 0.000 | 1.000 | ⚠️ Acceptable |
+| **Science** | KS2 | 15 | **0.852** | 0.938 | 0.333 | 0.200 | — | 1.000 | ✅ Excellent |
+| **Science** | KS3 | 20 | **0.899** | 0.874 | 1.000 | 1.000 | 1.000 | — | ✅ Excellent |
 
-**Tier 1 status**: ✅ EXHAUSTED (all standard approaches tried for KS4 Maths)
+**⚠️ TEST FLAW**: English KS1/KS2 baselines are invalid — Primary ground truths span both key stages but were tested against single key stage filters. See architectural discovery above.
 
-**Key gap**: These metrics only cover KS4 Maths. Full curriculum benchmarks needed.
+#### Humanities (Per Key Stage)
+
+| Subject | Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Multi | Col | Status |
+|---------|-----------|---------|-------------|-----|-----|-----|-------|-----|--------|
+| **History** | KS2 | 6 | **0.667** | 0.800 | 0.000 | — | — | — | ✅ Good |
+| **History** | KS3 | 10 | **0.950** | 0.938 | 1.000 | 1.000 | — | — | ✅ Excellent |
+| **Geography** | KS3 | 9 | **0.759** | 0.806 | 0.500 | 0.500 | 1.000 | — | ✅ Good |
+| **Religious Ed** | KS3 | 7 | **0.667** | 0.667 | 0.333 | 1.000 | — | — | ✅ Good |
+
+#### Languages (KS3 Only)
+
+| Subject | Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Col | Status |
+|---------|-----------|---------|-------------|-----|-----|-----|-----|--------|
+| **French** | KS3 | 6 | **0.190** | 0.286 | 0.000 | 0.000 | — | ❌ Poor |
+| **Spanish** | KS3 | 6 | **0.294** | 0.417 | 0.000 | 0.100 | — | ❌ Poor |
+| **German** | KS3 | 6 | **0.194** | 0.292 | 0.000 | 0.000 | — | ❌ Poor |
+
+#### Creative & Other (KS3 Unless Noted)
+
+| Subject | Key Stage | Queries | Overall MRR | Nat | Mis | Syn | Col | Status |
+|---------|-----------|---------|-------------|-----|-----|-----|-----|--------|
+| **Computing** | KS3 | 9 | **0.481** | 0.571 | 0.333 | 0.000 | — | ⚠️ Acceptable |
+| **Art** | KS3 | 9 | **0.741** | 0.810 | 0.500 | 0.500 | — | ✅ Good |
+| **Music** | KS3 | 9 | **0.722** | 0.714 | 0.500 | — | 1.000 | ✅ Good |
+| **D&T** | KS3 | 9 | **0.815** | 0.806 | 1.000 | 1.000 | 0.500 | ✅ Excellent |
+| **PE** | KS3 | 9 | **0.356** | 0.450 | 0.000 | 0.500 | 0.000 | ❌ Poor |
+| **Citizenship** | KS3 | 6 | **0.667** | 0.708 | 0.167 | 1.000 | — | ✅ Good |
+| **Cooking** | KS2 | 6 | **0.493** | 0.667 | 0.167 | — | 0.125 | ⚠️ Acceptable |
+| **RSHE/PSHE** | — | — | — | — | — | — | — | ⏸️ Deferred |
+
+**Legend**: Nat=Naturalistic, Mis=Misspelling, Syn=Synonym, Multi=Multi-concept, Col=Colloquial
+
+### Performance Tiers (Current State)
+
+| Tier | Count | Subject/KS Combinations |
+|------|-------|-------------------------|
+| ✅ Excellent (MRR ≥ 0.7) | 11 | Maths KS4, English KS3, Science KS2, Science KS3, History KS3, Geography KS3, Art KS3, Music KS3, D&T KS3 |
+| ✅ Good (MRR 0.5-0.7) | 4 | History KS2, RE KS3, Citizenship KS3 |
+| ⚠️ Acceptable (MRR 0.4-0.5) | 3 | English KS4, Computing KS3, Cooking KS2 |
+| ❌ Poor (MRR < 0.4) | 6 | English KS1, English KS2, French KS3, Spanish KS3, German KS3, PE KS3 |
+| ⏸️ Deferred | 1 | RSHE/PSHE (no bulk data) |
+
+### Key Findings from Comprehensive Baselines (2026-01-03)
+
+1. **Primary English severely underperforms** — KS1 (0.131) and KS2 (0.107) have critical MRR gaps
+2. **Science performs excellently** — Both KS2 (0.852) and KS3 (0.899) exceed expectations
+3. **History KS3 is top performer** — 0.950 MRR demonstrates strong curriculum alignment
+4. **MFL continues to struggle** — All three languages remain below 0.3 MRR (upstream transcript issue)
+5. **English KS4 needs attention** — GCSE English at 0.394 MRR is below acceptable threshold
+6. **Misspelling remains a weakness** — Multiple subjects score 0.000 on typo handling
+
+### ⚠️ Root Cause: MFL Lessons Have No Transcripts (Upstream Issue)
+
+**Discovery (2026-01-03)**: MFL lessons lack transcripts entirely — verified via API.
+
+| Subject | Bulk Transcript Coverage | API Response |
+|---------|--------------------------|--------------|
+| French | 0.2% (1/417) | **500 server error** |
+| Spanish | 0.2% (1/525) | **404 "not available"** |
+| German | 0.2% (1/411) | **500 server error** |
+| Maths | 99.8% | ✅ Full transcript |
+
+**Root Cause**: Automatic captioning doesn't work for non-English speech. MFL videos exist (confirmed via assets API) but transcripts were never generated.
+
+**Implications**:
+
+- **This is an upstream Oak data issue** — we cannot fix it in our codebase
+- MFL search relies entirely on metadata (titles, outcomes, keywords — all in English)
+- ELSER limitation is now moot — there's no transcript content to semantically match
+
+See [mfl-multilingual-embeddings.md](post-sdk-extraction/mfl-multilingual-embeddings.md) for full analysis.
+
+**Potential improvements within our scope**:
+
+1. Boost BM25 weight for lesson titles (contain target language)
+2. Add MFL-specific synonyms for grammar terms
+3. Report issue to Oak for upstream fix
 
 ---
 
@@ -96,18 +188,29 @@ Unit documents now include:
 |-----------|--------|-----|
 | M1: Complete ES Ingestion | ✅ Verified | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) |
 | M2: Sequence Indexing | ✅ Verified | — |
+| M3: Ground Truth Expansion | ✅ **Complete** | — |
 | M4: DRY/SRP Refactoring | ✅ Complete | — |
 | M5: Data Completeness | ✅ Complete | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) |
 
 ## 🎯 Next Priority
 
-**Milestone 3: Search Quality Optimization**
+**Post-M3: Search Quality Optimization by Subject**
 
-1. Create comprehensive ground truths (all subjects, all key stages)
-2. Establish baseline benchmarks
-3. Audit and improve synonyms
-4. Analyze bulk download data for enrichment
-5. Measure and iterate
+**Priority subjects for improvement** (based on comprehensive baselines):
+
+| Priority | Subject/KS | MRR | Issue | Recommended Action |
+|----------|-----------|-----|-------|-------------------|
+| **1** | English KS1/KS2 | 0.13/0.11 | Primary content not found | Investigate ground truth alignment with indexed content |
+| **2** | English KS4 | 0.39 | GCSE texts poorly matched | Add An Inspector Calls, Macbeth-specific synonyms |
+| **3** | French/Spanish/German | 0.19-0.29 | No transcripts (upstream) | Add MFL grammar synonyms, boost title weighting |
+| **4** | PE KS3 | 0.36 | Misspellings not handled | Add PE-specific fuzzy terms |
+| **5** | Computing KS3 | 0.48 | "coding" not bridged | Add "coding"→"programming" synonym |
+
+**Recommended next steps**:
+1. Investigate English Primary ground truth alignment — expected slugs may not exist in KS1/KS2 content
+2. Add subject-specific synonyms for GCSE texts (An Inspector Calls characters, etc.)
+3. Add MFL grammar term synonyms ("negation"↔"saying no", etc.)
+4. Implement fuzzy matching improvements for common misspellings
 
 See [roadmap.md](roadmap.md) for full details.
 
@@ -133,10 +236,23 @@ See [roadmap.md](roadmap.md) for full details.
 
 ---
 
+## Experiment Protocol
+
+**When making changes to search**, follow the [EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md):
+
+1. **Design** — Document hypothesis and success criteria
+2. **Baseline** — Run cross-curriculum analysis, record in EXPERIMENT-LOG
+3. **Implement** — Make one change at a time
+4. **Measure** — Run benchmarks again
+5. **Decide** — Accept if improvement, reject if regression
+
+---
+
 ## Related Documents
 
 | Document | Purpose |
 |----------|---------|
+| [EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md) | **How to run experiments** |
 | [roadmap.md](roadmap.md) | Master plan |
 | [search-acceptance-criteria.md](search-acceptance-criteria.md) | Tier definitions |
 | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |

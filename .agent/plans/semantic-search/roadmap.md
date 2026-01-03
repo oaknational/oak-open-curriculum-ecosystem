@@ -16,6 +16,8 @@ This is THE authoritative roadmap for semantic search work.
 ```
 M3: Search Quality Optimization (active/)
         ↓
+Comprehensive Filter Testing (pre-sdk-extraction/) ← HIGH PRIORITY
+        ↓
 Bulk Data Analysis (pre-sdk-extraction/)
         ↓
 Tier 2: Document Relationships (pre-sdk-extraction/)
@@ -24,7 +26,11 @@ Tier 3: Modern ES Features (pre-sdk-extraction/)
         ↓
 SDK Extraction (sdk-extraction/)
         ↓
-Post-SDK Work (post-sdk-extraction/)
+MFL Multilingual Embeddings (post-sdk-extraction/) ← HIGH PRIORITY
+        ↓
+MCP Search Tool (post-sdk-extraction/)
+        ↓
+Tier 4: AI Enhancement (post-sdk-extraction/)
 ```
 
 ---
@@ -59,27 +65,49 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 ---
 
-## 🎯 CURRENT: M3 — Search Quality Optimization
+## ✅ COMPLETE: M3 — Search Quality Optimization
 
-**Status**: 📋 Ready to start
-**Priority**: HIGH — Foundation for all future search work
+**Status**: ✅ **Ground truth expansion complete** (263 queries, 16 subjects)
 **Specification**: [active/m3-search-quality-optimization.md](active/m3-search-quality-optimization.md)
 
-This milestone combines:
+### M3 Phases
 
-1. **Comprehensive ground truths** — All 17 subjects, all 4 key stages
-2. **Baseline benchmarks** — Per-subject, per-category MRR
-3. **Synonym audit** — Remove noise, add high-impact synonyms
-4. **ES tuning evaluation** — Query-time enhancements
-5. **Measure and iterate** — Experiment protocol for every change
+| Phase | Focus | Status |
+|-------|-------|--------|
+| 1. Ground Truths | All 17 subjects, all key stages | ✅ 263 queries |
+| 2. Baselines | Per-subject, per-category MRR | ✅ 11 subjects baselined |
+| 3. Synonym Audit | Remove noise, add high-impact | 📋 Next priority |
+| 4. ES Tuning | Query-time enhancements | 📋 |
+| 5. Iteration | Experiment protocol | 📋 |
 
-**Exit Criteria**: Search quality validated across full curriculum, not just KS4 Maths.
+### Key Findings
+
+- **Creative subjects excel**: Art (0.741), Music (0.722), D&T (0.815) MRR
+- **Languages struggle**: French (0.190), Spanish (0.294), German (0.194)
+- **Misspelling universal weakness**: PE, Languages fail on typos
+- **Synonym gaps**: "coding"→"programming", "saying no"→"negation"
+
+**Next Steps**: Complete remaining baselines, audit language-specific synonyms, add common misspellings.
 
 ---
 
 ## PRE-SDK-EXTRACTION Work
 
 Must complete before SDK can be extracted.
+
+### Comprehensive Filter Testing ⚠️ HIGH PRIORITY
+
+**Status**: 📋 Planned (after M3)
+**Specification**: [pre-sdk-extraction/comprehensive-filter-testing.md](pre-sdk-extraction/comprehensive-filter-testing.md)
+
+**KS4 Maths is NOT representative of the whole curriculum.** Before SDK extraction, we MUST:
+
+- Document all filter dimensions for all 17 subjects × 4 key stages
+- Understand metadata differences (tiers, exam boards, categories, unit options)
+- Test all valid and invalid filter combinations
+- Establish filter-specific MRR baselines
+
+**This is blocking SDK extraction** — we cannot design a clean filter API without understanding all edge cases.
 
 ### Bulk Data Analysis
 
@@ -122,6 +150,19 @@ Extract semantic search into:
 ## POST-SDK-EXTRACTION Work
 
 Requires SDK to exist first.
+
+### MFL Multilingual Embeddings ⚠️ HIGH PRIORITY
+
+**Status**: 📋 Planned — Hypothesis verification needed first
+**Specification**: [post-sdk-extraction/mfl-multilingual-embeddings.md](post-sdk-extraction/mfl-multilingual-embeddings.md)
+
+French, Spanish, German have the worst MRR (0.19-0.29). **Hypothesis**: ELSER v2 is English-only and cannot semantically match target language content.
+
+**Before implementing**, we MUST:
+
+1. Read Elastic ELSER documentation to verify language limitations
+2. Test hypothesis empirically (ELSER-only vs BM25-only for MFL)
+3. Analyze failure modes for MFL queries
 
 ### MCP Search Tool
 

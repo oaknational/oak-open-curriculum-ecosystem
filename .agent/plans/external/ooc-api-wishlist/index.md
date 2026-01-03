@@ -30,10 +30,12 @@ If someone handed you this pack, would you know how to find what you want, and w
 - **Bulk download completeness:** `15-bulk-download-examples.md` (Examples 8-12) and `00-overview-and-known-issues.md` (ER4-ER8)
 - **Schema/validation tooling:** `20-validation-and-schema-examples.md` and `09-schemas-endpoint-rfc.md`
 - **Programme variants and identifiers:** `18-programmes-and-identifiers-examples.md` and `04-high-priority-requests.md` (Items 5-6)
+- **MFL/Languages issues:** `00-overview-and-known-issues.md` (MFL Transcript API Response Inconsistency, ER14 Multilingual Captioning)
+- **Data variances and coverage:** `00-overview-and-known-issues.md` (ER15 Category Availability, ER16 Key Stage Coverage Discovery) and [Data Variances](../../../../docs/data/DATA-VARIANCES.md)
 
 ## File map
 
-- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30), **bulk download completeness requests** (RSHE-PSHE file, tier field, unit options, yearSlug, examBoard) (NEW 2025-12-30), **bulk download structure improvements** (top-level threads, null handling, bundled schemas, lesson counts, subject metadata) (NEW 2025-12-31).
+- `00-overview-and-known-issues.md` — open questions, API code review findings, binary response fix, legitimate z.unknown exceptions, bulk download data integrity issues, KS4 science accessibility clarification, **clarifying questions for upstream team** (NEW 2025-12-30), **enhancement requests** (full data coverage, API vs bulk docs, hasTranscript flags) (NEW 2025-12-30), **bulk download completeness requests** (RSHE-PSHE file, tier field, unit options, yearSlug, examBoard) (NEW 2025-12-30), **bulk download structure improvements** (top-level threads, null handling, bundled schemas, lesson counts, subject metadata) (NEW 2025-12-31), **MFL transcript API inconsistency** (500 vs 404 responses) (NEW 2026-01-03), **future enhancements** (multilingual captioning, category docs, key stage discovery) (NEW 2026-01-03).
 - `01-derived-fields-and-ks4-metadata.md` — derived fields registry, ghost pathway note, KS4 programme factors, and interim denormalisation workaround.
 - `02-semantic-summary.md` — rerank summary request and the semantic_summary field definitions with status and rationale.
 - `03-context-and-vision.md` — executive summary, vision, tool ecosystem, schema-first pipeline overview, and audience.
@@ -58,4 +60,5 @@ If someone handed you this pack, would you know how to find what you want, and w
 
 ## Related Analysis Documents
 
-- **[Curriculum Structure Analysis](../../curriculum-structure-analysis.md)** — Comprehensive analysis of all 6 structural patterns, traversal strategies, and aggregation requirements (2025-12-28)
+- **[Data Variances](../../../../docs/data/DATA-VARIANCES.md)** — **Consolidated reference** for all curriculum data differences, transcript availability, structural patterns, API vs Bulk, integrity issues
+- **[Curriculum Structure Analysis](../../analysis/curriculum-structure-analysis.md)** — Comprehensive analysis of all 7 structural patterns, traversal strategies, and aggregation requirements (2025-12-28)

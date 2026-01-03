@@ -90,11 +90,22 @@ pnpm doc-gen
 
 Keep CI green locally; no `--no-verify` or disabled lint rules.
 
-## 10. Useful References
+## 10. Understand Curriculum Data Variances
 
-- [docs/README.md](../README.md)
-- [docs/architecture/architectural-decisions/](../architecture/architectural-decisions/)
-- [docs/agent-guidance/development-practice.md](../agent-guidance/development-practice.md)
+The Oak curriculum data has significant variances across subjects and key stages. Before working on search or ingestion:
+
+- **Read**: [Data Variances](../data/DATA-VARIANCES.md) — transcript availability, structural patterns, KS4 complexity
+- **Key insight**: MFL subjects (French, Spanish, German) have 0% transcript coverage; Maths has 100%
+- **Key insight**: KS4 has tiers, exam boards, pathways that don't exist in KS1-3
+- **Key insight**: Only 3 subjects (English, Science, RE) have categories
+
+## 11. Useful References
+
+- [docs/README.md](../README.md) - Documentation hub
+- [Data Variances](../data/DATA-VARIANCES.md) - Subject/key stage differences
+- [docs/architecture/architectural-decisions/](../architecture/architectural-decisions/) - ADRs
+- [docs/agent-guidance/development-practice.md](../agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
+- [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 
 Welcome aboard! Keep the documentation close to the code and prefer the shared helpers over bespoke validation.

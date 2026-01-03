@@ -860,6 +860,52 @@ See Item 13 in `05-medium-priority-requests.md`: Add `hasVideo`/`hasTranscript` 
 
 ---
 
+## MFL Transcript API Response Inconsistency (2026-01-03)
+
+**Status**: 🔴 BUG — Inconsistent error responses for the same condition
+**Endpoint**: `/api/v0/lessons/{lesson}/transcript`
+**Impact**: Cannot reliably detect "no transcript" vs "server error"
+
+### Observation
+
+MFL (French, Spanish, German) lessons consistently lack transcripts, but the API returns **different error types** for the same underlying condition:
+
+| Subject | Lesson Example | Response | Expected |
+|---------|----------------|----------|----------|
+| French | (any KS3 lesson) | **500 Internal Server Error** | 404 |
+| Spanish | (any KS3 lesson) | **404 "not available"** | 404 ✅ |
+| German | (any KS3 lesson) | **500 Internal Server Error** | 404 |
+
+**Tested 2026-01-03 via API**
+
+### Root Cause
+
+MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The videos exist, but transcripts were never generated.
+
+### Impact
+
+1. **Observability**: 500 errors trigger alerts; 404s don't
+2. **Retry Logic**: Consumers may retry 500s assuming transient failure
+3. **Caching**: 500s typically aren't cached; 404s can be cached
+4. **Error Budgets**: 500s count against SLOs; 404s don't
+
+### Requested Fix
+
+Return consistent 404 responses with explicit reason:
+
+```json
+HTTP 404 Not Found
+{
+  "error": "not_found",
+  "reason": "no_transcript_available",
+  "message": "This lesson does not have a transcript. MFL lessons with non-English audio are not transcribed."
+}
+```
+
+**User impact**: API consumers and SDK/MCP engineers can correctly handle MFL lessons; monitoring systems don't fire false alerts.
+
+---
+
 ## Empty Transcript Responses (2025-12-30)
 
 **Examples**: See `11-assets-and-transcripts-examples.md`.
@@ -1455,3 +1501,157 @@ bulk-download-2025-12-30.zip
 - Consistent with API subject response structure
 
 **Priority**: LOW — workarounds exist
+
+---
+
+## Future Enhancement Requests (2026-01-03)
+
+### ER14: Multilingual Captioning Support for MFL Subjects
+
+**Status**: 🟡 ENHANCEMENT — Long-term improvement
+**Priority**: LOW-MEDIUM (significant effort, high value for MFL teachers)
+
+**Current State**:
+
+MFL (French, German, Spanish) lessons have 0% transcript coverage because:
+
+1. Videos contain non-English speech (teachers speaking the target language)
+2. Automatic captioning services are trained on English
+3. Captioning fails or produces garbage for non-English audio
+4. Videos exist, but transcripts were never generated
+
+**Impact**:
+
+| Subject | Video | Transcript | Search Quality |
+|---------|-------|------------|----------------|
+| French | ✅ Exists | ❌ None | MRR 0.19 |
+| Spanish | Varies | ❌ None | MRR 0.29 |
+| German | ✅ Exists | ❌ None | MRR 0.19 |
+| Maths | ✅ Exists | ✅ Full | MRR 0.61 |
+
+MFL search quality is 3-4x worse than subjects with transcripts.
+
+**Requested Enhancement**:
+
+Explore multilingual captioning options:
+
+1. **Multilingual ASR models** — Modern models (Whisper, etc.) support French, Spanish, German
+2. **Human captioning** — Higher accuracy, higher cost
+3. **Hybrid approach** — ASR with human review
+
+**Business Case**:
+
+- ~1,350 MFL lessons across primary and secondary
+- Teachers for 3 subjects (10%+ of curriculum) cannot benefit from transcript-based search
+- MFL is a high-demand subject area
+
+**User impact**: MFL teachers get full search functionality; AI agents can retrieve relevant MFL content.
+
+---
+
+### ER15: Document Category Availability by Subject
+
+**Status**: 🟡 ENHANCEMENT — Documentation improvement
+**Priority**: LOW
+
+**Current State**:
+
+Categories (`categoryTitle`, `categorySlug`) are only available for **3 of 17 subjects**:
+
+| Subject | Has Categories | Category Values |
+|---------|----------------|-----------------|
+| English | ✅ | Grammar, Handwriting, Reading/writing/oracy |
+| Science | ✅ | Biology, Chemistry, Physics |
+| Religious Education | ✅ | Theology, Philosophy, Social science |
+| **All others (14)** | ❌ | None |
+
+This is **intentional curriculum design**, not missing data — but it's not documented.
+
+**Requested Enhancement**:
+
+1. **Document in OpenAPI schema** which subjects have categories:
+
+```yaml
+categories:
+  type: array
+  description: |
+    Thematic groupings within subjects. Only available for:
+    - English (Grammar, Handwriting, Reading/writing/oracy)
+    - Science (Biology, Chemistry, Physics)  
+    - Religious Education (Theology, Philosophy, Social science)
+    
+    Other subjects do not use category groupings.
+```
+
+2. **Add category descriptions** (currently only titles exist):
+
+```json
+{
+  "categorySlug": "biology",
+  "categoryTitle": "Biology",
+  "categoryDescription": "Study of living organisms, including cells, genetics, evolution, and ecosystems"
+}
+```
+
+**User impact**: API consumers understand category scope; UI developers can conditionally show category filters.
+
+---
+
+### ER16: Key Stage Coverage Discovery Endpoint
+
+**Status**: 🟡 ENHANCEMENT — Discoverability improvement
+**Priority**: LOW
+
+**Current State**:
+
+Different subjects cover different key stages, but there's no API way to discover this:
+
+| Gap | Subjects |
+|-----|----------|
+| No KS1 (start at Year 3) | French, Spanish |
+| No primary content | German, Citizenship |
+| No KS4 content | Cooking & Nutrition |
+| No bulk download | RSHE-PSHE |
+
+Consumers must discover gaps through trial and error or external documentation.
+
+**Requested Enhancement**:
+
+Add key stage coverage to `/subjects` response:
+
+```json
+{
+  "subjectSlug": "french",
+  "subjectTitle": "French",
+  "keyStages": ["ks2", "ks3", "ks4"],
+  "keyStageNotes": "No KS1 content; French begins in Year 3"
+}
+```
+
+Or create a dedicated discovery endpoint:
+
+```http
+GET /api/v0/subjects/{subject}/coverage
+```
+
+```json
+{
+  "subjectSlug": "french",
+  "keyStages": {
+    "ks1": { "available": false, "reason": "Subject begins at Year 3" },
+    "ks2": { "available": true, "years": [3, 4, 5, 6] },
+    "ks3": { "available": true, "years": [7, 8, 9] },
+    "ks4": { "available": true, "years": [10, 11], "examBoards": ["aqa", "edexcel"] }
+  }
+}
+```
+
+**User impact**: API consumers can programmatically determine subject availability; UI developers can hide unavailable options.
+
+---
+
+## Related Documents
+
+- **[Data Variances](../../../../docs/data/DATA-VARIANCES.md)** — Consolidated reference for all curriculum data differences (includes summaries of issues documented here)
+- **[Curriculum Structure Analysis](../../analysis/curriculum-structure-analysis.md)** — 7 structural patterns, traversal strategies
+- **[index.md](index.md)** — Navigation hub for all wishlist documents

@@ -82,6 +82,16 @@ See [environment variables guide](development/environment-variables.md) for comp
 
 ## Key Concepts
 
+### Curriculum Data Variances
+
+The Oak curriculum data has significant differences across subjects and key stages. Before working on search or data:
+
+- **[Data Variances](data/DATA-VARIANCES.md)** — Essential reading for understanding data shapes
+- **Transcript availability**: MFL (French, Spanish, German) has 0%; most subjects have 100%
+- **KS4 complexity**: Tiers, exam boards, pathways don't exist in KS1-3
+- **Categories**: Only English, Science, RE have categories
+- **Structural patterns**: 6 API traversal patterns that can combine
+
 ### OpenAPI-First Pipeline
 
 Everything flows from the OpenAPI specification:
@@ -305,9 +315,10 @@ test('MCP server lists all generated tools', async () => {
 ### Documentation
 
 1. **Architecture**: [OpenAPI Pipeline](architecture/openapi-pipeline.md)
-2. **Setup**: [Environment Variables](development/environment-variables.md)
-3. **Onboarding**: [Developer Onboarding](development/onboarding.md)
-4. **Contributing**: [CONTRIBUTING.md](../CONTRIBUTING.md)
+2. **Curriculum Data**: [Data Variances](data/DATA-VARIANCES.md)
+3. **Setup**: [Environment Variables](development/environment-variables.md)
+4. **Onboarding**: [Developer Onboarding](development/onboarding.md)
+5. **Contributing**: [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ### Troubleshooting
 

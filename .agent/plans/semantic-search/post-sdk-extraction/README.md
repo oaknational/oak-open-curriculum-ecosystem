@@ -8,11 +8,22 @@
 
 ## Plans in This Folder
 
-| Plan | Prerequisites | Description |
-|------|---------------|-------------|
-| [mcp-search-tool.md](mcp-search-tool.md) | SDK extraction | Expose search via MCP for AI agents |
-| [tier-4-ai-enhancement.md](tier-4-ai-enhancement.md) | Tiers 1-3 exhausted | LLM pre-processing, intent classification |
-| [advanced-features.md](advanced-features.md) | SDK stable | RAG, knowledge graph, multi-vector fields |
+| Plan | Prerequisites | Priority | Description |
+|------|---------------|----------|-------------|
+| **[mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md)** | SDK extraction | **HIGH** | Fix 0.19-0.29 MRR for French/Spanish/German |
+| [mcp-search-tool.md](mcp-search-tool.md) | SDK extraction | HIGH | Expose search via MCP for AI agents |
+| [tier-4-ai-enhancement.md](tier-4-ai-enhancement.md) | Tiers 1-3 exhausted | MEDIUM | LLM pre-processing, intent classification |
+| [advanced-features.md](advanced-features.md) | SDK stable | LOW | RAG, knowledge graph, multi-vector fields |
+
+### ⚠️ Critical: MFL Multilingual Embeddings
+
+**[mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md)** is HIGH PRIORITY because:
+
+- MFL subjects have the worst search performance (French: 0.190, German: 0.194)
+- ELSER v2 is (hypothetically) English-only
+- Teachers of French/Spanish/German deserve working search
+
+**However**, before implementation, we MUST verify the hypothesis that ELSER is the cause. See the plan for verification steps.
 
 ---
 

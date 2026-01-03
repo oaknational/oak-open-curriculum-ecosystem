@@ -3,6 +3,8 @@
 Use this template for **search relevance evaluations**. For other experiment types,
 see [`template-for-experiments.md`](template-for-experiments.md).
 
+**Before starting**: Read [EXPERIMENTAL-PROTOCOL.md](../EXPERIMENTAL-PROTOCOL.md) for the full process.
+
 File naming: `[topic].experiment.md`
 
 ---
