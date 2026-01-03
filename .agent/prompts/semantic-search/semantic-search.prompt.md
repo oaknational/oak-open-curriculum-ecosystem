@@ -6,6 +6,50 @@ This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
+## What Is This Project?
+
+**Oak National Academy** provides free, high-quality curriculum resources for UK schools (KS1-KS4, ages 5-16). This project builds **semantic search** over Oak's 16,000+ lessons to help teachers and AI agents find relevant educational content.
+
+**Impact**: Teachers can find "lessons about equivalent fractions for Year 5" instead of navigating taxonomy trees. AI agents can retrieve curriculum-aligned content for lesson planning.
+
+---
+
+## Repository Orientation
+
+| Location | Purpose |
+|----------|---------|
+| `apps/oak-open-curriculum-semantic-search/` | Search app (transitioning to SDK/CLI) |
+| `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API access, type-gen |
+| `packages/libs/oak-curriculum-search-lib/` | Shared search library (synonyms, types) |
+| `.agent/plans/semantic-search/` | Planning documents |
+| `.agent/evaluations/` | Experiment framework and logs |
+
+**Key directories in the search app**:
+
+| Directory | Purpose |
+|-----------|---------|
+| `src/lib/` | Core search logic (hybrid search, indexing) |
+| `evaluation/` | Ground truths, benchmarks, analysis scripts |
+| `docs/` | Technical documentation |
+| `cli/` | CLI commands for ingestion, search, status |
+
+---
+
+## Before You Start
+
+1. **Verify ES access**: `cd apps/oak-open-curriculum-semantic-search && pnpm es:status`
+   - Should show 7 indices with 16,414 documents total
+   - If this fails, check `.env` has valid `ELASTICSEARCH_*` credentials
+
+2. **Run current benchmarks**: `pnpm eval:per-category`
+   - This establishes your baseline before any changes
+
+3. **Read the M3 plan**: [m3-search-quality-optimization.md](../../plans/semantic-search/active/m3-search-quality-optimization.md)
+
+4. **Read foundation documents** (linked below) — TDD, quality gates, type discipline
+
+---
+
 ## 🎯 CURRENT PRIORITY: Milestone 3 — Search Quality Optimization
 
 **Full ingestion is complete** (16,414 documents). Now optimising search quality.

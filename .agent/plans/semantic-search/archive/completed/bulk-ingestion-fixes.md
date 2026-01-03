@@ -72,3 +72,4 @@ This plan addressed three critical fixes for the bulk ingestion pipeline. All fi
 - [ADR-095: Missing Transcript Handling](../../../../docs/architecture/architectural-decisions/095-missing-transcript-handling.md)
 
 
+
