@@ -1,7 +1,7 @@
 # Semantic Search Current State
 
-**Last Updated**: 2026-01-03 (evening)
-**Status**: 🔄 **Phase 5a In Progress** — Ground truth restructure ~80% complete, needs recovery
+**Last Updated**: 2026-01-05
+**Status**: ✅ **Phase 5a Complete** — Ready for Phase 5b (maths/primary ground truths)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Current Plan**: [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
@@ -9,25 +9,25 @@ This is THE authoritative source for current system metrics.
 
 ---
 
-## 🚨 Phase 5a Status (2026-01-03 Evening)
+## ✅ Phase 5a Complete (2026-01-05)
 
-**Ground truth restructure is IN PROGRESS but needs recovery.**
+**Ground truth restructure is COMPLETE. All quality gates pass.**
 
-### What's Done ✅
+### What Was Done ✅
 - All `ks3/` directories renamed to `secondary/`
 - All `ks2/` directories renamed to `primary/`  
 - English `ks3/` + `ks4/` merged into `english/secondary/`
 - Maths files moved to `maths/secondary/`
 - Root `index.ts` cleaned up (no deprecated aliases)
 - `analyze-cross-curriculum.ts` updated with phase-based exports
+- Fixed corrupted UNIT_* export names from sed timeout
+- Updated all consumer files with correct imports
+- All 934 unit tests pass, e2e tests pass, smoke tests pass
 
-### What's Broken ⚠️
-A timed-out `sed` command corrupted some UNIT_* export names. See the prompt file for fix commands.
-
-### What's Next
-1. Fix corrupted files
-2. Run quality gates
-3. Phase 5b: Create `maths/primary/` ground truths
+### What's Next: Phase 5b
+1. Create `maths/primary/` ground truths (30+ queries for KS1+KS2)
+2. Use MCP tools to discover KS1+KS2 maths content
+3. Validate all slugs via API
 
 ---
 
@@ -74,6 +74,19 @@ From Elastic Cloud Index Management (2026-01-02):
 ---
 
 ## Search Quality Metrics
+
+### Metrics Tracked
+
+| Metric | Purpose | Reference |
+|--------|---------|-----------|
+| **MRR** | Position of first relevant result | Primary acceptance metric |
+| **NDCG@10** | Overall ranking quality | Secondary quality metric |
+| **Precision@10** | Proportion of top 10 that are relevant | Noise detection |
+| **Recall@10** | Proportion of relevant found in top 10 | Completeness detection |
+| **Zero-Hit Rate** | Queries returning nothing | Coverage gaps |
+| **p95 Latency** | User experience | Performance budget |
+
+> **Full definitions**: See [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
 
 ### Ground Truth Coverage (2026-01-03)
 

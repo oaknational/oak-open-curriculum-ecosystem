@@ -28,19 +28,20 @@ This directory contains documentation about the Oak curriculum data structure, v
 
 ### Transcript Availability
 
-| Category    | Coverage              | Subjects                                          |
-| ----------- | --------------------- | ------------------------------------------------- |
-| Full (100%) | Rich semantic search  | Maths, English, Science, History, Geography, etc. |
-| None (<1%)  | Structure-only search | **French, Spanish, German**                       |
+| Category       | Coverage                | Subjects                                                          |
+| -------------- | ----------------------- | ----------------------------------------------------------------- |
+| Full (96-100%) | Rich semantic search    | Most subjects (Maths, English, Science, History, Geography, etc.) |
+| Partial (~29%) | Limited semantic search | **PE Secondary**                                                  |
+| None (<1%)     | Structure-only search   | **French, Spanish, German, PE Primary**                           |
 
 ### Bulk Download Issues
 
-| Issue                     | Impact                                    |
-| ------------------------- | ----------------------------------------- |
-| **467 duplicate lessons** | Across Maths, English, Geography, Science |
-| **Missing tier metadata** | Maths KS4 only                            |
-| **RSHE-PSHE missing**     | Entire subject unavailable                |
-| **Null title fields**     | Despite slug being populated              |
+| Issue                     | Impact                                                  |
+| ------------------------- | ------------------------------------------------------- |
+| **513 duplicate lessons** | 2025-12-30: Maths, English, Geography, History, Science |
+| **Missing tier metadata** | Maths KS4 only                                          |
+| **RSHE-PSHE missing**     | Entire subject unavailable                              |
+| **Null title fields**     | Despite slug being populated                            |
 
 ### Type Consistency Issues
 

@@ -67,6 +67,25 @@ cd apps/oak-open-curriculum-semantic-search
 pnpm tsx evaluation/validation/validate-ground-truth.ts
 ```
 
+### 2.3 TDD for Ground Truths
+
+Ground truth creation follows TDD principles (per [testing-strategy.md](../directives-and-memory/testing-strategy.md)):
+
+1. **RED**: Add query to ground truth file with expected slugs
+2. **Validate**: Run `validate-ground-truth.ts` — it MUST fail if slugs don't exist
+3. **GREEN**: Fix slugs by validating against API/MCP tools
+4. **Document**: Add comprehensive TSDoc explaining the test scenario
+
+### 2.4 Single Source of Truth
+
+All ground truths MUST be registered in `GROUND_TRUTH_REGISTRY` (per [rules.md](../directives-and-memory/rules.md)):
+
+- **One registry**: `src/lib/search-quality/ground-truth/index.ts`
+- **One validation script**: Iterates the registry
+- **One benchmark runner**: Uses the registry
+
+No hardcoded mappings duplicating the registry. No compatibility layers.
+
 ### 2.3 Measure Per-Category, Not Just Aggregate
 
 Aggregate MRR hides important variation. Always report per-category metrics.
@@ -138,19 +157,22 @@ Define before running:
 | Smoke tests | Reproducible validation | Confirming winners |
 | Experiments framework | Formal A/B | Architectural decisions |
 
-### 4.2 Analysis Scripts
+### 4.2 Benchmark Commands
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Cross-curriculum analysis (any subject)
-pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject maths --keyStage ks4
-pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject french --keyStage ks3
+# Unified benchmark runner (preferred)
+pnpm benchmark --all                                    # All subjects, all phases
+pnpm benchmark --subject maths --phase secondary        # Specific scope
+pnpm benchmark --phase primary --verbose                # All primary, detailed output
 
-# Legacy KS4 Maths analysis
-pnpm eval:per-category    # Per-category MRR breakdown
-pnpm eval:diagnostic      # Detailed pattern analysis
+# Cross-curriculum analysis (CLI)
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject maths --phase secondary
+pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject french --phase secondary
 ```
+
+**Note**: Use `--phase` (primary/secondary) or `--keyStages` (comma-separated), not legacy `--keyStage`.
 
 ### 4.3 Experiment Workflow
 
@@ -219,8 +241,12 @@ If metrics changed, update [current-state.md](../plans/semantic-search/current-s
 |--------|---------|----------------|
 | **MRR** | 1/N × Σ(1/rank_i) | Average of 1/position of first relevant result |
 | **NDCG@10** | Normalised DCG | Quality of ranking with graded relevance |
+| **Precision@10** | relevant_in_top_10 / 10 | Proportion of top 10 that are relevant (less noise = higher) |
+| **Recall@10** | relevant_in_top_10 / total_relevant | Proportion of relevant found in top 10 (completeness) |
 | **Zero-Hit Rate** | count(no_results) / total | Queries returning nothing |
 | **p95 Latency** | 95th percentile | Tail latency |
+
+> **Full definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
 
 ### 6.2 MRR Interpretation Scale
 

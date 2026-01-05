@@ -1,6 +1,6 @@
 # Curriculum Structure Analysis
 
-**Status**: COMPLETE — Comprehensive analysis verified 2025-12-28  
+**Status**: COMPLETE — Comprehensive analysis verified 2025-12-28 (bulk counts updated 2025-12-30)  
 **Date**: 2025-12-28  
 **Purpose**: Document all structural patterns across ALL 17 subjects and ALL 4 key stages
 
@@ -201,7 +201,7 @@ subject → sequence → year → units[] where unit has unitOptions[]
 | Design-Technology | Papers/boards, Polymers/timbers, Textiles | 0 |
 | English | Animal Farm, Inspector Calls, Macbeth, etc. | 26 |
 | Geography | Coastal, River, Glacial landscapes | 67 |
-| History | Battle of Hastings, Durham Cathedral, etc. | 0 |
+| History | Battle of Hastings, Durham Cathedral, etc. | 25 |
 | Religious-Education | Buddhism vs Islam beliefs/practices | 0 |
 
 **API Response Example** (English AQA Year 10):
@@ -217,12 +217,13 @@ subject → sequence → year → units[] where unit has unitOptions[]
 }
 ```
 
-**Bulk Download Impact**:
+**Bulk Download Impact (2025-12-30 snapshot)**:
 
 - Lessons appear in multiple unit variants (different unit slugs, same lesson)
-- English: 26 duplicate lesson entries
+- English: 47 duplicate lesson entries
 - Geography: 67 duplicate lesson entries
-- Art, D&T, History, RE: No bulk duplicates despite having unitOptions (lessons unique to each option)
+- History: 25 duplicate lesson entries
+- Art, D&T, RE: No bulk duplicates despite having unitOptions (lessons unique to each option)
 
 **Ingestion Impact**:
 
@@ -243,12 +244,12 @@ subject → sequence → year → units[] where unit has unitOptions[]
 
 ## Data Analysis Summary
 
-### Bulk Download Analysis (Complete — All 30 Files)
+### Bulk Download Analysis (Complete — All 30 Files, 2025-12-30 snapshot)
 
 | File | Raw Lessons | Unique Lessons | Duplicates | Cause |
 |------|-------------|----------------|------------|-------|
 | art-primary | 214 | 214 | 0 | — |
-| art-secondary | 189 | 189 | 0 | — |
+| art-secondary | 204 | 204 | 0 | — |
 | citizenship-secondary | 318 | 318 | 0 | — |
 | computing-primary | 180 | 180 | 0 | — |
 | computing-secondary | 348 | 348 | 0 | — |
@@ -256,15 +257,15 @@ subject → sequence → year → units[] where unit has unitOptions[]
 | cooking-nutrition-secondary | 36 | 36 | 0 | — |
 | design-technology-primary | 144 | 144 | 0 | — |
 | design-technology-secondary | 216 | 216 | 0 | — |
-| english-primary | 1,516 | 1,516 | 0 | — |
-| english-secondary | 1,035 | 1,009 | **26** | Unit options |
+| english-primary | 1,512 | 1,512 | 0 | — |
+| english-secondary | 1,075 | 1,028 | **47** | Unit options |
 | french-primary | 105 | 105 | 0 | — |
 | french-secondary | 417 | 417 | 0 | — |
 | geography-primary | 223 | 223 | 0 | — |
 | geography-secondary | 527 | 460 | **67** | Unit options |
 | german-secondary | 411 | 411 | 0 | — |
-| history-primary | 216 | 216 | 0 | — |
-| history-secondary | 468 | 468 | 0 | — |
+| history-primary | 218 | 218 | 0 | — |
+| history-secondary | 464 | 439 | **25** | Unit options |
 | maths-primary | 1,072 | 1,072 | 0 | — |
 | maths-secondary | 1,235 | 862 | **373** | Tier variants |
 | music-primary | 216 | 216 | 0 | — |
@@ -272,12 +273,12 @@ subject → sequence → year → units[] where unit has unitOptions[]
 | physical-education-primary | 432 | 432 | 0 | — |
 | physical-education-secondary | 560 | 560 | 0 | — |
 | religious-education-primary | 216 | 216 | 0 | — |
-| religious-education-secondary | 396 | 396 | 0 | — |
+| religious-education-secondary | 395 | 395 | 0 | — |
 | science-primary | 390 | 390 | 0 | — |
-| science-secondary | 888 | 887 | **1** | Cross-unit |
+| science-secondary | 890 | 889 | **1** | Cross-unit |
 | spanish-primary | 112 | 112 | 0 | — |
 | spanish-secondary | 413 | 413 | 0 | — |
-| **TOTAL** | **12,783** | **12,316** | **467** | — |
+| **TOTAL** | **12,833** | **12,320** | **513** | — |
 
 **Note**: RSHE-PSHE has no bulk download file (API only).
 
@@ -410,4 +411,3 @@ Each unit document should contain:
 - [ADR-080: KS4 Metadata Denormalisation Strategy](../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md)
 - [ADR-083: Complete Lesson Enumeration Strategy](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
 - [Upstream API Wishlist](./external/ooc-api-wishlist/00-overview-and-known-issues.md)
-

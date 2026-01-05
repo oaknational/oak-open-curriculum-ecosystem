@@ -8,10 +8,10 @@
 
 Investigation into transcript availability revealed fundamental differences between the Oak bulk download and live API:
 
-| Source            | Transcript Coverage   | Structural Data                 |
-| ----------------- | --------------------- | ------------------------------- |
-| **Bulk Download** | ~81% (14/17 subjects) | Missing tier info, unit options |
-| **Live API**      | ~16% (maths only)     | Complete structural data        |
+| Source            | Transcript Coverage | Structural Data                 |
+| ----------------- | ------------------- | ------------------------------- |
+| **Bulk Download** | ~81.9% overall      | Missing tier info, unit options |
+| **Live API**      | ~16% (maths only)   | Complete structural data        |
 
 The current ingestion pipeline uses the API exclusively, which results in:
 
@@ -31,8 +31,8 @@ This is intentional TPC (Third Party Content) license filtering, not a bug.
 
 The bulk download (`reference/bulk_download_data/`) contains:
 
-- Complete lesson enumeration (~12,783 lessons)
-- Transcripts for 81% of lessons (all subjects except MFL and PE)
+- Complete lesson enumeration (~12,833 lessons; 12,320 unique)
+- Transcripts for ~81.9% of lessons (MFL and PE sparse; missing often `"NULL"`)
 - Rich metadata (keywords, learning points, misconceptions, teacher tips)
 - Exam board information on units
 - Exam subject information (biology, chemistry, physics, combined-science)
@@ -40,7 +40,7 @@ The bulk download (`reference/bulk_download_data/`) contains:
 However, it lacks:
 
 - **Tier information** for Maths KS4 (373 lessons duplicated with no discriminator)
-- **Unit options** for Geography and English KS4
+- **Unit options** for Geography, English, and History KS4
 - `phaseSlug`, `categories`, `canonicalUrl` fields
 
 ## Decision
@@ -54,7 +54,7 @@ However, it lacks:
 │                                                                  │
 │  1. PARSE BULK DOWNLOAD                                          │
 │     ├── Enumerate all lessons                                    │
-│     ├── Extract transcripts (81% coverage)                       │
+│     ├── Extract transcripts (~81.9% coverage)                    │
 │     ├── Extract metadata (keywords, learning points, etc.)       │
 │     ├── Extract exam boards from unit `examBoards` field         │
 │     └── Extract exam subjects from `subjectSlug`                 │
@@ -62,7 +62,7 @@ However, it lacks:
 │  2. SUPPLEMENT FROM API                                          │
 │     ├── Tier info for Maths KS4                                  │
 │     │   └── Via `/sequences/maths-secondary/units`               │
-│     └── Unit options for Geography/English KS4                   │
+│     └── Unit options for Geography/English/History KS4           │
 │         └── Via `/sequences/{seq}/units` with `unitOptions`      │
 │                                                                  │
 │  3. MERGE AND INDEX                                              │
@@ -96,7 +96,7 @@ lesson.unitSlug → sequence.units[].unitSlug → unit.yearSlug
 
 ### Why Bulk-First?
 
-1. **81% transcript coverage** vs 16% from API
+1. **~81.9% transcript coverage** vs 16% from API
 2. **No wasted API calls** — bulk has all data locally
 3. **Faster ingestion** — read from disk vs HTTP requests
 4. **Complete enumeration** — no pagination bugs or TPC filtering
@@ -120,7 +120,7 @@ Without tier information, maths KS4 lessons cannot be correctly associated with 
 
 ### Positive
 
-- ✅ **81% transcript coverage** — semantic search across 14/17 subjects
+- ✅ **~81.9% transcript coverage** — semantic search across most subjects (MFL/PE sparse)
 - ✅ **No 404 noise** — transcripts available locally
 - ✅ **Faster ingestion** — no per-lesson API calls for transcripts
 - ✅ **Complete metadata** — all fields available in bulk

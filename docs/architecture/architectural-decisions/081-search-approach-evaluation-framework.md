@@ -80,12 +80,16 @@ How do we systematically evaluate and compare search approaches to ensure:
 
 #### Primary Metrics
 
-| Metric                         | Formula                       | Interpretation                                  |
-| ------------------------------ | ----------------------------- | ----------------------------------------------- |
-| **MRR** (Mean Reciprocal Rank) | `1/N × Σ(1/rank_i)`           | Average of 1/position of first relevant result  |
-| **NDCG@10**                    | Normalised DCG                | Quality of ranking considering graded relevance |
-| **Zero-Hit Rate**              | `count(no_results) / total`   | Queries returning no results                    |
-| **p95 Latency**                | 95th percentile response time | Tail latency for worst 5% of queries            |
+| Metric                         | Formula                               | Interpretation                                     |
+| ------------------------------ | ------------------------------------- | -------------------------------------------------- |
+| **MRR** (Mean Reciprocal Rank) | `1/N × Σ(1/rank_i)`                   | Average of 1/position of first relevant result     |
+| **NDCG@10**                    | Normalised DCG                        | Quality of ranking considering graded relevance    |
+| **Precision@10**               | `relevant_in_top_10 / 10`             | Proportion of top 10 results that are relevant     |
+| **Recall@10**                  | `relevant_in_top_10 / total_relevant` | Proportion of all relevant results found in top 10 |
+| **Zero-Hit Rate**              | `count(no_results) / total`           | Queries returning no results                       |
+| **p95 Latency**                | 95th percentile response time         | Tail latency for worst 5% of queries               |
+
+> **Full metric definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
 
 #### MRR Interpretation Scale
 
@@ -422,3 +426,4 @@ When implementing query classification and pre-processing:
 - [Semantic Reranking](https://www.elastic.co/guide/en/elasticsearch/reference/current/semantic-reranking.html)
 - [MRR Definition](https://en.wikipedia.org/wiki/Mean_reciprocal_rank)
 - [NDCG Definition](https://en.wikipedia.org/wiki/Discounted_cumulative_gain)
+- [Precision and Recall](https://en.wikipedia.org/wiki/Precision_and_recall)

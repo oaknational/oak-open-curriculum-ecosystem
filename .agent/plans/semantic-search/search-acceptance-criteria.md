@@ -33,6 +33,21 @@
 
 ---
 
+## Metrics We Track
+
+| Metric | Purpose | Primary Use |
+|--------|---------|-------------|
+| **MRR** | Finding first relevant result quickly | Main acceptance metric |
+| **NDCG@10** | Overall ranking quality | Secondary quality metric |
+| **Precision@10** | Proportion of relevant in top 10 | Noise detection |
+| **Recall@10** | Proportion of relevant found | Completeness detection |
+| **Zero-Hit Rate** | Queries returning nothing | Coverage gaps |
+| **p95 Latency** | User experience | Performance budget |
+
+> **Full definitions**: See [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
+
+---
+
 ## Per-Category Thresholds
 
 These thresholds apply to individual query categories within each tier:

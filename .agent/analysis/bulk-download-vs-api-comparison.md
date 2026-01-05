@@ -18,10 +18,10 @@ A deep dive comparison of the Oak bulk download data against the live API reveal
 
 | Source | Coverage | Notes |
 |--------|----------|-------|
-| **Bulk Download** | ~81% (14/17 subjects) | Complete transcripts for most subjects |
-| **Live API** | ~16% (maths only) | TPC-filtered; other subjects return 404 |
+| **Bulk Download** | ~81.9% overall | Most subjects 96-100%; MFL/PE sparse (missing often `"NULL"`) |
+| **Live API** | ~16% (maths only) | TPC-filtered; other subjects return 404/500 |
 
-**Winner**: Bulk download is the authoritative source for transcripts.
+**Winner**: Bulk download is the authoritative source for transcripts, with explicit handling for MFL/PE sparsity.
 
 ### 2. Tier Information (Maths KS4)
 
@@ -65,7 +65,7 @@ Both sources correctly identify exam subjects at KS4 via the `subjectSlug` field
 | **Bulk Download** | ❌ None | No `unitOptions` field present |
 | **Live API** | ✅ Complete | Via `/sequences/{seq}/units` with `unitOptions[]` |
 
-Geography and English have unit options (alternative unit choices) that are **only available via API**.
+Geography, English, and History have unit options (alternative unit choices) that are **only available via API**. Art, D&T, and RE also expose `unitOptions[]` in the API, even where bulk duplicates are not present.
 
 ### 6. Metadata Fields
 
@@ -133,9 +133,11 @@ Geography and English have unit options (alternative unit choices) that are **on
 
 2. **Typo in field name**: Uses `downloadsavailable` (lowercase) instead of `downloadsAvailable`
 
-3. **Maths tier duplicates**: 373 lessons × 2 = 746 entries with no distinguishing fields
+3. **Unit option duplicates**: English (47), Geography (67), History (25) duplicate lesson entries with no context fields
 
-4. **Science exam board duplicates**: `examBoards` array contains duplicates (e.g., 4× AQA entries)
+4. **Maths tier duplicates**: 373 lessons × 2 = 746 entries with no distinguishing fields
+
+5. **Science exam board duplicates**: `examBoards` array contains duplicates (e.g., 4× AQA entries)
 
 ---
 
@@ -150,7 +152,7 @@ Geography and English have unit options (alternative unit choices) that are **on
 │                                                                  │
 │  PRIMARY: Bulk Download                                          │
 │  ├── Lesson enumeration (complete list)                          │
-│  ├── Transcript content (81% coverage)                           │
+│  ├── Transcript content (~81.9% coverage; MFL/PE sparse)          │
 │  ├── Keywords, learning points, misconceptions                   │
 │  ├── Teacher tips, pupil outcomes                                │
 │  ├── Exam boards (from unit `examBoards`)                        │
@@ -225,14 +227,14 @@ See `docs/architecture/architectural-decisions/README.md` for ADR registry.
 
 ```bash
 # Analyze bulk download structure
-cd reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z
+cd reference/bulk_download_data/oak-bulk-download-2025-12-30T16_07_45.986Z
 python3 -c "import json; d=json.load(open('english-primary.json')); print(list(d.keys()))"
 
 # Count transcripts
 python3 -c "
 import json
 d = json.load(open('maths-secondary.json'))
-has = sum(1 for l in d['lessons'] if l.get('transcript_sentences'))
+has = sum(1 for l in d['lessons'] if l.get('transcript_sentences') not in (None, '', 'NULL'))
 print(f'{has}/{len(d[\"lessons\"])} lessons have transcripts')
 "
 
@@ -253,4 +255,3 @@ print(f'Tier-related fields: {fields}')
 - [Curriculum Structure Analysis](curriculum-structure-analysis.md)
 - [ADR-091: Video Availability Detection](../../docs/architecture/architectural-decisions/091-video-availability-detection-strategy.md)
 - [ADR-083: Complete Lesson Enumeration](../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
-

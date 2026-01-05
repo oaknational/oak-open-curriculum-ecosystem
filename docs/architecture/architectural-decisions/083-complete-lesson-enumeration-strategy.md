@@ -260,10 +260,10 @@ pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
 
 **See ADR-093**: The bulk download (`reference/bulk_download_data/`) provides an alternative complete lesson enumeration source that avoids API pagination entirely:
 
-| Source              | Lessons | Pagination         | Notes                           |
-| ------------------- | ------- | ------------------ | ------------------------------- |
-| **Bulk Download**   | ~12,783 | None (local files) | Missing tier info, unit options |
-| **API (paginated)** | ~12,316 | Required           | 5 lessons missing due to bug    |
+| Source              | Lessons                     | Pagination         | Notes                                           |
+| ------------------- | --------------------------- | ------------------ | ----------------------------------------------- |
+| **Bulk Download**   | ~12,833 raw / 12,320 unique | None (local files) | Missing tier info, unit options; 513 duplicates |
+| **API (paginated)** | ~12,320 unique (varies)     | Required           | 5 lessons missing due to bug                    |
 
 The bulk-first approach (ADR-093) uses bulk download for enumeration, with API only for supplementary structural data (tier info, unit options).
 

@@ -13,7 +13,7 @@ This ADR documents the **complete structural analysis** of:
 - **17 subjects**: art, citizenship, computing, cooking-nutrition, design-technology, english, french, geography, german, history, maths, music, physical-education, religious-education, rshe-pshe, science, spanish
 - **4 key stages**: KS1, KS2, KS3, KS4
 - **30 bulk download files** (one subject has no bulk file)
-- **~12,316 unique lessons** (467 duplicates in raw bulk data)
+- **~12,320 unique lessons** (513 duplicates in raw bulk data, 2025-12-30 snapshot)
 
 ## Context
 
@@ -712,7 +712,7 @@ For **exclusive** filtering ("Foundation only, not Higher"), query must explicit
 | Citizenship         | —       | 318       | 318        | 318            | 0          | —                      |
 | Cooking-nutrition   | 72      | 36        | 108        | 108            | 0          | —                      |
 | RSHE-PSHE           | ?       | ?         | ?          | ?              | ?          | No bulk file available |
-| **TOTAL**           | —       | —         | **12,783** | **~12,316**    | **467**    | —                      |
+| **TOTAL**           | —       | —         | **12,833** | **~12,320**    | **513**    | —                      |
 
 ### KS4 Lesson Counts by Subject (from Bulk)
 

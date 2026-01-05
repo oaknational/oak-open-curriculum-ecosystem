@@ -9,8 +9,8 @@
 This document captures all findings from the investigation into transcript availability discrepancies between the Oak API and bulk download data. The investigation revealed that:
 
 1. **The API documentation explicitly states that only Maths has complete lesson resources** — other subjects have only "a sample"
-2. **The bulk download contains complete transcripts** for most subjects (not just maths)
-3. **MFL subjects (French, German, Spanish) and PE genuinely lack transcripts** — likely because these lessons don't have video
+2. **The bulk download contains transcript fields for all subjects, but coverage varies** (most subjects 96-100%; MFL/PE sparse; missing often encoded as `"NULL"`)
+3. **MFL subjects (French, German, Spanish) and PE have near-zero/low transcript coverage** — likely because these lessons don't have video or transcripts
 4. **We should use bulk download data as the primary source for transcripts**
 
 ## Key Documentation References
@@ -44,14 +44,17 @@ From [Bulk Download page](https://open-api.thenational.academy/bulk-download):
 > - Misconceptions
 > - And much more....
 
-The bulk download **explicitly includes transcripts** for all subjects.
+The bulk download **explicitly includes transcript fields** for all subjects, but coverage varies and missing values are often encoded as `"NULL"`.
 
 ## Verified Data: Bulk Download Transcript Availability
+
+Counts treat `transcript_sentences` as present when it is **non-null, non-empty, and not `"NULL"`**.  
+Snapshot: `reference/bulk_download_data/oak-bulk-download-2025-12-30T16_07_45.986Z/`
 
 | Subject | Phase | Total Lessons | With Transcripts | % Coverage |
 |---------|-------|---------------|------------------|------------|
 | Art | Primary | 214 | 214 | **100%** |
-| Art | Secondary | 189 | 189 | **100%** |
+| Art | Secondary | 204 | 204 | **100%** |
 | Citizenship | Secondary | 318 | 318 | **100%** |
 | Computing | Primary | 180 | 180 | **100%** |
 | Computing | Secondary | 348 | 348 | **100%** |
@@ -59,29 +62,29 @@ The bulk download **explicitly includes transcripts** for all subjects.
 | Cooking & Nutrition | Secondary | 36 | 36 | **100%** |
 | Design Technology | Primary | 144 | 144 | **100%** |
 | Design Technology | Secondary | 216 | 216 | **100%** |
-| English | Primary | 1,516 | 1,488 | **98%** |
-| English | Secondary | 1,035 | 1,035 | **100%** |
+| English | Primary | 1,512 | 1,485 | **98.2%** |
+| English | Secondary | 1,075 | 1,075 | **100%** |
 | Geography | Primary | 223 | 223 | **100%** |
 | Geography | Secondary | 527 | 527 | **100%** |
-| History | Primary | 216 | 216 | **100%** |
-| History | Secondary | 468 | 468 | **100%** |
+| History | Primary | 218 | 218 | **100%** |
+| History | Secondary | 464 | 464 | **100%** |
 | Maths | Primary | 1,072 | 1,067 | **99.5%** |
 | Maths | Secondary | 1,235 | 1,235 | **100%** |
 | Music | Primary | 216 | 216 | **100%** |
-| Music | Secondary | 218 | 210 | **96%** |
+| Music | Secondary | 218 | 210 | **96.3%** |
 | Religious Education | Primary | 216 | 216 | **100%** |
-| Religious Education | Secondary | 396 | 396 | **100%** |
+| Religious Education | Secondary | 395 | 395 | **100%** |
 | Science | Primary | 390 | 390 | **100%** |
-| Science | Secondary | 888 | 888 | **100%** |
+| Science | Secondary | 890 | 890 | **100%** |
 | **French** | Primary | 105 | 0 | **0%** |
 | **French** | Secondary | 417 | 1 | **0.2%** |
 | **German** | Secondary | 411 | 1 | **0.2%** |
 | **Spanish** | Primary | 112 | 1 | **0.9%** |
 | **Spanish** | Secondary | 413 | 0 | **0%** |
 | **PE** | Primary | 432 | 3 | **0.7%** |
-| **PE** | Secondary | 560 | 160 | **29%** |
+| **PE** | Secondary | 560 | 160 | **28.6%** |
 
-**Total lessons in bulk download: 12,783**
+**Total lessons in bulk download: 12,833**
 
 ### Subject Categories
 
@@ -96,11 +99,11 @@ These subjects have video lessons with transcripts for virtually all content:
 - Maths (99.5-100%), Music (96-100%)
 - Religious Education, Science
 
-**Total lessons with transcripts: ~10,400 (81% of all lessons)**
+**Total lessons with transcripts: 10,509 (81.9% of all lessons)**
 
 #### Category B: Partial Transcripts
 
-- Physical Education Secondary: 29% (160/560)
+- Physical Education Secondary: 28.6% (160/560)
 
 #### Category C: No/Minimal Transcripts (0-1%)
 
@@ -147,7 +150,7 @@ The API documentation explains this:
 
 > Currently, the API includes **all lesson resources for KS1-4 maths**, plus a **sample of lesson resources** for [other subjects]
 
-The bulk download provides the **complete dataset**, while the API **intentionally restricts** non-maths resources to a "sample". This is likely due to:
+The bulk download provides a **richer dataset**, while the API **intentionally restricts** non-maths resources to a "sample". This is likely due to:
 
 1. **TPC (Third Party Content) license clearance** — maths is fully cleared, others are partial
 2. **Phased rollout** — Oak is "working to provide curriculum data... Production is expected to finish in **Autumn 2025**"
@@ -164,8 +167,8 @@ The bulk download provides the **complete dataset**, while the API **intentional
 ### Corrected Understanding (RIGHT)
 
 1. ✅ **The API intentionally limits non-maths transcripts** — documented as "sample" only
-2. ✅ **Bulk download has complete transcripts** for most subjects (except MFL and PE)
-3. ✅ **MFL subjects genuinely don't have transcripts** — likely no video content
+2. ✅ **Bulk download has near-complete transcripts** for most subjects (MFL/PE sparse)
+3. ✅ **MFL subjects have near-zero transcripts** — likely no video content or no transcription
 4. ✅ **We should use bulk download for transcripts, API for real-time/incremental data**
 5. ✅ **"Transcript not found" errors for non-maths are expected API behavior**
 
@@ -180,7 +183,7 @@ The bulk download provides the **complete dataset**, while the API **intentional
 │                                                                  │
 │  Bulk Download (Authoritative for Transcripts)                   │
 │  ├── Lesson enumeration (complete list)                          │
-│  ├── Transcript content (100% for most subjects)                 │
+│  ├── Transcript content (96-100% for most subjects; MFL/PE sparse)│
 │  ├── Quiz questions and answers                                  │
 │  ├── Misconceptions                                              │
 │  └── Learning points, keywords, etc.                             │
@@ -201,12 +204,12 @@ Given transcript availability patterns, we could create:
 1. **Rich Index (Maths + bulk-download subjects)**
    - Full hybrid search with transcript-based semantic search
    - Optimized for transcript-heavy queries
-   - Covers ~81% of lessons
+   - Covers ~81.9% of lessons
 
 2. **Foundation Index (MFL + PE)**
    - Keyword-based search only
    - Uses lesson metadata (title, description, keywords, learning points)
-   - Covers ~19% of lessons
+   - Covers ~18.1% of lessons
 
 ### Work Estimate for Bulk Download Ingestion
 
@@ -343,12 +346,12 @@ Ran shell commands to analyse bulk download transcript coverage:
 ```bash
 for f in *.json; do
   total=$(cat "$f" | jq '.lessons | length')
-  with=$(cat "$f" | jq '[.lessons[] | select(.transcript_sentences != null)] | length')
+  with=$(cat "$f" | jq '[.lessons[] | select(.transcript_sentences != null and .transcript_sentences != "" and .transcript_sentences != "NULL")] | length')
   echo "$f: $total total, $with with transcripts"
 done
 ```
 
-Discovered bulk download has complete transcripts for 14/17 subjects.
+Discovered bulk download transcript coverage is 96-100% for most subjects, with MFL and PE sparse (overall ~81.9%).
 
 ### Step 6: Documentation Review
 
@@ -362,8 +365,8 @@ Found explicit statement: "API includes all lesson resources for KS1-4 maths, pl
 
 The "transcript not found" warnings are **expected behavior**, not bugs:
 1. API intentionally limits non-maths transcripts (TPC filtering)
-2. Bulk download has complete data (different generation process)
-3. MFL subjects genuinely lack transcripts (no video content)
+2. Bulk download has higher coverage but still sparse transcripts for MFL/PE (missing often encoded as `"NULL"`)
+3. MFL subjects genuinely lack transcripts (no video content or no transcription)
 
 ### Assumptions Tested
 
@@ -392,7 +395,7 @@ The data in this document was verified using:
 
 ```bash
 # Transcript count per subject
-cd reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z
+cd reference/bulk_download_data/oak-bulk-download-2025-12-30T16_07_45.986Z
 for f in *.json; do
   total=$(cat "$f" | jq '.lessons | length')
   with=$(cat "$f" | jq '[.lessons[] | select(.transcript_sentences != null and .transcript_sentences != "" and .transcript_sentences != "NULL")] | length')
@@ -415,4 +418,3 @@ Content can be:
 - Exploited commercially and non-commercially
 
 With attribution: "A [subject] lesson by Oak National Academy licensed under Open Government Licence (OGL)"
-

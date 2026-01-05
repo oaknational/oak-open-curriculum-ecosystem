@@ -8,30 +8,33 @@
 
 ## Quick Reference
 
-| Variance Type               | Impact             | Key Finding                                     |
-| --------------------------- | ------------------ | ----------------------------------------------- |
-| **Transcript availability** | Search quality     | MFL has 0%; most subjects 100%                  |
-| **Categories**              | Faceted search     | Only English, Science, RE have categories       |
-| **Tiers**                   | Filter handling    | Only KS4 Maths/Science                          |
-| **Exam boards**             | Filter handling    | KS4 only; varies by subject                     |
-| **Structural patterns**     | API traversal      | 7 patterns that can combine                     |
-| **API vs Bulk**             | Ingestion strategy | Bulk has complete data; API restricts non-Maths |
-| **Bulk duplicates**         | Data processing    | 467 duplicates across 4 subjects                |
-| **RSHE-PSHE**               | Availability       | Missing from bulk download entirely             |
-| **Year type**               | SDK complexity     | number vs "string" vs "year-N" slug             |
-| **Null handling**           | SDK complexity     | JSON null vs "NULL" string vs missing           |
+| Variance Type               | Impact             | Key Finding                                                                                         |
+| --------------------------- | ------------------ | --------------------------------------------------------------------------------------------------- |
+| **Transcript availability** | Search quality     | **API**: maths complete, others sample; **Bulk**: MFL ~0%, PE partial, most subjects 96-100%        |
+| **Categories**              | Faceted search     | Only English, Science, RE have categories                                                           |
+| **Tiers**                   | Filter handling    | Only KS4 Maths/Science                                                                              |
+| **Exam boards**             | Filter handling    | KS4 only; varies by subject                                                                         |
+| **Structural patterns**     | API traversal      | 7 patterns that can combine                                                                         |
+| **API vs Bulk**             | Ingestion strategy | Bulk transcripts mostly complete (MFL/PE sparse); API restricts non-maths resources (TPC filtering) |
+| **Bulk duplicates**         | Data processing    | 2025-12-07: 467 across 4 subjects; 2025-12-30: 513 across 5 subjects                                |
+| **RSHE-PSHE**               | Availability       | Missing from bulk download entirely                                                                 |
+| **Year type**               | SDK complexity     | number vs "string" vs "year-N" slug                                                                 |
+| **Null handling**           | SDK complexity     | JSON null vs "NULL" string vs missing                                                               |
 
 ---
 
 ## 1. Transcript Availability
 
-### By Subject Category
+### API coverage (documented + spot checks)
 
-| Category           | Subjects                                                                                          | Coverage | Implication               |
-| ------------------ | ------------------------------------------------------------------------------------------------- | -------- | ------------------------- |
-| **Full (96-100%)** | Maths, English, Science, History, Geography, Art, Music, Computing, D&T, Citizenship, Cooking, RE | 100%     | Rich semantic search      |
-| **Partial**        | PE Secondary                                                                                      | 29%      | Limited semantic matching |
-| **None (<1%)**     | **French, Spanish, German**, PE Primary                                                           | 0-1%     | **Structure-only search** |
+**Documented scope**: Maths is complete; all other subjects are described as a **sample** (no guaranteed completeness).  
+Source: [Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage)
+
+**Observed gaps (API)**:
+
+- MFL transcript endpoint returns 404/500 (near-zero coverage)
+- PE Primary near-zero; PE Secondary partial
+- Non-maths subjects can return 404 even when bulk has transcripts (TPC filtering)
 
 ### Root Cause for MFL
 
@@ -43,13 +46,30 @@
 | Spanish | 404 "not available"     | ❌ 404      |
 | German  | 500 server error        | ✅ Exists   |
 
-**Explanation**: MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. Videos exist, but transcripts were never generated.
+**Explanation (API behaviour)**: MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The API transcript endpoint returns 404/500 for these lessons; bulk download shows `transcript_sentences` mostly `"NULL"` for MFL, so transcript coverage is near-zero in both sources.
 
-**Search Implication**: MFL search relies entirely on:
+**API search implication**: MFL search relies entirely on:
 
 - `lesson_structure` / `lesson_structure_semantic` (always populated)
 - `lesson_title` (contains target language)
 - `lesson_keywords`, `key_learning_points`, etc. (all English)
+
+### Bulk coverage (observed via bulk download)
+
+Coverage is calculated by treating `transcript_sentences` as **missing** when it is `null`, empty, or the string `"NULL"`.
+
+| Category           | Subjects                                                                                                      | Coverage | Implication               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- | -------- | ------------------------- |
+| **Full (96-100%)** | Art, Citizenship, Computing, Cooking & Nutrition, D&T, English, Geography, History, Maths, Music, RE, Science | 96-100%  | Rich semantic search      |
+| **Partial**        | PE Secondary                                                                                                  | 29%      | Limited semantic matching |
+| **None (<1%)**     | **French, Spanish, German**, PE Primary                                                                       | 0-1%     | **Structure-only search** |
+
+**Bulk scan detail (repo snapshots)**:
+
+- 2025-12-07: English 98.9%, Maths 99.8%, Music 98.2%, PE Secondary 29.0%, PE Primary 0.7%, MFL ~0.2%
+- 2025-12-30: English 99.0%, Maths 99.8%, Music 98.2%, PE Secondary 28.6%, PE Primary 0.7%, MFL ~0.2%
+
+**Implication**: Bulk download transcripts are far more complete than the API for non-maths subjects, but MFL and PE remain sparse even in bulk.
 
 ### Implementation
 
@@ -243,14 +263,14 @@ From [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-
 
 ### Known Discrepancies
 
-| Data Type                 | Bulk Download           | API                  | Notes                |
-| ------------------------- | ----------------------- | -------------------- | -------------------- |
-| **Transcripts**           | 14/17 subjects complete | Only maths complete  | TPC filtering on API |
-| **`downloadsAvailable`**  | Always `true`           | Not applicable       | Field may be stale   |
-| **Asset access**          | Not applicable          | TPC-filtered         | ~35% non-maths       |
-| **Tier metadata (maths)** | Missing                 | Present in responses | Bulk has duplicates  |
-| **Null semantics**        | String `"NULL"`         | JSON `null`          | Inconsistent         |
-| **Title fields**          | Often null              | Usually present      | Denormalization gap  |
+| Data Type                 | Bulk Download                                                            | API                                   | Notes                                 |
+| ------------------------- | ------------------------------------------------------------------------ | ------------------------------------- | ------------------------------------- |
+| **Transcripts**           | Most subjects 96-100%; MFL/PE sparse (bulk scans 2025-12-07, 2025-12-30) | Maths complete; others sample/blocked | TPC filtering and missing transcripts |
+| **`downloadsAvailable`**  | Always `true`                                                            | Not applicable                        | Field may be stale                    |
+| **Asset access**          | Not applicable                                                           | TPC-filtered                          | ~35% non-maths                        |
+| **Tier metadata (maths)** | Missing                                                                  | Present in responses                  | Bulk has duplicates                   |
+| **Null semantics**        | String `"NULL"`                                                          | JSON `null`                           | Inconsistent                          |
+| **Title fields**          | Often null                                                               | Usually present                       | Denormalization gap                   |
 
 ---
 
@@ -260,6 +280,11 @@ From [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-
 
 ### Duplicate Lessons in Bulk Download
 
+Validated by scanning bulk snapshots stored in `reference/bulk_download_data/`.  
+All duplicates are in **secondary** files; primary files show zero duplicates.
+
+#### Snapshot: 2025-12-07T09_37_04.693Z
+
 | File                | Raw Lessons | Unique Lessons | Duplicates | Cause         |
 | ------------------- | ----------- | -------------- | ---------- | ------------- |
 | english-secondary   | 1,035       | 1,009          | **26**     | Unit options  |
@@ -268,6 +293,18 @@ From [Oak API Content Coverage](https://open-api.thenational.academy/docs/about-
 | science-secondary   | 888         | 887            | **1**      | Cross-unit    |
 | **All others**      | —           | —              | 0          | —             |
 | **TOTAL**           | 12,783      | 12,316         | **467**    | —             |
+
+#### Snapshot: 2025-12-30T16_07_45.986Z
+
+| File                | Raw Lessons | Unique Lessons | Duplicates | Cause         |
+| ------------------- | ----------- | -------------- | ---------- | ------------- |
+| english-secondary   | 1,075       | 1,028          | **47**     | Unit options  |
+| geography-secondary | 527         | 460            | **67**     | Unit options  |
+| history-secondary   | 464         | 439            | **25**     | Unit options  |
+| maths-secondary     | 1,235       | 862            | **373**    | Tier variants |
+| science-secondary   | 890         | 889            | **1**      | Cross-unit    |
+| **All others**      | —           | —              | 0          | —             |
+| **TOTAL**           | 12,833      | 12,320         | **513**    | —             |
 
 ### Title Fields Null Despite Slugs Present
 
@@ -474,14 +511,13 @@ year:
 
 > **Source**: [00-overview-and-known-issues.md](../../.agent/plans/external/ooc-api-wishlist/00-overview-and-known-issues.md) Issue 1
 
-| Subject | Duplicates | Cause                               |
-| ------- | ---------- | ----------------------------------- |
-| Maths   | ~200       | Lessons appearing in multiple tiers |
-| Science | ~150       | Lessons shared across exam subjects |
-| Spanish | ~100       | Pathway variants                    |
-| French  | ~17        | Pathway variants                    |
+Validated by scanning bulk snapshots in `reference/bulk_download_data/`.  
+See Section 7 for full tables and totals.
 
-**Total**: 467 duplicate lesson slugs across 4 subjects.
+| Snapshot   | Subjects with duplicates                    | Total duplicates | Primary cause(s)                        |
+| ---------- | ------------------------------------------- | ---------------- | --------------------------------------- |
+| 2025-12-07 | English, Geography, Maths, Science          | **467**          | Unit options, tier variants, cross-unit |
+| 2025-12-30 | English, Geography, History, Maths, Science | **513**          | Unit options, tier variants, cross-unit |
 
 **Impact**:
 

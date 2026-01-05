@@ -1,222 +1,213 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-03 (Phase 5a in progress)
+**Last Updated**: 2026-01-05 (M3 Plan Consolidated)
 
 This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
-## 🚨 IMMEDIATE: Phase 5a Recovery Required
+## Goal
 
-**Status**: Phase 5a ground truth restructure is **IN PROGRESS** but has **corrupted files** that need fixing.
+**Create comprehensive ground truths covering ALL subjects × ALL phases, then establish universal benchmarks that enable meaningful like-for-like comparison when index structure or retriever configuration changes.**
 
-### What Happened
-
-A `sed` command timed out mid-execution, leaving some files with corrupted export names. The refactoring was to change from key-stage-based naming (`KS3_`) to phase-based naming (`SECONDARY_`).
-
-### Files That Need Fixing
-
-The following pattern was corrupted: `UNIT_GROUND_TRUTH_QUERIES` became `UNIT_MATHS_SECONDARY_STANDARD_QUERIES` (wrong).
-
-**Run this fix first**:
-```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
-
-# Fix corrupted UNIT names
-find apps/oak-open-curriculum-semantic-search -name "*.ts" -exec sed -i '' 's/UNIT_MATHS_SECONDARY_STANDARD_QUERIES/UNIT_GROUND_TRUTH_QUERIES/g' {} \;
-find apps/oak-open-curriculum-semantic-search -name "*.ts" -exec sed -i '' 's/UNIT_HARD_MATHS_SECONDARY_STANDARD_QUERIES/UNIT_HARD_GROUND_TRUTH_QUERIES/g' {} \;
-find apps/oak-open-curriculum-semantic-search -name "*.ts" -exec sed -i '' 's/UNIT_ALL_MATHS_SECONDARY_STANDARD_QUERIES/UNIT_ALL_GROUND_TRUTH_QUERIES/g' {} \;
-
-# Verify no corruption remains
-grep -r "UNIT_.*MATHS_SECONDARY_STANDARD" apps/oak-open-curriculum-semantic-search/
-```
-
-Then run quality gates:
-```bash
-pnpm type-check
-pnpm lint:fix
-pnpm test
-```
+**Impact**: Teachers and AI agents searching for any subject at any phase get measurably good results. We can prove improvements and detect regressions across the full curriculum.
 
 ---
 
-## 🚀 Current State: Phase 5a Partially Complete
+## Key Discovery (Why Phase-Aligned)
 
-### What's Been Completed ✅
+Per-key-stage testing was **fundamentally flawed**:
 
-| Task | Description | Status |
-|------|-------------|--------|
-| Directory rename | All `ks3/` → `secondary/`, `ks2/` → `primary/` | ✅ Done |
-| Maths restructure | Created `maths/secondary/`, moved all files | ✅ Done |
-| English restructure | Merged `ks3/` + `ks4/` → `secondary/` | ✅ Done |
-| Export naming | KS3_ → SECONDARY_ in topic files | ✅ Done |
-| Root index.ts | Removed deprecated aliases, clean exports | ✅ Done |
-| analyze-cross-curriculum.ts | Updated imports to phase-based | ✅ Done |
+- Primary content spans KS1+KS2 — the same lessons appear across both
+- Testing KS1 separately from KS2 caused false failures (slugs valid in KS2 but not KS1)
+- Curriculum is organised by **phase** (primary/secondary), not individual key stage
 
-### What's Partially Done ⚠️
-
-| Task | Issue | Action Needed |
-|------|-------|---------------|
-| Consumer file updates | `sed` corrupted some UNIT_* names | Run fix commands above |
-| Other smoke tests | May have incorrect imports | Verify after fix |
-
-### What's Remaining (Phase 5a) 📋
-
-1. **Run fix commands** for corrupted files
-2. **Run full quality gates** to verify everything compiles
-3. **Verify query counts** match expected totals
-
-### What's Remaining (Phase 5b) 📋
-
-| Task | Description |
-|------|-------------|
-| Discover KS1+KS2 maths | Use MCP tools to explore primary maths content |
-| Create maths/primary/ | 30+ queries for: addition, subtraction, fractions, shapes, etc. |
-| Validate slugs | Via MCP `get-lessons-summary` |
-| Run quality gates | Full suite |
+**Solution**: Ground truths organised by `subject/phase/` (e.g., `maths/primary/`, `maths/secondary/`).
 
 ---
 
-## 📁 Ground Truth Structure (Current)
+## Current Status: Comprehensive Ground Truths
+
+**Phases 1-5a COMPLETE** ✅ — Infrastructure ready.
+
+**Next Work**: Phase 5b — Create ALL missing primary ground truths (10 subjects).
+
+---
+
+## What's Been Completed
+
+| Phase | Description | Date |
+|-------|-------------|------|
+| **Phase 1** | SDK Schema — `phase_slug` in index documents | 2026-01-03 |
+| **Phase 2** | Indexing — `derivePhaseFromKeyStage()` populates `phase_slug` | 2026-01-03 |
+| **Phase 3** | Search Filters — Array support for phases, keyStages, years, examBoards | 2026-01-03 |
+| **Phase 4** | Analysis CLI — `--phase`, `--keyStages`, `--years`, `--examBoards` | 2026-01-03 |
+| **Phase 5a** | Directory restructure — phase-aligned structure, clean exports | 2026-01-05 |
+
+---
+
+## What's Next
+
+### Phase 5b: Create ALL Missing Primary Ground Truths
+
+**10 subjects** need `primary/` ground truths:
+
+| Subject | Units | Priority | Notes |
+|---------|-------|----------|-------|
+| maths | 125 | 1 | Largest, most important |
+| physical-education | 65 | 2 | Large but simpler |
+| art | 42 | 3 | Creative |
+| geography | 37 | 4 | Physical/human |
+| music | 36 | 5 | Performance/composition |
+| religious-education | 36 | 6 | World religions |
+| computing | 30 | 7 | Programming/data |
+| spanish | 21 | 8 | **MFL - structure-only** |
+| design-technology | 18 | 9 | Materials/making |
+| french | 15 | 10 | **MFL - structure-only** |
+
+**MFL Note**: French and Spanish have **no transcripts** (automatic captioning doesn't work for non-English speech). ELSER is also English-only. Ground truths for MFL MUST test **structural fields** (`lesson_structure`, `lesson_structure_semantic`) and metadata, NOT transcript content. This validates our 4-retriever hybrid architecture works for all subjects.
+
+### Phase 5c: Create Missing Secondary Ground Truth
+
+- **cooking-nutrition/secondary/** (12 units)
+
+### Phase 5d: Create KS4-Specific Ground Truths
+
+For subjects with KS4 complexity, create `secondary/ks4/` subdirectories:
+
+- **science**: Biology, Chemistry, Physics (exam subject split)
+- **maths**: Foundation/Higher tier variants
+- **english**: Set texts (Macbeth, Inspector Calls)
+- **MFL**: Exam board skills
+- Others as needed
+
+### Phases 6-8
+
+- **Phase 6**: ES re-index (add `phase_slug` to existing documents)
+- **Phase 7**: **Unified Evaluation Infrastructure**
+  - 7a: Create `GROUND_TRUTH_REGISTRY` as single source of truth
+  - 7b: Update validation to iterate registry
+  - 7c: Create unified `benchmark.ts` **evaluation tool** (measure effects of changes)
+  - 7d: Create unified `search-baseline.smoke.test.ts` **smoke test** (is it working?)
+  - 7e: Delete fragmented scripts and tests
+  - 7f: Remove legacy `--keyStage` param
+- **Phase 8**: Run comprehensive phase-based baselines for ALL subjects
+
+**Key Distinction** (two categories of tools):
+
+| Category | Question | When Run | Output |
+|----------|----------|----------|--------|
+| **Evaluations** | "Did this change improve quality?" | Manual, before/after changes | Metrics to compare |
+| **Smoke Tests** | "Is search working as expected?" | CI/CD, deployment | Pass/fail |
+
+---
+
+## Ground Truth Structure
 
 ```
 ground-truth/
-├── english/
-│   ├── primary/           ✅ Exists (KS1+KS2 content)
-│   ├── secondary/         ✅ NEW - merged from ks3/ + ks4/
-│   └── types.ts
-├── maths/
-│   ├── primary/           ❌ NEEDS CREATING (Phase 5b)
-│   ├── secondary/         ✅ NEW - moved from root
-│   │   ├── units/         ✅ Unit ground truths
-│   │   ├── algebra.ts
-│   │   ├── geometry.ts
-│   │   └── ...
+├── {subject}/
+│   ├── primary/              # Years 1-6 (KS1+KS2)
+│   │   ├── {topic}.ts
+│   │   ├── hard-queries.ts
+│   │   └── index.ts
+│   ├── secondary/            # Years 7-11 (KS3+KS4)
+│   │   ├── {topic}.ts
+│   │   ├── hard-queries.ts
+│   │   ├── ks4/              # For complex KS4 subjects
+│   │   │   └── ...
+│   │   └── index.ts
 │   └── index.ts
-├── science/
-│   ├── primary/           ✅ Exists
-│   └── secondary/         ✅ RENAMED from ks3/
-├── history/
-│   ├── primary/           ✅ Exists
-│   └── secondary/         ✅ RENAMED from ks3/
-├── cooking-nutrition/
-│   └── primary/           ✅ RENAMED from ks2/
-└── [other subjects]/
-    └── secondary/         ✅ RENAMED from ks3/
 ```
 
 ---
 
-## 🎯 Ground Truth Philosophy
+## Ground Truth Creation Methodology
 
-**Two types of queries** (2026-01-03 insight):
+**TDD Process** (per [testing-strategy.md](../../directives-and-memory/testing-strategy.md)):
 
-| Type | Example | Tests | Coupling |
-|------|---------|-------|----------|
-| **Curriculum concept** | "teaching fractions to year 4" | Semantic understanding | Low - stable |
-| **Content discovery** | "Macbeth Lady Macbeth guilt" | Specific content findability | High - content-dependent |
+1. **RED**: Add query with expected slugs to ground truth file
+2. **Validate**: Run `pnpm tsx evaluation/validation/validate-ground-truth.ts` — MUST fail if slugs don't exist
+3. **GREEN**: Fix slugs by validating against API/MCP tools
+4. **Document**: Add comprehensive TSDoc explaining the test scenario
 
-A healthy ground truth set needs **both**:
-- Curriculum concept queries test search intelligence (stable across content changes)
-- Content discovery queries validate real content is findable (may break if content changes)
-
-The **current set leans heavily toward content discovery**. When creating `maths/primary/`, include more curriculum concept queries.
+**Per subject**: Minimum 15 queries mixing categories (naturalistic, misspelling, synonym, multi-concept).
 
 ---
 
-## 📚 Key Exports (Phase-Aligned)
+## MCP Tools for Discovery
 
-After restructure, the canonical exports are:
+Use Oak Curriculum MCP tools to discover and validate content:
 
 ```typescript
-// Subject-level (aggregates all phases)
-import { ALL_MATHS_QUERIES } from './ground-truth/maths';
-import { ENGLISH_ALL_QUERIES } from './ground-truth/english';
+// List units for a subject/key-stage
+mcp_ooc-http-dev-local_get-key-stages-subject-units({ keyStage: "ks2", subject: "maths" })
 
-// Phase-specific
-import { MATHS_SECONDARY_STANDARD_QUERIES } from './ground-truth/maths';
-import { MATHS_SECONDARY_HARD_QUERIES } from './ground-truth/maths';
-import { ENGLISH_PRIMARY_ALL_QUERIES } from './ground-truth/english';
-import { ENGLISH_SECONDARY_ALL_QUERIES } from './ground-truth/english';
+// List lessons
+mcp_ooc-http-dev-local_get-key-stages-subject-lessons({ keyStage: "ks2", subject: "maths" })
 
-// Unit ground truths (maths only)
-import { UNIT_GROUND_TRUTH_QUERIES } from './ground-truth/maths';
-import { UNIT_HARD_GROUND_TRUTH_QUERIES } from './ground-truth/maths';
-```
+// Validate slug exists
+mcp_ooc-http-dev-local_get-lessons-summary({ lesson: "adding-fractions-with-same-denominator" })
 
-**Old names removed** (clean break, no compatibility):
-- ~~`GROUND_TRUTH_QUERIES`~~ → `MATHS_SECONDARY_STANDARD_QUERIES`
-- ~~`HARD_GROUND_TRUTH_QUERIES`~~ → `MATHS_SECONDARY_HARD_QUERIES`
-- ~~`ALL_MATHS_GROUND_TRUTH_QUERIES`~~ → `ALL_MATHS_QUERIES`
-- ~~`ENGLISH_KS3_ALL_QUERIES`~~ → `ENGLISH_SECONDARY_ALL_QUERIES`
-- ~~`SCIENCE_KS3_ALL_QUERIES`~~ → `SCIENCE_SECONDARY_ALL_QUERIES`
-
----
-
-## 🛠️ MCP Server Tools
-
-The Oak Curriculum MCP server (`ooc-http-dev-local`) is available. Key tools for Phase 5b:
-
-```bash
-# Explore KS1 and KS2 maths units
-get-key-stages-subject-units --keyStage ks1 --subject maths
-get-key-stages-subject-units --keyStage ks2 --subject maths
-
-# List lessons in a unit
-get-key-stages-subject-lessons --keyStage ks2 --subject maths --unit fractions
-
-# Validate slugs exist
-get-lessons-summary --lesson <slug>
-
-# Search for content
-search --q "fractions year 3" --subject maths --keyStage ks2
+// Search for content
+mcp_ooc-http-dev-local_search({ q: "fractions year 3", subject: "maths", keyStage: "ks2" })
 ```
 
 ---
 
-## 📊 Baseline Status
+## Bulk Data Location
 
-These baselines used the old per-key-stage approach. After Phase 5b, run phase-based baselines.
-
-| Subject | Primary | Secondary | Notes |
-|---------|---------|-----------|-------|
-| **Maths** | ❌ No GTs | ✅ 0.894 | Phase 5b creates Primary |
-| **English** | ✅ Exists | ✅ Exists | Now properly merged |
-| **Science** | ✅ 0.852 | ✅ 0.899 | Good |
-| **History** | ✅ 0.667 | ✅ 0.950 | Good |
-| Other | — | Various | Mostly KS3 only |
-
----
-
-## 📋 Full Plan Reference
-
-**Plan file**: [.cursor/plans/phase_5_ground_truth_restructure_8bf86d73.plan.md](../../../.cursor/plans/phase_5_ground_truth_restructure_8bf86d73.plan.md)
-
-**M3 Revised plan**: [m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)
+```
+apps/oak-open-curriculum-semantic-search/bulk-downloads/
+├── maths-primary.json         # 125 units
+├── maths-secondary.json       # 98 units
+├── english-primary.json       # 213 units
+├── english-secondary.json     # 71 units
+├── ...
+└── manifest.json              # List of all files
+```
 
 ---
 
-## Before You Start
+## Metrics Tracked
 
-### 1. Read Foundation Documents (MANDATORY)
+| Metric | Purpose |
+|--------|---------|
+| **MRR** | Position of first relevant result (primary) |
+| **NDCG@10** | Overall ranking quality |
+| **Precision@10** | Proportion of top 10 that are relevant |
+| **Recall@10** | Proportion of relevant found in top 10 |
+| **Zero-Hit Rate** | Queries returning nothing |
+| **p95 Latency** | User experience |
 
-- **[rules.md](../../directives-and-memory/rules.md)** — First Question, TDD, no type shortcuts, **NO COMPATIBILITY LAYERS**
+> **Full definitions**: [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
+
+---
+
+## Query Categories
+
+| Category | Description | Priority |
+|----------|-------------|----------|
+| naturalistic | Teacher/student language | HIGH |
+| misspelling | Typos, mobile errors | CRITICAL |
+| synonym | Alternative terminology | HIGH |
+| multi-concept | Topic intersections | MEDIUM |
+| colloquial | Informal language | MEDIUM |
+| intent-based | Pedagogical purpose | EXPLORATORY |
+
+**Two query types needed**:
+1. **Curriculum concept**: "teaching fractions to year 4" (stable)
+2. **Content discovery**: "Macbeth Lady Macbeth guilt" (content-dependent)
+
+---
+
+## Foundation Documents (MANDATORY)
+
+Before ANY work, read:
+
+- **[rules.md](../../directives-and-memory/rules.md)** — First Question, TDD, no type shortcuts
 - **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — TDD at ALL levels
 - **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
-
-**Key rule**: Clean breaks only. No deprecated aliases, no backwards compatibility.
-
-### 2. Fix Corrupted Files First
-
-See the "IMMEDIATE" section at the top of this document.
-
-### 3. Verify Environment
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm type-check  # Must pass
-pnpm test        # Must pass
-```
 
 ---
 
@@ -244,26 +235,12 @@ pnpm smoke:dev:stub
 
 | File | Purpose |
 |------|---------|
-| `src/lib/search-quality/ground-truth/` | Ground truths (restructured) |
-| `src/lib/search-quality/ground-truth/index.ts` | Root exports (clean, no deprecated) |
-| `src/lib/search-quality/ground-truth/maths/` | Maths GT (secondary only, needs primary) |
-| `evaluation/analysis/analyze-cross-curriculum.ts` | Baseline analysis |
-| `src/lib/hybrid-search/phase-filter-utils.ts` | Phase expansion utilities |
-
----
-
-## Next Steps After Phase 5a
-
-1. **Phase 5b**: Create `maths/primary/` ground truths
-   - Use MCP to discover KS1+KS2 content
-   - Create 30+ queries mixing curriculum concepts and content discovery
-   - Validate all slugs
-
-2. **Phase 6**: Add `phase_slug` to ES documents via update-by-query
-
-3. **Phase 7**: Run comprehensive phase-based baselines
-
-4. **Documentation**: Update this prompt, create ADR if needed
+| `src/lib/search-quality/ground-truth/` | Ground truths |
+| `src/lib/search-quality/metrics.ts` | MRR, NDCG, Precision, Recall calculations |
+| `evaluation/analysis/analyze-cross-curriculum.ts` | Phase-based analysis |
+| `evaluation/validation/validate-ground-truth.ts` | Slug validation |
+| `bulk-downloads/` | Source data |
+| [DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md) | **Critical**: Curriculum data differences, KS4 complexity |
 
 ---
 
@@ -272,7 +249,8 @@ pnpm smoke:dev:stub
 | Document | Purpose |
 |----------|---------|
 | **This file** | Session entry point |
-| [m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md) | Current plan |
+| [m3-revised-phase-aligned-search-quality.md](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md) | **Comprehensive plan** |
+| [current-state.md](../../plans/semantic-search/current-state.md) | Authoritative metrics |
 | [roadmap.md](../../plans/semantic-search/roadmap.md) | Master roadmap |
 | [EXPERIMENTAL-PROTOCOL.md](../../evaluations/EXPERIMENTAL-PROTOCOL.md) | How to run experiments |
 | [DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md) | Curriculum data differences |

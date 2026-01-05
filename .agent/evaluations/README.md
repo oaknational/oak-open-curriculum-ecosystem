@@ -12,25 +12,28 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
-## ✅ Ground Truth Expansion Complete (2026-01-03)
+## 📋 Current Work: Comprehensive Ground Truths & Unified Evaluation
 
-**M3 ground truth expansion complete.** 263 queries across 16 subjects.
+**Status**: Phase 5a complete, Phase 5b-8 in progress.
 
-| Dimension | Previous | Current | Status |
-|-----------|----------|---------|--------|
-| Subjects | 1 (Maths) | **16** | ✅ Complete |
-| Key Stages | KS4 only | **KS1-4** | ✅ Complete |
-| Queries | 73 | **263** | ✅ M3 Target exceeded |
+| Dimension | Current | Target | Status |
+|-----------|---------|--------|--------|
+| Subjects with GT | 16 | 16 | ✅ All subjects |
+| Subjects with primary GT | 4 | 14 | 🔄 In progress |
+| Subjects with secondary GT | 15 | 16 | 🔄 1 remaining |
+| Total queries | 263 | ~500+ | 🔄 Expanding |
 
-**Remaining**: RSHE/PSHE deferred (no bulk data). Baselines need restructure by phase — see M3 Revised.
+**Current Focus**: Create comprehensive ground truths for ALL subjects × ALL phases.
 
-See [M3 Revised: Phase-Aligned Search Quality](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
+**Architectural Change**: Unified evaluation infrastructure replacing fragmented scripts.
+
+See [M3: Comprehensive Ground Truths](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
 
 ---
 
-## 📊 Curriculum Baseline Counts (2026-01-02)
+## 📊 Curriculum Baseline Counts (2026-01-03)
 
-Reference data: `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z/`
+Reference data: `reference/bulk_download_data/oak-bulk-download-2025-12-30T16_07_45.986Z/`
 
 ### ⚠️ Important: Bulk Download Contains Duplicates
 
@@ -44,26 +47,26 @@ See [00-overview-and-known-issues.md](../plans/external/ooc-api-wishlist/00-over
 
 | Subject | Primary | Secondary | Raw Total | Unique Lessons | Duplicates | Cause |
 |---------|---------|-----------|-----------|----------------|------------|-------|
-| english | 1,516 | 1,035 | 2,551 | **2,525** | 26 | Unit options |
+| english | 1,512 | 1,075 | 2,587 | **2,540** | 47 | Unit options |
 | maths | 1,072 | 1,235 | 2,307 | **1,934** | 373 | Tier variants |
-| science | 390 | 888 | 1,278 | **1,277** | 1 | Cross-unit |
+| science | 390 | 890 | 1,280 | **1,279** | 1 | Cross-unit |
 | physical-education | 432 | 560 | 992 | 992 | 0 | — |
 | geography | 223 | 527 | 750 | **683** | 67 | Unit options |
-| history | 216 | 468 | 684 | 684 | 0 | — |
-| religious-education | 216 | 396 | 612 | 612 | 0 | — |
+| history | 218 | 464 | 682 | **657** | 25 | Unit options |
+| religious-education | 216 | 395 | 611 | 611 | 0 | — |
 | computing | 180 | 348 | 528 | 528 | 0 | — |
 | spanish | 112 | 413 | 525 | 525 | 0 | — |
 | french | 105 | 417 | 522 | 522 | 0 | — |
 | music | 216 | 218 | 434 | 434 | 0 | — |
 | german | 0 | 411 | 411 | 411 | 0 | — |
-| art | 214 | 189 | 403 | 403 | 0 | — |
+| art | 214 | 204 | 418 | 418 | 0 | — |
 | design-technology | 144 | 216 | 360 | 360 | 0 | — |
 | citizenship | 0 | 318 | 318 | 318 | 0 | — |
 | cooking-nutrition | 72 | 36 | 108 | 108 | 0 | — |
 | rshe-pshe | ? | ? | ? | ? | — | No bulk file |
-| **TOTAL** | — | — | **12,783** | **~12,316** | **467** | — |
+| **TOTAL** | — | — | **12,833** | **~12,320** | **513** | — |
 
-**Verified duplicates (2025-12-28)**: Maths (373 tier variants), Geography (67 unit options), English (26 unit options), Science (1 cross-unit).
+**Verified duplicates (2025-12-30)**: Maths (373 tier variants), Geography (67 unit options), English (47 unit options), History (25 unit options), Science (1 cross-unit).
 
 ### Ingestion Target Counts
 
@@ -72,9 +75,10 @@ Use these **unique lesson counts** as acceptance criteria for ES ingestion:
 | Subject | ES Target | Tolerance | Notes |
 |---------|-----------|-----------|-------|
 | maths | 1,934 | ±3 lessons | Verified: 373 tier duplicates removed |
-| english | 2,525 | ±3 lessons | Verified: 26 unit option duplicates |
+| english | 2,540 | ±3 lessons | Verified: 47 unit option duplicates |
 | geography | 683 | ±3 lessons | Verified: 67 unit option duplicates |
-| science | 1,277 | ±3 lessons | KS4 via sequences endpoint (598 lessons) |
+| history | 657 | ±3 lessons | Verified: 25 unit option duplicates |
+| science | 1,279 | ±3 lessons | KS4 via sequences endpoint (598 lessons) |
 | All others | Raw bulk count | ±3 lessons | No duplicates found |
 
 ### Key Stage Distribution (Approximate)
@@ -123,9 +127,9 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 |---------|-------|------------|----------|
 | Art | Area specialisms | 0* | Fine Art, Photography, Textiles, 3D Design |
 | Design-technology | Material types | 0* | Papers/boards, Polymers/timbers, Textiles |
-| English | Set texts | 26 | Animal Farm, Inspector Calls, Macbeth |
+| English | Set texts | 47 | Animal Farm, Inspector Calls, Macbeth |
 | Geography | Topics | 67 | Coastal, River, Glacial landscapes |
-| History | Historic environments | 0* | Battle of Hastings, Durham Cathedral |
+| History | Historic environments | 25 | Battle of Hastings, Durham Cathedral |
 | Religious-education | Religions | 0* | Buddhism vs Islam |
 
 *\* = No bulk duplicates, but API returns unitOptions structure that pipeline must handle.*
@@ -133,6 +137,60 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 ---
 
 > ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth restructuring is the current work — see [M3 Revised: Phase-Aligned Search Quality](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
+
+---
+
+## Unified Evaluation Architecture
+
+### Two Categories of Tools
+
+| Category | Question Answered | When Run | Output |
+|----------|-------------------|----------|--------|
+| **Evaluations** | "Did this change improve/regress quality?" | Before/after changes | Metrics to compare |
+| **Smoke Tests** | "Is our search service working as expected?" | CI/CD, deployment | Pass/fail |
+
+### Components
+
+| Component | Category | Purpose | Location |
+|-----------|----------|---------|----------|
+| **Ground Truth Registry** | Data | Single source of ALL ground truths | `ground-truth/index.ts` |
+| **Validation Script** | Pre-check | Validates ALL slugs from registry | `evaluation/validation/validate-ground-truth.ts` |
+| **Benchmark Tool** | Evaluation | Measure MRR for any scope | `evaluation/analysis/benchmark.ts` |
+| **Baseline Smoke Test** | Smoke Test | Assert ALL baselines met | `smoke-tests/search-baseline.smoke.test.ts` |
+
+### Usage
+
+```bash
+# Validate all ground truths (pre-check)
+pnpm tsx evaluation/validation/validate-ground-truth.ts
+
+# Evaluate (measure effects of changes)
+pnpm benchmark --all                    # Everything
+pnpm benchmark --subject maths          # One subject
+pnpm benchmark --phase primary          # One phase
+
+# Smoke test (is it working?)
+pnpm smoke:dev:stub                     # Includes search-baseline test
+```
+
+### Metrics Output
+
+Benchmark outputs ALL standard IR metrics:
+
+| Metric | What It Measures |
+|--------|------------------|
+| **MRR** | Position of first relevant result |
+| **NDCG@10** | Ranking quality with graded relevance |
+| **Precision@10** | Proportion of top 10 that are relevant |
+| **Recall@10** | Proportion of relevant found in top 10 |
+| **Zero-Hit Rate** | Queries returning nothing |
+| **p95 Latency** | 95th percentile response time |
+
+> **Full definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
+
+**Key Distinction**:
+- **Evaluations** are tools you run manually to measure effects of changes
+- **Smoke tests** are automated pass/fail checks that run in CI/CD
 
 ---
 

@@ -67,7 +67,7 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 ## 🔄 IN PROGRESS: M3 Revised — Phase-Aligned Search Quality
 
-**Status**: 📋 **PLANNED** — Architectural restructure required
+**Status**: ✅ **Phase 5a Complete** — Ready for Phase 5b
 **Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
 **Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths must be organised by **phase** (primary/secondary/GCSE).
@@ -76,11 +76,11 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 | Phase | Focus | Status |
 |-------|-------|--------|
-| 1. Ground Truths | All 17 subjects, all key stages | ✅ 263 queries |
-| 2. Baselines | Per-subject, per-category MRR | ✅ 11 subjects baselined |
-| 3. Synonym Audit | Remove noise, add high-impact | 📋 Next priority |
-| 4. ES Tuning | Query-time enhancements | 📋 |
-| 5. Iteration | Experiment protocol | 📋 |
+| 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
+| 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
+| 5b | Create maths/primary ground truths | 📋 **Next** |
+| 6 | ES Re-index (add phase_slug) | 📋 Pending |
+| 7 | Run phase-based baselines | 📋 Pending |
 
 ### Key Findings
 

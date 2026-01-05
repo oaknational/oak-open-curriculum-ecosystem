@@ -1073,7 +1073,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 - AI-powered tools limited to maths-only full functionality
 
 **Business Case**:
-- The bulk download **already contains** complete transcripts for 14 of 17 subjects (81% of all lessons)
+- The bulk download contains **near-complete transcripts for most subjects** (overall ~81.9% of lessons; MFL/PE sparse, missing often `"NULL"`)
 - API infrastructure exists — only TPC/license filtering prevents access
 - Teachers for non-maths subjects cannot benefit from transcript-based search
 
@@ -1096,7 +1096,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 
 | Data Type | Bulk Download | API | Notes |
 |-----------|---------------|-----|-------|
-| **Transcripts** | 14/17 subjects complete | Only maths complete | TPC filtering on API |
+| **Transcripts** | Most subjects 96-100%; MFL/PE sparse (~81.9% overall) | Only maths complete | TPC filtering on API |
 | **`downloadsAvailable`** | Always `true` | Not applicable | Field may be stale |
 | **Asset access** | Not applicable | TPC-filtered | ~35% non-maths |
 | **Tier metadata (maths)** | Missing | Present in responses | Bulk has duplicates |
@@ -1647,6 +1647,214 @@ GET /api/v0/subjects/{subject}/coverage
 ```
 
 **User impact**: API consumers can programmatically determine subject availability; UI developers can hide unavailable options.
+
+---
+
+## Ground Truth & Evaluation Support (2026-01-05)
+
+### ER17: Phase Metadata in API and Bulk Data
+
+**Status**: 🟡 ENHANCEMENT — Would simplify phase-aligned search and evaluation
+**Priority**: MEDIUM
+
+**Current State**:
+
+The curriculum is fundamentally organized by **phase** (primary/secondary), not individual key stages:
+- **Primary**: KS1 + KS2 (Years 1-6)
+- **Secondary**: KS3 + KS4 (Years 7-11)
+
+However, neither the API responses nor bulk download include a `phase_slug` field. Consumers must derive this:
+
+```typescript
+// Current: consumers must derive phase from key stage
+const phase = ['ks1', 'ks2'].includes(keyStage) ? 'primary' : 'secondary';
+```
+
+**Key Discovery (2026-01-05)**:
+
+During ground truth creation, we discovered that per-key-stage testing is **fundamentally flawed** because:
+- The same lessons appear across KS1 and KS2 (they're filtered views of the same primary content)
+- Testing KS1 separately from KS2 causes false failures (slugs valid in KS2 but not KS1)
+- Search filters should operate on **phase**, not individual key stage
+
+**Requested Enhancement**:
+
+Add `phaseSlug` field to:
+
+1. **Bulk download lessons**:
+```json
+{
+  "lessonSlug": "adding-fractions",
+  "phaseSlug": "primary",
+  "keyStageSlug": "ks2",
+  ...
+}
+```
+
+2. **API lesson responses** (`/lessons/{lesson}/summary`):
+```json
+{
+  "lessonSlug": "adding-fractions",
+  "phaseSlug": "primary",
+  ...
+}
+```
+
+3. **Subjects endpoint** (`/subjects`):
+```json
+{
+  "subjectSlug": "maths",
+  "phases": ["primary", "secondary"],
+  "phaseDetails": [
+    { "phaseSlug": "primary", "keyStages": ["ks1", "ks2"], "years": [1,2,3,4,5,6] },
+    { "phaseSlug": "secondary", "keyStages": ["ks3", "ks4"], "years": [7,8,9,10,11] }
+  ]
+}
+```
+
+**User impact**: Search implementers can filter by phase correctly; ground truth creators can organize tests by phase; teachers understand curriculum structure better.
+
+---
+
+### ER18: Bulk Slug Validation Endpoint
+
+**Status**: 🟡 ENHANCEMENT — Would dramatically simplify ground truth validation
+**Priority**: LOW-MEDIUM
+
+**Current State**:
+
+To validate that lesson/unit slugs exist, consumers must make individual API calls:
+
+```typescript
+// Current: N API calls to validate N slugs
+for (const slug of slugsToValidate) {
+  const result = await client.getLessonSummary(slug);
+  if (!result.ok) invalidSlugs.push(slug);
+}
+```
+
+For ground truth creation with 100+ queries, this means 100+ API calls just for validation.
+
+**Requested Enhancement**:
+
+Batch validation endpoint:
+
+```http
+POST /api/v0/validate-slugs
+
+Request:
+{
+  "lessonSlugs": ["adding-fractions", "nonexistent-lesson", "subtracting-fractions"],
+  "unitSlugs": ["fractions-year-4", "invalid-unit"]
+}
+
+Response:
+{
+  "lessons": {
+    "valid": ["adding-fractions", "subtracting-fractions"],
+    "invalid": ["nonexistent-lesson"],
+    "deprecated": []
+  },
+  "units": {
+    "valid": ["fractions-year-4"],
+    "invalid": ["invalid-unit"],
+    "deprecated": []
+  }
+}
+```
+
+**Benefits**:
+- Single API call validates hundreds of slugs
+- Clear distinction between invalid and deprecated slugs
+- Enables efficient ground truth validation workflows
+- Could include additional context (e.g., which subject/keyStage the slug belongs to)
+
+**User impact**: Ground truth creators and data validators can verify large slug sets efficiently; SDK/MCP engineers can implement reliable validation tools.
+
+---
+
+### ER19: Field Availability Documentation by Subject
+
+**Status**: 🟡 ENHANCEMENT — Would clarify which fields to use for search/evaluation
+**Priority**: LOW
+
+**Current State**:
+
+Field availability varies significantly by subject, but this isn't documented:
+
+| Subject | Transcripts | Categories | Tiers | Exam Boards | Structural Fields |
+|---------|-------------|------------|-------|-------------|-------------------|
+| Maths | ✅ 100% | ❌ | KS4 only | KS4 only | ✅ |
+| French | ❌ 0% | ❌ | ❌ | KS4 only | ✅ |
+| Science | ✅ ~100% | ✅ | KS4 only | KS4 only | ✅ |
+| PE | ⚠️ ~30% | ❌ | ❌ | ❌ | ✅ |
+
+Consumers building search or evaluation must discover these patterns through trial and error.
+
+**Requested Enhancement**:
+
+Add field availability matrix to OpenAPI schema or a dedicated endpoint:
+
+```http
+GET /api/v0/subjects/{subject}/field-availability
+
+Response:
+{
+  "subjectSlug": "french",
+  "fields": {
+    "transcript_sentences": { "availability": "none", "reason": "MFL audio not transcribed" },
+    "categorySlug": { "availability": "none", "reason": "Subject doesn't use categories" },
+    "lesson_structure": { "availability": "full", "note": "Always populated" },
+    "tierSlug": { "availability": "ks4_only", "values": ["foundation", "higher"] }
+  }
+}
+```
+
+**User impact**: Search implementers know which fields to rely on; ground truth creators understand what to test; API consumers avoid 404s for unavailable data.
+
+---
+
+### ER20: Bulk Download Version/Freshness Metadata
+
+**Status**: 🟡 ENHANCEMENT — Would improve cache/freshness handling
+**Priority**: LOW
+
+**Current State**:
+
+The bulk download `manifest.json` includes filenames but no version or timestamp information. Consumers cannot determine:
+- When was this bulk data generated?
+- Is it current with the live API?
+- What API version does it correspond to?
+
+**Requested Enhancement**:
+
+Enhance `manifest.json`:
+
+```json
+{
+  "version": "2026-01-05",
+  "generatedAt": "2026-01-05T03:00:00Z",
+  "apiVersion": "v0",
+  "nextRefresh": "2026-01-12T03:00:00Z",
+  "refreshFrequency": "weekly",
+  "checksums": {
+    "maths-primary.json": "sha256:abc123...",
+    "maths-secondary.json": "sha256:def456..."
+  },
+  "files": [
+    { "name": "maths-primary.json", "lessonCount": 1099, "lastModified": "2026-01-05T03:00:00Z" },
+    ...
+  ]
+}
+```
+
+**Benefits**:
+- Consumers can implement cache invalidation based on timestamps
+- Checksums enable efficient incremental updates
+- Clear expectations about data freshness
+- Version alignment with API
+
+**User impact**: Data engineers can build reliable caching; SDK/MCP engineers can detect stale data; teachers and learners get timely content updates.
 
 ---
 

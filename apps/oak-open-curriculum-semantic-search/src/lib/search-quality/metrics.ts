@@ -3,20 +3,23 @@
  *
  * This module provides standard IR metrics used to evaluate search quality:
  * - **MRR** (Mean Reciprocal Rank): How quickly users find the first relevant result
- * - **NDCG** (Normalized Discounted Cumulative Gain): Overall ranking quality
+ * - **NDCG** (Normalized Discounted Cumulative Gain): Overall ranking quality with graded relevance
+ * - **Precision@k**: Proportion of top k results that are relevant
+ * - **Recall@k**: Proportion of all relevant results found in top k
  *
- *
- * @see `.agent/plans/semantic-search/reference-ir-metrics-guide.md` for detailed explanations
+ * @see `docs/IR-METRICS.md` for detailed explanations and interpretation guides
  *
  * @example
  * ```typescript
- * import { calculateMRR, calculateNDCG } from './metrics';
+ * import { calculateMRR, calculateNDCG, calculatePrecisionAtK, calculateRecallAtK } from './metrics';
  *
  * const results = ['lesson-a', 'lesson-b', 'lesson-c'];
  * const relevance = { 'lesson-a': 3, 'lesson-c': 2 };
  *
- * const mrr = calculateMRR(results, relevance); // 1.0 (first result relevant)
- * const ndcg = calculateNDCG(results, relevance, 10); // Ranking quality score
+ * const mrr = calculateMRR(results, relevance);           // 1.0 (first result relevant)
+ * const ndcg = calculateNDCG(results, relevance, 10);     // Ranking quality score
+ * const precision = calculatePrecisionAtK(results, relevance, 10);  // 2/10 = 0.2
+ * const recall = calculateRecallAtK(results, relevance, 10);        // 2/2 = 1.0
  * ```
  */
 
@@ -137,4 +140,102 @@ export function calculateNDCG(
   }
 
   return idcg === 0 ? 0 : dcg / idcg;
+}
+
+/**
+ * Relevance threshold for Precision and Recall.
+ *
+ * Results with relevance >= this threshold count as "relevant".
+ * A score of 2 means "Relevant" (related and useful), excluding marginal matches.
+ */
+const PRECISION_RECALL_RELEVANCE_THRESHOLD = 2;
+
+/**
+ * Calculate Precision@k.
+ *
+ * Precision measures what proportion of the top k results are relevant.
+ * Higher precision means less noise in the results.
+ *
+ * Formula: (relevant results in top k) / k
+ *
+ * @param results - Array of result identifiers in ranked order
+ * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none)
+ * @param k - Number of results to consider (default 10)
+ * @returns Precision score between 0 and 1, higher is better
+ *
+ * @example
+ * ```typescript
+ * // 2 relevant out of 3 shown
+ * calculatePrecisionAtK(['a', 'b', 'c'], { 'a': 3, 'c': 2 }, 3); // → 0.667
+ *
+ * // All 3 relevant
+ * calculatePrecisionAtK(['a', 'b', 'c'], { 'a': 3, 'b': 2, 'c': 2 }, 3); // → 1.0
+ * ```
+ */
+export function calculatePrecisionAtK(
+  results: readonly string[],
+  relevance: Readonly<Record<string, number>>,
+  k = 10,
+): number {
+  const topK = results.slice(0, k);
+
+  let relevantCount = 0;
+  for (const slug of topK) {
+    const score = relevance[slug] ?? 0;
+    if (score >= PRECISION_RECALL_RELEVANCE_THRESHOLD) {
+      relevantCount++;
+    }
+  }
+
+  // Precision is relevant/k, even if we have fewer than k results
+  return k === 0 ? 0 : relevantCount / k;
+}
+
+/**
+ * Calculate Recall@k.
+ *
+ * Recall measures what proportion of all relevant results are found in the top k.
+ * Higher recall means we're finding more of the relevant content.
+ *
+ * Formula: (relevant results in top k) / (total relevant in ground truth)
+ *
+ * @param results - Array of result identifiers in ranked order
+ * @param relevance - Map of identifier → relevance score (3=highly, 2=relevant, 1=marginal, 0=none)
+ * @param k - Number of results to consider (default 10)
+ * @returns Recall score between 0 and 1, higher is better
+ *
+ * @example
+ * ```typescript
+ * // Found 2 of 3 relevant items
+ * calculateRecallAtK(['a', 'b', 'c'], { 'a': 3, 'c': 2, 'd': 2 }, 3); // → 0.667
+ *
+ * // Found all relevant items
+ * calculateRecallAtK(['a', 'b', 'c'], { 'a': 3, 'c': 2 }, 3); // → 1.0
+ * ```
+ */
+export function calculateRecallAtK(
+  results: readonly string[],
+  relevance: Readonly<Record<string, number>>,
+  k = 10,
+): number {
+  const topK = results.slice(0, k);
+
+  // Count relevant items in top k
+  let foundRelevant = 0;
+  for (const slug of topK) {
+    const score = relevance[slug] ?? 0;
+    if (score >= PRECISION_RECALL_RELEVANCE_THRESHOLD) {
+      foundRelevant++;
+    }
+  }
+
+  // Count total relevant items in ground truth
+  let totalRelevant = 0;
+  for (const score of typeSafeValues(relevance)) {
+    if (score >= PRECISION_RECALL_RELEVANCE_THRESHOLD) {
+      totalRelevant++;
+    }
+  }
+
+  return totalRelevant === 0 ? 0 : foundRelevant / totalRelevant;
 }
