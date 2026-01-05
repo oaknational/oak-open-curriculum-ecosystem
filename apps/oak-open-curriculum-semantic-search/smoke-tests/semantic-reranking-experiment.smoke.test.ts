@@ -18,8 +18,11 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { HARD_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/index.js';
-import { UNIT_HARD_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_HARD_QUERIES,
+  UNIT_HARD_GROUND_TRUTH_QUERIES,
+  type UnitGroundTruthQuery,
+} from '../src/lib/search-quality/ground-truth/index.js';
 import { esSearch } from '../src/lib/elastic-http.js';
 import {
   buildLessonRrfRequest,
@@ -31,7 +34,6 @@ import {
 } from '../src/lib/hybrid-search/reranking-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oak.js';
 import type { GroundTruthQuery } from '../src/lib/search-quality/ground-truth/types.js';
-import type { UnitGroundTruthQuery } from '../src/lib/search-quality/ground-truth/units/types.js';
 
 /**
  * Baseline values (2025-12-20) against COMPLETE index (431 Maths KS4 lessons).
@@ -257,7 +259,7 @@ describe('E-001 Semantic Reranking Experiment', () => {
     console.log(`Target: +${THRESHOLDS.MIN_IMPROVEMENT_PERCENT}% improvement\n`);
 
     console.log('Running lesson experiments...');
-    for (const query of HARD_GROUND_TRUTH_QUERIES) {
+    for (const query of MATHS_SECONDARY_HARD_QUERIES) {
       const result = await runLessonExperiment(query);
       lessonResults.push(result);
       console.log(

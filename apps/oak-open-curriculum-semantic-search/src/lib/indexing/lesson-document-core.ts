@@ -140,6 +140,27 @@ function extractUnitArrays(units: readonly LessonUnitInfo[]) {
   };
 }
 
+/**
+ * Derives phase slug from key stage.
+ *
+ * Phases are the fundamental curriculum division:
+ * - `primary`: Years 1-6 (KS1 + KS2)
+ * - `secondary`: Years 7-11 (KS3 + KS4)
+ *
+ * @param keyStage - The key stage slug
+ * @returns The corresponding phase slug
+ * @example
+ * ```typescript
+ * derivePhaseFromKeyStage('ks1') // => 'primary'
+ * derivePhaseFromKeyStage('ks2') // => 'primary'
+ * derivePhaseFromKeyStage('ks3') // => 'secondary'
+ * derivePhaseFromKeyStage('ks4') // => 'secondary'
+ * ```
+ */
+function derivePhaseFromKeyStage(keyStage: KeyStage): 'primary' | 'secondary' {
+  return keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
+}
+
 /** Copy array if defined, else undefined */
 function copyArrayOrUndefined<T>(arr: readonly T[] | undefined): T[] | undefined {
   return arr ? [...arr] : undefined;
@@ -179,6 +200,7 @@ export function buildLessonDocument(params: CreateLessonDocParams): SearchLesson
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,
+    phase_slug: derivePhaseFromKeyStage(keyStage),
     years: copyArrayOrUndefined(params.years),
     unit_ids: unitIds,
     unit_titles: unitTitles,

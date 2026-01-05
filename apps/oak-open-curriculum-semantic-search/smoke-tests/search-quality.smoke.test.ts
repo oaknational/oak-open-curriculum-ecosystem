@@ -21,7 +21,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth.js';
+import { MATHS_SECONDARY_STANDARD_QUERIES } from '../src/lib/search-quality/ground-truth.js';
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { HybridResponseLessons } from '../src/lib/openapi.schemas.js';
 
@@ -125,7 +125,7 @@ function calculateP95(latencies: readonly number[]): number {
 function calculateMetricsSummary(metrics: CollectedMetrics): MetricsSummary {
   const avgMRR = metrics.mrr.reduce((a, b) => a + b, 0) / metrics.mrr.length;
   const avgNDCG = metrics.ndcg.reduce((a, b) => a + b, 0) / metrics.ndcg.length;
-  const zeroHitRate = metrics.zeroHits / GROUND_TRUTH_QUERIES.length;
+  const zeroHitRate = metrics.zeroHits / MATHS_SECONDARY_STANDARD_QUERIES.length;
   const p95Latency = calculateP95(metrics.latencies);
 
   return { avgMRR, avgNDCG, zeroHitRate, p95Latency };
@@ -156,7 +156,7 @@ function logMetricsSummary(summary: MetricsSummary): void {
   console.log('='.repeat(60));
   console.log('SEARCH QUALITY BASELINE RESULTS');
   console.log('='.repeat(60));
-  console.log(`Queries evaluated: ${GROUND_TRUTH_QUERIES.length}`);
+  console.log(`Queries evaluated: ${MATHS_SECONDARY_STANDARD_QUERIES.length}`);
   console.log(`MRR:          ${summary.avgMRR.toFixed(3)} (target: > 0.70)`);
   console.log(`NDCG@10:      ${summary.avgNDCG.toFixed(3)} (target: > 0.75)`);
   console.log(`Zero-hit:     ${(summary.zeroHitRate * 100).toFixed(1)}% (target: < 10%)`);
@@ -260,7 +260,7 @@ describe('Search Quality Baseline (Phase 1C)', () => {
   });
 
   // Individual query tests
-  for (const { query, expectedRelevance } of GROUND_TRUTH_QUERIES) {
+  for (const { query, expectedRelevance } of MATHS_SECONDARY_STANDARD_QUERIES) {
     it(`evaluates: "${query}"`, async () => {
       const { results, latency, total } = await searchLessons(query);
 

@@ -83,6 +83,10 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      phase_slug: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       years: {
         type: 'keyword',
         normalizer: 'oak_lower',

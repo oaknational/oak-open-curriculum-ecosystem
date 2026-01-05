@@ -1,11 +1,33 @@
 # Semantic Search Current State
 
-**Last Updated**: 2026-01-03
-**Status**: 🔄 **M3 Revised** — Architectural discovery requires phase-aligned restructure
+**Last Updated**: 2026-01-03 (evening)
+**Status**: 🔄 **Phase 5a In Progress** — Ground truth restructure ~80% complete, needs recovery
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Current Plan**: [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
 This is THE authoritative source for current system metrics.
+
+---
+
+## 🚨 Phase 5a Status (2026-01-03 Evening)
+
+**Ground truth restructure is IN PROGRESS but needs recovery.**
+
+### What's Done ✅
+- All `ks3/` directories renamed to `secondary/`
+- All `ks2/` directories renamed to `primary/`  
+- English `ks3/` + `ks4/` merged into `english/secondary/`
+- Maths files moved to `maths/secondary/`
+- Root `index.ts` cleaned up (no deprecated aliases)
+- `analyze-cross-curriculum.ts` updated with phase-based exports
+
+### What's Broken ⚠️
+A timed-out `sed` command corrupted some UNIT_* export names. See the prompt file for fix commands.
+
+### What's Next
+1. Fix corrupted files
+2. Run quality gates
+3. Phase 5b: Create `maths/primary/` ground truths
 
 ---
 

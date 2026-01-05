@@ -14,13 +14,11 @@ dotenvConfig({ path: resolve(thisDir, '../../.env.local') });
 dotenvConfig({ path: resolve(thisDir, '../../../../.env') });
 
 import {
-  GROUND_TRUTH_QUERIES,
-  HARD_GROUND_TRUTH_QUERIES,
-} from '../../src/lib/search-quality/ground-truth/index';
-import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  MATHS_SECONDARY_HARD_QUERIES,
   UNIT_GROUND_TRUTH_QUERIES,
   UNIT_HARD_GROUND_TRUTH_QUERIES,
-} from '../../src/lib/search-quality/ground-truth/units/index';
+} from '../../src/lib/search-quality/ground-truth/index';
 import {
   processQueryResult,
   calculateOverallMrr,
@@ -97,17 +95,19 @@ async function printLessonMetrics(): Promise<{ stdMrr: number; hardMrr: number }
   console.log('LESSON SEARCH');
   console.log('-'.repeat(70));
 
-  const lessonStd = await runLessonQueries(GROUND_TRUTH_QUERIES);
-  console.log(`  Standard (${GROUND_TRUTH_QUERIES.length}): MRR = ${lessonStd.mrr.toFixed(3)}`);
-
-  const lessonHard = await runLessonQueries(HARD_GROUND_TRUTH_QUERIES);
+  const lessonStd = await runLessonQueries(MATHS_SECONDARY_STANDARD_QUERIES);
   console.log(
-    `  Hard (${HARD_GROUND_TRUTH_QUERIES.length}):     MRR = ${lessonHard.mrr.toFixed(3)}`,
+    `  Standard (${MATHS_SECONDARY_STANDARD_QUERIES.length}): MRR = ${lessonStd.mrr.toFixed(3)}`,
+  );
+
+  const lessonHard = await runLessonQueries(MATHS_SECONDARY_HARD_QUERIES);
+  console.log(
+    `  Hard (${MATHS_SECONDARY_HARD_QUERIES.length}):     MRR = ${lessonHard.mrr.toFixed(3)}`,
   );
 
   console.log('\n  Hard by Category:');
   for (const cat of HARD_CATEGORIES) {
-    const catQueries = HARD_GROUND_TRUTH_QUERIES.filter((q) => q.category === cat);
+    const catQueries = MATHS_SECONDARY_HARD_QUERIES.filter((q) => q.category === cat);
     if (catQueries.length > 0) {
       const catResult = await runLessonQueries(catQueries);
       const status = catResult.mrr >= 0.5 ? '✅' : catResult.mrr >= 0.25 ? '⚠️' : '❌';

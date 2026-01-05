@@ -1,31 +1,12 @@
-/* eslint max-lines: [error, 500] -- Cross-curriculum analysis requires subject/key-stage mappings and report generation */
+/* eslint max-lines: [error, 580] -- Cross-curriculum analysis with phase/key-stage filtering */
 /**
- * Cross-curriculum baseline analysis script.
+ * Cross-curriculum baseline analysis script with phase-based filtering.
  *
- * Runs ground truth queries against any subject/key stage combination
- * and generates per-category MRR breakdown.
+ * Usage: npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=english --phase=primary
+ *        npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=maths --keyStage=ks4
+ *        npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=english --keyStages=ks3,ks4
  *
- * **Key Feature**: Per-key-stage query filtering ensures only queries targeting
- * content available in the specified key stage are evaluated. This prevents
- * false negatives when KS3 queries are run against KS4-filtered results.
- *
- * Usage:
- *   npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=english --keyStage=ks4
- *   npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=english --keyStage=ks3
- *   npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=science --keyStage=ks2
- *   npx tsx evaluation/analysis/analyze-cross-curriculum.ts --subject=maths --keyStage=ks4
- *
- * **Available Subject/Key-Stage Combinations**:
- * - english: ks1, ks2, ks3, ks4
- * - science: ks2, ks3
- * - history: ks2, ks3
- * - geography: ks3
- * - religious-education: ks3
- * - maths: ks4
- * - french, spanish, german: ks3
- * - computing, art, music, design-technology, citizenship: ks3
- * - physical-education: ks3
- * - cooking-nutrition: ks2
+ * Phase filters expand: primary → ks1,ks2 | secondary → ks3,ks4
  *
  * **Classification**: ANALYSIS SCRIPT (not a test)
  */
@@ -43,46 +24,29 @@ const repoRootEnv = resolve(thisDir, '../../../../.env');
 dotenvConfig({ path: envLocalPath });
 dotenvConfig({ path: repoRootEnv });
 
-// Maths - KS4 only (from main index)
-import { ALL_MATHS_GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth/index';
-
-// English - per key stage (from english module)
+// Ground truth imports by subject - using phase-aligned exports
+import { ALL_MATHS_QUERIES } from '../../src/lib/search-quality/ground-truth/index';
 import {
-  ENGLISH_KS4_ALL_QUERIES,
-  ENGLISH_KS3_ALL_QUERIES,
+  ENGLISH_SECONDARY_ALL_QUERIES,
   ENGLISH_PRIMARY_ALL_QUERIES,
 } from '../../src/lib/search-quality/ground-truth/english';
-
-// Science - per key stage (from science module)
 import {
-  SCIENCE_KS3_ALL_QUERIES,
+  SCIENCE_SECONDARY_ALL_QUERIES,
   SCIENCE_PRIMARY_ALL_QUERIES,
 } from '../../src/lib/search-quality/ground-truth/science';
-
-// History - per key stage (from history module)
 import {
-  HISTORY_KS3_ALL_QUERIES,
+  HISTORY_SECONDARY_ALL_QUERIES,
   HISTORY_PRIMARY_ALL_QUERIES,
 } from '../../src/lib/search-quality/ground-truth/history';
-
-// Geography - KS3 only (from main index)
 import { GEOGRAPHY_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/geography';
-
-// RE - KS3 only (from main index)
 import { RE_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/religious-education';
-
-// Languages - KS3 only
 import { FRENCH_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/french';
 import { SPANISH_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/spanish';
 import { GERMAN_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/german';
-
-// Creative - KS3 only
 import { COMPUTING_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/computing';
 import { ART_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/art';
 import { MUSIC_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/music';
 import { DT_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/design-technology';
-
-// Other
 import { PE_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/physical-education';
 import { CITIZENSHIP_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/citizenship';
 import { COOKING_ALL_QUERIES } from '../../src/lib/search-quality/ground-truth/cooking-nutrition';
@@ -100,6 +64,10 @@ import { esSearch } from '../../src/lib/elastic-http';
 import { buildLessonRrfRequest } from '../../src/lib/hybrid-search/rrf-query-builders';
 import type { KeyStage, SearchSubjectSlug, SearchLessonsIndexDoc } from '../../src/types/oak';
 import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
+import {
+  type Phase,
+  expandPhasesToKeyStages,
+} from '../../src/lib/hybrid-search/phase-filter-utils';
 
 /**
  * Ground truth queries by subject AND key stage.
@@ -118,96 +86,54 @@ import { isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
  *
  * When a subject/KS combination is `null`, no ground truths exist for that combination.
  */
+/**
+ * Ground truth queries by subject AND key stage.
+ *
+ * Uses phase-aligned exports but maps to key stages for ES filtering.
+ * Secondary queries cover both KS3 and KS4.
+ */
 const GROUND_TRUTHS_BY_SUBJECT_AND_KS: Readonly<
   Record<SearchSubjectSlug, Readonly<Partial<Record<KeyStage, readonly GroundTruthQuery[] | null>>>>
 > = {
-  art: {
-    ks3: ART_ALL_QUERIES,
-  },
-  citizenship: {
-    ks3: CITIZENSHIP_ALL_QUERIES,
-  },
-  computing: {
-    ks3: COMPUTING_ALL_QUERIES,
-  },
-  'cooking-nutrition': {
-    ks2: COOKING_ALL_QUERIES,
-  },
-  'design-technology': {
-    ks3: DT_ALL_QUERIES,
-  },
+  art: { ks3: ART_ALL_QUERIES },
+  citizenship: { ks3: CITIZENSHIP_ALL_QUERIES },
+  computing: { ks3: COMPUTING_ALL_QUERIES },
+  'cooking-nutrition': { ks2: COOKING_ALL_QUERIES },
+  'design-technology': { ks3: DT_ALL_QUERIES },
   english: {
     ks1: ENGLISH_PRIMARY_ALL_QUERIES,
     ks2: ENGLISH_PRIMARY_ALL_QUERIES,
-    ks3: ENGLISH_KS3_ALL_QUERIES,
-    ks4: ENGLISH_KS4_ALL_QUERIES,
+    ks3: ENGLISH_SECONDARY_ALL_QUERIES,
+    ks4: ENGLISH_SECONDARY_ALL_QUERIES,
   },
-  french: {
-    ks3: FRENCH_ALL_QUERIES,
-  },
-  geography: {
-    ks3: GEOGRAPHY_ALL_QUERIES,
-  },
-  german: {
-    ks3: GERMAN_ALL_QUERIES,
-  },
-  history: {
-    ks2: HISTORY_PRIMARY_ALL_QUERIES,
-    ks3: HISTORY_KS3_ALL_QUERIES,
-  },
-  maths: {
-    ks4: ALL_MATHS_GROUND_TRUTH_QUERIES,
-  },
-  music: {
-    ks3: MUSIC_ALL_QUERIES,
-  },
-  'physical-education': {
-    ks3: PE_ALL_QUERIES,
-  },
-  'religious-education': {
-    ks3: RE_ALL_QUERIES,
-  },
-  'rshe-pshe': {}, // Deferred until bulk data available
-  science: {
-    ks2: SCIENCE_PRIMARY_ALL_QUERIES,
-    ks3: SCIENCE_KS3_ALL_QUERIES,
-  },
-  spanish: {
-    ks3: SPANISH_ALL_QUERIES,
-  },
+  french: { ks3: FRENCH_ALL_QUERIES },
+  geography: { ks3: GEOGRAPHY_ALL_QUERIES },
+  german: { ks3: GERMAN_ALL_QUERIES },
+  history: { ks2: HISTORY_PRIMARY_ALL_QUERIES, ks3: HISTORY_SECONDARY_ALL_QUERIES },
+  maths: { ks3: ALL_MATHS_QUERIES, ks4: ALL_MATHS_QUERIES },
+  music: { ks3: MUSIC_ALL_QUERIES },
+  'physical-education': { ks3: PE_ALL_QUERIES },
+  'religious-education': { ks3: RE_ALL_QUERIES },
+  'rshe-pshe': {},
+  science: { ks2: SCIENCE_PRIMARY_ALL_QUERIES, ks3: SCIENCE_SECONDARY_ALL_QUERIES },
+  spanish: { ks3: SPANISH_ALL_QUERIES },
 } as const;
 
-/**
- * Gets available key stages for a subject that have ground truths.
- */
+/** Gets available key stages for a subject that have ground truths. */
 function getAvailableKeyStages(subject: SearchSubjectSlug): readonly KeyStage[] {
-  const subjectGroundTruths = GROUND_TRUTHS_BY_SUBJECT_AND_KS[subject];
-  const keyStages: KeyStage[] = [];
-  for (const ks of ['ks1', 'ks2', 'ks3', 'ks4'] as const) {
-    if (subjectGroundTruths[ks]) {
-      keyStages.push(ks);
-    }
-  }
-  return keyStages;
+  const gt = GROUND_TRUTHS_BY_SUBJECT_AND_KS[subject];
+  return (['ks1', 'ks2', 'ks3', 'ks4'] as const).filter((ks) => gt[ks]);
 }
 
-/**
- * Gets ground truth queries for a specific subject/key-stage combination.
- *
- * @returns The queries if available, or null if no ground truths exist for this combination.
- */
+/** Gets ground truth queries for a specific subject/key-stage combination. */
 function getQueriesForSubjectAndKeyStage(
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
 ): readonly GroundTruthQuery[] | null {
-  const subjectGroundTruths = GROUND_TRUTHS_BY_SUBJECT_AND_KS[subject];
-  const queries = subjectGroundTruths[keyStage];
-  return queries ?? null;
+  return GROUND_TRUTHS_BY_SUBJECT_AND_KS[subject][keyStage] ?? null;
 }
 
-/**
- * Default key stage by subject (used when not specified).
- */
+/** Default key stage by subject (used when not specified). */
 const DEFAULT_KEY_STAGES: Readonly<Record<SearchSubjectSlug, KeyStage>> = {
   art: 'ks3',
   citizenship: 'ks3',
@@ -228,21 +154,36 @@ const DEFAULT_KEY_STAGES: Readonly<Record<SearchSubjectSlug, KeyStage>> = {
   spanish: 'ks3',
 } as const;
 
+/** Search filter options for baseline analysis. */
+interface SearchOptions {
+  readonly subject: SearchSubjectSlug;
+  readonly keyStage?: KeyStage;
+  readonly keyStages?: readonly KeyStage[];
+  readonly phase?: Phase;
+  readonly phases?: readonly Phase[];
+  readonly years?: readonly string[];
+  readonly examBoards?: readonly string[];
+}
+
 /**
  * Search lessons using 4-way hybrid.
  */
 async function searchLessons(
   query: string,
-  subject: SearchSubjectSlug,
-  keyStage: KeyStage,
+  options: SearchOptions,
 ): Promise<{ results: readonly string[]; latencyMs: number }> {
   const start = performance.now();
 
   const request = buildLessonRrfRequest({
     text: query,
     size: 10,
-    subject,
-    keyStage,
+    subject: options.subject,
+    keyStage: options.keyStage,
+    keyStages: options.keyStages ? [...options.keyStages] : undefined,
+    phase: options.phase,
+    phases: options.phases ? [...options.phases] : undefined,
+    years: options.years ? [...options.years] : undefined,
+    examBoards: options.examBoards ? [...options.examBoards] : undefined,
   });
 
   const response = await esSearch<SearchLessonsIndexDoc>(request);
@@ -257,17 +198,12 @@ async function searchLessons(
  */
 async function runSubjectBaseline(
   queries: readonly GroundTruthQuery[],
-  subject: SearchSubjectSlug,
-  keyStage: KeyStage,
+  options: SearchOptions,
 ): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
 
   for (const query of queries) {
-    const { results: actualResults, latencyMs } = await searchLessons(
-      query.query,
-      subject,
-      keyStage,
-    );
+    const { results: actualResults, latencyMs } = await searchLessons(query.query, options);
     const result = processQueryResult(query, actualResults, latencyMs);
     results.push(result);
   }
@@ -446,48 +382,193 @@ function resolveKeyStage(subject: SearchSubjectSlug, keyStageInput: string | und
   return keyStageInput;
 }
 
+/** Validates a phase string. */
+function isPhase(value: string): value is Phase {
+  return value === 'primary' || value === 'secondary';
+}
+
+/** Parses comma-separated string into array, filtering invalid values. */
+function parseKeyStages(input: string | undefined): KeyStage[] | undefined {
+  if (!input) {
+    return undefined;
+  }
+  const values = input.split(',').map((v) => v.trim().toLowerCase());
+  const valid: KeyStage[] = [];
+  for (const v of values) {
+    if (isKeyStage(v)) {
+      valid.push(v);
+    }
+  }
+  return valid.length > 0 ? valid : undefined;
+}
+
+/** Parses comma-separated string into array. */
+function parseStringArray(input: string | undefined): string[] | undefined {
+  if (!input) {
+    return undefined;
+  }
+  const values = input.split(',').map((v) => v.trim());
+  return values.length > 0 ? values : undefined;
+}
+
+/** CLI arguments for the analysis script. */
+interface CliArgs {
+  readonly subject: SearchSubjectSlug;
+  readonly keyStage?: KeyStage;
+  readonly keyStages?: readonly KeyStage[];
+  readonly phase?: Phase;
+  readonly years?: readonly string[];
+  readonly examBoards?: readonly string[];
+  readonly verbose: boolean;
+}
+
 /** Parse command-line arguments. */
-function parseCliArgs(): { subject: SearchSubjectSlug; keyStage: KeyStage; verbose: boolean } {
+function parseCliArgs(): CliArgs {
   const { values } = parseArgs({
     options: {
       subject: { type: 'string', short: 's' },
       keyStage: { type: 'string', short: 'k' },
+      keyStages: { type: 'string' },
+      phase: { type: 'string', short: 'p' },
+      years: { type: 'string', short: 'y' },
+      examBoards: { type: 'string', short: 'e' },
       verbose: { type: 'boolean', short: 'v', default: false },
     },
   });
+
   const subject = validateSubject(values.subject);
-  const keyStage = resolveKeyStage(subject, values.keyStage);
-  return { subject, keyStage, verbose: values.verbose ?? false };
+
+  // Handle phase filtering
+  let phase: Phase | undefined;
+  if (values.phase) {
+    if (!isPhase(values.phase)) {
+      console.error(`Error: Invalid phase "${values.phase}". Valid: primary, secondary`);
+      process.exit(1);
+    }
+    phase = values.phase;
+  }
+
+  // Handle keyStages (comma-separated)
+  const keyStages = parseKeyStages(values.keyStages);
+
+  // Resolve single keyStage only if phase and keyStages not provided
+  let keyStage: KeyStage | undefined;
+  if (!phase && !keyStages) {
+    keyStage = resolveKeyStage(subject, values.keyStage);
+  }
+
+  return {
+    subject,
+    keyStage,
+    keyStages,
+    phase,
+    years: parseStringArray(values.years),
+    examBoards: parseStringArray(values.examBoards),
+    verbose: values.verbose ?? false,
+  };
 }
 
-/**
- * Main analysis function.
- */
-async function main(): Promise<void> {
-  const { subject, keyStage, verbose } = parseCliArgs();
+/** Result of resolving queries and filter label from CLI args. */
+interface ResolvedQueries {
+  readonly queries: readonly GroundTruthQuery[];
+  readonly filterLabel: string;
+}
 
-  // Get queries for this specific subject/key-stage combination
-  const queries = getQueriesForSubjectAndKeyStage(subject, keyStage);
-  if (!queries) {
-    // This should not happen as parseCliArgs validates, but defensive check
-    console.error(`No ground truth queries for ${subject} at ${keyStage.toUpperCase()}`);
-    const available = getAvailableKeyStages(subject);
-    console.error(`Available key stages: ${available.join(', ')}`);
+/** Merges queries from multiple key stages. */
+function mergeQueriesFromKeyStages(
+  subject: SearchSubjectSlug,
+  keyStages: readonly KeyStage[],
+): readonly GroundTruthQuery[] {
+  const merged: GroundTruthQuery[] = [];
+  for (const ks of keyStages) {
+    const queries = getQueriesForSubjectAndKeyStage(subject, ks);
+    if (queries) {
+      merged.push(...queries);
+    }
+  }
+  return merged;
+}
+
+/** Resolves queries based on CLI filtering mode (phase, keyStages, or keyStage). Exits on error. */
+function resolveQueries(args: CliArgs): ResolvedQueries {
+  const { subject } = args;
+  if (args.phase) {
+    const keyStages = expandPhasesToKeyStages([args.phase]);
+    return {
+      queries: mergeQueriesFromKeyStages(subject, keyStages),
+      filterLabel: `${subject} (phase=${args.phase})`,
+    };
+  }
+  if (args.keyStages?.length) {
+    return {
+      queries: mergeQueriesFromKeyStages(subject, args.keyStages),
+      filterLabel: `${subject} (keyStages=${args.keyStages.join(',')})`,
+    };
+  }
+  if (args.keyStage) {
+    const ksQueries = getQueriesForSubjectAndKeyStage(subject, args.keyStage);
+    if (!ksQueries) {
+      console.error(
+        `No queries for ${subject} at ${args.keyStage.toUpperCase()}. Available: ${getAvailableKeyStages(subject).join(', ')}`,
+      );
+      return process.exit(1);
+    }
+    return { queries: ksQueries, filterLabel: `${subject} (${args.keyStage.toUpperCase()})` };
+  }
+  console.error('Error: Must specify --keyStage, --keyStages, or --phase');
+  return process.exit(1);
+}
+
+/** Builds SearchOptions from CLI args. */
+function buildSearchOptions(args: CliArgs): SearchOptions {
+  return {
+    subject: args.subject,
+    keyStage: args.keyStage,
+    keyStages: args.keyStages,
+    phase: args.phase,
+    years: args.years,
+    examBoards: args.examBoards,
+  };
+}
+
+/** Formats filter description for display. */
+function formatFilters(args: CliArgs): string {
+  const parts: string[] = [];
+  if (args.phase) {
+    parts.push(`phase=${args.phase}`);
+  }
+  if (args.keyStages) {
+    parts.push(`keyStages=${args.keyStages.join(',')}`);
+  }
+  if (args.keyStage) {
+    parts.push(`keyStage=${args.keyStage}`);
+  }
+  if (args.years) {
+    parts.push(`years=${args.years.join(',')}`);
+  }
+  if (args.examBoards) {
+    parts.push(`examBoards=${args.examBoards.join(',')}`);
+  }
+  return parts.length > 0 ? parts.join(', ') : 'none';
+}
+
+/** Main analysis function. */
+async function main(): Promise<void> {
+  const args = parseCliArgs();
+  const { queries, filterLabel } = resolveQueries(args);
+  if (queries.length === 0) {
+    console.error(`No ground truth queries found for ${filterLabel}`);
     process.exit(1);
   }
-
-  console.log(`Running ${subject} (${keyStage.toUpperCase()}) baseline analysis...`);
-  console.log(`Ground truth queries for this key stage: ${queries.length}`);
-  console.log('This will take a few seconds...\n');
-
-  const results = await runSubjectBaseline(queries, subject, keyStage);
-
-  generateCategoryReport(results, subject, keyStage);
-
-  if (verbose) {
+  console.log(
+    `Running ${filterLabel} baseline analysis...\nFilters: ${formatFilters(args)}\nQueries: ${queries.length}\n`,
+  );
+  const results = await runSubjectBaseline(queries, buildSearchOptions(args));
+  const reportKs = args.keyStage ?? (args.phase ? expandPhasesToKeyStages([args.phase])[0] : 'ks3');
+  generateCategoryReport(results, args.subject, reportKs);
+  if (args.verbose) {
     generateQueryBreakdown(results);
   }
-
   console.log('\nAnalysis complete. Copy the tables above to update baseline documentation.');
 }
 

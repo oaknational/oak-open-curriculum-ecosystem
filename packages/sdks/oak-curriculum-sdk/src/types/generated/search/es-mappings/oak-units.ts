@@ -53,6 +53,10 @@ export const OAK_UNITS_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      phase_slug: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       years: {
         type: 'keyword',
         normalizer: 'oak_lower',

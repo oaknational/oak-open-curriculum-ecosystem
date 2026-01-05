@@ -25,13 +25,12 @@
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import {
-  GROUND_TRUTH_QUERIES,
-  HARD_GROUND_TRUTH_QUERIES,
-} from '../src/lib/search-quality/ground-truth/index.js';
-import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  MATHS_SECONDARY_HARD_QUERIES,
   UNIT_GROUND_TRUTH_QUERIES,
   UNIT_HARD_GROUND_TRUTH_QUERIES,
-} from '../src/lib/search-quality/ground-truth/units/index.js';
+  type UnitGroundTruthQuery,
+} from '../src/lib/search-quality/ground-truth/index.js';
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { esSearch } from '../src/lib/elastic-http.js';
 import {
@@ -54,7 +53,6 @@ import {
 } from '../src/lib/hybrid-search/experiment-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oak.js';
 import type { GroundTruthQuery } from '../src/lib/search-quality/ground-truth/types.js';
-import type { UnitGroundTruthQuery } from '../src/lib/search-quality/ground-truth/units/types.js';
 
 /**
  * MRR Interpretation Rubric
@@ -454,8 +452,12 @@ async function runAllExperiments(): Promise<{
 }> {
   const [lessonStandardMetrics, lessonHardMetrics, unitStandardMetrics, unitHardMetrics] =
     await Promise.all([
-      Promise.all(ALL_CONFIGS.map((c) => runLessonConfigExperiment(c, GROUND_TRUTH_QUERIES))),
-      Promise.all(ALL_CONFIGS.map((c) => runLessonConfigExperiment(c, HARD_GROUND_TRUTH_QUERIES))),
+      Promise.all(
+        ALL_CONFIGS.map((c) => runLessonConfigExperiment(c, MATHS_SECONDARY_STANDARD_QUERIES)),
+      ),
+      Promise.all(
+        ALL_CONFIGS.map((c) => runLessonConfigExperiment(c, MATHS_SECONDARY_HARD_QUERIES)),
+      ),
       Promise.all(ALL_CONFIGS.map((c) => runUnitConfigExperiment(c, UNIT_GROUND_TRUTH_QUERIES))),
       Promise.all(
         ALL_CONFIGS.map((c) => runUnitConfigExperiment(c, UNIT_HARD_GROUND_TRUTH_QUERIES)),
@@ -466,13 +468,13 @@ async function runAllExperiments(): Promise<{
     lessonStandard: buildContentTypeResults(
       'lessons',
       'standard',
-      GROUND_TRUTH_QUERIES.length,
+      MATHS_SECONDARY_STANDARD_QUERIES.length,
       lessonStandardMetrics,
     ),
     lessonHard: buildContentTypeResults(
       'lessons',
       'hard',
-      HARD_GROUND_TRUTH_QUERIES.length,
+      MATHS_SECONDARY_HARD_QUERIES.length,
       lessonHardMetrics,
     ),
     unitStandard: buildContentTypeResults(

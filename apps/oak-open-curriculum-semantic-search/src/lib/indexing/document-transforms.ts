@@ -71,6 +71,20 @@ export interface CreateUnitDocumentParams {
 }
 
 /** Convert ThreadInfo to UnitThreadInfo format */
+/**
+ * Derives phase slug from key stage.
+ *
+ * Phases are the fundamental curriculum division:
+ * - `primary`: Years 1-6 (KS1 + KS2)
+ * - `secondary`: Years 7-11 (KS3 + KS4)
+ *
+ * @param keyStage - The key stage slug
+ * @returns The corresponding phase slug
+ */
+function derivePhaseFromKeyStage(keyStage: KeyStage): 'primary' | 'secondary' {
+  return keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
+}
+
 function convertThreadInfo(info: ReturnType<typeof extractThreadInfo>) {
   if (!info.slugs || info.slugs.length === 0) {
     return undefined;
@@ -282,15 +296,12 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
   } = params;
   const fields = extractRollupDocumentFields(summary, normaliseYears, lessonsByUnit);
   const rollupText = createEnrichedRollupText(snippets, extractPedagogicalData(summary));
-  const ks4Fields = extractKs4DocumentFields(
-    getKs4ContextForUnit(unitContextMap, summary.unitSlug),
-  );
+  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, summary.unitSlug));
   const unitSemantic = generateUnitSemanticSummary(
     summary,
     keyStageTitle ?? keyStage,
     subjectTitle ?? subject,
   );
-
   return {
     unit_id: fields.unitSlug,
     unit_slug: fields.unitSlug,
@@ -299,6 +310,7 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     subject_title: subjectTitle,
     key_stage: keyStage,
     key_stage_title: keyStageTitle,
+    phase_slug: derivePhaseFromKeyStage(keyStage),
     years: fields.years,
     lesson_ids: fields.lessonIds,
     lesson_count: fields.lessonIds.length,
@@ -314,7 +326,7 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     thread_titles: fields.threadTitles,
     thread_orders: fields.threadOrders,
     ...extractUnitEnrichmentFields(summary),
-    ...ks4Fields,
+    ...ks4,
     doc_type: 'unit',
   };
 }

@@ -21,7 +21,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/units/index.js';
+import { UNIT_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/index.js';
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { HybridResponseUnits } from '../src/lib/openapi.schemas.js';
 

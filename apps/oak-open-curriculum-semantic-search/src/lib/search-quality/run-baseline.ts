@@ -18,8 +18,11 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const envLocalPath = resolve(thisDir, '../../../.env.local');
 dotenvConfig({ path: envLocalPath });
 
-import { HARD_GROUND_TRUTH_QUERIES } from './ground-truth/index.js';
-import { UNIT_HARD_GROUND_TRUTH_QUERIES } from './ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_HARD_QUERIES,
+  UNIT_HARD_GROUND_TRUTH_QUERIES,
+  type UnitGroundTruthQuery,
+} from './ground-truth/index.js';
 import {
   processQueryResult,
   calculateCategoryMrr,
@@ -27,7 +30,6 @@ import {
 } from './baseline-runner.js';
 import type { QueryBaselineResult } from './baseline-runner.js';
 import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
-import type { UnitGroundTruthQuery } from './ground-truth/units/types.js';
 import { esSearch } from '../elastic-http.js';
 import { buildLessonRrfRequest, buildUnitRrfRequest } from '../hybrid-search/rrf-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../types/oak.js';
@@ -95,7 +97,7 @@ async function searchUnits(
 /** Run baseline for all lesson hard queries. */
 async function runLessonBaseline(): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
-  for (const query of HARD_GROUND_TRUTH_QUERIES) {
+  for (const query of MATHS_SECONDARY_HARD_QUERIES) {
     const { results: actualResults, latencyMs } = await searchLessons(query.query);
     results.push(processQueryResult(query, actualResults, latencyMs));
   }

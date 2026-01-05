@@ -3,8 +3,10 @@
  *
  */
 
-import { GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  UNIT_GROUND_TRUTH_QUERIES,
+} from '../../../../src/lib/search-quality/ground-truth/index.js';
 import {
   runLessonModeExperiment,
   runUnitModeExperiment,
@@ -23,7 +25,7 @@ export async function runLessonExperiments(): Promise<ContentTypeExperiment> {
 
   return buildExperiment(
     'lessons',
-    GROUND_TRUTH_QUERIES.length,
+    MATHS_SECONDARY_STANDARD_QUERIES.length,
     aggregateResults(bm25),
     aggregateResults(elser),
     aggregateResults(hybrid),

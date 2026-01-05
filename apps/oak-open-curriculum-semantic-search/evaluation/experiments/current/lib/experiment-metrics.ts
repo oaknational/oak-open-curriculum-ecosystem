@@ -3,8 +3,10 @@
  *
  */
 
-import { GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../../../../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  UNIT_GROUND_TRUTH_QUERIES,
+} from '../../../../src/lib/search-quality/ground-truth/index.js';
 import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
 import { searchLessonsWithMode, searchUnitsWithMode } from './experiment-search.js';
 import type {
@@ -21,10 +23,10 @@ export async function runLessonModeExperiment(mode: RetrievalMode): Promise<Mode
     mrr: [],
     ndcg: [],
     zeroHits: 0,
-    queryCount: GROUND_TRUTH_QUERIES.length,
+    queryCount: MATHS_SECONDARY_STANDARD_QUERIES.length,
   };
 
-  for (const { query, expectedRelevance } of GROUND_TRUTH_QUERIES) {
+  for (const { query, expectedRelevance } of MATHS_SECONDARY_STANDARD_QUERIES) {
     const results = await searchLessonsWithMode(query, mode);
     if (results.length === 0) {
       metrics.zeroHits++;

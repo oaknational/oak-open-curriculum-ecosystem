@@ -1,64 +1,41 @@
-/* eslint max-lines: [error, 410] -- Phrase boosting (B.5), topic facets (ADR-097); defer re-org to ADR-086 */
+/* eslint max-lines: [error, 390] -- Phrase boosting (B.5), topic facets (ADR-097); defer re-org to ADR-086 */
 /**
  * Shared helper functions for RRF query builders.
  *
  * Contains filter builders, highlight configs, and facet definitions
  * used by both two-way and three-way hybrid search.
- *
  */
 
 import type { estypes } from '@elastic/elasticsearch';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import { type Phase, buildKeyStageFilter, collectMetadataFilters } from './phase-filter-utils';
+
+export { type Phase, expandPhasesToKeyStages, buildKeyStageFilter } from './phase-filter-utils';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /**
- * Filter options for lesson and unit queries.
- * Uses `terms` query for array document fields (e.g., tiers[], exam_boards[]).
+ * Filter options for lesson and unit queries. Array fields use OR logic within;
+ * different fields use AND logic between them. Key stage filter precedence: phases > keyStages > keyStage
  */
 export interface SearchFilterOptions {
   readonly subject?: SearchSubjectSlug;
+  readonly phase?: Phase;
+  readonly phases?: readonly Phase[];
   readonly keyStage?: KeyStage;
+  readonly keyStages?: readonly KeyStage[];
+  readonly year?: string;
+  readonly years?: readonly string[];
   readonly unitSlug?: string;
   readonly minLessons?: number;
-  // KS4 and metadata filter fields (Phase 3 completion)
   readonly tier?: string;
+  readonly tiers?: readonly string[];
   readonly examBoard?: string;
+  readonly examBoards?: readonly string[];
   readonly examSubject?: string;
   readonly ks4Option?: string;
-  readonly year?: string;
   readonly threadSlug?: string;
   readonly category?: string;
-}
-
-/** Adds KS4 and metadata filters. For tier, uses bool/should to match tier OR tiers. */
-function addMetadataFilters(filters: QueryContainer[], options: SearchFilterOptions): void {
-  if (options.tier) {
-    filters.push({
-      bool: {
-        should: [{ term: { tier: options.tier } }, { terms: { tiers: [options.tier] } }],
-        minimum_should_match: 1,
-      },
-    });
-  }
-  if (options.examBoard) {
-    filters.push({ terms: { exam_boards: [options.examBoard] } });
-  }
-  if (options.examSubject) {
-    filters.push({ terms: { exam_subjects: [options.examSubject] } });
-  }
-  if (options.ks4Option) {
-    filters.push({ terms: { ks4_options: [options.ks4Option] } });
-  }
-  if (options.year) {
-    filters.push({ terms: { years: [options.year] } });
-  }
-  if (options.threadSlug) {
-    filters.push({ terms: { thread_slugs: [options.threadSlug] } });
-  }
-  if (options.category) {
-    filters.push({ terms: { categories: [options.category] } });
-  }
 }
 
 /** Creates filters for lesson queries. */
@@ -67,13 +44,14 @@ export function createLessonFilters(options: SearchFilterOptions): QueryContaine
   if (options.subject) {
     filters.push({ term: { subject_slug: options.subject } });
   }
-  if (options.keyStage) {
-    filters.push({ term: { key_stage: options.keyStage } });
+  const keyStageFilter = buildKeyStageFilter(options);
+  if (keyStageFilter) {
+    filters.push(keyStageFilter);
   }
   if (options.unitSlug) {
     filters.push({ term: { unit_ids: options.unitSlug } });
   }
-  addMetadataFilters(filters, options);
+  filters.push(...collectMetadataFilters(options));
   return filters;
 }
 
@@ -83,13 +61,14 @@ export function createUnitFilters(options: SearchFilterOptions): QueryContainer[
   if (options.subject) {
     filters.push({ term: { subject_slug: options.subject } });
   }
-  if (options.keyStage) {
-    filters.push({ term: { key_stage: options.keyStage } });
+  const keyStageFilter = buildKeyStageFilter(options);
+  if (keyStageFilter) {
+    filters.push(keyStageFilter);
   }
   if (typeof options.minLessons === 'number') {
     filters.push({ range: { lesson_count: { gte: options.minLessons } } });
   }
-  addMetadataFilters(filters, options);
+  filters.push(...collectMetadataFilters(options));
   return filters;
 }
 

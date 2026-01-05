@@ -28,8 +28,10 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth.js';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  UNIT_GROUND_TRUTH_QUERIES,
+} from '../src/lib/search-quality/ground-truth.js';
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { esSearch } from '../src/lib/elastic-http.js';
 import {
@@ -145,10 +147,10 @@ async function runLessonModeExperiment(mode: RetrievalMode): Promise<ModeMetrics
     mrr: [],
     ndcg: [],
     zeroHits: 0,
-    queryCount: GROUND_TRUTH_QUERIES.length,
+    queryCount: MATHS_SECONDARY_STANDARD_QUERIES.length,
   };
 
-  for (const { query, expectedRelevance } of GROUND_TRUTH_QUERIES) {
+  for (const { query, expectedRelevance } of MATHS_SECONDARY_STANDARD_QUERIES) {
     const results = await searchLessonsWithMode(query, mode);
 
     if (results.length === 0) {
@@ -268,7 +270,7 @@ describe('Hybrid Superiority Experiment (Phase 3.0, Task 1)', () => {
 
   beforeAll(async () => {
     console.log('Running hybrid superiority experiment...');
-    console.log(`Testing lessons: ${GROUND_TRUTH_QUERIES.length} queries × 3 modes`);
+    console.log(`Testing lessons: ${MATHS_SECONDARY_STANDARD_QUERIES.length} queries × 3 modes`);
     console.log(`Testing units: ${UNIT_GROUND_TRUTH_QUERIES.length} queries × 3 modes`);
     console.log('This may take a few minutes...');
 
@@ -285,7 +287,7 @@ describe('Hybrid Superiority Experiment (Phase 3.0, Task 1)', () => {
 
     lessonExperiment = {
       contentType: 'lessons',
-      queryCount: GROUND_TRUTH_QUERIES.length,
+      queryCount: MATHS_SECONDARY_STANDARD_QUERIES.length,
       bm25: lessonBm25Results,
       elser: lessonElserResults,
       hybrid: lessonHybridResults,

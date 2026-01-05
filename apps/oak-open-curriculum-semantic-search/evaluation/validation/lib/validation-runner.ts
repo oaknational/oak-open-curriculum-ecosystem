@@ -11,14 +11,12 @@ import { collectSlugsFromQueries } from './slug-collectors';
 import { checkLessonExists, checkUnitExists, checkSequenceExists } from './api-checkers';
 import { validateCategory, printResults, validateQueryStructure } from './validation-helpers';
 import {
-  GROUND_TRUTH_QUERIES,
-  HARD_GROUND_TRUTH_QUERIES,
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  MATHS_SECONDARY_HARD_QUERIES,
   DIAGNOSTIC_QUERIES,
-} from '../../../src/lib/search-quality/ground-truth/index';
-import {
   UNIT_GROUND_TRUTH_QUERIES,
   UNIT_HARD_GROUND_TRUTH_QUERIES,
-} from '../../../src/lib/search-quality/ground-truth/units/index';
+} from '../../../src/lib/search-quality/ground-truth/index';
 import {
   SEQUENCE_GROUND_TRUTH_QUERIES,
   SEQUENCE_HARD_GROUND_TRUTH_QUERIES,
@@ -41,8 +39,8 @@ export async function runValidation(): Promise<void> {
 function validateStructure(): void {
   console.log('Validating query structure...');
   const allLessonQueries = [
-    ...GROUND_TRUTH_QUERIES,
-    ...HARD_GROUND_TRUTH_QUERIES,
+    ...MATHS_SECONDARY_STANDARD_QUERIES,
+    ...MATHS_SECONDARY_HARD_QUERIES,
     ...DIAGNOSTIC_QUERIES,
   ];
 
@@ -70,12 +68,12 @@ function buildCategories(): readonly ValidationCategory[] {
   return [
     {
       name: 'Standard Lesson Queries',
-      entries: collectSlugsFromQueries(GROUND_TRUTH_QUERIES),
+      entries: collectSlugsFromQueries(MATHS_SECONDARY_STANDARD_QUERIES),
       checker: checkLessonExists,
     },
     {
       name: 'Hard Lesson Queries',
-      entries: collectSlugsFromQueries(HARD_GROUND_TRUTH_QUERIES),
+      entries: collectSlugsFromQueries(MATHS_SECONDARY_HARD_QUERIES),
       checker: checkLessonExists,
     },
     {

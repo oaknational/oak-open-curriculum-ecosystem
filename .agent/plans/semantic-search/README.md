@@ -36,7 +36,7 @@ Then read:
 ├── search-acceptance-criteria.md  # Tier definitions
 │
 ├── active/                        # CURRENT executable work
-│   └── m3-search-quality-optimization.md  # Ground truths + synonyms + ES tuning
+│   └── m3-revised-phase-aligned-search-quality.md  # Phase-aligned ground truths + filters
 │
 ├── pre-sdk-extraction/            # Must complete before SDK extraction
 │   ├── README.md                  # Overview
@@ -117,19 +117,23 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ---
 
-## ✅ Complete: M3 Search Quality Optimization
+## 🔄 In Progress: M3 Revised — Phase-Aligned Search Quality
 
-**Status**: ✅ Ground truth expansion complete (263 queries, 16 subjects)
+**Status**: 📋 PLANNED — Architectural restructure required
 
-See [active/m3-search-quality-optimization.md](active/m3-search-quality-optimization.md)
+See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
+
+### Discovery
+
+Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2 together. This plan restructures ground truths by **phase** (primary/secondary/GCSE) and adds flexible filter support.
 
 ### Next Priorities
 
 | Priority | Work | Why |
 |----------|------|-----|
-| **1. Filter Testing** | [comprehensive-filter-testing.md](pre-sdk-extraction/comprehensive-filter-testing.md) | KS4 Maths is NOT representative; must understand all filters before SDK extraction |
-| **2. MFL Hypothesis** | [mfl-multilingual-embeddings.md](post-sdk-extraction/mfl-multilingual-embeddings.md) | Verify ELSER English-only limitation before designing solution |
-| 3. Synonym Audit | [m3-search-quality-optimization.md](active/m3-search-quality-optimization.md) | Add high-impact synonyms based on M3 findings |
+| **1. Filter Architecture** | Phase 1 of M3 Revised | Array support for keyStages, years, phases |
+| **2. Ground Truth Restructure** | Phase 2 of M3 Revised | Reorganise by phase, not key stage |
+| **3. Comprehensive Baselines** | Phase 4 of M3 Revised | All subjects by phase |
 
 ---
 

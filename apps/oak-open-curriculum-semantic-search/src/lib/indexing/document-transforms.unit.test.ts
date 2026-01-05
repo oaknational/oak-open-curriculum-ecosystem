@@ -534,6 +534,36 @@ describe('createRollupDocument', () => {
     // Dense vectors removed per ADR-075 - E5 provides no benefit over BM25+ELSER
   });
 
+  it('derives phase_slug as "secondary" for KS4 rollup documents', () => {
+    const summary = buildUnitSummary({ keyStageSlug: 'ks4' });
+
+    const doc = createRollupDocument({
+      summary,
+      snippets: [],
+      subject: mathsSubject,
+      keyStage: 'ks4',
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
+      unitContextMap: emptyContextMap,
+    });
+
+    expect(doc.phase_slug).toBe('secondary');
+  });
+
+  it('derives phase_slug as "primary" for KS2 rollup documents', () => {
+    const summary = buildUnitSummary({ keyStageSlug: 'ks2' });
+
+    const doc = createRollupDocument({
+      summary,
+      snippets: [],
+      subject: mathsSubject,
+      keyStage: 'ks2',
+      subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks2',
+      unitContextMap: emptyContextMap,
+    });
+
+    expect(doc.phase_slug).toBe('primary');
+  });
+
   it('throws when the unit canonical URL is missing', () => {
     const summary = buildUnitSummary({ canonicalUrl: undefined });
 

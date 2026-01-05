@@ -1,62 +1,47 @@
 /**
  * English ground truth queries for search quality evaluation.
  *
- * Comprehensive ground truth covering all key stages:
- * - KS4 (GCSE): Shakespeare, nineteenth-century, modern texts, poetry, non-fiction
- * - KS3 (Year 7-9): Fiction, Shakespeare, poetry
- * - Primary (KS1/KS2): Reading, writing
+ * **Phase-aligned structure**:
+ * - **Primary** (KS1-2): Reading, writing fundamentals
+ * - **Secondary** (KS3-4): Fiction, Shakespeare, poetry, modern texts, non-fiction
  *
- * **Methodology (2026-01-03)**:
- * All lesson slugs verified via Oak Curriculum MCP tools:
- * - `get-key-stages-subject-units` for unit structure
- * - `get-key-stages-subject-lessons` for lesson slugs
- * - `get-lessons-summary` for lesson details and keywords
+ * **Query types** (2026-01-03):
+ * - Curriculum concept queries: Test semantic understanding (e.g., "persuasive writing")
+ * - Content discovery queries: Test specific content findability (e.g., "Macbeth guilt")
+ *
+ * **Methodology**:
+ * All lesson slugs verified via Oak Curriculum MCP tools.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../types';
 
-import {
-  ENGLISH_KS3_ALL_QUERIES,
-  ENGLISH_KS3_HARD_QUERIES,
-  ENGLISH_KS3_STANDARD_QUERIES,
-} from './ks3';
-import {
-  ENGLISH_KS4_ALL_QUERIES,
-  ENGLISH_KS4_HARD_QUERIES,
-  ENGLISH_KS4_STANDARD_QUERIES,
-} from './ks4';
-import {
-  ENGLISH_PRIMARY_ALL_QUERIES,
-  ENGLISH_PRIMARY_HARD_QUERIES,
-  ENGLISH_PRIMARY_STANDARD_QUERIES,
-} from './primary';
+import { ENGLISH_PRIMARY_HARD_QUERIES, ENGLISH_PRIMARY_STANDARD_QUERIES } from './primary';
+import { ENGLISH_SECONDARY_HARD_QUERIES, ENGLISH_SECONDARY_STANDARD_QUERIES } from './secondary';
 
 /**
- * All standard English ground truth queries across all key stages.
+ * All standard English ground truth queries across all phases.
  *
- * Total: 50 queries (27 KS4 + 13 KS3 + 10 Primary).
+ * Total: 50 queries (40 Secondary + 10 Primary).
  */
 export const ENGLISH_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...ENGLISH_KS4_STANDARD_QUERIES,
-  ...ENGLISH_KS3_STANDARD_QUERIES,
+  ...ENGLISH_SECONDARY_STANDARD_QUERIES,
   ...ENGLISH_PRIMARY_STANDARD_QUERIES,
 ] as const;
 
 /**
- * All hard English ground truth queries across all key stages.
+ * All hard English ground truth queries across all phases.
  *
- * Total: 16 queries (8 KS4 + 4 KS3 + 4 Primary).
+ * Total: 16 queries (12 Secondary + 4 Primary).
  */
 export const ENGLISH_HARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...ENGLISH_KS4_HARD_QUERIES,
-  ...ENGLISH_KS3_HARD_QUERIES,
+  ...ENGLISH_SECONDARY_HARD_QUERIES,
   ...ENGLISH_PRIMARY_HARD_QUERIES,
 ] as const;
 
 /**
- * All English ground truth queries (standard + hard) across all key stages.
+ * All English ground truth queries (standard + hard) across all phases.
  *
  * Total: 66 queries.
  */
@@ -65,15 +50,22 @@ export const ENGLISH_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...ENGLISH_HARD_QUERIES,
 ] as const;
 
-// Re-export key stage specific queries
+// Phase-based exports
 export {
-  ENGLISH_KS3_ALL_QUERIES,
-  ENGLISH_KS3_HARD_QUERIES,
-  ENGLISH_KS3_STANDARD_QUERIES,
-  ENGLISH_KS4_ALL_QUERIES,
-  ENGLISH_KS4_HARD_QUERIES,
-  ENGLISH_KS4_STANDARD_QUERIES,
   ENGLISH_PRIMARY_ALL_QUERIES,
   ENGLISH_PRIMARY_HARD_QUERIES,
   ENGLISH_PRIMARY_STANDARD_QUERIES,
-};
+} from './primary';
+
+export {
+  ENGLISH_SECONDARY_ALL_QUERIES,
+  ENGLISH_SECONDARY_HARD_QUERIES,
+  ENGLISH_SECONDARY_STANDARD_QUERIES,
+  FICTION_SECONDARY_QUERIES,
+  HARD_QUERIES_SECONDARY_ENGLISH,
+  MODERN_TEXTS_SECONDARY_QUERIES,
+  NINETEENTH_CENTURY_SECONDARY_QUERIES,
+  NON_FICTION_SECONDARY_QUERIES,
+  POETRY_SECONDARY_QUERIES,
+  SHAKESPEARE_SECONDARY_QUERIES,
+} from './secondary';

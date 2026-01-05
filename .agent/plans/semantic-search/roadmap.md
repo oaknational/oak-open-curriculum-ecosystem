@@ -65,10 +65,12 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 ---
 
-## ✅ COMPLETE: M3 — Search Quality Optimization
+## 🔄 IN PROGRESS: M3 Revised — Phase-Aligned Search Quality
 
-**Status**: ✅ **Ground truth expansion complete** (263 queries, 16 subjects)
-**Specification**: [active/m3-search-quality-optimization.md](active/m3-search-quality-optimization.md)
+**Status**: 📋 **PLANNED** — Architectural restructure required
+**Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
+
+**Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths must be organised by **phase** (primary/secondary/GCSE).
 
 ### M3 Phases
 

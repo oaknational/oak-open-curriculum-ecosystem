@@ -25,8 +25,10 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { GROUND_TRUTH_QUERIES } from '../../../src/lib/search-quality/ground-truth/index.js';
-import { UNIT_GROUND_TRUTH_QUERIES } from '../../../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  UNIT_GROUND_TRUTH_QUERIES,
+} from '../../../src/lib/search-quality/ground-truth/index.js';
 import {
   runLessonExperiments,
   runUnitExperiments,
@@ -45,7 +47,7 @@ function logMetrics(label: string, mode: { avgMRR: number; avgNDCG: number }): v
 describe('Hybrid Superiority Experiment', () => {
   beforeAll(async () => {
     console.log('Running hybrid superiority experiment...');
-    console.log(`Lessons: ${GROUND_TRUTH_QUERIES.length} queries × 3 modes`);
+    console.log(`Lessons: ${MATHS_SECONDARY_STANDARD_QUERIES.length} queries × 3 modes`);
     console.log(`Units: ${UNIT_GROUND_TRUTH_QUERIES.length} queries × 3 modes`);
 
     lessonExperiment = await runLessonExperiments();

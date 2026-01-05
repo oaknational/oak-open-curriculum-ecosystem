@@ -17,8 +17,10 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { HARD_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/index.js';
-import { UNIT_HARD_GROUND_TRUTH_QUERIES } from '../src/lib/search-quality/ground-truth/units/index.js';
+import {
+  MATHS_SECONDARY_HARD_QUERIES,
+  UNIT_HARD_GROUND_TRUTH_QUERIES,
+} from '../src/lib/search-quality/ground-truth/index.js';
 import {
   processQueryResult,
   calculateOverallMrr,
@@ -97,7 +99,7 @@ async function searchUnits(
 async function runLessonBaseline(): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
 
-  for (const query of HARD_GROUND_TRUTH_QUERIES) {
+  for (const query of MATHS_SECONDARY_HARD_QUERIES) {
     const { results: actualResults, latencyMs } = await searchLessons(query.query);
     const result = processQueryResult(query, actualResults, latencyMs);
     results.push(result);

@@ -58,6 +58,38 @@ describe('unit-document-core', () => {
       expect(doc.doc_type).toBe('unit');
     });
 
+    it('derives phase_slug as "primary" for KS1 units', () => {
+      const params = createMinimalParams({ keyStage: 'ks1' });
+
+      const doc = buildUnitDocument(params);
+
+      expect(doc.phase_slug).toBe('primary');
+    });
+
+    it('derives phase_slug as "primary" for KS2 units', () => {
+      const params = createMinimalParams({ keyStage: 'ks2' });
+
+      const doc = buildUnitDocument(params);
+
+      expect(doc.phase_slug).toBe('primary');
+    });
+
+    it('derives phase_slug as "secondary" for KS3 units', () => {
+      const params = createMinimalParams({ keyStage: 'ks3' });
+
+      const doc = buildUnitDocument(params);
+
+      expect(doc.phase_slug).toBe('secondary');
+    });
+
+    it('derives phase_slug as "secondary" for KS4 units', () => {
+      const params = createMinimalParams({ keyStage: 'ks4' });
+
+      const doc = buildUnitDocument(params);
+
+      expect(doc.phase_slug).toBe('secondary');
+    });
+
     it('includes lesson IDs and count', () => {
       const params = createMinimalParams({
         lessonIds: ['lesson-a', 'lesson-b', 'lesson-c'],

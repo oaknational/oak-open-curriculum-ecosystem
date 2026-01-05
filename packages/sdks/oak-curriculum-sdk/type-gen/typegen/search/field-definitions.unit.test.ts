@@ -107,6 +107,13 @@ describe('UNITS_INDEX_FIELDS', () => {
     expect(keyStage?.enumRef).toBe('KEY_STAGE_TUPLE');
   });
 
+  it('has phase_slug as optional string for phase-based filtering', () => {
+    const field = UNITS_INDEX_FIELDS.find((f) => f.name === 'phase_slug');
+    expect(field).toBeDefined();
+    expect(field?.zodType).toBe('string');
+    expect(field?.optional).toBe(true);
+  });
+
   it('marks years as optional array-string', () => {
     const years = UNITS_INDEX_FIELDS.find((f) => f.name === 'years');
     expect(years).toBeDefined();
@@ -150,11 +157,11 @@ describe('UNITS_INDEX_FIELDS', () => {
     //           lesson_ids, lesson_count, unit_url, subject_programmes_url, doc_type
     expect(requiredFields).toHaveLength(10);
 
-    // Optional: subject_title, key_stage_title, years, unit_topics, sequence_ids,
+    // Optional: subject_title, key_stage_title, phase_slug, years, unit_topics, sequence_ids,
     //           thread_slugs, thread_titles, thread_orders, title_suggest,
     //           description, why_this_why_now, categories, prior_knowledge_requirements, national_curriculum_content,
     //           tiers, tier_titles, exam_boards, exam_board_titles, exam_subjects, exam_subject_titles, ks4_options, ks4_option_titles
-    expect(optionalFields).toHaveLength(22);
+    expect(optionalFields).toHaveLength(23);
   });
 });
 
@@ -200,6 +207,13 @@ describe('LESSONS_INDEX_FIELDS', () => {
     const field = LESSONS_INDEX_FIELDS.find((f) => f.name === 'key_stage');
     expect(field?.enumRef).toBe('KEY_STAGE_TUPLE');
   });
+
+  it('has phase_slug as optional string for phase-based filtering', () => {
+    const field = LESSONS_INDEX_FIELDS.find((f) => f.name === 'phase_slug');
+    expect(field).toBeDefined();
+    expect(field?.zodType).toBe('string');
+    expect(field?.optional).toBe(true);
+  });
 });
 
 describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
@@ -218,6 +232,13 @@ describe('UNIT_ROLLUP_INDEX_FIELDS', () => {
 
   it('includes unit_content_semantic as optional', () => {
     const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'unit_content_semantic');
+    expect(field?.optional).toBe(true);
+  });
+
+  it('has phase_slug as optional string for phase-based filtering', () => {
+    const field = UNIT_ROLLUP_INDEX_FIELDS.find((f) => f.name === 'phase_slug');
+    expect(field).toBeDefined();
+    expect(field?.zodType).toBe('string');
     expect(field?.optional).toBe(true);
   });
 });

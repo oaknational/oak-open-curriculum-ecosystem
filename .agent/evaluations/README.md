@@ -22,9 +22,9 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 | Key Stages | KS4 only | **KS1-4** | ✅ Complete |
 | Queries | 73 | **263** | ✅ M3 Target exceeded |
 
-**Remaining**: RSHE/PSHE deferred (no bulk data). 5 subject baselines pending (English, Science, History, Geography, RE).
+**Remaining**: RSHE/PSHE deferred (no bulk data). Baselines need restructure by phase — see M3 Revised.
 
-See [Milestone 3: Search Quality Optimization](../plans/semantic-search/active/m3-search-quality-optimization.md).
+See [M3 Revised: Phase-Aligned Search Quality](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
 
 ---
 
@@ -132,7 +132,7 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 
 ---
 
-> ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth coverage is the current gap — see [M3: Search Quality Optimization](../plans/semantic-search/active/m3-search-quality-optimization.md).
+> ✅ **INGESTION COMPLETE**: Full curriculum indexed (16,414 documents). Ground truth restructuring is the current work — see [M3 Revised: Phase-Aligned Search Quality](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
 
 ---
 

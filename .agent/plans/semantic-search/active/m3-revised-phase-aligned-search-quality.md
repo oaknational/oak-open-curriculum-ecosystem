@@ -1,10 +1,61 @@
 # M3 Revised: Phase-Aligned Search Quality Architecture
 
-**Status**: 📋 **PLANNED** — Replaces original M3
+**Status**: 🚧 **Phase 5a IN PROGRESS** — Restructure ~80% complete, needs recovery
 **Priority**: HIGH — Foundation for all future search work
 **Parent**: [../roadmap.md](../roadmap.md)
 **Created**: 2026-01-03
-**Replaces**: [m3-search-quality-optimization.md](m3-search-quality-optimization.md)
+**Last Updated**: 2026-01-03 (evening)
+**Replaces**: Original M3 (deleted after content merged into this plan)
+
+---
+
+## Progress Summary
+
+### Completed ✅
+
+| Phase | Description | Date |
+|-------|-------------|------|
+| **Phase 1** | SDK Schema Enhancement — `phase_slug` added to index document schemas | 2026-01-03 |
+| **Phase 2** | Indexing Pipeline — `derivePhaseFromKeyStage()` populates `phase_slug` in all document builders | 2026-01-03 |
+| **Phase 3** | Search Filter Architecture — Array support for `phases[]`, `keyStages[]`, `years[]`, `examBoards[]` | 2026-01-03 |
+| **Phase 4** | Analysis Script Enhancement — CLI supports `--phase`, `--keyStages`, `--years`, `--examBoards` | 2026-01-03 |
+| **Phase 5a** | Directory restructure — `ks3/` → `secondary/`, `ks2/` → `primary/`, exports renamed | 2026-01-03 |
+
+### In Progress ⚠️
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| **Phase 5a** | Fix corrupted UNIT_* exports from timed-out sed | NEEDS RECOVERY |
+
+See [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) for fix commands.
+
+### Remaining 📋
+
+| Phase | Description | Effort |
+|-------|-------------|--------|
+| **Phase 5a** | Complete file fixes, run quality gates | LOW |
+| **Phase 5b** | Create `maths/primary/` ground truths (30+ queries) | HIGH |
+| **Phase 6** | ES Re-index — Update-by-query to add `phase_slug` to existing documents | LOW |
+| **Phase 7** | Baselines — Run comprehensive phase-based baselines for all subjects | MEDIUM |
+| **Docs** | Documentation — ADR, READMEs, TSDoc | MEDIUM |
+
+### Key Decision (2026-01-03)
+
+**Decision**: Phase 5 must create a **comprehensive set of ground truths**, not just restructure existing ones.
+
+**Rationale**: Maths has NO primary ground truths at all. Creating `maths/primary/` requires researching KS1+KS2 maths content via MCP tools and creating 30+ new queries. This is foundational work that will serve the project for years — there is no shortcut.
+
+### Environment Status
+
+**MCP Server**: ✅ Running (`ooc-http-dev-local`)
+
+The Oak Curriculum MCP server is available for Phase 5 implementation. Key tools:
+- `get-key-stages-subject-units` — List units for a subject/key-stage
+- `get-key-stages-subject-lessons` — List lessons for a subject/key-stage
+- `get-lessons-summary` — Validate lesson slugs exist
+- `search` — Find lessons by topic query
+
+---
 
 ---
 
@@ -725,25 +776,58 @@ pnpm es:status
 
 ### 3. Understand Current State
 
-- Read [current-state.md](../current-state.md) for current metrics
-- Read [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md) for history
-- Note: English KS1/KS2 baselines are marked as TEST FLAW (this plan fixes that)
+**Phases 1-4 are COMPLETE** (as of 2026-01-03):
+- ✅ Phase 1: SDK schema has `phase_slug` field
+- ✅ Phase 2: Document builders populate `phase_slug`
+- ✅ Phase 3: `SearchFilterOptions` supports arrays (`phases[]`, `keyStages[]`, etc.)
+- ✅ Phase 4: CLI supports `--phase`, `--keyStages`, `--years`, `--examBoards`
 
-### 4. Identify Next Phase
+**Next work is Phase 5: Ground Truth Restructure**
 
-Check which phase is next:
-1. Filter architecture enhancement — Array support in ES query builders
-2. Ground truth restructure — Reorganise by phase
-3. Analysis script update — Add `--phase` parameter
-4. Run comprehensive baselines — All subjects by phase
-5. Comprehensive filter testing — All valid combinations
+This is substantial work requiring:
+1. Creating `maths/primary/` ground truths (30+ new queries) — **these don't exist yet**
+2. Restructuring all subjects into phase-based directories
+3. Validating all slugs via MCP tools
+
+### 4. Phase 5 Implementation
+
+**Before starting Phase 5:**
+1. Re-read `rules.md`, `testing-strategy.md`, and this plan
+2. Read the detailed Phase 5 section below
+
+**MCP Server**: ✅ Running — available for Phase 5
+
+**Ground truth creation requires:**
+1. Using Oak MCP tools (`ooc-http-dev-local`) to explore curriculum content:
+   - `get-key-stages-subject-units --keyStage ks1 --subject maths`
+   - `get-key-stages-subject-units --keyStage ks2 --subject maths`
+   - `get-key-stages-subject-lessons --keyStage ks1 --subject maths`
+   - `get-key-stages-subject-lessons --keyStage ks2 --subject maths`
+   - `get-lessons-summary` to validate slugs
+   - `search` to find lessons by topic
+2. Creating queries that reflect teacher/student language
+3. Assigning relevance scores (3=highly relevant, 2=relevant, 1=marginally)
+4. Comprehensive TSDoc on all new files
+
+**Target structure:**
+```
+ground-truth/
+├── maths/
+│   ├── primary/     # NEW - 30+ queries for KS1+KS2
+│   └── secondary/   # Reorganised from root-level files
+├── english/
+│   ├── primary/     # Existing
+│   └── secondary/   # NEW - merged from ks3/ + ks4/
+├── [other subjects]/
+│   └── secondary/   # Renamed from ks3/
+```
 
 ### 5. Follow TDD Approach
 
-For each phase:
-1. **RED**: Write failing test for new functionality
-2. **GREEN**: Implement minimum to pass
-3. **REFACTOR**: Clean up, add TSDoc
+For ground truth creation:
+1. **RED**: Add expected queries to validation script
+2. **GREEN**: Create ground truth files with validated slugs
+3. **REFACTOR**: Ensure consistent structure, add TSDoc
 4. **QUALITY GATES**: Run full suite before proceeding
 
 ### 6. Record Everything
@@ -751,4 +835,12 @@ For each phase:
 - All baseline runs → [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md)
 - Final metrics → [current-state.md](../current-state.md)
 - Decisions → This plan or ADRs as appropriate
+
+### 7. Key Files for Phase 5
+
+| File | Purpose |
+|------|---------|
+| `src/lib/search-quality/ground-truth/` | Ground truth directory |
+| `evaluation/analysis/analyze-cross-curriculum.ts` | Maps subjects to ground truths |
+| `evaluation/validation/validate-ground-truth.ts` | Validates slugs exist |
 

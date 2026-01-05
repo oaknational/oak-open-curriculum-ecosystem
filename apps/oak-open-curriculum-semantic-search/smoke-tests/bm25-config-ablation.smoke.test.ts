@@ -25,13 +25,12 @@
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import {
-  GROUND_TRUTH_QUERIES,
-  HARD_GROUND_TRUTH_QUERIES,
-} from '../src/lib/search-quality/ground-truth/index.js';
-import {
+  MATHS_SECONDARY_STANDARD_QUERIES,
+  MATHS_SECONDARY_HARD_QUERIES,
   UNIT_GROUND_TRUTH_QUERIES,
   UNIT_HARD_GROUND_TRUTH_QUERIES,
-} from '../src/lib/search-quality/ground-truth/units/index.js';
+  type UnitGroundTruthQuery,
+} from '../src/lib/search-quality/ground-truth/index.js';
 import { calculateMRR, calculateNDCG } from '../src/lib/search-quality/metrics.js';
 import { esSearch } from '../src/lib/elastic-http.js';
 import {
@@ -46,7 +45,6 @@ import {
 } from '../src/lib/hybrid-search/configurable-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../src/types/oak.js';
 import type { GroundTruthQuery } from '../src/lib/search-quality/ground-truth/types.js';
-import type { UnitGroundTruthQuery } from '../src/lib/search-quality/ground-truth/units/types.js';
 
 /** Target thresholds */
 const TARGETS = {
@@ -311,7 +309,7 @@ describe('BM25 Configuration Ablation (Phase 3e)', () => {
     console.log('='.repeat(80));
     console.log(`Testing ${BM25_CONFIG_NAMES.length} configurations...`);
     console.log(
-      `Lesson queries: ${GROUND_TRUTH_QUERIES.length} std, ${HARD_GROUND_TRUTH_QUERIES.length} hard`,
+      `Lesson queries: ${MATHS_SECONDARY_STANDARD_QUERIES.length} std, ${MATHS_SECONDARY_HARD_QUERIES.length} hard`,
     );
     console.log(
       `Unit queries: ${UNIT_GROUND_TRUTH_QUERIES.length} std, ${UNIT_HARD_GROUND_TRUTH_QUERIES.length} hard`,
@@ -321,10 +319,14 @@ describe('BM25 Configuration Ablation (Phase 3e)', () => {
     // Run lesson and unit experiments in parallel
     const [lessonStd, lessonHard, unitHard] = await Promise.all([
       Promise.all(
-        BM25_CONFIG_NAMES.map((c) => runLessonExperiment(c, GROUND_TRUTH_QUERIES, 'hybrid')),
+        BM25_CONFIG_NAMES.map((c) =>
+          runLessonExperiment(c, MATHS_SECONDARY_STANDARD_QUERIES, 'hybrid'),
+        ),
       ),
       Promise.all(
-        BM25_CONFIG_NAMES.map((c) => runLessonExperiment(c, HARD_GROUND_TRUTH_QUERIES, 'hybrid')),
+        BM25_CONFIG_NAMES.map((c) =>
+          runLessonExperiment(c, MATHS_SECONDARY_HARD_QUERIES, 'hybrid'),
+        ),
       ),
       Promise.all(
         BM25_CONFIG_NAMES.map((c) => runUnitExperiment(c, UNIT_HARD_GROUND_TRUTH_QUERIES)),

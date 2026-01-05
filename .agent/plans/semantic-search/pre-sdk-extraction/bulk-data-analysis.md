@@ -15,7 +15,7 @@ This plan consolidates all bulk data analysis work into a single cohesive effort
 2. **Transcript patterns** — Spoken teacher language, colloquial terms
 3. **Entity relationships** — Concept co-occurrence, misconception clusters
 
-**Prerequisite**: [M3: Search Quality Optimization](../active/m3-search-quality-optimization.md) must complete first to identify what quality gaps exist through comprehensive ground truths.
+**Prerequisite**: [M3 Revised: Phase-Aligned Search Quality](../active/m3-revised-phase-aligned-search-quality.md) must complete first to identify what quality gaps exist through comprehensive ground truths.
 
 ---
 
@@ -290,7 +290,7 @@ Before implementing new indices:
 | [vocab-gen/](../../../../packages/sdks/oak-curriculum-sdk/vocab-gen/)                         | Pipeline code        |
 | [ADR-086](../../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) | Graph export pattern |
 | [vocabulary-value-analysis.md](../../../research/semantic-search/vocabulary-value-analysis.md) | Value score research |
-| [../active/m3-search-quality-optimization.md](../active/m3-search-quality-optimization.md)   | Prerequisite work    |
+| [../active/m3-revised-phase-aligned-search-quality.md](../active/m3-revised-phase-aligned-search-quality.md) | Prerequisite work |
 
 ---
 

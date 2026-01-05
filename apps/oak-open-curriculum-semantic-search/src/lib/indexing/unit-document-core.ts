@@ -79,6 +79,20 @@ function copyArrayOrUndefined<T>(arr: readonly T[] | undefined): T[] | undefined
   return arr && arr.length > 0 ? [...arr] : undefined;
 }
 
+/**
+ * Derives phase slug from key stage.
+ *
+ * Phases are the fundamental curriculum division:
+ * - `primary`: Years 1-6 (KS1 + KS2)
+ * - `secondary`: Years 7-11 (KS3 + KS4)
+ *
+ * @param keyStage - The key stage slug
+ * @returns The corresponding phase slug
+ */
+function derivePhaseFromKeyStage(keyStage: KeyStage): 'primary' | 'secondary' {
+  return keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
+}
+
 /** Build thread-related fields */
 function buildThreadFields(threadInfo: UnitThreadInfo | undefined) {
   const sequenceIds = copyArrayOrUndefined(threadInfo?.slugs);
@@ -128,6 +142,7 @@ export function buildUnitDocument(params: CreateUnitDocParams): SearchUnitsIndex
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,
+    phase_slug: derivePhaseFromKeyStage(keyStage),
     years: copyArrayOrUndefined(params.years),
     lesson_ids: [...lessonIds],
     lesson_count: lessonIds.length,

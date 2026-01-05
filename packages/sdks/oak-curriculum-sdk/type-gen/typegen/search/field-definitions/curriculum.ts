@@ -47,6 +47,8 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
   { name: 'key_stage_title', zodType: 'string', optional: true },
+  /** Phase slug for curriculum filtering (primary/secondary). @see ADR for phase-aligned search. */
+  { name: 'phase_slug', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'unit_ids', zodType: 'array-string', optional: false },
   { name: 'unit_titles', zodType: 'array-string', optional: false },
@@ -114,6 +116,8 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
   { name: 'key_stage_title', zodType: 'string', optional: true },
+  /** Phase slug for curriculum filtering (primary/secondary). @see ADR for phase-aligned search. */
+  { name: 'phase_slug', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'lesson_ids', zodType: 'array-string', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },
@@ -163,6 +167,8 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
   { name: 'key_stage_title', zodType: 'string', optional: true },
+  /** Phase slug for curriculum filtering (primary/secondary). @see ADR for phase-aligned search. */
+  { name: 'phase_slug', zodType: 'string', optional: true },
   { name: 'years', zodType: 'array-string', optional: true },
   { name: 'lesson_ids', zodType: 'array-string', optional: false },
   { name: 'lesson_count', zodType: 'number', optional: false },

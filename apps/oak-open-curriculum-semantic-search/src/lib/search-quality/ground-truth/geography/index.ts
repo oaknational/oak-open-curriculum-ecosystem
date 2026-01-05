@@ -10,27 +10,31 @@
 import type { GroundTruthQuery } from '../types';
 
 import {
-  GEOGRAPHY_KS3_ALL_QUERIES,
-  GEOGRAPHY_KS3_HARD_QUERIES,
-  GEOGRAPHY_KS3_STANDARD_QUERIES,
-} from './ks3';
+  GEOGRAPHY_SECONDARY_ALL_QUERIES,
+  GEOGRAPHY_SECONDARY_HARD_QUERIES,
+  GEOGRAPHY_SECONDARY_STANDARD_QUERIES,
+} from './secondary';
 
 /**
  * All standard Geography ground truth queries.
  */
 export const GEOGRAPHY_STANDARD_QUERIES: readonly GroundTruthQuery[] =
-  GEOGRAPHY_KS3_STANDARD_QUERIES;
+  GEOGRAPHY_SECONDARY_STANDARD_QUERIES;
 
 /**
  * All hard Geography ground truth queries.
  */
-export const GEOGRAPHY_HARD_QUERIES: readonly GroundTruthQuery[] = GEOGRAPHY_KS3_HARD_QUERIES;
+export const GEOGRAPHY_HARD_QUERIES: readonly GroundTruthQuery[] = GEOGRAPHY_SECONDARY_HARD_QUERIES;
 
 /**
  * All Geography ground truth queries.
  *
  * Total: 9 queries (5 standard + 4 hard).
  */
-export const GEOGRAPHY_ALL_QUERIES: readonly GroundTruthQuery[] = GEOGRAPHY_KS3_ALL_QUERIES;
+export const GEOGRAPHY_ALL_QUERIES: readonly GroundTruthQuery[] = GEOGRAPHY_SECONDARY_ALL_QUERIES;
 
-export { GEOGRAPHY_KS3_ALL_QUERIES, GEOGRAPHY_KS3_HARD_QUERIES, GEOGRAPHY_KS3_STANDARD_QUERIES };
+export {
+  GEOGRAPHY_SECONDARY_ALL_QUERIES,
+  GEOGRAPHY_SECONDARY_HARD_QUERIES,
+  GEOGRAPHY_SECONDARY_STANDARD_QUERIES,
+};

@@ -19,7 +19,7 @@ const repoRootEnv = resolve(thisDir, '../../../../.env');
 dotenvConfig({ path: envLocalPath });
 dotenvConfig({ path: repoRootEnv });
 
-import { HARD_GROUND_TRUTH_QUERIES } from '../../src/lib/search-quality/ground-truth/index';
+import { MATHS_SECONDARY_HARD_QUERIES } from '../../src/lib/search-quality/ground-truth/index';
 import {
   processQueryResult,
   calculateOverallMrr,
@@ -59,7 +59,7 @@ async function searchLessons(
 async function runLessonBaseline(): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
 
-  for (const query of HARD_GROUND_TRUTH_QUERIES) {
+  for (const query of MATHS_SECONDARY_HARD_QUERIES) {
     const { results: actualResults, latencyMs } = await searchLessons(query.query);
     const result = processQueryResult(query, actualResults, latencyMs);
     results.push(result);
