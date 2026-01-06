@@ -162,17 +162,14 @@ Define before running:
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Unified benchmark runner (preferred)
-pnpm benchmark --all                                    # All subjects, all phases
+# Unified benchmark runner (the ONLY evaluation tool)
+pnpm benchmark --all                                    # All 28 subject/phase entries
+pnpm benchmark --subject maths                          # One subject, all phases
+pnpm benchmark --phase secondary                        # One phase, all subjects
 pnpm benchmark --subject maths --phase secondary        # Specific scope
-pnpm benchmark --phase primary --verbose                # All primary, detailed output
-
-# Cross-curriculum analysis (CLI)
-pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject maths --phase secondary
-pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts --subject french --phase secondary
 ```
 
-**Note**: Use `--phase` (primary/secondary) or `--keyStages` (comma-separated), not legacy `--keyStage`.
+**Note**: All fragmented analysis scripts have been deleted. Use `benchmark.ts` exclusively.
 
 ### 4.3 Experiment Workflow
 

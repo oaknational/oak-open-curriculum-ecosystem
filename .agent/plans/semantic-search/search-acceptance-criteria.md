@@ -252,10 +252,11 @@ The two intent-based queries express **pedagogical intent** (difficulty level, t
 To verify tier completion status:
 
 ```bash
-# Run evaluations
+# Run unified benchmark
 cd apps/oak-open-curriculum-semantic-search
-pnpm eval:per-category    # Per-category breakdown
-pnpm eval:diagnostic      # Diagnostic patterns
+pnpm benchmark --all                    # All subjects, all phases
+pnpm benchmark --subject maths          # One subject
+pnpm benchmark --phase secondary        # One phase
 
 # Check results against this document
 # - All categories meet thresholds

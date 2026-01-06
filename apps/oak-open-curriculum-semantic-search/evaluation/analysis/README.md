@@ -31,7 +31,7 @@ pnpm benchmark --subject maths
 pnpm benchmark --phase secondary
 
 # Run for a specific subject/phase combination
-pnpm benchmark --subject maths --phase ks4
+pnpm benchmark --subject maths --phase secondary
 ```
 
 ### What It Measures
@@ -62,7 +62,7 @@ The benchmark uses `GROUND_TRUTH_ENTRIES` from the registry as the single source
 of truth. Each entry contains:
 
 - `subject`: The Oak curriculum subject slug
-- `phase`: `primary` | `secondary` | `ks4`
+- `phase`: `primary` | `secondary` (KS4 is part of secondary)
 - `queries`: Ground truth queries with expected relevance judgments
 - `baselineMrr`: Documented MRR baseline (for reference, not used by benchmark)
 
@@ -71,14 +71,17 @@ See `src/lib/search-quality/ground-truth/registry/` for implementation.
 ## Phase Definitions
 
 - **primary**: KS1 + KS2 (Years 1-6) content
-- **secondary**: KS3 + general secondary content
-- **ks4**: KS4-specific scenarios with additional structural complexity
-  - Tier variants (Maths, Science)
-  - Exam subject split (Science: biology, chemistry, physics)
-  - Set texts / unit options (English, Geography, History)
+- **secondary**: KS3 + KS4 (Years 7-11) content
 
-KS4 ground truths are stored in `subject/secondary/ks4/` directories and test
-KS4-specific query patterns that don't apply to KS3.
+**KS4 Special Case**: KS4 is part of secondary but has additional structural
+complexity. KS4-specific queries have `keyStage: 'ks4'` set on individual query
+objects for correct ES filtering:
+
+- Tier variants (Maths, Science)
+- Exam subject split (Science: biology, chemistry, physics)
+- Set texts / unit options (English, Geography, History)
+
+KS4 ground truths are stored in `subject/secondary/ks4/` directories.
 
 ## Adding Ground Truths
 

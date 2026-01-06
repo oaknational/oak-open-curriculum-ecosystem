@@ -117,23 +117,26 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ---
 
-## 🔄 In Progress: M3 Revised — Phase-Aligned Search Quality
+## ✅ Complete: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: 📋 PLANNED — Architectural restructure required
+**Status**: ✅ **Phases 1-7 Complete** — Ready for Phase 8 (baselines)
 
 See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
-### Discovery
+### Completed
 
-Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2 together. This plan restructures ground truths by **phase** (primary/secondary/GCSE) and adds flexible filter support.
+| Completed | What |
+|-----------|------|
+| ✅ Filter Architecture | Array support for keyStages, years, phases |
+| ✅ Ground Truth Restructure | Phase-aligned directories, KS4 as special case of secondary |
+| ✅ Comprehensive Ground Truths | 14 primary subjects, all secondary subjects, KS4-specific |
+| ✅ Unified Evaluation | `GROUND_TRUTH_REGISTRY`, `benchmark.ts`, cleanup |
 
-### Next Priorities
+### Next Priority
 
 | Priority | Work | Why |
 |----------|------|-----|
-| **1. Filter Architecture** | Phase 1 of M3 Revised | Array support for keyStages, years, phases |
-| **2. Ground Truth Restructure** | Phase 2 of M3 Revised | Reorganise by phase, not key stage |
-| **3. Comprehensive Baselines** | Phase 4 of M3 Revised | All subjects by phase |
+| **Phase 8** | Run comprehensive baselines | Measure MRR for all entries, update registry |
 
 ---
 

@@ -1,6 +1,6 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-05 (M3 Plan Consolidated)
+**Last Updated**: 2026-01-06 (M3 Phases 1-7 Complete)
 
 This is a **standalone entrypoint** for semantic search sessions. Start here.
 
@@ -22,15 +22,15 @@ Per-key-stage testing was **fundamentally flawed**:
 - Testing KS1 separately from KS2 caused false failures (slugs valid in KS2 but not KS1)
 - Curriculum is organised by **phase** (primary/secondary), not individual key stage
 
-**Solution**: Ground truths organised by `subject/phase/` (e.g., `maths/primary/`, `maths/secondary/`).
+**Solution**: Ground truths organised by `subject/phase/` (e.g., `maths/primary/`, `maths/secondary/`). KS4 is a special case of secondary with additional complexity, handled via `keyStage?: KeyStage` property on queries.
 
 ---
 
-## Current Status: Comprehensive Ground Truths
+## Current Status: Unified Evaluation Infrastructure ✅
 
-**Phases 1-5a COMPLETE** ✅ — Infrastructure ready.
+**Phases 1-7 COMPLETE** ✅ — Ground truths and unified benchmark infrastructure ready.
 
-**Next Work**: Phase 5b — Create ALL missing primary ground truths (10 subjects).
+**Next Work**: Phase 8 — Run comprehensive baselines, update registry with measured MRR values.
 
 ---
 
@@ -43,62 +43,40 @@ Per-key-stage testing was **fundamentally flawed**:
 | **Phase 3** | Search Filters — Array support for phases, keyStages, years, examBoards | 2026-01-03 |
 | **Phase 4** | Analysis CLI — `--phase`, `--keyStages`, `--years`, `--examBoards` | 2026-01-03 |
 | **Phase 5a** | Directory restructure — phase-aligned structure, clean exports | 2026-01-05 |
+| **Phase 5b** | Create ALL primary ground truths (14 subjects) | 2026-01-06 |
+| **Phase 5c** | Create missing secondary ground truths | 2026-01-06 |
+| **Phase 5d** | Create KS4-specific ground truths (maths tiers, science subjects, etc.) | 2026-01-06 |
+| **Phase 7a** | Create `GROUND_TRUTH_REGISTRY` (ADR-098) | 2026-01-06 |
+| **Phase 7b-c** | Unified `benchmark.ts` evaluation tool | 2026-01-06 |
+| **Phase 7d-e** | Cleanup — delete fragmented scripts and performance-measuring smoke tests | 2026-01-06 |
 
 ---
 
 ## What's Next
 
-### Phase 5b: Create ALL Missing Primary Ground Truths
+### Phase 8: Run Comprehensive Baselines
 
-**10 subjects** need `primary/` ground truths:
+Run the unified benchmark against live ES and update registry with measured MRR values:
 
-| Subject | Units | Priority | Notes |
-|---------|-------|----------|-------|
-| maths | 125 | 1 | Largest, most important |
-| physical-education | 65 | 2 | Large but simpler |
-| art | 42 | 3 | Creative |
-| geography | 37 | 4 | Physical/human |
-| music | 36 | 5 | Performance/composition |
-| religious-education | 36 | 6 | World religions |
-| computing | 30 | 7 | Programming/data |
-| spanish | 21 | 8 | **MFL - structure-only** |
-| design-technology | 18 | 9 | Materials/making |
-| french | 15 | 10 | **MFL - structure-only** |
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm benchmark --all                    # All subjects, all phases
+pnpm benchmark --subject maths          # One subject
+pnpm benchmark --phase primary          # One phase
+```
 
-**MFL Note**: French and Spanish have **no transcripts** (automatic captioning doesn't work for non-English speech). ELSER is also English-only. Ground truths for MFL MUST test **structural fields** (`lesson_structure`, `lesson_structure_semantic`) and metadata, NOT transcript content. This validates our 4-retriever hybrid architecture works for all subjects.
+Then update `baselineMrr` values in `GROUND_TRUTH_ENTRIES` with measured results.
 
-### Phase 5c: Create Missing Secondary Ground Truth
+---
 
-- **cooking-nutrition/secondary/** (12 units)
-
-### Phase 5d: Create KS4-Specific Ground Truths
-
-For subjects with KS4 complexity, create `secondary/ks4/` subdirectories:
-
-- **science**: Biology, Chemistry, Physics (exam subject split)
-- **maths**: Foundation/Higher tier variants
-- **english**: Set texts (Macbeth, Inspector Calls)
-- **MFL**: Exam board skills
-- Others as needed
-
-### Phases 6-8
-
-- **Phase 6**: ES re-index (add `phase_slug` to existing documents)
-- **Phase 7**: **Unified Evaluation Infrastructure**
-  - 7a: Create `GROUND_TRUTH_REGISTRY` as single source of truth
-  - 7b: Update validation to iterate registry
-  - 7c: Create unified `benchmark.ts` **evaluation tool** (measure effects of changes)
-  - 7d: Create unified `search-baseline.smoke.test.ts` **smoke test** (is it working?)
-  - 7e: Delete fragmented scripts and tests
-  - 7f: Remove legacy `--keyStage` param
-- **Phase 8**: Run comprehensive phase-based baselines for ALL subjects
-
-**Key Distinction** (two categories of tools):
+## Architecture (Two Categories of Tools)
 
 | Category | Question | When Run | Output |
 |----------|----------|----------|--------|
 | **Evaluations** | "Did this change improve quality?" | Manual, before/after changes | Metrics to compare |
 | **Smoke Tests** | "Is search working as expected?" | CI/CD, deployment | Pass/fail |
+
+**Never conflate these concerns.** Evaluation measures quality; smoke tests verify behavior.
 
 ---
 
@@ -106,19 +84,24 @@ For subjects with KS4 complexity, create `secondary/ks4/` subdirectories:
 
 ```
 ground-truth/
+├── registry/
+│   ├── types.ts              # Phase = 'primary' | 'secondary'
+│   ├── entries.ts            # GROUND_TRUTH_ENTRIES (single source of truth)
+│   └── index.ts              # Type-safe accessors
 ├── {subject}/
 │   ├── primary/              # Years 1-6 (KS1+KS2)
 │   │   ├── {topic}.ts
-│   │   ├── hard-queries.ts
 │   │   └── index.ts
 │   ├── secondary/            # Years 7-11 (KS3+KS4)
 │   │   ├── {topic}.ts
-│   │   ├── hard-queries.ts
-│   │   ├── ks4/              # For complex KS4 subjects
+│   │   ├── ks4/              # KS4-specific queries (keyStage: 'ks4')
 │   │   │   └── ...
 │   │   └── index.ts
 │   └── index.ts
+└── types.ts                  # GroundTruthQuery (with keyStage?: KeyStage)
 ```
+
+**Phase Model**: `Phase = 'primary' | 'secondary'` only. KS4 is part of secondary but KS4-specific queries have `keyStage: 'ks4'` set for correct ES filtering.
 
 ---
 
@@ -235,9 +218,9 @@ pnpm smoke:dev:stub
 
 | File | Purpose |
 |------|---------|
-| `src/lib/search-quality/ground-truth/` | Ground truths |
+| `src/lib/search-quality/ground-truth/registry/` | Ground truth registry (single source of truth) |
 | `src/lib/search-quality/metrics.ts` | MRR, NDCG, Precision, Recall calculations |
-| `evaluation/analysis/analyze-cross-curriculum.ts` | Phase-based analysis |
+| `evaluation/analysis/benchmark.ts` | **Unified benchmark tool** |
 | `evaluation/validation/validate-ground-truth.ts` | Slug validation |
 | `bulk-downloads/` | Source data |
 | [DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md) | **Critical**: Curriculum data differences, KS4 complexity |

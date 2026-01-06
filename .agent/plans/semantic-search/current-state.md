@@ -1,7 +1,7 @@
 # Semantic Search Current State
 
-**Last Updated**: 2026-01-05
-**Status**: ✅ **Phase 5a Complete** — Ready for Phase 5b (maths/primary ground truths)
+**Last Updated**: 2026-01-06
+**Status**: ✅ **Phases 1-7 Complete** — Ready for Phase 8 (run baselines)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Current Plan**: [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
@@ -9,25 +9,29 @@ This is THE authoritative source for current system metrics.
 
 ---
 
-## ✅ Phase 5a Complete (2026-01-05)
+## ✅ Phases 1-7 Complete (2026-01-06)
 
-**Ground truth restructure is COMPLETE. All quality gates pass.**
+**Unified evaluation infrastructure is COMPLETE. All quality gates pass.**
 
 ### What Was Done ✅
-- All `ks3/` directories renamed to `secondary/`
-- All `ks2/` directories renamed to `primary/`  
-- English `ks3/` + `ks4/` merged into `english/secondary/`
-- Maths files moved to `maths/secondary/`
-- Root `index.ts` cleaned up (no deprecated aliases)
-- `analyze-cross-curriculum.ts` updated with phase-based exports
-- Fixed corrupted UNIT_* export names from sed timeout
-- Updated all consumer files with correct imports
-- All 934 unit tests pass, e2e tests pass, smoke tests pass
 
-### What's Next: Phase 5b
-1. Create `maths/primary/` ground truths (30+ queries for KS1+KS2)
-2. Use MCP tools to discover KS1+KS2 maths content
-3. Validate all slugs via API
+**Phase 5a-d: Comprehensive Ground Truths**
+- 14 primary subjects with ground truths
+- All secondary subjects with ground truths
+- KS4-specific ground truths for: maths (tiers), science (biology/chemistry/physics), english (set texts), geography (fieldwork), history (historic environments)
+- Phase model: `Phase = 'primary' | 'secondary'` — KS4 is part of secondary with `keyStage: 'ks4'` property
+
+**Phase 7: Unified Evaluation Infrastructure (ADR-098)**
+- `GROUND_TRUTH_REGISTRY` as single source of truth
+- Type-safe accessors: `getAllGroundTruthEntries()`, `getGroundTruthEntry()`
+- Unified `benchmark.ts` replaces fragmented analysis scripts
+- Deleted 10 performance-measuring smoke tests (smoke tests now behavior-focused only)
+- Deleted 5 fragmented analysis scripts
+
+### What's Next: Phase 8
+1. Run `pnpm benchmark --all` against live ES
+2. Update `baselineMrr` values in `GROUND_TRUTH_ENTRIES` with measured results
+3. Document results in EXPERIMENT-LOG.md
 
 ---
 
@@ -226,26 +230,25 @@ Unit documents now include:
 | M3: Ground Truth Expansion | ✅ **Complete** | — |
 | M4: DRY/SRP Refactoring | ✅ Complete | — |
 | M5: Data Completeness | ✅ Complete | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) |
+| M6: Unified Evaluation Infrastructure | ✅ **Complete** | [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) |
 
 ## 🎯 Next Priority
 
-**Post-M3: Search Quality Optimization by Subject**
+**Phase 8: Run Comprehensive Baselines**
 
-**Priority subjects for improvement** (based on comprehensive baselines):
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm benchmark --all                    # All 28 subject/phase entries
+```
 
-| Priority | Subject/KS | MRR | Issue | Recommended Action |
-|----------|-----------|-----|-------|-------------------|
-| **1** | English KS1/KS2 | 0.13/0.11 | Primary content not found | Investigate ground truth alignment with indexed content |
-| **2** | English KS4 | 0.39 | GCSE texts poorly matched | Add An Inspector Calls, Macbeth-specific synonyms |
-| **3** | French/Spanish/German | 0.19-0.29 | No transcripts (upstream) | Add MFL grammar synonyms, boost title weighting |
-| **4** | PE KS3 | 0.36 | Misspellings not handled | Add PE-specific fuzzy terms |
-| **5** | Computing KS3 | 0.48 | "coding" not bridged | Add "coding"→"programming" synonym |
+**Priority subjects for improvement** (based on previous baselines):
 
-**Recommended next steps**:
-1. Investigate English Primary ground truth alignment — expected slugs may not exist in KS1/KS2 content
-2. Add subject-specific synonyms for GCSE texts (An Inspector Calls characters, etc.)
-3. Add MFL grammar term synonyms ("negation"↔"saying no", etc.)
-4. Implement fuzzy matching improvements for common misspellings
+| Priority | Subject/Phase | Baseline MRR | Issue | Recommended Action |
+|----------|---------------|--------------|-------|-------------------|
+| **1** | English primary | 0.0 (TBD) | Not yet measured | Run baseline |
+| **2** | French/Spanish secondary | 0.19-0.29 | No transcripts (upstream) | Add MFL grammar synonyms |
+| **3** | PE secondary | 0.36 | Misspellings not handled | Add PE-specific fuzzy terms |
+| **4** | Computing secondary | 0.48 | "coding" not bridged | Add "coding"→"programming" synonym |
 
 See [roadmap.md](roadmap.md) for full details.
 

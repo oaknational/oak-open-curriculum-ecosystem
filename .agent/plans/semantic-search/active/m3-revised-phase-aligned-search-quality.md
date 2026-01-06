@@ -1,10 +1,10 @@
 # M3: Comprehensive Ground Truths & Phase-Aligned Search Quality
 
-**Status**: ✅ **Phase 1-4 Complete** | 📋 **Phase 5-8 Ready**
+**Status**: ✅ **Phases 1-7 Complete** | 📋 **Phase 8 Ready**
 **Priority**: HIGH — Foundation for all future search work
 **Parent**: [../roadmap.md](../roadmap.md)
 **Created**: 2026-01-03
-**Last Updated**: 2026-01-05
+**Last Updated**: 2026-01-06
 
 ---
 
@@ -29,22 +29,18 @@
 | **Phase 3** | Search Filter Architecture — Array support for `phases[]`, `keyStages[]`, `years[]`, `examBoards[]` | 2026-01-03 |
 | **Phase 4** | Analysis Script Enhancement — CLI supports `--phase`, `--keyStages`, `--years`, `--examBoards` | 2026-01-03 |
 | **Phase 5a** | Ground truth restructure — directory rename, export standardisation, consumer file updates | 2026-01-05 |
+| **Phase 5b** | Create ALL primary ground truths (14 subjects) | 2026-01-06 |
+| **Phase 5c** | Create missing secondary ground truths | 2026-01-06 |
+| **Phase 5d** | Create KS4-specific ground truths (maths tiers, science subjects, english set texts, etc.) | 2026-01-06 |
+| **Phase 6** | ⏸️ Cancelled — phase model changed, `phase_slug` not needed in ES | — |
+| **Phase 7a** | Create `GROUND_TRUTH_REGISTRY` (ADR-098) | 2026-01-06 |
+| **Phase 7b-c** | Unified `benchmark.ts` evaluation tool | 2026-01-06 |
+| **Phase 7d-e** | Cleanup — delete fragmented scripts and performance-measuring smoke tests | 2026-01-06 |
 
 ### Next Up 📋
 
 | Phase | Description | Effort |
 |-------|-------------|--------|
-| **Phase 5b** | Create ALL missing primary ground truths (10 subjects) | HIGH |
-| **Phase 5c** | Create missing secondary ground truths (1 subject) | LOW |
-| **Phase 5d** | Create KS4-specific ground truths for complex subjects | MEDIUM |
-| **Phase 6** | ES Re-index — Add `phase_slug` to existing documents | LOW |
-| **Phase 7** | Unified Evaluation Infrastructure | HIGH |
-| **Phase 7a** | Create `GROUND_TRUTH_REGISTRY` as single source of truth | MEDIUM |
-| **Phase 7b** | Update validation script to iterate registry | MEDIUM |
-| **Phase 7c** | Create unified `benchmark.ts` evaluation tool | HIGH |
-| **Phase 7d** | Create unified `search-baseline.smoke.test.ts` | MEDIUM |
-| **Phase 7e** | Delete fragmented scripts and tests | LOW |
-| **Phase 7f** | Remove legacy `--keyStage` param | LOW |
 | **Phase 8** | Baselines — Run comprehensive phase-based baselines for ALL subjects | HIGH |
 
 ---
@@ -248,37 +244,27 @@ Based on bulk data availability and existing ground truths:
 
 ---
 
-## Current Evaluation Infrastructure
+## Current Evaluation Infrastructure (Post-Cleanup)
 
 ### Analysis Scripts
 
-| Script | Purpose | Scope |
-|--------|---------|-------|
-| `analyze-cross-curriculum.ts` | Phase-based analysis CLI | All subjects (configurable) |
-| `analyze-per-category.ts` | Per-category MRR breakdown | Maths KS4 only (hardcoded) |
-| `analyze-diagnostic-queries.ts` | Diagnostic query patterns | Maths (specific query sets) |
-| `full-metrics-breakdown.ts` | Comprehensive metrics | Maths (lessons + units) |
+| Script | Purpose | Status |
+|--------|---------|--------|
+| `benchmark.ts` | **Unified benchmark tool** — all subjects, all phases | ✅ Active |
 
 ### Smoke Tests
 
-| Test | Purpose | Scope |
-|------|---------|-------|
-| `search-quality.smoke.test.ts` | Standard query baseline | Maths KS4 only |
-| `hard-query-baseline.smoke.test.ts` | Hard query regression | Maths KS4 only |
-| `four-retriever-ablation.smoke.test.ts` | Retriever comparison | Maths KS4 only |
-| `unit-search-quality.smoke.test.ts` | Unit search testing | Maths KS4 only |
-| `ks4-filtering.smoke.test.ts` | KS4 filter testing | Maths/English |
-| `synonym-coverage.smoke.test.ts` | Synonym testing | Maths |
+| Test | Purpose | Status |
+|------|---------|--------|
+| Behavior-focused smoke tests | Verify search service works | ✅ Active |
 
-### Validation
+**Deleted** (replaced by unified approach):
+- `analyze-per-category.ts`, `analyze-diagnostic-queries.ts`, `full-metrics-breakdown.ts`, etc.
+- `search-quality.smoke.test.ts`, `hard-query-baseline.smoke.test.ts`, etc.
 
-| Script | Current Coverage | Needed |
-|--------|------------------|--------|
-| `validate-ground-truth.ts` | Maths secondary, diagnostics, units, sequences | ALL subjects × ALL phases |
+### Key Achievement
 
-### Key Finding
-
-**Almost all benchmarking is maths KS4 focused.** This is a significant gap — we need universal benchmarks that cover all subjects and phases to make meaningful comparisons.
+**Universal benchmarking now available.** Single `benchmark.ts` covers all 28 subject/phase entries from the registry.
 
 ---
 

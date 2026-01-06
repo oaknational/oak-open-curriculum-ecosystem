@@ -65,12 +65,12 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 ---
 
-## 🔄 IN PROGRESS: M3 Revised — Phase-Aligned Search Quality
+## ✅ COMPLETE: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: ✅ **Phase 5a Complete** — Ready for Phase 5b
+**Status**: ✅ **Phases 1-7 Complete** — Ready for Phase 8 (baselines)
 **Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
-**Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths must be organised by **phase** (primary/secondary/GCSE).
+**Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.
 
 ### M3 Phases
 
@@ -78,9 +78,10 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 |-------|-------|--------|
 | 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
 | 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
-| 5b | Create maths/primary ground truths | 📋 **Next** |
-| 6 | ES Re-index (add phase_slug) | 📋 Pending |
-| 7 | Run phase-based baselines | 📋 Pending |
+| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ✅ Complete (2026-01-06) |
+| 6 | ES Re-index (add phase_slug) | ⏸️ Cancelled (phase model changed) |
+| 7 | Unified evaluation infrastructure (`GROUND_TRUTH_REGISTRY`, `benchmark.ts`) | ✅ Complete (2026-01-06) |
+| 8 | Run comprehensive baselines | 📋 **Next** |
 
 ### Key Findings
 

@@ -12,20 +12,22 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
-## 📋 Current Work: Comprehensive Ground Truths & Unified Evaluation
+## ✅ Unified Evaluation Infrastructure Complete (2026-01-06)
 
-**Status**: Phase 5a complete, Phase 5b-8 in progress.
+**Status**: Phases 1-7 complete. Phase 8 (baselines) pending.
 
 | Dimension | Current | Target | Status |
 |-----------|---------|--------|--------|
 | Subjects with GT | 16 | 16 | ✅ All subjects |
-| Subjects with primary GT | 4 | 14 | 🔄 In progress |
-| Subjects with secondary GT | 15 | 16 | 🔄 1 remaining |
-| Total queries | 263 | ~500+ | 🔄 Expanding |
+| Subjects with primary GT | 14 | 14 | ✅ Complete |
+| Subjects with secondary GT | 16 | 16 | ✅ Complete |
+| Subject/phase entries in registry | 28 | 28 | ✅ Complete |
 
-**Current Focus**: Create comprehensive ground truths for ALL subjects × ALL phases.
-
-**Architectural Change**: Unified evaluation infrastructure replacing fragmented scripts.
+**What was completed**:
+- `GROUND_TRUTH_REGISTRY` as single source of truth (ADR-098)
+- Unified `benchmark.ts` replaces 5 fragmented analysis scripts
+- Behavior-focused smoke tests (deleted 10 performance-measuring tests)
+- KS4 queries use `keyStage: 'ks4'` property for correct ES filtering
 
 See [M3: Comprehensive Ground Truths](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
 
@@ -140,7 +142,7 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 
 ---
 
-## Unified Evaluation Architecture
+## Unified Evaluation Architecture ✅ IMPLEMENTED
 
 ### Two Categories of Tools
 
@@ -149,28 +151,32 @@ These subjects have `unitOptions[]` at KS4, causing duplicate lesson entries in 
 | **Evaluations** | "Did this change improve/regress quality?" | Before/after changes | Metrics to compare |
 | **Smoke Tests** | "Is our search service working as expected?" | CI/CD, deployment | Pass/fail |
 
+**Never conflate these concerns.** Evaluation measures quality; smoke tests verify behavior.
+
 ### Components
 
 | Component | Category | Purpose | Location |
 |-----------|----------|---------|----------|
-| **Ground Truth Registry** | Data | Single source of ALL ground truths | `ground-truth/index.ts` |
+| **Ground Truth Registry** | Data | Single source of ALL ground truths | `ground-truth/registry/` |
 | **Validation Script** | Pre-check | Validates ALL slugs from registry | `evaluation/validation/validate-ground-truth.ts` |
 | **Benchmark Tool** | Evaluation | Measure MRR for any scope | `evaluation/analysis/benchmark.ts` |
-| **Baseline Smoke Test** | Smoke Test | Assert ALL baselines met | `smoke-tests/search-baseline.smoke.test.ts` |
+| **Smoke Tests** | Smoke Test | Verify search behavior works | `smoke-tests/*.smoke.test.ts` |
 
 ### Usage
 
 ```bash
+cd apps/oak-open-curriculum-semantic-search
+
 # Validate all ground truths (pre-check)
 pnpm tsx evaluation/validation/validate-ground-truth.ts
 
 # Evaluate (measure effects of changes)
-pnpm benchmark --all                    # Everything
+pnpm benchmark --all                    # All 28 subject/phase entries
 pnpm benchmark --subject maths          # One subject
 pnpm benchmark --phase primary          # One phase
 
 # Smoke test (is it working?)
-pnpm smoke:dev:stub                     # Includes search-baseline test
+pnpm smoke:dev:stub                     # Behavior-focused tests
 ```
 
 ### Metrics Output

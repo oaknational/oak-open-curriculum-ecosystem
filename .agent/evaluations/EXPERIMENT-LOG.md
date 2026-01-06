@@ -40,6 +40,50 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 
 ## Log Entries
 
+### 2026-01-06: Unified Evaluation Infrastructure Complete (ADR-098)
+
+**Context**: Completed M3 Phases 5b-7. Established `GROUND_TRUTH_REGISTRY` as single source of truth, unified `benchmark.ts` as the only evaluation tool, and clarified the separation between evaluation (measure quality) and smoke tests (verify behavior).
+
+**What Was Built**:
+
+1. **Ground Truth Registry** (`src/lib/search-quality/ground-truth/registry/`)
+   - `GROUND_TRUTH_ENTRIES`: 28 entries covering 16 subjects × primary/secondary phases
+   - Type-safe accessors: `getAllGroundTruthEntries()`, `getGroundTruthEntry()`
+   - Phase model: `Phase = 'primary' | 'secondary'` (KS4 is part of secondary)
+   - KS4-specific queries have `keyStage: 'ks4'` for correct ES filtering
+
+2. **Unified Benchmark Tool** (`evaluation/analysis/benchmark.ts`)
+   - Single entry point for all search quality measurement
+   - Usage: `pnpm benchmark --all | --subject X --phase Y`
+   - Reports MRR, NDCG@10, zero-hit rate per entry
+
+3. **Comprehensive Ground Truths**
+   - 14 primary subjects with curated queries
+   - All secondary subjects with queries
+   - KS4-specific: maths tiers, science subjects, english set texts, geography fieldwork, history historic environments
+
+**What Was Deleted**:
+
+- **10 performance-measuring smoke tests**: `search-quality.smoke.test.ts`, `hard-query-baseline.smoke.test.ts`, etc.
+- **5 fragmented analysis scripts**: `analyze-per-category.ts`, `analyze-diagnostic-queries.ts`, etc.
+
+**Decision**: ✅ **INFRASTRUCTURE COMPLETE**
+
+| Before | After |
+|--------|-------|
+| 6 analysis scripts | 1 unified `benchmark.ts` |
+| Hardcoded mappings | Registry-driven |
+| Maths KS4 focused | All 28 subject/phase entries |
+| Performance smoke tests | Behavior-focused smoke tests |
+
+**Documentation**:
+- ADR-098: Ground Truth Registry as Single Source of Truth
+- Updated: `evaluation/analysis/README.md`
+
+**Next**: Phase 8 — Run `pnpm benchmark --all` against live ES, update `baselineMrr` values.
+
+---
+
 ### 2026-01-03: M3 Comprehensive Baselines — All Core and Humanities Subjects Measured
 
 **Context**: Final phase of M3 baseline completion. Fixed the `analyze-cross-curriculum.ts` script to support per-key-stage query filtering, enabling accurate measurement of subject/KS-specific ground truths. Previously the script loaded ALL queries for a subject but filtered ES by key stage, causing false negatives.
