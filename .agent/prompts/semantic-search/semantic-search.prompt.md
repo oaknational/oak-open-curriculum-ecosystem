@@ -26,11 +26,11 @@ Per-key-stage testing was **fundamentally flawed**:
 
 ---
 
-## Current Status: Unified Evaluation Infrastructure ✅
+## Current Status: Unified Evaluation Infrastructure Ready for Testing
 
-**Phases 1-7 COMPLETE** ✅ — Ground truths and unified benchmark infrastructure ready.
+**Phases 1-7 BUILT** 🔄 — Ground truths and unified benchmark infrastructure built, needs validation.
 
-**Next Work**: Phase 8 — Run comprehensive baselines, update registry with measured MRR values.
+**Next Work**: Phase 8 — Run comprehensive baselines to validate infrastructure, update registry with measured MRR values.
 
 ---
 

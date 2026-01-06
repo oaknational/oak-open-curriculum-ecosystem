@@ -12,9 +12,9 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
-## ✅ Unified Evaluation Infrastructure Complete (2026-01-06)
+## 🔄 Unified Evaluation Infrastructure Ready for Testing (2026-01-06)
 
-**Status**: Phases 1-7 complete. Phase 8 (baselines) pending.
+**Status**: Phases 1-7 built. Phase 8 (run baselines to validate) pending.
 
 | Dimension | Current | Target | Status |
 |-----------|---------|--------|--------|
@@ -23,11 +23,14 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 | Subjects with secondary GT | 16 | 16 | ✅ Complete |
 | Subject/phase entries in registry | 28 | 28 | ✅ Complete |
 
-**What was completed**:
+**What was built**:
+
 - `GROUND_TRUTH_REGISTRY` as single source of truth (ADR-098)
 - Unified `benchmark.ts` replaces 5 fragmented analysis scripts
 - Behavior-focused smoke tests (deleted 10 performance-measuring tests)
 - KS4 queries use `keyStage: 'ks4'` property for correct ES filtering
+
+**Needs validation**: Run `pnpm benchmark --all` against live ES to confirm infrastructure works end-to-end.
 
 See [M3: Comprehensive Ground Truths](../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md).
 
@@ -195,6 +198,7 @@ Benchmark outputs ALL standard IR metrics:
 > **Full definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
 
 **Key Distinction**:
+
 - **Evaluations** are tools you run manually to measure effects of changes
 - **Smoke tests** are automated pass/fail checks that run in CI/CD
 
@@ -243,6 +247,7 @@ Benchmark outputs ALL standard IR metrics:
 **Format**: `{kebab-case-description}.experiment.md`
 
 **Examples**:
+
 - `semantic-reranking.experiment.md`
 - `comprehensive-synonym-coverage.experiment.md`
 - `linear-retriever.experiment.md`
@@ -252,6 +257,7 @@ Benchmark outputs ALL standard IR metrics:
 **Format**: `{kebab-case-description}.md`
 
 **Examples**:
+
 - `hard-query-baseline.md`
 
 ### Guidance (`guidance/`)

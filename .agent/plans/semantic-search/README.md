@@ -117,9 +117,9 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ---
 
-## ✅ Complete: M3 — Phase-Aligned Search Quality & Unified Evaluation
+## 🔄 In Progress: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: ✅ **Phases 1-7 Complete** — Ready for Phase 8 (baselines)
+**Status**: 🔄 **Phases 1-7 Built** — Ready for Phase 8 (run baselines to validate)
 
 See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 

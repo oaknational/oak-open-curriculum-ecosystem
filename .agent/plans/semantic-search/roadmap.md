@@ -65,9 +65,9 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 
 ---
 
-## ✅ COMPLETE: M3 — Phase-Aligned Search Quality & Unified Evaluation
+## 🔄 IN PROGRESS: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: ✅ **Phases 1-7 Complete** — Ready for Phase 8 (baselines)
+**Status**: 🔄 **Phases 1-7 Built** — Ready for Phase 8 (run baselines to validate)
 **Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
 **Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.

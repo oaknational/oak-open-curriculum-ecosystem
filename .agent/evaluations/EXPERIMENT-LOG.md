@@ -40,9 +40,9 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 
 ## Log Entries
 
-### 2026-01-06: Unified Evaluation Infrastructure Complete (ADR-098)
+### 2026-01-06: Unified Evaluation Infrastructure Built (ADR-098)
 
-**Context**: Completed M3 Phases 5b-7. Established `GROUND_TRUTH_REGISTRY` as single source of truth, unified `benchmark.ts` as the only evaluation tool, and clarified the separation between evaluation (measure quality) and smoke tests (verify behavior).
+**Context**: Built M3 Phases 5b-7. Established `GROUND_TRUTH_REGISTRY` as single source of truth, unified `benchmark.ts` as the only evaluation tool, and clarified the separation between evaluation (measure quality) and smoke tests (verify behavior). **Needs validation via Phase 8 baseline runs.**
 
 **What Was Built**:
 
@@ -67,7 +67,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 - **10 performance-measuring smoke tests**: `search-quality.smoke.test.ts`, `hard-query-baseline.smoke.test.ts`, etc.
 - **5 fragmented analysis scripts**: `analyze-per-category.ts`, `analyze-diagnostic-queries.ts`, etc.
 
-**Decision**: ✅ **INFRASTRUCTURE COMPLETE**
+**Decision**: 🔄 **INFRASTRUCTURE BUILT, READY FOR TESTING**
 
 | Before | After |
 |--------|-------|

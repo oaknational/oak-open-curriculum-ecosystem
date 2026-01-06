@@ -1,6 +1,6 @@
 # M3: Comprehensive Ground Truths & Phase-Aligned Search Quality
 
-**Status**: ✅ **Phases 1-7 Complete** | 📋 **Phase 8 Ready**
+**Status**: 🔄 **Phases 1-7 Built** | 📋 **Phase 8 Ready (validation)**
 **Priority**: HIGH — Foundation for all future search work
 **Parent**: [../roadmap.md](../roadmap.md)
 **Created**: 2026-01-03
