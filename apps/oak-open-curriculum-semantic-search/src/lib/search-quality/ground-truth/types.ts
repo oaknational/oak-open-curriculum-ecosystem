@@ -1,7 +1,7 @@
 /**
  * Ground truth type definitions.
- *
  */
+import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
 
 /**
  * Query categories for test scenario classification.
@@ -41,4 +41,6 @@ export interface GroundTruthQuery {
   readonly description?: string;
   /** Relative importance for current system priorities */
   readonly priority?: QueryPriority;
+  /** Override keyStage for KS4-specific queries within secondary phase */
+  readonly keyStage?: KeyStage;
 }

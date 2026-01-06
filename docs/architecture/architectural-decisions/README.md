@@ -105,6 +105,8 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-094: has_transcript Field for Transcript Presence](094-has-transcript-field.md)
 - [ADR-095: Missing Transcript Handling](095-missing-transcript-handling.md)
 - [ADR-096: ES Bulk Retry Strategy](096-es-bulk-retry-strategy.md)
+- [ADR-097: Context Enrichment Architecture](097-context-enrichment-architecture.md)
+- [ADR-098: Ground Truth Registry as Single Source of Truth](098-ground-truth-registry.md)
 
 ## Key Architectural Decisions
 
@@ -134,6 +136,8 @@ For understanding semantic search and Elastic-native AI/ML approach:
 - **[ADR-080](080-curriculum-data-denormalization-strategy.md)** - KS4 metadata denormalisation via sequence traversal
 - **[ADR-081](081-search-approach-evaluation-framework.md)** - Search approach evaluation framework (metrics, harness)
 - **[ADR-082](082-fundamentals-first-search-strategy.md)** - Fundamentals-first search strategy (tier prioritisation)
+- **[ADR-085](085-ground-truth-validation-discipline.md)** - Ground truth validation discipline
+- **[ADR-098](098-ground-truth-registry.md)** - Ground truth registry as single source of truth
 - **[ADR-067](067-sdk-generated-elasticsearch-mappings.md)** - SDK-generated Elasticsearch mappings
 - **[ADR-068](068-per-index-completion-context-enforcement.md)** - Per-index completion context enforcement
 - **[ADR-069](069-systematic-ingestion-progress-tracking.md)** - Systematic ingestion with progress tracking

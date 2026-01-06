@@ -2813,7 +2813,7 @@ pnpm qg = format ✅ + type-check ✅ + lint ✅ + markdown ✅ +
 
      ### Vercel Configuration
      - **Framework**: Express
-     - **Node Version**: 22.x
+     - **Node Version**: 24.x
      - **Environment Variables**: Set in Vercel Dashboard (Production + Preview)
      - **Deployment**: Auto-deploy on push to `main`
 

@@ -12,10 +12,30 @@
  * **Methodology**:
  * All lesson slugs verified against Oak API via MCP tools.
  *
+ * ## Ground Truth Registry
+ *
+ * The registry (`GROUND_TRUTH_ENTRIES`) is THE single source of truth for all
+ * ground truth entries. Use the registry accessors for validation and benchmarking:
+ *
+ * - `getAllGroundTruthEntries()` - Iterate all entries
+ * - `getGroundTruthEntry(subject, phase)` - Get specific entry
+ * - `getEntriesForSubject(subject)` - Get all entries for a subject
+ * - `getEntriesForPhase(phase)` - Get all entries for a phase
+ *
  * @packageDocumentation
  */
 
 export type { GroundTruthQuery } from './types';
+
+// Registry - THE single source of truth
+export type { GroundTruthEntry, Phase } from './registry/index';
+export {
+  getAllGroundTruthEntries,
+  getEntriesForPhase,
+  getEntriesForSubject,
+  getGroundTruthEntry,
+  GROUND_TRUTH_ENTRIES,
+} from './registry/index';
 
 import { ART_ALL_QUERIES } from './art';
 import { CITIZENSHIP_ALL_QUERIES } from './citizenship';

@@ -84,7 +84,7 @@ Every workspace needs these files:
     // Add workspace and external dependencies
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "24",
     "tsx": "^4.20.5", // Only for MCP servers with dev scripts
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",

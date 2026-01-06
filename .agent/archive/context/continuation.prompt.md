@@ -1145,7 +1145,7 @@ Upon reviewing Session 3.C requirements, **all repository work is already comple
 
 1. **Vercel UI Configuration** (No Repo Changes):
    - Create Vercel project from GitHub repository
-   - Configure build settings (Framework: Express, Node 22.x)
+   - Configure build settings (Framework: Express, Node 24.x)
    - Set environment variables (Clerk keys, OAK_API_KEY, security settings)
    - Deploy to staging environment
 

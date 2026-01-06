@@ -284,7 +284,7 @@ export default createApp();
 {
   "functions": {
     "src/index.ts": {
-      "runtime": "nodejs22.x"
+      "runtime": "nodejs24.x"
     }
   }
 }

@@ -82,7 +82,7 @@ cd ecosystem/psycha/oak-curriculum-mcp
     "zod-to-json-schema": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^24",
     "vitest": "^3.2.4"
   },
   "scripts": {

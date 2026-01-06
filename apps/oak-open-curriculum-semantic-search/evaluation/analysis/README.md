@@ -1,147 +1,97 @@
 # Evaluation Analysis
 
-Post-hoc measurement scripts that analyze search quality against known query sets.
+Unified search quality measurement using the Ground Truth Registry.
 
 ## Purpose
 
-Analysis scripts measure system performance, generate reports, and provide human-readable output for understanding search behavior.
+Evaluation scripts **measure** search quality to quantify the impact of changes.
+This is fundamentally different from smoke tests, which **verify** behavior works.
 
-## Scripts
+| Concern        | Tool               | Question                 | Output            |
+| -------------- | ------------------ | ------------------------ | ----------------- |
+| **Evaluation** | `benchmark.ts`     | "How well does it work?" | MRR, NDCG metrics |
+| **Smoke Test** | `smoke-tests/*.ts` | "Does it work?"          | Pass/fail         |
 
-### `analyze-diagnostic-queries.ts`
+**Never conflate these concerns.** Evaluation measures quality; smoke tests verify behavior.
 
-Analyzes 18 diagnostic queries (9 synonym, 9 multi-concept) with detailed per-pattern breakdown.
+## Single Benchmark Tool
 
-**Usage**:
+All search quality evaluation is consolidated into one tool: `benchmark.ts`
 
-```bash
-pnpm eval:diagnostic
-```
-
-**What it measures**:
-
-- Per-pattern MRR for synonym queries (single-word, phrase at start/end/middle, etc.)
-- Per-pattern MRR for multi-concept queries (concept+method, explicit AND, etc.)
-- Success rates (% of queries in top 3)
-- Failure analysis (top 3 results for failing queries)
-
-**Output**: Console report with pattern-by-pattern analysis.
-
-**Created**: 2025-12-23 (B.4a diagnostic analysis)
-
----
-
-### `analyze-per-category.ts`
-
-Analyzes full hard query baseline (15 queries) with per-category MRR breakdown.
-
-**Usage**:
+### Usage
 
 ```bash
-pnpm eval:per-category
+# Run all ground truths from the registry
+pnpm benchmark --all
+
+# Run for a specific subject
+pnpm benchmark --subject maths
+
+# Run for a specific phase
+pnpm benchmark --phase secondary
+
+# Run for a specific subject/phase combination
+pnpm benchmark --subject maths --phase ks4
 ```
 
-**What it measures**:
+### What It Measures
 
-- MRR by category (naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based)
-- Per-query ranks and MRR values
-- Aggregate MRR (with warning that it hides category variation)
+- **MRR (Mean Reciprocal Rank)**: Position of first relevant result
+- **NDCG@10**: Ranking quality across top 10 results
+- **Zero-hit rate**: Percentage of queries returning no results
+- **Query count**: Number of queries evaluated
 
-**Output**: Console report with category-by-category analysis.
+### Output
 
-**Created**: 2025-12-23 (to emphasize per-category over aggregate MRR)
-
----
-
-### `analyze-intent-queries.ts`
-
-Deep analysis of intent-based query failures. Examines WHY queries expressing pedagogical intent (difficulty, teaching approach) fail.
-
-**Usage**:
-
-```bash
-pnpm tsx evaluation/analysis/analyze-intent-queries.ts
+```text
+================================================================================
+BENCHMARK RESULTS
+================================================================================
+Subject/Phase      | Queries | MRR    | NDCG@10 | Zero-hit
+-------------------|---------|--------|---------|----------
+maths/secondary    | 20      | 0.894  | 0.782   | 0.0%
+maths/ks4          | 5       | 0.850  | 0.720   | 0.0%
+science/primary    | 15      | 0.852  | 0.695   | 0.0%
+...
+================================================================================
 ```
 
-**What it measures**:
+## Ground Truth Registry
 
-- Actual vs expected results for intent-based queries
-- Gap between query intent and indexed metadata
-- Tier-level metadata available for each result
+The benchmark uses `GROUND_TRUTH_ENTRIES` from the registry as the single source
+of truth. Each entry contains:
 
-**Output**: Detailed breakdown showing missing capabilities (lesson type, teaching style metadata).
+- `subject`: The Oak curriculum subject slug
+- `phase`: `primary` | `secondary` | `ks4`
+- `queries`: Ground truth queries with expected relevance judgments
+- `baselineMrr`: Documented MRR baseline (for reference, not used by benchmark)
 
-**Created**: 2025-12-24 (Tier 1 exhaustion analysis)
+See `src/lib/search-quality/ground-truth/registry/` for implementation.
 
----
+## Phase Definitions
 
-### `analyze-colloquial.ts`
+- **primary**: KS1 + KS2 (Years 1-6) content
+- **secondary**: KS3 + general secondary content
+- **ks4**: KS4-specific scenarios with additional structural complexity
+  - Tier variants (Maths, Science)
+  - Exam subject split (Science: biology, chemistry, physics)
+  - Set texts / unit options (English, Geography, History)
 
-Deep analysis of colloquial query performance. Investigates informal language queries.
+KS4 ground truths are stored in `subject/secondary/ks4/` directories and test
+KS4-specific query patterns that don't apply to KS3.
 
-**Usage**:
+## Adding Ground Truths
 
-```bash
-pnpm tsx evaluation/analysis/analyze-colloquial.ts
-```
+To add new ground truths:
 
-**What it measures**:
-
-- Actual vs expected results for colloquial queries
-- Noise phrase filtering effectiveness
-- Synonym expansion (e.g., SOHCAHTOA → trigonometry)
-
-**Output**: Detailed breakdown with keyword analysis and root cause identification.
-
-**Created**: 2025-12-24 (Tier 1 exhaustion analysis)
-
----
-
-### `full-metrics-breakdown.ts`
-
-Comprehensive evaluation across all query types (lessons and units, standard and hard).
-
-**Usage**:
-
-```bash
-pnpm tsx evaluation/analysis/full-metrics-breakdown.ts
-```
-
-**What it measures**:
-
-- Lesson standard/hard MRR
-- Unit standard/hard MRR
-- Per-category breakdown for hard queries
-
-**Output**: Summary table with all metrics and targets.
-
-**Created**: 2025-12-22 (baseline measurement)
-
----
-
-## Adding New Analysis Scripts
-
-When adding new analysis scripts:
-
-1. **Use structured output**: Clear headers, tables, summaries
-2. **Allow console.log**: Analysis scripts should be human-readable
-3. **Document the query set**: What queries are being analyzed?
-4. **Explain the metrics**: What do the numbers mean?
-5. **Add npm script** to `package.json` with `eval:*` prefix
-6. **Update this README** with usage and output description
-
-## Code Quality Standards
-
-- **TypeScript**: Strict mode, all types explicit
-- **Complexity**: Max 8 cyclomatic complexity
-- **Function length**: Max 50 lines
-- **File length**: Max 250 lines
-- **Console.log**: ✅ Allowed for output
-- **Logging**: Use proper logger for errors/debugging
+1. Create query files in `src/lib/search-quality/ground-truth/{subject}/{phase}/`
+2. Export an `ALL_QUERIES` array from the index
+3. Add entry to `GROUND_TRUTH_ENTRIES` in `registry/entries.ts`
+4. Run benchmark to measure initial MRR
+5. Update `baselineMrr` with measured value
 
 ## Related Documentation
 
-- [DIAGNOSTIC-QUERIES.md](../../docs/DIAGNOSTIC-QUERIES.md) - Diagnostic query suite documentation
-- [hard-query-baseline.md](../../../.agent/evaluations/baselines/hard-query-baseline.md) - Baseline performance data
-- [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md) - Historical experiment results
-- [current-state.md](../../../.agent/plans/semantic-search/current-state.md) - Current system metrics
+- [ADR-098](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) - Registry architecture
+- [current-state.md](../../../../.agent/plans/semantic-search/current-state.md) - Current system metrics
+- [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) - Curriculum data differences by subject
