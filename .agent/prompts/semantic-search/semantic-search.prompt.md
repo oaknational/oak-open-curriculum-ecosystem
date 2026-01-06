@@ -1,12 +1,22 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-06 (M3 Phases 1-7 Complete)
+**Last Updated**: 2026-01-06 (M3 Phases 1-7 Built, Ready for Testing)
 
 This is a **standalone entrypoint** for semantic search sessions. Start here.
 
 ---
 
-## Goal
+## What Is This?
+
+**Elasticsearch-backed semantic search** for the Oak National Academy curriculum. The system indexes 16,000+ lessons across 16 subjects and enables teachers and AI agents to find relevant content using natural language queries.
+
+**Workspace**: `apps/oak-open-curriculum-semantic-search/`
+
+**Architecture**: 4-retriever hybrid search (BM25 + ELSER sparse vectors) across content and structure fields. See [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md).
+
+---
+
+## Current Goal
 
 **Create comprehensive ground truths covering ALL subjects × ALL phases, then establish universal benchmarks that enable meaningful like-for-like comparison when index structure or retriever configuration changes.**
 
@@ -56,7 +66,12 @@ Per-key-stage testing was **fundamentally flawed**:
 
 ### Phase 8: Run Comprehensive Baselines
 
-Run the unified benchmark against live ES and update registry with measured MRR values:
+**Prerequisites**:
+1. Elasticsearch must be running (cloud or local)
+2. Data must be ingested (see [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md))
+3. `.env` file configured with ES credentials
+
+**Run the unified benchmark**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -65,7 +80,7 @@ pnpm benchmark --subject maths          # One subject
 pnpm benchmark --phase primary          # One phase
 ```
 
-Then update `baselineMrr` values in `GROUND_TRUTH_ENTRIES` with measured results.
+**Then**: Update `baselineMrr` values in `GROUND_TRUTH_ENTRIES` (`registry/entries.ts`) with measured results.
 
 ---
 
@@ -216,14 +231,17 @@ pnpm smoke:dev:stub
 
 ## Key Files
 
+All paths relative to `apps/oak-open-curriculum-semantic-search/`:
+
 | File | Purpose |
 |------|---------|
-| `src/lib/search-quality/ground-truth/registry/` | Ground truth registry (single source of truth) |
+| `src/lib/search-quality/ground-truth/registry/` | Ground truth registry (single source of truth, ADR-098) |
 | `src/lib/search-quality/metrics.ts` | MRR, NDCG, Precision, Recall calculations |
 | `evaluation/analysis/benchmark.ts` | **Unified benchmark tool** |
 | `evaluation/validation/validate-ground-truth.ts` | Slug validation |
-| `bulk-downloads/` | Source data |
+| `bulk-downloads/` | Source curriculum data (JSON files) |
 | [DATA-VARIANCES.md](../../../docs/data/DATA-VARIANCES.md) | **Critical**: Curriculum data differences, KS4 complexity |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Registry architecture decision |
 
 ---
 
