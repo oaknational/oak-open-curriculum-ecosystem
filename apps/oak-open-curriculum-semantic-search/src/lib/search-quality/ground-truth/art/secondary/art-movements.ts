@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const ART_SECONDARY_MOVEMENTS_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'art movements history',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for art movements unit.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const ART_SECONDARY_MOVEMENTS_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'abstract painting techniques',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for abstract painting.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const ART_SECONDARY_MOVEMENTS_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'collage and assemblage art',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for collage unit.',
     expectedRelevance: {

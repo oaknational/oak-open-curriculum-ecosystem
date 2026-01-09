@@ -100,7 +100,7 @@ The server uses App Router with SSR theming; logs appear in the terminal for obs
 cd apps/oak-open-curriculum-semantic-search
 
 # Ingest specific subject
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest-live -- --subject maths --key-stage ks4
 
 # Ingest all subjects
 pnpm es:ingest-live -- --all

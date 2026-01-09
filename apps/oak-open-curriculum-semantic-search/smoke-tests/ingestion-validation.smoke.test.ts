@@ -10,7 +10,7 @@
  * - Queries Elasticsearch directly (network IO)
  * - Per testing-strategy.md: "Smoke tests CAN trigger all IO types"
  * - Requires ES_NODE env var pointing to Elasticsearch instance
- * - Requires data to be ingested (run `pnpm es:ingest-live -- --subject maths --keystage ks4`)
+ * - Requires data to be ingested (run `pnpm es:ingest-live -- --subject maths --key-stage ks4`)
  *
  * **Acceptance Criteria**:
  * - All units have correct lesson_count

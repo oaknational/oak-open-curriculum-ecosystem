@@ -1,43 +1,43 @@
 # Ground Truth Validation
 
-Scripts that validate ground truth data against the live Oak Curriculum API.
+Scripts that validate ground truth data against local bulk data files.
 
 ## Scripts
 
 ### `validate-ground-truth.ts`
 
-Validates that all lesson, unit, and sequence slugs in the ground truth data
-actually exist in the Oak Curriculum API.
+Validates that all lesson slugs in the ground truth data actually exist in the
+bulk data files (downloaded via `pnpm bulk:download`).
 
 **Usage**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm tsx evaluation/validation/validate-ground-truth.ts
+pnpm ground-truth:validate
 ```
 
 **Requirements**:
 
-- `OAK_API_KEY` environment variable must be set
-- Network access to `https://open-api.thenational.academy/api/v0`
+- Bulk data files must be downloaded: `pnpm bulk:download`
+- Files are located in `bulk-downloads/` directory
 
 **What it validates**:
 
 1. **Query structure** — All queries have expected slugs with valid relevance scores (1, 2, 3)
 2. **Slug format** — All slugs match `[a-z0-9-]+` pattern
-3. **Slug existence** — All slugs exist in the live API
+3. **Slug existence** — All slugs exist in the corresponding bulk data file
 
 **Output**:
 
 - ✅ If all slugs are valid, exits with code 0
 - ❌ If any slugs are invalid, prints details and exits with code 1
 
-**Why this is a script, not a test**:
+**Why bulk data validation (not live API)?**:
 
-- Tests should not have external dependencies (network, API keys)
-- Tests should not silently skip when prerequisites are missing
-- This validation requires network access and an API key
-- Running this as a script makes the requirements explicit
+1. **Speed** — Bulk data validation is instant; API calls take 10-30 seconds
+2. **Offline capability** — Can validate without network access
+3. **Consistency** — Validates against same data as ES index
+4. **No rate limits** — Can validate hundreds of slugs instantly
 
 ---
 
@@ -46,13 +46,23 @@ pnpm tsx evaluation/validation/validate-ground-truth.ts
 Run ground truth validation:
 
 1. **Before committing new ground truth** — Ensure all slugs are valid
-2. **When evaluating search changes** — Ensure results are comparable
-3. **Periodically** — Content may be removed from the API
+2. **After downloading fresh bulk data** — Check for curriculum drift
+3. **Before major experiments** — Ensure measurements are valid
+4. **Periodically** — Content may change in the curriculum
+
+---
+
+## Creating Ground Truths
+
+For the complete step-by-step process of creating new ground truths, see:
+
+**[GROUND-TRUTH-PROCESS.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)**
 
 ---
 
 ## Related
 
+- [GROUND-TRUTH-PROCESS.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step creation process
 - [ADR-085: Ground Truth Validation Discipline](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
-- [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md)
-- [testing-strategy.md](../../../.agent/directives-and-memory/testing-strategy.md)
+- [ADR-098: Ground Truth Registry](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)
+- [testing-strategy.md](../../../../.agent/directives-and-memory/testing-strategy.md)

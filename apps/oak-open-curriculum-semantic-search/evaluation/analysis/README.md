@@ -7,10 +7,10 @@ Unified search quality measurement using the Ground Truth Registry.
 Evaluation scripts **measure** search quality to quantify the impact of changes.
 This is fundamentally different from smoke tests, which **verify** behavior works.
 
-| Concern        | Tool               | Question                 | Output            |
-| -------------- | ------------------ | ------------------------ | ----------------- |
-| **Evaluation** | `benchmark.ts`     | "How well does it work?" | MRR, NDCG metrics |
-| **Smoke Test** | `smoke-tests/*.ts` | "Does it work?"          | Pass/fail         |
+| Concern        | Tool               | Question                 | Output         |
+| -------------- | ------------------ | ------------------------ | -------------- |
+| **Evaluation** | `benchmark.ts`     | "How well does it work?" | All IR metrics |
+| **Smoke Test** | `smoke-tests/*.ts` | "Does it work?"          | Pass/fail      |
 
 **Never conflate these concerns.** Evaluation measures quality; smoke tests verify behavior.
 
@@ -32,29 +32,62 @@ pnpm benchmark --phase secondary
 
 # Run for a specific subject/phase combination
 pnpm benchmark --subject maths --phase secondary
+
+# Verbose mode shows per-query results
+pnpm benchmark --subject maths --phase secondary --verbose
 ```
 
 ### What It Measures
 
-- **MRR (Mean Reciprocal Rank)**: Position of first relevant result
-- **NDCG@10**: Ranking quality across top 10 results
-- **Zero-hit rate**: Percentage of queries returning no results
-- **Query count**: Number of queries evaluated
+All metrics from [IR-METRICS.md](../../docs/IR-METRICS.md):
+
+| Metric            | Description                                              |
+| ----------------- | -------------------------------------------------------- |
+| **MRR**           | Mean Reciprocal Rank — position of first relevant result |
+| **NDCG@10**       | Normalized Discounted Cumulative Gain — ranking quality  |
+| **Precision@10**  | Proportion of top 10 results that are relevant           |
+| **Recall@10**     | Proportion of relevant results found in top 10           |
+| **Zero-hit rate** | Percentage of queries with no relevant results           |
+| **p95 Latency**   | 95th percentile query latency in milliseconds            |
 
 ### Output
 
 ```text
-================================================================================
+===========================================================================================================
 BENCHMARK RESULTS
-================================================================================
-Subject/Phase      | Queries | MRR    | NDCG@10 | Zero-hit
--------------------|---------|--------|---------|----------
-maths/secondary    | 20      | 0.894  | 0.782   | 0.0%
-maths/ks4          | 5       | 0.850  | 0.720   | 0.0%
-science/primary    | 15      | 0.852  | 0.695   | 0.0%
+===========================================================================================================
+Subject              | Phase      | #Q   | MRR    | NDCG   | P@10   | R@10   | Zero%  | p95ms
+-----------------------------------------------------------------------------------------------------------
+maths                | secondary  | 60   | 0.894  | 0.782  | 0.320  | 0.850  | 5.0%   | 245
+science              | primary    | 15   | 0.852  | 0.695  | 0.280  | 0.920  | 0.0%   | 198
 ...
-================================================================================
+-----------------------------------------------------------------------------------------------------------
+
+OVERALL: 100 queries | MRR=0.870 | NDCG=0.745 | P@10=0.300 | R@10=0.880 | Zero=3.2% | p95=267ms
 ```
+
+## Baselines
+
+Baselines are stored separately from ground truths in `evaluation/baselines/baselines.json`:
+
+```json
+{
+  "referenceValues": {
+    "mrr": { "excellent": 0.90, "good": 0.70, "target": 0.70 },
+    "ndcg10": { "excellent": 0.85, "good": 0.75, "target": 0.75 },
+    ...
+  },
+  "measuredBaselines": {
+    "entries": {
+      "maths/secondary": { "mrr": 0.894, "ndcg10": 0.782, ... },
+      ...
+    }
+  }
+}
+```
+
+- **Reference values**: Industry-standard targets, same for all subjects
+- **Measured baselines**: Actual values from the last benchmark run
 
 ## Ground Truth Registry
 
@@ -64,9 +97,18 @@ of truth. Each entry contains:
 - `subject`: The Oak curriculum subject slug
 - `phase`: `primary` | `secondary` (KS4 is part of secondary)
 - `queries`: Ground truth queries with expected relevance judgments
-- `baselineMrr`: Documented MRR baseline (for reference, not used by benchmark)
 
 See `src/lib/search-quality/ground-truth/registry/` for implementation.
+
+## Ground Truth Validation
+
+Before running benchmarks, validate that all slugs exist in the bulk data:
+
+```bash
+pnpm ground-truth:validate
+```
+
+See `GROUND-TRUTH-PROCESS.md` for the full process of creating valid ground truths.
 
 ## Phase Definitions
 
@@ -85,16 +127,17 @@ KS4 ground truths are stored in `subject/secondary/ks4/` directories.
 
 ## Adding Ground Truths
 
-To add new ground truths:
+Follow the step-by-step process in `GROUND-TRUTH-PROCESS.md`:
 
-1. Create query files in `src/lib/search-quality/ground-truth/{subject}/{phase}/`
-2. Export an `ALL_QUERIES` array from the index
-3. Add entry to `GROUND_TRUTH_ENTRIES` in `registry/entries.ts`
-4. Run benchmark to measure initial MRR
-5. Update `baselineMrr` with measured value
+1. Download bulk data for your subject/phase
+2. Explore available lessons using jq queries
+3. Create queries with expected slugs and relevance scores
+4. Validate slugs with `pnpm ground-truth:validate`
+5. Run benchmark to measure initial metrics
+6. Update baselines.json with measured values
 
 ## Related Documentation
 
+- [IR-METRICS.md](../../docs/IR-METRICS.md) - Metric definitions and interpretation
+- [GROUND-TRUTH-PROCESS.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) - Creation process
 - [ADR-098](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) - Registry architecture
-- [current-state.md](../../../../.agent/plans/semantic-search/current-state.md) - Current system metrics
-- [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) - Curriculum data differences by subject

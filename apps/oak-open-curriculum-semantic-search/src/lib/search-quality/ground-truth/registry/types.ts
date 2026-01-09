@@ -24,7 +24,10 @@ export type Phase = 'primary' | 'secondary';
  * A ground truth entry in the registry.
  *
  * Represents a complete set of ground truth queries for a specific
- * subject/phase combination, along with the baseline MRR for smoke tests.
+ * subject/phase combination.
+ *
+ * **Note**: Baseline metrics are stored separately in baselines.json,
+ * not in the ground truth entries. This separates test data from results.
  */
 export interface GroundTruthEntry {
   /** Subject slug matching the Oak curriculum SDK Subject type */
@@ -33,13 +36,4 @@ export interface GroundTruthEntry {
   readonly phase: Phase;
   /** The ground truth queries for this subject/phase */
   readonly queries: readonly GroundTruthQuery[];
-  /**
-   * Baseline MRR for smoke test regression detection.
-   *
-   * Set to 0.0 for newly created ground truths, then update with
-   * measured value after running benchmarks.
-   *
-   * Smoke tests assert: `actualMrr >= baselineMrr * 0.95` (5% tolerance)
-   */
-  readonly baselineMrr: number;
 }

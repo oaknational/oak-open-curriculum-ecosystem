@@ -20,6 +20,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   // SECONDARY Gothic poetry
   {
     query: 'Gothic poetry The Raven',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of The Raven poetry content using curriculum terminology',
     expectedRelevance: {
       'analysing-the-raven': 3,
       'understanding-the-raven': 3,
@@ -28,6 +31,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Gothic poetry analysis',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of Gothic poetry analysis content using curriculum terminology',
     expectedRelevance: {
       'analysing-the-raven': 3,
       'analysing-the-haunted-palace': 3,
@@ -35,14 +41,21 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'poetry performance speaking',
+    query: 'poetry performance speaking aloud',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of poetry performance content using curriculum terminology',
     expectedRelevance: {
       'performing-your-chosen-gothic-poem': 3,
+      'performing-our-own-poetry': 2,
     },
   },
   // KS4 Power and Conflict anthology
   {
     query: 'Power and Conflict poetry Ozymandias',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Ozymandias content using curriculum terminology',
     expectedRelevance: {
       'analysing-the-poem-ozymandias': 3,
       'comparing-the-presentation-of-power-in-my-last-duchess-and-ozymandias': 3,
@@ -51,6 +64,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'war poetry analysis Exposure',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Exposure war poetry content using curriculum terminology',
     expectedRelevance: {
       'analysing-exposure': 3,
       'comparing-conflict-in-war-poems': 3,
@@ -59,6 +75,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Bayonet Charge poem analysis',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Bayonet Charge content using curriculum terminology',
     expectedRelevance: {
       'analysing-the-poem-bayonet-charge': 3,
       'comparing-conflict-in-war-poems': 2,
@@ -67,6 +86,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'comparing poetry Power and Conflict',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of poetry comparison content using curriculum terminology',
     expectedRelevance: {
       'comparing-conflict-in-war-poems': 3,
       'comparing-power-and-conflict-war-poems': 3,
@@ -77,6 +99,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Remains poem PTSD trauma',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Remains poem content using curriculum terminology',
     expectedRelevance: {
       'analysing-the-poem-remains': 3,
       'developing-interpretations-of-remains-with-simon-armitage': 3,
@@ -85,6 +110,9 @@ export const POETRY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'poetry essay writing comparison',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of poetry essay writing content using curriculum terminology',
     expectedRelevance: {
       'developing-comparative-essay-writing-skills': 3,
       'introductions-and-topic-sentences-for-poetry-comparison': 3,

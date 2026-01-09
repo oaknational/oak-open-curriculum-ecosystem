@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ **Full ingestion verified** — Now optimising search quality
-**Last Updated**: 2026-01-03
+**Status**: 📋 **Phase 8 — Comprehensive Baselines** (Ground truth remediation complete)
+**Last Updated**: 2026-01-08
 **Metrics Source**: [current-state.md](current-state.md)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -11,12 +11,26 @@ This is THE authoritative roadmap for semantic search work.
 
 ---
 
+## Status Legend
+
+| Symbol | Status | Meaning |
+|--------|--------|---------|
+| ✅ | Complete | Work finished and verified |
+| 🔄 | In Progress | Actively being worked on |
+| 📋 | Pending | Ready to start, not blocked |
+| ⏸️ | Blocked/Deferred | Cannot start until dependency complete, or deprioritised |
+| ❌ | Cancelled | No longer needed (with rationale) |
+
+---
+
 ## Dependency Chain
 
 ```
-M3: Search Quality Optimization (active/)
+Ground Truth Remediation ✅ COMPLETE
         ↓
-Comprehensive Filter Testing (pre-sdk-extraction/) ← HIGH PRIORITY
+Phase 8: Comprehensive Baselines ← CURRENT PRIORITY
+        ↓
+Comprehensive Filter Testing (pre-sdk-extraction/)
         ↓
 Bulk Data Analysis (pre-sdk-extraction/)
         ↓
@@ -26,12 +40,76 @@ Tier 3: Modern ES Features (pre-sdk-extraction/)
         ↓
 SDK Extraction (sdk-extraction/)
         ↓
-MFL Multilingual Embeddings (post-sdk-extraction/) ← HIGH PRIORITY
+MFL Multilingual Embeddings (post-sdk-extraction/)
         ↓
 MCP Search Tool (post-sdk-extraction/)
         ↓
 Tier 4: AI Enhancement (post-sdk-extraction/)
 ```
+
+---
+
+## ✅ COMPLETE: Ground Truth Remediation
+
+**Status**: ✅ **All 431 queries pass all 17 validation checks**
+**Completion Date**: 2026-01-08
+
+### Final Results
+
+| Issue | Before | After | Status |
+|-------|--------|-------|--------|
+| Invalid slugs | 66 | 0 | ✅ |
+| Empty expectedRelevance | 12 | 0 | ✅ |
+| Missing categories | 130 | 0 | ✅ |
+| Short queries | 78 | 0 | ✅ |
+| Uniform scores | 47 | 0 | ✅ |
+| Missing priority | 34 | 0 | ✅ |
+| Single-slug queries | 10 | 0 | ✅ |
+| No score=3 | 21 | 0 | ✅ |
+| **Total errors** | **408** | **0** | ✅ |
+
+### Acceptance Criteria (All Met)
+
+- [x] `pnpm ground-truth:generate` generates types from bulk data
+- [x] All `expectedRelevance` objects have entries
+- [x] All slugs exist in bulk data (0 invalid)
+- [x] `pnpm ground-truth:validate` passes with 0 errors
+- [x] All entries have 0% uniform scores
+- [x] All entries have 100% category coverage
+- [x] All queries have priority set
+- [x] All queries have graded relevance (score variety)
+
+### Available Scripts
+
+```bash
+pnpm ground-truth:validate  # Run all 17 validation checks
+pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+```
+
+**Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
+
+---
+
+## ✅ COMPLETE: Test Coverage
+
+**Status**: ✅ **Complete** (2026-01-07)
+**Specification**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+
+### Coverage Summary
+
+| Component | Tests | Status |
+|-----------|-------|--------|
+| **`safeGet`** | 3 unit tests | ✅ Complete |
+| **SDK API Methods (error)** | 8 unit tests | ✅ Complete |
+| **SDK API Methods (success)** | 8 unit tests | ✅ Complete |
+| **SDK Retry Middleware** | 13 integration tests | ✅ Complete |
+| **Lesson Materials** | 12 unit tests | ✅ Complete |
+
+### Decision: Generated File Testing
+
+**Decision**: Test through **integration at consumer level**, not direct unit tests.
+
+**Rationale**: Per `schema-first-execution.md`, the generator is the source of truth. Testing behavior at consumer level avoids coupling tests to generated code structure.
 
 ---
 
@@ -63,14 +141,27 @@ All document builders follow the shared pattern.
 
 All fields resolved with appropriate sources (API supplementation, bulk data extraction).
 
+### Result Pattern Compliance ✅ (2026-01-07)
+
+Network error handling per ADR-088:
+
+| Component | Change |
+|-----------|--------|
+| SDK Retry Middleware | Catches and retries network exceptions |
+| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` |
+| SDK API Methods | All 8 `makeGet...` functions use `safeGet` |
+| File Split | `sdk-api-methods.ts` → 4 smaller modules |
+
 ---
 
 ## 🔄 IN PROGRESS: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: 🔄 **Phases 1-7 Built** — Ready for Phase 8 (run baselines to validate)
+**Status**: ✅ **Phases 1-7 Complete** | ✅ **Test Coverage Complete** | ⏸️ **Phase 8 BLOCKED**
 **Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
-**Discovery**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.
+**Discovery (2026-01-03)**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.
+
+**Discovery (2026-01-08)**: Ground truth data quality issues block Phase 8. See "Ground Truth Remediation" section above.
 
 ### M3 Phases
 
@@ -78,19 +169,23 @@ All fields resolved with appropriate sources (API supplementation, bulk data ext
 |-------|-------|--------|
 | 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
 | 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
-| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ✅ Complete (2026-01-06) |
+| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ⚠️ Quality issues found |
 | 6 | ES Re-index (add phase_slug) | ⏸️ Cancelled (phase model changed) |
 | 7 | Unified evaluation infrastructure (`GROUND_TRUTH_REGISTRY`, `benchmark.ts`) | ✅ Complete (2026-01-06) |
-| 8 | Run comprehensive baselines | 📋 **Next** |
+| Test Coverage | Unit tests for safeGet + SDK API methods | ✅ Complete (2026-01-07) |
+| **Ground Truth Remediation** | Fix validation script, validate slugs, fix data | 🔄 **CURRENT PRIORITY** |
+| 8 | Run comprehensive baselines | ⏸️ Blocked on remediation |
 
-### Key Findings
+### Key Findings (Pending Verification)
+
+**Note**: These findings from previous baselines may be unreliable due to ground truth quality issues.
 
 - **Creative subjects excel**: Art (0.741), Music (0.722), D&T (0.815) MRR
 - **Languages struggle**: French (0.190), Spanish (0.294), German (0.194)
 - **Misspelling universal weakness**: PE, Languages fail on typos
 - **Synonym gaps**: "coding"→"programming", "saying no"→"negation"
 
-**Next Steps**: Complete remaining baselines, audit language-specific synonyms, add common misspellings.
+**Next Steps**: Complete ground truth remediation, then re-run Phase 8 baselines.
 
 ---
 

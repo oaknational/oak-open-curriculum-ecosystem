@@ -11,8 +11,9 @@ Scripts have been organized into domain-specific directories with proper documen
 **Code Standards**: Same as `src/` - MUST use proper logger, NO console.log
 
 - **`operations/ingestion/`** - Data loading and validation
-  - `ingest-all-combinations.ts`, `verify-ingestion.ts`, `check-progress.ts`, etc.
-  - Run via: `pnpm ingest:all`, `pnpm ingest:verify`, `pnpm ingest:progress`
+  - `verify-ingestion.ts` - Validate ingested data
+  - Run via: `pnpm ingest:verify`
+  - Full ingestion: `pnpm es:ingest-live -- --all`
 
 - **`operations/observability/`** - Monitoring and maintenance
   - `delete-zero-hit-events.ts`
@@ -71,19 +72,19 @@ Scripts have been organized into domain-specific directories with proper documen
 
 ## Migration Guide
 
-| Old Location                                      | New Location                                            | Command                   |
-| ------------------------------------------------- | ------------------------------------------------------- | ------------------------- |
-| `scripts/ingest-all-combinations.ts`              | `operations/ingestion/`                                 | `pnpm ingest:all`         |
-| `scripts/check-progress.ts`                       | `operations/ingestion/`                                 | `pnpm ingest:progress`    |
-| `scripts/verify-ingestion.ts`                     | `operations/ingestion/`                                 | `pnpm ingest:verify`      |
-| `scripts/observability/delete-zero-hit-events.ts` | `operations/observability/`                             | `pnpm zero-hit:purge`     |
-| `scripts/sandbox/ingest.ts`                       | `operations/sandbox/`                                   | `pnpm sandbox:ingest`     |
-| `scripts/alias-swap.sh`                           | `operations/infrastructure/`                            | `pnpm elastic:alias-swap` |
-| `scripts/analyze-diagnostic-queries.ts`           | `evaluation/analysis/`                                  | `pnpm eval:diagnostic`    |
-| `scripts/analyze-per-category.ts`                 | `evaluation/analysis/`                                  | `pnpm eval:per-category`  |
-| `scripts/rerank-experiment/`                      | `evaluation/experiments/historical/semantic-reranking/` | (historical)              |
-| `experiments/hybrid-superiority.experiment.ts`    | `evaluation/experiments/current/`                       | vitest                    |
-| `experiments/mcp-comparison.experiment.ts`        | `evaluation/experiments/current/`                       | vitest                    |
+| Old Location                                      | New Location                                            | Command                        |
+| ------------------------------------------------- | ------------------------------------------------------- | ------------------------------ |
+| `scripts/ingest-all-combinations.ts`              | (removed)                                               | `pnpm es:ingest-live -- --all` |
+| `scripts/check-progress.ts`                       | (removed)                                               | (use `pnpm es:status`)         |
+| `scripts/verify-ingestion.ts`                     | `operations/ingestion/`                                 | `pnpm ingest:verify`           |
+| `scripts/observability/delete-zero-hit-events.ts` | `operations/observability/`                             | `pnpm zero-hit:purge`          |
+| `scripts/sandbox/ingest.ts`                       | `operations/sandbox/`                                   | `pnpm sandbox:ingest`          |
+| `scripts/alias-swap.sh`                           | `operations/infrastructure/`                            | `pnpm elastic:alias-swap`      |
+| `scripts/analyze-diagnostic-queries.ts`           | (removed)                                               | `pnpm benchmark`               |
+| `scripts/analyze-per-category.ts`                 | (removed)                                               | `pnpm benchmark`               |
+| `scripts/rerank-experiment/`                      | `evaluation/experiments/historical/semantic-reranking/` | (historical)                   |
+| `experiments/hybrid-superiority.experiment.ts`    | `evaluation/experiments/current/`                       | vitest                         |
+| `experiments/mcp-comparison.experiment.ts`        | `evaluation/experiments/current/`                       | vitest                         |
 
 ## Next Steps
 

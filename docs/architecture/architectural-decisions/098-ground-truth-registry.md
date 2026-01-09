@@ -1,9 +1,27 @@
 # ADR-098: Ground Truth Registry as Single Source of Truth
 
 **Status**: Accepted  
-**Date**: 2026-01-05  
+**Date**: 2026-01-05 (Updated: 2026-01-09)  
 **Decision Makers**: Engineering Team  
 **Context**: M3 Phase 7a — Unified Evaluation Infrastructure
+
+## Critical Understanding: Three-Stage Validation
+
+Ground truths require **three distinct validation stages**:
+
+| Stage                                 | What It Proves       | What It Does NOT Prove |
+| ------------------------------------- | -------------------- | ---------------------- |
+| **1. Type-Check**                     | Data integrity       | Semantic correctness   |
+| **2. Runtime Validation (16 checks)** | Semantic rules       | Production readiness   |
+| **3. Qualitative (manual review)**    | Production readiness | —                      |
+
+**Stage 1** enforces required fields (`category`, `priority`, `description`) at compile time.
+
+**Stage 2** enforces semantic rules TypeScript cannot check (slug existence, category coverage, etc.).
+
+**Passing type-check AND runtime validation means ground truths meet a MINIMUM QUALITY THRESHOLD.** This makes them _worthy of investment in manual review_. It does **NOT** mean they are production-ready.
+
+**Ground truths are NOT production-ready until ALL THREE stages are complete.**
 
 ## Context
 
@@ -30,31 +48,68 @@ Create a **Ground Truth Registry** (`GROUND_TRUTH_ENTRIES`) as THE single source
 
 1. **Only entries that exist**: No nulls, no placeholders. If a subject/phase combination has ground truths, it's in the registry. Otherwise, it isn't.
 
-2. **Baseline MRR for smoke tests**: Each entry stores its baseline MRR for automated regression detection. Smoke tests assert `actualMrr >= baselineMrr * 0.95`.
+2. **Baselines stored separately**: Baseline metrics are stored in `evaluation/baselines/baselines.json`, not in the ground truth entries. This separates test data from results.
 
 3. **Single source of truth**: All tools that need ground truths import from the registry. No hardcoded mappings elsewhere.
+
+4. **Consistent category coverage**: Every entry must contain the same set of mandatory scenario categories. See [Canonical Scenario Categories](#canonical-scenario-categories-mandatory) below.
 
 ### Registry Structure
 
 ```typescript
 interface GroundTruthEntry {
   readonly subject: Subject;
-  readonly phase: 'primary' | 'secondary' | 'ks4';
+  readonly phase: 'primary' | 'secondary';
   readonly queries: readonly GroundTruthQuery[];
-  readonly baselineMrr: number;
+}
+
+interface GroundTruthQuery {
+  // Required
+  readonly query: string;
+  readonly expectedRelevance: Readonly<Record<string, number>>;
+
+  // Recommended
+  readonly category?: QueryCategory;
+  readonly description?: string;
+  readonly priority?: QueryPriority;
+
+  // Optional
+  readonly keyStage?: KeyStage; // Override for KS4 queries
 }
 
 export const GROUND_TRUTH_ENTRIES: readonly GroundTruthEntry[] = [
-  { subject: 'art', phase: 'secondary', queries: ART_SECONDARY_ALL_QUERIES, baselineMrr: 0.741 },
-  {
-    subject: 'maths',
-    phase: 'secondary',
-    queries: MATHS_SECONDARY_ALL_QUERIES,
-    baselineMrr: 0.894,
-  },
+  { subject: 'art', phase: 'secondary', queries: ART_SECONDARY_ALL_QUERIES },
+  { subject: 'maths', phase: 'secondary', queries: MATHS_SECONDARY_ALL_QUERIES },
   // ... only entries that exist
 ] as const;
 ```
+
+### Baselines Structure
+
+Baselines are stored separately in `evaluation/baselines/baselines.json`:
+
+```json
+{
+  "referenceValues": {
+    "mrr": { "excellent": 0.9, "good": 0.7, "target": 0.7 },
+    "ndcg10": { "excellent": 0.85, "good": 0.75, "target": 0.75 },
+    ...
+  },
+  "measuredBaselines": {
+    "entries": {
+      "maths/secondary": { "mrr": 0.894, "ndcg10": 0.782, ... },
+      ...
+    }
+  }
+}
+```
+
+This separation:
+
+- Keeps test data (ground truths) separate from results (baselines)
+- Enables tracking multiple metrics, not just MRR
+- Prevents self-reinforcing feedback loops
+- Makes baseline updates explicit
 
 ### Accessor Functions
 
@@ -96,11 +151,11 @@ The simpler array of entries approach:
 - **Easy iteration**: Simple `for (const entry of getAllGroundTruthEntries())`
 - **Type safety**: Compile-time guarantees on entry shape
 - **Self-documenting**: Registry shows exactly what ground truths exist
-- **Smoke test integration**: Baseline MRR enables automated regression detection
+- **Clean separation**: Test data separate from baseline metrics
 
 ### Negative
 
-- **Baseline MRR maintenance**: Must update baselineMrr after running benchmarks
+- **Baseline maintenance**: Must update `baselines.json` after running benchmarks
 - **Manual registry updates**: Adding new ground truths requires adding entry to registry
 
 ### Neutral
@@ -109,7 +164,11 @@ The simpler array of entries approach:
 
 ## Implementation
 
-**File**: `src/lib/search-quality/ground-truth/registry.ts`
+**Files**:
+
+- `src/lib/search-quality/ground-truth/registry/` — Registry implementation
+- `evaluation/baselines/baselines.json` — Baseline metrics (separate)
+- `src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md` — Creation process
 
 **Exports**:
 
@@ -130,9 +189,57 @@ Tests in `registry.unit.test.ts` verify:
 - Subject/phase combinations are unique
 - Accessor functions work correctly
 
+### Ground Truth Type Generation (2026-01-08)
+
+The registry is validated against generated types from bulk data:
+
+**Infrastructure** (`ground-truths/generation/`):
+
+- `bulk-data-parser.ts` — Parse bulk JSON with Result pattern
+- `type-emitter.ts` — Generate branded `AnyLessonSlug` type + `SLUG_TO_SUBJECT_MAP`
+- `schema-emitter.ts` — Generate Zod schemas for runtime validation
+
+**Generated Output** (`ground-truths/generated/`):
+
+- `lesson-slugs-by-subject.ts` — 12,320 valid slugs across 16 subjects
+- `ground-truth-schemas.ts` — Zod schemas for comprehensive validation
+
+**Validation** (`evaluation/validation/validate-ground-truth.ts`):
+
+- 21 comprehensive checks including cross-subject contamination, category coverage, and description presence
+- All checks report as errors (no warnings)
+- Validates against generated `ALL_LESSON_SLUGS` Set
+- Entry-level checks ensure consistent category coverage across all entries
+
+### Canonical Scenario Categories (MANDATORY)
+
+Ground truths form a **subject × phase × category matrix** that must have consistent coverage.
+
+**Outcome-Oriented Framework (2026-01-09)**
+
+Categories are structured around **user outcomes** rather than technical challenges:
+
+| Category             | User Scenario                  | Behavior Proved             | Priority    | Required | Min |
+| -------------------- | ------------------------------ | --------------------------- | ----------- | -------- | --- |
+| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical    | **YES**  | 4+  |
+| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High        | **YES**  | 2+  |
+| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical    | **YES**  | 1+  |
+| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium      | **YES**  | 1+  |
+| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | Exploratory | No       | 0-1 |
+
+**Minimum per entry**: 8-10 queries covering all 4 required categories.
+
+**Category Migration**: Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are still accepted for backward compatibility but deprecated.
+
+**Consistency requirement**: ALL subject-phase pairings must have the SAME category coverage. No entry may omit a required category. This ensures:
+
+- Benchmarks are comparable across subjects and phases
+- Category-level MRR analysis is meaningful
+- Gaps in search capability are detectable across the full curriculum
+
 ## Related
 
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics definitions
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md) — Tier system
 - [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md) — Validation requirements
-- [M3: Comprehensive Ground Truths](../../.agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md) — Implementation plan
+- [GROUND-TRUTH-PROCESS.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step creation process

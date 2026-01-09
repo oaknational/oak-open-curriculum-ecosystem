@@ -1,7 +1,7 @@
 # Semantic Search Current State
 
-**Last Updated**: 2026-01-06
-**Status**: 🔄 **Phases 1-7 Built** — Ready for Phase 8 (run baselines to validate)
+**Last Updated**: 2026-01-09
+**Status**: 🚨 **BLOCKED** — Ground Truth Data Integrity Failures
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 **Current Plan**: [m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
@@ -9,27 +9,173 @@ This is THE authoritative source for current system metrics.
 
 ---
 
-## 🔄 Phases 1-7 Built, Ready for Testing (2026-01-06)
+## 🚨 Ground Truth Validation FAILING (2026-01-09)
 
-**Unified evaluation infrastructure is BUILT. Needs validation via Phase 8 baseline runs.**
+Deterministic validation has two stages. BOTH must pass.
+
+### Stage 1: Type-Check (Data Integrity)
+
+**Status**: 🚨 **FAILING** (275 errors)
+
+TypeScript enforces required fields. 275 queries missing `description`:
+
+```bash
+pnpm type-check  # MUST PASS before Stage 2
+```
+
+### Stage 2: Runtime Validation (Semantic Rules)
+
+**Status**: 🚨 **FAILING** (43 errors)
+
+| Issue | Count | Status |
+|-------|-------|--------|
+| Category coverage gaps | 43 | 🚨 |
+
+```bash
+pnpm ground-truth:validate  # MUST PASS before Stage 3
+```
+
+### Stage 3: Critical Review (Manual)
+
+**Status**: ⏸️ BLOCKED by Stages 1 & 2
+
+After deterministic validation passes, manually review ALL queries.
+
+**All benchmarks blocked until ALL THREE stages complete.**
+
+### Validation Infrastructure
+
+| Aspect | Before | Current |
+|--------|--------|---------|
+| Bulk data parsing | ❌ Wrong format | ✅ Correct `.lessons[]` + `lessonSlug` |
+| Slug validation | ❌ False positives | ✅ Validates against 12,320 slugs |
+| Type generation | ❌ None | ✅ Branded types + Zod schemas |
+| Validation checks | ❌ 2 checks | ✅ **21 comprehensive checks** |
+| Cross-subject check | ❌ None | ✅ Slug-to-subject mapping |
+| Category coverage | ❌ None | ✅ Entry-level minimum enforcement |
+| Description required | ❌ Optional | ✅ **Now required** |
+| Quality analysis | ❌ None | ✅ `pnpm ground-truth:analyze` |
+
+**Infrastructure** in `ground-truths/generation/`:
+- `bulk-data-parser.ts` — Parse bulk JSON with Result pattern
+- `type-emitter.ts` — Generate branded slug types + subject map
+- `schema-emitter.ts` — Generate Zod validation schemas
+- `generate-ground-truth-types.ts` — Orchestrates generation
+
+### Quality Metrics
+
+**Previous issues (RESOLVED)**:
+
+| Issue | Before | After | Status |
+|-------|--------|-------|--------|
+| Invalid slugs | 66 | 0 | ✅ Fixed |
+| Empty expectedRelevance | 12 | 0 | ✅ Fixed |
+| Missing categories | 130 | 0 | ✅ Fixed |
+| Short queries | 78 | 0 | ✅ Fixed |
+| Uniform scores | 47 | 0 | ✅ Fixed |
+| Missing priority | 34 | 0 | ✅ Fixed |
+| Single-slug queries | 10 | 0 | ✅ Fixed |
+| No score=3 | 21 | 0 | ✅ Fixed |
+
+**New issues (2026-01-09)**:
+
+| Issue | Count | Status |
+|-------|-------|--------|
+| Missing descriptions | 272 | 🚨 NEW |
+| Category coverage gaps | 43 | 🚨 NEW |
+| **Total errors** | **315** | 🚨 |
+
+### Available Scripts
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm ground-truth:validate  # Run all 21 validation checks
+pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+```
+
+### Next Steps
+
+1. **Add descriptions to ALL 272 queries** — Each must document what behaviour the query tests
+2. **Fix 43 category coverage gaps** — Add queries to meet minimum coverage per entry
+3. **Then: Critical review of ALL queries** — Verify realism, scores, completeness
+
+**Benchmarks BLOCKED until all 315 errors are resolved.**
+
+---
+
+## 🔄 Recent Work: Result Pattern Compliance (2026-01-07)
+
+**Problem**: Ingestion crashed on network errors (`TypeError: fetch failed`) despite retry mechanism.
+
+**Root Cause**: SDK retry middleware only retried HTTP status codes (429, 503), not transport-level exceptions.
+
+**Solution Implemented**:
+
+| Component | Change | Status |
+|-----------|--------|--------|
+| SDK Retry Middleware | Now catches and retries network exceptions | ✅ Complete |
+| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` | ✅ Complete |
+| SDK API Methods | All 8 `makeGet...` functions use `safeGet` | ✅ Complete |
+| File Split | `sdk-api-methods.ts` → 4 smaller modules | ✅ Complete |
+
+**Test Coverage** (all complete 2026-01-07):
+
+| Component | Tests | Status |
+|-----------|-------|--------|
+| Retry middleware | 13 integration tests | ✅ Complete |
+| Lesson materials | 12 unit tests (error handling) | ✅ Complete |
+| `safeGet` | 3 unit tests | ✅ Complete |
+| SDK API methods (error) | 8 unit tests | ✅ Complete |
+| SDK API methods (success) | 8 unit tests | ✅ Complete |
+
+---
+
+## ✅ Test Coverage Complete (2026-01-07)
+
+All test coverage gaps identified on 2026-01-07 have been resolved.
+
+### Decision: Testing Generated Files
+
+`sdk-error-types.ts` contains hand-authored functions but is marked "GENERATED".
+
+**Decision**: Test through **integration at consumer level**, not direct unit tests.
+
+**Rationale**:
+- Schema-first: Generator is source of truth
+- Test behavior not implementation: Direct tests couple to generated code
+- Already covered: `lesson-materials.unit.test.ts` exercises error classification
+
+---
+
+## ✅ Phases 1-7 Complete + Test Coverage (2026-01-07)
+
+**Unified evaluation infrastructure BUILT. Test coverage COMPLETE. Ready for Phase 8.**
 
 ### What Was Done ✅
 
 **Phase 5a-d: Comprehensive Ground Truths**
+
 - 14 primary subjects with ground truths
 - All secondary subjects with ground truths
 - KS4-specific ground truths for: maths (tiers), science (biology/chemistry/physics), english (set texts), geography (fieldwork), history (historic environments)
 - Phase model: `Phase = 'primary' | 'secondary'` — KS4 is part of secondary with `keyStage: 'ks4'` property
 
 **Phase 7: Unified Evaluation Infrastructure (ADR-098)**
+
 - `GROUND_TRUTH_REGISTRY` as single source of truth
 - Type-safe accessors: `getAllGroundTruthEntries()`, `getGroundTruthEntry()`
 - Unified `benchmark.ts` replaces fragmented analysis scripts
 - Deleted 10 performance-measuring smoke tests (smoke tests now behavior-focused only)
 - Deleted 5 fragmented analysis scripts
 
-### What's Next: Phase 8
-1. Run `pnpm benchmark --all` against live ES
+**Test Coverage (2026-01-07)**
+
+- `safeGet`: 3 unit tests (success, Error thrown, non-Error thrown)
+- SDK API methods: 16 unit tests (8 error + 8 success paths)
+
+### What's Next — Phase 8
+
+1. **Run `pnpm benchmark --all`** against live ES
 2. Update `baselineMrr` values in `GROUND_TRUTH_ENTRIES` with measured results
 3. Document results in EXPERIMENT-LOG.md
 
@@ -40,6 +186,7 @@ This is THE authoritative source for current system metrics.
 **The per-key-stage baseline approach is fundamentally flawed.**
 
 English KS1 (0.131) and KS2 (0.107) show catastrophically low MRR because:
+
 - The same "Primary" ground truths were used for both KS1 and KS2 tests
 - But expected slugs are key-stage-specific (BFG is KS2, Billy Goats is KS1)
 - This is a **test design flaw**, not a search quality issue
@@ -100,7 +247,11 @@ From Elastic Cloud Index Management (2026-01-02):
 | Key Stages | KS4 only | **KS1-4** | ✅ Complete |
 | Query count | 73 | **263** | ✅ M3 Target exceeded |
 
-### Cross-Curriculum MRR Baselines (2026-01-03)
+### Historical: Per-Key-Stage Baselines (2026-01-03) — SUPERSEDED
+
+> **Note**: These per-key-stage baselines have been superseded by the **phase-aligned approach** (primary/secondary).
+> The flaws in English KS1/KS2 testing demonstrated that per-KS testing was fundamentally misaligned with curriculum structure.
+> See Phase 8 for new phase-aligned baselines using `pnpm benchmark --all`.
 
 #### Core Subjects (Per Key Stage)
 
@@ -164,7 +315,7 @@ From Elastic Cloud Index Management (2026-01-02):
 2. **Science performs excellently** — Both KS2 (0.852) and KS3 (0.899) exceed expectations
 3. **History KS3 is top performer** — 0.950 MRR demonstrates strong curriculum alignment
 4. **MFL continues to struggle** — All three languages remain below 0.3 MRR (upstream transcript issue)
-5. **English KS4 needs attention** — GCSE English at 0.394 MRR is below acceptable threshold
+5. **English KS4 needs attention** — KS4 English at 0.394 MRR is below acceptable threshold
 6. **Misspelling remains a weakness** — Multiple subjects score 0.000 on typo handling
 
 ### ⚠️ Root Cause: MFL Lessons Have No Transcripts (Upstream Issue)
@@ -215,6 +366,7 @@ See [category-availability-by-subject.md](../../analysis/category-availability-b
 ### Thread Context
 
 Unit documents now include:
+
 - `thread_slugs` — All associated thread slugs
 - `thread_titles` — Human-readable thread names
 - `thread_orders` — Position in each thread
@@ -231,10 +383,11 @@ Unit documents now include:
 | M4: DRY/SRP Refactoring | ✅ Complete | — |
 | M5: Data Completeness | ✅ Complete | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) |
 | M6: Unified Evaluation Infrastructure | ✅ **Complete** | [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) |
+| Result Pattern Compliance | ✅ **Complete** | [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) |
 
-## 🎯 Next Priority
+## 🎯 Next Priority: Phase 8
 
-**Phase 8: Run Comprehensive Baselines**
+### Run Comprehensive Baselines
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -294,5 +447,7 @@ See [roadmap.md](roadmap.md) for full details.
 | [roadmap.md](roadmap.md) | Master plan |
 | [search-acceptance-criteria.md](search-acceptance-criteria.md) | Tier definitions |
 | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
+| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result Pattern |
 | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry |
 | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Ground Truth Registry |

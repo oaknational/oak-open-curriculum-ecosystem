@@ -45,13 +45,13 @@ Ingest the new subject/keystage from the live Oak API:
 cd apps/oak-open-curriculum-semantic-search
 
 # Single subject/keystage
-pnpm es:ingest-live -- --subject science --keystage ks3
+pnpm es:ingest-live -- --subject science --key-stage ks3
 
 # Multiple keystages
-pnpm es:ingest-live -- --subject science --keystage ks3 --keystage ks4
+pnpm es:ingest-live -- --subject science --key-stage ks3 --key-stage ks4
 
 # Dry run to preview
-pnpm es:ingest-live -- --subject science --keystage ks3 --dry-run
+pnpm es:ingest-live -- --subject science --key-stage ks3 --dry-run
 ```
 
 **Duration**: 5-15 minutes depending on content volume.
@@ -109,7 +109,7 @@ Record the baseline metrics:
 | Unit Hard MRR   | [value] |
 | Standard MRR    | [value] |
 
-**Important**: If no ground truth queries exist for this subject, create them first. See `src/lib/search-quality/ground-truth/` for examples.
+**Important**: If no ground truth queries exist for this subject, create them first. See [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) for the complete step-by-step process.
 
 ---
 
@@ -309,7 +309,7 @@ Re-run ingestion with latest code:
 
 ```bash
 git pull && pnpm build
-pnpm es:ingest-live -- --subject [subject] --keystage [keystage]
+pnpm es:ingest-live -- --subject [subject] --key-stage [keystage]
 ```
 
 ### Synonyms Not Working
@@ -324,9 +324,11 @@ See [SYNONYMS.md](./SYNONYMS.md) for detailed troubleshooting.
 
 ## Related Documents
 
-| Document                                                                                                 | Purpose                      |
-| -------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| [INGESTION-GUIDE.md](./INGESTION-GUIDE.md)                                                               | Ingestion commands reference |
-| [SYNONYMS.md](./SYNONYMS.md)                                                                             | Synonym system details       |
-| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | Synonym architecture         |
-| [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md)                                       | Experiment history           |
+| Document                                                                                                 | Purpose                       |
+| -------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)                | Ground truth creation process |
+| [INGESTION-GUIDE.md](./INGESTION-GUIDE.md)                                                               | Ingestion commands reference  |
+| [SYNONYMS.md](./SYNONYMS.md)                                                                             | Synonym system details        |
+| [ADR-063](../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md) | Synonym architecture          |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)               | Ground truth registry         |
+| [EXPERIMENT-LOG.md](../../../.agent/evaluations/EXPERIMENT-LOG.md)                                       | Experiment history            |

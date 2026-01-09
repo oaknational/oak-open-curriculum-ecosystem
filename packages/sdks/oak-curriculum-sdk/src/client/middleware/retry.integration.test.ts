@@ -282,4 +282,140 @@ describe('retry middleware integration', () => {
     expect(result.response.status).toBe(429);
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
+
+  describe('network exception handling', () => {
+    it('should retry on network exception and eventually succeed', async () => {
+      const config = createRetryConfig({
+        maxRetries: 2,
+        initialDelayMs: 10,
+      });
+
+      // First two calls throw network error, third succeeds
+      mockFetch
+        .mockRejectedValueOnce(new TypeError('fetch failed'))
+        .mockRejectedValueOnce(new TypeError('fetch failed'))
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ message: 'success' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
+
+      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+
+      const resultPromise = wrappedFetch('http://test.local/test');
+
+      // Advance through retry delays: 10ms (first retry) + 20ms (second retry)
+      await vi.advanceTimersByTimeAsync(10);
+      await vi.advanceTimersByTimeAsync(20);
+
+      const result = await resultPromise;
+
+      expect(result.status).toBe(200);
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('should throw network exception after all retries exhausted', async () => {
+      const config = createRetryConfig({
+        maxRetries: 2,
+        initialDelayMs: 5,
+      });
+
+      // All calls throw network error
+      mockFetch.mockRejectedValue(new TypeError('fetch failed'));
+
+      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+
+      // Create promise and immediately capture any rejection
+      let caughtError: Error | null = null;
+      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
+        caughtError = e;
+      });
+
+      // Run all timers to completion
+      await vi.runAllTimersAsync();
+      await resultPromise;
+
+      expect(caughtError).toBeInstanceOf(Error);
+      expect(caughtError).toHaveProperty('message', 'fetch failed');
+      // Initial request + 2 retries = 3 total
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('should not retry network exception when disabled', async () => {
+      const config = createRetryConfig({ enabled: false, maxRetries: 3 });
+
+      mockFetch.mockRejectedValue(new TypeError('fetch failed'));
+
+      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+
+      await expect(wrappedFetch('http://test.local/test')).rejects.toThrow('fetch failed');
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('should use exponential backoff for network exceptions', async () => {
+      const config = createRetryConfig({
+        maxRetries: 3,
+        initialDelayMs: 50,
+        backoffMultiplier: 2,
+      });
+
+      // All calls throw network error
+      mockFetch.mockRejectedValue(new TypeError('fetch failed'));
+
+      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+
+      // Create promise and immediately capture any rejection
+      let caughtError: Error | null = null;
+      const resultPromise = wrappedFetch('http://test.local/test').catch((e: Error) => {
+        caughtError = e;
+      });
+
+      // Run all timers to completion
+      await vi.runAllTimersAsync();
+      await resultPromise;
+
+      expect(caughtError).toBeInstanceOf(Error);
+      expect(caughtError).toHaveProperty('message', 'fetch failed');
+      expect(mockFetch).toHaveBeenCalledTimes(4); // initial + 3 retries
+    });
+
+    it('should handle mixed network exceptions and HTTP errors', async () => {
+      const config = createRetryConfig({
+        maxRetries: 3,
+        initialDelayMs: 10,
+      });
+
+      // First: network error, second: 503, third: network error, fourth: success
+      mockFetch
+        .mockRejectedValueOnce(new TypeError('fetch failed'))
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ error: 'service unavailable' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        )
+        .mockRejectedValueOnce(new TypeError('fetch failed again'))
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ message: 'success' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        );
+
+      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+
+      const resultPromise = wrappedFetch('http://test.local/test');
+
+      // Advance through retry delays
+      await vi.advanceTimersByTimeAsync(10);
+      await vi.advanceTimersByTimeAsync(20);
+      await vi.advanceTimersByTimeAsync(40);
+
+      const result = await resultPromise;
+
+      expect(result.status).toBe(200);
+      expect(mockFetch).toHaveBeenCalledTimes(4);
+    });
+  });
 });

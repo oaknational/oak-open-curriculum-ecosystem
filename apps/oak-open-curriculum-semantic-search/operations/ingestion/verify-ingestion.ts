@@ -8,10 +8,10 @@
  * @example
  * ```bash
  * # Verify Maths KS4 ingestion
- * npx tsx scripts/verify-ingestion.ts --subject maths --keystage ks4
+ * npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4
  *
  * # With custom bulk download path
- * npx tsx scripts/verify-ingestion.ts --subject maths --keystage ks4 --bulk-download ./data/maths.json
+ * npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4 --bulk-download ./data/maths.json
  * ```
  */
 
@@ -64,7 +64,7 @@ function parseArgs(args: string[]): CliArgs {
           i++;
         }
         break;
-      case '--keystage':
+      case '--key-stage':
         if (nextArg) {
           result.keystage = nextArg;
           i++;
@@ -101,14 +101,14 @@ Usage:
 
 Options:
   --subject <subject>      Subject to verify (default: maths)
-  --keystage <ks>          Key stage to verify (default: ks4)
+  --key-stage <ks>          Key stage to verify (default: ks4)
   --bulk-download <path>   Path to bulk download JSON file
   --es-url <url>           Elasticsearch URL (default: http://localhost:9200)
   --help, -h               Show this help message
 
 Examples:
-  npx tsx scripts/verify-ingestion.ts --subject maths --keystage ks4
-  npx tsx scripts/verify-ingestion.ts --subject history --keystage ks3
+  npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4
+  npx tsx scripts/verify-ingestion.ts --subject history --key-stage ks3
 `);
 }
 

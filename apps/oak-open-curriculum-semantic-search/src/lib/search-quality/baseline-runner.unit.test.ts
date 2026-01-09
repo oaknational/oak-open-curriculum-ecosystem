@@ -13,7 +13,7 @@ import {
   calculateCategoryMrr,
   type QueryBaselineResult,
 } from './baseline-runner.js';
-import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
+import type { GroundTruthQuery, LegacyQueryCategory, QueryCategory } from './ground-truth/types.js';
 
 describe('processQueryResult', () => {
   it('calculates correct MRR when first result is relevant', () => {
@@ -25,6 +25,7 @@ describe('processQueryResult', () => {
       },
       category: 'naturalistic',
       priority: 'high',
+      description: 'Test fixture for MRR calculation',
     };
 
     const actualResults = [
@@ -52,6 +53,7 @@ describe('processQueryResult', () => {
       },
       category: 'misspelling',
       priority: 'critical',
+      description: 'Test fixture for rank-3 MRR calculation',
     };
 
     const actualResults = [
@@ -75,6 +77,7 @@ describe('processQueryResult', () => {
       },
       category: 'intent-based',
       priority: 'exploratory',
+      description: 'Test fixture for zero-hit scenario',
     };
 
     const actualResults = [
@@ -100,11 +103,14 @@ describe('processQueryResult', () => {
     const query: GroundTruthQuery = {
       query: 'simple query',
       expectedRelevance: { 'some-lesson': 2 },
+      category: 'precise-topic',
+      description: 'Test fixture for default values',
+      priority: 'medium',
     };
 
     const result = processQueryResult(query, ['some-lesson'], 100);
 
-    expect(result.category).toBe('naturalistic');
+    expect(result.category).toBe('precise-topic');
     expect(result.priority).toBe('medium');
   });
 });
@@ -136,7 +142,11 @@ describe('calculateCategoryMrr', () => {
 /**
  * Helper to create a minimal QueryBaselineResult for testing.
  */
-function createResult(category: QueryCategory, mrr: number): QueryBaselineResult {
+function createResult(
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
+  category: QueryCategory | LegacyQueryCategory,
+  mrr: number,
+): QueryBaselineResult {
   return {
     query: 'test query',
     category,

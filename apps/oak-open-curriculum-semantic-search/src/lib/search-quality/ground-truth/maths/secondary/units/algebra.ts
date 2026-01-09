@@ -18,6 +18,9 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
       'algebraic-manipulation': 3,
       'non-linear-graphs': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of quadratic equations unit using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'simultaneous equations',
@@ -25,30 +28,45 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
       'simultaneous-equations-2-variables': 3,
       'algebraic-manipulation': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of simultaneous equations unit using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'expanding brackets',
     expectedRelevance: {
       'algebraic-manipulation': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of algebraic manipulation unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'factorising',
     expectedRelevance: {
       'algebraic-manipulation': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of algebraic manipulation unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'inequalities',
     expectedRelevance: {
       inequalities: 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of inequalities unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'sequences',
     expectedRelevance: {
       'further-sequences': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of sequences unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'algebraic fractions',
@@ -56,17 +74,26 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
       'algebraic-fractions': 3,
       'algebraic-manipulation': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of algebraic fractions unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'functions',
     expectedRelevance: {
       'functions-and-proof': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of functions unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'iteration',
     expectedRelevance: {
       iteration: 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of iteration unit using curriculum terminology',
+    priority: 'medium',
   },
 ] as const;

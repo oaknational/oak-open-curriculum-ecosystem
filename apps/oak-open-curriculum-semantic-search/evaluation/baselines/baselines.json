@@ -1,0 +1,322 @@
+{
+  "_metadata": {
+    "description": "Search quality baselines and reference values",
+    "lastUpdated": "2026-01-06",
+    "documentation": "See IR-METRICS.md for metric definitions"
+  },
+  "referenceValues": {
+    "_description": "Industry-standard targets. Same for all subjects/phases. Used for comparison, not regression testing.",
+    "mrr": {
+      "excellent": 0.9,
+      "good": 0.7,
+      "fair": 0.5,
+      "target": 0.7
+    },
+    "ndcg10": {
+      "excellent": 0.85,
+      "good": 0.75,
+      "fair": 0.6,
+      "target": 0.75
+    },
+    "zeroHitRate": {
+      "excellent": 0.05,
+      "good": 0.1,
+      "fair": 0.2,
+      "target": 0.1
+    },
+    "precision10": {
+      "excellent": 0.7,
+      "good": 0.5,
+      "fair": 0.3,
+      "target": 0.5
+    },
+    "recall10": {
+      "excellent": 0.8,
+      "good": 0.6,
+      "fair": 0.4,
+      "target": 0.6
+    },
+    "p95LatencyMs": {
+      "excellent": 100,
+      "good": 300,
+      "fair": 500,
+      "target": 300
+    }
+  },
+  "measuredBaselines": {
+    "_description": "Actual measured values. Updated by running benchmark. Null means not yet measured.",
+    "_lastMeasured": null,
+    "entries": {
+      "art/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "art/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 9
+      },
+      "citizenship/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "computing/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "computing/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 9
+      },
+      "cooking-nutrition/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "cooking-nutrition/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 8
+      },
+      "design-technology/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "design-technology/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 9
+      },
+      "english/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 14
+      },
+      "english/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 57
+      },
+      "french/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "french/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "geography/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "geography/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 14
+      },
+      "german/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "history/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "history/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 15
+      },
+      "maths/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 37
+      },
+      "maths/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 60
+      },
+      "music/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "music/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 9
+      },
+      "physical-education/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 18
+      },
+      "physical-education/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 9
+      },
+      "religious-education/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "religious-education/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 7
+      },
+      "science/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 15
+      },
+      "science/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 35
+      },
+      "spanish/primary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      },
+      "spanish/secondary": {
+        "mrr": null,
+        "ndcg10": null,
+        "zeroHitRate": null,
+        "precision10": null,
+        "recall10": null,
+        "p95LatencyMs": null,
+        "queryCount": 6
+      }
+    }
+  }
+}

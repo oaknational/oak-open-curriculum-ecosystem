@@ -3,9 +3,8 @@
  *
  * Covers computer networks, data representation, web development, and cybersecurity.
  *
- * **Methodology (2026-01-03)**:
- * All lesson slugs verified against Oak API via MCP tools:
- * - `get-key-stages-subject-lessons` for lesson slugs
+ * **Methodology (2026-01-08)**:
+ * All lesson slugs verified against bulk-downloads/computing-secondary.json.
  *
  * @packageDocumentation
  */
@@ -17,8 +16,8 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const COMPUTING_SECONDARY_DATA_SYSTEMS_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'computer networks internet',
-    category: 'naturalistic',
+    query: 'computer networks internet wired wireless connections',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for networks topic.',
     expectedRelevance: {
@@ -28,8 +27,8 @@ export const COMPUTING_SECONDARY_DATA_SYSTEMS_QUERIES: readonly GroundTruthQuery
     },
   },
   {
-    query: 'binary numbers computing',
-    category: 'naturalistic',
+    query: 'binary numbers digits computing representation',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for binary representation.',
     expectedRelevance: {
@@ -39,12 +38,14 @@ export const COMPUTING_SECONDARY_DATA_SYSTEMS_QUERIES: readonly GroundTruthQuery
     },
   },
   {
-    query: 'cybersecurity lessons',
-    category: 'naturalistic',
+    query: 'cybersecurity lessons threats attacks prevention careers',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for cybersecurity unit.',
     expectedRelevance: {
-      'introduction-to-cybersecurity': 3,
+      'careers-in-cyber-security': 3,
+      'preventing-cyber-attacks': 3,
+      'the-cost-of-cyber-crime-and-hacker-motivation': 2,
     },
   },
 ] as const;

@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const DT_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'platics and polymers materials',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspelling of "plastics".',
     expectedRelevance: {
@@ -28,7 +28,7 @@ export const DT_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'making stuff from wood',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Colloquial: "stuff" → products, "wood" → timbers.',
     expectedRelevance: {
@@ -38,13 +38,23 @@ export const DT_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'green design environment friendly',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Synonym: "green" + "environment friendly" → sustainable.',
     expectedRelevance: {
       'linear-versus-circular-economy': 3,
       'life-cycle-assessment': 2,
       'sustainable-fabrics-for-wearable-technology': 2,
+    },
+  },
+  {
+    query: 'sketching and materials properties',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of design sketching with materials science.',
+    expectedRelevance: {
+      'advanced-3d-sketching': 3,
+      'polymer-properties-and-processes': 2,
     },
   },
 ] as const;

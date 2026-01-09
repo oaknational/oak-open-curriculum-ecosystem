@@ -1,6 +1,6 @@
 # IR Metrics Guide for Search Quality Evaluation
 
-**Last Updated**: 2026-01-05
+**Last Updated**: 2026-01-06
 
 **Purpose**: Reference guide for Information Retrieval (IR) metrics used in search quality evaluation  
 **Audience**: Developers unfamiliar with IR assessment protocols  
@@ -11,6 +11,8 @@
 ## Why These Metrics?
 
 Information Retrieval (IR) metrics measure how well search results match what users actually want. We use industry-standard metrics that balance "did we find the right thing?" with "did we find it quickly?"
+
+> **Note**: The targets in this document are **industry benchmarks** for reference. For **project-specific acceptance thresholds** (which are more lenient given curriculum search complexity), see [search-acceptance-criteria.md](../../../.agent/plans/semantic-search/search-acceptance-criteria.md).
 
 ---
 
@@ -205,7 +207,7 @@ Before measuring metrics, you must define what "relevant" means for each test qu
    - **1**: "Maybe useful, but not directly what they want"
    - **0**: "Wrong topic, not helpful" (don't list these - implicit)
 3. **Validate slugs exist** using MCP tools or the validation script
-4. **Add to registry** in `src/lib/search-quality/ground-truth/`
+4. **Add to registry** in `src/lib/search-quality/ground-truth/registry/entries.ts`
 
 ### Validating Ground Truth
 
@@ -238,17 +240,13 @@ We use IR metrics in two distinct ways:
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Unified benchmark tool
+# Unified benchmark tool (the only evaluation tool)
 pnpm benchmark --all                              # All subjects, all phases
 pnpm benchmark --subject maths --phase secondary  # Specific scope
 pnpm benchmark --phase primary --verbose          # Detailed output
-
-# Cross-curriculum analysis (CLI)
-pnpm tsx evaluation/analysis/analyze-cross-curriculum.ts \
-  --subject maths --phase secondary --verbose
 ```
 
-**Output**: MRR, NDCG, per-category breakdown — use to compare before vs after your change.
+**Output**: MRR, NDCG@10, zero-hit rate, per-entry breakdown — use to compare before vs after your change.
 
 ---
 
@@ -280,12 +278,14 @@ All experiment results should be recorded in:
 
 ## Related Documentation
 
-| Document                                                                                                | Purpose                     |
-| ------------------------------------------------------------------------------------------------------- | --------------------------- |
-| [EXPERIMENTAL-PROTOCOL.md](../../../.agent/evaluations/EXPERIMENTAL-PROTOCOL.md)                        | How to run experiments      |
-| [search-acceptance-criteria.md](../../../.agent/plans/semantic-search/search-acceptance-criteria.md)    | Per-category MRR thresholds |
-| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation     |
-| [M3 Plan](../../../.agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)      | Current search quality work |
+| Document                                                                                                | Purpose                       |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| [GROUND-TRUTH-PROCESS.md](../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)               | Ground truth creation process |
+| [EXPERIMENTAL-PROTOCOL.md](../../../.agent/evaluations/EXPERIMENTAL-PROTOCOL.md)                        | How to run experiments        |
+| [search-acceptance-criteria.md](../../../.agent/plans/semantic-search/search-acceptance-criteria.md)    | Per-category MRR thresholds   |
+| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Ground truth validation       |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)              | Ground truth registry         |
+| [M3 Plan](../../../.agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md)      | Current search quality work   |
 
 ---
 

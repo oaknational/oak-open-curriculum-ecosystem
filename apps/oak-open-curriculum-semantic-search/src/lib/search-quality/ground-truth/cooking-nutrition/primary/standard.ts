@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const COOKING_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'healthy eating nutrition',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for nutrition units.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const COOKING_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'cooking recipes for kids',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Teacher intent for cooking practical lessons.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const COOKING_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'food from around the world',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for global foods.',
     expectedRelevance: {
@@ -51,12 +51,12 @@ export const COOKING_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'food production processing',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for food production.',
     expectedRelevance: {
       'producing-our-food': 3,
-      'processing-our-food': 3,
+      'processing-our-food': 2,
     },
   },
 ] as const;

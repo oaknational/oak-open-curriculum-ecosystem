@@ -27,7 +27,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // NATURALISTIC (SECONDARY)
   {
     query: 'teach students about gothic literature year 8',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group specification.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // MISSPELLING (SECONDARY)
   {
     query: 'frankenstien monster creation',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common Frankenstein misspelling.',
     expectedRelevance: {
@@ -53,7 +53,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // SYNONYM (SECONDARY)
   {
     query: 'detective stories mystery solving',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Detective = Sherlock Holmes style. Tests vocabulary bridging.',
     expectedRelevance: {
@@ -66,7 +66,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // COLLOQUIAL (SECONDARY)
   {
     query: 'the shakespeare play about the island',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'medium',
     description: 'Informal reference to The Tempest.',
     expectedRelevance: {
@@ -83,7 +83,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // NATURALISTIC (KS4)
   {
     query: 'how to teach persuasive writing to GCSE students',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Pedagogical intent + informal phrasing. Tests ELSER vocabulary bridging.',
     expectedRelevance: {
@@ -94,7 +94,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   },
   {
     query: 'lessons on analysing character in Shakespeare',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Generic Shakespeare character analysis request.',
     expectedRelevance: {
@@ -107,7 +107,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // MISSPELLING (KS4)
   {
     query: 'shakespere macbeth analysis',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspelling of Shakespeare. Tests fuzzy matching.',
     expectedRelevance: {
@@ -118,7 +118,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   },
   {
     query: 'jekyll and hyde duality analysys',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Misspelling of analysis. Tests fuzzy + ELSER recovery.',
     expectedRelevance: {
@@ -131,7 +131,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // SYNONYM (KS4)
   {
     query: 'comprehension skills reading',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Comprehension = reading analysis. Tests synonym handling.',
     expectedRelevance: {
@@ -142,7 +142,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   },
   {
     query: 'verse analysis techniques',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Verse = poetry. Tests vocabulary bridging.',
     expectedRelevance: {
@@ -155,12 +155,12 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // MULTI-CONCEPT (KS4)
   {
     query: 'grammar and punctuation in essay writing',
-    category: 'multi-concept',
+    category: 'cross-topic',
     priority: 'medium',
     description: 'Cross-topic intersection. Tests concept combination.',
     expectedRelevance: {
       'persuasive-opinion-pieces': 3,
-      'an-inspector-calls-annotating-essay-questions-and-writing-a-thesis-statement': 2,
+      'annotating-essay-questions-and-writing-thesis-statements': 2,
       'developing-comparative-essay-writing-skills': 2,
     },
   },
@@ -168,7 +168,7 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
   // COLLOQUIAL (KS4)
   {
     query: 'that poetry stuff about war and conflict',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'medium',
     description: 'Very informal phrasing. Tests noise filtering + concept extraction.',
     expectedRelevance: {

@@ -17,12 +17,18 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
     expectedRelevance: {
       'right-angled-trigonometry': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of Pythagoras unit using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'pythagorus', // Intentional misspelling for fuzzy matching
     expectedRelevance: {
       'right-angled-trigonometry': 3,
     },
+    category: 'imprecise-input',
+    description: 'Tests error recovery from common misspelling of Pythagoras',
+    priority: 'critical',
   },
   {
     query: 'trigonometry',
@@ -30,18 +36,27 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
       'right-angled-trigonometry': 3,
       'non-right-angled-trigonometry': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of trigonometry units using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'circle theorems',
     expectedRelevance: {
       'circle-theorems': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of circle theorems unit using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'vectors',
     expectedRelevance: {
       vectors: 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of vectors unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'similarity and enlargement',
@@ -49,6 +64,9 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
       similarity: 3,
       'further-transformations': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of similarity unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'surface area and volume',
@@ -56,6 +74,9 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
       '2d-and-3d-shape-surface-area-and-volume-pyramids-spheres-and-cones': 3,
       '2d-and-3d-shape-compound-shapes': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of 3D shape units using curriculum terminology',
+    priority: 'high',
   },
   {
     query: 'transformations',
@@ -63,12 +84,18 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
       'further-transformations': 3,
       'transformations-of-graphs': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of transformations unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'bearings',
     expectedRelevance: {
       bearings: 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of bearings unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'angles',
@@ -76,17 +103,26 @@ export const UNIT_GEOMETRY_QUERIES: readonly UnitGroundTruthQuery[] = [
       angles: 3,
       'circle-theorems': 2,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of angles unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'loci and construction',
     expectedRelevance: {
       'loci-and-construction': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of loci and construction unit using curriculum terminology',
+    priority: 'medium',
   },
   {
     query: 'plans and elevations',
     expectedRelevance: {
       'plans-and-elevations': 3,
     },
+    category: 'precise-topic',
+    description: 'Tests retrieval of plans and elevations unit using curriculum terminology',
+    priority: 'medium',
   },
 ] as const;

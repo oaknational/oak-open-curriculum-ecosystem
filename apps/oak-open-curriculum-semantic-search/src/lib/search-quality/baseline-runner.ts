@@ -8,7 +8,12 @@
  */
 
 import { calculateMRR, calculateNDCG } from './metrics.js';
-import type { GroundTruthQuery, QueryCategory, QueryPriority } from './ground-truth/types.js';
+import type {
+  GroundTruthQuery,
+  LegacyQueryCategory,
+  QueryCategory,
+  QueryPriority,
+} from './ground-truth/types.js';
 
 /**
  * Result of running a single ground truth query against the search system.
@@ -17,7 +22,8 @@ export interface QueryBaselineResult {
   /** The original query text */
   readonly query: string;
   /** Query category for analysis grouping */
-  readonly category: QueryCategory;
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
+  readonly category: QueryCategory | LegacyQueryCategory;
   /** Query priority for triage */
   readonly priority: QueryPriority;
   /** Expected relevant lesson/unit slugs */
@@ -35,7 +41,7 @@ export interface QueryBaselineResult {
 }
 
 /** Default category when not specified in ground truth */
-const DEFAULT_CATEGORY: QueryCategory = 'naturalistic';
+const DEFAULT_CATEGORY: QueryCategory = 'precise-topic';
 
 /** Default priority when not specified in ground truth */
 const DEFAULT_PRIORITY: QueryPriority = 'medium';
@@ -88,7 +94,8 @@ export function processQueryResult(
  */
 export function calculateCategoryMrr(
   results: readonly QueryBaselineResult[],
-  category: QueryCategory,
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
+  category: QueryCategory | LegacyQueryCategory,
 ): number {
   const categoryResults = results.filter((r) => r.category === category);
 

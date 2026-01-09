@@ -3,7 +3,11 @@
     "oak-curriculum-stdio": {
       "type": "stdio",
       "command": "pnpm",
-      "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"],
+      "args": [
+        "exec",
+        "tsx",
+        "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"
+      ],
       "env": {
         "LOG_LEVEL": "debug"
       }
@@ -11,6 +15,10 @@
     "oak-curriculum-http-remote": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
+    },
+    "oak-local": {
+      "type": "http",
+      "url": "http://localhost:3333/mcp"
     },
     "ooc-preview-branch": {
       "type": "http",
@@ -20,21 +28,18 @@
       "type": "http",
       "url": "https://poc-oak-open-curriculum-92n5xluaf.vercel.thenational.academy/mcp"
     },
-    "ooc-http-dev-local": {
-      "type": "http",
-      "url": "http://localhost:3333/mcp"
-    },
-    "ooc-http-prod-local": {
-      "type": "http",
-      "url": "http://localhost:3333/mcp"
-    },
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest"]
+      "args": [
+        "@playwright/mcp@latest"
+      ]
     },
     "next-devtools": {
       "command": "npx",
-      "args": ["-y", "next-devtools-mcp@latest"]
+      "args": [
+        "-y",
+        "next-devtools-mcp@latest"
+      ]
     },
     "Vercel": {
       "type": "http",

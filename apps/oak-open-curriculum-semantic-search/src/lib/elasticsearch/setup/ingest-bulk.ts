@@ -52,7 +52,7 @@ export function printBulkHeader(args: CliArgs): void {
   ingestLogger.info('Bulk Ingestion', {
     bulkDir: args.bulkDir,
     dryRun: args.dryRun,
-    force: args.force,
+    incremental: args.incremental,
   });
 }
 

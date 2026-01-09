@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const CITIZENSHIP_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'democracy voting elections UK',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for democracy units.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const CITIZENSHIP_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[]
   },
   {
     query: 'equality discrimination Equality Act',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for equality unit.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const CITIZENSHIP_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[]
   },
   {
     query: 'active citizenship community',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for active citizenship.',
     expectedRelevance: {
@@ -51,7 +51,7 @@ export const CITIZENSHIP_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[]
   },
   {
     query: 'managing money finances',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for financial literacy.',
     expectedRelevance: {

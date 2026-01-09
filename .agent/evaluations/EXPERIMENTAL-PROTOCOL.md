@@ -1,6 +1,6 @@
 # Experimental Protocol for Search Quality Evaluation
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-01-06
 **Status**: Active
 **Purpose**: Canonical reference for how to design, execute, record, and learn from search experiments.
 
@@ -56,16 +56,65 @@ Tier 3: Modern ES Features     → RRF tuning, Linear Retriever
 Tier 4: AI Enhancement         → Reranking, query expansion, RAG
 ```
 
-### 2.2 Ground Truth Is Sacred
+### 2.2 Ground Truth Is Sacred: Three-Stage Validation
 
-All experiments MUST use validated ground truth. See [ADR-085: Ground Truth Validation Discipline](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md).
+All experiments MUST use **production-ready** ground truth. Ground truths require three validation stages:
+
+| Stage | What It Proves | What It Does NOT Prove |
+|-------|----------------|------------------------|
+| **1. Type-Check** | Data integrity (required fields) | Semantic correctness |
+| **2. Runtime Validation (16 checks)** | Semantic rules | Production readiness |
+| **3. Qualitative (manual review)** | Production readiness | — |
+
+**Stage 1** enforces required fields at compile time: `category`, `priority`, `description`.
+
+**Stage 2** enforces semantic rules TypeScript cannot check.
+
+**Passing type-check AND runtime validation means ground truths meet a MINIMUM QUALITY THRESHOLD.** This makes them *worthy of investment in manual review*. It does **NOT** mean they are production-ready.
+
+**Ground truths are NOT production-ready until ALL THREE stages are complete.**
+
+See [ADR-085: Ground Truth Validation Discipline](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md).
 
 **Before any experiment**:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm tsx evaluation/validation/validate-ground-truth.ts
+pnpm ground-truth:generate    # Generate types from bulk data (if bulk data updated)
+pnpm ground-truth:validate    # Run 17 validation checks (Stage 1)
+# Stage 2: Qualitative review must also be complete
 ```
+
+**Stage 1: Type-Check** (TypeScript-enforced fields):
+
+| Field | Requirement |
+|-------|-------------|
+| `category` | REQUIRED — TypeScript error if missing |
+| `priority` | REQUIRED — TypeScript error if missing |
+| `description` | REQUIRED — TypeScript error if missing |
+
+**Stage 2: Runtime Validation** (16 checks, all blocking errors):
+
+| # | Check | Error Category |
+|---|-------|----------------|
+| 1 | Slug existence | `invalid-slug` |
+| 2 | Non-empty relevance | `empty-relevance` |
+| 3 | Valid scores (1-3) | `invalid-score` |
+| 4 | No duplicate queries | `duplicate-query` |
+| 5 | No duplicate slugs | `duplicate-slug-in-query` |
+| 6 | Query length (3-10 words) | `short-query` / `long-query` |
+| 7 | Slug format | `slug-format` |
+| 8 | Cross-subject | `cross-subject` |
+| 9 | Phase consistency | `phase-mismatch` |
+| 10 | KS4 consistency | `ks4-in-primary` |
+| 11 | Minimum slugs (≥2) | `single-slug` |
+| 12 | Score variety (2+ slugs) | `uniform-scores` |
+| 13 | Highly relevant (score=3) | `no-highly-relevant` |
+| 14 | Maximum slugs (≤5) | `too-many-slugs` |
+| 15 | Zod schema | `schema-validation` |
+| 16 | Category coverage | `category-coverage` |
+
+**Analysis script**: `pnpm ground-truth:analyze` provides detailed breakdown by entry
 
 ### 2.3 TDD for Ground Truths
 
@@ -76,7 +125,46 @@ Ground truth creation follows TDD principles (per [testing-strategy.md](../direc
 3. **GREEN**: Fix slugs by validating against API/MCP tools
 4. **Document**: Add comprehensive TSDoc explaining the test scenario
 
-### 2.4 Single Source of Truth
+### 2.4 Ground Truth Design Rules
+
+Ground truths must test **ranking quality**, not just topic presence.
+
+**Key rules**:
+
+- **Queries**: 3-7 words, specific enough that only 2-4 lessons are highly relevant
+- **Results**: Maximum 5 slugs, at least one score=3, graded relevance (mix of 3/2/1)
+- **Single-word queries**: Only for misspelling category
+
+**Review checklist**:
+
+- [ ] Would a teacher actually type this query?
+- [ ] Does at least one lesson directly answer the query (score=3)?
+- [ ] Are other lessons appropriately scored (2 for related, 1 for tangential)?
+- [ ] Is the query specific enough to test ranking, not just topic presence?
+
+**Full design rules**: See [ADR-085 Section 6](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md#6-ground-truth-design-rules) and [GROUND-TRUTH-PROCESS.md](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md)
+
+### 2.5 Canonical Scenario Categories (MANDATORY)
+
+Ground truths form a **subject × phase × category matrix** that must have consistent coverage.
+
+Every subject-phase entry MUST contain queries from ALL required categories:
+
+| Category | Priority | Required | Min Queries | Description |
+|----------|----------|----------|-------------|-------------|
+| `precise-topic` | Critical | **YES** | 4+ | Teacher knows curriculum terms |
+| `natural-expression` | High | **YES** | 2+ | Teacher uses everyday language |
+| `imprecise-input` | Critical | **YES** | 1+ | Teacher makes typing errors |
+| `cross-topic` | Medium | **YES** | 1+ | Teacher wants intersection |
+| `pedagogical-intent` | Exploratory | No | 0-1 | Teacher describes goal, not topic |
+
+**Minimum per entry**: 8-10 queries covering all 4 required categories.
+
+**Consistency requirement**: ALL subject-phase pairings must have the SAME category coverage. No entry may omit a required category. This ensures benchmarks are comparable across subjects and phases.
+
+**Enforcement**: Validation check 20 (`category-coverage`) enforces these minimums programmatically.
+
+### 2.6 Single Source of Truth
 
 All ground truths MUST be registered in `GROUND_TRUTH_REGISTRY` (per [rules.md](../directives-and-memory/rules.md)):
 
@@ -86,7 +174,7 @@ All ground truths MUST be registered in `GROUND_TRUTH_REGISTRY` (per [rules.md](
 
 No hardcoded mappings duplicating the registry. No compatibility layers.
 
-### 2.3 Measure Per-Category, Not Just Aggregate
+### 2.7 Measure Per-Category, Not Just Aggregate
 
 Aggregate MRR hides important variation. Always report per-category metrics.
 
@@ -94,7 +182,7 @@ Aggregate MRR hides important variation. Always report per-category metrics.
 |--------|---------|
 | "MRR improved 5%" | "Naturalistic MRR +15%, Misspelling -2%" |
 
-### 2.4 No Regressions
+### 2.8 No Regressions
 
 A change that improves hard queries but regresses standard queries is usually **rejected**. Protect the baseline.
 
@@ -258,14 +346,13 @@ If metrics changed, update [current-state.md](../plans/semantic-search/current-s
 
 ### 6.3 Query Categories
 
-| Category | Challenge | Example |
-|----------|-----------|---------|
-| Naturalistic | Pedagogical intent, informal | "teach my students about solving for x" |
-| Misspelling | Typos | "fotosinthesis" |
-| Synonym | Vocabulary gaps | "solving for x" instead of "linear equations" |
-| Multi-concept | Cross-topic | "combining algebra with graphs" |
-| Colloquial | Informal language | "the water cycle thing" |
-| Intent-based | Pure intent, no topic | "challenging extension work" |
+| Category | User Scenario | Example |
+|----------|---------------|---------|
+| `precise-topic` | Teacher knows curriculum terms | "quadratic equations factorising" |
+| `natural-expression` | Teacher uses everyday language | "teach solving for x" |
+| `imprecise-input` | Teacher makes typos | "fotosinthesis" |
+| `cross-topic` | Teacher wants intersection | "algebra with graphs" |
+| `pedagogical-intent` | Teacher describes goal | "extension work for able students" |
 
 ### 6.4 Per-Category Thresholds
 
@@ -401,4 +488,3 @@ Intent-based queries (e.g., "challenging extension work") require metadata we do
 | Date | Change |
 |------|--------|
 | 2026-01-03 | Created — consolidates experimental protocol from scattered docs |
-

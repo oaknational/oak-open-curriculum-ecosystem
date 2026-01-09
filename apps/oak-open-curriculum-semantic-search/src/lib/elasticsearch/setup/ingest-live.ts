@@ -1,13 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
- * Live data ingestion CLI - canonical way to ingest curriculum data into Elasticsearch.
- *
- * Supports two modes:
- * - API mode (default): `pnpm es:ingest-live --all --verbose`
- * - Bulk mode: `pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --verbose`
- *
- * @see operations/ingestion/README.md for full documentation
- * @see ADR-080, ADR-087, ADR-093 for architecture decisions
+ * Live data ingestion CLI - ingest curriculum data into Elasticsearch.
+ * @see operations/ingestion/README.md
  */
 
 import { dirname } from 'node:path';
@@ -20,7 +14,7 @@ import {
   resetIngestionErrorCollector,
 } from '../../indexing/ingestion-error-collector.js';
 import { ingestLogger, setLogLevel, enableFileSink, disableFileSink } from '../../logger';
-import { parseArgs, printHelp, type CliArgs } from './ingest-cli-args.js';
+import { parseArgs, type CliArgs } from './ingest-cli-args.js';
 import { createIngestionClient, CacheRequiredError } from './ingest-client-factory.js';
 import { setIngestionMode } from '../../indexing/bulk-action-factory.js';
 import type { IngestionResult } from './ingest-output.js';
@@ -56,13 +50,15 @@ async function handleCacheClearing(args: CliArgs): Promise<void> {
   }
 }
 
-/** Configure ingestion mode based on --force flag. */
+/** Configure ingestion mode based on --incremental flag. */
 function configureIngestionMode(args: CliArgs): void {
-  const ingestionMode = args.force ? 'force' : 'incremental';
+  const ingestionMode = args.incremental ? 'incremental' : 'force';
   setIngestionMode(ingestionMode);
   ingestLogger.info('Ingestion mode configured', {
     mode: ingestionMode,
-    behavior: args.force ? 'overwrite existing documents' : 'skip existing documents (resumable)',
+    behavior: args.incremental
+      ? 'skip existing documents (resumable)'
+      : 'overwrite existing documents',
   });
 }
 
@@ -218,7 +214,7 @@ async function main(): Promise<void> {
   }
 
   if (args.help) {
-    printHelp();
+    // Commander already printed help, just exit cleanly
     disableFileSink();
     return;
   }

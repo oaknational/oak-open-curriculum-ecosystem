@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const MUSIC_SECONDARY_PERFORMANCE_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'drum grooves rhythm',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for drum grooves units.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const MUSIC_SECONDARY_PERFORMANCE_QUERIES: readonly GroundTruthQuery[] = 
   },
   {
     query: 'keyboard skills music',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for keyboard unit.',
     expectedRelevance: {
@@ -39,7 +39,7 @@ export const MUSIC_SECONDARY_PERFORMANCE_QUERIES: readonly GroundTruthQuery[] = 
   },
   {
     query: 'djembe West African drumming',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for West African music.',
     expectedRelevance: {

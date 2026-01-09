@@ -26,7 +26,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // NATURALISTIC: Teacher/student language vs formal curriculum terminology
   {
     query: 'teach my students about solving for x',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Pedagogical intent + informal "solving for x" → linear equations. Tests ELSER vocabulary bridging.',
@@ -38,7 +38,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'lesson on working out missing angles in shapes',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Descriptive "working out" + "missing angles" → geometry. Tests structure field semantic capture.',
@@ -50,7 +50,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'what to teach before quadratic formula',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Curriculum sequencing intent. Tests semantic understanding of prerequisites.',
     expectedRelevance: {
@@ -63,7 +63,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // MISSPELLING: Tolerance for spelling errors (critical for mobile UX)
   {
     query: 'simulatneous equasions substitution method',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description:
       'Two misspellings in 4 words - common mobile typing. Tests fuzzy + ELSER recovery.',
@@ -74,7 +74,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'circel theorms tangent',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description:
       'Severe misspellings (edit distance >2). Tests limits of fuzzy; phonetic would catch.',
@@ -86,7 +86,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'standerd form multiplying dividing',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description:
       'Single char typo (edit distance 1). Baseline fuzzy test - failure = fundamental issue.',
@@ -100,7 +100,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // SYNONYM: Alternative terminology and conceptual equivalence
   {
     query: 'finding the gradient of a straight line',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: '"straight line" = "linear" synonym. Good baseline for synonym handling.',
     expectedRelevance: {
@@ -111,7 +111,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'rules for powers and indices',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: '"rules" = "laws", "powers/indices" = exponents. Tests synonym filter + ELSER.',
     expectedRelevance: {
@@ -122,7 +122,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'how to rearrange formulas',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       '"rearrange formulas" = "changing the subject". No lexical overlap - pure ELSER test.',
@@ -136,7 +136,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // MULTI-CONCEPT: Topic intersections and combinations
   {
     query: 'combining algebra with graphs',
-    category: 'multi-concept',
+    category: 'cross-topic',
     priority: 'medium',
     description: 'Cross-topic intersection query. Tests if hybrid finds algebra+graphing overlap.',
     expectedRelevance: {
@@ -147,7 +147,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'probability with tree diagrams and fractions',
-    category: 'multi-concept',
+    category: 'cross-topic',
     priority: 'medium',
     description: 'Three concepts must all match. Tests min_should_match precision.',
     expectedRelevance: {
@@ -160,7 +160,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // COLLOQUIAL: Informal language to formal curriculum mapping
   {
     query: 'that sohcahtoa stuff for triangles',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'medium',
     description: 'Very informal "that...stuff" + SOHCAHTOA acronym. LLM expansion would help.',
     expectedRelevance: {
@@ -171,7 +171,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'the bit where you complete the square',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'medium',
     description: '"the bit where" noise + actual term. Tests min_should_match noise filtering.',
     expectedRelevance: {
@@ -184,7 +184,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   // INTENT-BASED: Pedagogical purpose without topic names
   {
     query: 'challenging extension work for able mathematicians',
-    category: 'intent-based',
+    category: 'pedagogical-intent',
     priority: 'exploratory',
     description: 'Pure intent, NO topic. May need NL→DSL to extract difficulty filter.',
     expectedRelevance: {
@@ -195,7 +195,7 @@ export const HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'visual introduction to vectors for beginners',
-    category: 'intent-based',
+    category: 'pedagogical-intent',
     priority: 'exploratory',
     description:
       'Topic present but qualifiers ("visual", "beginners") are semantic. Tests structure field.',

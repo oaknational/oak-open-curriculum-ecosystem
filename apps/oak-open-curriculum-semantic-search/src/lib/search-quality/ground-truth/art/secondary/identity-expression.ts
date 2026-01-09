@@ -17,18 +17,19 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const ART_SECONDARY_IDENTITY_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'portraiture art lessons',
-    category: 'naturalistic',
+    query: 'portraiture art lessons identity expression self',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for portraiture unit.',
     expectedRelevance: {
-      'identity-exploring-portraiture': 3,
+      'using-portraiture-to-reveal-and-conceal-identities': 3,
+      'what-is-a-portrait': 3,
       'exploring-collage-and-composition-through-portraits': 2,
     },
   },
   {
     query: 'art and wellbeing emotions',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for wellbeing unit.',
     expectedRelevance: {
@@ -39,7 +40,7 @@ export const ART_SECONDARY_IDENTITY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'nature and environment in art',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for nature in art unit.',
     expectedRelevance: {

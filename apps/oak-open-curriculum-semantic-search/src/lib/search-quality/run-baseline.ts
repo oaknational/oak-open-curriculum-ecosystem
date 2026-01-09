@@ -21,7 +21,6 @@ dotenvConfig({ path: envLocalPath });
 import {
   MATHS_SECONDARY_HARD_QUERIES,
   UNIT_HARD_GROUND_TRUTH_QUERIES,
-  type UnitGroundTruthQuery,
 } from './ground-truth/index.js';
 import {
   processQueryResult,
@@ -29,13 +28,21 @@ import {
   calculateOverallMrr,
 } from './baseline-runner.js';
 import type { QueryBaselineResult } from './baseline-runner.js';
-import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
+import type { GroundTruthQuery, LegacyQueryCategory, QueryCategory } from './ground-truth/types.js';
 import { esSearch } from '../elastic-http.js';
 import { buildLessonRrfRequest, buildUnitRrfRequest } from '../hybrid-search/rrf-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../types/oak.js';
 
-/** All query categories for iteration */
-const ALL_CATEGORIES: readonly QueryCategory[] = [
+/** All query categories for iteration (new + legacy) */
+// eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
+const ALL_CATEGORIES: readonly (QueryCategory | LegacyQueryCategory)[] = [
+  // New outcome-oriented categories
+  'precise-topic',
+  'natural-expression',
+  'imprecise-input',
+  'cross-topic',
+  'pedagogical-intent',
+  // Legacy categories (deprecated)
   'naturalistic',
   'misspelling',
   'synonym',
@@ -43,21 +50,6 @@ const ALL_CATEGORIES: readonly QueryCategory[] = [
   'colloquial',
   'intent-based',
 ];
-
-/** Misspelling indicator patterns */
-const MISSPELLING_PATTERNS = ['simultanous', 'equasion', 'trigonomatry', 'quadradic'];
-
-/** Intent-based indicator patterns */
-const INTENT_PATTERNS = ['prepare students', 'real world', 'help with', 'struggling'];
-
-/** Colloquial indicator patterns */
-const COLLOQUIAL_PATTERNS = ['that thing', 'the circle rules'];
-
-/** Multi-concept indicator patterns */
-const MULTI_PATTERNS = [' and ', 'together', 'comparing'];
-
-/** Synonym indicator patterns */
-const SYNONYM_PATTERNS = ['working out', 'making x', 'nth term'];
 
 /**
  * Search lessons using 4-way hybrid.
@@ -108,37 +100,18 @@ async function runLessonBaseline(): Promise<readonly QueryBaselineResult[]> {
 async function runUnitBaseline(): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
   for (const query of UNIT_HARD_GROUND_TRUTH_QUERIES) {
+    // UnitGroundTruthQuery now has all required fields, so we can use it directly
     const standardQuery: GroundTruthQuery = {
       query: query.query,
       expectedRelevance: query.expectedRelevance,
-      category: detectCategory(query),
-      priority: 'medium',
+      category: query.category,
+      priority: query.priority,
+      description: query.description,
     };
     const { results: actualResults, latencyMs } = await searchUnits(query.query);
     results.push(processQueryResult(standardQuery, actualResults, latencyMs));
   }
   return results;
-}
-
-/** Detect category from unit query based on content patterns. */
-function detectCategory(query: UnitGroundTruthQuery): QueryCategory {
-  const q = query.query.toLowerCase();
-  if (MISSPELLING_PATTERNS.some((p) => q.includes(p))) {
-    return 'misspelling';
-  }
-  if (INTENT_PATTERNS.some((p) => q.includes(p))) {
-    return 'intent-based';
-  }
-  if (COLLOQUIAL_PATTERNS.some((p) => q.includes(p))) {
-    return 'colloquial';
-  }
-  if (MULTI_PATTERNS.some((p) => q.includes(p))) {
-    return 'multi-concept';
-  }
-  if (SYNONYM_PATTERNS.some((p) => q.includes(p))) {
-    return 'synonym';
-  }
-  return 'naturalistic';
 }
 
 /** Output per-query table row */
@@ -151,7 +124,8 @@ function formatQueryRow(r: QueryBaselineResult): string {
 /** Output category table row */
 function formatCategoryRow(
   results: readonly QueryBaselineResult[],
-  category: QueryCategory,
+  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
+  category: QueryCategory | LegacyQueryCategory,
 ): string {
   const categoryResults = results.filter((r) => r.category === category);
   if (categoryResults.length === 0) {

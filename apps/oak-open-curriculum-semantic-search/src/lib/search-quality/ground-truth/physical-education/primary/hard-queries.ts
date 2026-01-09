@@ -16,39 +16,53 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const PE_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'footbal skills',
+    query: 'footbal skills primary',
     expectedRelevance: {
-      'dribbling-and-keeping-control': 2,
+      'dribbling-and-keeping-control': 3,
       'passing-and-receiving-skills': 2,
     },
-    category: 'misspelling',
+    category: 'imprecise-input',
+    priority: 'critical',
     description: 'Common misspelling of football',
   },
   {
     query: 'PE games ks1',
     expectedRelevance: {
-      'running-in-a-game': 2,
+      'running-in-a-game': 3,
       'dodging-in-simple-games': 2,
     },
-    category: 'colloquial',
+    category: 'natural-expression',
+    priority: 'high',
     description: 'Uses PE abbreviation and key stage reference',
   },
   {
     query: 'sporty movement warm up',
     expectedRelevance: {
-      'movement-and-exercise': 2,
+      'movement-and-exercise': 3,
       agility: 2,
     },
-    category: 'synonym',
+    category: 'natural-expression',
+    priority: 'high',
     description: 'Uses informal "sporty" for physical activity',
   },
   {
     query: 'how to throw and catch',
     expectedRelevance: {
+      'passing-and-receiving-skills': 3,
       'dribbling-and-sending-with-hands': 2,
-      'passing-and-receiving-skills': 2,
     },
-    category: 'colloquial',
+    category: 'natural-expression',
+    priority: 'high',
     description: 'Question format for sending/receiving skills',
+  },
+  {
+    query: 'maps and teamwork outdoor activities',
+    expectedRelevance: {
+      'orientating-a-map-to-locate-points': 3,
+      'collaborate-effectively-to-complete-a-timed-course': 2,
+    },
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of navigation skills with teamwork in OAA.',
   },
 ] as const;

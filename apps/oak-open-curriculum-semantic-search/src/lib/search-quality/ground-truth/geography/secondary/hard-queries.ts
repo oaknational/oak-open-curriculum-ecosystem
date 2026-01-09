@@ -13,7 +13,7 @@ export const HARD_QUERIES_SECONDARY_GEOGRAPHY: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach about volcanoes and earthquakes year 8',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group.',
     expectedRelevance: {
@@ -26,7 +26,7 @@ export const HARD_QUERIES_SECONDARY_GEOGRAPHY: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'tectonic plaits and earthqakes',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspellings.',
     expectedRelevance: {
@@ -39,7 +39,7 @@ export const HARD_QUERIES_SECONDARY_GEOGRAPHY: readonly GroundTruthQuery[] = [
   // SYNONYM
   {
     query: 'global warming effects',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Global warming = climate change.',
     expectedRelevance: {
@@ -52,7 +52,7 @@ export const HARD_QUERIES_SECONDARY_GEOGRAPHY: readonly GroundTruthQuery[] = [
   // MULTI-CONCEPT
   {
     query: 'river erosion and deposition landforms',
-    category: 'multi-concept',
+    category: 'cross-topic',
     priority: 'medium',
     description: 'Cross-topic: processes + landforms.',
     expectedRelevance: {

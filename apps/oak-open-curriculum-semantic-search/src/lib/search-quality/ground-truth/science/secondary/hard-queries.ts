@@ -15,7 +15,7 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach my year 7 class about cells',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group specification.',
     expectedRelevance: {
@@ -28,7 +28,7 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'fotosynthesis plants energy',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common photosynthesis misspelling.',
     expectedRelevance: {
@@ -39,7 +39,7 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
   },
   {
     query: 'resperation in humans',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common respiration misspelling.',
     expectedRelevance: {
@@ -52,7 +52,7 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
   // SYNONYM
   {
     query: 'living organism processes',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Living organism = life processes. Tests vocabulary bridging.',
     expectedRelevance: {
@@ -64,7 +64,7 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
   // MULTI-CONCEPT
   {
     query: 'predator and prey ecosystem relationships',
-    category: 'multi-concept',
+    category: 'cross-topic',
     priority: 'medium',
     description: 'Cross-topic intersection: ecology + behaviour.',
     expectedRelevance: {

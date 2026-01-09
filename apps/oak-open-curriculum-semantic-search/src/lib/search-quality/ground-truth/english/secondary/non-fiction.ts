@@ -19,6 +19,9 @@ import type { GroundTruthQuery } from '../../types';
 export const NON_FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'persuasive writing techniques',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of persuasive writing content using curriculum terminology',
     expectedRelevance: {
       'crafting-a-clear-point-of-view-in-non-fiction-writing': 3,
       'persuasive-opinion-pieces': 3,
@@ -27,6 +30,9 @@ export const NON_FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'speech writing rhetorical devices',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of speech writing content using curriculum terminology',
     expectedRelevance: {
       'crafting-a-clear-point-of-view-in-non-fiction-writing': 3,
       'crafting-a-voice-in-nonfiction-writing': 3,
@@ -35,6 +41,9 @@ export const NON_FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'analysing non-fiction language',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of non-fiction analysis content using curriculum terminology',
     expectedRelevance: {
       'analysing-language-devices-effectively': 3,
       'making-effective-inferences': 3,
@@ -43,6 +52,9 @@ export const NON_FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'comparing non-fiction texts',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of text comparison content using curriculum terminology',
     expectedRelevance: {
       'analysing-evidence-to-support-a-comparison-of-attitudes': 3,
       'aiming-high-in-a-comparative-summary': 3,
@@ -51,6 +63,9 @@ export const NON_FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'inference and summary skills',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of inference and summary content using curriculum terminology',
     expectedRelevance: {
       'how-to-summarise': 3,
       'making-effective-inferences': 3,

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "castr-bundle.schema.json",
+  "title": "Castr Bundle Contract",
+  "description": "Manifest contract describing a castr output bundle for automated verification.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "source", "ir", "schemas", "endpoints", "emit"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": ["castr-bundle/1"],
+      "description": "Bundle contract version."
+    },
+    "source": {
+      "$ref": "castr-ir.schema.json#/$defs/source"
+    },
+    "ir": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to the IR JSON file."
+    },
+    "schemas": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to the schema registry JSON file."
+    },
+    "endpoints": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to the endpoint registry JSON file."
+    },
+    "emit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zod", "typescript", "openapi"],
+      "properties": {
+        "zod": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to Zod v4 emitter output."
+        },
+        "typescript": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to TypeScript emitter output."
+        },
+        "openapi": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to OpenAPI emitter output."
+        },
+        "jsonSchema": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional path to JSON Schema emitter output."
+        }
+      }
+    }
+  }
+}

@@ -83,6 +83,7 @@ const eslintConfig = defineConfig(
   // Evaluation scripts - same standards as src/ but allow console.log
   {
     files: ['evaluation/**/*.ts'],
+    ignores: ['evaluation/**/*.test.ts'],
     languageOptions: {
       parser: tseslintParser,
       parserOptions: {

@@ -1,4 +1,10 @@
-# Diagnostic Query Suite
+# Diagnostic Query Suite (ARCHIVED)
+
+**Archived**: 2026-01-09
+**Reason**: Category framework migrated from legacy categories (`synonym`, `multi-concept`) to outcome-oriented categories (`natural-expression`, `cross-topic`). Diagnostic queries still exist in the codebase but this documentation is outdated.
+**Original Location**: `apps/oak-open-curriculum-semantic-search/docs/DIAGNOSTIC-QUERIES.md`
+
+---
 
 **Last Updated**: 2026-01-03
 

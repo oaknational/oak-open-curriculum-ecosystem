@@ -3,9 +3,8 @@
  *
  * Covers Python programming, block-based programming, and computational thinking.
  *
- * **Methodology (2026-01-03)**:
- * All lesson slugs verified against Oak API via MCP tools:
- * - `get-key-stages-subject-lessons` for lesson slugs
+ * **Methodology (2026-01-08)**:
+ * All lesson slugs verified against bulk-downloads/computing-secondary.json.
  *
  * @packageDocumentation
  */
@@ -17,32 +16,36 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const COMPUTING_SECONDARY_PROGRAMMING_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'Python programming introduction',
-    category: 'naturalistic',
+    query: 'Python programming lists data structures projects',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for Python programming unit.',
     expectedRelevance: {
-      'introduction-to-python-programming': 3,
-      'python-programming-with-sequences-of-data': 2,
+      'creating-lists-in-python': 3,
+      'data-structure-projects-in-python': 3,
+      'python-list-operations': 2,
     },
   },
   {
-    query: 'teach block based programming year 7',
-    category: 'naturalistic',
+    query: 'programming constructs sequence iteration selection Year 7',
+    category: 'precise-topic',
     priority: 'high',
-    description: 'Teacher intent query for block-based programming content.',
+    description: 'Teacher intent query for programming constructs content.',
     expectedRelevance: {
-      'using-fundamental-programming-constructs-in-a-block-based-language': 3,
+      'problem-solving-using-programming-constructs': 3,
+      'programming-project-sequence-i': 3,
+      'programming-project-iteration-i': 2,
     },
   },
   {
-    query: 'Boolean logic computing',
-    category: 'naturalistic',
+    query: 'Boolean logic computing gates circuits',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for Boolean logic.',
     expectedRelevance: {
       'boolean-logic': 3,
-      'machine-learning-and-artificial-intelligence': 1,
+      'boolean-logic-and-logic-gates': 3,
+      'implementing-boolean-logic-in-python': 2,
     },
   },
 ] as const;

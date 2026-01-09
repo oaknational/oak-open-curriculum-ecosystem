@@ -24,7 +24,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   // Single-word synonyms (baseline)
   {
     query: 'trig ratios',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Single-word synonym: "trig" → "trigonometry". Baseline for synonym expansion.',
     expectedRelevance: {
@@ -35,7 +35,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'factorise quadratics',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Single-word synonym: "factorise" → "factorising"/"factoring". Tests UK/US spelling.',
@@ -49,7 +49,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   // Phrase synonyms at different positions
   {
     query: 'straight line equations',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Phrase synonym at START: "straight line" → "linear". Tests phrase position sensitivity.',
@@ -61,7 +61,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'equations for straight lines',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Phrase synonym at END: "straight lines" → "linear". Compare with START position.',
     expectedRelevance: {
@@ -72,7 +72,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'finding straight line slope',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Phrase synonym in MIDDLE: "straight line" → "linear". Tests multi-word phrase matching.',
@@ -86,7 +86,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   // Multiple synonyms in one query
   {
     query: 'rules for index laws',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Multiple synonyms: "rules"→"laws" AND "index"→"indices". Tests synonym density.',
     expectedRelevance: {
@@ -97,7 +97,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'transposition of formulas',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Formal synonym: "transposition" → "changing the subject"/"rearrange". Tests technical vocabulary.',
@@ -111,7 +111,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   // Curriculum-specific multi-word terms (likely need phrase boost)
   {
     query: 'circle rules tangent',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Multi-word curriculum term: "circle rules" → "circle theorems". Tests compound term matching.',
@@ -123,7 +123,7 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'y equals mx plus c',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description:
       'Spoken formula: "y equals mx plus c" → "gradient intercept"/"linear graphs". Tests formula recognition.',

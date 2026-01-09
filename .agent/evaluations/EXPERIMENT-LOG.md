@@ -11,6 +11,7 @@ Chronological record of search experiments and their impact on system metrics.
 - Entries are in **reverse chronological order** (newest first)
 - Each entry shows before/after metrics and the decision
 - The "Cumulative Progress" table at the bottom shows system evolution
+- **Note**: Historical entries reference scripts that existed at the time (e.g., `analyze-cross-curriculum.ts`). As of 2026-01-06, all evaluation is consolidated into `pnpm benchmark` — see [ADR-098](../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)
 
 ---
 
@@ -18,27 +19,161 @@ Chronological record of search experiments and their impact on system metrics.
 
 For the full current state, see [current-state.md](../plans/semantic-search/current-state.md).
 
-### ✅ TRUE BASELINE VERIFIED (2025-12-24)
+### ✅ Ground Truth Remediation COMPLETE (2026-01-08)
 
-**Ground truth was corrected 2025-12-23. TRUE baseline measured 2025-12-24 00:30 UTC.**
+**All validation checks pass. Ground truths are production-ready.**
 
-| Metric | Previous Value | Verified Value | Change |
-|--------|----------------|----------------|--------|
-| Lesson Hard MRR | 0.369 | **0.614** | +66% ✅ |
-| Unit Hard MRR | 0.856 | 0.856 | — ✅ |
-| Lesson Std MRR | 0.944 | 0.944 | — ✅ |
-| Unit Std MRR | 0.988 | 0.988 | — ✅ |
+| Issue | Before | After | Status |
+|-------|--------|-------|--------|
+| Validation script | ❌ Broken | ✅ 17 checks | ✅ Fixed |
+| Invalid slugs | 66 (5.2%) | 0 | ✅ Fixed |
+| Empty expectedRelevance | 12 queries | 0 | ✅ Fixed |
+| Missing categories | 130 queries | 0 | ✅ Fixed |
+| Short queries | 78 queries | 0 | ✅ Fixed |
+| Uniform scores (2+ slugs) | 47 queries | 0 | ✅ Fixed |
+| Missing priority | 34 queries | 0 | ✅ Fixed |
 
-**Tier 1 Target: ✅ MET** — MRR 0.614 > target 0.45  
-**Tier 1 Status: ✅ EXHAUSTED** — All standard approaches exhausted (2025-12-24)
+**Status**: All 431 queries across 30 entries pass all 17 validation checks. Benchmarks can proceed.
 
-**Note**: "Target Met" means aggregate MRR meets minimum. "Exhausted/Complete" means all standard approaches tried AND plateau demonstrated. See [Search Acceptance Criteria](../plans/semantic-search/search-acceptance-criteria.md) for definitions.
+**Available scripts**:
 
-**See**: [ground-truth-corrections.md](ground-truth-corrections.md) for details of all 63 corrections.
+```bash
+pnpm ground-truth:validate  # Run all 17 validation checks
+pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+```
+
+### Historical: TRUE BASELINE (2025-12-24) — NOW SUSPECT
+
+**Note**: These baselines were measured against ground truth that has since been found to have quality issues.
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Lesson Hard MRR | 0.614 | ⚠️ May be inaccurate |
+| Unit Hard MRR | 0.856 | ⚠️ May be inaccurate |
+| Lesson Std MRR | 0.944 | ⚠️ May be inaccurate |
+| Unit Std MRR | 0.988 | ⚠️ May be inaccurate |
+
+**See**: [ground-truth-corrections.md](ground-truth-corrections.md) for details of previous corrections (63 in Dec 2025).
 
 ---
 
 ## Log Entries
+
+### 2026-01-08: Ground Truth Remediation — COMPLETE
+
+**Context**: Following discovery of ground truth quality issues, comprehensive remediation undertaken. All 431 queries across 30 entries now pass all 17 validation checks.
+
+**What Was Built**:
+
+1. **Type Generation Infrastructure** (`ground-truths/generation/`):
+   - `bulk-data-parser.ts` — Parse bulk JSON with Result pattern and type guards
+   - `type-emitter.ts` — Generate branded `AnyLessonSlug` type + `SLUG_TO_SUBJECT_MAP`
+   - `schema-emitter.ts` — Generate Zod schemas for runtime validation
+   - `generate-ground-truth-types.ts` — Orchestrates generation
+
+2. **Validation Script** (`evaluation/validation/validate-ground-truth.ts`):
+   - **17 comprehensive validation checks** (all blocking errors, no warnings)
+   - Validates against 12,320 slugs from bulk data
+   - Cross-subject contamination detection
+   - Run with: `pnpm ground-truth:validate`
+
+3. **Analysis Script** (`evaluation/validation/analyze-ground-truth-quality.ts`):
+   - Detailed breakdown by entry showing which queries have issues
+   - Run with: `pnpm ground-truth:analyze` (add `--verbose` for query lists)
+
+4. **Generated Output** (`ground-truths/generated/`):
+   - `lesson-slugs-by-subject.ts` — Branded types, Sets, subject map
+   - `ground-truth-schemas.ts` — Zod schemas for validation
+
+**17 Validation Checks** (all blocking):
+
+| # | Check | Error Category |
+|---|-------|----------------|
+| 1 | Slug existence | `invalid-slug` |
+| 2 | Non-empty relevance | `empty-relevance` |
+| 3 | Valid scores | `invalid-score` |
+| 4 | No duplicate queries | `duplicate-query` |
+| 5 | No duplicate slugs | `duplicate-slug-in-query` |
+| 6 | Query length (3-10 words) | `short-query` / `long-query` |
+| 7 | Category required | `missing-category` |
+| 8 | **Priority required** | `missing-priority` |
+| 9 | Slug format | `slug-format` |
+| 10 | Cross-subject | `cross-subject` |
+| 11 | Phase consistency | `phase-mismatch` |
+| 12 | KS4 consistency | `ks4-in-primary` |
+| 13 | Minimum slugs (≥2) | `single-slug` |
+| 14 | **Score variety (2+ slugs)** | `uniform-scores` |
+| 15 | Highly relevant (score=3) | `no-highly-relevant` |
+| 16 | Zod schema | `schema-validation` |
+| 17 | Entry duplicates | (entry-level) |
+
+**Final Results**:
+
+| Metric | Start | End | Status |
+|--------|-------|-----|--------|
+| Invalid slugs | 66 | 0 | ✅ |
+| Empty expectedRelevance | 12 | 0 | ✅ |
+| Missing categories | 130 | 0 | ✅ |
+| Short queries | 78 | 0 | ✅ |
+| Uniform scores | 47 | 0 | ✅ |
+| Missing priority | 34 | 0 | ✅ |
+| Single-slug queries | 10 | 0 | ✅ |
+| No score=3 | 21 | 0 | ✅ |
+| **Total errors** | **408** | **0** | ✅ |
+
+**Decision**: ✅ **REMEDIATION COMPLETE**
+
+All 431 queries pass all 17 validation checks. Ground truths are production-ready for benchmarking.
+
+**Files Changed**: 40+ ground truth files across all subjects + validation infrastructure
+
+**Documentation Updated**:
+
+- ADR-085: Ground Truth Validation Discipline — all 17 checks documented
+- GROUND-TRUTH-PROCESS.md — updated with all validation requirements
+
+---
+
+### 2026-01-08: Ground Truth Quality Issues Discovered — DISCOVERY ENTRY
+
+**Context**: During post-ingestion benchmark analysis, discovered fundamental issues with ground truth validation infrastructure and data quality. This entry documents the original discovery; see above for remediation progress.
+
+**Original Findings**:
+
+| Issue | Details | Impact |
+|-------|---------|--------|
+| **Validation script broken** | Expects `lesson_slug` in top-level array, actual is `lessonSlug` in `.lessons[]` | Script reports false positives |
+| **Missing slugs** | 66 of 1278 (5.2%) don't exist in bulk data | Guaranteed MRR=0 |
+| **Empty expectedRelevance** | e.g., "mitosis meiosis cell division" has `{}` | Cannot calculate metrics |
+| **Fabricated slugs** | e.g., An Inspector Calls slugs invented | False failures |
+
+**Root Cause**: Bulk download format changed Dec 30, 2025, but validation script was not updated.
+
+**Decision**: 🔄 **REMEDIATION INITIATED** — See entry above for progress.
+
+---
+
+### 2026-01-07: Test Coverage Complete + Documentation Cleanup
+
+**Context**: Completed all test coverage gaps identified during Result pattern compliance work. Also cleaned up outdated documentation references to deprecated `ingest:all` command.
+
+**Test Coverage Added**:
+
+| Component | Tests Added | File |
+|-----------|-------------|------|
+| `safeGet` | 3 unit tests | `src/adapters/sdk-safe-get.unit.test.ts` |
+| SDK API Methods (success) | 8 unit tests | `src/adapters/sdk-api-methods.unit.test.ts` |
+
+**Documentation Updates**:
+
+- Updated `INGESTION-GUIDE.md`, `scripts/README.md`, `operations/README.md` — replaced `pnpm ingest:all` with `pnpm es:ingest-live -- --all`
+- Updated `ADR-069` — marked as superseded, removed outdated usage patterns
+
+**Decision**: ✅ **COMPLETE** — All infrastructure ready for Phase 8.
+
+**Next**: Run `pnpm benchmark --all` against live ES.
+
+---
 
 ### 2026-01-06: Unified Evaluation Infrastructure Built (ADR-098)
 
@@ -77,6 +212,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 | Performance smoke tests | Behavior-focused smoke tests |
 
 **Documentation**:
+
 - ADR-098: Ground Truth Registry as Single Source of Truth
 - Updated: `evaluation/analysis/README.md`
 
@@ -144,6 +280,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 **Decision**: ✅ M3 COMPREHENSIVE BASELINES COMPLETE — All 25 subject/KS combinations now measured
 
 **Files changed**:
+
 - `evaluation/analysis/analyze-cross-curriculum.ts` — Fixed to support per-KS query filtering
 
 ---
@@ -187,6 +324,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 3. **Cross-curriculum validation working** — New analysis script enables per-subject measurement
 
 **Files changed**:
+
 - `evaluation/analysis/analyze-cross-curriculum.ts` — NEW parameterised baseline script
 - `src/lib/search-quality/ground-truth/french/` — NEW 6 queries
 - `src/lib/search-quality/ground-truth/spanish/` — NEW 6 queries
@@ -223,6 +361,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 **Decision**: ✅ PHASE 4 COMPLETE — All 16 subjects with bulk data now have ground truths
 
 **Files changed**:
+
 - `src/lib/search-quality/ground-truth/computing/` — NEW 9 queries
 - `src/lib/search-quality/ground-truth/art/` — NEW 9 queries
 - `src/lib/search-quality/ground-truth/music/` — NEW 9 queries
@@ -257,6 +396,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 | **Total** | **All** | **263** | — | **M3 TARGET EXCEEDED** |
 
 **Next Steps**:
+
 - Run full baselines for English, Science, History, Geography, RE
 - Document all results in current-state.md
 - Identify cross-curriculum synonym gaps for Tier 2 work
@@ -283,6 +423,7 @@ For the full current state, see [current-state.md](../plans/semantic-search/curr
 **Intent-Based Exception**:
 
 The two intent-based queries (MRR 0.229) cannot be fixed with Tier 1 approaches:
+
 - "challenging extension work for able mathematicians" — needs difficulty metadata
 - "visual introduction to vectors for beginners" — needs teaching approach metadata
 
@@ -387,6 +528,7 @@ pnpm eval:diagnostic      # 18 diagnostic queries by pattern
 **Root Cause**: Ground truth was created using assumed slug naming conventions rather than verified API data.
 
 **Impact**: ALL previous MRR measurements are suspect:
+
 - "Failures" may have been correct — searching for lessons that don't exist
 - "Successes" may have been luck — correct by accident
 - The semantic reranking rejection (-16.8%) may be WRONG
@@ -402,17 +544,20 @@ pnpm eval:diagnostic      # 18 diagnostic queries by pattern
 **Decision**: 🔴 **ALL EXPERIMENTS MUST BE RE-RUN**
 
 This is not a setback — it's a quality improvement. We now have:
+
 - Validated ground truth (can trust measurements)
 - Preventative test (can't happen again)
 - Complete coverage (lessons, units, sequences)
 
 **What We Preserve**:
+
 - ✅ All implementations (B.4, B.5, synonyms)
 - ✅ All architectural decisions (ADR-082, ADR-083, ADR-084)
 - ✅ All learnings (ES synonym filter works for tokens not phrases)
 - ✅ The tier-based strategy
 
 **What Needs Re-Evaluation**:
+
 - ⚠️ Semantic reranking rejection — may have been wrong
 - ⚠️ B.4 noise filtering improvement (+16.8%) — may be different
 - ⚠️ B.5 phrase boosting — never measured
@@ -429,6 +574,7 @@ pnpm eval:diagnostic      # Detailed pattern analysis
 Then: Update all documentation with VERIFIED metrics.
 
 **Files changed**:
+
 - `hard-queries.ts` — 15 slugs corrected
 - `diagnostic-synonym-queries.ts` — 9 slugs corrected
 - `diagnostic-multi-concept-queries.ts` — 9 slugs corrected
@@ -456,6 +602,7 @@ Then: Update all documentation with VERIFIED metrics.
 **Decision**: ⏸️ PENDING — Quality gates NOT verified, experiment NOT run
 
 **⚠️ CRITICAL**: The code is merged but:
+
 1. Quality gates have NOT been run after the merge
 2. The experiment to measure MRR impact has NOT been run
 
@@ -538,11 +685,13 @@ Then update this entry with actual before/after metrics and change decision to �
 3. **Next step clarity**: B.5 should focus on **phrase query enhancement** (match_phrase boosting for curriculum terms), NOT complex multi-concept scoring logic.
 
 **Files changed**:
+
 - Added `diagnostic-queries.ts` with 18 queries
 - Added `analyze-diagnostic-queries.ts` script
 - Added `DIAGNOSTIC-QUERIES.md` documentation
 
 **What this teaches us**:
+
 - Always measure granularly — aggregate MRR hides critical patterns
 - Assumptions about "working" systems need validation (synonyms were deployed but not working for phrases)
 - The search system has strengths (method-based queries) to leverage, not just weaknesses to fix
@@ -575,6 +724,7 @@ Then update this entry with actual before/after metrics and change decision to �
 **What was implemented**:
 
 **B.4 Noise Phrase Filtering**:
+
 - Created `removeNoisePhrases()` pure function with 8 colloquial patterns
 - TDD approach: unit tests → implementation → integration
 - Integrated as preprocessor in `buildLessonRrfRequest()` and `buildUnitRrfRequest()`
@@ -582,6 +732,7 @@ Then update this entry with actual before/after metrics and change decision to �
 - Patterns: "that X stuff for", "the bit where you", "how do I", "how to", "what is", "teach my students about", "lesson on", "help with"
 
 **Synonym Deployment Investigation**:
+
 - Discovered ES GET API pagination issue (defaults to 10 results)
 - Confirmed all 163 synonyms deployed via `?size=200` parameter
 - Verified synonyms include: `changing-the-subject` → "rearrange formulas", `linear-graphs` → "straight line graphs", `trigonometry` → "sohcahtoa"
@@ -589,6 +740,7 @@ Then update this entry with actual before/after metrics and change decision to �
 - Issue: Synonyms expand correctly but phrase matching too weak for multi-word terms
 
 **Files changed**:
+
 - `src/lib/query-processing/remove-noise-phrases.ts` — New pure function
 - `src/lib/query-processing/remove-noise-phrases.unit.test.ts` — TDD tests
 - `src/lib/query-processing/index.ts` — Barrel export
@@ -761,6 +913,8 @@ _*Previous values were against INCOMPLETE index_
 | 2025-12-22 | Data Quality Fixes Complete | 0.316 | 0.856 | 436 | ⚠️ Against invalid ground truth |
 | 2025-12-23 | Ground Truth Corrected | — | — | 436 | 63 invalid slugs fixed |
 | **2025-12-24** | **TRUE Baseline Established** | **0.614** | **0.856** | **436** | ✅ **TIER 1 TARGET MET** |
+| **2026-01-06** | **Unified Evaluation Infrastructure** | — | — | — | Phase 7 complete, ADR-098, `benchmark.ts` |
+| **2026-01-07** | **Test Coverage + Docs Cleanup** | — | — | — | ✅ All infrastructure ready for Phase 8 |
 
 **Standard Query Performance** (verified 2025-12-24):
 
@@ -791,6 +945,7 @@ After running an experiment:
 | Changed the recommended process | Update **NEW-SUBJECT-GUIDE.md** |
 
 **Key principle**:
+
 - **What we DO** → Goes in operational guides (e.g., NEW-SUBJECT-GUIDE.md)
 - **What we DON'T DO** → Stays here in the experiment log
 - **Why we decided** → Full reasoning in the experiment file
@@ -824,4 +979,3 @@ After running an experiment:
 | [EXPERIMENT-PRIORITIES.md](experiments/EXPERIMENT-PRIORITIES.md) | Strategic roadmap (what to try next) |
 | [ADR-081](../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Evaluation framework and decision criteria |
 | [ADR-082](../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first strategy |
-

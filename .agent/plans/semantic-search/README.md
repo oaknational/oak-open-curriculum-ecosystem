@@ -1,7 +1,7 @@
 # Semantic Search — Navigation Hub
 
-**Status**: ✅ **Full ingestion verified** — Now optimising search quality
-**Last Updated**: 2026-01-03
+**Status**: 📋 **Phase 8 — Comprehensive Baselines** (Ground truth remediation complete)
+**Last Updated**: 2026-01-08
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 ---
@@ -23,6 +23,46 @@ Then read:
 - [rules.md](../../directives-and-memory/rules.md) — Cardinal Rule, TDD, no type shortcuts
 - [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
 - [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
+
+---
+
+## 🎯 Current Priority: Phase 8 — Run Comprehensive Benchmarks
+
+**Status**: ✅ Ground truth remediation COMPLETE (2026-01-08). All 431 queries pass all 17 validation checks.
+
+### What's Done ✅
+
+| Task | Status |
+|------|--------|
+| Type generation infrastructure | ✅ Complete |
+| Validation script (17 checks) | ✅ Complete |
+| Analysis script (`pnpm ground-truth:analyze`) | ✅ Complete |
+| All quality issues fixed | ✅ Complete |
+
+### Final Quality Metrics
+
+| Issue | Before | After |
+|-------|--------|-------|
+| Invalid slugs | 66 | 0 |
+| Empty expectedRelevance | 12 | 0 |
+| Missing categories | 130 | 0 |
+| Short queries | 78 | 0 |
+| Uniform scores | 47 | 0 |
+| Missing priority | 34 | 0 |
+| **Total errors** | **408** | **0** |
+
+### Next Step: Run Benchmarks
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm ground-truth:validate              # Verify 0 errors
+pnpm ground-truth:analyze               # Confirm 0 issues
+pnpm benchmark --all                    # Run all 28 subject/phase entries
+```
+
+Then update `baselineMrr` values in `registry/entries.ts` with measured results.
+
+**Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
 
 ---
 
@@ -67,7 +107,7 @@ Then read:
 ## Dependency Chain
 
 ```
-M3: Search Quality Optimization (active/)
+Phase 8: Comprehensive Baselines (current priority)
         ↓
 Comprehensive Filter Testing (pre-sdk-extraction/) ← HIGH PRIORITY
         ↓
@@ -117,13 +157,22 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ---
 
-## 🔄 In Progress: M3 — Phase-Aligned Search Quality & Unified Evaluation
+## Recent Work
 
-**Status**: 🔄 **Phases 1-7 Built** — Ready for Phase 8 (run baselines to validate)
+### Result Pattern Compliance (2026-01-07) ✅
+
+Network error handling per ADR-088:
+
+| Component | Change |
+|-----------|--------|
+| SDK Retry Middleware | Catches and retries network exceptions |
+| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` |
+| SDK API Methods | All 8 `makeGet...` functions use `safeGet` |
+| File Split | `sdk-api-methods.ts` → 4 smaller modules |
+
+### M3: Phase-Aligned Search Quality (2026-01-06) ✅
 
 See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
-
-### Completed
 
 | Completed | What |
 |-----------|------|
@@ -136,7 +185,8 @@ See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-
 
 | Priority | Work | Why |
 |----------|------|-----|
-| **Phase 8** | Run comprehensive baselines | Measure MRR for all entries, update registry |
+| **Phase 8** | Run comprehensive baselines | Measure MRR for all 28 entries, update registry |
+| **Synonym Audit** | Language-specific synonyms | French/Spanish/German underperforming |
 
 ---
 
@@ -146,8 +196,10 @@ See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-
 | -------- | ---------------------------- | ----------- |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Active |
 | [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | Implemented |
+| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result Pattern for Error Handling | Implemented |
 | [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | Verified |
 | [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment | Complete |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Ground Truth Registry | Complete |
 
 ---
 

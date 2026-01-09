@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const ART_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'teach drawing skills beginers',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspelling of "beginners" + teacher intent.',
     expectedRelevance: {
@@ -28,7 +28,7 @@ export const ART_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'feelings in pictures',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Colloquial: "feelings" → emotions, "pictures" → art.',
     expectedRelevance: {
@@ -38,13 +38,23 @@ export const ART_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'what is art year 7',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Conceptual question about art definition + year group.',
     expectedRelevance: {
       'thats-not-art': 3,
       'this-is-art-the-power-of-collaborative-making': 2,
       'defining-design': 1,
+    },
+  },
+  {
+    query: 'portraits and colour expression',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of portrait techniques with colour/expression concepts.',
+    expectedRelevance: {
+      'exploring-power-in-the-portrait': 3,
+      'tone-hue-and-colour': 2,
     },
   },
 ] as const;

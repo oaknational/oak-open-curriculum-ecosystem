@@ -58,7 +58,7 @@ If you're onboarding a **new subject/keystage** (not just re-ingesting), see [NE
 pnpm es:setup
 
 # 2. Re-ingest Maths KS4 only (semantic search demo)
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest-live -- --subject maths --key-stage ks4
 
 # 3. Verify ELSER is working
 pnpm es:status
@@ -72,13 +72,13 @@ pnpm test:smoke           # Terminal 2
 
 ## Available Commands
 
-| Command                | Purpose                                      | Duration             |
-| ---------------------- | -------------------------------------------- | -------------------- |
-| `pnpm es:setup`        | Create indexes, synonym sets, verify cluster | ~30 seconds          |
-| `pnpm es:status`       | Check index counts, ELSER status             | ~5 seconds           |
-| `pnpm es:ingest-live`  | Ingest from live Oak API                     | 2-15 min per subject |
-| `pnpm ingest:all`      | Ingest ALL subjects/keystages                | Hours                |
-| `pnpm ingest:progress` | Check progress of `ingest:all`               | Instant              |
+| Command                        | Purpose                                      | Duration             |
+| ------------------------------ | -------------------------------------------- | -------------------- |
+| `pnpm es:setup`                | Create indexes, synonym sets, verify cluster | ~30 seconds          |
+| `pnpm es:status`               | Check index counts, ELSER status             | ~5 seconds           |
+| `pnpm es:ingest-live`          | Ingest from live Oak API (selective)         | 2-15 min per subject |
+| `pnpm es:ingest-live -- --all` | Ingest ALL subjects/keystages                | Hours                |
+| `pnpm ingest:verify`           | Verify ingestion completeness                | ~1 minute            |
 
 ---
 
@@ -126,10 +126,10 @@ Expected output:
 
 ```bash
 # Ingest Maths KS4 (semantic search demo data)
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest-live -- --subject maths --key-stage ks4
 
 # Ingest History KS2 (smaller, faster for testing)
-pnpm es:ingest-live -- --subject history --keystage ks2
+pnpm es:ingest-live -- --subject history --key-stage ks2
 ```
 
 #### Option B: Multiple Subjects
@@ -142,14 +142,14 @@ pnpm es:ingest-live -- --subject maths --subject science --subject english
 #### Option C: All Data
 
 ```bash
-# Ingest everything (takes hours, can resume)
-pnpm ingest:all
+# Ingest everything (takes hours)
+pnpm es:ingest-live -- --all
 
-# Resume after interruption
-pnpm ingest:all --resume
+# Resume after interruption (skip already-indexed documents)
+pnpm es:ingest-live -- --all --incremental
 
-# Check progress
-pnpm ingest:progress
+# Verify ingestion completeness
+pnpm ingest:verify
 ```
 
 ### Step 4: Verify Ingestion
@@ -187,7 +187,7 @@ pnpm es:ingest-live -- [options]
 Options:
   --subject <slug>    Subject to ingest (can repeat)
                       Default: maths, english, science, history, geography
-  --keystage <ks>     Key stage: ks1, ks2, ks3, ks4 (can repeat)
+  --key-stage <ks>     Key stage: ks1, ks2, ks3, ks4 (can repeat)
                       Default: all key stages
   --index <kind>      Index type: lessons, units, unit_rollup, sequences, sequence_facets
                       Default: all indexes
@@ -198,29 +198,35 @@ Options:
 
 Examples:
   # Re-ingest Maths KS4 lessons only
-  pnpm es:ingest-live -- --subject maths --keystage ks4 --index lessons
+  pnpm es:ingest-live -- --subject maths --key-stage ks4 --index lessons
 
   # Dry run to see what would be ingested
   pnpm es:ingest-live -- --subject maths --dry-run
 
   # Verbose output for debugging
-  pnpm es:ingest-live -- --subject maths --keystage ks4 --verbose
+  pnpm es:ingest-live -- --subject maths --key-stage ks4 --verbose
 ```
 
-### `pnpm ingest:all`
+### Full Ingestion with `--all`
 
 ```bash
-pnpm ingest:all [options]
+pnpm es:ingest-live -- --all [options]
 
 Options:
-  --resume      Resume from last checkpoint
-  --reset       Reset progress and start fresh
-  --dry-run     Preview without actually ingesting
-  --help, -h    Show help
+  --all              Ingest all subjects
+  -i, --incremental  Skip existing documents (for resuming)
+  --dry-run          Preview without writing to ES
+  --bypass-cache     Continue without Redis cache
+  --max-retries <n>  Max retry attempts
+  --retry-delay <ms> Base retry delay in ms
+  --no-retry         Disable document-level retry
+  -v, --verbose      Show detailed output
+  -h, --help         Display help
 
-Progress:
-  Tracked in .ingest-progress.json
-  Safe to interrupt (Ctrl+C) and resume later
+Examples:
+  pnpm es:ingest-live -- --all                  # Full fresh ingestion
+  pnpm es:ingest-live -- --all --incremental    # Resume interrupted run
+  pnpm es:ingest-live -- --all --dry-run        # Preview what would be ingested
 ```
 
 ---
@@ -289,7 +295,7 @@ pnpm test:smoke
 ```bash
 git pull
 pnpm build
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest-live -- --subject maths --key-stage ks4
 ```
 
 ### "ELSER query returns 0 hits"
@@ -312,7 +318,7 @@ pnpm es:ingest-live -- --subject maths --keystage ks4
 # Enable SDK caching to reduce API calls
 pnpm redis:up
 export SDK_CACHE_ENABLED=true
-pnpm es:ingest-live -- --subject maths --keystage ks4
+pnpm es:ingest-live -- --subject maths --key-stage ks4
 ```
 
 ### "Missing environment variables"

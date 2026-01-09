@@ -275,24 +275,24 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --dry-run
 # Full ingestion (incremental - skips existing)
 pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads
 
-# Force ingestion (overwrites existing documents)
-pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force
+# Incremental ingestion (skip existing documents - for resuming)
+pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --incremental
 ```
 
 ### Flags
 
-| Flag                 | Description                                                     |
-| -------------------- | --------------------------------------------------------------- |
-| `--bulk`             | Enable bulk mode (reads from files instead of API)              |
-| `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)   |
-| `--dry-run`          | Preview operations without executing                            |
-| `--force`            | Use `index` action (upsert) instead of `create` (skip existing) |
-| `--verbose`          | Detailed logging                                                |
-| `--subject <slug>`   | Filter to specific subject(s)                                   |
-| `--keystage <slug>`  | Filter to specific key stage(s)                                 |
-| `--max-retries <n>`  | Maximum document-level retry attempts (default: 4)              |
-| `--retry-delay <ms>` | Base delay for exponential backoff (default: 5000)              |
-| `--no-retry`         | Disable document-level retry (fail fast)                        |
+| Flag                 | Description                                                      |
+| -------------------- | ---------------------------------------------------------------- |
+| `--bulk`             | Enable bulk mode (reads from files instead of API)               |
+| `--bulk-dir <path>`  | Path to bulk download directory (default: `./bulk-downloads`)    |
+| `--dry-run`          | Preview operations without executing                             |
+| `--incremental`      | Use `create` action (skip existing) instead of default overwrite |
+| `--verbose`          | Detailed logging                                                 |
+| `--subject <slug>`   | Filter to specific subject(s)                                    |
+| `--key-stage <slug>` | Filter to specific key stage(s)                                  |
+| `--max-retries <n>`  | Maximum document-level retry attempts (default: 4)               |
+| `--retry-delay <ms>` | Base delay for exponential backoff (default: 5000)               |
+| `--no-retry`         | Disable document-level retry (fail fast)                         |
 
 ### Refresh Bulk Data
 

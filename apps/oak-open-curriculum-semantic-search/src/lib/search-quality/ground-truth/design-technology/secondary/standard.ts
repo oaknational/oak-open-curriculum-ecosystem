@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'materials properties DT',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for materials unit.',
     expectedRelevance: {
@@ -28,8 +28,8 @@ export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'ergonomics design',
-    category: 'naturalistic',
+    query: 'ergonomics design human factors',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for ergonomics unit.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'sustainable design circular economy',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for sustainability unit.',
     expectedRelevance: {
@@ -51,7 +51,7 @@ export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'batch production manufacturing',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for manufacturing.',
     expectedRelevance: {
@@ -62,7 +62,7 @@ export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'wearable technology micro:bit',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for wearables unit.',
     expectedRelevance: {
@@ -73,7 +73,7 @@ export const DT_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'technical drawing orthographic',
-    category: 'naturalistic',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for communication unit.',
     expectedRelevance: {

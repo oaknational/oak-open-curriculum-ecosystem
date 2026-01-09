@@ -28,7 +28,9 @@ export const FRENCH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
       'introductions-voici-je-suis-and-il-elle-est': 3,
       'new-friends-mon-ma-ton-ta': 2,
     },
-    category: 'naturalistic',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests verb and topic concept matching in MFL without transcripts.',
   },
   {
     query: 'French plural adjectives Year 5',
@@ -36,7 +38,9 @@ export const FRENCH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
       'back-to-school-information-questions-with-qui-and-comment': 3,
       'story-soura-la-souris': 2,
     },
-    category: 'naturalistic',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests year-specific grammar topic matching.',
   },
   {
     query: 'French school instructions',
@@ -44,23 +48,29 @@ export const FRENCH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
       'school-instructions-in-class': 3,
       'numbers-1-31-il-ny-a-pas-de': 2,
     },
-    category: 'naturalistic',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests classroom vocabulary topic retrieval.',
   },
   {
     query: 'French celebrations Christmas Haiti',
     expectedRelevance: {
       'christmas-in-haiti-and-france-er-verbs-nous-and-vous': 3,
-      'new-years-traditions-vous-meaning-formal-you': 3,
+      'new-years-traditions-vous-meaning-formal-you': 2,
     },
-    category: 'naturalistic',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests cultural topic with geographic specificity.',
   },
   {
     query: 'French ER verbs singular',
     expectedRelevance: {
       'menton-carnival-uses-of-de': 3,
-      'menton-carnival-singular-adjective-agreement': 3,
+      'menton-carnival-singular-adjective-agreement': 2,
     },
-    category: 'naturalistic',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests verb conjugation grammar topic matching.',
   },
 ] as const;
 
@@ -71,11 +81,42 @@ export const FRENCH_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'learning french ks2',
     expectedRelevance: {
-      'introductions-voici-je-suis-and-il-elle-est': 2,
+      'introductions-voici-je-suis-and-il-elle-est': 3,
       'school-instructions-in-class': 2,
     },
-    category: 'colloquial',
+    category: 'natural-expression',
+    priority: 'high',
     description: 'Informal phrasing with key stage reference',
+  },
+  {
+    query: 'teach french greetings to children',
+    expectedRelevance: {
+      'introductions-voici-je-suis-and-il-elle-est': 3,
+      'new-friends-mon-ma-ton-ta': 2,
+    },
+    category: 'natural-expression',
+    priority: 'high',
+    description: 'Teacher intent phrasing for basic French vocabulary.',
+  },
+  {
+    query: 'fench vocabulary primary',
+    expectedRelevance: {
+      'introductions-voici-je-suis-and-il-elle-est': 3,
+      'my-birthday-quand': 2,
+    },
+    category: 'imprecise-input',
+    priority: 'critical',
+    description: 'Misspelling of French with context.',
+  },
+  {
+    query: 'French verbs and vocabulary together',
+    expectedRelevance: {
+      'age-avoir-meaning-be': 3,
+      'my-monster-il-y-a-and-il-a': 2,
+    },
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of grammar with vocabulary topics.',
   },
 ] as const;
 

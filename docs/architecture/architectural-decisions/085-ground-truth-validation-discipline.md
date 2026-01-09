@@ -1,9 +1,37 @@
 # ADR-085: Ground Truth Validation Discipline
 
 **Status**: ACCEPTED  
-**Date**: 2025-12-24  
+**Date**: 2025-12-24 (Updated: 2026-01-09)  
 **Decision Makers**: Development Team  
-**Related**: [ADR-082](082-fundamentals-first-search-strategy.md), [ADR-081](081-search-approach-evaluation-framework.md)
+**Related**: [ADR-082](082-fundamentals-first-search-strategy.md), [ADR-081](081-search-approach-evaluation-framework.md), [ADR-098](098-ground-truth-registry.md)
+
+## Critical Understanding: Three-Stage Validation
+
+Ground truths require **three distinct validation stages**:
+
+| Stage                                 | What It Proves       | What It Does NOT Prove |
+| ------------------------------------- | -------------------- | ---------------------- |
+| **1. Type-Check**                     | Data integrity       | Semantic correctness   |
+| **2. Runtime Validation (16 checks)** | Semantic rules       | Production readiness   |
+| **3. Qualitative (manual review)**    | Production readiness | —                      |
+
+### Stage 1: Type-Check (TypeScript Enforced)
+
+The `GroundTruthQuery` type enforces required fields at compile time:
+
+- `category` — REQUIRED
+- `priority` — REQUIRED
+- `description` — REQUIRED
+
+Missing fields cause `pnpm type-check` to fail. This is **data integrity enforcement**.
+
+### Stage 2: Runtime Validation (16 checks)
+
+Semantic rules that TypeScript cannot enforce (slug existence, category coverage, etc.).
+
+**Passing type-check AND runtime validation means ground truths meet a MINIMUM QUALITY THRESHOLD.** This makes them _worthy of investment in manual review_. It does **NOT** mean they are production-ready.
+
+**Ground truths are NOT production-ready until ALL THREE stages are complete.**
 
 ## Context
 
@@ -37,111 +65,277 @@ How do we ensure ground truth data is valid and prevent future experiments from 
 
 ## Decision
 
-**All ground truth data MUST be validated against the live Oak Curriculum API before use, with a dedicated validation script preventing invalid slugs from entering the codebase.**
+**All ground truth data MUST be validated through a two-stage process: programmatic bulk data validation followed by structured agent review.**
 
-### 1. Mandatory Validation Script
+### 1. Type Generation and Programmatic Validation
 
-Every ground truth file must be covered by `evaluation/validation/validate-ground-truth.ts`:
+Ground truth validation uses generated types from bulk data:
 
 ```bash
 # Run from apps/oak-open-curriculum-semantic-search/
-pnpm tsx evaluation/validation/validate-ground-truth.ts
+
+# Generate types from bulk data (after bulk:download)
+pnpm ground-truth:generate
+
+# Run 17 validation checks (all must pass)
+pnpm ground-truth:validate
 ```
 
-The validation script:
+**Type generation** (`ground-truths/generation/`):
 
-- Loads environment variables from `.env` and `.env.local` directly
-- **Fails fast** if `OAK_API_KEY` is missing (no silent skipping)
-- Uses Zod schemas for proper type discipline when validating API responses
-- Validates lessons, units, and sequences against the live Oak API
+- `bulk-data-parser.ts` — Parse bulk JSON with Result pattern
+- `type-emitter.ts` — Generate branded `AnyLessonSlug` type + `SLUG_TO_SUBJECT_MAP`
+- `schema-emitter.ts` — Generate Zod schemas for runtime validation
+
+**TypeScript-enforced fields** (Stage 1):
+
+| Field         | Requirement                            |
+| ------------- | -------------------------------------- |
+| `category`    | REQUIRED — TypeScript error if missing |
+| `priority`    | REQUIRED — TypeScript error if missing |
+| `description` | REQUIRED — TypeScript error if missing |
+
+**Runtime validation checks** (Stage 2, 16 total, all blocking):
+
+| #   | Check                | Error Category               | Description                                                   |
+| --- | -------------------- | ---------------------------- | ------------------------------------------------------------- |
+| 1   | Slug existence       | `invalid-slug`               | All slugs must exist in the 12,320 valid slugs from bulk data |
+| 2   | Non-empty relevance  | `empty-relevance`            | expectedRelevance must have at least one slug                 |
+| 3   | Valid scores         | `invalid-score`              | Relevance scores must be 1, 2, or 3                           |
+| 4   | No duplicate queries | `duplicate-query`            | Each query must be unique within an entry                     |
+| 5   | No duplicate slugs   | `duplicate-slug-in-query`    | No repeated slugs within a single query                       |
+| 6   | Query length         | `short-query` / `long-query` | 3-10 words (single words only for imprecise-input)            |
+| 7   | Slug format          | `slug-format`                | Slugs must be lowercase with hyphens                          |
+| 8   | Cross-subject        | `cross-subject`              | Slugs must belong to the entry's subject                      |
+| 9   | Phase consistency    | `phase-mismatch`             | keyStage must match primary/secondary phase                   |
+| 10  | KS4 consistency      | `ks4-in-primary`             | KS4 queries cannot be in primary entries                      |
+| 11  | Minimum slugs        | `single-slug`                | At least 2 expected results for ranking tests                 |
+| 12  | Score variety        | `uniform-scores`             | 2+ slug queries must have varied scores                       |
+| 13  | Highly relevant      | `no-highly-relevant`         | At least one slug must have score=3                           |
+| 14  | Maximum slugs        | `too-many-slugs`             | Maximum 5 expected results (more = query too broad)           |
+| 15  | Zod schema           | `schema-validation`          | Must pass Zod schema validation                               |
+| 16  | Category coverage    | `category-coverage`          | Entry must have minimum queries per required category         |
+
+**The script**:
+
+- Validates all slugs against generated `ALL_LESSON_SLUGS` Set
+- Checks cross-subject contamination via `SLUG_TO_SUBJECT_MAP`
+- Fails fast with specific error messages
+- Returns non-zero exit code on any validation failure
+- **Must pass before any benchmark run or merge**
 
 ### 2. Ground Truth Creation Process
+
+See `GROUND-TRUTH-PROCESS.md` for the complete step-by-step process. Summary:
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    GROUND TRUTH CREATION PROCESS                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  STEP 1: IDENTIFY QUERY SCENARIOS                                            │
+│  STEP 1-4: QUERY DESIGN                                                      │
+│  ──────────────────────                                                      │
+│  • Identify subject/phase                                                    │
+│  • Download bulk data                                                        │
+│  • Explore available lessons                                                 │
+│  • Create realistic query                                                    │
+│                                                                              │
+│  STEP 5-9: ENTRY CREATION                                                    │
+│  ────────────────────────                                                    │
+│  • Choose query category (precise-topic, natural-expression, etc.)           │
+│  • Assign relevance scores (3/2/1)                                           │
+│  • Write entry with all recommended fields                                   │
+│  • Add to index and registry                                                 │
+│                                                                              │
+│  STEP 10: PROGRAMMATIC VALIDATION                                            │
+│  ─────────────────────────────────                                           │
+│  • pnpm ground-truth:validate                                                │
+│  • Script MUST pass before proceeding                                        │
+│                                                                              │
+│  STEP 11: AGENT REVIEW (STRUCTURED)                                          │
+│  ───────────────────────────────────                                         │
+│  • Query realism check                                                       │
+│  • Relevance score verification via MCP                                      │
+│  • Completeness check for missed lessons                                     │
+│  • Category and priority validation                                          │
+│  • Sign-off with documentation                                               │
+│                                                                              │
+│  STEP 12-13: BENCHMARK AND COMMIT                                            │
 │  ────────────────────────────────                                            │
-│  • Define query text and category (synonym, misspelling, etc.)               │
-│  • Document expected user intent                                             │
-│                                                                              │
-│  STEP 2: SEARCH LIVE API FOR CANDIDATE SLUGS                                 │
-│  ───────────────────────────────────────────                                 │
-│  • NEVER guess slugs based on expected naming conventions                    │
-│  • Use Oak Curriculum API or bulk download to find actual slugs              │
-│  • Verify each slug exists: GET /api/v1/lessons/{slug}                       │
-│                                                                              │
-│  STEP 3: ASSIGN RELEVANCE SCORES                                             │
-│  ───────────────────────────────                                             │
-│  • Score 3 (highly relevant): Perfect match for query intent                 │
-│  • Score 2 (relevant): Good match, acceptable result                         │
-│  • Score 1 (marginally relevant): Acceptable but not ideal                   │
-│                                                                              │
-│  STEP 4: ADD TO GROUND TRUTH FILE                                            │
-│  ───────────────────────────────                                             │
-│  • Add query to appropriate file (hard-queries.ts, etc.)                     │
-│  • Include category, priority, and description                               │
-│                                                                              │
-│  STEP 5: RUN VALIDATION SCRIPT                                               │
-│  ──────────────────────────────                                              │
-│  • pnpm tsx evaluation/validation/validate-ground-truth.ts                   │
-│  • Script MUST pass before merge                                             │
-│  • CI rejects PRs with invalid slugs                                         │
+│  • Run benchmark to measure metrics                                          │
+│  • Update baselines.json                                                     │
+│  • Commit changes                                                            │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3. Validation Requirements
+### 3. Agent Review Checklist
 
-| Requirement                  | Implementation           | Enforcement             |
-| ---------------------------- | ------------------------ | ----------------------- |
-| All slugs exist in API       | Validation script        | CI blocks invalid slugs |
-| No duplicate queries         | TypeScript type checking | Compile-time            |
-| Valid relevance scores (1-3) | Zod schema               | Runtime validation      |
-| Category and priority set    | TypeScript types         | Compile-time            |
+After programmatic validation passes, the agent MUST verify each query:
 
-### 4. When to Re-Validate
+| Check              | Description                    | Method                        |
+| ------------------ | ------------------------------ | ----------------------------- |
+| Query realism      | Would a teacher type this?     | Human judgment                |
+| Relevance accuracy | Do scores match content?       | `get-lessons-summary` via MCP |
+| Completeness       | Any missed relevant lessons?   | Search bulk data              |
+| Category accuracy  | Is the category correct?       | Compare to definitions        |
+| Priority accuracy  | Is importance rated correctly? | Compare to usage patterns     |
+
+### 4. Validation Requirements
+
+All checks are **blocking errors** — validation fails if any check fails.
+
+| Requirement                  | Implementation         | Enforcement        |
+| ---------------------------- | ---------------------- | ------------------ |
+| All slugs exist in bulk data | `ALL_LESSON_SLUGS` Set | Runtime validation |
+| Cross-subject contamination  | `SLUG_TO_SUBJECT_MAP`  | Runtime validation |
+| No duplicate queries         | Validation script      | Runtime validation |
+| Valid relevance scores (1-3) | Zod schema             | Runtime validation |
+| Non-empty expectedRelevance  | Validation script      | Runtime validation |
+| Query length (3-10 words)    | Validation script      | Runtime validation |
+| Category required            | Validation script      | Runtime validation |
+| **Priority required**        | Validation script      | Runtime validation |
+| **Score variety (2+ slugs)** | Validation script      | Runtime validation |
+| At least one score=3         | Validation script      | Runtime validation |
+| At least 2 expected results  | Validation script      | Runtime validation |
+
+### 5. When to Re-Validate
 
 Ground truth must be re-validated when:
 
-1. **Curriculum changes** — Oak updates lesson content or naming
+1. **Bulk data updated** — After downloading fresh bulk data
 2. **Index rebuilds** — After re-ingestion from upstream API
-3. **Before major experiments** — Any experiment that will inform architectural decisions
+3. **Before major experiments** — Any experiment informing architectural decisions
 4. **Quarterly audit** — Proactive check for curriculum drift
 
-### 5. Audit Capability
+### 6. Ground Truth Design Rules
 
-The `evaluation/audit/audit-ground-truth.ts` script provides:
+These rules ensure ground truths test **ranking quality**, not just topic presence.
 
-- Full semantic audit (slug existence AND content relevance)
-- Detailed reports identifying invalid or outdated slugs
-- Suggestions for corrections based on API search
+#### Query Design
+
+| Rule        | Requirement                       | Rationale                                                |
+| ----------- | --------------------------------- | -------------------------------------------------------- |
+| Length      | 3-7 words                         | Short enough to be realistic, long enough to be specific |
+| Specificity | Only 2-4 lessons highly relevant  | Tests ranking, not topic matching                        |
+| Realism     | Would a teacher type this?        | Ground truths must reflect real usage                    |
+| Single-word | Only for imprecise-input category | Single words are too ambiguous for ranking tests         |
+
+#### Expected Results
+
+| Rule             | Requirement            | Rationale                                        |
+| ---------------- | ---------------------- | ------------------------------------------------ |
+| Maximum slugs    | 5 per query            | More indicates query is too broad                |
+| Score=3 required | At least one           | Ensures we're testing for a clear "right answer" |
+| Graded relevance | Mix of 3s, 2s, and 1s  | Tests ranking quality, not just presence         |
+| Verified slugs   | Each against bulk data | Prevents invalid ground truth                    |
+
+#### Anti-Patterns to Avoid
+
+| Anti-Pattern    | Example                        | Problem                              |
+| --------------- | ------------------------------ | ------------------------------------ |
+| Topic matching  | "trigonometry" with 17 results | Tests presence, not ranking          |
+| All same score  | 5 slugs all score=3            | Cannot test ranking quality          |
+| Too broad       | "maths"                        | Every maths lesson is "relevant"     |
+| No clear answer | All score=2                    | No target to measure success against |
+
+#### Review Checklist
+
+Before committing any ground truth:
+
+- [ ] Would a teacher actually type this query?
+- [ ] Does at least one lesson directly answer the query (score=3)?
+- [ ] Are other lessons appropriately scored (2 for related, 1 for tangential)?
+- [ ] Is the query specific enough to test ranking, not just topic presence?
+- [ ] Does the query have 3-7 words (or is imprecise-input category)?
+- [ ] Are there 5 or fewer expected slugs?
+
+### 7. Canonical Scenario Categories (MANDATORY)
+
+Ground truths form a **subject × phase × category matrix** that must have consistent coverage.
+
+#### The Validation Matrix
+
+```text
+Subject (16) × Phase (2) × Category (5) = Consistent Coverage
+```
+
+**Outcome-Oriented Framework (2026-01-09)**
+
+Categories are structured around **user outcomes** rather than technical challenges:
+
+| Category             | User Scenario                  | Behavior Proved             | Priority    | Required | Min |
+| -------------------- | ------------------------------ | --------------------------- | ----------- | -------- | --- |
+| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical    | **YES**  | 4+  |
+| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High        | **YES**  | 2+  |
+| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical    | **YES**  | 1+  |
+| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium      | **YES**  | 1+  |
+| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | Exploratory | No       | 0-1 |
+
+**Minimum per entry**: 8-10 queries covering all 4 required categories.
+
+**Enforcement**: Validation check 20 (`category-coverage`) enforces these minimums programmatically. Entries failing this check cannot pass Stage 1 validation.
+
+#### Category Migration (2026-01-09)
+
+Legacy categories have been migrated to outcome-oriented categories:
+
+| Legacy                    | New Category         | Notes        |
+| ------------------------- | -------------------- | ------------ |
+| `naturalistic` (formal)   | `precise-topic`      | ~313 queries |
+| `naturalistic` (informal) | `natural-expression` | ~28 queries  |
+| `synonym`                 | `natural-expression` | 31 queries   |
+| `colloquial`              | `natural-expression` | 24 queries   |
+| `misspelling`             | `imprecise-input`    | 34 queries   |
+| `multi-concept`           | `cross-topic`        | 16 queries   |
+| `intent-based`            | `pedagogical-intent` | 2 queries    |
+
+Legacy categories are still accepted for backward compatibility but deprecated.
+
+#### Consistency Requirement
+
+**ALL subject-phase pairings must have the SAME category coverage.** No entry may omit a required category.
+
+This ensures:
+
+- Benchmarks are comparable across subjects and phases
+- Category-level MRR analysis is meaningful
+- Gaps in search capability are detectable across the full curriculum
+
+#### Category Coverage Checklist
+
+For **EACH** subject-phase entry, verify:
+
+- [ ] Contains 4+ `precise-topic` queries
+- [ ] Contains 2+ `natural-expression` queries
+- [ ] Contains 1+ `imprecise-input` query
+- [ ] Contains 1+ `cross-topic` query
+- [ ] Contains 0-1 `pedagogical-intent` query (optional)
+
+**If any required category is missing → Add queries before the entry is considered complete.**
 
 ## Rationale
 
-### Why Automated Validation?
+### Why Bulk Data Validation (Not Live API)?
 
-1. **Human error is inevitable** — 63 slugs were invalid despite careful review
-2. **Curriculum changes** — Oak updates lesson content regularly
-3. **Experiment integrity** — Invalid ground truth corrupts all downstream decisions
-4. **Cost of errors** — The semantic reranking rejection may have been wrong
+1. **Speed** — Bulk data validation is instant; API calls take 10-30 seconds
+2. **Offline capability** — Can validate without network access
+3. **Consistency** — Validates against same data as ES index
+4. **No rate limits** — Can validate hundreds of slugs instantly
 
-### Why a Validation Script (Not a Test)?
+### Why Agent Review After Programmatic Validation?
 
-Ground truth validation requires network access to the Oak API:
+Programmatic validation confirms slugs exist but cannot verify:
 
-- Unit tests cannot verify slug existence
-- Mocking would defeat the purpose (testing against fake data)
-- Using `it.skipIf` for missing API keys led to silent failures (see "No Skipped Tests" rule)
+- Query is realistic (subjective)
+- Relevance scores are accurate (requires content understanding)
+- All relevant lessons are included (requires curriculum knowledge)
+- Category matches query characteristics (semantic judgment)
 
-A dedicated validation script:
+The two-stage process combines:
 
-- Loads `.env` directly (tests don't load environment variables)
-- **Fails fast** with helpful error messages if `OAK_API_KEY` is missing
-- Never silently skips — if it runs, it validates everything
-- Takes ~10-30 seconds (acceptable for validation)
+- **Programmatic**: Fast, deterministic, catches obvious errors
+- **Agent review**: Thorough, semantic, catches subtle issues
 
 ## Consequences
 
@@ -151,47 +345,50 @@ A dedicated validation script:
 2. **Early detection** — Invalid slugs caught before experiments run
 3. **Curriculum tracking** — Forced awareness of upstream changes
 4. **Confidence in decisions** — Tier advancement and AI decisions based on real data
+5. **Fast validation** — Bulk data validation is instant
 
 ### Negative
 
-1. **CI dependency on Oak API** — Requires API key in CI environment
-2. **Slower validation** — Validation script takes longer than unit tests
+1. **Bulk data dependency** — Must keep bulk data files updated
+2. **Agent review time** — Structured review takes 5-10 minutes per subject/phase
 3. **Maintenance burden** — Must update ground truth when curriculum changes
 
 ### Mitigations
 
-- API key securely stored in CI secrets
-- Validation script run only on PR merge, not every commit
+- Bulk data download automated in process
+- Agent review checklist is structured and efficient
 - Quarterly audit schedule prevents drift accumulation
 
 ## Implementation
 
-### Files Created
+### Files
 
-| File                                             | Purpose                                        |
-| ------------------------------------------------ | ---------------------------------------------- |
-| `evaluation/validation/validate-ground-truth.ts` | Validates all slugs exist                      |
-| `evaluation/validation/lib/`                     | Validation helpers (Zod schemas, API checkers) |
-| `evaluation/audit/audit-ground-truth.ts`         | Full semantic audit script                     |
-| `ground-truth-corrections.md`                    | Documents the 63 corrections                   |
+| File                                                          | Purpose                                        |
+| ------------------------------------------------------------- | ---------------------------------------------- |
+| `ground-truths/generation/bulk-data-parser.ts`                | Parse bulk JSON with Result pattern            |
+| `ground-truths/generation/type-emitter.ts`                    | Generate branded slug types + subject map      |
+| `ground-truths/generation/schema-emitter.ts`                  | Generate Zod validation schemas                |
+| `ground-truths/generation/generate-ground-truth-types.ts`     | Orchestrates generation                        |
+| `ground-truths/generated/lesson-slugs-by-subject.ts`          | Generated: 12,320 slugs + subject map          |
+| `ground-truths/generated/ground-truth-schemas.ts`             | Generated: Zod schemas                         |
+| `evaluation/validation/validate-ground-truth.ts`              | 17 validation checks (all blocking)            |
+| `src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md` | Complete creation process                      |
+| `evaluation/baselines/baselines.json`                         | Baseline metrics (separate from ground truths) |
 
-### Files Updated
+### Commands
 
-| File                                  | Changes            |
-| ------------------------------------- | ------------------ |
-| `hard-queries.ts`                     | 15 slugs corrected |
-| `diagnostic-synonym-queries.ts`       | 9 slugs corrected  |
-| `diagnostic-multi-concept-queries.ts` | 9 slugs corrected  |
+```bash
+# Download bulk data (all subjects at once)
+pnpm bulk:download
 
-### CI Configuration
+# Generate types from bulk data
+pnpm ground-truth:generate
 
-```yaml
-# In CI workflow (example)
-- name: Validate Ground Truth
-  env:
-    OAK_API_KEY: ${{ secrets.OAK_API_KEY }}
-  working-directory: apps/oak-open-curriculum-semantic-search
-  run: pnpm tsx evaluation/validation/validate-ground-truth.ts
+# Validate all ground truths (17 checks, all must pass)
+pnpm ground-truth:validate
+
+# Run benchmark
+pnpm benchmark --subject {subject} --phase {phase} --verbose
 ```
 
 ## Historical Context
@@ -215,17 +412,18 @@ Common patterns of invalid slugs:
 
 ### Lessons Learned
 
-1. **Never assume slug naming** — Always verify against live API
+1. **Never assume slug naming** — Always verify against bulk data
 2. **Ground truth is critical infrastructure** — Treat it with same rigour as production code
 3. **Invalid data corrupts decisions** — One experiment rejection may have been wrong
-4. **Automated validation is essential** — Human review is insufficient
+4. **Two-stage validation is essential** — Programmatic + semantic review
 
 ## Related Documents
 
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md) — Strategy this validates
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics framework
-- [ground-truth-corrections.md](../../.agent/evaluations/ground-truth-corrections.md) — Full correction details
-- [EXPERIMENT-LOG.md](../../.agent/evaluations/EXPERIMENT-LOG.md) — Experiment history
+- [ADR-098: Ground Truth Registry](098-ground-truth-registry.md) — Registry structure
+- [GROUND-TRUTH-PROCESS.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step process
+- [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) — Metric definitions
 
 ## References
 

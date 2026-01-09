@@ -13,7 +13,7 @@ export const HARD_QUERIES_SECONDARY_RE: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach about different world religions year 8',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request for comparative religion.',
     expectedRelevance: {
@@ -25,7 +25,7 @@ export const HARD_QUERIES_SECONDARY_RE: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'buddism and the dhama',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common Buddhism/Dhamma misspellings.',
     expectedRelevance: {
@@ -38,7 +38,7 @@ export const HARD_QUERIES_SECONDARY_RE: readonly GroundTruthQuery[] = [
   // SYNONYM
   {
     query: 'right and wrong philosophy',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Right/wrong = ethics.',
     expectedRelevance: {

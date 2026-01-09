@@ -48,18 +48,19 @@ Use the npm scripts defined in `package.json`:
 
 ```bash
 # Ingestion
-pnpm ingest:all        # Bulk ingest all subject/keystage combinations
-pnpm ingest:progress   # Monitor ingestion progress
-pnpm ingest:verify     # Validate ingested data
+pnpm es:ingest-live -- --all     # Ingest all subjects/keystages
+pnpm es:ingest-live -- --all -i  # Resume (skip existing documents)
+pnpm ingest:verify               # Validate ingested data
+pnpm es:status                   # Check index counts
 
 # Observability
-pnpm zero-hit:purge    # Clean up zero-hit analytics events
+pnpm zero-hit:purge              # Clean up zero-hit analytics events
 
 # Infrastructure
-pnpm elastic:alias-swap  # Swap ES index aliases (blue/green deployment)
+pnpm elastic:alias-swap          # Swap ES index aliases (blue/green deployment)
 
 # Development
-pnpm sandbox:ingest    # Ingest fixture data for testing
+pnpm sandbox:ingest              # Ingest fixture data for testing
 ```
 
 ## Adding New Operations Scripts

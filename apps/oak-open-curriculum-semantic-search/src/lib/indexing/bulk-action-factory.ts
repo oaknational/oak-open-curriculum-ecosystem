@@ -21,7 +21,7 @@
  * Use this mode when:
  * - Schema has changed and all documents need refreshing
  * - Data needs to be completely replaced
- * - Running with `--force` CLI flag
+ * - Default CLI behavior (overwrite mode)
  *
  * @example Setting ingestion mode at startup
  * ```typescript

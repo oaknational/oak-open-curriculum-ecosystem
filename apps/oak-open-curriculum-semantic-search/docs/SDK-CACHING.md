@@ -111,11 +111,11 @@ This is critical for achieving true 100% cache hit rates:
 
 ```bash
 # First run: 127 hits (from prior runs), 99 misses (new fetches + 404s)
-pnpm es:ingest-live --subject history --keystage ks2 --dry-run
+pnpm es:ingest-live --subject history --key-stage ks2 --dry-run
 # Cache: 127 hits, 99 misses
 
 # Second run: 100% cache hits (including cached 404 fallbacks)
-pnpm es:ingest-live --subject history --keystage ks2 --dry-run
+pnpm es:ingest-live --subject history --key-stage ks2 --dry-run
 # Cache: 226 hits, 0 misses
 ```
 

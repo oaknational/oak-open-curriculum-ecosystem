@@ -1,31 +1,19 @@
 #!/usr/bin/env npx tsx
 /**
- * CLI argument parsing for live data ingestion.
+ * CLI argument parsing for live data ingestion using Commander.
  *
  * @remarks
- * Handles parsing of subject, keystage, and flag arguments with validation.
+ * Handles parsing of subject, key-stage, and flag arguments with validation.
  * Subject and key stage values are derived from the OpenAPI schema via the SDK.
- * Use --all to ingest all subjects, or --subject to specify individual subjects.
+ * Unknown flags trigger help output and exit.
  *
  * @module ingest-cli-args
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
-import { KEY_STAGES, SUBJECTS } from '@oaknational/oak-curriculum-sdk';
-import {
-  processValueArg,
-  processBulkDirArg,
-  processMaxRetriesArg,
-  processRetryDelayArg,
-} from './ingest-cli-processors.js';
-
-// Re-export help functions
-export { printHelp } from './ingest-cli-help.js';
-
-/** Available key stages and subjects from schema. */
-const ALL_KEY_STAGES = KEY_STAGES;
-const ALL_SUBJECTS = SUBJECTS;
+import { createProgram } from './ingest-cli-program.js';
+import { ALL_KEY_STAGES, resolveSubjects, validateBulkMode } from './ingest-cli-validators.js';
 
 /** Parsed CLI arguments for ingestion. */
 export interface CliArgs {
@@ -38,7 +26,7 @@ export interface CliArgs {
   readonly clearCache: boolean;
   readonly all: boolean;
   readonly bypassCache: boolean;
-  readonly force: boolean;
+  readonly incremental: boolean;
   readonly ignoreCached404: boolean;
   readonly bulk: boolean;
   readonly bulkDir: string | undefined;
@@ -47,191 +35,117 @@ export interface CliArgs {
   readonly noRetry: boolean;
 }
 
-/** Flag container for CLI argument parsing. */
-interface FlagContainer {
-  dryRun: boolean;
-  verbose: boolean;
-  help: boolean;
-  clearCache: boolean;
-  all: boolean;
-  bypassCache: boolean;
-  force: boolean;
-  ignoreCached404: boolean;
-  bulk: boolean;
-  noRetry: boolean;
+/** Commander parsed options interface. */
+interface ParsedOptions {
+  readonly subject: SearchSubjectSlug[];
+  readonly all?: boolean;
+  readonly bulk?: boolean;
+  readonly bulkDir?: string;
+  readonly keyStage: KeyStage[];
+  readonly index: SearchIndexKind[];
+  readonly dryRun?: boolean;
+  readonly incremental?: boolean;
+  readonly clearCache?: boolean;
+  readonly bypassCache?: boolean;
+  readonly ignoreCached404?: boolean;
+  readonly verbose?: boolean;
+  readonly maxRetries?: number;
+  readonly retryDelay?: number;
+  readonly retry: boolean;
 }
 
-/** Flag names that can be set via CLI arguments. */
-type FlagName = keyof FlagContainer;
-
-/** Mapping of CLI arguments to flag names. */
-const FLAG_ARG_MAP: ReadonlyMap<string, FlagName> = new Map([
-  ['--help', 'help'],
-  ['-h', 'help'],
-  ['--dry-run', 'dryRun'],
-  ['--verbose', 'verbose'],
-  ['-v', 'verbose'],
-  ['--clear-cache', 'clearCache'],
-  ['--all', 'all'],
-  ['--bypass-cache', 'bypassCache'],
-  ['--force', 'force'],
-  ['-f', 'force'],
-  ['--ignore-cached-404', 'ignoreCached404'],
-  ['--bulk', 'bulk'],
-  ['--no-retry', 'noRetry'],
-]);
-
-/** Process a single flag argument. */
-function processFlag(arg: string, flags: FlagContainer): boolean {
-  const flagName = FLAG_ARG_MAP.get(arg);
-  if (flagName !== undefined) {
-    flags[flagName] = true;
-    return true;
-  }
-  return false;
-}
-
-/** Resolve subjects based on --all flag and explicit --subject args. */
-function resolveSubjects(
-  explicitSubjects: readonly SearchSubjectSlug[],
-  allFlag: boolean,
-): SearchSubjectSlug[] {
-  if (allFlag && explicitSubjects.length > 0) {
-    throw new Error('--all cannot be combined with --subject');
-  }
-  if (allFlag) {
-    return [...ALL_SUBJECTS];
-  }
-  if (explicitSubjects.length === 0) {
-    throw new Error('No subjects specified. Use --subject <slug> or --all for all subjects.');
-  }
-  return [...explicitSubjects];
-}
-
-/** Initial state for flag container. */
-function createInitialFlags(): FlagContainer {
+/**
+ * Build default CliArgs for help mode.
+ */
+function buildHelpArgs(): CliArgs {
   return {
+    subjects: [],
+    keyStages: [...ALL_KEY_STAGES],
+    indexes: [],
     dryRun: false,
     verbose: false,
-    help: false,
+    help: true,
     clearCache: false,
     all: false,
     bypassCache: false,
-    force: false,
+    incremental: false,
     ignoreCached404: false,
     bulk: false,
+    bulkDir: undefined,
+    maxRetries: undefined,
+    retryDelay: undefined,
     noRetry: false,
   };
 }
 
-/** Process all arguments in a single pass. */
-function processAllArgs(
-  args: readonly string[],
-  subjects: SearchSubjectSlug[],
-  keyStages: KeyStage[],
-  indexes: SearchIndexKind[],
-  bulkDirRef: { value: string | undefined },
-  maxRetriesRef: { value: number | undefined },
-  retryDelayRef: { value: number | undefined },
-  flags: FlagContainer,
-): void {
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    const nextArg = args[i + 1];
-
-    if (processFlag(arg, flags)) {
-      continue;
-    }
-
-    const consumed =
-      processBulkDirArg(arg, nextArg, bulkDirRef) ||
-      processMaxRetriesArg(arg, nextArg, maxRetriesRef) ||
-      processRetryDelayArg(arg, nextArg, retryDelayRef) ||
-      processValueArg(arg, nextArg, subjects, keyStages, indexes);
-
-    if (consumed > 0) {
-      i += consumed;
-    }
-  }
+/**
+ * Resolve key stages from options.
+ */
+function resolveKeyStages(keyStageOpts: readonly KeyStage[]): KeyStage[] {
+  return keyStageOpts.length > 0 ? [...keyStageOpts] : [...ALL_KEY_STAGES];
 }
 
-/** Build CliArgs from parsed components. */
-function buildCliArgs(
-  subjects: SearchSubjectSlug[],
-  keyStages: KeyStage[],
-  indexes: SearchIndexKind[],
-  bulkDirRef: { value: string | undefined },
-  maxRetriesRef: { value: number | undefined },
-  retryDelayRef: { value: number | undefined },
-  flags: FlagContainer,
-): CliArgs {
-  // Skip validation for help mode
-  if (flags.help) {
-    return {
-      subjects: [],
-      keyStages: [...ALL_KEY_STAGES],
-      indexes,
-      bulkDir: bulkDirRef.value,
-      maxRetries: maxRetriesRef.value,
-      retryDelay: retryDelayRef.value,
-      ...flags,
-    };
-  }
+/**
+ * Extract boolean flag with default false.
+ */
+function boolFlag(value: boolean | undefined): boolean {
+  return value ?? false;
+}
 
-  // Validate bulk mode requirements
-  if (flags.bulk && bulkDirRef.value === undefined) {
-    throw new Error('--bulk requires --bulk-dir <path> to specify the bulk download directory');
-  }
+/**
+ * Build CliArgs from parsed options.
+ */
+function buildCliArgs(opts: ParsedOptions): CliArgs {
+  const bulkMode = boolFlag(opts.bulk);
+  const allFlag = boolFlag(opts.all);
+
+  validateBulkMode(bulkMode, opts.bulkDir);
 
   return {
-    subjects: flags.bulk ? [] : resolveSubjects(subjects, flags.all),
-    keyStages: keyStages.length > 0 ? keyStages : [...ALL_KEY_STAGES],
-    indexes,
-    bulkDir: bulkDirRef.value,
-    maxRetries: maxRetriesRef.value,
-    retryDelay: retryDelayRef.value,
-    ...flags,
+    subjects: resolveSubjects(opts.subject, allFlag, bulkMode),
+    keyStages: resolveKeyStages(opts.keyStage),
+    indexes: opts.index,
+    dryRun: boolFlag(opts.dryRun),
+    verbose: boolFlag(opts.verbose),
+    help: false,
+    clearCache: boolFlag(opts.clearCache),
+    all: allFlag,
+    bypassCache: boolFlag(opts.bypassCache),
+    incremental: boolFlag(opts.incremental),
+    ignoreCached404: boolFlag(opts.ignoreCached404),
+    bulk: bulkMode,
+    bulkDir: opts.bulkDir,
+    maxRetries: opts.maxRetries,
+    retryDelay: opts.retryDelay,
+    noRetry: !opts.retry,
   };
 }
 
-/** Reference container for optional string value. */
-interface StringRef {
-  value: string | undefined;
-}
-
-/** Reference container for optional number value. */
-interface NumberRef {
-  value: number | undefined;
-}
-
-/** Parse CLI arguments into structured CliArgs. */
+/**
+ * Parse CLI arguments into structured CliArgs.
+ *
+ * @param args - Command line arguments (process.argv.slice(2))
+ * @returns Parsed and validated CLI arguments
+ */
 export function parseArgs(args: readonly string[]): CliArgs {
-  const subjects: SearchSubjectSlug[] = [];
-  const keyStages: KeyStage[] = [];
-  const indexes: SearchIndexKind[] = [];
-  const bulkDirRef: StringRef = { value: undefined };
-  const maxRetriesRef: NumberRef = { value: undefined };
-  const retryDelayRef: NumberRef = { value: undefined };
-  const flags = createInitialFlags();
+  // Check for help flag explicitly before parsing
+  if (args.includes('--help') || args.includes('-h')) {
+    const program = createProgram();
+    program.parse([...args], { from: 'user' });
+    return buildHelpArgs();
+  }
 
-  processAllArgs(
-    args,
-    subjects,
-    keyStages,
-    indexes,
-    bulkDirRef,
-    maxRetriesRef,
-    retryDelayRef,
-    flags,
-  );
+  const program = createProgram();
+  program.parse([...args], { from: 'user' });
 
-  return buildCliArgs(
-    subjects,
-    keyStages,
-    indexes,
-    bulkDirRef,
-    maxRetriesRef,
-    retryDelayRef,
-    flags,
-  );
+  const opts = program.opts<ParsedOptions>();
+  return buildCliArgs(opts);
+}
+
+/**
+ * Print help text (delegates to commander).
+ */
+export function printHelp(): void {
+  const program = createProgram();
+  program.outputHelp();
 }

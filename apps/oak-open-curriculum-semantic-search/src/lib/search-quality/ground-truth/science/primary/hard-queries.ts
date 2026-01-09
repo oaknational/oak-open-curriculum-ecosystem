@@ -18,7 +18,7 @@ export const HARD_QUERIES_PRIMARY_SCIENCE: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach year 5 about forces',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group specification.',
     expectedRelevance: {
@@ -31,7 +31,7 @@ export const HARD_QUERIES_PRIMARY_SCIENCE: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'evoloution and adaptashun',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common primary-level spelling errors.',
     expectedRelevance: {
@@ -44,7 +44,7 @@ export const HARD_QUERIES_PRIMARY_SCIENCE: readonly GroundTruthQuery[] = [
   // SYNONYM
   {
     query: 'mixing and unmixing substances',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Mixing = dissolving/separating. Tests vocabulary bridging.',
     expectedRelevance: {
@@ -57,7 +57,7 @@ export const HARD_QUERIES_PRIMARY_SCIENCE: readonly GroundTruthQuery[] = [
   // COLLOQUIAL
   {
     query: 'that Darwin bird lesson',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'medium',
     description: 'Informal reference to Darwin finches lesson.',
     expectedRelevance: {

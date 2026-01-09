@@ -19,6 +19,9 @@ import type { GroundTruthQuery } from '../../types';
 export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'Jekyll and Hyde duality',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Jekyll and Hyde duality content using curriculum terminology',
     expectedRelevance: {
       'chapter-10-henry-jekylls-full-statement-of-the-case': 3,
       'chapter-10-jekylls-confession': 3,
@@ -27,6 +30,10 @@ export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] =
   },
   {
     query: 'Jekyll and Hyde Victorian society',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of Jekyll and Hyde Victorian context content using curriculum terminology',
     expectedRelevance: {
       'chapter-1-the-story-of-the-door': 3,
       'chapter-1-mr-utterson': 3,
@@ -35,6 +42,10 @@ export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] =
   },
   {
     query: 'Jekyll and Hyde science and morality',
+    category: 'precise-topic',
+    priority: 'medium',
+    description:
+      'Tests retrieval of Jekyll and Hyde morality themes content using curriculum terminology',
     expectedRelevance: {
       'chapter-10-henry-jekylls-full-statement-of-the-case': 3,
       'chapter-10-jekylls-confession': 3,
@@ -43,6 +54,10 @@ export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] =
   },
   {
     query: 'A Christmas Carol Scrooge redemption',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of A Christmas Carol redemption content using curriculum terminology',
     expectedRelevance: {
       'scrooges-redemptive-journey': 3,
       'perfect-planning-for-an-essay-on-a-christmas-carol': 2,
@@ -51,6 +66,10 @@ export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] =
   },
   {
     query: 'A Christmas Carol Victorian values',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of A Christmas Carol Victorian context content using curriculum terminology',
     expectedRelevance: {
       'scrooge-as-a-very-victorian-character': 3,
       'stave-1-scrooge-the-miser': 3,
@@ -59,6 +78,9 @@ export const NINETEENTH_CENTURY_SECONDARY_QUERIES: readonly GroundTruthQuery[] =
   },
   {
     query: 'A Christmas Carol Marley ghost',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of Marley ghost content using curriculum terminology',
     expectedRelevance: {
       'stave-1-meeting-with-marleys-ghost': 3,
       'scrooges-redemptive-journey': 2,

@@ -16,7 +16,7 @@
  *
  * **Pre-requisites**:
  * - Re-index KS4 content with the new KS4 context builder
- * - `pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4`
+ * - `pnpm es:setup && pnpm es:ingest-live -- --subject maths --key-stage ks4`
  *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  * @see `.agent/plans/phase_3_feature_parity.plan.md`

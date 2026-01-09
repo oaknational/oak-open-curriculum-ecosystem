@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const PE_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'PE athletics runing and jumping',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspelling of "running".',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const PE_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'teach kids throwing sports',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Colloquial: "kids" → students, "throwing sports" → field events.',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const PE_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'getting fit exercise programme',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Synonym: "getting fit" → fitness, "exercise programme" → training.',
     expectedRelevance: {

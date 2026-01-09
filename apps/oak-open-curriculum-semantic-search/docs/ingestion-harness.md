@@ -60,7 +60,7 @@ Establish a repeatable ingestion workflow that exercises the full indexing pipel
 - Flags:
   - `--subject <slug>` – specify subjects to ingest (repeatable).
   - `--all` – ingest all 17 subjects from the OpenAPI schema.
-  - `--keystage <slug>` – specify key stages (defaults to all 4).
+  - `--key-stage <slug>` – specify key stages (defaults to all 4).
   - `--dry-run` – skip the Elasticsearch `_bulk` request while still producing summary logs.
   - `--verbose` – enable debug logging.
   - `--clear-cache` – clear Redis SDK response cache before ingestion.

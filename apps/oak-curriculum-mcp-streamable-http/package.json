@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist .turbo",
-    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
+    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
     "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
     "dev:observe:noauth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-noauth-$(date +%Y%m%d-%H%M%S).log",
     "widget:preview": "tsx scripts/widget-preview-server.ts",
@@ -32,9 +32,9 @@
     "test:ui": "playwright test"
   },
   "dependencies": {
-    "@clerk/express": "^1.7.57",
+    "@clerk/express": "^1.7.62",
     "@clerk/mcp-tools": "^0.3.1",
-    "@modelcontextprotocol/sdk": "^1.24.3",
+    "@modelcontextprotocol/sdk": "^1.25.2",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",

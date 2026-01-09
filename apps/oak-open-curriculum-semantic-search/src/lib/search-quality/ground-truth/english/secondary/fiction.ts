@@ -17,6 +17,9 @@ import type { GroundTruthQuery } from '../../types';
 export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'Sherlock Holmes character analysis',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Sherlock Holmes content using curriculum terminology',
     expectedRelevance: {
       'making-predictions-about-sherlock-holmes': 3,
       'becoming-a-detective-like-sherlock-holmes': 3,
@@ -25,6 +28,9 @@ export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Sherlock Holmes mystery writing',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of mystery writing content using curriculum terminology',
     expectedRelevance: {
       'collecting-evidence-in-the-adventure-of-the-speckled-band': 3,
       'solving-the-speckled-band-mystery': 3,
@@ -33,6 +39,10 @@ export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Lord of the Flies symbolism',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of Lord of the Flies symbolism content using curriculum terminology',
     expectedRelevance: {
       'goldings-use-of-symbolism-in-lord-of-the-flies': 3,
       'allusions-in-lord-of-the-flies': 3,
@@ -41,6 +51,9 @@ export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Lord of the Flies human nature',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Lord of the Flies themes content using curriculum terminology',
     expectedRelevance: {
       'goldings-message-about-human-behaviour': 3,
       'an-introduction-to-lord-of-the-flies': 3,
@@ -49,6 +62,9 @@ export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Gothic fiction Frankenstein',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Frankenstein Gothic content using curriculum terminology',
     expectedRelevance: {
       'frankenstein-and-the-gothic-context': 3,
       'frankensteins-reaction-to-his-creation': 3,
@@ -58,6 +74,9 @@ export const FICTION_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'Gothic literature features',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of Gothic genre content using curriculum terminology',
     expectedRelevance: {
       'diving-deeper-into-the-gothic-genre': 3,
       'frankenstein-and-the-gothic-context': 3,

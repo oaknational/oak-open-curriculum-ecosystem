@@ -185,7 +185,7 @@ pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --no-retry
 **Solution**:
 
 1. Check the mapping schema matches document structure
-2. For 409 conflicts, use `--force` flag to overwrite
+2. For 409 conflicts, default mode overwrites (remove `--incremental` if set)
 3. Review document content for invalid field values
 
 ## Architecture

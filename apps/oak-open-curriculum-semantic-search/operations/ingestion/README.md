@@ -14,35 +14,35 @@ pnpm es:ingest-live --all --verbose
 pnpm es:ingest-live --subject maths --verbose
 
 # Specific subject and keystage
-pnpm es:ingest-live --subject maths --keystage ks4 --verbose
+pnpm es:ingest-live --subject maths --key-stage ks4 --verbose
 
 # Dry run (preview without indexing)
 pnpm es:ingest-live --all --dry-run
 
-# Force mode (overwrite existing documents)
-pnpm es:ingest-live --all --force
+# Incremental mode (skip existing, useful for resuming)
+pnpm es:ingest-live --all --incremental
 ```
 
 ### CLI Flags
 
-| Flag                  | Description                                           |
-| --------------------- | ----------------------------------------------------- |
-| `--all`               | Ingest all 17 subjects                                |
-| `--subject <slug>`    | Ingest specific subject(s), can be repeated           |
-| `--keystage <slug>`   | Filter by key stage (ks1, ks2, ks3, ks4)              |
-| `--index <kind>`      | Filter to specific index kind (lessons, units, etc.)  |
-| `--verbose`           | Enable detailed logging                               |
-| `--dry-run`           | Preview without indexing                              |
-| `--force`             | Overwrite existing documents (default: skip existing) |
-| `--bypass-cache`      | Skip Redis cache requirement                          |
-| `--clear-cache`       | Clear SDK response cache before ingestion             |
-| `--ignore-cached-404` | Ignore cached 404s for transcripts (re-fetch)         |
+| Flag                  | Description                                          |
+| --------------------- | ---------------------------------------------------- |
+| `--all`               | Ingest all 17 subjects                               |
+| `--subject <slug>`    | Ingest specific subject(s), can be repeated          |
+| `--key-stage <slug>`  | Filter by key stage (ks1, ks2, ks3, ks4)             |
+| `--index <kind>`      | Filter to specific index kind (lessons, units, etc.) |
+| `--verbose`           | Enable detailed logging                              |
+| `--dry-run`           | Preview without indexing                             |
+| `--incremental`       | Skip existing documents (default: overwrite)         |
+| `--bypass-cache`      | Skip Redis cache requirement                         |
+| `--clear-cache`       | Clear SDK response cache before ingestion            |
+| `--ignore-cached-404` | Ignore cached 404s for transcripts (re-fetch)        |
 
 ### Incremental vs Force Mode
 
 - **Incremental (default)**: Uses ES `create` action. Skips existing documents.
   Enables resumable ingestion if interrupted.
-- **Force (`--force`)**: Uses ES `index` action. Overwrites existing documents.
+- **Overwrite (default)**: Uses ES `index` action. Overwrites existing documents.
   Use for full re-index or schema changes.
 
 ---
@@ -57,7 +57,7 @@ Validates ingested data for correctness and completeness.
 
 ```bash
 pnpm ingest:verify
-pnpm ingest:verify --subject maths --keystage ks4
+pnpm ingest:verify --subject maths --key-stage ks4
 ```
 
 **Purpose**: Data quality assurance after ingestion.
@@ -126,8 +126,8 @@ The default incremental mode skips already-indexed documents, allowing resumptio
 # 1. Reset indices
 pnpm es:setup reset
 
-# 2. Force re-index all data
-pnpm es:ingest-live --all --force --verbose
+# 2. Re-index all data (default behavior)
+pnpm es:ingest-live --all --verbose
 ```
 
 ### Refreshing Transcripts
@@ -137,7 +137,7 @@ are cached to avoid repeated API calls. To re-check for newly added transcripts:
 
 ```bash
 # Re-fetch transcripts that were previously 404
-pnpm es:ingest-live --all --ignore-cached-404 --force --verbose
+pnpm es:ingest-live --all --ignore-cached-404 --verbose
 ```
 
 **Note**: This does NOT clear the entire cache, only bypasses cached 404s for

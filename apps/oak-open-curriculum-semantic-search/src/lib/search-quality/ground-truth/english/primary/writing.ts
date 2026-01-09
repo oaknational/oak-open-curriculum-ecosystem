@@ -3,8 +3,8 @@
  *
  * Covers Year 1-6 writing: narrative, non-fiction, grammar.
  *
- * **Methodology (2026-01-03)**:
- * All lesson slugs verified via Oak Curriculum MCP tools.
+ * **Methodology (2026-01-08)**:
+ * All lesson slugs verified against bulk-downloads/english-primary.json.
  *
  * @packageDocumentation
  */
@@ -16,41 +16,59 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const WRITING_PRIMARY_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'narrative writing Year 3',
+    query: 'narrative writing Year 3 iron man BFG stories',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of Year 3 narrative writing content using curriculum terminology',
     expectedRelevance: {
-      'the-bfg-reading-and-narrative-writing': 3,
-      'the-iron-man-narrative-writing': 3,
-      'the-man-on-the-moon-narrative-writing': 2,
+      'writing-the-opening-of-the-bfg-part-one': 3,
+      'writing-the-opening-of-the-iron-man': 3,
+      'planning-the-opening-of-the-iron-man': 2,
     },
   },
   {
-    query: 'diary writing primary',
+    query: 'diary writing primary into the forest firework maker',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of diary writing content using curriculum terminology',
     expectedRelevance: {
-      'the-journey-diary-writing': 3,
-      'the-firework-makers-daughter-reading-and-diary-writing': 3,
-      'into-the-forest-diary-writing': 2,
+      'planning-a-paragraph-of-a-diary-entry-based-on-into-the-forest': 3,
+      'planning-the-first-diary-entry-based-on-the-firework-makers-daughter': 3,
+      'writing-the-first-diary-entry-based-on-the-firework-makers-daughter': 2,
     },
   },
   {
-    query: 'non-chronological report writing',
+    query: 'non-chronological report writing stone age portia spider',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of non-chronological report writing content using curriculum terminology',
     expectedRelevance: {
-      'the-stone-age-non-chronological-report': 3,
-      'the-portia-spider-non-chronological-report': 3,
-      'king-tut-or-healthy-lifestyle-non-chronological-report-629': 2,
+      'linguistic-features-of-a-non-chronological-report-about-the-stone-age': 3,
+      'linguistic-features-of-a-non-chronological-report-about-portia-spiders': 3,
+      'planning-a-section-on-portia-spiders-appearance-for-a-non-chronological-report': 2,
     },
   },
   {
-    query: 'simple compound sentences Year 3',
+    query: 'simple compound adverbial sentences Year 3 grammar',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of sentence structure content using curriculum terminology',
     expectedRelevance: {
-      'simple-compound-and-adverbial-complex-sentences': 3,
+      'adverbial-complex-sentences': 3,
+      'compound-and-adverbial-complex-sentences-revision': 3,
+      'a-new-sentence-structure-the-relative-complex-sentence': 2,
     },
   },
   {
-    query: 'persuasive letter writing',
+    query: 'persuasive letter writing school uniform crayons quit',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of persuasive writing content using curriculum terminology',
     expectedRelevance: {
-      'the-day-the-crayons-quit-reading-and-writing-persuasive-letters': 3,
-      'front-desk-persuasive-letter-writing': 3,
-      'school-uniform-persuasive-letter-writing': 2,
+      'editing-a-persuasive-letter-about-school-uniform': 3,
+      'engaging-with-the-plot-of-the-day-the-crayons-quit': 3,
+      'generating-points-to-use-in-a-persuasive-letter-about-school-uniform': 2,
     },
   },
 ] as const;

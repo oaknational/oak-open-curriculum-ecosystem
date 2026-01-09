@@ -9,18 +9,22 @@
  * 1. **Only entries that exist**: No nulls, no placeholders. If a subject/phase
  *    combination has ground truths, it's in the registry. Otherwise, it isn't.
  *
- * 2. **Baseline MRR for smoke tests**: Each entry stores its baseline MRR for
- *    automated regression detection.
+ * 2. **Baselines stored separately**: Baseline metrics are in `evaluation/baselines/baselines.json`,
+ *    not in the ground truth entries. This separates test data from results.
  *
  * 3. **Single source of truth**: All tools that need ground truths import from here.
  *    No hardcoded mappings elsewhere.
  *
  * ## Adding New Ground Truths
  *
- * 1. Create the ground truth files in the subject's directory
- * 2. Add an entry to `GROUND_TRUTH_ENTRIES` in `./entries.ts` with `baselineMrr: 0.0`
- * 3. Run `pnpm benchmark --subject X --phase Y` to measure
- * 4. Update `baselineMrr` with the measured value
+ * See `GROUND-TRUTH-PROCESS.md` for the full step-by-step process:
+ *
+ * 1. Download bulk data for your subject/phase
+ * 2. Create ground truth files with validated slugs
+ * 3. Add entry to `GROUND_TRUTH_ENTRIES` in `./entries.ts`
+ * 4. Run `pnpm ground-truth:validate` to verify slugs
+ * 5. Run `pnpm benchmark --subject X --phase Y` to measure
+ * 6. Update `evaluation/baselines/baselines.json` with measured values
  *
  * @example
  * ```typescript
@@ -33,9 +37,13 @@
  *
  * // Get specific entry
  * const mathsSecondary = getGroundTruthEntry('maths', 'secondary');
+ * if (mathsSecondary) {
+ *   console.log(`${mathsSecondary.queries.length} queries`);
+ * }
  * ```
  *
  * @see ADR-098 Ground Truth Registry as Single Source of Truth
+ * @see GROUND-TRUTH-PROCESS.md for creating new ground truths
  * @packageDocumentation
  */
 
@@ -79,7 +87,7 @@ export function getAllGroundTruthEntries(): readonly GroundTruthEntry[] {
  * ```typescript
  * const mathsSecondary = getGroundTruthEntry('maths', 'secondary');
  * if (mathsSecondary) {
- *   console.log(`Baseline MRR: ${mathsSecondary.baselineMrr}`);
+ *   console.log(`${mathsSecondary.queries.length} queries`);
  * }
  * ```
  */

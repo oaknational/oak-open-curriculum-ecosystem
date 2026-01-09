@@ -18,7 +18,7 @@ import type { GroundTruthQuery } from '../../types';
 export const MUSIC_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'music for films scary scenes',
-    category: 'colloquial',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Colloquial description of film music for tension.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const MUSIC_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'teach folk songs sea shanty',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher intent + specific genre (sea shanties).',
     expectedRelevance: {
@@ -40,7 +40,7 @@ export const MUSIC_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
   },
   {
     query: 'rythm patterns drums',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common misspelling of "rhythm".',
     expectedRelevance: {

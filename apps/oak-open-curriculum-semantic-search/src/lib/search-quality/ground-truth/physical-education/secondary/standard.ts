@@ -3,9 +3,8 @@
  *
  * Covers athletics, games, dance, gymnastics, and health/wellbeing.
  *
- * **Methodology (2026-01-03)**:
- * All lesson slugs verified against Oak API via MCP tools:
- * - `get-key-stages-subject-lessons` for lesson slugs
+ * **Methodology (2026-01-08)**:
+ * All lesson slugs verified against bulk-downloads/physical-education-secondary.json.
  *
  * @packageDocumentation
  */
@@ -17,8 +16,8 @@ import type { GroundTruthQuery } from '../../types';
  */
 export const PE_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
-    query: 'athletics shot put javelin',
-    category: 'naturalistic',
+    query: 'athletics shot put javelin throwing technique officiating',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for athletics field events.',
     expectedRelevance: {
@@ -28,8 +27,8 @@ export const PE_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'dance choreography identity',
-    category: 'naturalistic',
+    query: 'dance choreography identity who I am character',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for dance unit.',
     expectedRelevance: {
@@ -39,45 +38,56 @@ export const PE_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'fitness training FITT principle',
-    category: 'naturalistic',
+    query: 'fitness training FITT principle intensity programme design',
+    category: 'precise-topic',
     priority: 'high',
     description: 'Direct curriculum term match for fitness unit.',
     expectedRelevance: {
       'the-fitt-frequency-intensity-time-and-type-principle': 3,
-      'training-with-intensity': 2,
+      'training-with-intensity': 3,
       'design-your-programme': 2,
     },
   },
   {
-    query: 'invasion games tactics football',
-    category: 'naturalistic',
+    query: 'invasion games tactics football flag defensive strategies',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for invasion games.',
     expectedRelevance: {
-      'invasion-games-tactics-and-strategies-to-outwit-opponents-through-football': 3,
-      'invasion-games-basic-tactics-to-overcome-opponents-through-futsal': 2,
+      'defensive-strategies-and-tactics': 3,
+      'flag-football-tactics-strategies-and-game-play': 3,
+      'building-a-team-to-perform-tactics-and-strategies-together': 2,
     },
   },
   {
-    query: 'badminton net wall games',
-    category: 'naturalistic',
+    query: 'badminton net wall games court movement assessment',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for net/wall games.',
     expectedRelevance: {
-      'net-and-wall-games-technical-proficiency-and-problem-solving-through-badminton': 3,
-      'net-and-wall-games-understand-effective-performance-in-badminton': 2,
+      'badminton-practical-assessment': 3,
+      'effective-court-movement-and-strategic-thinking-through-throw-badminton': 2,
     },
   },
   {
-    query: 'capoeira hip hop dance',
-    category: 'naturalistic',
+    query: 'capoeira hip hop dance movement language improvisation',
+    category: 'precise-topic',
     priority: 'medium',
     description: 'Direct curriculum term match for world dance styles.',
     expectedRelevance: {
       'capoeira-the-basic-movement-language': 3,
       'hip-hop-the-basic-movement-language': 3,
       'capoeira-improvised-duets': 2,
+    },
+  },
+  {
+    query: 'joints and movement in PE',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of anatomy with physical activity.',
+    expectedRelevance: {
+      'synovial-joint-structure-and-function': 3,
+      'movements-possible-at-different-joints': 2,
     },
   },
 ] as const;

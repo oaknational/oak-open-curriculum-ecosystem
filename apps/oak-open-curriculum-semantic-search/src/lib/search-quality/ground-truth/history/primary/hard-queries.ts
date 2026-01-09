@@ -13,7 +13,7 @@ export const HARD_QUERIES_PRIMARY_HISTORY: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach year 4 about the Romans',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group.',
     expectedRelevance: {
@@ -26,7 +26,7 @@ export const HARD_QUERIES_PRIMARY_HISTORY: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'vikins and anglo saxons',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common Vikings misspelling.',
     expectedRelevance: {

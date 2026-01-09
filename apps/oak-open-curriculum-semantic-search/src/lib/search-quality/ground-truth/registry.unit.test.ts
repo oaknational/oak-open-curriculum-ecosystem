@@ -32,9 +32,6 @@ describe('GROUND_TRUTH_ENTRIES', () => {
       expect(['primary', 'secondary']).toContain(entry.phase);
       expect(Array.isArray(entry.queries)).toBe(true);
       expect(entry.queries.length).toBeGreaterThan(0);
-      expect(typeof entry.baselineMrr).toBe('number');
-      expect(entry.baselineMrr).toBeGreaterThanOrEqual(0);
-      expect(entry.baselineMrr).toBeLessThanOrEqual(1);
     }
   });
 
@@ -147,12 +144,10 @@ describe('GroundTruthEntry type', () => {
       subject: 'maths',
       phase: 'secondary',
       queries: [],
-      baselineMrr: 0.894,
     };
     expect(entry.subject).toBe('maths');
     expect(entry.phase).toBe('secondary');
     expect(entry.queries).toEqual([]);
-    expect(entry.baselineMrr).toBe(0.894);
   });
 });
 

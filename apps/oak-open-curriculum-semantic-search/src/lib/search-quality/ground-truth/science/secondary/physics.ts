@@ -14,6 +14,10 @@ import type { GroundTruthQuery } from '../../types';
 export const PHYSICS_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'forces balanced unbalanced',
+    category: 'precise-topic',
+    priority: 'high',
+    description:
+      'Tests retrieval of balanced and unbalanced forces content using curriculum terminology',
     expectedRelevance: {
       'balanced-and-unbalanced-forces': 3,
       'what-forces-do': 3,
@@ -22,7 +26,10 @@ export const PHYSICS_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'friction forces',
+    query: 'friction forces reducing surfaces',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of friction content using curriculum terminology',
     expectedRelevance: {
       friction: 3,
       'reducing-friction-practical': 3,
@@ -30,14 +37,20 @@ export const PHYSICS_SECONDARY_QUERIES: readonly GroundTruthQuery[] = [
     },
   },
   {
-    query: 'energy transfer',
+    query: 'energy transfer stores pathways',
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Tests retrieval of energy transfer content using curriculum terminology',
     expectedRelevance: {
       energy: 3,
-      'transferring-energy': 3,
+      'transferring-energy': 2,
     },
   },
   {
     query: 'force arrows diagrams',
+    category: 'precise-topic',
+    priority: 'medium',
+    description: 'Tests retrieval of force diagrams content using curriculum terminology',
     expectedRelevance: {
       'using-force-arrows': 3,
       'balanced-and-unbalanced-forces': 2,

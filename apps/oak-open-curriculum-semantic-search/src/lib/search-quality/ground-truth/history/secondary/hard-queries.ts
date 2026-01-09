@@ -16,7 +16,7 @@ export const HARD_QUERIES_SECONDARY_HISTORY: readonly GroundTruthQuery[] = [
   // NATURALISTIC
   {
     query: 'teach year 7 about the Norman invasion',
-    category: 'naturalistic',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Teacher request with year group.',
     expectedRelevance: {
@@ -29,7 +29,7 @@ export const HARD_QUERIES_SECONDARY_HISTORY: readonly GroundTruthQuery[] = [
   // MISSPELLING
   {
     query: 'holocost and nazi germany',
-    category: 'misspelling',
+    category: 'imprecise-input',
     priority: 'critical',
     description: 'Common Holocaust misspelling.',
     expectedRelevance: {
@@ -42,7 +42,7 @@ export const HARD_QUERIES_SECONDARY_HISTORY: readonly GroundTruthQuery[] = [
   // SYNONYM
   {
     query: 'factory age workers conditions',
-    category: 'synonym',
+    category: 'natural-expression',
     priority: 'high',
     description: 'Factory age = Industrial Revolution.',
     expectedRelevance: {
