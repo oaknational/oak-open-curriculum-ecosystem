@@ -4,6 +4,12 @@
  * This module contains the core benchmark logic that can be called with
  * any search function, enabling both production use and testing.
  *
+ * Output shows measured values with status indicators:
+ * - ✓✓ EXCELLENT: At or above excellent threshold
+ * - ✓  GOOD: At or above good threshold
+ * - ~  ACCEPTABLE: At or above fair threshold
+ * - ✗  BAD: Below fair threshold
+ *
  * @see benchmark.ts - Production CLI (uses real ES)
  * @see benchmark-test-harness.ts - Test CLI (uses fake)
  * @see ADR-078 Dependency Injection for Testability
@@ -17,7 +23,7 @@ import {
 } from '../../src/lib/search-quality/ground-truth/registry/index.js';
 import { benchmarkEntry, type EntryBenchmarkResult } from './benchmark-entry-runner.js';
 import type { SearchFunction } from './benchmark-query-runner.js';
-import { calculateP95 } from './benchmark-stats.js';
+import { printSummary } from './benchmark-output.js';
 
 /**
  * CLI options parsed from command line arguments.
@@ -32,84 +38,6 @@ export interface CliOptions {
   readonly phase?: string;
   /** Enable per-query diagnostic output. Does NOT change result granularity. */
   readonly verbose: boolean;
-}
-
-/**
- * Print detailed per-category results for each entry.
- *
- * Shows metrics broken down by query category for granular analysis.
- */
-function printDetailedResults(results: readonly EntryBenchmarkResult[]): void {
-  console.log(
-    '\n' + '='.repeat(120) + '\nDETAILED PER-CATEGORY RESULTS\n' + '='.repeat(120) + '\n',
-  );
-  console.log(
-    'Subject'.padEnd(14) +
-      ' | ' +
-      'Phase'.padEnd(9) +
-      ' | ' +
-      'Category'.padEnd(20) +
-      ' | #Q   | MRR    | NDCG   | P@10   | R@10   | Zero%  | p95ms',
-  );
-  console.log('-'.repeat(120));
-
-  for (const r of results) {
-    // Print per-category rows
-    for (const cat of r.perCategory) {
-      console.log(
-        `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${cat.category.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${cat.mrr.toFixed(3).padEnd(6)} | ${cat.ndcg10.toFixed(3).padEnd(6)} | ${cat.precision10.toFixed(3).padEnd(6)} | ${cat.recall10.toFixed(3).padEnd(6)} | ${(cat.zeroHitRate * 100).toFixed(1).padEnd(6)}% | ${cat.p95LatencyMs.toFixed(0)}`,
-      );
-    }
-    // Print aggregate row for this entry
-    const p95 = calculateP95(r.latencies);
-    console.log(
-      `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${'AGGREGATE'.padEnd(20)} | ${String(r.queryCount).padEnd(4)} | ${r.mrr.toFixed(3).padEnd(6)} | ${r.ndcg10.toFixed(3).padEnd(6)} | ${r.precision10.toFixed(3).padEnd(6)} | ${r.recall10.toFixed(3).padEnd(6)} | ${(r.zeroHitRate * 100).toFixed(1).padEnd(6)}% | ${p95.toFixed(0)}`,
-    );
-    console.log('-'.repeat(120));
-  }
-}
-
-/**
- * Print summary table with all IR metrics.
- *
- * Note: Baselines are stored separately in baselines.json.
- * This output shows current metrics only. Compare to baselines manually
- * or use the smoke test for regression detection.
- */
-function printSummary(results: readonly EntryBenchmarkResult[]): void {
-  // Print detailed per-category results first
-  printDetailedResults(results);
-
-  // Then print aggregate summary
-  console.log('\n' + '='.repeat(110) + '\nAGGREGATE SUMMARY\n' + '='.repeat(110) + '\n');
-  console.log(
-    'Subject'.padEnd(20) +
-      ' | ' +
-      'Phase'.padEnd(10) +
-      ' | #Q   | MRR    | NDCG   | P@10   | R@10   | Zero%  | p95ms',
-  );
-  console.log('-'.repeat(110));
-  for (const r of results) {
-    const p95 = calculateP95(r.latencies);
-    console.log(
-      `${r.subject.padEnd(20)} | ${r.phase.padEnd(10)} | ${String(r.queryCount).padEnd(4)} | ${r.mrr.toFixed(3).padEnd(6)} | ${r.ndcg10.toFixed(3).padEnd(6)} | ${r.precision10.toFixed(3).padEnd(6)} | ${r.recall10.toFixed(3).padEnd(6)} | ${(r.zeroHitRate * 100).toFixed(1).padEnd(6)}% | ${p95.toFixed(0)}`,
-    );
-  }
-  console.log('-'.repeat(110));
-
-  // Aggregate all metrics
-  const totalQ = results.reduce((s, r) => s + r.queryCount, 0);
-  const avgMrr = results.reduce((s, r) => s + r.mrr * r.queryCount, 0) / totalQ;
-  const avgNdcg = results.reduce((s, r) => s + r.ndcg10 * r.queryCount, 0) / totalQ;
-  const avgP10 = results.reduce((s, r) => s + r.precision10 * r.queryCount, 0) / totalQ;
-  const avgR10 = results.reduce((s, r) => s + r.recall10 * r.queryCount, 0) / totalQ;
-  const avgZero = results.reduce((s, r) => s + r.zeroHitRate * r.queryCount, 0) / totalQ;
-  const allLatencies = results.flatMap((r) => [...r.latencies]);
-  const overallP95 = calculateP95(allLatencies);
-
-  console.log(
-    `\nOVERALL: ${totalQ} queries | MRR=${avgMrr.toFixed(3)} | NDCG=${avgNdcg.toFixed(3)} | P@10=${avgP10.toFixed(3)} | R@10=${avgR10.toFixed(3)} | Zero=${(avgZero * 100).toFixed(1)}% | p95=${overallP95.toFixed(0)}ms`,
-  );
 }
 
 /** Parse CLI arguments */

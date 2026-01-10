@@ -151,13 +151,13 @@ describe('benchmark CLI E2E', () => {
       expect(result.stdout).toMatch(/MRR=\d\.\d{3}/);
     });
 
-    it('reports zero-hit rate as percentage', async () => {
+    it('reports zero-hit rate with status', async () => {
       const result = await runBenchmarkCli(['--subject', 'maths', '--phase', 'primary']);
 
       expect(result.exitCode).toBe(0);
 
-      // Zero-hit rate should be in the output (as percentage)
-      expect(result.stdout).toMatch(/Zero=\d+\.\d+%/);
+      // Zero-hit rate should be in the output with status indicator (✓✓/✓/~/✗)
+      expect(result.stdout).toMatch(/Zero=\d\.\d{3}[✓~✗]/);
     });
 
     it('reports NDCG values', async () => {
