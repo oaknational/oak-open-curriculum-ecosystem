@@ -1,6 +1,6 @@
 # M3: Comprehensive Ground Truths & Phase-Aligned Search Quality
 
-**Status**: ✅ **ALL PHASES COMPLETE** | ✅ **Ground Truths PRODUCTION-READY** | 📋 **Phase 8 NEXT**
+**Status**: ✅ **Ground Truths PRODUCTION-READY** | ✅ **Benchmark Tooling Complete** | 📋 **Phase 8: Run Baselines**
 **Priority**: HIGH — Foundation for all future search work
 **Parent**: [../roadmap.md](../roadmap.md)
 **Created**: 2026-01-03
@@ -10,12 +10,24 @@
 
 ## 🎯 START HERE: Phase 8 Benchmarks
 
-Ground truths are **production-ready**. All three validation stages complete.
+Ground truths are **production-ready** (509 queries, 30 entries). Benchmark tooling complete with status indicators.
+
+### Benchmark Output
+
+Output now shows per-category metrics with status indicators:
+
+- ✓✓ EXCELLENT: At or above excellent threshold
+- ✓  GOOD: At or above good threshold
+- ~  ACCEPTABLE: At or above fair threshold
+- ✗  BAD: Below fair threshold
 
 ### Run Benchmarks Now
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
+
+# Verify ground truths (should pass)
+pnpm ground-truth:validate
 
 # Run all 30 subject/phase entries
 pnpm benchmark --all
@@ -30,7 +42,7 @@ pnpm benchmark --subject english --phase secondary --verbose
 
 1. Update `evaluation/baselines/baselines.json` with ALL measured metrics (MRR, NDCG@10, Precision@10, Recall@10, Zero-Hit Rate, p95 Latency)
 2. Document results in `EXPERIMENT-LOG.md` with complete metrics tables
-3. Identify subjects needing improvement (MRR < 0.40)
+3. Identify subjects needing improvement (metrics showing ✗ BAD status)
 
 **Note**: Results are stored in `baselines.json`, NOT in the registry code. The registry (`entries.ts`) contains only ground truth queries.
 
@@ -52,8 +64,8 @@ pnpm benchmark --subject english --phase secondary --verbose
 
 ```
 ✅ All ground truth entries are valid!
-Total queries:     474
-Total slugs:       1288
+Total queries:     509
+Total slugs:       1360
 Valid slugs pool:  12320
 Errors:            0
 ```
@@ -170,7 +182,7 @@ All 30 entries must meet minimum requirements for ALL 5 categories:
 | `natural-expression` | 2+ | ✅ All entries pass |
 | `imprecise-input` | 1+ | ✅ All entries pass |
 | `cross-topic` | 1+ | ✅ All entries pass |
-| `pedagogical-intent` | 1+ | ❌ **Only 1/30 entries** — needs remediation |
+| `pedagogical-intent` | 1+ | ✅ All entries pass |
 
 ### Deep Verification (Sampling)
 
@@ -493,7 +505,7 @@ interface BenchmarkResult {
 
 ## Coverage Matrix (Current State)
 
-Deterministic validation complete. **474 queries** across **30 entries** meet structural requirements. **Qualitative review pending** before Phase 8.
+Deterministic validation complete. **509 queries** across **30 entries** meet structural requirements. Stage 3 qualitative review complete.
 
 | Subject | Primary Bulk | Primary GT | Secondary Bulk | Secondary GT | KS4 Complexity |
 |---------|--------------|------------|----------------|--------------|----------------|

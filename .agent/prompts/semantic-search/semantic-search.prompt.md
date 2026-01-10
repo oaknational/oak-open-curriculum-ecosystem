@@ -1,7 +1,7 @@
 # Semantic Search — Session Entry Point
 
 **Last Updated**: 2026-01-10
-**Status**: ✅ **Category Consistency + Benchmark Output Complete** — All 5 categories required, per-category metrics displayed
+**Status**: ✅ **Category Consistency + Benchmark Output Complete** — All 5 categories required, per-category metrics with status indicators (✓✓/✓/~/✗)
 
 ---
 
@@ -11,7 +11,7 @@
 
 1. ✅ **Added `pedagogical-intent` queries to ALL 29 entries** — All 30 entries now have consistent category coverage with all 5 required categories.
 
-2. ✅ **Updated benchmark output to show per-category metrics** — Benchmark runs now display per-category grid with MRR, NDCG@10, P@10, R@10, Zero%, and AvgMs for each category.
+2. ✅ **Updated benchmark output to show per-category metrics with status indicators** — Benchmark runs now display per-category grid with MRR, NDCG@10, P@10, R@10, Zero%, and p95ms for each category, with status indicators (✓✓=EXCELLENT, ✓=GOOD, ~=ACCEPTABLE, ✗=BAD) comparing against reference thresholds.
 
 ### Why This Matters
 
@@ -22,39 +22,54 @@
 
 | Aspect | Status | Notes |
 |--------|--------|-------|
-| Ground truths | ✅ ~500+ queries, 30 entries | All 5 categories required per entry |
+| Ground truths | ✅ 509 queries, 30 entries | All 5 categories required per entry |
 | Benchmarks | ✅ All 6 metrics collected | Per-category breakdown in output |
 | Validation | ✅ `pedagogical-intent` required | Min 1 per entry enforced |
 
 ---
 
-## First Actions This Session
+## 🚀 Next Work: Phase 8 — Comprehensive Baselines
 
-### 1. Read Foundation Documents
+**Goal**: Run benchmarks for ALL 30 subject-phase combinations, record baselines, identify improvement targets.
+
+### What "Done" Looks Like
+
+- [ ] `baselines.json` updated with fresh measurements for all 30 entries
+- [ ] `EXPERIMENT-LOG.md` has complete per-category tables for each entry
+- [ ] Subjects with MRR < 0.40 identified as improvement targets
+- [ ] Phase 8 marked complete in m3 plan
+
+### First Actions This Session
+
+#### 1. Read Foundation Documents
 
 Before any work, re-read and commit to:
 
 - [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no shortcuts
 - [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test behaviour
 
-### 2. Run Benchmarks
+#### 2. Verify Current State
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm ground-truth:validate          # Must pass
-pnpm benchmark --all                # Shows per-category grid
+pnpm ground-truth:validate          # Must pass (509 queries, 0 errors)
 ```
 
-### 3. Record Results
+#### 3. Run Full Benchmark
+
+```bash
+pnpm benchmark --all                # All 30 entries, per-category metrics
+```
+
+#### 4. Record Results
 
 Update `evaluation/baselines/baselines.json` with ALL measured metrics:
 
 - MRR, NDCG@10, Precision@10, Recall@10, Zero-Hit Rate, p95 Latency
-- Include per-category baselines
-
-**Note**: Results are stored in `baselines.json`, NOT in the registry code. The registry (`entries.ts`) contains only ground truth queries.
 
 Document full results in `.agent/evaluations/EXPERIMENT-LOG.md` with complete per-category metrics tables.
+
+**Note**: Results are stored in `baselines.json`, NOT in the registry code. The registry (`entries.ts`) contains only ground truth queries.
 
 ---
 
@@ -64,7 +79,7 @@ Document full results in `.agent/evaluations/EXPERIMENT-LOG.md` with complete pe
 
 | Metric | Value |
 |--------|-------|
-| Total queries reviewed | 474 |
+| Total queries reviewed | 509 |
 | Total slugs validated | 1,290 |
 | Subject/phase entries | 30 |
 | Issues found | 1 |
@@ -129,7 +144,6 @@ All entries now have complete category coverage.
 # Validation (should pass)
 pnpm type-check               # Stage 1: Data integrity
 pnpm ground-truth:validate    # Stage 2: Semantic rules (16 checks)
-pnpm ground-truth:analyze     # Quality breakdown by entry
 
 # Benchmarks (Phase 8)
 pnpm benchmark --all          # Run all 30 entries
