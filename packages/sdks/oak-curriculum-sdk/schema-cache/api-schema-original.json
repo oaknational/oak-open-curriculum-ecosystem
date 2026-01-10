@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-6691cb883cfe8fbf3c254dcda407bd37bfb17ca4"
+    "version": "0.5.0-80e80c7b5efa9aa0c5efe7f2f9e72900a98297d4"
   },
   "servers": [
     {

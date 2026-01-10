@@ -117,16 +117,26 @@ export const GEOGRAPHY_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'fieldwork-autumn-in-the-school-grounds': 3,
       'mapping-trees-locally': 2,
     },
+    category: 'precise-topic',
+    priority: 'high',
+    description: 'Curriculum terms fieldwork and autumn match slug directly.',
+  },
+  {
+    query: 'scaffolding strategies for map reading skills',
+    expectedRelevance: {
+      'our-school-from-above': 3,
+      'mapping-our-journey-to-school': 2,
+    },
     category: 'pedagogical-intent',
     priority: 'exploratory',
-    description: 'Tests teaching goal for outdoor practical learning.',
+    description: 'Pure pedagogical query about teaching methodology, not curriculum content.',
   },
 ] as const;
 
 /**
  * All Primary Geography ground truth queries.
  *
- * Total: 7 queries.
+ * Total: 11 queries (5 standard + 6 hard).
  */
 export const GEOGRAPHY_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...GEOGRAPHY_PRIMARY_STANDARD_QUERIES,

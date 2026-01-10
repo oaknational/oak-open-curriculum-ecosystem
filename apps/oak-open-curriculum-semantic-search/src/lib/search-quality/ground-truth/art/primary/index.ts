@@ -117,16 +117,27 @@ export const ART_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'expressive-mark-making': 3,
       'building-drawing-machines': 2,
     },
+    category: 'natural-expression',
+    priority: 'high',
+    description:
+      'Informal phrasing for engagement-focused art lessons. Contains curriculum-adjacent terms.',
+  },
+  {
+    query: 'differentiation strategies for mixed ability art class',
+    expectedRelevance: {
+      'expressive-mark-making': 3,
+      'how-artists-make-marks': 2,
+    },
     category: 'pedagogical-intent',
     priority: 'exploratory',
-    description: 'Tests teaching goal for engagement without specifying art technique.',
+    description: 'Pure pedagogical query about teaching methodology, not curriculum content.',
   },
 ] as const;
 
 /**
  * All Primary Art ground truth queries.
  *
- * Total: 7 queries.
+ * Total: 11 queries (6 standard + 5 hard).
  */
 export const ART_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...ART_PRIMARY_STANDARD_QUERIES,

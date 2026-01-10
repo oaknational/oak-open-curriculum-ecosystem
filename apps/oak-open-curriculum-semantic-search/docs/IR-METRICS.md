@@ -127,20 +127,22 @@ where IDCG is DCG with perfectly ranked results
 
 **Calculation**: `(relevant results in top k) / k`
 
+> **Note**: We use k=3 rather than k=10 because our ground truths typically contain 2-4 relevant results per query. With sparse ground truths, P@10 of 0.50 would be mathematically impossible even with perfect ranking. P@3 provides meaningful signal while remaining achievable.
+
 ```text
-Top 10 results: [✓, ✓, ✗, ✓, ✗, ✗, ✗, ✗, ✗, ✗]
-Relevant: 3
-Precision@10 = 3/10 = 0.30
+Top 3 results: [✓, ✓, ✗]
+Relevant: 2
+Precision@3 = 2/3 = 0.67
 ```
 
-**Target**: Precision@10 > 0.50 means at least half of the top 10 results are relevant.
+**Target**: Precision@3 > 0.50 means at least half of the top 3 results are relevant.
 
-| Precision@10 | Meaning                                  |
-| ------------ | ---------------------------------------- |
-| > 0.70       | Excellent - most results are relevant    |
-| > 0.50       | Good - majority of results are useful    |
-| > 0.30       | Fair - some noise in results             |
-| < 0.30       | Poor - too many irrelevant results shown |
+| Precision@3 | Meaning                                  |
+| ----------- | ---------------------------------------- |
+| > 0.80      | Excellent - most results are relevant    |
+| > 0.60      | Good - majority of results are useful    |
+| > 0.40      | Fair - some noise in results             |
+| < 0.40      | Poor - too many irrelevant results shown |
 
 **When to use**: Precision matters when users are overwhelmed by irrelevant results. High precision = less noise.
 

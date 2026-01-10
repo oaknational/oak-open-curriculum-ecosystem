@@ -22,7 +22,7 @@ describe('aggregateByCategory', () => {
       category,
       mrr,
       ndcg10: mrr * 0.9, // Simplified for testing
-      precision10: mrr * 0.2,
+      precision3: mrr * 0.2,
       recall10: mrr * 0.8,
       latencyMs,
       hasHit,

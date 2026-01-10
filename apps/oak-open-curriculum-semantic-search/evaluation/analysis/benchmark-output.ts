@@ -13,6 +13,7 @@ import { z } from 'zod';
 import type { EntryBenchmarkResult } from './benchmark-entry-runner.js';
 import { calculateP95 } from './benchmark-stats.js';
 import { determineStatus, formatStatusSymbol, type MetricThresholds } from './benchmark-status.js';
+import { calculateFilteredAggregate } from './benchmark-filtered.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +34,7 @@ const ReferenceValuesSchema = z.object({
   mrr: MetricThresholdsSchema,
   ndcg10: MetricThresholdsSchema,
   zeroHitRate: MetricThresholdsSchema,
-  precision10: MetricThresholdsSchema,
+  precision3: MetricThresholdsSchema,
   recall10: MetricThresholdsSchema,
   p95LatencyMs: MetricThresholdsSchema,
 });
@@ -90,7 +91,7 @@ function printDetailedResults(
     'Subject'.padEnd(14) +
       ' | Phase'.padEnd(11) +
       ' | Category'.padEnd(22) +
-      ' | #Q   | MRR      | NDCG     | P@10     | R@10     | Zero%    | p95ms',
+      ' | #Q   | MRR      | NDCG     | P@3      | R@10     | Zero%    | p95ms',
   );
   console.log('-'.repeat(130));
 
@@ -107,7 +108,7 @@ function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): v
     const row = formatMetricRow(
       cat.mrr,
       cat.ndcg10,
-      cat.precision10,
+      cat.precision3,
       cat.recall10,
       cat.zeroHitRate,
       cat.p95LatencyMs,
@@ -118,7 +119,7 @@ function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): v
     );
   }
   const p95 = calculateP95(r.latencies);
-  const row = formatMetricRow(r.mrr, r.ndcg10, r.precision10, r.recall10, r.zeroHitRate, p95, refs);
+  const row = formatMetricRow(r.mrr, r.ndcg10, r.precision3, r.recall10, r.zeroHitRate, p95, refs);
   console.log(
     `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${'AGGREGATE'.padEnd(20)} | ${String(r.queryCount).padEnd(4)} | ${row}`,
   );
@@ -131,7 +132,7 @@ function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): v
 function formatMetricRow(
   mrr: number,
   ndcg: number,
-  p10: number,
+  p3: number,
   r10: number,
   zero: number,
   lat: number,
@@ -139,11 +140,11 @@ function formatMetricRow(
 ): string {
   const mrrStr = formatWithStatus(mrr, refs.mrr, 'higher').padEnd(8);
   const ndcgStr = formatWithStatus(ndcg, refs.ndcg10, 'higher').padEnd(8);
-  const p10Str = formatWithStatus(p10, refs.precision10, 'higher').padEnd(8);
+  const p3Str = formatWithStatus(p3, refs.precision3, 'higher').padEnd(8);
   const r10Str = formatWithStatus(r10, refs.recall10, 'higher').padEnd(8);
   const zeroStr = formatWithStatus(zero, refs.zeroHitRate, 'lower').padEnd(8);
   const latStr = formatWithStatus(lat, refs.p95LatencyMs, 'lower', 0);
-  return `${mrrStr} | ${ndcgStr} | ${p10Str} | ${r10Str} | ${zeroStr} | ${latStr}`;
+  return `${mrrStr} | ${ndcgStr} | ${p3Str} | ${r10Str} | ${zeroStr} | ${latStr}`;
 }
 
 /**
@@ -157,7 +158,7 @@ function printAggregateSummary(
   console.log(
     'Subject'.padEnd(20) +
       ' | Phase'.padEnd(12) +
-      ' | #Q   | MRR      | NDCG     | P@10     | R@10     | Zero%    | p95ms',
+      ' | #Q   | MRR      | NDCG     | P@3      | R@10     | Zero%    | p95ms',
   );
   console.log('-'.repeat(120));
   for (const r of results) {
@@ -165,7 +166,7 @@ function printAggregateSummary(
     const row = formatMetricRow(
       r.mrr,
       r.ndcg10,
-      r.precision10,
+      r.precision3,
       r.recall10,
       r.zeroHitRate,
       p95,
@@ -185,7 +186,7 @@ function printOverallTotals(results: readonly EntryBenchmarkResult[], refs: Refe
   const totalQ = results.reduce((s, r) => s + r.queryCount, 0);
   const avgMrr = results.reduce((s, r) => s + r.mrr * r.queryCount, 0) / totalQ;
   const avgNdcg = results.reduce((s, r) => s + r.ndcg10 * r.queryCount, 0) / totalQ;
-  const avgP10 = results.reduce((s, r) => s + r.precision10 * r.queryCount, 0) / totalQ;
+  const avgP3 = results.reduce((s, r) => s + r.precision3 * r.queryCount, 0) / totalQ;
   const avgR10 = results.reduce((s, r) => s + r.recall10 * r.queryCount, 0) / totalQ;
   const avgZero = results.reduce((s, r) => s + r.zeroHitRate * r.queryCount, 0) / totalQ;
   const allLatencies = results.flatMap((r) => [...r.latencies]);
@@ -193,13 +194,32 @@ function printOverallTotals(results: readonly EntryBenchmarkResult[], refs: Refe
 
   const mrrStatus = formatWithStatus(avgMrr, refs.mrr, 'higher');
   const ndcgStatus = formatWithStatus(avgNdcg, refs.ndcg10, 'higher');
-  const p10Status = formatWithStatus(avgP10, refs.precision10, 'higher');
+  const p3Status = formatWithStatus(avgP3, refs.precision3, 'higher');
   const r10Status = formatWithStatus(avgR10, refs.recall10, 'higher');
   const zeroStatus = formatWithStatus(avgZero, refs.zeroHitRate, 'lower');
   const latStatus = formatWithStatus(overallP95, refs.p95LatencyMs, 'lower', 0);
 
   console.log(
-    `\nOVERALL: ${totalQ} queries | MRR=${mrrStatus} | NDCG=${ndcgStatus} | P@10=${p10Status} | R@10=${r10Status} | Zero=${zeroStatus} | p95=${latStatus}ms`,
+    `\nOVERALL: ${totalQ} queries | MRR=${mrrStatus} | NDCG=${ndcgStatus} | P@3=${p3Status} | R@10=${r10Status} | Zero=${zeroStatus} | p95=${latStatus}ms`,
+  );
+}
+
+/** Print filtered aggregate excluding LLM-required categories. */
+function printFilteredAggregate(
+  results: readonly EntryBenchmarkResult[],
+  refs: ReferenceValues,
+): void {
+  const filtered = calculateFilteredAggregate(results);
+
+  const mrrStatus = formatWithStatus(filtered.mrr, refs.mrr, 'higher');
+  const ndcgStatus = formatWithStatus(filtered.ndcg10, refs.ndcg10, 'higher');
+  const p3Status = formatWithStatus(filtered.precision3, refs.precision3, 'higher');
+  const r10Status = formatWithStatus(filtered.recall10, refs.recall10, 'higher');
+  const zeroStatus = formatWithStatus(filtered.zeroHitRate, refs.zeroHitRate, 'lower');
+  const latStatus = formatWithStatus(filtered.p95LatencyMs, refs.p95LatencyMs, 'lower', 0);
+
+  console.log(
+    `FILTERED (excl. pedagogical-intent, natural-expression): ${filtered.queryCount} queries | MRR=${mrrStatus} | NDCG=${ndcgStatus} | P@3=${p3Status} | R@10=${r10Status} | Zero=${zeroStatus} | p95=${latStatus}ms`,
   );
 }
 
@@ -211,4 +231,5 @@ export function printSummary(results: readonly EntryBenchmarkResult[]): void {
   printDetailedResults(results, refs);
   printAggregateSummary(results, refs);
   printOverallTotals(results, refs);
+  printFilteredAggregate(results, refs);
 }

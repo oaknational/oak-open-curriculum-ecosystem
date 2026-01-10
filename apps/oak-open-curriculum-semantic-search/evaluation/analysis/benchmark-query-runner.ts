@@ -69,7 +69,7 @@ export interface QueryResult {
   readonly category: QueryCategory;
   readonly mrr: number;
   readonly ndcg10: number;
-  readonly precision10: number;
+  readonly precision3: number;
   readonly recall10: number;
   readonly latencyMs: number;
   readonly hasHit: boolean;
@@ -122,14 +122,14 @@ export async function runQuery(
   const relevanceMap = input.expectedRelevance;
   const mrr = calculateMRR(actualResults, relevanceMap);
   const ndcg10 = calculateNDCG(actualResults, relevanceMap, 10);
-  const precision10 = calculatePrecisionAtK(actualResults, relevanceMap, 10);
+  const precision3 = calculatePrecisionAtK(actualResults, relevanceMap, 3);
   const recall10 = calculateRecallAtK(actualResults, relevanceMap, 10);
 
   return {
     category: input.category,
     mrr,
     ndcg10,
-    precision10,
+    precision3,
     recall10,
     latencyMs,
     hasHit: actualResults.some((slug) => expectedSlugs.includes(slug)),

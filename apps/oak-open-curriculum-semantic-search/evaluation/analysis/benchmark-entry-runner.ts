@@ -25,7 +25,7 @@ export type { SearchFunction } from './benchmark-query-runner.js';
  * Result of benchmarking a single ground truth entry.
  *
  * Contains all IR metrics as defined in IR-METRICS.md:
- * - MRR, NDCG@10, Precision@10, Recall@10, Zero-hit rate, Latency
+ * - MRR, NDCG@10, Precision@3, Recall@10, Zero-hit rate, Latency
  *
  * Also includes per-category breakdown for granular analysis.
  *
@@ -39,7 +39,7 @@ export interface EntryBenchmarkResult {
   readonly queryCount: number;
   readonly mrr: number;
   readonly ndcg10: number;
-  readonly precision10: number;
+  readonly precision3: number;
   readonly recall10: number;
   readonly zeroHitRate: number;
   readonly avgLatencyMs: number;
@@ -55,7 +55,7 @@ function aggregateResults(
 ): EntryBenchmarkResult {
   const avgMrr = results.reduce((sum, r) => sum + r.mrr, 0) / results.length;
   const avgNdcg10 = results.reduce((sum, r) => sum + r.ndcg10, 0) / results.length;
-  const avgPrecision10 = results.reduce((sum, r) => sum + r.precision10, 0) / results.length;
+  const avgPrecision3 = results.reduce((sum, r) => sum + r.precision3, 0) / results.length;
   const avgRecall10 = results.reduce((sum, r) => sum + r.recall10, 0) / results.length;
   const zeroHitCount = results.filter((r) => !r.hasHit).length;
   const latencies = results.map((r) => r.latencyMs);
@@ -70,7 +70,7 @@ function aggregateResults(
     queryCount: entry.queries.length,
     mrr: avgMrr,
     ndcg10: avgNdcg10,
-    precision10: avgPrecision10,
+    precision3: avgPrecision3,
     recall10: avgRecall10,
     zeroHitRate: zeroHitCount / results.length,
     avgLatencyMs,
@@ -81,7 +81,7 @@ function aggregateResults(
 
 /** Create a zero-result QueryResult for error cases. */
 function createErrorResult(category: QueryCategory): QueryResult {
-  return { category, mrr: 0, ndcg10: 0, precision10: 0, recall10: 0, latencyMs: 0, hasHit: false };
+  return { category, mrr: 0, ndcg10: 0, precision3: 0, recall10: 0, latencyMs: 0, hasHit: false };
 }
 
 /**

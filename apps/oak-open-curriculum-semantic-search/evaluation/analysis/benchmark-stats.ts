@@ -24,8 +24,8 @@ export interface CategoryResult {
   readonly mrr: number;
   /** Normalized Discounted Cumulative Gain @10 across queries. */
   readonly ndcg10: number;
-  /** Precision @10 across queries. */
-  readonly precision10: number;
+  /** Precision @3 across queries. */
+  readonly precision3: number;
   /** Recall @10 across queries. */
   readonly recall10: number;
   /** Percentage of queries with no relevant results in top 10. */
@@ -93,7 +93,7 @@ export function aggregateByCategory(results: readonly QueryResult[]): readonly C
     const count = categoryQueryResults.length;
     const avgMrr = categoryQueryResults.reduce((sum, r) => sum + r.mrr, 0) / count;
     const avgNdcg10 = categoryQueryResults.reduce((sum, r) => sum + r.ndcg10, 0) / count;
-    const avgPrecision10 = categoryQueryResults.reduce((sum, r) => sum + r.precision10, 0) / count;
+    const avgPrecision3 = categoryQueryResults.reduce((sum, r) => sum + r.precision3, 0) / count;
     const avgRecall10 = categoryQueryResults.reduce((sum, r) => sum + r.recall10, 0) / count;
     const zeroHitCount = categoryQueryResults.filter((r) => !r.hasHit).length;
     const latencies = categoryQueryResults.map((r) => r.latencyMs);
@@ -103,7 +103,7 @@ export function aggregateByCategory(results: readonly QueryResult[]): readonly C
       queryCount: count,
       mrr: avgMrr,
       ndcg10: avgNdcg10,
-      precision10: avgPrecision10,
+      precision3: avgPrecision3,
       recall10: avgRecall10,
       zeroHitRate: zeroHitCount / count,
       p95LatencyMs: calculateP95(latencies),

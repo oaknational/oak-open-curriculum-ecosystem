@@ -45,7 +45,7 @@ All metrics from [IR-METRICS.md](../../docs/IR-METRICS.md):
 | ----------------- | -------------------------------------------------------- |
 | **MRR**           | Mean Reciprocal Rank — position of first relevant result |
 | **NDCG@10**       | Normalized Discounted Cumulative Gain — ranking quality  |
-| **Precision@10**  | Proportion of top 10 results that are relevant           |
+| **Precision@3**   | Proportion of top 3 results that are relevant            |
 | **Recall@10**     | Proportion of relevant results found in top 10           |
 | **Zero-hit rate** | Percentage of queries with no relevant results           |
 | **p95 Latency**   | 95th percentile query latency in milliseconds            |
@@ -56,14 +56,14 @@ All metrics from [IR-METRICS.md](../../docs/IR-METRICS.md):
 ===========================================================================================================
 BENCHMARK RESULTS
 ===========================================================================================================
-Subject              | Phase      | #Q   | MRR    | NDCG   | P@10   | R@10   | Zero%  | p95ms
+Subject              | Phase      | #Q   | MRR    | NDCG   | P@3    | R@10   | Zero%  | p95ms
 -----------------------------------------------------------------------------------------------------------
-maths                | secondary  | 60   | 0.894  | 0.782  | 0.320  | 0.850  | 5.0%   | 245
-science              | primary    | 15   | 0.852  | 0.695  | 0.280  | 0.920  | 0.0%   | 198
+maths                | secondary  | 60   | 0.894  | 0.782  | 0.600  | 0.850  | 5.0%   | 245
+science              | primary    | 15   | 0.852  | 0.695  | 0.550  | 0.920  | 0.0%   | 198
 ...
 -----------------------------------------------------------------------------------------------------------
 
-OVERALL: 100 queries | MRR=0.870 | NDCG=0.745 | P@10=0.300 | R@10=0.880 | Zero=3.2% | p95=267ms
+OVERALL: 100 queries | MRR=0.870 | NDCG=0.745 | P@3=0.580 | R@10=0.880 | Zero=3.2% | p95=267ms
 ```
 
 ## Baselines
