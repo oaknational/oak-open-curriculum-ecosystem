@@ -264,17 +264,17 @@ Subject (16) × Phase (2) × Category (5) = Consistent Coverage
 
 Categories are structured around **user outcomes** rather than technical challenges:
 
-| Category             | User Scenario                  | Behavior Proved             | Priority    | Required | Min |
-| -------------------- | ------------------------------ | --------------------------- | ----------- | -------- | --- |
-| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical    | **YES**  | 4+  |
-| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High        | **YES**  | 2+  |
-| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical    | **YES**  | 1+  |
-| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium      | **YES**  | 1+  |
-| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | Exploratory | No       | 0-1 |
+| Category             | User Scenario                  | Behavior Proved             | Priority | Required | Min |
+| -------------------- | ------------------------------ | --------------------------- | -------- | -------- | --- |
+| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical | **YES**  | 4+  |
+| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High     | **YES**  | 2+  |
+| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical | **YES**  | 1+  |
+| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium   | **YES**  | 1+  |
+| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | High     | **YES**  | 1+  |
 
-**Minimum per entry**: 8-10 queries covering all 4 required categories.
+**Minimum per entry**: 9-11 queries covering all 5 required categories.
 
-**Enforcement**: Validation check 20 (`category-coverage`) enforces these minimums programmatically. Entries failing this check cannot pass Stage 1 validation.
+**Enforcement**: Validation check 16 (`category-coverage`) enforces these minimums programmatically. Entries failing this check cannot pass Stage 2 validation.
 
 #### Category Migration (2026-01-09)
 
@@ -310,9 +310,9 @@ For **EACH** subject-phase entry, verify:
 - [ ] Contains 2+ `natural-expression` queries
 - [ ] Contains 1+ `imprecise-input` query
 - [ ] Contains 1+ `cross-topic` query
-- [ ] Contains 0-1 `pedagogical-intent` query (optional)
+- [ ] Contains 1+ `pedagogical-intent` query
 
-**If any required category is missing → Add queries before the entry is considered complete.**
+**ALL 5 categories are REQUIRED. If any category is missing → Add queries before the entry is considered complete.**
 
 ## Rationale
 
@@ -416,6 +416,32 @@ Common patterns of invalid slugs:
 2. **Ground truth is critical infrastructure** — Treat it with same rigour as production code
 3. **Invalid data corrupts decisions** — One experiment rejection may have been wrong
 4. **Two-stage validation is essential** — Programmatic + semantic review
+
+## Stage 3 Completion Record
+
+### Stage 3 Qualitative Review (2026-01-09)
+
+The Stage 3 qualitative review was completed 2026-01-09, validating all 474 ground truth queries across 30 subject/phase entries.
+
+**Review Summary:**
+
+| Metric                 | Value                                                   |
+| ---------------------- | ------------------------------------------------------- |
+| Total queries reviewed | 474                                                     |
+| Total slugs validated  | 1,290                                                   |
+| Subject/phase entries  | 30 (citizenship-primary and german-primary don't exist) |
+| Issues found           | 1                                                       |
+| Issues fixed           | 1                                                       |
+
+**Category coverage verified:** All entries meet minimum requirements (4+ precise-topic, 2+ natural-expression, 1+ imprecise-input, 1+ cross-topic).
+
+**Cross-entry consistency verified:** 0 duplicate queries, 0 cross-subject slug conflicts.
+
+**Issue fixed:** `times tables year 3` in maths/primary was incorrectly categorized as `cross-topic` and corrected to `precise-topic` (year filter does not constitute topic intersection).
+
+**Review documentation:** `.agent/reviews/stage-3-review-progress.md`
+
+**Conclusion:** Ground truths are now **production-ready** following completion of all three validation stages.
 
 ## Related Documents
 

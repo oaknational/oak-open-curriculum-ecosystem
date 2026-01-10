@@ -1,7 +1,7 @@
 # Semantic Search — Navigation Hub
 
-**Status**: 📋 **Phase 8 — Comprehensive Baselines** (Ground truth remediation complete)
-**Last Updated**: 2026-01-08
+**Status**: 🔄 **Category Consistency + Benchmark Output Improvements Required**
+**Last Updated**: 2026-01-10
 **Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 ---
@@ -26,41 +26,36 @@ Then read:
 
 ---
 
-## 🎯 Current Priority: Phase 8 — Run Comprehensive Benchmarks
+## 🎯 Current Priorities
 
-**Status**: ✅ Ground truth remediation COMPLETE (2026-01-08). All 431 queries pass all 17 validation checks.
+### Priority 1: Add `pedagogical-intent` Queries to ALL Entries
 
-### What's Done ✅
+**Problem**: Only `maths/secondary` has `pedagogical-intent` queries (5). The other 29 entries have 0.
 
-| Task | Status |
-|------|--------|
-| Type generation infrastructure | ✅ Complete |
-| Validation script (17 checks) | ✅ Complete |
-| Analysis script (`pnpm ground-truth:analyze`) | ✅ Complete |
-| All quality issues fixed | ✅ Complete |
+**Why**: ALL 5 categories are now REQUIRED for consistent cross-subject benchmarking.
 
-### Final Quality Metrics
+**Steps**:
+1. Update validation script to make `pedagogical-intent` required (min 1 per entry)
+2. Add 1+ pedagogical-intent query to each of 29 entries
+3. Run `pnpm ground-truth:validate` — must pass
 
-| Issue | Before | After |
-|-------|--------|-------|
-| Invalid slugs | 66 | 0 |
-| Empty expectedRelevance | 12 | 0 |
-| Missing categories | 130 | 0 |
-| Short queries | 78 | 0 |
-| Uniform scores | 47 | 0 |
-| Missing priority | 34 | 0 |
-| **Total errors** | **408** | **0** |
+### Priority 2: Update Benchmark Output
 
-### Next Step: Run Benchmarks
+**Problem**: Current output shows only aggregate metrics per subject/phase.
+
+**Required**: Every run must display measured/target/difference/status for every subject-phase-category combination.
+
+### After Completing Priorities
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm ground-truth:validate              # Verify 0 errors
-pnpm ground-truth:analyze               # Confirm 0 issues
-pnpm benchmark --all                    # Run all 28 subject/phase entries
+pnpm ground-truth:validate              # Verify 0 errors (including pedagogical-intent)
+pnpm benchmark --all                    # Run all 30 entries with per-category output
 ```
 
-Then update `baselineMrr` values in `registry/entries.ts` with measured results.
+Then update `evaluation/baselines/baselines.json` with all measured metrics including per-category baselines.
+
+**Note**: Results are stored in `baselines.json`, NOT in registry code. The registry contains only ground truth queries.
 
 **Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
 

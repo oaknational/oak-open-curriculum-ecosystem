@@ -19,45 +19,181 @@ Chronological record of search experiments and their impact on system metrics.
 
 For the full current state, see [current-state.md](../plans/semantic-search/current-state.md).
 
-### ✅ Ground Truth Remediation COMPLETE (2026-01-08)
+### ✅ Phase 8 Comprehensive Baselines COMPLETE (2026-01-10)
 
-**All validation checks pass. Ground truths are production-ready.**
+**All 30 subject/phase entries measured with production-ready ground truths.**
 
-| Issue | Before | After | Status |
-|-------|--------|-------|--------|
-| Validation script | ❌ Broken | ✅ 17 checks | ✅ Fixed |
-| Invalid slugs | 66 (5.2%) | 0 | ✅ Fixed |
-| Empty expectedRelevance | 12 queries | 0 | ✅ Fixed |
-| Missing categories | 130 queries | 0 | ✅ Fixed |
-| Short queries | 78 queries | 0 | ✅ Fixed |
-| Uniform scores (2+ slugs) | 47 queries | 0 | ✅ Fixed |
-| Missing priority | 34 queries | 0 | ✅ Fixed |
+| Metric | Value | Status |
+|--------|-------|--------|
+| Overall MRR | 0.616 | ✅ Exceeds Tier 1 target (0.45) |
+| Overall NDCG@10 | 0.548 | ⚠️ Below target (0.75) |
+| Overall Precision@10 | 0.179 | ⚠️ Below target (0.50) |
+| Overall Recall@10 | 0.659 | ✅ Meets target (0.60) |
+| Zero-Hit Rate | 13.5% | ⚠️ Above target (10%) |
+| p95 Latency | 808ms | ⚠️ Above target (300ms) |
+| Total Queries | 474 | — |
+| Total Entries | 30 | — |
 
-**Status**: All 431 queries across 30 entries pass all 17 validation checks. Benchmarks can proceed.
+**Results stored in**: `evaluation/baselines/baselines.json`
+
+**Performance by tier**:
+
+- ✅ Excellent (MRR ≥ 0.80): 8 entries
+- ✅ Good (MRR 0.50-0.79): 13 entries
+- ⚠️ Acceptable (MRR 0.40-0.49): 5 entries
+- ❌ Poor (MRR < 0.40): 4 entries (MFL subjects)
 
 **Available scripts**:
 
 ```bash
-pnpm ground-truth:validate  # Run all 17 validation checks
+pnpm ground-truth:validate  # Run all 16 validation checks
 pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+pnpm benchmark --all        # Run benchmarks for all entries
 ```
 
-### Historical: TRUE BASELINE (2025-12-24) — NOW SUSPECT
+### Historical: Previous Baselines (2025-12-24) — SUPERSEDED
 
-**Note**: These baselines were measured against ground truth that has since been found to have quality issues.
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| Lesson Hard MRR | 0.614 | ⚠️ May be inaccurate |
-| Unit Hard MRR | 0.856 | ⚠️ May be inaccurate |
-| Lesson Std MRR | 0.944 | ⚠️ May be inaccurate |
-| Unit Std MRR | 0.988 | ⚠️ May be inaccurate |
+**Note**: These baselines were measured against ground truth that has since been corrected. The 2026-01-10 baselines above are now authoritative.
 
 **See**: [ground-truth-corrections.md](ground-truth-corrections.md) for details of previous corrections (63 in Dec 2025).
 
 ---
 
 ## Log Entries
+
+### 2026-01-10: Phase 8 Comprehensive Baselines — COMPLETE
+
+**Context**: First comprehensive baseline measurement across all 30 subject/phase entries using production-ready ground truths (474 queries, all three validation stages complete).
+
+**Method**: `pnpm benchmark --all` against live Elasticsearch.
+
+**Results — All 30 Entries**:
+
+| Entry | #Q | MRR | NDCG@10 | P@10 | R@10 | Zero% | p95ms | Status |
+|-------|-----|-----|---------|------|------|-------|-------|--------|
+| art/primary | 9 | 0.889 | 0.809 | 0.167 | 0.833 | 0.0% | 2344 | ✅ Excellent |
+| art/secondary | 10 | 0.688 | 0.623 | 0.210 | 0.767 | 0.0% | 620 | ✅ Good |
+| citizenship/secondary | 8 | 0.408 | 0.362 | 0.150 | 0.500 | 25.0% | 477 | ⚠️ Acceptable |
+| computing/primary | 9 | 0.574 | 0.522 | 0.156 | 0.778 | 11.1% | 571 | ✅ Good |
+| computing/secondary | 11 | 0.827 | 0.666 | 0.182 | 0.636 | 9.1% | 983 | ✅ Excellent |
+| cooking-nutrition/primary | 8 | 0.572 | 0.517 | 0.175 | 0.750 | 12.5% | 462 | ✅ Good |
+| cooking-nutrition/secondary | 10 | 0.833 | 0.786 | 0.160 | 0.850 | 10.0% | 513 | ✅ Excellent |
+| design-technology/primary | 9 | 0.574 | 0.528 | 0.156 | 0.778 | 11.1% | 480 | ✅ Good |
+| design-technology/secondary | 10 | 0.452 | 0.480 | 0.180 | 0.650 | 10.0% | 672 | ⚠️ Acceptable |
+| english/primary | 15 | 0.617 | 0.546 | 0.187 | 0.644 | 13.3% | 846 | ✅ Good |
+| english/secondary | 57 | 0.591 | 0.519 | 0.181 | 0.599 | 12.3% | 732 | ✅ Good |
+| french/primary | 9 | 0.379 | 0.353 | 0.111 | 0.500 | 33.3% | 516 | ❌ Poor |
+| french/secondary | 8 | 0.263 | 0.244 | 0.063 | 0.271 | 62.5% | 529 | ❌ Poor |
+| geography/primary | 9 | 0.759 | 0.631 | 0.144 | 0.722 | 0.0% | 615 | ✅ Good |
+| geography/secondary | 14 | 0.758 | 0.560 | 0.186 | 0.619 | 0.0% | 839 | ✅ Good |
+| german/secondary | 8 | 0.119 | 0.163 | 0.063 | 0.292 | 50.0% | 467 | ❌ Very Poor |
+| history/primary | 8 | 0.643 | 0.607 | 0.200 | 0.708 | 12.5% | 451 | ✅ Good |
+| history/secondary | 16 | 0.713 | 0.658 | 0.231 | 0.812 | 6.3% | 598 | ✅ Good |
+| maths/primary | 37 | 0.561 | 0.456 | 0.157 | 0.554 | 16.2% | 938 | ✅ Good |
+| maths/secondary | 76 | 0.734 | 0.671 | 0.242 | 0.811 | 2.6% | 1012 | ✅ Good |
+| music/primary | 9 | 0.512 | 0.422 | 0.111 | 0.556 | 33.3% | 517 | ✅ Good |
+| music/secondary | 10 | 0.825 | 0.723 | 0.230 | 0.850 | 10.0% | 494 | ✅ Excellent |
+| physical-education/primary | 19 | 0.408 | 0.338 | 0.116 | 0.461 | 31.6% | 432 | ⚠️ Acceptable |
+| physical-education/secondary | 10 | 0.328 | 0.287 | 0.100 | 0.383 | 40.0% | 634 | ❌ Poor |
+| religious-education/primary | 9 | 0.421 | 0.448 | 0.122 | 0.611 | 33.3% | 411 | ⚠️ Acceptable |
+| religious-education/secondary | 8 | 0.408 | 0.322 | 0.100 | 0.396 | 25.0% | 477 | ⚠️ Acceptable |
+| science/primary | 16 | 0.815 | 0.771 | 0.269 | 0.839 | 0.0% | 726 | ✅ Excellent |
+| science/secondary | 35 | 0.811 | 0.711 | 0.226 | 0.776 | 0.0% | 744 | ✅ Excellent |
+| spanish/primary | 9 | 0.341 | 0.378 | 0.100 | 0.500 | 22.2% | 471 | ❌ Poor |
+| spanish/secondary | 8 | 0.200 | 0.168 | 0.063 | 0.313 | 50.0% | 472 | ❌ Poor |
+| **OVERALL** | **474** | **0.616** | **0.548** | **0.179** | **0.659** | **13.5%** | **808** | — |
+
+**Performance Tiers**:
+
+| Tier | Entries | Subjects |
+|------|---------|----------|
+| ✅ Excellent (MRR ≥ 0.80) | 8 | art/primary, computing/secondary, cooking-nutrition/secondary, music/secondary, science/primary, science/secondary |
+| ✅ Good (MRR 0.50-0.79) | 13 | art/secondary, computing/primary, cooking-nutrition/primary, design-technology/primary, english/primary, english/secondary, geography/primary, geography/secondary, history/primary, history/secondary, maths/primary, maths/secondary, music/primary |
+| ⚠️ Acceptable (MRR 0.40-0.49) | 5 | citizenship/secondary, design-technology/secondary, physical-education/primary, religious-education/primary, religious-education/secondary |
+| ❌ Poor (MRR < 0.40) | 4 | french/primary, french/secondary, physical-education/secondary, spanish/primary, spanish/secondary, german/secondary |
+
+**Key Findings**:
+
+1. **MFL subjects critically underperform**: German (0.119), Spanish/secondary (0.200), French/secondary (0.263) — ELSER is English-only, cannot semantically match target language content
+2. **Science excels across phases**: Primary (0.815) and secondary (0.811) both excellent
+3. **Art/primary is top performer**: MRR 0.889 (but high latency at 2344ms)
+4. **PE struggles**: Both primary (0.408) and secondary (0.328) need improvement
+5. **Overall MRR 0.616**: Exceeds Tier 1 target (0.45) by 37%
+
+**Results stored in**: `evaluation/baselines/baselines.json`
+
+---
+
+#### Detailed Metric Comparison Grid (Measured / Target)
+
+**Targets**: MRR ≥0.70 | NDCG@10 ≥0.75 | P@10 ≥0.50 | R@10 ≥0.60 | Zero% ≤10% | p95ms ≤300
+
+**Legend**: ✅ meets target | ⚠️ fair (within 50%) | ❌ fails target
+
+| Entry | MRR | | NDCG@10 | | P@10 | | R@10 | | Zero% | | p95ms | |
+|-------|-----|---|---------|---|------|---|------|---|-------|---|-------|---|
+| | **Actual** | **vs 0.70** | **Actual** | **vs 0.75** | **Actual** | **vs 0.50** | **Actual** | **vs 0.60** | **Actual** | **vs ≤10%** | **Actual** | **vs ≤300** |
+| art/primary | 0.889 | ✅ | 0.809 | ✅ | 0.167 | ❌ | 0.833 | ✅ | 0.0% | ✅ | 2344 | ❌ |
+| art/secondary | 0.688 | ⚠️ | 0.623 | ⚠️ | 0.210 | ❌ | 0.767 | ✅ | 0.0% | ✅ | 620 | ❌ |
+| citizenship/secondary | 0.408 | ❌ | 0.362 | ❌ | 0.150 | ❌ | 0.500 | ⚠️ | 25.0% | ❌ | 477 | ⚠️ |
+| computing/primary | 0.574 | ⚠️ | 0.522 | ⚠️ | 0.156 | ❌ | 0.778 | ✅ | 11.1% | ⚠️ | 571 | ❌ |
+| computing/secondary | 0.827 | ✅ | 0.666 | ⚠️ | 0.182 | ❌ | 0.636 | ✅ | 9.1% | ✅ | 983 | ❌ |
+| cooking-nutrition/primary | 0.572 | ⚠️ | 0.517 | ⚠️ | 0.175 | ❌ | 0.750 | ✅ | 12.5% | ⚠️ | 462 | ⚠️ |
+| cooking-nutrition/secondary | 0.833 | ✅ | 0.786 | ✅ | 0.160 | ❌ | 0.850 | ✅ | 10.0% | ✅ | 513 | ❌ |
+| design-technology/primary | 0.574 | ⚠️ | 0.528 | ⚠️ | 0.156 | ❌ | 0.778 | ✅ | 11.1% | ⚠️ | 480 | ⚠️ |
+| design-technology/secondary | 0.452 | ❌ | 0.480 | ⚠️ | 0.180 | ❌ | 0.650 | ✅ | 10.0% | ✅ | 672 | ❌ |
+| english/primary | 0.617 | ⚠️ | 0.546 | ⚠️ | 0.187 | ❌ | 0.644 | ✅ | 13.3% | ⚠️ | 846 | ❌ |
+| english/secondary | 0.591 | ⚠️ | 0.519 | ⚠️ | 0.181 | ❌ | 0.599 | ⚠️ | 12.3% | ⚠️ | 732 | ❌ |
+| french/primary | 0.379 | ❌ | 0.353 | ❌ | 0.111 | ❌ | 0.500 | ⚠️ | 33.3% | ❌ | 516 | ❌ |
+| french/secondary | 0.263 | ❌ | 0.244 | ❌ | 0.063 | ❌ | 0.271 | ❌ | 62.5% | ❌ | 529 | ❌ |
+| geography/primary | 0.759 | ✅ | 0.631 | ⚠️ | 0.144 | ❌ | 0.722 | ✅ | 0.0% | ✅ | 615 | ❌ |
+| geography/secondary | 0.758 | ✅ | 0.560 | ⚠️ | 0.186 | ❌ | 0.619 | ✅ | 0.0% | ✅ | 839 | ❌ |
+| german/secondary | 0.119 | ❌ | 0.163 | ❌ | 0.063 | ❌ | 0.292 | ❌ | 50.0% | ❌ | 467 | ⚠️ |
+| history/primary | 0.643 | ⚠️ | 0.607 | ⚠️ | 0.200 | ❌ | 0.708 | ✅ | 12.5% | ⚠️ | 451 | ⚠️ |
+| history/secondary | 0.713 | ✅ | 0.658 | ⚠️ | 0.231 | ❌ | 0.812 | ✅ | 6.3% | ✅ | 598 | ❌ |
+| maths/primary | 0.561 | ⚠️ | 0.456 | ⚠️ | 0.157 | ❌ | 0.554 | ⚠️ | 16.2% | ⚠️ | 938 | ❌ |
+| maths/secondary | 0.734 | ✅ | 0.671 | ⚠️ | 0.242 | ❌ | 0.811 | ✅ | 2.6% | ✅ | 1012 | ❌ |
+| music/primary | 0.512 | ⚠️ | 0.422 | ❌ | 0.111 | ❌ | 0.556 | ⚠️ | 33.3% | ❌ | 517 | ❌ |
+| music/secondary | 0.825 | ✅ | 0.723 | ⚠️ | 0.230 | ❌ | 0.850 | ✅ | 10.0% | ✅ | 494 | ⚠️ |
+| physical-education/primary | 0.408 | ❌ | 0.338 | ❌ | 0.116 | ❌ | 0.461 | ⚠️ | 31.6% | ❌ | 432 | ⚠️ |
+| physical-education/secondary | 0.328 | ❌ | 0.287 | ❌ | 0.100 | ❌ | 0.383 | ❌ | 40.0% | ❌ | 634 | ❌ |
+| religious-education/primary | 0.421 | ❌ | 0.448 | ⚠️ | 0.122 | ❌ | 0.611 | ✅ | 33.3% | ❌ | 411 | ⚠️ |
+| religious-education/secondary | 0.408 | ❌ | 0.322 | ❌ | 0.100 | ❌ | 0.396 | ❌ | 25.0% | ❌ | 564 | ❌ |
+| science/primary | 0.815 | ✅ | 0.771 | ✅ | 0.269 | ❌ | 0.839 | ✅ | 0.0% | ✅ | 726 | ❌ |
+| science/secondary | 0.811 | ✅ | 0.711 | ⚠️ | 0.226 | ❌ | 0.776 | ✅ | 0.0% | ✅ | 744 | ❌ |
+| spanish/primary | 0.341 | ❌ | 0.378 | ❌ | 0.100 | ❌ | 0.500 | ⚠️ | 22.2% | ❌ | 471 | ⚠️ |
+| spanish/secondary | 0.200 | ❌ | 0.168 | ❌ | 0.063 | ❌ | 0.313 | ❌ | 50.0% | ❌ | 472 | ⚠️ |
+| **OVERALL** | **0.616** | ⚠️ | **0.548** | ⚠️ | **0.179** | ❌ | **0.659** | ✅ | **13.5%** | ⚠️ | **808** | ❌ |
+
+#### Summary by Metric (entries meeting target)
+
+| Metric | Target | ✅ Meets | ⚠️ Fair | ❌ Fails | % Meeting |
+|--------|--------|---------|---------|---------|-----------|
+| MRR | ≥0.70 | 11 | 10 | 9 | 37% |
+| NDCG@10 | ≥0.75 | 3 | 17 | 10 | 10% |
+| P@10 | ≥0.50 | 0 | 0 | 30 | 0% |
+| R@10 | ≥0.60 | 20 | 6 | 4 | 67% |
+| Zero% | ≤10% | 12 | 8 | 10 | 40% |
+| p95ms | ≤300ms | 0 | 10 | 20 | 0% |
+
+#### Critical Observations
+
+1. **Precision@10 universally fails** — No entry meets 0.50 target (max: 0.269 science/primary)
+2. **Latency universally fails** — No entry meets 300ms target (min: 411ms RE/primary)
+3. **Recall@10 is strongest** — 67% meet target (20/30 entries)
+4. **MFL subjects fail across all metrics** — French, German, Spanish consistently ❌
+
+---
+
+**Decision**: ✅ **PHASE 8 COMPLETE** — Comprehensive baselines established for all 30 entries.
+
+**Next Steps**:
+
+1. Investigate MFL performance (ELSER multilingual limitation)
+2. Improve PE ground truths or search configuration
+3. Address high-latency entries (art/primary at 2344ms)
+
+---
 
 ### 2026-01-08: Ground Truth Remediation — COMPLETE
 
@@ -216,7 +352,7 @@ All 431 queries pass all 17 validation checks. Ground truths are production-read
 - ADR-098: Ground Truth Registry as Single Source of Truth
 - Updated: `evaluation/analysis/README.md`
 
-**Next**: Phase 8 — Run `pnpm benchmark --all` against live ES, update `baselineMrr` values.
+**Next**: Phase 8 — Run `pnpm benchmark --all` against live ES, update `evaluation/baselines/baselines.json` with all metrics (MRR, NDCG@10, Precision@10, Recall@10, Zero-Hit Rate, p95 Latency).
 
 ---
 

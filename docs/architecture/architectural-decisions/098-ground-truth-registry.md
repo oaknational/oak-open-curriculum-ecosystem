@@ -219,15 +219,15 @@ Ground truths form a **subject × phase × category matrix** that must have cons
 
 Categories are structured around **user outcomes** rather than technical challenges:
 
-| Category             | User Scenario                  | Behavior Proved             | Priority    | Required | Min |
-| -------------------- | ------------------------------ | --------------------------- | ----------- | -------- | --- |
-| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical    | **YES**  | 4+  |
-| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High        | **YES**  | 2+  |
-| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical    | **YES**  | 1+  |
-| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium      | **YES**  | 1+  |
-| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | Exploratory | No       | 0-1 |
+| Category             | User Scenario                  | Behavior Proved             | Priority | Required | Min |
+| -------------------- | ------------------------------ | --------------------------- | -------- | -------- | --- |
+| `precise-topic`      | Teacher knows curriculum terms | Basic retrieval works       | Critical | **YES**  | 4+  |
+| `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High     | **YES**  | 2+  |
+| `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical | **YES**  | 1+  |
+| `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium   | **YES**  | 1+  |
+| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | High     | **YES**  | 1+  |
 
-**Minimum per entry**: 8-10 queries covering all 4 required categories.
+**Minimum per entry**: 9-11 queries covering all 5 required categories.
 
 **Category Migration**: Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are still accepted for backward compatibility but deprecated.
 

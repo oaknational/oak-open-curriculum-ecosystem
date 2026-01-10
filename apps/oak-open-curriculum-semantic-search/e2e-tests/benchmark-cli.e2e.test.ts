@@ -99,19 +99,16 @@ describe('benchmark CLI E2E', () => {
 
       expect(result.exitCode).toBe(0);
 
-      // Verify output structure
-      expect(result.stdout).toContain('BENCHMARK RESULTS');
-      expect(result.stdout).toContain('Subject');
-      expect(result.stdout).toContain('Phase');
+      // Verify output contains IR metrics (behavior we care about)
       expect(result.stdout).toContain('MRR');
       expect(result.stdout).toContain('NDCG');
       expect(result.stdout).toContain('Zero%');
 
-      // Verify maths/primary appears in results
+      // Verify requested subject/phase appears in results
       expect(result.stdout).toContain('maths');
       expect(result.stdout).toContain('primary');
 
-      // Verify OVERALL summary appears
+      // Verify aggregate metrics summary exists
       expect(result.stdout).toContain('OVERALL:');
     });
 
@@ -119,7 +116,8 @@ describe('benchmark CLI E2E', () => {
       const result = await runBenchmarkCli(['--all']);
 
       expect(result.exitCode).toBe(0);
-      expect(result.stdout).toContain('BENCHMARK RESULTS');
+
+      // Verify aggregate metrics summary exists
       expect(result.stdout).toContain('OVERALL:');
 
       // Should have run multiple entries

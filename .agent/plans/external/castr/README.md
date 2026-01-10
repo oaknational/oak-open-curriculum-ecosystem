@@ -59,8 +59,25 @@ Provide canonical inputs for validating `@engraph/castr` against a real, schema-
 - Output must be lossless: normalised OpenAPI output must be identical to the SDK input schema.
 - Ordering must be deterministic for schema and endpoint registries.
 - Bundle manifest is required for validation runs.
-- TypeScript output must export `paths` and `components` types for the SDK client and public API.
+- TypeScript output must export `paths`, `components`, and `operations` types for the SDK client and public API.
 
+## Invariant checks (non-exhaustive, non-formatting)
+
+Endpoints are complete and deterministic:
+- Every OpenAPI operation is present in `endpoints.json`.
+- No extra operations appear in `endpoints.json`.
+- Endpoints are sorted by `method + path`.
+
+Schema registry integrity:
+- All schema references in endpoints resolve to `schemas.json`.
+- Object schemas are explicitly strict (`additionalProperties: false` or `unevaluatedProperties: false`).
+- Schemas are sorted by name.
+
+Response completeness:
+- Every response entry includes either `schemaRef` or `jsonSchema`.
+
+Lossless OpenAPI output:
+- `emit.openapi` must be byte-stable (JSON key ordering normalised) against `api-schema-sdk.json`.
 ## Verification harness
 
 Run from repo root:
@@ -74,6 +91,15 @@ Optional arguments:
 ```bash
 node .agent/plans/external/castr/verify-castr-fixtures.mjs --dir .agent/plans/external/castr
 node .agent/plans/external/castr/verify-castr-fixtures.mjs --bundle /path/to/castr-bundle.json
+```
+
+The harness also validates `castr-bundle.sample.json` if present to prove the bundle schema wiring.
+It prints a short human summary to stderr (eslint-style counts + failures) and the full JSON report to stdout.
+
+By default the sample bundle only checks shape (not file existence). Use `--strict-sample` to enforce asset existence:
+
+```bash
+node .agent/plans/external/castr/verify-castr-fixtures.mjs --strict-sample
 ```
 
 ## Local castr checkout

@@ -111,6 +111,16 @@ export const ART_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of colour theory and texture within themed art',
   },
+  {
+    query: 'hands-on activity for reluctant artists',
+    expectedRelevance: {
+      'expressive-mark-making': 3,
+      'building-drawing-machines': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for engagement without specifying art technique.',
+  },
 ] as const;
 
 /**

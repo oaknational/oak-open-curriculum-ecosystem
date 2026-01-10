@@ -121,6 +121,16 @@ export const COOKING_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of nutrition theory with practical cooking skills.',
   },
+  {
+    query: 'quick practical for double lesson',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for time-appropriate practical cooking.',
+    expectedRelevance: {
+      'making-leek-and-potato-soup': 3,
+      'making-a-mini-deli-salad': 2,
+    },
+  },
 ] as const;
 
 /**

@@ -5,65 +5,119 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { calculateP95 } from './benchmark-stats';
+import type { QueryResult } from './benchmark-query-runner.js';
+import { aggregateByCategory } from './benchmark-stats.js';
 
-describe('calculateP95', () => {
-  it('returns 0 for empty array', () => {
-    const result = calculateP95([]);
-    expect(result).toBe(0);
+describe('aggregateByCategory', () => {
+  /**
+   * Creates a mock QueryResult for testing.
+   */
+  function createResult(
+    category: QueryResult['category'],
+    mrr: number,
+    hasHit: boolean,
+    latencyMs = 100,
+  ): QueryResult {
+    return {
+      category,
+      mrr,
+      ndcg10: mrr * 0.9, // Simplified for testing
+      precision10: mrr * 0.2,
+      recall10: mrr * 0.8,
+      latencyMs,
+      hasHit,
+    };
+  }
+
+  it('should return empty array for empty input', () => {
+    const result = aggregateByCategory([]);
+    expect(result).toEqual([]);
   });
 
-  it('returns the single value for array of one', () => {
-    const result = calculateP95([100]);
-    expect(result).toBe(100);
-  });
-
-  it('returns the maximum for array of two values', () => {
-    // 95th percentile of 2 values is effectively the max
-    const result = calculateP95([100, 200]);
-    expect(result).toBe(200);
-  });
-
-  it('returns approximately 95th percentile for larger array', () => {
-    // 20 values: 1-20. 95th percentile index = floor(20 * 0.95) = 19
-    const latencies = Array.from({ length: 20 }, (_, i) => i + 1);
-    const result = calculateP95(latencies);
-    expect(result).toBe(20); // Index 19 (0-based) = value 20
-  });
-
-  it('handles unsorted input correctly', () => {
-    // Should sort internally
-    const latencies = [300, 100, 200, 400, 500];
-    const result = calculateP95(latencies);
-    // Sorted: [100, 200, 300, 400, 500]
-    // 95th percentile index = floor(5 * 0.95) = 4
-    expect(result).toBe(500);
-  });
-
-  it('returns correct p95 for 100 values', () => {
-    // 100 values: 1-100. 95th percentile index = floor(100 * 0.95) = 95
-    const latencies = Array.from({ length: 100 }, (_, i) => i + 1);
-    const result = calculateP95(latencies);
-    expect(result).toBe(96); // Index 95 (0-based) = value 96
-  });
-
-  it('handles all same values', () => {
-    const latencies = [50, 50, 50, 50, 50];
-    const result = calculateP95(latencies);
-    expect(result).toBe(50);
-  });
-
-  it('handles realistic latency distribution', () => {
-    // Simulate realistic latencies: mostly fast, some slow outliers
-    const latencies = [
-      ...Array.from({ length: 90 }, () => 100), // 90 fast queries at 100ms
-      ...Array.from({ length: 5 }, () => 200), // 5 medium queries at 200ms
-      ...Array.from({ length: 5 }, () => 500), // 5 slow queries at 500ms
+  it('should aggregate single category correctly', () => {
+    const results: QueryResult[] = [
+      createResult('precise-topic', 1.0, true, 100),
+      createResult('precise-topic', 0.5, true, 200),
     ];
-    const result = calculateP95(latencies);
-    // Index = floor(100 * 0.95) = 95
-    // Sorted: [100 (indices 0-89), 200 (indices 90-94), 500 (indices 95-99)]
-    // Index 95 is in the 500ms range
-    expect(result).toBe(500);
+
+    const aggregated = aggregateByCategory(results);
+
+    expect(aggregated).toHaveLength(1);
+    expect(aggregated[0]?.category).toBe('precise-topic');
+    expect(aggregated[0]?.queryCount).toBe(2);
+    expect(aggregated[0]?.mrr).toBe(0.75); // (1.0 + 0.5) / 2
+    expect(aggregated[0]?.zeroHitRate).toBe(0); // Both have hits
+  });
+
+  it('should aggregate multiple categories correctly', () => {
+    const results: QueryResult[] = [
+      createResult('precise-topic', 1.0, true),
+      createResult('precise-topic', 0.5, true),
+      createResult('imprecise-input', 0.8, true),
+      createResult('pedagogical-intent', 0.0, false),
+    ];
+
+    const aggregated = aggregateByCategory(results);
+
+    expect(aggregated).toHaveLength(3);
+
+    // Results should be sorted alphabetically by category
+    expect(aggregated[0]?.category).toBe('imprecise-input');
+    expect(aggregated[1]?.category).toBe('pedagogical-intent');
+    expect(aggregated[2]?.category).toBe('precise-topic');
+  });
+
+  it('should calculate zero-hit rate correctly', () => {
+    const results: QueryResult[] = [
+      createResult('precise-topic', 1.0, true),
+      createResult('precise-topic', 0.0, false),
+      createResult('precise-topic', 0.5, true),
+      createResult('precise-topic', 0.0, false),
+    ];
+
+    const aggregated = aggregateByCategory(results);
+
+    expect(aggregated[0]?.zeroHitRate).toBe(0.5); // 2 out of 4 have no hits
+  });
+
+  it('should calculate p95 latency correctly', () => {
+    const results: QueryResult[] = [
+      createResult('precise-topic', 1.0, true, 100),
+      createResult('precise-topic', 1.0, true, 200),
+      createResult('precise-topic', 1.0, true, 300),
+      createResult('precise-topic', 1.0, true, 400),
+      createResult('precise-topic', 1.0, true, 500),
+      createResult('precise-topic', 1.0, true, 600),
+      createResult('precise-topic', 1.0, true, 700),
+      createResult('precise-topic', 1.0, true, 800),
+      createResult('precise-topic', 1.0, true, 900),
+      createResult('precise-topic', 1.0, true, 1000),
+    ];
+
+    const aggregated = aggregateByCategory(results);
+
+    // p95 of [100, 200, ..., 1000] should be around 950-1000
+    expect(aggregated[0]?.p95LatencyMs).toBeGreaterThanOrEqual(900);
+    expect(aggregated[0]?.p95LatencyMs).toBeLessThanOrEqual(1000);
+  });
+
+  it('should include all required categories', () => {
+    const results: QueryResult[] = [
+      createResult('precise-topic', 1.0, true),
+      createResult('natural-expression', 0.8, true),
+      createResult('imprecise-input', 0.6, true),
+      createResult('cross-topic', 0.4, true),
+      createResult('pedagogical-intent', 0.2, false),
+    ];
+
+    const aggregated = aggregateByCategory(results);
+
+    expect(aggregated).toHaveLength(5);
+    const categories = aggregated.map((r) => r.category);
+    expect(categories).toContain('precise-topic');
+    expect(categories).toContain('natural-expression');
+    expect(categories).toContain('imprecise-input');
+    expect(categories).toContain('cross-topic');
+    expect(categories).toContain('pedagogical-intent');
   });
 });

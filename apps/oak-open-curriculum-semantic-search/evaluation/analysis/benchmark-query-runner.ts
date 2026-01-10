@@ -11,6 +11,7 @@
 
 import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
 import type { Phase } from '../../src/lib/search-quality/ground-truth/registry/index.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
 import type { SearchSubjectSlug } from '../../src/types/oak.js';
 import {
   calculateMRR,
@@ -42,21 +43,30 @@ export interface SearchResponse {
  */
 export type SearchFunction = (request: EsSearchRequest) => Promise<SearchResponse>;
 
-/** Input parameters for running a single benchmark query. */
+/**
+ * Input parameters for running a single benchmark query.
+ *
+ * Includes the query category for per-category metric aggregation.
+ */
 export interface RunQueryInput {
   readonly query: string;
   readonly expectedRelevance: Readonly<Record<string, number>>;
   readonly subject: SearchSubjectSlug;
   readonly phase: Phase;
   readonly queryKeyStage?: KeyStage;
+  /** Category of user scenario this query represents. */
+  readonly category: QueryCategory;
 }
 
 /**
  * Result of running a single benchmark query.
  *
- * Contains all IR metrics as defined in IR-METRICS.md.
+ * Contains all IR metrics as defined in IR-METRICS.md,
+ * plus the category for per-category aggregation.
  */
 export interface QueryResult {
+  /** Category of user scenario this query represents. */
+  readonly category: QueryCategory;
   readonly mrr: number;
   readonly ndcg10: number;
   readonly precision10: number;
@@ -116,6 +126,7 @@ export async function runQuery(
   const recall10 = calculateRecallAtK(actualResults, relevanceMap, 10);
 
   return {
+    category: input.category,
     mrr,
     ndcg10,
     precision10,

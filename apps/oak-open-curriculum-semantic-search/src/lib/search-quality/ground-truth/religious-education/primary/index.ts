@@ -111,6 +111,16 @@ export const RE_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of religious teachings with ethical values.',
   },
+  {
+    query: 'discussion starter for sensitive topic',
+    expectedRelevance: {
+      'shared-stories': 3,
+      'the-calling-of-abraham': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for thoughtful RE discussion.',
+  },
 ] as const;
 
 /**

@@ -184,7 +184,7 @@ pnpm smoke:dev:stub                     # Behavior-focused tests
 
 ### Metrics Output
 
-Benchmark outputs ALL standard IR metrics:
+Benchmark outputs ALL standard IR metrics at **per-category granularity**:
 
 | Metric | What It Measures |
 |--------|------------------|
@@ -194,6 +194,17 @@ Benchmark outputs ALL standard IR metrics:
 | **Recall@10** | Proportion of relevant found in top 10 |
 | **Zero-Hit Rate** | Queries returning nothing |
 | **p95 Latency** | 95th percentile response time |
+
+**Required output format** (for EVERY benchmark run):
+
+```
+Subject/Phase/Category | MRR      | NDCG@10  | P@10     | R@10     | Zero%    | p95ms
+                       | Act/Tgt  | Act/Tgt  | Act/Tgt  | Act/Tgt  | Act/Tgt  | Act/Tgt
+-----------------------|----------|----------|----------|----------|----------|----------
+maths/secondary/precise| 0.89/0.70| 0.82/0.75| 0.17/0.50| 0.83/0.60| 0%/≤10%  | 234/≤300
+```
+
+Each cell shows: `actual/target` with status indicator (✅/⚠️/❌)
 
 > **Full definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
 

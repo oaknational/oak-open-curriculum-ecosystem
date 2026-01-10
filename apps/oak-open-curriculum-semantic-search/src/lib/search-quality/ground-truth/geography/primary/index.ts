@@ -111,6 +111,16 @@ export const GEOGRAPHY_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of mapping skills with environmental topics.',
   },
+  {
+    query: 'outdoor fieldwork activity autumn',
+    expectedRelevance: {
+      'fieldwork-autumn-in-the-school-grounds': 3,
+      'mapping-trees-locally': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for outdoor practical learning.',
+  },
 ] as const;
 
 /**

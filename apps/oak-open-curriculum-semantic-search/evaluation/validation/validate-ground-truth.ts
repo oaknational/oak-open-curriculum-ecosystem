@@ -60,7 +60,12 @@ const generatedDir = resolve(thisDir, '../../ground-truths/generated');
 // Types
 // ============================================================================
 
-interface ValidationIssue {
+/**
+ * A validation issue found during ground truth validation.
+ *
+ * Exported for use in unit tests that verify validation behaviour.
+ */
+export interface ValidationIssue {
   readonly severity: 'error';
   readonly category: string;
   readonly entry: string;
@@ -174,24 +179,44 @@ function checkDuplicateQueries(
 /**
  * Required categories for consistent coverage.
  *
- * Every subject-phase entry MUST have queries in these categories
+ * Every subject-phase entry MUST have queries in ALL of these categories
  * to ensure benchmarks are comparable across the curriculum.
+ *
+ * Categories:
+ * - `precise-topic`: Teacher uses curriculum terminology (basic retrieval)
+ * - `natural-expression`: Teacher uses everyday language (vocabulary bridging)
+ * - `imprecise-input`: Teacher makes typos (error recovery)
+ * - `cross-topic`: Teacher wants intersection content (concept overlap)
+ * - `pedagogical-intent`: Teacher describes teaching goal (purpose understanding)
+ *
+ * @see ADR-085 Ground Truth Validation Discipline
  */
-const REQUIRED_CATEGORIES = [
+export const REQUIRED_CATEGORIES = [
   'precise-topic',
   'natural-expression',
   'imprecise-input',
   'cross-topic',
+  'pedagogical-intent',
 ] as const;
 
 /**
  * Minimum queries per required category.
+ *
+ * Each category has a minimum based on its testing value:
+ * - `precise-topic`: 4 — core functionality, needs multiple tests
+ * - `natural-expression`: 2 — vocabulary bridging is important
+ * - `imprecise-input`: 1 — typo handling
+ * - `cross-topic`: 1 — concept intersection
+ * - `pedagogical-intent`: 1 — teaching goal understanding
+ *
+ * @see ADR-085 Ground Truth Validation Discipline
  */
-const CATEGORY_MINIMUMS: Readonly<Record<string, number>> = {
+export const CATEGORY_MINIMUMS: Readonly<Record<string, number>> = {
   'precise-topic': 4,
   'natural-expression': 2,
   'imprecise-input': 1,
   'cross-topic': 1,
+  'pedagogical-intent': 1,
 };
 
 /**
@@ -199,8 +224,24 @@ const CATEGORY_MINIMUMS: Readonly<Record<string, number>> = {
  *
  * Each entry must have minimum required category coverage
  * to ensure benchmarks are comparable across subjects/phases.
+ *
+ * Validates that all categories in {@link REQUIRED_CATEGORIES} have
+ * at least the minimum count specified in {@link CATEGORY_MINIMUMS}.
+ *
+ * @param entry - The entry identifier (e.g., "maths/primary")
+ * @param queries - The queries to validate
+ * @param issues - Array to push validation issues into (mutated)
+ *
+ * @example
+ * ```typescript
+ * const issues: ValidationIssue[] = [];
+ * checkCategoryCoverage('maths/primary', queries, issues);
+ * if (issues.length > 0) {
+ *   console.error('Category coverage errors:', issues);
+ * }
+ * ```
  */
-function checkCategoryCoverage(
+export function checkCategoryCoverage(
   entry: string,
   queries: readonly GroundTruthQuery[],
   issues: ValidationIssue[],
@@ -650,6 +691,8 @@ function printSummary(summary: ValidationSummary): void {
 
 /**
  * Main entry point.
+ *
+ * Only runs when executed directly as a script, not when imported.
  */
 function main(): void {
   console.log('Ground Truth Validation');
@@ -682,4 +725,8 @@ function main(): void {
   process.exit(1);
 }
 
-main();
+// Only run main() when executed directly as a script, not when imported for testing
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
+  main();
+}

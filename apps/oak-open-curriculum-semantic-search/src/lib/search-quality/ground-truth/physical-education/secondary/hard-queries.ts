@@ -49,4 +49,24 @@ export const PE_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'setting-goals-for-training': 2,
     },
   },
+  {
+    query: 'fitness and athletics together',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of fitness training with athletics events.',
+    expectedRelevance: {
+      'design-your-programme': 3,
+      'running-for-speed-and-the-relationship-between-distance-and-time': 2,
+    },
+  },
+  {
+    query: 'indoor alternative for wet weather',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for context-constrained PE lesson.',
+    expectedRelevance: {
+      'design-your-programme': 3,
+      'the-fitt-frequency-intensity-time-and-type-principle': 2,
+    },
+  },
 ] as const;

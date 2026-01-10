@@ -28,27 +28,18 @@ import {
   calculateOverallMrr,
 } from './baseline-runner.js';
 import type { QueryBaselineResult } from './baseline-runner.js';
-import type { GroundTruthQuery, LegacyQueryCategory, QueryCategory } from './ground-truth/types.js';
+import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
 import { esSearch } from '../elastic-http.js';
 import { buildLessonRrfRequest, buildUnitRrfRequest } from '../hybrid-search/rrf-query-builders.js';
 import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../types/oak.js';
 
-/** All query categories for iteration (new + legacy) */
-// eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
-const ALL_CATEGORIES: readonly (QueryCategory | LegacyQueryCategory)[] = [
-  // New outcome-oriented categories
+/** All query categories for iteration */
+const ALL_CATEGORIES: readonly QueryCategory[] = [
   'precise-topic',
   'natural-expression',
   'imprecise-input',
   'cross-topic',
   'pedagogical-intent',
-  // Legacy categories (deprecated)
-  'naturalistic',
-  'misspelling',
-  'synonym',
-  'multi-concept',
-  'colloquial',
-  'intent-based',
 ];
 
 /**
@@ -124,8 +115,7 @@ function formatQueryRow(r: QueryBaselineResult): string {
 /** Output category table row */
 function formatCategoryRow(
   results: readonly QueryBaselineResult[],
-  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
-  category: QueryCategory | LegacyQueryCategory,
+  category: QueryCategory,
 ): string {
   const categoryResults = results.filter((r) => r.category === category);
   if (categoryResults.length === 0) {

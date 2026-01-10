@@ -45,4 +45,28 @@ export const HARD_QUERIES_SECONDARY_GERMAN: readonly GroundTruthQuery[] = [
       'what-i-do-at-school-infinitives-present-tense-3rd-person-singular': 2,
     },
   },
+
+  // CROSS-TOPIC
+  {
+    query: 'German verbs and vocabulary together',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of grammar with vocabulary topics.',
+    expectedRelevance: {
+      'at-and-after-school-present-tense-weak-verbs-1st-and-3rd-person-singular': 3,
+      'school-activities-infinitives-present-tense-3rd-person-singular': 2,
+    },
+  },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'confidence building speaking practice',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for oral skill development.',
+    expectedRelevance: {
+      'at-and-after-school-present-tense-weak-verbs-1st-and-3rd-person-singular': 3,
+      'school-activities-infinitives-present-tense-3rd-person-singular': 2,
+    },
+  },
 ] as const;

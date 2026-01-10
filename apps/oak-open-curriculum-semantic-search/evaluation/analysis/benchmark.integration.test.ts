@@ -42,6 +42,7 @@ describe('runQuery', () => {
           expectedRelevance,
           subject: 'maths',
           phase: 'secondary',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -60,6 +61,7 @@ describe('runQuery', () => {
           expectedRelevance,
           subject: 'maths',
           phase: 'secondary',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -78,6 +80,7 @@ describe('runQuery', () => {
           expectedRelevance,
           subject: 'maths',
           phase: 'secondary',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -96,6 +99,7 @@ describe('runQuery', () => {
           expectedRelevance,
           subject: 'maths',
           phase: 'secondary',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -115,6 +119,7 @@ describe('runQuery', () => {
           expectedRelevance: { slug: 3 },
           subject: 'maths',
           phase: 'secondary',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -139,6 +144,7 @@ describe('runQuery', () => {
           subject: 'maths',
           phase: 'secondary',
           queryKeyStage: 'ks4',
+          category: 'precise-topic',
         },
         mockSearch,
       );
@@ -157,6 +163,7 @@ describe('runQuery', () => {
           expectedRelevance: { slug: 3 },
           subject: 'maths',
           phase: 'primary',
+          category: 'precise-topic',
         },
         mockSearch,
       );

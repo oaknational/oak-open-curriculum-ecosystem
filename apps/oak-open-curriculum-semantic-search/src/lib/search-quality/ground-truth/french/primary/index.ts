@@ -35,8 +35,9 @@ export const FRENCH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'French plural adjectives Year 5',
     expectedRelevance: {
-      'back-to-school-information-questions-with-qui-and-comment': 3,
-      'story-soura-la-souris': 2,
+      'teachers-nous-sommes-and-plural-adjective-agreement': 3,
+      'cousins-vous-etes-and-plural-adjective-agreement': 3,
+      'description-ils-elles-sont-and-plural-adjective-agreement': 2,
     },
     category: 'precise-topic',
     priority: 'medium',
@@ -65,8 +66,9 @@ export const FRENCH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'French ER verbs singular',
     expectedRelevance: {
-      'menton-carnival-uses-of-de': 3,
-      'menton-carnival-singular-adjective-agreement': 2,
+      'at-school-singular-er-verbs': 3,
+      'family-activities-singular-regular-er-verbs': 3,
+      'at-school-er-verbs-i-and-you': 2,
     },
     category: 'precise-topic',
     priority: 'medium',
@@ -117,6 +119,16 @@ export const FRENCH_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     category: 'cross-topic',
     priority: 'medium',
     description: 'Tests intersection of grammar with vocabulary topics.',
+  },
+  {
+    query: 'confidence building speaking practice',
+    expectedRelevance: {
+      'introductions-voici-je-suis-and-il-elle-est': 3,
+      'new-friends-mon-ma-ton-ta': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for oral skill development.',
   },
 ] as const;
 

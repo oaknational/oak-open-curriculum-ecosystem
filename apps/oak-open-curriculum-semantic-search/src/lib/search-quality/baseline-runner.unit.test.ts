@@ -13,7 +13,7 @@ import {
   calculateCategoryMrr,
   type QueryBaselineResult,
 } from './baseline-runner.js';
-import type { GroundTruthQuery, LegacyQueryCategory, QueryCategory } from './ground-truth/types.js';
+import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
 
 describe('processQueryResult', () => {
   it('calculates correct MRR when first result is relevant', () => {
@@ -23,7 +23,7 @@ describe('processQueryResult', () => {
         'solving-simple-linear-equations': 3,
         'solving-equations-involving-functions': 2,
       },
-      category: 'naturalistic',
+      category: 'precise-topic',
       priority: 'high',
       description: 'Test fixture for MRR calculation',
     };
@@ -37,7 +37,7 @@ describe('processQueryResult', () => {
     const result = processQueryResult(query, actualResults, 150);
 
     expect(result.query).toBe('solving equations');
-    expect(result.category).toBe('naturalistic');
+    expect(result.category).toBe('precise-topic');
     expect(result.priority).toBe('high');
     expect(result.firstRelevantRank).toBe(1);
     expect(result.mrr).toBe(1); // 1/1
@@ -51,7 +51,7 @@ describe('processQueryResult', () => {
       expectedRelevance: {
         'solving-simple-linear-equations': 3,
       },
-      category: 'misspelling',
+      category: 'imprecise-input',
       priority: 'critical',
       description: 'Test fixture for rank-3 MRR calculation',
     };
@@ -75,7 +75,7 @@ describe('processQueryResult', () => {
       expectedRelevance: {
         'expected-lesson': 3,
       },
-      category: 'intent-based',
+      category: 'pedagogical-intent',
       priority: 'exploratory',
       description: 'Test fixture for zero-hit scenario',
     };
@@ -118,22 +118,22 @@ describe('processQueryResult', () => {
 describe('calculateCategoryMrr', () => {
   it('calculates average MRR for a category', () => {
     const results: readonly QueryBaselineResult[] = [
-      createResult('naturalistic', 1.0),
-      createResult('naturalistic', 0.5),
-      createResult('naturalistic', 0.333),
-      createResult('misspelling', 0.25),
+      createResult('precise-topic', 1.0),
+      createResult('precise-topic', 0.5),
+      createResult('precise-topic', 0.333),
+      createResult('imprecise-input', 0.25),
     ];
 
-    const categoryMrr = calculateCategoryMrr(results, 'naturalistic');
+    const categoryMrr = calculateCategoryMrr(results, 'precise-topic');
 
     // (1.0 + 0.5 + 0.333) / 3 ≈ 0.611
     expect(categoryMrr).toBeCloseTo((1.0 + 0.5 + 0.333) / 3, 3);
   });
 
   it('returns 0 when no results for category', () => {
-    const results: readonly QueryBaselineResult[] = [createResult('naturalistic', 1.0)];
+    const results: readonly QueryBaselineResult[] = [createResult('precise-topic', 1.0)];
 
-    const categoryMrr = calculateCategoryMrr(results, 'misspelling');
+    const categoryMrr = calculateCategoryMrr(results, 'imprecise-input');
 
     expect(categoryMrr).toBe(0);
   });
@@ -142,11 +142,7 @@ describe('calculateCategoryMrr', () => {
 /**
  * Helper to create a minimal QueryBaselineResult for testing.
  */
-function createResult(
-  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
-  category: QueryCategory | LegacyQueryCategory,
-  mrr: number,
-): QueryBaselineResult {
+function createResult(category: QueryCategory, mrr: number): QueryBaselineResult {
   return {
     query: 'test query',
     category,

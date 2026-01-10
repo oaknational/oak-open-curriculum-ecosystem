@@ -111,6 +111,16 @@ export const MUSIC_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of singing skills with rhythm concepts.',
   },
+  {
+    query: 'introduction for non-musicians',
+    expectedRelevance: {
+      'learning-about-beat': 3,
+      'singing-and-moving-together': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for beginner-friendly music lesson.',
+  },
 ] as const;
 
 /**

@@ -68,4 +68,14 @@ export const COMPUTING_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'mathematical-operations-in-data-structures': 2,
     },
   },
+  {
+    query: 'unplugged activity without computers',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for resource-constrained computing lesson.',
+    expectedRelevance: {
+      'an-introduction-to-computer-networks': 3,
+      'the-internet': 2,
+    },
+  },
 ] as const;

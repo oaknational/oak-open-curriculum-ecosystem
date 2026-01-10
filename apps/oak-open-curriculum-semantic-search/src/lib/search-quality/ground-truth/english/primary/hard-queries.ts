@@ -78,4 +78,16 @@ export const HARD_QUERIES_PRIMARY_ENGLISH: readonly GroundTruthQuery[] = [
       'writing-sentences-in-the-progressive-present-past-and-future-tense': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'creative writing warm-up activity',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for lesson starter without topic.',
+    expectedRelevance: {
+      'retelling-a-story': 3,
+      'imagining-you-are-the-characters-the-three-billy-goats-gruff': 2,
+    },
+  },
 ] as const;

@@ -57,4 +57,14 @@ export const ART_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'tone-hue-and-colour': 2,
     },
   },
+  {
+    query: 'observational drawing for beginners',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for skill-level appropriate art lesson.',
+    expectedRelevance: {
+      'recording-from-observation-and-first-hand-sources': 3,
+      'drawing-for-different-purposes-and-needs': 2,
+    },
+  },
 ] as const;

@@ -118,6 +118,16 @@ export const SPANISH_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of two key Spanish verb concepts.',
   },
+  {
+    query: 'confidence building speaking practice',
+    expectedRelevance: {
+      'greetings-the-verb-estar': 3,
+      'ask-how-someone-is-today': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for oral skill development.',
+  },
 ] as const;
 
 /**

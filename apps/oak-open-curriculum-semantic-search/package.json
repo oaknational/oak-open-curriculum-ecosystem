@@ -29,7 +29,6 @@
     "benchmark": "tsx evaluation/analysis/benchmark.ts",
     "ground-truth:generate": "tsx ground-truths/generation/generate-ground-truth-types.ts",
     "ground-truth:validate": "tsx evaluation/validation/validate-ground-truth.ts",
-    "ground-truth:analyze": "tsx evaluation/validation/analyze-ground-truth-quality.ts",
     "redis:up": "docker compose up -d",
     "redis:down": "docker compose down",
     "redis:reset": "docker compose down -v",

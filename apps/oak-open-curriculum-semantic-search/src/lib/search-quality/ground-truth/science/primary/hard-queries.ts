@@ -65,4 +65,16 @@ export const HARD_QUERIES_PRIMARY_SCIENCE: readonly GroundTruthQuery[] = [
       'evolution-evidence': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'hands-on experiment for reluctant learners',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for engagement-focused practical science.',
+    expectedRelevance: {
+      'changing-shape-plan-and-do': 3,
+      'thermal-insulators-plan': 2,
+    },
+  },
 ] as const;

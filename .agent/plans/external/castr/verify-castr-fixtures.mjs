@@ -53,6 +53,16 @@ function readArgValue(flag) {
 }
 
 /**
+ * Check whether a CLI flag is present.
+ * @param {string} flag - Flag name, e.g. \"--strict-sample\".
+ * @returns {boolean} True when the flag is present.
+ */
+function hasFlag(flag) {
+  const args = process.argv.slice(2);
+  return args.includes(flag);
+}
+
+/**
  * Track a named verification check.
  * @param {Array<{name: string, ok: boolean, details?: object}>} checks - Check list.
  * @param {string} name - Check name.
@@ -185,6 +195,109 @@ function countNonStrictSchemas(registry) {
     }
   }
   return { total, nonStrict };
+}
+
+/**
+ * Extract schema names from a registry array.
+ * @param {unknown} registry - Schema registry array.
+ * @returns {string[]} Schema names.
+ */
+function collectSchemaNames(registry) {
+  if (!Array.isArray(registry)) {
+    return [];
+  }
+  const names = [];
+  for (let i = 0; i < registry.length; i += 1) {
+    const entry = registry[i];
+    if (isObject(entry) && typeof entry.name === 'string') {
+      names.push(entry.name);
+    }
+  }
+  return names;
+}
+
+/**
+ * Collect schema references from endpoints.
+ * @param {unknown} endpoints - Endpoint registry array.
+ * @returns {string[]} Schema reference names.
+ */
+function collectSchemaRefsFromEndpoints(endpoints) {
+  if (!Array.isArray(endpoints)) {
+    return [];
+  }
+  const refs = [];
+  for (let i = 0; i < endpoints.length; i += 1) {
+    const endpoint = endpoints[i];
+    if (!isObject(endpoint)) {
+      continue;
+    }
+    const parameters = endpoint.parameters;
+    if (Array.isArray(parameters)) {
+      for (let j = 0; j < parameters.length; j += 1) {
+        const param = parameters[j];
+        if (isObject(param) && typeof param.schemaRef === 'string') {
+          refs.push(param.schemaRef);
+        }
+      }
+    }
+    const requestBody = endpoint.requestBody;
+    if (isObject(requestBody) && Array.isArray(requestBody.content)) {
+      const content = requestBody.content;
+      for (let j = 0; j < content.length; j += 1) {
+        const entry = content[j];
+        if (isObject(entry) && typeof entry.schemaRef === 'string') {
+          refs.push(entry.schemaRef);
+        }
+      }
+    }
+    const responses = endpoint.responses;
+    if (Array.isArray(responses)) {
+      for (let j = 0; j < responses.length; j += 1) {
+        const response = responses[j];
+        if (isObject(response) && typeof response.schemaRef === 'string') {
+          refs.push(response.schemaRef);
+        }
+      }
+    }
+  }
+  return refs;
+}
+
+/**
+ * Verify that responses provide either schemaRef or jsonSchema.
+ * @param {unknown} endpoints - Endpoint registry array.
+ * @returns {string[]} List of response identifiers missing schema data.
+ */
+function findResponsesMissingSchema(endpoints) {
+  if (!Array.isArray(endpoints)) {
+    return [];
+  }
+  const missing = [];
+  for (let i = 0; i < endpoints.length; i += 1) {
+    const endpoint = endpoints[i];
+    if (!isObject(endpoint)) {
+      continue;
+    }
+    const responses = endpoint.responses;
+    if (!Array.isArray(responses)) {
+      continue;
+    }
+    for (let j = 0; j < responses.length; j += 1) {
+      const response = responses[j];
+      if (!isObject(response)) {
+        continue;
+      }
+      const hasSchemaRef = typeof response.schemaRef === 'string';
+      const hasInlineSchema = 'jsonSchema' in response;
+      if (!hasSchemaRef && !hasInlineSchema) {
+        const method = typeof endpoint.method === 'string' ? endpoint.method : 'unknown';
+        const pathValue = typeof endpoint.path === 'string' ? endpoint.path : 'unknown';
+        const status = 'status' in response ? String(response.status) : 'unknown';
+        missing.push(`${method.toUpperCase()} ${pathValue} ${status}`);
+      }
+    }
+  }
+  return missing;
 }
 
 /**
@@ -330,11 +443,13 @@ function isOpenApi3(schema) {
  * @param {string} bundlePath - Path to the bundle manifest.
  * @param {Array<{name: string, ok: boolean, details?: object}>} checks - Check list.
  */
-function checkBundle(bundle, bundlePath, checks) {
+function checkBundle(bundle, bundlePath, checks, options = {}) {
   if (!isObject(bundle)) {
     recordCheck(checks, 'bundle.isObject', false, { path: bundlePath });
     return;
   }
+
+  const allowMissing = options.allowMissing === true;
 
   const versionOk = bundle.schemaVersion === 'castr-bundle/1';
   recordCheck(checks, 'bundle.schemaVersion', versionOk, { value: bundle.schemaVersion });
@@ -346,10 +461,11 @@ function checkBundle(bundle, bundlePath, checks) {
     const value = bundle[key];
     const isString = typeof value === 'string' && value.length > 0;
     recordCheck(checks, `bundle.${key}.isString`, isString);
-    if (isString) {
-      const resolved = path.resolve(bundleDir, value);
-      recordCheck(checks, `bundle.${key}.exists`, fs.existsSync(resolved), { path: resolved });
+    if (!isString || allowMissing) {
+      continue;
     }
+    const resolved = path.resolve(bundleDir, value);
+    recordCheck(checks, `bundle.${key}.exists`, fs.existsSync(resolved), { path: resolved });
   }
 
   const emit = bundle.emit;
@@ -368,12 +484,15 @@ function checkBundle(bundle, bundlePath, checks) {
     if (!isString) {
       continue;
     }
+    if (allowMissing) {
+      continue;
+    }
     const resolved = path.resolve(bundleDir, value);
     recordCheck(checks, `bundle.emit.${key}.exists`, fs.existsSync(resolved), { path: resolved });
   }
 
   const openApiPath = emit.openapi;
-  if (typeof openApiPath === 'string' && openApiPath.length > 0) {
+  if (!allowMissing && typeof openApiPath === 'string' && openApiPath.length > 0) {
     const resolvedOpenApi = path.resolve(bundleDir, openApiPath);
     if (fs.existsSync(resolvedOpenApi)) {
       const openApi = readJson(resolvedOpenApi);
@@ -382,14 +501,16 @@ function checkBundle(bundle, bundlePath, checks) {
   }
 
   const tsPath = emit.typescript;
-  if (typeof tsPath === 'string' && tsPath.length > 0) {
+  if (!allowMissing && typeof tsPath === 'string' && tsPath.length > 0) {
     const resolvedTs = path.resolve(bundleDir, tsPath);
     if (fs.existsSync(resolvedTs)) {
       const tsSource = fs.readFileSync(resolvedTs, 'utf8');
       const hasPaths = /export\\s+(interface|type)\\s+paths\\b/.test(tsSource);
       const hasComponents = /export\\s+(interface|type)\\s+components\\b/.test(tsSource);
+      const hasOperations = /export\\s+(interface|type)\\s+operations\\b/.test(tsSource);
       recordCheck(checks, 'typescript.output.pathsType', hasPaths);
       recordCheck(checks, 'typescript.output.componentsType', hasComponents);
+      recordCheck(checks, 'typescript.output.operationsType', hasOperations);
     }
   }
 }
@@ -462,10 +583,11 @@ function main() {
           recordCheck(checks, 'ir.policy.strictFailFastLossless', policyOk);
         }
 
+        let registry = null;
         const schemasPath =
           typeof bundle.schemas === 'string' ? path.resolve(bundleDir, bundle.schemas) : null;
         if (schemasPath && fs.existsSync(schemasPath)) {
-          const registry = readJson(schemasPath);
+          registry = readJson(schemasPath);
           const strictCounts = countNonStrictSchemas(registry);
           const strictOk = strictCounts.nonStrict === 0;
           recordCheck(checks, 'schemas.strictObjects', strictOk, strictCounts);
@@ -488,6 +610,46 @@ function main() {
             return `${method} ${pathValue}`;
           });
           recordCheck(checks, 'endpoints.sortedByMethodPath', sortedOk);
+
+          const endpointOps = Array.isArray(endpoints)
+            ? endpoints.map((entry) =>
+                isObject(entry) && typeof entry.operationId === 'string'
+                  ? entry.operationId
+                  : null,
+              )
+            : [];
+          const endpointOpIds = endpointOps.filter((value) => typeof value === 'string');
+          const endpointOpIdSet = new Set(endpointOpIds);
+
+          const referenceOps = collectOperations(sdk);
+          const referenceOpIds = referenceOps
+            .map((entry) => entry.operationId)
+            .filter((value) => typeof value === 'string');
+          const referenceOpIdSet = new Set(referenceOpIds);
+
+          const missingOpIds = referenceOpIds.filter((id) => !endpointOpIdSet.has(id));
+          const extraOpIds = endpointOpIds.filter((id) => !referenceOpIdSet.has(id));
+
+          recordCheck(checks, 'endpoints.operationIds.missing', missingOpIds.length === 0, {
+            missing: missingOpIds,
+          });
+          recordCheck(checks, 'endpoints.operationIds.extra', extraOpIds.length === 0, {
+            extra: extraOpIds,
+          });
+
+          const registryNames = registry ? collectSchemaNames(registry) : [];
+          const registryNameSet = new Set(registryNames);
+          const missingSchemas = registry
+            ? collectSchemaRefsFromEndpoints(endpoints).filter((ref) => !registryNameSet.has(ref))
+            : [];
+          recordCheck(checks, 'schemas.references.missing', missingSchemas.length === 0, {
+            missing: missingSchemas,
+          });
+
+          const responsesMissingSchema = findResponsesMissingSchema(endpoints);
+          recordCheck(checks, 'responses.schema.present', responsesMissingSchema.length === 0, {
+            missing: responsesMissingSchema,
+          });
         }
 
         const openApiPath =
@@ -532,6 +694,13 @@ function main() {
     }
   }
 
+  const sampleBundlePath = path.resolve(fixturesDir, 'castr-bundle.sample.json');
+  if (fs.existsSync(sampleBundlePath)) {
+    const sampleBundle = readJson(sampleBundlePath);
+    const strictSample = hasFlag('--strict-sample');
+    checkBundle(sampleBundle, sampleBundlePath, checks, { allowMissing: !strictSample });
+  }
+
   let ok = true;
   for (let i = 0; i < checks.length; i += 1) {
     if (!checks[i].ok) {
@@ -540,7 +709,71 @@ function main() {
     }
   }
 
-  console.log(JSON.stringify({ ok, checks }, null, 2));
+  const failedChecks = checks.filter((check) => !check.ok);
+  const summaryLines = [];
+
+  function formatDetails(details) {
+    if (!isObject(details)) {
+      return '';
+    }
+    const parts = [];
+    if (typeof details.path === 'string') {
+      parts.push(`path=${details.path}`);
+    }
+    if (typeof details.count === 'number') {
+      parts.push(`count=${details.count}`);
+    }
+    if (typeof details.expected === 'number') {
+      parts.push(`expected=${details.expected}`);
+    }
+    if (typeof details.actual === 'number') {
+      parts.push(`actual=${details.actual}`);
+    }
+    if (Array.isArray(details.missing)) {
+      parts.push(`missing=${details.missing.length}`);
+    }
+    if (Array.isArray(details.extra)) {
+      parts.push(`extra=${details.extra.length}`);
+    }
+    return parts.join(', ');
+  }
+
+  summaryLines.push(`Castr fixtures: ${ok ? 'PASS' : 'FAIL'}`);
+  if (ok) {
+    summaryLines.push(`Checks: ${checks.length}, failed: 0`);
+  } else {
+    const errorCount = failedChecks.length;
+    summaryLines.push(
+      `x ${errorCount} problem${errorCount === 1 ? '' : 's'} (${errorCount} error${errorCount === 1 ? '' : 's'})`,
+    );
+    summaryLines.push(`Checks: ${checks.length}, failed: ${failedChecks.length}`);
+    const limit = 10;
+    summaryLines.push('Failures:');
+    for (let i = 0; i < Math.min(limit, failedChecks.length); i += 1) {
+      const failure = failedChecks[i];
+      const detail = formatDetails(failure.details);
+      summaryLines.push(`- ${failure.name}${detail ? ` (${detail})` : ''}`);
+    }
+    if (failedChecks.length > limit) {
+      summaryLines.push(`- ...and ${failedChecks.length - limit} more`);
+    }
+  }
+  console.error(summaryLines.join('\n'));
+
+  console.log(
+    JSON.stringify(
+      {
+        ok,
+        summary: {
+          totalChecks: checks.length,
+          failedChecks: failedChecks.length,
+        },
+        checks,
+      },
+      null,
+      2,
+    ),
+  );
   process.exit(ok ? 0 : 1);
 }
 

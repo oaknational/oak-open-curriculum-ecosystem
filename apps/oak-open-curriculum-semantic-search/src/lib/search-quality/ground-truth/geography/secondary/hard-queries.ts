@@ -61,4 +61,16 @@ export const HARD_QUERIES_SECONDARY_GEOGRAPHY: readonly GroundTruthQuery[] = [
       'the-middle-and-lower-course-of-a-river': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'fieldwork activity for case study',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for practical geography learning.',
+    expectedRelevance: {
+      'river-processes': 3,
+      'the-upper-course-of-a-river': 2,
+    },
+  },
 ] as const;

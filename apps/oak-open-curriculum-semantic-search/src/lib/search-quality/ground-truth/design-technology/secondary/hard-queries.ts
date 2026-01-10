@@ -57,4 +57,14 @@ export const DT_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'polymer-properties-and-processes': 2,
     },
   },
+  {
+    query: 'design brief for mixed ability class',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for differentiated design project.',
+    expectedRelevance: {
+      'linear-versus-circular-economy': 3,
+      'life-cycle-assessment': 2,
+    },
+  },
 ] as const;

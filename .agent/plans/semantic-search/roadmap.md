@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 📋 **Phase 8 — Comprehensive Baselines** (Ground truth remediation complete)
-**Last Updated**: 2026-01-08
+**Status**: ✅ **Ground Truths Production-Ready** | 📋 **Phase 8 Benchmarks NEXT**
+**Last Updated**: 2026-01-10
 **Metrics Source**: [current-state.md](current-state.md)
 **Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -26,7 +26,7 @@ This is THE authoritative roadmap for semantic search work.
 ## Dependency Chain
 
 ```
-Ground Truth Remediation ✅ COMPLETE
+Three-Stage Ground Truth Validation ✅ COMPLETE
         ↓
 Phase 8: Comprehensive Baselines ← CURRENT PRIORITY
         ↓
@@ -49,12 +49,32 @@ Tier 4: AI Enhancement (post-sdk-extraction/)
 
 ---
 
-## ✅ COMPLETE: Ground Truth Remediation
+## ✅ COMPLETE: Three-Stage Ground Truth Validation
 
-**Status**: ✅ **All 431 queries pass all 17 validation checks**
-**Completion Date**: 2026-01-08
+**Status**: ✅ **474 queries validated and production-ready**
+**Completion Date**: 2026-01-09
 
-### Final Results
+### Three-Stage Validation Model
+
+| Stage | What It Proves | Status |
+|-------|----------------|--------|
+| **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
+| **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
+| **3. Qualitative Review** | Production readiness | ✅ COMPLETE |
+
+### Stage 3 Qualitative Review (2026-01-09)
+
+| Metric | Value |
+|--------|-------|
+| Total queries reviewed | 474 |
+| Total slugs validated | 1,290 |
+| Subject/phase entries | 30 |
+| Issues found | 1 |
+| Issues fixed | 1 |
+
+**Issue fixed**: `times tables year 3` category corrected (cross-topic → precise-topic)
+
+### Remediation Results (2026-01-08)
 
 | Issue | Before | After | Status |
 |-------|--------|-------|--------|
@@ -66,24 +86,15 @@ Tier 4: AI Enhancement (post-sdk-extraction/)
 | Missing priority | 34 | 0 | ✅ |
 | Single-slug queries | 10 | 0 | ✅ |
 | No score=3 | 21 | 0 | ✅ |
-| **Total errors** | **408** | **0** | ✅ |
-
-### Acceptance Criteria (All Met)
-
-- [x] `pnpm ground-truth:generate` generates types from bulk data
-- [x] All `expectedRelevance` objects have entries
-- [x] All slugs exist in bulk data (0 invalid)
-- [x] `pnpm ground-truth:validate` passes with 0 errors
-- [x] All entries have 0% uniform scores
-- [x] All entries have 100% category coverage
-- [x] All queries have priority set
-- [x] All queries have graded relevance (score variety)
+| Missing descriptions | 275 | 0 | ✅ |
+| Category coverage gaps | 43 | 0 | ✅ |
 
 ### Available Scripts
 
 ```bash
-pnpm ground-truth:validate  # Run all 17 validation checks
+pnpm ground-truth:validate  # Run all 16 validation checks
 pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+pnpm benchmark --all        # Run benchmarks (Phase 8)
 ```
 
 **Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
@@ -154,38 +165,37 @@ Network error handling per ADR-088:
 
 ---
 
-## 🔄 IN PROGRESS: M3 — Phase-Aligned Search Quality & Unified Evaluation
+## ✅ COMPLETE: M3 — Phase-Aligned Search Quality & Unified Evaluation
 
-**Status**: ✅ **Phases 1-7 Complete** | ✅ **Test Coverage Complete** | ⏸️ **Phase 8 BLOCKED**
+**Status**: ✅ **All Phases Complete** | ✅ **Ground Truths Production-Ready** | 📋 **Phase 8 NEXT**
 **Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
 
 **Discovery (2026-01-03)**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.
 
-**Discovery (2026-01-08)**: Ground truth data quality issues block Phase 8. See "Ground Truth Remediation" section above.
-
-### M3 Phases
+### M3 Phases — All Complete
 
 | Phase | Focus | Status |
 |-------|-------|--------|
 | 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
 | 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
-| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ⚠️ Quality issues found |
+| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ✅ Complete |
 | 6 | ES Re-index (add phase_slug) | ⏸️ Cancelled (phase model changed) |
 | 7 | Unified evaluation infrastructure (`GROUND_TRUTH_REGISTRY`, `benchmark.ts`) | ✅ Complete (2026-01-06) |
 | Test Coverage | Unit tests for safeGet + SDK API methods | ✅ Complete (2026-01-07) |
-| **Ground Truth Remediation** | Fix validation script, validate slugs, fix data | 🔄 **CURRENT PRIORITY** |
-| 8 | Run comprehensive baselines | ⏸️ Blocked on remediation |
+| Ground Truth Remediation | Fix validation script, validate slugs, fix data | ✅ Complete (2026-01-08) |
+| Stage 3 Qualitative Review | Manual review of all 474 queries | ✅ Complete (2026-01-09) |
+| **8** | **Run comprehensive baselines** | 📋 **READY TO START** |
 
-### Key Findings (Pending Verification)
+### Key Findings (To Be Verified by Phase 8)
 
-**Note**: These findings from previous baselines may be unreliable due to ground truth quality issues.
+**Note**: These findings from previous baselines should be re-verified with production-ready ground truths.
 
 - **Creative subjects excel**: Art (0.741), Music (0.722), D&T (0.815) MRR
 - **Languages struggle**: French (0.190), Spanish (0.294), German (0.194)
 - **Misspelling universal weakness**: PE, Languages fail on typos
 - **Synonym gaps**: "coding"→"programming", "saying no"→"negation"
 
-**Next Steps**: Complete ground truth remediation, then re-run Phase 8 baselines.
+**Next Steps**: Run Phase 8 benchmarks to establish verified baselines.
 
 ---
 

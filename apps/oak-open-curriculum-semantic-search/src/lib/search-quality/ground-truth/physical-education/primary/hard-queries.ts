@@ -65,4 +65,14 @@ export const PE_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of navigation skills with teamwork in OAA.',
   },
+  {
+    query: 'indoor alternative for wet weather',
+    expectedRelevance: {
+      'movement-and-exercise': 3,
+      'solving-problems-by-cooperating-in-pairs': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for context-constrained PE lesson.',
+  },
 ] as const;

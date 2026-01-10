@@ -178,4 +178,16 @@ export const HARD_QUERIES_SECONDARY_ENGLISH: readonly GroundTruthQuery[] = [
       'analysing-the-poem-bayonet-charge': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'creative writing warm-up activity',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for lesson starter without topic.',
+    expectedRelevance: {
+      'crafting-a-voice-in-nonfiction-writing': 3,
+      'persuasive-opinion-pieces': 2,
+    },
+  },
 ] as const;

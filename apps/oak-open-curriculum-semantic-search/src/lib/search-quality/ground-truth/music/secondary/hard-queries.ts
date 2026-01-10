@@ -48,4 +48,24 @@ export const MUSIC_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'creating-variation-to-a-fundamental-drum-groove': 2,
     },
   },
+  {
+    query: 'film music and composition together',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of film music with composition skills.',
+    expectedRelevance: {
+      'creating-scary-music': 3,
+      'tension-in-early-movies': 2,
+    },
+  },
+  {
+    query: 'introduction for non-musicians',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for beginner-friendly music lesson.',
+    expectedRelevance: {
+      'characteristics-of-folk-songs': 3,
+      'singing-sea-shanties': 2,
+    },
+  },
 ] as const;

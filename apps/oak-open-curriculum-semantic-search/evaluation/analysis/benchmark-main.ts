@@ -19,12 +19,54 @@ import { benchmarkEntry, type EntryBenchmarkResult } from './benchmark-entry-run
 import type { SearchFunction } from './benchmark-query-runner.js';
 import { calculateP95 } from './benchmark-stats.js';
 
-/** CLI options parsed from command line arguments. */
+/**
+ * CLI options parsed from command line arguments.
+ *
+ * @remarks
+ * The `verbose` flag ONLY enables per-query diagnostic output during execution.
+ * It does NOT change the output granularity - per-category metrics are always shown.
+ */
 export interface CliOptions {
   readonly all: boolean;
   readonly subject?: string;
   readonly phase?: string;
+  /** Enable per-query diagnostic output. Does NOT change result granularity. */
   readonly verbose: boolean;
+}
+
+/**
+ * Print detailed per-category results for each entry.
+ *
+ * Shows metrics broken down by query category for granular analysis.
+ */
+function printDetailedResults(results: readonly EntryBenchmarkResult[]): void {
+  console.log(
+    '\n' + '='.repeat(120) + '\nDETAILED PER-CATEGORY RESULTS\n' + '='.repeat(120) + '\n',
+  );
+  console.log(
+    'Subject'.padEnd(14) +
+      ' | ' +
+      'Phase'.padEnd(9) +
+      ' | ' +
+      'Category'.padEnd(20) +
+      ' | #Q   | MRR    | NDCG   | P@10   | R@10   | Zero%  | p95ms',
+  );
+  console.log('-'.repeat(120));
+
+  for (const r of results) {
+    // Print per-category rows
+    for (const cat of r.perCategory) {
+      console.log(
+        `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${cat.category.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${cat.mrr.toFixed(3).padEnd(6)} | ${cat.ndcg10.toFixed(3).padEnd(6)} | ${cat.precision10.toFixed(3).padEnd(6)} | ${cat.recall10.toFixed(3).padEnd(6)} | ${(cat.zeroHitRate * 100).toFixed(1).padEnd(6)}% | ${cat.p95LatencyMs.toFixed(0)}`,
+      );
+    }
+    // Print aggregate row for this entry
+    const p95 = calculateP95(r.latencies);
+    console.log(
+      `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${'AGGREGATE'.padEnd(20)} | ${String(r.queryCount).padEnd(4)} | ${r.mrr.toFixed(3).padEnd(6)} | ${r.ndcg10.toFixed(3).padEnd(6)} | ${r.precision10.toFixed(3).padEnd(6)} | ${r.recall10.toFixed(3).padEnd(6)} | ${(r.zeroHitRate * 100).toFixed(1).padEnd(6)}% | ${p95.toFixed(0)}`,
+    );
+    console.log('-'.repeat(120));
+  }
 }
 
 /**
@@ -35,7 +77,11 @@ export interface CliOptions {
  * or use the smoke test for regression detection.
  */
 function printSummary(results: readonly EntryBenchmarkResult[]): void {
-  console.log('\n' + '='.repeat(110) + '\nBENCHMARK RESULTS\n' + '='.repeat(110) + '\n');
+  // Print detailed per-category results first
+  printDetailedResults(results);
+
+  // Then print aggregate summary
+  console.log('\n' + '='.repeat(110) + '\nAGGREGATE SUMMARY\n' + '='.repeat(110) + '\n');
   console.log(
     'Subject'.padEnd(20) +
       ' | ' +

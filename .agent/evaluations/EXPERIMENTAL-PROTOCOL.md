@@ -156,13 +156,13 @@ Every subject-phase entry MUST contain queries from ALL required categories:
 | `natural-expression` | High | **YES** | 2+ | Teacher uses everyday language |
 | `imprecise-input` | Critical | **YES** | 1+ | Teacher makes typing errors |
 | `cross-topic` | Medium | **YES** | 1+ | Teacher wants intersection |
-| `pedagogical-intent` | Exploratory | No | 0-1 | Teacher describes goal, not topic |
+| `pedagogical-intent` | High | **YES** | 1+ | Teacher describes goal, not topic |
 
-**Minimum per entry**: 8-10 queries covering all 4 required categories.
+**Minimum per entry**: 9-11 queries covering all 5 required categories.
 
 **Consistency requirement**: ALL subject-phase pairings must have the SAME category coverage. No entry may omit a required category. This ensures benchmarks are comparable across subjects and phases.
 
-**Enforcement**: Validation check 20 (`category-coverage`) enforces these minimums programmatically.
+**Enforcement**: Validation check 16 (`category-coverage`) enforces these minimums programmatically.
 
 ### 2.6 Single Source of Truth
 

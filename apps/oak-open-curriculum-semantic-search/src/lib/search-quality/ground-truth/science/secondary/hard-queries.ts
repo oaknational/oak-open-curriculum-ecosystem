@@ -73,4 +73,16 @@ export const HARD_QUERIES_SECONDARY_SCIENCE: readonly GroundTruthQuery[] = [
       'food-webs': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'hands-on experiment for reluctant learners',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for engagement-focused practical science.',
+    expectedRelevance: {
+      'observing-cells-with-a-light-microscope': 3,
+      'the-common-processes-of-all-living-organisms': 2,
+    },
+  },
 ] as const;

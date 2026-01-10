@@ -47,4 +47,28 @@ export const HARD_QUERIES_SECONDARY_RE: readonly GroundTruthQuery[] = [
       'deontology-and-immanuel-kant': 2,
     },
   },
+
+  // CROSS-TOPIC
+  {
+    query: 'ethics and religion together',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of ethical philosophy with religious teachings.',
+    expectedRelevance: {
+      'virtue-ethics': 3,
+      'dhamma-moral-precepts': 2,
+    },
+  },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'discussion starter for sensitive topic',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for thoughtful RE discussion.',
+    expectedRelevance: {
+      'the-nature-of-human-goodness': 3,
+      'virtue-ethics': 2,
+    },
+  },
 ] as const;

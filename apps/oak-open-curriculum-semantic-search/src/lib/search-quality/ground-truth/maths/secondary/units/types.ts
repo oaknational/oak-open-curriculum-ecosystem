@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import type { QueryCategory, LegacyQueryCategory, QueryPriority } from '../../../types';
+import type { QueryCategory, QueryPriority } from '../../../types';
 
 /**
  * A ground truth query for unit search with expected relevance judgments.
@@ -20,8 +20,7 @@ export interface UnitGroundTruthQuery {
   /**
    * Category of user scenario this query represents. REQUIRED.
    */
-  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
-  readonly category: QueryCategory | LegacyQueryCategory;
+  readonly category: QueryCategory;
   /**
    * What this test scenario reveals/validates about system behavior. REQUIRED.
    */

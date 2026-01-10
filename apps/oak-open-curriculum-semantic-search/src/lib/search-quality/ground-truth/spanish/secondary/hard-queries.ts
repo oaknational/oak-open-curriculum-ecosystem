@@ -45,4 +45,16 @@ export const HARD_QUERIES_SECONDARY_SPANISH: readonly GroundTruthQuery[] = [
       'a-school-play-ar-verbs-2nd-person-singular-information-questions': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'confidence building speaking practice',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for oral skill development.',
+    expectedRelevance: {
+      'conversation-with-a-friend-ar-verbs-1st-and-3rd-person-singular': 3,
+      'a-school-play-ar-verbs-2nd-person-singular-information-questions': 2,
+    },
+  },
 ] as const;

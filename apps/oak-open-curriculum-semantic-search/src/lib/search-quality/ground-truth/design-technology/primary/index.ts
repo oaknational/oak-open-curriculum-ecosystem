@@ -111,6 +111,16 @@ export const DT_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of structures with materials evaluation.',
   },
+  {
+    query: 'design brief for mixed ability class',
+    expectedRelevance: {
+      'user-research': 3,
+      'disassemble-products-to-inspire-ideas': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for differentiated design project.',
+  },
 ] as const;
 
 /**

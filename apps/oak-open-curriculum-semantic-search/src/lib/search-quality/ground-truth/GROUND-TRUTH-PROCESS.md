@@ -470,9 +470,9 @@ Every subject-phase entry MUST contain queries from ALL required categories:
 | `natural-expression` | Teacher uses everyday language | High        | **YES**  | 2+  | "teach solving for x"          |
 | `imprecise-input`    | Teacher makes typing errors    | Critical    | **YES**  | 1+  | "fotosynthesis"                |
 | `cross-topic`        | Teacher wants intersection     | Medium      | **YES**  | 1+  | "algebra with graphs"          |
-| `pedagogical-intent` | Teacher describes goal         | Exploratory | No       | 0-1 | "extension work able students" |
+| `pedagogical-intent` | Teacher describes goal         | Exploratory | **YES**  | 1+  | "extension work able students" |
 
-**Minimum per entry**: 8-10 queries covering all 4 required categories.
+**Minimum per entry**: 9-10 queries covering all 5 required categories.
 
 ### Category Migration (2026-01-09)
 
@@ -506,7 +506,7 @@ For **EACH** subject-phase entry, verify:
 - [ ] Contains 2+ `natural-expression` queries
 - [ ] Contains 1+ `imprecise-input` query
 - [ ] Contains 1+ `cross-topic` query
-- [ ] Contains 0-1 `pedagogical-intent` query (optional)
+- [ ] Contains 1+ `pedagogical-intent` query
 
 **If any required category is missing → Add queries before the entry is considered complete.**
 

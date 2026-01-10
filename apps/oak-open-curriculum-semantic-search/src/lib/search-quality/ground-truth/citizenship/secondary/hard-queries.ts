@@ -58,4 +58,14 @@ export const CITIZENSHIP_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'why-is-media-freedom-necessary-in-a-democracy': 2,
     },
   },
+  {
+    query: 'debate preparation resources',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for structured discussion activity.',
+    expectedRelevance: {
+      'is-direct-democracy-better-than-representative-democracy': 3,
+      'does-the-uks-democracy-need-reform': 2,
+    },
+  },
 ] as const;

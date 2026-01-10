@@ -59,19 +59,6 @@ export type QueryCategory =
   | 'pedagogical-intent';
 
 /**
- * Legacy query categories for backward compatibility during migration.
- *
- * @deprecated Use {@link QueryCategory} instead. These will be removed after migration.
- */
-export type LegacyQueryCategory =
-  | 'naturalistic'
-  | 'misspelling'
-  | 'synonym'
-  | 'multi-concept'
-  | 'colloquial'
-  | 'intent-based';
-
-/**
  * Priority weighting for test scenarios.
  *
  * Indicates relative importance for the current system's use cases:
@@ -151,8 +138,7 @@ export interface GroundTruthQuery {
    *
    * @see QueryCategory for definitions and examples
    */
-  // eslint-disable-next-line @typescript-eslint/no-deprecated -- Legacy category support during migration
-  readonly category: QueryCategory | LegacyQueryCategory;
+  readonly category: QueryCategory;
 
   /**
    * What this test scenario reveals/validates about system behavior. REQUIRED.

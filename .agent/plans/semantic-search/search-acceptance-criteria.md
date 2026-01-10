@@ -1,26 +1,49 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-08
-**Status**: Active — Phase 8 Ready (Ground truth remediation complete)
+**Last Updated**: 2026-01-10
+**Status**: ✅ Ground Truths Production-Ready — Phase 8 Benchmarks Next
 **Purpose**: Defines what "exhausted" means for each tier, vs "target met"
 
 ---
 
-## ✅ Ground Truth Validation Infrastructure COMPLETE (2026-01-08)
+## ✅ Three-Stage Ground Truth Validation COMPLETE (2026-01-09)
 
-**Ground truth validation infrastructure rebuilt and all quality issues fixed.** 431 queries across 30 entries pass all 17 validation checks.
+**All three validation stages complete.** 474 queries across 30 entries are production-ready.
+
+### Three-Stage Validation Model
+
+| Stage | What It Proves | Status |
+|-------|----------------|--------|
+| **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
+| **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
+| **3. Qualitative Review** | Production readiness | ✅ COMPLETE |
+
+### Stage 3 Qualitative Review (2026-01-09)
+
+| Metric | Value |
+|--------|-------|
+| Total queries reviewed | 474 |
+| Total slugs validated | 1,290 |
+| Subject/phase entries | 30 |
+| Issues found | 1 |
+| Issues fixed | 1 |
+
+**Issue fixed**: `times tables year 3` category corrected (cross-topic → precise-topic)
+
+### Remediation Summary (2026-01-08)
 
 | Dimension | Before | After | Status |
 |-----------|--------|-------|--------|
-| Validation script | ❌ Broken | ✅ 17 checks | ✅ Fixed |
+| Validation script | ❌ Broken | ✅ 16 checks | ✅ Fixed |
 | Invalid slugs | 66 (5.2%) | 0 | ✅ Fixed |
 | Empty expectedRelevance | 12 queries | 0 | ✅ Fixed |
 | Missing categories | 130 queries | 0 | ✅ Fixed |
 | Short queries | 78 queries | 0 | ✅ Fixed |
 | Uniform scores | 47 queries | 0 | ✅ Fixed |
 | Missing priority | 34 queries | 0 | ✅ Fixed |
-| Total queries | 263 | **431** | ✅ Expanded |
-| Quality errors | 408 | **0** | ✅ Complete |
+| Missing descriptions | 275 queries | 0 | ✅ Fixed |
+| Category coverage gaps | 43 entries | 0 | ✅ Fixed |
+| Total queries | 263 | **474** | ✅ Expanded |
 
 **Infrastructure** (`ground-truths/generation/`):
 
@@ -32,11 +55,12 @@
 **Scripts**:
 
 ```bash
-pnpm ground-truth:validate  # Run all 17 validation checks
+pnpm ground-truth:validate  # Run all 16 validation checks
 pnpm ground-truth:analyze   # Detailed quality breakdown by entry
+pnpm benchmark --all        # Run Phase 8 benchmarks
 ```
 
-**Implication**: Benchmarks can now proceed. Ground truths are production-ready.
+**Implication**: All validation complete. Ready for Phase 8 benchmarks.
 
 ---
 

@@ -111,6 +111,16 @@ export const COMPUTING_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     priority: 'medium',
     description: 'Tests intersection of programming concepts with sequence logic.',
   },
+  {
+    query: 'unplugged activity without computers',
+    expectedRelevance: {
+      'working-together': 3,
+      'sharing-information': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for resource-constrained computing lesson.',
+  },
 ] as const;
 
 /**

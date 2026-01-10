@@ -45,4 +45,28 @@ export const HARD_QUERIES_SECONDARY_FRENCH: readonly GroundTruthQuery[] = [
       'what-people-do-and-dont-do-ne-pas-negation': 2,
     },
   },
+
+  // CROSS-TOPIC
+  {
+    query: 'French verbs and vocabulary together',
+    category: 'cross-topic',
+    priority: 'medium',
+    description: 'Tests intersection of grammar with vocabulary topics.',
+    expectedRelevance: {
+      'what-isnt-done-negation-before-a-noun-with-avoir-etre-faire': 3,
+      'what-people-do-and-dont-do-ne-pas-negation': 2,
+    },
+  },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'confidence building speaking practice',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for oral skill development.',
+    expectedRelevance: {
+      'what-isnt-happening-ne-pas-negation': 3,
+      'what-people-do-and-dont-do-ne-pas-negation': 2,
+    },
+  },
 ] as const;

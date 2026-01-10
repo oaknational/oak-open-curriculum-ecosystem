@@ -25,9 +25,9 @@ export const MATHS_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'represent-counting-in-sixes-as-the-6-times-table': 3,
       'represent-counting-in-fives-as-the-5-times-table': 2,
     },
-    category: 'cross-topic',
+    category: 'precise-topic',
     priority: 'high',
-    description: 'Year group + topic combination',
+    description: 'Tests retrieval of Year 3 times tables content using curriculum terminology',
   },
   {
     query: 'adding up primary',
@@ -93,5 +93,15 @@ export const MATHS_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
     category: 'cross-topic',
     priority: 'medium',
     description: 'Specific manipulative resources',
+  },
+  {
+    query: 'visual introduction for concrete learners',
+    expectedRelevance: {
+      'subitising-numbers-to-five': 3,
+      'anything-can-be-counted': 2,
+    },
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for visual/concrete learning approach.',
   },
 ] as const;

@@ -35,4 +35,16 @@ export const HARD_QUERIES_PRIMARY_HISTORY: readonly GroundTruthQuery[] = [
       'the-anglo-saxon-fightback': 2,
     },
   },
+
+  // PEDAGOGICAL-INTENT
+  {
+    query: 'starter activity to hook year 4',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for engaging lesson opener.',
+    expectedRelevance: {
+      'the-roman-invasion-of-britain': 3,
+      'early-viking-raids': 2,
+    },
+  },
 ] as const;

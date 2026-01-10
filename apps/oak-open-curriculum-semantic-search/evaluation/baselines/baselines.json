@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "description": "Search quality baselines and reference values",
-    "lastUpdated": "2026-01-06",
+    "lastUpdated": "2026-01-10",
     "documentation": "See IR-METRICS.md for metric definitions"
   },
   "referenceValues": {
@@ -45,278 +45,287 @@
   },
   "measuredBaselines": {
     "_description": "Actual measured values. Updated by running benchmark. Null means not yet measured.",
-    "_lastMeasured": null,
+    "_lastMeasured": "2026-01-10",
     "entries": {
       "art/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
+        "mrr": 0.889,
+        "ndcg10": 0.809,
+        "zeroHitRate": 0.0,
+        "precision10": 0.167,
+        "recall10": 0.833,
+        "p95LatencyMs": 2344,
+        "queryCount": 9
       },
       "art/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 9
+        "mrr": 0.688,
+        "ndcg10": 0.623,
+        "zeroHitRate": 0.0,
+        "precision10": 0.21,
+        "recall10": 0.767,
+        "p95LatencyMs": 620,
+        "queryCount": 10
       },
       "citizenship/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
-      },
-      "computing/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
-      },
-      "computing/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 9
-      },
-      "cooking-nutrition/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
-      },
-      "cooking-nutrition/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+        "mrr": 0.408,
+        "ndcg10": 0.362,
+        "zeroHitRate": 0.25,
+        "precision10": 0.15,
+        "recall10": 0.5,
+        "p95LatencyMs": 477,
         "queryCount": 8
       },
-      "design-technology/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
-      },
-      "design-technology/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+      "computing/primary": {
+        "mrr": 0.574,
+        "ndcg10": 0.522,
+        "zeroHitRate": 0.111,
+        "precision10": 0.156,
+        "recall10": 0.778,
+        "p95LatencyMs": 571,
         "queryCount": 9
       },
+      "computing/secondary": {
+        "mrr": 0.827,
+        "ndcg10": 0.666,
+        "zeroHitRate": 0.091,
+        "precision10": 0.182,
+        "recall10": 0.636,
+        "p95LatencyMs": 983,
+        "queryCount": 11
+      },
+      "cooking-nutrition/primary": {
+        "mrr": 0.572,
+        "ndcg10": 0.517,
+        "zeroHitRate": 0.125,
+        "precision10": 0.175,
+        "recall10": 0.75,
+        "p95LatencyMs": 462,
+        "queryCount": 8
+      },
+      "cooking-nutrition/secondary": {
+        "mrr": 0.833,
+        "ndcg10": 0.786,
+        "zeroHitRate": 0.1,
+        "precision10": 0.16,
+        "recall10": 0.85,
+        "p95LatencyMs": 513,
+        "queryCount": 10
+      },
+      "design-technology/primary": {
+        "mrr": 0.574,
+        "ndcg10": 0.528,
+        "zeroHitRate": 0.111,
+        "precision10": 0.156,
+        "recall10": 0.778,
+        "p95LatencyMs": 480,
+        "queryCount": 9
+      },
+      "design-technology/secondary": {
+        "mrr": 0.452,
+        "ndcg10": 0.48,
+        "zeroHitRate": 0.1,
+        "precision10": 0.18,
+        "recall10": 0.65,
+        "p95LatencyMs": 672,
+        "queryCount": 10
+      },
       "english/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 14
+        "mrr": 0.617,
+        "ndcg10": 0.546,
+        "zeroHitRate": 0.133,
+        "precision10": 0.187,
+        "recall10": 0.644,
+        "p95LatencyMs": 846,
+        "queryCount": 15
       },
       "english/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+        "mrr": 0.591,
+        "ndcg10": 0.519,
+        "zeroHitRate": 0.123,
+        "precision10": 0.181,
+        "recall10": 0.599,
+        "p95LatencyMs": 732,
         "queryCount": 57
       },
       "french/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.379,
+        "ndcg10": 0.353,
+        "zeroHitRate": 0.333,
+        "precision10": 0.111,
+        "recall10": 0.5,
+        "p95LatencyMs": 516,
+        "queryCount": 9
       },
       "french/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.263,
+        "ndcg10": 0.244,
+        "zeroHitRate": 0.625,
+        "precision10": 0.063,
+        "recall10": 0.271,
+        "p95LatencyMs": 529,
+        "queryCount": 8
       },
       "geography/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
+        "mrr": 0.759,
+        "ndcg10": 0.631,
+        "zeroHitRate": 0.0,
+        "precision10": 0.144,
+        "recall10": 0.722,
+        "p95LatencyMs": 615,
+        "queryCount": 9
       },
       "geography/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+        "mrr": 0.758,
+        "ndcg10": 0.56,
+        "zeroHitRate": 0.0,
+        "precision10": 0.186,
+        "recall10": 0.619,
+        "p95LatencyMs": 839,
         "queryCount": 14
       },
       "german/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.119,
+        "ndcg10": 0.163,
+        "zeroHitRate": 0.5,
+        "precision10": 0.063,
+        "recall10": 0.292,
+        "p95LatencyMs": 467,
+        "queryCount": 8
       },
       "history/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.643,
+        "ndcg10": 0.607,
+        "zeroHitRate": 0.125,
+        "precision10": 0.2,
+        "recall10": 0.708,
+        "p95LatencyMs": 451,
+        "queryCount": 8
       },
       "history/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 15
+        "mrr": 0.713,
+        "ndcg10": 0.658,
+        "zeroHitRate": 0.063,
+        "precision10": 0.231,
+        "recall10": 0.812,
+        "p95LatencyMs": 598,
+        "queryCount": 16
       },
       "maths/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+        "mrr": 0.561,
+        "ndcg10": 0.456,
+        "zeroHitRate": 0.162,
+        "precision10": 0.157,
+        "recall10": 0.554,
+        "p95LatencyMs": 938,
         "queryCount": 37
       },
       "maths/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 60
+        "mrr": 0.734,
+        "ndcg10": 0.671,
+        "zeroHitRate": 0.026,
+        "precision10": 0.242,
+        "recall10": 0.811,
+        "p95LatencyMs": 1012,
+        "queryCount": 76
       },
       "music/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
+        "mrr": 0.512,
+        "ndcg10": 0.422,
+        "zeroHitRate": 0.333,
+        "precision10": 0.111,
+        "recall10": 0.556,
+        "p95LatencyMs": 517,
+        "queryCount": 9
       },
       "music/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 9
+        "mrr": 0.825,
+        "ndcg10": 0.723,
+        "zeroHitRate": 0.1,
+        "precision10": 0.23,
+        "recall10": 0.85,
+        "p95LatencyMs": 494,
+        "queryCount": 10
       },
       "physical-education/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 18
+        "mrr": 0.408,
+        "ndcg10": 0.338,
+        "zeroHitRate": 0.316,
+        "precision10": 0.116,
+        "recall10": 0.461,
+        "p95LatencyMs": 432,
+        "queryCount": 19
       },
       "physical-education/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 9
+        "mrr": 0.328,
+        "ndcg10": 0.287,
+        "zeroHitRate": 0.4,
+        "precision10": 0.1,
+        "recall10": 0.383,
+        "p95LatencyMs": 634,
+        "queryCount": 10
       },
       "religious-education/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
+        "mrr": 0.421,
+        "ndcg10": 0.448,
+        "zeroHitRate": 0.333,
+        "precision10": 0.122,
+        "recall10": 0.611,
+        "p95LatencyMs": 411,
+        "queryCount": 9
       },
       "religious-education/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 7
+        "mrr": 0.408,
+        "ndcg10": 0.322,
+        "zeroHitRate": 0.25,
+        "precision10": 0.1,
+        "recall10": 0.396,
+        "p95LatencyMs": 564,
+        "queryCount": 8
       },
       "science/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 15
+        "mrr": 0.815,
+        "ndcg10": 0.771,
+        "zeroHitRate": 0.0,
+        "precision10": 0.269,
+        "recall10": 0.839,
+        "p95LatencyMs": 726,
+        "queryCount": 16
       },
       "science/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
+        "mrr": 0.811,
+        "ndcg10": 0.711,
+        "zeroHitRate": 0.0,
+        "precision10": 0.226,
+        "recall10": 0.776,
+        "p95LatencyMs": 744,
         "queryCount": 35
       },
       "spanish/primary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.341,
+        "ndcg10": 0.378,
+        "zeroHitRate": 0.222,
+        "precision10": 0.1,
+        "recall10": 0.5,
+        "p95LatencyMs": 471,
+        "queryCount": 9
       },
       "spanish/secondary": {
-        "mrr": null,
-        "ndcg10": null,
-        "zeroHitRate": null,
-        "precision10": null,
-        "recall10": null,
-        "p95LatencyMs": null,
-        "queryCount": 6
+        "mrr": 0.2,
+        "ndcg10": 0.168,
+        "zeroHitRate": 0.5,
+        "precision10": 0.063,
+        "recall10": 0.313,
+        "p95LatencyMs": 472,
+        "queryCount": 8
       }
+    },
+    "overall": {
+      "mrr": 0.616,
+      "ndcg10": 0.548,
+      "zeroHitRate": 0.135,
+      "precision10": 0.179,
+      "recall10": 0.659,
+      "p95LatencyMs": 808,
+      "queryCount": 474
     }
   }
 }

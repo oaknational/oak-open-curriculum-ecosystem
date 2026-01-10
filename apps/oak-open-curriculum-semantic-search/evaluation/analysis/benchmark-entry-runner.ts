@@ -13,8 +13,10 @@ import type {
   GroundTruthEntry,
   Phase,
 } from '../../src/lib/search-quality/ground-truth/registry/index.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
 import type { SearchSubjectSlug } from '../../src/types/oak.js';
 import { runQuery, type SearchFunction, type QueryResult } from './benchmark-query-runner.js';
+import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
 
 // Re-export SearchFunction type for test imports
 export type { SearchFunction } from './benchmark-query-runner.js';
@@ -24,6 +26,8 @@ export type { SearchFunction } from './benchmark-query-runner.js';
  *
  * Contains all IR metrics as defined in IR-METRICS.md:
  * - MRR, NDCG@10, Precision@10, Recall@10, Zero-hit rate, Latency
+ *
+ * Also includes per-category breakdown for granular analysis.
  *
  * Note: Baselines are stored separately in baselines.json and compared
  * at the reporting layer, not here. This keeps test execution separate
@@ -40,6 +44,8 @@ export interface EntryBenchmarkResult {
   readonly zeroHitRate: number;
   readonly avgLatencyMs: number;
   readonly latencies: readonly number[];
+  /** Per-category metric breakdown for granular analysis. */
+  readonly perCategory: readonly CategoryResult[];
 }
 
 /** Aggregate query results into entry-level metrics. */
@@ -55,6 +61,9 @@ function aggregateResults(
   const latencies = results.map((r) => r.latencyMs);
   const avgLatencyMs = latencies.reduce((sum, l) => sum + l, 0) / latencies.length;
 
+  // Calculate per-category metrics
+  const perCategory = aggregateByCategory(results);
+
   return {
     subject: entry.subject,
     phase: entry.phase,
@@ -66,12 +75,13 @@ function aggregateResults(
     zeroHitRate: zeroHitCount / results.length,
     avgLatencyMs,
     latencies,
+    perCategory,
   };
 }
 
 /** Create a zero-result QueryResult for error cases. */
-function createErrorResult(): QueryResult {
-  return { mrr: 0, ndcg10: 0, precision10: 0, recall10: 0, latencyMs: 0, hasHit: false };
+function createErrorResult(category: QueryCategory): QueryResult {
+  return { category, mrr: 0, ndcg10: 0, precision10: 0, recall10: 0, latencyMs: 0, hasHit: false };
 }
 
 /**
@@ -98,6 +108,7 @@ export async function benchmarkEntry(
           subject: entry.subject,
           phase: entry.phase,
           queryKeyStage: query.keyStage,
+          category: query.category,
         },
         searchFn,
       );
@@ -109,7 +120,7 @@ export async function benchmarkEntry(
       }
     } catch (error) {
       console.error(`  ✗ Error running query "${query.query}":`, error);
-      results.push(createErrorResult());
+      results.push(createErrorResult(query.category));
     }
   }
 

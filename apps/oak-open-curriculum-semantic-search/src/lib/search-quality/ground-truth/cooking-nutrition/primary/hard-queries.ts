@@ -57,4 +57,14 @@ export const COOKING_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] = [
       'why-we-need-energy-and-nutrients': 2,
     },
   },
+  {
+    query: 'quick practical for 30 minute lesson',
+    category: 'pedagogical-intent',
+    priority: 'exploratory',
+    description: 'Tests teaching goal for time-constrained practical cooking.',
+    expectedRelevance: {
+      'making-curry-in-a-hurry': 3,
+      'lets-make-some-veggie-snacks': 2,
+    },
+  },
 ] as const;
