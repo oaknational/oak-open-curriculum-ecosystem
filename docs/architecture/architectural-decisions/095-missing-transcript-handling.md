@@ -101,25 +101,13 @@ lesson_content: lesson.transcript_sentences ?? structureSummary;
 
 - **Truthful**: No placeholder data in index
 - **Clean retrieval**: BM25/ELSER content retrievers only match documents with actual content
-- **RRF natural handling**: Documents without content fields simply don't appear in content retriever results; structure retrievers still find them
 - **No garbage embeddings**: ELSER doesn't waste inference on placeholders
-- **Documented behavior**: ES documentation confirms this is the correct approach
+- **Documented behavior**: ES documentation confirms omitting fields is safe
 
 ### Negative
 
-- **Lessons without transcripts rank lower**: They only match via structure retrievers (2 of 4 retrievers)
-  - This is **correct behavior** — MFL lessons should rank lower on transcript-based queries
-
-### RRF Behavior
-
-| Retriever       | Doc with transcript   | Doc without transcript         |
-| --------------- | --------------------- | ------------------------------ |
-| BM25 content    | ✅ Appears in ranking | ❌ Field missing, no match     |
-| ELSER content   | ✅ Appears in ranking | ❌ Field missing, no inference |
-| BM25 structure  | ✅ Appears in ranking | ✅ Appears in ranking          |
-| ELSER structure | ✅ Appears in ranking | ✅ Appears in ranking          |
-
-**Result**: Lessons without transcripts can still be found via structure queries (pedagogical fields: title, keywords, learning points, misconceptions, tips). They will rank lower than transcript-bearing lessons for content queries, which is correct behavior.
+- **Schema change**: Requires update to SDK mapping generator
+- **Re-index**: Existing indices need refresh after mapping change
 
 ## Implementation
 

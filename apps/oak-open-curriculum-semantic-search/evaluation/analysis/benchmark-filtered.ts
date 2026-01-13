@@ -13,16 +13,12 @@ import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/ty
  *
  * These categories test query types that our ELSER-based search cannot
  * adequately handle without query expansion or semantic understanding:
- * - pedagogical-intent: Asks about teaching methodology, not curriculum content
  * - natural-expression: Informal phrasing that needs synonym expansion
  *
  * We still measure these categories but report separate aggregates
  * to give a clearer picture of search performance.
  */
-export const LLM_REQUIRED_CATEGORIES: readonly QueryCategory[] = [
-  'pedagogical-intent',
-  'natural-expression',
-] as const;
+export const LLM_REQUIRED_CATEGORIES: readonly QueryCategory[] = ['natural-expression'] as const;
 
 /** Filtered aggregate result type. */
 export interface FilteredAggregate {

@@ -1,57 +1,30 @@
 /**
  * History ground truth queries for search quality evaluation.
  *
- * Comprehensive ground truth covering:
- * - KS3 (Year 7-9): Medieval, Modern history
- * - Primary (KS2): Ancient history
+ * **Phase-aligned structure**:
+ * - **Primary** (KS2): Ancient history, Romans, Vikings
+ * - **Secondary** (KS3-4): Medieval, Modern history, Holocaust
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../types';
 
-import {
-  HISTORY_SECONDARY_ALL_QUERIES,
-  HISTORY_SECONDARY_HARD_QUERIES,
-  HISTORY_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-import {
-  HISTORY_PRIMARY_ALL_QUERIES,
-  HISTORY_PRIMARY_HARD_QUERIES,
-  HISTORY_PRIMARY_STANDARD_QUERIES,
-} from './primary';
+import { HISTORY_PRIMARY_ALL_QUERIES } from './primary';
+import { HISTORY_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
- * All standard History ground truth queries.
- */
-export const HISTORY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...HISTORY_SECONDARY_STANDARD_QUERIES,
-  ...HISTORY_PRIMARY_STANDARD_QUERIES,
-] as const;
-
-/**
- * All hard History ground truth queries.
- */
-export const HISTORY_HARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...HISTORY_SECONDARY_HARD_QUERIES,
-  ...HISTORY_PRIMARY_HARD_QUERIES,
-] as const;
-
-/**
- * All History ground truth queries.
+ * All History ground truth queries across all phases.
  *
- * Total: 16 queries (11 standard + 5 hard).
+ * Total: 8 queries (4 Primary + 4 Secondary).
  */
 export const HISTORY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...HISTORY_STANDARD_QUERIES,
-  ...HISTORY_HARD_QUERIES,
+  ...HISTORY_PRIMARY_ALL_QUERIES,
+  ...HISTORY_SECONDARY_ALL_QUERIES,
 ] as const;
 
-export {
-  HISTORY_SECONDARY_ALL_QUERIES,
-  HISTORY_SECONDARY_HARD_QUERIES,
-  HISTORY_SECONDARY_STANDARD_QUERIES,
-  HISTORY_PRIMARY_ALL_QUERIES,
-  HISTORY_PRIMARY_HARD_QUERIES,
-  HISTORY_PRIMARY_STANDARD_QUERIES,
-};
+// Re-export primary
+export { HISTORY_PRIMARY_ALL_QUERIES } from './primary';
+
+// Re-export secondary
+export { HISTORY_SECONDARY_ALL_QUERIES } from './secondary';

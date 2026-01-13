@@ -1,22 +1,21 @@
 /**
- * SECONDARY German ground truth queries.
- *
+ * Secondary German ground truth queries - 4 queries, 1 per category, AI-curated.
  * @packageDocumentation
  */
-
 import type { GroundTruthQuery } from '../../types';
-
-import { GRAMMAR_SECONDARY_GERMAN } from './grammar';
-import { HARD_QUERIES_SECONDARY_GERMAN } from './hard-queries';
-
-export const GERMAN_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] =
-  GRAMMAR_SECONDARY_GERMAN;
-export const GERMAN_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_SECONDARY_GERMAN;
+import { GERMAN_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { GERMAN_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { GERMAN_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { GERMAN_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
 export const GERMAN_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...GERMAN_SECONDARY_STANDARD_QUERIES,
-  ...GERMAN_SECONDARY_HARD_QUERIES,
+  ...GERMAN_SECONDARY_PRECISE_TOPIC,
+  ...GERMAN_SECONDARY_NATURAL_EXPRESSION,
+  ...GERMAN_SECONDARY_IMPRECISE_INPUT,
+  ...GERMAN_SECONDARY_CROSS_TOPIC,
 ] as const;
 
-export { GRAMMAR_SECONDARY_GERMAN, HARD_QUERIES_SECONDARY_GERMAN };
+export { GERMAN_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { GERMAN_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { GERMAN_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { GERMAN_SECONDARY_PRECISE_TOPIC } from './precise-topic';

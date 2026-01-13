@@ -52,29 +52,6 @@ This is significantly worse than other subjects (Art: 0.741, D&T: 0.815).
 
 1. **~90% less searchable text** — MFL lessons have only metadata; no rich transcript content
 2. **Metadata is in English** — Outcomes, keywords, tips are all in English
-3. **ELSER hypothesis may be secondary** — Even if ELSER understood French, there's little French text to match
-
-### Updated Root Cause Analysis
-
-| Factor | Impact | Evidence |
-|--------|--------|----------|
-| **Missing transcripts** | HIGH | 0.2% coverage vs 100% for Maths |
-| ELSER English-only | UNCLEAR | Metadata is English anyway |
-| Target language vocab | LOW | Most searchable content is English |
-
----
-
-## ⚠️ HYPOTHESIS: ELSER is English-Only (Lower Priority Now)
-
-**Hypothesis**: ELSER v2 is trained on English text only and cannot effectively create semantic embeddings for French, German, or Spanish vocabulary.
-
-**Status**: Lower priority given transcript discovery — but still worth verifying
-
-### Why We Believed This
-
-1. ADR-076 explicitly states: "No cross-lingual support: English-only (acceptable for UK curriculum)"
-2. ELSER documentation describes it as trained on English language datasets
-3. MFL subjects have the lowest MRR despite having similar lesson structure to other subjects
 
 ### Root Cause Verified via API (2026-01-03)
 
@@ -100,59 +77,29 @@ Likely cause: **Automatic captioning doesn't work for non-English speech**
 
 ### Implications for Search
 
-1. **ELSER is NOT the problem** — there's no transcript text to semantically match
-2. **We cannot fix this in our codebase** — it's an upstream data issue
-3. **MFL search relies entirely on metadata** — titles, outcomes, keywords, tips (all English)
-4. **The 4-way RRF handles this** — `lesson_structure` and `lesson_structure_semantic` are always populated
-
-### What We Will NOT Do
-
-- ❌ **Add MFL vocabulary to synonyms** — Synonyms are for English query expansion, not target language vocabulary
-- ❌ **Multilingual embeddings** — Moot since there's no target-language content to embed
-- ❌ **Query-time translation** — Overkill for the limited MFL content
-
-### Potential Improvements (Within Our Scope)
-
-1. **Boost BM25 for titles** — Titles contain target language vocabulary
-2. **Report to Oak** — Flag missing MFL transcripts as upstream data issue
-3. **Rely on structure-based RRF** — The system already handles transcript-less lessons correctly
-
----
-
-## Phase 0: Verify Hypothesis
-
-### 0.1 Documentation Review
-
-- [ ] Read official ELSER documentation for language support
-- [ ] Check ELSER training data description
-- [ ] Search for Elastic blog posts about multilingual support
-- [ ] Document findings
-
-### 0.2 Empirical Testing
-
-| Experiment | Description | Expected Outcome |
-|------------|-------------|------------------|
-| ELSER-only | Run MFL queries with ELSER retriever only | Very poor (hypothesis: ELSER doesn't understand target language) |
-| BM25-only | Run MFL queries with BM25 only | Moderate (hypothesis: BM25 handles vocabulary matches) |
-| Current hybrid | Run MFL queries with current 4-way RRF | Poor (current state) |
-| BM25-boosted | Run MFL with heavier BM25 weighting | Potentially better if ELSER hurts |
-
-### 0.3 Failure Analysis
-
-For each failing MFL query, analyze:
-
-1. What language is the query in? (English or target language)
-2. What language is the lesson content in? (Usually English with target language vocabulary)
-3. Is ELSER returning irrelevant results or no results?
-4. Is BM25 finding the right documents but ELSER demoting them?
+1. **Missing transcripts are upstream data** — MFL lessons have no transcript content
+2. **MFL search relies on metadata** — titles, outcomes, keywords, tips (all English)
 
 ---
 
 ## Potential Solutions
 
-**Only proceed with these after hypothesis is verified.**
+### Option 1: Adaptive RRF Weights
 
-### Option 1: Multilingual Sparse Embeddings
+Adapt retriever weights based on content availability:
+
+```typescript
+// Pseudo-code for content-aware RRF
+if (hasTranscript) {
+  // Use all 4 retrievers with standard weights
+  return buildFourWayRrf(query);
+} else {
+  // Boost structure retrievers, reduce/skip content retrievers
+  return buildStructureWeightedRrf(query);
+}
+```
+
+### Option 2: Multilingual Sparse Embeddings
 
 Add a multilingual model alongside ELSER for MFL content:
 
@@ -175,18 +122,18 @@ if (subject.isMFL) {
 }
 ```
 
-### Option 2: MFL-Specific BM25 Boosting
+### Option 3: MFL-Specific BM25 Boosting
 
-If ELSER is actively harming MFL results, we could:
+For MFL lessons:
 
-1. Reduce ELSER weight for MFL subjects
-2. Boost BM25 for MFL-specific vocabulary
+1. Boost structure-based retrievers
+2. Boost BM25 for title fields (which contain target language vocabulary)
 3. Add MFL-specific synonyms (French infinitives, German cases, etc.)
 
 **Pros**: No new infrastructure
-**Cons**: Loses semantic understanding entirely
+**Cons**: Relies on limited metadata fields
 
-### Option 3: Query-Time Translation
+### Option 4: Query-Time Translation
 
 Translate user queries to target language before search:
 
@@ -199,7 +146,7 @@ Translate user queries to target language before search:
 **Pros**: Works with existing infrastructure
 **Cons**: Adds latency, translation errors, requires LLM
 
-### Option 4: Hybrid Approach
+### Option 5: Hybrid Approach
 
 Different strategy based on query content:
 

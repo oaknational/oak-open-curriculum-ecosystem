@@ -2,13 +2,40 @@
 
 **Purpose**: Step-by-step process for creating validated search quality ground truths.
 
-**Last Updated**: 2026-01-09
+**Last Updated**: 2026-01-12
 
 **Important**: Follow these steps in exact order. Do not skip steps.
 
 ---
 
-## 🚨 Critical: Three-Stage Validation Model
+## Critical Understanding (2026-01-11)
+
+### What Ground Truth Metrics Measure
+
+| What We Thought                                  | What We're Actually Measuring                                  |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| "Does search help teachers find useful content?" | "Did search return the exact slugs we arbitrarily wrote down?" |
+
+**Ground truths test expected slug position, NOT user satisfaction.**
+
+### Target Structure (Post-Restructure)
+
+| Dimension             | Value   |
+| --------------------- | ------- |
+| Subject-phase entries | 30      |
+| Categories per entry  | 4       |
+| Queries per category  | **1**   |
+| **Total queries**     | **120** |
+
+### Measurement Scope Disclaimer (MANDATORY)
+
+**All reporting must include:**
+
+> **Measurement Scope**: Ground truth metrics measure expected slug position, not user satisfaction. A query may receive low MRR while search returns useful results.
+
+---
+
+## Three-Stage Validation Model
 
 Ground truths require **three distinct validation stages**:
 
@@ -203,9 +230,8 @@ Assign a category that describes the **user scenario** and **behavior being test
 | `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | "teach solving for x"             |
 | `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | "fotosynthesis"                   |
 | `cross-topic`        | Teacher wants intersection     | System finds overlaps       | "algebra with graphs"             |
-| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | "extension work able students"    |
 
-**Note**: Categories are outcome-oriented (2026-01-09). Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are still accepted for backward compatibility but deprecated.
+**Note**: Categories are outcome-oriented (2026-01-10). Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are still accepted for backward compatibility but deprecated.
 
 ---
 
@@ -360,45 +386,55 @@ pnpm ground-truth:validate
 
 ---
 
-## Step 11: Agent Review (Structured)
+## Step 11: AI-as-Judge Curation (CRITICAL)
 
-After programmatic validation, the agent must review each ground truth entry.
+After programmatic validation, AI must curate each ground truth entry.
 
-For EACH query in the ground truth file, verify:
+**This is not a rubber-stamp review.** AI must critically assess whether expected slugs are the BEST results.
 
-### 11a. Query Realism
+### 11a. Run Actual Search
 
-- [ ] Would a teacher actually type this query?
-- [ ] Is the query 3-7 words?
-- [ ] Does it represent a realistic search scenario?
+For each query:
 
-### 11b. Relevance Score Accuracy
+```bash
+# Run search against ES index to see actual results
+pnpm benchmark --subject {subject} --phase {phase} --verbose
+```
 
-For each expected slug:
+Or use the search API directly to compare expected vs actual results.
 
-- [ ] Fetch the lesson summary via MCP: `get-lessons-summary lesson:{slug}`
-- [ ] Confirm the lesson content matches the query intent
-- [ ] Verify the relevance score is appropriate (3/2/1)
+### 11b. Compare Expected vs Actual
 
-### 11c. Completeness
+| Check             | Question                                                           | Action                           |
+| ----------------- | ------------------------------------------------------------------ | -------------------------------- |
+| Actual better?    | Do actual top results answer the query better than expected slugs? | FIX expected slugs               |
+| Expected correct? | Are expected slugs genuinely the BEST results?                     | KEEP                             |
+| Query bad?        | Is the query unrealistic or too broad?                             | DELETE or SELECT different query |
 
-- [ ] Are there other relevant lessons in the bulk data that should be included?
-- [ ] Run: `cat bulk-downloads/{subject}-{phase}.json | jq '.[] | select(.lesson_title | test("QUERY_KEYWORD"; "i")) | .lesson_slug'`
-- [ ] Add any missed relevant lessons
+### 11c. Curation Criteria
 
-### 11d. Category and Priority
+For each query, AI must verify:
 
-- [ ] Is the category accurate for this query type?
-- [ ] Is the priority appropriate (critical for common scenarios)?
+- [ ] **Query realism**: Would a teacher actually search this?
+- [ ] **Expected relevance**: Are these the BEST lessons for this query?
+- [ ] **Actual comparison**: Does search return better results than expected?
+- [ ] **Category fit**: Does query behaviour match category intent?
 
-### 11e. Sign-off
-
-Document the review:
+### 11d. Document Decision
 
 ```typescript
-// Reviewed: 2026-01-06
-// Agent verified: slugs exist, relevance scores accurate, no missed lessons
+// AI Curation: 2026-01-11
+// Decision: KEEP | FIX | DELETE
+// Rationale: [Brief explanation]
+// Actual top result: [lesson-slug]
+// Expected matches actual: YES | NO (fixed)
 ```
+
+### 11e. Curation Sign-off
+
+After curation, the query is considered **production-ready** for its limited scope:
+
+> **Scope**: This ground truth tests "does search return expected slug?", NOT "does search help teachers?"
 
 ---
 
@@ -459,22 +495,21 @@ Ground truths form a **subject × phase × category matrix** that must have cons
 ### The Validation Matrix
 
 ```text
-Subject (16) × Phase (2) × Category (5) = Consistent Coverage
+Subject (16) × Phase (2) × Category (4) = Consistent Coverage
 ```
 
-Every subject-phase entry MUST contain queries from ALL required categories:
+Every subject-phase entry MUST contain exactly **4 queries** (1 per category):
 
-| Category             | User Scenario                  | Priority    | Required | Min | Example                        |
-| -------------------- | ------------------------------ | ----------- | -------- | --- | ------------------------------ |
-| `precise-topic`      | Teacher knows curriculum       | Critical    | **YES**  | 4+  | "cell structure function"      |
-| `natural-expression` | Teacher uses everyday language | High        | **YES**  | 2+  | "teach solving for x"          |
-| `imprecise-input`    | Teacher makes typing errors    | Critical    | **YES**  | 1+  | "fotosynthesis"                |
-| `cross-topic`        | Teacher wants intersection     | Medium      | **YES**  | 1+  | "algebra with graphs"          |
-| `pedagogical-intent` | Teacher describes goal         | Exploratory | **YES**  | 1+  | "extension work able students" |
+| Category             | User Scenario                  | Priority | Required | Count | Example                   |
+| -------------------- | ------------------------------ | -------- | -------- | ----- | ------------------------- |
+| `precise-topic`      | Teacher knows curriculum       | Critical | **YES**  | **1** | "cell structure function" |
+| `natural-expression` | Teacher uses everyday language | High     | **YES**  | **1** | "teach solving for x"     |
+| `imprecise-input`    | Teacher makes typing errors    | Critical | **YES**  | **1** | "fotosynthesis"           |
+| `cross-topic`        | Teacher wants intersection     | Medium   | **YES**  | **1** | "algebra with graphs"     |
 
-**Minimum per entry**: 9-10 queries covering all 5 required categories.
+**Total per entry**: 4 queries (1 per category, AI-curated for quality over quantity).
 
-### Category Migration (2026-01-09)
+### Category Migration (2026-01-10)
 
 Legacy categories have been migrated to outcome-oriented categories:
 
@@ -486,7 +521,6 @@ Legacy categories have been migrated to outcome-oriented categories:
 | `colloquial`              | `natural-expression` | 24 queries   |
 | `misspelling`             | `imprecise-input`    | 34 queries   |
 | `multi-concept`           | `cross-topic`        | 16 queries   |
-| `intent-based`            | `pedagogical-intent` | 2 queries    |
 
 ### Consistency Requirement
 
@@ -502,13 +536,12 @@ This ensures:
 
 For **EACH** subject-phase entry, verify:
 
-- [ ] Contains 4+ `precise-topic` queries
-- [ ] Contains 2+ `natural-expression` queries
-- [ ] Contains 1+ `imprecise-input` query
-- [ ] Contains 1+ `cross-topic` query
-- [ ] Contains 1+ `pedagogical-intent` query
+- [ ] Contains exactly 1 `precise-topic` query
+- [ ] Contains exactly 1 `natural-expression` query
+- [ ] Contains exactly 1 `imprecise-input` query
+- [ ] Contains exactly 1 `cross-topic` query
 
-**If any required category is missing → Add queries before the entry is considered complete.**
+**Total: 4 queries per entry** (AI-curated for accuracy). If any category is missing → Add query before the entry is considered complete.
 
 ---
 

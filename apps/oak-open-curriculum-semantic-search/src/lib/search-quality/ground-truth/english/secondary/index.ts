@@ -1,64 +1,43 @@
 /**
- * Secondary English ground truth queries (KS3-4).
+ * Secondary English ground truth queries for search quality evaluation.
  *
- * Aggregates all Secondary English ground truth across curriculum areas:
- * - Fiction (Sherlock Holmes, Lord of the Flies, Gothic fiction)
- * - Shakespeare (The Tempest, Macbeth)
- * - Poetry (Gothic poetry, Power and Conflict anthology)
- * - Modern texts (An Inspector Calls)
- * - Nineteenth-century texts (Jekyll and Hyde, A Christmas Carol)
- * - Non-fiction and language skills
+ * **Structure (2026-01-11)**:
+ * 4 queries total, 1 per category, AI-curated for accuracy.
+ *
+ * | Category | Query | MRR |
+ * |----------|-------|-----|
+ * | precise-topic | Lord of the Flies symbolism | 1.000 |
+ * | natural-expression | teach students about gothic literature year 8 | 1.000 |
+ * | imprecise-input | frankenstien monster creation | 0.500 |
+ * | cross-topic | grammar and punctuation in essay writing | 0.100 |
+ *
+ * **Measurement Scope**: These queries test expected slug position,
+ * NOT user satisfaction. See audit report for details.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../types';
 
-import { FICTION_SECONDARY_QUERIES } from './fiction';
-import { HARD_QUERIES_SECONDARY_ENGLISH } from './hard-queries';
-import { MODERN_TEXTS_SECONDARY_QUERIES } from './modern-texts';
-import { NINETEENTH_CENTURY_SECONDARY_QUERIES } from './nineteenth-century';
-import { NON_FICTION_SECONDARY_QUERIES } from './non-fiction';
-import { POETRY_SECONDARY_QUERIES } from './poetry';
-import { SHAKESPEARE_SECONDARY_QUERIES } from './shakespeare';
+import { ENGLISH_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { ENGLISH_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { ENGLISH_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { ENGLISH_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
 /**
- * All standard Secondary English ground truth queries.
+ * All Secondary English ground truth queries.
  *
- * Total: 40 queries across 7 curriculum areas.
- */
-export const ENGLISH_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...FICTION_SECONDARY_QUERIES,
-  ...SHAKESPEARE_SECONDARY_QUERIES,
-  ...POETRY_SECONDARY_QUERIES,
-  ...MODERN_TEXTS_SECONDARY_QUERIES,
-  ...NINETEENTH_CENTURY_SECONDARY_QUERIES,
-  ...NON_FICTION_SECONDARY_QUERIES,
-] as const;
-
-/**
- * Hard Secondary English ground truth queries.
- *
- * Total: 12 queries (merged SECONDARY + KS4 hard queries).
- */
-export const ENGLISH_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_SECONDARY_ENGLISH;
-
-/**
- * All Secondary English ground truth queries (standard + hard).
- *
- * Total: 52 queries.
+ * Total: 4 queries (1 per category).
  */
 export const ENGLISH_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...ENGLISH_SECONDARY_STANDARD_QUERIES,
-  ...ENGLISH_SECONDARY_HARD_QUERIES,
+  ...ENGLISH_SECONDARY_PRECISE_TOPIC,
+  ...ENGLISH_SECONDARY_NATURAL_EXPRESSION,
+  ...ENGLISH_SECONDARY_IMPRECISE_INPUT,
+  ...ENGLISH_SECONDARY_CROSS_TOPIC,
 ] as const;
 
-// Re-export individual topic arrays for granular access
-export { FICTION_SECONDARY_QUERIES } from './fiction';
-export { HARD_QUERIES_SECONDARY_ENGLISH } from './hard-queries';
-export { MODERN_TEXTS_SECONDARY_QUERIES } from './modern-texts';
-export { NINETEENTH_CENTURY_SECONDARY_QUERIES } from './nineteenth-century';
-export { NON_FICTION_SECONDARY_QUERIES } from './non-fiction';
-export { POETRY_SECONDARY_QUERIES } from './poetry';
-export { SHAKESPEARE_SECONDARY_QUERIES } from './shakespeare';
+// Re-export category modules
+export { ENGLISH_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { ENGLISH_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { ENGLISH_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { ENGLISH_SECONDARY_PRECISE_TOPIC } from './precise-topic';

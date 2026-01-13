@@ -187,7 +187,6 @@ function checkDuplicateQueries(
  * - `natural-expression`: Teacher uses everyday language (vocabulary bridging)
  * - `imprecise-input`: Teacher makes typos (error recovery)
  * - `cross-topic`: Teacher wants intersection content (concept overlap)
- * - `pedagogical-intent`: Teacher describes teaching goal (purpose understanding)
  *
  * @see ADR-085 Ground Truth Validation Discipline
  */
@@ -196,27 +195,23 @@ export const REQUIRED_CATEGORIES = [
   'natural-expression',
   'imprecise-input',
   'cross-topic',
-  'pedagogical-intent',
 ] as const;
 
 /**
  * Minimum queries per required category.
  *
- * Each category has a minimum based on its testing value:
- * - `precise-topic`: 4 — core functionality, needs multiple tests
- * - `natural-expression`: 2 — vocabulary bridging is important
- * - `imprecise-input`: 1 — typo handling
- * - `cross-topic`: 1 — concept intersection
- * - `pedagogical-intent`: 1 — teaching goal understanding
+ * **Updated 2026-01-11**: Per M3 plan and audit decision, each entry
+ * now requires exactly 1 query per category (4 total per entry).
+ * This ensures consistent, AI-curated ground truths across all subjects.
  *
- * @see ADR-085 Ground Truth Validation Discipline
+ * @see M3 plan: .agent/plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md
+ * @see Audit: .agent/evaluations/audits/ground-truth-audit-2026-01.md
  */
 export const CATEGORY_MINIMUMS: Readonly<Record<string, number>> = {
-  'precise-topic': 4,
-  'natural-expression': 2,
+  'precise-topic': 1,
+  'natural-expression': 1,
   'imprecise-input': 1,
   'cross-topic': 1,
-  'pedagogical-intent': 1,
 };
 
 /**

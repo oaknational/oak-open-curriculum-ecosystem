@@ -1,10 +1,19 @@
-import { esSearch, type EsHit } from '../elastic-http';
+import { esSearch, type EsHit, type EsSearchFn } from '../elastic-http';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../types/oak';
 import type { StructuredQuery, HybridSearchResult, UnitResult } from './types';
 import { buildUnitRrfRequest } from './rrf-query-builders';
 
 /**
- * Runs hybrid search for units using two-way RRF (BM25 + ELSER).
+ * Options for unit search, including optional DI for testing.
+ * @see ADR-078 Dependency Injection for Testability
+ */
+export interface RunUnitsSearchOptions {
+  /** Injected search function for testing. Defaults to esSearch. */
+  readonly search?: EsSearchFn;
+}
+
+/**
+ * Runs hybrid search for units using four-way RRF (BM25 + ELSER on content + structure).
  *
  * Uses Reciprocal Rank Fusion to combine lexical (BM25) and semantic (ELSER)
  * retrieval for optimal search quality. Searches the `oak_unit_rollup` index
@@ -14,8 +23,10 @@ import { buildUnitRrfRequest } from './rrf-query-builders';
  * @param size - Maximum number of results to return
  * @param from - Offset for pagination
  * @param doHighlight - Whether to include rollup text highlights
+ * @param options - Optional dependencies for testing
  * @returns Search results with units, scores, and metadata
  *
+ * @see ADR-078 Dependency Injection for Testability
  * @see `.agent/research/elasticsearch/methods/hybrid-retrieval.md`
  */
 export async function runUnitsSearch(
@@ -23,7 +34,9 @@ export async function runUnitsSearch(
   size: number,
   from: number,
   doHighlight: boolean,
+  options: RunUnitsSearchOptions = {},
 ): Promise<HybridSearchResult> {
+  const search = options.search ?? esSearch;
   const request = buildUnitRrfRequest({
     text: q.text,
     size,
@@ -44,7 +57,7 @@ export async function runUnitsSearch(
     request.from = from;
   }
 
-  const res = await esSearch<SearchUnitRollupDoc>(request);
+  const res = await search<SearchUnitRollupDoc>(request);
   const results = makeUnitResults(res.hits.hits);
   return {
     scope: 'units',

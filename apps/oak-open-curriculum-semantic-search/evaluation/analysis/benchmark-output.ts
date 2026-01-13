@@ -219,7 +219,7 @@ function printFilteredAggregate(
   const latStatus = formatWithStatus(filtered.p95LatencyMs, refs.p95LatencyMs, 'lower', 0);
 
   console.log(
-    `FILTERED (excl. pedagogical-intent, natural-expression): ${filtered.queryCount} queries | MRR=${mrrStatus} | NDCG=${ndcgStatus} | P@3=${p3Status} | R@10=${r10Status} | Zero=${zeroStatus} | p95=${latStatus}ms`,
+    `FILTERED (excl. natural-expression): ${filtered.queryCount} queries | MRR=${mrrStatus} | NDCG=${ndcgStatus} | P@3=${p3Status} | R@10=${r10Status} | Zero=${zeroStatus} | p95=${latStatus}ms`,
   );
 }
 

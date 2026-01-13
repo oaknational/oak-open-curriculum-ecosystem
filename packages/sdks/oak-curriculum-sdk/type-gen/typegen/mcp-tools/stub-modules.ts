@@ -36,7 +36,6 @@ export function generateStubModules(
 
   const mainIndex = [
     '/* GENERATED FILE - DO NOT EDIT */',
-    '/* eslint-disable @typescript-eslint/consistent-type-assertions -- SDK interop: stub data must satisfy CallToolResult.structuredContent */',
     "import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';",
     "import { stubbedToolResponses } from './tools/index.js';",
     "import type { StubbedToolName } from './tools/index.js';",

@@ -1,32 +1,23 @@
 /**
  * KS4 Science ground truth queries for search quality evaluation.
  *
- * Covers Year 10-11 GCSE Science: Biology, Chemistry, Physics.
- *
- * **Methodology (2026-01-06)**:
- * All lesson slugs verified from bulk-downloads/science-secondary.json.
+ * **Updated 2026-01-11**: Per M3 plan, KS4 queries are now integrated
+ * into the main secondary entry. This module exports an empty array
+ * for backward compatibility.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../../types';
 
-import { BIOLOGY_KS4_QUERIES } from './biology';
-import { CHEMISTRY_KS4_QUERIES } from './chemistry';
-import { PHYSICS_KS4_QUERIES } from './physics';
-
 /**
  * All KS4 Science ground truth queries.
  *
- * Total: 15 queries across Biology, Chemistry, Physics.
+ * Empty array - KS4 queries integrated into secondary entry.
  */
-export const SCIENCE_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...BIOLOGY_KS4_QUERIES,
-  ...CHEMISTRY_KS4_QUERIES,
-  ...PHYSICS_KS4_QUERIES,
-] as const;
+export const SCIENCE_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [] as const;
 
-// Re-export individual subjects
-export { BIOLOGY_KS4_QUERIES } from './biology';
-export { CHEMISTRY_KS4_QUERIES } from './chemistry';
-export { PHYSICS_KS4_QUERIES } from './physics';
+// Legacy exports for backward compatibility
+export const SCIENCE_KS4_BIOLOGY_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const SCIENCE_KS4_CHEMISTRY_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const SCIENCE_KS4_PHYSICS_QUERIES: readonly GroundTruthQuery[] = [] as const;

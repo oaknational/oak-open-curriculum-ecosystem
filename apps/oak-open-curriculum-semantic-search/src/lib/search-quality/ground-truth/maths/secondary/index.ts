@@ -1,26 +1,30 @@
 /**
  * Secondary Maths ground truth queries for search quality evaluation.
  *
- * Aggregates all KS3-4 Maths ground truths across topic areas:
- * - Algebra: quadratics, simultaneous equations, factorising, sequences, functions
- * - Geometry: Pythagoras, trigonometry, circle theorems, vectors, bearings
- * - Number: indices, surds, standard form, percentages, ratio, proportion
- * - Graphs: linear, quadratic, transformations, distance-time
- * - Statistics: probability, histograms, cumulative frequency, scatter graphs
+ * **Structure (2026-01-11)**:
+ * 4 queries total, 1 per category, AI-curated for accuracy.
+ *
+ * | Category | Query | MRR |
+ * |----------|-------|-----|
+ * | precise-topic | solving quadratic equations by factorising | 1.000 |
+ * | natural-expression | the bit where you complete the square | 1.000 |
+ * | imprecise-input | simulatneous equasions substitution method | 1.000 |
+ * | cross-topic | combining algebra with graphs | 0.333 |
+ *
+ * **Measurement Scope**: These queries test expected slug position,
+ * NOT user satisfaction. See audit report for details.
  *
  * @packageDocumentation
  */
 
-import { ALGEBRA_QUERIES } from './algebra';
-import { EDGE_CASE_QUERIES } from './edge-cases';
-import { GEOMETRY_QUERIES } from './geometry';
-import { GRAPHS_QUERIES } from './graphs';
-import { HARD_QUERIES } from './hard-queries';
-import { NUMBER_QUERIES } from './number';
-import { STATISTICS_QUERIES } from './statistics';
 import type { GroundTruthQuery } from '../../types';
 
-// Re-export unit ground truths
+import { MATHS_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { MATHS_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { MATHS_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { MATHS_SECONDARY_PRECISE_TOPIC } from './precise-topic';
+
+// Re-export unit ground truths (preserved for backward compatibility)
 export {
   UNIT_ALL_GROUND_TRUTH_QUERIES,
   UNIT_GROUND_TRUTH_QUERIES,
@@ -29,44 +33,30 @@ export {
 } from './units';
 
 /**
- * Standard lesson ground truth queries for Secondary Maths (topic-name based).
+ * All Secondary Maths ground truth queries.
  *
- * Total: 40 queries covering all major KS3-4 Maths curriculum areas.
- */
-export const MATHS_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...ALGEBRA_QUERIES,
-  ...GEOMETRY_QUERIES,
-  ...GRAPHS_QUERIES,
-  ...NUMBER_QUERIES,
-  ...STATISTICS_QUERIES,
-  ...EDGE_CASE_QUERIES,
-] as const;
-
-/**
- * Hard lesson ground truth queries for Secondary Maths.
- *
- * These queries challenge the search system with naturalistic phrasing,
- * misspellings, synonyms, multi-concept queries, and colloquial language.
- *
- * Total: 15 queries
- */
-export const MATHS_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = HARD_QUERIES;
-
-/**
- * All lesson ground truth queries for Secondary Maths (standard + hard).
- *
- * Total: 55 queries
+ * Total: 4 queries (1 per category).
  */
 export const MATHS_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_SECONDARY_STANDARD_QUERIES,
-  ...MATHS_SECONDARY_HARD_QUERIES,
+  ...MATHS_SECONDARY_PRECISE_TOPIC,
+  ...MATHS_SECONDARY_NATURAL_EXPRESSION,
+  ...MATHS_SECONDARY_IMPRECISE_INPUT,
+  ...MATHS_SECONDARY_CROSS_TOPIC,
 ] as const;
 
-// Re-export individual topic arrays for granular access
-export { ALGEBRA_QUERIES } from './algebra';
-export { GEOMETRY_QUERIES } from './geometry';
-export { GRAPHS_QUERIES } from './graphs';
-export { NUMBER_QUERIES } from './number';
-export { STATISTICS_QUERIES } from './statistics';
-export { HARD_QUERIES } from './hard-queries';
-export { EDGE_CASE_QUERIES } from './edge-cases';
+// Legacy exports - empty arrays for backward compatibility during transition
+export const MATHS_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const MATHS_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const ALGEBRA_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const GEOMETRY_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const GRAPHS_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const NUMBER_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const STATISTICS_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const EDGE_CASE_QUERIES: readonly GroundTruthQuery[] = [] as const;
+
+// Re-export category modules
+export { MATHS_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { MATHS_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { MATHS_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { MATHS_SECONDARY_PRECISE_TOPIC } from './precise-topic';

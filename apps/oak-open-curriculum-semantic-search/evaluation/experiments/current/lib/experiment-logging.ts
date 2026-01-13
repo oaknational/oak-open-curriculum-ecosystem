@@ -57,27 +57,24 @@ function logDecision(experiment: ContentTypeExperiment): void {
 }
 
 /** Log all experiment results. */
-export function logAllResults(lessons: ContentTypeExperiment, units: ContentTypeExperiment): void {
+export function logAllResults(lessons: ContentTypeExperiment): void {
   console.log('\n');
   console.log('='.repeat(SEPARATOR_WIDTH));
   console.log('HYBRID SUPERIORITY EXPERIMENT RESULTS');
   console.log('='.repeat(SEPARATOR_WIDTH));
 
   logComparisonTable(lessons);
-  logComparisonTable(units);
 
   console.log('\n' + '='.repeat(SEPARATOR_WIDTH));
   console.log('ANALYSIS');
   console.log('='.repeat(SEPARATOR_WIDTH));
   logDecision(lessons);
-  logDecision(units);
 
   console.log('\n' + '='.repeat(SEPARATOR_WIDTH));
   console.log('CONCLUSIONS');
   console.log('='.repeat(SEPARATOR_WIDTH));
   console.log('• Lessons: Hybrid search outperforms both single methods');
-  console.log('• Units: ELSER alone has excellent MRR; hybrid has best NDCG@10');
-  console.log('• Note: Results based on Maths KS4 only (314 lessons, 36 units)');
+  console.log('• Note: Results based on Maths Secondary only');
   console.log('• Recommendation: Re-run after full curriculum ingestion');
   console.log('='.repeat(SEPARATOR_WIDTH));
 }

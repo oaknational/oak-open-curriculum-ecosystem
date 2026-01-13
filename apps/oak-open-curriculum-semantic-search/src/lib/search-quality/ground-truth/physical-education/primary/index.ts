@@ -1,34 +1,21 @@
 /**
- * Primary Physical Education ground truth queries for search quality evaluation.
- *
- * Covers KS1-KS2 PE curriculum:
- * - Locomotion and movement
- * - Ball skills
- * - Dance
- * - Invasion games
- * - Swimming
- * - Outdoor adventurous activities
- *
- * **Methodology (2026-01-05)**:
- * All lesson slugs verified from bulk-downloads/physical-education-primary.json.
- *
+ * Primary Physical Education ground truth queries - 4 queries, 1 per category, AI-curated.
  * @packageDocumentation
  */
-
 import type { GroundTruthQuery } from '../../types';
+import { PE_PRIMARY_CROSS_TOPIC } from './cross-topic';
+import { PE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+import { PE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+import { PE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
 
-import { PE_PRIMARY_HARD_QUERIES } from './hard-queries';
-import { PE_PRIMARY_STANDARD_QUERIES } from './standard';
-
-/**
- * All Primary PE ground truth queries (standard + hard).
- *
- * Total: 18 queries.
- */
 export const PE_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...PE_PRIMARY_STANDARD_QUERIES,
-  ...PE_PRIMARY_HARD_QUERIES,
+  ...PE_PRIMARY_PRECISE_TOPIC,
+  ...PE_PRIMARY_NATURAL_EXPRESSION,
+  ...PE_PRIMARY_IMPRECISE_INPUT,
+  ...PE_PRIMARY_CROSS_TOPIC,
 ] as const;
 
-export { PE_PRIMARY_HARD_QUERIES } from './hard-queries';
-export { PE_PRIMARY_STANDARD_QUERIES } from './standard';
+export { PE_PRIMARY_CROSS_TOPIC } from './cross-topic';
+export { PE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+export { PE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+export { PE_PRIMARY_PRECISE_TOPIC } from './precise-topic';

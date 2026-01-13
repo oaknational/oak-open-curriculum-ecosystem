@@ -1,30 +1,26 @@
 /**
  * German ground truth queries for search quality evaluation.
  *
+ * This module aggregates ground truths by phase:
+ * - **Secondary** (KS3-4): Present tense, weak verbs, cases
+ *
+ * Note: German is only taught at secondary level in Oak.
+ *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../types';
 
-import {
-  GERMAN_SECONDARY_ALL_QUERIES,
-  GERMAN_SECONDARY_HARD_QUERIES,
-  GERMAN_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-
-export const GERMAN_STANDARD_QUERIES: readonly GroundTruthQuery[] =
-  GERMAN_SECONDARY_STANDARD_QUERIES;
-export const GERMAN_HARD_QUERIES: readonly GroundTruthQuery[] = GERMAN_SECONDARY_HARD_QUERIES;
+import { GERMAN_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All German ground truth queries.
  *
- * Total: 6 queries (3 standard + 3 hard).
+ * Total: 4 queries (4 Secondary).
  */
-export const GERMAN_ALL_QUERIES: readonly GroundTruthQuery[] = GERMAN_SECONDARY_ALL_QUERIES;
+export const GERMAN_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  ...GERMAN_SECONDARY_ALL_QUERIES,
+] as const;
 
-export {
-  GERMAN_SECONDARY_ALL_QUERIES,
-  GERMAN_SECONDARY_HARD_QUERIES,
-  GERMAN_SECONDARY_STANDARD_QUERIES,
-};
+// Re-export secondary
+export { GERMAN_SECONDARY_ALL_QUERIES } from './secondary';

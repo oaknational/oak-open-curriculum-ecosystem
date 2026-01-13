@@ -54,7 +54,7 @@ describe('aggregateByCategory', () => {
       createResult('precise-topic', 1.0, true),
       createResult('precise-topic', 0.5, true),
       createResult('imprecise-input', 0.8, true),
-      createResult('pedagogical-intent', 0.0, false),
+      createResult('cross-topic', 0.0, false),
     ];
 
     const aggregated = aggregateByCategory(results);
@@ -62,8 +62,8 @@ describe('aggregateByCategory', () => {
     expect(aggregated).toHaveLength(3);
 
     // Results should be sorted alphabetically by category
-    expect(aggregated[0]?.category).toBe('imprecise-input');
-    expect(aggregated[1]?.category).toBe('pedagogical-intent');
+    expect(aggregated[0]?.category).toBe('cross-topic');
+    expect(aggregated[1]?.category).toBe('imprecise-input');
     expect(aggregated[2]?.category).toBe('precise-topic');
   });
 
@@ -107,17 +107,15 @@ describe('aggregateByCategory', () => {
       createResult('natural-expression', 0.8, true),
       createResult('imprecise-input', 0.6, true),
       createResult('cross-topic', 0.4, true),
-      createResult('pedagogical-intent', 0.2, false),
     ];
 
     const aggregated = aggregateByCategory(results);
 
-    expect(aggregated).toHaveLength(5);
+    expect(aggregated).toHaveLength(4);
     const categories = aggregated.map((r) => r.category);
     expect(categories).toContain('precise-topic');
     expect(categories).toContain('natural-expression');
     expect(categories).toContain('imprecise-input');
     expect(categories).toContain('cross-topic');
-    expect(categories).toContain('pedagogical-intent');
   });
 });

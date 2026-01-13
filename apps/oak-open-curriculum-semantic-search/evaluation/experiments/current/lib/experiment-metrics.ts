@@ -3,12 +3,9 @@
  *
  */
 
-import {
-  MATHS_SECONDARY_STANDARD_QUERIES,
-  UNIT_GROUND_TRUTH_QUERIES,
-} from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
 import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
-import { searchLessonsWithMode, searchUnitsWithMode } from './experiment-search.js';
+import { searchLessonsWithMode } from './experiment-search.js';
 import type {
   RetrievalMode,
   ModeMetrics,
@@ -23,36 +20,11 @@ export async function runLessonModeExperiment(mode: RetrievalMode): Promise<Mode
     mrr: [],
     ndcg: [],
     zeroHits: 0,
-    queryCount: MATHS_SECONDARY_STANDARD_QUERIES.length,
+    queryCount: MATHS_SECONDARY_ALL_QUERIES.length,
   };
 
-  for (const { query, expectedRelevance } of MATHS_SECONDARY_STANDARD_QUERIES) {
+  for (const { query, expectedRelevance } of MATHS_SECONDARY_ALL_QUERIES) {
     const results = await searchLessonsWithMode(query, mode);
-    if (results.length === 0) {
-      metrics.zeroHits++;
-      metrics.mrr.push(0);
-      metrics.ndcg.push(0);
-    } else {
-      metrics.mrr.push(calculateMRR(results, expectedRelevance));
-      metrics.ndcg.push(calculateNDCG(results, expectedRelevance, 10));
-    }
-  }
-
-  return metrics;
-}
-
-/** Run unit experiment for a specific mode. */
-export async function runUnitModeExperiment(mode: RetrievalMode): Promise<ModeMetrics> {
-  const metrics: ModeMetrics = {
-    mode,
-    mrr: [],
-    ndcg: [],
-    zeroHits: 0,
-    queryCount: UNIT_GROUND_TRUTH_QUERIES.length,
-  };
-
-  for (const { query, expectedRelevance } of UNIT_GROUND_TRUTH_QUERIES) {
-    const results = await searchUnitsWithMode(query, mode);
     if (results.length === 0) {
       metrics.zeroHits++;
       metrics.mrr.push(0);

@@ -12,5 +12,5 @@ export type {
   ContentTypeExperiment,
 } from './experiment-types.js';
 
-export { runLessonExperiments, runUnitExperiments } from './experiment-runners.js';
+export { runLessonExperiments } from './experiment-runners.js';
 export { logAllResults } from './experiment-logging.js';

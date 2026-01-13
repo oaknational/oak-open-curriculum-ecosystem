@@ -1,0 +1,204 @@
+# Semantic Search — Completed Work
+
+**Last Updated**: 2026-01-13
+
+Historical record of completed milestones. For current priorities, see [roadmap.md](roadmap.md).
+
+---
+
+## ✅ Transcript-Aware RRF Score Normalisation (2026-01-13)
+
+**Status**: ✅ Complete  
+**ADR**: [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)  
+**Archive**: [transcript-aware-rrf.md](archive/completed/transcript-aware-rrf.md)
+
+The 4-way RRF was architecturally broken — documents without transcripts were penalised by 50%.
+
+### What Was Fixed
+
+| Issue | Fix |
+|-------|-----|
+| Documents without transcripts could only appear in 2/4 retrievers | Post-RRF score normalisation |
+| MFL subjects (0% transcript coverage) structurally disadvantaged | Scores now correctly normalised |
+| PE subjects (~0.6% transcript coverage) structurally disadvantaged | Scores now correctly normalised |
+
+### Deliverables
+
+| Deliverable | Status |
+|-------------|--------|
+| `normaliseRrfScores()` pure function | ✅ `rrf-score-normaliser.ts` |
+| Unit tests (17 tests) | ✅ `rrf-score-normaliser.unit.test.ts` |
+| Integration tests (6 tests) | ✅ `lessons.integration.test.ts` |
+| DI refactor per ADR-078 | ✅ All search functions injectable |
+| ADR-099 created | ✅ Complete |
+| All quality gates | ✅ Passing |
+
+### Key Insight
+
+**Unit search does NOT need normalisation** — units aggregate lesson content, so `unit_content` is always present. Only lessons have the transcript/no-transcript variation.
+
+---
+
+## ✅ Phase 1: Ground Truth Pruning & Curation (2026-01-12)
+
+**Status**: ✅ Structure Complete → 🔄 Now validating through benchmarking
+
+All 30 subject-phase entries restructured and AI-curated. Now iterating through benchmarks to validate.
+
+| Metric | Value |
+|--------|-------|
+| Subject-phase entries | 30 |
+| Categories per entry | 4 |
+| Queries per category | 1 |
+| **Total queries** | **120** |
+| AI-curated | 100% |
+| Quality gates | All passing |
+| **Benchmark validated** | ⏳ In progress |
+
+### What Was Done
+
+1. **Restructured** all ground truths from topic-based to category-based files
+2. **Pruned** from ~480 queries to exactly 120 (1 per category per entry)
+3. **AI-as-judge curation** for each query comparing expected vs actual results
+4. **Updated documentation** (GROUND-TRUTH-PROCESS.md, current-state.md)
+5. **Cleaned up exports** removing legacy `_STANDARD_QUERIES`, `_HARD_QUERIES`
+
+### Next Step: Benchmark & Iterate
+
+Ground truths are assumed good, but need validation. Run `pnpm benchmark --all` and iterate until failures are caused by search quality, not ground truth quality.
+
+### Category Structure
+
+| Category | Purpose |
+|----------|---------|
+| `precise-topic` | Curriculum-aligned terminology |
+| `natural-expression` | Teacher natural language |
+| `imprecise-input` | Typos, misspellings |
+| `cross-topic` | Concept intersections |
+
+### Limitations Documented
+
+Ground truths measure expected slug position, NOT user satisfaction. All reporting must include scope disclaimer.
+
+---
+
+## Previous: Three-Stage Ground Truth Validation (Superseded)
+
+**Status**: ⚠️ **Superseded** — Replaced by Phase 1 restructure
+**Original Completion Date**: 2026-01-09
+
+### Three-Stage Validation Model
+
+| Stage | What It Proves | Status |
+|-------|----------------|--------|
+| **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
+| **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
+| **3. Qualitative Review** | Production readiness | ⚠️ **INCOMPLETE** |
+
+### Stage 3 Qualitative Review (2026-01-09) — INCOMPLETE
+
+| Metric | Claimed | Actual |
+|--------|---------|--------|
+| Total queries reviewed | 474 | ~50 (5 entries only) |
+| Subject/phase entries reviewed | 30 | 5 |
+
+**Only reviewed**: art/primary, art/secondary, computing/primary, computing/secondary, french/secondary
+
+### Remediation Results (2026-01-08)
+
+| Issue | Before | After | Status |
+|-------|--------|-------|--------|
+| Invalid slugs | 66 | 0 | ✅ |
+| Empty expectedRelevance | 12 | 0 | ✅ |
+| Missing categories | 130 | 0 | ✅ |
+| Short queries | 78 | 0 | ✅ |
+| Uniform scores | 47 | 0 | ✅ |
+| Missing priority | 34 | 0 | ✅ |
+| Single-slug queries | 10 | 0 | ✅ |
+| No score=3 | 21 | 0 | ✅ |
+| Missing descriptions | 275 | 0 | ✅ |
+| Category coverage gaps | 43 | 0 | ✅ |
+
+---
+
+## Test Coverage (2026-01-07)
+
+| Component | Tests | Status |
+|-----------|-------|--------|
+| `safeGet` | 3 unit tests | ✅ Complete |
+| SDK API Methods (error) | 8 unit tests | ✅ Complete |
+| SDK API Methods (success) | 8 unit tests | ✅ Complete |
+| SDK Retry Middleware | 13 integration tests | ✅ Complete |
+| Lesson Materials | 12 unit tests | ✅ Complete |
+
+**Decision**: Test through **integration at consumer level**, not direct unit tests.
+
+---
+
+## Milestone 1: Complete ES Ingestion ✅
+
+| Metric | Value |
+|--------|-------|
+| Documents indexed | 16,414 |
+| Initial failures | 17 (0.10%) |
+| Final failures | 0 |
+| Duration | ~22 minutes |
+
+See [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md).
+
+---
+
+## Milestone 2: Sequence Indexing ✅
+
+| Index | Count |
+|-------|-------|
+| `oak_sequences` | 30 |
+| `oak_sequence_facets` | 57 |
+
+---
+
+## Milestone 4: DRY/SRP Refactoring ✅
+
+All document builders follow the shared pattern.
+
+---
+
+## Milestone 5: Data Completeness ✅
+
+All fields resolved with appropriate sources (API supplementation, bulk data extraction).
+
+---
+
+## Result Pattern Compliance ✅ (2026-01-07)
+
+Network error handling per ADR-088:
+
+| Component | Change |
+|-----------|--------|
+| SDK Retry Middleware | Catches and retries network exceptions |
+| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` |
+| SDK API Methods | All 8 `makeGet...` functions use `safeGet` |
+| File Split | `sdk-api-methods.ts` → 4 smaller modules |
+
+---
+
+## M3 Phases (Infrastructure)
+
+| Phase | Focus | Status |
+|-------|-------|--------|
+| 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
+| 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
+| 5b-d | Create ALL ground truths | ✅ Complete (structure only) |
+| 6 | ES Re-index (add phase_slug) | ⏸️ Cancelled |
+| 7 | Unified evaluation infrastructure | ✅ Complete (2026-01-06) |
+
+---
+
+## Key Findings (Unverified)
+
+**Note**: These findings need re-verification after ground truth review.
+
+- **Creative subjects excel**: Art (0.741), Music (0.722), D&T (0.815) MRR
+- **Languages struggle**: French (0.190), Spanish (0.294), German (0.194)
+- **Misspelling universal weakness**: PE, Languages fail on typos
+- **Synonym gaps**: "coding"→"programming", "saying no"→"negation"

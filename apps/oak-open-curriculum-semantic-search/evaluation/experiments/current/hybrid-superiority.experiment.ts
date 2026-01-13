@@ -2,7 +2,7 @@
  * Hybrid Superiority Experiment (Phase 3.0)
  *
  * Measures whether two-way hybrid (BM25 + ELSER) provides measurable benefit
- * over either retrieval method alone for lessons and units.
+ * over either retrieval method alone for lessons.
  *
  *
  * **Classification**: EXPERIMENT (not a test)
@@ -14,30 +14,18 @@
  * **Findings (2025-12-12, Maths KS4 dataset)**:
  *
  * LESSONS (40 queries): Hybrid MRR 0.908 > BM25 0.892 > ELSER 0.830
- * UNITS (43 queries): ELSER MRR 0.919 > Hybrid 0.915 > BM25 0.911
  *
  * **Conclusions**:
  * - For lessons: Hybrid search clearly outperforms both single methods
- * - For units: ELSER alone performs excellently; hybrid has best NDCG@10
- * - Unit reranking experiment deferred until full curriculum is indexed
  *
  * @see `.agent/plans/semantic-search/phase-3-multi-index-and-fields.md`
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import {
-  MATHS_SECONDARY_STANDARD_QUERIES,
-  UNIT_GROUND_TRUTH_QUERIES,
-} from '../../../src/lib/search-quality/ground-truth/index.js';
-import {
-  runLessonExperiments,
-  runUnitExperiments,
-  logAllResults,
-  type ContentTypeExperiment,
-} from './lib/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../src/lib/search-quality/ground-truth/index.js';
+import { runLessonExperiments, logAllResults, type ContentTypeExperiment } from './lib/index.js';
 
 let lessonExperiment: ContentTypeExperiment;
-let unitExperiment: ContentTypeExperiment;
 
 /** Log metrics for a mode. */
 function logMetrics(label: string, mode: { avgMRR: number; avgNDCG: number }): void {
@@ -47,16 +35,14 @@ function logMetrics(label: string, mode: { avgMRR: number; avgNDCG: number }): v
 describe('Hybrid Superiority Experiment', () => {
   beforeAll(async () => {
     console.log('Running hybrid superiority experiment...');
-    console.log(`Lessons: ${MATHS_SECONDARY_STANDARD_QUERIES.length} queries × 3 modes`);
-    console.log(`Units: ${UNIT_GROUND_TRUTH_QUERIES.length} queries × 3 modes`);
+    console.log(`Lessons: ${MATHS_SECONDARY_ALL_QUERIES.length} queries × 3 modes`);
 
     lessonExperiment = await runLessonExperiments();
-    unitExperiment = await runUnitExperiments();
-    logAllResults(lessonExperiment, unitExperiment);
+    logAllResults(lessonExperiment);
   });
 
   afterAll(() => {
-    if (!lessonExperiment || !unitExperiment) {
+    if (!lessonExperiment) {
       console.error('Experiment incomplete');
     }
   });
@@ -73,21 +59,6 @@ describe('Hybrid Superiority Experiment', () => {
 
   it('documents Lesson Hybrid', () => {
     logMetrics('Lesson Hybrid', lessonExperiment.hybrid);
-    expect(true).toBe(true);
-  });
-
-  it('documents Unit BM25', () => {
-    logMetrics('Unit BM25', unitExperiment.bm25);
-    expect(true).toBe(true);
-  });
-
-  it('documents Unit ELSER', () => {
-    logMetrics('Unit ELSER', unitExperiment.elser);
-    expect(true).toBe(true);
-  });
-
-  it('documents Unit Hybrid', () => {
-    logMetrics('Unit Hybrid', unitExperiment.hybrid);
     expect(true).toBe(true);
   });
 });

@@ -1,45 +1,43 @@
 /**
- * Primary Science ground truth queries.
+ * Primary Science ground truth queries for search quality evaluation.
  *
- * Aggregates all Primary Science ground truth across disciplines:
- * - Biology (evolution, adaptation, human body)
- * - Physics/Chemistry (forces, materials)
+ * **Structure (2026-01-11)**:
+ * 4 queries total, 1 per category, AI-curated for accuracy.
+ *
+ * | Category | Query | MRR |
+ * |----------|-------|-----|
+ * | precise-topic | evolution Darwin finches Year 6 | 1.000 |
+ * | natural-expression | that Darwin bird lesson | 1.000 |
+ * | imprecise-input | evoloution and adaptashun | 0.333 |
+ * | cross-topic | animals and food together | 0.250 |
+ *
+ * **Measurement Scope**: These queries test expected slug position,
+ * NOT user satisfaction. See audit report for details.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../types';
 
-import { BIOLOGY_PRIMARY_QUERIES } from './biology';
-import { HARD_QUERIES_PRIMARY_SCIENCE } from './hard-queries';
-import { PHYSICS_CHEMISTRY_PRIMARY_QUERIES } from './physics-chemistry';
+import { SCIENCE_PRIMARY_CROSS_TOPIC } from './cross-topic';
+import { SCIENCE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+import { SCIENCE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+import { SCIENCE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
 
 /**
- * All standard Primary Science ground truth queries.
+ * All Primary Science ground truth queries.
  *
- * Total: 11 queries across 2 discipline areas.
- */
-export const SCIENCE_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...BIOLOGY_PRIMARY_QUERIES,
-  ...PHYSICS_CHEMISTRY_PRIMARY_QUERIES,
-] as const;
-
-/**
- * Hard Primary Science ground truth queries.
- *
- * Total: 4 queries.
- */
-export const SCIENCE_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_PRIMARY_SCIENCE;
-
-/**
- * All Primary Science ground truth queries (standard + hard).
- *
- * Total: 15 queries.
+ * Total: 4 queries (1 per category).
  */
 export const SCIENCE_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...SCIENCE_PRIMARY_STANDARD_QUERIES,
-  ...SCIENCE_PRIMARY_HARD_QUERIES,
+  ...SCIENCE_PRIMARY_PRECISE_TOPIC,
+  ...SCIENCE_PRIMARY_NATURAL_EXPRESSION,
+  ...SCIENCE_PRIMARY_IMPRECISE_INPUT,
+  ...SCIENCE_PRIMARY_CROSS_TOPIC,
 ] as const;
 
-export { BIOLOGY_PRIMARY_QUERIES, HARD_QUERIES_PRIMARY_SCIENCE, PHYSICS_CHEMISTRY_PRIMARY_QUERIES };
+// Re-export category modules
+export { SCIENCE_PRIMARY_CROSS_TOPIC } from './cross-topic';
+export { SCIENCE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+export { SCIENCE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+export { SCIENCE_PRIMARY_PRECISE_TOPIC } from './precise-topic';

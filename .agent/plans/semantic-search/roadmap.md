@@ -1,13 +1,39 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ **Ground Truths Production-Ready** | 📋 **Phase 8 Benchmarks NEXT**
-**Last Updated**: 2026-01-10
-**Metrics Source**: [current-state.md](current-state.md)
-**Session Context**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Status**: 🔄 **Benchmark & Iterate** — RRF fixed, validating ground truths  
+**Last Updated**: 2026-01-13  
+**Metrics Source**: [current-state.md](current-state.md)  
+**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Scope**: Search SDK/CLI capabilities. UI delivery is out of scope (separate repository).
 
 This is THE authoritative roadmap for semantic search work.
+
+---
+
+## ✅ Complete: RRF Architecture Fix (2026-01-13)
+
+**The 4-way RRF was broken.** Documents without transcripts were penalised by 50%.
+
+| Deliverable | Status |
+|-------------|--------|
+| ADR-099: Transcript-Aware RRF Normalisation | ✅ |
+| `normaliseRrfScores()` pure function | ✅ |
+| Unit tests (17) + Integration tests (6) | ✅ |
+| DI refactor per ADR-078 | ✅ |
+| All quality gates | ✅ |
+
+**Details**: [transcript-aware-rrf.md](archive/completed/transcript-aware-rrf.md) | [ADR-099](../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
+
+---
+
+## Ground Truth Understanding (2026-01-11)
+
+Ground truths were restructured to 120 queries (30 entries × 4 categories), AI-curated.
+
+**Important**: Ground truths measure "did expected slugs appear?" not "are teachers satisfied?"
+
+See: [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md)
 
 ---
 
@@ -16,6 +42,7 @@ This is THE authoritative roadmap for semantic search work.
 | Symbol | Status | Meaning |
 |--------|--------|---------|
 | ✅ | Complete | Work finished and verified |
+| 🔧 | Fix Required | Architectural issue that must be fixed |
 | 🔄 | In Progress | Actively being worked on |
 | 📋 | Pending | Ready to start, not blocked |
 | ⏸️ | Blocked/Deferred | Cannot start until dependency complete, or deprioritised |
@@ -26,9 +53,13 @@ This is THE authoritative roadmap for semantic search work.
 ## Dependency Chain
 
 ```
-Three-Stage Ground Truth Validation ✅ COMPLETE
+Phase 1: Ground Truth Pruning & Curation ✅ COMPLETE
         ↓
-Phase 8: Comprehensive Baselines ← CURRENT PRIORITY
+Fix RRF Architecture ✅ COMPLETE (ADR-099)
+        ↓
+🔄 Benchmark & Iterate ← CURRENT PRIORITY
+        ↓
+Phase 2: AI-Driven Evaluation (Deferred)
         ↓
 Comprehensive Filter Testing (pre-sdk-extraction/)
         ↓
@@ -40,8 +71,6 @@ Tier 3: Modern ES Features (pre-sdk-extraction/)
         ↓
 SDK Extraction (sdk-extraction/)
         ↓
-MFL Multilingual Embeddings (post-sdk-extraction/)
-        ↓
 MCP Search Tool (post-sdk-extraction/)
         ↓
 Tier 4: AI Enhancement (post-sdk-extraction/)
@@ -49,153 +78,98 @@ Tier 4: AI Enhancement (post-sdk-extraction/)
 
 ---
 
-## ✅ COMPLETE: Three-Stage Ground Truth Validation
+## ✅ COMPLETE: Phase 1 — Ground Truth Pruning & Curation
 
-**Status**: ✅ **474 queries validated and production-ready**
-**Completion Date**: 2026-01-09
+**Status**: ✅ Complete (2026-01-12)  
+**Specification**: [M3 Plan](active/m3-revised-phase-aligned-search-quality.md)
 
-### Three-Stage Validation Model
+All 30 subject-phase entries curated with AI-as-judge review.
 
-| Stage | What It Proves | Status |
-|-------|----------------|--------|
-| **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
-| **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
-| **3. Qualitative Review** | Production readiness | ✅ COMPLETE |
-
-### Stage 3 Qualitative Review (2026-01-09)
+**Final Structure**:
 
 | Metric | Value |
 |--------|-------|
-| Total queries reviewed | 474 |
-| Total slugs validated | 1,290 |
-| Subject/phase entries | 30 |
-| Issues found | 1 |
-| Issues fixed | 1 |
+| Subject-phase entries | 30 |
+| Categories per entry | 4 |
+| Queries per category | 1 |
+| **Total queries** | **120** |
+| AI-curated | 100% |
+| Quality gates | All passing |
 
-**Issue fixed**: `times tables year 3` category corrected (cross-topic → precise-topic)
+---
 
-### Remediation Results (2026-01-08)
+## 🔄 CURRENT: Benchmark & Iterate
 
-| Issue | Before | After | Status |
-|-------|--------|-------|--------|
-| Invalid slugs | 66 | 0 | ✅ |
-| Empty expectedRelevance | 12 | 0 | ✅ |
-| Missing categories | 130 | 0 | ✅ |
-| Short queries | 78 | 0 | ✅ |
-| Uniform scores | 47 | 0 | ✅ |
-| Missing priority | 34 | 0 | ✅ |
-| Single-slug queries | 10 | 0 | ✅ |
-| No score=3 | 21 | 0 | ✅ |
-| Missing descriptions | 275 | 0 | ✅ |
-| Category coverage gaps | 43 | 0 | ✅ |
+**Status**: 🔄 In Progress  
+**Goal**: Validate ground truths until search quality is the constraining factor
 
-### Available Scripts
+**Prerequisites**: ✅ RRF architecture is correct. Score normalisation applied.
 
-```bash
-pnpm ground-truth:validate  # Run all 16 validation checks
-pnpm ground-truth:analyze   # Detailed quality breakdown by entry
-pnpm benchmark --all        # Run benchmarks (Phase 8)
+Ground truths have been restructured and AI-curated (120 queries). Once RRF is fixed, benchmarking will reveal whether failures are due to:
+
+1. **Bad ground truth** — Expected slugs are wrong for the query
+2. **Bad search** — Search isn't returning what it should
+
+### Iteration Loop
+
+```
+1. Run benchmark     → pnpm benchmark --all
+2. Analyse failures  → Identify root cause (ground truth or search?)
+3. If GT issue       → Fix ground truth, document rationale, re-run
+4. If search issue   → Ground truths validated, search is the bottleneck
+5. Repeat            → Until search quality is the only limiting factor
 ```
 
-**Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
+### Success Criteria
+
+**Ground truths are validated when**:
+
+- Low MRR scores are caused by search limitations, NOT wrong expected slugs
+- Manual review of failures confirms actual search results are worse than expected
+- Iteration produces diminishing returns on ground truth fixes
+
+**Then** we can trust benchmark results to guide search improvements.
+
+### Commands
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Run full benchmark
+pnpm benchmark --all
+
+# Investigate specific failures
+pnpm benchmark --subject maths --phase primary --verbose
+```
 
 ---
 
-## ✅ COMPLETE: Test Coverage
+## 📋 FUTURE: Phase 2 — AI-Driven Evaluation
 
-**Status**: ✅ **Complete** (2026-01-07)
-**Specification**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Status**: 📋 Deferred until Phase 1 complete  
 
-### Coverage Summary
+Separate evaluation layer for "does search help teachers?"
 
-| Component | Tests | Status |
-|-----------|-------|--------|
-| **`safeGet`** | 3 unit tests | ✅ Complete |
-| **SDK API Methods (error)** | 8 unit tests | ✅ Complete |
-| **SDK API Methods (success)** | 8 unit tests | ✅ Complete |
-| **SDK Retry Middleware** | 13 integration tests | ✅ Complete |
-| **Lesson Materials** | 12 unit tests | ✅ Complete |
-
-### Decision: Generated File Testing
-
-**Decision**: Test through **integration at consumer level**, not direct unit tests.
-
-**Rationale**: Per `schema-first-execution.md`, the generator is the source of truth. Testing behavior at consumer level avoids coupling tests to generated code structure.
+| Parameter | Value |
+|-----------|-------|
+| Query set size | 60-120 (2-4 per subject-phase) |
+| Evaluation method | AI judges result usefulness |
+| Frequency | Manual, local development |
+| Executor | Human stakeholder |
 
 ---
 
-## ✅ Completed Milestones
+## 🔄 Comprehensive Baselines
 
-### Milestone 1: Complete ES Ingestion ✅
+**Status**: 🔄 Part of Benchmark & Iterate phase
 
-| Metric            | Value        |
-| ----------------- | ------------ |
-| Documents indexed | 16,414       |
-| Initial failures  | 17 (0.10%)   |
-| Final failures    | 0            |
-| Duration          | ~22 minutes  |
+Run `pnpm benchmark --all` — but treat results as **validation data**, not final baselines.
 
-See [ADR-096: ES Bulk Retry Strategy](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md).
+**Key insight**: Until we iterate and confirm ground truths are correct, benchmark results tell us about ground truth quality AS WELL AS search quality. We cannot separate them until ground truths are validated.
 
-### Milestone 2: Sequence Indexing ✅
+**Important**: All baseline reporting must include scope disclaimer:
 
-| Index               | Count |
-| ------------------- | ----- |
-| `oak_sequences`     | 30    |
-| `oak_sequence_facets` | 57  |
-
-### Milestone 4: DRY/SRP Refactoring ✅
-
-All document builders follow the shared pattern.
-
-### Milestone 5: Data Completeness ✅
-
-All fields resolved with appropriate sources (API supplementation, bulk data extraction).
-
-### Result Pattern Compliance ✅ (2026-01-07)
-
-Network error handling per ADR-088:
-
-| Component | Change |
-|-----------|--------|
-| SDK Retry Middleware | Catches and retries network exceptions |
-| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` |
-| SDK API Methods | All 8 `makeGet...` functions use `safeGet` |
-| File Split | `sdk-api-methods.ts` → 4 smaller modules |
-
----
-
-## ✅ COMPLETE: M3 — Phase-Aligned Search Quality & Unified Evaluation
-
-**Status**: ✅ **All Phases Complete** | ✅ **Ground Truths Production-Ready** | 📋 **Phase 8 NEXT**
-**Specification**: [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
-
-**Discovery (2026-01-03)**: Per-key-stage testing is misaligned with curriculum structure. Primary content spans KS1+KS2. Ground truths organised by **phase** (primary/secondary). KS4 is a special case of secondary with `keyStage?: KeyStage` property on queries.
-
-### M3 Phases — All Complete
-
-| Phase | Focus | Status |
-|-------|-------|--------|
-| 1-4 | SDK, Indexing, Filters, CLI | ✅ Complete |
-| 5a | Ground truth restructure (ks→phase) | ✅ Complete (2026-01-05) |
-| 5b-d | Create ALL ground truths (14 primary, all secondary, KS4-specific) | ✅ Complete |
-| 6 | ES Re-index (add phase_slug) | ⏸️ Cancelled (phase model changed) |
-| 7 | Unified evaluation infrastructure (`GROUND_TRUTH_REGISTRY`, `benchmark.ts`) | ✅ Complete (2026-01-06) |
-| Test Coverage | Unit tests for safeGet + SDK API methods | ✅ Complete (2026-01-07) |
-| Ground Truth Remediation | Fix validation script, validate slugs, fix data | ✅ Complete (2026-01-08) |
-| Stage 3 Qualitative Review | Manual review of all 474 queries | ✅ Complete (2026-01-09) |
-| **8** | **Run comprehensive baselines** | 📋 **READY TO START** |
-
-### Key Findings (To Be Verified by Phase 8)
-
-**Note**: These findings from previous baselines should be re-verified with production-ready ground truths.
-
-- **Creative subjects excel**: Art (0.741), Music (0.722), D&T (0.815) MRR
-- **Languages struggle**: French (0.190), Spanish (0.294), German (0.194)
-- **Misspelling universal weakness**: PE, Languages fail on typos
-- **Synonym gaps**: "coding"→"programming", "saying no"→"negation"
-
-**Next Steps**: Run Phase 8 benchmarks to establish verified baselines.
+> **Measurement Scope**: Ground truth metrics measure expected slug position, not user satisfaction. A query may receive low MRR while search returns useful results.
 
 ---
 
@@ -205,7 +179,7 @@ Must complete before SDK can be extracted.
 
 ### Comprehensive Filter Testing ⚠️ HIGH PRIORITY
 
-**Status**: 📋 Planned (after M3)
+**Status**: 📋 Planned (after ground truth review)
 **Specification**: [pre-sdk-extraction/comprehensive-filter-testing.md](pre-sdk-extraction/comprehensive-filter-testing.md)
 
 **KS4 Maths is NOT representative of the whole curriculum.** Before SDK extraction, we MUST:
@@ -219,7 +193,7 @@ Must complete before SDK can be extracted.
 
 ### Bulk Data Analysis
 
-**Status**: 📋 Planned (after M3)
+**Status**: 📋 Planned
 **Specification**: [pre-sdk-extraction/bulk-data-analysis.md](pre-sdk-extraction/bulk-data-analysis.md)
 
 Consolidated vocabulary mining, transcript analysis, entity extraction. Mining the bulk download data to identify patterns that address search quality gaps.
@@ -259,18 +233,12 @@ Extract semantic search into:
 
 Requires SDK to exist first.
 
-### MFL Multilingual Embeddings ⚠️ HIGH PRIORITY
+### MFL Subject-Aware RRF ⚠️ HIGH PRIORITY
 
-**Status**: 📋 Planned — Hypothesis verification needed first
+**Status**: 📋 Planned
 **Specification**: [post-sdk-extraction/mfl-multilingual-embeddings.md](post-sdk-extraction/mfl-multilingual-embeddings.md)
 
-French, Spanish, German have the worst MRR (0.19-0.29). **Hypothesis**: ELSER v2 is English-only and cannot semantically match target language content.
-
-**Before implementing**, we MUST:
-
-1. Read Elastic ELSER documentation to verify language limitations
-2. Test hypothesis empirically (ELSER-only vs BM25-only for MFL)
-3. Analyze failure modes for MFL queries
+French, Spanish, German have the worst MRR (0.19-0.29). MFL lessons have almost no transcripts (0.2% coverage).
 
 ### MCP Search Tool
 
@@ -299,19 +267,19 @@ RAG infrastructure, knowledge graph evolution, multi-vector fields.
 
 These features are documented but not prioritised:
 
-| Feature           | Specification                               | Notes                  |
-| ----------------- | ------------------------------------------- | ---------------------- |
+| Feature | Specification | Notes |
+|---------|---------------|-------|
 | Reference Indices | [backlog/reference-indices.md](backlog/reference-indices.md) | Glossary, NC coverage |
-| Resource Types    | [backlog/resource-types.md](backlog/resource-types.md) | Worksheets, quizzes   |
+| Resource Types | [backlog/resource-types.md](backlog/resource-types.md) | Worksheets, quizzes |
 
 ---
 
 ## Two SDKs
 
-| SDK               | Location                                | Purpose                              |
-| ----------------- | --------------------------------------- | ------------------------------------ |
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Access to upstream Oak API, type-gen |
-| **Search SDK**    | To be: `packages/libs/search-sdk/`      | Elasticsearch-backed semantic search |
+| SDK | Location | Purpose |
+|-----|----------|---------|
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
+| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
 
 The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
 
@@ -341,12 +309,14 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-| Document                                                                                      | Purpose              |
-| --------------------------------------------------------------------------------------------- | -------------------- |
-| [current-state.md](current-state.md)                                                          | Authoritative metrics |
-| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)          | Session context      |
-| [search-acceptance-criteria.md](search-acceptance-criteria.md)                                | Tier definitions     |
-| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)                                      | Experiment history   |
+| Document | Purpose |
+|----------|---------|
+| [ADR-099](../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md) | RRF normalisation (complete) |
+| [completed.md](completed.md) | Historical completed work |
+| [current-state.md](current-state.md) | Current metrics |
+| [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry |
+| [search-acceptance-criteria.md](search-acceptance-criteria.md) | Tier definitions |
+| [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
 
 ---
 

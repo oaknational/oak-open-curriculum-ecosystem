@@ -1,16 +1,12 @@
 /**
  * Comprehensive ground truth for search quality evaluation.
  *
- * **Phase-Aligned Architecture (2026-01-03)**:
+ * **Phase-Aligned Architecture (2026-01-11)**:
  * Ground truths are organised by phase (primary/secondary) to align with
- * the curriculum structure and eliminate measurement artefacts.
+ * the curriculum structure. Each subject-phase has exactly 4 queries,
+ * one for each category: precise-topic, natural-expression, imprecise-input, cross-topic.
  *
- * **Query types**:
- * - Curriculum concept queries: Test semantic understanding (stable)
- * - Content discovery queries: Test specific content findability (coupled to content)
- *
- * **Methodology**:
- * All lesson slugs verified against Oak API via MCP tools.
+ * **Total**: 120 queries (30 subject-phases × 4 categories)
  *
  * ## Ground Truth Registry
  *
@@ -58,7 +54,7 @@ import type { GroundTruthQuery } from './types';
 /**
  * All ground truth queries across all subjects.
  *
- * Total: 263 queries across 16 subjects
+ * Total: 120 queries (30 subject-phases × 4 categories)
  */
 export const ALL_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
   ...ALL_MATHS_QUERIES,
@@ -86,92 +82,64 @@ export {
   SYNONYM_DIAGNOSTIC_QUERIES,
 } from './diagnostic-queries';
 
-// Maths exports
-export {
-  ALL_MATHS_QUERIES,
-  MATHS_SECONDARY_ALL_QUERIES,
-  MATHS_SECONDARY_HARD_QUERIES,
-  MATHS_SECONDARY_STANDARD_QUERIES,
-  ALGEBRA_QUERIES,
-  EDGE_CASE_QUERIES,
-  GEOMETRY_QUERIES,
-  GRAPHS_QUERIES,
-  HARD_QUERIES,
-  NUMBER_QUERIES,
-  STATISTICS_QUERIES,
-  UNIT_ALL_GROUND_TRUTH_QUERIES,
-  UNIT_GROUND_TRUTH_QUERIES,
-  UNIT_HARD_GROUND_TRUTH_QUERIES,
-  type UnitGroundTruthQuery,
-} from './maths';
-
-// English exports
+// Subject exports - ALL_QUERIES only (no legacy STANDARD/HARD)
+export { ALL_MATHS_QUERIES, MATHS_PRIMARY_ALL_QUERIES, MATHS_SECONDARY_ALL_QUERIES } from './maths';
 export {
   ENGLISH_ALL_QUERIES,
-  ENGLISH_HARD_QUERIES,
-  ENGLISH_STANDARD_QUERIES,
   ENGLISH_PRIMARY_ALL_QUERIES,
-  ENGLISH_PRIMARY_HARD_QUERIES,
-  ENGLISH_PRIMARY_STANDARD_QUERIES,
   ENGLISH_SECONDARY_ALL_QUERIES,
-  ENGLISH_SECONDARY_HARD_QUERIES,
-  ENGLISH_SECONDARY_STANDARD_QUERIES,
 } from './english';
-
-// Science exports
-export { SCIENCE_ALL_QUERIES, SCIENCE_HARD_QUERIES, SCIENCE_STANDARD_QUERIES } from './science';
-
-// History exports
-export { HISTORY_ALL_QUERIES, HISTORY_HARD_QUERIES, HISTORY_STANDARD_QUERIES } from './history';
-
-// Geography exports
+export {
+  SCIENCE_ALL_QUERIES,
+  SCIENCE_PRIMARY_ALL_QUERIES,
+  SCIENCE_SECONDARY_ALL_QUERIES,
+} from './science';
+export {
+  HISTORY_ALL_QUERIES,
+  HISTORY_PRIMARY_ALL_QUERIES,
+  HISTORY_SECONDARY_ALL_QUERIES,
+} from './history';
 export {
   GEOGRAPHY_ALL_QUERIES,
-  GEOGRAPHY_HARD_QUERIES,
-  GEOGRAPHY_STANDARD_QUERIES,
+  GEOGRAPHY_PRIMARY_ALL_QUERIES,
+  GEOGRAPHY_SECONDARY_ALL_QUERIES,
 } from './geography';
-
-// Religious Education exports
-export { RE_ALL_QUERIES, RE_HARD_QUERIES, RE_STANDARD_QUERIES } from './religious-education';
-
-// French exports
-export { FRENCH_ALL_QUERIES, FRENCH_HARD_QUERIES, FRENCH_STANDARD_QUERIES } from './french';
-
-// Spanish exports
-export { SPANISH_ALL_QUERIES, SPANISH_HARD_QUERIES, SPANISH_STANDARD_QUERIES } from './spanish';
-
-// German exports
-export { GERMAN_ALL_QUERIES, GERMAN_HARD_QUERIES, GERMAN_STANDARD_QUERIES } from './german';
-
-// Computing exports
+export {
+  RE_ALL_QUERIES,
+  RE_PRIMARY_ALL_QUERIES,
+  RE_SECONDARY_ALL_QUERIES,
+} from './religious-education';
+export {
+  FRENCH_ALL_QUERIES,
+  FRENCH_PRIMARY_ALL_QUERIES,
+  FRENCH_SECONDARY_ALL_QUERIES,
+} from './french';
+export {
+  SPANISH_ALL_QUERIES,
+  SPANISH_PRIMARY_ALL_QUERIES,
+  SPANISH_SECONDARY_ALL_QUERIES,
+} from './spanish';
+export { GERMAN_ALL_QUERIES, GERMAN_SECONDARY_ALL_QUERIES } from './german';
 export {
   COMPUTING_ALL_QUERIES,
-  COMPUTING_HARD_QUERIES,
-  COMPUTING_STANDARD_QUERIES,
+  COMPUTING_PRIMARY_ALL_QUERIES,
+  COMPUTING_SECONDARY_ALL_QUERIES,
 } from './computing';
-
-// Art exports
-export { ART_ALL_QUERIES, ART_HARD_QUERIES, ART_STANDARD_QUERIES } from './art';
-
-// Music exports
-export { MUSIC_ALL_QUERIES, MUSIC_HARD_QUERIES, MUSIC_STANDARD_QUERIES } from './music';
-
-// Design & Technology exports
-export { DT_ALL_QUERIES, DT_HARD_QUERIES, DT_STANDARD_QUERIES } from './design-technology';
-
-// Physical Education exports
-export { PE_ALL_QUERIES, PE_HARD_QUERIES, PE_STANDARD_QUERIES } from './physical-education';
-
-// Citizenship exports
+export { ART_ALL_QUERIES, ART_PRIMARY_ALL_QUERIES, ART_SECONDARY_ALL_QUERIES } from './art';
+export { MUSIC_ALL_QUERIES, MUSIC_PRIMARY_ALL_QUERIES, MUSIC_SECONDARY_ALL_QUERIES } from './music';
 export {
-  CITIZENSHIP_ALL_QUERIES,
-  CITIZENSHIP_HARD_QUERIES,
-  CITIZENSHIP_STANDARD_QUERIES,
-} from './citizenship';
-
-// Cooking & Nutrition exports
+  DT_ALL_QUERIES,
+  DT_PRIMARY_ALL_QUERIES,
+  DT_SECONDARY_ALL_QUERIES,
+} from './design-technology';
+export {
+  PE_ALL_QUERIES,
+  PE_PRIMARY_ALL_QUERIES,
+  PE_SECONDARY_ALL_QUERIES,
+} from './physical-education';
+export { CITIZENSHIP_ALL_QUERIES, CITIZENSHIP_SECONDARY_ALL_QUERIES } from './citizenship';
 export {
   COOKING_ALL_QUERIES,
-  COOKING_HARD_QUERIES,
-  COOKING_STANDARD_QUERIES,
+  COOKING_PRIMARY_ALL_QUERIES,
+  COOKING_SECONDARY_ALL_QUERIES,
 } from './cooking-nutrition';

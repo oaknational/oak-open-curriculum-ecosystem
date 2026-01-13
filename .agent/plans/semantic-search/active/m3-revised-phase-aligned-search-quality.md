@@ -1,1055 +1,245 @@
-# M3: Comprehensive Ground Truths & Phase-Aligned Search Quality
+# M3: Ground Truth Restructure & Search Quality
 
-**Status**: ✅ **Ground Truths PRODUCTION-READY** | ✅ **Benchmark Tooling Complete** | 📋 **Phase 8: Run Baselines**
-**Priority**: HIGH — Foundation for all future search work
-**Parent**: [../roadmap.md](../roadmap.md)
-**Created**: 2026-01-03
-**Last Updated**: 2026-01-10
-
----
-
-## 🎯 START HERE: Phase 8 Benchmarks
-
-Ground truths are **production-ready** (509 queries, 30 entries). Benchmark tooling complete with status indicators.
-
-### Benchmark Output
-
-Output now shows per-category metrics with status indicators:
-
-- ✓✓ EXCELLENT: At or above excellent threshold
-- ✓  GOOD: At or above good threshold
-- ~  ACCEPTABLE: At or above fair threshold
-- ✗  BAD: Below fair threshold
-
-### Run Benchmarks Now
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# Verify ground truths (should pass)
-pnpm ground-truth:validate
-
-# Run all 30 subject/phase entries
-pnpm benchmark --all
-
-# Or run specific combinations
-pnpm benchmark --subject maths
-pnpm benchmark --phase primary
-pnpm benchmark --subject english --phase secondary --verbose
-```
-
-### After Benchmarks
-
-1. Update `evaluation/baselines/baselines.json` with ALL measured metrics (MRR, NDCG@10, Precision@10, Recall@10, Zero-Hit Rate, p95 Latency)
-2. Document results in `EXPERIMENT-LOG.md` with complete metrics tables
-3. Identify subjects needing improvement (metrics showing ✗ BAD status)
-
-**Note**: Results are stored in `baselines.json`, NOT in the registry code. The registry (`entries.ts`) contains only ground truth queries.
+**Status**: 🔄 Benchmark & Iterate  
+**Priority**: HIGH  
+**Parent**: [../roadmap.md](../roadmap.md)  
+**Created**: 2026-01-03  
+**Last Updated**: 2026-01-13  
+**Audit**: [../../evaluations/audits/ground-truth-audit-2026-01.md](../../evaluations/audits/ground-truth-audit-2026-01.md)
 
 ---
 
-## ✅ Three-Stage Validation Model — ALL COMPLETE
+## ✅ Prerequisite Complete: RRF Architecture Fixed (2026-01-13)
 
-| Stage | What It Proves | Status |
-|-------|----------------|--------|
-| **1. Type-Check** | Data integrity (required fields) | ✅ **PASS** |
-| **2. Runtime Validation (16 checks)** | Semantic rules | ✅ **PASS** |
-| **3. Qualitative Review** | Production readiness | ✅ **COMPLETE** |
+The RRF scoring flaw has been fixed. Documents without transcripts are no longer penalised.
 
-**Stage 3 completed 2026-01-09**: 474 queries across 30 entries reviewed. 1 issue found and fixed.
+| Deliverable | Status |
+|-------------|--------|
+| ADR-099: Transcript-Aware RRF Normalisation | ✅ |
+| `normaliseRrfScores()` pure function | ✅ |
+| Unit tests (17) + Integration tests (6) | ✅ |
+| All quality gates | ✅ |
+
+**Details**: [transcript-aware-rrf.md](../archive/completed/transcript-aware-rrf.md) | [ADR-099](../../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
 
 ---
 
-## ✅ Deterministic Validation PASSING (2026-01-09)
+## 🔄 Current: Benchmark & Iterate
+
+**Goal**: Validate ground truths through benchmarking until search quality is the constraining factor.
+
+Ground truths have been restructured, but we are **assuming** they are correct. Benchmarking will reveal whether failures are due to bad ground truths or bad search.
+
+### Iteration Loop
 
 ```
-✅ All ground truth entries are valid!
-Total queries:     509
-Total slugs:       1360
-Valid slugs pool:  12320
-Errors:            0
+1. Run benchmark     → pnpm benchmark --all
+2. Analyse failures  → Is the failure due to ground truth or search?
+3. If GT issue       → Fix expected slugs, document rationale
+4. If search issue   → Ground truths validated for that query
+5. Repeat            → Until search is the only bottleneck
 ```
 
-### Stage 1: Type-Check (Data Integrity) ✅
+### Success Criteria
 
-TypeScript enforces required fields at compile time:
-- `category` — REQUIRED ✅
-- `priority` — REQUIRED ✅
-- `description` — REQUIRED ✅
-
-**All 474 queries have required fields.**
-
-### Stage 2: Runtime Validation (16 checks) ✅
-
-All 30 subject-phase entries meet category coverage minimums.
-
-### Required Category Coverage Per Entry
-
-| Category | Minimum | Tests |
-|----------|---------|-------|
-| `precise-topic` | 4 | Basic retrieval with curriculum terms |
-| `natural-expression` | 2 | Vocabulary bridging |
-| `imprecise-input` | 1 | Error recovery (typos) |
-| `cross-topic` | 1 | Concept intersection |
-| `pedagogical-intent` | 1 | Understanding teaching goals |
-
-### Runtime Checks (16 total)
-
-**Entry-level (2 checks)**:
-- Duplicate queries within entry
-- Category coverage (minimums per category)
-
-**Per-query (14 checks)**:
-- Slug existence, format, cross-subject
-- Score validity (1-3), distribution, highly-relevant presence
-- Query length (3-10 words), slug count (2-5)
-- Phase/KS4 consistency
-- Zod schema validation
-
-### All Issues Resolved ✅
-
-| Issue | Before | After | Status |
-|-------|--------|-------|--------|
-| Invalid slugs | 66 | 0 | ✅ |
-| Empty expectedRelevance | 12 | 0 | ✅ |
-| Missing categories | 130 | 0 | ✅ |
-| Short queries | 78 | 0 | ✅ |
-| Uniform scores | 47 | 0 | ✅ |
-| Missing priority | 34 | 0 | ✅ |
-| Single-slug queries | 10 | 0 | ✅ |
-| No score=3 | 21 | 0 | ✅ |
-| **Missing descriptions** | **275** | **0** | ✅ |
-| **Category coverage gaps** | **43** | **0** | ✅ |
-
-### Available Scripts
-
-```bash
-pnpm type-check             # Stage 1: Data integrity (TypeScript)
-pnpm ground-truth:validate  # Stage 2: Semantic rules (16 checks)
-pnpm ground-truth:analyze   # Detailed quality breakdown by entry
-pnpm benchmark --all        # Run benchmarks for all entries
-```
-
-### Design Rules (Documented)
-
-Ground truths must test **ranking quality**, not just topic presence.
-
-**Query Design**:
-
-- 3-7 words (short enough to be realistic, long enough to be specific)
-- Only 2-4 lessons should be highly relevant
-- Would a teacher actually type this?
-- Single-word queries only for misspelling category
-
-**Expected Results**:
-
-- Maximum 5 slugs per query (more = query too broad)
-- At least one score=3 (tests for a clear "right answer")
-- Graded relevance: mix of 3s, 2s, and 1s
-- Each slug verified against bulk data
-
-**Full design rules**: See [ADR-085](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
+Ground truths are validated when low MRR scores are caused by **search limitations**, not wrong expected slugs.
 
 ---
 
-## ✅ Stage 3 Qualitative Review COMPLETE (2026-01-09)
+## ✅ Phase 1 Complete (2026-01-12)
 
-**Status**: ✅ **ALL 474 queries reviewed** — Ground truths are production-ready
+All 30 subject-phase entries have been curated with 4 queries each (1 per category).
 
-### Review Statistics
-
-| Metric | Value |
-|--------|-------|
-| Total queries reviewed | 474 |
-| Total slugs validated | 1,290 |
-| Subject/phase entries | 30 |
-| Issues found | 1 |
-| Issues fixed | 1 |
-
-### Issue Log
-
-| Entry | Query | Issue | Resolution |
-|-------|-------|-------|------------|
-| maths/primary | times tables year 3 | Wrong category | cross-topic → precise-topic |
-
-### Category Coverage — Consistency Required
-
-All 30 entries must meet minimum requirements for ALL 5 categories:
-
-| Category | Minimum | Status |
-|----------|---------|--------|
-| `precise-topic` | 4+ | ✅ All entries pass |
-| `natural-expression` | 2+ | ✅ All entries pass |
-| `imprecise-input` | 1+ | ✅ All entries pass |
-| `cross-topic` | 1+ | ✅ All entries pass |
-| `pedagogical-intent` | 1+ | ✅ All entries pass |
-
-### Deep Verification (Sampling)
-
-15 queries across maths and english verified against lesson summaries:
-
-- Relevance scores match actual lesson content
-- No obviously missing lessons in verified queries
-- Vocabulary bridging works as intended
-
-### Documentation
-
-- [Stage 3 Review Progress](../../../reviews/stage-3-review-progress.md) — Full results
-- [ADR-085](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) — Updated with completion
-
-**Phase 8 is UNBLOCKED** — Ready to run benchmarks.
+| Metric | Target | Actual |
+|--------|--------|--------|
+| Subject-phase folders | 30 | ✅ 30 |
+| Category files per folder | 4 | ✅ 4 |
+| Queries per category | 1 | ✅ 1 |
+| Total queries | 120 | ✅ 120 |
+| All slugs validated | 100% | ✅ 100% |
+| All queries AI-curated | 100% | ✅ 100% |
+| Quality gates | All pass | ✅ All pass |
+| RRF architecture fixed | Required | ✅ Complete (ADR-099) |
+| **Benchmark validated** | — | 📋 Ready to run |
 
 ---
 
-## Status Legend
+## Critical Understanding
 
-| Symbol | Status | Meaning |
-|--------|--------|---------|
-| ✅ | Complete | Work finished and verified |
-| 🔄 | In Progress | Actively being worked on |
-| 📋 | Pending | Ready to start, not blocked |
-| ⏸️ | Blocked/Superseded | Cannot proceed, or replaced by different approach |
+### The Fundamental Problem
 
----
+The ground truth system measures the **wrong thing**:
 
-## Executive Summary
+| What We Thought | What We're Actually Measuring |
+|-----------------|------------------------------|
+| "Does search help teachers find useful content?" | "Did search return the exact slugs we arbitrarily wrote down?" |
 
-**Goal**: Create comprehensive ground truths covering ALL subjects × ALL phases, then establish universal benchmarks that enable meaningful like-for-like comparison when index structure or retriever configuration changes.
+**~60% of ground truths were broken or suboptimal.** Search often returns BETTER results than expected slugs.
 
-**Impact**: Teachers and AI agents searching for any subject at any phase get measurably good results. We can prove improvements and detect regressions across the full curriculum.
+**Full evidence and examples**: See [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md)
 
-**Key Insight**: Ground truths must NOT be transcript-dependent. MFL subjects have minimal transcripts but rich structural content (`lesson_structure`, `lesson_structure_semantic`). If our ground truths only work for transcript-rich subjects, that's a design flaw, not a reason to ignore MFL.
+### The Decision (2026-01-11)
 
-**Discovery (2026-01-08)**: Ground truths must be rigorously validated. The validation script and ground truth data had fundamental issues that went undetected.
+After stakeholder discussion:
 
----
+1. **Keep the current ground truth system** — it's not useless, just misunderstood
+2. **Review categories** — ensure they test meaningful user behaviours
+3. **Aggressively prune to 1 query per subject-phase-category** — 120 queries total
+4. **Be explicit about what results tell us** — and what they don't
+5. **Use AI-as-judge to curate** — at ground truth definition time
+6. **Future**: Consider AI-driven evaluation layer AFTER pruning is complete
 
-## Progress Summary
+### Two Different Systems
 
-### Completed ✅
+| System | Contents | Access |
+|--------|----------|--------|
+| **Oak Curriculum API** | Canonical curriculum data | MCP tools (`oak-local`) |
+| **Our ES Index** | Search-optimised copy | `hybrid-search` library |
 
-| Phase | Description | Date |
-|-------|-------------|------|
-| **Phase 1** | SDK Schema Enhancement — `phase_slug` added to index document schemas | 2026-01-03 |
-| **Phase 2** | Indexing Pipeline — `derivePhaseFromKeyStage()` populates `phase_slug` in all document builders | 2026-01-03 |
-| **Phase 3** | Search Filter Architecture — Array support for `phases[]`, `keyStages[]`, `years[]`, `examBoards[]` | 2026-01-03 |
-| **Phase 4** | Analysis Script Enhancement — CLI supports `--phase`, `--keyStages`, `--years`, `--examBoards` | 2026-01-03 |
-| **Phase 5a** | Ground truth restructure — directory rename, export standardisation, consumer file updates | 2026-01-05 |
-| **Phase 5b** | Create ALL primary ground truths (14 subjects) | 2026-01-06 |
-| **Phase 5c** | Create missing secondary ground truths | 2026-01-06 |
-| **Phase 5d** | Create KS4-specific ground truths (maths tiers, science subjects, english set texts, etc.) | 2026-01-06 |
-| **Phase 6** | ⏸️ Cancelled — phase model changed, `phase_slug` not needed in ES | — |
-| **Phase 7a** | Create `GROUND_TRUTH_REGISTRY` (ADR-098) | 2026-01-06 |
-| **Phase 7b-c** | Unified `benchmark.ts` evaluation tool | 2026-01-06 |
-| **Phase 7d-e** | Cleanup — delete fragmented scripts and performance-measuring smoke tests | 2026-01-06 |
-| **Result Pattern** | Network error handling per ADR-088 | 2026-01-07 |
-| **File Split** | `sdk-api-methods.ts` → 4 smaller modules by responsibility | 2026-01-07 |
-| **Test Coverage** | Unit tests for `safeGet` (3) + SDK API success paths (8) | 2026-01-07 |
-
-### Ground Truth Remediation (2026-01-08 → 2026-01-09)
-
-| Task | Status | Details |
-|------|--------|---------|
-| **Build type generation** | ✅ Complete | `ground-truths/generation/` with TDD |
-| **Fix validation script** | ✅ Complete | 16 checks, correct bulk format |
-| **Fix invalid slugs** | ✅ Complete | 66 → 0 missing slugs (17 files fixed) |
-| **Fix empty expectedRelevance** | ✅ Complete | 12 → 0 empty queries |
-| **Add missing categories** | ✅ Complete | 130 → 0 queries without categories |
-| **Extend short queries** | ✅ Complete | 78 → 0 queries < 3 words |
-| **Add missing descriptions** | ✅ Complete | 275 → 0 queries without descriptions |
-| **Fix category coverage gaps** | ✅ Complete | 43 → 0 entries below minimums |
-| **Review relevance scores** | 📋 Ready | Quality review can proceed |
-
-**New Infrastructure**:
-
-- `ground-truths/generation/bulk-data-parser.ts` — Parse bulk JSON
-- `ground-truths/generation/type-emitter.ts` — Generate branded types
-- `ground-truths/generation/schema-emitter.ts` — Generate Zod schemas
-- `ground-truths/generated/` — Generated output files
-
-### Result Pattern Compliance (2026-01-07)
-
-**Problem**: Ingestion crashed on network errors (`TypeError: fetch failed`) despite retry mechanism.
-
-**Root Cause**: SDK retry middleware only retried HTTP status codes (429, 503), not transport-level exceptions.
-
-**Solution Implemented**:
-
-| Component | Change |
-|-----------|--------|
-| SDK Retry Middleware | Now catches and retries network exceptions with exponential backoff |
-| `safeGet` Helper | New file `src/adapters/sdk-safe-get.ts` wraps `client.GET`, converts exceptions to `Result.Err` |
-| SDK API Methods | All 8 `makeGet...` functions now use `safeGet`, never throw |
-| File Split | `sdk-api-methods.ts` (258 lines) → 4 smaller modules in `sdk-api-methods/` directory |
-
-**File Structure After Split**:
-
-```
-src/adapters/
-├── sdk-api-methods/
-│   ├── index.ts              # Re-exports all public API
-│   ├── lesson-methods.ts     # makeGetLessonTranscript, makeGetLessonSummary, makeGetLessonsByKeyStageAndSubject
-│   ├── unit-methods.ts       # makeGetUnitsByKeyStageAndSubject, makeGetUnitSummary
-│   ├── sequence-methods.ts   # makeGetSubjectSequences, makeGetSequenceUnits
-│   └── asset-methods.ts      # makeGetSubjectAssets
-├── sdk-safe-get.ts           # safeGet helper (wraps client.GET, catches exceptions)
-├── sdk-safe-get.unit.test.ts # 3 unit tests for safeGet
-└── sdk-api-methods.unit.test.ts  # 16 unit tests (8 error + 8 success)
-```
-
-### ✅ Test Coverage Complete (2026-01-07)
-
-| Component | Tests | Status |
-|-----------|-------|--------|
-| SDK Retry Middleware | 13 integration tests | ✅ Complete |
-| Lesson Materials | 12 unit tests | ✅ Complete |
-| `safeGet` | 3 unit tests | ✅ Complete |
-| SDK API Methods (error) | 8 unit tests | ✅ Complete |
-| SDK API Methods (success) | 8 unit tests | ✅ Complete |
-
-**Decision: Testing Generated Files**
-
-`sdk-error-types.ts` contains hand-authored functions but is marked "GENERATED".
-
-**Decision**: Test through **integration at consumer level**, not direct unit tests.
-
-**Rationale**:
-
-- Schema-first: Generator is source of truth
-- Test behavior not implementation: Direct tests couple to generated code
-- Already covered: `lesson-materials.unit.test.ts` exercises error classification
-
-### All Validation Stages Complete ✅
-
-| Task | Description | Status |
-|------|-------------|--------|
-| **Stage 1** | Type-check — All 474 queries have required fields | ✅ Complete |
-| **Stage 2** | Runtime validation — All 30 entries meet category minimums | ✅ Complete |
-| **Stage 3** | Qualitative review of ALL 474 queries across 30 entries | ✅ Complete (2026-01-09) |
-
-### Next: Phase 8 Benchmarks 📋
-
-| Phase | Description | Status |
-|-------|-------------|--------|
-| **Phase 8** | Baselines — Run comprehensive phase-based baselines for ALL subjects | 📋 **READY TO START** |
+Ground truths validated against Oak API, benchmarks run against ES index. Related but not identical.
 
 ---
 
-## Unified Evaluation Architecture
+## Final State
 
-### Current State (Fragmented)
+### Structure
 
-**Problem**: The evaluation infrastructure violates several foundation principles:
+| Dimension | Value |
+|-----------|-------|
+| Subject-phase entries | 30 (14 primary + 16 secondary) |
+| Categories per entry | 4 |
+| Queries per category | **1** |
+| **Total queries** | **120** |
 
-| Issue | Foundation Rule Violated | Current State |
-|-------|-------------------------|---------------|
-| Multiple analysis scripts doing same thing | KISS, First Question | 6 scripts with overlapping functionality |
-| Hardcoded mappings | DRY, Single Source of Truth | `GROUND_TRUTHS_BY_SUBJECT_AND_KS` manually maintained |
-| Validation covers subset only | Comprehensive, Single Source | Only maths + diagnostics + units validated |
-| `--keyStage` backwards compat | "NEVER create compatibility layers" | Legacy param still supported |
-| Smoke tests hardcoded | Configurable over hardcoded | Each test fixed to maths KS4 |
+**Note**: citizenship-primary and german-primary don't exist in the curriculum. The 30 bulk data files represent all valid subject-phase combinations.
 
-### Target State (Unified)
-
-**Principle**: Two distinct categories of tools, each with a single implementation.
-
-| Category | Purpose | Question Answered | Output |
-|----------|---------|-------------------|--------|
-| **Evaluations** | Measure effect of changes | "Did this improve/regress quality?" | Metrics to compare |
-| **Smoke Tests** | Verify service is working | "Is search meeting baseline?" | Pass/fail |
+### Directory Structure
 
 ```
 ground-truth/
-├── index.ts                     ← SINGLE registry of ALL ground truths
-│                                  Exports: GROUND_TRUTH_REGISTRY
-│
-├── {subject}/                   ← Individual subject files
+├── maths/
 │   ├── primary/
-│   ├── secondary/
-│   └── index.ts                 ← Re-exports for registry
-
-evaluation/
-├── validation/
-│   └── validate-all.ts          ← Validates ALL slugs from registry
-│
-├── analysis/
-│   └── benchmark.ts             ← EVALUATION: Measure MRR for any scope
-│                                  Flexible, for before/after comparison
-
-smoke-tests/
-└── search-baseline.smoke.test.ts  ← SMOKE TEST: Assert ALL baselines
-                                     Uses GROUND_TRUTH_REGISTRY
-                                     Fails if ANY combination regresses
+│   │   ├── precise-topic.ts      # 1 query
+│   │   ├── natural-expression.ts # 1 query
+│   │   ├── imprecise-input.ts    # 1 query
+│   │   ├── cross-topic.ts        # 1 query
+│   │   └── index.ts              # Exports ALL_QUERIES
+│   └── secondary/
+│       └── ... (same structure)
+├── english/
+│   └── ... (same structure)
+└── ... (all subjects)
 ```
 
-**Key Distinction**:
+### Categories
 
-- **Evaluations** are tools you run manually to measure effects of changes
-- **Smoke tests** are automated pass/fail checks that run in CI/CD
-
-### Ground Truth Registry Design
-
-The registry must be the **single source of truth** for what ground truths exist:
-
-```typescript
-/**
- * Complete registry of all ground truths.
- * 
- * This is the SINGLE source of truth for what ground truths exist.
- * All validation and benchmarking tools iterate over this registry.
- * 
- * @remarks
- * Adding a new ground truth? Add it here and it will automatically
- * be validated and benchmarked.
- */
-export const GROUND_TRUTH_REGISTRY = {
-  art: {
-    primary: ART_PRIMARY_QUERIES,       // null if not yet created
-    secondary: ART_SECONDARY_QUERIES,
-    ks4: null,                          // null if no KS4-specific
-  },
-  // ... all 16 subjects
-} as const;
-
-/**
- * Type-safe accessor for ground truths.
- * Returns null if the subject/phase combination doesn't exist.
- */
-export function getGroundTruths(
-  subject: SearchSubjectSlug,
-  phase: 'primary' | 'secondary' | 'ks4'
-): readonly GroundTruthQuery[] | null {
-  return GROUND_TRUTH_REGISTRY[subject]?.[phase] ?? null;
-}
-
-/**
- * Get all subject/phase combinations that have ground truths.
- * Used by validation and benchmark runners.
- */
-export function getAllGroundTruthEntries(): readonly GroundTruthEntry[] {
-  // Derive from GROUND_TRUTH_REGISTRY
-}
-```
-
-### Unified Benchmark Runner Design
-
-Replace fragmented scripts with single configurable runner:
-
-```typescript
-/**
- * Universal benchmark runner.
- * 
- * Usage:
- *   pnpm benchmark --all                    # Run all subjects/phases
- *   pnpm benchmark --subject maths          # One subject, all phases
- *   pnpm benchmark --phase primary          # One phase, all subjects
- *   pnpm benchmark --subject maths --phase secondary
- */
-interface BenchmarkConfig {
-  /** Subjects to benchmark. Empty = all. */
-  subjects: readonly SearchSubjectSlug[];
-  /** Phases to benchmark. Empty = all. */
-  phases: readonly ('primary' | 'secondary' | 'ks4')[];
-  /** Output format */
-  format: 'console' | 'json' | 'markdown';
-  /** Verbose per-query output */
-  verbose: boolean;
-}
-
-/**
- * Benchmark output includes ALL standard IR metrics.
- */
-interface BenchmarkResult {
-  subject: SearchSubjectSlug;
-  phase: 'primary' | 'secondary' | 'ks4';
-  metrics: {
-    mrr: number;              // Mean Reciprocal Rank
-    ndcg10: number;           // NDCG@10
-    precision10: number;      // Precision@10 — proportion of top 10 that are relevant
-    recall10: number;         // Recall@10 — proportion of relevant found in top 10
-    zeroHitRate: number;      // Queries returning nothing
-    p95LatencyMs: number;     // 95th percentile latency
-  };
-  perCategory: Record<string, CategoryMetrics>;
-  queryCount: number;
-}
-```
-
-**Why Precision and Recall**: These are industry-standard IR metrics that ML engineers expect. They provide complementary insights:
-
-- **Precision@10**: Are we showing too much noise? (high = clean results)
-- **Recall@10**: Are we missing relevant content? (high = complete results)
-
-### Migration Path
-
-| Phase | Action | Files Affected |
-|-------|--------|----------------|
-| **Phase 7a** | Create `GROUND_TRUTH_REGISTRY` in `ground-truth/index.ts` | `ground-truth/index.ts` |
-| **Phase 7b** | Update `validate-ground-truth.ts` to iterate registry | `validation/validate-ground-truth.ts` |
-| **Phase 7c** | Create unified `benchmark.ts` | `evaluation/analysis/benchmark.ts` |
-| **Phase 7d** | Delete fragmented scripts | `analyze-per-category.ts`, etc. |
-| **Phase 7e** | Remove `--keyStage` legacy param | `analyze-cross-curriculum.ts` |
-
-### Alignment with Foundation Documents
-
-| Foundation Rule | How We Align |
-|-----------------|--------------|
-| **Single Source of Truth** | `GROUND_TRUTH_REGISTRY` is THE registry |
-| **KISS** | One benchmark runner, one validation script |
-| **DRY** | No hardcoded mappings duplicating registry |
-| **No Compatibility Layers** | Remove legacy `--keyStage` param |
-| **Fail Fast** | Validation fails on ANY missing/invalid slug |
-| **TDD** | Tests for registry, validation, benchmark |
+| Category | Purpose | What It Tests |
+|----------|---------|---------------|
+| `precise-topic` | Curriculum-aligned terminology | Basic retrieval works |
+| `natural-expression` | Teacher/student natural language | System bridges vocabulary |
+| `imprecise-input` | Typos, misspellings | Error recovery |
+| `cross-topic` | Concept intersections | Multi-topic handling |
 
 ---
 
-## Coverage Matrix (Current State)
+## What This System Tells Us
 
-Deterministic validation complete. **509 queries** across **30 entries** meet structural requirements. Stage 3 qualitative review complete.
+| Question | Quality |
+|----------|---------|
+| "Did search change?" | ✅ Good — metric changes indicate something changed |
+| "Do expected slugs appear in results?" | ✅ Good — direct measurement |
+| "Is performance acceptable?" | ✅ Good — p95 latency is valid |
 
-| Subject | Primary Bulk | Primary GT | Secondary Bulk | Secondary GT | KS4 Complexity |
-|---------|--------------|------------|----------------|--------------|----------------|
-| **art** | ✅ | ✅ | ✅ | ✅ | UnitOptions |
-| **citizenship** | ❌ | — | ✅ | ✅ | Pathways |
-| **computing** | ✅ | ✅ | ✅ | ✅ | Pathways |
-| **cooking-nutrition** | ✅ | ✅ | ✅ | ✅ | — |
-| **design-technology** | ✅ | ✅ | ✅ | ✅ | UnitOptions |
-| **english** | ✅ | ✅ | ✅ | ✅ | UnitOptions (set texts) |
-| **french** | ✅ | ✅ | ✅ | ✅ | ExamBoards |
-| **geography** | ✅ | ✅ | ✅ | ✅ | UnitOptions |
-| **german** | ❌ | — | ✅ | ✅ | ExamBoards |
-| **history** | ✅ | ✅ | ✅ | ✅ | UnitOptions |
-| **maths** | ✅ | ✅ | ✅ | ✅ | Tiers (Foundation/Higher) |
-| **music** | ✅ | ✅ | ✅ | ✅ | — |
-| **physical-education** | ✅ | ✅ | ✅ | ✅ | Pathways |
-| **religious-education** | ✅ | ✅ | ✅ | ✅ | UnitOptions |
-| **science** | ✅ | ✅ | ✅ | ✅ | ExamSubject+Tiers |
-| **spanish** | ✅ | ✅ | ✅ | ✅ | ExamBoards |
+### What It Does NOT Tell Us
 
-**Note**: Citizenship and German have no primary content in the curriculum (secondary only). "—" indicates not applicable.
+| Question | Why Not |
+|----------|---------|
+| "Are teachers satisfied?" | No user testing |
+| "Is quality good enough?" | Ground truths are spot checks, not comprehensive |
+| "Which approach is better?" | Only measures expected slug position |
+
+**This must be explicitly documented in all reporting.**
 
 ---
 
-## Current Evaluation Infrastructure (Post-Cleanup)
+## Progress Tracker (Complete)
 
-### Analysis Scripts
-
-| Script | Purpose | Status |
-|--------|---------|--------|
-| `benchmark.ts` | **Unified benchmark tool** — all subjects, all phases | ✅ Active |
-
-### Smoke Tests
-
-| Test | Purpose | Status |
-|------|---------|--------|
-| Behavior-focused smoke tests | Verify search service works | ✅ Active |
-
-**Deleted** (replaced by unified approach):
-
-- `analyze-per-category.ts`, `analyze-diagnostic-queries.ts`, `full-metrics-breakdown.ts`, etc.
-- `search-quality.smoke.test.ts`, `hard-query-baseline.smoke.test.ts`, etc.
-
-### Key Achievement
-
-**Universal benchmarking now available.** Single `benchmark.ts` covers all 28 subject/phase entries from the registry.
-
----
-
-## Directory Structure
-
-### Current (Phase-Aligned)
-
-```
-ground-truth/
-├── {subject}/
-│   ├── primary/              # Years 1-6 (KS1+KS2)
-│   │   ├── {topic}.ts
-│   │   ├── hard-queries.ts
-│   │   └── index.ts
-│   ├── secondary/            # Years 7-11 (KS3+KS4)
-│   │   ├── {topic}.ts
-│   │   ├── hard-queries.ts
-│   │   └── index.ts
-│   └── index.ts
-```
-
-### Proposed (With KS4 Subdirectories)
-
-For subjects with significant KS4 complexity:
-
-```
-ground-truth/
-├── {subject}/
-│   ├── primary/              # Years 1-6
-│   ├── secondary/            # Years 7-11
-│   │   ├── {topic}.ts
-│   │   ├── hard-queries.ts
-│   │   ├── ks4/              # KS4-specific complexity (GCSE)
-│   │   │   ├── {ks4-topic}.ts
-│   │   │   └── index.ts
-│   │   └── index.ts
-│   └── index.ts
-```
-
-**KS4 subdirectory contents by subject**:
-
-| Subject | KS4 Complexity | `secondary/ks4/` files |
-|---------|----------------|------------------------|
-| maths | Tiers | `tier-variants.ts` |
-| science | ExamSubj+Tiers | `biology.ts`, `chemistry.ts`, `physics.ts` |
-| english | UnitOpts | `set-texts.ts` |
-| geography | UnitOpts | `fieldwork-options.ts` |
-| history | UnitOpts | `historic-environments.ts` |
-| art | UnitOpts | `specialisms.ts` |
-| design-tech | UnitOpts | `materials.ts` |
-| religious-ed | UnitOpts | `faith-comparisons.ts` |
-| french/spanish/german | ExamBoards | `exam-skills.ts` |
-| computing/citizenship/PE | Pathways | `core-vs-gcse.ts` |
+| # | Subject-Phase | Curated | Queries |
+|---|---------------|---------|---------|
+| 1 | art-primary | ✅ | 4/4 |
+| 2 | art-secondary | ✅ | 4/4 |
+| 3 | citizenship-secondary | ✅ | 4/4 |
+| 4 | computing-primary | ✅ | 4/4 |
+| 5 | computing-secondary | ✅ | 4/4 |
+| 6 | cooking-nutrition-primary | ✅ | 4/4 |
+| 7 | cooking-nutrition-secondary | ✅ | 4/4 |
+| 8 | design-technology-primary | ✅ | 4/4 |
+| 9 | design-technology-secondary | ✅ | 4/4 |
+| 10 | english-primary | ✅ | 4/4 |
+| 11 | english-secondary | ✅ | 4/4 |
+| 12 | french-primary | ✅ | 4/4 |
+| 13 | french-secondary | ✅ | 4/4 |
+| 14 | geography-primary | ✅ | 4/4 |
+| 15 | geography-secondary | ✅ | 4/4 |
+| 16 | german-secondary | ✅ | 4/4 |
+| 17 | history-primary | ✅ | 4/4 |
+| 18 | history-secondary | ✅ | 4/4 |
+| 19 | maths-primary | ✅ | 4/4 |
+| 20 | maths-secondary | ✅ | 4/4 |
+| 21 | music-primary | ✅ | 4/4 |
+| 22 | music-secondary | ✅ | 4/4 |
+| 23 | physical-education-primary | ✅ | 4/4 |
+| 24 | physical-education-secondary | ✅ | 4/4 |
+| 25 | religious-education-primary | ✅ | 4/4 |
+| 26 | religious-education-secondary | ✅ | 4/4 |
+| 27 | science-primary | ✅ | 4/4 |
+| 28 | science-secondary | ✅ | 4/4 |
+| 29 | spanish-primary | ✅ | 4/4 |
+| 30 | spanish-secondary | ✅ | 4/4 |
 
 ---
 
-## Implementation Phases
+## Phase 2: AI-Driven Evaluation (Future)
 
-### Phase 5b: Create ALL Missing Primary Ground Truths
+**Deferred. Not currently planned.**
 
-**Goal**: Complete primary coverage for all 10 subjects that have bulk data but no ground truths.
+Separate evaluation layer for "does search help teachers?"
 
-**Implementation Order** (breadth-first — complete all primary first):
+| Parameter | Value |
+|-----------|-------|
+| Query set size | 60-120 (2-4 per subject-phase) |
+| Evaluation method | AI judges result usefulness |
+| Frequency | Manual, local development |
+| Executor | Human stakeholder |
 
-| Priority | Subject | Units | Data Source | Notes |
-|----------|---------|-------|-------------|-------|
-| 1 | maths | 125 | Bulk + MCP | Largest, most important |
-| 2 | physical-education | 65 | Bulk | Large but simpler |
-| 3 | art | 42 | Bulk | Creative subjects |
-| 4 | geography | 37 | Bulk | Physical/human geography |
-| 5 | music | 36 | Bulk | Performance/composition |
-| 6 | religious-education | 36 | Bulk | World religions |
-| 7 | computing | 30 | Bulk | Programming/data |
-| 8 | spanish | 21 | Bulk | **MFL - structure-only** |
-| 9 | design-technology | 18 | Bulk | Materials/making |
-| 10 | french | 15 | Bulk | **MFL - structure-only** |
+This answers different questions than the ground truth system:
 
-**MFL Note**: French, Spanish (and German secondary) are Modern Foreign Languages with minimal transcripts. Ground truths for MFL MUST test structural search fields (`lesson_structure`, `lesson_structure_semantic`), not just content fields. This is critical for validating our four-retriever hybrid architecture.
-
-**Methodology**:
-
-1. **Extract from bulk data**: `apps/oak-open-curriculum-semantic-search/bulk-downloads/{subject}-primary.json`
-2. **Validate via MCP**: Use `get-lessons-summary` to confirm slugs exist
-3. **Create queries**: Mix of curriculum-concept and content-discovery queries
-4. **Document**: Comprehensive TSDoc on all files
-
-**Target per subject**:
-
-- Minimum 15 queries
-- Mix of categories: naturalistic, misspelling, synonym, multi-concept
-- At least 3 hard queries
-
-**Acceptance Criteria**:
-
-| Criterion | Measurement |
-|-----------|-------------|
-| All 10 subjects have `primary/` directories | Directory check |
-| Each has ≥15 queries | Query count |
-| All slugs validated | MCP validation |
-| Quality gates pass | Full gate run |
-
-### Phase 5c: Create Missing Secondary Ground Truths
-
-**Goal**: Complete secondary coverage for cooking-nutrition.
-
-**Scope**: Small — only 12 units in `cooking-nutrition-secondary.json`
-
-**Acceptance Criteria**:
-
-| Criterion | Measurement |
-|-----------|-------------|
-| `cooking-nutrition/secondary/` exists | Directory check |
-| ≥10 queries created | Query count |
-| All slugs validated | MCP validation |
-
-### Phase 5d: Create KS4-Specific Ground Truths
-
-**Goal**: Create `secondary/ks4/` subdirectories for subjects with significant KS4 complexity.
-
-**Subjects** (in order):
-
-1. **science** — ExamSubject split (Biology/Chemistry/Physics) + Tiers
-2. **maths** — Tiers (Foundation/Higher)
-3. **english** — Set texts (An Inspector Calls, Macbeth, etc.)
-4. **geography** — Fieldwork options
-5. **history** — Historic environments
-6. **MFL** (french/spanish/german) — Exam board skills
-
-**Acceptance Criteria**:
-
-| Criterion | Measurement |
-|-----------|-------------|
-| KS4 directories exist for complex subjects | Directory check |
-| Each has ≥10 queries testing KS4 features | Query count |
-| Tier queries test Foundation vs Higher | Coverage review |
-| Set text queries test specific works | Coverage review |
-
-### Phase 6: ES Re-index — SUPERSEDED
-
-> **Status**: ⏸️ SUPERSEDED (2026-01-06)
->
-> **Reason**: The phase model was simplified. Instead of adding `phase_slug` to ES documents,
-> the phase is derived at query time from `key_stage`. KS1/KS2 queries expand to primary phase,
-> KS3/KS4 queries expand to secondary phase. This eliminates the need for ES re-indexing.
->
-> **Impact**: None. Ground truths use `Phase = 'primary' | 'secondary'` and individual queries
-> can specify `keyStage: 'ks4'` for KS4-specific filtering. No ES changes required.
-
-### Phase 7: Unified Evaluation Infrastructure
-
-**Goal**: Replace fragmented evaluation tools with unified, registry-driven infrastructure.
-
-#### Phase 7a: Create Ground Truth Registry
-
-**File**: `src/lib/search-quality/ground-truth/index.ts`
-
-Create `GROUND_TRUTH_REGISTRY` as the single source of truth:
-
-```typescript
-export const GROUND_TRUTH_REGISTRY = {
-  art: { primary: null, secondary: ART_SECONDARY_QUERIES, ks4: null },
-  citizenship: { primary: null, secondary: CITIZENSHIP_SECONDARY_QUERIES, ks4: null },
-  // ... all 16 subjects with actual exports or null
-} as const;
-```
-
-**Acceptance Criteria**:
-
-- Registry exports all existing ground truths
-- `null` for missing subject/phase combinations
-- Type-safe accessors: `getGroundTruths()`, `getAllGroundTruthEntries()`
-
-#### Phase 7b: Update Validation Script
-
-**File**: `evaluation/validation/validate-ground-truth.ts`
-
-Replace hardcoded imports with registry iteration:
-
-```typescript
-// BEFORE (hardcoded)
-import { MATHS_SECONDARY_STANDARD_QUERIES, ... } from '...';
-
-// AFTER (registry-driven)
-import { getAllGroundTruthEntries } from '...';
-
-for (const entry of getAllGroundTruthEntries()) {
-  await validateEntry(entry, apiKey);
-}
-```
-
-**Acceptance Criteria**:
-
-- Validates ALL subjects that have ground truths
-- Validates both primary and secondary where applicable
-- Validates KS4-specific queries where applicable
-- All slugs pass → exit code 0
-- Any invalid → fail fast with details
-
-#### Phase 7c: Create Unified Evaluation Tool
-
-**File**: `evaluation/analysis/benchmark.ts`
-
-**Purpose**: Measure search quality for any scope. Used for before/after comparison when making changes.
-
-```bash
-# Usage examples
-pnpm benchmark --all                              # All subjects, all phases
-pnpm benchmark --subject maths                    # One subject, all phases
-pnpm benchmark --phase primary                    # One phase, all subjects
-pnpm benchmark --subject english --phase secondary --verbose
-pnpm benchmark --all --format markdown > RESULTS.md
-```
-
-**Acceptance Criteria**:
-
-- Configurable scope (all/subject/phase)
-- Output formats: console, json, markdown
-- Per-category MRR breakdown
-- Uses `GROUND_TRUTH_REGISTRY` as source
-
-#### Phase 7d: Create Unified Smoke Test
-
-**File**: `smoke-tests/search-baseline.smoke.test.ts`
-
-**Purpose**: Assert search service is meeting baseline for ALL subjects × ALL phases. Runs in CI/CD.
-
-```typescript
-/**
- * Universal Search Baseline Smoke Test
- * 
- * Iterates GROUND_TRUTH_REGISTRY and asserts MRR >= baseline for each
- * subject/phase combination that has ground truths.
- * 
- * Fails if ANY combination regresses below documented baseline.
- */
-describe('Search Baseline', () => {
-  for (const entry of getAllGroundTruthEntries()) {
-    describe(`${entry.subject} ${entry.phase}`, () => {
-      it(`meets MRR baseline (>= ${entry.baseline})`, async () => {
-        const mrr = await measureMRR(entry.queries, entry.subject, entry.phase);
-        expect(mrr).toBeGreaterThanOrEqual(entry.baseline * 0.95); // 5% regression tolerance
-      });
-    });
-  }
-});
-```
-
-**Acceptance Criteria**:
-
-- Tests ALL subject/phase combinations from registry
-- Each has documented baseline MRR
-- 5% regression tolerance
-- Single pass/fail for "is search working?"
-
-**Replaces**: Multiple hardcoded smoke tests
-
-- `search-quality.smoke.test.ts` → merged
-- `hard-query-baseline.smoke.test.ts` → merged
-- `unit-search-quality.smoke.test.ts` → merged
-
-#### Phase 7e: Delete Fragmented Tools
-
-**Evaluation scripts to delete** (replaced by `benchmark.ts`):
-
-- `analyze-per-category.ts`
-- `analyze-diagnostic-queries.ts`
-- `analyze-colloquial.ts`
-- `analyze-intent-queries.ts`
-- `full-metrics-breakdown.ts`
-
-**Keep**: `analyze-cross-curriculum.ts` — but remove legacy `--keyStage` param
-
-**Smoke tests to delete** (replaced by `search-baseline.smoke.test.ts`):
-
-- `search-quality.smoke.test.ts`
-- `hard-query-baseline.smoke.test.ts`
-
-**Keep**: Smoke tests for specific concerns (synonyms, KS4 filtering, etc.)
-
-#### Phase 7f: Remove Legacy Parameters
-
-**File**: `evaluation/analysis/analyze-cross-curriculum.ts`
-
-Remove backwards-compatible `--keyStage` single param:
-
-```typescript
-// BEFORE
-keyStage: { type: 'string', short: 'k' },      // Legacy, single
-keyStages: { type: 'string' },                  // NEW: comma-separated
-
-// AFTER
-keyStages: { type: 'string', short: 'k' },     // Only this, no legacy
-```
-
-Per foundation rule: "NEVER create compatibility layers"
-
-**Acceptance Criteria**:
-
-- Only `--keyStages` (plural) or `--phase` accepted
-- Legacy `--keyStage` removed
-- Documentation updated
-
-### Phase 8: Comprehensive Baselines
-
-**Goal**: Run phase-based baselines for ALL subjects and establish universal benchmark configuration.
-
-**Commands**:
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# Run all 28 subject/phase entries from the registry
-pnpm benchmark --all
-
-# Or run by subject or phase
-pnpm benchmark --subject maths          # One subject, all phases
-pnpm benchmark --phase primary          # One phase, all subjects
-pnpm benchmark --subject english --phase secondary  # Specific combination
-```
-
-**Recording Results**:
-
-All results recorded in [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md) following the template:
-
-```markdown
-### YYYY-MM-DD: {Subject} {Phase} Baseline
-
-**Context**: M3 Phase 8 — comprehensive baseline
-
-**Method**: `analyze-cross-curriculum.ts --subject {subject} --phase {phase}`
-
-**Results**:
-
-| Category | Queries | MRR | Status |
-|----------|---------|-----|--------|
-| naturalistic | N | X.XXX | ✅/⚠️/❌ |
-| misspelling | N | X.XXX | ✅/⚠️/❌ |
-| ... | ... | ... | ... |
-| **Overall** | **N** | **X.XXX** | **Status** |
-
-**Key Findings**:
-1. ...
-
-**Decision**: ✅ BASELINE ESTABLISHED
-```
-
-**Acceptance Criteria**:
-
-| Criterion | Measurement |
-|-----------|-------------|
-| All subjects with primary content baselined | EXPERIMENT-LOG entries |
-| All subjects with secondary content baselined | EXPERIMENT-LOG entries |
-| Per-category MRR breakdown for each | EXPERIMENT-LOG entries |
-| current-state.md updated | File updated |
-
----
-
-## Ground Truth Creation Methodology
-
-### Data Sources
-
-1. **Bulk Download Data** (preferred for discovery):
-   - Location: `apps/oak-open-curriculum-semantic-search/bulk-downloads/`
-   - Files: `{subject}-{primary|secondary}.json`
-   - Contains: Complete lesson data including slugs, titles, units
-
-2. **Oak Curriculum MCP Tools** (for validation and exploration):
-   - `get-key-stages-subject-units` — List units for a subject/key-stage
-   - `get-key-stages-subject-lessons` — List lessons for a subject/key-stage
-   - `get-lessons-summary` — Validate lesson slugs exist
-   - `search` — Find lessons by topic query
-
-### Query Categories
-
-| Category | Description | Priority | Example |
-|----------|-------------|----------|---------|
-| naturalistic | Teacher/student language | HIGH | "teaching fractions to year 4" |
-| misspelling | Typos, mobile errors | CRITICAL | "fotosynthesis" |
-| synonym | Alternative terminology | HIGH | "times tables" vs "multiplication facts" |
-| multi-concept | Topic intersections | MEDIUM | "ratio in cooking" |
-| colloquial | Informal language | MEDIUM | "SOHCAHTOA" |
-| intent-based | Pedagogical purpose | EXPLORATORY | "introduction lesson for algebra" |
-
-### Query Types
-
-**Two types of queries** (from 2026-01-03 insight):
-
-| Type | Example | Tests | Coupling |
-|------|---------|-------|----------|
-| **Curriculum concept** | "teaching fractions to year 4" | Semantic understanding | Low - stable |
-| **Content discovery** | "Macbeth Lady Macbeth guilt" | Specific content findability | High - content-dependent |
-
-Both types are essential:
-
-- Curriculum concept queries test search intelligence (stable across content changes)
-- Content discovery queries validate real content is findable (may break if content changes)
-
-### MFL Ground Truths (Special Consideration)
-
-Modern Foreign Languages (French, Spanish, German) have minimal transcripts but rich structural content. Ground truths for MFL must:
-
-1. **Test structural fields**: `lesson_structure`, `lesson_structure_semantic`
-2. **Use vocabulary/grammar topics**: These appear in structural metadata
-3. **NOT assume transcript content**: Don't use queries that would only match transcripts
-4. **Validate all 4 retrievers**: BM25/ELSER × content/structure
-
-Example MFL queries:
-
-- "French vocabulary food" (structural)
-- "German grammar modal verbs" (structural)
-- "Spanish phonics pronunciation" (structural)
-
----
-
-## Quality Gates
-
-Run after each phase (from repo root):
-
-```bash
-pnpm type-gen      # Makes changes
-pnpm build         # Makes changes
-pnpm type-check
-pnpm lint:fix      # Makes changes
-pnpm format:root   # Makes changes
-pnpm markdownlint:root  # Makes changes
-pnpm test
-pnpm test:e2e
-pnpm test:e2e:built
-pnpm test:ui
-pnpm smoke:dev:stub
-```
-
----
-
-## Foundation Document Re-Read Schedule
-
-| Checkpoint | Re-read |
-|------------|---------|
-| Before Phase 5b | rules.md, testing-strategy.md |
-| Before Phase 6 | schema-first-execution.md |
-| Before Phase 7 | testing-strategy.md |
-| Before Phase 8 | All three |
-| Before sign-off | All three |
-
----
-
-## Risk Mitigation
-
-| Risk | Mitigation |
-|------|------------|
-| MFL ground truths fail due to transcript dependency | Use structural field queries only |
-| Bulk data stale | Cross-validate with MCP API calls |
-| Ground truth slugs become invalid | Periodic validation runs |
-| Query count insufficient for meaningful comparison | Minimum 15 queries per subject/phase |
-| Scope creep | Breadth-first: complete one phase across all subjects before next |
-
----
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `src/lib/search-quality/ground-truth/` | Ground truth directory |
-| `evaluation/analysis/analyze-cross-curriculum.ts` | Phase-based analysis CLI |
-| `evaluation/validation/validate-ground-truth.ts` | Slug validation script |
-| `bulk-downloads/` | Source data for ground truth creation |
-| `src/lib/hybrid-search/phase-filter-utils.ts` | Phase expansion utilities |
+- "Would a teacher be satisfied with these results?"
+- "Is result #1 useful even if it's not the expected slug?"
+- "How does quality compare across subject-phases?"
 
 ---
 
 ## Related Documents
 
-### Planning
-
 | Document | Purpose |
 |----------|---------|
-| [../roadmap.md](../roadmap.md) | Master roadmap |
-| [../current-state.md](../current-state.md) | Current metrics |
-| [../search-acceptance-criteria.md](../search-acceptance-criteria.md) | Acceptance criteria |
+| [Transcript-Aware RRF](../archive/completed/transcript-aware-rrf.md) | ✅ Complete — Per-document score normalisation |
+| [ADR-099](../../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md) | RRF normalisation decision |
+| [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md) | Full audit findings |
+| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
+| [Roadmap](../roadmap.md) | Overall roadmap |
+| [Current State](../current-state.md) | System metrics |
+| [ADR-085](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Validation discipline |
+| [ADR-098](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Registry design |
+| [Ground Truth Process](../../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) | Curation workflow |
 
-### Evaluation Framework
+---
 
-| Document | Purpose |
-|----------|---------|
-| [../../evaluations/EXPERIMENTAL-PROTOCOL.md](../../../evaluations/EXPERIMENTAL-PROTOCOL.md) | How to run experiments |
-| [../../evaluations/EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md) | Record all baselines |
+## Foundation Documents
 
-### Technical Documentation
+Before any work, read:
 
-| Document | Purpose |
-|----------|---------|
-| [../../../../docs/data/DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) | Curriculum data differences |
-| [IR-METRICS.md](../../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG definitions |
-
-### Foundation Documents
-
-| Document | Purpose |
-|----------|---------|
-| [rules.md](../../../directives-and-memory/rules.md) | First Question, TDD, no shortcuts |
-| [testing-strategy.md](../../../directives-and-memory/testing-strategy.md) | TDD at ALL levels |
-| [schema-first-execution.md](../../../directives-and-memory/schema-first-execution.md) | Generator is source of truth |
+1. [rules.md](../../../directives-and-memory/rules.md)
+2. [testing-strategy.md](../../../directives-and-memory/testing-strategy.md)
+3. [schema-first-execution.md](../../../directives-and-memory/schema-first-execution.md)

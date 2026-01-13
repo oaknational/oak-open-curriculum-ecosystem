@@ -1,238 +1,61 @@
-# Semantic Search — Navigation Hub
+# Semantic Search — Navigation
 
-**Status**: 🔄 **Category Consistency + Benchmark Output Improvements Required**
-**Last Updated**: 2026-01-10
-**Session Entry Point**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Last Updated**: 2026-01-13
 
 ---
 
 ## Quick Start
 
-**For new sessions, start with the prompt file:**
-
-➡️ **[semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)** — Standalone session entry point
-
-Then read:
-
-1. **[roadmap.md](roadmap.md)** — Authoritative roadmap
-2. **[current-state.md](current-state.md)** — Current metrics
-3. **[search-acceptance-criteria.md](search-acceptance-criteria.md)** — Tier definitions
-
-**Foundation Documents (MANDATORY)**:
-
-- [rules.md](../../directives-and-memory/rules.md) — Cardinal Rule, TDD, no type shortcuts
-- [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
-- [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
+**Start here**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 ---
 
-## 🎯 Current Priorities
+## ✅ RRF Architecture Fixed (2026-01-13)
 
-### Priority 1: Add `pedagogical-intent` Queries to ALL Entries
+The RRF scoring flaw has been fixed. MFL/PE subjects are no longer structurally disadvantaged.
 
-**Problem**: Only `maths/secondary` has `pedagogical-intent` queries (5). The other 29 entries have 0.
+**Details**: [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
 
-**Why**: ALL 5 categories are now REQUIRED for consistent cross-subject benchmarking.
+---
 
-**Steps**:
-1. Update validation script to make `pedagogical-intent` required (min 1 per entry)
-2. Add 1+ pedagogical-intent query to each of 29 entries
-3. Run `pnpm ground-truth:validate` — must pass
+## Current Priority: Benchmark & Iterate
 
-### Priority 2: Update Benchmark Output
+Ground truths have been restructured (120 queries), RRF is now correct. Ready for **validation through benchmarking**.
 
-**Problem**: Current output shows only aggregate metrics per subject/phase.
-
-**Required**: Every run must display measured/target/difference/status for every subject-phase-category combination.
-
-### After Completing Priorities
+**Goal**: Iterate until the constraining factor is search quality, not ground truth quality.
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm ground-truth:validate              # Verify 0 errors (including pedagogical-intent)
-pnpm benchmark --all                    # Run all 30 entries with per-category output
-```
-
-Then update `evaluation/baselines/baselines.json` with all measured metrics including per-category baselines.
-
-**Note**: Results are stored in `baselines.json`, NOT in registry code. The registry contains only ground truth queries.
-
-**Design rules**: See [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
-
----
-
-## Directory Structure
-
-```
-.agent/plans/semantic-search/
-├── README.md                      # This file (navigation hub)
-├── roadmap.md                     # Authoritative linear roadmap
-├── current-state.md               # Current metrics snapshot
-├── search-acceptance-criteria.md  # Tier definitions
-│
-├── active/                        # CURRENT executable work
-│   └── m3-revised-phase-aligned-search-quality.md  # Phase-aligned ground truths + filters
-│
-├── pre-sdk-extraction/            # Must complete before SDK extraction
-│   ├── README.md                  # Overview
-│   ├── bulk-data-analysis.md      # Vocabulary mining, transcripts, entities
-│   ├── tier-2-document-relationships.md  # Cross-referencing, threads
-│   └── tier-3-modern-es-features.md      # RRF tuning, field boosting
-│
-├── sdk-extraction/                # The SDK migration itself
-│   ├── README.md                  # Overview
-│   └── search-sdk-cli.md          # Full extraction specification
-│
-├── post-sdk-extraction/           # Requires SDK to exist first
-│   ├── README.md                  # Overview
-│   ├── mcp-search-tool.md         # MCP integration
-│   ├── tier-4-ai-enhancement.md   # LLM pre-processing
-│   └── advanced-features.md       # RAG, knowledge graph, etc.
-│
-├── backlog/                       # No clear timeline, documented ideas
-│   ├── README.md                  # Overview
-│   ├── reference-indices.md       # Glossary, NC coverage
-│   └── resource-types.md          # Worksheets, quizzes
-│
-└── archive/completed/             # Completed work (historical)
+pnpm benchmark --all  # Run benchmarks
+# Analyse failures → Fix ground truths OR confirm search is the bottleneck
 ```
 
 ---
 
-## Dependency Chain
+## Critical Understanding
 
-```
-Phase 8: Comprehensive Baselines (current priority)
-        ↓
-Comprehensive Filter Testing (pre-sdk-extraction/) ← HIGH PRIORITY
-        ↓
-Bulk Data Analysis (pre-sdk-extraction/)
-        ↓
-Tier 2: Document Relationships (pre-sdk-extraction/)
-        ↓
-Tier 3: Modern ES Features (pre-sdk-extraction/)
-        ↓
-SDK Extraction (sdk-extraction/)
-        ↓
-MFL Multilingual Embeddings (post-sdk-extraction/) ← HIGH PRIORITY
-        ↓
-MCP Search Tool (post-sdk-extraction/)
-        ↓
-Tier 4: AI Enhancement (post-sdk-extraction/)
-```
+Ground truths measure **expected slug position**, NOT user satisfaction.
+
+See: [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md)
 
 ---
 
-## Two SDKs
+## Documents
 
-This project involves TWO distinct SDKs:
-
-| SDK               | Location                                | Purpose                              |
-| ----------------- | --------------------------------------- | ------------------------------------ |
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Access to upstream Oak API, type-gen |
-| **Search SDK**    | To be: `packages/libs/search-sdk/`      | Elasticsearch-backed semantic search |
-
-The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
-
----
-
-## Current ES Index State (2026-01-02)
-
-| Index               | Documents | Storage    |
-| ------------------- | --------- | ---------- |
-| `oak_lessons`       | 184,985   | 806.62MB   |
-| `oak_unit_rollup`   | 165,345   | 706.06MB   |
-| `oak_units`         | 1,635     | 8.94MB     |
-| `oak_threads`       | 164       | 255.53KB   |
-| `oak_sequence_facets` | 57      | 375.14KB   |
-| `oak_sequences`     | 30        | 267.67KB   |
-| `oak_meta`          | 1         | 5.34KB     |
-
-**Actual documents**: 16,414 (ES counts include ELSER sub-documents)
+| Document | Purpose |
+|----------|---------|
+| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point, current status, warnings |
+| [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md) | Full audit findings |
+| [Roadmap](roadmap.md) | Future work items and dependencies |
+| [Completed](completed.md) | Historical completed work |
+| [Current State](current-state.md) | System metrics and ES index state |
+| [M3 Plan](active/m3-revised-phase-aligned-search-quality.md) | Ground truth restructure specification |
+| [Transcript-Aware RRF](active/transcript-aware-rrf.md) | Per-document score normalization for MFL/PE |
 
 ---
 
-## Recent Work
+## Foundation Documents (MANDATORY)
 
-### Result Pattern Compliance (2026-01-07) ✅
-
-Network error handling per ADR-088:
-
-| Component | Change |
-|-----------|--------|
-| SDK Retry Middleware | Catches and retries network exceptions |
-| `safeGet` Helper | Wraps `client.GET`, converts exceptions to `Result.Err` |
-| SDK API Methods | All 8 `makeGet...` functions use `safeGet` |
-| File Split | `sdk-api-methods.ts` → 4 smaller modules |
-
-### M3: Phase-Aligned Search Quality (2026-01-06) ✅
-
-See [active/m3-revised-phase-aligned-search-quality.md](active/m3-revised-phase-aligned-search-quality.md)
-
-| Completed | What |
-|-----------|------|
-| ✅ Filter Architecture | Array support for keyStages, years, phases |
-| ✅ Ground Truth Restructure | Phase-aligned directories, KS4 as special case of secondary |
-| ✅ Comprehensive Ground Truths | 14 primary subjects, all secondary subjects, KS4-specific |
-| ✅ Unified Evaluation | `GROUND_TRUTH_REGISTRY`, `benchmark.ts`, cleanup |
-
-### Next Priority
-
-| Priority | Work | Why |
-|----------|------|-----|
-| **Phase 8** | Run comprehensive baselines | Measure MRR for all 28 entries, update registry |
-| **Synonym Audit** | Language-specific synonyms | French/Spanish/German underperforming |
-
----
-
-## Key ADRs
-
-| ADR      | Title                        | Status      |
-| -------- | ---------------------------- | ----------- |
-| [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-First Strategy | Active |
-| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md) | Phrase Query Boosting | Implemented |
-| [ADR-088](../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result Pattern for Error Handling | Implemented |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md) | ES Bulk Retry Strategy | Verified |
-| [ADR-097](../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context Enrichment | Complete |
-| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Ground Truth Registry | Complete |
-
----
-
-## Quality Gates
-
-Run from repo root after any changes:
-
-```bash
-pnpm type-gen && pnpm build && pnpm type-check
-pnpm lint:fix && pnpm format:root && pnpm markdownlint:root
-pnpm test && pnpm test:e2e && pnpm test:e2e:built
-pnpm test:ui && pnpm smoke:dev:stub
-```
-
-**All gates must pass. No exceptions.**
-
----
-
-## Technical Documentation (Search App)
-
-All operational documentation lives in the search app workspace:
-
-| Document | Location | Purpose |
-| -------- | -------- | ------- |
-| **IR Metrics Guide** | [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | MRR, NDCG@10, zero-hit rate definitions |
-| **Querying** | [QUERYING.md](../../../apps/oak-open-curriculum-semantic-search/docs/QUERYING.md) | How hybrid search queries work |
-| **Indexing** | [INDEXING.md](../../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md) | Index structure and fields |
-| **Synonyms** | [SYNONYMS.md](../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) | Synonym expansion strategy |
-| **Diagnostic Queries** | [DIAGNOSTIC-QUERIES.md](../../../apps/oak-open-curriculum-semantic-search/docs/DIAGNOSTIC-QUERIES.md) | Diagnostic query categories |
-| **Ingestion Guide** | [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md) | How to run ingestion |
-| **Data Completeness** | [DATA-COMPLETENESS.md](../../../apps/oak-open-curriculum-semantic-search/docs/DATA-COMPLETENESS.md) | Ingestion completeness policy |
-
----
-
-## ES Documentation
-
-**Do NOT guess how ES works** — read the official documentation:
-
-- [ES semantic_text](https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/semantic-text)
-- [ELSER model docs](https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/elser)
-- [Inference queue docs](https://www.elastic.co/docs/explore-analyze/machine-learning/inference/inference-queue)
+1. [rules.md](../../directives-and-memory/rules.md)
+2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
+3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)

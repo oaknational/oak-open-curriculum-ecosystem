@@ -17,7 +17,7 @@ import { config } from 'dotenv';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { MATHS_SECONDARY_STANDARD_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
 import type { ExperimentResult } from './types';
 import { runSingleQuery, runExperiment } from './experiment-runner';
 import { formatResultRow, compareResults } from './result-analysis';
@@ -104,7 +104,7 @@ function printAnalysis(results: readonly ExperimentResult[]): void {
 async function main(): Promise<void> {
   log('=== RERANKER EXPERIMENT ===');
   log(`Retrieve size: ${RETRIEVE_SIZE}, Rerank window: ${RERANK_SIZE}`);
-  log(`Total queries: ${MATHS_SECONDARY_STANDARD_QUERIES.length}`);
+  log(`Total queries: ${MATHS_SECONDARY_ALL_QUERIES.length}`);
   log('');
 
   if (!(await testConnection())) {

@@ -62,7 +62,6 @@ All 30 entries verified to meet:
 | `natural-expression` | 2+ |
 | `imprecise-input` | 1+ |
 | `cross-topic` | 1+ |
-| `pedagogical-intent` | 0-1 (optional) |
 
 ---
 

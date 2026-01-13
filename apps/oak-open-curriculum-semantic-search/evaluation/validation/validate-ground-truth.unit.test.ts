@@ -31,54 +31,60 @@ describe('checkCategoryCoverage', () => {
   }
 
   describe('required categories', () => {
-    it('should include pedagogical-intent as a required category', () => {
-      expect(REQUIRED_CATEGORIES).toContain('pedagogical-intent');
+    it('should include all four required categories', () => {
+      expect(REQUIRED_CATEGORIES).toContain('precise-topic');
+      expect(REQUIRED_CATEGORIES).toContain('natural-expression');
+      expect(REQUIRED_CATEGORIES).toContain('imprecise-input');
+      expect(REQUIRED_CATEGORIES).toContain('cross-topic');
+      expect(REQUIRED_CATEGORIES).toHaveLength(4);
     });
 
-    it('should require minimum 1 pedagogical-intent query', () => {
-      expect(CATEGORY_MINIMUMS['pedagogical-intent']).toBe(1);
+    it('should require minimum 1 precise-topic query', () => {
+      // Updated 2026-01-11: M3 plan specifies 1 query per category
+      expect(CATEGORY_MINIMUMS['precise-topic']).toBe(1);
+    });
+
+    it('should require minimum 1 natural-expression query', () => {
+      // Updated 2026-01-11: M3 plan specifies 1 query per category
+      expect(CATEGORY_MINIMUMS['natural-expression']).toBe(1);
+    });
+
+    it('should require minimum 1 imprecise-input query', () => {
+      expect(CATEGORY_MINIMUMS['imprecise-input']).toBe(1);
+    });
+
+    it('should require minimum 1 cross-topic query', () => {
+      expect(CATEGORY_MINIMUMS['cross-topic']).toBe(1);
     });
   });
 
   describe('validation behaviour', () => {
-    it('should report error when pedagogical-intent queries are missing', () => {
+    it('should report error when cross-topic queries are missing', () => {
       const queries: readonly GroundTruthQuery[] = [
-        // Has all categories EXCEPT pedagogical-intent
+        // Has all categories EXCEPT cross-topic (1 each per M3 plan)
         createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('natural-expression'),
         createQuery('natural-expression'),
         createQuery('imprecise-input'),
-        createQuery('cross-topic'),
       ];
 
       const issues: ValidationIssue[] = [];
       checkCategoryCoverage('test/entry', queries, issues);
 
-      // Should have an error about missing pedagogical-intent
-      const pedagogicalIntentError = issues.find(
-        (issue) =>
-          issue.category === 'category-coverage' && issue.message.includes('pedagogical-intent'),
+      // Should have an error about missing cross-topic
+      const crossTopicError = issues.find(
+        (issue) => issue.category === 'category-coverage' && issue.message.includes('cross-topic'),
       );
-      expect(pedagogicalIntentError).toBeDefined();
-      expect(pedagogicalIntentError?.message).toContain(
-        "'pedagogical-intent' queries - minimum 1 required",
-      );
+      expect(crossTopicError).toBeDefined();
+      expect(crossTopicError?.message).toContain("'cross-topic' queries - minimum 1 required");
     });
 
-    it('should pass when all required categories including pedagogical-intent are present', () => {
+    it('should pass when all required categories are present', () => {
+      // M3 plan: 1 query per category = 4 total
       const queries: readonly GroundTruthQuery[] = [
         createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('precise-topic'),
-        createQuery('natural-expression'),
         createQuery('natural-expression'),
         createQuery('imprecise-input'),
         createQuery('cross-topic'),
-        createQuery('pedagogical-intent'), // Now included
       ];
 
       const issues: ValidationIssue[] = [];
@@ -94,15 +100,14 @@ describe('checkCategoryCoverage', () => {
       const issues: ValidationIssue[] = [];
       checkCategoryCoverage('test/entry', queries, issues);
 
-      // Should have errors for all 5 required categories
-      expect(issues.length).toBe(5);
+      // Should have errors for all 4 required categories
+      expect(issues.length).toBe(4);
 
       const messages = issues.map((i) => i.message);
       expect(messages.some((m) => m.includes('precise-topic'))).toBe(true);
       expect(messages.some((m) => m.includes('natural-expression'))).toBe(true);
       expect(messages.some((m) => m.includes('imprecise-input'))).toBe(true);
       expect(messages.some((m) => m.includes('cross-topic'))).toBe(true);
-      expect(messages.some((m) => m.includes('pedagogical-intent'))).toBe(true);
     });
   });
 });

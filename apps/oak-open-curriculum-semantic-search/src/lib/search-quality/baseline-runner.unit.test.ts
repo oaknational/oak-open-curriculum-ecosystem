@@ -75,7 +75,7 @@ describe('processQueryResult', () => {
       expectedRelevance: {
         'expected-lesson': 3,
       },
-      category: 'pedagogical-intent',
+      category: 'cross-topic',
       priority: 'exploratory',
       description: 'Test fixture for zero-hit scenario',
     };

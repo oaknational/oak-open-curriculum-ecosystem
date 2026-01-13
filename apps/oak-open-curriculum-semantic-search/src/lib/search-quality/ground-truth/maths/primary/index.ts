@@ -1,54 +1,43 @@
 /**
  * Primary Maths ground truth queries for search quality evaluation.
  *
- * **Phase-aligned structure (2026-01-05)**:
- * This module covers KS1 (Years 1-2) and KS2 (Years 3-6) primary maths.
+ * **Structure (2026-01-11)**:
+ * 4 queries total, 1 per category, AI-curated for accuracy.
  *
- * **Topics covered**:
- * - Number: addition, subtraction, place value, number bonds
- * - Multiplication: times tables, equal groups, multiplication strategies
- * - Fractions: unit fractions, halves, quarters, thirds
- * - Geometry: 2D/3D shapes, angles, properties
+ * | Category | Query | MRR |
+ * |----------|-------|-----|
+ * | precise-topic | place value tens and ones | 1.000 |
+ * | natural-expression | takeaway sums primary | 0.200 |
+ * | imprecise-input | halfs and quarters | 0.500 |
+ * | cross-topic | pattern blocks tangrams | 1.000 |
  *
- * **Methodology**:
- * All lesson slugs verified from bulk-downloads/maths-primary.json.
+ * **Measurement Scope**: These queries test expected slug position,
+ * NOT user satisfaction. See audit report for details.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../types';
 
-import { FRACTIONS_PRIMARY_QUERIES } from './fractions';
-import { GEOMETRY_PRIMARY_QUERIES } from './geometry';
-import { MATHS_PRIMARY_HARD_QUERIES } from './hard-queries';
-import { MULTIPLICATION_PRIMARY_QUERIES } from './multiplication';
-import { NUMBER_PRIMARY_QUERIES } from './number';
+import { MATHS_PRIMARY_CROSS_TOPIC } from './cross-topic';
+import { MATHS_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+import { MATHS_PRIMARY_PRECISE_TOPIC } from './precise-topic';
 
 /**
- * All standard Primary Maths ground truth queries.
+ * All Primary Maths ground truth queries.
  *
- * Total: 30 queries across 4 topic areas.
- */
-export const MATHS_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...NUMBER_PRIMARY_QUERIES,
-  ...MULTIPLICATION_PRIMARY_QUERIES,
-  ...FRACTIONS_PRIMARY_QUERIES,
-  ...GEOMETRY_PRIMARY_QUERIES,
-] as const;
-
-/**
- * All Primary Maths ground truth queries (standard + hard).
- *
- * Total: 37 queries.
+ * Total: 4 queries (1 per category).
  */
 export const MATHS_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_PRIMARY_STANDARD_QUERIES,
-  ...MATHS_PRIMARY_HARD_QUERIES,
+  ...MATHS_PRIMARY_PRECISE_TOPIC,
+  ...MATHS_PRIMARY_NATURAL_EXPRESSION,
+  ...MATHS_PRIMARY_IMPRECISE_INPUT,
+  ...MATHS_PRIMARY_CROSS_TOPIC,
 ] as const;
 
-// Re-export individual topic modules
-export { FRACTIONS_PRIMARY_QUERIES } from './fractions';
-export { GEOMETRY_PRIMARY_QUERIES } from './geometry';
-export { MATHS_PRIMARY_HARD_QUERIES } from './hard-queries';
-export { MULTIPLICATION_PRIMARY_QUERIES } from './multiplication';
-export { NUMBER_PRIMARY_QUERIES } from './number';
+// Re-export category modules
+export { MATHS_PRIMARY_CROSS_TOPIC } from './cross-topic';
+export { MATHS_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+export { MATHS_PRIMARY_PRECISE_TOPIC } from './precise-topic';

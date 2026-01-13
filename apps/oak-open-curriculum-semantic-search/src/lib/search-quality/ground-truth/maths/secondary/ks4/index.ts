@@ -1,22 +1,21 @@
 /**
  * KS4 Maths ground truth queries for search quality evaluation.
  *
- * Covers Year 10-11 GCSE Maths with tier variant testing.
+ * **Updated 2026-01-11**: Per M3 plan, KS4 queries are now integrated
+ * into the main secondary entry. This module exports an empty array
+ * for backward compatibility.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../../types';
 
-import { MATHS_KS4_TIER_QUERIES } from './tier-variants';
-
 /**
  * All KS4 Maths ground truth queries.
  *
- * Total: 5 queries focused on tier discrimination.
+ * Empty array - KS4 queries integrated into secondary entry.
  */
-export const MATHS_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_KS4_TIER_QUERIES,
-] as const;
+export const MATHS_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [] as const;
 
-export { MATHS_KS4_TIER_QUERIES } from './tier-variants';
+// Legacy export for backward compatibility
+export const MATHS_KS4_TIER_QUERIES: readonly GroundTruthQuery[] = [] as const;

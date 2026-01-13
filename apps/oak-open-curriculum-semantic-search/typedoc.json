@@ -1,14 +1,15 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
+    "src/lib/elastic-http.ts",
     "src/lib/hybrid-search/index.ts",
     "src/lib/hybrid-search/lessons.ts",
     "src/lib/hybrid-search/units.ts",
     "src/lib/hybrid-search/types.ts",
     "src/lib/openapi.ts",
     "src/lib/openapi.register.ts",
-    "src/adapters/oak-adapter-sdk.ts",
-    "src/adapters/oak-adapter-sdk-types.ts",
+    "src/adapters/oak-adapter.ts",
+    "src/adapters/oak-adapter-types.ts",
     "src/adapters/sdk-guards.ts"
   ],
   "out": "docs/api",

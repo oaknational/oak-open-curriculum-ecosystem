@@ -1,7 +1,7 @@
 /**
  * CLI script to run hard query baseline and output structured results.
  *
- * Executes all hard queries against the production 4-way hybrid search
+ * Executes all queries against the production 4-way hybrid search
  * and outputs per-query results for baseline documentation.
  *
  * Usage: pnpm tsx src/lib/search-quality/run-baseline.ts
@@ -18,20 +18,17 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const envLocalPath = resolve(thisDir, '../../../.env.local');
 dotenvConfig({ path: envLocalPath });
 
-import {
-  MATHS_SECONDARY_HARD_QUERIES,
-  UNIT_HARD_GROUND_TRUTH_QUERIES,
-} from './ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from './ground-truth/index.js';
 import {
   processQueryResult,
   calculateCategoryMrr,
   calculateOverallMrr,
 } from './baseline-runner.js';
 import type { QueryBaselineResult } from './baseline-runner.js';
-import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
+import type { QueryCategory } from './ground-truth/types.js';
 import { esSearch } from '../elastic-http.js';
-import { buildLessonRrfRequest, buildUnitRrfRequest } from '../hybrid-search/rrf-query-builders.js';
-import type { SearchLessonsIndexDoc, SearchUnitRollupDoc } from '../../types/oak.js';
+import { buildLessonRrfRequest } from '../hybrid-search/rrf-query-builders.js';
+import type { SearchLessonsIndexDoc } from '../../types/oak.js';
 
 /** All query categories for iteration */
 const ALL_CATEGORIES: readonly QueryCategory[] = [
@@ -39,7 +36,6 @@ const ALL_CATEGORIES: readonly QueryCategory[] = [
   'natural-expression',
   'imprecise-input',
   'cross-topic',
-  'pedagogical-intent',
 ];
 
 /**
@@ -62,45 +58,12 @@ async function searchLessons(
   };
 }
 
-/**
- * Search units using 4-way hybrid.
- */
-async function searchUnits(
-  query: string,
-): Promise<{ results: readonly string[]; latencyMs: number }> {
-  const start = performance.now();
-  const request = buildUnitRrfRequest({ text: query, size: 10, subject: 'maths', keyStage: 'ks4' });
-  const response = await esSearch<SearchUnitRollupDoc>(request);
-  return {
-    results: response.hits.hits.map((hit) => hit._source.unit_slug),
-    latencyMs: performance.now() - start,
-  };
-}
-
-/** Run baseline for all lesson hard queries. */
+/** Run baseline for all lesson queries. */
 async function runLessonBaseline(): Promise<readonly QueryBaselineResult[]> {
   const results: QueryBaselineResult[] = [];
-  for (const query of MATHS_SECONDARY_HARD_QUERIES) {
+  for (const query of MATHS_SECONDARY_ALL_QUERIES) {
     const { results: actualResults, latencyMs } = await searchLessons(query.query);
     results.push(processQueryResult(query, actualResults, latencyMs));
-  }
-  return results;
-}
-
-/** Run baseline for all unit hard queries. */
-async function runUnitBaseline(): Promise<readonly QueryBaselineResult[]> {
-  const results: QueryBaselineResult[] = [];
-  for (const query of UNIT_HARD_GROUND_TRUTH_QUERIES) {
-    // UnitGroundTruthQuery now has all required fields, so we can use it directly
-    const standardQuery: GroundTruthQuery = {
-      query: query.query,
-      expectedRelevance: query.expectedRelevance,
-      category: query.category,
-      priority: query.priority,
-      description: query.description,
-    };
-    const { results: actualResults, latencyMs } = await searchUnits(query.query);
-    results.push(processQueryResult(standardQuery, actualResults, latencyMs));
   }
   return results;
 }
@@ -128,7 +91,7 @@ function formatCategoryRow(
 /** Output formatted results table for a content type. */
 function outputResultsTable(contentType: string, results: readonly QueryBaselineResult[]): void {
   console.log(
-    `\n${'='.repeat(100)}\n${contentType.toUpperCase()} HARD QUERY BASELINE\n${'='.repeat(100)}`,
+    `\n${'='.repeat(100)}\n${contentType.toUpperCase()} QUERY BASELINE\n${'='.repeat(100)}`,
   );
   console.log('\nPER-QUERY RESULTS:\n' + '-'.repeat(100));
   console.log(
@@ -159,16 +122,13 @@ function outputResultsTable(contentType: string, results: readonly QueryBaseline
 /** Main entry point. */
 async function main(): Promise<void> {
   console.log(
-    'Running hard query baseline...\nConfiguration: 4-way RRF hybrid, Subject: Maths KS4\n',
+    'Running query baseline...\nConfiguration: 4-way RRF hybrid, Subject: Maths Secondary\n',
   );
-  console.log('Executing lesson hard queries...');
+  console.log('Executing lesson queries...');
   const lessonResults = await runLessonBaseline();
   outputResultsTable('Lessons', lessonResults);
-  console.log('\nExecuting unit hard queries...');
-  const unitResults = await runUnitBaseline();
-  outputResultsTable('Units', unitResults);
   console.log(
-    `\n${'='.repeat(60)}\nSUMMARY: Lesson MRR=${calculateOverallMrr(lessonResults).toFixed(3)}, Unit MRR=${calculateOverallMrr(unitResults).toFixed(3)}\n${'='.repeat(60)}`,
+    `\n${'='.repeat(60)}\nSUMMARY: Lesson MRR=${calculateOverallMrr(lessonResults).toFixed(3)}\n${'='.repeat(60)}`,
   );
 }
 

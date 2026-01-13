@@ -1,22 +1,21 @@
 /**
  * KS4 English ground truth queries for search quality evaluation.
  *
- * Covers Year 10-11 GCSE English Literature set texts.
+ * **Updated 2026-01-11**: Per M3 plan, KS4 queries are now integrated
+ * into the main secondary entry. This module exports an empty array
+ * for backward compatibility.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../../types';
 
-import { ENGLISH_KS4_SET_TEXT_QUERIES } from './set-texts';
-
 /**
  * All KS4 English ground truth queries.
  *
- * Total: 5 queries focused on set texts.
+ * Empty array - KS4 queries integrated into secondary entry.
  */
-export const ENGLISH_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...ENGLISH_KS4_SET_TEXT_QUERIES,
-] as const;
+export const ENGLISH_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [] as const;
 
-export { ENGLISH_KS4_SET_TEXT_QUERIES } from './set-texts';
+// Legacy export for backward compatibility
+export const ENGLISH_KS4_SET_TEXT_QUERIES: readonly GroundTruthQuery[] = [] as const;

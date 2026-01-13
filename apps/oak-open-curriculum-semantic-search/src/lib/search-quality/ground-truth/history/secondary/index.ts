@@ -1,35 +1,26 @@
 /**
- * SECONDARY History ground truth queries.
+ * Secondary History ground truth queries for search quality evaluation.
+ *
+ * **Structure (2026-01-11)**: 4 queries total, 1 per category, AI-curated.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../types';
 
-import { HARD_QUERIES_SECONDARY_HISTORY } from './hard-queries';
-import { MEDIEVAL_SECONDARY_QUERIES } from './medieval';
-import { MODERN_SECONDARY_QUERIES } from './modern';
+import { HISTORY_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { HISTORY_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { HISTORY_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { HISTORY_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
-/**
- * All standard SECONDARY History ground truth queries.
- */
-export const HISTORY_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...MEDIEVAL_SECONDARY_QUERIES,
-  ...MODERN_SECONDARY_QUERIES,
-] as const;
-
-/**
- * Hard SECONDARY History ground truth queries.
- */
-export const HISTORY_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_SECONDARY_HISTORY;
-
-/**
- * All SECONDARY History ground truth queries.
- */
 export const HISTORY_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...HISTORY_SECONDARY_STANDARD_QUERIES,
-  ...HISTORY_SECONDARY_HARD_QUERIES,
+  ...HISTORY_SECONDARY_PRECISE_TOPIC,
+  ...HISTORY_SECONDARY_NATURAL_EXPRESSION,
+  ...HISTORY_SECONDARY_IMPRECISE_INPUT,
+  ...HISTORY_SECONDARY_CROSS_TOPIC,
 ] as const;
 
-export { HARD_QUERIES_SECONDARY_HISTORY, MEDIEVAL_SECONDARY_QUERIES, MODERN_SECONDARY_QUERIES };
+export { HISTORY_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { HISTORY_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { HISTORY_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { HISTORY_SECONDARY_PRECISE_TOPIC } from './precise-topic';

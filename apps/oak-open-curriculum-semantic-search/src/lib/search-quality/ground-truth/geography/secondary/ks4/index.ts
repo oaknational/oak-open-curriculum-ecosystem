@@ -1,18 +1,10 @@
 /**
- * KS4 Geography ground truth queries.
+ * KS4 Geography ground truth queries - empty for backward compatibility.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../../types';
 
-import { GEOGRAPHY_KS4_FIELDWORK_QUERIES } from './fieldwork';
-
-/**
- * All KS4 Geography ground truth queries.
- */
-export const GEOGRAPHY_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...GEOGRAPHY_KS4_FIELDWORK_QUERIES,
-] as const;
-
-export { GEOGRAPHY_KS4_FIELDWORK_QUERIES } from './fieldwork';
+export const GEOGRAPHY_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export const GEOGRAPHY_KS4_FIELDWORK_QUERIES: readonly GroundTruthQuery[] = [] as const;

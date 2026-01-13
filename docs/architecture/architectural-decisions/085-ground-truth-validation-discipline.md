@@ -1,9 +1,41 @@
 # ADR-085: Ground Truth Validation Discipline
 
 **Status**: ACCEPTED  
-**Date**: 2025-12-24 (Updated: 2026-01-09)  
+**Date**: 2025-12-24 (Updated: 2026-01-11)  
 **Decision Makers**: Development Team  
 **Related**: [ADR-082](082-fundamentals-first-search-strategy.md), [ADR-081](081-search-approach-evaluation-framework.md), [ADR-098](098-ground-truth-registry.md)
+
+## Critical Understanding: What Ground Truths Measure (2026-01-11)
+
+### Measurement Scope
+
+| What We Thought                                  | What We're Actually Measuring                                  |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| "Does search help teachers find useful content?" | "Did search return the exact slugs we arbitrarily wrote down?" |
+
+**Ground truths test expected slug position, NOT user satisfaction.**
+
+### Measurement Scope Disclaimer (MANDATORY)
+
+**All reporting must include:**
+
+> **Measurement Scope**: Ground truth metrics measure expected slug position, not user satisfaction. A query may receive low MRR while search returns useful results.
+
+### What Ground Truths CAN Tell Us
+
+| Question                               | Quality                                             |
+| -------------------------------------- | --------------------------------------------------- |
+| "Did search change?"                   | ✅ Good — metric changes indicate something changed |
+| "Do expected slugs appear in results?" | ✅ Good — direct measurement                        |
+| "Is performance acceptable?"           | ✅ Good — p95 latency is valid                      |
+
+### What They CANNOT Tell Us
+
+| Question                    | Why Not                              |
+| --------------------------- | ------------------------------------ |
+| "Are teachers satisfied?"   | No user testing                      |
+| "Is quality good enough?"   | Spot checks, not comprehensive       |
+| "Which approach is better?" | Only measures expected slug position |
 
 ## Critical Understanding: Three-Stage Validation
 
@@ -257,10 +289,10 @@ Ground truths form a **subject × phase × category matrix** that must have cons
 #### The Validation Matrix
 
 ```text
-Subject (16) × Phase (2) × Category (5) = Consistent Coverage
+Subject (16) × Phase (2) × Category (4) = Consistent Coverage
 ```
 
-**Outcome-Oriented Framework (2026-01-09)**
+**Outcome-Oriented Framework (2026-01-10)**
 
 Categories are structured around **user outcomes** rather than technical challenges:
 
@@ -270,13 +302,12 @@ Categories are structured around **user outcomes** rather than technical challen
 | `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High     | **YES**  | 2+  |
 | `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical | **YES**  | 1+  |
 | `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium   | **YES**  | 1+  |
-| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | High     | **YES**  | 1+  |
 
-**Minimum per entry**: 9-11 queries covering all 5 required categories.
+**Minimum per entry**: 8+ queries covering all 4 required categories.
 
 **Enforcement**: Validation check 16 (`category-coverage`) enforces these minimums programmatically. Entries failing this check cannot pass Stage 2 validation.
 
-#### Category Migration (2026-01-09)
+#### Category Migration (2026-01-10)
 
 Legacy categories have been migrated to outcome-oriented categories:
 
@@ -288,7 +319,6 @@ Legacy categories have been migrated to outcome-oriented categories:
 | `colloquial`              | `natural-expression` | 24 queries   |
 | `misspelling`             | `imprecise-input`    | 34 queries   |
 | `multi-concept`           | `cross-topic`        | 16 queries   |
-| `intent-based`            | `pedagogical-intent` | 2 queries    |
 
 Legacy categories are still accepted for backward compatibility but deprecated.
 
@@ -310,9 +340,8 @@ For **EACH** subject-phase entry, verify:
 - [ ] Contains 2+ `natural-expression` queries
 - [ ] Contains 1+ `imprecise-input` query
 - [ ] Contains 1+ `cross-topic` query
-- [ ] Contains 1+ `pedagogical-intent` query
 
-**ALL 5 categories are REQUIRED. If any category is missing → Add queries before the entry is considered complete.**
+**ALL 4 categories are REQUIRED. If any category is missing → Add queries before the entry is considered complete.**
 
 ## Rationale
 

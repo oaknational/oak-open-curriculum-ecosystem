@@ -71,6 +71,12 @@ function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
   return arr.every(isEsHit);
 }
 
+/**
+ * Type for the search function, enabling dependency injection for testability.
+ * @see ADR-078 Dependency Injection for Testability
+ */
+export type EsSearchFn = <T>(body: EsSearchRequest) => Promise<EsSearchResponse<T>>;
+
 export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchResponse<T>> {
   const client = esClient();
   const res = await client.search<T, Record<string, estypes.AggregationsAggregate>>(

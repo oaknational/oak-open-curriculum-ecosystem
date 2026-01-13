@@ -4,7 +4,7 @@ All of these rules MUST be followed at all times.
 
 ## First Question
 
-Always apply the first question; **Ask: could it be simpler without compromising quality?**
+Always apply the first question; **Ask: could it be simpler _without compromising quality_?**. The answer will often be no, that is fine, but bring real critically thinking to the question each time.
 
 ## Core Rules
 

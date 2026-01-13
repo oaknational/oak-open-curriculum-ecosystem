@@ -1,28 +1,21 @@
 /**
- * SECONDARY Art ground truth queries.
- *
+ * Secondary Art ground truth queries - 4 queries, 1 per category, AI-curated.
  * @packageDocumentation
  */
-
 import type { GroundTruthQuery } from '../../types';
+import { ART_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { ART_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { ART_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { ART_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
-import { ART_SECONDARY_HARD_QUERIES } from './hard-queries';
-import { ART_SECONDARY_IDENTITY_QUERIES } from './identity-expression';
-import { ART_SECONDARY_MOVEMENTS_QUERIES } from './art-movements';
-
-export const ART_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...ART_SECONDARY_MOVEMENTS_QUERIES,
-  ...ART_SECONDARY_IDENTITY_QUERIES,
-] as const;
-
-export { ART_SECONDARY_HARD_QUERIES };
-
-/**
- * All SECONDARY Art ground truth queries.
- *
- * Total: 9 queries (6 standard + 3 hard).
- */
 export const ART_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...ART_SECONDARY_STANDARD_QUERIES,
-  ...ART_SECONDARY_HARD_QUERIES,
+  ...ART_SECONDARY_PRECISE_TOPIC,
+  ...ART_SECONDARY_NATURAL_EXPRESSION,
+  ...ART_SECONDARY_IMPRECISE_INPUT,
+  ...ART_SECONDARY_CROSS_TOPIC,
 ] as const;
+
+export { ART_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { ART_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { ART_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { ART_SECONDARY_PRECISE_TOPIC } from './precise-topic';

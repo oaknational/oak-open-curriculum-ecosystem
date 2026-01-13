@@ -97,12 +97,10 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
 
   // QueryCategory - outcome-oriented framework (2026-01-09)
   lines.push(
-    '/** Query categories. New: precise-topic, natural-expression, imprecise-input, cross-topic, pedagogical-intent. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */',
+    '/** Query categories. New: precise-topic, natural-expression, imprecise-input, cross-topic. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */',
   );
   lines.push('export const QueryCategorySchema = z.enum([');
-  lines.push(
-    "  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic', 'pedagogical-intent',",
-  ); // New
+  lines.push("  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic',"); // New
   lines.push(
     "  'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',",
   ); // Legacy

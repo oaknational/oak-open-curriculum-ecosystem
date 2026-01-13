@@ -1,28 +1,21 @@
 /**
- * SECONDARY Computing ground truth queries.
- *
+ * Secondary Computing ground truth queries - 4 queries, 1 per category, AI-curated.
  * @packageDocumentation
  */
-
 import type { GroundTruthQuery } from '../../types';
+import { COMPUTING_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { COMPUTING_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { COMPUTING_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { COMPUTING_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
-import { COMPUTING_SECONDARY_DATA_SYSTEMS_QUERIES } from './data-systems';
-import { COMPUTING_SECONDARY_HARD_QUERIES } from './hard-queries';
-import { COMPUTING_SECONDARY_PROGRAMMING_QUERIES } from './programming';
-
-export const COMPUTING_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...COMPUTING_SECONDARY_PROGRAMMING_QUERIES,
-  ...COMPUTING_SECONDARY_DATA_SYSTEMS_QUERIES,
-] as const;
-
-export { COMPUTING_SECONDARY_HARD_QUERIES };
-
-/**
- * All SECONDARY Computing ground truth queries.
- *
- * Total: 9 queries (6 standard + 3 hard).
- */
 export const COMPUTING_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...COMPUTING_SECONDARY_STANDARD_QUERIES,
-  ...COMPUTING_SECONDARY_HARD_QUERIES,
+  ...COMPUTING_SECONDARY_PRECISE_TOPIC,
+  ...COMPUTING_SECONDARY_NATURAL_EXPRESSION,
+  ...COMPUTING_SECONDARY_IMPRECISE_INPUT,
+  ...COMPUTING_SECONDARY_CROSS_TOPIC,
 ] as const;
+
+export { COMPUTING_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { COMPUTING_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { COMPUTING_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { COMPUTING_SECONDARY_PRECISE_TOPIC } from './precise-topic';

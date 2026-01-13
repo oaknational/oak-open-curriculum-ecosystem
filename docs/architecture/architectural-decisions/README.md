@@ -107,6 +107,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-096: ES Bulk Retry Strategy](096-es-bulk-retry-strategy.md)
 - [ADR-097: Context Enrichment Architecture](097-context-enrichment-architecture.md)
 - [ADR-098: Ground Truth Registry as Single Source of Truth](098-ground-truth-registry.md)
+- [ADR-099: Transcript-Aware RRF Score Normalisation](099-transcript-aware-rrf-normalisation.md)
 
 ## Key Architectural Decisions
 
@@ -150,6 +151,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-094](094-has-transcript-field.md)** - `has_transcript` field for filtering/debugging
 - **[ADR-095](095-missing-transcript-handling.md)** - Missing transcript handling (omit content fields, don't pollute index)
 - **[ADR-096](096-es-bulk-retry-strategy.md)** - Two-tier retry for ELSER queue overflow recovery
+- **[ADR-099](099-transcript-aware-rrf-normalisation.md)** - Post-RRF score normalisation for transcript-less documents
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for detailed architecture.
 

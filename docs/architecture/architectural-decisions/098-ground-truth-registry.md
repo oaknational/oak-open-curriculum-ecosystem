@@ -1,9 +1,34 @@
 # ADR-098: Ground Truth Registry as Single Source of Truth
 
 **Status**: Accepted  
-**Date**: 2026-01-05 (Updated: 2026-01-09)  
+**Date**: 2026-01-05 (Updated: 2026-01-11)  
 **Decision Makers**: Engineering Team  
 **Context**: M3 Phase 7a — Unified Evaluation Infrastructure
+
+## Critical Understanding: What Ground Truths Measure (2026-01-11)
+
+### Measurement Scope
+
+| What We Thought                                  | What We're Actually Measuring                                  |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| "Does search help teachers find useful content?" | "Did search return the exact slugs we arbitrarily wrote down?" |
+
+**Ground truths test expected slug position, NOT user satisfaction.**
+
+### Target Structure (Post-Restructure)
+
+| Dimension             | Value   |
+| --------------------- | ------- |
+| Subject-phase entries | 30      |
+| Categories per entry  | 4       |
+| Queries per category  | **1**   |
+| **Total queries**     | **112** |
+
+### Measurement Scope Disclaimer (MANDATORY)
+
+**All reporting must include:**
+
+> **Measurement Scope**: Ground truth metrics measure expected slug position, not user satisfaction. A query may receive low MRR while search returns useful results.
 
 ## Critical Understanding: Three-Stage Validation
 
@@ -215,7 +240,7 @@ The registry is validated against generated types from bulk data:
 
 Ground truths form a **subject × phase × category matrix** that must have consistent coverage.
 
-**Outcome-Oriented Framework (2026-01-09)**
+**Outcome-Oriented Framework (2026-01-10)**
 
 Categories are structured around **user outcomes** rather than technical challenges:
 
@@ -225,9 +250,8 @@ Categories are structured around **user outcomes** rather than technical challen
 | `natural-expression` | Teacher uses everyday language | System bridges vocabulary   | High     | **YES**  | 2+  |
 | `imprecise-input`    | Teacher makes typing errors    | System recovers from errors | Critical | **YES**  | 1+  |
 | `cross-topic`        | Teacher wants intersection     | System finds overlaps       | Medium   | **YES**  | 1+  |
-| `pedagogical-intent` | Teacher describes goal         | System understands purpose  | High     | **YES**  | 1+  |
 
-**Minimum per entry**: 9-11 queries covering all 5 required categories.
+**Minimum per entry**: 8+ queries covering all 4 required categories.
 
 **Category Migration**: Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are still accepted for backward compatibility but deprecated.
 

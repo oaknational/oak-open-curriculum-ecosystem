@@ -12,9 +12,30 @@ Structured evaluation and experimentation for the Oak Curriculum ecosystem.
 
 ---
 
-## 🔄 Unified Evaluation Infrastructure Ready for Testing (2026-01-06)
+## 🔄 Current Priority: Benchmark & Iterate (2026-01-13)
 
-**Status**: Phases 1-7 built. Phase 8 (run baselines to validate) pending.
+**RRF architecture fixed.** Ground truths restructured (120 queries, 30 entries). Ready for benchmarking.
+
+**Prerequisite complete**: ADR-099 — Transcript-Aware RRF Score Normalisation
+
+**Goal**: Iterate until the constraining factor is **search quality**, not ground truth quality.
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm benchmark --all --verbose  # Run benchmarks
+# Analyse failures → Fix ground truths OR confirm search is the bottleneck
+```
+
+| Failure Type | Action |
+|--------------|--------|
+| Ground truth wrong | Fix expected slugs, re-run benchmark |
+| Search wrong | Ground truths validated, proceed to search improvements |
+
+---
+
+## Unified Evaluation Infrastructure (2026-01-06)
+
+**Status**: Infrastructure built. Benchmark validation in progress.
 
 | Dimension | Current | Target | Status |
 |-----------|---------|--------|--------|
@@ -174,7 +195,7 @@ cd apps/oak-open-curriculum-semantic-search
 pnpm tsx evaluation/validation/validate-ground-truth.ts
 
 # Evaluate (measure effects of changes)
-pnpm benchmark --all                    # All 28 subject/phase entries
+pnpm benchmark --all                    # All 30 subject/phase entries
 pnpm benchmark --subject maths          # One subject
 pnpm benchmark --phase primary          # One phase
 

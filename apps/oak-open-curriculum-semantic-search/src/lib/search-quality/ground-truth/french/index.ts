@@ -2,11 +2,8 @@
  * French ground truth queries for search quality evaluation.
  *
  * This module aggregates ground truths by phase:
- * - **Primary** (KS2): Vocabulary, grammar, everyday topics
- * - **Secondary** (KS3-4): Advanced grammar, literature, culture
- *
- * **IMPORTANT**: French lessons lack transcripts. Ground truths
- * test structural fields only.
+ * - **Primary** (KS2): Vocabulary, grammar, verbs, everyday topics
+ * - **Secondary** (KS3-4): Advanced grammar, tenses, negation
  *
  * @packageDocumentation
  */
@@ -18,6 +15,8 @@ import { FRENCH_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All French ground truth queries across all phases.
+ *
+ * Total: 8 queries (4 Primary + 4 Secondary).
  */
 export const FRENCH_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...FRENCH_PRIMARY_ALL_QUERIES,
@@ -25,19 +24,7 @@ export const FRENCH_ALL_QUERIES: readonly GroundTruthQuery[] = [
 ] as const;
 
 // Re-export primary
-export {
-  FRENCH_PRIMARY_ALL_QUERIES,
-  FRENCH_PRIMARY_HARD_QUERIES,
-  FRENCH_PRIMARY_STANDARD_QUERIES,
-} from './primary';
+export { FRENCH_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export {
-  FRENCH_SECONDARY_ALL_QUERIES,
-  FRENCH_SECONDARY_HARD_QUERIES,
-  FRENCH_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-
-// Legacy exports
-export const FRENCH_STANDARD_QUERIES = FRENCH_ALL_QUERIES;
-export const FRENCH_HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export { FRENCH_SECONDARY_ALL_QUERIES } from './secondary';

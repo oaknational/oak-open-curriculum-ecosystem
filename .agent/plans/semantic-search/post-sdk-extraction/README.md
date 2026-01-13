@@ -15,15 +15,13 @@
 | [tier-4-ai-enhancement.md](tier-4-ai-enhancement.md) | Tiers 1-3 exhausted | MEDIUM | LLM pre-processing, intent classification |
 | [advanced-features.md](advanced-features.md) | SDK stable | LOW | RAG, knowledge graph, multi-vector fields |
 
-### ⚠️ Critical: MFL Multilingual Embeddings
+### MFL Search Performance
 
 **[mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md)** is HIGH PRIORITY because:
 
 - MFL subjects have the worst search performance (French: 0.190, German: 0.194)
-- ELSER v2 is (hypothetically) English-only
+- MFL lessons have almost no transcripts (0.2% coverage vs 100% for Maths)
 - Teachers of French/Spanish/German deserve working search
-
-**However**, before implementation, we MUST verify the hypothesis that ELSER is the cause. See the plan for verification steps.
 
 ---
 

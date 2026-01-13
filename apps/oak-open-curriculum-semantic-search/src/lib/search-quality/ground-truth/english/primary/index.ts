@@ -1,45 +1,43 @@
 /**
- * Primary (KS1/KS2) English ground truth queries.
+ * Primary English ground truth queries for search quality evaluation.
  *
- * Aggregates all Primary English ground truth across curriculum areas:
- * - Reading (traditional tales, narrative texts, book clubs)
- * - Writing (narrative, diary, non-fiction)
+ * **Structure (2026-01-11)**:
+ * 4 queries total, 1 per category, AI-curated for accuracy.
+ *
+ * | Category | Query | MRR |
+ * |----------|-------|-----|
+ * | precise-topic | The BFG reading comprehension Roald Dahl Year 3 | 1.000 |
+ * | natural-expression | that Roald Dahl book with the giant BFG reading | 1.000 |
+ * | imprecise-input | narative writing storys iron man Year 3 | 0.167 |
+ * | cross-topic | writing and grammar tenses together | 1.000 |
+ *
+ * **Measurement Scope**: These queries test expected slug position,
+ * NOT user satisfaction. See audit report for details.
  *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../../types';
 
-import { HARD_QUERIES_PRIMARY_ENGLISH } from './hard-queries';
-import { READING_PRIMARY_QUERIES } from './reading';
-import { WRITING_PRIMARY_QUERIES } from './writing';
+import { ENGLISH_PRIMARY_CROSS_TOPIC } from './cross-topic';
+import { ENGLISH_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+import { ENGLISH_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+import { ENGLISH_PRIMARY_PRECISE_TOPIC } from './precise-topic';
 
 /**
- * All standard Primary English ground truth queries.
+ * All Primary English ground truth queries.
  *
- * Total: 10 queries across 2 curriculum areas.
- */
-export const ENGLISH_PRIMARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [
-  ...READING_PRIMARY_QUERIES,
-  ...WRITING_PRIMARY_QUERIES,
-] as const;
-
-/**
- * Hard Primary English ground truth queries.
- *
- * Total: 4 queries.
- */
-export const ENGLISH_PRIMARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_PRIMARY_ENGLISH;
-
-/**
- * All Primary English ground truth queries (standard + hard).
- *
- * Total: 14 queries.
+ * Total: 4 queries (1 per category).
  */
 export const ENGLISH_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...ENGLISH_PRIMARY_STANDARD_QUERIES,
-  ...ENGLISH_PRIMARY_HARD_QUERIES,
+  ...ENGLISH_PRIMARY_PRECISE_TOPIC,
+  ...ENGLISH_PRIMARY_NATURAL_EXPRESSION,
+  ...ENGLISH_PRIMARY_IMPRECISE_INPUT,
+  ...ENGLISH_PRIMARY_CROSS_TOPIC,
 ] as const;
 
-export { HARD_QUERIES_PRIMARY_ENGLISH, READING_PRIMARY_QUERIES, WRITING_PRIMARY_QUERIES };
+// Re-export category modules
+export { ENGLISH_PRIMARY_CROSS_TOPIC } from './cross-topic';
+export { ENGLISH_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
+export { ENGLISH_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
+export { ENGLISH_PRIMARY_PRECISE_TOPIC } from './precise-topic';

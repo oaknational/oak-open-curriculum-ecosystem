@@ -16,7 +16,7 @@ import { ART_SECONDARY_ALL_QUERIES } from './secondary';
 /**
  * All Art ground truth queries across all phases.
  *
- * Total: 16 queries (7 Primary + 9 Secondary).
+ * Total: 8 queries (4 Primary + 4 Secondary).
  */
 export const ART_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...ART_PRIMARY_ALL_QUERIES,
@@ -24,19 +24,7 @@ export const ART_ALL_QUERIES: readonly GroundTruthQuery[] = [
 ] as const;
 
 // Re-export primary
-export {
-  ART_PRIMARY_ALL_QUERIES,
-  ART_PRIMARY_HARD_QUERIES,
-  ART_PRIMARY_STANDARD_QUERIES,
-} from './primary';
+export { ART_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export {
-  ART_SECONDARY_ALL_QUERIES,
-  ART_SECONDARY_HARD_QUERIES,
-  ART_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-
-// Legacy exports
-export const ART_STANDARD_QUERIES = ART_ALL_QUERIES;
-export const ART_HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export { ART_SECONDARY_ALL_QUERIES } from './secondary';

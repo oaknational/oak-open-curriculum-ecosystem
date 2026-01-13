@@ -1,22 +1,21 @@
 /**
- * SECONDARY French ground truth queries.
- *
+ * Secondary French ground truth queries - 4 queries, 1 per category, AI-curated.
  * @packageDocumentation
  */
-
 import type { GroundTruthQuery } from '../../types';
-
-import { GRAMMAR_SECONDARY_FRENCH } from './grammar';
-import { HARD_QUERIES_SECONDARY_FRENCH } from './hard-queries';
-
-export const FRENCH_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] =
-  GRAMMAR_SECONDARY_FRENCH;
-export const FRENCH_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] =
-  HARD_QUERIES_SECONDARY_FRENCH;
+import { FRENCH_SECONDARY_CROSS_TOPIC } from './cross-topic';
+import { FRENCH_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+import { FRENCH_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+import { FRENCH_SECONDARY_PRECISE_TOPIC } from './precise-topic';
 
 export const FRENCH_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...FRENCH_SECONDARY_STANDARD_QUERIES,
-  ...FRENCH_SECONDARY_HARD_QUERIES,
+  ...FRENCH_SECONDARY_PRECISE_TOPIC,
+  ...FRENCH_SECONDARY_NATURAL_EXPRESSION,
+  ...FRENCH_SECONDARY_IMPRECISE_INPUT,
+  ...FRENCH_SECONDARY_CROSS_TOPIC,
 ] as const;
 
-export { GRAMMAR_SECONDARY_FRENCH, HARD_QUERIES_SECONDARY_FRENCH };
+export { FRENCH_SECONDARY_CROSS_TOPIC } from './cross-topic';
+export { FRENCH_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
+export { FRENCH_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
+export { FRENCH_SECONDARY_PRECISE_TOPIC } from './precise-topic';

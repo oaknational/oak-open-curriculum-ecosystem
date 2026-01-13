@@ -1,8 +1,67 @@
 # Experimental Protocol for Search Quality Evaluation
 
-**Last Updated**: 2026-01-06
-**Status**: Active
+**Last Updated**: 2026-01-13  
+**Status**: Active  
 **Purpose**: Canonical reference for how to design, execute, record, and learn from search experiments.
+
+---
+
+## ✅ RRF Architecture Fixed (2026-01-13)
+
+Post-RRF score normalisation implemented (ADR-099). MFL/PE subjects no longer penalised.
+
+---
+
+## 🔄 Current Priority: Benchmark & Iterate (2026-01-13)
+
+**RRF is correct.** Now validate ground truths through benchmarking.
+
+**Goal**: Iterate until the constraining factor is **search quality**, not ground truth quality.
+
+```
+1. Run benchmark     → pnpm benchmark --all
+2. Analyse failures  → Ground truth issue OR search issue?
+3. If GT issue       → Fix expected slugs, re-run
+4. If search issue   → Ground truths validated, proceed to experiments
+```
+
+**Ground truths are validated when** low MRR scores are caused by search limitations, not wrong expected slugs.
+
+---
+
+## Critical Understanding (2026-01-11)
+
+### What Ground Truth Metrics Actually Measure
+
+| What We Thought | What We're Actually Measuring |
+|-----------------|------------------------------|
+| "Does search help teachers find useful content?" | "Did search return the exact slugs we arbitrarily wrote down?" |
+
+**~60% of ground truths were broken or suboptimal.** Search often returns BETTER results than expected slugs.
+
+See: [Audit Report](audits/ground-truth-audit-2026-01.md)
+
+### Measurement Scope Disclaimer (MANDATORY)
+
+**All experiment reports and metrics must include:**
+
+> **Measurement Scope**: Ground truth metrics measure expected slug position, not user satisfaction. A query may receive low MRR while search returns useful results.
+
+### What Ground Truths CAN Tell Us
+
+| Question | Quality |
+|----------|---------|
+| "Did search change?" | ✅ Good — metric changes indicate something changed |
+| "Do expected slugs appear in results?" | ✅ Good — direct measurement |
+| "Is performance acceptable?" | ✅ Good — p95 latency is valid |
+
+### What They CANNOT Tell Us
+
+| Question | Why Not |
+|----------|---------|
+| "Are teachers satisfied?" | No user testing |
+| "Is quality good enough?" | Spot checks, not comprehensive |
+| "Which approach is better?" | Only measures expected slug position |
 
 ---
 
@@ -156,9 +215,8 @@ Every subject-phase entry MUST contain queries from ALL required categories:
 | `natural-expression` | High | **YES** | 2+ | Teacher uses everyday language |
 | `imprecise-input` | Critical | **YES** | 1+ | Teacher makes typing errors |
 | `cross-topic` | Medium | **YES** | 1+ | Teacher wants intersection |
-| `pedagogical-intent` | High | **YES** | 1+ | Teacher describes goal, not topic |
 
-**Minimum per entry**: 9-11 queries covering all 5 required categories.
+**Minimum per entry**: 8+ queries covering all 4 required categories.
 
 **Consistency requirement**: ALL subject-phase pairings must have the SAME category coverage. No entry may omit a required category. This ensures benchmarks are comparable across subjects and phases.
 
@@ -251,7 +309,7 @@ Define before running:
 cd apps/oak-open-curriculum-semantic-search
 
 # Unified benchmark runner (the ONLY evaluation tool)
-pnpm benchmark --all                                    # All 28 subject/phase entries
+pnpm benchmark --all                                    # All 30 subject/phase entries
 pnpm benchmark --subject maths                          # One subject, all phases
 pnpm benchmark --phase secondary                        # One phase, all subjects
 pnpm benchmark --subject maths --phase secondary        # Specific scope
@@ -352,7 +410,6 @@ If metrics changed, update [current-state.md](../plans/semantic-search/current-s
 | `natural-expression` | Teacher uses everyday language | "teach solving for x" |
 | `imprecise-input` | Teacher makes typos | "fotosinthesis" |
 | `cross-topic` | Teacher wants intersection | "algebra with graphs" |
-| `pedagogical-intent` | Teacher describes goal | "extension work for able students" |
 
 ### 6.4 Per-Category Thresholds
 
@@ -421,26 +478,17 @@ After each experiment:
 
 ## 9. Known Limitations & Future Work
 
-### 9.1 ELSER Multilingual Limitation
+### 9.1 MFL Transcript Coverage
 
-**CRITICAL**: ELSER is an English-language model. It cannot effectively process non-English content.
+MFL lessons have almost no transcript data (0.2% coverage vs 100% for Maths/Science).
 
-**Impact on MFL subjects** (French, Spanish, German):
+| Subject | Baseline MRR | Transcript Coverage |
+|---------|--------------|---------------------|
+| French | 0.194 | 0.2% |
+| Spanish | 0.194 | 0.2% |
+| German | 0.200 | 0.2% |
 
-| Subject | Baseline MRR | Root Cause |
-|---------|--------------|------------|
-| French | 0.194 | ELSER cannot semantically match French content |
-| Spanish | 0.194 | ELSER cannot semantically match Spanish content |
-| German | 0.200 | ELSER cannot semantically match German content |
-
-**Potential solutions** (Tier 4/5 work):
-
-1. Multilingual E5 embeddings for MFL content (requires dense vectors)
-2. Query-time translation
-3. MFL-specific BM25 boosting (bypass ELSER)
-4. Multilingual ELSER when/if Elastic releases one
-
-**See**: [ADR-076: ELSER-Only Embedding Strategy](../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md) — explicitly notes "No cross-lingual support: English-only"
+**See**: [mfl-multilingual-embeddings.md](./plans/semantic-search/post-sdk-extraction/mfl-multilingual-embeddings.md)
 
 ### 9.2 Intent-Based Query Gap
 

@@ -46,13 +46,13 @@ describe('runQuery', () => {
         expectedRelevance: { 'test-slug': 3 },
         subject: 'maths',
         phase: 'primary',
-        category: 'pedagogical-intent',
+        category: 'cross-topic',
       };
 
       const result = await runQuery(input, mockSearch);
 
       // Result should include the category from input
-      expect(result.category).toBe('pedagogical-intent');
+      expect(result.category).toBe('cross-topic');
     });
 
     it('should preserve category through all query categories', async () => {
@@ -62,7 +62,6 @@ describe('runQuery', () => {
         'natural-expression',
         'imprecise-input',
         'cross-topic',
-        'pedagogical-intent',
       ];
 
       for (const category of categories) {

@@ -9,7 +9,7 @@ import type { ExperimentResult, QueryResult, SearchConfig } from './types';
 import { buildSearchBody } from './query-builders';
 import { calculateAverages } from './result-analysis';
 import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
-import { MATHS_SECONDARY_STANDARD_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
 
 /** BM25 fields for lesson search. */
 const BM25_FIELDS = [
@@ -114,8 +114,8 @@ export async function runExperiment(
   const latencies: number[] = [];
   let errors = 0;
 
-  for (let i = 0; i < MATHS_SECONDARY_STANDARD_QUERIES.length; i++) {
-    const gt = MATHS_SECONDARY_STANDARD_QUERIES[i];
+  for (let i = 0; i < MATHS_SECONDARY_ALL_QUERIES.length; i++) {
+    const gt = MATHS_SECONDARY_ALL_QUERIES[i];
     if (!gt) {
       continue;
     }
@@ -128,7 +128,7 @@ export async function runExperiment(
         await processQuery(client, gt, useRerank, retrieveSize, rerankSize),
       );
       if ((i + 1) % 10 === 0) {
-        log(`  ${name}: ${i + 1}/${MATHS_SECONDARY_STANDARD_QUERIES.length} queries done`);
+        log(`  ${name}: ${i + 1}/${MATHS_SECONDARY_ALL_QUERIES.length} queries done`);
       }
     } catch (e) {
       errors++;

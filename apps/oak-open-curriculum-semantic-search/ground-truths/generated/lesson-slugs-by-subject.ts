@@ -5,7 +5,7 @@
  * Uses branded string types instead of massive unions (which crash TypeScript).
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-09T10:05:31.309Z
+ * Generated at: 2026-01-10T22:25:17.226Z
  *
  * @packageDocumentation
  */

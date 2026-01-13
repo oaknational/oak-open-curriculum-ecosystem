@@ -175,7 +175,11 @@ export async function clearSdkCache(): Promise<number> {
   });
 }
 
-interface CacheStatus {
+/**
+ * SDK cache connection status.
+ * Used by {@link getSdkCacheStatus} to report cache availability.
+ */
+export interface CacheStatus {
   readonly enabled: boolean;
   readonly connected: boolean;
   readonly keyCount: number;

@@ -25,7 +25,6 @@ import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
  * | `natural-expression` | Teacher uses everyday language | System bridges vocabulary gaps |
  * | `imprecise-input` | Teacher makes typing errors | System recovers from errors |
  * | `cross-topic` | Teacher wants intersection content | System finds concept overlaps |
- * | `pedagogical-intent` | Teacher describes goal, not topic | System understands purpose |
  *
  * ## Migration from Legacy Categories (2026-01-09)
  *
@@ -37,7 +36,6 @@ import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
  * | `colloquial` | `natural-expression` | Informal phrasing |
  * | `misspelling` | `imprecise-input` | Typo tolerance |
  * | `multi-concept` | `cross-topic` | Concept intersection |
- * | `intent-based` | `pedagogical-intent` | Goal-based search |
  *
  * @example
  * // Precise Topic - teacher knows the term
@@ -55,8 +53,7 @@ export type QueryCategory =
   | 'precise-topic'
   | 'natural-expression'
   | 'imprecise-input'
-  | 'cross-topic'
-  | 'pedagogical-intent';
+  | 'cross-topic';
 
 /**
  * Priority weighting for test scenarios.
@@ -105,11 +102,6 @@ export type QueryPriority = 'critical' | 'high' | 'medium' | 'exploratory';
  * - Query genuinely combines multiple distinct concepts
  * - Expected lessons span ALL mentioned concepts
  * - Score=3 lessons are true intersections
- *
- * ### Pedagogical Intent
- * - Query describes teaching GOAL, not curriculum topic
- * - Expected lessons appropriate for described purpose
- * - Lower MRR expectations acceptable (exploratory)
  *
  * @see IR-METRICS.md for how these fields influence metric calculation
  * @see ADR-085 for validation requirements

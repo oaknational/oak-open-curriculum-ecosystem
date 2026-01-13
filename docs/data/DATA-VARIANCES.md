@@ -73,7 +73,7 @@ Coverage is calculated by treating `transcript_sentences` as **missing** when it
 
 ### Implementation
 
-Lessons without transcripts are handled correctly in the indexing code:
+Lessons without transcripts have content fields omitted in the indexing code:
 
 ```typescript
 // From buildLessonDocument() - lesson-document-core.ts
@@ -86,8 +86,6 @@ return {
   lesson_structure_semantic: params.lessonStructure, // ← Always present
 };
 ```
-
-The 4-way RRF retriever uses both content and structure fields, so lessons without transcripts still get matched via structure fields.
 
 ---
 

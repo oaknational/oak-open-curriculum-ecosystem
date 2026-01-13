@@ -11,13 +11,11 @@
 
 import { getApiKey } from './api-helpers';
 import { collectSlugsFromQueries } from './slug-collectors';
-import { checkLessonExists, checkUnitExists, checkSequenceExists } from './api-checkers';
+import { checkLessonExists, checkSequenceExists } from './api-checkers';
 import { validateCategory, printResults, validateQueryStructure } from './validation-helpers';
 import {
   getAllGroundTruthEntries,
   DIAGNOSTIC_QUERIES,
-  UNIT_GROUND_TRUTH_QUERIES,
-  UNIT_HARD_GROUND_TRUTH_QUERIES,
 } from '../../../src/lib/search-quality/ground-truth/index';
 import {
   SEQUENCE_GROUND_TRUTH_QUERIES,
@@ -29,7 +27,7 @@ import type { ValidationCategory } from './types';
  * Validates all ground truth data against the Oak API.
  *
  * Uses the Ground Truth Registry to iterate over all subject/phase combinations,
- * plus validates diagnostic, unit, and sequence ground truths.
+ * plus validates diagnostic and sequence ground truths.
  */
 export async function runValidation(): Promise<void> {
   console.log('Ground Truth Validation');
@@ -45,7 +43,7 @@ export async function runValidation(): Promise<void> {
 /**
  * Validate query structure (fast, no API calls).
  *
- * Validates all queries from the registry plus diagnostic/unit/sequence queries.
+ * Validates all queries from the registry plus diagnostic/sequence queries.
  */
 function validateStructure(): void {
   console.log('Validating query structure...');
@@ -57,13 +55,11 @@ function validateStructure(): void {
   // Include diagnostic queries
   const allLessonQueries = [...allRegistryQueries, ...DIAGNOSTIC_QUERIES];
 
-  // Unit and sequence queries
-  const unitQueries = [...UNIT_GROUND_TRUTH_QUERIES, ...UNIT_HARD_GROUND_TRUTH_QUERIES];
+  // Sequence queries
   const sequenceQueries = [...SEQUENCE_GROUND_TRUTH_QUERIES, ...SEQUENCE_HARD_GROUND_TRUTH_QUERIES];
 
   const structureErrors = [
     ...validateQueryStructure(allLessonQueries, 'Lessons'),
-    ...validateQueryStructure(unitQueries, 'Units'),
     ...validateQueryStructure(sequenceQueries, 'Sequences'),
   ];
 
@@ -83,7 +79,6 @@ function validateStructure(): void {
  * Includes:
  * - All subject/phase combinations from the registry
  * - Diagnostic queries
- * - Unit queries
  * - Sequence queries
  */
 function buildCategories(): readonly ValidationCategory[] {
@@ -96,22 +91,12 @@ function buildCategories(): readonly ValidationCategory[] {
     checker: checkLessonExists,
   }));
 
-  // Add diagnostic, unit, and sequence categories
+  // Add diagnostic and sequence categories
   const additionalCategories: ValidationCategory[] = [
     {
       name: 'Diagnostic Queries',
       entries: collectSlugsFromQueries(DIAGNOSTIC_QUERIES),
       checker: checkLessonExists,
-    },
-    {
-      name: 'Standard Unit Queries',
-      entries: collectSlugsFromQueries(UNIT_GROUND_TRUTH_QUERIES),
-      checker: checkUnitExists,
-    },
-    {
-      name: 'Hard Unit Queries',
-      entries: collectSlugsFromQueries(UNIT_HARD_GROUND_TRUTH_QUERIES),
-      checker: checkUnitExists,
     },
     {
       name: 'Standard Sequence Queries',

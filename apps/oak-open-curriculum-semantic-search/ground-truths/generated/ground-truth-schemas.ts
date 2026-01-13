@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-09T10:05:31.315Z
+ * Generated at: 2026-01-10T22:25:17.231Z
  *
  * @packageDocumentation
  */
@@ -31,35 +31,10 @@ export const RelevanceScoreSchema = z.union([
 ]);
 export type RelevanceScore = z.infer<typeof RelevanceScoreSchema>;
 
-/**
- * Query categories - outcome-oriented framework (2026-01-09).
- *
- * New categories:
- * - precise-topic: Teacher knows curriculum terminology
- * - natural-expression: Teacher uses everyday language
- * - imprecise-input: Teacher makes typing errors
- * - cross-topic: Teacher wants content spanning multiple areas
- * - pedagogical-intent: Teacher describes goal, not topic
- *
- * Legacy categories (deprecated, for backward compatibility):
- * - naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based
- *
- * @generated
- */
+/** Query categories. New: precise-topic, natural-expression, imprecise-input, cross-topic. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */
 export const QueryCategorySchema = z.enum([
-  // New outcome-oriented categories
-  'precise-topic',
-  'natural-expression',
-  'imprecise-input',
-  'cross-topic',
-  'pedagogical-intent',
-  // Legacy categories (deprecated)
-  'naturalistic',
-  'misspelling',
-  'synonym',
-  'multi-concept',
-  'colloquial',
-  'intent-based',
+  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic',
+  'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',
 ]);
 export type QueryCategory = z.infer<typeof QueryCategorySchema>;
 

@@ -15,6 +15,8 @@ import { COMPUTING_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All Computing ground truth queries across all phases.
+ *
+ * Total: 8 queries (4 Primary + 4 Secondary).
  */
 export const COMPUTING_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ...COMPUTING_PRIMARY_ALL_QUERIES,
@@ -22,19 +24,7 @@ export const COMPUTING_ALL_QUERIES: readonly GroundTruthQuery[] = [
 ] as const;
 
 // Re-export primary
-export {
-  COMPUTING_PRIMARY_ALL_QUERIES,
-  COMPUTING_PRIMARY_HARD_QUERIES,
-  COMPUTING_PRIMARY_STANDARD_QUERIES,
-} from './primary';
+export { COMPUTING_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export {
-  COMPUTING_SECONDARY_ALL_QUERIES,
-  COMPUTING_SECONDARY_HARD_QUERIES,
-  COMPUTING_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-
-// Legacy exports
-export const COMPUTING_STANDARD_QUERIES = COMPUTING_ALL_QUERIES;
-export const COMPUTING_HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
+export { COMPUTING_SECONDARY_ALL_QUERIES } from './secondary';

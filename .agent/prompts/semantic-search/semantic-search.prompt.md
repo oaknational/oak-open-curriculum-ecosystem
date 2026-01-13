@@ -1,129 +1,49 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-10
-**Status**: ✅ **Category Consistency + Benchmark Output Complete** — All 5 categories required, per-category metrics with status indicators (✓✓/✓/~/✗)
+**Last Updated**: 2026-01-13  
+**Status**: 🔄 **Benchmark & Iterate** — Architecture correct, validating ground truths
 
 ---
 
-## 🎯 Current State
+## 🔄 Current Priority: Benchmark & Iterate
 
-### Completed Work (2026-01-10)
+**RRF architecture is correct.** Ground truths are curated (120 queries). Now validate through benchmarking.
 
-1. ✅ **Added `pedagogical-intent` queries to ALL 29 entries** — All 30 entries now have consistent category coverage with all 5 required categories.
-
-2. ✅ **Updated benchmark output to show per-category metrics with status indicators** — Benchmark runs now display per-category grid with MRR, NDCG@10, P@10, R@10, Zero%, and p95ms for each category, with status indicators (✓✓=EXCELLENT, ✓=GOOD, ~=ACCEPTABLE, ✗=BAD) comparing against reference thresholds.
-
-### Why This Matters
-
-- **Category consistency**: Benchmarks are now comparable across subjects. All entries have the same category coverage.
-- **Output granularity**: Per-category metrics reveal category-specific problems that aggregate metrics hide.
-
-### Current State
-
-| Aspect | Status | Notes |
-|--------|--------|-------|
-| Ground truths | ✅ 509 queries, 30 entries | All 5 categories required per entry |
-| Benchmarks | ✅ All 6 metrics collected | Per-category breakdown in output |
-| Validation | ✅ `pedagogical-intent` required | Min 1 per entry enforced |
-
----
-
-## 🚀 Next Work: Phase 8 — Comprehensive Baselines
-
-**Goal**: Run benchmarks for ALL 30 subject-phase combinations, record baselines, identify improvement targets.
-
-### What "Done" Looks Like
-
-- [ ] `baselines.json` updated with fresh measurements for all 30 entries
-- [ ] `EXPERIMENT-LOG.md` has complete per-category tables for each entry
-- [ ] Subjects with MRR < 0.40 identified as improvement targets
-- [ ] Phase 8 marked complete in m3 plan
-
-### First Actions This Session
-
-#### 1. Read Foundation Documents
-
-Before any work, re-read and commit to:
-
-- [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no shortcuts
-- [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test behaviour
-
-#### 2. Verify Current State
+### Immediate Next Step
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm ground-truth:validate          # Must pass (509 queries, 0 errors)
+pnpm benchmark --all --verbose
 ```
 
-#### 3. Run Full Benchmark
+### Iteration Loop
 
-```bash
-pnpm benchmark --all                # All 30 entries, per-category metrics
+```
+1. Run benchmark     → pnpm benchmark --all
+2. Analyse failures  → Is this a ground truth problem or a search problem?
+3. If GT issue       → Fix expected slugs, document rationale
+4. If search issue   → Ground truths validated, search is the bottleneck
+5. Repeat            → Until search quality is the only limiting factor
 ```
 
-#### 4. Record Results
+### Subjects to Watch
 
-Update `evaluation/baselines/baselines.json` with ALL measured metrics:
-
-- MRR, NDCG@10, Precision@10, Recall@10, Zero-Hit Rate, p95 Latency
-
-Document full results in `.agent/evaluations/EXPERIMENT-LOG.md` with complete per-category metrics tables.
-
-**Note**: Results are stored in `baselines.json`, NOT in the registry code. The registry (`entries.ts`) contains only ground truth queries.
+| Subject | Previous Issue | Expected Now |
+|---------|---------------|--------------|
+| French, German, Spanish | 0% transcript coverage, 50% scoring penalty | ✅ Should produce results |
+| PE Primary | ~0.6% transcript coverage | ✅ Should produce results |
+| PE Secondary | ~28.5% transcript coverage | ✅ Should produce results |
 
 ---
 
-## Ground Truth Summary (Stage 3 Complete)
+## ✅ Prerequisites Complete
 
-### Review Statistics (2026-01-09)
-
-| Metric | Value |
-|--------|-------|
-| Total queries reviewed | 509 |
-| Total slugs validated | 1,290 |
-| Subject/phase entries | 30 |
-| Issues found | 1 |
-| Issues fixed | 1 |
-
-### Issue Log
-
-| Entry | Query | Issue | Resolution |
-|-------|-------|-------|------------|
-| maths/primary | times tables year 3 | Wrong category | cross-topic → precise-topic |
-
-### Category Coverage Requirements
-
-**ALL 5 categories are REQUIRED** for consistent cross-subject benchmarking:
-
-| Category | Minimum | Status |
-|----------|---------|--------|
-| `precise-topic` | 4+ | ✅ All 30 entries pass |
-| `natural-expression` | 2+ | ✅ All 30 entries pass |
-| `imprecise-input` | 1+ | ✅ All 30 entries pass |
-| `cross-topic` | 1+ | ✅ All 30 entries pass |
-| `pedagogical-intent` | 1+ | ✅ All 30 entries pass |
-
-All entries now have complete category coverage.
-
-### Deep Verification (Sampling)
-
-15 queries across maths and english verified against lesson summaries:
-
-- Relevance scores match actual lesson content
-- No obviously missing lessons in verified queries
-- Vocabulary bridging works as intended (e.g., "rearrange formulas" → "changing the subject")
-
----
-
-## Workspace
-
-**App**: `apps/oak-open-curriculum-semantic-search/`
-
-**Ground truths**: `src/lib/search-quality/ground-truth/{subject}/{phase}/`
-
-**Bulk data**: `bulk-downloads/{subject}-{phase}.json`
-
-**Registry**: `src/lib/search-quality/ground-truth/registry/`
+| Prerequisite | Status | Details |
+|--------------|--------|---------|
+| RRF architecture | ✅ Fixed | [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md) |
+| Ground truths | ✅ Curated | 120 queries (30 × 4 categories) |
+| Tests | ✅ Passing | 17 unit + 6 integration |
+| Quality gates | ✅ Passing | All gates green |
 
 ---
 
@@ -131,25 +51,53 @@ All entries now have complete category coverage.
 
 | Document | Purpose |
 |----------|---------|
-| [M3 Plan](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md) | Full phase status, design rules |
-| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Three-stage validation discipline |
-| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Ground truth registry design |
-| [Stage 3 Review](../../reviews/stage-3-review-progress.md) | Qualitative review results |
+| [M3 Plan](../../plans/semantic-search/active/m3-revised-phase-aligned-search-quality.md) | **CURRENT**: Benchmark & iterate specification |
+| [Current State](../../plans/semantic-search/current-state.md) | System metrics, ground truth structure |
+| [Roadmap](../../plans/semantic-search/roadmap.md) | Strategic direction |
+| [Completed Work](../../plans/semantic-search/completed.md) | Historical record including RRF fix |
 
 ---
 
-## Commands
+## Ground Truth Scope (IMPORTANT)
+
+Ground truths measure **expected slug position**, NOT user satisfaction.
+
+| What They Tell Us | What They Do NOT Tell Us |
+|-------------------|--------------------------|
+| "Did search change?" | "Are teachers satisfied?" |
+| "Do expected slugs appear?" | "Is quality good enough?" |
+| "Is performance acceptable?" | "Which result is better?" |
+
+**All reporting must include this scope disclaimer.**
+
+---
+
+## Workspace
+
+| Path | Contents |
+|------|----------|
+| `apps/oak-open-curriculum-semantic-search/` | Search app |
+| `src/lib/search-quality/ground-truth/` | Ground truth definitions |
+| `evaluation/analysis/benchmark.ts` | Benchmark runner |
+| `evaluation/baselines/baselines.json` | Baseline storage |
+
+---
+
+## Commands Reference
 
 ```bash
-# Validation (should pass)
-pnpm type-check               # Stage 1: Data integrity
-pnpm ground-truth:validate    # Stage 2: Semantic rules (16 checks)
+cd apps/oak-open-curriculum-semantic-search
 
-# Benchmarks (Phase 8)
-pnpm benchmark --all          # Run all 30 entries
-pnpm benchmark --subject maths --verbose  # Single subject with detail
+# Benchmarks
+pnpm benchmark --all                              # Full benchmark
+pnpm benchmark --subject french --verbose         # Check MFL
+pnpm benchmark --subject physical-education       # Check PE
 
-# Quality gates (after changes)
+# Validation
+pnpm type-check
+pnpm ground-truth:validate
+
+# Quality gates (from repo root)
 cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm type-gen && pnpm build && pnpm type-check
 pnpm lint:fix && pnpm format:root && pnpm markdownlint:root
@@ -159,21 +107,23 @@ pnpm test:ui && pnpm smoke:dev:stub
 
 ---
 
-## Quality Gate Results (2026-01-09)
+## Foundation Documents (MANDATORY)
 
-All gates passed:
+Before any work, read:
 
-| Gate | Status |
-|------|--------|
-| type-gen | ✓ PASS |
-| build | ✓ PASS |
-| type-check | ✓ PASS |
-| lint:fix | ✓ PASS |
-| format:root | ✓ PASS |
-| markdownlint:root | ✓ PASS |
-| test (1061 tests) | ✓ PASS |
-| test:e2e | ✓ PASS |
-| test:e2e:built | ✓ PASS |
-| test:ui | ✓ PASS |
-| smoke:dev:stub | ✓ PASS |
-| ground-truth:validate | ✓ PASS |
+1. [rules.md](../../directives-and-memory/rules.md) — TDD, no type shortcuts, fail fast
+2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
+3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
+
+---
+
+## Value & Impact
+
+**Always ask**: "What value are we delivering, through what impact, for which users?"
+
+| Value | Impact | Users |
+|-------|--------|-------|
+| Validated search quality | Know what's working, what needs improvement | Developers |
+| MFL/PE findability | Teachers can find language and PE content | Teachers |
+| Regression detection | Confidence in search changes | Developers |
+| Clear measurement scope | Honest reporting | Stakeholders |

@@ -1,32 +1,26 @@
 /**
  * Citizenship ground truth queries for search quality evaluation.
  *
+ * This module aggregates ground truths by phase:
+ * - **Secondary** (KS3-4): Democracy, rights, community, law, active citizenship
+ *
+ * Note: Citizenship is only taught at secondary level.
+ *
  * @packageDocumentation
  */
 
 import type { GroundTruthQuery } from '../types';
 
-import {
-  CITIZENSHIP_SECONDARY_ALL_QUERIES,
-  CITIZENSHIP_SECONDARY_HARD_QUERIES,
-  CITIZENSHIP_SECONDARY_STANDARD_QUERIES,
-} from './secondary';
-
-export const CITIZENSHIP_STANDARD_QUERIES: readonly GroundTruthQuery[] =
-  CITIZENSHIP_SECONDARY_STANDARD_QUERIES;
-export const CITIZENSHIP_HARD_QUERIES: readonly GroundTruthQuery[] =
-  CITIZENSHIP_SECONDARY_HARD_QUERIES;
+import { CITIZENSHIP_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All Citizenship ground truth queries.
  *
- * Total: 6 queries (4 standard + 2 hard).
+ * Total: 4 queries (4 Secondary).
  */
-export const CITIZENSHIP_ALL_QUERIES: readonly GroundTruthQuery[] =
-  CITIZENSHIP_SECONDARY_ALL_QUERIES;
+export const CITIZENSHIP_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  ...CITIZENSHIP_SECONDARY_ALL_QUERIES,
+] as const;
 
-export {
-  CITIZENSHIP_SECONDARY_ALL_QUERIES,
-  CITIZENSHIP_SECONDARY_HARD_QUERIES,
-  CITIZENSHIP_SECONDARY_STANDARD_QUERIES,
-};
+// Re-export secondary
+export { CITIZENSHIP_SECONDARY_ALL_QUERIES } from './secondary';
