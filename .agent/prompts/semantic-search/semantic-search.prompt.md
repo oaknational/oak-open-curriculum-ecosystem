@@ -1,7 +1,7 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-01-16  
-**Status**: **Ground Truth Review — In Progress**
+**Last Updated**: 2026-01-17  
+**Status**: **Ground Truth Review — In Progress (9/30 complete)**
 
 ---
 
@@ -46,18 +46,61 @@
 
 ## Current Task: Ground Truth Comprehensive Review
 
-**Progress**: 6/30 subject-phases complete (24/120 ground truths)
+**Progress**: 9/30 subject-phases complete (36/120 ground truths)
 
-**Previous work**: [Sessions 1-5 Log](../../plans/semantic-search/logs/sessions-1-5-log.md) | Session 6: cooking-nutrition/primary
+**Previous work**: [Sessions 1-5 Log](../../plans/semantic-search/logs/sessions-1-5-log.md) | Session 6: cooking-nutrition/primary | Session 7: Post-synonym re-review | Session 8: design-technology (primary + secondary)
 
-### Next Session: cooking-nutrition/secondary
+---
 
-**Target**: Review all 4 categories for cooking-nutrition/secondary.
+### ✅ Prerequisites Complete
+
+| Prerequisite | Status | Date |
+|--------------|--------|------|
+| Synonym Coverage (ADR-100) | ✅ Complete | 2026-01-17 |
+| Post-synonym re-review | ✅ Complete | 2026-01-17 |
+
+**Synonyms**: All 17 subjects have domain-specific synonym files (~580 total).
+
+**Re-review completed (2026-01-17)**:
+
+- art/primary — verified correct
+- art/secondary — verified correct
+- citizenship/secondary — verified correct
+- cooking-nutrition/primary — verified correct (low MRR reveals search quality gaps)
+- cooking-nutrition/secondary — **cross-topic corrected** (was nutrition-theory, now cooking+nutrition)
+
+See: [ADR-100](../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md) | [synonym-complete-coverage.md](../../plans/semantic-search/active/synonym-complete-coverage.md)
+
+---
+
+### Next Session: english (primary + secondary)
+
+**Scope**: 2 subject-phases, 8 ground truths total
+
+| Subject-Phase | Lessons | Synonyms |
+|---------------|---------|----------|
+| english/primary | ~2000+ | english.ts |
+| english/secondary | ~1500+ | english.ts |
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm gt-review --subject cooking-nutrition --phase secondary
+
+# List all lessons first
+jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle)"' bulk-downloads/english-primary.json | wc -l
+jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle)"' bulk-downloads/english-secondary.json | wc -l
+
+# Review english (both phases)
+pnpm gt-review --subject english --phase primary
+pnpm gt-review --subject english --phase secondary
+
+# Benchmark after review
+pnpm benchmark --subject english --verbose
 ```
+
+**Ground truth files**:
+
+- `src/lib/search-quality/ground-truth/english/primary/`
+- `src/lib/search-quality/ground-truth/english/secondary/`
 
 ---
 
@@ -70,27 +113,36 @@ pnpm gt-review --subject cooking-nutrition --phase secondary
 | Tool | Purpose | When to Use |
 |------|---------|-------------|
 | **Bulk data** (`jq`) | Find ALL candidate lessons | Every category — search with multiple terms |
-| **`get-lessons-summary`** | Get keywords, key learning points | Every candidate (5-10 per category) |
-| **`get-units-summary`** | Understand lesson ordering within unit | When query involves skill level (beginner/intro/advanced) |
+| **`get-lessons-summary`** | Get keywords, key learning points | **5-10 candidates per category** (mandatory) |
+| **`get-units-summary`** | Understand lesson ordering within unit | Skill-level queries AND unit exploration |
 | **`get-key-stages-subject-units`** | See unit structure for subject | When exploring curriculum structure |
 | **`gt-review`** | See actual search results | Every category |
 | **Direct ES queries** | Understand retriever behaviour | When debugging unexpected results |
 
-### The Process (Per Category)
+### The Process (Per Category) — DEEP EXPLORATION STANDARD
 
-1. **SEARCH bulk data comprehensively** — `jq` with multiple search terms to find ALL potentially relevant lessons
-2. **GET MCP summaries** — `get-lessons-summary` for ALL promising candidates (5-10), not just existing expected slugs
-3. **GET unit context** — `get-units-summary` to understand lesson ordering (especially for beginner/advanced queries)
-4. **RUN gt-review** — See actual search results and current MRR
-5. **CREATE comparison table** — Systematically compare candidates with key learning points and relevance assessment
-6. **SELECT THE BEST** — Choose slugs that are objectively the best semantic matches
+1. **SEARCH bulk data comprehensively** — `jq` with multiple search terms to find ALL potentially relevant lessons. List ALL lessons in relevant units.
+2. **GET MCP summaries** — `get-lessons-summary` for **5-10 candidates** (not 1-2). Include existing expected slugs AND new candidates.
+3. **GET unit context** — `get-units-summary` to understand lesson ordering. Critical for skill-level queries but useful for all.
+4. **RUN gt-review** — See actual search results and current MRR.
+5. **CREATE comparison table** — Required for every category:
 
-### Anti-Pattern (DO NOT DO THIS)
+   ```
+   | Slug | Keywords | Key Learning | Relevance Score | Notes |
+   |------|----------|--------------|-----------------|-------|
+   ```
 
-- Looking at existing expected slugs
-- Checking they appear in search results
-- Concluding "looks good, no changes needed"
-- Using only `get-lessons-summary` without `get-units-summary` for skill-level queries
+6. **ASK "Am I confident?"** — Before finalising, explicitly ask: "Have I discovered the BEST possible matches through deep exploration, or just assessed if current matches are good enough?"
+7. **SELECT THE BEST** — Choose slugs that are objectively the best semantic matches based on evidence.
+
+### Anti-Patterns (DO NOT DO THIS)
+
+- Looking at existing expected slugs → checking they appear → "looks good" ❌
+- Getting only 1-2 MCP summaries instead of 5-10 ❌
+- Skipping comparison table creation ❌
+- Using only `get-lessons-summary` without exploring unit structure ❌
+- Accepting "good enough" without asking "is this the BEST?" ❌
+- Missing lessons with non-obvious titles (key learning reveals relevance) ❌
 
 ### Session Prerequisites (CHECK FIRST)
 
@@ -106,19 +158,45 @@ Before starting any session:
 
 ---
 
-## Key Learnings (Sessions 1-6)
+## Key Learnings (Sessions 1-8)
+
+### Foundational Principles
 
 1. **Query differentiation**: Ask "What does this query tell us given we're already filtering to [subject] + [phase]?"
 2. **Imprecise-input tests resilience**: We prove that typos and messy input don't break search — the system should still return relevant results despite input errors (enabled by BM25 fuzziness + ELSER semantics + RRF combination)
-3. **Curriculum exploration**: Use MCP tools to find qualitatively best matches, not just top search results
-4. **Expected slugs must match query intent**: Replace slugs that don't actually cover the query topic (e.g., "programming-sprites" replaced with "programming-sequences" for query about sequences)
-5. **Expected slugs must match skill level**: "coding for beginners" should return KS3 intro lessons, not KS4 advanced topics like "good programming practices"
-6. **Semantic search understands meaning, not just keywords**: For "databse querying lessons", semantic search correctly ranks SQL lessons higher than database-structure lessons because SQL SELECT is literally about querying. Expected slugs should match semantic intent, not just title keywords.
-7. **Verify slug content matches query semantics**: A lesson in a "painting" unit may not be about painting. Use MCP `get-lessons-summary` to verify keywords and key learning points match query intent.
-8. **Use MCP `get-units-summary` to understand lesson ordering**: For "beginner" queries, use the unit summary to identify which lessons are FIRST in the unit (true beginner content) vs END of unit (capstone/advanced). Lessons 1-3 are typically foundational; Lessons 5-6 often assume prior knowledge.
-9. **Ground truth correctness over benchmark scores**: If the semantically correct slugs don't rank well, the ground truth should still use them. A lower MRR reveals search quality issues — that's valuable information, not a problem to hide.
-10. **Review ALL lessons in the pool**: List all lessons (e.g., `jq '.lessons[]' | sort`) and scan the full list. MCP key learning points may reveal relevance not visible in lesson titles. Don't rely solely on title-based searches.
-11. **Distinguish practical vs theory lessons**: For queries like "learning to cook X", practical hands-on lessons should be preferred over theory lessons, even if theory ranks higher. The query verb ("learning to cook") indicates intent.
+3. **Ground truth correctness over benchmark scores**: If the semantically correct slugs don't rank well, the ground truth should still use them. A lower MRR reveals search quality issues — that's valuable information, not a problem to hide.
+4. **Specification vs optimisation**: Ground truth review is about correctness (the answer key), not optimising scores (tuning the system).
+
+### Exploration Standards (Session 8: Deep Review)
+
+5. **Deep exploration is mandatory**: Get 5-10 MCP summaries per category, not just 1-2. Create explicit comparison tables with key learning points before selecting slugs.
+6. **Unit-level exploration**: List ALL lessons in relevant units (not just keyword-filtered results). Lessons with non-obvious titles may be highly relevant — their key learning points reveal this.
+7. **Comparison tables are required**: For every category, create a table comparing candidates: Slug | Keywords | Key Learning | Relevance Score. This prevents "good enough" thinking.
+8. **Ask "Am I confident?"**: Before finalising each category, explicitly ask: "Have I discovered the BEST possible matches through deep exploration, or just assessed if current matches are good enough?"
+
+### Semantic Matching
+
+9. **Expected slugs must match query semantics**: Replace slugs that don't actually cover the query topic. "Coding for beginners" should return KS3 intro lessons, not KS4 advanced topics.
+10. **Natural-expression matches informal language**: "DT making things move" should match lessons with "mechanisms are systems that make something move" in key learning — match the informal phrasing, not technical terms.
+11. **Verify vocabulary bridging**: For sustainability queries like "green design environment friendly", expected slugs should explicitly use bridging vocabulary (e.g., "sustainable", "environmental impact") in their keywords/key learning.
+12. **Human factors includes empathy**: In design context, "empathy" (understanding what users experience) IS human factors — don't miss lessons with related vocabulary.
+
+### Cross-Topic Verification
+
+13. **Cross-topic requires BOTH components**: For "X AND Y together" queries, expected slugs must combine BOTH concepts in their key learning points. Verify this explicitly, don't assume from title.
+14. **Rendering can be valid intersection**: For sketching + materials queries, lessons about rendering that explicitly teach "show material texture through rendering" ARE valid intersections — they combine both concepts.
+15. **Some queries have no perfect intersection**: If no single lesson truly combines all query concepts, document this and select best available approximations from different angles.
+
+### MCP Tool Usage
+
+16. **Use `get-lessons-summary` for 5-10 candidates**: Every category needs comprehensive MCP exploration, not just search result validation.
+17. **Use `get-units-summary` for lesson ordering**: For skill-level queries, identify which lessons are FIRST (beginner) vs END of unit (capstone).
+18. **Use unit listings to find hidden candidates**: List all lessons in a unit — lessons 3-4 may be more relevant than lessons 1-2 for specific queries.
+
+### Practical Considerations
+
+19. **Distinguish practical vs theory lessons**: For queries like "learning to cook X", practical hands-on lessons should be preferred over theory lessons — the query verb indicates intent.
+20. **Review ALL lessons in the pool**: Don't rely solely on title-based searches. MCP key learning points may reveal relevance not visible in titles.
 
 ---
 
@@ -265,16 +343,17 @@ The benchmark outputs 4 key metrics. Use them together for diagnosis:
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Ground truth review
-pnpm gt-review --subject citizenship --phase secondary
-pnpm gt-review --subject citizenship --phase secondary --category precise-topic
+# Ground truth review (design-technology example)
+pnpm gt-review --subject design-technology --phase primary
+pnpm gt-review --subject design-technology --phase secondary
+pnpm gt-review --subject design-technology --phase primary --category precise-topic
 
 # Validation
 pnpm type-check
 pnpm ground-truth:validate
 
 # Benchmarking
-pnpm benchmark --subject citizenship --phase secondary --verbose
+pnpm benchmark --subject design-technology --verbose
 pnpm benchmark --all
 ```
 

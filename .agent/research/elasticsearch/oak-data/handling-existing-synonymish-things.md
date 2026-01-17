@@ -1,14 +1,28 @@
 
-# Managing an Existing Large Synonym Set  
+# Managing an Existing Large Synonym Set
+
+> **Status**: Research documentation
+> **Last Updated**: 2026-01-17
 
 _How to stabilise, refactor, and safely evolve a mature synonym corpus in a hybrid Elastic search system_
 
-> **Context**  
-> You already have a **large, curated synonym corpus (~500+ entries across ~23 categories)** that is:
+> **Context — Oak Search Synonym Corpus**
+>
+> Oak Search has a **curated synonym corpus (~580 entries across 23 categories)** that is:
 >
 > - the **single source of truth** for MCP tools, Elasticsearch, and the Search App
-> - hand-maintained, test-driven, and sensitivity-aware
-> - already deployed via Elasticsearch synonym sets
+> - hand-maintained with LLM-assisted review and explicit sensitivity handling
+> - already deployed via Elasticsearch `synonym_graph` filter with updateable `oak-syns` set
+>
+> **Location**: `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/`
+>
+> | Category | Lines | Notes |
+> |----------|-------|-------|
+> | maths.ts | 375 | Most complex — algebra, trig, geometry, statistics |
+> | citizenship.ts | 178 | Overlap with RSHE/PSHE |
+> | cooking-nutrition.ts | 170 | Practical vs theory distinction |
+> | physical-education.ts | 183 | Sport-specific vocabulary |
+> | science.ts | 37 | **Underdeveloped** — needs expansion |
 >
 > This document explains **how to work with that existing corpus**, without discarding it, while introducing **sense-gated behaviour, relationship-aware expansion, and mining-assisted evolution**.
 
@@ -332,3 +346,17 @@ The task now is **precision of application**, not expansion of content.
   <https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rrf-retriever>
 - Elasticsearch Analyze API (debugging analysis chains):  
   <https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-analyze>
+
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| [README.md](./README.md) | Index and reading order |
+| [aliases-and-equivalances.md](./aliases-and-equivalances.md) | Deep dive on mining strict equivalences |
+| [data-and-domain-vocabulary.md](./data-and-domain-vocabulary.md) | Structural vocabulary and definitions |
+| [elasticsearch-approaches.md](./elasticsearch-approaches.md) | Elastic-native implementation patterns |
+| [uses-of-structured-domain-knowledge.md](./uses-of-structured-domain-knowledge.md) | Survey of all vocabulary levers |
+| [python-mining-workspace.md](./python-mining-workspace.md) | Mining pipeline scope and governance |
+| [documentation-gap-analysis.md](./documentation-gap-analysis.md) | Gaps and remediation plan |

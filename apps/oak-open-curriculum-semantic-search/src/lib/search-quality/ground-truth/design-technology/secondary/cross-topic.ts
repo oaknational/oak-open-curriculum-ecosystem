@@ -4,16 +4,18 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - MRR 0.500, tests sketching + materials intersection */
+/** Human Review: 2026-01-17 - Deep review: realistic-rendering-techniques is BEST intersection (shows material texture) */
 export const DT_SECONDARY_CROSS_TOPIC: readonly GroundTruthQuery[] = [
   {
     query: 'sketching and materials properties',
     category: 'cross-topic',
     priority: 'medium',
-    description: 'Tests intersection of design sketching with materials science',
+    description: 'Tests intersection of design sketching/rendering with materials representation',
     expectedRelevance: {
-      'advanced-3d-sketching': 3,
-      'polymer-properties-and-processes': 2,
+      'realistic-rendering-techniques': 3,
+      'advanced-3d-sketching': 2,
+      'materials-in-design': 2,
+      'physical-and-working-properties-of-materials': 2,
     },
   },
 ] as const;

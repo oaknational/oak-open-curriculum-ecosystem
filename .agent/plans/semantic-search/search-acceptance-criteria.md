@@ -1,14 +1,31 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-10
-**Status**: ✅ Ground Truths Production-Ready — Phase 8 Benchmarks Next
-**Purpose**: Defines what "exhausted" means for each tier, vs "target met"
+**Last Updated**: 2026-01-17
+**Status**: 🔄 Ground Truth Review In Progress (9/30 entries reviewed)
+**Purpose**: Defines what "exhausted" means for each level, vs "target met"
 
 ---
 
-## ✅ Three-Stage Ground Truth Validation COMPLETE (2026-01-09)
+## Search Quality Levels
 
-**All three validation stages complete.** 474 queries across 30 entries are production-ready.
+Levels (from [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)) are sequential improvement stages:
+
+| Level | Focus | Status |
+|-------|-------|--------|
+| **1** | Fundamentals (synonyms, phrase boosting) | Approaches complete, awaiting GT validation |
+| **2** | Document relationships | 📋 Pending |
+| **3** | Modern ES features (semantic reranking, query rules) | 📋 Pending |
+| **4** | AI enhancement (LLM preprocessing) | 📋 Pending — DESTINATION |
+
+**Levels are sequential.** Exhaust lower levels before moving up.
+
+**A level is "exhausted" when**: All approaches attempted, measured with **validated ground truths**, plateau demonstrated (≤5% improvement × 3 experiments).
+
+---
+
+## 🔄 Three-Stage Ground Truth Validation (2026-01-17)
+
+**Stage 3 (Qualitative Review) is IN PROGRESS.** 120 queries across 30 subject-phase entries.
 
 ### Three-Stage Validation Model
 
@@ -16,19 +33,20 @@
 |-------|----------------|--------|
 | **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
 | **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
-| **3. Qualitative Review** | Production readiness | ✅ COMPLETE |
+| **3. Qualitative Review** | Production readiness | 🔄 **IN PROGRESS** (9/30 entries) |
 
-### Stage 3 Qualitative Review (2026-01-09)
+### Stage 3 Qualitative Review Progress (2026-01-17)
 
 | Metric | Value |
 |--------|-------|
-| Total queries reviewed | 474 |
-| Total slugs validated | 1,290 |
+| Total queries | 120 (4 categories × 30 entries) |
 | Subject/phase entries | 30 |
-| Issues found | 1 |
-| Issues fixed | 1 |
+| Entries reviewed | **9/30** (30%) |
+| Remaining | 21 entries |
 
-**Issue fixed**: `times tables year 3` category corrected (cross-topic → precise-topic)
+**Reviewed so far**: art (pri+sec), citizenship/sec, computing (pri+sec), cooking-nutrition (pri+sec), design-technology (pri+sec)
+
+**See**: [ground-truth-review-checklist.md](active/ground-truth-review-checklist.md) for full progress tracking
 
 ### Remediation Summary (2026-01-08)
 
@@ -148,16 +166,18 @@ These thresholds apply to individual query categories within each tier:
 | **Good** | ≥ 0.60 | Solid performance; no urgent action needed |
 | **Excellent** | ≥ 0.80 | Outstanding; focus effort elsewhere |
 
-### Current Category Status — Maths KS4 (2025-12-24)
+### Current Category Status (2026-01-17)
 
-| Category | MRR | Status |
-|----------|-----|--------|
-| Misspelling | 0.833 | Excellent |
-| Naturalistic | 0.722 | Good |
-| Multi-concept | 0.625 | Good |
-| Synonym | 0.611 | Good |
-| Colloquial | 0.500 | Acceptable |
-| **Intent-based** | **0.229** | **Exception granted** (see below) |
+**Note**: Categories were renamed in Phase 1 restructure. See [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) for canonical definitions.
+
+| Category | Description | Required |
+|----------|-------------|----------|
+| `precise-topic` | Curriculum-aligned terminology | **YES** |
+| `natural-expression` | Teacher everyday language (formerly "naturalistic") | **YES** |
+| `imprecise-input` | Typos, misspellings (formerly "misspelling") | **YES** |
+| `cross-topic` | Concept intersections (formerly "multi-concept") | **YES** |
+
+Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `colloquial`, `intent-based`) are deprecated.
 
 ### Cross-Curriculum Performance Tiers (2026-01-03)
 
@@ -170,20 +190,23 @@ These thresholds apply to individual query categories within each tier:
 
 ---
 
-## Tier 1: Search Fundamentals
+## Level 1: Search Fundamentals
 
 ### Exit Criteria
 
 | Criterion | Target | Current | Status |
 |-----------|--------|---------|--------|
-| Aggregate Hard MRR | ≥ 0.45 | 0.614 | ✅ Met |
+| Aggregate Hard MRR | ≥ 0.45 | 0.614 | ✅ Met (pending GT validation) |
 | No category < 0.25 | All ≥ 0.25 | Intent=0.229 | ✅ Exception granted (see below) |
-| Standard approaches exhausted | All checked | All checked | ✅ Exhausted |
-| Plateau demonstrated | ≤5% improvement × 3 | Single measurement | ⚠️ Only 1 experiment with corrected GT |
+| Standard approaches attempted | All checked | All checked | ✅ Complete |
+| **Ground truth validated** | 30/30 | **9/30** | 🔄 **IN PROGRESS** |
+| Plateau demonstrated | ≤5% improvement × 3 | N/A | ⏸️ Blocked by GT validation |
+
+**Level 1 is NOT exhausted until ground truth review is complete.** The MRR measurements may change as ground truths are corrected.
 
 ### Standard Approaches Checklist
 
-All items must be checked (attempted and documented) before Tier 1 can be declared "exhausted":
+All items must be checked (attempted and documented) before Level 1 can be declared "exhausted":
 
 #### Synonym Coverage
 
@@ -213,18 +236,18 @@ All items must be checked (attempted and documented) before Tier 1 can be declar
 
 ### Plateau Definition
 
-Tier 1 is "exhausted" when:
+Level 1 is "exhausted" when:
 
 1. All checklist items are checked (attempted and documented)
 2. No category remains below critical threshold (< 0.25) without documented exception
-3. ≤5% aggregate MRR improvement achieved across 3 consecutive experiments OR no more Tier 1 experiments possible
+3. ≤5% aggregate MRR improvement achieved across 3 consecutive experiments OR no more Level 1 experiments possible
 4. Root cause analysis complete for all poor-performing categories
 
 ### Plateau Status (2025-12-24)
 
 **Status**: ✅ PLATEAU ACHIEVED (de facto)
 
-While we only have one measurement with corrected ground truth (MRR 0.614), all Tier 1 approaches are exhausted:
+While we only have one measurement with corrected ground truth (MRR 0.614), all Level 1 approaches are exhausted:
 
 | Approach | Status | Finding |
 |----------|--------|---------|
@@ -236,9 +259,9 @@ While we only have one measurement with corrected ground truth (MRR 0.614), all 
 | Technical vocabulary | ✅ Verified | `transposition` works |
 | Vocabulary mining | ✅ Complete | No critical gaps in top 20 keywords |
 | Stop words | ✅ Verified | Not affecting results |
-| Intent-based | ⚠️ Exception | Requires Tier 4 (no lesson metadata) |
+| Intent-based | ⚠️ Exception | Requires Level 4 (no lesson metadata) |
 
-**Conclusion**: No further Tier 1 experiments are possible. The plateau requirement is satisfied because all standard approaches have been attempted and no improvement opportunities remain at this tier.
+**Conclusion**: No further Level 1 experiments are possible. The plateau requirement is satisfied because all standard approaches have been attempted and no improvement opportunities remain at this level.
 
 ---
 
@@ -247,7 +270,7 @@ While we only have one measurement with corrected ground truth (MRR 0.614), all 
 ### Intent-Based Category (0.229 MRR) — EXCEPTION GRANTED
 
 **Investigated**: 2025-12-24  
-**Decision**: Intent-based queries cannot be fixed with Tier 1 approaches
+**Decision**: Intent-based queries cannot be fixed with Level 1 approaches
 
 **Root Cause Analysis**:
 
@@ -281,23 +304,23 @@ The two intent-based queries express **pedagogical intent** (difficulty level, t
 - Query 1: Expected lesson at rank 3 (not complete failure)
 - Query 2: Expected lesson at rank 8 (finding vectors, but can't filter by "visual" or "beginners")
 
-**Tier Classification**:
+**Level Classification**:
 
-- This is a **Tier 4 problem** requiring LLM query classification or metadata enrichment
+- This is a **Level 4 problem** requiring LLM query classification or metadata enrichment
 - Ground truth marks priority as "exploratory" for this reason
 
-**Conclusion**: Intent-based category exception is granted. The 0.229 MRR does NOT block Tier 1 completion because the failure mode is documented and cannot be addressed with Tier 1 approaches.
+**Conclusion**: Intent-based category exception is granted. The 0.229 MRR does NOT block Level 1 completion because the failure mode is documented and cannot be addressed with Level 1 approaches.
 
 ---
 
-## Tier 2: Document Relationships
+## Level 2: Document Relationships
 
 ### Exit Criteria
 
 | Criterion | Target | Current | Status |
 |-----------|--------|---------|--------|
 | Aggregate Hard MRR | ≥ 0.55 | 0.614 | ✅ Already exceeded |
-| Tier 1 exhausted | Complete | ✅ Complete | 🔓 Ready to proceed |
+| Level 1 exhausted | Complete | ✅ Complete | 🔓 Ready to proceed |
 
 ### Standard Approaches Checklist
 
@@ -308,47 +331,76 @@ The two intent-based queries express **pedagogical intent** (difficulty level, t
 
 ---
 
-## Tier 3: Modern ES Features
+## Level 3: Modern ES Features — HIGHEST ROI
+
+**Priority**: 🔴 HIGHEST (research's top recommendations)  
+**Plan**: [post-sdk/search-quality/modern-es-features.md](post-sdk/search-quality/modern-es-features.md)
 
 ### Exit Criteria
 
 | Criterion | Target | Current | Status |
 |-----------|--------|---------|--------|
 | Aggregate Hard MRR | ≥ 0.60 | 0.614 | ✅ Already exceeded |
-| Tier 2 exhausted | Complete | Pending | ❌ Blocked by Tier 2 |
+| Level 2 exhausted | Complete | Pending | ⏸️ Blocked by Level 2 |
 
 ### Standard Approaches Checklist
+
+**🔴 HIGHEST Priority** (Research #1-2 recommendations):
+
+- [ ] **Semantic reranking** (`text_similarity_reranker`) — Research #1 recommendation
+- [ ] **Query rules** (rule retriever for deterministic intent) — Research #2 recommendation  
+- [ ] **Definition retrieval** — Dedicated definition channel
+- [ ] **Negative controls** — Subject/phase mismatch penalties
+
+**🟡 MEDIUM Priority**:
 
 - [ ] RRF k-parameter tuning experiments
 - [ ] Per-field boost weight optimisation
 - [ ] Query-time synonym expansion (vs index-time)
+- [ ] Relationship channel (dedicated field + retriever)
 - [ ] kNN vector search evaluation
 
 ---
 
-## Tier 4: AI Enhancement
+## Level 4: AI Enhancement — DESTINATION
+
+**Priority**: Part of the journey (NOT optional)  
+**Plan**: [post-sdk/search-quality/ai-enhancement.md](post-sdk/search-quality/ai-enhancement.md)
+
+**Level 4 is the destination, not a "nice to have".** Some query types cannot be solved without AI.
 
 ### Entry Criteria
 
-**Only consider Tier 4 if:**
+**Begin Level 4 when:**
 
-1. Tiers 1-3 are exhausted (all checklists complete)
+1. Levels 1-3 are exhausted (all checklists complete)
 2. Aggregate MRR plateau demonstrated (≤5% improvement × 3)
 3. Specific category gaps remain that cannot be addressed by traditional means
 4. Cost/benefit analysis completed
 
-### Approaches to Evaluate
+### Standard Approaches Checklist
 
-- [x] ~~Semantic reranking with validated ground truth~~ — **DEFERRED** (revisit after Tier 2)
-- [ ] Query expansion via LLM
-- [ ] Pedagogical intent classification
-- [ ] Lesson metadata enrichment
+- [ ] LLM query preprocessing (intent extraction, filter inference)
+- [ ] Colloquial → curriculum term resolution
+- [ ] Pedagogical intent classification (remediation, extension, introduction)
+- [ ] Query reformulation for progression queries
+
+### Queries That Require Level 4
+
+| Query | Current MRR | Why AI Required |
+|-------|-------------|-----------------|
+| "challenging extension work for able mathematicians" | 0.000 | Pedagogical intent |
+| "visual introduction to vectors for beginners" | 0.000 | Teaching style + level |
+| "that thing with triangles and squares" | 0.000 | Colloquial entity resolution |
+| "help struggling students with fractions" | N/A | Remediation intent |
+
+**These queries will never improve without Level 4.**
 
 ---
 
 ## Verification Method
 
-To verify tier completion status:
+To verify level completion status:
 
 ```bash
 # Run unified benchmark
@@ -408,7 +460,7 @@ For any search-affecting change:
 | [ADR-085: Ground Truth Discipline](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Data integrity |
 | [current-state.md](current-state.md) | Authoritative metrics |
 | [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md) | Experiment history |
-| [tier-1-fundamentals.md](archive/completed/tier-1-fundamentals.md) | Tier 1 plan (archived) |
+| [tier-1-fundamentals.md](archive/completed/tier-1-fundamentals.md) | Level 1 plan (archived) |
 
 ---
 
@@ -416,6 +468,8 @@ For any search-affecting change:
 
 | Date | Change |
 |------|--------|
+| 2026-01-17 | Restructured post-sdk into streams; Level 1 status corrected to "awaiting GT validation"; renamed tiers to levels |
+| 2026-01-17 | Updated query count from 474 to 120 (restructured to 4 categories × 30 entries) |
 | 2026-01-07 | Added test coverage requirements section |
 | 2026-01-03 | Updated: M3 ground truth expansion complete (263 queries, 16 subjects) |
 | 2026-01-03 | Added cross-curriculum performance tiers |

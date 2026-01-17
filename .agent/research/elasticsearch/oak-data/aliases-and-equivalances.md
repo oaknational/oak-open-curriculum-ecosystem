@@ -444,7 +444,7 @@ You have two parallel “workspace systems”:
 
 Keep Python mining as tooling (not a runtime dependency of apps):
 
-```
+```text
 repo/
   apps/
   packages/
@@ -600,3 +600,63 @@ Then in `turbo.json`, add pipeline tasks:
 - Token graphs (synonyms): <https://www.elastic.co/docs/manage-data/data-store/text-analysis/token-graphs>
 - Synonyms API (create/update): <https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-synonyms-put-synonym>
 - Analyze API: <https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-analyze>
+
+---
+
+## Appendix C: Subject-specific complexity
+
+### Maths secondary — the most complex subject
+
+Maths secondary has dramatically more vocabulary complexity than other subjects:
+
+| Aspect | Maths | Typical Subject |
+|--------|-------|-----------------|
+| Synonym file size | 375 lines | 30-180 lines |
+| Concepts per domain | 30+ | 10-20 |
+| Notation variants | High | Low |
+
+**Key challenges**:
+
+- **Notation variance**: "y = mx + c" vs "y equals mx plus c" vs "gradient intercept form"
+- **Spoken vs written**: "sohcahtoa" vs "sine cosine tangent" vs "opposite adjacent hypotenuse"
+- **Cross-topic relationships**: Algebra concepts appear in geometry, graphs, and statistics
+- **Level-dependent vocabulary**: KS3 "solve equations" vs KS4 "simultaneous equations"
+
+**Diagnostic queries** (from `diagnostic-synonym-queries.ts`) reveal that phrase synonyms like "straight line" → "linear" need special handling because ES synonym filters apply after tokenisation.
+
+### Science secondary — underdeveloped
+
+Science synonyms (37 lines) are significantly underdeveloped compared to maths:
+
+| Gap | Example |
+|-----|---------|
+| Physics vocabulary | Newton's laws, forces, energy transfer |
+| Chemistry vocabulary | Equations, reactions, periodic table |
+| Biology vocabulary | Cells, genetics, ecosystems |
+| Practical terminology | Apparatus, method, variables |
+
+**KS4 complexity**: Science has three exam board variants (AQA, Edexcel, OCR), each with different terminology emphasis.
+
+**Recommendation**: Expand science synonyms following the maths pattern, with sub-domain organisation (physics, chemistry, biology).
+
+---
+
+## Appendix D: Future direction
+
+> **Note**: Static vocabulary analysis (mining) will eventually move **upstream** to the bulk-data generation pipeline (i.e., where Oak's curriculum data is assembled), rather than being part of SDK type-gen. This keeps vocabulary extraction close to the source data.
+
+The current TypeScript synonym files in `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` are manually curated. Future mining outputs would supplement (not replace) this corpus.
+
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| [README.md](./README.md) | Index and reading order |
+| [handling-existing-synonymish-things.md](./handling-existing-synonymish-things.md) | Managing existing synonym corpus |
+| [data-and-domain-vocabulary.md](./data-and-domain-vocabulary.md) | Structural vocabulary and definitions |
+| [elasticsearch-approaches.md](./elasticsearch-approaches.md) | Elastic-native implementation patterns |
+| [uses-of-structured-domain-knowledge.md](./uses-of-structured-domain-knowledge.md) | Survey of all vocabulary levers |
+| [python-mining-workspace.md](./python-mining-workspace.md) | Mining pipeline scope and governance |
+| [documentation-gap-analysis.md](./documentation-gap-analysis.md) | Gaps and remediation plan |

@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-01-13
+**Last Updated**: 2026-01-17
 
 ---
 
@@ -10,33 +10,54 @@
 
 ---
 
-## ✅ RRF Architecture Fixed (2026-01-13)
+## Current Work: Ground Truth Review
 
-The RRF scoring flaw has been fixed. MFL/PE subjects are no longer structurally disadvantaged.
+The ground truth review is in progress. **9/30 subject-phases complete**.
 
-**Details**: [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
+**Details**: [active/ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
 
 ---
 
-## Current Priority: Benchmark & Iterate
+## Execution Order
 
-Ground truths have been restructured (120 queries), RRF is now correct. Ready for **validation through benchmarking**.
-
-**Goal**: Iterate until the constraining factor is search quality, not ground truth quality.
-
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm benchmark --all  # Run benchmarks
-# Analyse failures → Fix ground truths OR confirm search is the bottleneck
+```
+1. Ground Truth Review (active/)              ← CURRENT
+         ↓
+2. SDK Extraction (sdk-extraction/)
+         ↓
+3. MCP Integration (post-sdk/mcp-integration/)
+         ↓
+4. Everything Else (post-sdk/ streams)
 ```
 
 ---
 
-## Critical Understanding
+## Folder Structure
 
-Ground truths measure **expected slug position**, NOT user satisfaction.
+| Folder | Purpose | Status |
+|--------|---------|--------|
+| `active/` | Work in progress | 🔄 Ground truth review |
+| `sdk-extraction/` | SDK extraction plans | 📋 Ready after Phase 1 |
+| `post-sdk/` | Streams of post-SDK work | ⏸️ After SDK extraction |
+| `archive/` | Completed work | ✅ Historical |
+| `templates/` | Session templates | — |
 
-See: [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md)
+---
+
+## Post-SDK Streams
+
+After SDK extraction, work is organized into **streams** — coherent domains with their own intent and impact.
+
+| Stream | Intent |
+|--------|--------|
+| [mcp-integration/](post-sdk/mcp-integration/) | Wire hybrid search into MCP tools (FIRST) |
+| [search-quality/](post-sdk/search-quality/) | Improve search result relevance (Levels 2-4) |
+| [bulk-data-analysis/](post-sdk/bulk-data-analysis/) | Mine vocabulary from curriculum data |
+| [sdk-api/](post-sdk/sdk-api/) | Understand and stabilise SDK API |
+| [operations/](post-sdk/operations/) | Run the system safely |
+| [extensions/](post-sdk/extensions/) | Add capabilities beyond core search |
+
+Each stream has a README explaining domain, intent, desired impact, and any internal sequencing.
 
 ---
 
@@ -44,13 +65,21 @@ See: [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md)
 
 | Document | Purpose |
 |----------|---------|
-| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point, current status, warnings |
-| [Audit Report](../../evaluations/audits/ground-truth-audit-2026-01.md) | Full audit findings |
-| [Roadmap](roadmap.md) | Future work items and dependencies |
+| [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
+| [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
+| [Current State](current-state.md) | System metrics |
 | [Completed](completed.md) | Historical completed work |
-| [Current State](current-state.md) | System metrics and ES index state |
-| [M3 Plan](active/m3-revised-phase-aligned-search-quality.md) | Ground truth restructure specification |
-| [Transcript-Aware RRF](active/transcript-aware-rrf.md) | Per-document score normalization for MFL/PE |
+| [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
+
+---
+
+## Research Documents
+
+| Document | Purpose |
+|----------|---------|
+| [elasticsearch-approaches.md](../../research/elasticsearch/oak-data/elasticsearch-approaches.md) | Elastic-native patterns |
+| [aliases-and-equivalances.md](../../research/elasticsearch/oak-data/aliases-and-equivalances.md) | Synonym classification |
+| [documentation-gap-analysis.md](../../research/elasticsearch/oak-data/documentation-gap-analysis.md) | Gaps and remediation |
 
 ---
 

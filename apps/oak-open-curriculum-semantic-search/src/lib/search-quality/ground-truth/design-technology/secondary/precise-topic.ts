@@ -4,16 +4,19 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - Perfect MRR (1.000) */
+/** Human Review: 2026-01-17 - Deep review: added empathy (human factors lesson) */
 export const DT_SECONDARY_PRECISE_TOPIC: readonly GroundTruthQuery[] = [
   {
     query: 'ergonomics design human factors',
     category: 'precise-topic',
     priority: 'high',
-    description: 'Direct curriculum term match for ergonomics unit',
+    description:
+      'Direct curriculum term match for ergonomics/anthropometrics/human factors content',
     expectedRelevance: {
       ergonomics: 3,
       anthropometrics: 3,
+      'anthropometrics-and-ergonomics': 3,
+      empathy: 2,
       'ergonomic-testing-and-design-development': 2,
     },
   },

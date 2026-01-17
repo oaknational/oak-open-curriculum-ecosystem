@@ -22,7 +22,7 @@
 | Subject-phase entries | 30      |
 | Categories per entry  | 4       |
 | Queries per category  | **1**   |
-| **Total queries**     | **112** |
+| **Total queries**     | **120** |
 
 ### Measurement Scope Disclaimer (MANDATORY)
 
@@ -231,7 +231,7 @@ The registry is validated against generated types from bulk data:
 
 **Validation** (`evaluation/validation/validate-ground-truth.ts`):
 
-- 21 comprehensive checks including cross-subject contamination, category coverage, and description presence
+- 16 comprehensive checks including cross-subject contamination, category coverage, and description presence
 - All checks report as errors (no warnings)
 - Validates against generated `ALL_LESSON_SLUGS` Set
 - Entry-level checks ensure consistent category coverage across all entries

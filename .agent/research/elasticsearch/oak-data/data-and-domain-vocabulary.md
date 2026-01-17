@@ -244,9 +244,9 @@ They are rarely useful for index-time synonyms.
 Elastic’s own guidance is to use synonyms wisely, and `synonym_graph` is recommended for multiword handling.  
 Docs:
 
-- synonym_graph token filter: <https://www.elastic.co/docs/reference/text-analysis/analysis-synonym-graph-tokenfilter> :contentReference[oaicite:0]{index=0}
-- token graphs overview: <https://www.elastic.co/docs/manage-data/data-store/text-analysis/token-graphs> :contentReference[oaicite:1]{index=1}
-- “search with synonyms” guide: <https://www.elastic.co/docs/solutions/search/full-text/search-with-synonyms> :contentReference[oaicite:2]{index=2}
+- synonym_graph token filter: <https://www.elastic.co/docs/reference/text-analysis/analysis-synonym-graph-tokenfilter>
+- token graphs overview: <https://www.elastic.co/docs/manage-data/data-store/text-analysis/token-graphs>
+- “search with synonyms” guide: <https://www.elastic.co/docs/solutions/search/full-text/search-with-synonyms>
 
 For your structural vocab:
 
@@ -257,11 +257,11 @@ For your structural vocab:
 ### 6.2 Manage synonyms via Synonyms API (operationally safer)
 
 Docs: Create or update synonym set (10k rules max per set):  
-<https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-synonyms-put-synonym> :contentReference[oaicite:3]{index=3}
+<https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-synonyms-put-synonym>
 
 Important operational note from Elastic:
 > synonym sets must exist before indices reference them, or the index can become partially created/inoperable  
-(see the “search with synonyms” guide) :contentReference[oaicite:4]{index=4}
+(see the “search with synonyms” guide)
 
 ### 6.3 Prefer query-time logic for “structural intent”
 
@@ -313,13 +313,13 @@ That’s a definition for humans/agents, not a synonym.
 
 Oak’s API documentation is a useful “public truth” anchor for the glossary/definitions model:
 
-- What is Oak’s API: <https://open-api.thenational.academy/docs> :contentReference[oaicite:5]{index=5}
+- What is Oak’s API: <https://open-api.thenational.academy/docs>
 - Lesson data fields (keywords + pupil-friendly definitions, learning points, misconceptions, etc.):  
-  <https://open-api.thenational.academy/docs/api-endpoints/lesson-data> :contentReference[oaicite:6]{index=6}
+  <https://open-api.thenational.academy/docs/api-endpoints/lesson-data>
 - Unit & curriculum data endpoints:  
-  <https://open-api.thenational.academy/docs/api-endpoints/unit-and-curriculum-data> :contentReference[oaicite:7]{index=7}
+  <https://open-api.thenational.academy/docs/api-endpoints/unit-and-curriculum-data>
 - Lists endpoint docs (good entry point for enumerations and taxonomy):  
-  <https://open-api.thenational.academy/docs/api-endpoints/lists> :contentReference[oaicite:8]{index=8}
+  <https://open-api.thenational.academy/docs/api-endpoints/lists>
 
 Use these as provenance for “structural” definitions and enumerations.
 
@@ -347,12 +347,26 @@ This lets you keep your existing investment intact while making the system more 
 ## Appendix: Elastic docs relevant to your current architecture
 
 - Retrievers overview (including rule retriever, RRF):  
-  <https://www.elastic.co/docs/solutions/search/retrievers-overview> :contentReference[oaicite:9]{index=9}
+  <https://www.elastic.co/docs/solutions/search/retrievers-overview>
 - RRF retriever reference:  
-  <https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rrf-retriever> :contentReference[oaicite:10]{index=10}
+  <https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/rrf-retriever>
 - Synonyms API:  
-  <https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-synonyms-put-synonym> :contentReference[oaicite:11]{index=11}
+  <https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-synonyms-put-synonym>
 - synonym_graph token filter:  
-  <https://www.elastic.co/docs/reference/text-analysis/analysis-synonym-graph-tokenfilter> :contentReference[oaicite:12]{index=12}
+  <https://www.elastic.co/docs/reference/text-analysis/analysis-synonym-graph-tokenfilter>
 - Search with synonyms guide:  
-  <https://www.elastic.co/docs/solutions/search/full-text/search-with-synonyms> :contentReference[oaicite:13]{index=13}
+  <https://www.elastic.co/docs/solutions/search/full-text/search-with-synonyms>
+
+---
+
+## Related Documents
+
+| Document | Relationship |
+|----------|--------------|
+| [README.md](./README.md) | Index and reading order |
+| [handling-existing-synonymish-things.md](./handling-existing-synonymish-things.md) | Managing existing synonym corpus |
+| [aliases-and-equivalances.md](./aliases-and-equivalances.md) | Mining strict equivalences |
+| [elasticsearch-approaches.md](./elasticsearch-approaches.md) | Elastic-native implementation patterns |
+| [uses-of-structured-domain-knowledge.md](./uses-of-structured-domain-knowledge.md) | Survey of all vocabulary levers |
+| [python-mining-workspace.md](./python-mining-workspace.md) | Mining pipeline scope and governance |
+| [documentation-gap-analysis.md](./documentation-gap-analysis.md) | Gaps and remediation plan |

@@ -4,16 +4,18 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - MRR 0.500, tests DT abbreviation and informal phrasing */
+/** Human Review: 2026-01-17 - Deep review: expanded to include rotary-motion and upgraded slider to score=3 */
 export const DT_PRIMARY_NATURAL_EXPRESSION: readonly GroundTruthQuery[] = [
   {
     query: 'DT making things move',
     expectedRelevance: {
-      'cam-mechanisms': 3,
-      'card-lever-mechanisms': 2,
+      'card-lever-mechanisms': 3,
+      'card-slider-mechanisms': 3,
+      'make-things-move-with-air': 3,
+      'rotary-motion': 2,
     },
     category: 'natural-expression',
     priority: 'high',
-    description: 'Uses DT abbreviation and informal phrasing',
+    description: 'Tests informal phrasing "making things move" bridging to mechanisms vocabulary',
   },
 ] as const;

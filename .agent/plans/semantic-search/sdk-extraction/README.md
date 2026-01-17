@@ -1,8 +1,14 @@
 # SDK Extraction
 
-**Purpose**: Extract the semantic search capabilities from the Next.js app into a dedicated Search SDK and CLI.
+**Label**: Prerequisite  
+**Purpose**: Extract the semantic search capabilities from the Next.js app into a dedicated Search SDK and CLI.  
+**Status**: 📋 READY — Waiting for Ground Truth Review to complete
 
-**Status**: 📋 PLANNED — Blocked by pre-SDK work completion
+---
+
+## Labelling System Reference
+
+See [../roadmap.md](../roadmap.md) for the full labelling system. SDK Extraction is a **Prerequisite** — it must complete before Foundations and Tier work begins.
 
 ---
 
@@ -29,14 +35,13 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ## Prerequisites
 
-All pre-SDK work must complete first:
+| Prerequisite | Status | Notes |
+|--------------|--------|-------|
+| Ground truth review complete | 🔄 In Progress | 9/30 subject-phases done |
+| RRF architecture correct | ✅ | ADR-099 implemented |
+| Synonym coverage complete | ✅ | ADR-100 implemented |
 
-1. ✅ M3: Search Quality Optimization (ground truths, benchmarks, synonyms)
-2. 📋 Bulk Data Analysis (vocabulary mining, transcript analysis)
-3. 📋 Tier 2: Document Relationships
-4. 📋 Tier 3: Modern ES Features
-
-See [../pre-sdk-extraction/](../pre-sdk-extraction/) for details.
+**Note (2026-01-17)**: The dependency chain has been revised. Filter testing, bulk analysis, and tier work now happen AFTER SDK extraction. The SDK API can evolve as we learn more — extraction is primarily a packaging concern.
 
 ---
 
@@ -54,6 +59,5 @@ See [../pre-sdk-extraction/](../pre-sdk-extraction/) for details.
 ## Related Documents
 
 - [search-sdk-cli.md](search-sdk-cli.md) — Full extraction specification
-- [../pre-sdk-extraction/](../pre-sdk-extraction/) — Work that must complete first
-- [../post-sdk-extraction/](../post-sdk-extraction/) — Work that follows
-
+- [../roadmap.md](../roadmap.md) — Authoritative milestone sequence
+- [../post-sdk/](../post-sdk/) — Work that follows SDK extraction

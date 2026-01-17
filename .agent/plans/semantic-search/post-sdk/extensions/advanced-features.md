@@ -1,25 +1,26 @@
 # Advanced Features
 
-**Status**: 📋 FUTURE — Post-SDK stabilization
-**Priority**: LOW — Documented ideas for future consideration
-**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
-**Created**: 2026-01-03 (Consolidated from advanced-features.md, knowledge-graph-evolution.md, mcp-graph-tools.md)
+**Stream**: extensions  
+**Status**: ⏸️ Future  
+**Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
+**Created**: 2026-01-03  
+**Last Updated**: 2026-01-17
 
 ---
 
 ## Overview
 
-This document covers advanced features planned for after SDK extraction and core search stabilization.
+This document covers advanced features planned for after Level 4 (AI Enhancement) is complete.
 
 **Prerequisites**:
 
-- SDK extraction complete
-- Core search quality optimized (Tiers 1-3)
+- Level 4 complete (LLM pre-processing operational)
+- Core search quality optimised (Levels 1-4)
 - MCP search tool operational
 
 ---
 
-## Phase 1: RAG Infrastructure
+## Feature 1: RAG Infrastructure
 
 ### ES Playground
 
@@ -53,7 +54,7 @@ const response = await esClient.inference.inference({
 });
 ```
 
-### Success Criteria
+### Checklist
 
 - [ ] Chunked transcripts indexed with semantic_text
 - [ ] RAG endpoint implemented
@@ -62,7 +63,7 @@ const response = await esClient.inference.inference({
 
 ---
 
-## Phase 2: Knowledge Graph Evolution
+## Feature 2: Knowledge Graph Evolution
 
 ### Current State: Property Graph
 
@@ -92,76 +93,9 @@ Schema + instances = true knowledge graph = graph-based queries.
 | "What concepts lead to this one?"        | Prerequisite only | Multi-hop reasoning |
 | "Related concepts to X"                  | N/A             | Graph neighbour query |
 
-### Implementation Phases
-
-1. **Rename and Document** — `knowledge-graph-data.ts` → `curriculum-property-graph.ts`
-2. **Schema Validation** — Validate extracted entities match schema-defined types
-3. **Generate Instance Edges** — Create instance relationships
-4. **Unified Export** — Combined schema + instances export
-5. **Graph Query Interface** — API for graph queries
-6. **MCP Tool Integration** — New MCP tool: `get-curriculum-graph`
-
-### Success Criteria
-
-- [ ] Property graph clearly distinguished from knowledge graph
-- [ ] Extracted entities validated against schema types
-- [ ] Instance edges generated from implicit relationships
-- [ ] At least 2 graph query functions implemented
-
 ---
 
-## Phase 3: Advanced ES Features
-
-### Learning to Rank (LTR) Foundations
-
-Prepare for future ML-based ranking:
-
-- Click-through data collection
-- Feature extraction for model training
-- A/B testing infrastructure
-
-### Multi-Vector Fields
-
-Separate vectors for different aspects:
-
-```typescript
-{
-  title_vector: [...],         // Title semantics
-  summary_vector: [...],       // Summary semantics
-  key_points_vector: [...],    // Key learning points
-}
-
-// Aspect-based retrieval
-const results = await search({
-  query: "teaching tips",
-  vector_field: 'key_points_vector', // Focus on pedagogy
-});
-```
-
-### Runtime Fields
-
-Computed fields at query time:
-
-```typescript
-{
-  runtime_mappings: {
-    keyStageShortCode: {
-      type: 'keyword',
-      script: "emit(doc['key_stage_slug'].value.toUpperCase())",
-    },
-  },
-}
-```
-
-### Success Criteria
-
-- [ ] Click tracking implemented
-- [ ] Multi-vector fields tested
-- [ ] Runtime field patterns documented
-
----
-
-## Phase 4: MCP Graph Tools
+## Feature 3: MCP Graph Tools
 
 ### Existing Tools (Complete)
 
@@ -188,7 +122,7 @@ For large graphs:
 
 ---
 
-## Features Requiring Upstream API Changes
+## Feature 4: Features Requiring Upstream API Changes
 
 These features **cannot be implemented** without changes to the Open API:
 
@@ -209,28 +143,6 @@ These features **cannot be implemented** without changes to the Open API:
 
 ---
 
-## Research References
-
-| Research Document                                                                            | Topic                    |
-| -------------------------------------------------------------------------------------------- | ------------------------ |
-| [knowledge-graph-integration-opportunities.md](../../../research/semantic-search/knowledge-graph-integration-opportunities.md) | KG integration          |
-| [enhanced-search-elasticsearch-neo4j-with-links.md](../../../research/elasticsearch/graphs/enhanced-search-elasticsearch-neo4j-with-links.md) | ES + Neo4j             |
-| [elastic-cloud-graph-search.md](../../../research/elasticsearch/graphs/elastic-cloud-graph-search.md) | ES graph capabilities |
-
----
-
-## Guiding Principles
-
-1. **Validate before adding complexity**
-2. **Measure impact of each phase**
-3. **Document decisions in ADRs**
-4. **All quality gates must pass**
-5. **First Question**: Could it be simpler?
-6. **Teachers want curriculum resources, not just lessons**
-7. **SDK handles mechanics, apps handle policy**
-
----
-
 ## What We Have That Production Doesn't
 
 | Feature                  | Value                                 | Status               |
@@ -244,11 +156,27 @@ These features **cannot be implemented** without changes to the Open API:
 
 ---
 
+## Timeline Context
+
+```
+Now:       Ground Truth Review (Prerequisite)
+           ↓
+Next:      SDK Extraction (Prerequisite)
+           ↓
+Then:      Levels 2-3
+           ↓
+Then:      Level 4 (AI Enhancement)
+           ↓
+Finally:   ADVANCED FEATURES (this plan)
+```
+
+---
+
 ## Related Documents
 
 | Document                                                                                      | Purpose              |
 | --------------------------------------------------------------------------------------------- | -------------------- |
 | [../roadmap.md](../roadmap.md)                                                                | Linear milestone sequence |
 | [README.md](README.md)                                                                        | Post-SDK overview    |
-| [four-retriever-implementation.md](../archive/completed/four-retriever-implementation.md)     | Hybrid search foundation |
-
+| [ai-enhancement.md](../search-quality/ai-enhancement.md)                                      | Prerequisite level   |
+| [mcp-search-tool.md](mcp-search-tool.md)                                                      | Related MCP work     |

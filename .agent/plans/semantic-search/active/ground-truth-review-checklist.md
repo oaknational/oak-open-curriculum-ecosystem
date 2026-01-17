@@ -1,41 +1,126 @@
 # Ground Truth Review Checklist
 
 **Status**: In Progress  
-**Progress**: 6/30 subject-phases complete (24/120 ground truths)  
-**Next**: cooking-nutrition/secondary (4 queries)
+**Progress**: 9/30 subject-phases complete (36/120 ground truths)  
+**Next**: english/primary + english/secondary (8 queries)
 
 **Previous work**: [Sessions 1-5 Log](../logs/sessions-1-5-log.md)
 
 ---
 
-## CRITICAL: Required Standard
+## ✅ Synonym Coverage Complete (2026-01-17)
 
-**Use ALL relevant MCP tools AND bulk data** for every ground truth review.
+**All 17 subjects now have domain-specific synonym files.** This was a prerequisite blocking ground truth review.
+
+### What Was Added
+
+| File | Subject | Entries | Sensitivity |
+|------|---------|---------|-------------|
+| `art.ts` | Art | ~45 | Normal |
+| `citizenship.ts` | Citizenship | ~35 | Medium |
+| `design-technology.ts` | Design Technology | ~40 | Normal |
+| `physical-education.ts` | Physical Education | ~45 | Normal |
+| `french.ts` | French | ~25 | Normal |
+| `german.ts` | German | ~25 | Normal |
+| `spanish.ts` | Spanish | ~20 | Normal |
+| `religious-education.ts` | Religious Education | ~70 | **HIGH** |
+| `rshe-pshe.ts` | RSHE/PSHE | ~25 | **HIGH** |
+
+### Impact on Ground Truth Review
+
+**✅ COMPLETED 2026-01-17**: Re-reviewed with new synonyms deployed:
+
+1. **art/primary** — ✅ re-reviewed, ground truths verified correct
+2. **art/secondary** — ✅ re-reviewed, ground truths verified correct
+3. **citizenship/secondary** — ✅ re-reviewed, ground truths verified correct
+4. **cooking-nutrition/primary** — ✅ re-reviewed, ground truths verified correct (low MRR reveals search quality gaps)
+5. **cooking-nutrition/secondary** — ✅ completed, cross-topic corrected (was nutrition-theory, now cooking+nutrition)
+
+See: [ADR-100](../../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md) | [synonym-complete-coverage.md](../archive/completed/synonym-complete-coverage.md)
+
+---
+
+## 🎯 NEXT SESSION: english (primary + secondary)
+
+**Scope**: 2 subject-phases, 8 ground truths total
+
+**REMINDER**: This session uses the **Deep Exploration Standard**:
+- 5-10 MCP summaries per category (not 1-2)
+- Comparison tables for every category
+- Ask "Am I confident this is the BEST?" before finalising each category
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Count lessons
+jq -r '.lessons[] | .lessonSlug' bulk-downloads/english-primary.json | wc -l
+jq -r '.lessons[] | .lessonSlug' bulk-downloads/english-secondary.json | wc -l
+
+# List all lessons (SCAN FULL LIST for non-obvious candidates)
+jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle) | \(.unitTitle)"' \
+  bulk-downloads/english-primary.json | sort
+
+jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle) | \(.unitTitle)"' \
+  bulk-downloads/english-secondary.json | sort
+
+# Review both phases
+pnpm gt-review --subject english --phase primary
+pnpm gt-review --subject english --phase secondary
+
+# Benchmark after review
+pnpm benchmark --subject english --verbose
+```
+
+**Ground truth files**:
+- `src/lib/search-quality/ground-truth/english/primary/`
+- `src/lib/search-quality/ground-truth/english/secondary/`
+
+---
+
+## CRITICAL: Deep Exploration Standard (Session 8+)
+
+**This is about discovering the BEST possible matches, not validating current matches are "good enough".**
+
+### The Mandatory Question
+
+Before finalising EACH category, explicitly ask:
+
+> **"Am I confident I have discovered the BEST possible matches through deep exploration, rather than just assessing if the returned results are 'good enough'?"**
+
+If the answer is not a confident "yes", do more exploration.
 
 ### Required Tools (Per Category)
 
-| Tool | Purpose | Required |
-|------|---------|----------|
-| **Bulk data** (`jq`) | Find ALL candidate lessons | ✓ Always |
-| **`get-lessons-summary`** | Keywords, key learning points | ✓ For 5-10 candidates |
-| **`get-units-summary`** | Lesson ordering in unit | ✓ For skill-level queries (beginner/intro/advanced) |
+| Tool | Purpose | Minimum Required |
+|------|---------|------------------|
+| **Bulk data** (`jq`) | Find ALL candidate lessons | ✓ Multiple search terms |
+| **`get-lessons-summary`** | Keywords, key learning points | ✓ **5-10 per category** (not 1-2) |
+| **`get-units-summary`** | Lesson ordering + unit contents | ✓ All relevant units |
 | **`get-key-stages-subject-units`** | Unit structure | When exploring curriculum |
 | **`gt-review`** | Actual search results | ✓ Always |
 
-### The Process (Per Category)
+### The Process (Per Category) — DEEP EXPLORATION
 
-1. **SEARCH bulk data** — `jq` with multiple terms to find ALL potentially relevant lessons
-2. **GET MCP summaries** — `get-lessons-summary` for 5-10 candidates
-3. **GET unit context** — `get-units-summary` when query involves skill level
+1. **SEARCH bulk data comprehensively** — `jq` with multiple terms. List ALL lessons in relevant units.
+2. **GET MCP summaries** — `get-lessons-summary` for **5-10 candidates** (including existing expected + new candidates)
+3. **GET unit context** — `get-units-summary` to find hidden candidates and understand ordering
 4. **RUN gt-review** — See search results and MRR
-5. **CREATE comparison table** — Key learning points + relevance assessment
-6. **SELECT THE BEST** — Objectively best semantic matches
+5. **CREATE comparison table** — Required for every category:
+   ```
+   | Slug | Keywords | Key Learning | Score | Notes |
+   |------|----------|--------------|-------|-------|
+   ```
+6. **ASK "Am I confident?"** — Explicitly before finalising
+7. **SELECT THE BEST** — Based on evidence from comparison table
 
-### Anti-pattern (DO NOT DO THIS)
+### Anti-Patterns (DO NOT DO THIS)
 
-- Looking at existing slugs → checking they appear → "looks good"
-- Using only `get-lessons-summary` without `get-units-summary` for skill-level queries
-- Accepting end-of-unit lessons as "beginner" content without checking lesson order
+- ❌ Looking at existing slugs → checking they appear → "looks good"
+- ❌ Getting only 1-2 MCP summaries instead of 5-10
+- ❌ Skipping comparison table creation
+- ❌ Not exploring unit structure with `get-units-summary`
+- ❌ Accepting "good enough" without asking "is this the BEST?"
+- ❌ Missing lessons with non-obvious titles (key learning reveals relevance)
 
 ---
 
@@ -293,40 +378,48 @@ File: `src/lib/search-quality/ground-truth/cooking-nutrition/primary/`
 
 ---
 
-### 7. cooking-nutrition/secondary
+### 7. cooking-nutrition/secondary **← REVIEWED 2026-01-17**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000. Both expected slugs (`macronutrients-fibre-and-water`, `micronutrients`) found. Scientific nutrition vocabulary correctly matches.
+- [x] natural-expression — MRR 1.000. Both expected slugs (`making-herby-focaccia`, `making-chelsea-buns`) found. Bread-making lessons correctly identified for "teach students to make bread".
+- [x] imprecise-input — MRR 0.333. Both expected slugs found (#3, #5). Typo "nutrision" relies on ELSER semantics since fuzzy matching struggles.
+- [x] cross-topic — MRR 1.000. **CORRECTED**: Replaced nutrition-theory slugs (`eat-well-now`, `making-better-food-and-drink-choices`) with cooking+nutrition combination slugs (`making-mushroom-bean-burgers-with-flatbreads` score=3, `making-cheesy-bean-burritos` score=2, `making-toad-in-the-hole` score=2). Previous slugs were theory-only without cooking techniques.
+
+**Changes**: cross-topic expected slugs corrected to lessons that actually combine nutrition AND cooking techniques.
+
+**Aggregate**: MRR 0.833 | NDCG 0.764 | P@3 0.500 | R@10 1.000
 
 File: `src/lib/search-quality/ground-truth/cooking-nutrition/secondary/`
 
 ---
 
-### 8. design-technology/primary
+### 8. design-technology/primary **← REVIEWED 2026-01-17 (DEEP REVIEW)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000. Verified correct with 8 MCP summaries. `cam-mechanisms` and `cams-in-a-product` are the foundational conceptual lessons.
+- [x] natural-expression — MRR 1.000. **DEEP REVIEW**: Added `rotary-motion` (score=2), upgraded `card-slider-mechanisms` to score=3. Explored 50+ movement lessons, selected those with "mechanisms are systems that make something move" in key learning.
+- [x] imprecise-input — MRR 1.000. Verified with unit structure analysis. Current selection correctly covers KS1 mechanism content from "Levers and sliders: moving cards" unit.
+- [x] cross-topic — MRR 0.500. Verified best available given curriculum. No single lesson combines all three concepts (structures + materials + testing).
+
+**Aggregate**: MRR 0.875 | NDCG 0.689 | P@3 0.417 | R@10 0.938
 
 File: `src/lib/search-quality/ground-truth/design-technology/primary/`
 
 ---
 
-### 9. design-technology/secondary
+### 9. design-technology/secondary **← REVIEWED 2026-01-17 (DEEP REVIEW)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 0.500. **DEEP REVIEW**: Added `empathy` (score=2) which is explicitly about "understanding what users experience" - this IS human factors.
+- [x] natural-expression — MRR 1.000. **DEEP REVIEW**: Added `material-sustainability` (score=2) which explicitly uses "sustainable" vocabulary bridging from "green/environment friendly".
+- [x] imprecise-input — MRR 1.000. Verified with comprehensive polymer search. Only 2 polymer-specific lessons exist, current selection is correct.
+- [x] cross-topic — MRR 1.000. **DEEP REVIEW**: Added `realistic-rendering-techniques` (score=3) as TRUE intersection - explicitly teaches "show material texture" through sketching. Downgraded `advanced-3d-sketching` to score=2.
+
+**Aggregate**: MRR 0.875 | NDCG 0.675 | P@3 0.583 | R@10 0.750
 
 File: `src/lib/search-quality/ground-truth/design-technology/secondary/`
 

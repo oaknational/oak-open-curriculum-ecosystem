@@ -1,30 +1,32 @@
-# Tier 2: Document Relationships
+# Document Relationships
 
-**Status**: 📋 Planned — Prerequisite: Bulk analysis complete
-**Priority**: MEDIUM — Next tier after fundamentals
-**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
-**Created**: 2026-01-03 (Extracted from thread-based-search.md and acceptance criteria)
+**Stream**: search-quality  
+**Level**: 2  
+**Status**: 📋 Pending — After Level 1 validated  
+**Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
+**Created**: 2026-01-03  
+**Last Updated**: 2026-01-17
 
 ---
 
 ## Overview
 
-Tier 2 exploits document relationships (threads, sequences, prerequisites) to improve search relevance through cross-referencing and relationship scoring.
+This plan exploits document relationships (threads, sequences, prerequisites) to improve search relevance through cross-referencing and relationship scoring.
 
-**Prerequisite**: [Bulk Data Analysis](bulk-data-analysis.md) should complete first to ensure vocabulary and entity relationships are available.
+**Prerequisite**: Level 1 validated (ground truth review complete).
 
-**Exit Criteria** (from [search-acceptance-criteria.md](../search-acceptance-criteria.md)):
+**Exit Criteria** (from [search-acceptance-criteria.md](../../search-acceptance-criteria.md)):
 
 | Criterion           | Target | Current | Status             |
 | ------------------- | ------ | ------- | ------------------ |
 | Aggregate Hard MRR  | ≥ 0.55 | 0.614   | ✅ Already exceeded |
-| Tier 1 exhausted    | Complete | ✅ Complete | 🔓 Ready to proceed |
+| Level 1 exhausted   | Complete | ✅ Complete | 🔓 Ready to proceed |
 
 ---
 
 ## Standard Approaches Checklist
 
-All items must be attempted and documented before Tier 2 can be declared "exhausted":
+All items must be attempted and documented before this level can be declared "exhausted":
 
 - [ ] Cross-reference boosting between lessons and units
 - [ ] Prerequisite/successor relationship scoring
@@ -159,44 +161,27 @@ const prerequisiteQuery = {
 
 ---
 
-## UX Concepts (For Future UI Work)
-
-**Progression Breadcrumb**:
-
-```text
-🧵 Number: Fractions
-   Year 3 → Year 4 → [Year 5: This Lesson] → Year 6 → Year 7
-```
-
-**Thread Filter Chips**:
-
-```text
-🔍 "fractions"
-   [All Threads] [Number ✓] [Ratio & Proportion] [Algebra]
-```
-
----
-
-## Implementation Notes
-
-The foundational data is in place. Advanced features should be driven by:
-
-1. User research showing demand for progression queries
-2. MRR improvement experiments
-3. MCP tool requirements
-
----
-
 ## Evaluation Requirements
 
-Before implementing Tier 2 features:
+Before implementing Level 2 features:
 
 1. **Create ground truths** for relationship queries:
    - "What comes before quadratics?" → Expected unit list
    - "Show me the fractions progression" → Expected thread
 2. **Baseline**: Document current MRR for these query types
 3. **After**: Measure improvement
-4. **Record**: [EXPERIMENT-LOG.md](../../../evaluations/EXPERIMENT-LOG.md)
+4. **Record**: [EXPERIMENT-LOG.md](../../evaluations/EXPERIMENT-LOG.md)
+
+---
+
+## Checklist
+
+- [ ] Create ground truths for relationship queries
+- [ ] Implement cross-reference boosting
+- [ ] Implement prerequisite scoring
+- [ ] Implement thread-grouped search
+- [ ] Benchmark all changes
+- [ ] Document in ADR
 
 ---
 
@@ -205,6 +190,6 @@ Before implementing Tier 2 features:
 | Document                                                                                      | Purpose                 |
 | --------------------------------------------------------------------------------------------- | ----------------------- |
 | [ADR-097](../../../../docs/architecture/architectural-decisions/097-context-enrichment-architecture.md) | Context enrichment      |
-| [../search-acceptance-criteria.md](../search-acceptance-criteria.md)                          | Tier 2 checklist        |
+| [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md)                    | Level 2 checklist       |
 | [../roadmap.md](../roadmap.md)                                                                | Master roadmap          |
-
+| [tier-3-modern-es-features.md](tier-3-modern-es-features.md)                                  | Next tier               |

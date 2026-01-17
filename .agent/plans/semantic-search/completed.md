@@ -1,8 +1,56 @@
 # Semantic Search — Completed Work
 
-**Last Updated**: 2026-01-13
+**Last Updated**: 2026-01-17
 
 Historical record of completed milestones. For current priorities, see [roadmap.md](roadmap.md).
+
+---
+
+## ✅ Ground Truth Review Sessions 6-9 (2026-01-16 — 2026-01-17)
+
+**Status**: ✅ Complete (9/30 subject-phases reviewed)  
+**Checklist**: [ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
+
+Deep exploration reviews using enhanced methodology (5-10 MCP summaries, comparison tables, unit ordering verification).
+
+### Sessions Completed
+
+| Session | Subject-Phase | MRR | Key Changes |
+|---------|---------------|-----|-------------|
+| 6 | cooking-nutrition/primary | 0.563 | Added 5 new slugs, revealed ranking weakness |
+| 7 | cooking-nutrition/secondary | 0.833 | cross-topic corrected (theory → cooking+nutrition) |
+| 8 | design-technology/primary | 0.875 | Added `rotary-motion`, upgraded `card-slider-mechanisms` |
+| 9 | design-technology/secondary | 0.875 | Added `empathy`, `material-sustainability`, `realistic-rendering-techniques` |
+
+### Key Learnings
+
+1. **Low MRR with high R@10** indicates results ARE found but poorly ranked — search quality insight, not ground truth error
+2. **Unit structure analysis** critical for skill-level queries (beginner/intro) — use `get-units-summary` to verify lesson ordering
+3. **Key learning points** reveal relevance not visible in titles — scan full curriculum, not just title searches
+
+---
+
+## ✅ Complete Subject Synonym Coverage (2026-01-17)
+
+**Status**: ✅ Complete  
+**ADR**: [ADR-100](../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md)  
+**Archive**: [synonym-complete-coverage.md](archive/completed/synonym-complete-coverage.md)
+
+All 17 subjects now have domain-specific synonym files, unblocking ground truth review.
+
+### What Was Added
+
+| Subjects | Files Added | Approximate Entries |
+|----------|-------------|---------------------|
+| Art, D&T, PE | 3 files | ~130 entries |
+| Citizenship, French, German, Spanish | 4 files | ~105 entries |
+| Religious Education, RSHE/PSHE | 2 files (HIGH sensitivity) | ~95 entries |
+
+### Impact
+
+- Ground truth re-review for sessions 1-5 completed with new synonyms deployed
+- All subject-phases now have synonym support for search queries
+- **Total corpus**: ~580 synonym entries across 17 subjects
 
 ---
 

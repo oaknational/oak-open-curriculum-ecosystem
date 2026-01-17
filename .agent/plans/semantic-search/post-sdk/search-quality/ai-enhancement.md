@@ -1,22 +1,43 @@
-# Tier 4: AI Enhancement
+# AI Enhancement — DESTINATION
 
-**Status**: 📋 DEFERRED — Requires Tiers 1-3 exhausted
-**Priority**: LOW until prerequisites met
-**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)
-**Created**: 2026-01-03 (Extracted from conversational-search.md and reranking analysis)
+**Stream**: search-quality  
+**Level**: 4  
+**Status**: ⏸️ Blocked by Level 3  
+**Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
+**Created**: 2026-01-03  
+**Last Updated**: 2026-01-17
 
 ---
 
-## Overview
+## This Is Not Optional
 
-Tier 4 adds AI/LLM capabilities to search when traditional approaches are exhausted. This includes query understanding, intent classification, and semantic reranking.
+**AI Enhancement is the destination, not a "nice to have".**
 
-**Entry Criteria** (per [ADR-082: Fundamentals-First Strategy](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)):
+Some query types CANNOT be solved by Levels 1-3. Without AI:
 
-1. Tiers 1-3 are exhausted (all checklists complete)
-2. Aggregate MRR plateau demonstrated (≤5% improvement × 3 experiments)
-3. Specific category gaps remain that cannot be addressed by traditional means
-4. Cost/benefit analysis completed
+| Query | Issue | Why AI Required |
+|-------|-------|-----------------|
+| "challenging extension work for able mathematicians" | Intent-based | No metadata for difficulty/audience |
+| "visual introduction to vectors for beginners" | Intent-based | No teaching style metadata |
+| "that thing with triangles and squares" | Colloquial | Entity resolution beyond synonyms |
+| "what comes before GCSE trigonometry" | Progression | Curriculum sequence + NL understanding |
+| "help struggling students with fractions" | Pedagogical | Remediation intent |
+
+**These queries currently have 0.000 MRR.** They will never improve without Level 4.
+
+---
+
+## Entry Criteria
+
+Level 4 begins when (per [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)):
+
+1. ✅ Level 1 exhausted (COMPLETE — 0.614 MRR, intent-based exception documented)
+2. ⏸️ Level 2 exhausted (document relationships)
+3. ⏸️ Level 3 exhausted (semantic reranking, query rules, definitions)
+4. ⏸️ ≤5% MRR improvement in last 3 experiments (plateau demonstrated)
+5. ⏸️ Specific gaps documented that require AI
+
+**This is "when we reach Level 4" not "if we decide to do Level 4".**
 
 ---
 
@@ -24,13 +45,13 @@ Tier 4 adds AI/LLM capabilities to search when traditional approaches are exhaus
 
 Certain query types cannot be solved by retrieval alone. They require **intent understanding**:
 
-| Query                                            | Issue        | Required Understanding               |
-| ------------------------------------------------ | ------------ | ------------------------------------ |
-| "challenging extension work for able mathematicians" | Intent-based | Difficulty level, pedagogical intent |
-| "visual introduction to vectors for beginners"   | Intent-based | Content format, difficulty level     |
-| "that thing with triangles and squares"          | Colloquial   | Entity resolution (Pythagorean theorem) |
-| "what comes before GCSE trigonometry"            | Progression  | Curriculum sequence awareness        |
-| "help struggling students with fractions"        | Pedagogical  | Remediation intent                   |
+| Query | Current MRR | Issue |
+|-------|-------------|-------|
+| "challenging extension work for able mathematicians" | 0.000 | No difficulty metadata |
+| "visual introduction to vectors for beginners" | 0.000 | No teaching style metadata |
+| "that thing with triangles and squares" | 0.000 | Needs entity resolution |
+| "what comes before GCSE trigonometry" | N/A | Needs curriculum + NL |
+| "help struggling students with fractions" | N/A | Needs pedagogical intent |
 
 **Current retrieval limitations**:
 
@@ -68,7 +89,7 @@ User Query ─────────────│                           
                                         ▼
                         ┌─────────────────────────────────────────┐
                         │        Search SDK Pipeline              │
-                        │  (BM25 + ELSER + RRF + synonyms)        │
+                        │  (BM25 + ELSER + RRF + reranking)       │
                         └───────────────┬─────────────────────────┘
                                         │
                                         ▼
@@ -115,28 +136,6 @@ interface PreprocessedQuery {
 
 ---
 
-## Semantic Reranking
-
-### Status: DEFERRED
-
-Per [SEMANTIC-RERANKING-REASSESSMENT.md](../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md):
-
-The previous rejection of semantic reranking was based on invalid ground truth data (15% invalid slugs). However, the decision to defer remains valid because:
-
-1. **Fundamentals-First**: Tiers 1-3 are not yet exhausted
-2. **Cost/Benefit**: Reranking adds latency without guaranteed benefit
-3. **Simpler Alternatives**: Query reformulation may be more effective
-
-### When to Revisit
-
-Revisit reranking ONLY when:
-
-1. Tiers 1-3 are exhausted (all checklists complete)
-2. Specific query categories show plateau
-3. LLM pre-processing alone is insufficient
-
----
-
 ## Implementation Considerations
 
 ### LLM Selection
@@ -150,13 +149,23 @@ Revisit reranking ONLY when:
 
 **Recommendation**: Start with GPT-3.5-turbo for balance, measure quality degradation.
 
-### Caching
+### Latency Budget
 
-Pre-processed queries should be cached:
+Per [operations-governance.md](operations-governance.md):
+
+| Stage | Budget |
+|-------|--------|
+| LLM preprocessing | 300ms |
+| Total with LLM | ~580ms |
+
+LLM preprocessing is **optional under load** — graceful degradation means original query passes through unchanged.
+
+### Caching
 
 ```typescript
 // Cache key: hash(normalized_query)
 // TTL: 24 hours (curriculum vocabulary stable)
+// Expected hit rate: >80% for common queries
 ```
 
 ### Fallback
@@ -171,7 +180,7 @@ If LLM pre-processing fails:
 
 ## Acceptance Criteria
 
-- [ ] Colloquial queries resolve to curriculum terms
+- [ ] Colloquial queries resolve to curriculum terms (MRR ≥ 0.70)
 - [ ] Intent extraction works for preparation/review/extension/remediation
 - [ ] Filter extraction captures subject/keyStage from natural language
 - [ ] Latency overhead < 500ms (p95)
@@ -184,12 +193,44 @@ If LLM pre-processing fails:
 
 These queries should improve after implementation:
 
-| Query                                            | Current MRR | Expected MRR |
-| ------------------------------------------------ | ----------- | ------------ |
-| "challenging extension work for able mathematicians" | 0.000     | ≥ 0.80       |
-| "visual introduction to vectors for beginners"   | 0.000       | ≥ 0.70       |
-| "that thing with triangles and squares"          | 0.000       | ≥ 0.90       |
-| "what comes before GCSE trigonometry"            | N/A         | ≥ 0.80       |
+| Query                                            | Current MRR | Target MRR |
+| ------------------------------------------------ | ----------- | ---------- |
+| "challenging extension work for able mathematicians" | 0.000     | ≥ 0.80     |
+| "visual introduction to vectors for beginners"   | 0.000       | ≥ 0.70     |
+| "that thing with triangles and squares"          | 0.000       | ≥ 0.90     |
+| "what comes before GCSE trigonometry"            | N/A         | ≥ 0.80     |
+| "help struggling students with fractions"        | N/A         | ≥ 0.70     |
+
+---
+
+## Checklist
+
+- [ ] Design LLM prompt for query preprocessing
+- [ ] Implement PreprocessedQuery schema
+- [ ] Add caching layer
+- [ ] Implement fallback logic
+- [ ] Add ground truths for intent-based queries
+- [ ] Benchmark intent-based query MRR
+- [ ] Document latency impact
+- [ ] Create ADR for Level 4 architecture
+
+---
+
+## Timeline Expectation
+
+Based on the roadmap dependency chain:
+
+```
+Now:       Ground Truth Review (Phase 1)
+           ↓
+Next:      SDK Extraction (Phase 2)
+           ↓
+Then:      Foundations + Tiers 2-3
+           ↓
+Finally:   TIER 4 (this plan)
+```
+
+**Level 4 is not far away — it's the natural end of the quality journey.**
 
 ---
 
@@ -199,6 +240,6 @@ These queries should improve after implementation:
 | --------------------------------------------------------------------------------------------- | -------------------- |
 | [../roadmap.md](../roadmap.md)                                                                | Master plan          |
 | [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first   |
-| [../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md](../../../analysis/SEMANTIC-RERANKING-REASSESSMENT.md) | Reranking analysis |
-| [../search-acceptance-criteria.md](../search-acceptance-criteria.md)                          | Tier 4 entry criteria |
-
+| [../../search-acceptance-criteria.md](../../search-acceptance-criteria.md)                    | Level 4 entry criteria |
+| [operations-governance.md](operations-governance.md)                                          | Latency budgets, fallbacks |
+| [search-decision-model.md](search-decision-model.md)                                          | Query shape taxonomy |

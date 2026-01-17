@@ -2,7 +2,7 @@
 
 **Status**: ACCEPTED  
 **Date**: 2025-12-19  
-**Last Updated**: 2025-12-24  
+**Last Updated**: 2026-01-17  
 **Decision Makers**: Development Team  
 **Related**: [ADR-081](081-search-approach-evaluation-framework.md), [ADR-085](085-ground-truth-validation-discipline.md), [ADR-076](076-elser-only-embedding-strategy.md), [ADR-063](063-sdk-domain-synonyms-source-of-truth.md)
 
@@ -85,7 +85,7 @@ These artefacts are:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-See [02b-vocabulary-mining.md](../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) for the comprehensive bulk analysis plan.
+See [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) for the comprehensive bulk analysis plan.
 
 ## Problem Statement
 
@@ -284,7 +284,7 @@ Only pursue when Tiers 1-3 show diminishing returns.
 | **NC coverage map**     | ❌ Not built    | 🔜 Curriculum alignment      |
 | **Thread progressions** | ❌ Not built    | 🔜 Learning path queries     |
 
-See [02b-vocabulary-mining.md](../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) for the comprehensive vocabulary mining plan.
+See [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) for the vocabulary mining plan.
 
 ## Rationale
 
@@ -363,18 +363,18 @@ All Tier 1 checklist items complete. Intent-based category (0.229) has documente
 | **3** | 📋 Blocked       | —         | Waiting for Tier 2 exhaustion                    |
 | **4** | ⏸️ Deferred      | —         | Only after Tiers 1-3 exhausted and plateau shown |
 
-### Per-Category Breakdown (Lesson Hard Queries)
+### Per-Category Breakdown
 
-Measured 2025-12-24 with corrected ground truth (see ADR-085):
+**Note**: Categories were renamed in 2026-01. See [ADR-098](098-ground-truth-registry.md) for canonical definitions.
 
-| Category         | MRR       | Status       | Root Cause of Remaining Gap        |
-| ---------------- | --------- | ------------ | ---------------------------------- |
-| misspelling      | 0.833     | ✅ Excellent | —                                  |
-| naturalistic     | 0.722     | ✅ Good      | —                                  |
-| multi-concept    | 0.625     | ✅ Good      | —                                  |
-| synonym          | 0.611     | ✅ Good      | —                                  |
-| colloquial       | 0.500     | ✅ Good      | —                                  |
-| **intent-based** | **0.229** | ⚠️ Exception | Exception granted — Tier 4 problem |
+| Old Category   | New Category         | Description               |
+| -------------- | -------------------- | ------------------------- |
+| naturalistic   | `natural-expression` | Teacher everyday language |
+| misspelling    | `imprecise-input`    | Typos, truncation         |
+| multi-concept  | `cross-topic`        | Concept intersections     |
+| standard/topic | `precise-topic`      | Curriculum terminology    |
+
+Legacy categories (`synonym`, `colloquial`, `intent-based`) have been deprecated — these scenarios are now captured within the four canonical categories.
 
 ### Intent-Based Query Gap Analysis — EXCEPTION GRANTED
 
@@ -462,9 +462,10 @@ AI enhancement (semantic reranking, LLM query expansion) should be re-evaluated 
 
 ### Vocabulary Mining & Static Analysis
 
-- [02b-vocabulary-mining.md](../../.agent/plans/semantic-search/part-1-search-excellence/02b-vocabulary-mining.md) — **Comprehensive bulk data analysis plan**
-- [02a-synonym-architecture.md](../../.agent/plans/semantic-search/part-1-search-excellence/02a-synonym-architecture.md) — Fix circular dependency
+- [bulk-data-analysis.md](../../.agent/plans/semantic-search/post-sdk/bulk-data-analysis.md) — **Bulk data analysis plan (post-SDK)**
+- [synonym-architecture.md](../../.agent/plans/semantic-search/archive/completed/synonym-architecture.md) — Synonym architecture (completed)
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md) — Synonym management
+- [ADR-100: Complete Subject Synonym Coverage](100-complete-subject-synonym-coverage.md) — All 17 subjects covered
 
 ### Architecture
 

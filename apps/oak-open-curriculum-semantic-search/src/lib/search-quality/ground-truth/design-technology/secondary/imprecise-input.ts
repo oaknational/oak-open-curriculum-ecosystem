@@ -4,16 +4,17 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - MRR 0.333, tests "platics" misspelling */
+/** Human Review: 2026-01-17 - Updated with polymer-specific lessons (not general materials) */
 export const DT_SECONDARY_IMPRECISE_INPUT: readonly GroundTruthQuery[] = [
   {
     query: 'platics and polymers materials',
     category: 'imprecise-input',
     priority: 'critical',
-    description: 'Common misspelling of "plastics" - tests fuzzy recovery',
+    description: 'Misspelling of "plastics" - tests fuzzy recovery for polymer content',
     expectedRelevance: {
       'polymers-properties-sources-and-stock-forms': 3,
-      'physical-properties-of-materials': 2,
+      'polymer-properties-and-processes': 3,
+      'materials-and-manufacturing-processes-polymers-and-timbers': 2,
     },
   },
 ] as const;

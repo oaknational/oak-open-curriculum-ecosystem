@@ -2,6 +2,13 @@
 
 Use this template when creating Cursor plans for ground truth review sessions.
 
+**CRITICAL**: Deep exploration is mandatory. This means:
+
+- **5-10 MCP summaries** per category (not 1-2)
+- **Comparison tables** for every category
+- **Unit-level exploration** using `get-units-summary`
+- Explicitly asking **"Am I confident this is the BEST?"** before finalising
+
 ---
 
 ## Cursor Plan Frontmatter
@@ -9,7 +16,7 @@ Use this template when creating Cursor plans for ground truth review sessions.
 ```yaml
 ---
 name: Ground Truth Session N
-overview: "Session N: Comprehensive ground truth review for SUBJECT/PHASE (4 queries, X lessons in pool). Uses ALL relevant MCP tools AND bulk data."
+overview: "Session N: DEEP ground truth review for SUBJECT/PHASE (4 queries, X lessons in pool). Uses ALL relevant MCP tools AND bulk data with DEEP EXPLORATION STANDARD: 5-10 MCP summaries per category, comparison tables, unit exploration. Goal: discover BEST possible matches, not validate current matches are 'good enough'. Metrics: MRR, NDCG, P@3, R@10."
 todos:
   - id: prereq
     content: "Prerequisites: Verify MCP server, ES access, bulk data, list ALL lessons"
@@ -26,6 +33,9 @@ todos:
   - id: cat1-compare
     content: "precise-topic: Create comparison table, select BEST matches"
     status: pending
+  - id: cat1-confident
+    content: "precise-topic: Ask 'Am I confident this is the BEST?' — if no, explore more"
+    status: pending
   - id: cat2-bulk
     content: "natural-expression: Search bulk data for ALL relevant lessons"
     status: pending
@@ -38,6 +48,9 @@ todos:
   - id: cat2-compare
     content: "natural-expression: Create comparison table, select BEST matches"
     status: pending
+  - id: cat2-confident
+    content: "natural-expression: Ask 'Am I confident this is the BEST?' — if no, explore more"
+    status: pending
   - id: cat3-bulk
     content: "imprecise-input: Search bulk data for ALL relevant lessons"
     status: pending
@@ -47,6 +60,9 @@ todos:
   - id: cat3-compare
     content: "imprecise-input: Create comparison table, select BEST matches"
     status: pending
+  - id: cat3-confident
+    content: "imprecise-input: Ask 'Am I confident this is the BEST?' — if no, explore more"
+    status: pending
   - id: cat4-bulk
     content: "cross-topic: Search bulk data for ALL relevant lessons"
     status: pending
@@ -54,7 +70,10 @@ todos:
     content: "cross-topic: Get MCP summaries for 5-10 candidates"
     status: pending
   - id: cat4-compare
-    content: "cross-topic: Create comparison table, select BEST matches"
+    content: "cross-topic: Create comparison table, verify BOTH concepts in key learning"
+    status: pending
+  - id: cat4-confident
+    content: "cross-topic: Ask 'Am I confident this is the BEST?' — if no, explore more"
     status: pending
   - id: verify
     content: "Verification: Review ALL lessons list for missed candidates"
@@ -75,15 +94,24 @@ todos:
 ```markdown
 # Ground Truth Review Session N: SUBJECT/PHASE
 
-## Required Standard
+## DEEP EXPLORATION STANDARD (Mandatory)
 
-**Use ALL relevant MCP tools AND bulk data** for every category.
+This session uses the **Deep Exploration Standard** established in Session 8:
+
+| Requirement | Minimum | Why |
+|-------------|---------|-----|
+| MCP summaries per category | **5-10** | Reveals non-obvious candidates |
+| Comparison tables | **Every category** | Prevents "good enough" thinking |
+| Unit exploration | **Every relevant unit** | Finds hidden gems |
+| Confidence check | **Before finalising** | Ensures thoroughness |
+
+### Required Tools
 
 | Tool | Purpose | Required |
 |------|---------|----------|
 | **Bulk data** (`jq`) | Find ALL candidate lessons | ✓ Always |
-| **`get-lessons-summary`** | Keywords, key learning points | ✓ For 5-10 candidates |
-| **`get-units-summary`** | Lesson ordering in unit | ✓ For skill-level queries |
+| **`get-lessons-summary`** | Keywords, key learning points | ✓ **5-10 per category** |
+| **`get-units-summary`** | Lesson ordering in unit | ✓ All skill-level queries + unit exploration |
 | **`gt-review`** | Actual search results | ✓ Always |
 
 ---
@@ -152,9 +180,12 @@ pnpm gt-review --subject SUBJECT --phase PHASE --category precise-topic
 **Current query**: "QUERY"
 **Current expected**: SLUGS
 
-### Key consideration
+### Key considerations
 
-Parse the query for ACTION verbs (e.g., "learning to cook" → practical lessons, not theory).
+- Parse the query for **ACTION verbs** (e.g., "learning to cook" → practical lessons, not theory)
+- Match the **INFORMAL phrasing** of the query, not just technical terms
+- Example: "making things move" → lessons with "mechanisms are systems that make something move" (not "cam mechanisms")
+- Verify **vocabulary bridging**: For "green design", expected slugs should use "sustainable", "environmental" in key learning
 
 ### Step 1: Search bulk data
 
@@ -219,7 +250,13 @@ jq -r '.lessons[] | select(.lessonTitle | test("CONCEPT2"; "i"))' ...
 
 ### Step 3: Create comparison table
 
-Focus on: Which lessons explicitly combine BOTH/ALL concepts?
+Focus on: Which lessons explicitly combine BOTH/ALL concepts in their key learning points?
+
+**Important insights from Session 8:**
+
+- **Rendering can be valid intersection**: For "sketching + materials" queries, lessons about rendering that teach "show material texture" ARE valid intersections
+- **Some queries have no perfect match**: If no single lesson combines all concepts, document this and select best approximations from different angles
+- **Verify BOTH concepts**: Don't assume from title — check key learning points explicitly mention both concepts
 
 ### Step 4: Run gt-review
 
@@ -227,14 +264,22 @@ Focus on: Which lessons explicitly combine BOTH/ALL concepts?
 
 ---
 
-## Verification Step
+## Verification Step (CRITICAL)
 
-Before finalising, ask: "Am I confident I've found the BEST lessons?"
+Before finalising each category, explicitly ask yourself:
 
-1. Review the full lesson list (from Prerequisites)
-2. Check if any lessons with non-obvious titles might be relevant
-3. Get MCP summaries for any additional candidates
-4. The key learning points may reveal relevance not visible in titles
+> **"Am I confident I have discovered the BEST possible matches through deep exploration, rather than just assessing if the returned results are 'good enough'?"**
+
+### Verification Checklist
+
+- [ ] Did I get **5-10 MCP summaries** for this category? (not 1-2)
+- [ ] Did I create a **comparison table** with key learning points?
+- [ ] Did I explore **all relevant units** using `get-units-summary`?
+- [ ] Did I check for lessons with **non-obvious titles** whose key learning reveals relevance?
+- [ ] For cross-topic: Did I verify expected slugs **actually combine BOTH concepts** in their key learning?
+- [ ] For natural-expression: Did I match the **informal phrasing** of the query, not just technical terms?
+
+If any answer is "no", go back and do deeper exploration.
 
 ---
 
@@ -273,8 +318,6 @@ pnpm benchmark --subject SUBJECT --phase PHASE --verbose
 
 Any new insights to add to documentation.
 
-```
-
 ---
 
 ## Checklist for Plan Completeness
@@ -296,11 +339,26 @@ Before starting a session, verify the plan includes:
 
 ## Anti-Patterns to Avoid
 
-1. **Validating existing slugs instead of exploring**: Don't just check if current slugs appear in results
-2. **Skipping `get-units-summary`**: Critical for understanding lesson ordering
-3. **Using end-of-unit lessons for beginner queries**: Lessons 5-6 are often capstone content
-4. **Accepting low MRR without investigation**: Lower MRR with correct ground truth is valuable information
-5. **Gaming benchmarks**: Ground truth correctness > benchmark scores
-6. **Only searching by title keywords**: MCP key learning points may reveal relevance not visible in titles — review ALL lessons in pool
-7. **Ignoring query verbs**: "learning to cook" indicates practical cooking lessons, not theory. Match the action implied by the query.
-8. **Skipping verification**: Always ask "Am I confident?" before finalising. Get MCP summaries for any suspicious lessons.
+### Shallow Exploration (Most Common Problem)
+
+1. **Getting only 1-2 MCP summaries**: You need **5-10 per category** to find non-obvious candidates
+2. **Skipping comparison tables**: Without explicit comparison, you'll accept "good enough" instead of finding BEST
+3. **Only searching by title keywords**: MCP key learning points reveal relevance not visible in titles
+4. **Accepting "looks good" without asking "is this the BEST?"**: The deep exploration question is mandatory
+
+### Process Shortcuts
+
+5. **Validating existing slugs instead of exploring**: Don't just check if current slugs appear in results
+6. **Skipping `get-units-summary`**: Critical for lesson ordering AND discovering hidden candidates
+7. **Using end-of-unit lessons for beginner queries**: Lessons 5-6 are often capstone content
+
+### Semantic Mismatches
+
+8. **Cross-topic without verifying BOTH concepts**: Expected slugs must explicitly combine both concepts in key learning
+9. **Natural-expression with technical terms**: Match informal phrasing ("making things move") not technical terms ("cam mechanisms")
+10. **Ignoring query verbs**: "learning to cook" indicates practical cooking lessons, not theory
+
+### Benchmark Gaming
+
+11. **Accepting low MRR without investigation**: Lower MRR with correct ground truth is valuable information
+12. **Prioritising scores over correctness**: Ground truth correctness > benchmark scores

@@ -1,7 +1,16 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-16
-**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Last Updated**: 2026-01-17  
+**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
+**Status**: 🔄 **Ground truth review** (9/30 subject-phases)
+
+---
+
+## Current Phase
+
+**Phase 1: Ground Truth Review** — Validating expected slugs.
+
+Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth review validates the measurements. Until 30/30 subject-phases are reviewed, MRR values may change as ground truths are corrected.
 
 ---
 
@@ -39,11 +48,12 @@
 | Milestone | Status |
 |-----------|--------|
 | RRF normalisation (ADR-099) | ✅ Implemented and validated |
-| Ground truths reviewed | 🔄 **6/30 subject-phases** (art/primary, art/secondary, citizenship/secondary, computing/primary, computing/secondary, cooking-nutrition/primary) |
+| Synonym coverage (ADR-100) | ✅ All 17 subjects have domain-specific synonyms (~580 total) |
+| Ground truths reviewed | 🔄 **9/30 subject-phases** (art/primary, art/secondary, citizenship/secondary, computing/primary, computing/secondary, cooking-nutrition/primary, cooking-nutrition/secondary, design-technology/primary, design-technology/secondary) |
 | Baselines established | ✅ 120 queries measured |
 | Quality gates | ✅ All passing |
 
-**Next Session**: cooking-nutrition/secondary (4 queries)
+**Next Session**: english/primary (4 queries)
 
 **Sessions 1-5 Log**: [sessions-1-5-log.md](logs/sessions-1-5-log.md) — Previous work before enhanced understanding
 
@@ -61,17 +71,28 @@
 
 **Plan template**: [ground-truth-session-template.md](templates/ground-truth-session-template.md)
 
-### Key Learnings from Sessions 1-6
+### Key Learnings from Sessions 1-8
+
+#### Foundational Principles (Sessions 1-7)
 
 1. **Imprecise-input tests resilience**: Proves that typos and messy input don't break search — the combined system (BM25 fuzziness + ELSER semantics + RRF) should still return relevant results despite imperfect input
 2. **Semantic intent**: Expected slugs must match what the query semantically means, not just title keywords
 3. **Skill level matching**: "coding for beginners" should return KS3 intro, not KS4 advanced
-4. **Curriculum exploration**: Find qualitatively best matches, not just top search results
-5. **Specification vs optimisation**: Ground truth review is about correctness (the answer key), not optimising scores (tuning the system)
-6. **Use MCP `get-units-summary` for lesson ordering**: For "beginner" queries, identify which lessons are FIRST in unit (true beginner) vs END of unit (capstone). Lower MRR with correct ground truth exposes search issues — valuable information.
-7. **Ground truth correctness over benchmark scores**: If semantically correct slugs don't rank well, the ground truth should still use them. This reveals search quality issues.
-8. **Review ALL lessons systematically**: List all lessons in the pool and review the full list, not just search results or title-based jq filters. MCP key learning points may reveal relevance not visible in titles.
-9. **Distinguish practical vs theory lessons**: For queries like "learning to cook X", practical cooking lessons should be preferred over theory lessons, even if theory ranks higher in search.
+4. **Specification vs optimisation**: Ground truth review is about correctness (the answer key), not optimising scores (tuning the system)
+5. **Ground truth correctness over benchmark scores**: If semantically correct slugs don't rank well, the ground truth should still use them. This reveals search quality issues.
+6. **Cross-topic requires BOTH components**: For "X AND Y together" queries, expected slugs must combine BOTH concepts.
+
+#### Deep Exploration Standard (Session 8)
+
+7. **5-10 MCP summaries per category**: Deep exploration requires getting `get-lessons-summary` for 5-10 candidates, not just 1-2. This reveals lessons missed by superficial exploration.
+8. **Comparison tables are mandatory**: Create explicit tables for every category: `| Slug | Keywords | Key Learning | Score |`. This prevents "good enough" thinking.
+9. **Unit-level exploration**: List ALL lessons in relevant units using `get-units-summary`, not just keyword-filtered results. Lessons with non-obvious titles may be highly relevant.
+10. **Ask "Am I confident?"**: Before finalising each category, explicitly ask: "Have I discovered the BEST possible matches through deep exploration?"
+11. **Rendering as valid intersection**: For sketching + materials queries, lessons about rendering that explicitly teach "show material texture" ARE valid intersections — `realistic-rendering-techniques` is better than `advanced-3d-sketching` for this query.
+12. **Human factors vocabulary**: In design context, "empathy" (understanding what users experience) IS human factors — don't miss lessons with related vocabulary.
+13. **Natural-expression semantic matching**: "DT making things move" should match lessons with "mechanisms are systems that make something move" in key learning — match informal phrasing.
+14. **Vocabulary bridging verification**: For sustainability queries, verify expected slugs explicitly use bridging vocabulary (e.g., `material-sustainability` uses "sustainable").
+15. **Some queries have no perfect match**: Document when no single lesson truly combines all query concepts — select best approximations from different angles.
 
 **Documentation**: [GROUND-TRUTH-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — consolidated design, troubleshooting, lessons learned
 

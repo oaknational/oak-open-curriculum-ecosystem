@@ -65,13 +65,13 @@ How do we systematically evaluate and compare search approaches to ensure:
 │         │                                                                   │
 │  ┌──────┴──────────────────────────────────────────────────────────┐        │
 │  │                    QUERY CATEGORIES                              │        │
-│  ├──────────────┬────────────┬────────────┬────────────┬───────────┤        │
-│  │  Standard    │ Naturalistic│ Misspelling│ Colloquial │ Intent   │        │
-│  │  (topic)     │  (teacher)  │  (typos)   │ (informal) │  (pure)  │        │
-│  │              │             │            │            │          │        │
-│  │  Priority:   │  Priority:  │ Priority:  │ Priority:  │ Priority:│        │
-│  │  baseline    │  high       │ critical   │ medium     │ explore  │        │
-│  └──────────────┴────────────┴────────────┴────────────┴───────────┘        │
+│  ├──────────────┬─────────────┬─────────────┬─────────────┐         │        │
+│  │ precise-topic│ natural-    │ imprecise-  │ cross-topic │         │        │
+│  │ (curriculum) │ expression  │ input       │ (intersect) │         │        │
+│  │              │ (teacher)   │ (typos)     │             │         │        │
+│  │  Priority:   │  Priority:  │  Priority:  │  Priority:  │         │        │
+│  │  baseline    │  high       │  critical   │  medium     │         │        │
+│  └──────────────┴─────────────┴─────────────┴─────────────┘         │        │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -120,14 +120,14 @@ How do we systematically evaluate and compare search approaches to ensure:
 
 #### Metric Targets by Query Category
 
-| Category         | Current MRR | Target MRR | Acceptable Latency | Priority    |
-| ---------------- | ----------- | ---------- | ------------------ | ----------- |
-| Standard (topic) | 0.931       | ≥0.92      | ≤500ms             | Baseline    |
-| Naturalistic     | ~0.40       | ≥0.50      | ≤1500ms            | High        |
-| Misspelling      | ~0.30       | ≥0.45      | ≤1500ms            | Critical    |
-| Multi-concept    | ~0.35       | ≥0.45      | ≤1500ms            | Medium      |
-| Colloquial       | ~0.35       | ≥0.45      | ≤1500ms            | Medium      |
-| Intent-based     | ~0.25       | ≥0.40      | ≤2000ms            | Exploratory |
+**Note**: Categories were standardised in 2026-01. See [ADR-098](098-ground-truth-registry.md) for canonical definitions.
+
+| Category             | Description               | Target MRR | Acceptable Latency | Priority |
+| -------------------- | ------------------------- | ---------- | ------------------ | -------- |
+| `precise-topic`      | Curriculum terminology    | ≥0.80      | ≤500ms             | Baseline |
+| `natural-expression` | Teacher everyday language | ≥0.50      | ≤1500ms            | High     |
+| `imprecise-input`    | Typos, misspellings       | ≥0.45      | ≤1500ms            | Critical |
+| `cross-topic`        | Concept intersections     | ≥0.45      | ≤1500ms            | Medium   |
 
 ### 3. Test Harness Architecture
 
