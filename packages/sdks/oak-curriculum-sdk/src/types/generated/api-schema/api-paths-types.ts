@@ -3162,9 +3162,9 @@ export interface operations {
         parameters: {
             query?: {
                 unit?: string;
-                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
+                /** @description Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted. */
                 offset?: number;
-                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
+                /** @description Offset applied to lessons within each unit (not to the unit list). */
                 limit?: number;
             };
             header?: never;

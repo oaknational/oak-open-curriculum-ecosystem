@@ -23,7 +23,7 @@ import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
  * |----------|---------------|-----------------|
  * | `precise-topic` | Teacher knows curriculum terminology | Basic retrieval works |
  * | `natural-expression` | Teacher uses everyday language | System bridges vocabulary gaps |
- * | `imprecise-input` | Teacher makes typing errors | System recovers from errors |
+ * | `imprecise-input` | Teacher types imperfectly (typos, truncation, wrong order) | Search is resilient — imprecise input doesn't break search |
  * | `cross-topic` | Teacher wants intersection content | System finds concept overlaps |
  *
  * ## Migration from Legacy Categories (2026-01-09)
@@ -94,9 +94,11 @@ export type QueryPriority = 'critical' | 'high' | 'medium' | 'exploratory';
  * - Expected lessons match user INTENT, not keywords
  *
  * ### Imprecise Input
- * - Errors are plausible (common typos, not random)
+ * - Tests that imprecise input doesn't break search (resilience, not mechanism isolation)
+ * - Errors are plausible (common typos, truncation, wrong word order)
  * - Correct spelling is obvious to human reader
- * - Single-word queries acceptable only in this category
+ * - Success = relevant results appear despite imperfect input
+ * - Enabled by: BM25 fuzziness + ELSER semantics + RRF combination
  *
  * ### Cross-Topic
  * - Query genuinely combines multiple distinct concepts

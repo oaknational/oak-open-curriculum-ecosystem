@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-80e80c7b5efa9aa0c5efe7f2f9e72900a98297d4"
+    "version": "0.5.0-18a779a213d24096ecd2d73eec530f1679ab3e54"
   },
   "servers": [
     {
@@ -846,22 +846,24 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "offset",
-            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+            "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
             "schema": {
               "type": "number",
               "example": 50,
-              "default": 0
+              "default": 0,
+              "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted."
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+            "description": "Offset applied to lessons within each unit (not to the unit list).",
             "schema": {
               "type": "number",
               "maximum": 100,
               "example": 10,
-              "default": 10
+              "default": 10,
+              "description": "Offset applied to lessons within each unit (not to the unit list)."
             }
           }
         ],

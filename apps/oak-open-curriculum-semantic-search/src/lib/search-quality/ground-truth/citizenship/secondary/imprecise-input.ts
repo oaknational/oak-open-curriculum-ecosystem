@@ -4,17 +4,17 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - MRR 0.333, tests "goverment" misspelling */
+/** AI Curation: 2026-01-15 - Reviewed: replaced score=2 slug (procedures/traditions) with roles-focused slug */
 export const CITIZENSHIP_SECONDARY_IMPRECISE_INPUT: readonly GroundTruthQuery[] = [
   {
-    query: 'UK goverment parliament democracy',
+    query: 'parliment functions and roles',
     category: 'imprecise-input',
     priority: 'critical',
-    description: 'Common misspelling of "government" - tests fuzzy recovery',
+    description:
+      'Tests typo recovery: "parliment" → "parliament". System should remain resilient despite typo and return functions/roles lessons.',
     expectedRelevance: {
-      'how-is-the-uk-government-organised': 3,
-      'what-is-the-difference-between-the-government-and-parliament': 3,
-      'how-is-local-government-different-to-central-government': 2,
+      'what-is-parliament-and-what-are-its-functions': 3,
+      'what-is-the-difference-between-the-government-and-parliament': 2,
     },
   },
 ] as const;

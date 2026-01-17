@@ -1,3 +1,4 @@
 !.agent
 !.env.example
 !vercel_logs
+!apps/oak-open-curriculum-semantic-search/bulk-downloads

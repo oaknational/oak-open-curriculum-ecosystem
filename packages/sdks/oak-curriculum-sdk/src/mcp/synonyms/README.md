@@ -14,19 +14,32 @@ All synonym definitions live here and flow to consumers via SDK exports.
 
 ```text
 synonyms/
-├── maths.ts          ← Maths concept synonyms (comprehensive KS4 coverage)
-├── science.ts        ← Science concept synonyms
-├── english.ts        ← English/literacy synonyms
-├── history.ts        ← History topic synonyms
-├── geography.ts      ← Geography theme synonyms
-├── computing.ts      ← Computing concept synonyms [NEW 2025-12-26]
-├── music.ts          ← Music concept synonyms [NEW 2025-12-26]
-├── subjects.ts       ← Subject name synonyms (maths ↔ mathematics)
-├── key-stages.ts     ← Key stage synonyms (ks1 ↔ key stage 1)
-├── exam-boards.ts    ← Exam board synonyms
-├── numbers.ts        ← Number word synonyms (one ↔ 1)
-├── education.ts      ← General educational terminology + PE/DT terms
-└── index.ts          ← Barrel export → synonymsData
+├── # Subject-specific synonyms (alphabetical, complete coverage)
+├── art.ts                  ← Art concept synonyms [NEW 2026-01-16]
+├── citizenship.ts          ← Citizenship synonyms (medium sensitivity) [NEW 2026-01-16]
+├── computing.ts            ← Computing concept synonyms
+├── cooking-nutrition.ts    ← Cooking & nutrition synonyms
+├── design-technology.ts    ← Design Technology synonyms [NEW 2026-01-16]
+├── english.ts              ← English/literacy synonyms
+├── french.ts               ← French language learning synonyms [NEW 2026-01-16]
+├── geography.ts            ← Geography theme synonyms
+├── german.ts               ← German language learning synonyms [NEW 2026-01-16]
+├── history.ts              ← History topic synonyms
+├── maths.ts                ← Maths concept synonyms (comprehensive KS4 coverage)
+├── music.ts                ← Music concept synonyms
+├── physical-education.ts   ← Physical Education synonyms [NEW 2026-01-16]
+├── religious-education.ts  ← Religious Education synonyms (HIGH sensitivity) [NEW 2026-01-16]
+├── rshe-pshe.ts            ← RSHE/PSHE synonyms (HIGH sensitivity, placeholder) [NEW 2026-01-16]
+├── science.ts              ← Science concept synonyms
+├── spanish.ts              ← Spanish language learning synonyms [NEW 2026-01-16]
+│
+├── # Structural/generic synonyms
+├── education.ts            ← General educational terminology
+├── exam-boards.ts          ← Exam board synonyms
+├── key-stages.ts           ← Key stage synonyms (ks1 ↔ key stage 1)
+├── numbers.ts              ← Number word synonyms (one ↔ 1)
+├── subjects.ts             ← Subject name synonyms (maths ↔ mathematics)
+└── index.ts                ← Barrel export → synonymsData
 ```
 
 ## Synonym Structure
@@ -161,20 +174,51 @@ Record before/after MRR in the experiment log.
 
 ## Current Coverage
 
-| Category              | Count | Example                                      |
-| --------------------- | ----- | -------------------------------------------- |
-| `subjects`            | ~13   | maths ↔ mathematics                          |
-| `keyStages`           | ~4    | ks1 ↔ key stage 1                            |
-| `mathsConcepts`       | ~40   | trigonometry ↔ sohcahtoa                     |
-| `scienceConcepts`     | ~15   | photosynthesis ↔ plant energy process        |
-| `englishConcepts`     | ~10   | punctuation ↔ grammar marks                  |
-| `geographyThemes`     | ~10   | climate change ↔ global warming              |
-| `historyTopics`       | ~10   | ww1 ↔ world war 1                            |
-| `examBoards`          | ~5    | aqa ↔ assessment and qualifications alliance |
-| `generic`             | ~5    | lesson ↔ teaching session                    |
-| `educationalAcronyms` | ~10   | sen ↔ special educational needs              |
+**Complete coverage achieved 2026-01-16**: All 17 subjects now have domain-specific synonym files.
 
-Total: ~160+ synonym entries.
+| Category                           | Count | Example                                          |
+| ---------------------------------- | ----- | ------------------------------------------------ |
+| **Subject-specific (17 subjects)** |       |                                                  |
+| `artConcepts`                      | ~45   | watercolour ↔ watercolor, collage ↔ mixed media  |
+| `citizenshipConcepts`              | ~35   | democracy ↔ democratic system                    |
+| `computingConcepts`                | ~15   | raster ↔ bitmap, algorithm ↔ set of instructions |
+| `cookingNutritionConcepts`         | ~25   | nutrition ↔ nutrients, eatwell guide             |
+| `designTechnologyConcepts`         | ~40   | prototype ↔ model, mechanism ↔ moving parts      |
+| `englishConcepts`                  | ~10   | punctuation ↔ grammar marks                      |
+| `frenchConcepts`                   | ~25   | verb ↔ action word, present tense                |
+| `geographyThemes`                  | ~10   | climate change ↔ global warming                  |
+| `germanConcepts`                   | ~25   | nominative ↔ accusative (cases)                  |
+| `historyTopics`                    | ~10   | ww1 ↔ world war 1                                |
+| `mathsConcepts`                    | ~40   | trigonometry ↔ sohcahtoa                         |
+| `musicConcepts`                    | ~15   | semibreve ↔ whole note                           |
+| `physicalEducationConcepts`        | ~45   | invasion games ↔ team games, stamina ↔ endurance |
+| `religiousEducationConcepts`       | ~70   | church ↔ chapel, mosque ↔ masjid (distinct)      |
+| `rshePsheConcepts`                 | ~25   | mental health ↔ emotional wellbeing              |
+| `scienceConcepts`                  | ~15   | photosynthesis ↔ plant energy process            |
+| `spanishConcepts`                  | ~20   | ser/estar distinction, preterite tenses          |
+| **Structural/generic**             |       |                                                  |
+| `subjects`                         | ~13   | maths ↔ mathematics                              |
+| `keyStages`                        | ~4    | ks1 ↔ key stage 1                                |
+| `examBoards`                       | ~5    | aqa ↔ assessment and qualifications alliance     |
+| `numbers`                          | ~10   | one ↔ 1                                          |
+| `generic`                          | ~5    | lesson ↔ teaching session                        |
+| `educationalAcronyms`              | ~10   | sen ↔ special educational needs                  |
+
+**Total: ~500+ synonym entries across 23 categories.**
+
+### Sensitivity Notes
+
+Some subject areas contain content requiring careful handling:
+
+- **HIGH SENSITIVITY**: `religiousEducationConcepts`, `rshePsheConcepts`
+- **MEDIUM SENSITIVITY**: `citizenshipConcepts`
+
+These files include sensitivity notices and have undergone additional review for:
+
+- Accurate representation of all groups
+- Avoidance of conflating distinct concepts
+- Respectful, inclusive terminology
+- Theological/cultural precision where appropriate
 
 ## Vocab-Gen Integration: Lessons Learned (2025-12-26)
 

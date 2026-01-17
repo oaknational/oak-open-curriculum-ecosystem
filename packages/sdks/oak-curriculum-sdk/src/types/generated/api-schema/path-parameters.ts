@@ -1096,22 +1096,24 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "offset",
-        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+        "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
         "schema": {
           "type": "number",
           "example": 50,
-          "default": 0
+          "default": 0,
+          "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted."
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+        "description": "Offset applied to lessons within each unit (not to the unit list).",
         "schema": {
           "type": "number",
           "maximum": 100,
           "example": 10,
-          "default": 10
+          "default": 10,
+          "description": "Offset applied to lessons within each unit (not to the unit list)."
         }
       }
     ],

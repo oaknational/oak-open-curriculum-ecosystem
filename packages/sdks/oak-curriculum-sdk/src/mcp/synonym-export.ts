@@ -89,20 +89,13 @@ function populateLookup(group: SynonymGroup, lookup: Map<string, string>): void 
  * ```
  */
 export function buildElasticsearchSynonyms(): ElasticsearchSynonymSet {
-  // Process each synonym group explicitly for type safety.
-  // Dynamic iteration over a union of keys loses type information.
-  const entries: ElasticsearchSynonymEntry[] = [
-    ...processGroup('subjects', synonymsData.subjects),
-    ...processGroup('keyStages', synonymsData.keyStages),
-    ...processGroup('numbers', synonymsData.numbers),
-    ...processGroup('geographyThemes', synonymsData.geographyThemes),
-    ...processGroup('historyTopics', synonymsData.historyTopics),
-    ...processGroup('mathsConcepts', synonymsData.mathsConcepts),
-    ...processGroup('englishConcepts', synonymsData.englishConcepts),
-    ...processGroup('scienceConcepts', synonymsData.scienceConcepts),
-    ...processGroup('generic', synonymsData.generic),
-    ...processGroup('educationalAcronyms', synonymsData.educationalAcronyms),
-  ];
+  const entries: ElasticsearchSynonymEntry[] = [];
+
+  // Iterate over all synonym categories in synonymsData.
+  // Adding a new category to synonymsData automatically includes it here.
+  for (const [categoryName, group] of typeSafeEntries(synonymsData)) {
+    entries.push(...processGroup(categoryName, group));
+  }
 
   return { synonyms_set: entries };
 }
@@ -124,17 +117,11 @@ export function buildElasticsearchSynonyms(): ElasticsearchSynonymSet {
 export function buildSynonymLookup(): ReadonlyMap<string, string> {
   const lookup = new Map<string, string>();
 
-  // Process each synonym group explicitly for type safety.
-  populateLookup(synonymsData.subjects, lookup);
-  populateLookup(synonymsData.keyStages, lookup);
-  populateLookup(synonymsData.numbers, lookup);
-  populateLookup(synonymsData.geographyThemes, lookup);
-  populateLookup(synonymsData.historyTopics, lookup);
-  populateLookup(synonymsData.mathsConcepts, lookup);
-  populateLookup(synonymsData.englishConcepts, lookup);
-  populateLookup(synonymsData.scienceConcepts, lookup);
-  populateLookup(synonymsData.generic, lookup);
-  populateLookup(synonymsData.educationalAcronyms, lookup);
+  // Iterate over all synonym categories in synonymsData.
+  // Adding a new category to synonymsData automatically includes it here.
+  for (const [, group] of typeSafeEntries(synonymsData)) {
+    populateLookup(group, lookup);
+  }
 
   return lookup;
 }
@@ -196,17 +183,11 @@ function collectPhrases(group: SynonymGroup, phrases: Set<string>): void {
 export function buildPhraseVocabulary(): ReadonlySet<string> {
   const phrases = new Set<string>();
 
-  // Process each synonym group explicitly for type safety.
-  collectPhrases(synonymsData.subjects, phrases);
-  collectPhrases(synonymsData.keyStages, phrases);
-  collectPhrases(synonymsData.numbers, phrases);
-  collectPhrases(synonymsData.geographyThemes, phrases);
-  collectPhrases(synonymsData.historyTopics, phrases);
-  collectPhrases(synonymsData.mathsConcepts, phrases);
-  collectPhrases(synonymsData.englishConcepts, phrases);
-  collectPhrases(synonymsData.scienceConcepts, phrases);
-  collectPhrases(synonymsData.generic, phrases);
-  collectPhrases(synonymsData.educationalAcronyms, phrases);
+  // Iterate over all synonym categories in synonymsData.
+  // Adding a new category to synonymsData automatically includes it here.
+  for (const [, group] of typeSafeEntries(synonymsData)) {
+    collectPhrases(group, phrases);
+  }
 
   return phrases;
 }

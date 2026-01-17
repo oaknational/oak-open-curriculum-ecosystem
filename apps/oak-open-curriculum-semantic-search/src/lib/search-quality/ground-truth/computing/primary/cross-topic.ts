@@ -4,16 +4,19 @@
  */
 import type { GroundTruthQuery } from '../../types';
 
-/** AI Curation: 2026-01-11 - MRR 0.333, tests programming + sequences intersection */
+/** AI Curation: 2026-01-15 - Reviewed: systematically compared all 12 sequence-related lessons */
 export const COMPUTING_PRIMARY_CROSS_TOPIC: readonly GroundTruthQuery[] = [
   {
     query: 'programming and code sequences',
     expectedRelevance: {
-      'combining-code-blocks-in-a-sequence': 3,
-      'programming-sprites': 2,
+      'programming-sequences': 3,
+      sequences: 2,
+      'combining-code-blocks-in-a-sequence': 2,
+      'building-blocks-to-create-a-sequence': 2,
     },
     category: 'cross-topic',
     priority: 'medium',
-    description: 'Tests intersection of programming concepts with sequence logic',
+    description:
+      'Tests programming + sequences intersection. Score=3 is the foundational lesson ("programs run in a sequence"); score=2 are related sequence lessons from KS1 and KS2 units.',
   },
 ] as const;

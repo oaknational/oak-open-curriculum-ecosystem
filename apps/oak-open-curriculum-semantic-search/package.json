@@ -27,6 +27,7 @@
     "analyze:elser": "tsx scripts/analyze-elser-failures.ts",
     "ingest:verify": "tsx operations/ingestion/verify-ingestion.ts",
     "benchmark": "tsx evaluation/analysis/benchmark.ts",
+    "gt-review": "tsx evaluation/analysis/gt-review.ts",
     "ground-truth:generate": "tsx ground-truths/generation/generate-ground-truth-types.ts",
     "ground-truth:validate": "tsx evaluation/validation/validate-ground-truth.ts",
     "redis:up": "docker compose up -d",
