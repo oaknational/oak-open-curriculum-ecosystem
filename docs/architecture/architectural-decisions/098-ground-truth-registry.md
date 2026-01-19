@@ -141,8 +141,8 @@ function combineGroundTruth(
 
 **Benefits**:
 
-- **Independent discovery**: Review protocol reads query metadata without seeing expected slugs
-- **Protocol enforcement**: `pnpm gt:queries` extracts queries without revealing expectations
+- **Independent discovery**: Review protocol reads `.query.ts` files without seeing expected slugs
+- **Protocol enforcement**: `.query.ts` and `.expected.ts` are separate files, preventing accidental exposure
 - **Cleaner separation**: Query design vs expected outcomes are distinct concerns
 
 See [ADR-085](085-ground-truth-validation-discipline.md) for full architecture details.

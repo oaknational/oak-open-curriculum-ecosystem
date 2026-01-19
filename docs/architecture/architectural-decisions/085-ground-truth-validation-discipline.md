@@ -87,7 +87,7 @@ src/lib/search-quality/ground-truth/{subject}/{phase}/
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Independent Discovery**  | Agent review protocol can read query metadata without seeing expected slugs, preventing "expected slug validation bias" |
 | **Cleaner PRs**            | Adding/modifying queries vs updating expectations are distinct changes                                                  |
-| **Protocol Enforcement**   | `pnpm gt:queries` extracts query metadata without revealing expected slugs                                              |
+| **Protocol Enforcement**   | Reading `.query.ts` files provides query metadata without revealing expected slugs (in separate `.expected.ts` files)   |
 | **Independent Versioning** | Query design and expected outcomes can evolve separately                                                                |
 
 ### File Structure
@@ -135,11 +135,11 @@ export const GEOGRAPHY_PRIMARY_ALL_QUERIES = [
 
 ### Protocol Integration
 
-The ground truth review protocol uses `pnpm gt:queries` to extract query metadata:
+The ground truth review protocol reads `.query.ts` files directly to get query metadata:
 
 ```bash
-# Phase 1A: Read query metadata ONLY (no expected slugs)
-pnpm gt:queries geography primary
+# Phase 1A/1B: Read query metadata ONLY (no expected slugs)
+cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.query.ts
 
 # Phase 1C: NOW read expected slugs for comparison
 cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.expected.ts
