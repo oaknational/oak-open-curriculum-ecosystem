@@ -26,6 +26,8 @@ describe('aggregateByCategory', () => {
       recall10: mrr * 0.8,
       latencyMs,
       hasHit,
+      actualResults: [], // Not used by aggregateByCategory
+      expectedRelevance: {}, // Not used by aggregateByCategory
     };
   }
 

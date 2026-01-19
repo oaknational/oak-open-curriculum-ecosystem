@@ -24,7 +24,6 @@ describe('processQueryResult', () => {
         'solving-equations-involving-functions': 2,
       },
       category: 'precise-topic',
-      priority: 'high',
       description: 'Test fixture for MRR calculation',
     };
 
@@ -38,7 +37,6 @@ describe('processQueryResult', () => {
 
     expect(result.query).toBe('solving equations');
     expect(result.category).toBe('precise-topic');
-    expect(result.priority).toBe('high');
     expect(result.firstRelevantRank).toBe(1);
     expect(result.mrr).toBe(1); // 1/1
     expect(result.actualTop10).toEqual(actualResults);
@@ -52,7 +50,6 @@ describe('processQueryResult', () => {
         'solving-simple-linear-equations': 3,
       },
       category: 'imprecise-input',
-      priority: 'critical',
       description: 'Test fixture for rank-3 MRR calculation',
     };
 
@@ -76,7 +73,6 @@ describe('processQueryResult', () => {
         'expected-lesson': 3,
       },
       category: 'cross-topic',
-      priority: 'exploratory',
       description: 'Test fixture for zero-hit scenario',
     };
 
@@ -99,19 +95,17 @@ describe('processQueryResult', () => {
     expect(result.mrr).toBe(0);
   });
 
-  it('uses default category and priority when not provided', () => {
+  it('preserves category from query', () => {
     const query: GroundTruthQuery = {
       query: 'simple query',
       expectedRelevance: { 'some-lesson': 2 },
       category: 'precise-topic',
-      description: 'Test fixture for default values',
-      priority: 'medium',
+      description: 'Test fixture for category preservation',
     };
 
     const result = processQueryResult(query, ['some-lesson'], 100);
 
     expect(result.category).toBe('precise-topic');
-    expect(result.priority).toBe('medium');
   });
 });
 
@@ -146,7 +140,6 @@ function createResult(category: QueryCategory, mrr: number): QueryBaselineResult
   return {
     query: 'test query',
     category,
-    priority: 'medium',
     expectedSlugs: [],
     actualTop10: [],
     firstRelevantRank: mrr > 0 ? Math.round(1 / mrr) : null,

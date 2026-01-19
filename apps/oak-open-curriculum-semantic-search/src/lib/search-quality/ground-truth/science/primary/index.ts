@@ -1,43 +1,45 @@
 /**
- * Primary Science ground truth queries for search quality evaluation.
+ * Primary ground truth queries - 4 queries, 1 per category.
  *
- * **Structure (2026-01-11)**:
- * 4 queries total, 1 per category, AI-curated for accuracy.
- *
- * | Category | Query | MRR |
- * |----------|-------|-----|
- * | precise-topic | evolution Darwin finches Year 6 | 1.000 |
- * | natural-expression | that Darwin bird lesson | 1.000 |
- * | imprecise-input | evoloution and adaptashun | 0.333 |
- * | cross-topic | animals and food together | 0.250 |
- *
- * **Measurement Scope**: These queries test expected slug position,
- * NOT user satisfaction. See audit report for details.
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
  *
  * @packageDocumentation
  */
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
-import type { GroundTruthQuery } from '../../types';
+// Import query definitions
+import { SCIENCE_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { SCIENCE_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { SCIENCE_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { SCIENCE_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
 
-import { SCIENCE_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { SCIENCE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { SCIENCE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { SCIENCE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Import expected relevance
+import { SCIENCE_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { SCIENCE_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { SCIENCE_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { SCIENCE_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
 
-/**
- * All Primary Science ground truth queries.
- *
- * Total: 4 queries (1 per category).
- */
+/** All queries for this subject/phase */
 export const SCIENCE_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...SCIENCE_PRIMARY_PRECISE_TOPIC,
-  ...SCIENCE_PRIMARY_NATURAL_EXPRESSION,
-  ...SCIENCE_PRIMARY_IMPRECISE_INPUT,
-  ...SCIENCE_PRIMARY_CROSS_TOPIC,
+  combineGroundTruth(SCIENCE_PRIMARY_PRECISE_TOPIC_QUERY, SCIENCE_PRIMARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(
+    SCIENCE_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    SCIENCE_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    SCIENCE_PRIMARY_IMPRECISE_INPUT_QUERY,
+    SCIENCE_PRIMARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(SCIENCE_PRIMARY_CROSS_TOPIC_QUERY, SCIENCE_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-// Re-export category modules
-export { SCIENCE_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { SCIENCE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { SCIENCE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { SCIENCE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { SCIENCE_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { SCIENCE_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { SCIENCE_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { SCIENCE_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { SCIENCE_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { SCIENCE_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { SCIENCE_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { SCIENCE_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

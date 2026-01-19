@@ -10,21 +10,21 @@
 
 import type { GroundTruthQuery } from '../types';
 
-import { PE_PRIMARY_ALL_QUERIES } from './primary';
-import { PE_SECONDARY_ALL_QUERIES } from './secondary';
+import { PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES } from './primary';
+import { PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All Physical Education ground truth queries across all phases.
  *
  * Total: 8 queries (4 Primary + 4 Secondary).
  */
-export const PE_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...PE_PRIMARY_ALL_QUERIES,
-  ...PE_SECONDARY_ALL_QUERIES,
+export const PHYSICAL_EDUCATION_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  ...PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES,
+  ...PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES,
 ] as const;
 
 // Re-export primary
-export { PE_PRIMARY_ALL_QUERIES } from './primary';
+export { PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export { PE_SECONDARY_ALL_QUERIES } from './secondary';
+export { PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES } from './secondary';

@@ -1,7 +1,7 @@
 # ADR-085: Ground Truth Validation Discipline
 
 **Status**: ACCEPTED  
-**Date**: 2025-12-24 (Updated: 2026-01-11)  
+**Date**: 2025-12-24 (Updated: 2026-01-19)  
 **Decision Makers**: Development Team  
 **Related**: [ADR-082](082-fundamentals-first-search-strategy.md), [ADR-081](081-search-approach-evaluation-framework.md), [ADR-098](098-ground-truth-registry.md)
 
@@ -52,7 +52,6 @@ Ground truths require **three distinct validation stages**:
 The `GroundTruthQuery` type enforces required fields at compile time:
 
 - `category` — REQUIRED
-- `priority` — REQUIRED
 - `description` — REQUIRED
 
 Missing fields cause `pnpm type-check` to fail. This is **data integrity enforcement**.
@@ -64,6 +63,89 @@ Semantic rules that TypeScript cannot enforce (slug existence, category coverage
 **Passing type-check AND runtime validation means ground truths meet a MINIMUM QUALITY THRESHOLD.** This makes them _worthy of investment in manual review_. It does **NOT** mean they are production-ready.
 
 **Ground truths are NOT production-ready until ALL THREE stages are complete.**
+
+## Split File Architecture (2026-01-19)
+
+Ground truth files are split into separate query definition and expected relevance files:
+
+```text
+src/lib/search-quality/ground-truth/{subject}/{phase}/
+├── precise-topic.query.ts      # Query metadata only
+├── precise-topic.expected.ts   # Expected relevance only
+├── natural-expression.query.ts
+├── natural-expression.expected.ts
+├── imprecise-input.query.ts
+├── imprecise-input.expected.ts
+├── cross-topic.query.ts
+├── cross-topic.expected.ts
+└── index.ts                    # Combines at runtime
+```
+
+### Benefits
+
+| Benefit                    | Description                                                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Independent Discovery**  | Agent review protocol can read query metadata without seeing expected slugs, preventing "expected slug validation bias" |
+| **Cleaner PRs**            | Adding/modifying queries vs updating expectations are distinct changes                                                  |
+| **Protocol Enforcement**   | `pnpm gt:queries` extracts query metadata without revealing expected slugs                                              |
+| **Independent Versioning** | Query design and expected outcomes can evolve separately                                                                |
+
+### File Structure
+
+**Query Definition** (`*.query.ts`):
+
+```typescript
+import type { GroundTruthQueryDefinition } from '../../types';
+
+export const GEOGRAPHY_PRIMARY_PRECISE_TOPIC_QUERY: GroundTruthQueryDefinition = {
+  query: 'UK countries capitals',
+  category: 'precise-topic',
+  description: 'Tests UK geography locational knowledge retrieval',
+  expectedFile: './precise-topic.expected.ts',
+} as const;
+```
+
+**Expected Relevance** (`*.expected.ts`):
+
+```typescript
+import type { ExpectedRelevance } from '../../types';
+
+export const GEOGRAPHY_PRIMARY_PRECISE_TOPIC_EXPECTED: ExpectedRelevance = {
+  'locating-countries-of-the-united-kingdom': 3,
+  'capital-cities-of-the-uk': 3,
+  'human-and-physical-features-of-the-uk': 2,
+} as const;
+```
+
+**Index** (`index.ts`):
+
+```typescript
+import { combineGroundTruth } from '../../types';
+import { GEOGRAPHY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { GEOGRAPHY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+
+export const GEOGRAPHY_PRIMARY_ALL_QUERIES = [
+  combineGroundTruth(
+    GEOGRAPHY_PRIMARY_PRECISE_TOPIC_QUERY,
+    GEOGRAPHY_PRIMARY_PRECISE_TOPIC_EXPECTED,
+  ),
+  // ... other categories
+] as const;
+```
+
+### Protocol Integration
+
+The ground truth review protocol uses `pnpm gt:queries` to extract query metadata:
+
+```bash
+# Phase 1A: Read query metadata ONLY (no expected slugs)
+pnpm gt:queries geography primary
+
+# Phase 1C: NOW read expected slugs for comparison
+cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.expected.ts
+```
+
+This enforces the "COMMIT before comparison" discipline in the review protocol.
 
 ## Context
 
@@ -107,7 +189,7 @@ Ground truth validation uses generated types from bulk data:
 # Run from apps/oak-open-curriculum-semantic-search/
 
 # Generate types from bulk data (after bulk:download)
-pnpm ground-truth:generate
+pnpm bulk:typegen
 
 # Run 17 validation checks (all must pass)
 pnpm ground-truth:validate
@@ -124,7 +206,6 @@ pnpm ground-truth:validate
 | Field         | Requirement                            |
 | ------------- | -------------------------------------- |
 | `category`    | REQUIRED — TypeScript error if missing |
-| `priority`    | REQUIRED — TypeScript error if missing |
 | `description` | REQUIRED — TypeScript error if missing |
 
 **Runtime validation checks** (Stage 2, 16 total, all blocking):
@@ -205,13 +286,12 @@ See `GROUND-TRUTH-PROCESS.md` for the complete step-by-step process. Summary:
 
 After programmatic validation passes, the agent MUST verify each query:
 
-| Check              | Description                    | Method                        |
-| ------------------ | ------------------------------ | ----------------------------- |
-| Query realism      | Would a teacher type this?     | Human judgment                |
-| Relevance accuracy | Do scores match content?       | `get-lessons-summary` via MCP |
-| Completeness       | Any missed relevant lessons?   | Search bulk data              |
-| Category accuracy  | Is the category correct?       | Compare to definitions        |
-| Priority accuracy  | Is importance rated correctly? | Compare to usage patterns     |
+| Check              | Description                  | Method                        |
+| ------------------ | ---------------------------- | ----------------------------- |
+| Query realism      | Would a teacher type this?   | Human judgment                |
+| Relevance accuracy | Do scores match content?     | `get-lessons-summary` via MCP |
+| Completeness       | Any missed relevant lessons? | Search bulk data              |
+| Category accuracy  | Is the category correct?     | Compare to definitions        |
 
 ### 4. Validation Requirements
 
@@ -226,7 +306,6 @@ All checks are **blocking errors** — validation fails if any check fails.
 | Non-empty expectedRelevance  | Validation script      | Runtime validation |
 | Query length (3-10 words)    | Validation script      | Runtime validation |
 | Category required            | Validation script      | Runtime validation |
-| **Priority required**        | Validation script      | Runtime validation |
 | **Score variety (2+ slugs)** | Validation script      | Runtime validation |
 | At least one score=3         | Validation script      | Runtime validation |
 | At least 2 expected results  | Validation script      | Runtime validation |
@@ -411,7 +490,7 @@ The two-stage process combines:
 pnpm bulk:download
 
 # Generate types from bulk data
-pnpm ground-truth:generate
+pnpm bulk:typegen
 
 # Validate all ground truths (17 checks, all must pass)
 pnpm ground-truth:validate

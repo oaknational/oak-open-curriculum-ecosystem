@@ -17,10 +17,10 @@ import { ART_SECONDARY_ALL_QUERIES } from '../art/secondary';
 import { CITIZENSHIP_SECONDARY_ALL_QUERIES } from '../citizenship/secondary';
 import { COMPUTING_PRIMARY_ALL_QUERIES } from '../computing/primary';
 import { COMPUTING_SECONDARY_ALL_QUERIES } from '../computing/secondary';
-import { COOKING_PRIMARY_ALL_QUERIES } from '../cooking-nutrition/primary';
-import { COOKING_SECONDARY_ALL_QUERIES } from '../cooking-nutrition/secondary';
-import { DT_PRIMARY_ALL_QUERIES } from '../design-technology/primary';
-import { DT_SECONDARY_ALL_QUERIES } from '../design-technology/secondary';
+import { COOKING_NUTRITION_PRIMARY_ALL_QUERIES } from '../cooking-nutrition/primary';
+import { COOKING_NUTRITION_SECONDARY_ALL_QUERIES } from '../cooking-nutrition/secondary';
+import { DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES } from '../design-technology/primary';
+import { DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES } from '../design-technology/secondary';
 import { ENGLISH_PRIMARY_ALL_QUERIES } from '../english/primary';
 import { ENGLISH_SECONDARY_ALL_QUERIES } from '../english/secondary';
 import { ENGLISH_KS4_ALL_QUERIES } from '../english/secondary/ks4';
@@ -38,10 +38,10 @@ import { MATHS_SECONDARY_ALL_QUERIES } from '../maths/secondary';
 import { MATHS_KS4_ALL_QUERIES } from '../maths/secondary/ks4';
 import { MUSIC_PRIMARY_ALL_QUERIES } from '../music/primary';
 import { MUSIC_SECONDARY_ALL_QUERIES } from '../music/secondary';
-import { PE_PRIMARY_ALL_QUERIES } from '../physical-education/primary';
-import { PE_SECONDARY_ALL_QUERIES } from '../physical-education/secondary';
-import { RE_PRIMARY_ALL_QUERIES } from '../religious-education/primary';
-import { RE_SECONDARY_ALL_QUERIES } from '../religious-education/secondary';
+import { PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES } from '../physical-education/primary';
+import { PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES } from '../physical-education/secondary';
+import { RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES } from '../religious-education/primary';
+import { RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES } from '../religious-education/secondary';
 import { SCIENCE_PRIMARY_ALL_QUERIES } from '../science/primary';
 import { SCIENCE_SECONDARY_ALL_QUERIES } from '../science/secondary';
 import { SCIENCE_KS4_ALL_QUERIES } from '../science/secondary/ks4';
@@ -59,11 +59,27 @@ export const GROUND_TRUTH_ENTRIES: readonly GroundTruthEntry[] = [
   { subject: 'computing', phase: 'primary', queries: COMPUTING_PRIMARY_ALL_QUERIES },
   { subject: 'computing', phase: 'secondary', queries: COMPUTING_SECONDARY_ALL_QUERIES },
   // Cooking & Nutrition
-  { subject: 'cooking-nutrition', phase: 'primary', queries: COOKING_PRIMARY_ALL_QUERIES },
-  { subject: 'cooking-nutrition', phase: 'secondary', queries: COOKING_SECONDARY_ALL_QUERIES },
+  {
+    subject: 'cooking-nutrition',
+    phase: 'primary',
+    queries: COOKING_NUTRITION_PRIMARY_ALL_QUERIES,
+  },
+  {
+    subject: 'cooking-nutrition',
+    phase: 'secondary',
+    queries: COOKING_NUTRITION_SECONDARY_ALL_QUERIES,
+  },
   // Design & Technology
-  { subject: 'design-technology', phase: 'primary', queries: DT_PRIMARY_ALL_QUERIES },
-  { subject: 'design-technology', phase: 'secondary', queries: DT_SECONDARY_ALL_QUERIES },
+  {
+    subject: 'design-technology',
+    phase: 'primary',
+    queries: DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES,
+  },
+  {
+    subject: 'design-technology',
+    phase: 'secondary',
+    queries: DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES,
+  },
   // English (secondary includes KS4 set-text queries)
   { subject: 'english', phase: 'primary', queries: ENGLISH_PRIMARY_ALL_QUERIES },
   {
@@ -101,11 +117,27 @@ export const GROUND_TRUTH_ENTRIES: readonly GroundTruthEntry[] = [
   { subject: 'music', phase: 'primary', queries: MUSIC_PRIMARY_ALL_QUERIES },
   { subject: 'music', phase: 'secondary', queries: MUSIC_SECONDARY_ALL_QUERIES },
   // Physical Education
-  { subject: 'physical-education', phase: 'primary', queries: PE_PRIMARY_ALL_QUERIES },
-  { subject: 'physical-education', phase: 'secondary', queries: PE_SECONDARY_ALL_QUERIES },
+  {
+    subject: 'physical-education',
+    phase: 'primary',
+    queries: PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES,
+  },
+  {
+    subject: 'physical-education',
+    phase: 'secondary',
+    queries: PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES,
+  },
   // Religious Education
-  { subject: 'religious-education', phase: 'primary', queries: RE_PRIMARY_ALL_QUERIES },
-  { subject: 'religious-education', phase: 'secondary', queries: RE_SECONDARY_ALL_QUERIES },
+  {
+    subject: 'religious-education',
+    phase: 'primary',
+    queries: RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES,
+  },
+  {
+    subject: 'religious-education',
+    phase: 'secondary',
+    queries: RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES,
+  },
   // Science (secondary includes KS4 biology/chemistry/physics queries)
   { subject: 'science', phase: 'primary', queries: SCIENCE_PRIMARY_ALL_QUERIES },
   {

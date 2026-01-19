@@ -1,43 +1,42 @@
 /**
- * Primary Maths ground truth queries for search quality evaluation.
+ * Primary ground truth queries - 4 queries, 1 per category.
  *
- * **Structure (2026-01-11)**:
- * 4 queries total, 1 per category, AI-curated for accuracy.
- *
- * | Category | Query | MRR |
- * |----------|-------|-----|
- * | precise-topic | place value tens and ones | 1.000 |
- * | natural-expression | takeaway sums primary | 0.200 |
- * | imprecise-input | halfs and quarters | 0.500 |
- * | cross-topic | pattern blocks tangrams | 1.000 |
- *
- * **Measurement Scope**: These queries test expected slug position,
- * NOT user satisfaction. See audit report for details.
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
  *
  * @packageDocumentation
  */
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
-import type { GroundTruthQuery } from '../../types';
+// Import query definitions
+import { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { MATHS_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
 
-import { MATHS_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { MATHS_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { MATHS_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { MATHS_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Import expected relevance
+import { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { MATHS_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
 
-/**
- * All Primary Maths ground truth queries.
- *
- * Total: 4 queries (1 per category).
- */
+/** All queries for this subject/phase */
 export const MATHS_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_PRIMARY_PRECISE_TOPIC,
-  ...MATHS_PRIMARY_NATURAL_EXPRESSION,
-  ...MATHS_PRIMARY_IMPRECISE_INPUT,
-  ...MATHS_PRIMARY_CROSS_TOPIC,
+  combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(
+    MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(MATHS_PRIMARY_IMPRECISE_INPUT_QUERY, MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_CROSS_TOPIC_QUERY, MATHS_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-// Re-export category modules
-export { MATHS_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { MATHS_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { MATHS_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { MATHS_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { MATHS_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { MATHS_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

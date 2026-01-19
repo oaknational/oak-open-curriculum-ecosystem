@@ -35,7 +35,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests naturalistic student/parent help-seeking phrasing for unit discovery.',
-    priority: 'high',
   }, // Misspellings and typos
   {
     query: 'simultanous equasions',
@@ -44,7 +43,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'imprecise-input',
     description: 'Tests typo tolerance for common algebra misspelling.',
-    priority: 'critical',
   },
   {
     query: 'trigonomatry sohcahtoa',
@@ -53,7 +51,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'imprecise-input',
     description: 'Tests typo tolerance with mnemonic hint.',
-    priority: 'critical',
   },
   {
     query: 'quadradic graphs and roots',
@@ -63,7 +60,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'imprecise-input',
     description: 'Tests typo tolerance for quadratic terminology.',
-    priority: 'critical',
   },
 
   // Synonyms and alternative phrasings
@@ -75,7 +71,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests informal phrasing for geometry problem-solving.',
-    priority: 'high',
   },
   {
     query: 'making x the subject',
@@ -85,7 +80,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests informal rearrangement terminology.',
-    priority: 'high',
   },
   {
     query: 'number patterns and nth term',
@@ -94,7 +88,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests alternative vocabulary for sequences.',
-    priority: 'medium',
   },
 
   // Multi-concept queries
@@ -107,7 +100,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'cross-topic',
     description: 'Tests cross-domain topic intersection for integrated teaching.',
-    priority: 'medium',
   }, // Colloquial/informal language
   {
     query: 'that thing with triangles and squares',
@@ -117,7 +109,6 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests highly informal description for Pythagoras theorem.',
-    priority: 'medium',
   },
   {
     query: 'the circle rules with tangents and chords',
@@ -126,6 +117,5 @@ export const UNIT_HARD_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests informal description for circle theorems.',
-    priority: 'medium',
   },
 ] as const;

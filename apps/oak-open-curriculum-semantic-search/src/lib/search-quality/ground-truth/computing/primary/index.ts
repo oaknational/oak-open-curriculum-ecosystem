@@ -1,21 +1,48 @@
 /**
- * Primary Computing ground truth queries - 4 queries, 1 per category, AI-curated.
+ * Primary ground truth queries - 4 queries, 1 per category.
+ *
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
+ *
  * @packageDocumentation
  */
-import type { GroundTruthQuery } from '../../types';
-import { COMPUTING_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { COMPUTING_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { COMPUTING_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { COMPUTING_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
+// Import query definitions
+import { COMPUTING_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { COMPUTING_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { COMPUTING_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { COMPUTING_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+
+// Import expected relevance
+import { COMPUTING_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { COMPUTING_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { COMPUTING_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { COMPUTING_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+
+/** All queries for this subject/phase */
 export const COMPUTING_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...COMPUTING_PRIMARY_PRECISE_TOPIC,
-  ...COMPUTING_PRIMARY_NATURAL_EXPRESSION,
-  ...COMPUTING_PRIMARY_IMPRECISE_INPUT,
-  ...COMPUTING_PRIMARY_CROSS_TOPIC,
+  combineGroundTruth(
+    COMPUTING_PRIMARY_PRECISE_TOPIC_QUERY,
+    COMPUTING_PRIMARY_PRECISE_TOPIC_EXPECTED,
+  ),
+  combineGroundTruth(
+    COMPUTING_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    COMPUTING_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    COMPUTING_PRIMARY_IMPRECISE_INPUT_QUERY,
+    COMPUTING_PRIMARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(COMPUTING_PRIMARY_CROSS_TOPIC_QUERY, COMPUTING_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-export { COMPUTING_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { COMPUTING_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { COMPUTING_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { COMPUTING_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { COMPUTING_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { COMPUTING_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { COMPUTING_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { COMPUTING_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { COMPUTING_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { COMPUTING_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { COMPUTING_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { COMPUTING_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

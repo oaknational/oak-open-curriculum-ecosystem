@@ -16,7 +16,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Misspellings
   {
     query: 'mathamatics primary',
-    priority: 'critical',
     description: 'Misspelling of mathematics',
     expectedRelevance: {
       'maths-primary': 3,
@@ -24,7 +23,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'geograpy secondary',
-    priority: 'critical',
     description: 'Misspelling of geography',
     expectedRelevance: {
       'geography-secondary-aqa': 3,
@@ -33,7 +31,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'scince AQA',
-    priority: 'critical',
     description: 'Misspelling of science',
     expectedRelevance: {
       'science-secondary-aqa': 3,
@@ -41,7 +38,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'computor science',
-    priority: 'high',
     description: 'Common misspelling of computing/computer',
     expectedRelevance: {
       'computing-secondary-aqa': 3,
@@ -53,7 +49,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Colloquial/informal language
   {
     query: 'GCSE biology',
-    priority: 'high',
     description: 'GCSE typically means KS4 science',
     expectedRelevance: {
       'science-secondary-aqa': 3,
@@ -63,7 +58,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'maths for year 5',
-    priority: 'high',
     description: 'Year 5 is primary (KS2)',
     expectedRelevance: {
       'maths-primary': 3,
@@ -71,7 +65,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'year 10 english literature',
-    priority: 'high',
     description: 'Year 10 is secondary (KS4)',
     expectedRelevance: {
       'english-secondary-aqa': 3,
@@ -81,7 +74,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'languages for beginners',
-    priority: 'medium',
     description: 'Intent query - primary MFL',
     expectedRelevance: {
       'french-primary': 3,
@@ -92,7 +84,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Acronyms
   {
     query: 'MFL primary',
-    priority: 'medium',
     description: 'MFL = Modern Foreign Languages',
     expectedRelevance: {
       'french-primary': 3,
@@ -101,7 +92,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'DT secondary',
-    priority: 'medium',
     description: 'DT = Design Technology',
     expectedRelevance: {
       'design-technology-secondary': 3,
@@ -109,7 +99,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'RE AQA',
-    priority: 'medium',
     description: 'RE = Religious Education',
     expectedRelevance: {
       'religious-education-secondary-aqa': 3,
@@ -119,7 +108,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Synonym/alternative naming
   {
     query: 'food technology',
-    priority: 'medium',
     description: 'Alternative name for cooking-nutrition',
     expectedRelevance: {
       'cooking-nutrition-primary': 3,
@@ -128,7 +116,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'gym class',
-    priority: 'exploratory',
     description: 'Informal name for PE',
     expectedRelevance: {
       'physical-education-primary': 3,
@@ -137,7 +124,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'IT lessons',
-    priority: 'medium',
     description: 'IT often used interchangeably with computing',
     expectedRelevance: {
       'computing-primary': 3,
@@ -148,7 +134,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Multi-subject queries
   {
     query: 'stem subjects primary',
-    priority: 'exploratory',
     description: 'STEM = Science, Technology, Engineering, Mathematics',
     expectedRelevance: {
       'science-primary': 3,
@@ -161,7 +146,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Intent-based
   {
     query: 'resources for teaching fractions',
-    priority: 'exploratory',
     description: 'Topic-specific intent - should find maths',
     expectedRelevance: {
       'maths-primary': 3,
@@ -170,7 +154,6 @@ export const SEQUENCE_HARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'shakespeare curriculum',
-    priority: 'exploratory',
     description: 'Topic-specific - should find english secondary',
     expectedRelevance: {
       'english-secondary-aqa': 3,

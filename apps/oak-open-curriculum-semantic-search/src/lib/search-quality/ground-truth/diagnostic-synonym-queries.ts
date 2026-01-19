@@ -25,7 +25,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'trig ratios',
     category: 'natural-expression',
-    priority: 'high',
     description: 'Single-word synonym: "trig" → "trigonometry". Baseline for synonym expansion.',
     expectedRelevance: {
       'applying-trigonometric-ratios-in-context': 3,
@@ -36,7 +35,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'factorise quadratics',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Single-word synonym: "factorise" → "factorising"/"factoring". Tests UK/US spelling.',
     expectedRelevance: {
@@ -50,7 +48,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'straight line equations',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Phrase synonym at START: "straight line" → "linear". Tests phrase position sensitivity.',
     expectedRelevance: {
@@ -62,7 +59,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'equations for straight lines',
     category: 'natural-expression',
-    priority: 'high',
     description: 'Phrase synonym at END: "straight lines" → "linear". Compare with START position.',
     expectedRelevance: {
       'checking-and-securing-understanding-of-finding-the-equation-of-the-line-from-the-graph': 3,
@@ -73,7 +69,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'finding straight line slope',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Phrase synonym in MIDDLE: "straight line" → "linear". Tests multi-word phrase matching.',
     expectedRelevance: {
@@ -87,7 +82,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'rules for index laws',
     category: 'natural-expression',
-    priority: 'high',
     description: 'Multiple synonyms: "rules"→"laws" AND "index"→"indices". Tests synonym density.',
     expectedRelevance: {
       'the-laws-of-indices-multiplication': 3,
@@ -98,7 +92,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'transposition of formulas',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Formal synonym: "transposition" → "changing the subject"/"rearrange". Tests technical vocabulary.',
     expectedRelevance: {
@@ -112,7 +105,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'circle rules tangent',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Multi-word curriculum term: "circle rules" → "circle theorems". Tests compound term matching.',
     expectedRelevance: {
@@ -124,7 +116,6 @@ export const SYNONYM_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'y equals mx plus c',
     category: 'natural-expression',
-    priority: 'high',
     description:
       'Spoken formula: "y equals mx plus c" → "gradient intercept"/"linear graphs". Tests formula recognition.',
     expectedRelevance: {

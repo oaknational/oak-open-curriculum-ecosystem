@@ -19,7 +19,7 @@
  * @packageDocumentation
  */
 
-export type { SequenceGroundTruthQuery, SequenceQueryPriority } from './types';
+export type { SequenceGroundTruthQuery } from './types';
 
 import { SEQUENCE_STANDARD_QUERIES } from './standard-queries';
 import { SEQUENCE_HARD_QUERIES } from './hard-queries';

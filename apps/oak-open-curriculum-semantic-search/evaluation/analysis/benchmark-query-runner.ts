@@ -63,6 +63,9 @@ export interface RunQueryInput {
  *
  * Contains all IR metrics as defined in IR-METRICS.md,
  * plus the category for per-category aggregation.
+ *
+ * In review mode, also includes the actual results and expected relevance
+ * for detailed analysis.
  */
 export interface QueryResult {
   /** Category of user scenario this query represents. */
@@ -73,6 +76,10 @@ export interface QueryResult {
   readonly recall10: number;
   readonly latencyMs: number;
   readonly hasHit: boolean;
+  /** Actual result slugs returned by search, in rank order. */
+  readonly actualResults: readonly string[];
+  /** Expected relevance map from ground truth. */
+  readonly expectedRelevance: Readonly<Record<string, number>>;
 }
 
 /**
@@ -133,5 +140,7 @@ export async function runQuery(
     recall10,
     latencyMs,
     hasHit: actualResults.some((slug) => expectedSlugs.includes(slug)),
+    actualResults,
+    expectedRelevance: input.expectedRelevance,
   };
 }

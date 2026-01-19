@@ -1,281 +1,244 @@
 # Ground Truth Review Checklist
 
 **Status**: In Progress  
-**Progress**: 9/30 subject-phases complete (36/120 ground truths)  
-**Next**: english/primary + english/secondary (8 queries)
+**Progress**: 14/30 subject-phases complete (geography needs re-evaluation)  
+**Next**: geography/primary, geography/secondary (re-evaluation with proper methodology)  
+**Last Updated**: 2026-01-19 (added COMMIT step to prevent search validation bias)
 
-**Previous work**: [Sessions 1-5 Log](../logs/sessions-1-5-log.md)
+---
+
+## Quality Over Speed
+
+> **There is no time pressure. Going slowly and doing an excellent job provides lasting, significant value to this project. Going fast and compromising causes _damage_.**
+
+Previous sessions have repeatedly fallen into the "search validation" failure mode. This happens when there's perceived pressure to complete quickly.
+
+**Take your time.** Read each step. Complete each step fully. If something feels unclear, stop and think. The goal is correct ground truth, not fast ground truth.
+
+---
+
+## ⛔ CARDINAL RULES — READ FIRST ⛔
+
+### Rule 1: The search might be RIGHT. Your expected slugs might be WRONG.
+
+**Session 9 proved this**: Previous session claimed MRR 0.000 was a "search quality issue". After deep exploration: the expected slugs used "emotions" but the query said "feel". The search correctly prioritised "feel/feelings" lessons. After correction: MRR 0.000 → 1.000.
+
+### Rule 2: You must COMMIT to your rankings BEFORE seeing search results.
+
+**Session 15 (geography) proved this is critical**: Without explicit commitment before benchmark, agents repeatedly validate search results instead of doing independent discovery. The COMMIT step forces you to form an independent judgment first.
+
+**The Key Question is NOT**: "Do expected slugs appear in results?"  
+**The Key Question IS**: "What are the BEST slugs for this query, based on curriculum content?"
+
+---
+
+## Linear Execution Protocol with COMMIT Step
+
+**EVERY session MUST use the [Linear Execution Protocol](../templates/ground-truth-session-template.md).**
+
+This is not optional. Sessions that skip the COMMIT step or read expected slugs early produce flawed results.
+
+### Phase 0: Read Query Metadata (MANDATORY FIRST STEP)
+
+**Split File Architecture (2026-01-19)**:
+- `*.query.ts` — Contains query, category, description (SAFE to read)
+- `*.expected.ts` — Contains expectedRelevance (ONLY read in Phase 1C)
+
+```bash
+# Read query metadata WITHOUT expected slugs
+cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.query.ts
+# e.g.: cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.query.ts
+```
+
+**⛔ DO NOT READ `.expected.ts` FILES until Phase 1C.** They contain expected slugs.
+
+### Phase 1A: Query Analysis (REFLECT ONLY — no searches, no tools)
+
+**⚠️ No jq. No MCP. No benchmark. No data exploration. Just THINKING.**
+
+**⛔ DO NOT READ `.expected.ts` FILES. Use the query from `.query.ts` file.**
+
+| Requirement | Evidence Required | Why |
+|-------------|-------------------|-----|
+| State capability being tested | Which search behaviour is this category proving? | Clarity on purpose |
+| Evaluate query as test | Is this a good test of that capability? | Catch bad experimental design |
+| Assess experimental design | Will success/failure be informative? | Ensure meaningful results |
+| Identify design issues | Is query miscategorised, trivial, or impossible? | Catch problems early |
+
+**⛔ QUERY GATE**: Cannot search for candidates until query is validated.
+
+### Phase 1B: Discovery + COMMIT (BEFORE benchmark, BEFORE reading GT file)
+
+**⛔ DO NOT READ THE GT FILE. You do not know the expected slugs yet.**
+
+| Requirement | Evidence Required | Why |
+|-------------|-------------------|-----|
+| Search bulk data | 10+ candidate slugs | Find ALL candidates |
+| Get 5-10 MCP summaries | Key learning quotes | Reveals non-obvious matches |
+| Get unit context | Lesson ordering | Finds hidden gems |
+| Analyse candidates | Reasoning for each | Independent assessment |
+| **COMMIT rankings** | Top 5 with scores and justifications | **BEFORE seeing search OR expected slugs** |
+
+**⛔ DISCOVERY GATE**: Cannot run benchmark until rankings are COMMITTED and you have NOT read the GT file.
+
+### Phase 1C: Comparison (AFTER commitment — NOW read GT file)
+
+**✅ NOW you may read the GT file to see expected slugs for the first time.**
+
+| Requirement | Evidence Required | Why |
+|-------------|-------------------|-----|
+| Pre-comparison verification | Confirm rankings committed before benchmark AND before seeing expected slugs | Prevent validation bias |
+| Run benchmark --review | ALL 4 metrics output | Single tool, all metrics — shows expected slugs |
+| Create three-way comparison | YOUR rankings vs SEARCH vs EXPECTED | Must be three distinct sources |
+| Answer critical question | Justify: which source is BEST? | May be YOUR rankings! |
+| Record ALL 4 metrics | MRR, NDCG, P@3, R@10 | All visible in benchmark |
+
+**If any requirement is missing → the category is NOT complete.**
+
+---
+
+## Anti-Pattern: Search Validation (NOT Independent Discovery)
+
+This failure mode has occurred repeatedly. Learn to recognise it.
+
+### ❌ WRONG (Validates Search)
+
+1. Run benchmark → see search returns A, B, C
+2. Get MCP summaries for A, B, C
+3. Note they have relevant content
+4. Conclude "A, B, C are good"
+5. Fill COMMIT table with A, B, C
+6. Comparison table has identical columns
+
+**Why wrong**: No independent judgment formed. Just justified what search returned.
+
+### ✅ CORRECT (Independent Discovery)
+
+1. Search bulk data → find candidates X, Y, Z, A, B, W... (10+ slugs)
+2. Get MCP summaries → analyse each against query
+3. Realise X and Y directly match query; A and B are tangential
+4. COMMIT: X=#1, Y=#2, W=#3 (BEFORE seeing search)
+5. Run benchmark → see search returns A, B, C
+6. Three-way comparison shows differences
+7. Conclude: "X and Y are better than A and B because..."
+
+**Why correct**: Independent judgment formed first. Meaningful comparison made.
 
 ---
 
 ## ✅ Synonym Coverage Complete (2026-01-17)
 
-**All 17 subjects now have domain-specific synonym files.** This was a prerequisite blocking ground truth review.
-
-### What Was Added
-
-| File | Subject | Entries | Sensitivity |
-|------|---------|---------|-------------|
-| `art.ts` | Art | ~45 | Normal |
-| `citizenship.ts` | Citizenship | ~35 | Medium |
-| `design-technology.ts` | Design Technology | ~40 | Normal |
-| `physical-education.ts` | Physical Education | ~45 | Normal |
-| `french.ts` | French | ~25 | Normal |
-| `german.ts` | German | ~25 | Normal |
-| `spanish.ts` | Spanish | ~20 | Normal |
-| `religious-education.ts` | Religious Education | ~70 | **HIGH** |
-| `rshe-pshe.ts` | RSHE/PSHE | ~25 | **HIGH** |
-
-### Impact on Ground Truth Review
-
-**✅ COMPLETED 2026-01-17**: Re-reviewed with new synonyms deployed:
-
-1. **art/primary** — ✅ re-reviewed, ground truths verified correct
-2. **art/secondary** — ✅ re-reviewed, ground truths verified correct
-3. **citizenship/secondary** — ✅ re-reviewed, ground truths verified correct
-4. **cooking-nutrition/primary** — ✅ re-reviewed, ground truths verified correct (low MRR reveals search quality gaps)
-5. **cooking-nutrition/secondary** — ✅ completed, cross-topic corrected (was nutrition-theory, now cooking+nutrition)
-
-See: [ADR-100](../../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md) | [synonym-complete-coverage.md](../archive/completed/synonym-complete-coverage.md)
+All 17 subjects have domain-specific synonym files (~580 total). See: [ADR-100](../../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md)
 
 ---
 
-## 🎯 NEXT SESSION: english (primary + secondary)
+## 🎯 NEXT SESSION: geography (RE-EVALUATION)
 
-**Scope**: 2 subject-phases, 8 ground truths total
+**Scope**: 2 subject-phases, 8 ground truths total (geography/primary + geography/secondary)
 
-**REMINDER**: This session uses the **Deep Exploration Standard**:
-- 5-10 MCP summaries per category (not 1-2)
-- Comparison tables for every category
-- Ask "Am I confident this is the BEST?" before finalising each category
+**Why re-evaluation?**: Session 15 validated search results instead of doing independent discovery. The COMMIT step was missing. Changes made to ground truths were based on what search returned, not on independent curriculum analysis.
+
+**This session must**:
+1. Follow the updated protocol with explicit COMMIT step (1B.5)
+2. Form independent rankings BEFORE running benchmark
+3. Create meaningful three-way comparison tables
+
+**USE THE UPDATED PROTOCOL**: [ground-truth-session-template.md](../templates/ground-truth-session-template.md)
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Count lessons
-jq -r '.lessons[] | .lessonSlug' bulk-downloads/english-primary.json | wc -l
-jq -r '.lessons[] | .lessonSlug' bulk-downloads/english-secondary.json | wc -l
+# PHASE 0: Prerequisites
+jq '.sequence | length' bulk-downloads/geography-primary.json
+jq '.sequence | length' bulk-downloads/geography-secondary.json
 
-# List all lessons (SCAN FULL LIST for non-obvious candidates)
-jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle) | \(.unitTitle)"' \
-  bulk-downloads/english-primary.json | sort
+# List ALL lessons (scan for non-obvious candidates)
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
+  bulk-downloads/geography-primary.json | sort
 
-jq -r '.lessons[] | "\(.lessonSlug) | \(.lessonTitle) | \(.unitTitle)"' \
-  bulk-downloads/english-secondary.json | sort
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
+  bulk-downloads/geography-secondary.json | sort
 
-# Review both phases
-pnpm gt-review --subject english --phase primary
-pnpm gt-review --subject english --phase secondary
-
-# Benchmark after review
-pnpm benchmark --subject english --verbose
+# After completing all categories
+pnpm benchmark --subject geography --verbose
 ```
 
 **Ground truth files**:
-- `src/lib/search-quality/ground-truth/english/primary/`
-- `src/lib/search-quality/ground-truth/english/secondary/`
+
+- `src/lib/search-quality/ground-truth/geography/primary/`
+- `src/lib/search-quality/ground-truth/geography/secondary/`
+
+**Remember**: Quality over speed. There is no time pressure. Take your time. Do it right.
 
 ---
 
-## CRITICAL: Deep Exploration Standard (Session 8+)
+## Metrics Reference
 
-**This is about discovering the BEST possible matches, not validating current matches are "good enough".**
+| Metric | Target | Interpretation |
+|--------|--------|----------------|
+| **MRR** | > 0.70 | 1.0=pos 1, 0.5=pos 2, 0.33=pos 3 |
+| **NDCG@10** | > 0.75 | Overall ranking quality |
+| **P@3** | > 0.50 | Are top 3 useful? |
+| **R@10** | > 0.70 | Are expected slugs found at all? |
 
-### The Mandatory Question
-
-Before finalising EACH category, explicitly ask:
-
-> **"Am I confident I have discovered the BEST possible matches through deep exploration, rather than just assessing if the returned results are 'good enough'?"**
-
-If the answer is not a confident "yes", do more exploration.
-
-### Required Tools (Per Category)
-
-| Tool | Purpose | Minimum Required |
-|------|---------|------------------|
-| **Bulk data** (`jq`) | Find ALL candidate lessons | ✓ Multiple search terms |
-| **`get-lessons-summary`** | Keywords, key learning points | ✓ **5-10 per category** (not 1-2) |
-| **`get-units-summary`** | Lesson ordering + unit contents | ✓ All relevant units |
-| **`get-key-stages-subject-units`** | Unit structure | When exploring curriculum |
-| **`gt-review`** | Actual search results | ✓ Always |
-
-### The Process (Per Category) — DEEP EXPLORATION
-
-1. **SEARCH bulk data comprehensively** — `jq` with multiple terms. List ALL lessons in relevant units.
-2. **GET MCP summaries** — `get-lessons-summary` for **5-10 candidates** (including existing expected + new candidates)
-3. **GET unit context** — `get-units-summary` to find hidden candidates and understand ordering
-4. **RUN gt-review** — See search results and MRR
-5. **CREATE comparison table** — Required for every category:
-   ```
-   | Slug | Keywords | Key Learning | Score | Notes |
-   |------|----------|--------------|-------|-------|
-   ```
-6. **ASK "Am I confident?"** — Explicitly before finalising
-7. **SELECT THE BEST** — Based on evidence from comparison table
-
-### Anti-Patterns (DO NOT DO THIS)
-
-- ❌ Looking at existing slugs → checking they appear → "looks good"
-- ❌ Getting only 1-2 MCP summaries instead of 5-10
-- ❌ Skipping comparison table creation
-- ❌ Not exploring unit structure with `get-units-summary`
-- ❌ Accepting "good enough" without asking "is this the BEST?"
-- ❌ Missing lessons with non-obvious titles (key learning reveals relevance)
+**Diagnostic**: High R@10 + Low MRR = results found but poorly ranked (search issue)  
+**Diagnostic**: Low R@10 = expected slugs may be wrong (GT issue)
 
 ---
 
 ## Session Entry
 
-**Before starting each session:**
+1. **Read the entry prompt** — [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+2. **Execute the protocol** — [ground-truth-session-template.md](../templates/ground-truth-session-template.md) — This is the LINEAR EXECUTION PROTOCOL
+3. **Find your target below** — Work through all 4 categories with evidence
+4. **Update this checklist** — Record metrics and learnings when complete
 
-1. **Read the entry prompt first** — [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) has essential context, required standards, and key learnings
-2. **Verify prerequisites** — MCP server, ES access, bulk data
-3. **Find your target subject-phase below** — Work through all 4 categories
-4. **Use the plan template** — [ground-truth-session-template.md](../templates/ground-truth-session-template.md) when creating Cursor plans
-
-**If any tool is unavailable: STOP and wait. Do not guess.**
+**If MCP server unavailable: STOP and wait. Do not proceed.**
 
 ---
 
-## Search Architecture (ESSENTIAL CONTEXT)
+## Quick Reference
 
-### Two Information Sources Per Lesson
+### Search Architecture
 
-| Source | ES Field | Description | Coverage |
-|--------|----------|-------------|----------|
-| **Structure** | `lesson_structure` | Curated semantic summary (title, unit, keywords, key learning points) | ALL lessons (100%) |
-| **Content** | `lesson_content` | Full video transcript + pedagogical fields | SOME lessons (~81%) |
+| Source | Coverage | Description |
+|--------|----------|-------------|
+| **Structure** | 100% | Keywords, key learning (all lessons) |
+| **Content** | ~81% | Transcript (most lessons, except MFL/PE) |
 
-### Four Retrievers
+Four retrievers (Structure BM25, Structure ELSER, Content BM25, Content ELSER) combined via RRF.
 
-| Retriever | ES Field | Technology | What It Does |
-|-----------|----------|------------|--------------|
-| **Structure BM25** | `lesson_structure`, `lesson_title` | Keyword matching | Fuzzy text search on curated summary |
-| **Structure ELSER** | `lesson_structure_semantic` | Semantic embedding | Understands meaning of summary |
-| **Content BM25** | `lesson_content`, `lesson_keywords`, etc. | Keyword matching | Fuzzy text search on transcript |
-| **Content ELSER** | `lesson_content_semantic` | Semantic embedding | Understands meaning of transcript |
+**Note**: MFL subjects (French, German, Spanish) and PE have ~0% content coverage (no transcripts). These subjects use **structure retrieval only**. This is an architectural fact, not a limitation. Ground truths for MFL/PE must be designed for structure-based retrieval.
 
-### How They Combine (RRF)
-
-- **With content**: All 4 retrievers combined via RRF (~81% of lessons)
-- **Without content**: Structure only — 2 retrievers (~19% of lessons)
-
-**Critical**: Structure is the **foundation** — ALL lessons have it. Content is a **bonus** where transcripts exist. MFL and PE have very low content coverage (~0-28%).
-
----
-
-## Instructions
-
-For each ground truth, use **three exploration methods**:
-
-### Step 1: Evaluate Query Design
-
-1. **Differentiation** — Ask: "What does matching specific results for this query tell us, given we're already filtering to [subject] + [phase]?"
-2. **Retriever coverage** — Will this query work for Structure-only lessons (no transcript)? Structure retrieval is the foundation.
-3. **Fix bad queries** — Replace queries that lack differentiation power
-
-### Step 2: Run gt-review (Search Service)
+### Commands
 
 ```bash
-pnpm gt-review --subject X --phase Y --category Z
+cd apps/oak-open-curriculum-semantic-search
+
+# FIRST: Read query metadata from .query.ts files (SAFE — no expected slugs)
+cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.query.ts
+# e.g.: cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.query.ts
+
+# Phase 1A: Query Analysis — NO TOOLS, just REFLECT on the query
+
+# Phase 1B: Bulk data exploration (BEFORE benchmark, BEFORE reading .expected.ts)
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' bulk-downloads/SUBJECT-PHASE.json
+
+# Phase 1C: Review with ALL 4 metrics (AFTER COMMIT — NOW you may see expected slugs)
+pnpm benchmark -s X -p Y -c Z --review
+# Or read directly: cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.expected.ts
+
+# Phase 2: Validation
+pnpm type-check && pnpm ground-truth:validate && pnpm benchmark -s X -p Y --verbose
 ```
 
-This calls the search service directly and shows:
+### MCP Tools
 
-- Top 10 results from our hybrid search
-- Which expected slugs were found and at what position
-- MRR score
-
-### Step 3: Direct ES Diagnostics
-
-Query Elasticsearch directly to understand retriever behaviour:
-
-```bash
-source .env.local
-
-# Test BM25 with fuzziness (for imprecise-input)
-curl -s "${ELASTICSEARCH_URL}/oak_lessons/_search" \
-  -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": {"bool": {
-      "must": [{"match": {"lesson_title": {"query": "YOUR_TERM", "fuzziness": "AUTO"}}}],
-      "filter": [{"term": {"subject_slug": "SUBJECT"}}]
-    }},
-    "size": 5,
-    "_source": ["lesson_slug", "lesson_title"]
-  }' | jq '.hits.hits[]._source'
-
-# Test Structure field (always present)
-curl -s "${ELASTICSEARCH_URL}/oak_lessons/_search" \
-  -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": {"bool": {
-      "must": [{"match": {"lesson_structure": "YOUR_QUERY"}}],
-      "filter": [{"term": {"subject_slug": "SUBJECT"}}]
-    }},
-    "size": 5,
-    "_source": ["lesson_slug", "lesson_title", "lesson_structure"]
-  }' | jq '.hits.hits[]._source'
-```
-
-### Step 4: MCP Curriculum Exploration (CRITICAL)
-
-**Do not just accept top-ranked results.** Use Oak MCP server (`oak-local`) to find qualitatively better matches.
-
-**Required MCP tools:**
-
-```text
-# REQUIRED for EVERY category — get individual lesson details
-get-lessons-summary: lesson="lesson-slug"
-  → Returns: keywords, key learning points, misconceptions, pupil outcome
-  → Use for: 5-10 candidates per category
-
-# REQUIRED for skill-level queries (beginner/intro/advanced) — understand lesson ordering
-get-units-summary: unit="unit-slug"
-  → Returns: lesson order (1-6), unit description, prior knowledge requirements
-  → Use for: Understanding which lessons are FIRST (beginner) vs END (capstone)
-
-# For curriculum structure exploration
-get-key-stages-subject-units: keyStage="ks3", subject="subject-slug"
-  → Returns: all units in key stage with their slugs
-```
-
-**Goal**: Find the lessons that SHOULD rank highly for this query, not just what currently does. If better matches exist, the ground truth must be corrected.
-
-### Step 5: Bulk Data Exploration
-
-Explore the downloaded bulk data to find lessons by title/content:
-
-```bash
-# Find lessons with keyword in title
-jq -r '.lessons[] | select(.lessonTitle | test("KEYWORD"; "i")) | "\(.lessonSlug) | \(.lessonTitle)"' \
-  bulk-downloads/SUBJECT-PHASE.json
-
-# Get lesson details
-jq '.lessons[] | select(.lessonSlug == "SLUG")' \
-  bulk-downloads/SUBJECT-PHASE.json
-```
-
-### Step 6: Update Ground Truth File
-
-Based on evidence from steps 2-5:
-
-- Update query if needed
-- Update `expectedRelevance` with **qualitatively best matches** from exploration
-- Update description to reflect what the test proves
-- Update TSDoc comment with review date
-
-### After All 4 Categories Complete
-
-```bash
-pnpm type-check
-pnpm ground-truth:validate
-pnpm benchmark --subject X --phase Y --verbose
-```
-
-**If MCP server is unavailable**: STOP and wait for user to fix. Do not proceed without exploration capability.
+| Tool | Purpose |
+|------|---------|
+| `get-lessons-summary` | Keywords, key learning — **5-10 per category** |
+| `get-units-summary` | Lesson ordering in unit |
+| `get-key-stages-subject-units` | Unit structure |
 
 ---
 
@@ -425,79 +388,132 @@ File: `src/lib/search-quality/ground-truth/design-technology/secondary/`
 
 ---
 
-### 10. english/primary
+### 10. english/primary **← RE-REVIEWED 2026-01-17 (DEEP EXPLORATION)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000, NDCG 0.884, P@3 0.667, R@10 0.667. Verified with 12 MCP summaries + unit context. BFG reading comprehension lessons correct.
+- [x] natural-expression — **CORRECTED** MRR 1.000, NDCG 0.951, P@3 1.000, R@10 1.000. Previous session WRONGLY claimed expected slugs were correct. Deep exploration revealed: search correctly prioritizes lessons with "feel/feelings" in key learning over lessons with "emotions". Updated expected slugs to match what search SHOULD return.
+- [x] imprecise-input — MRR 0.167, NDCG 0.193, P@3 0.000, R@10 0.333. Verified with 6 MCP summaries + unit structure. Expected slugs ARE correct for "narrative writing" intent. Low MRR = search quality issue with fuzzy matching.
+- [x] cross-topic — MRR 1.000, NDCG 0.884, P@3 0.667, R@10 0.667. Bulk data confirms these are the ONLY lessons combining writing+tenses.
+
+**Aggregate**: MRR 0.792 | NDCG 0.728 | P@3 0.583 | R@10 0.667
+
+**Key Learnings from RE-REVIEW**:
+
+1. **DO NOT assume expected slugs are correct** — compare against ACTUAL search results
+2. **The search might be RIGHT** — previous session claimed MRR 0.000 was "search quality issue" but it was WRONG expected slugs
+3. **"emotions" ≠ "feel"** — query said "how characters feel", search correctly found lessons with "feel/feelings" not "emotions"
+4. **ALL 4 metrics required** — MRR alone can mislead; P@3=1.000 and R@10=1.000 confirm excellent result
 
 File: `src/lib/search-quality/ground-truth/english/primary/`
 
 ---
 
-### 11. english/secondary
+### 11. english/secondary **← REVIEWED 2026-01-17**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000. **CORRECTED**: Allusions ≠ Symbolism. Downgraded allusions to score=2, added allegory lesson.
+- [x] natural-expression — MRR 1.000. Verified correct - Gothic literature lessons appropriate for Year 8.
+- [x] imprecise-input — MRR 0.500, R@10 1.000. Verified correct - all 3 expected slugs found despite "frankenstien" typo.
+- [x] cross-topic — MRR 1.000. **CORRECTED**: Previous slugs didn't teach grammar/punctuation. New slugs verified via MCP to actually combine grammar+essay.
+
+**Aggregate**: MRR 0.875 | NDCG 0.625 | P@3 0.417 | R@10 0.583
+
+**Key Learnings**:
+
+1. Allusions (references to other texts) is a different literary device from Symbolism (objects representing ideas)
+2. Cross-topic expected slugs must be verified via MCP to actually combine BOTH concepts
 
 File: `src/lib/search-quality/ground-truth/english/secondary/`
 
 ---
 
-### 12. french/primary
+### 12. french/primary **← RE-REVIEWED 2026-01-19 (CROSS-TOPIC FIXED)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000, NDCG 0.813, P@3 0.667, R@10 0.667. Expected ER verb lessons verified via MCP summaries. Search finds `my-friend-singular-er-verbs` which has same key learning definition — equally valid match.
+- [x] natural-expression — MRR 1.000, NDCG 0.787, P@3 0.333, R@10 0.500. **VERIFIED CORRECTION**: "Greetings" (bonjour, salut, ça va) ≠ "Introductions" (voici, je m'appelle). Lessons with explicit greetings vocabulary are correct expected slugs.
+- [x] imprecise-input — MRR 1.000, NDCG 1.000, P@3 0.667, R@10 1.000. **VERIFIED CORRECTION**: Both expected slugs (#1, #2) explicitly mention "vocabulary" in key learning. Typo "fench" → "French" handled correctly.
+- [x] cross-topic — MRR 0.250, NDCG 0.339, P@3 0.000, R@10 0.500. **RE-REVIEWED**: Previous slugs (`packing-a-bag-singular-avoir`, `activities-at-home-questions-with-quest-ce-que`) taught verbs (avoir, faire) but didn't have "verb" as a keyword — search couldn't match them for query containing "verbs". New slugs have "verb" in keywords AND "vocabulary" in key learning: `preferences-extending-my-sentences` ("-er verb" keyword, found at #4), `who-has-what-singular-avoir-and-intonation-questions` ("singular verb forms" keyword, not found). P@3=0.000 is correct — top 3 results don't have "vocabulary" in key learning.
+
+**Aggregate**: MRR 0.813 | NDCG 0.735 | P@3 0.417 | R@10 0.667
+
+**Changes**:
+
+1. cross-topic: Replaced avoir/faire lessons with lessons that have "verb" in keywords + vocabulary in key learning
+
+**Key Learnings**:
+
+1. **MFL structure-only retrieval**: French lessons have metadata but NO transcripts (~0% content coverage). Ground truths must test structure-based retrieval.
+2. **"Greetings" ≠ "Introductions"**: Distinct concepts requiring different lessons. Greetings = bonjour/salut/ça va. Introductions = voici/je m'appelle.
+3. **Cross-topic requires DISCOVERABLE intersection**: Expected slugs must have BOTH concepts in SEARCHABLE text (keywords/title), not just in key learning. If query uses "verbs", expected slugs need "verb" in keywords, not just specific verb names like "avoir".
+4. **Keywords vs title matching**: Search heavily weights title matches. Lessons with "verb" in title rank higher than lessons with "verb" only in keywords.
 
 File: `src/lib/search-quality/ground-truth/french/primary/`
 
 ---
 
-### 13. french/secondary
+### 13. french/secondary **← REVIEWED 2026-01-19 (DEEP EXPLORATION)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000, NDCG 0.785, P@3 0.667, R@10 0.667. Year 7 foundational negation unit (ne...pas) verified via MCP. All 4 expected slugs from correct unit.
+- [x] natural-expression — MRR 0.000, NDCG 0.000, P@3 0.000, R@10 0.000. GT CORRECT but search quality gap. Expected slugs ARE the Year 7 negation lessons for "teach French negative sentences year 7". Search returns advanced negation (perfect tense, aller+infinitive) instead of foundational.
+- [x] imprecise-input — MRR 0.500, NDCG 0.598, P@3 0.333, R@10 1.000. **VERIFIED CORRECTION**: avoir/être grammar lessons correct for "french grammer avoir etre" (with typo). Correction from negation lessons was valid.
+- [x] cross-topic — MRR 1.000, NDCG 0.907, P@3 0.333, R@10 1.000. **VERIFIED CORRECTION**: `clean-up-re-verbs-adjectives` and `describe-people-etre-3rd-person-plural-and-regular-plural-adjectives` both explicitly combine verbs AND adjectives in key learning. Correction from verbs+questions was valid.
+
+**Aggregate**: MRR 0.625 | NDCG 0.573 | P@3 0.333 | R@10 0.667
+
+**Changes**:
+
+1. Previous session corrections verified as correct (imprecise-input and cross-topic)
+
+**Key Learnings**:
+
+1. **Year group matters**: "year 7" in query should weight foundational content, but search returns advanced content
+2. **MFL structure-only retrieval confirmed**: Secondary French also relies solely on metadata (no transcripts)
+3. **Previous corrections validated**: The avoir/être and verbs+adjectives corrections were both correct
 
 File: `src/lib/search-quality/ground-truth/french/secondary/`
 
 ---
 
-### 14. geography/primary
+### 14. geography/primary **← NEEDS RE-EVALUATION**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+**Previous review (2026-01-19) used flawed methodology** — validated search results instead of independent discovery.
+
+- [ ] precise-topic — NEEDS RE-EVALUATION with COMMIT step
+- [ ] natural-expression — NEEDS RE-EVALUATION with COMMIT step
+- [ ] imprecise-input — NEEDS RE-EVALUATION with COMMIT step
+- [ ] cross-topic — NEEDS RE-EVALUATION with COMMIT step
+
+**Why re-evaluation needed**: Session 15 did not form independent rankings before seeing search results. Changes made were based on validating what search returned, not on independent curriculum analysis. The COMMIT step (1B.5) must be used to ensure proper methodology.
 
 File: `src/lib/search-quality/ground-truth/geography/primary/`
 
 ---
 
-### 15. geography/secondary
+### 15. geography/secondary **← NEEDS RE-EVALUATION**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+**Previous review (2026-01-19) used flawed methodology** — validated search results instead of independent discovery.
+
+- [ ] precise-topic — NEEDS RE-EVALUATION with COMMIT step
+- [ ] natural-expression — NEEDS RE-EVALUATION with COMMIT step
+- [ ] imprecise-input — NEEDS RE-EVALUATION with COMMIT step
+- [ ] cross-topic — NEEDS RE-EVALUATION with COMMIT step
+
+**Why re-evaluation needed**: Session 15 did not form independent rankings before seeing search results. The "correction" to natural-expression (`actions-to-tackle-climate-change` kept despite being about actions, not effects) was based on validating search results, not independent analysis. The COMMIT step (1B.5) must be used.
+
+**Specific issues identified**:
+- natural-expression: `actions-to-tackle-climate-change` is about mitigation/adaptation (actions), NOT effects — yet it remained in ground truth
+- cross-topic: Changes were made based on what search returned, not independent discovery
 
 File: `src/lib/search-quality/ground-truth/geography/secondary/`
 
@@ -700,80 +716,29 @@ File: `src/lib/search-quality/ground-truth/spanish/secondary/`
 
 ## Category Definitions
 
-| Category | User Scenario | What It Tests | How ES Handles It |
-|----------|---------------|---------------|-------------------|
-| `precise-topic` | Teacher knows curriculum terminology | Basic retrieval with exact terms | Structure BM25 (keyword match on curated summary) |
-| `natural-expression` | Teacher uses everyday language | Vocabulary bridging (requires LLM - will fail) | Both ELSER retrievers (semantic understanding) |
-| `imprecise-input` | Teacher types imperfectly (typos, truncation, wrong order) | **Search resilience** — relevant results despite messy input | BM25 fuzziness + ELSER semantics + RRF combination |
-| `cross-topic` | Teacher wants intersection content | Multi-concept matching | All 4 retrievers via RRF |
-
-**Key insight for imprecise-input**: We are proving that imprecise input **doesn't break search**, not isolating a single mechanism. Real users make typos, truncate words, and type messily — the combined system (BM25 fuzziness + ELSER semantic understanding + RRF fusion) should be resilient to this.
-
-**Note**: All categories should work with Structure-only retrieval (the foundation). Content retrieval is a bonus that may improve rankings where transcripts exist.
-
----
-
-## Commands Reference
-
-```bash
-# Review specific category
-pnpm gt-review --subject french --phase primary --category precise-topic
-
-# Review all categories for a subject-phase
-pnpm gt-review --subject french --phase primary
-
-# Validate after updates
-pnpm type-check
-pnpm ground-truth:validate
-
-# Benchmark after validation
-pnpm benchmark --subject french --phase primary --verbose
-```
-
----
-
-## Metrics Interpretation
-
-The benchmark outputs 4 key metrics. Each reveals different information:
-
-| Metric | Question Answered | Interpretation |
-|--------|-------------------|----------------|
-| **MRR** | How quickly is FIRST relevant result found? | 1.0 = position 1, 0.5 = position 2, 0.33 = position 3. Low MRR = users must scroll. |
-| **NDCG** | How good is the OVERALL ranking? | Uses graded relevance (1/2/3). 1.0 = perfect ranking. High R@10 + low NDCG = results found but poorly ranked. |
-| **P@3** | Are the TOP 3 results relevant? | 0.67 = 2/3 relevant. P@3=0 means none of top 3 are useful — poor user experience. |
-| **R@10** | Do we FIND the relevant results at all? | 0.8 = 80% of expected slugs appear in top 10. High R@10 = good coverage. |
-
-**Key diagnostic patterns:**
-
-- **High R@10, Low MRR, Low NDCG**: Results ARE found, just ranked poorly → search ranking issue
-- **Low R@10**: Missing results entirely → ground truth may use wrong slugs OR search coverage issue
-- **P@3 = 0**: Terrible user experience — top results all wrong even if lower results are good
-
-See [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) for detailed definitions.
-
----
-
-## Notes
-
-- **Required standard**: Use ALL relevant MCP tools (`get-lessons-summary`, `get-units-summary`) AND bulk data for every category.
-- **Structure is the foundation**: All lessons have the `lesson_structure` field (curated summary). Ground truths should primarily test Structure retrieval.
-- **Content is a bonus**: ~81% of lessons have the `lesson_content` field (transcript). MFL and PE have very low coverage (~0-28%).
-- **natural-expression category**: Requires LLM interpretation we don't support yet. Review anyway to ensure the query and expected results are sensible for when we do add LLM support. **CRITICAL**: Use `get-units-summary` to verify lesson ordering for beginner/skill-level queries.
-- Update the progress counter at the top after completing each subject-phase.
-
----
-
-## Important Distinction: Specification vs Optimisation
-
-**Ground truth review** (this task) is about **specification correctness** — ensuring ground truths accurately represent what search SHOULD return. This is fixing the answer key.
-
-**Search optimisation** (separate, later task) is about improving system behaviour to achieve better scores against the correct specification. That is tuning the system.
-
-We do not conflate these. Ground truths must be correct before metrics are meaningful. If better matches exist than current expected slugs, the ground truth is wrong and must be corrected — regardless of the impact on MRR scores.
+| Category | Tests | Key Consideration |
+|----------|-------|-------------------|
+| `precise-topic` | Exact terminology | Direct matches |
+| `natural-expression` | Informal → curriculum terms | **Vocabulary must match query** |
+| `imprecise-input` | Typos, truncation | Semantic intent behind typo |
+| `cross-topic` | Multiple concepts | **BOTH concepts in key learning** |
 
 ---
 
 ## Reference
 
-- **Full guide**: [GROUND-TRUTH-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — Design principles, troubleshooting, lessons learned
-- **Sessions 1-5 Log**: [sessions-1-5-log.md](../logs/sessions-1-5-log.md) — Previous work before enhanced understanding
+| Document | Purpose |
+|----------|---------|
+| [Protocol](../templates/ground-truth-session-template.md) | **LINEAR execution with checkpoints** |
+| [Entry Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Overview, cardinal rule |
+| [IR Metrics](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
+| [GT Guide](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+
+---
+
+## Key Principle
+
+**Ground truth review** = Specification correctness (fixing the answer key)  
+**Search optimisation** = Tuning the system (separate task)
+
+If better matches exist → ground truth is wrong → correct it.

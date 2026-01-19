@@ -20,7 +20,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of quadratic equations unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'simultaneous equations',
@@ -30,7 +29,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of simultaneous equations unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'expanding brackets',
@@ -39,7 +37,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of algebraic manipulation unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'factorising',
@@ -48,7 +45,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of algebraic manipulation unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'inequalities',
@@ -57,7 +53,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of inequalities unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'sequences',
@@ -66,7 +61,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of sequences unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'algebraic fractions',
@@ -76,7 +70,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of algebraic fractions unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'functions',
@@ -85,7 +78,6 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of functions unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'iteration',
@@ -94,6 +86,5 @@ export const UNIT_ALGEBRA_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of iteration unit using curriculum terminology',
-    priority: 'medium',
   },
 ] as const;

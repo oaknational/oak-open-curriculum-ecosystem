@@ -174,11 +174,11 @@ expectedRelevance: {
 
 ## Part 2: Review Process
 
-### Step 1: Run gt-review
+### Step 1: Run Benchmark Review Mode
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm gt-review --subject citizenship --phase secondary --category precise-topic
+pnpm benchmark -s citizenship -p secondary -c precise-topic --review
 ```
 
 Output shows:
@@ -186,7 +186,7 @@ Output shows:
 - Expected slugs with relevance scores
 - Top 10 actual results
 - Which expected slugs were found and at what position
-- MRR score
+- ALL 4 metrics: MRR, NDCG@10, P@3, R@10
 
 ### Step 2: Explore Curriculum Data
 
@@ -254,7 +254,7 @@ All must pass before proceeding.
 
 ### Low MRR Despite Good Results
 
-**Symptom**: gt-review shows useful results, but expected slugs aren't found.
+**Symptom**: Benchmark review shows useful results, but expected slugs aren't found.
 
 **Diagnosis**: Expected slugs may not be the best matches.
 
@@ -422,12 +422,12 @@ export const {SUBJECT}_{PHASE}_{CATEGORY}: readonly GroundTruthQuery[] = [
 
 ### Session Workflow
 
-1. `pnpm gt-review --subject X --phase Y` — See current state
+1. `pnpm benchmark -s X -p Y --review` — See current state with ALL 4 metrics
 2. Explore via MCP tools — Find qualitatively best matches
 3. Update ground truth file — Based on evidence
 4. `pnpm ground-truth:validate` — Check validity
-5. `pnpm benchmark --subject X --phase Y --verbose` — Measure
-6. Update checklist — Record findings and MRR
+5. `pnpm benchmark -s X -p Y --verbose` — Measure aggregate metrics
+6. Update checklist — Record findings with all 4 metrics
 
 ---
 

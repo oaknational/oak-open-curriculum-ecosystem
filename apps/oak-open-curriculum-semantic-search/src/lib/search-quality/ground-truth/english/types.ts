@@ -6,7 +6,7 @@
  * @packageDocumentation
  */
 
-import type { GroundTruthQuery, QueryCategory, QueryPriority } from '../types';
+import type { GroundTruthQuery, QueryCategory } from '../types';
 
 /**
  * English curriculum areas for ground truth organisation.
@@ -26,4 +26,4 @@ export type EnglishCurriculumArea =
 /**
  * Re-export base types for convenience.
  */
-export type { GroundTruthQuery, QueryCategory, QueryPriority };
+export type { GroundTruthQuery, QueryCategory };

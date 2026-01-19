@@ -10,21 +10,21 @@
 
 import type { GroundTruthQuery } from '../types';
 
-import { DT_PRIMARY_ALL_QUERIES } from './primary';
-import { DT_SECONDARY_ALL_QUERIES } from './secondary';
+import { DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES } from './primary';
+import { DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All D&T ground truth queries across all phases.
  *
  * Total: 8 queries (4 Primary + 4 Secondary).
  */
-export const DT_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...DT_PRIMARY_ALL_QUERIES,
-  ...DT_SECONDARY_ALL_QUERIES,
+export const DESIGN_TECHNOLOGY_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  ...DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES,
+  ...DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES,
 ] as const;
 
 // Re-export primary
-export { DT_PRIMARY_ALL_QUERIES } from './primary';
+export { DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export { DT_SECONDARY_ALL_QUERIES } from './secondary';
+export { DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES } from './secondary';

@@ -1,62 +1,45 @@
 /**
- * Secondary Maths ground truth queries for search quality evaluation.
+ * Secondary ground truth queries - 4 queries, 1 per category.
  *
- * **Structure (2026-01-11)**:
- * 4 queries total, 1 per category, AI-curated for accuracy.
- *
- * | Category | Query | MRR |
- * |----------|-------|-----|
- * | precise-topic | solving quadratic equations by factorising | 1.000 |
- * | natural-expression | the bit where you complete the square | 1.000 |
- * | imprecise-input | simulatneous equasions substitution method | 1.000 |
- * | cross-topic | combining algebra with graphs | 0.333 |
- *
- * **Measurement Scope**: These queries test expected slug position,
- * NOT user satisfaction. See audit report for details.
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
  *
  * @packageDocumentation
  */
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
-import type { GroundTruthQuery } from '../../types';
+// Import query definitions
+import { MATHS_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { MATHS_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { MATHS_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { MATHS_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
 
-import { MATHS_SECONDARY_CROSS_TOPIC } from './cross-topic';
-import { MATHS_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
-import { MATHS_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
-import { MATHS_SECONDARY_PRECISE_TOPIC } from './precise-topic';
+// Import expected relevance
+import { MATHS_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { MATHS_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { MATHS_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { MATHS_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
 
-// Re-export unit ground truths (preserved for backward compatibility)
-export {
-  UNIT_ALL_GROUND_TRUTH_QUERIES,
-  UNIT_GROUND_TRUTH_QUERIES,
-  UNIT_HARD_GROUND_TRUTH_QUERIES,
-  type UnitGroundTruthQuery,
-} from './units';
-
-/**
- * All Secondary Maths ground truth queries.
- *
- * Total: 4 queries (1 per category).
- */
+/** All queries for this subject/phase */
 export const MATHS_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_SECONDARY_PRECISE_TOPIC,
-  ...MATHS_SECONDARY_NATURAL_EXPRESSION,
-  ...MATHS_SECONDARY_IMPRECISE_INPUT,
-  ...MATHS_SECONDARY_CROSS_TOPIC,
+  combineGroundTruth(MATHS_SECONDARY_PRECISE_TOPIC_QUERY, MATHS_SECONDARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(
+    MATHS_SECONDARY_NATURAL_EXPRESSION_QUERY,
+    MATHS_SECONDARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    MATHS_SECONDARY_IMPRECISE_INPUT_QUERY,
+    MATHS_SECONDARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(MATHS_SECONDARY_CROSS_TOPIC_QUERY, MATHS_SECONDARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-// Legacy exports - empty arrays for backward compatibility during transition
-export const MATHS_SECONDARY_STANDARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const MATHS_SECONDARY_HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const ALGEBRA_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const GEOMETRY_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const GRAPHS_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const NUMBER_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const STATISTICS_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const HARD_QUERIES: readonly GroundTruthQuery[] = [] as const;
-export const EDGE_CASE_QUERIES: readonly GroundTruthQuery[] = [] as const;
-
-// Re-export category modules
-export { MATHS_SECONDARY_CROSS_TOPIC } from './cross-topic';
-export { MATHS_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
-export { MATHS_SECONDARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { MATHS_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { MATHS_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { MATHS_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { MATHS_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { MATHS_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { MATHS_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { MATHS_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { MATHS_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

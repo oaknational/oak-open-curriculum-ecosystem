@@ -72,14 +72,12 @@ describe('benchmarkEntry', () => {
           expectedRelevance: { 'slug-a': 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
         {
           query: 'query 2',
           expectedRelevance: { 'slug-b': 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
       ]);
 
@@ -104,21 +102,18 @@ describe('benchmarkEntry', () => {
           expectedRelevance: { 'slug-a': 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
         {
           query: 'query 2',
           expectedRelevance: { 'slug-b': 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
         {
           query: 'query 3',
           expectedRelevance: { 'slug-c': 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
       ]);
 
@@ -140,7 +135,6 @@ describe('benchmarkEntry', () => {
             expectedRelevance: { 'expected-slug': 3 },
             category: 'precise-topic',
             description: 'Test fixture',
-            priority: 'medium',
           },
         ],
       };
@@ -166,7 +160,6 @@ describe('benchmarkEntry', () => {
           expectedRelevance: { slug: 3 },
           category: 'precise-topic',
           description: 'Test fixture',
-          priority: 'medium',
         },
       ]);
 
@@ -189,7 +182,6 @@ describe('benchmarkEntry', () => {
             keyStage: 'ks4',
             category: 'precise-topic',
             description: 'Test fixture for KS4 query',
-            priority: 'medium',
           },
         ],
       };
@@ -213,7 +205,6 @@ describe('benchmarkEntry', () => {
             expectedRelevance: { slug: 3 },
             category: 'precise-topic',
             description: 'Test fixture',
-            priority: 'medium',
           },
         ],
       };

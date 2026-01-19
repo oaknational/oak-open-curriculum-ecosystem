@@ -1,8 +1,8 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-17  
+**Last Updated**: 2026-01-19  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Status**: 🔄 **Ground truth review** (9/30 subject-phases)
+**Status**: 🔄 **Ground truth review** (11/30 subject-phases)
 
 ---
 
@@ -49,11 +49,11 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 |-----------|--------|
 | RRF normalisation (ADR-099) | ✅ Implemented and validated |
 | Synonym coverage (ADR-100) | ✅ All 17 subjects have domain-specific synonyms (~580 total) |
-| Ground truths reviewed | 🔄 **9/30 subject-phases** (art/primary, art/secondary, citizenship/secondary, computing/primary, computing/secondary, cooking-nutrition/primary, cooking-nutrition/secondary, design-technology/primary, design-technology/secondary) |
+| Ground truths reviewed | 🔄 **11/30 subject-phases** (art/primary, art/secondary, citizenship/secondary, computing/primary, computing/secondary, cooking-nutrition/primary, cooking-nutrition/secondary, design-technology/primary, design-technology/secondary, english/primary, english/secondary) |
 | Baselines established | ✅ 120 queries measured |
 | Quality gates | ✅ All passing |
 
-**Next Session**: english/primary (4 queries)
+**Next Session**: french/primary + french/secondary (8 queries)
 
 **Sessions 1-5 Log**: [sessions-1-5-log.md](logs/sessions-1-5-log.md) — Previous work before enhanced understanding
 
@@ -67,7 +67,7 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 | **`get-lessons-summary`** | Get keywords, key learning points for each candidate |
 | **`get-units-summary`** | Understand lesson ordering (critical for beginner/advanced queries) |
 | **`get-key-stages-subject-units`** | See unit structure |
-| **`gt-review`** | See actual search results |
+| **`benchmark --review`** | See actual search results with ALL 4 metrics |
 
 **Plan template**: [ground-truth-session-template.md](templates/ground-truth-session-template.md)
 
@@ -145,7 +145,7 @@ The RRF fix (ADR-099) is confirmed working:
 | PE Primary | 50% scoring penalty | **Producing results** (MRR 0.19) |
 | PE Secondary | 50% scoring penalty | Zero results (search issue, not GT) |
 
-**Conclusion**: MFL/PE subjects can now compete. Low MRR values are due to search limitations (misspelling handling, content matching), not structural RRF disadvantage.
+**Conclusion**: MFL/PE subjects can now compete. Note that MFL subjects (French, German, Spanish) use **structure retrieval only** (metadata: title, keywords, key learning) because transcripts are not available for these subjects (~0% content coverage). This is an architectural fact, not a limitation. Ground truths for MFL subjects must be designed for structure-based retrieval.
 
 ---
 

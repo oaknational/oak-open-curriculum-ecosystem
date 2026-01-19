@@ -19,7 +19,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of percentages unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'ratio',
@@ -29,7 +28,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of ratio unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'ratio and proportion',
@@ -39,7 +37,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of ratio and proportion units using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'direct proportion',
@@ -49,7 +46,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of proportion unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'surds',
@@ -58,7 +54,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of surds unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'index laws',
@@ -67,7 +62,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of index laws unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'indices',
@@ -76,7 +70,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'natural-expression',
     description: 'Tests vocabulary bridging from indices to index laws curriculum term',
-    priority: 'medium',
   },
   {
     query: 'standard form',
@@ -85,7 +78,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of standard form unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'bounds',
@@ -94,7 +86,6 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of bounds unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'compound measures',
@@ -103,6 +94,5 @@ export const UNIT_NUMBER_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of compound measures unit using curriculum terminology',
-    priority: 'medium',
   },
 ] as const;

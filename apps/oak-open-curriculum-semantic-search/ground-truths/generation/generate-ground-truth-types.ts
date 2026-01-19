@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * Ground Truth Type Generator
+ * Bulk Data Type Generator
  *
  * Parses bulk download data and generates:
  * 1. TypeScript union types for valid lesson slugs
  * 2. Zod schemas for ground truth validation
  *
- * Run with: pnpm ground-truth:generate
+ * Run with: pnpm bulk:typegen
  *
  * @packageDocumentation
  */
@@ -391,8 +391,8 @@ async function main(): Promise<void> {
   const bulkDir = join(appDir, 'bulk-downloads');
   const outputDir = join(appDir, 'ground-truths', 'generated');
 
-  console.log('Ground Truth Type Generator');
-  console.log('===========================');
+  console.log('Bulk Data Type Generator');
+  console.log('========================');
   console.log('');
 
   const result = await generateGroundTruthTypes({

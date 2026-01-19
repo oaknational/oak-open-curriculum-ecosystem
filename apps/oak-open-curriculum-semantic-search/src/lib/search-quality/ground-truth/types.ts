@@ -1,6 +1,17 @@
 /**
  * Ground truth type definitions.
  *
+ * ## Architecture (2026-01-19)
+ *
+ * Ground truths are split into two files with different lifecycles:
+ * - **Query files** (*.query.ts): Define what we're testing. Change rarely.
+ * - **Expected files** (*.expected.ts): Define current "answer key". Change when curriculum updates.
+ *
+ * This separation:
+ * - Enforces independent discovery in GT review protocol (agent reads query, not expected)
+ * - Enables independent versioning (queries vs expectations)
+ * - Makes PRs clearer ("added query" vs "updated expectations")
+ *
  * ## Outcome-Oriented Category Framework (2026-01-09)
  *
  * Categories are structured around **user outcomes** rather than technical challenges.
@@ -26,17 +37,6 @@ import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
  * | `imprecise-input` | Teacher types imperfectly (typos, truncation, wrong order) | Search is resilient — imprecise input doesn't break search |
  * | `cross-topic` | Teacher wants intersection content | System finds concept overlaps |
  *
- * ## Migration from Legacy Categories (2026-01-09)
- *
- * | Legacy Category | New Category | Notes |
- * |-----------------|--------------|-------|
- * | `naturalistic` (formal) | `precise-topic` | When using curriculum terms |
- * | `naturalistic` (informal) | `natural-expression` | When using teaching language |
- * | `synonym` | `natural-expression` | Vocabulary variance |
- * | `colloquial` | `natural-expression` | Informal phrasing |
- * | `misspelling` | `imprecise-input` | Typo tolerance |
- * | `multi-concept` | `cross-topic` | Concept intersection |
- *
  * @example
  * // Precise Topic - teacher knows the term
  * { category: 'precise-topic', query: 'quadratic equations factorising' }
@@ -55,58 +55,81 @@ export type QueryCategory =
   | 'imprecise-input'
   | 'cross-topic';
 
+// ============================================================================
+// New Split Architecture (2026-01-19)
+// ============================================================================
+
 /**
- * Priority weighting for test scenarios.
+ * Query definition — lives in *.query.ts files.
  *
- * Indicates relative importance for the current system's use cases:
- * - critical: Must work well - core user behaviour (typos, short queries)
- * - high: Important for good UX - common search patterns
- * - medium: Nice to have - less common but valuable scenarios
- * - exploratory: Future capability - may require NL→DSL pipeline
+ * Contains only the query metadata, NOT the expected results.
+ * This enables the GT review protocol where agents discover candidates
+ * independently before seeing expected slugs.
  */
-export type QueryPriority = 'critical' | 'high' | 'medium' | 'exploratory';
+export interface GroundTruthQueryDefinition {
+  /** The search query text (3-10 words, realistic teacher phrasing) */
+  readonly query: string;
+
+  /**
+   * Category of user scenario this query represents.
+   *
+   * @see QueryCategory for definitions and examples
+   */
+  readonly category: QueryCategory;
+
+  /**
+   * What this test scenario reveals/validates about system behavior.
+   *
+   * Should answer: "What would failure of this query mean for users?"
+   */
+  readonly description: string;
+
+  /**
+   * Relative path to the expected relevance file.
+   *
+   * Convention: `./${category}.expected.ts`
+   */
+  readonly expectedFile: string;
+
+  /** Override keyStage for KS4-specific queries within secondary phase */
+  readonly keyStage?: KeyStage;
+}
+
+/**
+ * Expected relevance judgments — lives in *.expected.ts files.
+ *
+ * Map of lesson_slug → relevance score.
+ *
+ * - **3** = Highly relevant: Lesson directly answers the query
+ * - **2** = Relevant: Lesson is related and useful
+ * - **1** = Marginal: Lesson is tangentially related
+ *
+ * Requirements:
+ * - At least 2 slugs (tests ranking, not just retrieval)
+ * - At least one score=3 (clear "right answer")
+ * - Maximum 5 slugs (more = query too broad)
+ * - Varied scores for 2+ slugs (tests ranking quality)
+ */
+export type ExpectedRelevance = Readonly<Record<string, number>>;
+
+// ============================================================================
+// Combined Type (Runtime Assembly)
+// ============================================================================
 
 /**
  * A ground truth query with expected relevance judgments.
  *
- * Ground truths prove that **users get what they need from search**. Each query
- * represents a user scenario and the behavior the system must exhibit.
+ * This type is assembled at runtime by combining:
+ * - `GroundTruthQueryDefinition` (from *.query.ts files)
+ * - `ExpectedRelevance` (from *.expected.ts files)
  *
- * ## Design Principles
+ * The split architecture enables:
+ * - Independent discovery in GT review protocol (agent reads query, not expected)
+ * - Independent versioning (queries vs expectations)
+ * - Cleaner PRs ("added query" vs "updated expectations")
  *
- * 1. **Prove behavior, not implementation** - Query should test what users need,
- *    not what the system does internally.
- * 2. **Test ranking, not just retrieval** - Multiple relevant lessons with
- *    differentiated scores (3/2/1) test ranking quality.
- * 3. **Be realistic** - Queries should reflect how teachers actually search.
- * 4. **Have clear value** - Each query should answer "what would failure mean for users?"
- *
- * ## Acceptance Criteria by Category
- *
- * ### Precise Topic
- * - Query uses recognized curriculum terminology
- * - Expected lessons directly address the stated topic
- * - Score=3 lessons are the canonical answer
- *
- * ### Natural Expression
- * - Query reflects real teacher phrasing (read aloud test)
- * - There's a vocabulary gap between query and lesson titles
- * - Expected lessons match user INTENT, not keywords
- *
- * ### Imprecise Input
- * - Tests that imprecise input doesn't break search (resilience, not mechanism isolation)
- * - Errors are plausible (common typos, truncation, wrong word order)
- * - Correct spelling is obvious to human reader
- * - Success = relevant results appear despite imperfect input
- * - Enabled by: BM25 fuzziness + ELSER semantics + RRF combination
- *
- * ### Cross-Topic
- * - Query genuinely combines multiple distinct concepts
- * - Expected lessons span ALL mentioned concepts
- * - Score=3 lessons are true intersections
- *
- * @see IR-METRICS.md for how these fields influence metric calculation
- * @see ADR-085 for validation requirements
+ * @see GroundTruthQueryDefinition for query-only metadata
+ * @see ExpectedRelevance for expected relevance scores
  */
 export interface GroundTruthQuery {
   /** The search query text (3-10 words, realistic teacher phrasing) */
@@ -118,39 +141,46 @@ export interface GroundTruthQuery {
    * - **3** = Highly relevant: Lesson directly answers the query
    * - **2** = Relevant: Lesson is related and useful
    * - **1** = Marginal: Lesson is tangentially related
-   *
-   * Requirements:
-   * - At least 2 slugs (tests ranking, not just retrieval)
-   * - At least one score=3 (clear "right answer")
-   * - Maximum 5 slugs (more = query too broad)
-   * - Varied scores for 2+ slugs (tests ranking quality)
    */
-  readonly expectedRelevance: Readonly<Record<string, number>>;
+  readonly expectedRelevance: ExpectedRelevance;
 
   /**
-   * Category of user scenario this query represents. REQUIRED.
+   * Category of user scenario this query represents.
    *
    * @see QueryCategory for definitions and examples
    */
   readonly category: QueryCategory;
 
   /**
-   * What this test scenario reveals/validates about system behavior. REQUIRED.
+   * What this test scenario reveals/validates about system behavior.
    *
    * Should answer: "What would failure of this query mean for users?"
    */
   readonly description: string;
 
-  /**
-   * Relative importance for current system priorities. REQUIRED.
-   *
-   * - critical: Must work well - core user behaviour
-   * - high: Important for good UX - common search patterns
-   * - medium: Nice to have - less common but valuable
-   * - exploratory: Future capability - may require NL→DSL pipeline
-   */
-  readonly priority: QueryPriority;
-
   /** Override keyStage for KS4-specific queries within secondary phase */
   readonly keyStage?: KeyStage;
+}
+
+/**
+ * Combine a query definition and expected relevance into a GroundTruthQuery.
+ *
+ * This is the canonical way to assemble a complete ground truth entry
+ * from the split files.
+ *
+ * @param queryDef - The query definition from *.query.ts
+ * @param expected - The expected relevance from *.expected.ts
+ * @returns A complete GroundTruthQuery
+ */
+export function combineGroundTruth(
+  queryDef: GroundTruthQueryDefinition,
+  expected: ExpectedRelevance,
+): GroundTruthQuery {
+  return {
+    query: queryDef.query,
+    category: queryDef.category,
+    description: queryDef.description,
+    expectedRelevance: expected,
+    ...(queryDef.keyStage ? { keyStage: queryDef.keyStage } : {}),
+  };
 }

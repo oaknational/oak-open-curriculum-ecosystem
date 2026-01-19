@@ -139,7 +139,7 @@ See [ADR-085: Ground Truth Validation Discipline](../../docs/architecture/archit
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm ground-truth:generate    # Generate types from bulk data (if bulk data updated)
+pnpm bulk:typegen             # Generate types from bulk data (if bulk data updated)
 pnpm ground-truth:validate    # Run 17 validation checks (Stage 1)
 # Stage 2: Qualitative review must also be complete
 ```

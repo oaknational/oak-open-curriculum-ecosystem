@@ -20,7 +20,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of probability unit using curriculum terminology',
-    priority: 'high',
   },
   {
     query: 'conditional probability',
@@ -29,7 +28,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of conditional probability unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'histograms',
@@ -38,7 +36,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of histograms unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'cumulative frequency',
@@ -47,7 +44,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of cumulative frequency unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'scatter graphs',
@@ -56,7 +52,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of scatter graphs unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'sampling',
@@ -65,7 +60,6 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     },
     category: 'precise-topic',
     description: 'Tests retrieval of sampling unit using curriculum terminology',
-    priority: 'medium',
   },
   {
     query: 'data comparison',
@@ -77,6 +71,5 @@ export const UNIT_STATISTICS_QUERIES: readonly UnitGroundTruthQuery[] = [
     category: 'natural-expression',
     description:
       'Tests vocabulary bridging from data comparison to numerical summaries curriculum term',
-    priority: 'medium',
   },
 ] as const;

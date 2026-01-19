@@ -1,21 +1,51 @@
 /**
- * Primary Religious Education ground truth queries - 4 queries, 1 per category, AI-curated.
+ * Primary ground truth queries - 4 queries, 1 per category.
+ *
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
+ *
  * @packageDocumentation
  */
-import type { GroundTruthQuery } from '../../types';
-import { RE_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { RE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { RE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { RE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
-export const RE_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...RE_PRIMARY_PRECISE_TOPIC,
-  ...RE_PRIMARY_NATURAL_EXPRESSION,
-  ...RE_PRIMARY_IMPRECISE_INPUT,
-  ...RE_PRIMARY_CROSS_TOPIC,
+// Import query definitions
+import { RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+
+// Import expected relevance
+import { RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+
+/** All queries for this subject/phase */
+export const RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  combineGroundTruth(
+    RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_QUERY,
+    RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_EXPECTED,
+  ),
+  combineGroundTruth(
+    RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_QUERY,
+    RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(
+    RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_QUERY,
+    RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_EXPECTED,
+  ),
 ] as const;
 
-export { RE_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { RE_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { RE_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { RE_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { RELIGIOUS_EDUCATION_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

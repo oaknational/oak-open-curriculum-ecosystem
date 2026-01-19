@@ -10,16 +10,6 @@
  */
 
 /**
- * Query priority for sequence search scenarios.
- *
- * - critical: Core use case - finding sequences by subject/phase
- * - high: Common search patterns - exam boards, key stages
- * - medium: Less common but valuable - acronyms, synonyms
- * - exploratory: Future capability - complex intent queries
- */
-export type SequenceQueryPriority = 'critical' | 'high' | 'medium' | 'exploratory';
-
-/**
  * A ground truth query for sequence search with expected relevance judgments.
  */
 export interface SequenceGroundTruthQuery {
@@ -29,6 +19,4 @@ export interface SequenceGroundTruthQuery {
   readonly expectedRelevance: Readonly<Record<string, number>>;
   /** What this test scenario validates about the search system */
   readonly description?: string;
-  /** Relative importance for current system priorities */
-  readonly priority?: SequenceQueryPriority;
 }

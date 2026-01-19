@@ -25,7 +25,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'algebra and graphs',
     category: 'cross-topic',
-    priority: 'high',
     description: 'Explicit AND: "algebra and graphs". Tests if both concepts must match.',
     expectedRelevance: {
       'solving-simultaneous-linear-equations-graphically': 3,
@@ -36,7 +35,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'quadratics with graphs',
     category: 'cross-topic',
-    priority: 'high',
     description: 'Implicit intersection: "quadratics with graphs". Tests natural language AND.',
     expectedRelevance: {
       'solving-a-quadratic-and-linear-pair-of-simultaneous-equations-graphically': 3,
@@ -49,7 +47,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'equations using substitution',
     category: 'cross-topic',
-    priority: 'high',
     description: 'Concept + Method: "equations" + "substitution". Tests method recognition.',
     expectedRelevance: {
       'solving-simultaneous-linear-equations-by-substitution': 3,
@@ -60,7 +57,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'quadratics by completing square',
     category: 'cross-topic',
-    priority: 'high',
     description:
       'Concept + Method: "quadratics" + "completing square". Tests method-specific matching.',
     expectedRelevance: {
@@ -74,7 +70,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'probability and fractions with diagrams',
     category: 'cross-topic',
-    priority: 'high',
     description:
       'Three concepts: "probability" + "fractions" + "diagrams". Tests concept density scoring.',
     expectedRelevance: {
@@ -86,7 +81,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'angles triangles and pythagoras',
     category: 'cross-topic',
-    priority: 'high',
     description:
       'Three geometry concepts: "angles" + "triangles" + "pythagoras". Tests geometric intersection.',
     expectedRelevance: {
@@ -100,7 +94,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'graphs',
     category: 'precise-topic',
-    priority: 'high',
     description:
       'Single concept baseline for comparison. Should rank differently than multi-concept.',
     expectedRelevance: {
@@ -112,7 +105,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'linear graphs algebra substitution',
     category: 'cross-topic',
-    priority: 'high',
     description:
       'Four concepts: "linear" + "graphs" + "algebra" + "substitution". Extreme density test.',
     expectedRelevance: {
@@ -126,7 +118,6 @@ export const MULTI_CONCEPT_DIAGNOSTIC_QUERIES: readonly GroundTruthQuery[] = [
   {
     query: 'geometry and algebra together',
     category: 'cross-topic',
-    priority: 'medium',
     description:
       'Abstract intersection: "geometry and algebra together". Tests semantic bridging for topic overlap.',
     expectedRelevance: {

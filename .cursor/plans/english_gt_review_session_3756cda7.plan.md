@@ -4,85 +4,85 @@ overview: "Session 9: DEEP ground truth review for english/primary (1517 lessons
 todos:
   - id: prereq
     content: "Prerequisites: Verify MCP server, ES access, bulk data availability"
-    status: pending
+    status: completed
   - id: primary-precise-bulk
     content: "english/primary precise-topic: Search bulk data for ALL BFG lessons"
-    status: pending
+    status: completed
   - id: primary-precise-mcp
     content: "english/primary precise-topic: Get MCP summaries for 5-10 BFG candidates"
-    status: pending
+    status: completed
   - id: primary-precise-compare
     content: "english/primary precise-topic: Create comparison table, select BEST matches"
-    status: pending
+    status: completed
   - id: primary-natural-bulk
     content: "english/primary natural-expression: Search bulk data, consider DIFFERENT topic than precise-topic"
-    status: pending
+    status: completed
   - id: primary-natural-mcp
     content: "english/primary natural-expression: Get MCP summaries for 5-10 candidates"
-    status: pending
+    status: completed
   - id: primary-natural-compare
     content: "english/primary natural-expression: Create comparison table, address same-slug issue"
-    status: pending
+    status: completed
   - id: primary-imprecise-bulk
     content: "english/primary imprecise-input: Search bulk data for ALL Iron Man lessons"
-    status: pending
+    status: completed
   - id: primary-imprecise-mcp
     content: "english/primary imprecise-input: Get MCP summaries for 5-10 candidates"
-    status: pending
+    status: completed
   - id: primary-imprecise-compare
     content: "english/primary imprecise-input: Create comparison table, investigate low MRR"
-    status: pending
+    status: completed
   - id: primary-cross-bulk
     content: "english/primary cross-topic: Search for writing+grammar lessons"
-    status: pending
+    status: completed
   - id: primary-cross-mcp
     content: "english/primary cross-topic: Get MCP summaries, verify BOTH concepts in key learning"
-    status: pending
+    status: completed
   - id: primary-cross-compare
     content: "english/primary cross-topic: Create comparison table, select BEST intersection matches"
-    status: pending
+    status: completed
   - id: secondary-precise-bulk
     content: "english/secondary precise-topic: Search bulk data for ALL Lord of the Flies lessons"
-    status: pending
+    status: completed
   - id: secondary-precise-mcp
     content: "english/secondary precise-topic: Get MCP summaries for 5-10 candidates"
-    status: pending
+    status: completed
   - id: secondary-precise-compare
     content: "english/secondary precise-topic: Create comparison table, verify symbolism focus"
-    status: pending
+    status: completed
   - id: secondary-natural-bulk
     content: "english/secondary natural-expression: Search bulk data for ALL Gothic lessons"
-    status: pending
+    status: completed
   - id: secondary-natural-mcp
     content: "english/secondary natural-expression: Get MCP summaries for 5-10 candidates"
-    status: pending
+    status: completed
   - id: secondary-natural-compare
     content: "english/secondary natural-expression: Create comparison table, verify Year 8 appropriateness"
-    status: pending
+    status: completed
   - id: secondary-imprecise-bulk
     content: "english/secondary imprecise-input: Search bulk data for ALL Frankenstein lessons"
-    status: pending
+    status: completed
   - id: secondary-imprecise-mcp
     content: "english/secondary imprecise-input: Get MCP summaries for 5-10 candidates"
-    status: pending
+    status: completed
   - id: secondary-imprecise-compare
     content: "english/secondary imprecise-input: Create comparison table, focus on creation theme"
-    status: pending
+    status: completed
   - id: secondary-cross-bulk
     content: "english/secondary cross-topic: Search for grammar+essay lessons"
-    status: pending
+    status: completed
   - id: secondary-cross-mcp
     content: "english/secondary cross-topic: Get MCP summaries, investigate MRR 0.100"
-    status: pending
+    status: completed
   - id: secondary-cross-compare
     content: "english/secondary cross-topic: Create comparison table, verify intersection exists"
-    status: pending
+    status: completed
   - id: validate
     content: "Validation: type-check, ground-truth:validate, benchmark --subject english --verbose"
-    status: pending
+    status: completed
   - id: docs
     content: "Documentation: Update checklist, prompt, current-state with session findings"
-    status: pending
+    status: completed
 ---
 
 # Ground Truth Review Session 9: English (Primary + Secondary)

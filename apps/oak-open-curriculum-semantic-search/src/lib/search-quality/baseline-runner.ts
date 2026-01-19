@@ -8,7 +8,7 @@
  */
 
 import { calculateMRR, calculateNDCG } from './metrics.js';
-import type { GroundTruthQuery, QueryCategory, QueryPriority } from './ground-truth/types.js';
+import type { GroundTruthQuery, QueryCategory } from './ground-truth/types.js';
 
 /**
  * Result of running a single ground truth query against the search system.
@@ -18,8 +18,6 @@ export interface QueryBaselineResult {
   readonly query: string;
   /** Query category for analysis grouping */
   readonly category: QueryCategory;
-  /** Query priority for triage */
-  readonly priority: QueryPriority;
   /** Expected relevant lesson/unit slugs */
   readonly expectedSlugs: readonly string[];
   /** Actual top 10 results from search */
@@ -33,12 +31,6 @@ export interface QueryBaselineResult {
   /** Query latency in milliseconds */
   readonly latencyMs: number;
 }
-
-/** Default category when not specified in ground truth */
-const DEFAULT_CATEGORY: QueryCategory = 'precise-topic';
-
-/** Default priority when not specified in ground truth */
-const DEFAULT_PRIORITY: QueryPriority = 'medium';
 
 /** Minimum relevance score to count as "relevant" for rank calculation */
 const RELEVANCE_THRESHOLD = 2;
@@ -68,8 +60,7 @@ export function processQueryResult(
 
   return {
     query: query.query,
-    category: query.category ?? DEFAULT_CATEGORY,
-    priority: query.priority ?? DEFAULT_PRIORITY,
+    category: query.category,
     expectedSlugs,
     actualTop10,
     firstRelevantRank,

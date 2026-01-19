@@ -21,6 +21,9 @@ import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
 // Re-export SearchFunction type for test imports
 export type { SearchFunction } from './benchmark-query-runner.js';
 
+// Re-export QueryResult type for review output
+export type { QueryResult } from './benchmark-query-runner.js';
+
 /**
  * Result of benchmarking a single ground truth entry.
  *
@@ -80,8 +83,29 @@ function aggregateResults(
 }
 
 /** Create a zero-result QueryResult for error cases. */
-function createErrorResult(category: QueryCategory): QueryResult {
-  return { category, mrr: 0, ndcg10: 0, precision3: 0, recall10: 0, latencyMs: 0, hasHit: false };
+function createErrorResult(
+  category: QueryCategory,
+  expectedRelevance: Readonly<Record<string, number>> = {},
+): QueryResult {
+  return {
+    category,
+    mrr: 0,
+    ndcg10: 0,
+    precision3: 0,
+    recall10: 0,
+    latencyMs: 0,
+    hasHit: false,
+    actualResults: [],
+    expectedRelevance,
+  };
+}
+
+/**
+ * Detailed result for review mode, pairing query with its result.
+ */
+export interface ReviewQueryResult {
+  readonly query: GroundTruthEntry['queries'][number];
+  readonly result: QueryResult;
 }
 
 /**
@@ -120,9 +144,51 @@ export async function benchmarkEntry(
       }
     } catch (error) {
       console.error(`  ✗ Error running query "${query.query}":`, error);
-      results.push(createErrorResult(query.category));
+      results.push(createErrorResult(query.category, query.expectedRelevance));
     }
   }
 
   return aggregateResults(entry, results);
+}
+
+/**
+ * Runs benchmark in review mode, returning detailed per-query results.
+ *
+ * Provides all metrics per query plus actual results for comparison.
+ * Used by `pnpm benchmark --review` mode.
+ *
+ * @param entry - Ground truth entry containing queries and expected results
+ * @param searchFn - Search function (injected for testability)
+ * @returns Array of query-result pairs for detailed review
+ */
+export async function benchmarkEntryForReview(
+  entry: GroundTruthEntry,
+  searchFn: SearchFunction,
+): Promise<readonly ReviewQueryResult[]> {
+  const reviews: ReviewQueryResult[] = [];
+
+  for (const query of entry.queries) {
+    try {
+      const result = await runQuery(
+        {
+          query: query.query,
+          expectedRelevance: query.expectedRelevance,
+          subject: entry.subject,
+          phase: entry.phase,
+          queryKeyStage: query.keyStage,
+          category: query.category,
+        },
+        searchFn,
+      );
+      reviews.push({ query, result });
+    } catch (error) {
+      console.error(`  ✗ Error running query "${query.query}":`, error);
+      reviews.push({
+        query,
+        result: createErrorResult(query.category, query.expectedRelevance),
+      });
+    }
+  }
+
+  return reviews;
 }

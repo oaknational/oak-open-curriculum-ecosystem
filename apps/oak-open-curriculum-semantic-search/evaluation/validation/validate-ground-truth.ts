@@ -30,7 +30,7 @@
  * - Zod schema validation
  *
  * Run with: pnpm ground-truth:validate
- * Generate types first: pnpm ground-truth:generate
+ * Generate types first: pnpm bulk:typegen
  *
  * @see GROUND-TRUTH-PROCESS.md
  * @see ADR-085 Ground Truth Validation Discipline
@@ -697,7 +697,7 @@ function main(): void {
   const indexPath = resolve(generatedDir, 'index.ts');
   if (!existsSync(indexPath)) {
     console.error('❌ Generated types not found!');
-    console.error('   Run: pnpm ground-truth:generate');
+    console.error('   Run: pnpm bulk:typegen');
     process.exit(1);
   }
 

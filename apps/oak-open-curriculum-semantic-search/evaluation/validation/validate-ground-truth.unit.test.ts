@@ -26,7 +26,6 @@ describe('checkCategoryCoverage', () => {
       expectedRelevance: { 'test-slug-1': 3, 'test-slug-2': 2 },
       category,
       description: 'Test query for validation',
-      priority: 'medium',
     };
   }
 

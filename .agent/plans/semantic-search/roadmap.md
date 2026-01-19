@@ -1,13 +1,29 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Ground Truth Review** — Validating expected slugs  
-**Last Updated**: 2026-01-17  
+**Last Updated**: 2026-01-19  
 **Metrics Source**: [current-state.md](current-state.md)  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
 **Scope**: Search SDK/CLI capabilities. UI delivery is out of scope (separate repository).
 
 This is THE authoritative roadmap for semantic search work.
+
+---
+
+## Recent Changes (2026-01-19)
+
+### Discovery Gate in Template
+
+The [ground-truth-session-template.md](templates/ground-truth-session-template.md) now includes:
+
+- **Discovery Gate**: Must complete curriculum exploration BEFORE running benchmark
+- **Explicit evidence requirements**: Paste sections that must be filled
+- **Two-phase structure**: Phase 1A (Discovery) → Phase 1B (Comparison)
+
+### Benchmark Review Mode
+
+Use `pnpm benchmark -s X -p Y --review` for per-query review showing ALL 4 metrics (MRR, NDCG@10, P@3, R@10).
 
 ---
 
@@ -46,7 +62,7 @@ This is THE authoritative roadmap for semantic search work.
 
 ## 🔄 Phase 1: Ground Truth Review
 
-**Status**: 🔄 In Progress (9/30 subject-phases complete)  
+**Status**: 🔄 In Progress (11/30 subject-phases complete)  
 **Location**: [active/ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
 
 **Goal**: Validate ground truths until search quality is the constraining factor.
@@ -55,7 +71,7 @@ Ground truths measure "did expected slugs appear?" — they must be correct befo
 
 | Complete | Remaining |
 |----------|-----------|
-| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2) | english, french, geography, german, history, maths, music, physical-education, religious-education, science, spanish |
+| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2) | french, geography, german, history, maths, music, physical-education, religious-education, science, spanish |
 
 **Level 1 approaches are complete** but Level 1 is NOT exhausted until ground truth review validates the measurements.
 

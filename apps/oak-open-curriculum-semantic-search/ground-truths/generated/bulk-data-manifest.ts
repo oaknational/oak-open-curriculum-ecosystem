@@ -2,7 +2,7 @@
  * Bulk data manifest with generation metadata.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-10T22:25:17.231Z
+ * Generated at: 2026-01-19T12:30:15.780Z
  *
  * @packageDocumentation
  */
@@ -31,7 +31,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'art',
     phase: 'secondary',
     sequenceSlug: 'art-secondary',
-    lessonCount: 204,
+    lessonCount: 197,
   },
   {
     subject: 'citizenship',
@@ -79,13 +79,13 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'english',
     phase: 'primary',
     sequenceSlug: 'english-primary',
-    lessonCount: 1512,
+    lessonCount: 1517,
   },
   {
     subject: 'english',
     phase: 'secondary',
     sequenceSlug: 'english-secondary',
-    lessonCount: 1028,
+    lessonCount: 1045,
   },
   {
     subject: 'french',
@@ -121,13 +121,13 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'history',
     phase: 'primary',
     sequenceSlug: 'history-primary',
-    lessonCount: 218,
+    lessonCount: 216,
   },
   {
     subject: 'history',
     phase: 'secondary',
     sequenceSlug: 'history-secondary',
-    lessonCount: 439,
+    lessonCount: 465,
   },
   {
     subject: 'maths',
@@ -139,7 +139,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'maths',
     phase: 'secondary',
     sequenceSlug: 'maths-secondary',
-    lessonCount: 862,
+    lessonCount: 863,
   },
   {
     subject: 'music',
@@ -175,7 +175,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'religious-education',
     phase: 'secondary',
     sequenceSlug: 'religious-education-secondary',
-    lessonCount: 395,
+    lessonCount: 396,
   },
   {
     subject: 'science',
@@ -187,7 +187,7 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
     subject: 'science',
     phase: 'secondary',
     sequenceSlug: 'science-secondary',
-    lessonCount: 889,
+    lessonCount: 888,
   },
   {
     subject: 'spanish',
@@ -204,10 +204,10 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
 ] as const;
 
 /** Total number of lessons across all subjects */
-export const TOTAL_LESSON_COUNT = 12320 as const;
+export const TOTAL_LESSON_COUNT = 12360 as const;
 
 /** Number of subject/phase combinations */
 export const SUBJECT_PHASE_COUNT = 30 as const;
 
 /** Generation timestamp */
-export const GENERATED_AT = '2026-01-10T22:25:17.231Z' as const;
+export const GENERATED_AT = '2026-01-19T12:30:15.780Z' as const;

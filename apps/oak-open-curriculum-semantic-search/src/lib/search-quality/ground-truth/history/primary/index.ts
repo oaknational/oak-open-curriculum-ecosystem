@@ -1,43 +1,45 @@
 /**
- * Primary History ground truth queries for search quality evaluation.
+ * Primary ground truth queries - 4 queries, 1 per category.
  *
- * **Structure (2026-01-11)**:
- * 4 queries total, 1 per category, AI-curated for accuracy.
- *
- * | Category | Query | MRR |
- * |----------|-------|-----|
- * | precise-topic | Boudica rebellion against Romans | 1.000 |
- * | natural-expression | teach year 4 about the Romans | 0.500 |
- * | imprecise-input | vikins and anglo saxons | 0.000 |
- * | cross-topic | Vikings and trade in York | 1.000 |
- *
- * **Measurement Scope**: These queries test expected slug position,
- * NOT user satisfaction. See audit report for details.
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
  *
  * @packageDocumentation
  */
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
-import type { GroundTruthQuery } from '../../types';
+// Import query definitions
+import { HISTORY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { HISTORY_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { HISTORY_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { HISTORY_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
 
-import { HISTORY_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { HISTORY_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { HISTORY_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { HISTORY_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Import expected relevance
+import { HISTORY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { HISTORY_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { HISTORY_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { HISTORY_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
 
-/**
- * All Primary History ground truth queries.
- *
- * Total: 4 queries (1 per category).
- */
+/** All queries for this subject/phase */
 export const HISTORY_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...HISTORY_PRIMARY_PRECISE_TOPIC,
-  ...HISTORY_PRIMARY_NATURAL_EXPRESSION,
-  ...HISTORY_PRIMARY_IMPRECISE_INPUT,
-  ...HISTORY_PRIMARY_CROSS_TOPIC,
+  combineGroundTruth(HISTORY_PRIMARY_PRECISE_TOPIC_QUERY, HISTORY_PRIMARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(
+    HISTORY_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    HISTORY_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    HISTORY_PRIMARY_IMPRECISE_INPUT_QUERY,
+    HISTORY_PRIMARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(HISTORY_PRIMARY_CROSS_TOPIC_QUERY, HISTORY_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-// Re-export category modules
-export { HISTORY_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { HISTORY_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { HISTORY_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { HISTORY_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { HISTORY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { HISTORY_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { HISTORY_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { HISTORY_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { HISTORY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { HISTORY_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { HISTORY_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { HISTORY_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

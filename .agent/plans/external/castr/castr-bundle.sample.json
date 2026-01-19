@@ -6,7 +6,6 @@
     "hash": "sha256:REPLACE_WITH_INPUT_HASH",
     "version": "REPLACE_WITH_INFO_VERSION"
   },
-  "ir": "ir.json",
   "schemas": "schemas.json",
   "endpoints": "endpoints.json",
   "emit": {

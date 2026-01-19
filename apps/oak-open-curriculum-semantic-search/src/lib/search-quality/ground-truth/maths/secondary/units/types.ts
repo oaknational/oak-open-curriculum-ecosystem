@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import type { QueryCategory, QueryPriority } from '../../../types';
+import type { QueryCategory } from '../../../types';
 
 /**
  * A ground truth query for unit search with expected relevance judgments.
@@ -25,8 +25,4 @@ export interface UnitGroundTruthQuery {
    * What this test scenario reveals/validates about system behavior. REQUIRED.
    */
   readonly description: string;
-  /**
-   * Relative importance for current system priorities. REQUIRED.
-   */
-  readonly priority: QueryPriority;
 }

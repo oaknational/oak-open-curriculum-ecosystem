@@ -1,7 +1,7 @@
 # ADR-098: Ground Truth Registry as Single Source of Truth
 
 **Status**: Accepted  
-**Date**: 2026-01-05 (Updated: 2026-01-11)  
+**Date**: 2026-01-05 (Updated: 2026-01-19)  
 **Decision Makers**: Engineering Team  
 **Context**: M3 Phase 7a — Unified Evaluation Infrastructure
 
@@ -40,7 +40,7 @@ Ground truths require **three distinct validation stages**:
 | **2. Runtime Validation (16 checks)** | Semantic rules       | Production readiness   |
 | **3. Qualitative (manual review)**    | Production readiness | —                      |
 
-**Stage 1** enforces required fields (`category`, `priority`, `description`) at compile time.
+**Stage 1** enforces required fields (`category`, `description`) at compile time.
 
 **Stage 2** enforces semantic rules TypeScript cannot check (slug existence, category coverage, etc.).
 
@@ -91,12 +91,9 @@ interface GroundTruthEntry {
 interface GroundTruthQuery {
   // Required
   readonly query: string;
-  readonly expectedRelevance: Readonly<Record<string, number>>;
-
-  // Recommended
-  readonly category?: QueryCategory;
-  readonly description?: string;
-  readonly priority?: QueryPriority;
+  readonly expectedRelevance: ExpectedRelevance;
+  readonly category: QueryCategory;
+  readonly description: string;
 
   // Optional
   readonly keyStage?: KeyStage; // Override for KS4 queries
@@ -108,6 +105,47 @@ export const GROUND_TRUTH_ENTRIES: readonly GroundTruthEntry[] = [
   // ... only entries that exist
 ] as const;
 ```
+
+### Split File Architecture (2026-01-19)
+
+Ground truth data is split into separate files to support independent discovery during review:
+
+```text
+{subject}/{phase}/
+├── precise-topic.query.ts      # GroundTruthQueryDefinition
+├── precise-topic.expected.ts   # ExpectedRelevance
+├── index.ts                    # Combines using combineGroundTruth()
+```
+
+**Types**:
+
+```typescript
+// Query metadata (safe to read during discovery)
+interface GroundTruthQueryDefinition {
+  readonly query: string;
+  readonly category: QueryCategory;
+  readonly description: string;
+  readonly expectedFile: string;
+  readonly keyStage?: KeyStage;
+}
+
+// Expected relevance (read only during comparison phase)
+type ExpectedRelevance = Readonly<Record<string, number>>;
+
+// Combined at runtime
+function combineGroundTruth(
+  queryDef: GroundTruthQueryDefinition,
+  expected: ExpectedRelevance,
+): GroundTruthQuery;
+```
+
+**Benefits**:
+
+- **Independent discovery**: Review protocol reads query metadata without seeing expected slugs
+- **Protocol enforcement**: `pnpm gt:queries` extracts queries without revealing expectations
+- **Cleaner separation**: Query design vs expected outcomes are distinct concerns
+
+See [ADR-085](085-ground-truth-validation-discipline.md) for full architecture details.
 
 ### Baselines Structure
 

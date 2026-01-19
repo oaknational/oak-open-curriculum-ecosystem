@@ -10,21 +10,21 @@
 
 import type { GroundTruthQuery } from '../types';
 
-import { RE_PRIMARY_ALL_QUERIES } from './primary';
-import { RE_SECONDARY_ALL_QUERIES } from './secondary';
+import { RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES } from './primary';
+import { RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES } from './secondary';
 
 /**
  * All Religious Education ground truth queries across all phases.
  *
  * Total: 8 queries (4 Primary + 4 Secondary).
  */
-export const RE_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...RE_PRIMARY_ALL_QUERIES,
-  ...RE_SECONDARY_ALL_QUERIES,
+export const RELIGIOUS_EDUCATION_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  ...RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES,
+  ...RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES,
 ] as const;
 
 // Re-export primary
-export { RE_PRIMARY_ALL_QUERIES } from './primary';
+export { RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES } from './primary';
 
 // Re-export secondary
-export { RE_SECONDARY_ALL_QUERIES } from './secondary';
+export { RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES } from './secondary';

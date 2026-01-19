@@ -1,21 +1,51 @@
 /**
- * Secondary Citizenship ground truth queries - 4 queries, 1 per category, AI-curated.
+ * Secondary ground truth queries - 4 queries, 1 per category.
+ *
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
+ *
  * @packageDocumentation
  */
-import type { GroundTruthQuery } from '../../types';
-import { CITIZENSHIP_SECONDARY_CROSS_TOPIC } from './cross-topic';
-import { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
-import { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
-import { CITIZENSHIP_SECONDARY_PRECISE_TOPIC } from './precise-topic';
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
+// Import query definitions
+import { CITIZENSHIP_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { CITIZENSHIP_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+
+// Import expected relevance
+import { CITIZENSHIP_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { CITIZENSHIP_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+
+/** All queries for this subject/phase */
 export const CITIZENSHIP_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...CITIZENSHIP_SECONDARY_PRECISE_TOPIC,
-  ...CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION,
-  ...CITIZENSHIP_SECONDARY_IMPRECISE_INPUT,
-  ...CITIZENSHIP_SECONDARY_CROSS_TOPIC,
+  combineGroundTruth(
+    CITIZENSHIP_SECONDARY_PRECISE_TOPIC_QUERY,
+    CITIZENSHIP_SECONDARY_PRECISE_TOPIC_EXPECTED,
+  ),
+  combineGroundTruth(
+    CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_QUERY,
+    CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(
+    CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_QUERY,
+    CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_EXPECTED,
+  ),
+  combineGroundTruth(
+    CITIZENSHIP_SECONDARY_CROSS_TOPIC_QUERY,
+    CITIZENSHIP_SECONDARY_CROSS_TOPIC_EXPECTED,
+  ),
 ] as const;
 
-export { CITIZENSHIP_SECONDARY_CROSS_TOPIC } from './cross-topic';
-export { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT } from './imprecise-input';
-export { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION } from './natural-expression';
-export { CITIZENSHIP_SECONDARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { CITIZENSHIP_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { CITIZENSHIP_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { CITIZENSHIP_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { CITIZENSHIP_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { CITIZENSHIP_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { CITIZENSHIP_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

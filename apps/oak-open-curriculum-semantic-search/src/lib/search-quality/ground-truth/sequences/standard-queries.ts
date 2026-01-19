@@ -15,7 +15,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Subject + Phase queries (critical)
   {
     query: 'maths primary',
-    priority: 'critical',
     description: 'Direct subject + phase query',
     expectedRelevance: {
       'maths-primary': 3,
@@ -24,7 +23,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'primary maths',
-    priority: 'critical',
     description: 'Reversed order - phase + subject',
     expectedRelevance: {
       'maths-primary': 3,
@@ -33,7 +31,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'secondary science',
-    priority: 'critical',
     description: 'Subject + phase for science',
     expectedRelevance: {
       'science-secondary-aqa': 3,
@@ -44,7 +41,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'english secondary',
-    priority: 'critical',
     description: 'Subject + phase for english',
     expectedRelevance: {
       'english-secondary-aqa': 3,
@@ -55,7 +51,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'history',
-    priority: 'critical',
     description: 'Subject-only query should return all history sequences',
     expectedRelevance: {
       'history-primary': 3,
@@ -65,7 +60,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'geography',
-    priority: 'critical',
     description: 'Subject-only query for geography',
     expectedRelevance: {
       'geography-primary': 3,
@@ -77,7 +71,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Exam board queries (high)
   {
     query: 'AQA science',
-    priority: 'high',
     description: 'Exam board + subject',
     expectedRelevance: {
       'science-secondary-aqa': 3,
@@ -87,7 +80,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'Edexcel english',
-    priority: 'high',
     description: 'Exam board + subject for english',
     expectedRelevance: {
       'english-secondary-edexcel': 3,
@@ -97,7 +89,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'OCR computing',
-    priority: 'high',
     description: 'Exam board + subject for computing',
     expectedRelevance: {
       'computing-secondary-ocr': 3,
@@ -107,7 +98,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'AQA music',
-    priority: 'high',
     description: 'Exam board + subject for music',
     expectedRelevance: {
       'music-secondary-aqa': 3,
@@ -120,7 +110,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Key stage queries (high)
   {
     query: 'KS1 art',
-    priority: 'high',
     description: 'Key stage + subject',
     expectedRelevance: {
       'art-primary': 3,
@@ -128,7 +117,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'KS2 computing',
-    priority: 'high',
     description: 'KS2 computing is primary',
     expectedRelevance: {
       'computing-primary': 3,
@@ -136,7 +124,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'KS3 french',
-    priority: 'high',
     description: 'KS3 is secondary',
     expectedRelevance: {
       'french-secondary-aqa': 3,
@@ -146,7 +133,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'KS4 maths',
-    priority: 'high',
     description: 'KS4 is secondary (GCSE level)',
     expectedRelevance: {
       'maths-secondary': 3,
@@ -157,7 +143,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Language queries (high)
   {
     query: 'french',
-    priority: 'high',
     description: 'Modern foreign language',
     expectedRelevance: {
       'french-primary': 3,
@@ -167,7 +152,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'german secondary',
-    priority: 'high',
     description: 'German only has secondary sequences',
     expectedRelevance: {
       'german-secondary-aqa': 3,
@@ -176,7 +160,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'spanish primary',
-    priority: 'high',
     description: 'Spanish primary sequence',
     expectedRelevance: {
       'spanish-primary': 3,
@@ -188,7 +171,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   // Specialist subjects (medium)
   {
     query: 'citizenship',
-    priority: 'medium',
     description: 'Citizenship has core and GCSE options',
     expectedRelevance: {
       'citizenship-secondary-core': 3,
@@ -197,7 +179,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'religious education',
-    priority: 'medium',
     description: 'RE has multiple exam boards',
     expectedRelevance: {
       'religious-education-primary': 3,
@@ -209,7 +190,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'PSHE',
-    priority: 'medium',
     description: 'PSHE acronym should find RSHE-PSHE',
     expectedRelevance: {
       'rshe-pshe-primary': 3,
@@ -218,7 +198,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'design technology',
-    priority: 'medium',
     description: 'DT without hyphen',
     expectedRelevance: {
       'design-technology-primary': 3,
@@ -227,7 +206,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'PE primary',
-    priority: 'medium',
     description: 'PE acronym for physical education',
     expectedRelevance: {
       'physical-education-primary': 3,
@@ -235,7 +213,6 @@ export const SEQUENCE_STANDARD_QUERIES: readonly SequenceGroundTruthQuery[] = [
   },
   {
     query: 'cooking',
-    priority: 'medium',
     description: 'Cooking should find cooking-nutrition',
     expectedRelevance: {
       'cooking-nutrition-primary': 3,

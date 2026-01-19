@@ -1,21 +1,42 @@
 /**
- * Primary Music ground truth queries - 4 queries, 1 per category, AI-curated.
+ * Primary ground truth queries - 4 queries, 1 per category.
+ *
+ * This index combines query definitions and expected relevance using
+ * combineGroundTruth() at runtime.
+ *
  * @packageDocumentation
  */
-import type { GroundTruthQuery } from '../../types';
-import { MUSIC_PRIMARY_CROSS_TOPIC } from './cross-topic';
-import { MUSIC_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-import { MUSIC_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-import { MUSIC_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
+// Import query definitions
+import { MUSIC_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { MUSIC_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { MUSIC_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { MUSIC_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+
+// Import expected relevance
+import { MUSIC_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { MUSIC_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { MUSIC_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { MUSIC_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+
+/** All queries for this subject/phase */
 export const MUSIC_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
-  ...MUSIC_PRIMARY_PRECISE_TOPIC,
-  ...MUSIC_PRIMARY_NATURAL_EXPRESSION,
-  ...MUSIC_PRIMARY_IMPRECISE_INPUT,
-  ...MUSIC_PRIMARY_CROSS_TOPIC,
+  combineGroundTruth(MUSIC_PRIMARY_PRECISE_TOPIC_QUERY, MUSIC_PRIMARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(
+    MUSIC_PRIMARY_NATURAL_EXPRESSION_QUERY,
+    MUSIC_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
+  ),
+  combineGroundTruth(MUSIC_PRIMARY_IMPRECISE_INPUT_QUERY, MUSIC_PRIMARY_IMPRECISE_INPUT_EXPECTED),
+  combineGroundTruth(MUSIC_PRIMARY_CROSS_TOPIC_QUERY, MUSIC_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
 
-export { MUSIC_PRIMARY_CROSS_TOPIC } from './cross-topic';
-export { MUSIC_PRIMARY_IMPRECISE_INPUT } from './imprecise-input';
-export { MUSIC_PRIMARY_NATURAL_EXPRESSION } from './natural-expression';
-export { MUSIC_PRIMARY_PRECISE_TOPIC } from './precise-topic';
+// Re-export query definitions and expected relevance
+export { MUSIC_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { MUSIC_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { MUSIC_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { MUSIC_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { MUSIC_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { MUSIC_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { MUSIC_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { MUSIC_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
