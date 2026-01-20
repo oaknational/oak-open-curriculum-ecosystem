@@ -2,7 +2,39 @@
 
 **This is a PROTOCOL, not a reference document. Execute it step by step.**
 
-**Last Updated**: 2026-01-19 (added COMMIT step to prevent search validation bias)
+**Last Updated**: 2026-01-20 (maths complete, added phase separation guidance)
+
+---
+
+## ⚠️ CRITICAL: Phases are SEPARATE Processes ⚠️
+
+**Each phase is a SEPARATE process with a HARD CHECKPOINT. Do not jump ahead.**
+
+| Phase | Purpose | Checkpoint |
+|-------|---------|------------|
+| **Phase 0 + 1A** | Prerequisites + Query Analysis (REFLECTION ONLY) | All queries analysed |
+| **Phase 1B** | Discovery + COMMIT (BEFORE benchmark, BEFORE reading `.expected.ts`) | All COMMIT tables complete |
+| **Phase 1C** | Comparison (NOW read `.expected.ts` and run benchmark) | All metrics recorded |
+
+### Why Phase Separation Matters
+
+**Session 15 (geography)**: Without explicit commitment before benchmark, the agent validated search results instead of doing independent discovery.
+
+**Session 20 (maths)**: Three-way comparison revealed cases where search outperformed human COMMIT (query used informal language → search correctly prioritised basic content, not advanced).
+
+Phase separation prevents:
+- Validation bias (justifying search results post-hoc)
+- Expected slug bias (discovering "candidates" that match existing GT)
+
+### Standard Session Structure
+
+**For subjects with 4 queries per phase (most subjects):**
+
+1. **First Process (Phase 0 + 1A)**: Read ALL query files, analyse ALL queries
+2. **Second Process (Phase 1B)**: Explore bulk data, get MCP summaries, COMMIT rankings for ALL queries
+3. **Third Process (Phase 1C)**: Run benchmark, three-way comparison, record metrics for ALL queries
+
+**For maths (24 queries — COMPLETE):** See archived maths guidance in [ground-truth-review-checklist.md](../active/ground-truth-review-checklist.md)
 
 ---
 
@@ -34,6 +66,7 @@ After correction: MRR 0.000 → 1.000, P@3 0.000 → 1.000.
 > **You must form YOUR OWN ground truth assessment BEFORE seeing search results.**
 
 The purpose of this protocol is to prevent "search validation bias" — the failure mode where you:
+
 1. Run benchmark
 2. See what search returned
 3. Retroactively justify those results as "good"
@@ -58,7 +91,8 @@ This protocol has **5 phases** with **hard checkpoints**. You CANNOT proceed pas
 | **PHASE 2** | Validation | Aggregate metrics collected |
 | **PHASE 3** | Documentation | Checklist updated |
 
-**⚠️ CRITICAL**: 
+**⚠️ CRITICAL**:
+
 - Phase 1A catches poorly-designed queries through REFLECTION — no tools, just thinking.
 - Phase 1B requires you to COMMIT to rankings BEFORE running benchmark. This is the key safeguard.
 - Phase 1C compares THREE things: YOUR committed rankings, SEARCH results, and EXPECTED slugs.
@@ -106,6 +140,7 @@ Scan this list for lessons that might be relevant but have non-obvious titles.
 ### Step 0.3: Read Query Definition Files (BEFORE Starting Phase 1)
 
 **Split File Architecture (2026-01-19)**: Ground truths are split into two files:
+
 - `*.query.ts` — Contains query, category, description (SAFE to read)
 - `*.expected.ts` — Contains expectedRelevance (ONLY read in Phase 1C)
 
@@ -137,7 +172,7 @@ description: "___"
 
 **Category**: `[precise-topic | natural-expression | imprecise-input | cross-topic]`  
 **Query**: "___" (from Step 0.3 output)  
-**Capability being tested**: ___
+**Capability being tested**:___
 
 ---
 
@@ -181,20 +216,36 @@ Each category proves a specific **search behaviour**:
 ### Step 1A.3: Will This Query Actually Prove What It Claims?
 
 **For precise-topic**:
+
 - Is this actually precise curriculum terminology that teachers would use?
 - Is this a fair test of "basic retrieval works"?
 
 **For natural-expression**:
+
 - Is this genuinely informal/everyday language (not curriculum terms)?
 - Does this test vocabulary bridging, or is it already using curriculum vocabulary?
+- **Does the query's register (formal/informal) match the expected content level?**
+  - "Finding the unknown number" is BASIC language → expect LINEAR equations, not quadratics
+  - "How steep is the line" is INFORMAL → expect GRADIENT basics, not advanced calculus
+  - Match the sophistication level implied by the language, not just the mathematical topic
 
 **For imprecise-input**:
+
 - Is the error realistic (typo a real person might make)?
 - Does this test search resilience, or is the error too severe/unrealistic?
+- **Is this testing typo recovery or compound word expansion?**
+  - Fuzzy matching handles: "multiplikation" → "multiplication" (character edit)
+  - Fuzzy matching CANNOT handle: "timetables" → "times table" (word boundary change)
+  - If your query has compound words that curriculum spells as two words, this is a tokenization issue, not achievable with fuzzy matching alone
 
 **For cross-topic**:
+
 - Are there genuinely TWO distinct concepts in this query?
 - Is finding their intersection a meaningful capability to test?
+- **Does the cross-topic intersection EXIST in the curriculum?**
+  - "Fractions word problems money" assumes lessons combining fractions + money exist
+  - If curriculum doesn't have this intersection, GT cannot specify it — that's a curriculum gap, not a search gap
+  - Verify the intersection exists before expecting search to find it
 
 **Your analysis**: ___
 
@@ -218,7 +269,7 @@ Each category proves a specific **search behaviour**:
 - ☐ **Query is a good test** — proceed to Phase 1B Discovery
 - ☐ **Query has design risks** — note them, watch for them during Discovery
 - ☐ **Query should be revised** — propose revision: "___"
-- ☐ **Category should change** — from ___ to ___
+- ☐ **Category should change** — from ___to___
 
 **If revising**: Update the ground truth file BEFORE proceeding to Phase 1B.
 
@@ -258,6 +309,17 @@ This is the critical safeguard against "validate search results" bias AND "valid
 
 Search with 3+ different terms related to the query. Cast a wide net.
 
+**⛔ CRITICAL: Title-only matching is NOT sufficient.**
+
+Session 17 (German) proved this: `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` was initially missed because its unit title is "meine Welt" — not obviously about grammar. But MCP summary revealed it teaches ADVANCED stem variation rules. Title-only `grep` would never find it.
+
+**Required discovery approach:**
+
+1. **Keyword searches** — Find lessons with obvious title matches
+2. **Unit review** — Scan ALL units, especially those that MIGHT contain relevant content even if title doesn't suggest it
+3. **MCP summaries for edge cases** — Get summaries for lessons that MIGHT be relevant, not just those with perfect title matches
+4. **Key learning analysis** — Grammar/concept content often hidden in activity-focused lessons
+
 ```bash
 # Example searches - adapt terms for your query
 jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | select(.lessonTitle | test("TERM1|TERM2"; "i")) | 
@@ -266,6 +328,9 @@ jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | select(.lessonTitle 
 # Also search unit titles
 jq -r '.sequence[] | select(.unitTitle | test("TERM"; "i")) | 
   "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' bulk-downloads/SUBJECT-PHASE.json
+
+# LIST ALL UNITS to scan for non-obvious matches
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' bulk-downloads/SUBJECT-PHASE.json
 ```
 
 **⬇️ PASTE EVIDENCE HERE (MANDATORY) ⬇️**
@@ -306,11 +371,16 @@ Search term 3 "___": ___ lessons found
 
 **⛔ DO NOT look at expected slugs. Select candidates from your bulk data search ONLY.**
 
-Call `get-lessons-summary` for 5-10 candidates from your Step 1B.1 candidate list:
+**⛔ Title-only selection is NOT sufficient.** You MUST include:
 
-- Candidates from bulk data search (Step 1B.1)
-- Any with non-obvious titles that might be relevant
+- Candidates from keyword searches (Step 1B.1)
+- **Candidates from units that MIGHT contain relevant content** (even if title doesn't suggest it)
+- Candidates with non-obvious titles that MIGHT be relevant
 - DO NOT look at expected slugs — you don't know them yet
+
+**Why this matters**: MCP summaries reveal key learning content that is NOT visible in titles. A lesson titled "activities at home" might teach fundamental grammar rules. A unit titled "meine Welt" might contain lessons teaching advanced verb conjugation patterns. You cannot know this without MCP summaries.
+
+Call `get-lessons-summary` for 5-10 candidates from your Step 1B.1 candidate list:
 
 **⬇️ PASTE MCP SUMMARIES HERE (MANDATORY — minimum 5) ⬇️**
 
@@ -373,6 +443,7 @@ Based on MCP summaries and unit context (NOT search results), analyse each candi
 **⬇️ RECORD YOUR ANALYSIS HERE (MANDATORY) ⬇️**
 
 For each candidate from your 10+ list, assess:
+
 - Does the key learning directly address the query?
 - Is this lesson about what the query asks, or only tangentially related?
 - Quote the specific key learning text that matches (or doesn't match) the query
@@ -441,6 +512,7 @@ Based ONLY on your curriculum analysis (Steps 1B.1-1B.4), commit to your top can
 **✅ NOW you may read the ground truth file to see expected slugs.**
 
 This is the first time you see what the current expected slugs are. You will compare:
+
 1. Your committed rankings (from Step 1B.5)
 2. Search results (from benchmark)
 3. Current expected slugs (from GT file — first time seeing them!)
@@ -471,6 +543,7 @@ pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
 ```
 
 This shows:
+
 - Expected slugs with relevance scores
 - Actual search results (top 10)
 - Which expected slugs were found and at what position
@@ -497,6 +570,7 @@ METRICS:
 **This table is MANDATORY. It compares THREE distinct sources.**
 
 The three sources are:
+
 1. **YOUR committed rankings** (from Step 1B.5)
 2. **SEARCH results** (from Step 1C.1)
 3. **EXPECTED slugs** (current ground truth file)
@@ -512,6 +586,7 @@ The three sources are:
 | ___ | not in top 5 | #2 | not expected | "..." | ___ |
 
 **Verdict options**:
+
 - **Agreement**: All three sources agree this is relevant
 - **Search found better**: Search ranked something higher that is actually better than expected
 - **Your discovery found better**: Your analysis found something better than both search and expected
@@ -541,6 +616,7 @@ The three sources are:
 > **"What are the BEST slugs for this query — and where did they come from?"**
 
 Consider all three sources:
+
 1. Your committed rankings from curriculum analysis (1B.5)
 2. Actual search results (1C.1)
 3. Current expected slugs
@@ -574,6 +650,7 @@ Answer (one of):
 **Interpretation**: ___
 
 **Diagnostic Guide**:
+
 - High R@10 + Low MRR = results found but poorly ranked (search issue)
 - Low R@10 = expected slugs may be wrong (GT issue)
 
@@ -772,6 +849,135 @@ todos:
 ---
 ```
 
+### Maths-Specific Plan Structure (Multiple Queries Per Category)
+
+For maths evaluations, use this expanded structure with 2 queries per category:
+
+```yaml
+---
+name: Ground Truth Session - maths/PHASE (CRITICAL)
+overview: "MATHS IS CRITICAL. 100% certainty required. Multiple queries per category. Exhaustive discovery using BOTH MCP tools AND bulk data for EVERY query. No shortcuts."
+todos:
+  - id: phase0
+    content: "PHASE 0: Verify MCP, bulk data, benchmark — list ALL units"
+    status: pending
+  # precise-topic query 1
+  - id: pt1-query
+    content: "precise-topic Q1 1A: QUERY ANALYSIS — REFLECT on query design"
+    status: pending
+  - id: pt1-discovery
+    content: "precise-topic Q1 1B: DISCOVERY — bulk search (10+), MCP summaries (5-10), ALL units review"
+    status: pending
+  - id: pt1-commit
+    content: "precise-topic Q1 1B.5: COMMIT — 100% certain these are BEST answers"
+    status: pending
+  - id: pt1-comparison
+    content: "precise-topic Q1 1C: COMPARISON — three-way table, critical question"
+    status: pending
+  # precise-topic query 2
+  - id: pt2-query
+    content: "precise-topic Q2 1A: QUERY ANALYSIS — FRESH query, FRESH analysis"
+    status: pending
+  - id: pt2-discovery
+    content: "precise-topic Q2 1B: DISCOVERY — FRESH bulk search, FRESH MCP summaries"
+    status: pending
+  - id: pt2-commit
+    content: "precise-topic Q2 1B.5: COMMIT — 100% certain these are BEST answers"
+    status: pending
+  - id: pt2-comparison
+    content: "precise-topic Q2 1C: COMPARISON — three-way table, critical question"
+    status: pending
+  # natural-expression query 1
+  - id: ne1-query
+    content: "natural-expression Q1 1A: QUERY ANALYSIS — is vocabulary natural?"
+    status: pending
+  - id: ne1-discovery
+    content: "natural-expression Q1 1B: DISCOVERY — vocabulary bridging candidates"
+    status: pending
+  - id: ne1-commit
+    content: "natural-expression Q1 1B.5: COMMIT — 100% certain these are BEST answers"
+    status: pending
+  - id: ne1-comparison
+    content: "natural-expression Q1 1C: COMPARISON — three-way table"
+    status: pending
+  # natural-expression query 2
+  - id: ne2-query
+    content: "natural-expression Q2 1A: QUERY ANALYSIS — FRESH query"
+    status: pending
+  - id: ne2-discovery
+    content: "natural-expression Q2 1B: DISCOVERY — FRESH exploration"
+    status: pending
+  - id: ne2-commit
+    content: "natural-expression Q2 1B.5: COMMIT — 100% certain"
+    status: pending
+  - id: ne2-comparison
+    content: "natural-expression Q2 1C: COMPARISON — three-way table"
+    status: pending
+  # imprecise-input query 1
+  - id: ii1-query
+    content: "imprecise-input Q1 1A: QUERY ANALYSIS — is typo realistic?"
+    status: pending
+  - id: ii1-discovery
+    content: "imprecise-input Q1 1B: DISCOVERY — semantic intent focus"
+    status: pending
+  - id: ii1-commit
+    content: "imprecise-input Q1 1B.5: COMMIT — 100% certain"
+    status: pending
+  - id: ii1-comparison
+    content: "imprecise-input Q1 1C: COMPARISON — three-way table"
+    status: pending
+  # imprecise-input query 2
+  - id: ii2-query
+    content: "imprecise-input Q2 1A: QUERY ANALYSIS — FRESH query"
+    status: pending
+  - id: ii2-discovery
+    content: "imprecise-input Q2 1B: DISCOVERY — FRESH exploration"
+    status: pending
+  - id: ii2-commit
+    content: "imprecise-input Q2 1B.5: COMMIT — 100% certain"
+    status: pending
+  - id: ii2-comparison
+    content: "imprecise-input Q2 1C: COMPARISON — three-way table"
+    status: pending
+  # cross-topic query 1
+  - id: ct1-query
+    content: "cross-topic Q1 1A: QUERY ANALYSIS — are BOTH concepts present?"
+    status: pending
+  - id: ct1-discovery
+    content: "cross-topic Q1 1B: DISCOVERY — verify BOTH concepts in candidates"
+    status: pending
+  - id: ct1-commit
+    content: "cross-topic Q1 1B.5: COMMIT — 100% certain"
+    status: pending
+  - id: ct1-comparison
+    content: "cross-topic Q1 1C: COMPARISON — three-way table"
+    status: pending
+  # cross-topic query 2
+  - id: ct2-query
+    content: "cross-topic Q2 1A: QUERY ANALYSIS — FRESH query"
+    status: pending
+  - id: ct2-discovery
+    content: "cross-topic Q2 1B: DISCOVERY — FRESH exploration"
+    status: pending
+  - id: ct2-commit
+    content: "cross-topic Q2 1B.5: COMMIT — 100% certain"
+    status: pending
+  - id: ct2-comparison
+    content: "cross-topic Q2 1C: COMPARISON — three-way table"
+    status: pending
+  # Validation
+  - id: phase2
+    content: "PHASE 2: Validation — type-check, validate, benchmark"
+    status: pending
+  - id: phase3
+    content: "PHASE 3: Documentation — update checklist with metrics and learnings"
+    status: pending
+  - id: certainty-check
+    content: "FINAL CHECK: Am I 100% certain ALL maths ground truths are correct?"
+    status: pending
+---
+```
+
 ---
 
 ## Anti-Pattern: "Discovery" That Validates Search
@@ -825,6 +1031,8 @@ This is the failure mode that keeps recurring. Learn to recognise it.
 | Only MRR reported | Misleading conclusions | Missing 3 metrics | All 4 required |
 | Assumed GT correct | Wrong conclusions | No assessment of expected slugs | 1B.5 requires assessment |
 | All three sources identical | No real comparison made | Table columns are same | 1C.2 asks "are they identical?" |
+| **Title-only discovery** | Missed excellent lessons in non-obvious units | Ask: "Did I review ALL units systematically?" | List ALL units, examine edge cases |
+| Only obvious MCP summaries | Missed lessons with relevant key learning but non-obvious titles | Ask: "Did I get summaries for edge cases?" | Include candidates from non-obvious units |
 
 ---
 
@@ -833,6 +1041,7 @@ This is the failure mode that keeps recurring. Learn to recognise it.
 For each category, you must have recorded:
 
 **Phase 0 (Prerequisites):**
+
 1. ☐ Query metadata read from `.query.ts` file (NOT `.expected.ts`)
 2. ☐ **Confirmed: `.expected.ts` files have NOT been read yet**
 

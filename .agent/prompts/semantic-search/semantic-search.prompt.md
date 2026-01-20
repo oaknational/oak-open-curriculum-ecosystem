@@ -1,8 +1,93 @@
 # Semantic Search — Ground Truth Review Protocol
 
-**Status**: Ground Truth Review — 14/30 complete (geography needs re-evaluation)  
-**Next Session**: geography/primary, geography/secondary (re-evaluation with proper methodology)  
-**Last Updated**: 2026-01-19 (added COMMIT step to prevent search validation bias)
+**Status**: Ground Truth Review — 20/30 complete  
+**Next Session**: music/primary + music/secondary  
+**Last Updated**: 2026-01-20 (maths complete, Music next)
+
+---
+
+## 🎯 NEXT SESSION: Music Ground Truth Evaluation
+
+**Scope**: music/primary + music/secondary (2 subject-phases, 8 queries total)
+
+**Session Structure** (phases are SEPARATE processes — no jumping ahead):
+
+1. **Phase 0 + 1A** (first process): Prerequisites + Query Analysis for ALL 8 queries
+2. **Phase 1B** (second process): Discovery + COMMIT for ALL 8 queries
+3. **Phase 1C** (third process): Comparison for ALL 8 queries
+
+### Music Context
+
+- Music has **moderate content coverage** (check with bulk data)
+- Likely has specialised vocabulary (e.g., tempo, rhythm, dynamics)
+- May have MFL-like structure issues (activity-based lesson titles)
+
+### Commands to Start
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Verify bulk data exists
+ls bulk-downloads/music-*.json
+
+# Count lessons
+jq '.sequence | length' bulk-downloads/music-primary.json
+jq '.sequence | length' bulk-downloads/music-secondary.json
+
+# Read query files (Phase 0)
+cat src/lib/search-quality/ground-truth/music/primary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/cross-topic.query.ts
+
+cat src/lib/search-quality/ground-truth/music/secondary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/cross-topic.query.ts
+```
+
+### Ground Truth Files
+
+```
+src/lib/search-quality/ground-truth/music/primary/
+  - precise-topic.query.ts, precise-topic.expected.ts
+  - natural-expression.query.ts, natural-expression.expected.ts
+  - imprecise-input.query.ts, imprecise-input.expected.ts
+  - cross-topic.query.ts, cross-topic.expected.ts
+  - index.ts
+
+src/lib/search-quality/ground-truth/music/secondary/
+  [same structure]
+```
+
+---
+
+## ✅ MATHS COMPLETE — Key Learnings from Phase 1C
+
+### Aggregate Results (after GT corrections)
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.675 | 0.607 | 0.500 | 0.683 |
+| SECONDARY | 0.861 | 0.749 | 0.667 | 0.828 |
+
+### Critical Findings
+
+1. **Query register must match content level**: "Finding the unknown number" (informal) maps to LINEAR equations, not advanced quadratics. GT corrected — search was RIGHT.
+
+2. **Tokenization ≠ fuzzy matching**: "timetables" vs "times table" is a word boundary issue, not a character edit. Fuzzy matching can't bridge this. Synonym added: `times-table => timetables, timestables, time tables`.
+
+3. **Cross-topic curriculum gaps**: If "fractions + money" intersection doesn't exist in curriculum, GT can't specify it. GT replaced with "area and perimeter problems together" which has verified cross-topic content.
+
+4. **Secondary > Primary structurally**: Standardised terminology in secondary vs child-friendly vocabulary fragmentation in primary. This is curriculum design, not search quality.
+
+5. **Three-way comparison works**: Revealed cases where search outperformed COMMIT (natural-expression-2) and cases where GT was correct but search failed (natural-expression-3).
+
+### GT Changes Made
+
+- `maths/secondary/natural-expression-2.expected.ts`: Changed from quadratic equations to linear equations
+- `maths/primary/cross-topic.query.ts` + `.expected.ts`: Changed from "fractions word problems money" to "area and perimeter problems together"
+- `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/maths.ts`: Added `times-table` synonyms
 
 ---
 
@@ -51,7 +136,20 @@ This is the critical safeguard. The protocol requires you to:
 4. **COMMIT to your rankings** with scores and justifications
 5. **ONLY THEN** run benchmark and read `.expected.ts` files to see expected slugs
 
+### Rule 3: Title-only matching is NOT sufficient for discovery.
+
+**Session 17 (German) proved this**: `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` was missed initially because its unit title is "meine Welt" (not obviously about grammar). But MCP summary revealed it teaches **advanced stem variation rules** for present tense weak verbs — a highly relevant match for "German grammar present tense".
+
+**Discovery MUST include:**
+
+- ✅ Systematic review of ALL units (not just those with obvious titles)
+- ✅ MCP summaries for lessons with ANY potential relevance
+- ✅ Key learning analysis (grammar content often hidden in activity-focused lessons)
+- ⛔ NOT just `grep` for title keywords
+- ⛔ NOT assuming unit titles reflect lesson content
+
 **Split File Architecture (2026-01-19)**: Ground truths are split into two files:
+
 - `*.query.ts` — Contains query, category, description (SAFE to read in Phase 1A/1B)
 - `*.expected.ts` — Contains expectedRelevance (ONLY read in Phase 1C)
 
@@ -250,6 +348,7 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 ## Key Learnings from Past Sessions
 
 **Session 9 (English)**:
+
 1. **"emotions" ≠ "feel"** — Vocabulary matters. Search matched query terms correctly.
 2. **Low MRR can mean WRONG ground truth** — Not always a search issue.
 3. **ALL 4 metrics together** — MRR alone can mislead.
@@ -262,6 +361,16 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 6. **Search validation is not discovery** — Running benchmark first and justifying results is not independent discovery.
 7. **COMMIT before benchmark** — Must form independent judgment before seeing search results.
 8. **"actions" ≠ "effects"** — Query asking for "effects" should not expect slugs about "actions to tackle".
+
+**Session 17 (German — exhaustive vs title-only discovery)**:
+9. **Title-only matching misses excellent content** — `das-leben-mit-behinderung...` teaches advanced grammar but unit title "meine Welt" doesn't suggest this.
+10. **Systematic unit review required** — Review ALL units, not just those with obvious title matches.
+11. **MCP summaries reveal hidden gems** — Key learning often contains highly relevant content not visible in titles.
+
+**Session 18 (History — discovery gaps)**:
+12. **Check ALL units, not just obvious ones** — `improvements-in-public-health-in-the-19th-century` (in Medicine unit) was relevant to "factory age workers conditions" but was missed because only the Industrial Revolution unit was checked.
+13. **Search can be MORE comprehensive than manual discovery** — For one query, search found relevant content that manual discovery missed. This is a signal that discovery was incomplete.
+14. **100% certainty standard** — For critical subjects like maths, "good enough" is not acceptable. Every unit must be checked systematically.
 
 ---
 

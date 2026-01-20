@@ -1,8 +1,8 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-19  
+**Last Updated**: 2026-01-20  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Status**: 🔄 **Ground truth review** (11/30 subject-phases)
+**Status**: 🔄 **Ground truth review** (20/30 subject-phases complete)
 
 ---
 
@@ -49,11 +49,32 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 |-----------|--------|
 | RRF normalisation (ADR-099) | ✅ Implemented and validated |
 | Synonym coverage (ADR-100) | ✅ All 17 subjects have domain-specific synonyms (~580 total) |
-| Ground truths reviewed | 🔄 **11/30 subject-phases** (art/primary, art/secondary, citizenship/secondary, computing/primary, computing/secondary, cooking-nutrition/primary, cooking-nutrition/secondary, design-technology/primary, design-technology/secondary, english/primary, english/secondary) |
+| Ground truths reviewed | 🔄 **20/30 subject-phases** |
 | Baselines established | ✅ 120 queries measured |
 | Quality gates | ✅ All passing |
+| Split file architecture | ✅ `*.query.ts` + `*.expected.ts` |
 
-**Next Session**: french/primary + french/secondary (8 queries)
+**Reviewed**: art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), **maths (2)**
+
+**Next Session**: music/primary + music/secondary
+
+### Maths Phase 1C Complete (2026-01-20)
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.675 | 0.607 | 0.500 | 0.683 |
+| SECONDARY | 0.861 | 0.749 | 0.667 | 0.828 |
+
+**GT Corrections Made**:
+- `maths/secondary/natural-expression-2.expected.ts`: Quadratic → linear equations (search was RIGHT)
+- `maths/primary/cross-topic`: Changed from "fractions word problems money" to "area and perimeter problems together" (verified cross-topic content)
+- Synonym added: `times-table => timetables, timestables, time tables`
+
+**Key Learnings**:
+- Query register must match content level (informal → basic, not advanced)
+- Tokenization ≠ fuzzy matching (word boundary issues need synonyms)
+- Cross-topic GTs must reflect curriculum reality (intersection must exist)
+- Secondary outperforms Primary (standardised vs fragmented vocabulary)
 
 **Sessions 1-5 Log**: [sessions-1-5-log.md](logs/sessions-1-5-log.md) — Previous work before enhanced understanding
 
@@ -71,7 +92,7 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 
 **Plan template**: [ground-truth-session-template.md](templates/ground-truth-session-template.md)
 
-### Key Learnings from Sessions 1-8
+### Key Learnings from Sessions 1-19
 
 #### Foundational Principles (Sessions 1-7)
 
@@ -93,6 +114,35 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 13. **Natural-expression semantic matching**: "DT making things move" should match lessons with "mechanisms are systems that make something move" in key learning — match informal phrasing.
 14. **Vocabulary bridging verification**: For sustainability queries, verify expected slugs explicitly use bridging vocabulary (e.g., `material-sustainability` uses "sustainable").
 15. **Some queries have no perfect match**: Document when no single lesson truly combines all query concepts — select best approximations from different angles.
+
+#### Search vs Ground Truth Corrections (Sessions 9-16)
+
+16. **The search might be RIGHT**: Session 9 (English) proved MRR 0.000 was WRONG ground truth, not search failure. After correction: MRR 1.000.
+17. **Vocabulary precision matters**: "emotions" ≠ "feel", "actions" ≠ "effects". Query terms must match expected slug content.
+18. **COMMIT before benchmark**: Must form independent judgment BEFORE seeing search results.
+19. **Fresh MCP for every query**: Never copy expected slugs between queries, even with "similar intent".
+
+#### Exhaustive Discovery (Sessions 17-18)
+
+20. **Title-only matching is insufficient**: Lessons in non-obvious units (e.g., "meine Welt") may contain highly relevant content.
+21. **Search can be more comprehensive than manual discovery**: If search finds relevant content you missed, your discovery was incomplete.
+22. **100% certainty for critical subjects**: For maths, "good enough" is unacceptable.
+
+#### Query Design (Session 19 — Maths Preparation)
+
+23. **Phase 1A catches design issues early**: Analysing queries before exploring data identifies miscategorised or poorly designed queries.
+24. **Vocabulary bridges must be genuine**: "the bit where you complete the square" contains curriculum vocabulary — not a true vocabulary bridge.
+25. **Cross-topic must combine concepts, not tools**: "pattern blocks tangrams" tests tool co-occurrence, not meaningful concept intersection.
+26. **3 queries per category for maths**: Comprehensive coverage for the most important subject.
+
+#### Phase 1B Discovery (Session 20 — Maths Discovery)
+
+27. **COMMIT before comparison**: Independent rankings formed using bulk data + MCP summaries BEFORE viewing existing `.expected.ts` files or search results.
+28. **Exhaustive exploration for maths**: 125 primary units (~1,072 lessons), 98 secondary units (~1,073 lessons) systematically searched.
+29. **Cross-topic gaps**: Some cross-topic queries (e.g., "geometry proof coordinate") have limited direct curriculum matches — need to select best approximations.
+30. **MCP summaries reveal hidden relevance**: Key learning quotes essential for ranking decisions (e.g., "The gradient is a measure of how steep a line is" for "how steep is the line").
+31. **Primary maths well-structured**: Place value, fractions, multiplication units have excellent lesson coverage with clear progression.
+32. **Secondary maths dense coverage**: Quadratics, simultaneous equations, probability units have multiple highly-relevant lessons per topic.
 
 **Documentation**: [GROUND-TRUTH-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — consolidated design, troubleshooting, lessons learned
 

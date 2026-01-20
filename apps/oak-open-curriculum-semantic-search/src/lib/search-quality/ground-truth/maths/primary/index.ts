@@ -1,5 +1,5 @@
 /**
- * Primary ground truth queries - 4 queries, 1 per category.
+ * Primary ground truth queries - 12 queries, 3 per category.
  *
  * This index combines query definitions and expected relevance using
  * combineGroundTruth() at runtime.
@@ -10,33 +10,91 @@ import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 
 // Import query definitions
 import { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+import { MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY } from './precise-topic-2.query';
+import { MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY } from './precise-topic-3.query';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY } from './natural-expression-2.query';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_3_QUERY } from './natural-expression-3.query';
 import { MATHS_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_2_QUERY } from './imprecise-input-2.query';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_3_QUERY } from './imprecise-input-3.query';
 import { MATHS_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+import { MATHS_PRIMARY_CROSS_TOPIC_2_QUERY } from './cross-topic-2.query';
+import { MATHS_PRIMARY_CROSS_TOPIC_3_QUERY } from './cross-topic-3.query';
 
 // Import expected relevance
 import { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+import { MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED } from './precise-topic-2.expected';
+import { MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED } from './precise-topic-3.expected';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_2_EXPECTED } from './natural-expression-2.expected';
+import { MATHS_PRIMARY_NATURAL_EXPRESSION_3_EXPECTED } from './natural-expression-3.expected';
 import { MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_2_EXPECTED } from './imprecise-input-2.expected';
+import { MATHS_PRIMARY_IMPRECISE_INPUT_3_EXPECTED } from './imprecise-input-3.expected';
 import { MATHS_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+import { MATHS_PRIMARY_CROSS_TOPIC_2_EXPECTED } from './cross-topic-2.expected';
+import { MATHS_PRIMARY_CROSS_TOPIC_3_EXPECTED } from './cross-topic-3.expected';
 
 /** All queries for this subject/phase */
 export const MATHS_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
+  // Precise topic queries
   combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED),
+  // Natural expression queries
   combineGroundTruth(
     MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY,
     MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED,
   ),
+  combineGroundTruth(
+    MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY,
+    MATHS_PRIMARY_NATURAL_EXPRESSION_2_EXPECTED,
+  ),
+  combineGroundTruth(
+    MATHS_PRIMARY_NATURAL_EXPRESSION_3_QUERY,
+    MATHS_PRIMARY_NATURAL_EXPRESSION_3_EXPECTED,
+  ),
+  // Imprecise input queries
   combineGroundTruth(MATHS_PRIMARY_IMPRECISE_INPUT_QUERY, MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED),
+  combineGroundTruth(
+    MATHS_PRIMARY_IMPRECISE_INPUT_2_QUERY,
+    MATHS_PRIMARY_IMPRECISE_INPUT_2_EXPECTED,
+  ),
+  combineGroundTruth(
+    MATHS_PRIMARY_IMPRECISE_INPUT_3_QUERY,
+    MATHS_PRIMARY_IMPRECISE_INPUT_3_EXPECTED,
+  ),
+  // Cross topic queries
   combineGroundTruth(MATHS_PRIMARY_CROSS_TOPIC_QUERY, MATHS_PRIMARY_CROSS_TOPIC_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_CROSS_TOPIC_2_QUERY, MATHS_PRIMARY_CROSS_TOPIC_2_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_CROSS_TOPIC_3_QUERY, MATHS_PRIMARY_CROSS_TOPIC_3_EXPECTED),
 ] as const;
 
-// Re-export query definitions and expected relevance
+// Re-export query definitions
 export { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
+export { MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY } from './precise-topic-2.query';
+export { MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY } from './precise-topic-3.query';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY } from './natural-expression-2.query';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_3_QUERY } from './natural-expression-3.query';
 export { MATHS_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_2_QUERY } from './imprecise-input-2.query';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_3_QUERY } from './imprecise-input-3.query';
 export { MATHS_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
+export { MATHS_PRIMARY_CROSS_TOPIC_2_QUERY } from './cross-topic-2.query';
+export { MATHS_PRIMARY_CROSS_TOPIC_3_QUERY } from './cross-topic-3.query';
+
+// Re-export expected relevance
 export { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
+export { MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED } from './precise-topic-2.expected';
+export { MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED } from './precise-topic-3.expected';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_2_EXPECTED } from './natural-expression-2.expected';
+export { MATHS_PRIMARY_NATURAL_EXPRESSION_3_EXPECTED } from './natural-expression-3.expected';
 export { MATHS_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_2_EXPECTED } from './imprecise-input-2.expected';
+export { MATHS_PRIMARY_IMPRECISE_INPUT_3_EXPECTED } from './imprecise-input-3.expected';
 export { MATHS_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
+export { MATHS_PRIMARY_CROSS_TOPIC_2_EXPECTED } from './cross-topic-2.expected';
+export { MATHS_PRIMARY_CROSS_TOPIC_3_EXPECTED } from './cross-topic-3.expected';

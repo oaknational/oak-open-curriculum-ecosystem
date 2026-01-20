@@ -1,9 +1,9 @@
 # Ground Truth Review Checklist
 
 **Status**: In Progress  
-**Progress**: 14/30 subject-phases complete (geography needs re-evaluation)  
-**Next**: geography/primary, geography/secondary (re-evaluation with proper methodology)  
-**Last Updated**: 2026-01-19 (added COMMIT step to prevent search validation bias)
+**Progress**: 20/30 subject-phases complete  
+**Next**: music/primary or another incomplete subject  
+**Last Updated**: 2026-01-20 (maths Phase 1C complete)
 
 ---
 
@@ -29,6 +29,35 @@ Previous sessions have repeatedly fallen into the "search validation" failure mo
 
 **The Key Question is NOT**: "Do expected slugs appear in results?"  
 **The Key Question IS**: "What are the BEST slugs for this query, based on curriculum content?"
+
+### Rule 3: EVERY query requires FRESH MCP analysis. NO EXCEPTIONS.
+
+**Session 16 (geography re-evaluation) proved this**: Even when two queries have "similar semantic intent", you MUST do fresh bulk exploration AND fresh MCP summaries for EACH query. Copying expected slugs from one query to another is FORBIDDEN.
+
+**What happened**: SECONDARY imprecise-input appeared to have the same intent as precise-topic ("tectonic plates and earthquakes"). The agent copied expected slugs instead of doing fresh MCP analysis. Result: `plate-tectonics-theory` was included but MCP shows it has NO mention of earthquakes in key learning. Fresh analysis revealed `global-distribution-of-earthquakes-and-volcanoes` was correct.
+
+**The rule is absolute**:
+- ⛔ **NEVER** assume two queries need the same expected slugs
+- ⛔ **NEVER** copy expected slugs from another query
+- ⛔ **NEVER** skip MCP summaries because "it's similar to what I just did"
+- ✅ **ALWAYS** do fresh jq bulk search for EACH query
+- ✅ **ALWAYS** get 5-10 fresh MCP summaries for EACH query
+- ✅ **ALWAYS** verify key learning explicitly connects to query concepts
+
+**There are NO exceptions to this rule. None. Ever.**
+
+### Rule 4: Title-only matching is NOT sufficient for discovery.
+
+**Session 17 (German) proved this**: `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` was initially missed because its unit title is "meine Welt" — not obviously about grammar. But MCP summary revealed it teaches ADVANCED stem variation rules for present tense weak verbs.
+
+**The discovery process MUST include:**
+- ⛔ **NOT** just `grep` for title keywords
+- ⛔ **NOT** assuming unit titles reflect lesson content
+- ✅ **SYSTEMATIC** review of ALL units (not just those with obvious titles)
+- ✅ **MCP summaries** for lessons with ANY potential relevance
+- ✅ **Key learning analysis** (grammar/concept content often hidden in activity-focused lessons)
+
+**Why this matters**: MCP summaries reveal key learning content NOT visible in titles. A lesson titled "activities at home" might teach fundamental grammar rules. You cannot know this without getting MCP summaries for edge-case candidates.
 
 ---
 
@@ -126,49 +155,376 @@ This failure mode has occurred repeatedly. Learn to recognise it.
 
 ---
 
+## Anti-Pattern: "Similar Query" Shortcut (Session 16)
+
+This failure mode occurred in Session 16 and must never happen again.
+
+### ❌ WRONG (Copies from Similar Query)
+
+1. Complete Query A properly with fresh MCP analysis
+2. See Query B has "similar semantic intent" to Query A
+3. Assume Query B needs the same expected slugs
+4. Copy expected slugs from Query A to Query B
+5. Skip fresh jq search for Query B
+6. Skip fresh MCP summaries for Query B
+7. Result: Wrong slugs included (e.g., lesson with NO relevant key learning)
+
+**Why wrong**: MCP summaries reveal what's ACTUALLY in key learning. Different lessons can have misleadingly similar titles but DIFFERENT key learning content. Only fresh MCP analysis reveals this.
+
+### ✅ CORRECT (Fresh Analysis for Every Query)
+
+1. Complete Query A properly with fresh MCP analysis
+2. See Query B — **IGNORE** any perceived similarity to Query A
+3. Do fresh jq search for Query B
+4. Get 5-10 fresh MCP summaries for Query B candidates
+5. Analyse each MCP summary against Query B's specific requirements
+6. COMMIT rankings based on Query B's MCP evidence
+7. Result: Correct slugs based on actual key learning content
+
+**The rule**: Every query is independent. Fresh MCP analysis every time. No exceptions.
+
+---
+
+## Anti-Pattern: Title-Only Discovery (Session 17)
+
+This failure mode was identified in Session 17 (German) and must be avoided.
+
+### ❌ WRONG (Title-Only Matching)
+
+1. Search bulk data with `grep` for obvious keywords
+2. Only examine lessons with matching titles
+3. Skip units with non-obvious titles
+4. Get MCP summaries only for "obvious" candidates
+5. Miss excellent lessons in unexpected units
+6. Result: Incomplete ground truth missing highly relevant lessons
+
+**Why wrong**: Lesson titles don't always reflect content. A unit titled "meine Welt" contained a lesson teaching advanced grammar rules. Title-only search would never find it.
+
+### ✅ CORRECT (Exhaustive Discovery)
+
+1. Search bulk data with `grep` for obvious keywords
+2. **ALSO** list ALL units and scan for any that MIGHT contain relevant content
+3. Include lessons from non-obvious units in candidate list
+4. Get MCP summaries for 10+ candidates including edge cases
+5. Discover excellent lessons that titles don't suggest
+6. Result: Complete ground truth with all highly relevant lessons
+
+**The rule**: Title matching is the START of discovery, not the END. Systematic unit review and MCP summaries are required.
+
+---
+
 ## ✅ Synonym Coverage Complete (2026-01-17)
 
 All 17 subjects have domain-specific synonym files (~580 total). See: [ADR-100](../../../../docs/architecture/architectural-decisions/100-complete-subject-synonym-coverage.md)
 
 ---
 
-## 🎯 NEXT SESSION: geography (RE-EVALUATION)
+## 🎯 NEXT SESSION: music/primary + music/secondary
 
-**Scope**: 2 subject-phases, 8 ground truths total (geography/primary + geography/secondary)
+**Scope**: 2 subject-phases, 8 queries total (4 per phase)
 
-**Why re-evaluation?**: Session 15 validated search results instead of doing independent discovery. The COMMIT step was missing. Changes made to ground truths were based on what search returned, not on independent curriculum analysis.
+### Session Structure (Phases are SEPARATE processes)
 
-**This session must**:
-1. Follow the updated protocol with explicit COMMIT step (1B.5)
-2. Form independent rankings BEFORE running benchmark
-3. Create meaningful three-way comparison tables
+**This is critical**: Each phase is a SEPARATE process. Complete one phase fully before starting the next. No jumping ahead.
 
-**USE THE UPDATED PROTOCOL**: [ground-truth-session-template.md](../templates/ground-truth-session-template.md)
+| Phase | Process | When to Stop |
+|-------|---------|--------------|
+| **Phase 0 + 1A** | Prerequisites + Query Analysis (REFLECTION ONLY) | After analysing ALL 8 queries |
+| **Phase 1B** | Discovery + COMMIT (BEFORE benchmark) | After COMMITTING rankings for ALL 8 queries |
+| **Phase 1C** | Comparison (run benchmark, three-way comparison) | After recording metrics for ALL 8 queries |
+
+### Phase 0: Prerequisites
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# PHASE 0: Prerequisites
-jq '.sequence | length' bulk-downloads/geography-primary.json
-jq '.sequence | length' bulk-downloads/geography-secondary.json
+# Verify bulk data
+ls bulk-downloads/music-*.json
+jq '.sequence | length' bulk-downloads/music-primary.json
+jq '.sequence | length' bulk-downloads/music-secondary.json
 
-# List ALL lessons (scan for non-obvious candidates)
-jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
-  bulk-downloads/geography-primary.json | sort
+# Verify MCP server
+# Call get-help via MCP
 
-jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
-  bulk-downloads/geography-secondary.json | sort
-
-# After completing all categories
-pnpm benchmark --subject geography --verbose
+# Verify benchmark
+pnpm benchmark --help
 ```
 
-**Ground truth files**:
+### Phase 1A: Query Analysis (ALL 8 queries — REFLECTION ONLY)
 
-- `src/lib/search-quality/ground-truth/geography/primary/`
-- `src/lib/search-quality/ground-truth/geography/secondary/`
+Read query files (DO NOT read `.expected.ts` files):
 
-**Remember**: Quality over speed. There is no time pressure. Take your time. Do it right.
+```bash
+# PRIMARY (4 queries)
+cat src/lib/search-quality/ground-truth/music/primary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/music/primary/cross-topic.query.ts
+
+# SECONDARY (4 queries)
+cat src/lib/search-quality/ground-truth/music/secondary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/music/secondary/cross-topic.query.ts
+```
+
+For EACH query, answer:
+1. What capability is being tested?
+2. Is this a good test of that capability?
+3. Any design issues?
+
+**⛔ CHECKPOINT**: All 8 queries analysed before starting Phase 1B.
+
+### Phase 1B: Discovery + COMMIT (ALL 8 queries)
+
+For EACH query:
+1. Search bulk data (10+ candidates)
+2. Get MCP summaries (5-10 lessons)
+3. Analyse candidates
+4. **COMMIT rankings** (BEFORE benchmark, BEFORE reading `.expected.ts`)
+
+**⛔ CHECKPOINT**: All 8 COMMIT tables complete before starting Phase 1C.
+
+### Phase 1C: Comparison (ALL 8 queries)
+
+For EACH query:
+1. Run `pnpm benchmark -s music -p [primary|secondary] -c [category] --review`
+2. Create three-way comparison (COMMIT vs SEARCH vs EXPECTED)
+3. Answer critical question: Which source is BEST?
+4. Record ALL 4 metrics
+5. Update `.expected.ts` if needed
+
+After ALL 8 queries:
+```bash
+pnpm benchmark -s music -p primary --verbose
+pnpm benchmark -s music -p secondary --verbose
+```
+
+---
+
+## ✅ MATHS COMPLETE — PHASE 1C FINDINGS (2026-01-20)
+
+**Scope**: 2 subject-phases, 24 queries total — ALL COMPLETE
+
+**PRIMARY Aggregate** (after GT corrections): MRR 0.675, NDCG 0.607, P@3 0.500, R@10 0.683  
+**SECONDARY Aggregate** (after GT corrections): MRR 0.861, NDCG 0.749, P@3 0.667, R@10 0.828
+
+**GT Corrections Made**:
+- `maths/secondary/natural-expression-2.expected.ts`: Quadratic → linear equations (search was RIGHT)
+- `maths/primary/cross-topic`: "fractions word problems money" → "area and perimeter problems together"
+- Synonym added: `times-table => timetables, timestables, time tables`
+
+---
+
+### Key Learnings from Maths Phase 1C
+
+> **Phase 1B is complete. 24 COMMIT tables ready. Focus exclusively on Phase 1C comparison.**
+
+**What was done (previous sessions)**:
+- All 24 query `.query.ts` files created
+- Query design validated (all queries are good tests of their categories)
+- **Phase 1B complete**: 24 independent COMMIT tables with:
+  - Top 5 ranked slugs per query
+  - Relevance scores (3=Highly relevant, 2=Relevant)
+  - Key learning quotes from MCP summaries
+  - Justifications for each ranking
+
+**What the session found**:
+
+1. **Query register matters**: "Finding the unknown number" (informal) → LINEAR equations, not quadratics. GT corrected.
+
+2. **Tokenization ≠ fuzziness**: "timetables" vs "times table" is a word boundary issue. Fuzzy handles character edits, not compound word expansion. Need synonyms: `timetables => times, tables`.
+
+3. **Cross-topic gaps are curriculum gaps**: If "fractions + money" intersection doesn't exist in curriculum, GT can't specify it. GT should reflect curriculum reality.
+
+4. **Search can outperform COMMIT**: For natural-expression-2, search correctly prioritised linear equations while COMMIT had quadratics. Three-way comparison revealed this.
+
+5. **Secondary > Primary structurally**: Standardised terminology vs child-friendly vocabulary fragmentation.
+
+### All 24 Maths Queries
+
+**PRIMARY (12 queries)**:
+
+| Category | Query 1 | Query 2 | Query 3 |
+|----------|---------|---------|---------|
+| precise-topic | "place value tens and ones" | "multiplication arrays year 3" | "equivalent fractions same value" |
+| natural-expression | "sharing equally into groups" | "counting in groups of" | "splitting numbers into parts" |
+| imprecise-input | "halfs and quarters" | "multiplikation timetables" | "adding frations togethr" |
+| cross-topic | "fractions word problems money" | "shapes symmetry patterns" | "multiplication area rectangles" |
+
+**SECONDARY (12 queries)**:
+
+| Category | Query 1 | Query 2 | Query 3 |
+|----------|---------|---------|---------|
+| precise-topic | "solving quadratic equations by factorising" | "interior angles polygons" | "calculating mean from frequency table" |
+| natural-expression | "working out percentages from amounts" | "finding the unknown number" | "how steep is the line" |
+| imprecise-input | "simulatneous equasions substitution method" | "pythagorus theorum triangles" | "probablity tree diagrams" |
+| cross-topic | "combining algebra with graphs" | "geometry proof coordinate" | "ratio proportion percentage" |
+
+---
+
+### ⚠️ MATHS IS THE LYNCHPIN — SPECIAL REQUIREMENTS ⚠️
+
+> **Maths is the critical subject. These ground truths must be absolutely correct.**
+
+**Requirements for Phase 1B**:
+
+1. **100% certainty** — You must be completely certain you have found the BEST possible answers
+2. **Fresh analysis for EVERY query** — 24 independent discovery cycles, no copying
+3. **Exhaustive discovery** — Use BOTH MCP tools AND bulk data for EVERY query
+4. **Complete unit review** — Check ALL maths units, not just those with obvious titles
+5. **No "good enough"** — If you're not 100% certain, keep exploring
+
+**Why maths matters more**:
+- Maths has the largest lesson count (2,145 lessons)
+- Maths is the most searched subject
+- Getting maths ground truths wrong will misguide search improvements for the most important subject
+- The search validation anti-pattern is especially dangerous here
+
+**Session 18 (history) key learning**: Discovery gaps were found when only "obvious" units were checked. For maths, you MUST systematically check ALL units — a lesson about "money" might teach fundamental addition, a lesson about "shapes" might cover area calculations.
+
+---
+
+### ⛔ CRITICAL REMINDER: FRESH MCP FOR EVERY QUERY ⛔
+
+**Each query requires INDEPENDENT investigation:**
+
+1. **precise-topic**: Fresh jq search + 5-10 fresh MCP summaries + COMMIT
+2. **natural-expression**: Fresh jq search + 5-10 fresh MCP summaries + COMMIT
+3. **imprecise-input**: Fresh jq search + 5-10 fresh MCP summaries + COMMIT
+4. **cross-topic**: Fresh jq search + 5-10 fresh MCP summaries + COMMIT
+
+**DO NOT** assume any query is "similar" to another. **DO NOT** copy expected slugs. **DO NOT** skip MCP analysis.
+
+---
+
+### ⛔ CRITICAL REMINDER: TITLE-ONLY MATCHING IS NOT SUFFICIENT ⛔
+
+**For BOTH bulk data AND MCP research:**
+
+- ⛔ Do NOT rely only on `grep` for title keywords
+- ⛔ Do NOT assume unit titles reflect lesson content
+- ✅ Review ALL units systematically — maths lessons about "real-world problems" might teach core arithmetic
+- ✅ Get MCP summaries for lessons that MIGHT be relevant, not just those with perfect title matches
+- ✅ Examine key learning content — mathematical concepts often hidden in application-focused lessons
+
+**Example from German session**: A lesson in unit "meine Welt" (my world) taught advanced grammar rules not suggested by the title. Only MCP summaries revealed this.
+
+**Example from history session**: `improvements-in-public-health-in-the-19th-century` was missed because it was in a Medicine unit, not the Industrial Revolution unit — but it explicitly mentioned "industrial workers" in key learning.
+
+---
+
+### Commands — maths/primary
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# PHASE 0: Prerequisites (verify bulk data exists)
+jq '.sequence | length' bulk-downloads/maths-primary.json  # Should be 125 units
+
+# List ALL lessons to /tmp for reference
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
+  bulk-downloads/maths-primary.json > /tmp/maths-primary-all.txt
+
+# Count total lessons (should be ~1072)
+wc -l /tmp/maths-primary-all.txt
+
+# List ALL units (MUST review ALL of these for each query)
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
+  bulk-downloads/maths-primary.json > /tmp/maths-primary-units.txt
+
+# Read ALL query files (12 total for PRIMARY)
+cat src/lib/search-quality/ground-truth/maths/primary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/precise-topic-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/precise-topic-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/natural-expression-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/natural-expression-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/imprecise-input-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/imprecise-input-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/cross-topic.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/cross-topic-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/primary/cross-topic-3.query.ts
+
+# After completing all 12 queries
+pnpm benchmark --subject maths --phase primary --verbose
+```
+
+### Commands — maths/secondary
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# PHASE 0: Prerequisites (verify bulk data exists)
+jq '.sequence | length' bulk-downloads/maths-secondary.json  # Should be 98 units
+
+# List ALL lessons to /tmp for reference
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
+  bulk-downloads/maths-secondary.json > /tmp/maths-secondary-all.txt
+
+# Count total lessons (should be ~1073)
+wc -l /tmp/maths-secondary-all.txt
+
+# List ALL units (MUST review ALL of these for each query)
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
+  bulk-downloads/maths-secondary.json > /tmp/maths-secondary-units.txt
+
+# Read ALL query files (12 total for SECONDARY)
+cat src/lib/search-quality/ground-truth/maths/secondary/precise-topic.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/precise-topic-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/precise-topic-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/natural-expression.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/natural-expression-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/natural-expression-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/imprecise-input.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/imprecise-input-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/imprecise-input-3.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/cross-topic.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/cross-topic-2.query.ts
+cat src/lib/search-quality/ground-truth/maths/secondary/cross-topic-3.query.ts
+
+# After completing all 12 queries
+pnpm benchmark --subject maths --phase secondary --verbose
+```
+
+### Ground truth files
+
+```
+src/lib/search-quality/ground-truth/maths/primary/
+  - precise-topic.query.ts, precise-topic-2.query.ts, precise-topic-3.query.ts
+  - natural-expression.query.ts, natural-expression-2.query.ts, natural-expression-3.query.ts
+  - imprecise-input.query.ts, imprecise-input-2.query.ts, imprecise-input-3.query.ts
+  - cross-topic.query.ts, cross-topic-2.query.ts, cross-topic-3.query.ts
+  - (expected files to be created in Phase 1B)
+
+src/lib/search-quality/ground-truth/maths/secondary/
+  [same structure]
+```
+
+### Protocol Checklist (for EACH of the 24 queries)
+
+**Phase 1A: ✅ COMPLETE** — All queries validated as good tests
+
+**Phase 1B: ✅ COMPLETE** — 24 COMMIT tables with independent rankings:
+- [x] Fresh jq bulk search (10+ candidates per query)
+- [x] Fresh MCP summaries (5-10 lessons per query, 50+ total)
+- [x] Review ALL units list for non-obvious candidates
+- [x] COMMIT rankings BEFORE benchmark (top 5 with scores and justifications)
+
+**Phase 1C: Comparison** (this session):
+- [ ] Run benchmark --review for each query
+- [ ] Three-way comparison table (COMMIT rankings vs SEARCH vs existing EXPECTED)
+- [ ] Answer critical question with justification
+- [ ] **Verify: Am I 100% certain these are the BEST answers?**
+- [ ] Update `.expected.ts` files if COMMIT rankings differ
+
+**After all 24 queries complete**:
+- [ ] Update `index.ts` files to wire in all queries
+- [ ] Run full benchmark: `pnpm benchmark --subject maths --phase primary --verbose`
+- [ ] Run full benchmark: `pnpm benchmark --subject maths --phase secondary --verbose`
+
+**Remember**: Maths is critical. There is no time pressure. The COMMIT rankings represent exhaustive independent discovery. Phase 1C validates them against search results and existing expectations.
 
 ---
 
@@ -481,52 +837,85 @@ File: `src/lib/search-quality/ground-truth/french/secondary/`
 
 ---
 
-### 14. geography/primary **← NEEDS RE-EVALUATION**
+### 14. geography/primary **← RE-EVALUATED 2026-01-19 (COMMIT METHODOLOGY)**
 
 [↑ Instructions](#instructions)
 
-**Previous review (2026-01-19) used flawed methodology** — validated search results instead of independent discovery.
+- [x] precise-topic — MRR 1.000, NDCG 0.907, P@3 0.333, R@10 1.000. Independent discovery VALIDATED existing GT. `the-countries-and-capital-cities-of-the-uk` is correct (directly addresses query).
+- [x] natural-expression — MRR 1.000, NDCG 0.932, P@3 0.333, R@10 1.000. **UPDATED**: Replaced `our-school-from-above` (score 2) with `describing-locations` (score 2). Independent discovery found `describing-locations` more relevant for "where is our school" — teaches locational language.
+- [x] imprecise-input — MRR 1.000, NDCG 0.834, P@3 0.667, R@10 1.000. **UPDATED**: Replaced `the-countries-and-capital-cities-of-the-uk` (score 2) with `mapping-the-coast` (score 2). For "british ilands map", `mapping-the-coast` explicitly discusses UK islands and mapping context.
+- [x] cross-topic — MRR 1.000, NDCG 0.834, P@3 0.667, R@10 1.000. Independent discovery VALIDATED existing GT. Lessons correctly combine maps + forests concepts.
 
-- [ ] precise-topic — NEEDS RE-EVALUATION with COMMIT step
-- [ ] natural-expression — NEEDS RE-EVALUATION with COMMIT step
-- [ ] imprecise-input — NEEDS RE-EVALUATION with COMMIT step
-- [ ] cross-topic — NEEDS RE-EVALUATION with COMMIT step
+**Aggregate**: MRR 1.000 | NDCG 0.877 | P@3 0.500 | R@10 1.000
 
-**Why re-evaluation needed**: Session 15 did not form independent rankings before seeing search results. Changes made were based on validating what search returned, not on independent curriculum analysis. The COMMIT step (1B.5) must be used to ensure proper methodology.
+**Changes**:
+
+1. natural-expression: `our-school-from-above` → `describing-locations` (better match for "where is our school")
+2. imprecise-input: `the-countries-and-capital-cities-of-the-uk` → `mapping-the-coast` (better match for "british ilands map")
+
+**Key Learnings**:
+
+1. COMMIT methodology worked — independent rankings formed before benchmark
+2. Some existing GTs were correct (precise-topic, cross-topic), others needed correction (natural-expression, imprecise-input)
+3. MCP summaries critical for distinguishing nuanced relevance
 
 File: `src/lib/search-quality/ground-truth/geography/primary/`
 
 ---
 
-### 15. geography/secondary **← NEEDS RE-EVALUATION**
+### 15. geography/secondary **← RE-EVALUATED 2026-01-19 (COMMIT METHODOLOGY)**
 
 [↑ Instructions](#instructions)
 
-**Previous review (2026-01-19) used flawed methodology** — validated search results instead of independent discovery.
+- [x] precise-topic — MRR 1.000, NDCG 0.905, P@3 0.667, R@10 1.000. **UPDATED**: Added `earthquakes` (score 3) as it explicitly mentions "Earthquakes are caused by tectonic plate movement" — exact match missed in previous GT. Also added `plate-tectonics-theory` (score 2), removed `the-movement-of-tectonic-plates` and `the-effects-of-earthquakes`.
+- [x] natural-expression — MRR 0.111, NDCG 0.163, P@3 0.000, R@10 0.333. **GT CORRECT** — search quality gap. Independent discovery VALIDATED existing expected slugs (about EFFECTS). Search returns CAUSES lessons instead of EFFECTS lessons. Confirmed NO `actions-to-tackle-climate-change` in GT (that would be about ACTIONS, not EFFECTS).
+- [x] imprecise-input — MRR 0.500, NDCG 0.713, P@3 0.667, R@10 1.000. **CORRECTED after independent MCP analysis**: `plate-boundaries` upgraded to score 3 (4 key learning points connecting plates→earthquakes). Replaced `plate-tectonics-theory` (NO earthquake mention in key learning) with `global-distribution-of-earthquakes-and-volcanoes` (explicitly connects both concepts). Initial shortcut of copying from precise-topic was wrong.
+- [x] cross-topic — MRR 1.000, NDCG 1.000, P@3 1.000, R@10 1.000. Independent discovery VALIDATED existing GT. All 3 expected slugs found at #1, #2, #3. `river-landforms-caused-by-erosion-and-deposition` is EXACT match for all concepts.
 
-- [ ] precise-topic — NEEDS RE-EVALUATION with COMMIT step
-- [ ] natural-expression — NEEDS RE-EVALUATION with COMMIT step
-- [ ] imprecise-input — NEEDS RE-EVALUATION with COMMIT step
-- [ ] cross-topic — NEEDS RE-EVALUATION with COMMIT step
+**Aggregate**: MRR 0.653 | NDCG 0.695 | P@3 0.583 | R@10 0.833
 
-**Why re-evaluation needed**: Session 15 did not form independent rankings before seeing search results. The "correction" to natural-expression (`actions-to-tackle-climate-change` kept despite being about actions, not effects) was based on validating search results, not independent analysis. The COMMIT step (1B.5) must be used.
+**Changes**:
 
-**Specific issues identified**:
-- natural-expression: `actions-to-tackle-climate-change` is about mitigation/adaptation (actions), NOT effects — yet it remained in ground truth
-- cross-topic: Changes were made based on what search returned, not independent discovery
+1. precise-topic: Added `earthquakes` (score 3), `plate-tectonics-theory` (score 2). Previous GT missed the EXACT match lesson.
+2. imprecise-input: Updated to match precise-topic semantic intent (earthquakes + tectonic plates).
+
+**Key Learnings**:
+
+1. **EFFECTS ≠ ACTIONS**: Query "global warming effects" requires EFFECTS lessons, NOT "actions to tackle". GT correctly excludes action/mitigation lessons.
+2. **Search quality gap**: natural-expression poor metrics are due to search returning CAUSES instead of EFFECTS — GT is correct.
+3. **cross-topic already perfect**: `river-landforms-caused-by-erosion-and-deposition` is EXACT match (all 4 concepts in title).
+4. **`earthquakes` lesson critical**: Key learning explicitly mentions both "earthquakes" and "tectonic plates" — must be in GT.
+5. **NO SHORTCUTS**: imprecise-input was initially done wrong by copying from precise-topic. Independent MCP analysis revealed `plate-tectonics-theory` doesn't mention earthquakes at all. Every category needs fresh MCP analysis.
 
 File: `src/lib/search-quality/ground-truth/geography/secondary/`
 
 ---
 
-### 16. german/secondary
+### 16. german/secondary **← REVIEWED 2026-01-19 (COMMIT METHODOLOGY)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000, NDCG 0.849, P@3 0.333, R@10 1.000. **UPDATED**: Removed infinitive-focused slugs (`school-activities-infinitives...`, `what-i-do-at-school-infinitives...`) which don't have "weak verb" in key learning. Added `famous-german-speakers-present-tense-weak-verbs-singular-persons` (score 3) which EXPLICITLY defines "Singular present tense weak verb endings are..." and `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` (score 2).
+- [x] natural-expression — MRR 0.500, NDCG 0.342, P@3 0.333, R@10 0.333. **UPDATED**: Query "teach German verb endings year 7" requires lessons with "verb endings" explicitly. Added `famous-german-speakers...` (score 3) and `activities-at-home-verb-infinitives-and-singular-persons` (score 3) which has "endings -e, -st or -t" in key learning. Low metrics suggest search quality gap for Year 7 content.
+- [x] imprecise-input — MRR 1.000, NDCG 0.735, P@3 0.333, R@10 0.667. **UPDATED**: Semantic intent "German grammar present tense". Added `famous-german-speakers...` (score 3) and `feste-present-tense-weak-and-strong-verbs` (score 3) which teach grammar rules, not just activities.
+- [x] cross-topic — MRR 0.500, NDCG 0.603, P@3 0.333, R@10 1.000. **UPDATED**: Query "verbs and questions in German" requires BOTH concepts. Removed `kultur-in-deutschland-wh-question-words` (only teaches question WORDS, not verb conjugation). Added `interview-with-a-musician-present-tense-weak-verbs-yes-no-questions` (score 3) and `everyday-experiences-present-tense-separable-verbs-questions` (score 3) which have BOTH verb rules AND question formation in key learning.
+
+**Aggregate**: MRR 0.750 | NDCG 0.632 | P@3 0.333 | R@10 0.750
+
+**Key Learnings**:
+
+1. **Infinitive-focused lessons ≠ weak-verb lessons**: `school-activities-infinitives...` teaches infinitive forms but has NO "weak verb" in keywords or key learning. For "weak verbs" queries, only include lessons that explicitly mention "weak verb".
+2. **"verb endings" must be explicit**: Query "verb endings" requires lessons with "verb endings" or "endings -e, -st or -t" in key learning, not just lessons that USE verb endings.
+3. **Grammar intent ≠ activity focus**: For "German grammar present tense", lessons like `famous-german-speakers...` that DEFINE grammar rules are better than activity-focused lessons that happen to USE present tense.
+4. **Cross-topic requires BOTH concepts in key learning**: `kultur-in-deutschland-wh-question-words` only teaches question WORDS and pronunciation ([w]/[v] sounds), not verb conjugation. For "verbs and questions", need lessons that teach BOTH in key learning.
+5. **MFL structure-only retrieval**: German has ~0% transcript coverage. Ground truths must work with structure metadata only (title, keywords, key learning).
+
+**Changes Made**:
+
+1. precise-topic: Removed 2 infinitive-focused slugs, added 2 weak-verb-focused slugs
+2. natural-expression: Replaced with lessons having explicit "verb endings" in key learning
+3. imprecise-input: Replaced with grammar-rule-focused lessons
+4. cross-topic: Replaced question-words-only slug with verb+question intersection lessons
 
 File: `src/lib/search-quality/ground-truth/german/secondary/`
 
@@ -545,40 +934,89 @@ File: `src/lib/search-quality/ground-truth/history/primary/`
 
 ---
 
-### 18. history/secondary
+### 18. history/secondary **← REVIEWED 2026-01-20 (FULL PROTOCOL)**
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+- [x] precise-topic — MRR 1.000, NDCG 1.000, P@3 1.000, R@10 1.000. **GT CORRECT**. Independent discovery validated all 4 expected slugs. `nazi-persecution-of-jewish-people` is exact title match. All Holocaust unit lessons correctly ranked.
+- [x] natural-expression — MRR 1.000, NDCG 0.666, P@3 0.667, R@10 1.000. **GT CORRECT**. "factory age" correctly bridges to Industrial Revolution. `the-industrial-revolution-and-urban-migration` has explicit worker conditions in key learning. Search returns some irrelevant results (Henry Ford - American 1920s).
+- [x] imprecise-input — MRR 1.000, NDCG 0.815, P@3 0.667, R@10 1.000. **GT CORRECT**. "holocost" typo handled well. All expected slugs found. `the-holocaust-in-context` at #10 instead of top 3 is minor ranking issue.
+- [x] cross-topic — MRR 1.000, NDCG 0.907, P@3 0.333, R@10 1.000. **GT SHOULD EXPAND**. Independent discovery found `abolitionist-movements-in-britain` explicitly connects revolution to abolition in key learning - should be added to GT. P@3 fails because GT only has 2 slugs.
+
+**Aggregate**: MRR 1.000 | NDCG 0.847 | P@3 0.667 | R@10 1.000
+
+**Recommended Changes**:
+
+1. cross-topic: Add `abolitionist-movements-in-britain` [3] - key learning explicitly mentions "The Haitian Revolution created fear amongst British plantation owners" and "worked for abolition"
+
+**Key Learnings**:
+
+1. **Holocaust unit is well-structured**: 7 lessons covering context, persecution, escalation, perpetrators, resistance - all properly indexed
+2. **Typo resilience works**: "holocost" typo successfully recovered to Holocaust content
+3. **Cross-topic GT too narrow**: Only 2 expected slugs in a unit with 6 lessons that all combine revolution + abolition
+4. **MCP summaries critical**: `abolitionist-movements-in-britain` was identified as highly relevant by both independent analysis AND search, but not in GT
+5. **Search quality gaps**: natural-expression returns some irrelevant American history (Henry Ford)
 
 File: `src/lib/search-quality/ground-truth/history/secondary/`
 
 ---
 
-### 19. maths/primary
+### 19. maths/primary ✅ COMPLETE
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+**Status**: Phase 1C complete (2026-01-20)
+
+**Aggregate Metrics** (after GT correction):
+| Category | MRR | NDCG@10 | P@3 | R@10 |
+|----------|-----|---------|-----|------|
+| precise-topic | 0.833 | 0.670 | 0.667 | 0.667 |
+| natural-expression | 0.533 | 0.517 | 0.222 | 0.600 |
+| imprecise-input | 0.333 | 0.340 | 0.222 | 0.467 |
+| cross-topic | 1.000 | 0.900 | 0.889 | 1.000 |
+| **AGGREGATE** | **0.675** | **0.607** | **0.500** | **0.683** |
+
+**Key Findings**:
+
+1. **natural-expression-3** ("splitting numbers into parts"): MRR 0.100 — Critical search gap. Lesson `explain-that-a-whole-can-be-split-into-parts` has "split into parts" in title but search didn't find it. GT is CORRECT.
+
+2. **imprecise-input-2** ("multiplikation timetables"): MRR 0.000 — ALL expected slugs NOT found. Root cause: "timetables" (one word) vs "times table" (two words in curriculum) is a tokenization mismatch, not a fuzzy matching failure. With `minimum_should_match: 75%` on 2 tokens, if one token fails completely, zero results. **This is a synonym/tokenization issue, not retriever config.**
+
+3. **cross-topic-1** FIXED: Changed from "fractions word problems money" (intersection doesn't exist) to "area and perimeter problems together" (4 verified lessons). MRR 0.167 → 1.000.
+
+4. **precise-topic-2** ("multiplication arrays year 3"): MRR 0.500, R@10 0.400 — Some expected slugs don't have "array" keyword (about grouping instead). Search #1 has explicit "array" keyword. GT may need review.
 
 File: `src/lib/search-quality/ground-truth/maths/primary/`
 
 ---
 
-### 20. maths/secondary
+### 20. maths/secondary ✅ COMPLETE
 
 [↑ Instructions](#instructions)
 
-- [ ] precise-topic
-- [ ] natural-expression
-- [ ] imprecise-input
-- [ ] cross-topic
+**Status**: Phase 1C complete (2026-01-20)
+
+**Aggregate Metrics** (after GT correction):
+| Category | MRR | NDCG@10 | P@3 | R@10 |
+|----------|-----|---------|-----|------|
+| precise-topic | 1.000 | 0.807 | 0.778 | 0.867 |
+| natural-expression | 1.000 | 0.856 | 0.778 | 0.867 |
+| imprecise-input | 0.833 | 0.845 | 0.667 | 0.933 |
+| cross-topic | 0.611 | 0.487 | 0.444 | 0.644 |
+| **AGGREGATE** | **0.861** | **0.749** | **0.667** | **0.828** |
+
+**Key Findings**:
+
+1. **natural-expression-2** ("finding the unknown number"): MRR 0.143 — **GT UPDATED**. Original expected slugs were QUADRATIC equations, but "finding the unknown number" is basic/informal language for LINEAR equations. Search correctly prioritised linear lessons. Changed expected slugs from quadratics to linear equations.
+
+2. **cross-topic-2** ("geometry proof coordinate"): MRR 0.500, R@10 0.333 — Expected slugs about algebraic proof, NOT coordinate geometry. Search #3 `shapes-on-coordinate-grids` is more relevant. GT may need review.
+
+3. **Secondary outperforms Primary**: MRR 0.790 vs 0.606. Secondary content uses standardised mathematical terminology; primary uses varied, child-friendly language creating vocabulary fragmentation. This is structural.
+
+4. **imprecise-input excellent**: MRR 0.833, R@10 0.933. Typo recovery works well for secondary because terms are distinctive (e.g., "pythagorus" → "pythagoras").
+
+**GT Changes Made**:
+- `natural-expression-2.expected.ts`: Replaced quadratic equation slugs with linear equation slugs
 
 File: `src/lib/search-quality/ground-truth/maths/secondary/`
 

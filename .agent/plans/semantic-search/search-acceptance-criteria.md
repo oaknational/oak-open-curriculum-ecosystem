@@ -1,7 +1,7 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-17
-**Status**: 🔄 Ground Truth Review In Progress (9/30 entries reviewed)
+**Last Updated**: 2026-01-20
+**Status**: 🔄 Ground Truth Review In Progress (20/30 entries reviewed)
 **Purpose**: Defines what "exhausted" means for each level, vs "target met"
 
 ---
@@ -23,9 +23,9 @@ Levels (from [ADR-082](../../../docs/architecture/architectural-decisions/082-fu
 
 ---
 
-## 🔄 Three-Stage Ground Truth Validation (2026-01-17)
+## 🔄 Three-Stage Ground Truth Validation (2026-01-20)
 
-**Stage 3 (Qualitative Review) is IN PROGRESS.** 120 queries across 30 subject-phase entries.
+**Stage 3 (Qualitative Review) is IN PROGRESS.** 120+ queries across 30 subject-phase entries.
 
 ### Three-Stage Validation Model
 
@@ -33,18 +33,20 @@ Levels (from [ADR-082](../../../docs/architecture/architectural-decisions/082-fu
 |-------|----------------|--------|
 | **1. Type-Check** | Data integrity (required fields) | ✅ PASS |
 | **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
-| **3. Qualitative Review** | Production readiness | 🔄 **IN PROGRESS** (9/30 entries) |
+| **3. Qualitative Review** | Production readiness | 🔄 **IN PROGRESS** (20/30 entries) |
 
-### Stage 3 Qualitative Review Progress (2026-01-17)
+### Stage 3 Qualitative Review Progress (2026-01-20)
 
 | Metric | Value |
 |--------|-------|
-| Total queries | 120 (4 categories × 30 entries) |
+| Total queries | 120+ (maths has 24 queries = 3 per category) |
 | Subject/phase entries | 30 |
-| Entries reviewed | **9/30** (30%) |
-| Remaining | 21 entries |
+| Entries reviewed | **20/30** (67%) |
+| Remaining | 10 entries |
 
-**Reviewed so far**: art (pri+sec), citizenship/sec, computing (pri+sec), cooking-nutrition (pri+sec), design-technology (pri+sec)
+**Reviewed so far**: art (pri+sec), citizenship/sec, computing (pri+sec), cooking-nutrition (pri+sec), design-technology (pri+sec), english (pri+sec), french (pri+sec), geography (pri+sec), german/sec, history/sec, **maths (pri+sec)**
+
+**Next**: music (pri+sec)
 
 **See**: [ground-truth-review-checklist.md](active/ground-truth-review-checklist.md) for full progress tracking
 
@@ -199,7 +201,7 @@ Legacy categories (`naturalistic`, `misspelling`, `synonym`, `multi-concept`, `c
 | Aggregate Hard MRR | ≥ 0.45 | 0.614 | ✅ Met (pending GT validation) |
 | No category < 0.25 | All ≥ 0.25 | Intent=0.229 | ✅ Exception granted (see below) |
 | Standard approaches attempted | All checked | All checked | ✅ Complete |
-| **Ground truth validated** | 30/30 | **9/30** | 🔄 **IN PROGRESS** |
+| **Ground truth validated** | 30/30 | **20/30** | 🔄 **IN PROGRESS** |
 | Plateau demonstrated | ≤5% improvement × 3 | N/A | ⏸️ Blocked by GT validation |
 
 **Level 1 is NOT exhausted until ground truth review is complete.** The MRR measurements may change as ground truths are corrected.

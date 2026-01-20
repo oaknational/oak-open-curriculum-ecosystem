@@ -12,6 +12,10 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const GERMAN_SECONDARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'wer-ist-bella-was-macht-sie-present-tense-verbs-yes-no-questions': 3,
-  'kultur-in-deutschland-wh-question-words': 2,
+  // Score 3: BOTH verb conjugation AND question formation in key learning
+  'interview-with-a-musician-present-tense-weak-verbs-yes-no-questions': 3,
+  // Score 3: BOTH separable verb rules AND question formation
+  'everyday-experiences-present-tense-separable-verbs-questions': 3,
+  // Score 2: Question formation with verb position
+  'wer-ist-bella-was-macht-sie-present-tense-verbs-yes-no-questions': 2,
 } as const;

@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'the bit where you complete the square',
+  query: 'working out percentages from amounts',
   category: 'natural-expression',
-  description: 'Informal language with noise words - tests semantic understanding',
+  description:
+    'Tests vocabulary bridging: "working out" is informal for calculating; maps to percentage calculation lessons',
   expectedFile: './natural-expression.expected.ts',
 } as const;

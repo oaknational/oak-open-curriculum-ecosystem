@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Ground Truth Review** — Validating expected slugs  
-**Last Updated**: 2026-01-19  
+**Last Updated**: 2026-01-20  
 **Metrics Source**: [current-state.md](current-state.md)  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -62,16 +62,32 @@ Use `pnpm benchmark -s X -p Y --review` for per-query review showing ALL 4 metri
 
 ## 🔄 Phase 1: Ground Truth Review
 
-**Status**: 🔄 In Progress (11/30 subject-phases complete)  
+**Status**: 🔄 In Progress (20/30 subject-phases complete)  
 **Location**: [active/ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
 
 **Goal**: Validate ground truths until search quality is the constraining factor.
 
 Ground truths measure "did expected slugs appear?" — they must be correct before metrics are meaningful.
 
-| Complete | Remaining |
-|----------|-----------|
-| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2) | french, geography, german, history, maths, music, physical-education, religious-education, science, spanish |
+| Complete (20) | Remaining (10) |
+|---------------|----------------|
+| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), **maths (2)** | music (2), physical-education (2), religious-education (2), science (2), spanish (2) |
+
+**Next**: music/primary + music/secondary
+
+### Maths Phase 1C Complete (2026-01-20)
+
+All 24 maths queries evaluated with three-way comparison:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.675 | 0.607 | 0.500 | 0.683 |
+| SECONDARY | 0.861 | 0.749 | 0.667 | 0.828 |
+
+**GT Corrections Made**:
+- `maths/secondary/natural-expression-2.expected.ts`: Quadratic → linear equations
+- `maths/primary/cross-topic`: "fractions word problems money" → "area and perimeter problems together"
+- Synonym added: `times-table => timetables, timestables, time tables`
 
 **Level 1 approaches are complete** but Level 1 is NOT exhausted until ground truth review validates the measurements.
 

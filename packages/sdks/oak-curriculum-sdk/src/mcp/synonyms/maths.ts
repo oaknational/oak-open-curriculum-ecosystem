@@ -42,6 +42,24 @@ export const mathsSynonyms = {
   /** Multiplication and related terms */
   multiplication: ['multiply', 'times', 'product', 'multiplying'],
 
+  /**
+   * Times tables — multiplication facts.
+   * Common misspellings/compounds: "timetables", "timestables", "time tables".
+   * Curriculum consistently uses "times table" (two words).
+   *
+   * Added 2026-01-20 after Phase 1C revealed tokenization mismatch:
+   * "timetables" (one word) vs "times table" (two words) caused zero results.
+   */
+  'times-table': [
+    'times tables',
+    'timetable',
+    'timetables',
+    'timestables',
+    'timestable',
+    'time tables',
+    'time table',
+  ],
+
   /** Division and related terms */
   division: ['divide', 'quotient', 'dividing', 'shared equally'],
 

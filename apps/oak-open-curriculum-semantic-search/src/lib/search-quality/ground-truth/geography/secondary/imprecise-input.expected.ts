@@ -12,6 +12,7 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const GEOGRAPHY_SECONDARY_IMPRECISE_INPUT_EXPECTED: ExpectedRelevance = {
-  'the-movement-of-tectonic-plates': 3,
-  'plate-boundaries': 2,
+  earthquakes: 3,
+  'plate-boundaries': 3,
+  'global-distribution-of-earthquakes-and-volcanoes': 2,
 } as const;

@@ -13,5 +13,5 @@ import type { ExpectedRelevance } from '../../types';
 
 export const GEOGRAPHY_PRIMARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
   'our-school': 3,
-  'our-school-from-above': 2,
+  'describing-locations': 2,
 } as const;

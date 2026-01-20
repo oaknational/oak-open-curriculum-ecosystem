@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'takeaway sums primary',
+  query: 'sharing equally into groups',
   category: 'natural-expression',
-  description: 'Colloquial term for subtraction - tests vocabulary bridging',
+  description:
+    'Tests vocabulary bridging: "sharing equally" is informal language that should map to division (partition model)',
   expectedFile: './natural-expression.expected.ts',
 } as const;

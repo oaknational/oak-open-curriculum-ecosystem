@@ -2,7 +2,7 @@
 
 **The single source of truth for designing, reviewing, and improving ground truths.**
 
-**Last Updated**: 2026-01-14
+**Last Updated**: 2026-01-20
 
 ---
 
@@ -154,6 +154,13 @@ expectedRelevance: {
 ```
 
 **Success criterion**: Despite the imprecise input, the expected relevant lessons still appear in results.
+
+**Known limitation**: Fuzzy matching handles character edits within tokens, but NOT word boundary changes. For example:
+
+- "multiplikation" → "multiplication" ✓ (fuzzy handles k→c)
+- "timetables" → "times table" ✗ (one word vs two words — tokenization mismatch)
+
+If your imprecise-input query includes a compound word that the curriculum spells as two words, fuzzy matching alone won't bridge the gap. Consider whether the imprecise-input test is testing typo recovery (achievable) or compound word expansion (requires synonyms).
 
 #### cross-topic
 
@@ -375,49 +382,120 @@ pnpm benchmark --verbose     # Stage 3: Measure against search
 - **Foundational lessons are score=3**: The lesson that introduces or defines the core concept should typically be score=3. Lessons about specific techniques or applications are score=2.
 - **Scores should match semantic relevance, not search rank**: If search ranks slug A higher than slug B, but slug B is semantically more relevant to the query, slug B should have the higher score. Ground truths specify what SHOULD be returned, not what IS returned.
 
+### From english/primary (Session 9)
+
+- **"emotions" ≠ "feel"**: Vocabulary matters. Query said "how characters feel" but expected slugs used "emotions". Search correctly prioritised "feel/feelings" lessons. The ground truth was WRONG, not the search.
+- **Low MRR can mean WRONG ground truth**: MRR 0.000 was not a search issue — after correction: MRR 0.000 → 1.000.
+- **ALL 4 metrics together**: MRR alone can mislead. P@3 and R@10 confirm whether results are actually good.
+
+### From french/cross-topic (Session 12)
+
+- **Query/slug term mismatch**: Query used "verbs" but expected slugs had "avoir" without "verb" in keywords. Search couldn't match them.
+- **REFLECT before searching**: This mismatch was detectable by thinking, not by running searches.
+
+### From geography (Session 15-16)
+
+- **Search validation is not discovery**: Running benchmark first and justifying results is not independent discovery.
+- **COMMIT before benchmark**: Must form independent judgment before seeing search results.
+- **"actions" ≠ "effects"**: Query asking for "effects" should not expect slugs about "actions to tackle".
+- **EVERY query requires FRESH MCP analysis**: Even when two queries have "similar semantic intent", you MUST do fresh bulk exploration AND fresh MCP summaries for EACH query.
+
+### From german (Session 17)
+
+- **Title-only matching misses excellent content**: `das-leben-mit-behinderung...` teaches advanced grammar but unit title "meine Welt" doesn't suggest this.
+- **Systematic unit review required**: Review ALL units, not just those with obvious title matches.
+- **MCP summaries reveal hidden gems**: Key learning often contains highly relevant content not visible in titles.
+
+### From history (Session 18)
+
+- **Check ALL units, not just obvious ones**: `improvements-in-public-health-in-the-19th-century` (in Medicine unit) was relevant to "factory age workers conditions" but was missed because only the Industrial Revolution unit was checked.
+- **Search can be MORE comprehensive than manual discovery**: For one query, search found relevant content that manual discovery missed. This is a signal that discovery was incomplete.
+- **100% certainty standard**: For critical subjects like maths, "good enough" is not acceptable. Every unit must be checked systematically.
+
+### From maths preparation (Session 19)
+
+- **Phase 1A (query analysis) is valuable**: Analysing queries before exploring data catches design issues early.
+- **3 queries per category for maths**: The most important subject needs comprehensive coverage.
+- **Vocabulary bridges must be genuine**: "the bit where you complete the square" tests noise filtering, not vocabulary bridging (since "complete the square" is already curriculum terminology).
+- **Cross-topic must combine concepts, not tools**: "pattern blocks tangrams" tests tool co-occurrence, not meaningful concept intersection.
+
+### From maths Phase 1C (Session 20)
+
+- **Query register must match expected content level**: "Finding the unknown number" is basic/informal language that maps to LINEAR equations, not advanced quadratic solving. Expected slugs should match the sophistication level implied by query language.
+- **Compound word tokenization breaks fuzzy matching**: "timetables" (one word) vs "times table" (two words) is NOT a fuzzy matching issue — it's a tokenization mismatch. Fuzzy handles character edits within tokens, not word boundary changes. With `minimum_should_match: 75%`, if one token completely fails to match, the whole query returns zero results.
+- **Cross-topic ground truths must reflect curriculum reality**: If a cross-topic intersection (e.g., "fractions + money") doesn't exist strongly in the curriculum, the GT cannot specify lessons that don't exist. The GT should reflect what the curriculum CAN provide, not an ideal that the curriculum doesn't support.
+- **Search can outperform manual discovery**: For "finding the unknown number," search correctly prioritised linear equations while human COMMIT had advanced quadratics. The Phase 1C three-way comparison revealed this — search was RIGHT.
+- **Secondary outperforms Primary for a reason**: Secondary content uses standardised mathematical terminology. Primary uses varied, child-friendly language creating vocabulary fragmentation. This is structural, not a search bug.
+- **Imprecise-input divide**: Secondary typo recovery works well (terms are distinctive). Primary typo recovery struggles (common words + `minimum_should_match` create compound failures).
+
 ---
 
 ## Quick Reference
 
-### File Structure
+### File Structure (Split Architecture 2026-01-19)
+
+Ground truths are split into two files with different lifecycles:
+
+- **Query files** (`*.query.ts`): Define what we're testing. Change rarely.
+- **Expected files** (`*.expected.ts`): Define current "answer key". Change when curriculum updates.
 
 ```text
 src/lib/search-quality/ground-truth/
 ├── {subject}/
 │   └── {phase}/
-│       ├── precise-topic.ts
-│       ├── natural-expression.ts
-│       ├── imprecise-input.ts
-│       ├── cross-topic.ts
-│       └── index.ts
+│       ├── precise-topic.query.ts      # Query definition
+│       ├── precise-topic.expected.ts   # Expected relevance
+│       ├── precise-topic-2.query.ts    # Additional query (maths has 3 per category)
+│       ├── precise-topic-2.expected.ts
+│       ├── natural-expression.query.ts
+│       ├── natural-expression.expected.ts
+│       ├── imprecise-input.query.ts
+│       ├── imprecise-input.expected.ts
+│       ├── cross-topic.query.ts
+│       ├── cross-topic.expected.ts
+│       └── index.ts                    # Combines queries + expected at runtime
 ├── registry/
 │   └── entries.ts
 ├── types.ts
 └── GROUND-TRUTH-GUIDE.md  ← You are here
 ```
 
-### Entry Template
+**Note**: Maths has 3 queries per category (24 total) due to its critical importance.
+
+### Entry Templates
+
+**Query file (`*.query.ts`)**:
 
 ```typescript
 /**
- * {Category} ground truth query for {Phase} {Subject}.
+ * Query definition for {category} ground truth.
+ * This file contains ONLY the query metadata, NOT the expected results.
  * @packageDocumentation
  */
-import type { GroundTruthQuery } from '../../types';
+import type { GroundTruthQueryDefinition } from '../../types';
 
-/** AI Curation: YYYY-MM-DD - [Decision rationale] */
-export const {SUBJECT}_{PHASE}_{CATEGORY}: readonly GroundTruthQuery[] = [
-  {
-    query: 'your query here',
-    category: '{category}',
-    priority: 'high',  // critical | high | medium | exploratory
-    description: 'What this query tests and why expected slugs were chosen',
-    expectedRelevance: {
-      'best-match-slug': 3,
-      'good-match-slug': 2,
-    },
-  },
-] as const;
+export const {SUBJECT}_{PHASE}_{CATEGORY}_QUERY: GroundTruthQueryDefinition = {
+  query: 'your query here',
+  category: '{category}',
+  description: 'What this query tests and why',
+  expectedFile: './{category}.expected.ts',
+} as const;
+```
+
+**Expected file (`*.expected.ts`)**:
+
+```typescript
+/**
+ * Expected relevance for {category} ground truth.
+ * @packageDocumentation
+ */
+import type { ExpectedRelevance } from '../../types';
+
+export const {SUBJECT}_{PHASE}_{CATEGORY}_EXPECTED: ExpectedRelevance = {
+  'best-match-slug': 3,
+  'good-match-slug': 2,
+  'related-slug': 1,
+} as const;
 ```
 
 ### Session Workflow
