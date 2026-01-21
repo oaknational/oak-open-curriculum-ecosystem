@@ -12,6 +12,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const PHYSICAL_EDUCATION_PRIMARY_IMPRECISE_INPUT_EXPECTED: ExpectedRelevance = {
-  'dribbling-and-keeping-control': 3,
-  'passing-and-receiving-skills': 2,
+  // Query "footbal skills primary" (typo) = football/soccer skills with feet
+  'moving-with-a-ball-using-our-feet': 3,
+  'dribbling-with-our-feet-in-games': 3,
+  'passing-and-receiving-using-our-feet': 3,
+  'develop-moving-with-the-ball-using-our-feet-dribbling': 2,
 } as const;

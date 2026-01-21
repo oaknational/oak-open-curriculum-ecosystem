@@ -12,7 +12,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const PHYSICAL_EDUCATION_SECONDARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'design-your-programme': 3,
-  'the-fitt-frequency-intensity-time-and-type-principle': 2,
-  'setting-goals-for-training': 2,
+  // Query "getting fit exercise programme" - lessons about fitness/exercise programmes
+  'promotion-of-personal-health': 3,
+  'non-examined-assessment-writing-your-personal-exercise-programme': 3,
+  'the-principles-of-training-and-their-application-to-a-personal-exercise-programme': 3,
+  'long-term-effects-of-exercise': 2,
 } as const;

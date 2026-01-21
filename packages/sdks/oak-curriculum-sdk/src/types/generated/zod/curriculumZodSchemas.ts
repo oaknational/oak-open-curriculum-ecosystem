@@ -95,7 +95,7 @@ const SequenceUnitsResponseSchema = z.array(
   z.union([
     z
       .object({
-        year: z.union([z.number(), z.literal("all-years")]),
+        year: z.union([z.number(), z.string()]),
         title: z.string().optional(),
         units: z.array(
           z.union([
@@ -532,10 +532,10 @@ const AllSubjectsResponseSchema = z.array(
             ),
             phaseSlug: z.string(),
             phaseTitle: z.string(),
-            ks4Options: z
-              .object({ title: z.string(), slug: z.string() })
-              .strict()
-              .nullable(),
+            ks4Options: z.union([
+              z.object({ title: z.string(), slug: z.string() }).strict(),
+              z.null(),
+            ]),
           })
           .strict()
       ),
@@ -565,10 +565,10 @@ const SubjectResponseSchema = z
           ),
           phaseSlug: z.string(),
           phaseTitle: z.string(),
-          ks4Options: z
-            .object({ title: z.string(), slug: z.string() })
-            .strict()
-            .nullable(),
+          ks4Options: z.union([
+            z.object({ title: z.string(), slug: z.string() }).strict(),
+            z.null(),
+          ]),
         })
         .strict()
     ),
@@ -591,10 +591,10 @@ const SubjectSequenceResponseSchema = z.array(
       ),
       phaseSlug: z.string(),
       phaseTitle: z.string(),
-      ks4Options: z
-        .object({ title: z.string(), slug: z.string() })
-        .strict()
-        .nullable(),
+      ks4Options: z.union([
+        z.object({ title: z.string(), slug: z.string() }).strict(),
+        z.null(),
+      ]),
       canonicalUrl: z.string().optional(),
     })
     .strict()
@@ -645,232 +645,248 @@ const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
 const QuestionForLessonsResponseSchema = z
   .object({
     starterQuiz: z.array(
-      z
-        .object({
-          question: z.string(),
-          questionType: z.union([
-            z.literal("multiple-choice"),
-            z.literal("short-answer"),
-            z.literal("match"),
-            z.literal("order"),
-          ]),
-          questionImage: z
-            .object({
-              url: z.string(),
-              width: z.number(),
-              height: z.number(),
-              alt: z.string().optional(),
-              text: z.string().optional(),
-              attribution: z.string().optional(),
-            })
-            .strict()
-            .optional(),
-        })
-        .strict()
-        .and(
-          z.union([
-            z
+      z.union([
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("multiple-choice"),
-                answers: z.array(
-                  z
-                    .object({ distractor: z.boolean() })
-                    .strict()
-                    .and(
-                      z.union([
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        z
-                          .object({
-                            type: z.literal("image"),
-                            content: z
-                              .object({
-                                url: z.string(),
-                                width: z.number(),
-                                height: z.number(),
-                                alt: z.string().optional(),
-                                text: z.string().optional(),
-                                attribution: z.string().optional(),
-                              })
-                              .strict(),
-                          })
-                          .strict(),
-                      ])
-                    )
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z.union([
+                z
+                  .object({
+                    type: z.string(),
+                    content: z.string(),
+                    distractor: z.boolean(),
+                  })
+                  .strict(),
+                z
+                  .object({
+                    type: z.string(),
+                    content: z
+                      .object({
+                        url: z.string(),
+                        width: z.number(),
+                        height: z.number(),
+                        alt: z.string().optional(),
+                        text: z.string().optional(),
+                        attribution: z.string().optional(),
+                      })
+                      .strict(),
+                    distractor: z.boolean(),
+                  })
+                  .strict(),
+              ])
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("short-answer"),
-                answers: z.array(
-                  z
-                    .object({ type: z.literal("text"), content: z.string() })
-                    .strict()
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z.object({ type: z.string(), content: z.string() }).strict()
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("match"),
-                answers: z.array(
-                  z
-                    .object({
-                      matchOption: z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict(),
-                      correctChoice: z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict(),
-                    })
-                    .strict()
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z
+                .object({
+                  matchOption: z
+                    .object({ type: z.string(), content: z.string() })
+                    .strict(),
+                  correctChoice: z
+                    .object({ type: z.string(), content: z.string() })
+                    .strict(),
+                })
+                .strict()
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("order"),
-                answers: z.array(
-                  z
-                    .object({ order: z.number() })
-                    .strict()
-                    .and(
-                      z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict()
-                    )
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-          ])
-        )
+              .strict()
+              .optional(),
+            answers: z.array(
+              z
+                .object({ order: z.number() })
+                .strict()
+                .and(
+                  z.object({ type: z.string(), content: z.string() }).strict()
+                )
+            ),
+          })
+          .strict(),
+      ])
     ),
     exitQuiz: z.array(
-      z
-        .object({
-          question: z.string(),
-          questionType: z.union([
-            z.literal("multiple-choice"),
-            z.literal("short-answer"),
-            z.literal("match"),
-            z.literal("order"),
-          ]),
-          questionImage: z
-            .object({
-              url: z.string(),
-              width: z.number(),
-              height: z.number(),
-              alt: z.string().optional(),
-              text: z.string().optional(),
-              attribution: z.string().optional(),
-            })
-            .strict()
-            .optional(),
-        })
-        .strict()
-        .and(
-          z.union([
-            z
+      z.union([
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("multiple-choice"),
-                answers: z.array(
-                  z
-                    .object({ distractor: z.boolean() })
-                    .strict()
-                    .and(
-                      z.union([
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        z
-                          .object({
-                            type: z.literal("image"),
-                            content: z
-                              .object({
-                                url: z.string(),
-                                width: z.number(),
-                                height: z.number(),
-                                alt: z.string().optional(),
-                                text: z.string().optional(),
-                                attribution: z.string().optional(),
-                              })
-                              .strict(),
-                          })
-                          .strict(),
-                      ])
-                    )
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z.union([
+                z
+                  .object({
+                    type: z.string(),
+                    content: z.string(),
+                    distractor: z.boolean(),
+                  })
+                  .strict(),
+                z
+                  .object({
+                    type: z.string(),
+                    content: z
+                      .object({
+                        url: z.string(),
+                        width: z.number(),
+                        height: z.number(),
+                        alt: z.string().optional(),
+                        text: z.string().optional(),
+                        attribution: z.string().optional(),
+                      })
+                      .strict(),
+                    distractor: z.boolean(),
+                  })
+                  .strict(),
+              ])
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("short-answer"),
-                answers: z.array(
-                  z
-                    .object({ type: z.literal("text"), content: z.string() })
-                    .strict()
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z.object({ type: z.string(), content: z.string() }).strict()
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("match"),
-                answers: z.array(
-                  z
-                    .object({
-                      matchOption: z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict(),
-                      correctChoice: z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict(),
-                    })
-                    .strict()
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-            z
+              .strict()
+              .optional(),
+            answers: z.array(
+              z
+                .object({
+                  matchOption: z
+                    .object({ type: z.string(), content: z.string() })
+                    .strict(),
+                  correctChoice: z
+                    .object({ type: z.string(), content: z.string() })
+                    .strict(),
+                })
+                .strict()
+            ),
+          })
+          .strict(),
+        z
+          .object({
+            question: z.string(),
+            questionType: z.string(),
+            questionImage: z
               .object({
-                questionType: z.literal("order"),
-                answers: z.array(
-                  z
-                    .object({ order: z.number() })
-                    .strict()
-                    .and(
-                      z
-                        .object({
-                          type: z.literal("text"),
-                          content: z.string(),
-                        })
-                        .strict()
-                    )
-                ),
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
               })
-              .strict(),
-          ])
-        )
+              .strict()
+              .optional(),
+            answers: z.array(
+              z
+                .object({ order: z.number() })
+                .strict()
+                .and(
+                  z.object({ type: z.string(), content: z.string() }).strict()
+                )
+            ),
+          })
+          .strict(),
+      ])
     ),
     canonicalUrl: z.string().optional(),
   })
@@ -881,232 +897,248 @@ const QuestionsForSequenceResponseSchema = z.array(
       lessonSlug: z.string(),
       lessonTitle: z.string(),
       starterQuiz: z.array(
-        z
-          .object({
-            question: z.string(),
-            questionType: z.union([
-              z.literal("multiple-choice"),
-              z.literal("short-answer"),
-              z.literal("match"),
-              z.literal("order"),
-            ]),
-            questionImage: z
-              .object({
-                url: z.string(),
-                width: z.number(),
-                height: z.number(),
-                alt: z.string().optional(),
-                text: z.string().optional(),
-                attribution: z.string().optional(),
-              })
-              .strict()
-              .optional(),
-          })
-          .strict()
-          .and(
-            z.union([
-              z
+        z.union([
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("multiple-choice"),
-                  answers: z.array(
-                    z
-                      .object({ distractor: z.boolean() })
-                      .strict()
-                      .and(
-                        z.union([
-                          z
-                            .object({
-                              type: z.literal("text"),
-                              content: z.string(),
-                            })
-                            .strict(),
-                          z
-                            .object({
-                              type: z.literal("image"),
-                              content: z
-                                .object({
-                                  url: z.string(),
-                                  width: z.number(),
-                                  height: z.number(),
-                                  alt: z.string().optional(),
-                                  text: z.string().optional(),
-                                  attribution: z.string().optional(),
-                                })
-                                .strict(),
-                            })
-                            .strict(),
-                        ])
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.union([
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z.string(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z
+                        .object({
+                          url: z.string(),
+                          width: z.number(),
+                          height: z.number(),
+                          alt: z.string().optional(),
+                          text: z.string().optional(),
+                          attribution: z.string().optional(),
+                        })
+                        .strict(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                ])
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("short-answer"),
-                  answers: z.array(
-                    z
-                      .object({ type: z.literal("text"), content: z.string() })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.object({ type: z.string(), content: z.string() }).strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("match"),
-                  answers: z.array(
-                    z
-                      .object({
-                        matchOption: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        correctChoice: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                      })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({
+                    matchOption: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                    correctChoice: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                  })
+                  .strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("order"),
-                  answers: z.array(
-                    z
-                      .object({ order: z.number() })
-                      .strict()
-                      .and(
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict()
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-            ])
-          )
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({ order: z.number() })
+                  .strict()
+                  .and(
+                    z.object({ type: z.string(), content: z.string() }).strict()
+                  )
+              ),
+            })
+            .strict(),
+        ])
       ),
       exitQuiz: z.array(
-        z
-          .object({
-            question: z.string(),
-            questionType: z.union([
-              z.literal("multiple-choice"),
-              z.literal("short-answer"),
-              z.literal("match"),
-              z.literal("order"),
-            ]),
-            questionImage: z
-              .object({
-                url: z.string(),
-                width: z.number(),
-                height: z.number(),
-                alt: z.string().optional(),
-                text: z.string().optional(),
-                attribution: z.string().optional(),
-              })
-              .strict()
-              .optional(),
-          })
-          .strict()
-          .and(
-            z.union([
-              z
+        z.union([
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("multiple-choice"),
-                  answers: z.array(
-                    z
-                      .object({ distractor: z.boolean() })
-                      .strict()
-                      .and(
-                        z.union([
-                          z
-                            .object({
-                              type: z.literal("text"),
-                              content: z.string(),
-                            })
-                            .strict(),
-                          z
-                            .object({
-                              type: z.literal("image"),
-                              content: z
-                                .object({
-                                  url: z.string(),
-                                  width: z.number(),
-                                  height: z.number(),
-                                  alt: z.string().optional(),
-                                  text: z.string().optional(),
-                                  attribution: z.string().optional(),
-                                })
-                                .strict(),
-                            })
-                            .strict(),
-                        ])
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.union([
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z.string(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z
+                        .object({
+                          url: z.string(),
+                          width: z.number(),
+                          height: z.number(),
+                          alt: z.string().optional(),
+                          text: z.string().optional(),
+                          attribution: z.string().optional(),
+                        })
+                        .strict(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                ])
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("short-answer"),
-                  answers: z.array(
-                    z
-                      .object({ type: z.literal("text"), content: z.string() })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.object({ type: z.string(), content: z.string() }).strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("match"),
-                  answers: z.array(
-                    z
-                      .object({
-                        matchOption: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        correctChoice: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                      })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({
+                    matchOption: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                    correctChoice: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                  })
+                  .strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("order"),
-                  answers: z.array(
-                    z
-                      .object({ order: z.number() })
-                      .strict()
-                      .and(
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict()
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-            ])
-          )
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({ order: z.number() })
+                  .strict()
+                  .and(
+                    z.object({ type: z.string(), content: z.string() }).strict()
+                  )
+              ),
+            })
+            .strict(),
+        ])
       ),
       canonicalUrl: z.string().optional(),
     })
@@ -1118,232 +1150,248 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
       lessonSlug: z.string(),
       lessonTitle: z.string(),
       starterQuiz: z.array(
-        z
-          .object({
-            question: z.string(),
-            questionType: z.union([
-              z.literal("multiple-choice"),
-              z.literal("short-answer"),
-              z.literal("match"),
-              z.literal("order"),
-            ]),
-            questionImage: z
-              .object({
-                url: z.string(),
-                width: z.number(),
-                height: z.number(),
-                alt: z.string().optional(),
-                text: z.string().optional(),
-                attribution: z.string().optional(),
-              })
-              .strict()
-              .optional(),
-          })
-          .strict()
-          .and(
-            z.union([
-              z
+        z.union([
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("multiple-choice"),
-                  answers: z.array(
-                    z
-                      .object({ distractor: z.boolean() })
-                      .strict()
-                      .and(
-                        z.union([
-                          z
-                            .object({
-                              type: z.literal("text"),
-                              content: z.string(),
-                            })
-                            .strict(),
-                          z
-                            .object({
-                              type: z.literal("image"),
-                              content: z
-                                .object({
-                                  url: z.string(),
-                                  width: z.number(),
-                                  height: z.number(),
-                                  alt: z.string().optional(),
-                                  text: z.string().optional(),
-                                  attribution: z.string().optional(),
-                                })
-                                .strict(),
-                            })
-                            .strict(),
-                        ])
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.union([
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z.string(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z
+                        .object({
+                          url: z.string(),
+                          width: z.number(),
+                          height: z.number(),
+                          alt: z.string().optional(),
+                          text: z.string().optional(),
+                          attribution: z.string().optional(),
+                        })
+                        .strict(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                ])
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("short-answer"),
-                  answers: z.array(
-                    z
-                      .object({ type: z.literal("text"), content: z.string() })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.object({ type: z.string(), content: z.string() }).strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("match"),
-                  answers: z.array(
-                    z
-                      .object({
-                        matchOption: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        correctChoice: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                      })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({
+                    matchOption: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                    correctChoice: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                  })
+                  .strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("order"),
-                  answers: z.array(
-                    z
-                      .object({ order: z.number() })
-                      .strict()
-                      .and(
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict()
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-            ])
-          )
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({ order: z.number() })
+                  .strict()
+                  .and(
+                    z.object({ type: z.string(), content: z.string() }).strict()
+                  )
+              ),
+            })
+            .strict(),
+        ])
       ),
       exitQuiz: z.array(
-        z
-          .object({
-            question: z.string(),
-            questionType: z.union([
-              z.literal("multiple-choice"),
-              z.literal("short-answer"),
-              z.literal("match"),
-              z.literal("order"),
-            ]),
-            questionImage: z
-              .object({
-                url: z.string(),
-                width: z.number(),
-                height: z.number(),
-                alt: z.string().optional(),
-                text: z.string().optional(),
-                attribution: z.string().optional(),
-              })
-              .strict()
-              .optional(),
-          })
-          .strict()
-          .and(
-            z.union([
-              z
+        z.union([
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("multiple-choice"),
-                  answers: z.array(
-                    z
-                      .object({ distractor: z.boolean() })
-                      .strict()
-                      .and(
-                        z.union([
-                          z
-                            .object({
-                              type: z.literal("text"),
-                              content: z.string(),
-                            })
-                            .strict(),
-                          z
-                            .object({
-                              type: z.literal("image"),
-                              content: z
-                                .object({
-                                  url: z.string(),
-                                  width: z.number(),
-                                  height: z.number(),
-                                  alt: z.string().optional(),
-                                  text: z.string().optional(),
-                                  attribution: z.string().optional(),
-                                })
-                                .strict(),
-                            })
-                            .strict(),
-                        ])
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.union([
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z.string(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                  z
+                    .object({
+                      type: z.string(),
+                      content: z
+                        .object({
+                          url: z.string(),
+                          width: z.number(),
+                          height: z.number(),
+                          alt: z.string().optional(),
+                          text: z.string().optional(),
+                          attribution: z.string().optional(),
+                        })
+                        .strict(),
+                      distractor: z.boolean(),
+                    })
+                    .strict(),
+                ])
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("short-answer"),
-                  answers: z.array(
-                    z
-                      .object({ type: z.literal("text"), content: z.string() })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z.object({ type: z.string(), content: z.string() }).strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("match"),
-                  answers: z.array(
-                    z
-                      .object({
-                        matchOption: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                        correctChoice: z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict(),
-                      })
-                      .strict()
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-              z
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({
+                    matchOption: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                    correctChoice: z
+                      .object({ type: z.string(), content: z.string() })
+                      .strict(),
+                  })
+                  .strict()
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              question: z.string(),
+              questionType: z.string(),
+              questionImage: z
                 .object({
-                  questionType: z.literal("order"),
-                  answers: z.array(
-                    z
-                      .object({ order: z.number() })
-                      .strict()
-                      .and(
-                        z
-                          .object({
-                            type: z.literal("text"),
-                            content: z.string(),
-                          })
-                          .strict()
-                      )
-                  ),
+                  url: z.string(),
+                  width: z.number(),
+                  height: z.number(),
+                  alt: z.string().optional(),
+                  text: z.string().optional(),
+                  attribution: z.string().optional(),
                 })
-                .strict(),
-            ])
-          )
+                .strict()
+                .optional(),
+              answers: z.array(
+                z
+                  .object({ order: z.number() })
+                  .strict()
+                  .and(
+                    z.object({ type: z.string(), content: z.string() }).strict()
+                  )
+              ),
+            })
+            .strict(),
+        ])
       ),
       canonicalUrl: z.string().optional(),
     })
@@ -1789,7 +1837,7 @@ export const endpoints: readonly Endpoint[] = ([
   {
     method: "get",
     path: "/lessons/:lesson/assets",
-    description: `This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. 
+    description: `This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
         This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
           `,
     requestFormat: "json",

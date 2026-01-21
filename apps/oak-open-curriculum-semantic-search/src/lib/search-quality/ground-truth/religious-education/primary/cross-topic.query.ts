@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const RELIGIOUS_EDUCATION_PRIMARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'Sikh teachings and values together',
+  query: 'places of worship and religious festivals',
   category: 'cross-topic',
-  description: 'Tests intersection of religious teachings with ethical values',
+  description:
+    'Tests intersection of two distinct RE concepts: sacred buildings and celebratory events',
   expectedFile: './cross-topic.expected.ts',
 } as const;

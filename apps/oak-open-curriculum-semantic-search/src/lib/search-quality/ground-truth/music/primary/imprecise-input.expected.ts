@@ -12,6 +12,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const MUSIC_PRIMARY_IMPRECISE_INPUT_EXPECTED: ExpectedRelevance = {
+  // KS1 rhythm/beat basics (syncopated-rhythms removed - KS2 concept)
+  // Query mentions both "rhythm" and "beat" - vary scores for ranking
   'learning-about-beat': 3,
-  'syncopated-rhythms': 2,
+  'rhythm-and-beat': 3,
+  'learning-about-rhythm': 2,
 } as const;

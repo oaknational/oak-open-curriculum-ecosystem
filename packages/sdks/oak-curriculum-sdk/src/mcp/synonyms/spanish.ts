@@ -16,10 +16,8 @@
 export const spanishSynonyms = {
   // ═══════════════════════════════════════════════════════════════════════════
   // LANGUAGE IDENTITY
+  // Subject name synonyms are defined in subjects.ts (single source of truth)
   // ═══════════════════════════════════════════════════════════════════════════
-
-  /** Spanish - the language */
-  spanish: ['español', 'castellano', 'spanish language'],
 
   /** Spain - the country */
   spain: ['spanish culture', 'españa'],

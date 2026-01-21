@@ -877,6 +877,7 @@ export interface components {
             /** @description List of assets */
             assets: {
                 /**
+                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
                  * @enum {string}
                  */
@@ -927,6 +928,7 @@ export interface components {
             /** @description List of assets */
             assets: {
                 /**
+                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
                  * @enum {string}
                  */
@@ -973,6 +975,7 @@ export interface components {
             /** @description List of assets */
             assets?: {
                 /**
+                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
                  * @enum {string}
                  */
@@ -1100,7 +1103,6 @@ export interface components {
                 phaseSlug: string;
                 /** @description The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                /** @description The key stage 4 study pathway that this sequence represents. May be null. */
                 ks4Options: {
                     title: string;
                     slug: string;
@@ -1230,7 +1232,6 @@ export interface components {
                 phaseSlug: string;
                 /** @description The title for the phase to which this sequence belongs */
                 phaseTitle: string;
-                /** @description The key stage 4 study pathway that this sequence represents. May be null. */
                 ks4Options: {
                     title: string;
                     slug: string;
@@ -1319,7 +1320,6 @@ export interface components {
             phaseSlug: string;
             /** @description The title for the phase to which this sequence belongs */
             phaseTitle: string;
-            /** @description The key stage 4 study pathway that this sequence represents. May be null. */
             ks4Options: {
                 title: string;
                 slug: string;
@@ -1493,7 +1493,9 @@ export interface components {
             yearTitle: string;
             /** @description List of units for the specified year */
             units: {
+                /** @description The unit slug identifier */
                 unitSlug: string;
+                /** @description The unit title */
                 unitTitle: string;
             }[];
             /**
@@ -1567,15 +1569,8 @@ export interface components {
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -1585,23 +1580,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -1612,30 +1603,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1646,7 +1661,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1654,8 +1669,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -1663,26 +1689,19 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -1692,23 +1711,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -1719,30 +1734,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1753,7 +1792,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1761,8 +1800,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -1770,13 +1820,13 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /**
              * @description The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
@@ -1851,15 +1901,8 @@ export interface components {
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -1869,23 +1912,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -1896,30 +1935,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1930,7 +1993,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -1938,8 +2001,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -1947,26 +2021,19 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -1976,23 +2043,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -2003,30 +2066,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2037,7 +2124,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2045,8 +2132,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -2054,13 +2152,13 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /**
              * @description The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
@@ -2200,15 +2298,8 @@ export interface components {
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -2218,23 +2309,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -2245,30 +2332,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2279,7 +2390,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2287,8 +2398,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -2296,26 +2418,19 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /**
-                 * @description The type of quiz question which could be one of the following:
-                 *     - multiple-choice
-                 *     - order
-                 *     - match
-                 *     - explanatory-text
-                 *     - short-answer
-                 */
-                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                /** @constant */
+                questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
@@ -2325,23 +2440,19 @@ export interface components {
                     text?: string;
                     attribution?: string;
                 };
-            } & ({
-                /** @enum {string} */
-                questionType: "multiple-choice";
                 answers: ({
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
-                    distractor: boolean;
-                } & ({
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
                 } | {
-                    /** @enum {string} */
+                    /** @constant */
                     type: "image";
                     content: {
                         url: string;
@@ -2352,30 +2463,54 @@ export interface components {
                         text?: string;
                         attribution?: string;
                     };
-                }))[];
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                })[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "short-answer";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "match";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: {
                     /** @description Matching options (LHS) */
                     matchOption: {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2386,7 +2521,7 @@ export interface components {
                         /**
                          * @description The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @enum {string}
+                         * @constant
                          */
                         type: "text";
                         /** @description Quiz question answer */
@@ -2394,8 +2529,19 @@ export interface components {
                     };
                 }[];
             } | {
-                /** @enum {string} */
+                /** @description The question text */
+                question: string;
+                /** @constant */
                 questionType: "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
                 answers: ({
                     /** @description Indicates the correct ordering of the response */
                     order: number;
@@ -2403,13 +2549,13 @@ export interface components {
                     /**
                      * @description The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @enum {string}
+                     * @constant
                      */
                     type: "text";
                     /** @description Quiz question answer */
                     content: string;
                 })[];
-            }))[];
+            })[];
             /**
              * @description The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
@@ -2504,6 +2650,7 @@ export interface components {
             misconceptionsAndCommonMistakes: {
                 /** @description A common misconception */
                 misconception: string;
+                /** @description Suggested teacher response to a common misconception */
                 response: string;
             }[];
             /** @description Suggested teacher response to a common misconception */
@@ -2943,7 +3090,6 @@ export interface operations {
         parameters: {
             query?: {
                 year?: number;
-                /** @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
                 type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
             };
             header?: never;
@@ -2967,7 +3113,6 @@ export interface operations {
     "getAssets-getSubjectAssets": {
         parameters: {
             query?: {
-                /** @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
                 type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
                 unit?: string;
             };
@@ -2994,7 +3139,6 @@ export interface operations {
     "getAssets-getLessonAssets": {
         parameters: {
             query?: {
-                /** @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
                 type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
             };
             header?: never;
@@ -3162,9 +3306,7 @@ export interface operations {
         parameters: {
             query?: {
                 unit?: string;
-                /** @description Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted. */
                 offset?: number;
-                /** @description Offset applied to lessons within each unit (not to the unit list). */
                 limit?: number;
             };
             header?: never;
@@ -3235,9 +3377,7 @@ export interface operations {
         parameters: {
             query?: {
                 year?: number;
-                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
                 offset?: number;
-                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
                 limit?: number;
             };
             header?: never;
@@ -3261,9 +3401,7 @@ export interface operations {
     "getQuestions-getQuestionsForKeyStageAndSubject": {
         parameters: {
             query?: {
-                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
                 offset?: number;
-                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
                 limit?: number;
             };
             header?: never;

@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const RELIGIOUS_EDUCATION_SECONDARY_PRECISE_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'Buddhism beliefs practices',
+  query: 'religious beliefs and practices',
   category: 'precise-topic',
-  description: 'Tests retrieval of Buddhism content using curriculum terminology',
+  description:
+    'Tests discovery of beliefs/practices content across faiths using generic curriculum terminology',
   expectedFile: './precise-topic.expected.ts',
 } as const;

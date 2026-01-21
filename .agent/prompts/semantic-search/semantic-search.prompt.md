@@ -1,93 +1,68 @@
 # Semantic Search — Ground Truth Review Protocol
 
-**Status**: Ground Truth Review — 20/30 complete  
-**Next Session**: music/primary + music/secondary  
-**Last Updated**: 2026-01-20 (maths complete, Music next)
+**Status**: Ground Truth Review — 26/30 complete  
+**Next Session**: Science (Phase 0+1A+1B) — THREE queries per category  
+**Last Updated**: 2026-01-21 (RE Phase 1C complete)
 
 ---
 
-## 🎯 NEXT SESSION: Music Ground Truth Evaluation
+## 🎯 NEXT SESSION: Science (CRITICAL SUBJECT)
 
-**Scope**: music/primary + music/secondary (2 subject-phases, 8 queries total)
+**Scope**: science/primary + science/secondary (2 subject-phases, **24 queries total** — 3 per category)
 
-**Session Structure** (phases are SEPARATE processes — no jumping ahead):
+**Status**: Phase 0+1A+1B required (full protocol, like Maths)
 
-1. **Phase 0 + 1A** (first process): Prerequisites + Query Analysis for ALL 8 queries
-2. **Phase 1B** (second process): Discovery + COMMIT for ALL 8 queries
-3. **Phase 1C** (third process): Comparison for ALL 8 queries
+### ⚠️ SCIENCE IS A CRITICAL SUBJECT — SPECIAL REQUIREMENTS ⚠️
 
-### Music Context
+Like Maths, Science is a high-importance subject requiring **THREE queries per category** instead of one:
 
-- Music has **moderate content coverage** (check with bulk data)
-- Likely has specialised vocabulary (e.g., tempo, rhythm, dynamics)
-- May have MFL-like structure issues (activity-based lesson titles)
+| Category | Query Count | Purpose |
+|----------|-------------|---------|
+| precise-topic | 3 | Curriculum vocabulary (physics, chemistry, biology terms) |
+| natural-expression | 3 | Informal → formal bridging |
+| imprecise-input | 3 | Typo resilience |
+| cross-topic | 3 | Cross-discipline (physics+chemistry, etc.) |
 
-### Commands to Start
+**Requirements**:
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
+1. **100% certainty** — You must be completely certain you have found the BEST possible answers
+2. **Fresh analysis for EVERY query** — 24 independent discovery cycles, no copying
+3. **Exhaustive discovery** — Use BOTH MCP tools AND bulk data for EVERY query
+4. **Complete unit review** — Check ALL science units, not just those with obvious titles
+5. **No "good enough"** — If you're not 100% certain, keep exploring
 
-# Verify bulk data exists
-ls bulk-downloads/music-*.json
+### Protocol
 
-# Count lessons
-jq '.sequence | length' bulk-downloads/music-primary.json
-jq '.sequence | length' bulk-downloads/music-secondary.json
+1. **Use the template** — [ground-truth-session-template.md](../../plans/semantic-search/templates/ground-truth-session-template.md)
+2. **Create Cursor plans** — One per phase (0+1A, 1B, 1C) using `quality-fix-plan-template.md`
+3. **Follow linear execution** — No skipping phases, no shortcuts
 
-# Read query files (Phase 0)
-cat src/lib/search-quality/ground-truth/music/primary/precise-topic.query.ts
-cat src/lib/search-quality/ground-truth/music/primary/natural-expression.query.ts
-cat src/lib/search-quality/ground-truth/music/primary/imprecise-input.query.ts
-cat src/lib/search-quality/ground-truth/music/primary/cross-topic.query.ts
+### Previous Session: Religious Education Phase 1C COMPLETE (2026-01-21)
 
-cat src/lib/search-quality/ground-truth/music/secondary/precise-topic.query.ts
-cat src/lib/search-quality/ground-truth/music/secondary/natural-expression.query.ts
-cat src/lib/search-quality/ground-truth/music/secondary/imprecise-input.query.ts
-cat src/lib/search-quality/ground-truth/music/secondary/cross-topic.query.ts
+**PRIMARY Aggregate**: MRR 0.875, NDCG 0.677, P@3 0.583, R@10 0.750  
+**SECONDARY Aggregate**: MRR 0.640, NDCG 0.526, P@3 0.467, R@10 0.510
+
+**Key Learnings from RE**:
+
+1. **Original GT was COMPLETELY wrong for 6 of 9 queries** - Guru Nanak slugs were used for prayer and festival queries
+2. **Generic queries require generic expected slugs** - Query "religious founders and leaders" needs cross-faith content, not Sikh-only
+3. **Bulk API data alignment issue** - See [bug report](../../plans/bug-report-bulk-api-incomplete-paired-units.md). Search returns Buddhist meditation content that doesn't exist in bulk data files because the Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half).
+4. **Phase 1B COMMIT process worked** - Independent discovery revealed misalignment before seeing expected slugs
+5. **cross-topic-2 added** - Academic query "East-West Schism and ecumenical movements" tests sophisticated user queries
+
+### Ground Truth Files (for religious-education)
+
 ```
-
-### Ground Truth Files
-
-```
-src/lib/search-quality/ground-truth/music/primary/
+src/lib/search-quality/ground-truth/religious-education/primary/
   - precise-topic.query.ts, precise-topic.expected.ts
   - natural-expression.query.ts, natural-expression.expected.ts
   - imprecise-input.query.ts, imprecise-input.expected.ts
   - cross-topic.query.ts, cross-topic.expected.ts
   - index.ts
 
-src/lib/search-quality/ground-truth/music/secondary/
-  [same structure]
+src/lib/search-quality/ground-truth/religious-education/secondary/
+  [same structure + cross-topic-2]
 ```
-
----
-
-## ✅ MATHS COMPLETE — Key Learnings from Phase 1C
-
-### Aggregate Results (after GT corrections)
-
-| Phase | MRR | NDCG@10 | P@3 | R@10 |
-|-------|-----|---------|-----|------|
-| PRIMARY | 0.675 | 0.607 | 0.500 | 0.683 |
-| SECONDARY | 0.861 | 0.749 | 0.667 | 0.828 |
-
-### Critical Findings
-
-1. **Query register must match content level**: "Finding the unknown number" (informal) maps to LINEAR equations, not advanced quadratics. GT corrected — search was RIGHT.
-
-2. **Tokenization ≠ fuzzy matching**: "timetables" vs "times table" is a word boundary issue, not a character edit. Fuzzy matching can't bridge this. Synonym added: `times-table => timetables, timestables, time tables`.
-
-3. **Cross-topic curriculum gaps**: If "fractions + money" intersection doesn't exist in curriculum, GT can't specify it. GT replaced with "area and perimeter problems together" which has verified cross-topic content.
-
-4. **Secondary > Primary structurally**: Standardised terminology in secondary vs child-friendly vocabulary fragmentation in primary. This is curriculum design, not search quality.
-
-5. **Three-way comparison works**: Revealed cases where search outperformed COMMIT (natural-expression-2) and cases where GT was correct but search failed (natural-expression-3).
-
-### GT Changes Made
-
-- `maths/secondary/natural-expression-2.expected.ts`: Changed from quadratic equations to linear equations
-- `maths/primary/cross-topic.query.ts` + `.expected.ts`: Changed from "fractions word problems money" to "area and perimeter problems together"
-- `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/maths.ts`: Added `times-table` synonyms
 
 ---
 
@@ -371,6 +346,25 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 12. **Check ALL units, not just obvious ones** — `improvements-in-public-health-in-the-19th-century` (in Medicine unit) was relevant to "factory age workers conditions" but was missed because only the Industrial Revolution unit was checked.
 13. **Search can be MORE comprehensive than manual discovery** — For one query, search found relevant content that manual discovery missed. This is a signal that discovery was incomplete.
 14. **100% certainty standard** — For critical subjects like maths, "good enough" is not acceptable. Every unit must be checked systematically.
+
+---
+
+## Completed Sessions Summary (26/30)
+
+| Subject | Phase | MRR | NDCG@10 | Key Finding |
+|---------|-------|-----|---------|-------------|
+| music | primary | 0.781 | 0.567 | "In tune" = pitch, not timing |
+| music | secondary | 0.813 | 0.854 | Film composition, not analysis |
+| maths | primary | 0.675 | 0.607 | Query register must match level |
+| maths | secondary | 0.861 | 0.749 | Tokenization ≠ fuzzy matching |
+| physical-education | primary | 0.833 | 0.797 | Original GT was completely wrong |
+| physical-education | secondary | 0.813 | 0.725 | Typo recovery poor ("runing") |
+| religious-education | primary | 0.875 | 0.677 | Original GT wrong (Sikh-specific for generic queries) |
+| religious-education | secondary | 0.640 | 0.526 | Bulk API returns incomplete paired units |
+
+**Remaining (4)**: science (2), spanish (2)
+
+**Full details**: [current-state.md](../../plans/semantic-search/current-state.md)
 
 ---
 

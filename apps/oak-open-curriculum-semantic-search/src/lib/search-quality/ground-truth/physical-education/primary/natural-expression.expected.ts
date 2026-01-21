@@ -12,6 +12,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const PHYSICAL_EDUCATION_PRIMARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'passing-and-receiving-skills': 3,
-  'dribbling-and-sending-with-hands': 2,
+  // Query "how to throw and catch" - EXACT title match and throwing-focused lessons
+  'throwing-and-catching': 3,
+  'throwing-with-accuracy': 3,
+  'throwing-underarm': 3,
+  'passing-and-receiving-using-our-hands': 2,
 } as const;

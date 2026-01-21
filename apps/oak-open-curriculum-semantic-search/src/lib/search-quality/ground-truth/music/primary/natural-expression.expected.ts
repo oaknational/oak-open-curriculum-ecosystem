@@ -12,6 +12,8 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const MUSIC_PRIMARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'singing-and-moving-together': 3,
-  'chanting-and-singing-in-time': 2,
+  // "singing in tune" = pitch accuracy, NOT timing
+  'singing-with-pitch-accuracy': 3,
+  'recognising-pitch-changes-in-our-singing-games': 3,
+  'my-singing-voice': 2,
 } as const;

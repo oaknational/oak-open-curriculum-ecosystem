@@ -5,10 +5,10 @@
  */
 
 export const schemaBase = {
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-18a779a213d24096ecd2d73eec530f1679ab3e54"
+    "version": "0.5.0-07b604314fd435a904876a5a691ddce624ab638f"
   },
   "servers": [
     {
@@ -63,13 +63,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "sequence",
-            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
               "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
               "example": "english-primary"
             },
-            "required": true
+            "required": true,
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant."
           },
           {
             "in": "query",
@@ -126,13 +126,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The slug of the lesson",
             "schema": {
               "type": "string",
               "description": "The slug of the lesson",
               "example": "checking-understanding-of-basic-transformations"
             },
-            "required": true
+            "required": true,
+            "description": "The slug of the lesson"
           }
         ],
         "responses": {
@@ -235,13 +235,13 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "q",
-            "description": "A snippet of text to search for in the lesson video transcripts",
             "schema": {
               "type": "string",
               "description": "A snippet of text to search for in the lesson video transcripts",
               "example": "Who were the romans?"
             },
-            "required": true
+            "required": true,
+            "description": "A snippet of text to search for in the lesson video transcripts"
           }
         ],
         "responses": {
@@ -276,13 +276,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "sequence",
-            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
               "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
               "example": "english-primary"
             },
-            "required": true
+            "required": true,
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant."
           },
           {
             "in": "query",
@@ -296,7 +296,6 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "type",
-            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
             "schema": {
               "type": "string",
               "enum": [
@@ -310,8 +309,8 @@ export const schemaBase = {
                 "worksheet",
                 "worksheetAnswers"
               ],
-              "example": "slideDeck",
-              "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers"
+              "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers",
+              "example": "slideDeck"
             }
           }
         ],
@@ -346,7 +345,6 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "keyStage",
-            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -358,12 +356,12 @@ export const schemaBase = {
               "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
-            "required": true
+            "required": true,
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase"
           },
           {
             "in": "path",
             "name": "subject",
-            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
             "schema": {
               "type": "string",
               "enum": [
@@ -388,12 +386,12 @@ export const schemaBase = {
               "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
               "example": "english"
             },
-            "required": true
+            "required": true,
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)"
           },
           {
             "in": "query",
             "name": "type",
-            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
             "schema": {
               "type": "string",
               "enum": [
@@ -407,6 +405,7 @@ export const schemaBase = {
                 "worksheet",
                 "worksheetAnswers"
               ],
+              "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
               "example": "slideDeck"
             }
           },
@@ -438,7 +437,7 @@ export const schemaBase = {
       "get": {
         "operationId": "getAssets-getLessonAssets",
         "summary": "Downloadable lesson assets",
-        "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. \n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
+        "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.\n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
         "tags": [
           "assets",
           "lessons"
@@ -452,18 +451,17 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The lesson slug identifier",
             "schema": {
               "type": "string",
               "description": "The lesson slug identifier",
               "example": "child-workers-in-the-victorian-era"
             },
-            "required": true
+            "required": true,
+            "description": "The lesson slug identifier"
           },
           {
             "in": "query",
             "name": "type",
-            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
             "schema": {
               "type": "string",
               "enum": [
@@ -477,6 +475,7 @@ export const schemaBase = {
                 "worksheet",
                 "worksheetAnswers"
               ],
+              "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
               "example": "slideDeck"
             }
           }
@@ -513,18 +512,17 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The lesson slug",
             "schema": {
               "type": "string",
               "description": "The lesson slug",
               "example": "child-workers-in-the-victorian-era"
             },
-            "required": true
+            "required": true,
+            "description": "The lesson slug"
           },
           {
             "in": "path",
             "name": "type",
-            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
             "schema": {
               "type": "string",
               "enum": [
@@ -538,9 +536,11 @@ export const schemaBase = {
                 "worksheet",
                 "worksheetAnswers"
               ],
+              "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
               "example": "slideDeck"
             },
-            "required": true
+            "required": true,
+            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint"
           }
         ],
         "responses": {
@@ -601,13 +601,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "subject",
-            "description": "The slug identifier for the subject",
             "schema": {
               "type": "string",
               "description": "The slug identifier for the subject",
               "example": "art"
             },
-            "required": true
+            "required": true,
+            "description": "The slug identifier for the subject"
           }
         ],
         "responses": {
@@ -642,13 +642,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "subject",
-            "description": "The slug identifier for the subject",
             "schema": {
               "type": "string",
               "description": "The slug identifier for the subject",
               "example": "art"
             },
-            "required": true
+            "required": true,
+            "description": "The slug identifier for the subject"
           }
         ],
         "responses": {
@@ -682,13 +682,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "subject",
-            "description": "The subject slug identifier",
             "schema": {
               "type": "string",
               "description": "The subject slug identifier",
               "example": "art"
             },
-            "required": true
+            "required": true,
+            "description": "The subject slug identifier"
           }
         ],
         "responses": {
@@ -722,13 +722,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "subject",
-            "description": "Subject slug to filter by",
             "schema": {
               "type": "string",
               "example": "cooking-nutrition",
               "description": "Subject slug to filter by"
             },
-            "required": true
+            "required": true,
+            "description": "Subject slug to filter by"
           }
         ],
         "responses": {
@@ -790,7 +790,6 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "keyStage",
-            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -802,12 +801,12 @@ export const schemaBase = {
               "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
-            "required": true
+            "required": true,
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase"
           },
           {
             "in": "path",
             "name": "subject",
-            "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -832,7 +831,8 @@ export const schemaBase = {
               "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
               "example": "english"
             },
-            "required": true
+            "required": true,
+            "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase"
           },
           {
             "in": "query",
@@ -846,24 +846,22 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "offset",
-            "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
             "schema": {
-              "type": "number",
-              "example": 50,
               "default": 0,
-              "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted."
+              "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
+              "type": "number",
+              "example": 50
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Offset applied to lessons within each unit (not to the unit list).",
             "schema": {
+              "default": 10,
+              "description": "Offset applied to lessons within each unit (not to the unit list).",
               "type": "number",
               "maximum": 100,
-              "example": 10,
-              "default": 10,
-              "description": "Offset applied to lessons within each unit (not to the unit list)."
+              "example": 10
             }
           }
         ],
@@ -899,7 +897,6 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "keyStage",
-            "description": "Key stage slug to filter by, e.g. 'ks2'",
             "schema": {
               "type": "string",
               "enum": [
@@ -911,12 +908,12 @@ export const schemaBase = {
               "description": "Key stage slug to filter by, e.g. 'ks2'",
               "example": "ks1"
             },
-            "required": true
+            "required": true,
+            "description": "Key stage slug to filter by, e.g. 'ks2'"
           },
           {
             "in": "path",
             "name": "subject",
-            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
             "schema": {
               "type": "string",
               "enum": [
@@ -941,7 +938,8 @@ export const schemaBase = {
               "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
               "example": "art"
             },
-            "required": true
+            "required": true,
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)"
           }
         ],
         "responses": {
@@ -976,13 +974,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The lesson slug identifier",
             "schema": {
               "type": "string",
               "description": "The lesson slug identifier",
               "example": "imagining-you-are-the-characters-the-three-billy-goats-gruff"
             },
-            "required": true
+            "required": true,
+            "description": "The lesson slug identifier"
           }
         ],
         "responses": {
@@ -1017,13 +1015,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "sequence",
-            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
               "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
               "example": "english-primary"
             },
-            "required": true
+            "required": true,
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant."
           },
           {
             "in": "query",
@@ -1037,22 +1035,22 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "offset",
-            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
             "schema": {
+              "default": 0,
               "type": "number",
-              "example": 50,
-              "default": 0
+              "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+              "example": 50
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
             "schema": {
+              "default": 10,
               "type": "number",
               "maximum": 100,
-              "example": 10,
-              "default": 10
+              "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+              "example": 10
             }
           }
         ],
@@ -1087,7 +1085,6 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "keyStage",
-            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -1099,12 +1096,12 @@ export const schemaBase = {
               "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
-            "required": true
+            "required": true,
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase"
           },
           {
             "in": "path",
             "name": "subject",
-            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
             "schema": {
               "type": "string",
               "enum": [
@@ -1129,27 +1126,28 @@ export const schemaBase = {
               "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
               "example": "art"
             },
-            "required": true
+            "required": true,
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here"
           },
           {
             "in": "query",
             "name": "offset",
-            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
             "schema": {
+              "default": 0,
               "type": "number",
-              "example": 50,
-              "default": 0
+              "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+              "example": 50
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
             "schema": {
+              "default": 10,
               "type": "number",
               "maximum": 100,
-              "example": 10,
-              "default": 10
+              "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+              "example": 10
             }
           }
         ],
@@ -1184,13 +1182,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The slug of the lesson",
             "schema": {
               "type": "string",
               "description": "The slug of the lesson",
               "example": "joining-using-and"
             },
-            "required": true
+            "required": true,
+            "description": "The slug of the lesson"
           }
         ],
         "responses": {
@@ -1225,13 +1223,13 @@ export const schemaBase = {
           {
             "in": "query",
             "name": "q",
-            "description": "Search query text snippet",
             "schema": {
               "type": "string",
               "description": "Search query text snippet",
               "example": "gothic"
             },
-            "required": true
+            "required": true,
+            "description": "Search query text snippet"
           },
           {
             "in": "query",
@@ -1317,13 +1315,13 @@ export const schemaBase = {
           {
             "in": "path",
             "name": "unit",
-            "description": "The unit slug",
             "schema": {
               "type": "string",
               "description": "The unit slug",
               "example": "simple-compound-and-adverbial-complex-sentences"
             },
-            "required": true
+            "required": true,
+            "description": "The unit slug"
           }
         ],
         "responses": {
@@ -1444,7 +1442,8 @@ export const schemaBase = {
                       "version",
                       "date",
                       "changes"
-                    ]
+                    ],
+                    "additionalProperties": false
                   },
                   "example": [
                     {
@@ -1509,6 +1508,7 @@ export const schemaBase = {
                     "date",
                     "changes"
                   ],
+                  "additionalProperties": false,
                   "example": {
                     "version": "0.5.0",
                     "date": "2025-03-06",
@@ -1553,13 +1553,6 @@ export const schemaBase = {
     }
   },
   "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
     "schemas": {
       "SequenceUnitsResponseSchema": {
         "type": "array",
@@ -1575,9 +1568,7 @@ export const schemaBase = {
                     },
                     {
                       "type": "string",
-                      "enum": [
-                        "all-years"
-                      ]
+                      "const": "all-years"
                     }
                   ],
                   "description": "The year group"
@@ -1616,11 +1607,13 @@ export const schemaBase = {
                               "required": [
                                 "unitTitle",
                                 "unitSlug"
-                              ]
+                              ],
+                              "additionalProperties": false
                             },
                             "description": "The unique slug identifier for the unit"
                           },
                           "categories": {
+                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                             "type": "array",
                             "items": {
                               "type": "object",
@@ -1630,17 +1623,18 @@ export const schemaBase = {
                                   "description": "The title of the category"
                                 },
                                 "categorySlug": {
-                                  "type": "string",
-                                  "description": "The unique identifier for the category"
+                                  "description": "The unique identifier for the category",
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "categoryTitle"
-                              ]
-                            },
-                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                              ],
+                              "additionalProperties": false
+                            }
                           },
                           "threads": {
+                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                             "type": "array",
                             "items": {
                               "type": "object",
@@ -1662,16 +1656,17 @@ export const schemaBase = {
                                 "threadTitle",
                                 "threadSlug",
                                 "order"
-                              ]
-                            },
-                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                              ],
+                              "additionalProperties": false
+                            }
                           }
                         },
                         "required": [
                           "unitTitle",
                           "unitOrder",
                           "unitOptions"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
                       {
                         "type": "object",
@@ -1696,13 +1691,14 @@ export const schemaBase = {
                                   "description": "The title of the category"
                                 },
                                 "categorySlug": {
-                                  "type": "string",
-                                  "description": "The unique identifier for the category"
+                                  "description": "The unique identifier for the category",
+                                  "type": "string"
                                 }
                               },
                               "required": [
                                 "categoryTitle"
-                              ]
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "threads": {
@@ -1727,7 +1723,8 @@ export const schemaBase = {
                                 "threadTitle",
                                 "threadSlug",
                                 "order"
-                              ]
+                              ],
+                              "additionalProperties": false
                             }
                           }
                         },
@@ -1735,7 +1732,8 @@ export const schemaBase = {
                           "unitTitle",
                           "unitOrder",
                           "unitSlug"
-                        ]
+                        ],
+                        "additionalProperties": false
                       }
                     ]
                   },
@@ -1750,7 +1748,8 @@ export const schemaBase = {
               "required": [
                 "year",
                 "units"
-              ]
+              ],
+              "additionalProperties": false
             },
             {
               "type": "object",
@@ -1817,11 +1816,13 @@ export const schemaBase = {
                                               "required": [
                                                 "unitTitle",
                                                 "unitSlug"
-                                              ]
+                                              ],
+                                              "additionalProperties": false
                                             },
                                             "description": "The unique slug identifier for the unit"
                                           },
                                           "categories": {
+                                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                             "type": "array",
                                             "items": {
                                               "type": "object",
@@ -1831,17 +1832,18 @@ export const schemaBase = {
                                                   "description": "The title of the category"
                                                 },
                                                 "categorySlug": {
-                                                  "type": "string",
-                                                  "description": "The unique identifier for the category"
+                                                  "description": "The unique identifier for the category",
+                                                  "type": "string"
                                                 }
                                               },
                                               "required": [
                                                 "categoryTitle"
-                                              ]
-                                            },
-                                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                              ],
+                                              "additionalProperties": false
+                                            }
                                           },
                                           "threads": {
+                                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                             "type": "array",
                                             "items": {
                                               "type": "object",
@@ -1863,16 +1865,17 @@ export const schemaBase = {
                                                 "threadTitle",
                                                 "threadSlug",
                                                 "order"
-                                              ]
-                                            },
-                                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                              ],
+                                              "additionalProperties": false
+                                            }
                                           }
                                         },
                                         "required": [
                                           "unitTitle",
                                           "unitOrder",
                                           "unitOptions"
-                                        ]
+                                        ],
+                                        "additionalProperties": false
                                       },
                                       {
                                         "type": "object",
@@ -1897,13 +1900,14 @@ export const schemaBase = {
                                                   "description": "The title of the category"
                                                 },
                                                 "categorySlug": {
-                                                  "type": "string",
-                                                  "description": "The unique identifier for the category"
+                                                  "description": "The unique identifier for the category",
+                                                  "type": "string"
                                                 }
                                               },
                                               "required": [
                                                 "categoryTitle"
-                                              ]
+                                              ],
+                                              "additionalProperties": false
                                             }
                                           },
                                           "threads": {
@@ -1928,7 +1932,8 @@ export const schemaBase = {
                                                 "threadTitle",
                                                 "threadSlug",
                                                 "order"
-                                              ]
+                                              ],
+                                              "additionalProperties": false
                                             }
                                           }
                                         },
@@ -1936,7 +1941,8 @@ export const schemaBase = {
                                           "unitTitle",
                                           "unitOrder",
                                           "unitSlug"
-                                        ]
+                                        ],
+                                        "additionalProperties": false
                                       }
                                     ]
                                   }
@@ -1946,14 +1952,16 @@ export const schemaBase = {
                                 "tierTitle",
                                 "tierSlug",
                                 "units"
-                              ]
+                              ],
+                              "additionalProperties": false
                             }
                           }
                         },
                         "required": [
                           "examSubjectTitle",
                           "tiers"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
                       {
                         "type": "object",
@@ -1994,11 +2002,13 @@ export const schemaBase = {
                                         "required": [
                                           "unitTitle",
                                           "unitSlug"
-                                        ]
+                                        ],
+                                        "additionalProperties": false
                                       },
                                       "description": "The unique slug identifier for the unit"
                                     },
                                     "categories": {
+                                      "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                       "type": "array",
                                       "items": {
                                         "type": "object",
@@ -2008,17 +2018,18 @@ export const schemaBase = {
                                             "description": "The title of the category"
                                           },
                                           "categorySlug": {
-                                            "type": "string",
-                                            "description": "The unique identifier for the category"
+                                            "description": "The unique identifier for the category",
+                                            "type": "string"
                                           }
                                         },
                                         "required": [
                                           "categoryTitle"
-                                        ]
-                                      },
-                                      "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                        ],
+                                        "additionalProperties": false
+                                      }
                                     },
                                     "threads": {
+                                      "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                       "type": "array",
                                       "items": {
                                         "type": "object",
@@ -2040,16 +2051,17 @@ export const schemaBase = {
                                           "threadTitle",
                                           "threadSlug",
                                           "order"
-                                        ]
-                                      },
-                                      "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                        ],
+                                        "additionalProperties": false
+                                      }
                                     }
                                   },
                                   "required": [
                                     "unitTitle",
                                     "unitOrder",
                                     "unitOptions"
-                                  ]
+                                  ],
+                                  "additionalProperties": false
                                 },
                                 {
                                   "type": "object",
@@ -2074,13 +2086,14 @@ export const schemaBase = {
                                             "description": "The title of the category"
                                           },
                                           "categorySlug": {
-                                            "type": "string",
-                                            "description": "The unique identifier for the category"
+                                            "description": "The unique identifier for the category",
+                                            "type": "string"
                                           }
                                         },
                                         "required": [
                                           "categoryTitle"
-                                        ]
+                                        ],
+                                        "additionalProperties": false
                                       }
                                     },
                                     "threads": {
@@ -2105,7 +2118,8 @@ export const schemaBase = {
                                           "threadTitle",
                                           "threadSlug",
                                           "order"
-                                        ]
+                                        ],
+                                        "additionalProperties": false
                                       }
                                     }
                                   },
@@ -2113,7 +2127,8 @@ export const schemaBase = {
                                     "unitTitle",
                                     "unitOrder",
                                     "unitSlug"
-                                  ]
+                                  ],
+                                  "additionalProperties": false
                                 }
                               ]
                             }
@@ -2122,7 +2137,8 @@ export const schemaBase = {
                         "required": [
                           "examSubjectTitle",
                           "units"
-                        ]
+                        ],
+                        "additionalProperties": false
                       }
                     ]
                   },
@@ -2137,7 +2153,8 @@ export const schemaBase = {
               "required": [
                 "year",
                 "examSubjects"
-              ]
+              ],
+              "additionalProperties": false
             },
             {
               "type": "object",
@@ -2191,11 +2208,13 @@ export const schemaBase = {
                                     "required": [
                                       "unitTitle",
                                       "unitSlug"
-                                    ]
+                                    ],
+                                    "additionalProperties": false
                                   },
                                   "description": "The unique slug identifier for the unit"
                                 },
                                 "categories": {
+                                  "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                   "type": "array",
                                   "items": {
                                     "type": "object",
@@ -2205,17 +2224,18 @@ export const schemaBase = {
                                         "description": "The title of the category"
                                       },
                                       "categorySlug": {
-                                        "type": "string",
-                                        "description": "The unique identifier for the category"
+                                        "description": "The unique identifier for the category",
+                                        "type": "string"
                                       }
                                     },
                                     "required": [
                                       "categoryTitle"
-                                    ]
-                                  },
-                                  "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 },
                                 "threads": {
+                                  "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted.",
                                   "type": "array",
                                   "items": {
                                     "type": "object",
@@ -2237,16 +2257,17 @@ export const schemaBase = {
                                       "threadTitle",
                                       "threadSlug",
                                       "order"
-                                    ]
-                                  },
-                                  "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "required": [
                                 "unitTitle",
                                 "unitOrder",
                                 "unitOptions"
-                              ]
+                              ],
+                              "additionalProperties": false
                             },
                             {
                               "type": "object",
@@ -2271,13 +2292,14 @@ export const schemaBase = {
                                         "description": "The title of the category"
                                       },
                                       "categorySlug": {
-                                        "type": "string",
-                                        "description": "The unique identifier for the category"
+                                        "description": "The unique identifier for the category",
+                                        "type": "string"
                                       }
                                     },
                                     "required": [
                                       "categoryTitle"
-                                    ]
+                                    ],
+                                    "additionalProperties": false
                                   }
                                 },
                                 "threads": {
@@ -2302,7 +2324,8 @@ export const schemaBase = {
                                       "threadTitle",
                                       "threadSlug",
                                       "order"
-                                    ]
+                                    ],
+                                    "additionalProperties": false
                                   }
                                 }
                               },
@@ -2310,7 +2333,8 @@ export const schemaBase = {
                                 "unitTitle",
                                 "unitOrder",
                                 "unitSlug"
-                              ]
+                              ],
+                              "additionalProperties": false
                             }
                           ]
                         }
@@ -2320,7 +2344,8 @@ export const schemaBase = {
                       "tierTitle",
                       "tierSlug",
                       "units"
-                    ]
+                    ],
+                    "additionalProperties": false
                   }
                 },
                 "canonicalUrl": {
@@ -2332,7 +2357,8 @@ export const schemaBase = {
               "required": [
                 "year",
                 "tiers"
-              ]
+              ],
+              "additionalProperties": false
             }
           ]
         },
@@ -2382,6 +2408,7 @@ export const schemaBase = {
           "transcript",
           "vtt"
         ],
+        "additionalProperties": false,
         "example": {
           "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
           "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
@@ -2416,7 +2443,8 @@ export const schemaBase = {
           "required": [
             "lessonTitle",
             "lessonSlug"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -2455,11 +2483,11 @@ export const schemaBase = {
               "description": "The title for the lesson"
             },
             "attribution": {
+              "description": "Licence information for any third-party content contained in the lessons' downloadable resources",
               "type": "array",
               "items": {
                 "type": "string"
-              },
-              "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
+              }
             },
             "assets": {
               "type": "array",
@@ -2479,6 +2507,7 @@ export const schemaBase = {
                       "worksheet",
                       "worksheetAnswers"
                     ],
+                    "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
                     "example": "slideDeck"
                   },
                   "label": {
@@ -2494,7 +2523,8 @@ export const schemaBase = {
                   "type",
                   "label",
                   "url"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "List of assets"
             },
@@ -2508,7 +2538,8 @@ export const schemaBase = {
             "lessonSlug",
             "lessonTitle",
             "assets"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -2548,11 +2579,11 @@ export const schemaBase = {
               "description": "The title for the lesson"
             },
             "attribution": {
+              "description": "Licence information for any third-party content contained in the lessons' downloadable resources",
               "type": "array",
               "items": {
                 "type": "string"
-              },
-              "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
+              }
             },
             "assets": {
               "type": "array",
@@ -2572,6 +2603,7 @@ export const schemaBase = {
                       "worksheet",
                       "worksheetAnswers"
                     ],
+                    "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
                     "example": "slideDeck"
                   },
                   "label": {
@@ -2587,7 +2619,8 @@ export const schemaBase = {
                   "type",
                   "label",
                   "url"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "List of assets"
             },
@@ -2601,7 +2634,8 @@ export const schemaBase = {
             "lessonSlug",
             "lessonTitle",
             "assets"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -2631,13 +2665,14 @@ export const schemaBase = {
         "type": "object",
         "properties": {
           "attribution": {
+            "description": "Licence information for any third-party content contained in the lessons' downloadable resources",
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
+            }
           },
           "assets": {
+            "description": "List of assets",
             "type": "array",
             "items": {
               "type": "object",
@@ -2655,6 +2690,7 @@ export const schemaBase = {
                     "worksheet",
                     "worksheetAnswers"
                   ],
+                  "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
                   "example": "slideDeck"
                 },
                 "label": {
@@ -2670,9 +2706,9 @@ export const schemaBase = {
                 "type",
                 "label",
                 "url"
-              ]
-            },
-            "description": "List of assets"
+              ],
+              "additionalProperties": false
+            }
           },
           "canonicalUrl": {
             "type": "string",
@@ -2680,6 +2716,7 @@ export const schemaBase = {
             "example": "https://www.thenational.academy/teachers/lessons/example-lesson"
           }
         },
+        "additionalProperties": false,
         "example": {
           "attribution": [
             "Copyright XYZ Authors",
@@ -2753,7 +2790,8 @@ export const schemaBase = {
                       "required": [
                         "keyStageTitle",
                         "keyStageSlug"
-                      ]
+                      ],
+                      "additionalProperties": false
                     },
                     "description": "The key stage slug identifiers for which this subject has content available for."
                   },
@@ -2766,21 +2804,28 @@ export const schemaBase = {
                     "description": "The title for the phase to which this sequence belongs"
                   },
                   "ks4Options": {
-                    "type": "object",
-                    "nullable": true,
-                    "properties": {
-                      "title": {
-                        "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "slug"
+                        ],
+                        "additionalProperties": false,
+                        "description": "The key stage 4 study pathway that this sequence represents. May be null."
                       },
-                      "slug": {
-                        "type": "string"
+                      {
+                        "type": "null"
                       }
-                    },
-                    "required": [
-                      "title",
-                      "slug"
-                    ],
-                    "description": "The key stage 4 study pathway that this sequence represents. May be null."
+                    ]
                   }
                 },
                 "required": [
@@ -2790,7 +2835,8 @@ export const schemaBase = {
                   "phaseSlug",
                   "phaseTitle",
                   "ks4Options"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "Information about the years, key stages and key stage 4 variance for each sequence"
             },
@@ -2818,7 +2864,8 @@ export const schemaBase = {
                 "required": [
                   "keyStageTitle",
                   "keyStageSlug"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "The key stage slug identifiers for which this subject has content available for."
             },
@@ -2834,7 +2881,8 @@ export const schemaBase = {
             "sequenceSlugs",
             "years",
             "keyStages"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -2967,7 +3015,8 @@ export const schemaBase = {
                     "required": [
                       "keyStageTitle",
                       "keyStageSlug"
-                    ]
+                    ],
+                    "additionalProperties": false
                   },
                   "description": "The key stage slug identifiers for which this subject has content available for."
                 },
@@ -2980,21 +3029,28 @@ export const schemaBase = {
                   "description": "The title for the phase to which this sequence belongs"
                 },
                 "ks4Options": {
-                  "type": "object",
-                  "nullable": true,
-                  "properties": {
-                    "title": {
-                      "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "slug"
+                      ],
+                      "additionalProperties": false,
+                      "description": "The key stage 4 study pathway that this sequence represents. May be null."
                     },
-                    "slug": {
-                      "type": "string"
+                    {
+                      "type": "null"
                     }
-                  },
-                  "required": [
-                    "title",
-                    "slug"
-                  ],
-                  "description": "The key stage 4 study pathway that this sequence represents. May be null."
+                  ]
                 }
               },
               "required": [
@@ -3004,7 +3060,8 @@ export const schemaBase = {
                 "phaseSlug",
                 "phaseTitle",
                 "ks4Options"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "Information about the years, key stages and key stage 4 variance for each sequence"
           },
@@ -3032,7 +3089,8 @@ export const schemaBase = {
               "required": [
                 "keyStageTitle",
                 "keyStageSlug"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The key stage slug identifiers for which this subject has content available for."
           },
@@ -3049,6 +3107,7 @@ export const schemaBase = {
           "years",
           "keyStages"
         ],
+        "additionalProperties": false,
         "example": {
           "subjectTitle": "Art and design",
           "subjectSlug": "art",
@@ -3168,7 +3227,8 @@ export const schemaBase = {
                 "required": [
                   "keyStageTitle",
                   "keyStageSlug"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "The key stage slug identifiers for which this subject has content available for."
             },
@@ -3181,21 +3241,28 @@ export const schemaBase = {
               "description": "The title for the phase to which this sequence belongs"
             },
             "ks4Options": {
-              "type": "object",
-              "nullable": true,
-              "properties": {
-                "title": {
-                  "type": "string"
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "slug"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The key stage 4 study pathway that this sequence represents. May be null."
                 },
-                "slug": {
-                  "type": "string"
+                {
+                  "type": "null"
                 }
-              },
-              "required": [
-                "title",
-                "slug"
-              ],
-              "description": "The key stage 4 study pathway that this sequence represents. May be null."
+              ]
             },
             "canonicalUrl": {
               "type": "string",
@@ -3210,7 +3277,8 @@ export const schemaBase = {
             "phaseSlug",
             "phaseTitle",
             "ks4Options"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -3285,9 +3353,10 @@ export const schemaBase = {
           "required": [
             "keyStageTitle",
             "keyStageSlug"
-          ]
+          ],
+          "additionalProperties": false
         },
-        "description": "The key stage slug identifiers for which this subject has content available for",
+        "description": "The key stage slug identifiers for which this subject has content available for",
         "example": [
           {
             "keyStageTitle": "Key Stage 1",
@@ -3349,7 +3418,8 @@ export const schemaBase = {
           "required": [
             "slug",
             "title"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -3392,7 +3462,8 @@ export const schemaBase = {
                 "required": [
                   "lessonSlug",
                   "lessonTitle"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "List of lessons for the specified unit",
               "example": [
@@ -3416,7 +3487,8 @@ export const schemaBase = {
             "unitSlug",
             "unitTitle",
             "lessons"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -3456,16 +3528,19 @@ export const schemaBase = {
                 "type": "object",
                 "properties": {
                   "unitSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unit slug identifier"
                   },
                   "unitTitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unit title"
                   }
                 },
                 "required": [
                   "unitSlug",
                   "unitTitle"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "List of units for the specified year"
             },
@@ -3479,7 +3554,8 @@ export const schemaBase = {
             "yearSlug",
             "yearTitle",
             "units"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -3504,7 +3580,7 @@ export const schemaBase = {
           "starterQuiz": {
             "type": "array",
             "items": {
-              "allOf": [
+              "oneOf": [
                 {
                   "type": "object",
                   "properties": {
@@ -3513,33 +3589,8 @@ export const schemaBase = {
                       "description": "The question text"
                     },
                     "questionType": {
-                      "anyOf": [
-                        {
-                          "type": "string",
-                          "enum": [
-                            "multiple-choice"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "short-answer"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "match"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "order"
-                          ]
-                        }
-                      ],
-                      "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                      "type": "string",
+                      "const": "multiple-choice"
                     },
                     "questionImage": {
                       "type": "object",
@@ -3568,137 +3619,223 @@ export const schemaBase = {
                         "url",
                         "width",
                         "height"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "question",
-                    "questionType"
-                  ]
-                },
-                {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "multiple-choice"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
-                            "allOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "distractor": {
-                                    "type": "boolean",
-                                    "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                  }
-                                },
-                                "required": [
-                                  "distractor"
-                                ]
-                              },
-                              {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "text"
-                                        ],
-                                        "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                      },
-                                      "content": {
-                                        "type": "string",
-                                        "description": "Quiz question answer"
-                                      }
-                                    },
-                                    "required": [
-                                      "type",
-                                      "content"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "image"
-                                        ]
-                                      },
-                                      "content": {
-                                        "type": "object",
-                                        "properties": {
-                                          "url": {
-                                            "type": "string"
-                                          },
-                                          "width": {
-                                            "type": "number"
-                                          },
-                                          "height": {
-                                            "type": "number"
-                                          },
-                                          "alt": {
-                                            "type": "string"
-                                          },
-                                          "text": {
-                                            "type": "string",
-                                            "description": "Supplementary text for the image, if any"
-                                          },
-                                          "attribution": {
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "url",
-                                          "width",
-                                          "height"
-                                        ]
-                                      }
-                                    },
-                                    "required": [
-                                      "type",
-                                      "content"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                      ],
+                      "additionalProperties": false
                     },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "short-answer"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
                             "type": "object",
                             "properties": {
                               "type": {
                                 "type": "string",
-                                "enum": [
-                                  "text"
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                              },
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
+                              },
+                              "distractor": {
+                                "type": "boolean",
+                                "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content",
+                              "distractor"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "image"
+                              },
+                              "content": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "alt": {
+                                    "type": "string"
+                                  },
+                                  "text": {
+                                    "type": "string",
+                                    "description": "Supplementary text for the image, if any"
+                                  },
+                                  "attribution": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "url",
+                                  "width",
+                                  "height"
                                 ],
+                                "additionalProperties": false
+                              },
+                              "distractor": {
+                                "type": "boolean",
+                                "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content",
+                              "distractor"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
+                    },
+                    "questionType": {
+                      "type": "string",
+                      "const": "short-answer"
+                    },
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "text",
+                            "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                          },
+                          "content": {
+                            "type": "string",
+                            "description": "Quiz question answer"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "content"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
+                    },
+                    "questionType": {
+                      "type": "string",
+                      "const": "match"
+                    },
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "matchOption": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "text",
                                 "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
                               "content": {
@@ -3709,148 +3846,145 @@ export const schemaBase = {
                             "required": [
                               "type",
                               "content"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "match"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
+                            ],
+                            "additionalProperties": false,
+                            "description": "Matching options (LHS)"
+                          },
+                          "correctChoice": {
                             "type": "object",
                             "properties": {
-                              "matchOption": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ],
-                                "description": "Matching options (LHS)"
+                              "type": {
+                                "type": "string",
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
-                              "correctChoice": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ],
-                                "description": "Matching options (RHS), indicating the correct choice"
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
                               }
                             },
                             "required": [
-                              "matchOption",
-                              "correctChoice"
-                            ]
+                              "type",
+                              "content"
+                            ],
+                            "additionalProperties": false,
+                            "description": "Matching options (RHS), indicating the correct choice"
                           }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                        },
+                        "required": [
+                          "matchOption",
+                          "correctChoice"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
                     },
-                    {
+                    "questionType": {
+                      "type": "string",
+                      "const": "order"
+                    },
+                    "questionImage": {
                       "type": "object",
                       "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "order"
-                          ]
+                        "url": {
+                          "type": "string"
                         },
-                        "answers": {
-                          "type": "array",
-                          "items": {
-                            "allOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "order": {
-                                    "type": "number",
-                                    "description": "Indicates the correct ordering of the response"
-                                  }
-                                },
-                                "required": [
-                                  "order"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ]
-                              }
-                            ]
-                          }
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "order": {
+                                "type": "number",
+                                "description": "Indicates the correct ordering of the response"
+                              }
+                            },
+                            "required": [
+                              "order"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                              },
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
                     }
-                  ]
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                 }
-              ]
+              ],
+              "type": "object"
             },
             "description": "The starter quiz questions - which test prior knowledge"
           },
           "exitQuiz": {
             "type": "array",
             "items": {
-              "allOf": [
+              "oneOf": [
                 {
                   "type": "object",
                   "properties": {
@@ -3859,33 +3993,8 @@ export const schemaBase = {
                       "description": "The question text"
                     },
                     "questionType": {
-                      "anyOf": [
-                        {
-                          "type": "string",
-                          "enum": [
-                            "multiple-choice"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "short-answer"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "match"
-                          ]
-                        },
-                        {
-                          "type": "string",
-                          "enum": [
-                            "order"
-                          ]
-                        }
-                      ],
-                      "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                      "type": "string",
+                      "const": "multiple-choice"
                     },
                     "questionImage": {
                       "type": "object",
@@ -3914,137 +4023,223 @@ export const schemaBase = {
                         "url",
                         "width",
                         "height"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "question",
-                    "questionType"
-                  ]
-                },
-                {
-                  "oneOf": [
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "multiple-choice"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
-                            "allOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "distractor": {
-                                    "type": "boolean",
-                                    "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                  }
-                                },
-                                "required": [
-                                  "distractor"
-                                ]
-                              },
-                              {
-                                "anyOf": [
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "text"
-                                        ],
-                                        "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                      },
-                                      "content": {
-                                        "type": "string",
-                                        "description": "Quiz question answer"
-                                      }
-                                    },
-                                    "required": [
-                                      "type",
-                                      "content"
-                                    ]
-                                  },
-                                  {
-                                    "type": "object",
-                                    "properties": {
-                                      "type": {
-                                        "type": "string",
-                                        "enum": [
-                                          "image"
-                                        ]
-                                      },
-                                      "content": {
-                                        "type": "object",
-                                        "properties": {
-                                          "url": {
-                                            "type": "string"
-                                          },
-                                          "width": {
-                                            "type": "number"
-                                          },
-                                          "height": {
-                                            "type": "number"
-                                          },
-                                          "alt": {
-                                            "type": "string"
-                                          },
-                                          "text": {
-                                            "type": "string",
-                                            "description": "Supplementary text for the image, if any"
-                                          },
-                                          "attribution": {
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "url",
-                                          "width",
-                                          "height"
-                                        ]
-                                      }
-                                    },
-                                    "required": [
-                                      "type",
-                                      "content"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                      ],
+                      "additionalProperties": false
                     },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "short-answer"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
                             "type": "object",
                             "properties": {
                               "type": {
                                 "type": "string",
-                                "enum": [
-                                  "text"
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                              },
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
+                              },
+                              "distractor": {
+                                "type": "boolean",
+                                "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content",
+                              "distractor"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "image"
+                              },
+                              "content": {
+                                "type": "object",
+                                "properties": {
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "width": {
+                                    "type": "number"
+                                  },
+                                  "height": {
+                                    "type": "number"
+                                  },
+                                  "alt": {
+                                    "type": "string"
+                                  },
+                                  "text": {
+                                    "type": "string",
+                                    "description": "Supplementary text for the image, if any"
+                                  },
+                                  "attribution": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "url",
+                                  "width",
+                                  "height"
                                 ],
+                                "additionalProperties": false
+                              },
+                              "distractor": {
+                                "type": "boolean",
+                                "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content",
+                              "distractor"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
+                    },
+                    "questionType": {
+                      "type": "string",
+                      "const": "short-answer"
+                    },
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "text",
+                            "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                          },
+                          "content": {
+                            "type": "string",
+                            "description": "Quiz question answer"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "content"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
+                    },
+                    "questionType": {
+                      "type": "string",
+                      "const": "match"
+                    },
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "matchOption": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "text",
                                 "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
                               "content": {
@@ -4055,141 +4250,138 @@ export const schemaBase = {
                             "required": [
                               "type",
                               "content"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "match"
-                          ]
-                        },
-                        "answers": {
-                          "type": "array",
-                          "items": {
+                            ],
+                            "additionalProperties": false,
+                            "description": "Matching options (LHS)"
+                          },
+                          "correctChoice": {
                             "type": "object",
                             "properties": {
-                              "matchOption": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ],
-                                "description": "Matching options (LHS)"
+                              "type": {
+                                "type": "string",
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
-                              "correctChoice": {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ],
-                                "description": "Matching options (RHS), indicating the correct choice"
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
                               }
                             },
                             "required": [
-                              "matchOption",
-                              "correctChoice"
-                            ]
+                              "type",
+                              "content"
+                            ],
+                            "additionalProperties": false,
+                            "description": "Matching options (RHS), indicating the correct choice"
                           }
-                        }
-                      },
-                      "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                        },
+                        "required": [
+                          "matchOption",
+                          "correctChoice"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string",
+                      "description": "The question text"
                     },
-                    {
+                    "questionType": {
+                      "type": "string",
+                      "const": "order"
+                    },
+                    "questionImage": {
                       "type": "object",
                       "properties": {
-                        "questionType": {
-                          "type": "string",
-                          "enum": [
-                            "order"
-                          ]
+                        "url": {
+                          "type": "string"
                         },
-                        "answers": {
-                          "type": "array",
-                          "items": {
-                            "allOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "order": {
-                                    "type": "number",
-                                    "description": "Indicates the correct ordering of the response"
-                                  }
-                                },
-                                "required": [
-                                  "order"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "text"
-                                    ],
-                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                  },
-                                  "content": {
-                                    "type": "string",
-                                    "description": "Quiz question answer"
-                                  }
-                                },
-                                "required": [
-                                  "type",
-                                  "content"
-                                ]
-                              }
-                            ]
-                          }
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
+                        },
+                        "attribution": {
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "questionType",
-                        "answers"
-                      ]
+                        "url",
+                        "width",
+                        "height"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "order": {
+                                "type": "number",
+                                "description": "Indicates the correct ordering of the response"
+                              }
+                            },
+                            "required": [
+                              "order"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "text",
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                              },
+                              "content": {
+                                "type": "string",
+                                "description": "Quiz question answer"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
                     }
-                  ]
+                  },
+                  "required": [
+                    "question",
+                    "questionType",
+                    "answers"
+                  ],
+                  "additionalProperties": false,
+                  "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                 }
-              ]
+              ],
+              "type": "object"
             },
             "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
           },
@@ -4203,6 +4395,7 @@ export const schemaBase = {
           "starterQuiz",
           "exitQuiz"
         ],
+        "additionalProperties": false,
         "example": {
           "starterQuiz": [
             {
@@ -4278,7 +4471,7 @@ export const schemaBase = {
             "starterQuiz": {
               "type": "array",
               "items": {
-                "allOf": [
+                "oneOf": [
                   {
                     "type": "object",
                     "properties": {
@@ -4287,33 +4480,8 @@ export const schemaBase = {
                         "description": "The question text"
                       },
                       "questionType": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
-                          }
-                        ],
-                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                        "type": "string",
+                        "const": "multiple-choice"
                       },
                       "questionImage": {
                         "type": "object",
@@ -4342,137 +4510,223 @@ export const schemaBase = {
                           "url",
                           "width",
                           "height"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "question",
-                      "questionType"
-                    ]
-                  },
-                  {
-                    "oneOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "distractor": {
-                                      "type": "boolean",
-                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                    }
-                                  },
-                                  "required": [
-                                    "distractor"
-                                  ]
-                                },
-                                {
-                                  "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "text"
-                                          ],
-                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                        },
-                                        "content": {
-                                          "type": "string",
-                                          "description": "Quiz question answer"
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "image"
-                                          ]
-                                        },
-                                        "content": {
-                                          "type": "object",
-                                          "properties": {
-                                            "url": {
-                                              "type": "string"
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            },
-                                            "alt": {
-                                              "type": "string"
-                                            },
-                                            "text": {
-                                              "type": "string",
-                                              "description": "Supplementary text for the image, if any"
-                                            },
-                                            "attribution": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "url",
-                                            "width",
-                                            "height"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
                               "type": "object",
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": [
-                                    "text"
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "image"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    },
+                                    "alt": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string",
+                                      "description": "Supplementary text for the image, if any"
+                                    },
+                                    "attribution": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "url",
+                                    "width",
+                                    "height"
                                   ],
+                                  "additionalProperties": false
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ],
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "text",
+                              "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                            },
+                            "content": {
+                              "type": "string",
+                              "description": "Quiz question answer"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "content"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "match"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "matchOption": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
                                   "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
@@ -4483,148 +4737,145 @@ export const schemaBase = {
                               "required": [
                                 "type",
                                 "content"
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (LHS)"
+                            },
+                            "correctChoice": {
                               "type": "object",
                               "properties": {
-                                "matchOption": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (LHS)"
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
-                                "correctChoice": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (RHS), indicating the correct choice"
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
-                                "matchOption",
-                                "correctChoice"
-                              ]
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (RHS), indicating the correct choice"
                             }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          },
+                          "required": [
+                            "matchOption",
+                            "correctChoice"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
                       },
-                      {
+                      "questionType": {
+                        "type": "string",
+                        "const": "order"
+                      },
+                      "questionImage": {
                         "type": "object",
                         "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
+                          "url": {
+                            "type": "string"
                           },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "order": {
-                                      "type": "number",
-                                      "description": "Indicates the correct ordering of the response"
-                                    }
-                                  },
-                                  "required": [
-                                    "order"
-                                  ]
-                                },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ]
-                                }
-                              ]
-                            }
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "order": {
+                                  "type": "number",
+                                  "description": "Indicates the correct ordering of the response"
+                                }
+                              },
+                              "required": [
+                                "order"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
                       }
-                    ]
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                   }
-                ]
+                ],
+                "type": "object"
               },
               "description": "The starter quiz questions - which test prior knowledge"
             },
             "exitQuiz": {
               "type": "array",
               "items": {
-                "allOf": [
+                "oneOf": [
                   {
                     "type": "object",
                     "properties": {
@@ -4633,33 +4884,8 @@ export const schemaBase = {
                         "description": "The question text"
                       },
                       "questionType": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
-                          }
-                        ],
-                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                        "type": "string",
+                        "const": "multiple-choice"
                       },
                       "questionImage": {
                         "type": "object",
@@ -4688,137 +4914,223 @@ export const schemaBase = {
                           "url",
                           "width",
                           "height"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "question",
-                      "questionType"
-                    ]
-                  },
-                  {
-                    "oneOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "distractor": {
-                                      "type": "boolean",
-                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                    }
-                                  },
-                                  "required": [
-                                    "distractor"
-                                  ]
-                                },
-                                {
-                                  "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "text"
-                                          ],
-                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                        },
-                                        "content": {
-                                          "type": "string",
-                                          "description": "Quiz question answer"
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "image"
-                                          ]
-                                        },
-                                        "content": {
-                                          "type": "object",
-                                          "properties": {
-                                            "url": {
-                                              "type": "string"
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            },
-                                            "alt": {
-                                              "type": "string"
-                                            },
-                                            "text": {
-                                              "type": "string",
-                                              "description": "Supplementary text for the image, if any"
-                                            },
-                                            "attribution": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "url",
-                                            "width",
-                                            "height"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
                               "type": "object",
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": [
-                                    "text"
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "image"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    },
+                                    "alt": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string",
+                                      "description": "Supplementary text for the image, if any"
+                                    },
+                                    "attribution": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "url",
+                                    "width",
+                                    "height"
                                   ],
+                                  "additionalProperties": false
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ],
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "text",
+                              "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                            },
+                            "content": {
+                              "type": "string",
+                              "description": "Quiz question answer"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "content"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "match"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "matchOption": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
                                   "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
@@ -4829,141 +5141,138 @@ export const schemaBase = {
                               "required": [
                                 "type",
                                 "content"
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (LHS)"
+                            },
+                            "correctChoice": {
                               "type": "object",
                               "properties": {
-                                "matchOption": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (LHS)"
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
-                                "correctChoice": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (RHS), indicating the correct choice"
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
-                                "matchOption",
-                                "correctChoice"
-                              ]
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (RHS), indicating the correct choice"
                             }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          },
+                          "required": [
+                            "matchOption",
+                            "correctChoice"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
                       },
-                      {
+                      "questionType": {
+                        "type": "string",
+                        "const": "order"
+                      },
+                      "questionImage": {
                         "type": "object",
                         "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
+                          "url": {
+                            "type": "string"
                           },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "order": {
-                                      "type": "number",
-                                      "description": "Indicates the correct ordering of the response"
-                                    }
-                                  },
-                                  "required": [
-                                    "order"
-                                  ]
-                                },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ]
-                                }
-                              ]
-                            }
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "order": {
+                                  "type": "number",
+                                  "description": "Indicates the correct ordering of the response"
+                                }
+                              },
+                              "required": [
+                                "order"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
                       }
-                    ]
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                   }
-                ]
+                ],
+                "type": "object"
               },
               "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
             },
@@ -4978,7 +5287,8 @@ export const schemaBase = {
             "lessonTitle",
             "starterQuiz",
             "exitQuiz"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -5054,7 +5364,7 @@ export const schemaBase = {
             "starterQuiz": {
               "type": "array",
               "items": {
-                "allOf": [
+                "oneOf": [
                   {
                     "type": "object",
                     "properties": {
@@ -5063,33 +5373,8 @@ export const schemaBase = {
                         "description": "The question text"
                       },
                       "questionType": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
-                          }
-                        ],
-                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                        "type": "string",
+                        "const": "multiple-choice"
                       },
                       "questionImage": {
                         "type": "object",
@@ -5118,137 +5403,223 @@ export const schemaBase = {
                           "url",
                           "width",
                           "height"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "question",
-                      "questionType"
-                    ]
-                  },
-                  {
-                    "oneOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "distractor": {
-                                      "type": "boolean",
-                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                    }
-                                  },
-                                  "required": [
-                                    "distractor"
-                                  ]
-                                },
-                                {
-                                  "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "text"
-                                          ],
-                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                        },
-                                        "content": {
-                                          "type": "string",
-                                          "description": "Quiz question answer"
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "image"
-                                          ]
-                                        },
-                                        "content": {
-                                          "type": "object",
-                                          "properties": {
-                                            "url": {
-                                              "type": "string"
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            },
-                                            "alt": {
-                                              "type": "string"
-                                            },
-                                            "text": {
-                                              "type": "string",
-                                              "description": "Supplementary text for the image, if any"
-                                            },
-                                            "attribution": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "url",
-                                            "width",
-                                            "height"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
                               "type": "object",
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": [
-                                    "text"
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "image"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    },
+                                    "alt": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string",
+                                      "description": "Supplementary text for the image, if any"
+                                    },
+                                    "attribution": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "url",
+                                    "width",
+                                    "height"
                                   ],
+                                  "additionalProperties": false
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ],
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "text",
+                              "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                            },
+                            "content": {
+                              "type": "string",
+                              "description": "Quiz question answer"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "content"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "match"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "matchOption": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
                                   "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
@@ -5259,148 +5630,145 @@ export const schemaBase = {
                               "required": [
                                 "type",
                                 "content"
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (LHS)"
+                            },
+                            "correctChoice": {
                               "type": "object",
                               "properties": {
-                                "matchOption": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (LHS)"
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
-                                "correctChoice": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (RHS), indicating the correct choice"
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
-                                "matchOption",
-                                "correctChoice"
-                              ]
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (RHS), indicating the correct choice"
                             }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          },
+                          "required": [
+                            "matchOption",
+                            "correctChoice"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
                       },
-                      {
+                      "questionType": {
+                        "type": "string",
+                        "const": "order"
+                      },
+                      "questionImage": {
                         "type": "object",
                         "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
+                          "url": {
+                            "type": "string"
                           },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "order": {
-                                      "type": "number",
-                                      "description": "Indicates the correct ordering of the response"
-                                    }
-                                  },
-                                  "required": [
-                                    "order"
-                                  ]
-                                },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ]
-                                }
-                              ]
-                            }
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "order": {
+                                  "type": "number",
+                                  "description": "Indicates the correct ordering of the response"
+                                }
+                              },
+                              "required": [
+                                "order"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
                       }
-                    ]
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                   }
-                ]
+                ],
+                "type": "object"
               },
               "description": "The starter quiz questions - which test prior knowledge"
             },
             "exitQuiz": {
               "type": "array",
               "items": {
-                "allOf": [
+                "oneOf": [
                   {
                     "type": "object",
                     "properties": {
@@ -5409,33 +5777,8 @@ export const schemaBase = {
                         "description": "The question text"
                       },
                       "questionType": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
-                          }
-                        ],
-                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                        "type": "string",
+                        "const": "multiple-choice"
                       },
                       "questionImage": {
                         "type": "object",
@@ -5464,137 +5807,223 @@ export const schemaBase = {
                           "url",
                           "width",
                           "height"
-                        ]
-                      }
-                    },
-                    "required": [
-                      "question",
-                      "questionType"
-                    ]
-                  },
-                  {
-                    "oneOf": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "multiple-choice"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "distractor": {
-                                      "type": "boolean",
-                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
-                                    }
-                                  },
-                                  "required": [
-                                    "distractor"
-                                  ]
-                                },
-                                {
-                                  "anyOf": [
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "text"
-                                          ],
-                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                        },
-                                        "content": {
-                                          "type": "string",
-                                          "description": "Quiz question answer"
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    },
-                                    {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "enum": [
-                                            "image"
-                                          ]
-                                        },
-                                        "content": {
-                                          "type": "object",
-                                          "properties": {
-                                            "url": {
-                                              "type": "string"
-                                            },
-                                            "width": {
-                                              "type": "number"
-                                            },
-                                            "height": {
-                                              "type": "number"
-                                            },
-                                            "alt": {
-                                              "type": "string"
-                                            },
-                                            "text": {
-                                              "type": "string",
-                                              "description": "Supplementary text for the image, if any"
-                                            },
-                                            "attribution": {
-                                              "type": "string"
-                                            }
-                                          },
-                                          "required": [
-                                            "url",
-                                            "width",
-                                            "height"
-                                          ]
-                                        }
-                                      },
-                                      "required": [
-                                        "type",
-                                        "content"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                        ],
+                        "additionalProperties": false
                       },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "short-answer"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
                               "type": "object",
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": [
-                                    "text"
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "image"
+                                },
+                                "content": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "width": {
+                                      "type": "number"
+                                    },
+                                    "height": {
+                                      "type": "number"
+                                    },
+                                    "alt": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string",
+                                      "description": "Supplementary text for the image, if any"
+                                    },
+                                    "attribution": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "url",
+                                    "width",
+                                    "height"
                                   ],
+                                  "additionalProperties": false
+                                },
+                                "distractor": {
+                                  "type": "boolean",
+                                  "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content",
+                                "distractor"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ],
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Multiple choice answer allows for one or more than one answer to be correct as defined by the distractor field being set to false"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "text",
+                              "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                            },
+                            "content": {
+                              "type": "string",
+                              "description": "Quiz question answer"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "content"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Short answers allow students to enter a free text answer, and the answers array contains a list of acceptable answers"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "type": "string",
+                        "const": "match"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "matchOption": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
                                   "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
@@ -5605,141 +6034,138 @@ export const schemaBase = {
                               "required": [
                                 "type",
                                 "content"
-                              ]
-                            }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "match"
-                            ]
-                          },
-                          "answers": {
-                            "type": "array",
-                            "items": {
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (LHS)"
+                            },
+                            "correctChoice": {
                               "type": "object",
                               "properties": {
-                                "matchOption": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (LHS)"
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
-                                "correctChoice": {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ],
-                                  "description": "Matching options (RHS), indicating the correct choice"
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
-                                "matchOption",
-                                "correctChoice"
-                              ]
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false,
+                              "description": "Matching options (RHS), indicating the correct choice"
                             }
-                          }
-                        },
-                        "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          },
+                          "required": [
+                            "matchOption",
+                            "correctChoice"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list from the `match_option` field in the answers array, and must correctly match them to the `correct_choice` value"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
                       },
-                      {
+                      "questionType": {
+                        "type": "string",
+                        "const": "order"
+                      },
+                      "questionImage": {
                         "type": "object",
                         "properties": {
-                          "questionType": {
-                            "type": "string",
-                            "enum": [
-                              "order"
-                            ]
+                          "url": {
+                            "type": "string"
                           },
-                          "answers": {
-                            "type": "array",
-                            "items": {
-                              "allOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "order": {
-                                      "type": "number",
-                                      "description": "Indicates the correct ordering of the response"
-                                    }
-                                  },
-                                  "required": [
-                                    "order"
-                                  ]
-                                },
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "text"
-                                      ],
-                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
-                                    },
-                                    "content": {
-                                      "type": "string",
-                                      "description": "Quiz question answer"
-                                    }
-                                  },
-                                  "required": [
-                                    "type",
-                                    "content"
-                                  ]
-                                }
-                              ]
-                            }
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
                           }
                         },
                         "required": [
-                          "questionType",
-                          "answers"
-                        ]
+                          "url",
+                          "width",
+                          "height"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "answers": {
+                        "type": "array",
+                        "items": {
+                          "allOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "order": {
+                                  "type": "number",
+                                  "description": "Indicates the correct ordering of the response"
+                                }
+                              },
+                              "required": [
+                                "order"
+                              ],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "text",
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
                       }
-                    ]
+                    },
+                    "required": [
+                      "question",
+                      "questionType",
+                      "answers"
+                    ],
+                    "additionalProperties": false,
+                    "description": "The student is offered a list of items to order, and must correctly order them according to the `order` field. When presenting the answer options to the student, you should randomise the order of the items"
                   }
-                ]
+                ],
+                "type": "object"
               },
               "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
             },
@@ -5754,7 +6180,8 @@ export const schemaBase = {
             "lessonTitle",
             "starterQuiz",
             "exitQuiz"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -5927,7 +6354,8 @@ export const schemaBase = {
               "required": [
                 "keyword",
                 "description"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The lesson's keywords and their descriptions"
           },
@@ -5943,7 +6371,8 @@ export const schemaBase = {
               },
               "required": [
                 "keyLearningPoint"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The lesson's key learning points"
           },
@@ -5957,19 +6386,21 @@ export const schemaBase = {
                   "description": "A common misconception"
                 },
                 "response": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Suggested teacher response to a common misconception"
                 }
               },
               "required": [
                 "misconception",
                 "response"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The lesson’s anticipated common misconceptions and suggested teacher responses"
           },
           "pupilLessonOutcome": {
-            "type": "string",
-            "description": "Suggested teacher response to a common misconception"
+            "description": "Suggested teacher response to a common misconception",
+            "type": "string"
           },
           "teacherTips": {
             "type": "array",
@@ -5983,6 +6414,7 @@ export const schemaBase = {
               "required": [
                 "teacherTip"
               ],
+              "additionalProperties": false,
               "description": "A teaching tip"
             },
             "description": "Helpful teaching tips for the lesson"
@@ -6016,7 +6448,8 @@ export const schemaBase = {
                     "supervisionlevel_id",
                     "contentGuidanceLabel",
                     "contentGuidanceDescription"
-                  ]
+                  ],
+                  "additionalProperties": false
                 }
               },
               {
@@ -6062,6 +6495,7 @@ export const schemaBase = {
           "supervisionLevel",
           "downloadsAvailable"
         ],
+        "additionalProperties": false,
         "example": {
           "lessonTitle": "Joining using 'and'",
           "unitSlug": "simple-sentences",
@@ -6169,7 +6603,8 @@ export const schemaBase = {
                   "examBoardTitle",
                   "keyStageSlug",
                   "subjectSlug"
-                ]
+                ],
+                "additionalProperties": false
               },
               "description": "The units that the lesson is part of. See sample response below"
             },
@@ -6184,7 +6619,8 @@ export const schemaBase = {
             "lessonTitle",
             "similarity",
             "units"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -6241,7 +6677,8 @@ export const schemaBase = {
                 "type": "number"
               },
               {
-                "type": "string"
+                "type": "string",
+                "description": "All years"
               }
             ],
             "description": "The year to which the unit belongs",
@@ -6317,7 +6754,8 @@ export const schemaBase = {
                 "slug",
                 "title",
                 "order"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The threads that are associated with the unit",
             "example": [
@@ -6342,7 +6780,8 @@ export const schemaBase = {
               },
               "required": [
                 "categoryTitle"
-              ]
+              ],
+              "additionalProperties": false
             },
             "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
           },
@@ -6381,6 +6820,7 @@ export const schemaBase = {
                 "lessonTitle",
                 "state"
               ],
+              "additionalProperties": false,
               "description": "All the lessons contained in the unit"
             }
           },
@@ -6402,6 +6842,7 @@ export const schemaBase = {
           "nationalCurriculumContent",
           "unitLessons"
         ],
+        "additionalProperties": false,
         "example": {
           "unitSlug": "simple-compound-and-adverbial-complex-sentences",
           "unitTitle": "Simple, compound and adverbial complex sentences",
@@ -6464,7 +6905,8 @@ export const schemaBase = {
           "required": [
             "title",
             "slug"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -6499,7 +6941,8 @@ export const schemaBase = {
             "unitTitle",
             "unitSlug",
             "unitOrder"
-          ]
+          ],
+          "additionalProperties": false
         },
         "example": [
           {
@@ -6543,11 +6986,19 @@ export const schemaBase = {
           "remaining",
           "reset"
         ],
+        "additionalProperties": false,
         "example": {
           "limit": 1000,
           "remaining": 953,
           "reset": 1740164400000
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

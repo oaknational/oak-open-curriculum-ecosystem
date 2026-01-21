@@ -42,6 +42,20 @@ synonyms/
 └── index.ts                ← Barrel export → synonymsData
 ```
 
+## Single Source of Truth Principle
+
+**Subject name synonyms** (e.g., `physical-education` → `pe`, `p.e.`) are defined ONLY in `subjects.ts`.
+
+**Concept synonyms** (e.g., `athletics` → `track and field`) are defined in subject-specific files (e.g., `physical-education.ts`).
+
+This separation prevents duplicate definitions that can have conflicting values. Each subject concept file has a comment:
+
+```typescript
+// Subject name synonyms are defined in subjects.ts (single source of truth)
+```
+
+**Important**: Do NOT define subject names (like `french`, `german`, `spanish`, `physical-education`) in concept files. These belong exclusively in `subjects.ts`.
+
 ## Synonym Structure
 
 Synonyms map a **canonical term** to an array of **alternative terms**:

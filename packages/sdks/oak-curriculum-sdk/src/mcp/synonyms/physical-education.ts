@@ -15,10 +15,8 @@
 export const physicalEducationSynonyms = {
   // ═══════════════════════════════════════════════════════════════════════════
   // GENERAL PE
+  // Subject name synonyms are defined in subjects.ts (single source of truth)
   // ═══════════════════════════════════════════════════════════════════════════
-
-  /** Physical Education - abbreviations */
-  'physical-education': ['pe', 'p.e.', 'sport', 'sports'],
 
   /** Exercise - physical activity */
   exercise: ['physical activity', 'workout', 'training'],

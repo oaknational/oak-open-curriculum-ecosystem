@@ -12,6 +12,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const PHYSICAL_EDUCATION_SECONDARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'design-your-programme': 3,
-  'running-for-speed-and-the-relationship-between-distance-and-time': 2,
+  // Query "fitness and athletics together" - lessons combining fitness with sport/athletics
+  'linking-sports-and-physical-activity-to-different-components-of-fitness': 3,
+  'components-of-fitness-and-the-relative-importance-to-physical-activity-and-sport': 3,
+  'the-importance-of-fitness-components-in-sport': 3,
+  'the-relationship-between-health-fitness-exercise-and-performance': 2,
 } as const;

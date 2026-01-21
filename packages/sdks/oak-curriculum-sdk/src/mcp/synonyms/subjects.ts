@@ -69,10 +69,28 @@ export const subjectSynonyms = {
     'money',
   ],
 
-  // Languages
-  french: ['french language', 'mfl french', 'modern foreign languages french'],
-  german: ['german language', 'mfl german', 'modern foreign languages german'],
-  spanish: ['spanish language', 'mfl spanish', 'modern foreign languages spanish'],
+  // Languages - with native language names (single source of truth for subject synonyms)
+  french: [
+    'french language',
+    'mfl french',
+    'modern foreign languages french',
+    'français',
+    'francophone',
+  ],
+  german: [
+    'german language',
+    'mfl german',
+    'modern foreign languages german',
+    'deutsch',
+    'germanic',
+  ],
+  spanish: [
+    'spanish language',
+    'mfl spanish',
+    'modern foreign languages spanish',
+    'español',
+    'castellano',
+  ],
 
   // Geography - with common abbreviation
   geography: ['geo', 'geog'],
@@ -87,15 +105,7 @@ export const subjectSynonyms = {
   music: ['music education'],
 
   // Physical Education - with OWA aliases
-  'physical-education': [
-    'physical education',
-    'pe',
-    'p.e.',
-    'sport',
-    'sports',
-    'phys ed',
-    'physical wellbeing',
-  ],
+  'physical-education': ['physical education', 'pe', 'p.e.'],
 
   // Religious Education - with OWA aliases
   'religious-education': ['religious studies', 'religion', 're', 'r.e.', 'rs'],

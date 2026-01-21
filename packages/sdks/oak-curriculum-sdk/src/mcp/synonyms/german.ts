@@ -16,10 +16,8 @@
 export const germanSynonyms = {
   // ═══════════════════════════════════════════════════════════════════════════
   // LANGUAGE IDENTITY
+  // Subject name synonyms are defined in subjects.ts (single source of truth)
   // ═══════════════════════════════════════════════════════════════════════════
-
-  /** German - the language */
-  german: ['deutsch', 'germanic', 'german language'],
 
   /** Germany - the country */
   germany: ['german culture', 'deutschland'],

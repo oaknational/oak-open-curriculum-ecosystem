@@ -1,8 +1,8 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-20  
+**Last Updated**: 2026-01-21  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Status**: 🔄 **Ground truth review** (20/30 subject-phases complete)
+**Status**: 🔄 **Ground truth review** (26/30 subject-phases complete)
 
 ---
 
@@ -11,6 +11,8 @@
 **Phase 1: Ground Truth Review** — Validating expected slugs.
 
 Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth review validates the measurements. Until 30/30 subject-phases are reviewed, MRR values may change as ground truths are corrected.
+
+**Next Session**: Science (CRITICAL SUBJECT — 24 queries, 3 per category, like Maths)
 
 ---
 
@@ -49,14 +51,114 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 |-----------|--------|
 | RRF normalisation (ADR-099) | ✅ Implemented and validated |
 | Synonym coverage (ADR-100) | ✅ All 17 subjects have domain-specific synonyms (~580 total) |
-| Ground truths reviewed | 🔄 **20/30 subject-phases** |
+| Ground truths reviewed | 🔄 **26/30 subject-phases** |
 | Baselines established | ✅ 120 queries measured |
 | Quality gates | ✅ All passing |
 | Split file architecture | ✅ `*.query.ts` + `*.expected.ts` |
 
-**Reviewed**: art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), **maths (2)**
+**Reviewed**: art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), maths (2), music (2), physical-education (2), religious-education (2)
 
-**Next Session**: music/primary + music/secondary
+**Remaining (4)**: science (2), spanish (2)
+
+**Next Session**: Science Phase 0+1A+1B — CRITICAL SUBJECT with THREE queries per category (like Maths)
+
+### Religious Education Phase 1C COMPLETE (2026-01-21)
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.875 | 0.677 | 0.583 | 0.750 |
+| SECONDARY | 0.640 | 0.526 | 0.467 | 0.510 |
+
+**GT Corrections Made**:
+- PRIMARY precise-topic: Expanded to cross-faith founders (prophet-muhammad, idea-of-a-buddha, guru-nanak, moses)
+- PRIMARY natural-expression: REPLACED — Previous (guru-nanak) was wrong for "why do people pray". Changed to prayer-focused lessons.
+- PRIMARY imprecise-input: Added story-focused lessons
+- PRIMARY cross-topic: REPLACED — Previous (guru-nanak teachings) was wrong for "places of worship and religious festivals". Changed to festival/worship lessons.
+- SECONDARY precise-topic: REPLACED Buddhism-only slugs with cross-faith content
+- SECONDARY natural-expression: Expanded to include ethics lessons
+- SECONDARY imprecise-input: REPLACED dhamma slugs with worship/prayer lessons
+- SECONDARY cross-topic: REPLACED afterlife slugs with text+ethics lessons
+- SECONDARY cross-topic-2: Added reconciliation lessons for "East-West Schism and ecumenical movements"
+
+**Key Learnings**:
+1. **Original GT was COMPLETELY wrong** for 6 of 9 queries — Sikh-specific content (Guru Nanak) was used for generic queries about prayer, festivals, founders
+2. **Generic queries require generic expected slugs** — "religious founders and leaders" needs cross-faith content, not Sikh-only
+3. **Bulk API data alignment issue**: See [bug report](bug-report-bulk-api-incomplete-paired-units.md). Search returns Buddhist meditation content that doesn't exist in bulk data files. The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half).
+4. **Phase 1B COMMIT process worked** — Independent discovery revealed misalignment before seeing expected slugs
+
+### Physical Education Phase 1C COMPLETE (2026-01-21)
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.833 | 0.797 | 0.583 | 0.875 |
+| SECONDARY | 0.813 | 0.725 | 0.667 | 0.787 |
+
+**GT Corrections Made**:
+- PRIMARY precise-topic: Added feet-dribbling lessons (query is generic "ball skills")
+- PRIMARY natural-expression: Changed from passing to throwing lessons ("throw and catch")
+- PRIMARY imprecise-input: Changed to feet-based football skills ("footbal" = soccer)
+- PRIMARY cross-topic: Added `introduce-maps-working-together` (perfect title match)
+- SECONDARY precise-topic: Added `the-fitt-principle` (original slug not found)
+- SECONDARY natural-expression: Changed to exercise programme lessons
+- SECONDARY imprecise-input: Added `high-jump` and `triple-jump` lessons
+- SECONDARY cross-topic: Changed to fitness components lessons
+
+**Search Quality Gaps Identified**:
+- PRIMARY imprecise-input: Typo "footbal" doesn't strongly recover to football (MRR=0.333)
+- SECONDARY imprecise-input: Typo "runing" appears weak (MRR=0.250) but investigation revealed BM25 fuzzy matching IS working — the issue is multi-term query ranking (lessons matching more query terms rank higher than running-only lessons)
+
+**Key Learnings**:
+1. Original GT was completely wrong for most queries - needed substantial corrections
+2. Structure-only retrieval works well for PE once GT is correct
+3. **Synonym DRY Fix (2026-01-21)**: Removed duplicate `physical-education` definition from `physical-education.ts`. Subject name synonyms now defined ONLY in `subjects.ts`. This fixed incorrect "sport/sports" expansion that was causing `drugs-in-sport` to rank highly for athletics queries.
+4. **BM25 explain investigation**: Used ES explain API to verify fuzzy matching works correctly. The "runing" typo DOES match "running" content, but in multi-term queries, lessons matching more terms naturally rank higher.
+
+**Historical COMMIT Rankings (from Phase 1B)**:
+
+**PRIMARY Queries**:
+
+| Query | Category | Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 |
+|-------|----------|--------|--------|--------|--------|--------|
+| "dribbling ball skills" | precise-topic | dribbling-with-hands [3] | moving-with-a-ball-using-our-feet [3] | develop-moving-with-the-ball-using-our-feet-dribbling [3] | dribbling-and-keeping-control [3] | dribbling-and-keeping-possession-using-our-hands [2] |
+| "how to throw and catch" | natural-expression | throwing-and-catching [3] | throwing-with-accuracy [3] | throwing-underarm [3] | passing-and-receiving-using-our-hands [2] | overarm-throwing [2] |
+| "footbal skills primary" | imprecise-input | moving-with-a-ball-using-our-feet [3] | kicking-passing [3] | dribbling-with-our-feet-in-games [3] | passing-and-receiving-using-our-feet [3] | dribbling-to-score-a-point-in-game-activities-using-our-feet [2] |
+| "maps and teamwork outdoor activities" | cross-topic | introduce-maps-working-together [3] | using-a-map-to-follow-a-route [3] | collaborate-effectively-to-complete-a-timed-course [3] | orientating-a-map-to-locate-points [2] | create-and-use-simple-tactics-through-team-challenges [2] |
+
+**SECONDARY Queries**:
+
+| Query | Category | Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 |
+|-------|----------|--------|--------|--------|--------|--------|
+| "fitness training FITT principle..." | precise-topic | the-fitt-principle [3] | the-fitt-frequency-intensity-time-and-type-principle [3] | the-principles-of-training-and-their-application-to-a-personal-exercise-programme [3] | planning-a-training-programme [2] | design-your-programme [2] |
+| "getting fit exercise programme" | natural-expression | planning-a-training-programme [3] | promotion-of-personal-health [3] | physical-emotional-and-social-health-fitness-and-wellbeing [3] | the-relationship-between-health-and-fitness [2] | future-goals-and-healthy-habits [2] |
+| "PE athletics runing and jumping" | imprecise-input | running-for-speed-and-the-relationship-between-distance-and-time [3] | jumping-for-distance [3] | jumping-for-height [3] | running-for-distance-and-understanding-pace [2] | training-in-teams-for-personal-bests-in-long-jump-and-triple-jump [2] |
+| "fitness and athletics together" | cross-topic | the-fitt-frequency-intensity-time-and-type-principle [3] | training-with-intensity [3] | your-strengths-as-an-athlete [3] | design-your-programme [2] | training-in-teams-for-personal-bests-in-sprint-events [2] |
+
+**Key Observations from Discovery**:
+
+1. **PRIMARY dribbling**: Ball skills units (Year 1-2) have comprehensive dribbling coverage for hands and feet
+2. **PRIMARY throwing/catching**: "Ball skills: sending, receiving and dribbling" unit has `throwing-and-catching` as exact title match
+3. **PRIMARY imprecise-input**: Football skills = dribbling/kicking with feet; searched with correct spelling for semantic intent
+4. **PRIMARY cross-topic**: OAA: Orienteering unit explicitly combines maps + teamwork in title and content
+5. **SECONDARY fitness/FITT**: "Physical training: principles of training" unit has direct FITT lessons at KS4
+6. **SECONDARY cross-topic**: "Athletics: fitness development of pace or power" unit is the perfect intersection - unit title contains both concepts
+
+**Phase 1C Next**: Run benchmark, three-way comparison (COMMIT vs SEARCH vs EXPECTED), record metrics, update GT if needed.
+
+### Music Phase 1C Complete (2026-01-20)
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.781 | 0.567 | 0.417 | 0.750 |
+| SECONDARY | 0.813 | 0.854 | 0.500 | 1.000 |
+
+**GT Corrections Made**:
+- `music/primary/natural-expression.expected.ts`: Changed from timing-related to pitch-related slugs ("in tune" = pitch accuracy, not timing)
+- `music/primary/imprecise-input.expected.ts`: Replaced KS2 `syncopated-rhythms` with KS1-appropriate lessons
+- `music/secondary/cross-topic.expected.ts`: Changed from narrow (scary/tension) to composition-focused (all involve creating, not just analyzing)
+
+**Search Quality Gaps Identified**:
+- PRIMARY natural-expression: Search doesn't find pitch-related lessons well (MRR=0.125)
+- SECONDARY cross-topic: Film composition lessons ranked at 4, 6, 7 instead of top 3 (MRR=0.250)
 
 ### Maths Phase 1C Complete (2026-01-20)
 
@@ -143,6 +245,12 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 30. **MCP summaries reveal hidden relevance**: Key learning quotes essential for ranking decisions (e.g., "The gradient is a measure of how steep a line is" for "how steep is the line").
 31. **Primary maths well-structured**: Place value, fractions, multiplication units have excellent lesson coverage with clear progression.
 32. **Secondary maths dense coverage**: Quadratics, simultaneous equations, probability units have multiple highly-relevant lessons per topic.
+
+#### RE Session Findings (Session 21 — RE Phase 1C)
+
+33. **Generic queries require generic expected slugs**: Queries like "religious founders and leaders" need cross-faith content, not Sikh-only.
+34. **Bulk API data alignment issue**: See [bug report](bug-report-bulk-api-incomplete-paired-units.md). The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half). This causes GT validation failures for lessons that exist in search but not in bulk data.
+35. **Original GT can be completely wrong**: 6 of 9 RE queries had completely wrong expected slugs (Sikh-specific for generic queries).
 
 **Documentation**: [GROUND-TRUTH-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — consolidated design, troubleshooting, lessons learned
 

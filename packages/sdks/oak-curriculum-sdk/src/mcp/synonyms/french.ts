@@ -16,10 +16,8 @@
 export const frenchSynonyms = {
   // ═══════════════════════════════════════════════════════════════════════════
   // LANGUAGE IDENTITY
+  // Subject name synonyms are defined in subjects.ts (single source of truth)
   // ═══════════════════════════════════════════════════════════════════════════
-
-  /** French - the language */
-  french: ['français', 'francophone', 'french language'],
 
   /** France - the country */
   france: ['french culture', 'la france'],

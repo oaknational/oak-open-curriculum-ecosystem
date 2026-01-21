@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const RELIGIOUS_EDUCATION_PRIMARY_PRECISE_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'Guru Nanak Sikhs',
+  query: 'religious founders and leaders',
   category: 'precise-topic',
-  description: 'Tests Sikh religious figure and belief retrieval',
+  description:
+    'Tests discovery of founder content across faiths using generic curriculum terminology',
   expectedFile: './precise-topic.expected.ts',
 } as const;

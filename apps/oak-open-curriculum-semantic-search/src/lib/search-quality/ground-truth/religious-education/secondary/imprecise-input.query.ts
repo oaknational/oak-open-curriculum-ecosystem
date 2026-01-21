@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const RELIGIOUS_EDUCATION_SECONDARY_IMPRECISE_INPUT_QUERY: GroundTruthQueryDefinition = {
-  query: 'buddism and the dhama',
+  query: 'meditaton and prayer practices',
   category: 'imprecise-input',
-  description: 'Common Buddhism/Dhamma misspellings - tests fuzzy recovery',
+  description: 'Single realistic typo (meditaton) on generic RE terms - tests fuzzy recovery',
   expectedFile: './imprecise-input.expected.ts',
 } as const;

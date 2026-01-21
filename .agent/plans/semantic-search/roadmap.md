@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
 **Status**: 🔄 **Ground Truth Review** — Validating expected slugs  
-**Last Updated**: 2026-01-20  
+**Last Updated**: 2026-01-21  
 **Metrics Source**: [current-state.md](current-state.md)  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
 
@@ -11,9 +11,53 @@ This is THE authoritative roadmap for semantic search work.
 
 ---
 
-## Recent Changes (2026-01-19)
+## Recent Changes (2026-01-21)
 
-### Discovery Gate in Template
+### Religious Education Phase 1C COMPLETE
+
+All 9 RE queries evaluated with three-way comparison:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.875 | 0.677 | 0.583 | 0.750 |
+| SECONDARY | 0.640 | 0.526 | 0.467 | 0.510 |
+
+**GT Corrections Made**: All 9 `.expected.ts` files updated after independent discovery. Original GT was COMPLETELY wrong for 6 of 9 queries (Sikh-specific content for generic queries).
+
+**Bulk API Bug Identified**: Search returns Buddhist meditation content that doesn't exist in bulk data files. The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half). See [bug report](bug-report-bulk-api-incomplete-paired-units.md).
+
+### Physical Education Phase 1C COMPLETE
+
+All 8 PE queries evaluated with three-way comparison:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.833 | 0.797 | 0.583 | 0.875 |
+| SECONDARY | 0.813 | 0.725 | 0.667 | 0.787 |
+
+**GT Corrections Made**: All 8 `.expected.ts` files updated after independent discovery.
+
+**Synonym DRY Fix**: Removed duplicate subject name definitions from concept files. `subjects.ts` is now the single source of truth for subject name synonyms (e.g., `physical-education` → `pe`, `p.e.`). This fixed an issue where "sport/sports" was incorrectly expanding from PE queries.
+
+---
+
+## Previous Changes (2026-01-20)
+
+### Music Complete (22/30)
+
+All 8 Music queries evaluated with three-way comparison:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.781 | 0.567 | 0.417 | 0.750 |
+| SECONDARY | 0.813 | 0.854 | 0.500 | 1.000 |
+
+**GT Corrections**:
+- `music/primary/natural-expression`: "In tune" = pitch accuracy, not timing
+- `music/primary/imprecise-input`: KS1-appropriate (removed KS2 syncopation)
+- `music/secondary/cross-topic`: Composition-focused film music (not analysis-only)
+
+### Discovery Gate in Template (2026-01-19)
 
 The [ground-truth-session-template.md](templates/ground-truth-session-template.md) now includes:
 
@@ -62,18 +106,18 @@ Use `pnpm benchmark -s X -p Y --review` for per-query review showing ALL 4 metri
 
 ## 🔄 Phase 1: Ground Truth Review
 
-**Status**: 🔄 In Progress (20/30 subject-phases complete)  
+**Status**: 🔄 In Progress (26/30 subject-phases complete)  
 **Location**: [active/ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
 
 **Goal**: Validate ground truths until search quality is the constraining factor.
 
 Ground truths measure "did expected slugs appear?" — they must be correct before metrics are meaningful.
 
-| Complete (20) | Remaining (10) |
-|---------------|----------------|
-| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), **maths (2)** | music (2), physical-education (2), religious-education (2), science (2), spanish (2) |
+| Complete (26) | In Progress | Remaining (4) |
+|---------------|-------------|---------------|
+| art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), maths (2), music (2), physical-education (2), religious-education (2) | None | science (2), spanish (2) |
 
-**Next**: music/primary + music/secondary
+**Next**: Science Phase 0+1A+1B — CRITICAL SUBJECT with THREE queries per category (like Maths)
 
 ### Maths Phase 1C Complete (2026-01-20)
 

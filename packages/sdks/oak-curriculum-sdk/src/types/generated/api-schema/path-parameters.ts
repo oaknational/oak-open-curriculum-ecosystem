@@ -628,7 +628,6 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "type",
-        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
         "schema": {
           "type": "string",
           "enum": [
@@ -642,8 +641,8 @@ export const PATH_OPERATIONS = [
             "worksheet",
             "worksheetAnswers"
           ],
-          "example": "slideDeck",
-          "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers"
+          "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers",
+          "example": "slideDeck"
         }
       }
     ],
@@ -717,7 +716,6 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "type",
-        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
         "schema": {
           "type": "string",
           "enum": [
@@ -731,6 +729,7 @@ export const PATH_OPERATIONS = [
             "worksheet",
             "worksheetAnswers"
           ],
+          "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
           "example": "slideDeck"
         }
       },
@@ -762,7 +761,7 @@ export const PATH_OPERATIONS = [
     "method": "get",
     "operationId": "getAssets-getLessonAssets",
     "summary": "Downloadable lesson assets",
-    "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. \n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
+    "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.\n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
     "parameters": [
       {
         "in": "path",
@@ -778,7 +777,6 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "type",
-        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
         "schema": {
           "type": "string",
           "enum": [
@@ -792,6 +790,7 @@ export const PATH_OPERATIONS = [
             "worksheet",
             "worksheetAnswers"
           ],
+          "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
           "example": "slideDeck"
         }
       }
@@ -845,6 +844,7 @@ export const PATH_OPERATIONS = [
             "worksheet",
             "worksheetAnswers"
           ],
+          "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
           "example": "slideDeck"
         }
       }
@@ -1096,24 +1096,22 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "offset",
-        "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
         "schema": {
-          "type": "number",
-          "example": 50,
           "default": 0,
-          "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted."
+          "description": "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted.",
+          "type": "number",
+          "example": 50
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Offset applied to lessons within each unit (not to the unit list).",
         "schema": {
+          "default": 10,
+          "description": "Offset applied to lessons within each unit (not to the unit list).",
           "type": "number",
           "maximum": 100,
-          "example": 10,
-          "default": 10,
-          "description": "Offset applied to lessons within each unit (not to the unit list)."
+          "example": 10
         }
       }
     ],
@@ -1260,22 +1258,22 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "offset",
-        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
         "schema": {
+          "default": 0,
           "type": "number",
-          "example": 50,
-          "default": 0
+          "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+          "example": 50
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
         "schema": {
+          "default": 10,
           "type": "number",
           "maximum": 100,
-          "example": 10,
-          "default": 10
+          "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+          "example": 10
         }
       }
     ],
@@ -1349,22 +1347,22 @@ export const PATH_OPERATIONS = [
       {
         "in": "query",
         "name": "offset",
-        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
         "schema": {
+          "default": 0,
           "type": "number",
-          "example": 50,
-          "default": 0
+          "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
+          "example": 50
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
         "schema": {
+          "default": 10,
           "type": "number",
           "maximum": 100,
-          "example": 10,
-          "default": 10
+          "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
+          "example": 10
         }
       }
     ],
@@ -1612,7 +1610,8 @@ export const PATH_OPERATIONS = [
                   "version",
                   "date",
                   "changes"
-                ]
+                ],
+                "additionalProperties": false
               },
               "example": [
                 {
@@ -1670,6 +1669,7 @@ export const PATH_OPERATIONS = [
                 "date",
                 "changes"
               ],
+              "additionalProperties": false,
               "example": {
                 "version": "0.5.0",
                 "date": "2025-03-06",
