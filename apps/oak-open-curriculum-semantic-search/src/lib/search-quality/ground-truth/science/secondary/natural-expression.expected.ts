@@ -12,6 +12,8 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SCIENCE_SECONDARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'the-common-processes-of-all-living-organisms': 3,
-  'cellular-respiration': 2,
+  photosynthesis: 3,
+  'adaptations-of-plants-for-photosynthesis-absorbing-light': 3,
+  'adaptations-of-plants-for-photosynthesis-gas-exchange-and-stomata': 2,
+  'plant-nutrition': 2,
 } as const;

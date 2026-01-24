@@ -88,6 +88,8 @@ All bulk analysis code MUST use types from:
 
 **Priority**: 🔴 HIGHEST — Quick win, builds on existing work
 
+**Related**: [mfl-synonym-architecture.md](../search-quality/mfl-synonym-architecture.md) — MFL-specific DRY refactoring
+
 Classify existing ~580 synonyms into 4 buckets (from research):
 
 | Bucket | Definition | Example | ES Treatment |

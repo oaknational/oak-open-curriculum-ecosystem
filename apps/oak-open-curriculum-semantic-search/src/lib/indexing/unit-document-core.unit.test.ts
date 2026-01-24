@@ -229,5 +229,43 @@ describe('unit-document-core', () => {
       expect(doc.exam_boards).toEqual(['aqa']);
       expect(doc.exam_board_titles).toEqual(['AQA']);
     });
+
+    describe('subject_parent derivation', () => {
+      it('sets subject_parent to match subject_slug for science', () => {
+        const params = createMinimalParams({ subjectSlug: 'science' });
+
+        const doc = buildUnitDocument(params);
+
+        expect(doc.subject_parent).toBe('science');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for maths', () => {
+        const params = createMinimalParams({ subjectSlug: 'maths' });
+
+        const doc = buildUnitDocument(params);
+
+        expect(doc.subject_parent).toBe('maths');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for english', () => {
+        const params = createMinimalParams({ subjectSlug: 'english' });
+
+        const doc = buildUnitDocument(params);
+
+        expect(doc.subject_parent).toBe('english');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for history', () => {
+        const params = createMinimalParams({ subjectSlug: 'history' });
+
+        const doc = buildUnitDocument(params);
+
+        expect(doc.subject_parent).toBe('history');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+    });
   });
 });

@@ -58,6 +58,7 @@ Supporting plans can run in parallel:
 | Plan | Description | Status |
 |------|-------------|--------|
 | [mfl-multilingual-embeddings.md](mfl-multilingual-embeddings.md) | Fix MFL search (0.19-0.29 MRR) | 📋 Pending |
+| [mfl-synonym-architecture.md](mfl-synonym-architecture.md) | DRY refactoring of MFL synonyms | 📋 Pending |
 
 ---
 

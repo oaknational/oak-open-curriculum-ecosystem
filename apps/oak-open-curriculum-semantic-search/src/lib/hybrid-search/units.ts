@@ -92,6 +92,7 @@ function deriveUnitFromRollup(hit: EsHit<SearchUnitRollupDoc>): SearchUnitsIndex
     unit_slug: hit._source.unit_slug,
     unit_title: hit._source.unit_title,
     subject_slug: hit._source.subject_slug,
+    subject_parent: hit._source.subject_parent,
     key_stage: hit._source.key_stage,
     years: hit._source.years,
     lesson_ids: hit._source.lesson_ids,

@@ -13,4 +13,6 @@ import type { ExpectedRelevance } from '../../types';
 
 export const COOKING_NUTRITION_SECONDARY_PRECISE_TOPIC_EXPECTED: ExpectedRelevance = {
   'macronutrients-fibre-and-water': 3,
+  micronutrients: 3,
+  'nutritional-needs-throughout-life': 2,
 } as const;

@@ -44,7 +44,6 @@ import { RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES } from '../religious-education/
 import { RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES } from '../religious-education/secondary';
 import { SCIENCE_PRIMARY_ALL_QUERIES } from '../science/primary';
 import { SCIENCE_SECONDARY_ALL_QUERIES } from '../science/secondary';
-import { SCIENCE_KS4_ALL_QUERIES } from '../science/secondary/ks4';
 import { SPANISH_PRIMARY_ALL_QUERIES } from '../spanish/primary';
 import { SPANISH_SECONDARY_ALL_QUERIES } from '../spanish/secondary';
 
@@ -143,7 +142,7 @@ export const GROUND_TRUTH_ENTRIES: readonly GroundTruthEntry[] = [
   {
     subject: 'science',
     phase: 'secondary',
-    queries: [...SCIENCE_SECONDARY_ALL_QUERIES, ...SCIENCE_KS4_ALL_QUERIES],
+    queries: SCIENCE_SECONDARY_ALL_QUERIES,
   },
   // Spanish
   { subject: 'spanish', phase: 'primary', queries: SPANISH_PRIMARY_ALL_QUERIES },

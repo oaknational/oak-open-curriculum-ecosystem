@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SPANISH_SECONDARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'Spanish verbs and nouns together',
+  query: 'Spanish adjectives and noun agreement',
   category: 'cross-topic',
-  description: 'Tests intersection of verb conjugation with noun/article agreement',
+  description: 'Tests intersection of adjective forms with noun gender/number agreement',
   expectedFile: './cross-topic.expected.ts',
 } as const;

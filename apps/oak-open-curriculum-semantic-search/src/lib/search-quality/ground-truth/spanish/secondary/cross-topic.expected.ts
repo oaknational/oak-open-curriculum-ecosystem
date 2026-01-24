@@ -12,6 +12,10 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'un-estudiante-inmigrante-plural-nouns-indefinite-articles': 3,
-  'las-fallas-de-valencia-alguno-meaning-some': 2,
+  // Search found PERFECT matches - lessons explicitly about adjective + noun agreement (max 5)
+  'places-in-the-spanish-speaking-world-plural-adjective-placement-and-agreement': 3, // Search #1 - explicit
+  'people-singular-adjective-placement-and-agreement': 3, // Search #2 - explicit
+  'day-of-the-teacher-plural-adjective-agreement': 3, // Search #3 - explicit
+  'en-una-fiesta-de-cumpleanos-adjective-position-and-agreement': 2, // Search #4 - explicit
+  'how-are-you-feeling-singular-gender-adjective-agreement': 2, // Phase 1B - gender adjective agreement
 } as const;

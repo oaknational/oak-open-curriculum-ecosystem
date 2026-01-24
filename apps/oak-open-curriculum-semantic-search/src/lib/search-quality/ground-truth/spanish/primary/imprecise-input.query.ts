@@ -10,8 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SPANISH_PRIMARY_IMPRECISE_INPUT_QUERY: GroundTruthQueryDefinition = {
-  query: 'spansh vocabulary primary',
+  query: 'spansh adjective agreemnt',
   category: 'imprecise-input',
-  description: 'Misspelling of Spanish - tests fuzzy recovery',
+  description:
+    'Misspellings of Spanish and agreement - tests fuzzy recovery on real curriculum concept',
   expectedFile: './imprecise-input.expected.ts',
 } as const;

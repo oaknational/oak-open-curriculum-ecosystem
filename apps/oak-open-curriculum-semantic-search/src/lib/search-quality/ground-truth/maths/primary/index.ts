@@ -1,8 +1,11 @@
 /**
- * Primary ground truth queries - 12 queries, 3 per category.
+ * Primary ground truth queries - 13 queries (3 per category + 1 control).
  *
  * This index combines query definitions and expected relevance using
  * combineGroundTruth() at runtime.
+ *
+ * precise-topic-4 is a control query for imprecise-input-2, with same expected
+ * slugs but no typos, to isolate fuzzy matching and tokenization effects.
  *
  * @packageDocumentation
  */
@@ -12,6 +15,7 @@ import { combineGroundTruth, type GroundTruthQuery } from '../../types';
 import { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
 import { MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY } from './precise-topic-2.query';
 import { MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY } from './precise-topic-3.query';
+import { MATHS_PRIMARY_PRECISE_TOPIC_4_QUERY } from './precise-topic-4.query';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY } from './natural-expression-2.query';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_3_QUERY } from './natural-expression-3.query';
@@ -26,6 +30,7 @@ import { MATHS_PRIMARY_CROSS_TOPIC_3_QUERY } from './cross-topic-3.query';
 import { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
 import { MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED } from './precise-topic-2.expected';
 import { MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED } from './precise-topic-3.expected';
+import { MATHS_PRIMARY_PRECISE_TOPIC_4_EXPECTED } from './precise-topic-4.expected';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_2_EXPECTED } from './natural-expression-2.expected';
 import { MATHS_PRIMARY_NATURAL_EXPRESSION_3_EXPECTED } from './natural-expression-3.expected';
@@ -42,6 +47,7 @@ export const MATHS_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED),
   combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED),
   combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED),
+  combineGroundTruth(MATHS_PRIMARY_PRECISE_TOPIC_4_QUERY, MATHS_PRIMARY_PRECISE_TOPIC_4_EXPECTED), // control for imprecise-input-2
   // Natural expression queries
   combineGroundTruth(
     MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY,
@@ -75,6 +81,7 @@ export const MATHS_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
 export { MATHS_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
 export { MATHS_PRIMARY_PRECISE_TOPIC_2_QUERY } from './precise-topic-2.query';
 export { MATHS_PRIMARY_PRECISE_TOPIC_3_QUERY } from './precise-topic-3.query';
+export { MATHS_PRIMARY_PRECISE_TOPIC_4_QUERY } from './precise-topic-4.query';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY } from './natural-expression-2.query';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_3_QUERY } from './natural-expression-3.query';
@@ -89,6 +96,7 @@ export { MATHS_PRIMARY_CROSS_TOPIC_3_QUERY } from './cross-topic-3.query';
 export { MATHS_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
 export { MATHS_PRIMARY_PRECISE_TOPIC_2_EXPECTED } from './precise-topic-2.expected';
 export { MATHS_PRIMARY_PRECISE_TOPIC_3_EXPECTED } from './precise-topic-3.expected';
+export { MATHS_PRIMARY_PRECISE_TOPIC_4_EXPECTED } from './precise-topic-4.expected';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_2_EXPECTED } from './natural-expression-2.expected';
 export { MATHS_PRIMARY_NATURAL_EXPRESSION_3_EXPECTED } from './natural-expression-3.expected';

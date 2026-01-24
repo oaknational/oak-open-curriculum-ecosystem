@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'living organism processes',
+  query: 'how do plants make their own food',
   category: 'natural-expression',
-  description: 'Living organism = life processes - tests vocabulary bridging',
+  description: 'Tests vocabulary bridging from everyday question to photosynthesis content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

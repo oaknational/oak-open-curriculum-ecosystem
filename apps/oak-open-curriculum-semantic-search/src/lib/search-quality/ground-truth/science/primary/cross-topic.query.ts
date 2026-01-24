@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_PRIMARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'animals and food together',
+  query: 'habitats and food chains',
   category: 'cross-topic',
-  description: 'Tests intersection of animal classification with nutrition/diet',
+  description: 'Tests finding lessons that combine habitat concepts with food chain concepts',
   expectedFile: './cross-topic.expected.ts',
 } as const;

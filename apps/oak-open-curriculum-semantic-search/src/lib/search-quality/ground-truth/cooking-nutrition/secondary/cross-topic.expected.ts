@@ -12,6 +12,7 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const COOKING_NUTRITION_SECONDARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'eat-well-now': 3,
-  'making-better-food-and-drink-choices': 2,
+  'making-mushroom-bean-burgers-with-flatbreads': 3,
+  'making-sweet-potato-katsu-curry': 3,
+  'making-pea-and-mint-falafel-with-tzatziki': 2,
 } as const;

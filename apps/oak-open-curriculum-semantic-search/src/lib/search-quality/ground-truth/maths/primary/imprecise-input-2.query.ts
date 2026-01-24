@@ -10,9 +10,9 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_PRIMARY_IMPRECISE_INPUT_2_QUERY: GroundTruthQueryDefinition = {
-  query: 'multiplikation timetables',
+  query: 'multiplikation timetables year 3',
   category: 'imprecise-input',
   description:
-    'Tests typo recovery: phonetic substitution (k for c) combined with variant spelling "timetables" instead of "times tables"',
+    'Tests typo recovery: phonetic substitution (k for c) combined with variant spelling "timetables" instead of "times tables", with year context',
   expectedFile: './imprecise-input-2.expected.ts',
 } as const;

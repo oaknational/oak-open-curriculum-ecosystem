@@ -5,7 +5,7 @@
 **Status**: 📋 Pending — After Level 2  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  
-**Last Updated**: 2026-01-17  
+**Last Updated**: 2026-01-23  
 **Research**: [elasticsearch-approaches.md](../../../research/elasticsearch/oak-data/elasticsearch-approaches.md)
 
 ---
@@ -43,6 +43,9 @@ All items must be attempted and documented before this level can be declared "ex
 - [ ] Query-time synonym expansion (vs index-time)
 - [ ] Relationship channel (dedicated field + retriever)
 - [ ] kNN vector search evaluation
+- [ ] **Fuzziness tuning** — Reduce false positives from AUTO edit distance
+- [x] **minimum_should_match tuning** — ✅ IMPLEMENTED (2026-01-23): Changed from `75%` to `2<65%`
+- [ ] **Domain term boosting** — Boost matches on curriculum vocabulary (HIGHEST priority for fuzzy false positives)
 
 ---
 
@@ -205,6 +208,202 @@ Without negative controls:
 | Wrong subject | Demote | "maths fractions" matching English lesson |
 | Wrong phase | Demote | "KS2 photosynthesis" matching KS4 content |
 | Dangerous mismatch | Exclude | Sensitive content in wrong context |
+
+---
+
+## 🟡 MEDIUM: Fuzziness Tuning
+
+### The Problem
+
+`fuzziness: AUTO` applies edit distance based on term length:
+- 0 edits for 1-2 char terms
+- 1 edit for 3-5 char terms
+- **2 edits for 6+ char terms**
+
+For educational content, this causes false positives when typos look like different valid terms:
+
+| Query Term | Intended | Fuzzy Match | Edit Distance |
+|------------|----------|-------------|---------------|
+| "magnits" | magnets | magnify/magnification | 2 |
+| "electrisity" | electricity | (correct) | 2 |
+
+**Real example**: Query "electrisity and magnits" returns microscopy lessons (#1-3) because "magnits" fuzzy-matches "magnification" (both share "magni-" prefix, edit distance = 2).
+
+### Elasticsearch Best Practices
+
+From ES documentation:
+- 80% of human misspellings have edit distance of 1
+- Edit distance 2 is "overly permissive" for long words
+- **Recommendation**: Use `fuzziness: 1` instead of `AUTO` for better precision
+
+### Mitigation Options
+
+| Option | Pros | Cons |
+|--------|------|------|
+| `fuzziness: 1` | Eliminates 2-edit false positives | Misses legitimate 2-edit typos |
+| `prefix_length: 3` | Keeps initial chars fixed | Doesn't help if prefix matches |
+| Explicit typo synonyms | Precise control | Requires curation |
+| Domain term boosting | Boosts curriculum vocab | Doesn't block false positives |
+
+### Experiment Design
+
+1. **Baseline**: Current `fuzziness: AUTO`
+2. **Test A**: `fuzziness: 1` (fixed)
+3. **Test B**: `fuzziness: AUTO` with `prefix_length: 3`
+4. **Test C**: Combine with domain term boosting
+5. **Measure**: MRR for imprecise-input category specifically
+
+**Note**: AUTO thresholds (3 and 6 char boundaries) are hard-coded in ES and cannot be configured.
+
+---
+
+## 🟡 MEDIUM: minimum_should_match Tuning
+
+### The Problem
+
+Current configuration uses `minimum_should_match: '75%'` for BM25 lesson queries. For 2-term queries, this requires **both terms to match** (75% of 2 = 1.5, rounded to 2).
+
+This breaks cross-topic queries:
+
+| Query | Terms | Required | Problem |
+|-------|-------|----------|---------|
+| "electricity and magnets" | 2 | Both | Specialized lessons matching only one term are excluded |
+| "plants and animals" | 2 | Both | Cross-topic lessons penalized |
+
+**Real example**: Lessons about "electromagnets" (which heavily mention BOTH terms) rank higher than lessons specifically about "electricity" or "magnets" individually — even when those individual lessons are more relevant.
+
+### Elasticsearch Best Practices
+
+From ES documentation, several formats are available:
+
+```
+// Fixed: all terms required
+"minimum_should_match": "100%"
+
+// Flexible: allow some terms to be missing
+"minimum_should_match": "50%"
+
+// Conditional: scale with query size
+"minimum_should_match": "2<50%"  // ≤2 terms: all required; >2 terms: 50% required
+
+// Multiple conditions
+"minimum_should_match": "2<-25% 9<-3"
+```
+
+### Implemented Configuration (2026-01-23)
+
+**Implemented: `2<65%`**
+
+This conditional expression means:
+- ≤2 terms: all required (same as previous)
+- >2 terms: 65% required (more lenient than previous 75%)
+
+| Terms | Previous (75%) | With `2<65%` | Change |
+|-------|----------------|--------------|--------|
+| 2 | 2 required | 2 required | Neutral |
+| 3 | 3 required | 2 required | **+1 term flexibility** |
+| 4 | 3 required | 3 required | Neutral |
+| 5 | 4 required | 4 required | Neutral |
+
+**Rationale**: `2<65%` is strictly better for 3-term queries while being neutral for 2-term queries. It doesn't make anything worse and helps queries like "carbon cycle in ecosystems" (3 terms → only 2 required).
+
+**Location**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts:227`
+
+```typescript
+// Previous
+minimum_should_match: '75%'
+
+// Implemented (2026-01-23)
+minimum_should_match: '2<65%'
+```
+
+### Alternative Options
+
+```typescript
+// Option A: Lower threshold (may reduce precision)
+minimum_should_match: '50%'
+
+// Option B: More aggressive conditional
+minimum_should_match: '2<50%'  // ≤2 terms: all; >2 terms: half
+
+// Option C: Allow 1 missing term always
+minimum_should_match: '-1'
+```
+
+### Experiment Design
+
+1. **Baseline**: Current `75%`
+2. **Test A**: `2<66%` (recommended — neutral for 2-term, better for 3-term)
+3. **Test B**: `50%` (flat reduction)
+4. **Test C**: `-1` (allow 1 missing term)
+5. **Measure**: Aggregate MRR, cross-topic MRR, precision@3 trade-off
+
+### Trade-offs
+
+| Threshold | 2-term | 3-term | Precision | Notes |
+|-----------|--------|--------|-----------|-------|
+| 75% | Both required | All required | High | Current |
+| **2<66%** | Both required | 2/3 required | High | **Recommended** |
+| 50% | 1/2 required | 2/3 required | Medium | More aggressive |
+| -1 | 1 can miss | 1 can miss | Medium | Simple rule |
+
+### Note on 2-term Cross-Topic Queries
+
+The `2<66%` configuration does NOT help 2-term cross-topic queries like "electricity and magnets" — these still require both terms. Fixing this requires either:
+1. Using `1<66%` or `50%` (more aggressive, may hurt precision)
+2. **Domain term boosting** (preferred long-term solution) — boost curriculum vocabulary so specialized lessons rank higher even when matching only one term
+
+---
+
+## 🟡 MEDIUM: Domain Term Boosting
+
+### The Problem
+
+Fuzzy matching treats all terms equally. When a typo happens to match a valid but unrelated scientific term, there's no signal to prefer curriculum-specific vocabulary.
+
+### Solution: Boost Known Curriculum Terms
+
+Add a dedicated retriever or scoring function that boosts matches on curriculum vocabulary:
+
+```json
+{
+  "function_score": {
+    "query": { "/* main query */" },
+    "functions": [
+      {
+        "filter": { "terms": { "keywords": ["magnets", "electricity", "electromagnets"] } },
+        "weight": 1.5
+      }
+    ],
+    "boost_mode": "multiply"
+  }
+}
+```
+
+### Implementation Options
+
+| Approach | Complexity | Effectiveness |
+|----------|------------|---------------|
+| Terms boost in query | Low | Medium - requires known term lists |
+| Dedicated `curriculum_terms` field | Medium | High - can use synonyms |
+| Query rules for known patterns | Medium | High - deterministic |
+| ELSER semantic disambiguation | Low | Variable - may already help |
+
+### Vocabulary Sources
+
+The curriculum SDK already contains structured vocabulary:
+- Lesson keywords (from API)
+- Unit titles
+- Subject-specific synonyms
+- Thread names
+
+These can be indexed into a dedicated field for boosting.
+
+### Experiment Design
+
+1. **Index**: Add `curriculum_terms` field populated from keywords
+2. **Query**: Add boost for matches on this field
+3. **Measure**: Impact on false positive rate for imprecise-input queries
 
 ---
 

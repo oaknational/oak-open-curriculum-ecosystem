@@ -4,7 +4,7 @@ Practical guide for running search relevance experiments.
 
 **Canonical protocol**: [EXPERIMENTAL-PROTOCOL.md](../EXPERIMENTAL-PROTOCOL.md) — Read this first  
 **Formal framework**: [ADR-081: Search Approach Evaluation Framework](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)  
-**Template**: [Search Experiment Template](../experiments/template-for-search-experiments.md)
+**Template**: [Search Experiment Template](../archive/experiments/template-for-search-experiments.md) (archived)
 
 ---
 

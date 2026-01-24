@@ -71,6 +71,10 @@ export const OAK_UNIT_ROLLUP_MAPPING = {
         type: 'keyword',
         normalizer: 'oak_lower',
       },
+      subject_parent: {
+        type: 'keyword',
+        normalizer: 'oak_lower',
+      },
       subject_title: {
         type: 'keyword',
         normalizer: 'oak_lower',

@@ -12,6 +12,10 @@ export const keyStageSynonyms = {
   // Early Years Foundation Stage (from OALA)
   eyfs: ['early years foundation stage', 'early years', 'foundation stage', 'reception', 'nursery'],
 
+  keystage: ['key stage', 'key-stage', 'ks'],
+
+  // Note, this is wrong, there is no 1:1 mapping between key stages and years.
+  // https://www.gov.uk/national-curriculum
   // Key Stage 1 - Years 1-2
   ks1: [
     'key stage 1',

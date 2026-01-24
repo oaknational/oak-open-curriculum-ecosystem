@@ -26,6 +26,7 @@ function createTestLessonDoc(slug: string): SearchLessonsIndexDoc {
     lesson_slug: slug,
     lesson_title: `Test Lesson ${slug}`,
     subject_slug: 'maths',
+    subject_parent: 'maths',
     key_stage: 'ks4',
     unit_ids: ['test-unit'],
     unit_titles: ['Test Unit'],

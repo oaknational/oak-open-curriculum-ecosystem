@@ -4,7 +4,7 @@
  * Handles execution of status, setup, and reset commands.
  */
 
-import { verifyConnection, listIndexes, runSetup, runReset } from './index.js';
+import { verifyConnection, listIndexes, runSetup, runReset, runSynonymsUpdate } from './index.js';
 import { esClient } from '../../es-client.js';
 import { readIndexMeta } from '../index-meta.js';
 import { ingestLogger } from '../../logger';
@@ -172,4 +172,57 @@ async function executeSetupOrReset(
   const result: SetupResult = command === 'reset' ? await runReset(config) : await runSetup(config);
 
   return result;
+}
+
+/**
+ * Executes the synonyms update command.
+ *
+ * Updates the synonym set without touching indexes.
+ * Uses the Elasticsearch Synonyms API for live updates.
+ *
+ * @returns Exit code (0 for success, 1 for failure)
+ */
+export async function executeSynonymsCommand(): Promise<number> {
+  const esUrl = process.env.ELASTICSEARCH_URL;
+  const esKey = process.env.ELASTICSEARCH_API_KEY;
+
+  if (!esUrl || !esKey) {
+    ingestLogger.error('Missing environment variables', {
+      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
+    });
+    return 1;
+  }
+
+  const config: ElasticsearchConfig = {
+    elasticsearchUrl: esUrl,
+    elasticsearchApiKey: esKey,
+    verbose: true,
+  };
+
+  // Verify connection first
+  const connection: ConnectionResult = await verifyConnection(config);
+  if (!connection.connected) {
+    ingestLogger.error('Connection failed', { error: connection.error });
+    return 1;
+  }
+
+  ingestLogger.info('Connected to Elasticsearch', {
+    cluster: connection.clusterName,
+    version: connection.version,
+  });
+
+  // Update synonyms
+  const result = await runSynonymsUpdate(config);
+
+  if (!result.success) {
+    ingestLogger.error('Synonym update failed', { error: result.error });
+    return 1;
+  }
+
+  ingestLogger.info('Synonyms updated successfully', {
+    count: result.count,
+    note: 'Search analyzers reloaded automatically (no reindexing required)',
+  });
+
+  return 0;
 }

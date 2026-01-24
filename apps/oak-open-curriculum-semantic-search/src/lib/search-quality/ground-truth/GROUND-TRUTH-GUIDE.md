@@ -2,7 +2,7 @@
 
 **The single source of truth for designing, reviewing, and improving ground truths.**
 
-**Last Updated**: 2026-01-20
+**Last Updated**: 2026-01-23
 
 ---
 
@@ -77,12 +77,29 @@ Before writing any ground truth, ask:
 
 ### Query Design Rules
 
-| Rule           | Requirement                     | Example                       |
-| -------------- | ------------------------------- | ----------------------------- |
-| Length         | 3-7 words                       | "cell structure and function" |
-| Realistic      | Would a teacher type this?      | Yes: "teach fractions year 4" |
-| Specific       | 2-4 lessons highly relevant     | Not: "maths" (too broad)      |
-| Differentiated | Query adds value beyond filters | Not: "art lessons secondary"  |
+| Rule                   | Requirement                     | Example                                     |
+| ---------------------- | ------------------------------- | ------------------------------------------- |
+| Length                 | 3-7 words                       | "cell structure and function"               |
+| Realistic              | Would a teacher type this?      | Yes: "teach fractions year 4"               |
+| Specific               | 2-4 lessons highly relevant     | Not: "maths" (too broad)                    |
+| Differentiated         | Query adds value beyond filters | Not: "art lessons secondary"                |
+| **Curriculum-aligned** | Terms must exist in curriculum  | Not: "spanish vocabulary" (no such concept) |
+
+### Pre-Design Verification (MANDATORY)
+
+Before writing any query, verify the concept exists in the curriculum with sufficient coverage:
+
+```bash
+# 1. List all units to understand curriculum structure
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle)"' bulk-downloads/{subject}-{phase}.json
+
+# 2. Search for your query terms in lesson slugs
+jq -r '.sequence[].unitLessons[].lessonSlug' bulk-downloads/{subject}-{phase}.json | grep -i "your-term"
+
+# 3. If < 3 matches, the query lacks coverage — redesign
+```
+
+**Example**: "spanish vocabulary" returns 0 matches; "adjective agreement" returns 5 matches. Design queries around concepts that exist.
 
 ### Expected Results Rules
 
@@ -422,11 +439,58 @@ pnpm benchmark --verbose     # Stage 3: Measure against search
 ### From maths Phase 1C (Session 20)
 
 - **Query register must match expected content level**: "Finding the unknown number" is basic/informal language that maps to LINEAR equations, not advanced quadratic solving. Expected slugs should match the sophistication level implied by query language.
-- **Compound word tokenization breaks fuzzy matching**: "timetables" (one word) vs "times table" (two words) is NOT a fuzzy matching issue — it's a tokenization mismatch. Fuzzy handles character edits within tokens, not word boundary changes. With `minimum_should_match: 75%`, if one token completely fails to match, the whole query returns zero results.
+- **Compound word tokenization breaks fuzzy matching**: "timetables" (one word) vs "times table" (two words) is NOT a fuzzy matching issue — it's a tokenization mismatch. Fuzzy handles character edits within tokens, not word boundary changes. With `minimum_should_match: 75%`, if one token completely fails to match, the whole query returns zero results. See [ADR-103](../../../../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md).
 - **Cross-topic ground truths must reflect curriculum reality**: If a cross-topic intersection (e.g., "fractions + money") doesn't exist strongly in the curriculum, the GT cannot specify lessons that don't exist. The GT should reflect what the curriculum CAN provide, not an ideal that the curriculum doesn't support.
 - **Search can outperform manual discovery**: For "finding the unknown number," search correctly prioritised linear equations while human COMMIT had advanced quadratics. The Phase 1C three-way comparison revealed this — search was RIGHT.
 - **Secondary outperforms Primary for a reason**: Secondary content uses standardised mathematical terminology. Primary uses varied, child-friendly language creating vocabulary fragmentation. This is structural, not a search bug.
 - **Imprecise-input divide**: Secondary typo recovery works well (terms are distinctive). Primary typo recovery struggles (common words + `minimum_should_match` create compound failures).
+
+### From RE Phase 1C (Session 21)
+
+- **Generic queries require generic expected slugs**: Queries like "religious founders and leaders" need cross-faith content, not Sikh-only. The original GT was COMPLETELY wrong for 6 of 9 queries.
+- **Bulk API data alignment issue**: The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half). This causes GT validation failures for lessons that exist in search but not in bulk data.
+
+### From PE Phase 1C (Session 21)
+
+- **Synonym DRY fix**: Subject name synonyms must be defined ONLY in `subjects.ts`. Duplicate definitions in concept files cause incorrect expansion (e.g., "sport/sports" expanding incorrectly from PE queries).
+- **BM25 explain investigation**: ES explain API can verify fuzzy matching works correctly. Multi-term query ranking naturally prioritises lessons matching more terms.
+
+### From Science Phase 1B-1C (Sessions 22-23)
+
+- **Subject hierarchy not modelled in ES**: Physics/chemistry/biology/combined-science are conceptually "Science" but have different `subject_slug` values. 44% of Science Secondary expected slugs were excluded by the filter. Fixed by adding `subject_parent` field. See [ADR-101](../../../../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md).
+- **Fuzzy edit distance 2 causes false positives**: "magnits" (intended: magnets) matches "magnify/magnification" because both share "magni-" prefix and AUTO allows 2 edits for 6+ char words. See [ADR-103](../../../../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md).
+- **Control queries diagnose problem type**: Adding "electricity and magnets" (no typos) confirmed the issue was fuzzy matching, not search architecture.
+- **GT may be wrong, not search**: "energy transfers and efficiency" scored low because GT had work/power/KE lessons; search correctly found efficiency lessons. MRR 0.333 → 1.000 after correction.
+- **`minimum_should_match` conditional syntax**: Changed from `75%` to `2<65%` (≤2 terms: all required; >2 terms: 65%). Neutral for 2-term, better for 3+ term queries. See [ADR-102](../../../../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md).
+- **Domain term boosting is the long-term solution**: Fuzzy false positives need curriculum vocabulary boosting, not just threshold tuning. Documented for future implementation. See [ADR-104](../../../../../../docs/architecture/architectural-decisions/104-domain-term-boosting.md).
+
+### From Spanish Phase 1C (Session 24)
+
+- **Query-data alignment is critical**: Queries must use terminology that actually exists in the curriculum. "spansh vocabulary primary" had 0% hits because "vocabulary" doesn't exist in Spanish curriculum — it's organized by **grammar concepts** (ser/estar, tener, adjective agreement).
+- **Curriculum analysis reveals structure**: Spanish primary teaches verb conjugations (soy/es/eres, estoy/está, tengo/tiene), adjective agreement, and sound-symbol correspondences. Queries must align with this structure.
+- **25% zero-hit rate = query design problem**: Original PRIMARY queries had 25% zero-hit rate. After aligning queries with curriculum terminology: 0% zero-hit, MRR 0.375 → 1.000.
+- **MFL subjects have no transcripts**: Spanish (like French/German) relies 100% on structure-based retrieval (titles, keywords, key learning). Queries must match this metadata.
+- **Redesigned queries**:
+  - "teach spanish greetings to children" (1 match) → "teaching estar for states and location KS2" (5+ matches)
+  - "spansh vocabulary primary" (0 matches) → "spansh adjective agreemnt" (5 matches)
+- **Always verify query coverage BEFORE designing GT**: Use bulk data exploration to confirm the query concept exists and has sufficient coverage (3-5 lessons minimum).
+
+### Phase 1A Query Analysis Framework
+
+Phase 1A (introduced Session 19) catches query design issues BEFORE exploring data:
+
+| Check              | Question                                          |
+| ------------------ | ------------------------------------------------- |
+| Capability test    | Does this query test what the category claims?    |
+| Register match     | Does query language match expected content level? |
+| Achievability      | Can fuzzy matching handle this imprecise-input?   |
+| Curriculum reality | Does the cross-topic intersection exist?          |
+
+Common design issues caught by Phase 1A:
+
+- **Miscategorised queries**: "the bit where you complete the square" contains curriculum terminology — not a vocabulary bridge
+- **Compound word tokenization**: "timetables" vs "times table" is not achievable with fuzzy matching alone
+- **Non-existent intersections**: Cross-topic queries for concept combinations not in curriculum
 
 ---
 
@@ -511,8 +575,22 @@ export const {SUBJECT}_{PHASE}_{CATEGORY}_EXPECTED: ExpectedRelevance = {
 
 ## Related Documents
 
-| Document                                                                                                         | Purpose                                     |
-| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| [ADR-085](../../../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Validation discipline and three-stage model |
-| [Review Checklist](../../../../../../.agent/plans/semantic-search/active/ground-truth-review-checklist.md)       | Current review progress                     |
-| [Session Prompt](../../../../../../.agent/prompts/semantic-search/semantic-search.prompt.md)                     | Session entry point                         |
+### Architectural Decision Records
+
+| ADR                                                                                                                                                          | Purpose                                               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| [ADR-085: Ground Truth Validation Discipline](../../../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)         | Three-stage validation model, 16 checks, design rules |
+| [ADR-098: Ground Truth Registry](../../../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)                                   | Registry structure, split file architecture           |
+| [ADR-101: Subject Hierarchy for Search Filtering](../../../../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | `subject_parent` field for Science KS4                |
+| [ADR-102: Conditional minimum_should_match](../../../../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md)             | Query tuning for multi-term queries                   |
+| [ADR-103: Fuzzy Matching Limitations](../../../../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md)                         | Tokenization vs character edits, compound words       |
+| [ADR-104: Domain Term Boosting](../../../../../../docs/architecture/architectural-decisions/104-domain-term-boosting.md)                                     | Future solution for fuzzy false positives (proposed)  |
+
+### Session and Process Documents
+
+| Document                                                                                                      | Purpose                                    |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| [Review Checklist](../../../../../../.agent/plans/semantic-search/active/ground-truth-review-checklist.md)    | Current review progress                    |
+| [Session Template](../../../../../../.agent/plans/semantic-search/templates/ground-truth-session-template.md) | LINEAR execution protocol with COMMIT step |
+| [Session Prompt](../../../../../../.agent/prompts/semantic-search/semantic-search.prompt.md)                  | Session entry point                        |
+| [IR-METRICS.md](../../../docs/IR-METRICS.md)                                                                  | Metric definitions (MRR, NDCG, P@3, R@10)  |

@@ -12,7 +12,8 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SCIENCE_SECONDARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'predator-prey-relationships': 3,
-  'adaptations-of-predators-and-prey': 3,
-  'food-webs': 2,
+  'energy-changes-in-reactions': 3,
+  'exothermic-and-endothermic-chemical-reactions': 3,
+  'breaking-and-making-bonds': 2,
+  'why-chemical-reactions-happen': 2,
 } as const;

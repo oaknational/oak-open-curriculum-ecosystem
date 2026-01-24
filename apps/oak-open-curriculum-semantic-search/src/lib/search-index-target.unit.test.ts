@@ -90,6 +90,7 @@ describe('search index target helpers', () => {
       lesson_slug: 'lesson-one',
       lesson_title: 'Test Lesson',
       subject_slug: 'maths',
+      subject_parent: 'maths',
       key_stage: 'ks3',
       unit_ids: ['unit-1'],
       unit_titles: ['Test Unit'],

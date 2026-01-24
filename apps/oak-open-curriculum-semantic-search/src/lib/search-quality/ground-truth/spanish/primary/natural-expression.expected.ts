@@ -12,6 +12,10 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SPANISH_PRIMARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'greetings-the-verb-estar': 3,
-  'how-are-you-today-today-estoy-and-estas-for-states': 2,
+  // Lessons teaching estar for states and/or location
+  'how-are-you-today-today-estoy-and-estas-for-states': 3, // Explicit: estar for states
+  'how-are-you-today-and-usually-estar-for-states-and-ser-for-traits': 3, // States vs traits
+  'in-class-estoy-and-esta-for-location': 3, // Explicit: estar for location
+  'are-you-here-estas-for-location': 2, // Location usage
+  'greetings-the-verb-estar': 2, // Introduces estar
 } as const;

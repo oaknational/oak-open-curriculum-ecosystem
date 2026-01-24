@@ -130,21 +130,15 @@ export const germanSynonyms = {
   // PRONOUNS
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /** Du - informal you (singular) */
-  du: ['informal you singular'],
-
-  /** Ihr - informal you (plural) */
-  ihr: ['informal you plural'],
-
-  /** Sie - formal you */
-  sie: ['formal you', 'polite form'],
+  // NOTE: German pronouns (du, ihr, sie) removed.
+  // They were definitions, not synonyms. See bucket-c-analysis.ts.
 
   // ═══════════════════════════════════════════════════════════════════════════
   // NEGATION
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /** Negation - not, never, nothing */
-  negation: ['negative', 'nicht', 'kein', 'nie'],
+  /** Negation - making sentences negative */
+  negation: ['negative', 'making negative', 'not'],
 } as const;
 
 export type GermanSynonyms = typeof germanSynonyms;

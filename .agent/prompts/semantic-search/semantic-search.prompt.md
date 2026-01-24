@@ -1,68 +1,160 @@
 # Semantic Search — Ground Truth Review Protocol
 
-**Status**: Ground Truth Review — 26/30 complete  
-**Next Session**: Science (Phase 0+1A+1B) — THREE queries per category  
-**Last Updated**: 2026-01-21 (RE Phase 1C complete)
+**Status**: 🔄 **Ground Truth Review — Quality Improvement Pass**  
+**This Session**: **Continue Priority 3+ queries, MFL refinement**  
+**Last Updated**: 2026-01-24
 
 ---
 
-## 🎯 NEXT SESSION: Science (CRITICAL SUBJECT)
+## ✅ Current State: Validation Passing
 
-**Scope**: science/primary + science/secondary (2 subject-phases, **24 queries total** — 3 per category)
+### 1. Validation Status
 
-**Status**: Phase 0+1A+1B required (full protocol, like Maths)
-
-### ⚠️ SCIENCE IS A CRITICAL SUBJECT — SPECIAL REQUIREMENTS ⚠️
-
-Like Maths, Science is a high-importance subject requiring **THREE queries per category** instead of one:
-
-| Category | Query Count | Purpose |
-|----------|-------------|---------|
-| precise-topic | 3 | Curriculum vocabulary (physics, chemistry, biology terms) |
-| natural-expression | 3 | Informal → formal bridging |
-| imprecise-input | 3 | Typo resilience |
-| cross-topic | 3 | Cross-discipline (physics+chemistry, etc.) |
-
-**Requirements**:
-
-1. **100% certainty** — You must be completely certain you have found the BEST possible answers
-2. **Fresh analysis for EVERY query** — 24 independent discovery cycles, no copying
-3. **Exhaustive discovery** — Use BOTH MCP tools AND bulk data for EVERY query
-4. **Complete unit review** — Check ALL science units, not just those with obvious titles
-5. **No "good enough"** — If you're not 100% certain, keep exploring
-
-### Protocol
-
-1. **Use the template** — [ground-truth-session-template.md](../../plans/semantic-search/templates/ground-truth-session-template.md)
-2. **Create Cursor plans** — One per phase (0+1A, 1B, 1C) using `quality-fix-plan-template.md`
-3. **Follow linear execution** — No skipping phases, no shortcuts
-
-### Previous Session: Religious Education Phase 1C COMPLETE (2026-01-21)
-
-**PRIMARY Aggregate**: MRR 0.875, NDCG 0.677, P@3 0.583, R@10 0.750  
-**SECONDARY Aggregate**: MRR 0.640, NDCG 0.526, P@3 0.467, R@10 0.510
-
-**Key Learnings from RE**:
-
-1. **Original GT was COMPLETELY wrong for 6 of 9 queries** - Guru Nanak slugs were used for prayer and festival queries
-2. **Generic queries require generic expected slugs** - Query "religious founders and leaders" needs cross-faith content, not Sikh-only
-3. **Bulk API data alignment issue** - See [bug report](../../plans/bug-report-bulk-api-incomplete-paired-units.md). Search returns Buddhist meditation content that doesn't exist in bulk data files because the Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half).
-4. **Phase 1B COMMIT process worked** - Independent discovery revealed misalignment before seeing expected slugs
-5. **cross-topic-2 added** - Academic query "East-West Schism and ecumenical movements" tests sophisticated user queries
-
-### Ground Truth Files (for religious-education)
-
+```bash
+pnpm ground-truth:validate  # PASSES (0 errors)
 ```
-src/lib/search-quality/ground-truth/religious-education/primary/
-  - precise-topic.query.ts, precise-topic.expected.ts
-  - natural-expression.query.ts, natural-expression.expected.ts
-  - imprecise-input.query.ts, imprecise-input.expected.ts
-  - cross-topic.query.ts, cross-topic.expected.ts
-  - index.ts
 
-src/lib/search-quality/ground-truth/religious-education/secondary/
-  [same structure + cross-topic-2]
+All validation errors from previous sessions have been fixed.
+
+### 2. Session 2026-01-24 Progress Summary
+
+**Completed Work**:
+
+| Issue | Resolution | Result |
+|-------|------------|--------|
+| French negation synonym missing | Added to `french.ts` | MRR 0.000 → **1.000** |
+| Control queries for fuzzy diagnosis | Added history/cross-topic-2, maths/precise-topic-4 | Diagnostic capability |
+| MFL synonym DRY violations | Documented in `mfl-synonym-architecture.md` | Future refactoring planned |
+| Bucket C translation hints | Removed from MFL files, archived | Cleaner synonym sets |
+| German negation German words | Removed `nicht`, `kein`, `nie` | English synonyms only |
+| 3 validation errors | Fixed all three | Validation passing |
+
+**Remaining Search Quality Gaps** (document, don't fix with GT changes):
+
+| Query | MRR | Issue | Future Solution |
+|-------|-----|-------|-----------------|
+| `narative writing storys iron man Year 3` | 0.333 | Multiple typos exceed fuzzy limits | Query rules, domain boosting |
+| `electrisity and magnits` | 0.200 | Fuzzy false positive (magnits → magnify) | Domain term boosting |
+| MFL subjects overall | 0.19-0.29 | No transcripts, English-only ELSER | Multilingual embeddings |
+
+### 3. Priority Ordering (ALWAYS)
+
+| Priority | Category | Rationale |
+|----------|----------|-----------|
+| **1** | Validation failures | No benchmark is trustworthy until validation passes |
+| **2** | Zero-hit queries (MRR = 0.000) | Complete failure to find expected results |
+| **3** | Very low MRR (< 0.333) | Severe ranking issues |
+| **4** | Acceptable MRR, poor other metrics | Ranking or recall issues |
+| **5** | Good MRR, poor other metrics | Fine-tuning needed |
+
+**Validation failures are ALWAYS Priority 1.** This is not negotiable.
+
+### 4. Recommended Actions for This Session
+
+1. **Continue Priority 3 queries** — Very low MRR queries (0.001-0.333) in [problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md)
+2. **MFL quality improvement** — Consider multilingual embedding investigation
+3. **Document search gaps honestly** — Some queries expose search limitations, not GT errors
+
+See: [problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md) for full context
+
+---
+
+## 🎯 THIS SESSION: Continue Priority 3+ Queries
+
+### Entry Point
+
+**Read the investigation plan** for the full list of queries needing work:
+
+[problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md)
+
+### Current Focus: Priority 3 Queries (Very Low MRR)
+
+17 queries have MRR between 0.167 and 0.333. These need investigation.
+
+**Pick one query from the Priority 3 list and follow the investigation process.**
+
+### Quick Commands
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+
+# Verify validation passes
+pnpm ground-truth:validate  # Should show 0 errors
+
+# Run benchmark for a specific query
+pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review --verbose
+
+# Search bulk data (for independent discovery)
+jq -r '.sequence[].unitLessons[] | select(.lessonTitle | test("KEYWORD"; "i")) | "\(.lessonSlug)|\(.lessonTitle)"' \
+  bulk-downloads/SUBJECT-PHASE.json
+
+# List all lessons in a subject-phase
+jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
+  bulk-downloads/SUBJECT-PHASE.json
 ```
+
+### Key Anti-Pattern: Search Validation Bias
+
+**Do NOT**:
+1. Run benchmark first
+2. See what search returns
+3. Update GT to match search results
+
+**DO**:
+1. Discover candidates independently from bulk data
+2. Get MCP summaries BEFORE running benchmark
+3. COMMIT rankings BEFORE seeing search results
+4. Create three-way comparison table (YOUR rankings vs SEARCH vs EXPECTED)
+
+---
+
+## Previous Work
+
+### Session 2026-01-24: MFL Fixes + Control Queries (COMPLETE)
+
+**Key Accomplishments**:
+
+| Query | Before | After | Action |
+|-------|--------|-------|--------|
+| `making French sentences negative KS3` | MRR 0.000 | **MRR 1.000** | Added `negation` synonym |
+| `Vikings and Anglo-Saxons Britain` | — | Control | Isolate fuzzy matching |
+| `multiplication times tables year 3` | — | Control | Isolate fuzzy matching |
+
+**MFL Synonym Architecture**:
+- Removed 9 "Bucket C" translation hints (no search value)
+- Fixed German `negation` (removed German words, kept English)
+- Documented DRY refactoring in `mfl-synonym-architecture.md`
+
+**All 3 validation errors fixed.** Quality gate passing.
+
+### Session 2026-01-24: Zero-Hit Investigation (Earlier)
+
+| Query | Outcome | Status |
+|-------|---------|--------|
+| `dribbling baal with feet` | Query redesigned | ✅ MRR 1.000 |
+| `vikins and anglo saxons` | GT + control query | ✅ MRR 1.000 |
+| `making French sentences negative KS3` | Synonym + query refined | ✅ MRR 1.000 |
+| `nutrition and cooking techniques together` | GT validated | ✅ MRR 1.000 |
+| `narative writing storys iron man Year 3` | GT updated | ⚠️ MRR 0.333 (search gap) |
+| `coding for beginners...` | Blocked | ⏸️ Future functionality |
+
+### Session 2026-01-23: Spanish Complete
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 1.000 | 0.800 | 0.750 | 0.750 |
+| SECONDARY | 1.000 | 0.549 | 0.583 | 0.700 |
+
+### Session 2026-01-23: Science Complete
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY | 0.836 | 0.737 | 0.641 | 0.723 |
+| SECONDARY | 0.932 | 0.731 | 0.561 | 0.741 |
+
+### All 30 Subject-Phases Initial Review Complete
+
+Initial review complete, but quality improvement pass revealed issues that need addressing.
 
 ---
 
@@ -316,43 +408,48 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 | [Checklist](../../plans/semantic-search/active/ground-truth-review-checklist.md) | Progress tracking, next target |
 | [Template](../../plans/semantic-search/templates/ground-truth-session-template.md) | **LINEAR execution with COMMIT step** |
 | [IR Metrics](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
-| [GT Guide](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+| [GT Guide](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | **THE single source of truth** for design, troubleshooting, lessons learned |
 
 ---
 
 ## Key Learnings from Past Sessions
 
-**Session 9 (English)**:
+**See [GROUND-TRUTH-GUIDE.md Part 6: Lessons Learned](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md#part-6-lessons-learned) for the complete, authoritative list of learnings from all sessions.**
 
-1. **"emotions" ≠ "feel"** — Vocabulary matters. Search matched query terms correctly.
-2. **Low MRR can mean WRONG ground truth** — Not always a search issue.
-3. **ALL 4 metrics together** — MRR alone can mislead.
+### Quick Reference: Most Critical Learnings
 
-**Session 12 (French cross-topic)**:
-4. **Query/slug term mismatch** — Query used "verbs" but expected slugs had "avoir" without "verb" in keywords.
-5. **REFLECT before searching** — This mismatch was detectable by thinking, not by running searches.
+| Category | Key Insight |
+|----------|-------------|
+| **Cardinal Rule** | The search might be RIGHT. Your expected slugs might be WRONG. (Session 9) |
+| **Methodology** | COMMIT before benchmark — form independent judgment first (Session 15) |
+| **Discovery** | Title-only matching is insufficient; systematic unit review required (Session 17) |
+| **Architecture** | Subject hierarchy must flow to index — see [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) (Science) |
+| **Fuzzy Matching** | Tokenization ≠ character edits — see [ADR-103](../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md) (Maths/Science) |
+| **Query Tuning** | `minimum_should_match: '2<65%'` — see [ADR-102](../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md) (Science) |
 
-**Session 15 (Geography — flawed methodology)**:
-6. **Search validation is not discovery** — Running benchmark first and justifying results is not independent discovery.
-7. **COMMIT before benchmark** — Must form independent judgment before seeing search results.
-8. **"actions" ≠ "effects"** — Query asking for "effects" should not expect slugs about "actions to tackle".
+### Relevant ADRs
 
-**Session 17 (German — exhaustive vs title-only discovery)**:
-9. **Title-only matching misses excellent content** — `das-leben-mit-behinderung...` teaches advanced grammar but unit title "meine Welt" doesn't suggest this.
-10. **Systematic unit review required** — Review ALL units, not just those with obvious title matches.
-11. **MCP summaries reveal hidden gems** — Key learning often contains highly relevant content not visible in titles.
-
-**Session 18 (History — discovery gaps)**:
-12. **Check ALL units, not just obvious ones** — `improvements-in-public-health-in-the-19th-century` (in Medicine unit) was relevant to "factory age workers conditions" but was missed because only the Industrial Revolution unit was checked.
-13. **Search can be MORE comprehensive than manual discovery** — For one query, search found relevant content that manual discovery missed. This is a signal that discovery was incomplete.
-14. **100% certainty standard** — For critical subjects like maths, "good enough" is not acceptable. Every unit must be checked systematically.
+| ADR | Decision |
+|-----|----------|
+| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Three-stage validation model |
+| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Split file architecture |
+| [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | `subject_parent` for Science KS4 |
+| [ADR-102](../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md) | Conditional minimum_should_match |
+| [ADR-103](../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md) | Fuzzy matching limitations |
+| [ADR-104](../../../docs/architecture/architectural-decisions/104-domain-term-boosting.md) | Domain term boosting (proposed) |
 
 ---
 
-## Completed Sessions Summary (26/30)
+## Completed Sessions Summary (30/30 core subjects)
+
+All 30 subject-phases have completed initial GT review. Now in quality improvement phase.
 
 | Subject | Phase | MRR | NDCG@10 | Key Finding |
 |---------|-------|-----|---------|-------------|
+| spanish | primary | **1.000** | **0.800** | Query-data alignment critical; redesigned queries |
+| spanish | secondary | **1.000** | **0.549** | MFL structure-only retrieval |
+| science | primary | **0.836** | **0.737** | Fuzzy limits in short queries; control queries added |
+| science | secondary | **0.932** | **0.731** | "magnits"→"magnification" fuzzy false positive identified |
 | music | primary | 0.781 | 0.567 | "In tune" = pitch, not timing |
 | music | secondary | 0.813 | 0.854 | Film composition, not analysis |
 | maths | primary | 0.675 | 0.607 | Query register must match level |
@@ -362,7 +459,7 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 | religious-education | primary | 0.875 | 0.677 | Original GT wrong (Sikh-specific for generic queries) |
 | religious-education | secondary | 0.640 | 0.526 | Bulk API returns incomplete paired units |
 
-**Remaining (4)**: science (2), spanish (2)
+**Current Focus**: [Problematic Queries Investigation](../../plans/semantic-search/active/problematic-queries-investigation.md)
 
 **Full details**: [current-state.md](../../plans/semantic-search/current-state.md)
 

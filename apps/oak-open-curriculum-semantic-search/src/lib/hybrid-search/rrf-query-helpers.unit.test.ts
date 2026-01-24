@@ -11,6 +11,20 @@ import { describe, it, expect } from 'vitest';
 import { createLessonFilters, createUnitFilters } from './rrf-query-helpers';
 
 describe('createLessonFilters', () => {
+  describe('subject filtering', () => {
+    it('uses subject_parent field for subject filter', () => {
+      const filters = createLessonFilters({ subject: 'science' });
+
+      expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
+    });
+
+    it('does not use subject_slug field for subject filter', () => {
+      const filters = createLessonFilters({ subject: 'science' });
+
+      expect(filters).not.toContainEqual({ term: { subject_slug: 'science' } });
+    });
+  });
+
   describe('phase filtering', () => {
     it('expands phase "primary" to keyStages ks1 and ks2', () => {
       const filters = createLessonFilters({ phase: 'primary' });
@@ -101,6 +115,20 @@ describe('createLessonFilters', () => {
 });
 
 describe('createUnitFilters', () => {
+  describe('subject filtering', () => {
+    it('uses subject_parent field for subject filter', () => {
+      const filters = createUnitFilters({ subject: 'science' });
+
+      expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
+    });
+
+    it('does not use subject_slug field for subject filter', () => {
+      const filters = createUnitFilters({ subject: 'science' });
+
+      expect(filters).not.toContainEqual({ term: { subject_slug: 'science' } });
+    });
+  });
+
   describe('phase filtering', () => {
     it('expands phase "primary" to keyStages ks1 and ks2', () => {
       const filters = createUnitFilters({ phase: 'primary' });

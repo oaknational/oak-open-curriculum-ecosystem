@@ -13,11 +13,11 @@
 export const genericSynonyms = {
   assessment: ['quiz', 'test', 'exam'],
 
-  // [MINED-2025-12-26] Physical education terms
+  // [MINED-2025-12-26] Physical education terms - move to pe
   sweating: ['perspiration'],
   'cardiovascular-fitness': ['stamina', 'aerobic endurance', 'cardio fitness'],
 
-  // [MINED-2025-12-26] Design & Technology terms
+  // [MINED-2025-12-26] Design & Technology terms - move to dt
   'personal-protective-equipment': ['ppe', 'safety equipment'],
   'british-standards-institute': ['bsi', 'british standards'],
 } as const;

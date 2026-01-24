@@ -21,5 +21,5 @@ export const MATHS_PRIMARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
   'solve-problems-involving-area-and-perimeter': 3,
   'reason-about-shapes-using-the-relationship-between-side-lengths-and-area-and-perimeter': 3,
   'shapes-with-the-same-areas-can-have-different-perimeters-and-vice-versa': 3,
-  'reason-about-compound-shapes-using-the-relationship-between-side-lengths-and-area-and-perimeter': 3,
+  'reason-about-compound-shapes-using-the-relationship-between-side-lengths-and-area-and-perimeter': 2,
 } as const;

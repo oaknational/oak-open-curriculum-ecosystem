@@ -21,6 +21,7 @@ Usage:
 Commands:
   setup     Create synonyms and indexes (default)
   reset     Delete and recreate all indexes (for mapping changes)
+  synonyms  Update synonyms only (no reindexing required)
   status    Show cluster info and index counts
   help      Show this help message
 
@@ -30,6 +31,10 @@ Options:
 Environment:
   Reads ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY from .env.local
   in the app directory (apps/oak-open-curriculum-semantic-search/).
+
+Note:
+  The 'synonyms' command uses the Elasticsearch Synonyms API to update
+  synonyms without reindexing. Search analyzers reload automatically.
 `);
 }
 

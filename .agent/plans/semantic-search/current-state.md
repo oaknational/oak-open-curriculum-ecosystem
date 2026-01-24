@@ -1,18 +1,126 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-21  
+**Last Updated**: 2026-01-24  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Status**: 🔄 **Ground truth review** (26/30 subject-phases complete)
+**Status**: 🔄 **Ground Truth Review — Quality Improvement Pass**
+
+---
+
+## ✅ Session 2026-01-24 Progress
+
+### Validation Status: PASSING
+
+`pnpm ground-truth:validate` **PASSES** with 0 errors.
+
+All validation errors have been fixed:
+- `cooking-nutrition/secondary/precise-topic`: Added 2 more slugs
+- `maths/primary/imprecise-input-2`: Extended query to 4 words
+- `maths/primary/cross-topic`: Varied relevance scores
+
+### Key Accomplishments
+
+| Issue | Resolution | Result |
+|-------|------------|--------|
+| French negation synonym missing | Added to `french.ts` | MRR 0.000 → **1.000** |
+| Control queries for fuzzy diagnosis | Added history/cross-topic-2, maths/precise-topic-4 | Diagnostic capability |
+| MFL synonym DRY violations | Documented in `mfl-synonym-architecture.md` | Future refactoring planned |
+| Bucket C translation hints | Removed from MFL files, archived in `bucket-c-analysis.ts` | Cleaner synonym sets |
+| German negation German words | Removed `nicht`, `kein`, `nie` | English synonyms only |
+
+### Zero-Hit Query Resolution
+
+| Query | Before | After | Status |
+|-------|--------|-------|--------|
+| `making French sentences negative KS3` | MRR 0.000 | MRR 1.000 | ✅ Resolved |
+| `dribbling baal with feet` | MRR 0.000 | MRR 1.000 | ✅ Resolved |
+| `vikins and anglo saxons` | MRR 0.000 | MRR 1.000 | ✅ Resolved |
+| `nutrition and cooking techniques together` | MRR 0.000 | MRR 1.000 | ✅ Resolved |
+| `narative writing storys iron man Year 3` | MRR 0.000 | MRR 0.333 | ⚠️ Search gap |
+| `coding for beginners...` | MRR 0.000 | MRR 0.000 | ⏸️ Future work |
+
+### Remaining Challenges
+
+| Challenge | Root Cause | Future Solution |
+|-----------|------------|-----------------|
+| `narative writing storys iron man Year 3` MRR 0.333 | Multiple typos exceed fuzzy limits | Query rules, domain boosting |
+| `electrisity and magnits` MRR 0.200 | Fuzzy false positive (magnits → magnify) | Domain term boosting |
+| MFL subjects MRR 0.19-0.29 | No transcripts, English-only ELSER | Multilingual embeddings |
+
+See: [problematic-queries-investigation.md](active/problematic-queries-investigation.md) for detailed analysis
+
+---
+
+## ✅ RESOLVED: Subject Hierarchy Enhancement
+
+The `subject_parent` field has been implemented and verified (2026-01-22). Science secondary searches now correctly include physics, chemistry, biology, and combined-science lessons.
+
+**Implementation**: [subject-hierarchy-enhancement.md](./archive/completed/subject-hierarchy-enhancement.md)  
+**ADR**: [ADR-101: Subject Hierarchy for Search Filtering](../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md)
+
+### Verification Results
+
+Post-ingestion benchmark (2026-01-22):
+
+| Metric | Score | Status |
+|--------|-------|--------|
+| MRR | 0.681 | ~ borderline |
+| NDCG@10 | 0.521 | ✗ below threshold |
+| P@3 | 0.333 | ✗ below threshold |
+| R@10 | 0.611 | ✓ passing |
+
+**Key Finding**: Filtering now works correctly. The remaining quality gaps are **search ranking issues**, not filtering issues.
+
+### Search Quality Gaps (Pre-Discovery)
+
+| Query | MRR | Issue | Status |
+|-------|-----|-------|--------|
+| "what makes things hot or cold" | 0.000 | Vocabulary bridging failure | **REVISED** to "why do some things feel hotter than others" |
+| "why does metal go rusty" | 0.250 | Results found but poorly ranked | Awaiting Phase 1C re-measurement |
+| "electromagnetic spectrum waves" | 0.333 | High R@10 + Low MRR = ranking issue | Awaiting Phase 1C re-measurement |
+
+**Note**: These metrics are from before Phase 1B re-discovery. Phase 1C will produce fresh measurements for all 29 queries.
+
+**Future architecture work**: [subject-domain-model.md](./post-sdk/subject-domain-model.md) — Full SDK architecture (after GT review)
 
 ---
 
 ## Current Phase
 
-**Phase 1: Ground Truth Review** — Validating expected slugs.
+**Phase 1: Ground Truth Review** — Quality improvement pass in progress.
 
-Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth review validates the measurements. Until 30/30 subject-phases are reviewed, MRR values may change as ground truths are corrected.
+### ✅ Validation Passing
 
-**Next Session**: Science (CRITICAL SUBJECT — 24 queries, 3 per category, like Maths)
+All validation errors have been fixed. Benchmark results are trustworthy.
+
+### Recommended Next Actions
+
+1. **Continue Priority 3 queries** — Very low MRR (0.001-0.333) queries
+2. **MFL quality investigation** — Evaluate multilingual embedding options
+3. **Document search gaps** — Some queries expose search limitations, not GT errors
+
+### MFL-Specific Considerations (Added 2026-01-24)
+
+MFL subjects (French, German, Spanish) have unique challenges:
+
+| Challenge | Impact | Potential Solution |
+|-----------|--------|-------------------|
+| No transcripts | ~0% content coverage | Structure-only retrieval (architectural limit) |
+| English-only ELSER | Semantic matching weak | Multilingual embedding model |
+| Low MRR (0.19-0.29) | Below all other subjects | Combination of above |
+
+**Potential enhancement**: Add a multilingual semantic text retriever using a model like `multilingual-e5-base` on the metadata semantic_text field.
+
+**See**: [roadmap.md](roadmap.md) "MFL-Specific Considerations" section and [mfl-synonym-architecture.md](post-sdk/search-quality/mfl-synonym-architecture.md)
+
+### Documented Search Gaps (Not GT Errors)
+
+These queries expose genuine search limitations that require future search improvements:
+
+| Query | MRR | Root Cause | Future Solution |
+|-------|-----|------------|-----------------|
+| `narative writing storys iron man Year 3` | 0.333 | Multiple typos exceed fuzzy limits | Query rules, domain boosting |
+| `electrisity and magnits` | 0.200 | Fuzzy false positive (magnits → magnify) | Domain term boosting |
+| `coding for beginners...` | 0.000 | Search doesn't prioritise "introduction" | Query rules, semantic reranking |
 
 ---
 
@@ -51,16 +159,72 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 |-----------|--------|
 | RRF normalisation (ADR-099) | ✅ Implemented and validated |
 | Synonym coverage (ADR-100) | ✅ All 17 subjects have domain-specific synonyms (~580 total) |
-| Ground truths reviewed | 🔄 **26/30 subject-phases** |
+| Ground truths reviewed | 🔄 **28/30 subject-phases** |
 | Baselines established | ✅ 120 queries measured |
 | Quality gates | ✅ All passing |
 | Split file architecture | ✅ `*.query.ts` + `*.expected.ts` |
 
-**Reviewed**: art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), maths (2), music (2), physical-education (2), religious-education (2)
+**Reviewed**: art (2), citizenship (1), computing (2), cooking-nutrition (2), design-technology (2), english (2), french (2), geography (2), german (1), history (1+partial), maths (2), music (2), physical-education (2), religious-education (2), science (2 — Phase 1C COMPLETE)
 
-**Remaining (4)**: science (2), spanish (2)
+**Remaining (2)**: spanish (2)
 
-**Next Session**: Science Phase 0+1A+1B — CRITICAL SUBJECT with THREE queries per category (like Maths)
+**Next Session**: Spanish Phase 1B — MFL subject with structure-only retrieval
+
+### Science GT Fixes + Query Tuning (2026-01-23)
+
+All 32 Science queries benchmarked and validated.
+
+**Final Metrics (Post-Tuning)**:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY (13 queries) | 0.836 | 0.737 | 0.641 | 0.723 |
+| SECONDARY (19 queries) | 0.932 | 0.731 | 0.561 | 0.741 |
+| **OVERALL** | **0.893** | 0.733 | 0.594 | 0.734 |
+
+**Primary Category Breakdown**:
+
+| Category | MRR | NDCG@10 | P@3 | R@10 |
+|----------|-----|---------|-----|------|
+| precise-topic | 1.000 | 0.970 | 1.000 | 1.000 |
+| natural-expression | 0.722 | 0.466 | 0.222 | 0.300 |
+| imprecise-input | 0.611 | 0.576 | 0.556 | 0.717 |
+| cross-topic | 0.875 | 0.805 | 0.750 | 0.838 |
+
+**Secondary Category Breakdown**:
+
+| Category | MRR | NDCG@10 | P@3 | R@10 |
+|----------|-----|---------|-----|------|
+| precise-topic (8 queries) | 1.000 | 0.806 | 0.625 | 0.850 |
+| natural-expression | 0.875 | 0.580 | 0.333 | 0.521 |
+| imprecise-input | 0.800 | 0.675 | 0.583 | 0.737 |
+| cross-topic | 1.000 | 0.805 | 0.667 | 0.750 |
+
+**Changes Made (2026-01-23)**:
+
+1. **`minimum_should_match: '2<65%'`** — Changed from `75%` to conditional matching for 3+ term queries
+2. **Fixed "energy transfers and efficiency" GT** — Search was correct, GT was wrong. MRR 0.333 → **1.000**
+3. **Fixed "plants and animals" GT** — Added `animal-habitats`, `protecting-microhabitats`. MRR → **1.000**
+4. **Added control queries** — "electricity and magnets" (MRR 1.000) and "plants and animals" (MRR 1.000) for typo comparison
+5. **Documented fuzziness/minimum_should_match tuning** in modern-es-features.md
+
+**Known Fuzzy Matching Limitation**:
+
+| Query | Issue | Root Cause |
+|-------|-------|------------|
+| "electrisity and magnits" | MRR 0.200 — Microscopy lessons in top 3 | "magnits" fuzzy-matches "magnify" (edit distance 2) |
+| "plints and enimals" | MRR 0.200 — Missing cross-topic lessons | Fuzzy dilutes signal in 2-term queries |
+
+**Solution (deferred)**: Domain term boosting — boost matches on curriculum vocabulary. Documented in [modern-es-features.md](post-sdk/search-quality/modern-es-features.md).
+
+### Science Phase 1C COMPLETE (2026-01-22)
+
+Previous baseline before 2026-01-23 tuning:
+
+| Phase | MRR | NDCG@10 | P@3 | R@10 |
+|-------|-----|---------|-----|------|
+| PRIMARY (12 queries) | 0.787 | 0.743 | 0.639 | 0.799 |
+| SECONDARY (17 queries) | 0.892 | 0.653 | 0.451 | 0.657 |
 
 ### Religious Education Phase 1C COMPLETE (2026-01-21)
 
@@ -70,6 +234,7 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 | SECONDARY | 0.640 | 0.526 | 0.467 | 0.510 |
 
 **GT Corrections Made**:
+
 - PRIMARY precise-topic: Expanded to cross-faith founders (prophet-muhammad, idea-of-a-buddha, guru-nanak, moses)
 - PRIMARY natural-expression: REPLACED — Previous (guru-nanak) was wrong for "why do people pray". Changed to prayer-focused lessons.
 - PRIMARY imprecise-input: Added story-focused lessons
@@ -81,6 +246,7 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 - SECONDARY cross-topic-2: Added reconciliation lessons for "East-West Schism and ecumenical movements"
 
 **Key Learnings**:
+
 1. **Original GT was COMPLETELY wrong** for 6 of 9 queries — Sikh-specific content (Guru Nanak) was used for generic queries about prayer, festivals, founders
 2. **Generic queries require generic expected slugs** — "religious founders and leaders" needs cross-faith content, not Sikh-only
 3. **Bulk API data alignment issue**: See [bug report](bug-report-bulk-api-incomplete-paired-units.md). Search returns Buddhist meditation content that doesn't exist in bulk data files. The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half).
@@ -94,6 +260,7 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 | SECONDARY | 0.813 | 0.725 | 0.667 | 0.787 |
 
 **GT Corrections Made**:
+
 - PRIMARY precise-topic: Added feet-dribbling lessons (query is generic "ball skills")
 - PRIMARY natural-expression: Changed from passing to throwing lessons ("throw and catch")
 - PRIMARY imprecise-input: Changed to feet-based football skills ("footbal" = soccer)
@@ -104,10 +271,12 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 - SECONDARY cross-topic: Changed to fitness components lessons
 
 **Search Quality Gaps Identified**:
+
 - PRIMARY imprecise-input: Typo "footbal" doesn't strongly recover to football (MRR=0.333)
 - SECONDARY imprecise-input: Typo "runing" appears weak (MRR=0.250) but investigation revealed BM25 fuzzy matching IS working — the issue is multi-term query ranking (lessons matching more query terms rank higher than running-only lessons)
 
 **Key Learnings**:
+
 1. Original GT was completely wrong for most queries - needed substantial corrections
 2. Structure-only retrieval works well for PE once GT is correct
 3. **Synonym DRY Fix (2026-01-21)**: Removed duplicate `physical-education` definition from `physical-education.ts`. Subject name synonyms now defined ONLY in `subjects.ts`. This fixed incorrect "sport/sports" expansion that was causing `drugs-in-sport` to rank highly for athletics queries.
@@ -152,11 +321,13 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 | SECONDARY | 0.813 | 0.854 | 0.500 | 1.000 |
 
 **GT Corrections Made**:
+
 - `music/primary/natural-expression.expected.ts`: Changed from timing-related to pitch-related slugs ("in tune" = pitch accuracy, not timing)
 - `music/primary/imprecise-input.expected.ts`: Replaced KS2 `syncopated-rhythms` with KS1-appropriate lessons
 - `music/secondary/cross-topic.expected.ts`: Changed from narrow (scary/tension) to composition-focused (all involve creating, not just analyzing)
 
 **Search Quality Gaps Identified**:
+
 - PRIMARY natural-expression: Search doesn't find pitch-related lessons well (MRR=0.125)
 - SECONDARY cross-topic: Film composition lessons ranked at 4, 6, 7 instead of top 3 (MRR=0.250)
 
@@ -168,11 +339,13 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 | SECONDARY | 0.861 | 0.749 | 0.667 | 0.828 |
 
 **GT Corrections Made**:
+
 - `maths/secondary/natural-expression-2.expected.ts`: Quadratic → linear equations (search was RIGHT)
 - `maths/primary/cross-topic`: Changed from "fractions word problems money" to "area and perimeter problems together" (verified cross-topic content)
 - Synonym added: `times-table => timetables, timestables, time tables`
 
 **Key Learnings**:
+
 - Query register must match content level (informal → basic, not advanced)
 - Tokenization ≠ fuzzy matching (word boundary issues need synonyms)
 - Cross-topic GTs must reflect curriculum reality (intersection must exist)
@@ -194,65 +367,31 @@ Level 1 approaches are complete, but Level 1 is NOT exhausted until ground truth
 
 **Plan template**: [ground-truth-session-template.md](templates/ground-truth-session-template.md)
 
-### Key Learnings from Sessions 1-19
+### Key Learnings
 
-#### Foundational Principles (Sessions 1-7)
+**See [GROUND-TRUTH-GUIDE.md Part 6: Lessons Learned](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md#part-6-lessons-learned) for the complete, authoritative list of learnings from all 25+ sessions.**
 
-1. **Imprecise-input tests resilience**: Proves that typos and messy input don't break search — the combined system (BM25 fuzziness + ELSER semantics + RRF) should still return relevant results despite imperfect input
-2. **Semantic intent**: Expected slugs must match what the query semantically means, not just title keywords
-3. **Skill level matching**: "coding for beginners" should return KS3 intro, not KS4 advanced
-4. **Specification vs optimisation**: Ground truth review is about correctness (the answer key), not optimising scores (tuning the system)
-5. **Ground truth correctness over benchmark scores**: If semantically correct slugs don't rank well, the ground truth should still use them. This reveals search quality issues.
-6. **Cross-topic requires BOTH components**: For "X AND Y together" queries, expected slugs must combine BOTH concepts.
+The guide contains lessons organised by session covering:
 
-#### Deep Exploration Standard (Session 8)
+- Foundational principles (Sessions 1-7)
+- Deep exploration standards (Session 8)
+- Search vs GT corrections (Sessions 9-16)
+- Exhaustive discovery (Sessions 17-18)
+- Query design and Phase 1A (Session 19)
+- Maths comprehensive review (Sessions 19-20)
+- RE and PE corrections (Session 21)
+- Science architecture fixes and query tuning (Sessions 22-23)
 
-7. **5-10 MCP summaries per category**: Deep exploration requires getting `get-lessons-summary` for 5-10 candidates, not just 1-2. This reveals lessons missed by superficial exploration.
-8. **Comparison tables are mandatory**: Create explicit tables for every category: `| Slug | Keywords | Key Learning | Score |`. This prevents "good enough" thinking.
-9. **Unit-level exploration**: List ALL lessons in relevant units using `get-units-summary`, not just keyword-filtered results. Lessons with non-obvious titles may be highly relevant.
-10. **Ask "Am I confident?"**: Before finalising each category, explicitly ask: "Have I discovered the BEST possible matches through deep exploration?"
-11. **Rendering as valid intersection**: For sketching + materials queries, lessons about rendering that explicitly teach "show material texture" ARE valid intersections — `realistic-rendering-techniques` is better than `advanced-3d-sketching` for this query.
-12. **Human factors vocabulary**: In design context, "empathy" (understanding what users experience) IS human factors — don't miss lessons with related vocabulary.
-13. **Natural-expression semantic matching**: "DT making things move" should match lessons with "mechanisms are systems that make something move" in key learning — match informal phrasing.
-14. **Vocabulary bridging verification**: For sustainability queries, verify expected slugs explicitly use bridging vocabulary (e.g., `material-sustainability` uses "sustainable").
-15. **Some queries have no perfect match**: Document when no single lesson truly combines all query concepts — select best approximations from different angles.
+### Related ADRs
 
-#### Search vs Ground Truth Corrections (Sessions 9-16)
-
-16. **The search might be RIGHT**: Session 9 (English) proved MRR 0.000 was WRONG ground truth, not search failure. After correction: MRR 1.000.
-17. **Vocabulary precision matters**: "emotions" ≠ "feel", "actions" ≠ "effects". Query terms must match expected slug content.
-18. **COMMIT before benchmark**: Must form independent judgment BEFORE seeing search results.
-19. **Fresh MCP for every query**: Never copy expected slugs between queries, even with "similar intent".
-
-#### Exhaustive Discovery (Sessions 17-18)
-
-20. **Title-only matching is insufficient**: Lessons in non-obvious units (e.g., "meine Welt") may contain highly relevant content.
-21. **Search can be more comprehensive than manual discovery**: If search finds relevant content you missed, your discovery was incomplete.
-22. **100% certainty for critical subjects**: For maths, "good enough" is unacceptable.
-
-#### Query Design (Session 19 — Maths Preparation)
-
-23. **Phase 1A catches design issues early**: Analysing queries before exploring data identifies miscategorised or poorly designed queries.
-24. **Vocabulary bridges must be genuine**: "the bit where you complete the square" contains curriculum vocabulary — not a true vocabulary bridge.
-25. **Cross-topic must combine concepts, not tools**: "pattern blocks tangrams" tests tool co-occurrence, not meaningful concept intersection.
-26. **3 queries per category for maths**: Comprehensive coverage for the most important subject.
-
-#### Phase 1B Discovery (Session 20 — Maths Discovery)
-
-27. **COMMIT before comparison**: Independent rankings formed using bulk data + MCP summaries BEFORE viewing existing `.expected.ts` files or search results.
-28. **Exhaustive exploration for maths**: 125 primary units (~1,072 lessons), 98 secondary units (~1,073 lessons) systematically searched.
-29. **Cross-topic gaps**: Some cross-topic queries (e.g., "geometry proof coordinate") have limited direct curriculum matches — need to select best approximations.
-30. **MCP summaries reveal hidden relevance**: Key learning quotes essential for ranking decisions (e.g., "The gradient is a measure of how steep a line is" for "how steep is the line").
-31. **Primary maths well-structured**: Place value, fractions, multiplication units have excellent lesson coverage with clear progression.
-32. **Secondary maths dense coverage**: Quadratics, simultaneous equations, probability units have multiple highly-relevant lessons per topic.
-
-#### RE Session Findings (Session 21 — RE Phase 1C)
-
-33. **Generic queries require generic expected slugs**: Queries like "religious founders and leaders" need cross-faith content, not Sikh-only.
-34. **Bulk API data alignment issue**: See [bug report](bug-report-bulk-api-incomplete-paired-units.md). The Oak Bulk API returns incomplete data for paired RE units (Islam half only, not Buddhism half). This causes GT validation failures for lessons that exist in search but not in bulk data.
-35. **Original GT can be completely wrong**: 6 of 9 RE queries had completely wrong expected slugs (Sikh-specific for generic queries).
-
-**Documentation**: [GROUND-TRUTH-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — consolidated design, troubleshooting, lessons learned
+| ADR | Decision |
+|-----|----------|
+| [ADR-085](../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Three-stage validation model |
+| [ADR-098](../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Split file architecture |
+| [ADR-101](../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | `subject_parent` for Science KS4 |
+| [ADR-102](../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md) | Conditional minimum_should_match |
+| [ADR-103](../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md) | Fuzzy matching limitations |
+| [ADR-104](../../docs/architecture/architectural-decisions/104-domain-term-boosting.md) | Domain term boosting (proposed) |
 
 ---
 

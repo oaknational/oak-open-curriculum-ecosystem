@@ -24,6 +24,7 @@ This work feeds into multiple streams, so it lives in its own stream.
 | Plan | Description | Status |
 |------|-------------|--------|
 | [vocabulary-mining.md](vocabulary-mining.md) | Synonym classification, science expansion, definition mining | 📋 Pending |
+| [natural-language-paraphrases.md](natural-language-paraphrases.md) | Bucket B: Query-time weak expansions for natural language | 📋 Pending |
 
 ---
 

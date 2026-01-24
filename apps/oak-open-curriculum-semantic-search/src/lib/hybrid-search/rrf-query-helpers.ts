@@ -42,7 +42,7 @@ export interface SearchFilterOptions {
 export function createLessonFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (options.subject) {
-    filters.push({ term: { subject_slug: options.subject } });
+    filters.push({ term: { subject_parent: options.subject } });
   }
   const keyStageFilter = buildKeyStageFilter(options);
   if (keyStageFilter) {
@@ -59,7 +59,7 @@ export function createLessonFilters(options: SearchFilterOptions): QueryContaine
 export function createUnitFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (options.subject) {
-    filters.push({ term: { subject_slug: options.subject } });
+    filters.push({ term: { subject_parent: options.subject } });
   }
   const keyStageFilter = buildKeyStageFilter(options);
   if (keyStageFilter) {
@@ -209,7 +209,7 @@ export function createPhraseBoosters(
 }
 
 /**
- * BM25 for lessons: min_should_match 75% (+11.7% MRR), default fuzziness.
+ * BM25 for lessons: min_should_match 2<65% (conditional: ≤2 terms all required, >2 terms 65%), default fuzziness.
  * Optionally includes phrase boosters for multi-word curriculum terms.
  */
 function createLessonBm25Retriever(
@@ -224,7 +224,7 @@ function createLessonBm25Retriever(
       type: 'best_fields',
       tie_breaker: 0.2,
       fuzziness: 'AUTO',
-      minimum_should_match: '75%',
+      minimum_should_match: '2<65%',
       fields,
     },
   };

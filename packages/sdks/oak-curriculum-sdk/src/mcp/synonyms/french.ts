@@ -54,6 +54,9 @@ export const frenchSynonyms = {
   // FRENCH-SPECIFIC GRAMMAR
   // ═══════════════════════════════════════════════════════════════════════════
 
+  /** Negation - making sentences negative with ne...pas */
+  negation: ['negative', 'making negative', 'ne pas', 'ne ... pas', "don't", 'not'],
+
   /** Gender - masculine/feminine */
   'grammatical-gender': ['gender', 'masculine', 'feminine', 'noun gender'],
 
@@ -108,17 +111,8 @@ export const frenchSynonyms = {
   /** Question words - interrogatives */
   'question-words': ['interrogatives', 'wh-words'],
 
-  /** Comment - how */
-  comment: ['how question'],
-
-  /** Quand - when */
-  quand: ['when question'],
-
-  /** Qui - who */
-  qui: ['who question'],
-
-  /** Quel/Quelle - which */
-  quel: ['quelle', 'which question'],
+  // NOTE: French question words (comment, quand, qui, quel) removed.
+  // They were translation hints, not synonyms. See bucket-c-analysis.ts.
 } as const;
 
 export type FrenchSynonyms = typeof frenchSynonyms;

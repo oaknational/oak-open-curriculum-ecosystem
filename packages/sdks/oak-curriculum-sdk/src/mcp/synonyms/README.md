@@ -174,13 +174,51 @@ export const mathsSynonyms = {
 # From repo root
 pnpm type-gen && pnpm build
 
-# Deploy synonyms to Elasticsearch
+# Deploy synonyms to Elasticsearch (two options):
+
+# Option A: Full setup (creates indexes + synonyms)
 cd apps/oak-open-curriculum-semantic-search
 pnpm es:setup
+
+# Option B: Update synonyms ONLY (no reindexing required - RECOMMENDED)
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup synonyms
 
 # Run test — should now pass
 pnpm vitest run -c vitest.smoke.config.ts synonym-coverage
 ```
+
+### Live Synonym Updates (No Reindexing)
+
+The `synonyms` command uses the **Elasticsearch Synonyms API** to update synonyms
+without touching indexes or requiring reindexing. This is the preferred method for
+production environments:
+
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm es:setup synonyms
+```
+
+**How it works:**
+
+1. Generates synonym set from SDK ontology (`buildElasticsearchSynonyms()`)
+2. Calls `PUT /_synonyms/oak-syns` to update the synonym set
+3. Elasticsearch automatically reloads search analyzers
+
+**Available CLI commands:**
+
+| Command    | Description                               | Reindex? |
+| ---------- | ----------------------------------------- | -------- |
+| `setup`    | Create synonyms + indexes (initial setup) | N/A      |
+| `reset`    | Delete and recreate all indexes           | Yes      |
+| `synonyms` | Update synonyms only (live reload)        | **No**   |
+| `status`   | Show cluster info and index counts        | No       |
+
+**API Reference:**
+
+- [Elasticsearch Synonyms APIs](https://www.elastic.co/guide/en/elasticsearch/reference/current/synonyms-apis.html)
+- Uses `PUT /_synonyms/{id}` to create or update a synonyms set
+- Analyzers referencing the set are automatically reloaded
 
 ### 4. Document Impact
 

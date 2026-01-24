@@ -33,6 +33,7 @@ const BASE_LESSON_DOC: Omit<SearchLessonsIndexDoc, 'has_transcript'> = {
   lesson_slug: 'test-lesson',
   lesson_title: 'Test Lesson',
   subject_slug: 'maths',
+  subject_parent: 'maths',
   key_stage: 'ks2',
   years: ['4'],
   unit_ids: ['unit-1'],

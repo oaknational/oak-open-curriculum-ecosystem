@@ -139,6 +139,7 @@ export function buildUnitDocument(params: CreateUnitDocParams): SearchUnitsIndex
     unit_slug: unitSlug,
     unit_title: unitTitle,
     subject_slug: subjectSlug,
+    subject_parent: subjectSlug,
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,

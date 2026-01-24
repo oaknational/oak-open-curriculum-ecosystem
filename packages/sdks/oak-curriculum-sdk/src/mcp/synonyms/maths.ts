@@ -51,7 +51,9 @@ export const mathsSynonyms = {
    * "timetables" (one word) vs "times table" (two words) caused zero results.
    */
   'times-table': [
+    'times',
     'times tables',
+    'times table',
     'timetable',
     'timetables',
     'timestables',

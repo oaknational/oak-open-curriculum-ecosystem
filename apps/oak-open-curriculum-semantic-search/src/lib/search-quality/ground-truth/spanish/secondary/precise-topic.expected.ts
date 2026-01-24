@@ -12,8 +12,10 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SPANISH_SECONDARY_PRECISE_TOPIC_EXPECTED: ExpectedRelevance = {
-  'a-big-adventure-ar-verbs-3rd-person-singular': 3,
-  'a-school-play-ar-verbs-2nd-person-singular-information-questions': 2,
-  'conversation-with-a-friend-ar-verbs-1st-and-3rd-person-singular': 2,
-  'homework-disaster-ar-infinitives-and-3rd-person-singular': 1,
+  // Phase 1B + Search discovery: Secondary AR verbs present tense lessons (max 5)
+  'conversation-with-a-friend-ar-verbs-1st-and-3rd-person-singular': 3, // AR verbs 1st/3rd person
+  'a-big-adventure-ar-verbs-3rd-person-singular': 3, // AR verbs 3rd person singular
+  'work-and-jobs-eres-and-sois-simple-present-ar-verbs': 2, // Search #1 - AR present
+  'what-people-do-at-school-regular-verbs-3rd-person-present': 2, // Regular verbs present
+  'en-paises-donde-se-habla-espanol-ar-present-tense-2nd-persons': 2, // AR present tense explicit
 } as const;

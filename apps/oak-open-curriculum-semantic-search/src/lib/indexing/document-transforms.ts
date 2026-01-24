@@ -307,6 +307,7 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     unit_slug: fields.unitSlug,
     unit_title: fields.unitTitle,
     subject_slug: subject,
+    subject_parent: subject,
     subject_title: subjectTitle,
     key_stage: keyStage,
     key_stage_title: keyStageTitle,

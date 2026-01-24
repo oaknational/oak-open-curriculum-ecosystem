@@ -3,8 +3,8 @@
  * Creates synonyms set and search indexes from SDK.
  * Mappings are generated at SDK type-gen time and imported here.
  */
-import { z } from 'zod';
 import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools';
+import { CreateIndexErrorSchema, ClusterInfoSchema, CatIndicesSchema } from './schemas';
 import {
   OAK_LESSONS_MAPPING,
   OAK_UNITS_MAPPING,
@@ -78,6 +78,26 @@ async function upsertSynonyms(config: SetupConfig): Promise<{ created: boolean; 
   return { created: true, count };
 }
 
+/**
+ * Update synonyms only (no index changes).
+ *
+ * Uses the Elasticsearch Synonyms API to update the synonym set.
+ * Search analyzers are reloaded automatically without reindexing.
+ *
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/synonyms-apis.html
+ */
+export async function runSynonymsUpdate(
+  config: SetupConfig,
+): Promise<{ success: boolean; count: number; error?: string }> {
+  try {
+    const result = await upsertSynonyms(config);
+    return { success: true, count: result.count };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { success: false, count: 0, error: message };
+  }
+}
+
 /** Delete an Elasticsearch index. */
 async function deleteIndex(config: SetupConfig, indexName: string): Promise<boolean> {
   const url = `${config.elasticsearchUrl}/${indexName}`;
@@ -114,14 +134,6 @@ function safeJsonParse(text: string): unknown {
     return null;
   }
 }
-
-const CreateIndexErrorSchema = z.object({
-  error: z
-    .object({
-      type: z.string().optional(),
-    })
-    .optional(),
-});
 
 /** Create a single Elasticsearch index. */
 async function createIndex(
@@ -198,15 +210,6 @@ export async function verifyConnection(config: SetupConfig): Promise<{
   }
 }
 
-const ClusterInfoSchema = z.object({
-  cluster_name: z.string().optional(),
-  version: z
-    .object({
-      number: z.string().optional(),
-    })
-    .optional(),
-});
-
 /** List current indexes and their document counts. */
 export async function listIndexes(
   config: SetupConfig,
@@ -229,11 +232,3 @@ export async function listIndexes(
     docsCount: parseInt(idx['docs.count'], 10) || 0,
   }));
 }
-
-const CatIndicesSchema = z.array(
-  z.object({
-    index: z.string(),
-    health: z.string(),
-    'docs.count': z.string(),
-  }),
-);

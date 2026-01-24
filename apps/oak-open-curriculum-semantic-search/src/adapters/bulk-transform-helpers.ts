@@ -118,6 +118,31 @@ export function getKeyStageTitle(keyStage: KeyStage): string {
 // ============================================================================
 
 /**
+ * KS4 science variants that exist in bulk data but not in the API.
+ * These map to the parent 'science' subject for filtering purposes.
+ * @see ADR-101 Subject Hierarchy for Search Filtering
+ */
+export const KS4_SCIENCE_VARIANTS = [
+  'biology',
+  'chemistry',
+  'physics',
+  'combined-science',
+] as const;
+
+/**
+ * Type for KS4 science variant slugs.
+ */
+export type Ks4ScienceVariant = (typeof KS4_SCIENCE_VARIANTS)[number];
+
+/**
+ * Type guard for KS4 science variants.
+ */
+export function isKs4ScienceVariant(value: string): value is Ks4ScienceVariant {
+  const variants: readonly string[] = KS4_SCIENCE_VARIANTS;
+  return variants.includes(value);
+}
+
+/**
  * Maps bulk data subject variants to API subject slugs.
  *
  * @remarks
@@ -125,7 +150,7 @@ export function getKeyStageTitle(keyStage: KeyStage): string {
  * physics, combined-science) that map to the parent 'science' subject.
  * The API's subject parameter only accepts the base subjects.
  */
-const BULK_SUBJECT_TO_API_SUBJECT: Readonly<Record<string, string>> = {
+const BULK_SUBJECT_TO_API_SUBJECT: Readonly<Record<Ks4ScienceVariant, 'science'>> = {
   // KS4 science variants all map to 'science'
   'combined-science': 'science',
   biology: 'science',
@@ -151,5 +176,8 @@ const BULK_SUBJECT_TO_API_SUBJECT: Readonly<Record<string, string>> = {
  * ```
  */
 export function normaliseSubjectSlug(bulkSubjectSlug: string): string {
-  return BULK_SUBJECT_TO_API_SUBJECT[bulkSubjectSlug] ?? bulkSubjectSlug;
+  if (isKs4ScienceVariant(bulkSubjectSlug)) {
+    return BULK_SUBJECT_TO_API_SUBJECT[bulkSubjectSlug];
+  }
+  return bulkSubjectSlug;
 }

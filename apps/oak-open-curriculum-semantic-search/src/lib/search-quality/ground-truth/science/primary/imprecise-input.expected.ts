@@ -15,4 +15,5 @@ export const SCIENCE_PRIMARY_IMPRECISE_INPUT_EXPECTED: ExpectedRelevance = {
   'evolution-evidence': 3,
   'animal-adaptations': 3,
   'charles-darwin-and-finches': 2,
+  'the-survival-of-the-fittest': 2,
 } as const;

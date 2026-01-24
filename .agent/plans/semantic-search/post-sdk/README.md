@@ -25,6 +25,16 @@ All work in this folder happens AFTER SDK extraction is complete.
 
 ---
 
+## Standalone Plans
+
+Plans that span multiple streams or address SDK architecture.
+
+| Plan | Intent | Prerequisite |
+|------|--------|--------------|
+| [subject-domain-model.md](subject-domain-model.md) | Curriculum SDK type-gen: subject hierarchy, KS4 patterns, curriculum config | Ground truth review complete |
+
+---
+
 ## Streams
 
 Each stream is a coherent domain of work with its own README explaining intent and impact.

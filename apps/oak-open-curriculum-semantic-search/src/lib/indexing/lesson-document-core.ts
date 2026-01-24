@@ -197,6 +197,7 @@ export function buildLessonDocument(params: CreateLessonDocParams): SearchLesson
     lesson_slug: lessonSlug,
     lesson_title: lessonTitle,
     subject_slug: subjectSlug,
+    subject_parent: subjectSlug,
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,

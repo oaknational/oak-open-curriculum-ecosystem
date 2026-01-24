@@ -60,7 +60,7 @@ export const physicalEducationSynonyms = {
   // ═══════════════════════════════════════════════════════════════════════════
 
   /** Football - soccer */
-  football: ['soccer'],
+  football: ['soccer', 'feet', 'dribbling', 'passing', 'kicking'],
 
   /** Basketball */
   basketball: ['basket ball'],

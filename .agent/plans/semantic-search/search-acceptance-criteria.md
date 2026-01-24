@@ -1,7 +1,7 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-20
-**Status**: 🔄 Ground Truth Review In Progress (20/30 entries reviewed)
+**Last Updated**: 2026-01-23
+**Status**: 🔄 Ground Truth Review In Progress (28/30 entries reviewed)
 **Purpose**: Defines what "exhausted" means for each level, vs "target met"
 
 ---
@@ -35,18 +35,18 @@ Levels (from [ADR-082](../../../docs/architecture/architectural-decisions/082-fu
 | **2. Runtime Validation** | Semantic rules (16 checks) | ✅ PASS |
 | **3. Qualitative Review** | Production readiness | 🔄 **IN PROGRESS** (20/30 entries) |
 
-### Stage 3 Qualitative Review Progress (2026-01-20)
+### Stage 3 Qualitative Review Progress (2026-01-23)
 
 | Metric | Value |
 |--------|-------|
-| Total queries | 120+ (maths has 24 queries = 3 per category) |
+| Total queries | 132+ (science has 32 queries) |
 | Subject/phase entries | 30 |
-| Entries reviewed | **20/30** (67%) |
-| Remaining | 10 entries |
+| Entries reviewed | **28/30** (93%) |
+| Remaining | 2 entries (Spanish pri+sec) |
 
-**Reviewed so far**: art (pri+sec), citizenship/sec, computing (pri+sec), cooking-nutrition (pri+sec), design-technology (pri+sec), english (pri+sec), french (pri+sec), geography (pri+sec), german/sec, history/sec, **maths (pri+sec)**
+**Reviewed so far**: art (pri+sec), citizenship/sec, computing (pri+sec), cooking-nutrition (pri+sec), design-technology (pri+sec), english (pri+sec), french (pri+sec), geography (pri+sec), german/sec, history/sec, maths (pri+sec), music (pri+sec), physical-education (pri+sec), religious-education (pri+sec), **science (pri+sec — Phase 1C + GT fixes COMPLETE)**
 
-**Next**: music (pri+sec)
+**Next**: spanish (pri+sec)
 
 **See**: [ground-truth-review-checklist.md](active/ground-truth-review-checklist.md) for full progress tracking
 
@@ -470,6 +470,7 @@ For any search-affecting change:
 
 | Date | Change |
 |------|--------|
+| 2026-01-23 | Updated GT review progress to 28/30; science GT fixes complete; minimum_should_match tuning implemented |
 | 2026-01-17 | Restructured post-sdk into streams; Level 1 status corrected to "awaiting GT validation"; renamed tiers to levels |
 | 2026-01-17 | Updated query count from 474 to 120 (restructured to 4 categories × 30 entries) |
 | 2026-01-07 | Added test coverage requirements section |

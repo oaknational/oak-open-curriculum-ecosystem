@@ -121,11 +121,8 @@ export const spanishSynonyms = {
   /** Question words - interrogatives */
   'question-words': ['interrogatives', 'wh-words'],
 
-  /** Cómo - how */
-  cómo: ['como', 'how question'],
-
-  /** Quién - who */
-  quién: ['quien', 'who question'],
+  // NOTE: Spanish question words (cómo, quién) removed.
+  // They were translation hints, not synonyms. See bucket-c-analysis.ts.
 
   // ═══════════════════════════════════════════════════════════════════════════
   // STRUCTURES

@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const PHYSICAL_EDUCATION_PRIMARY_IMPRECISE_INPUT_QUERY: GroundTruthQueryDefinition = {
-  query: 'footbal skills primary',
+  query: 'dribbling baal with feet',
   category: 'imprecise-input',
-  description: 'Common misspelling of football - tests fuzzy recovery',
+  description: 'Common misspelling of ball - tests fuzzy recovery on curriculum vocabulary',
   expectedFile: './imprecise-input.expected.ts',
 } as const;

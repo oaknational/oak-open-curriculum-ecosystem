@@ -153,9 +153,9 @@ describe('UNITS_INDEX_FIELDS', () => {
     const requiredFields = UNITS_INDEX_FIELDS.filter((f) => !f.optional);
     const optionalFields = UNITS_INDEX_FIELDS.filter((f) => f.optional);
 
-    // Required: unit_id, unit_slug, unit_title, subject_slug, key_stage,
+    // Required: unit_id, unit_slug, unit_title, subject_slug, subject_parent, key_stage,
     //           lesson_ids, lesson_count, unit_url, subject_programmes_url, doc_type
-    expect(requiredFields).toHaveLength(10);
+    expect(requiredFields).toHaveLength(11);
 
     // Optional: subject_title, key_stage_title, phase_slug, years, unit_topics, sequence_ids,
     //           thread_slugs, thread_titles, thread_orders, title_suggest,

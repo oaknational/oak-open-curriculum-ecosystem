@@ -12,6 +12,7 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SCIENCE_PRIMARY_CROSS_TOPIC_EXPECTED: ExpectedRelevance = {
-  'what-animals-eat': 3,
-  'animal-structure': 2,
+  'protecting-food-chains': 3,
+  'dangers-to-food-chains-non-statutory': 3,
+  'changes-in-food-chains-non-statutory': 2,
 } as const;

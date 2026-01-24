@@ -17,6 +17,7 @@ export const historySynonyms = {
   victorians: ['victorian'],
   'cold-war': ['superpower rivalry'],
   'british-empire': ['empire', 'imperial'],
+  'anglo-saxon': ['anglo saxon', 'anglo-saxons', 'anglo saxons'],
 
   // [MINED-2025-12-26] Extracted by LLM agent from bulk curriculum definitions
   royalist: ['cavaliers', 'cavalier'],

@@ -10,6 +10,7 @@
  */
 
 import type { IndexFieldDefinitions } from './types.js';
+import { KS4_METADATA_FIELDS } from './ks4-metadata-fields.js';
 import { UNIT_ENRICHMENT_FIELDS } from './unit-enrichment-fields.js';
 
 /** Field definitions for the oak_threads search index. @see SearchThreadIndexDocSchema */
@@ -43,6 +44,8 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'lesson_slug', zodType: 'string', optional: false },
   { name: 'lesson_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
@@ -76,15 +79,7 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   // Lesson metadata (from LessonSummaryResponseSchema)
   { name: 'supervision_level', zodType: 'string', optional: true },
   { name: 'downloads_available', zodType: 'boolean', optional: true },
-  // KS4 metadata arrays (many-to-many relationships per ADR-080)
-  { name: 'tiers', zodType: 'array-string', optional: true },
-  { name: 'tier_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_boards', zodType: 'array-string', optional: true },
-  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_subjects', zodType: 'array-string', optional: true },
-  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
-  { name: 'ks4_options', zodType: 'array-string', optional: true },
-  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
+  ...KS4_METADATA_FIELDS,
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
@@ -112,6 +107,8 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
@@ -131,15 +128,7 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'title_suggest', zodType: 'object', optional: true },
   // Unit enrichment fields from /units/{unit}/summary
   ...UNIT_ENRICHMENT_FIELDS,
-  // KS4 metadata arrays (many-to-many relationships per ADR-080)
-  { name: 'tiers', zodType: 'array-string', optional: true },
-  { name: 'tier_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_boards', zodType: 'array-string', optional: true },
-  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_subjects', zodType: 'array-string', optional: true },
-  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
-  { name: 'ks4_options', zodType: 'array-string', optional: true },
-  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
+  ...KS4_METADATA_FIELDS,
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 
@@ -163,6 +152,8 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
   { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },
   { name: 'key_stage', zodType: 'string', optional: false, enumRef: 'KEY_STAGE_TUPLE' },
@@ -188,15 +179,7 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'title_suggest', zodType: 'object', optional: true },
   // Unit enrichment fields from /units/{unit}/summary
   ...UNIT_ENRICHMENT_FIELDS,
-  // KS4 metadata arrays (many-to-many relationships per ADR-080)
-  { name: 'tiers', zodType: 'array-string', optional: true },
-  { name: 'tier_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_boards', zodType: 'array-string', optional: true },
-  { name: 'exam_board_titles', zodType: 'array-string', optional: true },
-  { name: 'exam_subjects', zodType: 'array-string', optional: true },
-  { name: 'exam_subject_titles', zodType: 'array-string', optional: true },
-  { name: 'ks4_options', zodType: 'array-string', optional: true },
-  { name: 'ks4_option_titles', zodType: 'array-string', optional: true },
+  ...KS4_METADATA_FIELDS,
   { name: 'doc_type', zodType: 'string', optional: false },
 ] as const;
 

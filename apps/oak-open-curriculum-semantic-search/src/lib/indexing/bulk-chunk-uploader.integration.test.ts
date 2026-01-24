@@ -59,6 +59,7 @@ function createTestOperations(count: number): BulkOperations {
         lesson_slug: `lesson-${i}`,
         lesson_title: `Test Lesson ${i}`,
         subject_slug: 'maths',
+        subject_parent: 'maths',
         key_stage: 'ks4',
         unit_ids: ['test-unit'],
         unit_titles: ['Test Unit'],

@@ -257,5 +257,43 @@ describe('lesson-document-builder', () => {
       // Empty array becomes empty array (not undefined) - arrays are copied
       expect(doc.years).toEqual([]);
     });
+
+    describe('subject_parent derivation', () => {
+      it('sets subject_parent to match subject_slug for science', () => {
+        const params = createMinimalParams({ subjectSlug: 'science' });
+
+        const doc = buildLessonDocument(params);
+
+        expect(doc.subject_parent).toBe('science');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for maths', () => {
+        const params = createMinimalParams({ subjectSlug: 'maths' });
+
+        const doc = buildLessonDocument(params);
+
+        expect(doc.subject_parent).toBe('maths');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for english', () => {
+        const params = createMinimalParams({ subjectSlug: 'english' });
+
+        const doc = buildLessonDocument(params);
+
+        expect(doc.subject_parent).toBe('english');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+
+      it('sets subject_parent to match subject_slug for history', () => {
+        const params = createMinimalParams({ subjectSlug: 'history' });
+
+        const doc = buildLessonDocument(params);
+
+        expect(doc.subject_parent).toBe('history');
+        expect(doc.subject_parent).toBe(doc.subject_slug);
+      });
+    });
   });
 });

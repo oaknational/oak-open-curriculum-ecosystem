@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_SECONDARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'predator and prey ecosystem relationships',
+  query: 'energy and chemical reactions',
   category: 'cross-topic',
-  description: 'Cross-topic intersection: ecology + behaviour',
+  description: 'Tests finding lessons combining energy concepts with chemical reactions',
   expectedFile: './cross-topic.expected.ts',
 } as const;
