@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const ART_SECONDARY_IMPRECISE_INPUT_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach drawing skills beginers',
+  query: 'drawing skills begginers',
   category: 'imprecise-input',
-  description: 'Tests search resilience to typo ',
+  description: 'Tests typo recovery: begginers → beginners',
   expectedFile: './imprecise-input.expected.ts',
 } as const;

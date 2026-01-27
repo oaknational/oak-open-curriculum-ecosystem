@@ -51,31 +51,46 @@ export interface EntryBenchmarkResult {
   readonly perCategory: readonly CategoryResult[];
 }
 
-/** Aggregate query results into entry-level metrics. */
+/**
+ * Aggregate query results into entry-level metrics.
+ *
+ * NOTE: future-intent queries are EXCLUDED from aggregate statistics
+ * but included in perCategory for separate reporting.
+ */
 function aggregateResults(
   entry: GroundTruthEntry,
   results: readonly QueryResult[],
 ): EntryBenchmarkResult {
-  const avgMrr = results.reduce((sum, r) => sum + r.mrr, 0) / results.length;
-  const avgNdcg10 = results.reduce((sum, r) => sum + r.ndcg10, 0) / results.length;
-  const avgPrecision3 = results.reduce((sum, r) => sum + r.precision3, 0) / results.length;
-  const avgRecall10 = results.reduce((sum, r) => sum + r.recall10, 0) / results.length;
-  const zeroHitCount = results.filter((r) => !r.hasHit).length;
-  const latencies = results.map((r) => r.latencyMs);
-  const avgLatencyMs = latencies.reduce((sum, l) => sum + l, 0) / latencies.length;
+  // Separate future-intent results from regular results
+  const regularResults = results.filter((r) => r.category !== 'future-intent');
+  const regularCount = regularResults.length;
 
-  // Calculate per-category metrics
+  // Calculate aggregates ONLY from regular results (exclude future-intent)
+  const avgMrr =
+    regularCount > 0 ? regularResults.reduce((sum, r) => sum + r.mrr, 0) / regularCount : 0;
+  const avgNdcg10 =
+    regularCount > 0 ? regularResults.reduce((sum, r) => sum + r.ndcg10, 0) / regularCount : 0;
+  const avgPrecision3 =
+    regularCount > 0 ? regularResults.reduce((sum, r) => sum + r.precision3, 0) / regularCount : 0;
+  const avgRecall10 =
+    regularCount > 0 ? regularResults.reduce((sum, r) => sum + r.recall10, 0) / regularCount : 0;
+  const zeroHitCount = regularResults.filter((r) => !r.hasHit).length;
+  const latencies = regularResults.map((r) => r.latencyMs);
+  const avgLatencyMs =
+    latencies.length > 0 ? latencies.reduce((sum, l) => sum + l, 0) / latencies.length : 0;
+
+  // Calculate per-category metrics (includes future-intent for separate display)
   const perCategory = aggregateByCategory(results);
 
   return {
     subject: entry.subject,
     phase: entry.phase,
-    queryCount: entry.queries.length,
+    queryCount: regularCount, // Only count regular queries in aggregate
     mrr: avgMrr,
     ndcg10: avgNdcg10,
     precision3: avgPrecision3,
     recall10: avgRecall10,
-    zeroHitRate: zeroHitCount / results.length,
+    zeroHitRate: regularCount > 0 ? zeroHitCount / regularCount : 0,
     avgLatencyMs,
     latencies,
     perCategory,
@@ -111,14 +126,14 @@ export interface ReviewQueryResult {
 /**
  * Runs benchmark for a single ground truth entry.
  *
+ * Shows per-query progress with MRR status.
+ *
  * @param entry - Ground truth entry containing queries and expected results
- * @param verbose - Whether to log per-query results
  * @param searchFn - Search function (injected for testability)
  * @returns Aggregated benchmark results for the entry
  */
 export async function benchmarkEntry(
   entry: GroundTruthEntry,
-  verbose: boolean,
   searchFn: SearchFunction,
 ): Promise<EntryBenchmarkResult> {
   const results: QueryResult[] = [];
@@ -138,10 +153,8 @@ export async function benchmarkEntry(
       );
       results.push(result);
 
-      if (verbose) {
-        const status = result.mrr > 0 ? '✓' : '✗';
-        console.log(`  ${status} "${query.query}" - MRR: ${result.mrr.toFixed(3)}`);
-      }
+      const status = result.mrr > 0 ? '✓' : '✗';
+      console.log(`  ${status} "${query.query}" - MRR: ${result.mrr.toFixed(3)}`);
     } catch (error) {
       console.error(`  ✗ Error running query "${query.query}":`, error);
       results.push(createErrorResult(query.category, query.expectedRelevance));

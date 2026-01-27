@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SPANISH_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach Spanish verb endings year 7',
+  query: 'Spanish verb endings Year 7',
   category: 'natural-expression',
-  description: 'Teacher request for verb conjugation',
+  description: 'Tests vocabulary bridging: verb endings to conjugation content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

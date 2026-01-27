@@ -30,22 +30,53 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
-## Use of Sub-agents [Claude only, other agents should apply self-review instead]
+## Use Sub-agents
 
-Use sub-agents to review changes; you must carry out the analysis yourself first. This establishes context, which the sub-agents can then build on from their perspectives.
+Always apply your own critical thinking to your work, and then use the sub-agents to gain additional perspectives and insights.
+
+### Available Sub-agents
+
+Specialist sub-agents provide targeted reviews and insights. Use them proactively for quality assurance.
+
+| Agent | Purpose | When to Use |
+|-------|---------|-------------|
+| `architecture-reviewer` | Boundary compliance, import patterns | Structural changes, new modules, refactoring |
+| `code-reviewer` | Quality, security, maintainability | After writing/modifying code, completing features |
+| `test-reviewer` | Test quality, TDD compliance, mock simplicity | After test changes, when auditing test suites |
+| `type-reviewer` | Type safety, compile-time embedding | Complex generics, type narrowing, external data |
+| `config-reviewer` | Tooling configuration, quality gates | Config changes, new workspaces, base config updates |
+| `subagent-architect` | Creating and optimising sub-agents | Agent design, system prompts, orchestration |
+
+**Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
+
+### Cursor Configuration
+
+| Location | Purpose |
+|----------|---------|
+| `.cursor/agents/*.md` | Sub-agent definitions |
+| `.cursor/commands/*.md` | Slash commands (`/jc-review`, `/jc-gates`, etc.) |
+| `.cursor/rules/*.mdc` | Always-applied rules |
 
 ## Essential Links
 
-**Important**:
+**Important**: These documents must be read.
 
-These documents must be read.
+### Core Practice
 
 - [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](testing-strategy.md) - TDD/BDD approach at all levels
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
-- [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
+- [Safety and Security](../../docs/agent-guidance/safety-and-security.md) - API keys, PII protection, security principles
+
+### Architecture and Schema
+
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
 - [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
+
+### Domain and Context
+
+- [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
+- [Experience Recording](../experience/README.md) - Subjective experience across sessions
 
 ## Development Commands
 
@@ -77,8 +108,8 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ### Structure
 
 - `apps/` – runnable apps that provide services to users
-- `packages/libs/` – libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
-- `packages/sdks/` – SDKs
+- `packages/libs/` – libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/result`)
+- `packages/sdks/` – SDKs (e.g., `@oaknational/oak-curriculum-sdk`)
 - `packages/core/` – Shared, low-level code
 
 ## Remember

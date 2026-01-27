@@ -6,11 +6,23 @@ A Next.js App Router workspace that ingests Oak Curriculum content via the offic
 
 ## What It Does
 
-The semantic search app indexes Oak's entire curriculum into Elasticsearch for teachers and students to search using natural language. For example:
+The semantic search app indexes Oak's entire curriculum into Elasticsearch for users to search using natural language.
 
-- "How do I teach fractions to Year 5?"
-- "Lessons about the water cycle"
-- "KS4 physics electricity"
+### Current Focus: Educator Lesson Search
+
+| Dimension         | Current Scope                       | Future                     |
+| ----------------- | ----------------------------------- | -------------------------- |
+| **Content Type**  | Lessons                             | Units, sequences, threads  |
+| **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
+| **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
+
+Example teacher searches:
+
+- "fake emails, scams, social engineering" (finding cyber security lessons)
+- "photosynthesis plant nutrition" (finding biology lessons)
+- "fractions unlike denominators" (finding maths lessons)
+
+A future learner-focused search may use different RRF weightings, retrievers, and preprocessing. Ground truths and evaluation currently assume the user is a professional teacher.
 
 The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic embeddings, enabling search by meaning rather than just keywords.
 

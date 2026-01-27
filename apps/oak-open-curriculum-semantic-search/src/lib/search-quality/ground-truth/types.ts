@@ -36,6 +36,7 @@ import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
  * | `natural-expression` | Teacher uses everyday language | System bridges vocabulary gaps |
  * | `imprecise-input` | Teacher types imperfectly (typos, truncation, wrong order) | Search is resilient — imprecise input doesn't break search |
  * | `cross-topic` | Teacher wants intersection content | System finds concept overlaps |
+ * | `future-intent` | Tests capability requiring Level 3-4 features | Excluded from stats, tracks future progress |
  *
  * @example
  * // Precise Topic - teacher knows the term
@@ -53,7 +54,8 @@ export type QueryCategory =
   | 'precise-topic'
   | 'natural-expression'
   | 'imprecise-input'
-  | 'cross-topic';
+  | 'cross-topic'
+  | 'future-intent';
 
 // ============================================================================
 // New Split Architecture (2026-01-19)

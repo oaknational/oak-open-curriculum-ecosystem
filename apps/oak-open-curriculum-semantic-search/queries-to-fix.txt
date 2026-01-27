@@ -1,0 +1,88 @@
+// For ALL of these, ask, would a PROFESSIONAL teacher make these queries during lesson planning or curriculum resource discovery work.
+// Given that these queries are filtered to a subject-phase pair, having the subject in the query just adds noise
+multiplikation timetables
+plants and animalls
+counting in groups, skip counting // check if this concept is in the bulk data
+global warming effects
+electrisity and magnets
+Ethical philosophy in modern religions
+French verbs for holiday activities
+coordinate geometry algebra
+narative writing iron man
+nutrition and health
+beat and pulse in singing
+vikins and anglo saxons
+relegion stories primary // this is nonsense, design a better test for fuzzy matching
+nutrision and health
+multiplication arrays
+athletics, runing and jumping
+origins of religions around the world
+negating sentences, key stage 3
+green design environment friendly // what is this testing, design a better query based on actual content
+Verb endings
+multiplication times tables // Check if times-tables actually feature in the content
+The carbon cycle
+Present tense grammer
+meditaton and prayer in world religions
+halfs and quarters and fractions
+splitting numbers into parts // what is this?
+Beats and rythyms 
+Verb congugation, simple present
+The concepts of right and wrong in philosophy
+how universal rights relate to fairness
+brush painting techneeques
+evoloution and biological and environmental adapation
+colour expression within portrait painting
+nutrision and helthy food // why are there so many variations on this same query, find all of them, redesign all but one, get rid of this one
+state change, ice melting
+German verb endings Year 7 // strip the year and design a better query
+Religious festivals around the world
+gothic literature
+Key stage 1 greetings
+verbs and adjectives and agreement
+Boudica and her goals in Roman Britain
+Division into equal portions
+Solving an equation to find an unknown number
+holocost and nazi germany // Design a completely different query
+AR verbs present tense // What is AR?
+energy nutrients and healthy eating // Another crappy duplicate
+french grammer avoir etre // What are we testing here? Redesign
+grammar and punctuation in essay writing // Is this an actual topic, in the data, in school, it is not the 1950s
+genetic inheritance and call nuclei
+frankenstien's monster, and the dramatic role of lightning // Check is this is in the content 
+databse design and sql
+human factor considerations, including ergonomics, in design
+rythm and patterns in drumming
+the relationship between linear equations and graphs
+maps and teamwork outdoor activities // wtf?
+French ER verbs singular // do better
+pythagorus' theorem triangles and angles
+area and perimeter problems together // nonsense
+fitness and athletics together // what? How is this a query a teacher would input
+place value tens and ones // redesign, using an actual concept from the data
+Lord of the Flies symbolism // is lord of the flies in the content?
+music composition in the film industry // is this in the content?
+sketching and materials properties // redesign based on real content
+working conditions and age for factory workers in Victorian Britain // Check in content
+cam mechanisms automata // wtf
+ratio proportion percentage // do better
+polygons and internal angles
+calculating gradients, how steep is the graph
+religious beliefs and practices // so just the whole subject then
+Vikings and Anglo-Saxons Britain // Do these periods overlap, is this in the content?
+estar states location Spanish // redesign, to generic, useless
+verbs and questions in German // redesign
+human resperation the lungs and heart
+East-West Schism and ecumenical movements compared with other religious traditions // lol, this is expected to do badly, it is supposed to be excluded from aggregate stats
+waves and the electromagnetic spectrum
+how democracy depends on laws
+tectonic plates and earthqakes
+syncopation rhythm music ks2 // There are a LOT of beat related queries, add some variety, and use real content
+flow controls, loops, data structures
+fench vocabulary primary // nonsense
+The capital cities of the united kingdom
+the abolition of slavery and revolutions in the 18th Century // Vet this for accuracy and sensitivity 
+Roles within the united kingdom parliament
+calculating the area of a rectangle 
+healthy lunches, balanced meals // more of the same, mine the content, find better queries
+ionic and covalent bonds in molecules

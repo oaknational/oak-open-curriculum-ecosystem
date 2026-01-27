@@ -7,6 +7,18 @@
 
 ## Critical Understanding: What Ground Truths Measure (2026-01-11)
 
+### Current Scope: Educator Lesson Search (2026-01-24)
+
+| Dimension         | Current Scope                       | Future (Not Today)         |
+| ----------------- | ----------------------------------- | -------------------------- |
+| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
+| **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
+
+**All current ground truths assume the user is a professional teacher searching for lessons.**
+
+A future learner-focused search may use different RRF weightings, different retrievers, and different preprocessing. Ground truths for that persona will be developed separately.
+
 ### Measurement Scope
 
 | What We Thought                                  | What We're Actually Measuring                                  |
@@ -328,7 +340,7 @@ These rules ensure ground truths test **ranking quality**, not just topic presen
 | Rule        | Requirement                       | Rationale                                                |
 | ----------- | --------------------------------- | -------------------------------------------------------- |
 | Length      | 3-7 words                         | Short enough to be realistic, long enough to be specific |
-| Specificity | Only 2-4 lessons highly relevant  | Tests ranking, not topic matching                        |
+| Specificity | 5 lessons highly relevant (min 4) | Tests ranking, not topic matching                        |
 | Realism     | Would a teacher type this?        | Ground truths must reflect real usage                    |
 | Single-word | Only for imprecise-input category | Single words are too ambiguous for ranking tests         |
 

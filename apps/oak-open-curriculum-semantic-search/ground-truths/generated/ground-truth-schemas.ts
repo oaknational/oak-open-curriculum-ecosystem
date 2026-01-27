@@ -4,7 +4,7 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-01-19T12:30:15.779Z
+ * Generated at: 2026-01-24T17:11:53.822Z
  *
  * @packageDocumentation
  */
@@ -31,9 +31,9 @@ export const RelevanceScoreSchema = z.union([
 ]);
 export type RelevanceScore = z.infer<typeof RelevanceScoreSchema>;
 
-/** Query categories. New: precise-topic, natural-expression, imprecise-input, cross-topic. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */
+/** Query categories. Standard: precise-topic, natural-expression, imprecise-input, cross-topic, future-intent. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */
 export const QueryCategorySchema = z.enum([
-  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic',
+  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic', 'future-intent',
   'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',
 ]);
 export type QueryCategory = z.infer<typeof QueryCategorySchema>;

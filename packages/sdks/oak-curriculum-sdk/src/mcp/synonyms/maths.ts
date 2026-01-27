@@ -122,8 +122,8 @@ export const mathsSynonyms = {
     'quadratic completion',
   ],
 
-  /** Factorising (US: factoring) */
-  factorising: ['factoring', 'factorise', 'factorize', 'factor', 'factorisation', 'factorization'],
+  /** Factorising - breaking into factors */
+  factorising: ['factorise', 'factor', 'factorisation'],
 
   /** Quadratic equations and graphs */
   'quadratic-equations': ['quadratics', 'quadratic', 'quadratic formula', 'solving quadratics'],

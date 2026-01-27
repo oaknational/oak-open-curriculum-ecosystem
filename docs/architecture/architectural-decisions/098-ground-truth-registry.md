@@ -7,6 +7,18 @@
 
 ## Critical Understanding: What Ground Truths Measure (2026-01-11)
 
+### Current Scope: Educator Lesson Search (2026-01-24)
+
+| Dimension         | Current Scope                       | Future (Not Today)         |
+| ----------------- | ----------------------------------- | -------------------------- |
+| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
+| **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
+
+**All current ground truths assume the user is a professional teacher searching for lessons.**
+
+A future learner-focused search may use different RRF weightings, different retrievers, and different preprocessing. Ground truths for that persona will be developed separately.
+
 ### Measurement Scope
 
 | What We Thought                                  | What We're Actually Measuring                                  |

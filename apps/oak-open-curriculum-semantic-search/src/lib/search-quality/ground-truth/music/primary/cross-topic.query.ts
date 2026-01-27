@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MUSIC_PRIMARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'singing and beat together',
+  query: 'singing beat, pulse',
   category: 'cross-topic',
-  description: 'Tests intersection of singing skills with rhythm concepts',
+  description: 'Tests intersection of singing skills with rhythm/pulse concepts',
   expectedFile: './cross-topic.expected.ts',
 } as const;

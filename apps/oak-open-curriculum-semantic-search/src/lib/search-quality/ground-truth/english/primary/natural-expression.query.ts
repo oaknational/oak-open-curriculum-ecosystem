@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const ENGLISH_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'stories about how characters feel',
+  query: 'character feelings, emotions in stories',
   category: 'natural-expression',
-  description: 'Tests informal phrasing: ',
+  description: 'Informal terminology bridging to character analysis/comprehension content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

@@ -33,8 +33,11 @@ pnpm benchmark --phase secondary
 # Run for a specific subject/phase combination
 pnpm benchmark --subject maths --phase secondary
 
-# Verbose mode shows per-query results
-pnpm benchmark --subject maths --phase secondary --verbose
+# Review mode: detailed per-query output for ground truth investigation
+pnpm benchmark --subject maths --phase secondary --review
+
+# Issues mode: generate markdown report of all problematic queries
+pnpm benchmark --issues
 ```
 
 ### What It Measures

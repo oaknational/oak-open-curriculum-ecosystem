@@ -1,33 +1,32 @@
 # High-Level Plan
 
-**Last Updated**: 2025-12-19  
+**Last Updated**: 2026-01-26  
 **Scope**: Strategic overview. Details are in individual plan documents.
 
-**Recent Changes (2025-12-19)**:
+**Recent Changes (2026-01-26)**:
+
+- Ground Truth strategy revised — focus on testing OUR value proposition, not Elasticsearch
+- New category structure: `natural-query` (bulk), `exact-term` (few), `typo-recovery` (handful)
+- Content-weighted distribution: maths gets considerably more coverage than low-priority subjects
+- Target: ~80-100 focused queries answering "Does search help teachers find what they need?"
+
+**Previous Changes (2025-12-19)**:
 
 - Semantic Search restructured from Phase 1-11 to Part → Stream → Task hierarchy
-- Created Part 1: Search Excellence with four streams (Foundation, Relevance, Intelligence, Infrastructure)
-- Archived legacy phase documents (phase-5, 6, 7, 8)
+- Created Part 1: Search Excellence with four streams
 - Aligned metrics with ADR-081 (Standard MRR ≥0.92, Hard MRR ≥0.50)
-
-**Previous Changes (2025-12-14)**:
-
-- Restructured Item #1 into separate workstreams (Semantic Search, Ontology, MCP Infrastructure)
-- Moved OAuth/Clerk to Completed section (plan archived as complete)
-- Type Discipline Restoration quality gates passing (Phase 5 DI deferred)
-- Deleted 3 unused packages: `mcp-transport`, `mcp-storage`, `mcp-providers-node` (workspace count: 14 → 11)
 
 ---
 
-## Current Priorities (2025-12-19)
+## Current Priorities (2026-01-26)
 
 **Active Work**:
 
-1. **Semantic Search Part 1** — Stream A ✅ Complete; Streams B (Relevance) and D (Infrastructure) ready to start
+1. **Semantic Search** — Ground Truth strategy revision (see [ground-truth-redesign-plan.md](semantic-search/active/ground-truth-redesign-plan.md))
 2. **Type Discipline Restoration** — Quality gates passing, ongoing refinement
 3. **SDK/MCP Enhancements** — Plan 05 (Zod v4) active
 
-**Next Up**: Part 1 Stream B (Semantic Reranking), Part 1 Stream D (SDK extraction), Ontology Resource (Plan 02)
+**Next Up**: GT implementation, SDK extraction, MCP integration, Ontology Resource (Plan 02)
 
 **Deferred**: Global State DI Refactoring, Advanced MCP Tools (Phase 4 of Plan 03)
 
@@ -41,32 +40,33 @@
 
 ### 1. Elasticsearch Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
 
-**Plan**: `.agent/plans/semantic-search/README.md` (navigation hub)
-
-**Current Work**: Full ingestion complete (16,414 docs). Now optimising search quality.
+**Plan**: `.agent/plans/semantic-search/roadmap.md` (authoritative roadmap)  
+**Current Work**: [ground-truth-redesign-plan.md](semantic-search/active/ground-truth-redesign-plan.md)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
 | 1 | Complete ES ingestion | ✅ Complete (16,414 docs) |
 | 2 | Sequence indexing | ✅ Complete (30 sequences, 57 facets) |
-| 4 | DRY/SRP refactoring | ✅ Complete |
-| 5 | Data completeness | ✅ Complete (thread context, categories) |
-| **3** | **Search quality optimization** | 🔄 **NEXT** — Ground truths, benchmarks, synonyms |
-| 6 | ES Native MCP research | 📋 Planned |
-| 7 | SDK/CLI extraction | 📋 Planned |
-| 8+ | MCP tool, conversational search | 📋 Future |
+| 3 | Level 1 fundamentals | ✅ Approaches complete |
+| **4** | **Ground truth redesign** | 🔄 **CURRENT** — Revising strategy |
+| 5 | SDK/CLI extraction | 📋 Planned |
+| 6 | MCP integration | 📋 Planned |
+| 7+ | Levels 2-4, conversational search | 📋 Future |
 
-**Success Criteria** (from [ADR-081](../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)):
+**Current Priority**: Ground Truth Strategy Revision
 
-| Metric | Current | Target | Status |
-|--------|---------|--------|--------|
-| Standard Query MRR | 0.944 | ≥0.92 | ✅ Met |
-| Hard Query MRR | **0.614** | ≥0.45 | ✅ **Exceeded by 36%** |
-| Tier 1 (KS4 Maths) | — | Complete | ✅ **EXHAUSTED** |
+The previous GT structure (120 queries, 4 categories per subject-phase) has been superseded:
 
-**Gap**: Ground truths cover KS4 Maths only. Need comprehensive coverage (all subjects, all key stages).
+| Issue | Resolution |
+|-------|------------|
+| 66/78 natural-expression are clipped lists | Require natural phrasing |
+| 30 typo queries is overkill | Reduce to 5-10 total |
+| Cross-topic questionable value | Keep only verified pairings |
+| Uniform distribution | Content-weighted (maths gets more) |
 
-**Next Priority**: M3 Search Quality Optimization. See [roadmap.md](./semantic-search/roadmap.md).
+**Core Question**: "Does search help teachers find what they need?"
+
+**Next Priority**: Revise queries per new strategy. See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 
@@ -282,12 +282,12 @@
 | M2 | Broad MCP platform compatibility | ✅ DONE |
 | M3 | Remote Streaming HTTP live (Vercel) | ✅ DONE |
 | M4 | OAuth/Clerk Integration | ✅ DONE |
-| **M5** | **Part 1 Stream A: Foundation** | ✅ DONE |
-| **M6** | **Part 1 Stream B: Relevance (Hard MRR ≥0.50)** | 🔄 IN PROGRESS |
-| M7 | Part 1 Stream D: Infrastructure (SDK + CLI) | 📋 Planned |
-| M8 | Ontology Resource Implementation | 📋 Planned |
-| M9 | OpenAI Apps SDK Integration | 📋 Planned |
-| M10 | Part 2: Semantic Search MCP Integration | 📋 Planned (after M7) |
+| M5 | Search Level 1: Fundamentals | ✅ DONE |
+| **M6** | **Ground Truth Redesign** | 🔄 **IN PROGRESS** |
+| M7 | Search SDK + CLI Extraction | 📋 Planned |
+| M8 | MCP Search Integration | 📋 Planned |
+| M9 | Ontology Resource Implementation | 📋 Planned |
+| M10 | OpenAI Apps SDK Integration | 📋 Planned |
 | M11 | Advanced MCP Tools | ⏸ Deferred |
 | M12 | Contract Testing | 📋 Planned |
 | M13 | SDK Workspace Separation | 📋 Planned |

@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const ENGLISH_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach students about gothic literature year 8',
+  query: 'gothic literature Year 8',
   category: 'natural-expression',
-  description: 'Teacher request with year group specification - tests informal phrasing',
+  description: 'Tests topic search with year group filter',
   expectedFile: './natural-expression.expected.ts',
 } as const;

@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const HISTORY_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach year 4 about the Romans',
+  query: 'Romans Year 4, Roman Britain',
   category: 'natural-expression',
-  description: 'Teacher request with year group - tests informal phrasing',
+  description: 'Tests topic search with year group and related term',
   expectedFile: './natural-expression.expected.ts',
 } as const;

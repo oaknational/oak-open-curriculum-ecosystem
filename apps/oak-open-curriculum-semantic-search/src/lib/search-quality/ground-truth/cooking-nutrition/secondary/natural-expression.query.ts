@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const COOKING_NUTRITION_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach students to make bread',
+  query: 'bread making, baking techniques',
   category: 'natural-expression',
-  description: 'Teacher intent phrasing for baking lessons',
+  description: 'Informal baking terminology bridging to food preparation content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

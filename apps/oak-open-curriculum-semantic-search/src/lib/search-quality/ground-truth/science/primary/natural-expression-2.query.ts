@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_PRIMARY_NATURAL_EXPRESSION_2_QUERY: GroundTruthQueryDefinition = {
-  query: 'why do things fall down',
+  query: 'gravity forces falling',
   category: 'natural-expression',
-  description: 'Tests vocabulary bridging from everyday question to gravity content',
+  description: 'Tests vocabulary bridging: informal physics terminology to forces content',
   expectedFile: './natural-expression-2.expected.ts',
 } as const;

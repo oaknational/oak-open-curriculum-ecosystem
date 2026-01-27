@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MUSIC_SECONDARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach folk songs sea shanty',
+  query: 'folk songs, sea shanty',
   category: 'natural-expression',
-  description: 'Teacher intent + specific genre (sea shanties)',
+  description: 'Informal genre terminology bridging to traditional music content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

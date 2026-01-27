@@ -95,12 +95,14 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push('export type RelevanceScore = z.infer<typeof RelevanceScoreSchema>;');
   lines.push('');
 
-  // QueryCategory - outcome-oriented framework (2026-01-09)
+  // QueryCategory - outcome-oriented framework (2026-01-09), future-intent added 2026-01-24
   lines.push(
-    '/** Query categories. New: precise-topic, natural-expression, imprecise-input, cross-topic. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */',
+    '/** Query categories. Standard: precise-topic, natural-expression, imprecise-input, cross-topic, future-intent. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */',
   );
   lines.push('export const QueryCategorySchema = z.enum([');
-  lines.push("  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic',"); // New
+  lines.push(
+    "  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic', 'future-intent',",
+  ); // Standard categories
   lines.push(
     "  'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',",
   ); // Legacy

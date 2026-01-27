@@ -12,8 +12,10 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const ENGLISH_PRIMARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'thinking-from-different-perspectives-jack-and-the-beanstalk': 3,
-  'thinking-from-lulus-perspective-and-asking-questions': 3,
-  'thinking-from-paddington-and-floella-benjamins-perspectives': 3,
-  'developing-reading-preferences-in-year-3-through-appreciation-of-characters': 2,
+  // Directly about emotions and feelings in stories
+  'comparing-emotions-and-feelings-in-paddington': 3,
+  'exploring-emotions-in-the-final-year': 3,
+  'exploring-characters-emotions': 3,
+  // Related: understanding character perspectives/feelings
+  'thinking-from-paddington-and-floella-benjamins-perspectives': 2,
 } as const;

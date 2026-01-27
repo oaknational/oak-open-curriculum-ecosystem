@@ -129,8 +129,15 @@ function formatSummaryRow(
   result: QueryResult,
   refs: ReferenceValues,
 ): string {
+  // Mark future-intent queries as excluded in the query text display
+  const isFutureIntent = query.category === 'future-intent';
+  const suffix = isFutureIntent ? ' (excl)' : '';
+  const maxLen = isFutureIntent ? 41 : 47; // Shorter to accommodate suffix
   const queryText =
-    query.query.length > 47 ? query.query.substring(0, 47) + '...' : query.query.padEnd(50);
+    query.query.length > maxLen
+      ? query.query.substring(0, maxLen) + '...' + suffix
+      : (query.query + suffix).padEnd(50);
+
   const mrrStr = formatWithStatus(result.mrr, refs.mrr, 'higher').padEnd(8);
   const ndcgStr = formatWithStatus(result.ndcg10, refs.ndcg10, 'higher').padEnd(8);
   const p3Str = formatWithStatus(result.precision3, refs.precision3, 'higher').padEnd(8);
@@ -170,19 +177,28 @@ function printAggregateAndNextSteps(
 
 /**
  * Print review summary after all queries.
+ *
+ * NOTE: future-intent queries are EXCLUDED from aggregate statistics
+ * but still shown in the individual query list.
  */
 export function printReviewSummary(reviews: readonly ReviewQueryResult[]): void {
   const refs = loadReferenceValues();
   printSummaryTableHeader();
 
   const totals = { mrr: 0, ndcg: 0, p3: 0, r10: 0 };
+  let regularCount = 0;
+
   for (const { query, result } of reviews) {
     console.log(formatSummaryRow(query, result, refs));
-    totals.mrr += result.mrr;
-    totals.ndcg += result.ndcg10;
-    totals.p3 += result.precision3;
-    totals.r10 += result.recall10;
+    // Exclude future-intent from aggregate stats
+    if (query.category !== 'future-intent') {
+      totals.mrr += result.mrr;
+      totals.ndcg += result.ndcg10;
+      totals.p3 += result.precision3;
+      totals.r10 += result.recall10;
+      regularCount++;
+    }
   }
 
-  printAggregateAndNextSteps(totals, reviews.length, refs);
+  printAggregateAndNextSteps(totals, regularCount, refs);
 }

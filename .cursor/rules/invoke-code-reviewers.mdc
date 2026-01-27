@@ -1,0 +1,71 @@
+---
+description: After significant code changes, invoke the multi-model code reviewer ensemble for diverse perspectives. Use when completing features, fixing bugs, refactoring, or making architectural changes.
+globs: '**/*.{ts,tsx,mts}'
+---
+
+# Invoke Multi-Model Code Reviewers
+
+After significant code changes, invoke multiple code reviewer sub-agents for diverse perspectives. The value comes from the **multiplicity of approaches** — different models catch different issues.
+
+## When to Invoke
+
+Significant changes include:
+
+- Completing a feature or user story
+- Fixing a non-trivial bug
+- Refactoring (especially structural changes)
+- Adding or modifying public APIs
+- Changes touching multiple files
+- Architectural modifications
+
+Minor changes (typo fixes, comment updates, formatting) do not require full ensemble review.
+
+## The Ensemble
+
+Invoke **all 6 reviewers** from the general family in parallel for maximum perspective diversity:
+
+| Agent | Model | Invoke via Task tool |
+|-------|-------|---------------------|
+| `code-reviewer-general-composer` | Composer 1 | `subagent_type: "code-reviewer-general-composer"` |
+| `code-reviewer-general-gemini-flash` | Gemini 3 Flash | `subagent_type: "code-reviewer-general-gemini-flash"` |
+| `code-reviewer-general-haiku` | Haiku 4.5 | `subagent_type: "code-reviewer-general-haiku"` |
+| `code-reviewer-general-grok` | Grok Code | `subagent_type: "code-reviewer-general-grok"` |
+| `code-reviewer-general-kimi` | Kimi K2 | `subagent_type: "code-reviewer-general-kimi"` |
+| `code-reviewer-general-codex-low` | GPT-5.2 Codex Low | `subagent_type: "code-reviewer-general-codex-low"` |
+
+Use the `/jc-review-ensemble` command to invoke all 6 in parallel with a single action.
+
+For security-sensitive changes, also invoke:
+
+| Agent | Model |
+|-------|-------|
+| `code-reviewer-security-codex` | GPT-5.2 Codex |
+| `code-reviewer-security-opus` | Opus 4.5 |
+
+For architectural changes (new workspaces, cross-boundary imports, structural refactoring), invoke the specialist:
+
+| Agent | Focus |
+|-------|-------|
+| `architecture-reviewer` | Workspace boundaries, import direction, ADR compliance |
+
+## Invocation Pattern
+
+Use the Task tool with `readonly: true`:
+
+```yaml
+Task tool:
+  subagent_type: "code-reviewer-general-gemini-flash"
+  readonly: true
+  prompt: "Review the recent changes for quality, security, and maintainability."
+```
+
+Invoke multiple reviewers in parallel for efficiency.
+
+## Synthesise Findings
+
+After receiving feedback from multiple reviewers:
+
+1. Identify common themes (issues flagged by multiple models)
+2. Note unique insights (issues only one model caught)
+3. Prioritise by severity (Critical > Important > Suggestions)
+4. Present consolidated findings to user

@@ -80,8 +80,8 @@ export const artSynonyms = {
   /** Shape and form */
   shape: ['shapes', 'form', 'forms'],
 
-  /** Colour - UK/US spelling */
-  colour: ['color', 'colours', 'colors'],
+  /** Colour - singular/plural */
+  colour: ['colours'],
 
   /** Texture - surface quality */
   texture: ['surface', 'tactile', 'surface quality'],

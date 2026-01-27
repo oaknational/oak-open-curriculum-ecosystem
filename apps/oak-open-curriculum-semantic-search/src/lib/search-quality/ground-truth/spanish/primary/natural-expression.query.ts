@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SPANISH_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teaching estar for states and location KS2',
+  query: 'estar states location Spanish',
   category: 'natural-expression',
-  description: 'Teacher phrasing using curriculum terminology for core grammatical concept',
+  description: 'Tests vocabulary bridging: estar usage for states and location',
   expectedFile: './natural-expression.expected.ts',
 } as const;

@@ -20,6 +20,16 @@ import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/ty
  */
 export const LLM_REQUIRED_CATEGORIES: readonly QueryCategory[] = ['natural-expression'] as const;
 
+/**
+ * Categories excluded from ALL aggregate statistics.
+ *
+ * These categories test capabilities that require Level 3-4 search features
+ * not yet implemented. They are tracked separately to measure progress toward
+ * future capabilities.
+ * - future-intent: Requires intent classification (Level 4)
+ */
+export const EXCLUDED_FROM_STATS_CATEGORIES: readonly QueryCategory[] = ['future-intent'] as const;
+
 /** Filtered aggregate result type. */
 export interface FilteredAggregate {
   queryCount: number;
@@ -80,7 +90,7 @@ function finalizeAggregate(
   };
 }
 
-/** Calculate filtered aggregate excluding LLM-required categories. */
+/** Calculate filtered aggregate excluding LLM-required AND excluded-from-stats categories. */
 export function calculateFilteredAggregate(
   results: readonly EntryBenchmarkResult[],
 ): FilteredAggregate {
@@ -89,7 +99,9 @@ export function calculateFilteredAggregate(
 
   for (const entry of results) {
     for (const cat of entry.perCategory) {
-      if (!LLM_REQUIRED_CATEGORIES.includes(cat.category)) {
+      const isLlmRequired = LLM_REQUIRED_CATEGORIES.includes(cat.category);
+      const isExcludedFromStats = EXCLUDED_FROM_STATS_CATEGORIES.includes(cat.category);
+      if (!isLlmRequired && !isExcludedFromStats) {
         accumulateCategory(acc, cat);
       }
     }

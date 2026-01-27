@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_SECONDARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'combining algebra with graphs',
+  query: 'algebra graphs, linear equations',
   category: 'cross-topic',
-  description: 'Cross-topic intersection - tests algebra+graphing overlap',
+  description: 'Cross-topic intersection: algebra and graphing overlap',
   expectedFile: './cross-topic.expected.ts',
 } as const;

@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const RELIGIOUS_EDUCATION_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'why do people pray',
+  query: 'prayer, worship practices',
   category: 'natural-expression',
-  description: 'Informal question format bridging to curriculum concepts about prayer and worship',
+  description: 'Informal terminology bridging to curriculum concepts about religious practices',
   expectedFile: './natural-expression.expected.ts',
 } as const;

@@ -10,9 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_PRIMARY_NATURAL_EXPRESSION_2_QUERY: GroundTruthQueryDefinition = {
-  query: 'counting in groups of',
+  query: 'counting in groups, skip counting',
   category: 'natural-expression',
-  description:
-    'Tests vocabulary bridging: "counting in groups of" is natural teacher language that maps to multiplication (grouping model)',
+  description: 'Tests vocabulary bridging: teacher language for multiplication grouping model',
   expectedFile: './natural-expression-2.expected.ts',
 } as const;

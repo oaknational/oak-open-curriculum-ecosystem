@@ -6,13 +6,19 @@
  * - 2 = Relevant
  * - 1 = Marginal
  *
+ * Query: "fake emails, scams, social engineering"
+ * Vocabulary bridging: "fake emails" → phishing, "scams" → social engineering
+ *
  * @packageDocumentation
  */
 
 import type { ExpectedRelevance } from '../../types';
 
 export const COMPUTING_SECONDARY_NATURAL_EXPRESSION_EXPECTED: ExpectedRelevance = {
-  'writing-a-text-based-program': 3,
-  'working-with-numerical-inputs': 2,
-  'using-selection': 2,
+  // Year 9: teaches phishing, blagging, name generator attacks
+  'social-engineering': 3,
+  // Year 11: teaches phishing, pharming, blagging techniques
+  'social-engineering-techniques': 3,
+  // Year 10: covers phishing, malware (more general overview)
+  'being-safe-online': 2,
 } as const;

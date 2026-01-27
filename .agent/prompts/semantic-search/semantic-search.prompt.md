@@ -1,475 +1,278 @@
-# Semantic Search — Ground Truth Review Protocol
+# Semantic Search — Ground Truth Query Grounding
 
-**Status**: 🔄 **Ground Truth Review — Quality Improvement Pass**  
-**This Session**: **Continue Priority 3+ queries, MFL refinement**  
-**Last Updated**: 2026-01-24
+**Status**: ⚠️ Stage 1b — Query Grounding Required (subject filter fix blocking KS4 science)  
+**Current Priority**: Execute known-answer-first process for each subject/key-stage  
+**Last Updated**: 2026-01-27
 
 ---
 
-## ✅ Current State: Validation Passing
+## Known Blockers
 
-### 1. Validation Status
+### Subject Filter Implementation Gap
 
-```bash
-pnpm ground-truth:validate  # PASSES (0 errors)
+KS4 science sub-disciplines (physics, chemistry, biology, combined-science) cannot be filtered individually. See [subject-filter-fix-plan.md](../../plans/semantic-search/active/subject-filter-fix-plan.md).
+
+**Impact**: 11 ground truth queries for KS4 science are blocked until this is fixed.
+
+**Solution**: Add SDK-generated subject hierarchy lookup (`SUBJECT_TO_PARENT`). Users specify one subject (e.g., `physics`), system uses smart filtering:
+- At KS4: filter on `subject_slug: physics` (specific)
+- At other key stages: filter on `subject_parent: science` (parent, since no physics exists)
+
+---
+
+## The User: Professional Teachers
+
+ALL users are professional teachers. Every query should be constructed with a professional teacher persona in mind.
+
+---
+
+## The Methodology: Known-Answer-First
+
+**This is mandatory. There is no alternative.**
+
+```text
+WRONG:  Invent query → hope curriculum has matches → find whatever slugs exist
+        └─ Result: 25% zero-hit rate (Spanish Session 24)
+
+CORRECT: Mine curriculum → identify target lessons → construct query to find them
+         └─ Result: Every query grounded, every slug justified
 ```
 
-All validation errors from previous sessions have been fixed.
-
-### 2. Session 2026-01-24 Progress Summary
-
-**Completed Work**:
-
-| Issue | Resolution | Result |
-|-------|------------|--------|
-| French negation synonym missing | Added to `french.ts` | MRR 0.000 → **1.000** |
-| Control queries for fuzzy diagnosis | Added history/cross-topic-2, maths/precise-topic-4 | Diagnostic capability |
-| MFL synonym DRY violations | Documented in `mfl-synonym-architecture.md` | Future refactoring planned |
-| Bucket C translation hints | Removed from MFL files, archived | Cleaner synonym sets |
-| German negation German words | Removed `nicht`, `kein`, `nie` | English synonyms only |
-| 3 validation errors | Fixed all three | Validation passing |
-
-**Remaining Search Quality Gaps** (document, don't fix with GT changes):
-
-| Query | MRR | Issue | Future Solution |
-|-------|-----|-------|-----------------|
-| `narative writing storys iron man Year 3` | 0.333 | Multiple typos exceed fuzzy limits | Query rules, domain boosting |
-| `electrisity and magnits` | 0.200 | Fuzzy false positive (magnits → magnify) | Domain term boosting |
-| MFL subjects overall | 0.19-0.29 | No transcripts, English-only ELSER | Multilingual embeddings |
-
-### 3. Priority Ordering (ALWAYS)
-
-| Priority | Category | Rationale |
-|----------|----------|-----------|
-| **1** | Validation failures | No benchmark is trustworthy until validation passes |
-| **2** | Zero-hit queries (MRR = 0.000) | Complete failure to find expected results |
-| **3** | Very low MRR (< 0.333) | Severe ranking issues |
-| **4** | Acceptable MRR, poor other metrics | Ranking or recall issues |
-| **5** | Good MRR, poor other metrics | Fine-tuning needed |
-
-**Validation failures are ALWAYS Priority 1.** This is not negotiable.
-
-### 4. Recommended Actions for This Session
-
-1. **Continue Priority 3 queries** — Very low MRR queries (0.001-0.333) in [problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md)
-2. **MFL quality improvement** — Consider multilingual embedding investigation
-3. **Document search gaps honestly** — Some queries expose search limitations, not GT errors
-
-See: [problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md) for full context
-
 ---
 
-## 🎯 THIS SESSION: Continue Priority 3+ Queries
+## The Process (Execute This Exactly)
 
-### Entry Point
-
-**Read the investigation plan** for the full list of queries needing work:
-
-[problematic-queries-investigation.md](../../plans/semantic-search/active/problematic-queries-investigation.md)
-
-### Current Focus: Priority 3 Queries (Very Low MRR)
-
-17 queries have MRR between 0.167 and 0.333. These need investigation.
-
-**Pick one query from the Priority 3 list and follow the investigation process.**
-
-### Quick Commands
+### Step 1: Mine Curriculum
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# Verify validation passes
-pnpm ground-truth:validate  # Should show 0 errors
+# List all units with lesson counts
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
+  bulk-downloads/{subject}-{phase}.json
 
-# Run benchmark for a specific query
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review --verbose
-
-# Search bulk data (for independent discovery)
-jq -r '.sequence[].unitLessons[] | select(.lessonTitle | test("KEYWORD"; "i")) | "\(.lessonSlug)|\(.lessonTitle)"' \
-  bulk-downloads/SUBJECT-PHASE.json
-
-# List all lessons in a subject-phase
-jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' \
-  bulk-downloads/SUBJECT-PHASE.json
+# Find rich topic areas (target: 5+ lessons)
+jq -r '.sequence[] | select(.unitLessons | length >= 5) | 
+  "\(.unitTitle): \(.unitLessons | length) lessons"' bulk-downloads/{subject}-{phase}.json
 ```
 
-### Key Anti-Pattern: Search Validation Bias
-
-**Do NOT**:
-1. Run benchmark first
-2. See what search returns
-3. Update GT to match search results
-
-**DO**:
-1. Discover candidates independently from bulk data
-2. Get MCP summaries BEFORE running benchmark
-3. COMMIT rankings BEFORE seeing search results
-4. Create three-way comparison table (YOUR rankings vs SEARCH vs EXPECTED)
-
----
-
-## Previous Work
-
-### Session 2026-01-24: MFL Fixes + Control Queries (COMPLETE)
-
-**Key Accomplishments**:
-
-| Query | Before | After | Action |
-|-------|--------|-------|--------|
-| `making French sentences negative KS3` | MRR 0.000 | **MRR 1.000** | Added `negation` synonym |
-| `Vikings and Anglo-Saxons Britain` | — | Control | Isolate fuzzy matching |
-| `multiplication times tables year 3` | — | Control | Isolate fuzzy matching |
-
-**MFL Synonym Architecture**:
-- Removed 9 "Bucket C" translation hints (no search value)
-- Fixed German `negation` (removed German words, kept English)
-- Documented DRY refactoring in `mfl-synonym-architecture.md`
-
-**All 3 validation errors fixed.** Quality gate passing.
-
-### Session 2026-01-24: Zero-Hit Investigation (Earlier)
-
-| Query | Outcome | Status |
-|-------|---------|--------|
-| `dribbling baal with feet` | Query redesigned | ✅ MRR 1.000 |
-| `vikins and anglo saxons` | GT + control query | ✅ MRR 1.000 |
-| `making French sentences negative KS3` | Synonym + query refined | ✅ MRR 1.000 |
-| `nutrition and cooking techniques together` | GT validated | ✅ MRR 1.000 |
-| `narative writing storys iron man Year 3` | GT updated | ⚠️ MRR 0.333 (search gap) |
-| `coding for beginners...` | Blocked | ⏸️ Future functionality |
-
-### Session 2026-01-23: Spanish Complete
-
-| Phase | MRR | NDCG@10 | P@3 | R@10 |
-|-------|-----|---------|-----|------|
-| PRIMARY | 1.000 | 0.800 | 0.750 | 0.750 |
-| SECONDARY | 1.000 | 0.549 | 0.583 | 0.700 |
-
-### Session 2026-01-23: Science Complete
-
-| Phase | MRR | NDCG@10 | P@3 | R@10 |
-|-------|-----|---------|-----|------|
-| PRIMARY | 0.836 | 0.737 | 0.641 | 0.723 |
-| SECONDARY | 0.932 | 0.731 | 0.561 | 0.741 |
-
-### All 30 Subject-Phases Initial Review Complete
-
-Initial review complete, but quality improvement pass revealed issues that need addressing.
-
----
-
-## Quality Over Speed
-
-> **There is no time pressure. Going slowly and doing an excellent job provides lasting, significant value to this project. Going fast and compromising causes _damage_.**
-
-Previous sessions have repeatedly fallen into the "search validation" failure mode despite clear documentation. This happens when there's perceived pressure to complete quickly.
-
-**Take your time.** Read each step. Complete each step fully. If something feels unclear, stop and think. The goal is not to finish quickly — it's to establish correct ground truth that will guide search improvement for months.
-
----
-
-## Note: Bulk Data Files
-
-The `bulk-downloads/` folder contains JSON files that are **gitignored** (not missing). Use `ls` to verify:
+### Step 2: Identify 5 Target Lessons (Expected Slugs)
 
 ```bash
-ls apps/oak-open-curriculum-semantic-search/bulk-downloads/*.json | wc -l  # Should be ~32 files
+# Sample lessons from topic area
+jq -r '.sequence[] | select(.unitSlug == "TARGET-UNIT") | .unitLessons[] | 
+  "\(.lessonSlug): \(.lessonTitle)"' bulk-downloads/{subject}-{phase}.json
+
+# Get key learning for each candidate
+# MCP: get-lessons-summary lesson="lesson-slug"
 ```
 
-If missing, download with: `pnpm bulk:download` (requires `OAK_API_KEY` in `.env.local`)
+**Select 5 lessons** that represent the topic well. Slugs can come from different units.
+
+### Step 3: Construct Query
+
+Ask: **"What would a teacher type to find these 5 lessons?"**
+
+| Rule | Requirement |
+|------|-------------|
+| Natural phrasing | "how bones and muscles work", not "bones muscles body" |
+| Topic-focused | Topics, not advice ("fractions", not "how to teach fractions") |
+| No meta-phrases | No "lessons on", "teaching about" |
+| No redundant subject | Don't say "French" when filtered to French |
+
+### Step 4: Assign Graded Relevance
+
+For each of the 5 slugs:
+
+| Score | Criteria | Evidence Required |
+|-------|----------|-------------------|
+| **3** | Key learning directly addresses query | Quote the text |
+| **2** | Related but different angle/depth | Quote the text |
+| **1** | Touches topic peripherally | Quote the text |
+
+**At least one must be score=3.**
 
 ---
 
-## ⛔ CARDINAL RULES — READ FIRST ⛔
+## Expected Slugs Requirement
 
-### Rule 1: The search might be RIGHT. Your expected slugs might be WRONG.
+| Requirement | Value |
+|-------------|-------|
+| **Slugs per query** | **5** |
+| **Absolute minimum** | **4** (only if curriculum genuinely limited) |
+| **Cross-unit allowed** | Yes — slugs do NOT have to be from same unit |
+| **Score=3 required** | At least one per query |
+| **Justification required** | Every score backed by key learning evidence |
 
-Session 9 (english) proved this. Previous session claimed MRR 0.000 was a "search quality issue". After **deep exploration**, we discovered:
+### Why 5 Slugs?
 
-- The query said "how characters **feel**"
-- The expected slugs used "**emotions**" in key learning
-- The search correctly prioritised lessons with "**feel/feelings**" in key learning
-- **The search was RIGHT. The ground truth was WRONG.**
+With fewer slugs, metrics become noisy or trivial:
 
-After correction: MRR 0.000 → 1.000, P@3 0.000 → 1.000
-
-### Rule 2: You must form YOUR OWN assessment BEFORE seeing search results OR expected slugs.
-
-This is the critical safeguard. The protocol requires you to:
-
-1. **Read query metadata from `.query.ts` files** (these contain query, category, description — NOT expected slugs)
-2. Discover candidates from bulk data (10+ slugs)
-3. Analyse them with MCP summaries (5-10 candidates)
-4. **COMMIT to your rankings** with scores and justifications
-5. **ONLY THEN** run benchmark and read `.expected.ts` files to see expected slugs
-
-### Rule 3: Title-only matching is NOT sufficient for discovery.
-
-**Session 17 (German) proved this**: `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` was missed initially because its unit title is "meine Welt" (not obviously about grammar). But MCP summary revealed it teaches **advanced stem variation rules** for present tense weak verbs — a highly relevant match for "German grammar present tense".
-
-**Discovery MUST include:**
-
-- ✅ Systematic review of ALL units (not just those with obvious titles)
-- ✅ MCP summaries for lessons with ANY potential relevance
-- ✅ Key learning analysis (grammar content often hidden in activity-focused lessons)
-- ⛔ NOT just `grep` for title keywords
-- ⛔ NOT assuming unit titles reflect lesson content
-
-**Split File Architecture (2026-01-19)**: Ground truths are split into two files:
-
-- `*.query.ts` — Contains query, category, description (SAFE to read in Phase 1A/1B)
-- `*.expected.ts` — Contains expectedRelevance (ONLY read in Phase 1C)
-
-**⛔ DO NOT READ `.expected.ts` FILES until Phase 1C.** If you read them earlier, you will see expected slugs and bias your discovery.
-
-If you run benchmark first and then "discover" candidates that match what search returned, you have not done independent discovery. You have validated search results.
-
-If you read the GT file first and then "discover" candidates that match expected slugs, you have not done independent discovery. You have validated expected slugs.
-
-**The Key Question is NOT**: "Do expected slugs appear in results?"  
-**The Key Question IS**: "What are the BEST slugs for this query, based on curriculum content?"
+- **MRR**: Needs multiple "right answers" to average meaningfully
+- **NDCG@10**: Needs graded relevance across results
+- **P@3**: With 2 slugs, 1/3 match is 50% — trivial
+- **R@10**: With 2 slugs, finding both is trivial 100%
 
 ---
 
-## How to Use This Document
+## Session Entry
 
-1. **Read this prompt** — Understand the cardinal rules and quality expectations
-2. **Go to checklist** — [ground-truth-review-checklist.md](../../plans/semantic-search/active/ground-truth-review-checklist.md) — Find your target subject-phase
-3. **Execute the template** — [ground-truth-session-template.md](../../plans/semantic-search/templates/ground-truth-session-template.md) — LINEAR execution with **COMMIT step**
-
-**If MCP server is unavailable: STOP and wait. Do not proceed.**
-
----
-
-## Execution Protocol Overview
-
-The protocol has three phases per category:
-
-### Phase 1A: Query Analysis (REFLECT ONLY — no searches, no tools)
-
-**⚠️ No jq. No MCP. No benchmark. No data exploration. Just THINKING.**
-
-**⚠️ IGNORE EXPECTED SLUGS. They are irrelevant in Phase 1A.**
-
-Phase 1A is about **experimental design** — does this query prove what it claims to prove?
-
-| Step | Action | Evidence Required |
-|------|--------|-------------------|
-| 1A.1 | State capability being tested | What search behaviour does this category prove? |
-| 1A.2 | Evaluate query as test | Is this a good test of that capability? |
-| 1A.3 | Assess experimental design | Will success/failure be informative? |
-| 1A.4 | Identify design issues | Is query miscategorised, trivial, or impossible? |
-| 1A.5 | Make recommendation | Proceed, revise, or change category |
-
-**⛔ QUERY GATE**: Cannot search for candidates until query is validated.
-
-### Phase 1B: Discovery + COMMIT (BEFORE seeing search results)
-
-| Step | Action | Evidence Required |
-|------|--------|-------------------|
-| 1B.1 | Search bulk data | 10+ candidate slugs from multiple search terms |
-| 1B.2 | Get MCP summaries | 5-10 summaries with key learning quotes |
-| 1B.3 | Get unit context | Unit structure and lesson ordering |
-| 1B.4 | Analyse candidates | Reasoning for each candidate's relevance |
-| 1B.5 | **COMMIT rankings** | Your top 5 with scores and justifications |
-
-**⛔ DISCOVERY GATE**: Cannot run benchmark until rankings are COMMITTED.
-
-### Phase 1C: Comparison (AFTER commitment)
-
-| Step | Action | Evidence Required |
-|------|--------|-------------------|
-| 1C.0 | Pre-comparison verification | Confirm rankings committed before benchmark |
-| 1C.1 | Run benchmark --review | Output with ALL 4 metrics |
-| 1C.2 | Create three-way comparison | YOUR rankings vs SEARCH results vs EXPECTED slugs |
-| 1C.3 | Answer critical question | Decision with justification |
-| 1C.4 | Record ALL 4 metrics | MRR, NDCG@10, P@3, R@10 |
-
-**Why the COMMIT step?** It forces you to form an independent judgment BEFORE seeing search results. Without it, agents repeatedly fall into the trap of validating whatever search returns.
+1. **Read this prompt** — the methodology is here
+2. **Read the plan** — `@.agent/plans/semantic-search/active/ground-truth-redesign-plan.md`
+3. **Pick a subject-phase** — start with maths (highest priority)
+4. **Execute the process** — mine → identify 5 slugs → construct query → score
 
 ---
 
-## Anti-Pattern: Search Validation
+## Current State
 
-This failure mode has occurred repeatedly. Learn to recognise it.
+| Subject | Primary | KS3 | KS4 | Total | Status |
+|---------|---------|-----|-----|-------|--------|
+| maths | 8 | 6 | 10 | 24 | ❌ Query text pending |
+| science (broad) | 4 | 4 | — | 8 | ❌ Query text pending |
+| physics (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
+| chemistry (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
+| biology (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
+| combined-science (KS4) | — | — | 2 | 2 | ⚠️ BLOCKED (filter fix) |
+| english | 4 | 3 | 3 | 10 | ❌ Query text pending |
+| Other subjects | 16 | 14 | 10 | 40 | ❌ Query text pending |
+| Global (typo/curriculum/future) | — | — | — | 9 | ❌ Query text pending |
+| **Total** | **32** | **27** | **31** | **~99** | |
 
-### ❌ WRONG (Validates Search)
-
-1. Run benchmark → see search returns A, B, C
-2. Get MCP summaries for A, B, C
-3. Note they have relevant content
-4. Conclude "A, B, C are good"
-5. Fill COMMIT table with A, B, C
-6. Comparison table has identical columns
-
-**Why wrong**: No independent judgment formed. Just justified what search returned.
-
-### ✅ CORRECT (Independent Discovery)
-
-1. Search bulk data → find candidates X, Y, Z, A, B, W...
-2. Get MCP summaries → analyse each against query
-3. Realise X and Y directly match query; A and B are tangential
-4. COMMIT: X=#1, Y=#2, W=#3 (before seeing search)
-5. Run benchmark → see search returns A, B, C
-6. Three-way comparison shows differences
-7. Conclude: "X and Y are better than A and B because..."
-
-**Why correct**: Independent judgment formed first. Meaningful comparison made.
+**Legend**: ✅ Complete | ❌ Not yet created | ⚠️ BLOCKED (requires code fix)
 
 ---
 
-## Required Metrics (ALL 4, EVERY Category)
+## Output Format
 
-| Metric | Target | What It Reveals |
-|--------|--------|-----------------|
-| **MRR** | > 0.70 | Position of first relevant result |
-| **NDCG@10** | > 0.75 | Overall ranking quality |
-| **P@3** | > 0.50 | Are top 3 results useful? |
-| **R@10** | > 0.70 | Are expected slugs found at all? |
+For each query, produce the following and **update `queries-redesigned.md`** with the grounded query:
 
-**Diagnostic**: High R@10 + Low MRR = results found but poorly ranked (search issue)  
-**Diagnostic**: Low R@10 = expected slugs may be wrong (GT issue)
+```markdown
+### [subject]/[phase]: [topic]
 
----
+**Query**: "[the natural-phrasing query]"
 
-## Search Architecture (Quick Reference)
+**Expected Slugs**:
 
-| Source | Field | Coverage | Description |
-|--------|-------|----------|-------------|
-| **Structure** | `lesson_structure` | 100% | Keywords, key learning (ALL lessons) |
-| **Content** | `lesson_content` | ~81% | Transcript (SOME lessons) |
+| Slug | Score | Justification |
+|------|-------|---------------|
+| `lesson-slug-1` | 3 | Key learning: "[quote]" |
+| `lesson-slug-2` | 3 | Key learning: "[quote]" |
+| `lesson-slug-3` | 2 | Related: "[quote]" |
+| `lesson-slug-4` | 2 | Related: "[quote]" |
+| `lesson-slug-5` | 1 | Tangential: "[quote]" |
 
-**Four Retrievers**: Structure BM25, Structure ELSER, Content BM25, Content ELSER — combined via RRF.
-
-**Ground truths should test Structure retrieval** (works for all lessons).
-
-**Note**: MFL subjects (French, German, Spanish) and PE have ~0% content coverage (no transcripts).
+**Category**: natural-query / exact-term / typo-recovery / curriculum-connection
+```
 
 ---
 
-## Category Definitions
+## Guiding Principles
 
-| Category | Capability Tested | Example |
-|----------|-------------------|---------|
-| `precise-topic` | Basic retrieval with curriculum terms | "cam mechanisms" |
-| `natural-expression` | Vocabulary bridging (informal → curriculum) | "making things move" |
-| `imprecise-input` | Resilience to typos | "narative writng" |
-| `cross-topic` | Finding concept intersections | "writing + grammar" |
+### We Test OUR Value, Not Elasticsearch
+
+| We Test | We Don't Test |
+|---------|---------------|
+| Does search help teachers? | ES stemming (it works) |
+| Natural teacher queries | ES disambiguation (filtering handles it) |
+| Typo recovery (handful) | ES phrase matching (it works) |
+
+### We Enable Teachers, Not Police Them
+
+Teachers can search for anything. No judgment.
+
+### Metadata Is the Default
+
+ALL search works on metadata. Transcripts are supplementary.
+
+### Ground Everything in Bulk Data
+
+If it's not in the data, it doesn't exist. Mine it. Verify it.
 
 ---
 
-## Tools Reference
-
-| Tool | Command | Purpose |
-|------|---------|---------|
-| **Bulk data** | `jq` queries on bulk-downloads/*.json | Find ALL candidates (10+ per category) |
-| **MCP** | `get-lessons-summary` | Keywords, key learning (5-10 per category) |
-| **MCP** | `get-units-summary` | Lesson ordering in units |
-| **Benchmark (review)** | `pnpm benchmark -s X -p Y -c Z --review` | Per-query details with ALL 4 metrics |
-| **Benchmark (aggregate)** | `pnpm benchmark -s X -p Y` | Aggregate metrics after all categories |
-
----
-
-## Commands
+## Bulk Data Commands
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# FIRST: Read query metadata from .query.ts files (SAFE — no expected slugs)
-cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.query.ts
-# e.g.: cat src/lib/search-quality/ground-truth/geography/primary/precise-topic.query.ts
-# This shows: query, category, description — NOT expectedRelevance
+# List all subject-phase files
+ls bulk-downloads/*.json
 
-# Phase 1A: Query Analysis — NO COMMANDS, just REFLECT on the query
+# Count lessons in a file
+jq '.lessons | length' bulk-downloads/{subject}-{phase}.json
 
-# Phase 1B: Discovery (bulk data exploration - BEFORE benchmark, BEFORE reading .expected.ts)
-jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.lessonTitle)|Unit: \($unit)"' bulk-downloads/SUBJECT-PHASE.json
+# List all units
+jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle)"' bulk-downloads/{subject}-{phase}.json
 
-# Phase 1B.5: COMMIT rankings — BEFORE benchmark, BEFORE reading .expected.ts
-# (Document your rankings in the template — you don't know expected slugs yet!)
+# Search lesson titles
+jq -r '.lessons[] | select(.lessonTitle | test("TERM"; "i")) | 
+  "\(.lessonSlug): \(.lessonTitle)"' bulk-downloads/{subject}-{phase}.json
 
-# Phase 1C: Comparison (AFTER COMMIT — NOW you may read .expected.ts)
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
-# Benchmark output shows expected slugs — first time you see them!
-# Or read directly: cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.expected.ts
-
-# Phase 2: Validation
-pnpm type-check
-pnpm ground-truth:validate
-pnpm benchmark -s SUBJECT -p PHASE --verbose
+# Lessons in a specific unit
+jq -r '.sequence[] | select(.unitSlug == "UNIT") | .unitLessons[] | 
+  "\(.lessonSlug): \(.lessonTitle)"' bulk-downloads/{subject}-{phase}.json
 ```
 
----
+## MCP Tools
 
-## Key Documents
-
-| Document | Purpose |
-|----------|---------|
-| [Checklist](../../plans/semantic-search/active/ground-truth-review-checklist.md) | Progress tracking, next target |
-| [Template](../../plans/semantic-search/templates/ground-truth-session-template.md) | **LINEAR execution with COMMIT step** |
-| [IR Metrics](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
-| [GT Guide](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | **THE single source of truth** for design, troubleshooting, lessons learned |
+| Tool | Purpose |
+|------|---------|
+| `get-lessons-summary` | Get keywords and key learning for a lesson |
+| `get-units-summary` | Get unit structure and lesson ordering |
+| `get-help` | Reference for all available tools |
 
 ---
 
-## Key Learnings from Past Sessions
+## Priority Order
 
-**See [GROUND-TRUTH-GUIDE.md Part 6: Lessons Learned](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md#part-6-lessons-learned) for the complete, authoritative list of learnings from all sessions.**
-
-### Quick Reference: Most Critical Learnings
-
-| Category | Key Insight |
-|----------|-------------|
-| **Cardinal Rule** | The search might be RIGHT. Your expected slugs might be WRONG. (Session 9) |
-| **Methodology** | COMMIT before benchmark — form independent judgment first (Session 15) |
-| **Discovery** | Title-only matching is insufficient; systematic unit review required (Session 17) |
-| **Architecture** | Subject hierarchy must flow to index — see [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) (Science) |
-| **Fuzzy Matching** | Tokenization ≠ character edits — see [ADR-103](../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md) (Maths/Science) |
-| **Query Tuning** | `minimum_should_match: '2<65%'` — see [ADR-102](../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md) (Science) |
-
-### Relevant ADRs
-
-| ADR | Decision |
-|-----|----------|
-| [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Three-stage validation model |
-| [ADR-098](../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Split file architecture |
-| [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | `subject_parent` for Science KS4 |
-| [ADR-102](../../../docs/architecture/architectural-decisions/102-conditional-minimum-should-match.md) | Conditional minimum_should_match |
-| [ADR-103](../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md) | Fuzzy matching limitations |
-| [ADR-104](../../../docs/architecture/architectural-decisions/104-domain-term-boosting.md) | Domain term boosting (proposed) |
+1. **Fix subject filter** — Unblock KS4 science queries
+2. **Maths** (24 queries) — highest priority, largest content, KS4 complexity
+3. **Science (broad)** (8 queries) — high priority, tests subject_parent filter
+4. **English** (10 queries) — high priority
+5. **KS4 science disciplines** (11 queries) — high priority AFTER filter fix
+6. **Medium subjects** — moderate priority
+7. **Low subjects** — minimal priority
 
 ---
 
-## Completed Sessions Summary (30/30 core subjects)
+## Typo Recovery
 
-All 30 subject-phases have completed initial GT review. Now in quality improvement phase.
+Typo-recovery tests a **mechanism** (fuzzy matching), not subject-specific behaviour. 
 
-| Subject | Phase | MRR | NDCG@10 | Key Finding |
-|---------|-------|-----|---------|-------------|
-| spanish | primary | **1.000** | **0.800** | Query-data alignment critical; redesigned queries |
-| spanish | secondary | **1.000** | **0.549** | MFL structure-only retrieval |
-| science | primary | **0.836** | **0.737** | Fuzzy limits in short queries; control queries added |
-| science | secondary | **0.932** | **0.731** | "magnits"→"magnification" fuzzy false positive identified |
-| music | primary | 0.781 | 0.567 | "In tune" = pitch, not timing |
-| music | secondary | 0.813 | 0.854 | Film composition, not analysis |
-| maths | primary | 0.675 | 0.607 | Query register must match level |
-| maths | secondary | 0.861 | 0.749 | Tokenization ≠ fuzzy matching |
-| physical-education | primary | 0.833 | 0.797 | Original GT was completely wrong |
-| physical-education | secondary | 0.813 | 0.725 | Typo recovery poor ("runing") |
-| religious-education | primary | 0.875 | 0.677 | Original GT wrong (Sikh-specific for generic queries) |
-| religious-education | secondary | 0.640 | 0.526 | Bulk API returns incomplete paired units |
-
-**Current Focus**: [Problematic Queries Investigation](../../plans/semantic-search/active/problematic-queries-investigation.md)
-
-**Full details**: [current-state.md](../../plans/semantic-search/current-state.md)
+- 3 global proofs are sufficient
+- Testing per-subject would be wasteful
+- Fuzzy matching either works or it doesn't — one domain proves it for all
 
 ---
 
-## Remember
+## Anti-Patterns (Do NOT Do These)
 
-> **There is no time pressure. Quality is what matters.**
->
-> Slow and thoughtful work creates lasting value.
-> Fast and careless work causes damage that takes even longer to fix.
+| Anti-Pattern | Why It's Wrong |
+|--------------|----------------|
+| Invent query first, then search for slugs | Risks zero-hit queries |
+| Accept 2-3 slugs "because that's all there is" | Didn't search hard enough |
+| Use slugs from one unit only | Missed cross-unit candidates |
+| Skip key learning verification | Scores become arbitrary |
+| Use clipped term lists for natural-query | Not how teachers search |
+| Add "teaching about" or "lessons on" | Meta-phrases add no value |
+| Create typo-recovery per subject | Mechanism test, not content test |
 
-Take your time. Do it right.
+---
+
+## Session Log
+
+### 2026-01-27: Structure Revised
+
+- Complexity-weighted distribution with KS3/KS4 breakdown
+- Science sub-disciplines blocked pending subject filter fix
+- Typo-recovery consolidated to 3 global mechanism tests
+- Target: ~99 queries
+- **Next**: Fix subject filter, then create queries
+
+### 2026-01-26: Ready for Query Creation
+
+- Structure and distribution complete
+- Known-answer-first methodology documented
+- Expected slugs requirement: 5 per query (minimum 4)
+- Cross-unit slug selection allowed

@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_PRIMARY_NATURAL_EXPRESSION_3_QUERY: GroundTruthQueryDefinition = {
-  query: 'what makes ice turn into water',
+  query: 'melting ice, changes of state',
   category: 'natural-expression',
-  description: 'Tests vocabulary bridging from everyday question to melting/state change content',
+  description: 'Tests vocabulary bridging: informal "melting ice" to curriculum terminology',
   expectedFile: './natural-expression-3.expected.ts',
 } as const;

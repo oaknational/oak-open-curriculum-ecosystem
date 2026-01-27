@@ -1,0 +1,22 @@
+---
+description: No skipped tests. Never use it.skip, describe.skip, it.skipIf, or any other skipping mechanism. Fix it or delete it.
+globs: '**/*.test.ts'
+---
+
+# No Skipped Tests
+
+NEVER use `it.skip`, `describe.skip`, `it.skipIf`, or any other skipping mechanism.
+
+Skipped tests are silent failures waiting to happen.
+
+## The Only Options
+
+1. **Fix it** - Make the test pass
+2. **Delete it** - If the test is no longer valid, remove it entirely
+
+## Special Cases
+
+If a test cannot run due to missing external resources (e.g., API key):
+
+- The test MUST fail fast with a helpful error message explaining what is needed
+- Validation scripts that require external resources should be standalone scripts, NOT tests

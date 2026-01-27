@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'why do birds have different shaped beaks',
+  query: 'bird beaks adaptation',
   category: 'natural-expression',
-  description: 'Tests vocabulary bridging from everyday question to adaptation/evolution content',
+  description: 'Tests vocabulary bridging: informal adaptation terminology to evolution content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

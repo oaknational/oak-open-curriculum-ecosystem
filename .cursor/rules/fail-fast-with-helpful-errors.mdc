@@ -1,0 +1,22 @@
+---
+description: Fail FAST with helpful error messages. Never fail silently. Never ignore errors.
+alwaysApply: true
+---
+
+# Fail Fast With Helpful Errors
+
+Fail FAST with helpful error messages. Never fail silently. NEVER IGNORE ERRORS.
+
+## Principles
+
+1. **Detect problems early** - Validate at entry points, not deep in the call stack
+2. **Fail immediately** - Don't continue with invalid state
+3. **Be specific** - Error messages must explain what went wrong and why
+4. **Guide resolution** - Where possible, indicate how to fix the problem
+
+## Anti-Patterns
+
+- Swallowing exceptions with empty catch blocks
+- Logging errors but continuing execution
+- Returning `null` or `undefined` to indicate failure
+- Generic error messages ("An error occurred")

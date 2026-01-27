@@ -81,7 +81,7 @@ describe('benchmarkEntry', () => {
         },
       ]);
 
-      const result = await benchmarkEntry(entry, false, mockSearch);
+      const result = await benchmarkEntry(entry, mockSearch);
 
       // Average of 1.0 and 0.5 = 0.75
       expect(result.mrr).toBe(0.75);
@@ -117,7 +117,7 @@ describe('benchmarkEntry', () => {
         },
       ]);
 
-      const result = await benchmarkEntry(entry, false, mockSearch);
+      const result = await benchmarkEntry(entry, mockSearch);
 
       // 1 out of 3 queries had zero hits
       expect(result.zeroHitRate).toBeCloseTo(1 / 3);
@@ -139,7 +139,7 @@ describe('benchmarkEntry', () => {
         ],
       };
 
-      const result = await benchmarkEntry(entry, false, mockSearch);
+      const result = await benchmarkEntry(entry, mockSearch);
 
       // All metric fields should be present
       expect(result.mrr).toBe(1.0);
@@ -163,7 +163,7 @@ describe('benchmarkEntry', () => {
         },
       ]);
 
-      await benchmarkEntry(entry, false, mockSearch);
+      await benchmarkEntry(entry, mockSearch);
 
       // The mock was called - we trust unit tests verify correct params
       expect(mockSearch).toHaveBeenCalledTimes(1);
@@ -186,7 +186,7 @@ describe('benchmarkEntry', () => {
         ],
       };
 
-      await benchmarkEntry(entry, false, mockSearch);
+      await benchmarkEntry(entry, mockSearch);
 
       expect(mockSearch).toHaveBeenCalledTimes(1);
     });
@@ -209,7 +209,7 @@ describe('benchmarkEntry', () => {
         ],
       };
 
-      const result = await benchmarkEntry(entry, false, mockSearch);
+      const result = await benchmarkEntry(entry, mockSearch);
 
       expect(result.subject).toBe('science');
       expect(result.phase).toBe('primary');

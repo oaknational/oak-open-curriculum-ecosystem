@@ -1,10 +1,24 @@
 # IR Metrics Guide for Search Quality Evaluation
 
-**Last Updated**: 2026-01-06
+**Last Updated**: 2026-01-24
 
 **Purpose**: Reference guide for Information Retrieval (IR) metrics used in search quality evaluation  
 **Audience**: Developers unfamiliar with IR assessment protocols  
 **Used By**: Search quality evaluation, smoke tests, experiment analysis
+
+---
+
+## Current Scope: Educator Lesson Search
+
+| Dimension         | Current Scope                       | Future (Not Today)         |
+| ----------------- | ----------------------------------- | -------------------------- |
+| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
+| **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
+
+**All current ground truths and metrics assume the user is a professional teacher searching for lessons.**
+
+A future learner-focused search may require different metrics, thresholds, or evaluation approaches.
 
 ---
 

@@ -1,8 +1,99 @@
 # Ground Truth Design Guide
 
-**The single source of truth for designing, reviewing, and improving ground truths.**
+**The single source of truth for designing, reviewing, and evaluating ground truths.**
 
-**Last Updated**: 2026-01-23
+This document contains:
+
+- Design principles for creating ground truths
+- Cardinal rules for evaluation
+- The rigorous COMMIT protocol for independent discovery
+- Anti-patterns to avoid
+- Lessons learned from 25+ review sessions
+
+**Last Updated**: 2026-01-26
+
+---
+
+## Scope: Educator Lesson Search
+
+### Current Ground Truths Are For:
+
+| Dimension         | Current Scope                       | Future (Not Today)         |
+| ----------------- | ----------------------------------- | -------------------------- |
+| **Content Type**  | Lessons only                        | Units, sequences, threads  |
+| **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
+| **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
+
+### Why This Matters
+
+The search system will eventually serve multiple user types with different needs:
+
+| User Type   | Search Behaviour                                        | Optimisation  |
+| ----------- | ------------------------------------------------------- | ------------- |
+| **Teacher** | Topic-focused, curriculum terminology, planning lessons | Current focus |
+| **Pupil**   | Question-based, informal language, learning concepts    | Future work   |
+
+A learner-focused search may require:
+
+- Different RRF weightings (e.g., prioritise transcripts over structure)
+- Different retrievers (e.g., semantic-heavy for natural questions)
+- Different preprocessing (e.g., query expansion for informal language)
+- Different result types (e.g., unit-level rather than lesson-level)
+
+**All current ground truths assume the user is a professional teacher searching for lessons to teach.**
+
+Queries should reflect teacher search patterns:
+
+- Topic-focused, not advice-seeking
+- Curriculum-aligned vocabulary (with natural bridging)
+- No meta-phrases like "lessons about" or "how to teach"
+
+---
+
+## Core Principles (2026-01-26)
+
+### We Test OUR Value, Not Elasticsearch
+
+We know Elasticsearch works. We test whether **our search service with our data** delivers value to teachers.
+
+| We Test                                            | We Don't Test (ES Handles)         |
+| -------------------------------------------------- | ---------------------------------- |
+| Does search help teachers find content?            | Stemming / morphological variation |
+| Natural teacher queries returning relevant lessons | Disambiguation (filtering handles) |
+| Typo recovery (a handful of proofs)                | Phrase matching internals          |
+
+**Invalid categories**: Don't create ground truths for morphological variation ("fraction" vs "fractions"), ambiguous terms, or difficulty mismatch. Elasticsearch handles these, or filtering handles them.
+
+### We Enable Teachers, Not Police Them
+
+Teachers can search for anything. We don't judge what's "appropriate". A KS2 teacher searching "quadratic equations" should find quadratic equations. This is not a failure mode — this is the system working.
+
+### Metadata Is the Default
+
+| Reality                           | Wrong Framing             |
+| --------------------------------- | ------------------------- |
+| ALL search works on metadata      | "Fallback to metadata"    |
+| Transcripts are **supplementary** | "Missing transcripts"     |
+| Search MUST work for ALL subjects | "Special case for MFL/PE" |
+
+Don't create "metadata-only" ground truths as a special category. Metadata-based search is the foundation for ALL lessons.
+
+### Work With Current Data
+
+| Test Now                          | Future Work (Don't Test)     |
+| --------------------------------- | ---------------------------- |
+| Current search with current data  | MFL multilingual embeddings  |
+| Accept curriculum structure as-is | Vocabulary mining            |
+| Document gaps for improvement     | Natural language paraphrases |
+
+See future work plans in `.agent/plans/semantic-search/post-sdk/`.
+
+### No Redundant Subject Terms
+
+When a query is filtered to French, don't include "French" in the query. It adds noise and won't match well. The filter provides context.
+
+**Bad**: "French negation ne pas" (filtered to French)
+**Good**: "negation ne pas" (filtered to French)
 
 ---
 
@@ -39,10 +130,11 @@ The search system uses four retrievers combined via Reciprocal Rank Fusion (RRF)
 
 ### Implications for Ground Truth Design
 
-1. **Structure-based queries** work for all lessons (100% coverage)
-2. **Content-dependent queries** only work for lessons with transcripts (~81%)
-3. **Low MRR in MFL/PE** may indicate content-dependency, not search failure
+1. **ALL queries rely on structure** — metadata is the foundation (100% coverage)
+2. **Transcripts are supplementary** — some lessons have them (~81%), enhancing retrieval
+3. **MFL/PE have low transcript coverage** — search relies more heavily on metadata for these subjects
 4. **Title matches** come from Structure BM25; semantic understanding from both ELSER retrievers
+5. **Don't create "metadata-only" categories** — metadata-based search is the default, not special
 
 ---
 
@@ -77,13 +169,34 @@ Before writing any ground truth, ask:
 
 ### Query Design Rules
 
-| Rule                   | Requirement                     | Example                                     |
-| ---------------------- | ------------------------------- | ------------------------------------------- |
-| Length                 | 3-7 words                       | "cell structure and function"               |
-| Realistic              | Would a teacher type this?      | Yes: "teach fractions year 4"               |
-| Specific               | 2-4 lessons highly relevant     | Not: "maths" (too broad)                    |
-| Differentiated         | Query adds value beyond filters | Not: "art lessons secondary"                |
-| **Curriculum-aligned** | Terms must exist in curriculum  | Not: "spanish vocabulary" (no such concept) |
+| Rule                   | Requirement                       | Example                                     |
+| ---------------------- | --------------------------------- | ------------------------------------------- |
+| Length                 | 3-7 words                         | "cell structure and function"               |
+| Realistic              | Would a teacher type this?        | Yes: "fractions unlike denominators"        |
+| **Pedagogy aware**     | Professional UK teacher queries   | Yes: curriculum-aligned vocabulary          |
+| Specific               | 5 lessons highly relevant         | Not: "maths" (too broad)                    |
+| Differentiated         | Query adds value beyond filters   | Not: "art lessons secondary"                |
+| **Curriculum-aligned** | Terms must exist in curriculum    | Not: "spanish vocabulary" (no such concept) |
+| **No meta-phrases**    | No "teaching about", "lessons on" | Not: "teaching about fractions"             |
+| **Topic-focused**      | Search topics, not advice         | Not: "how to teach fractions"               |
+
+### Query Design for Teacher Context (2026-01-24)
+
+Ground truth queries must reflect how **professional teachers** actually search for curriculum content. Teachers are finding content to teach, not seeking personal help or advice.
+
+| Principle                  | Bad Example                   | Good Example                      | Why                                                             |
+| -------------------------- | ----------------------------- | --------------------------------- | --------------------------------------------------------------- |
+| **No meta-phrases**        | "teaching about email scams"  | "fake emails, scams"              | "teaching about" adds no search value                           |
+| **No advice-seeking**      | "how to avoid getting hacked" | "phishing, social engineering"    | Teachers search for topics, not personal advice                 |
+| **Topic-focused**          | "lessons on cyber security"   | "brute force attacks, hacking"    | Teachers type topics directly                                   |
+| **Natural vocabulary mix** | All curriculum terms only     | "fake emails, social engineering" | Real searches blend natural teacher language + curriculum terms |
+
+**Key insight**: Teachers don't type "lessons about X" or "teaching about X" — they type X directly. Any prefix like "how to teach", "lessons on", "teaching about" is redundant noise that doesn't improve search relevance.
+
+**Example transformation**:
+
+- Before: "how to avoid getting hacked online" (advice query, MRR 0.200)
+- After: "fake emails, scams, social engineering" (topic query, MRR 1.000)
 
 ### Pre-Design Verification (MANDATORY)
 
@@ -103,12 +216,15 @@ jq -r '.sequence[].unitLessons[].lessonSlug' bulk-downloads/{subject}-{phase}.js
 
 ### Expected Results Rules
 
-| Rule                 | Requirement            | Why                               |
-| -------------------- | ---------------------- | --------------------------------- |
-| Maximum 5 slugs      | More = query too broad | Tests ranking, not topic presence |
-| At least one score=3 | Clear "right answer"   | Defines success                   |
-| Graded relevance     | Mix of 3, 2, 1 scores  | Tests ranking quality             |
-| Verified existence   | All slugs in bulk data | Prevents false negatives          |
+| Rule                   | Requirement                    | Why                                     |
+| ---------------------- | ------------------------------ | --------------------------------------- |
+| **Exactly 5 slugs**    | Target: 5 per query            | Enables meaningful metric calculation   |
+| **Minimum 4 slugs**    | Only if curriculum limited     | Below 4 = query too narrow, redesign it |
+| **Cross-unit allowed** | Slugs can come from ANY unit   | Best matches may be in different units  |
+| At least one score=3   | Clear "right answer"           | Defines success                         |
+| Graded relevance       | Mix of 3, 2, 1 scores          | Tests ranking quality                   |
+| Verified existence     | All slugs in bulk data         | Prevents false negatives                |
+| Justified scores       | Quote key learning as evidence | Prevents arbitrary scoring              |
 
 ### Category-Specific Design
 
@@ -128,16 +244,31 @@ expectedRelevance: {
 
 #### natural-expression
 
-Tests: Vocabulary bridging (colloquial → technical)
+Tests: Vocabulary bridging (natural teacher vocabulary → curriculum metadata)
+
+**Key principle**: Teachers are professionals who know their domain. They use natural language when searching for resources — the words they'd naturally type when planning a lesson. This may differ from the exact terminology in curriculum metadata. Use **natural phrasing**, not clipped term lists (that's what `precise-topic` tests). No meta-phrases like "teaching about" or advice-seeking like "how to".
 
 ```typescript
-// GOOD: Everyday language that maps to curriculum terms
-query: 'being fair to everyone rights'
-description: 'Tests "being fair" → equality, "rights" → legal protections'
+// GOOD: How a teacher would naturally phrase it when planning
+query: 'fake emails and online scams'
+description: 'Tests teacher vocabulary → curriculum terms: "fake emails" → phishing'
 expectedRelevance: {
-  'what-does-fairness-mean-in-society': 3,
-  'why-do-we-need-laws-on-equality-in-the-uk': 2,
+  'social-engineering': 3,           // Teaches phishing, blagging
+  'social-engineering-techniques': 3, // Teaches phishing, pharming
+  'being-safe-online': 2,            // General overview
 }
+
+// BAD: Clipped term list (belongs in precise-topic, not natural-expression)
+query: 'phishing scams social engineering'
+// Problem: This is curriculum terminology, not natural teacher vocabulary
+
+// BAD: Advice-seeking query (teachers search for topics to teach, not personal help)
+query: 'how to avoid getting hacked online'
+// Problem: Teachers search for curriculum content, not advice
+
+// BAD: Meta-phrase adds no value
+query: 'teaching about email scams'
+// Problem: "teaching about" is noise — teachers type topics directly
 ```
 
 #### imprecise-input
@@ -150,6 +281,8 @@ Real users don't type perfectly. Teachers searching quickly may:
 - Truncate words ("tech" instead of "techniques")
 - Use wrong word order
 - Make phonetic errors
+- Use alternative spellings (British/American, dialect variants)
+- Make word boundary errors ("timetables" vs "times tables")
 - Have mobile keyboard / autocorrect issues
 
 The **imprecise-input** category proves that **imprecise input doesn't break search**. The system should still return relevant results despite input errors.
@@ -183,8 +316,10 @@ If your imprecise-input query includes a compound word that the curriculum spell
 
 Tests: Multi-concept intersection
 
+**Key principle**: Cross-topic intersections must exist **within a single unit or between units in the same sequence**. Random concept mashups from unrelated curriculum areas are not valid cross-topic queries.
+
 ```typescript
-// GOOD: Query combines two distinct concepts
+// GOOD: Query combines two concepts that appear together in curriculum
 query: 'democracy and laws together'
 description: 'Tests lessons that explicitly combine democracy + rule of law'
 expectedRelevance: {
@@ -192,61 +327,235 @@ expectedRelevance: {
   'what-are-rights-and-where-do-they-come-from': 3,  // Rule of law + democracy
   'what-is-the-right-to-protest-within-a-democracy-with-the-rule-of-law': 2,
 }
+
+// BAD: Random concept mashup (no curriculum connection)
+query: 'maps and teamwork outdoor activities'
+// Problem: These concepts don't appear together in curriculum
+
+// BAD: Concepts from unrelated sequences
+query: 'fractions and volcanoes'
+// Problem: No genuine curriculum intersection exists
 ```
 
 ---
 
-## Part 2: Review Process
+## Part 2: Cardinal Rules
 
-### Step 1: Run Benchmark Review Mode
+### Rule 1: The Search Might Be RIGHT. Your Expected Slugs Might Be WRONG.
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-pnpm benchmark -s citizenship -p secondary -c precise-topic --review
-```
+Session 9 proved this: Previous session claimed MRR 0.000 was a "search quality issue". After deep exploration, the expected slugs used "emotions" but the query said "feel". The search correctly prioritised "feel/feelings" lessons. After correction: MRR 0.000 → 1.000.
 
-Output shows:
+**The Key Question is NOT**: "Do expected slugs appear in results?"  
+**The Key Question IS**: "What are the BEST slugs for this query, based on curriculum content?"
 
-- Expected slugs with relevance scores
-- Top 10 actual results
-- Which expected slugs were found and at what position
-- ALL 4 metrics: MRR, NDCG@10, P@3, R@10
+### Rule 2: Form Your OWN Assessment BEFORE Seeing Search Results
 
-### Step 2: Explore Curriculum Data
+The purpose of the COMMIT protocol is to prevent "search validation bias" — the failure mode where you:
 
-**CRITICAL**: Do not just accept top-ranked results.
+1. Run benchmark
+2. See what search returned
+3. Retroactively justify those results as "good"
+4. Claim you did "independent discovery"
 
-Use the Oak MCP server (`oak-local`) to explore:
+**This is not independent discovery. This is validation.**
 
-```text
-# Search with query variations
-get-search-lessons: q="democracy voting", subject="citizenship"
+True independent discovery means: you identify the best lessons from curriculum content, COMMIT to your rankings, and ONLY THEN compare against what search returned.
 
-# Browse units in the subject
-get-key-stages-subject-lessons: keyStage="ks3", subject="citizenship"
+### Rule 3: Every Query Requires FRESH Analysis
 
-# Read lesson content to verify relevance
-get-lessons-summary: lesson="what-is-democracy"
-```
+Session 16 (geography) proved this: Even when two queries have "similar semantic intent", you MUST do fresh bulk exploration AND fresh MCP summaries for EACH query. Copying expected slugs from one query to another is FORBIDDEN.
 
-**Goal**: Find lessons that are **qualitatively better matches** for what the query should test, even if they don't currently rank highly. This ensures benchmarks push the system to improve.
+### Rule 4: Title-Only Matching is NOT Sufficient
 
-### Step 3: Verify with Direct ES Queries
+Session 17 (German) proved this: `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` was initially missed because its unit title is "meine Welt" — not obviously about grammar. But MCP summary revealed it teaches ADVANCED stem variation rules.
 
-For imprecise-input or when investigating ranking issues:
+Discovery MUST include systematic review of ALL units, not just those with obvious titles.
+
+---
+
+## Part 3: Rigorous Evaluation Protocol (COMMIT Methodology)
+
+When reviewing or validating existing ground truths, use this rigorous protocol to ensure independent discovery.
+
+### Protocol Overview
+
+| Phase        | Purpose                            | Checkpoint                    |
+| ------------ | ---------------------------------- | ----------------------------- |
+| **Phase 0**  | Prerequisites                      | Tools working                 |
+| **Phase 1A** | Query Analysis (REFLECT only)      | Query validated               |
+| **Phase 1B** | Discovery + COMMIT (BEFORE search) | Rankings committed            |
+| **Phase 1C** | Comparison (AFTER commitment)      | Three-way comparison complete |
+| **Phase 2**  | Validation                         | Metrics collected             |
+
+### Phase 0: Prerequisites
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 source .env.local
+```
 
-# Test typo with fuzziness
+| Tool       | Verification                                                 |
+| ---------- | ------------------------------------------------------------ |
+| MCP server | Call `get-help`                                              |
+| Bulk data  | `jq '.sequence \| length' bulk-downloads/SUBJECT-PHASE.json` |
+| Benchmark  | `pnpm benchmark --help`                                      |
+
+**CHECKPOINT 0**: If ANY tool is unavailable → **STOP**.
+
+### Phase 1A: Query Analysis (REFLECT — No Tools)
+
+**⚠️ No searches. No tools. No data exploration. Just THINKING.**
+
+Read the `.query.ts` file (NOT `.expected.ts`) and answer:
+
+| Question                                      | Analysis Required                    |
+| --------------------------------------------- | ------------------------------------ |
+| What capability does this category test?      | State explicitly                     |
+| Is this query a good test of that capability? | Evaluate design                      |
+| Will success/failure be informative?          | Assess experiment                    |
+| Any design issues?                            | Miscategorised, trivial, impossible? |
+
+**CHECKPOINT 1A**: Query validated before searching.
+
+### Phase 1B: Discovery + COMMIT (BEFORE Benchmark)
+
+**⛔ DO NOT run benchmark until COMMIT is complete.**
+
+| Step | Action              | Evidence Required                    |
+| ---- | ------------------- | ------------------------------------ |
+| 1B.1 | Search bulk data    | 10+ candidate slugs                  |
+| 1B.2 | Get MCP summaries   | 5-10 with key learning quotes        |
+| 1B.3 | Get unit context    | Lesson ordering                      |
+| 1B.4 | Analyse candidates  | Reasoning for each                   |
+| 1B.5 | **COMMIT rankings** | Top 5 with scores and justifications |
+
+**COMMIT Table Template**:
+
+| Rank | Slug   | Score (1-3) | Key Learning Quote | Why This Ranking |
+| ---- | ------ | ----------- | ------------------ | ---------------- |
+| 1    | \_\_\_ | \_\_\_      | "..."              | \_\_\_           |
+| 2    | \_\_\_ | \_\_\_      | "..."              | \_\_\_           |
+| 3    | \_\_\_ | \_\_\_      | "..."              | \_\_\_           |
+
+**CHECKPOINT 1B**: Rankings committed BEFORE seeing search results OR expected slugs.
+
+### Phase 1C: Comparison (AFTER Commitment)
+
+**✅ NOW you may read `.expected.ts` and run benchmark.**
+
+```bash
+pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
+```
+
+**Three-Way Comparison Table** (MANDATORY):
+
+| Slug   | YOUR Rank | SEARCH Rank | EXPECTED Score | Verdict                                           |
+| ------ | --------- | ----------- | -------------- | ------------------------------------------------- |
+| \_\_\_ | #1        | #?          | score ?        | Agreement / Search better / Your discovery better |
+
+**Critical Question**: "What are the BEST slugs for this query — and where did they come from?"
+
+| Answer Option            | Meaning                                  |
+| ------------------------ | ---------------------------------------- |
+| Current GT is CORRECT    | Expected slugs are best matches          |
+| Search found BETTER      | Search returned genuinely better lessons |
+| My candidates are BETTER | Discovery found better than both         |
+| Mix is best              | Best GT combines sources                 |
+
+**CHECKPOINT 1C**: Three-way comparison complete with justified decision.
+
+---
+
+## Part 4: Anti-Patterns
+
+### Anti-Pattern 1: Search Validation (NOT Independent Discovery)
+
+**❌ WRONG (Validates Search)**:
+
+1. Run benchmark → see search returns A, B, C
+2. Get MCP summaries for A, B, C
+3. Note they have relevant content
+4. Conclude "A, B, C are good"
+5. Fill COMMIT table with A, B, C
+6. Comparison table has identical columns
+
+**Why wrong**: No independent judgment formed. Just justified what search returned.
+
+**✅ CORRECT (Independent Discovery)**:
+
+1. Search bulk data → find candidates X, Y, Z, A, B, W... (10+ slugs)
+2. Get MCP summaries → analyse each against query
+3. Realise X and Y directly match query; A and B are tangential
+4. COMMIT: X=#1, Y=#2, W=#3 (BEFORE seeing search)
+5. Run benchmark → see search returns A, B, C
+6. Three-way comparison shows differences
+7. Conclude: "X and Y are better than A and B because..."
+
+### Anti-Pattern 2: "Similar Query" Shortcut
+
+**❌ WRONG**:
+
+1. Complete Query A properly with fresh MCP analysis
+2. See Query B has "similar semantic intent" to Query A
+3. Copy expected slugs from Query A to Query B
+4. Skip fresh jq search for Query B
+
+**Result**: Wrong slugs included (lesson with NO relevant key learning).
+
+**✅ CORRECT**: Every query is independent. Fresh MCP analysis every time. No exceptions.
+
+### Anti-Pattern 3: Title-Only Discovery
+
+**❌ WRONG**:
+
+1. Search bulk data with `grep` for obvious keywords
+2. Only examine lessons with matching titles
+3. Skip units with non-obvious titles
+4. Miss excellent lessons in unexpected units
+
+**✅ CORRECT**:
+
+1. Search for obvious keywords
+2. **ALSO** list ALL units and scan for relevant content
+3. Get MCP summaries for edge cases
+4. Discover lessons that titles don't suggest
+
+---
+
+## Part 5: Quick Review Process
+
+For quick reviews (not full COMMIT protocol):
+
+### Step 1: Run Benchmark Review Mode
+
+```bash
+pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
+```
+
+Output shows expected slugs, top 10 results, and all 4 metrics.
+
+### Step 2: Explore Curriculum Data
+
+Use MCP tools to verify relevance:
+
+```text
+get-lessons-summary: lesson="lesson-slug"
+get-units-summary: unit="unit-slug"
+```
+
+### Step 3: Verify with Direct ES Queries
+
+For imprecise-input or ranking issues:
+
+```bash
+source .env.local
 curl -s "${ELASTICSEARCH_URL}/oak_lessons/_search" \
   -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
     "query": {"bool": {
-      "must": [{"match": {"lesson_title": {"query": "goverment", "fuzziness": "AUTO"}}}],
-      "filter": [{"term": {"subject_slug": "citizenship"}}]
+      "must": [{"match": {"lesson_title": {"query": "term", "fuzziness": "AUTO"}}}],
+      "filter": [{"term": {"subject_slug": "subject"}}]
     }},
     "size": 5,
     "_source": ["lesson_slug", "lesson_title"]
@@ -255,26 +564,23 @@ curl -s "${ELASTICSEARCH_URL}/oak_lessons/_search" \
 
 ### Step 4: Update Ground Truth
 
-Based on evidence from steps 1-3:
+Based on evidence:
 
 1. **Update query** if it lacks differentiation power
 2. **Update expectedRelevance** with qualitatively best matches
 3. **Update description** to explain what the test proves
-4. **Update TSDoc comment** with review date
 
 ### Step 5: Validate
 
 ```bash
 pnpm type-check
 pnpm ground-truth:validate
-pnpm benchmark --subject citizenship --phase secondary --verbose
+pnpm benchmark --subject SUBJECT --phase PHASE --verbose
 ```
-
-All must pass before proceeding.
 
 ---
 
-## Part 3: Troubleshooting
+## Part 7: Troubleshooting
 
 ### Low MRR Despite Good Results
 
@@ -316,7 +622,7 @@ cat bulk-downloads/*.json | jq -r '.lessons[] | select(.lessonSlug == "the-slug"
 
 ---
 
-## Part 4: Bulk Data Exploration
+## Part 8: Bulk Data Exploration
 
 ### Setup
 
@@ -346,7 +652,7 @@ cat bulk-downloads/maths-primary.json | \
 
 ---
 
-## Part 5: Validation Reference
+## Part 9: Validation Reference
 
 ### Commands
 
@@ -358,21 +664,21 @@ pnpm benchmark --verbose     # Stage 3: Measure against search
 
 ### Validation Checks (All Blocking)
 
-| Check                   | Error                | Fix                            |
-| ----------------------- | -------------------- | ------------------------------ |
-| Slug doesn't exist      | `invalid-slug`       | Find correct slug in bulk data |
-| Empty expectedRelevance | `empty-relevance`    | Add at least 2 slugs           |
-| Score not 1/2/3         | `invalid-score`      | Use only 1, 2, or 3            |
-| Query too short         | `short-query`        | Minimum 3 words                |
-| Query too long          | `long-query`         | Maximum 10 words               |
-| All same scores         | `uniform-scores`     | Vary scores (e.g., 3 and 2)    |
-| No score=3              | `no-highly-relevant` | At least one slug must be 3    |
-| Too many slugs          | `too-many-slugs`     | Maximum 5 (query too broad)    |
-| Wrong subject           | `cross-subject`      | Slug must match entry subject  |
+| Check                   | Error                | Fix                                                   |
+| ----------------------- | -------------------- | ----------------------------------------------------- |
+| Slug doesn't exist      | `invalid-slug`       | Find correct slug in bulk data                        |
+| Empty expectedRelevance | `empty-relevance`    | Add 5 slugs total, if that is impossible minimum of 4 |
+| Score not 1/2/3         | `invalid-score`      | Use only 1, 2, or 3                                   |
+| Query too short         | `short-query`        | Minimum 3 words                                       |
+| Query too long          | `long-query`         | Maximum 10 words                                      |
+| All same scores         | `uniform-scores`     | Vary scores (e.g., 3 and 2)                           |
+| No score=3              | `no-highly-relevant` | At least one slug must be 3                           |
+| Too many slugs          | `too-many-slugs`     | Maximum 5 (query too broad)                           |
+| Wrong subject           | `cross-subject`      | Slug must match entry subject                         |
 
 ---
 
-## Part 6: Lessons Learned
+## Part 10: Lessons Learned
 
 ### From art/primary (Session 1)
 
@@ -474,6 +780,14 @@ pnpm benchmark --verbose     # Stage 3: Measure against search
   - "teach spanish greetings to children" (1 match) → "teaching estar for states and location KS2" (5+ matches)
   - "spansh vocabulary primary" (0 matches) → "spansh adjective agreemnt" (5 matches)
 - **Always verify query coverage BEFORE designing GT**: Use bulk data exploration to confirm the query concept exists and has sufficient coverage (3-5 lessons minimum).
+
+### From computing/secondary natural-expression (Session 25, 2026-01-24)
+
+- **Queries must reflect teacher search behaviour**: Teachers search for curriculum topics, not personal advice. "How to avoid getting hacked" is an advice query; "fake emails, scams, social engineering" is a curriculum search.
+- **No meta-phrases**: "teaching about", "lessons on", "how to teach" add no search value — teachers type topics directly.
+- **Vocabulary bridging requires natural→curriculum mapping**: "fake emails" (natural teacher vocabulary) bridges to "phishing" (curriculum metadata term). Query should reflect how teachers naturally phrase searches.
+- **`future-intent` category created**: Queries requiring Level 3-4 features (intent classification, semantic reranking) are now categorised as `future-intent` and excluded from aggregate statistics while tracking progress.
+- **Example transformation**: "how to avoid getting hacked online" (MRR 0.200) → "fake emails, scams, social engineering" (MRR 1.000).
 
 ### Phase 1A Query Analysis Framework
 
@@ -586,11 +900,10 @@ export const {SUBJECT}_{PHASE}_{CATEGORY}_EXPECTED: ExpectedRelevance = {
 | [ADR-103: Fuzzy Matching Limitations](../../../../../../docs/architecture/architectural-decisions/103-fuzzy-matching-limitations.md)                         | Tokenization vs character edits, compound words       |
 | [ADR-104: Domain Term Boosting](../../../../../../docs/architecture/architectural-decisions/104-domain-term-boosting.md)                                     | Future solution for fuzzy false positives (proposed)  |
 
-### Session and Process Documents
+### Other Documents
 
-| Document                                                                                                      | Purpose                                    |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| [Review Checklist](../../../../../../.agent/plans/semantic-search/active/ground-truth-review-checklist.md)    | Current review progress                    |
-| [Session Template](../../../../../../.agent/plans/semantic-search/templates/ground-truth-session-template.md) | LINEAR execution protocol with COMMIT step |
-| [Session Prompt](../../../../../../.agent/prompts/semantic-search/semantic-search.prompt.md)                  | Session entry point                        |
-| [IR-METRICS.md](../../../docs/IR-METRICS.md)                                                                  | Metric definitions (MRR, NDCG, P@3, R@10)  |
+| Document                                                                                                | Purpose                                   |
+| ------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [Session Prompt](../../../../../../.agent/prompts/semantic-search/semantic-search.prompt.md)            | Session entry point for GT work           |
+| [GT Redesign Plan](../../../../../../.agent/plans/semantic-search/active/ground-truth-redesign-plan.md) | Current priority: GT redesign             |
+| [IR-METRICS.md](../../../docs/IR-METRICS.md)                                                            | Metric definitions (MRR, NDCG, P@3, R@10) |

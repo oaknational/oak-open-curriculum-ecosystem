@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const SCIENCE_SECONDARY_NATURAL_EXPRESSION_2_QUERY: GroundTruthQueryDefinition = {
-  query: 'why does metal go rusty',
+  query: 'rusting oxidation metals',
   category: 'natural-expression',
-  description: 'Tests vocabulary bridging from everyday question to oxidation content',
+  description: 'Tests vocabulary bridging: informal "rusting" to oxidation chemistry content',
   expectedFile: './natural-expression-2.expected.ts',
 } as const;

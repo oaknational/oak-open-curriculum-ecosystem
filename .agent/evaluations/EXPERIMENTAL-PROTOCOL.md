@@ -190,7 +190,7 @@ Ground truths must test **ranking quality**, not just topic presence.
 
 **Key rules**:
 
-- **Queries**: 3-7 words, specific enough that only 2-4 lessons are highly relevant
+- **Queries**: 3-7 words, specific enough that 5 lessons are highly relevant (minimum 4 if curriculum limited)
 - **Results**: Maximum 5 slugs, at least one score=3, graded relevance (mix of 3/2/1)
 - **Single-word queries**: Only for misspelling category
 

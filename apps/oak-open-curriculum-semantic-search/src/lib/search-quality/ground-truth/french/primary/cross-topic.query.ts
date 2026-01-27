@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const FRENCH_PRIMARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'French verbs and vocabulary together',
+  query: 'French verbs vocabulary',
   category: 'cross-topic',
-  description: 'Tests intersection of verbs with vocabulary building - expected slugs must have ',
+  description: 'Tests intersection of verbs with vocabulary building',
   expectedFile: './cross-topic.expected.ts',
 } as const;

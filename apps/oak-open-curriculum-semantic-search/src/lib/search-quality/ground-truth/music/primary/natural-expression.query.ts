@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MUSIC_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'singing in tune for children',
+  query: 'singing in tune, pitch matching',
   category: 'natural-expression',
-  description: 'Informal phrasing for singing lessons',
+  description: 'Tests vocabulary bridging: informal "singing in tune" to pitch/vocal lessons',
   expectedFile: './natural-expression.expected.ts',
 } as const;

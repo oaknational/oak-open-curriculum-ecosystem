@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const FRENCH_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'teach french greetings to children',
+  query: 'French greetings KS1',
   category: 'natural-expression',
-  description: 'Teacher intent phrasing for basic French vocabulary',
+  description: 'Informal terminology with key stage for basic French vocabulary',
   expectedFile: './natural-expression.expected.ts',
 } as const;

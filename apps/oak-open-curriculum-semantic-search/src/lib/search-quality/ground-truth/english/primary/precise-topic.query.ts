@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const ENGLISH_PRIMARY_PRECISE_TOPIC_QUERY: GroundTruthQueryDefinition = {
-  query: 'The BFG reading comprehension Roald Dahl Year 3',
+  query: 'The BFG, Roald Dahl',
   category: 'precise-topic',
-  description: 'Tests retrieval of The BFG reading content using curriculum terminology',
+  description: 'Tests retrieval of The BFG reading content',
   expectedFile: './precise-topic.expected.ts',
 } as const;

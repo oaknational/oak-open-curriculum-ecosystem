@@ -13,6 +13,18 @@ This monorepo demonstrates and implements a pattern where:
 
 **Key principle**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
 
+## Who This Is For
+
+| Persona                      | Description                                                |
+| ---------------------------- | ---------------------------------------------------------- |
+| **New Teacher**              | Finding and adapting curriculum content for lessons        |
+| **Experienced Teacher**      | Efficiently searching across subjects and key stages       |
+| **Curriculum Leader**        | Exploring curriculum structure, sequences, and progression |
+| **Ed-Tech Engineer**         | Building applications using the SDK and MCP tools          |
+| **Ed-Tech Product Champion** | Evaluating curriculum data integration possibilities       |
+
+Current search optimisation focuses on **educators** (teachers, curriculum leaders). Learner-focused search will be developed separately.
+
 ## Implementation: Oak Open Curriculum
 
 This pattern is implemented for the [Oak National Academy Curriculum API](https://www.thenational.academy/):

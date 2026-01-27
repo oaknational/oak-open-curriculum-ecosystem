@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const PHYSICAL_EDUCATION_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'how to throw and catch',
+  query: 'throwing catching skills',
   category: 'natural-expression',
-  description: 'Question format for sending/receiving skills',
+  description: 'Informal terminology bridging to sending/receiving skills content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

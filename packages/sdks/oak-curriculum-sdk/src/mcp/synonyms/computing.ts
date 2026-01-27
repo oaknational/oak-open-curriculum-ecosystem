@@ -14,7 +14,7 @@ export const computingSynonyms = {
 
   /** Image representation */
   raster: ['bitmap', 'bitmap image', 'raster graphic'],
-  'colour-depth': ['bit depth', 'color depth'],
+  'colour-depth': ['bit depth'],
 
   /** Software licensing */
   proprietary: ['closed source', 'closed source software'],

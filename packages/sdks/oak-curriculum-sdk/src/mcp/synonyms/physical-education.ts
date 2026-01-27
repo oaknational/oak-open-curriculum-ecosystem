@@ -151,10 +151,10 @@ export const physicalEducationSynonyms = {
   team: ['teams', 'teammates', 'group'],
 
   /** Defending - stopping attackers */
-  defending: ['defence', 'defense', 'defenders'],
+  defending: ['defence', 'defenders'],
 
   /** Attacking - scoring */
-  attacking: ['attack', 'attackers', 'offense'],
+  attacking: ['attack', 'attackers'],
 
   /** Score - points */
   score: ['scoring', 'points', 'goals'],

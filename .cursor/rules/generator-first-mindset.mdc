@@ -1,0 +1,27 @@
+---
+description: When behaviour needs to change, update the generator templates and rerun pnpm type-gen. The generator is the single source of truth.
+globs: '**/*.{ts,tsx,mts}'
+---
+
+# Generator-First Mindset
+
+Every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts that flow directly from the Open Curriculum OpenAPI schema.
+
+## When Behaviour Needs to Change
+
+1. Update the templates under `type-gen/typegen/mcp-tools/**/*`
+2. Rerun `pnpm type-gen`
+3. If the change cannot be expressed in the generator, reconsider the approach
+
+## Prohibited Practices
+
+- Hand-authoring helper functions that widen types (returning `unknown`, omitting generics)
+- Editing generated files manually instead of updating generator templates
+- Introducing overrides, registries, or fallbacks that "cope" with missing descriptors
+- Re-validating or re-parsing tool arguments in authored runtime code
+
+Missing data is a generator bug—fail fast, don't work around it.
+
+## Reference
+
+@.agent/directives-and-memory/schema-first-execution.md

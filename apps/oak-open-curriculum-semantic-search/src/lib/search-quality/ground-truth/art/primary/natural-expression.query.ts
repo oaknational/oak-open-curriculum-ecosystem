@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const ART_PRIMARY_NATURAL_EXPRESSION_QUERY: GroundTruthQueryDefinition = {
-  query: 'how to draw faces',
+  query: 'drawing faces, portraits',
   category: 'natural-expression',
-  description: 'Informal ',
+  description: 'Informal terminology bridging to portraiture/figure drawing content',
   expectedFile: './natural-expression.expected.ts',
 } as const;

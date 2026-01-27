@@ -10,9 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const MATHS_SECONDARY_CROSS_TOPIC_2_QUERY: GroundTruthQueryDefinition = {
-  query: 'geometry proof coordinate',
+  query: 'coordinate geometry proofs',
   category: 'cross-topic',
-  description:
-    'Tests cross-topic capability: combines geometric proof with coordinate geometry - two distinct geometry approaches',
+  description: 'Tests cross-topic capability: geometric proof with coordinate geometry',
   expectedFile: './cross-topic-2.expected.ts',
 } as const;

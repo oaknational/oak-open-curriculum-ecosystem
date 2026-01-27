@@ -10,8 +10,8 @@
 import type { GroundTruthQueryDefinition } from '../../types';
 
 export const COMPUTING_PRIMARY_IMPRECISE_INPUT_QUERY: GroundTruthQueryDefinition = {
-  query: 'how does the internat work',
+  query: 'internat networking basics',
   category: 'imprecise-input',
-  description: 'Tests typo recovery: ',
+  description: 'Tests typo recovery: internat → internet',
   expectedFile: './imprecise-input.expected.ts',
 } as const;

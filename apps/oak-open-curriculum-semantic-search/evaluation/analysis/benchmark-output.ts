@@ -102,6 +102,8 @@ function printDetailedResults(
 
 /**
  * Print category rows for a single entry.
+ * NOTE: future-intent categories are marked as "(excluded)" since they
+ * test capabilities requiring Level 3-4 features not yet implemented.
  */
 function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): void {
   for (const cat of r.perCategory) {
@@ -114,8 +116,10 @@ function printEntryCategories(r: EntryBenchmarkResult, refs: ReferenceValues): v
       cat.p95LatencyMs,
       refs,
     );
+    // Mark future-intent queries as excluded from stats
+    const categoryLabel = cat.category === 'future-intent' ? 'future-intent (excl)' : cat.category;
     console.log(
-      `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${cat.category.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${row}`,
+      `${r.subject.padEnd(14)} | ${r.phase.padEnd(9)} | ${categoryLabel.padEnd(20)} | ${String(cat.queryCount).padEnd(4)} | ${row}`,
     );
   }
   const p95 = calculateP95(r.latencies);

@@ -15,11 +15,9 @@
 import type { ExpectedRelevance } from '../../types';
 
 export const SCIENCE_SECONDARY_NATURAL_EXPRESSION_4_EXPECTED: ExpectedRelevance = {
-  // Key learning: "Thermal conductors can feel cold because they transfer
-  // energy quickly away from their surface."
+  // Core thermal conductivity lessons
+  'thermal-conductors': 3,
   'thermal-conduction-and-insulation': 3,
-  // Related: heating and energy transfer through materials
-  'heating-different-substances': 2,
-  // Related: heat capacity and energy transfer
-  'calculating-specific-heat-capacity-e-equals-m-c': 2,
+  // Related: insulators are the opposite of conductors
+  'thermal-insulators': 2,
 } as const;
