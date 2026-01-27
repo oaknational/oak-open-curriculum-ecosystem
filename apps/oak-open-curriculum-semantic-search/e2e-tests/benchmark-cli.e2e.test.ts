@@ -124,18 +124,18 @@ describe('benchmark CLI E2E', () => {
       expect(result.stdout).toMatch(/Running benchmark for \d+ entries/);
     }, 30000);
 
-    it('verbose mode shows per-query results', async () => {
+    it('review mode shows per-query results', async () => {
       const result = await runBenchmarkCli([
         '--subject',
         'maths',
         '--phase',
         'primary',
-        '--verbose',
+        '--review',
       ]);
 
       expect(result.exitCode).toBe(0);
 
-      // Verbose mode shows checkmarks or X marks for each query
+      // Review mode shows checkmarks or X marks for each query's metrics
       expect(result.stdout).toMatch(/[✓✗]/);
       expect(result.stdout).toContain('MRR:');
     });
