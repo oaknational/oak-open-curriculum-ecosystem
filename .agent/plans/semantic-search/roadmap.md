@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **Ground Truth Strategy Revision**  
-**Last Updated**: 2026-01-26  
+**Status**: 🔄 **Ground Truth Query Grounding**  
+**Last Updated**: 2026-01-27  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: [current-state.md](current-state.md)
 
@@ -48,11 +48,11 @@ The previous GT structure (120 queries, 4 categories per subject-phase) has been
 ## Execution Order
 
 ```text
-1. Ground Truth Redesign (active/)              ← CURRENT
-   Revise queries per new strategy
+1. Ground Truth Redesign (active/)              ← CURRENT (Stage 1b)
+   Mine queries from bulk data (known-answer-first)
          ↓
-2. Expected Slugs (bulk data mining)
-   Mine slugs from bulk-downloads/*.json
+2. Expected Slugs Implementation
+   Create .query.ts and .expected.ts files
          ↓
 3. Implementation
    Update .query.ts and .expected.ts files
@@ -89,18 +89,19 @@ The previous GT structure (120 queries, 4 categories per subject-phase) has been
 
 ## Phase 1: Ground Truth Redesign
 
-**Status**: 🔄 In Progress  
+**Status**: 🔄 In Progress (Stage 1b: Query Grounding)  
 **Location**: [active/ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md)
 
 **Goal**: Create ground truths that answer "Does search help teachers find what they need?"
 
 | Task | Status |
 |------|--------|
-| Revise natural-expression → natural phrasing | 📋 Pending |
-| Reduce typo-recovery to 5-10 total | 📋 Pending |
-| Evaluate/eliminate cross-topic | 📋 Pending |
-| Increase maths coverage | 📋 Pending |
-| Mine expected slugs from bulk data | 📋 Pending |
+| Revise natural-expression → natural phrasing | ✅ Complete |
+| Reduce typo-recovery to 3 global | ✅ Complete |
+| Evaluate/eliminate cross-topic | ✅ Complete |
+| Content-weighted distribution | ✅ Complete |
+| Subject filter fix (KS4 science) | ✅ Complete (2026-01-27) |
+| Mine expected slugs from bulk data | 📋 **CURRENT** |
 | Implement in code | ⏸️ Blocked |
 | Benchmark and analyse | ⏸️ Blocked |
 

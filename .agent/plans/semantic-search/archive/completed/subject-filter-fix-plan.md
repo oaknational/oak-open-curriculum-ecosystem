@@ -1,7 +1,8 @@
 # Subject Filter Fix Plan
 
 **Created**: 2026-01-27  
-**Status**: 🔴 Required — Blocking KS4 Science Ground Truths  
+**Completed**: 2026-01-27  
+**Status**: ✅ Complete  
 **Priority**: High — Blocks 11 ground truth queries  
 **Effort**: ~3-4 hours implementation + re-indexing
 

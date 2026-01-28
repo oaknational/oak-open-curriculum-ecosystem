@@ -14,7 +14,12 @@
  * @module lib/indexing/lesson-document-core
  */
 
-import type { KeyStage, SearchLessonsIndexDoc, SearchSubjectSlug } from '../../types/oak';
+import type {
+  KeyStage,
+  SearchLessonsIndexDoc,
+  AllSubjectSlug,
+  ParentSubjectSlug,
+} from '../../types/oak';
 import type { Ks4DocumentFields } from './document-transform-helpers';
 
 /**
@@ -66,8 +71,20 @@ export interface CreateLessonDocParams {
   readonly lessonTitle: string;
 
   // === Subject/KeyStage ===
-  /** Subject slug (validated SearchSubjectSlug) */
-  readonly subjectSlug: SearchSubjectSlug;
+  /**
+   * Subject slug - the actual subject from bulk data.
+   * For KS4 science, this may be 'physics', 'chemistry', 'biology', or 'combined-science'.
+   * @see AllSubjectSlug - Includes all 21 valid subjects
+   */
+  readonly subjectSlug: AllSubjectSlug;
+  /**
+   * Subject parent - the parent subject for hierarchical filtering.
+   * For KS4 science variants, this is 'science'.
+   * For other subjects, this equals subjectSlug.
+   * @see ParentSubjectSlug - The 17 canonical subjects
+   * @see ADR-101 for subject hierarchy design
+   */
+  readonly subjectParent: ParentSubjectSlug;
   /** Subject display title */
   readonly subjectTitle: string;
   /** Key stage slug (validated KeyStage) */
@@ -183,7 +200,7 @@ function copyArrayOrUndefined<T>(arr: readonly T[] | undefined): T[] | undefined
  * @see ADR-095 for conditional field inclusion rationale
  */
 export function buildLessonDocument(params: CreateLessonDocParams): SearchLessonsIndexDoc {
-  const { lessonSlug, lessonTitle, subjectSlug, keyStage, units } = params;
+  const { lessonSlug, lessonTitle, subjectSlug, subjectParent, keyStage, units } = params;
 
   if (units.length === 0) {
     throw new Error(`Lesson ${lessonSlug} has no unit relationships`);
@@ -197,7 +214,7 @@ export function buildLessonDocument(params: CreateLessonDocParams): SearchLesson
     lesson_slug: lessonSlug,
     lesson_title: lessonTitle,
     subject_slug: subjectSlug,
-    subject_parent: subjectSlug,
+    subject_parent: subjectParent,
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,

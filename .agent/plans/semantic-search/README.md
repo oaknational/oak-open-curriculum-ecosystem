@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-01-17
+**Last Updated**: 2026-01-27
 
 ---
 
@@ -10,24 +10,28 @@
 
 ---
 
-## Current Work: Ground Truth Review
+## Current Work: Ground Truth Query Grounding (Stage 1b)
 
-The ground truth review is in progress. **9/30 subject-phases complete**.
+Create ground truths using known-answer-first methodology. All subjects are critical.
 
-**Details**: [active/ground-truth-review-checklist.md](active/ground-truth-review-checklist.md)
+**Details**: [active/ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md)
 
 ---
 
 ## Execution Order
 
-```
-1. Ground Truth Review (active/)              ← CURRENT
+```text
+1. Ground Truth Redesign (active/)              ← CURRENT (Stage 1b)
+   Mine queries from bulk data (known-answer-first)
          ↓
-2. SDK Extraction (sdk-extraction/)
+2. Expected Slugs Implementation
+   Create .query.ts and .expected.ts files
          ↓
-3. MCP Integration (post-sdk/mcp-integration/)
+3. SDK Extraction (sdk-extraction/)
          ↓
-4. Everything Else (post-sdk/ streams)
+4. MCP Integration (post-sdk/mcp-integration/)
+         ↓
+5. Everything Else (post-sdk/ streams)
 ```
 
 ---
@@ -36,10 +40,10 @@ The ground truth review is in progress. **9/30 subject-phases complete**.
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Work in progress | 🔄 Ground truth review |
-| `sdk-extraction/` | SDK extraction plans | 📋 Ready after Phase 1 |
+| `active/` | Work in progress | 🔄 Ground truth query grounding |
+| `sdk-extraction/` | SDK extraction plans | 📋 Ready after GT complete |
 | `post-sdk/` | Streams of post-SDK work | ⏸️ After SDK extraction |
-| `archive/` | Completed work | ✅ Historical |
+| `archive/` | Historical work | ✅ Reference only |
 | `templates/` | Session templates | — |
 
 ---
@@ -68,18 +72,18 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [Current State](current-state.md) | System metrics |
-| [Completed](completed.md) | Historical completed work |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 
 ---
 
-## Research Documents
+## Archive
+
+Historical work from previous phases. **Metrics and details are stale** — for reference only.
 
 | Document | Purpose |
 |----------|---------|
-| [elasticsearch-approaches.md](../../research/elasticsearch/oak-data/elasticsearch-approaches.md) | Elastic-native patterns |
-| [aliases-and-equivalances.md](../../research/elasticsearch/oak-data/aliases-and-equivalances.md) | Synonym classification |
-| [documentation-gap-analysis.md](../../research/elasticsearch/oak-data/documentation-gap-analysis.md) | Gaps and remediation |
+| [archive/completed-jan-2026.md](archive/completed-jan-2026.md) | Initial development phase milestones |
+| [archive/completed/](archive/completed/) | Individual completed plans |
 
 ---
 

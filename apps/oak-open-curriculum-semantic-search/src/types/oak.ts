@@ -6,6 +6,9 @@
 // Core types from main SDK entry point
 export type { KeyStage, Subject as SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk';
 
+// Subject hierarchy types for ADR-101 (KS4 science variants)
+export type { AllSubjectSlug, ParentSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+
 // Search functionality from dedicated search entry point
 export {
   isLessonSummary,

@@ -43,8 +43,9 @@ export const LESSONS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'lesson_id', zodType: 'string', optional: false },
   { name: 'lesson_slug', zodType: 'string', optional: false },
   { name: 'lesson_title', zodType: 'string', optional: false },
-  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
-  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  /** Original subject slug including KS4 variants (21 subjects). @see ADR-101 */
+  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'ALL_SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (17 canonical subjects). @see ADR-101 */
   { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },
@@ -106,8 +107,9 @@ export const UNITS_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_id', zodType: 'string', optional: false },
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
-  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
-  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  /** Original subject slug including KS4 variants (21 subjects). @see ADR-101 */
+  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'ALL_SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (17 canonical subjects). @see ADR-101 */
   { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },
@@ -151,8 +153,9 @@ export const UNIT_ROLLUP_INDEX_FIELDS: IndexFieldDefinitions = [
   { name: 'unit_id', zodType: 'string', optional: false },
   { name: 'unit_slug', zodType: 'string', optional: false },
   { name: 'unit_title', zodType: 'string', optional: false },
-  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
-  /** Parent subject for hierarchical filtering (e.g., physics → science). @see ADR-101 */
+  /** Original subject slug including KS4 variants (21 subjects). @see ADR-101 */
+  { name: 'subject_slug', zodType: 'string', optional: false, enumRef: 'ALL_SUBJECT_TUPLE' },
+  /** Parent subject for hierarchical filtering (17 canonical subjects). @see ADR-101 */
   { name: 'subject_parent', zodType: 'string', optional: false, enumRef: 'SUBJECT_TUPLE' },
   // Display title fields for UI (avoids slug-to-title lookup overhead)
   { name: 'subject_title', zodType: 'string', optional: true },

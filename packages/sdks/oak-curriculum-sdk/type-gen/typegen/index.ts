@@ -55,5 +55,8 @@ export { generateAdminStreamFixtureModules } from './admin/generate-admin-fixtur
 export { BASE_WIDGET_URI } from './cross-domain-constants.js';
 export { generateWidgetConstants } from './generate-widget-constants.js';
 
+// Subject hierarchy (ADR-101)
+export { generateSubjectHierarchy } from './search/generate-subject-hierarchy.js';
+
 // Error types (ADR-088)
 export { generateSdkErrorTypes } from './error-types/index.js';

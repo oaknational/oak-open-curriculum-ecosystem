@@ -1,4 +1,4 @@
-import type { KeyStage, SearchSubjectSlug, SearchScope } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, AllSubjectSlug, SearchScope } from '../../types/oak';
 
 /**
  * Request payload accepted by the suggestion runner.
@@ -22,12 +22,14 @@ export interface SuggestionContext {
 
 /**
  * Structured suggestion surfaced by the API endpoint.
+ * subject uses AllSubjectSlug to support KS4 science variants.
+ * @see ADR-101
  */
 export interface SuggestionItem {
   label: string;
   scope: SearchScope;
   url: string;
-  subject?: SearchSubjectSlug;
+  subject?: AllSubjectSlug;
   keyStage?: KeyStage;
   contexts: SuggestionContext;
 }

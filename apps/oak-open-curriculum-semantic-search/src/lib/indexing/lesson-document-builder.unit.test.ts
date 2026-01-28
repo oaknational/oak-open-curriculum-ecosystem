@@ -28,6 +28,7 @@ function createMinimalParams(overrides?: Partial<CreateLessonDocParams>): Create
     lessonSlug: 'introduction-to-fractions',
     lessonTitle: 'Introduction to Fractions',
     subjectSlug: 'maths',
+    subjectParent: 'maths',
     subjectTitle: 'Mathematics',
     keyStage: 'ks2',
     keyStageTitle: 'Key Stage 2',

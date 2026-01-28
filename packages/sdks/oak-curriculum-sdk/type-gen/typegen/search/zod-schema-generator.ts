@@ -31,6 +31,9 @@ export const ZOD_ENUM_EXPRESSIONS: Readonly<Record<string, string>> = {
   KEY_STAGE_TUPLE:
     'KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]',
   SUBJECT_TUPLE: 'SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]',
+  /** All 21 subjects including KS4 science variants (physics, chemistry, biology, combined-science) */
+  ALL_SUBJECT_TUPLE:
+    'ALL_SUBJECTS as unknown as [typeof ALL_SUBJECTS[number], ...typeof ALL_SUBJECTS[number][]]',
 } as const;
 
 /**

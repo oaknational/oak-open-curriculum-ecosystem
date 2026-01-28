@@ -1,22 +1,19 @@
 # Semantic Search — Ground Truth Query Grounding
 
-**Status**: ⚠️ Stage 1b — Query Grounding Required (subject filter fix blocking KS4 science)  
+**Status**: 🔄 Stage 1b — Query Grounding (KS4 science unblocked)  
 **Current Priority**: Execute known-answer-first process for each subject/key-stage  
 **Last Updated**: 2026-01-27
 
 ---
 
-## Known Blockers
+## No Blockers
 
-### Subject Filter Implementation Gap
+All blockers have been resolved. KS4 science sub-disciplines (physics, chemistry, biology, combined-science) can now be filtered individually.
 
-KS4 science sub-disciplines (physics, chemistry, biology, combined-science) cannot be filtered individually. See [subject-filter-fix-plan.md](../../plans/semantic-search/active/subject-filter-fix-plan.md).
-
-**Impact**: 11 ground truth queries for KS4 science are blocked until this is fixed.
-
-**Solution**: Add SDK-generated subject hierarchy lookup (`SUBJECT_TO_PARENT`). Users specify one subject (e.g., `physics`), system uses smart filtering:
-- At KS4: filter on `subject_slug: physics` (specific)
-- At other key stages: filter on `subject_parent: science` (parent, since no physics exists)
+**What was fixed** (2026-01-27):
+- SDK-generated subject hierarchy: `SUBJECT_TO_PARENT`, `isKs4ScienceVariant()` — [ADR-105](../../../docs/architecture/architectural-decisions/105-sdk-generated-search-constants.md)
+- Smart filtering at query time — [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md)
+- Re-indexed with correct `subject_slug` and `subject_parent` values
 
 ---
 
@@ -119,7 +116,7 @@ With fewer slugs, metrics become noisy or trivial:
 
 1. **Read this prompt** — the methodology is here
 2. **Read the plan** — `@.agent/plans/semantic-search/active/ground-truth-redesign-plan.md`
-3. **Pick a subject-phase** — start with maths (highest priority)
+3. **Pick a subject-phase** — start with maths (largest content surface, highest complexity)
 4. **Execute the process** — mine → identify 5 slugs → construct query → score
 
 ---
@@ -130,16 +127,16 @@ With fewer slugs, metrics become noisy or trivial:
 |---------|---------|-----|-----|-------|--------|
 | maths | 8 | 6 | 10 | 24 | ❌ Query text pending |
 | science (broad) | 4 | 4 | — | 8 | ❌ Query text pending |
-| physics (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
-| chemistry (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
-| biology (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED (filter fix) |
-| combined-science (KS4) | — | — | 2 | 2 | ⚠️ BLOCKED (filter fix) |
+| physics (KS4) | — | — | 3 | 3 | ❌ Query text pending |
+| chemistry (KS4) | — | — | 3 | 3 | ❌ Query text pending |
+| biology (KS4) | — | — | 3 | 3 | ❌ Query text pending |
+| combined-science (KS4) | — | — | 2 | 2 | ❌ Query text pending |
 | english | 4 | 3 | 3 | 10 | ❌ Query text pending |
 | Other subjects | 16 | 14 | 10 | 40 | ❌ Query text pending |
 | Global (typo/curriculum/future) | — | — | — | 9 | ❌ Query text pending |
 | **Total** | **32** | **27** | **31** | **~99** | |
 
-**Legend**: ✅ Complete | ❌ Not yet created | ⚠️ BLOCKED (requires code fix)
+**Legend**: ✅ Complete | ❌ Not yet created
 
 ---
 
@@ -224,15 +221,20 @@ jq -r '.sequence[] | select(.unitSlug == "UNIT") | .unitLessons[] |
 
 ---
 
-## Priority Order
+## Execution Order
 
-1. **Fix subject filter** — Unblock KS4 science queries
-2. **Maths** (24 queries) — highest priority, largest content, KS4 complexity
-3. **Science (broad)** (8 queries) — high priority, tests subject_parent filter
-4. **English** (10 queries) — high priority
-5. **KS4 science disciplines** (11 queries) — high priority AFTER filter fix
-6. **Medium subjects** — moderate priority
-7. **Low subjects** — minimal priority
+**All subjects are critical.** We start with maths, then science — not because they matter more than other subjects, but because:
+
+- **Largest content surface** — more lessons, more units to stress-test
+- **Highest KS4 complexity** — higher-tier, separate disciplines
+- **Most stakeholder attention** — these subjects are watched closely
+
+| Order | Subject(s) | Queries | Rationale |
+|-------|-----------|---------|-----------|
+| 1 | Maths | 24 | Largest surface, KS4 complexity |
+| 2 | Science (broad + KS4 disciplines) | 19 | Tests both filter types |
+| 3 | English | 10 | Core subject |
+| 4 | All other subjects | 46 | Complete coverage |
 
 ---
 
@@ -262,13 +264,19 @@ Typo-recovery tests a **mechanism** (fuzzy matching), not subject-specific behav
 
 ## Session Log
 
+### 2026-01-27: Subject Filter Fixed — All Queries Unblocked
+
+- Subject filter fix implemented (ADR-101, ADR-105)
+- SDK-generated `SUBJECT_TO_PARENT`, `isKs4ScienceVariant()` exported
+- Re-indexed with correct `subject_slug` and `subject_parent` values
+- All 11 KS4 science queries now available
+- **Next**: Create queries starting with maths (24 queries)
+
 ### 2026-01-27: Structure Revised
 
 - Complexity-weighted distribution with KS3/KS4 breakdown
-- Science sub-disciplines blocked pending subject filter fix
 - Typo-recovery consolidated to 3 global mechanism tests
 - Target: ~99 queries
-- **Next**: Fix subject filter, then create queries
 
 ### 2026-01-26: Ready for Query Creation
 

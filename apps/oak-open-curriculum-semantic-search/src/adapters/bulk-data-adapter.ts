@@ -15,8 +15,13 @@ import type {
   Unit,
   BulkDownloadFile,
 } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchSubjectSlug } from '../types/oak';
-import { isSubject } from './sdk-guards';
+import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/oak-curriculum-sdk';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  AllSubjectSlug,
+  ParentSubjectSlug,
+} from '../types/oak';
 import {
   derivePhaseSlug,
   generateSubjectProgrammesUrl,
@@ -76,12 +81,15 @@ function buildLessonsByUnitMap(lessons: readonly Lesson[]): Map<string, Lesson[]
   return map;
 }
 
-/** Derive subject slug from sequence, returning a validated SearchSubjectSlug */
-function deriveSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
+/**
+ * Derive subject slug from sequence, returning a validated AllSubjectSlug.
+ * @see ADR-101 - Subject hierarchy for search filtering
+ */
+function deriveSubjectSlug(sequenceSlug: string): AllSubjectSlug {
   const phaseSlug = derivePhaseSlug(sequenceSlug);
   const derivedSubjectSlug = sequenceSlug.replace(`-${phaseSlug}`, '');
 
-  if (!isSubject(derivedSubjectSlug)) {
+  if (!isAllSubject(derivedSubjectSlug)) {
     throw new Error(`Cannot derive valid subject from sequence: ${sequenceSlug}`);
   }
   return derivedSubjectSlug;
@@ -108,7 +116,11 @@ function createLessonTransformer(
 }
 
 /** Create unit transform function */
-function createUnitTransformer(bulkFile: BulkDownloadFile, subjectSlug: SearchSubjectSlug) {
+function createUnitTransformer(
+  bulkFile: BulkDownloadFile,
+  subjectSlug: AllSubjectSlug,
+  subjectParent: ParentSubjectSlug,
+) {
   return (): readonly SearchUnitsIndexDoc[] => {
     const firstUnit = bulkFile.sequence[0];
     const keyStageSlug = firstUnit?.keyStageSlug ?? 'ks2';
@@ -118,6 +130,7 @@ function createUnitTransformer(bulkFile: BulkDownloadFile, subjectSlug: SearchSu
       transformBulkUnitToESDoc({
         unit,
         subjectSlug,
+        subjectParent,
         subjectTitle: bulkFile.subjectTitle,
         subjectProgrammesUrl,
       }),
@@ -133,9 +146,10 @@ export function createBulkDataAdapter(bulkFile: BulkDownloadFile): BulkDataAdapt
   const unitMap = new Map(bulkFile.sequence.map((u) => [u.unitSlug, u]));
   const phaseSlug = derivePhaseSlug(bulkFile.sequenceSlug);
   const subjectSlug = deriveSubjectSlug(bulkFile.sequenceSlug);
+  const subjectParent = SUBJECT_TO_PARENT[subjectSlug];
 
   const transformLessonsToES = createLessonTransformer(bulkFile, unitMap, subjectSlug, phaseSlug);
-  const transformUnitsToES = createUnitTransformer(bulkFile, subjectSlug);
+  const transformUnitsToES = createUnitTransformer(bulkFile, subjectSlug, subjectParent);
 
   return {
     sequenceSlug: bulkFile.sequenceSlug,

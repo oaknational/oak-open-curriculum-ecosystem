@@ -136,3 +136,18 @@ export type {
   OakSequenceFacetsMapping,
   OakMetaMapping,
 } from './es-mappings/index.js';
+
+export {
+  SUBJECT_TO_PARENT,
+  ALL_SUBJECTS,
+  KS4_SCIENCE_VARIANTS,
+  PARENT_TO_SUBJECTS,
+  isKs4ScienceVariant,
+  getSubjectParent,
+  isAllSubject,
+} from './subject-hierarchy.js';
+export type {
+  AllSubjectSlug,
+  ParentSubjectSlug,
+  Ks4ScienceVariant,
+} from './subject-hierarchy.js';

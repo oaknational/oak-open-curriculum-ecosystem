@@ -2,7 +2,7 @@
 
 **Created**: 2026-01-25  
 **Revised**: 2026-01-27  
-**Status**: ⚠️ Stage 1b Required — Query Grounding (subject filter fix blocking KS4 science)  
+**Status**: ⚠️ Stage 1b Required — Query Grounding (KS4 science unblocked)  
 **Objective**: Create ground truths that answer: "Does search help teachers find what they need?"
 
 ---
@@ -17,17 +17,21 @@ Every design decision flows from this question. ALL users are professional teach
 
 ## Known Blockers
 
-### Subject Filter Implementation Gap
+### Subject Filter Implementation Gap — ✅ RESOLVED
 
-KS4 science sub-disciplines (physics, chemistry, biology, combined-science) cannot be filtered individually because:
+~~KS4 science sub-disciplines (physics, chemistry, biology, combined-science) cannot be filtered individually.~~
 
-1. `bulk-lesson-transformer.ts` normalises these subjects to "science" before indexing
-2. The original granular subject slug is lost
-3. `subject_parent` is set to the already-normalised value
+**Fixed**: 2026-01-27. The subject filter is now correctly implemented per ADR-101:
 
-**Impact**: 11 ground truth queries for KS4 physics/chemistry/biology/combined-science are blocked.
+- Physics lessons: `subject_slug: 'physics'`, `subject_parent: 'science'`
+- Chemistry lessons: `subject_slug: 'chemistry'`, `subject_parent: 'science'`
+- etc.
 
-**Required Fix**: See [subject-filter-fix-plan.md](subject-filter-fix-plan.md)
+**Verification**: ES queries confirm 176 physics, 83 chemistry, 39 biology, 301 combined-science lessons correctly indexed.
+
+**All 11 KS4 science queries are now unblocked.**
+
+See: [subject-filter-fix-plan.md](subject-filter-fix-plan.md) (completed), [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md), [ADR-105](../../../docs/architecture/architectural-decisions/105-sdk-generated-search-constants.md)
 
 ### Solution: SDK Subject Hierarchy Lookup
 
@@ -198,38 +202,46 @@ When filtered to a subject, don't include the subject name in the query.
 
 ---
 
-## Complexity-Weighted Distribution
+## Query Distribution by Content Complexity
 
-Maths and science have more queries because they have greater complexity at KS4, not because they are more important than other subjects. All lessons are equally important.
+**All subjects are critical.** Query counts reflect content complexity and surface area, NOT subject importance.
+
+Maths and science have more queries because:
+
+- Largest content surface (more lessons, more units)
+- Highest KS4 complexity (higher-tier, separate disciplines)
+- Most stakeholder attention (these subjects are watched closely)
+
+We START with maths, then science — not because they matter more, but because they stress-test the system most effectively.
 
 ### Distribution by Subject
 
-| Priority | Subject/Filter | Primary | KS3 | KS4 | Total | Notes |
-|----------|----------------|---------|-----|-----|-------|-------|
-| **Highest** | maths | 8 | 6 | 10 | 24 | KS4: higher-tier, circle theorems, vectors |
-| **High** | science (broad) | 4 | 4 | — | 8 | Uses `subject_parent` filter |
-| **High** | physics (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED — uses `subject_slug` filter |
-| **High** | chemistry (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED — uses `subject_slug` filter |
-| **High** | biology (KS4) | — | — | 3 | 3 | ⚠️ BLOCKED — uses `subject_slug` filter |
-| **High** | combined-science (KS4) | — | — | 2 | 2 | ⚠️ BLOCKED — uses `subject_slug` filter |
-| **High** | english | 4 | 3 | 3 | 10 | |
-| **Medium** | history | 2 | 2 | 1 | 5 | |
-| **Medium** | geography | 2 | 2 | 1 | 5 | |
-| **Medium** | computing | 2 | 2 | 1 | 5 | |
-| **Medium** | PE | 2 | 1 | — | 3 | |
-| **Medium** | RE | 2 | 1 | — | 3 | |
-| **Medium** | french | 1 | 1 | 1 | 3 | |
-| **Medium** | german | — | 1 | 1 | 2 | |
-| **Medium** | spanish | 1 | — | 1 | 2 | |
-| **Medium** | citizenship | — | 1 | 1 | 2 | |
-| **Low** | art | 1 | 1 | — | 2 | |
-| **Low** | music | 1 | 1 | — | 2 | |
-| **Low** | design-technology | 1 | 1 | — | 2 | |
-| **Low** | cooking-nutrition | 1 | — | — | 1 | |
-| **Global** | typo-recovery | — | — | — | 3 | Mechanism tests |
-| **Global** | curriculum-connection | — | — | — | 4 | Cross-topic |
-| **Global** | future-intent | — | — | — | 2 | Excluded from stats |
-| **Total** | | **32** | **27** | **31** | **~99** | |
+| Subject/Filter | Primary | KS3 | KS4 | Total | Notes |
+|----------------|---------|-----|-----|-------|-------|
+| maths | 8 | 6 | 10 | 24 | KS4: higher-tier, circle theorems, vectors |
+| science (broad) | 4 | 4 | — | 8 | Uses `subject_parent` filter |
+| physics (KS4) | — | — | 3 | 3 | Uses `subject_slug` filter |
+| chemistry (KS4) | — | — | 3 | 3 | Uses `subject_slug` filter |
+| biology (KS4) | — | — | 3 | 3 | Uses `subject_slug` filter |
+| combined-science (KS4) | — | — | 2 | 2 | Uses `subject_slug` filter |
+| english | 4 | 3 | 3 | 10 | |
+| history | 2 | 2 | 1 | 5 | |
+| geography | 2 | 2 | 1 | 5 | |
+| computing | 2 | 2 | 1 | 5 | |
+| PE | 2 | 1 | — | 3 | |
+| RE | 2 | 1 | — | 3 | |
+| french | 1 | 1 | 1 | 3 | |
+| german | — | 1 | 1 | 2 | |
+| spanish | 1 | — | 1 | 2 | |
+| citizenship | — | 1 | 1 | 2 | |
+| art | 1 | 1 | — | 2 | |
+| music | 1 | 1 | — | 2 | |
+| design-technology | 1 | 1 | — | 2 | |
+| cooking-nutrition | 1 | — | — | 1 | |
+| typo-recovery | — | — | — | 3 | Global mechanism tests |
+| curriculum-connection | — | — | — | 4 | Cross-topic |
+| future-intent | — | — | — | 2 | Excluded from stats |
+| **Total** | **32** | **27** | **31** | **~99** | |
 
 **Total target**: ~99 queries × 5 slugs each = ~495 expected slugs
 
@@ -297,7 +309,7 @@ pnpm benchmark --all --verbose
 
 | Aspect | Status |
 |--------|--------|
-| Structure | ⚠️ Revised (pending subject filter fix for KS4 science) |
+| Structure | ✅ Ready (subject filter fixed 2026-01-27) |
 | Distribution | ✅ Complexity-weighted with KS3/KS4 breakdown |
 | Categories | ✅ Aligned |
 | Query slots | ✅ Defined with search challenges |
@@ -308,11 +320,11 @@ pnpm benchmark --all --verbose
 
 | Blocker | Queries Affected | Status |
 |---------|------------------|--------|
-| Subject filter normalisation | 11 KS4 science queries | ❌ Requires code fix |
+| ~~Subject filter normalisation~~ | 11 KS4 science queries | ✅ Fixed 2026-01-27 |
 
 ### What Needs Doing
 
-1. **Fix subject filter** — Implement [subject-filter-fix-plan.md](subject-filter-fix-plan.md) to unblock KS4 science
+1. ~~**Fix subject filter**~~ — ✅ Complete (see ADR-101, ADR-105)
 2. **Mine bulk data** — For each of the ~99 query slots:
    - Find rich topic area
    - Identify 5 target lessons (expected slugs)

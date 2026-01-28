@@ -15,8 +15,9 @@
  */
 
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import type { SearchLessonsIndexDoc } from '../types/oak';
-import { isKeyStage, isSubject } from './sdk-guards';
+import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/oak-curriculum-sdk';
+import type { SearchLessonsIndexDoc, AllSubjectSlug } from '../types/oak';
+import { isKeyStage } from './sdk-guards';
 import {
   generateLessonUrl,
   extractKeywordStrings,
@@ -25,7 +26,6 @@ import {
   extractTeacherTipStrings,
   extractContentGuidanceLabels,
   normaliseSupervisionLevel,
-  normaliseSubjectSlug,
 } from './bulk-transform-helpers.js';
 import {
   buildLessonDocument,
@@ -138,15 +138,15 @@ export interface BulkToESLessonParams {
 export function extractLessonParamsFromBulk(params: BulkToESLessonParams): CreateLessonDocParams {
   const { lesson, unitInfo, years } = params;
 
-  // Normalise subject slug (e.g., 'combined-science' → 'science')
-  const normalisedSubject = normaliseSubjectSlug(lesson.subjectSlug);
-  const subjectSlug = isSubject(normalisedSubject)
-    ? normalisedSubject
+  // Validate and preserve original subject slug (ADR-101: don't normalise away KS4 variants)
+  const subjectSlug: AllSubjectSlug = isAllSubject(lesson.subjectSlug)
+    ? lesson.subjectSlug
     : (() => {
-        throw new Error(
-          `Invalid subject slug: ${lesson.subjectSlug} (normalised: ${normalisedSubject})`,
-        );
+        throw new Error(`Invalid subject slug: ${lesson.subjectSlug}`);
       })();
+
+  // Get parent subject from SDK lookup (e.g., 'physics' → 'science')
+  const subjectParent = SUBJECT_TO_PARENT[subjectSlug];
 
   const keyStage = isKeyStage(lesson.keyStageSlug)
     ? lesson.keyStageSlug
@@ -158,6 +158,7 @@ export function extractLessonParamsFromBulk(params: BulkToESLessonParams): Creat
     lessonSlug: lesson.lessonSlug,
     lessonTitle: lesson.lessonTitle,
     subjectSlug,
+    subjectParent,
     subjectTitle: lesson.subjectTitle,
     keyStage,
     keyStageTitle: lesson.keyStageTitle,

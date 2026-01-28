@@ -11,17 +11,55 @@ import { describe, it, expect } from 'vitest';
 import { createLessonFilters, createUnitFilters } from './rrf-query-helpers';
 
 describe('createLessonFilters', () => {
-  describe('subject filtering', () => {
-    it('uses subject_parent field for subject filter', () => {
+  describe('subject filtering (ADR-101 smart filtering)', () => {
+    it('uses subject_parent for canonical subjects (broad match)', () => {
       const filters = createLessonFilters({ subject: 'science' });
 
       expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
     });
 
-    it('does not use subject_slug field for subject filter', () => {
-      const filters = createLessonFilters({ subject: 'science' });
+    it('uses subject_parent for non-science subjects', () => {
+      const filters = createLessonFilters({ subject: 'maths' });
 
-      expect(filters).not.toContainEqual({ term: { subject_slug: 'science' } });
+      expect(filters).toContainEqual({ term: { subject_parent: 'maths' } });
+    });
+
+    it('uses subject_slug for KS4 science variant at KS4 (specific match)', () => {
+      const filters = createLessonFilters({ subject: 'physics', keyStage: 'ks4' });
+
+      expect(filters).toContainEqual({ term: { subject_slug: 'physics' } });
+      expect(filters).not.toContainEqual({ term: { subject_parent: 'physics' } });
+    });
+
+    it('uses subject_slug for chemistry at KS4', () => {
+      const filters = createLessonFilters({ subject: 'chemistry', keyStage: 'ks4' });
+
+      expect(filters).toContainEqual({ term: { subject_slug: 'chemistry' } });
+    });
+
+    it('uses subject_slug for biology at KS4', () => {
+      const filters = createLessonFilters({ subject: 'biology', keyStage: 'ks4' });
+
+      expect(filters).toContainEqual({ term: { subject_slug: 'biology' } });
+    });
+
+    it('uses subject_slug for combined-science at KS4', () => {
+      const filters = createLessonFilters({ subject: 'combined-science', keyStage: 'ks4' });
+
+      expect(filters).toContainEqual({ term: { subject_slug: 'combined-science' } });
+    });
+
+    it('uses subject_parent for physics NOT at KS4 (falls back to parent)', () => {
+      const filters = createLessonFilters({ subject: 'physics', keyStage: 'ks3' });
+
+      expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
+      expect(filters).not.toContainEqual({ term: { subject_slug: 'physics' } });
+    });
+
+    it('uses subject_parent for physics when no keyStage specified', () => {
+      const filters = createLessonFilters({ subject: 'physics' });
+
+      expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
     });
   });
 
@@ -115,17 +153,23 @@ describe('createLessonFilters', () => {
 });
 
 describe('createUnitFilters', () => {
-  describe('subject filtering', () => {
-    it('uses subject_parent field for subject filter', () => {
+  describe('subject filtering (ADR-101 smart filtering)', () => {
+    it('uses subject_parent for canonical subjects (broad match)', () => {
       const filters = createUnitFilters({ subject: 'science' });
 
       expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
     });
 
-    it('does not use subject_slug field for subject filter', () => {
-      const filters = createUnitFilters({ subject: 'science' });
+    it('uses subject_slug for KS4 science variant at KS4 (specific match)', () => {
+      const filters = createUnitFilters({ subject: 'physics', keyStage: 'ks4' });
 
-      expect(filters).not.toContainEqual({ term: { subject_slug: 'science' } });
+      expect(filters).toContainEqual({ term: { subject_slug: 'physics' } });
+    });
+
+    it('uses subject_parent for physics NOT at KS4', () => {
+      const filters = createUnitFilters({ subject: 'physics', keyStage: 'ks3' });
+
+      expect(filters).toContainEqual({ term: { subject_parent: 'science' } });
     });
   });
 

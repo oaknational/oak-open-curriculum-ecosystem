@@ -142,20 +142,23 @@ packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
 ├── es-mapping-utils.ts          # Code generation utilities
 ├── es-mapping-generators.ts     # Primary index generators
 ├── es-mapping-generators-minimal.ts  # Simple index generators
-└── generate-es-mappings.ts      # Generator entry point
+├── generate-es-mappings.ts      # Generator entry point
+└── generate-subject-hierarchy.ts # Subject hierarchy generator (ADR-105)
 ```
 
 ### SDK Generated Files (Output)
 
 ```text
-packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/
-├── index.ts                     # Barrel exports
-├── oak-lessons.ts               # Lessons index mapping
-├── oak-units.ts                 # Units index mapping
-├── oak-unit-rollup.ts           # Unit rollup mapping
-├── oak-sequences.ts             # Sequences mapping
-├── oak-sequence-facets.ts       # Sequence facets mapping
-└── oak-meta.ts                  # Metadata mapping
+packages/sdks/oak-curriculum-sdk/src/types/generated/search/
+├── es-mappings/
+│   ├── index.ts                 # Barrel exports
+│   ├── oak-lessons.ts           # Lessons index mapping
+│   ├── oak-units.ts             # Units index mapping
+│   ├── oak-unit-rollup.ts       # Unit rollup mapping
+│   ├── oak-sequences.ts         # Sequences mapping
+│   ├── oak-sequence-facets.ts   # Sequence facets mapping
+│   └── oak-meta.ts              # Metadata mapping
+└── subject-hierarchy.ts         # Subject hierarchy constants (ADR-105)
 ```
 
 ### Search App (Consumer)
@@ -172,6 +175,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/
 
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
 - [ADR-064: Elasticsearch Mapping Organization](064-elasticsearch-mapping-organization.md) (superseded)
+- [ADR-105: SDK-Generated Search Constants](105-sdk-generated-search-constants.md) — Subject hierarchy generator
 - Cardinal rule: `.agent/directives-and-memory/rules.md`
 - Schema-first execution: `.agent/directives-and-memory/schema-first-execution.md`
 

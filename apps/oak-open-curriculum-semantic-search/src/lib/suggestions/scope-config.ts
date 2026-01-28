@@ -10,6 +10,7 @@ import type {
   SearchSequenceIndexDoc,
   KeyStage,
   SearchSubjectSlug,
+  AllSubjectSlug,
   SearchScope,
 } from '../../types/oak';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
@@ -197,7 +198,7 @@ function createSuggestionHit(params: {
   scope: SearchScope;
   label: string;
   url: string;
-  subject?: SearchSubjectSlug;
+  subject?: AllSubjectSlug;
   keyStage?: KeyStage;
   contexts: SuggestionContext;
 }): SuggestionHit | null {

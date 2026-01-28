@@ -1,8 +1,8 @@
 # Semantic Search — Current State
 
-**Last Updated**: 2026-01-26  
+**Last Updated**: 2026-01-27  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Status**: ⚠️ **Stage 1b Required — Query Grounding**
+**Status**: 🔄 **Stage 1b — Query Grounding** (KS4 science unblocked)
 
 ---
 
@@ -18,6 +18,7 @@
 | Category naming | ✅ Aligned |
 | Content-weighted distribution | ✅ Applied |
 | Session template | ✅ Updated |
+| Subject filter fix (KS4 science) | ✅ Fixed (2026-01-27) — [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md), [ADR-105](../../../docs/architecture/architectural-decisions/105-sdk-generated-search-constants.md) |
 
 ### What's Needed
 

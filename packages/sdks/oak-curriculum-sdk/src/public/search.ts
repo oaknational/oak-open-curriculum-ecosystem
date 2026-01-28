@@ -113,6 +113,19 @@ export type {
   IndexMetaDoc,
   ZeroHitDoc,
   SearchSubjectSlug,
+  AllSubjectSlug,
+  ParentSubjectSlug,
+  Ks4ScienceVariant,
+} from '../types/generated/search/index.js';
+
+export {
+  SUBJECT_TO_PARENT,
+  ALL_SUBJECTS,
+  KS4_SCIENCE_VARIANTS,
+  PARENT_TO_SUBJECTS,
+  isKs4ScienceVariant,
+  getSubjectParent,
+  isAllSubject,
 } from '../types/generated/search/index.js';
 
 export {

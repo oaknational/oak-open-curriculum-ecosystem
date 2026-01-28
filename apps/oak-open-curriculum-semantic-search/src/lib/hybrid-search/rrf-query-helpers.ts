@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 390] -- Phrase boosting (B.5), topic facets (ADR-097); defer re-org to ADR-086 */
+/* eslint max-lines: [error, 420] -- Phrase boosting (B.5), topic facets (ADR-097), smart subject filtering (ADR-101); defer re-org to ADR-086 */
 /**
  * Shared helper functions for RRF query builders.
  *
@@ -7,7 +7,8 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import { isKs4ScienceVariant, SUBJECT_TO_PARENT } from '@oaknational/oak-curriculum-sdk';
+import type { KeyStage, AllSubjectSlug } from '../../types/oak';
 import { type Phase, buildKeyStageFilter, collectMetadataFilters } from './phase-filter-utils';
 
 export { type Phase, expandPhasesToKeyStages, buildKeyStageFilter } from './phase-filter-utils';
@@ -19,7 +20,8 @@ type QueryContainer = estypes.QueryDslQueryContainer;
  * different fields use AND logic between them. Key stage filter precedence: phases > keyStages > keyStage
  */
 export interface SearchFilterOptions {
-  readonly subject?: SearchSubjectSlug;
+  /** Subject filter - uses AllSubjectSlug to support KS4 science variants. @see ADR-101 */
+  readonly subject?: AllSubjectSlug;
   readonly phase?: Phase;
   readonly phases?: readonly Phase[];
   readonly keyStage?: KeyStage;
@@ -38,11 +40,38 @@ export interface SearchFilterOptions {
   readonly category?: string;
 }
 
+/**
+ * Determines which field to use for subject filtering (ADR-101 smart filtering).
+ *
+ * For KS4 science variants (physics, chemistry, biology, combined-science) at KS4:
+ * - Use `subject_slug` for specific matching
+ *
+ * For all other cases:
+ * - Use `subject_parent` for broad matching (hierarchical filtering)
+ *
+ * @param subject - The subject to filter on
+ * @param keyStage - Optional key stage (used for KS4 variant detection)
+ * @returns Object with field name and value to use in the filter
+ */
+function buildSubjectFilter(
+  subject: AllSubjectSlug,
+  keyStage: KeyStage | undefined,
+): { field: 'subject_slug' | 'subject_parent'; value: string } {
+  // KS4 science variant at KS4 → use subject_slug for specific match
+  if (isKs4ScienceVariant(subject) && keyStage === 'ks4') {
+    return { field: 'subject_slug', value: subject };
+  }
+
+  // Otherwise → use subject_parent for broad match (hierarchical filtering)
+  return { field: 'subject_parent', value: SUBJECT_TO_PARENT[subject] };
+}
+
 /** Creates filters for lesson queries. */
 export function createLessonFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (options.subject) {
-    filters.push({ term: { subject_parent: options.subject } });
+    const subjectFilter = buildSubjectFilter(options.subject, options.keyStage);
+    filters.push({ term: { [subjectFilter.field]: subjectFilter.value } });
   }
   const keyStageFilter = buildKeyStageFilter(options);
   if (keyStageFilter) {
@@ -59,7 +88,8 @@ export function createLessonFilters(options: SearchFilterOptions): QueryContaine
 export function createUnitFilters(options: SearchFilterOptions): QueryContainer[] {
   const filters: QueryContainer[] = [];
   if (options.subject) {
-    filters.push({ term: { subject_parent: options.subject } });
+    const subjectFilter = buildSubjectFilter(options.subject, options.keyStage);
+    filters.push({ term: { [subjectFilter.field]: subjectFilter.value } });
   }
   const keyStageFilter = buildKeyStageFilter(options);
   if (keyStageFilter) {

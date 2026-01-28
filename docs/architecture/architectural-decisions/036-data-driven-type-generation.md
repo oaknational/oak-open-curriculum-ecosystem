@@ -144,6 +144,10 @@ const TOOLS = {
 - Performance is equivalent (object lookup is O(1) like switch)
 - Testing approach changes from testing functions to testing data and validators
 
+### Extension: Encoded Domain Knowledge
+
+This pattern extends to domain knowledge not available in the OpenAPI schema. When schema data is incomplete, generators can encode hardcoded domain knowledge using the same data-driven pattern. See [ADR-105](./105-sdk-generated-search-constants.md) for an example (subject hierarchy for search filtering).
+
 ## Implementation
 
 ### Phase 1: Refactor MCP Tool Generation
@@ -213,6 +217,7 @@ export function isKeyStage(value: string): value is KeyStage {
 - ADR-032: External boundary validation
 - ADR-034: System boundaries and type assertions
 - ADR-035: Unified SDK-MCP type generation
+- [ADR-105](./105-sdk-generated-search-constants.md): SDK-generated search constants (applies this pattern to domain knowledge not in schema)
 
 ## References
 

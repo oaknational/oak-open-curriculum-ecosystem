@@ -94,6 +94,26 @@ export type {
 export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
 
 // ============================================================================
+// Subject Hierarchy (ADR-101)
+// ============================================================================
+
+export {
+  SUBJECT_TO_PARENT,
+  ALL_SUBJECTS,
+  KS4_SCIENCE_VARIANTS,
+  PARENT_TO_SUBJECTS,
+  isKs4ScienceVariant,
+  getSubjectParent,
+  isAllSubject,
+} from './types/generated/search/subject-hierarchy.js';
+
+export type {
+  AllSubjectSlug,
+  ParentSubjectSlug,
+  Ks4ScienceVariant,
+} from './types/generated/search/subject-hierarchy.js';
+
+// ============================================================================
 // Validation
 // ============================================================================
 

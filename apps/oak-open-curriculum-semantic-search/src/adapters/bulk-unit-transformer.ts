@@ -19,7 +19,7 @@
  */
 
 import type { Unit } from '@oaknational/oak-curriculum-sdk/public/bulk.js';
-import type { SearchUnitsIndexDoc, SearchSubjectSlug } from '../types/oak';
+import type { SearchUnitsIndexDoc, AllSubjectSlug, ParentSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {
   generateUnitUrl,
@@ -36,7 +36,10 @@ import {
 /** Parameters for transforming a bulk unit to ES document */
 export interface BulkToESUnitParams {
   readonly unit: Unit;
-  readonly subjectSlug: SearchSubjectSlug;
+  /** Original subject slug including KS4 variants (21 subjects). @see ADR-101 */
+  readonly subjectSlug: AllSubjectSlug;
+  /** Parent subject for hierarchical filtering (17 canonical subjects). @see ADR-101 */
+  readonly subjectParent: ParentSubjectSlug;
   readonly subjectTitle: string;
   readonly subjectProgrammesUrl: string;
   /**
@@ -86,7 +89,8 @@ function resolveUnitTopics(
  * @returns Params for `buildUnitDocument()`
  */
 export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUnitDocParams {
-  const { unit, subjectSlug, subjectTitle, subjectProgrammesUrl, categoryMap } = params;
+  const { unit, subjectSlug, subjectParent, subjectTitle, subjectProgrammesUrl, categoryMap } =
+    params;
 
   const keyStage = isKeyStage(unit.keyStageSlug)
     ? unit.keyStageSlug
@@ -101,6 +105,7 @@ export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUni
     unitSlug: unit.unitSlug,
     unitTitle: unit.unitTitle,
     subjectSlug,
+    subjectParent,
     subjectTitle,
     keyStage,
     keyStageTitle: getKeyStageTitle(keyStage),

@@ -275,6 +275,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -303,6 +304,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -323,6 +325,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -340,6 +343,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -356,6 +360,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -370,6 +375,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };
@@ -391,6 +397,7 @@ describe('transformBulkUnitToESDoc', () => {
     const params: BulkToESUnitParams = {
       unit,
       subjectSlug: 'maths',
+      subjectParent: 'maths',
       subjectTitle: 'Maths',
       subjectProgrammesUrl: 'https://example.com/programmes/maths',
     };

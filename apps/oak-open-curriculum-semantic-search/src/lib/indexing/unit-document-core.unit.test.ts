@@ -18,6 +18,7 @@ function createMinimalParams(overrides?: Partial<CreateUnitDocParams>): CreateUn
     unitSlug: 'fractions-year-3',
     unitTitle: 'Fractions Year 3',
     subjectSlug: 'maths',
+    subjectParent: 'maths',
     subjectTitle: 'Mathematics',
     keyStage: 'ks2',
     keyStageTitle: 'Key Stage 2',
@@ -230,41 +231,56 @@ describe('unit-document-core', () => {
       expect(doc.exam_board_titles).toEqual(['AQA']);
     });
 
-    describe('subject_parent derivation', () => {
-      it('sets subject_parent to match subject_slug for science', () => {
-        const params = createMinimalParams({ subjectSlug: 'science' });
+    describe('subject_parent from params (ADR-101)', () => {
+      it('uses subjectParent param for subject_parent field', () => {
+        const params = createMinimalParams({
+          subjectSlug: 'physics',
+          subjectParent: 'science',
+        });
 
         const doc = buildUnitDocument(params);
 
+        expect(doc.subject_slug).toBe('physics');
         expect(doc.subject_parent).toBe('science');
-        expect(doc.subject_parent).toBe(doc.subject_slug);
       });
 
-      it('sets subject_parent to match subject_slug for maths', () => {
-        const params = createMinimalParams({ subjectSlug: 'maths' });
+      it('preserves distinct subject_slug and subject_parent for KS4 science variants', () => {
+        const params = createMinimalParams({
+          subjectSlug: 'chemistry',
+          subjectParent: 'science',
+          keyStage: 'ks4',
+        });
 
         const doc = buildUnitDocument(params);
 
+        expect(doc.subject_slug).toBe('chemistry');
+        expect(doc.subject_parent).toBe('science');
+        expect(doc.subject_slug).not.toBe(doc.subject_parent);
+      });
+
+      it('allows subject_parent to equal subject_slug for non-science subjects', () => {
+        const params = createMinimalParams({
+          subjectSlug: 'maths',
+          subjectParent: 'maths',
+        });
+
+        const doc = buildUnitDocument(params);
+
+        expect(doc.subject_slug).toBe('maths');
         expect(doc.subject_parent).toBe('maths');
-        expect(doc.subject_parent).toBe(doc.subject_slug);
       });
 
-      it('sets subject_parent to match subject_slug for english', () => {
-        const params = createMinimalParams({ subjectSlug: 'english' });
+      it('sets subject_parent to science for combined-science', () => {
+        const params = createMinimalParams({
+          subjectSlug: 'combined-science',
+          subjectParent: 'science',
+          keyStage: 'ks4',
+        });
 
         const doc = buildUnitDocument(params);
 
-        expect(doc.subject_parent).toBe('english');
-        expect(doc.subject_parent).toBe(doc.subject_slug);
-      });
-
-      it('sets subject_parent to match subject_slug for history', () => {
-        const params = createMinimalParams({ subjectSlug: 'history' });
-
-        const doc = buildUnitDocument(params);
-
-        expect(doc.subject_parent).toBe('history');
-        expect(doc.subject_parent).toBe(doc.subject_slug);
+        expect(doc.subject_slug).toBe('combined-science');
+        expect(doc.subject_parent).toBe('science');
       });
     });
   });

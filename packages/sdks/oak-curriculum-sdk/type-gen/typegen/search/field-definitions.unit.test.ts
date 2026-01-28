@@ -91,12 +91,12 @@ describe('UNITS_INDEX_FIELDS', () => {
     expect(unitId?.optional).toBe(false);
   });
 
-  it('marks subject_slug as required string with SUBJECT_TUPLE enum', () => {
+  it('marks subject_slug as required string with ALL_SUBJECT_TUPLE enum (ADR-101)', () => {
     const subjectSlug = UNITS_INDEX_FIELDS.find((f) => f.name === 'subject_slug');
     expect(subjectSlug).toBeDefined();
     expect(subjectSlug?.zodType).toBe('string');
     expect(subjectSlug?.optional).toBe(false);
-    expect(subjectSlug?.enumRef).toBe('SUBJECT_TUPLE');
+    expect(subjectSlug?.enumRef).toBe('ALL_SUBJECT_TUPLE');
   });
 
   it('marks key_stage as required string with KEY_STAGE_TUPLE enum', () => {
@@ -198,9 +198,9 @@ describe('LESSONS_INDEX_FIELDS', () => {
     expect(fieldNames).toContain('title_suggest');
   });
 
-  it('has subject_slug with SUBJECT_TUPLE enum', () => {
+  it('has subject_slug with ALL_SUBJECT_TUPLE enum (ADR-101)', () => {
     const field = LESSONS_INDEX_FIELDS.find((f) => f.name === 'subject_slug');
-    expect(field?.enumRef).toBe('SUBJECT_TUPLE');
+    expect(field?.enumRef).toBe('ALL_SUBJECT_TUPLE');
   });
 
   it('has key_stage with KEY_STAGE_TUPLE enum', () => {

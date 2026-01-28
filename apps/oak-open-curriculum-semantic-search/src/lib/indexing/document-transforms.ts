@@ -11,6 +11,7 @@
  */
 /* eslint-disable max-lines -- Document transforms require comprehensive field mappings */
 
+import { SUBJECT_TO_PARENT } from '@oaknational/oak-curriculum-sdk';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
@@ -19,6 +20,8 @@ import type {
   SearchUnitRollupDoc,
   SearchUnitsIndexDoc,
   SearchUnitSummary,
+  ParentSubjectSlug,
+  AllSubjectSlug,
 } from '../../types/oak';
 import {
   extractLessonDocumentFields,
@@ -123,10 +126,14 @@ export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): Crea
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
+  // API path: subject is always canonical, so subjectParent equals subjectSlug
+  const subjectParent: ParentSubjectSlug = subject;
+
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
     subjectSlug: subject,
+    subjectParent,
     subjectTitle,
     keyStage,
     keyStageTitle,
@@ -185,56 +192,35 @@ export interface CreateLessonDocumentParams {
   units: readonly LessonUnitInfo[];
 }
 
-/**
- * Extracts lesson document params from API types.
- *
- * This function transforms API-specific types into the input-agnostic
- * `CreateLessonDocParams` interface used by the shared builder.
- *
- * @param params - API path params
- * @returns Params for `buildLessonDocument()`
- */
-export function extractLessonParamsFromAPI(
-  params: CreateLessonDocumentParams,
-): CreateLessonDocParams {
-  const {
-    lesson,
-    transcript,
-    summary,
-    subject,
-    keyStage,
-    years,
-    lessonCount,
-    unitContextMap,
-    units,
-  } = params;
-
-  if (units.length === 0) {
-    throw new Error(`Lesson ${lesson.lessonSlug} has no unit relationships`);
+/** Extracts lesson document params from API types. Transforms API-specific types into `CreateLessonDocParams`. */
+export function extractLessonParamsFromAPI(p: CreateLessonDocumentParams): CreateLessonDocParams {
+  if (p.units.length === 0) {
+    throw new Error(`Lesson ${p.lesson.lessonSlug} has no unit relationships`);
   }
 
-  const primaryUnitSlug = units[0].unitSlug;
-  const f = extractLessonDocumentFields(summary);
-  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, primaryUnitSlug));
-  const lessonStructure = generateLessonSemanticSummary(summary);
+  const f = extractLessonDocumentFields(p.summary);
+  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(p.unitContextMap, p.units[0].unitSlug));
+  // API path: subject is always canonical, so subjectParent equals subjectSlug
+  const subjectParent: ParentSubjectSlug = p.subject;
 
   return {
-    lessonSlug: lesson.lessonSlug,
-    lessonTitle: lesson.lessonTitle,
-    subjectSlug: subject,
+    lessonSlug: p.lesson.lessonSlug,
+    lessonTitle: p.lesson.lessonTitle,
+    subjectSlug: p.subject,
+    subjectParent,
     subjectTitle: f.subjectTitle,
-    keyStage,
+    keyStage: p.keyStage,
     keyStageTitle: f.keyStageTitle,
-    years,
-    units,
-    unitCount: lessonCount,
+    years: p.years,
+    units: p.units,
+    unitCount: p.lessonCount,
     lessonKeywords: f.lessonKeywords,
     keyLearningPoints: f.keyLearningPoints,
     misconceptions: f.misconceptions,
     teacherTips: f.teacherTips,
     contentGuidance: f.contentGuidance,
-    transcript,
-    lessonStructure,
+    transcript: p.transcript,
+    lessonStructure: generateLessonSemanticSummary(p.summary),
     lessonUrl: f.canonicalUrl,
     pupilLessonOutcome: f.pupilLessonOutcome,
     supervisionLevel: f.supervisionLevel,
@@ -271,7 +257,8 @@ export function createLessonDocument(params: CreateLessonDocumentParams): Search
 export interface CreateRollupDocumentParams {
   summary: SearchUnitSummary;
   snippets: string[];
-  subject: SearchSubjectSlug;
+  /** Subject slug including KS4 variants (AllSubjectSlug). @see ADR-101 */
+  subject: AllSubjectSlug;
   subjectTitle?: string;
   keyStage: KeyStage;
   keyStageTitle?: string;
@@ -282,36 +269,26 @@ export interface CreateRollupDocumentParams {
 }
 
 /** Creates a rollup document for Elasticsearch indexing. */
-export function createRollupDocument(params: CreateRollupDocumentParams): SearchUnitRollupDoc {
-  const {
-    summary,
-    snippets,
-    subject,
-    subjectTitle,
-    keyStage,
-    keyStageTitle,
-    subjectProgrammesUrl,
-    unitContextMap,
-    lessonsByUnit,
-  } = params;
-  const fields = extractRollupDocumentFields(summary, normaliseYears, lessonsByUnit);
-  const rollupText = createEnrichedRollupText(snippets, extractPedagogicalData(summary));
-  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(unitContextMap, summary.unitSlug));
+export function createRollupDocument(p: CreateRollupDocumentParams): SearchUnitRollupDoc {
+  const fields = extractRollupDocumentFields(p.summary, normaliseYears, p.lessonsByUnit);
+  const rollupText = createEnrichedRollupText(p.snippets, extractPedagogicalData(p.summary));
+  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(p.unitContextMap, p.summary.unitSlug));
   const unitSemantic = generateUnitSemanticSummary(
-    summary,
-    keyStageTitle ?? keyStage,
-    subjectTitle ?? subject,
+    p.summary,
+    p.keyStageTitle ?? p.keyStage,
+    p.subjectTitle ?? p.subject,
   );
+
   return {
     unit_id: fields.unitSlug,
     unit_slug: fields.unitSlug,
     unit_title: fields.unitTitle,
-    subject_slug: subject,
-    subject_parent: subject,
-    subject_title: subjectTitle,
-    key_stage: keyStage,
-    key_stage_title: keyStageTitle,
-    phase_slug: derivePhaseFromKeyStage(keyStage),
+    subject_slug: p.subject,
+    subject_parent: SUBJECT_TO_PARENT[p.subject],
+    subject_title: p.subjectTitle,
+    key_stage: p.keyStage,
+    key_stage_title: p.keyStageTitle,
+    phase_slug: derivePhaseFromKeyStage(p.keyStage),
     years: fields.years,
     lesson_ids: fields.lessonIds,
     lesson_count: fields.lessonIds.length,
@@ -321,12 +298,12 @@ export function createRollupDocument(params: CreateRollupDocumentParams): Search
     unit_content_semantic: rollupText,
     unit_structure_semantic: unitSemantic,
     unit_url: fields.canonicalUrl,
-    subject_programmes_url: subjectProgrammesUrl,
+    subject_programmes_url: p.subjectProgrammesUrl,
     sequence_ids: fields.sequenceIds,
     thread_slugs: fields.threadSlugs,
     thread_titles: fields.threadTitles,
     thread_orders: fields.threadOrders,
-    ...extractUnitEnrichmentFields(summary),
+    ...extractUnitEnrichmentFields(p.summary),
     ...ks4,
     doc_type: 'unit',
   };

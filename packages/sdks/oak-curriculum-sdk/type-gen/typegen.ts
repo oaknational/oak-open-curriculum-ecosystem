@@ -20,7 +20,7 @@ import { generateSchemaArtifacts } from './typegen-core.js';
 import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
 import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separation-core.js';
 import { validateOpenApiDocument } from './schema-validator.js';
-import { generateWidgetConstants } from './typegen/index.js';
+import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
@@ -165,6 +165,9 @@ await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory);
 
 console.log('🎨 Generating widget constants...');
 generateWidgetConstants();
+
+console.log('🎨 Generating subject hierarchy...');
+generateSubjectHierarchy();
 
 console.log('✅ Type generation complete!');
 console.log('✅ MCP tools generated from schema!');

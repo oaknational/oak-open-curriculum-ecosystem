@@ -109,6 +109,7 @@ export default defineConfig({
     'src/types/generated/search/scopes.ts',
     'src/types/generated/search/suggestions.ts',
     'src/types/generated/search/facets.ts',
+    'src/types/generated/search/subject-hierarchy.ts',
     // ES mappings (generated from field definitions)
     'src/types/generated/search/es-mappings/index.ts',
     'src/types/generated/search/es-mappings/oak-lessons.ts',

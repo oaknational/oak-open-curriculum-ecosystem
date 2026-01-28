@@ -14,7 +14,12 @@
  * @module lib/indexing/unit-document-core
  */
 
-import type { KeyStage, SearchSubjectSlug, SearchUnitsIndexDoc } from '../../types/oak';
+import type {
+  KeyStage,
+  SearchUnitsIndexDoc,
+  AllSubjectSlug,
+  ParentSubjectSlug,
+} from '../../types/oak';
 import type { Ks4DocumentFields } from './document-transform-helpers';
 
 /**
@@ -49,7 +54,20 @@ export interface CreateUnitDocParams {
   readonly unitTitle: string;
 
   // === Subject/KeyStage ===
-  readonly subjectSlug: SearchSubjectSlug;
+  /**
+   * Subject slug - the actual subject from bulk data.
+   * For KS4 science, this may be 'physics', 'chemistry', 'biology', or 'combined-science'.
+   * @see AllSubjectSlug - Includes all 21 valid subjects
+   */
+  readonly subjectSlug: AllSubjectSlug;
+  /**
+   * Subject parent - the parent subject for hierarchical filtering.
+   * For KS4 science variants, this is 'science'.
+   * For other subjects, this equals subjectSlug.
+   * @see ParentSubjectSlug - The 17 canonical subjects
+   * @see ADR-101 for subject hierarchy design
+   */
+  readonly subjectParent: ParentSubjectSlug;
   readonly subjectTitle: string | undefined;
   readonly keyStage: KeyStage;
   readonly keyStageTitle: string | undefined;
@@ -129,8 +147,17 @@ function buildEnrichmentDocFields(enrichment: UnitEnrichmentFields | undefined) 
  * @returns A valid SearchUnitsIndexDoc ready for Elasticsearch indexing
  */
 export function buildUnitDocument(params: CreateUnitDocParams): SearchUnitsIndexDoc {
-  const { unitSlug, unitTitle, subjectSlug, keyStage, lessonIds, threadInfo, enrichment, ks4 } =
-    params;
+  const {
+    unitSlug,
+    unitTitle,
+    subjectSlug,
+    subjectParent,
+    keyStage,
+    lessonIds,
+    threadInfo,
+    enrichment,
+    ks4,
+  } = params;
   const { docFields: threadDocFields, sequenceIdsForSuggest } = buildThreadFields(threadInfo);
   const enrichmentFields = buildEnrichmentDocFields(enrichment);
 
@@ -139,7 +166,7 @@ export function buildUnitDocument(params: CreateUnitDocParams): SearchUnitsIndex
     unit_slug: unitSlug,
     unit_title: unitTitle,
     subject_slug: subjectSlug,
-    subject_parent: subjectSlug,
+    subject_parent: subjectParent,
     subject_title: params.subjectTitle,
     key_stage: keyStage,
     key_stage_title: params.keyStageTitle,

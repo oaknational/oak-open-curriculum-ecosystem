@@ -1,8 +1,54 @@
-# Semantic Search — Completed Work
+# Semantic Search — Completed Work (Archived)
 
-**Last Updated**: 2026-01-17
+> **Archived**: 2026-01-27
+>
+> This file has been archived. It captures work completed during the initial ground truth development phase (Jan 2026). The metrics and MRR values cited here are **stale** — the ground truth structure was completely redesigned on 2026-01-25/26 and these historical values no longer apply to the current system.
+>
+> **Why archived**: The document was growing long with increasingly outdated historical detail that is not useful for current work. Key decisions are captured in ADRs; the execution history here is now purely historical.
+>
+> For current state, see:
+> - [roadmap.md](../roadmap.md)
+> - [current-state.md](../current-state.md)
+> - [ground-truth-redesign-plan.md](../active/ground-truth-redesign-plan.md)
 
-Historical record of completed milestones. For current priorities, see [roadmap.md](roadmap.md).
+---
+
+**Original Last Updated**: 2026-01-27
+
+Historical record of completed milestones from the initial development phase.
+
+---
+
+## ✅ Subject Filter Fix — KS4 Science (2026-01-27)
+
+**Status**: ✅ Complete  
+**ADRs**: [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md), [ADR-105](../../../docs/architecture/architectural-decisions/105-sdk-generated-search-constants.md)  
+**Archive**: [subject-filter-fix-plan.md](archive/completed/subject-filter-fix-plan.md)
+
+Fixed incorrect subject filtering that prevented granular KS4 science queries.
+
+### The Problem
+
+KS4 science sub-disciplines (physics, chemistry, biology, combined-science) were normalised to "science" during indexing, losing the original subject slug. This blocked 11 ground truth queries.
+
+### What Was Fixed
+
+| Phase | Change |
+|-------|--------|
+| 1. SDK Generator | Created `generate-subject-hierarchy.ts` — exports `SUBJECT_TO_PARENT`, `isKs4ScienceVariant()`, types |
+| 2. Indexing | `subject_slug` preserves original (e.g., `physics`), `subject_parent` derived from lookup |
+| 3. Query Helpers | Smart filtering: KS4 variant at KS4 → `subject_slug`, otherwise → `subject_parent` |
+| 4. Re-index | Bulk re-indexed with correct values |
+
+### Verification
+
+| Subject | Lessons | subject_parent |
+|---------|---------|----------------|
+| physics | 176 | science |
+| chemistry | 83 | science |
+| biology | 39 | science |
+| combined-science | 301 | science |
+| **Total science** | **1,278** | — |
 
 ---
 

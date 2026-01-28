@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted and Implemented (2026-01-22)
+Accepted and Implemented (2026-01-22, Updated 2026-01-27)
 
 ## Context
 
@@ -90,20 +90,30 @@ function computeSubjectParent(subjectSlug: string): string {
 
 For most subjects, `subject_parent === subject_slug`. Only Science KS4 variants have a different parent.
 
-### Search Filter Update
+### Search Filter Update: Smart Filtering
 
-When searching for "science" at secondary level, use `subject_parent`:
+The query layer uses **context-sensitive filtering** based on subject type and key stage:
 
-```json
-{
-  "bool": {
-    "filter": [
-      { "term": { "subject_parent": "science" } },
-      { "terms": { "key_stage": ["ks3", "ks4"] } }
-    ]
+```typescript
+function buildSubjectFilter(
+  subject: AllSubjectSlug,
+  keyStage: KeyStage | undefined,
+): { field: 'subject_slug' | 'subject_parent'; value: string } {
+  // KS4 science variant at KS4 → use subject_slug for specific match
+  if (isKs4ScienceVariant(subject) && keyStage === 'ks4') {
+    return { field: 'subject_slug', value: subject };
   }
+  // Otherwise → use subject_parent for broad match
+  return { field: 'subject_parent', value: SUBJECT_TO_PARENT[subject] };
 }
 ```
+
+| Query             | Key Stage | Filter Field              | Result                                  |
+| ----------------- | --------- | ------------------------- | --------------------------------------- |
+| `subject=physics` | `ks4`     | `subject_slug: physics`   | Only physics lessons                    |
+| `subject=physics` | `ks3`     | `subject_parent: science` | All KS3 science (no KS3 physics exists) |
+| `subject=science` | any       | `subject_parent: science` | All science including variants          |
+| `subject=maths`   | any       | `subject_parent: maths`   | All maths lessons                       |
 
 This matches:
 
@@ -183,25 +193,50 @@ Verify Science secondary ground truths now pass.
 - [ADR-080](./080-curriculum-data-denormalization-strategy.md) — Comprehensive KS4 denormalisation (parent ADR)
 - [ADR-067](./067-sdk-generated-elasticsearch-mappings.md) — SDK-generated ES mappings
 - [ADR-089](./089-index-everything-principle.md) — Index-time enrichment philosophy
+- [ADR-105](./105-sdk-generated-search-constants.md) — SDK-generated search constants (subject hierarchy generator)
 
 ## Implementation
 
-**Completed**: 2026-01-22
+**Initial**: 2026-01-22  
+**Enhanced**: 2026-01-27 (Smart filtering, SDK generator)
 
-See: [subject-hierarchy-enhancement.md](../../../.agent/plans/semantic-search/archive/completed/subject-hierarchy-enhancement.md)
+See: [ADR-105](./105-sdk-generated-search-constants.md) for SDK generator pattern.
 
-### Files Modified
+### Phase 1: SDK Subject Hierarchy Generator
 
-| File                                                                                       | Change                                               |
-| ------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts` | Added `subject_parent` field definition              |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/lesson-document-core.ts`        | Compute `subject_parent` at build time               |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/unit-document-core.ts`          | Compute `subject_parent` at build time               |
-| `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`      | Filter by `subject_parent` instead of `subject_slug` |
+| File                                                                                     | Change                                         |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/generate-subject-hierarchy.ts` | NEW: Generator for subject hierarchy constants |
+| `packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts`       | NEW: Generated output                          |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen.ts`                                   | Wire generator into type-gen                   |
+| `packages/sdks/oak-curriculum-sdk/src/index.ts`                                          | Export subject hierarchy from public API       |
+
+### Phase 2: Correct Indexing
+
+| File                                                                                       | Change                                                      |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts` | `subject_slug` uses `ALL_SUBJECT_TUPLE` (21 subjects)       |
+| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/lesson-document-core.ts`        | Accept `subjectSlug` and `subjectParent` as distinct params |
+| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/unit-document-core.ts`          | Accept `subjectSlug` and `subjectParent` as distinct params |
+| `apps/oak-open-curriculum-semantic-search/src/adapters/bulk-lesson-transformer.ts`         | Preserve original subject, derive parent via SDK lookup     |
+| `apps/oak-open-curriculum-semantic-search/src/adapters/bulk-unit-transformer.ts`           | Accept `subjectParent` from caller                          |
+| `apps/oak-open-curriculum-semantic-search/src/adapters/bulk-data-adapter.ts`               | Compute `subjectParent` using `SUBJECT_TO_PARENT`           |
+
+### Phase 3: Smart Query Filtering
+
+| File                                                                                  | Change                                              |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts` | `buildSubjectFilter()` with context-sensitive logic |
 
 ### Verification
 
-Post-ingestion benchmark confirmed filtering works correctly:
+Post-ingestion ES queries confirmed:
 
-- All 12 science secondary queries return science content
-- Remaining quality gaps are search ranking issues, not filtering issues
+| Subject                  | subject_slug count | subject_parent | Notes                             |
+| ------------------------ | ------------------ | -------------- | --------------------------------- |
+| physics                  | 176                | science        | KS4 only                          |
+| chemistry                | 83                 | science        | KS4 only                          |
+| biology                  | 39                 | science        | KS4 only                          |
+| combined-science         | 301                | science        | KS4 only                          |
+| science                  | 679                | science        | KS1-KS3                           |
+| **Total science parent** | -                  | **1,278**      | All variants correctly aggregated |

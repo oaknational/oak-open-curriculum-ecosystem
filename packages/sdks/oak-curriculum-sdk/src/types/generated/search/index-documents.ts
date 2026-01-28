@@ -5,7 +5,9 @@
 
 import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS, type Subject } from '../api-schema/path-parameters.js';
+import { ALL_SUBJECTS, type AllSubjectSlug } from './subject-hierarchy.js';
 export type SearchSubjectSlug = Subject;
+export type { AllSubjectSlug };
 
 // Per-Index Completion Context Schemas
 export const SearchLessonsCompletionContextsSchema = z
@@ -108,7 +110,7 @@ export const SearchLessonsIndexDocSchema = z
     lesson_id: z.string().min(1),
     lesson_slug: z.string().min(1),
     lesson_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    subject_slug: z.enum(ALL_SUBJECTS as unknown as [typeof ALL_SUBJECTS[number], ...typeof ALL_SUBJECTS[number][]]),
     subject_parent: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
     subject_title: z.string().min(1).optional(),
     key_stage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]),
@@ -156,7 +158,7 @@ export const SearchUnitsIndexDocSchema = z
     unit_id: z.string().min(1),
     unit_slug: z.string().min(1),
     unit_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    subject_slug: z.enum(ALL_SUBJECTS as unknown as [typeof ALL_SUBJECTS[number], ...typeof ALL_SUBJECTS[number][]]),
     subject_parent: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
     subject_title: z.string().min(1).optional(),
     key_stage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]),
@@ -198,7 +200,7 @@ export const SearchUnitRollupDocSchema = z
     unit_id: z.string().min(1),
     unit_slug: z.string().min(1),
     unit_title: z.string().min(1),
-    subject_slug: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
+    subject_slug: z.enum(ALL_SUBJECTS as unknown as [typeof ALL_SUBJECTS[number], ...typeof ALL_SUBJECTS[number][]]),
     subject_parent: z.enum(SUBJECTS as unknown as [typeof SUBJECTS[number], ...typeof SUBJECTS[number][]]),
     subject_title: z.string().min(1).optional(),
     key_stage: z.enum(KEY_STAGES as unknown as [typeof KEY_STAGES[number], ...typeof KEY_STAGES[number][]]),
