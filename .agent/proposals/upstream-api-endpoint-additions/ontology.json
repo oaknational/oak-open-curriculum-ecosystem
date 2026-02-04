@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "generatedAt": "2026-02-04T00:00:00Z",
+  "purpose": "Unified Oak curriculum domain model for AI agents. Describes the structure of UK education content including key stages, subjects, entity hierarchies, and API traversal patterns.",
+  "officialDocs": "https://open-api.thenational.academy/docs/about-oaks-data/glossary",
+
+  "domain": {
+    "keyStages": [
+      {
+        "slug": "ks1",
+        "title": "Key Stage 1",
+        "ageRange": "5-7",
+        "years": [1, 2],
+        "phase": "primary",
+        "description": "Foundation stage covering basic literacy and numeracy"
+      },
+      {
+        "slug": "ks2",
+        "title": "Key Stage 2",
+        "ageRange": "7-11",
+        "years": [3, 4, 5, 6],
+        "phase": "primary",
+        "description": "Primary education building on KS1 foundations"
+      },
+      {
+        "slug": "ks3",
+        "title": "Key Stage 3",
+        "ageRange": "11-14",
+        "years": [7, 8, 9],
+        "phase": "secondary",
+        "description": "Lower secondary education"
+      },
+      {
+        "slug": "ks4",
+        "title": "Key Stage 4",
+        "ageRange": "14-16",
+        "years": [10, 11],
+        "phase": "secondary",
+        "description": "GCSE preparation years with additional programme factors (tiers, exam boards)"
+      }
+    ],
+
+    "phases": [
+      {
+        "slug": "primary",
+        "title": "Primary",
+        "keyStages": ["ks1", "ks2"],
+        "years": [1, 2, 3, 4, 5, 6]
+      },
+      {
+        "slug": "secondary",
+        "title": "Secondary",
+        "keyStages": ["ks3", "ks4"],
+        "years": [7, 8, 9, 10, 11]
+      }
+    ],
+
+    "subjects": [
+      { "slug": "maths", "title": "Mathematics", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "english", "title": "English", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": true, "hasExamSubjects": false },
+      { "slug": "science", "title": "Science", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": true, "hasExamSubjects": true },
+      { "slug": "history", "title": "History", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "geography", "title": "Geography", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "art", "title": "Art", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "music", "title": "Music", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "physical-education", "title": "Physical Education", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "computing", "title": "Computing", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "religious-education", "title": "Religious Education", "keyStages": ["ks1", "ks2", "ks3"], "hasCategories": true, "hasExamSubjects": false },
+      { "slug": "french", "title": "French", "keyStages": ["ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "spanish", "title": "Spanish", "keyStages": ["ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "german", "title": "German", "keyStages": ["ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "citizenship", "title": "Citizenship", "keyStages": ["ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "design-technology", "title": "Design & Technology", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "cooking-nutrition", "title": "Cooking & Nutrition", "keyStages": ["ks1", "ks2", "ks3"], "hasCategories": false, "hasExamSubjects": false },
+      { "slug": "rshe-pshe", "title": "RSHE/PSHE", "keyStages": ["ks1", "ks2", "ks3", "ks4"], "hasCategories": false, "hasExamSubjects": false, "note": "Not available in bulk download" }
+    ],
+
+    "yearToAge": {
+      "1": "5-6", "2": "6-7", "3": "7-8", "4": "8-9", "5": "9-10", "6": "10-11",
+      "7": "11-12", "8": "12-13", "9": "13-14", "10": "14-15", "11": "15-16"
+    },
+
+    "ukEducationContext": [
+      "Key Stages are UK-specific age groupings defined by the National Curriculum",
+      "Year 1 = age 5-6 (first year of primary school)",
+      "Year 6 = age 10-11 (final year of primary, SATs exams)",
+      "Year 7 = age 11-12 (first year of secondary school)",
+      "Year 11 = age 15-16 (final year of secondary, GCSE exams)",
+      "Oak lessons align with the National Curriculum for England",
+      "GCSE = General Certificate of Secondary Education (KS4 qualification)"
+    ]
+  },
+
+  "schema": {
+    "entities": [
+      { "id": "subject", "label": "Subject", "brief": "Curriculum subject area (maths, history, etc.)", "category": "structure" },
+      { "id": "sequence", "label": "Sequence", "brief": "Internal API grouping of units across years", "category": "structure" },
+      { "id": "unit", "label": "Unit", "brief": "Topic of study with ordered lessons", "category": "structure" },
+      { "id": "lesson", "label": "Lesson", "brief": "Teaching session with up to 8 optional components", "category": "structure" },
+      { "id": "quiz", "label": "Quiz", "brief": "Starter or exit assessment", "category": "content" },
+      { "id": "question", "label": "Question", "brief": "Quiz question with answers", "category": "content" },
+      { "id": "answer", "label": "Answer", "brief": "Correct answer or distractor", "category": "content" },
+      { "id": "asset", "label": "Asset", "brief": "Downloadable resource (slides, worksheet)", "category": "content" },
+      { "id": "transcript", "label": "Transcript", "brief": "Video transcript text", "category": "content" },
+      { "id": "phase", "label": "Phase", "brief": "Primary or secondary", "category": "context" },
+      { "id": "keystage", "label": "KeyStage", "brief": "KS1-KS4 formal education stage", "category": "context" },
+      { "id": "yeargroup", "label": "YearGroup", "brief": "Year 1-11 school year", "category": "context" },
+      { "id": "thread", "label": "Thread", "brief": "Conceptual strand linking units across years", "category": "taxonomy" },
+      { "id": "category", "label": "Category", "brief": "Subject-specific grouping of units", "category": "taxonomy" },
+      { "id": "programme", "label": "Programme", "brief": "User-facing curriculum pathway (derived view)", "category": "ks4" },
+      { "id": "tier", "label": "Tier", "brief": "Foundation or higher difficulty level", "category": "ks4" },
+      { "id": "ks4option", "label": "KS4Option", "brief": "Alternative sequence variant (e.g., core vs GCSE) via ks4Options field", "category": "ks4" },
+      { "id": "examboard", "label": "ExamBoard", "brief": "AQA, OCR, Edexcel, Eduqas", "category": "ks4" },
+      { "id": "examsubject", "label": "ExamSubject", "brief": "Biology, Chemistry, Physics (KS4 science)", "category": "ks4" },
+      { "id": "keyword", "label": "Keyword", "brief": "Critical vocabulary for the lesson", "category": "metadata" },
+      { "id": "misconception", "label": "Misconception", "brief": "Common misunderstanding to address", "category": "metadata" },
+      { "id": "contentguidance", "label": "ContentGuidance", "brief": "Sensitive content advisory", "category": "metadata" },
+      { "id": "supervisionlevel", "label": "SupervisionLevel", "brief": "Adult supervision requirement level", "category": "metadata" },
+      { "id": "priorknowledge", "label": "PriorKnowledge", "brief": "Prerequisite understanding required", "category": "metadata" },
+      { "id": "nationalcurriculum", "label": "NationalCurriculumStatement", "brief": "NC coverage alignment", "category": "metadata" },
+      { "id": "keylearningpoint", "label": "KeyLearningPoint", "brief": "Main knowledge outcome of lesson", "category": "metadata" },
+      { "id": "teachertip", "label": "TeacherTip", "brief": "Pedagogical guidance for delivery", "category": "metadata" }
+    ],
+
+    "relationships": [
+      { "from": "subject", "to": "sequence", "rel": "hasSequences", "explicit": true },
+      { "from": "sequence", "to": "unit", "rel": "containsUnits", "explicit": true },
+      { "from": "unit", "to": "lesson", "rel": "containsLessons", "explicit": true },
+      { "from": "lesson", "to": "quiz", "rel": "hasQuizzes", "explicit": true },
+      { "from": "quiz", "to": "question", "rel": "containsQuestions", "explicit": true },
+      { "from": "question", "to": "answer", "rel": "hasAnswers", "explicit": true },
+      { "from": "lesson", "to": "asset", "rel": "hasAssets", "explicit": true },
+      { "from": "lesson", "to": "transcript", "rel": "hasTranscript", "explicit": true },
+      { "from": "phase", "to": "keystage", "rel": "includesKeyStages", "explicit": true },
+      { "from": "keystage", "to": "yeargroup", "rel": "includesYears", "explicit": true },
+      { "from": "subject", "to": "keystage", "rel": "availableAt", "explicit": true },
+      { "from": "thread", "to": "unit", "rel": "linksAcrossYears", "explicit": true },
+      { "from": "unit", "to": "thread", "rel": "taggedWith", "explicit": true },
+      { "from": "unit", "to": "category", "rel": "taggedWith", "explicit": true },
+      { "from": "lesson", "to": "keyword", "rel": "hasKeywords", "explicit": true },
+      { "from": "lesson", "to": "misconception", "rel": "addressesMisconceptions", "explicit": true },
+      { "from": "lesson", "to": "contentguidance", "rel": "hasGuidance", "explicit": true },
+      { "from": "contentguidance", "to": "supervisionlevel", "rel": "requiresSupervision", "explicit": true },
+      { "from": "unit", "to": "priorknowledge", "rel": "requiresPriorKnowledge", "explicit": true },
+      { "from": "unit", "to": "nationalcurriculum", "rel": "covers", "explicit": true },
+      { "from": "lesson", "to": "keylearningpoint", "rel": "delivers", "explicit": true },
+      { "from": "lesson", "to": "teachertip", "rel": "hasTips", "explicit": true },
+      { "from": "unit", "to": "subject", "rel": "belongsTo", "explicit": false, "note": "Inferred from context" },
+      { "from": "unit", "to": "keystage", "rel": "scopedTo", "explicit": false, "note": "Inferred from context" },
+      { "from": "unit", "to": "yeargroup", "rel": "targets", "explicit": false, "note": "Inferred from context" },
+      { "from": "lesson", "to": "subject", "rel": "belongsTo", "explicit": false, "note": "Inherited from unit" },
+      { "from": "lesson", "to": "keystage", "rel": "scopedTo", "explicit": false, "note": "Inherited from unit" },
+      { "from": "programme", "to": "sequence", "rel": "derivedFrom", "explicit": false, "note": "Programmes are views" },
+      { "from": "programme", "to": "tier", "rel": "usesFactorWhen", "explicit": false, "note": "KS4 maths/science only" },
+      { "from": "programme", "to": "examboard", "rel": "usesFactorWhen", "explicit": false, "note": "KS4 only" },
+      { "from": "sequence", "to": "ks4option", "rel": "hasVariants", "explicit": true, "note": "Via ks4Options field" },
+      { "from": "sequence", "to": "examsubject", "rel": "branchesInto", "explicit": false, "note": "Science KS4 only" },
+      { "from": "sequence", "to": "tier", "rel": "hasTiers", "explicit": false, "note": "Maths/Science KS4" },
+      { "from": "examsubject", "to": "tier", "rel": "hasTiers", "explicit": false, "note": "Science KS4" },
+      { "from": "examsubject", "to": "unit", "rel": "containsUnits", "explicit": false, "note": "Science KS4" },
+      { "from": "tier", "to": "unit", "rel": "containsUnits", "explicit": false, "note": "KS4 tiered subjects" }
+    ],
+
+    "entityCategories": {
+      "structure": "Core curriculum hierarchy (Subject → Sequence → Unit → Lesson)",
+      "content": "Within-lesson components (quizzes, assets, transcripts)",
+      "context": "Scoping dimensions (phase, key stage, year)",
+      "taxonomy": "Cross-cutting classifications (threads, categories)",
+      "ks4": "KS4-specific complexity (programmes, tiers, exam boards)",
+      "metadata": "Educational annotations (keywords, misconceptions, guidance)"
+    }
+  },
+
+  "ks4Complexity": {
+    "note": "KS4 has additional programme factors not present in KS1-3",
+    "programmeFactors": {
+      "tier": {
+        "values": ["foundation", "higher"],
+        "appliesTo": ["maths", "science"],
+        "description": "Difficulty level for GCSE courses"
+      },
+      "examBoard": {
+        "values": ["aqa", "ocr", "edexcel", "eduqas", "edexcelb"],
+        "description": "Official body that sets and grades qualifications"
+      },
+      "examSubject": {
+        "values": ["biology", "chemistry", "physics", "combined-science"],
+        "appliesTo": ["science"],
+        "description": "Child subject within KS4 science with associated examination"
+      },
+      "ks4Option": {
+        "description": "Alternative sequence variants at KS4, exposed via ks4Options field on sequences",
+        "appliesTo": ["citizenship", "computing", "physical-education"],
+        "note": "Not a distinct field — values like 'core' and 'gcse' are ks4Options.slug values. See DATA-VARIANCES.md."
+      }
+    },
+    "subjectHierarchy": {
+      "parentSubject": "Top-level subject (e.g., 'Science' at KS1-3)",
+      "childSubject": "Specialisation within parent (e.g., 'Biology' within Science at KS4)",
+      "examSubject": "Child subject with exam board (e.g., 'AQA Biology GCSE')"
+    },
+    "examBoardsBySubject": {
+      "english": ["aqa", "edexcel", "eduqas"],
+      "science": ["aqa", "edexcel", "ocr"],
+      "geography": ["aqa", "edexcelb"],
+      "history": ["aqa", "edexcel"],
+      "french": ["aqa", "edexcel"],
+      "spanish": ["aqa", "edexcel"],
+      "german": ["aqa", "edexcel"],
+      "music": ["aqa", "edexcel", "eduqas", "ocr"],
+      "physical-education": ["aqa", "edexcel", "ocr"],
+      "religious-education": ["aqa", "edexcelb", "eduqas"],
+      "computing": ["aqa", "ocr"],
+      "citizenship": []
+    }
+  },
+
+  "navigation": {
+    "structuralPatterns": [
+      {
+        "id": "simple-flat",
+        "description": "Standard year → units → lessons structure",
+        "appliesTo": "All subjects at KS1-KS3, most subjects at KS4",
+        "responseShape": "{ data: [{ year, units: [...] }] }",
+        "detection": "Default when no tiers, examSubjects, or unitOptions present"
+      },
+      {
+        "id": "tier-variants",
+        "description": "Year response includes tiers[] at top level",
+        "appliesTo": ["maths KS4"],
+        "responseShape": "{ data: [{ year, tiers: [{ tierSlug, units }] }] }",
+        "detection": "Check for 'tiers' key in year response"
+      },
+      {
+        "id": "exam-subject-split",
+        "description": "Science KS4 splits into Biology/Chemistry/Physics/Combined",
+        "appliesTo": ["science KS4"],
+        "responseShape": "{ data: [{ year, examSubjects: [{ examSubjectSlug, tiers: [...] }] }] }",
+        "detection": "Check for 'examSubjects' key in year response",
+        "critical": "/key-stages/ks4/subject/science/lessons returns EMPTY. Use sequences endpoint."
+      },
+      {
+        "id": "exam-board-variants",
+        "description": "Subject has multiple sequences for different exam boards",
+        "appliesTo": ["citizenship", "computing", "english", "french", "geography", "german", "history", "music", "physical-education", "religious-education", "science", "spanish"],
+        "detection": "Subject has multiple ks4Options in /subjects/{subject} response"
+      },
+      {
+        "id": "unit-options",
+        "description": "Units have unitOptions[] with alternative content choices",
+        "appliesTo": ["art KS4", "design-technology KS4", "english KS4", "geography KS4", "history KS4", "religious-education KS4"],
+        "responseShape": "{ units: [{ unitTitle, unitOptions: [{ unitSlug, unitTitle }] }] }",
+        "detection": "Check for 'unitOptions' key in unit response"
+      },
+      {
+        "id": "no-ks4",
+        "description": "Subject has no KS4 content",
+        "appliesTo": ["cooking-nutrition"],
+        "detection": "Secondary sequence only covers years 7-9"
+      }
+    ],
+
+    "patternCombinations": {
+      "description": "Patterns can combine. A subject may have multiple patterns simultaneously.",
+      "examples": [
+        { "subject": "science KS4", "patterns": ["exam-board-variants", "exam-subject-split", "tier-variants"] },
+        { "subject": "english KS4", "patterns": ["exam-board-variants", "unit-options"] },
+        { "subject": "geography KS4", "patterns": ["exam-board-variants", "unit-options"] },
+        { "subject": "maths KS4", "patterns": ["tier-variants"] }
+      ]
+    },
+
+    "traversalGuidance": {
+      "simpleFlatRoute": "GET /key-stages/{ks}/subject/{subject}/lessons — works for KS1-KS3 all subjects",
+      "sequenceRoute": "GET /sequences/{sequence}/units?year={year} — required for KS4 patterns with tiers/examSubjects",
+      "scienceKs4Warning": "CRITICAL: GET /key-stages/ks4/subject/science/lessons returns EMPTY. Must use sequences endpoint and traverse examSubjects → tiers → units."
+    },
+
+    "keyStageGaps": [
+      { "subjects": ["french", "spanish"], "gap": "No KS1 (start at Year 3)" },
+      { "subjects": ["german", "citizenship"], "gap": "No primary content" },
+      { "subjects": ["cooking-nutrition"], "gap": "No KS4 content" },
+      { "subjects": ["rshe-pshe"], "gap": "No bulk download file (API only)" }
+    ],
+
+    "canonicalUrls": {
+      "lesson": "https://www.thenational.academy/teachers/lessons/{lessonSlug}",
+      "unit": "https://www.thenational.academy/teachers/units/{unitSlug}",
+      "programme": "https://www.thenational.academy/teachers/programmes/{programmeSlug}",
+      "threadFilter": "https://www.thenational.academy/teachers/curriculum/{subject}-{phase}/units?threads={threadSlug}"
+    }
+  },
+
+  "threads": {
+    "definition": "An attribute assigned to units that groups together units across the curriculum building a common body of knowledge. Threads are important for making vertical connections across year groups in each subject.",
+    "importance": "Threads show how ideas BUILD over time — they are the pedagogical backbone of Oak's curriculum. Understanding threads enables powerful queries like 'what comes before this topic?' and 'how does this concept develop from Year 1 to Year 11?'",
+    "characteristics": [
+      "Programme-agnostic: A single thread spans multiple programmes, key stages, and years",
+      "Ordered: Units within a thread have unitOrder showing conceptual progression",
+      "Cross-key-stage: Threads enable tracking progression from early years to GCSE",
+      "Primary navigation: Threads are used as filters on the Oak website"
+    ],
+    "examples": [
+      { "slug": "number", "subject": "maths", "spans": "Reception → Year 11", "unitCount": 118, "progression": "Counting 0-10 → Place value → Fractions → Algebra → Surds" },
+      { "slug": "geometry-and-measure", "subject": "maths", "spans": "KS1 → KS4", "progression": "2D shapes → Angles → Area/perimeter → Trigonometry" }
+    ]
+  },
+
+  "entityHierarchy": {
+    "description": "Curriculum content is organised in a hierarchy from Subject down to Lesson",
+    "levels": [
+      { "entity": "Subject", "example": "maths", "contains": "Sequences (API) / Programmes (user-facing)" },
+      { "entity": "Sequence", "example": "maths-primary", "contains": "Units (organised by year)", "note": "API internal structure - generates multiple programme views" },
+      { "entity": "Unit", "example": "fractions-year-4", "contains": "Lessons (typically 4-8 per unit)", "types": ["simple", "variant (tier-based)", "optionality (teacher choice)"] },
+      { "entity": "Lesson", "example": "adding-fractions-with-same-denominator", "contains": "Up to 8 OPTIONAL components: curriculum info, slide deck, video, transcript, starter quiz, exit quiz, worksheet, additional materials" }
+    ]
+  },
+
+  "lessonComponents": {
+    "definition": "Oak lessons can have up to 8 component types. All components are OPTIONAL.",
+    "components": [
+      { "name": "Curriculum information", "description": "Lesson summary with metadata", "availability": "always present" },
+      { "name": "Slide deck", "description": "Presentation slides", "availability": "optional" },
+      { "name": "Video", "description": "Teacher-delivered lesson video", "availability": "optional - not all lessons have video" },
+      { "name": "Video transcript", "description": "Full text of video content", "availability": "optional - only present if lesson has video" },
+      { "name": "Starter quiz", "description": "Prior knowledge assessment", "availability": "optional" },
+      { "name": "Exit quiz", "description": "Learning assessment", "availability": "optional" },
+      { "name": "Worksheet", "description": "Practice tasks with answers", "availability": "optional" },
+      { "name": "Additional materials", "description": "Supplementary resources", "availability": "optional" }
+    ]
+  },
+
+  "contentGuidance": {
+    "definition": "Warnings to teachers about lesson content requiring awareness or supervision",
+    "categories": [
+      "Language and discrimination",
+      "Upsetting, disturbing and sensitive content",
+      "Nudity and sex",
+      "Physical activity and equipment requiring safe use"
+    ],
+    "supervisionLevels": [
+      { "level": 1, "description": "Adult supervision suggested" },
+      { "level": 2, "description": "Adult supervision recommended" },
+      { "level": 3, "description": "Adult supervision required" },
+      { "level": 4, "description": "Adult support required" }
+    ]
+  },
+
+  "glossary": {
+    "tier": {
+      "definition": "Difficulty level for GCSE courses, determining paper content and grade boundaries",
+      "values": ["foundation", "higher"],
+      "context": "KS4 maths and science only",
+      "appliesTo": ["maths", "science"]
+    },
+    "examBoard": {
+      "definition": "Official awarding body that sets and grades GCSE qualifications",
+      "values": ["aqa", "ocr", "edexcel", "eduqas", "edexcelb"],
+      "context": "KS4 subjects with multiple exam board options"
+    },
+    "thread": {
+      "definition": "Conceptual strand that links related units across year groups, showing how knowledge builds progressively",
+      "context": "Used for vertical curriculum navigation"
+    },
+    "sequence": {
+      "definition": "API internal structure for organising curriculum data; one sequence can generate multiple programme views",
+      "context": "API/technical concept, not user-facing"
+    },
+    "programme": {
+      "definition": "User-facing curriculum pathway combining subject, key stage, tier, and exam board",
+      "context": "What teachers navigate on Oak Web Application"
+    },
+    "unitOptions": {
+      "definition": "Alternative content choices within a unit position, allowing teacher personalisation",
+      "context": "KS4 subjects like English (set texts), History (periods), Geography (topics)"
+    },
+    "ks4Options": {
+      "definition": "Alternative sequence variants at KS4, exposed via ks4Options field on sequences",
+      "context": "Citizenship, Computing, PE have 'core' vs 'gcse' options. Not a separate 'pathway' concept."
+    },
+    "priorKnowledge": {
+      "definition": "Prerequisite understanding required before teaching a unit",
+      "context": "Listed at unit level to support sequencing decisions"
+    },
+    "category": {
+      "definition": "Subject-specific grouping of units by content area",
+      "context": "Only English, Science, and Religious Education have categories"
+    }
+  },
+
+  "relatedResources": {
+    "officialGlossary": "https://open-api.thenational.academy/docs/about-oaks-data/glossary",
+    "ontologyDiagrams": "https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams",
+    "dataExamples": "https://open-api.thenational.academy/docs/about-oaks-data/data-examples",
+    "apiOverview": "https://open-api.thenational.academy/docs/about-oaks-api/api-overview",
+    "foundationGraphs": "/graphs/vocabulary, /graphs/prerequisites, /graphs/progressions, /graphs/misconceptions, /graphs/curriculum-coverage"
+  }
+}

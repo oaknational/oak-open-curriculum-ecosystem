@@ -1,0 +1,22 @@
+# Example: Enhanced OpenAPI info object
+# Shows how to add API-level context
+
+info:
+  title: "Oak OpenAPI"
+  version: "0.5.0"
+  summary: "Programmatic access to Oak National Academy's open curriculum"
+  description: |
+    The Oak Open Curriculum API provides access to lesson content, curriculum structure,
+    and educational resources for UK Key Stages 1-4.
+    
+    ## Key Concepts
+    - **Subjects**: Curriculum areas (maths, english, science, etc.)
+    - **Sequences**: Internal API structure grouping units across years
+    - **Units**: Topics of study containing ordered lessons
+    - **Lessons**: Individual teaching sessions with up to 8 optional components
+    
+    ## KS4 Complexity
+    Key Stage 4 has additional factors: tiers (foundation/higher), exam boards (AQA, Edexcel, etc.),
+    and for science, exam subjects (biology, chemistry, physics, combined-science).
+    
+    See the [Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary) for definitions.

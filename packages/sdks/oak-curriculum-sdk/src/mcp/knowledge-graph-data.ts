@@ -1,14 +1,39 @@
 /* eslint-disable max-lines -- this is a static knowledge graph data file, disabling to maintain readability */
 /**
- * Oak Curriculum Knowledge Graph (schema-level)
+ * Oak Curriculum Knowledge Graph (schema-level) — A Property Graph
  *
  * Captures concept TYPE relationships for agent reasoning.
  * This is a static data structure — not searchable, not instance-level.
+ *
+ * RELATIONSHIP TO ONTOLOGY:
+ * This property graph is a SUBSET of what's in ontology-data.ts, expressed as explicit
+ * nodes and edges. Almost everything here could be inferred from the ontology's narrative
+ * descriptions, but the graph format is useful for:
+ * - Explicit relationship direction and typing
+ * - Graph-based traversal reasoning
+ * - Compact structural overview
+ *
+ * WHAT THIS ADDS (not duplicated from ontology):
+ * - Explicit edge labeling with from/to/rel structure
+ * - "inferred" markers distinguishing schema-explicit vs domain-inferred relationships
+ * - Category groupings (structure, content, context, taxonomy, ks4, metadata)
+ *
+ * WHAT ONTOLOGY HAS (this does not):
+ * - Rich definitions and examples
+ * - Workflow guidance
+ * - Structural patterns with detection logic
+ * - UK education context
+ * - Canonical URL patterns
+ *
+ * FUTURE CONSIDERATION:
+ * Consider merging this into ontology-data.ts as an embedded `schema` section,
+ * eliminating the need for two separate files. See 20-ontology-and-graphs-api-proposal.md.
  *
  * Use `get-ontology` for rich definitions and usage guidance.
  *
  * @see knowledge-graph-analysis-synthesis.md for design rationale
  * @see optimised-graph-proposal.md for target structure
+ * @see 20-ontology-and-graphs-api-proposal.md for API consolidation proposal
  *
  * @remarks This is authored domain knowledge that complements the OpenAPI schema.
  * The graph captures relationships that are implied but not explicit in the API.

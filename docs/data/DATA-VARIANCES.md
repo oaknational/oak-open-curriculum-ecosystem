@@ -1,8 +1,26 @@
 # Data Variances Across Subjects and Key Stages
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-02-04
 **Purpose**: Consolidated reference for all curriculum data differences
 **Status**: Living document — update when new variances discovered
+
+---
+
+## Relationship to Ontology
+
+This document captures **data quirks** that affect how consumers process curriculum data. Some of this information is (or should be) reflected in the ontology:
+
+| Variance                           | In Ontology? | Location                          |
+| ---------------------------------- | ------------ | --------------------------------- |
+| Structural patterns                | ✅ Yes       | `ontologyData.structuralPatterns` |
+| KS4 programme factors              | ✅ Yes       | `ontologyData.ks4Complexity`      |
+| Many-to-many cardinalities         | ❌ No        | Section 10 of this document       |
+| Null handling (`"NULL"` vs `null`) | ❌ No        | Section 12 of this document       |
+| Year type variations               | ❌ No        | Section 12 of this document       |
+| Bulk duplicate causes              | ❌ No        | Section 7 of this document        |
+
+**TODO**: Consider adding a `dataQuirks` section to the ontology to capture these edge cases.
+See `.agent/plans/external/ooc-api-wishlist/20-ontology-and-graphs-api-proposal.md` for the full proposal.
 
 ---
 

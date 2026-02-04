@@ -542,13 +542,28 @@ export const ontologyData = {
   /**
    * Domain synonyms for curriculum terminology.
    *
-   * Imported from the synonyms module - the SINGLE SOURCE OF TRUTH for synonyms used across:
-   * - MCP tools (natural language understanding)
-   * - Search app (Elasticsearch synonym expansion)
-   * - Any other consumer needing term normalisation
+   * IMPORTANT: This synonyms data serves a DIFFERENT purpose than what LLMs need.
+   *
+   * What this provides:
+   * - Term normalisation mappings (e.g., "PE" → "physical-education")
+   * - Used by Search app for Elasticsearch synonym expansion
+   *
+   * What LLMs DON'T need from this:
+   * - LLMs handle linguistic variation naturally (they don't need "maths" → "maths")
+   * - LLMs understand abbreviations, colloquialisms, and typos without explicit mappings
+   *
+   * What LLMs WOULD benefit from instead:
+   * - Domain-specific DEFINITIONS (what does "tier" mean in UK education?)
+   * - Official Oak terminology (canonical names for concepts)
+   * - Contextual usage notes (when does this term apply?)
+   *
+   * FUTURE: Consider replacing this with a glossary structure containing:
+   * - term, definition, aliases, context, officialSource
+   * The vocabulary-graph-data.ts already provides term definitions - that's closer to what's needed.
    *
    * @see ./synonyms/index.ts for individual synonym modules
-   * @remarks Use `buildElasticsearchSynonyms()` to export ES-compatible format.
+   * @see 20-ontology-and-graphs-api-proposal.md for planned refactoring
+   * @remarks Use `buildElasticsearchSynonyms()` to export ES-compatible format for search app.
    */
   synonyms: {
     description: 'Alternative terms users might use. Map to canonical slugs when calling tools.',

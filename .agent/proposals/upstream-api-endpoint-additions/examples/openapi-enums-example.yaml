@@ -1,0 +1,47 @@
+# Example: Enriched enum definitions for OpenAPI
+# Shows how to add descriptions to enum values
+
+components:
+  schemas:
+    TierSlug:
+      type: string
+      enum: [foundation, higher]
+      description: "GCSE difficulty tier determining paper content and available grades"
+      x-enum-descriptions:
+        foundation: "Foundation tier - grades 1-5 available"
+        higher: "Higher tier - grades 4-9 available"
+
+    ExamBoardSlug:
+      type: string
+      enum: [aqa, edexcel, edexcelb, eduqas, ocr]
+      x-enum-descriptions:
+        aqa: "Assessment and Qualifications Alliance"
+        edexcel: "Pearson Edexcel"
+        edexcelb: "Pearson Edexcel Specification B"
+        eduqas: "Eduqas (WJEC)"
+        ocr: "Oxford, Cambridge and RSA Examinations"
+
+    ExamSubjectSlug:
+      type: string
+      enum: [biology, chemistry, physics, combined-science]
+      description: "Science exam subjects for KS4"
+
+    AssetType:
+      type: string
+      enum: [slideDeck, exitQuiz, starterQuiz, worksheet, video]
+      x-enum-descriptions:
+        slideDeck: "Presentation slides for the lesson"
+        video: "Teacher-delivered lesson video"
+        worksheet: "Practice tasks for students"
+        exitQuiz: "End-of-lesson assessment"
+        starterQuiz: "Beginning-of-lesson recall check"
+
+    Year:
+      type: string
+      enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"]
+      description: |
+        Year group filter. Note: Year values appear in multiple formats:
+        - String enum here (e.g., "3")
+        - Number in /sequences/{sequence}/assets?year=3
+        - Slug in yearSlug response fields (e.g., "year-3")
+        - Title in yearTitle response fields (e.g., "Year 3")

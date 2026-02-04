@@ -8,6 +8,19 @@
  * This graph provides a curated glossary for students and teachers,
  * with cross-subject term identification and first-year tracking.
  *
+ * CURRENT PROCESS:
+ * 1. Bulk download data is stored locally in reference/bulk_download_data/
+ * 2. This generator is run manually (pnpm generate:graphs)
+ * 3. Output is committed as static TypeScript file (vocabulary-graph-data.ts)
+ *
+ * FUTURE VISION (see 20-ontology-and-graphs-api-proposal.md):
+ * Pre-compute this graph at API build time and expose via /graphs/vocabulary endpoint.
+ * Benefits:
+ * - Eliminates need for local bulk data processing
+ * - All consumers get same version
+ * - Enables proper versioning and cache invalidation
+ * - Reduces SDK complexity
+ *
  * @module vocab-gen/generators/vocabulary-graph-generator
  */
 import { writeFile } from 'fs/promises';
