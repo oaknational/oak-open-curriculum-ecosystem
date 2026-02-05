@@ -31,14 +31,17 @@
  * @packageDocumentation
  */
 
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
-import type { Phase } from '../../src/lib/search-quality/ground-truth/registry/index.js';
-import type { SearchSubjectSlug } from '../../src/types/oak.js';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 
-/** Input parameters for building benchmark request. */
+/**
+ * Input parameters for building benchmark request.
+ *
+ * Uses AllSubjectSlug to support KS4 science variants (physics, chemistry, biology, combined-science).
+ */
 export interface BuildBenchmarkRequestInput {
   readonly text: string;
-  readonly subject: SearchSubjectSlug;
+  readonly subject: AllSubjectSlug;
   readonly phase: Phase;
   readonly queryKeyStage?: KeyStage;
 }
@@ -47,7 +50,7 @@ export interface BuildBenchmarkRequestInput {
 interface PhaseFilterParams {
   readonly text: string;
   readonly size: 10;
-  readonly subject: SearchSubjectSlug;
+  readonly subject: AllSubjectSlug;
   readonly phase: Phase;
 }
 
@@ -55,7 +58,7 @@ interface PhaseFilterParams {
 interface KeyStageFilterParams {
   readonly text: string;
   readonly size: 10;
-  readonly subject: SearchSubjectSlug;
+  readonly subject: AllSubjectSlug;
   readonly keyStage: KeyStage;
 }
 

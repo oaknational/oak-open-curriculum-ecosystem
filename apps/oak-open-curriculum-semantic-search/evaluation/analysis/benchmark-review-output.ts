@@ -15,7 +15,7 @@
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
 import type { ReviewQueryResult } from './benchmark-entry-runner.js';
 import { loadReferenceValues, formatWithStatus, type ReferenceValues } from './benchmark-output.js';
-import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import type { QueryResult } from './benchmark-query-runner.js';
 
 // Re-export the type for convenience

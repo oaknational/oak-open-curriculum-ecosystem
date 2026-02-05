@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import { runQuery, type RunQueryInput, type SearchResponse } from './benchmark-query-runner.js';
 
 describe('runQuery', () => {

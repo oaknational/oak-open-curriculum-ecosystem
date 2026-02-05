@@ -22,7 +22,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { MATHS_SECONDARY_ALL_QUERIES } from '../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../src/lib/search-quality/ground-truth-archive/index.js';
 import { runLessonExperiments, logAllResults, type ContentTypeExperiment } from './lib/index.js';
 
 let lessonExperiment: ContentTypeExperiment;

@@ -3,7 +3,7 @@
  *
  */
 
-import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth-archive/index.js';
 import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
 import { searchLessonsWithMode } from './experiment-search.js';
 import type {

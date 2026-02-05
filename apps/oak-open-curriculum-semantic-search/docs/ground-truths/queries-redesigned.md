@@ -1,103 +1,133 @@
-# Ground Truth Queries: Redesign
+# Foundational Ground Truths
 
-**Status**: 🔄 Phase 1 — Minimum Viable Ground Truths  
-**Target**: One ground truth per subject-phase pair (~33 ground truths)  
-**Last Updated**: 2026-01-27
+**Status**: ✅ Phase 1 Complete  
+**Total**: 30 ground truths (one per subject-phase pair)  
+**Completed**: 2026-02-05
 
 ---
 
-## The Protocol
+## Summary
 
-For each subject-phase pair, execute these steps:
+Phase 1 of the ground truth redesign is complete. 30 foundational ground truths are:
 
-### Step 1: Find a Rich Unit
+- **Integrated with the benchmark** (`pnpm benchmark --all`)
+- **Producing excellent metrics** (MRR=1.000, NDCG=0.989)
+- **Testing actual search value** (4-way RRF, not raw ES)
 
-Target units with 5+ lessons.
+### Baseline Metrics
+
+| Metric        | Value | Rating    |
+| ------------- | ----- | --------- |
+| MRR           | 1.000 | Excellent |
+| NDCG@10       | 0.989 | Excellent |
+| P@3           | 0.956 | Excellent |
+| R@10          | 1.000 | Excellent |
+| Zero-hit rate | 0.000 | Excellent |
+
+---
+
+## Coverage Matrix
+
+| Subject             | Primary | Secondary | Notes             |
+| ------------------- | ------- | --------- | ----------------- |
+| maths               | ✅      | ✅        |                   |
+| science             | ✅      | ✅        |                   |
+| english             | ✅      | ✅        |                   |
+| history             | ✅      | ✅        |                   |
+| geography           | ✅      | ✅        |                   |
+| computing           | ✅      | ✅        |                   |
+| art                 | ✅      | ✅        |                   |
+| music               | ✅      | ✅        |                   |
+| design-technology   | ✅      | ✅        |                   |
+| physical-education  | ✅      | ✅        |                   |
+| religious-education | ✅      | ✅        |                   |
+| french              | ✅      | ✅        |                   |
+| german              | N/A     | ✅        | No primary        |
+| spanish             | ✅      | ✅        |                   |
+| citizenship         | N/A     | ✅        | No primary        |
+| cooking-nutrition   | ✅      | ✅        |                   |
+| physics             | N/A     | —         | KS4 only (future) |
+| chemistry           | N/A     | —         | KS4 only (future) |
+| biology             | N/A     | —         | KS4 only (future) |
+| combined-science    | N/A     | —         | KS4 only (future) |
+
+**Legend**: ✅ = Complete | — = Future | N/A = Not applicable
+
+---
+
+## Running the Benchmark
 
 ```bash
-jq -r '.sequence[] | select(.unitLessons | length >= 5) |
-  "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
-  bulk-downloads/{subject}-{phase}.json
+cd apps/oak-open-curriculum-semantic-search
+
+# All ground truths
+pnpm benchmark --all
+
+# Single subject-phase
+pnpm benchmark -s maths -p secondary
+
+# Review mode (detailed per-query output)
+pnpm benchmark -s maths -p secondary --review
 ```
 
-### Step 2: Pick a Lesson and Extract ALL Data
+---
 
-```bash
-jq '.lessons[] | select(.lessonSlug == "TARGET-LESSON") | {
-  title: .lessonTitle,
-  keywords: [.lessonKeywords[]?.keyword],
-  keyLearning: [.keyLearningPoints[]?.keyLearningPoint],
-  hasTranscript: (.transcript_sentences | length > 0),
-  transcript: (.transcript_sentences | .[0:500])
-}' bulk-downloads/{subject}-{phase}.json
+## Ground Truth Entries
+
+All entries are defined in TypeScript at:
+
+```text
+src/lib/search-quality/ground-truth/entries/
 ```
 
-### Step 3: Summarise the Lesson Content
+Each entry follows the `MinimalGroundTruth` type:
 
-Create a summary from ALL available data: title, keywords, key learning, transcript (if available).
-
-### Step 4: Design a Query Around the Summary
-
-Ask: "What would a teacher type to find content like this?"
-
-**Critical**: DO NOT match on lesson title alone. The query must reflect natural teacher search behaviour.
-
-### Step 5: Run the Query
-
-Execute the query against the search system and examine results.
-
-### Step 6: Evaluate Top 3 Results
-
-| Result                   | Action                                            |
-| ------------------------ | ------------------------------------------------- |
-| Top 3 are reasonable     | Lock in ground truth                              |
-| Top 3 are NOT reasonable | Evaluate why → refine query OR suggest system fix |
-
-### Step 7: Lock In or Iterate
-
-Repeat steps 4-6 until satisfied, then record the ground truth.
+```typescript
+export const MATHS_SECONDARY: MinimalGroundTruth = {
+  subject: 'maths',
+  phase: 'secondary',
+  keyStage: 'ks3',
+  query: 'dividing fractions using reciprocals',
+  expectedRelevance: {
+    'dividing-a-fraction-by-a-fraction': 3,
+    'dividing-with-decimals': 2,
+    'checking-and-securing-dividing-a-fraction-by-a-whole-number': 2,
+  },
+  description:
+    'Lesson teaches dividing fractions by fractions using diagrams and the reciprocal method.',
+} as const;
+```
 
 ---
 
-## Subject-Phase Coverage
+## Methodology
 
-| Subject           | Primary | Secondary | Notes      |
-| ----------------- | ------- | --------- | ---------- |
-| maths             | ❌      | ❌        |            |
-| science           | ❌      | ❌        |            |
-| english           | ❌      | ❌        |            |
-| history           | ❌      | ❌        |            |
-| geography         | ❌      | ❌        |            |
-| computing         | ❌      | ❌        |            |
-| art               | ❌      | ❌        |            |
-| music             | ❌      | ❌        |            |
-| design-technology | ❌      | ❌        |            |
-| PE                | ❌      | ❌        |            |
-| RE                | ❌      | ❌        |            |
-| french            | ❌      | ❌        |            |
-| german            | —       | ❌        | No primary |
-| spanish           | ❌      | ❌        |            |
-| citizenship       | —       | ❌        | No primary |
-| cooking-nutrition | ❌      | ❌        |            |
-| physics           | —       | ❌        | KS4 only   |
-| chemistry         | —       | ❌        | KS4 only   |
-| biology           | —       | ❌        | KS4 only   |
-| combined-science  | —       | ❌        | KS4 only   |
+Ground truths follow the **Known-Answer-First** methodology:
 
-**Legend**: ✅ Complete | ❌ Not started | — Not applicable
+1. Start from curriculum content (find a lesson)
+2. Design a realistic query to find that content
+3. Test via actual search (4-way RRF)
+4. Capture actual results with relevance scores
 
-**Total**: ~33 ground truths (one per subject-phase pair)
+See [ADR-106: Known-Answer-First Ground Truth Methodology](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) for the full decision record.
 
 ---
 
-## Refinement (Phase 2)
+## Future Work
 
-Once baseline coverage is established, we will add more queries for complexity-weighted coverage (~99 total). But first we need to prove the protocol works.
+Phase 2 expansion opportunities are documented in:
+[ground-truth-expansion-plan.md](/.agent/plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md)
+
+The archived 120-query system is preserved at:
+`src/lib/search-quality/ground-truth-archive/`
 
 ---
 
-## Completed Ground Truths
+## Related Documents
 
-Ground truths will be recorded here as they are completed.
-
-(None yet)
+| Document                                                                                                          | Purpose              |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------- |
+| [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md)          | Methodology decision |
+| [ground-truth-protocol.md](/.agent/prompts/semantic-search/ground-truth-protocol.md)                              | The protocol         |
+| [ground-truth/README.md](/apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/README.md) | Code documentation   |
+| [expansion-plan.md](/.agent/plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md)         | Future work          |

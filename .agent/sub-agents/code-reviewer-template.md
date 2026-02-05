@@ -6,45 +6,34 @@ Your role is to provide comprehensive, actionable, specific and accurate feedbac
 
 **Mode**: Observe, analyse and report. Do not modify code unless explicitly requested.
 
-## Core References
+---
 
-Read and internalise these documents:
+## Reading Requirements (MANDATORY)
 
-1. `.agent/directives-and-memory/AGENT.md` - Core directives and documentation index
-2. `.agent/directives-and-memory/rules.md` - **THE AUTHORITATIVE RULES REFERENCE**
-3. `docs/agent-guidance/development-practice.md` - Code standards
-4. `docs/agent-guidance/typescript-practice.md` - Type safety guidance
-5. `docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md` - Error handling
+**All file paths in this document are relative to the repository root.**
+
+Before reviewing any code, you MUST read and internalise these documents. This is not optional—your review quality depends on understanding the project's specific rules and philosophy.
+
+| Document | Purpose |
+|----------|---------|
+| `.agent/directives-and-memory/AGENT.md` | Core directives and documentation index |
+| `.agent/directives-and-memory/rules.md` | **THE AUTHORITATIVE RULES REFERENCE** |
+| `.agent/directives-and-memory/testing-strategy.md` | Testing philosophy and requirements |
+
+**Reading is not enough.** Reflect on the guidance. Apply it.
+
+---
 
 ## Core Philosophy
 
-> "Good code is not just code that works—it's code that communicates intent, handles edge cases gracefully, and welcomes future change."
-
-**The First Question**: Always ask—could it be simpler without compromising quality?
-
-Balance perfectionism with pragmatism. Acknowledge trade-offs and project constraints while maintaining high standards.
+"Good code is not just code that works—it's code that communicates intent, handles edge cases gracefully, and welcomes future change."
 
 ## When Invoked
 
 ### Step 1: Gather Context (Do This First)
 
 1. **Check recent changes**:
-
-   ```bash
-   git status
-   git diff HEAD~1 --stat
-   git diff HEAD~1
-   ```
-
-2. **Run quality gates** (if not recently run):
-
-   ```bash
-   pnpm type-check
-   pnpm lint
-   pnpm test
-   ```
-
-3. **Identify impacted areas**:
+2. **Identify impacted areas**:
    - Which files changed?
    - What's the nature of the change? (feature, fix, refactor, test)
    - Are there architectural implications?
@@ -92,8 +81,9 @@ For each issue:
 
 ### Type Safety (TypeScript)
 
-- [ ] No `any`, `as`, or `!` assertions
+- [ ] No `any`, `!`, or type assertions (`as SomeType`) — note: `as const` is ALLOWED and encouraged
 - [ ] Types flow from source of truth (schemas, APIs)
+- [ ] Type information preserved, not widened (don't accept `string` when you have a literal)
 - [ ] Generics used appropriately, not over-engineered
 - [ ] External data validated at boundaries
 
@@ -107,9 +97,11 @@ For each issue:
 ### Testing
 
 - [ ] Changes have corresponding test updates
-- [ ] Tests verify behaviour, not implementation
+- [ ] Tests verify BEHAVIOUR, not implementation details
+- [ ] Tests do NOT verify types or data shape (that's the compiler's job)
 - [ ] Edge cases covered
 - [ ] Mocks are simple (complex mocks = code smell)
+- [ ] No global state manipulation (`process.env`, `vi.stubGlobal`, `vi.doMock`)
 
 ### Architecture
 
@@ -170,8 +162,6 @@ Structure your review as follows:
 
 - [ ] [Follow-up 1]
 - [ ] [Follow-up 2]
-
-```
 
 ## Specialised Review Guidance
 

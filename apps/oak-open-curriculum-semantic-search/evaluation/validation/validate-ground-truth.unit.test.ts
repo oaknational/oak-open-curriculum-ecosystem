@@ -14,7 +14,7 @@ import {
   CATEGORY_MINIMUMS,
   type ValidationIssue,
 } from './validate-ground-truth.js';
-import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 
 describe('checkCategoryCoverage', () => {
   /**

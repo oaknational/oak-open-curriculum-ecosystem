@@ -7,6 +7,12 @@ description: Evaluate and validate ground truths for Oak semantic search using t
 
 Validate existing ground truths to ensure they accurately represent what search SHOULD return.
 
+## Priorities
+
+1. **Minimal working system** — Prove the approach with ~33 foundational ground truths
+2. **Product integration** — Integrate semantic search into useful teacher tools
+3. **Expansion** — Once proven, plan GT expansions for improved coverage
+
 ## Core Principles
 
 ### We Test OUR Value, Not Elasticsearch
@@ -62,82 +68,32 @@ True independent discovery means: identify best lessons from curriculum content,
 
 Even when queries have "similar semantic intent", you MUST do fresh bulk exploration for EACH query. Copying expected slugs is FORBIDDEN.
 
-## COMMIT Protocol
+## Foundational Ground Truth Structure
 
-### Phase 0: Prerequisites
+The current system uses `MinimalGroundTruth` entries:
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-source .env.local
+```typescript
+export const MATHS_SECONDARY: MinimalGroundTruth = {
+  subject: 'maths',
+  phase: 'secondary',
+  keyStage: 'ks3',
+  query: 'dividing fractions using reciprocals',
+  expectedRelevance: {
+    'dividing-a-fraction-by-a-fraction': 3,
+    'dividing-with-decimals': 2,
+    'checking-and-securing-dividing-a-fraction-by-a-whole-number': 2,
+  },
+  description: 'Lesson teaches dividing fractions by fractions using diagrams and the reciprocal method.',
+} as const;
 ```
 
-| Tool | Verification |
-|------|--------------|
-| MCP server | Call `get-help` |
-| Bulk data | `jq '.sequence | length' bulk-downloads/SUBJECT-PHASE.json` |
-| Benchmark | `pnpm benchmark --help` |
+### Relevance Scores
 
-**CHECKPOINT 0**: If ANY tool unavailable → STOP.
-
-### Phase 1A: Query Analysis (REFLECT — No Tools)
-
-Read the `.query.ts` file (NOT `.expected.ts`) and answer:
-
-| Question | Analysis |
-|----------|----------|
-| What capability does this category test? | State explicitly |
-| Is this query a good test of that? | Evaluate design |
-| Will success/failure be informative? | Assess experiment |
-| Any design issues? | Miscategorised, trivial, impossible? |
-
-**CHECKPOINT 1A**: Query validated before any searching.
-
-### Phase 1B: Discovery + COMMIT (BEFORE Benchmark)
-
-**DO NOT run benchmark until COMMIT is complete.**
-
-| Step | Action | Evidence Required |
-|------|--------|-------------------|
-| 1B.1 | Search bulk data | 10+ candidate slugs |
-| 1B.2 | Get MCP summaries | 5-10 with key learning quotes |
-| 1B.3 | Get unit context | Lesson ordering |
-| 1B.4 | Analyse candidates | Reasoning for each |
-| 1B.5 | **COMMIT rankings** | Top 5 with scores and justifications |
-
-**COMMIT Table**:
-
-| Rank | Slug | Score | Key Learning Quote | Why This Ranking |
-|------|------|-------|-------------------|------------------|
-| 1 | ___ | ___ | "..." | ___ |
-| 2 | ___ | ___ | "..." | ___ |
-| 3 | ___ | ___ | "..." | ___ |
-
-**CHECKPOINT 1B**: Rankings committed BEFORE seeing search results OR expected slugs.
-
-### Phase 1C: Comparison (AFTER Commitment)
-
-**NOW you may read `.expected.ts` and run benchmark.**
-
-```bash
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
-```
-
-**Three-Way Comparison Table** (MANDATORY):
-
-| Slug | YOUR Rank | SEARCH Rank | EXPECTED Score | Verdict |
-|------|-----------|-------------|----------------|---------|
-| ___ | #1 | #? | score ? | Agreement / Search better / Your discovery better |
-
-**Critical Question**: "What are the BEST slugs for this query — and where did they come from?"
-
-| Answer | Meaning |
-|--------|---------|
-| Current GT is CORRECT | Expected slugs are best matches |
-| Search found BETTER | Search returned genuinely better lessons |
-| My candidates are BETTER | Discovery found better than both |
-| Mix is best | Best GT combines sources |
-
-**CHECKPOINT 1C**: Three-way comparison complete with justified decision.
+| Score | Meaning |
+|-------|---------|
+| 3 | Direct match — teaches exactly what query asks |
+| 2 | Related — covers topic but not directly |
+| 1 | Tangential — mentions concept peripherally |
 
 ## Metrics Reference
 
@@ -196,15 +152,12 @@ Of all relevant results, what proportion found in top 10?
 
 ## Quick Review Process
 
-For quick reviews (not full COMMIT):
-
-### Step 1: Run Benchmark Review Mode
+### Step 1: Test Query via test-query.ts
 
 ```bash
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
+cd apps/oak-open-curriculum-semantic-search
+pnpm tsx src/lib/search-quality/test-query.ts "query" subject keyStage
 ```
-
-Output shows expected slugs, top 10 results, all 4 metrics.
 
 ### Step 2: Explore Curriculum Data
 
@@ -246,8 +199,7 @@ Based on evidence:
 
 ```bash
 pnpm type-check
-pnpm ground-truth:validate
-pnpm benchmark -s SUBJECT -p PHASE --verbose
+pnpm test
 ```
 
 ## Troubleshooting
@@ -309,7 +261,7 @@ pnpm benchmark -s SUBJECT -p PHASE --verbose
 
 **WRONG**: Only examine lessons with matching titles.
 
-**CORRECT**: Review ALL units. MCP summaries reveal content that titles don't suggest. `das-leben-mit-behinderung-stem-changes-in-present-tense-weak-verbs` teaches grammar despite unit title "meine Welt".
+**CORRECT**: Review ALL units. MCP summaries reveal content that titles don't suggest.
 
 ## Additional Resources
 

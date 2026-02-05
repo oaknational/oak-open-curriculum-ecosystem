@@ -1,188 +1,149 @@
 /**
- * Ground truth type definitions.
+ * Ground truth type definitions for the foundational ground truths approach.
  *
- * ## Architecture (2026-01-19)
+ * ## Approach (2026-02-05)
  *
- * Ground truths are split into two files with different lifecycles:
- * - **Query files** (*.query.ts): Define what we're testing. Change rarely.
- * - **Expected files** (*.expected.ts): Define current "answer key". Change when curriculum updates.
+ * One ground truth per subject-phase pair (~33 total), each with:
+ * - A natural teacher query
+ * - The top 3 expected results with relevance scores
  *
- * This separation:
- * - Enforces independent discovery in GT review protocol (agent reads query, not expected)
- * - Enables independent versioning (queries vs expectations)
- * - Makes PRs clearer ("added query" vs "updated expectations")
+ * The goal: **"Does search help teachers find what they need?"**
  *
- * ## Outcome-Oriented Category Framework (2026-01-09)
+ * ## Known-Answer-First Methodology
  *
- * Categories are structured around **user outcomes** rather than technical challenges.
- * This follows the "test behavior, not implementation" principle: ground truths should
- * prove that **users get what they need from search**, not just that the system handles
- * technical edge cases.
+ * 1. Find a rich unit (5+ lessons) in bulk data
+ * 2. Pick a lesson and extract ALL data
+ * 3. Summarise the lesson content
+ * 4. Design a query around the summary (NOT title alone)
+ * 5. Run the query against search
+ * 6. Capture top 3 results with relevance scores
+ * 7. Lock in or iterate
  *
- * @see ADR-085 for category definitions and acceptance criteria
- * @see GROUND-TRUTH-PROCESS.md for creation process
+ * @see semantic-search.prompt.md for the full protocol
+ * @see ground-truth-redesign-plan.md for the strategy
  * @packageDocumentation
  */
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
 
 /**
- * Outcome-oriented query categories for ground truth classification.
+ * Valid phase values for ground truth organisation.
  *
- * Each category represents a **user scenario** and the **system behavior** it proves:
- *
- * | Category | User Scenario | Behavior Proved |
- * |----------|---------------|-----------------|
- * | `precise-topic` | Teacher knows curriculum terminology | Basic retrieval works |
- * | `natural-expression` | Teacher uses everyday language | System bridges vocabulary gaps |
- * | `imprecise-input` | Teacher types imperfectly (typos, truncation, wrong order) | Search is resilient — imprecise input doesn't break search |
- * | `cross-topic` | Teacher wants intersection content | System finds concept overlaps |
- * | `future-intent` | Tests capability requiring Level 3-4 features | Excluded from stats, tracks future progress |
- *
- * @example
- * // Precise Topic - teacher knows the term
- * { category: 'precise-topic', query: 'quadratic equations factorising' }
- *
- * @example
- * // Natural Expression - teacher uses everyday language
- * { category: 'natural-expression', query: 'teach solving for x' }
- *
- * @example
- * // Imprecise Input - teacher makes typos
- * { category: 'imprecise-input', query: 'simulatneous equasions' }
+ * - **primary**: KS1 + KS2 (Years 1-6)
+ * - **secondary**: KS3 + KS4 (Years 7-11)
  */
-export type QueryCategory =
-  | 'precise-topic'
-  | 'natural-expression'
-  | 'imprecise-input'
-  | 'cross-topic'
-  | 'future-intent';
-
-// ============================================================================
-// New Split Architecture (2026-01-19)
-// ============================================================================
+export type Phase = 'primary' | 'secondary';
 
 /**
- * Query definition — lives in *.query.ts files.
+ * Relevance score for expected results.
  *
- * Contains only the query metadata, NOT the expected results.
- * This enables the GT review protocol where agents discover candidates
- * independently before seeing expected slugs.
+ * - **3**: Highly relevant — the target lesson or equally good
+ * - **2**: Relevant — useful for the query, reasonable result
+ * - **1**: Marginally relevant — somewhat related but not ideal
  */
-export interface GroundTruthQueryDefinition {
-  /** The search query text (3-10 words, realistic teacher phrasing) */
+export type RelevanceScore = 1 | 2 | 3;
+
+/**
+ * Expected relevance judgments for search results.
+ *
+ * Maps lesson slugs to their relevance scores (1-3).
+ * Used by the benchmark system to calculate MRR, NDCG, Precision, Recall.
+ */
+export type ExpectedRelevance = Readonly<Record<string, RelevanceScore>>;
+
+/**
+ * A foundational ground truth entry.
+ *
+ * Each subject-phase pair has exactly one ground truth with:
+ * - A natural teacher query
+ * - The top 3 expected results with relevance scores
+ *
+ * The goal is to prove baseline search quality across the curriculum.
+ *
+ * @example
+ * const mathsSecondary: MinimalGroundTruth = {
+ *   subject: 'maths',
+ *   phase: 'secondary',
+ *   keyStage: 'ks3',
+ *   query: 'equations unknowns on both sides',
+ *   expectedRelevance: {
+ *     'rearranging-to-solve-linear-equations': 3,
+ *     'solving-two-step-linear-equations': 2,
+ *     'forming-and-solving-equations': 2,
+ *   },
+ *   description: 'Lesson teaches that equations with unknowns on both sides can be manipulated by collecting like terms onto one side.',
+ * };
+ */
+export interface MinimalGroundTruth {
+  /**
+   * The subject this ground truth belongs to.
+   * Uses the canonical subject slug from the curriculum SDK.
+   */
+  readonly subject: AllSubjectSlug;
+
+  /**
+   * The phase (primary or secondary) this ground truth targets.
+   */
+  readonly phase: Phase;
+
+  /**
+   * The key stage for filtering. Secondary subjects may be KS3 or KS4.
+   */
+  readonly keyStage: KeyStage;
+
+  /**
+   * The natural-phrasing query a teacher would type.
+   *
+   * Must NOT match on lesson title alone.
+   * Must reflect natural teacher search behaviour.
+   */
   readonly query: string;
 
   /**
-   * Category of user scenario this query represents.
+   * Expected relevance judgments for the top results.
    *
-   * @see QueryCategory for definitions and examples
-   */
-  readonly category: QueryCategory;
-
-  /**
-   * What this test scenario reveals/validates about system behavior.
-   *
-   * Should answer: "What would failure of this query mean for users?"
-   */
-  readonly description: string;
-
-  /**
-   * Relative path to the expected relevance file.
-   *
-   * Convention: `./${category}.expected.ts`
-   */
-  readonly expectedFile: string;
-
-  /** Override keyStage for KS4-specific queries within secondary phase */
-  readonly keyStage?: KeyStage;
-}
-
-/**
- * Expected relevance judgments — lives in *.expected.ts files.
- *
- * Map of lesson_slug → relevance score.
- *
- * - **3** = Highly relevant: Lesson directly answers the query
- * - **2** = Relevant: Lesson is related and useful
- * - **1** = Marginal: Lesson is tangentially related
- *
- * Requirements:
- * - At least 2 slugs (tests ranking, not just retrieval)
- * - At least one score=3 (clear "right answer")
- * - Maximum 5 slugs (more = query too broad)
- * - Varied scores for 2+ slugs (tests ranking quality)
- */
-export type ExpectedRelevance = Readonly<Record<string, number>>;
-
-// ============================================================================
-// Combined Type (Runtime Assembly)
-// ============================================================================
-
-/**
- * A ground truth query with expected relevance judgments.
- *
- * This type is assembled at runtime by combining:
- * - `GroundTruthQueryDefinition` (from *.query.ts files)
- * - `ExpectedRelevance` (from *.expected.ts files)
- *
- * The split architecture enables:
- * - Independent discovery in GT review protocol (agent reads query, not expected)
- * - Independent versioning (queries vs expectations)
- * - Cleaner PRs ("added query" vs "updated expectations")
- *
- * @see GroundTruthQueryDefinition for query-only metadata
- * @see ExpectedRelevance for expected relevance scores
- */
-export interface GroundTruthQuery {
-  /** The search query text (3-10 words, realistic teacher phrasing) */
-  readonly query: string;
-
-  /**
-   * Map of lesson_slug → relevance score.
-   *
-   * - **3** = Highly relevant: Lesson directly answers the query
-   * - **2** = Relevant: Lesson is related and useful
-   * - **1** = Marginal: Lesson is tangentially related
+   * Maps lesson slugs to relevance scores (1-3).
+   * Should include 2-3 expected results for meaningful metrics.
    */
   readonly expectedRelevance: ExpectedRelevance;
 
   /**
-   * Category of user scenario this query represents.
+   * Brief description of the lesson content that informed the query design.
    *
-   * @see QueryCategory for definitions and examples
-   */
-  readonly category: QueryCategory;
-
-  /**
-   * What this test scenario reveals/validates about system behavior.
-   *
-   * Should answer: "What would failure of this query mean for users?"
+   * This explains WHY the query should find these lessons.
    */
   readonly description: string;
-
-  /** Override keyStage for KS4-specific queries within secondary phase */
-  readonly keyStage?: KeyStage;
 }
 
 /**
- * Combine a query definition and expected relevance into a GroundTruthQuery.
+ * All subject-phase pairs that need ground truths.
  *
- * This is the canonical way to assemble a complete ground truth entry
- * from the split files.
- *
- * @param queryDef - The query definition from *.query.ts
- * @param expected - The expected relevance from *.expected.ts
- * @returns A complete GroundTruthQuery
+ * Based on the curriculum structure:
+ * - Primary: ~15 subjects
+ * - Secondary: ~18 subjects (including KS4 science variants)
+ * - Total: ~33 ground truths
  */
-export function combineGroundTruth(
-  queryDef: GroundTruthQueryDefinition,
-  expected: ExpectedRelevance,
-): GroundTruthQuery {
-  return {
-    query: queryDef.query,
-    category: queryDef.category,
-    description: queryDef.description,
-    expectedRelevance: expected,
-    ...(queryDef.keyStage ? { keyStage: queryDef.keyStage } : {}),
-  };
+export interface SubjectPhasePair {
+  readonly subject: AllSubjectSlug;
+  readonly phase: Phase;
+}
+
+/**
+ * A subject-phase key created by {@link subjectPhaseKey}.
+ *
+ * Preserves type information rather than widening to `string`.
+ */
+export type SubjectPhaseKey = `${AllSubjectSlug}-${Phase}`;
+
+/**
+ * Create a unique key for a subject-phase pair.
+ *
+ * @param subject - The subject slug
+ * @param phase - The phase (primary or secondary)
+ * @returns A unique key like "maths-secondary"
+ */
+export function subjectPhaseKey<S extends AllSubjectSlug, P extends Phase>(
+  subject: S,
+  phase: P,
+): `${S}-${P}` {
+  return `${subject}-${phase}`;
 }

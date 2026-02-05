@@ -72,6 +72,7 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
 - [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
+- [Semantic Search Architecture](./semantic-search-architecture.md) - Structure is the foundation, transcripts are a bonus
 
 ### Domain and Context
 

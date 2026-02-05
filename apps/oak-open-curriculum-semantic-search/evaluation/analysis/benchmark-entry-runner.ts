@@ -9,14 +9,25 @@
  * @packageDocumentation
  */
 
+import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type {
-  GroundTruthEntry,
-  Phase,
-} from '../../src/lib/search-quality/ground-truth/registry/index.js';
-import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
-import type { SearchSubjectSlug } from '../../src/types/oak.js';
+  QueryCategory,
+  GroundTruthQuery,
+} from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import { runQuery, type SearchFunction, type QueryResult } from './benchmark-query-runner.js';
 import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
+
+/**
+ * A ground truth entry for benchmarking.
+ *
+ * Uses AllSubjectSlug to support both archive (Subject) and foundational (AllSubjectSlug) ground truths.
+ */
+export interface GroundTruthEntry {
+  readonly subject: AllSubjectSlug;
+  readonly phase: Phase;
+  readonly queries: readonly GroundTruthQuery[];
+}
 
 // Re-export SearchFunction type for test imports
 export type { SearchFunction } from './benchmark-query-runner.js';
@@ -37,7 +48,7 @@ export type { QueryResult } from './benchmark-query-runner.js';
  * from baseline comparison.
  */
 export interface EntryBenchmarkResult {
-  readonly subject: SearchSubjectSlug;
+  readonly subject: AllSubjectSlug;
   readonly phase: Phase;
   readonly queryCount: number;
   readonly mrr: number;

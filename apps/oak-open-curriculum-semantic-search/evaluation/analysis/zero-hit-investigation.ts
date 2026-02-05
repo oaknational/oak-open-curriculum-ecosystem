@@ -21,7 +21,7 @@ import type { SearchLessonsIndexDoc, SearchSubjectSlug } from '../../src/types/o
 import {
   getAllGroundTruthEntries,
   type Phase,
-} from '../../src/lib/search-quality/ground-truth/registry/index.js';
+} from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import { buildLessonRrfRequest } from '../../src/lib/hybrid-search/rrf-query-builders.js';
 import { buildBenchmarkRequestParams } from './benchmark-request-builder.js';
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';

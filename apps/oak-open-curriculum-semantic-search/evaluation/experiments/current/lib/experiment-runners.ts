@@ -3,7 +3,7 @@
  *
  */
 
-import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth-archive/index.js';
 import {
   runLessonModeExperiment,
   aggregateResults,

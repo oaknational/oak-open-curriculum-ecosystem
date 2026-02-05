@@ -1,145 +1,181 @@
 /**
- * Comprehensive ground truth for search quality evaluation.
+ * Minimum Viable Ground Truths — Phase 1.
  *
- * **Phase-Aligned Architecture (2026-01-11)**:
- * Ground truths are organised by phase (primary/secondary) to align with
- * the curriculum structure. Each subject-phase has exactly 4 queries,
- * one for each category: precise-topic, natural-expression, imprecise-input, cross-topic.
+ * One ground truth per subject-phase pair (~33 total).
+ * Uses known-answer-first methodology to prove baseline search quality.
  *
- * **Total**: 120 queries (30 subject-phases × 4 categories)
+ * ## Coverage Target
  *
- * ## Ground Truth Registry
+ * | Phase     | Subjects |
+ * |-----------|----------|
+ * | Primary   | ~15      |
+ * | Secondary | ~18      |
+ * | **Total** | **~33**  |
  *
- * The registry (`GROUND_TRUTH_ENTRIES`) is THE single source of truth for all
- * ground truth entries. Use the registry accessors for validation and benchmarking:
+ * ## Usage
  *
- * - `getAllGroundTruthEntries()` - Iterate all entries
- * - `getGroundTruthEntry(subject, phase)` - Get specific entry
- * - `getEntriesForSubject(subject)` - Get all entries for a subject
- * - `getEntriesForPhase(phase)` - Get all entries for a phase
+ * ```typescript
+ * import { GROUND_TRUTHS, getGroundTruth } from './ground-truth';
+ *
+ * // Get all ground truths
+ * for (const gt of GROUND_TRUTHS) {
+ *   console.log(`${gt.subject}/${gt.phase}: ${gt.query}`);
+ * }
+ *
+ * // Get specific ground truth
+ * const mathsSec = getGroundTruth('maths', 'secondary');
+ * ```
  *
  * @packageDocumentation
  */
 
-export type { GroundTruthQuery } from './types';
+import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
 
-// Registry - THE single source of truth
-export type { GroundTruthEntry, Phase } from './registry/index';
-export {
-  getAllGroundTruthEntries,
-  getEntriesForPhase,
-  getEntriesForSubject,
-  getGroundTruthEntry,
-  GROUND_TRUTH_ENTRIES,
-} from './registry/index';
+import type { Phase, MinimalGroundTruth } from './types';
 
-import { ART_ALL_QUERIES } from './art';
-import { CITIZENSHIP_ALL_QUERIES } from './citizenship';
-import { COMPUTING_ALL_QUERIES } from './computing';
-import { COOKING_NUTRITION_ALL_QUERIES } from './cooking-nutrition';
-import { DESIGN_TECHNOLOGY_ALL_QUERIES } from './design-technology';
-import { ENGLISH_ALL_QUERIES } from './english';
-import { FRENCH_ALL_QUERIES } from './french';
-import { GEOGRAPHY_ALL_QUERIES } from './geography';
-import { GERMAN_ALL_QUERIES } from './german';
-import { HISTORY_ALL_QUERIES } from './history';
-import { MATHS_ALL_QUERIES } from './maths';
-import { MUSIC_ALL_QUERIES } from './music';
-import { PHYSICAL_EDUCATION_ALL_QUERIES } from './physical-education';
-import { RELIGIOUS_EDUCATION_ALL_QUERIES } from './religious-education';
-import { SCIENCE_ALL_QUERIES } from './science';
-import { SPANISH_ALL_QUERIES } from './spanish';
-import type { GroundTruthQuery } from './types';
+export type { MinimalGroundTruth, SubjectPhasePair, Phase, SubjectPhaseKey } from './types';
+export { subjectPhaseKey } from './types';
+
+// =============================================================================
+// Ground Truth Entries
+// =============================================================================
+
+// Import individual ground truths as they are created
+import { ART_PRIMARY } from './entries/art-primary';
+import { ART_SECONDARY } from './entries/art-secondary';
+import { CITIZENSHIP_SECONDARY } from './entries/citizenship-secondary';
+import { COOKING_NUTRITION_PRIMARY } from './entries/cooking-nutrition-primary';
+import { COOKING_NUTRITION_SECONDARY } from './entries/cooking-nutrition-secondary';
+import { COMPUTING_PRIMARY } from './entries/computing-primary';
+import { COMPUTING_SECONDARY } from './entries/computing-secondary';
+import { DESIGN_TECHNOLOGY_PRIMARY } from './entries/design-technology-primary';
+import { DESIGN_TECHNOLOGY_SECONDARY } from './entries/design-technology-secondary';
+import { ENGLISH_PRIMARY } from './entries/english-primary';
+import { ENGLISH_SECONDARY } from './entries/english-secondary';
+import { FRENCH_PRIMARY } from './entries/french-primary';
+import { FRENCH_SECONDARY } from './entries/french-secondary';
+import { GEOGRAPHY_PRIMARY } from './entries/geography-primary';
+import { GERMAN_SECONDARY } from './entries/german-secondary';
+import { GEOGRAPHY_SECONDARY } from './entries/geography-secondary';
+import { HISTORY_PRIMARY } from './entries/history-primary';
+import { HISTORY_SECONDARY } from './entries/history-secondary';
+import { MATHS_PRIMARY } from './entries/maths-primary';
+import { MUSIC_PRIMARY } from './entries/music-primary';
+import { MUSIC_SECONDARY } from './entries/music-secondary';
+import { RELIGIOUS_EDUCATION_PRIMARY } from './entries/religious-education-primary';
+import { RELIGIOUS_EDUCATION_SECONDARY } from './entries/religious-education-secondary';
+import { MATHS_SECONDARY } from './entries/maths-secondary';
+import { PHYSICAL_EDUCATION_PRIMARY } from './entries/physical-education-primary';
+import { PHYSICAL_EDUCATION_SECONDARY } from './entries/physical-education-secondary';
+import { SCIENCE_PRIMARY } from './entries/science-primary';
+import { SCIENCE_SECONDARY } from './entries/science-secondary';
+import { SPANISH_PRIMARY } from './entries/spanish-primary';
+import { SPANISH_SECONDARY } from './entries/spanish-secondary';
 
 /**
- * All ground truth queries across all subjects.
+ * All ground truths in the system.
  *
- * Total: 120 queries (30 subject-phases × 4 categories)
+ * This array grows as ground truths are created for each subject-phase pair.
  */
-export const ALL_GROUND_TRUTH_QUERIES: readonly GroundTruthQuery[] = [
-  ...MATHS_ALL_QUERIES,
-  ...ENGLISH_ALL_QUERIES,
-  ...SCIENCE_ALL_QUERIES,
-  ...HISTORY_ALL_QUERIES,
-  ...GEOGRAPHY_ALL_QUERIES,
-  ...RELIGIOUS_EDUCATION_ALL_QUERIES,
-  ...FRENCH_ALL_QUERIES,
-  ...SPANISH_ALL_QUERIES,
-  ...GERMAN_ALL_QUERIES,
-  ...COMPUTING_ALL_QUERIES,
-  ...ART_ALL_QUERIES,
-  ...MUSIC_ALL_QUERIES,
-  ...DESIGN_TECHNOLOGY_ALL_QUERIES,
-  ...PHYSICAL_EDUCATION_ALL_QUERIES,
-  ...CITIZENSHIP_ALL_QUERIES,
-  ...COOKING_NUTRITION_ALL_QUERIES,
+export const GROUND_TRUTHS: readonly MinimalGroundTruth[] = [
+  ART_PRIMARY,
+  ART_SECONDARY,
+  CITIZENSHIP_SECONDARY,
+  COOKING_NUTRITION_PRIMARY,
+  COOKING_NUTRITION_SECONDARY,
+  COMPUTING_PRIMARY,
+  COMPUTING_SECONDARY,
+  DESIGN_TECHNOLOGY_PRIMARY,
+  DESIGN_TECHNOLOGY_SECONDARY,
+  ENGLISH_PRIMARY,
+  ENGLISH_SECONDARY,
+  FRENCH_PRIMARY,
+  FRENCH_SECONDARY,
+  GEOGRAPHY_PRIMARY,
+  GEOGRAPHY_SECONDARY,
+  GERMAN_SECONDARY,
+  HISTORY_PRIMARY,
+  HISTORY_SECONDARY,
+  MATHS_PRIMARY,
+  MATHS_SECONDARY,
+  MUSIC_PRIMARY,
+  MUSIC_SECONDARY,
+  PHYSICAL_EDUCATION_PRIMARY,
+  PHYSICAL_EDUCATION_SECONDARY,
+  RELIGIOUS_EDUCATION_PRIMARY,
+  RELIGIOUS_EDUCATION_SECONDARY,
+  SCIENCE_PRIMARY,
+  SCIENCE_SECONDARY,
+  SPANISH_PRIMARY,
+  SPANISH_SECONDARY,
 ] as const;
 
-// Diagnostic queries
-export {
-  DIAGNOSTIC_QUERIES,
-  MULTI_CONCEPT_DIAGNOSTIC_QUERIES,
-  SYNONYM_DIAGNOSTIC_QUERIES,
-} from './diagnostic-queries';
+// Re-export individual entries for direct access
+export { ART_PRIMARY } from './entries/art-primary';
+export { ART_SECONDARY } from './entries/art-secondary';
+export { CITIZENSHIP_SECONDARY } from './entries/citizenship-secondary';
+export { COOKING_NUTRITION_PRIMARY } from './entries/cooking-nutrition-primary';
+export { COOKING_NUTRITION_SECONDARY } from './entries/cooking-nutrition-secondary';
+export { COMPUTING_PRIMARY } from './entries/computing-primary';
+export { COMPUTING_SECONDARY } from './entries/computing-secondary';
+export { DESIGN_TECHNOLOGY_PRIMARY } from './entries/design-technology-primary';
+export { DESIGN_TECHNOLOGY_SECONDARY } from './entries/design-technology-secondary';
+export { ENGLISH_PRIMARY } from './entries/english-primary';
+export { ENGLISH_SECONDARY } from './entries/english-secondary';
+export { FRENCH_PRIMARY } from './entries/french-primary';
+export { FRENCH_SECONDARY } from './entries/french-secondary';
+export { GEOGRAPHY_PRIMARY } from './entries/geography-primary';
+export { GEOGRAPHY_SECONDARY } from './entries/geography-secondary';
+export { GERMAN_SECONDARY } from './entries/german-secondary';
+export { HISTORY_PRIMARY } from './entries/history-primary';
+export { HISTORY_SECONDARY } from './entries/history-secondary';
+export { MATHS_PRIMARY } from './entries/maths-primary';
+export { MATHS_SECONDARY } from './entries/maths-secondary';
+export { MUSIC_PRIMARY } from './entries/music-primary';
+export { MUSIC_SECONDARY } from './entries/music-secondary';
+export { PHYSICAL_EDUCATION_PRIMARY } from './entries/physical-education-primary';
+export { PHYSICAL_EDUCATION_SECONDARY } from './entries/physical-education-secondary';
+export { RELIGIOUS_EDUCATION_PRIMARY } from './entries/religious-education-primary';
+export { RELIGIOUS_EDUCATION_SECONDARY } from './entries/religious-education-secondary';
+export { SCIENCE_PRIMARY } from './entries/science-primary';
+export { SCIENCE_SECONDARY } from './entries/science-secondary';
+export { SPANISH_PRIMARY } from './entries/spanish-primary';
+export { SPANISH_SECONDARY } from './entries/spanish-secondary';
 
-// Subject exports
-export { MATHS_ALL_QUERIES, MATHS_PRIMARY_ALL_QUERIES, MATHS_SECONDARY_ALL_QUERIES } from './maths';
-export {
-  ENGLISH_ALL_QUERIES,
-  ENGLISH_PRIMARY_ALL_QUERIES,
-  ENGLISH_SECONDARY_ALL_QUERIES,
-} from './english';
-export {
-  SCIENCE_ALL_QUERIES,
-  SCIENCE_PRIMARY_ALL_QUERIES,
-  SCIENCE_SECONDARY_ALL_QUERIES,
-} from './science';
-export {
-  HISTORY_ALL_QUERIES,
-  HISTORY_PRIMARY_ALL_QUERIES,
-  HISTORY_SECONDARY_ALL_QUERIES,
-} from './history';
-export {
-  GEOGRAPHY_ALL_QUERIES,
-  GEOGRAPHY_PRIMARY_ALL_QUERIES,
-  GEOGRAPHY_SECONDARY_ALL_QUERIES,
-} from './geography';
-export {
-  RELIGIOUS_EDUCATION_ALL_QUERIES,
-  RELIGIOUS_EDUCATION_PRIMARY_ALL_QUERIES,
-  RELIGIOUS_EDUCATION_SECONDARY_ALL_QUERIES,
-} from './religious-education';
-export {
-  FRENCH_ALL_QUERIES,
-  FRENCH_PRIMARY_ALL_QUERIES,
-  FRENCH_SECONDARY_ALL_QUERIES,
-} from './french';
-export {
-  SPANISH_ALL_QUERIES,
-  SPANISH_PRIMARY_ALL_QUERIES,
-  SPANISH_SECONDARY_ALL_QUERIES,
-} from './spanish';
-export { GERMAN_ALL_QUERIES, GERMAN_SECONDARY_ALL_QUERIES } from './german';
-export {
-  COMPUTING_ALL_QUERIES,
-  COMPUTING_PRIMARY_ALL_QUERIES,
-  COMPUTING_SECONDARY_ALL_QUERIES,
-} from './computing';
-export { ART_ALL_QUERIES, ART_PRIMARY_ALL_QUERIES, ART_SECONDARY_ALL_QUERIES } from './art';
-export { MUSIC_ALL_QUERIES, MUSIC_PRIMARY_ALL_QUERIES, MUSIC_SECONDARY_ALL_QUERIES } from './music';
-export {
-  DESIGN_TECHNOLOGY_ALL_QUERIES,
-  DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES,
-  DESIGN_TECHNOLOGY_SECONDARY_ALL_QUERIES,
-} from './design-technology';
-export {
-  PHYSICAL_EDUCATION_ALL_QUERIES,
-  PHYSICAL_EDUCATION_PRIMARY_ALL_QUERIES,
-  PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES,
-} from './physical-education';
-export { CITIZENSHIP_ALL_QUERIES, CITIZENSHIP_SECONDARY_ALL_QUERIES } from './citizenship';
-export {
-  COOKING_NUTRITION_ALL_QUERIES,
-  COOKING_NUTRITION_PRIMARY_ALL_QUERIES,
-  COOKING_NUTRITION_SECONDARY_ALL_QUERIES,
-} from './cooking-nutrition';
+// =============================================================================
+// Accessors
+// =============================================================================
+
+/**
+ * Get a ground truth by subject and phase.
+ *
+ * @param subject - The subject slug
+ * @param phase - The phase (primary or secondary)
+ * @returns The ground truth if found, undefined otherwise
+ */
+export function getGroundTruth(
+  subject: AllSubjectSlug,
+  phase: Phase,
+): MinimalGroundTruth | undefined {
+  return GROUND_TRUTHS.find((gt) => gt.subject === subject && gt.phase === phase);
+}
+
+/**
+ * Get all ground truths for a subject.
+ *
+ * @param subject - The subject slug
+ * @returns Array of ground truths for that subject (may be 0, 1, or 2)
+ */
+export function getGroundTruthsForSubject(subject: AllSubjectSlug): readonly MinimalGroundTruth[] {
+  return GROUND_TRUTHS.filter((gt) => gt.subject === subject);
+}
+
+/**
+ * Get all ground truths for a phase.
+ *
+ * @param phase - The phase (primary or secondary)
+ * @returns Array of ground truths for that phase
+ */
+export function getGroundTruthsForPhase(phase: Phase): readonly MinimalGroundTruth[] {
+  return GROUND_TRUTHS.filter((gt) => gt.phase === phase);
+}

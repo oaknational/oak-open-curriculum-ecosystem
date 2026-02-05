@@ -33,7 +33,7 @@ These endpoints benefit AI agents, search applications, and any consumer needing
 
 ### 1. Agent Ontology
 
-```
+```text
 GET /agent/ontology
 ```
 
@@ -61,7 +61,7 @@ All graphs support `?subject=` and `?key_stage=` filters. See `examples/graph-re
 
 ### 3. Enum List
 
-```
+```text
 GET /enums
 ```
 

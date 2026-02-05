@@ -7,6 +7,12 @@ description: Design ground truth queries for the Oak semantic search service usi
 
 Design ground truth queries that accurately measure search quality for the Oak curriculum search service.
 
+## Priorities
+
+1. **Minimal working system** — Prove the approach with ~33 foundational ground truths
+2. **Product integration** — Integrate semantic search into useful teacher tools
+3. **Expansion** — Once proven, plan GT expansions for improved coverage
+
 ## Core Principles
 
 ### We Test OUR Value, Not Elasticsearch
@@ -64,29 +70,9 @@ cat bulk-downloads/maths-primary.json | jq '.lessons | length'  # Count lessons
 
 Ground truths are tests where we **know the correct answer before running search**.
 
-### Step 1: Define the Scenario
+### Step 1: Find Content First
 
-What search capability are we testing?
-
-| Category | Scenario |
-|----------|----------|
-| `natural-query` | Natural teacher vocabulary → curriculum metadata bridging (PRIMARY) |
-| `exact-term` | Exact curriculum term retrieval (clipped term lists) |
-| `typo-recovery` | Resilience to typos (a handful of proofs, not per subject) |
-| `curriculum-connection` | Real curriculum concept intersections (only if verified in bulk data) |
-
-### Invalid Categories (Don't Create)
-
-| Category | Why Invalid |
-|----------|-------------|
-| `morphological-variation` | ES stemming handles "fraction" vs "fractions" |
-| `ambiguous-term` | Filtering handles disambiguation |
-| `difficulty-mismatch` | We enable teachers, not police them |
-| `metadata-only` | Metadata IS the default, not special |
-
-### Step 2: Find Content First
-
-Mine bulk data to identify lessons that would prove the scenario:
+Mine bulk data to identify lessons:
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -100,149 +86,72 @@ jq '.lessons[] | select(.lessonKeywords | test("TERM"; "i")) | {slug: .lessonSlu
   bulk-downloads/SUBJECT-PHASE.json
 ```
 
-These lessons ARE the known correct answer. Find them FIRST.
-
-### Step 3: Design the Query
+### Step 2: Design the Query
 
 Create a query a teacher would realistically type:
-
-| Category | Query Design |
-|----------|-------------|
-| `precise-topic` | Exact curriculum terms (clipped term lists) |
-| `imprecise-input` | ONE realistic typo, word boundary error, or alternative spelling |
-| `natural-expression` | How a teacher would naturally phrase it when planning lessons |
-| `cross-topic` | Combine concepts naturally (must exist in same unit or sequence) |
-
-### Step 4: Record Expected Slugs
-
-The lessons from Step 2 become `expectedRelevance`:
-
-| Score | Meaning |
-|-------|---------|
-| 3 | Direct match - teaches exactly what query asks |
-| 2 | Related - covers topic but not directly |
-| 1 | Tangential - mentions concept peripherally |
-
-## Query Design Rules
 
 | Rule | Requirement | Example |
 |------|-------------|---------|
 | Length | 3-7 words | "cell structure and function" |
 | Realistic | Would a teacher type this? | Yes: "fractions unlike denominators" |
 | Pedagogy aware | Professional UK teacher queries | Yes: curriculum-aligned vocabulary |
-| Specific | 5 lessons highly relevant (min 4) | Not: "maths" (too broad) |
-| Differentiated | Adds value beyond filters | Not: "art lessons secondary" |
 | No meta-phrases | No "teaching about", "lessons on" | Not: "lessons on fractions" |
 | Topic-focused | Topics, not advice | Not: "how to teach fractions" |
 | No redundant subject | Don't repeat filter context | Not: "French negation" when filtered to French |
 
-### Pre-Design Verification (MANDATORY)
-
-Before writing any query, verify the concept exists:
+### Step 3: Test Via test-query.ts
 
 ```bash
-# Count matches
-jq -r '.lessons[] | select(.lessonSlug | test("your-term"; "i")) | .lessonSlug' \
-  bulk-downloads/SUBJECT-PHASE.json | wc -l
-
-# If < 3 matches, the query lacks coverage — redesign
+pnpm tsx src/lib/search-quality/test-query.ts "your query" subject keyStage
 ```
 
-## Category-Specific Guidance
+### Step 4: Capture Top 3 with Relevance Scores
 
-### precise-topic
-
-Tests exact curriculum term matching. Should achieve MRR 1.0 easily.
-
-```typescript
-query: 'quadratic equations factorising'
-expectedRelevance: {
-  'factorising-quadratic-expressions': 3,
-  'solving-quadratics-by-factorising': 3,
-}
-```
-
-### natural-expression
-
-Tests bridging from **natural teacher vocabulary** to curriculum metadata terminology. Teachers are professionals who know their domain — they use natural language when searching, not the exact terms that appear in lesson metadata. No meta-phrases.
-
-```typescript
-// GOOD: How a teacher would naturally phrase it
-query: 'fake emails and online scams'
-description: 'Tests teacher vocabulary → curriculum terms: "fake emails" → phishing'
-
-// BAD: Clipped term list (belongs in precise-topic)
-query: 'phishing scams social engineering'
-
-// BAD: Advice-seeking (teachers search for topics to teach, not personal help)
-query: 'how to avoid getting hacked online'
-
-// BAD: Meta-phrase adds no value
-query: 'teaching about email scams'
-```
-
-### imprecise-input
-
-Tests search resilience to typos. ONE realistic error per query.
-
-```typescript
-query: 'brush painting techneeques'
-description: 'Tests typo "techneeques" still finds painting lessons'
-```
-
-**Known limitation**: Fuzzy matching handles character edits, NOT word boundaries:
-
-- "multiplikation" → "multiplication" works
-- "timetables" → "times table" does NOT work (tokenization mismatch)
-
-### cross-topic
-
-Tests genuine curriculum connections, not random mashups. Intersections must exist **within a single unit or between units in the same sequence**.
-
-```typescript
-// GOOD: Real curriculum connection (concepts appear together in curriculum)
-query: 'ratio and scaling in maps'
-
-// BAD: Random concept mashup (no curriculum connection)
-query: 'maps and teamwork outdoor activities'
-
-// BAD: Concepts from unrelated sequences
-query: 'fractions and volcanoes'
-```
+| Score | Meaning |
+|-------|---------|
+| 3 | Direct match — teaches exactly what query asks |
+| 2 | Related — covers topic but not directly |
+| 1 | Tangential — mentions concept peripherally |
 
 ## File Structure
 
 ```text
 src/lib/search-quality/ground-truth/
-├── {subject}/
-│   └── {phase}/
-│       ├── {category}.query.ts      # Query definition
-│       ├── {category}.expected.ts   # Expected relevance
-│       └── index.ts                 # Combines at runtime
+├── types.ts              # MinimalGroundTruth type definition
+├── index.ts              # Exports and accessors
+├── README.md             # Overview
+└── entries/              # Individual ground truths
+    ├── maths-secondary.ts
+    ├── maths-primary.ts
+    └── ...
 ```
 
-### Query File Template
+### Entry Template
 
 ```typescript
-import type { GroundTruthQueryDefinition } from '../../types';
+/**
+ * Subject Phase ground truth entry.
+ *
+ * @see ground-truth-protocol.md for the process
+ * @packageDocumentation
+ */
 
-export const SUBJECT_PHASE_CATEGORY_QUERY: GroundTruthQueryDefinition = {
-  query: 'your query here',
-  category: 'natural-expression',
-  description: 'What this query tests and why',
-  expectedFile: './natural-expression.expected.ts',
-} as const;
-```
+import type { MinimalGroundTruth } from '../types';
 
-### Expected File Template
-
-```typescript
-import type { ExpectedRelevance } from '../../types';
-
-export const SUBJECT_PHASE_CATEGORY_EXPECTED: ExpectedRelevance = {
-  'best-match-slug': 3,
-  'good-match-slug': 2,
-  'related-slug': 1,
+/**
+ * Subject Phase ground truth: Topic description.
+ */
+export const SUBJECT_PHASE: MinimalGroundTruth = {
+  subject: 'subject-slug',
+  phase: 'primary' | 'secondary',
+  keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4',
+  query: 'realistic teacher query here',
+  expectedRelevance: {
+    'best-match-slug': 3,
+    'good-match-slug': 2,
+    'related-slug': 2,
+  },
+  description: 'Brief description of what the lesson teaches and why it matches.',
 } as const;
 ```
 
@@ -250,19 +159,8 @@ export const SUBJECT_PHASE_CATEGORY_EXPECTED: ExpectedRelevance = {
 
 ```bash
 pnpm type-check              # TypeScript compilation
-pnpm ground-truth:validate   # 16 semantic checks
-pnpm benchmark -s SUBJECT -p PHASE --review  # Per-query results
+pnpm test                    # Unit tests
 ```
-
-### Common Validation Errors
-
-| Error | Fix |
-|-------|-----|
-| `invalid-slug` | Slug doesn't exist — find correct one in bulk data |
-| `empty-relevance` | Add 5 slugs total, if that is impossible minimum of 4  |
-| `no-highly-relevant` | At least one slug must have score 3 |
-| `too-many-slugs` | Maximum 5 — query is too broad |
-| `cross-subject` | Slug belongs to wrong subject |
 
 ## Anti-Patterns
 
@@ -270,16 +168,16 @@ pnpm benchmark -s SUBJECT -p PHASE --review  # Per-query results
 
 **WRONG**:
 
-1. Run benchmark
+1. Run search
 2. See search returns A, B, C
 3. Use A, B, C as expected slugs
 
 **CORRECT**:
 
 1. Mine bulk data for candidates
-2. Analyse each against query intent
-3. Select best matches based on curriculum content
-4. THEN compare with search results
+2. Design query based on curriculum content
+3. Run query via test-query.ts
+4. Capture top 3 results with relevance scores
 
 ### Query/Slug Term Mismatch
 

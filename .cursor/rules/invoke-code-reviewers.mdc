@@ -1,11 +1,11 @@
 ---
 description: After significant code changes, invoke the multi-model code reviewer ensemble for diverse perspectives. Use when completing features, fixing bugs, refactoring, or making architectural changes.
-globs: '**/*.{ts,tsx,mts}'
+globs: **/*.ts,**/*.tsx,**/*.*ts
 ---
 
 # Invoke Multi-Model Code Reviewers
 
-After significant code changes, invoke multiple code reviewer sub-agents for diverse perspectives. The value comes from the **multiplicity of approaches** — different models catch different issues.
+After significant code changes, invoke multiple code reviewer sub-agents for diverse perspectives. The value comes from the **multiplicity of approaches** — different models catch different issues. Invoke with the `/jc-review-ensemble` command @.cursor/commands/jc-review-ensemble.md
 
 ## When to Invoke
 
@@ -22,18 +22,16 @@ Minor changes (typo fixes, comment updates, formatting) do not require full ense
 
 ## The Ensemble
 
-Invoke **all 6 reviewers** from the general family in parallel for maximum perspective diversity:
+Invoke **all 4 reviewers** from the general family sequentially for diverse perspectives:
 
 | Agent | Model | Invoke via Task tool |
 |-------|-------|---------------------|
 | `code-reviewer-general-composer` | Composer 1 | `subagent_type: "code-reviewer-general-composer"` |
-| `code-reviewer-general-gemini-flash` | Gemini 3 Flash | `subagent_type: "code-reviewer-general-gemini-flash"` |
-| `code-reviewer-general-haiku` | Haiku 4.5 | `subagent_type: "code-reviewer-general-haiku"` |
-| `code-reviewer-general-grok` | Grok Code | `subagent_type: "code-reviewer-general-grok"` |
-| `code-reviewer-general-kimi` | Kimi K2 | `subagent_type: "code-reviewer-general-kimi"` |
-| `code-reviewer-general-codex-low` | GPT-5.2 Codex Low | `subagent_type: "code-reviewer-general-codex-low"` |
+| `code-reviewer-general-gemini-pro` | Gemini 3 Pro | `subagent_type: "code-reviewer-general-gemini-pro"` |
+| `code-reviewer-general-sonnet` | Sonnet 4.5 Thinking | `subagent_type: "code-reviewer-general-sonnet"` |
+| `code-reviewer-general-codex` | GPT-5.2 Codex | `subagent_type: "code-reviewer-general-codex"` |
 
-Use the `/jc-review-ensemble` command to invoke all 6 in parallel with a single action.
+Use the `/jc-review-ensemble` command to invoke all 4 sequentially with a single action.
 
 For security-sensitive changes, also invoke:
 
@@ -59,7 +57,7 @@ Task tool:
   prompt: "Review the recent changes for quality, security, and maintainability."
 ```
 
-Invoke multiple reviewers in parallel for efficiency.
+Invoke reviewers sequentially to avoid rate limits.
 
 ## Synthesise Findings
 

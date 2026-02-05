@@ -17,7 +17,7 @@ import { config } from 'dotenv';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth-archive/index.js';
 import type { ExperimentResult } from './types';
 import { runSingleQuery, runExperiment } from './experiment-runner';
 import { formatResultRow, compareResults } from './result-analysis';

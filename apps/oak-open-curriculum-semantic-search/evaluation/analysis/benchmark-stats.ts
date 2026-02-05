@@ -6,7 +6,7 @@
  * @packageDocumentation
  */
 
-import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import type { QueryResult } from './benchmark-query-runner.js';
 
 /**

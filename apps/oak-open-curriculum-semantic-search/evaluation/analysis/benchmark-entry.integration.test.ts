@@ -16,7 +16,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { benchmarkEntry, type SearchFunction } from './benchmark-entry-runner.js';
-import type { GroundTruthEntry } from '../../src/lib/search-quality/ground-truth/registry/index.js';
+import type { GroundTruthEntry } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 
 /**
  * Creates a mock search function that returns specified slugs.

@@ -9,7 +9,7 @@ import type { ExperimentResult, QueryResult, SearchConfig } from './types';
 import { buildSearchBody } from './query-builders';
 import { calculateAverages } from './result-analysis';
 import { calculateMRR, calculateNDCG } from '../../../../src/lib/search-quality/metrics.js';
-import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth/index.js';
+import { MATHS_SECONDARY_ALL_QUERIES } from '../../../../src/lib/search-quality/ground-truth-archive/index.js';
 
 /** BM25 fields for lesson search. */
 const BM25_FIELDS = [

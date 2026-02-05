@@ -1,120 +1,112 @@
-# Semantic Search — Ground Truth Protocol
+# Semantic Search — Ground Truth Work
 
-**Status**: 🔄 Phase 1 — Minimum Viable Ground Truths  
-**Target**: One ground truth per subject-phase pair (~33 total)  
-**Last Updated**: 2026-01-27
-
----
-
-## The Protocol
-
-For each subject-phase pair:
-
-### Step 1: Find a Rich Unit
-
-Target units with 5+ lessons.
-
-```bash
-jq -r '.sequence[] | select(.unitLessons | length >= 5) | 
-  "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
-  bulk-downloads/{subject}-{phase}.json
-```
-
-### Step 2: Pick a Lesson and Extract ALL Data
-
-```bash
-jq '.lessons[] | select(.lessonSlug == "TARGET-LESSON") | {
-  title: .lessonTitle,
-  keywords: [.lessonKeywords[]?.keyword],
-  keyLearning: [.keyLearningPoints[]?.keyLearningPoint],
-  hasTranscript: (.transcript_sentences | length > 0),
-  transcript: (.transcript_sentences | .[0:500])
-}' bulk-downloads/{subject}-{phase}.json
-```
-
-### Step 3: Summarise the Lesson Content
-
-Create a summary from ALL available data: title, keywords, key learning, transcript (if available).
-
-### Step 4: Design a Query Around the Summary
-
-Ask: "What would a teacher type to find content like this?"
-
-**Critical**: DO NOT match on lesson title alone. The query must reflect natural teacher search behaviour.
-
-### Step 5: Run the Query
-
-Execute the query against the search system and examine results.
-
-### Step 6: Evaluate Top 3 Results
-
-| Result | Action |
-|--------|--------|
-| Top 3 are reasonable | Lock in ground truth |
-| Top 3 are NOT reasonable | Evaluate why → refine query OR suggest system fix |
-
-### Step 7: Lock In or Iterate
-
-Repeat steps 4-6 until satisfied, then record the ground truth.
+**Status**: ✅ Phase 1 Complete  
+**Total**: 30 foundational ground truths  
+**Baseline Metrics**: MRR=1.000, NDCG=0.989, P@3=0.956, R@10=1.000  
+**Last Updated**: 2026-02-05
 
 ---
 
-## Key Principles
+## Current State
 
-- **DO NOT match on lesson title alone** — The query must reflect natural teacher search behaviour
-- **Test against actual search** — Iterate based on real results
-- **Top 3 evaluation** — Reasonable results = ground truth locked in
-- **Pragmatic** — We need baseline coverage now; refinement comes later
+Phase 1 is complete. The Foundational Ground Truths system is:
 
----
+- **Integrated with the benchmark** (`pnpm benchmark --all`)
+- **Producing excellent metrics** (see baseline above)
+- **Testing actual search value** via 4-way RRF
 
-## Subject-Phase Coverage Target
-
-| Phase | Subjects |
-|-------|----------|
-| Primary | ~15 |
-| Secondary | ~18 (including KS4 science variants) |
-| **Total** | **~33 ground truths** |
+For future expansion, see [ground-truth-expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md).
 
 ---
 
-## Bulk Data Commands
+## Mandatory Reading
+
+Before any ground truth work, read these documents:
+
+1. **[Ground Truth Protocol](./ground-truth-protocol.md)** — The step-by-step process
+2. **[Semantic Search Architecture](../../directives-and-memory/semantic-search-architecture.md)** — Structure is the foundation
+3. **[ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md)** — Known-Answer-First methodology
+
+---
+
+## Running the Benchmark
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
 
-# List all subject-phase files
-ls bulk-downloads/*.json
+# All ground truths
+pnpm benchmark --all
 
-# List all units with lesson counts
-jq -r '.sequence[] | "\(.unitSlug): \(.unitTitle) (\(.unitLessons | length) lessons)"' \
-  bulk-downloads/{subject}-{phase}.json
+# Single subject-phase
+pnpm benchmark -s maths -p secondary
 
-# Get full lesson data
-jq '.lessons[] | select(.lessonSlug == "TARGET-LESSON")' bulk-downloads/{subject}-{phase}.json
+# Review mode (detailed per-query output)
+pnpm benchmark -s maths -p secondary --review
 ```
 
 ---
 
-## Recording a Ground Truth
+## Testing Queries
 
-When a ground truth is locked in, record it in `queries-redesigned.md`:
+Our search uses **4-way Reciprocal Rank Fusion (RRF)**. Raw ES queries bypass this infrastructure.
 
-```markdown
-### [subject]/[phase]: [topic]
+**ALWAYS** use the test script:
 
-**Query**: "[the natural-phrasing query]"
-**Subject Filter**: `[subject]`
-**Key Stage**: [KS1/KS2/KS3/KS4]
-
-**Target Lesson**: `[lesson-slug]`
-**Top 3 Reasonable**: Yes
-
-**Summary**: [Brief summary of lesson content that informed the query]
+```bash
+cd apps/oak-open-curriculum-semantic-search
+pnpm tsx src/lib/search-quality/test-query.ts "your query" subject keyStage
 ```
+
+**NEVER** use raw Elasticsearch queries.
 
 ---
 
-## Phase 2 (Later)
+## Coverage Status
 
-Once Phase 1 baseline is established (~33 ground truths), expand to complexity-weighted coverage (~99 total) with multiple expected slugs per query and graded relevance scores.
+| Subject | Primary | Secondary | Notes |
+|---------|---------|-----------|-------|
+| maths | ✅ | ✅ | |
+| english | ✅ | ✅ | |
+| science | ✅ | ✅ | |
+| history | ✅ | ✅ | |
+| geography | ✅ | ✅ | |
+| computing | ✅ | ✅ | |
+| art | ✅ | ✅ | |
+| music | ✅ | ✅ | |
+| design-technology | ✅ | ✅ | |
+| physical-education | ✅ | ✅ | |
+| religious-education | ✅ | ✅ | |
+| french | ✅ | ✅ | |
+| german | — | ✅ | No primary |
+| spanish | ✅ | ✅ | |
+| citizenship | — | ✅ | No primary |
+| cooking-nutrition | ✅ | ✅ | |
+| physics | — | Future | KS4 only |
+| chemistry | — | Future | KS4 only |
+| biology | — | Future | KS4 only |
+| combined-science | — | Future | KS4 only |
+
+**Legend**: ✅ Complete | Future = Phase 2 | — Not applicable
+
+---
+
+## The Value We Provide
+
+Teachers use our search to find lessons. Ground truths test:
+
+> **"If a teacher searches for X, do they get useful results?"**
+
+We are NOT testing Elasticsearch. We are testing whether **our system** — with **our data**, **our retrievers**, and **our configuration** — helps teachers find content.
+
+---
+
+## Related Documents
+
+| Document | Purpose |
+|----------|---------|
+| [Ground Truth Protocol](./ground-truth-protocol.md) | Step-by-step process |
+| [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology decision |
+| [Semantic Search Architecture](../../directives-and-memory/semantic-search-architecture.md) | Structure is the foundation |
+| [queries-redesigned.md](../../../apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md) | Coverage matrix |
+| [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future work |
+| [completed redesign plan](../../plans/semantic-search/archive/completed/ground-truth-redesign-plan.md) | Phase 1 completion record |

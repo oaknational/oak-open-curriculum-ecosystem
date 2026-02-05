@@ -6,7 +6,7 @@
 
 import type { EntryBenchmarkResult } from './benchmark-entry-runner.js';
 import { calculateP95, type CategoryResult } from './benchmark-stats.js';
-import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 
 /**
  * Categories that require LLM features to function well.

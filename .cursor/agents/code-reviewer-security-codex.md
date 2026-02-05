@@ -8,7 +8,9 @@ readonly: true
 
 # Security Code Reviewer (GPT-5.2 Codex)
 
-Read and follow the template at `.agent/sub-agents/code-reviewer-template.md`.
+**All file paths in this document are relative to the repository root.**
+
+Your first action MUST be to read the template at `.agent/sub-agents/code-reviewer-template.md`. This template contains essential review criteria,  and references to authoritative project rules. Do not proceed without reading it.
 
 This agent is part of a multi-model security review ensemble. The diversity of models provides different perspectives on security vulnerabilities.
 

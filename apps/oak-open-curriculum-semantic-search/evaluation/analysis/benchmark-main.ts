@@ -18,19 +18,17 @@
 
 import { parseArgs } from 'node:util';
 import {
-  getAllGroundTruthEntries,
-  type GroundTruthEntry,
-} from '../../src/lib/search-quality/ground-truth/registry/index.js';
-import {
   benchmarkEntry,
   benchmarkEntryForReview,
   type EntryBenchmarkResult,
+  type GroundTruthEntry,
   type ReviewQueryResult,
 } from './benchmark-entry-runner.js';
 import type { SearchFunction } from './benchmark-query-runner.js';
 import { printSummary } from './benchmark-output.js';
 import { printQueryReview, printReviewSummary } from './benchmark-review-output.js';
 import { generateIssuesReport, type AugmentedReview } from './benchmark-issues-report.js';
+import { getAllGroundTruthEntries } from './benchmark-adapters.js';
 
 /**
  * CLI options parsed from command line arguments.

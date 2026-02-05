@@ -16,11 +16,11 @@ import { validateCategory, printResults, validateQueryStructure } from './valida
 import {
   getAllGroundTruthEntries,
   DIAGNOSTIC_QUERIES,
-} from '../../../src/lib/search-quality/ground-truth/index';
+} from '../../../src/lib/search-quality/ground-truth-archive/index';
 import {
   SEQUENCE_GROUND_TRUTH_QUERIES,
   SEQUENCE_HARD_GROUND_TRUTH_QUERIES,
-} from '../../../src/lib/search-quality/ground-truth/sequences/index';
+} from '../../../src/lib/search-quality/ground-truth-archive/sequences/index';
 import type { ValidationCategory } from './types';
 
 /**

@@ -9,10 +9,9 @@
  * @packageDocumentation
  */
 
-import type { KeyStage } from '@oaknational/oak-curriculum-sdk';
-import type { Phase } from '../../src/lib/search-quality/ground-truth/registry/index.js';
-import type { QueryCategory } from '../../src/lib/search-quality/ground-truth/types.js';
-import type { SearchSubjectSlug } from '../../src/types/oak.js';
+import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
+import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import {
   calculateMRR,
   calculateNDCG,
@@ -47,11 +46,12 @@ export type SearchFunction = (request: EsSearchRequest) => Promise<SearchRespons
  * Input parameters for running a single benchmark query.
  *
  * Includes the query category for per-category metric aggregation.
+ * Uses AllSubjectSlug to support KS4 science variants.
  */
 export interface RunQueryInput {
   readonly query: string;
   readonly expectedRelevance: Readonly<Record<string, number>>;
-  readonly subject: SearchSubjectSlug;
+  readonly subject: AllSubjectSlug;
   readonly phase: Phase;
   readonly queryKeyStage?: KeyStage;
   /** Category of user scenario this query represents. */

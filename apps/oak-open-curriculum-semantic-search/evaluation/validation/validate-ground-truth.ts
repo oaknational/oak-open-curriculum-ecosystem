@@ -43,7 +43,7 @@
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getAllGroundTruthEntries } from '../../src/lib/search-quality/ground-truth/registry/index.js';
+import { getAllGroundTruthEntries } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import { typeSafeKeys, typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
 import {
   ALL_LESSON_SLUGS,
@@ -51,7 +51,7 @@ import {
   getSubjectForSlug,
 } from '../../ground-truths/generated/lesson-slugs-by-subject.js';
 import { validateGroundTruthQuery } from '../../ground-truths/generated/ground-truth-schemas.js';
-import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth/types.js';
+import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const generatedDir = resolve(thisDir, '../../ground-truths/generated');
