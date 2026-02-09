@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * French Secondary ground truth: Perfect tense with être.
  */
-export const FRENCH_SECONDARY: MinimalGroundTruth = {
+export const FRENCH_SECONDARY: LessonGroundTruth = {
   subject: 'french',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'New Year celebrations perfect tense être',
+  query: 'perfect tense etre',
   expectedRelevance: {
     'new-year-er-verbs-in-the-perfect-tense-with-etre': 3,
-    'new-year-in-algeria-er-verbs-in-the-perfect-tense-with-etre': 3,
-    'celebrations-information-questions-with-question-word-plus-est-ce-que': 2,
+    'emergency-services-er-verbs-in-the-perfect-tense-with-etre': 2,
+    'spring-holidays-perfect-tense-with-etre-pronouns-moi-toi-qui': 2,
   },
   description:
     'Lesson teaches that movement verbs take être instead of avoir in the perfect tense.',

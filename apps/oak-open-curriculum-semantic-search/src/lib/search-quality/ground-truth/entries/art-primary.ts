@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Art Primary ground truth: Patterns in nature.
  */
-export const ART_PRIMARY: MinimalGroundTruth = {
+export const ART_PRIMARY: LessonGroundTruth = {
   subject: 'art',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'natural patterns symmetry spiral leaves',
+  query: 'patterns in nature',
   expectedRelevance: {
     'patterns-in-nature': 3,
-    'create-a-kaleidoscope-pattern': 2,
-    'make-frottage-leaf-studies': 2,
+    'investigating-patterns-in-art': 2,
+    'create-a-kaleidoscope-pattern': 1,
   },
   description:
     'Lesson teaches how patterns can be found in nature such as in leaves, shells, and flowers.',

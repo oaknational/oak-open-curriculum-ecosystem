@@ -1,7 +1,7 @@
 /**
- * Ground truth relevance judgments for search quality evaluation.
+ * Lesson ground truth relevance judgments for search quality evaluation.
  *
- * This module exports the NEW ground truth system only (Phase 1 minimal ground truths).
+ * This module exports the lesson ground truth system.
  * For the archived 120-query system, import directly from `./ground-truth-archive/`.
  *
  * @see ./ground-truth/index.ts for full documentation
@@ -9,7 +9,7 @@
  */
 
 export {
-  GROUND_TRUTHS,
+  LESSON_GROUND_TRUTHS,
   ART_PRIMARY,
   ART_SECONDARY,
   CITIZENSHIP_SECONDARY,
@@ -40,10 +40,10 @@ export {
   SCIENCE_SECONDARY,
   SPANISH_PRIMARY,
   SPANISH_SECONDARY,
-  getGroundTruth,
-  getGroundTruthsForSubject,
-  getGroundTruthsForPhase,
-  type MinimalGroundTruth,
+  getLessonGroundTruth,
+  getLessonGroundTruthsForSubject,
+  getLessonGroundTruthsForPhase,
+  type LessonGroundTruth,
   type Phase,
   type SubjectPhasePair,
   subjectPhaseKey,

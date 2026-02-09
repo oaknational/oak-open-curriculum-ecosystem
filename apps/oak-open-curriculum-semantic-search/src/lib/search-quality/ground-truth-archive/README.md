@@ -65,7 +65,7 @@ cp ground-truth-archive/maths/secondary/natural-expression.query.ts ground-truth
 cp ground-truth-archive/maths/secondary/natural-expression.expected.ts ground-truth/entries/
 ```
 
-Note: Requires adapting to `MinimalGroundTruth` type.
+Note: Requires adapting to `LessonGroundTruth` type.
 
 ### Full Restoration
 

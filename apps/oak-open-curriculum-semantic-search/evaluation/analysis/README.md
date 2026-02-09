@@ -7,37 +7,37 @@ Unified search quality measurement using the Ground Truth Registry.
 Evaluation scripts **measure** search quality to quantify the impact of changes.
 This is fundamentally different from smoke tests, which **verify** behavior works.
 
-| Concern        | Tool               | Question                 | Output         |
-| -------------- | ------------------ | ------------------------ | -------------- |
-| **Evaluation** | `benchmark.ts`     | "How well does it work?" | All IR metrics |
-| **Smoke Test** | `smoke-tests/*.ts` | "Does it work?"          | Pass/fail      |
+| Concern        | Tool                   | Question                 | Output         |
+| -------------- | ---------------------- | ------------------------ | -------------- |
+| **Evaluation** | `benchmark-lessons.ts` | "How well does it work?" | All IR metrics |
+| **Smoke Test** | `smoke-tests/*.ts`     | "Does it work?"          | Pass/fail      |
 
 **Never conflate these concerns.** Evaluation measures quality; smoke tests verify behavior.
 
 ## Single Benchmark Tool
 
-All search quality evaluation is consolidated into one tool: `benchmark.ts`
+All search quality evaluation is consolidated into one tool: `benchmark-lessons.ts`
 
 ### Usage
 
 ```bash
 # Run all ground truths from the registry
-pnpm benchmark --all
+pnpm benchmark:lessons --all
 
 # Run for a specific subject
-pnpm benchmark --subject maths
+pnpm benchmark:lessons --subject maths
 
 # Run for a specific phase
-pnpm benchmark --phase secondary
+pnpm benchmark:lessons --phase secondary
 
 # Run for a specific subject/phase combination
-pnpm benchmark --subject maths --phase secondary
+pnpm benchmark:lessons --subject maths --phase secondary
 
 # Review mode: detailed per-query output for ground truth investigation
-pnpm benchmark --subject maths --phase secondary --review
+pnpm benchmark:lessons --subject maths --phase secondary --review
 
 # Issues mode: generate markdown report of all problematic queries
-pnpm benchmark --issues
+pnpm benchmark:lessons --issues
 ```
 
 ### What It Measures

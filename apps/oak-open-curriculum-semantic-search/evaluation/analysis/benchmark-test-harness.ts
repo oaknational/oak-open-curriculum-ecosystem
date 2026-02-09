@@ -10,7 +10,7 @@
  * @packageDocumentation
  */
 
-import type { SearchFunction, SearchResponse } from './benchmark-query-runner.js';
+import type { SearchFunction, SearchResponse } from './benchmark-query-runner-lessons.js';
 import { runBenchmark } from './benchmark-main.js';
 
 /**

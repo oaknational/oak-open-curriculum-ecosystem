@@ -1,5 +1,5 @@
 /**
- * Unit tests for the Foundational Ground Truths system.
+ * Unit tests for the Lesson Ground Truths system.
  *
  * These tests verify the BEHAVIOUR of accessor functions, not types.
  * TypeScript enforces type structure at compile time.
@@ -10,12 +10,12 @@
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
 import { describe, it, expect } from 'vitest';
 import {
-  GROUND_TRUTHS,
+  LESSON_GROUND_TRUTHS,
   MATHS_PRIMARY,
   MATHS_SECONDARY,
-  getGroundTruth,
-  getGroundTruthsForSubject,
-  getGroundTruthsForPhase,
+  getLessonGroundTruth,
+  getLessonGroundTruthsForSubject,
+  getLessonGroundTruthsForPhase,
   subjectPhaseKey,
 } from './index';
 
@@ -35,41 +35,41 @@ describe('subjectPhaseKey', () => {
 });
 
 // =============================================================================
-// GROUND_TRUTHS — Data integrity tests
+// LESSON_GROUND_TRUTHS — Data integrity tests
 // =============================================================================
 
-describe('GROUND_TRUTHS', () => {
+describe('LESSON_GROUND_TRUTHS', () => {
   it('is a non-empty array', () => {
-    expect(Array.isArray(GROUND_TRUTHS)).toBe(true);
-    expect(GROUND_TRUTHS.length).toBeGreaterThan(0);
+    expect(Array.isArray(LESSON_GROUND_TRUTHS)).toBe(true);
+    expect(LESSON_GROUND_TRUTHS.length).toBeGreaterThan(0);
   });
 
   it('has no duplicate subject-phase pairs', () => {
     // Each subject-phase pair should appear exactly once
-    const keys = GROUND_TRUTHS.map((gt) => subjectPhaseKey(gt.subject, gt.phase));
+    const keys = LESSON_GROUND_TRUTHS.map((gt) => subjectPhaseKey(gt.subject, gt.phase));
     const uniqueKeys = new Set(keys);
     expect(uniqueKeys.size).toBe(keys.length);
   });
 
-  it('all queries follow the 3-7 word constraint from GROUND-TRUTH-GUIDE', () => {
-    // This validates a business rule, not a type
-    for (const gt of GROUND_TRUTHS) {
+  it('all queries follow the 2-10 word constraint from GROUND-TRUTH-GUIDE', () => {
+    // Some curriculum topics are naturally 2 words (e.g. "plate boundaries", "cam mechanisms")
+    for (const gt of LESSON_GROUND_TRUTHS) {
       const wordCount = gt.query.split(/\s+/).length;
-      expect(wordCount).toBeGreaterThanOrEqual(3);
-      expect(wordCount).toBeLessThanOrEqual(7);
+      expect(wordCount).toBeGreaterThanOrEqual(2);
+      expect(wordCount).toBeLessThanOrEqual(10);
     }
   });
 
   it('all descriptions explain why the query should find the lesson', () => {
     // Descriptions must be meaningful, not empty
-    for (const gt of GROUND_TRUTHS) {
+    for (const gt of LESSON_GROUND_TRUTHS) {
       expect(gt.description.length).toBeGreaterThan(20);
     }
   });
 
   it('all entries have expected relevance with 2-3 results', () => {
     // Each ground truth must have relevance judgments for benchmarking
-    for (const gt of GROUND_TRUTHS) {
+    for (const gt of LESSON_GROUND_TRUTHS) {
       const resultCount = typeSafeKeys(gt.expectedRelevance).length;
       expect(resultCount).toBeGreaterThanOrEqual(2);
       expect(resultCount).toBeLessThanOrEqual(3);
@@ -78,19 +78,19 @@ describe('GROUND_TRUTHS', () => {
 });
 
 // =============================================================================
-// getGroundTruth — Lookup behaviour tests
+// getLessonGroundTruth — Lookup behaviour tests
 // =============================================================================
 
-describe('getGroundTruth', () => {
+describe('getLessonGroundTruth', () => {
   it('finds ground truth when subject and phase match (secondary)', () => {
-    const result = getGroundTruth('maths', 'secondary');
+    const result = getLessonGroundTruth('maths', 'secondary');
     expect(result).toBeDefined();
     expect(result?.subject).toBe('maths');
     expect(result?.phase).toBe('secondary');
   });
 
   it('finds ground truth when subject and phase match (primary)', () => {
-    const result = getGroundTruth('maths', 'primary');
+    const result = getLessonGroundTruth('maths', 'primary');
     expect(result).toBeDefined();
     expect(result?.subject).toBe('maths');
     expect(result?.phase).toBe('primary');
@@ -98,36 +98,36 @@ describe('getGroundTruth', () => {
 
   it('returns undefined when subject has no ground truths for that phase', () => {
     // German only has secondary ground truth, primary should be undefined
-    const result = getGroundTruth('german', 'primary');
+    const result = getLessonGroundTruth('german', 'primary');
     expect(result).toBeUndefined();
   });
 
   it('returns undefined when phase has no ground truth for that subject', () => {
     // Citizenship only has secondary ground truth, primary should be undefined
-    const result = getGroundTruth('citizenship', 'primary');
+    const result = getLessonGroundTruth('citizenship', 'primary');
     expect(result).toBeUndefined();
   });
 
-  it('returns the exact same object reference from GROUND_TRUTHS (secondary)', () => {
+  it('returns the exact same object reference from LESSON_GROUND_TRUTHS (secondary)', () => {
     // Verifies no copying/cloning occurs
-    const result = getGroundTruth('maths', 'secondary');
+    const result = getLessonGroundTruth('maths', 'secondary');
     expect(result).toBe(MATHS_SECONDARY);
   });
 
-  it('returns the exact same object reference from GROUND_TRUTHS (primary)', () => {
+  it('returns the exact same object reference from LESSON_GROUND_TRUTHS (primary)', () => {
     // Verifies no copying/cloning occurs
-    const result = getGroundTruth('maths', 'primary');
+    const result = getLessonGroundTruth('maths', 'primary');
     expect(result).toBe(MATHS_PRIMARY);
   });
 });
 
 // =============================================================================
-// getGroundTruthsForSubject — Filtering behaviour tests
+// getLessonGroundTruthsForSubject — Filtering behaviour tests
 // =============================================================================
 
-describe('getGroundTruthsForSubject', () => {
+describe('getLessonGroundTruthsForSubject', () => {
   it('returns all ground truths for a subject with entries', () => {
-    const results = getGroundTruthsForSubject('maths');
+    const results = getLessonGroundTruthsForSubject('maths');
     expect(results.length).toBeGreaterThan(0);
     // All results should have the requested subject
     for (const gt of results) {
@@ -137,23 +137,23 @@ describe('getGroundTruthsForSubject', () => {
 
   it('returns empty array for subject with no ground truths', () => {
     // combined-science exists as a valid subject type but has no ground truths
-    const results = getGroundTruthsForSubject('combined-science');
+    const results = getLessonGroundTruthsForSubject('combined-science');
     expect(results).toEqual([]);
   });
 
   it('returns array even when only one entry matches', () => {
-    const results = getGroundTruthsForSubject('maths');
+    const results = getLessonGroundTruthsForSubject('maths');
     expect(Array.isArray(results)).toBe(true);
   });
 });
 
 // =============================================================================
-// getGroundTruthsForPhase — Filtering behaviour tests
+// getLessonGroundTruthsForPhase — Filtering behaviour tests
 // =============================================================================
 
-describe('getGroundTruthsForPhase', () => {
+describe('getLessonGroundTruthsForPhase', () => {
   it('returns all ground truths for secondary phase', () => {
-    const results = getGroundTruthsForPhase('secondary');
+    const results = getLessonGroundTruthsForPhase('secondary');
     expect(results.length).toBeGreaterThan(0);
     // All results should have the requested phase
     for (const gt of results) {
@@ -162,7 +162,7 @@ describe('getGroundTruthsForPhase', () => {
   });
 
   it('returns all ground truths for primary phase', () => {
-    const results = getGroundTruthsForPhase('primary');
+    const results = getLessonGroundTruthsForPhase('primary');
     expect(results.length).toBeGreaterThan(0);
     // All results should have the requested phase
     for (const gt of results) {
@@ -171,7 +171,7 @@ describe('getGroundTruthsForPhase', () => {
   });
 
   it('returns array type for phase results', () => {
-    const results = getGroundTruthsForPhase('secondary');
+    const results = getLessonGroundTruthsForPhase('secondary');
     expect(Array.isArray(results)).toBe(true);
   });
 });

@@ -5,7 +5,7 @@
  *
  * ## Ground Truth Systems
  *
- * - **New system**: `MinimalGroundTruth` — One ground truth per subject-phase (~33 total)
+ * - **Lesson system**: `LessonGroundTruth` — One ground truth per subject-phase (~33 total)
  * - **Archive**: `GroundTruthQuery` — Legacy 120-query system (import from `ground-truth-archive/`)
  *
  * @packageDocumentation
@@ -13,9 +13,9 @@
 
 export { calculateMRR, calculateNDCG } from './metrics';
 
-// New system (Phase 1 minimal ground truths)
+// Lesson ground truths
 export {
-  GROUND_TRUTHS,
+  LESSON_GROUND_TRUTHS,
   ART_PRIMARY,
   ART_SECONDARY,
   CITIZENSHIP_SECONDARY,
@@ -46,10 +46,10 @@ export {
   SCIENCE_SECONDARY,
   SPANISH_PRIMARY,
   SPANISH_SECONDARY,
-  getGroundTruth,
-  getGroundTruthsForSubject,
-  getGroundTruthsForPhase,
-  type MinimalGroundTruth,
+  getLessonGroundTruth,
+  getLessonGroundTruthsForSubject,
+  getLessonGroundTruthsForPhase,
+  type LessonGroundTruth,
   type Phase,
   type SubjectPhasePair,
   subjectPhaseKey,

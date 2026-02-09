@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { runQuery, type SearchFunction } from './benchmark-query-runner';
+import { runQuery, type SearchFunction } from './benchmark-query-runner-lessons';
 
 /**
  * Creates a mock search function that returns specified slugs.

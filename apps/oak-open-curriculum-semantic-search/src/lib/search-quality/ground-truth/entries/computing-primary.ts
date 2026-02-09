@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Computing Primary ground truth: Types of loops in programming.
  */
-export const COMPUTING_PRIMARY: MinimalGroundTruth = {
+export const COMPUTING_PRIMARY: LessonGroundTruth = {
   subject: 'computing',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'count-controlled loops vs infinite loops',
+  query: 'types of loops programming KS2',
   expectedRelevance: {
     'types-of-loops': 3,
-    'combining-outputs': 1,
-    'count-controlled-loops': 3,
+    'using-loops-in-a-program': 2,
+    'creating-a-program-that-uses-loops': 2,
   },
   description:
     'Lesson teaches the difference between count-controlled loops and infinite loops in programming.',

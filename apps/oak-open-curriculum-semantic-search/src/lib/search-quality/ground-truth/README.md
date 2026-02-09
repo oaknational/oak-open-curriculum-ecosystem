@@ -31,8 +31,8 @@ See [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-
 
 ```text
 ground-truth/
-├── types.ts              # MinimalGroundTruth type definition
-├── index.ts              # Exports GROUND_TRUTHS and accessors
+├── types.ts              # LessonGroundTruth type definition
+├── index.ts              # Exports LESSON_GROUND_TRUTHS and accessors
 ├── index.unit.test.ts    # Unit tests for accessor functions
 ├── README.md             # This file
 ├── GROUND-TRUTH-GUIDE.md # Design principles
@@ -51,13 +51,13 @@ ground-truth/
 cd apps/oak-open-curriculum-semantic-search
 
 # All ground truths
-pnpm benchmark --all
+pnpm benchmark:lessons --all
 
 # Single subject-phase
-pnpm benchmark -s maths -p secondary
+pnpm benchmark:lessons -s maths -p secondary
 
 # Review mode (detailed per-query output)
-pnpm benchmark -s maths -p secondary --review
+pnpm benchmark:lessons -s maths -p secondary --review
 ```
 
 ### Current Metrics (Phase 1 Baseline)
@@ -74,12 +74,12 @@ pnpm benchmark -s maths -p secondary --review
 
 ## Entry Format
 
-Each ground truth is a TypeScript file exporting a `MinimalGroundTruth`:
+Each ground truth is a TypeScript file exporting a `LessonGroundTruth`:
 
 ```typescript
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
-export const MATHS_SECONDARY: MinimalGroundTruth = {
+export const MATHS_SECONDARY: LessonGroundTruth = {
   subject: 'maths',
   phase: 'secondary',
   keyStage: 'ks3',
@@ -108,9 +108,9 @@ export const MATHS_SECONDARY: MinimalGroundTruth = {
 
 1. Follow the protocol in [ground-truth-protocol.md](/.agent/prompts/semantic-search/ground-truth-protocol.md)
 2. Create a file in `entries/` named `{subject}-{phase}.ts`
-3. Export a `MinimalGroundTruth` constant (e.g., `MATHS_SECONDARY`)
+3. Export a `LessonGroundTruth` constant (e.g., `MATHS_SECONDARY`)
 4. Add the export to `index.ts`
-5. Run `pnpm benchmark -s {subject} -p {phase}` to validate
+5. Run `pnpm benchmark:lessons -s {subject} -p {phase}` to validate
 6. Update coverage in [queries-redesigned.md](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md)
 
 ---
@@ -120,7 +120,7 @@ export const MATHS_SECONDARY: MinimalGroundTruth = {
 Always test via the actual 4-way RRF search system:
 
 ```bash
-pnpm tsx src/lib/search-quality/test-query.ts "your query" subject keyStage
+pnpm tsx src/lib/search-quality/test-query-lessons.ts "your query" subject keyStage
 ```
 
 **Never** use raw Elasticsearch queries — they bypass query preprocessing and RRF fusion.

@@ -95,11 +95,11 @@ apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/ent
 Each entry contains:
 
 ```typescript
-export const MATHS_SECONDARY: MinimalGroundTruth = {
+export const MATHS_SECONDARY: LessonGroundTruth = {
   subject: 'maths',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'dividing fractions using reciprocals',
+  query: 'dividing fractions year 8',
   expectedRelevance: {
     'dividing-a-fraction-by-a-fraction': 3,
     'dividing-with-decimals': 2,
@@ -120,15 +120,32 @@ The benchmark system runs all ground truths through:
 
 ### Results
 
-Phase 1 baseline metrics (30 queries):
+Lesson baseline metrics (30 queries, realistic teacher vocabulary):
 
 | Metric        | Value | Rating    |
 | ------------- | ----- | --------- |
-| MRR           | 1.000 | Excellent |
-| NDCG@10       | 0.989 | Excellent |
-| P@3           | 0.956 | Excellent |
+| MRR           | 0.983 | Excellent |
+| NDCG@10       | 0.955 | Excellent |
+| P@3           | 0.778 | Good      |
 | R@10          | 1.000 | Excellent |
 | Zero-hit rate | 0.000 | Excellent |
+
+### Refinement: Title-Echoing Circularity (2026-02-09)
+
+The initial implementation achieved MRR=1.000, which was an artefact of query design rather than a measurement of search quality. Investigation revealed:
+
+1. **Queries echoed target titles** — All 30 queries shared 2-3 content words with the target lesson title (e.g. "introduction to atoms and elements" for lesson "Atoms and elements")
+2. **BM25 title boost dominated** — `lesson_title^3` in both BM25 retrievers meant title-matching alone determined rank
+3. **Metrics were blind to improvements** — Removing ELSER entirely would not have changed MRR=1.000
+
+The methodology itself was sound, but iterative query testing naturally converged on BM25 title matches. The fix was replacing all 30 queries with realistic teacher vocabulary — what a professional teacher would actually type when looking for curriculum resources. The redesigned queries:
+
+- Use curriculum-oriented language, not lesson title vocabulary
+- Include pedagogical context where natural (key stages, year groups)
+- Accept MRR < 1.0 when it reflects genuine ranking competition
+- Create headroom to detect both regressions and improvements
+
+26/30 queries find the correct lesson at rank 1. The 4 that do not expose genuine ranking opportunities (e.g. "dividing fractions year 8" lands target at #2, "Eatwell Guide healthy diet" lands target at #2).
 
 ## Alternatives Considered
 
@@ -158,6 +175,6 @@ Use lesson titles as queries (e.g., query "Brackets in equations" for lesson "br
 
 ## References
 
-- [Ground Truth Protocol](/.agent/prompts/semantic-search/ground-truth-protocol.md) — Step-by-step process
+- [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) — Step-by-step process (all indexes)
 - [Expansion Plan](/.agent/plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) — Future work
 - [Archive](/../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth-archive/README.md) — Previous approach

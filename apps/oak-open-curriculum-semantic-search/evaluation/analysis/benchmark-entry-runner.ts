@@ -15,7 +15,11 @@ import type {
   QueryCategory,
   GroundTruthQuery,
 } from '../../src/lib/search-quality/ground-truth-archive/types.js';
-import { runQuery, type SearchFunction, type QueryResult } from './benchmark-query-runner.js';
+import {
+  runQuery,
+  type SearchFunction,
+  type QueryResult,
+} from './benchmark-query-runner-lessons.js';
 import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
 
 /**
@@ -30,10 +34,10 @@ export interface GroundTruthEntry {
 }
 
 // Re-export SearchFunction type for test imports
-export type { SearchFunction } from './benchmark-query-runner.js';
+export type { SearchFunction } from './benchmark-query-runner-lessons.js';
 
 // Re-export QueryResult type for review output
-export type { QueryResult } from './benchmark-query-runner.js';
+export type { QueryResult } from './benchmark-query-runner-lessons.js';
 
 /**
  * Result of benchmarking a single ground truth entry.

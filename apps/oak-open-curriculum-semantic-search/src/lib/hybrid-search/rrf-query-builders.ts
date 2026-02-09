@@ -1,4 +1,4 @@
-/* eslint max-lines: [error, 260] -- Phrase boosting added in B.5; defer re-org to ADR-086 */
+/* eslint max-lines: [error, 345] -- Phrase boosting added in B.5, threads added for multi-index GTs; defer re-org to ADR-086 */
 /**
  * Four-way RRF query builders for hybrid search.
  *
@@ -45,6 +45,13 @@ export interface SequenceRrfParams {
   size: number;
   subject?: SearchSubjectSlug;
   phaseSlug?: string;
+}
+
+/** Parameters for thread RRF search. */
+export interface ThreadRrfParams {
+  text: string;
+  size: number;
+  subjectSlug?: string;
 }
 
 /** Parameters for lesson RRF search including KS4 metadata filters. */
@@ -146,6 +153,26 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
     index: resolveCurrentSearchIndexName('sequences'),
     size,
     retriever: createSequenceRetriever(text, filters),
+  };
+}
+
+/**
+ * Builds a two-way RRF request for threads (BM25 + ELSER).
+ *
+ * Threads represent curriculum progressions (predominantly Maths). With only
+ * 164 documents, this is a small index requiring high precision.
+ *
+ * **Note**: Like sequences, thread search uses a simpler two-way RRF approach
+ * (BM25 + ELSER) rather than the four-way architecture used for lessons and units.
+ * This is appropriate given the small index size and simple document structure.
+ */
+export function buildThreadRrfRequest(params: ThreadRrfParams): EsSearchRequest {
+  const { text, size, subjectSlug } = params;
+  const filters = createThreadFilters(subjectSlug);
+  return {
+    index: resolveCurrentSearchIndexName('threads'),
+    size,
+    retriever: createThreadRetriever(text, filters),
   };
 }
 
@@ -253,6 +280,61 @@ function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string):
   }
   if (phaseSlug) {
     filters.push({ term: { phase_slug: phaseSlug } });
+  }
+  return filters;
+}
+
+/** Thread BM25 search fields with boosts. */
+const THREAD_BM25_FIELDS = ['thread_title^2'];
+
+/**
+ * Creates a two-way RRF retriever for threads.
+ *
+ * Includes `fuzziness: 'AUTO'` for typo tolerance.
+ */
+function createThreadRetriever(
+  text: string,
+  filters: QueryContainer[],
+): estypes.RetrieverContainer {
+  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+  return {
+    rrf: {
+      retrievers: [
+        {
+          standard: {
+            query: {
+              multi_match: {
+                query: text,
+                type: 'best_fields',
+                fuzziness: 'AUTO',
+                fields: THREAD_BM25_FIELDS,
+              },
+            },
+            filter: filterClause,
+          },
+        },
+        {
+          standard: {
+            query: { semantic: { field: 'thread_semantic', query: text } },
+            filter: filterClause,
+          },
+        },
+      ],
+      rank_window_size: 40,
+      rank_constant: 40,
+    },
+  };
+}
+
+/**
+ * Creates filters for thread queries.
+ *
+ * @param subjectSlug - Optional subject to filter by (threads use subject_slugs array field)
+ */
+function createThreadFilters(subjectSlug?: string): QueryContainer[] {
+  const filters: QueryContainer[] = [];
+  if (subjectSlug) {
+    filters.push({ term: { subject_slugs: subjectSlug } });
   }
   return filters;
 }

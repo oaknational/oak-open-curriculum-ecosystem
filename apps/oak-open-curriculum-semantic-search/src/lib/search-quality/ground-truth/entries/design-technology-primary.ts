@@ -5,16 +5,16 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Design Technology Primary ground truth: Cam mechanisms.
  */
-export const DESIGN_TECHNOLOGY_PRIMARY: MinimalGroundTruth = {
+export const DESIGN_TECHNOLOGY_PRIMARY: LessonGroundTruth = {
   subject: 'design-technology',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'cam rotary linear reciprocating motion',
+  query: 'cam mechanisms',
   expectedRelevance: {
     'cam-mechanisms': 3,
     'cams-in-a-product': 2,

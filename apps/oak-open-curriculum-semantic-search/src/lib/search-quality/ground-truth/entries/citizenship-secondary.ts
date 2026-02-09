@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Citizenship Secondary ground truth: Government vs Parliament.
  */
-export const CITIZENSHIP_SECONDARY: MinimalGroundTruth = {
+export const CITIZENSHIP_SECONDARY: LessonGroundTruth = {
   subject: 'citizenship',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'UK government parliament difference roles',
+  query: 'government and parliament',
   expectedRelevance: {
     'what-is-the-difference-between-the-government-and-parliament': 3,
+    'how-is-local-government-different-to-central-government': 2,
     'what-are-the-differences-between-the-uk-and-us-political-systems': 2,
-    'what-are-the-differences-between-local-regional-and-national-governance': 2,
   },
   description: 'Lesson teaches the key differences between parliament and government in the UK.',
 } as const;

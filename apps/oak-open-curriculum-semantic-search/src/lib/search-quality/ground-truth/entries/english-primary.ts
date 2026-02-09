@@ -5,18 +5,18 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * English Primary ground truth: Spelling plural nouns with suffix rules.
  */
-export const ENGLISH_PRIMARY: MinimalGroundTruth = {
+export const ENGLISH_PRIMARY: LessonGroundTruth = {
   subject: 'english',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'spelling plural nouns suffix rules',
+  query: 'plural nouns suffixes es ves',
   expectedRelevance: {
-    'practise-changing-nouns-from-singular-to-plural-using-alternative-rules': 2,
+    'making-plurals-using-the-suffix-es-and-ves': 3,
     'forming-plural-nouns-using-the-suffix-es-and-ves': 3,
     'forming-plural-nouns-using-the-suffix-s-and-ies': 2,
   },

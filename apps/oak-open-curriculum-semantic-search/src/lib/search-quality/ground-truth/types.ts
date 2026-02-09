@@ -60,7 +60,7 @@ export type ExpectedRelevance = Readonly<Record<string, RelevanceScore>>;
  * The goal is to prove baseline search quality across the curriculum.
  *
  * @example
- * const mathsSecondary: MinimalGroundTruth = {
+ * const mathsSecondary: LessonGroundTruth = {
  *   subject: 'maths',
  *   phase: 'secondary',
  *   keyStage: 'ks3',
@@ -73,7 +73,7 @@ export type ExpectedRelevance = Readonly<Record<string, RelevanceScore>>;
  *   description: 'Lesson teaches that equations with unknowns on both sides can be manipulated by collecting like terms onto one side.',
  * };
  */
-export interface MinimalGroundTruth {
+export interface LessonGroundTruth {
   /**
    * The subject this ground truth belongs to.
    * Uses the canonical subject slug from the curriculum SDK.

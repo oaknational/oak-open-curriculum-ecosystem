@@ -10,7 +10,7 @@
  * - ~  ACCEPTABLE: At or above fair threshold
  * - ✗  BAD: Below fair threshold
  *
- * @see benchmark.ts - Production CLI (uses real ES)
+ * @see benchmark-lessons.ts - Production CLI (uses real ES)
  * @see benchmark-test-harness.ts - Test CLI (uses fake)
  * @see ADR-078 Dependency Injection for Testability
  * @packageDocumentation
@@ -24,11 +24,11 @@ import {
   type GroundTruthEntry,
   type ReviewQueryResult,
 } from './benchmark-entry-runner.js';
-import type { SearchFunction } from './benchmark-query-runner.js';
+import type { SearchFunction } from './benchmark-query-runner-lessons.js';
 import { printSummary } from './benchmark-output.js';
 import { printQueryReview, printReviewSummary } from './benchmark-review-output.js';
 import { generateIssuesReport, type AugmentedReview } from './benchmark-issues-report.js';
-import { getAllGroundTruthEntries } from './benchmark-adapters.js';
+import { getLessonGroundTruthEntries } from './benchmark-adapters.js';
 
 /**
  * CLI options parsed from command line arguments.
@@ -51,7 +51,7 @@ export interface CliOptions {
   readonly issues: boolean;
 }
 
-const CLI_HELP = `Usage: pnpm benchmark --all | --subject X --phase Y [options]
+const CLI_HELP = `Usage: pnpm benchmark:lessons --all | --subject X --phase Y [options]
 
 Options:
   --all              Run all subject-phases
@@ -63,11 +63,11 @@ Options:
   -h, --help         Show this help
 
 Examples:
-  pnpm benchmark --all                          # All subjects, aggregate output
-  pnpm benchmark -s french -p primary           # Single subject-phase, aggregate
-  pnpm benchmark -s french -p primary --review  # Review mode with per-query details
-  pnpm benchmark -s french -p primary -c precise-topic --review  # Single category review
-  pnpm benchmark --issues                       # Generate issues report for all queries
+  pnpm benchmark:lessons --all                          # All subjects, aggregate output
+  pnpm benchmark:lessons -s french -p primary           # Single subject-phase, aggregate
+  pnpm benchmark:lessons -s french -p primary --review  # Review mode with per-query details
+  pnpm benchmark:lessons -s french -p primary -c precise-topic --review  # Single category review
+  pnpm benchmark:lessons --issues                       # Generate issues report for all queries
 `;
 
 interface RawCliValues {
@@ -115,7 +115,7 @@ export function parseCliArgs(): CliOptions {
 
 /** Filter entries based on CLI options */
 function filterEntries(opts: CliOptions): readonly GroundTruthEntry[] {
-  let entries = getAllGroundTruthEntries();
+  let entries = getLessonGroundTruthEntries();
   if (!opts.all && !opts.subject && !opts.phase) {
     console.log('No filter. Use --all or --subject/--phase. Run --help for usage.');
     process.exit(1);

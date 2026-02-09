@@ -2,6 +2,14 @@
 
 **Status**: Mandatory directive for all semantic search work.
 
+## Bulk Data
+
+The bulk data is the source of truth for the semantic search system. It is the data that is indexed into the Elasticsearch database. It is downloaded, you can't see it because it is gitignored, use the shell.
+
+## Protocol
+
+If you can't follow proper protocol while tuning search, STOP, and explain why, DO NOT work around the protocol.
+
 ## The Foundation: Structure-Based Search
 
 **Structure search is the foundation.** This is not negotiable. This is not "good enough". This is what we have, and this is what we are making work.

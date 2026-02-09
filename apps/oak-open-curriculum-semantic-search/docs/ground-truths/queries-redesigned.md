@@ -10,7 +10,7 @@
 
 Phase 1 of the ground truth redesign is complete. 30 foundational ground truths are:
 
-- **Integrated with the benchmark** (`pnpm benchmark --all`)
+- **Integrated with the benchmark** (`pnpm benchmark:lessons --all`)
 - **Producing excellent metrics** (MRR=1.000, NDCG=0.989)
 - **Testing actual search value** (4-way RRF, not raw ES)
 
@@ -61,13 +61,13 @@ Phase 1 of the ground truth redesign is complete. 30 foundational ground truths 
 cd apps/oak-open-curriculum-semantic-search
 
 # All ground truths
-pnpm benchmark --all
+pnpm benchmark:lessons --all
 
 # Single subject-phase
-pnpm benchmark -s maths -p secondary
+pnpm benchmark:lessons -s maths -p secondary
 
 # Review mode (detailed per-query output)
-pnpm benchmark -s maths -p secondary --review
+pnpm benchmark:lessons -s maths -p secondary --review
 ```
 
 ---
@@ -80,10 +80,10 @@ All entries are defined in TypeScript at:
 src/lib/search-quality/ground-truth/entries/
 ```
 
-Each entry follows the `MinimalGroundTruth` type:
+Each entry follows the `LessonGroundTruth` type:
 
 ```typescript
-export const MATHS_SECONDARY: MinimalGroundTruth = {
+export const MATHS_SECONDARY: LessonGroundTruth = {
   subject: 'maths',
   phase: 'secondary',
   keyStage: 'ks3',

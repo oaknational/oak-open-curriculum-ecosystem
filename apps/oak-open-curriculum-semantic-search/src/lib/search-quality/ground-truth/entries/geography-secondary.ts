@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Geography Secondary ground truth: Plate boundaries and tectonics.
  */
-export const GEOGRAPHY_SECONDARY: MinimalGroundTruth = {
+export const GEOGRAPHY_SECONDARY: LessonGroundTruth = {
   subject: 'geography',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'types of plate boundaries tectonics',
+  query: 'plate boundaries',
   expectedRelevance: {
     'plate-boundaries': 3,
-    'types-of-volcanoes': 2,
     earthquakes: 2,
+    'types-of-volcanoes': 2,
   },
   description:
     'Lesson teaches the four main types of plate boundary and the tectonic hazards at each.',

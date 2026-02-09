@@ -2,7 +2,7 @@
  * ARCHIVED: Ground truth type definitions (pre-2026-02-04).
  *
  * These types support the archived 120-query ground truth system.
- * For new ground truths, use the MinimalGroundTruth type from ../ground-truth/types.ts
+ * For new ground truths, use the LessonGroundTruth type from ../ground-truth/types.ts
  *
  * @packageDocumentation
  */

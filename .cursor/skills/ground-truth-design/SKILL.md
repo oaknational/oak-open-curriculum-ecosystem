@@ -99,10 +99,10 @@ Create a query a teacher would realistically type:
 | Topic-focused | Topics, not advice | Not: "how to teach fractions" |
 | No redundant subject | Don't repeat filter context | Not: "French negation" when filtered to French |
 
-### Step 3: Test Via test-query.ts
+### Step 3: Test Via test-query-lessons.ts
 
 ```bash
-pnpm tsx src/lib/search-quality/test-query.ts "your query" subject keyStage
+pnpm tsx src/lib/search-quality/test-query-lessons.ts "your query" subject keyStage
 ```
 
 ### Step 4: Capture Top 3 with Relevance Scores
@@ -117,7 +117,7 @@ pnpm tsx src/lib/search-quality/test-query.ts "your query" subject keyStage
 
 ```text
 src/lib/search-quality/ground-truth/
-├── types.ts              # MinimalGroundTruth type definition
+├── types.ts              # LessonGroundTruth type definition
 ├── index.ts              # Exports and accessors
 ├── README.md             # Overview
 └── entries/              # Individual ground truths
@@ -136,12 +136,12 @@ src/lib/search-quality/ground-truth/
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Subject Phase ground truth: Topic description.
  */
-export const SUBJECT_PHASE: MinimalGroundTruth = {
+export const SUBJECT_PHASE: LessonGroundTruth = {
   subject: 'subject-slug',
   phase: 'primary' | 'secondary',
   keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4',
@@ -176,7 +176,7 @@ pnpm test                    # Unit tests
 
 1. Mine bulk data for candidates
 2. Design query based on curriculum content
-3. Run query via test-query.ts
+3. Run query via test-query-lessons.ts
 4. Capture top 3 results with relevance scores
 
 ### Query/Slug Term Mismatch

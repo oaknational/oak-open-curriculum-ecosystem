@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Design Technology Secondary ground truth: Linear vs circular economy.
  */
-export const DESIGN_TECHNOLOGY_SECONDARY: MinimalGroundTruth = {
+export const DESIGN_TECHNOLOGY_SECONDARY: LessonGroundTruth = {
   subject: 'design-technology',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'linear vs circular economy cradle grave',
+  query: 'linear circular economy sustainability',
   expectedRelevance: {
     'linear-versus-circular-economy': 3,
-    'selecting-materials-for-manufacture': 2,
     'repair-maintenance-and-recycling': 2,
+    'product-in-use': 1,
   },
   description:
     'Lesson teaches the difference between linear economy (cradle to grave) and circular economy (cradle to cradle).',

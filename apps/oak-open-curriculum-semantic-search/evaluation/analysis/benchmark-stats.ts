@@ -7,7 +7,7 @@
  */
 
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
-import type { QueryResult } from './benchmark-query-runner.js';
+import type { QueryResult } from './benchmark-query-runner-lessons.js';
 
 /**
  * Aggregated metrics for a single query category.

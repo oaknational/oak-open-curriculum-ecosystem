@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { QueryResult } from './benchmark-query-runner.js';
+import type { QueryResult } from './benchmark-query-runner-lessons.js';
 import { aggregateByCategory } from './benchmark-stats.js';
 
 describe('aggregateByCategory', () => {

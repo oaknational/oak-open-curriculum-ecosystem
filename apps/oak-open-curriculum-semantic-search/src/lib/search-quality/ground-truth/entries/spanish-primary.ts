@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Spanish Primary ground truth: Estar for greetings and location.
  */
-export const SPANISH_PRIMARY: MinimalGroundTruth = {
+export const SPANISH_PRIMARY: LessonGroundTruth = {
   subject: 'spanish',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'estar estoy está location hello hola',
+  query: 'greetings estar',
   expectedRelevance: {
     'greetings-the-verb-estar': 3,
-    'in-class-estoy-and-esta-for-location': 3,
-    'who-is-in-class-estoy-estas-and-esta-to-answer-the-register': 2,
+    'i-am-pleased-estoy-and-esta-for-state': 2,
+    'how-are-you-today-and-usually-estar-for-states-and-ser-for-traits': 1,
   },
   description: 'Lesson teaches how to use estoy and está for greetings and location.',
 } as const;

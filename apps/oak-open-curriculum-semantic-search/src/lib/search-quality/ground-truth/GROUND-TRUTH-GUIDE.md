@@ -171,7 +171,7 @@ Before writing any ground truth, ask:
 
 | Rule                   | Requirement                       | Example                                     |
 | ---------------------- | --------------------------------- | ------------------------------------------- |
-| Length                 | 3-7 words                         | "cell structure and function"               |
+| Length                 | 2-10 words                        | "plate boundaries", "singing rounds"        |
 | Realistic              | Would a teacher type this?        | Yes: "fractions unlike denominators"        |
 | **Pedagogy aware**     | Professional UK teacher queries   | Yes: curriculum-aligned vocabulary          |
 | Specific               | 5 lessons highly relevant         | Not: "maths" (too broad)                    |
@@ -398,7 +398,7 @@ source .env.local
 | ---------- | ------------------------------------------------------------ |
 | MCP server | Call `get-help`                                              |
 | Bulk data  | `jq '.sequence \| length' bulk-downloads/SUBJECT-PHASE.json` |
-| Benchmark  | `pnpm benchmark --help`                                      |
+| Benchmark  | `pnpm benchmark:lessons --help`                              |
 
 **CHECKPOINT 0**: If ANY tool is unavailable → **STOP**.
 
@@ -444,7 +444,7 @@ Read the `.query.ts` file (NOT `.expected.ts`) and answer:
 **✅ NOW you may read `.expected.ts` and run benchmark.**
 
 ```bash
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
+pnpm benchmark:lessons -s SUBJECT -p PHASE -c CATEGORY --review
 ```
 
 **Three-Way Comparison Table** (MANDATORY):
@@ -529,7 +529,7 @@ For quick reviews (not full COMMIT protocol):
 ### Step 1: Run Benchmark Review Mode
 
 ```bash
-pnpm benchmark -s SUBJECT -p PHASE -c CATEGORY --review
+pnpm benchmark:lessons -s SUBJECT -p PHASE -c CATEGORY --review
 ```
 
 Output shows expected slugs, top 10 results, and all 4 metrics.
@@ -575,7 +575,7 @@ Based on evidence:
 ```bash
 pnpm type-check
 pnpm ground-truth:validate
-pnpm benchmark --subject SUBJECT --phase PHASE --verbose
+pnpm benchmark:lessons --subject SUBJECT --phase PHASE --verbose
 ```
 
 ---
@@ -659,7 +659,7 @@ cat bulk-downloads/maths-primary.json | \
 ```bash
 pnpm type-check              # Stage 1: TypeScript compilation
 pnpm ground-truth:validate   # Stage 2: 16 semantic checks
-pnpm benchmark --verbose     # Stage 3: Measure against search
+pnpm benchmark:lessons --verbose     # Stage 3: Measure against search
 ```
 
 ### Validation Checks (All Blocking)
@@ -878,11 +878,11 @@ export const {SUBJECT}_{PHASE}_{CATEGORY}_EXPECTED: ExpectedRelevance = {
 
 ### Session Workflow
 
-1. `pnpm benchmark -s X -p Y --review` — See current state with ALL 4 metrics
+1. `pnpm benchmark:lessons -s X -p Y --review` — See current state with ALL 4 metrics
 2. Explore via MCP tools — Find qualitatively best matches
 3. Update ground truth file — Based on evidence
 4. `pnpm ground-truth:validate` — Check validity
-5. `pnpm benchmark -s X -p Y --verbose` — Measure aggregate metrics
+5. `pnpm benchmark:lessons -s X -p Y --verbose` — Measure aggregate metrics
 6. Update checklist — Record findings with all 4 metrics
 
 ---

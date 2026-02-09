@@ -1,5 +1,5 @@
 /**
- * Minimum Viable Ground Truths — Phase 1.
+ * Lesson Ground Truths.
  *
  * One ground truth per subject-phase pair (~33 total).
  * Uses known-answer-first methodology to prove baseline search quality.
@@ -15,15 +15,15 @@
  * ## Usage
  *
  * ```typescript
- * import { GROUND_TRUTHS, getGroundTruth } from './ground-truth';
+ * import { LESSON_GROUND_TRUTHS, getLessonGroundTruth } from './ground-truth';
  *
- * // Get all ground truths
- * for (const gt of GROUND_TRUTHS) {
+ * // Get all lesson ground truths
+ * for (const gt of LESSON_GROUND_TRUTHS) {
  *   console.log(`${gt.subject}/${gt.phase}: ${gt.query}`);
  * }
  *
- * // Get specific ground truth
- * const mathsSec = getGroundTruth('maths', 'secondary');
+ * // Get specific lesson ground truth
+ * const mathsSec = getLessonGroundTruth('maths', 'secondary');
  * ```
  *
  * @packageDocumentation
@@ -31,9 +31,9 @@
 
 import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
 
-import type { Phase, MinimalGroundTruth } from './types';
+import type { Phase, LessonGroundTruth } from './types';
 
-export type { MinimalGroundTruth, SubjectPhasePair, Phase, SubjectPhaseKey } from './types';
+export type { LessonGroundTruth, SubjectPhasePair, Phase, SubjectPhaseKey } from './types';
 export { subjectPhaseKey } from './types';
 
 // =============================================================================
@@ -73,11 +73,11 @@ import { SPANISH_PRIMARY } from './entries/spanish-primary';
 import { SPANISH_SECONDARY } from './entries/spanish-secondary';
 
 /**
- * All ground truths in the system.
+ * All lesson ground truths in the system.
  *
  * This array grows as ground truths are created for each subject-phase pair.
  */
-export const GROUND_TRUTHS: readonly MinimalGroundTruth[] = [
+export const LESSON_GROUND_TRUTHS: readonly LessonGroundTruth[] = [
   ART_PRIMARY,
   ART_SECONDARY,
   CITIZENSHIP_SECONDARY,
@@ -147,35 +147,37 @@ export { SPANISH_SECONDARY } from './entries/spanish-secondary';
 // =============================================================================
 
 /**
- * Get a ground truth by subject and phase.
+ * Get a lesson ground truth by subject and phase.
  *
  * @param subject - The subject slug
  * @param phase - The phase (primary or secondary)
- * @returns The ground truth if found, undefined otherwise
+ * @returns The lesson ground truth if found, undefined otherwise
  */
-export function getGroundTruth(
+export function getLessonGroundTruth(
   subject: AllSubjectSlug,
   phase: Phase,
-): MinimalGroundTruth | undefined {
-  return GROUND_TRUTHS.find((gt) => gt.subject === subject && gt.phase === phase);
+): LessonGroundTruth | undefined {
+  return LESSON_GROUND_TRUTHS.find((gt) => gt.subject === subject && gt.phase === phase);
 }
 
 /**
- * Get all ground truths for a subject.
+ * Get all lesson ground truths for a subject.
  *
  * @param subject - The subject slug
- * @returns Array of ground truths for that subject (may be 0, 1, or 2)
+ * @returns Array of lesson ground truths for that subject (may be 0, 1, or 2)
  */
-export function getGroundTruthsForSubject(subject: AllSubjectSlug): readonly MinimalGroundTruth[] {
-  return GROUND_TRUTHS.filter((gt) => gt.subject === subject);
+export function getLessonGroundTruthsForSubject(
+  subject: AllSubjectSlug,
+): readonly LessonGroundTruth[] {
+  return LESSON_GROUND_TRUTHS.filter((gt) => gt.subject === subject);
 }
 
 /**
- * Get all ground truths for a phase.
+ * Get all lesson ground truths for a phase.
  *
  * @param phase - The phase (primary or secondary)
- * @returns Array of ground truths for that phase
+ * @returns Array of lesson ground truths for that phase
  */
-export function getGroundTruthsForPhase(phase: Phase): readonly MinimalGroundTruth[] {
-  return GROUND_TRUTHS.filter((gt) => gt.phase === phase);
+export function getLessonGroundTruthsForPhase(phase: Phase): readonly LessonGroundTruth[] {
+  return LESSON_GROUND_TRUTHS.filter((gt) => gt.phase === phase);
 }

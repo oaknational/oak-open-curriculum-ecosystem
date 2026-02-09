@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Maths Secondary ground truth: Dividing fractions using reciprocals.
  */
-export const MATHS_SECONDARY: MinimalGroundTruth = {
+export const MATHS_SECONDARY: LessonGroundTruth = {
   subject: 'maths',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'dividing fractions using reciprocals',
+  query: 'dividing fractions',
   expectedRelevance: {
     'dividing-a-fraction-by-a-fraction': 3,
-    'dividing-with-decimals': 2,
     'checking-and-securing-dividing-a-fraction-by-a-whole-number': 2,
+    'dividing-a-whole-number-by-a-fraction': 2,
   },
   description:
     'Lesson teaches dividing fractions by fractions using diagrams and the reciprocal method.',

@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Geography Primary ground truth: River journey from source to mouth.
  */
-export const GEOGRAPHY_PRIMARY: MinimalGroundTruth = {
+export const GEOGRAPHY_PRIMARY: LessonGroundTruth = {
   subject: 'geography',
   phase: 'primary',
   keyStage: 'ks2',
-  query: 'river source to mouth course',
+  query: 'river changes on its journey from source to mouth',
   expectedRelevance: {
     'the-rivers-journey': 3,
     'introducing-rivers': 2,
-    'rivers-in-europe': 2,
+    'rivers-in-the-uk': 1,
   },
   description: 'Lesson teaches how rivers change as they flow from source to mouth.',
 } as const;

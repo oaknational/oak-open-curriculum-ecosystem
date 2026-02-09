@@ -70,10 +70,10 @@ Even when queries have "similar semantic intent", you MUST do fresh bulk explora
 
 ## Foundational Ground Truth Structure
 
-The current system uses `MinimalGroundTruth` entries:
+The current system uses `LessonGroundTruth` entries:
 
 ```typescript
-export const MATHS_SECONDARY: MinimalGroundTruth = {
+export const MATHS_SECONDARY: LessonGroundTruth = {
   subject: 'maths',
   phase: 'secondary',
   keyStage: 'ks3',
@@ -152,11 +152,11 @@ Of all relevant results, what proportion found in top 10?
 
 ## Quick Review Process
 
-### Step 1: Test Query via test-query.ts
+### Step 1: Test Query via test-query-lessons.ts
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
-pnpm tsx src/lib/search-quality/test-query.ts "query" subject keyStage
+pnpm tsx src/lib/search-quality/test-query-lessons.ts "query" subject keyStage
 ```
 
 ### Step 2: Explore Curriculum Data

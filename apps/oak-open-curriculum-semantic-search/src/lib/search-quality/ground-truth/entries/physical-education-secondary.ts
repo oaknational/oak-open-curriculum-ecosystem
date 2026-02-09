@@ -5,20 +5,20 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Physical Education Secondary ground truth: Gymnastics sequences.
  */
-export const PHYSICAL_EDUCATION_SECONDARY: MinimalGroundTruth = {
+export const PHYSICAL_EDUCATION_SECONDARY: LessonGroundTruth = {
   subject: 'physical-education',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'gymnastics sequence unison canon balances',
+  query: 'gymnastics sequences',
   expectedRelevance: {
     'creating-sequences-with-locomotion-rotation-and-balance': 3,
-    'small-group-performances-in-canon-and-unison': 3,
     'evaluating-and-refining-sequences': 2,
+    'different-ways-to-move': 1,
   },
   description:
     'Lesson teaches how to create sequences with locomotion, rotation and balances using unison and canon patterns.',

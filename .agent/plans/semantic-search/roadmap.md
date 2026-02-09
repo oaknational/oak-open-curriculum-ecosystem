@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **Ground Truth Query Grounding**  
-**Last Updated**: 2026-01-27  
+**Status**: ✅ **Ground Truths Complete** — Ready for Application Improvement  
+**Last Updated**: 2026-02-05  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: [current-state.md](current-state.md)
 
@@ -9,69 +9,40 @@
 
 ---
 
-## Current Work: Ground Truth Redesign
+## Current State
 
-**Plan**: [ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md)
+Ground truth infrastructure is complete across all four indexes. Baseline metrics are established. Priority is now application improvement.
 
-The previous GT structure (120 queries, 4 categories per subject-phase) has been superseded by a revised strategy focused on answering:
+| Index | GTs | MRR | Status |
+|-------|-----|-----|--------|
+| `oak_lessons` | 30 | 1.000 | ✅ Done |
+| `oak_units` | 2 | 1.000 | ✅ Done |
+| `oak_threads` | 1 | 1.000 | ✅ Done |
+| `oak_sequences` | 1 | 1.000 | ✅ Done |
 
-> "Does search help teachers find what they need?"
-
-### What Changed (2026-01-26)
-
-| Before | After |
-|--------|-------|
-| 154 queries, uniform distribution | ~80-100 queries, content-weighted |
-| 4 categories per subject-phase | Bulk natural-query + handful of mechanics proofs |
-| Clipped term lists as "natural-expression" | Natural phrasing required |
-| Testing ES features (stemming, disambiguation) | Testing OUR value proposition |
-
-### New Category Structure
-
-| Category | Purpose | Count |
-|----------|---------|-------|
-| `natural-query` | How teachers actually search | **Bulk** |
-| `exact-term` | BM25 returns exact terms | **Few** |
-| `typo-recovery` | Fuzzy matching works | **Handful** |
-| `curriculum-connection` | Genuine topic pairings | **Few if any** |
-| `future-intent` | Not yet built (excluded) | **2-3** |
-
-### Eliminated Categories
-
-- `morphological-variation` — ES stemming handles it
-- `ambiguous-term` — Filtering handles it
-- `difficulty-mismatch` — We enable teachers, not police them
-- `metadata-only` — Metadata IS the default
+**Ground truth cleanup** (rename, consolidate protocol docs, deeper metrics) is documented in [multi-index-ground-truths.md](active/multi-index-ground-truths.md#remaining-work-deferred-to-next-session). These are not blockers.
 
 ---
 
 ## Execution Order
 
 ```text
-1. Ground Truth Redesign (active/)              ← CURRENT (Stage 1b)
-   Mine queries from bulk data (known-answer-first)
+1. Ground Truth Foundation                       ✅ COMPLETE
+   30 lesson GTs + multi-index GTs (units, threads, sequences)
          ↓
-2. Expected Slugs Implementation
-   Create .query.ts and .expected.ts files
+2. Application Improvement                       ← NEXT
+   SDK extraction, MCP integration, search quality levels
          ↓
-3. Implementation
-   Update .query.ts and .expected.ts files
-         ↓
-4. Benchmark & Analysis
-   Validate with pnpm benchmark
-         ↓
-5. SDK Extraction (sdk-extraction/)
+3. SDK Extraction (sdk-extraction/)
    Extract search from Next.js app into SDK + CLI
          ↓
-6. MCP Integration (post-sdk/mcp-integration/)
+4. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools
          ↓
-7. Everything Else (post-sdk/ streams)
-   ├── Search Quality (Levels 2 → 3 → 4)
-   ├── Bulk Data Analysis
-   ├── SDK API
-   ├── Operations
-   └── Extensions
+5. Search Quality Levels (post-sdk/search-quality/)
+   ├── Level 2: Document Relationships
+   ├── Level 3: Modern ES Features
+   └── Level 4: AI Enhancement
 ```
 
 ---
@@ -87,23 +58,21 @@ The previous GT structure (120 queries, 4 categories per subject-phase) has been
 
 ---
 
-## Phase 1: Ground Truth Redesign
+## Phase 1: Ground Truth Foundation ✅ Complete
 
-**Status**: 🔄 In Progress (Stage 1b: Query Grounding)  
-**Location**: [active/ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md)
+**Location**: [active/multi-index-ground-truths.md](active/multi-index-ground-truths.md)
 
 **Goal**: Create ground truths that answer "Does search help teachers find what they need?"
 
 | Task | Status |
 |------|--------|
-| Revise natural-expression → natural phrasing | ✅ Complete |
-| Reduce typo-recovery to 3 global | ✅ Complete |
-| Evaluate/eliminate cross-topic | ✅ Complete |
-| Content-weighted distribution | ✅ Complete |
-| Subject filter fix (KS4 science) | ✅ Complete (2026-01-27) |
-| Mine expected slugs from bulk data | 📋 **CURRENT** |
-| Implement in code | ⏸️ Blocked |
-| Benchmark and analyse | ⏸️ Blocked |
+| Lesson GTs (30 subject-phase pairs) | ✅ Complete |
+| Known-Answer-First methodology (ADR-106) | ✅ Complete |
+| Multi-index infrastructure (test scripts, benchmarks) | ✅ Complete |
+| Unit GTs (2: maths primary, science secondary) | ✅ Complete |
+| Thread GT (1: maths algebra) | ✅ Complete |
+| Sequence GT (1: maths secondary) | ✅ Complete |
+| Cleanup: rename, consolidate docs, metric depth | 📋 Deferred |
 
 ---
 

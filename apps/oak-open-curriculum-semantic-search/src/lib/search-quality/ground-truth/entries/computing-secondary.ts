@@ -5,16 +5,16 @@
  * @packageDocumentation
  */
 
-import type { MinimalGroundTruth } from '../types';
+import type { LessonGroundTruth } from '../types';
 
 /**
  * Computing Secondary ground truth: Python while loops and iteration.
  */
-export const COMPUTING_SECONDARY: MinimalGroundTruth = {
+export const COMPUTING_SECONDARY: LessonGroundTruth = {
   subject: 'computing',
   phase: 'secondary',
   keyStage: 'ks3',
-  query: 'Python while loops iteration',
+  query: 'while loops Python',
   expectedRelevance: {
     'iteration-using-while-loops': 3,
     'using-for-loops-to-iterate-data-structures': 2,
