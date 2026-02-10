@@ -8,7 +8,7 @@
 export type { SlugEntry, ValidationResult, ValidationCategory } from './types';
 
 // API helpers
-export { getApiKey, API_BASE } from './api-helpers';
+export { requireApiKey, API_BASE } from './api-helpers';
 
 // API checkers
 export { checkLessonExists, checkUnitExists, checkSequenceExists } from './api-checkers';

@@ -8,11 +8,12 @@
  * @see .agent/research/elasticsearch/methods/elser-ingestion-scaling.md
  */
 
-import { config } from 'dotenv';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@elastic/elasticsearch';
+import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
+import { env } from '../src/lib/env.js';
 import { readAllBulkFiles } from '@oaknational/oak-curriculum-sdk/public/bulk';
 import { createOakClient } from '../src/adapters/oak-adapter';
 import { createHybridDataSource } from '../src/adapters/hybrid-data-source';
@@ -33,7 +34,7 @@ import type { BulkOperationEntry } from '../src/lib/indexing/bulk-operation-type
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-config({ path: join(__dirname, '..', '.env.local') });
+loadAppEnv(__dirname);
 
 const LESSONS_INDEX = 'oak_lessons';
 const UNITS_INDEX = 'oak_units';
@@ -61,15 +62,16 @@ function parseArgs(): { limit: number | undefined; subject: string | undefined }
   return { limit, subject };
 }
 
-/** Get required environment variables or exit. */
-function getEnvOrExit(): { esUrl: string; esApiKey: string } {
-  const esUrl = process.env.ELASTICSEARCH_URL;
-  const esApiKey = process.env.ELASTICSEARCH_API_KEY;
-  if (!esUrl || !esApiKey) {
-    console.error('Error: ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY required');
-    process.exit(1);
-  }
-  return { esUrl, esApiKey };
+/** Read validated environment config. */
+function getEsCredentials(): {
+  esUrl: string;
+  esApiKey: string;
+} {
+  const config = env();
+  return {
+    esUrl: config.ELASTICSEARCH_URL,
+    esApiKey: config.ELASTICSEARCH_API_KEY,
+  };
 }
 
 /** Load and filter bulk files. */
@@ -185,7 +187,7 @@ function printAndSaveReport(report: DiagnosticReport, outputDir: string): void {
 /** Main diagnostic function. */
 async function main(): Promise<void> {
   const { limit, subject } = parseArgs();
-  const { esUrl, esApiKey } = getEnvOrExit();
+  const { esUrl, esApiKey } = getEsCredentials();
   const esClient = new Client({ node: esUrl, auth: { apiKey: esApiKey } });
   const bulkDir = join(__dirname, '..', 'bulk-downloads');
   const runId = `elser-diagnostic-${Date.now()}`;

@@ -1,13 +1,20 @@
 /**
  * CLI command handlers for Elasticsearch setup.
  *
- * Handles execution of status, setup, and reset commands.
+ * All functions accept credentials as parameters — callers (CLI entry points)
+ * are responsible for reading the environment via `env()`.
  */
 
 import { verifyConnection, listIndexes, runSetup, runReset, runSynonymsUpdate } from './index.js';
 import { esClient } from '../../es-client.js';
 import { readIndexMeta } from '../index-meta.js';
 import { ingestLogger } from '../../logger';
+
+/** Elasticsearch credentials required by all CLI commands. */
+export interface ElasticsearchCredentials {
+  readonly ELASTICSEARCH_URL: string;
+  readonly ELASTICSEARCH_API_KEY: string;
+}
 
 interface ElasticsearchConfig {
   readonly elasticsearchUrl: string;
@@ -32,23 +39,17 @@ interface SetupResult {
  *
  * Shows Elasticsearch connection info, Oak indexes, and ingestion metadata.
  *
+ * @param credentials - Elasticsearch connection credentials
  * @param verbose - Enable verbose output
  * @returns Exit code (0 for success, 1 for failure)
  */
-export async function executeStatusCommand(verbose: boolean): Promise<number> {
-  const esUrl = process.env.ELASTICSEARCH_URL;
-  const esKey = process.env.ELASTICSEARCH_API_KEY;
-
-  if (!esUrl || !esKey) {
-    ingestLogger.error('Missing environment variables', {
-      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
-    });
-    return 1;
-  }
-
+export async function executeStatusCommand(
+  credentials: ElasticsearchCredentials,
+  verbose: boolean,
+): Promise<number> {
   const config: ElasticsearchConfig = {
-    elasticsearchUrl: esUrl,
-    elasticsearchApiKey: esKey,
+    elasticsearchUrl: credentials.ELASTICSEARCH_URL,
+    elasticsearchApiKey: credentials.ELASTICSEARCH_API_KEY,
     verbose,
   };
 
@@ -119,26 +120,17 @@ async function logIndexMetadata(): Promise<void> {
 /**
  * Executes setup or reset command.
  *
+ * @param credentials - Elasticsearch connection credentials
  * @param command - Command to execute ('setup' or 'reset')
  * @returns Setup result or undefined if connection failed
  */
 export async function executeSetupOrResetCommand(
+  credentials: ElasticsearchCredentials,
   command: 'setup' | 'reset',
 ): Promise<SetupResult | undefined> {
-  const esUrl = process.env.ELASTICSEARCH_URL;
-  const esKey = process.env.ELASTICSEARCH_API_KEY;
-
-  if (!esUrl || !esKey) {
-    ingestLogger.error('Missing environment variables', {
-      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
-      hint: 'Create a .env.local file with these values in the app directory',
-    });
-    return undefined;
-  }
-
   const config: ElasticsearchConfig = {
-    elasticsearchUrl: esUrl,
-    elasticsearchApiKey: esKey,
+    elasticsearchUrl: credentials.ELASTICSEARCH_URL,
+    elasticsearchApiKey: credentials.ELASTICSEARCH_API_KEY,
     verbose: true,
   };
 
@@ -180,22 +172,15 @@ async function executeSetupOrReset(
  * Updates the synonym set without touching indexes.
  * Uses the Elasticsearch Synonyms API for live updates.
  *
+ * @param credentials - Elasticsearch connection credentials
  * @returns Exit code (0 for success, 1 for failure)
  */
-export async function executeSynonymsCommand(): Promise<number> {
-  const esUrl = process.env.ELASTICSEARCH_URL;
-  const esKey = process.env.ELASTICSEARCH_API_KEY;
-
-  if (!esUrl || !esKey) {
-    ingestLogger.error('Missing environment variables', {
-      error: 'ELASTICSEARCH_URL and ELASTICSEARCH_API_KEY must be set',
-    });
-    return 1;
-  }
-
+export async function executeSynonymsCommand(
+  credentials: ElasticsearchCredentials,
+): Promise<number> {
   const config: ElasticsearchConfig = {
-    elasticsearchUrl: esUrl,
-    elasticsearchApiKey: esKey,
+    elasticsearchUrl: credentials.ELASTICSEARCH_URL,
+    elasticsearchApiKey: credentials.ELASTICSEARCH_API_KEY,
     verbose: true,
   };
 

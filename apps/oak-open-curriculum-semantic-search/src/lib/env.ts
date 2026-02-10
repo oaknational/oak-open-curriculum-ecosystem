@@ -43,6 +43,15 @@ export type Env = z.infer<typeof EnvSchema>;
 
 type EnvResult = Env & { OAK_EFFECTIVE_KEY: string };
 
+/**
+ * Return a shallow copy of `process.env` for forwarding to child
+ * process spawns. This is the ONLY export (alongside `readProcessEnv`)
+ * that accesses `process.env` — all other code must use {@link env}.
+ */
+export function childProcessEnv(): NodeJS.ProcessEnv {
+  return { ...process.env };
+}
+
 function readProcessEnv(): Record<string, string | undefined> {
   return {
     ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
@@ -61,7 +70,8 @@ function readProcessEnv(): Record<string, string | undefined> {
   };
 }
 
-function parseEnv(raw: Record<string, string | undefined>): EnvResult {
+/** Validate a raw env record against the schema. Exported for direct unit testing. */
+export function parseEnv(raw: Record<string, string | undefined>): EnvResult {
   const parsed = EnvSchema.safeParse(raw);
   if (!parsed.success) {
     throw new Error(parsed.error.message);
@@ -73,13 +83,27 @@ function parseEnv(raw: Record<string, string | undefined>): EnvResult {
   return { ...parsed.data, OAK_EFFECTIVE_KEY: key };
 }
 
-export function env(): EnvResult {
-  return parseEnv(readProcessEnv());
+/**
+ * Parse and validate environment configuration.
+ *
+ * When called without arguments, reads from `process.env` via the internal
+ * `readProcessEnv()` helper. Pass a raw env record to bypass `process.env`
+ * entirely — this is the required pattern for tests (no global state mutation).
+ */
+export function env(rawEnv: Record<string, string | undefined> = readProcessEnv()): EnvResult {
+  return parseEnv(rawEnv);
 }
 
-export function optionalEnv(): EnvResult | null {
+/**
+ * Attempt to parse environment configuration, returning `null` on failure.
+ *
+ * Accepts the same optional raw env parameter as {@link env}.
+ */
+export function optionalEnv(
+  rawEnv: Record<string, string | undefined> = readProcessEnv(),
+): EnvResult | null {
   try {
-    return env();
+    return env(rawEnv);
   } catch {
     return null;
   }

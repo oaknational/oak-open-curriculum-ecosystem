@@ -75,20 +75,6 @@ pnpm ingest:verify --subject maths --key-stage ks4
 
 ---
 
-### `discover-lessons.ts`
-
-Discovers available lessons from the search API for ground truth population.
-
-**Usage**:
-
-```bash
-tsx operations/ingestion/discover-lessons.ts
-```
-
-**Purpose**: Exploration and debugging of search results for evaluation.
-
----
-
 ## Common Workflows
 
 ### Full Ingestion & Validation

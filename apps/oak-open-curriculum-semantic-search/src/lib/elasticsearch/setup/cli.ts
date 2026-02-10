@@ -9,6 +9,7 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadAppEnv } from './load-app-env.js';
+import { env } from '../../env.js';
 import { ingestLogger, setLogLevel } from '../../logger';
 import { printHelp, printSetupSummary } from './cli-output.js';
 import {
@@ -79,14 +80,21 @@ async function executeCommand(args: CliArgs): Promise<number> {
     printHelp();
     return 0;
   }
+
+  const config = env();
+  const credentials = {
+    ELASTICSEARCH_URL: config.ELASTICSEARCH_URL,
+    ELASTICSEARCH_API_KEY: config.ELASTICSEARCH_API_KEY,
+  };
+
   if (args.command === 'status') {
-    return executeStatusCommand(args.verbose);
+    return executeStatusCommand(credentials, args.verbose);
   }
   if (args.command === 'synonyms') {
-    return executeSynonymsCommand();
+    return executeSynonymsCommand(credentials);
   }
   // Setup or reset command
-  const result = await executeSetupOrResetCommand(args.command);
+  const result = await executeSetupOrResetCommand(credentials, args.command);
   if (!result) {
     return 1;
   }

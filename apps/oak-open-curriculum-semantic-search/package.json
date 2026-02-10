@@ -35,7 +35,7 @@
     "redis:down": "docker compose down",
     "redis:reset": "docker compose down -v",
     "redis:status": "docker compose ps",
-    "cache:reset-ttls": "tsx src/adapters/sdk-cache/reset-ttls.ts",
+    "cache:reset-ttls": "tsx operations/utilities/reset-ttls.ts",
     "elastic:alias-swap": "bash operations/infrastructure/alias-swap.sh",
     "sandbox:ingest": "tsx operations/sandbox/ingest.ts",
     "zero-hit:purge": "tsx operations/observability/delete-zero-hit-events.ts",

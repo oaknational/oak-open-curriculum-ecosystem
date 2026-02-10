@@ -8,7 +8,6 @@
  * @see .agent/research/elasticsearch/methods/elser-ingestion-scaling.md
  */
 
-import { config } from 'dotenv';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -18,8 +17,6 @@ import { typeSafeEntries } from '@oaknational/oak-curriculum-sdk';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-config({ path: join(__dirname, '..', '.env.local') });
 
 /** Schema for failures in diagnostic report. */
 const FailureSchema = z.object({

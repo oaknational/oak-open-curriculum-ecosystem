@@ -1,30 +1,14 @@
 #!/usr/bin/env npx tsx
-/**
- * Ingestion verification CLI.
- *
- * Compares lessons from Oak bulk download against lessons indexed in Elasticsearch,
- * identifying any gaps in ingestion coverage.
- *
- * @example
- * ```bash
- * # Verify Maths KS4 ingestion
- * npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4
- *
- * # With custom bulk download path
- * npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4 --bulk-download ./data/maths.json
- * ```
- */
-
+/** Ingestion verification CLI — compares bulk download vs Elasticsearch. */
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { config } from 'dotenv';
 import { Client } from '@elastic/elasticsearch';
+import { loadAppEnv } from '../../src/lib/elasticsearch/setup/load-app-env.js';
+import { env } from '../../src/lib/env.js';
 
 const CURRENT_DIR = dirname(fileURLToPath(import.meta.url));
-
-// Load environment from .env.local
-config({ path: join(CURRENT_DIR, '..', '.env.local') });
+loadAppEnv(CURRENT_DIR);
 import {
   extractLessonsFromBulkDownload,
   findMissingLessons,
@@ -36,20 +20,20 @@ interface CliArgs {
   subject: string;
   keystage: string;
   bulkDownload: string;
-  esUrl: string;
+  esUrlOverride: string;
   help: boolean;
 }
 
 const DEFAULT_BULK_DOWNLOAD_PATH =
-  '../../../reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z';
+  '../../../reference/bulk_download_data/' + 'oak-bulk-download-2025-12-07T09_37_04.693Z';
 
-// eslint-disable-next-line complexity -- CLI arg parsing requires handling each flag
+// eslint-disable-next-line complexity -- CLI arg parsing
 function parseArgs(args: string[]): CliArgs {
   const result: CliArgs = {
     subject: 'maths',
     keystage: 'ks4',
     bulkDownload: '',
-    esUrl: process.env.ELASTICSEARCH_URL ?? 'http://localhost:9200',
+    esUrlOverride: '',
     help: false,
   };
 
@@ -78,7 +62,7 @@ function parseArgs(args: string[]): CliArgs {
         break;
       case '--es-url':
         if (nextArg) {
-          result.esUrl = nextArg;
+          result.esUrlOverride = nextArg;
           i++;
         }
         break;
@@ -93,23 +77,14 @@ function parseArgs(args: string[]): CliArgs {
 }
 
 function printHelp(): void {
-  console.log(`
-Ingestion Verification CLI
-
-Usage:
-  npx tsx scripts/verify-ingestion.ts [options]
-
-Options:
-  --subject <subject>      Subject to verify (default: maths)
-  --key-stage <ks>          Key stage to verify (default: ks4)
-  --bulk-download <path>   Path to bulk download JSON file
-  --es-url <url>           Elasticsearch URL (default: http://localhost:9200)
-  --help, -h               Show this help message
-
-Examples:
-  npx tsx scripts/verify-ingestion.ts --subject maths --key-stage ks4
-  npx tsx scripts/verify-ingestion.ts --subject history --key-stage ks3
-`);
+  console.log(
+    'Usage: pnpm ingest:verify [options]\n' +
+      '  --subject <slug>       (default: maths)\n' +
+      '  --key-stage <ks>       (default: ks4)\n' +
+      '  --bulk-download <path>\n' +
+      '  --es-url <url>\n' +
+      '  --help, -h',
+  );
 }
 
 function isBulkDownloadData(data: unknown): data is BulkDownloadData {
@@ -130,39 +105,32 @@ function isBulkDownloadData(data: unknown): data is BulkDownloadData {
 }
 
 async function loadBulkDownload(args: CliArgs): Promise<BulkDownloadData> {
-  let filePath = args.bulkDownload;
-
-  if (!filePath) {
-    // Construct default path based on subject
-    const subjectFile = args.subject === 'maths' ? 'maths-secondary.json' : `${args.subject}.json`;
-    filePath = join(CURRENT_DIR, DEFAULT_BULK_DOWNLOAD_PATH, subjectFile);
-  }
-
+  const filePath =
+    args.bulkDownload ||
+    join(
+      CURRENT_DIR,
+      DEFAULT_BULK_DOWNLOAD_PATH,
+      args.subject === 'maths' ? 'maths-secondary.json' : `${args.subject}.json`,
+    );
   console.log(`Loading bulk download from: ${filePath}`);
-
-  const raw = await readFile(filePath, 'utf8');
-  const parsed: unknown = JSON.parse(raw);
+  const parsed: unknown = JSON.parse(await readFile(filePath, 'utf8'));
   if (!isBulkDownloadData(parsed)) {
     throw new Error('Invalid bulk download data structure');
   }
   return parsed;
 }
 
-async function getIndexedLessons(esUrl: string, keystage: string): Promise<string[]> {
-  const apiKey = process.env.ELASTICSEARCH_API_KEY;
-  if (!apiKey) {
-    throw new Error('ELASTICSEARCH_API_KEY environment variable not set');
-  }
-
+async function getIndexedLessons(
+  esUrl: string,
+  apiKey: string,
+  keystage: string,
+): Promise<string[]> {
   const client = new Client({
     node: esUrl,
     auth: { apiKey },
   });
 
   console.log(`Querying Elasticsearch at: ${esUrl}`);
-
-  // Query all lesson slugs from the lessons index
-  // Note: field names in ES use snake_case (key_stage, lesson_slug)
   const response = await client.search({
     index: 'oak_lessons',
     size: 10000, // Get all lessons
@@ -186,52 +154,52 @@ async function getIndexedLessons(esUrl: string, keystage: string): Promise<strin
   return lessons;
 }
 
+/** Run the verification comparison and print results. */
+async function runVerification(args: CliArgs, esUrl: string, apiKey: string): Promise<boolean> {
+  const bulkData = await loadBulkDownload(args);
+  const expected = extractLessonsFromBulkDownload(bulkData, args.keystage);
+  console.log(`Found ${expected.length} lessons ` + `in bulk download for ${args.keystage}`);
+
+  const indexed = await getIndexedLessons(esUrl, apiKey, args.keystage);
+  console.log(`Found ${indexed.length} lessons ` + `in Elasticsearch for ${args.keystage}`);
+
+  const missing = findMissingLessons(expected, indexed);
+  const report = generateVerificationReport({
+    subject: args.subject,
+    keyStage: args.keystage,
+    expectedCount: expected.length,
+    indexedCount: indexed.length,
+    missingLessons: missing,
+  });
+  console.log(report);
+  return missing.length === 0;
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
-
   if (args.help) {
     printHelp();
     return;
   }
 
-  console.log(`\nVerifying ingestion for ${args.subject} ${args.keystage}...\n`);
+  const config = env();
+  const esUrl = args.esUrlOverride || config.ELASTICSEARCH_URL;
+
+  console.log(`\nVerifying ingestion for ` + `${args.subject} ${args.keystage}...\n`);
 
   try {
-    // Load bulk download data
-    const bulkData = await loadBulkDownload(args);
-    const expectedLessons = extractLessonsFromBulkDownload(bulkData, args.keystage);
-    console.log(`Found ${expectedLessons.length} lessons in bulk download for ${args.keystage}`);
-
-    // Get indexed lessons from Elasticsearch
-    const indexedLessons = await getIndexedLessons(args.esUrl, args.keystage);
-    console.log(`Found ${indexedLessons.length} lessons in Elasticsearch for ${args.keystage}`);
-
-    // Find missing lessons
-    const missingLessons = findMissingLessons(expectedLessons, indexedLessons);
-
-    // Generate and print report
-    const report = generateVerificationReport({
-      subject: args.subject,
-      keyStage: args.keystage,
-      expectedCount: expectedLessons.length,
-      indexedCount: indexedLessons.length,
-      missingLessons,
-    });
-
-    console.log(report);
-
-    // Exit with error code if verification failed
-    if (missingLessons.length > 0) {
-      process.exit(1);
+    const ok = await runVerification(args, esUrl, config.ELASTICSEARCH_API_KEY);
+    if (!ok) {
+      process.exitCode = 1;
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`\nVerification failed: ${message}`);
-    process.exit(1);
+    process.exitCode = 1;
   }
 }
 
 main().catch((error: unknown) => {
   console.error('Fatal error:', error);
-  process.exit(1);
+  process.exitCode = 1;
 });

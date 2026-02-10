@@ -9,8 +9,16 @@ const DEFAULT_LIMIT = 10;
 const MAX_LIMIT = 20;
 const TTL_SECONDS = 60;
 
-/** Execute the suggestion pipeline for the supplied query. */
-export async function runSuggestions(query: SuggestQuery): Promise<SuggestionResponse> {
+/**
+ * Execute the suggestion pipeline for the supplied query.
+ *
+ * @param query - suggestion query parameters
+ * @param searchIndexVersion - index version string for cache headers
+ */
+export async function runSuggestions(
+  query: SuggestQuery,
+  searchIndexVersion: string,
+): Promise<SuggestionResponse> {
   const config = getConfigForScope(query.scope);
   const limit = normaliseLimit(query.limit);
   const prefix = query.prefix.trim();
@@ -32,7 +40,7 @@ export async function runSuggestions(query: SuggestQuery): Promise<SuggestionRes
 
   return {
     suggestions: suggestions.map((entry) => entry.item),
-    cache: { version: indexVersion(), ttlSeconds: TTL_SECONDS },
+    cache: { version: searchIndexVersion, ttlSeconds: TTL_SECONDS },
   };
 }
 
@@ -247,8 +255,4 @@ function isCompletionOption(value: unknown): value is CompletionOptionBase {
   // eslint-disable-next-line no-restricted-properties -- REFACTOR
   const source: unknown = Reflect.get(value, '_source');
   return source !== undefined;
-}
-
-function indexVersion(): string {
-  return process.env.SEARCH_INDEX_VERSION ?? 'v1';
 }

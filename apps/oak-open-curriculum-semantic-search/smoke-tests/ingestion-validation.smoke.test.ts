@@ -22,18 +22,14 @@
 
 import { describe, it, expect } from 'vitest';
 import { Client } from '@elastic/elasticsearch';
+import { env } from '../src/lib/env';
 
-const ELASTICSEARCH_URL = process.env.ELASTICSEARCH_URL;
-const ELASTICSEARCH_API_KEY = process.env.ELASTICSEARCH_API_KEY;
-
-if (!ELASTICSEARCH_URL) {
-  throw new Error('ELASTICSEARCH_URL environment variable is required for smoke tests');
-}
+const config = env();
 
 // Initialize ES client
 const client = new Client({
-  node: ELASTICSEARCH_URL,
-  ...(ELASTICSEARCH_API_KEY ? { auth: { apiKey: ELASTICSEARCH_API_KEY } } : {}),
+  node: config.ELASTICSEARCH_URL,
+  auth: { apiKey: config.ELASTICSEARCH_API_KEY },
 });
 
 interface UnitDoc {

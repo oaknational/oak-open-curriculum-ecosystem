@@ -9,10 +9,11 @@
  * @packageDocumentation
  */
 
-import { getApiKey } from './api-helpers';
+import { requireApiKey } from './api-helpers';
 import { collectSlugsFromQueries } from './slug-collectors';
 import { checkLessonExists, checkSequenceExists } from './api-checkers';
 import { validateCategory, printResults, validateQueryStructure } from './validation-helpers';
+import { env } from '../../../src/lib/env.js';
 import {
   getAllGroundTruthEntries,
   DIAGNOSTIC_QUERIES,
@@ -33,7 +34,8 @@ export async function runValidation(): Promise<void> {
   console.log('Ground Truth Validation');
   console.log('========================\n');
 
-  const apiKey = getApiKey();
+  const config = env();
+  const apiKey = requireApiKey(config.OAK_API_KEY);
   console.log('✅ API key found\n');
 
   validateStructure();

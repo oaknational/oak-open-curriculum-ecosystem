@@ -13,17 +13,18 @@
  * @see ADR-093 Bulk-First Ingestion Strategy
  */
 
-import { config } from 'dotenv';
 import { createReadStream, createWriteStream, existsSync, mkdirSync } from 'node:fs';
 import { readdir, stat, unlink, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Extract } from 'unzipper';
+import { loadAppEnv } from '../src/lib/elasticsearch/setup/load-app-env.js';
+import { env } from '../src/lib/env.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-config({ path: join(__dirname, '..', '.env.local') });
+loadAppEnv(__dirname);
 
 const BULK_API_URL = 'https://open-api.thenational.academy/api/bulk';
 
@@ -62,14 +63,9 @@ const BULK_DOWNLOAD_FILES = [
   'spanish-secondary',
 ] as const;
 
-function getApiKeyOrExit(): string {
-  const apiKey = process.env.OAK_API_KEY;
-  if (!apiKey) {
-    console.error('Error: OAK_API_KEY not found in .env.local');
-    console.error('Get an API key from: https://open-api.thenational.academy/');
-    process.exit(1);
-  }
-  return apiKey;
+function getApiKey(): string {
+  const config = env();
+  return config.OAK_EFFECTIVE_KEY;
 }
 
 async function fetchBulkZip(apiKey: string, subjects: readonly string[]): Promise<Response> {
@@ -138,7 +134,7 @@ async function writeManifest(outputDir: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  const apiKey = getApiKeyOrExit();
+  const apiKey = getApiKey();
   const outputDir = join(__dirname, '..', 'bulk-downloads');
   const zipPath = join(outputDir, '_temp.zip');
 

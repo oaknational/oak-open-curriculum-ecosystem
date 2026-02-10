@@ -14,8 +14,7 @@ experiments/
 │   ├── hybrid-superiority.experiment.ts
 │   ├── mcp-comparison.experiment.ts
 │   └── lib/         # Shared experiment utilities
-└── historical/      # Rejected or superseded experiments
-    └── semantic-reranking/  # B.2 - rejected with -16.8% regression
+└── historical/      # Rejected or superseded experiments (currently empty)
 ```
 
 ## Running Experiments
@@ -67,17 +66,7 @@ pnpm vitest -c vitest.experiment.config.ts
 
 ## Historical Experiments
 
-### `semantic-reranking/` (B.2)
-
-**Hypothesis**: Cross-encoder semantic reranking will improve hard query MRR by ≥15%.
-
-**Status**: ❌ REJECTED (2025-12-19)
-
-**Result**: -16.8% regression on lesson MRR
-
-**Why rejected**: Generic AI models lack curriculum domain knowledge. This led to [ADR-082: Fundamentals-First Strategy](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md).
-
-**Key lesson**: AI on weak fundamentals amplifies weakness. Master fundamentals first (Tiers 1-3) before adding AI (Tier 4).
+The `historical/` directory holds rejected or superseded experiments. Previously this included the semantic reranking experiment (B.2, rejected 2025-12-19 with -16.8% MRR regression). Code was removed in Feb 2026; findings are preserved in [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md).
 
 ---
 

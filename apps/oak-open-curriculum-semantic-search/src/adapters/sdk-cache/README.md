@@ -193,17 +193,7 @@ See [ADR-078: Dependency Injection for Testability](../../../../docs/architectur
 
 ### Legacy Format Migration
 
-The cache previously used `__NOT_FOUND__` sentinel strings. A migration script converts these to the structured format:
-
-```bash
-# Dry run (preview changes)
-npx tsx scripts/migrate-transcript-cache.ts
-
-# Execute migration
-npx tsx scripts/migrate-transcript-cache.ts --execute
-```
-
-The deserializer also handles legacy format for safety, interpreting `__NOT_FOUND__` as `{ status: 'not_found' }`.
+The cache previously used `__NOT_FOUND__` sentinel strings. The one-off migration script that converted these was removed in Feb 2026 after execution. The deserializer still handles legacy format for safety, interpreting `__NOT_FOUND__` as `{ status: 'not_found' }`.
 
 ## Related Documentation
 

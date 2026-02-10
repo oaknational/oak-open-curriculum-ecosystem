@@ -142,6 +142,30 @@ const eslintConfig = defineConfig(
       'no-console': 'off',
     },
   },
+
+  // ──────────────────────────────────────────────────
+  // process.env access restriction
+  // Only src/lib/env.ts may touch process.env.
+  // Everything else uses env() or accepts config as a parameter.
+  // ──────────────────────────────────────────────────
+  {
+    files: ['**/*.ts'],
+    ignores: ['src/lib/env.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: ['MemberExpression', '[object.name="process"]', '[property.name="env"]'].join(
+            '',
+          ),
+          message:
+            'Direct process.env access is forbidden. ' +
+            'Use env() from src/lib/env.ts at entry ' +
+            'points, or accept config as a parameter.',
+        },
+      ],
+    },
+  },
 );
 
 export default eslintConfig;

@@ -48,8 +48,16 @@ export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
   return resolveSearchIndexName(kind, 'primary');
 }
 
-/** Return the configured search index target from the current environment. */
-export function currentSearchIndexTarget(): SearchIndexTarget {
+/**
+ * Return the configured search index target.
+ *
+ * When called without arguments, falls back to the live environment.
+ * Pass a target explicitly to avoid reading `process.env` (required in tests).
+ */
+export function currentSearchIndexTarget(target?: SearchIndexTarget): SearchIndexTarget {
+  if (target) {
+    return target;
+  }
   return optionalEnv()?.SEARCH_INDEX_TARGET ?? 'primary';
 }
 

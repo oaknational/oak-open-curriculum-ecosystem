@@ -20,6 +20,7 @@ import { describe, it, expect } from 'vitest';
 import { spawn } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { childProcessEnv } from '../src/lib/env';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const testHarness = resolve(thisDir, '../evaluation/analysis/benchmark-test-harness.ts');
@@ -39,7 +40,7 @@ async function runBenchmarkCli(args: readonly string[]): Promise<CliResult> {
   return new Promise((resolve) => {
     const child = spawn('npx', ['tsx', testHarness, ...args], {
       cwd: dirname(testHarness),
-      env: process.env,
+      env: childProcessEnv(),
     });
 
     let stdout = '';

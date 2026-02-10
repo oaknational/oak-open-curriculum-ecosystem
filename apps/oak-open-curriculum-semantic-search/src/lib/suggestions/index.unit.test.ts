@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { estypes } from '@elastic/elasticsearch';
 import type {
   SearchLessonsIndexDoc,
@@ -30,6 +30,8 @@ vi.mock('../logger', () => ({
 
 import { runSuggestions } from './index';
 
+const TEST_INDEX_VERSION = 'v-test-index';
+
 interface CompletionOption<TDoc> {
   text: string;
   _index: string;
@@ -44,8 +46,17 @@ function completionResponse<TDoc>(
   return {
     took: 5,
     timed_out: false,
-    _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
-    hits: { total: { value: 0, relation: 'eq' }, max_score: null, hits: [] },
+    _shards: {
+      total: 1,
+      successful: 1,
+      skipped: 0,
+      failed: 0,
+    },
+    hits: {
+      total: { value: 0, relation: 'eq' },
+      max_score: null,
+      hits: [],
+    },
     suggest: {
       suggestions: [
         {
@@ -65,7 +76,12 @@ function fallbackResponse<TDoc>(
   return {
     took: 7,
     timed_out: false,
-    _shards: { total: 1, successful: 1, skipped: 0, failed: 0 },
+    _shards: {
+      total: 1,
+      successful: 1,
+      skipped: 0,
+      failed: 0,
+    },
     hits: {
       total: { value: hits.length, relation: 'eq' },
       max_score: null,
@@ -96,24 +112,9 @@ function extractContexts(request: estypes.SearchRequest | undefined): unknown {
 }
 
 describe('runSuggestions', () => {
-  let originalSearchIndexVersion: string | undefined;
-
-  beforeEach(() => {
+  it('returns completion suggestions for lessons', async () => {
     searchMock.mockReset();
-    originalSearchIndexVersion = process.env.SEARCH_INDEX_VERSION;
-    process.env.SEARCH_INDEX_VERSION = 'v-test-index';
-  });
 
-  afterEach(() => {
-    // Restore original environment
-    if (originalSearchIndexVersion === undefined) {
-      delete process.env.SEARCH_INDEX_VERSION;
-    } else {
-      process.env.SEARCH_INDEX_VERSION = originalSearchIndexVersion;
-    }
-  });
-
-  it('returns completion suggestions for lessons with contextual filters', async () => {
     const lessonDoc: SearchLessonsIndexDoc = {
       lesson_id: 'lesson-1',
       lesson_slug: 'lesson-one',
@@ -129,7 +130,10 @@ describe('runSuggestions', () => {
       unit_urls: ['https://example.com/unit-1'],
       title_suggest: {
         input: ['Mountains and glaciation'],
-        contexts: { subject: ['geography'], key_stage: ['ks4'] },
+        contexts: {
+          subject: ['geography'],
+          key_stage: ['ks4'],
+        },
       },
       doc_type: 'lesson',
     };
@@ -148,13 +152,16 @@ describe('runSuggestions', () => {
       )
       .mockResolvedValueOnce(fallbackResponse<SearchLessonsIndexDoc>([]));
 
-    const result = await runSuggestions({
-      prefix: 'mount',
-      scope: 'lessons',
-      subject: 'geography',
-      keyStage: 'ks4',
-      limit: 5,
-    });
+    const result = await runSuggestions(
+      {
+        prefix: 'mount',
+        scope: 'lessons',
+        subject: 'geography',
+        keyStage: 'ks4',
+        limit: 5,
+      },
+      TEST_INDEX_VERSION,
+    );
 
     expect(searchMock).toHaveBeenCalledTimes(2);
     const request = searchMock.mock.calls[0]?.[0];
@@ -181,11 +188,16 @@ describe('runSuggestions', () => {
           contexts: {},
         },
       ],
-      cache: { version: 'v-test-index', ttlSeconds: 60 },
+      cache: {
+        version: TEST_INDEX_VERSION,
+        ttlSeconds: 60,
+      },
     });
   });
 
-  it('falls back to search_as_you_type matches when completion is empty', async () => {
+  it('falls back to search_as_you_type when completion is empty', async () => {
+    searchMock.mockReset();
+
     const unitDoc: SearchUnitRollupDoc = {
       unit_id: 'unit-2',
       unit_slug: 'weather-and-climate',
@@ -200,7 +212,11 @@ describe('runSuggestions', () => {
       subject_programmes_url: 'https://example.com/programme',
       title_suggest: {
         input: ['Weather and climate'],
-        contexts: { subject: ['geography'], key_stage: ['ks3'], sequence: ['sequence-9'] },
+        contexts: {
+          subject: ['geography'],
+          key_stage: ['ks3'],
+          sequence: ['sequence-9'],
+        },
       },
       sequence_ids: ['sequence-9'],
       doc_type: 'unit',
@@ -219,13 +235,16 @@ describe('runSuggestions', () => {
         ]),
       );
 
-    const result = await runSuggestions({
-      prefix: 'weath',
-      scope: 'units',
-      subject: 'geography',
-      keyStage: 'ks3',
-      limit: 3,
-    });
+    const result = await runSuggestions(
+      {
+        prefix: 'weath',
+        scope: 'units',
+        subject: 'geography',
+        keyStage: 'ks3',
+        limit: 3,
+      },
+      TEST_INDEX_VERSION,
+    );
 
     expect(searchMock).toHaveBeenCalledTimes(2);
     const fallbackRequest = searchMock.mock.calls[1]?.[0];
@@ -252,7 +271,9 @@ describe('runSuggestions', () => {
     ]);
   });
 
-  it('applies phase context when querying sequences', async () => {
+  it('applies phase context for sequences', async () => {
+    searchMock.mockReset();
+
     const sequenceDoc: SearchSequenceIndexDoc = {
       sequence_id: 'sequence-44',
       sequence_slug: 'earth-science',
@@ -262,7 +283,10 @@ describe('runSuggestions', () => {
       sequence_url: 'https://example.com/sequence-44',
       title_suggest: {
         input: ['Earth science'],
-        contexts: { subject: ['geography'], phase: ['secondary'] },
+        contexts: {
+          subject: ['geography'],
+          phase: ['secondary'],
+        },
       },
       doc_type: 'sequence',
     };
@@ -281,13 +305,16 @@ describe('runSuggestions', () => {
       )
       .mockResolvedValueOnce(fallbackResponse<SearchSequenceIndexDoc>([]));
 
-    const result = await runSuggestions({
-      prefix: 'earth',
-      scope: 'sequences',
-      subject: 'geography',
-      phaseSlug: 'secondary',
-      limit: 4,
-    });
+    const result = await runSuggestions(
+      {
+        prefix: 'earth',
+        scope: 'sequences',
+        subject: 'geography',
+        phaseSlug: 'secondary',
+        limit: 4,
+      },
+      TEST_INDEX_VERSION,
+    );
 
     expect(searchMock).toHaveBeenCalledTimes(2);
     const request = searchMock.mock.calls[0]?.[0];

@@ -18,6 +18,7 @@ import { describe, it, expect } from 'vitest';
 import { spawn } from 'child_process';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { childProcessEnv } from '../src/lib/env';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(currentDir, '..');
@@ -33,7 +34,7 @@ function runCli(args: string[]): Promise<{ stdout: string; stderr: string; exitC
     const child = spawn('npx', ['tsx', 'src/lib/elasticsearch/setup/ingest-live.ts', ...args], {
       cwd: appRoot,
       env: {
-        ...process.env,
+        ...childProcessEnv(),
         // Set minimal environment to avoid actual ES connection
         ELASTICSEARCH_URL: 'http://localhost:9200',
         ELASTICSEARCH_API_KEY: 'test-key',

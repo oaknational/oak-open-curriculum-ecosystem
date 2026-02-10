@@ -1,4 +1,5 @@
-import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { env, optionalEnv, parseEnv } from './env';
 
 const REQUIRED_ENV = {
   ELASTICSEARCH_URL: 'https://example.com',
@@ -8,54 +9,23 @@ const REQUIRED_ENV = {
   SEARCH_INDEX_VERSION: 'v2025-03-18',
 } satisfies Record<string, string>;
 
-type EnvOverrides = Partial<Record<string, string | undefined>>;
-
-const originalProcessEnv = { ...process.env };
-let previousProcessEnv: NodeJS.ProcessEnv;
-
-function withBaseEnv(overrides: EnvOverrides = {}): Record<string, string> {
-  const merged: Record<string, string> = {
-    ...REQUIRED_ENV,
-    ...overrides,
-  };
-  return Object.fromEntries(
-    // eslint-disable-next-line no-restricted-properties -- REFACTOR
-    Object.entries(merged).filter((entry): entry is [string, string] => entry[1] !== undefined),
-  );
+function withBaseEnv(
+  overrides: Record<string, string | undefined> = {},
+): Record<string, string | undefined> {
+  return { ...REQUIRED_ENV, ...overrides };
 }
-
-function setProcessEnv(overrides: EnvOverrides = {}): void {
-  process.env = {
-    ...withBaseEnv(overrides),
-  } as NodeJS.ProcessEnv;
-}
-
-async function loadEnvModule() {
-  vi.resetModules();
-  return await import('./env');
-}
-
-beforeEach(() => {
-  previousProcessEnv = process.env;
-  setProcessEnv();
-});
-
-afterEach(() => {
-  process.env = previousProcessEnv;
-  vi.resetModules();
-});
 
 describe('env helpers', () => {
-  it('parses environment variables and applies defaults', async () => {
-    setProcessEnv({
-      ZERO_HIT_WEBHOOK_URL: undefined,
-      LOG_LEVEL: undefined,
-      ZERO_HIT_PERSISTENCE_ENABLED: undefined,
-      ZERO_HIT_INDEX_RETENTION_DAYS: undefined,
-      SEARCH_INDEX_TARGET: undefined,
-    });
-    const { env } = await loadEnvModule();
-    const result = env();
+  it('parses environment variables and applies defaults', () => {
+    const result = env(
+      withBaseEnv({
+        ZERO_HIT_WEBHOOK_URL: undefined,
+        LOG_LEVEL: undefined,
+        ZERO_HIT_PERSISTENCE_ENABLED: undefined,
+        ZERO_HIT_INDEX_RETENTION_DAYS: undefined,
+        SEARCH_INDEX_TARGET: undefined,
+      }),
+    );
     expect(result.SEARCH_INDEX_VERSION).toBe(REQUIRED_ENV.SEARCH_INDEX_VERSION);
     expect(result.ZERO_HIT_WEBHOOK_URL).toBe('none');
     expect(result.LOG_LEVEL).toBe('info');
@@ -65,75 +35,63 @@ describe('env helpers', () => {
     expect(result.OAK_EFFECTIVE_KEY).toBe(REQUIRED_ENV.OAK_API_KEY);
   });
 
-  it('parses zero-hit persistence overrides from strings', async () => {
-    setProcessEnv({
-      ZERO_HIT_PERSISTENCE_ENABLED: 'true',
-      ZERO_HIT_INDEX_RETENTION_DAYS: '45',
-    });
-    const { env } = await loadEnvModule();
-    const result = env();
+  it('parses zero-hit persistence overrides', () => {
+    const result = env(
+      withBaseEnv({
+        ZERO_HIT_PERSISTENCE_ENABLED: 'true',
+        ZERO_HIT_INDEX_RETENTION_DAYS: '45',
+      }),
+    );
     expect(result.ZERO_HIT_PERSISTENCE_ENABLED).toBe(true);
     expect(result.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(45);
   });
 
-  it('accepts sandbox search index targets', async () => {
-    setProcessEnv({ SEARCH_INDEX_TARGET: 'sandbox' });
-    const { env } = await loadEnvModule();
-    const result = env();
+  it('accepts sandbox search index targets', () => {
+    const result = env(withBaseEnv({ SEARCH_INDEX_TARGET: 'sandbox' }));
     expect(result.SEARCH_INDEX_TARGET).toBe('sandbox');
   });
 
-  it('rejects invalid search index targets', async () => {
-    setProcessEnv({ SEARCH_INDEX_TARGET: 'staging' });
-    const { env } = await loadEnvModule();
-    expect(() => env()).toThrow();
+  it('rejects invalid search index targets', () => {
+    expect(() => env(withBaseEnv({ SEARCH_INDEX_TARGET: 'staging' }))).toThrow();
   });
 
-  it('throws when a required key is missing', async () => {
-    setProcessEnv({ ELASTICSEARCH_URL: undefined });
-    const { env } = await loadEnvModule();
-    expect(() => env()).toThrow();
+  it('throws when a required key is missing', () => {
+    expect(() => env(withBaseEnv({ ELASTICSEARCH_URL: undefined }))).toThrow();
   });
 
-  it('optionalEnv returns null when validation fails', async () => {
-    setProcessEnv({
-      OAK_API_KEY: undefined,
-    });
-    const { optionalEnv } = await loadEnvModule();
-    expect(optionalEnv()).toBeNull();
+  it('optionalEnv returns null when validation fails', () => {
+    expect(optionalEnv(withBaseEnv({ OAK_API_KEY: undefined }))).toBeNull();
   });
 
-  it('SDK cache defaults to disabled with 14-day TTL', async () => {
-    setProcessEnv({
-      SDK_CACHE_ENABLED: undefined,
-      SDK_CACHE_REDIS_URL: undefined,
-      SDK_CACHE_TTL_DAYS: undefined,
-    });
-    const { env } = await loadEnvModule();
-    const result = env();
+  it('SDK cache defaults to disabled with 14-day TTL', () => {
+    const result = env(
+      withBaseEnv({
+        SDK_CACHE_ENABLED: undefined,
+        SDK_CACHE_REDIS_URL: undefined,
+        SDK_CACHE_TTL_DAYS: undefined,
+      }),
+    );
     expect(result.SDK_CACHE_ENABLED).toBe(false);
     expect(result.SDK_CACHE_REDIS_URL).toBe('redis://localhost:6379');
-    // Default TTL is 14 days (with ±12 hour jitter applied per-entry)
-    // See ADR-079 for cache stampede prevention rationale
     expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
   });
 
-  it('SDK cache can be enabled with custom settings', async () => {
-    setProcessEnv({
-      SDK_CACHE_ENABLED: 'true',
-      SDK_CACHE_REDIS_URL: 'redis://custom:6380',
-      SDK_CACHE_TTL_DAYS: '14',
-    });
-    const { env } = await loadEnvModule();
-    const result = env();
+  it('SDK cache can be enabled with custom settings', () => {
+    const result = env(
+      withBaseEnv({
+        SDK_CACHE_ENABLED: 'true',
+        SDK_CACHE_REDIS_URL: 'redis://custom:6380',
+        SDK_CACHE_TTL_DAYS: '14',
+      }),
+    );
     expect(result.SDK_CACHE_ENABLED).toBe(true);
     expect(result.SDK_CACHE_REDIS_URL).toBe('redis://custom:6380');
     expect(result.SDK_CACHE_TTL_DAYS).toBe(14);
   });
-});
 
-afterAll(() => {
-  process.env = {
-    ...originalProcessEnv,
-  };
+  it('parseEnv validates a raw record directly', () => {
+    const result = parseEnv(withBaseEnv());
+    expect(result.ELASTICSEARCH_URL).toBe(REQUIRED_ENV.ELASTICSEARCH_URL);
+    expect(result.ELASTICSEARCH_API_KEY).toBe(REQUIRED_ENV.ELASTICSEARCH_API_KEY);
+  });
 });
