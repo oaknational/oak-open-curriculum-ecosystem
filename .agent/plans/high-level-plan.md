@@ -1,32 +1,31 @@
 # High-Level Plan
 
-**Last Updated**: 2026-01-26  
+**Last Updated**: 2026-02-10  
 **Scope**: Strategic overview. Details are in individual plan documents.
 
-**Recent Changes (2026-01-26)**:
+**Recent Changes (2026-02-10)**:
+
+- Ground truths complete across all four indexes (lessons, units, threads, sequences)
+- SDK extraction is the immediate priority
+- Search enhancements (document relationships, tuning, modern ES features) consolidated into one workstream
+
+**Previous Changes (2026-01-26)**:
 
 - Ground Truth strategy revised — focus on testing OUR value proposition, not Elasticsearch
 - New category structure: `natural-query` (bulk), `exact-term` (few), `typo-recovery` (handful)
 - Content-weighted distribution: maths gets considerably more coverage than low-priority subjects
-- Target: ~80-100 focused queries answering "Does search help teachers find what they need?"
-
-**Previous Changes (2025-12-19)**:
-
-- Semantic Search restructured from Phase 1-11 to Part → Stream → Task hierarchy
-- Created Part 1: Search Excellence with four streams
-- Aligned metrics with ADR-081 (Standard MRR ≥0.92, Hard MRR ≥0.50)
 
 ---
 
-## Current Priorities (2026-01-26)
+## Current Priorities (2026-02-10)
 
 **Active Work**:
 
-1. **Semantic Search** — Ground Truth strategy revision (see [ground-truth-redesign-plan.md](semantic-search/active/ground-truth-redesign-plan.md))
+1. **Semantic Search** — SDK extraction (see [roadmap.md](semantic-search/roadmap.md))
 2. **Type Discipline Restoration** — Quality gates passing, ongoing refinement
 3. **SDK/MCP Enhancements** — Plan 05 (Zod v4) active
 
-**Next Up**: GT implementation, SDK extraction, MCP integration, Ontology Resource (Plan 02)
+**Next Up**: MCP integration, search enhancements, Ontology Resource (Plan 02)
 
 **Deferred**: Global State DI Refactoring, Advanced MCP Tools (Phase 4 of Plan 03)
 
@@ -41,32 +40,21 @@
 ### 1. Elasticsearch Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
 
 **Plan**: `.agent/plans/semantic-search/roadmap.md` (authoritative roadmap)  
-**Current Work**: [ground-truth-redesign-plan.md](semantic-search/active/ground-truth-redesign-plan.md)
+**Current Work**: [sdk-extraction/search-sdk-cli.md](semantic-search/sdk-extraction/search-sdk-cli.md)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
 | 1 | Complete ES ingestion | ✅ Complete (16,414 docs) |
 | 2 | Sequence indexing | ✅ Complete (30 sequences, 57 facets) |
 | 3 | Level 1 fundamentals | ✅ Approaches complete |
-| **4** | **Ground truth redesign** | 🔄 **CURRENT** — Revising strategy |
-| 5 | SDK/CLI extraction | 📋 Planned |
+| 4 | Ground truth foundation | ✅ Complete (30 lessons, 2 units, 1 thread, 1 sequence) |
+| **5** | **SDK/CLI extraction** | 🔄 **CURRENT** |
 | 6 | MCP integration | 📋 Planned |
-| 7+ | Levels 2-4, conversational search | 📋 Future |
+| 7+ | Search enhancements | 📋 Future |
 
-**Current Priority**: Ground Truth Strategy Revision
+**Current Priority**: SDK Extraction
 
-The previous GT structure (120 queries, 4 categories per subject-phase) has been superseded:
-
-| Issue | Resolution |
-|-------|------------|
-| 66/78 natural-expression are clipped lists | Require natural phrasing |
-| 30 typo queries is overkill | Reduce to 5-10 total |
-| Cross-topic questionable value | Keep only verified pairings |
-| Uniform distribution | Content-weighted (maths gets more) |
-
-**Core Question**: "Does search help teachers find what they need?"
-
-**Next Priority**: Revise queries per new strategy. See [roadmap.md](./semantic-search/roadmap.md).
+Extract semantic search from the Next.js app into a dedicated SDK and CLI. See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 
@@ -283,8 +271,8 @@ The previous GT structure (120 queries, 4 categories per subject-phase) has been
 | M3 | Remote Streaming HTTP live (Vercel) | ✅ DONE |
 | M4 | OAuth/Clerk Integration | ✅ DONE |
 | M5 | Search Level 1: Fundamentals | ✅ DONE |
-| **M6** | **Ground Truth Redesign** | 🔄 **IN PROGRESS** |
-| M7 | Search SDK + CLI Extraction | 📋 Planned |
+| M6 | Ground Truth Foundation | ✅ DONE |
+| **M7** | **Search SDK + CLI Extraction** | 🔄 **IN PROGRESS** |
 | M8 | MCP Search Integration | 📋 Planned |
 | M9 | Ontology Resource Implementation | 📋 Planned |
 | M10 | OpenAI Apps SDK Integration | 📋 Planned |
@@ -303,7 +291,6 @@ The previous GT structure (120 queries, 4 categories per subject-phase) has been
 ├── semantic-search/                # Elasticsearch search
 │   ├── README.md                   # Navigation hub
 │   ├── roadmap.md                  # Single authoritative roadmap
-│   ├── current-state.md            # Current metrics snapshot
 │   ├── search-acceptance-criteria.md # Definition of done
 │   ├── active/                     # Currently blocking work
 │   ├── planned/                    # Future work with specs

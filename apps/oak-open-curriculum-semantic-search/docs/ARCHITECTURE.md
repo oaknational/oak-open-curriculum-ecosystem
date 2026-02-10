@@ -63,6 +63,47 @@ All admin endpoints require `x-api-key: ${SEARCH_API_KEY}`.
 
 ---
 
+## Query Processing Pipeline
+
+When a search request arrives, the query passes through several stages before reaching Elasticsearch.
+
+### 1. Noise Phrase Removal
+
+Filler phrases are stripped from the user's query text before query building. Examples: "that X stuff", "how do I", "lesson on", "help with". This prevents irrelevant terms from diluting BM25 matching.
+
+**Implementation**: `src/lib/query-processing/remove-noise-phrases.ts`
+
+### 2. Curriculum Phrase Detection
+
+Multi-word curriculum terms (e.g. "completing the square", "key learning points") are detected using longest-match-first against a vocabulary built from the SDK (`buildPhraseVocabulary()`). Detected phrases are used to create `match_phrase` boosters (boost 2.0) that are injected into BM25 retrievers.
+
+**Implementation**: `src/lib/query-processing/detect-curriculum-phrases.ts`, `src/lib/hybrid-search/rrf-query-helpers.ts`  
+**ADR**: [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)
+
+### 3. Reciprocal Rank Fusion (RRF)
+
+Each search scope uses Elasticsearch's retriever API to blend lexical and semantic results:
+
+| Scope         | Retrievers                                                          | RRF Parameters                              |
+| ------------- | ------------------------------------------------------------------- | ------------------------------------------- |
+| **Lessons**   | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
+| **Units**     | 4-way: BM25 Content, ELSER Content, BM25 Structure, ELSER Structure | `rank_constant: 60`, `rank_window_size: 80` |
+| **Threads**   | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
+| **Sequences** | 2-way: BM25, ELSER                                                  | `rank_constant: 40`, `rank_window_size: 40` |
+
+Synonym expansion is handled at the Elasticsearch analyser level via the `oak-syns` synonym set, not at the application level.
+
+**Implementation**: `src/lib/hybrid-search/rrf-query-builders.ts`
+
+### 4. Transcript-Aware Score Normalisation (Lessons Only)
+
+Lessons without transcripts can only appear in the two Structure retrievers (not the two Content retrievers). Without normalisation, these lessons would be systematically ranked lower. Post-RRF normalisation scales scores so that structure-only lessons compete fairly with transcript-bearing lessons.
+
+**Implementation**: `src/lib/hybrid-search/rrf-score-normaliser.ts`  
+**ADR**: [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)
+
+---
+
 ## Developer Workflow
 
 1. Copy `.env.example` → `.env.local`, set the required search credentials.
@@ -116,10 +157,14 @@ API routes → CLI → SDK consumers
 
 ## Related ADRs
 
-| ADR                                                                                                       | Topic                                |
-| --------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md) | SDK Generated Elasticsearch Mappings |
-| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)        | ELSER-Only Embedding Strategy        |
-| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)               | Batch-Atomic Ingestion               |
-| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)        | Bulk-First Ingestion Strategy        |
-| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)               | ES Bulk Retry Strategy               |
+| ADR                                                                                                              | Topic                                       |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [ADR-067](../../../docs/architecture/architectural-decisions/067-sdk-generated-elasticsearch-mappings.md)        | SDK Generated Elasticsearch Mappings        |
+| [ADR-076](../../../docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)               | ELSER-Only Embedding Strategy               |
+| [ADR-084](../../../docs/architecture/architectural-decisions/084-phrase-query-boosting.md)                       | Phrase Query Boosting                       |
+| [ADR-087](../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md)                      | Batch-Atomic Ingestion                      |
+| [ADR-093](../../../docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md)               | Bulk-First Ingestion Strategy               |
+| [ADR-096](../../../docs/architecture/architectural-decisions/096-es-bulk-retry-strategy.md)                      | ES Bulk Retry Strategy                      |
+| [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)          | Transcript-Aware RRF Score Normalisation    |
+| [ADR-106](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Known-Answer-First Ground Truth Methodology |
+| [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)        | Deterministic SDK / NL-in-MCP Boundary      |

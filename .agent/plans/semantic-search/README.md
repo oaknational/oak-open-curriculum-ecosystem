@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-01-27
+**Last Updated**: 2026-02-10
 
 ---
 
@@ -10,28 +10,29 @@
 
 ---
 
-## Current Work: Ground Truth Query Grounding (Stage 1b)
+## Current Work: SDK Extraction
 
-Create ground truths using known-answer-first methodology. All subjects are critical.
+Ground truths are complete across all four indexes. The immediate priority is extracting the search capability from the Next.js app into a dedicated SDK and CLI.
 
-**Details**: [active/ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md)
+**Details**: [sdk-extraction/search-sdk-cli.md](sdk-extraction/search-sdk-cli.md)
 
 ---
 
 ## Execution Order
 
 ```text
-1. Ground Truth Redesign (active/)              ← CURRENT (Stage 1b)
-   Mine queries from bulk data (known-answer-first)
+1. Ground Truth Foundation                       ✅ COMPLETE
+   30 lesson GTs + multi-index GTs
          ↓
-2. Expected Slugs Implementation
-   Create .query.ts and .expected.ts files
+2. SDK Extraction (sdk-extraction/)              ← CURRENT
+   Extract search from Next.js app into SDK + CLI
          ↓
-3. SDK Extraction (sdk-extraction/)
+3. MCP Integration (post-sdk/mcp-integration/)
+   Wire hybrid search into MCP tools
          ↓
-4. MCP Integration (post-sdk/mcp-integration/)
-         ↓
-5. Everything Else (post-sdk/ streams)
+4. Search Enhancements (post-sdk/search-quality/)
+   Ground truth expansion, fundamentals re-evaluation,
+   document relationships, modern ES features, AI enhancement
 ```
 
 ---
@@ -40,8 +41,8 @@ Create ground truths using known-answer-first methodology. All subjects are crit
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Work in progress | 🔄 Ground truth query grounding |
-| `sdk-extraction/` | SDK extraction plans | 📋 Ready after GT complete |
+| `active/` | Work in progress | Empty (GT work archived) |
+| `sdk-extraction/` | SDK extraction plans | 🔄 Current |
 | `post-sdk/` | Streams of post-SDK work | ⏸️ After SDK extraction |
 | `archive/` | Historical work | ✅ Reference only |
 | `templates/` | Session templates | — |
@@ -71,8 +72,8 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [Current State](current-state.md) | System metrics |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
+| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 
 ---
 

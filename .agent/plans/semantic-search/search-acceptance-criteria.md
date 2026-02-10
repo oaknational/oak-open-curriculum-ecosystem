@@ -1,7 +1,7 @@
 # Search Acceptance Criteria
 
-**Last Updated**: 2026-01-26  
-**Status**: 🔄 Ground Truth Strategy Revision  
+**Last Updated**: 2026-02-10  
+**Status**: ✅ Ground truths established — SDK extraction in progress  
 **Purpose**: Defines what "exhausted" means for each level, success criteria for ground truths
 
 ---
@@ -139,8 +139,10 @@ Ground truth coverage should reflect teaching priority and content volume:
 | Criterion | Target | Status |
 |-----------|--------|--------|
 | Standard approaches attempted | All checked | ✅ Complete |
-| Ground truths validated | Revised strategy | 🔄 In Progress |
-| Plateau demonstrated | ≤5% improvement × 3 | ⏸️ Blocked by GT |
+| Ground truths validated | Known-answer-first methodology | ✅ Complete (ADR-106) |
+| Measured with validated GTs | Re-evaluate with current GTs | 📋 Planned (part of enhancements) |
+
+> **Note**: Level 1 approaches were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production; re-evaluation with validated ground truths is planned as an early stage of search enhancements.
 
 ### Standard Approaches Checklist
 
@@ -225,8 +227,8 @@ pnpm benchmark -s maths -p primary --review  # Per-query review
 
 | Document | Purpose |
 |----------|---------|
-| [ground-truth-redesign-plan.md](active/ground-truth-redesign-plan.md) | Current GT strategy |
+| [ground-truth-redesign-plan.md](archive/completed/ground-truth-redesign-plan.md) | GT strategy (complete) |
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Metrics and decision criteria |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Level system rationale |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Data integrity |
-| [current-state.md](current-state.md) | Current metrics |
+| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

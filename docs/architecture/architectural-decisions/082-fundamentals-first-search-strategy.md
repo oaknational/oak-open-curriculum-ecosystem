@@ -350,18 +350,24 @@ Complexity spiral                     MRR 0.80+ ✓
 
 All experiments tracked in: `.agent/evaluations/experiments/EXPERIMENT-PRIORITIES.md`
 
-### Current Status (2025-12-24)
+### Current Status (2026-02-10)
 
-**✅ TIER 1 EXHAUSTED** — All standard Tier 1 approaches verified (2025-12-24).
+**✅ TIER 1 APPROACHES COMPLETE** — All standard Tier 1 approaches implemented and deployed (2025-12-24).
 
 All Tier 1 checklist items complete. Intent-based category (0.229) has documented exception (requires Tier 4 metadata/LLM solutions). See [Search Acceptance Criteria](.agent/plans/semantic-search/search-acceptance-criteria.md) for verification details.
 
-| Tier  | Status           | MRR       | Notes                                            |
-| ----- | ---------------- | --------- | ------------------------------------------------ |
-| **1** | ✅ **EXHAUSTED** | **0.614** | All approaches verified; intent-based exception  |
-| **2** | 🔓 Ready         | —         | Tier 1 exhausted; can proceed when prioritised   |
-| **3** | 📋 Blocked       | —         | Waiting for Tier 2 exhaustion                    |
-| **4** | ⏸️ Deferred      | —         | Only after Tiers 1-3 exhausted and plateau shown |
+| Tier  | Status                     | MRR       | Notes                                                    |
+| ----- | -------------------------- | --------- | -------------------------------------------------------- |
+| **1** | ✅ **Approaches complete** | **0.614** | See evaluation context note below                        |
+| **2** | 🔓 Ready                   | —         | Tier 1 approaches complete; can proceed when prioritised |
+| **3** | 📋 Blocked                 | —         | Waiting for Tier 2 exhaustion                            |
+| **4** | ⏸️ Deferred                | —         | Only after Tiers 1-3 exhausted and plateau shown         |
+
+#### Evaluation Context (2026-02-10)
+
+The MRR 0.614 figure and the "exhausted" determination were measured against the original ground truth system (120 queries, 4 categories per subject-phase). That system was superseded by [ADR-106](106-known-answer-first-ground-truth-methodology.md) (known-answer-first methodology, 30 focused ground truths with realistic teacher vocabulary). The 0.614 figure is not directly comparable to the current lesson baseline of MRR 0.983.
+
+The Tier 1 approaches (synonyms, phrase boosting, noise filtering) remain in production and are not in question. However, their measured impact needs re-baselining against the validated ground truths. Re-evaluation of Level 1 fundamentals with the known-answer-first ground truths is planned as an early stage of future search quality work.
 
 ### Per-Category Breakdown
 

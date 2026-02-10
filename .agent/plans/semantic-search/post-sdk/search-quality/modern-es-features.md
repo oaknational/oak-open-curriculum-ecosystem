@@ -2,10 +2,10 @@
 
 **Stream**: search-quality  
 **Level**: 3  
-**Status**: 📋 Pending — After Level 2  
+**Status**: 📋 Pending — After SDK extraction and MCP integration  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-03  
-**Last Updated**: 2026-01-23  
+**Last Updated**: 2026-02-10  
 **Research**: [elasticsearch-approaches.md](../../../research/elasticsearch/oak-data/elasticsearch-approaches.md)
 
 ---
@@ -14,7 +14,9 @@
 
 This plan applies ES-native features to maximize retrieval quality. **These are the highest-ROI changes** per research recommendations. Semantic reranking and query rules are NOT AI features — they are Elastic-native capabilities.
 
-**Prerequisite**: [Document Relationships](document-relationships.md) should complete first.
+This plan also includes re-evaluation of Level 1 fundamentals (Stage 0) and MFL-specific investigation, since these are tuning work that belongs in this workstream.
+
+**Prerequisite**: SDK extraction and MCP integration should complete first. [Document Relationships](document-relationships.md) is part of the same enhancements workstream.
 
 **Exit Criteria** (from [search-acceptance-criteria.md](../../search-acceptance-criteria.md)):
 
@@ -22,6 +24,19 @@ This plan applies ES-native features to maximize retrieval quality. **These are 
 | ------------------ | ------ | ------- | ------------------ |
 | Aggregate Hard MRR | ≥ 0.60 | 0.614   | ✅ Already exceeded |
 | Level 2 exhausted  | Complete | Pending | ⏸️ Blocked by Level 2 |
+
+---
+
+## Stage 0: Fundamentals Re-evaluation
+
+Level 1 approaches (synonyms, phrase boosting, noise filtering) were evaluated against the original ground truth system (120 queries, 4 categories per subject-phase), which was superseded by [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md). The approaches remain in production and are not in question, but their measured impact needs re-baselining against the validated known-answer-first ground truths.
+
+**Before any new search experiments**, run the current configuration against the full ground truth suite to establish a true baseline:
+
+- [ ] Run `pnpm benchmark:lessons --all` and record results as the validated baseline
+- [ ] Run `pnpm benchmark:units --all`, `pnpm benchmark:threads --all`, `pnpm benchmark:sequences --all`
+- [ ] Investigate MFL performance (French, German, Spanish MRR 0.19-0.29) — metadata is extensive and should support better results with existing BM25 + ELSER approaches before considering multilingual embeddings
+- [ ] Document baseline in evaluation/baselines/
 
 ---
 
@@ -451,11 +466,14 @@ const fields = [
 ];
 ```
 
+> **Note**: The `lesson_title^3` boost applies in each BM25 retriever. With all four lesson retrievers active (two BM25, two ELSER), the title boost in BM25 may be excessive — a lesson matching the title in both BM25 retrievers gets double the boost effect. This is a key tuning candidate.
+
 ### Optimisation Approach
 
 1. **Ablation study**: Remove each boost, measure impact
 2. **Sensitivity analysis**: Test boost values [1, 2, 3, 4, 5]
-3. **Per-query-type optimisation**: Different boosts for different intent
+3. **Title boost specifically**: Test reducing `title^3` to `title^2` or `title^1.5` given the 4-retriever architecture
+4. **Per-query-type optimisation**: Different boosts for different intent
 
 ---
 

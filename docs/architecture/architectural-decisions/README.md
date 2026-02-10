@@ -1,6 +1,6 @@
 # Architectural Decisions Records
 
-> 🗺️ **Quick Navigation**: [Architecture Map](../../ARCHITECTURE_MAP.md) | [Architecture Overview](../../architecture-overview.md) | [Architecture Home](../README.md)
+> 🗺️ **Quick Navigation**: [Architecture Map](../../archive/ARCHITECTURE_MAP.md) | [Architecture Overview](../../archive/architecture-overview.md) | [Architecture Home](../README.md)
 
 This file is an index of architectural decisions made during the development of this repository.
 
@@ -67,23 +67,15 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-060: Agent Support Tool Metadata System](060-agent-support-metadata-system.md)
 - [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md)
 - [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
+- [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
+- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
+- [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
+- [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
+- [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
+- [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
+- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
+- [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
-- [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
-- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
-- [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
-- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
-- [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
-- [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
-- [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
-- [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
-- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
-- [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
-- [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
-- [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
-- [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
-- [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
-- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
-- [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-075: Dense Vector Code Removal](075-dense-vector-removal.md) ← **Supersedes ADR-071, 072, 073**
 - [ADR-076: ELSER-Only Embedding Strategy](076-elser-only-embedding-strategy.md)
 - [ADR-077: Local Semantic Summary Generation at Ingest Time](077-semantic-summary-generation.md)
@@ -108,6 +100,14 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-097: Context Enrichment Architecture](097-context-enrichment-architecture.md)
 - [ADR-098: Ground Truth Registry as Single Source of Truth](098-ground-truth-registry.md)
 - [ADR-099: Transcript-Aware RRF Score Normalisation](099-transcript-aware-rrf-normalisation.md)
+- [ADR-100: Complete Subject Synonym Coverage](100-complete-subject-synonym-coverage.md)
+- [ADR-101: Subject Hierarchy for Search Filtering](101-subject-hierarchy-for-search-filtering.md)
+- [ADR-102: Conditional Minimum Should Match](102-conditional-minimum-should-match.md)
+- [ADR-103: Fuzzy Matching Limitations](103-fuzzy-matching-limitations.md)
+- [ADR-104: Domain Term Boosting](104-domain-term-boosting.md)
+- [ADR-105: SDK-Generated Search Constants](105-sdk-generated-search-constants.md)
+- [ADR-106: Known-Answer-First Ground Truth Methodology](106-known-answer-first-ground-truth-methodology.md)
+- [ADR-107: Deterministic SDK / NL-in-MCP Boundary](107-deterministic-sdk-nl-in-mcp-boundary.md)
 
 ## Key Architectural Decisions
 
@@ -152,6 +152,8 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-095](095-missing-transcript-handling.md)** - Missing transcript handling (omit content fields, don't pollute index)
 - **[ADR-096](096-es-bulk-retry-strategy.md)** - Two-tier retry for ELSER queue overflow recovery
 - **[ADR-099](099-transcript-aware-rrf-normalisation.md)** - Post-RRF score normalisation for transcript-less documents
+- **[ADR-106](106-known-answer-first-ground-truth-methodology.md)** - Known-answer-first ground truth methodology
+- **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for detailed architecture.
 

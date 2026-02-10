@@ -1,6 +1,8 @@
 # Developer Onboarding
 
-Welcome to the Oak MCP ecosystem. This guide points you to the documentation, plans, and tooling you need in your first pass through the repository.
+Welcome to the Oak MCP ecosystem — infrastructure for AI agents and teacher search over Oak's openly-licensed curriculum. This guide points you to the documentation, plans, and tooling you need in your first pass through the repository.
+
+> **Note**: This repo works with the [Oak Open Curriculum API](https://open-api.thenational.academy/) — Oak's openly-licensed curriculum data, organised to support reuse. See the root README for context on how this relates to Oak's main site.
 
 ## 1. Understand the Core Architecture
 
@@ -8,7 +10,7 @@ Welcome to the Oak MCP ecosystem. This guide points you to the documentation, pl
 
 Everything in this repository flows from OpenAPI specifications:
 
-1. **`pnpm type-gen`** fetches the Oak Curriculum OpenAPI schema
+1. **`pnpm type-gen`** fetches the Oak Open Curriculum OpenAPI schema
 2. **SDK generation** creates TypeScript types, Zod validators, and MCP tool metadata
 3. **MCP servers** import the generated tools - no manual mapping
 4. **Applications** import the generated types - no manual definitions
@@ -19,9 +21,9 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 
 **Key ADRs**:
 
-- [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data-structures.md) - No manual API data structures
-- [ADR-030](../architecture/architectural-decisions/030-sdk-as-single-source-of-truth.md) - SDK as single source of truth
-- [ADR-031](../architecture/architectural-decisions/031-generation-at-build-time.md) - Generation at build time
+- [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data.md) - No manual API data structures
+- [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md) - SDK as single source of truth
+- [ADR-031](../architecture/architectural-decisions/031-generation-time-extraction.md) - Generation-time extraction
 
 ## 2. Read the Grounding Docs
 
@@ -68,9 +70,9 @@ See [Environment Variables Guide](./environment-variables.md) for complete setup
 
 ## 7. Workspace Priorities
 
-- **SDK (`packages/sdks/oak-curriculum-sdk`)** – keep generation scripts deterministic, update docs via `pnpm doc-gen`, and ensure new helpers are exported from `src/validation/index.ts`.
-- **Semantic Search (`apps/oak-open-curriculum-semantic-search`)** – prioritise admin workflows (index management, rollups, telemetry).
-- **MCP Servers** – consume SDK exports directly; configuration examples live in the app READMEs.
+- **Curriculum SDK (`packages/sdks/oak-curriculum-sdk`)** – The type generation pipeline. Keep generation scripts deterministic, update docs via `pnpm doc-gen`, and ensure new helpers are exported from `src/validation/index.ts`.
+- **Semantic Search (`apps/oak-open-curriculum-semantic-search`)** – The largest workspace. 4-way RRF hybrid search across 7 Elasticsearch indices, with ingestion, query processing, ground truth evaluation, and benchmark suite. Currently being extracted into a standalone Search SDK + CLI. See [ARCHITECTURE.md](../../apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md) for the full picture.
+- **MCP Servers** – Expose the curriculum to AI agents. Consume SDK exports directly; configuration examples live in the app READMEs.
 
 ## 8. Documentation Expectations
 

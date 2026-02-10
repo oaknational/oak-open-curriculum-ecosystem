@@ -1,53 +1,64 @@
 # Oak MCP Ecosystem
 
-**A type-safe, compile-time pipeline for generating SDKs and MCP servers from OpenAPI specifications.**
+**Infrastructure for AI agents and teacher search over Oak's openly-licensed curriculum — SDKs, MCP servers, and Elasticsearch-backed semantic search, all generated from the OpenAPI schema.**
 
 ## What This Is
 
-This monorepo demonstrates and implements a pattern where:
+This monorepo makes the [Oak Open Curriculum](https://open-api.thenational.academy/) accessible to AI agents and searchable for teachers. It contains:
+
+- **A Curriculum SDK** generated at compile time from the Oak Curriculum OpenAPI schema — TypeScript types, Zod validators, MCP tool metadata, search type generators
+- **MCP servers** (stdio and HTTP) that expose the full curriculum to AI agents via the Model Context Protocol
+- **A semantic search system** with 4-way Reciprocal Rank Fusion hybrid search (BM25 + ELSER) across 7 Elasticsearch Serverless indices, covering lessons, units, curriculum threads, and subject-phase sequences
+- **Shared libraries** for logging, configuration, storage, and transport
+
+### The Open Curriculum
+
+The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides a subset of Oak's curriculum data — specifically the content that is openly licensed and free of third-party copyright. Unlike the data behind [www.thenational.academy](https://www.thenational.academy/), the Open Curriculum is organised to support reuse: by developers, AI agents, and anyone building on Oak's curriculum.
+
+Everything in this repository works with the Open Curriculum API. When you see "curriculum" in the codebase, it means the open, reusable subset.
+
+### The Architectural Foundation
+
+Everything flows from the OpenAPI schema:
 
 1. **OpenAPI Schema** (single source of truth)
 2. **→ TypeScript SDK** (generated at `pnpm type-gen`)
 3. **→ MCP Tools** (generated from the same schema)
 4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
 
-**Key principle**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
+**The Cardinal Rule**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
 
-## Who This Is For
+### Who Uses What
 
-| Persona                      | Description                                                |
-| ---------------------------- | ---------------------------------------------------------- |
-| **New Teacher**              | Finding and adapting curriculum content for lessons        |
-| **Experienced Teacher**      | Efficiently searching across subjects and key stages       |
-| **Curriculum Leader**        | Exploring curriculum structure, sequences, and progression |
-| **Ed-Tech Engineer**         | Building applications using the SDK and MCP tools          |
-| **Ed-Tech Product Champion** | Evaluating curriculum data integration possibilities       |
+| If you are...                              | Start here                                                               |
+| ------------------------------------------ | ------------------------------------------------------------------------ |
+| A teacher searching for curriculum content | The search system serves you (via products built on this infrastructure) |
+| An AI agent accessing the curriculum       | MCP servers expose the full curriculum via tools                         |
+| A developer building on the curriculum     | The SDK gives you typed access to the API                                |
+| A contributor to this repo                 | Read on — the rest of this README is for you                             |
 
-Current search optimisation focuses on **educators** (teachers, curriculum leaders). Learner-focused search will be developed separately.
+## What's In The Repo
 
-## Implementation: Oak Open Curriculum
-
-This pattern is implemented for the [Oak National Academy Curriculum API](https://www.thenational.academy/):
-
-- **`packages/sdks/oak-curriculum-sdk`** – Generated SDK with runtime clients, Zod schemas, MCP tool metadata, and shared `parseSchema` helper that validates every request/response boundary
+- **`packages/sdks/oak-curriculum-sdk`** – Generated SDK: runtime clients, Zod schemas, MCP tool metadata, Elasticsearch mapping generators, and shared `parseSchema` validation helpers
 - **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
 - **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
-- **`apps/oak-open-curriculum-semantic-search`** – Hybrid search application using the SDK
-- **Supporting libraries** under `packages/libs/` for logging, configuration, storage, and transport
+- **`apps/oak-open-curriculum-semantic-search`** – Semantic search: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline. Currently being extracted into a standalone Search SDK + CLI ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md))
+- **`packages/libs/`** – Shared libraries for logging, configuration, storage, and transport
+- **`docs/architecture/architectural-decisions/`** – 107 Architectural Decision Records documenting every significant design choice
 
 **Architectural reference**: `apps/oak-notion-mcp` demonstrates the pattern isn't Oak-specific.
 
 ## Architecture Overview
 
-| Directory        | Purpose                                                         |
-| ---------------- | --------------------------------------------------------------- |
-| `apps/`          | MCP servers and the Semantic Search web app                     |
-| `packages/core/` | Core infrastructure (ESLint configs, Zod adapters)              |
-| `packages/sdks/` | Generated SDKs (currently the Oak Curriculum SDK)               |
-| `packages/libs/` | Shared libraries for logging, configuration, storage, transport |
-| `docs/`          | Developer documentation, onboarding guides, ADRs                |
+| Directory        | Purpose                                                                  |
+| ---------------- | ------------------------------------------------------------------------ |
+| `apps/`          | MCP servers (stdio + HTTP) and the semantic search application           |
+| `packages/sdks/` | Generated SDKs (Curriculum SDK with type-gen, Zod schemas, MCP metadata) |
+| `packages/libs/` | Shared libraries for logging, configuration, storage, transport          |
+| `packages/core/` | Core infrastructure (ESLint configs, Zod adapters)                       |
+| `docs/`          | Developer documentation, onboarding guides, 107 ADRs                     |
 
-Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). ADR-048 documents the shared parsing helper pattern introduced with the new `parseSchema` function.
+Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). Key ADRs include schema-first generation ([ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)), ELSER-only search embeddings ([ADR-076](docs/architecture/architectural-decisions/076-elser-only-embedding-strategy.md)), and the deterministic SDK / NL-in-MCP boundary ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)).
 
 ## Quick Start
 
@@ -126,7 +137,7 @@ pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdo
 
 - The SDK emits generated Zod schemas for curriculum responses, search responses, and request parameter maps.
 - `parseSchema`, `parseWithCurriculumSchema`, `parseEndpointParameters`, and `parseSearchResponse` wrap `schema.safeParse`, returning typed `ValidationResult` objects without manual assertions.
-- MCP servers, the Semantic Search app, and admin tooling import these helpers—no consumer duplicates schema knowledge. ADR-048 formalises this shared pattern.
+- MCP servers, the search system, and admin tooling import these helpers — no consumer duplicates schema knowledge ([ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md)).
 
 ## Documentation & Onboarding
 
@@ -136,11 +147,11 @@ pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdo
 
 ## Contributing
 
-We are iterating internally but welcome interest. Before starting work:
+We welcome contributions from Oak team members and the wider community. Before starting work:
 
-1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, commit conventions, and helper usage expectations.
-2. Review [GO.md](GO.md) for the grounding cadence.
-3. Keep documentation close to your changes—onboarding, workspace READMEs, and ADRs should stay current.
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, commit conventions, and quality expectations.
+2. Review [GO.md](GO.md) for the grounding cadence (ACTION → REVIEW, regular GROUNDING checkpoints).
+3. Keep documentation close to your changes — onboarding, workspace READMEs, and ADRs should stay current.
 
 Quality gate checklist:
 

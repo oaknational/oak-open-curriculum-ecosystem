@@ -1,115 +1,113 @@
-# Semantic Search — Ground Truth & Quality
+# Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-09
-
----
-
-## Index Coverage
-
-| Index | Documents | GTs | Status |
-|-------|-----------|-----|--------|
-| `oak_lessons` | 12,833 | 30 | ✅ Done |
-| `oak_units` | 1,665 | 2 | ✅ Done |
-| `oak_threads` | 164 | 1 | ✅ Done |
-| `oak_sequences` | 30 | 1 | ✅ Done |
-
-**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) (all indexes)
-
-**Completed**: [Multi-Index Ground Truths Plan](../../plans/semantic-search/active/multi-index-ground-truths.md)
+**Last Updated**: 2026-02-10
 
 ---
 
-## Lessons (Complete)
+## Current Priority: SDK Extraction
 
-**Baseline Metrics**: MRR=0.983, NDCG=0.955, P@3=0.778, R@10=1.000
+Ground truths are complete across all four indexes. The immediate priority is extracting the search capability from the Next.js app into a dedicated SDK and CLI.
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
-
-# Run benchmark
-pnpm benchmark:lessons --all
-pnpm benchmark:lessons -s maths -p secondary --review
-
-# Test a query
-pnpm tsx src/lib/search-quality/test-query-lessons.ts "expanding brackets" maths ks3
-```
+**Plan**: [search-sdk-cli.md](../../plans/semantic-search/sdk-extraction/search-sdk-cli.md)  
+**Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
 ---
 
-## Units, Threads, Sequences (Complete)
+## What We Have
 
-**Baseline Metrics**:
+A powerful Elasticsearch-backed semantic search capability, currently packaged as a Next.js app at `apps/oak-open-curriculum-semantic-search/`. The core search logic lives in `src/lib/` — the Next.js UI and HTTP API layers are not needed going forward.
 
-| Index | MRR | NDCG@10 | P@3 | R@10 |
-|-------|-----|---------|-----|------|
-| Units | 1.000 | 0.926 | 0.833 | 1.000 |
-| Threads | 1.000 | 1.000 | 0.333 | 1.000 |
-| Sequences | 1.000 | 1.000 | 0.333 | 1.000 |
+### Search Pipeline
 
-```bash
-cd apps/oak-open-curriculum-semantic-search
+4-way RRF hybrid search (BM25 + ELSER on both Content and Structure) for lessons and units, 2-way for threads and sequences. Query processing includes noise phrase removal, curriculum phrase detection, and transcript-aware score normalisation.
 
-# Run benchmarks
-pnpm benchmark:units --all
-pnpm benchmark:threads --all
-pnpm benchmark:sequences --all
+**Full details**: [ARCHITECTURE.md](/apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md)
 
-# Test queries
-pnpm tsx src/lib/search-quality/test-query-units.ts "fractions year 5" maths ks2
-pnpm tsx src/lib/search-quality/test-query-threads.ts "algebra progression" maths
-pnpm tsx src/lib/search-quality/test-query-sequences.ts "secondary maths" maths
-```
+### Indexes
 
-### What Each Index Contains
+| Index | Documents | Purpose |
+|-------|-----------|---------|
+| `oak_lessons` | 12,833 | Primary lesson retrieval |
+| `oak_unit_rollup` | 1,665 | Unit search and highlights |
+| `oak_threads` | 164 | Curriculum progressions |
+| `oak_sequences` | 30 | Subject-phase programmes |
 
-| Index | Content | Search Use Case |
-|-------|---------|-----------------|
-| **Units** | Lesson collections with descriptions | "fractions year 5", "algebra KS3" |
-| **Threads** | Curriculum progressions | "multiplication progression", "algebra strand" |
-| **Sequences** | Subject-phase programmes | May be filter rather than search target |
+### Ground Truth Baselines
+
+| Index | GTs | MRR | NDCG@10 |
+|-------|-----|-----|---------|
+| Lessons | 30 | 0.983 | 0.955 |
+| Units | 2 | 1.000 | 0.926 |
+| Threads | 1 | 1.000 | 1.000 |
+| Sequences | 1 | 1.000 | 1.000 |
+
+**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md)
+
+---
+
+## What We Are Building
+
+### Search SDK (`packages/libs/search-sdk/`)
+
+Public API: `createSearchSdk({ deps, config }) -> { retrieval, admin, observability }`
+
+- **Retrieval**: structured search + suggestions (hybrid BM25 + ELSER via RRF)
+- **Admin**: ES setup, ingestion, rollups, index metadata
+- **Observability**: zero-hit logging/persistence/maintenance
+- **Dependency-injected**: consuming app supplies config + clients
+
+### Search CLI (`packages/tools/search-cli/`)
+
+First-class CLI workspace consuming the SDK. Replaces ad-hoc `scripts/` entrypoints with cohesive operator-intent commands.
+
+### Key Architectural Decision
+
+NL parsing stays in the **MCP layer**. The SDK remains deterministic. See [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md).
 
 ---
 
 ## Mandatory Reading
 
-Before any ground truth work:
+Before starting work:
 
-1. **[ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md)** — Known-Answer-First methodology
-2. **[Semantic Search Architecture](../../directives-and-memory/semantic-search-architecture.md)** — Structure is the foundation, bulk data is the source of truth, STOP if you can't follow protocol
-
-> **Protocol**: All index protocols are consolidated into a single document at [ground-truth-protocol.md](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md).
-
----
-
-## The Value We Provide
-
-Teachers use our search to find curriculum content. Ground truths test:
-
-> **"If a teacher searches for X, do they get useful results?"**
-
-We test **our system** — with **our data**, **our retrievers**, and **our configuration** — not Elasticsearch in isolation.
+1. [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no type shortcuts
+2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
+3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
+4. [semantic-search-architecture.md](../../directives-and-memory/semantic-search-architecture.md) — Structure is the foundation
+5. [search-sdk-cli.md](../../plans/semantic-search/sdk-extraction/search-sdk-cli.md) — **THE** plan for this work
 
 ---
 
-## Key Principles
+## Two SDKs
 
-1. **Known-Answer-First** — Start from curriculum content, work backward to queries
-2. **Test via RRF** — Never use raw Elasticsearch queries
-3. **One index at a time** — Each index has different search characteristics
-4. **Realistic queries** — What would a teacher actually type?
+| SDK | Location | Purpose |
+|-----|----------|---------|
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
+| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
+
+The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
 
 ---
 
-## GT Quality Status
+## Quality Gates
 
-All ground truth quality work is complete:
+Run after every piece of work, from repo root:
 
-- **Lesson queries redesigned** — All 30 queries use realistic teacher vocabulary. See [ADR-106 refinement](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md#refinement-title-echoing-circularity-2026-02-09).
-- **Protocol consolidated** — Single document at [ground-truth-protocol.md](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md).
-- **Lesson GT infrastructure renamed** — `LessonGroundTruth`, `LESSON_GROUND_TRUTHS`, lesson-specific benchmark/test scripts.
-- **Non-lesson GTs investigated** — Unit GTs expanded. Threads and sequences confirmed as mechanism checks (too few documents for ranking discrimination).
+```bash
+pnpm type-gen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm test:e2e
+pnpm test:e2e:built
+pnpm test:ui
+pnpm smoke:dev:stub
+```
 
-Priority now shifts to application improvement — see the [roadmap](../../plans/semantic-search/roadmap.md).
+**All gates must pass. No exceptions.**
 
 ---
 
@@ -117,7 +115,11 @@ Priority now shifts to application improvement — see the [roadmap](../../plans
 
 | Document | Purpose |
 |----------|---------|
-| [Multi-Index Plan](../../plans/semantic-search/active/multi-index-ground-truths.md) | Ground truth coverage across indexes |
-| [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology |
-| [queries-redesigned.md](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md) | Lessons coverage |
-| [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Lessons expansion |
+| [ARCHITECTURE.md](/apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md) | Search pipeline architecture |
+| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and GT process |
+| [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Ground truth methodology |
+| [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
+| [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |
+| [roadmap.md](../../plans/semantic-search/roadmap.md) | Authoritative plan sequence |
+| [Multi-Index Plan](../../plans/semantic-search/archive/completed/multi-index-ground-truths.md) | Completed ground truth work |
+| [expansion-plan.md](../../plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) | Future GT expansion |

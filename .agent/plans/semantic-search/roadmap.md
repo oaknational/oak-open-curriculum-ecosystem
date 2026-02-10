@@ -1,9 +1,9 @@
 # Semantic Search Roadmap
 
-**Status**: ✅ **Ground Truths Complete** — Ready for Application Improvement  
-**Last Updated**: 2026-02-05  
+**Status**: 🔄 **SDK Extraction** — Ground truths complete, extracting search into SDK + CLI  
+**Last Updated**: 2026-02-10  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Metrics**: [current-state.md](current-state.md)
+**Metrics**: See [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
 **Scope**: Search SDK/CLI capabilities. UI delivery is out of scope (separate repository).
 
@@ -11,16 +11,16 @@
 
 ## Current State
 
-Ground truth infrastructure is complete across all four indexes. Baseline metrics are established. Priority is now application improvement.
+Ground truth infrastructure is complete across all four indexes. Baseline metrics are established. SDK extraction is the immediate priority.
 
-| Index | GTs | MRR | Status |
-|-------|-----|-----|--------|
-| `oak_lessons` | 30 | 1.000 | ✅ Done |
-| `oak_units` | 2 | 1.000 | ✅ Done |
-| `oak_threads` | 1 | 1.000 | ✅ Done |
-| `oak_sequences` | 1 | 1.000 | ✅ Done |
+| Index | GTs | MRR | NDCG@10 | Status |
+|-------|-----|-----|---------|--------|
+| `oak_lessons` | 30 | 0.983 | 0.955 | ✅ Done |
+| `oak_units` | 2 | 1.000 | 0.926 | ✅ Done |
+| `oak_threads` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
+| `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
 
-**Ground truth cleanup** (rename, consolidate protocol docs, deeper metrics) is documented in [multi-index-ground-truths.md](active/multi-index-ground-truths.md#remaining-work-deferred-to-next-session). These are not blockers.
+Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md).
 
 ---
 
@@ -30,19 +30,15 @@ Ground truth infrastructure is complete across all four indexes. Baseline metric
 1. Ground Truth Foundation                       ✅ COMPLETE
    30 lesson GTs + multi-index GTs (units, threads, sequences)
          ↓
-2. Application Improvement                       ← NEXT
-   SDK extraction, MCP integration, search quality levels
-         ↓
-3. SDK Extraction (sdk-extraction/)
+2. SDK Extraction (sdk-extraction/)              ← CURRENT
    Extract search from Next.js app into SDK + CLI
          ↓
-4. MCP Integration (post-sdk/mcp-integration/)
+3. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools
          ↓
-5. Search Quality Levels (post-sdk/search-quality/)
-   ├── Level 2: Document Relationships
-   ├── Level 3: Modern ES Features
-   └── Level 4: AI Enhancement
+4. Search Enhancements (post-sdk/search-quality/)
+   Ground truth expansion, fundamentals re-evaluation,
+   document relationships, modern ES features, AI enhancement
 ```
 
 ---
@@ -60,7 +56,7 @@ Ground truth infrastructure is complete across all four indexes. Baseline metric
 
 ## Phase 1: Ground Truth Foundation ✅ Complete
 
-**Location**: [active/multi-index-ground-truths.md](active/multi-index-ground-truths.md)
+**Location**: [archive/completed/multi-index-ground-truths.md](archive/completed/multi-index-ground-truths.md)
 
 **Goal**: Create ground truths that answer "Does search help teachers find what they need?"
 
@@ -76,9 +72,9 @@ Ground truth infrastructure is complete across all four indexes. Baseline metric
 
 ---
 
-## Phase 2: SDK Extraction
+## Phase 2: SDK Extraction 🔄 Current
 
-**Status**: 📋 Ready after GT complete  
+**Status**: 🔄 In Progress  
 **Location**: [sdk-extraction/search-sdk-cli.md](sdk-extraction/search-sdk-cli.md)
 
 **Goal**: Extract semantic search from Next.js app into a dedicated SDK and CLI.
@@ -100,21 +96,21 @@ Ground truth infrastructure is complete across all four indexes. Baseline metric
 
 ---
 
-## Phase 4: Search Quality Levels
+## Phase 4: Search Enhancements
 
 **Status**: ⏸️ Blocked by MCP Integration  
 **Location**: [post-sdk/search-quality/](post-sdk/search-quality/)
 
-Levels (from [ADR-082](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md)):
+Search enhancements form one workstream encompassing ground truth expansion, fundamentals re-evaluation, document relationships, modern ES features, and AI enhancement. Work items draw from [ADR-082](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) but are managed as a single enhancements plan rather than rigid sequential tiers.
 
-| Level | Focus | Status |
-|-------|-------|--------|
-| **1** | Fundamentals (synonyms, phrase boosting) | ✅ Approaches complete |
-| **2** | Document Relationships | 📋 Pending |
-| **3** | Modern ES Features (semantic reranking, query rules) | 📋 Pending |
-| **4** | AI Enhancement (LLM preprocessing) | 📋 Pending — DESTINATION |
-
-**Levels are sequential.** Exhaust lower levels before moving up.
+| Area | Focus | Status |
+|------|-------|--------|
+| **GT expansion** | More examples and scenarios before tuning | 📋 Pending |
+| **Fundamentals re-evaluation** | Re-assess Level 1 approaches with validated GTs | 📋 Pending |
+| **Document relationships** | Cross-reference boosting, thread/sequence context | 📋 Pending |
+| **Tuning** | Field boosts, RRF parameters, MFL investigation | 📋 Pending |
+| **Modern ES features** | Semantic reranking, query rules | 📋 Pending |
+| **AI enhancement** | LLM preprocessing, intent extraction | 📋 Pending — DESTINATION |
 
 ---
 
@@ -168,7 +164,7 @@ pnpm smoke:dev:stub
 
 | Document | Purpose |
 |----------|---------|
-| [current-state.md](current-state.md) | Current metrics and architecture |
+| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [search-acceptance-criteria.md](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Guide](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
 

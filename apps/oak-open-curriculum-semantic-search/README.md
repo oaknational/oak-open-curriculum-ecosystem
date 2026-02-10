@@ -8,11 +8,11 @@ A Next.js App Router workspace that ingests Oak Curriculum content via the offic
 
 The semantic search app indexes Oak's entire curriculum into Elasticsearch for users to search using natural language.
 
-### Current Focus: Educator Lesson Search
+### Current Focus: Educator Curriculum Search
 
 | Dimension         | Current Scope                       | Future                     |
 | ----------------- | ----------------------------------- | -------------------------- |
-| **Content Type**  | Lessons                             | Units, sequences, threads  |
+| **Content Type**  | Lessons, units, threads, sequences  | Additional content types   |
 | **User Persona**  | Professional educators (teachers)   | Pupils, students, learners |
 | **Search Intent** | Finding curriculum content to teach | Self-directed learning     |
 
@@ -21,6 +21,7 @@ Example teacher searches:
 - "fake emails, scams, social engineering" (finding cyber security lessons)
 - "photosynthesis plant nutrition" (finding biology lessons)
 - "fractions unlike denominators" (finding maths lessons)
+- "algebra progression" (finding curriculum threads)
 
 A future learner-focused search may use different RRF weightings, retrievers, and preprocessing. Ground truths and evaluation currently assume the user is a professional teacher.
 
@@ -28,7 +29,7 @@ The app uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic emb
 
 ## Features and Possibilities
 
-**🔍 Intelligent Three-Way Hybrid Search** - Combines traditional keyword matching (BM25), semantic search with sparse embeddings (ELSER), dense vector text embeddings (E5) for relevance improvement.
+**🔍 Hybrid Search with Reciprocal Rank Fusion** - Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads and sequences use 2-way RRF.
 
 **📚 Curriculum-Aware Vocabulary** - Every lesson includes expert-curated keyword definitions, which are used to improve the relevance of the search results.
 
@@ -44,7 +45,7 @@ The possibility for data enrichment at ingest time, such as:
 **This project explores how far we can go using ONLY Elasticsearch Serverless features** - no external AI/ML APIs (Cohere, OpenAI, etc.). We suspect it might be a long way:
 
 - ✅ **Hybrid search** - BM25 lexical + ELSER sparse embeddings (RRF fusion)
-- ✅ **Three-way hybrid** - Add E5 dense vectors (`.multilingual-e5-small-elasticsearch`)
+- ✅ **Four-way RRF** - Content + Structure field groups with both BM25 and ELSER retrievers
 - 🎯 **Advanced relevance** - Elastic Native ReRank (`.rerank-v1-elasticsearch`)
 - 🎯 **Knowledge graphs** - ES Graph API for curriculum relationships
 - 🎯 **RAG** - Elastic Native LLM (`.gp-llm-v2-chat_completion`) + `semantic_text` chunking
@@ -64,7 +65,7 @@ And when that isn't possible, we can deploy open source models **within** the ES
 - 🛡️ **Simplified architecture** - Fewer dependencies, single platform
 - 🔄 **Graceful degradation** - If inference unavailable, fallback to lexical search
 
-See `docs/architecture/architectural-decisions/071-elastic-native-dense-vector-strategy.md` for the detailed rationale.
+See [ADR-074: Elastic-Native-First Philosophy](/docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md) for the detailed rationale.
 
 ---
 
@@ -87,7 +88,7 @@ All admin/status routes require `x-api-key: ${SEARCH_API_KEY}`.
 
 ## Technical highlights
 
-- **Four indices**: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences` with `semantic_text`, completion contexts, highlight offsets, canonical URLs, and lesson-planning data.
+- **Seven indices**: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_threads`, `oak_sequences`, `oak_sequence_facets`, `oak_meta` with `semantic_text`, completion contexts, highlight offsets, canonical URLs, and lesson-planning data.
 - **Server-side RRF**: Lexical + semantic queries fused per scope; optional facets and highlights per definitive guide.
 - **Suggestions**: Completion + `search_as_you_type` endpoints with cache tagging tied to `SEARCH_INDEX_VERSION`.
 - **Observability**: Structured logging for ingestion batches, zero-hit events, cache version rotation; optional webhook for zero hits.
@@ -260,7 +261,7 @@ For deeper explanations see:
 - `docs/INDEXING.md`
 - `docs/QUERYING.md`
 - `docs/ROLLUP.md`
-- `docs/oak-curriculum-hybrid-search-definitive-guide.md`
+- `docs/ARCHITECTURE.md`
 
 Maintain this README alongside code changes to keep onboarding concise and accurate.
 
@@ -370,7 +371,7 @@ pnpm vitest run --config vitest.smoke.config.ts four-retriever-ablation
 │  │  poc-open-curriculum-api-search-dd21a1.es.europe-west1.gcp...     │  │
 │  │                                                                   │  │
 │  │  Indexes: oak_lessons, oak_units, oak_unit_rollup,                │  │
-│  │           oak_sequences, oak_sequence_facets, oak_meta            │  │
+│  │    oak_threads, oak_sequences, oak_sequence_facets, oak_meta     │  │
 │  └───────────────────────────────────────────────────────────────────┘  │
 │                          │                                              │
 │                          ▼ (optional)                                   │

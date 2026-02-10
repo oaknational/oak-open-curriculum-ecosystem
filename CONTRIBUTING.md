@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to the Oak MCP Ecosystem Server! This guide will help you get started.
 
-This is an internal technical spike for now, so at this time we are not looking for external contributions, but we do appreciate your interest.
+This repository is maintained by Oak National Academy. We welcome internal contributions and interest from the wider community.
 
 ## Code of Conduct
 
@@ -350,9 +350,8 @@ pnpm test:e2e
 
 ```bash
 pnpm build
-pnpm dev
-# In another terminal:
-claude mcp add test-notion -- node dist/index.js
+pnpm -C apps/oak-curriculum-mcp-stdio dev
+# In another terminal, add the MCP server to Claude Desktop
 ```
 
 ## Common Issues
@@ -365,12 +364,12 @@ claude mcp add test-notion -- node dist/index.js
 ### Type Errors
 
 - Never use `any` or `as`
-- Use proper Notion SDK types
-- Check for missing properties in mocks
+- Use generated SDK types, not manual definitions
+- Check for missing properties in test fakes
 
 ### Test Failures
 
-- Ensure mocks match Notion SDK types exactly
+- Ensure test fakes match SDK types exactly
 - Check for race conditions in async tests
 - Verify environment setup
 

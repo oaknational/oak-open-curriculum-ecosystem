@@ -1,13 +1,11 @@
 # Search SDK + CLI Extraction
 
-**Label**: Prerequisite  
-**Status**: 📋 READY (after Ground Truth Review)  
+**Label**: Current priority  
+**Status**: 🔄 IN PROGRESS  
 **Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)  
 **Estimated Effort**: 3-6 days (depends on how much Next.js removal + CLI consolidation is bundled)  
-**Prerequisites**: Ground truth review complete  
-**Last Updated**: 2026-01-17
-
-> **Note (2026-01-17)**: Prerequisites revised. SDK extraction now happens AFTER ground truth review but BEFORE bulk analysis and tier work. The SDK API can evolve — extraction is primarily a packaging concern.
+**Prerequisites**: Ground truth foundation (✅ complete)  
+**Last Updated**: 2026-02-10
 
 ---
 

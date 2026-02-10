@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Fast-track guide for developers who want to understand and contribute to the OpenAPI→SDK→MCP pipeline.
+Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
 
 > **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](architecture/openapi-pipeline.md) and [onboarding guide](development/onboarding.md).
 
@@ -16,21 +16,21 @@ This ensures the agent maintains focus, quality, and regular grounding. See [AI 
 
 ## Architecture TL;DR
 
-This repository implements a type-safe, compile-time pipeline:
+This repository makes Oak's openly-licensed curriculum accessible to AI agents and searchable for teachers. The architectural foundation is a type-safe, compile-time pipeline:
 
 ```text
 OpenAPI Spec (single source of truth)
          ↓
     pnpm type-gen (compile time)
          ↓
-    ┌────────────────────────────────┐
-    ↓                                ↓
-TypeScript SDK                  MCP Tools
-(types, clients,              (metadata, validators,
- Zod schemas)                  input/output shapes)
-    ↓                                ↓
-Runtime Apps                   MCP Servers
-(search, admin)              (stdio, HTTP)
+    ┌───────────────────────────────────────────────┐
+    ↓                    ↓                           ↓
+TypeScript SDK      MCP Tools             Search Type Generators
+(types, clients,  (metadata, validators,  (ES mappings, index docs,
+ Zod schemas)      input/output shapes)    search constants)
+    ↓                    ↓                           ↓
+Runtime Apps        MCP Servers            Semantic Search
+(admin, CLI)      (stdio, HTTP)           (4-way RRF hybrid)
 ```
 
 **Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm type-gen` updates everything automatically.
@@ -41,7 +41,7 @@ You can start contributing immediately without any API keys:
 
 ```bash
 # Clone and install
-git clone <repo> && cd oak-notion-mcp
+git clone <repo> && cd oak-mcp-ecosystem
 pnpm install
 
 # Run tests and quality checks (no env vars required)
@@ -266,7 +266,7 @@ open packages/sdks/oak-curriculum-sdk/docs/index.html
 ## Repository Structure
 
 ```text
-oak-notion-mcp/
+oak-mcp-ecosystem/
 ├── packages/
 │   ├── sdks/
 │   │   └── oak-curriculum-sdk/      # Generated SDK (THE SOURCE)
