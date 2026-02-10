@@ -8,8 +8,7 @@ The build system uses:
 
 - **pnpm** - Package manager and workspace orchestration
 - **Turborepo** - Task runner with caching and dependency management
-- **tsup** - TypeScript bundler for libraries
-- **Next.js** - Framework for web apps
+- **tsup** - TypeScript bundler for libraries and apps
 
 ## Build Order
 
@@ -28,11 +27,17 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
                ▼
 ┌──────────────────────────────┐
 │    oak-curriculum-sdk        │  ← type-gen, then build
-└──────────────┬───────────────┘
-               │ dep
-               ▼
+└──────────┬───────────────────┘
+           │ dep
+           ├─────────────────────────┐
+           ▼                         ▼
+┌──────────────────┐   ┌──────────────────────┐
+│  oak-search-sdk  │   │      apps/*          │  ← build last
+└────────┬─────────┘   └──────────────────────┘
+         │ dep
+         ▼
 ┌──────────────────────────────┐
-│          apps/*              │  ← build last
+│    apps/oak-search-cli/*     │  ← future consumer
 └──────────────────────────────┘
 ```
 

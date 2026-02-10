@@ -3,11 +3,15 @@
   "version": "0.0.0-development",
   "private": true,
   "type": "module",
+  "main": "dist/bin/oaksearch.js",
+  "bin": {
+    "oaksearch": "./dist/bin/oaksearch.js"
+  },
   "engines": {
     "node": "24.x"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.lint.json --noEmit",
+    "build": "tsup",
     "clean": "rm -rf dist .turbo",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -65,6 +69,7 @@
     "@vitest/ui": "^4.0.15",
     "eslint": "^9.39.1",
     "prettier": "^3.7.4",
+    "tsup": "^8.5.1",
     "typedoc": "^0.28.15",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.9.3",

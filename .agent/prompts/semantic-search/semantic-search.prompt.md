@@ -4,13 +4,17 @@
 
 ---
 
-## Current Priority: SDK Extraction
+## Current Priority: SDK Extraction — Checkpoint E (CLI Rename + Wiring)
 
-Ground truths are complete across all four indexes. The Next.js
-UI and HTTP API layers were removed (Feb 2026). The workspace
-has been cleaned up with full DI and centralised env access
-(Feb 2026). The immediate priority is extracting the search
-capability into a dedicated SDK and CLI.
+Checkpoints A–D are complete: the SDK workspace exists with
+fully implemented retrieval, admin, and observability services.
+34 tests pass (25 integration + 9 unit). All quality gates
+are green.
+
+**Next step**: Implement Checkpoint E — rename the current
+workspace from `apps/oak-open-curriculum-semantic-search/` to
+`apps/oak-search-cli/`, wire CLI subcommands to call SDK
+services (`search`, `admin`, `eval`, `observe`).
 
 **Plan**: [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md)
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
@@ -86,6 +90,10 @@ Also hosts all **evaluation** (ground truths, benchmarks,
 validation), which is operator tooling *about* the
 search, not the search itself.
 
+CLI entry point: `bin/oaksearch.ts` (commander, single
+entry, tsup-bundled). Subcommands will be registered
+during Checkpoint E: `search`, `admin`, `eval`, `observe`.
+
 ### Key Architectural Decision
 
 NL parsing stays in the **MCP layer**. The SDK remains
@@ -110,8 +118,8 @@ Before starting work:
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
-| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (fully implemented, 34 GREEN tests) |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (`bin/oaksearch.ts` entry, tsup-bundled) |
 
 The Search SDK consumes types from the Curriculum SDK.
 The Search CLI consumes the Search SDK.

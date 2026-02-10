@@ -12,7 +12,7 @@
  * is not yet implemented. They will turn GREEN as services are built.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createSearchSdk } from './create-search-sdk.js';
 import type {
   SearchSdk,
@@ -34,19 +34,104 @@ import type {
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 // ---------------------------------------------------------------------------
-// Test helpers — simple fakes, no complex mocks
+// Test helpers — simple fakes injected as arguments
 // ---------------------------------------------------------------------------
 
 /**
- * Create a real Elasticsearch client pointing at a non-existent node.
+ * Empty but valid ES search response shape.
  *
- * These integration tests validate the SDK factory contract, not ES
- * interactions. The factory throws before the client is used, so
- * network connectivity is irrelevant. A real `Client` instance avoids
- * type assertions while satisfying `SearchSdkDeps`.
+ * Used by `vi.spyOn` mocks on the Client instance. Returns
+ * empty result sets with structurally valid metadata so the SDK
+ * can process them into correctly-shaped domain results.
+ */
+const EMPTY_SEARCH_RESPONSE = {
+  hits: { total: { value: 0, relation: 'eq' as const }, max_score: null, hits: [] },
+  took: 1,
+  timed_out: false,
+  _shards: { total: 1, successful: 1, failed: 0, skipped: 0 },
+  suggest: {
+    suggestions: [
+      {
+        text: '',
+        offset: 0,
+        length: 0,
+        options: [],
+      },
+    ],
+  },
+};
+
+const EMPTY_INFO_RESPONSE = {
+  name: 'test-node',
+  cluster_name: 'test-cluster',
+  cluster_uuid: 'test-uuid',
+  version: {
+    number: '8.17.0',
+    build_flavor: 'default',
+    build_type: 'tar',
+    build_hash: 'abc',
+    build_date: '2024-01-01',
+    build_snapshot: false,
+    lucene_version: '9.0',
+    minimum_wire_compatibility_version: '7.17.0',
+    minimum_index_compatibility_version: '7.0.0',
+  },
+  tagline: 'You Know, for Search',
+};
+
+/**
+ * Create a real ES Client with all methods spied to return
+ * valid empty responses. No network IO occurs.
  */
 function createTestEsClient(): Client {
-  return new Client({ node: 'http://localhost:19200' });
+  const client = new Client({ node: 'http://localhost:19200' });
+
+  vi.spyOn(client, 'search').mockResolvedValue(EMPTY_SEARCH_RESPONSE);
+  vi.spyOn(client, 'index').mockResolvedValue({
+    _index: 'test',
+    _id: '1',
+    _version: 1,
+    result: 'created',
+    _shards: { total: 1, successful: 1, failed: 0 },
+    _seq_no: 0,
+    _primary_term: 1,
+  });
+  vi.spyOn(client, 'get').mockResolvedValue({
+    _index: 'oak_meta',
+    _id: 'index_version',
+    _version: 1,
+    _seq_no: 0,
+    _primary_term: 1,
+    found: true,
+    _source: {
+      version: 'v-test',
+      ingested_at: '2024-01-01T00:00:00Z',
+      subjects: ['maths'],
+      key_stages: ['ks3'],
+      duration_ms: 1000,
+      doc_counts: {},
+    },
+  });
+  vi.spyOn(client, 'info').mockResolvedValue(EMPTY_INFO_RESPONSE);
+  vi.spyOn(client.cat, 'indices').mockResolvedValue([]);
+  vi.spyOn(client.indices, 'create').mockResolvedValue({
+    acknowledged: true,
+    shards_acknowledged: true,
+    index: 'test',
+  });
+  vi.spyOn(client.indices, 'delete').mockResolvedValue({ acknowledged: true });
+  vi.spyOn(client.synonyms, 'putSynonym').mockResolvedValue({
+    result: 'created',
+    reload_analyzers_details: {
+      _shards: { total: 1, successful: 1, failed: 0 },
+      reload_details: [],
+    },
+  });
+
+  // Mock transport.request for bulk operations
+  vi.spyOn(client.transport, 'request').mockResolvedValue({ errors: false, items: [] });
+
+  return client;
 }
 
 function createTestDeps(): SearchSdkDeps {

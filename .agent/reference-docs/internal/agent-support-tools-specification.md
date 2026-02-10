@@ -414,16 +414,11 @@ export { YOUR_NEW_RESOURCE, getYourNewResourceJson } from '../mcp/your-new-tool-
 
 **File:** `packages/sdks/oak-curriculum-sdk/tsup.config.ts`
 
-Add new files to the entry array:
-
-```typescript
-entry: [
-  // ...existing entries
-  'src/mcp/aggregated-your-new-tool.ts',
-  'src/mcp/your-new-tool-data.ts',
-  'src/mcp/your-new-tool-resource.ts',
-],
-```
+The SDK uses grouped annotated globs in its `entry` array.
+New files placed under `src/mcp/` are automatically included
+by the `'src/mcp/**/*.ts'` glob — no manual entry changes
+needed. You only need to edit `tsup.config.ts` when adding
+a new top-level module area (a new `src/<area>/` directory).
 
 ### Phase 6: Widget Rendering
 

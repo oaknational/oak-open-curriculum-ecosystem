@@ -1,22 +1,44 @@
 /**
  * Factory function for creating a Search SDK instance.
  *
- * This is the stub — implementation will be added during Checkpoints B–D.
+ * Creates stateful service instances that hold the injected
+ * dependencies as closures. Each call produces an independent
+ * SDK instance with its own in-memory state.
  *
  * @packageDocumentation
  */
 
 import type { CreateSearchSdkOptions, SearchSdk } from './types/index.js';
+import { createRetrievalService } from './retrieval/index.js';
+import { createAdminService } from './admin/index.js';
+import { createObservabilityService } from './observability/index.js';
 
 /**
  * Creates a Search SDK instance with retrieval, admin, and observability services.
  *
  * @param options - Dependencies and configuration
  * @returns The SDK instance
- * @throws Error until implementation is complete (Checkpoints B–D)
+ *
+ * @example
+ * ```typescript
+ * import { createSearchSdk } from '@oaknational/oak-search-sdk';
+ * import { Client } from '@elastic/elasticsearch';
+ *
+ * const sdk = createSearchSdk({
+ *   deps: {
+ *     esClient: new Client({ node: esUrl, auth: { apiKey } }),
+ *   },
+ *   config: { indexTarget: 'primary' },
+ * });
+ *
+ * const results = await sdk.retrieval.searchLessons({
+ *   text: 'expanding brackets',
+ *   subject: 'maths',
+ *   keyStage: 'ks3',
+ * });
+ * ```
  */
 export function createSearchSdk(options: CreateSearchSdkOptions): SearchSdk {
-  // Validate that deps and config are provided — fail fast.
   if (!options.deps.esClient) {
     throw new Error(
       'createSearchSdk: deps.esClient is required. Provide an @elastic/elasticsearch Client instance.',
@@ -27,8 +49,12 @@ export function createSearchSdk(options: CreateSearchSdkOptions): SearchSdk {
     throw new Error("createSearchSdk: config.indexTarget is required. Use 'primary' or 'sandbox'.");
   }
 
-  // TODO: Replace with real service implementations (Checkpoints B–D).
-  throw new Error(
-    'createSearchSdk: Not yet implemented. Service implementations will be added during SDK extraction (Checkpoints B–D).',
-  );
+  const { esClient, logger } = options.deps;
+  const config = options.config;
+
+  const retrieval = createRetrievalService(esClient, config, logger);
+  const admin = createAdminService(esClient, config, logger);
+  const observability = createObservabilityService(esClient, config, logger);
+
+  return { retrieval, admin, observability };
 }

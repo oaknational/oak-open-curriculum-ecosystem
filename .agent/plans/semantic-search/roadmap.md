@@ -11,7 +11,7 @@
 
 ## Current State
 
-Ground truth infrastructure is complete across all four indexes. Baseline metrics are established. SDK extraction is the immediate priority.
+SDK service extraction is complete — all three services (retrieval, admin, observability) are implemented in `packages/sdks/oak-search-sdk/` with 34 passing tests. Next: rename the CLI workspace and wire subcommands.
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -30,8 +30,9 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 1. Ground Truth Foundation                       ✅ COMPLETE
    30 lesson GTs + multi-index GTs (units, threads, sequences)
          ↓
-2. SDK Extraction (sdk-extraction/)              ← CURRENT
-   Extract search into SDK + CLI (Next.js layer removed)
+2. SDK Extraction                                ← CURRENT
+   a. Service extraction (A–D)                   ✅ COMPLETE
+   b. CLI rename + wiring (E)                    📋 PENDING
          ↓
 3. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools
@@ -74,26 +75,28 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 
 ## Phase 2: SDK Extraction 🔄 Current
 
-**Status**: 🔄 In Progress  
+**Status**: 🔄 In Progress (services extracted; CLI rename pending)
 **Location**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
 
 **Goal**: Extract search library into an SDK; rename the
 current workspace as the CLI.
 
-**Prep complete** (Feb 2026): Next.js layer removed.
-Workspace tidied — `process.env` centralised in `env.ts`
-(ESLint enforced), all product code accepts config as
-parameters (DI-ready), dead code deleted, tests use DI.
-Extraction is primarily a file-move exercise.
+**Checkpoints A–D complete** (Feb 2026):
 
-**Approach**: the current workspace stays in place and
-becomes the CLI (renamed). SDK library code is extracted
-out. Evaluation stays in the CLI.
+- SDK workspace at `packages/sdks/oak-search-sdk/`
+- All three services fully implemented: retrieval, admin,
+  observability
+- 25 integration tests GREEN + 9 unit tests
+- All quality gates pass
+- Factory: `createSearchSdk({ deps, config }) -> SearchSdk`
+
+**Remaining**: Checkpoint E (rename workspace + wire CLI),
+Checkpoint F (MCP integration wiring).
 
 | What | From | To |
 |------|------|-----|
-| SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` |
-| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` (rename) |
+| SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` ✅ |
+| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` (rename) 📋 |
 
 ---
 
@@ -142,7 +145,7 @@ Modern Foreign Languages (French, German, Spanish) have unique search challenges
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (services implemented, 34 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
 
 The Search SDK consumes types from the Curriculum SDK.

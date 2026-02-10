@@ -2,16 +2,24 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: [
+    // Public barrel and factory
     'src/index.ts',
     'src/create-search-sdk.ts',
-    'src/types/index.ts',
-    'src/types/sdk.ts',
-    'src/types/retrieval.ts',
-    'src/types/retrieval-params.ts',
-    'src/types/retrieval-results.ts',
-    'src/types/admin.ts',
-    'src/types/admin-types.ts',
-    'src/types/observability.ts',
+
+    // Type definitions — service interfaces, params, results
+    'src/types/**/*.ts',
+
+    // Service implementations
+    'src/retrieval/**/*.ts',
+    'src/admin/**/*.ts',
+    'src/observability/**/*.ts',
+
+    // Internal infrastructure
+    'src/internal/**/*.ts',
+
+    // Exclude tests from all groups
+    '!src/**/*.test.ts',
+    '!src/**/*.spec.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations

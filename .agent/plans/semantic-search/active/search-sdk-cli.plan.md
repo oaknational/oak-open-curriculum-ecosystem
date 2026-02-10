@@ -14,7 +14,7 @@
 | Workspace | Location | Purpose |
 | --- | --- | --- |
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/sdks/oak-search-sdk/` | ES-backed semantic search (library) |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (library) — created, interfaces defined |
 | **Search CLI** | `apps/oak-search-cli/` (renamed from `apps/oak-open-curriculum-semantic-search/`) | Operator CLI consuming the SDK; also hosts evaluation |
 
 The Search SDK **consumes types from** the Curriculum
@@ -173,42 +173,66 @@ deterministic. See [ADR-107].
 
 ## Checkpoints (re-read foundation docs at each)
 
-### Checkpoint A — Confirm assumptions + define contract
+### Checkpoint A — Confirm assumptions + define contract ✅ Complete
 
-(TDD entry)
+- ✅ Next.js layer removed
+- ✅ `process.env` centralised in `env.ts` (ESLint enforced)
+- ✅ Dead code cleaned up
+- ✅ SDK workspace created at `packages/sdks/oak-search-sdk/`
+  with package.json, tsconfig, tsup, vitest, eslint configs
+- ✅ Service interfaces defined:
+  - `RetrievalService` — `searchLessons`, `searchUnits`,
+    `searchSequences`, `suggest`, `fetchSequenceFacets`
+  - `AdminService` — `setup`, `reset`, `verifyConnection`,
+    `listIndexes`, `updateSynonyms`, `ingest`,
+    `getIndexMeta`, `setIndexMeta`
+  - `ObservabilityService` — `recordZeroHit`,
+    `getRecentZeroHits`, `getZeroHitSummary`,
+    `persistZeroHitEvent`, `fetchTelemetry`
+- ✅ Factory: `createSearchSdk({ deps, config }) -> SearchSdk`
+  - `SearchSdkDeps`: `esClient` (ES `Client`), optional `Logger`
+  - `SearchSdkConfig`: `indexTarget`, `indexVersion`, `zeroHit`
+- ✅ Schema-first boundary documented: curriculum types
+  from `@oaknational/oak-curriculum-sdk`, authored types
+  for SDK contract, params, results, and ES transport
+- ✅ 25 integration tests specify the full contract (GREEN)
+  — all three services fully implemented
+- ✅ 9 additional unit tests for index resolver
+- ✅ Test helpers use `vi.spyOn` on injected Client methods
+  returning structurally valid empty responses (no IO)
 
-- ~~Confirm no production/active consumer depends on the
-  Next.js UI or HTTP routes.~~ ✅ Done — Next.js layer
-  removed
-- ~~Centralise `process.env` access + enforce DI pattern
-  across all code, scripts, and tests.~~ ✅ Done — env.ts
-  is the single source (ESLint enforced, zero exemptions)
-- ~~Clean up dead code (rejected experiments, one-off
-  scripts, redundant ES clients).~~ ✅ Done — workspace
-  tidy-up complete
-- Write down the proposed SDK service interfaces (public
-  contract) and the CLI command surface.
-- Identify what must remain schema-first (generated) vs
-  what is authored (config objects, command routing).
-- Write tests **first** for the new service boundary
-  (unit/integration as appropriate).
+### Checkpoints B + C + D — Full SDK extraction ✅ Complete
 
-### Checkpoint B — Extract Retrieval service (read path)
+All three services extracted in a single pass (Feb 2026).
+25 integration tests GREEN, all quality gates pass.
 
-- Move/port retrieval logic (RRF query builders, result shaping, suggestions)
-- Make Elasticsearch client + logging injectable
-- Ensure the service surface is small and stable
+**Retrieval service** (`src/retrieval/`):
+- ✅ 4-way RRF query builders (lessons, units), 2-way (sequences)
+- ✅ Query preprocessing: noise removal, curriculum phrase detection
+- ✅ Transcript-aware score normalisation (ADR-099)
+- ✅ Suggestions: completion + bool_prefix fallback
+- ✅ Sequence facet fetching
+- ✅ Smart subject filtering (ADR-101, KS4 science variants)
 
-### Checkpoint C — Extract Admin/Indexing service (write path)
+**Admin service** (`src/admin/`):
+- ✅ Setup: index creation + synonym upsert via Client API
+- ✅ Connection verification, index listing
+- ✅ Synonym management (`buildElasticsearchSynonyms`)
+- ✅ Index metadata read/write using Result pattern
+- ✅ Bulk ingestion from JSON files with doc-type routing
+- ✅ ES error type guards (resource exists, not found, mapping)
 
-- Move/port setup (synonyms, mappings, index creation), ingestion orchestration, rollups, index metadata
-- Make Oak SDK client injectable (no env-based singletons)
-- Preserve existing batching/backoff semantics and data integrity reporting
+**Observability service** (`src/observability/`):
+- ✅ Instance-level in-memory FIFO store (max 200 events)
+- ✅ Zero-hit event recording + optional ES persistence
+- ✅ Summary aggregation by scope
+- ✅ Telemetry fetching from ES with aggregations
 
-### Checkpoint D — Extract Observability service
-
-- Move/port zero-hit event recording, persistence (if enabled), and maintenance operations
-- Make persistence targets and fetch/logging injectable
+**Internal infrastructure** (`src/internal/`):
+- ✅ `EsSearchFn` adapter wrapping `Client.search()`
+- ✅ Pure index name resolver (no env reads)
+- ✅ Internal ES types (`EsSearchRequest`, `EsSearchResponse`, `EsHit`)
+- ✅ 9 unit tests for index resolver
 
 ### Checkpoint E — Rename workspace + wire CLI
 
@@ -216,8 +240,17 @@ deterministic. See [ADR-107].
   to `apps/oak-search-cli/`
 - Update `package.json` name, turbo config, and all
   internal references
-- Add `bin/` entrypoint for cohesive CLI commands
-- Wire CLI commands to call SDK services (thin wrapper)
+- ✅ `bin/oaksearch.ts` CLI entry point created with
+  commander — ready for subcommand registration
+- ✅ tsup build from single entry (`bin/oaksearch.ts`),
+  bundled, with shebang banner
+- ✅ `package.json` has `bin.oaksearch` pointing to
+  built output
+- Wire CLI subcommands to call SDK services:
+  - `oaksearch search` — retrieval operations
+  - `oaksearch admin` — ES setup, ingest, management
+  - `oaksearch eval` — benchmarks, ground truth validation
+  - `oaksearch observe` — zero-hit telemetry
 - Evaluation, operations, and scripts remain in the
   CLI workspace — they call SDK services via DI
 

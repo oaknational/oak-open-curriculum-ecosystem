@@ -184,13 +184,26 @@ export default defineConfig({
 });
 ```
 
-For **SDKs/libraries** (don't bundle):
+For **SDKs/libraries** (don't bundle — use grouped annotated globs):
 
 ```typescript
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/**/*.ts'],
+  entry: [
+    // Root-level modules
+    'src/*.ts',
+
+    // Each module area gets its own annotated glob.
+    // New files within a group are included automatically.
+    // Only add a new glob when adding a new top-level module area.
+    'src/types/**/*.ts',
+    'src/client/**/*.ts',
+
+    // Exclude tests from all groups
+    '!src/**/*.test.ts',
+    '!src/**/*.spec.ts',
+  ],
   format: ['esm'],
   dts: false,
   splitting: false,

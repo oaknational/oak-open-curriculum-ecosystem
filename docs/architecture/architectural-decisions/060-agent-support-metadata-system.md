@@ -157,7 +157,7 @@ When adding a new agent support tool:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/agent-support-tool-metadata.ts` - New file
 - `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-guidance.ts` - Now imports and uses generated values
-- `packages/sdks/oak-curriculum-sdk/tsup.config.ts` - Added new entry
+- `packages/sdks/oak-curriculum-sdk/tsup.config.ts` - File included via `src/mcp/**/*.ts` glob
 
 ### Test Coverage
 
