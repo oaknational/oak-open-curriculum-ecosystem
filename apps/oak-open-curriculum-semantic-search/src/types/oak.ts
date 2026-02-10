@@ -53,10 +53,6 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-  QueryParserRequestSchema,
-  QueryParserResponseSchema,
-  isQueryParserResponse,
-  QUERY_PARSER_INTENT_ENUM,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 export type {
@@ -91,7 +87,4 @@ export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
-  QueryParserRequest,
-  QueryParserResponse,
-  QueryParserIntent,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';

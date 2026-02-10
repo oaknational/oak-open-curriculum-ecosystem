@@ -6,8 +6,7 @@
     "src/lib/hybrid-search/lessons.ts",
     "src/lib/hybrid-search/units.ts",
     "src/lib/hybrid-search/types.ts",
-    "src/lib/openapi.ts",
-    "src/lib/openapi.register.ts",
+    "src/lib/openapi.schemas.ts",
     "src/adapters/oak-adapter.ts",
     "src/adapters/oak-adapter-types.ts",
     "src/adapters/sdk-guards.ts"
@@ -18,7 +17,7 @@
   "githubPages": false,
   "categorizeByGroup": true,
   "sort": ["kind", "instance-first", "alphabetical"],
-  "exclude": ["**/*.test.ts", "**/*.spec.ts", "app/**", "e2e-tests/**", "public/**", "scripts/**"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "e2e-tests/**", "scripts/**"],
   "excludeInternal": true,
   "excludePrivate": true,
   "excludeProtected": false,

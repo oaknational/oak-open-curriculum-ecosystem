@@ -40,7 +40,7 @@
 ### 1. Elasticsearch Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
 
 **Plan**: `.agent/plans/semantic-search/roadmap.md` (authoritative roadmap)  
-**Current Work**: [sdk-extraction/search-sdk-cli.md](semantic-search/sdk-extraction/search-sdk-cli.md)
+**Current Work**: [active/search-sdk-cli.md](semantic-search/active/search-sdk-cli.md)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|

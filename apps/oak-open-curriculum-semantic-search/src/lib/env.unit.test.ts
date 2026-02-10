@@ -16,7 +16,6 @@ let previousProcessEnv: NodeJS.ProcessEnv;
 function withBaseEnv(overrides: EnvOverrides = {}): Record<string, string> {
   const merged: Record<string, string> = {
     ...REQUIRED_ENV,
-    AI_PROVIDER: 'none',
     ...overrides,
   };
   return Object.fromEntries(
@@ -96,36 +95,12 @@ describe('env helpers', () => {
     expect(() => env()).toThrow();
   });
 
-  it('requires OPENAI_API_KEY when AI_PROVIDER=openai', async () => {
-    setProcessEnv({
-      AI_PROVIDER: 'openai',
-      OPENAI_API_KEY: undefined,
-    });
-    const { env } = await loadEnvModule();
-    expect(() => env()).toThrow('OPENAI_API_KEY is required when AI_PROVIDER=openai.');
-  });
-
   it('optionalEnv returns null when validation fails', async () => {
     setProcessEnv({
       OAK_API_KEY: undefined,
     });
     const { optionalEnv } = await loadEnvModule();
     expect(optionalEnv()).toBeNull();
-  });
-
-  it('llmEnabled reflects environment values', async () => {
-    setProcessEnv({
-      AI_PROVIDER: 'openai',
-      OPENAI_API_KEY: 'openai-key-12345',
-    });
-    const { llmEnabled } = await loadEnvModule();
-    expect(llmEnabled()).toBe(true);
-    setProcessEnv({
-      AI_PROVIDER: 'none',
-      OPENAI_API_KEY: undefined,
-    });
-    const { llmEnabled: llmDisabled } = await loadEnvModule();
-    expect(llmDisabled()).toBe(false);
   });
 
   it('SDK cache defaults to disabled with 14-day TTL', async () => {

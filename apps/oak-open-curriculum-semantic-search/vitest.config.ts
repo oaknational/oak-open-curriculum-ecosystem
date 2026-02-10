@@ -1,33 +1,29 @@
 /**
  * Vitest Configuration for Oak Open Curriculum Semantic Search
  *
- * Extends the base vitest config and adds Next.js specific settings.
  * Focuses on unit and integration tests with no network calls.
  */
 
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()],
   test: {
     globals: true,
-    environment: 'jsdom',
+    environment: 'node',
     setupFiles: ['./test.setup.ts'],
-    include: ['**/*.unit.test.{ts,tsx}', '**/*.integration.test.{ts,tsx}'],
+    include: ['**/*.unit.test.ts', '**/*.integration.test.ts'],
     // Restored to proper isolation after completing DI refactoring.
-    // Tests no longer mutate global state (window.matchMedia, etc.).
+    // Tests no longer mutate global state.
     // See: test-isolation-architecture-fix.md
     isolate: true,
     pool: 'forks',
     exclude: [
       '**/*.e2e.test.ts',
       'node_modules',
-      '.next',
       'dist',
       // Ingest harness test causes OOM in forked worker due to heavy import graph.
-      // Skipped as this Next.js app is being retired in favor of SDK+CLI.
-      // See: .agent/plans/semantic-search/phase-4-search-sdk-and-cli.md
+      // Skipped as this workspace is being extracted into SDK+CLI.
+      // See: .agent/plans/semantic-search/active/search-sdk-cli.md
       'src/lib/indexing/ingest-harness.unit.test.ts',
     ],
     coverage: {
@@ -35,7 +31,6 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
-        '.next/',
         'dist/',
         '**/*.d.ts',
         '**/*.config.ts',

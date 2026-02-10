@@ -11,7 +11,7 @@ const REQUIRED_ENV = {
 };
 
 type RequiredEnvKey = keyof typeof REQUIRED_ENV;
-type TestEnvKey = RequiredEnvKey | 'AI_PROVIDER' | 'SEARCH_INDEX_TARGET';
+type TestEnvKey = RequiredEnvKey | 'SEARCH_INDEX_TARGET';
 
 let originalEnv: Map<TestEnvKey, string | undefined>;
 
@@ -20,7 +20,6 @@ beforeEach(() => {
   const keys: TestEnvKey[] = [
     // eslint-disable-next-line no-restricted-properties -- REFACTOR
     ...(Object.keys(REQUIRED_ENV) as RequiredEnvKey[]),
-    'AI_PROVIDER',
     'SEARCH_INDEX_TARGET',
   ];
   originalEnv = new Map(keys.map((key) => [key, process.env[key]]));
@@ -46,7 +45,6 @@ function setEnv(overrides: Partial<Record<TestEnvKey, string>> = {}): void {
   for (const [key, value] of Object.entries(REQUIRED_ENV)) {
     process.env[key] = value;
   }
-  process.env.AI_PROVIDER = 'none';
 
   // Apply overrides (immutable approach - only set defined values)
   // eslint-disable-next-line no-restricted-properties -- REFACTOR

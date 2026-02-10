@@ -4,15 +4,20 @@ Date: 2025-10-06
 
 ## Status
 
-Accepted
+Partially superseded — app-side fixture wiring removed
+
+> Decision point 1 (SDK-generated fixture builders) remains active and unchanged. Decision points
+> 2 and 3 relied on the Next.js App Router layer (environment variables, admin API routes, Playwright
+> fixture mode, cookie persistence) which was removed in February 2026. App-side fixture wiring will
+> be revisited as part of SDK extraction and MCP integration.
 
 ## Context
 
 The semantic search workspace needs deterministic data for:
 
 - Local onboarding without live Elasticsearch
-- Unit/Integration/Playwright suites that exercise admin _and_ search endpoints
-- UI/UX work that depends on consistent copy, zero-hit flows, and cookie behaviour
+- Unit/Integration test suites that exercise search functionality
+- Development work that depends on consistent copy and zero-hit flows
 
 Previously, fixtures lived in the app layer as handwritten objects. They were hard to keep in sync as
 soon as the SDK schema evolved, and they duplicated knowledge about payload shapes. The repository
@@ -26,15 +31,17 @@ fixtures were the last remaining place that broke this principle.
    - Builders live under `src/types/generated/**/stream-fixtures.ts` and export strongly typed
      factories that re-use the SDK’s Zod schemas.
 
-2. Expose the fixtures through the shared fixture resolver in the semantic search app.
-   - `SEMANTIC_SEARCH_USE_FIXTURES` (server) and `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` (client) control
-     the behaviour.
-   - Admin endpoints (`GET /api/index-oak`, `GET /api/rebuild-rollup`, `GET /api/index-oak/status`)
-     use the same resolver, so fixture modes cover search + admin routes consistently.
+2. ~~Expose the fixtures through the shared fixture resolver in the semantic search app.~~
+   - ~~`SEMANTIC_SEARCH_USE_FIXTURES` (server) and `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` (client) control
+     the behaviour.~~
+   - ~~Admin endpoints (`GET /api/index-oak`, `GET /api/rebuild-rollup`, `GET /api/index-oak/status`)
+     use the same resolver, so fixture modes cover search + admin routes consistently.~~
+   - _Removed: the Next.js app layer, environment variables, and admin API routes no longer exist._
 
-3. Default Playwright and integration environments to fixture mode.
-   - Deterministic responses unlock offline CI runs and UX development.
-   - Cookie persistence (`semantic-search-fixtures`) stays identical to live behaviour.
+3. ~~Default Playwright and integration environments to fixture mode.~~
+   - ~~Deterministic responses unlock offline CI runs and UX development.~~
+   - ~~Cookie persistence (`semantic-search-fixtures`) stays identical to live behaviour.~~
+   - _Removed: Playwright and the Next.js-based fixture toggle have been removed._
 
 ## Consequences
 
@@ -53,18 +60,18 @@ fixtures were the last remaining place that broke this principle.
 
 ### Neutral
 
-- Fixture toggle env vars (`SEMANTIC_SEARCH_USE_FIXTURES`, `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`) are
-  now part of the documented contract; deployments must decide whether to surface them.
-- Admin endpoints returning fixtures via GET may surprise legacy clients that expected POST; all
-  first-party tooling already uses GET.
+- ~~Fixture toggle env vars (`SEMANTIC_SEARCH_USE_FIXTURES`, `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`) are
+  now part of the documented contract; deployments must decide whether to surface them.~~ _Removed._
+- ~~Admin endpoints returning fixtures via GET may surprise legacy clients that expected POST; all
+  first-party tooling already uses GET.~~ _Removed._
 
 ## Implementation
 
-- SDK type-gen module: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/admin/generate-admin-fixtures.ts`
-- Generated output: `packages/sdks/oak-curriculum-sdk/src/types/generated/admin/stream-fixtures.ts`
-- App wiring: `apps/oak-open-curriculum-semantic-search/app/lib/admin-fixtures.ts`,
-  `app/lib/fixture-mode.ts`
-- Fixture toggle UI: `app/lib/fixture-toggle.ts` and the corresponding Playwright helpers
+- SDK type-gen module (active): `packages/sdks/oak-curriculum-sdk/type-gen/typegen/admin/generate-admin-fixtures.ts`
+- Generated output (active): `packages/sdks/oak-curriculum-sdk/src/types/generated/admin/stream-fixtures.ts`
+- App wiring (removed): ~~`apps/oak-open-curriculum-semantic-search/app/lib/admin-fixtures.ts`,
+  `app/lib/fixture-mode.ts`~~
+- Fixture toggle UI (removed): ~~`app/lib/fixture-toggle.ts` and the corresponding Playwright helpers~~
 
 ## References
 

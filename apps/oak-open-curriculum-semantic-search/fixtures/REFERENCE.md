@@ -38,4 +38,4 @@ All datasets originate from the Oak Curriculum SDK (OpenAPI aligned at `packages
 - Suggestions should maintain consistent casing, prefixing with scope labels (Lesson ·, Unit ·, Programme ·) for hero guidance tests.
 - Retain `fetchedAt`, `keyStage`, and `subject` metadata to document provenance and future regeneration inputs.
 
-These notes inform the `app/lib/search-fixtures` module, ensuring builder outputs remain faithful to upstream schema constraints while delivering UX-relevant variety.
+These notes inform test fixture builders, ensuring outputs remain faithful to upstream schema constraints while delivering relevant variety.

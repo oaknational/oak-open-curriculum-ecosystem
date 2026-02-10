@@ -31,7 +31,7 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
    30 lesson GTs + multi-index GTs (units, threads, sequences)
          ↓
 2. SDK Extraction (sdk-extraction/)              ← CURRENT
-   Extract search from Next.js app into SDK + CLI
+   Extract search into SDK + CLI (Next.js layer removed)
          ↓
 3. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools
@@ -75,9 +75,9 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 ## Phase 2: SDK Extraction 🔄 Current
 
 **Status**: 🔄 In Progress  
-**Location**: [sdk-extraction/search-sdk-cli.md](sdk-extraction/search-sdk-cli.md)
+**Location**: [active/search-sdk-cli.md](active/search-sdk-cli.md)
 
-**Goal**: Extract semantic search from Next.js app into a dedicated SDK and CLI.
+**Goal**: Extract semantic search into a dedicated SDK and CLI. Next.js layer already removed (Feb 2026).
 
 | Component | From | To |
 |-----------|------|-----|

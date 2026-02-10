@@ -2,8 +2,8 @@
 
 **Label**: Current priority  
 **Status**: 🔄 IN PROGRESS  
-**Parent**: [README.md](README.md) | [../roadmap.md](../roadmap.md)  
-**Estimated Effort**: 3-6 days (depends on how much Next.js removal + CLI consolidation is bundled)  
+**Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)  
+**Estimated Effort**: 3-5 days (Next.js removal complete; remaining: SDK extraction + CLI consolidation)  
 **Prerequisites**: Ground truth foundation (✅ complete)  
 **Last Updated**: 2026-02-10
 
@@ -24,19 +24,17 @@ The Search SDK **consumes types from** the Curriculum SDK but is a separate conc
 
 ## Purpose (right problem, right layer)
 
-We have built a powerful Elasticsearch-backed semantic search capability, but it is currently packaged as a Next.js "app".
+We have built a powerful Elasticsearch-backed semantic search capability. The Next.js UI and HTTP API layers were removed in Feb 2026 (ADRs 044, 045 superseded; 049 partially superseded). The workspace is now a pure TypeScript library at `apps/oak-open-curriculum-semantic-search/` with all search logic in `src/lib/`.
 
 **Actual usage today**: scripts + `src/lib/**` (indexing, retrieval, observability).
 **Required usage next**: an **SDK** consumed by an **Express MCP server** (NL mapping stays in MCP), plus a **first-class local CLI** for admin/indexing workflows.
-**Not required now**: UI and HTTP API layers inside this workspace.
 
 This phase makes the boundaries explicit:
 
 - **SDK**: retrieval + admin + observability services, dependency-injected and testable
 - **CLI**: a first-class workspace that consumes the SDK (not ad-hoc scripts)
-- **Docs/examples**: preserve useful Next.js patterns (fixture mode, caching concepts, ops UX) as documentation only
 
-Reference research: `.agent/research/elasticsearch/semantic-search-sdk-and-cli-extraction.md`
+Reference research: `.agent/research/elasticsearch/system/semantic-search-sdk-and-cli-extraction.md`
 
 ---
 
@@ -76,14 +74,14 @@ Additionally, ensure you are still solving the right problem at the right layer:
    - Express MCP server consumes the SDK
    - NL mapping lives in MCP via comprehensive tool examples (not inside SDK)
 
-4. **Retire Next.js runtime from this workspace**
-   - Remove the Next.js "app" layer from the active build graph once consumers have migrated
-   - Preserve selected UI/HTTP patterns as docs/examples
+4. ~~**Retire Next.js runtime from this workspace**~~ ✅ Complete (Feb 2026)
+   - Next.js app layer, React, styled-components, Oak Components, and all UI/HTTP code removed
+   - ADRs 044, 045 superseded; ADR-049 partially superseded
 
 ### Explicitly out of scope
 
 - Building a new UI (will live in a different app)
-- Building a deployed HTTP API layer (may be Next.js later, but not now)
+- Building a deployed HTTP API layer
 - Relevance re-tuning (pre-SDK work is the verification phase for IR correctness)
 
 ---
@@ -119,7 +117,7 @@ NL stays in the **MCP layer**. The SDK remains deterministic.
 
 ### Checkpoint A — Confirm assumptions + define contract (TDD entry)
 
-- Confirm no production/active consumer depends on the Next.js UI or HTTP routes.
+- ~~Confirm no production/active consumer depends on the Next.js UI or HTTP routes.~~ ✅ Done — Next.js layer removed
 - Write down the proposed SDK service interfaces (public contract) and the CLI command surface.
 - Identify what must remain schema-first (generated) vs what is authored (config objects, command routing).
 - Write tests **first** for the new service boundary (unit/integration as appropriate).
@@ -154,10 +152,16 @@ NL stays in the **MCP layer**. The SDK remains deterministic.
 - Ship comprehensive tool examples mapping user intent to SDK calls
 - Keep NL parsing policy in MCP (and test it there)
 
-### Checkpoint G — Retire the Next.js layer from active builds
+### Checkpoint G — Retire the Next.js layer from active builds ✅ Complete
 
-- Archive / remove the Next.js app code from the build graph
-- Extract the best patterns into docs/examples for future UI/API adapters
+- ✅ Next.js app layer removed from the build graph (Feb 2026)
+- ✅ `app/`, `tests/`, `public/`, Next.js config, Playwright config deleted
+- ✅ Dependencies removed (`next`, `react`, `react-dom`, `styled-components`, `@oaknational/oak-components`, `ai`, `@ai-sdk/openai`)
+- ✅ Build/lint/test configs updated to pure TypeScript (no JSX, no jsdom, no React plugins)
+- ✅ Smoke tests rewritten to call `src/lib/` directly (no HTTP layer)
+- ✅ Dead code removed (`query-parser.ts`, `openapi.ts`, `openapi.register.ts`, orphaned types)
+- ✅ Documentation and `.env.example` updated; obsolete docs deleted
+- ✅ ADRs 044, 045 superseded; ADR-049 partially superseded
 
 ---
 
@@ -196,8 +200,7 @@ Future adapters should be designed with Elasticsearch-native capabilities in min
 | Document                                                                                      | Purpose              |
 | --------------------------------------------------------------------------------------------- | -------------------- |
 | [../roadmap.md](../roadmap.md)                                                                | Linear milestone sequence |
-| [README.md](README.md)                                                                        | SDK extraction overview |
-| [semantic-search-sdk-and-cli-extraction.md](../../../research/elasticsearch/semantic-search-sdk-and-cli-extraction.md) | Research analysis |
+| [sdk-extraction/README.md](../sdk-extraction/README.md)                                       | SDK extraction overview |
+| [semantic-search-sdk-and-cli-extraction.md](../../../research/elasticsearch/system/semantic-search-sdk-and-cli-extraction.md) | Research analysis |
 | [four-retriever-implementation.md](../archive/completed/four-retriever-implementation.md)     | Retrieval architecture |
 | [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Tier strategy |
-

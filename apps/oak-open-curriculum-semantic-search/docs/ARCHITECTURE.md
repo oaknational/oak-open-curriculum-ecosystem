@@ -6,7 +6,7 @@
 
 The semantic search workspace provides a CLI/SDK-first service that ingests Oak Curriculum content via the official SDK, stores enriched documents in **seven Elasticsearch Serverless indices**, and serves hybrid (lexical + semantic) queries with server-side **Reciprocal Rank Fusion (RRF)**.
 
-> **Note**: The UI layer is being retired in favour of CLI/SDK architecture. See [search-sdk-cli.md](../../../.agent/plans/semantic-search/sdk-extraction/search-sdk-cli.md) for the extraction roadmap.
+> **Note**: The UI layer is being retired in favour of CLI/SDK architecture. See [search-sdk-cli.md](../../../.agent/plans/semantic-search/active/search-sdk-cli.md) for the extraction roadmap.
 
 ---
 
@@ -26,22 +26,13 @@ Shared settings include the `oak_text` analyser (standard, lowercase, asciifoldi
 
 ---
 
-## API Surface
+## Search Capabilities
 
-### Search Endpoints
-
-- `POST /api/search` — Structured hybrid search over lessons, units, or sequences. Validates payloads, builds server-side RRF queries, returns highlights, canonical URLs, facets, zero-hit metadata.
-- `POST /api/search/nl` — Natural-language wrapper that deterministically converts `{ q }` into structured parameters, then delegates to `/api/search`. Returns `501` when NL search disabled via `AI_PROVIDER=none`.
-- `POST /api/search/suggest` — Suggestion/type-ahead endpoint backed by completion contexts and `search_as_you_type` fields.
-
-### Admin Endpoints
-
-All admin endpoints require `x-api-key: ${SEARCH_API_KEY}`.
-
-- `GET /api/index-oak` — Admin ingestion entry point. Triggers resilient batching across lessons, units, sequences.
-- `GET /api/rebuild-rollup` — Regenerates rollup snippets, updates `oak_unit_rollup`, bumps index version.
-- `GET /api/index-oak/status` — Reports ingestion progress, processed counts, remaining batches, last error.
-- `GET /api/openapi.json` & `GET /api/docs` — Serve generated OpenAPI schema and Redoc UI.
+- **Structured hybrid search** — Search over lessons, units, or sequences. Builds server-side RRF queries, returns highlights, canonical URLs, facets, zero-hit metadata.
+- **Suggestion/type-ahead** — Backed by completion contexts and `search_as_you_type` fields.
+- **Zero-hit telemetry** — Records queries that return no results for quality improvement.
+- **CLI ingestion** — `pnpm es:ingest-live` triggers resilient batching across lessons, units, sequences.
+- **Index management** — `pnpm es:setup` manages mappings, synonyms, and index creation.
 
 ---
 
@@ -150,7 +141,7 @@ Elasticsearch Serverless indices (7 indices)
     ↓
 Server-side RRF queries & suggestions
     ↓
-API routes → CLI → SDK consumers
+CLI → SDK consumers
 ```
 
 ---

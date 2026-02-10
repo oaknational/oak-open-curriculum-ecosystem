@@ -52,7 +52,7 @@ MCP curriculum tools call the upstream Oak API directly. Search is not yet integ
 
 ### Target State
 
-```
+```text
 MCP Tool Layer
     │
     ├── get-lessons, get-units, etc. → Oak API (unchanged)
@@ -112,5 +112,5 @@ async function handleSearchCurriculum(params: SearchParams) {
 
 | Document | Purpose |
 |----------|---------|
-| [../../sdk-extraction/search-sdk-cli.md](../../sdk-extraction/search-sdk-cli.md) | SDK extraction spec |
+| [../../active/search-sdk-cli.md](../../active/search-sdk-cli.md) | SDK extraction spec |
 | [../../roadmap.md](../../roadmap.md) | Master roadmap |

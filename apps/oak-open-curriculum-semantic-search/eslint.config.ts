@@ -1,8 +1,7 @@
 /**
  * ESLint Configuration for Oak Open Curriculum Semantic Search
  *
- * Next.js 16: Using canonical eslint-config-next pattern with STRICT React Hooks rules
- * See: https://nextjs.org/docs/app/api-reference/config/eslint
+ * Node.js library workspace — no React, no Next.js.
  */
 
 import { fileURLToPath } from 'node:url';
@@ -15,13 +14,9 @@ import { configs, ignores, testRules } from '@oaknational/eslint-plugin-standard
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
 const eslintConfig = defineConfig(
-  // Override default ignores of eslint-config-next
   globalIgnores([
     ...ignores,
-    '.next/**',
-    'out/**',
     'build/**',
-    'next-env.d.ts',
     'vitest.config.ts',
     'vitest.e2e.config.ts',
     'bulk-downloads/**',
@@ -30,13 +25,9 @@ const eslintConfig = defineConfig(
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
   ...configs.strict,
 
-  // Use the Next.js config from our standards plugin (includes React, React Hooks, Next.js)
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- eslint-config-next types don't align with defineConfig
-  ...(configs.next as Linter.Config[]),
-
-  // React and TypeScript rules for source files
+  // TypeScript rules for source files
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts'],
     languageOptions: {
       parser: tseslintParser,
       parserOptions: {
@@ -44,17 +35,7 @@ const eslintConfig = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      next: {
-        rootDir: thisDir,
-      },
-    },
     rules: {
-      // ============================================================
-      // STRICT REACT HOOKS RULES
-      // ============================================================
-      'react-hooks/exhaustive-deps': 'error', // Enforces exhaustive dependency arrays
-
       // ============================================================
       // COMPLEXITY RULES
       // ============================================================
@@ -68,14 +49,7 @@ const eslintConfig = defineConfig(
 
   // Test file rules
   {
-    files: [
-      '**/*.test.ts',
-      '**/*.test.tsx',
-      '**/*.spec.ts',
-      '**/*.spec.tsx',
-      '**/test-*.ts',
-      '**/__tests__/**',
-    ],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/test-*.ts', '**/__tests__/**'],
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- testRules types don't match defineConfig's strict expectations
     rules: testRules as unknown as Linter.RulesRecord,
   },

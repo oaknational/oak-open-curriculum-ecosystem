@@ -10,12 +10,9 @@
  */
 
 import { afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom/vitest';
 
 // Cleanup after each test case to prevent state pollution
 afterEach(() => {
-  cleanup(); // Clean up React Testing Library state
   vi.useRealTimers(); // Ensure fake timers are always reset
   vi.clearAllMocks(); // Clear all mock state
 });

@@ -4,7 +4,13 @@ Date: 2025-09-14
 
 ## Status
 
-Accepted
+Superseded by [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)
+
+> The Next.js App Router that hosted the API routes described below was removed in February 2026.
+> ADR-107 now governs the NL/structured boundary: the search SDK is deterministic and accepts only
+> structured parameters; NL parsing, intent extraction, and query reformulation belong in the
+> consuming application layer (e.g. the MCP server). Caching strategy will be revisited as part of
+> SDK extraction. The original decision is preserved below for historical context.
 
 ## Context
 
@@ -57,7 +63,8 @@ This ensures:
 
 ## References
 
-- Code: `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts`
-- Code: `apps/oak-open-curriculum-semantic-search/app/api/search/nl/route.ts`
+- Code (removed): `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts`
+- Code (removed): `apps/oak-open-curriculum-semantic-search/app/api/search/nl/route.ts`
 - Plan: `.agent/plans/semantic-search-caching-plan.md`
 - Next.js Data Cache docs: [Vercel docs](https://vercel.com/docs/infrastructure/data-cache)
+- Successor: [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)

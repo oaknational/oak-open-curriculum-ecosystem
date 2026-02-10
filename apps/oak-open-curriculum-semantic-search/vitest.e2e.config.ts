@@ -2,8 +2,7 @@
  * Vitest E2E Configuration for Oak Open Curriculum Semantic Search
  *
  * Extends the base E2E config for running search quality benchmarks
- * and other E2E tests against a running Next.js server.
- *
+ * and other E2E tests against live Elasticsearch.
  */
 
 import { mergeConfig } from 'vitest/config';

@@ -1,7 +1,6 @@
 /**
  * Shared semantic search logger instance with configurable log level.
- * Centralising creation avoids multiple logger bindings in Next.js.
- * Uses console for browser compatibility.
+ * Centralised creation ensures a single logger configuration.
  *
  * Supports dual-sink logging (stdout + file) for CLI ingestion runs.
  *

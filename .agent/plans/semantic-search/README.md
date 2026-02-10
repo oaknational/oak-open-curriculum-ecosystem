@@ -12,9 +12,9 @@
 
 ## Current Work: SDK Extraction
 
-Ground truths are complete across all four indexes. The immediate priority is extracting the search capability from the Next.js app into a dedicated SDK and CLI.
+Ground truths are complete across all four indexes. The Next.js layer has been removed (Feb 2026). The immediate priority is extracting the search capability into a dedicated SDK and CLI.
 
-**Details**: [sdk-extraction/search-sdk-cli.md](sdk-extraction/search-sdk-cli.md)
+**Details**: [active/search-sdk-cli.md](active/search-sdk-cli.md)
 
 ---
 
@@ -25,7 +25,7 @@ Ground truths are complete across all four indexes. The immediate priority is ex
    30 lesson GTs + multi-index GTs
          ↓
 2. SDK Extraction (sdk-extraction/)              ← CURRENT
-   Extract search from Next.js app into SDK + CLI
+   Extract search into SDK + CLI (Next.js layer removed)
          ↓
 3. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools
@@ -41,8 +41,8 @@ Ground truths are complete across all four indexes. The immediate priority is ex
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Work in progress | Empty (GT work archived) |
-| `sdk-extraction/` | SDK extraction plans | 🔄 Current |
+| `active/` | Work in progress | 🔄 SDK extraction |
+| `sdk-extraction/` | SDK extraction context | See `active/` |
 | `post-sdk/` | Streams of post-SDK work | ⏸️ After SDK extraction |
 | `archive/` | Historical work | ✅ Reference only |
 | `templates/` | Session templates | — |

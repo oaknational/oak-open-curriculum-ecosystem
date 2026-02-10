@@ -1,4 +1,3 @@
-import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
 import { optionalEnv } from '../../env';
 import { getZeroHitRecent, getZeroHitSummary, recordZeroHitEvent } from '../zero-hit-store';
@@ -25,41 +24,41 @@ const WebhookPayloadSchema = z.object({
 
 type WebhookPayload = z.infer<typeof WebhookPayloadSchema>;
 
-export async function handleZeroHitSummary(request: NextRequest): Promise<Response> {
+export async function handleZeroHitSummary(request: Request): Promise<Response> {
   const envVars = optionalEnv();
 
   if (!envVars?.SEARCH_API_KEY) {
-    return NextResponse.json(buildDisabledTelemetryPayload());
+    return Response.json(buildDisabledTelemetryPayload());
   }
 
   if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
-    return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
+    return Response.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
   if (zeroHitPersistenceEnabled()) {
     const telemetry = await fetchZeroHitTelemetry({ limit: 50 });
-    return NextResponse.json(telemetry);
+    return Response.json(telemetry);
   }
 
   const summary = getZeroHitSummary();
   const recent = getZeroHitRecent();
-  return NextResponse.json({ summary, recent });
+  return Response.json({ summary, recent });
 }
 
-export async function handleZeroHitWebhook(request: NextRequest): Promise<Response> {
+export async function handleZeroHitWebhook(request: Request): Promise<Response> {
   const envVars = optionalEnv();
 
   if (!envVars?.SEARCH_API_KEY) {
-    return NextResponse.json({ error: 'Zero-hit telemetry disabled' }, { status: 503 });
+    return Response.json({ error: 'Zero-hit telemetry disabled' }, { status: 503 });
   }
 
   if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
-    return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
+    return Response.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
   const parsed = parseWebhookPayload(await request.json());
   if (!parsed) {
-    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+    return Response.json({ error: 'Invalid payload' }, { status: 400 });
   }
 
   const event = {
@@ -76,10 +75,10 @@ export async function handleZeroHitWebhook(request: NextRequest): Promise<Respon
     await persistZeroHitEvent(event);
   }
 
-  return NextResponse.json({ status: 'accepted' }, { status: 202 });
+  return Response.json({ status: 'accepted' }, { status: 202 });
 }
 
-function isAuthorised(request: NextRequest, apiKey: string): boolean {
+function isAuthorised(request: Request, apiKey: string): boolean {
   const header = request.headers.get('x-search-api-key');
   return typeof header === 'string' && header === apiKey;
 }

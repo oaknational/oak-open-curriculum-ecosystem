@@ -4,7 +4,13 @@ Date: 2025-09-15
 
 ## Status
 
-Accepted
+Superseded — Next.js UI layer removed
+
+> The entire Next.js UI layer, including React, styled-components, Oak Components, and all
+> referenced code (`app/lib/theme/*`, `app/lib/Providers.tsx`, `app/layout.tsx`), was removed in
+> February 2026. The semantic search workspace is now a pure TypeScript library with no UI surface.
+> Supporting documentation (`docs/oak-components-theming.md`) has also been deleted. This decision
+> is no longer applicable to the current codebase but is preserved below for historical context.
 
 ## Context
 

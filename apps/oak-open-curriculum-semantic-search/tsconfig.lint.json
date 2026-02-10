@@ -4,6 +4,6 @@
     "noEmit": true,
     "incremental": false
   },
-  "exclude": ["node_modules", ".next", "dist", "out", "docs/_typedoc_src/**"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "exclude": ["node_modules", "dist", "docs/_typedoc_src/**"],
+  "include": ["**/*.ts"]
 }

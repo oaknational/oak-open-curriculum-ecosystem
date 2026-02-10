@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** Strict runtime env validation aligned with Next.js defaults. */
+/** Strict runtime env validation for semantic search workspace. */
 export const BaseEnvSchema = z.object({
   ELASTICSEARCH_URL: z.url(),
   ELASTICSEARCH_API_KEY: z.string().min(10),
@@ -18,8 +18,6 @@ export const BaseEnvSchema = z.object({
     .default('v0-unversioned'),
   ZERO_HIT_WEBHOOK_URL: z.union([z.literal('none'), z.url()]).default('none'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
-  AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
-  OPENAI_API_KEY: z.string().min(10).optional(),
   SEARCH_INDEX_TARGET: z.enum(['primary', 'sandbox']).default('primary'),
   ZERO_HIT_PERSISTENCE_ENABLED: z
     .union([z.literal('true'), z.literal('false'), z.boolean()])
@@ -39,15 +37,6 @@ export const EnvSchema = BaseEnvSchema.superRefine((value, ctx) => {
   if (!value.OAK_API_KEY) {
     ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY.' });
   }
-  if (
-    value.AI_PROVIDER === 'openai' &&
-    (!value.OPENAI_API_KEY || value.OPENAI_API_KEY.length < 10)
-  ) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'OPENAI_API_KEY is required when AI_PROVIDER=openai.',
-    });
-  }
 });
 
 export type Env = z.infer<typeof EnvSchema>;
@@ -63,8 +52,6 @@ function readProcessEnv(): Record<string, string | undefined> {
     SEARCH_INDEX_VERSION: process.env.SEARCH_INDEX_VERSION,
     ZERO_HIT_WEBHOOK_URL: process.env.ZERO_HIT_WEBHOOK_URL,
     LOG_LEVEL: process.env.LOG_LEVEL,
-    AI_PROVIDER: process.env.AI_PROVIDER,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
     ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
     ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
@@ -96,14 +83,4 @@ export function optionalEnv(): EnvResult | null {
   } catch {
     return null;
   }
-}
-
-/** True when natural-language parsing (OpenAI) is available. */
-export function llmEnabled(): boolean {
-  const current = env();
-  return (
-    current.AI_PROVIDER === 'openai' &&
-    typeof current.OPENAI_API_KEY === 'string' &&
-    current.OPENAI_API_KEY.length > 0
-  );
 }

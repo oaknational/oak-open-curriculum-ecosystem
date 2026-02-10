@@ -1,8 +1,8 @@
 # Setup
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-02-10
 
-Follow these steps to run the semantic search service end-to-end. All commands assume the repository root unless stated otherwise.
+Follow these steps to run the semantic search workspace end-to-end. All commands assume the repository root unless stated otherwise.
 
 ---
 
@@ -24,14 +24,6 @@ SEARCH_INDEX_TARGET=primary | sandbox       # Index namespace (defaults to prima
 LOG_LEVEL=info                              # Structured logging level
 ZERO_HIT_WEBHOOK_URL=https://... | none     # Optional webhook for zero-hit telemetry
 ZERO_HIT_PERSISTENCE_ENABLED=false          # true to persist zero-hit events
-
-# Natural language search (optional)
-AI_PROVIDER=openai | none                   # Choose 'none' to disable NL endpoint
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Development
-SEMANTIC_SEARCH_USE_FIXTURES=fixtures       # fixtures | fixtures-empty | fixtures-error | live
-NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE=true      # Controls fixture toggle visibility
 ```
 
 Environment validation (`src/lib/env.ts`) enforces these rules; run unit tests after editing env handling.
@@ -82,19 +74,7 @@ This script:
 
 ---
 
-## 5. Start the Dev Server
-
-```bash
-pnpm -C apps/oak-open-curriculum-semantic-search dev
-```
-
-The server uses App Router with SSR theming; logs appear in the terminal for observability events.
-
----
-
-## 6. Run Ingestion
-
-### Option A: CLI Ingestion (Recommended)
+## 5. Run Ingestion
 
 ```bash
 cd apps/oak-open-curriculum-semantic-search
@@ -109,63 +89,21 @@ pnpm es:ingest-live -- --all
 pnpm es:ingest-live -- --subject maths --dry-run
 ```
 
-### Option B: Admin Endpoints
+---
 
-Admin endpoints require `x-api-key: $SEARCH_API_KEY`:
-
-```bash
-curl "http://localhost:3003/api/index-oak" \
-  -H "x-api-key: $SEARCH_API_KEY"
-
-curl "http://localhost:3003/api/rebuild-rollup" \
-  -H "x-api-key: $SEARCH_API_KEY"
-```
-
-Monitor progress:
+## 6. Verify Search Quality
 
 ```bash
-curl http://localhost:3003/api/index-oak/status \
-  -H "x-api-key: $SEARCH_API_KEY"
+# Run smoke tests (hit live Elasticsearch directly)
+pnpm test:smoke
+
+# Run ground truth benchmarks
+pnpm benchmark
 ```
 
 ---
 
-## 7. Verify Search Endpoints
-
-Structured search:
-
-```bash
-curl -X POST http://localhost:3003/api/search \
-  -H 'content-type: application/json' \
-  -d '{
-    "scope": "units",
-    "text": "mountain formation",
-    "subject": "geography",
-    "keyStage": "ks4",
-    "minLessons": 3,
-    "facets": true
-  }'
-```
-
-Natural-language search (if `AI_PROVIDER` ≠ `none`):
-
-```bash
-curl -X POST http://localhost:3003/api/search/nl \
-  -H 'content-type: application/json' \
-  -d '{ "q": "Find KS4 geography units about mountains with at least three lessons" }'
-```
-
-Suggestion endpoint:
-
-```bash
-curl -X POST http://localhost:3003/api/search/suggest \
-  -H 'content-type: application/json' \
-  -d '{ "prefix": "mount", "scope": "lessons", "subject": "geography", "keyStage": "ks4" }'
-```
-
----
-
-## 8. Quality Gates (Run After Changes)
+## 7. Quality Gates (Run After Changes)
 
 From repository root:
 
@@ -183,7 +121,7 @@ pnpm test:e2e:built
 
 ---
 
-## 9. Observability Reminders
+## 8. Observability Reminders
 
 - Monitor logs for bulk retries, zero-hit events, and ingestion durations.
 - If using `ZERO_HIT_WEBHOOK_URL`, verify webhook deliveries after search verification.
@@ -191,9 +129,9 @@ pnpm test:e2e:built
 
 ---
 
-## 10. Documentation Sync
+## 9. Documentation Sync
 
-After making structural changes, update authored docs and regenerate OpenAPI/TypeDoc artefacts:
+After making structural changes, regenerate TypeDoc artefacts:
 
 ```bash
 pnpm -C apps/oak-open-curriculum-semantic-search doc-gen

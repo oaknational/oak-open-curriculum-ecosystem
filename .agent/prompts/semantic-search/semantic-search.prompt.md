@@ -6,16 +6,16 @@
 
 ## Current Priority: SDK Extraction
 
-Ground truths are complete across all four indexes. The immediate priority is extracting the search capability from the Next.js app into a dedicated SDK and CLI.
+Ground truths are complete across all four indexes. The Next.js UI and HTTP API layers have been removed (Feb 2026). The immediate priority is extracting the search capability into a dedicated SDK and CLI.
 
-**Plan**: [search-sdk-cli.md](../../plans/semantic-search/sdk-extraction/search-sdk-cli.md)  
+**Plan**: [search-sdk-cli.md](../../plans/semantic-search/active/search-sdk-cli.md)  
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
 ---
 
 ## What We Have
 
-A powerful Elasticsearch-backed semantic search capability, currently packaged as a Next.js app at `apps/oak-open-curriculum-semantic-search/`. The core search logic lives in `src/lib/` — the Next.js UI and HTTP API layers are not needed going forward.
+A powerful Elasticsearch-backed semantic search capability at `apps/oak-open-curriculum-semantic-search/`. The core search logic lives in `src/lib/`. The workspace is a pure TypeScript library — the Next.js UI and HTTP API layers were removed in Feb 2026 (ADRs 044, 045 superseded; 049 partially superseded).
 
 ### Search Pipeline
 
@@ -74,7 +74,7 @@ Before starting work:
 2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
 4. [semantic-search-architecture.md](../../directives-and-memory/semantic-search-architecture.md) — Structure is the foundation
-5. [search-sdk-cli.md](../../plans/semantic-search/sdk-extraction/search-sdk-cli.md) — **THE** plan for this work
+5. [search-sdk-cli.md](../../plans/semantic-search/active/search-sdk-cli.md) — **THE** plan for this work
 
 ---
 

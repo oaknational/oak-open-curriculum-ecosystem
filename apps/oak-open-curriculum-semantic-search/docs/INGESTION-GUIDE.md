@@ -64,8 +64,7 @@ pnpm es:ingest-live -- --subject maths --key-stage ks4
 pnpm es:status
 
 # 4. Run smoke tests to measure search quality
-rm -rf .next && pnpm dev  # Terminal 1
-pnpm test:smoke           # Terminal 2
+pnpm test:smoke
 ```
 
 ---
@@ -275,10 +274,7 @@ Expected: Non-zero value (e.g., 30+ for Pythagoras query).
 ### 4. Run Search Quality Smoke Tests
 
 ```bash
-# Terminal 1: Start server
-rm -rf .next && pnpm dev
-
-# Terminal 2: Run smoke tests
+# Smoke tests hit live Elasticsearch directly (no server required)
 pnpm test:smoke
 ```
 

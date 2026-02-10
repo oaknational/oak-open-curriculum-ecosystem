@@ -1,27 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "jsx": "preserve",
+    "lib": ["ESNext"],
     "baseUrl": ".",
-    "allowJs": true,
+    "allowJs": false,
     "noEmit": true,
     "incremental": true,
     "isolatedModules": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "styled.d.ts",
-    ".next/types/**/*.ts",
-    "evaluation/**/*.ts",
-    "operations/**/*.ts"
-  ],
+  "include": ["**/*.ts", "evaluation/**/*.ts", "operations/**/*.ts"],
   "exclude": ["node_modules", "vitest.config.ts", "vitest.e2e.config.ts"]
 }

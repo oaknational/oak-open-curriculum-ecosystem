@@ -1,5 +1,4 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { NextRequest } from 'next/server';
 import { handleZeroHitSummary, handleZeroHitWebhook } from './zero-hit-api';
 import { recordZeroHitEvent, resetZeroHitStore, getZeroHitSummary } from '../zero-hit-store';
 import type { ZeroHitTelemetry } from '../zero-hit-persistence';
@@ -140,13 +139,13 @@ function makeRequest(
   method: 'GET' | 'POST',
   body?: unknown,
   headers: Record<string, string> = {},
-): NextRequest {
-  const requestInit = {
+): Request {
+  const requestInit: RequestInit = {
     method,
     headers: new Headers(headers),
     body: body ? JSON.stringify(body) : undefined,
   };
-  return new NextRequest('http://localhost/api/observability/zero-hit', requestInit);
+  return new Request('http://localhost/api/observability/zero-hit', requestInit);
 }
 
 describe('zero-hit API handlers', () => {
