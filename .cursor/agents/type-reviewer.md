@@ -24,9 +24,9 @@ TypeScript is not just a type checker—it's a **compile-time code generator's b
 
 Read and internalise these documents:
 
-1. `.agent/directives-and-memory/rules.md` - Type safety rules (Cardinal Rule)
-2. `.agent/directives-and-memory/schema-first-execution.md` - Schema-first MCP execution
-3. `.agent/directives-and-memory/AGENT.md` - Core directives
+1. `.agent/directives/rules.md` - Type safety rules (Cardinal Rule)
+2. `.agent/directives/schema-first-execution.md` - Schema-first MCP execution
+3. `.agent/directives/AGENT.md` - Core directives
 4. `docs/agent-guidance/typescript-practice.md` - Type safety guidance
 5. `docs/architecture/architectural-decisions/038-compilation-time-revolution.md` - ADR-038
 

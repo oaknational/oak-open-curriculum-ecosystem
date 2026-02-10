@@ -3,8 +3,8 @@
 ## Mission
 
 - Remove the final hard-coded HTTP `200` assumptions from the MCP tool generation pipeline so every documented response status becomes first-class.
-- Ensure the Open Curriculum SDK can react to upstream schema changes by re-running `pnpm type-gen`, keeping the Cardinal Rule unbroken (`.agent/directives-and-memory/rules.md:13`).
-- Preserve the mandated flow: **original OpenAPI schema → schema decoration pipeline → generated handling code**, with authored runtime remaining a thin façade (`.agent/directives-and-memory/schema-first-execution.md:5`).
+- Ensure the Open Curriculum SDK can react to upstream schema changes by re-running `pnpm type-gen`, keeping the Cardinal Rule unbroken (`.agent/directives/rules.md:13`).
+- Preserve the mandated flow: **original OpenAPI schema → schema decoration pipeline → generated handling code**, with authored runtime remaining a thin façade (`.agent/directives/schema-first-execution.md:5`).
 
 ## Problem Statement
 
@@ -15,10 +15,10 @@
 
 ## Directives and Constraints
 
-- **Cardinal Rule**: All branching logic must be generated; runtime code cannot infer or widen unions (`.agent/directives-and-memory/rules.md:13`).
-- **Schema-First Execution**: Runtime remains a façade; generator outputs must provide readonly literal descriptors for every status (`.agent/directives-and-memory/schema-first-execution.md:11`).
+- **Cardinal Rule**: All branching logic must be generated; runtime code cannot infer or widen unions (`.agent/directives/rules.md:13`).
+- **Schema-First Execution**: Runtime remains a façade; generator outputs must provide readonly literal descriptors for every status (`.agent/directives/schema-first-execution.md:11`).
 - **Decoration Pipeline Safeguard**: Decorations may add new status descriptors, but any attempt to mutate an existing status (identical method + path + status tuple) must throw immediately to protect fidelity (new requirement).
-- **First Question**: Prefer the simplest compliant approach—extend existing method/path tables rather than introducing new registries (`.agent/directives-and-memory/AGENT.md:17`).
+- **First Question**: Prefer the simplest compliant approach—extend existing method/path tables rather than introducing new registries (`.agent/directives/AGENT.md:17`).
 - **Strict typings**: No runtime narrowing or type assertions; unions produced at type-gen time must describe the full status space.
 
 ## Current Context Snapshot (24 October 2025)

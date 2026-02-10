@@ -1,6 +1,6 @@
 ---
-description: Always read .agent/directives-and-memory/AGENT.md and .agent/directives-and-memory/rules.md (both relative to repo root) to understand the project and the agent's role.
+description: Always read .agent/directives/AGENT.md and .agent/directives/rules.md (both relative to repo root) to understand the project and the agent's role.
 alwaysApply: true
 ---
 
-Read .agent/directives-and-memory/AGENT.md and .agent/directives-and-memory/rules.md files (both relative to repo root) to understand the project and the agent's role.
+Read .agent/directives/AGENT.md and .agent/directives/rules.md files (both relative to repo root) to understand the project and the agent's role.

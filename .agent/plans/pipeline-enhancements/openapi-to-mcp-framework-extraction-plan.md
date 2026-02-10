@@ -3,9 +3,9 @@
 ## Core References
 
 - [GO.md](../../GO.md)
-- [AGENT.md](../directives-and-memory/AGENT.md)
-- [.agent/directives-and-memory/rules.md](../directives-and-memory/rules.md)
-- [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
+- [AGENT.md](../directives/AGENT.md)
+- [.agent/directives/rules.md](../directives/rules.md)
+- [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
 
 ## Prerequisites
 
@@ -107,7 +107,7 @@ Deliver an extensible framework that transforms any OpenAPI specification, plus 
 5. QUALITY-GATE: Cross-check that audit and abstraction documents reference the latest code paths (`packages/sdks/oak-curriculum-sdk/`, `apps/oak-curriculum-mcp-stdio/`, `apps/oak-curriculum-mcp-streamable-http/`, `apps/oak-open-curriculum-semantic-search/`).
 6. GROUNDING: Read GO.md and follow all instructions; update approach if plan or context has shifted.
 7. ACTION: Design the framework configuration schema (fields for schema source, transport targets, auth strategies, search entity descriptors, optional modules) and validate it with Zod guards plus illustrative examples under `packages/openapi-mcp-framework/config/`.
-8. REVIEW: Self-review the configuration schema and examples to ensure alignment with `.agent/directives-and-memory/rules.md` type-safety mandates.
+8. REVIEW: Self-review the configuration schema and examples to ensure alignment with `.agent/directives/rules.md` type-safety mandates.
 9. QUALITY-GATE: Execute `pnpm type-check` and `pnpm lint` focused on the new config package to guarantee rule compliance before proceeding.
 10. ACTION: Document the onboarding dry-run procedure and acceptance checklist in `docs/openapi-mcp-framework/onboarding-checklist.md` to measure adoption readiness.
 11. REVIEW: Self-review the onboarding checklist, verifying it covers SDK, MCP server, and search scaffolding expectations.

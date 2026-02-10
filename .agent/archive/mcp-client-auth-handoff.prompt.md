@@ -26,9 +26,9 @@ We need to implement **MCP client authentication** - allowing ChatGPT to authent
 
 **Foundation documents** (read these first):
 
-- `.agent/directives-and-memory/rules.md` - Core rules, TDD, quality gates
-- `.agent/directives-and-memory/testing-strategy.md` - TDD at all levels, test types
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first for SDK
+- `.agent/directives/rules.md` - Core rules, TDD, quality gates
+- `.agent/directives/testing-strategy.md` - TDD at all levels, test types
+- `.agent/directives/schema-first-execution.md` - Schema-first for SDK
 
 **Implementation plan**:
 

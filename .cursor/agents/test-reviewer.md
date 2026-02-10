@@ -38,9 +38,9 @@ Tests are specifications of behaviour, not regression checks. Complex tests indi
 
 Read and internalise these documents:
 
-1. `.agent/directives-and-memory/testing-strategy.md` - **THE AUTHORITATIVE TESTING REFERENCE**
-2. `.agent/directives-and-memory/rules.md` - Core development rules
-3. `.agent/directives-and-memory/AGENT.md` - General practice guidance
+1. `.agent/directives/testing-strategy.md` - **THE AUTHORITATIVE TESTING REFERENCE**
+2. `.agent/directives/rules.md` - Core development rules
+3. `.agent/directives/AGENT.md` - General practice guidance
 4. `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md` - DI for testing
 
 ## Tooling

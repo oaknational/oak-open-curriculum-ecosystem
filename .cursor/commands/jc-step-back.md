@@ -8,7 +8,7 @@ Take a step back. Pause. Reflect.
 
 2. **Is this the simplest approach?** Could we make any of this simpler? Reflect on this honestly.
 
-3. **Are we aligned?** Does everything we have done fully align with the rules and guides linked to from @.agent/directives-and-memory/AGENT.md ?
+3. **Are we aligned?** Does everything we have done fully align with the rules and guides linked to from @.agent/directives/AGENT.md ?
 
 4. **What do the quality gates say?**
 

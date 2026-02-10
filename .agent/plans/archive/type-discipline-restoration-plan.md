@@ -10,7 +10,7 @@
 
 > **All quality gate issues are blocking at all times, regardless of location, cause, or context. There is no such thing as an acceptable failure. There is no such thing as "someone else's problem".**
 
-See: `.agent/directives-and-memory/rules.md`
+See: `.agent/directives/rules.md`
 
 ---
 
@@ -346,9 +346,9 @@ const ks4OptionSlug = sequence.ks4Options?.slug;
 ### 1. Read Foundation Documents (MANDATORY)
 
 ```bash
-cat .agent/directives-and-memory/rules.md
-cat .agent/directives-and-memory/schema-first-execution.md
-cat .agent/directives-and-memory/testing-strategy.md
+cat .agent/directives/rules.md
+cat .agent/directives/schema-first-execution.md
+cat .agent/directives/testing-strategy.md
 ```
 
 ### 2. Run ALL Quality Gates
@@ -425,9 +425,9 @@ The ~188 `eslint-disable` comments are not obstacles—they're **signals showing
 
 Before each work session, re-read and commit to:
 
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/schema-first-execution.md`
+- `.agent/directives/testing-strategy.md`
 
 ---
 

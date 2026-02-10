@@ -10,8 +10,8 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 ## Essential Reading (MANDATORY — in order)
 
 1. **Repository Rules & Standards**
-   - `.agent/directives-and-memory/rules.md`
-   - `.agent/directives-and-memory/testing-strategy.md`
+   - `.agent/directives/rules.md`
+   - `.agent/directives/testing-strategy.md`
 2. **Plans & Context**
    - `.agent/plans/semantic-search/semantic-search-api-plan.md`
    - `.agent/plans/semantic-search/semantic-search-api-context.md`
@@ -47,7 +47,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 2. Open `.agent/plans/semantic-search/semantic-search-alignment-refresh-plan.md` and continue from the next ACTION item.
 3. For each task:
    - Write the todo entry in GO format (ACTION, REVIEW, with grounding every third step).
-   - Use TDD (`.agent/directives-and-memory/testing-strategy.md`), starting with failing tests.
+   - Use TDD (`.agent/directives/testing-strategy.md`), starting with failing tests.
    - Capture reviews/quality-gate outcomes in the refresh plan’s Review Log.
 4. Keep documentation in sync (docs, README, MCP notes) per the documentation plan.
 
@@ -67,7 +67,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 
 ## Development Rules (always)
 
-- Honour `.agent/directives-and-memory/rules.md` and the testing strategy; apply TDD (Red → Green → Refactor).
+- Honour `.agent/directives/rules.md` and the testing strategy; apply TDD (Red → Green → Refactor).
 - No skipping quality gates. The sequence: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`.
 - No unsafe assertions (`as`, `!`) or bypassing type guards; prefer pure functions.
 - British spelling required; mention “REMINDER: Use british spelling” in todo lists.

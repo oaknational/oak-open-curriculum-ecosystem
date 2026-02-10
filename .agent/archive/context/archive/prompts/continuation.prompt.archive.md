@@ -12,9 +12,9 @@ that expose Oak's open curriculum data.
 
 Please read:
 1. @.agent/context/context.md – latest state snapshot
-2. @.agent/directives-and-memory/rules.md – repository rules (mandatory)
-3. @.agent/directives-and-memory/schema-first-execution.md – schema-first mandate
-4. @.agent/directives-and-memory/testing-strategy.md – TDD/testing guidelines
+2. @.agent/directives/rules.md – repository rules (mandatory)
+3. @.agent/directives/schema-first-execution.md – schema-first mandate
+4. @.agent/directives/testing-strategy.md – TDD/testing guidelines
 5. @.agent/plans/high-level-plan.md – active strategic priorities
 
 After reading, please:

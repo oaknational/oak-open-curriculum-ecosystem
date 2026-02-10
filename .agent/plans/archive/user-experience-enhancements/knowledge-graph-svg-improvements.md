@@ -2,7 +2,7 @@
 
 > **Status**: Draft
 > **Priority**: Medium
-> **Foundation Documents**: [rules.md](../../directives-and-memory/rules.md), [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
+> **Foundation Documents**: [rules.md](../../directives/rules.md), [testing-strategy.md](../../directives/testing-strategy.md)
 > **Research Sources**:
 >
 > - [world-bank-graphing-demo-svg-patterns.md](../../research/world-bank-graphing-demo-svg-patterns.md)
@@ -441,9 +441,9 @@ The following would require significant architectural changes and are **not** re
 
 Before starting implementation, re-read:
 
-1. [rules.md](../../directives-and-memory/rules.md) — TDD, pure functions, no shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test-first at all levels
-3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — For M2 (brief consolidation)
+1. [rules.md](../../directives/rules.md) — TDD, pure functions, no shortcuts
+2. [testing-strategy.md](../../directives/testing-strategy.md) — Test-first at all levels
+3. [schema-first-execution.md](../../directives/schema-first-execution.md) — For M2 (brief consolidation)
 
 ---
 

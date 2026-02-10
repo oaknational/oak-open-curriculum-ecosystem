@@ -79,6 +79,6 @@ Review `LessonSummaryResponseSchema` for any remaining unindexed fields:
 ## Related Documents
 
 - [ADR-082](../../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) - Fundamentals-first strategy
-- [Cardinal Rule](../../../directives-and-memory/rules.md) - All types from schema at compile time
+- [Cardinal Rule](../../../directives/rules.md) - All types from schema at compile time
 
 

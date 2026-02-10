@@ -118,7 +118,7 @@ pnpm dev
 
 #### 1. Testing Philosophy
 
-**Read**: [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)
+**Read**: [Testing Strategy](../../../.agent/directives/testing-strategy.md)
 
 - Focus on: Test pyramid and TDD approach
 - Key insight: Pure functions enable comprehensive testing

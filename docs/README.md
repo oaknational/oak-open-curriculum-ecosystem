@@ -38,7 +38,7 @@ Comprehensive documentation for AI agents working with this codebase:
 - [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Primary guide for AI agents
 - [Development Practice](agent-guidance/development-practice.md) - Code standards and workflow
 - [TypeScript Practice](agent-guidance/typescript-practice.md) - Type safety guidelines
-- [Testing Strategy](../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
+- [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [Safety and Security](agent-guidance/safety-and-security.md) - Security measures and privacy protection
 
 ## Search Application

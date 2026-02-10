@@ -122,9 +122,9 @@ Before ANY code changes, read and internalize these documents:
 
 ```bash
 # These define what "correct" means - read them FIRST
-cat .agent/directives-and-memory/rules.md
-cat .agent/directives-and-memory/schema-first-execution.md
-cat .agent/directives-and-memory/testing-strategy.md
+cat .agent/directives/rules.md
+cat .agent/directives/schema-first-execution.md
+cat .agent/directives/testing-strategy.md
 
 # The schema is the source of truth for all types
 cat packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json
@@ -406,9 +406,9 @@ Every `eslint-disable` is entropy. Every `as` destroys type information. Every `
 
 Before any work, re-read and commit to:
 
-1. **`.agent/directives-and-memory/rules.md`** — TDD, quality gates, no type shortcuts
-2. **`.agent/directives-and-memory/schema-first-execution.md`** — All types from schema at type-gen time
-3. **`.agent/directives-and-memory/testing-strategy.md`** — Test types and TDD approach
+1. **`.agent/directives/rules.md`** — TDD, quality gates, no type shortcuts
+2. **`.agent/directives/schema-first-execution.md`** — All types from schema at type-gen time
+3. **`.agent/directives/testing-strategy.md`** — Test types and TDD approach
 
 Key principles:
 
@@ -553,9 +553,9 @@ import type {
 
 ### Foundation Documents
 
-- `.agent/directives-and-memory/rules.md` — Core rules
-- `.agent/directives-and-memory/schema-first-execution.md` — Schema-first approach
-- `.agent/directives-and-memory/testing-strategy.md` — TDD at all levels
+- `.agent/directives/rules.md` — Core rules
+- `.agent/directives/schema-first-execution.md` — Schema-first approach
+- `.agent/directives/testing-strategy.md` — TDD at all levels
 
 ### Key Source Files (Indexing Pipeline)
 

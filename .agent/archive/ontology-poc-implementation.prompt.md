@@ -9,9 +9,9 @@ Implement the `get-ontology` aggregated tool as specified in the POC plan. This 
 Before starting, read these documents in order:
 
 1. **Foundation Documents** (mandatory):
-   - `.agent/directives-and-memory/rules.md` - TDD, no type shortcuts, schema-first
-   - `.agent/directives-and-memory/testing-strategy.md` - Red → Green → Refactor
-   - `.agent/directives-and-memory/schema-first-execution.md` - Generated artifacts drive runtime
+   - `.agent/directives/rules.md` - TDD, no type shortcuts, schema-first
+   - `.agent/directives/testing-strategy.md` - Red → Green → Refactor
+   - `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 
 2. **Plan & Content**:
    - `.agent/plans/sdk-and-mcp-enhancements/00-ontology-poc-static-tool.md` - Full implementation plan

@@ -4,7 +4,7 @@ REMINDER: Use British spelling
 
 ## Purpose
 
-Get the full set of quality gates passing consistently across the repository with minimal, surgical refactors and corrections only. No new functionality. Follow `.agent/directives-and-memory/AGENT.md` and `rules.md` strictly. Ignore Notion-specific feature work; only fix linting, types, and tests where needed to pass gates.
+Get the full set of quality gates passing consistently across the repository with minimal, surgical refactors and corrections only. No new functionality. Follow `.agent/directives/AGENT.md` and `rules.md` strictly. Ignore Notion-specific feature work; only fix linting, types, and tests where needed to pass gates.
 
 ## Quality Gates (canonical order)
 

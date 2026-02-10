@@ -12,9 +12,9 @@
 
 Before starting this work, read and commit to:
 
-1. [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates, no type shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test types and approach
-3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator-first architecture
+1. [rules.md](../../directives/rules.md) — TDD, quality gates, no type shortcuts
+2. [testing-strategy.md](../../directives/testing-strategy.md) — Test types and approach
+3. [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator-first architecture
 
 **Note**: This plan is documentation-only (no code changes), but foundation principles still apply to documentation quality.
 

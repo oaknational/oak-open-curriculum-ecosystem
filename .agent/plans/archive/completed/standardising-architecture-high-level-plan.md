@@ -5,7 +5,7 @@ Strategic roadmap only. Detailed execution for Part 1 is defined in `standardisi
 ## Scope & References
 
 - Read and follow `GO.md` for grounding, TODO structuring, and quality gates. Replace references to external review agents with self-reviews.
-- Read `.agent/directives-and-memory/AGENT.md` and linked documents.
+- Read `.agent/directives/AGENT.md` and linked documents.
 - Implementation details live in:
   - `.agent/plans/standardising-architecture-part1.md` (Part 1 implementation)
   - `.agent/plans/standardising-architecture-part2.md` (Part 2 implementation)

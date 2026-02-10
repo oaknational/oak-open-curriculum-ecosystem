@@ -1048,4 +1048,4 @@ For tracking diagnostic improvements, see:
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP-specific instrumentation details
 - [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Stdio-specific instrumentation details
 - [Logger Package README](../../packages/libs/logger/README.md) - Logger API documentation
-- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - Testing logging code
+- [Testing Strategy](../../.agent/directives/testing-strategy.md) - Testing logging code

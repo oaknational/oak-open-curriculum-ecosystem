@@ -174,7 +174,7 @@ According to the cardinal rule, ALL of the following must be generated:
 
 ### Cardinal Rule Compliance
 
-From `.agent/directives-and-memory/rules.md`:
+From `.agent/directives/rules.md`:
 
 > ALL static data structures, types, type guards, Zod schemas, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run. If the upstream OpenAPI schema changes, then running `pnpm type-gen` MUST be sufficient to bring all workspaces into alignment with the new schema.
 
@@ -184,7 +184,7 @@ From `.agent/directives-and-memory/rules.md`:
 
 ### Schema-First Execution
 
-From `.agent/directives-and-memory/schema-first-execution.md`:
+From `.agent/directives/schema-first-execution.md`:
 
 > The definitive source of truth for all data shapes is the OpenAPI schema. Types, validators, and runtime behavior MUST derive from this schema at compile time.
 
@@ -1289,7 +1289,7 @@ pnpm test -- search-with-facets
 
 ## Testing and Validation Strategy
 
-Following `.agent/directives-and-memory/testing-strategy.md`, the search service uses a three-tier testing approach.
+Following `.agent/directives/testing-strategy.md`, the search service uses a three-tier testing approach.
 
 ### Unit Tests (Pure Functions, `.unit.test.ts`)
 
@@ -1492,17 +1492,17 @@ pnpm e2e:thread-search
    - Provides: Entity definitions, relationships, official Oak API alignment
 
 2. **Cardinal rule architecture**
-   - Location: `.agent/directives-and-memory/rules.md`
+   - Location: `.agent/directives/rules.md`
    - Status: ✅ COMPLETE
    - Defines: Type-gen requirement, schema-first mandate
 
 3. **Schema-first execution patterns**
-   - Location: `.agent/directives-and-memory/schema-first-execution.md`
+   - Location: `.agent/directives/schema-first-execution.md`
    - Status: ✅ COMPLETE
    - Defines: Compile-time generation, no runtime types
 
 4. **Testing strategy**
-   - Location: `.agent/directives-and-memory/testing-strategy.md`
+   - Location: `.agent/directives/testing-strategy.md`
    - Status: ✅ COMPLETE
    - Defines: Unit/integration/E2E patterns
 
@@ -2048,9 +2048,9 @@ describe('API error tracking', () => {
 
 ### Guidance
 
-- [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md)
-- [Schema-First Execution](../../../directives-and-memory/schema-first-execution.md)
-- [Cardinal Rule](../../../directives-and-memory/rules.md)
+- [Testing Strategy](../../../.agent/directives/testing-strategy.md)
+- [Schema-First Execution](../../../directives/schema-first-execution.md)
+- [Cardinal Rule](../../../directives/rules.md)
 
 ### Application
 

@@ -1,1 +1,1 @@
-Read .agent/directives-and-memory/metacognition.md (relative to repo root) and follow the instructions.
+Read .agent/directives/metacognition.md (relative to repo root) and follow the instructions.

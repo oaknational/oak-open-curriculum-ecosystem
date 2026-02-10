@@ -17,7 +17,7 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 ## Core References
 
 - Read and follow `GO.md` for grounding, TODO structuring, and quality gates. Replace references to external review agents with self-reviews.
-- Read `.agent/directives-and-memory/AGENT.md` and linked documents.
+- Read `.agent/directives/AGENT.md` and linked documents.
 
 ## Zero‑Context Resume Checklist
 

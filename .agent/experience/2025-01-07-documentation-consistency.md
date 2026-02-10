@@ -100,11 +100,11 @@ Continue documenting significant learnings and decisions as experience documents
 
 Key documentation files updated:
 
-- `.agent/directives-and-memory/AGENT.md`
-- `.agent/directives-and-memory/rules.md`
+- `.agent/directives/AGENT.md`
+- `.agent/directives/rules.md`
 - `docs/ARCHITECTURE_MAP.md`
 - `docs/agent-guidance/architecture.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/testing-strategy.md`
 - `docs/architecture/high-level-architecture.md`
 - `docs/architecture/biological-philosophy.md`
 - All Phase 5 planning documents

@@ -44,7 +44,7 @@ Phase 2.5 is a complete architectural restructuring based on the fundamental ins
 
 ## Core Principles
 
-Based on [AGENT.md](../directives-and-memory/AGENT.md), [TypeScript Practice](../../docs/typescript-practice.md), and [Development Practice](../../docs/development-practice.md):
+Based on [AGENT.md](../directives/AGENT.md), [TypeScript Practice](../../docs/typescript-practice.md), and [Development Practice](../../docs/development-practice.md):
 
 - **NEVER use `any` or type assertions (`as`)**
 - **NEVER create substitute types for library types**

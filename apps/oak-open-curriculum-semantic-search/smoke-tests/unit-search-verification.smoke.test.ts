@@ -13,7 +13,7 @@
  * - Response latency is under 300ms
  * - Results are returned for valid queries
  *
- * @see `.agent/directives-and-memory/testing-strategy.md`
+ * @see `.agent/directives/testing-strategy.md`
  */
 
 import { describe, it, expect } from 'vitest';

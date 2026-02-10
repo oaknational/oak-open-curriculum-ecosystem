@@ -167,7 +167,7 @@ When you see files marked `DO NOT EDIT MANUALLY` or in `src/types/generated/` di
 
 **This extends to runtime behavior**: Not just types, but MCP tool descriptors, validators, and execution helpers are all generated. Runtime code is a thin façade that calls generated helpers - it never re-implements validation or widens types.
 
-See [Schema-First Execution Directive](../.agent/directives-and-memory/schema-first-execution.md) for implementation requirements.
+See [Schema-First Execution Directive](../.agent/directives/schema-first-execution.md) for implementation requirements.
 
 ## Development Workflows
 

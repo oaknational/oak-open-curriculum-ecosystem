@@ -911,6 +911,6 @@ Replace `buildInputSchemaObject()` function (lines 20-84 in `packages/sdks/oak-c
 
 - Investigation: `.agent/plans/archive/resolve-di-digressions.md`
 - Future work: `.agent/plans/quality-and-maintainability/di-architecture-consistency.md`
-- Foundation: `.agent/directives-and-memory/rules.md`
-- Testing: `.agent/directives-and-memory/testing-strategy.md`
-- Schema-first: `.agent/directives-and-memory/schema-first-execution.md`
+- Foundation: `.agent/directives/rules.md`
+- Testing: `.agent/directives/testing-strategy.md`
+- Schema-first: `.agent/directives/schema-first-execution.md`

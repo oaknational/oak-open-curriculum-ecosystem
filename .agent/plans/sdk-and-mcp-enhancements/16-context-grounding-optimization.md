@@ -8,7 +8,7 @@
 
 - [`.agent/research/openai-apps-sdk-data-return-optimization.md`](../../research/openai-apps-sdk-data-return-optimization.md)
 - [`.agent/reference-docs/openai-apps/openai-apps-sdk-reference.md`](../../reference-docs/openai-apps/openai-apps-sdk-reference.md)
-- [`.agent/directives-and-memory/schema-first-execution.md`](../../directives-and-memory/schema-first-execution.md)
+- [`.agent/directives/schema-first-execution.md`](../../directives/schema-first-execution.md)
 
 ---
 
@@ -16,9 +16,9 @@
 
 Before each phase of work, re-read and re-commit to:
 
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
+- `.agent/directives/schema-first-execution.md`
 
 ---
 

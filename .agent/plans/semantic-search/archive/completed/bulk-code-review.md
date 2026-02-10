@@ -13,9 +13,9 @@
 
 ## Foundation Documents (Re-commit before continuing)
 
-1. **[rules.md](../../../directives-and-memory/rules.md)** — TDD at ALL levels
-2. **[testing-strategy.md](../../../directives-and-memory/testing-strategy.md)** — Red → Green → Refactor
-3. **[schema-first-execution.md](../../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+1. **[rules.md](../../../directives/rules.md)** — TDD at ALL levels
+2. **[testing-strategy.md](../../../directives/testing-strategy.md)** — Red → Green → Refactor
+3. **[schema-first-execution.md](../../../directives/schema-first-execution.md)** — Generator is source of truth
 4. **[ADR-088: Result Pattern](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)** — No try/catch, use Result pattern
 5. **[ADR-051: OpenTelemetry Logging](../../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md)** — Structured JSON logging
 
@@ -760,7 +760,7 @@ The current bulk ingestion code has **insufficient logging**:
 | [bulk-api-parity-requirements.md](./bulk-api-parity-requirements.md) | Field specifications (Action 1) |
 | [roadmap.md](../roadmap.md) | Master plan |
 | [semantic-search.prompt.md](../../../prompts/semantic-search/semantic-search.prompt.md) | Session context |
-| [testing-strategy.md](../../../directives-and-memory/testing-strategy.md) | TDD principles |
+| [testing-strategy.md](../../../directives/testing-strategy.md) | TDD principles |
 | [ADR-088: Result Pattern](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Error handling pattern |
 | [ADR-051: OpenTelemetry Logging](../../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md) | Logging format |
 | [ADR-033: Log Level Configuration](../../../../docs/architecture/architectural-decisions/033-centralised-log-level-configuration.md) | Log levels |

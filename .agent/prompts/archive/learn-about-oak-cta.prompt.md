@@ -249,6 +249,6 @@ Current status: ✅ Unit and integration tests pass (35 tests)
 
 This work complies with:
 
-- **[rules.md](.agent/directives-and-memory/rules.md)** - No type shortcuts, proper TSDoc, pure functions, DRY (single CTA registry)
-- **[schema-first-execution.md](.agent/directives-and-memory/schema-first-execution.md)** - Widget code is authored runtime (not generated from OpenAPI), which is permitted
-- **[testing-strategy.md](.agent/directives-and-memory/testing-strategy.md)** - Testing work is identified as remaining work (Phase 1)
+- **[rules.md](.agent/directives/rules.md)** - No type shortcuts, proper TSDoc, pure functions, DRY (single CTA registry)
+- **[schema-first-execution.md](.agent/directives/schema-first-execution.md)** - Widget code is authored runtime (not generated from OpenAPI), which is permitted
+- **[testing-strategy.md](.agent/directives/testing-strategy.md)** - Testing work is identified as remaining work (Phase 1)

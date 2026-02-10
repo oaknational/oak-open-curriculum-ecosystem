@@ -158,9 +158,9 @@ Agents don't need this — they already know about endpoints. The graph should c
 When implementing `get-knowledge-graph`:
 
 1. **Re-read foundation documents** (per project rules):
-   - `.agent/directives-and-memory/rules.md`
-   - `.agent/directives-and-memory/testing-strategy.md`
-   - `.agent/directives-and-memory/schema-first-execution.md`
+   - `.agent/directives/rules.md`
+   - `.agent/directives/testing-strategy.md`
+   - `.agent/directives/schema-first-execution.md`
 
 2. **Read implementation documents** (in order):
    - `knowledge-graph-analysis-synthesis.md` — Comprehensive synthesis

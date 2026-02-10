@@ -94,7 +94,7 @@ Parameter descriptions help users understand what data they're providing.
 
 ### 1.4 Schema-First Principle
 
-Per `.agent/directives-and-memory/schema-first-execution.md`:
+Per `.agent/directives/schema-first-execution.md`:
 
 > Every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts sourced from the OpenAPI schema.
 

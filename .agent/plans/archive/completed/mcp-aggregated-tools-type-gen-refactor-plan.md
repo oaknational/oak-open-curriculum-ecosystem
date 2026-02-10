@@ -6,8 +6,8 @@ Refactor aggregated MCP tools (`search`, `fetch`) from hand-written runtime code
 
 ## Context and References
 
-- Aligns with `.agent/directives-and-memory/rules.md` (Cardinal rule: type-gen sufficiency)
-- Follows `.agent/directives-and-memory/schema-first-execution.md` (all complexity at type-gen time)
+- Aligns with `.agent/directives/rules.md` (Cardinal rule: type-gen sufficiency)
+- Follows `.agent/directives/schema-first-execution.md` (all complexity at type-gen time)
 - Prerequisite for `.agent/plans/curriculum-ontology-resource-plan.md` Sprint 0
 - Prerequisite for `.agent/plans/high-level-plan.md` Item #6 (semantic search MCP integration)
 - Related to `.agent/plans/oak-openai-app-plan.md` (metadata optimization, tool consistency)
@@ -480,9 +480,9 @@ After each phase:
 
 ### Implementation Directives
 
-- `.agent/directives-and-memory/rules.md` - Cardinal rule: type-gen sufficiency
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first execution directive
-- `.agent/directives-and-memory/testing-strategy.md` - TDD approach
+- `.agent/directives/rules.md` - Cardinal rule: type-gen sufficiency
+- `.agent/directives/schema-first-execution.md` - Schema-first execution directive
+- `.agent/directives/testing-strategy.md` - TDD approach
 
 ### Related Plans
 

@@ -29,9 +29,9 @@ All tasks completed with TDD approach:
 
 Read these foundational documents in order:
 
-1. `.agent/directives-and-memory/rules.md` - Cardinal rules including schema-first types, TDD, no type shortcuts
-2. `.agent/directives-and-memory/schema-first-execution.md` - Type-gen drives all MCP tool behaviour
-3. `.agent/directives-and-memory/testing-strategy.md` - TDD at all levels, test definitions
+1. `.agent/directives/rules.md` - Cardinal rules including schema-first types, TDD, no type shortcuts
+2. `.agent/directives/schema-first-execution.md` - Type-gen drives all MCP tool behaviour
+3. `.agent/directives/testing-strategy.md` - TDD at all levels, test definitions
 4. `.agent/plans/sdk-and-mcp-enhancements/08-openai-apps-sdk-feature-adoption-plan.md` - Full plan (see Phase 2 section)
 5. `.agent/reference-docs/openai-apps/` - OpenAI Apps SDK documentation
 

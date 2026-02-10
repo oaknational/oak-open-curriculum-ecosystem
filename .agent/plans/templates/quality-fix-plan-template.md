@@ -108,9 +108,9 @@ Answer: [YES/NO - explain why]
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives-and-memory/rules.md` - Core principles
-2. **Re-read** `.agent/directives-and-memory/testing-strategy.md` - Testing philosophy
-3. **Re-read** `.agent/directives-and-memory/schema-first-execution.md` - Type generation flow
+1. **Re-read** `.agent/directives/rules.md` - Core principles
+2. **Re-read** `.agent/directives/testing-strategy.md` - Testing philosophy
+3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
 5. **Verify**: No compatibility layers, no type shortcuts, no disabled checks
 
@@ -482,9 +482,9 @@ done
 
 - [Product code reference]: [File path or description]
 - Foundation documents:
-  - `.agent/directives-and-memory/rules.md`
-  - `.agent/directives-and-memory/testing-strategy.md`
-  - `.agent/directives-and-memory/schema-first-execution.md`
+  - `.agent/directives/rules.md`
+  - `.agent/directives/testing-strategy.md`
+  - `.agent/directives/schema-first-execution.md`
 
 ---
 

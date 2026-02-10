@@ -170,5 +170,5 @@ search({ filters: buildFilters({ subject, keyStage }).withTier('higher') })
 
 Before starting work, re-read:
 
-1. [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates, no type shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
+1. [rules.md](../../directives/rules.md) — TDD, quality gates, no type shortcuts
+2. [testing-strategy.md](../../directives/testing-strategy.md) — TDD at ALL levels

@@ -1,12 +1,12 @@
 # TDD Remediation Plan: ecosystem/psycha/oak-curriculum-mcp
 
-Grounded on `GO.md` and `.agent/directives-and-memory/AGENT.md`. Follows strict TS rules: no `any`, no `as` (prefer type guards), no non-null assertions. Tests via Vitest. Small, atomic refactors.
+Grounded on `GO.md` and `.agent/directives/AGENT.md`. Follows strict TS rules: no `any`, no `as` (prefer type guards), no non-null assertions. Tests via Vitest. Small, atomic refactors.
 
 ## Core references
 
 - `GO.md`
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/AGENT.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/AGENT.md`
 - `docs/agent-guidance/typescript-practice.md`
 - `docs/architecture/workspace-eslint-rules.md`
 

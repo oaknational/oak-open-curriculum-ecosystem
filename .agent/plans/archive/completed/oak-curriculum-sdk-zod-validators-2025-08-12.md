@@ -5,7 +5,7 @@
 ### Planning & Guidance
 
 - GO.md (workspace root): `GO.md`
-- Testing Strategy: `.agent/directives-and-memory/testing-strategy.md`
+- Testing Strategy: `.agent/directives/testing-strategy.md`
 - Rules & Best Practices: `docs/README.md#rules-and-best-practices`
 - Current SDK Reference: `packages/oak-curriculum-sdk/docs/oak-open-curriculum-api-sdk-reference.md`
 

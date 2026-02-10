@@ -32,9 +32,9 @@
 
 ## 2. Context & References
 
-- `.agent/directives-and-memory/AGENT.md`
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
+- `.agent/directives/AGENT.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/schema-first-execution.md`
 - `docs/architecture/architectural-decisions/029-no-manual-api-data.md`
 - `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md`
 - `docs/architecture/architectural-decisions/031-generation-time-extraction.md`

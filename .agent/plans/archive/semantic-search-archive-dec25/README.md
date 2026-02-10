@@ -69,9 +69,9 @@
 For new sessions, read in this order:
 
 1. **Foundation Documents** (MUST READ FIRST)
-   - [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates, no type shortcuts
-   - [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — All types from schema
-   - [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test types and TDD approach
+   - [rules.md](../../directives/rules.md) — TDD, quality gates, no type shortcuts
+   - [schema-first-execution.md](../../directives/schema-first-execution.md) — All types from schema
+   - [testing-strategy.md](../../directives/testing-strategy.md) — Test types and TDD approach
    - [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) — **Fundamentals-first strategy**
 
 2. **Ground Truth Status** (CRITICAL)

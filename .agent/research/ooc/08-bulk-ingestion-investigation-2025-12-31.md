@@ -21,9 +21,9 @@ This investigation systematically verified 15 assumptions from `semantic-search.
 
 ## Foundation Documents (Re-read before continuing)
 
-1. **[rules.md](../../directives-and-memory/rules.md)** — TDD at ALL levels
-2. **[testing-strategy.md](../../directives-and-memory/testing-strategy.md)** — Red → Green → Refactor
-3. **[schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
+1. **[rules.md](../../directives/rules.md)** — TDD at ALL levels
+2. **[testing-strategy.md](../../directives/testing-strategy.md)** — Red → Green → Refactor
+3. **[schema-first-execution.md](../../directives/schema-first-execution.md)** — Generator is source of truth
 
 ---
 

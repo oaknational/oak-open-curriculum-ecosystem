@@ -219,9 +219,9 @@ This is a **sector-transformative opportunity**. See [02b-vocabulary-mining.md](
 
 ### Foundation Documents (MANDATORY)
 
-- [rules.md](../../directives-and-memory/rules.md) — TDD, quality gates
-- [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — Test types
-- [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator-first
+- [rules.md](../../directives/rules.md) — TDD, quality gates
+- [testing-strategy.md](../../directives/testing-strategy.md) — Test types
+- [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator-first
 
 ### Key ADRs
 

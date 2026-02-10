@@ -23,9 +23,9 @@ This comprehensive plan covers MCP architecture evolution and advanced capabilit
 
 Read and follow:
 
-- `.agent/directives-and-memory/rules.md` - Cardinal Rule, TDD, type safety, no shortcuts
-- `.agent/directives-and-memory/schema-first-execution.md` - All runtime behaviour driven by generated artefacts
-- `.agent/directives-and-memory/testing-strategy.md` - TDD-first, unit → integration → E2E
+- `.agent/directives/rules.md` - Cardinal Rule, TDD, type safety, no shortcuts
+- `.agent/directives/schema-first-execution.md` - All runtime behaviour driven by generated artefacts
+- `.agent/directives/testing-strategy.md` - TDD-first, unit → integration → E2E
 
 ---
 
@@ -666,7 +666,7 @@ pnpm test:e2e      # E2E tests pass
 
 ## Testing Strategy
 
-Following `.agent/directives-and-memory/testing-strategy.md`:
+Following `.agent/directives/testing-strategy.md`:
 
 1. **Unit Tests**: Pure functions, no I/O, no mocks
    - Configuration validation

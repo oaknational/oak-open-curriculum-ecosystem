@@ -3,7 +3,7 @@ Objective: Emit discriminated entries so TypeScript keeps the literal associatio
 
 Grounding Check
 
-Re-read .agent/directives-and-memory/rules.md and .agent/directives-and-memory/schema-first-execution.md.
+Re-read .agent/directives/rules.md and .agent/directives/schema-first-execution.md.
 Log in .agent/plans/semantic-search/context.md that Stage 3.2 is starting; note the build failure from Stage 3.1.
 Design & Implementation
 

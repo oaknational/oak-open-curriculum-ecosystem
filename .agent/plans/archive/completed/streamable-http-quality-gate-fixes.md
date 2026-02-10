@@ -332,5 +332,5 @@ If bootstrap logic extraction requires integration testing:
 - Quality gate logs: `/tmp/quality-gate-*.log`
 - Test files: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/`
 - Production code: `apps/oak-curriculum-mcp-streamable-http/src/`
-- Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
-- Rules: `.agent/directives-and-memory/rules.md`
+- Testing strategy: `.agent/directives/testing-strategy.md`
+- Rules: `.agent/directives/rules.md`

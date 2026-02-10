@@ -2,7 +2,7 @@
 
 > **Status**: ✅ Complete (2025-12-16)  
 > **Priority**: High (affects type safety across entire codebase)  
-> **Foundation Alignment**: [rules.md](../../directives-and-memory/rules.md), [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md), [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
+> **Foundation Alignment**: [rules.md](../../directives/rules.md), [schema-first-execution.md](../../directives/schema-first-execution.md), [testing-strategy.md](../../directives/testing-strategy.md)
 
 ## Strategic Intent
 

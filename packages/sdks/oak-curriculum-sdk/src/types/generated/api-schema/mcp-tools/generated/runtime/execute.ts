@@ -6,7 +6,7 @@
  * Generated from packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-execute-file.ts
  *
  * @remarks This file is part of the schema-first execution DAG described in
- * .agent/directives-and-memory/schema-first-execution.md. Do not hand-edit.
+ * .agent/directives/schema-first-execution.md. Do not hand-edit.
  */
 import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
 import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../data/definitions.js';

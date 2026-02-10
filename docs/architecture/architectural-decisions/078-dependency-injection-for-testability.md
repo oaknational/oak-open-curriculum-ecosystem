@@ -3,7 +3,7 @@
 **Status**: Accepted  
 **Date**: 2025-12-14  
 **Deciders**: Engineering Team  
-**Related**: [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md), [Rules](../../../.agent/directives-and-memory/rules.md)
+**Related**: [Testing Strategy](../../../.agent/directives/testing-strategy.md), [Rules](../../../.agent/directives/rules.md)
 
 ## Context
 

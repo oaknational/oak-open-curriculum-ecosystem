@@ -8,7 +8,7 @@
  * Canonical literal descriptors for every tool.
  *
  * This file participates in the schema-first execution DAG. See
- * .agent/directives-and-memory/schema-first-execution.md for details.
+ * .agent/directives/schema-first-execution.md for details.
  */
 
 // Import canonical tool descriptors

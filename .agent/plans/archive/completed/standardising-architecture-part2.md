@@ -262,7 +262,7 @@ Abort conditions (Part 2 execution):
 ## 10. Grounding & Core References
 
 - Read and follow `GO.md` (primary operational guidance: grounding, TODO structuring, quality gates, deep thinking). For this plan and future sub‑plans, replace any “review agent” mentions with self‑reviews.
-- Read `.agent/directives-and-memory/AGENT.md` and linked documents; align behaviour accordingly.
+- Read `.agent/directives/AGENT.md` and linked documents; align behaviour accordingly.
 - High‑level context: `.agent/plans/standardising-architecture-high-level-plan.md`
 - Part 1 plan: `.agent/plans/standardising-architecture-part1.md`
 

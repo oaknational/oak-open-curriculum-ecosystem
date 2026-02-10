@@ -37,11 +37,11 @@ Pre-SDK-extraction cleanup of `apps/oak-open-curriculum-semantic-search/`. Zero 
 
 ## Guiding principle
 
-From [rules.md](.agent/directives-and-memory/rules.md):
+From [rules.md](.agent/directives/rules.md):
 
 > Environment variables MUST be read once at the entry point, then passed as configuration through the call stack. Product code MUST NOT read `process.env` directly.
 
-From [testing-strategy.md](.agent/directives-and-memory/testing-strategy.md):
+From [testing-strategy.md](.agent/directives/testing-strategy.md):
 
 > NEVER manipulate global state in tests -- no `process.env` mutations, no `vi.stubGlobal`, no `vi.doMock`. Product code must accept configuration as parameters.
 

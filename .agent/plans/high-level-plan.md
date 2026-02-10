@@ -340,9 +340,9 @@ pnpm smoke:dev:stub    # Smoke tests
 
 Re-read regularly:
 
-- `.agent/directives-and-memory/rules.md` — Cardinal Rule, TDD, type safety
-- `.agent/directives-and-memory/testing-strategy.md` — TDD at all levels
-- `.agent/directives-and-memory/schema-first-execution.md` — Generator-first architecture
+- `.agent/directives/rules.md` — Cardinal Rule, TDD, type safety
+- `.agent/directives/testing-strategy.md` — TDD at all levels
+- `.agent/directives/schema-first-execution.md` — Generator-first architecture
 
 ---
 

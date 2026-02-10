@@ -6,7 +6,7 @@ Read this WHOLE document _before_ taking action.
 
 Perform a slow, deep, COMPREHENSIVE review of the **entire** codebase: go slowly, take your time, get it right. I do not expect this process to be quick, I do expect it to be both thorough and accurate.
 
-As you go, compare the code to the rules @.agent/directives-and-memory/rules.md and other guidance @.agent/directives-and-memory/AGENT.md, and make notes of any discrepancies.
+As you go, compare the code to the rules @.agent/directives/rules.md and other guidance @.agent/directives/AGENT.md, and make notes of any discrepancies.
 
 If additional context was provided by the user, consider all feedback in that context.
 

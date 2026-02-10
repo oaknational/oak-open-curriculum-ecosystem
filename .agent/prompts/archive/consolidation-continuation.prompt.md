@@ -66,10 +66,10 @@ This enables full cross-referencing to prove no information has been lost.
 
 Before proceeding, re-read and commit to:
 
-1. **[`.agent/directives-and-memory/rules.md`](../../directives-and-memory/rules.md)** — First Question: "Could it be simpler?"
-2. **[`.agent/directives-and-memory/testing-strategy.md`](../../directives-and-memory/testing-strategy.md)** — Test pyramid, TDD
-3. **[`.agent/directives-and-memory/schema-first-execution.md`](../../directives-and-memory/schema-first-execution.md)** — Generator is source of truth
-4. **[`.agent/directives-and-memory/AGENT.md`](../../directives-and-memory/AGENT.md)** — Agent-specific directives
+1. **[`.agent/directives/rules.md`](../../directives/rules.md)** — First Question: "Could it be simpler?"
+2. **[`.agent/directives/testing-strategy.md`](../../directives/testing-strategy.md)** — Test pyramid, TDD
+3. **[`.agent/directives/schema-first-execution.md`](../../directives/schema-first-execution.md)** — Generator is source of truth
+4. **[`.agent/directives/AGENT.md`](../../directives/AGENT.md)** — Agent-specific directives
 
 ---
 

@@ -293,7 +293,7 @@ See `archive/` for historical plan versions and consolidated plans.
 
 ## Related Documentation
 
-- `.agent/directives-and-memory/rules.md` - Cardinal Rule, TDD, type safety
-- `.agent/directives-and-memory/schema-first-execution.md` - Generator-first architecture
-- `.agent/directives-and-memory/testing-strategy.md` - Unit → integration → E2E
+- `.agent/directives/rules.md` - Cardinal Rule, TDD, type safety
+- `.agent/directives/schema-first-execution.md` - Generator-first architecture
+- `.agent/directives/testing-strategy.md` - Unit → integration → E2E
 - `docs/architecture/curriculum-ontology.md` - Domain model reference

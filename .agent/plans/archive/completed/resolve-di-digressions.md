@@ -155,9 +155,9 @@ Answer: YES - use what exists, don't add more.
 
 Before beginning work and at the start of each phase:
 
-1. **Re-read** `.agent/directives-and-memory/rules.md` - Core principles
-2. **Re-read** `.agent/directives-and-memory/testing-strategy.md` - Testing philosophy
-3. **Re-read** `.agent/directives-and-memory/schema-first-execution.md` - Type generation flow
+1. **Re-read** `.agent/directives/rules.md` - Core principles
+2. **Re-read** `.agent/directives/testing-strategy.md` - Testing philosophy
+3. **Re-read** `.agent/directives/schema-first-execution.md` - Type generation flow
 4. **Ask**: "Does this deliver system-level value, not just fix the immediate issue?"
 5. **Verify**: No compatibility layers, no type shortcuts, no disabled checks
 
@@ -1025,8 +1025,8 @@ Allow `process.env` for "harmless" values like package version.
 
 ## References
 
-- `.agent/directives-and-memory/rules.md` - "No global state", "Pure functions first"
-- `.agent/directives-and-memory/testing-strategy.md` - "Use dependency injection with pure functions"
+- `.agent/directives/rules.md` - "No global state", "Pure functions first"
+- `.agent/directives/testing-strategy.md` - "Use dependency injection with pure functions"
 - `.agent/plans/resolve-di-digressions.md` - Phase 0 validation findings
 - Martin Fowler: "Inversion of Control Containers and the Dependency Injection pattern"
 
@@ -1321,8 +1321,8 @@ const config = createTestConfig({ apiKey: 'custom-key' });
 ## See Also
 
 - [ADR 054: Dependency Injection for Configuration](../architecture/architectural-decisions/0001-dependency-injection-for-configuration.md)
-- [Testing Strategy](../../directives-and-memory/testing-strategy.md)
-- [Rules: No Global State](.agent/directives-and-memory/rules.md)
+- [Testing Strategy](../../directives/testing-strategy.md)
+- [Rules: No Global State](.agent/directives/rules.md)
 
 **Acceptance Criteria**:
 
@@ -2539,8 +2539,8 @@ No new unit tests required - existing unit tests for `loadRuntimeConfig` already
 - App bootstrap: `src/application.ts:createApp()`
 - Test helpers: `e2e-tests/helpers/create-*-http-app.ts`
 - Failing test: `e2e-tests/auth-enforcement.e2e.test.ts`
-- Testing strategy: `.agent/directives-and-memory/testing-strategy.md`
-- Rules: `.agent/directives-and-memory/rules.md`
+- Testing strategy: `.agent/directives/testing-strategy.md`
+- Rules: `.agent/directives/rules.md`
 - Vitest config: `apps/oak-curriculum-mcp-streamable-http/vitest.e2e.config.ts`
 
 ---

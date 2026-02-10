@@ -19,7 +19,7 @@ _Last updated: 28 October 2025 12:25 GMT_
 ## Focus: Status-Aware Response Handling
 
 - Responses are defined by **method + path + status**; every branch must be generated at type-gen time from the decorated schema.
-- Flow remains **original schema → decoration pipeline (with collision guards) → generated handling code**, keeping runtime a thin façade (`.agent/directives-and-memory/schema-first-execution.md`).
+- Flow remains **original schema → decoration pipeline (with collision guards) → generated handling code**, keeping runtime a thin façade (`.agent/directives/schema-first-execution.md`).
 - No runtime type assertions or ad-hoc narrowing—generated artefacts expose readonly descriptors and discriminated unions.
 - Detailed roadmap, acceptance criteria, and validation commands live in `../status-handling.plan.md`.
 

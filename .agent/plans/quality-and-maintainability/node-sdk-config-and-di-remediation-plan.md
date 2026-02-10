@@ -13,9 +13,9 @@ Eliminate direct `process.env` access and global-state mutations in product code
 
 ## Foundations (Must Re-Read)
 
-- [rules.md](../../directives-and-memory/rules.md)
-- [testing-strategy.md](../../directives-and-memory/testing-strategy.md)
-- [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md)
+- [rules.md](../../directives/rules.md)
+- [testing-strategy.md](../../directives/testing-strategy.md)
+- [schema-first-execution.md](../../directives/schema-first-execution.md)
 
 ## Related Plans
 

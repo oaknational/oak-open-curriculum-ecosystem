@@ -10,19 +10,19 @@ This task implements **tool-name-routed renderers** with **generic renderer patt
 
 Before starting ANY work, read and internalise these foundational documents:
 
-1. **Rules**: `.agent/directives-and-memory/rules.md`
+1. **Rules**: `.agent/directives/rules.md`
    - TDD at ALL levels (unit, integration, E2E)
    - Pure functions first
    - No type shortcuts (`as`, `any`, `!`)
    - Fail fast with helpful errors
 
-2. **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md`
+2. **Testing Strategy**: `.agent/directives/testing-strategy.md`
    - Write tests FIRST (RED → GREEN → REFACTOR)
    - Unit tests for pure functions (no IO, no mocks)
    - Integration tests for code units working together
    - E2E tests for running systems (Playwright)
 
-3. **Schema-First**: `.agent/directives-and-memory/schema-first-execution.md`
+3. **Schema-First**: `.agent/directives/schema-first-execution.md`
    - Generator-first mindset
    - Types flow from OpenAPI schema
    - No hand-authored type widening

@@ -50,9 +50,9 @@ If you find yourself thinking "in this case it's justified" — STOP. That is ex
 
 Before ANY work:
 
-1. **[rules.md](../directives-and-memory/rules.md)** — Especially "No type shortcuts" and "NEVER disable checks"
-2. **[testing-strategy.md](../directives-and-memory/testing-strategy.md)** — TDD at all levels
-3. **[schema-first-execution.md](../directives-and-memory/schema-first-execution.md)** — Types flow from source
+1. **[rules.md](../directives/rules.md)** — Especially "No type shortcuts" and "NEVER disable checks"
+2. **[testing-strategy.md](../directives/testing-strategy.md)** — TDD at all levels
+3. **[schema-first-execution.md](../directives/schema-first-execution.md)** — Types flow from source
 
 Read them fully. Internalise them. They are not guidelines — they are constraints.
 

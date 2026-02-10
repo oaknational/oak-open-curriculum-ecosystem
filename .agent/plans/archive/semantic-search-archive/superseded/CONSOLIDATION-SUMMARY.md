@@ -156,9 +156,9 @@
 1. Read: .agent/prompts/semantic-search/semantic-search.prompt.md
    ↓ (THE entry point, has everything)
 
-2. Read: .agent/directives-and-memory/rules.md (15 min)
-   Read: .agent/directives-and-memory/schema-first-execution.md (5 min)
-   Read: .agent/directives-and-memory/testing-strategy.md (5 min)
+2. Read: .agent/directives/rules.md (15 min)
+   Read: .agent/directives/schema-first-execution.md (5 min)
+   Read: .agent/directives/testing-strategy.md (5 min)
    ↓ (Foundation principles)
 
 3. Read: .agent/plans/semantic-search/maths-ks4-implementation-plan.md

@@ -66,9 +66,9 @@ Search for `[` in your new plan and replace all bracketed placeholders:
 
 **Read all three foundation documents:**
 
-1. `.agent/directives-and-memory/rules.md`
-2. `.agent/directives-and-memory/testing-strategy.md`
-3. `.agent/directives-and-memory/schema-first-execution.md`
+1. `.agent/directives/rules.md`
+2. `.agent/directives/testing-strategy.md`
+3. `.agent/directives/schema-first-execution.md`
 
 **Ask the first question:**
 

@@ -478,8 +478,8 @@ All must pass (exit code 0).
 ## Foundation Documents
 
 Before implementing, re-read:
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
 
 Key principle: Tests MUST NOT manipulate global state. Product code must accept dependencies as parameters.
 
@@ -489,7 +489,7 @@ Key principle: Tests MUST NOT manipulate global state. Product code must accept 
 
 - **Blocked by this**: [test-isolation-architecture-fix.md](../semantic-search/test-isolation-architecture-fix.md)
 - **Part of**: [global-state-elimination-and-testing-discipline-plan.md](../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md)
-- **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md` (line 25, 37)
+- **Testing Strategy**: `.agent/directives/testing-strategy.md` (line 25, 37)
 - **ADR**: Should create ADR documenting this pattern for future media query usage
 
 ---

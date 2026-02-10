@@ -494,5 +494,5 @@ pnpm test:e2e
 
 - Investigation: `.agent/plans/archive/resolve-di-digressions.md`
 - Immediate fixes: `.agent/plans/fix-e2e-test-isolation.md`
-- Foundation: `.agent/directives-and-memory/rules.md`
-- Testing: `.agent/directives-and-memory/testing-strategy.md`
+- Foundation: `.agent/directives/rules.md`
+- Testing: `.agent/directives/testing-strategy.md`

@@ -311,4 +311,4 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 - [Parent Plan (Archived)](../archive/08-openai-apps-sdk-feature-adoption-plan.archived.md)
 - [Implementation Prompt](../../prompts/phase-8a-token-optimization-and-widget-features.prompt.md)
 - [OpenAI Apps SDK Reference](../../reference-docs/openai-apps/openai-apps-sdk-reference.md)
-- [Testing Strategy](../../directives-and-memory/testing-strategy.md)
+- [Testing Strategy](../../directives/testing-strategy.md)

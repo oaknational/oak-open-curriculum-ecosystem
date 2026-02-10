@@ -328,5 +328,5 @@ Zero regressions.
 - **Phase 1 Summary**: `.agent/plans/phase-1-implementation-summary.md`
 - **Phase 0 Plan** (aggregated tools migration): `.agent/plans/sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md`
 - **OpenAI Auth Docs**: Referenced in code comments
-- **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md`
-- **Schema-First Execution**: `.agent/directives-and-memory/schema-first-execution.md`
+- **Testing Strategy**: `.agent/directives/testing-strategy.md`
+- **Schema-First Execution**: `.agent/directives/schema-first-execution.md`

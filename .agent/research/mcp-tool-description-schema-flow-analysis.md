@@ -14,8 +14,8 @@ This report provides a deep analysis of how MCP tool descriptions, input schemas
 
 **Alignment with Directives**:
 
-- ✅ Follows `.agent/directives-and-memory/schema-first-execution.md` - All tool metadata generated at compile time
-- ✅ Follows `.agent/directives-and-memory/rules.md` - No type shortcuts, schema-first architecture
+- ✅ Follows `.agent/directives/schema-first-execution.md` - All tool metadata generated at compile time
+- ✅ Follows `.agent/directives/rules.md` - No type shortcuts, schema-first architecture
 - ⚠️ Partial alignment with type reuse principle - we could leverage more upstream SDK types
 
 ---
@@ -1014,7 +1014,7 @@ if (!parsed.success) {
 
 ### 7.1 Schema-First Execution Directive
 
-**Reference**: `.agent/directives-and-memory/schema-first-execution.md`
+**Reference**: `.agent/directives/schema-first-execution.md`
 
 | Requirement                                        | Status     | Evidence                           |
 | -------------------------------------------------- | ---------- | ---------------------------------- |
@@ -1031,7 +1031,7 @@ if (!parsed.success) {
 
 ### 7.2 Core Rules
 
-**Reference**: `.agent/directives-and-memory/rules.md`
+**Reference**: `.agent/directives/rules.md`
 
 | Rule                                                    | Status                 | Evidence                         |
 | ------------------------------------------------------- | ---------------------- | -------------------------------- |
@@ -1047,7 +1047,7 @@ if (!parsed.success) {
 
 ### 7.3 Testing Strategy
 
-**Reference**: `.agent/directives-and-memory/testing-strategy.md`
+**Reference**: `.agent/directives/testing-strategy.md`
 
 | Principle                               | Status                | Evidence                        |
 | --------------------------------------- | --------------------- | ------------------------------- |

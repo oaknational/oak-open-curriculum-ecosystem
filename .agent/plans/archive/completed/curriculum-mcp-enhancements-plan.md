@@ -66,7 +66,7 @@ Benefits
 ## Core References
 
 - `.agent/reference-docs/openai-connector-standards.md` (OpenAI Connector standard for MCP)
-- `.agent/directives-and-memory/AGENT.md` (Development Practice, Testing Strategy, TypeScript Practice)
+- `.agent/directives/AGENT.md` (Development Practice, Testing Strategy, TypeScript Practice)
 - `.agent/reference-docs/mcp-typescript-sdk-readme.md` (McpServer, Streamable HTTP, stdio, debounced notifications, elicitation)
 - `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md`
 - `docs/architecture/architectural-decisions/` (relevant ADRs)

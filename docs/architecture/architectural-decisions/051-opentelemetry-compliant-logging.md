@@ -133,7 +133,7 @@ interface OpenTelemetryLogRecord {
 
 ### Why No Backwards Compatibility
 
-Per `.agent/directives-and-memory/rules.md` and `.agent/directives-and-memory/testing-strategy.md`:
+Per `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`:
 
 - We iterate quickly and fix forward
 - Breaking changes are acceptable when justified

@@ -24,8 +24,8 @@ Configuration consistency enables predictable behaviour across all workspaces. B
 
 Read and internalise these documents:
 
-1. `.agent/directives-and-memory/AGENT.md` - Core directives and documentation index
-2. `.agent/directives-and-memory/rules.md` - Development rules and principles
+1. `.agent/directives/AGENT.md` - Core directives and documentation index
+2. `.agent/directives/rules.md` - Development rules and principles
 3. `tsconfig.base.json` - Base TypeScript configuration
 4. `eslint.config.ts` - Root ESLint configuration
 5. `.prettierrc.json` - Prettier configuration

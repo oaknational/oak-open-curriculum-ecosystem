@@ -624,4 +624,4 @@ main();
 - [Logger Package README](../../libs/logger/README.md) - Complete logger API documentation
 - [HTTP Server README](../../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP server with correlation IDs
 - [Stdio Server README](../../../apps/oak-curriculum-mcp-stdio/README.md) - Stdio server with file logging
-- [Testing Strategy](../../../.agent/directives-and-memory/testing-strategy.md) - How to test logging code
+- [Testing Strategy](../../../.agent/directives/testing-strategy.md) - How to test logging code

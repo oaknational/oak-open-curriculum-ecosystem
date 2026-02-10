@@ -4,7 +4,7 @@ Theme inventory: .agent/plans/semantic-search/semantic-theme-inventory.md
 Theme spec: .agent/plans/semantic-search/semantic-theme-spec.md
 Next.js + Styled Components reference: .agent/reference-docs/ui/styled-components-in-nextjs.md
 
-All work must align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `.agent/directives-and-memory/testing-strategy.md`. Maintain GO cadence (ACTION → REVIEW with grounding cadence) and use British spelling.
+All work must align with `GO.md`, `.agent/directives/AGENT.md`, `.agent/directives/rules.md`, and `.agent/directives/testing-strategy.md`. Maintain GO cadence (ACTION → REVIEW with grounding cadence) and use British spelling.
 
 Current status (2025-09-26): Structured search controllers and theme bridge are stable; ingestion/telemetry pipelines need resilience and actionable outputs. Functionality plan focuses on ingestion/rollup hardening, telemetry/health improvements, admin tooling, and documentation.
 

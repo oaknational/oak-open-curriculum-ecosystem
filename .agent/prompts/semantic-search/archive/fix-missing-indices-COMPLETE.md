@@ -96,9 +96,9 @@ apps/oak-open-curriculum-semantic-search/src/lib/
 
 Before implementing, re-read and commit to:
 
-1. **`.agent/directives-and-memory/rules.md`** - Core rules, TDD, no type shortcuts
-2. **`.agent/directives-and-memory/schema-first-execution.md`** - All types flow from generators
-3. **`.agent/directives-and-memory/testing-strategy.md`** - TDD at ALL levels
+1. **`.agent/directives/rules.md`** - Core rules, TDD, no type shortcuts
+2. **`.agent/directives/schema-first-execution.md`** - All types flow from generators
+3. **`.agent/directives/testing-strategy.md`** - TDD at ALL levels
 
 ### Key Principles to Apply
 

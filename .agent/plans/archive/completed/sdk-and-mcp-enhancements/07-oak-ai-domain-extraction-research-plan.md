@@ -37,9 +37,9 @@ The Oak AI Lesson Assistant repository (`reference/oak-ai-lesson-assistant/`) co
 
 Before beginning any research task, and at the start of each working session, re-read and recommit to:
 
-1. `.agent/directives-and-memory/rules.md` - Our development principles
-2. `.agent/directives-and-memory/testing-strategy.md` - Our testing philosophy
-3. `.agent/directives-and-memory/schema-first-execution.md` - Our type generation mandate
+1. `.agent/directives/rules.md` - Our development principles
+2. `.agent/directives/testing-strategy.md` - Our testing philosophy
+3. `.agent/directives/schema-first-execution.md` - Our type generation mandate
 
 **The First Question always applies**: Could it be simpler without compromising quality?
 
@@ -554,9 +554,9 @@ The `extraction-recommendations.md` deliverable will provide specific guidance f
 
 ## References
 
-- `.agent/directives-and-memory/rules.md` - Development principles
-- `.agent/directives-and-memory/testing-strategy.md` - Testing philosophy
-- `.agent/directives-and-memory/schema-first-execution.md` - Type generation mandate
+- `.agent/directives/rules.md` - Development principles
+- `.agent/directives/testing-strategy.md` - Testing philosophy
+- `.agent/directives/schema-first-execution.md` - Type generation mandate
 - `reference/oak-ai-lesson-assistant/` - Research target repository
 - `.agent/plans/sdk-and-mcp-enhancements/06-ux-improvements-and-research-plan.md` - Parent plan
 

@@ -496,7 +496,7 @@ function createUser(data: unknown) {
 
 **Session 1: Context Gathering**
 
-1. Read project rules from `.agent/directives-and-memory/rules.md`
+1. Read project rules from `.agent/directives/rules.md`
 2. Cache rules in memory
 3. Extract relevant file context (±10 lines around issue)
 4. Gather diagnostics (linter errors)
@@ -713,8 +713,8 @@ function createUser(data: unknown) {
 
 **Automatic Detection**:
 
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/typescript-practice.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/typescript-practice.md`
 - `.cursorrules` (Cursor-specific)
 - `.eslintrc` (ESLint rules)
 
@@ -819,8 +819,8 @@ function createUser(data: unknown) {
 - `dev-tooling-and-dev-ai-support/agent-lifecycle-automation-plan.md` - Automated quality gates (complementary)
 - `observability/logger-sentry-otel-integration-plan.md` - Observability patterns to detect
 - `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` - MCP tools that could benefit from real-time coaching
-- `.agent/directives-and-memory/rules.md` - Rules the coach enforces
-- `.agent/directives-and-memory/typescript-practice.md` - Type safety patterns to detect
+- `.agent/directives/rules.md` - Rules the coach enforces
+- `.agent/directives/typescript-practice.md` - Type safety patterns to detect
 
 ## References
 

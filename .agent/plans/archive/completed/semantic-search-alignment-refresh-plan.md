@@ -7,14 +7,14 @@ Create a consolidated execution plan to align every semantic search plan and aut
 ## Impact
 
 - Contributors receive a single, accurate roadmap for finishing semantic search back-end, documentation, and UI workstreams.
-- Plans and docs describe processes that honour `.agent/directives-and-memory/rules.md` and `.agent/directives-and-memory/testing-strategy.md`, including TDD expectations, quality gates, and documentation standards.
+- Plans and docs describe processes that honour `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md`, including TDD expectations, quality gates, and documentation standards.
 - Semantic search onboarding material reflects the enriched SDK data, index mappings, suggestion endpoints, zero-hit logging, and regression coverage.
 
 ## References
 
 - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
 - `GO.md`
 - Existing semantic search plans and docs listed in the High-Level Plan (#4)
 

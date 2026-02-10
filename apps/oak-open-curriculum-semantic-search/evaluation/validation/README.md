@@ -65,4 +65,4 @@ For the complete step-by-step process of creating new ground truths, see:
 - [GROUND-TRUTH-PROCESS.md](../../src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step creation process
 - [ADR-085: Ground Truth Validation Discipline](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
 - [ADR-098: Ground Truth Registry](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md)
-- [testing-strategy.md](../../../../.agent/directives-and-memory/testing-strategy.md)
+- [testing-strategy.md](../../../../.agent/directives/testing-strategy.md)

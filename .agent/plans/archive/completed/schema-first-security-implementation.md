@@ -510,9 +510,9 @@ This plan implements per-tool OAuth 2.1 security metadata for MCP tools to enabl
 
 This plan MUST be executed in strict compliance with:
 
-- [`.agent/directives-and-memory/rules.md`](../directives-and-memory/rules.md) - Core rules, ALWAYS followed
-- [`.agent/directives-and-memory/schema-first-execution.md`](../directives-and-memory/schema-first-execution.md) - Non-negotiable generator/runtime contract
-- [`.agent/directives-and-memory/testing-strategy.md`](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach
+- [`.agent/directives/rules.md`](../directives/rules.md) - Core rules, ALWAYS followed
+- [`.agent/directives/schema-first-execution.md`](../directives/schema-first-execution.md) - Non-negotiable generator/runtime contract
+- [`.agent/directives/testing-strategy.md`](../../.agent/directives/testing-strategy.md) - TDD approach
 
 **Mandatory re-reading**: At the start of each phase and after any significant blocker, re-read these documents to ensure continued alignment.
 

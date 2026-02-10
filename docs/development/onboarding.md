@@ -28,7 +28,7 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 ## 2. Read the Grounding Docs
 
 1. `GO.md` – follow the cadence (ACTION → REVIEW, every sixth task is GROUNDING).
-2. `.agent/directives-and-memory/AGENT.md` and `.agent/directives-and-memory/rules.md` – British spelling, TDD, no disabled quality gates.
+2. `.agent/directives/AGENT.md` and `.agent/directives/rules.md` – British spelling, TDD, no disabled quality gates.
 3. Relevant plans and context documents for the area you're working on (e.g., `.agent/plans/semantic-search/*` for search features).
 
 ## 3. Understand the Repository Layout
@@ -107,7 +107,7 @@ The Oak curriculum data has significant variances across subjects and key stages
 - [Data Variances](../data/DATA-VARIANCES.md) - Subject/key stage differences
 - [docs/architecture/architectural-decisions/](../architecture/architectural-decisions/) - ADRs
 - [docs/agent-guidance/development-practice.md](../agent-guidance/development-practice.md) - Code standards
-- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
+- [Testing Strategy](../../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts) - Domain model and structural patterns
 
 Welcome aboard! Keep the documentation close to the code and prefer the shared helpers over bespoke validation.

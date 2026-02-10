@@ -442,9 +442,9 @@ apps/oak-open-curriculum-semantic-search/app/api/rebuild-rollup/route.ts ✅
 ## Foundation Documents
 
 **MUST re-read before starting work:**
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
+- `.agent/directives/schema-first-execution.md`
 
 Key principles:
 1. **First Question**: "Could it be simpler without compromising quality?"
@@ -457,7 +457,7 @@ Key principles:
 
 - **Prerequisite**: [matchMedia DI Refactoring Plan](../../architecture/matchmedia-di-refactoring-plan.md)
 - **Part of**: [Global State Elimination and Testing Discipline Plan](../../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md)
-- **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md` (line 25, 37)
+- **Testing Strategy**: `.agent/directives/testing-strategy.md` (line 25, 37)
 
 ## Lessons Learned
 

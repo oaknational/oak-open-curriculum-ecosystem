@@ -3,9 +3,9 @@
 ## Core References
 
 - [GO.md](../../GO.md)
-- [AGENT.md](../directives-and-memory/AGENT.md)
-- [rules.md](../directives-and-memory/rules.md)
-- [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
+- [AGENT.md](../directives/AGENT.md)
+- [rules.md](../directives/rules.md)
+- [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
 - [ADR-029: No Manual API Data](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
@@ -131,7 +131,7 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
   - A helper script (`.contract-tests/bin/refresh-scenarios.ts`) diffs the
     latest published OpenAPI schema against the baseline snapshot and produces
     guidance for updating synthetic scenarios while keeping history intact
-  - Scenario READMEs cross-reference [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
+  - Scenario READMEs cross-reference [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
     and [docs/agent-guidance/development-practice.md](../../docs/agent-guidance/development-practice.md)
     so contributors follow repository-wide testing and TDD expectations
 - **Schema decoration simulation**:
@@ -179,7 +179,7 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
   - List violations with file path, line number, code snippet, violation type
   - Classify by severity: CRITICAL (blocks Cardinal Rule), WARNING (potential
     issue), INFO (allowed pattern) and cross-reference remediation guidance in
-    [.agent/directives-and-memory/testing-strategy.md](../../.agent/directives-and-memory/testing-strategy.md)
+    [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
 
 ### 5. Downstream Validation Scope
 

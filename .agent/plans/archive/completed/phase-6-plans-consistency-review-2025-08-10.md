@@ -4,8 +4,8 @@ This report reviews the following documents for internal consistency, cross-cons
 
 - `.agent/plans/phase-6-oak-curriculum-api.md`
 - `.agent/plans/high-level-plan.md`
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
 - Other guidance under `docs/agent-guidance/` (notably `architecture.md`, `development-practice.md`, `typescript-practice.md`, `safety-and-security.md`, `ai-agent-guide.md`)
 
 ## Executive Summary
@@ -59,7 +59,7 @@ Each issue below includes concrete, minimal edits to make in the plans.
 
 - Evidence
   - `phase-6-oak-curriculum-api.md` examples include filenames like `scripts/typegen.test.ts` and `client.test.ts`.
-  - `.agent/directives-and-memory/testing-strategy.md` requires:
+  - `.agent/directives/testing-strategy.md` requires:
     - Unit tests: `*.unit.test.ts`
     - Integration tests: `*.integration.test.ts`
     - E2E tests: `*.e2e.test.ts`
@@ -226,8 +226,8 @@ Apply the following minimal edits to the plans (no code changes):
 
 - `/.agent/plans/phase-6-oak-curriculum-api.md`
 - `/.agent/plans/high-level-plan.md`
-- `/.agent/directives-and-memory/rules.md`
-- `/.agent/directives-and-memory/testing-strategy.md`
+- `/.agent/directives/rules.md`
+- `/.agent/directives/testing-strategy.md`
 - `/docs/agent-guidance/architecture.md`
 - `/docs/agent-guidance/development-practice.md`
 - `/docs/agent-guidance/typescript-practice.md`

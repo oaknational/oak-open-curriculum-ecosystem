@@ -158,4 +158,4 @@ pnpm dev
 
 - [OAuth Testing Strategy](../TESTING.md#oauth-testing)
 - [OAuth Validation Results](../smoke-tests/OAUTH-VALIDATION-RESULTS.md)
-- [Testing Strategy](../../../../.agent/directives-and-memory/testing-strategy.md)
+- [Testing Strategy](../../../../.agent/directives/testing-strategy.md)

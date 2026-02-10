@@ -273,9 +273,9 @@ Both require **fresh indices** to produce meaningful results.
 
 Before starting any work on this phase, read these foundation documents:
 
-1. `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
-2. `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
-3. `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
+1. `.agent/directives/rules.md` - TDD, quality gates, no type shortcuts
+2. `.agent/directives/schema-first-execution.md` - All types from field definitions
+3. `.agent/directives/testing-strategy.md` - Test types and TDD approach
 
 **Source of truth** for all types and available data:
 

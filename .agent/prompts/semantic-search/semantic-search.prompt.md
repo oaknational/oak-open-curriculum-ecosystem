@@ -97,10 +97,10 @@ deterministic. See [ADR-107].
 
 Before starting work:
 
-1. [rules.md](../../directives-and-memory/rules.md) — First Question, TDD, no type shortcuts
-2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
-3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
-4. [semantic-search-architecture.md](../../directives-and-memory/semantic-search-architecture.md) — Structure is the foundation
+1. [rules.md](../../directives/rules.md) — First Question, TDD, no type shortcuts
+2. [testing-strategy.md](../../directives/testing-strategy.md) — TDD at ALL levels
+3. [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator is source of truth
+4. [semantic-search-architecture.md](../../directives/semantic-search-architecture.md) — Structure is the foundation
 5. [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md) — **THE** plan for this work
 
 ---

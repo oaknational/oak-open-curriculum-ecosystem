@@ -316,7 +316,7 @@ Based on research analysis, **build a bespoke implementation** inspired by `neve
 ## References
 
 - `research/error_handling/oak-error-handling-survey.md` - Comprehensive survey of current patterns
-- `.agent/directives-and-memory/rules.md` - Type safety and testing requirements
+- `.agent/directives/rules.md` - Type safety and testing requirements
 - `packages/sdks/oak-curriculum-sdk/src/validation/types.ts` - Existing `ValidationResult<T>` pattern
 - Session 2.4 deliverables - Tactical error enrichment in logger package
 

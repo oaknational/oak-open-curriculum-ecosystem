@@ -60,9 +60,9 @@ Full metadata treatment     Auto-generated metadata      API-native metadata
 
 Read and follow:
 
-- `.agent/directives-and-memory/rules.md` - TDD, no type shortcuts, schema-first
-- `.agent/directives-and-memory/testing-strategy.md` - Test first (Red → Green → Refactor)
-- `.agent/directives-and-memory/schema-first-execution.md` - Generated artifacts drive runtime
+- `.agent/directives/rules.md` - TDD, no type shortcuts, schema-first
+- `.agent/directives/testing-strategy.md` - Test first (Red → Green → Refactor)
+- `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 
 ---
 

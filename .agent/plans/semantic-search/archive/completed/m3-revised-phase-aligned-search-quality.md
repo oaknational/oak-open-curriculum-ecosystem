@@ -240,6 +240,6 @@ This answers different questions than the ground truth system:
 
 Before any work, read:
 
-1. [rules.md](../../../directives-and-memory/rules.md)
-2. [testing-strategy.md](../../../directives-and-memory/testing-strategy.md)
-3. [schema-first-execution.md](../../../directives-and-memory/schema-first-execution.md)
+1. [rules.md](../../../directives/rules.md)
+2. [testing-strategy.md](../../../directives/testing-strategy.md)
+3. [schema-first-execution.md](../../../directives/schema-first-execution.md)

@@ -18,7 +18,7 @@ All other work is tracked in `shared-mcp-core-and-mcp-server-migration-plan.md` 
 ## References
 
 - `.agent/reference-docs/mcp-typescript-sdk-readme.md` (Tool schema, Streamable HTTP, stdio)
-- GO.md; .agent/directives-and-memory/testing-strategy.md; typescript-practice.md; development-practice.md
+- GO.md; .agent/directives/testing-strategy.md; typescript-practice.md; development-practice.md
 
 ## Next steps (only remaining tasks)
 
@@ -84,8 +84,8 @@ Owner: Engineering (MCP/Oak SDK)
 ## Core References
 
 - GO.md (root)
-- .agent/directives-and-memory/rules.md
-- .agent/directives-and-memory/testing-strategy.md
+- .agent/directives/rules.md
+- .agent/directives/testing-strategy.md
 - docs/agent-guidance/typescript-practice.md
 - docs/agent-guidance/development-practice.md
 

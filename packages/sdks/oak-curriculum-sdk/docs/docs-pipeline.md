@@ -120,8 +120,8 @@ A CI workflow runs `docs:all` and fails PRs if verification fails or content cha
 
 ## References
 
-- GO.md: `/.agent/directives-and-memory/GO.md`
-- AGENT.md: `/.agent/directives-and-memory/AGENT.md`
+- GO.md: `/.agent/directives/GO.md`
+- AGENT.md: `/.agent/directives/AGENT.md`
 - TypeDoc: <https://typedoc.org/>
 
 ## FAQ

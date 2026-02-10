@@ -43,7 +43,7 @@ The SDK follows best practices with Result<T, E> pattern and error cause chains.
 
 ### Architectural Constraint: Schema-First
 
-Per [schema-first directive](../../../.agent/directives-and-memory/schema-first-execution.md), the SDK's types and error handling flow from the OpenAPI schema. We cannot modify the SDK to add MCP-specific metadata to `ToolExecutionResult` or `CallToolResult` - that would violate schema-first.
+Per [schema-first directive](../../../.agent/directives/schema-first-execution.md), the SDK's types and error handling flow from the OpenAPI schema. We cannot modify the SDK to add MCP-specific metadata to `ToolExecutionResult` or `CallToolResult` - that would violate schema-first.
 
 The MCP server layer (apps) is where MCP protocol-specific concerns belong.
 

@@ -485,5 +485,5 @@ For initial population or verification, a "discovery mode" could:
 - [Curriculum Traversal Strategy](../../../curriculum-traversal-strategy.md)
 - [Curriculum Structure Analysis](../../../curriculum-structure-analysis.md)
 - [05-complete-data-indexing.md](./05-complete-data-indexing.md)
-- [Cardinal Rule](../../../directives-and-memory/rules.md)
+- [Cardinal Rule](../../../directives/rules.md)
 

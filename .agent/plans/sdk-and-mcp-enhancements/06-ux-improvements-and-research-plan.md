@@ -22,9 +22,9 @@ This plan captures immediate UX improvements and coordinates research activities
 
 Before beginning any task, re-read and recommit to:
 
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
+- `.agent/directives/schema-first-execution.md`
 
 ---
 
@@ -90,7 +90,7 @@ function renderResourcesList(): string { ... }
 - [x] Dark mode support maintained
 - [x] Quality gates pass
 - [x] Prominent hero explainer text at the top of the page, under the title
-- [x] Minimal Playwright test for basic functionality, including a11y, strictly in line with .agent/directives-and-memory/testing-strategy.md
+- [x] Minimal Playwright test for basic functionality, including a11y, strictly in line with .agent/directives/testing-strategy.md
 
 ---
 
@@ -294,9 +294,9 @@ This plan provides:
 
 ### Foundational Documents (Re-read before each session)
 
-- `.agent/directives-and-memory/rules.md` - Development rules
-- `.agent/directives-and-memory/testing-strategy.md` - TDD approach
-- `.agent/directives-and-memory/schema-first-execution.md` - Type generation mandate
+- `.agent/directives/rules.md` - Development rules
+- `.agent/directives/testing-strategy.md` - TDD approach
+- `.agent/directives/schema-first-execution.md` - Type generation mandate
 
 ### Related Plans
 

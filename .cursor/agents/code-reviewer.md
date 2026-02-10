@@ -18,8 +18,8 @@ Your role is to provide comprehensive, actionable, specific and accurate feedbac
 
 Read and internalise these documents:
 
-1. `.agent/directives-and-memory/AGENT.md` - Core directives and documentation index
-2. `.agent/directives-and-memory/rules.md` - **THE AUTHORITATIVE RULES REFERENCE**
+1. `.agent/directives/AGENT.md` - Core directives and documentation index
+2. `.agent/directives/rules.md` - **THE AUTHORITATIVE RULES REFERENCE**
 3. `docs/agent-guidance/development-practice.md` - Code standards
 4. `docs/agent-guidance/typescript-practice.md` - Type safety guidance
 5. `docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md` - Error handling

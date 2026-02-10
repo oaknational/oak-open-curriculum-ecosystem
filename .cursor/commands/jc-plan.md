@@ -1,6 +1,6 @@
 # Create a Plan
 
-All plans, prompts, and work must be fully aligned with the foundations docs @.agent/directives-and-memory/rules.md @.agent/directives-and-memory/schema-first-execution.md @.agent/directives-and-memory/testing-strategy.md and all sub-sections must have goals and intended impacts, and explicit, measurable acceptance criteria.
+All plans, prompts, and work must be fully aligned with the foundations docs @.agent/directives/rules.md @.agent/directives/schema-first-execution.md @.agent/directives/testing-strategy.md and all sub-sections must have goals and intended impacts, and explicit, measurable acceptance criteria.
 
 All code must be documented with comprehensive TSDoc comments. Authored markdown documentation must be created as appropriate, and all significant decisions must be documented with ADRs @docs/architecture/architectural-decisions/README.md .
 

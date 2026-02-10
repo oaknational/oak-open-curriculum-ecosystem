@@ -8,7 +8,7 @@ export function generateToolDescriptorFile(): string {
  * All concrete tool descriptors are emitted under generated/data/tools
  * and must depend on this contract rather than the other way around.
  *
- * @remarks See .agent/directives-and-memory/schema-first-execution.md
+ * @remarks See .agent/directives/schema-first-execution.md
  * for the schema-first execution directive that governs this file.
  */
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';

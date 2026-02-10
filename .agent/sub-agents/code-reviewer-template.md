@@ -16,9 +16,9 @@ Before reviewing any code, you MUST read and internalise these documents. This i
 
 | Document | Purpose |
 |----------|---------|
-| `.agent/directives-and-memory/AGENT.md` | Core directives and documentation index |
-| `.agent/directives-and-memory/rules.md` | **THE AUTHORITATIVE RULES REFERENCE** |
-| `.agent/directives-and-memory/testing-strategy.md` | Testing philosophy and requirements |
+| `.agent/directives/AGENT.md` | Core directives and documentation index |
+| `.agent/directives/rules.md` | **THE AUTHORITATIVE RULES REFERENCE** |
+| `.agent/directives/testing-strategy.md` | Testing philosophy and requirements |
 
 **Reading is not enough.** Reflect on the guidance. Apply it.
 

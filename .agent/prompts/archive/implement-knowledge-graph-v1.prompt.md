@@ -12,21 +12,21 @@ This prompt guides the implementation of the `get-knowledge-graph` agent support
 
 Before ANY implementation work, read and internalise these foundation documents:
 
-1. **`.agent/directives-and-memory/rules.md`**
+1. **`.agent/directives/rules.md`**
    - First Question: "Could it be simpler without compromising quality?"
    - Cardinal Rule: `pnpm type-gen` + `pnpm build` must align all workspaces
    - TDD at ALL levels (unit, integration, E2E)
    - No type shortcuts (`as`, `any`, `!`, `Record<string, unknown>`)
    - Types flow from `as const` data structures
 
-2. **`.agent/directives-and-memory/testing-strategy.md`**
+2. **`.agent/directives/testing-strategy.md`**
    - TDD cycle: RED → GREEN → REFACTOR
    - Unit tests: Pure functions, no IO, no mocks
    - Integration tests: Code units together, simple injected mocks
    - E2E tests: Running system, separate process
    - Write tests FIRST at EVERY level
 
-3. **`.agent/directives-and-memory/schema-first-execution.md`**
+3. **`.agent/directives/schema-first-execution.md`**
    - Generator is single source of truth for API types
    - The knowledge graph is **authored domain knowledge** (like ontology)
    - It complements schema-first without violating it

@@ -19,9 +19,9 @@ This plan defines advanced MCP tooling beyond simple API endpoint facades, inclu
 
 ### Alignment with Core Directives
 
-- **.agent/directives-and-memory/rules.md** – Cardinal Rule, TDD, type safety, no shortcuts
-- **.agent/directives-and-memory/schema-first-execution.md** – All runtime behaviour driven by generated artefacts
-- **.agent/directives-and-memory/testing-strategy.md** – TDD-first, unit → integration → E2E
+- **.agent/directives/rules.md** – Cardinal Rule, TDD, type safety, no shortcuts
+- **.agent/directives/schema-first-execution.md** – All runtime behaviour driven by generated artefacts
+- **.agent/directives/testing-strategy.md** – TDD-first, unit → integration → E2E
 - **.agent/plans/high-level-plan.md** – Strategic roadmap (Items #1-3 are prerequisites)
 - **.agent/plans/curriculum-ontology-resource-plan.md** – Provides curriculum structure knowledge required for intelligent tools
 - **.agent/plans/mcp-aggregated-tools-type-gen-refactor-plan.md** – Pattern for composite tools
@@ -130,7 +130,7 @@ Phase 1 functionality work is ongoing. Status-aware response handling completed.
 
 ### Testing Strategy
 
-Following `.agent/directives-and-memory/testing-strategy.md`:
+Following `.agent/directives/testing-strategy.md`:
 
 1. **Unit Tests**: Pure functions, no I/O, no mocks
    - Configuration validation
@@ -648,9 +648,9 @@ pnpm test:e2e      # E2E tests pass
 
 ### Implementation Directives
 
-- `.agent/directives-and-memory/rules.md` - Cardinal rule, TDD, type safety
-- `.agent/directives-and-memory/schema-first-execution.md` - Generator-first mindset
-- `.agent/directives-and-memory/testing-strategy.md` - Unit → integration → E2E
+- `.agent/directives/rules.md` - Cardinal rule, TDD, type safety
+- `.agent/directives/schema-first-execution.md` - Generator-first mindset
+- `.agent/directives/testing-strategy.md` - Unit → integration → E2E
 
 ### Related Plans
 

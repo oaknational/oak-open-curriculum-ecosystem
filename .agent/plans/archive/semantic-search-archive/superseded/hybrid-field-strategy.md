@@ -23,19 +23,19 @@ To minimize re-ingestion cycles, we'll add **37 carefully selected Phase 2 field
 
 This plan strictly adheres to:
 
-1. **Schema-First** (`.agent/directives-and-memory/schema-first-execution.md`):
+1. **Schema-First** (`.agent/directives/schema-first-execution.md`):
    - ✅ All fields defined in SDK `field-definitions/curriculum.ts`
    - ✅ Zod schemas generated via `pnpm type-gen`
    - ✅ ES mappings generated from same source
    - ✅ Never edit generated files
 
-2. **TDD** (`.agent/directives-and-memory/testing-strategy.md`):
+2. **TDD** (`.agent/directives/testing-strategy.md`):
    - ✅ Write tests FIRST for all extraction functions
    - ✅ Red → Green → Refactor at unit level
    - ✅ Integration tests for document transforms
    - ✅ No type-only tests
 
-3. **Quality Standards** (`.agent/directives-and-memory/rules.md`):
+3. **Quality Standards** (`.agent/directives/rules.md`):
    - ✅ No type shortcuts (`as`, `any`, `!`)
    - ✅ Pure extraction functions with unit tests
    - ✅ Functions ≤8 complexity

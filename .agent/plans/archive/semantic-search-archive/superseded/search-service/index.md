@@ -132,7 +132,7 @@ import {
 
 ## Testing Strategy
 
-Following `.agent/directives-and-memory/testing-strategy.md`:
+Following `.agent/directives/testing-strategy.md`:
 
 - **Unit tests** (`.unit.test.ts`): Pure functions, schema generators, query builders
 - **Integration tests** (`.integration.test.ts`): API routes with mocked Elasticsearch, ingestion with mocked SDK

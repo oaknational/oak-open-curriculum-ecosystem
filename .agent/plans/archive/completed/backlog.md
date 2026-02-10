@@ -63,12 +63,12 @@
 ### Core References
 
 - [OpenAI Connector standard for MCP](.agent/reference-docs/openai-connector-standards.md)
-- [Development Practice, Testing Strategy, TypeScript Practice](.agent/directives-and-memory/AGENT.md)
+- [Development Practice, Testing Strategy, TypeScript Practice](.agent/directives/AGENT.md)
 - [McpServer, Streamable HTTP, stdio, debounced notifications, elicitation](.agent/reference-docs/mcp-typescript-sdk-readme.md)
 - [Understanding MCP servers](https://modelcontextprotocol.io/docs/learn/server-concepts)
 
 ## MCP server ideas
 
 - [+] Open Curriculum API MCP server including hybrid lexical+semantic search and all the API endpoints IN PROGRESS
-- [ ] An fan-out-fan-in MCP server that takes a JSON array of well defined tasks `[{name: string, prompt: string}]`, uses Claude Typescript SDK to execute them in parallel, and collates and returns the results to the calling MCP client. E.g. fixing linting issues, if there are many issues, but approximately five _groups_ of issues, we could run five agent tasks in parallel, and collate the results. Five Sonnet instances could be given prompts specify the files, issues, and likely solutions, and told that all fixes need to align with the rules in .agent/directives-and-memory/AGENT.md, and that all fixes need to be self-contained, i.e. not dependent on other fixes, and that once their individual fixes are made the instances should stop, not pick up other tasks or make any other changes. If the changes are isolated, atomic, and precise, then the agents should be able to act in parallel without issue, and the calling agent can review the results.
+- [ ] An fan-out-fan-in MCP server that takes a JSON array of well defined tasks `[{name: string, prompt: string}]`, uses Claude Typescript SDK to execute them in parallel, and collates and returns the results to the calling MCP client. E.g. fixing linting issues, if there are many issues, but approximately five _groups_ of issues, we could run five agent tasks in parallel, and collate the results. Five Sonnet instances could be given prompts specify the files, issues, and likely solutions, and told that all fixes need to align with the rules in .agent/directives/AGENT.md, and that all fixes need to be self-contained, i.e. not dependent on other fixes, and that once their individual fixes are made the instances should stop, not pick up other tasks or make any other changes. If the changes are isolated, atomic, and precise, then the agents should be able to act in parallel without issue, and the calling agent can review the results.
 - [ ] As above but much simpler, single purpose review agents, narrow scope, low power models, short highly specific tasks, built on top of coding specific CLIs/SDKs, Codex, Gemini, Claude, Cursor, all the Cs.

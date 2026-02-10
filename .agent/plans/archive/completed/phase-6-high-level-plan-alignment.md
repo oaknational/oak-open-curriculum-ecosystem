@@ -7,7 +7,7 @@ Sources reviewed:
 - `.agent/plans/phase-6-oak-curriculum-api.md`
 - `.agent/plans/high-level-plan.md`
 - `GO.md`
-- `.agent/directives-and-memory/AGENT.md`
+- `.agent/directives/AGENT.md`
 
 This report follows GO.md and AGENT.md: atomic, measurable, provable actions; periodic GROUNDING; explicit sub‑agent checkpoints; and quality gates.
 

@@ -71,9 +71,9 @@ Based on codebase inspection:
 
 All work MUST align with:
 
-- [`.agent/directives-and-memory/rules.md`](../../directives-and-memory/rules.md) - Cardinal Rule, TDD, type safety
-- [`.agent/directives-and-memory/schema-first-execution.md`](../../directives-and-memory/schema-first-execution.md) - Generator-first architecture
-- [`.agent/directives-and-memory/testing-strategy.md`](../../directives-and-memory/testing-strategy.md) - TDD at all levels
+- [`.agent/directives/rules.md`](../../directives/rules.md) - Cardinal Rule, TDD, type safety
+- [`.agent/directives/schema-first-execution.md`](../../directives/schema-first-execution.md) - Generator-first architecture
+- [`.agent/directives/testing-strategy.md`](../../directives/testing-strategy.md) - TDD at all levels
 
 ### Reference Documentation
 
@@ -1232,7 +1232,7 @@ Phase 6: Production Readiness & Compliance
 
 ## Testing Strategy
 
-Per [testing-strategy.md](../../directives-and-memory/testing-strategy.md):
+Per [testing-strategy.md](../../directives/testing-strategy.md):
 
 ### Unit Tests (Pure Functions)
 
@@ -1268,7 +1268,7 @@ Per [testing-strategy.md](../../directives-and-memory/testing-strategy.md):
 
 ## Schema-First Compliance
 
-Per [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md):
+Per [schema-first-execution.md](../../directives/schema-first-execution.md):
 
 | Requirement                               | Status After Phase 2 |
 | ----------------------------------------- | -------------------- |
@@ -1389,9 +1389,9 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 ### Internal Documentation
 
-- [Rules](../../directives-and-memory/rules.md)
-- [Schema-First Execution](../../directives-and-memory/schema-first-execution.md)
-- [Testing Strategy](../../directives-and-memory/testing-strategy.md)
+- [Rules](../../directives/rules.md)
+- [Schema-First Execution](../../directives/schema-first-execution.md)
+- [Testing Strategy](../../directives/testing-strategy.md)
 - [Plan 01: Tool Metadata Enhancement](./01-mcp-tool-metadata-enhancement-plan.md)
 - [Plan 02: Curriculum Ontology Resource](./02-curriculum-ontology-resource-plan.md)
 

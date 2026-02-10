@@ -176,18 +176,18 @@ pnpm markdownlint:root --fix
 
 ### ✅ Fully Aligned With
 
-1. **`.agent/directives-and-memory/rules.md`**
+1. **`.agent/directives/rules.md`**
    - TDD at all levels
    - No type shortcuts
    - Quality gates must pass
    - Schema-first approach
 
-2. **`.agent/directives-and-memory/schema-first-execution.md`**
+2. **`.agent/directives/schema-first-execution.md`**
    - All types flow from field definitions
    - Generator-first mindset
    - No manual edits to generated files
 
-3. **`.agent/directives-and-memory/testing-strategy.md`**
+3. **`.agent/directives/testing-strategy.md`**
    - Unit tests: Pure functions, no IO, no mocks
    - Integration tests: Code units, simple mocks
    - E2E tests: Running system

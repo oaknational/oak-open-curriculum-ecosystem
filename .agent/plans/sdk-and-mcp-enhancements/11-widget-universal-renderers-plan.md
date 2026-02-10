@@ -31,9 +31,9 @@ Enhance the Oak JSON Viewer widget to provide rich, type-specific rendering for 
 
 Before beginning any task, re-read and recommit to:
 
-- `.agent/directives-and-memory/rules.md` - TDD, schema-first, simplicity
-- `.agent/directives-and-memory/testing-strategy.md` - Test types, TDD at all levels
-- `.agent/directives-and-memory/schema-first-execution.md` - Generator-first mindset
+- `.agent/directives/rules.md` - TDD, schema-first, simplicity
+- `.agent/directives/testing-strategy.md` - Test types, TDD at all levels
+- `.agent/directives/schema-first-execution.md` - Generator-first mindset
 
 ---
 
@@ -531,5 +531,5 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
 - [Widget Script](../../apps/oak-curriculum-mcp-streamable-http/src/widget-script.ts)
 - [Widget Renderers](../../apps/oak-curriculum-mcp-streamable-http/src/widget-renderers.ts)
 - [Stub Data](../../packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/generated/stubs/tools/)
-- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md)
-- [Rules](../../.agent/directives-and-memory/rules.md)
+- [Testing Strategy](../../.agent/directives/testing-strategy.md)
+- [Rules](../../.agent/directives/rules.md)

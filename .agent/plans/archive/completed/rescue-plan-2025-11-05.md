@@ -406,7 +406,7 @@ Git status:
 - Read `.agent/context/continuation.prompt.md` (updated to reflect rescue completion and Phase 1 delivered)
 - Proceed directly to Phase 2, Session 2.A (Timing & Error Instrumentation)
 - NOT revisit logging consolidation or runtime config (it's done and working)
-- Continue following `.agent/directives-and-memory/rules.md` and TDD practices
+- Continue following `.agent/directives/rules.md` and TDD practices
 
 ---
 

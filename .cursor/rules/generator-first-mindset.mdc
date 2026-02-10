@@ -24,4 +24,4 @@ Missing data is a generator bug—fail fast, don't work around it.
 
 ## Reference
 
-@.agent/directives-and-memory/schema-first-execution.md
+@.agent/directives/schema-first-execution.md

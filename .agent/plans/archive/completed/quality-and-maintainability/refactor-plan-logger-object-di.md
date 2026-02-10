@@ -22,9 +22,9 @@
 Before ANY work, read and internalize:
 
 ```bash
-cat .agent/directives-and-memory/rules.md
-cat .agent/directives-and-memory/testing-strategy.md
-cat .agent/directives-and-memory/schema-first-execution.md
+cat .agent/directives/rules.md
+cat .agent/directives/testing-strategy.md
+cat .agent/directives/schema-first-execution.md
 ```
 
 **Cardinal Rules**:
@@ -411,9 +411,9 @@ pnpm check:turbo  # Runs all gates with --concurrency=2
 
 ### Foundation Documents
 
-- `.agent/directives-and-memory/rules.md` — Core rules (TDD, no type shortcuts, quality gates blocking)
-- `.agent/directives-and-memory/testing-strategy.md` — Test types, no complex mocks, DI pattern
-- `.agent/directives-and-memory/schema-first-execution.md` — Schema-first approach
+- `.agent/directives/rules.md` — Core rules (TDD, no type shortcuts, quality gates blocking)
+- `.agent/directives/testing-strategy.md` — Test types, no complex mocks, DI pattern
+- `.agent/directives/schema-first-execution.md` — Schema-first approach
 
 ### Plans
 

@@ -24,8 +24,8 @@ Good architecture enables change by establishing clear boundaries, enforcing dep
 
 Read and internalise these documents:
 
-1. `.agent/directives-and-memory/AGENT.md` - Core directives and documentation index
-2. `.agent/directives-and-memory/rules.md` - Development rules and principles
+1. `.agent/directives/AGENT.md` - Core directives and documentation index
+2. `.agent/directives/rules.md` - Development rules and principles
 3. `docs/architecture/README.md` - Architecture overview and ADR index
 4. `docs/agent-guidance/typescript-practice.md` - Type safety guidance
 5. `docs/agent-guidance/development-practice.md` - Code standards

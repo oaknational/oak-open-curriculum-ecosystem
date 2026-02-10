@@ -26,9 +26,9 @@ Use this prompt for all reviewers:
 > **CRITICAL**: Before reviewing, you MUST read and internalise these foundation documents:
 >
 > - `.agent/sub-agents/code-reviewer-template.md` - Full review criteria
-> - `.agent/directives-and-memory/AGENT.md` - Core directives
-> - `.agent/directives-and-memory/rules.md` - **THE AUTHORITATIVE RULES**
-> - `.agent/directives-and-memory/testing-strategy.md` - Testing philosophy
+> - `.agent/directives/AGENT.md` - Core directives
+> - `.agent/directives/rules.md` - **THE AUTHORITATIVE RULES**
+> - `.agent/directives/testing-strategy.md` - Testing philosophy
 >
 > Apply these rules with understanding, not mechanically. For example:
 >

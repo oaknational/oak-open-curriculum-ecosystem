@@ -94,12 +94,12 @@ Start here, then dive deeper as needed:
 
 ### Supporting Documents
 
-6. **`.agent/directives-and-memory/rules.md`**
+6. **`.agent/directives/rules.md`**
    - Cardinal rules (MUST follow)
    - Type safety requirements
    - TDD workflow
 
-7. **`.agent/directives-and-memory/testing-strategy.md`**
+7. **`.agent/directives/testing-strategy.md`**
    - Red → Green → Refactor loop
    - Test organization patterns
 
@@ -122,7 +122,7 @@ I'm continuing work on the Oak MCP Ecosystem. Please read:
 @.agent/context/context.md
 @.agent/plans/mcp-oauth-implementation-plan.md
 @.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md
-@.agent/directives-and-memory/rules.md
+@.agent/directives/rules.md
 @docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md
 
 Once ready:
@@ -405,7 +405,7 @@ export function doX() {
 | "What changed recently?"             | `.agent/context/context.md`                     |
 | "What's the full technical context?" | `.agent/context/continuation.prompt.md`         |
 | "What are the detailed tasks?"       | `.agent/plans/mcp-oauth-implementation-plan.md` |
-| "What are the rules?"                | `.agent/directives-and-memory/rules.md`         |
+| "What are the rules?"                | `.agent/directives/rules.md`         |
 
 ### When to Update What
 
@@ -425,7 +425,7 @@ export function doX() {
 1. **Logger API**: `packages/libs/logger/README.md`
 2. **HTTP Server**: `apps/oak-curriculum-mcp-streamable-http/README.md`
 3. **Stdio Server**: `apps/oak-curriculum-mcp-stdio/README.md`
-4. **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md`
+4. **Testing Strategy**: `.agent/directives/testing-strategy.md`
 
 ### For Understanding MCP Protocol
 

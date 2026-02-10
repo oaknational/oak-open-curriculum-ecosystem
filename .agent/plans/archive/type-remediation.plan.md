@@ -420,9 +420,9 @@ The rules apply to ALL code. "Vetted" is not an exception.
 
 Before starting, read:
 
-1. **[rules.md](../directives-and-memory/rules.md)** — "No type shortcuts", "NEVER disable checks"
-2. **[testing-strategy.md](../directives-and-memory/testing-strategy.md)** — TDD at all levels
-3. **[schema-first-execution.md](../directives-and-memory/schema-first-execution.md)** — Types flow from source
+1. **[rules.md](../directives/rules.md)** — "No type shortcuts", "NEVER disable checks"
+2. **[testing-strategy.md](../directives/testing-strategy.md)** — TDD at all levels
+3. **[schema-first-execution.md](../directives/schema-first-execution.md)** — Types flow from source
 
 Key quotes to internalise:
 

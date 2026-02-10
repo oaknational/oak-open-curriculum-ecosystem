@@ -154,7 +154,7 @@ This isn't a guideline - it's a hard requirement. When tests violate it, the fix
 - **DI Plan**: [matchmedia-di-refactoring-plan.md](../architecture/matchmedia-di-refactoring-plan.md)
 - **Test Fix Plan**: [test-isolation-architecture-fix.md](test-isolation-architecture-fix.md)
 - **Global State Plan**: [global-state-elimination-and-testing-discipline-plan.md](../quality-and-maintainability/global-state-elimination-and-testing-discipline-plan.md)
-- **Testing Strategy**: `.agent/directives-and-memory/testing-strategy.md`
+- **Testing Strategy**: `.agent/directives/testing-strategy.md`
 
 ---
 

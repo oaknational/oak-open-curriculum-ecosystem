@@ -127,7 +127,7 @@ Not touching `generate-ai-doc.ts` or `ai-doc-render.ts` per Horatio's work.
 
 - What: Ensure SDK doc tooling is robust: generate normal Markdown API docs and an additional single-file AI markdown; keep zero lint/type/test errors; validate inputs with Zod at boundaries.
 - Status: Lint OK; Type-check OK; Tests OK (91 passing); `docs:all` OK; AI doc generation uses Zod; plugin-free HTML docs path in place.
-- Alignment: Follows GO.md and rules in `/.agent/directives-and-memory/AGENT.md`; TDD waived for docs tooling per memory; no `any`; prefer type guards; used Zod parsing at system boundary.
+- Alignment: Follows GO.md and rules in `/.agent/directives/AGENT.md`; TDD waived for docs tooling per memory; no `any`; prefer type guards; used Zod parsing at system boundary.
 - Gaps: Normal Markdown API docs still pending (plugin compatibility). TypeDoc warns about unsupported TS version (non-blocking).
 - Next actions:
   1. ACTION: Investigate and pin a compatible `typedoc` + `typedoc-plugin-markdown` pair to produce normal Markdown API docs; or create a dedicated `typedoc.markdown.json` with plugin-only options and verify.

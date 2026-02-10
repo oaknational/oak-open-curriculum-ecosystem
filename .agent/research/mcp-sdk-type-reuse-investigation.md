@@ -693,8 +693,8 @@ Implementation:
 
 **Project Rules**:
 
-- `.agent/directives-and-memory/rules.md` - "Use library types directly where possible"
-- `.agent/directives-and-memory/schema-first-execution.md` - Schema-first architecture
+- `.agent/directives/rules.md` - "Use library types directly where possible"
+- `.agent/directives/schema-first-execution.md` - Schema-first architecture
 
 **MCP Documentation**:
 

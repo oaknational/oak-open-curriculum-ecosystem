@@ -13,9 +13,9 @@ Define how we replace `openapi-typescript` and `openapi-zod-client` with the new
 - `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/mcp_ecosystem_integration_requirements.md`
 - `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/PHASE-4-ARTEFACT-EXPANSION.md`
 - `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/openapi-to-mcp-framework-extraction-plan.md`
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/schema-first-execution.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/schema-first-execution.md`
+- `.agent/directives/testing-strategy.md`
 
 ## Problem Statement
 

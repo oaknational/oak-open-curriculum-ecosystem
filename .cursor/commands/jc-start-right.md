@@ -6,10 +6,10 @@ Ground yourself before beginning work.
 
 Read and internalise these documents:
 
-1. @.agent/directives-and-memory/AGENT.md - Entry point and documentation index
-2. @.agent/directives-and-memory/rules.md - **THE AUTHORITATIVE RULES**
-3. @.agent/directives-and-memory/testing-strategy.md - TDD at all levels
-4. @.agent/directives-and-memory/schema-first-execution.md - Types flow from schema
+1. @.agent/directives/AGENT.md - Entry point and documentation index
+2. @.agent/directives/rules.md - **THE AUTHORITATIVE RULES**
+3. @.agent/directives/testing-strategy.md - TDD at all levels
+4. @.agent/directives/schema-first-execution.md - Types flow from schema
 
 ## Guiding Questions
 

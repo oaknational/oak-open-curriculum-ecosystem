@@ -60,4 +60,4 @@ core (base types) → SDK (specific) → apps (specific only).
 ### References
 
 - Plan: `.agent/plans/http-mvp-plan.md`
-- Rules: `.agent/directives-and-memory/rules.md`
+- Rules: `.agent/directives/rules.md`

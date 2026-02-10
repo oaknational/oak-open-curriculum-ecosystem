@@ -405,7 +405,7 @@ The following product code needs to accept dependencies as parameters:
 
 ## Appendix A: Testing Strategy Reference
 
-From `.agent/directives-and-memory/testing-strategy.md`:
+From `.agent/directives/testing-strategy.md`:
 
 > - Line 13: ALWAYS test behaviour, NEVER test implementation
 > - Line 19: NEVER create complex mocks
@@ -414,7 +414,7 @@ From `.agent/directives-and-memory/testing-strategy.md`:
 > - Line 32: No useless tests - Each test must prove something useful
 > - Line 37: No global state manipulation
 
-From `.agent/directives-and-memory/rules.md`:
+From `.agent/directives/rules.md`:
 
 > - Line 82: Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
 

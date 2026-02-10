@@ -16,7 +16,7 @@ The tests are failing primarily due to `Invalid environment` errors during appli
 - **Constraints**:
   - **No Global State**: We MUST NOT create global `.env` files or rely on global environment variables that might leak or cause side effects.
   - **No Network IO**: E2E tests MUST NOT make real network calls (e.g., to Clerk or other external services). They must use mocks.
-  - **Strict Adherence**: We must follow `@[.agent/directives-and-memory/rules.md]` and `@[.agent/directives-and-memory/testing-strategy.md]`.
+  - **Strict Adherence**: We must follow `@[.agent/directives/rules.md]` and `@[.agent/directives/testing-strategy.md]`.
 
 ## Experiments & Findings
 
@@ -38,6 +38,6 @@ We need to systematically apply the successful pattern (or a better, more archit
 
 ## Directives
 
-- **Read**: `@[.agent/directives-and-memory/rules.md]` and `@[.agent/directives-and-memory/testing-strategy.md]` before proposing any changes.
+- **Read**: `@[.agent/directives/rules.md]` and `@[.agent/directives/testing-strategy.md]` before proposing any changes.
 - **Plan**: Create a detailed plan to refactor the test suite to be hermetic and self-contained.
 - **Refactor**: Implement the solution, prioritizing a clean, DRY approach (e.g., a test helper or setup file) over copy-pasting mocks.

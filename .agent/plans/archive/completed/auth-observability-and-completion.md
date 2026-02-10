@@ -255,9 +255,9 @@ All items verified:
 
 ## Directive References
 
-- [Rules](../directives-and-memory/rules.md) - TDD, no type shortcuts, fail fast
-- [Testing Strategy](../directives-and-memory/testing-strategy.md) - TDD at all levels
-- [Schema-First Execution](../directives-and-memory/schema-first-execution.md) - Generated artifacts drive runtime
+- [Rules](../directives/rules.md) - TDD, no type shortcuts, fail fast
+- [Testing Strategy](../directives/testing-strategy.md) - TDD at all levels
+- [Schema-First Execution](../directives/schema-first-execution.md) - Generated artifacts drive runtime
 
 ## Archived Implementation
 

@@ -11,9 +11,9 @@
 For new implementation sessions, read in this order:
 
 1. **Foundation Documents** (MUST READ FIRST)
-   - `.agent/directives-and-memory/rules.md` - TDD, quality gates, no type shortcuts
-   - `.agent/directives-and-memory/schema-first-execution.md` - All types from field definitions
-   - `.agent/directives-and-memory/testing-strategy.md` - Test types and TDD approach
+   - `.agent/directives/rules.md` - TDD, quality gates, no type shortcuts
+   - `.agent/directives/schema-first-execution.md` - All types from field definitions
+   - `.agent/directives/testing-strategy.md` - Test types and TDD approach
 
 2. **Source of Truth** (for all types and available data)
    - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json` - **The OpenAPI schema**

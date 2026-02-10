@@ -29,9 +29,9 @@ All metadata flows through the type-gen pipeline following schema-first principl
 
 Read and follow:
 
-- `.agent/directives-and-memory/rules.md` - TDD, no type shortcuts, fail fast
-- `.agent/directives-and-memory/testing-strategy.md` - TDD at ALL levels
-- `.agent/directives-and-memory/schema-first-execution.md` - Generated artifacts drive runtime
+- `.agent/directives/rules.md` - TDD, no type shortcuts, fail fast
+- `.agent/directives/testing-strategy.md` - TDD at ALL levels
+- `.agent/directives/schema-first-execution.md` - Generated artifacts drive runtime
 
 ---
 

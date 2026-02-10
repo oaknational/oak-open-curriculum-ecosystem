@@ -74,6 +74,6 @@ NEVER disable any quality gates or Git hooks.
 
 ## Related Documentation
 
-- [Testing Strategy](../../.agent/directives-and-memory/testing-strategy.md) - TDD approach at all levels
+- [Testing Strategy](../../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [TypeScript Practice](./typescript-practice.md) - Type safety rules
 - [Tooling](../development/tooling.md) - Development tools and versions

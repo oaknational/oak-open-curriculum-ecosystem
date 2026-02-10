@@ -5,7 +5,7 @@
 - **GO.md** (primary grounding)
 - **AGENT.md**
 - **docs/agent-guidance/development-practice.md**
-- **.agent/directives-and-memory/testing-strategy.md**
+- **.agent/directives/testing-strategy.md**
 - **docs/agent-guidance/typescript-practice.md**
 
 ## Executive summary

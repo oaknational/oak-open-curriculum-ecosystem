@@ -28,7 +28,7 @@ This document enables best practice development of the Oak MCP Server Ecosystem.
 
 ## Grounding
 
-Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions in that file and in the files it leads to.
+Read [AGENT.md](.agent/directives/AGENT.md) and follow all instructions in that file and in the files it leads to.
 
 Make any adjustments to the todo list that you feel are beneficial.
 

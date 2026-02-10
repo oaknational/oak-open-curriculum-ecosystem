@@ -174,8 +174,8 @@ export async function POST() {
 
 ## References
 
-- `.agent/directives-and-memory/rules.md`
-- `.agent/directives-and-memory/testing-strategy.md`
+- `.agent/directives/rules.md`
+- `.agent/directives/testing-strategy.md`
 - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
 - `.agent/plans/semantic-search/semantic-search-api-plan.md`
 - Vercel App Router caching docs (`unstable_cache`, tag revalidation).

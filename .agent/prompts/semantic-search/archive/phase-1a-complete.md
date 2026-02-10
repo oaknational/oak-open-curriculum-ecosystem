@@ -14,9 +14,9 @@
 
 ```bash
 # Open in editor
-code .agent/directives-and-memory/rules.md
-code .agent/directives-and-memory/schema-first-execution.md
-code .agent/directives-and-memory/testing-strategy.md
+code .agent/directives/rules.md
+code .agent/directives/schema-first-execution.md
+code .agent/directives/testing-strategy.md
 ```
 
 Remind yourself of:

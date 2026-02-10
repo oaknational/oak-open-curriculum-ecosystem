@@ -3,8 +3,8 @@
 ## Core References (Grounding)
 
 - GO.md → `./GO.md`
-- Rules → `.agent/directives-and-memory/rules.md`
-- Testing strategy → `.agent/directives-and-memory/testing-strategy.md`
+- Rules → `.agent/directives/rules.md`
+- Testing strategy → `.agent/directives/testing-strategy.md`
 - Current SDK doc → `packages/oak-curriculum-sdk/docs/oak-open-curriculum-api-sdk-reference.md`
 
 ## Intent
@@ -128,4 +128,4 @@ Expose existing, generated TypeScript type guards and allowed-values constants t
 ## Grounding Cadence
 
 - Every third task: “GROUNDING: read GO.md and follow all instructions.”
-- Apply rules from `.agent/directives-and-memory/rules.md` throughout and adhere strictly to the testing strategy.
+- Apply rules from `.agent/directives/rules.md` throughout and adhere strictly to the testing strategy.

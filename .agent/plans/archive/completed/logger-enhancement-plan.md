@@ -367,7 +367,7 @@ The following enhancements are deferred to future plans and are NOT part of this
 - `.agent/plans/mcp-oauth-implementation-plan.md` - Original Phase 3 planning document
 - `packages/libs/logger/README.md` - Logger package documentation
 - `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` - ADR for OTel format
-- `.agent/directives-and-memory/rules.md` - Project rules (all followed)
+- `.agent/directives/rules.md` - Project rules (all followed)
 
 ---
 

@@ -222,8 +222,8 @@ export const testRules = {
 ### Mandatory Session Workflow (do this every time)
 
 - Re-read and re-commit to:
-  - `.agent/directives-and-memory/rules.md`
-  - `.agent/directives-and-memory/testing-strategy.md`
+  - `.agent/directives/rules.md`
+  - `.agent/directives/testing-strategy.md`
 - Pick a **small slice** (preferably one file at a time).
 - Make the change.
 - From repo root, run the **full quality gate suite one gate at a time** (no filters). Do **not** start analysis until all gates complete:
@@ -349,7 +349,7 @@ Many tests violate the testing strategy:
 
 ## Testing Strategy Reference
 
-From [testing-strategy.md](../../directives-and-memory/testing-strategy.md):
+From [testing-strategy.md](../../directives/testing-strategy.md):
 
 > - Line 13: ALWAYS test behaviour, NEVER test implementation
 > - Line 19: NEVER create complex mocks
@@ -723,8 +723,8 @@ Negative assertions:                 ~385 instances (mixed)
 
 ## References
 
-- Foundation: `.agent/directives-and-memory/rules.md`
-- Testing: `.agent/directives-and-memory/testing-strategy.md`
+- Foundation: `.agent/directives/rules.md`
+- Testing: `.agent/directives/testing-strategy.md`
 - Audit: `.agent/research/vi-mock-audit-report.md`
 - Original analysis: `.agent/plans/archive/completed/resolve-di-digressions.md`
 - Previous fix: `.agent/plans/archive/completed/fix-e2e-test-isolation.md`

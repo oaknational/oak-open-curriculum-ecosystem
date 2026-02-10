@@ -13,8 +13,8 @@ Add the `max-files-per-dir` rule to `@oaknational/eslint-plugin-standards`, impl
 
 ## Foundations (Must Re-Read)
 
-- [rules.md](../../../directives-and-memory/rules.md)
-- [testing-strategy.md](../../../directives-and-memory/testing-strategy.md)
+- [rules.md](../../../directives/rules.md)
+- [testing-strategy.md](../../../directives/testing-strategy.md)
 - [eslint-enhancement-plan.md](./eslint-enhancement-plan.md)
 - [eslint-max-files-per-dir.md](./eslint-max-files-per-dir.md)
 - [eslint-plugin-standards-research.md](./eslint-plugin-standards-research.md)

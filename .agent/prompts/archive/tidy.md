@@ -1,7 +1,7 @@
-0. Are we following the rules, no fallbacks, no compatibility layers, clean breaks, fail fast with helpful error messages? @.agent/directives-and-memory/rules.md
+0. Are we following the rules, no fallbacks, no compatibility layers, clean breaks, fail fast with helpful error messages? @.agent/directives/rules.md
 1. Do we have any dead code?
-2. Are we versioning with Git rather than names? @.agent/directives-and-memory/rules.md
-3. Do all test prove behaviour rather than implementation? @.agent/directives-and-memory/testing-strategy.md
+2. Are we versioning with Git rather than names? @.agent/directives/rules.md
+3. Do all test prove behaviour rather than implementation? @.agent/directives/testing-strategy.md
 4. Do all tests prove something useful about product code, not just about test code?
 5. Are there any other potential sources of mismatch, or other issues, that could potential prevent an upload from occurring?
 6. Do we have comprehensive and detailed TSDoc that includes examples?

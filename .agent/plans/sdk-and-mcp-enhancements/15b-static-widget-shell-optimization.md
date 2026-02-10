@@ -14,9 +14,9 @@
 
 **Re-read these before starting work:**
 
-1. `.agent/directives-and-memory/rules.md`
-2. `.agent/directives-and-memory/testing-strategy.md`
-3. `.agent/directives-and-memory/schema-first-execution.md`
+1. `.agent/directives/rules.md`
+2. `.agent/directives/testing-strategy.md`
+3. `.agent/directives/schema-first-execution.md`
 
 **Schema-first applicability**: This plan modifies authored runtime code (widget HTML generation). The widget is runtime UI code, not type/schema information. No generator changes required.
 
@@ -646,8 +646,8 @@ ALL must pass before considering work complete.
 
 Per project rules, regularly re-read during implementation:
 
-1. `.agent/directives-and-memory/rules.md`
-2. `.agent/directives-and-memory/testing-strategy.md`
+1. `.agent/directives/rules.md`
+2. `.agent/directives/testing-strategy.md`
 
 Ask at each phase: **Could it be simpler without compromising quality?**
 

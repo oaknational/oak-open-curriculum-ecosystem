@@ -1294,6 +1294,6 @@ However, several targets were not met:
 | [ES Stemmer Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) | Official stemmer docs |
 | [ES Phonetic Reference](https://www.elastic.co/guide/en/elasticsearch/plugins/current/analysis-phonetic.html) | Official phonetic plugin docs |
 | [ES search_as_you_type Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html) | Official typeahead docs |
-| [testing-strategy.md](../../directives-and-memory/testing-strategy.md) | TDD requirements |
-| [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) | Schema-first approach |
-| [rules.md](../../directives-and-memory/rules.md) | Core development rules |
+| [testing-strategy.md](../../directives/testing-strategy.md) | TDD requirements |
+| [schema-first-execution.md](../../directives/schema-first-execution.md) | Schema-first approach |
+| [rules.md](../../directives/rules.md) | Core development rules |

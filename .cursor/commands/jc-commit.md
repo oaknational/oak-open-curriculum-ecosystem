@@ -49,5 +49,5 @@ If any of these would be helpful, **MUST discuss with the user first**. When in 
 
 Fix them **properly**. No shortcuts, no disabling checks, no bypassing hooks.
 
-@.agent/directives-and-memory/rules.md
-@.agent/directives-and-memory/testing-strategy.md
+@.agent/directives/rules.md
+@.agent/directives/testing-strategy.md
