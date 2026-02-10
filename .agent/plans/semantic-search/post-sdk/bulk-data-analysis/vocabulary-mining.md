@@ -28,7 +28,7 @@ This plan consolidates all bulk data analysis work into a single cohesive effort
 | SDK               | Location                                | Role in Bulk Analysis |
 | ----------------- | --------------------------------------- | --------------------- |
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Types for bulk data, API access for supplementary data |
-| **Search SDK**    | `packages/libs/search-sdk/` (post-extraction) | Where analysis outputs are consumed |
+| **Search SDK**    | `packages/sdks/oak-search-sdk/` (post-extraction) | Where analysis outputs are consumed |
 
 ### Data Sources
 
@@ -49,7 +49,7 @@ This plan consolidates all bulk data analysis work into a single cohesive effort
 Bulk analysis code lives in the **Search SDK** (post-extraction):
 
 ```
-packages/libs/search-sdk/
+packages/sdks/oak-search-sdk/
 ├── analysis/               # Bulk analysis tools
 │   ├── vocabulary/         # Vocabulary mining
 │   ├── transcripts/        # Transcript analysis

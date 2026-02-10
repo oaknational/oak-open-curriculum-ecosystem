@@ -6,7 +6,7 @@
 
 The semantic search workspace provides a CLI/SDK-first service that ingests Oak Curriculum content via the official SDK, stores enriched documents in **seven Elasticsearch Serverless indices**, and serves hybrid (lexical + semantic) queries with server-side **Reciprocal Rank Fusion (RRF)**.
 
-> **Note**: The UI layer is being retired in favour of CLI/SDK architecture. See [search-sdk-cli.md](../../../.agent/plans/semantic-search/active/search-sdk-cli.md) for the extraction roadmap.
+> **Note**: The UI layer is being retired in favour of CLI/SDK architecture. See [search-sdk-cli.plan.md](../../../.agent/plans/semantic-search/active/search-sdk-cli.plan.md) for the extraction roadmap.
 
 ---
 

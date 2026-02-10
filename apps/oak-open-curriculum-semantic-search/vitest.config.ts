@@ -23,7 +23,7 @@ export default defineConfig({
       'dist',
       // Ingest harness test causes OOM in forked worker due to heavy import graph.
       // Skipped as this workspace is being extracted into SDK+CLI.
-      // See: .agent/plans/semantic-search/active/search-sdk-cli.md
+      // See: .agent/plans/semantic-search/active/search-sdk-cli.plan.md
       'src/lib/indexing/ingest-harness.unit.test.ts',
     ],
     coverage: {

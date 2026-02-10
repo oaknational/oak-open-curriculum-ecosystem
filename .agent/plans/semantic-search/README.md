@@ -12,9 +12,13 @@
 
 ## Current Work: SDK Extraction
 
-Ground truths are complete across all four indexes. The Next.js layer has been removed (Feb 2026). The immediate priority is extracting the search capability into a dedicated SDK and CLI.
+Ground truths are complete across all four indexes. The
+Next.js layer has been removed and the workspace tidied
+(Feb 2026). The immediate priority is extracting the SDK
+library code to `packages/sdks/oak-search-sdk/` and renaming
+the current workspace as the CLI (`apps/oak-search-cli/`).
 
-**Details**: [active/search-sdk-cli.md](active/search-sdk-cli.md)
+**Details**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
 
 ---
 
@@ -25,7 +29,7 @@ Ground truths are complete across all four indexes. The Next.js layer has been r
    30 lesson GTs + multi-index GTs
          ↓
 2. SDK Extraction (sdk-extraction/)              ← CURRENT
-   Extract search into SDK + CLI (Next.js layer removed)
+   Extract SDK lib; rename workspace as CLI
          ↓
 3. MCP Integration (post-sdk/mcp-integration/)
    Wire hybrid search into MCP tools

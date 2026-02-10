@@ -75,15 +75,25 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 ## Phase 2: SDK Extraction 🔄 Current
 
 **Status**: 🔄 In Progress  
-**Location**: [active/search-sdk-cli.md](active/search-sdk-cli.md)
+**Location**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
 
-**Goal**: Extract semantic search into a dedicated SDK and CLI. Next.js layer already removed (Feb 2026).
+**Goal**: Extract search library into an SDK; rename the
+current workspace as the CLI.
 
-| Component | From | To |
-|-----------|------|-----|
-| Retrieval services | `apps/.../src/lib/hybrid-search/` | `packages/libs/search-sdk/retrieval/` |
-| Admin services | `apps/.../src/lib/admin/` | `packages/libs/search-sdk/admin/` |
-| CLI commands | `apps/.../scripts/` | `packages/tools/search-cli/` |
+**Prep complete** (Feb 2026): Next.js layer removed.
+Workspace tidied — `process.env` centralised in `env.ts`
+(ESLint enforced), all product code accepts config as
+parameters (DI-ready), dead code deleted, tests use DI.
+Extraction is primarily a file-move exercise.
+
+**Approach**: the current workspace stays in place and
+becomes the CLI (renamed). SDK library code is extracted
+out. Evaluation stays in the CLI.
+
+| What | From | To |
+|------|------|-----|
+| SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` |
+| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` (rename) |
 
 ---
 
@@ -127,14 +137,16 @@ Modern Foreign Languages (French, German, Spanish) have unique search challenges
 
 ---
 
-## Two SDKs
+## Three Workspaces
 
-| SDK | Location | Purpose |
-|-----|----------|---------|
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
+| Workspace | Location | Purpose |
+|-----------|----------|---------|
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
+| **Search SDK** | To be: `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
 
-The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
+The Search SDK consumes types from the Curriculum SDK.
+The Search CLI consumes the Search SDK.
 
 ---
 

@@ -10,6 +10,7 @@ packages:
   - packages/libs/openapi-zod-client-adapter
   - packages/libs/result
   - packages/sdks/oak-curriculum-sdk
+  - packages/sdks/oak-search-sdk
 
 onlyBuiltDependencies:
   - core-js

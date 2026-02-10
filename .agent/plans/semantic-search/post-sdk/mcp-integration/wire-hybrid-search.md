@@ -112,5 +112,5 @@ async function handleSearchCurriculum(params: SearchParams) {
 
 | Document | Purpose |
 |----------|---------|
-| [../../active/search-sdk-cli.md](../../active/search-sdk-cli.md) | SDK extraction spec |
+| [../../active/search-sdk-cli.plan.md](../../active/search-sdk-cli.plan.md) | SDK extraction spec |
 | [../../roadmap.md](../../roadmap.md) | Master roadmap |

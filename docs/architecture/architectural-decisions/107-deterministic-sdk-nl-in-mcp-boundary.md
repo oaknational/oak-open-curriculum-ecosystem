@@ -6,7 +6,14 @@ Accepted (2026-02-10)
 
 ## Context
 
-The semantic search capability is being extracted from its current Next.js application (`apps/oak-open-curriculum-semantic-search/`) into a dedicated SDK (`packages/libs/search-sdk/`). Multiple consumers will call the SDK: a CLI for operator workflows, an Express-based MCP server for AI agent access, and potentially future HTTP API or UI layers.
+The semantic search capability is being extracted from
+its current workspace (`apps/oak-open-curriculum-semantic-search/`,
+to be renamed `apps/oak-search-cli/`) into a dedicated SDK
+(`packages/sdks/oak-search-sdk/`). The current workspace stays
+in place and becomes the CLI; the SDK library code is
+extracted out. Multiple consumers will call the SDK: the
+CLI for operator workflows, an Express-based MCP server
+for AI agent access, and potentially future layers.
 
 The question is: **where does natural language understanding live?**
 
@@ -115,5 +122,5 @@ Provide an optional `sdk.nl.parse(text)` method alongside the structured API.
 
 ## References
 
-- [Search SDK + CLI Extraction Plan](/.agent/plans/semantic-search/active/search-sdk-cli.md) — Implementation plan
+- [Search SDK + CLI Extraction Plan](/.agent/plans/semantic-search/active/search-sdk-cli.plan.md) — Implementation plan
 - [Semantic Search Prompt](/.agent/prompts/semantic-search/semantic-search.prompt.md) — Session entry point

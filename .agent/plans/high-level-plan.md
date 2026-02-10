@@ -40,7 +40,7 @@
 ### 1. Elasticsearch Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
 
 **Plan**: `.agent/plans/semantic-search/roadmap.md` (authoritative roadmap)  
-**Current Work**: [active/search-sdk-cli.md](semantic-search/active/search-sdk-cli.md)
+**Current Work**: [active/search-sdk-cli.plan.md](semantic-search/active/search-sdk-cli.plan.md)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
@@ -54,7 +54,9 @@
 
 **Current Priority**: SDK Extraction
 
-Extract semantic search from the Next.js app into a dedicated SDK and CLI. See [roadmap.md](./semantic-search/roadmap.md).
+Extract SDK library code to `packages/sdks/oak-search-sdk/`;
+rename current workspace as CLI (`apps/oak-search-cli/`).
+See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 

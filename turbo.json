@@ -21,12 +21,9 @@
         "$TURBO_DEFAULT$",
         "**/type-gen/**/*.ts",
         "**/scripts/**/*.ts",
-        "next.config.ts",
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ]
@@ -34,17 +31,14 @@
     "build": {
       "dependsOn": ["^build", "type-gen"],
       "cache": true,
-      "outputs": ["dist/**", ".tsup/**", ".next/**"],
+      "outputs": ["dist/**", ".tsup/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
-        "next.config.ts",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ],
@@ -103,8 +97,6 @@
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
@@ -118,8 +110,6 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
@@ -156,10 +146,7 @@
         "src/**/*.ts",
         "src/types/generated/**/*.ts",
         "src/types/generated/**/*.d.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "tests/**/*.ts",
-        "next.config.ts",
         "playwright.config.ts"
       ]
     },
@@ -174,8 +161,6 @@
         "tsconfig.build.json",
         "tsconfig.lint.json",
         "src/**/*.ts",
-        "app/**/*.ts",
-        "app/**/*.tsx",
         "smoke-tests/**/*.ts",
         "**/*.d.ts",
         "src/types/generated/**/*.ts",

@@ -25,7 +25,7 @@ todos:
     status: completed
   - id: quality-gates
     content: Run full quality gates, commit, push
-    status: in_progress
+    status: completed
 isProject: false
 ---
 

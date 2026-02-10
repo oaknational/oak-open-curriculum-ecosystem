@@ -6,16 +6,33 @@
 
 ## Current Priority: SDK Extraction
 
-Ground truths are complete across all four indexes. The Next.js UI and HTTP API layers have been removed (Feb 2026). The immediate priority is extracting the search capability into a dedicated SDK and CLI.
+Ground truths are complete across all four indexes. The Next.js
+UI and HTTP API layers were removed (Feb 2026). The workspace
+has been cleaned up with full DI and centralised env access
+(Feb 2026). The immediate priority is extracting the search
+capability into a dedicated SDK and CLI.
 
-**Plan**: [search-sdk-cli.md](../../plans/semantic-search/active/search-sdk-cli.md)  
+**Plan**: [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md)
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
 ---
 
 ## What We Have
 
-A powerful Elasticsearch-backed semantic search capability at `apps/oak-open-curriculum-semantic-search/`. The core search logic lives in `src/lib/`. The workspace is a pure TypeScript library — the Next.js UI and HTTP API layers were removed in Feb 2026 (ADRs 044, 045 superseded; 049 partially superseded).
+A powerful Elasticsearch-backed semantic search capability
+at `apps/oak-open-curriculum-semantic-search/` (will be
+renamed to `apps/oak-search-cli/` during extraction). The
+core search logic lives in `src/lib/`. The workspace is
+pure TypeScript — the Next.js layers were removed in
+Feb 2026 (ADRs 044, 045 superseded; 049 partially
+superseded).
+
+**DI-ready**: All `process.env` access is centralised in
+`src/lib/env.ts` (ESLint-enforced). Product code accepts
+config as parameters. Tests use DI — no `process.env`
+mutations. Every function already accepts its dependencies
+as parameters, so SDK extraction is primarily a file-move
+exercise.
 
 ### Search Pipeline
 
@@ -47,22 +64,32 @@ A powerful Elasticsearch-backed semantic search capability at `apps/oak-open-cur
 
 ## What We Are Building
 
-### Search SDK (`packages/libs/search-sdk/`)
+### Search SDK (`packages/sdks/oak-search-sdk/`)
 
-Public API: `createSearchSdk({ deps, config }) -> { retrieval, admin, observability }`
+Public API:
+`createSearchSdk({ deps, config }) -> { retrieval, admin, observability }`
 
-- **Retrieval**: structured search + suggestions (hybrid BM25 + ELSER via RRF)
-- **Admin**: ES setup, ingestion, rollups, index metadata
-- **Observability**: zero-hit logging/persistence/maintenance
-- **Dependency-injected**: consuming app supplies config + clients
+- **Retrieval**: structured search + suggestions
+  (hybrid BM25 + ELSER via RRF)
+- **Admin**: ES setup, ingestion, rollups, index
+  metadata
+- **Observability**: zero-hit logging/persistence/
+  maintenance
+- **Dependency-injected**: consuming app supplies
+  config + clients
 
-### Search CLI (`packages/tools/search-cli/`)
+### Search CLI (`apps/oak-search-cli/`)
 
-First-class CLI workspace consuming the SDK. Replaces ad-hoc `scripts/` entrypoints with cohesive operator-intent commands.
+The current workspace renamed. Thin wrapper over the
+SDK — operator-intent commands call SDK services.
+Also hosts all **evaluation** (ground truths, benchmarks,
+validation), which is operator tooling *about* the
+search, not the search itself.
 
 ### Key Architectural Decision
 
-NL parsing stays in the **MCP layer**. The SDK remains deterministic. See [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md).
+NL parsing stays in the **MCP layer**. The SDK remains
+deterministic. See [ADR-107].
 
 ---
 
@@ -74,18 +101,22 @@ Before starting work:
 2. [testing-strategy.md](../../directives-and-memory/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../directives-and-memory/schema-first-execution.md) — Generator is source of truth
 4. [semantic-search-architecture.md](../../directives-and-memory/semantic-search-architecture.md) — Structure is the foundation
-5. [search-sdk-cli.md](../../plans/semantic-search/active/search-sdk-cli.md) — **THE** plan for this work
+5. [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md) — **THE** plan for this work
 
 ---
 
-## Two SDKs
+## Three Workspaces
 
-| SDK | Location | Purpose |
-|-----|----------|---------|
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Access to upstream Oak API, type-gen |
-| **Search SDK** | To be: `packages/libs/search-sdk/` | Elasticsearch-backed semantic search |
+| Workspace | Location | Purpose |
+|-----------|----------|---------|
+| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
+| **Search SDK** | To be: `packages/sdks/oak-search-sdk/` | ES-backed semantic search |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
 
-The Search SDK **consumes types from** the Curriculum SDK but is a separate concern.
+The Search SDK consumes types from the Curriculum SDK.
+The Search CLI consumes the Search SDK.
+
+[ADR-107]: /docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md
 
 ---
 
