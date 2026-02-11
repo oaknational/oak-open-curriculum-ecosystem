@@ -1,11 +1,13 @@
 # Search SDK + CLI Extraction
 
-**Label**: Current priority  
-**Status**: 🔄 IN PROGRESS (Checkpoints A–E2 ✅; Checkpoint F next)  
+**Label**: Complete  
+**Status**: ✅ COMPLETE (Checkpoints A–E2 all done)  
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)  
-**Estimated Effort**: SDK + CLI extraction complete; Result pattern + TSDoc complete; remaining: MCP integration (F)  
 **Prerequisites**: Ground truth foundation (✅ complete)  
 **Last Updated**: 2026-02-11
+
+> **MCP integration** is a separate concern — consuming the SDK, not
+> extracting it. See [wire-hybrid-search.md](../post-sdk/mcp-integration/wire-hybrid-search.md).
 
 ---
 
@@ -338,12 +340,6 @@ test:ui, test:e2e, test:e2e:built, smoke:dev:stub).
   (removed eslint max-lines override)
 - Directive review: sub-agent audits confirmed compliance
   across all modified files
-
-### Checkpoint F — MCP integration wiring
-
-- Add / update the semantic search MCP tool in the Express MCP server to call SDK services
-- Ship comprehensive tool examples mapping user intent to SDK calls
-- Keep NL parsing policy in MCP (and test it there)
 
 ### Checkpoint G — Retire the Next.js layer ✅ Complete
 

@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **SDK + CLI + Result Pattern + TSDoc Complete** — MCP integration (F) next  
+**Status**: 🔄 **MCP integration next** — SDK extraction complete  
 **Last Updated**: 2026-02-11  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
@@ -11,7 +11,10 @@
 
 ## Current State
 
-SDK extraction, CLI wiring, Result pattern, and TSDoc are all complete. All three SDK services (retrieval, admin, observability) return `Result<T, E>` and are fully documented. The SDK has 34 tests; the CLI has 934 tests (82 test files). The full quality gate chain passes (clean through smoke:dev:stub). Next: Checkpoint F (MCP integration).
+SDK extraction is complete. All three services (retrieval,
+admin, observability) return `Result<T, E>` with per-service
+error types and comprehensive TSDoc. The full quality gate
+chain passes. The SDK is ready for its first consumer.
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -27,21 +30,28 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-
 ## Execution Order
 
 ```text
-1. Ground Truth Foundation                       ✅ COMPLETE
-   30 lesson GTs + multi-index GTs (units, threads, sequences)
+Phase 1: Ground Truth Foundation                    ✅ COMPLETE
+  30 lesson GTs + multi-index GTs
          ↓
-2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
-   a. Service extraction (A–D)                   ✅ COMPLETE
-   b. CLI rename + wiring (E)                    ✅ COMPLETE
-   c. TSDoc compliance fix (tag correctness)     ✅ COMPLETE
-   d. Result pattern + TSDoc annotations (E2)    ✅ COMPLETE
+Phase 2: SDK Extraction + CLI Wiring                ✅ COMPLETE
+  a. Service extraction (A–D)                       ✅
+  b. CLI rename + wiring (E)                        ✅
+  c. TSDoc compliance fix                           ✅
+  d. Result pattern + TSDoc annotations (E2)        ✅
          ↓
-3. MCP Integration (post-sdk/mcp-integration/)       ← NEXT
-   Wire hybrid search into MCP tools (Checkpoint F)
+Phase 3: MCP Search Integration                     ← NEXT
+  Wire SDK retrieval into MCP tools
          ↓
-4. Search Enhancements (post-sdk/search-quality/)
-   Ground truth expansion, fundamentals re-evaluation,
-   document relationships, modern ES features, AI enhancement
+Phase 4: Search Quality + Ecosystem (parallel streams)
+  ├── GT Expansion (30 → 80-100 queries)
+  ├── Search Quality Levels 2 → 3 → 4 (sequential)
+  ├── Bulk Data Analysis (vocabulary mining)
+  ├── SDK API (filter testing, API stabilisation)
+  ├── Subject Domain Model (type-gen enhancement)
+  └── Operations (governance, latency budgets)
+         ↓
+Phase 5: Extensions
+  RAG, knowledge graph, advanced features
 ```
 
 ---
@@ -71,73 +81,96 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-
 | Unit GTs (2: maths primary, science secondary) | ✅ Complete |
 | Thread GT (1: maths algebra) | ✅ Complete |
 | Sequence GT (1: maths secondary) | ✅ Complete |
-| Cleanup: rename, consolidate docs, metric depth | 📋 Deferred |
 
 ---
 
 ## Phase 2: SDK Extraction + CLI Wiring ✅ Complete
 
-**Status**: ✅ Complete (Feb 2026)
 **Location**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
 
 **Goal**: Extract search library into an SDK; rename the
 current workspace as the CLI.
-
-**Checkpoints A–E complete** (Feb 2026):
-
-- SDK workspace at `packages/sdks/oak-search-sdk/`
-- All three services fully implemented: retrieval, admin,
-  observability (34 tests)
-- CLI renamed to `apps/oak-search-cli/` with all
-  subcommands wired to SDK services (934 tests)
-- All quality gates pass
-- Factory: `createSearchSdk({ deps, config }) -> SearchSdk`
-- Evaluation rewired to use SDK retrieval code paths
 
 | What | From | To |
 |------|------|-----|
 | SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` ✅ |
 | CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` ✅ |
 | TSDoc compliance fix | Non-standard tags everywhere | Tags correct at source, `eslint-plugin-tsdoc` enforced ✅ |
-| Result pattern + TSDoc annotations | Throws on failure, sparse docs | `Result<T, E>` everywhere + comprehensive TSDoc ✅ |
+| Result pattern + TSDoc | Throws on failure, sparse docs | `Result<T, E>` everywhere + comprehensive TSDoc ✅ |
 
 ---
 
-## Phase 3: MCP Integration
+## Phase 3: MCP Search Integration
 
-**Status**: 📋 Ready to start (SDK + CLI + Result pattern + TSDoc complete)  
-**Location**: [post-sdk/mcp-integration/](post-sdk/mcp-integration/)
+**Status**: 📋 Ready to start  
+**Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
 
-**Goal**: Wire hybrid search into MCP tools — first consumer of SDK.
+**Goal**: Wire hybrid search into MCP tools — first
+consumer of the SDK.
+
+| Task | Status |
+|------|--------|
+| `semantic-search` MCP tool wired to SDK retrieval | 📋 Pending |
+| Filter parameters passed through correctly | 📋 Pending |
+| `Result<T, E>` errors surfaced as MCP errors | 📋 Pending |
+| Tool examples mapping user intent to SDK calls | 📋 Pending |
+| Existing MCP tools unaffected | 📋 Pending |
+| All quality gates pass | 📋 Pending |
 
 ---
 
-## Phase 4: Search Enhancements
+## Phase 4: Search Quality + Ecosystem
 
-**Status**: ⏸️ Blocked by MCP Integration  
-**Location**: [post-sdk/search-quality/](post-sdk/search-quality/)
+**Status**: 📋 Pending  
+**Location**: [post-sdk/](post-sdk/)
 
-Search enhancements form one workstream encompassing ground truth expansion, fundamentals re-evaluation, document relationships, modern ES features, and AI enhancement. Work items draw from [ADR-082](../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) but are managed as a single enhancements plan rather than rigid sequential tiers.
+Multiple parallel streams, each with its own plan.
+Some have internal sequencing; others can run
+independently.
 
-| Area | Focus | Status |
-|------|-------|--------|
-| **GT expansion** | More examples and scenarios before tuning | 📋 Pending |
-| **Fundamentals re-evaluation** | Re-assess Level 1 approaches with validated GTs | 📋 Pending |
-| **Document relationships** | Cross-reference boosting, thread/sequence context | 📋 Pending |
-| **Tuning** | Field boosts, RRF parameters, MFL investigation | 📋 Pending |
-| **Modern ES features** | Semantic reranking, query rules | 📋 Pending |
-| **AI enhancement** | LLM preprocessing, intent extraction | 📋 Pending — DESTINATION |
+### Sequential streams
+
+| Stream | Plan | Dependency | Status |
+|--------|------|------------|--------|
+| **GT Expansion** | [ground-truth-expansion-plan.md](post-sdk/search-quality/ground-truth-expansion-plan.md) | None (can start now) | 📋 Pending |
+| **Level 2: Document Relationships** | [document-relationships.md](post-sdk/search-quality/document-relationships.md) | GT expansion | 📋 Pending |
+| **Level 3: Modern ES Features** | [modern-es-features.md](post-sdk/search-quality/modern-es-features.md) | Level 2 exhausted | 📋 Pending |
+| **Level 4: AI Enhancement** | [ai-enhancement.md](post-sdk/search-quality/ai-enhancement.md) | Level 3 exhausted | 📋 Pending |
+
+### Parallel streams (can start alongside Phase 3 or 4)
+
+| Stream | Plan | Notes | Status |
+|--------|------|-------|--------|
+| **Bulk Data Analysis** | [vocabulary-mining.md](post-sdk/bulk-data-analysis/vocabulary-mining.md) | Feeds vocabulary into search quality work | 📋 Pending |
+| **SDK API** | [filter-testing.md](post-sdk/sdk-api/filter-testing.md) | 17 subjects × 4 key stages filter matrix | 📋 Pending |
+| **Subject Domain Model** | [move-search-domain-knowledge-to-typegen-time.md](post-sdk/move-search-domain-knowledge-to-typegen-time.md) | Curriculum SDK type-gen enhancement | 📋 Pending |
+| **MFL Fix** | [mfl-multilingual-embeddings.md](post-sdk/search-quality/mfl-multilingual-embeddings.md) | MFL MRR 0.19-0.29, specific fix | 📋 Pending |
+| **Operations** | [governance.md](post-sdk/operations/governance.md) | Latency budgets, failure modes, versioning | 📋 Pending |
+
+---
+
+## Phase 5: Extensions
+
+**Status**: ⏸️ Blocked by Level 4  
+**Location**: [post-sdk/extensions/](post-sdk/extensions/)
+
+RAG infrastructure, knowledge graph evolution, and
+advanced MCP graph tools. Requires Level 4 (AI
+Enhancement) and MCP integration to be complete.
 
 ---
 
 ## MFL-Specific Considerations
 
-Modern Foreign Languages (French, German, Spanish) have unique search challenges:
+Modern Foreign Languages (French, German, Spanish)
+have unique search challenges:
 
-- **No transcripts**: MFL lessons have no video transcripts, only metadata
+- **No transcripts**: MFL lessons have no video
+  transcripts, only metadata
 - **Low MRR**: Current MFL MRR is 0.19-0.29
 
-**Future enhancement**: Multilingual semantic text retriever using `multilingual-e5-base`.
+**Future enhancement**: Multilingual semantic text
+retriever using `multilingual-e5-base`.
 
 **Plan**: [post-sdk/search-quality/mfl-multilingual-embeddings.md](post-sdk/search-quality/mfl-multilingual-embeddings.md)
 
@@ -148,7 +181,7 @@ Modern Foreign Languages (French, German, Spanish) have unique search challenges
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (fully implemented, 34 tests) |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (34 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests) |
 
 The Search SDK consumes types from the Curriculum SDK.
@@ -161,16 +194,17 @@ The Search CLI consumes the Search SDK.
 Run after every piece of work, from repo root:
 
 ```bash
+pnpm clean
 pnpm type-gen
 pnpm build
 pnpm type-check
-pnpm lint:fix
 pnpm format:root
 pnpm markdownlint:root
+pnpm lint:fix
 pnpm test
+pnpm test:ui
 pnpm test:e2e
 pnpm test:e2e:built
-pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
@@ -184,7 +218,7 @@ pnpm smoke:dev:stub
 |----------|---------|
 | [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [search-acceptance-criteria.md](search-acceptance-criteria.md) | Level definitions |
-| [Ground Truth Guide](../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+| [Ground Truth Guide](/apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
 
 ---
 

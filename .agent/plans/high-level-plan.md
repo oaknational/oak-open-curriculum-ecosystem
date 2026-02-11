@@ -1,31 +1,32 @@
 # High-Level Plan
 
-**Last Updated**: 2026-02-10  
+**Last Updated**: 2026-02-11  
 **Scope**: Strategic overview. Details are in individual plan documents.
 
-**Recent Changes (2026-02-10)**:
+**Recent Changes (2026-02-11)**:
 
-- Ground truths complete across all four indexes (lessons, units, threads, sequences)
-- SDK extraction is the immediate priority
-- Search enhancements (document relationships, tuning, modern ES features) consolidated into one workstream
+- SDK extraction complete (Checkpoints A–E2): all services return `Result<T, E>`, comprehensive TSDoc, all quality gates pass
+- SDK extraction plan (`search-sdk-cli.plan.md`) marked ✅ COMPLETE
+- MCP search integration is the immediate next priority
+- Semantic search roadmap restructured with all post-SDK streams and correct dependencies
 
-**Previous Changes (2026-01-26)**:
+**Previous Changes (2026-02-10)**:
 
-- Ground Truth strategy revised — focus on testing OUR value proposition, not Elasticsearch
-- New category structure: `natural-query` (bulk), `exact-term` (few), `typo-recovery` (handful)
-- Content-weighted distribution: maths gets considerably more coverage than low-priority subjects
+- Ground truths complete across all four indexes
+- SDK extraction started as immediate priority
+- Search enhancements consolidated into one workstream
 
 ---
 
-## Current Priorities (2026-02-10)
+## Current Priorities (2026-02-11)
 
 **Active Work**:
 
-1. **Semantic Search** — SDK extraction (see [roadmap.md](semantic-search/roadmap.md))
+1. **Semantic Search** — MCP integration next (SDK extraction complete, see [roadmap.md](semantic-search/roadmap.md))
 2. **Type Discipline Restoration** — Quality gates passing, ongoing refinement
 3. **SDK/MCP Enhancements** — Plan 05 (Zod v4) active
 
-**Next Up**: MCP integration, search enhancements, Ontology Resource (Plan 02)
+**Next Up**: Search enhancements (GT expansion, Levels 2-4), Ontology Resource (Plan 02)
 
 **Deferred**: Global State DI Refactoring, Advanced MCP Tools (Phase 4 of Plan 03)
 
@@ -40,7 +41,7 @@
 ### 1. Elasticsearch Semantic Search — Status: 🔄 IN PROGRESS (Priority 1)
 
 **Plan**: `.agent/plans/semantic-search/roadmap.md` (authoritative roadmap)  
-**Current Work**: [active/search-sdk-cli.plan.md](semantic-search/active/search-sdk-cli.plan.md)
+**Current Work**: [wire-hybrid-search.md](semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
@@ -48,15 +49,15 @@
 | 2 | Sequence indexing | ✅ Complete (30 sequences, 57 facets) |
 | 3 | Level 1 fundamentals | ✅ Approaches complete |
 | 4 | Ground truth foundation | ✅ Complete (30 lessons, 2 units, 1 thread, 1 sequence) |
-| **5** | **SDK/CLI extraction** | 🔄 **CURRENT** |
-| 6 | MCP integration | 📋 Planned |
-| 7+ | Search enhancements | 📋 Future |
+| 5 | SDK/CLI extraction + Result pattern + TSDoc | ✅ Complete |
+| **6** | **MCP search integration** | 📋 **NEXT** |
+| 7 | Search quality + ecosystem streams | 📋 Future |
 
-**Current Priority**: SDK Extraction
+**Current Priority**: MCP Search Integration
 
-Extract SDK library code to `packages/sdks/oak-search-sdk/`;
-rename current workspace as CLI (`apps/oak-search-cli/`).
-See [roadmap.md](./semantic-search/roadmap.md).
+SDK extraction is complete. Wire the Search SDK into
+MCP curriculum servers so AI agents can use hybrid
+Elasticsearch search. See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 
@@ -119,13 +120,15 @@ See [roadmap.md](./semantic-search/roadmap.md).
 
 ---
 
-### 5. Semantic Search MCP Integration — Status: 📋 PLANNED (Priority 5)
+### 5. Semantic Search Type-Gen Integration — Status: 📋 PLANNED (Priority 5)
 
-**Scope**: Add semantic search to the type-gen-generated `search` MCP tool; compose with curriculum data + semantic search APIs
+**Scope**: Generate the semantic search MCP tool at `pnpm type-gen` time (replacing the hand-written tool from M8)
 
-**Prerequisites**: Item #1 (semantic search Phase 4 complete), Item #2 (ontology + aggregated tools refactor)
+**Prerequisites**: Item #1 M8 (basic MCP wiring complete), Item #3 Phase 0 (aggregated tools type-gen refactor)
 
-**Architecture**: Semantic search integration defined in type-gen configuration; generated at `pnpm type-gen` time
+**Architecture**: Semantic search integration defined in type-gen configuration; generated alongside other aggregated tools
+
+**Note**: Basic MCP search wiring (M8 in Item #1) is hand-written and has no dependency on this. This item upgrades the hand-written tool to a generated one, aligning with the type-gen-first architecture.
 
 **Acceptance**: Generated `search` tool composes curriculum + semantic search APIs; E2E tests pass; documentation updated.
 
@@ -274,8 +277,8 @@ See [roadmap.md](./semantic-search/roadmap.md).
 | M4 | OAuth/Clerk Integration | ✅ DONE |
 | M5 | Search Level 1: Fundamentals | ✅ DONE |
 | M6 | Ground Truth Foundation | ✅ DONE |
-| **M7** | **Search SDK + CLI Extraction** | 🔄 **IN PROGRESS** |
-| M8 | MCP Search Integration | 📋 Planned |
+| M7 | Search SDK + CLI Extraction + Result + TSDoc | ✅ DONE |
+| **M8** | **MCP Search Integration** | 📋 **NEXT** |
 | M9 | Ontology Resource Implementation | 📋 Planned |
 | M10 | OpenAI Apps SDK Integration | 📋 Planned |
 | M11 | Advanced MCP Tools | ⏸ Deferred |
@@ -319,16 +322,17 @@ See [roadmap.md](./semantic-search/roadmap.md).
 Run after every piece of work, from repo root, in order:
 
 ```bash
+pnpm clean             # Clean build products
 pnpm type-gen          # Generate types from schema
 pnpm build             # Build all packages
 pnpm type-check        # TypeScript validation
-pnpm lint:fix          # Auto-fix linting issues
 pnpm format:root       # Format code
 pnpm markdownlint:root # Markdown lint
+pnpm lint:fix          # Auto-fix linting issues
 pnpm test              # Unit + integration tests
+pnpm test:ui           # Playwright UI tests
 pnpm test:e2e          # E2E tests
 pnpm test:e2e:built    # E2E on built app
-pnpm test:ui           # Playwright UI tests
 pnpm smoke:dev:stub    # Smoke tests
 ```
 

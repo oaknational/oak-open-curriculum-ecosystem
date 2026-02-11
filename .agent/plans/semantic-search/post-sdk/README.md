@@ -1,16 +1,16 @@
 # Post-SDK Work — Streams
 
-**Status**: 📋 Pending — Waiting for SDK extraction  
+**Status**: 📋 Ready — SDK extraction complete (Feb 2026)  
 **Parent**: [../roadmap.md](../roadmap.md)
 
-All work in this folder happens AFTER SDK extraction is complete.
+SDK extraction is complete. Work in these streams can now begin.
 
 ---
 
 ## Execution Order
 
-```
-1. MCP Integration (mcp-integration/)     ← FIRST after SDK
+```text
+1. MCP Integration (mcp-integration/)     ← FIRST
    Wire hybrid search into MCP tools
          ↓
 2. Everything else (parallel where independent):
@@ -31,7 +31,7 @@ Plans that span multiple streams or address SDK architecture.
 
 | Plan | Intent | Prerequisite |
 |------|--------|--------------|
-| [subject-domain-model.md](subject-domain-model.md) | Curriculum SDK type-gen: subject hierarchy, KS4 patterns, curriculum config | Ground truth review complete |
+| [subject-domain-model.md](move-search-domain-knowledge-to-typegen-time.md) | Curriculum SDK type-gen: subject hierarchy, KS4 patterns, curriculum config | SDK extraction complete ✅ |
 
 ---
 
@@ -61,9 +61,7 @@ Each stream is a coherent domain of work with its own README explaining intent a
 
 ## Prerequisites
 
-All streams require:
-
 | Prerequisite | Status | Location |
 |--------------|--------|----------|
-| Ground truth review complete | 🔄 In Progress | [../active/](../active/) |
-| SDK extraction complete | 📋 Pending | [../sdk-extraction/](../sdk-extraction/) |
+| Ground truth foundation | ✅ Complete | [../archive/completed/](../archive/completed/) |
+| SDK extraction | ✅ Complete | [../sdk-extraction/](../sdk-extraction/) |

@@ -2,7 +2,8 @@
 
 **Domain**: Wiring the Search SDK into MCP tools  
 **Intent**: Enable AI agents to use semantic search capabilities  
-**Impact**: Agents can search Oak curriculum with full hybrid search power
+**Impact**: Agents can search Oak curriculum with full hybrid search power  
+**Status**: 📋 Ready to start (SDK extraction complete)
 
 ---
 
@@ -20,20 +21,23 @@ MCP integration is the **immediate consumer** of the Search SDK. Wiring it up:
 
 | Plan | Description | Status |
 |------|-------------|--------|
-| [wire-hybrid-search.md](wire-hybrid-search.md) | Connect SDK search to MCP tools | 📋 Pending |
+| [wire-hybrid-search.md](wire-hybrid-search.md) | Connect SDK search to MCP tools | 📋 Ready |
 
 ---
 
-## Dependencies
+## Dependencies (all met)
 
-- SDK extraction complete
-- Search SDK published and consumable
+| Dependency | Status |
+|------------|--------|
+| SDK extraction complete | ✅ |
+| All services return `Result<T, E>` | ✅ |
+| Comprehensive TSDoc | ✅ |
 
 ---
 
 ## Success Criteria
 
-- [ ] MCP `search-curriculum` tool calls SDK search
-- [ ] MCP `suggest-completions` tool calls SDK suggestions
+- [ ] MCP `semantic-search` tool calls SDK retrieval methods
+- [ ] Suggestions tool calls SDK `suggest`
 - [ ] All existing MCP curriculum tools continue to work
 - [ ] Quality gates pass

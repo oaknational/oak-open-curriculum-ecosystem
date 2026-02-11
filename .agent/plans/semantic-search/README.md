@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-10
+**Last Updated**: 2026-02-11
 
 ---
 
@@ -10,15 +10,14 @@
 
 ---
 
-## Current Work: SDK Extraction
+## Current Work: MCP Search Integration
 
-Ground truths are complete across all four indexes. The
-Next.js layer has been removed and the workspace tidied
-(Feb 2026). The immediate priority is extracting the SDK
-library code to `packages/sdks/oak-search-sdk/` and renaming
-the current workspace as the CLI (`apps/oak-search-cli/`).
+SDK extraction is complete (Checkpoints A–E2, Feb 2026).
+The immediate priority is wiring the Search SDK into the
+MCP curriculum servers so that AI agents can use hybrid
+Elasticsearch search.
 
-**Details**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
+**Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
 
 ---
 
@@ -28,15 +27,18 @@ the current workspace as the CLI (`apps/oak-search-cli/`).
 1. Ground Truth Foundation                       ✅ COMPLETE
    30 lesson GTs + multi-index GTs
          ↓
-2. SDK Extraction (sdk-extraction/)              ← CURRENT
-   Extract SDK lib; rename workspace as CLI
+2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
+   Checkpoints A–E2 (extraction, Result pattern, TSDoc)
          ↓
-3. MCP Integration (post-sdk/mcp-integration/)
+3. MCP Search Integration                        ← CURRENT
    Wire hybrid search into MCP tools
          ↓
-4. Search Enhancements (post-sdk/search-quality/)
-   Ground truth expansion, fundamentals re-evaluation,
-   document relationships, modern ES features, AI enhancement
+4. Search Quality + Ecosystem (parallel streams)
+   GT expansion, Levels 2-4, bulk data, SDK API,
+   subject domain model, operations
+         ↓
+5. Extensions
+   RAG, knowledge graph, advanced features
 ```
 
 ---
@@ -45,11 +47,10 @@ the current workspace as the CLI (`apps/oak-search-cli/`).
 
 | Folder | Purpose | Status |
 |--------|---------|--------|
-| `active/` | Work in progress | 🔄 SDK extraction |
-| `sdk-extraction/` | SDK extraction context | See `active/` |
-| `post-sdk/` | Streams of post-SDK work | ⏸️ After SDK extraction |
+| `active/` | SDK extraction plan (complete, reference) | ✅ Complete |
+| `sdk-extraction/` | SDK extraction context | ✅ Complete |
+| `post-sdk/` | Streams of post-extraction work | 📋 Ready |
 | `archive/` | Historical work | ✅ Reference only |
-| `templates/` | Session templates | — |
 
 ---
 
