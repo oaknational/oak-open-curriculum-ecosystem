@@ -32,10 +32,10 @@ export type ZodFieldType =
  * - A Zod schema field for runtime validation
  * - An Elasticsearch mapping field for index configuration
  *
- * @property name - The field name as it appears in documents
- * @property zodType - The Zod type category for this field
- * @property optional - Whether the field is optional (affects `.optional()` in Zod)
- * @property enumRef - Optional reference to an enum tuple (e.g., 'SUBJECT_TUPLE')
+ * - `name` — The field name as it appears in documents
+ * - `zodType` — The Zod type category for this field
+ * - `optional` — Whether the field is optional (affects `.optional()` in Zod)
+ * - `enumRef` — Optional reference to an enum tuple (e.g., 'SUBJECT_TUPLE')
  */
 export interface FieldDefinition {
   /** The field name as it appears in documents and mappings. */

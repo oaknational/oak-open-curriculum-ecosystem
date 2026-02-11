@@ -29,8 +29,7 @@
  * const result = processBulkData(input);
  * console.log(`Processed ${result.totalLessons} lessons`);
  * ```
- *
- * @module public/bulk
+
  */
 
 // ============================================================================

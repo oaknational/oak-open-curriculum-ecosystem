@@ -6,7 +6,7 @@
 
 # Interface: ValidationSuccess\<T\>
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/types.ts:30
+Defined in: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:30](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L30)
 
 Result type for validation operations
 Discriminated union for type-safe error handling
@@ -23,7 +23,7 @@ Discriminated union for type-safe error handling
 
 > **ok**: `true`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/types.ts:31
+Defined in: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:31](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L31)
 
 ---
 
@@ -31,4 +31,4 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/types
 
 > **value**: `T`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/types.ts:32
+Defined in: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:32](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L32)

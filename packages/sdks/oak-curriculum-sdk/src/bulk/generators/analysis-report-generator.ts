@@ -8,8 +8,7 @@
  * Generates exploratory analysis reports from extracted data.
  * These reports provide insights into vocabulary patterns, synonym opportunities,
  * and misconception density to inform subsequent generators.
- *
- * @module vocab-gen/generators/analysis-report-generator
+
  */
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';

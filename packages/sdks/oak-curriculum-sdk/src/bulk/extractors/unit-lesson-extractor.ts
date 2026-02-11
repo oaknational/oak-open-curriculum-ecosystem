@@ -5,8 +5,7 @@
  * Extracts the lesson structure from units, providing a map of which
  * lessons belong to which units. Useful for navigation and curriculum
  * structure analysis.
- *
- * @module bulk/extractors/unit-lesson-extractor
+
  */
 
 import type { Unit } from '../../types/generated/bulk/index.js';

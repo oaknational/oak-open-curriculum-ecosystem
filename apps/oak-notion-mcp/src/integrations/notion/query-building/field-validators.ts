@@ -1,5 +1,5 @@
 /**
- * @fileoverview Field-specific validation functions
+ * Field-specific validation functions
  */
 
 import type { McpPropertyFilter, McpSort } from '../../../types';

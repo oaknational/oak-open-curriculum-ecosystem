@@ -6,7 +6,6 @@
  * and extract them from bulk responses.
  *
  * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
- * @module bulk-retry-utils
  */
 import type { BulkOperationEntry, BulkOperations } from './bulk-operation-types';
 

@@ -8,7 +8,7 @@
 
 > `const` **OAK\_SEQUENCE\_FACETS\_MAPPING**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/es-mappings/oak-sequence-facets.ts:15
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/oak-sequence-facets.ts:15](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/oak-sequence-facets.ts#L15)
 
 Elasticsearch mapping for the oak_sequence_facets index.
 

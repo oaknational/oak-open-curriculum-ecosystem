@@ -5,8 +5,7 @@
  * Extracts curriculum sequencing rationale from units. These explanations
  * describe where a unit sits within the sequence and why it has been
  * placed there - valuable for understanding pedagogical intent.
- *
- * @module bulk/extractors/why-this-why-now-extractor
+
  */
 
 import type { Unit } from '../../types/generated/bulk/index.js';

@@ -8,7 +8,6 @@
  * buildKs4SupplementationContext, not to bulk file I/O or ES dispatch.
  *
  * @see ADR-093 Bulk-First Ingestion Strategy
- * @module lib/elasticsearch/setup/ingest-bulk
  */
 
 import type { CliArgs } from './ingest-cli-args.js';

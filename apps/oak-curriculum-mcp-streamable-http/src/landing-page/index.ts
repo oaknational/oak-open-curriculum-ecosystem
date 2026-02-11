@@ -1,5 +1,5 @@
 /**
- * @fileoverview Landing page module for the MCP HTTP server.
+ * Landing page module for the MCP HTTP server.
  *
  * This module provides the public API for rendering the landing page that
  * explains the MCP server capabilities and how to connect to it.

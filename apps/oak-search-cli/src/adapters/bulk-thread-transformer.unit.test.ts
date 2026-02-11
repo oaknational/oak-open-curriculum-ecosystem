@@ -6,7 +6,6 @@
  * Verifies DRY compliance by ensuring bulk transformer produces identical
  * output to the shared `createThreadDocument()` builder.
  *
- * @module adapters/bulk-thread-transformer.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { BulkDownloadFile } from '@oaknational/oak-curriculum-sdk/public/bulk';

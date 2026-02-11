@@ -8,7 +8,7 @@ export interface paths {
         };
         /**
          * Units within a sequence
-         * @description This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
+         * This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
          */
         get: operations["getSequences-getSequenceUnits"];
         put?: never;
@@ -28,7 +28,7 @@ export interface paths {
         };
         /**
          * Lesson transcript
-         * @description This endpoint returns the video transcript and video captions file for a given lesson.
+         * This endpoint returns the video transcript and video captions file for a given lesson.
          */
         get: operations["getLessonTranscript-getLessonTranscript"];
         put?: never;
@@ -48,7 +48,7 @@ export interface paths {
         };
         /**
          * Lesson search using lesson video transcripts
-         * @description Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
+         * Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
          */
         get: operations["searchTranscripts-searchTranscripts"];
         put?: never;
@@ -68,7 +68,7 @@ export interface paths {
         };
         /**
          * Assets within a sequence
-         * @description This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
+         * This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
          *     This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
          */
         get: operations["getAssets-getSequenceAssets"];
@@ -89,7 +89,7 @@ export interface paths {
         };
         /**
          * Assets
-         * @description This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
+         * This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
          */
         get: operations["getAssets-getSubjectAssets"];
         put?: never;
@@ -109,7 +109,7 @@ export interface paths {
         };
         /**
          * Downloadable lesson assets
-         * @description This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
+         * This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
          *             This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
          */
         get: operations["getAssets-getLessonAssets"];
@@ -130,7 +130,7 @@ export interface paths {
         };
         /**
          * Lesson asset by type
-         * @description This endpoint will stream the downloadable asset for the given lesson and type.
+         * This endpoint will stream the downloadable asset for the given lesson and type.
          *     There is no response returned for this endpoint as it returns a content attachment.
          */
         get: operations["getAssets-getLessonAsset"];
@@ -151,7 +151,7 @@ export interface paths {
         };
         /**
          * Subjects
-         * @description This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
+         * This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
          */
         get: operations["getSubjects-getAllSubjects"];
         put?: never;
@@ -171,7 +171,7 @@ export interface paths {
         };
         /**
          * Subject
-         * @description This endpoint returns the sequences, key stages and years that are currently available for a given subject.
+         * This endpoint returns the sequences, key stages and years that are currently available for a given subject.
          */
         get: operations["getSubjects-getSubject"];
         put?: never;
@@ -191,7 +191,7 @@ export interface paths {
         };
         /**
          * Sequencing information for a given subject
-         * @description This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
+         * This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
          */
         get: operations["getSubjects-getSubjectSequence"];
         put?: never;
@@ -211,7 +211,7 @@ export interface paths {
         };
         /**
          * Key stages within a subject
-         * @description This endpoint returns a list of key stages that are currently available for a given subject.
+         * This endpoint returns a list of key stages that are currently available for a given subject.
          */
         get: operations["getSubjects-getSubjectKeyStages"];
         put?: never;
@@ -231,7 +231,7 @@ export interface paths {
         };
         /**
          * Year groups for a given subject
-         * @description This endpoint returns an array of years that are currently available for a given subject.
+         * This endpoint returns an array of years that are currently available for a given subject.
          */
         get: operations["getSubjects-getSubjectYears"];
         put?: never;
@@ -251,7 +251,7 @@ export interface paths {
         };
         /**
          * Key stages
-         * @description This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
+         * This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
          */
         get: operations["getKeyStages-getKeyStages"];
         put?: never;
@@ -271,7 +271,7 @@ export interface paths {
         };
         /**
          * Lessons
-         * @description This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
+         * This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
          */
         get: operations["getKeyStageSubjectLessons-getKeyStageSubjectLessons"];
         put?: never;
@@ -291,7 +291,7 @@ export interface paths {
         };
         /**
          * Units
-         * @description This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
+         * This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
          */
         get: operations["getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits"];
         put?: never;
@@ -311,7 +311,7 @@ export interface paths {
         };
         /**
          * Quiz questions by lesson
-         * @description The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
+         * The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
          */
         get: operations["getQuestions-getQuestionsForLessons"];
         put?: never;
@@ -331,7 +331,7 @@ export interface paths {
         };
         /**
          * Questions within a sequence
-         * @description This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
+         * This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
          */
         get: operations["getQuestions-getQuestionsForSequence"];
         put?: never;
@@ -351,7 +351,7 @@ export interface paths {
         };
         /**
          * Quiz questions by subject and key stage
-         * @description This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
+         * This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
          */
         get: operations["getQuestions-getQuestionsForKeyStageAndSubject"];
         put?: never;
@@ -371,7 +371,7 @@ export interface paths {
         };
         /**
          * Lesson summary
-         * @description This endpoint returns a summary for a given lesson
+         * This endpoint returns a summary for a given lesson
          */
         get: operations["getLessons-getLesson"];
         put?: never;
@@ -391,7 +391,7 @@ export interface paths {
         };
         /**
          * Lesson search using lesson title
-         * @description Search for a term and find the 20 most similar lessons with titles that contain similar text.
+         * Search for a term and find the 20 most similar lessons with titles that contain similar text.
          */
         get: operations["getLessons-searchByTextSimilarity"];
         put?: never;
@@ -411,7 +411,7 @@ export interface paths {
         };
         /**
          * Unit summary
-         * @description This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
+         * This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
          */
         get: operations["getUnits-getUnit"];
         put?: never;
@@ -431,7 +431,7 @@ export interface paths {
         };
         /**
          * Threads
-         * @description This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
+         * This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
          */
         get: operations["getThreads-getAllThreads"];
         put?: never;
@@ -451,7 +451,7 @@ export interface paths {
         };
         /**
          * Units belonging to a given thread
-         * @description This endpoint returns all of the units that belong to a given thread.
+         * This endpoint returns all of the units that belong to a given thread.
          */
         get: operations["getThreads-getThreadUnits"];
         put?: never;
@@ -469,7 +469,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description History of significant changes to the API with associated dates and versions */
+        /** History of significant changes to the API with associated dates and versions */
         get: operations["changelog-changelog"];
         put?: never;
         post?: never;
@@ -486,7 +486,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get the latest version and latest change note for the API */
+        /** Get the latest version and latest change note for the API */
         get: operations["changelog-latest"];
         put?: never;
         post?: never;
@@ -504,7 +504,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Check your current rate limit status (note that your rate limit is also included in the headers of every response).
+         * Check your current rate limit status (note that your rate limit is also included in the headers of every response).
          *
          *     This specific endpoint does not cost any requests.
          */
@@ -548,117 +548,117 @@ export interface components {
          *     ]
          */
         SequenceUnitsResponseSchema: ({
-            /** @description The year group */
+            /** The year group */
             year: number | "all-years";
-            /** @description An optional alternative title for the year sequence */
+            /** An optional alternative title for the year sequence */
             title?: string;
-            /** @description A list of units that make up a full sequence, grouped by year. */
+            /** A list of units that make up a full sequence, grouped by year. */
             units: ({
-                /** @description The title of the unit */
+                /** The title of the unit */
                 unitTitle: string;
-                /** @description The position of the unit within the sequence. */
+                /** The position of the unit within the sequence. */
                 unitOrder: number;
-                /** @description The unique slug identifier for the unit */
+                /** The unique slug identifier for the unit */
                 unitOptions: {
                     unitTitle: string;
                     unitSlug: string;
                 }[];
-                /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                /** The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                 categories?: {
-                    /** @description The title of the category */
+                    /** The title of the category */
                     categoryTitle: string;
-                    /** @description The unique identifier for the category */
+                    /** The unique identifier for the category */
                     categorySlug?: string;
                 }[];
-                /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                /** A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                 threads?: {
-                    /** @description The title of the category */
+                    /** The title of the category */
                     threadTitle: string;
-                    /** @description The unique identifier for the thread */
+                    /** The unique identifier for the thread */
                     threadSlug: string;
-                    /** @description Deprecated */
+                    /** Deprecated */
                     order: number;
                 }[];
             } | {
                 unitTitle: string;
                 unitOrder: number;
-                /** @description The unique slug identifier for the unit */
+                /** The unique slug identifier for the unit */
                 unitSlug: string;
                 categories?: {
-                    /** @description The title of the category */
+                    /** The title of the category */
                     categoryTitle: string;
-                    /** @description The unique identifier for the category */
+                    /** The unique identifier for the category */
                     categorySlug?: string;
                 }[];
                 threads?: {
-                    /** @description The title of the category */
+                    /** The title of the category */
                     threadTitle: string;
-                    /** @description The unique identifier for the thread */
+                    /** The unique identifier for the thread */
                     threadSlug: string;
-                    /** @description Deprecated */
+                    /** Deprecated */
                     order: number;
                 }[];
             })[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
         } | {
             year: number;
             title?: string;
-            /** @description Only used in secondary science. Contains a full year's unit sequences based on which subject is being studied at KS4. */
+            /** Only used in secondary science. Contains a full year's unit sequences based on which subject is being studied at KS4. */
             examSubjects: ({
                 examSubjectTitle: string;
                 examSubjectSlug?: string;
                 tiers: {
-                    /** @description The title of the tier */
+                    /** The title of the tier */
                     tierTitle: string;
-                    /** @description The tier identifier */
+                    /** The tier identifier */
                     tierSlug: string;
                     units: ({
-                        /** @description The title of the unit */
+                        /** The title of the unit */
                         unitTitle: string;
-                        /** @description The position of the unit within the sequence. */
+                        /** The position of the unit within the sequence. */
                         unitOrder: number;
-                        /** @description The unique slug identifier for the unit */
+                        /** The unique slug identifier for the unit */
                         unitOptions: {
                             unitTitle: string;
                             unitSlug: string;
                         }[];
-                        /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                        /** The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                         categories?: {
-                            /** @description The title of the category */
+                            /** The title of the category */
                             categoryTitle: string;
-                            /** @description The unique identifier for the category */
+                            /** The unique identifier for the category */
                             categorySlug?: string;
                         }[];
-                        /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                        /** A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                         threads?: {
-                            /** @description The title of the category */
+                            /** The title of the category */
                             threadTitle: string;
-                            /** @description The unique identifier for the thread */
+                            /** The unique identifier for the thread */
                             threadSlug: string;
-                            /** @description Deprecated */
+                            /** Deprecated */
                             order: number;
                         }[];
                     } | {
                         unitTitle: string;
                         unitOrder: number;
-                        /** @description The unique slug identifier for the unit */
+                        /** The unique slug identifier for the unit */
                         unitSlug: string;
                         categories?: {
-                            /** @description The title of the category */
+                            /** The title of the category */
                             categoryTitle: string;
-                            /** @description The unique identifier for the category */
+                            /** The unique identifier for the category */
                             categorySlug?: string;
                         }[];
                         threads?: {
-                            /** @description The title of the category */
+                            /** The title of the category */
                             threadTitle: string;
-                            /** @description The unique identifier for the thread */
+                            /** The unique identifier for the thread */
                             threadSlug: string;
-                            /** @description Deprecated */
+                            /** Deprecated */
                             order: number;
                         }[];
                     })[];
@@ -667,54 +667,54 @@ export interface components {
                 examSubjectTitle: string;
                 examSubjectSlug?: string;
                 units: ({
-                    /** @description The title of the unit */
+                    /** The title of the unit */
                     unitTitle: string;
-                    /** @description The position of the unit within the sequence. */
+                    /** The position of the unit within the sequence. */
                     unitOrder: number;
-                    /** @description The unique slug identifier for the unit */
+                    /** The unique slug identifier for the unit */
                     unitOptions: {
                         unitTitle: string;
                         unitSlug: string;
                     }[];
-                    /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                    /** The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     categories?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         categoryTitle: string;
-                        /** @description The unique identifier for the category */
+                        /** The unique identifier for the category */
                         categorySlug?: string;
                     }[];
-                    /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                    /** A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     threads?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         threadTitle: string;
-                        /** @description The unique identifier for the thread */
+                        /** The unique identifier for the thread */
                         threadSlug: string;
-                        /** @description Deprecated */
+                        /** Deprecated */
                         order: number;
                     }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
-                    /** @description The unique slug identifier for the unit */
+                    /** The unique slug identifier for the unit */
                     unitSlug: string;
                     categories?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         categoryTitle: string;
-                        /** @description The unique identifier for the category */
+                        /** The unique identifier for the category */
                         categorySlug?: string;
                     }[];
                     threads?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         threadTitle: string;
-                        /** @description The unique identifier for the thread */
+                        /** The unique identifier for the thread */
                         threadSlug: string;
-                        /** @description Deprecated */
+                        /** Deprecated */
                         order: number;
                     }[];
                 })[];
             })[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -722,59 +722,59 @@ export interface components {
             year: number;
             title?: string;
             tiers: {
-                /** @description The title of the tier */
+                /** The title of the tier */
                 tierTitle: string;
-                /** @description The tier identifier */
+                /** The tier identifier */
                 tierSlug: string;
                 units: ({
-                    /** @description The title of the unit */
+                    /** The title of the unit */
                     unitTitle: string;
-                    /** @description The position of the unit within the sequence. */
+                    /** The position of the unit within the sequence. */
                     unitOrder: number;
-                    /** @description The unique slug identifier for the unit */
+                    /** The unique slug identifier for the unit */
                     unitOptions: {
                         unitTitle: string;
                         unitSlug: string;
                     }[];
-                    /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                    /** The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     categories?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         categoryTitle: string;
-                        /** @description The unique identifier for the category */
+                        /** The unique identifier for the category */
                         categorySlug?: string;
                     }[];
-                    /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+                    /** A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     threads?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         threadTitle: string;
-                        /** @description The unique identifier for the thread */
+                        /** The unique identifier for the thread */
                         threadSlug: string;
-                        /** @description Deprecated */
+                        /** Deprecated */
                         order: number;
                     }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
-                    /** @description The unique slug identifier for the unit */
+                    /** The unique slug identifier for the unit */
                     unitSlug: string;
                     categories?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         categoryTitle: string;
-                        /** @description The unique identifier for the category */
+                        /** The unique identifier for the category */
                         categorySlug?: string;
                     }[];
                     threads?: {
-                        /** @description The title of the category */
+                        /** The title of the category */
                         threadTitle: string;
-                        /** @description The unique identifier for the thread */
+                        /** The unique identifier for the thread */
                         threadSlug: string;
-                        /** @description Deprecated */
+                        /** Deprecated */
                         order: number;
                     }[];
                 })[];
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -786,12 +786,12 @@ export interface components {
          *     }
          */
         TranscriptResponseSchema: {
-            /** @description The transcript for the lesson video */
+            /** The transcript for the lesson video */
             transcript: string;
-            /** @description The contents of the .vtt file for the lesson video, which maps captions to video timestamps. */
+            /** The contents of the .vtt file for the lesson video, which maps captions to video timestamps. */
             vtt: string;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -822,22 +822,22 @@ export interface components {
          */
         SearchTranscriptResponseSchema: {
             /**
-             * @description The lesson title
+             * The lesson title
              * @example The Roman invasion of Britain
              */
             lessonTitle: string;
             /**
-             * @description The lesson slug identifier
+             * The lesson slug identifier
              * @example the-roman-invasion-of-britain
              */
             lessonSlug: string;
             /**
-             * @description The snippet of the transcript that matched the search term
+             * The snippet of the transcript that matched the search term
              * @example The Romans were ready,
              */
             transcriptSnippet?: string;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -868,27 +868,27 @@ export interface components {
          *     ]
          */
         SequenceAssetsResponseSchema: {
-            /** @description The unique slug identifier for the lesson */
+            /** The unique slug identifier for the lesson */
             lessonSlug: string;
-            /** @description The title for the lesson */
+            /** The title for the lesson */
             lessonTitle: string;
-            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
+            /** Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
-            /** @description List of assets */
+            /** List of assets */
             assets: {
                 /**
-                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
+                 * Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
-                 * @enum {string}
+
                  */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
-                /** @description The label for the asset */
+                /** The label for the asset */
                 label: string;
-                /** @description The download endpoint for the asset. */
+                /** The download endpoint for the asset. */
                 url: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -919,27 +919,27 @@ export interface components {
          *     ]
          */
         SubjectAssetsResponseSchema: {
-            /** @description The unique slug identifier for the lesson */
+            /** The unique slug identifier for the lesson */
             lessonSlug: string;
-            /** @description The title for the lesson */
+            /** The title for the lesson */
             lessonTitle: string;
-            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
+            /** Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
-            /** @description List of assets */
+            /** List of assets */
             assets: {
                 /**
-                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
+                 * Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
-                 * @enum {string}
+
                  */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
-                /** @description The label for the asset */
+                /** The label for the asset */
                 label: string;
-                /** @description The download endpoint for the asset. */
+                /** The download endpoint for the asset. */
                 url: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -970,23 +970,23 @@ export interface components {
          *     }
          */
         LessonAssetsResponseSchema: {
-            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
+            /** Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
-            /** @description List of assets */
+            /** List of assets */
             assets?: {
                 /**
-                 * @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
+                 * Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint
                  * @example slideDeck
-                 * @enum {string}
+
                  */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
-                /** @description The label for the asset */
+                /** The label for the asset */
                 label: string;
-                /** @description The download endpoint for the asset. */
+                /** The download endpoint for the asset. */
                 url: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1082,43 +1082,43 @@ export interface components {
          *     ]
          */
         AllSubjectsResponseSchema: {
-            /** @description The subject title */
+            /** The subject title */
             subjectTitle: string;
-            /** @description The subject slug identifier */
+            /** The subject slug identifier */
             subjectSlug: string;
-            /** @description Information about the years, key stages and key stage 4 variance for each sequence */
+            /** Information about the years, key stages and key stage 4 variance for each sequence */
             sequenceSlugs: {
-                /** @description The unique identifier for each sequence */
+                /** The unique identifier for each sequence */
                 sequenceSlug: string;
-                /** @description The years for which this subject has content available for */
+                /** The years for which this subject has content available for */
                 years: number[];
-                /** @description The key stage slug identifiers for which this subject has content available for. */
+                /** The key stage slug identifiers for which this subject has content available for. */
                 keyStages: {
-                    /** @description The key stage title for the given key stage */
+                    /** The key stage title for the given key stage */
                     keyStageTitle: string;
-                    /** @description The unique identifier for a given key stage */
+                    /** The unique identifier for a given key stage */
                     keyStageSlug: string;
                 }[];
-                /** @description The unique identifier for the phase to which this sequence belongs */
+                /** The unique identifier for the phase to which this sequence belongs */
                 phaseSlug: string;
-                /** @description The title for the phase to which this sequence belongs */
+                /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
                 ks4Options: {
                     title: string;
                     slug: string;
                 } | null;
             }[];
-            /** @description The years for which this subject has content available for */
+            /** The years for which this subject has content available for */
             years: number[];
-            /** @description The key stage slug identifiers for which this subject has content available for. */
+            /** The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
-                /** @description The key stage title for the given key stage */
+                /** The key stage title for the given key stage */
                 keyStageTitle: string;
-                /** @description The unique identifier for a given key stage */
+                /** The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1211,43 +1211,43 @@ export interface components {
          *     }
          */
         SubjectResponseSchema: {
-            /** @description The subject title */
+            /** The subject title */
             subjectTitle: string;
-            /** @description The subject slug identifier */
+            /** The subject slug identifier */
             subjectSlug: string;
-            /** @description Information about the years, key stages and key stage 4 variance for each sequence */
+            /** Information about the years, key stages and key stage 4 variance for each sequence */
             sequenceSlugs: {
-                /** @description The unique identifier for each sequence */
+                /** The unique identifier for each sequence */
                 sequenceSlug: string;
-                /** @description The years for which this subject has content available for */
+                /** The years for which this subject has content available for */
                 years: number[];
-                /** @description The key stage slug identifiers for which this subject has content available for. */
+                /** The key stage slug identifiers for which this subject has content available for. */
                 keyStages: {
-                    /** @description The key stage title for the given key stage */
+                    /** The key stage title for the given key stage */
                     keyStageTitle: string;
-                    /** @description The unique identifier for a given key stage */
+                    /** The unique identifier for a given key stage */
                     keyStageSlug: string;
                 }[];
-                /** @description The unique identifier for the phase to which this sequence belongs */
+                /** The unique identifier for the phase to which this sequence belongs */
                 phaseSlug: string;
-                /** @description The title for the phase to which this sequence belongs */
+                /** The title for the phase to which this sequence belongs */
                 phaseTitle: string;
                 ks4Options: {
                     title: string;
                     slug: string;
                 } | null;
             }[];
-            /** @description The years for which this subject has content available for */
+            /** The years for which this subject has content available for */
             years: number[];
-            /** @description The key stage slug identifiers for which this subject has content available for. */
+            /** The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
-                /** @description The key stage title for the given key stage */
+                /** The key stage title for the given key stage */
                 keyStageTitle: string;
-                /** @description The unique identifier for a given key stage */
+                /** The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1305,33 +1305,33 @@ export interface components {
          *     ]
          */
         SubjectSequenceResponseSchema: {
-            /** @description The unique identifier for each sequence */
+            /** The unique identifier for each sequence */
             sequenceSlug: string;
-            /** @description The years for which this subject has content available for */
+            /** The years for which this subject has content available for */
             years: number[];
-            /** @description The key stage slug identifiers for which this subject has content available for. */
+            /** The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
-                /** @description The key stage title for the given key stage */
+                /** The key stage title for the given key stage */
                 keyStageTitle: string;
-                /** @description The unique identifier for a given key stage */
+                /** The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
-            /** @description The unique identifier for the phase to which this sequence belongs */
+            /** The unique identifier for the phase to which this sequence belongs */
             phaseSlug: string;
-            /** @description The title for the phase to which this sequence belongs */
+            /** The title for the phase to which this sequence belongs */
             phaseTitle: string;
             ks4Options: {
                 title: string;
                 slug: string;
             } | null;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
         }[];
         /**
-         * @description The key stage slug identifiers for which this subject has content available for
+         * The key stage slug identifiers for which this subject has content available for
          * @example [
          *       {
          *         "keyStageTitle": "Key Stage 1",
@@ -1352,18 +1352,18 @@ export interface components {
          *     ]
          */
         SubjectKeyStagesResponseSchema: {
-            /** @description The key stage title for the given key stage */
+            /** The key stage title for the given key stage */
             keyStageTitle: string;
-            /** @description The unique identifier for a given key stage */
+            /** The unique identifier for a given key stage */
             keyStageSlug: string;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
         }[];
         /**
-         * @description The years for which this sequence has content available for
+         * The years for which this sequence has content available for
          * @example [
          *       1,
          *       2,
@@ -1387,17 +1387,17 @@ export interface components {
          */
         KeyStageResponseSchema: {
             /**
-             * @description The key stage slug identifier
+             * The key stage slug identifier
              * @example ks1
              */
             slug: string;
             /**
-             * @description The key stage title
+             * The key stage title
              * @example Key Stage 1
              */
             title: string;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1422,17 +1422,17 @@ export interface components {
          */
         KeyStageSubjectLessonsResponseSchema: {
             /**
-             * @description The unit slug identifier
+             * The unit slug identifier
              * @example simple-compound-and-adverbial-complex-sentences
              */
             unitSlug: string;
             /**
-             * @description The unit title
+             * The unit title
              * @example Simple, compound and adverbial complex sentences
              */
             unitTitle: string;
             /**
-             * @description List of lessons for the specified unit
+             * List of lessons for the specified unit
              * @example [
              *       {
              *         "lessonSlug": "four-types-of-simple-sentence",
@@ -1446,18 +1446,18 @@ export interface components {
              */
             lessons: {
                 /**
-                 * @description The lesson slug identifier
+                 * The lesson slug identifier
                  * @example four-types-of-simple-sentence
                  */
                 lessonSlug: string;
                 /**
-                 * @description The lesson title
+                 * The lesson title
                  * @example Four types of simple sentence
                  */
                 lessonTitle: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1482,24 +1482,24 @@ export interface components {
          */
         AllKeyStageAndSubjectUnitsResponseSchema: {
             /**
-             * @description The year identifier
+             * The year identifier
              * @example year-3
              */
             yearSlug: string;
             /**
-             * @description The year title
+             * The year title
              * @example Year 3
              */
             yearTitle: string;
-            /** @description List of units for the specified year */
+            /** List of units for the specified year */
             units: {
-                /** @description The unit slug identifier */
+                /** The unit slug identifier */
                 unitSlug: string;
-                /** @description The unit title */
+                /** The unit title */
                 unitTitle: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1565,270 +1565,270 @@ export interface components {
          *     }
          */
         QuestionForLessonsResponseSchema: {
-            /** @description The starter quiz questions - which test prior knowledge */
+            /** The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
-            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
+            /** The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -1893,274 +1893,274 @@ export interface components {
          *     ]
          */
         QuestionsForSequenceResponseSchema: {
-            /** @description The lesson slug identifier */
+            /** The lesson slug identifier */
             lessonSlug: string;
-            /** @description The title of the lesson */
+            /** The title of the lesson */
             lessonTitle: string;
-            /** @description The starter quiz questions - which test prior knowledge */
+            /** The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
-            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
+            /** The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2290,274 +2290,274 @@ export interface components {
          *     ]
          */
         QuestionsForKeyStageAndSubjectResponseSchema: {
-            /** @description The lesson slug identifier */
+            /** The lesson slug identifier */
             lessonSlug: string;
-            /** @description The title of the lesson */
+            /** The title of the lesson */
             lessonTitle: string;
-            /** @description The starter quiz questions - which test prior knowledge */
+            /** The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
-            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
+            /** The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "multiple-choice";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } | {
-                    /** @constant */
+
                     type: "image";
                     content: {
                         url: string;
                         width: number;
                         height: number;
                         alt?: string;
-                        /** @description Supplementary text for the image, if any */
+                        /** Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
-                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    /** Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 })[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "short-answer";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "match";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: {
-                    /** @description Matching options (LHS) */
+                    /** Matching options (LHS) */
                     matchOption: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
-                    /** @description Matching options (RHS), indicating the correct choice */
+                    /** Matching options (RHS), indicating the correct choice */
                     correctChoice: {
                         /**
-                         * @description The format of the quiz answer
+                         * The format of the quiz answer
                          *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                         * @constant
+
                          */
                         type: "text";
-                        /** @description Quiz question answer */
+                        /** Quiz question answer */
                         content: string;
                     };
                 }[];
             } | {
-                /** @description The question text */
+                /** The question text */
                 question: string;
-                /** @constant */
+
                 questionType: "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
-                    /** @description Supplementary text for the image, if any */
+                    /** Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
                 answers: ({
-                    /** @description Indicates the correct ordering of the response */
+                    /** Indicates the correct ordering of the response */
                     order: number;
                 } & {
                     /**
-                     * @description The format of the quiz answer
+                     * The format of the quiz answer
                      *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
-                     * @constant
+
                      */
                     type: "text";
-                    /** @description Quiz question answer */
+                    /** Quiz question answer */
                     content: string;
                 })[];
             })[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2620,62 +2620,62 @@ export interface components {
          *     }
          */
         LessonSummaryResponseSchema: {
-            /** @description The lesson title */
+            /** The lesson title */
             lessonTitle: string;
-            /** @description The unit slug identifier */
+            /** The unit slug identifier */
             unitSlug: string;
-            /** @description The unit title */
+            /** The unit title */
             unitTitle: string;
-            /** @description The subject slug identifier */
+            /** The subject slug identifier */
             subjectSlug: string;
-            /** @description The subject slug identifier */
+            /** The subject slug identifier */
             subjectTitle: string;
-            /** @description The key stage slug identifier */
+            /** The key stage slug identifier */
             keyStageSlug: string;
-            /** @description The key stage title */
+            /** The key stage title */
             keyStageTitle: string;
-            /** @description The lesson's keywords and their descriptions */
+            /** The lesson's keywords and their descriptions */
             lessonKeywords: {
-                /** @description The keyword */
+                /** The keyword */
                 keyword: string;
-                /** @description A definition of the keyword */
+                /** A definition of the keyword */
                 description: string;
             }[];
-            /** @description The lesson's key learning points */
+            /** The lesson's key learning points */
             keyLearningPoints: {
-                /** @description A key learning point */
+                /** A key learning point */
                 keyLearningPoint: string;
             }[];
-            /** @description The lesson’s anticipated common misconceptions and suggested teacher responses */
+            /** The lesson’s anticipated common misconceptions and suggested teacher responses */
             misconceptionsAndCommonMistakes: {
-                /** @description A common misconception */
+                /** A common misconception */
                 misconception: string;
-                /** @description Suggested teacher response to a common misconception */
+                /** Suggested teacher response to a common misconception */
                 response: string;
             }[];
-            /** @description Suggested teacher response to a common misconception */
+            /** Suggested teacher response to a common misconception */
             pupilLessonOutcome?: string;
-            /** @description Helpful teaching tips for the lesson */
+            /** Helpful teaching tips for the lesson */
             teacherTips: {
                 teacherTip: string;
             }[];
-            /** @description Full guidance about the types of lesson content for the teacher to consider (where appropriate) */
+            /** Full guidance about the types of lesson content for the teacher to consider (where appropriate) */
             contentGuidance: {
-                /** @description Category of content guidance */
+                /** Category of content guidance */
                 contentGuidanceArea: string;
-                /** @description The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
+                /** The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
                 supervisionlevel_id: number;
-                /** @description Content guidance label */
+                /** Content guidance label */
                 contentGuidanceLabel: string;
-                /** @description A detailed description of the type of content that we suggest needs guidance. */
+                /** A detailed description of the type of content that we suggest needs guidance. */
                 contentGuidanceDescription: string;
             }[] | null;
-            /** @description The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
+            /** The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
             supervisionLevel: string | null;
-            /** @description Whether the lesson currently has any downloadable assets availableNote: this field reflects the current availability of downloadable assets, which reflects the availability of early-release content available for the hackathon. All lessons will eventually have downloadable assets available. */
+            /** Whether the lesson currently has any downloadable assets availableNote: this field reflects the current availability of downloadable assets, which reflects the availability of early-release content available for the hackathon. All lessons will eventually have downloadable assets available. */
             downloadsAvailable: boolean;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2713,13 +2713,13 @@ export interface components {
          *     ]
          */
         LessonSearchResponseSchema: {
-            /** @description The lesson slug identifier */
+            /** The lesson slug identifier */
             lessonSlug: string;
-            /** @description The lesson title */
+            /** The lesson title */
             lessonTitle: string;
-            /** @description The snippet of the transcript that matched the search term */
+            /** The snippet of the transcript that matched the search term */
             similarity: number;
-            /** @description The units that the lesson is part of. See sample response below */
+            /** The units that the lesson is part of. See sample response below */
             units: {
                 unitSlug: string;
                 unitTitle: string;
@@ -2728,7 +2728,7 @@ export interface components {
                 subjectSlug: string;
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2777,46 +2777,46 @@ export interface components {
          */
         UnitSummaryResponseSchema: {
             /**
-             * @description The unit slug identifier
+             * The unit slug identifier
              * @example simple-compound-and-adverbial-complex-sentences
              */
             unitSlug: string;
             /**
-             * @description The unit title
+             * The unit title
              * @example Simple, compound and adverbial complex sentences
              */
             unitTitle: string;
             /**
-             * @description The slug identifier for the year to which the unit belongs
+             * The slug identifier for the year to which the unit belongs
              * @example year-3
              */
             yearSlug: string;
             /**
-             * @description The year to which the unit belongs
+             * The year to which the unit belongs
              * @example 3
              */
             year: number | string;
             /**
-             * @description The slug identifier for the phase to which the unit belongs
+             * The slug identifier for the phase to which the unit belongs
              * @example primary
              */
             phaseSlug: string;
             /**
-             * @description The subject identifier
+             * The subject identifier
              * @example english
              */
             subjectSlug: string;
             /**
-             * @description The slug identifier for the the key stage to which the unit belongs
+             * The slug identifier for the the key stage to which the unit belongs
              * @example ks2
              */
             keyStageSlug: string;
-            /** @description Unit summary notes */
+            /** Unit summary notes */
             notes?: string;
-            /** @description A short description of the unit. Not yet available for all subjects. */
+            /** A short description of the unit. Not yet available for all subjects. */
             description?: string;
             /**
-             * @description The prior knowledge required for the unit
+             * The prior knowledge required for the unit
              * @example [
              *       "A simple sentence is about one idea and makes complete sense.",
              *       "Any simple sentence contains one verb and at least one noun.",
@@ -2825,7 +2825,7 @@ export interface components {
              */
             priorKnowledgeRequirements: string[];
             /**
-             * @description National curriculum attainment statements covered in this unit
+             * National curriculum attainment statements covered in this unit
              * @example [
              *       "Ask relevant questions to extend their understanding and knowledge",
              *       "Articulate and justify answers, arguments and opinions",
@@ -2833,10 +2833,10 @@ export interface components {
              *     ]
              */
             nationalCurriculumContent: string[];
-            /** @description An explanation of where the unit sits within the sequence and why it has been placed there. */
+            /** An explanation of where the unit sits within the sequence and why it has been placed there. */
             whyThisWhyNow?: string;
             /**
-             * @description The threads that are associated with the unit
+             * The threads that are associated with the unit
              * @example [
              *       {
              *         "slug": "developing-grammatical-knowledge",
@@ -2850,36 +2850,36 @@ export interface components {
                 title: string;
                 order: number;
             }[];
-            /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
+            /** The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
             categories?: {
                 categoryTitle: string;
                 categorySlug?: string;
             }[];
             unitLessons: {
                 /**
-                 * @description The lesson slug identifier
+                 * The lesson slug identifier
                  * @example four-types-of-simple-sentence
                  */
                 lessonSlug: string;
                 /**
-                 * @description The title for the lesson
+                 * The title for the lesson
                  * @example Four types of simple sentence
                  */
                 lessonTitle: string;
                 /**
-                 * @description Indicates the ordering of the lesson
+                 * Indicates the ordering of the lesson
                  * @example 1
                  */
                 lessonOrder?: number;
                 /**
-                 * @description If the state is 'published' then it is also available on the /lessons/* endpoints. If the state is 'new' then it's not available yet.
+                 * If the state is 'published' then it is also available on the /lessons/* endpoints. If the state is 'new' then it's not available yet.
                  * @example published
-                 * @enum {string}
+
                  */
                 state: "published" | "new";
             }[];
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2893,11 +2893,11 @@ export interface components {
          *     ]
          */
         AllThreadsResponseSchema: {
-            /** @description The thread title */
+            /** The thread title */
             title: string;
-            /** @description The thread slug identifier */
+            /** The thread slug identifier */
             slug: string;
-            /** @description Threads are data concepts without canonical URLs on the website. Always null for thread resources. */
+            /** Threads are data concepts without canonical URLs on the website. Always null for thread resources. */
             canonicalUrl?: null;
         }[];
         /**
@@ -2915,13 +2915,13 @@ export interface components {
          *     ]
          */
         ThreadUnitsResponseSchema: {
-            /** @description The unit title */
+            /** The unit title */
             unitTitle: string;
-            /** @description The unit slug identifier */
+            /** The unit slug identifier */
             unitSlug: string;
-            /** @description The position of the unit within the thread */
+            /** The position of the unit within the thread */
             unitOrder: number;
-            /** @description Threads are data concepts without canonical URLs on the website. Always null for thread resources. */
+            /** Threads are data concepts without canonical URLs on the website. Always null for thread resources. */
             canonicalUrl?: null;
         }[];
         /**
@@ -2933,22 +2933,22 @@ export interface components {
          */
         RateLimitResponseSchema: {
             /**
-             * @description The maximum number of requests you can make in the current window.
+             * The maximum number of requests you can make in the current window.
              * @example 1000
              */
             limit: number;
             /**
-             * @description The number of requests remaining in the current window.
+             * The number of requests remaining in the current window.
              * @example 953
              */
             remaining: number;
             /**
-             * @description The time at which the current window resets, in milliseconds since the Unix epoch.
+             * The time at which the current window resets, in milliseconds since the Unix epoch.
              * @example 1740164400000
              */
             reset: number;
             /**
-             * @description The canonical URL for this resource, generated by the SDK
+             * The canonical URL for this resource, generated by the SDK
              * @example https://www.thenational.academy/teachers/lessons/example-lesson
              */
             canonicalUrl?: string;
@@ -2969,14 +2969,14 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
+                /** The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -2990,14 +2990,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The slug of the lesson */
+                /** The slug of the lesson */
                 lesson: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3005,7 +3005,7 @@ export interface operations {
                 };
             };
             /**
-             * @description Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
+             * Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
              *
              *     Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish "no transcript available" from invalid lesson slugs.
              *
@@ -3028,34 +3028,34 @@ export interface operations {
                      */
                     "application/json": {
                         /**
-                         * @description Human-readable message describing why the resource is unavailable.
+                         * Human-readable message describing why the resource is unavailable.
                          * @example Transcript not available for this query
                          */
                         message: string;
                         /**
-                         * @description API error code describing the failure classification.
+                         * API error code describing the failure classification.
                          * @example NOT_FOUND
                          */
                         code: string;
-                        /** @description Additional metadata describing the failure as emitted by the Oak API gateway. */
+                        /** Additional metadata describing the failure as emitted by the Oak API gateway. */
                         data: {
                             /**
-                             * @description Reiterated error code for downstream tools.
+                             * Reiterated error code for downstream tools.
                              * @example NOT_FOUND
                              */
                             code: string;
                             /**
-                             * @description HTTP status code returned by the upstream API.
+                             * HTTP status code returned by the upstream API.
                              * @example 404
                              */
                             httpStatus: number;
                             /**
-                             * @description Identifier of the upstream operation emitting the error.
+                             * Identifier of the upstream operation emitting the error.
                              * @example getLessonTranscript.getLessonTranscript
                              */
                             path: string;
                             /**
-                             * @description Optional validation payload describing schema mismatches. Always null for 404 responses.
+                             * Optional validation payload describing schema mismatches. Always null for 404 responses.
                              * @example null
                              */
                             zodError?: null;
@@ -3068,7 +3068,7 @@ export interface operations {
     "searchTranscripts-searchTranscripts": {
         parameters: {
             query: {
-                /** @description A snippet of text to search for in the lesson video transcripts */
+                /** A snippet of text to search for in the lesson video transcripts */
                 q: string;
             };
             header?: never;
@@ -3077,7 +3077,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3094,14 +3094,14 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
+                /** The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3118,16 +3118,16 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
+                /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
                 keyStage: "ks1" | "ks2" | "ks3" | "ks4";
-                /** @description Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
+                /** Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
                 subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3143,14 +3143,14 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description The lesson slug identifier */
+                /** The lesson slug identifier */
                 lesson: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3164,16 +3164,16 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The lesson slug */
+                /** The lesson slug */
                 lesson: string;
-                /** @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
+                /** Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3191,7 +3191,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3205,14 +3205,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The slug identifier for the subject */
+                /** The slug identifier for the subject */
                 subject: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3226,14 +3226,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The slug identifier for the subject */
+                /** The slug identifier for the subject */
                 subject: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3247,14 +3247,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The subject slug identifier */
+                /** The subject slug identifier */
                 subject: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3268,14 +3268,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description Subject slug to filter by */
+                /** Subject slug to filter by */
                 subject: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3293,7 +3293,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3311,16 +3311,16 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
+                /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
                 keyStage: "ks1" | "ks2" | "ks3" | "ks4";
-                /** @description Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase */
+                /** Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase */
                 subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3334,16 +3334,16 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description Key stage slug to filter by, e.g. 'ks2' */
+                /** Key stage slug to filter by, e.g. 'ks2' */
                 keyStage: "ks1" | "ks2" | "ks3" | "ks4";
-                /** @description Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
+                /** Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase) */
                 subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3357,14 +3357,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The lesson slug identifier */
+                /** The lesson slug identifier */
                 lesson: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3382,14 +3382,14 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
+                /** The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3406,16 +3406,16 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
+                /** Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
                 keyStage: "ks1" | "ks2" | "ks3" | "ks4";
-                /** @description Subject slug to search by, e.g. 'science' - note that casing is important here */
+                /** Subject slug to search by, e.g. 'science' - note that casing is important here */
                 subject: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3429,14 +3429,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The slug of the lesson */
+                /** The slug of the lesson */
                 lesson: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3448,7 +3448,7 @@ export interface operations {
     "getLessons-searchByTextSimilarity": {
         parameters: {
             query: {
-                /** @description Search query text snippet */
+                /** Search query text snippet */
                 q: string;
                 keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
                 subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
@@ -3460,7 +3460,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3474,14 +3474,14 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description The unit slug */
+                /** The unit slug */
                 unit: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3499,7 +3499,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3519,7 +3519,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3537,7 +3537,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3559,7 +3559,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {
@@ -3581,7 +3581,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful response */
+            /** Successful response */
             200: {
                 headers?: never;
                 content: {

@@ -5,7 +5,6 @@
  * Tests the shared unit document builder that provides a single source
  * of truth for unit document creation (DRY compliance).
  *
- * @module lib/indexing/unit-document-core.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import { buildUnitDocument, type CreateUnitDocParams } from './unit-document-core';

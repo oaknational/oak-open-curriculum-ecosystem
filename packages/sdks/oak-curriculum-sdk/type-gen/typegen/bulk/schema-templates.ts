@@ -4,8 +4,7 @@
  * @remarks
  * Contains the Zod schema code templates used by the bulk schema generator.
  * Separated for maintainability and to stay under max-lines lint rule.
- *
- * @module type-gen/typegen/bulk/schema-templates
+
  */
 
 /**
@@ -49,7 +48,6 @@ export const HEADER_TEMPLATE = `/**
  * - BulkFile: top-level file schema
  *
  * @see type-gen/typegen/bulk/generate-bulk-schemas.ts
- * @module types/generated/bulk
  */
 
 import { z } from 'zod';

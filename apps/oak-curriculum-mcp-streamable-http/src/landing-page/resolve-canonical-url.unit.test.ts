@@ -1,5 +1,5 @@
 /**
- * @fileoverview Unit tests for canonical URL resolution.
+ * Unit tests for canonical URL resolution.
  *
  * Tests verify that the MCP endpoint URL is correctly resolved
  * based on the Vercel host header.

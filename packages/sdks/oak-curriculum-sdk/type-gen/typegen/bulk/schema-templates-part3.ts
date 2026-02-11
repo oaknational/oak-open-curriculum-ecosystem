@@ -4,8 +4,7 @@
  * @remarks
  * Contains unit-related Zod schema code templates.
  * Separated for maintainability and to stay under max-lines lint rule.
- *
- * @module type-gen/typegen/bulk/schema-templates-part3
+
  */
 
 /** Unit schemas template */

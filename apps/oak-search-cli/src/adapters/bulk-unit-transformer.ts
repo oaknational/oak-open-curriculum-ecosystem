@@ -15,7 +15,6 @@
  * @see ADR-093 Bulk-First Ingestion Strategy
  * @see buildUnitDocument - Shared document builder
  * @see category-supplementation.ts - Category map for enrichment
- * @module adapters/bulk-unit-transformer
  */
 
 import type { Unit } from '@oaknational/oak-curriculum-sdk/public/bulk.js';

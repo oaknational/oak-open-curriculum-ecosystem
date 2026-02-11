@@ -6,7 +6,7 @@
 
 # Interface: components
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:522
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:522](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L522)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **headers**: `never`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2960
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2960](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2960)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **parameters**: `never`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2958
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2958](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2958)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **pathItems**: `never`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2961
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2961](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2961)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **requestBodies**: `never`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2959
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2959](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2959)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **responses**: `never`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2957
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2957](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2957)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **schemas**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:523
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:523](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L523)
 
 #### AllKeyStageAndSubjectUnitsResponseSchema
 

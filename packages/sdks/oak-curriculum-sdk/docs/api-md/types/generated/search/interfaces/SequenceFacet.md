@@ -6,7 +6,7 @@
 
 # Interface: SequenceFacet
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:16
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:16](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L16)
 
 Sequence facet enriched for hybrid search presentation.
 
@@ -16,7 +16,7 @@ Sequence facet enriched for hybrid search presentation.
 
 > **hasKs4Options**: `boolean`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:27
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L27)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **keyStage**: `"ks1"` \| `"ks2"` \| `"ks3"` \| `"ks4"`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:19
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:19](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L19)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > `optional` **keyStageTitle**: `string`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:20
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:20](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L20)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **lessonCount**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:26
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:26](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L26)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **phaseSlug**: `string`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:21
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:21](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L21)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **phaseTitle**: `string`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:22
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:22](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L22)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **sequenceSlug**: `string`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:18
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:18](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L18)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > `optional` **sequenceUrl**: `string`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:28
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:28](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L28)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **subjectSlug**: `"art"` \| `"citizenship"` \| `"computing"` \| `"cooking-nutrition"` \| `"design-technology"` \| `"english"` \| `"french"` \| `"geography"` \| `"german"` \| `"history"` \| `"maths"` \| `"music"` \| `"physical-education"` \| `"religious-education"` \| `"rshe-pshe"` \| `"science"` \| `"spanish"`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:17
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L17)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **unitCount**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:25
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:25](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L25)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **units**: [`SequenceFacetUnit`](SequenceFacetUnit.md)[]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:24
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:24](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L24)
 
 ***
 
@@ -104,4 +104,4 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **years**: `string`[]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/search/facets.ts:23
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts:23](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/facets.ts#L23)

@@ -1,7 +1,6 @@
 /**
  * ELSER diagnostic runner for characterising bulk ingestion failures.
  *
- * @module lib/diagnostics/elser-diagnostic-runner
  */
 
 import { z } from 'zod';

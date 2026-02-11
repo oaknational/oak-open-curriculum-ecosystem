@@ -6,7 +6,6 @@
  * enabling prerequisite graph construction.
  *
  * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
- * @module bulk/extractors/prior-knowledge-extractor
  */
 import type { Unit } from '../../types/generated/bulk/index.js';
 

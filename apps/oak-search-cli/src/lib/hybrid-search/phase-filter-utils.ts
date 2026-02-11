@@ -3,8 +3,7 @@
  *
  * Provides functions to expand phases to key stages and build
  * key stage filters with phase expansion support.
- *
- * @module lib/hybrid-search/phase-filter-utils
+
  */
 
 import type { estypes } from '@elastic/elasticsearch';

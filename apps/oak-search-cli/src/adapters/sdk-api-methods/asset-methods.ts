@@ -1,6 +1,5 @@
 /**
  * Asset-related API method factories.
- * @module sdk-api-methods/asset-methods
  */
 
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';

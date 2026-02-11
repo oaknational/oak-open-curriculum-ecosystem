@@ -20,8 +20,7 @@
  * - All consumers get same version
  * - Enables proper versioning and cache invalidation
  * - Reduces SDK complexity
- *
- * @module vocab-gen/generators/vocabulary-graph-generator
+
  */
 import { writeFile } from 'fs/promises';
 import { join } from 'path';

@@ -7,7 +7,6 @@
  *
  * @see ./document-retry.ts for Tier 2 (document-level) retry
  * @see ADR-070 SDK Rate Limiting and Retry
- * @module retry/http-retry
  */
 import type { Logger } from '@oaknational/mcp-logger';
 import type { BulkOperations } from '../bulk-operation-types';

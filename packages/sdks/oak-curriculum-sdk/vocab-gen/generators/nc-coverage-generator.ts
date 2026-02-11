@@ -6,8 +6,7 @@
  * @remarks
  * Generates a graph of National Curriculum statement coverage from extracted data.
  * This graph helps curriculum planners ensure NC coverage and identify gaps.
- *
- * @module vocab-gen/generators/nc-coverage-generator
+
  */
 import { writeFile } from 'fs/promises';
 import { join } from 'path';

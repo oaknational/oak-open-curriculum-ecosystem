@@ -11,7 +11,6 @@
  *
  * @see ADR-093 Bulk-First Ingestion Strategy
  * @see buildLessonDocument - Shared document builder
- * @module adapters/bulk-lesson-transformer
  */
 
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';

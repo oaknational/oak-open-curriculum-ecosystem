@@ -1,5 +1,5 @@
 /**
- * @fileoverview Unit tests for MCP configuration snippet generation.
+ * Unit tests for MCP configuration snippet generation.
  *
  * Tests verify that the JSON configuration snippet is correctly
  * generated for different deployment environments.

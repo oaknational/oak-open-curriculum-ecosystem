@@ -1,5 +1,5 @@
 /**
- * @fileoverview Constants for Notion query building
+ * Constants for Notion query building
  */
 
 /**

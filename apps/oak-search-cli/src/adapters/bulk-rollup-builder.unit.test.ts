@@ -5,7 +5,6 @@
  * Tests the transformation of bulk download unit data into SearchUnitSummary
  * format for rollup document generation, and lesson snippet collection.
  *
- * @module adapters/bulk-rollup-builder.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { Unit, Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';

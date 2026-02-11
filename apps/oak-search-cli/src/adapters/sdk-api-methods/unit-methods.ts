@@ -1,6 +1,5 @@
 /**
  * Unit-related API method factories.
- * @module sdk-api-methods/unit-methods
  */
 
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';

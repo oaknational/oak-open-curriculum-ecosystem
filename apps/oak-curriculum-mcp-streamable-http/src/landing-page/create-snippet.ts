@@ -1,5 +1,5 @@
 /**
- * @fileoverview MCP client configuration snippet generator.
+ * MCP client configuration snippet generator.
  *
  * Provides a pure function for generating the JSON configuration snippet
  * that users can add to their MCP client configuration.

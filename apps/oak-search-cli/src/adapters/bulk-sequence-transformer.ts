@@ -4,7 +4,6 @@
  * into Elasticsearch documents for the `oak_sequences` and `oak_sequence_facets` indexes.
  * Follows DRY by reusing shared helpers and document builders.
  * @see ADR-093 Bulk-First Ingestion Strategy
- * @module adapters/bulk-sequence-transformer
  */
 import type { BulkDownloadFile, Unit, Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';
 import type { BulkOperationEntry, BulkIndexAction } from '../lib/indexing/bulk-operation-types';

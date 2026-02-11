@@ -1,7 +1,6 @@
 /**
  * Commander program configuration for ingestion CLI.
- *
- * @module ingest-cli-program
+
  */
 
 import { Command } from 'commander';

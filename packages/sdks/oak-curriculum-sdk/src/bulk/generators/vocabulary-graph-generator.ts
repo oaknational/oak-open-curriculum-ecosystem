@@ -7,8 +7,7 @@
  * Generates a graph of curriculum vocabulary from extracted keywords.
  * This graph provides a curated glossary for students and teachers,
  * with cross-subject term identification and first-year tracking.
- *
- * @module vocab-gen/generators/vocabulary-graph-generator
+
  */
 import { writeFile } from 'fs/promises';
 import { join } from 'path';

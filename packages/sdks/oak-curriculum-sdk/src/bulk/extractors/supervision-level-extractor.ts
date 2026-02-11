@@ -5,8 +5,7 @@
  * Extracts and aggregates supervision level information from lessons.
  * Supervision levels indicate the degree of adult oversight recommended
  * for lesson content. Useful for content safety filtering.
- *
- * @module bulk/extractors/supervision-level-extractor
+
  */
 
 import type { Lesson } from '../../types/generated/bulk/index.js';

@@ -8,6 +8,6 @@
 
 > **AllSubjectSlug** = keyof _typeof_ [`SUBJECT_TO_PARENT`](../variables/SUBJECT_TO_PARENT.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/types/generated/search/subject-hierarchy.ts:173
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts:173](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts#L173)
 
 Type for all valid subject slugs including KS4 variants (21 subjects)

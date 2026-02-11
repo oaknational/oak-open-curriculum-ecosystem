@@ -1,7 +1,6 @@
 /**
  * Type definitions for Elasticsearch bulk operation retry logic.
- *
- * @module retry/types
+
  */
 import type { BulkOperations } from '../bulk-operation-types';
 

@@ -7,7 +7,6 @@
  * Verifies DRY compliance by ensuring bulk transformer produces identical
  * output to the shared `buildLessonDocument()` builder.
  *
- * @module adapters/bulk-lesson-transformer.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk';

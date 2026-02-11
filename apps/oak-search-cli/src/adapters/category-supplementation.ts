@@ -22,7 +22,6 @@
  * ```
  *
  * @see ADR-xxx Context Enrichment Architecture
- * @module adapters/category-supplementation
  */
 
 /**

@@ -13,7 +13,6 @@
  * 3. Handle bulk-specific transformations (NULL sentinel → null)
  *
  * @see ../../../docs/architecture/schema-first-execution.md
- * @module type-gen/typegen/bulk/generate-bulk-schemas
  */
 
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';

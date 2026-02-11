@@ -221,7 +221,8 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
  * @returns The canonical URL fields for the response, which is null for threads (no website equivalent)
  * @throws An error if the content type is unsupported or no result is generated
  *
- * @todo Refactor to return a Result<string, Error> instead of throwing errors
+ * @remarks
+ * TODO: Refactor to return a Result\<string, Error\> instead of throwing errors
  */
 function extractCanonicalUrlFields(
   response: unknown,

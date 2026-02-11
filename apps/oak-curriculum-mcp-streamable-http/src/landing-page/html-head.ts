@@ -1,5 +1,5 @@
 /**
- * @fileoverview HTML head template for the landing page.
+ * HTML head template for the landing page.
  *
  * Contains the complete HTML `<head>` section including meta tags,
  * font imports, favicon links, and CSS styles for the landing page.

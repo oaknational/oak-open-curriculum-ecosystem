@@ -12,7 +12,6 @@
  *
  * @see ADR-070 SDK Rate Limiting and Retry (pattern reuse)
  * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
- * @module e2e-tests/bulk-retry-cli.e2e.test
  */
 import { describe, it, expect } from 'vitest';
 import { spawn } from 'child_process';

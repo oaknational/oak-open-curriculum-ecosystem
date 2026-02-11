@@ -7,7 +7,6 @@
  * the multiplier value is changed.
  *
  * @see testing-strategy.md - "Test real behaviour, not implementation details"
- * @module document-retry.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import {

@@ -5,8 +5,7 @@
  * Extracts video transcript content from lessons. Transcripts provide
  * rich semantic content for search indexing and can be mined for
  * additional vocabulary and concepts.
- *
- * @module bulk/extractors/transcript-extractor
+
  */
 
 import type { Lesson } from '../../types/generated/bulk/index.js';

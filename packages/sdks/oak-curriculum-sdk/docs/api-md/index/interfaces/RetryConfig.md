@@ -6,7 +6,7 @@
 
 # Interface: RetryConfig
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:22
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:22](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L22)
 
 Configuration for SDK request retry with exponential backoff.
 Automatically retries transient failures (429, 503) with increasing delays.
@@ -18,7 +18,7 @@ Supports per-status-code retry limits for conservative retries on 404/500.
 
 > `readonly` **backoffMultiplier**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:30
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:30](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L30)
 
 Backoff multiplier. Default: 2 (exponential)
 
@@ -28,7 +28,7 @@ Backoff multiplier. Default: 2 (exponential)
 
 > `readonly` **enabled**: `boolean`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:24
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:24](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L24)
 
 Enable/disable retry. Default: true
 
@@ -38,7 +38,7 @@ Enable/disable retry. Default: true
 
 > `readonly` **initialDelayMs**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:28
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:28](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L28)
 
 Initial backoff delay in ms. Default: 1000ms
 
@@ -48,7 +48,7 @@ Initial backoff delay in ms. Default: 1000ms
 
 > `readonly` **maxDelayMs**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:32
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:32](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L32)
 
 Maximum backoff delay in ms. Default: 60000ms (1 minute)
 
@@ -58,7 +58,7 @@ Maximum backoff delay in ms. Default: 60000ms (1 minute)
 
 > `readonly` **maxRetries**: `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:26
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:26](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L26)
 
 Maximum retry attempts. Default: 3
 
@@ -68,7 +68,7 @@ Maximum retry attempts. Default: 3
 
 > `readonly` **retryableStatusCodes**: readonly `number`[]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:34
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:34](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L34)
 
 HTTP status codes that trigger retry. Default: [429, 503]
 
@@ -78,7 +78,7 @@ HTTP status codes that trigger retry. Default: [429, 503]
 
 > `readonly` `optional` **statusCodeMaxRetries**: `Readonly`\<`Partial`\<`Record`\<`number`, `number`\>\>\>
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/config/retry-config.ts:40
+Defined in: [packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts:40](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/config/retry-config.ts#L40)
 
 Per-status-code maximum retries. Overrides `maxRetries` for specific codes.
 Example: `{ 404: 2, 500: 2 }` limits 404/500 to 2 retries while others use `maxRetries`.

@@ -1,5 +1,5 @@
 /**
- * @oaknational/oak-search-sdk
+ * `@oaknational/oak-search-sdk`
  *
  * TypeScript SDK for Oak semantic search — retrieval, admin, and
  * observability services backed by Elasticsearch.

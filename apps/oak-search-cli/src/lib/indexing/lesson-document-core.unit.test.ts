@@ -5,7 +5,6 @@
  * Tests the shared lesson document builder that provides a single source
  * of truth for lesson document creation (DRY compliance).
  *
- * @module lib/indexing/lesson-document-core.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import {

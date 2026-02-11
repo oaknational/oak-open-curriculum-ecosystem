@@ -6,6 +6,6 @@
 
 # Type Alias: OpenApiSchemaBase
 
-> **OpenApiSchemaBase** = _typeof_ [`schemaBase`](../variables/schemaBase.md)
+> **OpenApiSchemaBase** = _typeof_ [`schema`](../../../index/variables/schema.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/types/schema-bridge.ts:3
+Defined in: packages/sdks/oak-curriculum-sdk/src/types/schema-bridge.ts:10

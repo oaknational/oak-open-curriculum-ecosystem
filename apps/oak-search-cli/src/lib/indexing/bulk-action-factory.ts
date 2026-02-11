@@ -44,7 +44,6 @@
  *
  * @see {@link IngestionMode} for mode definitions
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
- * @module bulk-action-factory
  */
 
 import type { BulkIndexAction, BulkCreateAction } from './bulk-operation-types';

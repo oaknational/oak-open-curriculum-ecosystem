@@ -4,8 +4,7 @@
  * @remarks
  * These are stateless, side-effect-free functions for preparing
  * bulk operations before upload to Elasticsearch.
- *
- * @module bulk-chunk-utils
+
  */
 import type { BulkOperationEntry, BulkOperations } from './bulk-operation-types';
 

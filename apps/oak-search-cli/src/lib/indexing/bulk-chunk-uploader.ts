@@ -11,7 +11,6 @@
  *
  * @see ./retry for retry logic
  * @see ADR-070 SDK Rate Limiting and Retry
- * @module bulk-chunk-uploader
  */
 import type { Logger } from '@oaknational/mcp-logger';
 import type { BulkOperations } from './bulk-operation-types';

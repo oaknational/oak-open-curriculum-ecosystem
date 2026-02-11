@@ -5,8 +5,7 @@
  * All extractors are pure functions that take bulk download data
  * and return extracted data with metadata. These extracted
  * data structures can be used for ES indexing or other purposes.
- *
- * @module bulk/extractors
+
  */
 
 // ============================================================================

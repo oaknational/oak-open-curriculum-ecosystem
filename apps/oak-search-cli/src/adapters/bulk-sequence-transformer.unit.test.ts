@@ -5,7 +5,6 @@
  * Tests the transformation of bulk download sequence data into ES documents.
  * Tests are written TDD-style (RED phase) before implementation.
  *
- * @module adapters/bulk-sequence-transformer.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { BulkDownloadFile } from '@oaknational/oak-curriculum-sdk/public/bulk';

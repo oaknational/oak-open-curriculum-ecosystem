@@ -5,8 +5,7 @@
  * Re-exports bulk parsing schemas and utilities from the SDK generated bulk module.
  * This ensures a single source of truth for bulk data types while
  * maintaining backwards compatibility with vocab-gen imports.
- *
- * @module vocab-gen/lib
+
  */
 
 // ============================================================================

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Type definitions for Notion query building
+ * Type definitions for Notion query building
  */
 import type { JsonObject } from '@oaknational/mcp-logger';
 

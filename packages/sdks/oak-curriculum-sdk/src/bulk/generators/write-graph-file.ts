@@ -5,8 +5,7 @@
  * @remarks
  * Handles serialization of graph data structures to TypeScript format
  * with proper `as const` annotations and TSDoc comments.
- *
- * @module vocab-gen/generators/write-graph-file
+
  */
 import { writeFile } from 'fs/promises';
 import { join } from 'path';

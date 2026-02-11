@@ -139,9 +139,18 @@ export function generatePathParametersContent(
 }
 
 function postProcessTypesSource(source: string): string {
-  return source
-    .replace(/\u00A0/g, ' ')
-    .replace(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;');
+  return (
+    source
+      .replace(/\u00A0/g, ' ')
+      .replace(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;')
+      // Strip non-standard JSDoc tags emitted by openapiTS
+      .replace(/\/\*\*\s*@description\s+/g, '/** ')
+      .replace(/^(\s*\*)\s*@description\s+/gm, '$1 ')
+      .replace(/^(\s*\*)\s*@constant\s*$/gm, '')
+      .replace(/^\s*\/\*\*\s*@constant\s*\*\/\s*$/gm, '')
+      .replace(/^(\s*\*)\s*@enum\s+\{[^}]*\}\s*$/gm, '')
+      .replace(/^\s*\/\*\*\s*@enum\s+\{[^}]*\}\s*\*\/\s*$/gm, '')
+  );
 }
 
 export async function generateSchemaArtifacts(

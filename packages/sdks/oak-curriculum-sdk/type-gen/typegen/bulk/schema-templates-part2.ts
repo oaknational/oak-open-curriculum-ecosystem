@@ -4,8 +4,7 @@
  * @remarks
  * Contains additional Zod schema code templates.
  * Separated for maintainability and to stay under max-lines lint rule.
- *
- * @module type-gen/typegen/bulk/schema-templates-part2
+
  */
 
 import { BULK_LESSON_DELTA, BULK_UNIT_DELTA } from './schema-templates.js';
@@ -146,8 +145,7 @@ export const INDEX_TEMPLATE = `/**
  * GENERATED FILE - DO NOT EDIT
  *
  * Public exports for bulk download schemas.
- *
- * @module types/generated/bulk
+
  */
 
 export {

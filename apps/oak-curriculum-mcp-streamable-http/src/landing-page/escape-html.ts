@@ -1,5 +1,5 @@
 /**
- * @fileoverview HTML escaping utility for preventing XSS vulnerabilities.
+ * HTML escaping utility for preventing XSS vulnerabilities.
  *
  * Provides a pure function for escaping special HTML characters in user-provided
  * or dynamic content before rendering in HTML templates.

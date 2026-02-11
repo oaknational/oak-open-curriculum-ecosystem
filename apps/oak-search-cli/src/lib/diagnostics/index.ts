@@ -1,7 +1,6 @@
 /**
  * ELSER diagnostics module.
  *
- * @module lib/diagnostics
  */
 
 export type {

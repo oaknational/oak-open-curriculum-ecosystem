@@ -8,7 +8,7 @@
 
 > **CurriculumSchemaDefinition**\<`Name`\> = [`CurriculumSchemaRegistry`](CurriculumSchemaRegistry.md)\[`Name`\]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/zod/curriculumZodSchemas.ts:2260
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/zod/curriculumZodSchemas.ts:2260](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/zod/curriculumZodSchemas.ts#L2260)
 
 Concrete Zod schema definition for a curriculum schema name.
 

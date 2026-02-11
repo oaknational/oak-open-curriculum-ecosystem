@@ -8,7 +8,7 @@
 
 > `const` **PARENT_TO_SUBJECTS**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/types/generated/search/subject-hierarchy.ts:114
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts:114](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-hierarchy.ts#L114)
 
 Maps parent subjects to all their children (including themselves).
 

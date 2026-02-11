@@ -6,7 +6,7 @@
 
 # Interface: paths
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:1
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:1](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **/changelog**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:465
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:465](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L465)
 
 #### delete?
 
@@ -122,7 +122,7 @@ Successful response
 
 > **/changelog/latest**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:482
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:482](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L482)
 
 #### delete?
 
@@ -242,7 +242,7 @@ Successful response
 
 > **/key-stages**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:245
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:245](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L245)
 
 #### delete?
 
@@ -351,7 +351,7 @@ Successful response
 
 > **/key-stages/\{keyStage\}/subject/\{subject\}/assets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:83
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:83](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L83)
 
 #### delete?
 
@@ -480,7 +480,7 @@ Successful response
 
 > **/key-stages/\{keyStage\}/subject/\{subject\}/lessons**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:265
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:265](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L265)
 
 #### delete?
 
@@ -613,7 +613,7 @@ Successful response
 
 > **/key-stages/\{keyStage\}/subject/\{subject\}/questions**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:345
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:345](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L345)
 
 #### delete?
 
@@ -742,7 +742,7 @@ Successful response
 
 > **/key-stages/\{keyStage\}/subject/\{subject\}/units**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:285
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:285](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L285)
 
 #### delete?
 
@@ -863,7 +863,7 @@ Successful response
 
 > **/lessons/\{lesson\}/assets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:103
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:103](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L103)
 
 #### delete?
 
@@ -1007,7 +1007,7 @@ https://www.thenational.academy/teachers/lessons/example-lesson
 
 > **/lessons/\{lesson\}/assets/\{type\}**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:124
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:124](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L124)
 
 #### delete?
 
@@ -1129,7 +1129,7 @@ Successful response
 
 > **/lessons/\{lesson\}/quiz**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:305
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:305](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L305)
 
 #### delete?
 
@@ -1268,7 +1268,7 @@ The starter quiz questions - which test prior knowledge
 
 > **/lessons/\{lesson\}/summary**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:365
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:365](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L365)
 
 #### delete?
 
@@ -1485,7 +1485,7 @@ The unit title
 
 > **/lessons/\{lesson\}/transcript**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:22
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:22](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L22)
 
 #### delete?
 
@@ -1739,7 +1739,7 @@ Transcript not available for this query
 
 > **/rate-limit**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:499
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:499](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L499)
 
 #### delete?
 
@@ -1897,7 +1897,7 @@ The time at which the current window resets, in milliseconds since the Unix epoc
 
 > **/search/lessons**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:385
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:385](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L385)
 
 #### delete?
 
@@ -2024,7 +2024,7 @@ Successful response
 
 > **/search/transcripts**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:42
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:42](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L42)
 
 #### delete?
 
@@ -2139,7 +2139,7 @@ Successful response
 
 > **/sequences/\{sequence\}/assets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:62
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:62](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L62)
 
 #### delete?
 
@@ -2263,7 +2263,7 @@ Successful response
 
 > **/sequences/\{sequence\}/questions**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:325
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:325](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L325)
 
 #### delete?
 
@@ -2390,7 +2390,7 @@ Successful response
 
 > **/sequences/\{sequence\}/units**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2)
 
 #### delete?
 
@@ -2509,7 +2509,7 @@ Successful response
 
 > **/subjects**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:145
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:145](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L145)
 
 #### delete?
 
@@ -2618,7 +2618,7 @@ Successful response
 
 > **/subjects/\{subject\}**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:165
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:165](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L165)
 
 #### delete?
 
@@ -2775,7 +2775,7 @@ The years for which this subject has content available for
 
 > **/subjects/\{subject\}/key-stages**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:205
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:205](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L205)
 
 #### delete?
 
@@ -2890,7 +2890,7 @@ Successful response
 
 > **/subjects/\{subject\}/sequences**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:185
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:185](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L185)
 
 #### delete?
 
@@ -3005,7 +3005,7 @@ Successful response
 
 > **/subjects/\{subject\}/years**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:225
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:225](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L225)
 
 #### delete?
 
@@ -3120,7 +3120,7 @@ Successful response
 
 > **/threads**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:425
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:425](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L425)
 
 #### delete?
 
@@ -3229,7 +3229,7 @@ Successful response
 
 > **/threads/\{threadSlug\}/units**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:445
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:445](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L445)
 
 #### delete?
 
@@ -3342,7 +3342,7 @@ Successful response
 
 > **/units/\{unit\}/summary**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:405
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:405](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L405)
 
 #### delete?
 

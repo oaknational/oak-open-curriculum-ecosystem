@@ -1,7 +1,6 @@
 /**
  * Formatting utilities for vocabulary mining pipeline output.
- *
- * @module vocab-gen/vocab-gen-format
+
  */
 import type { PipelineResult } from './vocab-gen.js';
 

@@ -143,7 +143,8 @@ export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
  * faceted filtering or aggregations. This is intentional as sequences use a
  * different navigation pattern via the `oak_sequence_facets` index for browsing.
  *
- * @future When faceted sequence search is needed, add `includeFacets` parameter
+ * @remarks
+ * When faceted sequence search is needed, add `includeFacets` parameter
  * and implement `createSequenceFacets()` following the lesson/unit pattern.
  */
 export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequest {

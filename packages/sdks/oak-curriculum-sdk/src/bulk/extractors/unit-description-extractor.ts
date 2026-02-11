@@ -5,8 +5,7 @@
  * Extracts unit descriptions from the sequence data. These provide
  * short summaries of what each unit covers, useful for search
  * and curriculum overview features.
- *
- * @module bulk/extractors/unit-description-extractor
+
  */
 
 import type { Unit } from '../../types/generated/bulk/index.js';

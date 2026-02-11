@@ -5,8 +5,7 @@
  * Extracts content guidance metadata from lessons. This includes
  * guidance areas, labels, descriptions, and supervision levels.
  * Useful for content filtering, safety features, and parental guidance.
- *
- * @module bulk/extractors/content-guidance-extractor
+
  */
 
 import type { Lesson } from '../../types/generated/bulk/index.js';

@@ -2,8 +2,7 @@
  * GENERATED FILE - DO NOT EDIT
  *
  * Public exports for bulk download schemas.
- *
- * @module types/generated/bulk
+
  */
 
 export {

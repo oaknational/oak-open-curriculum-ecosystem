@@ -1,6 +1,5 @@
 /**
  * Sequence and subject-related API method factories.
- * @module sdk-api-methods/sequence-methods
  */
 
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';

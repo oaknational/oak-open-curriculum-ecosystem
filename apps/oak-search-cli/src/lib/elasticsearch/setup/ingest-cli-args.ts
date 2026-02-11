@@ -6,8 +6,7 @@
  * Handles parsing of subject, key-stage, and flag arguments with validation.
  * Subject and key stage values are derived from the OpenAPI schema via the SDK.
  * Unknown flags trigger help output and exit.
- *
- * @module ingest-cli-args
+
  */
 
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';

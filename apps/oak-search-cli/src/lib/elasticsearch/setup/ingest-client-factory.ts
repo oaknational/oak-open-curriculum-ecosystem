@@ -27,7 +27,7 @@ export interface IngestionClientOptions {
   /**
    * If true, ignore cached 404 responses for transcripts.
    * Use when re-checking if transcripts have been added after initial ingestion.
-   * @default false
+   * @defaultValue false
    */
   readonly ignoreCached404?: boolean;
 }

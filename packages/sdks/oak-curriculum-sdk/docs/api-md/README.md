@@ -19,7 +19,6 @@
 - [types/public-types](types/public-types/README.md)
 - [types/schema-bridge](types/schema-bridge/README.md)
 - [types/search-response-guards](types/search-response-guards/README.md)
-- [types/search-response-schemas](types/search-response-schemas/README.md)
 - [validation](validation/README.md)
 - [validation/search-response-validators](validation/search-response-validators/README.md)
 - [validation/types](validation/types/README.md)

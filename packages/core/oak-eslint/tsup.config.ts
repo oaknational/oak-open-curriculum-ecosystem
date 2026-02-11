@@ -40,6 +40,7 @@ export default defineConfig({
     'eslint-plugin-react',
     'eslint-plugin-react-hooks',
     'eslint-plugin-sonarjs',
+    'eslint-plugin-tsdoc',
     'typescript-eslint',
     'globals',
     'minimatch',

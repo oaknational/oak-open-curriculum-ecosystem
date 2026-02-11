@@ -13,8 +13,7 @@
  *   // Process data...
  * }
  * ```
- *
- * @module bulk/reader
+
  */
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';

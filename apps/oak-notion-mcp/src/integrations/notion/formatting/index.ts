@@ -1,5 +1,5 @@
 /**
- * @fileoverview Public API for Notion formatting functionality
+ * Public API for Notion formatting functionality
  */
 
 // Re-export formatters

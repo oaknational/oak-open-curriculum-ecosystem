@@ -10,8 +10,7 @@
  * Examples:
  * - `maths-primary` → subject: `maths`, phase: `primary`
  * - `design-technology-secondary` → subject: `design-technology`, phase: `secondary`
- *
- * @module lib/indexing/slug-derivation
+
  */
 
 /**

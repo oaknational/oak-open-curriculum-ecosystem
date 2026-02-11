@@ -1,7 +1,6 @@
 /**
  * Type definitions for ELSER failure diagnostics.
  *
- * @module lib/diagnostics/elser-diagnostic-types
  */
 
 /**

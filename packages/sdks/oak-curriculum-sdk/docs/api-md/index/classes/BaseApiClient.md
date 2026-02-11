@@ -6,7 +6,7 @@
 
 # Class: BaseApiClient
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-client.ts:63
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:63](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L63)
 
 Base wrapper that constructs both the method-based and path-based clients.
 
@@ -23,7 +23,7 @@ Environment-agnostic: The API key must be passed in; no env access.
 
 > **new BaseApiClient**(`config`): `BaseApiClient`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-client.ts:76
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:76](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L76)
 
 Create a new Oak API client with optional rate limiting and retry configuration.
 
@@ -49,7 +49,7 @@ API key string (legacy) or full configuration object
 
 > **get** **client**(): [`OakApiClient`](../type-aliases/OakApiClient.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-client.ts:127
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:127](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L127)
 
 ##### Returns
 
@@ -63,7 +63,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-
 
 > **get** **pathBasedClient**(): [`OakApiPathBasedClient`](../type-aliases/OakApiPathBasedClient.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-client.ts:131
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:131](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L131)
 
 ##### Returns
 
@@ -77,7 +77,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-
 
 > **get** **rateLimitTracker**(): [`RateLimitTracker`](../interfaces/RateLimitTracker.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/oak-base-client.ts:140
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:140](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L140)
 
 Get the rate limit tracker for monitoring API usage.
 Provides information about request counts, rates, and rate limit status.

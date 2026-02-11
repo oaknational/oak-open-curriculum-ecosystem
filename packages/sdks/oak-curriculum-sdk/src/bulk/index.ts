@@ -32,8 +32,7 @@
  * const result = processBulkData(input);
  * console.log(`Extracted ${result.stats.uniqueKeywords} keywords`);
  * ```
- *
- * @module bulk
+
  */
 
 // ============================================================================

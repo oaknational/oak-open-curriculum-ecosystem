@@ -6,7 +6,7 @@
 
 # Interface: operations
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2964
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2964](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2964)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated
 
 > **changelog-changelog**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3531
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3531](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3531)
 
 #### parameters
 
@@ -68,7 +68,7 @@ Successful response
 
 > **changelog-latest**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3553
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3553](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3553)
 
 #### parameters
 
@@ -134,7 +134,7 @@ Successful response
 
 > **getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3332
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3332](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3332)
 
 #### parameters
 
@@ -200,7 +200,7 @@ Successful response
 
 > **getAssets-getLessonAsset**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3162
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3162](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3162)
 
 #### parameters
 
@@ -266,7 +266,7 @@ Successful response
 
 > **getAssets-getLessonAssets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3139
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3139](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3139)
 
 #### parameters
 
@@ -354,7 +354,7 @@ https://www.thenational.academy/teachers/lessons/example-lesson
 
 > **getAssets-getSequenceAssets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3089
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3089](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3089)
 
 #### parameters
 
@@ -422,7 +422,7 @@ Successful response
 
 > **getAssets-getSubjectAssets**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3113
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3113](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3113)
 
 #### parameters
 
@@ -496,7 +496,7 @@ Successful response
 
 > **getKeyStages-getKeyStages**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3287
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3287](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3287)
 
 #### parameters
 
@@ -550,7 +550,7 @@ Successful response
 
 > **getKeyStageSubjectLessons-getKeyStageSubjectLessons**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3305
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3305](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3305)
 
 #### parameters
 
@@ -628,7 +628,7 @@ Successful response
 
 > **getLessons-getLesson**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3427
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3427](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3427)
 
 #### parameters
 
@@ -790,7 +790,7 @@ The unit title
 
 > **getLessons-searchByTextSimilarity**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3448
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3448](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3448)
 
 #### parameters
 
@@ -862,7 +862,7 @@ Successful response
 
 > **getLessonTranscript-getLessonTranscript**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2988
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2988](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2988)
 
 #### parameters
 
@@ -1061,7 +1061,7 @@ Transcript not available for this query
 
 > **getQuestions-getQuestionsForKeyStageAndSubject**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3401
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3401](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3401)
 
 #### parameters
 
@@ -1135,7 +1135,7 @@ Successful response
 
 > **getQuestions-getQuestionsForLessons**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3355
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3355](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3355)
 
 #### parameters
 
@@ -1219,7 +1219,7 @@ The starter quiz questions - which test prior knowledge
 
 > **getQuestions-getQuestionsForSequence**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3376
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3376](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3376)
 
 #### parameters
 
@@ -1291,7 +1291,7 @@ Successful response
 
 > **getRateLimit-getRateLimit**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3575
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3575](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3575)
 
 #### parameters
 
@@ -1393,7 +1393,7 @@ The time at which the current window resets, in milliseconds since the Unix epoc
 
 > **getSequences-getSequenceUnits**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:2965
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:2965](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L2965)
 
 #### parameters
 
@@ -1457,7 +1457,7 @@ Successful response
 
 > **getSubjects-getAllSubjects**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3185
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3185](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3185)
 
 #### parameters
 
@@ -1511,7 +1511,7 @@ Successful response
 
 > **getSubjects-getSubject**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3203
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3203](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3203)
 
 #### parameters
 
@@ -1613,7 +1613,7 @@ The years for which this subject has content available for
 
 > **getSubjects-getSubjectKeyStages**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3245
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3245](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3245)
 
 #### parameters
 
@@ -1673,7 +1673,7 @@ Successful response
 
 > **getSubjects-getSubjectSequence**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3224
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3224](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3224)
 
 #### parameters
 
@@ -1733,7 +1733,7 @@ Successful response
 
 > **getSubjects-getSubjectYears**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3266
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3266](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3266)
 
 #### parameters
 
@@ -1793,7 +1793,7 @@ Successful response
 
 > **getThreads-getAllThreads**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3493
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3493](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3493)
 
 #### parameters
 
@@ -1847,7 +1847,7 @@ Successful response
 
 > **getThreads-getThreadUnits**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3511
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3511](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3511)
 
 #### parameters
 
@@ -1905,7 +1905,7 @@ Successful response
 
 > **getUnits-getUnit**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3472
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3472](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3472)
 
 #### parameters
 
@@ -2139,7 +2139,7 @@ year-3
 
 > **searchTranscripts-searchTranscripts**: `object`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/api-paths-types.ts:3068
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts:3068](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-paths-types.ts#L3068)
 
 #### parameters
 

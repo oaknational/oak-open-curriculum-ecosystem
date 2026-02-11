@@ -4,8 +4,7 @@
  * @remarks
  * This module contains the pure functions for processing bulk download data.
  * Separated from IO for testability.
- *
- * @module bulk/processing
+
  */
 import {
   extractKeywords,

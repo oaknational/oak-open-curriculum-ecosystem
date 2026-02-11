@@ -22,7 +22,6 @@
  *
  * @see ADR-070 SDK Rate Limiting and Retry
  * @see ADR-096 ES Bulk Retry Strategy
- * @module retry
  */
 
 // Types - public interfaces for retry configuration and results

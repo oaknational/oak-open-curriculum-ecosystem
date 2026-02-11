@@ -10,8 +10,7 @@
  * @see SearchLessonsIndexDoc - The Zod-validated type this produces
  * @see transformBulkLessonToESDoc - Bulk path adapter that delegates here
  * @see createLessonDocument - API path function in document-transforms.ts
- *
- * @module lib/indexing/lesson-document-core
+
  */
 
 import type {

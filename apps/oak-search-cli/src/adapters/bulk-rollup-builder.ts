@@ -5,8 +5,7 @@
  * Transforms bulk download unit data into SearchUnitSummary format
  * for rollup document generation, and collects lesson snippets for
  * unit content enrichment.
- *
- * @module adapters/bulk-rollup-builder
+
  */
 
 import type { Unit, Lesson } from '@oaknational/oak-curriculum-sdk/public/bulk.js';

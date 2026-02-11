@@ -2,8 +2,11 @@ import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-a
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 
 /**
- * @todo For now, we are exporting the raw logic as we did in eslint-rules
- *But we should aim to expose them as proper configs or rules
+ * Re-exports boundary rules and helpers from the boundary module.
+ *
+ * @remarks
+ * TODO: For now, we are exporting the raw logic as we did in eslint-rules.
+ * We should aim to expose them as proper configs or rules.
  */
 export {
   coreBoundaryRules,

@@ -9,8 +9,7 @@
  * Mines synonyms from curriculum keyword definitions using patterns like
  * "also known as", "sometimes called", and parenthetical alternatives.
  * These mined synonyms supplement the curated synonyms but never replace them.
- *
- * @module vocab-gen/generators/synonym-miner
+
  */
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';

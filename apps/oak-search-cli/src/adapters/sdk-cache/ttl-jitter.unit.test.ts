@@ -12,7 +12,7 @@ import { describe, it, expect } from 'vitest';
 import { calculateTtlWithJitter } from './ttl-jitter';
 
 describe('calculateTtlWithJitter', () => {
-  /** @test Base TTL calculation with no jitter. */
+  /** Base TTL calculation with no jitter. */
   it('returns base TTL in seconds when jitter is zero', () => {
     const baseDays = 14;
     const jitterHours = 0;
@@ -24,7 +24,7 @@ describe('calculateTtlWithJitter', () => {
     expect(result).toBe(expectedSeconds);
   });
 
-  /** @test Maximum positive jitter when random = 1. */
+  /** Maximum positive jitter when random = 1. */
   it('adds maximum positive jitter when random = 1', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -38,7 +38,7 @@ describe('calculateTtlWithJitter', () => {
     expect(result).toBe(expected);
   });
 
-  /** @test Maximum negative jitter when random = 0. */
+  /** Maximum negative jitter when random = 0. */
   it('applies maximum negative jitter when random = 0', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -52,7 +52,7 @@ describe('calculateTtlWithJitter', () => {
     expect(result).toBe(expected);
   });
 
-  /** @test No jitter when random = 0.5 (midpoint). */
+  /** No jitter when random = 0.5 (midpoint). */
   it('returns base TTL with no jitter when random = 0.5', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -64,7 +64,7 @@ describe('calculateTtlWithJitter', () => {
     expect(result).toBe(baseSeconds);
   });
 
-  /** @test Produces varied TTLs across multiple calls with varied random. */
+  /** Produces varied TTLs across multiple calls with varied random. */
   it('produces varied TTLs when random values differ', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -84,7 +84,7 @@ describe('calculateTtlWithJitter', () => {
     expect(uniqueResults.size).toBeGreaterThan(1);
   });
 
-  /** @test TTL range bounds with ±12 hour jitter on 14-day base. */
+  /** TTL range bounds with ±12 hour jitter on 14-day base. */
   it('respects bounds: 13.5 to 14.5 days with 12-hour jitter on 14-day base', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -101,7 +101,7 @@ describe('calculateTtlWithJitter', () => {
     expect(maxTtl).toBe(expectedMax);
   });
 
-  /** @test Defaults: uses Math.random when no randomFn provided. */
+  /** Defaults: uses Math.random when no randomFn provided. */
   it('uses Math.random by default and returns value in expected range', () => {
     const baseDays = 14;
     const jitterHours = 12;
@@ -123,7 +123,7 @@ describe('calculateTtlWithJitter', () => {
     }
   });
 
-  /** @test Default jitter is 12 hours. */
+  /** Default jitter is 12 hours. */
   it('defaults to 12-hour jitter when not specified', () => {
     const baseDays = 14;
     // Using extreme random values to verify default jitter amount

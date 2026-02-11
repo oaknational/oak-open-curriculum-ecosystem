@@ -1,5 +1,5 @@
 /**
- * @fileoverview Notion integration public API
+ * Notion integration public API
  *
  * Exposes Notion operations for dependency injection into other modules.
  * This maintains clear boundaries – consumers receive these operations

@@ -5,8 +5,7 @@
  * Extracts year group and phase information from units. This enables
  * filtering and faceted navigation by year and educational phase
  * (primary/secondary).
- *
- * @module bulk/extractors/year-phase-extractor
+
  */
 
 import type { Unit } from '../../types/generated/bulk/index.js';

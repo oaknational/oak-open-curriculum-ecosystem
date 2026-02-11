@@ -8,7 +8,7 @@
 
 > **AllowedMethodsForPath**\<`P`\> = `Extract`\<keyof [`paths`](../../api-paths-types/interfaces/paths.md)\[`P`\], [`HttpMethodKeys`](HttpMethodKeys.md)\>
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/path-parameters.ts:85
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/path-parameters.ts:84](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/path-parameters.ts#L84)
 
 ## Type Parameters
 

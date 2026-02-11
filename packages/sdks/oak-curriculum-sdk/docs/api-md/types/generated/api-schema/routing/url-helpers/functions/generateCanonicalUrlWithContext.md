@@ -8,7 +8,7 @@
 
 > **generateCanonicalUrlWithContext**(`type`, `id`, `context?`): `string` \| `null`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc\_src/types/generated/api-schema/routing/url-helpers.ts:62
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/routing/url-helpers.ts:62](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/routing/url-helpers.ts#L62)
 
 Generate a canonical URL for a resource with context.
 

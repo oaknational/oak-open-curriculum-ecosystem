@@ -4,8 +4,7 @@
  * @remarks
  * Handles the low-level processing of retry chunks, including error handling
  * and accumulating results across multiple chunks.
- *
- * @module retry/chunk-processor
+
  */
 import type { Logger } from '@oaknational/mcp-logger';
 import type { BulkOperations } from '../bulk-operation-types';

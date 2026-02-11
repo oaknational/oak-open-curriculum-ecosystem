@@ -36,7 +36,7 @@ import type { IngestionBatch, BatchGeneratorOptions } from './index-batch-types'
  * enabling batch-atomic commits and observable progress.
  *
  * @param options - Configuration for batch generation
- * @yields Batches containing operations for Elasticsearch dispatch
+ * @returns Batches containing operations for Elasticsearch dispatch
  *
  * @example
  * ```typescript

@@ -2,6 +2,7 @@ import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
+import tsdocPlugin from 'eslint-plugin-tsdoc';
 
 import type { Linter } from 'eslint';
 
@@ -13,6 +14,9 @@ export const recommended: Linter.Config[] = [
   importX.flatConfigs.typescript,
   prettierConfig,
   {
+    plugins: {
+      tsdoc: tsdocPlugin,
+    },
     rules: {
       // Types
       '@typescript-eslint/no-misused-promises': 'error',
@@ -87,6 +91,9 @@ export const recommended: Linter.Config[] = [
       'import-x/no-cycle': ['error'],
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
+
+      // TSDoc
+      'tsdoc/syntax': 'warn',
 
       // Prevent export *
       'no-restricted-syntax': [

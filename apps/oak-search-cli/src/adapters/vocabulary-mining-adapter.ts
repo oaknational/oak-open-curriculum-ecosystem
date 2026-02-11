@@ -5,8 +5,7 @@
  * Integrates the SDK's vocabulary extractors and generators into the
  * ingestion pipeline. Extracts keywords, misconceptions, learning points,
  * and other vocabulary data, plus mines synonyms from keyword definitions.
- *
- * @module adapters/vocabulary-mining-adapter
+
  */
 import {
   type BulkDownloadFile,

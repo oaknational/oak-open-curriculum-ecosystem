@@ -1,7 +1,6 @@
 /**
  * Vocabulary extractors for the mining pipeline.
- *
- * @module vocab-gen/extractors
+
  *
  * @remarks
  * All extractors are pure functions that take bulk download data

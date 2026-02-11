@@ -10,7 +10,6 @@
  *
  * @see ADR-070 SDK Rate Limiting and Retry (pattern reuse)
  * @see .agent/plans/semantic-search/active/elser-retry-robustness.md
- * @module bulk-chunk-uploader.integration.test
  */
 import { describe, it, expect, vi } from 'vitest';
 import { uploadAllChunks, type EsTransport, type BulkUploadConfig } from './bulk-chunk-uploader';

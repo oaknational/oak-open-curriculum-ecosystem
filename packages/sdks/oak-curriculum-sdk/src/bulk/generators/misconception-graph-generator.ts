@@ -7,8 +7,7 @@
  * Generates a graph of misconceptions extracted from curriculum lessons.
  * This graph helps teachers identify common mistakes and AI agents provide
  * targeted tutoring support.
- *
- * @module vocab-gen/generators/misconception-graph-generator
+
  */
 import { writeFile } from 'fs/promises';
 import { join } from 'path';

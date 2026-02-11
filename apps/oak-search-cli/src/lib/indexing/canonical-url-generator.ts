@@ -16,7 +16,6 @@
  * - Subject programmes: `/teachers/key-stages/{keyStageSlug}/subjects/{subjectSlug}/programmes`
  *
  * @see ADR-xxx Canonical URL Generation (if applicable)
- * @module lib/indexing/canonical-url-generator
  */
 
 /**

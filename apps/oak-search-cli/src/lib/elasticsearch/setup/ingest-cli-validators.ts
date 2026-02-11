@@ -2,8 +2,7 @@
  * CLI argument validators for ingestion.
  *
  * Pure validation functions for CLI argument values.
- *
- * @module ingest-cli-validators
+
  */
 
 import { InvalidArgumentError } from 'commander';

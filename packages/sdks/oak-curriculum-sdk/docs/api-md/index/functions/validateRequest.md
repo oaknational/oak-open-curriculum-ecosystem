@@ -8,7 +8,7 @@
 
 > **validateRequest**\<`P`\>(`path`, `method`, `args`): [`ValidationResult`](../../validation/types/type-aliases/ValidationResult.md)\<`unknown`\>
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/request-validators.ts:79
+Defined in: [packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts:79](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L79)
 
 Validates request parameters against the schema for the given path and method
 Uses generated schemas from the endpoints file

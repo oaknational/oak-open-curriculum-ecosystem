@@ -5,7 +5,6 @@
  * Tests filter building with support for phases, multiple key stages, years,
  * and other curriculum dimensions.
  *
- * @module lib/hybrid-search/rrf-query-helpers.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import { createLessonFilters, createUnitFilters } from './rrf-query-helpers';

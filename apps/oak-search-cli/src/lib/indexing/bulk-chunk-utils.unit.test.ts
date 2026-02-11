@@ -1,7 +1,6 @@
 /**
  * Unit tests for bulk chunk utilities.
  *
- * @module bulk-chunk-utils.unit.test
  */
 import { describe, it, expect } from 'vitest';
 import type { SearchLessonsIndexDoc } from '../../types/oak';

@@ -5,8 +5,7 @@
  * Extracts pupil lesson outcomes from lessons. These represent the
  * intended learning outcome for each lesson and are valuable for
  * semantic search indexing.
- *
- * @module bulk/extractors/pupil-outcome-extractor
+
  */
 
 import type { Lesson } from '../../types/generated/bulk/index.js';

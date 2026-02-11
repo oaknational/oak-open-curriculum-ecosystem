@@ -1,5 +1,5 @@
 /**
- * @fileoverview Query builders for Notion API
+ * Query builders for Notion API
  *
  * This file now re-exports from the modular query-building subdomain
  * to maintain backward compatibility while reducing file size.

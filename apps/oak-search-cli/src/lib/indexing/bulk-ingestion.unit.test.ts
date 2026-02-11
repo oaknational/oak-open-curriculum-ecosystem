@@ -1,7 +1,6 @@
 /**
  * Unit tests for bulk-ingestion module.
  *
- * @module lib/indexing/bulk-ingestion.unit.test
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type {

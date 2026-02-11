@@ -8,7 +8,7 @@
 
 > **typeSafeGet**\<`T`, `K`\>(`obj`, `key`): `T`\[`K`\]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/types/helpers/type-helpers.ts:38
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/helpers/type-helpers.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/helpers/type-helpers.ts#L38)
 
 Typed value access (instead of Reflect.get)
 

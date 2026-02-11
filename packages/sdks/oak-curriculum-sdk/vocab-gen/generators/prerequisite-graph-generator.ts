@@ -13,8 +13,7 @@
  * @see knowledge-graph-data.ts for the canonical pattern
  * @see thread-progression-generator.ts for the sister implementation
  * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
- *
- * @module vocab-gen/generators/prerequisite-graph-generator
+
  */
 import type { ExtractedPriorKnowledge, ExtractedThread } from '../extractors/index.js';
 

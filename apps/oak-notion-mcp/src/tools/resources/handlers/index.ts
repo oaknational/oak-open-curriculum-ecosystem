@@ -1,5 +1,5 @@
 /**
- * @fileoverview Resource handlers public API
+ * Resource handlers public API
  */
 
 import type {

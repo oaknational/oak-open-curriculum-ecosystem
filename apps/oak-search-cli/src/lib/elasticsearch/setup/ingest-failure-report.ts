@@ -4,8 +4,7 @@
  * @remarks
  * Writes JSON reports of documents that failed after all retry attempts,
  * enabling targeted re-ingestion of specific documents.
- *
- * @module lib/elasticsearch/setup/ingest-failure-report
+
  */
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';

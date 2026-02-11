@@ -1,5 +1,5 @@
 /**
- * @fileoverview Helper functions for formatters
+ * Helper functions for formatters
  */
 
 import type { Resource } from '../transformers';

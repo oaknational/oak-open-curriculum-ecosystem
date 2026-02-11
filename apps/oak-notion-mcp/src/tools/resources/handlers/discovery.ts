@@ -1,5 +1,5 @@
 /**
- * @fileoverview Discovery resource handler for Notion workspace
+ * Discovery resource handler for Notion workspace
  */
 
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';

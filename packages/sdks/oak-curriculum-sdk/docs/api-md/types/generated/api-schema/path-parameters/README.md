@@ -34,7 +34,6 @@
 - [RawPaths](type-aliases/RawPaths.md)
 - [ResponseForPathAndMethod](type-aliases/ResponseForPathAndMethod.md)
 - [ResponsesForPath](type-aliases/ResponsesForPath.md)
-- [Schema](type-aliases/Schema.md)
 - [Subject](type-aliases/Subject.md)
 - [Subjects](type-aliases/Subjects.md)
 - [UnknownResponseCode](type-aliases/UnknownResponseCode.md)

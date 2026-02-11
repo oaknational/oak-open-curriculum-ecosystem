@@ -1,5 +1,5 @@
 /**
- * @fileoverview Renders the tools section for the landing page.
+ * Renders the tools section for the landing page.
  *
  * Generates an HTML collapsible section listing all available MCP tools
  * from the Oak Curriculum SDK.

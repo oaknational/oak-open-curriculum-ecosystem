@@ -11,7 +11,6 @@
  * - BulkFile: top-level file schema
  *
  * @see type-gen/typegen/bulk/generate-bulk-schemas.ts
- * @module types/generated/bulk
  */
 
 import { z } from 'zod';

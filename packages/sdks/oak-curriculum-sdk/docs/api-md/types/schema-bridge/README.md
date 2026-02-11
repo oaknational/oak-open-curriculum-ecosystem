@@ -10,6 +10,8 @@
 
 - [OpenApiSchemaBase](type-aliases/OpenApiSchemaBase.md)
 
-## Variables
+## References
 
-- [schemaBase](variables/schemaBase.md)
+### schemaBase
+
+Renames and re-exports [schema](../../index/variables/schema.md)

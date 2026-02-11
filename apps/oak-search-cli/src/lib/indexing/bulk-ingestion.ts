@@ -1,7 +1,6 @@
 /**
  * Bulk-first ingestion module for Elasticsearch.
  * @see ADR-093 Bulk-First Ingestion Strategy
- * @module lib/indexing/bulk-ingestion
  */
 import {
   readAllBulkFiles,

@@ -8,7 +8,7 @@
 
 > **isSubjectAssets**(`v`): v is \{ assets: \{ label: string; type: "slideDeck" \| "exitQuiz" \| "exitQuizAnswers" \| "starterQuiz" \| "starterQuizAnswers" \| "supplementaryResource" \| "video" \| "worksheet" \| "worksheetAnswers"; url: string \}\[\]; attribution?: string\[\]; canonicalUrl?: string; lessonSlug: string; lessonTitle: string \}\[\]
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/types/search-response-guards.ts:91
+Defined in: [packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts:91](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L91)
 
 Type guard for subject assets response.
 

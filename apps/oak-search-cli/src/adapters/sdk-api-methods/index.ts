@@ -9,7 +9,6 @@
  *
  * All methods return `Result<T, SdkFetchError>` per ADR-088.
  * @see {@link ../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md}
- * @module sdk-api-methods
  */
 
 export {

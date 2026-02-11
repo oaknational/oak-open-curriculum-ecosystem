@@ -10,8 +10,7 @@
  * @see SearchUnitsIndexDoc - The Zod-validated type this produces
  * @see transformBulkUnitToESDoc - Bulk path adapter that delegates here
  * @see createUnitDocument - API path function in document-transforms.ts
- *
- * @module lib/indexing/unit-document-core
+
  */
 
 import type {

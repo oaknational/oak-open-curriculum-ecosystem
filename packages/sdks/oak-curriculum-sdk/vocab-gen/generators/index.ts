@@ -4,8 +4,7 @@
  * @remarks
  * Generators transform extracted vocabulary data into static graph
  * structures suitable for MCP tool consumption.
- *
- * @module vocab-gen/generators
+
  */
 
 export {

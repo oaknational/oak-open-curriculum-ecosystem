@@ -6,7 +6,7 @@
 
 # Interface: RateLimitTracker
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middleware/rate-limit-tracker.ts:17
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts#L17)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middlewar
 
 > **getRequestCount**(): `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middleware/rate-limit-tracker.ts:19
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts:19](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts#L19)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middlewar
 
 > **getRequestRate**(): `number`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middleware/rate-limit-tracker.ts:20
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts:20](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts#L20)
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middlewar
 
 > **getStatus**(): [`RateLimitInfo`](RateLimitInfo.md)
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middleware/rate-limit-tracker.ts:18
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts:18](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts#L18)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middlewar
 
 > **reset**(): `void`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/client/middleware/rate-limit-tracker.ts:21
+Defined in: [packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts:21](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts#L21)
 
 #### Returns
 

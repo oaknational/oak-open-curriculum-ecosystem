@@ -8,6 +8,6 @@
 
 > **HttpMethod** = `"get"` \| `"post"` \| `"put"` \| `"delete"` \| `"patch"` \| `"options"` \| `"head"` \| `"trace"`
 
-Defined in: packages/sdks/oak-curriculum-sdk/docs/\_typedoc_src/validation/types.ts:88
+Defined in: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:88](https://github.com/oaknational/oak-mcp-ecosystem/blob/f1af18965d39c4eda1de9a2e93a1faa5f4bdf4f1/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L88)
 
 HTTP methods supported by validation
