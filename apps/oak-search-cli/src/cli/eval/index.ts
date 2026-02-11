@@ -20,7 +20,11 @@
 import { Command } from 'commander';
 import { registerPassThrough } from '../shared/index.js';
 
-/** Create the `eval benchmark` subcommand group with per-scope commands. */
+/**
+ * Create the `eval benchmark` subcommand group with per-scope commands.
+ *
+ * @returns A Commander `Command` with benchmark subcommands registered
+ */
 function createBenchmarkCmd(): Command {
   const cmd = new Command('benchmark').description('Run search benchmarks against ground truth');
 
@@ -62,6 +66,12 @@ function createBenchmarkCmd(): Command {
  * Create the `eval` subcommand group.
  *
  * @returns A Commander `Command` with eval subcommands registered
+ *
+ * @example
+ * ```typescript
+ * const program = new Command();
+ * program.addCommand(evalCommand());
+ * ```
  */
 export function evalCommand(): Command {
   const cmd = new Command('eval').description(

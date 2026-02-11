@@ -12,7 +12,11 @@ import { fileURLToPath } from 'node:url';
 import type { Command } from 'commander';
 import { printError } from './output.js';
 
-/** Resolve the CLI workspace root directory. */
+/**
+ * Resolve the CLI workspace root directory.
+ *
+ * Absolute path to the oak-search-cli workspace root (parent of `src/`).
+ */
 export const APP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
 /**
@@ -26,6 +30,13 @@ export const APP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../
  * @param name - The subcommand name
  * @param description - Help text for the subcommand
  * @param scriptPath - Path to the script file, relative to workspace root
+ * @returns void
+ *
+ * @example
+ * ```typescript
+ * const admin = new Command('admin');
+ * registerPassThrough(admin, 'ingest', 'Ingest curriculum data', 'src/lib/ingest.ts');
+ * ```
  */
 export function registerPassThrough(
   parent: Command,
@@ -71,6 +82,13 @@ export function registerPassThrough(
  * @param name - The subcommand name
  * @param description - Help text for the subcommand
  * @param scriptPath - Path to the bash script, relative to workspace root
+ * @returns void
+ *
+ * @example
+ * ```typescript
+ * const admin = new Command('admin');
+ * registerBashPassThrough(admin, 'alias-swap', 'Swap index alias', 'operations/alias-swap.sh');
+ * ```
  */
 export function registerBashPassThrough(
   parent: Command,

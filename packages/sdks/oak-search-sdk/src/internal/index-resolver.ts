@@ -20,7 +20,7 @@ export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
 /**
  * Known search index kinds.
  *
- * Each kind maps to a base index name (e.g. `'lessons'` -> `'oak_lessons'`).
+ * Each kind maps to a base index name (e.g. `'lessons'` \> `'oak_lessons'`).
  */
 export const SEARCH_INDEX_KINDS = [
   'lessons',
@@ -45,6 +45,8 @@ export const INDEX_VERSION_DOC_ID = 'index_version';
 
 /**
  * Mapping from search index kind to base Elasticsearch index name.
+ *
+ * Used internally by resolveSearchIndexName.
  */
 const BASE_INDEX_NAMES: Readonly<Record<SearchIndexKind, string>> = {
   lessons: 'oak_lessons',
@@ -76,7 +78,7 @@ export function resolveSearchIndexName(kind: SearchIndexKind, target: SearchInde
 /**
  * Resolve the zero-hit telemetry index name for a given target.
  *
- * @param target - The index target
+ * @param target - The index target (`'primary'` or `'sandbox'`)
  * @returns The concrete zero-hit index name
  */
 export function resolveZeroHitIndexName(target: SearchIndexTarget): string {

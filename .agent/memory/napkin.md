@@ -1,5 +1,102 @@
 # Napkin
 
+## Session: 2026-02-11 — Checkpoint E2: Result Pattern + TSDoc + Directive Review
+
+### Context
+
+- Checkpoint E2 complete: all SDK service I/O returns `Result<T, E>`, comprehensive TSDoc across SDK and CLI
+- Full quality gate chain passes: clean, type-gen, build, type-check, format:root, markdownlint:root, lint:fix, test, test:ui, test:e2e, test:e2e:built, smoke:dev:stub
+- Directive review completed with sub-agent audits
+- Branch: feat/semantic_search_deployment
+
+### What Was Built
+
+- **Error types**: `AdminError` (replaced `IndexMetaError`), `ObservabilityError` discriminated unions; `RetrievalError` already existed
+- **Result wrapping**: All 16 SDK service I/O methods return `Result<T, E>` via `ok()`/`err()`
+- **Silent error swallowing fixed**: `observability.persistEvent`, `observability.fetchTelemetry`, `admin.safeDeleteIndex` no longer silently swallow errors
+- **Simplified data types**: `ConnectionStatus` (removed `connected`/`error`), `SynonymsResult` (removed `success`/`error`) — redundant with `Result`
+- **CLI error boundary**: All command `.action()` blocks check `result.ok`, print `type: message` on error, set `process.exitCode = 1`
+- **Benchmark runners**: Updated `SearchFunction`/`UnitSearchFunction`/`SequenceSearchFunction` to return `Result`, fail fast on `!result.ok`
+- **TSDoc**: Comprehensive annotations on all SDK and CLI functions, interfaces, types, constants
+- **File extractions by responsibility**:
+  - `admin-index-operations.ts` from `create-admin-service.ts` (index lifecycle)
+  - `retrieval-search-helpers.ts` from `create-retrieval-service.ts` (sequence/unit helpers)
+  - `admin-sdk-commands.ts` from `admin/index.ts` (SDK-mapped commands)
+  - `admin-orchestration-commands.ts` from `admin/index.ts` (pass-through commands)
+- **DRY refactor**: `benchmark-adapters.ts` — eliminated 4 identical grouping functions with generic `groupEntries<T>`, removed eslint max-lines override
+- **Pure function extraction**: `calculateBenchmarkMetrics` from `runQuery` to stay under max-lines-per-function while preserving full documentation
+
+### Mistakes Made (and Corrected)
+
+- **CRITICAL: Compressed TSDoc to meet max-lines instead of splitting files** — the rules say "split into smaller files by responsibility", NEVER make files shorter by stripping documentation. Fixed by proper file splits.
+- **Ran only `pnpm test` instead of full quality gate chain** — `pnpm test` is only unit+integration tests. The full chain includes test:ui, test:e2e, test:e2e:built, smoke:dev:stub. Must always run the full chain as specified in AGENT.md.
+- TSDoc subagent added `@remarks` tags that are unsupported by the tsdoc plugin
+- `{@link ./module-path}` syntax triggers `tsdoc-reference-missing-hash` — replaced with backtick module references
+- `>` in TSDoc examples must use backslash escape
+- `{ value: number }` in TSDoc triggers malformed inline tag — braces look like TSDoc inline tags
+- `benchmark-test-harness.ts` needed explicit `LessonsSearchResult` intermediate variable to avoid type incompatibility with `ok()` wrapper
+
+### Directive Review Findings
+
+**SDK (23 files): ALL PASS** — No type shortcuts, no disabled checks, complete TSDoc, no unused code, fail-fast compliance, proper test patterns.
+
+**CLI (25 files): 23 PASS, 2 pre-existing issues in files I touched:**
+1. `benchmark-adapters.ts` — Had `/* eslint max-lines: [error, 275] */` override (rule workaround). **FIXED** by DRYing with generic `groupEntries<T>`, file went from 267 to 157 lines.
+2. `benchmark-entry-runner.ts` — Catch blocks log errors and create synthetic 0-score results instead of failing fast. **PRE-EXISTING design choice** for benchmark resilience. Errors ARE logged and visible in results, but process exits 0 even when queries fail. Noted for future work.
+
+### Patterns to Remember
+
+- **NEVER compress docs to meet line limits** — always split files by responsibility
+- **Full quality gate chain** from AGENT.md: clean, type-gen, build, type-check, format:root, markdownlint:root, lint:fix, test, test:ui, test:e2e, test:e2e:built, smoke:dev:stub
+- `{@link ./path}` is NOT valid TSDoc — use backtick references for module paths
+- DRY repetitive adapter code with generic functions + callbacks before splitting into separate files
+- `toServiceError` helper pattern: catch unknown, check for `statusCode` (ES errors), always provide `type` + `message`
+- `safeDeleteIndex` returning `ok(undefined)` for not-found is correct
+- `handleStatus` must unwrap TWO Result calls and combine
+- Benchmark runners should `throw` on `!result.ok` — fail fast, no Result propagation
+- When a pre-existing eslint override exists in a file you touch, fix the root cause (DRY/split) rather than leaving the override
+
+---
+
+## Session: 2026-02-11 — TSDoc Compliance Fix
+
+### Context
+
+- Implemented full TSDoc compliance plan: fix all non-standard tags at source, delete sanitize-docs.ts
+- Branch: feat/semantic_search_deployment
+- Commit: 506a9cf (pushed)
+
+### What Was Done
+
+- Extended `postProcessTypesSource` in `typegen-core.ts` to strip `@description`, `@constant` (both inline and multi-line), `@enum` from openapiTS output
+- Deleted `sanitize-docs.ts` and entire `docs/_typedoc_src/` directory
+- Moved `schema-bridge.ts` from `docs/_typedoc_src/types/` to `src/types/` as real source
+- Updated all three TypeDoc configs (`typedoc.json`, `typedoc.ai.json`, `typedoc.mcp.json`) to point at `src/` directly
+- Removed `docs:prepare` script and simplified all docs commands in package.json
+- Removed `@module` from 84+ files across search-cli and curriculum-sdk
+- Removed `@fileoverview` from 30+ files across notion-mcp, streamable-http
+- Fixed one-off tags: `@property`->list, `@todo`->`@remarks TODO:`, `@default`->`@defaultValue`, `@future`->`@remarks`, `@yields`->`@returns`, `@remark`->`@remarks`, `@test`->plain comment, `@oaknational/*`/`@clerk/*`->backtick-wrapped
+- Installed `eslint-plugin-tsdoc` in `@oaknational/eslint-plugin-standards`, added `tsdoc/syntax: warn`
+- Created `tsdoc.json` at root and in workspaces with `@generated` files (search-cli, curriculum-sdk)
+- All quality gates pass: 0 errors, 462 files changed
+
+### Mistakes Made (and Corrected)
+
+- Initial `@constant` regex only matched multi-line `* @constant` but missed inline `/** @constant */` — added second pattern
+- Root `tsdoc.json` not picked up by workspaces because `@microsoft/tsdoc-config` stops at nearest `package.json` — had to create per-workspace `tsdoc.json` files
+- `extends` in `tsdoc.json` didn't propagate tags due to version incompatibility between `@microsoft/tsdoc` and `@microsoft/tsdoc-config` — put full tag definition in each workspace's config instead
+- `eslint-plugin-tsdoc` was being bundled by tsup which broke config discovery — added to `external` list in tsup.config.ts
+
+### Patterns to Remember
+
+- `openapiTS` emits `/** @constant */` as single-line comments AND `* @constant` as multi-line — regex must handle both
+- `@microsoft/tsdoc-config` `loadForFolder()` stops walking up at nearest `package.json` — each workspace needs its own `tsdoc.json`
+- ESLint plugins that use dynamic file resolution (`@microsoft/tsdoc-config`) must be marked `external` in tsup bundles
+- `perl -i -pe` for single-line replacements, `perl -i -0pe` for multi-line patterns spanning newlines
+- The `docs/_typedoc_src` layer was unnecessary — TypeDoc can read `src/` directly with `--skipErrorChecking`
+
+---
+
 ## Session: 2026-02-11 — Directive Review + E2 Planning
 
 ### Context

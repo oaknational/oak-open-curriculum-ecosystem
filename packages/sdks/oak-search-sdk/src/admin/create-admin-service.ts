@@ -2,47 +2,57 @@
  * Admin service factory.
  */
 
-import type { Client, estypes } from '@elastic/elasticsearch';
+import type { Client } from '@elastic/elasticsearch';
 import type { Logger } from '@oaknational/mcp-logger';
-import {
-  OAK_LESSONS_MAPPING,
-  OAK_UNIT_ROLLUP_MAPPING,
-  OAK_UNITS_MAPPING,
-  OAK_SEQUENCES_MAPPING,
-  OAK_SEQUENCE_FACETS_MAPPING,
-  OAK_THREADS_MAPPING,
-  OAK_META_MAPPING,
-} from '@oaknational/oak-curriculum-sdk/elasticsearch.js';
+import { ok, err, type Result } from '@oaknational/result';
 import { buildElasticsearchSynonyms } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 import type { AdminService } from '../types/admin.js';
 import type {
+  AdminError,
   SetupResult,
   SetupOptions,
   ConnectionStatus,
   IndexInfo,
   SynonymsResult,
-  IndexSetupResult,
+  IngestOptions,
+  IngestResult,
 } from '../types/admin-types.js';
 import type { SearchSdkConfig } from '../types/sdk.js';
 import type { IndexResolverFn } from '../internal/index-resolver.js';
-import { createIndexResolver, INDEX_META_INDEX } from '../internal/index-resolver.js';
-import { isResourceExistsError } from './es-error-guards.js';
+import { createIndexResolver } from '../internal/index-resolver.js';
 import { runIngest } from './ingest.js';
 import { readIndexMeta, writeIndexMeta } from './index-meta.js';
+import { createAllIndexes, deleteAllIndexes } from './admin-index-operations.js';
 
+/**
+ * Convert an unknown caught error into an `AdminError`.
+ *
+ * @param error - The caught error value
+ * @returns A typed `AdminError` discriminated union member
+ */
+function toAdminError(error: unknown): AdminError {
+  const message = error instanceof Error ? error.message : String(error);
+  return { type: 'es_error', message };
+}
+
+/** Elasticsearch synonym set identifier used for upsert operations. */
 const SYNONYM_SET_ID = 'oak-syns';
 
-const INDEX_DEFINITIONS = [
-  { kind: 'lessons', mapping: OAK_LESSONS_MAPPING },
-  { kind: 'unit_rollup', mapping: OAK_UNIT_ROLLUP_MAPPING },
-  { kind: 'units', mapping: OAK_UNITS_MAPPING },
-  { kind: 'sequences', mapping: OAK_SEQUENCES_MAPPING },
-  { kind: 'sequence_facets', mapping: OAK_SEQUENCE_FACETS_MAPPING },
-  { kind: 'threads', mapping: OAK_THREADS_MAPPING },
-] as const;
-
-/** Create the admin service implementation. */
+/**
+ * Create the admin service implementation.
+ *
+ * @param esClient - Elasticsearch client for all admin operations
+ * @param config - SDK configuration (index target, version, etc.)
+ * @param logger - Optional structured logger for debug/info output
+ * @returns AdminService with setup, reset, verifyConnection, listIndexes, updateSynonyms, ingest, getIndexMeta, setIndexMeta
+ *
+ * @example
+ * ```typescript
+ * const admin = createAdminService(esClient, config, logger);
+ * const result = await admin.setup({ verbose: true });
+ * ```
+ */
 export function createAdminService(
   esClient: Client,
   config: SearchSdkConfig,
@@ -56,147 +66,119 @@ export function createAdminService(
     verifyConnection: () => verifyConnection(esClient),
     listIndexes: () => listIndexes(esClient),
     updateSynonyms: () => upsertSynonyms(esClient, logger),
-    ingest: (options) => runIngest(esClient, resolveIndex, logger, options),
+    ingest: (options) => runIngestWrapped(esClient, resolveIndex, logger, options),
     getIndexMeta: () => readIndexMeta(esClient),
     setIndexMeta: (meta) => writeIndexMeta(esClient, meta),
   };
 }
 
+/**
+ * Run setup: create synonyms and all indexes.
+ *
+ * @param client - Elasticsearch client
+ * @param resolveIndex - Index name resolver
+ * @param logger - Optional logger
+ * @param options - Setup options (e.g. verbose)
+ * @returns Result with synonyms count and index results
+ */
 async function runSetup(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
   options?: SetupOptions,
-): Promise<SetupResult> {
-  const synonymResult = await upsertSynonyms(client, logger);
-  const indexResults = await createAllIndexes(client, resolveIndex, logger, options);
-  return {
-    synonymsCreated: synonymResult.success,
-    synonymCount: synonymResult.count,
-    indexResults,
-  };
+): Promise<Result<SetupResult, AdminError>> {
+  try {
+    const synonymResult = await upsertSynonyms(client, logger);
+    if (!synonymResult.ok) {
+      return synonymResult;
+    }
+    const indexResults = await createAllIndexes(client, resolveIndex, logger, options);
+    return ok({
+      synonymsCreated: true,
+      synonymCount: synonymResult.value.count,
+      indexResults,
+    });
+  } catch (error: unknown) {
+    return err(toAdminError(error));
+  }
 }
 
+/**
+ * Run reset: delete all indexes, then run setup.
+ *
+ * @param client - Elasticsearch client
+ * @param resolveIndex - Index name resolver
+ * @param logger - Optional logger
+ * @param options - Setup options (e.g. verbose)
+ * @returns Result with synonyms count and index results
+ */
 async function runReset(
   client: Client,
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
   options?: SetupOptions,
-): Promise<SetupResult> {
-  await deleteAllIndexes(client, resolveIndex, logger);
-  return runSetup(client, resolveIndex, logger, options);
-}
-
-async function createAllIndexes(
-  client: Client,
-  resolveIndex: IndexResolverFn,
-  logger: Logger | undefined,
-  options?: SetupOptions,
-): Promise<IndexSetupResult[]> {
-  const results: IndexSetupResult[] = [];
-  for (const def of INDEX_DEFINITIONS) {
-    results.push(
-      await createIndex(client, resolveIndex(def.kind), def.mapping, logger, options?.verbose),
-    );
-  }
-  results.push(
-    await createIndex(client, INDEX_META_INDEX, OAK_META_MAPPING, logger, options?.verbose),
-  );
-  return results;
-}
-
-async function deleteAllIndexes(
-  client: Client,
-  resolveIndex: IndexResolverFn,
-  logger?: Logger,
-): Promise<void> {
-  for (const def of INDEX_DEFINITIONS) {
-    await safeDeleteIndex(client, resolveIndex(def.kind), logger);
-  }
-  await safeDeleteIndex(client, INDEX_META_INDEX, logger);
-}
-
-async function safeDeleteIndex(client: Client, indexName: string, logger?: Logger): Promise<void> {
+): Promise<Result<SetupResult, AdminError>> {
   try {
-    await client.indices.delete({ index: indexName });
-    logger?.debug('Deleted index', { index: indexName });
-  } catch {
-    // Index may not exist
-  }
-}
-
-async function createIndex(
-  client: Client,
-  indexName: string,
-  mapping: unknown,
-  logger: Logger | undefined,
-  verbose?: boolean,
-): Promise<IndexSetupResult> {
-  try {
-    const params = extractMappingParams(mapping);
-    await client.indices.create({ index: indexName, ...params });
-    if (verbose) {
-      logger?.info('Created index', { index: indexName });
+    const deleteResult = await deleteAllIndexes(client, resolveIndex, logger);
+    if (!deleteResult.ok) {
+      return deleteResult;
     }
-    return { indexName, status: 'created' };
+    return runSetup(client, resolveIndex, logger, options);
   } catch (error: unknown) {
-    if (isResourceExistsError(error)) {
-      return { indexName, status: 'exists' };
-    }
-    return {
-      indexName,
-      status: 'error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
+    return err(toAdminError(error));
   }
 }
 
-function extractMappingParams(mapping: unknown): {
-  settings?: estypes.IndicesIndexSettings;
-  mappings?: estypes.MappingTypeMapping;
-} {
-  if (typeof mapping !== 'object' || mapping === null) {
-    return {};
-  }
-  const result: { settings?: estypes.IndicesIndexSettings; mappings?: estypes.MappingTypeMapping } =
-    {};
-  if ('settings' in mapping && isPlainObject(mapping.settings)) {
-    result.settings = mapping.settings;
-  }
-  if ('mappings' in mapping && isPlainObject(mapping.mappings)) {
-    result.mappings = mapping.mappings;
-  }
-  return result;
-}
-
-function isPlainObject(
-  value: unknown,
-): value is estypes.IndicesIndexSettings & estypes.MappingTypeMapping {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-async function verifyConnection(client: Client): Promise<ConnectionStatus> {
+/**
+ * Verify Elasticsearch cluster connection and return cluster info.
+ *
+ * @param client - Elasticsearch client
+ * @returns Result with cluster name and version, or AdminError
+ */
+async function verifyConnection(client: Client): Promise<Result<ConnectionStatus, AdminError>> {
   try {
     const info = await client.info();
-    return { connected: true, clusterName: info.cluster_name, version: info.version.number };
+    return ok({ clusterName: info.cluster_name, version: info.version.number });
   } catch (error: unknown) {
-    return { connected: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    return err(toAdminError(error));
   }
 }
 
-async function listIndexes(client: Client): Promise<readonly IndexInfo[]> {
-  const response = await client.cat.indices({ format: 'json' });
-  if (!Array.isArray(response)) {
-    return [];
+/**
+ * List all indexes with health and doc count.
+ *
+ * @param client - Elasticsearch client
+ * @returns Result with array of index info, or AdminError
+ */
+async function listIndexes(client: Client): Promise<Result<readonly IndexInfo[], AdminError>> {
+  try {
+    const response = await client.cat.indices({ format: 'json' });
+    if (!Array.isArray(response)) {
+      return ok([]);
+    }
+    return ok(
+      response.map((entry) => ({
+        index: typeof entry.index === 'string' ? entry.index : '',
+        health: typeof entry.health === 'string' ? entry.health : 'unknown',
+        docsCount: typeof entry['docs.count'] === 'string' ? parseInt(entry['docs.count'], 10) : 0,
+      })),
+    );
+  } catch (error: unknown) {
+    return err(toAdminError(error));
   }
-  return response.map((entry) => ({
-    index: typeof entry.index === 'string' ? entry.index : '',
-    health: typeof entry.health === 'string' ? entry.health : 'unknown',
-    docsCount: typeof entry['docs.count'] === 'string' ? parseInt(entry['docs.count'], 10) : 0,
-  }));
 }
 
-async function upsertSynonyms(client: Client, logger?: Logger): Promise<SynonymsResult> {
+/**
+ * Upsert the curriculum synonym set into Elasticsearch.
+ *
+ * @param client - Elasticsearch client
+ * @param logger - Optional logger for debug output
+ * @returns Result with synonym count
+ */
+async function upsertSynonyms(
+  client: Client,
+  logger?: Logger,
+): Promise<Result<SynonymsResult, AdminError>> {
   try {
     const synonymSet = buildElasticsearchSynonyms();
     await client.synonyms.putSynonym({
@@ -207,12 +189,31 @@ async function upsertSynonyms(client: Client, logger?: Logger): Promise<Synonyms
       id: SYNONYM_SET_ID,
       count: synonymSet.synonyms_set.length,
     });
-    return { success: true, count: synonymSet.synonyms_set.length };
+    return ok({ count: synonymSet.synonyms_set.length });
   } catch (error: unknown) {
-    return {
-      success: false,
-      count: 0,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
+    return err(toAdminError(error));
+  }
+}
+
+/**
+ * Run bulk ingest, wrapping any thrown errors in AdminError.
+ *
+ * @param client - Elasticsearch client
+ * @param resolveIndex - Index name resolver
+ * @param logger - Optional logger
+ * @param options - Ingest options (bulkDir, dryRun, subjectFilter)
+ * @returns Result with ingest counts
+ */
+async function runIngestWrapped(
+  client: Client,
+  resolveIndex: IndexResolverFn,
+  logger: Logger | undefined,
+  options: IngestOptions,
+): Promise<Result<IngestResult, AdminError>> {
+  try {
+    const result = await runIngest(client, resolveIndex, logger, options);
+    return ok(result);
+  } catch (error: unknown) {
+    return err(toAdminError(error));
   }
 }

@@ -4,26 +4,15 @@
 
 ---
 
-## Current Priority: Result Pattern + TSDoc — Checkpoint E2
+## Current Priority: MCP Integration — Checkpoint F
 
-Checkpoints A–E are complete: the SDK is fully implemented
-with 34 tests, and the CLI is renamed with all subcommands
-wired to SDK services. 934 tests pass in the CLI workspace
-(82 test files). All quality gates are green.
+Checkpoints A–E2 are complete. The SDK is production-ready:
+all service I/O methods return `Result<T, E>`, comprehensive
+TSDoc is in place, all quality gates pass (including test:ui,
+test:e2e, test:e2e:built, smoke:dev:stub).
 
-**A directive review identified two non-compliances** that
-must be fixed before the MCP server (Checkpoint F) consumes
-the SDK:
-
-1. **Result pattern**: All three SDK services throw on
-   failure instead of returning `Result<T, E>`. The rules
-   say "Don't throw, use the result pattern."
-2. **TSDoc depth**: Private helpers and several public APIs
-   lack the exhaustive TSDoc annotations the rules require.
-
-**Next step**: Implement Checkpoint E2 — convert all SDK
-services to use `Result<T, E>` and add comprehensive TSDoc
-with examples across all new code.
+**Next step**: Checkpoint F — wire the semantic search MCP
+tool in the Express MCP server to call SDK services.
 
 **Plan**: [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md)
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
@@ -77,44 +66,42 @@ env → ES client → SDK instance.
 
 ---
 
-## Checkpoint E2 — What Needs Doing
+## Completed: Checkpoint E2 — Result Pattern + TSDoc
 
-### Result Pattern (~25 files)
-
-Convert all SDK service methods that can fail to return
-`Result<T, E>` using per-service error types:
+All SDK service I/O methods now return `Result<T, E>`:
 
 | Service | Error Type | Variants |
 |---------|-----------|----------|
 | Retrieval | `RetrievalError` | `es_error`, `timeout`, `validation_error`, `unknown` |
-| Admin | `AdminError` (replaces `IndexMetaError`) | `es_error`, `not_found`, `mapping_error`, `validation_error`, `unknown` |
+| Admin | `AdminError` (replaced `IndexMetaError`) | `es_error`, `not_found`, `mapping_error`, `validation_error`, `unknown` |
 | Observability | `ObservabilityError` | `es_error`, `unknown` |
 
 Sync observe methods (`getRecentZeroHits`,
-`getZeroHitSummary`) stay as-is — they are pure
-in-memory operations that cannot fail.
+`getZeroHitSummary`) are unchanged — pure in-memory
+operations that cannot fail.
 
-**Partial progress**: `RetrievalError` type definition
-has been added to `types/retrieval-results.ts` (type only,
-not yet integrated into the interface or implementation).
+Comprehensive TSDoc on all functions (public and private)
+across the SDK and CLI. Files split by responsibility
+where TSDoc additions pushed past max-lines limits.
 
-### TSDoc Standard
+## Completed: TSDoc Compliance Fix
 
-Every function (public or private) gets:
-- One-sentence summary
-- `@param` for each parameter
-- `@returns` description
-- `@example` block on all public API surfaces
+Non-standard TSDoc tags fixed at source across the entire
+codebase (462 files). `eslint-plugin-tsdoc` added with
+`tsdoc/syntax: warn` for regression prevention.
 
-### Execution Phases
+## Checkpoint F — What Needs Doing
 
-1. SDK types + interfaces
-2. SDK implementation (`ok()`/`err()` wrapping)
-3. SDK integration tests
-4. CLI handlers + handler tests
-5. Benchmark query runners
-6. TSDoc pass (all files)
-7. Quality gates + docs
+Wire the semantic search MCP tool in the Express MCP
+server to call SDK services:
+
+- Add/update the search tool to use `createSearchSdk()`
+- Ship comprehensive tool examples mapping user intent
+  to SDK calls
+- Keep NL parsing policy in MCP (and test it there)
+
+**Key Decision**: NL stays in the **MCP layer**. The SDK
+remains deterministic. See [ADR-107].
 
 ---
 
@@ -129,18 +116,11 @@ Every function (public or private) gets:
 
 ---
 
-## After E2: Checkpoint F — MCP Integration Wiring
+## After F: Phase 4 — Search Enhancements
 
-Wire the semantic search MCP tool in the Express MCP
-server to call SDK services:
-
-- Add/update the search tool to use `createSearchSdk()`
-- Ship comprehensive tool examples mapping user intent
-  to SDK calls
-- Keep NL parsing policy in MCP (and test it there)
-
-**Key Decision**: NL stays in the **MCP layer**. The SDK
-remains deterministic. See [ADR-107].
+Ground truth expansion, fundamentals re-evaluation,
+document relationships, modern ES features, and AI
+enhancement. See [roadmap.md](../../plans/semantic-search/roadmap.md).
 
 ---
 

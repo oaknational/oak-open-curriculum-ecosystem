@@ -22,12 +22,24 @@ interface DetectedPhrase {
   readonly index: number;
 }
 
-/** Check if a character represents a word boundary. */
+/**
+ * Check if a character represents a word boundary (space or undefined).
+ *
+ * @param char - Single character or undefined
+ * @returns True when char is space or undefined
+ */
 function isWordBoundary(char: string | undefined): boolean {
   return char === undefined || char === ' ';
 }
 
-/** Check if phrase at given index has valid word boundaries. */
+/**
+ * Check if phrase at given index has valid word boundaries before and after.
+ *
+ * @param query - The full query string
+ * @param index - Start index of the phrase
+ * @param phraseLength - Length of the phrase
+ * @returns True when surrounded by word boundaries
+ */
 function hasWordBoundaries(query: string, index: number, phraseLength: number): boolean {
   const beforeChar = index > 0 ? query[index - 1] : undefined;
   const afterIndex = index + phraseLength;
@@ -35,7 +47,13 @@ function hasWordBoundaries(query: string, index: number, phraseLength: number): 
   return isWordBoundary(beforeChar) && isWordBoundary(afterChar);
 }
 
-/** Find a phrase in the query if it has valid word boundaries. */
+/**
+ * Find a phrase in the query if it has valid word boundaries.
+ *
+ * @param query - The search query
+ * @param phrase - Vocabulary phrase to find
+ * @returns Detected phrase with index, or undefined if not found
+ */
 function findPhraseWithBoundary(query: string, phrase: string): DetectedPhrase | undefined {
   const index = query.indexOf(phrase);
   if (index === -1) {
@@ -47,7 +65,12 @@ function findPhraseWithBoundary(query: string, phrase: string): DetectedPhrase |
   return { phrase, index };
 }
 
-/** Remove duplicates from detected phrases while preserving order. */
+/**
+ * Remove duplicates from detected phrases while preserving order.
+ *
+ * @param detected - Array of detected phrases with indices
+ * @returns Unique phrases in order of first appearance
+ */
 function deduplicatePhrases(detected: readonly DetectedPhrase[]): readonly string[] {
   const seen = new Set<string>();
   const result: string[] = [];
@@ -65,6 +88,11 @@ function deduplicatePhrases(detected: readonly DetectedPhrase[]): readonly strin
  *
  * @param query - The preprocessed search query (after noise removal)
  * @returns Array of detected phrases, lowercased, in order of appearance
+ *
+ * @example
+ * ```typescript
+ * detectCurriculumPhrases('key stage 2 photosynthesis'); // ['key stage 2']
+ * ```
  */
 export function detectCurriculumPhrases(query: string): readonly string[] {
   if (query.length === 0) {

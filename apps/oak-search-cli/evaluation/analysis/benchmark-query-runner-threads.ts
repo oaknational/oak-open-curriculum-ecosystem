@@ -22,7 +22,11 @@ import { buildThreadRrfRequest } from '../../src/lib/hybrid-search/rrf-query-bui
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
 import type { EsSearchRequest } from '../../src/lib/elastic-http.js';
 
-/** Simplified ES response type for thread benchmark purposes. */
+/**
+ * Simplified ES response type for thread benchmark purposes.
+ *
+ * Extracts thread_slug from Elasticsearch hit _source.
+ */
 export interface ThreadSearchResponse {
   readonly hits: {
     readonly hits: readonly {
@@ -38,25 +42,35 @@ export interface ThreadSearchResponse {
  *
  * Accepts an ES request and returns a promise of search results.
  * Production code passes esSearch; tests pass a mock.
+ *
+ * @param request - Elasticsearch search request
+ * @returns Promise resolving to thread search response
  */
 export type ThreadSearchFunction = (request: EsSearchRequest) => Promise<ThreadSearchResponse>;
 
 /**
  * Input parameters for running a single thread benchmark query.
  *
- * Note: Threads don't use phase or keyStage for filtering - they span multiple.
+ * Note: Threads do not use phase or keyStage for filtering; they span multiple.
  */
 export interface RunThreadQueryInput {
+  /** The search query text. */
   readonly query: string;
+  /** Map of thread slug to expected relevance score. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
+  /** Subject slug for filtering. */
   readonly subject: AllSubjectSlug;
+  /** Category of user scenario this query represents. */
   readonly category: QueryCategory;
 }
 
 /**
  * Result of running a single thread benchmark query.
+ *
+ * Contains all IR metrics as defined in IR-METRICS.md, plus category for aggregation.
  */
 export interface ThreadQueryResult {
+  /** Category of user scenario this query represents. */
   readonly category: QueryCategory;
   readonly mrr: number;
   readonly ndcg10: number;
@@ -64,12 +78,16 @@ export interface ThreadQueryResult {
   readonly recall10: number;
   readonly latencyMs: number;
   readonly hasHit: boolean;
+  /** Actual result slugs returned by search, in rank order. */
   readonly actualResults: readonly string[];
+  /** Expected relevance map from ground truth. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
 }
 
 /**
- * Runs a single thread benchmark query and calculates metrics.
+ * Run a single thread benchmark query and calculate metrics.
+ *
+ * Builds the ES request via buildThreadRrfRequest and extracts thread_slug from results.
  *
  * @param input - Query configuration
  * @param searchFn - Search function (injected for testability)

@@ -43,19 +43,19 @@ export interface SetupOptions {
 // Connection and index listing types
 // ---------------------------------------------------------------------------
 
-/** Result of an Elasticsearch connectivity check. */
+/**
+ * Information returned by a successful Elasticsearch connectivity check.
+ *
+ * When the connection fails, the error is encoded in the `Result`
+ * wrapper as an `AdminError` — this type only represents the
+ * success case.
+ */
 export interface ConnectionStatus {
-  /** Whether the connection was successful. */
-  readonly connected: boolean;
+  /** Elasticsearch cluster name. */
+  readonly clusterName: string;
 
-  /** Elasticsearch cluster name, when connected. */
-  readonly clusterName?: string;
-
-  /** Elasticsearch version, when connected. */
-  readonly version?: string;
-
-  /** Error message, when connection failed. */
-  readonly error?: string;
+  /** Elasticsearch version string (e.g. `'8.17.0'`). */
+  readonly version: string;
 }
 
 /** Information about a single Elasticsearch index. */
@@ -74,16 +74,16 @@ export interface IndexInfo {
 // Synonym types
 // ---------------------------------------------------------------------------
 
-/** Result of a synonym-only update. */
+/**
+ * Successful result of a synonym-only update.
+ *
+ * When the update fails, the error is encoded in the `Result`
+ * wrapper as an `AdminError` — this type only represents the
+ * success case.
+ */
 export interface SynonymsResult {
-  /** Whether the update was successful. */
-  readonly success: boolean;
-
   /** Number of synonyms in the updated set. */
   readonly count: number;
-
-  /** Error message, when the update failed. */
-  readonly error?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -145,25 +145,73 @@ export interface IngestResult {
 }
 
 // ---------------------------------------------------------------------------
-// Index metadata types
+// Admin error type
 // ---------------------------------------------------------------------------
 
 /**
- * Error type for index metadata operations.
+ * Error type for all admin service operations.
  *
  * Uses a discriminated union on the `type` field for exhaustive matching.
+ * Consumers inspect `result.ok` and then narrow via `error.type`.
+ *
+ * @example
+ * ```typescript
+ * const result = await sdk.admin.setup();
+ * if (!result.ok) {
+ *   switch (result.error.type) {
+ *     case 'es_error':
+ *       console.error(`ES error (${result.error.statusCode}): ${result.error.message}`);
+ *       break;
+ *     case 'not_found':
+ *       console.error(`Not found: ${result.error.message}`);
+ *       break;
+ *     case 'mapping_error':
+ *       console.error(`Mapping: ${result.error.message}`);
+ *       break;
+ *     case 'validation_error':
+ *       console.error(`Validation: ${result.error.message}`);
+ *       break;
+ *     case 'unknown':
+ *       console.error(`Unexpected: ${result.error.message}`);
+ *       break;
+ *   }
+ * }
+ * ```
  */
-export type IndexMetaError =
-  | { readonly type: 'not_found' }
-  | { readonly type: 'network_error'; readonly message: string }
+export type AdminError =
   | {
+      /** An Elasticsearch communication or transport error. */
+      readonly type: 'es_error';
+      /** Human-readable description of the ES error. */
+      readonly message: string;
+      /** HTTP status code from Elasticsearch, when available. */
+      readonly statusCode?: number;
+    }
+  | {
+      /** The requested resource was not found in Elasticsearch. */
+      readonly type: 'not_found';
+      /** Human-readable description of what was not found. */
+      readonly message: string;
+    }
+  | {
+      /** An Elasticsearch mapping conflict or strict dynamic mapping error. */
       readonly type: 'mapping_error';
-      readonly field: string;
+      /** Human-readable description of the mapping error. */
       readonly message: string;
+      /** The field that caused the mapping error, when identifiable. */
+      readonly field?: string;
     }
   | {
+      /** The input or response failed validation. */
       readonly type: 'validation_error';
+      /** Human-readable description of the validation failure. */
       readonly message: string;
-      readonly details: string;
+      /** Detailed information about the validation failure, when available. */
+      readonly details?: string;
     }
-  | { readonly type: 'unknown'; readonly message: string };
+  | {
+      /** An error that does not fit the other categories. */
+      readonly type: 'unknown';
+      /** Human-readable description of the unexpected error. */
+      readonly message: string;
+    };

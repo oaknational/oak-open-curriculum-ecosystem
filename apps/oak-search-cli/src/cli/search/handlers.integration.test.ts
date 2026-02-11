@@ -2,11 +2,12 @@
  * Integration tests for search CLI handlers.
  *
  * Each handler receives an SDK retrieval service (mocked) and
- * validated parameters, returning structured results.
+ * validated parameters, returning Result-wrapped results.
  */
 
 import { describe, it, expect, vi } from 'vitest';
 import type { RetrievalService } from '@oaknational/oak-search-sdk';
+import { ok } from '@oaknational/result';
 import {
   handleSearchLessons,
   handleSearchUnits,
@@ -15,35 +16,43 @@ import {
   handleFetchFacets,
 } from './handlers.js';
 
-/** Create a mock retrieval service with vi.fn() for all methods. */
+/** Create a mock retrieval service returning ok() Results for all methods. */
 function createMockRetrieval(): RetrievalService {
   return {
-    searchLessons: vi.fn().mockResolvedValue({
-      scope: 'lessons',
-      results: [],
-      total: 0,
-      took: 1,
-      timedOut: false,
-    }),
-    searchUnits: vi.fn().mockResolvedValue({
-      scope: 'units',
-      results: [],
-      total: 0,
-      took: 1,
-      timedOut: false,
-    }),
-    searchSequences: vi.fn().mockResolvedValue({
-      scope: 'sequences',
-      results: [],
-      total: 0,
-      took: 1,
-      timedOut: false,
-    }),
-    suggest: vi.fn().mockResolvedValue({
-      suggestions: [],
-      cache: { version: 'v1', ttlSeconds: 300 },
-    }),
-    fetchSequenceFacets: vi.fn().mockResolvedValue({}),
+    searchLessons: vi.fn().mockResolvedValue(
+      ok({
+        scope: 'lessons',
+        results: [],
+        total: 0,
+        took: 1,
+        timedOut: false,
+      }),
+    ),
+    searchUnits: vi.fn().mockResolvedValue(
+      ok({
+        scope: 'units',
+        results: [],
+        total: 0,
+        took: 1,
+        timedOut: false,
+      }),
+    ),
+    searchSequences: vi.fn().mockResolvedValue(
+      ok({
+        scope: 'sequences',
+        results: [],
+        total: 0,
+        took: 1,
+        timedOut: false,
+      }),
+    ),
+    suggest: vi.fn().mockResolvedValue(
+      ok({
+        suggestions: [],
+        cache: { version: 'v1', ttlSeconds: 300 },
+      }),
+    ),
+    fetchSequenceFacets: vi.fn().mockResolvedValue(ok({})),
   };
 }
 
@@ -66,18 +75,21 @@ describe('handleSearchLessons', () => {
     });
   });
 
-  it('returns the search result from the retrieval service', async () => {
+  it('returns ok with the search result from the retrieval service', async () => {
     const retrieval = createMockRetrieval();
 
     const result = await handleSearchLessons(retrieval, { text: 'fractions' });
 
-    expect(result).toEqual({
-      scope: 'lessons',
-      results: [],
-      total: 0,
-      took: 1,
-      timedOut: false,
-    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual({
+        scope: 'lessons',
+        results: [],
+        total: 0,
+        took: 1,
+        timedOut: false,
+      });
+    }
   });
 });
 

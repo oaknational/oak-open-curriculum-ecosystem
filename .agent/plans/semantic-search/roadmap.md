@@ -1,6 +1,6 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **SDK + CLI Complete** — Result pattern + TSDoc (E2) next, then MCP integration  
+**Status**: 🔄 **SDK + CLI + Result Pattern + TSDoc Complete** — MCP integration (F) next  
 **Last Updated**: 2026-02-11  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
@@ -11,7 +11,7 @@
 
 ## Current State
 
-SDK extraction and CLI wiring are complete. All three SDK services (retrieval, admin, observability) are implemented in `packages/sdks/oak-search-sdk/` with 34 tests. The CLI workspace has been renamed to `apps/oak-search-cli/` with all subcommands wired to SDK services (934 tests, 82 test files). A directive review identified that all services must use the Result pattern and comprehensive TSDoc. Next: Checkpoint E2 (Result + TSDoc), then Checkpoint F (MCP integration).
+SDK extraction, CLI wiring, Result pattern, and TSDoc are all complete. All three SDK services (retrieval, admin, observability) return `Result<T, E>` and are fully documented. The SDK has 34 tests; the CLI has 934 tests (82 test files). The full quality gate chain passes (clean through smoke:dev:stub). Next: Checkpoint F (MCP integration).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -33,9 +33,10 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-
 2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
    a. Service extraction (A–D)                   ✅ COMPLETE
    b. CLI rename + wiring (E)                    ✅ COMPLETE
-   c. Result pattern + TSDoc (E2)                ← NEXT
+   c. TSDoc compliance fix (tag correctness)     ✅ COMPLETE
+   d. Result pattern + TSDoc annotations (E2)    ✅ COMPLETE
          ↓
-3. MCP Integration (post-sdk/mcp-integration/)
+3. MCP Integration (post-sdk/mcp-integration/)       ← NEXT
    Wire hybrid search into MCP tools (Checkpoint F)
          ↓
 4. Search Enhancements (post-sdk/search-quality/)
@@ -93,20 +94,18 @@ current workspace as the CLI.
 - Factory: `createSearchSdk({ deps, config }) -> SearchSdk`
 - Evaluation rewired to use SDK retrieval code paths
 
-**Remaining**: Checkpoint E2 (Result pattern + TSDoc),
-then Checkpoint F (MCP integration wiring).
-
 | What | From | To |
 |------|------|-----|
 | SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` ✅ |
 | CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` ✅ |
-| Result pattern + TSDoc | Throws on failure | `Result<T, E>` everywhere 📋 |
+| TSDoc compliance fix | Non-standard tags everywhere | Tags correct at source, `eslint-plugin-tsdoc` enforced ✅ |
+| Result pattern + TSDoc annotations | Throws on failure, sparse docs | `Result<T, E>` everywhere + comprehensive TSDoc ✅ |
 
 ---
 
 ## Phase 3: MCP Integration
 
-**Status**: 📋 Ready to start (SDK + CLI complete)  
+**Status**: 📋 Ready to start (SDK + CLI + Result pattern + TSDoc complete)  
 **Location**: [post-sdk/mcp-integration/](post-sdk/mcp-integration/)
 
 **Goal**: Wire hybrid search into MCP tools — first consumer of SDK.

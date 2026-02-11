@@ -6,6 +6,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { ok } from '@oaknational/result';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
 import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -52,7 +53,7 @@ describe('runQuery', () => {
       took: 1,
       timedOut: false,
     };
-    return vi.fn().mockResolvedValue(result);
+    return vi.fn().mockResolvedValue(ok(result));
   }
 
   describe('category field', () => {

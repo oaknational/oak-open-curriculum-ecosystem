@@ -31,14 +31,23 @@ import {
   handleFetchFacets,
 } from './handlers.js';
 
-/** Common CLI option shape for commands with subject + key stage + size. */
+/**
+ * Common CLI option shape for commands with subject, key stage, and size.
+ *
+ * Used by lessons, units, and suggest commands.
+ */
 interface SubjectKeyStageOpts {
   readonly subject?: string;
   readonly keyStage?: string;
   readonly size: string;
 }
 
-/** Register the `search lessons` subcommand. */
+/**
+ * Register the `search lessons` subcommand.
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerLessonsCmd(parent: Command): void {
   parent
     .command('lessons')
@@ -56,7 +65,12 @@ function registerLessonsCmd(parent: Command): void {
           keyStage: validateKeyStage(opts.keyStage),
           size: parseInt(opts.size, 10),
         });
-        printJson(result);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printJson(result.value);
       } catch (error) {
         printError(error instanceof Error ? error.message : String(error));
         process.exitCode = 1;
@@ -64,7 +78,12 @@ function registerLessonsCmd(parent: Command): void {
     });
 }
 
-/** Register the `search units` subcommand. */
+/**
+ * Register the `search units` subcommand.
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerUnitsCmd(parent: Command): void {
   parent
     .command('units')
@@ -82,7 +101,12 @@ function registerUnitsCmd(parent: Command): void {
           keyStage: validateKeyStage(opts.keyStage),
           size: parseInt(opts.size, 10),
         });
-        printJson(result);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printJson(result.value);
       } catch (error) {
         printError(error instanceof Error ? error.message : String(error));
         process.exitCode = 1;
@@ -90,7 +114,12 @@ function registerUnitsCmd(parent: Command): void {
     });
 }
 
-/** Register the `search sequences` subcommand. */
+/**
+ * Register the `search sequences` subcommand.
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerSequencesCmd(parent: Command): void {
   parent
     .command('sequences')
@@ -106,7 +135,12 @@ function registerSequencesCmd(parent: Command): void {
           subject: validateSubject(opts.subject),
           size: parseInt(opts.size, 10),
         });
-        printJson(result);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printJson(result.value);
       } catch (error) {
         printError(error instanceof Error ? error.message : String(error));
         process.exitCode = 1;
@@ -114,7 +148,12 @@ function registerSequencesCmd(parent: Command): void {
     });
 }
 
-/** Register the `search suggest` subcommand. */
+/**
+ * Register the `search suggest` subcommand.
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerSuggestCmd(parent: Command): void {
   parent
     .command('suggest')
@@ -133,7 +172,12 @@ function registerSuggestCmd(parent: Command): void {
             subject: validateSubject(opts.subject),
             keyStage: validateKeyStage(opts.keyStage),
           });
-          printJson(result);
+          if (!result.ok) {
+            printError(`${result.error.type}: ${result.error.message}`);
+            process.exitCode = 1;
+            return;
+          }
+          printJson(result.value);
         } catch (error) {
           printError(error instanceof Error ? error.message : String(error));
           process.exitCode = 1;
@@ -142,7 +186,12 @@ function registerSuggestCmd(parent: Command): void {
     );
 }
 
-/** Register the `search facets` subcommand. */
+/**
+ * Register the `search facets` subcommand.
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerFacetsCmd(parent: Command): void {
   parent
     .command('facets')
@@ -156,7 +205,12 @@ function registerFacetsCmd(parent: Command): void {
           subject: validateSubject(opts.subject),
           keyStage: validateKeyStage(opts.keyStage),
         });
-        printJson(result);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printJson(result.value);
       } catch (error) {
         printError(error instanceof Error ? error.message : String(error));
         process.exitCode = 1;
@@ -168,6 +222,12 @@ function registerFacetsCmd(parent: Command): void {
  * Create the `search` subcommand group.
  *
  * @returns A Commander `Command` with search subcommands registered
+ *
+ * @example
+ * ```typescript
+ * const program = new Command();
+ * program.addCommand(searchCommand());
+ * ```
  */
 export function searchCommand(): Command {
   const cmd = new Command('search').description('Query lessons, units, sequences, and suggestions');

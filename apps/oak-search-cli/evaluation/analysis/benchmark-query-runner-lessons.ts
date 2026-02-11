@@ -10,6 +10,7 @@
  */
 
 import { isSubject, type AllSubjectSlug, type KeyStage } from '@oaknational/oak-curriculum-sdk';
+import type { Result } from '@oaknational/result';
 import type { SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
@@ -20,16 +21,25 @@ import {
   calculateRecallAtK,
 } from '../../src/lib/search-quality/metrics.js';
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
-import type { SearchLessonsParams, LessonsSearchResult } from '@oaknational/oak-search-sdk';
+import type {
+  SearchLessonsParams,
+  LessonsSearchResult,
+  RetrievalError,
+} from '@oaknational/oak-search-sdk';
 
 /**
  * Search function type for dependency injection.
  *
- * Accepts SDK search parameters and returns SDK results.
- * Production code passes `sdk.retrieval.searchLessons`;
- * tests pass a mock.
+ * Accepts SDK search parameters and returns a `Result` containing
+ * the search results or an error. Production code passes
+ * `sdk.retrieval.searchLessons`; tests pass a mock.
+ *
+ * @param params - SDK search parameters for lesson search
+ * @returns Promise resolving to Result with lesson search results or error
  */
-export type SearchFunction = (params: SearchLessonsParams) => Promise<LessonsSearchResult>;
+export type SearchFunction = (
+  params: SearchLessonsParams,
+) => Promise<Result<LessonsSearchResult, RetrievalError>>;
 
 /**
  * Input parameters for running a single benchmark query.
@@ -72,7 +82,29 @@ export interface QueryResult {
 }
 
 /**
- * Runs a single benchmark query and calculates metrics.
+ * Calculate all IR metrics for a single benchmark query.
+ *
+ * Computes MRR, NDCG\@10, Precision\@3, and Recall\@10 by comparing
+ * the actual search results against the expected relevance judgements.
+ *
+ * @param actualResults - Ordered list of lesson slugs returned by search
+ * @param expectedRelevance - Ground truth relevance map (slug to grade)
+ * @returns Object with mrr, ndcg10, precision3, and recall10 scores
+ */
+function calculateBenchmarkMetrics(
+  actualResults: readonly string[],
+  expectedRelevance: Readonly<Record<string, number>>,
+): { mrr: number; ndcg10: number; precision3: number; recall10: number } {
+  return {
+    mrr: calculateMRR(actualResults, expectedRelevance),
+    ndcg10: calculateNDCG(actualResults, expectedRelevance, 10),
+    precision3: calculatePrecisionAtK(actualResults, expectedRelevance, 3),
+    recall10: calculateRecallAtK(actualResults, expectedRelevance, 10),
+  };
+}
+
+/**
+ * Run a single benchmark query and calculate metrics.
  *
  * Uses the SDK retrieval service to execute the search, ensuring
  * benchmarks use the same RRF query building, search execution,
@@ -100,7 +132,7 @@ export async function runQuery(
   const start = performance.now();
 
   // Build SDK params from benchmark input.
-  // Map AllSubjectSlug → SearchSubjectSlug: KS4 science variants
+  // Map AllSubjectSlug to SearchSubjectSlug: KS4 science variants
   // (physics, chemistry, biology, combined-science) map to parent 'science'
   // because the SDK subject filter accepts canonical subjects only.
   const subject: SearchSubjectSlug = isSubject(input.subject) ? input.subject : 'science';
@@ -114,27 +146,21 @@ export async function runQuery(
 
   // Execute search via injected SDK function
   const result = await searchFn(sdkParams);
+  if (!result.ok) {
+    throw new Error(
+      `Benchmark search failed for query "${input.query}": ${result.error.type}: ${result.error.message}`,
+    );
+  }
   const latencyMs = performance.now() - start;
 
-  // Extract slugs from SDK results
-  const actualResults = result.results.map((r) => r.lesson.lesson_slug);
-  const expectedSlugs = typeSafeKeys(input.expectedRelevance);
-
-  // Calculate all metrics
-  const relevanceMap = input.expectedRelevance;
-  const mrr = calculateMRR(actualResults, relevanceMap);
-  const ndcg10 = calculateNDCG(actualResults, relevanceMap, 10);
-  const precision3 = calculatePrecisionAtK(actualResults, relevanceMap, 3);
-  const recall10 = calculateRecallAtK(actualResults, relevanceMap, 10);
+  const actualResults = result.value.results.map((r) => r.lesson.lesson_slug);
+  const metrics = calculateBenchmarkMetrics(actualResults, input.expectedRelevance);
 
   return {
     category: input.category,
-    mrr,
-    ndcg10,
-    precision3,
-    recall10,
+    ...metrics,
     latencyMs,
-    hasHit: actualResults.some((slug) => expectedSlugs.includes(slug)),
+    hasHit: actualResults.some((slug) => typeSafeKeys(input.expectedRelevance).includes(slug)),
     actualResults,
     expectedRelevance: input.expectedRelevance,
   };

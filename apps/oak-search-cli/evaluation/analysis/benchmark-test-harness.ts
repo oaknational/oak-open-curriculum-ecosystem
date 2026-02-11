@@ -9,6 +9,7 @@
  * @see ADR-078 Dependency Injection for Testability
  */
 
+import { ok } from '@oaknational/result';
 import type { SearchFunction } from './benchmark-query-runner-lessons.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
 import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -48,7 +49,7 @@ function stubResult(slug: string): LessonResult {
  * Returns a fixed set of lesson slugs that will produce predictable metrics.
  * The slugs are designed to match common ground truth expectations.
  */
-const fakeSearchAdapter: SearchFunction = (): Promise<LessonsSearchResult> => {
+const fakeSearchAdapter: SearchFunction = () => {
   const fakeSlugs = [
     'adding-within-10-6',
     'subtracting-within-10-6',
@@ -57,13 +58,15 @@ const fakeSearchAdapter: SearchFunction = (): Promise<LessonsSearchResult> => {
     'place-value-ones-and-tens',
   ];
 
-  return Promise.resolve({
+  const result: LessonsSearchResult = {
     scope: 'lessons',
     results: fakeSlugs.map(stubResult),
     total: fakeSlugs.length,
     took: 1,
     timedOut: false,
-  });
+  };
+
+  return Promise.resolve(ok(result));
 };
 
 runBenchmark(fakeSearchAdapter).catch((error: unknown) => {

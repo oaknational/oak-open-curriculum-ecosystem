@@ -12,6 +12,7 @@ import chalk from 'chalk';
  * Print a success message to stdout.
  *
  * @param message - The success message to display
+ * @returns void
  */
 export function printSuccess(message: string): void {
   console.log(chalk.green(`✓ ${message}`));
@@ -21,6 +22,7 @@ export function printSuccess(message: string): void {
  * Print an error message to stderr.
  *
  * @param message - The error message to display
+ * @returns void
  */
 export function printError(message: string): void {
   console.error(chalk.red(`✗ ${message}`));
@@ -30,6 +32,7 @@ export function printError(message: string): void {
  * Print an informational message to stdout.
  *
  * @param message - The info message to display
+ * @returns void
  */
 export function printInfo(message: string): void {
   console.log(chalk.blue(`ℹ ${message}`));
@@ -39,6 +42,7 @@ export function printInfo(message: string): void {
  * Print a warning message to stderr.
  *
  * @param message - The warning message to display
+ * @returns void
  */
 export function printWarning(message: string): void {
   console.error(chalk.yellow(`⚠ ${message}`));
@@ -48,6 +52,7 @@ export function printWarning(message: string): void {
  * Print data as formatted JSON to stdout.
  *
  * @param data - The data to serialise and print
+ * @returns void
  */
 export function printJson(data: unknown): void {
   console.log(JSON.stringify(data, null, 2));
@@ -57,6 +62,7 @@ export function printJson(data: unknown): void {
  * Print a section header for grouping related output.
  *
  * @param title - The section title
+ * @returns void
  */
 export function printHeader(title: string): void {
   console.log(`\n${chalk.bold(title)}`);

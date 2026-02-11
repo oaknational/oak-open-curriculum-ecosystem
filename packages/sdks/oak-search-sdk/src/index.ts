@@ -49,6 +49,7 @@ export type {
   CreateSearchSdkFn,
   // Retrieval service interface and types
   RetrievalService,
+  RetrievalError,
   SearchParamsBase,
   SearchLessonsParams,
   SearchUnitsParams,
@@ -65,6 +66,7 @@ export type {
   SuggestionResponse,
   // Admin service interface and types
   AdminService,
+  AdminError,
   IndexSetupResult,
   SetupResult,
   SetupOptions,
@@ -73,9 +75,9 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
-  IndexMetaError,
   // Observability service interface and types
   ObservabilityService,
+  ObservabilityError,
   ZeroHitPayload,
   TelemetryFetchOptions,
 } from './types/index.js';

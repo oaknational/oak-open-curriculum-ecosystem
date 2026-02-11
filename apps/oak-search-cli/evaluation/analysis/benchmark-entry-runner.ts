@@ -22,13 +22,16 @@ import {
 import { aggregateByCategory, type CategoryResult } from './benchmark-stats.js';
 
 /**
- * A ground truth entry for benchmarking.
+ * Ground truth entry for benchmarking.
  *
  * Uses AllSubjectSlug to support both archive (Subject) and foundational (AllSubjectSlug) ground truths.
  */
 export interface GroundTruthEntry {
+  /** Subject slug for this entry. */
   readonly subject: AllSubjectSlug;
+  /** Phase (e.g. primary, secondary). */
   readonly phase: Phase;
+  /** Ground truth queries to run for this entry. */
   readonly queries: readonly GroundTruthQuery[];
 }
 
@@ -42,7 +45,7 @@ export type { QueryResult } from './benchmark-query-runner-lessons.js';
  * Result of benchmarking a single ground truth entry.
  *
  * Contains all IR metrics as defined in IR-METRICS.md:
- * - MRR, NDCG@10, Precision@3, Recall@10, Zero-hit rate, Latency
+ * - MRR, NDCG\@10, Precision\@3, Recall\@10, Zero-hit rate, Latency
  *
  * Also includes per-category breakdown for granular analysis.
  *
@@ -51,15 +54,21 @@ export type { QueryResult } from './benchmark-query-runner-lessons.js';
  * from baseline comparison.
  */
 export interface EntryBenchmarkResult {
+  /** Subject slug for this entry. */
   readonly subject: AllSubjectSlug;
+  /** Phase (e.g. primary, secondary). */
   readonly phase: Phase;
+  /** Number of queries (excludes future-intent). */
   readonly queryCount: number;
   readonly mrr: number;
   readonly ndcg10: number;
   readonly precision3: number;
   readonly recall10: number;
+  /** Fraction of queries with no relevant results in top 10. */
   readonly zeroHitRate: number;
+  /** Mean latency in milliseconds. */
   readonly avgLatencyMs: number;
+  /** Per-query latency values. */
   readonly latencies: readonly number[];
   /** Per-category metric breakdown for granular analysis. */
   readonly perCategory: readonly CategoryResult[];
@@ -68,8 +77,12 @@ export interface EntryBenchmarkResult {
 /**
  * Aggregate query results into entry-level metrics.
  *
- * NOTE: future-intent queries are EXCLUDED from aggregate statistics
- * but included in perCategory for separate reporting.
+ * Excludes future-intent queries from aggregate statistics but includes
+ * them in perCategory for separate reporting.
+ *
+ * @param entry - Ground truth entry for context
+ * @param results - Query results to aggregate
+ * @returns Aggregated benchmark result for the entry
  */
 function aggregateResults(
   entry: GroundTruthEntry,
@@ -111,7 +124,13 @@ function aggregateResults(
   };
 }
 
-/** Create a zero-result QueryResult for error cases. */
+/**
+ * Create a zero-result QueryResult for error cases.
+ *
+ * @param category - Query category for the error result
+ * @param expectedRelevance - Expected relevance map (defaults to empty)
+ * @returns Query result with all metrics set to zero
+ */
 function createErrorResult(
   category: QueryCategory,
   expectedRelevance: Readonly<Record<string, number>> = {},
@@ -133,12 +152,14 @@ function createErrorResult(
  * Detailed result for review mode, pairing query with its result.
  */
 export interface ReviewQueryResult {
+  /** The ground truth query that was run. */
   readonly query: GroundTruthEntry['queries'][number];
+  /** The query result with metrics and actual results. */
   readonly result: QueryResult;
 }
 
 /**
- * Runs benchmark for a single ground truth entry.
+ * Run benchmark for a single ground truth entry.
  *
  * Shows per-query progress with MRR status.
  *
@@ -179,7 +200,7 @@ export async function benchmarkEntry(
 }
 
 /**
- * Runs benchmark in review mode, returning detailed per-query results.
+ * Run benchmark in review mode, returning detailed per-query results.
  *
  * Provides all metrics per query plus actual results for comparison.
  * Used by `pnpm benchmark --review` mode.

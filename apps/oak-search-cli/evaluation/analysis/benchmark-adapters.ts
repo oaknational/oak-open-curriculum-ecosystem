@@ -1,17 +1,14 @@
-/* eslint max-lines: [error, 275] -- Multi-index ground truth adapters for units, threads, sequences */
 /**
  * Adapters for converting between ground truth formats.
  *
- * Converts from the LessonGroundTruth format to the benchmark's
- * GroundTruthEntry format used by the benchmark entry runner.
+ * Converts from the per-scope ground truth types (Lesson, Unit,
+ * Thread, Sequence) to the benchmark's GroundTruthEntry format
+ * used by the benchmark entry runner.
  *
- * Supports multiple index types:
- * - Lessons (LessonGroundTruth)
- * - Units (UnitGroundTruth)
- * - Threads (ThreadGroundTruth)
- * - Sequences (SequenceGroundTruth)
+ * Uses a generic grouping function to eliminate per-scope duplication.
  */
 
+import type { AllSubjectSlug, KeyStage } from '@oaknational/oak-curriculum-sdk';
 import {
   LESSON_GROUND_TRUTHS,
   type LessonGroundTruth,
@@ -29,16 +26,33 @@ import {
   type SequenceGroundTruth,
 } from '../../src/lib/search-quality/ground-truth/sequences/index.js';
 import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
+import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type { GroundTruthEntry } from './benchmark-entry-runner.js';
 
-// =============================================================================
-// Lesson Adapters (existing)
-// =============================================================================
+/**
+ * Common fields shared by all ground truth types.
+ *
+ * Every scope-specific ground truth (Lesson, Unit, Thread, Sequence)
+ * has these fields. The generic adapter functions operate on this shape.
+ */
+interface GroundTruthBase {
+  readonly subject: AllSubjectSlug;
+  readonly query: string;
+  readonly expectedRelevance: Readonly<Record<string, number>>;
+  readonly description: string;
+  readonly keyStage?: KeyStage;
+}
 
 /**
- * Convert LessonGroundTruth to GroundTruthQuery format.
+ * Convert any ground truth entry to a GroundTruthQuery.
+ *
+ * Maps the common fields and defaults category to 'basic'.
+ * The `keyStage` field is passed through when present.
+ *
+ * @param gt - Any ground truth entry with the base fields
+ * @returns Ground truth query for the benchmark entry runner
  */
-function lessonToGroundTruthQuery(gt: LessonGroundTruth): GroundTruthQuery {
+function toGroundTruthQuery(gt: GroundTruthBase): GroundTruthQuery {
   return {
     query: gt.query,
     expectedRelevance: gt.expectedRelevance,
@@ -49,31 +63,39 @@ function lessonToGroundTruthQuery(gt: LessonGroundTruth): GroundTruthQuery {
 }
 
 /**
- * Convert LessonGroundTruth entries to GroundTruthEntry format.
+ * Group ground truth entries by subject and phase.
  *
- * Groups by subject/phase and converts each to a query.
+ * Collects ground truth entries into GroundTruthEntry groups,
+ * where each group shares a subject and phase. The grouping key
+ * and phase extraction are provided as callbacks to handle
+ * scope-specific differences (e.g. threads default to 'secondary').
+ *
+ * @param groundTruths - Array of ground truth entries to group
+ * @param groupKey - Derives the grouping key from an entry
+ * @param groupPhase - Derives the phase from an entry
+ * @returns Ground truth entries grouped by subject and phase
  */
-function convertLessonsToEntries(
-  groundTruths: readonly LessonGroundTruth[],
+function groupEntries<T extends GroundTruthBase>(
+  groundTruths: readonly T[],
+  groupKey: (gt: T) => string,
+  groupPhase: (gt: T) => Phase,
 ): readonly GroundTruthEntry[] {
   const entriesMap = new Map<string, GroundTruthEntry>();
 
   for (const gt of groundTruths) {
-    const key = `${gt.subject}-${gt.phase}`;
+    const key = groupKey(gt);
     const existing = entriesMap.get(key);
 
     if (existing) {
-      // Add query to existing entry
       entriesMap.set(key, {
         ...existing,
-        queries: [...existing.queries, lessonToGroundTruthQuery(gt)],
+        queries: [...existing.queries, toGroundTruthQuery(gt)],
       });
     } else {
-      // Create new entry
       entriesMap.set(key, {
         subject: gt.subject,
-        phase: gt.phase,
-        queries: [lessonToGroundTruthQuery(gt)],
+        phase: groupPhase(gt),
+        queries: [toGroundTruthQuery(gt)],
       });
     }
   }
@@ -83,177 +105,56 @@ function convertLessonsToEntries(
 
 /**
  * Get all lesson ground truth entries for benchmarking.
+ *
+ * @returns Ground truth entries for lesson benchmarks, grouped by subject/phase
  */
 export function getLessonGroundTruthEntries(): readonly GroundTruthEntry[] {
-  return convertLessonsToEntries(LESSON_GROUND_TRUTHS);
-}
-
-// =============================================================================
-// Unit Adapters
-// =============================================================================
-
-/**
- * Convert UnitGroundTruth to GroundTruthQuery format.
- */
-function unitToGroundTruthQuery(gt: UnitGroundTruth): GroundTruthQuery {
-  return {
-    query: gt.query,
-    expectedRelevance: gt.expectedRelevance,
-    category: 'basic',
-    description: gt.description,
-    keyStage: gt.keyStage,
-  };
+  return groupEntries(
+    LESSON_GROUND_TRUTHS,
+    (gt: LessonGroundTruth) => `${gt.subject}-${gt.phase}`,
+    (gt: LessonGroundTruth) => gt.phase,
+  );
 }
 
 /**
- * Convert UnitGroundTruth entries to GroundTruthEntry format.
+ * Get all unit ground truth entries for benchmarking.
  *
- * Groups by subject/phase and converts each to a query.
- */
-function convertUnitsToEntries(
-  groundTruths: readonly UnitGroundTruth[],
-): readonly GroundTruthEntry[] {
-  const entriesMap = new Map<string, GroundTruthEntry>();
-
-  for (const gt of groundTruths) {
-    const key = `${gt.subject}-${gt.phase}`;
-    const existing = entriesMap.get(key);
-
-    if (existing) {
-      entriesMap.set(key, {
-        ...existing,
-        queries: [...existing.queries, unitToGroundTruthQuery(gt)],
-      });
-    } else {
-      entriesMap.set(key, {
-        subject: gt.subject,
-        phase: gt.phase,
-        queries: [unitToGroundTruthQuery(gt)],
-      });
-    }
-  }
-
-  return Array.from(entriesMap.values());
-}
-
-/**
- * Get all ground truth entries from the unit ground truths.
+ * @returns Ground truth entries for unit benchmarks, grouped by subject/phase
  */
 export function getUnitGroundTruthEntries(): readonly GroundTruthEntry[] {
-  return convertUnitsToEntries(UNIT_GROUND_TRUTHS);
+  return groupEntries(
+    UNIT_GROUND_TRUTHS,
+    (gt: UnitGroundTruth) => `${gt.subject}-${gt.phase}`,
+    (gt: UnitGroundTruth) => gt.phase,
+  );
 }
 
-// =============================================================================
-// Thread Adapters
-// =============================================================================
-
 /**
- * Convert ThreadGroundTruth to GroundTruthQuery format.
+ * Get all thread ground truth entries for benchmarking.
  *
- * Note: Threads don't have keyStage as they span multiple key stages.
- */
-function threadToGroundTruthQuery(gt: ThreadGroundTruth): GroundTruthQuery {
-  return {
-    query: gt.query,
-    expectedRelevance: gt.expectedRelevance,
-    category: 'basic',
-    description: gt.description,
-    // Threads don't have keyStage - they span multiple key stages
-  };
-}
-
-/**
- * Convert ThreadGroundTruth entries to GroundTruthEntry format.
+ * Threads span multiple key stages, so they are grouped by subject
+ * only. Phase defaults to 'secondary' because threads primarily
+ * serve secondary curriculum progressions.
  *
- * Groups by subject (threads don't have phase, so we use 'secondary' as default).
- */
-function convertThreadsToEntries(
-  groundTruths: readonly ThreadGroundTruth[],
-): readonly GroundTruthEntry[] {
-  const entriesMap = new Map<string, GroundTruthEntry>();
-
-  for (const gt of groundTruths) {
-    // Threads primarily serve secondary curriculum progressions
-    const key = `${gt.subject}-threads`;
-    const existing = entriesMap.get(key);
-
-    if (existing) {
-      entriesMap.set(key, {
-        ...existing,
-        queries: [...existing.queries, threadToGroundTruthQuery(gt)],
-      });
-    } else {
-      entriesMap.set(key, {
-        subject: gt.subject,
-        phase: 'secondary', // Default phase for threads
-        queries: [threadToGroundTruthQuery(gt)],
-      });
-    }
-  }
-
-  return Array.from(entriesMap.values());
-}
-
-/**
- * Get all ground truth entries from the thread ground truths.
+ * @returns Ground truth entries for thread benchmarks, grouped by subject
  */
 export function getThreadGroundTruthEntries(): readonly GroundTruthEntry[] {
-  return convertThreadsToEntries(THREAD_GROUND_TRUTHS);
+  return groupEntries(
+    THREAD_GROUND_TRUTHS,
+    (gt: ThreadGroundTruth) => `${gt.subject}-threads`,
+    () => 'secondary',
+  );
 }
 
-// =============================================================================
-// Sequence Adapters
-// =============================================================================
-
 /**
- * Convert SequenceGroundTruth to GroundTruthQuery format.
+ * Get all sequence ground truth entries for benchmarking.
  *
- * Note: Sequences don't have keyStage in the traditional sense.
- */
-function sequenceToGroundTruthQuery(gt: SequenceGroundTruth): GroundTruthQuery {
-  return {
-    query: gt.query,
-    expectedRelevance: gt.expectedRelevance,
-    category: 'basic',
-    description: gt.description,
-    // Sequences don't use keyStage filtering
-  };
-}
-
-/**
- * Convert SequenceGroundTruth entries to GroundTruthEntry format.
- *
- * Groups by subject/phase and converts each to a query.
- */
-function convertSequencesToEntries(
-  groundTruths: readonly SequenceGroundTruth[],
-): readonly GroundTruthEntry[] {
-  const entriesMap = new Map<string, GroundTruthEntry>();
-
-  for (const gt of groundTruths) {
-    const key = `${gt.subject}-${gt.phase}`;
-    const existing = entriesMap.get(key);
-
-    if (existing) {
-      entriesMap.set(key, {
-        ...existing,
-        queries: [...existing.queries, sequenceToGroundTruthQuery(gt)],
-      });
-    } else {
-      entriesMap.set(key, {
-        subject: gt.subject,
-        phase: gt.phase,
-        queries: [sequenceToGroundTruthQuery(gt)],
-      });
-    }
-  }
-
-  return Array.from(entriesMap.values());
-}
-
-/**
- * Get all ground truth entries from the sequence ground truths.
+ * @returns Ground truth entries for sequence benchmarks, grouped by subject/phase
  */
 export function getSequenceGroundTruthEntries(): readonly GroundTruthEntry[] {
-  return convertSequencesToEntries(SEQUENCE_GROUND_TRUTHS);
+  return groupEntries(
+    SEQUENCE_GROUND_TRUTHS,
+    (gt: SequenceGroundTruth) => `${gt.subject}-${gt.phase}`,
+    (gt: SequenceGroundTruth) => gt.phase,
+  );
 }

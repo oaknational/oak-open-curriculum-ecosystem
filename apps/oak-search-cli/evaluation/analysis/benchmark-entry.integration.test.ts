@@ -14,6 +14,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { ok } from '@oaknational/result';
 import { benchmarkEntry, type SearchFunction } from './benchmark-entry-runner.js';
 import type { GroundTruthEntry } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
@@ -63,7 +64,7 @@ function buildMockResult(slugs: readonly string[]): LessonsSearchResult {
  * in SDK LessonsSearchResult format.
  */
 function createMockSearchFn(slugs: readonly string[]): SearchFunction {
-  return vi.fn().mockResolvedValue(buildMockResult(slugs));
+  return vi.fn().mockResolvedValue(ok(buildMockResult(slugs)));
 }
 
 /**
@@ -76,7 +77,7 @@ function createSequentialMockSearchFn(
   return vi.fn().mockImplementation(() => {
     const slugs = slugSequence[callIndex] ?? [];
     callIndex++;
-    return Promise.resolve(buildMockResult(slugs));
+    return Promise.resolve(ok(buildMockResult(slugs)));
   });
 }
 

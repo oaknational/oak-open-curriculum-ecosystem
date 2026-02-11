@@ -8,6 +8,7 @@
  * @see ADR-078 Dependency Injection for Testability
  */
 
+import type { Result } from '@oaknational/result';
 import type { Phase } from '../../src/lib/search-quality/ground-truth-archive/registry/index.js';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import {
@@ -17,35 +18,50 @@ import {
   calculateRecallAtK,
 } from '../../src/lib/search-quality/metrics.js';
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
-import type { SearchSequencesParams, SequencesSearchResult } from '@oaknational/oak-search-sdk';
+import type {
+  SearchSequencesParams,
+  SequencesSearchResult,
+  RetrievalError,
+} from '@oaknational/oak-search-sdk';
 import type { SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 /**
  * Sequence search function type for dependency injection.
  *
- * Accepts SDK search parameters and returns SDK results.
- * Production code passes `sdk.retrieval.searchSequences`;
- * tests pass a mock.
+ * Accepts SDK search parameters and returns a `Result` containing
+ * the search results or an error. Production code passes
+ * `sdk.retrieval.searchSequences`; tests pass a mock.
+ *
+ * @param params - SDK search parameters for sequence search
+ * @returns Promise resolving to Result with sequence search results or error
  */
 export type SequenceSearchFunction = (
   params: SearchSequencesParams,
-) => Promise<SequencesSearchResult>;
+) => Promise<Result<SequencesSearchResult, RetrievalError>>;
 
 /**
  * Input parameters for running a single sequence benchmark query.
  */
 export interface RunSequenceQueryInput {
+  /** The search query text. */
   readonly query: string;
+  /** Map of sequence slug to expected relevance score. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
+  /** Subject slug for filtering. */
   readonly subject: SearchSubjectSlug;
+  /** Phase (e.g. primary, secondary). */
   readonly phase: Phase;
+  /** Category of user scenario this query represents. */
   readonly category: QueryCategory;
 }
 
 /**
  * Result of running a single sequence benchmark query.
+ *
+ * Contains all IR metrics as defined in IR-METRICS.md, plus category for aggregation.
  */
 export interface SequenceQueryResult {
+  /** Category of user scenario this query represents. */
   readonly category: QueryCategory;
   readonly mrr: number;
   readonly ndcg10: number;
@@ -53,12 +69,17 @@ export interface SequenceQueryResult {
   readonly recall10: number;
   readonly latencyMs: number;
   readonly hasHit: boolean;
+  /** Actual result slugs returned by search, in rank order. */
   readonly actualResults: readonly string[];
+  /** Expected relevance map from ground truth. */
   readonly expectedRelevance: Readonly<Record<string, number>>;
 }
 
 /**
- * Runs a single sequence benchmark query and calculates metrics.
+ * Run a single sequence benchmark query and calculate metrics.
+ *
+ * Uses the SDK retrieval service to execute the search, ensuring
+ * benchmarks use the same code paths as production consumers.
  *
  * @param input - Query configuration
  * @param searchFn - SDK search function (injected for testability)
@@ -80,10 +101,15 @@ export async function runSequenceQuery(
 
   // Execute search via injected SDK function
   const result = await searchFn(sdkParams);
+  if (!result.ok) {
+    throw new Error(
+      `Benchmark sequence search failed for query "${input.query}": ${result.error.type}: ${result.error.message}`,
+    );
+  }
   const latencyMs = performance.now() - start;
 
   // Extract results - using sequence_slug from SDK results
-  const actualResults = result.results.map((r) => r.sequence.sequence_slug);
+  const actualResults = result.value.results.map((r) => r.sequence.sequence_slug);
   const expectedSlugs = typeSafeKeys(input.expectedRelevance);
 
   // Calculate all metrics

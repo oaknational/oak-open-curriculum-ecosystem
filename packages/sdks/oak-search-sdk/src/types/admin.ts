@@ -8,12 +8,13 @@
  * because many SDK consumers (e.g. MCP servers) never ingest data. Instead,
  * the `ingest()` method accepts the Oak client as a parameter.
  *
- * Types are in {@link ./admin-types}.
+ * Types are in `admin-types.ts`.
  */
 
 import type { Result } from '@oaknational/result';
 import type { IndexMetaDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type {
+  AdminError,
   SetupResult,
   SetupOptions,
   ConnectionStatus,
@@ -21,11 +22,11 @@ import type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
-  IndexMetaError,
 } from './admin-types.js';
 
 // Re-export admin types for convenience
 export type {
+  AdminError,
   IndexSetupResult,
   SetupResult,
   SetupOptions,
@@ -34,7 +35,6 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
-  IndexMetaError,
 } from './admin-types.js';
 
 /**
@@ -48,13 +48,16 @@ export type {
  * const { admin } = createSearchSdk({ deps, config });
  *
  * // Verify connection
- * const status = await admin.verifyConnection();
+ * const connResult = await admin.verifyConnection();
+ * if (connResult.ok) {
+ *   console.log(`Connected to ${connResult.value.clusterName}`);
+ * }
  *
  * // Full setup: synonyms + all indexes
- * const setup = await admin.setup({ verbose: true });
+ * const setupResult = await admin.setup({ verbose: true });
  *
  * // Ingest curriculum data
- * const result = await admin.ingest({
+ * const ingestResult = await admin.ingest({
  *   bulkDir: '/path/to/bulk-data',
  * });
  * ```
@@ -65,11 +68,13 @@ export interface AdminService {
    *
    * Creates or updates the synonym set and ensures all indexes exist
    * with the correct mappings. Safe to run repeatedly (idempotent).
+   * Per-index outcomes are encoded in the `SetupResult` data; the
+   * `Result` wrapper captures catastrophic failures.
    *
    * @param options - Optional verbose flag
-   * @returns Per-index results and synonym count
+   * @returns `ok` with per-index results and synonym count, or `err` with an `AdminError`
    */
-  setup(options?: SetupOptions): Promise<SetupResult>;
+  setup(options?: SetupOptions): Promise<Result<SetupResult, AdminError>>;
 
   /**
    * Delete and recreate all indexes with fresh mappings.
@@ -78,30 +83,33 @@ export interface AdminService {
    * development and testing, not production.
    *
    * @param options - Optional verbose flag
-   * @returns Per-index results and synonym count
+   * @returns `ok` with per-index results and synonym count, or `err` with an `AdminError`
    */
-  reset(options?: SetupOptions): Promise<SetupResult>;
+  reset(options?: SetupOptions): Promise<Result<SetupResult, AdminError>>;
 
   /**
    * Verify Elasticsearch connectivity.
    *
-   * @returns Connection status with cluster info or error
+   * On success, returns cluster name and version. On connection
+   * failure, returns an `AdminError` with the reason.
+   *
+   * @returns `ok` with cluster info, or `err` with an `AdminError`
    */
-  verifyConnection(): Promise<ConnectionStatus>;
+  verifyConnection(): Promise<Result<ConnectionStatus, AdminError>>;
 
   /**
    * List current indexes and their document counts.
    *
-   * @returns Array of index information
+   * @returns `ok` with an array of index information, or `err` with an `AdminError`
    */
-  listIndexes(): Promise<readonly IndexInfo[]>;
+  listIndexes(): Promise<Result<readonly IndexInfo[], AdminError>>;
 
   /**
    * Update the synonym set only (no index changes).
    *
-   * @returns Success status with synonym count
+   * @returns `ok` with the synonym count, or `err` with an `AdminError`
    */
-  updateSynonyms(): Promise<SynonymsResult>;
+  updateSynonyms(): Promise<Result<SynonymsResult, AdminError>>;
 
   /**
    * Run ingestion from bulk data.
@@ -111,22 +119,22 @@ export interface AdminService {
    * backoff.
    *
    * @param options - Ingestion options including bulk data path
-   * @returns Summary statistics from the ingestion run
+   * @returns `ok` with ingestion summary statistics, or `err` with an `AdminError`
    */
-  ingest(options: IngestOptions): Promise<IngestResult>;
+  ingest(options: IngestOptions): Promise<Result<IngestResult, AdminError>>;
 
   /**
    * Read current index metadata from Elasticsearch.
    *
-   * @returns The metadata document, null if not found, or an error
+   * @returns `ok` with the metadata document (or `null` if not found), or `err` with an `AdminError`
    */
-  getIndexMeta(): Promise<Result<IndexMetaDoc | null, IndexMetaError>>;
+  getIndexMeta(): Promise<Result<IndexMetaDoc | null, AdminError>>;
 
   /**
    * Write index metadata to Elasticsearch.
    *
    * @param meta - The metadata document to write
-   * @returns Success or error
+   * @returns `ok` on success, or `err` with an `AdminError`
    */
-  setIndexMeta(meta: IndexMetaDoc): Promise<Result<void, IndexMetaError>>;
+  setIndexMeta(meta: IndexMetaDoc): Promise<Result<void, AdminError>>;
 }

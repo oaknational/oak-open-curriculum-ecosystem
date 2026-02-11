@@ -9,12 +9,55 @@
  * Curriculum SDK and are re-exported, not redefined.
  */
 
+import type { Result } from '@oaknational/result';
 import type {
   ZeroHitScope,
   ZeroHitEvent,
   ZeroHitSummary,
   ZeroHitTelemetry,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
+
+// ---------------------------------------------------------------------------
+// Observability error type
+// ---------------------------------------------------------------------------
+
+/**
+ * Error type for observability service I/O operations.
+ *
+ * Uses a discriminated union on the `type` field for exhaustive matching.
+ * Only applies to methods that perform Elasticsearch I/O — sync in-memory
+ * methods (`getRecentZeroHits`, `getZeroHitSummary`) cannot fail.
+ *
+ * @example
+ * ```typescript
+ * const result = await sdk.observability.fetchTelemetry({ limit: 50 });
+ * if (!result.ok) {
+ *   switch (result.error.type) {
+ *     case 'es_error':
+ *       console.error(`ES error (${result.error.statusCode}): ${result.error.message}`);
+ *       break;
+ *     case 'unknown':
+ *       console.error(`Unexpected: ${result.error.message}`);
+ *       break;
+ *   }
+ * }
+ * ```
+ */
+export type ObservabilityError =
+  | {
+      /** An Elasticsearch communication or transport error. */
+      readonly type: 'es_error';
+      /** Human-readable description of the ES error. */
+      readonly message: string;
+      /** HTTP status code from Elasticsearch, when available. */
+      readonly statusCode?: number;
+    }
+  | {
+      /** An error that does not fit the other categories. */
+      readonly type: 'unknown';
+      /** Human-readable description of the unexpected error. */
+      readonly message: string;
+    };
 
 // ---------------------------------------------------------------------------
 // Zero-hit payload type
@@ -76,17 +119,20 @@ export interface TelemetryFetchOptions {
  * const { observability } = createSearchSdk({ deps, config });
  *
  * // Record a zero-hit event
- * await observability.recordZeroHit({
+ * const recordResult = await observability.recordZeroHit({
  *   scope: 'lessons',
  *   text: 'quantum computing ks2',
  *   filters: { subject: 'science', keyStage: 'ks2' },
  *   indexVersion: 'v2024.01.0',
  * });
+ * if (!recordResult.ok) {
+ *   console.error(`Persistence failed: ${recordResult.error.message}`);
+ * }
  *
- * // Get recent events
+ * // Get recent events (sync, cannot fail)
  * const recent = observability.getRecentZeroHits(10);
  *
- * // Get aggregated summary
+ * // Get aggregated summary (sync, cannot fail)
  * const summary = observability.getZeroHitSummary();
  * ```
  */
@@ -94,18 +140,21 @@ export interface ObservabilityService {
   /**
    * Record a zero-hit event.
    *
-   * Stores the event in the in-memory store and optionally sends
-   * a webhook notification. If persistence is enabled, also indexes
-   * the event to Elasticsearch.
+   * Stores the event in the in-memory store (always succeeds) and,
+   * when persistence is enabled, indexes it to Elasticsearch. If
+   * persistence fails, the in-memory recording still succeeds but
+   * the failure is surfaced via the `Result`.
    *
    * @param payload - The zero-hit event details
+   * @returns `ok` on success, or `err` with an `ObservabilityError` if persistence failed
    */
-  recordZeroHit(payload: ZeroHitPayload): Promise<void>;
+  recordZeroHit(payload: ZeroHitPayload): Promise<Result<void, ObservabilityError>>;
 
   /**
    * Retrieve recent zero-hit events from the in-memory store.
    *
    * Returns events in reverse chronological order (newest first).
+   * This is a synchronous, pure in-memory operation that cannot fail.
    *
    * @param limit - Maximum number of events to return. Defaults to 50.
    * @returns A readonly array of recent events
@@ -116,7 +165,8 @@ export interface ObservabilityService {
    * Get an aggregated summary of zero-hit activity.
    *
    * Summarises total count, per-scope breakdown, and the latest
-   * index version from the in-memory store.
+   * index version from the in-memory store. This is a synchronous,
+   * pure in-memory operation that cannot fail.
    *
    * @returns Aggregated zero-hit summary
    */
@@ -126,21 +176,23 @@ export interface ObservabilityService {
    * Persist a zero-hit event to Elasticsearch.
    *
    * Only operates when persistence is enabled in the SDK configuration.
-   * When disabled, this method is a no-op.
+   * When disabled, returns `ok` immediately (no-op).
    *
    * @param event - The zero-hit event to persist
+   * @returns `ok` on success, or `err` with an `ObservabilityError` if persistence failed
    */
-  persistZeroHitEvent(event: ZeroHitEvent): Promise<void>;
+  persistZeroHitEvent(event: ZeroHitEvent): Promise<Result<void, ObservabilityError>>;
 
   /**
    * Fetch persisted telemetry from Elasticsearch.
    *
    * Retrieves historical zero-hit data from the Elasticsearch
-   * telemetry index. Falls back to empty results when the index
-   * does not exist.
+   * telemetry index.
    *
    * @param options - Fetch options with limit
-   * @returns Telemetry data with summary and recent events
+   * @returns `ok` with telemetry data, or `err` with an `ObservabilityError`
    */
-  fetchTelemetry(options: TelemetryFetchOptions): Promise<ZeroHitTelemetry>;
+  fetchTelemetry(
+    options: TelemetryFetchOptions,
+  ): Promise<Result<ZeroHitTelemetry, ObservabilityError>>;
 }

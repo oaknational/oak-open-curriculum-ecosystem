@@ -3,26 +3,37 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
-import type { Logger } from '@oaknational/mcp-logger';
+import { ok, err, type Result } from '@oaknational/result';
 import type {
   ZeroHitEvent,
   ZeroHitScope,
   ZeroHitTelemetry,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
 
-import type { TelemetryFetchOptions } from '../types/observability.js';
+import type { TelemetryFetchOptions, ObservabilityError } from '../types/observability.js';
 
 /**
  * Fetch persisted telemetry from Elasticsearch.
  *
- * Falls back to empty results if the index does not exist.
+ * @param options - Fetch options specifying limit
+ * @param client - Elasticsearch client
+ * @param indexName - The zero-hit telemetry index name
+ * @returns `ok` with telemetry data, or `err` with an `ObservabilityError`
+ *
+ * @example
+ * ```typescript
+ * const result = await fetchTelemetry(
+ *   { limit: 50 },
+ *   esClient,
+ *   'oak_zero_hits_primary',
+ * );
+ * ```
  */
 export async function fetchTelemetry(
   options: TelemetryFetchOptions,
   client: Client,
   indexName: string,
-  logger?: Logger,
-): Promise<ZeroHitTelemetry> {
+): Promise<Result<ZeroHitTelemetry, ObservabilityError>> {
   try {
     const response = await client.search({
       index: indexName,
@@ -39,29 +50,22 @@ export async function fetchTelemetry(
     const recent = extractRecentEvents(response.hits.hits);
     const byScope = extractScopeCounts(response.aggregations);
 
-    return {
+    return ok({
       summary: { total, byScope, latestIndexVersion: null },
       recent,
-    };
-  } catch (error: unknown) {
-    logger?.debug('Failed to fetch zero-hit telemetry, returning empty', {
-      error: error instanceof Error ? error.message : String(error),
     });
-    return emptyTelemetry();
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    return err({ type: 'es_error', message });
   }
 }
 
-function emptyTelemetry(): ZeroHitTelemetry {
-  return {
-    summary: {
-      total: 0,
-      byScope: { lessons: 0, units: 0, sequences: 0 },
-      latestIndexVersion: null,
-    },
-    recent: [],
-  };
-}
-
+/**
+ * Normalise ES hit total to a number (handles object shape).
+ *
+ * @param total - Raw hit total from ES response
+ * @returns Total count
+ */
 function normaliseTotal(total: unknown): number {
   if (typeof total === 'number') {
     return total;
@@ -72,6 +76,12 @@ function normaliseTotal(total: unknown): number {
   return total.value;
 }
 
+/**
+ * Type guard: value has a numeric value property (ES total hits object).
+ *
+ * @param value - Value to check
+ * @returns True if value has required shape (object with numeric value property)
+ */
 function isTotalHitsObject(value: unknown): value is { value: number } {
   if (typeof value !== 'object' || value === null) {
     return false;
@@ -82,6 +92,12 @@ function isTotalHitsObject(value: unknown): value is { value: number } {
   return typeof value.value === 'number';
 }
 
+/**
+ * Extract ZeroHitEvent objects from ES search hits.
+ *
+ * @param hits - Search hits from ES response
+ * @returns Array of mapped ZeroHitEvent
+ */
 function extractRecentEvents(hits: readonly { _source?: unknown }[]): ZeroHitEvent[] {
   const events: ZeroHitEvent[] = [];
   for (const hit of hits) {
@@ -99,6 +115,7 @@ function extractRecentEvents(hits: readonly { _source?: unknown }[]): ZeroHitEve
   return events;
 }
 
+/** Shape of a zero-hit document as stored in Elasticsearch. */
 interface ZeroHitDoc {
   readonly '@timestamp': string;
   readonly search_scope: ZeroHitScope;
@@ -107,6 +124,12 @@ interface ZeroHitDoc {
   readonly index_version: string;
 }
 
+/**
+ * Type guard: value is a valid ZeroHitDoc.
+ *
+ * @param value - Value to check
+ * @returns True if value has required ZeroHitDoc fields
+ */
 function isZeroHitDoc(value: unknown): value is ZeroHitDoc {
   if (typeof value !== 'object' || value === null) {
     return false;
@@ -116,6 +139,12 @@ function isZeroHitDoc(value: unknown): value is ZeroHitDoc {
   );
 }
 
+/**
+ * Extract scope counts from ES terms aggregation buckets.
+ *
+ * @param aggregations - Raw aggregations from ES response
+ * @returns Record of scope to count
+ */
 function extractScopeCounts(aggregations: unknown): Record<ZeroHitScope, number> {
   const counts: Record<ZeroHitScope, number> = { lessons: 0, units: 0, sequences: 0 };
   const buckets = extractBuckets(aggregations);
@@ -127,11 +156,18 @@ function extractScopeCounts(aggregations: unknown): Record<ZeroHitScope, number>
   return counts;
 }
 
+/** Shape of an ES terms aggregation bucket. */
 interface ScopeBucket {
   readonly key: string;
   readonly doc_count: number;
 }
 
+/**
+ * Extract scope buckets from ES aggregations.
+ *
+ * @param aggregations - Raw aggregations from ES response
+ * @returns Filtered array of ScopeBucket
+ */
 function extractBuckets(aggregations: unknown): readonly ScopeBucket[] {
   if (typeof aggregations !== 'object' || aggregations === null) {
     return [];
@@ -153,6 +189,12 @@ function extractBuckets(aggregations: unknown): readonly ScopeBucket[] {
   return buckets.filter(isScopeBucket);
 }
 
+/**
+ * Type guard: value is a valid ScopeBucket.
+ *
+ * @param value - Value to check
+ * @returns True if value has key and doc_count
+ */
 function isScopeBucket(value: unknown): value is ScopeBucket {
   if (typeof value !== 'object' || value === null) {
     return false;

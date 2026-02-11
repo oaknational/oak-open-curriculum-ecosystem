@@ -15,6 +15,7 @@ export type {
 // Retrieval service interface and types
 export type {
   RetrievalService,
+  RetrievalError,
   SearchParamsBase,
   SearchLessonsParams,
   SearchUnitsParams,
@@ -34,6 +35,7 @@ export type {
 // Admin service interface and types
 export type {
   AdminService,
+  AdminError,
   IndexSetupResult,
   SetupResult,
   SetupOptions,
@@ -42,12 +44,12 @@ export type {
   SynonymsResult,
   IngestOptions,
   IngestResult,
-  IndexMetaError,
 } from './admin.js';
 
 // Observability service interface and types
 export type {
   ObservabilityService,
+  ObservabilityError,
   ZeroHitPayload,
   TelemetryFetchOptions,
 } from './observability.js';

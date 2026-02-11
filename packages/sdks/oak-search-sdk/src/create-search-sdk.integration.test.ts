@@ -1,37 +1,15 @@
 /**
  * Integration tests for the Search SDK factory and service interfaces.
  *
- * These tests form the TDD RED phase for Checkpoint A — they specify
- * the contract that will be implemented during Checkpoints B–D.
- *
- * Each test constructs the SDK with simple mock dependencies and
- * exercises the service methods, asserting correct result shapes
- * and dependency interaction.
- *
- * **Expected state**: ALL tests FAIL (RED) because `createSearchSdk`
- * is not yet implemented. They will turn GREEN as services are built.
+ * These tests specify the contract for all three services. Every I/O
+ * method returns `Result<T, E>` — tests assert `result.ok` before
+ * accessing `result.value`.
  */
 
 import { describe, it, expect, vi } from 'vitest';
 import { createSearchSdk } from './create-search-sdk.js';
-import type {
-  SearchSdk,
-  SearchSdkDeps,
-  SearchSdkConfig,
-  LessonsSearchResult,
-  UnitsSearchResult,
-  SequencesSearchResult,
-  SuggestionResponse,
-  SetupResult,
-  ConnectionStatus,
-  IngestResult,
-  SynonymsResult,
-} from './types/index.js';
+import type { SearchSdk, SearchSdkDeps, SearchSdkConfig } from './types/index.js';
 import { Client } from '@elastic/elasticsearch';
-import type {
-  SearchFacets,
-  ZeroHitTelemetry,
-} from '@oaknational/oak-curriculum-sdk/public/search.js';
 
 // ---------------------------------------------------------------------------
 // Test helpers — simple fakes injected as arguments
@@ -203,20 +181,23 @@ describe('RetrievalService', () => {
   }
 
   describe('searchLessons', () => {
-    it('returns a LessonsSearchResult with scope, results, and metadata', async () => {
+    it('returns ok with a LessonsSearchResult containing scope, results, and metadata', async () => {
       const { retrieval } = createSdk();
 
-      const result: LessonsSearchResult = await retrieval.searchLessons({
+      const result = await retrieval.searchLessons({
         text: 'expanding brackets',
         subject: 'maths',
         keyStage: 'ks3',
       });
 
-      expect(result.scope).toBe('lessons');
-      expect(result.results).toBeInstanceOf(Array);
-      expect(typeof result.total).toBe('number');
-      expect(typeof result.took).toBe('number');
-      expect(typeof result.timedOut).toBe('boolean');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('lessons');
+        expect(result.value.results).toBeInstanceOf(Array);
+        expect(typeof result.value.total).toBe('number');
+        expect(typeof result.value.took).toBe('number');
+        expect(typeof result.value.timedOut).toBe('boolean');
+      }
     });
 
     it('respects size and from parameters', async () => {
@@ -228,7 +209,10 @@ describe('RetrievalService', () => {
         from: 10,
       });
 
-      expect(result.results.length).toBeLessThanOrEqual(5);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.results.length).toBeLessThanOrEqual(5);
+      }
     });
 
     it('supports KS4-specific filters', async () => {
@@ -242,38 +226,47 @@ describe('RetrievalService', () => {
         examBoard: 'aqa',
       });
 
-      expect(result.scope).toBe('lessons');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('lessons');
+      }
     });
   });
 
   describe('searchUnits', () => {
-    it('returns a UnitsSearchResult with scope, results, and metadata', async () => {
+    it('returns ok with a UnitsSearchResult containing scope, results, and metadata', async () => {
       const { retrieval } = createSdk();
 
-      const result: UnitsSearchResult = await retrieval.searchUnits({
+      const result = await retrieval.searchUnits({
         text: 'fractions',
         subject: 'maths',
         keyStage: 'ks2',
       });
 
-      expect(result.scope).toBe('units');
-      expect(result.results).toBeInstanceOf(Array);
-      expect(typeof result.total).toBe('number');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('units');
+        expect(result.value.results).toBeInstanceOf(Array);
+        expect(typeof result.value.total).toBe('number');
+      }
     });
   });
 
   describe('searchSequences', () => {
-    it('returns a SequencesSearchResult with scope, results, and metadata', async () => {
+    it('returns ok with a SequencesSearchResult containing scope, results, and metadata', async () => {
       const { retrieval } = createSdk();
 
-      const result: SequencesSearchResult = await retrieval.searchSequences({
+      const result = await retrieval.searchSequences({
         text: 'secondary maths',
         phaseSlug: 'secondary',
       });
 
-      expect(result.scope).toBe('sequences');
-      expect(result.results).toBeInstanceOf(Array);
-      expect(typeof result.total).toBe('number');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('sequences');
+        expect(result.value.results).toBeInstanceOf(Array);
+        expect(typeof result.value.total).toBe('number');
+      }
     });
 
     it('supports includeFacets option', async () => {
@@ -284,33 +277,39 @@ describe('RetrievalService', () => {
         includeFacets: true,
       });
 
-      expect(result.scope).toBe('sequences');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('sequences');
+      }
     });
   });
 
   describe('suggest', () => {
-    it('returns a SuggestionResponse with suggestions and cache metadata', async () => {
+    it('returns ok with a SuggestionResponse containing suggestions and cache metadata', async () => {
       const { retrieval } = createSdk();
 
-      const result: SuggestionResponse = await retrieval.suggest({
+      const result = await retrieval.suggest({
         prefix: 'expand',
         scope: 'lessons',
       });
 
-      expect(result.suggestions).toBeInstanceOf(Array);
-      expect(result.cache).toBeDefined();
-      expect(typeof result.cache.version).toBe('string');
-      expect(typeof result.cache.ttlSeconds).toBe('number');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.suggestions).toBeInstanceOf(Array);
+        expect(result.value.cache).toBeDefined();
+        expect(typeof result.value.cache.version).toBe('string');
+        expect(typeof result.value.cache.ttlSeconds).toBe('number');
+      }
     });
   });
 
   describe('fetchSequenceFacets', () => {
-    it('returns SearchFacets', async () => {
+    it('returns ok with SearchFacets', async () => {
       const { retrieval } = createSdk();
 
-      const result: SearchFacets = await retrieval.fetchSequenceFacets();
+      const result = await retrieval.fetchSequenceFacets();
 
-      expect(result).toBeDefined();
+      expect(result.ok).toBe(true);
     });
 
     it('accepts optional subject and keyStage filters', async () => {
@@ -321,7 +320,7 @@ describe('RetrievalService', () => {
         keyStage: 'ks3',
       });
 
-      expect(result).toBeDefined();
+      expect(result.ok).toBe(true);
     });
   });
 });
@@ -339,85 +338,102 @@ describe('AdminService', () => {
   }
 
   describe('setup', () => {
-    it('returns a SetupResult with synonym and index info', async () => {
+    it('returns ok with a SetupResult containing synonym and index info', async () => {
       const { admin } = createSdk();
 
-      const result: SetupResult = await admin.setup();
+      const result = await admin.setup();
 
-      expect(typeof result.synonymsCreated).toBe('boolean');
-      expect(typeof result.synonymCount).toBe('number');
-      expect(result.indexResults).toBeInstanceOf(Array);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(typeof result.value.synonymsCreated).toBe('boolean');
+        expect(typeof result.value.synonymCount).toBe('number');
+        expect(result.value.indexResults).toBeInstanceOf(Array);
+      }
     });
   });
 
   describe('reset', () => {
-    it('returns a SetupResult', async () => {
+    it('returns ok with a SetupResult', async () => {
       const { admin } = createSdk();
 
-      const result: SetupResult = await admin.reset({ verbose: true });
+      const result = await admin.reset({ verbose: true });
 
-      expect(result.indexResults).toBeInstanceOf(Array);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.indexResults).toBeInstanceOf(Array);
+      }
     });
   });
 
   describe('verifyConnection', () => {
-    it('returns a ConnectionStatus', async () => {
+    it('returns ok with cluster name and version when connected', async () => {
       const { admin } = createSdk();
 
-      const result: ConnectionStatus = await admin.verifyConnection();
+      const result = await admin.verifyConnection();
 
-      expect(typeof result.connected).toBe('boolean');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(typeof result.value.clusterName).toBe('string');
+        expect(typeof result.value.version).toBe('string');
+      }
     });
   });
 
   describe('listIndexes', () => {
-    it('returns an array of IndexInfo', async () => {
+    it('returns ok with an array of IndexInfo', async () => {
       const { admin } = createSdk();
 
       const result = await admin.listIndexes();
 
-      expect(result).toBeInstanceOf(Array);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toBeInstanceOf(Array);
+      }
     });
   });
 
   describe('updateSynonyms', () => {
-    it('returns a SynonymsResult', async () => {
+    it('returns ok with a SynonymsResult containing count', async () => {
       const { admin } = createSdk();
 
-      const result: SynonymsResult = await admin.updateSynonyms();
+      const result = await admin.updateSynonyms();
 
-      expect(typeof result.success).toBe('boolean');
-      expect(typeof result.count).toBe('number');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(typeof result.value.count).toBe('number');
+      }
     });
   });
 
   describe('ingest', () => {
-    it('returns an IngestResult with document counts', async () => {
+    it('returns ok with an IngestResult containing document counts', async () => {
       const { admin } = createSdk();
 
-      const result: IngestResult = await admin.ingest({
+      const result = await admin.ingest({
         bulkDir: '/tmp/test-bulk-data',
       });
 
-      expect(typeof result.lessonsIndexed).toBe('number');
-      expect(typeof result.unitsIndexed).toBe('number');
-      expect(typeof result.sequencesIndexed).toBe('number');
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(typeof result.value.lessonsIndexed).toBe('number');
+        expect(typeof result.value.unitsIndexed).toBe('number');
+        expect(typeof result.value.sequencesIndexed).toBe('number');
+      }
     });
   });
 
   describe('getIndexMeta', () => {
-    it('returns a Result with IndexMetaDoc or null', async () => {
+    it('returns ok with IndexMetaDoc or null', async () => {
       const { admin } = createSdk();
 
       const result = await admin.getIndexMeta();
 
-      // Result type: either ok with value or err with error
-      expect(typeof result.ok).toBe('boolean');
+      expect(result.ok).toBe(true);
     });
   });
 
   describe('setIndexMeta', () => {
-    it('returns a Result indicating success or failure', async () => {
+    it('returns ok indicating success', async () => {
       const { admin } = createSdk();
 
       const result = await admin.setIndexMeta({
@@ -429,7 +445,7 @@ describe('AdminService', () => {
         doc_counts: {},
       });
 
-      expect(typeof result.ok).toBe('boolean');
+      expect(result.ok).toBe(true);
     });
   });
 });
@@ -451,17 +467,17 @@ describe('ObservabilityService', () => {
   }
 
   describe('recordZeroHit', () => {
-    it('records a zero-hit event without throwing', async () => {
+    it('returns ok when recording a zero-hit event', async () => {
       const { observability } = createSdk();
 
-      await expect(
-        observability.recordZeroHit({
-          scope: 'lessons',
-          text: 'quantum computing ks2',
-          filters: { subject: 'science', keyStage: 'ks2' },
-          indexVersion: 'v-test',
-        }),
-      ).resolves.toBeUndefined();
+      const result = await observability.recordZeroHit({
+        scope: 'lessons',
+        text: 'quantum computing ks2',
+        filters: { subject: 'science', keyStage: 'ks2' },
+        indexVersion: 'v-test',
+      });
+
+      expect(result.ok).toBe(true);
     });
   });
 
@@ -490,31 +506,34 @@ describe('ObservabilityService', () => {
   });
 
   describe('persistZeroHitEvent', () => {
-    it('persists without throwing when persistence is disabled', async () => {
+    it('returns ok when persistence is disabled', async () => {
       const { observability } = createSdk();
 
-      await expect(
-        observability.persistZeroHitEvent({
-          timestamp: Date.now(),
-          scope: 'lessons',
-          text: 'test query',
-          filters: { subject: 'maths' },
-          indexVersion: 'v-test',
-        }),
-      ).resolves.toBeUndefined();
+      const result = await observability.persistZeroHitEvent({
+        timestamp: Date.now(),
+        scope: 'lessons',
+        text: 'test query',
+        filters: { subject: 'maths' },
+        indexVersion: 'v-test',
+      });
+
+      expect(result.ok).toBe(true);
     });
   });
 
   describe('fetchTelemetry', () => {
-    it('returns telemetry with summary and recent events', async () => {
+    it('returns ok with telemetry containing summary and recent events', async () => {
       const { observability } = createSdk();
 
-      const telemetry: ZeroHitTelemetry = await observability.fetchTelemetry({
+      const result = await observability.fetchTelemetry({
         limit: 50,
       });
 
-      expect(telemetry.summary).toBeDefined();
-      expect(telemetry.recent).toBeInstanceOf(Array);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.summary).toBeDefined();
+        expect(result.value.recent).toBeInstanceOf(Array);
+      }
     });
   });
 });

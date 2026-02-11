@@ -1,9 +1,9 @@
 # Search SDK + CLI Extraction
 
 **Label**: Current priority  
-**Status**: 🔄 IN PROGRESS (Checkpoints A–E ✅; Checkpoint E2 next, then F)  
+**Status**: 🔄 IN PROGRESS (Checkpoints A–E2 ✅; Checkpoint F next)  
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)  
-**Estimated Effort**: SDK + CLI extraction complete; remaining: Result pattern + TSDoc (E2), then MCP integration (F)  
+**Estimated Effort**: SDK + CLI extraction complete; Result pattern + TSDoc complete; remaining: MCP integration (F)  
 **Prerequisites**: Ground truth foundation (✅ complete)  
 **Last Updated**: 2026-02-11
 
@@ -277,119 +277,67 @@ All three services extracted in a single pass (Feb 2026).
   observe handlers using mocked SDK services
 - ✅ All quality gates pass: build, type-check, lint, test
 
-### Checkpoint E2 — Result pattern + comprehensive TSDoc
+### TSDoc Compliance Fix ✅ Complete
 
-A directive review identified two non-compliances that
-must be fixed before the MCP server consumes the SDK:
+Codebase-wide fix of non-standard TSDoc tags at source
+(462 files changed, Feb 2026):
 
-1. **Result pattern**: All three SDK services (retrieval,
-   admin, observe) must return `Result<T, E>` instead of
-   throwing. The rules say "Don't throw, use the result
-   pattern."
-2. **TSDoc depth**: All functions (public and private)
-   must have exhaustive TSDoc with `@param`, `@returns`,
-   and `@example` on public APIs.
+- Extended `postProcessTypesSource` in `typegen-core.ts`
+  to strip `@description`, `@constant`, `@enum` from
+  openapiTS output at generation time
+- Deleted `sanitize-docs.ts` and `docs/_typedoc_src/`
+  entirely; TypeDoc configs point at `src/` directly
+- Moved `schema-bridge.ts` to `src/types/` as real source
+- Removed `@module` (84 files), `@fileoverview` (30 files),
+  and one-off non-standard tags across the codebase
+- Installed `eslint-plugin-tsdoc` with `tsdoc/syntax: warn`
+  in `@oaknational/eslint-plugin-standards` for regression
+  prevention
+- Created `tsdoc.json` configs declaring `@generated` as
+  custom modifier tag (root + per-workspace)
 
-**Error type strategy — per-service discriminated unions**:
+### Checkpoint E2 — Result pattern + comprehensive TSDoc ✅ Complete
+
+All SDK service I/O methods now return `Result<T, E>`
+using per-service discriminated union error types. All
+functions across the SDK and CLI have comprehensive TSDoc
+annotations. Full quality gate chain passes (including
+test:ui, test:e2e, test:e2e:built, smoke:dev:stub).
+
+**Error types implemented**:
 
 - `RetrievalError` (`es_error | timeout | validation_error
-  | unknown`) — partially added to `retrieval-results.ts`
-- `AdminError` (replaces `IndexMetaError`) (`es_error |
+  | unknown`)
+- `AdminError` (replaced `IndexMetaError`) (`es_error |
   not_found | mapping_error | validation_error | unknown`)
-- `ObservabilityError` (`es_error | unknown`) — only for
-  async I/O methods; sync pure methods stay as-is
+- `ObservabilityError` (`es_error | unknown`) — async I/O
+  methods only; sync pure methods unchanged
 
-**Execution phases and file change map** (~25 files):
+**What was done** (~50 files changed):
 
-**Phase 1 — SDK types + interfaces**:
-
-- `types/retrieval-results.ts` — add `RetrievalError`
-  (partially done: type defined, not integrated)
-- `types/retrieval.ts` — all 5 methods return
-  `Result<T, RetrievalError>`
-- `types/admin-types.ts` — rename `IndexMetaError` to
-  `AdminError`, add `es_error` variant
-- `types/admin.ts` — all methods return
-  `Result<T, AdminError>`
-- `types/observability.ts` — add `ObservabilityError`,
-  async I/O methods return Result
-- `types/index.ts` — export `RetrievalError`,
-  `AdminError`, `ObservabilityError`; remove
-  `IndexMetaError`
-- `index.ts` — export new error types
-
-(All paths relative to `packages/sdks/oak-search-sdk/src/`)
-
-**Phase 2 — SDK implementation** (`ok()`/`err()` wrapping):
-
-- `retrieval/create-retrieval-service.ts` — wrap returns
-  in `ok()`, catch ES errors into `err()`
-- `retrieval/suggestions.ts` — validation error returns
-  `err()` instead of throw; wrap success in `ok()`
-- `retrieval/sequence-facets.ts` — same pattern
-- Admin service implementation files — same pattern
-  for setup, reset, verifyConnection, listIndexes,
-  updateSynonyms, ingest; meta methods switch from
-  `IndexMetaError` to `AdminError`
-- Observability service implementation files — wrap
-  async I/O methods
-
-**Phase 3 — SDK integration tests**:
-
-- `create-search-sdk.integration.test.ts` — all
-  retrieval assertions check `result.ok` / `result.value`;
-  admin and observe assertions do the same
-
-**Phase 4 — CLI handlers + tests**:
-
-- `src/cli/search/handlers.ts` — unwrap `Result`
-- `src/cli/search/handlers.integration.test.ts` — mocks
-  return `ok(...)` values
-- `src/cli/admin/handlers.ts` — unwrap Result
-  (meta already partial)
-- `src/cli/admin/handlers.integration.test.ts` — mocks
-  return `ok(...)` values
-- `src/cli/observe/handlers.ts` — unwrap Result for
-  `fetchTelemetry`
-- `src/cli/observe/handlers.integration.test.ts` — mocks
-  return `ok(...)` values
-
-(All paths relative to `apps/oak-search-cli/`)
-
-**Phase 5 — Benchmark runners**:
-
-- `evaluation/analysis/benchmark-query-runner-lessons.ts`
-  — `SearchFunction` type returns `Result`, unwrap before
-  metric calculation
-- `evaluation/analysis/benchmark-query-runner-units.ts`
-  — same pattern
-
-**Phase 6 — TSDoc pass** (all files from phases 1–5 plus):
-
-- `src/cli/shared/pass-through.ts`
-- `src/cli/shared/output.ts`
-- `src/cli/shared/validators.ts`
-- `src/cli/search/index.ts` — all `register*Cmd` helpers
-- `src/cli/admin/index.ts` — all `register*Cmd` helpers
-- `src/cli/observe/index.ts` — all `register*Cmd` helpers
-- `src/cli/eval/index.ts` — `createBenchmarkCmd` helper
-
-**Phase 7 — Quality gates + docs**:
-
-- Run full quality gate chain
-- Update this plan to mark E2 complete
-- Update the napkin
-
-**Key notes**:
-
-- `RetrievalError` type definition has been partially
-  added to `types/retrieval-results.ts` (type only, no
-  integration yet)
-- `IndexMetaError` is replaced by `AdminError` everywhere
-- Sync observe methods (`getRecentZeroHits`,
-  `getZeroHitSummary`) cannot fail and stay as-is
-- TSDoc standard: every function gets summary + `@param`
-  + `@returns`; public APIs also get `@example`
+- All 16 SDK service I/O methods return `Result<T, E>`
+  via `ok()`/`err()` wrapping
+- Silent error swallowing fixed in observability
+  persistence, telemetry fetching, and admin delete
+- `ConnectionStatus` and `SynonymsResult` simplified
+  (redundant fields removed — `Result` envelope replaces
+  `success`/`error`/`connected` flags)
+- CLI error boundary: all `.action()` blocks check
+  `result.ok`, print error type and message, set
+  `process.exitCode = 1`
+- Benchmark runners updated to consume `Result`, fail
+  fast on `!result.ok`
+- Comprehensive TSDoc on all SDK and CLI functions
+- Files split by responsibility to maintain max-lines
+  with full documentation:
+  - `admin-index-operations.ts` (from `create-admin-service.ts`)
+  - `retrieval-search-helpers.ts` (from `create-retrieval-service.ts`)
+  - `admin-sdk-commands.ts` and `admin-orchestration-commands.ts`
+    (from `admin/index.ts`)
+- `benchmark-adapters.ts` DRYed with generic `groupEntries<T>`
+  (removed eslint max-lines override)
+- Directive review: sub-agent audits confirmed compliance
+  across all modified files
 
 ### Checkpoint F — MCP integration wiring
 

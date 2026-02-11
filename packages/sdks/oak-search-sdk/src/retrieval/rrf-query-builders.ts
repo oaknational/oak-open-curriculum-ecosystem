@@ -9,7 +9,7 @@ import type { estypes } from '@elastic/elasticsearch';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
-/** BM25 field definitions for four-retriever architecture. */
+/** BM25 content fields for lesson search (four-retriever architecture). */
 const LESSON_BM25_CONTENT = [
   'lesson_title^3',
   'lesson_keywords^2',
@@ -19,11 +19,27 @@ const LESSON_BM25_CONTENT = [
   'content_guidance',
   'lesson_content',
 ];
+/** BM25 structure fields for lesson search (four-retriever architecture). */
 const LESSON_BM25_STRUCTURE = ['lesson_structure^2', 'lesson_title^3'];
+/** BM25 content fields for unit search (four-retriever architecture). */
 const UNIT_BM25_CONTENT = ['unit_title^3', 'unit_content', 'unit_topics^1.5'];
+/** BM25 structure fields for unit search (four-retriever architecture). */
 const UNIT_BM25_STRUCTURE = ['unit_structure^2', 'unit_title^3'];
 
-/** Build four-way RRF retriever (BM25+ELSER on content+structure). */
+/**
+ * Build four-way RRF retriever (BM25+ELSER on content+structure).
+ *
+ * @param text - The search query text
+ * @param filters - Optional filter clauses
+ * @param phrases - Curriculum phrases for phrase boosting
+ * @param scope - Whether to use lesson or unit field mappings
+ * @returns ES retriever container for hybrid RRF search
+ *
+ * @example
+ * ```typescript
+ * const retriever = buildFourWayRetriever('photosynthesis', filters, ['key stage 2'], 'lesson');
+ * ```
+ */
 export function buildFourWayRetriever(
   text: string,
   filters: QueryContainer[],
@@ -66,7 +82,16 @@ export function buildFourWayRetriever(
   };
 }
 
-/** Build a BM25 retriever with optional phrase boosting. */
+/**
+ * Build a BM25 retriever with optional phrase boosting.
+ *
+ * @param text - The search query text
+ * @param fields - ES field names (with optional boost suffix)
+ * @param filter - Optional filter clause
+ * @param phrases - Curriculum phrases for match_phrase boosting
+ * @param config - BM25 config (fuzziness, minimum_should_match, etc.)
+ * @returns ES retriever container
+ */
 function buildBm25Retriever(
   text: string,
   fields: readonly string[],
@@ -108,7 +133,13 @@ function buildBm25Retriever(
   };
 }
 
-/** Create match_phrase queries for detected curriculum phrases. */
+/**
+ * Create match_phrase queries for detected curriculum phrases.
+ *
+ * @param phrases - Curriculum phrases to boost
+ * @param fields - ES field names (boosts stripped)
+ * @returns Array of match_phrase query containers
+ */
 function createPhraseBoosters(
   phrases: readonly string[],
   fields: readonly string[],
@@ -123,6 +154,12 @@ function createPhraseBoosters(
   return boosters;
 }
 
+/**
+ * Remove boost suffix from a field name (e.g. `lesson_title^3` \> `lesson_title`).
+ *
+ * @param field - ES field name possibly with ^boost suffix
+ * @returns Field name without boost
+ */
 function stripBoost(field: string): string {
   const i = field.indexOf('^');
   return i !== -1 ? field.slice(0, i) : field;

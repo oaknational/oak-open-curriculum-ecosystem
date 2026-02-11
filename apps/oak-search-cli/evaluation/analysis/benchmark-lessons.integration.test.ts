@@ -13,6 +13,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { ok } from '@oaknational/result';
 import { runQuery, type SearchFunction } from './benchmark-query-runner-lessons';
 import type { LessonsSearchResult, LessonResult } from '@oaknational/oak-search-sdk';
 import type { SearchLessonsIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -57,7 +58,7 @@ function createMockSearchFn(slugs: readonly string[]): SearchFunction {
     took: 1,
     timedOut: false,
   };
-  return vi.fn().mockResolvedValue(result);
+  return vi.fn().mockResolvedValue(ok(result));
 }
 
 describe('runQuery', () => {

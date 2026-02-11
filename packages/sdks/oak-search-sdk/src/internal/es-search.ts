@@ -35,6 +35,9 @@ export function createEsSearchFn(client: Client): EsSearchFn {
  * Supports two mutually exclusive modes:
  * - Query mode: traditional search with `query` property
  * - Retriever mode (ES 8.11+): hybrid RRF search with `retriever`
+ *
+ * @param body - The internal search request
+ * @returns ES client search parameters
  */
 function buildSearchParams(body: EsSearchRequest): estypes.SearchRequest {
   const params: estypes.SearchRequest = {
@@ -48,7 +51,12 @@ function buildSearchParams(body: EsSearchRequest): estypes.SearchRequest {
   return params;
 }
 
-/** Assign query or retriever (mutually exclusive). */
+/**
+ * Assign query or retriever (mutually exclusive) to the search params.
+ *
+ * @param params - The search params to mutate
+ * @param body - The internal request with query or retriever
+ */
 function assignQueryOrRetriever(params: estypes.SearchRequest, body: EsSearchRequest): void {
   if (body.retriever) {
     params.retriever = body.retriever;
@@ -57,7 +65,12 @@ function assignQueryOrRetriever(params: estypes.SearchRequest, body: EsSearchReq
   }
 }
 
-/** Assign optional search parameters when present. */
+/**
+ * Assign optional search parameters (highlight, sort, _source, aggs, from) when present.
+ *
+ * @param params - The search params to mutate
+ * @param body - The internal request
+ */
 function assignOptionalFields(params: estypes.SearchRequest, body: EsSearchRequest): void {
   if (body.highlight !== undefined) {
     params.highlight = body.highlight;
@@ -81,6 +94,11 @@ function assignOptionalFields(params: estypes.SearchRequest, body: EsSearchReque
  *
  * Handles missing fields, type coercion, and ES response format
  * variations across versions.
+ *
+ * @param res - The raw ES search response
+ * @param fallbackIndex - Index name when hit._index is missing
+ * @param requestedSize - Maximum hits to return
+ * @returns Normalised EsSearchResponse
  */
 function wrapSearchResponse<T>(
   res: estypes.SearchResponse<T, Record<string, estypes.AggregationsAggregate>>,
@@ -114,6 +132,10 @@ function wrapSearchResponse<T>(
  *
  * The ES client types `hit.highlight` as `Record<string, string[]> | undefined`
  * which is already the correct shape. We just need to verify presence.
+ *
+ * @param hit - The raw ES hit
+ * @param fallbackIndex - Index name when hit._index is missing
+ * @returns Normalised EsHit or undefined if hit is invalid
  */
 function normalizeHit<T>(
   hit: estypes.SearchResponse<T>['hits']['hits'][number],
@@ -140,6 +162,10 @@ function normalizeHit<T>(
 
 /**
  * Normalise the total hits value from ES response variations.
+ *
+ * @param total - The raw total from ES (number or object)
+ * @param fallback - Fallback count when total is missing
+ * @returns Normalised total with value and relation
  */
 function normalizeTotal(
   total: estypes.SearchTotalHits | number | undefined,

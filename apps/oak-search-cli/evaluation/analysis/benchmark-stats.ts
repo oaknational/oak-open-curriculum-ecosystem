@@ -20,11 +20,11 @@ export interface CategoryResult {
   readonly queryCount: number;
   /** Mean Reciprocal Rank across queries in this category. */
   readonly mrr: number;
-  /** Normalized Discounted Cumulative Gain @10 across queries. */
+  /** Normalized Discounted Cumulative Gain \@10 across queries. */
   readonly ndcg10: number;
-  /** Precision @3 across queries. */
+  /** Precision \@3 across queries. */
   readonly precision3: number;
-  /** Recall @10 across queries. */
+  /** Recall \@10 across queries. */
   readonly recall10: number;
   /** Percentage of queries with no relevant results in top 10. */
   readonly zeroHitRate: number;

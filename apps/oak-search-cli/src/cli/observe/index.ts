@@ -17,7 +17,12 @@ import { createCliSdk, printJson, printError, registerPassThrough } from '../sha
 import { env } from '../../lib/env.js';
 import { handleTelemetry, handleSummary } from './handlers.js';
 
-/** Register the `observe telemetry` subcommand (SDK-mapped). */
+/**
+ * Register the `observe telemetry` subcommand (SDK-mapped).
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerTelemetryCmd(parent: Command): void {
   parent
     .command('telemetry')
@@ -29,7 +34,12 @@ function registerTelemetryCmd(parent: Command): void {
         const result = await handleTelemetry(sdk.observability, {
           limit: parseInt(opts.limit, 10),
         });
-        printJson(result);
+        if (!result.ok) {
+          printError(`${result.error.type}: ${result.error.message}`);
+          process.exitCode = 1;
+          return;
+        }
+        printJson(result.value);
       } catch (error) {
         printError(error instanceof Error ? error.message : String(error));
         process.exitCode = 1;
@@ -37,7 +47,12 @@ function registerTelemetryCmd(parent: Command): void {
     });
 }
 
-/** Register the `observe summary` subcommand (SDK-mapped). */
+/**
+ * Register the `observe summary` subcommand (SDK-mapped).
+ *
+ * @param parent - The parent Commander command to register under
+ * @returns void
+ */
 function registerSummaryCmd(parent: Command): void {
   parent
     .command('summary')
@@ -58,6 +73,12 @@ function registerSummaryCmd(parent: Command): void {
  * Create the `observe` subcommand group.
  *
  * @returns A Commander `Command` with observe subcommands registered
+ *
+ * @example
+ * ```typescript
+ * const program = new Command();
+ * program.addCommand(observeCommand());
+ * ```
  */
 export function observeCommand(): Command {
   const cmd = new Command('observe').description(

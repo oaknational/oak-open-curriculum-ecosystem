@@ -1,13 +1,16 @@
 /**
  * Search CLI handler functions.
  *
- * Each handler is a pure function that accepts an SDK retrieval service
- * and validated parameters. Handlers are tested via integration tests
- * with mock retrieval services.
+ * Each handler is a thin pass-through that accepts an SDK retrieval service
+ * and validated parameters, returning the `Result` from the SDK. Handlers
+ * do not inspect or unwrap the Result — that responsibility belongs to the
+ * command wiring layer.
  */
 
+import type { Result } from '@oaknational/result';
 import type {
   RetrievalService,
+  RetrievalError,
   SearchLessonsParams,
   SearchUnitsParams,
   SearchSequencesParams,
@@ -25,12 +28,12 @@ import type { SearchFacets } from '@oaknational/oak-curriculum-sdk/public/search
  *
  * @param retrieval - The SDK retrieval service
  * @param params - Validated search parameters
- * @returns Lesson search results
+ * @returns `ok` with lesson search results, or `err` with a `RetrievalError`
  */
 export async function handleSearchLessons(
   retrieval: RetrievalService,
   params: SearchLessonsParams,
-): Promise<LessonsSearchResult> {
+): Promise<Result<LessonsSearchResult, RetrievalError>> {
   return retrieval.searchLessons(params);
 }
 
@@ -39,12 +42,12 @@ export async function handleSearchLessons(
  *
  * @param retrieval - The SDK retrieval service
  * @param params - Validated search parameters
- * @returns Unit search results
+ * @returns `ok` with unit search results, or `err` with a `RetrievalError`
  */
 export async function handleSearchUnits(
   retrieval: RetrievalService,
   params: SearchUnitsParams,
-): Promise<UnitsSearchResult> {
+): Promise<Result<UnitsSearchResult, RetrievalError>> {
   return retrieval.searchUnits(params);
 }
 
@@ -53,12 +56,12 @@ export async function handleSearchUnits(
  *
  * @param retrieval - The SDK retrieval service
  * @param params - Validated search parameters
- * @returns Sequence search results
+ * @returns `ok` with sequence search results, or `err` with a `RetrievalError`
  */
 export async function handleSearchSequences(
   retrieval: RetrievalService,
   params: SearchSequencesParams,
-): Promise<SequencesSearchResult> {
+): Promise<Result<SequencesSearchResult, RetrievalError>> {
   return retrieval.searchSequences(params);
 }
 
@@ -67,12 +70,12 @@ export async function handleSearchSequences(
  *
  * @param retrieval - The SDK retrieval service
  * @param params - Suggestion parameters (prefix, scope, optional filters)
- * @returns Suggestion response with items and cache metadata
+ * @returns `ok` with suggestion response, or `err` with a `RetrievalError`
  */
 export async function handleSuggest(
   retrieval: RetrievalService,
   params: SuggestParams,
-): Promise<SuggestionResponse> {
+): Promise<Result<SuggestionResponse, RetrievalError>> {
   return retrieval.suggest(params);
 }
 
@@ -81,11 +84,11 @@ export async function handleSuggest(
  *
  * @param retrieval - The SDK retrieval service
  * @param params - Optional filter parameters
- * @returns Sequence search result with facet data
+ * @returns `ok` with facet data, or `err` with a `RetrievalError`
  */
 export async function handleFetchFacets(
   retrieval: RetrievalService,
   params: FacetParams,
-): Promise<SearchFacets> {
+): Promise<Result<SearchFacets, RetrievalError>> {
   return retrieval.fetchSequenceFacets(params);
 }
