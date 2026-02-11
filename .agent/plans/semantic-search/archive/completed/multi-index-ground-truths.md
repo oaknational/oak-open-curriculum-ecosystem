@@ -61,7 +61,7 @@ Created:
 
 ### Phase 2: Unit Ground Truths ✅ Complete
 
-**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md#index-units)
+**Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md#index-units)
 
 #### 2.1 Primary Unit GT ✅
 
@@ -91,7 +91,7 @@ Created:
 
 ### Phase 3: Thread Ground Truth ✅ Complete
 
-**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md#index-threads)
+**Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md#index-threads)
 
 | Field | Value |
 |-------|-------|
@@ -106,7 +106,7 @@ Created:
 
 ### Phase 4: Sequence Ground Truth ✅ Complete
 
-**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md#index-sequences)
+**Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md#index-sequences)
 
 | Field | Value |
 |-------|-------|
@@ -186,7 +186,7 @@ Lesson-specific names (`LessonGroundTruth`, `LESSON_GROUND_TRUTHS`, `benchmark-l
 
 ### Consolidate Protocol Documents ✅
 
-Four separate protocol documents consolidated into [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md).
+Four separate protocol documents consolidated into [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md).
 
 ### Metric Depth and Query Quality ✅
 
@@ -202,5 +202,5 @@ Four separate protocol documents consolidated into [Ground Truth Protocol](/apps
 
 | Document | Purpose |
 |----------|---------|
-| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Consolidated protocol (all indexes) |
+| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Consolidated protocol (all indexes) |
 | [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology |

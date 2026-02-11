@@ -426,7 +426,7 @@ This workaround:
 - ⚠️ Makes N+1 API calls (36 units = 36 calls instead of 7 pages)
 - ⚠️ Slower due to serial fetching
 
-**Code**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/fetch-all-lessons.ts`
+**Code**: `apps/oak-search-cli/src/lib/indexing/fetch-all-lessons.ts`
 
 ---
 
@@ -980,7 +980,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 ### Related Documentation
 
 - [ADR-092: Transcript Cache Categorization Strategy](../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md)
-- [sdk-cache README](../../../apps/oak-open-curriculum-semantic-search/src/adapters/sdk-cache/README.md)
+- [sdk-cache README](../../../apps/oak-search-cli/src/adapters/sdk-cache/README.md)
 
 ---
 

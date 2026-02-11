@@ -242,7 +242,7 @@ When metrics change (after an experiment or system change):
 
 ```bash
 # Measure current metrics
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm eval:per-category    # Hard query baseline
 pnpm eval:diagnostic      # Diagnostic analysis
 ```

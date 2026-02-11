@@ -231,7 +231,7 @@ To override this philosophy and use an external API, the team must:
 
 ## Related Documents
 
-- `apps/oak-open-curriculum-semantic-search/README.md` - Project overview with philosophy
+- `apps/oak-search-cli/README.md` - Project overview with philosophy
 - `.agent/plans/semantic-search/maths-ks4-implementation-plan.md` - Implementation plan
 - `.agent/plans/semantic-search/ELASTIC-NATIVE-MIGRATION-COMPLETE.md` - Migration summary
 

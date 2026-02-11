@@ -71,7 +71,7 @@ A **hybrid lexical + semantic search platform** for Oak Curriculum content that:
 ### Key files & directories
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── app/api/
 │   ├── search/route.ts                     # Structured search (server-side RRF)
 │   ├── search/nl/route.ts                  # Natural language wrapper (LLM optional)
@@ -189,8 +189,8 @@ Environment validation in `src/lib/env.ts` must enforce mutual exclusivity betwe
 
 - **Planning & reviews**: Follow `GO.md` — every `ACTION:` is immediately followed by a self-review entry. Reference `.agent/directives/rules.md` and `.agent/directives/testing-strategy.md` when defining tasks.
 - **TDD**: Write failing tests first (Vitest for queries/transforms, integration harnesses for ES interactions). Avoid `any`, unsafe casts, or bypassing quality gates.
-- **Quality gates**: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`. Capture outcomes in the Review Log.
-- **Documentation**: Keep `apps/oak-open-curriculum-semantic-search/docs/*.md` and README in sync with code changes; regenerate OpenAPI + TypeDoc after schema updates.
+- **Quality gates**: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-search-cli doc-gen`. Capture outcomes in the Review Log.
+- **Documentation**: Keep `apps/oak-search-cli/docs/*.md` and README in sync with code changes; regenerate OpenAPI + TypeDoc after schema updates.
 - **Deployment**: Use Vercel with environment sets per branch (`Preview`, `Production`). Post-deploy, run admin ingestion/rollup routes, then verify search, suggestion, and status endpoints.
 - **Regression testing**: Compare hybrid results against SDK parity routes; run compatibility checks with target clients listed in the high-level plan.
 
@@ -204,14 +204,14 @@ pnpm install
 
 # Elasticsearch setup (post-mapping updates)
 ELASTICSEARCH_URL=https://your-elasticsearch-url-here
-  pnpm -C apps/oak-open-curriculum-semantic-search elastic:setup
+  pnpm -C apps/oak-search-cli elastic:setup
 
 # Run alignment-focused tests (workspace)
-pnpm -C apps/oak-open-curriculum-semantic-search test
+pnpm -C apps/oak-search-cli test
 
 # Execute quality gates in order
 pnpm format && pnpm type-check && pnpm lint && pnpm test && pnpm build && \
-  pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+  pnpm -C apps/oak-search-cli doc-gen
 
 # Admin ingestion (cloud)
 curl -X POST https://<host>/api/index-oak-bulk \

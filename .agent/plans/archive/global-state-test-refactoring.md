@@ -22,10 +22,10 @@ These are the most problematic - unit tests should have NO side effects.
 
 | File                                                                                   | Variables Mutated                   | Refactor Target                                                           |
 | -------------------------------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------- |
-| `apps/oak-open-curriculum-semantic-search/src/lib/suggestions/index.unit.test.ts:101`  | `SEARCH_INDEX_VERSION`              | Pass index version as parameter to function under test                    |
-| `apps/oak-open-curriculum-semantic-search/src/lib/search-index-target.unit.test.ts:47` | `AI_PROVIDER`                       | Pass AI provider config as parameter                                      |
-| `apps/oak-open-curriculum-semantic-search/app/lib/fixture-mode.unit.test.ts:66-72`     | `SEMANTIC_SEARCH_USE_FIXTURES`      | Pass fixture mode as parameter to `resolveFixtureModeFromEnv`             |
-| `apps/oak-open-curriculum-semantic-search/app/lib/fixture-toggle.unit.test.ts:30-32`   | `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` | Already has optional env parameter - use it                               |
+| `apps/oak-search-cli/src/lib/suggestions/index.unit.test.ts:101`  | `SEARCH_INDEX_VERSION`              | Pass index version as parameter to function under test                    |
+| `apps/oak-search-cli/src/lib/search-index-target.unit.test.ts:47` | `AI_PROVIDER`                       | Pass AI provider config as parameter                                      |
+| `apps/oak-search-cli/app/lib/fixture-mode.unit.test.ts:66-72`     | `SEMANTIC_SEARCH_USE_FIXTURES`      | Pass fixture mode as parameter to `resolveFixtureModeFromEnv`             |
+| `apps/oak-search-cli/app/lib/fixture-toggle.unit.test.ts:30-32`   | `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` | Already has optional env parameter - use it                               |
 | `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.unit.test.ts:26,49,61`           | `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` | Pass stub mode as parameter to `resolveToolExecutors`                     |
 | `apps/oak-notion-mcp/src/config/notion-config/env-utils.unit.test.ts:23,29`            | `LOG_LEVEL`                         | Already testing `parseLogLevel` with explicit input - remove env mutation |
 | `apps/oak-notion-mcp/src/app/index.unit.test.ts:19,30`                                 | `NOTION_API_KEY`                    | Pass config object to app factory                                         |
@@ -36,8 +36,8 @@ Integration tests can have simple mocks injected as arguments, but should not mu
 
 | File                                                                                           | Variables Mutated        | Refactor Target                      |
 | ---------------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------ |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/suggest/route.integration.test.ts:27` | `SEARCH_INDEX_VERSION`   | Pass config to route handler factory |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/route.integration.test.ts:40`         | `SEARCH_INDEX_VERSION`   | Pass config to route handler factory |
+| `apps/oak-search-cli/app/api/search/suggest/route.integration.test.ts:27` | `SEARCH_INDEX_VERSION`   | Pass config to route handler factory |
+| `apps/oak-search-cli/app/api/search/route.integration.test.ts:40`         | `SEARCH_INDEX_VERSION`   | Pass config to route handler factory |
 | `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts:9-11`             | `OAK_API_KEY`, `CLERK_*` | Pass config object to `createApp`    |
 
 ### Category 3: `process.env` Mutations in E2E Tests
@@ -61,10 +61,10 @@ E2E tests spawn separate processes, so env mutation is more acceptable but still
 
 | File                                                                                        | Global Stubbed | Refactor Target                       |
 | ------------------------------------------------------------------------------------------- | -------------- | ------------------------------------- |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/search-service.unit.test.ts:47-63` | `fetch`        | Inject fetch as dependency            |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/nl/route.integration.test.ts:84`   | `fetch`        | Inject fetch as dependency            |
-| `apps/oak-open-curriculum-semantic-search/src/lib/observability/zero-hit.unit.test.ts:44`   | `fetch`        | Inject fetch as dependency            |
-| `apps/oak-open-curriculum-semantic-search/app/lib/useStream.unit.test.ts:17`                | `fetch`        | Inject fetch as dependency or use msw |
+| `apps/oak-search-cli/app/api/search/search-service.unit.test.ts:47-63` | `fetch`        | Inject fetch as dependency            |
+| `apps/oak-search-cli/app/api/search/nl/route.integration.test.ts:84`   | `fetch`        | Inject fetch as dependency            |
+| `apps/oak-search-cli/src/lib/observability/zero-hit.unit.test.ts:44`   | `fetch`        | Inject fetch as dependency            |
+| `apps/oak-search-cli/app/lib/useStream.unit.test.ts:17`                | `fetch`        | Inject fetch as dependency or use msw |
 
 ### Category 5: `vi.doMock` (Module Cache Manipulation)
 
@@ -72,7 +72,7 @@ These cause the most subtle race conditions because module cache is shared.
 
 | File                                                                                              | Module Mocked              | Refactor Target                        |
 | ------------------------------------------------------------------------------------------------- | -------------------------- | -------------------------------------- |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/search-service.unit.test.ts:27-36,66-75` | `structured-search.shared` | Inject schema as dependency            |
+| `apps/oak-search-cli/app/api/search/search-service.unit.test.ts:27-36,66-75` | `structured-search.shared` | Inject schema as dependency            |
 | `apps/oak-notion-mcp/src/app/index.unit.test.ts:33-38,42-48`                                      | `env-utils`, `mcp-logger`  | Pass config/logger as constructor args |
 
 ### Category 6: Reference Docs (Not Active Code)
@@ -192,10 +192,10 @@ These are the source files that read `process.env` directly and need to be refac
 
 | File                                                                         | Current Pattern                            | Refactor To                                                              |
 | ---------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------ |
-| `apps/oak-open-curriculum-semantic-search/src/lib/suggestions/index.ts:253`  | `process.env.SEARCH_INDEX_VERSION`         | Accept `indexVersion` as parameter                                       |
-| `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts:21`        | `process.env.SEARCH_INDEX_VERSION`         | Accept via route config/context                                          |
-| `apps/oak-open-curriculum-semantic-search/app/lib/fixture-mode.ts:74,79,103` | `process.env.SEMANTIC_SEARCH_USE_FIXTURES` | Already accepts `envValue` param - ensure callers pass it                |
-| `apps/oak-open-curriculum-semantic-search/src/lib/env.ts:61-66`              | Aggregates env vars                        | This is the entry point - keep but ensure downstream uses config objects |
+| `apps/oak-search-cli/src/lib/suggestions/index.ts:253`  | `process.env.SEARCH_INDEX_VERSION`         | Accept `indexVersion` as parameter                                       |
+| `apps/oak-search-cli/app/api/search/route.ts:21`        | `process.env.SEARCH_INDEX_VERSION`         | Accept via route config/context                                          |
+| `apps/oak-search-cli/app/lib/fixture-mode.ts:74,79,103` | `process.env.SEMANTIC_SEARCH_USE_FIXTURES` | Already accepts `envValue` param - ensure callers pass it                |
+| `apps/oak-search-cli/src/lib/env.ts:61-66`              | Aggregates env vars                        | This is the entry point - keep but ensure downstream uses config objects |
 
 ### MCP STDIO App
 

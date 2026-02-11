@@ -261,7 +261,7 @@ export function createParaphraseBoosters(
 |----------|---------|
 | [vocabulary-mining.md](vocabulary-mining.md) | Parent plan |
 | [aliases-and-equivalances.md](../../../research/elasticsearch/oak-data/aliases-and-equivalances.md) | Bucket definitions |
-| [rrf-query-helpers.ts](../../../../apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts) | Query building |
+| [rrf-query-helpers.ts](../../../../apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts) | Query building |
 
 ---
 

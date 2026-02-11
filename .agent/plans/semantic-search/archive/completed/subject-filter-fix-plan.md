@@ -16,7 +16,7 @@ This plan is self-contained. To implement this fix:
 2. **Run quality gates first**: `pnpm type-check && pnpm lint && pnpm test`
 3. **Implement in phase order** (SDK first, then indexing, then query helpers)
 4. **Write tests before code** (TDD)
-5. **Re-index after code changes**: `pnpm --filter oak-open-curriculum-semantic-search ingest:all`
+5. **Re-index after code changes**: `pnpm --filter oak-search-cli ingest:all`
 
 ### Codebase Context
 
@@ -24,7 +24,7 @@ This plan is self-contained. To implement this fix:
 |------|---------|
 | `packages/sdks/oak-curriculum-sdk/` | SDK with type-gen (types flow from here) |
 | `packages/sdks/oak-curriculum-sdk/type-gen/` | Type generation code |
-| `apps/oak-open-curriculum-semantic-search/` | Semantic search app |
+| `apps/oak-search-cli/` | Semantic search app |
 | `apps/.../src/adapters/` | Bulk data transformers |
 | `apps/.../src/lib/indexing/` | Document builders for ES |
 | `apps/.../src/lib/hybrid-search/` | Query construction |
@@ -309,7 +309,7 @@ pnpm type-check && pnpm lint && pnpm test
 pnpm --filter @oaknational/oak-curriculum-sdk type-gen
 
 # Re-index all content with correct subject values
-pnpm --filter oak-open-curriculum-semantic-search ingest:all
+pnpm --filter oak-search-cli ingest:all
 ```
 
 ---
@@ -338,7 +338,7 @@ pnpm --filter oak-open-curriculum-semantic-search ingest:all
 After re-indexing, verify with a manual search:
 
 ```bash
-# In apps/oak-open-curriculum-semantic-search
+# In apps/oak-search-cli
 pnpm dev
 
 # Then test these queries (via API or benchmark):
@@ -395,4 +395,4 @@ pnpm dev
 | [ADR-101](../../../docs/architecture/architectural-decisions/101-subject-hierarchy-for-search-filtering.md) | Subject hierarchy design (correct intent) |
 | [ADR-080](../../../docs/architecture/architectural-decisions/080-curriculum-data-denormalization-strategy.md) | KS4 denormalisation strategy |
 | [ground-truth-redesign-plan.md](ground-truth-redesign-plan.md) | Lists this as a blocker |
-| [queries-redesigned.md](../../../apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md) | 11 blocked KS4 science queries |
+| [queries-redesigned.md](../../../apps/oak-search-cli/docs/ground-truths/queries-redesigned.md) | 11 blocked KS4 science queries |

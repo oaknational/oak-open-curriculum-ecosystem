@@ -71,7 +71,7 @@ Teachers can search for anything. We don't judge what's "appropriate". A KS2 tea
 Always use shell commands:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # List available bulk data files
 ls bulk-downloads/
@@ -173,5 +173,5 @@ Before proposing any ground truth:
 ## Reference Documents
 
 - `.cursor/skills/ground-truth-design/SKILL.md` - Full methodology
-- `apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` - Complete guide
+- `apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` - Complete guide
 - `.agent/plans/semantic-search/active/ground-truth-redesign-plan.md` - Current redesign plan

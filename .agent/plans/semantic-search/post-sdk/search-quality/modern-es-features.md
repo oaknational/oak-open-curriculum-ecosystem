@@ -322,7 +322,7 @@ This conditional expression means:
 
 **Rationale**: `2<65%` is strictly better for 3-term queries while being neutral for 2-term queries. It doesn't make anything worse and helps queries like "carbon cycle in ecosystems" (3 terms → only 2 required).
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts:227`
+**Location**: `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts:227`
 
 ```typescript
 // Previous

@@ -16,8 +16,6 @@
  * - `.passthrough()` is REMOVED to ensure unknown keys cause validation errors
  * - Combined with `strictObjects: true` in generator options, this ensures
  *   schemas use `.strict()` only - fail fast, never silently ignore keys
- *
- * @packageDocumentation
  */
 
 /**

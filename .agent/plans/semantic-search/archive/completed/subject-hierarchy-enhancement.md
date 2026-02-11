@@ -96,9 +96,9 @@ This enhancement is complete. Remaining work:
 | File | Change |
 |------|--------|
 | `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts` | Added `subject_parent` field |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/lesson-document-core.ts` | Compute `subject_parent` |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/unit-document-core.ts` | Compute `subject_parent` |
-| `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts` | Filter by `subject_parent` |
+| `apps/oak-search-cli/src/lib/indexing/lesson-document-core.ts` | Compute `subject_parent` |
+| `apps/oak-search-cli/src/lib/indexing/unit-document-core.ts` | Compute `subject_parent` |
+| `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts` | Filter by `subject_parent` |
 | Various test files | Added `subject_parent` to mocks |
 
 ---

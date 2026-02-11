@@ -1,7 +1,5 @@
 /**
  * Internal SDK infrastructure — not part of the public API.
- *
- * @packageDocumentation
  */
 
 export { createEsSearchFn } from './es-search.js';

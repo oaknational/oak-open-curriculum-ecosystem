@@ -9,8 +9,6 @@
  * the `ingest()` method accepts the Oak client as a parameter.
  *
  * Types are in {@link ./admin-types}.
- *
- * @packageDocumentation
  */
 
 import type { Result } from '@oaknational/result';

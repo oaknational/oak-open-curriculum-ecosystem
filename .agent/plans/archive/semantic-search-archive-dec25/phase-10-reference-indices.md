@@ -227,7 +227,7 @@ pnpm test:e2e
 ### New Reference Indices
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/reference/
+apps/oak-search-cli/src/lib/reference/
 ├── subjects.ts                     # Subject reference operations
 ├── key-stages.ts                   # Key stage reference operations
 ├── glossary.ts                     # Glossary operations

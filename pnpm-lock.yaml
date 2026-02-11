@@ -258,7 +258,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  apps/oak-open-curriculum-semantic-search:
+  apps/oak-search-cli:
     dependencies:
       '@elastic/elasticsearch':
         specifier: ^9.2.0
@@ -272,6 +272,9 @@ importers:
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-curriculum-sdk
+      '@oaknational/oak-search-sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdks/oak-search-sdk
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../packages/libs/result

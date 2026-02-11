@@ -22,7 +22,7 @@
 
 ## Phase 4: Clean Up `semantic-search`
 
-- **Action**: Replace the manual config in `apps/oak-open-curriculum-semantic-search` with the shared flat config from `@oaknational/eslint-plugin-standards`.
+- **Action**: Replace the manual config in `apps/oak-search-cli` with the shared flat config from `@oaknational/eslint-plugin-standards`.
 - **Benefit**: Removes about 100 lines of config, centralises React/Next.js best practices, and fixes redundancy issues.
 
 ## Phase 5: Boilerplate Reduction

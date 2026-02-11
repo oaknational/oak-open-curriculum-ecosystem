@@ -1,9 +1,9 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **SDK Extraction** — Ground truths complete, extracting search into SDK + CLI  
-**Last Updated**: 2026-02-10  
+**Status**: 🔄 **SDK + CLI Complete** — Result pattern + TSDoc (E2) next, then MCP integration  
+**Last Updated**: 2026-02-11  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
-**Metrics**: See [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
+**Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
 **Scope**: Search SDK/CLI capabilities. UI delivery is out of scope (separate repository).
 
@@ -11,7 +11,7 @@
 
 ## Current State
 
-SDK service extraction is complete — all three services (retrieval, admin, observability) are implemented in `packages/sdks/oak-search-sdk/` with 34 passing tests. Next: rename the CLI workspace and wire subcommands.
+SDK extraction and CLI wiring are complete. All three SDK services (retrieval, admin, observability) are implemented in `packages/sdks/oak-search-sdk/` with 34 tests. The CLI workspace has been renamed to `apps/oak-search-cli/` with all subcommands wired to SDK services (934 tests, 82 test files). A directive review identified that all services must use the Result pattern and comprehensive TSDoc. Next: Checkpoint E2 (Result + TSDoc), then Checkpoint F (MCP integration).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -20,7 +20,7 @@ SDK service extraction is complete — all three services (retrieval, admin, obs
 | `oak_threads` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
 | `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
 
-Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md).
+Full baseline details: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md).
 
 ---
 
@@ -30,12 +30,13 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 1. Ground Truth Foundation                       ✅ COMPLETE
    30 lesson GTs + multi-index GTs (units, threads, sequences)
          ↓
-2. SDK Extraction                                ← CURRENT
+2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
    a. Service extraction (A–D)                   ✅ COMPLETE
-   b. CLI rename + wiring (E)                    📋 PENDING
+   b. CLI rename + wiring (E)                    ✅ COMPLETE
+   c. Result pattern + TSDoc (E2)                ← NEXT
          ↓
 3. MCP Integration (post-sdk/mcp-integration/)
-   Wire hybrid search into MCP tools
+   Wire hybrid search into MCP tools (Checkpoint F)
          ↓
 4. Search Enhancements (post-sdk/search-quality/)
    Ground truth expansion, fundamentals re-evaluation,
@@ -73,36 +74,39 @@ Full baseline details: [Ground Truth Protocol](/apps/oak-open-curriculum-semanti
 
 ---
 
-## Phase 2: SDK Extraction 🔄 Current
+## Phase 2: SDK Extraction + CLI Wiring ✅ Complete
 
-**Status**: 🔄 In Progress (services extracted; CLI rename pending)
+**Status**: ✅ Complete (Feb 2026)
 **Location**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
 
 **Goal**: Extract search library into an SDK; rename the
 current workspace as the CLI.
 
-**Checkpoints A–D complete** (Feb 2026):
+**Checkpoints A–E complete** (Feb 2026):
 
 - SDK workspace at `packages/sdks/oak-search-sdk/`
 - All three services fully implemented: retrieval, admin,
-  observability
-- 25 integration tests GREEN + 9 unit tests
+  observability (34 tests)
+- CLI renamed to `apps/oak-search-cli/` with all
+  subcommands wired to SDK services (934 tests)
 - All quality gates pass
 - Factory: `createSearchSdk({ deps, config }) -> SearchSdk`
+- Evaluation rewired to use SDK retrieval code paths
 
-**Remaining**: Checkpoint E (rename workspace + wire CLI),
-Checkpoint F (MCP integration wiring).
+**Remaining**: Checkpoint E2 (Result pattern + TSDoc),
+then Checkpoint F (MCP integration wiring).
 
 | What | From | To |
 |------|------|-----|
 | SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` ✅ |
-| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` (rename) 📋 |
+| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` ✅ |
+| Result pattern + TSDoc | Throws on failure | `Result<T, E>` everywhere 📋 |
 
 ---
 
 ## Phase 3: MCP Integration
 
-**Status**: ⏸️ Blocked by SDK Extraction  
+**Status**: 📋 Ready to start (SDK + CLI complete)  
 **Location**: [post-sdk/mcp-integration/](post-sdk/mcp-integration/)
 
 **Goal**: Wire hybrid search into MCP tools — first consumer of SDK.
@@ -145,8 +149,8 @@ Modern Foreign Languages (French, German, Spanish) have unique search challenges
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (services implemented, 34 tests) |
-| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (fully implemented, 34 tests) |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests) |
 
 The Search SDK consumes types from the Curriculum SDK.
 The Search CLI consumes the Search SDK.
@@ -179,9 +183,9 @@ pnpm smoke:dev:stub
 
 | Document | Purpose |
 |----------|---------|
-| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 | [search-acceptance-criteria.md](search-acceptance-criteria.md) | Level definitions |
-| [Ground Truth Guide](../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+| [Ground Truth Guide](../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
 
 ---
 

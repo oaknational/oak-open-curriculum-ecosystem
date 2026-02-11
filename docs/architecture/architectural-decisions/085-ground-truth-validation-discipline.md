@@ -198,7 +198,7 @@ How do we ensure ground truth data is valid and prevent future experiments from 
 Ground truth validation uses generated types from bulk data:
 
 ```bash
-# Run from apps/oak-open-curriculum-semantic-search/
+# Run from apps/oak-search-cli/
 
 # Generate types from bulk data (after bulk:download)
 pnpm bulk:typegen
@@ -568,8 +568,8 @@ The Stage 3 qualitative review was completed 2026-01-09, validating all 474 grou
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md) — Strategy this validates
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics framework
 - [ADR-098: Ground Truth Registry](098-ground-truth-registry.md) — Registry structure
-- [GROUND-TRUTH-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — **Design, review, troubleshooting guide** (single source of truth)
-- [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) — Metric definitions
+- [GROUND-TRUTH-GUIDE.md](../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — **Design, review, troubleshooting guide** (single source of truth)
+- [IR-METRICS.md](../../../apps/oak-search-cli/docs/IR-METRICS.md) — Metric definitions
 
 ## References
 

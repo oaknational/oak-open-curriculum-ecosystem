@@ -499,7 +499,7 @@ This means:
 #### 2. Index Creation
 
 ```bash
-# From apps/oak-open-curriculum-semantic-search
+# From apps/oak-search-cli
 pnpm es:setup
 # Reset when you need a clean rebuild
 pnpm es:setup reset

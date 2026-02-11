@@ -126,7 +126,7 @@ pnpm es:setup  # Creates indexes and deploys synonyms
 
 ### Migration Notes
 
-The static `apps/oak-open-curriculum-semantic-search/scripts/synonyms.json` file was **deleted**. All synonyms now flow from SDK.
+The static `apps/oak-search-cli/scripts/synonyms.json` file was **deleted**. All synonyms now flow from SDK.
 
 ## Validation Criteria
 
@@ -146,7 +146,7 @@ This section documents the methodology for identifying and adding new synonyms, 
 Run hard query baseline tests and analyse failures by category:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
 ```
 
@@ -204,7 +204,7 @@ Deploy and verify:
 
 ```bash
 pnpm type-gen && pnpm build
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup   # Deploys new synonyms to ES
 pnpm vitest run -c vitest.smoke.config.ts synonym-coverage
 ```
@@ -234,7 +234,7 @@ Record before/after MRR in [EXPERIMENT-LOG.md](../../.agent/evaluations/EXPERIME
 
 ### For Full Process Documentation
 
-See [NEW-SUBJECT-GUIDE.md](../../apps/oak-open-curriculum-semantic-search/docs/NEW-SUBJECT-GUIDE.md) for the complete subject onboarding runbook.
+See [NEW-SUBJECT-GUIDE.md](../../apps/oak-search-cli/docs/NEW-SUBJECT-GUIDE.md) for the complete subject onboarding runbook.
 
 ---
 
@@ -338,4 +338,4 @@ Before implementing vocab-gen synonym generation, decide:
 - `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts` - Synonym definitions
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` - Export utilities
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` - Curated synonym modules
-- `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/index.ts` - ES setup CLI
+- `apps/oak-search-cli/src/lib/elasticsearch/setup/index.ts` - ES setup CLI

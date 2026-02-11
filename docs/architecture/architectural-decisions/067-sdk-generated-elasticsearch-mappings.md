@@ -164,7 +164,7 @@ packages/sdks/oak-curriculum-sdk/src/types/generated/search/
 ### Search App (Consumer)
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/
+apps/oak-search-cli/src/lib/elasticsearch/
 ├── definitions/
 │   └── index.ts                 # Documentation only (JSON files deleted)
 └── setup/
@@ -183,4 +183,4 @@ apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/
 
 - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/` - Generator source
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/` - Generated output
-- `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/index.ts` - Consumer
+- `apps/oak-search-cli/src/lib/elasticsearch/setup/index.ts` - Consumer

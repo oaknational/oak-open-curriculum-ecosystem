@@ -105,7 +105,7 @@ GET /api/search?q={query}&type=lesson,unit
 ## Component Structure
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/components/
+apps/oak-search-cli/src/components/
 ├── search/
 │   ├── SearchBox.tsx              # Input with typeahead
 │   ├── SearchResults.tsx          # Results container
@@ -213,7 +213,7 @@ pnpm test:ui                                      # Playwright component tests
 ### Existing Search Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── src/app/api/search/               # Search API routes
 ├── src/lib/hybrid-search/            # Query builders
 └── src/lib/search-quality/           # Metrics, ground truth
@@ -222,7 +222,7 @@ apps/oak-open-curriculum-semantic-search/
 ### New UI Components
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/
+apps/oak-search-cli/src/
 ├── components/search/                # New search UI components
 ├── components/ui/                    # Shared UI primitives
 └── hooks/                            # Search hooks

@@ -1,7 +1,7 @@
 # Repo Search Deep Dive (SDK/CLI focus)
 
 **Scope**: Search functionality in this repo intended for SDK and CLI usage. UI surfaces are ignored by request.
-**Primary codebase**: `apps/oak-open-curriculum-semantic-search` plus SDK type generation under `packages/sdks/oak-curriculum-sdk`.
+**Primary codebase**: `apps/oak-search-cli` plus SDK type generation under `packages/sdks/oak-curriculum-sdk`.
 
 **Status note**: Anything under `app/api` is aspirational and not actually built or deployed. We do have Elasticsearch data suitable for typeahead suggestions, but there is no UI integration, and there is no natural language or intent flow in use yet.
 
@@ -13,7 +13,7 @@
 
 ## Index inventory and data model
 
-- Indices and mappings are pulled from the SDK and created via `pnpm -C apps/oak-open-curriculum-semantic-search es:setup`.
+- Indices and mappings are pulled from the SDK and created via `pnpm -C apps/oak-search-cli es:setup`.
 - Current indices (via SDK mappings):
   - `oak_lessons` (semantic lesson docs)
   - `oak_unit_rollup` (aggregated unit content for search)
@@ -26,7 +26,7 @@
 ## Ingestion pipeline (CLI and orchestration)
 
 - Primary CLI:
-  - `pnpm -C apps/oak-open-curriculum-semantic-search es:ingest-live`
+  - `pnpm -C apps/oak-search-cli es:ingest-live`
   - Supports API mode (default) and bulk mode (`--bulk --bulk-dir`), with `--dry-run`, `--force`, `--verbose`.
 - Setup and status:
   - `pnpm ... es:setup` (create synonyms + indices)
@@ -98,17 +98,17 @@
 - Baseline and diagnostic evaluation scripts:
   - `pnpm eval:diagnostic`, `pnpm eval:per-category`.
 - Acceptance criteria and tiering defined in `.agent/plans/semantic-search/search-acceptance-criteria.md`.
-- Experiments tracked in `apps/oak-open-curriculum-semantic-search/evaluation/` and `.agent/evaluations/`.
+- Experiments tracked in `apps/oak-search-cli/evaluation/` and `.agent/evaluations/`.
 
 ## Key file references
 
 - SDK type generation overview: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md`
 - SDK search types: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/requests.ts`
-- Index setup CLI: `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/cli.ts`
-- Ingestion CLI: `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/ingest-live.ts`
-- Hybrid search orchestration: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts`
-- RRF query builders: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
-- Suggestion pipeline: `apps/oak-open-curriculum-semantic-search/src/lib/suggestions/index.ts`
-- Natural language parser: `apps/oak-open-curriculum-semantic-search/src/lib/query-parser.ts`
-- Indexing module overview: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/README.md`
-- SDK caching guide: `apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md`
+- Index setup CLI: `apps/oak-search-cli/src/lib/elasticsearch/setup/cli.ts`
+- Ingestion CLI: `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-live.ts`
+- Hybrid search orchestration: `apps/oak-search-cli/src/lib/hybrid-search/index.ts`
+- RRF query builders: `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts`
+- Suggestion pipeline: `apps/oak-search-cli/src/lib/suggestions/index.ts`
+- Natural language parser: `apps/oak-search-cli/src/lib/query-parser.ts`
+- Indexing module overview: `apps/oak-search-cli/src/lib/indexing/README.md`
+- SDK caching guide: `apps/oak-search-cli/docs/SDK-CACHING.md`

@@ -1,7 +1,5 @@
 /**
  * Type definitions for endpoint extraction.
- *
- * @packageDocumentation
  */
 
 /**

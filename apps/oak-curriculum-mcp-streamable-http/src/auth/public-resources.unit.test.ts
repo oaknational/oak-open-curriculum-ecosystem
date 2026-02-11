@@ -2,8 +2,6 @@
  * Unit tests for public resource detection.
  *
  * Pure function tests with no IO, no side effects, no mocks.
- *
- * @packageDocumentation
  */
 
 import { describe, it, expect } from 'vitest';

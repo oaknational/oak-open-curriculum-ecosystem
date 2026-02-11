@@ -14,7 +14,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 ## Current Context Snapshot
 
 - **Testing topology**: `package.json` defines `test` as `turbo run --continue test`, delegating to workspace-level `vitest run` scripts. E2E suites execute through the separate `test:e2e` Turbo task and are not invoked by `pnpm test`. No `mutate` script is registered yet.
-- **Configuration state**: Most workspaces import `vitest.config.base.ts`. Custom overrides exist in `apps/oak-notion-mcp/vitest.config.ts` (adds `**/*.api.test.ts`), `apps/oak-open-curriculum-semantic-search/vitest.config.ts` (JS DOM environment), and `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts` (mixes unit and E2E include globs). No Stryker configuration files are present anywhere in the repo.
+- **Configuration state**: Most workspaces import `vitest.config.base.ts`. Custom overrides exist in `apps/oak-notion-mcp/vitest.config.ts` (adds `**/*.api.test.ts`), `apps/oak-search-cli/vitest.config.ts` (JS DOM environment), and `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts` (mixes unit and E2E include globs). No Stryker configuration files are present anywhere in the repo.
 - **Dependency posture**: The root lists `vitest` under `devDependencies`. Several workspaces (`packages/libs/{env,logger,storage,transport}/`, `packages/providers/mcp-providers-node/`, `apps/oak-notion-mcp/`) rely on hoisted Vitest rather than declaring it locally.
 - **Tooling cadence**: Quality gates follow format → type-check → lint → test → build, as enforced by `package.json` scripts such as `qg`.
 
@@ -46,7 +46,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 - **`apps/oak-notion-mcp/`**: `package.json` provides `test: "vitest run"` yet omits `vitest` in `devDependencies`, depending on hoisting. `vitest.config.ts` merges the base config and narrows includes to `**/*.unit.test.ts`, `**/*.integration.test.ts`, `**/*.api.test.ts`.
 - **`apps/oak-curriculum-mcp-stdio/`**: `vitest.config.ts` re-exports the base configuration. `devDependencies` include `vitest`. No E2E patterns leak into the default suite.
 - **`apps/oak-curriculum-mcp-streamable-http/`**: Custom `vitest.config.ts` includes both `src/**/*.unit.test.ts` and `src/**/*.e2e.test.ts`; mutation runs must exclude the E2E glob or adjust the config. Dev dependencies include `vitest`.
-- **`apps/oak-open-curriculum-semantic-search/`**: `vitest.config.ts` configures JS DOM, includes `**/*.unit.test.{ts,tsx}` and `**/*.integration.test.{ts,tsx}`. Dev dependencies already pin `vitest`. Mutation tooling must honour the JS DOM environment and `test.setup.ts`.
+- **`apps/oak-search-cli/`**: `vitest.config.ts` configures JS DOM, includes `**/*.unit.test.{ts,tsx}` and `**/*.integration.test.{ts,tsx}`. Dev dependencies already pin `vitest`. Mutation tooling must honour the JS DOM environment and `test.setup.ts`.
 - **`packages/libs/{env,logger,storage,transport}/`**: Each `package.json` defines `test: "vitest run"`, imports `vitest.config.base.ts`, and lacks local `vitest` in `devDependencies`. Mutation config can rely on hoisting but should confirm the shared base provides correct include/exclude patterns (currently broad `*.test.ts`/`*.spec.ts`).
 - **`packages/providers/mcp-providers-node/`**: `package.json` exposes `test: "vitest run"` but has no local `vitest` dependency and no `vitest.config.ts`. It will rely entirely on root defaults; adding a workspace config may be necessary to tune mutation scope.
 - **Update (2025-09-24)**: Workspace now owns `vitest.config.ts`, `stryker.config.ts`, and a `mutate` script. Mutation score data above should inform follow-up test enhancements (assertions around logging providers).
@@ -57,14 +57,14 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ### 1. Baseline Configuration Audit
 
-- **Inventory**: Catalogue Vitest configs, TypeScript targets, lint rules, and Turbo tasks for each workspace to confirm inheritance from shared bases (`vitest.config.base.ts`, `tsconfig.base.json`, `eslint.config.base.ts`). Include explicit notes where workspaces add custom glob patterns (`apps/oak-notion-mcp`, `apps/oak-open-curriculum-semantic-search`) or lack explicit configs (`packages/providers/mcp-providers-node`).
+- **Inventory**: Catalogue Vitest configs, TypeScript targets, lint rules, and Turbo tasks for each workspace to confirm inheritance from shared bases (`vitest.config.base.ts`, `tsconfig.base.json`, `eslint.config.base.ts`). Include explicit notes where workspaces add custom glob patterns (`apps/oak-notion-mcp`, `apps/oak-search-cli`) or lack explicit configs (`packages/providers/mcp-providers-node`).
 - **Gap analysis**: Prioritise correcting `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts`, which currently pulls `src/**/*.e2e.test.ts` into the unit/integration pipeline; tighten library workspaces currently matching generic `*.test.ts`/`*.spec.ts` patterns; and resolve the `packages/libs/mcp-server-kit` workspace reference if the package remains absent.
 - **Documentation**: Record findings in `.agent/plans/mutation-testing/config-alignment-notes.md`, capturing evidence links (file paths, commit hashes) for future reference.
 
 ### 2. Dev Dependency Standardisation
 
 - **Hoisting policy**: Continue the established pattern by hoisting shared tooling (Vitest currently) and add the core Stryker packages (`@stryker-mutator/core`, `@stryker-mutator/vitest-runner`, `@stryker-mutator/typescript-checker`) to the root `devDependencies` so workspaces that lack local `vitest` still resolve tooling. Document the expectation that hoisted Stryker binaries remain accessible to script runners.
-- **Workspace overrides**: Document exceptions where local devDependencies remain necessary (e.g., `apps/oak-open-curriculum-semantic-search` already pinning `vitest` to satisfy JS DOM requirements) and specify when additional Stryker adapters should live alongside them.
+- **Workspace overrides**: Document exceptions where local devDependencies remain necessary (e.g., `apps/oak-search-cli` already pinning `vitest` to satisfy JS DOM requirements) and specify when additional Stryker adapters should live alongside them.
 - **Version governance**: Align Stryker package versions with the monorepo Vitest major version (currently `^3.2.4`) and codify upgrade procedures via root lockfile updates.
 - **Automation**: Evaluate adding a lint or script check that flags workspaces with `test` scripts but missing `mutate` scripts once rollout begins.
 

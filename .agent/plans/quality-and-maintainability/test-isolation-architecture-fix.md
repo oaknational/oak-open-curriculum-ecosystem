@@ -18,7 +18,7 @@ pool: 'threads',
 
 This means `pnpm test` and `pnpm check` report success even when tests fail, making quality gates unreliable.
 
-**Root Cause**: The `vitest.config.ts` in `oak-open-curriculum-semantic-search` disabled process isolation to work around OOM crashes. However, this causes vitest to not properly propagate failure exit codes.
+**Root Cause**: The `vitest.config.ts` in `oak-search-cli` disabled process isolation to work around OOM crashes. However, this causes vitest to not properly propagate failure exit codes.
 
 **Fix Required**:
 1. Complete MediaQueryProvider DI refactoring for remaining test files
@@ -106,8 +106,8 @@ The OOM crash during test cleanup has been fixed by removing process isolation (
 **ROOT CAUSE**: Tests mutate `window.matchMedia` globally via `Object.defineProperty`, violating testing-strategy.md line 25: "Tests MUST NOT manipulate shared global state".
 
 Failing tests:
-- `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeSystemPreference.integration.test.tsx`
-- `apps/oak-open-curriculum-semantic-search/app/ui/search/layout/SearchPageLayout.error.unit.test.tsx`
+- `apps/oak-search-cli/app/lib/theme/ThemeSystemPreference.integration.test.tsx`
+- `apps/oak-search-cli/app/ui/search/layout/SearchPageLayout.error.unit.test.tsx`
 
 ## Goal
 
@@ -276,7 +276,7 @@ Start at step "Fix search-index-target.unit.test.ts type errors" above, then pro
 
 **Command**:
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm vitest run app/lib/theme/ThemeSystemPreference.integration.test.tsx
 pnpm vitest run app/ui/search/layout/SearchPageLayout.error.unit.test.tsx
 ```
@@ -291,7 +291,7 @@ pnpm vitest run app/ui/search/layout/SearchPageLayout.error.unit.test.tsx
 
 **Command**:
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm test
 ```
 
@@ -305,7 +305,7 @@ pnpm test
 
 **Command**:
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 rg "Object\.defineProperty\(window" --glob "*.test.ts*"
 rg "mockMatchMedia" --glob "*.test.ts*"
 ```
@@ -352,51 +352,51 @@ pnpm test
 
 ### Files Created (NEW)
 ```bash
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.test-helpers.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.unit.test.tsx ✅
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.tsx ✅
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.test-helpers.tsx ✅
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.unit.test.tsx ✅
 ```
 
 ### Files Deleted (REMOVED)
 ```bash
-apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media.ts ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media-registries.ts ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.unit.test.tsx ✅
+apps/oak-search-cli/app/ui/search/mock-match-media.ts ✅
+apps/oak-search-cli/app/ui/search/mock-match-media-registries.ts ✅
+apps/oak-search-cli/app/ui/search/SearchPageClient.test-helpers.unit.test.tsx ✅
 ```
 
 ### Product Code Refactored (COMPLETED)
 ```bash
-apps/oak-open-curriculum-semantic-search/app/ui/search/layout/SearchSecondary.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/lib/theme/theme-utils.ts ✅
-apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/lib/Providers.tsx ✅
+apps/oak-search-cli/app/ui/search/layout/SearchSecondary.tsx ✅
+apps/oak-search-cli/app/lib/theme/theme-utils.ts ✅
+apps/oak-search-cli/app/lib/theme/ThemeContext.tsx ✅
+apps/oak-search-cli/app/lib/Providers.tsx ✅
 ```
 
 ### Test Files Refactored (COMPLETED)
 ```bash
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeSystemPreference.integration.test.tsx ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.integration.test.tsx ✅
+apps/oak-search-cli/app/ui/search/SearchPageClient.test-helpers.tsx ✅
+apps/oak-search-cli/app/lib/theme/ThemeSystemPreference.integration.test.tsx ✅
+apps/oak-search-cli/app/ui/search/SearchPageClient.integration.test.tsx ✅
 ```
 
 ### Type Discipline Fixes (COMPLETED)
 ```bash
-apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts ⏳ (in progress)
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/lesson-document-builder.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness-filtering.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-harness-ops.unit.test.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/search-index-target.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/search-index-target.unit.test.ts ⏳ (needs type fix)
-apps/oak-open-curriculum-semantic-search/src/lib/index-oak.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-bulk-helpers.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facet-index.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/bulk-operation-types.ts ✅
-apps/oak-open-curriculum-semantic-search/src/lib/suggestions/index.unit.test.ts ✅
-apps/oak-open-curriculum-semantic-search/app/api/index-oak/route.ts ✅
-apps/oak-open-curriculum-semantic-search/app/api/rebuild-rollup/route.ts ✅
+apps/oak-search-cli/src/lib/index-oak-helpers.ts ⏳ (in progress)
+apps/oak-search-cli/src/lib/indexing/document-transforms.ts ✅
+apps/oak-search-cli/src/lib/indexing/lesson-document-builder.ts ✅
+apps/oak-search-cli/src/lib/indexing/sandbox-harness.ts ✅
+apps/oak-search-cli/src/lib/indexing/sandbox-harness-filtering.ts ✅
+apps/oak-search-cli/src/lib/indexing/sandbox-harness-ops.unit.test.ts ✅
+apps/oak-search-cli/src/lib/search-index-target.ts ✅
+apps/oak-search-cli/src/lib/search-index-target.unit.test.ts ⏳ (needs type fix)
+apps/oak-search-cli/src/lib/index-oak.ts ✅
+apps/oak-search-cli/src/lib/indexing/sequence-bulk-helpers.ts ✅
+apps/oak-search-cli/src/lib/indexing/sequence-facet-index.ts ✅
+apps/oak-search-cli/src/lib/indexing/sequence-facets.ts ✅
+apps/oak-search-cli/src/lib/indexing/bulk-operation-types.ts ✅
+apps/oak-search-cli/src/lib/suggestions/index.unit.test.ts ✅
+apps/oak-search-cli/app/api/index-oak/route.ts ✅
+apps/oak-search-cli/app/api/rebuild-rollup/route.ts ✅
 ```
 
 ## All Assumptions (For Fresh Context)

@@ -15,8 +15,8 @@ Document relationships
 
 ## Scope
 
-- All authored documents under `apps/oak-open-curriculum-semantic-search/docs/` (excluding generated `docs/api/**`).
-- Workspace README (`apps/oak-open-curriculum-semantic-search/README.md`).
+- All authored documents under `apps/oak-search-cli/docs/` (excluding generated `docs/api/**`).
+- Workspace README (`apps/oak-search-cli/README.md`).
 - Cross-workspace onboarding references (root README as needed) and MCP tooling notes.
 - Documentation updates triggered by API surface changes (structured/NL search, suggestions, admin/status, observability).
 
@@ -73,7 +73,7 @@ Out of scope: code implementation itself (covered by other plans), but every cod
 7. ACTION: Revise workspace README with expanded endpoints, quick start, observability, and quality gates.  
    REVIEW: Ensure onboarding flow meets ≤15 minute goal.
 8. GROUNDING: Read GO.md.
-9. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` and `pnpm qg` after documentation changes.  
+9. QUALITY-GATE: Run `pnpm -C apps/oak-search-cli doc-gen` and `pnpm qg` after documentation changes.  
    REVIEW: Capture outcomes; remediate failures immediately.
 
 _(Insert additional ACTION/REVIEW/GROUNDING pairs if documentation scope grows.)_
@@ -97,4 +97,4 @@ _(Insert additional ACTION/REVIEW/GROUNDING pairs if documentation scope grows.)
 - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
 - `.agent/plans/semantic-search/semantic-search-api-plan.md`
 - `.agent/plans/semantic-search/semantic-search-alignment-refresh-plan.md`
-- `apps/oak-open-curriculum-semantic-search/docs/oak-curriculum-hybrid-search-definitive-guide.md`
+- `apps/oak-search-cli/docs/oak-curriculum-hybrid-search-definitive-guide.md`

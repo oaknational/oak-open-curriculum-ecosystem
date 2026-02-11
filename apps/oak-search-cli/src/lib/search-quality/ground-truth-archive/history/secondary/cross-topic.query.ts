@@ -1,0 +1,15 @@
+/**
+ * Query definition for cross-topic ground truth.
+ *
+ * This file contains ONLY the query metadata, NOT the expected results.
+ * Expected results are in ./cross-topic.expected.ts
+ */
+
+import type { GroundTruthQueryDefinition } from '../../types';
+
+export const HISTORY_SECONDARY_CROSS_TOPIC_QUERY: GroundTruthQueryDefinition = {
+  query: 'revolution and slavery abolition',
+  category: 'cross-topic',
+  description: 'Tests intersection of revolutionary history with abolition movement',
+  expectedFile: './cross-topic.expected.ts',
+} as const;

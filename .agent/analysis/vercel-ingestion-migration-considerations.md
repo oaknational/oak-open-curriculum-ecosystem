@@ -409,8 +409,8 @@ Deploy to Vercel with:
 ## References
 
 - **Rate Limit Analysis**: `.agent/analysis/api-rate-limit-investigation.md`
-- **Current Ingestion**: `apps/oak-open-curriculum-semantic-search/scripts/ingest-all-combinations.ts`
-- **Progress Tracking**: `apps/oak-open-curriculum-semantic-search/scripts/check-progress.ts`
+- **Current Ingestion**: `apps/oak-search-cli/scripts/ingest-all-combinations.ts`
+- **Progress Tracking**: `apps/oak-search-cli/scripts/check-progress.ts`
 - **Vercel Docs**: https://vercel.com/docs/functions/runtimes#max-duration
 - **Vercel Cron**: https://vercel.com/docs/cron-jobs
 - **Vercel KV**: https://vercel.com/docs/storage/vercel-kv

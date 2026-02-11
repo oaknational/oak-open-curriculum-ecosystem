@@ -108,4 +108,4 @@ No code changes required. This ADR documents architectural understanding.
 ## References
 
 - [Elasticsearch Fuzziness](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness)
-- [GROUND-TRUTH-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — imprecise-input category guidance
+- [GROUND-TRUTH-GUIDE.md](../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) — imprecise-input category guidance

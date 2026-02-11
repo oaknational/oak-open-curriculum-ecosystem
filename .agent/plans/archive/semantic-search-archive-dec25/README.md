@@ -270,7 +270,7 @@ pnpm smoke:dev:stub
 ### Search Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── src/lib/hybrid-search/            # RRF query builders
 ├── src/lib/search-quality/           # Ground truth, metrics
 │   └── ground-truth/                 # ✅ CORRECTED ground truth

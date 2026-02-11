@@ -3,8 +3,6 @@
  *
  * Types that flow from the Curriculum SDK schema (`SearchSubjectSlug`,
  * `KeyStage`, `SearchScope`) are imported, not redefined.
- *
- * @packageDocumentation
  */
 
 import type { KeyStage } from '@oaknational/oak-curriculum-sdk';

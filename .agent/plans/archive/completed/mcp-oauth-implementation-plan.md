@@ -161,7 +161,7 @@ Existing implementation covers plan objectives.
 - [x] `pnpm --filter @oaknational/mcp-logger test`
 - [x] `grep -E "require.*['\"](fs|node:fs)['\"]" packages/libs/logger/dist/index.js` → **no matches**
 - [x] `grep -E "require.*['\"](fs|node:fs)['\"]" packages/libs/logger/dist/node.js` → **fs imports present as expected**
-- [x] `pnpm --filter @oaknational/open-curriculum-semantic-search build`
+- [x] `pnpm --filter @oaknational/search-cli build`
 - [x] Full repository gates: `pnpm format-check:root`, `pnpm markdownlint-check:root`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm doc-gen`, `pnpm test`, `pnpm test:e2e`, `pnpm smoke:dev:stub`, `pnpm smoke:dev:live`, `pnpm qg`
 
 #### Follow-up Items Rolled Forward

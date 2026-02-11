@@ -3,8 +3,6 @@
  *
  * This module provides access to endpoint definitions extracted from OpenAPI,
  * transforming all Zod v3 schema code to Zod v4 before returning.
- *
- * @packageDocumentation
  */
 
 import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';

@@ -3,8 +3,6 @@
  *
  * Tests the preventive authentication layer that checks MCP client auth
  * BEFORE SDK execution. This is separate from upstream API auth (ADR-054).
- *
- * @packageDocumentation
  */
 
 /* eslint-disable max-lines-per-function -- comprehensive test coverage requires many test cases */

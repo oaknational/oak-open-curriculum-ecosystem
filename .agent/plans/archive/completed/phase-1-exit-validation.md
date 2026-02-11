@@ -7,7 +7,7 @@ _Authored: 2025-09-24_
 - `pnpm lint` – ✅ 2025-09-24 (post Oak UI migrations) with no violations.
 - `pnpm test` – ✅ 2025-09-24. Semantic search suite now includes `app/admin/page.integration.test.tsx` and `app/api/docs/page.integration.test.tsx` alongside existing coverage.
 - `pnpm build` – ✅ 2025-09-24. Resolved Next.js route typing and Oak spacing tokens before final success. Build output logged route bundle sizes.
-- `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` – ✅ 2025-09-24. Typedoc HTML/JSON regenerated without warnings.
+- `pnpm -C apps/oak-search-cli doc-gen` – ✅ 2025-09-24. Typedoc HTML/JSON regenerated without warnings.
 
 ## Regression artefacts review
 

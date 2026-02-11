@@ -1,6 +1,6 @@
 # TSDoc Canonical Tag Migration
 
-> **Status**: Planned  
+> **Status**: complete  
 > **Priority**: Medium (documentation quality)  
 > **Foundation Alignment**: Standards compliance, maintainability
 
@@ -86,8 +86,8 @@ The codebase uses `@description` in 548 places across 101 files. Per the [TSDoc 
 
 | Area                                                | Est. Files |
 | --------------------------------------------------- | ---------- |
-| `apps/oak-open-curriculum-semantic-search/src/`     | ~40        |
-| `apps/oak-open-curriculum-semantic-search/scripts/` | ~10        |
+| `apps/oak-search-cli/src/`     | ~40        |
+| `apps/oak-search-cli/scripts/` | ~10        |
 | `packages/sdks/oak-curriculum-sdk/src/`             | ~10        |
 | `packages/sdks/oak-curriculum-sdk/type-gen/`        | ~15        |
 | `packages/libs/result/`                             | 2          |
@@ -120,7 +120,7 @@ After migration, add `eslint-plugin-tsdoc` to prevent regression:
 1. Start with `packages/libs/result/` (2 files, easy win)
 2. Then `packages/sdks/oak-curriculum-sdk/src/config/` (small, self-contained)
 3. Then generators in `type-gen/typegen/search/`
-4. Finally bulk migration of `apps/oak-open-curriculum-semantic-search/`
+4. Finally bulk migration of `apps/oak-search-cli/`
 
 ### Per-File Checklist
 

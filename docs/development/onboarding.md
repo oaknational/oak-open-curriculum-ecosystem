@@ -35,7 +35,7 @@ Read the full explanation: [OpenAPI Pipeline Architecture](../architecture/opena
 
 - [`README.md`](../../README.md) – high-level description of the ecosystem and shared parsing helpers.
 - [`packages/sdks/oak-curriculum-sdk/README.md`](../../packages/sdks/oak-curriculum-sdk/README.md) – SDK generation pipeline, MCP tool exports, validation helpers.
-- [`apps/oak-open-curriculum-semantic-search/README.md`](../../apps/oak-open-curriculum-semantic-search/README.md) – ingestion, admin flows, hybrid search.
+- [`apps/oak-search-cli/README.md`](../../apps/oak-search-cli/README.md) – ingestion, admin flows, hybrid search.
 - MCP server READMEs (`apps/oak-curriculum-mcp-*`) – running stdio/HTTP servers locally or on Vercel.
 
 ## 4. Install & Regenerate Types
@@ -71,7 +71,7 @@ See [Environment Variables Guide](./environment-variables.md) for complete setup
 ## 7. Workspace Priorities
 
 - **Curriculum SDK (`packages/sdks/oak-curriculum-sdk`)** – The type generation pipeline. Keep generation scripts deterministic, update docs via `pnpm doc-gen`, and ensure new helpers are exported from `src/validation/index.ts`.
-- **Semantic Search (`apps/oak-open-curriculum-semantic-search`)** – The largest workspace. 4-way RRF hybrid search across 7 Elasticsearch indices, with ingestion, query processing, ground truth evaluation, and benchmark suite. Currently being extracted into a standalone Search SDK + CLI. See [ARCHITECTURE.md](../../apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md) for the full picture.
+- **Semantic Search (`apps/oak-search-cli`)** – The largest workspace. 4-way RRF hybrid search across 7 Elasticsearch indices, with ingestion, query processing, ground truth evaluation, and benchmark suite. Currently being extracted into a standalone Search SDK + CLI. See [ARCHITECTURE.md](../../apps/oak-search-cli/docs/ARCHITECTURE.md) for the full picture.
 - **MCP Servers** – Expose the curriculum to AI agents. Consume SDK exports directly; configuration examples live in the app READMEs.
 
 ## 8. Documentation Expectations

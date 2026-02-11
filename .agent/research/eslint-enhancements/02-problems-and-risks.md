@@ -7,7 +7,7 @@
 
 ## 2. Configuration Redundancy
 
-- **Issue**: `apps/oak-open-curriculum-semantic-search/eslint.config.ts` re-declares complexity rules (`max-lines`, `max-depth`, etc.) that are already present in `baseConfig`.
+- **Issue**: `apps/oak-search-cli/eslint.config.ts` re-declares complexity rules (`max-lines`, `max-depth`, etc.) that are already present in `baseConfig`.
 - **Issue**: `packages/libs/transport/eslint.config.ts` manually re-declares `no-restricted-globals`, duplicating logic from `createLibBoundaryRules`.
 - **Risk**: Configuration drift. Updates to the base config or boundary factories will not propagate to these workspaces, leading to inconsistent enforcement.
 
@@ -23,7 +23,7 @@
 
 ## 5. Type Incompatibilities
 
-- **Issue**: `apps/oak-open-curriculum-semantic-search` uses `@ts-expect-error` to suppress type errors for `eslint-plugin-react-hooks` and `eslint-plugin-import-x`.
+- **Issue**: `apps/oak-search-cli` uses `@ts-expect-error` to suppress type errors for `eslint-plugin-react-hooks` and `eslint-plugin-import-x`.
 - **Risk**: brittle configuration that may break silently with dependency updates.
 
 ## 6. Missing Core Scope

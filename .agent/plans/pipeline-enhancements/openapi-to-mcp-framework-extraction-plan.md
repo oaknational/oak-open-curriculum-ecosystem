@@ -104,7 +104,7 @@ Deliver an extensible framework that transforms any OpenAPI specification, plus 
 2. REVIEW: Self-review the audit summary to confirm every SDK script, generated artefact, and helper has a documented classification.
 3. ACTION: Define target abstraction layers for SDK generation, MCP runtime, and search service, capturing interfaces, dependency boundaries, and DI requirements in `docs/architecture/openapi-framework-layers.md`.
 4. REVIEW: Self-review the abstraction draft ensuring it reflects the Prime Directive and enforces single sources of truth.
-5. QUALITY-GATE: Cross-check that audit and abstraction documents reference the latest code paths (`packages/sdks/oak-curriculum-sdk/`, `apps/oak-curriculum-mcp-stdio/`, `apps/oak-curriculum-mcp-streamable-http/`, `apps/oak-open-curriculum-semantic-search/`).
+5. QUALITY-GATE: Cross-check that audit and abstraction documents reference the latest code paths (`packages/sdks/oak-curriculum-sdk/`, `apps/oak-curriculum-mcp-stdio/`, `apps/oak-curriculum-mcp-streamable-http/`, `apps/oak-search-cli/`).
 6. GROUNDING: Read GO.md and follow all instructions; update approach if plan or context has shifted.
 7. ACTION: Design the framework configuration schema (fields for schema source, transport targets, auth strategies, search entity descriptors, optional modules) and validate it with Zod guards plus illustrative examples under `packages/openapi-mcp-framework/config/`.
 8. REVIEW: Self-review the configuration schema and examples to ensure alignment with `.agent/directives/rules.md` type-safety mandates.

@@ -2,7 +2,7 @@
 
 This report details deviations from the standard "Base + Boundary" configuration pattern across the repository.
 
-## 1. `apps/oak-open-curriculum-semantic-search`
+## 1. `apps/oak-search-cli`
 
 **Deviation Level: High**
 

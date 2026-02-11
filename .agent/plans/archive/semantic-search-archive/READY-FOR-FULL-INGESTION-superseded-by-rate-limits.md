@@ -85,7 +85,7 @@ All 10 quality gates passing:
 
 ```bash
 # 1. Verify environment
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 cat .env.local  # Confirm ELASTICSEARCH_URL, ELASTICSEARCH_API_KEY, OAK_API_KEY
 
 # 2. Check ES is reachable
@@ -112,7 +112,7 @@ pnpm es:ingest-live --subject maths --keystage ks2 --verbose
 
 ```bash
 # In another terminal, monitor progress
-watch -n 30 "cd apps/oak-open-curriculum-semantic-search && pnpm ingest:progress"
+watch -n 30 "cd apps/oak-search-cli && pnpm ingest:progress"
 
 # Or check manually
 pnpm ingest:progress

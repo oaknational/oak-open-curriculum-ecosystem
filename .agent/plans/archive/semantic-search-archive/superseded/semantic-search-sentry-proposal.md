@@ -7,7 +7,7 @@
 
 ## Context
 
-- The `apps/oak-open-curriculum-semantic-search/` Next.js app currently lacks Sentry instrumentation.
+- The `apps/oak-search-cli/` Next.js app currently lacks Sentry instrumentation.
 - Observability today relies on `@oaknational/mcp-logger` and bespoke zero-hit telemetry (`src/lib/observability/`).
 - This proof of concept will serve extremely low traffic, so sample rates can prioritise visibility over cost.
 - Secure configuration supply has been confirmed and can rely on existing environment validation patterns in `src/lib/env.ts`.

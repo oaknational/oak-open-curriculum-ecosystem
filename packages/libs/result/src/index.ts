@@ -21,8 +21,6 @@
  *   console.error('Error:', result.error);
  * }
  * ```
- *
- * @packageDocumentation
  */
 
 /**

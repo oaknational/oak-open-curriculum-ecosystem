@@ -66,7 +66,7 @@ The original checkpoint content is preserved below for historical reference.
 
 ### 2. Code Implementation (Not Requested, But Completed ✅)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-generation.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-generation.ts`
 
 - Implemented `prepareTextForEmbedding()` function
 - Combines title + summary + keyword definitions for richer embeddings

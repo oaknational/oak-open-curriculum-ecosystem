@@ -38,7 +38,7 @@ This plan includes:
 4. **ALWAYS re-index fresh** before validation - stale indices invalidate all metrics:
 
    ```bash
-   cd apps/oak-open-curriculum-semantic-search
+   cd apps/oak-search-cli
    pnpm es:setup        # Ensure indices exist with correct mappings
    pnpm es:ingest-live -- --subject maths --keystage ks4  # Fresh data (~5-10 min)
    pnpm es:status       # Verify document counts
@@ -922,7 +922,7 @@ Semantic summaries provide information-dense text (~200 tokens) optimised for em
 | `document-transforms.unit.test.ts` | ✅ Removed dense vector expectations |
 | Rerank experiment scripts | ✅ Simplified to 2-way only |
 
-**Verification complete**: `grep -r "dense_vector\|generateDenseVector" apps/oak-open-curriculum-semantic-search/src` returns no matches.
+**Verification complete**: `grep -r "dense_vector\|generateDenseVector" apps/oak-search-cli/src` returns no matches.
 
 **All quality gates passing**.
 
@@ -1205,7 +1205,7 @@ Consistent pattern: `<entity>_content|structure[_semantic]`
 
 #### 2. Update Document Transforms
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
 
 ```typescript
 // createLessonDocument():
@@ -1223,14 +1223,14 @@ Consistent pattern: `<entity>_content|structure[_semantic]`
 
 #### 3. Update Summary Generator
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/semantic-summary-generator.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/semantic-summary-generator.ts`
 
 - Expand `generateLessonSemanticSummary()` to include ALL API fields
 - Expand `generateUnitSemanticSummary()` to include ALL API fields including full lesson list
 
 #### 4. Update Query Builders
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+**File**: `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`
 
 - Update `buildLessonSemanticRetriever()` → `buildLessonContentRetriever()` + `buildLessonStructureRetriever()`
 - Update `buildUnitSemanticRetriever()` → `buildUnitContentRetriever()` + `buildUnitStructureRetriever()`
@@ -1268,7 +1268,7 @@ pnpm smoke:dev:stub  # Run smoke tests including KS4 filtering
 { subjectSlug: 'maths', keyStageSlug: 'ks4', ks4OptionSlug: 'higher' }
 ```
 
-**Files**: `apps/oak-open-curriculum-semantic-search/smoke-tests/ks4-filtering.smoke.test.ts`
+**Files**: `apps/oak-search-cli/smoke-tests/ks4-filtering.smoke.test.ts`
 
 ### Success Criteria
 
@@ -1330,7 +1330,7 @@ pnpm smoke:dev:stub    # Smoke tests
 ### Document Transforms
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+apps/oak-search-cli/src/lib/indexing/
 └── document-transforms.ts          # createLessonDocument(), createUnitDocument()
 ```
 
@@ -1344,7 +1344,7 @@ packages/sdks/oak-curriculum-sdk/src/...
 ### Query Builders
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-builders.ts           # Two-way hybrid (BM25 + ELSER)
 └── rrf-query-helpers.ts            # Shared helpers
 ```
@@ -1361,7 +1361,7 @@ packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/
 ### Ground Truth
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/
+apps/oak-search-cli/src/lib/search-quality/ground-truth/
 ├── units/              # 43 unit queries (algebra, geometry, number, statistics, graphs)
 └── ...                 # 40 lesson queries
 ```
@@ -1369,7 +1369,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/
 ### Smoke Tests
 
 ```text
-apps/oak-open-curriculum-semantic-search/smoke-tests/
+apps/oak-search-cli/smoke-tests/
 ├── search-quality.smoke.test.ts           # Lesson search benchmarks
 ├── unit-search-quality.smoke.test.ts      # Unit search benchmarks
 └── unit-search-verification.smoke.test.ts # Unit hybrid verification

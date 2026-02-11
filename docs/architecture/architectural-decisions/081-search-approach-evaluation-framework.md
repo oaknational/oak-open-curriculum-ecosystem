@@ -89,7 +89,7 @@ How do we systematically evaluate and compare search approaches to ensure:
 | **Zero-Hit Rate**              | `count(no_results) / total`           | Queries returning no results                       |
 | **p95 Latency**                | 95th percentile response time         | Tail latency for worst 5% of queries               |
 
-> **Full metric definitions**: See [IR-METRICS.md](../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
+> **Full metric definitions**: See [IR-METRICS.md](../../apps/oak-search-cli/docs/IR-METRICS.md)
 
 #### MRR Interpretation Scale
 
@@ -381,7 +381,7 @@ Every experiment must document:
 ### Current Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
+apps/oak-search-cli/src/lib/search-quality/
 ├── ground-truth/
 │   ├── types.ts              # GroundTruthQuery interface
 │   ├── hard-queries.ts       # 15 hard query test cases

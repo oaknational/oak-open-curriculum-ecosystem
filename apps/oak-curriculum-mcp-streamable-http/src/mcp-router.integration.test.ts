@@ -5,8 +5,6 @@
  * based on MCP method and resource/tool security metadata.
  *
  * Uses simple mocks injected as arguments - no complex mock setup.
- *
- * @packageDocumentation
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';

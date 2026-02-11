@@ -119,7 +119,7 @@ function renderWithMockMedia(matches: boolean) {
 
 #### Task 1.1: Create MediaQueryContext
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.tsx`
+**File**: `apps/oak-search-cli/app/lib/media-query/MediaQueryContext.tsx`
 
 ```typescript
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
@@ -168,7 +168,7 @@ export function useMediaQuery(): MediaQueryAPI {
 
 #### Task 2.1: Update SearchSecondary.tsx
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/ui/search/layout/SearchSecondary.tsx`
+**File**: `apps/oak-search-cli/app/ui/search/layout/SearchSecondary.tsx`
 
 Replace direct `window.matchMedia` usage:
 
@@ -188,7 +188,7 @@ function useBreakpointMatch(name: BreakpointName): boolean {
 
 #### Task 2.2: Update theme-utils.ts
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/lib/theme/theme-utils.ts`
+**File**: `apps/oak-search-cli/app/lib/theme/theme-utils.ts`
 
 These are pure functions, not React hooks. Add matchMedia as parameter:
 
@@ -231,7 +231,7 @@ export function getContrastPreference(
 
 #### Task 2.3: Update ThemeContext
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`
+**File**: `apps/oak-search-cli/app/lib/theme/ThemeContext.tsx`
 
 Update to use injected matchMedia:
 
@@ -257,7 +257,7 @@ export function ThemeProvider({ initialMode, children }: ThemeProviderProps): JS
 
 #### Task 2.4: Update app layout
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/layout.tsx`
+**File**: `apps/oak-search-cli/app/layout.tsx`
 
 Wrap app with MediaQueryProvider:
 
@@ -282,7 +282,7 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
 
 #### Task 3.1: Create test helper
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.test-helpers.tsx`
+**File**: `apps/oak-search-cli/app/lib/media-query/MediaQueryContext.test-helpers.tsx`
 
 ```typescript
 import { render } from '@testing-library/react';
@@ -324,7 +324,7 @@ export function renderWithMediaQuery(
 
 #### Task 3.2: Update SearchPageClient.test-helpers
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.tsx`
+**File**: `apps/oak-search-cli/app/ui/search/SearchPageClient.test-helpers.tsx`
 
 Replace `mockMatchMedia` with provider:
 
@@ -374,7 +374,7 @@ export function resetSearchPageTestState(): void {
 
 #### Task 3.3: Update ThemeSystemPreference test
 
-**File**: `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeSystemPreference.integration.test.tsx`
+**File**: `apps/oak-search-cli/app/lib/theme/ThemeSystemPreference.integration.test.tsx`
 
 Pass matchMedia as parameter to mocked functions:
 
@@ -405,8 +405,8 @@ vi.mock('./theme-utils', async () => {
 #### Task 3.4: Delete mock-match-media files
 
 **Files to delete**:
-- `apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media.ts`
-- `apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media-registries.ts`
+- `apps/oak-search-cli/app/ui/search/mock-match-media.ts`
+- `apps/oak-search-cli/app/ui/search/mock-match-media-registries.ts`
 
 These are no longer needed.
 
@@ -415,7 +415,7 @@ These are no longer needed.
 #### Task 4.1: Run tests individually
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm vitest run app/lib/theme/ThemeSystemPreference.integration.test.tsx
 pnpm vitest run app/ui/search/layout/SearchPageLayout.error.unit.test.tsx
 ```
@@ -425,7 +425,7 @@ Both must pass (exit code 0).
 #### Task 4.2: Run full test suite
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm test
 ```
 
@@ -434,7 +434,7 @@ Must show: All tests pass, exit code 0.
 #### Task 4.3: Verify no global mutations remain
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 rg "Object\.defineProperty\(window" --glob "*.test.ts*"
 rg "mockMatchMedia" --glob "*.test.ts*"
 ```

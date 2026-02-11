@@ -53,8 +53,8 @@
 ## Current Build Error
 
 ```
-@oaknational/open-curriculum-semantic-search:build: Type error: Type 'unknown' has no matching index signature for type 'number'.
-@oaknational/open-curriculum-semantic-search:build: > 41 | export type SubjectSequenceEntry = SearchSubjectSequences[number];
+@oaknational/search-cli:build: Type error: Type 'unknown' has no matching index signature for type 'number'.
+@oaknational/search-cli:build: > 41 | export type SubjectSequenceEntry = SearchSubjectSequences[number];
 ```
 
 This happens because `SearchSubjectSequences` resolves to `unknown`.

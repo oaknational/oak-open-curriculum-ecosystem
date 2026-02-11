@@ -77,7 +77,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
-| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 
 ---
 

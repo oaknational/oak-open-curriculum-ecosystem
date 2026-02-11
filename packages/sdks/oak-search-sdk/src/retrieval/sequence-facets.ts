@@ -1,7 +1,5 @@
 /**
  * Sequence facet fetching.
- *
- * @packageDocumentation
  */
 
 import type { estypes } from '@elastic/elasticsearch';

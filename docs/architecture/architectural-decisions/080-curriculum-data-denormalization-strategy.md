@@ -522,7 +522,7 @@ For **exclusive** filtering ("Foundation only, not Higher"):
 | `src/lib/indexing/document-transform-helpers.ts` | `extractKs4DocumentFields()`        |
 | `type-gen/.../curriculum.ts`                     | Field definitions (schema source)   |
 
-All files are in `apps/oak-open-curriculum-semantic-search/`.
+All files are in `apps/oak-search-cli/`.
 
 ### Key Functions
 

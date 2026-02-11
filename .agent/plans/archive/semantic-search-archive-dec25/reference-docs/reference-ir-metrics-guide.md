@@ -207,7 +207,7 @@ Before measuring metrics, you must define what "relevant" means for each test qu
 
 ### Ground Truth File Structure
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth.ts`
+**File**: `apps/oak-search-cli/src/lib/search-quality/ground-truth.ts`
 
 **⚠️ IMPORTANT**: The slugs below are PLACEHOLDERS. You MUST run the discovery script (Step 0) first and replace these with actual lesson slugs from the Maths KS4 dataset.
 
@@ -364,7 +364,7 @@ export function calculateNDCG(
 
 ### Discovery Script
 
-**File**: `apps/oak-open-curriculum-semantic-search/scripts/discover-lessons.ts`
+**File**: `apps/oak-search-cli/scripts/discover-lessons.ts`
 
 ```typescript
 /**
@@ -415,7 +415,7 @@ discoverLessons().catch(console.error);
 ### Run Discovery
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm dev &  # Start server
 sleep 5
 npx tsx scripts/discover-lessons.ts
@@ -427,7 +427,7 @@ npx tsx scripts/discover-lessons.ts
 
 ## E2E Test Suite Template
 
-**File**: `apps/oak-open-curriculum-semantic-search/e2e-tests/search-quality.e2e.test.ts`
+**File**: `apps/oak-search-cli/e2e-tests/search-quality.e2e.test.ts`
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -524,7 +524,7 @@ describe('Search Quality Baseline (Phase 1C)', () => {
 ## Running the Evaluation
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Start server in background
 pnpm dev &

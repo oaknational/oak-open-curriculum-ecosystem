@@ -5,8 +5,6 @@
  * dependency and the internal `EsSearchFn` type used by all service
  * implementations. It normalises the ES client response into the
  * SDK's internal `EsSearchResponse` shape.
- *
- * @packageDocumentation
  */
 
 import type { Client, estypes } from '@elastic/elasticsearch';

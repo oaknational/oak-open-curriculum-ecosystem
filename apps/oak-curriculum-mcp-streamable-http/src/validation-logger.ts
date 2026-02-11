@@ -2,8 +2,6 @@
  * Validation Failure Logging
  *
  * Utilities for logging tool validation failures with comprehensive context.
- *
- * @packageDocumentation
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

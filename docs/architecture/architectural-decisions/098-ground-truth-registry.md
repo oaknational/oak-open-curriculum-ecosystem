@@ -316,4 +316,4 @@ Categories are structured around **user outcomes** rather than technical challen
 - [ADR-081: Search Approach Evaluation Framework](081-search-approach-evaluation-framework.md) — Metrics definitions
 - [ADR-082: Fundamentals-First Search Strategy](082-fundamentals-first-search-strategy.md) — Tier system
 - [ADR-085: Ground Truth Validation Discipline](085-ground-truth-validation-discipline.md) — Validation requirements
-- [GROUND-TRUTH-PROCESS.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step creation process
+- [GROUND-TRUTH-PROCESS.md](../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) — Step-by-step creation process

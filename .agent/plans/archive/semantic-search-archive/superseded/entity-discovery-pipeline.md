@@ -156,7 +156,7 @@ During curriculum data ingestion — synchronous with document indexing.
 ### Implementation
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/ingestion/extract-triples.ts
+// apps/oak-search-cli/src/lib/elasticsearch/ingestion/extract-triples.ts
 
 export async function extractExplicitTriples(lesson: LessonData): Promise<CurriculumTriple[]> {
   const triples: CurriculumTriple[] = [];
@@ -309,7 +309,7 @@ pnpm es:discover-entities --since "2025-12-01"
 Named Entity Recognition to extract people, places, scientific concepts.
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/discovery/ner-extraction.ts
+// apps/oak-search-cli/src/lib/elasticsearch/discovery/ner-extraction.ts
 
 interface NEREntity {
   text: string;
@@ -385,7 +385,7 @@ export async function runNERExtraction(options: {
 Use ES Graph API to discover implicit relationships.
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/discovery/cooccurrence-mining.ts
+// apps/oak-search-cli/src/lib/elasticsearch/discovery/cooccurrence-mining.ts
 
 export async function mineCooccurrences(options: {
   field: string; // e.g., 'keywords'
@@ -448,7 +448,7 @@ export async function mineCooccurrences(options: {
 Merge duplicate entities and establish canonical forms.
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/discovery/disambiguation.ts
+// apps/oak-search-cli/src/lib/elasticsearch/discovery/disambiguation.ts
 
 interface DisambiguationResult {
   canonical_id: string;
@@ -534,7 +534,7 @@ For production, run discovery as a scheduled job:
 After entity discovery, compute graph metrics for ranking and exploration.
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/discovery/compute-metrics.ts
+// apps/oak-search-cli/src/lib/elasticsearch/discovery/compute-metrics.ts
 
 export async function computeGraphMetrics(): Promise<void> {
   // 1. Compute in-degree for each entity

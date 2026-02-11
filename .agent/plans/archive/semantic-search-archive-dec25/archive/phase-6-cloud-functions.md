@@ -296,7 +296,7 @@ pnpm test:e2e
 ### Existing CLI Ingestion
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── scripts/ingest-live.ts          # CLI ingestion script
 ├── src/lib/indexing/               # Indexing logic
 │   ├── document-transforms.ts      # Document creation
@@ -307,7 +307,7 @@ apps/oak-open-curriculum-semantic-search/
 ### New Admin API Routes
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/app/api/admin/
+apps/oak-search-cli/src/app/api/admin/
 ├── ingest/route.ts                 # POST /api/admin/ingest
 ├── status/route.ts                 # GET /api/admin/status
 ├── reset/route.ts                  # POST /api/admin/reset

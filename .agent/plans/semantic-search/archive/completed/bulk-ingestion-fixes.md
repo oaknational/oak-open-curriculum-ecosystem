@@ -22,7 +22,7 @@ This plan addressed three critical fixes for the bulk ingestion pipeline. All fi
 
 ### Fix 2: Semantic Summary Generation ✅
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/adapters/bulk-lesson-transformer.ts`
+**Location**: `apps/oak-search-cli/src/adapters/bulk-lesson-transformer.ts`
 
 **Problem**: `lesson_structure` and `lesson_structure_semantic` were explicitly set to `undefined`.
 
@@ -30,7 +30,7 @@ This plan addressed three critical fixes for the bulk ingestion pipeline. All fi
 
 ### Fix 3: Rollup Document Creation ✅
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/adapters/bulk-rollup-builder.ts`
+**Location**: `apps/oak-search-cli/src/adapters/bulk-rollup-builder.ts`
 
 **Problem**: `oak_unit_rollup` index was completely empty.
 
@@ -38,7 +38,7 @@ This plan addressed three critical fixes for the bulk ingestion pipeline. All fi
 
 ### Fix 4: Bulk Upload Robustness ✅
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/bulk-chunk-uploader.ts`
+**Location**: `apps/oak-search-cli/src/lib/indexing/bulk-chunk-uploader.ts`
 
 **Changes**:
 

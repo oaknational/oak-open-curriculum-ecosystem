@@ -75,7 +75,7 @@ pnpm qg      # All quality gates
 # 3. Start a dev server (choose one)
 pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
-pnpm -C apps/oak-open-curriculum-semantic-search dev  # Search application
+pnpm -C apps/oak-search-cli dev  # Search application
 ```
 
 See [environment variables guide](development/environment-variables.md) for complete setup details.
@@ -278,7 +278,7 @@ oak-mcp-ecosystem/
 ├── apps/
 │   ├── oak-curriculum-mcp-stdio/     # MCP server for Claude Desktop
 │   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web
-│   ├── oak-open-curriculum-semantic-search/ # Search application
+│   ├── oak-search-cli/ # Search application
 │   └── oak-notion-mcp/               # Architectural reference
 └── docs/
     ├── architecture/                 # Architecture decisions

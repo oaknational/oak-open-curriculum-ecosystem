@@ -3,8 +3,6 @@
  *
  * These types define the request/response shapes used by the SDK's
  * internal search adapter. They are NOT part of the public API.
- *
- * @packageDocumentation
  */
 
 import type { estypes } from '@elastic/elasticsearch';

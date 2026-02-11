@@ -155,7 +155,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-106](106-known-answer-first-ground-truth-methodology.md)** - Known-answer-first ground truth methodology
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
 
-**Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) for detailed architecture.
+**Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 
 For historical context on dense vector evaluation (superseded):
 

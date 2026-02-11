@@ -16,8 +16,8 @@ The Oak MCP ecosystem currently mixes multiple error handling styles: direct exc
 
 ### Explicit throws with generic `Error`
 
-- **`apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts`** throws plain `Error`s for shape mismatches after calling generated SDK methods.
-- **`apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-helpers.ts`** raises `Error` on validation failures (e.g. missing canonical URL).
+- **`apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts`** throws plain `Error`s for shape mismatches after calling generated SDK methods.
+- **`apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts`** raises `Error` on validation failures (e.g. missing canonical URL).
 - **`packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts`** throws `TypeError` when routing metadata is invalid.
 - **`apps/oak-notion-mcp/src/tools/resources/handlers/read-resource.ts`** throws `Error` for URI validation failures and unsupported resource types.
 
@@ -50,7 +50,7 @@ These unions improve clarity locally but differ in naming, shape, helper functio
 the ecosystem relies on libraries that throw:
 
 - **`jose`** via `verifyAccessToken()` in `apps/oak-curriculum-mcp-streamable-http/src/auth-jwt.ts`.
-- **`@elastic/elasticsearch`** in `apps/oak-open-curriculum-semantic-search/src/lib/elastic-http.ts`.
+- **`@elastic/elasticsearch`** in `apps/oak-search-cli/src/lib/elastic-http.ts`.
 - Node built-ins (`fs`, `path`) throughout `packages/libs/storage/`.
 - Notion SDK in `apps/oak-notion-mcp/` handlers.
 - Generated SDK clients throw inside fetch implementations when network errors occur.

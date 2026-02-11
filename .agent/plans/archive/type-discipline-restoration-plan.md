@@ -83,7 +83,7 @@ These are NOT style violations. They are **fundamental architectural failures** 
 | ---------------------------------------- | ----- | -------------------------------------------- |
 | `@typescript-eslint/no-restricted-types` | 2     | `Record<string, unknown>` (type destruction) |
 
-**By file (all in `apps/oak-open-curriculum-semantic-search`):**
+**By file (all in `apps/oak-search-cli`):**
 
 | File                                                  | Status       | Notes                                                  |
 | ----------------------------------------------------- | ------------ | ------------------------------------------------------ |
@@ -386,7 +386,7 @@ This plan applies to **the entire repository**, not just the semantic search app
 
 | Workspace                                  | `eslint-disable` Count | Files Affected |
 | ------------------------------------------ | ---------------------- | -------------- |
-| `apps/oak-open-curriculum-semantic-search` | 63                     | 35             |
+| `apps/oak-search-cli` | 63                     | 35             |
 | `packages/*` (SDK, libs, core)             | 59                     | 25             |
 | `apps/oak-curriculum-mcp-streamable-http`  | 51                     | 34             |
 | `apps/oak-notion-mcp`                      | 12                     | 9              |
@@ -506,7 +506,7 @@ Before each work session, re-read and commit to:
 
 | File                                                                                    | Type Alias                                                 | Fix                         |
 | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------- |
-| ✅ `apps/oak-open-curriculum-semantic-search/src/lib/indexing/extraction-primitives.ts` | `IndexableObject = Readonly<Record<string, unknown>>`      | **Done** (file deleted)     |
+| ✅ `apps/oak-search-cli/src/lib/indexing/extraction-primitives.ts` | `IndexableObject = Readonly<Record<string, unknown>>`      | **Done** (file deleted)     |
 | `search-index-target.ts:110`                                                            | `UnknownObject = Record<string, unknown>`                  | Use `unknown` + type guard  |
 | `sandbox-harness-ops.ts:220`                                                            | Function returns `Record<string, unknown>`                 | Use specific type           |
 | `zero-hit-persistence-index.ts:12`                                                      | `UnknownRecord = Record<string, unknown>`                  | Use typed event interface   |

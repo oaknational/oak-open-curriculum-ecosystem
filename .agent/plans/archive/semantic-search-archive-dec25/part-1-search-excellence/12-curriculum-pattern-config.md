@@ -267,7 +267,7 @@ export class CurriculumContractViolationError extends Error {
 
 ### Phase 4: Startup Validation
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/validate-curriculum-patterns.ts`
+**Location**: `apps/oak-search-cli/src/lib/indexing/validate-curriculum-patterns.ts`
 
 ```typescript
 import { CURRICULUM_PATTERN_CONFIG } from '@oakai/curriculum-sdk/data/curriculum-pattern-config.js';
@@ -330,7 +330,7 @@ export async function validateCurriculumPatternConfig(): Promise<void> {
 
 ### Phase 5: Pattern-Aware Traversal
 
-**Location**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/pattern-aware-traversal.ts`
+**Location**: `apps/oak-search-cli/src/lib/indexing/pattern-aware-traversal.ts`
 
 ```typescript
 import { CURRICULUM_PATTERN_CONFIG } from '@oakai/curriculum-sdk/data/curriculum-pattern-config.js';

@@ -12,7 +12,7 @@
 ### Step 1: Run Issues Command
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm benchmark --issues
 ```
 
@@ -261,7 +261,7 @@ This query is excluded from aggregate statistics but tracked for future capabili
 ## Commands Reference
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Generate issues report (START HERE)
 pnpm benchmark --issues
@@ -287,5 +287,5 @@ jq -r '.sequence[] | .unitTitle as $unit | .unitLessons[] | "\(.lessonSlug)|\(.l
 |----------|---------|
 | [ground-truth-session-template.md](../templates/ground-truth-session-template.md) | **Linear execution protocol — USE THIS** |
 | [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md) | Methodology, cardinal rules |
-| [IR-METRICS.md](../../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
-| [GROUND-TRUTH-GUIDE.md](../../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+| [IR-METRICS.md](../../../../apps/oak-search-cli/docs/IR-METRICS.md) | Metric definitions |
+| [GROUND-TRUTH-GUIDE.md](../../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |

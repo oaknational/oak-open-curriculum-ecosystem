@@ -8,7 +8,7 @@
 
 ## Prep
 
-Make sure the [Cardinal Rule of the repository](../../directives/rules.md) is applied. Specifically the types in apps/oak-open-curriculum-semantic-search/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
+Make sure the [Cardinal Rule of the repository](../../directives/rules.md) is applied. Specifically the types in apps/oak-search-cli/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
 
 ## Phase Focus – Service Hardening & Operations
 
@@ -79,7 +79,7 @@ Phase 1 functionality work cements the back-end and operational experience:
 2. REVIEW: Validate backlog with stakeholders (data, infra, UX) to ensure priorities cover ingestion, telemetry, health, and docs.
 3. ACTION: Add failing automated tests covering ingestion resilience (mocked retries, alias swaps) and telemetry output contracts.
 4. REVIEW: Inspect failures to confirm they represent real gaps (retry logging, zero-hit summaries, health diagnostics).
-5. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search test src/lib/indexing` (or equivalent suites) to baseline current behaviour.
+5. QUALITY-GATE: Run `pnpm -C apps/oak-search-cli test src/lib/indexing` (or equivalent suites) to baseline current behaviour.
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
 7. ACTION: Implement ingestion/rollup hardening (batched retries, alias swap verification, logging) with accompanying tests and admin status updates.
 8. REVIEW: Conduct peer review focusing on failure handling, observability hooks, and admin feedback loops.

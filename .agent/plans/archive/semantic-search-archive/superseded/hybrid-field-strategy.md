@@ -310,9 +310,9 @@ pnpm type-gen
 
 **Files to modify**:
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/lesson-ingestion.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/unit-ingestion.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-ingestion.ts`
+- `apps/oak-search-cli/src/lib/indexing/lesson-ingestion.ts`
+- `apps/oak-search-cli/src/lib/indexing/unit-ingestion.ts`
+- `apps/oak-search-cli/src/lib/indexing/sequence-ingestion.ts`
 
 **Add extraction functions** (TDD approach):
 
@@ -473,7 +473,7 @@ pnpm test
 ### 6. Ingest Maths KS4
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 ```
 

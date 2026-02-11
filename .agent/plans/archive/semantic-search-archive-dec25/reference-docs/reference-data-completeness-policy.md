@@ -98,7 +98,7 @@
 ### Code Reference: Full Transcript Upload
 
 ```typescript
-// File: apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts
+// File: apps/oak-search-cli/src/lib/indexing/document-transforms.ts
 // Lines 96-136
 
 export function createLessonDocument({
@@ -231,8 +231,8 @@ After Maths KS4 ingestion:
 
 - **Hybrid Field Strategy**: `.agent/plans/semantic-search/hybrid-field-strategy.md`
 - **Phase 4 Deferred Fields**: `.agent/plans/semantic-search/phase-4-deferred-fields.md`
-- **ROLLUP.md**: `apps/oak-open-curriculum-semantic-search/docs/ROLLUP.md`
-- **INDEXING.md**: `apps/oak-open-curriculum-semantic-search/docs/INDEXING.md`
+- **ROLLUP.md**: `apps/oak-search-cli/docs/ROLLUP.md`
+- **INDEXING.md**: `apps/oak-search-cli/docs/INDEXING.md`
 
 ---
 

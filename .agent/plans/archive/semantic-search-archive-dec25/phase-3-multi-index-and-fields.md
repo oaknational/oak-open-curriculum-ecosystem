@@ -223,7 +223,7 @@ Comprehensive analysis of each retriever's contribution to search quality.
 ### Validation Sequence
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # 1. Reset and re-index with fresh schema (~5-10 min)
 pnpm es:setup reset
@@ -400,8 +400,8 @@ Pattern: `<entity>_content|structure[_semantic]`
 **Files to modify**:
 
 - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
+- `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
+- `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts`
 
 ### Task: Wire KS4 Filtering Through API
 
@@ -415,9 +415,9 @@ examSubject: z.string().optional(),
 ks4Option: z.string().optional(),
 ```
 
-2. **Update `StructuredQuery` interface** and `buildStructuredQuery()` in `apps/oak-open-curriculum-semantic-search/app/api/search/search-service.ts` to extract these fields.
+2. **Update `StructuredQuery` interface** and `buildStructuredQuery()` in `apps/oak-search-cli/app/api/search/search-service.ts` to extract these fields.
 
-3. **Update filter functions** in `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`:
+3. **Update filter functions** in `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`:
 
 ```typescript
 // In createLessonFilters() and createUnitFilters()
@@ -537,14 +537,14 @@ See: <https://www.elastic.co/guide/en/elasticsearch/reference/current/rrf.html>
 | `smoke-tests/hybrid-superiority.smoke.test.ts`      | Direct ES tests                 |
 | `src/lib/indexing/ks4-context-builder.unit.test.ts` | Unit tests for context building |
 
-All paths relative to `apps/oak-open-curriculum-semantic-search/`.
+All paths relative to `apps/oak-search-cli/`.
 
 ---
 
 ## Verification Sequence
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # 1. Re-index fresh data
 pnpm es:setup
@@ -751,7 +751,7 @@ This rubric is embedded in the ablation tests for consistent comparison.
 
 **Files to Modify**:
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+- `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`
 
 **TDD Approach**:
 
@@ -798,7 +798,7 @@ function createBm25Retriever(
 
 ```bash
 # After implementation
-pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+pnpm -C apps/oak-search-cli vitest run -c vitest.smoke.config.ts four-retriever-ablation
 ```
 
 **Acceptance Criteria for 3e.1**:
@@ -823,7 +823,7 @@ Wrap BM25 query in `bool.should` with a secondary `phrase_prefix` match at lower
 
 **Files to Modify**:
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+- `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`
 
 **Implementation**:
 
@@ -974,13 +974,13 @@ export type EsFilterConfig =
 pnpm type-gen && pnpm build
 
 # 2. Push new settings and mappings to ES
-pnpm -C apps/oak-open-curriculum-semantic-search es:setup reset
+pnpm -C apps/oak-search-cli es:setup reset
 
 # 3. Full reindex
-pnpm -C apps/oak-open-curriculum-semantic-search es:ingest-live -- --subject maths --keystage ks4
+pnpm -C apps/oak-search-cli es:ingest-live -- --subject maths --keystage ks4
 
 # 4. Run ablation tests
-pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+pnpm -C apps/oak-search-cli vitest run -c vitest.smoke.config.ts four-retriever-ablation
 ```
 
 **Elasticsearch Reference**:
@@ -1019,7 +1019,7 @@ pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.conf
 
 1. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-analyzer-config.ts`
 2. `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-field-overrides/lessons.ts`
-3. `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+3. `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`
 
 **Filter Addition**:
 
@@ -1184,7 +1184,7 @@ multi_match: {
 **Verification after Phase A**:
 
 ```bash
-pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+pnpm -C apps/oak-search-cli vitest run -c vitest.smoke.config.ts four-retriever-ablation
 # Record results in ablation study section
 ```
 
@@ -1203,11 +1203,11 @@ pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.conf
 pnpm type-gen && pnpm build
 
 # 2. Push settings and reindex
-pnpm -C apps/oak-open-curriculum-semantic-search es:setup reset
-pnpm -C apps/oak-open-curriculum-semantic-search es:ingest-live -- --subject maths --keystage ks4
+pnpm -C apps/oak-search-cli es:setup reset
+pnpm -C apps/oak-search-cli es:ingest-live -- --subject maths --keystage ks4
 
 # 3. Run ablation tests
-pnpm -C apps/oak-open-curriculum-semantic-search vitest run -c vitest.smoke.config.ts four-retriever-ablation
+pnpm -C apps/oak-search-cli vitest run -c vitest.smoke.config.ts four-retriever-ablation
 # Record results in ablation study section
 ```
 

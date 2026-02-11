@@ -1,6 +1,5 @@
 /**
  * @fileoverview Resource handlers public API
- * @packageDocumentation
  */
 
 import type {

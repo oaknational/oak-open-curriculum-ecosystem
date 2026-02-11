@@ -17,8 +17,6 @@
  *   res.type('html').send(html);
  * });
  * ```
- *
- * @packageDocumentation
  */
 
 export { renderLandingPageHtml } from './render-landing-page.js';

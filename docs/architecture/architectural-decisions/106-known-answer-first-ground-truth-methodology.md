@@ -89,7 +89,7 @@ Scores are determined by examining lesson content (title, keywords, key learning
 30 ground truths created (one per subject-phase), located at:
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/entries/
+apps/oak-search-cli/src/lib/search-quality/ground-truth/entries/
 ```
 
 Each entry contains:
@@ -175,6 +175,6 @@ Use lesson titles as queries (e.g., query "Brackets in equations" for lesson "br
 
 ## References
 
-- [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) — Step-by-step process (all indexes)
+- [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) — Step-by-step process (all indexes)
 - [Expansion Plan](/.agent/plans/semantic-search/post-sdk/search-quality/ground-truth-expansion-plan.md) — Future work
-- [Archive](/../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth-archive/README.md) — Previous approach
+- [Archive](/../apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/README.md) — Previous approach

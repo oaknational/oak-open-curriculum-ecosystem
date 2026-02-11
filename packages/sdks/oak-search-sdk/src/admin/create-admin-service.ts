@@ -1,7 +1,5 @@
 /**
  * Admin service factory.
- *
- * @packageDocumentation
  */
 
 import type { Client, estypes } from '@elastic/elasticsearch';

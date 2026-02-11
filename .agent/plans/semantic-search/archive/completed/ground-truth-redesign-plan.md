@@ -73,7 +73,7 @@ The previous 120-query, 4-category system is preserved in:
 src/lib/search-quality/ground-truth-archive/
 ```
 
-See [ground-truth-archive/README.md](../../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth-archive/README.md) for:
+See [ground-truth-archive/README.md](../../../../apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/README.md) for:
 
 - What the archive contains
 - Why it was archived
@@ -111,5 +111,5 @@ See [ADR-106: Known-Answer-First Ground Truth Methodology](../../../../docs/arch
 |----------|---------|
 | [ADR-106](../../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology decision |
 | [ground-truth-protocol.md](../../prompts/semantic-search/ground-truth-protocol.md) | The protocol |
-| [queries-redesigned.md](../../../../apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md) | Coverage matrix |
+| [queries-redesigned.md](../../../../apps/oak-search-cli/docs/ground-truths/queries-redesigned.md) | Coverage matrix |
 | [ground-truth-expansion-plan.md](../post-sdk/search-quality/ground-truth-expansion-plan.md) | Future work |

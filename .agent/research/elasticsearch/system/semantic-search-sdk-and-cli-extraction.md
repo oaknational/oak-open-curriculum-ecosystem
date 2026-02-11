@@ -8,7 +8,7 @@
 
 ## Why this document exists (right problem, right layer)
 
-We currently have a workspace at `apps/oak-open-curriculum-semantic-search/` that is _packaged_ as a Next.js App Router “app”, but is _used_ primarily as:
+We currently have a workspace at `apps/oak-search-cli/` that is _packaged_ as a Next.js App Router “app”, but is _used_ primarily as:
 
 - a **search/indexing library** (`src/lib/**`, `src/adapters/**`)
 - a **collection of operational scripts/CLIs** (`scripts/**`, plus an existing CLI under `src/lib/elasticsearch/setup/cli.ts`)
@@ -45,7 +45,7 @@ This decision includes an implementation plan that requires periodically re-read
 
 ### Workspace layout (high-signal)
 
-In `apps/oak-open-curriculum-semantic-search/` we have:
+In `apps/oak-search-cli/` we have:
 
 - **Core library (durable value)**
   - `src/lib/**`: hybrid retrieval (BM25 + ELSER + optional dense vectors), RRF builders, indexing transforms, ES setup helpers, zero-hit observability, suggestions.
@@ -57,11 +57,11 @@ In `apps/oak-open-curriculum-semantic-search/` we have:
 - **Deprecated Next.js adapter**
   - `app/api/**` and `app/ui/**` are not part of the current runtime and should be treated as archived patterns only.
 
-This matches the repo’s own description in `apps/oak-open-curriculum-semantic-search/README.md` (“Next.js App Router workspace… serves server-side RRF…”), but _usage has shifted_: the “app” is acting as a convenient wrapper around a search/indexing toolkit.
+This matches the repo’s own description in `apps/oak-search-cli/README.md` (“Next.js App Router workspace… serves server-side RRF…”), but _usage has shifted_: the “app” is acting as a convenient wrapper around a search/indexing toolkit.
 
 ### Key “SDK-ish” signals already present
 
-- **Search and index types flow from the SDK** via `@oaknational/oak-curriculum-sdk/public/search.js` and are re-exported in `apps/oak-open-curriculum-semantic-search/src/types/oak.ts`.
+- **Search and index types flow from the SDK** via `@oaknational/oak-curriculum-sdk/public/search.js` and are re-exported in `apps/oak-search-cli/src/types/oak.ts`.
 - **Indexing and retrieval are already modularised** in `src/lib/indexing/**` and `src/lib/hybrid-search/**`.
 - **Setup and mappings are SDK-led**: `src/lib/elasticsearch/setup/index.ts` uses `@oaknational/oak-curriculum-sdk/elasticsearch.js` for mappings and `@oaknational/oak-curriculum-sdk/public/mcp-tools` for synonyms.
 - **CLI ingestion is first-class**: `src/lib/elasticsearch/setup/ingest-live.ts` and `src/lib/elasticsearch/setup/ingest-bulk.ts` wrap `src/lib/indexing/ingest-harness.ts` and `src/lib/indexing/bulk-ingestion.ts`.
@@ -138,7 +138,7 @@ The current code already mostly follows this separation; the extraction work is 
 
 There are two reasonable packaging end-states; both satisfy “SDK first”:
 
-1. **Create a new SDK workspace under `packages/libs/`**, leaving `apps/oak-open-curriculum-semantic-search` to be retired.
+1. **Create a new SDK workspace under `packages/libs/`**, leaving `apps/oak-search-cli` to be retired.
    - Pros: aligns with repo architecture (`packages/libs` is the “runtime-adaptive library” layer).
    - Cons: requires moving code + updating import paths.
 
@@ -150,7 +150,7 @@ This document recommends **Option 1** for blast-radius control: extract a clean 
 
 ### Recommended new package name
 
-Keep naming honest and stable. The current name is `@oaknational/open-curriculum-semantic-search` (private) but “semantic-search” is overloaded with “Next app”.
+Keep naming honest and stable. The current name is `@oaknational/search-cli` (private) but “semantic-search” is overloaded with “Next app”.
 
 Proposed:
 

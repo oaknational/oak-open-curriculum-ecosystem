@@ -338,7 +338,7 @@ export function augmentResponseWithCanonicalUrl<T extends AugmentableResponse>(
 2. Update tests to pass config as parameters
 3. Remove test isolation settings from vitest configs:
    - `vitest.config.base.ts` — remove `isolate: true` and `pool: 'forks'`
-   - `apps/oak-open-curriculum-semantic-search/vitest.config.ts` — remove same
+   - `apps/oak-search-cli/vitest.config.ts` — remove same
 4. Run quality gates (see below)
 
 ### Phase D: Response Augmentation Generics (Task 4)
@@ -445,7 +445,7 @@ pnpm check:turbo  # Runs all gates with --concurrency=2
 **Vitest configs** (to update after Task 2):
 
 - `vitest.config.base.ts` — Has `isolate: true`, `pool: 'forks'`
-- `apps/oak-open-curriculum-semantic-search/vitest.config.ts` — Same
+- `apps/oak-search-cli/vitest.config.ts` — Same
 
 ---
 

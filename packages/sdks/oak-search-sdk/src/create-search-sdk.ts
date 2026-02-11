@@ -4,8 +4,6 @@
  * Creates stateful service instances that hold the injected
  * dependencies as closures. Each call produces an independent
  * SDK instance with its own in-memory state.
- *
- * @packageDocumentation
  */
 
 import type { CreateSearchSdkOptions, SearchSdk } from './types/index.js';

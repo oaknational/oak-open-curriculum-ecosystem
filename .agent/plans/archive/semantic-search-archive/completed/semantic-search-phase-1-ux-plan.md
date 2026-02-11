@@ -9,7 +9,7 @@ Deliver a polished, accessible semantic search experience across landing, struct
 - Landing experience rebuilt with CTA-first hero and `/search` redirect; structured and natural routes now dedicated views with consistent heroes, skip links, and deterministic fixtures.
 - Navigation, shared layouts, and fixture toggles aligned across search/admin/status; accessibility sweeps (RTL + Playwright + manual) captured as evidence.
 - Natural-language flow rebuilt as prompt-only pipeline with derived summary, SDK schema validation, and regression protection.
-- Operations layout introduced for admin/status; telemetry dashboard now emits aria-live guidance, fixture notices, and platform outage alerts with passing RTL/Playwright coverage (Playwright run: `tests/visual/admin.telemetry.spec.ts`, artefacts under `apps/oak-open-curriculum-semantic-search/test-results/admin.telemetry-*`).
+- Operations layout introduced for admin/status; telemetry dashboard now emits aria-live guidance, fixture notices, and platform outage alerts with passing RTL/Playwright coverage (Playwright run: `tests/visual/admin.telemetry.spec.ts`, artefacts under `apps/oak-search-cli/test-results/admin.telemetry-*`).
 - Status page tone hardened with richer outage/degraded copy plus unit/integration tests covering card summaries (`app/status/status-helpers.unit.test.ts`, `app/status/StatusClient.integration.test.tsx`).
 - Documentation (README, ARCHITECTURE) refreshed to describe layout hierarchy, telemetry pipeline, and artefact expectations; markdown lint suite passing.
 

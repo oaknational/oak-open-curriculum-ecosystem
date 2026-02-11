@@ -70,8 +70,8 @@ Review `LessonSummaryResponseSchema` for any remaining unindexed fields:
 
 1. **Add field definition** in `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/field-definitions/curriculum.ts`
 2. **Run `pnpm type-gen`** to regenerate Zod schemas and ES mappings
-3. **Update document transform** in `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
-4. **Update document creation** in `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+3. **Update document transform** in `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.ts`
+4. **Update document creation** in `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
 5. **Run quality gates** to verify all changes
 
 ---

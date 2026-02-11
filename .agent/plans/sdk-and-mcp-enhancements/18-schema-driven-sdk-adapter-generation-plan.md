@@ -9,7 +9,7 @@
 
 ## Problem Statement
 
-The search application (`oak-open-curriculum-semantic-search`) maintains a manual adapter layer that:
+The search application (`oak-search-cli`) maintains a manual adapter layer that:
 
 1. Wraps the SDK's raw `OakApiClient` (from `openapi-fetch`)
 2. Applies type guards to validate responses
@@ -259,8 +259,8 @@ Option A provides cleaner separation and explicit opt-in for the Result pattern.
 
 ## Related Files
 
-- `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts` - Current manual adapter (to be replaced)
-- `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk-types.ts` - Current manual types
+- `apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts` - Current manual adapter (to be replaced)
+- `apps/oak-search-cli/src/adapters/oak-adapter-sdk-types.ts` - Current manual types
 - `packages/sdks/oak-curriculum-sdk/type-gen/typegen/error-types/` - Error type generator (pattern to follow)
 - `packages/sdks/oak-curriculum-sdk/src/validation/` - Existing type guards to reuse
 

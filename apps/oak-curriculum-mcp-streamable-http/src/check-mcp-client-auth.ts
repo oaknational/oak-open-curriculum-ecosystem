@@ -3,8 +3,6 @@
  *
  * Preventive authentication for MCP clients (e.g., ChatGPT) before SDK execution.
  * This is separate from upstream API auth (ADR-054).
- *
- * @packageDocumentation
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

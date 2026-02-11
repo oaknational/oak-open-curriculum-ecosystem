@@ -803,7 +803,7 @@ test('Search page has no accessibility violations', async ({ page }) => {
 ### Test Structure
 
 ```text
-apps/oak-open-curriculum-semantic-search/tests/
+apps/oak-search-cli/tests/
 ├── e2e/
 │   ├── search-structured.spec.ts
 │   ├── search-natural-language.spec.ts

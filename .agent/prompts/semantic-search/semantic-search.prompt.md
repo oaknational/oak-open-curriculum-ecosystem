@@ -1,20 +1,29 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-10
+**Last Updated**: 2026-02-11
 
 ---
 
-## Current Priority: SDK Extraction — Checkpoint E (CLI Rename + Wiring)
+## Current Priority: Result Pattern + TSDoc — Checkpoint E2
 
-Checkpoints A–D are complete: the SDK workspace exists with
-fully implemented retrieval, admin, and observability services.
-34 tests pass (25 integration + 9 unit). All quality gates
-are green.
+Checkpoints A–E are complete: the SDK is fully implemented
+with 34 tests, and the CLI is renamed with all subcommands
+wired to SDK services. 934 tests pass in the CLI workspace
+(82 test files). All quality gates are green.
 
-**Next step**: Implement Checkpoint E — rename the current
-workspace from `apps/oak-open-curriculum-semantic-search/` to
-`apps/oak-search-cli/`, wire CLI subcommands to call SDK
-services (`search`, `admin`, `eval`, `observe`).
+**A directive review identified two non-compliances** that
+must be fixed before the MCP server (Checkpoint F) consumes
+the SDK:
+
+1. **Result pattern**: All three SDK services throw on
+   failure instead of returning `Result<T, E>`. The rules
+   say "Don't throw, use the result pattern."
+2. **TSDoc depth**: Private helpers and several public APIs
+   lack the exhaustive TSDoc annotations the rules require.
+
+**Next step**: Implement Checkpoint E2 — convert all SDK
+services to use `Result<T, E>` and add comprehensive TSDoc
+with examples across all new code.
 
 **Plan**: [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md)
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
@@ -23,26 +32,28 @@ services (`search`, `admin`, `eval`, `observe`).
 
 ## What We Have
 
-A powerful Elasticsearch-backed semantic search capability
-at `apps/oak-open-curriculum-semantic-search/` (will be
-renamed to `apps/oak-search-cli/` during extraction). The
-core search logic lives in `src/lib/`. The workspace is
-pure TypeScript — the Next.js layers were removed in
-Feb 2026 (ADRs 044, 045 superseded; 049 partially
-superseded).
+A production-ready Elasticsearch-backed semantic search
+system split across three workspaces:
+
+- **Search SDK** (`packages/sdks/oak-search-sdk/`): Fully
+  implemented retrieval, admin, and observability services
+  with dependency injection. 34 tests.
+- **Search CLI** (`apps/oak-search-cli/`): Thin wrapper
+  over the SDK providing `oaksearch` commands for search,
+  admin, evaluation, and observability. 934 tests (82 files).
+- **Curriculum SDK** (`packages/sdks/oak-curriculum-sdk/`):
+  Upstream Oak API types, generated via `pnpm type-gen`.
 
 **DI-ready**: All `process.env` access is centralised in
 `src/lib/env.ts` (ESLint-enforced). Product code accepts
-config as parameters. Tests use DI — no `process.env`
-mutations. Every function already accepts its dependencies
-as parameters, so SDK extraction is primarily a file-move
-exercise.
+config as parameters. The `createCliSdk()` factory maps
+env → ES client → SDK instance.
 
 ### Search Pipeline
 
 4-way RRF hybrid search (BM25 + ELSER on both Content and Structure) for lessons and units, 2-way for threads and sequences. Query processing includes noise phrase removal, curriculum phrase detection, and transcript-aware score normalisation.
 
-**Full details**: [ARCHITECTURE.md](/apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md)
+**Full details**: [ARCHITECTURE.md](/apps/oak-search-cli/docs/ARCHITECTURE.md)
 
 ### Indexes
 
@@ -62,42 +73,74 @@ exercise.
 | Threads | 1 | 1.000 | 1.000 |
 | Sequences | 1 | 1.000 | 1.000 |
 
-**Protocol**: [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md)
+**Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
 ---
 
-## What We Are Building
+## Checkpoint E2 — What Needs Doing
 
-### Search SDK (`packages/sdks/oak-search-sdk/`)
+### Result Pattern (~25 files)
 
-Public API:
-`createSearchSdk({ deps, config }) -> { retrieval, admin, observability }`
+Convert all SDK service methods that can fail to return
+`Result<T, E>` using per-service error types:
 
-- **Retrieval**: structured search + suggestions
-  (hybrid BM25 + ELSER via RRF)
-- **Admin**: ES setup, ingestion, rollups, index
-  metadata
-- **Observability**: zero-hit logging/persistence/
-  maintenance
-- **Dependency-injected**: consuming app supplies
-  config + clients
+| Service | Error Type | Variants |
+|---------|-----------|----------|
+| Retrieval | `RetrievalError` | `es_error`, `timeout`, `validation_error`, `unknown` |
+| Admin | `AdminError` (replaces `IndexMetaError`) | `es_error`, `not_found`, `mapping_error`, `validation_error`, `unknown` |
+| Observability | `ObservabilityError` | `es_error`, `unknown` |
 
-### Search CLI (`apps/oak-search-cli/`)
+Sync observe methods (`getRecentZeroHits`,
+`getZeroHitSummary`) stay as-is — they are pure
+in-memory operations that cannot fail.
 
-The current workspace renamed. Thin wrapper over the
-SDK — operator-intent commands call SDK services.
-Also hosts all **evaluation** (ground truths, benchmarks,
-validation), which is operator tooling *about* the
-search, not the search itself.
+**Partial progress**: `RetrievalError` type definition
+has been added to `types/retrieval-results.ts` (type only,
+not yet integrated into the interface or implementation).
 
-CLI entry point: `bin/oaksearch.ts` (commander, single
-entry, tsup-bundled). Subcommands will be registered
-during Checkpoint E: `search`, `admin`, `eval`, `observe`.
+### TSDoc Standard
 
-### Key Architectural Decision
+Every function (public or private) gets:
+- One-sentence summary
+- `@param` for each parameter
+- `@returns` description
+- `@example` block on all public API surfaces
 
-NL parsing stays in the **MCP layer**. The SDK remains
-deterministic. See [ADR-107].
+### Execution Phases
+
+1. SDK types + interfaces
+2. SDK implementation (`ok()`/`err()` wrapping)
+3. SDK integration tests
+4. CLI handlers + handler tests
+5. Benchmark query runners
+6. TSDoc pass (all files)
+7. Quality gates + docs
+
+---
+
+## CLI Commands (`oaksearch`)
+
+| Command Group | Subcommands | SDK Service |
+|---------------|-------------|-------------|
+| `oaksearch search` | lessons, units, sequences, suggest, facets | `RetrievalService` |
+| `oaksearch admin` | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService` |
+| `oaksearch eval` | benchmark (all/lessons/units/threads/sequences), validate, typegen | Pass-through |
+| `oaksearch observe` | telemetry, summary, purge | `ObservabilityService` |
+
+---
+
+## After E2: Checkpoint F — MCP Integration Wiring
+
+Wire the semantic search MCP tool in the Express MCP
+server to call SDK services:
+
+- Add/update the search tool to use `createSearchSdk()`
+- Ship comprehensive tool examples mapping user intent
+  to SDK calls
+- Keep NL parsing policy in MCP (and test it there)
+
+**Key Decision**: NL stays in the **MCP layer**. The SDK
+remains deterministic. See [ADR-107].
 
 ---
 
@@ -118,8 +161,8 @@ Before starting work:
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
-| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (fully implemented, 34 GREEN tests) |
-| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (`bin/oaksearch.ts` entry, tsup-bundled) |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (fully implemented, 34 tests) |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests, 82 files) |
 
 The Search SDK consumes types from the Curriculum SDK.
 The Search CLI consumes the Search SDK.
@@ -154,8 +197,8 @@ pnpm smoke:dev:stub
 
 | Document | Purpose |
 |----------|---------|
-| [ARCHITECTURE.md](/apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md) | Search pipeline architecture |
-| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and GT process |
+| [ARCHITECTURE.md](/apps/oak-search-cli/docs/ARCHITECTURE.md) | Search pipeline architecture |
+| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and GT process |
 | [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Ground truth methodology |
 | [ADR-082](/docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Fundamentals-first search strategy |
 | [ADR-107](/docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) | Deterministic SDK / NL-in-MCP boundary |

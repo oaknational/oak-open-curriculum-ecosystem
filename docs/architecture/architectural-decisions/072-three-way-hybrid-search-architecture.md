@@ -238,7 +238,7 @@ Initial testing with 100 Maths KS4 lessons:
 ### Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-builders.ts                    # Three-way RRF functions
 └── rrf-query-builders.unit.test.ts          # Query structure tests
 ```
@@ -246,7 +246,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ### Tests
 
 ```text
-apps/oak-open-curriculum-semantic-search/e2e-tests/
+apps/oak-search-cli/e2e-tests/
 └── three-way-hybrid.e2e.test.ts             # Three-way vs two-way comparison
 ```
 

@@ -1,7 +1,5 @@
 /**
  * Admin service types — setup, connection, ingestion, and index metadata.
- *
- * @packageDocumentation
  */
 
 // ---------------------------------------------------------------------------

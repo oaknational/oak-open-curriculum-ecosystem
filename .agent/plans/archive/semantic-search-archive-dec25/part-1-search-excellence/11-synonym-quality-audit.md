@@ -36,7 +36,7 @@ Synonym quality cannot be properly measured without representative curriculum da
 ### To Complete Ingestion
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 docker compose up -d  # Start Redis
 
 # Run remaining subjects (each takes 5-30 mins)

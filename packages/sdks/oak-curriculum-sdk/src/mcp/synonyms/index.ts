@@ -13,8 +13,6 @@
  * understanding was required to distinguish true synonyms from examples.
  *
  * [2026-01-16] Complete coverage for all 17 subjects achieved.
- *
- * @packageDocumentation
  */
 
 // ═══════════════════════════════════════════════════════════════════════════

@@ -140,4 +140,4 @@
 - Legacy request shape: `reference/Oak-Web-Application/src/context/Search/search.types.ts`
 - Legacy v2 query builder: `reference/search-api/curriculum/search_endpoint/src/constructElasticQuery.ts`
 - Semantic request schema: `packages/sdks/oak-curriculum-sdk/src/types/generated/search/requests.ts`
-- Semantic query builders: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts`
+- Semantic query builders: `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts`

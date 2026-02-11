@@ -109,7 +109,7 @@ This avoids recreating complex ES management UI.
 ## Page Structure
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/app/admin/
+apps/oak-search-cli/src/app/admin/
 ├── page.tsx                        # Dashboard overview
 ├── ingest/page.tsx                 # Ingestion control
 ├── metrics/page.tsx                # Detailed metrics
@@ -120,7 +120,7 @@ apps/oak-open-curriculum-semantic-search/src/app/admin/
 ### Component Structure
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/components/admin/
+apps/oak-search-cli/src/components/admin/
 ├── IngestForm.tsx                  # Subject/keystage selector + trigger
 ├── IngestProgress.tsx              # Progress bar and status
 ├── MetricsCard.tsx                 # Single metric display
@@ -263,7 +263,7 @@ pnpm test:ui                                      # Playwright component tests
 ### Phase 6 Cloud Functions (Dependencies)
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/app/api/admin/
+apps/oak-search-cli/src/app/api/admin/
 ├── ingest/route.ts                 # POST /api/admin/ingest
 ├── status/route.ts                 # GET /api/admin/status
 ├── reset/route.ts                  # POST /api/admin/reset
@@ -273,7 +273,7 @@ apps/oak-open-curriculum-semantic-search/src/app/api/admin/
 ### New Admin Pages
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/app/admin/
+apps/oak-search-cli/src/app/admin/
 ├── page.tsx                        # Dashboard overview
 ├── ingest/page.tsx                 # Ingestion control
 ├── metrics/page.tsx                # Detailed metrics

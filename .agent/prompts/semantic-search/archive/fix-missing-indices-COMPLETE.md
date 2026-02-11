@@ -51,7 +51,7 @@ packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/
 ### App Ingestion Paths (Relative to repo root)
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/
+apps/oak-search-cli/src/lib/
 ├── index-oak-helpers.ts       # buildPairDocuments() - integration point
 └── indexing/
     ├── sequence-document-builder.ts     # MUST CREATE
@@ -235,9 +235,9 @@ export async function buildPairDocuments(
 
 | File                                                                                               | Action                                 |
 | -------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-document-builder.ts`           | Create (NEW)                           |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-document-builder.unit.test.ts` | Create tests FIRST                     |
-| `apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts`                            | Add `buildSequenceOps()` and integrate |
+| `apps/oak-search-cli/src/lib/indexing/sequence-document-builder.ts`           | Create (NEW)                           |
+| `apps/oak-search-cli/src/lib/indexing/sequence-document-builder.unit.test.ts` | Create tests FIRST                     |
+| `apps/oak-search-cli/src/lib/index-oak-helpers.ts`                            | Add `buildSequenceOps()` and integrate |
 
 ### TDD Sequence
 
@@ -281,10 +281,10 @@ The `threads` field in unit summaries contains thread slugs/titles.
 
 | File                                                                                             | Action                       |
 | ------------------------------------------------------------------------------------------------ | ---------------------------- |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-document-builder.ts`           | Create (NEW)                 |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-document-builder.unit.test.ts` | Create tests FIRST           |
-| `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-extractor.ts`                  | Create (NEW) - deduplication |
-| `apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts`                          | Integrate into pipeline      |
+| `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts`           | Create (NEW)                 |
+| `apps/oak-search-cli/src/lib/indexing/thread-document-builder.unit.test.ts` | Create tests FIRST           |
+| `apps/oak-search-cli/src/lib/indexing/thread-extractor.ts`                  | Create (NEW) - deduplication |
+| `apps/oak-search-cli/src/lib/index-oak-helpers.ts`                          | Integrate into pipeline      |
 
 ### TDD Sequence
 

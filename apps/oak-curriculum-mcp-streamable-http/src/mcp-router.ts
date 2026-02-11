@@ -12,8 +12,6 @@
  *
  * This router applies HTTP auth middleware BEFORE the request reaches the SDK,
  * allowing HTTP 401 responses for protected tools without valid tokens.
- *
- * @packageDocumentation
  */
 
 import type { RequestHandler } from 'express';

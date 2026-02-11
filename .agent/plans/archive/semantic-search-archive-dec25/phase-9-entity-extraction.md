@@ -225,7 +225,7 @@ pnpm test:e2e
 ### New Entity Extraction
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/entity-extraction/
+apps/oak-search-cli/src/lib/entity-extraction/
 ├── ner-client.ts                   # ES inference API client
 ├── entity-filter.ts                # Confidence filtering
 ├── entity-types.ts                 # Entity type definitions
@@ -235,7 +235,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/entity-extraction/
 ### New Graph Discovery
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/graph/
+apps/oak-search-cli/src/lib/graph/
 ├── co-occurrence.ts                # Co-occurrence queries
 ├── relationships.ts                # Relationship extraction
 └── index.ts                        # Barrel exports

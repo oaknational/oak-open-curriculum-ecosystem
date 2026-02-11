@@ -232,7 +232,7 @@ This answers different questions than the ground truth system:
 | [Current State](../current-state.md) | System metrics |
 | [ADR-085](../../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Validation discipline |
 | [ADR-098](../../../../docs/architecture/architectural-decisions/098-ground-truth-registry.md) | Registry design |
-| [Ground Truth Process](../../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) | Curation workflow |
+| [Ground Truth Process](../../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-PROCESS.md) | Curation workflow |
 
 ---
 

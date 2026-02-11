@@ -49,7 +49,7 @@ The `2<65%` syntax means:
 
 ### Implementation
 
-Location: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`
+Location: `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`
 
 ```typescript
 // Before

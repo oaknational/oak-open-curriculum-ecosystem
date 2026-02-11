@@ -27,7 +27,7 @@ const fields: [string, EsFieldMapping][] = [
 ];
 ```
 
-**2. Document Interface (App):** [`apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts:23-37`](apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts)
+**2. Document Interface (App):** [`apps/oak-search-cli/src/lib/indexing/sequence-facets.ts:23-37`](apps/oak-search-cli/src/lib/indexing/sequence-facets.ts)
 
 ```typescript
 export interface SequenceFacetDocument {
@@ -47,7 +47,7 @@ export interface SequenceFacetDocument {
 }
 ```
 
-**3. Document Creation (App):** [`apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts:93-115`](apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts)
+**3. Document Creation (App):** [`apps/oak-search-cli/src/lib/indexing/sequence-facets.ts:93-115`](apps/oak-search-cli/src/lib/indexing/sequence-facets.ts)
 
 ```typescript
 return {
@@ -213,7 +213,7 @@ Add sequence facets to schema generation (find similar pattern for other indexes
 
 ### Step 5: Update App Code
 
-**File:** [`apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts`](apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts)
+**File:** [`apps/oak-search-cli/src/lib/indexing/sequence-facets.ts`](apps/oak-search-cli/src/lib/indexing/sequence-facets.ts)
 
 **DELETE** ad-hoc interface (lines 23-37) and IMPORT SDK type:
 
@@ -467,7 +467,7 @@ When moving existing index to schema-first:
 
 ````
 
-**File:** [`apps/oak-open-curriculum-semantic-search/docs/INDEXING.md`](apps/oak-open-curriculum-semantic-search/docs/INDEXING.md)
+**File:** [`apps/oak-search-cli/docs/INDEXING.md`](apps/oak-search-cli/docs/INDEXING.md)
 
 Add section referencing SDK documentation:
 
@@ -575,8 +575,8 @@ Confirmed via Kibana Dev Tools that `oak_sequence_facets` mapping contains:
 ### Documentation Created ✅
 
 - ✅ `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/README.md` - Comprehensive SDK guide
-- ✅ `apps/oak-open-curriculum-semantic-search/docs/INDEXING.md` - Updated with SDK references
-- ✅ `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md` - Systematic ingestion guide
+- ✅ `apps/oak-search-cli/docs/INDEXING.md` - Updated with SDK references
+- ✅ `apps/oak-search-cli/scripts/README-INGEST-ALL.md` - Systematic ingestion guide
 
 ### Next Steps
 

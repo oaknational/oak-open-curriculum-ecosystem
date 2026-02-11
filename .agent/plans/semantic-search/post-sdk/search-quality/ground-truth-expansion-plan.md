@@ -120,4 +120,4 @@ Recommended expansion priority based on user value:
 | [ground-truth-redesign-plan.md](../../archive/completed/ground-truth-redesign-plan.md) | Phase 1 completion record |
 | [ground-truth-protocol.md](../../../prompts/semantic-search/ground-truth-protocol.md) | The protocol |
 | [ADR-106](../../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology decision |
-| [ground-truth-archive/README.md](../../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth-archive/README.md) | Archive reference |
+| [ground-truth-archive/README.md](../../../../apps/oak-search-cli/src/lib/search-quality/ground-truth-archive/README.md) | Archive reference |

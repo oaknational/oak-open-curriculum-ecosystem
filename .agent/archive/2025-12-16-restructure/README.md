@@ -251,7 +251,7 @@ This is a **repo-wide** issue, not just semantic search:
 
 | Workspace                                  | `eslint-disable` Count |
 | ------------------------------------------ | ---------------------- |
-| `apps/oak-open-curriculum-semantic-search` | 63                     |
+| `apps/oak-search-cli` | 63                     |
 | `packages/*` (SDK, libs, core)             | 59                     |
 | `apps/oak-curriculum-mcp-streamable-http`  | 51                     |
 | `apps/oak-notion-mcp`                      | 12                     |
@@ -331,7 +331,7 @@ pnpm smoke:dev:stub    # Smoke tests
 5. **Run KS4 filtering tests** (CRITICAL for Phase 3 completion)
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # 1. Fresh re-index (~5-10 min)
 pnpm es:setup && pnpm es:ingest-live -- --subject maths --keystage ks4
@@ -359,7 +359,7 @@ Test queries to verify:
 - Filter by `examSubjectSlug` (gcse-biology, gcse-chemistry, gcse-physics)
 - Filter by `ks4OptionSlug` (core, higher)
 
-**File**: `apps/oak-open-curriculum-semantic-search/smoke-tests/ks4-filtering.smoke.test.ts`
+**File**: `apps/oak-search-cli/smoke-tests/ks4-filtering.smoke.test.ts`
 
 ---
 
@@ -368,7 +368,7 @@ Test queries to verify:
 ### Search Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── src/lib/hybrid-search/            # RRF query builders
 ├── src/lib/search-quality/           # Ground truth, metrics
 ├── src/lib/indexing/                 # Document transforms

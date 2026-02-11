@@ -45,9 +45,9 @@ Comprehensive documentation for AI agents working with this codebase:
 
 For semantic search specific documentation:
 
-- [Search App README](../apps/oak-open-curriculum-semantic-search/README.md) - Search application overview
-- [Search Architecture](../apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md) - Search pipeline architecture
-- [Ground Truth Protocol](../apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) - Baselines and GT process
+- [Search App README](../apps/oak-search-cli/README.md) - Search application overview
+- [Search Architecture](../apps/oak-search-cli/docs/ARCHITECTURE.md) - Search pipeline architecture
+- [Ground Truth Protocol](../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) - Baselines and GT process
 - [Search Plans](../.agent/plans/semantic-search/) - Roadmap, acceptance criteria, experiments
 
 ## Additional Resources

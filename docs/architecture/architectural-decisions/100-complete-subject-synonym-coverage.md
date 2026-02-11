@@ -135,4 +135,4 @@ See: `.agent/plans/semantic-search/active/synonym-complete-coverage.md`
 ## Related
 
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
-- [SYNONYMS.md](../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md)
+- [SYNONYMS.md](../../../apps/oak-search-cli/docs/SYNONYMS.md)

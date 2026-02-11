@@ -21,8 +21,6 @@
  *   keyStage: 'ks3',
  * });
  * ```
- *
- * @packageDocumentation
  */
 
 import type { Client } from '@elastic/elasticsearch';

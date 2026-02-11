@@ -96,7 +96,7 @@ Currently, the SDK generates limited search-related types:
 
 The search app currently defines **all other schemas at runtime**, violating the cardinal rule.
 
-**Location**: `apps/oak-open-curriculum-semantic-search/`
+**Location**: `apps/oak-search-cli/`
 
 **Runtime schema files** (detailed in [search-schema-inventory.md](../archive/superseded/search-schema-inventory.md)):
 
@@ -481,7 +481,7 @@ pnpm test -- search-schemas
 **Implementation Tasks**:
 
 1. **Update app type imports**
-   - Change `apps/oak-open-curriculum-semantic-search/src/types/oak.ts` to re-export from SDK
+   - Change `apps/oak-search-cli/src/types/oak.ts` to re-export from SDK
 
    ```typescript
    // OLD
@@ -543,7 +543,7 @@ describe('Search API', () => {
 **Validation**:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm type-check
 pnpm test
 pnpm build
@@ -591,15 +591,15 @@ pnpm build
 
 ```bash
 # Should find zero results
-rg "export const.*Schema = z\\.object" apps/oak-open-curriculum-semantic-search/src
-rg "export const.*Schema = z\\.object" apps/oak-open-curriculum-semantic-search/app
+rg "export const.*Schema = z\\.object" apps/oak-search-cli/src
+rg "export const.*Schema = z\\.object" apps/oak-search-cli/app
 
 # Quality gates
 pnpm -w type-gen
-pnpm -F @oaknational/oak-open-curriculum-semantic-search type-check
-pnpm -F @oaknational/oak-open-curriculum-semantic-search lint -- --fix
-pnpm -F @oaknational/oak-open-curriculum-semantic-search test
-pnpm -F @oaknational/oak-open-curriculum-semantic-search build
+pnpm -F @oaknational/oak-search-cli type-check
+pnpm -F @oaknational/oak-search-cli lint -- --fix
+pnpm -F @oaknational/oak-search-cli test
+pnpm -F @oaknational/oak-search-cli build
 ```
 
 ---
@@ -1451,8 +1451,8 @@ pnpm -F @oaknational/oak-curriculum-sdk type-check
 pnpm -F @oaknational/oak-curriculum-sdk test -- search-indices
 
 # After Session 1.3 (App migration)
-pnpm -F @oaknational/oak-open-curriculum-semantic-search type-check
-pnpm -F @oaknational/oak-open-curriculum-semantic-search test
+pnpm -F @oaknational/oak-search-cli type-check
+pnpm -F @oaknational/oak-search-cli test
 ```
 
 **Phase 2 sessions**:
@@ -1728,7 +1728,7 @@ export const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber(level),
   resourceAttributes: buildResourceAttributes(
     process.env,
-    'oak-open-curriculum-semantic-search',
+    'oak-search-cli',
     process.env.npm_package_version || '1.0.0',
   ),
   context: {},
@@ -2054,7 +2054,7 @@ describe('API error tracking', () => {
 
 ### Application
 
-- [Semantic Search App README](../../../../apps/oak-open-curriculum-semantic-search/README.md)
+- [Semantic Search App README](../../../../apps/oak-search-cli/README.md)
 
 ### Archived Plans
 

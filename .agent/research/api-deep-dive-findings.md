@@ -410,7 +410,7 @@ keyStage:
 **Our semantic search app** already uses OpenAPI 3.1.0:
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts
+// apps/oak-search-cli/src/lib/openapi.ts
 import { OpenApiGeneratorV31 } from '@asteasolutions/zod-to-openapi';
 
 const generator = new OpenApiGeneratorV31(registry.definitions);

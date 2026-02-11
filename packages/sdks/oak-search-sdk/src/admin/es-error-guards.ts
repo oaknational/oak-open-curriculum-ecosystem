@@ -1,7 +1,5 @@
 /**
  * Type guards for Elasticsearch error shapes.
- *
- * @packageDocumentation
  */
 
 /** Check if an ES error indicates the resource already exists. */

@@ -21,8 +21,6 @@
  *   runSearchTool,
  * } from './aggregated-search/index.js';
  * ```
- *
- * @packageDocumentation
  */
 
 // Tool definition and schema

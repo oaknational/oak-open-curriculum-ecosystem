@@ -67,7 +67,7 @@ All dense vector code has been removed:
 | Rerank experiment dense vector logic       | ✅ Removed           |
 | Unit tests for dense vectors               | ✅ Deleted           |
 
-**Verification complete**: `grep -r "dense_vector\|generateDenseVector" apps/oak-open-curriculum-semantic-search/src` returns no matches.
+**Verification complete**: `grep -r "dense_vector\|generateDenseVector" apps/oak-search-cli/src` returns no matches.
 
 ## Consequences
 
@@ -94,8 +94,8 @@ All dense vector code has been removed:
 
 This decision is successful when:
 
-1. `grep -r "dense_vector" apps/oak-open-curriculum-semantic-search` returns no matches
-2. `grep -r "generateDenseVector" apps/oak-open-curriculum-semantic-search` returns no matches
+1. `grep -r "dense_vector" apps/oak-search-cli` returns no matches
+2. `grep -r "generateDenseVector" apps/oak-search-cli` returns no matches
 3. All quality gates pass
 4. Ingestion completes without E5 inference calls
 

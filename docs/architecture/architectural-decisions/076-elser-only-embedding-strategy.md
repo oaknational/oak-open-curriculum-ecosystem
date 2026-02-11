@@ -154,7 +154,7 @@ Both exceed targets using ELSER-only semantic matching.
 ### ELSER Integration
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-helpers.ts      # createLessonElserRetriever(), createUnitElserRetriever()
 ├── rrf-query-builders.ts     # Two-way RRF (BM25 + ELSER)
 └── lessons.ts, units.ts      # Search implementations
@@ -163,7 +163,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ### Document Transforms
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+apps/oak-search-cli/src/lib/indexing/
 ├── document-transforms.ts    # Sets lesson_semantic, unit_semantic fields
 └── document-transform-helpers.ts  # createEnrichedRollupText()
 ```

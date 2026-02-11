@@ -213,7 +213,7 @@ To verify tier completion status:
 
 ```bash
 # Run evaluations
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm eval:per-category    # Per-category breakdown
 pnpm eval:diagnostic      # Diagnostic patterns
 

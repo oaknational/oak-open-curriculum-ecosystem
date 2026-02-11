@@ -99,7 +99,7 @@ Levels (from [ADR-082](../../../docs/architecture/architectural-decisions/082-fu
 | **Zero-Hit Rate** | Queries returning nothing | Coverage gaps |
 | **p95 Latency** | User experience | Performance budget |
 
-> **Full definitions**: See [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md)
+> **Full definitions**: See [IR-METRICS.md](../../../apps/oak-search-cli/docs/IR-METRICS.md)
 
 ---
 
@@ -213,7 +213,7 @@ All items completed:
 ## Verification Method
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 pnpm benchmark --all                    # All subjects, all phases
 pnpm benchmark --subject maths          # One subject
@@ -231,4 +231,4 @@ pnpm benchmark -s maths -p primary --review  # Per-query review
 | [ADR-081](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md) | Metrics and decision criteria |
 | [ADR-082](../../../docs/architecture/architectural-decisions/082-fundamentals-first-search-strategy.md) | Level system rationale |
 | [ADR-085](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md) | Data integrity |
-| [Ground Truth Protocol](/apps/oak-open-curriculum-semantic-search/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
+| [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

@@ -2,8 +2,6 @@
  * Test Helpers: Auth Error Integration Tests
  *
  * Shared test utilities for auth error interception testing.
- *
- * @packageDocumentation
  */
 
 import { vi } from 'vitest';

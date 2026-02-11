@@ -33,8 +33,6 @@
  * // Execute a tool
  * const result = await executor('search', { query: 'fractions' });
  * ```
- *
- * @packageDocumentation
  */
 
 // Aggregated tool definitions

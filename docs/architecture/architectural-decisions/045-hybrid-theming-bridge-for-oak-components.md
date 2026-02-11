@@ -142,8 +142,8 @@ Suggested files (illustrative):
 
 ## References
 
-- Guide: `apps/oak-open-curriculum-semantic-search/docs/oak-components-theming.md`
+- Guide: `apps/oak-search-cli/docs/oak-components-theming.md`
 - Plan: `.agent/plans/semantic-search/semantic-search-responsive-layout-architecture.md`
 - Plan: `.agent/plans/semantic-search/semantic-theme-inventory.md`
-- Code: `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`, `app/lib/Providers.tsx`, `app/lib/theme/ThemeBridgeProvider.tsx`, `app/layout.tsx`
+- Code: `apps/oak-search-cli/app/lib/theme/ThemeContext.tsx`, `app/lib/Providers.tsx`, `app/lib/theme/ThemeBridgeProvider.tsx`, `app/layout.tsx`
 - Related ADR: `044-nl-delegates-to-structured-search-and-caching-ownership.md`

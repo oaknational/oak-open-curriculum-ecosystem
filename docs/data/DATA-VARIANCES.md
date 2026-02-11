@@ -612,10 +612,10 @@ Note: `all-years` only valid for `physical-education-primary` sequence.
 
 ### Technical
 
-| Document                                                                                         | Focus                  |
-| ------------------------------------------------------------------------------------------------ | ---------------------- |
-| [DATA-COMPLETENESS.md](../../apps/oak-open-curriculum-semantic-search/docs/DATA-COMPLETENESS.md) | What we upload in full |
-| [INDEXING.md](../../apps/oak-open-curriculum-semantic-search/docs/INDEXING.md)                   | ES index structure     |
+| Document                                                                    | Focus                  |
+| --------------------------------------------------------------------------- | ---------------------- |
+| [DATA-COMPLETENESS.md](../../apps/oak-search-cli/docs/DATA-COMPLETENESS.md) | What we upload in full |
+| [INDEXING.md](../../apps/oak-search-cli/docs/INDEXING.md)                   | ES index structure     |
 
 ---
 

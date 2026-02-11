@@ -11,7 +11,7 @@
 1. **Search surfaces evidence** – refresh Playwright captures (responsive + reduced motion) and extend RTL assertions once SDK gates are green.
 2. **Natural-search error banner** – add E2E coverage ensuring server-delivered copy appears.
 3. **Admin & Status redesigns** – resume Workstreams 6 and 7 with schema-safe foundations.
-4. **Search barrel refactor** – extract `src/search/index.ts`, repoint downstream consumers (e.g. `apps/oak-open-curriculum-semantic-search/src/types/oak.ts`, query parser helpers).
+4. **Search barrel refactor** – extract `src/search/index.ts`, repoint downstream consumers (e.g. `apps/oak-search-cli/src/types/oak.ts`, query parser helpers).
 5. **Full quality gate** – run `pnpm check` after UI updates to verify repository health.
 
 ## Workstream Details

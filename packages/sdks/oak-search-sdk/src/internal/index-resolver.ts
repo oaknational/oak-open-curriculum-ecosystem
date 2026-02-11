@@ -4,8 +4,6 @@
  * Pure functions that map a search index kind and target to the
  * concrete Elasticsearch index name. No environment reads —
  * the target is provided by the SDK configuration.
- *
- * @packageDocumentation
  */
 
 /**

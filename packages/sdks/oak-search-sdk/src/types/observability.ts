@@ -7,8 +7,6 @@
  *
  * Types for zero-hit events, summaries, and telemetry flow from the
  * Curriculum SDK and are re-exported, not redefined.
- *
- * @packageDocumentation
  */
 
 import type {

@@ -3,8 +3,6 @@
  *
  * Each SDK instance gets its own in-memory event store (closure-scoped,
  * not module-level). Events are optionally persisted to Elasticsearch.
- *
- * @packageDocumentation
  */
 
 import type { Client } from '@elastic/elasticsearch';

@@ -7,8 +7,6 @@
  * **Strict Mode**: Generated schemas use `.strict()` to enforce that unknown
  * properties cause validation errors, following the "fail fast" principle.
  * Unknown keys are never silently ignored.
- *
- * @packageDocumentation
  */
 
 import path from 'node:path';

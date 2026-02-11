@@ -239,8 +239,8 @@ If you only do one thing: **make every change traceable to a named strategy** (r
 |-----------|------|---------|
 | **Synonym corpus** | `packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/` | Curated synonym data (~580 entries) |
 | **ES analyser config** | `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/es-analyzer-config.ts` | `synonym_graph` filter configuration |
-| **RRF query builders** | `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts` | Four-way RRF construction |
-| **Phrase detection** | `apps/oak-open-curriculum-semantic-search/src/lib/query-processing/detect-curriculum-phrases.ts` | Multi-word curriculum term detection |
-| **Ground truth** | `apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/` | 120 queries for MRR benchmarking |
-| **Diagnostic queries** | `apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/diagnostic-synonym-queries.ts` | Synonym expansion pattern tests |
+| **RRF query builders** | `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts` | Four-way RRF construction |
+| **Phrase detection** | `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.ts` | Multi-word curriculum term detection |
+| **Ground truth** | `apps/oak-search-cli/src/lib/search-quality/ground-truth/` | 120 queries for MRR benchmarking |
+| **Diagnostic queries** | `apps/oak-search-cli/src/lib/search-quality/ground-truth/diagnostic-synonym-queries.ts` | Synonym expansion pattern tests |
 | **Synonym miner** | `packages/sdks/oak-curriculum-sdk/vocab-gen/generators/synonym-miner.ts` | TypeScript-based definition mining |

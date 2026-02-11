@@ -161,7 +161,7 @@ For terms not defined in lesson data:
 Extract all keyword definitions from bulk data:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm tsx scripts/extract-definitions.ts --output definitions.json
 ```
 

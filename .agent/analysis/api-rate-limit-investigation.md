@@ -235,9 +235,9 @@ Status: ✅ COMPLETED SUCCESSFULLY
 
 **Application Files Modified**:
 
-- `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts` - Singleton pattern
-- `apps/oak-open-curriculum-semantic-search/src/lib/rate-limit-logger.ts` - Monitoring utilities
-- `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/ingest-live.ts` - Integration
+- `apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts` - Singleton pattern
+- `apps/oak-search-cli/src/lib/rate-limit-logger.ts` - Monitoring utilities
+- `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-live.ts` - Integration
 
 ### Test Coverage
 
@@ -306,6 +306,6 @@ The SDK now has comprehensive rate limiting, retry, and monitoring capabilities.
 ## References
 
 - ADR-070: SDK Rate Limiting and Exponential Backoff Retry
-- `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`
+- `apps/oak-search-cli/scripts/README-INGEST-ALL.md`
 - Test results: Art KS1 sequences ingestion (159 requests, 0 failures)
 - API quota data: 1000 requests/hour via `get-rate-limit` MCP tool

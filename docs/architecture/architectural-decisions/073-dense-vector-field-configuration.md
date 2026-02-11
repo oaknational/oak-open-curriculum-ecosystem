@@ -212,7 +212,7 @@ packages/sdks/oak-curriculum-sdk/src/types/generated/search/es-mappings/
 ### Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/
+apps/oak-search-cli/src/lib/
 ├── indexing/
 │   ├── dense-vector-generation.ts           # Generates 384-dim vectors
 │   └── document-transforms.ts                # Populates dense vector fields

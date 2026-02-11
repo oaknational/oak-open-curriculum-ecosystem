@@ -3,8 +3,6 @@
  *
  * Removes colloquial filler phrases and pedagogical intent markers
  * that dilute search signal. Pure function with no side effects.
- *
- * @packageDocumentation
  */
 
 /**

@@ -339,10 +339,10 @@ Rate limiting and retry involve timing, state, and edge cases. TDD ensures:
 
 **Application Usage**:
 
-- Updated `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts` (singleton pattern)
-- Created `apps/oak-open-curriculum-semantic-search/src/lib/rate-limit-logger.ts` (monitoring utilities)
-- Updated `apps/oak-open-curriculum-semantic-search/src/lib/elasticsearch/setup/ingest-live.ts` (integrated monitoring)
-- Updated `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`
+- Updated `apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts` (singleton pattern)
+- Created `apps/oak-search-cli/src/lib/rate-limit-logger.ts` (monitoring utilities)
+- Updated `apps/oak-search-cli/src/lib/elasticsearch/setup/ingest-live.ts` (integrated monitoring)
+- Updated `apps/oak-search-cli/scripts/README-INGEST-ALL.md`
 
 **Documentation**:
 
@@ -505,6 +505,6 @@ For now, the current implementation solves the immediate problem and provides co
 - Rate limit tracker: `src/client/middleware/rate-limit-tracker.ts`
 - Retry tests: `src/client/middleware/retry.integration.test.ts`
 - Configuration tests: `src/config/rate-limit-config.unit.test.ts`, `src/config/retry-config.unit.test.ts`
-- Monitoring utilities: `apps/oak-open-curriculum-semantic-search/src/lib/rate-limit-logger.ts`
-- Documentation: `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`
+- Monitoring utilities: `apps/oak-search-cli/src/lib/rate-limit-logger.ts`
+- Documentation: `apps/oak-search-cli/scripts/README-INGEST-ALL.md`
 - Test verification: Art KS1 sequences ingestion (159 requests, 0 failures, 2.08 req/sec)

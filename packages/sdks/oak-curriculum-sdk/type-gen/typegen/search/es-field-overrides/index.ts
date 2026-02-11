@@ -9,8 +9,6 @@
  * to ensure ES mappings and Zod schemas stay in lockstep.
  *
  * This is SOURCE CODE - the generator consumes it to produce the generated mappings.
- *
- * @packageDocumentation
  */
 
 // Re-export all field override constants

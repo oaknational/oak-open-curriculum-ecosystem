@@ -42,7 +42,7 @@ Centralize all ESLint configuration into a single, high-quality workspace: `@oak
 - [x] Migrate `apps/oak-notion-mcp`
 - [x] Migrate `apps/oak-curriculum-mcp-stdio`
 - [x] Migrate `apps/oak-curriculum-mcp-streamable-http`
-- [x] Migrate `apps/oak-open-curriculum-semantic-search`s
+- [x] Migrate `apps/oak-search-cli`s
 
 **Goal**: Switch all `apps/*` and `packages/providers/*` to use the plugin.
 

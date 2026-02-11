@@ -23,7 +23,6 @@
  * Data-fetching tools (tools/call) still require authentication.
  *
  * @see ADR-057: Selective Authentication for Public MCP Resources
- * @packageDocumentation
  */
 
 import { describe, it, expect, vi, beforeAll } from 'vitest';

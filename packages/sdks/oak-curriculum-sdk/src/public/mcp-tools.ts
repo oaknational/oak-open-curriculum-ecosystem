@@ -8,8 +8,6 @@
  * - Documentation resources and prompts
  *
  * Also re-exports core client types needed by MCP applications.
- *
- * @packageDocumentation
  */
 
 // Re-export core client types needed by MCP apps

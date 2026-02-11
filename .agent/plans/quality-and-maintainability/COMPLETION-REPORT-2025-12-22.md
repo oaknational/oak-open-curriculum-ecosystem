@@ -61,7 +61,7 @@ The 5 lessons that never appeared in unfiltered pagination:
 Created a workaround function that fetches lessons unit-by-unit instead of using buggy unfiltered pagination:
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/indexing/fetch-all-lessons.ts
+// apps/oak-search-cli/src/lib/indexing/fetch-all-lessons.ts
 
 export async function fetchAllLessonsByUnit(
   getLessons: GetLessonsFn,
@@ -91,7 +91,7 @@ export async function fetchAllLessonsByUnit(
 **2. Updated Ingestion Flow**
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts
+// apps/oak-search-cli/src/lib/index-oak-helpers.ts
 
 // BEFORE (buggy):
 const aggregatedLessons = await fetchAllLessonsWithPagination(

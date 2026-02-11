@@ -36,12 +36,12 @@ The solution adds three components:
    - New `buildPhraseVocabulary()` function extracts multi-word terms (containing spaces) from synonym data
    - Returns `ReadonlySet<string>` for efficient lookup
 
-2. **Phrase Detection** (`apps/oak-open-curriculum-semantic-search/src/lib/query-processing/detect-curriculum-phrases.ts`):
+2. **Phrase Detection** (`apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.ts`):
    - Pure function `detectCurriculumPhrases(query: string): readonly string[]`
    - Uses greedy matching (longest phrases first) with word boundary checking
    - Returns detected phrases in order of appearance
 
-3. **Phrase Boosters** (`apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts`):
+3. **Phrase Boosters** (`apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts`):
    - New `createPhraseBoosters()` function creates `match_phrase` queries for detected phrases
    - BM25 retrievers now accept optional `phrases` parameter
    - When phrases detected, query structure becomes `bool.must[multi_match] + bool.should[match_phrase...]`
@@ -131,10 +131,10 @@ Files changed:
 
 - `packages/sdks/oak-curriculum-sdk/src/mcp/synonym-export.ts` — Added `buildPhraseVocabulary()`
 - `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` — Exported new function
-- `apps/oak-open-curriculum-semantic-search/src/lib/query-processing/detect-curriculum-phrases.ts` — NEW
-- `apps/oak-open-curriculum-semantic-search/src/lib/query-processing/detect-curriculum-phrases.unit.test.ts` — NEW
-- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts` — Added `createPhraseBoosters()`, modified retrievers
-- `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts` — Integrated phrase detection
+- `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.ts` — NEW
+- `apps/oak-search-cli/src/lib/query-processing/detect-curriculum-phrases.unit.test.ts` — NEW
+- `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts` — Added `createPhraseBoosters()`, modified retrievers
+- `apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts` — Integrated phrase detection
 
 ## Related ADRs
 

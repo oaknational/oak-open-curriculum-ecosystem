@@ -167,9 +167,9 @@ ELSER queue overflow causes document-level failures:
 | [ADR-070](../../../../docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md) | Retry pattern source of truth |
 | [ADR-087](../../../../docs/architecture/architectural-decisions/087-batch-atomic-ingestion.md) | Batch-atomic ingestion, idempotent re-runs |
 | [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Typed error handling |
-| [bulk-chunk-uploader.ts](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/bulk-chunk-uploader.ts) | Upload orchestration |
-| [http-retry.ts](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/http-retry.ts) | Tier 1 retry |
-| [document-retry.ts](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-retry.ts) | Tier 2 retry |
+| [bulk-chunk-uploader.ts](../../../../apps/oak-search-cli/src/lib/indexing/bulk-chunk-uploader.ts) | Upload orchestration |
+| [http-retry.ts](../../../../apps/oak-search-cli/src/lib/indexing/http-retry.ts) | Tier 1 retry |
+| [document-retry.ts](../../../../apps/oak-search-cli/src/lib/indexing/document-retry.ts) | Tier 2 retry |
 
 ---
 

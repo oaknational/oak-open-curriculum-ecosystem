@@ -27,7 +27,7 @@ This document outlines the phased migration strategy for replacing runtime-defin
 
 - **Tasks**:
   - Update `packages/sdks/oak-curriculum-sdk/src/types/oak.ts` (or equivalent barrel) to re-export new search artefacts.
-  - Ensure search app re-imports everything from `apps/oak-open-curriculum-semantic-search/src/types/oak.ts`, which should only proxy SDK exports.
+  - Ensure search app re-imports everything from `apps/oak-search-cli/src/types/oak.ts`, which should only proxy SDK exports.
 - **Dependencies**: Phase 0 completed.
 - **Validation**: `pnpm type-check` in SDK and search app to confirm re-export wiring.
 
@@ -38,7 +38,7 @@ This document outlines the phased migration strategy for replacing runtime-defin
   - `app/ui/client/useSearchController.ts`, `app/ui/SearchResults.shared.tsx`, `app/ui/NaturalSearch.helpers.ts` → consume generated guards (`isSearchStructuredRequest`, `isSearchSuggestionResponse`) and types (`SearchSuggestionItem`, `SearchLessonsResponse`).
   - API routes (`/api/search`, `/api/search/nl`, `/api/search/suggest`, `/api/sdk/search-*`) → rely on SDK schemas from `src/types/generated/search` instead of local validators.
 - **Approach**: Swap imports, remove redundant helper types, adapt code to use generated guard functions.
-- **Validation**: `pnpm -C apps/oak-open-curriculum-semantic-search type-check` plus existing unit/integration suites.
+- **Validation**: `pnpm -C apps/oak-search-cli type-check` plus existing unit/integration suites.
 
 ## Phase 3 – Fixture Builder Alignment
 
@@ -46,7 +46,7 @@ This document outlines the phased migration strategy for replacing runtime-defin
   - `app/ui/search-fixtures/builders/*` → import generated fixtures (`createSearchLessonsResponse`, etc.) and type aliases (`SearchMultiScopeBucket`).
   - Ensure `DEFAULT_SUGGESTION_CACHE` constant and dataset typing flow from SDK `suggestions.ts`/`fixtures.ts` modules.
 - **Dependencies**: Phase 2 complete (shared schema module removed).
-- **Validation**: Fixture unit tests (`single-scope.unit.test.ts`, etc.) updated to use generator guard helpers; run `pnpm -C apps/oak-open-curriculum-semantic-search test --filter "fixtures"`.
+- **Validation**: Fixture unit tests (`single-scope.unit.test.ts`, etc.) updated to use generator guard helpers; run `pnpm -C apps/oak-search-cli test --filter "fixtures"`.
 
 ## Phase 4 – Search Library Updates
 
@@ -54,7 +54,7 @@ This document outlines the phased migration strategy for replacing runtime-defin
   - `src/lib/hybrid-search/types.ts`, `run-hybrid-search.ts`, `suggestions/types.ts`, `search-index-target.ts`, `observability/zero-hit*`.
   - Replace manual interfaces with generated exports or utility enums from SDK.
 - **Approach**: Gradually migrate each module, starting with read-only type replacements to minimise behavioural change.
-- **Validation**: `pnpm -C apps/oak-open-curriculum-semantic-search test` and targeted integration tests (`structured-search.actions.integration.test.ts`).
+- **Validation**: `pnpm -C apps/oak-search-cli test` and targeted integration tests (`structured-search.actions.integration.test.ts`).
 
 ## Phase 5 – OpenAPI Registration & Docs
 

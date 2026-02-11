@@ -15,8 +15,6 @@
  *   Semantic search schemas, validators, and types
  *
  * This separation improves tree-shaking and makes dependencies explicit.
- *
- * @packageDocumentation
  */
 
 // ============================================================================

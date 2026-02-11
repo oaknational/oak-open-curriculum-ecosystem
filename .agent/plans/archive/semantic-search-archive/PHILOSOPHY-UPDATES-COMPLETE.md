@@ -27,7 +27,7 @@ Successfully updated all documentation to clearly articulate the **Elastic-Nativ
 
 ### 1. Search App README
 
-**File**: `apps/oak-open-curriculum-semantic-search/README.md`
+**File**: `apps/oak-search-cli/README.md`
 
 **Added**:
 
@@ -222,7 +222,7 @@ This philosophy is successful when:
 
 ### Application Documentation
 
-- `apps/oak-open-curriculum-semantic-search/README.md` - Philosophy prominently featured
+- `apps/oak-search-cli/README.md` - Philosophy prominently featured
 
 ### Architectural Decisions
 

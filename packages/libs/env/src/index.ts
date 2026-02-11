@@ -3,8 +3,6 @@
  *
  * This library provides adaptive environment variable access that works across
  * different runtime environments (Node.js, Edge, Browser) using feature detection.
- *
- * @packageDocumentation
  */
 
 // Export adaptive environment (default)

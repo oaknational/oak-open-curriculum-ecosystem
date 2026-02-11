@@ -179,7 +179,7 @@ cat .agent/plans/quality-and-maintainability/type-discipline-restoration-plan.md
    - `pnpm test:ui`
 
 4. **Delete dead code when proven unused** — after consumers are updated:
-   - `apps/oak-open-curriculum-semantic-search/src/lib/indexing/summary-reader-helpers.ts`
+   - `apps/oak-search-cli/src/lib/indexing/summary-reader-helpers.ts`
 
 ---
 
@@ -561,25 +561,25 @@ import type {
 
 **Core pipeline (FIXED):**
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-helpers.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-helpers-internal.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-support.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts`
+- `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
+- `apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts`
+- `apps/oak-search-cli/src/lib/indexing/index-bulk-helpers-internal.ts`
+- `apps/oak-search-cli/src/lib/indexing/index-bulk-support.ts`
+- `apps/oak-search-cli/src/lib/index-oak-helpers.ts`
 
 **Helper functions (NEED UPDATING):**
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-and-pedagogical-extractors.ts`
+- `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.ts`
+- `apps/oak-search-cli/src/lib/indexing/thread-and-pedagogical-extractors.ts`
 
 **Helper functions (DONE):**
 
-- ✅ `apps/oak-open-curriculum-semantic-search/src/lib/indexing/programme-factor-extractors.ts` (tier derived; ghost fields removed)
+- ✅ `apps/oak-search-cli/src/lib/indexing/programme-factor-extractors.ts` (tier derived; ghost fields removed)
 
 **Other files with issues:**
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facet-utils.ts`
-- `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sandbox-*.ts`
+- `apps/oak-search-cli/src/lib/indexing/sequence-facet-utils.ts`
+- `apps/oak-search-cli/src/lib/indexing/sandbox-*.ts`
 
 ### SDK Types
 

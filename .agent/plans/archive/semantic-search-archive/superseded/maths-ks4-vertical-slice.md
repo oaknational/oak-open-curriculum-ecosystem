@@ -464,7 +464,7 @@ interface MathsTopicDoc {
 7. ⏳ Run Maths KS4 ingestion
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 ```
 

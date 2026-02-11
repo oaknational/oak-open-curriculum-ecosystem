@@ -42,10 +42,10 @@ The design does not make use of wide screens, and is not optimised for narrow sc
 - 2025-10-20: Structured and natural heroes now use intent-led copy, results gain a sticky summary card with motion-safe skeletons, and suggestions/facets live in a dedicated support column; RTL integration coverage updated to assert skeletons, summary stickiness, and relocated panels.
 - 2025-10-20: Result cards now carry accent meta pills plus improved contrast, and sub-`lg` layouts collapse support panels into header-controlled accordions (tested via new mobile accordion integration).
 - 2025-10-22: Result highlights clamp to three lines with accessible emphasis styling and high-contrast tweaks for badges/cards, keeping dense results readable.
-- 2025-10-22: Captured Chromium Playwright artefacts for structured/natural journeys (light/dark, responsive, fixture toggles) – files under `apps/oak-open-curriculum-semantic-search/test-results/responsive-baseline-*` and `fixture-toggle-*`.
-- 2025-10-22: Documented mobile support accordion behaviour in `apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md#mobile-support-accordions` (focus order, aria attributes, analytics contract).
+- 2025-10-22: Captured Chromium Playwright artefacts for structured/natural journeys (light/dark, responsive, fixture toggles) – files under `apps/oak-search-cli/test-results/responsive-baseline-*` and `fixture-toggle-*`.
+- 2025-10-22: Documented mobile support accordion behaviour in `apps/oak-search-cli/docs/ARCHITECTURE.md#mobile-support-accordions` (focus order, aria attributes, analytics contract).
 - 2025-10-22: Playwright test helpers now remove the Next.js dev overlay and centralise matchMedia stubs so responsive and fixture journeys capture stable evidence.
-- 2025-10-06: Skeleton shimmer now uses semantic brand tones with reduced-motion guards (`SearchSkeletons.tsx` + new integration test). Verified via targeted Vitest run (`pnpm --filter @oaknational/open-curriculum-semantic-search exec vitest run app/ui/search/components/SearchSkeletons.integration.test.tsx`). Broader suite still blocked on missing generated types (pre-existing); see search scopes fixture gap tracked under Workstream 5.
+- 2025-10-06: Skeleton shimmer now uses semantic brand tones with reduced-motion guards (`SearchSkeletons.tsx` + new integration test). Verified via targeted Vitest run (`pnpm --filter @oaknational/search-cli exec vitest run app/ui/search/components/SearchSkeletons.integration.test.tsx`). Broader suite still blocked on missing generated types (pre-existing); see search scopes fixture gap tracked under Workstream 5.
 
 ### Natural Language Search
 

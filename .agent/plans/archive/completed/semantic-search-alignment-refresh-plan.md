@@ -21,7 +21,7 @@ Create a consolidated execution plan to align every semantic search plan and aut
 ## Deliverables
 
 1. Updated semantic search plan documents (API, UI, docs, caching, context, prompts, audits) that mirror the target alignment outcomes, include accurate status, and instruct future work to apply GO.md cadence with self-reviews.
-2. Updated semantic search authored documentation (`apps/oak-open-curriculum-semantic-search/docs/*.md`, excluding generated `docs/api`) and `apps/oak-open-curriculum-semantic-search/README.md` that teach the definitive architecture, enriched payloads, and operational guardrails.
+2. Updated semantic search authored documentation (`apps/oak-search-cli/docs/*.md`, excluding generated `docs/api`) and `apps/oak-search-cli/README.md` that teach the definitive architecture, enriched payloads, and operational guardrails.
 3. Documented verification steps (quality gates, doc generation, linting) to run after edits.
 
 ## Assumptions
@@ -51,7 +51,7 @@ Create a consolidated execution plan to align every semantic search plan and aut
 16. ACTION: Rewrite authored docs (`ARCHITECTURE.md`, `SETUP.md`, `INDEXING.md`, `QUERYING.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`, `docs/README.md`, `oak-curriculum-hybrid-search-definitive-guide.md`) to cover enriched indices, canonical URLs, suggestion/type-ahead endpoints, zero-hit logging, and quality gate expectations.
 17. REVIEW: Self-review each document update for accuracy, British spelling, and consistency with the target plan.
 18. GROUNDING: read GO.md and follow all instructions.
-19. ACTION: Update `apps/oak-open-curriculum-semantic-search/README.md` to list the expanded endpoints, enriched payloads, and operational steps (index versioning, logging, suggestion APIs).
+19. ACTION: Update `apps/oak-search-cli/README.md` to list the expanded endpoints, enriched payloads, and operational steps (index versioning, logging, suggestion APIs).
 20. REVIEW: Self-review README changes for completeness and coherence with other docs.
 21. GROUNDING: read GO.md and follow all instructions.
 22. QUALITY-GATE: pnpm lint
@@ -63,7 +63,7 @@ Create a consolidated execution plan to align every semantic search plan and aut
 28. QUALITY-GATE: pnpm build
 29. REVIEW: Confirm build status; log next steps on failure.
 30. GROUNDING: read GO.md and follow all instructions.
-31. QUALITY-GATE: pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+31. QUALITY-GATE: pnpm -C apps/oak-search-cli doc-gen
 32. REVIEW: Document doc-gen results and address discrepancies.
 33. GROUNDING: read GO.md and follow all instructions.
 34. ACTION: Final self-review of all updated plans/docs, ensuring cross-links and instructions remain consistent.
@@ -86,7 +86,7 @@ Create a consolidated execution plan to align every semantic search plan and aut
 - **ROLLUP.md**: Must document enriched snippet assembly (teacher metadata, canonical URLs), semantic copy behaviour, and cache/tag invalidation after rebuilds.
 - **SDK-ENDPOINTS.md**: Should mention updated SDK adapter exposure (sequences, canonical URLs) and explain parity routes’ role in regression testing.
 - **docs/README.md**: Needs to reference refreshed architecture/setup/querying/observability docs and describe the expanded API surface plus quality gates.
-- **apps/oak-open-curriculum-semantic-search/README.md**: Endpoint list omits suggestions/status, quick start lacks resilient ingestion and observability steps, and operational checklist misses zero-hit logging and index versioning.
+- **apps/oak-search-cli/README.md**: Endpoint list omits suggestions/status, quick start lacks resilient ingestion and observability steps, and operational checklist misses zero-hit logging and index versioning.
 - **oak-curriculum-hybrid-search-definitive-guide.md**: Must confirm every requirement from the target alignment plan (indices, mappings, API payloads, observability) is present and authoritative.
 
 ## Acceptance Criteria
@@ -109,12 +109,12 @@ Create a consolidated execution plan to align every semantic search plan and aut
 - REVIEW (Todo item 14): Updated `semantic-search-startup-prompt.md` and `semantic-search-ui-continuation-prompt.md` to reflect alignment milestones, GO cadence with self-reviews, expanded scopes (sequences, suggestions, observability), and the four-index architecture.
 - REVIEW (Todo item 17): Rewrote authored docs (ARCHITECTURE, SETUP, INDEXING, QUERYING, ROLLUP, SDK-ENDPOINTS, docs/README, definitive guide) to match the target architecture—four indices, enriched ingestion, server-side RRF, suggestion/status endpoints, and observability. Ensured British spelling and cross-references to rules/testing strategy.
 - GROUNDING (Todo item 18): Re-read GO.md before updating workspace README to maintain cadence discipline.
-- REVIEW (Todo item 20): Updated `apps/oak-open-curriculum-semantic-search/README.md` with four-index architecture, expanded endpoints (suggest, status), environment matrix, quality gates, and observability reminders aligned with the definitive guide.
+- REVIEW (Todo item 20): Updated `apps/oak-search-cli/README.md` with four-index architecture, expanded endpoints (suggest, status), environment matrix, quality gates, and observability reminders aligned with the definitive guide.
 - GROUNDING (Todo item 21): Re-read GO.md prior to running quality gates to maintain cadence discipline.
 - REVIEW (Todo item 23): `pnpm lint` completed successfully across all packages (10/10), no violations.
 - REVIEW (Todo item 26): `pnpm test` passed (10/10 packages), Vitest suites green including semantic search workspace.
 - REVIEW (Todo item 29): `pnpm build` succeeded for all packages; Next.js production build for semantic search completed without warnings.
-- REVIEW (Todo item 32): `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` regenerated TypeDoc/OpenAPI artefacts (Docs OK).
+- REVIEW (Todo item 32): `pnpm -C apps/oak-search-cli doc-gen` regenerated TypeDoc/OpenAPI artefacts (Docs OK).
 - GROUNDING (Todo item 33): Re-read GO.md before the final self-review to ensure compliance with cadence.
 - ACTION (Todo item 34): Performed comprehensive self-review of all updated plans, prompts, docs, and README to confirm cross-references, GO cadence instructions, and alignment with the target plan.
 - REVIEW (Todo item 35): Final review complete; prepared change summary and verified readiness for handover.

@@ -1,10 +1,8 @@
 /**
- * Retrieval service result types — search results, suggestions, and metadata.
+ * Retrieval service result types — search results, suggestions, errors, and metadata.
  *
  * Index document types (`SearchLessonsIndexDoc`, etc.) flow from the
  * Curriculum SDK and are imported, not redefined.
- *
- * @packageDocumentation
  */
 
 import type {
@@ -14,6 +12,65 @@ import type {
   SearchFacets,
   SearchSuggestionItem,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
+
+// ---------------------------------------------------------------------------
+// Retrieval error type
+// ---------------------------------------------------------------------------
+
+/**
+ * Error type for retrieval service operations.
+ *
+ * Uses a discriminated union on the `type` field for exhaustive matching.
+ * Consumers inspect `result.ok` and then narrow via `error.type`.
+ *
+ * @example
+ * ```typescript
+ * const result = await sdk.retrieval.searchLessons({ text: 'fractions' });
+ * if (!result.ok) {
+ *   switch (result.error.type) {
+ *     case 'es_error':
+ *       console.error(`ES error (${result.error.statusCode}): ${result.error.message}`);
+ *       break;
+ *     case 'timeout':
+ *       console.error('Query timed out');
+ *       break;
+ *     case 'validation_error':
+ *       console.error(`Invalid input: ${result.error.message}`);
+ *       break;
+ *     case 'unknown':
+ *       console.error(`Unexpected: ${result.error.message}`);
+ *       break;
+ *   }
+ * }
+ * ```
+ */
+export type RetrievalError =
+  | {
+      /** An Elasticsearch communication or transport error. */
+      readonly type: 'es_error';
+      /** Human-readable description of the ES error. */
+      readonly message: string;
+      /** HTTP status code from Elasticsearch, when available. */
+      readonly statusCode?: number;
+    }
+  | {
+      /** The Elasticsearch query exceeded the timeout threshold. */
+      readonly type: 'timeout';
+      /** Human-readable description of the timeout. */
+      readonly message: string;
+    }
+  | {
+      /** The input parameters failed validation before reaching Elasticsearch. */
+      readonly type: 'validation_error';
+      /** Human-readable description of what was invalid. */
+      readonly message: string;
+    }
+  | {
+      /** An error that does not fit the other categories. */
+      readonly type: 'unknown';
+      /** Human-readable description of the unexpected error. */
+      readonly message: string;
+    };
 
 /** A single lesson result from a search query. */
 export interface LessonResult {

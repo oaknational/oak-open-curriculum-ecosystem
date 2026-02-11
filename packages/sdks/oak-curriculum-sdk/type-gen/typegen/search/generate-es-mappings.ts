@@ -53,8 +53,6 @@ function createEsMappingsIndexModule(): string {
  *   ...OAK_LESSONS_MAPPING,
  * });
  * \`\`\`
- *
- * @packageDocumentation
  */
 
 export { OAK_LESSONS_MAPPING } from './oak-lessons.js';

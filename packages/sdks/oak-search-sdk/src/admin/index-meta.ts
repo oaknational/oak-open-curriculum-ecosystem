@@ -1,7 +1,5 @@
 /**
  * Index metadata read/write using the Result pattern.
- *
- * @packageDocumentation
  */
 
 import type { Client } from '@elastic/elasticsearch';

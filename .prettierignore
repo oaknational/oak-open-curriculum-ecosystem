@@ -35,7 +35,7 @@ apps/oak-curriculum-mcp/src/tools/generation/
 apps/oak-curriculum-mcp/src/test/mocks/generated/
 
 # Bulk downloads data
-apps/oak-open-curriculum-semantic-search/bulk-downloads/**
+apps/oak-search-cli/bulk-downloads/**
 
 # API schema files
 **/*.api.json

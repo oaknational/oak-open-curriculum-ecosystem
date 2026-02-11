@@ -78,7 +78,7 @@ pnpm smoke:dev:stub
 **⚠️ Never run search quality smoke tests against stale indices.** The indices may contain data from a previous session with different schema, transforms, or field mappings. Results are meaningless without fresh data.
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup                                           # Ensure mappings are current
 pnpm es:ingest-live -- --subject maths --keystage ks4   # ~5-10 minutes
 pnpm es:status                                          # Verify document counts
@@ -510,7 +510,7 @@ See [ADR-077](docs/architecture/architectural-decisions/077-semantic-summary-gen
 ### Search Quality
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── src/lib/search-quality/
 │   ├── ground-truth/              # Lesson + unit ground truth
 │   │   ├── units/                 # 43 unit queries
@@ -526,7 +526,7 @@ apps/oak-open-curriculum-semantic-search/
 ### RRF Query Builders
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-builders.ts           # Two-way (BM25 + ELSER)
 ├── rrf-query-helpers.ts            # Shared helpers
 ├── lessons.ts                      # Lesson search
@@ -536,7 +536,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ### Document Transforms
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+apps/oak-search-cli/src/lib/indexing/
 └── document-transforms.ts          # createLessonDocument(), createUnitDocument()
 ```
 
@@ -581,7 +581,7 @@ pnpm smoke:dev:stub    # Smoke tests
 These tests talk directly to Elasticsearch using credentials from `.env.local`:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm vitest run -c vitest.smoke.config.ts hybrid-superiority
 ```
 
@@ -591,7 +591,7 @@ These tests hit the `/api/search` endpoint:
 
 ```bash
 # Terminal 1: Start the dev server
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 rm -rf .next  # Clear cache
 pnpm dev
 
@@ -606,7 +606,7 @@ pnpm vitest run -c vitest.smoke.config.ts unit-search
 **⚠️ Always re-index before running smoke tests.** Stale indices invalidate all results.
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Setup indices with current mappings
 pnpm es:setup
@@ -622,7 +622,7 @@ pnpm es:status
 
 ## Environment
 
-Required in `apps/oak-open-curriculum-semantic-search/.env.local`:
+Required in `apps/oak-search-cli/.env.local`:
 
 ```bash
 ELASTICSEARCH_URL=https://your-elasticsearch-url-here

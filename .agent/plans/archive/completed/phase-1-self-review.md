@@ -12,7 +12,7 @@ _Authored: 2025-09-24_
 
 ## Quality gates & validation
 
-- `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` all pass from a clean workspace.
+- `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm -C apps/oak-search-cli doc-gen` all pass from a clean workspace.
 - Added targeted tests to prove streaming admin output and Redoc embedding remain functional after the Oak migration.
 
 ## Behavioural confidence

@@ -80,5 +80,5 @@ See [02b-vocabulary-mining.md](02b-vocabulary-mining.md) for details.
 - [02b-vocabulary-mining.md](02b-vocabulary-mining.md) — **Comprehensive vocabulary mining pipeline** (next step)
 - [ADR-063: SDK Domain Synonyms Source of Truth](../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
 - [synonyms/README.md](../../../../packages/sdks/oak-curriculum-sdk/src/mcp/synonyms/README.md) — Synonym module documentation
-- [SYNONYMS.md](../../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) — Search app synonym documentation
+- [SYNONYMS.md](../../../../apps/oak-search-cli/docs/SYNONYMS.md) — Search app synonym documentation
 - [rules.md](../../directives/rules.md) — TDD, no dead code, Cardinal Rule

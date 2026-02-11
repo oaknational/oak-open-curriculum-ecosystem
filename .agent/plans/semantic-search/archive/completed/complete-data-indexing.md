@@ -89,9 +89,9 @@ See [ADR-096](../../../../docs/architecture/architectural-decisions/096-es-bulk-
 
 | Document | Purpose |
 |----------|---------|
-| [Search App README](../../../../apps/oak-open-curriculum-semantic-search/README.md) | CLI usage, setup |
-| [Indexing README](../../../../apps/oak-open-curriculum-semantic-search/src/lib/indexing/README.md) | Module documentation |
-| [Adapters README](../../../../apps/oak-open-curriculum-semantic-search/src/adapters/README.md) | Adapter architecture |
+| [Search App README](../../../../apps/oak-search-cli/README.md) | CLI usage, setup |
+| [Indexing README](../../../../apps/oak-search-cli/src/lib/indexing/README.md) | Module documentation |
+| [Adapters README](../../../../apps/oak-search-cli/src/adapters/README.md) | Adapter architecture |
 
 ---
 

@@ -1,7 +1,5 @@
 /**
  * Suggestion pipeline — completion + bool_prefix fallback.
- *
- * @packageDocumentation
  */
 
 import type { Client, estypes } from '@elastic/elasticsearch';

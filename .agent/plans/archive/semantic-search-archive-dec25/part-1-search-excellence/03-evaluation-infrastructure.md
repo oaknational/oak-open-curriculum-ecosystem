@@ -34,10 +34,10 @@ We have TWO evaluation directories:
     └── *.md
 ```
 
-### `apps/oak-open-curriculum-semantic-search/evaluation/` — App-Level Execution
+### `apps/oak-search-cli/evaluation/` — App-Level Execution
 
 ```text
-apps/oak-open-curriculum-semantic-search/evaluation/
+apps/oak-search-cli/evaluation/
 ├── README.md                    # Script usage
 ├── analysis/                    # Measurement SCRIPTS
 │   ├── analyze-per-category.ts
@@ -88,7 +88,7 @@ apps/oak-open-curriculum-semantic-search/evaluation/
 ### `apps/.../evaluation/` — Pure Execution
 
 ```text
-apps/oak-open-curriculum-semantic-search/evaluation/
+apps/oak-search-cli/evaluation/
 ├── README.md                    # How to run scripts, links to design docs
 ├── analysis/                    # Measurement scripts
 │   ├── per-category.ts

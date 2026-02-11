@@ -5,11 +5,11 @@ _Status: REFERENCE DOCUMENT_
 
 ## Purpose
 
-This document catalogs all search-related types, Zod schemas, and type guards currently defined at runtime in `apps/oak-open-curriculum-semantic-search`. Each entry documents the construct's purpose and consumers, supporting the migration to SDK-generated artifacts.
+This document catalogs all search-related types, Zod schemas, and type guards currently defined at runtime in `apps/oak-search-cli`. Each entry documents the construct's purpose and consumers, supporting the migration to SDK-generated artifacts.
 
 **Migration Strategy**: See [Search Service Implementation Plan](search-service/schema-first-ontology-implementation.md#phase-1-schema-first-migration) for sessions that migrate these runtime schemas to type-gen.
 
-## apps/oak-open-curriculum-semantic-search/app/ui/structured-search.shared.ts
+## apps/oak-search-cli/app/ui/structured-search.shared.ts
 
 - `SearchScope` / `SearchScopeWithAll` (type alias): enumerations of permitted search scopes including the synthetic `all` mode used only by the UI.
 - `StructuredBody` (interface): request envelope for `/api/search`; duplicates logic already expressed in `SearchRequest` Zod schema.

@@ -221,7 +221,7 @@ This decision is successful when:
 ## Implementation Files
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+apps/oak-search-cli/src/lib/indexing/
 ├── semantic-summary-generation.ts     # NEW: Template-based summary generation
 ├── semantic-summary-generation.unit.test.ts
 ├── document-transforms.ts             # UPDATE: Add summary fields

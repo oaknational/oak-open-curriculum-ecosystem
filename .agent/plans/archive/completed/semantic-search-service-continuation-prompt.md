@@ -11,7 +11,7 @@ continuation prompt. The theming approach is formalised in ADR‑045
 
 ## TL;DR (current state)
 
-- Workspace: `apps/oak-open-curriculum-semantic-search` (Next.js 15, React 19, TS strict)
+- Workspace: `apps/oak-search-cli` (Next.js 15, React 19, TS strict)
 - Search model: Hybrid retrieval (BM25 + `semantic_text`) fused via RRF.
 - Indices (Elasticsearch Serverless): `oak_lessons` (transcripts + `lesson_semantic`), `oak_units` (metadata), `oak_unit_rollup` (per‑lesson passages + `unit_semantic`).
 - Endpoints: `POST /api/search` (structured, LLM‑free), `POST /api/search/nl` (501 if LLM disabled); admin: `GET /api/index-oak`, `GET /api/rebuild-rollup`; SDK parity: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
@@ -68,7 +68,7 @@ Completed. Rebased `feat/semantic_search` onto remote; resolved generated‑doc 
 ## Handy commands
 
 - Create indices (serverless):
-  - `ELASTICSEARCH_URL=… ELASTICSEARCH_API_KEY=… pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup`
+  - `ELASTICSEARCH_URL=… ELASTICSEARCH_API_KEY=… pnpm -C apps/oak-search-cli run elastic:setup`
 - Index + rollup:
   - `curl -H "x-api-key: $SEARCH_API_KEY" http://localhost:3000/api/index-oak`
   - `curl -H "x-api-key: $SEARCH_API_KEY" http://localhost:3000/api/rebuild-rollup`
@@ -76,7 +76,7 @@ Completed. Rebased `feat/semantic_search` onto remote; resolved generated‑doc 
 - Docs (root): `pnpm docs` runs docs across workspaces.
 - Root doc generation: `pnpm doc-gen` runs doc generation across relevant workspaces.
 - SDK docs: `pnpm -F @oaknational/oak-curriculum-sdk doc-gen`.
-- Search docs: `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`.
+- Search docs: `pnpm -C apps/oak-search-cli doc-gen`.
 
 ---
 

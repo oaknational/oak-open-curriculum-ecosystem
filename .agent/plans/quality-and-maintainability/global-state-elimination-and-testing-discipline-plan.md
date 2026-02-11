@@ -132,25 +132,25 @@ See: [test-isolation-architecture-fix.md](../semantic-search/test-isolation-arch
 
 ```bash
 # Files deleted ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media.ts
-apps/oak-open-curriculum-semantic-search/app/ui/search/mock-match-media-registries.ts
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.unit.test.tsx
+apps/oak-search-cli/app/ui/search/mock-match-media.ts
+apps/oak-search-cli/app/ui/search/mock-match-media-registries.ts
+apps/oak-search-cli/app/ui/search/SearchPageClient.test-helpers.unit.test.tsx
 
 # Product code refactored ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/layout/SearchSecondary.tsx
-apps/oak-open-curriculum-semantic-search/app/lib/theme/theme-utils.ts
-apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx
-apps/oak-open-curriculum-semantic-search/app/lib/Providers.tsx
+apps/oak-search-cli/app/ui/search/layout/SearchSecondary.tsx
+apps/oak-search-cli/app/lib/theme/theme-utils.ts
+apps/oak-search-cli/app/lib/theme/ThemeContext.tsx
+apps/oak-search-cli/app/lib/Providers.tsx
 
 # Test files refactored ✅
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.test-helpers.tsx
-apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeSystemPreference.integration.test.tsx
-apps/oak-open-curriculum-semantic-search/app/ui/search/SearchPageClient.integration.test.tsx
+apps/oak-search-cli/app/ui/search/SearchPageClient.test-helpers.tsx
+apps/oak-search-cli/app/lib/theme/ThemeSystemPreference.integration.test.tsx
+apps/oak-search-cli/app/ui/search/SearchPageClient.integration.test.tsx
 
 # New files created ✅
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.tsx
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.test-helpers.tsx
-apps/oak-open-curriculum-semantic-search/app/lib/media-query/MediaQueryContext.unit.test.tsx
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.tsx
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.test-helpers.tsx
+apps/oak-search-cli/app/lib/media-query/MediaQueryContext.unit.test.tsx
 ```
 
 ---

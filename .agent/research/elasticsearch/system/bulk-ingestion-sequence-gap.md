@@ -11,7 +11,7 @@ The `oak_sequences` and `oak_sequence_facets` indices are empty (0 documents) be
 
 ### Bulk ingestion creates these indices only
 
-From `apps/oak-open-curriculum-semantic-search/src/lib/indexing/bulk-ingestion.ts`:
+From `apps/oak-search-cli/src/lib/indexing/bulk-ingestion.ts`:
 
 ```typescript
 const LESSONS_INDEX = 'oak_lessons';

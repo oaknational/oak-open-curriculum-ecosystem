@@ -168,7 +168,7 @@ All 16 schema/facet/integrity/search issues resolved.
 **For Every Feature**:
 
 1. **TSDoc comments** with examples in all functions/modules
-2. **Authored documentation** in `apps/oak-open-curriculum-semantic-search/docs/`
+2. **Authored documentation** in `apps/oak-search-cli/docs/`
 3. **ADR creation** for architectural decisions (see ADR checklist per phase)
 4. **Update semantic-search.prompt.md** with new capabilities
 5. **typedoc-compatible** documentation for public APIs
@@ -571,7 +571,7 @@ Currently, facets are returned for tier, exam_board, and pathway, but these **ca
 #### Step 1: Ingest Maths KS4 (Current)
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:status  # Verify connection
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 ```
@@ -747,7 +747,7 @@ threads_available: { type: 'keyword' },
 
 #### 1. Write Tests FIRST (RED)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.unit.test.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.unit.test.ts`
 
 ```typescript
 describe('extractTier', () => {
@@ -818,7 +818,7 @@ describe('extractResourceTypes', () => {
 
 #### 2. Implement Extraction Functions (GREEN)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.ts`
 
 ````typescript
 import type { LessonData } from '@oaknational/oak-curriculum-sdk/public/search';
@@ -895,7 +895,7 @@ export function extractResourceTypes(lessonData: LessonData): string[] {
 
 #### 3. Dense Vector Extraction (OpenAI Integration)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.ts` (NEW)
 
 ````typescript
 import type { Client } from '@elastic/elasticsearch';
@@ -958,7 +958,7 @@ export async function generateTitleEmbedding(
 
 ### Integration into Document Transforms
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
 
 Update `createLessonDocument` to include new fields:
 
@@ -997,7 +997,7 @@ export async function createLessonDocument(
 
 ### Three-Way RRF Query Implementation
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/three-way-rrf.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/hybrid-search/three-way-rrf.ts` (NEW)
 
 ````typescript
 import type { Client } from '@elastic/elasticsearch';
@@ -1162,7 +1162,7 @@ We currently extract only the keyword strings, discarding the expert-curated def
 
 #### Enhancement 1: Rich Embeddings (Immediate - Phase 1A)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-generation.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-generation.ts`
 
 Add helper function:
 
@@ -1420,7 +1420,7 @@ The following tests and implementation are ready if Phase 2 is needed:
 
 #### Unit Test: Dense Vector Extraction
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.unit.test.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.unit.test.ts`
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -1468,7 +1468,7 @@ describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
 
 #### Implementation: Dense Vector Generation
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.ts`
 
 ```typescript
 import type { Client } from '@elastic/elasticsearch';
@@ -1515,7 +1515,7 @@ export function prepareTextForEmbedding(params: { title: string; summary?: strin
 #### Step 1: Re-ingest with Dense Vectors
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Re-ingest Maths KS4 with dense vectors enabled
 pnpm es:ingest-live \

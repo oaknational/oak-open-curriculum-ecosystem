@@ -7,8 +7,6 @@
  * 2. Import from 'zod' (v3)
  *
  * All other code MUST import from 'zod' (with Zod v4 installed).
- *
- * @packageDocumentation
  */
 
 export {

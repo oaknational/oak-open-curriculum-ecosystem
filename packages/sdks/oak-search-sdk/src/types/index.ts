@@ -1,7 +1,5 @@
 /**
  * Search SDK types — barrel export for all public types.
- *
- * @packageDocumentation
  */
 
 // SDK factory and top-level types

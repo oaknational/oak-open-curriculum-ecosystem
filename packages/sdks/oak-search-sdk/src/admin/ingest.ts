@@ -1,7 +1,5 @@
 /**
  * Bulk ingestion — reads JSON files and indexes documents to Elasticsearch.
- *
- * @packageDocumentation
  */
 
 import type { Client } from '@elastic/elasticsearch';

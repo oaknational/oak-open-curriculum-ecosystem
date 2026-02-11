@@ -3,8 +3,6 @@
  *
  * Four-way RRF for lessons/units (BM25+ELSER on content+structure).
  * Two-way RRF for sequences (BM25+ELSER).
- *
- * @packageDocumentation
  */
 
 import type { estypes } from '@elastic/elasticsearch';

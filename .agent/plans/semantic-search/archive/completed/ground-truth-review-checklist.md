@@ -115,7 +115,7 @@ src/lib/search-quality/ground-truth/spanish/
 ### Spanish Bulk Data
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Verify files exist
 ls bulk-downloads/spanish-*.json
@@ -681,7 +681,7 @@ All 17 subjects have domain-specific synonym files (~580 total). See: [ADR-100](
 ### Commands — maths/primary
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # PHASE 0: Prerequisites (verify bulk data exists)
 jq '.sequence | length' bulk-downloads/maths-primary.json  # Should be 125 units
@@ -718,7 +718,7 @@ pnpm benchmark --subject maths --phase primary --verbose
 ### Commands — maths/secondary
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # PHASE 0: Prerequisites (verify bulk data exists)
 jq '.sequence | length' bulk-downloads/maths-secondary.json  # Should be 98 units
@@ -836,7 +836,7 @@ Four retrievers (Structure BM25, Structure ELSER, Content BM25, Content ELSER) c
 ### Commands
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # FIRST: Read query metadata from .query.ts files (SAFE — no expected slugs)
 cat src/lib/search-quality/ground-truth/SUBJECT/PHASE/CATEGORY.query.ts
@@ -1558,7 +1558,7 @@ File: `src/lib/search-quality/ground-truth/science/secondary/`
 **Commands**:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Read query files (Phase 1B)
 cat src/lib/search-quality/ground-truth/spanish/primary/precise-topic.query.ts
@@ -1602,7 +1602,7 @@ File: `src/lib/search-quality/ground-truth/spanish/primary/`
 **Commands**:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Read query files (Phase 1B)
 cat src/lib/search-quality/ground-truth/spanish/secondary/precise-topic.query.ts
@@ -1639,8 +1639,8 @@ File: `src/lib/search-quality/ground-truth/spanish/secondary/`
 |----------|---------|
 | [Protocol](../templates/ground-truth-session-template.md) | **LINEAR execution with checkpoints** |
 | [Entry Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Overview, cardinal rule |
-| [IR Metrics](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
-| [GT Guide](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
+| [IR Metrics](../../../apps/oak-search-cli/docs/IR-METRICS.md) | Metric definitions |
+| [GT Guide](../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles |
 
 ---
 

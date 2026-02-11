@@ -74,9 +74,9 @@
 
 **Files**:
 
-- `apps/oak-open-curriculum-semantic-search/src/lib/logger.ts`
-- `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`
-- `apps/oak-open-curriculum-semantic-search/app/lib/theme/HtmlThemeAttribute.tsx`
+- `apps/oak-search-cli/src/lib/logger.ts`
+- `apps/oak-search-cli/app/lib/theme/ThemeContext.tsx`
+- `apps/oak-search-cli/app/lib/theme/HtmlThemeAttribute.tsx`
   **Issue**: Imports deleted `createAdaptiveLogger`
   **Fix**: Update to use UnifiedLogger with explicit DI
   **Status**: NOT covered by remaining plan ❌

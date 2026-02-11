@@ -1,7 +1,5 @@
 /**
  * Zero-hit telemetry fetching from Elasticsearch.
- *
- * @packageDocumentation
  */
 
 import type { Client } from '@elastic/elasticsearch';

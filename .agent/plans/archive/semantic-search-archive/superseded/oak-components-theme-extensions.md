@@ -141,7 +141,7 @@ These artefacts will add significant value for scaling Oak Components across tea
 The following excerpts illustrate the bespoke infrastructure built for Semantic Search.
 
 <details>
-<summary>Pre-hydration script (apps/oak-open-curriculum-semantic-search/app/layout.tsx)</summary>
+<summary>Pre-hydration script (apps/oak-search-cli/app/layout.tsx)</summary>
 
 ```typescript
 const THEME_PREHYDRATION_SCRIPT = `(() => {

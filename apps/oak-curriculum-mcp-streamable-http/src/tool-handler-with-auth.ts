@@ -3,8 +3,6 @@
  *
  * Implements tool execution with auth error detection and MCP-compliant
  * _meta response generation per ADR-054.
- *
- * @packageDocumentation
  */
 
 import type { Logger } from '@oaknational/mcp-logger';

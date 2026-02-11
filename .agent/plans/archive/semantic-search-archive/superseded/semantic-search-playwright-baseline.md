@@ -20,7 +20,7 @@ Create failing visual and accessibility baselines that expose the current respon
 
 Across all pages capture:
 
-1. **Screenshot** – stored under `apps/oak-open-curriculum-semantic-search/tests/visual/{page}/{width}.png`.
+1. **Screenshot** – stored under `apps/oak-search-cli/tests/visual/{page}/{width}.png`.
 2. **DOM snapshot** – optional HTML excerpt to aid debugging (`.snap` alongside screenshot).
 3. **Accessibility** – axe violation report written to `tests/visual/{page}/{width}.axe.json` (expected to fail initially due to layout-driven issues).
 

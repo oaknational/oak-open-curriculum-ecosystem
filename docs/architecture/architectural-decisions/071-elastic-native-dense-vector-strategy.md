@@ -156,7 +156,7 @@ Initial testing with 100 Maths KS4 lessons:
 ### Implementation
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/
+apps/oak-search-cli/src/lib/
 ├── indexing/
 │   ├── dense-vector-generation.ts           # E5 endpoint integration
 │   ├── dense-vector-generation.unit.test.ts # Unit tests

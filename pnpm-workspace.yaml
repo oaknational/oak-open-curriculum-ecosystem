@@ -2,7 +2,7 @@ packages:
   - apps/oak-curriculum-mcp-stdio
   - apps/oak-curriculum-mcp-streamable-http
   - apps/oak-notion-mcp
-  - apps/oak-open-curriculum-semantic-search
+  - apps/oak-search-cli
   - packages/core/oak-eslint
   - packages/core/openapi-zod-client-adapter
   - packages/libs/env

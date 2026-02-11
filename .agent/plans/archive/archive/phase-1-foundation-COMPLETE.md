@@ -244,7 +244,7 @@ Robust error handling added to gracefully handle upstream API failures:
 ### Error Collector Module
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/indexing/
+apps/oak-search-cli/src/lib/indexing/
 └── ingestion-error-collector.ts    # Structured error tracking (NEW)
 ```
 
@@ -257,7 +257,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/indexing/
 ### 500 Error Handling
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/adapters/
+apps/oak-search-cli/src/adapters/
 └── oak-adapter-cached.ts           # Retry logic for 500 errors
 ```
 
@@ -286,7 +286,7 @@ interface IngestionContext {
 ## Files Modified
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 ├── src/lib/indexing/
 │   ├── index-bulk-helpers.ts              # deriveLessonGroupsFromUnitSummaries()
 │   ├── index-bulk-helpers-internal.ts     # Context passing to fetchLessonMaterials
@@ -343,7 +343,7 @@ See `phase-2-dense-vectors.md` and `.agent/research/elasticsearch/hybrid-search-
 
 ```bash
 # Terminal 1: Start the server
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 rm -rf .next && pnpm dev
 
 # Terminal 2: Run smoke tests
@@ -352,10 +352,10 @@ pnpm test:smoke
 
 ### Re-Ingestion (if needed)
 
-**Full ingestion guide**: `apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md`
+**Full ingestion guide**: `apps/oak-search-cli/docs/INGESTION-GUIDE.md`
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup
 pnpm es:ingest-live -- --subject maths --keystage ks4
 pnpm es:status

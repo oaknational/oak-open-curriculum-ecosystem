@@ -243,7 +243,7 @@ pnpm test:e2e
 ### Query Builders
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-builders.ts           # Two-way hybrid (BM25 + ELSER)
 └── rrf-query-helpers.ts            # Shared helpers
 ```
@@ -251,7 +251,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
 ### Search Quality
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
+apps/oak-search-cli/src/lib/search-quality/
 ├── ground-truth/                   # Ground truth queries
 └── metrics.ts                      # MRR, NDCG calculations
 ```
@@ -259,7 +259,7 @@ apps/oak-open-curriculum-semantic-search/src/lib/search-quality/
 ### New Query Rules
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/query-rules/
+apps/oak-search-cli/src/lib/query-rules/
 ├── rules.ts                        # Rule definitions
 ├── executor.ts                     # Rule execution logic
 └── index.ts                        # Barrel exports

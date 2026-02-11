@@ -325,7 +325,7 @@ src/lib/indexing/retry/
 ### Verification Command
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup --reset
 pnpm es:ingest-live --bulk --bulk-dir ./bulk-downloads --force --verbose
 pnpm es:status

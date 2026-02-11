@@ -159,7 +159,7 @@ pnpm type-check
 
 ### B.1: Create Sequence Document Builder
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-document-builder.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/sequence-document-builder.ts` (NEW)
 
 ````typescript
 import type { SearchSequenceIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search';
@@ -233,7 +233,7 @@ export function createSequenceDocument(
 
 ### B.2: Write Unit Tests FIRST (TDD)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-document-builder.unit.test.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/sequence-document-builder.unit.test.ts` (NEW)
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -282,7 +282,7 @@ describe('createSequenceDocument', () => {
 
 ### B.3: Integrate into Ingestion Pipeline
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-oak-helpers.ts`
+**File**: `apps/oak-search-cli/src/lib/indexing/index-oak-helpers.ts`
 
 Modify `buildPairDocuments()` to include sequence operations:
 
@@ -299,7 +299,7 @@ return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps, ...sequence
 ### B.4: Verify
 
 ```bash
-pnpm test apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-document-builder.unit.test.ts
+pnpm test apps/oak-search-cli/src/lib/indexing/sequence-document-builder.unit.test.ts
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 ```
 
@@ -315,7 +315,7 @@ pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 
 ### C.1: Create Thread Document Builder
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-document-builder.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/thread-document-builder.ts` (NEW)
 
 ````typescript
 import type { SearchThreadIndexDoc } from '@oaknational/oak-curriculum-sdk/public/search';
@@ -361,7 +361,7 @@ export function createThreadDocument(params: CreateThreadDocumentParams): Search
 
 ### C.2: Write Unit Tests FIRST (TDD)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-document-builder.unit.test.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/thread-document-builder.unit.test.ts` (NEW)
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -400,7 +400,7 @@ describe('createThreadDocument', () => {
 
 Threads are available in unit summary responses. During ingestion, we already fetch unit data - we need to extract and deduplicate threads.
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-extractor.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/thread-extractor.ts` (NEW)
 
 ```typescript
 import type { CreateThreadDocumentParams } from './thread-document-builder.js';
@@ -463,7 +463,7 @@ After Phase B is complete, add thread extraction and document creation to the in
 ### C.5: Verify
 
 ```bash
-pnpm test apps/oak-open-curriculum-semantic-search/src/lib/indexing/thread-*.unit.test.ts
+pnpm test apps/oak-search-cli/src/lib/indexing/thread-*.unit.test.ts
 pnpm es:ingest-live --subject maths --keystage ks4 --verbose
 ```
 

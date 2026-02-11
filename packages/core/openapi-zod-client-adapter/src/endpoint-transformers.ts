@@ -2,8 +2,6 @@
  * Transformation functions for endpoint data.
  *
  * Transforms Zod v3 schema code to Zod v4 in endpoint definitions.
- *
- * @packageDocumentation
  */
 
 import { transformZodV3ToV4 } from './zod-v3-to-v4-transform.js';

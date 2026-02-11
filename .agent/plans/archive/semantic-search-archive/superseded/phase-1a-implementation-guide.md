@@ -36,7 +36,7 @@
 
 #### Morning: Write Tests FIRST (RED Phase)
 
-1. **Create test file**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.unit.test.ts`
+1. **Create test file**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.unit.test.ts`
 
 ```typescript
 import { describe, it, expect, vi } from 'vitest';
@@ -125,7 +125,7 @@ describe('Dense Vector Extraction (E5 Elastic-Native)', () => {
 
 #### Afternoon: GREEN Phase - Implement
 
-3. **Create implementation**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts`
+3. **Create implementation**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.ts`
 
 ````typescript
 import type { Client } from '@elastic/elasticsearch';
@@ -261,7 +261,7 @@ exam_board: { type: 'keyword' },
 
 #### Afternoon: Extraction Functions (TDD)
 
-9. **Write unit tests for tier/exam_board extraction**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.unit.test.ts`
+9. **Write unit tests for tier/exam_board extraction**: `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.unit.test.ts`
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -311,7 +311,7 @@ describe('Maths KS4 field extraction', () => {
 });
 ```
 
-10. **Implement extraction functions**: Add to `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transform-helpers.ts`
+10. **Implement extraction functions**: Add to `apps/oak-search-cli/src/lib/indexing/document-transform-helpers.ts`
 
 11. **Update document transforms**: Integrate extraction functions and dense vector generation
 
@@ -319,7 +319,7 @@ describe('Maths KS4 field extraction', () => {
 
 #### Morning: Write E2E Test FIRST
 
-12. **Create E2E test**: `apps/oak-open-curriculum-semantic-search/e2e-tests/three-way-hybrid.e2e.test.ts`
+12. **Create E2E test**: `apps/oak-search-cli/e2e-tests/three-way-hybrid.e2e.test.ts`
 
 ```typescript
 describe('Three-Way Hybrid Search', () => {
@@ -347,7 +347,7 @@ describe('Three-Way Hybrid Search', () => {
 
 #### Afternoon: Implement Query Logic
 
-13. **Implement three-way RRF**: `apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/three-way-rrf.ts`
+13. **Implement three-way RRF**: `apps/oak-search-cli/src/lib/hybrid-search/three-way-rrf.ts`
 
 14. **Update search endpoint**: Integrate three-way search into `/api/search`
 
@@ -442,9 +442,9 @@ Use Elastic-native E5 model (`.multilingual-e5-small-elasticsearch`) for dense v
 
 #### Create Authored Documentation
 
-19. **Inference API Guide**: `apps/oak-open-curriculum-semantic-search/docs/INFERENCE-API.md`
+19. **Inference API Guide**: `apps/oak-search-cli/docs/INFERENCE-API.md`
 
-20. **Three-Way Hybrid Guide**: `apps/oak-open-curriculum-semantic-search/docs/THREE-WAY-HYBRID.md`
+20. **Three-Way Hybrid Guide**: `apps/oak-search-cli/docs/THREE-WAY-HYBRID.md`
 
 ### Final Validation
 

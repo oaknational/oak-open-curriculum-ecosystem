@@ -643,7 +643,7 @@ Until the upstream API provides `semantic_summary` fields, we can generate them 
 - TTL: Same as curriculum data (24 hours or until next ingest)
 - Version key incremented on template changes to invalidate cache
 
-**Implementation Location**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts`
+**Implementation Location**: `apps/oak-search-cli/src/lib/indexing/document-transforms.ts`
 
 **Tracking**: This interim solution should be replaced when upstream API provides native `semantic_summary` fields. The local generation logic can then be removed or repurposed for validation.
 

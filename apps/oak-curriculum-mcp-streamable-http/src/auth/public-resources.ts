@@ -15,7 +15,6 @@
  * Data-fetching tools (tools/call) still require authentication.
  *
  * @see ADR-057: Selective Authentication for MCP Resources
- * @packageDocumentation
  */
 
 import {

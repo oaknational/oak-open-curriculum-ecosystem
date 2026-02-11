@@ -51,7 +51,7 @@ This plan integrates **ALL high-impact Elasticsearch Serverless features** into 
 **For Every Feature**:
 
 1. **TSDoc comments** with examples in all functions/modules
-2. **Authored documentation** in `apps/oak-open-curriculum-semantic-search/docs/`
+2. **Authored documentation** in `apps/oak-search-cli/docs/`
 3. **ADR creation** for architectural decisions (see ADR checklist per phase)
 4. **Update semantic-search.prompt.md** with new capabilities
 5. **typedoc-compatible** documentation for public APIs
@@ -303,9 +303,9 @@ export async function executeThreeWayHybridSearch(
    - Field sizing: 1536-dim for future-proofing
 
 4. **Authored Docs**:
-   - `apps/oak-open-curriculum-semantic-search/docs/INFERENCE-API.md`
-   - `apps/oak-open-curriculum-semantic-search/docs/THREE-WAY-HYBRID.md`
-   - `apps/oak-open-curriculum-semantic-search/docs/DENSE-VECTORS.md`
+   - `apps/oak-search-cli/docs/INFERENCE-API.md`
+   - `apps/oak-search-cli/docs/THREE-WAY-HYBRID.md`
+   - `apps/oak-search-cli/docs/DENSE-VECTORS.md`
 
 5. **Prompt Updates**:
    - Update `.agent/prompts/semantic-search/semantic-search.prompt.md` §2.1

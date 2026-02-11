@@ -158,7 +158,7 @@ For each subject/keystage:
 Count current API calls during a dry-run ingestion:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:ingest-live --subject computing --keystage ks4 --verbose --dry-run 2>&1 | grep -c "Fetching"
 ```
 

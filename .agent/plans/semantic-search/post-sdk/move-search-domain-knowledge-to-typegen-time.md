@@ -27,7 +27,7 @@ This plan covers **Curriculum SDK type-gen** enhancements, NOT the Search SDK. I
 |-----------|----------|
 | **Source of truth** | `packages/sdks/oak-curriculum-sdk/type-gen/typegen/search/subject-domain/` |
 | **Generated output** | `packages/sdks/oak-curriculum-sdk/src/types/generated/search/subject-domain.ts` |
-| **Primary consumer** | `apps/oak-open-curriculum-semantic-search/` |
+| **Primary consumer** | `apps/oak-search-cli/` |
 
 ---
 

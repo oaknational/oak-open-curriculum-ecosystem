@@ -53,7 +53,7 @@
 **Document Creation Code (BEFORE FIX)**:
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts:114-141
+// apps/oak-search-cli/src/lib/indexing/document-transforms.ts:114-141
 return {
   lesson_id: lesson.lessonSlug,
   lesson_slug: lesson.lessonSlug,
@@ -115,7 +115,7 @@ All prior "hybrid" lesson searches were actually **BM25-only (lexical search)**.
 **Document Creation Code**:
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts:181
+// apps/oak-search-cli/src/lib/indexing/document-transforms.ts:181
 return {
   // ... other fields ...
   rollup_text: rollupText,
@@ -158,7 +158,7 @@ Unit semantic search is fully operational.
 **RRF Query Structure** (code):
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-builders.ts:136-145
+// apps/oak-search-cli/src/lib/hybrid-search/rrf-query-builders.ts:136-145
 return {
   rrf: {
     retrievers: [
@@ -174,7 +174,7 @@ return {
 **ELSER Retriever** (code):
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts:157
+// apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts:157
 return { standard: { query: { semantic: { field: 'lesson_semantic', query: text } }, filter } };
 ```
 
@@ -255,7 +255,7 @@ Synonyms are:
 **Document Creation** (code):
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/indexing/document-transforms.ts:109-112
+// apps/oak-search-cli/src/lib/indexing/document-transforms.ts:109-112
 const [lessonDenseVector, titleDenseVector] = await Promise.all([
   generateDenseVector(esClient, transcript),
   generateDenseVector(esClient, lesson.lessonTitle),
@@ -285,7 +285,7 @@ Dense vectors are being generated and stored. Three-way hybrid search infrastruc
 **Code**:
 
 ```typescript
-// apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/rrf-query-helpers.ts:139-145
+// apps/oak-search-cli/src/lib/hybrid-search/rrf-query-helpers.ts:139-145
 query: {
   multi_match: {
     query: text,

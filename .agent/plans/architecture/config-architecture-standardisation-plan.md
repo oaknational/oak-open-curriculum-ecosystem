@@ -44,7 +44,7 @@ This plan prioritises:
 | ------------------------------------- | ----------------------------------- | ---- | ------------------------------ | ----------------- |
 | `oak-curriculum-mcp-streamable-http`  | `env.ts` + `runtime-config.ts`      | ✅   | ✅ `readEnv(source)`           | **Canonical**     |
 | `oak-curriculum-mcp-stdio`            | `runtime-config.ts` only            | ❌   | ✅ `loadRuntimeConfig(source)` | **Good**          |
-| `oak-open-curriculum-semantic-search` | `env.ts` (private `readProcessEnv`) | ✅   | ❌ `env()` reads directly      | **Mixed**         |
+| `oak-search-cli` | `env.ts` (private `readProcessEnv`) | ✅   | ❌ `env()` reads directly      | **Mixed**         |
 | `oak-notion-mcp`                      | `env-utils.ts` + `environment.ts`   | ❌   | ❌ Module-level const          | **Non-compliant** |
 
 ### Existing Shared Package: `@oaknational/mcp-env`
@@ -527,7 +527,7 @@ Already has DI pattern; add Zod and use shared utilities.
 - [ ] Uses shared parsing utilities
 - [ ] All tests pass
 
-#### 2.3 Migrate `oak-open-curriculum-semantic-search` (Mixed → Canonical)
+#### 2.3 Migrate `oak-search-cli` (Mixed → Canonical)
 
 Has Zod but lacks DI; refactor to accept source parameter.
 

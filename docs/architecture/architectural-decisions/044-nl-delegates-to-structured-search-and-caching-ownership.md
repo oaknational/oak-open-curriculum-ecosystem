@@ -63,8 +63,8 @@ This ensures:
 
 ## References
 
-- Code (removed): `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts`
-- Code (removed): `apps/oak-open-curriculum-semantic-search/app/api/search/nl/route.ts`
+- Code (removed): `apps/oak-search-cli/app/api/search/route.ts`
+- Code (removed): `apps/oak-search-cli/app/api/search/nl/route.ts`
 - Plan: `.agent/plans/semantic-search-caching-plan.md`
 - Next.js Data Cache docs: [Vercel docs](https://vercel.com/docs/infrastructure/data-cache)
 - Successor: [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)

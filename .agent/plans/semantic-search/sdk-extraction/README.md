@@ -20,7 +20,7 @@ stays in the CLI.
 | What | From | To |
 |------|------|-----|
 | SDK (retrieval, admin, obs) | `apps/.../src/lib/` | `packages/sdks/oak-search-sdk/` |
-| CLI + evaluation | `apps/oak-open-curriculum-semantic-search/` | `apps/oak-search-cli/` (rename) |
+| CLI + evaluation | `apps/oak-search-cli/` | `apps/oak-search-cli/` (rename) |
 
 ## Related Documents
 

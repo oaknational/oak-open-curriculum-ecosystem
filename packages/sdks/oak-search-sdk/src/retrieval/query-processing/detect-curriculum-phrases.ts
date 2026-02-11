@@ -4,8 +4,6 @@
  * Detects multi-word curriculum terms in queries to enable phrase-level
  * boosting. Phrase detection provides a complementary mechanism to ES
  * synonym expansion for multi-word terms.
- *
- * @packageDocumentation
  */
 
 import { buildPhraseVocabulary } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';

@@ -36,7 +36,7 @@ See [ADR-067](067-sdk-generated-elasticsearch-mappings.md) for the current appro
 The following structure existed before ADR-067:
 
 ```text
-apps/oak-open-curriculum-semantic-search/
+apps/oak-search-cli/
 └── src/lib/elasticsearch/
     ├── definitions/                # ← Static JSON files (now deleted)
     │   ├── index.ts                # Documentation only

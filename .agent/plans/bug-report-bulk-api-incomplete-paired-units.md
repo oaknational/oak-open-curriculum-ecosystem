@@ -124,7 +124,7 @@ For now, the semantic search team will:
 
 ## Related Files
 
-- Bulk download manifest: `apps/oak-open-curriculum-semantic-search/bulk-downloads/manifest.json` (downloaded 2026-01-15)
+- Bulk download manifest: `apps/oak-search-cli/bulk-downloads/manifest.json` (downloaded 2026-01-15)
 - Affected GT file: `religious-education/secondary/imprecise-input.expected.ts`
 - ADR reference: `docs/architecture/architectural-decisions/093-bulk-first-ingestion-strategy.md`
 

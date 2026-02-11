@@ -96,7 +96,7 @@ Through investigation using the `ooc-http-dev-local/get-rate-limit` MCP tool, we
 **Execution**:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # Check current state
 pnpm ingest:progress
@@ -327,6 +327,6 @@ For API team discussion:
 
 - **Analysis**: `.agent/analysis/api-rate-limit-investigation.md`
 - **ADR**: `docs/architecture/architectural-decisions/070-sdk-rate-limiting-and-retry.md`
-- **Ingestion Guide**: `apps/oak-open-curriculum-semantic-search/scripts/README-INGEST-ALL.md`
+- **Ingestion Guide**: `apps/oak-search-cli/scripts/README-INGEST-ALL.md`
 - **Rate Limit Tracker**: `packages/sdks/oak-curriculum-sdk/src/client/middleware/rate-limit-tracker.ts`
 - **Test Results**: Art KS1 sequences (159 requests, 0 failures)

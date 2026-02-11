@@ -7,8 +7,6 @@
  * 3. Adapts Express request for MCP SDK
  *
  * Uses simple fakes injected as arguments - NO network IO.
- *
- * @packageDocumentation
  */
 
 import { describe, it, expect, vi } from 'vitest';

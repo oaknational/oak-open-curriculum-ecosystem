@@ -30,7 +30,7 @@ Objective: enrich search with pedagogical context, resources, and optional prior
   - Populate and validate enumerated metadata for exam boards, KS4 option flags, year groups, and asset-type booleans during ingestion so filters stay authoritative.
   - Establish cost monitoring (Elastic inference + storage) and alerting.
 - **Documentation**
-  - Publish index specs (mappings, chunking strategy, example docs) and query recipes in `apps/oak-open-curriculum-semantic-search/docs/`.
+  - Publish index specs (mappings, chunking strategy, example docs) and query recipes in `apps/oak-search-cli/docs/`.
 - **Exit Criteria**
   - Planning/transcript/resource indices populated with validated documents and passing ingestion regression tests.
   - Feature-flagged UI sections expose extended content cards without performance regressions.

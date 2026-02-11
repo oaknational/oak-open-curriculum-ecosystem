@@ -41,7 +41,7 @@ This is what ground truths must answer.
 ### Step 0.1: Verify Tools
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 source .env.local
 ```
 
@@ -378,7 +378,7 @@ pnpm benchmark --subject SUBJECT --phase PHASE --verbose
 ### Bulk Data Commands
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # List files
 ls bulk-downloads/*.json
@@ -418,7 +418,7 @@ pnpm benchmark --verbose     # Full metrics
 
 | Document | Purpose |
 |----------|---------|
-| [queries-redesigned.md](../../../apps/oak-open-curriculum-semantic-search/docs/ground-truths/queries-redesigned.md) | Query design output |
-| [GROUND-TRUTH-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles and evaluation |
-| [IR-METRICS.md](../../../apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md) | Metric definitions |
+| [queries-redesigned.md](../../../apps/oak-search-cli/docs/ground-truths/queries-redesigned.md) | Query design output |
+| [GROUND-TRUTH-GUIDE.md](../../../apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md) | Design principles and evaluation |
+| [IR-METRICS.md](../../../apps/oak-search-cli/docs/IR-METRICS.md) | Metric definitions |
 | [ground-truth-redesign-plan.md](../active/ground-truth-redesign-plan.md) | Current strategy |

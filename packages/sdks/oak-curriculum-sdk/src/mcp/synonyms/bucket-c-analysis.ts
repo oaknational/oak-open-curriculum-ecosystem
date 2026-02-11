@@ -12,7 +12,6 @@
  * 3. Reference for the MFL synonym architecture refactoring
  *
  * @see mfl-synonym-architecture.md in .agent/plans/semantic-search/post-sdk/search-quality/
- * @packageDocumentation
  */
 
 /**

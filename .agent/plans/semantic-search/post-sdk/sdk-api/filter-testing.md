@@ -55,7 +55,7 @@ For each subject and key stage combination:
 
 ```bash
 # Example audit approach
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm tsx scripts/audit-filter-dimensions.ts --subject maths --keyStage ks4
 pnpm tsx scripts/audit-filter-dimensions.ts --subject history --keyStage ks2
 ```

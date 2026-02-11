@@ -2,7 +2,7 @@
 
 **Archived**: 2026-01-09
 **Reason**: Category framework migrated from legacy categories (`synonym`, `multi-concept`) to outcome-oriented categories (`natural-expression`, `cross-topic`). Diagnostic queries still exist in the codebase but this documentation is outdated.
-**Original Location**: `apps/oak-open-curriculum-semantic-search/docs/DIAGNOSTIC-QUERIES.md`
+**Original Location**: `apps/oak-search-cli/docs/DIAGNOSTIC-QUERIES.md`
 
 ---
 
@@ -95,7 +95,7 @@ But we don't know **WHY**. The aggregate category MRR hides important patterns:
 ## Running Diagnostic Analysis
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm tsx scripts/analyze-diagnostic-queries.ts
 ```
 

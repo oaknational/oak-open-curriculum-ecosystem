@@ -189,5 +189,5 @@ Implement **optional Redis-based caching** for SDK API responses during ingestio
 
 ## Related Documents
 
-- [SDK-CACHING.md](../../apps/oak-open-curriculum-semantic-search/docs/SDK-CACHING.md) - User documentation
+- [SDK-CACHING.md](../../apps/oak-search-cli/docs/SDK-CACHING.md) - User documentation
 - [ADR 065: Turbo Task Dependencies](./065-turbo-task-dependencies.md) - Build system context

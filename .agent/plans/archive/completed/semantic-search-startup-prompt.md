@@ -39,7 +39,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 ### ⏳ Pending validation/sign-off
 
 - Compatibility checks with target clients (OpenAI Connector, Gemini, ElevenLabs).
-- Post-alignment quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`).
+- Post-alignment quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-search-cli doc-gen`).
 
 ## Immediate Next Steps (follow GO cadence)
 
@@ -56,19 +56,19 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 - **Architecture**: Next.js (App Router) on Vercel, Elasticsearch Serverless (four indices), Oak Curriculum SDK as sole data source, server-side RRF queries, suggestion endpoints, status telemetry.
 - **Environment Variables**: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY` or `OAK_API_BEARER`, `SEARCH_API_KEY`, `SEARCH_INDEX_VERSION`, observability (e.g., `ZERO_HIT_WEBHOOK_URL`), `AI_PROVIDER`, `OPENAI_API_KEY` (when AI enabled).
 - **Critical Files**:
-  - `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts` (structured RRF)
+  - `apps/oak-search-cli/app/api/search/route.ts` (structured RRF)
   - `app/api/search/nl/route.ts` (NL wrapper)
   - `app/api/search/suggest/route.ts` (to be implemented)
   - `app/api/index-oak/route.ts`, `app/api/index-oak/status/route.ts` (admin + telemetry)
   - `app/api/rebuild-rollup/route.ts`
   - `src/lib/ingestion/*`, `src/lib/queries/*`, `src/lib/env.ts`, `src/lib/logging.ts`
   - `scripts/elastic-setup.ts`, `elastic-alias-swap.ts`
-  - Docs under `apps/oak-open-curriculum-semantic-search/docs/`
+  - Docs under `apps/oak-search-cli/docs/`
 
 ## Development Rules (always)
 
 - Honour `.agent/directives/rules.md` and the testing strategy; apply TDD (Red → Green → Refactor).
-- No skipping quality gates. The sequence: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`.
+- No skipping quality gates. The sequence: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-search-cli doc-gen`.
 - No unsafe assertions (`as`, `!`) or bypassing type guards; prefer pure functions.
 - British spelling required; mention “REMINDER: Use british spelling” in todo lists.
 

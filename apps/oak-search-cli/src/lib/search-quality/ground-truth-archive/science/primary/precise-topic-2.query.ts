@@ -1,0 +1,15 @@
+/**
+ * Query definition for precise-topic-2 ground truth.
+ *
+ * This file contains ONLY the query metadata, NOT the expected results.
+ * Expected results are in ./precise-topic-2.expected.ts
+ */
+
+import type { GroundTruthQueryDefinition } from '../../types';
+
+export const SCIENCE_PRIMARY_PRECISE_TOPIC_2_QUERY: GroundTruthQueryDefinition = {
+  query: 'electrical circuits conductors insulators',
+  category: 'precise-topic',
+  description: 'Tests retrieval of electricity content using curriculum terminology',
+  expectedFile: './precise-topic-2.expected.ts',
+} as const;

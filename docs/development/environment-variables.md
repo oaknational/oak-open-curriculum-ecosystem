@@ -52,7 +52,7 @@ cp .env.example .env
 
 ## Workspace-Specific Variables
 
-### Search App (`apps/oak-open-curriculum-semantic-search/.env.local`)
+### Search App (`apps/oak-search-cli/.env.local`)
 
 The search app requires its own `.env.local` file with additional variables for Elasticsearch and natural language search.
 
@@ -78,7 +78,7 @@ The search app requires its own `.env.local` file with additional variables for 
 | `SEMANTIC_SEARCH_USE_FIXTURES`      | Enable fixture mode for testing          | `live`            |
 | `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` | Show fixture toggle in UI                | `false`           |
 
-**Complete reference**: See `apps/oak-open-curriculum-semantic-search/README.md` for detailed setup instructions.
+**Complete reference**: See `apps/oak-search-cli/README.md` for detailed setup instructions.
 
 ### HTTP MCP Server (via root `.env`)
 
@@ -157,7 +157,7 @@ Currently, external API keys are not automatically available. Please open a GitH
 
 1. Sign up for [Elasticsearch Cloud](https://cloud.elastic.co/)
 2. Create a free Serverless project
-3. Run `pnpm -C apps/oak-open-curriculum-semantic-search elastic:setup` to configure indices
+3. Run `pnpm -C apps/oak-search-cli elastic:setup` to configure indices
 4. Use provided credentials
 
 ### OpenAI (Natural Language Search)

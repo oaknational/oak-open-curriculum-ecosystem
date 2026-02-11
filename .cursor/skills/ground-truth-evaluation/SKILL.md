@@ -155,7 +155,7 @@ Of all relevant results, what proportion found in top 10?
 ### Step 1: Test Query via test-query-lessons.ts
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm tsx src/lib/search-quality/test-query-lessons.ts "query" subject keyStage
 ```
 
@@ -267,5 +267,5 @@ pnpm test
 
 For design principles, category-specific guidance, and lessons learned from 25+ review sessions:
 
-@apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md
-@apps/oak-open-curriculum-semantic-search/docs/IR-METRICS.md
+@apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md
+@apps/oak-search-cli/docs/IR-METRICS.md

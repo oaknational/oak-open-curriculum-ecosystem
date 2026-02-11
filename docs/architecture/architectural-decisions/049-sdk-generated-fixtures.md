@@ -69,12 +69,12 @@ fixtures were the last remaining place that broke this principle.
 
 - SDK type-gen module (active): `packages/sdks/oak-curriculum-sdk/type-gen/typegen/admin/generate-admin-fixtures.ts`
 - Generated output (active): `packages/sdks/oak-curriculum-sdk/src/types/generated/admin/stream-fixtures.ts`
-- App wiring (removed): ~~`apps/oak-open-curriculum-semantic-search/app/lib/admin-fixtures.ts`,
+- App wiring (removed): ~~`apps/oak-search-cli/app/lib/admin-fixtures.ts`,
   `app/lib/fixture-mode.ts`~~
 - Fixture toggle UI (removed): ~~`app/lib/fixture-toggle.ts` and the corresponding Playwright helpers~~
 
 ## References
 
 - Cardinal rule: `.agent/directives/rules.md`
-- Architecture updates: `apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md`
+- Architecture updates: `apps/oak-search-cli/docs/ARCHITECTURE.md`
 - Indexing + Query docs describing fixture workflow

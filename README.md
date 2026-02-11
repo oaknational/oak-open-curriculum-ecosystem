@@ -42,7 +42,7 @@ Everything flows from the OpenAPI schema:
 - **`packages/sdks/oak-curriculum-sdk`** – Generated SDK: runtime clients, Zod schemas, MCP tool metadata, Elasticsearch mapping generators, and shared `parseSchema` validation helpers
 - **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
 - **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
-- **`apps/oak-open-curriculum-semantic-search`** – Semantic search: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline. Currently being extracted into a standalone Search SDK + CLI ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md))
+- **`apps/oak-search-cli`** – Semantic search: ingestion, 4-way RRF hybrid search, ground truth evaluation, query processing pipeline. Currently being extracted into a standalone Search SDK + CLI ([ADR-107](docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md))
 - **`packages/libs/`** – Shared libraries for logging, configuration, storage, and transport
 - **`docs/architecture/architectural-decisions/`** – 107 Architectural Decision Records documenting every significant design choice
 
@@ -108,7 +108,7 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    - Work on type generation scripts, runtime clients, or validation helpers
 
    **For search application contributors** (requires Elasticsearch + API keys):
-   - Start with `apps/oak-open-curriculum-semantic-search/README.md` – hybrid search, admin endpoints, telemetry
+   - Start with `apps/oak-search-cli/README.md` – hybrid search, admin endpoints, telemetry
    - Requires: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`
 
    **For MCP server contributors** (requires OAK_API_KEY minimum):

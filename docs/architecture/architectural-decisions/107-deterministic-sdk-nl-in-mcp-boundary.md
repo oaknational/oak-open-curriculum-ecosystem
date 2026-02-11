@@ -7,7 +7,7 @@ Accepted (2026-02-10)
 ## Context
 
 The semantic search capability is being extracted from
-its current workspace (`apps/oak-open-curriculum-semantic-search/`,
+its current workspace (`apps/oak-search-cli/`,
 to be renamed `apps/oak-search-cli/`) into a dedicated SDK
 (`packages/sdks/oak-search-sdk/`). The current workspace stays
 in place and becomes the CLI; the SDK library code is

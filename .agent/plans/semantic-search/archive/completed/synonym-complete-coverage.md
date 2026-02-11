@@ -763,7 +763,7 @@ Add entry points for new synonym files:
 ```bash
 cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm -C packages/sdks/oak-curriculum-sdk build
-pnpm -C apps/oak-open-curriculum-semantic-search es:setup
+pnpm -C apps/oak-search-cli es:setup
 ```
 
 ### 4.2 Verify Synonym Count
@@ -771,7 +771,7 @@ pnpm -C apps/oak-open-curriculum-semantic-search es:setup
 Expected: ~350+ synonyms (up from ~234)
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 source .env.local
 curl -s "${ELASTICSEARCH_URL}/_synonyms/oak-syns?size=1000" \
   -H "Authorization: ApiKey ${ELASTICSEARCH_API_KEY}" | jq '.synonyms_set | length'
@@ -812,7 +812,7 @@ pnpm test
 ### 4.5 Run Benchmarks
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm benchmark --all --verbose
 ```
 

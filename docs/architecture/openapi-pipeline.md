@@ -133,7 +133,7 @@ The primary implementation uses the Oak National Academy Curriculum API:
   - `apps/oak-curriculum-mcp-stdio` (for Claude Desktop, Cursor)
   - `apps/oak-curriculum-mcp-streamable-http` (for web clients, Vercel)
 - **Applications**:
-  - `apps/oak-open-curriculum-semantic-search` (hybrid search)
+  - `apps/oak-search-cli` (hybrid search)
   - Admin tools, status pages, telemetry
 
 ### Architectural Reference: Notion

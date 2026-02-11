@@ -75,7 +75,7 @@ Ground truths are tests where we **know the correct answer before running search
 Mine bulk data to identify lessons:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 
 # List units and lessons
 jq '.sequence[] | {unit: .unitTitle, lessons: [.unitLessons[].lessonTitle]}' \
@@ -189,4 +189,4 @@ Verify that expected slugs contain terms semantically connected to the query.
 
 For full evaluation protocol (COMMIT methodology), lessons learned from 25+ review sessions, and troubleshooting:
 
-@apps/oak-open-curriculum-semantic-search/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md
+@apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md

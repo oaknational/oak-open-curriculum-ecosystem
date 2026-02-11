@@ -27,7 +27,7 @@ Remind yourself of:
 
 #### 2. Create Dense Vector Extraction Tests (2 hours)
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.unit.test.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.unit.test.ts` (NEW)
 
 Write tests FIRST for:
 
@@ -66,7 +66,7 @@ describe('Dense Vector Extraction', () => {
 #### 3. Run Tests (Should FAIL - RED)
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm test dense-vector-extraction.unit.test.ts
 
 # Expected: FAIL - function doesn't exist yet
@@ -78,7 +78,7 @@ This proves tests are actually testing something.
 
 #### 4. Implement Dense Vector Extraction
 
-**File**: `apps/oak-open-curriculum-semantic-search/src/lib/indexing/dense-vector-extraction.ts` (NEW)
+**File**: `apps/oak-search-cli/src/lib/indexing/dense-vector-extraction.ts` (NEW)
 
 Implement to pass tests:
 

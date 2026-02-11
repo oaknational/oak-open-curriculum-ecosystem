@@ -111,7 +111,7 @@ const synonymSet = buildElasticsearchSynonyms();
 Deploy to Elasticsearch with:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup   # Creates indexes and deploys oak-syns synonym set
 ```
 
@@ -134,7 +134,7 @@ const phrases = buildPhraseVocabulary();
 Run hard query tests and analyse failures:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm vitest run -c vitest.smoke.config.ts hard-query-baseline
 ```
 
@@ -177,11 +177,11 @@ pnpm type-gen && pnpm build
 # Deploy synonyms to Elasticsearch (two options):
 
 # Option A: Full setup (creates indexes + synonyms)
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup
 
 # Option B: Update synonyms ONLY (no reindexing required - RECOMMENDED)
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup synonyms
 
 # Run test — should now pass
@@ -195,7 +195,7 @@ without touching indexes or requiring reindexing. This is the preferred method f
 production environments:
 
 ```bash
-cd apps/oak-open-curriculum-semantic-search
+cd apps/oak-search-cli
 pnpm es:setup synonyms
 ```
 
@@ -352,4 +352,4 @@ See:
 - [ADR-063: SDK Domain Synonyms Source of Truth](../../../../../../docs/architecture/architectural-decisions/063-sdk-domain-synonyms-source-of-truth.md)
 - [synonym-export.ts](../synonym-export.ts) — Export utilities
 - [ontology-data.ts](../ontology-data.ts) — Consumes synonymsData
-- [SYNONYMS.md](../../../../../../apps/oak-open-curriculum-semantic-search/docs/SYNONYMS.md) — Search app synonym documentation
+- [SYNONYMS.md](../../../../../../apps/oak-search-cli/docs/SYNONYMS.md) — Search app synonym documentation

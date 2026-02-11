@@ -71,7 +71,7 @@
    - Note deviations or desired upstream enhancements for `@oaknational/oak-components`.
    - Update ADR-045 / UI snagging plan if mitigation strategy changes.
    - Record outstanding follow-ups (e.g. long-term CSS variable bridge) for the next phase.
-   - Maintain `apps/oak-open-curriculum-semantic-search/docs/oak-components-theming.md` with integration guidance for downstream apps.
+   - Maintain `apps/oak-search-cli/docs/oak-components-theming.md` with integration guidance for downstream apps.
 
 ### Remaining Phase 1 Scope – Demonstration Baseline
 
@@ -127,7 +127,7 @@ Objective: showcase a complete hybrid search experience with first-class filteri
 
 1. **Provision Elasticsearch Serverless** – Create a dedicated project/endpoint, generate API keys with write/search permissions, and record `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` secrets.
 2. **Configure environment variables** – Set `OAK_API_KEY` (or `OAK_API_BEARER`), `SEARCH_API_KEY`, `SEARCH_INDEX_VERSION`, `ZERO_HIT_WEBHOOK_URL` (or `none`), `LOG_LEVEL`, and `AI_PROVIDER`. Validate locally via `pnpm type-check` to ensure `env.ts` passes.
-3. **Bootstrap indices** – Run `pnpm -C apps/oak-open-curriculum-semantic-search scripts/elastic-setup` (or trigger the admin “Set up indices” action) to create mappings, synonyms, and the `oak_sequence_facets` store.
+3. **Bootstrap indices** – Run `pnpm -C apps/oak-search-cli scripts/elastic-setup` (or trigger the admin “Set up indices” action) to create mappings, synonyms, and the `oak_sequence_facets` store.
 4. **Initial ingestion & rollup** – Execute `/api/admin/index-oak` followed by `/api/admin/rebuild-rollup` (through CLI or admin UI). Confirm logs report document counts, alias swaps, and durations.
 5. **Admin home expectations** – `/admin` must expose ingestion triggers, last-run summaries, zero-hit metrics, index version, and links to documentation. All operations should require `SEARCH_API_KEY` and provide optimistic UI with failure messaging.
 6. **Ongoing updates** – Schedule nightly/weekly ingestion via platform cron (e.g. Vercel Cron) calling the admin endpoints. Monitor zero-hit webhook deliveries and search latency dashboards.
@@ -138,12 +138,12 @@ Objective: showcase a complete hybrid search experience with first-class filteri
 1. ACTION: Refresh this plan and the context snapshot with responsive layout goals, palette extensions, and navigation spacing alignment tasks.
 2. REVIEW: Confirm plan/context updates reflect responsive layout + palette objectives without contradicting prior milestones.
 3. ACTION: Add failing tests that lock header spacing, responsive search grids, and extended theme palette exports (including deeper `oakGreen` shades).
-4. REVIEW: QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx` to observe failing assertions.
+4. REVIEW: QUALITY-GATE: run `pnpm -C apps/oak-search-cli test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx` to observe failing assertions.
 5. QUALITY-GATE: Capture baseline notes/snapshots from failing tests to guide implementation.
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
 7. ACTION: Implement responsive layout + spacing changes driven by theme CSS variables, introduce additional brand palette shades, and remove hard-coded styles from header/search components.
 8. REVIEW: Inspect updated components to ensure spacing/colour rules flow exclusively via Oak tokens or bridge variables; adjust any residual hard-coded values.
-9. QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx theme-factory.unit.test.ts` to confirm green state.
+9. QUALITY-GATE: run `pnpm -C apps/oak-search-cli test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx theme-factory.unit.test.ts` to confirm green state.
 10. QUALITY-GATE: Execute `pnpm format`, `pnpm lint`, `pnpm type-check`, and `pnpm build` at repo root once updates settle.
 
 ## Pending Phases (for awareness)

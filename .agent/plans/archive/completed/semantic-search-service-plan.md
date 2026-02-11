@@ -38,7 +38,7 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 
 ## Current status (at a glance)
 
-- Workspace: `apps/oak-open-curriculum-semantic-search` (Next.js 15, React 19, TS strict)
+- Workspace: `apps/oak-search-cli` (Next.js 15, React 19, TS strict)
 - Implemented: ES setup scripts; `/api/search`, `/api/search/nl`, `/api/index-oak`, `/api/rebuild-rollup` and SDK‑parity routes; OpenAPI at `/api/openapi.json` with `/api/docs` UI; core hybrid‑search module (`src/lib/hybrid-search/*`); OpenAPI registration split; strict linting with Zod validation; official ES types; relative imports; App Router type‑check config.
 - UI/Health: Search page with shared header/theme; Styled Components SSR; `/healthz` covers ES/SDK/LLM.
 - Admin: `/admin` for ES setup, indexing, rollup with streaming output.
@@ -261,7 +261,7 @@ Acceptance
 
 ```bash
 ELASTICSEARCH_URL=https://your-elasticsearch-url-here
-pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
+pnpm -C apps/oak-search-cli run elastic:setup
 ```
 
 - Verify:
@@ -282,7 +282,7 @@ pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
 - Start dev server:
 
 ```bash
-pnpm -C apps/oak-open-curriculum-semantic-search dev
+pnpm -C apps/oak-search-cli dev
 ```
 
 - Index + rollup:

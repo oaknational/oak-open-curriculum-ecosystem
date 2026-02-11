@@ -59,4 +59,4 @@ This eliminated the need for separate `ingest:all` and `ingest:progress` command
 
 - [ADR-087: Batch-Atomic Ingestion](087-batch-atomic-ingestion.md) — Current approach
 - [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
-- [INGESTION-GUIDE.md](../../../apps/oak-open-curriculum-semantic-search/docs/INGESTION-GUIDE.md) — Current documentation
+- [INGESTION-GUIDE.md](../../../apps/oak-search-cli/docs/INGESTION-GUIDE.md) — Current documentation

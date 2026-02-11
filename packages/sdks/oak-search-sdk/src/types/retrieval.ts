@@ -8,8 +8,6 @@
  *
  * Parameter types are in {@link ./retrieval-params}.
  * Result types are in {@link ./retrieval-results}.
- *
- * @packageDocumentation
  */
 
 import type { SearchFacets } from '@oaknational/oak-curriculum-sdk/public/search.js';

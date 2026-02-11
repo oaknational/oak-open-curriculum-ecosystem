@@ -139,7 +139,7 @@ Phase 1 baseline is established. Before proceeding to three-way hybrid:
 ## Files
 
 ```text
-apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/
+apps/oak-search-cli/src/lib/hybrid-search/
 ├── rrf-query-builders-three-way.ts  # Three-way RRF (ready)
 ├── rrf-query-helpers.ts             # Shared helpers
 └── dense-vector-generation.ts       # E5 embedding generation

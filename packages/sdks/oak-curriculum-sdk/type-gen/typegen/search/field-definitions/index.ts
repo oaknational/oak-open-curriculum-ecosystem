@@ -29,8 +29,6 @@
  * import { REF_SUBJECTS_INDEX_FIELDS } from './field-definitions/reference.js';
  * import { META_INDEX_FIELDS } from './field-definitions/observability.js';
  * ```
- *
- * @packageDocumentation
  */
 
 // Re-export shared types

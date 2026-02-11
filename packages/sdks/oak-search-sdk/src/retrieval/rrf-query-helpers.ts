@@ -1,7 +1,5 @@
 /**
  * RRF query helpers — filter builders, highlight configs, and score normalisation.
- *
- * @packageDocumentation
  */
 
 import type { estypes } from '@elastic/elasticsearch';

@@ -1,0 +1,182 @@
+/**
+ * Search subcommand group — retrieval operations.
+ *
+ * Provides commands for querying lessons, units, sequences,
+ * type-ahead suggestions, and sequence facets via the Search SDK.
+ *
+ * @example
+ * ```bash
+ * oaksearch search lessons "expanding brackets" --subject maths --key-stage ks3
+ * oaksearch search units "fractions" --size 5
+ * oaksearch search suggest "frac" --scope lessons
+ * oaksearch search facets --subject maths
+ * ```
+ */
+
+import { Command } from 'commander';
+import {
+  createCliSdk,
+  printJson,
+  printError,
+  validateSubject,
+  validateKeyStage,
+  validateScope,
+} from '../shared/index.js';
+import { env } from '../../lib/env.js';
+import {
+  handleSearchLessons,
+  handleSearchUnits,
+  handleSearchSequences,
+  handleSuggest,
+  handleFetchFacets,
+} from './handlers.js';
+
+/** Common CLI option shape for commands with subject + key stage + size. */
+interface SubjectKeyStageOpts {
+  readonly subject?: string;
+  readonly keyStage?: string;
+  readonly size: string;
+}
+
+/** Register the `search lessons` subcommand. */
+function registerLessonsCmd(parent: Command): void {
+  parent
+    .command('lessons')
+    .description('Search lessons using hybrid BM25 + ELSER retrieval')
+    .argument('<query>', 'Search query text')
+    .option('-s, --subject <subject>', 'Filter by subject slug')
+    .option('-k, --key-stage <keyStage>', 'Filter by key stage (ks1-ks4)')
+    .option('--size <n>', 'Maximum results to return', '25')
+    .action(async (query: string, opts: SubjectKeyStageOpts) => {
+      try {
+        const sdk = createCliSdk(env());
+        const result = await handleSearchLessons(sdk.retrieval, {
+          text: query,
+          subject: validateSubject(opts.subject),
+          keyStage: validateKeyStage(opts.keyStage),
+          size: parseInt(opts.size, 10),
+        });
+        printJson(result);
+      } catch (error) {
+        printError(error instanceof Error ? error.message : String(error));
+        process.exitCode = 1;
+      }
+    });
+}
+
+/** Register the `search units` subcommand. */
+function registerUnitsCmd(parent: Command): void {
+  parent
+    .command('units')
+    .description('Search units using hybrid BM25 + ELSER retrieval')
+    .argument('<query>', 'Search query text')
+    .option('-s, --subject <subject>', 'Filter by subject slug')
+    .option('-k, --key-stage <keyStage>', 'Filter by key stage (ks1-ks4)')
+    .option('--size <n>', 'Maximum results to return', '25')
+    .action(async (query: string, opts: SubjectKeyStageOpts) => {
+      try {
+        const sdk = createCliSdk(env());
+        const result = await handleSearchUnits(sdk.retrieval, {
+          text: query,
+          subject: validateSubject(opts.subject),
+          keyStage: validateKeyStage(opts.keyStage),
+          size: parseInt(opts.size, 10),
+        });
+        printJson(result);
+      } catch (error) {
+        printError(error instanceof Error ? error.message : String(error));
+        process.exitCode = 1;
+      }
+    });
+}
+
+/** Register the `search sequences` subcommand. */
+function registerSequencesCmd(parent: Command): void {
+  parent
+    .command('sequences')
+    .description('Search sequences (subject-phase programmes)')
+    .argument('<query>', 'Search query text')
+    .option('-s, --subject <subject>', 'Filter by subject slug')
+    .option('--size <n>', 'Maximum results to return', '25')
+    .action(async (query: string, opts: { subject?: string; size: string }) => {
+      try {
+        const sdk = createCliSdk(env());
+        const result = await handleSearchSequences(sdk.retrieval, {
+          text: query,
+          subject: validateSubject(opts.subject),
+          size: parseInt(opts.size, 10),
+        });
+        printJson(result);
+      } catch (error) {
+        printError(error instanceof Error ? error.message : String(error));
+        process.exitCode = 1;
+      }
+    });
+}
+
+/** Register the `search suggest` subcommand. */
+function registerSuggestCmd(parent: Command): void {
+  parent
+    .command('suggest')
+    .description('Get type-ahead suggestions')
+    .argument('<prefix>', 'Prefix text to suggest from')
+    .option('--scope <scope>', 'Search scope (lessons, units, sequences)', 'lessons')
+    .option('-s, --subject <subject>', 'Filter by subject slug')
+    .option('-k, --key-stage <keyStage>', 'Filter by key stage')
+    .action(
+      async (prefix: string, opts: { scope: string; subject?: string; keyStage?: string }) => {
+        try {
+          const sdk = createCliSdk(env());
+          const result = await handleSuggest(sdk.retrieval, {
+            prefix,
+            scope: validateScope(opts.scope),
+            subject: validateSubject(opts.subject),
+            keyStage: validateKeyStage(opts.keyStage),
+          });
+          printJson(result);
+        } catch (error) {
+          printError(error instanceof Error ? error.message : String(error));
+          process.exitCode = 1;
+        }
+      },
+    );
+}
+
+/** Register the `search facets` subcommand. */
+function registerFacetsCmd(parent: Command): void {
+  parent
+    .command('facets')
+    .description('Fetch sequence facets for navigation')
+    .option('-s, --subject <subject>', 'Filter by subject slug')
+    .option('-k, --key-stage <keyStage>', 'Filter by key stage')
+    .action(async (opts: { subject?: string; keyStage?: string }) => {
+      try {
+        const sdk = createCliSdk(env());
+        const result = await handleFetchFacets(sdk.retrieval, {
+          subject: validateSubject(opts.subject),
+          keyStage: validateKeyStage(opts.keyStage),
+        });
+        printJson(result);
+      } catch (error) {
+        printError(error instanceof Error ? error.message : String(error));
+        process.exitCode = 1;
+      }
+    });
+}
+
+/**
+ * Create the `search` subcommand group.
+ *
+ * @returns A Commander `Command` with search subcommands registered
+ */
+export function searchCommand(): Command {
+  const cmd = new Command('search').description('Query lessons, units, sequences, and suggestions');
+
+  registerLessonsCmd(cmd);
+  registerUnitsCmd(cmd);
+  registerSequencesCmd(cmd);
+  registerSuggestCmd(cmd);
+  registerFacetsCmd(cmd);
+
+  return cmd;
+}

@@ -217,15 +217,15 @@ Unit-level metadata (description, threads, curriculum statements) is valuable an
 
 ### Files to Modify
 
-1. `apps/oak-open-curriculum-semantic-search/src/lib/index-oak-helpers.ts`
+1. `apps/oak-search-cli/src/lib/index-oak-helpers.ts`
    - Replace `deriveLessonGroupsFromUnitSummaries` call
    - Add `fetchAllLessons` pagination function
 
-2. `apps/oak-open-curriculum-semantic-search/src/lib/indexing/index-bulk-helpers.ts`
+2. `apps/oak-search-cli/src/lib/indexing/index-bulk-helpers.ts`
    - Update or remove `deriveLessonGroupsFromUnitSummaries`
    - Add aggregation logic for lesson-unit relationships
 
-3. `apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts`
+3. `apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts`
    - Ensure `getLessonsByKeyStageAndSubject` supports pagination parameters
 
 ### TDD Approach
