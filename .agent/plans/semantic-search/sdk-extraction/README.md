@@ -2,7 +2,7 @@
 
 **Purpose**: Extract the semantic search capabilities into a dedicated Search SDK and CLI.  
 **Status**: ✅ COMPLETE (Feb 2026)  
-**Plan**: [../active/search-sdk-cli.plan.md](../active/search-sdk-cli.plan.md)
+**Plan**: [../archive/completed/search-sdk-cli.plan.md](../archive/completed/search-sdk-cli.plan.md)
 
 ---
 

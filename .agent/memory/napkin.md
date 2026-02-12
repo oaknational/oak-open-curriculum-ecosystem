@@ -114,7 +114,7 @@
 
 ### What Was Done
 
-- Created remediation plan at `.agent/plans/semantic-search/active/transcript-451-test-doc-remediation.plan.md`
+- Created remediation plan at `.agent/plans/semantic-search/archive/completed/transcript-451-test-doc-remediation.plan.md`
 - 4 workstreams: 451 handling (generator fix), E2E test compliance, documentation updates, directive compliance sweep
 
 ### Mistakes Made (and Corrected)

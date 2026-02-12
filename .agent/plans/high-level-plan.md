@@ -236,7 +236,7 @@ working artefacts.
 | OAuth 2.1 / Clerk Integration | [archive/completed/mcp-oauth-implementation-plan.md](archive/completed/mcp-oauth-implementation-plan.md) | Clerk AS live with Google SSO |
 | Remote Streaming HTTP | [archive/completed/remote-mcp-enablement-plan.md](archive/completed/remote-mcp-enablement-plan.md) | Vercel deploy available |
 | MCP Hardening | [archive/completed/mcp-hardening-plan.md](archive/completed/mcp-hardening-plan.md) | Spec-aligned transport |
-| Search SDK + CLI Extraction | [semantic-search/active/search-sdk-cli.plan.md](semantic-search/active/search-sdk-cli.plan.md) | 34 SDK tests, 934 CLI tests |
+| Search SDK + CLI Extraction | [semantic-search/archive/completed/search-sdk-cli.plan.md](semantic-search/archive/completed/search-sdk-cli.plan.md) | 34 SDK tests, 934 CLI tests |
 | TSDoc Compliance Fix | [archive/tsdoc-canonical-tag-migration.md](archive/tsdoc-canonical-tag-migration.md) | 462 files, eslint-plugin-tsdoc |
 | Type Discipline Restoration | [archive/type-discipline-restoration-plan.md](archive/type-discipline-restoration-plan.md) | Quality gates passing |
 | Strict Zod Schema Generation | [archive/strict-zod-schema-generation.md](archive/strict-zod-schema-generation.md) | .strict() on all schemas |

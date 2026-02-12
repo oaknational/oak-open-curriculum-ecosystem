@@ -90,7 +90,7 @@ Phase 5: Extensions
 
 ## Phase 2: SDK Extraction + CLI Wiring ✅ Complete
 
-**Location**: [active/search-sdk-cli.plan.md](active/search-sdk-cli.plan.md)
+**Location**: [archive/completed/search-sdk-cli.plan.md](archive/completed/search-sdk-cli.plan.md)
 
 **Goal**: Extract search library into an SDK; rename the
 current workspace as the CLI.
@@ -107,7 +107,7 @@ current workspace as the CLI.
 ## Remediation: HTTP 451 + Test Strategy + Documentation
 
 **Status**: 📋 Ready  
-**Plan**: [active/transcript-451-test-doc-remediation.plan.md](active/transcript-451-test-doc-remediation.plan.md)
+**Plan**: [archive/completed/transcript-451-test-doc-remediation.plan.md](archive/completed/transcript-451-test-doc-remediation.plan.md)
 
 Cross-cutting remediation discovered during transcript
 endpoint investigation (2026-02-12). Four workstreams:

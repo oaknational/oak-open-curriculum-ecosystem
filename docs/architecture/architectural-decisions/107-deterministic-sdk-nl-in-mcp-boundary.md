@@ -122,5 +122,5 @@ Provide an optional `sdk.nl.parse(text)` method alongside the structured API.
 
 ## References
 
-- [Search SDK + CLI Extraction Plan](/.agent/plans/semantic-search/active/search-sdk-cli.plan.md) — Implementation plan
+- [Search SDK + CLI Extraction Plan](/.agent/plans/semantic-search/archive/completed/search-sdk-cli.plan.md) — Implementation plan
 - [Semantic Search Prompt](/.agent/prompts/semantic-search/semantic-search.prompt.md) — Session entry point

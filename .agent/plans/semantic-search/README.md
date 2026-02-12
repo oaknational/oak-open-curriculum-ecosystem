@@ -80,7 +80,7 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 |----------|---------|
 | [Prompt](../../prompts/semantic-search/semantic-search.prompt.md) | Session entry point |
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
-| [451 + Test Remediation](active/transcript-451-test-doc-remediation.plan.md) | HTTP 451 handling, E2E test compliance, stale docs |
+| [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
 | [Public Release Readiness](active/public-release-readiness.plan.md) | Secrets, licence, package.json, docs, GitHub config, npm publish |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |

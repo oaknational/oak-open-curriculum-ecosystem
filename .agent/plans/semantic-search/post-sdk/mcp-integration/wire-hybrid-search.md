@@ -300,7 +300,7 @@ No silent error swallowing. Every error is surfaced.
 
 | Document | Purpose |
 |----------|---------|
-| [../../active/search-sdk-cli.plan.md](../../active/search-sdk-cli.plan.md) | SDK extraction (complete) |
+| [../../archive/completed/search-sdk-cli.plan.md](../../archive/completed/search-sdk-cli.plan.md) | SDK extraction (complete) |
 | [../../roadmap.md](../../roadmap.md) | Master roadmap |
 | [ADR-107] | Deterministic SDK / NL-in-MCP boundary |
 | [Search SDK README](/packages/sdks/oak-search-sdk/README.md) | SDK documentation |

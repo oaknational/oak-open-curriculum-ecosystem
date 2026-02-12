@@ -88,7 +88,7 @@ score normalisation.
 
 ### SDK Extraction (Checkpoints A–E2) ✅
 
-Full details: [search-sdk-cli.plan.md](../../plans/semantic-search/active/search-sdk-cli.plan.md)
+Full details: [search-sdk-cli.plan.md](../../plans/semantic-search/archive/completed/search-sdk-cli.plan.md)
 
 - SDK workspace at `packages/sdks/oak-search-sdk/`
 - All 16 I/O methods return `Result<T, E>` with
@@ -119,7 +119,7 @@ Four workstreams completed: 451 error handling (new
 compliance (network IO removal, `process.env` cleanup), stale
 documentation updates, directive compliance sweep.
 
-**Plan**: [transcript-451-test-doc-remediation.plan.md](../../plans/semantic-search/active/transcript-451-test-doc-remediation.plan.md)
+**Plan**: [transcript-451-test-doc-remediation.plan.md](../../plans/semantic-search/archive/completed/transcript-451-test-doc-remediation.plan.md)
 
 ---
 
