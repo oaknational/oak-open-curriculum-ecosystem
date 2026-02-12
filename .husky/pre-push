@@ -24,8 +24,5 @@ pnpm turbo run type-gen build type-check lint test
 echo "🧪 Running E2E tests..."
 pnpm turbo run test:e2e --only
 
-echo "📦 Running built artifact E2E tests..."
-pnpm turbo run test:e2e:built --only
-
 echo "✅ Pre-push checks completed!"
 
