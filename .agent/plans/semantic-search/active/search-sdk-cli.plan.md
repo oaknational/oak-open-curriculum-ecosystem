@@ -154,6 +154,7 @@ createSearchSdk({ deps, config })
 ```
 
 Key rules:
+
 - **Config and clients are provided by the consumer.**
   No internal singletons.
 - **ES URL and credentials are constructor arguments,
@@ -216,6 +217,7 @@ All three services extracted in a single pass (Feb 2026).
 25 integration tests GREEN, all quality gates pass.
 
 **Retrieval service** (`src/retrieval/`):
+
 - ✅ 4-way RRF query builders (lessons, units), 2-way (sequences)
 - ✅ Query preprocessing: noise removal, curriculum phrase detection
 - ✅ Transcript-aware score normalisation (ADR-099)
@@ -224,6 +226,7 @@ All three services extracted in a single pass (Feb 2026).
 - ✅ Smart subject filtering (ADR-101, KS4 science variants)
 
 **Admin service** (`src/admin/`):
+
 - ✅ Setup: index creation + synonym upsert via Client API
 - ✅ Connection verification, index listing
 - ✅ Synonym management (`buildElasticsearchSynonyms`)
@@ -232,12 +235,14 @@ All three services extracted in a single pass (Feb 2026).
 - ✅ ES error type guards (resource exists, not found, mapping)
 
 **Observability service** (`src/observability/`):
+
 - ✅ Instance-level in-memory FIFO store (max 200 events)
 - ✅ Zero-hit event recording + optional ES persistence
 - ✅ Summary aggregation by scope
 - ✅ Telemetry fetching from ES with aggregations
 
 **Internal infrastructure** (`src/internal/`):
+
 - ✅ `EsSearchFn` adapter wrapping `Client.search()`
 - ✅ Pure index name resolver (no env reads)
 - ✅ Internal ES types (`EsSearchRequest`, `EsSearchResponse`, `EsHit`)
@@ -311,7 +316,7 @@ All SDK service I/O methods now return `Result<T, E>`
 using per-service discriminated union error types. All
 functions across the SDK and CLI have comprehensive TSDoc
 annotations. Full quality gate chain passes (including
-test:ui, test:e2e, test:e2e:built, smoke:dev:stub).
+test:ui, test:e2e, smoke:dev:stub).
 
 **Error types implemented**:
 
@@ -399,7 +404,6 @@ pnpm format:root       # Makes changes
 pnpm markdownlint:root # Makes changes
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm test:ui
 pnpm smoke:dev:stub
 ```

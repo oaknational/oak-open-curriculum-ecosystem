@@ -1,6 +1,6 @@
 # Transcript 451 + Test Strategy + Documentation Remediation
 
-**Status**: Ready -- execute all workstreams  
+**Status**: ✅ COMPLETE (all workstreams executed 2026-02-12)  
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)  
 **Last Updated**: 2026-02-12
 
@@ -22,11 +22,11 @@ Re-read them at each workstream boundary.
 
 | ID | Workstream | Status |
 | --- | --- | --- |
-| WS1 | [Handle HTTP 451 in SDK error classification](#workstream-1-handle-http-451-in-sdk-error-classification) | Pending |
-| WS2 | [Remove network IO from E2E tests](#workstream-2-remove-network-io-from-e2e-tests) | Pending |
-| WS3 | [Update stale documentation](#workstream-3-update-stale-documentation) | Pending |
-| WS4 | [Verify directive compliance](#workstream-4-verify-directive-compliance) | Pending |
-| QG | [Quality gates](#quality-gates) | Pending |
+| WS1 | [Handle HTTP 451 in SDK error classification](#workstream-1-handle-http-451-in-sdk-error-classification) | ✅ Complete |
+| WS2 | [Remove network IO from E2E tests](#workstream-2-remove-network-io-from-e2e-tests) | ✅ Complete |
+| WS3 | [Update stale documentation](#workstream-3-update-stale-documentation) | ✅ Complete |
+| WS4 | [Verify directive compliance](#workstream-4-verify-directive-compliance) | ✅ Complete |
+| QG | [Quality gates](#quality-gates) | ✅ Complete |
 
 **Recommended order**: WS1 -> WS3 -> WS2 -> WS4 -> QG.
 WS1 is small and unblocks WS3 documentation accuracy. WS2 is
@@ -108,27 +108,33 @@ directly.
 
 1. **RED**: Write a unit test for the generator output proving
    that `classifyHttpError(451, 'some-lesson', 'transcript', 'Transcript not available')`
-   returns `{ kind: 'not_found', resource: 'some-lesson', resourceType: 'transcript' }`.
+   returns `{ kind: 'legally_restricted', resource: 'some-lesson', resourceType: 'transcript' }`.
    Run `pnpm type-gen` first so the generated file is current.
    The test will fail because 451 currently returns
    `network_error`.
 
 2. **GREEN**: In `generate-error-types.ts`, add a
    `status === 451` branch to the generated `classifyHttpError`
-   function template that returns `not_found` (same shape as
-   404). 451 means the resource is permanently unavailable for
-   legal/licensing reasons -- semantically identical to "not
-   found" for our consumers. Run `pnpm type-gen` to regenerate,
-   then run the test. It must pass.
+   function template that returns `legally_restricted` — a new,
+   distinct error kind. 404 and 451 have different semantics:
+   404 means "does not exist", 451 means "exists but is legally
+   inaccessible". Add a new `SdkLegallyRestrictedError`
+   interface and include it in the `SdkFetchError` union. Run
+   `pnpm type-gen` to regenerate, then run the test. It must pass.
 
-3. **REFACTOR**: Update the generator's TSDoc comment block to
-   list 451 alongside 404 in the `SdkNotFoundError`
-   documentation. Confirm no other code path depends on
-   distinguishing 451 from 404. The `isRecoverableError`
-   function already treats `not_found` as recoverable, so
-   ingestion behaviour is unchanged. The `formatSdkError`
-   function already handles `not_found`. No changes needed
-   downstream.
+3. **REFACTOR**: Add TSDoc for the new `SdkLegallyRestrictedError`
+   type. Update `isRecoverableError` to treat `legally_restricted`
+   as recoverable (same as `not_found` — both are permanent and
+   non-retryable). Add a `case 'legally_restricted'` branch to
+   `formatSdkError` with a distinct message. Export the new type
+   from the SDK public surface. Update all downstream consumers:
+   transcript cache types, cache wrapper, ingestion error handling
+   in `lesson-materials.ts` and `unit-processing.ts`.
+
+> **Historical note**: The original plan collapsed 451 into
+> `not_found`. This was corrected during execution — 404 and 451
+> have different semantic meanings and MUST have distinct error
+> kinds. See [ADR-109](/docs/architecture/architectural-decisions/109-http-451-distinct-classification.md).
 
 ### Files
 
@@ -140,12 +146,17 @@ directly.
 
 ### Completion Checklist
 
-- [ ] Unit test for `classifyHttpError(451, ...)` returning `not_found` exists and passes
-- [ ] Generator template updated with 451 branch
-- [ ] `pnpm type-gen` regenerates cleanly
-- [ ] `pnpm --filter @oaknational/oak-curriculum-sdk test` passes
-- [ ] `pnpm --filter @oaknational/oak-curriculum-sdk type-check` passes
-- [ ] TSDoc for `SdkNotFoundError` mentions 451
+- [x] Unit test for `classifyHttpError(451, ...)` returning `legally_restricted` exists and passes
+- [x] Generator template updated with 451 branch returning `legally_restricted`
+- [x] New `SdkLegallyRestrictedError` interface added to `SdkFetchError` union
+- [x] `isRecoverableError` updated to include `legally_restricted`
+- [x] `formatSdkError` updated with distinct `legally_restricted` case
+- [x] `SdkLegallyRestrictedError` exported from SDK public surface
+- [x] `pnpm type-gen` regenerates cleanly
+- [x] `pnpm --filter @oaknational/oak-curriculum-sdk test` passes
+- [x] `pnpm --filter @oaknational/oak-curriculum-sdk type-check` passes
+- [x] TSDoc for `SdkLegallyRestrictedError` documents 451 semantics
+- [x] Downstream consumers updated (cache types, cache wrapper, ingestion)
 
 ---
 
@@ -358,18 +369,18 @@ options is correct there (if reclassified as smoke test per
 
 ### WS2 Completion Checklist
 
-- [ ] **2a**: `apps/oak-notion-mcp/` workspace removed entirely
-- [ ] **2a**: Notion references cleaned from active documentation
-- [ ] **2a**: Historical note retained explaining original purpose
-- [ ] **2b**: `built-server.e2e.test.ts` refactored to in-process supertest with DI
-- [ ] **2b**: Zero `spawn()` or `fetch()` calls remain in the test
-- [ ] **2b**: If merged into `vitest.e2e.config.ts`, separate config and turbo task removed
-- [ ] **2c**: `server.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
-- [ ] **2c**: `widget-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
-- [ ] **2c**: `tool-examples-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
-- [ ] **2c**: `header-redaction.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
-- [ ] **2c**: All `enableAuthBypass()` functions deleted
-- [ ] **2c**: Zero occurrences of `process.env` mutation in any E2E test (except subprocess spawn `env` options)
+- [x] **2a**: `apps/oak-notion-mcp/` workspace removed entirely
+- [x] **2a**: Notion references cleaned from active documentation
+- [x] **2a**: Historical note retained explaining original purpose
+- [x] **2b**: `built-server.e2e.test.ts` merged into `vitest.e2e.config.ts` as in-process supertest with DI
+- [x] **2b**: Zero `spawn()` or `fetch()` calls remain in the test
+- [x] **2b**: Separate `vitest.e2e.built.config.ts`, `test:e2e:built` script, and turbo task removed
+- [x] **2c**: `server.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [x] **2c**: `widget-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [x] **2c**: `tool-examples-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [x] **2c**: `header-redaction.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [x] **2c**: All `enableAuthBypass()` functions deleted
+- [x] **2c**: Zero occurrences of `process.env` mutation in any E2E test (except subprocess spawn `env` options)
 
 ---
 
@@ -464,16 +475,20 @@ returns a 4xx that is permanent, not transient.
 
 **Update**:
 
-- Update line 60 to include 451:
-  `not_found | API 404 OR API 451 OR API 200 with empty string`
-- Add a note that 451 (Unavailable For Legal Reasons) is a
-  permanent status indicating TPC-restricted content, NOT a
-  transient error
-- Update the "Why Not Cache Transient Errors?" section to note
-  that 451 is NOT transient and IS cached as `not_found`
-  (unlike 5xx)
-- Update the cache flow diagram: add `API451` state with
-  transition to `CacheNotFound` (same path as 404)
+- ✅ Updated: `TranscriptCacheStatus` now includes
+  `legally_restricted` as a distinct status (not collapsed
+  into `not_found`)
+- ✅ Added `legally_restricted` row to status definitions table
+- ✅ Updated cache flow diagram: `API451` transitions to
+  `CacheLegallyRestricted` (distinct from `CacheNotFound`)
+- ✅ "Why 3 Statuses" updated to "Why 4 Statuses" to explain
+  the semantic distinction between 404 and 451
+
+> **Historical note**: The original plan instructed collapsing
+> 451 into the `not_found` cache status. This was corrected
+> during execution — 451 gets its own `legally_restricted`
+> cache status. See [ADR-092](/docs/architecture/architectural-decisions/092-transcript-cache-categorization.md)
+> and [ADR-109](/docs/architecture/architectural-decisions/109-http-451-distinct-classification.md).
 
 ### 3e: Testing config fixes plan (archive)
 
@@ -489,12 +504,12 @@ it still exists, audit it against the testing strategy.
 
 ### WS3 Completion Checklist
 
-- [ ] `DATA-VARIANCES.md` updated with 451 status, verification date, body inconsistency note
-- [ ] API wishlist updated with partial fix note, remaining issues, verification date
-- [ ] ADR-078 prohibited patterns scope widened to all tests, in-process E2E DI clarified
-- [ ] ADR-092 updated with 451 in status table and cache flow diagram
-- [ ] Archive plan has resolution note (or audit if file still exists)
-- [ ] `pnpm markdownlint:root` passes on all changed markdown files
+- [x] `DATA-VARIANCES.md` updated with 451 status, verification date, body inconsistency note
+- [x] API wishlist updated with partial fix note, remaining issues, verification date
+- [x] ADR-078 prohibited patterns scope widened to all tests, in-process E2E DI clarified
+- [x] ADR-092 updated with 451 as distinct `legally_restricted` cache status and updated flow diagram
+- [x] Archive plan has resolution note (or audit if file still exists)
+- [x] `pnpm markdownlint:root` passes on all changed markdown files
 
 ---
 
@@ -505,15 +520,15 @@ After workstreams 1-3, run a sweep to confirm:
 ### rules.md
 
 - **Fail fast with helpful errors**: 451 now classified
-  correctly as `not_found`, not silently misclassified as
-  `network_error`
+  correctly as `legally_restricted`, not silently misclassified
+  as `network_error`
 - **No type shortcuts**: No `as`, `any`, `!`, or
   `Record<string, unknown>` introduced
 - **No disabled checks**: No `eslint-disable`, `@ts-ignore`,
   or similar
 - **Handle all cases explicitly**: `formatSdkError` switch is
-  exhaustive (451 maps to existing `not_found` kind, no new
-  case needed)
+  exhaustive (451 maps to new `legally_restricted` kind with
+  its own case and distinct error message)
 
 ### testing-strategy.md
 
@@ -535,10 +550,10 @@ After workstreams 1-3, run a sweep to confirm:
 
 ### WS4 Completion Checklist
 
-- [ ] All three directives re-read and compliance confirmed
-- [ ] No new violations introduced by WS1-WS3 changes
-- [ ] `rg 'process\.env\.' --glob '*.e2e.test.ts'` in streamable-http shows no mutations (only reads)
-- [ ] `rg 'eslint-disable\|@ts-ignore\|@ts-expect-error' --glob '*.ts'` in changed files shows zero results
+- [x] All three directives re-read and compliance confirmed
+- [x] No new violations introduced by WS1-WS3 changes
+- [x] `rg 'process\.env\.' --glob '*.e2e.test.ts'` in streamable-http shows no mutations (only reads)
+- [x] `rg 'eslint-disable\|@ts-ignore\|@ts-expect-error' --glob '*.ts'` in changed files shows zero results
 
 ---
 
@@ -555,7 +570,6 @@ pnpm format:root
 pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm test:ui
 pnpm smoke:dev:stub
 ```
@@ -573,7 +587,6 @@ monorepo. Do not introduce new naming conventions.
 | --- | --- | --- |
 | `test` | Unit + integration (vitest) | All workspaces |
 | `test:e2e` | E2E tests (vitest) | Most apps |
-| `test:e2e:built` | Built artefact E2E (vitest) | streamable-http |
 | `test:smoke` | Vitest-based smoke tests | search-cli |
 | `smoke:*` | Standalone tsx smoke scripts | streamable-http |
 | `test:ui` | Playwright UI tests | streamable-http |

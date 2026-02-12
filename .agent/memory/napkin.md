@@ -59,14 +59,25 @@
 - 6 workstreams: secrets remediation (CRITICAL), licence/legal, package.json standardisation, documentation overhaul, GitHub config, publication dry run
 - Updated navigation docs (README.md, roadmap.md) to link to the new plan
 
+### Plan Corrections (applied after remediation)
+
+- Removed `apps/oak-notion-mcp` from WS3a table, WS4f table, WS4 checklist (workspace deleted during remediation WS2a)
+- Fixed workspace count: 12 → 11 throughout (WS3 problem statement, audit table, checklists)
+- Fixed author count: 9/12 → 8/11
+- Removed `pnpm test:e2e:built` from quality gates (removed during remediation WS2b)
+- Fixed `CODE_OF_CONDUCT.md` claim: CONTRIBUTING.md has a "Code of Conduct" section but does not link to the file by name
+- Added note that `LICENSE.md` already exists at root (README link targets `LICENSE` not `LICENSE.md`)
+- Fixed ADR count: 104 → 105 (ADR-109 added during remediation)
+- Fixed stale line numbers for README.md and CONTRIBUTING.md references
+
 ### Key Findings from Audit
 
 - **CRITICAL: Real API keys in tracked files**: `.agent/experience/the-api-key-revelation.md` has actual NOTION_API_KEY and OAK_API_KEY values. `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md` has Clerk dev credentials.
-- **No LICENSE file**: README references `[LICENSE](LICENSE)` but file doesn't exist. MIT declared in package.json but no licence text.
-- **No CODE_OF_CONDUCT.md**: Referenced implicitly in CONTRIBUTING.md
+- **No LICENSE file**: README references `[LICENSE](LICENSE)` but only `LICENSE.md` exists. MIT declared in package.json but link is broken.
+- **No CODE_OF_CONDUCT.md**: CONTRIBUTING.md has a "Code of Conduct" section but no file exists
 - **CHANGELOG.md is from wrong repo**: Contains oak-notion-mcp entries, not oak-mcp-ecosystem
-- **9 of 12 workspaces missing `author`**: Only stdio, curriculum-sdk, and search-sdk have it
-- **All 12 workspaces missing `homepage` and `bugs`**
+- **8 of 11 workspaces missing `author`**: Only stdio, curriculum-sdk, and search-sdk have it
+- **All 11 workspaces missing `homepage` and `bugs`**
 - **5 workspaces missing `license` field**
 - **Most packages missing `private: true`**: Only root, streamable-http, and search-cli are marked private
 - **CONTRIBUTING.md stale**: Node.js 22+ (should be 24.x), references non-existent ErrorHandler class and CONTRIBUTORS.md, wrong quality gate commands, says E2E needs API keys (should use mocks)
@@ -112,7 +123,7 @@
 - Initially searched for `search_vtt` literally — the term does not exist in the codebase. The actual entity is `/lessons/{lesson}/transcript` which returns `{ transcript, vtt }`.
 - Fenced code blocks without language specifiers fail markdownlint (MD040). Always specify language even for file paths (use inline backticks instead).
 - First draft of plan was orphaned — no parent docs linked to it. Plans must always update README, roadmap, and session prompt. A document nobody can find is a document that doesn't exist.
-- `process.env.X = ` with trailing space inside backticks triggers MD038 (spaces inside code span). Rephrase to avoid trailing spaces in inline code.
+- `process.env.X = value` with trailing space inside backticks triggers MD038 (spaces inside code span). Rephrase to avoid trailing spaces in inline code.
 - Blank line between two blockquotes triggers MD028. Use `>` with empty line (`> \n >`) to continue a single blockquote.
 
 ### Patterns to Remember
@@ -279,6 +290,7 @@
 **SDK (23 files): ALL PASS** — No type shortcuts, no disabled checks, complete TSDoc, no unused code, fail-fast compliance, proper test patterns.
 
 **CLI (25 files): 23 PASS, 2 pre-existing issues in files I touched:**
+
 1. `benchmark-adapters.ts` — Had `/* eslint max-lines: [error, 275] */` override (rule workaround). **FIXED** by DRYing with generic `groupEntries<T>`, file went from 267 to 157 lines.
 2. `benchmark-entry-runner.ts` — Catch blocks log errors and create synthetic 0-score results instead of failing fast. **PRE-EXISTING design choice** for benchmark resilience. Errors ARE logged and visible in results, but process exits 0 even when queries fail. Noted for future work.
 
@@ -491,6 +503,7 @@
 ### Notion MCP Workspace Removal — Documentation Cleanup
 
 Completed systematic removal of actionable `oak-notion-mcp` references from:
+
 - **5 active plans** with work items targeting the workspace:
   `config-architecture-standardisation-plan`, `stryker-integration-plan`,
   `global-state-elimination-and-testing-discipline-plan`,

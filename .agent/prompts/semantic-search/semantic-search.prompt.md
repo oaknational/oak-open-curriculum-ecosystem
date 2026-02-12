@@ -73,10 +73,12 @@ score normalisation.
 
 | Index | GTs | MRR | NDCG@10 |
 |-------|-----|-----|---------|
-| Lessons | 30 | 0.983 | 0.955 |
-| Units | 2 | 1.000 | 0.926 |
-| Threads | 1 | 1.000 | 1.000 |
-| Sequences | 1 | 1.000 | 1.000 |
+| Lessons | 30 | 0.983 | 0.944 |
+| Units | 2 | 1.000 | 0.923 |
+| Threads | 1 | 1.000 | 1.000* |
+| Sequences | 1 | 1.000 | 1.000* |
+
+\* Single-query indexes — treat as mechanism checks, not stable baselines.
 
 **Protocol**: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
@@ -104,22 +106,24 @@ codebase (462 files). `eslint-plugin-tsdoc` added with
 
 ---
 
-## What Needs Doing Next
+### Remediation: HTTP 451 + Test Strategy + Documentation ✅
 
-### Remediation: HTTP 451 + Test Strategy + Documentation
+Cross-cutting remediation completed 2026-02-12. The upstream
+API returns HTTP 451 (Unavailable For Legal Reasons) for
+restricted transcripts. Our SDK now classifies 451 as
+`legally_restricted` — a distinct error kind, separate from
+`not_found` (404). See [ADR-109](/docs/architecture/architectural-decisions/109-http-451-distinct-classification.md).
 
-Cross-cutting remediation discovered 2026-02-12 during
-transcript endpoint investigation. The upstream API now
-returns HTTP 451 (Unavailable For Legal Reasons) instead of
-the previously documented 500/404. Our error classification,
-E2E tests, and documentation are out of alignment.
+Four workstreams completed: 451 error handling (new
+`SdkLegallyRestrictedError` kind via generator fix), E2E test
+compliance (network IO removal, `process.env` cleanup), stale
+documentation updates, directive compliance sweep.
 
 **Plan**: [transcript-451-test-doc-remediation.plan.md](../../plans/semantic-search/active/transcript-451-test-doc-remediation.plan.md)
 
-Four workstreams: 451 error handling (generator fix), E2E test
-compliance (network IO removal, `process.env` cleanup), stale
-documentation updates, directive compliance sweep. Can run in
-parallel with SDK validation below.
+---
+
+## What Needs Doing Next
 
 ### Search SDK Validation (Phase 2e)
 
@@ -219,7 +223,6 @@ pnpm lint:fix
 pnpm test
 pnpm test:ui
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm smoke:dev:stub
 ```
 

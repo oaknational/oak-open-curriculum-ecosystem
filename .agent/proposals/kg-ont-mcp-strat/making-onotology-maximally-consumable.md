@@ -1,6 +1,6 @@
 # From Ontology to Leverage  
 
-### Turning Oak’s Curriculum Knowledge Graph into Strategic Advantage
+Turning Oak’s Curriculum Knowledge Graph into Strategic Advantage
 
 ---
 

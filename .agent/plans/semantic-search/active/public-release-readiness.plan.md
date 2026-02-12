@@ -134,11 +134,13 @@ secrets are low-sensitivity (dev API keys, test Clerk instance).
 
 ## Workstream 2: Licence and legal
 
-**Problem**: The root `README.md` (line 168) references
-`[LICENSE](LICENSE)` but no `LICENSE` file exists. Multiple
-workspace `package.json` files declare `"license": "MIT"` without
-a corresponding licence file. A `CODE_OF_CONDUCT.md` is
-referenced implicitly in `CONTRIBUTING.md` but does not exist.
+**Problem**: The root `README.md` (line 161) references
+`[LICENSE](LICENSE)` but only `LICENSE.md` exists (not plain
+`LICENSE`), so the link is broken. Multiple workspace
+`package.json` files declare `"license": "MIT"` without a
+corresponding licence file. `CONTRIBUTING.md` has a "Code of
+Conduct" section (lines 7-9) but no `CODE_OF_CONDUCT.md` file
+exists.
 
 ### 2a: Create MIT licence file
 
@@ -149,17 +151,20 @@ Use the standard MIT licence text with:
 - Year: 2024-present (the repo's first commit year to present)
 - Copyright holder: Oak National Academy
 
-This must be a plain-text file, not markdown. The MIT licence
-is already declared in the root `package.json` and in most
-workspace `package.json` files.
+This must be a plain-text file, not markdown. Note: a
+`LICENSE.md` already exists at root — either rename it to
+`LICENSE` (plain text) or update the README link to point to
+`LICENSE.md`. The MIT licence is already declared in the root
+`package.json` and in most workspace `package.json` files.
 
 ### 2b: Create Code of Conduct
 
 **File to create**: `CODE_OF_CONDUCT.md` (root)
 
 Adopt the [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
-This is the industry standard for open source projects and is
-referenced (implicitly) by `CONTRIBUTING.md` line 9.
+This is the industry standard for open source projects.
+`CONTRIBUTING.md` has a "Code of Conduct" section (lines 7-9)
+that should link to this file once created.
 
 Set the enforcement contact to the same security contact used
 in `SECURITY.md` (or a dedicated email if Oak has one for
@@ -188,7 +193,7 @@ licensing:
 
 ## Workstream 3: Package.json standardisation
 
-**Problem**: Across 12 workspace `package.json` files, critical
+**Problem**: Across 11 workspace `package.json` files, critical
 metadata fields are missing or inconsistent. Before public
 release, every package must have correct metadata for both npm
 registry presentation and GitHub repository display.
@@ -205,7 +210,6 @@ Current state and recommendation:
 | Root (`@oaknational/mcp-ecosystem`) | `true` | `true` | Monorepo root, never published |
 | `apps/oak-curriculum-mcp-stdio` | missing | **publish** | Installable MCP server for Claude/Cursor |
 | `apps/oak-curriculum-mcp-streamable-http` | `true` | `true` | Deployed service, not an npm package |
-| `apps/oak-notion-mcp` | missing | `true` | Architectural reference, not for distribution |
 | `apps/oak-search-cli` | `true` | `true` | Internal CLI, requires Elasticsearch |
 | `packages/core/oak-eslint` | missing | `true` | Internal ESLint config, Oak-specific |
 | `packages/core/openapi-zod-client-adapter` | missing | evaluate | Potentially useful to others |
@@ -262,14 +266,14 @@ present and correct:
 
 | Field | Missing from |
 | --- | --- |
-| `author` | 9 of 12 workspaces |
-| `license` | 5 of 12 (`streamable-http`, `search-cli`, `eslint`, `result`, root has it) |
-| `repository` | 3 of 12 (`search-cli`, `eslint`, `result`) |
-| `homepage` | all 12 |
-| `bugs` | all 12 |
-| `keywords` | 5 of 12 |
-| `description` | 3 of 12 (`streamable-http`, `search-cli`, `eslint`) |
-| `publishConfig` | all except `oak-notion-mcp` |
+| `author` | 8 of 11 workspaces |
+| `license` | 5 of 11 (`streamable-http`, `search-cli`, `eslint`, `result`, root has it) |
+| `repository` | 3 of 11 (`search-cli`, `eslint`, `result`) |
+| `homepage` | all 11 |
+| `bugs` | all 11 |
+| `keywords` | 5 of 11 |
+| `description` | 3 of 11 (`streamable-http`, `search-cli`, `eslint`) |
+| `publishConfig` | all 11 |
 
 ### 3c: Version strategy
 
@@ -300,11 +304,11 @@ The root `package.json` has:
 
 - [ ] Public/private classification decided for all workspaces
 - [ ] `private: true` added to all non-published packages
-- [ ] `author` added to all 12 workspaces
+- [ ] `author` added to all 11 workspaces
 - [ ] `license` added to 5 workspaces missing it
-- [ ] `repository` (with `directory`) added to 3 missing workspaces, verified on 9 existing
-- [ ] `homepage` added to all 12 workspaces
-- [ ] `bugs` added to all 12 workspaces
+- [ ] `repository` (with `directory`) added to 3 missing workspaces, verified on 8 existing
+- [ ] `homepage` added to all 11 workspaces
+- [ ] `bugs` added to all 11 workspaces
 - [ ] `description` added to 3 workspaces missing it
 - [ ] `keywords` reviewed and updated across all workspaces
 - [ ] `publishConfig` added to all public packages
@@ -322,17 +326,17 @@ The root `package.json` has:
 
 The root README is generally strong. Specific issues to fix:
 
-1. **Stale command references**: Lines 87 and 123 both say
-   `pnpm dev:smoke` but the actual command is
+1. **Stale command references**: Line 91 (and possibly others)
+   says `pnpm dev:smoke` but the actual command is
    `pnpm smoke:dev:stub`. Fix all smoke test command references
    in the root README.
 2. **Contributing section** (lines 148-161): Currently says
    "We welcome contributions from Oak team members and the
    wider community." This must change to reflect that external
    contributions are not currently accepted. See 4c below.
-3. **ADR count**: Lines 47 and 59 reference "107 ADRs" but the
-   actual count is 104 (including the recently added ADR-108).
-   Update both references to the correct count.
+3. **ADR count**: Lines 47 and 58 reference "107 ADRs" but the
+   actual count is 105 (including ADR-109 added during 451
+   remediation). Update both references to the correct count.
 4. **Support section** (line 165-168): Contains emoji. Remove
    them (repo convention is no emoji unless user requests).
 5. **Node.js version**: `.env.example` and `CONTRIBUTING.md`
@@ -352,11 +356,11 @@ This file needs significant updates for public readiness:
    learning. Oak team members contribute via internal process.
 2. **Node.js version**: Line 15 says "Node.js 22+" -- update
    to `24.x` to match `engines` in root `package.json`.
-3. **Error handling section**: Line 238 references "ErrorHandler
+3. **Error handling section**: Line 219 references "ErrorHandler
    class" which does not exist in the codebase. Replace with
    the actual pattern (Result type from `@oaknational/result`,
    fail-fast with helpful errors).
-4. **CONTRIBUTORS.md reference**: Line 385 promises
+4. **CONTRIBUTORS.md reference**: Line 326 promises
    "Listed in CONTRIBUTORS.md" but no such file exists. Either
    create it or remove the reference. Given no external
    contributions are accepted, remove the reference.
@@ -430,7 +434,6 @@ Review and improve these workspace READMEs:
 | `packages/core/oak-eslint/README.md` | Does not exist | Create: purpose, usage, rule list |
 | `packages/core/openapi-zod-client-adapter/README.md` | 10 lines, minimal | Expand: purpose, why it exists, usage |
 | `packages/libs/env/README.md` | 26 lines, no examples | Add: installation, usage examples, API |
-| `apps/oak-notion-mcp/README.md` | 52 lines, limited | Add: setup detail, usage examples |
 
 The `apps/oak-curriculum-mcp-streamable-http/README.md`
 Authentication section now includes a note that Clerk is a
@@ -456,7 +459,6 @@ workspace READMEs are substantive and public-ready.
 - [ ] `packages/core/oak-eslint/README.md` created
 - [ ] `packages/core/openapi-zod-client-adapter/README.md` expanded
 - [ ] `packages/libs/env/README.md` expanded
-- [ ] `apps/oak-notion-mcp/README.md` expanded
 
 ---
 
@@ -656,7 +658,6 @@ pnpm format:root
 pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm test:ui
 pnpm smoke:dev:stub
 ```
