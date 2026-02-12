@@ -75,7 +75,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm markdownlint:root 
 Verifies the codebase passes all checks without modifications:
 
 ```bash
-pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check lint test test:ui test:e2e test:e2e:built smoke:dev:stub
+pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
 ```
 
 **Flow**:
@@ -88,8 +88,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && turbo run type-check l
    - `lint` - ESLint (verify only, no --fix)
    - `test` - unit and integration tests
    - `test:ui` - Playwright UI tests
-   - `test:e2e` - E2E tests
-   - `test:e2e:built` - E2E tests on built artifacts
+   - `test:e2e` - E2E tests (includes built-server behaviour tests)
    - `smoke:dev:stub` - smoke tests with stubs
 
 ### `pnpm check` - Full clean build and verify
@@ -105,7 +104,7 @@ pnpm clean && pnpm lint:clean && pnpm make && pnpm qg
 Runs all test types in a single turbo invocation:
 
 ```bash
-turbo run test test:e2e test:e2e:built test:ui smoke:dev:stub
+turbo run test test:e2e test:ui smoke:dev:stub
 ```
 
 ### `pnpm fix` - Auto-fix only
@@ -124,7 +123,7 @@ See [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/0
 
 ```text
 type-gen → build → test
-                 ↘ test:e2e:built
+                 ↘ test:e2e → smoke:dev:stub
                  ↘ type-check
                  ↘ lint / lint:fix
 ```
@@ -164,13 +163,12 @@ These run in parallel with no build dependency:
 
 ### Uncached tasks (always run)
 
-| Task             | Cached | Reason                                      |
-| ---------------- | ------ | ------------------------------------------- |
-| `lint:fix`       | ❌     | Modifies source files                       |
-| `test:e2e:built` | ❌     | Tests built artifacts, should always verify |
-| `smoke:*`        | ❌     | External system tests, non-deterministic    |
-| `clean`          | ❌     | Destructive operation                       |
-| `dev`            | ❌     | Persistent process                          |
+| Task       | Cached | Reason                                   |
+| ---------- | ------ | ---------------------------------------- |
+| `lint:fix` | ❌     | Modifies source files                    |
+| `smoke:*`  | ❌     | External system tests, non-deterministic |
+| `clean`    | ❌     | Destructive operation                    |
+| `dev`      | ❌     | Persistent process                       |
 
 ## Mixing pnpm and turbo
 

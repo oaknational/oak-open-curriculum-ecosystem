@@ -278,8 +278,7 @@ oak-mcp-ecosystem/
 ├── apps/
 │   ├── oak-curriculum-mcp-stdio/     # MCP server for Claude Desktop
 │   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web
-│   ├── oak-search-cli/ # Search application
-│   └── oak-notion-mcp/               # Architectural reference
+│   └── oak-search-cli/ # Search application
 └── docs/
     ├── architecture/                 # Architecture decisions
     └── development/                  # Development guides

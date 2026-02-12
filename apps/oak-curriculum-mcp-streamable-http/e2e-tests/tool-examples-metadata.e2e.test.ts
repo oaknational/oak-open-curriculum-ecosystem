@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 
 /**
  * E2E tests for parameter examples metadata in MCP tools.
@@ -26,13 +27,17 @@ import { createApp } from '../src/application.js';
 const ACCEPT = 'application/json, text/event-stream';
 
 /**
- * Configure environment for auth bypass in E2E tests.
+ * Isolated test environment with auth bypassed.
+ * No global `process.env` mutation — see ADR-078.
  */
-function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-}
+const testEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
@@ -96,6 +101,11 @@ function getPropertyExamples(tool: McpTool, propName: string): readonly unknown[
   return prop?.examples ?? [];
 }
 
+function createTestApp(): ReturnType<typeof createApp> {
+  const runtimeConfig = loadRuntimeConfig(testEnv);
+  return createApp({ runtimeConfig });
+}
+
 async function callToolsList(
   app: ReturnType<typeof createApp>,
 ): Promise<{ tools: McpTool[]; status: number }> {
@@ -108,15 +118,8 @@ async function callToolsList(
 }
 
 describe('Tool Examples Metadata E2E', () => {
-  beforeEach(() => {
-    enableAuthBypass();
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    delete process.env.ALLOWED_ORIGINS;
-  });
-
   it('verifies tools/list returns valid tool definitions', async () => {
-    const app = createApp();
+    const app = createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -135,7 +138,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for generated tools with OpenAPI examples', async () => {
-    const app = createApp();
+    const app = createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -152,7 +155,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for aggregated search tool', async () => {
-    const app = createApp();
+    const app = createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 
@@ -167,7 +170,7 @@ describe('Tool Examples Metadata E2E', () => {
   });
 
   it('tools/list includes examples for aggregated fetch tool', async () => {
-    const app = createApp();
+    const app = createTestApp();
     const { tools, status } = await callToolsList(app);
     expect(status).toBe(200);
 

@@ -1,5 +1,7 @@
 # Testing Gap Analysis & Resolution
 
+> **Historical Note (2026-02-12)**: The `test:e2e:built` task referenced throughout this document has been removed. Built-server behavioural tests were refactored to use in-process supertest with DI (ADR-078) and merged into the main `test:e2e` suite. The `smoke:dev:stub` script continues to verify built artefact boot behaviour. This document is preserved for historical context.
+
 ## Executive Summary
 
 **Problem**: Production deployment was completely non-functional, but all 27 test files passed.  

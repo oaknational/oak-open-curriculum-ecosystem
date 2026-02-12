@@ -16,6 +16,7 @@
  */
 export type SdkFetchError =
   | SdkNotFoundError
+  | SdkLegallyRestrictedError
   | SdkServerError
   | SdkRateLimitError
   | SdkNetworkError
@@ -23,10 +24,30 @@ export type SdkFetchError =
 
 /**
  * Resource was not found (HTTP 404).
- * Common for units/lessons that exist in listings but have no detail page.
+ *
+ * The resource does not exist in the API. This is distinct from
+ * `legally_restricted` (HTTP 451) where the resource exists but
+ * cannot be accessed for legal reasons.
  */
 export interface SdkNotFoundError {
   readonly kind: 'not_found';
+  readonly resource: string;
+  readonly resourceType: ResourceType;
+}
+
+/**
+ * Resource is unavailable for legal reasons (HTTP 451).
+ *
+ * The resource exists but is legally restricted (e.g. TPC-restricted
+ * transcripts). This is semantically distinct from `not_found` (HTTP 404):
+ * - 404: resource does not exist
+ * - 451: resource exists but is legally inaccessible
+ *
+ * Both are permanent and non-retryable, but have different implications
+ * for caching, user messaging, observability, and audit trails.
+ */
+export interface SdkLegallyRestrictedError {
+  readonly kind: 'legally_restricted';
   readonly resource: string;
   readonly resourceType: ResourceType;
 }
@@ -98,6 +119,9 @@ export function classifyHttpError(
   if (status === 404) {
     return { kind: 'not_found', resource, resourceType };
   }
+  if (status === 451) {
+    return { kind: 'legally_restricted', resource, resourceType };
+  }
   if (status === 429) {
     return { kind: 'rate_limited', resource, retryAfterMs: 60_000 };
   }
@@ -158,10 +182,10 @@ export function validationError(
 
 /**
  * Type guard to check if error is recoverable (should skip, not crash).
- * 404 and 5xx errors are recoverable in ingestion context.
+ * 404, 451, and 5xx errors are recoverable in ingestion context.
  */
 export function isRecoverableError(error: SdkFetchError): boolean {
-  return error.kind === 'not_found' || error.kind === 'server_error';
+  return error.kind === 'not_found' || error.kind === 'legally_restricted' || error.kind === 'server_error';
 }
 
 /**
@@ -171,6 +195,8 @@ export function formatSdkError(error: SdkFetchError): string {
   switch (error.kind) {
     case 'not_found':
       return `${error.resourceType} not found: ${error.resource}`;
+    case 'legally_restricted':
+      return `${error.resourceType} legally restricted: ${error.resource}`;
     case 'server_error':
       return `Server error ${error.status} for ${error.resource}: ${error.message}`;
     case 'rate_limited':

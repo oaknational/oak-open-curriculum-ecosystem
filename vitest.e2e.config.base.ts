@@ -3,8 +3,11 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 /**
- * Base Vitest configuration for E2E tests
- * Only oak-notion-mcp (the application phenotype) should have E2E tests
+ * Base Vitest configuration for E2E tests.
+ *
+ * E2E tests verify running system behaviour. They may trigger file system
+ * and STDIO IO but NOT network IO. In-process E2E tests must use DI via
+ * `loadRuntimeConfig(isolatedEnv)` — see ADR-078.
  */
 export const baseE2EConfig = defineConfig({
   test: {

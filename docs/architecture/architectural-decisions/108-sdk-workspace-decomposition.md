@@ -75,7 +75,8 @@ Transform any OpenAPI 3.x schema into typed SDK artifacts.
 - Schema ingestion (fetch, validate, cache)
 - OpenAPI to TypeScript types
 - OpenAPI to Zod v4 schemas (via pluggable generator,
-  currently openapi-zod-client, to be replaced by Castr)
+  currently openapi-zod-client + openapi3-ts, both to be
+  replaced by Castr)
 - OpenAPI to MCP tool descriptors and executors
 - Path utilities, response maps, request validators
 - Operation extraction, parameter generation
@@ -239,9 +240,12 @@ The decomposition is implemented in phases:
    [SDK workspace separation plan][ws-sep].
 
 2. **Step 2 (Castr integration)**: Replace
-   openapi-zod-client with Castr as the Zod generation
-   strategy. This validates the pluggable generator
-   interface.
+   openapi-zod-client and openapi3-ts with Castr as the
+   Zod generation strategy. The existing adapter can
+   remain in place initially while Castr output is
+   validated side-by-side; adapter removal is a
+   subsequent step. This validates the pluggable
+   generator interface.
 
 3. **Step 3 (generic extraction)**: Extract workspace 1
    (Generic Pipeline) from workspace 2, introducing the
@@ -254,8 +258,9 @@ established and proven.
 
 ## Relationship to Castr
 
-Castr replaces openapi-zod-client as the Zod generation
-strategy. In this architecture:
+Castr replaces both openapi-zod-client and openapi3-ts as
+the Zod generation and OpenAPI type strategy. In this
+architecture:
 
 - Castr is a dependency of workspace 1 (Generic Pipeline)
 - Workspace 1 defines the interface; Castr satisfies it
@@ -263,10 +268,13 @@ strategy. In this architecture:
   directly
 
 The existing `packages/core/openapi-zod-client-adapter/`
-validates the adapter pattern. After the split, the
-adapter's functionality is absorbed into workspace 1 as a
-pluggable strategy. When Castr is ready, it takes the
-adapter's place.
+validates the adapter pattern. The adapter can remain in
+place initially while Castr output is validated
+side-by-side against the existing pipeline. After the
+split, the adapter's functionality is absorbed into
+workspace 1 as a pluggable strategy. Once Castr output is
+validated, the adapter and its openapi-zod-client +
+openapi3-ts dependencies are removed.
 
 ## Consequences
 

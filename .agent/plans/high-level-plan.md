@@ -18,7 +18,8 @@ The immediate sequence is:
 3. **SDK workspace separation** — split the Curriculum SDK
    type-gen code from the runtime code
 4. **Castr integration** — replace `openapi-zod-client`
-   with Castr for direct Zod v4 generation
+   and `openapi3-ts` with Castr for direct Zod v4
+   generation
 
 After these: search quality enhancements, ontology
 resource, and further MCP improvements.
@@ -92,14 +93,17 @@ for external users, cleaner boundaries.
 **Contract docs**: [external/castr/](external/castr/)  
 **ADR**: [ADR-108][adr-108] (Castr is a dependency of WS1)
 
-Replace `openapi-zod-client` (currently wrapped by
-`packages/core/openapi-zod-client-adapter/`) with
-`@engraph/castr` for direct Zod v4 generation from
+Replace `openapi-zod-client` and `openapi3-ts` (currently
+wrapped by `packages/core/openapi-zod-client-adapter/`)
+with `@engraph/castr` for direct Zod v4 generation from
 OpenAPI schemas.
 
 **Phase 1 deliverable**: Castr produces Zod v4 output
 directly, eliminating the adapter's v3→v4 transformation
-layer. The adapter package is deprecated and removed.
+layer. The adapter can remain in place initially while
+Castr output is validated side-by-side against the
+existing pipeline. Adapter removal is a subsequent step
+once validation is complete.
 
 Per [ADR-108][adr-108], Castr becomes a pluggable
 dependency of the Generic Pipeline (WS1). After the
@@ -109,7 +113,7 @@ generation workspace.
 **Prerequisites**: Item #2 Step 1 (SDK workspace separation)
 
 **Acceptance**: `pnpm type-gen` uses Castr output; full
-quality gate chain passes; adapter removed.
+quality gate chain passes; adapter removal planned.
 
 [adr-108]: ../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md
 
@@ -319,9 +323,12 @@ configuration belongs in WS2 (Oak Type-Gen) and the generated
 output is consumed by WS4 (Oak Runtime).
 
 **Castr**: External library (`@engraph/castr`) being developed
-to replace `openapi-zod-client`. Per ADR-108, Castr is a
-dependency of WS1 (Generic Pipeline). Requirements and
-fixtures are in [external/castr/](external/castr/). Local
-development checkout at `~/code/personal/castr`.
+to replace both `openapi-zod-client` and `openapi3-ts`. Per
+ADR-108, Castr is a dependency of WS1 (Generic Pipeline).
+The existing adapter can stay in place initially during
+integration; removal follows once Castr output is validated.
+Requirements and fixtures are in
+[external/castr/](external/castr/). Local development
+checkout at `~/code/personal/castr`.
 
 [adr-108-rel]: ../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md

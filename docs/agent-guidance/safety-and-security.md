@@ -25,10 +25,8 @@ The Oak MCP Servers are designed with security and privacy as core principles. T
 
 ```bash
 # .env file (gitignored)
-NOTION_API_KEY=your_notion_api_key_here
-
-# System environment
-export NOTION_API_KEY="secret_your_actual_key_here"
+OAK_API_KEY=your_oak_api_key_here
+CLERK_SECRET_KEY=your_clerk_secret_key_here
 ```
 
 ### Key Rotation
@@ -63,13 +61,8 @@ export function scrubEmail(email: string): string {
 
 ### Read-Only Operations (Phase 2)
 
-- All operations are read-only by default
-- No modifications to Notion data are possible
-- The system cannot:
-  - Create pages or databases
-  - Update existing content
-  - Delete any data
-  - Modify permissions
+- All MCP tool operations that call the Oak Curriculum API are read-only
+- The system cannot modify upstream curriculum data
 
 All external inputs are validated using strict Zod schemas where appropriate:
 

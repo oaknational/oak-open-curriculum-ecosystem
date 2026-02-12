@@ -40,10 +40,14 @@ Intent: Align env loading across packages to reliably discover OAK_API_KEY durin
 - E2E tests: Passed for SDK, Curriculum MCP, and Notion MCP after adjustments.
 - Build: Passed across all packages.
 
-## Potential Future Refinements
+## Resolution Note (2026-02-12)
+
+The referenced E2E test file `packages/oak-curriculum-sdk/e2e-tests/client/api-calls.e2e.test.ts` no longer exists. It was removed as part of the SDK workspace restructuring. The "transcript search 5xx allowance" mentioned below is no longer relevant: the upstream API now returns HTTP 451 (not 5xx) for unavailable transcripts, and the SDK correctly classifies 451 as `not_found`.
+
+## Potential Future Refinements (historical)
 
 - Documentation: Add guidance for `.env.e2e` in `README.md` and update `.env.example` to mention E2E-specific file usage.
-- Retry policy: Replace the transcript search 5xx allowance with a small retry/backoff helper to keep assertions strict while mitigating transient upstream errors.
+- ~~Retry policy: Replace the transcript search 5xx allowance with a small retry/backoff helper~~ — resolved: upstream now returns 451 (permanent, not transient).
 - Centralize timeouts: Consider relying solely on the base E2E `testTimeout` and removing per-test overrides for consistency.
 - Shared helper: If more scripts need env loading, extract a tiny `scripts/load-env.ts` used by CLI scripts (keeping runtime libs env-agnostic).
 - Optional tool: Evaluate `find-up` for clarity, though current zero-dependency walker is simple and reliable.

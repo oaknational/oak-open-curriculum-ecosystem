@@ -5,7 +5,7 @@
  * Extracts `priorKnowledgeRequirements` from unit records,
  * enabling prerequisite graph construction.
  *
- * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
  */
 import type { Unit } from '../lib/index.js';
 

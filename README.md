@@ -46,8 +46,6 @@ Everything flows from the OpenAPI schema:
 - **`packages/libs/`** – Shared libraries for logging, configuration, storage, and transport
 - **`docs/architecture/architectural-decisions/`** – 107 Architectural Decision Records documenting every significant design choice
 
-**Architectural reference**: `apps/oak-notion-mcp` demonstrates the pattern isn't Oak-specific.
-
 ## Architecture Overview
 
 | Directory        | Purpose                                                                  |

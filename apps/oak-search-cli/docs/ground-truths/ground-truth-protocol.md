@@ -62,7 +62,7 @@ Ask: **"What would a teacher actually type to find this content?"**
 **Index**: `oak_lessons` (12,833 documents)
 **Ground truths**: 30 (one per subject-phase pair)
 **Type**: `LessonGroundTruth`
-**Baseline**: MRR=0.983, NDCG@10=0.955, P@3=0.778, R@10=1.000
+**Baseline**: MRR=0.983, NDCG@10=0.944, P@3=0.767, R@10=1.000
 
 ### Running
 
@@ -139,7 +139,7 @@ pnpm tsx src/lib/search-quality/test-query-lessons.ts "expanding brackets algebr
 **Index**: `oak_unit_rollup` (1,665 documents)
 **Ground truths**: 2 (1 primary, 1 secondary)
 **Type**: `UnitGroundTruth`
-**Baseline**: MRR=1.000, NDCG@10=0.926, P@3=0.833, R@10=1.000
+**Baseline**: MRR=1.000, NDCG@10=0.923, P@3=0.833, R@10=1.000
 
 ### Running
 
@@ -183,7 +183,7 @@ jq -r '.sequence[] | select(.unitDescription != null) |
 **Index**: `oak_threads` (164 documents)
 **Ground truths**: 1 (maths algebra)
 **Type**: `ThreadGroundTruth`
-**Baseline**: MRR=1.000, NDCG@10=1.000, P@3=0.333, R@10=1.000
+**Baseline** (1 query -- treat as mechanism check, not stable baseline): MRR=1.000, NDCG@10=1.000, P@3=0.333, R@10=1.000
 
 ### Running
 
@@ -226,7 +226,7 @@ jq -r '.threads[]? | "\(.threadSlug): \(.threadTitle) (\(.unitCount) units)"' \
 **Index**: `oak_sequences` (30 documents)
 **Ground truths**: 1 (maths secondary)
 **Type**: `SequenceGroundTruth`
-**Baseline**: MRR=1.000, NDCG@10=1.000, P@3=0.333, R@10=1.000
+**Baseline** (1 query -- treat as mechanism check, not stable baseline): MRR=1.000, NDCG@10=1.000, P@3=0.333, R@10=1.000
 
 ### Running
 

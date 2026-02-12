@@ -122,11 +122,12 @@ describe('my function', () => {
 ### Neutral
 
 1. Entry points (`bin/*.ts`, `index.ts`) remain the single place to read `process.env`
-2. E2E tests may still set environment via spawn options (process isolation makes this safe)
+2. Subprocess-spawned tests (e.g. smoke tests) may pass env via spawn options — process isolation makes this safe
+3. In-process E2E tests that use `createApp()` directly must use DI via `loadRuntimeConfig(isolatedEnv)` — they share the test process and are subject to the same prohibition as unit/integration tests
 
 ## Prohibited Patterns
 
-The following patterns are **prohibited** in unit and integration tests:
+The following patterns are **prohibited** in all tests (unit, integration, and in-process E2E):
 
 | Pattern                       | Why Prohibited                                   | Alternative                           |
 | ----------------------------- | ------------------------------------------------ | ------------------------------------- |
@@ -134,6 +135,21 @@ The following patterns are **prohibited** in unit and integration tests:
 | `vi.stubGlobal('fetch', ...)` | Mutates global object                            | Inject fetch as dependency            |
 | `vi.doMock('module', ...)`    | Manipulates module cache, subtle race conditions | Inject module exports as dependencies |
 | `globalThis.X = 'value'`      | Mutates global state                             | Pass as parameter                     |
+
+**In-process E2E pattern**: Tests that create the app in-process (e.g. `createApp()` + supertest) must build an isolated env object and pass it through DI:
+
+```typescript
+const testEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  OAK_API_KEY: 'test-key',
+  // ... other required keys
+};
+const runtimeConfig = loadRuntimeConfig(testEnv);
+const app = createApp({ runtimeConfig });
+```
+
+**Exception**: Subprocess-spawned tests (smoke tests) may pass environment variables via spawn options because the child process has its own isolated environment.
 
 ## Acceptance Criteria for Compliance
 
@@ -147,10 +163,11 @@ The following patterns are **prohibited** in unit and integration tests:
 
 - All unit tests pass without `isolate: true` in vitest config
 - All integration tests pass without `pool: 'forks'` in vitest config
-- No `process.env` mutations in unit tests
-- No `vi.doMock` in unit tests
-- No `vi.stubGlobal` in unit tests
+- No `process.env` mutations in any test (unit, integration, or in-process E2E)
+- No `vi.doMock` in any test
+- No `vi.stubGlobal` in any test
 - Simple fakes passed as constructor arguments, not complex mocks
+- In-process E2E tests use `loadRuntimeConfig(isolatedEnv)` + `createApp({ runtimeConfig })`
 
 ## Implementation Status
 

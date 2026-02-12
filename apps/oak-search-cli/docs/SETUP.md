@@ -116,7 +116,6 @@ pnpm format:root
 pnpm markdownlint:root
 pnpm test
 pnpm test:e2e
-pnpm test:e2e:built
 ```
 
 ---

@@ -81,7 +81,7 @@ interface OpenApiZodAdapter {
 }
 ```
 
-If we ever replace `openapi-zod-client`, the replacement must satisfy this interface
+If we ever replace `openapi-zod-client` (and `openapi3-ts`), the replacement must satisfy this interface. Castr (`@engraph/castr`) is the planned replacement for both libraries — see [ADR-108](108-sdk-workspace-decomposition.md). The adapter can remain in place initially while Castr output is validated side-by-side.
 
 ### Boundary Rules
 
@@ -284,3 +284,4 @@ Address the overlap between JSON Schema and Zod exports:
 - Zod package: `zod/v4` export path in Zod 3.25+
 - MCP TypeScript SDK: Zod v4 compatibility
 - `openapi-zod-client` Zod version requirements
+- [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md) — Castr replaces both `openapi-zod-client` and `openapi3-ts`

@@ -1,6 +1,6 @@
 # Build Artifact Verification System
 
-> **Historical Note**: The postbuild verification script (`scripts/verify-build-artifacts.js`) described in this document has been **removed** as it was constraining implementation rather than proving behavior. The behavioral verification (Layer 2: `test:e2e:built`) remains and provides sufficient deployment testing. This document is preserved for historical context.
+> **Historical Note (2026-02-12)**: The `test:e2e:built` task and `vitest.e2e.built.config.ts` have been removed. The built-server behavioural tests were refactored to use in-process supertest (DI pattern, ADR-078) and merged into the main `test:e2e` suite. The `smoke:dev:stub` script continues to verify that the built artefact boots and responds correctly. This document is preserved for historical context.
 >
 > **Last Updated**: 2025-01-14
 > **Status**: Historical / Archived

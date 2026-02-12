@@ -11,6 +11,7 @@
  * | `available` | Transcript data exists | Yes |
  * | `no_video` | Lesson has no video asset | Yes |
  * | `not_found` | API 404 or empty response | Yes |
+ * | `legally_restricted` | API 451 (TPC/legal restriction) | Yes |
  *
  * **Note**: Transient errors (5xx, network) are NOT cached to allow retry.
  *
@@ -29,11 +30,15 @@
  * |--------|---------|-----------|
  * | `available` | Transcript data exists | API 200 with content |
  * | `no_video` | Lesson has no video asset | `hasVideo === false` from assets endpoint |
- * | `not_found` | API 404 or empty response | TPC-blocked, missing, or empty transcript |
+ * | `not_found` | API 404 or empty response | Missing or empty transcript |
+ * | `legally_restricted` | API 451 | TPC-restricted (legal/licensing) |
  *
  * **Note**: Transient errors (5xx, network) are NOT cached to allow retry.
+ * **Note**: `not_found` and `legally_restricted` are both permanent but
+ * semantically distinct: 404 means "does not exist", 451 means "exists
+ * but legally inaccessible".
  */
-export type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found';
+export type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found' | 'legally_restricted';
 
 /**
  * Structured cache entry for transcript availability.
@@ -59,11 +64,17 @@ export type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found';
  * ```typescript
  * const notFound: TranscriptCacheEntry = { status: 'not_found' };
  * ```
+ *
+ * @example Legally restricted (API 451)
+ * ```typescript
+ * const restricted: TranscriptCacheEntry = { status: 'legally_restricted' };
+ * ```
  */
 export type TranscriptCacheEntry =
   | TranscriptCacheEntryAvailable
   | TranscriptCacheEntryNoVideo
-  | TranscriptCacheEntryNotFound;
+  | TranscriptCacheEntryNotFound
+  | TranscriptCacheEntryLegallyRestricted;
 
 /**
  * Cache entry for an available transcript.
@@ -96,6 +107,17 @@ export interface TranscriptCacheEntryNotFound {
   readonly status: 'not_found';
 }
 
+/**
+ * Cache entry indicating the transcript is legally restricted (HTTP 451).
+ * Used for TPC-restricted transcripts (MFL lessons, some maths lessons).
+ * Semantically distinct from `not_found`: the resource exists but cannot
+ * be accessed for legal reasons.
+ */
+export interface TranscriptCacheEntryLegallyRestricted {
+  /** Discriminant for legally restricted transcript. */
+  readonly status: 'legally_restricted';
+}
+
 // =============================================================================
 // Type Guards
 // =============================================================================
@@ -115,7 +137,7 @@ function isNonNullObject(value: unknown): value is MaybeStatusObject {
 /** Check if the object has a valid status field. @internal */
 function hasValidStatus(obj: MaybeStatusObject): obj is { status: TranscriptCacheStatus } {
   const s = obj.status;
-  return s === 'available' || s === 'no_video' || s === 'not_found';
+  return s === 'available' || s === 'no_video' || s === 'not_found' || s === 'legally_restricted';
 }
 
 /** Check if the object has required fields for 'available' status. @internal */

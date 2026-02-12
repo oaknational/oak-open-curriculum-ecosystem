@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 
 /**
  * Header Redaction E2E Tests
@@ -12,26 +13,43 @@ import { createApp } from '../src/application.js';
 const ACCEPT = 'application/json, text/event-stream';
 
 /**
- * Configure environment for auth bypass in E2E tests.
+ * Isolated test environment with auth bypassed.
+ * No global `process.env` mutation — see ADR-078.
  */
-function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
+const authBypassedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
+
+/**
+ * Isolated test environment with auth enforced.
+ */
+const authEnforcedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
+
+function createBypassedApp(): ReturnType<typeof createApp> {
+  const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+  return createApp({ runtimeConfig });
+}
+
+function createEnforcedApp(): ReturnType<typeof createApp> {
+  const runtimeConfig = loadRuntimeConfig(authEnforcedEnv);
+  return createApp({ runtimeConfig });
 }
 
 describe('Header Redaction E2E', () => {
-  beforeEach(() => {
-    // Enable auth bypass for these E2E tests
-    enableAuthBypass();
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    delete process.env.ALLOWED_ORIGINS;
-  });
-
   describe('full request/response cycle', () => {
     it('should redact all sensitive headers in full request cycle', async () => {
-      const app = createApp();
+      const app = createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -55,7 +73,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle request with IP headers without exposing full IPs in logs', async () => {
-      const app = createApp();
+      const app = createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -74,7 +92,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle mixed sensitive and non-sensitive headers correctly', async () => {
-      const app = createApp();
+      const app = createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -99,7 +117,7 @@ describe('Header Redaction E2E', () => {
 
   describe('real-world scenarios', () => {
     it('should handle simulated Clerk OAuth request headers', async () => {
-      const app = createApp();
+      const app = createBypassedApp();
 
       const response = await request(app)
         .get('/healthz')
@@ -119,7 +137,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle production-like header set with full verification', async () => {
-      const app = createApp();
+      const app = createBypassedApp();
 
       const response = await request(app)
         .post('/mcp')
@@ -149,10 +167,7 @@ describe('Header Redaction E2E', () => {
     });
 
     it('should handle auth failure with HTTP 401 and WWW-Authenticate header', async () => {
-      // Override: enable auth enforcement for this test
-      delete process.env.DANGEROUSLY_DISABLE_AUTH;
-
-      const app = createApp();
+      const app = createEnforcedApp();
 
       const response = await request(app)
         .post('/mcp')

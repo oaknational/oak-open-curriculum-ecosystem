@@ -157,7 +157,7 @@ The immediate goal is to replace the `openapi-zod-client` dependency in Oak's ad
 2. Transforms Zod v3 → Zod v4 via regex replacements
 3. Depends on `openapi3-ts` for OpenAPI type definitions
 
-**Phase 1 deliverable**: Castr produces Zod v4 output directly, eliminating the adapter's transformation layer.
+**Phase 1 deliverable**: Castr produces Zod v4 output directly, eliminating the need for the adapter's v3→v4 transformation layer. The adapter can remain in place initially while Castr output is validated side-by-side against the existing pipeline. Adapter removal is a subsequent step once validation is complete.
 
 ### Future Phases (Not Yet Specified)
 
@@ -538,7 +538,9 @@ Before castr can be integrated into Oak's type generation pipeline:
 
 1. **SDK workspace separation** — Oak's type-gen code must be extracted into a dedicated generation workspace (separate from the runtime SDK). This is Step 1 of the [4-workspace decomposition](../../pipeline-enhancements/sdk-workspace-separation-plan.md) defined in [ADR-108](../../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md). After separation, Castr becomes a dependency of the Generic Pipeline workspace (WS1).
 
-2. **Adapter deprecation** — Once Castr outputs are validated against the fixtures in this directory, Oak's current `openapi-zod-client-adapter` will be deprecated and removed.
+2. **Side-by-side validation** — The existing `openapi-zod-client-adapter` can remain in place initially while Castr output is validated against the fixtures in this directory. This allows comparison of the two pipelines before committing to the switch.
+
+3. **Adapter removal** (subsequent step) — Once Castr outputs are validated and the quality gate chain passes with Castr output, Oak's current `openapi-zod-client-adapter` and its `openapi-zod-client` + `openapi3-ts` dependencies will be removed.
 
 ## Local castr checkout
 

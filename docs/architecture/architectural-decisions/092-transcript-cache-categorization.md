@@ -43,22 +43,26 @@ This lack of categorization made debugging ingestion issues extremely difficult.
 Replace the single sentinel with a discriminated union:
 
 ```typescript
-type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found';
+type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found' | 'legally_restricted';
 
 type TranscriptCacheEntry =
   | { readonly status: 'available'; readonly transcript: string; readonly vtt: string }
   | { readonly status: 'no_video' } // Confirmed no video asset
-  | { readonly status: 'not_found' }; // API 404 or empty response
+  | { readonly status: 'not_found' } // API 404 or empty response
+  | { readonly status: 'legally_restricted' }; // API 451 (TPC/legal restriction)
 ```
 
 ### Status Definitions
 
-| Status            | When Used                                 | Cached? | Retry? |
-| ----------------- | ----------------------------------------- | ------- | ------ |
-| `available`       | API 200 with transcript data              | Yes     | No     |
-| `no_video`        | `hasVideo === false` from assets endpoint | Yes     | No     |
-| `not_found`       | API 404 OR API 200 with empty string      | Yes     | No     |
-| (transient error) | API 5xx or network failure                | **No**  | Yes    |
+| Status               | When Used                                 | Cached? | Retry? |
+| -------------------- | ----------------------------------------- | ------- | ------ |
+| `available`          | API 200 with transcript data              | Yes     | No     |
+| `no_video`           | `hasVideo === false` from assets endpoint | Yes     | No     |
+| `not_found`          | API 404 OR API 200 with empty string      | Yes     | No     |
+| `legally_restricted` | API 451 (Unavailable For Legal Reasons)   | Yes     | No     |
+| (transient error)    | API 5xx or network failure                | **No**  | Yes    |
+
+**Note on HTTP 451**: The upstream API returns 451 (Unavailable For Legal Reasons) for TPC-restricted transcripts (MFL lessons, some maths lessons). This is a **permanent** status — the resource will not become available on retry. It is cached as `legally_restricted`, semantically distinct from `not_found` (404). A resource that does not exist (404) and a resource that exists but is legally restricted (451) have different implications for observability, user messaging, and audit trails. Updated 2026-02-12.
 
 ### Cache Flow
 
@@ -74,15 +78,18 @@ stateDiagram-v2
     FetchTranscript --> API200WithData: Success
     FetchTranscript --> API200Empty: Empty response
     FetchTranscript --> API404: Not found
+    FetchTranscript --> API451: Unavailable for legal reasons
     FetchTranscript --> APIError: 5xx/network
 
     API200WithData --> CacheAvailable
     API200Empty --> CacheNotFound
     API404 --> CacheNotFound
+    API451 --> CacheLegallyRestricted
     APIError --> DoNotCache: Allow retry
 
     CacheAvailable --> [*]
     CacheNotFound --> [*]
+    CacheLegallyRestricted --> [*]
     DoNotCache --> [*]
 ```
 
@@ -97,14 +104,14 @@ stateDiagram-v2
 
 ## Rationale
 
-### Why 3 Statuses (Not 4 or 5)?
+### Why 4 Statuses (Not 5 or 6)?
 
 We considered additional statuses:
 
 - **`empty`**: For API 200 with empty transcript — Rejected as this is an upstream issue (should be 404). Treat same as `not_found` and document in API wishlist.
 - **`error`**: For transient failures — Rejected because transient errors should NOT be cached at all.
 
-Three statuses provide the right balance of observability and simplicity.
+The `legally_restricted` status (added 2026-02-12) was initially collapsed into `not_found`, but this was a lazy shortcut that destroyed semantic information. HTTP 404 (does not exist) and HTTP 451 (exists but legally restricted) have fundamentally different meanings for observability, user messaging, and audit trails. Four statuses provide the right balance of observability and simplicity.
 
 ### Why Cache `no_video`?
 
@@ -123,6 +130,8 @@ Transient errors (5xx, network failures) indicate temporary problems. Caching th
 3. Require additional TTL logic for short-lived error entries
 
 By not caching transient errors, we allow natural retry on the next ingestion attempt.
+
+**Important distinction**: HTTP 451 (Unavailable For Legal Reasons) is NOT transient despite being a 4xx status that is not explicitly 404. It indicates a permanent legal/licensing restriction and IS cached as `legally_restricted`. Only 5xx and network errors are treated as transient.
 
 ## Consequences
 

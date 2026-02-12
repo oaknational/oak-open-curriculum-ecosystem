@@ -27,6 +27,19 @@ A future learner-focused search may use different RRF weightings, retrievers, an
 
 The workspace uses **ELSER** (Elastic Learned Sparse EncodeR) to generate semantic embeddings, enabling search by meaning rather than just keywords.
 
+## CLI Commands (`oaksearch`)
+
+| Command Group       | Subcommands                                                         | SDK Service            |
+| ------------------- | ------------------------------------------------------------------- | ---------------------- |
+| `oaksearch search`  | lessons, units, sequences, suggest, facets                          | `RetrievalService`     |
+| `oaksearch admin`   | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService`         |
+| `oaksearch eval`    | benchmark (all/lessons/units/threads/sequences), validate, typegen  | Pass-through           |
+| `oaksearch observe` | telemetry, summary, purge                                           | `ObservabilityService` |
+
+See the [CLI Reference section](#cli-reference--bulk-ingestion) below for detailed usage.
+
+---
+
 ## Features and Possibilities
 
 **Hybrid Search with Reciprocal Rank Fusion** — Combines traditional keyword matching (BM25) with semantic search via sparse embeddings (ELSER). Lessons and units use 4-way RRF (BM25 + ELSER on both Content and Structure field groups); threads and sequences use 2-way RRF.

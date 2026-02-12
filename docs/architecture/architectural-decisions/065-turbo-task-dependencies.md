@@ -174,15 +174,15 @@ This creates circular cache invalidation: `build` produces outputs → outputs c
        │
        ├────────────────┬────────────────┬────────────────┬────────────────┐
        ▼                ▼                ▼                ▼                ▼
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│    test     │  │test:e2e:built│  │ type-check  │  │    lint     │  │  lint:fix   │
-│(dependsOn:  │  │(dependsOn:   │  │(dependsOn:  │  │(dependsOn:  │  │(dependsOn:  │
-│  [^build])  │  │  [^build])   │  │  [^build])  │  │  [^build])  │  │  [^build])  │
-└─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘
-  (cache: true)   (cache: false)    (cache: true)   (cache: true)   (cache: false)
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│    test     │  │ type-check  │  │    lint     │  │  lint:fix   │
+│(dependsOn:  │  │(dependsOn:  │  │(dependsOn:  │  │(dependsOn:  │
+│  [^build])  │  │  [^build])  │  │  [^build])  │  │  [^build])  │
+└─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘
+  (cache: true)   (cache: true)   (cache: true)   (cache: false)
 
 Independent tasks (no build dependency):
-- test:e2e (cache: true)
+- test:e2e (cache: true, built-server tests included)
 - test:ui (cache: true)
 - doc-gen (cache: true, dependsOn: [^doc-gen])
 ```

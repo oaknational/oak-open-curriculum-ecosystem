@@ -6,7 +6,7 @@
  * Handles maths-secondary tier variants by including all tips
  * (deduplication happens if needed at a higher level).
  *
- * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
  */
 import type { Lesson } from '../../types/generated/bulk/index.js';
 

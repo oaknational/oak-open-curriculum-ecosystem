@@ -4,11 +4,11 @@ Complete reference for all environment variables used across the Oak MCP Ecosyst
 
 ## Quick Reference by Contribution Level
 
-| Contribution Level                                         | Required Variables                          | Optional Variables                                   | Setup Time    |
-| ---------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------- | ------------- |
-| **Level 1**: Unit tests, type-checking, linting            | None                                        | None                                                 | 0 minutes     |
-| **Level 2**: Local dev servers, integration tests          | `OAK_API_KEY`                               | `LOG_LEVEL`                                          | 10-15 minutes |
-| **Level 3**: Full E2E, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*` | `OPENAI_API_KEY`, `SEARCH_API_KEY`, `NOTION_API_KEY` | 1-2 hours     |
+| Contribution Level                                         | Required Variables                          | Optional Variables                 | Setup Time    |
+| ---------------------------------------------------------- | ------------------------------------------- | ---------------------------------- | ------------- |
+| **Level 1**: Unit tests, type-checking, linting            | None                                        | None                               | 0 minutes     |
+| **Level 2**: Local dev servers, integration tests          | `OAK_API_KEY`                               | `LOG_LEVEL`                        | 10-15 minutes |
+| **Level 3**: Full E2E, search functionality, OAuth testing | `OAK_API_KEY`, `CLERK_*`, `ELASTICSEARCH_*` | `OPENAI_API_KEY`, `SEARCH_API_KEY` | 1-2 hours     |
 
 ## Monorepo-Wide Variables
 
@@ -41,14 +41,6 @@ cp .env.example .env
 | `ALLOWED_HOSTS`            | Comma-separated list of allowed hostnames                 | Auto-detected (localhost or Vercel URL) | HTTP MCP server                           |
 | `ALLOWED_ORIGINS`          | Comma-separated CORS origins                              | Auto-detected                           | HTTP MCP server                           |
 | `SMOKE_REMOTE_BASE_URL`    | Base URL for remote smoke tests                           | -                                       | Smoke tests                               |
-
-### Architectural Reference (Optional)
-
-| Variable         | Purpose                                           | Where to Get                                                 | Used By                                |
-| ---------------- | ------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------- |
-| `NOTION_API_KEY` | Notion integration (architectural reference only) | [Notion Integrations](https://www.notion.so/my-integrations) | Notion MCP server (optional workspace) |
-
-> **Note**: The Notion MCP server is an architectural reference to demonstrate the OpenAPI→SDK→MCP pattern's generality. It is **not required** for core development.
 
 ## Workspace-Specific Variables
 

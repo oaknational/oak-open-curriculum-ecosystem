@@ -21,7 +21,11 @@
  */
 
 import { ok, err, type Result } from '@oaknational/result';
-import type { SdkFetchError, SdkNotFoundError } from '@oaknational/oak-curriculum-sdk';
+import type {
+  SdkFetchError,
+  SdkNotFoundError,
+  SdkLegallyRestrictedError,
+} from '@oaknational/oak-curriculum-sdk';
 import { cacheLogger } from '../../lib/logger';
 import {
   deserializeTranscriptCacheEntry,
@@ -172,6 +176,10 @@ function createNotFoundError(id: string): SdkNotFoundError {
   return { kind: 'not_found', resource: id, resourceType: 'transcript' };
 }
 
+function createLegallyRestrictedError(id: string): SdkLegallyRestrictedError {
+  return { kind: 'legally_restricted', resource: id, resourceType: 'transcript' };
+}
+
 // =============================================================================
 // Cache Wrappers
 // =============================================================================
@@ -236,7 +244,7 @@ interface CachedNegativeResult<T> {
   readonly statsUpdated: boolean;
 }
 
-/** Handle cached negative response (not_found or no_video). */
+/** Handle cached negative response (not_found, legally_restricted, or no_video). */
 function handleCachedNegative<T>(
   rawCached: string,
   id: string,
@@ -248,7 +256,7 @@ function handleCachedNegative<T>(
   if (entry === null || entry.status === 'available') {
     return { result: null, statsUpdated: false };
   }
-  // entry.status is 'not_found' or 'no_video'
+  // entry.status is 'not_found', 'legally_restricted', or 'no_video'
   if (ignoreCached404) {
     cacheLogger.debug(`Ignoring cached ${entry.status} (--ignore-cached-404)`, {
       cacheKeyPrefix,
@@ -259,7 +267,11 @@ function handleCachedNegative<T>(
   }
   stats.hits++;
   cacheLogger.debug(`Negative cache hit (${entry.status})`, { cacheKeyPrefix, id });
-  return { result: err(createNotFoundError(id)), statsUpdated: true };
+  const error =
+    entry.status === 'legally_restricted'
+      ? createLegallyRestrictedError(id)
+      : createNotFoundError(id);
+  return { result: err(error), statsUpdated: true };
 }
 
 /** Try to parse and validate cached success value. */
@@ -280,7 +292,7 @@ function tryParseCachedValue<T>(
   return null;
 }
 
-/** Store result to cache, including negative caching for 404s. */
+/** Store result to cache, including negative caching for 404s and 451s. */
 async function storeResultToCache<T>(
   result: Result<T, SdkFetchError>,
   ops: CacheOperations,
@@ -294,6 +306,14 @@ async function storeResultToCache<T>(
   } else if (result.error.kind === 'not_found') {
     cacheLogger.debug('Caching 404 response', { cacheKeyPrefix, id, ttl });
     await tryWriteRaw(ops, key, ttl, serializeTranscriptCacheEntry({ status: 'not_found' }));
+  } else if (result.error.kind === 'legally_restricted') {
+    cacheLogger.debug('Caching 451 response', { cacheKeyPrefix, id, ttl });
+    await tryWriteRaw(
+      ops,
+      key,
+      ttl,
+      serializeTranscriptCacheEntry({ status: 'legally_restricted' }),
+    );
   }
 }
 

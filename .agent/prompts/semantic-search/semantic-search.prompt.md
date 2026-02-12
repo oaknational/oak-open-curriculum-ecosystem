@@ -175,12 +175,7 @@ Multiple parallel streams:
 
 ## CLI Commands (`oaksearch`)
 
-| Command Group | Subcommands | SDK Service |
-|---------------|-------------|-------------|
-| `oaksearch search` | lessons, units, sequences, suggest, facets | `RetrievalService` |
-| `oaksearch admin` | setup, reset, status, synonyms, meta, ingest, verify, download, ... | `AdminService` |
-| `oaksearch eval` | benchmark (all/lessons/units/threads/sequences), validate, typegen | Pass-through |
-| `oaksearch observe` | telemetry, summary, purge | `ObservabilityService` |
+See [apps/oak-search-cli/README.md](../../apps/oak-search-cli/README.md#cli-commands-oaksearch) for the full CLI command reference.
 
 ---
 

@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 
 /* eslint max-lines-per-function: ["error", 300] */
@@ -8,15 +9,29 @@ import { toolNames } from '@oaknational/oak-curriculum-sdk/public/mcp-tools.js';
 const ACCEPT = 'application/json, text/event-stream';
 
 /**
- * Configure environment for auth bypass in E2E tests.
- * These scenarios target protocol behaviour; auth enforcement is asserted in
- * auth-enforcement.e2e.test.ts and the smoke-dev-auth run.
+ * Isolated test environment with auth bypassed.
+ * No global `process.env` mutation — see ADR-078.
  */
-function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.CLERK_PUBLISHABLE_KEY = 'REDACTED';
-  process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-}
+const authBypassedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
+
+/**
+ * Isolated test environment with auth enforced.
+ * No `DANGEROUSLY_DISABLE_AUTH` — Clerk middleware is active.
+ */
+const authEnforcedEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
@@ -52,19 +67,9 @@ function toolNamesFromResult(value: unknown): string[] {
 }
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
-  beforeEach(() => {
-    // Default: enable auth bypass; individual tests re-enable auth when required.
-    enableAuthBypass();
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    delete process.env.ALLOWED_ORIGINS;
-  });
-
   it('returns HTTP 401 with WWW-Authenticate when missing Authorization for protected tools', async () => {
-    // Override: enable auth enforcement for this test
-    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
-
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authEnforcedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
@@ -87,7 +92,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns 200 with auth bypassed and list_tools parity', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -117,7 +123,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects missing Accept header with 406', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -128,7 +135,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('rejects initialize without clientInfo', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -149,7 +157,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -172,7 +181,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('initialize response includes server instructions for agent guidance', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -198,7 +208,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {
-    const app = createApp();
+    const runtimeConfig = loadRuntimeConfig(authBypassedEnv);
+    const app = createApp({ runtimeConfig });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -221,7 +232,4 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)
-
-  // TODO: Add E2E test with real Clerk token once automated flow is available.
-  // Requires: OAuth Device / programmatic flow support from Clerk.
 });

@@ -12,7 +12,7 @@
  *
  * @see thread-progression-data.ts for the graph data structure
  * @see aggregated-knowledge-graph.ts for the companion schema-level graph
- * @see {@link https://github.com/oaknationalacademy/oak-notion-mcp/blob/main/docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
+ * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for extraction methodology
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

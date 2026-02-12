@@ -199,7 +199,7 @@ function handleSummaryResult(
 
     // Treat all ingestion-recoverable errors the same - skip this lesson
     if (isIngestionRecoverableError(error)) {
-      if (error.kind === 'not_found') {
+      if (error.kind === 'not_found' || error.kind === 'legally_restricted') {
         getIngestionErrorCollector().record404(errorContext, 'getLessonSummary');
       } else if (error.kind === 'network_error') {
         getIngestionErrorCollector().recordError(

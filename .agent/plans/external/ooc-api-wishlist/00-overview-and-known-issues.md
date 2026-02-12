@@ -860,49 +860,55 @@ See Item 13 in `05-medium-priority-requests.md`: Add `hasVideo`/`hasTranscript` 
 
 ---
 
-## MFL Transcript API Response Inconsistency (2026-01-03)
+## MFL Transcript API Response Inconsistency (2026-01-03, updated 2026-02-12)
 
-**Status**: 🔴 BUG — Inconsistent error responses for the same condition
+**Status**: 🟡 PARTIALLY FIXED — Now consistent 451, but body mislabelling and missing schema docs remain
 **Endpoint**: `/api/v0/lessons/{lesson}/transcript`
-**Impact**: Cannot reliably detect "no transcript" vs "server error"
+**Impact**: Consistency improved; remaining issues are cosmetic and documentation-level
 
-### Observation
+### Observation (original, 2026-01-03)
 
-MFL (French, Spanish, German) lessons consistently lack transcripts, but the API returns **different error types** for the same underlying condition:
+MFL (French, Spanish, German) lessons consistently lack transcripts. The API originally returned **different error types** for the same underlying condition: 500 for French/German, 404 for Spanish.
 
-| Subject | Lesson Example | Response | Expected |
-|---------|----------------|----------|----------|
-| French | (any KS3 lesson) | **500 Internal Server Error** | 404 |
-| Spanish | (any KS3 lesson) | **404 "not available"** | 404 ✅ |
-| German | (any KS3 lesson) | **500 Internal Server Error** | 404 |
+### Update (2026-02-12)
 
-**Tested 2026-01-03 via API**
+The upstream API now returns HTTP 451 (Unavailable For Legal Reasons) consistently for all MFL transcripts and some maths lessons. This is a significant improvement.
+
+| Subject | Lesson Example                          | Old Response | Current Response |
+| ------- | --------------------------------------- | ------------ | ---------------- |
+| French  | `greetings-and-introductions`           | 500          | **451**          |
+| German  | `mein-traumhaus-describing-your-dream-home` | 500      | **451**          |
+| Spanish | `mi-familia-introducing-your-family`    | 404          | **451**          |
+| Maths   | `pythagoras-theorem`                    | n/a          | **451**          |
+
+Response body:
+
+```json
+{"code":"INTERNAL_SERVER_ERROR","statusCode":451,"message":"Transcript not available: \"...\""}
+```
 
 ### Root Cause
 
-MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The videos exist, but transcripts were never generated.
+MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The videos exist, but transcripts were never generated. HTTP 451 (Unavailable For Legal Reasons) is semantically appropriate for TPC-restricted content.
 
-### Impact
+### Remaining Issues
 
-1. **Observability**: 500 errors trigger alerts; 404s don't
-2. **Retry Logic**: Consumers may retry 500s assuming transient failure
-3. **Caching**: 500s typically aren't cached; 404s can be cached
-4. **Error Budgets**: 500s count against SLOs; 404s don't
+1. **Body mislabelling**: Response body says `code: "INTERNAL_SERVER_ERROR"` despite the HTTP status being 451. The `code` should reflect the actual status (e.g. `UNAVAILABLE_FOR_LEGAL_REASONS`).
+2. **Missing schema documentation**: HTTP 451 is not documented as a possible response in the OpenAPI schema for the transcript endpoint.
+3. **Broader TPC enforcement**: Some maths lessons (e.g. `pythagoras-theorem`) now also return 451. The scope of TPC enforcement appears broader than originally observed.
 
-### Requested Fix
+### SDK Handling
 
-Return consistent 404 responses with explicit reason:
+Our SDK classifies HTTP 451 as `legally_restricted` — a distinct error kind, separate from `not_found` (404). Both are permanent and non-retryable, but have different semantics: 404 means "does not exist", 451 means "exists but is legally inaccessible". The transcript cache stores each with its own status for observability. See ADR-109 and the `classifyHttpError` function in the generated error types.
 
-```json
-HTTP 404 Not Found
-{
-  "error": "not_found",
-  "reason": "no_transcript_available",
-  "message": "This lesson does not have a transcript. MFL lessons with non-English audio are not transcribed."
-}
-```
+### Original Requested Fix (now partially addressed)
 
-**User impact**: API consumers and SDK/MCP engineers can correctly handle MFL lessons; monitoring systems don't fire false alerts.
+The original request was for consistent 404 responses. The upstream chose 451 instead, which is arguably more semantically precise (legal/licensing reason rather than generic "not found"). The consistency issue is resolved. The remaining requests are:
+
+1. Fix the response body `code` field to match the HTTP status
+2. Document 451 as a possible response in the OpenAPI schema
+
+**User impact**: SDK/MCP consumers can now reliably detect unavailable transcripts. Monitoring no longer fires false 5xx alerts for MFL lessons.
 
 ---
 

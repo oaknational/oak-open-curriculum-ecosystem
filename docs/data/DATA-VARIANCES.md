@@ -50,21 +50,28 @@ Source: [Content Coverage](https://open-api.thenational.academy/docs/about-oaks-
 
 **Observed gaps (API)**:
 
-- MFL transcript endpoint returns 404/500 (near-zero coverage)
+- MFL transcript endpoint returns 451 (near-zero coverage)
+- Some maths lessons also return 451 (broader TPC enforcement)
 - PE Primary near-zero; PE Secondary partial
 - Non-maths subjects can return 404 even when bulk has transcripts (TPC filtering)
 
 ### Root Cause for MFL
 
-**Verified 2026-01-03 via API**:
+**Verified 2026-02-12 via API** (updated from 2026-01-03):
 
-| Subject | API Transcript Response | Video Asset |
-| ------- | ----------------------- | ----------- |
-| French  | 500 server error        | ✅ Exists   |
-| Spanish | 404 "not available"     | ❌ 404      |
-| German  | 500 server error        | ✅ Exists   |
+| Subject | Lesson Example                                                      | Old Response | Current Response | Video Asset |
+| ------- | ------------------------------------------------------------------- | ------------ | ---------------- | ----------- |
+| French  | `greetings-and-introductions`                                       | 500          | **451**          | Exists      |
+| German  | `mein-traumhaus-describing-your-dream-home`                         | 500          | **451**          | Exists      |
+| Spanish | `mi-familia-introducing-your-family`                                | 404          | **451**          | 404         |
+| Maths   | `pythagoras-theorem`                                                | n/a          | **451**          | Exists      |
+| Maths   | `checking-understanding-of-addition-and-subtraction-with-fractions` | 200          | **200**          | Exists      |
 
-**Explanation (API behaviour)**: MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The API transcript endpoint returns 404/500 for these lessons; bulk download shows `transcript_sentences` mostly `"NULL"` for MFL, so transcript coverage is near-zero in both sources.
+The upstream API now returns HTTP 451 (Unavailable For Legal Reasons) consistently for unavailable transcripts. This is a significant improvement over the previous inconsistent 500/404 responses.
+
+**Note**: The response body claims `code: "INTERNAL_SERVER_ERROR"` despite the HTTP status being 451. This is a remaining upstream inconsistency. HTTP 451 is also not yet documented in the upstream OpenAPI schema.
+
+**Explanation (API behaviour)**: MFL lesson videos contain non-English speech. Automatic captioning services (trained on English) fail or produce garbage. The API transcript endpoint returns 451 for these lessons; bulk download shows `transcript_sentences` mostly `"NULL"` for MFL, so transcript coverage is near-zero in both sources. Some maths lessons (e.g. `pythagoras-theorem`) also return 451, suggesting broader TPC (Third Party Content) enforcement.
 
 **API search implication**: MFL search relies entirely on:
 

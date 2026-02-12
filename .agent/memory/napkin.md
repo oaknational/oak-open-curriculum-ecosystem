@@ -1,5 +1,50 @@
 # Napkin
 
+## Session: 2026-02-12 — Castr Plan Corrections
+
+### Context
+
+- User clarified two corrections to Castr integration plans:
+  1. The adapter (`openapi-zod-client-adapter`) can stay in place initially during Castr integration — removal is a subsequent step, not a prerequisite
+  2. Castr replaces `openapi3-ts` alongside `openapi-zod-client` — this was partially documented in the Castr README but missing from ADR-108, high-level plan, and ADR-055
+
+### What Was Done
+
+- **Updated ADR-108**: Added openapi3-ts to replacement scope in workspace 1 description, Step 2 phased execution, and "Relationship to Castr" section. Softened adapter removal to phased approach (stays initially, validated side-by-side, removed later).
+- **Updated high-level-plan.md**: Item #3 (Castr Integration) now mentions both libraries, adapter stays initially, acceptance criterion changed from "adapter removed" to "adapter removal planned". Glossary entry updated.
+- **Updated sdk-workspace-separation-plan.md**: Related plans table now mentions both libraries.
+- **Updated Castr README**: Phase 1 deliverable and Integration Prerequisites restructured into 3 steps (workspace separation, side-by-side validation, adapter removal). Already had both libraries in Functional Criteria.
+- **Updated ADR-055**: Added forward reference to Castr replacing both libraries and ADR-108 link. Added note that adapter can remain during validation.
+
+### Key Insight
+
+- `openapi3-ts` has a much larger footprint (~70+ files across `type-gen/`) than `openapi-zod-client` (2 source files in the adapter). It provides OpenAPI type definitions (`OpenAPIObject`, `SchemaObject`, `PathItemObject` etc.) used throughout the entire generation pipeline. Castr replacing it means Castr must provide equivalent type definitions.
+
+---
+
+## Session: 2026-02-12 — Remediation, Validation, and Documentation Migration
+
+### Completed
+
+- **WS1**: HTTP 451 initially collapsed into `not_found` — **WRONG** (lazy shortcut). Corrected: 451 is now `legally_restricted`, a distinct error kind. TDD: RED -> GREEN. Fix in generator template, not generated output. ADR-109 rewritten.
+- **WS3**: Updated 5 stale docs: DATA-VARIANCES (451 verification), API wishlist (partial fix), ADR-078 (widened scope to all tests), ADR-092 (451 in cache flow), archive plan (resolution note).
+- **WS2a**: Removed `apps/oak-notion-mcp/` entirely. Updated pnpm-workspace, .env.example, vitest base config, ESLint boundary rule, README, quick-start, env-vars docs, troubleshooting guide (rewritten), safety docs, openapi-pipeline docs, 25 SDK TSDoc `@see` links (redirected to local ADR-086).
+- **WS2b**: Refactored `built-server.e2e.test.ts` to in-process supertest (DI pattern). Deleted `vitest.e2e.built.config.ts`. Removed `test:e2e:built` from turbo.json, both package.jsons, AGENT.md, build-system docs, ADR-065, SETUP.md. Updated smoke:dev:stub dependency. Added historical notes to BUILD_VERIFICATION.md and TESTING_GAP_ANALYSIS.md.
+- **WS2c**: Fixed `process.env` mutation in 5 E2E tests: server, widget-metadata, tool-examples-metadata, header-redaction, and index.e2e.test.ts. All now use `loadRuntimeConfig(isolatedEnv)` + `createApp({ runtimeConfig })`.
+- **WS4**: Compliance sweep passed. Zero `enableAuthBypass` functions remain. Zero `process.env` mutations in E2E tests. Generator is source of truth.
+- **Quality gates**: Full chain passed (type-gen, build, type-check, lint:fix, format, markdownlint, test, test:e2e, test:ui, smoke:dev:stub).
+- **Search benchmarks**: MRR 0.985, NDCG 0.946 overall. All targets met. No regression from SDK refactor.
+- **Documentation migration**: ADR-109 (451 classification), CLI commands table migrated to search-cli README, prompt references updated to point to permanent docs.
+
+### Lessons
+
+- **NEVER collapse distinct HTTP semantics into a single error kind** — 404 and 451 have different meanings. Collapsing them is a lazy shortcut that destroys information. Each HTTP status with distinct semantics gets its own error kind, cache status, and log message.
+- `pnpm benchmark` not `pnpm eval:benchmark` — the CLI package.json uses `benchmark` directly
+- Vitest E2E config `exclude` array was silently preventing `built-server.e2e.test.ts` from running in main suite — remove exclude when merging
+- When removing a workspace, search for references in TSDoc `@see` links too — they can point to old GitHub repo URLs
+
+---
+
 ## Session: 2026-02-12 — Public Release Readiness Plan
 
 ### Context

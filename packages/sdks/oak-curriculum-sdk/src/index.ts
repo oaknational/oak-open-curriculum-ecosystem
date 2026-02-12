@@ -165,6 +165,7 @@ export {
 export type {
   SdkFetchError,
   SdkNotFoundError,
+  SdkLegallyRestrictedError,
   SdkServerError,
   SdkRateLimitError,
   SdkNetworkError,

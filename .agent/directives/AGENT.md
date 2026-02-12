@@ -94,8 +94,7 @@ pnpm markdownlint:root    # Markdown lint
 pnpm lint:fix       # Lint
 pnpm test           # Unit and integration tests
 pnpm test:ui        # UI tests
-pnpm test:e2e       # E2E tests
-pnpm test:e2e:built # E2E tests on built app
+pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 
 # All in one command

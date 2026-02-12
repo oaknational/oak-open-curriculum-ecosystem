@@ -28,7 +28,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:e2e:built": "vitest run --config vitest.e2e.built.config.ts",
     "test:ui": "playwright test"
   },
   "dependencies": {

@@ -155,7 +155,7 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
       zones: [
         {
           target: './src/**',
-          from: '../!(oak-notion-mcp)/**',
+          from: '../*/**',
           message: 'Apps cannot import from other apps. Each app is independent.',
         },
       ],

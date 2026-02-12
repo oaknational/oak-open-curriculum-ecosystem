@@ -74,6 +74,11 @@ function handleUnitError(
       ingestLogger.warn(`Unit not_found - skipping`, { ...context, errorDetail });
       return null;
 
+    case 'legally_restricted':
+      errorCollector.record404(context, 'getUnitSummary');
+      ingestLogger.warn(`Unit legally_restricted - skipping`, { ...context, errorDetail });
+      return null;
+
     case 'server_error':
       errorCollector.record500Error(context, 'getUnitSummary');
       ingestLogger.warn(`Unit server_error - skipping`, { ...context, errorDetail });

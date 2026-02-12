@@ -264,7 +264,7 @@ draws the generic/Oak-specific boundary within each side.
 |---|---|
 | [openapi-to-tooling-integration-plan.md](openapi-to-tooling-integration-plan.md) | Describes the generic pipeline (WS1) extracted from WS2 in Step 2 |
 | [openapi-to-mcp-framework-extraction-plan.md](openapi-to-mcp-framework-extraction-plan.md) | Describes the full framework extraction including runtime (WS3) |
-| [Castr requirements](../external/castr/README.md) | Castr replaces openapi-zod-client after this separation |
+| [Castr requirements](../external/castr/README.md) | Castr replaces openapi-zod-client and openapi3-ts after this separation |
 | [MCP Infrastructure plan](../sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md) | Aggregated tools refactor targets WS2 (type-gen) and WS4 (runtime) |
 
 ---

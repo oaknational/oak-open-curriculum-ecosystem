@@ -109,6 +109,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-106: Known-Answer-First Ground Truth Methodology](106-known-answer-first-ground-truth-methodology.md)
 - [ADR-107: Deterministic SDK / NL-in-MCP Boundary](107-deterministic-sdk-nl-in-mcp-boundary.md)
 - [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md)
+- [ADR-109: HTTP 451 as Distinct Error Classification](109-http-451-distinct-classification.md)
 
 ## Key Architectural Decisions
 
