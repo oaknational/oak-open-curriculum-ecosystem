@@ -106,6 +106,21 @@ codebase (462 files). `eslint-plugin-tsdoc` added with
 
 ## What Needs Doing Next
 
+### Remediation: HTTP 451 + Test Strategy + Documentation
+
+Cross-cutting remediation discovered 2026-02-12 during
+transcript endpoint investigation. The upstream API now
+returns HTTP 451 (Unavailable For Legal Reasons) instead of
+the previously documented 500/404. Our error classification,
+E2E tests, and documentation are out of alignment.
+
+**Plan**: [transcript-451-test-doc-remediation.plan.md](../../plans/semantic-search/active/transcript-451-test-doc-remediation.plan.md)
+
+Four workstreams: 451 error handling (generator fix), E2E test
+compliance (network IO removal, `process.env` cleanup), stale
+documentation updates, directive compliance sweep. Can run in
+parallel with SDK validation below.
+
 ### Search SDK Validation (Phase 2e)
 
 The SDK was completely rewritten during extraction. Before
@@ -191,8 +206,6 @@ Before starting work:
 
 The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
-
-[ADR-107]: /docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md
 
 ---
 

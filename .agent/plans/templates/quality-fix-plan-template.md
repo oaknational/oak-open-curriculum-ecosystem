@@ -517,7 +517,7 @@ Run these commands to verify all fixes:
 
 ```bash
 # Full quality gate sequence
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm type-gen   # Generate types
 pnpm build      # Build all packages
 pnpm type-check # Type check

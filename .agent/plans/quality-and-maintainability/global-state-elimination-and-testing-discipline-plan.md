@@ -580,9 +580,14 @@ rg "vi\.mock\(" --glob "*.test.ts*" -l | wc -l
 
 ## Next Steps
 
-The remaining `vi.doMock` and `process.env` issues in `oak-notion-mcp` require architectural refactoring of the config/env layer. This is tracked in a dedicated plan:
+~~The remaining `vi.doMock` and `process.env` issues in
+`oak-notion-mcp` required architectural refactoring.~~ The
+`oak-notion-mcp` workspace has been removed entirely (see
+Item #4 in the [high-level plan](../high-level-plan.md)).
+These issues no longer exist.
 
-**→ [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md)**
+Remaining config standardisation work for other apps is
+tracked in the [Config Architecture Standardisation Plan](../architecture/config-architecture-standardisation-plan.md).
 
 ---
 

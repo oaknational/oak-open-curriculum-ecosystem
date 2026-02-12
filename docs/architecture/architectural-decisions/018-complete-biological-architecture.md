@@ -9,7 +9,7 @@ Accepted
 Our initial cellular architecture (ADR-006) provided a good foundation but had limitations:
 
 - Treated all components as "organs" regardless of their nature
-- No clear distinction between infrastructure (logging) and business logic (Notion)
+- No clear distinction between infrastructure (logging) and business logic
 - Unclear how cross-cutting concerns should be handled
 - Missing the concept of shared foundations
 - No provision for multi-application ecosystems
@@ -61,7 +61,7 @@ Refine our biological architecture to include all levels found in nature:
 
 - Clear physical boundaries
 - Specific business function
-- Examples: Notion integration, MCP protocol handler
+- Examples: search integration, MCP protocol handler
 
 ### 5. Organism (Complete Application)
 
@@ -80,7 +80,7 @@ Refine our biological architecture to include all levels found in nature:
 ### Biological Accuracy
 
 - Real organisms have both discrete organs AND pervasive systems
-- This distinction explains why logging feels different from Notion integration
+- This distinction explains why logging feels different from business logic integration
 - Provides natural patterns for different types of components
 
 ### Mathematical Foundation
@@ -133,14 +133,14 @@ This tri-level structure mirrors findings in neuroscience where signals have str
 src/
 ├── substrate/           # Foundation layer ✅ COMPLETED
 │   ├── types/          # Core types (LogLevel, etc.)
-│   ├── contracts/      # Logger, Config, EventBus, NotionOperations
+│   ├── contracts/      # Logger, Config, EventBus, DomainOperations
 │   └── event-schemas/  # Event blueprints
 ├── systems/            # Pervasive infrastructure ✅ COMPLETED
 │   ├── logging/        # Nervous system (flattened to 2 levels)
 │   ├── events/         # Edge-compatible event bus
 │   └── config/         # Configuration (moved from substrate)
 ├── organs/             # Discrete business logic ✅ COMPLETED
-│   ├── notion/         # Notion integration (with public API)
+│   ├── search/         # Search integration (with public API)
 │   └── mcp/            # MCP protocol (dependency injection)
 └── organism.ts         # Application assembly ⏳ PENDING
 ```
@@ -160,7 +160,7 @@ The implementation reduced relative import warnings from 103 to 91 (all remainin
 
 While the original design included a "tissue" level between cells and organs/systems, we simplified the implementation to avoid over-engineering. In practice:
 
-- What we called "tissues" are simply subdirectories within organa (e.g., `notion/formatters/`, `notion/transformers/`)
+- What we called "tissues" are simply subdirectories within organa (e.g., `search/formatters/`, `search/transformers/`)
 - These groupings emerge naturally without needing a formal architectural concept
 - The biological metaphor remains clear without this intermediate level
 

@@ -45,7 +45,7 @@ This plan prioritises:
 | `oak-curriculum-mcp-streamable-http`  | `env.ts` + `runtime-config.ts`      | ✅   | ✅ `readEnv(source)`           | **Canonical**     |
 | `oak-curriculum-mcp-stdio`            | `runtime-config.ts` only            | ❌   | ✅ `loadRuntimeConfig(source)` | **Good**          |
 | `oak-search-cli` | `env.ts` (private `readProcessEnv`) | ✅   | ❌ `env()` reads directly      | **Mixed**         |
-| `oak-notion-mcp`                      | `env-utils.ts` + `environment.ts`   | ❌   | ❌ Module-level const          | **Non-compliant** |
+| ~~`oak-notion-mcp`~~                  | ~~Removed~~ | — | — | **Removed** (see Item #4 in [high-level-plan](../high-level-plan.md)) |
 
 ### Existing Shared Package: `@oaknational/mcp-env`
 
@@ -126,16 +126,12 @@ function env(): Env {
 
 **Impact**: Tests require `vi.doMock` or `process.env` mutations, causing flaky tests and race conditions.
 
-### Problem 4: Module-Level Constants
+### ~~Problem 4: Module-Level Constants~~ (Resolved)
 
-`oak-notion-mcp/environment.ts` evaluates at import time:
-
-```typescript
-export const env: NotionEnvironment = {
-  NOTION_API_KEY: getString('NOTION_API_KEY'), // Called at import!
-  // ...
-};
-```
+~~`oak-notion-mcp/environment.ts` evaluated at import time.~~
+The `oak-notion-mcp` workspace has been removed entirely
+(see Item #4 in [high-level-plan](../high-level-plan.md)).
+This problem no longer exists.
 
 **Impact**: Cannot test without mocking the module itself; test isolation impossible.
 
@@ -175,18 +171,12 @@ export const readEnv = createEnvReader(AppEnvSchema);
 
 ## Options Considered
 
-### Option A: Minimal - Fix `oak-notion-mcp` Only ❌
+### ~~Option A: Minimal - Fix `oak-notion-mcp` Only~~ ❌ (Moot)
 
-**Scope**: Create `env.ts` and `runtime-config.ts` in `oak-notion-mcp` only.
+~~**Scope**: Create `env.ts` and `runtime-config.ts` in `oak-notion-mcp` only.~~
 
-**Why Not**:
-
-- Creates the 4th implementation of the same patterns
-- Continues duplication across apps
-- Dead code in `@oaknational/mcp-env` remains
-- "Quick fix now, proper fix later" often means the proper fix never happens
-
-**Verdict**: ❌ Creates technical debt; contradicts architectural principles.
+The `oak-notion-mcp` workspace has been removed. This option
+is no longer relevant.
 
 ---
 
@@ -251,7 +241,7 @@ export const readEnv = createEnvReader(AppEnvSchema);
 | Implement base schemas         | 1 hour    |
 | Implement parsing utilities    | 1 hour    |
 | Migrate `loadRootEnv`          | 0.5 hours |
-| Migrate `oak-notion-mcp`       | 2 hours   |
+| ~~Migrate `oak-notion-mcp`~~   | ~~removed~~ |
 | Migrate `oak-curriculum-stdio` | 1 hour    |
 | Migrate `oak-semantic-search`  | 1.5 hours |
 | Migrate `oak-streamable-http`  | 0.5 hours |
@@ -469,53 +459,15 @@ Update all 4 apps to use `@oaknational/mcp-config`, eliminating duplication and 
 
 ### Tasks
 
-#### 2.1 Migrate `oak-notion-mcp` (Non-compliant → Canonical)
+#### ~~2.1 Migrate `oak-notion-mcp`~~ (Removed)
 
-This is the most work as it requires complete refactoring.
+The `oak-notion-mcp` workspace has been removed entirely.
+This task is no longer needed. See Item #4 in the
+[high-level plan](../high-level-plan.md).
 
-**Files to create**:
-
-- `apps/oak-notion-mcp/src/env.ts`
-- `apps/oak-notion-mcp/src/runtime-config.ts`
-
-**Files to delete**:
-
-- `apps/oak-notion-mcp/src/config/notion-config/env-utils.ts`
-- `apps/oak-notion-mcp/src/config/notion-config/env-utils.unit.test.ts`
-- `apps/oak-notion-mcp/src/config/notion-config/environment.ts`
-
-**Files to update**:
-
-- `apps/oak-notion-mcp/src/index.ts` - Load config once, pass to app
-- `apps/oak-notion-mcp/src/app/*.ts` - Accept config as parameter
-- All unit tests - Remove `vi.doMock`, use DI
-
-**Example `env.ts`**:
-
-```typescript
-import { BaseEnvSchema, createEnvReader } from '@oaknational/mcp-config';
-import { z } from 'zod';
-
-const NotionEnvSchema = BaseEnvSchema.extend({
-  NOTION_API_KEY: z.string().min(1, 'NOTION_API_KEY is required'),
-  MAX_SEARCH_RESULTS: z.coerce.number().min(1).max(1000).default(100),
-});
-
-export interface Env {
-  NOTION_API_KEY: string;
-  MAX_SEARCH_RESULTS: number;
-}
-
-export const readEnv = createEnvReader(NotionEnvSchema);
-```
-
-**Acceptance Criteria**:
-
-- [ ] Uses `@oaknational/mcp-config` for base schema and factory
-- [ ] `readEnv()` accepts optional source parameter
-- [ ] Legacy config files deleted
-- [ ] Zero `vi.doMock` in unit tests
-- [ ] All tests pass
+~~**Original plan**: Complete refactoring from module-level
+constants to the canonical `env.ts` + `runtime-config.ts`
+pattern. This was the largest migration task.~~
 
 #### 2.2 Migrate `oak-curriculum-mcp-stdio` (Good → Canonical)
 

@@ -56,7 +56,6 @@ Establish a production-ready publishing and versioning workflow so that:
 **Private Packages** (not published):
 
 - `oak-search-cli` - Internal app
-- `oak-notion-mcp` - Example/demo only
 
 ### Versioning Strategy
 
@@ -315,7 +314,7 @@ pnpm dlx @oaknational/oak-curriculum-mcp-streamable-http --port 3000
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["oak-search-cli", "oak-notion-mcp"]
+  "ignore": ["oak-search-cli"]
 }
 ```
 

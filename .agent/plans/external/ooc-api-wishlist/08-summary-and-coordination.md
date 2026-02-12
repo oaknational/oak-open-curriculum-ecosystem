@@ -83,7 +83,7 @@ These enhancements can be implemented incrementally:
 
 After each schema change:
 
-1. Run `pnpm type-gen` in oak-notion-mcp
+1. Run `pnpm type-gen` in the MCP ecosystem
 2. Verify generated types and tools update correctly
 3. Test AI tool discovery in ChatGPT Developer Mode
 4. Measure tool selection accuracy improvements
@@ -92,7 +92,7 @@ After each schema change:
 
 - **API team:** Schema updates, new endpoint implementation
 - **Documentation team:** Review descriptions for clarity and consistency
-- **AI integration team (oak-notion-mcp):** Validate generated outputs, provide feedback
+- **AI integration team:** Validate generated outputs, provide feedback
 - **Product team:** Align tool usage guidance with user workflows
 
 ---
@@ -137,7 +137,7 @@ After each schema change:
 
 - **Live Demo**: Try the current MCP tools at `https://open-api.thenational.academy/mcp` (requires API key)
 - **Example ChatGPT Session**: [To be added - show real teacher using curriculum tools]
-- **GitHub**: [oak-notion-mcp repository link - if public]
+- **GitHub**: [oak-mcp-ecosystem repository link - if public]
 
 ---
 

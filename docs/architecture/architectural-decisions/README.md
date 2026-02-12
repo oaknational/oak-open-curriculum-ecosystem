@@ -9,7 +9,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-001: ESM-Only Package](001-esm-only-package.md)
 - [ADR-002: Pure Functions First](002-pure-functions-first.md)
 - [ADR-003: Zod for Runtime Validation](003-zod-for-validation.md)
-- [ADR-004: Abstract Notion SDK Behind Interface](004-no-direct-notion-sdk-usage.md)
+- [ADR-004: Abstract Notion SDK Behind Interface](004-no-direct-notion-sdk-usage.md) ← **Deprecated** (workspace removed)
 - [ADR-005: Automatic PII Scrubbing](005-automatic-pii-scrubbing.md)
 - [ADR-006: Cellular Architecture Pattern](006-cellular-architecture-pattern.md)
 - [ADR-007: Accept Current Technical Debt as Architectural Markers](007-accept-current-technical-debt.md)

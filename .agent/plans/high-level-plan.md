@@ -115,7 +115,40 @@ quality gate chain passes; adapter removed.
 
 ---
 
-### 4. Search Quality Enhancements — Status: 📋 PLANNED (Priority 4)
+### 4. Notion MCP Workspace Removal — Status: 📋 PLANNED (Priority 4)
+
+The `oak-notion-mcp` workspace was originally included to
+force generalisation of code that needed to support multiple
+MCP servers. That generalisation is now achieved — the
+generic pipeline vision (ADR-108) and the existing
+multi-server architecture (stdio + streamable-http) have
+made Notion's role as an architectural forcing function
+obsolete. The workspace code has already been removed.
+
+**What remains**: References to Notion in ~30 active
+documentation files across `.agent/plans/`, `docs/`, and
+`docs/architecture/`. These need cleaning:
+
+- Remove `oak-notion-mcp` from all active plans (config,
+  DI, testing, stryker, publishing, ESLint)
+- Remove Notion tools, resources, and API references from
+  `docs/usage/`, `docs/development/`, `docs/agent-guidance/`
+- Remove Notion SDK from `docs/development/tooling.md`
+- Remove `NOTION_API_KEY` from env vars documentation
+- Retain a single historical note (in the Completed section
+  or an ADR) explaining why the workspace once existed and
+  why it was removed
+- Archive (do not delete) `docs/usage/api-reference.md` if
+  it is entirely Notion-specific
+- Archive `.agent/reference-docs/notion-sdk-readme.md` and
+  `notion-api-overview.md`
+
+**Acceptance**: No active documentation references Notion
+except the single historical note. Quality gates pass.
+
+---
+
+### 5. Search Quality Enhancements — Status: 📋 PLANNED (Priority 5)
 
 **Plan**: [semantic-search/roadmap.md](semantic-search/roadmap.md) (Phase 4)  
 **Acceptance criteria**: [semantic-search/search-acceptance-criteria.md](semantic-search/search-acceptance-criteria.md)
@@ -134,7 +167,7 @@ Multiple parallel streams after MCP integration:
 
 ---
 
-### 5. Curriculum Ontology MCP Resource — Status: 📋 PLANNED (Priority 5)
+### 6. Curriculum Ontology MCP Resource — Status: 📋 PLANNED (Priority 6)
 
 **Plan**: [sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md](sdk-and-mcp-enhancements/02-curriculum-ontology-resource-plan.md)
 
@@ -146,7 +179,7 @@ knowledge for AI agents.
 
 ---
 
-### 6. OpenAI Apps SDK Integration — Status: 📋 PLANNED (Priority 6)
+### 7. OpenAI Apps SDK Integration — Status: 📋 PLANNED (Priority 7)
 
 **Plan**: [sdk-and-mcp-enhancements/08-openai-apps-sdk-feature-adoption-plan.md](sdk-and-mcp-enhancements/08-openai-apps-sdk-feature-adoption-plan.md)
 
@@ -155,7 +188,7 @@ widget capabilities, token optimization, tool visibility.
 
 ---
 
-### 7. MCP Tool Metadata Enhancement — Status: 🟡 PHASE 0 COMPLETE (Priority 7)
+### 8. MCP Tool Metadata Enhancement — Status: 🟡 PHASE 0 COMPLETE (Priority 8)
 
 **Plan**: [sdk-and-mcp-enhancements/01-mcp-tool-metadata-enhancement-plan.md](sdk-and-mcp-enhancements/01-mcp-tool-metadata-enhancement-plan.md)
 
@@ -166,7 +199,7 @@ widget capabilities, token optimization, tool visibility.
 
 ---
 
-### 8. Contract Testing — Status: 📋 PLANNED (Priority 8)
+### 9. Contract Testing — Status: 📋 PLANNED (Priority 9)
 
 **Plan**: [dev-tooling-and-dev-ai-support/contract-testing-schema-evolution-plan.md](dev-tooling-and-dev-ai-support/contract-testing-schema-evolution-plan.md)
 

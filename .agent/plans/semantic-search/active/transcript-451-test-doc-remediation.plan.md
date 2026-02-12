@@ -1,23 +1,63 @@
 # Transcript 451 + Test Strategy + Documentation Remediation
 
-**Status**: Ready  
+**Status**: Ready -- execute all workstreams  
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)  
 **Last Updated**: 2026-02-12
 
 ---
 
+## Instruction
+
+This plan contains four workstreams and a final quality gate.
+**Execute all of them.** Each workstream is self-contained with
+a problem statement, concrete file-level instructions, and a
+completion checklist. Mark each workstream done as you finish it.
+
+Before starting, read the three foundation documents below.
+Re-read them at each workstream boundary.
+
+---
+
+## Workstream Status
+
+| ID | Workstream | Status |
+| --- | --- | --- |
+| WS1 | [Handle HTTP 451 in SDK error classification](#workstream-1-handle-http-451-in-sdk-error-classification) | Pending |
+| WS2 | [Remove network IO from E2E tests](#workstream-2-remove-network-io-from-e2e-tests) | Pending |
+| WS3 | [Update stale documentation](#workstream-3-update-stale-documentation) | Pending |
+| WS4 | [Verify directive compliance](#workstream-4-verify-directive-compliance) | Pending |
+| QG | [Quality gates](#quality-gates) | Pending |
+
+**Recommended order**: WS1 -> WS3 -> WS2 -> WS4 -> QG.
+WS1 is small and unblocks WS3 documentation accuracy. WS2 is
+the largest workstream. WS4 must run after all code changes.
+
+---
+
+## Foundation Documents (MUST READ + RE-COMMIT)
+
+Before starting, and again at each workstream boundary, re-read
+and explicitly re-commit to:
+
+1. `.agent/directives/rules.md`
+2. `.agent/directives/testing-strategy.md`
+3. `.agent/directives/schema-first-execution.md`
+
+---
+
 ## Context
 
-Investigation of the `/lessons/{lesson}/transcript` endpoint (2026-02-12)
-revealed five issues requiring remediation:
+Investigation of the `/lessons/{lesson}/transcript` endpoint
+(2026-02-12) revealed five issues requiring remediation:
 
-1. The upstream API now returns HTTP 451 (Unavailable For Legal Reasons)
-   for unavailable transcripts. Our code does not handle this status.
+1. The upstream API now returns HTTP 451 (Unavailable For Legal
+   Reasons) for unavailable transcripts. Our code does not
+   handle this status.
 2. E2E tests exist that perform forbidden network IO.
-3. Documentation records stale 500/404 behaviour that no longer matches
-   upstream reality.
-4. Error classification misclassifies 451 as `network_error`.
-5. Tests and code must align with the three directives.
+3. E2E tests mutate `process.env` instead of using DI.
+4. Documentation records stale 500/404 behaviour that no longer
+   matches upstream reality.
+5. Error classification misclassifies 451 as `network_error`.
 
 ### Verification (2026-02-12)
 
@@ -31,19 +71,14 @@ Live API calls confirmed the upstream change:
 | `pythagoras-theorem` | Maths | n/a | **451** |
 | `checking-understanding-of-addition-and-subtraction-with-fractions` | Maths | 200 | **200** |
 
-Response body: `{"code":"INTERNAL_SERVER_ERROR","statusCode":451,"message":"Transcript not available: \"...\"}`.
-The body self-labels as `INTERNAL_SERVER_ERROR` despite the HTTP status being 451.
+Response body:
 
----
+```json
+{"code":"INTERNAL_SERVER_ERROR","statusCode":451,"message":"Transcript not available: \"...\""}
+```
 
-## Foundation Documents (MUST READ + RE-COMMIT)
-
-Before starting, and again at each workstream boundary, re-read and
-explicitly re-commit to:
-
-1. `.agent/directives/rules.md`
-2. `.agent/directives/testing-strategy.md`
-3. `.agent/directives/schema-first-execution.md`
+The body self-labels as `INTERNAL_SERVER_ERROR` despite the
+HTTP status being 451. This is a remaining upstream bug.
 
 ---
 
@@ -51,9 +86,10 @@ explicitly re-commit to:
 
 ### Problem
 
-`classifyHttpError` handles 404, 429, and 500-504. HTTP 451 falls through
-to the catch-all `network_error`, which is semantically wrong. 451 is a
-permanent 4xx status ("Unavailable For Legal Reasons"), not a transient
+`classifyHttpError` in the generated `sdk-error-types.ts` handles
+404, 429, and 500-504. HTTP 451 falls through to the catch-all
+`network_error`, which is semantically wrong. 451 is a permanent
+4xx status ("Unavailable For Legal Reasons"), not a transient
 network failure.
 
 ### Key Finding: Generated Code
@@ -64,30 +100,35 @@ network failure.
 The output file is
 `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/error-types/sdk-error-types.ts`.
 
-Per the schema-first directive, the fix **MUST** go in the generator
-template. Do not edit the generated output file directly.
+Per the schema-first directive, the fix **MUST** go in the
+generator template. Do not edit the generated output file
+directly.
 
 ### Approach (TDD)
 
-1. **RED**: Write a unit test for the generator output proving that
-   `classifyHttpError(451, 'some-lesson', 'transcript', 'Transcript not available')`
+1. **RED**: Write a unit test for the generator output proving
+   that `classifyHttpError(451, 'some-lesson', 'transcript', 'Transcript not available')`
    returns `{ kind: 'not_found', resource: 'some-lesson', resourceType: 'transcript' }`.
    Run `pnpm type-gen` first so the generated file is current.
-   The test will fail because 451 currently returns `network_error`.
+   The test will fail because 451 currently returns
+   `network_error`.
 
-2. **GREEN**: In `generate-error-types.ts`, add a `status === 451`
-   branch to the generated `classifyHttpError` function template that
-   returns `not_found` (same shape as 404). 451 means the resource is
-   permanently unavailable for legal/licensing reasons -- semantically
-   identical to "not found" for our consumers. Run `pnpm type-gen` to
-   regenerate, then run the test. It must pass.
+2. **GREEN**: In `generate-error-types.ts`, add a
+   `status === 451` branch to the generated `classifyHttpError`
+   function template that returns `not_found` (same shape as
+   404). 451 means the resource is permanently unavailable for
+   legal/licensing reasons -- semantically identical to "not
+   found" for our consumers. Run `pnpm type-gen` to regenerate,
+   then run the test. It must pass.
 
-3. **REFACTOR**: Update the generator's TSDoc comment block to list 451
-   alongside 404 in the `SdkNotFoundError` documentation. Confirm no
-   other code path depends on distinguishing 451 from 404. The
-   `isRecoverableError` function already treats `not_found` as
-   recoverable, so ingestion behaviour is unchanged. The `formatSdkError`
-   function already handles `not_found`. No changes needed downstream.
+3. **REFACTOR**: Update the generator's TSDoc comment block to
+   list 451 alongside 404 in the `SdkNotFoundError`
+   documentation. Confirm no other code path depends on
+   distinguishing 451 from 404. The `isRecoverableError`
+   function already treats `not_found` as recoverable, so
+   ingestion behaviour is unchanged. The `formatSdkError`
+   function already handles `not_found`. No changes needed
+   downstream.
 
 ### Files
 
@@ -95,15 +136,16 @@ template. Do not edit the generated output file directly.
 | --- | --- |
 | `type-gen/typegen/error-types/generate-error-types.ts` | Add 451 branch in template, update TSDoc |
 | `src/types/generated/api-schema/error-types/sdk-error-types.ts` | Regenerated by `pnpm type-gen` (do not edit) |
-| New unit test co-located with generator | Test classifyHttpError handles 451 |
+| New unit test co-located with generator | Test `classifyHttpError` handles 451 |
 
-### Verification
+### Completion Checklist
 
-```bash
-pnpm type-gen
-pnpm --filter @oaknational/oak-curriculum-sdk test
-pnpm --filter @oaknational/oak-curriculum-sdk type-check
-```
+- [ ] Unit test for `classifyHttpError(451, ...)` returning `not_found` exists and passes
+- [ ] Generator template updated with 451 branch
+- [ ] `pnpm type-gen` regenerates cleanly
+- [ ] `pnpm --filter @oaknational/oak-curriculum-sdk test` passes
+- [ ] `pnpm --filter @oaknational/oak-curriculum-sdk type-check` passes
+- [ ] TSDoc for `SdkNotFoundError` mentions 451
 
 ---
 
@@ -111,86 +153,189 @@ pnpm --filter @oaknational/oak-curriculum-sdk type-check
 
 ### Rule
 
-From `testing-strategy.md` line 60:
+From `testing-strategy.md`:
 
-> E2E test: A test that verifies the behaviour of a running system.
-> E2E tests CAN trigger File System and STDIO IO but **NOT network IO**.
+> **E2E test**: A test that verifies the behaviour of a running
+> system. E2E tests CAN trigger File System and STDIO IO but
+> **NOT network IO**.
+>
+> **Smoke test**: A test that verifies the behaviour of a running
+> system, locally or deployed. Smoke tests CAN trigger all IO
+> types, DO have side effects, and DO NOT contain mocks.
 
-From `testing-strategy.md` line 62:
+From `rules.md`:
 
-> Smoke test: A test that verifies the behaviour of a running system,
-> locally or deployed. Smoke tests CAN trigger all IO types, DO have
-> side effects, and DO NOT contain mocks.
+> Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`,
+> or use `vi.doMock`.
 
-### 2a: Notion MCP E2E test -- clear violation
+### 2a: Remove Notion MCP workspace
 
-**File**: `apps/oak-notion-mcp/e2e-tests/server.e2e.test.ts` (238 lines)
+The `oak-notion-mcp` workspace was originally included to
+force generalisation of code supporting multiple MCP servers.
+That generalisation is now achieved (ADR-108 4-workspace
+decomposition, multi-server architecture with stdio +
+streamable-http). The Notion workspace serves no further
+architectural purpose.
 
-This test requires `NOTION_API_KEY`, spawns the real server, and calls
-`notion-search`, `notion-list-users`, `notion-get-page` against the live
-Notion API. This is external network IO in an E2E test.
+**Action**: Remove `apps/oak-notion-mcp/` entirely.
 
-**Remediation**:
+- Delete the workspace directory
+- Remove from `pnpm-workspace.yaml`
+- Remove from `turbo.json` tasks
+- Remove Notion-related dependencies from root if any
+- Remove `NOTION_API_KEY` from `.env.example` and env docs
+- Clean Notion references from ~30 active documentation
+  files (see Item #4 in [high-level-plan.md](../../high-level-plan.md))
+- Retain a single historical note explaining why the
+  workspace once existed and why it was removed
+- Archive (do not delete) Notion reference docs
 
-1. **Prerequisite**: Check whether the Notion MCP server
-   (`apps/oak-notion-mcp/src/`) accepts an injected Notion client. The
-   source directory contains `app/`, `config/`, `integrations/`,
-   `tools/`, `types/`. If the server does not accept an injected client,
-   that is a prerequisite refactor: the server must accept its Notion
-   client as a constructor dependency, same as the Curriculum MCP server
-   accepts its Oak API client.
+This eliminates the E2E test violation (the test required
+`NOTION_API_KEY` and made live Notion API calls) without
+needing the DI refactor that was previously planned.
 
-2. **Rewrite**: Replace the live-API E2E test with one that spawns the
-   server with a mock/stub Notion client injected via DI. The test
-   should prove system behaviour (server starts, MCP protocol works,
-   tools return shaped responses) without network IO.
-
-3. **Reclassify**: If the live-API version is still desired for manual
-   validation, move it to a **smoke test** (`*.smoke.test.ts`). Smoke
-   tests are the correct category for tests that perform real network IO.
-
-### 2b: Built server E2E test -- borderline
+### 2b: Built server E2E test -- refactor to use DI
 
 **File**: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/built-server.e2e.test.ts`
 
 This test spawns the production build as a subprocess and uses
-`fetch('http://localhost:9999/...')` to verify it starts. `fetch()` over
-TCP is network IO.
+`fetch('http://localhost:9999/...')` to verify four behaviours:
+process alive, healthcheck response, root landing page, MCP
+endpoint availability. All four use `fetch()` over TCP, which
+is network IO forbidden by the testing strategy.
 
-**Remediation options** (pick one):
+**Do NOT reclassify as a smoke test.** Simply relabelling a
+test to permit IO is the lazy option, not the architecturally
+correct option. Every other E2E test in this directory already
+uses in-process supertest with DI. This test must follow the
+same pattern. The existing `smoke:dev:stub` script already
+covers "does the built artefact boot and respond?"
 
-- **Option A**: Reclassify as a smoke test by renaming to
-  `built-server.smoke.test.ts` and moving to a `smoke-tests/` directory.
-  This is the simplest option and correctly categorises the test. The
-  spawn-and-fetch pattern is specifically needed to prove the built `.js`
-  file actually runs, which supertest cannot do.
+#### Current Architecture (violating)
 
-- **Option B**: If the behaviour being tested (production build boots
-  and responds) can be verified via supertest against the in-process app
-  created by importing the built module, rewrite accordingly.
+```typescript
+// Spawns subprocess, uses fetch() over TCP
+server = spawn('node', [serverPath], { env: { ... } });
+await waitForServerReady(testPort, 20, 250);  // fetch() polling
+const response = await fetch(`http://localhost:${testPort}/healthz`);
+```
 
-**Recommendation**: Option A. The test's purpose is specifically to
-verify the production build artefact, which requires spawning a separate
-process. This is smoke test territory.
+#### Target Architecture (compliant)
+
+```typescript
+// In-process app with DI, tested via supertest
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { createApp } from '../src/application.js';
+import request from 'supertest';
+
+const testEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  OAK_API_KEY: 'test-key',
+  CLERK_PUBLISHABLE_KEY: 'pk_test_...',
+  CLERK_SECRET_KEY: 'sk_test_dummy',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
+
+const runtimeConfig = loadRuntimeConfig(testEnv);
+const app = createApp({ runtimeConfig });
+
+// Test the same four behaviours, zero network IO
+const response = await request(app).get('/healthz');
+expect(response.status).toBe(200);
+```
+
+#### Refactoring Steps
+
+1. Replace `spawn()` + `fetch()` with in-process
+   `createApp({ runtimeConfig })` + supertest, following the
+   same pattern as all other streamable-http E2E tests.
+
+2. Remove the `waitForServerReady` polling function, the
+   `ChildProcess` lifecycle management, and the port
+   allocation. None of these are needed for in-process testing.
+
+3. Keep all four test cases -- they prove the same behaviour
+   via supertest instead of `fetch()`.
+
+4. Once refactored, the test is identical in pattern to the
+   other E2E tests. Consider whether the separate
+   `vitest.e2e.built.config.ts` and `test:e2e:built` script
+   are still needed, or whether this test should be merged
+   into `vitest.e2e.config.ts` and `test:e2e`. If merged,
+   remove the separate config, update `turbo.json` to remove
+   the `test:e2e:built` task, and update the root
+   `package.json`, AGENT.md, and quality gate references.
+
+#### Current Wiring (may simplify after refactor)
+
+- Config: `vitest.e2e.built.config.ts` includes only this file
+- Script: `test:e2e:built` runs this config
+- Turbo: `test:e2e:built` depends on `build` and `test:e2e`
 
 ### 2c: `process.env` mutation in in-process E2E tests
 
-Several streamable-http E2E tests create the app **in-process** via
-`createApp()` but configure it by mutating `process.env` directly. The
-rules prohibit `process.env` mutation in tests. The correct pattern
-(already used by some tests) is `createApp({ runtimeConfig })`.
+Several streamable-http E2E tests create the app **in-process**
+via `createApp()` but configure it by mutating `process.env`
+directly. The correct pattern (already used by compliant tests)
+is to create an isolated env object and pass it through
+`loadRuntimeConfig()` to `createApp({ runtimeConfig })`.
 
-**Files requiring remediation** (use `process.env.X = ...` or
-`delete process.env.X` with in-process `createApp()`):
+#### The `RuntimeConfig` Interface
 
-| File | Current Pattern | Target Pattern |
+```typescript
+// From apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts
+export interface RuntimeConfig {
+  readonly env: Env;
+  readonly dangerouslyDisableAuth: boolean;
+  readonly useStubTools: boolean;
+  readonly version: string;
+  readonly vercelHostnames: readonly string[];
+  readonly displayHostname?: string;
+}
+```
+
+#### Compliant Pattern (from `auth-bypass.e2e.test.ts`)
+
+```typescript
+import { loadRuntimeConfig } from '../src/runtime-config.js';
+
+const testEnv: NodeJS.ProcessEnv = {
+  NODE_ENV: 'test',
+  DANGEROUSLY_DISABLE_AUTH: 'true',
+  CLERK_PUBLISHABLE_KEY: 'REDACTED',
+  CLERK_SECRET_KEY: 'sk_test_dummy_for_testing',
+  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
+};
+
+const runtimeConfig = loadRuntimeConfig(testEnv);
+const app = createApp({ runtimeConfig });
+```
+
+Reading `process.env.OAK_API_KEY` (read, not write) is
+acceptable for inheriting a real key when available. The
+critical difference is that an **isolated** env object is
+created and passed through DI -- `process.env` is never
+**mutated**.
+
+#### Files Requiring Migration
+
+Each of these files uses `enableAuthBypass()` which mutates
+global `process.env`, plus direct `process.env.X = ...`
+assignments. Replace with the compliant pattern above.
+
+| File | Current Mutation | Migration |
 | --- | --- | --- |
-| `server.e2e.test.ts` | `process.env.DANGEROUSLY_DISABLE_AUTH = 'true'` | `createApp({ runtimeConfig: { ... } })` |
-| `widget-metadata.e2e.test.ts` | `process.env` mutation in `enableAuthBypass()` | `createApp({ runtimeConfig: { ... } })` |
-| `tool-examples-metadata.e2e.test.ts` | `process.env` mutation in `enableAuthBypass()` | `createApp({ runtimeConfig: { ... } })` |
-| `header-redaction.e2e.test.ts` | `process.env` mutation | `createApp({ runtimeConfig: { ... } })` |
+| `server.e2e.test.ts` | `enableAuthBypass()`, sets `OAK_API_KEY`, `ALLOWED_HOSTS`, deletes `ALLOWED_ORIGINS`, deletes `DANGEROUSLY_DISABLE_AUTH` (mid-test) | Create isolated `testEnv` per test case, pass through `loadRuntimeConfig()`. For the auth-re-enabled test, create a second env without `DANGEROUSLY_DISABLE_AUTH`. |
+| `widget-metadata.e2e.test.ts` | `enableAuthBypass()`, sets `OAK_API_KEY`, `ALLOWED_HOSTS`, deletes `ALLOWED_ORIGINS` | Same pattern. Single `testEnv`. |
+| `tool-examples-metadata.e2e.test.ts` | `enableAuthBypass()`, sets `OAK_API_KEY`, `ALLOWED_HOSTS`, deletes `ALLOWED_ORIGINS` | Same pattern. Single `testEnv`. |
+| `header-redaction.e2e.test.ts` | `enableAuthBypass()`, sets `OAK_API_KEY`, `ALLOWED_HOSTS`, deletes `ALLOWED_ORIGINS`, deletes `DANGEROUSLY_DISABLE_AUTH` (mid-test) | Same pattern. Two envs (auth bypassed + auth enabled). |
 
-**Already compliant** (already use `runtimeConfig` injection):
+#### Already Compliant (for reference)
+
+These files already use the correct pattern. Use them as
+examples when migrating the non-compliant files:
 
 - `web-security-selective.e2e.test.ts`
 - `mcp-connection-timeout.e2e.test.ts`
@@ -198,9 +343,33 @@ rules prohibit `process.env` mutation in tests. The correct pattern
 - `helpers/create-stubbed-http-app.ts`
 - `helpers/create-live-http-app.ts`
 
-**Note**: `built-server.e2e.test.ts` also uses `process.env` but spawns
-a separate process, so env passing is correct there (if reclassified as
-smoke test per 2b).
+#### Shared `enableAuthBypass()` Helper
+
+This function appears inline in the non-compliant test files
+and mutates global `process.env`. After migration, delete it
+from every file. The helpers `create-stubbed-http-app.ts` and
+`create-live-http-app.ts` already solve this correctly -- they
+build isolated env objects with auth bypass baked in.
+
+**Note**: `built-server.e2e.test.ts` also uses `process.env`
+but spawns a separate process, so env passing via the spawn
+options is correct there (if reclassified as smoke test per
+2b).
+
+### WS2 Completion Checklist
+
+- [ ] **2a**: `apps/oak-notion-mcp/` workspace removed entirely
+- [ ] **2a**: Notion references cleaned from active documentation
+- [ ] **2a**: Historical note retained explaining original purpose
+- [ ] **2b**: `built-server.e2e.test.ts` refactored to in-process supertest with DI
+- [ ] **2b**: Zero `spawn()` or `fetch()` calls remain in the test
+- [ ] **2b**: If merged into `vitest.e2e.config.ts`, separate config and turbo task removed
+- [ ] **2c**: `server.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [ ] **2c**: `widget-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [ ] **2c**: `tool-examples-metadata.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [ ] **2c**: `header-redaction.e2e.test.ts` uses `loadRuntimeConfig(testEnv)` pattern
+- [ ] **2c**: All `enableAuthBypass()` functions deleted
+- [ ] **2c**: Zero occurrences of `process.env` mutation in any E2E test (except subprocess spawn `env` options)
 
 ---
 
@@ -210,22 +379,23 @@ smoke test per 2b).
 
 **File**: `docs/data/DATA-VARIANCES.md` (lines 59-67)
 
-Currently states French returns "500 server error" and German returns
-"500 server error". Spanish shown as "404".
+Currently states French returns "500 server error" and German
+returns "500 server error". Spanish shown as "404".
 
 **Update**:
 
-- Replace the MFL transcript response table with current 451 behaviour
-- Note the body inconsistency (`code: "INTERNAL_SERVER_ERROR"` but
-  HTTP status is 451)
-- Update the "Explanation (API behaviour)" paragraph to reference 451
+- Replace the MFL transcript response table with current 451
+  behaviour (use the verification table from the Context
+  section above)
+- Note the body inconsistency (`code: "INTERNAL_SERVER_ERROR"`
+  but HTTP status is 451)
+- Update the "Explanation (API behaviour)" paragraph to
+  reference 451
 - Note that 451 (Unavailable For Legal Reasons) is semantically
   appropriate for TPC-restricted transcripts
+- Note that some maths lessons (e.g. `pythagoras-theorem`) also
+  return 451, while others still return 200
 - Add verification date (2026-02-12)
-- Note that some maths lessons (e.g. `pythagoras-theorem`) also return
-  451 now, while others (e.g.
-  `checking-understanding-of-addition-and-subtraction-with-fractions`)
-  still return 200
 
 ### 3b: Upstream API wishlist
 
@@ -236,44 +406,95 @@ The bug report documents 500 for French/German, 404 for Spanish.
 
 **Update**:
 
-- Record that upstream partially fixed the inconsistency -- all three
-  MFL subjects now return 451 consistently
+- Record that upstream partially fixed the inconsistency -- all
+  three MFL subjects now return 451 consistently
 - Note the remaining issues:
-  - Response body claims `INTERNAL_SERVER_ERROR` while HTTP status is 451
+  - Response body claims `INTERNAL_SERVER_ERROR` while HTTP
+    status is 451
   - 451 is not documented in the OpenAPI schema
-  - Some maths lessons now also return 451 (broader TPC enforcement?)
-- Update the "Requested Fix" to reflect the new situation: 451 is better
-  than the previous inconsistent 500/404, but the body mislabelling and
-  lack of schema documentation remain
+  - Some maths lessons now also return 451 (broader TPC
+    enforcement?)
+- Update the "Requested Fix" to reflect the new situation: 451
+  is better than the previous inconsistent 500/404, but the
+  body mislabelling and lack of schema documentation remain
 - Add verification date (2026-02-12)
 
-### 3c: ADR-092 transcript cache categorisation
+### 3c: ADR-078 dependency injection for testability
 
-**File**: `docs/architecture/architectural-decisions/092-transcript-cache-categorization.md`
+**File**: `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md`
 
-The status table (lines 56-61) shows `(transient error) | API 5xx or
-network failure | No | Yes`. With 451, the transcript endpoint no longer
-returns 5xx for MFL. 451 is a 4xx status.
+The prohibited patterns table (line 129) scopes the
+`process.env` prohibition to "unit and integration tests"
+only. The acceptance criteria (lines 148-153) also only
+mention "unit tests". However, `rules.md` line 37 says:
+
+> Tests MUST NOT mutate `process.env`, use `vi.stubGlobal`,
+> or use `vi.doMock`.
+
+No qualification -- **all** tests. The ADR and the directive
+are out of alignment.
+
+The Neutral section (line 125) says "E2E tests may still set
+environment via spawn options (process isolation makes this
+safe)" which is correct for **subprocess-spawned** tests, but
+does not distinguish in-process E2E tests (using `createApp()`
+directly) from subprocess-spawned ones.
 
 **Update**:
 
-- Add a row or note clarifying that HTTP 451 is treated as `not_found`
-  (cached, not retried), same as 404
-- Update the "Why Not Cache Transient Errors?" section to note that 451
-  is NOT transient and IS cached (unlike 5xx)
+- Widen the prohibited patterns table scope from "unit and
+  integration tests" to "all tests" (matching `rules.md`)
+- Clarify the Neutral section: subprocess-spawned tests may
+  pass env via spawn options (process isolation). In-process
+  E2E tests must use DI via `loadRuntimeConfig(isolatedEnv)`
+  or equivalent, never `process.env` mutation.
+- Update acceptance criteria to cover all test types, not
+  just unit tests
 
-### 3d: Testing config fixes plan (archive)
+### 3d: ADR-092 transcript cache categorisation
+
+**File**: `docs/architecture/architectural-decisions/092-transcript-cache-categorization.md`
+
+The status table (line 60) shows
+`not_found | API 404 OR API 200 with empty string`. HTTP 451
+is not mentioned. Line 61 shows
+`(transient error) | API 5xx or network failure`. With 451,
+the transcript endpoint no longer returns 5xx for MFL -- it
+returns a 4xx that is permanent, not transient.
+
+**Update**:
+
+- Update line 60 to include 451:
+  `not_found | API 404 OR API 451 OR API 200 with empty string`
+- Add a note that 451 (Unavailable For Legal Reasons) is a
+  permanent status indicating TPC-restricted content, NOT a
+  transient error
+- Update the "Why Not Cache Transient Errors?" section to note
+  that 451 is NOT transient and IS cached as `not_found`
+  (unlike 5xx)
+- Update the cache flow diagram: add `API451` state with
+  transition to `CacheNotFound` (same path as 404)
+
+### 3e: Testing config fixes plan (archive)
 
 **File**: `.agent/plans/archive/completed/testing-config-fixes-plan.md`
 
-References "treated transient 5xx in transcript search as acceptable"
-(line 33) and "Replace the transcript search 5xx allowance" (line 46).
+References "treated transient 5xx in transcript search as
+acceptable" and "Replace the transcript search 5xx allowance".
 
 **Action**: Verify that the referenced E2E test file
 (`packages/oak-curriculum-sdk/e2e-tests/client/api-calls.e2e.test.ts`)
-no longer exists. If it has been deleted, add a brief resolution note to
-the archive. If it still exists, it must be audited against the testing
-strategy.
+no longer exists. If deleted, add a brief resolution note. If
+it still exists, audit it against the testing strategy.
+
+### WS3 Completion Checklist
+
+- [ ] `DATA-VARIANCES.md` updated with 451 status, verification date, body inconsistency note
+- [ ] API wishlist updated with partial fix note, remaining issues, verification date
+- [ ] ADR-078 prohibited patterns scope widened to all tests, in-process E2E DI clarified
+- [ ] ADR-092 updated with 451 in status table and cache flow diagram
+- [ ] Archive plan has resolution note (or audit if file still exists)
+- [ ] `pnpm markdownlint:root` passes on all changed markdown files
 
 ---
 
@@ -283,22 +504,27 @@ After workstreams 1-3, run a sweep to confirm:
 
 ### rules.md
 
-- **Fail fast with helpful errors**: 451 now classified correctly as
-  `not_found`, not silently misclassified as `network_error`
-- **No type shortcuts**: No `as`, `any`, `!`, or `Record<string, unknown>`
-  introduced
-- **No disabled checks**: No `eslint-disable`, `@ts-ignore`, or similar
-- **Handle all cases explicitly**: `formatSdkError` switch is exhaustive
-  (451 maps to existing `not_found` kind, no new case needed)
+- **Fail fast with helpful errors**: 451 now classified
+  correctly as `not_found`, not silently misclassified as
+  `network_error`
+- **No type shortcuts**: No `as`, `any`, `!`, or
+  `Record<string, unknown>` introduced
+- **No disabled checks**: No `eslint-disable`, `@ts-ignore`,
+  or similar
+- **Handle all cases explicitly**: `formatSdkError` switch is
+  exhaustive (451 maps to existing `not_found` kind, no new
+  case needed)
 
 ### testing-strategy.md
 
-- **No E2E test performs network IO**: Notion MCP test rewritten or
-  reclassified, built-server test reclassified
-- **All mocks are simple fakes injected as arguments**: No complex mocks,
-  no `vi.stubGlobal`, no `vi.doMock`
-- **No `process.env` mutation in in-process tests**: All `createApp()`
-  tests use `runtimeConfig` injection
+- **No E2E test performs network IO**: Notion MCP workspace
+  removed (eliminating the violation), built-server test
+  reclassified as smoke test
+- **All mocks are simple fakes injected as arguments**: No
+  complex mocks, no `vi.stubGlobal`, no `vi.doMock`
+- **No `process.env` mutation in in-process tests**: All
+  `createApp()` tests use `runtimeConfig` injection via
+  `loadRuntimeConfig(isolatedEnv)`
 
 ### schema-first-execution.md
 
@@ -306,6 +532,13 @@ After workstreams 1-3, run a sweep to confirm:
   `generate-error-types.ts` template, not the generated output
 - **Generated file not edited manually**: `sdk-error-types.ts`
   regenerated by `pnpm type-gen` only
+
+### WS4 Completion Checklist
+
+- [ ] All three directives re-read and compliance confirmed
+- [ ] No new violations introduced by WS1-WS3 changes
+- [ ] `rg 'process\.env\.' --glob '*.e2e.test.ts'` in streamable-http shows no mutations (only reads)
+- [ ] `rg 'eslint-disable\|@ts-ignore\|@ts-expect-error' --glob '*.ts'` in changed files shows zero results
 
 ---
 
@@ -331,16 +564,25 @@ All must pass. No exceptions.
 
 ---
 
-## Execution Order
+## Naming Conventions (Do Not Break)
 
-Workstreams are independent and can be parallelised, but the recommended
-order minimises wasted effort:
+Test-related scripts follow established patterns across the
+monorepo. Do not introduce new naming conventions.
 
-1. **Workstream 1** (451 handling) -- small, isolated, unblocks doc updates
-2. **Workstream 3** (documentation) -- depends on WS1 for accuracy
-3. **Workstream 2** (E2E tests) -- larger scope, independent of WS1/WS3
-4. **Workstream 4** (compliance sweep) -- must be last
-5. **Quality gates** -- after all workstreams complete
+| Pattern | Meaning | Examples |
+| --- | --- | --- |
+| `test` | Unit + integration (vitest) | All workspaces |
+| `test:e2e` | E2E tests (vitest) | Most apps |
+| `test:e2e:built` | Built artefact E2E (vitest) | streamable-http |
+| `test:smoke` | Vitest-based smoke tests | search-cli |
+| `smoke:*` | Standalone tsx smoke scripts | streamable-http |
+| `test:ui` | Playwright UI tests | streamable-http |
+
+**Existing inconsistency** (out of scope for this plan):
+`test:smoke` in search-cli vs `smoke:*` in streamable-http.
+The search-cli uses vitest for smoke tests; the streamable-http
+uses standalone tsx scripts. Both are valid patterns for their
+respective contexts, but the naming diverges.
 
 ---
 
@@ -348,10 +590,14 @@ order minimises wasted effort:
 
 | Document | Relationship |
 | --- | --- |
+| [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md) | DI for testability (needs scope widening in WS3) |
 | [ADR-088](../../../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md) | Result pattern governing error types |
-| [ADR-092](../../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Transcript cache categorisation (needs update) |
-| [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) | Data variance reference (needs update) |
-| [API wishlist](../../external/ooc-api-wishlist/00-overview-and-known-issues.md) | Upstream API issues (needs update) |
+| [ADR-092](../../../../docs/architecture/architectural-decisions/092-transcript-cache-categorization.md) | Transcript cache categorisation (needs update in WS3) |
+| [DATA-VARIANCES.md](../../../../docs/data/DATA-VARIANCES.md) | Data variance reference (needs update in WS3) |
+| [API wishlist](../../external/ooc-api-wishlist/00-overview-and-known-issues.md) | Upstream API issues (needs update in WS3) |
 | [testing-strategy.md](../../../directives/testing-strategy.md) | E2E test rules |
 | [schema-first-execution.md](../../../directives/schema-first-execution.md) | Generator-first mandate |
+| [rules.md](../../../directives/rules.md) | Fail fast, no type shortcuts, no `process.env` mutation |
 | [generate-error-types.ts](../../../../packages/sdks/oak-curriculum-sdk/type-gen/typegen/error-types/generate-error-types.ts) | Generator template for error types |
+| [high-level-plan.md](../../high-level-plan.md) | Notion workspace removal (Item #4) |
+| [runtime-config.ts](../../../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts) | `RuntimeConfig` interface (target pattern for WS2c) |

@@ -136,9 +136,16 @@ The primary implementation uses the Oak National Academy Curriculum API:
   - `apps/oak-search-cli` (hybrid search)
   - Admin tools, status pages, telemetry
 
-### Architectural Reference: Notion
+### Generalisability
 
-The `apps/oak-notion-mcp` workspace demonstrates the pattern isn't Oak-specific. It serves as an architectural reference to ensure the pipeline doesn't accidentally couple to a single use case.
+The pipeline is designed to be generic enough that it could
+serve any OpenAPI-described API, not just the Oak curriculum
+API. The planned SDK workspace decomposition (ADR-108)
+formalises this by separating generic pipeline concerns from
+Oak-specific configuration. _(The `oak-notion-mcp` workspace
+historically served as a forcing function for this
+generalisability; it has been removed now that the ecosystem
+supports multiple MCP servers natively.)_
 
 ## How It Works
 

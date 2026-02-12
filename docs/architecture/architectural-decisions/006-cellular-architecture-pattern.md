@@ -24,7 +24,7 @@ Adopt a complete biological architecture pattern with clear hierarchies:
 - **Cells**: Self-contained modules with clear membranes (interfaces)
 - **Tissues**: Groups of similar cells working together in a domain
 - **Systems**: Pervasive infrastructure (logging, events) - like nervous/circulatory systems
-- **Organs**: Discrete business logic units (e.g., Notion integration, MCP protocol)
+- **Organs**: Discrete business logic units (e.g., search integration, MCP protocol)
 - **Organism**: The complete application
 - **Ecosystem**: Multiple organisms interacting via contracts
 

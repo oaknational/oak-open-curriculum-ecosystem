@@ -446,7 +446,7 @@ Expected: No matches (or only in deleted/archive files).
 Run all quality gates from repo root:
 
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm type-gen
 pnpm build
 pnpm type-check

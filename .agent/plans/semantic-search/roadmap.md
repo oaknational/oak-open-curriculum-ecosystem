@@ -104,6 +104,51 @@ current workspace as the CLI.
 
 ---
 
+## Remediation: HTTP 451 + Test Strategy + Documentation
+
+**Status**: 📋 Ready  
+**Plan**: [active/transcript-451-test-doc-remediation.plan.md](active/transcript-451-test-doc-remediation.plan.md)
+
+Cross-cutting remediation discovered during transcript
+endpoint investigation (2026-02-12). Four workstreams:
+
+| WS | Scope | Status |
+| --- | --- | --- |
+| WS1 | Handle HTTP 451 in SDK error classification (generator fix) | 📋 Pending |
+| WS2 | Remove network IO and `process.env` mutation from E2E tests | 📋 Pending |
+| WS3 | Update stale documentation (DATA-VARIANCES, API wishlist, ADR-092) | 📋 Pending |
+| WS4 | Directive compliance sweep | 📋 Pending |
+
+Can be executed in parallel with Phase 2e. WS1 and WS3 are
+small. WS2 is smaller now that Notion MCP is being removed
+entirely (smoke test reclassification, env mutation cleanup
+remain).
+
+---
+
+## Public Release Readiness
+
+**Status**: 📋 Ready
+**Plan**: [active/public-release-readiness.plan.md](active/public-release-readiness.plan.md)
+
+Prepares the repository for public visibility on GitHub and
+the SDKs/libraries for publication as public npm packages
+under the `@oaknational` scope. Six workstreams:
+
+| WS | Scope | Status |
+| --- | --- | --- |
+| WS1 | Secrets audit and remediation (CRITICAL) | 📋 Pending |
+| WS2 | Licence and legal (MIT file, Code of Conduct) | 📋 Pending |
+| WS3 | Package.json standardisation (all 12 workspaces) | 📋 Pending |
+| WS4 | Documentation overhaul (README, CONTRIBUTING, onboarding, CHANGELOG) | 📋 Pending |
+| WS5 | GitHub repository configuration (templates, Dependabot) | 📋 Pending |
+| WS6 | Publication dry run (tarball inspection, test install) | 📋 Pending |
+
+Can be executed in parallel with other work. WS1 is a hard
+blocker for making the repo public.
+
+---
+
 ## Phase 2e: SDK Validation against Real Elasticsearch
 
 **Status**: 📋 Ready to start

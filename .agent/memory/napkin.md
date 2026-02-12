@@ -1,5 +1,44 @@
 # Napkin
 
+## Session: 2026-02-12 — Public Release Readiness Plan
+
+### Context
+
+- Repo going public within 1-2 sprints
+- SDKs and MCP tooling may become public npm packages
+- Branch: feat/semantic_search_deployment
+
+### What Was Done
+
+- Created public release readiness plan at `.agent/plans/semantic-search/active/public-release-readiness.plan.md`
+- 6 workstreams: secrets remediation (CRITICAL), licence/legal, package.json standardisation, documentation overhaul, GitHub config, publication dry run
+- Updated navigation docs (README.md, roadmap.md) to link to the new plan
+
+### Key Findings from Audit
+
+- **CRITICAL: Real API keys in tracked files**: `.agent/experience/the-api-key-revelation.md` has actual NOTION_API_KEY and OAK_API_KEY values. `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md` has Clerk dev credentials.
+- **No LICENSE file**: README references `[LICENSE](LICENSE)` but file doesn't exist. MIT declared in package.json but no licence text.
+- **No CODE_OF_CONDUCT.md**: Referenced implicitly in CONTRIBUTING.md
+- **CHANGELOG.md is from wrong repo**: Contains oak-notion-mcp entries, not oak-mcp-ecosystem
+- **9 of 12 workspaces missing `author`**: Only stdio, curriculum-sdk, and search-sdk have it
+- **All 12 workspaces missing `homepage` and `bugs`**
+- **5 workspaces missing `license` field**
+- **Most packages missing `private: true`**: Only root, streamable-http, and search-cli are marked private
+- **CONTRIBUTING.md stale**: Node.js 22+ (should be 24.x), references non-existent ErrorHandler class and CONTRIBUTORS.md, wrong quality gate commands, says E2E needs API keys (should use mocks)
+- **No GitHub issue/PR templates, no Dependabot**
+- **Stale `.github/workflows/sdk-docs-disabled.yml.bak`** tracked
+- **packages/core/oak-eslint has no README**
+
+### Patterns to Remember
+
+- Always audit for secrets before making any repo public
+- `rg` searches with `2>/dev/null` needed due to stale `.cursorignore` references
+- npm package.json person field: object form (`{ name, url }`) is preferred over string form
+- Scoped packages (`@oaknational/`) default to restricted on npm; need `publishConfig.access: "public"` to publish publicly
+- Plans must update README, roadmap, AND session prompt for discoverability
+
+---
+
 ## Session: 2026-02-12 — Transcript 451 + Test Strategy Remediation Plan
 
 ### Context
@@ -14,7 +53,7 @@
 - **Upstream 451**: French/German/Spanish transcripts now return HTTP 451 (was 500/404). Some maths lessons also return 451. Body says `INTERNAL_SERVER_ERROR` despite 451 status.
 - **classifyHttpError is GENERATED**: Lives in `type-gen/typegen/error-types/generate-error-types.ts`. Fix must go in the generator template per schema-first directive. Do NOT edit `sdk-error-types.ts` directly.
 - **Notion MCP E2E test**: `apps/oak-notion-mcp/e2e-tests/server.e2e.test.ts` makes real network calls to Notion API. Clear violation of testing strategy.
-- **built-server E2E test**: Uses `fetch()` to localhost — borderline network IO. Should be reclassified as smoke test.
+- **built-server E2E test**: Uses `fetch()` to localhost — network IO violation. Must be refactored to use in-process supertest with DI, NOT relabelled as smoke test (that's the lazy option).
 - **process.env mutation**: 4 streamable-http E2E tests mutate `process.env` despite using in-process `createApp()`. The correct pattern is `createApp({ runtimeConfig })`.
 
 ### What Was Done
@@ -27,13 +66,24 @@
 - Grep tool consistently failed due to missing `.cursorignore` files in `apps/oak-open-curriculum-semantic-search/`. Had to use shell `rg` with `2>/dev/null` instead.
 - Initially searched for `search_vtt` literally — the term does not exist in the codebase. The actual entity is `/lessons/{lesson}/transcript` which returns `{ transcript, vtt }`.
 - Fenced code blocks without language specifiers fail markdownlint (MD040). Always specify language even for file paths (use inline backticks instead).
+- First draft of plan was orphaned — no parent docs linked to it. Plans must always update README, roadmap, and session prompt. A document nobody can find is a document that doesn't exist.
+- `process.env.X = ` with trailing space inside backticks triggers MD038 (spaces inside code span). Rephrase to avoid trailing spaces in inline code.
+- Blank line between two blockquotes triggers MD028. Use `>` with empty line (`> \n >`) to continue a single blockquote.
 
 ### Patterns to Remember
 
 - `rg` in shell with `2>/dev/null` bypasses cursorignore errors that block the Grep tool
 - `curl -s -w "\n%{http_code}"` is the quick way to test upstream API status codes
 - Generator templates in `type-gen/typegen/` are the source of truth for anything in `src/types/generated/`
-- E2E tests: STDIO IO allowed, network IO forbidden. Smoke tests: all IO allowed.
+- E2E tests: STDIO IO allowed, network IO forbidden. Smoke tests: all IO allowed, NO mocks.
+- **NEVER reclassify a test to a weaker category just to permit IO** — refactor the test to use DI instead. Relabelling is lazy; DI is architecturally correct.
+- Naming: `test:*` for vitest tests, `smoke:*` for standalone tsx scripts. Do not invent new conventions.
+- Plan documents must be **discoverable**: link from parent README, roadmap, AND session prompt
+- Plan documents must be **actionable**: start with "execute these workstreams", include status tracking table, include completion checklists
+- Plan documents must **resolve open questions**: if a prerequisite is unknown, investigate it before writing the plan. Unresolved questions create decision forks with no signposts.
+- Notion MCP DI: client created internally in `wiring.ts`, not injected. Curriculum MCP pattern uses `ToolHandlerOverrides` for DI.
+- Streamable-http test configs: `vitest.config.ts` (unit/integration), `vitest.e2e.config.ts` (E2E, excludes built-server), `vitest.e2e.built.config.ts` (built-server only)
+- Compliant `process.env` pattern: `const testEnv: NodeJS.ProcessEnv = { ... }; loadRuntimeConfig(testEnv)` — never mutate global `process.env`
 
 ---
 
@@ -392,3 +442,18 @@
 - `isKnownSubject` type guard replaces `subject as keyof typeof SUBJECT_TO_PARENT`
 - `extractStatusCode` centralises ES error code extraction without assertions
 - `for...in` + `Object.prototype.hasOwnProperty.call()` for iterating unknown objects
+
+### Notion MCP Workspace Removal — Documentation Cleanup
+
+Completed systematic removal of actionable `oak-notion-mcp` references from:
+- **5 active plans** with work items targeting the workspace:
+  `config-architecture-standardisation-plan`, `stryker-integration-plan`,
+  `global-state-elimination-and-testing-discipline-plan`,
+  `node-sdk-config-and-di-remediation-plan`, `08-summary-and-coordination`
+- **5 additional active plans** with incidental references:
+  `matchmedia-di-refactoring-plan`, `sdk-publishing-and-versioning-plan`,
+  `eslint-enhancement-plan`, `test-isolation-architecture-fix`,
+  `quality-fix-plan-template`
+- **4 ADRs**: ADR-004 deprecated; ADR-005, 006, 018 examples updated
+- **1 architecture doc**: `openapi-pipeline.md` generalised
+- Archive files left untouched (historical records)

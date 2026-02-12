@@ -14,8 +14,8 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 ## Current Context Snapshot
 
 - **Testing topology**: `package.json` defines `test` as `turbo run --continue test`, delegating to workspace-level `vitest run` scripts. E2E suites execute through the separate `test:e2e` Turbo task and are not invoked by `pnpm test`. No `mutate` script is registered yet.
-- **Configuration state**: Most workspaces import `vitest.config.base.ts`. Custom overrides exist in `apps/oak-notion-mcp/vitest.config.ts` (adds `**/*.api.test.ts`), `apps/oak-search-cli/vitest.config.ts` (JS DOM environment), and `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts` (mixes unit and E2E include globs). No Stryker configuration files are present anywhere in the repo.
-- **Dependency posture**: The root lists `vitest` under `devDependencies`. Several workspaces (`packages/libs/{env,logger,storage,transport}/`, `packages/providers/mcp-providers-node/`, `apps/oak-notion-mcp/`) rely on hoisted Vitest rather than declaring it locally.
+- **Configuration state**: Most workspaces import `vitest.config.base.ts`. Custom overrides exist in `apps/oak-search-cli/vitest.config.ts` (JS DOM environment) and `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts` (mixes unit and E2E include globs). No Stryker configuration files are present anywhere in the repo. *(Note: `apps/oak-notion-mcp/` has been removed.)*
+- **Dependency posture**: The root lists `vitest` under `devDependencies`. Several workspaces (`packages/libs/{env,logger,storage,transport}/`, `packages/providers/mcp-providers-node/`) rely on hoisted Vitest rather than declaring it locally.
 - **Tooling cadence**: Quality gates follow format → type-check → lint → test → build, as enforced by `package.json` scripts such as `qg`.
 
 ### Latest repository observations (2025-09-24)
@@ -23,7 +23,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 - **Root orchestration confirmed**: `package.json` orchestrates `pnpm test` via Turbo; no mutation-testing or `pnpm mutate` placeholders exist yet at the root.
 - **Workspace script coverage**: Every workspace listed in `pnpm-workspace.yaml` exposes a `test` script (Vitest) but none define `mutate` or similar commands. `packages/providers/mcp-providers-node/package.json` lacks lint/type-check/test helper dependencies beyond `pnpm`.
 - **Vitest glob drift**: `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts` currently includes `src/**/*.e2e.test.ts` in the default test set. Libraries inheriting the base config still match generic `*.test.ts`/`*.spec.ts` patterns rather than the stricter `*.unit.test.ts` naming recommended for mutation scoping.
-- **Dev dependency gaps**: Libraries and the Notion MCP app omit local `vitest`, relying on root hoisting. Adding Stryker packages solely at the root will follow the existing pattern but should be documented.
+- **Dev dependency gaps**: Libraries omit local `vitest`, relying on root hoisting. Adding Stryker packages solely at the root will follow the existing pattern but should be documented.
 - **Stryker absence**: Searches confirm no `stryker.config.*` files or `@stryker-mutator/*` dependencies; greenfield integration is required.
 
 ### Progress update (2025-09-24)
@@ -43,7 +43,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ### Workspace inventory
 
-- **`apps/oak-notion-mcp/`**: `package.json` provides `test: "vitest run"` yet omits `vitest` in `devDependencies`, depending on hoisting. `vitest.config.ts` merges the base config and narrows includes to `**/*.unit.test.ts`, `**/*.integration.test.ts`, `**/*.api.test.ts`.
+- ~~**`apps/oak-notion-mcp/`**~~: Removed. See Item #4 in the [high-level plan](../high-level-plan.md).
 - **`apps/oak-curriculum-mcp-stdio/`**: `vitest.config.ts` re-exports the base configuration. `devDependencies` include `vitest`. No E2E patterns leak into the default suite.
 - **`apps/oak-curriculum-mcp-streamable-http/`**: Custom `vitest.config.ts` includes both `src/**/*.unit.test.ts` and `src/**/*.e2e.test.ts`; mutation runs must exclude the E2E glob or adjust the config. Dev dependencies include `vitest`.
 - **`apps/oak-search-cli/`**: `vitest.config.ts` configures JS DOM, includes `**/*.unit.test.{ts,tsx}` and `**/*.integration.test.{ts,tsx}`. Dev dependencies already pin `vitest`. Mutation tooling must honour the JS DOM environment and `test.setup.ts`.
@@ -57,7 +57,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ### 1. Baseline Configuration Audit
 
-- **Inventory**: Catalogue Vitest configs, TypeScript targets, lint rules, and Turbo tasks for each workspace to confirm inheritance from shared bases (`vitest.config.base.ts`, `tsconfig.base.json`, `eslint.config.base.ts`). Include explicit notes where workspaces add custom glob patterns (`apps/oak-notion-mcp`, `apps/oak-search-cli`) or lack explicit configs (`packages/providers/mcp-providers-node`).
+- **Inventory**: Catalogue Vitest configs, TypeScript targets, lint rules, and Turbo tasks for each workspace to confirm inheritance from shared bases (`vitest.config.base.ts`, `tsconfig.base.json`, `eslint.config.base.ts`). Include explicit notes where workspaces add custom glob patterns (`apps/oak-search-cli`) or lack explicit configs (`packages/providers/mcp-providers-node`).
 - **Gap analysis**: Prioritise correcting `apps/oak-curriculum-mcp-streamable-http/vitest.config.ts`, which currently pulls `src/**/*.e2e.test.ts` into the unit/integration pipeline; tighten library workspaces currently matching generic `*.test.ts`/`*.spec.ts` patterns; and resolve the `packages/libs/mcp-server-kit` workspace reference if the package remains absent.
 - **Documentation**: Record findings in `.agent/plans/mutation-testing/config-alignment-notes.md`, capturing evidence links (file paths, commit hashes) for future reference.
 
@@ -106,7 +106,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 ### Phase 1 – Pilot Workspaces
 
-- **Outcome**: Mutation testing operational in one library (`packages/libs/logger/`) and one app (`apps/oak-notion-mcp/`), validating Node and JS DOM pathways.
+- **Outcome**: Mutation testing operational in one library (`packages/libs/logger/`) and one app (`apps/oak-curriculum-mcp-stdio/`), validating Node pathways.
 - **Highlights**:
   - Implement workspace-specific `stryker.config.ts` files that merge the base template.
   - Integrate `mutate` scripts and Turbo tasks for pilot workspaces.

@@ -926,6 +926,10 @@ If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for
 
 The server uses **Clerk OAuth** for production authentication. All requests to `/mcp` must include a valid Bearer token in the `Authorization` header.
 
+> **Current status**: Authentication is provided by a Clerk test
+> instance. Only internal Oak team members are supported as users
+> at this time. External access is not available.
+
 ### OAuth Flow
 
 1. Unauthenticated requests return `401` with `WWW-Authenticate` header containing OAuth discovery information

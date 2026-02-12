@@ -320,7 +320,7 @@ rg "mockMatchMedia" --glob "*.test.ts*"
 
 **Commands** (run sequentially):
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm type-gen
 pnpm build
 pnpm type-check
@@ -342,7 +342,7 @@ pnpm smoke:dev:stub
 
 **Final check**:
 ```bash
-cd /Users/jim/code/oak/ai_experiments/oak-notion-mcp
+cd /Users/jim/code/oak/oak-mcp-ecosystem
 pnpm test
 ```
 

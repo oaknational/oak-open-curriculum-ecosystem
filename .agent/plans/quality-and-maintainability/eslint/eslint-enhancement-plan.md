@@ -39,7 +39,7 @@ Centralize all ESLint configuration into a single, high-quality workspace: `@oak
 ### Phase 3: Migrate Apps and Providers (Completed)
 
 - [x] Migrate `packages/providers/mcp-providers-node`
-- [x] Migrate `apps/oak-notion-mcp`
+- [x] ~~Migrate `apps/oak-notion-mcp`~~ (removed)
 - [x] Migrate `apps/oak-curriculum-mcp-stdio`
 - [x] Migrate `apps/oak-curriculum-mcp-streamable-http`
 - [x] Migrate `apps/oak-search-cli`s

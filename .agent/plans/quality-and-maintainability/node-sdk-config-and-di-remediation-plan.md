@@ -69,7 +69,9 @@ Eliminate direct `process.env` access and global-state mutations in product code
 ### Phase 3: App Config Standardisation (DI)
 
 - Apply the canonical config pattern from the Config Architecture Standardisation Plan.
-- Migrate `oak-notion-mcp` and `oak-search-cli` to DI-compatible env readers.
+- Migrate `oak-search-cli` to DI-compatible env readers.
+  *(Note: `oak-notion-mcp` has been removed — see Item #4
+  in the [high-level plan](../../high-level-plan.md).)*
 - Remove module-level env constants and direct `process.env` reads in product code.
 
 **Exit Criteria**
