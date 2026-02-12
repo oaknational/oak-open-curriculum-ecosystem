@@ -21,7 +21,7 @@ This violates the Cardinal Rule: *All structural knowledge should flow from the 
 
 ## Scope
 
-This plan covers **Curriculum SDK type-gen** enhancements, NOT the Search SDK. It establishes domain knowledge that other components (including semantic search) consume.
+This plan covers **Oak API SDK type-gen** enhancements, NOT the Search SDK. It establishes domain knowledge that other components (including semantic search) consume.
 
 | Component | Location |
 |-----------|----------|

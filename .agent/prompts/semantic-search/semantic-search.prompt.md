@@ -1,20 +1,26 @@
 # Semantic Search — Session Entry Point
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-02-12
 
 ---
 
-## Current Priority: MCP Search Integration
+## Current Priority: Search SDK Validation
 
-SDK extraction is complete (Checkpoints A–E2). The SDK is
-production-ready: all service I/O methods return
-`Result<T, E>`, comprehensive TSDoc is in place, all
-quality gates pass.
+SDK extraction is complete (Checkpoints A–E2). All service
+I/O methods return `Result<T, E>`, comprehensive TSDoc is
+in place, all quality gates pass.
 
-**Next step**: Wire the Search SDK into the MCP curriculum
-servers so AI agents can use hybrid Elasticsearch search.
+**However**, the SDK was completely rewritten and
+re-architected during extraction — DI, Result pattern,
+service boundaries, query builders, all refactored. Before
+wiring it into any consumer, we must thoroughly validate it
+against real Elasticsearch to confirm it produces correct
+results.
 
-**Plan**: [wire-hybrid-search.md](../../plans/semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md)
+**Next step**: Run the full evaluation suite against a real
+ES cluster via the CLI (which now uses SDK code paths) and
+confirm MRR/NDCG scores match or exceed baseline.
+
 **Roadmap**: [roadmap.md](../../plans/semantic-search/roadmap.md)
 
 ---
@@ -31,13 +37,18 @@ system split across three workspaces:
 - **Search CLI** (`apps/oak-search-cli/`): Thin wrapper
   over the SDK providing `oaksearch` commands for search,
   admin, evaluation, and observability. 934 tests.
-- **Curriculum SDK** (`packages/sdks/oak-curriculum-sdk/`):
-  Upstream Oak API types, generated via `pnpm type-gen`.
+- **Oak API SDK** (`packages/sdks/oak-curriculum-sdk/`):
+  Upstream Oak Open Curriculum API types, generated via
+  `pnpm type-gen`.
 
-**DI-ready**: All `process.env` access is centralised in
-`src/lib/env.ts` (ESLint-enforced). Product code accepts
-config as parameters. The `createCliSdk()` factory maps
-env → ES client → SDK instance.
+**DI and credential safety**: The Search SDK requires ES
+URL and credentials as explicit constructor arguments —
+no environment variable access inside the SDK. Only the
+CLI reads env vars (centralised in `src/lib/env.ts`,
+ESLint-enforced). The `createCliSdk()` factory maps
+env → ES client → SDK instance. All other consumers
+(MCP servers, future apps) must provide their own
+credentials at construction time.
 
 ### Search Pipeline
 
@@ -95,15 +106,38 @@ codebase (462 files). `eslint-plugin-tsdoc` added with
 
 ## What Needs Doing Next
 
-### MCP Search Integration (Phase 3)
+### Search SDK Validation (Phase 2e)
 
-Wire the Search SDK into the MCP curriculum servers:
+The SDK was completely rewritten during extraction. Before
+any consumer wires in, we must validate against real ES:
+
+- Run full benchmark suite (`oaksearch eval benchmark`)
+  via CLI (uses SDK retrieval code paths since Checkpoint E)
+- Confirm MRR/NDCG scores match or exceed baseline:
+  Lessons MRR 0.983, Units 1.000, Threads 1.000,
+  Sequences 1.000
+- Run manual searches across all retrieval methods
+  (`searchLessons`, `searchUnits`, `searchSequences`,
+  `suggest`, `fetchSequenceFacets`)
+- Exercise filter combinations (subject, key stage, tier,
+  exam board)
+- Verify error handling with real ES failure scenarios
+- Confirm zero-hit observability flows work end-to-end
+
+### After Validation: MCP Search Integration (Phase 3)
+
+Wire the Search SDK into the MCP curriculum servers
+(`apps/oak-curriculum-mcp-stdio/`,
+`apps/oak-curriculum-mcp-streamable-http/`), then compare
+with existing REST API search and likely replace it:
 
 - Add `semantic-search` MCP tool calling SDK retrieval
 - Pass filter parameters (subject, key stage, tier, etc.)
 - Handle `Result<T, E>` errors as MCP error responses
 - Ship tool examples mapping user intent to SDK calls
 - NL stays in MCP layer (ADR-107), SDK is deterministic
+- Compare semantic search with existing `search` tool (REST API)
+- If superior, replace REST API composite search with SDK-backed search
 
 **Plan**: [wire-hybrid-search.md](../../plans/semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md)
 
@@ -143,7 +177,7 @@ Before starting work:
 2. [testing-strategy.md](../../directives/testing-strategy.md) — TDD at ALL levels
 3. [schema-first-execution.md](../../directives/schema-first-execution.md) — Generator is source of truth
 4. [semantic-search-architecture.md](../../directives/semantic-search-architecture.md) — Structure is the foundation
-5. [wire-hybrid-search.md](../../plans/semantic-search/post-sdk/mcp-integration/wire-hybrid-search.md) — **THE** plan for next work
+5. [roadmap.md](../../plans/semantic-search/roadmap.md) — Authoritative milestone sequence
 
 ---
 
@@ -151,11 +185,11 @@ Before starting work:
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (34 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests) |
 
-The Search SDK consumes types from the Curriculum SDK.
+The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
 
 [ADR-107]: /docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md

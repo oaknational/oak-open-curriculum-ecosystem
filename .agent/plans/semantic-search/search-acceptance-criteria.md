@@ -1,7 +1,7 @@
 # Search Acceptance Criteria
 
 **Last Updated**: 2026-02-11  
-**Status**: ✅ Ground truths established — SDK extraction complete, MCP integration next  
+**Status**: ✅ Ground truths established — SDK extraction complete, validation against real ES next  
 **Purpose**: Defines what "exhausted" means for each level, success criteria for ground truths
 
 ---

@@ -1,8 +1,18 @@
 # Phase 4 Plan – Artefact Expansion & SDK Integration
 
 **Status:** Draft  
+**Last Updated**: 2026-02-12  
 **Prerequisites:** Phase 3 (Typed IR & ts-morph migration) complete; Scalar pipeline + MCP enhancements (Phase 2) stable  
-**Reference:** `.agent/plans/additional_project_requirements.md`
+**Reference:** [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
+
+## Workspace Architecture Context
+
+This phase operates within **Workspace 1** (Generic
+OpenAPI-to-SDK Pipeline) of the 4-workspace decomposition
+per [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md).
+All writers and artefacts described here are generic
+OpenAPI processing — Oak-specific configuration is
+supplied through hooks defined by the pipeline.
 
 ---
 

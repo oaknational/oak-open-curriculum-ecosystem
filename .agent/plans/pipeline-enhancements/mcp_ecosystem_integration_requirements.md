@@ -1,5 +1,19 @@
 # Schema-First Type & Validator Generator – Client Requirements
 
+**Last Updated**: 2026-02-12
+
+## Workspace Architecture Context
+
+These requirements define the public interface of
+**Workspace 1** (Generic OpenAPI-to-SDK Pipeline) in the
+4-workspace decomposition per
+[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md).
+The generator described here must remain vendor-agnostic
+and expose hook points for domain-specific configuration
+(Workspace 2).
+
+---
+
 This document captures Oak National Academy’s expectations for the shared generator that will ultimately replace both `openapi-typescript` and `openapi-zod-client` within our toolchain. It is written so the upstream `@oaknational/openapi-to-tooling` project can adopt or challenge these requirements whilst remaining vendor-agnostic.
 
 ---

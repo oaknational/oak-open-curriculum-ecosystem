@@ -2,7 +2,29 @@
 
 **Status**: PROPOSED  
 **Created**: 08/11/2025  
-**Owner**: Engineering
+**Last Updated**: 2026-02-12  
+**Owner**: Engineering  
+**ADR**: [ADR-108: SDK Workspace Decomposition][adr-108]
+
+## Workspace Architecture Context
+
+This plan describes what will become **Workspace 1** (Generic
+OpenAPI-to-SDK Pipeline) in the 4-workspace decomposition
+defined by [ADR-108][adr-108].
+
+The `@oaknational/openapi-to-tooling` library is the
+concrete realisation of the Generic Pipeline workspace. It
+provides hook points that allow Oak-specific configuration
+(Workspace 2) without encoding Oak assumptions. See ADR-108
+for the full dependency graph and plugin interface design.
+
+**Prerequisites**: [SDK workspace separation][ws-sep]
+(Step 1 of decomposition) must complete first. The
+separated generation workspace provides the extraction
+target.
+
+[adr-108]: ../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md
+[ws-sep]: sdk-workspace-separation-plan.md
 
 ## Purpose
 
@@ -10,9 +32,10 @@ Define how we replace `openapi-typescript` and `openapi-zod-client` with the new
 
 ## Context and References
 
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/mcp_ecosystem_integration_requirements.md`
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/PHASE-4-ARTEFACT-EXPANSION.md`
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/openapi-to-mcp-framework-extraction-plan.md`
+- [ADR-108: SDK Workspace Decomposition][adr-108]
+- [mcp_ecosystem_integration_requirements.md](mcp_ecosystem_integration_requirements.md)
+- [PHASE-4-ARTEFACT-EXPANSION.md](PHASE-4-ARTEFACT-EXPANSION.md)
+- [openapi-to-mcp-framework-extraction-plan.md](openapi-to-mcp-framework-extraction-plan.md)
 - `.agent/directives/rules.md`
 - `.agent/directives/schema-first-execution.md`
 - `.agent/directives/testing-strategy.md`

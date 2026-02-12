@@ -2,8 +2,24 @@
 
 **Status**: PLANNED  
 **Created**: 2025-11-27  
+**Last Updated**: 2026-02-12  
 **Priority**: Foundation work (Phase 0) blocks other enhancements  
 **Estimated Duration**: ~12-14 weeks (phased)
+
+---
+
+## Workspace Architecture Context
+
+In the 4-workspace decomposition per
+[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md):
+
+- **Phase 0** (aggregated tools type-gen refactor): the
+  declarative configuration and generators belong in
+  **Workspace 2** (Oak Type-Gen); the generated output is
+  consumed by **Workspace 4** (Oak Runtime).
+- **Phases 1-4**: infrastructure hardening, taxonomy,
+  playbooks, and advanced tools all operate within
+  Workspace 2 (type-gen) and Workspace 4 (runtime).
 
 ---
 
@@ -42,9 +58,10 @@ Read and follow:
 ### Priority Context
 
 - **Current Priorities** (blocking this plan):
-  1. ✅ Semantic search (Phase 1 in progress)
-  2. 🔄 OAuth/Clerk integration
-- **This Plan**: Priority 3 (Phase 0 can start after OAuth)
+  1. ✅ Semantic search SDK extraction complete
+  2. ✅ OAuth/Clerk integration complete
+  3. 🔄 MCP search integration in progress
+- **This Plan**: Can start after MCP search integration
 
 ---
 

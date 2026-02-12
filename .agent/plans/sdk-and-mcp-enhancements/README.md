@@ -2,7 +2,17 @@
 
 This directory contains plans for enhancing the Oak Curriculum SDK and MCP (Model Context Protocol) infrastructure.
 
-**Last Updated**: 2025-12-28
+**Last Updated**: 2026-02-12
+
+## Workspace Architecture
+
+The SDK is being decomposed into 4 workspaces per
+[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md):
+Generic Pipeline (WS1), Oak Type-Gen (WS2), Generic
+Runtime (WS3), Oak Runtime (WS4). Plans in this directory
+primarily affect WS2 (type-gen) and WS4 (runtime). See
+also [pipeline-enhancements/](../pipeline-enhancements/)
+for plans affecting WS1 and the overall decomposition.
 
 ---
 

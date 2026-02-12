@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **MCP integration next** — SDK extraction complete  
-**Last Updated**: 2026-02-11  
+**Status**: 🔄 **SDK validation next** — SDK extraction complete  
+**Last Updated**: 2026-02-12  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -14,7 +14,8 @@
 SDK extraction is complete. All three services (retrieval,
 admin, observability) return `Result<T, E>` with per-service
 error types and comprehensive TSDoc. The full quality gate
-chain passes. The SDK is ready for its first consumer.
+chain passes. The SDK must now be validated against real
+Elasticsearch before wiring into its first consumer.
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
@@ -39,7 +40,10 @@ Phase 2: SDK Extraction + CLI Wiring                ✅ COMPLETE
   c. TSDoc compliance fix                           ✅
   d. Result pattern + TSDoc annotations (E2)        ✅
          ↓
-Phase 3: MCP Search Integration                     ← NEXT
+Phase 2e: SDK Validation against Real ES             ← NEXT
+  Run full evaluation suite, confirm baselines hold
+         ↓
+Phase 3: MCP Search Integration
   Wire SDK retrieval into MCP tools
          ↓
 Phase 4: Search Quality + Ecosystem (parallel streams)
@@ -100,13 +104,52 @@ current workspace as the CLI.
 
 ---
 
+## Phase 2e: SDK Validation against Real Elasticsearch
+
+**Status**: 📋 Ready to start
+
+**Goal**: Confirm the completely rewritten SDK produces
+correct results against a real Elasticsearch cluster. The
+extraction involved DI refactoring, Result pattern wrapping,
+service boundary changes, and query builder restructuring.
+None of this has been validated against real ES.
+
+| Task | Status |
+|------|--------|
+| Run full benchmark suite (`oaksearch eval benchmark`) | 📋 Pending |
+| Confirm lesson MRR >= 0.983, NDCG >= 0.955 | 📋 Pending |
+| Confirm unit MRR >= 1.000, NDCG >= 0.926 | 📋 Pending |
+| Confirm thread and sequence baselines hold | 📋 Pending |
+| Manual search queries across all retrieval methods | 📋 Pending |
+| Exercise filter combinations (subject, key stage, tier) | 📋 Pending |
+| Verify error handling with real ES failure scenarios | 📋 Pending |
+| Confirm zero-hit observability flows end-to-end | 📋 Pending |
+| Validate admin operations (setup, synonyms, metadata) | 📋 Pending |
+| Confirm ES URL + credentials are constructor args, not env | 📋 Pending |
+
+**Credential safety**: The Search SDK must require ES URL
+and credentials as explicit constructor arguments. No
+environment variable access inside the SDK. Only the CLI
+reads env vars and passes them to `createSearchSdk()`. All
+other consumers (MCP servers, future apps) must provide
+their own credentials at construction time. This protects
+the Oak-specific ES deployment.
+
+**Tooling**: The CLI evaluation infrastructure (`oaksearch eval`)
+was rewired to use SDK retrieval code paths at Checkpoint E.
+Running benchmarks exercises the exact same SDK methods that
+MCP will later consume.
+
+---
+
 ## Phase 3: MCP Search Integration
 
-**Status**: 📋 Ready to start  
+**Status**: ⏸️ Blocked by Phase 2e validation  
 **Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
-consumer of the SDK.
+consumer of the SDK. Then compare with existing REST API
+search and likely replace it.
 
 | Task | Status |
 |------|--------|
@@ -116,6 +159,8 @@ consumer of the SDK.
 | Tool examples mapping user intent to SDK calls | 📋 Pending |
 | Existing MCP tools unaffected | 📋 Pending |
 | All quality gates pass | 📋 Pending |
+| Compare semantic search with existing `search` tool (REST API) | 📋 Pending |
+| If superior, replace REST API composite search with SDK-backed search | 📋 Pending |
 
 ---
 
@@ -143,7 +188,7 @@ independently.
 |--------|------|-------|--------|
 | **Bulk Data Analysis** | [vocabulary-mining.md](post-sdk/bulk-data-analysis/vocabulary-mining.md) | Feeds vocabulary into search quality work | 📋 Pending |
 | **SDK API** | [filter-testing.md](post-sdk/sdk-api/filter-testing.md) | 17 subjects × 4 key stages filter matrix | 📋 Pending |
-| **Subject Domain Model** | [move-search-domain-knowledge-to-typegen-time.md](post-sdk/move-search-domain-knowledge-to-typegen-time.md) | Curriculum SDK type-gen enhancement | 📋 Pending |
+| **Subject Domain Model** | [move-search-domain-knowledge-to-typegen-time.md](post-sdk/move-search-domain-knowledge-to-typegen-time.md) | Oak API SDK type-gen enhancement | 📋 Pending |
 | **MFL Fix** | [mfl-multilingual-embeddings.md](post-sdk/search-quality/mfl-multilingual-embeddings.md) | MFL MRR 0.19-0.29, specific fix | 📋 Pending |
 | **Operations** | [governance.md](post-sdk/operations/governance.md) | Latency budgets, failure modes, versioning | 📋 Pending |
 
@@ -180,11 +225,11 @@ retriever using `multilingual-e5-base`.
 
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (34 tests) |
 | **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests) |
 
-The Search SDK consumes types from the Curriculum SDK.
+The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
 
 ---

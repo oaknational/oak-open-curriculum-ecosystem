@@ -2,8 +2,27 @@
 
 **Status**: 🔴 NOT STARTED  
 **Estimated Duration**: ~3-4 days  
+**Last Updated**: 2026-02-12  
 **Priority**: Medium (architectural improvement, not blocking)  
-**Related ADRs**: ADR-088 (Result Pattern), ADR-030 (SDK as Single Source of Truth)
+**Related ADRs**: ADR-088 (Result Pattern), ADR-030 (SDK as Single Source of Truth), ADR-108 (SDK Workspace Decomposition)
+
+---
+
+## Workspace Architecture Context
+
+In the 4-workspace decomposition per
+[ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md):
+
+- The Result-returning client **generator** is a generic
+  pattern (any OpenAPI spec could benefit) and belongs in
+  **Workspace 1** (Generic Pipeline).
+- The **generated client** is consumed by
+  **Workspace 4** (Oak Runtime) and by apps like
+  `oak-search-cli`.
+- The manual adapter this replaces
+  (`apps/oak-search-cli/src/adapters/oak-adapter-sdk.ts`)
+  is an Oak-specific consumer that would be simplified
+  once the generator exists.
 
 ---
 

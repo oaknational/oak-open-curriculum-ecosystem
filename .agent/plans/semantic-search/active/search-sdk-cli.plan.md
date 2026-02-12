@@ -15,7 +15,7 @@
 
 | Workspace | Location | Purpose |
 | --- | --- | --- |
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream Oak API, type-gen |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
 | **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (library) — fully implemented, 34 tests |
 | **Search CLI** | `apps/oak-search-cli/` (renamed from `apps/oak-open-curriculum-semantic-search/`) | Operator CLI consuming the SDK; also hosts evaluation (934 tests) |
 
@@ -126,7 +126,7 @@ Additionally, ensure you are still solving the right problem at the right layer:
 ### 1) Where the SDK lives
 
 **`packages/sdks/oak-search-sdk/`** — sits alongside
-the Curriculum SDK in `packages/sdks/`.
+the Oak API SDK in `packages/sdks/`.
 
 ### 2) Where the CLI lives
 
@@ -153,8 +153,15 @@ createSearchSdk({ deps, config })
   -> { retrieval, admin, observability }
 ```
 
-Key rule: **config and clients are provided by the
-consumer**. No internal singletons.
+Key rules:
+- **Config and clients are provided by the consumer.**
+  No internal singletons.
+- **ES URL and credentials are constructor arguments,
+  never read from environment variables.** Only the
+  CLI reads env vars. All other consumers (MCP servers,
+  future apps) must provide their own credentials at
+  construction time. This protects the Oak-specific
+  ES deployment.
 
 ### 5) NL parsing responsibility
 

@@ -108,6 +108,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-105: SDK-Generated Search Constants](105-sdk-generated-search-constants.md)
 - [ADR-106: Known-Answer-First Ground Truth Methodology](106-known-answer-first-ground-truth-methodology.md)
 - [ADR-107: Deterministic SDK / NL-in-MCP Boundary](107-deterministic-sdk-nl-in-mcp-boundary.md)
+- [ADR-108: SDK Workspace Decomposition](108-sdk-workspace-decomposition.md)
 
 ## Key Architectural Decisions
 
@@ -119,6 +120,7 @@ For understanding our API integration approach:
 - **[ADR-070](070-sdk-rate-limiting-and-retry.md)** - SDK rate limiting and exponential backoff retry
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
+- **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x type-gen/runtime)
 
 For understanding authentication, authorization, and observability:
 

@@ -1,5 +1,17 @@
 # Schema-First Type & Validator Generator – Client Requirements
 
+**Last Updated**: 2026-02-12
+
+## Workspace Architecture Context
+
+These requirements supplement the
+[MCP ecosystem integration requirements](mcp_ecosystem_integration_requirements.md)
+and define the API for **Workspace 1** (Generic
+OpenAPI-to-SDK Pipeline) in the 4-workspace decomposition
+per [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md).
+
+---
+
 ## 1. Context
 
 - This document captures additional client-side requirements for a reworked, general-purpose successor to `openapi-zod-client` with the working title `openapi-zod-validation`.

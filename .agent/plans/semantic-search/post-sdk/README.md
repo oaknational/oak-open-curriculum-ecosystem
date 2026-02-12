@@ -31,7 +31,7 @@ Plans that span multiple streams or address SDK architecture.
 
 | Plan | Intent | Prerequisite |
 |------|--------|--------------|
-| [subject-domain-model.md](move-search-domain-knowledge-to-typegen-time.md) | Curriculum SDK type-gen: subject hierarchy, KS4 patterns, curriculum config | SDK extraction complete ✅ |
+| [subject-domain-model.md](move-search-domain-knowledge-to-typegen-time.md) | Oak API SDK type-gen: subject hierarchy, KS4 patterns, curriculum config | SDK extraction complete ✅ |
 
 ---
 

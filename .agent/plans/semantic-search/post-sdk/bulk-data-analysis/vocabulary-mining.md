@@ -27,7 +27,7 @@ This plan consolidates all bulk data analysis work into a single cohesive effort
 
 | SDK               | Location                                | Role in Bulk Analysis |
 | ----------------- | --------------------------------------- | --------------------- |
-| **Curriculum SDK** | `packages/sdks/oak-curriculum-sdk/`    | Types for bulk data, API access for supplementary data |
+| **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/`    | Types for bulk data, API access for supplementary data |
 | **Search SDK**    | `packages/sdks/oak-search-sdk/` (post-extraction) | Where analysis outputs are consumed |
 
 ### Data Sources
@@ -62,7 +62,7 @@ packages/sdks/oak-search-sdk/
 
 All bulk analysis code MUST use types from:
 
-1. **Curriculum SDK type-gen** — `BulkLesson`, `BulkUnit`, etc.
+1. **Oak API SDK type-gen** — `BulkLesson`, `BulkUnit`, etc.
 2. **Search SDK Elastic types** — Index document schemas
 
 **NO ad-hoc types** — this follows the Cardinal Rule.

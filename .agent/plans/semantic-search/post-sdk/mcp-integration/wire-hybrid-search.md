@@ -1,7 +1,7 @@
 # Wire Hybrid Search into MCP Tools
 
 **Stream**: mcp-integration  
-**Status**: 📋 Ready to start  
+**Status**: ⏸️ Blocked by SDK validation (Phase 2e)  
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)  
 **Created**: 2026-01-17  
 **Last Updated**: 2026-02-11
@@ -25,7 +25,7 @@ the Search SDK after extraction.
 
 ---
 
-## Prerequisites (all met)
+## Prerequisites
 
 | Prerequisite | Status |
 |--------------|--------|
@@ -33,6 +33,13 @@ the Search SDK after extraction.
 | All services return `Result<T, E>` | ✅ Checkpoint E2 |
 | Comprehensive TSDoc | ✅ Checkpoint E2 |
 | All quality gates pass | ✅ |
+| SDK validated against real ES (Phase 2e) | 📋 Pending |
+
+**Note**: The SDK must be validated against real
+Elasticsearch before wiring into MCP. The extraction
+involved complete re-architecture (DI, Result pattern,
+service boundaries). See Phase 2e in the
+[roadmap](../../roadmap.md).
 
 ---
 
@@ -48,6 +55,13 @@ the Search SDK after extraction.
 | Suggestions | `retrieval.suggest()` | Typeahead completions |
 | Filter passthrough | All retrieval methods | Subject, key stage, tier, exam board |
 
+### Also in scope
+
+| Capability | Description |
+|------------|-------------|
+| Compare with REST API search | Evaluate semantic search vs existing `search` aggregated tool |
+| Replace if superior | If SDK-backed search outperforms REST API search, replace the composite search |
+
 ### Out of scope (for this plan)
 
 - Admin or observability services in MCP (operator
@@ -55,9 +69,6 @@ the Search SDK after extraction.
 - NL query mapping (stays in MCP tool examples per
   ADR-107, not in this wiring layer)
 - Advanced intent classification (Level 4 future work)
-- Replacing the existing REST API search tool (that
-  tool calls the Oak API; this adds Elasticsearch
-  search alongside it)
 
 ---
 
@@ -76,7 +87,7 @@ The existing `search` aggregated tool in
 `@oaknational/oak-curriculum-sdk` calls the upstream
 Oak REST API for lesson and transcript search.
 
-### Target state
+### Target state (phase 1: add alongside)
 
 ```text
 MCP Tool Layer
@@ -92,7 +103,24 @@ MCP Tool Layer
 The new `semantic-search` tool calls the Search SDK
 directly, backed by Elasticsearch with ELSER sparse
 vectors. The existing REST API search tool is
-unchanged.
+unchanged initially.
+
+### Target state (phase 2: compare and replace)
+
+```text
+MCP Tool Layer
+    └── search → Search SDK → Elasticsearch
+        ├── searchLessons   (4-way RRF)
+        ├── searchUnits     (4-way RRF)
+        ├── searchSequences (2-way RRF)
+        └── suggest         (completions)
+```
+
+If semantic search outperforms the REST API composite
+search, the old `search` aggregated tool is replaced.
+The REST API `get-search-*` individual tools may be
+retained as data sources but no longer drive the
+primary search experience.
 
 ### Key decision: NL stays in MCP
 
@@ -176,12 +204,16 @@ semantic search. The implementation should be shared
 
 1. **Dependencies**: Add `@oaknational/oak-search-sdk`
    and `@elastic/elasticsearch` to the MCP app(s)
-2. **Configuration**: ES connection URL, index target,
-   and optional zero-hit config via environment
-   variables (following existing env patterns in
-   `runtime-config.ts` / `env.ts`)
+2. **Configuration**: ES connection URL and credentials
+   read from environment variables in the MCP server's
+   wiring layer (following existing env patterns in
+   `runtime-config.ts` / `env.ts`). **The Search SDK
+   itself never reads env vars** — URL and credentials
+   must be passed as constructor arguments to protect
+   the Oak-specific ES deployment.
 3. **SDK instance**: Create via `createSearchSdk()` in
-   the wiring layer, alongside the existing
+   the wiring layer, passing ES URL and credentials
+   explicitly, alongside the existing
    `createOakPathBasedClient()`
 4. **Tool registration**: Register semantic search tool
    handlers that delegate to the SDK, following the
@@ -231,6 +263,17 @@ No silent error swallowing. Every error is surfaced.
 - Verify existing MCP tools unaffected
 - Update plans and roadmap
 
+### Phase 5 — Compare and replace
+
+- Run comparable queries through both `search` (REST API)
+  and `semantic-search` (SDK) tools
+- Compare result quality: relevance, coverage, latency
+- If semantic search is superior (expected), replace the
+  REST API composite search with SDK-backed search
+- Remove or demote the old `search` aggregated tool
+- Update tool descriptions and examples
+- Run full quality gate chain again
+
 ---
 
 ## Success criteria
@@ -245,6 +288,10 @@ No silent error swallowing. Every error is surfaced.
 - [ ] Integration tests cover success and error paths
 - [ ] Tool examples guide agents to use the tool
       effectively
+- [ ] Semantic search compared with REST API search on
+      representative queries
+- [ ] If superior, REST API composite search replaced
+      with SDK-backed search
 - [ ] All quality gates pass
 
 ---

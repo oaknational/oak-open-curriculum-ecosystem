@@ -2,214 +2,277 @@
 
 **Status**: PROPOSED  
 **Created**: 08/11/2025  
-**Owner**: Engineering
+**Last Updated**: 2026-02-12  
+**ADR**: [ADR-108: SDK Workspace Decomposition](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md)
 
 ---
 
-## 1. Intent & Impact
+## 1. Intent
 
-### 1.1 Intent
+Separate the monolithic `@oaknational/oak-curriculum-sdk`
+into distinct workspaces with explicit, enforceable
+boundaries.
 
-- Separate the Oak Curriculum SDK into two workspaces with explicit, enforceable boundaries:
-  1. `@oaknational/oak-curriculum-sdk-generation` – owns schema ingestion, type generation, validators, constants, and MCP descriptors.
-  2. `@oaknational/oak-curriculum-sdk` – consumes the generated artefacts to provide runtime clients, validation, and MCP facades.
-- Establish the separation as a prerequisite for the `@oaknational/openapi-to-tooling` integration, ensuring the generation workspace becomes the single extraction target.
+This plan covers **Step 1** of the 4-workspace
+decomposition defined in [ADR-108][adr-108]. Step 1
+splits the SDK into two workspaces along the
+generation-time / runtime axis:
 
-### 1.2 Goals
+1. `@oaknational/oak-curriculum-sdk-generation` — owns
+   schema ingestion, type generation, validators,
+   constants, MCP descriptors, search/ES mappings, and
+   all code that runs at `pnpm type-gen` time.
 
-- **G1**: Relocate all type-gen code, schema caches, and generated artefacts into a dedicated generation workspace without altering behaviour.
-- **G2**: Introduce a comprehensive public API in the generation workspace that satisfies the schema-first execution directive.
-- **G3**: Update the runtime workspace to consume only the new package exports, backed by ESLint/Turborepo rules enforcing the boundary.
-- **G4**: Publish updated documentation and CI workflows reflecting the new workspace ownership.
+2. `@oaknational/oak-curriculum-sdk` — consumes the
+   generated artifacts to provide runtime clients,
+   validation, MCP facades, and domain features.
 
-### 1.3 Impact
+**Step 2** (extracting generic OpenAPI pipeline from
+Oak-specific configuration) follows after Castr
+integration. See [ADR-108][adr-108] for the full
+4-workspace end state.
 
-- Simplifies downstream extraction of generator logic into `@oaknational/openapi-to-tooling`.
-- Reinforces schema-first execution by making generated artefacts consumable via a single package boundary.
-- Reduces cognitive load in the runtime workspace—only runtime code remains.
+[adr-108]: ../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md
 
 ---
 
-## 2. Context & References
+## 2. Goals
 
-- `.agent/directives/AGENT.md`
-- `.agent/directives/rules.md`
+- **G1**: Relocate all type-gen code, schema caches, and
+  generated artifacts into a dedicated generation workspace
+  without altering behaviour.
+- **G2**: Introduce a comprehensive public API in the
+  generation workspace that satisfies the schema-first
+  execution directive.
+- **G3**: Update the runtime workspace to consume only the
+  new package exports, backed by ESLint/Turborepo rules
+  enforcing the boundary.
+- **G4**: Publish updated documentation and CI workflows
+  reflecting the new workspace ownership.
+- **G5**: Prepare the generation workspace for the
+  generic/Oak-specific split that follows in Step 2.
+
+---
+
+## 3. Context
+
+### Current state
+
+All code lives in a single workspace:
+
+```text
+packages/sdks/oak-curriculum-sdk/
+  type-gen/          (~180 files: generators, orchestrators, config)
+  schema-cache/      (cached OpenAPI snapshots)
+  vocab-gen/         (vocabulary generation)
+  src/
+    types/generated/ (output of type-gen)
+    client/          (HTTP client, middleware)
+    mcp/             (tool execution, aggregated tools)
+    validation/      (response/request validators)
+    ...
+```
+
+Generation-time and runtime code share a workspace, a
+`package.json`, and a build pipeline. Oak-specific constants
+are imported directly by generic generators. Generated files
+sit alongside hand-written runtime code.
+
+### Target state (Step 1)
+
+```text
+packages/sdks/oak-curriculum-sdk-generation/
+  type-gen/          (all generators)
+  schema-cache/      (OpenAPI snapshots)
+  vocab-gen/         (vocabulary generation)
+  src/               (public API: generated artifacts)
+
+packages/sdks/oak-curriculum-sdk/
+  src/
+    client/          (HTTP client, middleware)
+    mcp/             (tool execution, aggregated tools)
+    validation/      (response/request validators)
+    ...
+  (depends on @oaknational/oak-curriculum-sdk-generation)
+```
+
+### Target state (Step 2 — after Castr, see ADR-108)
+
+```text
+packages/core/openapi-to-sdk/           (WS1: Generic Pipeline)
+packages/sdks/oak-curriculum-sdk-generation/ (WS2: Oak Type-Gen)
+packages/core/openapi-sdk-runtime/      (WS3: Generic Runtime)
+packages/sdks/oak-curriculum-sdk/       (WS4: Oak Runtime)
+```
+
+Step 1 establishes the generation/runtime boundary. Step 2
+draws the generic/Oak-specific boundary within each side.
+
+---
+
+## 4. Prerequisites
+
+| Prerequisite | Status |
+|---|---|
+| MCP search integration complete | 📋 In progress |
+| Search SDK extraction complete | ✅ |
+| All quality gates pass | ✅ |
+
+---
+
+## 5. References
+
+- [ADR-108: SDK Workspace Decomposition][adr-108]
+- [ADR-030: SDK as Single Source of Truth](../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
+- [ADR-031: Generation-Time Extraction](../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
+- [ADR-038: Compilation-Time Revolution](../../../docs/architecture/architectural-decisions/038-compilation-time-revolution.md)
 - `.agent/directives/schema-first-execution.md`
-- `docs/architecture/architectural-decisions/029-no-manual-api-data.md`
-- `docs/architecture/architectural-decisions/030-sdk-single-source-truth.md`
-- `docs/architecture/architectural-decisions/031-generation-time-extraction.md`
-- `docs/architecture/architectural-decisions/038-compilation-time-revolution.md`
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/openapi-to-tooling-integration-plan.md`
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/mcp_ecosystem_integration_requirements.md`
-- `.agent/plans/replacing_openapi_ts_and_openapi_zod_client/openapi-to-mcp-framework-extraction-plan.md`
+- `.agent/directives/rules.md`
 
 ---
 
-## 3. Definitions
+## 6. Deliverables
 
-- **Generation Workspace**: The package containing schema ingestion, transforms, generators, generated artefacts, and public exports.
-- **Runtime Workspace**: The package exposing API clients, MCP facades, and validation built on the generation workspace outputs.
-- **Manifest**: The file/output descriptor emitted by the forthcoming generator; in this plan we rely on the current artefact set but anticipate manifest-based exports.
-- **Boundary Rules**: ESLint and Turborepo configuration that prevent cross-package imports outside the declared public API.
-
----
-
-## 4. Deliverables
-
-1. `packages/sdks/oak-curriculum-sdk-generation` workspace (package.json, tsconfig, lint config, docs).
-2. `packages/sdks/oak-curriculum-sdk` runtime workspace updated to depend on the generation package only via public exports.
-3. Generation workspace public API (`src/index.ts`) exporting all schema-first execution artefacts.
-4. ESLint/Turborepo rule updates enforcing package boundaries.
+1. `packages/sdks/oak-curriculum-sdk-generation` workspace
+   (package.json, tsconfig, lint config, docs).
+2. Runtime workspace updated to depend on the generation
+   package only via public exports.
+3. Generation workspace public API exporting all
+   schema-first artifacts with TSDoc.
+4. ESLint/Turborepo rules enforcing package boundaries.
 5. Updated CI scripts, README files, and migration notes.
-6. ADR documenting the separation decision.
 
 ---
 
-## 5. Phase Plan
+## 7. Phase Plan
 
-### Phase 0 – Foundations
+### Phase 0 — Foundations
 
-- Review ADRs and directives; confirm alignment with schema-first execution.
-- Inventory current type-gen outputs and runtime dependencies.
-- Capture current CI pipelines and identify required updates.
+- Review ADRs and directives; confirm alignment.
+- Inventory current type-gen outputs and runtime
+  dependencies (every import from `types/generated/`).
+- Capture current CI pipelines and identify updates.
 
-### Phase 1 – Public API Blueprint
+### Phase 1 — Public API Blueprint
 
-- Document every `src/types/generated/**` export the runtime currently consumes.
-- Group exports into categories (OpenAPI types, path constants, MCP descriptors, Zod schemas, search assets, helpers).
-- Draft the barrel export layout and update of docs to reflect planned API sections.
+- Document every `src/types/generated/**` export the
+  runtime currently consumes.
+- Group exports into categories (OpenAPI types, path
+  constants, MCP descriptors, Zod schemas, search assets,
+  helpers).
+- Draft the barrel export layout.
 
-### Phase 2 – Workspace Scaffolding
+### Phase 2 — Workspace Scaffolding
 
-- Create `oak-curriculum-sdk-generation` workspace structure; move `type-gen`, `schema-cache`, and generated artefacts using git-aware moves.
-- Set up `package.json`, `tsconfig.json`, `eslint` config, `tsup` config, and `README`.
-- Define script pipeline (`type-gen`, `build`, `lint`, `test`, `docs`), anticipating future use of `@oaknational/openapi-to-tooling`.
+- Create `oak-curriculum-sdk-generation` workspace; move
+  `type-gen/`, `schema-cache/`, `vocab-gen/`, and generated
+  artifacts using git-aware moves.
+- Set up package.json, tsconfig, ESLint config, tsup config,
+  and README.
+- Define script pipeline (`type-gen`, `build`, `lint`,
+  `test`, `docs`).
 
-### Phase 3 – Barrel Export & Boundary Enforcement
+### Phase 3 — Barrel Export and Boundary Enforcement
 
 - Build `src/index.ts` with comprehensive exports and TSDoc.
-- Configure ESLint rules to forbid runtime workspace imports from generation internals.
-- Update `turbo.json` and `pnpm-workspace.yaml` to reflect new packages and pipelines.
+- Configure ESLint rules to forbid runtime workspace imports
+  from generation internals.
+- Update `turbo.json` and `pnpm-workspace.yaml`.
 
-### Phase 4 – Runtime Workspace Updates
+### Phase 4 — Runtime Workspace Updates
 
 - Switch runtime imports to the new package.
-- Remove duplicated generated artefacts from runtime workspace.
+- Remove generated artifacts from runtime workspace.
 - Verify runtime tests, build, and CI pipelines.
 
-### Phase 5 – Documentation & ADR
+### Phase 5 — Documentation
 
-- Write ADR for workspace separation.
-- Update workspace READMEs and migration guide.
+- Update workspace READMEs.
 - Align logging/setup docs with new package boundaries.
 
-### Phase 6 – Validation & Metrics
+### Phase 6 — Validation
 
-- Execute validation plan (Section 8).
-- Capture metrics (build latency, coverage, CI gate timings) pre- and post-separation.
-- Log onboarding dry-run results.
-
----
-
-## 6. Acceptance Criteria
-
-1. Generation workspace contains all type-gen logic, schema caches, and generated artefacts; runtime workspace contains no generated files.
-2. Runtime workspace builds, tests, and linting succeed using only public exports from the generation package.
-3. ESLint boundary rules and Turborepo pipelines prevent cross-package leakage.
-4. Generation public API exports all schema-first artefacts required by the runtime, with TSDoc.
-5. CI pipelines run deterministically and record build/test timings for both workspaces.
-6. Documentation reflects the new workspace structure and provides migration guidance.
-7. Cross-schema smoke test (Oak schema + minimal reference schema) passes using the generation workspace.
+- Execute validation plan (Section 9).
+- Capture metrics (build latency, coverage, CI gate timings).
 
 ---
 
-## 7. Definition of Done
+## 8. Acceptance Criteria
 
-- [ ] Workspace restructuring tasks completed and merged with git history preserving file provenance.
-- [ ] All acceptance criteria satisfied and documented.
-- [ ] ADR published and linked from the relevant plans.
-- [ ] CI dashboards updated with new build/test timings and coverage metrics.
-- [ ] Onboarding dry-run log available demonstrating setup in < 4 hours.
-- [ ] Sign-off recorded in project governance log.
-
----
-
-## 8. Validation Strategy
-
-### 8.1 Structural Validation
-
-- Verify file moves via `git status` ensuring no content modifications.
-- Run `pnpm lint` with boundary rules to confirm no illegal imports.
-- Check `pnpm build` orchestrates generation → runtime builds in sequence.
-
-### 8.2 Behavioural Validation
-
-- Execute runtime integration tests (request/response validation, MCP execution) to confirm unchanged behaviour.
-- Run cross-schema generation on:
-  - Oak production schema.
-  - Minimal reference schema (e.g. simple CRUD spec) to ensure vendor-neutral readiness.
-
-### 8.3 Determinism & Metrics
-
-- Run generation twice and diff outputs to confirm determinism.
-- Record build durations, test durations, and coverage percentages for both workspaces.
-- Measure `pnpm docs:verify` and Lighthouse accessibility score (target ≥ 95%).
-
-### 8.4 Documentation & Onboarding
-
-- Validate updated READMEs through a fresh checkout dry-run; document time taken (< 4 hours goal).
-- Ensure ADR and migration guides pass lint/markdown checks.
-
-### 8.5 Governance
-
-- Update governance log with separation status, metrics, and open risks.
-- Cross-reference integration plan to confirm prerequisite satisfied.
+1. Generation workspace contains all type-gen logic, schema
+   caches, and generated artifacts; runtime workspace
+   contains no generated files.
+2. Runtime workspace builds, tests, and lints using only
+   public exports from the generation package.
+3. ESLint boundary rules prevent cross-package leakage.
+4. Generation public API exports all schema-first artifacts,
+   with TSDoc.
+5. CI pipelines run deterministically.
+6. Documentation reflects the new structure.
+7. All quality gates pass.
 
 ---
 
-## 9. Impacted Artefacts
+## 9. Validation Strategy
 
-- `packages/sdks/oak-curriculum-sdk/type-gen/**` → moved to generation workspace.
-- `packages/sdks/oak-curriculum-sdk/src/types/generated/**` → moved to generation workspace.
-- `packages/sdks/oak-curriculum-sdk/src/**` → updated imports and removed generated files.
-- `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.base.json`, ESLint configs.
-- Workspace READMEs, logging guide, and docs referencing generated types.
+### Structural
+
+- Verify file moves via `git status` (no content changes).
+- Run `pnpm lint` with boundary rules to confirm no illegal
+  imports.
+- Check `pnpm build` orchestrates generation then runtime.
+
+### Behavioural
+
+- Runtime integration tests pass unchanged.
+- MCP servers behave identically.
+
+### Determinism
+
+- Run generation twice and diff outputs.
+- Record build and test durations.
 
 ---
 
-## 10. Risks & Mitigations
+## 10. Risks and Mitigations
 
-- **Risk**: Hidden coupling between runtime code and generated internals.  
-  **Mitigation**: Audit imports before move, add ESLint rules & tests covering expected exports.
-
-- **Risk**: CI complexity increases with two workspaces.  
-  **Mitigation**: Centralise scripts via Turborepo, share metrics dashboard, monitor build times.
-
-- **Risk**: Incomplete documentation leading to onboarding friction.  
-  **Mitigation**: Dry-run onboarding and record findings; ensure migration guide is explicit.
-
-- **Risk**: Future generator upgrade introduces breaking API changes.  
-  **Mitigation**: Public API references the manifest-based exports planned in integration requirements; add TODO markers for `@oaknational/openapi-to-tooling` adoption.
+| Risk | Mitigation |
+|---|---|
+| Hidden coupling between runtime and generated internals | Audit imports before move; ESLint boundary rules |
+| CI complexity increases | Centralise scripts via Turborepo |
+| Incomplete documentation | Dry-run onboarding and document |
+| Future generator upgrade breaks API | Public API references manifest-based exports |
 
 ---
 
 ## 11. Open Questions
 
-1. Should the generation workspace publish a CLI entry point, or remain library-only until `@oaknational/openapi-to-tooling` lands?
-2. Do we require additional reference schemas for cross-validation beyond the minimal CRUD example?
-3. How will versioning be handled for consumers if the generation package becomes public (semver policy)?
+1. Should the generation workspace publish a CLI entry
+   point, or remain library-only until the generic pipeline
+   extraction (Step 2)?
+2. How will versioning be handled if the generation package
+   becomes public (semver policy)?
+3. What is the right boundary for generated artifacts —
+   committed in the generation workspace and consumed as a
+   package, or committed in the runtime workspace?
 
 ---
 
-## 12. Next Actions
+## 12. Relationship to Other Plans
 
-1. Confirm inventory of generated artefacts and runtime import list.
-2. Draft ADR outline and gather stakeholder approval.
-3. Begin Phase 2 scaffolding with git-aware moves.
-4. Update integration plan to mark this separation as “in progress”.
+| Plan | Relationship |
+|---|---|
+| [openapi-to-tooling-integration-plan.md](openapi-to-tooling-integration-plan.md) | Describes the generic pipeline (WS1) extracted from WS2 in Step 2 |
+| [openapi-to-mcp-framework-extraction-plan.md](openapi-to-mcp-framework-extraction-plan.md) | Describes the full framework extraction including runtime (WS3) |
+| [Castr requirements](../external/castr/README.md) | Castr replaces openapi-zod-client after this separation |
+| [MCP Infrastructure plan](../sdk-and-mcp-enhancements/03-mcp-infrastructure-advanced-tools-plan.md) | Aggregated tools refactor targets WS2 (type-gen) and WS4 (runtime) |
 
 ---
 
 ## 13. Revision History
 
-- **08/11/2025** – Plan rewritten to include goals, impacts, acceptance criteria, validation, metrics, and alignment with the openapi-to-tooling roadmap.
+- **08/11/2025** — Plan created for 2-way split.
+- **2026-02-12** — Rewritten to reference ADR-108
+  4-workspace decomposition. Step 1 (2-way split) scoped
+  as first phase of larger architecture. Prerequisites
+  updated, stale references removed.

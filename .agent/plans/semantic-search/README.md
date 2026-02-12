@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-02-12
 
 ---
 
@@ -10,14 +10,14 @@
 
 ---
 
-## Current Work: MCP Search Integration
+## Current Work: SDK Validation
 
 SDK extraction is complete (Checkpoints A–E2, Feb 2026).
-The immediate priority is wiring the Search SDK into the
-MCP curriculum servers so that AI agents can use hybrid
-Elasticsearch search.
+The SDK was completely rewritten and re-architected during
+extraction. The immediate priority is validating it against
+real Elasticsearch to confirm it produces correct results.
 
-**Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
+**Roadmap**: [roadmap.md](roadmap.md)
 
 ---
 
@@ -30,7 +30,10 @@ Elasticsearch search.
 2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
    Checkpoints A–E2 (extraction, Result pattern, TSDoc)
          ↓
-3. MCP Search Integration                        ← CURRENT
+2e. SDK Validation against Real ES               ← CURRENT
+    Run full evaluation suite, confirm baselines hold
+         ↓
+3. MCP Search Integration
    Wire hybrid search into MCP tools
          ↓
 4. Search Quality + Ecosystem (parallel streams)
@@ -60,7 +63,7 @@ After SDK extraction, work is organized into **streams** — coherent domains wi
 
 | Stream | Intent |
 |--------|--------|
-| [mcp-integration/](post-sdk/mcp-integration/) | Wire hybrid search into MCP tools (FIRST) |
+| [mcp-integration/](post-sdk/mcp-integration/) | Wire hybrid search into MCP tools (after SDK validation) |
 | [search-quality/](post-sdk/search-quality/) | Improve search result relevance (Levels 2-4) |
 | [bulk-data-analysis/](post-sdk/bulk-data-analysis/) | Mine vocabulary from curriculum data |
 | [sdk-api/](post-sdk/sdk-api/) | Understand and stabilise SDK API |

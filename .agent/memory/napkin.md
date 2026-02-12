@@ -1,5 +1,148 @@
 # Napkin
 
+## Session: 2026-02-12 — Transcript 451 + Test Strategy Remediation Plan
+
+### Context
+
+- Investigation of `/lessons/{lesson}/transcript` upstream behaviour
+- Found upstream changed from 500/404 to HTTP 451 for unavailable transcripts
+- Audited all E2E tests for testing strategy compliance
+- Branch: feat/semantic_search_deployment
+
+### Key Findings
+
+- **Upstream 451**: French/German/Spanish transcripts now return HTTP 451 (was 500/404). Some maths lessons also return 451. Body says `INTERNAL_SERVER_ERROR` despite 451 status.
+- **classifyHttpError is GENERATED**: Lives in `type-gen/typegen/error-types/generate-error-types.ts`. Fix must go in the generator template per schema-first directive. Do NOT edit `sdk-error-types.ts` directly.
+- **Notion MCP E2E test**: `apps/oak-notion-mcp/e2e-tests/server.e2e.test.ts` makes real network calls to Notion API. Clear violation of testing strategy.
+- **built-server E2E test**: Uses `fetch()` to localhost — borderline network IO. Should be reclassified as smoke test.
+- **process.env mutation**: 4 streamable-http E2E tests mutate `process.env` despite using in-process `createApp()`. The correct pattern is `createApp({ runtimeConfig })`.
+
+### What Was Done
+
+- Created remediation plan at `.agent/plans/semantic-search/active/transcript-451-test-doc-remediation.plan.md`
+- 4 workstreams: 451 handling (generator fix), E2E test compliance, documentation updates, directive compliance sweep
+
+### Mistakes Made (and Corrected)
+
+- Grep tool consistently failed due to missing `.cursorignore` files in `apps/oak-open-curriculum-semantic-search/`. Had to use shell `rg` with `2>/dev/null` instead.
+- Initially searched for `search_vtt` literally — the term does not exist in the codebase. The actual entity is `/lessons/{lesson}/transcript` which returns `{ transcript, vtt }`.
+- Fenced code blocks without language specifiers fail markdownlint (MD040). Always specify language even for file paths (use inline backticks instead).
+
+### Patterns to Remember
+
+- `rg` in shell with `2>/dev/null` bypasses cursorignore errors that block the Grep tool
+- `curl -s -w "\n%{http_code}"` is the quick way to test upstream API status codes
+- Generator templates in `type-gen/typegen/` are the source of truth for anything in `src/types/generated/`
+- E2E tests: STDIO IO allowed, network IO forbidden. Smoke tests: all IO allowed.
+
+---
+
+## Session: 2026-02-12 — ADR-108 and Documentation Cohesion
+
+### Context
+
+- Continued from workspace decomposition analysis session
+- Task: transfer all architectural reasoning from cursor
+  plan into permanent repo documentation
+- Branch: feat/semantic_search_deployment
+
+### What Was Done
+
+- **Created ADR-108** (`docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md`):
+  The authoritative architectural decision for the 4-workspace
+  decomposition. Contains full context, decision, workspace
+  definitions, dependency graph, plugin architecture,
+  why-not-more/fewer analysis, phased execution, Castr
+  relationship, consequences, and references.
+- **Updated ADR README index**: Added ADR-108 to both the
+  main index and the "Key Architectural Decisions" section.
+- **Rewrote `sdk-workspace-separation-plan.md`**: Now
+  describes the 2-way split as Step 1 of the 4-workspace
+  decomposition. References ADR-108. Updated prerequisites,
+  removed stale references, added relationship to Step 2.
+- **Updated 5 pipeline-enhancements plans**: Added "Workspace
+  Architecture Context" sections to
+  `openapi-to-tooling-integration-plan.md` (WS1),
+  `openapi-to-mcp-framework-extraction-plan.md` (WS1+WS3),
+  `mcp_ecosystem_integration_requirements.md` (WS1 API),
+  `schema-generator-client-requirements.md` (WS1 API),
+  `PHASE-4-ARTEFACT-EXPANSION.md` (WS1).
+- **Updated 2 SDK/MCP enhancement plans**: Added workspace
+  context to `03-mcp-infrastructure-advanced-tools-plan.md`
+  (WS2 type-gen, WS4 runtime) and
+  `18-schema-driven-sdk-adapter-generation-plan.md`
+  (WS1 generator, WS4 consumer). Fixed stale priorities.
+- **Updated `sdk-and-mcp-enhancements/README.md`**: Added
+  workspace architecture section cross-referencing ADR-108.
+- **Updated `high-level-plan.md`**: Expanded Item #2 from
+  2-way split to 4-workspace decomposition with phased
+  execution. Updated backlog (Generic Pipeline Extraction,
+  Generic Runtime Extraction). Updated milestones and notes.
+- **Updated navigation docs**: `plans/README.md` and
+  `external/castr/README.md` now reference ADR-108.
+- **Deleted cursor plan**: `sdk_workspace_decomposition_6cbebba0.plan.md`
+  removed without information loss.
+
+### Consistency Verification
+
+- 14 markdown files reference ADR-108
+- All cross-references validated
+- `pnpm markdownlint:root` passes clean
+
+### What Worked
+
+- Creating ADR-108 first as the canonical reference made
+  all subsequent updates straightforward
+- Adding "Workspace Architecture Context" sections at the
+  top of plans provides clear orientation without requiring
+  full rewrites
+
+### Mistakes
+
+- **Plans skipped validation**: All planning docs went
+  straight from "SDK extraction complete" to "MCP
+  integration." User correctly pointed out that a
+  completely rewritten SDK must be validated against real
+  ES before wiring into any consumer. Added Phase 2e
+  (SDK Validation) to roadmap and updated all docs.
+  Lesson: after any major rewrite/re-architecture,
+  validation against the real system is a non-negotiable
+  step — never skip straight to the next consumer.
+
+---
+
+## Session: 2026-02-11 — High-Level Plan Rewrite
+
+### Context
+
+- User flagged that `high-level-plan.md` was badly out of date — many items no longer exist or are irrelevant
+- User provided explicit priority sequence: MCP search integration → compare/replace REST search → SDK workspace separation → Castr integration
+- Performed full audit of ~200 plan files across all `.agent/plans/` directories
+- Branch: feat/semantic_search_deployment
+
+### What Was Done
+
+- **Full rewrite of `high-level-plan.md`**: Restructured from 10 numbered items (many stale) to 8 prioritised items matching actual priorities. Removed dead references, added Castr integration as explicit priority #3, added completed work section, added deferred/won't-implement section
+- **Updated `wire-hybrid-search.md`**: Added compare-and-replace as in-scope (was previously listed as out of scope). Added Phase 5 execution phase. Added second target state diagram showing post-replacement architecture. Updated success criteria.
+- **Updated `roadmap.md`**: Added compare-and-replace tasks to Phase 3 task list
+- **Updated `semantic-search.prompt.md`**: Added compare-and-replace bullets to MCP integration section
+
+### Key Findings from Plan Audit
+
+- ~200 plan files exist; ~90 in archive/completed directories
+- Many items in old high-level plan referenced completed or superseded work
+- Castr requirements are well-documented in `external/castr/` but weren't in the high-level plan
+- SDK workspace separation plan exists in `pipeline-enhancements/` and is prerequisite for Castr
+- The "compare and replace REST search" step was missing from all plans despite being a clear user priority
+
+### Patterns to Remember
+
+- Always audit archived plans when rewriting strategic docs — the archive structure tells you what's done
+- User priorities may not match plan document structure — listen to the user, not the docs
+- "Out of scope" items in plans should be reviewed when priorities change
+
+---
+
 ## Session: 2026-02-11 — Checkpoint E2: Result Pattern + TSDoc + Directive Review
 
 ### Context

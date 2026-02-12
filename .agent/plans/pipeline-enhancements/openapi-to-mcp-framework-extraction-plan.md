@@ -1,25 +1,48 @@
 # OpenAPI-Driven MCP Framework Plan
 
+**Last Updated**: 2026-02-12  
+**ADR**: [ADR-108: SDK Workspace Decomposition][adr-108]
+
+## Workspace Architecture Context
+
+This plan describes the extraction of a reusable
+OpenAPI-driven framework. In the 4-workspace decomposition
+defined by [ADR-108][adr-108], this plan covers:
+
+- **Workspace 1** (Generic Pipeline): the type-gen
+  framework that transforms any OpenAPI spec into SDK
+  artifacts and MCP tool descriptors.
+- **Workspace 3** (Generic Runtime): the "shared runtime
+  package" described below maps to the generic runtime
+  SDK framework.
+
+This plan is a superset of the
+[openapi-to-tooling integration plan](openapi-to-tooling-integration-plan.md),
+which focuses specifically on Workspace 1. This plan
+additionally covers MCP server scaffolding, shared runtime
+extraction, and multi-spec validation.
+
+[adr-108]: ../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md
+
 ## Core References
 
-- [GO.md](../../GO.md)
-- [AGENT.md](../directives/AGENT.md)
+- [ADR-108: SDK Workspace Decomposition][adr-108]
 - [.agent/directives/rules.md](../directives/rules.md)
 - [.agent/directives/testing-strategy.md](../../.agent/directives/testing-strategy.md)
 
 ## Prerequisites
 
-**BLOCKED**: This plan requires [SDK Workspace Separation](./sdk-workspace-separation-plan.md) (Item #5 in [High-Level Plan](./high-level-plan.md)) to complete first.
+**BLOCKED**: This plan requires [SDK Workspace Separation](./sdk-workspace-separation-plan.md) (Step 1 of the 4-workspace decomposition per [ADR-108][adr-108]) to complete first.
 
 ### Why SDK Separation Must Come First
 
 The framework extraction depends on first separating Oak's SDK into generation and runtime workspaces:
 
-1. **Clear extraction boundary** - SDK separation identifies exactly what to extract: the `oak-curriculum-sdk-generation` workspace contains all type-gen logic that will become the framework
-2. **Validated architecture** - Separation proves generation logic can operate independently, which is essential for a reusable framework
-3. **Working reference** - The separated generation workspace provides a concrete, tested example of what the framework should produce
-4. **Clean separation** - Distinguishes Oak-specific code (stays in runtime) from general-purpose generation logic (becomes framework)
-5. **Risk reduction** - Attempting both simultaneously would mix "move and expose" with "generalize and extract," making validation much harder
+1. **Clear extraction boundary** — SDK separation identifies exactly what to extract: the `oak-curriculum-sdk-generation` workspace contains all type-gen logic that will become the framework
+2. **Validated architecture** — Separation proves generation logic can operate independently, which is essential for a reusable framework
+3. **Working reference** — The separated generation workspace provides a concrete, tested example of what the framework should produce
+4. **Clean separation** — Distinguishes Oak-specific code (stays in runtime) from general-purpose generation logic (becomes framework)
+5. **Risk reduction** — Attempting both simultaneously would mix "move and expose" with "generalize and extract," making validation much harder
 
 ### Current State (Before Separation)
 
