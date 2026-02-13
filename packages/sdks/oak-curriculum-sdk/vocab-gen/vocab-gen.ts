@@ -20,6 +20,7 @@
  *
  * @see {@link ../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md | ADR-086} for the pipeline specification
  */
+import { readFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -133,26 +134,47 @@ export function createPipelineConfig(input: PipelineConfigInput): PipelineConfig
 }
 
 /**
- * Extracts a version identifier from the bulk data path.
+ * Type guard for objects with a string `downloadedAt` property.
+ */
+function hasDownloadedAt(value: unknown): value is { downloadedAt: string } {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    'downloadedAt' in value &&
+    typeof value.downloadedAt === 'string'
+  );
+}
+
+/**
+ * Reads the source version from the bulk data manifest.
+ *
+ * The manifest file (`manifest.json`) in the bulk download directory
+ * contains a `downloadedAt` ISO timestamp identifying when the data
+ * was fetched from the Oak API.
  *
  * @param bulkDataPath - Path to bulk download directory
- * @returns Version string derived from directory name
+ * @returns ISO timestamp from the manifest's `downloadedAt` field
  *
  * @example
  * ```ts
- * extractSourceVersion('/path/to/oak-bulk-download-2025-12-07T09_37_04.693Z');
- * // Returns: '2025-12-07T09:37:04.693Z'
+ * await readSourceVersion('/path/to/bulk-downloads');
+ * // Returns: '2026-01-15T15:39:50.310Z'
  * ```
  */
-function extractSourceVersion(bulkDataPath: string): string {
-  const dirName = basename(bulkDataPath);
-  // Extract timestamp from directory name like 'oak-bulk-download-2025-12-07T09_37_04.693Z'
-  const match = /(\d{4}-\d{2}-\d{2}T\d{2}_\d{2}_\d{2}\.\d{3}Z)/.exec(dirName);
-  if (match?.[1]) {
-    // Convert underscores back to colons for ISO format
-    return match[1].replace(/_/g, ':');
+async function readSourceVersion(bulkDataPath: string): Promise<string> {
+  const manifestPath = join(bulkDataPath, 'manifest.json');
+  const content = await readFile(manifestPath, 'utf-8').catch((error: unknown) => {
+    throw new Error(
+      `No manifest.json found at ${manifestPath}. ` +
+        `Bulk download directory must contain a manifest.json with a downloadedAt field. ` +
+        `(${error instanceof Error ? error.message : String(error)})`,
+    );
+  });
+  const parsed: unknown = JSON.parse(content);
+  if (!hasDownloadedAt(parsed)) {
+    throw new Error(`manifest.json missing downloadedAt field at ${manifestPath}`);
   }
-  return dirName;
+  return parsed.downloadedAt;
 }
 
 async function generateOutputFiles(
@@ -160,7 +182,7 @@ async function generateOutputFiles(
   config: PipelineConfig,
 ): Promise<string[]> {
   const outputFiles: string[] = [];
-  const sourceVersion = extractSourceVersion(config.bulkDataPath);
+  const sourceVersion = await readSourceVersion(config.bulkDataPath);
 
   // Generate thread progression graph
   const threadGraph = generateThreadProgressionData(result.extractedData.threads, sourceVersion);

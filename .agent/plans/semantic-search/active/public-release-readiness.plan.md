@@ -2,14 +2,14 @@
 
 **Status**: Ready -- execute all workstreams
 **Parent**: [../README.md](../README.md) | [../roadmap.md](../roadmap.md)
-**Last Updated**: 2026-02-12
+**Last Updated**: 2026-02-13
 
 ---
 
 ## Instruction
 
 This plan prepares the repository for public visibility on GitHub
-and the SDKs/libraries for publication as public npm packages
+and selected SDKs/libraries for publication as public npm packages
 under the `@oaknational` scope.
 
 It contains six workstreams and a final quality gate.
@@ -20,6 +20,17 @@ completion checklist. Mark each workstream done as you finish it.
 **External contributions are not accepted at this time.** The
 documentation must reflect this clearly and politely. Internal
 onboarding for Oak team members must be complete and accurate.
+Detailed onboarding refinement is tracked in
+`active/developer-onboarding-experience.plan.md` to keep this
+plan focused on release blockers.
+
+**Scope decision (2026-02-12)**: for the first public npm release,
+publish only `@oaknational/oak-curriculum-sdk`. All other workspaces
+remain private (`private: true`) for now.
+
+**Credential policy (2026-02-12)**: real credentials are allowed only
+in local `.env*` files that are not committed. `.env.example` files
+and all other tracked files must contain placeholders/redacted values.
 
 ---
 
@@ -49,10 +60,28 @@ independent of each other.
 
 **Priority**: CRITICAL -- must complete before any public visibility
 
-**Problem**: Two tracked files contain real credentials that would
-be exposed if the repo became public.
+**Problem**: real credentials and credential-like values exist in
+tracked files outside `.env*`, which violates the public-release
+policy and risks exposure the moment the repository is public.
 
-### 1a: API keys in experience document
+### 1a: Enforce credential location policy
+
+**Policy**:
+
+- Real credentials are allowed only in local, untracked `.env*` files.
+- `.env.example` files must contain placeholders only.
+- All other tracked files must contain placeholders/redacted values.
+
+**Action**:
+
+- Add this policy explicitly to `README.md`, `CONTRIBUTING.md`, and
+  the security guidance docs.
+- Add a CI check that fails when key-like values appear in tracked
+  non-`.env*` files.
+- Keep a small allowlist for known docs examples that are not secrets
+  (see 1e).
+
+### 1b: API keys in experience document
 
 **File**: `.agent/experience/the-api-key-revelation.md`
 
@@ -77,38 +106,56 @@ Consider using `git filter-repo` or BFG Repo-Cleaner to scrub
 history before making the repo public, or accept that the keys
 will be rotated and the old values are dead.
 
-### 1b: Clerk credentials in archived plan
+### 1c: Clerk publishable key and tenant URL across tracked files
 
-**File**: `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md`
+**Problem**: the same Clerk test publishable key and tenant URL are
+repeated in many tracked files (tests, plans, docs). Even if this is
+a test instance, it should not be embedded broadly in public source.
 
-Contains:
+Representative files (not exhaustive):
 
-- Clerk Frontend API URL (`REDACTED.clerk.accounts.dev`)
-- Clerk publishable key (`pk_test_bmF0aXZl...`)
+- `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md`
+- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts`
+- `apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth-enforcement.e2e.test.ts`
+- `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.integration.test.ts`
 
 **Remediation**:
 
-- Replace with redacted placeholders:
-  `https://REDACTED.clerk.accounts.dev` and
-  `pk_test_REDACTED`.
-- The surrounding OAuth implementation documentation remains
-  valuable and should be preserved.
+- Replace tenant-specific values with neutral placeholders in all
+  tracked non-`.env*` files:
+  `https://REDACTED.clerk.accounts.dev` and `pk_test_REDACTED`.
+- For tests, use deterministic non-real stubs (for example
+  `pk_test_dummy_for_testing`) rather than tenant-derived values.
+- Preserve implementation docs/plans, but redact literal values.
 
 **User action required**: Verify whether the Clerk dev instance
 is still active. If so, rotate or decommission it.
 
-### 1c: Pre-commit secret scanning
+### 1d: Secret scanning gates (CI and optional pre-commit)
 
 **Remediation**:
 
-- Add a `secretlint` or `gitleaks` configuration to catch
-  secrets before they reach git history.
-- Evaluate whether to add this as a husky pre-commit hook
-  (already using husky for commitlint) or as a CI step, or both.
-- At minimum, add a CI step in `.github/workflows/ci.yml` that
-  runs secret scanning on every PR.
+- Add a `gitleaks` or `secretlint` configuration that scans git
+  history and tracked files.
+- Configure rules/allowlists so docs examples remain valid while
+  real credentials fail the build.
+- Add a required CI step in `.github/workflows/ci.yml` on every PR.
+- Optionally add a husky pre-commit/pre-push hook for earlier feedback.
 
-### 1d: Git history scrubbing decision
+### 1e: Known docs examples (no remediation needed)
+
+The following are documentation examples and are not treated as
+live secrets:
+
+- `.agent/reference-docs/nextjs-environment-variables.md`
+  (`-----BEGIN ... PRIVATE KEY-----` sample block)
+- `.agent/reference-docs/clerk-testing.md`
+  (`__clerk_testing_token=...` sample token)
+
+These files should remain as documentation unless a separate
+documentation policy requires sanitising all token-like examples.
+
+### 1f: Git history scrubbing decision
 
 **Decision required**: Before making the repo public, decide
 whether to scrub git history of the exposed secrets using
@@ -123,11 +170,12 @@ secrets are low-sensitivity (dev API keys, test Clerk instance).
 
 ### Completion checklist
 
+- [ ] Credential location policy documented (real keys only in local untracked `.env*`; never in `.env.example` or other tracked files)
+- [ ] CI secret scan added with sensible allowlist handling
 - [ ] API keys redacted in `.agent/experience/the-api-key-revelation.md`
-- [ ] Clerk credentials redacted in archived OAuth plan
+- [ ] Clerk tenant/publishable values redacted across tracked non-`.env*` files
 - [ ] Exposed keys rotated (user action)
-- [ ] Secret scanning added to CI
-- [ ] Pre-commit hook evaluated and decision documented
+- [ ] Pre-commit/pre-push secret scan hook evaluated and decision documented
 - [ ] Git history scrubbing decision made and documented
 
 ---
@@ -200,30 +248,28 @@ registry presentation and GitHub repository display.
 
 ### 3a: Classify packages as public or private
 
-**Decision required**: Which packages will be published to npm
-as public packages, and which are private (internal-only)?
+**Decision (recorded)**: initial public npm scope is a single package:
+`@oaknational/oak-curriculum-sdk`. All other workspaces remain private.
 
 Current state and recommendation:
 
 | Workspace | Current `private` | Recommendation | Rationale |
 | --- | --- | --- | --- |
 | Root (`@oaknational/mcp-ecosystem`) | `true` | `true` | Monorepo root, never published |
-| `apps/oak-curriculum-mcp-stdio` | missing | **publish** | Installable MCP server for Claude/Cursor |
+| `apps/oak-curriculum-mcp-stdio` | missing | `true` | Hold for later release cycle |
 | `apps/oak-curriculum-mcp-streamable-http` | `true` | `true` | Deployed service, not an npm package |
 | `apps/oak-search-cli` | `true` | `true` | Internal CLI, requires Elasticsearch |
 | `packages/core/oak-eslint` | missing | `true` | Internal ESLint config, Oak-specific |
-| `packages/core/openapi-zod-client-adapter` | missing | evaluate | Potentially useful to others |
-| `packages/libs/env` | missing | evaluate | Potentially useful to others |
-| `packages/libs/logger` | missing | evaluate | Potentially useful to others |
-| `packages/libs/result` | missing | evaluate | Potentially useful to others |
+| `packages/core/openapi-zod-client-adapter` | missing | `true` | Hold for later release cycle |
+| `packages/libs/env` | missing | `true` | Hold for later release cycle |
+| `packages/libs/logger` | missing | `true` | Hold for later release cycle |
+| `packages/libs/result` | missing | `true` | Hold for later release cycle |
 | `packages/sdks/oak-curriculum-sdk` | missing | **publish** | Core SDK, primary public package |
-| `packages/sdks/oak-search-sdk` | missing | evaluate | Useful if search is offered as a service |
+| `packages/sdks/oak-search-sdk` | missing | `true` | Hold for later release cycle |
 
-**Action**: Get a definitive decision from the team on each
-"evaluate" row before proceeding. For the initial public release,
-a conservative approach is to mark everything except the SDK and
-stdio server as `private: true`, then selectively open packages
-in later releases.
+**Action**: make `private` explicit on every non-published workspace.
+Only `packages/sdks/oak-curriculum-sdk` should be publishable in this
+release cycle.
 
 ### 3b: Standardise metadata across all workspaces
 
@@ -267,11 +313,11 @@ present and correct:
 | Field | Missing from |
 | --- | --- |
 | `author` | 8 of 11 workspaces |
-| `license` | 5 of 11 (`streamable-http`, `search-cli`, `eslint`, `result`, root has it) |
+| `license` | 4 of 11 (`streamable-http`, `search-cli`, `eslint`, `result`) |
 | `repository` | 3 of 11 (`search-cli`, `eslint`, `result`) |
 | `homepage` | all 11 |
 | `bugs` | all 11 |
-| `keywords` | 5 of 11 |
+| `keywords` | 4 of 11 |
 | `description` | 3 of 11 (`streamable-http`, `search-cli`, `eslint`) |
 | `publishConfig` | all 11 |
 
@@ -305,13 +351,13 @@ The root `package.json` has:
 - [ ] Public/private classification decided for all workspaces
 - [ ] `private: true` added to all non-published packages
 - [ ] `author` added to all 11 workspaces
-- [ ] `license` added to 5 workspaces missing it
+- [ ] `license` added to 4 workspaces missing it
 - [ ] `repository` (with `directory`) added to 3 missing workspaces, verified on 8 existing
 - [ ] `homepage` added to all 11 workspaces
 - [ ] `bugs` added to all 11 workspaces
 - [ ] `description` added to 3 workspaces missing it
 - [ ] `keywords` reviewed and updated across all workspaces
-- [ ] `publishConfig` added to all public packages
+- [ ] `publishConfig` added to `packages/sdks/oak-curriculum-sdk`
 - [ ] Version strategy documented and applied
 - [ ] Root keywords updated
 - [ ] Node.js version consistent everywhere
@@ -319,6 +365,10 @@ The root `package.json` has:
 ---
 
 ## Workstream 4: Documentation overhaul
+
+**Scope note**: deep onboarding experience refinement is tracked in
+`active/developer-onboarding-experience.plan.md`. WS4 keeps release-
+critical documentation updates and cross-links only.
 
 ### 4a: Root README.md
 
@@ -394,15 +444,11 @@ Create a clear, polite boundary in both `README.md` and
 
 ### 4d: Internal onboarding
 
-**File**: `docs/development/onboarding.md`
+**Plan**: `active/developer-onboarding-experience.plan.md`
 
-Review for accuracy and completeness. Verify:
-
-1. All referenced files and paths still exist
-2. Commands are correct and match root `package.json`
-3. The onboarding flow works for a new Oak team member
-4. No references to tools or processes that are internal-only
-   and would confuse a public viewer
+Track deep onboarding improvements in the dedicated plan. In this
+release-readiness plan, only ensure public docs link cleanly to the
+canonical onboarding path and do not contradict onboarding policy.
 
 ### 4e: CHANGELOG.md
 
@@ -454,7 +500,7 @@ workspace READMEs are substantive and public-ready.
 - [ ] CONTRIBUTING.md: E2E test note corrected
 - [ ] CONTRIBUTING.md: section ordering improved
 - [ ] External contributor messaging consistent across README and CONTRIBUTING
-- [ ] `docs/development/onboarding.md` reviewed and verified
+- [ ] Public docs cross-link correctly to the canonical onboarding path (deep onboarding tracked separately)
 - [ ] CHANGELOG.md replaced or regenerated
 - [ ] `packages/core/oak-eslint/README.md` created
 - [ ] `packages/core/openapi-zod-client-adapter/README.md` expanded
@@ -577,15 +623,21 @@ read the full agent directives. Low priority.
 
 ## Workstream 6: Publication dry run
 
-**Problem**: Before publishing any package to npm, verify that
-the published artifacts are correct, complete, and contain no
-secrets or unnecessary files.
+**Problem**: Before publishing to npm, verify that the single
+public package (`@oaknational/oak-curriculum-sdk`) has clean
+artifacts and that automated releases work end-to-end.
 
 ### 6a: Run publish dry run
 
 ```bash
 pnpm publish:dry
 ```
+
+Notes:
+
+- `pnpm publish` enforces clean git state by default. Run from a clean
+  branch/worktree.
+- For local iteration only, use `pnpm -r publish --dry-run --no-git-checks`.
 
 For each package that would be published, verify:
 
@@ -599,7 +651,7 @@ For each package that would be published, verify:
 
 ### 6b: Inspect tarballs
 
-For each public package:
+For `packages/sdks/oak-curriculum-sdk`:
 
 ```bash
 cd <workspace>
@@ -624,7 +676,7 @@ Verify that the `@oaknational` scope is available and configured:
 
 ### 6d: Verify package install
 
-For each public package, verify it installs cleanly:
+Verify `@oaknational/oak-curriculum-sdk` installs cleanly:
 
 ```bash
 mkdir /tmp/test-install && cd /tmp/test-install
@@ -633,15 +685,30 @@ npm install <tarball-path>
 # Verify: types resolve, exports work, no missing dependencies
 ```
 
+### 6e: Release automation gate (required)
+
+**Requirement**: a full automated release flow must work for the
+SDK-only publication scope. Either semantic-release or changesets is
+acceptable, but it must be deterministic and CI-driven.
+
+Verify:
+
+1. Only `@oaknational/oak-curriculum-sdk` is published by automation.
+2. Release workflow reads credentials from GitHub Secrets (no inline tokens).
+3. Dry-run release works on CI (or equivalent preview mode) and reports the next version.
+4. Real release creates the expected git tag/release notes and publishes to npm.
+5. The workflow remains safe for public forks (read-only checks still run).
+
 ### Completion checklist
 
 - [ ] `pnpm publish:dry` runs without errors
-- [ ] Each public package tarball inspected
-- [ ] No secrets in any tarball
-- [ ] All public packages have correct `files` field
-- [ ] README and LICENSE included in each tarball
+- [ ] SDK tarball inspected (`packages/sdks/oak-curriculum-sdk`)
+- [ ] No secrets in SDK tarball
+- [ ] SDK `files` field includes only intended publish artifacts
+- [ ] README and LICENSE included in SDK tarball
 - [ ] `@oaknational` npm scope verified
-- [ ] Test install succeeds for each public package
+- [ ] Test install succeeds for SDK tarball
+- [ ] Release automation (semantic-release or changesets) validated end-to-end
 
 ---
 
@@ -682,7 +749,8 @@ All must pass. No exceptions.
 - [ ] All workspace READMEs exist and are substantive (WS4)
 - [ ] CHANGELOG.md is correct for this repository (WS4)
 - [ ] GitHub templates and Dependabot configured (WS5)
-- [ ] Published tarballs are clean and correct (WS6)
+- [ ] SDK tarball is clean and correct (WS6)
+- [ ] Release automation is working for SDK-only publish scope (WS6)
 - [ ] All quality gates pass
 
 ---
@@ -714,8 +782,9 @@ valuable. Just ensure WS1 secrets are fully remediated first.
 | `.agent/directives/rules.md` | Quality standards that all changes must meet |
 | `.agent/directives/testing-strategy.md` | Test classification rules |
 | `.agent/directives/schema-first-execution.md` | Cardinal rule for type generation |
-| `docs/development/onboarding.md` | Internal onboarding (WS4d) |
+| `docs/development/onboarding.md` | Canonical onboarding document (deep refinement in dedicated onboarding plan) |
+| `active/developer-onboarding-experience.plan.md` | Dedicated onboarding refinement plan |
 | `CONTRIBUTING.md` | External contributor process (WS4b/4c) |
 | `SECURITY.md` | Security reporting process |
-| `.agent/experience/the-api-key-revelation.md` | Contains secrets to redact (WS1a) |
-| `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md` | Contains secrets to redact (WS1b) |
+| `.agent/experience/the-api-key-revelation.md` | Contains secrets to redact (WS1b) |
+| `.agent/plans/archive/completed/mcp-oauth-implementation-plan.archive.md` | Contains secrets to redact (WS1c) |

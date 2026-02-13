@@ -40,10 +40,10 @@ All items must be attempted and documented before this level can be declared "ex
 ### Thread Index
 
 ```text
-oak_threads: 164 documents
+oak_threads: threads across all 16 subjects (exact count from bulk data)
 ```
 
-All 164 threads indexed with metadata:
+All threads indexed with metadata:
 
 - `thread_slug`
 - `thread_title`

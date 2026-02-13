@@ -429,7 +429,7 @@ Sequence → Tier → Unit (for Maths KS4)
 
 ### Cross-Cutting Taxonomy
 
-- **Threads**: Link units across years (164 threads across 14 subjects)
+- **Threads**: Link units across years (threads span all 16 subjects)
 - **Categories**: Group units within a subject (only English, Science, RE)
 
 ### Many-to-Many Relationships

@@ -4,6 +4,9 @@ Thank you for your interest in contributing to the Oak MCP Ecosystem Server! Thi
 
 This repository is maintained by Oak National Academy. We welcome internal contributions and interest from the wider community.
 
+Before making changes, start with the canonical onboarding guide:
+[docs/development/onboarding.md](docs/development/onboarding.md)
+
 ## Code of Conduct
 
 By participating in this project, you agree to maintain a respectful and inclusive environment for all contributors.

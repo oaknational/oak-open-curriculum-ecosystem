@@ -97,7 +97,10 @@ export interface SearchUnitsParams extends SearchParamsBase {
 }
 
 /**
- * Parameters for searching sequences (subject-phase programmes).
+ * Parameters for searching sequences (API data structures for curriculum retrieval).
+ *
+ * Sequences are not the same as programmes (user-facing pathways).
+ * One sequence can generate many programme views.
  *
  * @example
  * ```typescript

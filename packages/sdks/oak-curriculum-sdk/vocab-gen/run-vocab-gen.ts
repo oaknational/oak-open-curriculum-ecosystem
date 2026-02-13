@@ -29,9 +29,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /**
  * Default bulk download data path relative to repo root.
+ *
+ * Points to the CLI's bulk downloads directory, which is the canonical
+ * location for Oak bulk download data in this repository. The vocab-gen
+ * pipeline must process ALL sequence files present in this directory.
  */
-const DEFAULT_BULK_DATA_PATH =
-  'reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z';
+const DEFAULT_BULK_DATA_PATH = 'apps/oak-search-cli/bulk-downloads';
 
 /**
  * Default output path relative to SDK root.

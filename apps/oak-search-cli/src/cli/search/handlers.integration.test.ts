@@ -12,6 +12,7 @@ import {
   handleSearchLessons,
   handleSearchUnits,
   handleSearchSequences,
+  handleSearchThreads,
   handleSuggest,
   handleFetchFacets,
 } from './handlers.js';
@@ -40,6 +41,15 @@ function createMockRetrieval(): RetrievalService {
     searchSequences: vi.fn().mockResolvedValue(
       ok({
         scope: 'sequences',
+        results: [],
+        total: 0,
+        took: 1,
+        timedOut: false,
+      }),
+    ),
+    searchThreads: vi.fn().mockResolvedValue(
+      ok({
+        scope: 'threads',
         results: [],
         total: 0,
         took: 1,
@@ -123,6 +133,22 @@ describe('handleSearchSequences', () => {
     expect(retrieval.searchSequences).toHaveBeenCalledWith({
       text: 'secondary science',
       size: 5,
+    });
+  });
+});
+
+describe('handleSearchThreads', () => {
+  it('passes text and optional filters to the retrieval service', async () => {
+    const retrieval = createMockRetrieval();
+
+    await handleSearchThreads(retrieval, {
+      text: 'algebra equations progression',
+      subject: 'maths',
+    });
+
+    expect(retrieval.searchThreads).toHaveBeenCalledWith({
+      text: 'algebra equations progression',
+      subject: 'maths',
     });
   });
 });

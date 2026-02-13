@@ -21,7 +21,7 @@
  * ## Query Design
  *
  * A teacher looking for the complete secondary maths programme would search
- * for curriculum/programme level terms. Query tested via test-query-sequences.ts.
+ * for curriculum/programme level terms. Query testable via `oaksearch search sequences`.
  *
  * ## Test Results
  *

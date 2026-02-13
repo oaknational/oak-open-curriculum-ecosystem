@@ -77,7 +77,7 @@ function serializeThread(thread: ThreadProgressionGraph['threads'][number]): rea
     '    {',
     `      slug: '${thread.slug}',`,
     `      title: '${escapeString(thread.title)}',`,
-    `      subject: '${thread.subject}',`,
+    `      subjects: ${JSON.stringify(thread.subjects)},`,
     `      firstYear: ${firstYearValue},`,
     `      lastYear: ${lastYearValue},`,
     `      unitCount: ${thread.unitCount},`,

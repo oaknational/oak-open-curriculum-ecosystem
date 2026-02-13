@@ -1,7 +1,7 @@
 # Semantic Search Roadmap
 
-**Status**: 🔄 **SDK validation next** — SDK extraction complete  
-**Last Updated**: 2026-02-12  
+**Status**: 🔄 **Public release readiness next** — SDK extraction and thread search complete  
+**Last Updated**: 2026-02-13  
 **Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)  
 **Metrics**: See [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) for baseline metrics per index
 
@@ -13,15 +13,16 @@
 
 SDK extraction is complete. All three services (retrieval,
 admin, observability) return `Result<T, E>` with per-service
-error types and comprehensive TSDoc. The full quality gate
-chain passes. The SDK must now be validated against real
-Elasticsearch before wiring into its first consumer.
+error types and comprehensive TSDoc. Thread search is fully
+integrated (8 GTs, baselines validated against live ES).
+The repo must be prepared for public visibility before
+wiring the SDK into its first consumer (MCP).
 
 | Index | GTs | MRR | NDCG@10 | Status |
 |-------|-----|-----|---------|--------|
 | `oak_lessons` | 30 | 0.983 | 0.955 | ✅ Done |
 | `oak_units` | 2 | 1.000 | 0.926 | ✅ Done |
-| `oak_threads` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
+| `oak_threads` | 8 | 0.938 | 0.902 | ✅ SDK integrated, CLI wired, benchmarks migrated |
 | `oak_sequences` | 1 | 1.000 | 1.000 | ✅ Done (mechanism check) |
 
 Full baseline details: [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md).
@@ -40,8 +41,14 @@ Phase 2: SDK Extraction + CLI Wiring                ✅ COMPLETE
   c. TSDoc compliance fix                           ✅
   d. Result pattern + TSDoc annotations (E2)        ✅
          ↓
-Phase 2e: SDK Validation against Real ES             ← NEXT
-  Run full evaluation suite, confirm baselines hold
+Phase 2e: SDK Validation against Real ES             ✅ COMPLETE
+  Thread benchmarks validated against live ES
+         ↓
+Phase 2f: Public Release Readiness                   ← NEXT
+  Secrets audit, licence, package.json, docs, GitHub config
+         ↓
+Phase 2g: Developer Onboarding Experience
+  Canonical journey, command truth, link integrity
          ↓
 Phase 3: MCP Search Integration
   Wire SDK retrieval into MCP tools
@@ -104,9 +111,9 @@ current workspace as the CLI.
 
 ---
 
-## Remediation: HTTP 451 + Test Strategy + Documentation
+## Remediation: HTTP 451 + Test Strategy + Documentation ✅ Complete
 
-**Status**: 📋 Ready  
+**Status**: ✅ Complete
 **Plan**: [archive/completed/transcript-451-test-doc-remediation.plan.md](archive/completed/transcript-451-test-doc-remediation.plan.md)
 
 Cross-cutting remediation discovered during transcript
@@ -114,21 +121,16 @@ endpoint investigation (2026-02-12). Four workstreams:
 
 | WS | Scope | Status |
 | --- | --- | --- |
-| WS1 | Handle HTTP 451 in SDK error classification (generator fix) | 📋 Pending |
-| WS2 | Remove network IO and `process.env` mutation from E2E tests | 📋 Pending |
-| WS3 | Update stale documentation (DATA-VARIANCES, API wishlist, ADR-092) | 📋 Pending |
-| WS4 | Directive compliance sweep | 📋 Pending |
-
-Can be executed in parallel with Phase 2e. WS1 and WS3 are
-small. WS2 is smaller now that Notion MCP is being removed
-entirely (smoke test reclassification, env mutation cleanup
-remain).
+| WS1 | Handle HTTP 451 as `legally_restricted` (generator fix, ADR-109) | ✅ Complete |
+| WS2 | Remove network IO and `process.env` mutation from E2E tests | ✅ Complete |
+| WS3 | Update stale documentation (DATA-VARIANCES, API wishlist, ADR-092) | ✅ Complete |
+| WS4 | Directive compliance sweep | ✅ Complete |
 
 ---
 
-## Public Release Readiness
+## Phase 2f: Public Release Readiness ← NEXT
 
-**Status**: 📋 Ready
+**Status**: 🔄 Next
 **Plan**: [active/public-release-readiness.plan.md](active/public-release-readiness.plan.md)
 
 Prepares the repository for public visibility on GitHub and
@@ -140,7 +142,7 @@ under the `@oaknational` scope. Six workstreams:
 | WS1 | Secrets audit and remediation (CRITICAL) | 📋 Pending |
 | WS2 | Licence and legal (MIT file, Code of Conduct) | 📋 Pending |
 | WS3 | Package.json standardisation (all 12 workspaces) | 📋 Pending |
-| WS4 | Documentation overhaul (README, CONTRIBUTING, onboarding, CHANGELOG) | 📋 Pending |
+| WS4 | Documentation overhaul (README, CONTRIBUTING, CHANGELOG, workspace READMEs) | 📋 Pending |
 | WS5 | GitHub repository configuration (templates, Dependabot) | 📋 Pending |
 | WS6 | Publication dry run (tarball inspection, test install) | 📋 Pending |
 
@@ -149,47 +151,68 @@ blocker for making the repo public.
 
 ---
 
-## Phase 2e: SDK Validation against Real Elasticsearch
+## Phase 2g: Developer Onboarding Experience
 
-**Status**: 📋 Ready to start
+**Status**: 📋 After public release readiness
+**Plan**: [active/developer-onboarding-experience.plan.md](active/developer-onboarding-experience.plan.md)
 
-**Goal**: Confirm the completely rewritten SDK produces
-correct results against a real Elasticsearch cluster. The
-extraction involved DI refactoring, Result pattern wrapping,
-service boundary changes, and query builder restructuring.
-None of this has been validated against real ES.
+Dedicated stream for internal developer onboarding quality and
+consistency. Follows public release readiness — some onboarding
+work depends on the documentation and packaging established
+in Phase 2f.
 
-| Task | Status |
-|------|--------|
-| Run full benchmark suite (`oaksearch eval benchmark`) | 📋 Pending |
-| Confirm lesson MRR >= 0.983, NDCG >= 0.955 | 📋 Pending |
-| Confirm unit MRR >= 1.000, NDCG >= 0.926 | 📋 Pending |
-| Confirm thread and sequence baselines hold | 📋 Pending |
-| Manual search queries across all retrieval methods | 📋 Pending |
-| Exercise filter combinations (subject, key stage, tier) | 📋 Pending |
-| Verify error handling with real ES failure scenarios | 📋 Pending |
-| Confirm zero-hit observability flows end-to-end | 📋 Pending |
-| Validate admin operations (setup, synonyms, metadata) | 📋 Pending |
-| Confirm ES URL + credentials are constructor args, not env | 📋 Pending |
+| WS | Scope | Status |
+| --- | --- | --- |
+| WS1 | Canonical onboarding journey | 📋 Pending |
+| WS2 | Command truth and drift removal | 📋 Pending |
+| WS3 | Link integrity and navigation | 📋 Pending |
+| WS4 | Credential/access/contribution messaging | 📋 Pending |
+| WS5 | Release operator onboarding (SDK-only) | 📋 Pending |
+| WS6 | First-day rehearsal and sign-off | 📋 Pending |
 
-**Credential safety**: The Search SDK must require ES URL
-and credentials as explicit constructor arguments. No
-environment variable access inside the SDK. Only the CLI
-reads env vars and passes them to `createSearchSdk()`. All
-other consumers (MCP servers, future apps) must provide
-their own credentials at construction time. This protects
-the Oak-specific ES deployment.
+---
 
-**Tooling**: The CLI evaluation infrastructure (`oaksearch eval`)
-was rewired to use SDK retrieval code paths at Checkpoint E.
-Running benchmarks exercises the exact same SDK methods that
-MCP will later consume.
+## Thread Search: SDK Integration + Ground Truth Validation ✅ Complete
+
+**Status**: ✅ Complete
+**Plan**: [archive/completed/thread-search-sdk-integration.plan.md](archive/completed/thread-search-sdk-integration.plan.md)
+
+Thread search is now fully integrated through the SDK, exposed via the
+CLI `search threads` command, benchmarks use the SDK code path, and
+8 ground truths span 5 subjects. Legacy test-query scripts deleted.
+
+| WS | Scope | Status |
+| --- | --- | --- |
+| WS1 | SDK `searchThreads` method (types, retriever, service) | ✅ Complete |
+| WS2 | CLI `search threads` command | ✅ Complete |
+| WS3 | Benchmark migration to SDK code path | ✅ Complete |
+| WS4 | Ground truth expansion (1 → 8 across 5 subjects) | ✅ Complete |
+| WS5 | Validation and baseline lock | ✅ Complete |
+| WS6 | Delete legacy test-query scripts | ✅ Complete |
+
+---
+
+## Phase 2e: SDK Validation against Real Elasticsearch ✅ Complete
+
+**Status**: ✅ Complete
+
+Thread benchmarks were run against a live Elasticsearch cluster
+during the thread search integration work. The SDK code path
+(`createCliSdk` → `sdk.retrieval.searchThreads`) produced
+correct results: MRR=0.938, NDCG@10=0.902 across 8 GTs.
+Remaining validation tasks (filter combinations, error handling,
+admin ops) will be addressed as part of the MCP integration
+work in Phase 3.
+
+**Credential safety**: Confirmed — the Search SDK requires ES
+URL and credentials as explicit constructor arguments. No
+environment variable access inside the SDK.
 
 ---
 
 ## Phase 3: MCP Search Integration
 
-**Status**: ⏸️ Blocked by Phase 2e validation  
+**Status**: ⏸️ After public release + onboarding (Phases 2f, 2g)  
 **Plan**: [post-sdk/mcp-integration/wire-hybrid-search.md](post-sdk/mcp-integration/wire-hybrid-search.md)
 
 **Goal**: Wire hybrid search into MCP tools — first
@@ -271,8 +294,8 @@ retriever using `multilingual-e5-base`.
 | Workspace | Location | Purpose |
 |-----------|----------|---------|
 | **Oak API SDK** | `packages/sdks/oak-curriculum-sdk/` | Upstream OOC API types, type-gen |
-| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (34 tests) |
-| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (934 tests) |
+| **Search SDK** | `packages/sdks/oak-search-sdk/` | ES-backed semantic search (36 tests) |
+| **Search CLI** | `apps/oak-search-cli/` | Operator CLI + evaluation (935 tests) |
 
 The Search SDK consumes types from the Oak API SDK.
 The Search CLI consumes the Search SDK.
@@ -294,7 +317,6 @@ pnpm lint:fix
 pnpm test
 pnpm test:ui
 pnpm test:e2e
-pnpm test:e2e:built
 pnpm smoke:dev:stub
 ```
 

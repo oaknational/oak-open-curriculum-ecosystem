@@ -21,7 +21,7 @@
  * ## Query Design
  *
  * A Year 6 teacher planning fraction work would search for operations with
- * different denominators. Query tested via test-query-units.ts.
+ * different denominators. Query testable via `oaksearch search units`.
  *
  * ## Test Results
  *

@@ -100,7 +100,7 @@ Each generator serves specific user personas with measurable impact:
 | **Audiences** | Student, Teacher, Curriculum Planner, AI Agent                                                                                                                           |
 | **User Need** | "What's the learning path for X?"                                                                                                                                        |
 | **Impact**    | Enables clear progression through curriculum threads across years. Students see what comes next; teachers plan multi-year curricula; AI agents recommend learning paths. |
-| **Output**    | `thread-progression-data.ts` (164 threads, 14 subjects)                                                                                                                  |
+| **Output**    | `thread-progression-data.ts` (threads across all 16 subjects; counts are dynamic in generated data)                                                                      |
 | **MCP Tool**  | `get-thread-progressions`                                                                                                                                                |
 
 #### Prerequisite Graph Generator ✅ COMPLETE

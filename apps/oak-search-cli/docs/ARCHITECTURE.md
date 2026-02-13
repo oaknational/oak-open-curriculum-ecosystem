@@ -17,8 +17,8 @@ The semantic search workspace provides a CLI/SDK-first service that ingests Oak 
 | `oak_lessons`         | Primary lesson retrieval surface                   | `lesson_id`, `lesson_slug`, `lesson_title`, lesson-planning data (`lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`), `transcript_text` with `term_vector`, `lesson_semantic` (`semantic_text`), canonical URL, unit metadata, completion `title_suggest` with contexts, audit timestamps |
 | `oak_unit_rollup`     | Unit search and highlight surface                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`)                                                                                      |
 | `oak_units`           | Lightweight unit metadata for analytics and facets | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations                                                                                                                                                                                                                           |
-| `oak_threads`         | Curriculum thread metadata and relationships       | Thread identifiers, associated units, subject/key stage filters                                                                                                                                                                                                                                                                                            |
-| `oak_sequences`       | Sequence discovery and navigation                  | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, optional `sequence_semantic`, completion payloads                                                                                                                                                                                      |
+| `oak_threads`         | Conceptual progression strands across units/years  | `thread_slug`, `thread_title`, `unit_count`, `subject_slugs` (array — a thread can span multiple subjects), `thread_semantic` (`semantic_text`), `thread_url`, completion `title_suggest`. Programme-agnostic; show how ideas build over time. See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md).        |
+| `oak_sequences`       | API data structures for curriculum retrieval       | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, optional `sequence_semantic`, completion payloads. One sequence generates many programme views.                                                                                                                                        |
 | `oak_sequence_facets` | Sequence facet metadata                            | Facet identifiers, sequence relationships, filtering metadata                                                                                                                                                                                                                                                                                              |
 | `oak_meta`            | Index metadata and versioning                      | Index version, ingestion timestamps, schema version                                                                                                                                                                                                                                                                                                        |
 
@@ -38,7 +38,7 @@ src/cli/
 │   ├── validators.ts               # Schema-derived type guards
 │   ├── pass-through.ts             # Script delegation helper
 │   └── output.ts                   # Terminal formatting
-├── search/                         # oaksearch search {lessons|units|sequences|suggest|facets}
+├── search/                         # oaksearch search {lessons|units|sequences|threads|suggest|facets}
 │   ├── index.ts                    # Command registration
 │   └── handlers.ts                 # SDK retrieval calls
 ├── admin/                          # oaksearch admin {setup|status|synonyms|meta|ingest|...}
@@ -57,7 +57,7 @@ src/cli/
 
 ## Search Capabilities
 
-- **Structured hybrid search** — Search over lessons, units, or sequences. Builds server-side RRF queries via the SDK, returns highlights, canonical URLs, facets, zero-hit metadata.
+- **Structured hybrid search** — Search over lessons, units, sequences, or threads. Builds server-side RRF queries via the SDK, returns highlights, canonical URLs, facets, zero-hit metadata.
 - **Suggestion/type-ahead** — Backed by completion contexts and `search_as_you_type` fields.
 - **Zero-hit telemetry** — Records queries that return no results for quality improvement.
 - **CLI ingestion** — `oaksearch admin ingest` triggers resilient batching across lessons, units, sequences.
@@ -113,7 +113,9 @@ Each search scope uses Elasticsearch's retriever API to blend lexical and semant
 
 Synonym expansion is handled at the Elasticsearch analyser level via the `oak-syns` synonym set, not at the application level.
 
-**Implementation**: `src/lib/hybrid-search/rrf-query-builders.ts`
+Threads and sequences use 2-way RRF because they have a single text surface (title only — no transcripts, lesson-planning data, or rollup text). See [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) for the thread-specific rationale. Threads filter on `subject_slugs` (plural array field) because a single thread can span multiple subjects.
+
+**Implementation**: SDK `buildThreadRetriever` / `buildSequenceRetriever` in `packages/sdks/oak-search-sdk/src/retrieval/retrieval-search-helpers.ts`; CLI legacy builders in `src/lib/hybrid-search/rrf-query-builders.ts`
 
 ### 4. Transcript-Aware Score Normalisation (Lessons Only)
 
@@ -188,3 +190,4 @@ CLI → SDK consumers
 | [ADR-099](../../../docs/architecture/architectural-decisions/099-transcript-aware-rrf-normalisation.md)          | Transcript-Aware RRF Score Normalisation    |
 | [ADR-106](../../../docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Known-Answer-First Ground Truth Methodology |
 | [ADR-107](../../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)        | Deterministic SDK / NL-in-MCP Boundary      |
+| [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)                  | Thread Search Architecture (2-way RRF)      |

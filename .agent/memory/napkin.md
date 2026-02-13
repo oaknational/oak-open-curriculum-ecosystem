@@ -1,5 +1,192 @@
 # Napkin
 
+## Session: 2026-02-12 — Thread Search SDK Integration Complete
+
+### What Was Done
+
+- Executed all 6 workstreams of the Thread Search SDK Integration plan.
+- **WS1**: Added `searchThreads` to `RetrievalService` interface. Created
+  `ThreadResult`, `ThreadsSearchResult` types, `buildThreadRetriever` in
+  `retrieval-search-helpers.ts`, and extracted `searchThreads` implementation
+  to `search-threads.ts` (separate file to stay under max-lines). Shared
+  `toRetrievalError` extracted to `retrieval-error.ts` to break dependency cycle.
+  Used `SearchParamsBase` directly for params (no empty interface). TDD: RED then GREEN.
+- **WS2**: Added `handleSearchThreads` handler and `registerThreadsCmd` CLI command
+  (extracted to `register-threads-cmd.ts` to keep `index.ts` under max-lines).
+  Updated search description to include threads. TDD: RED then GREEN.
+- **WS3**: Migrated all 3 thread benchmark files (`benchmark-all-threads.ts`,
+  `benchmark-query-runner-threads.ts`, `benchmark-threads.ts`) from direct `esSearch`
+  to SDK `searchThreads`. Removed `ThreadSearchResponse`, `buildThreadRrfRequest`
+  dependencies. Now uses `sdk.retrieval.searchThreads.bind(sdk.retrieval)`.
+- **WS4**: Expanded thread ground truths from 1 to 8 across 5 subjects
+  (Maths: algebra, fractions, geometry; Science: forces, chemical reactions;
+  English: fiction writing; Computing: programming; Geography: climate).
+  All designed using Known-Answer-First methodology.
+- **WS6**: Deleted 4 legacy `test-query-*.ts` scripts (lessons, units, sequences,
+  threads). Updated all references in GT entries and README to use CLI commands.
+- **WS5**: Updated docs: ground-truth-protocol.md, roadmap.md, SDK README,
+  session prompt, napkin. Roadmap shows thread search as complete.
+- SDK: 36 tests, CLI: 935 tests. All quality gates pass.
+- Live benchmark results: MRR=0.938, NDCG@10=0.902, P@3=0.333, R@10=0.938.
+  7/8 queries hit at position 1. "chemical reactions substances changing" hit
+  at position 2 (MRR 0.500) — could iterate the query wording to improve.
+
+### Mistake: Assumed I couldn't run benchmarks
+
+I assumed a live ES connection wasn't available and skipped running
+`pnpm benchmark:threads --all`. The CLI had `.env.local` with credentials
+and it worked fine. Lesson: try it before assuming it won't work.
+
+### Architectural Decisions During Implementation
+
+- `SearchThreadsParams` was removed as it would be an empty interface extending
+  `SearchParamsBase` (lint violation: `@typescript-eslint/no-empty-object-type`).
+  Used `SearchParamsBase` directly in the `RetrievalService` interface.
+- `toRetrievalError` extracted from `create-retrieval-service.ts` to shared
+  `retrieval-error.ts` to break circular dependency with `search-threads.ts`.
+- Both `search-threads.ts` and `register-threads-cmd.ts` were extracted to
+  separate files because their parent files were at the 250-line max-lines limit.
+- Thread subject filter uses `{ term: { subject_slugs: value } }` (plural array
+  field), unlike sequences which use `{ term: { subject_slug: value } }` (singular).
+  This difference is internal to the SDK implementation.
+
+---
+
+## Session: 2026-02-12 — Plan Update: WS6 + Standalone Entry Point
+
+### What Was Done
+
+- Added WS6 (Delete legacy test-query scripts) to the thread search plan. Four
+  `test-query-*.ts` scripts bypass the SDK for ALL scopes (lessons, units,
+  sequences, threads). Once CLI `search` commands exist for all scopes, the
+  scripts are redundant and architecturally harmful.
+- Added the test-query script issue to the plan's "What is missing" section.
+- Updated the dependency graph: WS6 depends on WS2, runs before WS5.
+- Removed stale "or the test-query script" suggestion from WS4 methodology —
+  WS6 deletes those scripts; WS4 should use the CLI command.
+- Updated session prompt: "Current Priority" now points directly at the thread
+  search plan as the immediate action. GT baseline footnote references the plan.
+  "What Needs Doing Next" lists all 6 workstreams including legacy cleanup.
+- Both files pass markdownlint clean.
+
+### Key Insight
+
+The test-query scripts aren't just a thread problem — they exist for all four
+search scopes. Folding the cleanup into the thread search plan (rather than a
+separate plan) is correct because WS2 (CLI `search threads` command) completes
+the set of CLI replacements, making all four scripts redundant at that point.
+
+---
+
+## Session: 2026-02-12 — vocab-gen: Fix German/Spanish Thread Exclusion
+
+### Root Causes (Three)
+
+1. **Stale data path**: `run-vocab-gen.ts` pointed at
+   `reference/bulk_download_data/oak-bulk-download-2025-12-07T09_37_04.693Z` — a
+   directory that no longer exists. Fixed to point at `apps/oak-search-cli/bulk-downloads/`
+   (the canonical location with all 30 sequence files including german + spanish).
+
+2. **First-unit-only subject extraction**: `thread-progression-generator.ts`
+   `extractSubject()` took the first unit's subject. Since MFL threads (adjectives,
+   negation, etc.) share slugs across french/german/spanish and french units come
+   first alphabetically, german and spanish subjects never appeared.
+   Fixed: `extractSubjects()` now collects ALL unique subjects from ALL units per thread.
+   `ThreadNode.subject: string` → `ThreadNode.subjects: readonly string[]`.
+
+3. **First-unit-only subjects collection**: `collectSubjects()` iterated threads
+   calling `extractSubject()` (first unit only). Fixed to iterate ALL units in ALL
+   threads directly.
+
+### Additional Fixes
+
+- `extractSourceVersion()` (sync, parsed directory name) replaced with
+  `readSourceVersion()` (async, reads `manifest.json` `downloadedAt` field).
+- MCP tool descriptions (`aggregated-thread-progressions.ts`, `ontology-data.ts`,
+  `tool-guidance-data.ts`) now derive counts dynamically from the generated data
+  instead of hardcoding "164 threads across 14 subjects".
+- Documentation updated: `DATA-VARIANCES.md`, `ADR-086`, `document-relationships.md`.
+- Tests updated: both `vocab-gen/` and `src/bulk/` copies. Added cross-subject
+  thread test (the MFL case).
+
+### Key Insight
+
+Thread slugs are NOT globally unique per subject. MFL threads like "adjectives"
+span french, german, and spanish simultaneously — they represent a single conceptual
+progression strand across all three languages. The `subjects` array correctly models
+this. The total count (164 unique threads) doesn't change because all MFL thread
+slugs were already counted via French; what changes is subject coverage (14 → 16)
+and per-thread subject attribution.
+
+### Duplicate Code Alert
+
+`src/bulk/generators/` contains duplicates of `vocab-gen/generators/` files
+(thread-progression-generator.ts, write-graph-file.ts, etc.). Both need updating
+in parallel. This duplication should be resolved — one is the canonical source.
+
+---
+
+## Session: 2026-02-12 — Thread Search SDK Integration Plan + Ontology Clarification
+
+### Ontology Clarification (CRITICAL)
+
+Three distinct curriculum concepts that MUST NOT be conflated:
+
+1. **Thread** = Conceptual progression strand. Programme-agnostic. Cross-cutting.
+   Shows how ideas BUILD over time. "Algebra" spans 118 units from Reception to
+   Year 11. The pedagogical backbone of Oak's curriculum.
+2. **Sequence** = API organizational structure for curriculum data storage and
+   retrieval. A pragmatic grouping of units by subject+phase. "maths-primary"
+   covers KS1+KS2. One sequence generates MANY programme views.
+3. **Programme** = User-facing curriculum pathway. What teachers navigate by.
+   "biology-secondary-ks4-foundation-aqa". Contextualised by key stage, tier,
+   exam board.
+
+**Never call a sequence a "subject-phase programme"** — that conflates
+sequences with programmes. Never describe threads as merely "curriculum
+progressions" without specifying they are CONCEPTUAL progression strands.
+
+Fixed imprecise descriptions in: ground-truth-protocol.md, thread GT types.ts,
+session prompt, ARCHITECTURE.md, thread-search plan, rrf-query-builders.ts,
+SDK retrieval-results.ts, retrieval.ts, retrieval-params.ts,
+retrieval-search-helpers.ts, create-retrieval-service.ts,
+bulk-thread-transformer.ts, benchmark-adapters.ts, thread GT entries/index,
+sequence GT types.ts.
+
+### Context
+
+- Thread search exists only in CLI via direct ES calls (not via SDK)
+- No `searchThreads` on `RetrievalService`, no CLI `search threads` command
+- Benchmarks bypass SDK — use `esSearch` directly
+- Only 1 ground truth (maths algebra) — mechanism check, not quality measurement
+- ~164 thread documents across all 16 subjects (MFL threads span french/german/spanish)
+
+### What Was Done
+
+- Fixed textual inconsistency in archived 451 plan: WS4 compliance section described
+  built-server test as "reclassified as smoke test" but actual work was "refactored
+  to in-process supertest with DI and merged into main E2E suite"
+- Created thread search SDK integration plan at
+  `.agent/plans/semantic-search/archive/completed/thread-search-sdk-integration.plan.md`
+  with 6 workstreams: SDK method, CLI command, benchmark migration, GT expansion, validation, legacy cleanup (all complete)
+- Updated roadmap: added thread search plan section, updated thread status from
+  "Done (mechanism check)" to "Mechanism check only" with plan link, fixed stale
+  remediation WS statuses (Pending → Complete), removed stale `test:e2e:built`
+- Updated session prompt: added thread search plan to "What Needs Doing Next",
+  added `searchThreads` to validation method list
+- Updated README navigation: added thread search plan link
+
+### Key Pattern
+
+- Sequences are the closest SEARCH ARCHITECTURE analog to threads (both 2-way
+  RRF, similar index size). Ontologically they are different (threads are
+  conceptual progression strands, sequences are API data structures). The plan
+  specifies following the sequence search pattern for implementation:
+  `buildSequenceRetriever` → `buildThreadRetriever`,
+  `searchSequences` → `searchThreads`, same type/result/param structure.
+
+---
+
 ## Session: 2026-02-12 — Castr Plan Corrections
 
 ### Context

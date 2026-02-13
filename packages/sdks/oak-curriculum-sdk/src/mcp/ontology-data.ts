@@ -11,6 +11,7 @@
  */
 
 import { synonymsData } from './synonyms/index.js';
+import { threadProgressionGraph } from './thread-progression-data.js';
 import { toolGuidanceData } from './tool-guidance-data.js';
 
 /**
@@ -120,7 +121,7 @@ export const ontologyData = {
       'An attribute assigned to units that groups together units across the curriculum building a common body of knowledge. Threads are important for making vertical connections across year groups in each subject.',
     importance:
       "Threads show how ideas BUILD over time — they are the pedagogical backbone of Oak's curriculum. Understanding threads enables powerful queries like 'what comes before this topic?' and 'how does this concept develop from Year 1 to Year 11?'",
-    countSummary: '164 threads across 14 subjects, connecting units into learning progressions',
+    countSummary: `${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects, connecting units into learning progressions`,
     characteristics: [
       'Programme-agnostic: A single thread spans multiple programmes, key stages, and years',
       'Ordered: Units within a thread have unitOrder showing conceptual progression',

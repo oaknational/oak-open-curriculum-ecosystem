@@ -25,10 +25,12 @@ export type {
   LessonResult,
   UnitResult,
   SequenceResult,
+  ThreadResult,
   SearchResultMeta,
   LessonsSearchResult,
   UnitsSearchResult,
   SequencesSearchResult,
+  ThreadsSearchResult,
   SuggestionResponse,
 } from './retrieval.js';
 

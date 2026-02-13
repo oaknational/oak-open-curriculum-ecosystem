@@ -1,16 +1,17 @@
 /**
  * Query runner for thread benchmarks with dependency injection.
  *
- * Separates the query execution logic from the ES client, enabling
- * integration testing with mock search functions.
- *
- * Uses buildThreadRrfRequest and extracts thread_slug from results.
+ * Uses the Search SDK retrieval service for all queries, ensuring
+ * benchmarks exercise the same code paths as production consumers
+ * (MCP server, CLI search commands).
  *
  * @see benchmark-threads.ts
  * @see ADR-078 Dependency Injection for Testability
  */
 
-import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import { isSubject, type AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
+import type { Result } from '@oaknational/result';
+import type { SearchSubjectSlug } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type { QueryCategory } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 import {
   calculateMRR,
@@ -18,40 +19,33 @@ import {
   calculatePrecisionAtK,
   calculateRecallAtK,
 } from '../../src/lib/search-quality/metrics.js';
-import { buildThreadRrfRequest } from '../../src/lib/hybrid-search/rrf-query-builders.js';
 import { typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
-import type { EsSearchRequest } from '../../src/lib/elastic-http.js';
-
-/**
- * Simplified ES response type for thread benchmark purposes.
- *
- * Extracts thread_slug from Elasticsearch hit _source.
- */
-export interface ThreadSearchResponse {
-  readonly hits: {
-    readonly hits: readonly {
-      readonly _source: {
-        readonly thread_slug: string;
-      };
-    }[];
-  };
-}
+import type {
+  SearchParamsBase,
+  ThreadsSearchResult,
+  RetrievalError,
+} from '@oaknational/oak-search-sdk';
 
 /**
  * Thread search function type for dependency injection.
  *
- * Accepts an ES request and returns a promise of search results.
- * Production code passes esSearch; tests pass a mock.
+ * Accepts SDK search parameters and returns a `Result` containing
+ * the search results or an error. Production code passes
+ * `sdk.retrieval.searchThreads`; tests pass a mock.
  *
- * @param request - Elasticsearch search request
- * @returns Promise resolving to thread search response
+ * @param params - SDK search parameters for thread search
+ * @returns Promise resolving to Result with thread search results or error
  */
-export type ThreadSearchFunction = (request: EsSearchRequest) => Promise<ThreadSearchResponse>;
+export type ThreadSearchFunction = (
+  params: SearchParamsBase,
+) => Promise<Result<ThreadsSearchResult, RetrievalError>>;
 
 /**
  * Input parameters for running a single thread benchmark query.
  *
- * Note: Threads do not use phase or keyStage for filtering; they span multiple.
+ * Threads do not use phase or keyStage for filtering — they are
+ * programme-agnostic conceptual progression strands spanning
+ * multiple key stages.
  */
 export interface RunThreadQueryInput {
   /** The search query text. */
@@ -87,10 +81,12 @@ export interface ThreadQueryResult {
 /**
  * Run a single thread benchmark query and calculate metrics.
  *
- * Builds the ES request via buildThreadRrfRequest and extracts thread_slug from results.
+ * Uses the SDK retrieval service to execute the search, ensuring
+ * benchmarks use the same RRF query building, search execution,
+ * and result processing as production consumers.
  *
  * @param input - Query configuration
- * @param searchFn - Search function (injected for testability)
+ * @param searchFn - SDK search function (injected for testability)
  * @returns Query result with MRR, NDCG, latency, and hit status
  */
 export async function runThreadQuery(
@@ -99,28 +95,35 @@ export async function runThreadQuery(
 ): Promise<ThreadQueryResult> {
   const start = performance.now();
 
-  // Build the full ES request for threads
-  // Threads use subject slug for filtering, not keyStage
-  const request = buildThreadRrfRequest({
-    text: input.query,
-    size: 10,
-    subjectSlug: input.subject,
-  });
+  // Map AllSubjectSlug to SearchSubjectSlug: KS4 science variants
+  // map to parent 'science' because the SDK subject filter accepts
+  // canonical subjects only.
+  const subject: SearchSubjectSlug = isSubject(input.subject) ? input.subject : 'science';
 
-  // Execute search via injected function
-  const response = await searchFn(request);
+  const sdkParams: SearchParamsBase = {
+    text: input.query,
+    subject,
+    size: 10,
+  };
+
+  // Execute search via injected SDK function
+  const result = await searchFn(sdkParams);
+  if (!result.ok) {
+    throw new Error(
+      `Thread benchmark search failed for query "${input.query}": ${result.error.type}: ${result.error.message}`,
+    );
+  }
   const latencyMs = performance.now() - start;
 
-  // Extract results - using thread_slug
-  const actualResults = response.hits.hits.map((hit) => hit._source.thread_slug);
+  // Extract thread slugs from SDK results
+  const actualResults = result.value.results.map((r) => r.thread.thread_slug);
   const expectedSlugs = typeSafeKeys(input.expectedRelevance);
 
   // Calculate all metrics
-  const relevanceMap = input.expectedRelevance;
-  const mrr = calculateMRR(actualResults, relevanceMap);
-  const ndcg10 = calculateNDCG(actualResults, relevanceMap, 10);
-  const precision3 = calculatePrecisionAtK(actualResults, relevanceMap, 3);
-  const recall10 = calculateRecallAtK(actualResults, relevanceMap, 10);
+  const mrr = calculateMRR(actualResults, input.expectedRelevance);
+  const ndcg10 = calculateNDCG(actualResults, input.expectedRelevance, 10);
+  const precision3 = calculatePrecisionAtK(actualResults, input.expectedRelevance, 3);
+  const recall10 = calculateRecallAtK(actualResults, input.expectedRelevance, 10);
 
   return {
     category: input.category,

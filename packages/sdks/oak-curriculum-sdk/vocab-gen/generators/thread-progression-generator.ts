@@ -24,8 +24,14 @@ export interface ThreadNode {
   readonly slug: string;
   /** Human-readable thread title */
   readonly title: string;
-  /** Subject this thread belongs to */
-  readonly subject: string;
+  /**
+   * Subjects this thread spans.
+   *
+   * Most threads belong to a single subject, but some (especially MFL
+   * threads like "adjectives") span multiple subjects (e.g. french,
+   * german, spanish). Sorted alphabetically.
+   */
+  readonly subjects: readonly string[];
   /** First year this thread appears (undefined if all-years) */
   readonly firstYear: number | undefined;
   /** Last year this thread appears (undefined if all-years) */
@@ -69,23 +75,35 @@ export interface ThreadProgressionGraph {
 }
 
 /**
- * Extracts the primary subject from a thread's units.
+ * Extracts all unique subjects from a thread's units.
  *
- * @param thread - The thread to extract subject from
- * @returns The subject of the first unit (threads typically have one subject)
+ * Most threads span a single subject, but some (particularly MFL
+ * threads like "adjectives", "negation") span multiple subjects
+ * (e.g. french, german, spanish). Returns sorted unique subjects.
  */
-function extractSubject(thread: ExtractedThread): string {
-  const firstUnit = thread.units[0];
-  return firstUnit?.subject ?? 'unknown';
+function extractSubjects(thread: ExtractedThread): readonly string[] {
+  const subjects = new Set<string>();
+  for (const unit of thread.units) {
+    subjects.add(unit.subject);
+  }
+  if (subjects.size === 0) {
+    return ['unknown'];
+  }
+  return [...subjects].sort();
 }
 
 /**
- * Collects all unique subjects from the threads.
+ * Collects all unique subjects from ALL units across ALL threads.
+ *
+ * This correctly counts subjects even when thread slugs are shared
+ * across subjects (e.g. MFL threads span french, german, spanish).
  */
 function collectSubjects(threads: readonly ExtractedThread[]): readonly string[] {
   const subjects = new Set<string>();
   for (const thread of threads) {
-    subjects.add(extractSubject(thread));
+    for (const unit of thread.units) {
+      subjects.add(unit.subject);
+    }
   }
   return [...subjects].sort();
 }
@@ -97,7 +115,7 @@ function toThreadNode(thread: ExtractedThread): ThreadNode {
   return {
     slug: thread.slug,
     title: thread.title,
-    subject: extractSubject(thread),
+    subjects: extractSubjects(thread),
     firstYear: thread.firstYear,
     lastYear: thread.lastYear,
     unitCount: thread.units.length,

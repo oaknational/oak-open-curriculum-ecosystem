@@ -157,6 +157,7 @@ For understanding the unified ingestion pipeline architecture:
 - **[ADR-099](099-transcript-aware-rrf-normalisation.md)** - Post-RRF score normalisation for transcript-less documents
 - **[ADR-106](106-known-answer-first-ground-truth-methodology.md)** - Known-answer-first ground truth methodology
 - **[ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)** - Deterministic SDK / NL parsing stays in MCP layer
+- **[ADR-110](110-thread-search-architecture.md)** - Thread search architecture (2-way RRF, partially supersedes ADR-097)
 
 **Key principle**: Bulk and API ingestion use the **same indexing pipeline** with different data source adapters. Types are either SDK API types (for input) or SDK Search types (for ES output) — no custom types are invented. See [`src/adapters/README.md`](../../../apps/oak-search-cli/src/adapters/README.md) for detailed architecture.
 

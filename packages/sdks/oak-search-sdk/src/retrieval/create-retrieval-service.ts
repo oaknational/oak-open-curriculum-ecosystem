@@ -29,7 +29,6 @@ import type { SearchSdkConfig } from '../types/sdk.js';
 import type { EsSearchFn, EsSearchRequest } from '../internal/types.js';
 import { createEsSearchFn } from '../internal/es-search.js';
 import { createIndexResolver } from '../internal/index-resolver.js';
-import { extractStatusCode } from '../admin/es-error-guards.js';
 import { removeNoisePhrases } from './query-processing/remove-noise-phrases.js';
 import { detectCurriculumPhrases } from './query-processing/detect-curriculum-phrases.js';
 import { buildFourWayRetriever } from './rrf-query-builders.js';
@@ -45,18 +44,8 @@ import {
 import { suggest } from './suggestions.js';
 import { fetchSequenceFacets } from './sequence-facets.js';
 import { buildSequenceRetriever, deriveUnitDoc } from './retrieval-search-helpers.js';
-
-/**
- * Convert an unknown caught error into a `RetrievalError`.
- *
- * @param error - The caught error value
- * @returns A typed `RetrievalError` discriminated union member
- */
-function toRetrievalError(error: unknown): RetrievalError {
-  const message = error instanceof Error ? error.message : String(error);
-  const statusCode = extractStatusCode(error);
-  return { type: 'es_error', message, statusCode };
-}
+import { searchThreads } from './search-threads.js';
+import { toRetrievalError } from './retrieval-error.js';
 
 /**
  * Create the retrieval service implementation.
@@ -64,7 +53,7 @@ function toRetrievalError(error: unknown): RetrievalError {
  * @param esClient - Elasticsearch client instance
  * @param config - SDK configuration (index target, etc.)
  * @param logger - Optional logger for debug traces
- * @returns RetrievalService with searchLessons, searchUnits, searchSequences, suggest, fetchSequenceFacets
+ * @returns RetrievalService with searchLessons, searchUnits, searchSequences, searchThreads, suggest, fetchSequenceFacets
  *
  * @example
  * ```typescript
@@ -84,6 +73,7 @@ export function createRetrievalService(
     searchLessons: (params) => searchLessons(params, search, resolveIndex, logger),
     searchUnits: (params) => searchUnits(params, search, resolveIndex, logger),
     searchSequences: (params) => searchSequences(params, search, resolveIndex, logger),
+    searchThreads: (params) => searchThreads(params, search, resolveIndex, logger),
     suggest: (params) => suggest(params, esClient, resolveIndex, config),
     fetchSequenceFacets: (params) => fetchSequenceFacets(params, search, resolveIndex),
   };
@@ -194,6 +184,9 @@ async function searchUnits(
 
 /**
  * Execute sequence search with two-way RRF (BM25+semantic).
+ *
+ * Sequences are API data structures for curriculum retrieval, not
+ * user-facing programmes. One sequence generates many programme views.
  *
  * @param params - Search sequences parameters
  * @param search - ES search function

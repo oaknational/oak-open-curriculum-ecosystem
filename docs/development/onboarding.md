@@ -3,6 +3,19 @@
 Welcome to the Oak MCP ecosystem — infrastructure for AI agents and teacher search over Oak's openly-licensed curriculum. This guide points you to the documentation, plans, and tooling you need in your first pass through the repository.
 
 > **Note**: This repo works with the [Oak Open Curriculum API](https://open-api.thenational.academy/) — Oak's openly-licensed curriculum data, organised to support reuse. See the root README for context on how this relates to Oak's main site.
+>
+> **Canonical path**: this is the single onboarding source of truth.
+> `docs/onboarding.md` is a compatibility pointer only.
+
+## 0. Choose Your Path
+
+Pick the path that matches your first task:
+
+| Path                | Best for                                                | Credentials needed                                                                                       |
+| ------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| SDK/docs path       | SDK generation, TypeScript, docs, tests                 | None                                                                                                     |
+| MCP server path     | stdio/HTTP server feature work                          | `OAK_API_KEY`                                                                                            |
+| Search/release path | Search app, Elasticsearch flows, npm release operations | Multiple service credentials (`OAK_API_KEY`, `ELASTICSEARCH_*`, plus release credentials where relevant) |
 
 ## 1. Understand the Core Architecture
 

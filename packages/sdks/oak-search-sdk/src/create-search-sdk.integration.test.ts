@@ -284,6 +284,39 @@ describe('RetrievalService', () => {
     });
   });
 
+  describe('searchThreads', () => {
+    it('returns ok with a ThreadsSearchResult containing scope, results, and metadata', async () => {
+      const { retrieval } = createSdk();
+
+      const result = await retrieval.searchThreads({
+        text: 'algebra equations progression',
+        subject: 'maths',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('threads');
+        expect(result.value.results).toBeInstanceOf(Array);
+        expect(typeof result.value.total).toBe('number');
+        expect(typeof result.value.took).toBe('number');
+        expect(typeof result.value.timedOut).toBe('boolean');
+      }
+    });
+
+    it('works without a subject filter', async () => {
+      const { retrieval } = createSdk();
+
+      const result = await retrieval.searchThreads({
+        text: 'geometry shapes',
+      });
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.scope).toBe('threads');
+      }
+    });
+  });
+
   describe('suggest', () => {
     it('returns ok with a SuggestionResponse containing suggestions and cache metadata', async () => {
       const { retrieval } = createSdk();

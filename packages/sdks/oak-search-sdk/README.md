@@ -18,12 +18,19 @@ const sdk = createSearchSdk({
   },
 });
 
-// Search lessons
+// Search lessons (4-way RRF: BM25 + ELSER on Content and Structure)
 const results = await sdk.retrieval.searchLessons({
   text: 'expanding brackets',
   subject: 'maths',
   keyStage: 'ks3',
 });
+
+// Search threads (2-way RRF: BM25 on thread_title + ELSER on thread_semantic)
+const threads = await sdk.retrieval.searchThreads({
+  text: 'algebra equations progression',
+  subject: 'maths',
+});
+// threads.ok → { scope: 'threads', results: ThreadResult[], total, took, timedOut }
 
 // Admin operations
 await sdk.admin.setup();
@@ -42,11 +49,11 @@ createSearchSdk({ deps, config })
   → { retrieval, admin, observability }
 ```
 
-| Service                  | Purpose                                                                     |
-| ------------------------ | --------------------------------------------------------------------------- |
-| **RetrievalService**     | Hybrid BM25 + ELSER search (lessons, units, sequences), suggestions, facets |
-| **AdminService**         | ES setup, connection, synonyms, index metadata, bulk ingestion              |
-| **ObservabilityService** | Zero-hit event recording, ES persistence, telemetry queries                 |
+| Service                  | Purpose                                                                                                                                                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **RetrievalService**     | Hybrid BM25 + ELSER search (lessons, units, sequences, threads), suggestions, facets. Lessons/units use 4-way RRF; threads/sequences use 2-way RRF ([ADR-110](../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)) |
+| **AdminService**         | ES setup, connection, synonyms, index metadata, bulk ingestion                                                                                                                                                                                    |
+| **ObservabilityService** | Zero-hit event recording, ES persistence, telemetry queries                                                                                                                                                                                       |
 
 ### Design Principles
 
@@ -68,11 +75,13 @@ createSearchSdk({ deps, config })
 pnpm build        # Build with tsup + dts
 pnpm type-check   # Type check
 pnpm lint:fix     # Lint
-pnpm test         # Run tests (34 integration + unit)
+pnpm test         # Run tests (36 integration + unit)
 ```
 
 ## Related
 
 - [Search CLI README](../../apps/oak-search-cli/README.md)
 - [Search CLI Architecture](../../apps/oak-search-cli/docs/ARCHITECTURE.md)
+- [ADR-110: Thread Search Architecture](../../docs/architecture/architectural-decisions/110-thread-search-architecture.md)
+- [ADR-107: Deterministic SDK / NL-in-MCP Boundary](../../docs/architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md)
 - [SDK + CLI Plan](../../.agent/plans/semantic-search/archive/completed/search-sdk-cli.plan.md)

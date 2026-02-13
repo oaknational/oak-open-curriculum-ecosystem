@@ -534,7 +534,8 @@ After workstreams 1-3, run a sweep to confirm:
 
 - **No E2E test performs network IO**: Notion MCP workspace
   removed (eliminating the violation), built-server test
-  reclassified as smoke test
+  refactored to in-process supertest with DI and merged into
+  main E2E suite
 - **All mocks are simple fakes injected as arguments**: No
   complex mocks, no `vi.stubGlobal`, no `vi.doMock`
 - **No `process.env` mutation in in-process tests**: All

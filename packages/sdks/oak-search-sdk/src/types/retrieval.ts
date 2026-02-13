@@ -13,6 +13,7 @@
 import type { Result } from '@oaknational/result';
 import type { SearchFacets } from '@oaknational/oak-curriculum-sdk/public/search.js';
 import type {
+  SearchParamsBase,
   SearchLessonsParams,
   SearchUnitsParams,
   SearchSequencesParams,
@@ -24,6 +25,7 @@ import type {
   LessonsSearchResult,
   UnitsSearchResult,
   SequencesSearchResult,
+  ThreadsSearchResult,
   SuggestionResponse,
 } from './retrieval-results.js';
 
@@ -42,10 +44,12 @@ export type {
   LessonResult,
   UnitResult,
   SequenceResult,
+  ThreadResult,
   SearchResultMeta,
   LessonsSearchResult,
   UnitsSearchResult,
   SequencesSearchResult,
+  ThreadsSearchResult,
   SuggestionResponse,
 } from './retrieval-results.js';
 
@@ -92,7 +96,7 @@ export interface RetrievalService {
   searchUnits(params: SearchUnitsParams): Promise<Result<UnitsSearchResult, RetrievalError>>;
 
   /**
-   * Search sequences (subject-phase programmes) using hybrid RRF.
+   * Search sequences (API data structures for curriculum retrieval) using hybrid RRF.
    *
    * @param params - Structured search parameters
    * @returns `ok` with ranked sequence results, or `err` with a `RetrievalError`
@@ -100,6 +104,18 @@ export interface RetrievalService {
   searchSequences(
     params: SearchSequencesParams,
   ): Promise<Result<SequencesSearchResult, RetrievalError>>;
+
+  /**
+   * Search threads (conceptual progression strands) using two-way hybrid RRF.
+   *
+   * Threads are programme-agnostic strands that connect units across years,
+   * showing how ideas build over time. The `subject` filter maps to the
+   * `subject_slugs` array field in the thread index.
+   *
+   * @param params - Structured search parameters
+   * @returns `ok` with ranked thread results, or `err` with a `RetrievalError`
+   */
+  searchThreads(params: SearchParamsBase): Promise<Result<ThreadsSearchResult, RetrievalError>>;
 
   /**
    * Type-ahead suggestions backed by completion contexts.

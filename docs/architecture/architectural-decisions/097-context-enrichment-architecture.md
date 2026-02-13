@@ -2,7 +2,10 @@
 
 ## Status
 
-Accepted
+Accepted (partially superseded by [ADR-110](./110-thread-search-architecture.md)
+for thread searchability — `thread_semantic` is now populated and
+`searchThreads` is a full SDK retrieval method. The context enrichment
+model for threads enriching unit results remains valid.)
 
 ## Context
 

@@ -9,6 +9,7 @@ import type {
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchSequenceIndexDoc,
+  SearchThreadIndexDoc,
   SearchFacets,
   SearchSuggestionItem,
 } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -102,7 +103,7 @@ export interface UnitResult {
   readonly highlights: readonly string[];
 }
 
-/** A single sequence result from a search query. */
+/** A single sequence result from a search query. Sequences are API data structures for curriculum retrieval. */
 export interface SequenceResult {
   /** Elasticsearch document ID. */
   readonly id: string;
@@ -112,6 +113,23 @@ export interface SequenceResult {
 
   /** The sequence index document. */
   readonly sequence: SearchSequenceIndexDoc;
+}
+
+/**
+ * A single thread result from a search query.
+ *
+ * Threads are conceptual progression strands that connect units across
+ * years, showing how ideas build over time. They are programme-agnostic.
+ */
+export interface ThreadResult {
+  /** Elasticsearch document ID. */
+  readonly id: string;
+
+  /** RRF rank score from Elasticsearch. */
+  readonly rankScore: number;
+
+  /** The thread index document. */
+  readonly thread: SearchThreadIndexDoc;
 }
 
 /** Metadata common to all search results. */
@@ -141,10 +159,20 @@ export interface UnitsSearchResult extends SearchResultMeta {
   readonly results: readonly UnitResult[];
 }
 
-/** Result of a sequences search. */
+/** Result of a sequences search. Sequences are API data structures, not user-facing programmes. */
 export interface SequencesSearchResult extends SearchResultMeta {
   readonly scope: 'sequences';
   readonly results: readonly SequenceResult[];
+}
+
+/**
+ * Result of a threads search.
+ *
+ * Threads are conceptual progression strands, not sequences or programmes.
+ */
+export interface ThreadsSearchResult extends SearchResultMeta {
+  readonly scope: 'threads';
+  readonly results: readonly ThreadResult[];
 }
 
 /** Suggestion response with cache metadata. */

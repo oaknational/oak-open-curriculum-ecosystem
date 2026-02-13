@@ -1,7 +1,7 @@
 /**
  * Search subcommand group — retrieval operations.
  *
- * Provides commands for querying lessons, units, sequences,
+ * Provides commands for querying lessons, units, sequences, threads,
  * type-ahead suggestions, and sequence facets via the Search SDK.
  *
  * @example
@@ -30,6 +30,7 @@ import {
   handleSuggest,
   handleFetchFacets,
 } from './handlers.js';
+import { registerThreadsCmd } from './register-threads-cmd.js';
 
 /**
  * Common CLI option shape for commands with subject, key stage, and size.
@@ -230,11 +231,14 @@ function registerFacetsCmd(parent: Command): void {
  * ```
  */
 export function searchCommand(): Command {
-  const cmd = new Command('search').description('Query lessons, units, sequences, and suggestions');
+  const cmd = new Command('search').description(
+    'Query lessons, units, sequences, threads, and suggestions',
+  );
 
   registerLessonsCmd(cmd);
   registerUnitsCmd(cmd);
   registerSequencesCmd(cmd);
+  registerThreadsCmd(cmd);
   registerSuggestCmd(cmd);
   registerFacetsCmd(cmd);
 

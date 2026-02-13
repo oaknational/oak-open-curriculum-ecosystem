@@ -3,12 +3,14 @@
  *
  * ## Thread Ground Truths
  *
- * Threads represent curriculum progressions (predominantly Maths). They show
- * how concepts develop across years and key stages.
+ * Threads are conceptual progression strands that run across units and years,
+ * connecting units that build a common body of knowledge over time. They are
+ * programme-agnostic and show how ideas BUILD, not just what to teach.
+ * Predominantly Maths (~164 documents, e.g., "Algebra" spans Reception to Year 11).
  *
  * The index has ~164 documents, requiring high precision.
  *
- * Target: 1 ground truth (Maths progression)
+ * Target: 8 ground truths across 5 subjects
  */
 
 import type { AllSubjectSlug } from '@oaknational/oak-curriculum-sdk';
@@ -21,7 +23,7 @@ export type { RelevanceScore, ExpectedRelevance } from '../types';
  *
  * Follows the Known-Answer-First methodology:
  * 1. Explore available threads in bulk data
- * 2. Design a realistic teacher query for curriculum progression
+ * 2. Design a realistic teacher query for conceptual progression
  * 3. Test via the thread search RRF pipeline
  * 4. Capture top 3 results with relevance scores
  *
@@ -41,8 +43,9 @@ export interface ThreadGroundTruth {
   /**
    * The subject this ground truth belongs to.
    *
-   * Note: Threads are predominantly Maths. This field may be optional
-   * if threads span multiple subjects.
+   * Threads are programme-agnostic conceptual strands; they are
+   * predominantly Maths. This field may be optional if threads
+   * span multiple subjects.
    */
   readonly subject: AllSubjectSlug;
 

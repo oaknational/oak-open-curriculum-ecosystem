@@ -81,7 +81,7 @@ describe('generateThreadProgressionData', () => {
     expect(result.threads[0]).toEqual({
       slug: 'number-fractions',
       title: 'Number: Fractions',
-      subject: 'maths',
+      subjects: ['maths'],
       firstYear: 3,
       lastYear: 6,
       unitCount: 2,
@@ -158,6 +158,44 @@ describe('generateThreadProgressionData', () => {
     expect(result.stats.subjectsCovered).toHaveLength(2);
     expect(result.stats.subjectsCovered).toContain('maths');
     expect(result.stats.subjectsCovered).toContain('science');
+  });
+
+  it('collects subjects from all units when a thread spans multiple subjects', () => {
+    const mflThread = createThread({
+      slug: 'adjectives',
+      title: 'Adjectives',
+      units: [
+        {
+          unitSlug: 'french-adjectives-1',
+          unitTitle: 'French Adjectives 1',
+          order: 1,
+          subject: 'french',
+          keyStage: 'ks2',
+          year: 3,
+        },
+        {
+          unitSlug: 'german-adjectives-1',
+          unitTitle: 'German Adjectives 1',
+          order: 2,
+          subject: 'german',
+          keyStage: 'ks3',
+          year: 7,
+        },
+        {
+          unitSlug: 'spanish-adjectives-1',
+          unitTitle: 'Spanish Adjectives 1',
+          order: 3,
+          subject: 'spanish',
+          keyStage: 'ks3',
+          year: 7,
+        },
+      ],
+    });
+
+    const result = generateThreadProgressionData([mflThread], 'test');
+
+    expect(result.threads[0]?.subjects).toEqual(['french', 'german', 'spanish']);
+    expect(result.stats.subjectsCovered).toEqual(['french', 'german', 'spanish']);
   });
 
   it('includes cross-reference to related tools', () => {

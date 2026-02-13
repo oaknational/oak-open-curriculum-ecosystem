@@ -49,7 +49,7 @@ Ask: **"What would a teacher actually type to find this content?"**
 
 ### Common Mistakes
 
-**Using raw ES queries**: Always test via the index-specific test-query script, never `curl` against Elasticsearch directly.
+**Using raw ES queries**: Always test via the CLI search commands (`oaksearch search <scope>`), never `curl` against Elasticsearch directly.
 
 **Matching on title**: Query "Brackets in equations" for content slug "brackets-in-equations" proves nothing. Use natural teacher vocabulary.
 
@@ -71,7 +71,7 @@ cd apps/oak-search-cli
 
 pnpm benchmark:lessons --all
 pnpm benchmark:lessons -s maths -p secondary --review
-pnpm tsx src/lib/search-quality/test-query-lessons.ts "expanding brackets algebra" maths ks3
+oaksearch search lessons "expanding brackets algebra" --subject maths --key-stage ks3
 ```
 
 ### Search Architecture
@@ -128,7 +128,7 @@ pnpm tsx src/lib/search-quality/test-query-lessons.ts "expanding brackets algebr
 | `src/lib/search-quality/ground-truth/entries/*.ts` | Ground truth definitions           |
 | `src/lib/search-quality/ground-truth/types.ts`     | Type definitions (shared + lesson) |
 | `src/lib/search-quality/ground-truth/index.ts`     | Exports and accessors              |
-| `src/lib/search-quality/test-query-lessons.ts`     | Query testing script               |
+| CLI: `oaksearch search lessons`                    | Query testing via SDK              |
 | `evaluation/analysis/benchmark-lessons.ts`         | Benchmark runner                   |
 | `docs/ground-truths/queries-redesigned.md`         | Coverage tracking                  |
 
@@ -147,7 +147,7 @@ pnpm tsx src/lib/search-quality/test-query-lessons.ts "expanding brackets algebr
 cd apps/oak-search-cli
 
 pnpm benchmark:units --all
-pnpm tsx src/lib/search-quality/test-query-units.ts "fractions year 5" maths ks2
+oaksearch search units "fractions year 5" --subject maths --key-stage ks2
 ```
 
 ### Search Architecture
@@ -181,9 +181,11 @@ jq -r '.sequence[] | select(.unitDescription != null) |
 ## Index: Threads
 
 **Index**: `oak_threads` (164 documents)
-**Ground truths**: 1 (maths algebra)
+**Ground truths**: 8 across 5 subjects (Maths, Science, English, Computing, Geography)
 **Type**: `ThreadGroundTruth`
-**Baseline** (1 query -- treat as mechanism check, not stable baseline): MRR=1.000, NDCG@10=1.000, P@3=0.333, R@10=1.000
+**Baseline**: MRR=0.938, NDCG@10=0.902, P@3=0.333, R@10=0.938
+**Search**: SDK `searchThreads` (two-way RRF via `buildThreadRetriever`)
+**CLI**: `oaksearch search threads`
 
 ### Running
 
@@ -191,7 +193,7 @@ jq -r '.sequence[] | select(.unitDescription != null) |
 cd apps/oak-search-cli
 
 pnpm benchmark:threads --all
-pnpm tsx src/lib/search-quality/test-query-threads.ts "algebra progression" maths
+oaksearch search threads "algebra progression" --subject maths
 ```
 
 ### Search Architecture
@@ -200,14 +202,35 @@ pnpm tsx src/lib/search-quality/test-query-threads.ts "algebra progression" math
 
 ### What Threads Are
 
-Threads are curriculum progressions spanning multiple units and years. Key fields: `thread_title`, `thread_slug`, `subject_slugs`, `unit_count`. Predominantly Maths (~164 docs total).
+Threads are conceptual progression strands that run across units and years,
+connecting units that build a common body of knowledge over time. They are
+programme-agnostic: a single thread can span multiple programmes, key stages,
+and years. Threads are the pedagogical backbone of Oak's curriculum -- they
+show how ideas BUILD, not just what to teach.
+
+Key fields: `thread_title`, `thread_slug`, `subject_slugs`, `unit_count`.
+Predominantly Maths (~164 docs total, e.g., "Algebra" spans 118 units from
+Reception to Year 11).
+
+### Current Ground Truths
+
+| Entry                           | Subject   | Query                                         | Primary target                                          |
+| ------------------------------- | --------- | --------------------------------------------- | ------------------------------------------------------- |
+| `maths.ts`                      | Maths     | `algebra equations progression`               | `algebra`                                               |
+| `maths-fractions.ts`            | Maths     | `fractions progression primary maths`         | `number-fractions`                                      |
+| `maths-geometry.ts`             | Maths     | `geometry shapes angles measurement`          | `geometry-and-measure`                                  |
+| `science-forces.ts`             | Science   | `forces and motion physics progression`       | `bq11-physics-how-do-forces-make-things-happen`         |
+| `science-chemical-reactions.ts` | Science   | `chemical reactions substances changing`      | `bq08-chemistry-how-can-substances-be-made-and-changed` |
+| `english-fiction-writing.ts`    | English   | `fiction creative writing skills progression` | `developing-fiction-writing`                            |
+| `computing-programming.ts`      | Computing | `programming coding skills progression`       | `programming`                                           |
+| `geography-climate.ts`          | Geography | `climate weather patterns geography`          | `climate-and-weather`                                   |
 
 ### Design Considerations
 
-- Progression-focused queries: "how concepts build across years"
+- Progression-focused queries: "how does this concept develop across years?"
 - May use curriculum vocabulary ("strand", "progression", "thread")
-- No `phase` or `keyStage` -- threads span multiple
-- With only 164 docs, GTs are primarily mechanism checks, not ranking quality measures
+- No `phase` or `keyStage` -- threads span multiple by design
+- With only 164 docs, GTs validate the retrieval pipeline more than ranking subtlety
 
 ### Adding a Thread Ground Truth
 
@@ -234,7 +257,7 @@ jq -r '.threads[]? | "\(.threadSlug): \(.threadTitle) (\(.unitCount) units)"' \
 cd apps/oak-search-cli
 
 pnpm benchmark:sequences --all
-pnpm tsx src/lib/search-quality/test-query-sequences.ts "secondary maths" maths secondary
+oaksearch search sequences "secondary maths" --subject maths
 ```
 
 ### Search Architecture
@@ -243,7 +266,14 @@ pnpm tsx src/lib/search-quality/test-query-sequences.ts "secondary maths" maths 
 
 ### What Sequences Are
 
-Sequences are subject-phase programmes (highest level). Key fields: `sequence_title`, `sequence_slug`, `subject_slug`, `phase_slug`, `unit_slugs`, `category_titles`.
+Sequences are API organizational structures for curriculum data storage
+and retrieval. A sequence is a pragmatic grouping of units spanning
+multiple key stages and years (e.g., "maths-primary" covers KS1 + KS2).
+One sequence can generate many programme views -- the user-facing
+curriculum pathways that teachers navigate by.
+
+Key fields: `sequence_title`, `sequence_slug`, `subject_slug`,
+`phase_slug`, `unit_slugs`, `category_titles`.
 
 ### The Filter vs Search Question
 
@@ -272,6 +302,7 @@ jq -r '.sequences[]? | "\(.sequenceSlug): \(.sequenceTitle)"' \
 | Document                                                                                                 | Purpose                     |
 | -------------------------------------------------------------------------------------------------------- | --------------------------- |
 | [ADR-106](/docs/architecture/architectural-decisions/106-known-answer-first-ground-truth-methodology.md) | Methodology                 |
+| [ADR-110](/docs/architecture/architectural-decisions/110-thread-search-architecture.md)                  | Thread search architecture  |
 | [Semantic Search Architecture](/.agent/directives/semantic-search-architecture.md)                       | Structure is the foundation |
 | [queries-redesigned.md](./queries-redesigned.md)                                                         | Lessons coverage matrix     |
 | [GROUND-TRUTH-GUIDE.md](/apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md)  | Design principles           |

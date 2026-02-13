@@ -3,7 +3,9 @@
  *
  * ## Sequence Ground Truths
  *
- * Sequences represent subject-phase programmes (e.g., "Maths Secondary").
+ * Sequences are API data structures for curriculum retrieval -- a pragmatic
+ * grouping of units by subject and phase (e.g., "maths-primary"). They are
+ * not user-facing programmes; one sequence can generate many programme views.
  * The index has only ~30 documents, so sequences may be better served by
  * navigation/filters than search.
  *

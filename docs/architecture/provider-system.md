@@ -1,6 +1,6 @@
 # Provider System Overview
 
-This document explains how providers integrate with the lib packages, how apps compose a runtime, and how dependencies are injected. For a broader context, see the [Architecture index](./README.md) and onboarding in [docs/onboarding.md](../onboarding.md).
+This document explains how providers integrate with the lib packages, how apps compose a runtime, and how dependencies are injected. For a broader context, see the [Architecture index](./README.md) and onboarding in [Developer Onboarding](../development/onboarding.md).
 
 ## Concepts
 

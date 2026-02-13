@@ -132,9 +132,9 @@ export function getUnitGroundTruthEntries(): readonly GroundTruthEntry[] {
 /**
  * Get all thread ground truth entries for benchmarking.
  *
- * Threads span multiple key stages, so they are grouped by subject
- * only. Phase defaults to 'secondary' because threads primarily
- * serve secondary curriculum progressions.
+ * Threads are conceptual progression strands that span multiple key stages
+ * and programmes, so they are grouped by subject only. Phase defaults to
+ * 'secondary' because thread content is richest in secondary Maths.
  *
  * @returns Ground truth entries for thread benchmarks, grouped by subject
  */

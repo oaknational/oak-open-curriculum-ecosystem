@@ -160,10 +160,12 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
 /**
  * Builds a two-way RRF request for threads (BM25 + ELSER).
  *
- * Threads represent curriculum progressions (predominantly Maths). With only
- * 164 documents, this is a small index requiring high precision.
+ * Threads are conceptual progression strands that connect units across years,
+ * showing how ideas build over time (predominantly Maths, ~164 documents).
+ * They are programme-agnostic -- a thread like "Algebra" spans Reception
+ * to Year 11 across multiple programmes and key stages.
  *
- * **Note**: Like sequences, thread search uses a simpler two-way RRF approach
+ * Like sequences, thread search uses a simpler two-way RRF approach
  * (BM25 + ELSER) rather than the four-way architecture used for lessons and units.
  * This is appropriate given the small index size and simple document structure.
  */
@@ -289,7 +291,7 @@ function createSequenceFilters(subject?: SearchSubjectSlug, phaseSlug?: string):
 const THREAD_BM25_FIELDS = ['thread_title^2'];
 
 /**
- * Creates a two-way RRF retriever for threads.
+ * Creates a two-way RRF retriever for threads (conceptual progression strands).
  *
  * Includes `fuzziness: 'AUTO'` for typo tolerance.
  */

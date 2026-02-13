@@ -41,7 +41,7 @@ export const GET_THREAD_PROGRESSIONS_TOOL_DEF = {
   description: `Returns the Oak Curriculum thread progression graph.
 
 This instance-level graph shows ordered unit sequences within curriculum threads:
-- 164 threads across 14 subjects
+- ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects
 - Each thread contains ordered units showing the learning progression
 - Year spans show when concepts are taught (e.g., "Number: Fractions" from Year 2-6)
 
@@ -89,8 +89,7 @@ Complements get-knowledge-graph (schema-level structure) with actual progression
  */
 export function runThreadProgressionsTool(): CallToolResult {
   return formatOptimizedResult({
-    summary:
-      'Thread progression graph loaded. Contains 164 threads across 14 subjects with ordered unit sequences.',
+    summary: `Thread progression graph loaded. Contains ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects with ordered unit sequences.`,
     fullData: threadProgressionGraph,
     status: 'success',
     timestamp: Date.now(),

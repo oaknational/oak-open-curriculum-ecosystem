@@ -11,6 +11,7 @@ import type { Result } from '@oaknational/result';
 import type {
   RetrievalService,
   RetrievalError,
+  SearchParamsBase,
   SearchLessonsParams,
   SearchUnitsParams,
   SearchSequencesParams,
@@ -19,6 +20,7 @@ import type {
   LessonsSearchResult,
   UnitsSearchResult,
   SequencesSearchResult,
+  ThreadsSearchResult,
   SuggestionResponse,
 } from '@oaknational/oak-search-sdk';
 import type { SearchFacets } from '@oaknational/oak-curriculum-sdk/public/search.js';
@@ -63,6 +65,23 @@ export async function handleSearchSequences(
   params: SearchSequencesParams,
 ): Promise<Result<SequencesSearchResult, RetrievalError>> {
   return retrieval.searchSequences(params);
+}
+
+/**
+ * Search threads (conceptual progression strands) via the SDK retrieval service.
+ *
+ * Threads are programme-agnostic strands that connect units across years,
+ * showing how ideas build over time.
+ *
+ * @param retrieval - The SDK retrieval service
+ * @param params - Validated search parameters
+ * @returns `ok` with thread search results, or `err` with a `RetrievalError`
+ */
+export async function handleSearchThreads(
+  retrieval: RetrievalService,
+  params: SearchParamsBase,
+): Promise<Result<ThreadsSearchResult, RetrievalError>> {
+  return retrieval.searchThreads(params);
 }
 
 /**

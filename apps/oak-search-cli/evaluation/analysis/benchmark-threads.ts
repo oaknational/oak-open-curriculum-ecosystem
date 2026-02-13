@@ -1,7 +1,9 @@
 /**
  * Thread benchmark CLI.
  *
- * Runs ground truth benchmarks against the oak_threads index.
+ * Runs ground truth benchmarks against the oak_threads index via the
+ * Search SDK retrieval service, ensuring benchmarks exercise the same
+ * code paths as production consumers.
  *
  * Usage: pnpm benchmark:threads --all | --subject X
  *
@@ -15,8 +17,8 @@ import { parseArgs } from 'node:util';
 
 dotenvConfig({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env.local') });
 
-import { esSearch } from '../../src/lib/elastic-http.js';
-import type { SearchThreadIndexDoc } from '../../src/types/oak.js';
+import { createCliSdk } from '../../src/cli/shared/create-cli-sdk.js';
+import { env } from '../../src/lib/env.js';
 import {
   runThreadQuery,
   type ThreadSearchFunction,
@@ -65,29 +67,15 @@ async function runEntryQueries(
       );
       results.push(result);
 
-      const status = result.mrr > 0 ? '✓' : '✗';
+      const status = result.mrr > 0 ? '\u2713' : '\u2717';
       console.log(`  ${status} "${query.query}" - MRR: ${result.mrr.toFixed(3)}`);
     } catch (error) {
-      console.error(`  ✗ Error running query "${query.query}":`, error);
+      console.error(`  \u2717 Error running query "${query.query}":`, error);
     }
   }
 
   return results;
 }
-
-/**
- * Production search adapter for threads.
- */
-const productionThreadSearchAdapter: ThreadSearchFunction = async (request) => {
-  const response = await esSearch<SearchThreadIndexDoc>(request);
-  return {
-    hits: {
-      hits: response.hits.hits.map((hit) => ({
-        _source: { thread_slug: hit._source.thread_slug },
-      })),
-    },
-  };
-};
 
 interface CliOptions {
   readonly all: boolean;
@@ -152,6 +140,9 @@ async function runBenchmark(): Promise<void> {
     process.exit(0);
   }
 
+  const sdk = createCliSdk(env());
+  const searchFn = sdk.retrieval.searchThreads.bind(sdk.retrieval);
+
   console.log(`\nThread Benchmark (oak_threads index)`);
   console.log(`${'='.repeat(60)}`);
   console.log(`Running benchmark for ${entries.length} entries...\n`);
@@ -160,7 +151,7 @@ async function runBenchmark(): Promise<void> {
 
   for (const entry of entries) {
     console.log(`Benchmarking ${entry.subject} (${entry.queries.length} queries)...`);
-    const entryResults = await runEntryQueries(entry, productionThreadSearchAdapter);
+    const entryResults = await runEntryQueries(entry, searchFn);
     allResults.push(...entryResults);
   }
 

@@ -2,7 +2,7 @@
 
 ## 🚀 Getting Started
 
-- **New to the repo?** → [Developer Onboarding](development/onboarding.md) – first-stop checklist covering setup, workspace walkthroughs, and key concepts
+- **New to the repo?** → [Developer Onboarding](development/onboarding.md) – canonical onboarding path (first-stop checklist covering setup, workspace walkthroughs, and key concepts)
 - **Quick start?** → [Quick Start Guide](quick-start.md) - Zero-setup path to productive changes
 - **Working with AI?** → [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Essential patterns and practices
 

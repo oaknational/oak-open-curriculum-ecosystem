@@ -59,10 +59,12 @@ export type {
   LessonResult,
   UnitResult,
   SequenceResult,
+  ThreadResult,
   SearchResultMeta,
   LessonsSearchResult,
   UnitsSearchResult,
   SequencesSearchResult,
+  ThreadsSearchResult,
   SuggestionResponse,
   // Admin service interface and types
   AdminService,

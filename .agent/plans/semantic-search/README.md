@@ -1,6 +1,6 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-02-12
+**Last Updated**: 2026-02-13
 
 ---
 
@@ -10,12 +10,13 @@
 
 ---
 
-## Current Work: SDK Validation
+## Current Work: MCP Search Integration
 
 SDK extraction is complete (Checkpoints A–E2, Feb 2026).
-The SDK was completely rewritten and re-architected during
-extraction. The immediate priority is validating it against
-real Elasticsearch to confirm it produces correct results.
+Thread search is fully integrated — SDK method, CLI command,
+benchmarks migrated, 8 ground truths across 5 subjects.
+The immediate priority is wiring the Search SDK into MCP
+curriculum servers.
 
 **Roadmap**: [roadmap.md](roadmap.md)
 
@@ -30,10 +31,10 @@ real Elasticsearch to confirm it produces correct results.
 2. SDK Extraction + CLI Wiring                   ✅ COMPLETE
    Checkpoints A–E2 (extraction, Result pattern, TSDoc)
          ↓
-2e. SDK Validation against Real ES               ← CURRENT
-    Run full evaluation suite, confirm baselines hold
+2e. SDK Validation against Real ES               ✅ COMPLETE
+    Baselines confirmed, thread search validated
          ↓
-3. MCP Search Integration
+3. MCP Search Integration                        ← CURRENT
    Wire hybrid search into MCP tools
          ↓
 4. Search Quality + Ecosystem (parallel streams)
@@ -82,6 +83,8 @@ Each stream has a README explaining domain, intent, desired impact, and any inte
 | [Roadmap](roadmap.md) | **THE** authoritative plan sequence |
 | [451 + Test Remediation](archive/completed/transcript-451-test-doc-remediation.plan.md) | ✅ HTTP 451 handling, E2E test compliance, stale docs |
 | [Public Release Readiness](active/public-release-readiness.plan.md) | Secrets, licence, package.json, docs, GitHub config, npm publish |
+| [Developer Onboarding Experience](active/developer-onboarding-experience.plan.md) | Refine onboarding journey, command/link integrity, release runbook |
+| [Thread Search SDK Integration](archive/completed/thread-search-sdk-integration.plan.md) | ✅ SDK method, CLI command, benchmarks, 8 GTs across 5 subjects |
 | [Search Acceptance Criteria](search-acceptance-criteria.md) | Level definitions |
 | [Ground Truth Protocol](/apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md) | Baseline metrics and process |
 

@@ -25,7 +25,7 @@
  * ## Query Design
  *
  * A Year 7 teacher planning the forces unit would search for balanced/unbalanced
- * forces. Query tested via test-query-units.ts.
+ * forces. Query testable via `oaksearch search units`.
  *
  * ## Test Results
  *

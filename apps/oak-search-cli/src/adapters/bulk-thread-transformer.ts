@@ -3,9 +3,11 @@
  *
  * @remarks
  * Extracts threads from bulk download unit data and transforms them
- * into Elasticsearch documents for the oak_threads index.
+ * into Elasticsearch documents for the oak_threads index. Threads are
+ * conceptual progression strands that connect units across years,
+ * showing how ideas build over time (programme-agnostic).
  *
- * Threads are embedded in `sequence[].threads[]` in bulk files.
+ * Threads are embedded in `unit.threads[]` within bulk files.
  * This transformer:
  * 1. Extracts all threads from units across all bulk files
  * 2. Deduplicates by thread slug

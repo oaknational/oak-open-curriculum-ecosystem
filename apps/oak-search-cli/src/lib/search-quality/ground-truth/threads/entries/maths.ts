@@ -2,6 +2,8 @@
  * Thread ground truth: Maths
  *
  * Ground truth for testing thread search quality using Known-Answer-First methodology.
+ * Threads are conceptual progression strands -- this GT targets the "Algebra" strand,
+ * which shows how algebraic concepts build from Year 6 to Year 11.
  *
  * ## Source Data
  *
@@ -23,7 +25,7 @@
  * ## Query Design
  *
  * A teacher looking for the algebra curriculum progression would search for
- * equations and progression. Query tested via test-query-threads.ts.
+ * equations and progression. Query testable via `oaksearch search threads`.
  *
  * ## Test Results
  *

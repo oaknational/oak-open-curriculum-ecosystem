@@ -117,10 +117,13 @@ export const MATHS_SECONDARY: LessonGroundTruth = {
 
 ## Testing Queries
 
-Always test via the actual 4-way RRF search system:
+Always test via the CLI search commands which use the SDK RRF pipeline:
 
 ```bash
-pnpm tsx src/lib/search-quality/test-query-lessons.ts "your query" subject keyStage
+oaksearch search lessons "your query" --subject maths --key-stage ks3
+oaksearch search units "your query" --subject science --key-stage ks4
+oaksearch search sequences "your query" --subject maths
+oaksearch search threads "your query" --subject maths
 ```
 
 **Never** use raw Elasticsearch queries — they bypass query preprocessing and RRF fusion.
