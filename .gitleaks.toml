@@ -1,0 +1,13 @@
+title = "oak-mcp-ecosystem gitleaks config"
+
+[extend]
+useDefault = true
+
+# `.agent/reference-docs/**` is third-party reference material. It can contain
+# example tokens/keys that look like secrets; we intentionally ignore it.
+[[allowlists]]
+description = "Ignore third-party reference docs (.agent/reference-docs/**)"
+paths = [
+  '''^\.agent/reference-docs/''',
+]
+
