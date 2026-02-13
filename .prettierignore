@@ -49,7 +49,7 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 
 # Generated docs
 **/docs/api/
-**/docs/api-md/
+**/docs/api-md/index.md
 
 
 # Test output and cache

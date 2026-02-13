@@ -12,6 +12,7 @@ collaboration.txt
 
 # Generated docs
 **/docs/api
+**/docs/api-md/index.md
 **/.typedoc
 **/_typedoc_*
 
@@ -185,4 +186,3 @@ vite.config.ts.timestamp-*
 
 # Documentation helpers
 packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md
-
